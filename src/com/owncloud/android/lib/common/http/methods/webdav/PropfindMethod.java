@@ -33,7 +33,6 @@ import at.bitfire.dav4android.exception.DavException;
 import at.bitfire.dav4android.exception.HttpException;
 import at.bitfire.dav4android.exception.UnauthorizedException;
 import okhttp3.HttpUrl;
-import okhttp3.OkHttpClient;
 
 /**
  * Propfind calls wrapper
@@ -44,8 +43,8 @@ public class PropfindMethod extends DavMethod {
     private int mDepth;
     private Set<DavResource> mMembers;
 
-    public PropfindMethod(OkHttpClient okHttpClient, HttpUrl httpUrl, int depth) {
-        super(okHttpClient, httpUrl);
+    public PropfindMethod(HttpUrl httpUrl, int depth) {
+        super(httpUrl);
         mDepth = depth;
     };
 

@@ -24,58 +24,44 @@
 
 package com.owncloud.android.lib.common.http;
 
-import java.io.IOException;
-import java.io.InputStream;
+import com.owncloud.android.lib.common.OwnCloudClientManagerFactory;
+import com.owncloud.android.lib.common.http.interceptors.HttpInterceptor;
+import com.owncloud.android.lib.common.http.interceptors.UserAgentInterceptor;
 
-import okhttp3.Headers;
+import java.util.Arrays;
+
 import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
+import okhttp3.Protocol;
 
 /**
- * Wrapper to perform http calls transparently by using:
- *  - OkHttp for non webdav methods
- *  - Dav4Android for webdav methods
- *
+ * Client used to perform network operations
  * @author David González Verdugo
  */
-public abstract class HttpBaseMethod {
-    public abstract int execute() throws Exception;
-    protected OkHttpClient mOkHttpClient;
-    protected Request mRequest;
-    protected Response mResponse;
+public class HttpClient {
 
-    public HttpBaseMethod () {
-        mOkHttpClient = HttpClient.getOkHttpClient();
+    private static OkHttpClient mOkHttpClient;
+    private static HttpInterceptor mOkHttpInterceptor;
+
+    public static OkHttpClient getOkHttpClient() {
+        if (mOkHttpClient == null) {
+
+            mOkHttpInterceptor = new HttpInterceptor()
+                    .addRequestInterceptor(new UserAgentInterceptor(
+                                    // TODO Try to get rid of this dependency
+                                    OwnCloudClientManagerFactory.getUserAgent()
+                            )
+                    );
+
+            mOkHttpClient = new OkHttpClient.Builder()
+                    .addInterceptor(mOkHttpInterceptor)
+                    .protocols(Arrays.asList(Protocol.HTTP_1_1))
+                    .followRedirects(false)
+                    .build();
+        }
+        return mOkHttpClient;
     }
 
-    // Request
-    public Headers getRequestHeaders() {
-        return mRequest.headers();
-    }
-
-    // Response
-    public int getStatusCode() {
-        return mResponse.code();
-    }
-
-    public String getStatusMessage() {
-        return mResponse.message();
-    }
-
-    public String getResponseBodyAsString() throws IOException {
-        return mResponse.body().string();
-    }
-
-    public InputStream getResponseAsStream() {
-        return mResponse.body().byteStream();
-    }
-
-    public Headers getResponseHeaders() {
-        return mResponse.headers();
-    }
-
-    public String getResponseHeader(String headerName) {
-        return mResponse.header(headerName);
+    public static HttpInterceptor getOkHttpInterceptor() {
+        return mOkHttpInterceptor;
     }
 }

@@ -22,25 +22,16 @@
  *
  */
 
-package com.owncloud.android.lib.common.http.methods.nonwebdav;
+package com.owncloud.android.lib.common.http;
 
-import okhttp3.RequestBody;
+import okhttp3.HttpUrl;
 
-public class PutMethod extends HttpMethod{
+/**
+ * @author David González Verdugo
+ */
+public class HttpUtils {
 
-    private RequestBody mRequestBody;
-
-    public PutMethod(String httpUrl, RequestBody requestBody){
-        super(httpUrl);
-        mRequestBody = requestBody;
-    }
-
-    @Override
-    public int execute() throws Exception {
-        mRequest.newBuilder()
-                .put(mRequestBody)
-                .build();
-
-        return super.executeRequest();
+    public static HttpUrl stringUrlToHttpUrl(String url) {
+        return HttpUrl.parse(url);
     }
 }

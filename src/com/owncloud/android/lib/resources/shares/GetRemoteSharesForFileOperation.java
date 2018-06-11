@@ -93,7 +93,7 @@ public class GetRemoteSharesForFileOperation extends RemoteOperation {
             httpBuilder.addQueryParameter(PARAM_RESHARES, String.valueOf(mReshares));
             httpBuilder.addQueryParameter(PARAM_SUBFILES, String.valueOf(mSubfiles));
 
-            GetMethod getMethod = new GetMethod(client.getOkHttpClient(), httpBuilder.build());
+            GetMethod getMethod = new GetMethod(httpBuilder.build());
             getMethod.addRequestHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE);
 
             int status = client.executeHttpMethod(getMethod);

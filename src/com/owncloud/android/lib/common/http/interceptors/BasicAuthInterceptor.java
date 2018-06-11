@@ -24,6 +24,7 @@
 
 package com.owncloud.android.lib.common.http.interceptors;
 
+import okhttp3.Credentials;
 import okhttp3.Request;
 
 public class BasicAuthInterceptor implements HttpInterceptor.RequestInterceptor {
@@ -31,8 +32,8 @@ public class BasicAuthInterceptor implements HttpInterceptor.RequestInterceptor 
     private static final String AUTHORIZATION_HEADER = "Authorization";
     private String mCredentials;
 
-    public BasicAuthInterceptor(String credentials) {
-        mCredentials = credentials;
+    public BasicAuthInterceptor(String username, String password) {
+        mCredentials = Credentials.basic(username, password);
     }
 
     @Override

@@ -29,7 +29,6 @@ import com.owncloud.android.lib.common.http.HttpBaseMethod;
 import at.bitfire.dav4android.DavOCResource;
 import at.bitfire.dav4android.DavResource;
 import okhttp3.HttpUrl;
-import okhttp3.OkHttpClient;
 
 /**
  * Wrapper to perform WebDAV (dav4android) calls
@@ -39,8 +38,12 @@ public abstract class DavMethod extends HttpBaseMethod {
 
     protected DavResource mDavResource;
 
-    public DavMethod(OkHttpClient okHttpClient, HttpUrl httpUrl) {
-        mDavResource = new DavOCResource(okHttpClient, httpUrl);
+    public DavMethod(HttpUrl httpUrl) {
+        super();
+        mDavResource = new DavOCResource(
+                mOkHttpClient,
+                httpUrl
+        );
     }
 
     public DavResource getDavResource() {

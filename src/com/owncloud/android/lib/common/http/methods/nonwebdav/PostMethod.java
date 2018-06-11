@@ -24,8 +24,6 @@
 
 package com.owncloud.android.lib.common.http.methods.nonwebdav;
 
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
 import okhttp3.RequestBody;
 
 /**
@@ -36,8 +34,8 @@ public class PostMethod extends HttpMethod {
 
     private RequestBody mRequestBody;
 
-    public PostMethod(OkHttpClient okHttpClient, String httpUrl, RequestBody requestBody){
-        super(okHttpClient, httpUrl);
+    public PostMethod(String httpUrl, RequestBody requestBody){
+        super(httpUrl);
         mRequestBody = requestBody;
     }
 

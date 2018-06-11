@@ -27,7 +27,6 @@ package com.owncloud.android.lib.common.http.methods.nonwebdav;
 import java.io.IOException;
 
 import okhttp3.HttpUrl;
-import okhttp3.OkHttpClient;
 
 /**
  * OkHttp get calls wrapper
@@ -35,12 +34,12 @@ import okhttp3.OkHttpClient;
  */
 public class GetMethod extends HttpMethod {
 
-    public GetMethod(OkHttpClient okHttpClient, String httpUrl) {
-        super(okHttpClient, httpUrl);
+    public GetMethod(String httpUrl) {
+        super(httpUrl);
     }
 
-    public GetMethod(OkHttpClient okHttpClient, HttpUrl httpUrl) {
-        super(okHttpClient, httpUrl);
+    public GetMethod(HttpUrl httpUrl) {
+        super(httpUrl);
     }
 
     @Override

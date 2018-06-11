@@ -76,7 +76,7 @@ public class GetRemoteUserInfoOperation extends RemoteOperation {
 
             String url = client.getBaseUri() + OCS_ROUTE;
 
-            GetMethod getMethod = new GetMethod(client.getOkHttpClient(), url);
+            GetMethod getMethod = new GetMethod(url);
             int status = client.executeHttpMethod(getMethod);
 
             if (isSuccess(status)) {

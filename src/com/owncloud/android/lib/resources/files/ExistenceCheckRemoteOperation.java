@@ -26,6 +26,7 @@ package com.owncloud.android.lib.resources.files;
 
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.http.HttpConstants;
+import com.owncloud.android.lib.common.http.HttpUtils;
 import com.owncloud.android.lib.common.http.methods.webdav.PropfindMethod;
 import com.owncloud.android.lib.common.network.RedirectionPath;
 import com.owncloud.android.lib.common.network.WebdavUtils;
@@ -81,8 +82,7 @@ public class ExistenceCheckRemoteOperation extends RemoteOperation {
 
 //            client.setFollowRedirects(false);
             PropfindMethod propfindMethod = new PropfindMethod(
-                    client.getOkHttpClient(),
-                    HttpUrl.parse(client.getNewWebDavUri() + WebdavUtils.encodePath(mPath)),
+                    HttpUtils.stringUrlToHttpUrl(client.getNewWebDavUri() + WebdavUtils.encodePath(mPath)),
                     0);
 
             int status = client.executeHttpMethod(propfindMethod);

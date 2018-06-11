@@ -40,8 +40,6 @@ import java.util.Calendar;
 import java.util.Locale;
 
 import okhttp3.FormBody;
-import okhttp3.Request;
-
 
 /**
  * Updates parameters of an existing Share resource, known its remote ID.
@@ -199,17 +197,15 @@ public class UpdateRemoteShareOperation extends RemoteOperation {
                 formBodyBuilder.add(PARAM_PERMISSIONS, Integer.toString(mPermissions));
             }
 
+            FormBody formBody = formBodyBuilder.build();
+
             Uri requestUri = client.getBaseUri();
             Uri.Builder uriBuilder = requestUri.buildUpon();
             uriBuilder.appendEncodedPath(ShareUtils.SHARING_API_PATH.substring(1));
             uriBuilder.appendEncodedPath(Long.toString(mRemoteId));
 
-            FormBody formBody = formBodyBuilder.build();
-
-            PutMethod putMethod = new PutMethod(client.getOkHttpClient(),
-                    uriBuilder.build().toString(), formBody);
-            putMethod.setRequestHeader("Content-Type",
-                    "application/x-www-form-urlencoded; charset=utf-8");
+            PutMethod putMethod = new PutMethod(uriBuilder.build().toString(), formBody);
+            putMethod.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=utf-8");
             putMethod.addRequestHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE);
 
             int status = client.executeHttpMethod(putMethod);

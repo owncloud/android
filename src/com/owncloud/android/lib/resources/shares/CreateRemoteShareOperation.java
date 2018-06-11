@@ -231,8 +231,7 @@ public class CreateRemoteShareOperation extends RemoteOperation {
             Uri.Builder uriBuilder = requestUri.buildUpon();
             uriBuilder.appendEncodedPath(ShareUtils.SHARING_API_PATH);
 
-            PostMethod postMethod = new PostMethod(client.getOkHttpClient(),
-                    uriBuilder.build().toString(), formBody);
+            PostMethod postMethod = new PostMethod(uriBuilder.build().toString(), formBody);
             postMethod.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=utf-8");
             postMethod.addRequestHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE);
 

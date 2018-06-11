@@ -33,8 +33,6 @@ import android.net.Uri;
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentials;
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentialsFactory;
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentialsFactory.OwnCloudAnonymousCredentials;
-import com.owncloud.android.lib.common.http.interceptors.HttpInterceptor;
-import com.owncloud.android.lib.common.http.interceptors.UserAgentInterceptor;
 import com.owncloud.android.lib.common.http.HttpBaseMethod;
 import com.owncloud.android.lib.common.network.RedirectionPath;
 import com.owncloud.android.lib.common.utils.Log_OC;
@@ -55,10 +53,6 @@ import org.apache.commons.httpclient.params.HttpParams;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Arrays;
-
-import okhttp3.OkHttpClient;
-import okhttp3.Protocol;
 
 public class OwnCloudClient extends HttpClient {
 
@@ -103,9 +97,6 @@ public class OwnCloudClient extends HttpClient {
 
     private String mRedirectedLocation;
 
-    private static OkHttpClient mOkHttpClient = null;
-    private static HttpInterceptor mOkHttpInterceptor = null;
-
     /**
      * Constructor
      */
@@ -144,14 +135,6 @@ public class OwnCloudClient extends HttpClient {
 
         super(connectionMgr);
 
-        if (mOkHttpClient == null) {
-            mOkHttpClient = new OkHttpClient.Builder()
-                    .addInterceptor(getBaseOkHttpInterceptor())
-                    .protocols(Arrays.asList(Protocol.HTTP_1_1))
-                    .followRedirects(false)
-                    .build();
-        }
-
         if (baseUri == null) {
             throw new IllegalArgumentException("Parameter 'baseUri' cannot be NULL");
         }
@@ -170,24 +153,6 @@ public class OwnCloudClient extends HttpClient {
 //        applyProxySettings();
 
         clearCredentials();
-    }
-
-    /**
-     * {@link HttpInterceptor} singleton
-     * @return {@link HttpInterceptor} instance with user agent
-     */
-    public HttpInterceptor getBaseOkHttpInterceptor() {
-
-        if (mOkHttpInterceptor == null) {
-            mOkHttpInterceptor = new HttpInterceptor().
-                    addRequestInterceptor(
-                            new UserAgentInterceptor(
-                                    OwnCloudClientManagerFactory.getUserAgent()
-                            )
-                    );
-        }
-
-        return mOkHttpInterceptor;
     }
 
     private void applyProxySettings() {
@@ -291,9 +256,10 @@ public class OwnCloudClient extends HttpClient {
 
             checkFirstRedirection(method);
 
-            if (mOkHttpClient.followRedirects()) {
-                status = followRedirection(method).getLastStatus();
-            }
+            // TODO
+//            if (mOkHttpClient.followRedirects()) {
+//                status = followRedirection(method).getLastStatus();
+//            }
 
             repeatWithFreshCredentials = checkUnauthorizedAccess(status, repeatCounter);
             if (repeatWithFreshCredentials) {
@@ -483,18 +449,6 @@ public class OwnCloudClient extends HttpClient {
         return mCredentials;
     }
 
-    public void setFollowRedirects(boolean followRedirects) {
-        mOkHttpClient
-                .newBuilder()
-                .followRedirects(followRedirects)
-                .followSslRedirects(followRedirects)
-                .build();
-    }
-
-    public boolean getFollowRedirects() {
-        return mOkHttpClient.followRedirects();
-    }
-
     private void logCookiesAtRequest(Header[] headers, String when) {
         int counter = 0;
         for (int i = 0; i < headers.length; i++) {
@@ -595,10 +549,6 @@ public class OwnCloudClient extends HttpClient {
 
     public OwnCloudAccount getAccount() {
         return mAccount;
-    }
-
-    public OkHttpClient getOkHttpClient() {
-        return mOkHttpClient;
     }
 
     /**

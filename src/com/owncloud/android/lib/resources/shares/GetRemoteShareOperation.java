@@ -63,8 +63,8 @@ public class GetRemoteShareOperation extends RemoteOperation {
             uriBuilder.appendEncodedPath(ShareUtils.SHARING_API_PATH);
             uriBuilder.appendEncodedPath(Long.toString(mRemoteId));
 
-            GetMethod getMethod = new GetMethod(client.getOkHttpClient(),
-                    uriBuilder.build().toString());
+            GetMethod getMethod = new GetMethod(uriBuilder.build().toString());
+
             getMethod.addRequestHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE);
             int status = client.executeHttpMethod(getMethod);
 

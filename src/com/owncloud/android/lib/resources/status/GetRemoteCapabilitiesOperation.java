@@ -130,7 +130,7 @@ public class GetRemoteCapabilitiesOperation extends RemoteOperation {
 
             String url = uriBuilder.build().toString();
 
-            GetMethod getMethod = new GetMethod(client.getOkHttpClient(), url);
+            GetMethod getMethod = new GetMethod(url);
             getMethod.addRequestHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE);
 
             int status = client.executeHttpMethod(getMethod);

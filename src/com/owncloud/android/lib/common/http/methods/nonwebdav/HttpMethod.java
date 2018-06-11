@@ -29,7 +29,6 @@ import com.owncloud.android.lib.common.http.HttpBaseMethod;
 import java.io.IOException;
 
 import okhttp3.HttpUrl;
-import okhttp3.OkHttpClient;
 import okhttp3.Request;
 
 /**
@@ -38,17 +37,16 @@ import okhttp3.Request;
  * @author David González Verdugo
  */
 public abstract class HttpMethod extends HttpBaseMethod {
-    protected OkHttpClient mOkHttpClient;
 
-    public HttpMethod(OkHttpClient okHttpClient, String httpUrl) {
-        mOkHttpClient = okHttpClient;
+    public HttpMethod(String httpUrl) {
+        super();
         mRequest = new Request.Builder()
                 .url(httpUrl)
                 .build();
     }
 
-    public HttpMethod(OkHttpClient okHttpClient, HttpUrl httpUrl) {
-        mOkHttpClient = okHttpClient;
+    public HttpMethod(HttpUrl httpUrl) {
+        super();
         mRequest = new Request.Builder()
                 .url(httpUrl)
                 .build();

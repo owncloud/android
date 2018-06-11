@@ -57,8 +57,7 @@ public class GetRemoteSharesOperation extends RemoteOperation {
             Uri.Builder uriBuilder = requestUri.buildUpon();
             uriBuilder.appendEncodedPath(ShareUtils.SHARING_API_PATH);
 
-            GetMethod getMethod = new GetMethod(client.getOkHttpClient(),
-                    uriBuilder.build().toString());
+            GetMethod getMethod = new GetMethod(uriBuilder.build().toString());
             getMethod.addRequestHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE);
 
             int status = client.executeHttpMethod(getMethod);
@@ -75,7 +74,6 @@ public class GetRemoteSharesOperation extends RemoteOperation {
             } else {
                 result = new RemoteOperationResult(getMethod);
             }
-
         } catch (Exception e) {
             result = new RemoteOperationResult(e);
             Log_OC.e(TAG, "Exception while getting remote shares ", e);

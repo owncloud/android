@@ -86,7 +86,7 @@ public class GetRemoteUserAvatarOperation extends RemoteOperation {
             ;
             Log_OC.d(TAG, "avatar URI: " + url);
 
-            getMethod = new GetMethod(client.getOkHttpClient(), url);
+            getMethod = new GetMethod(url);
             int status = client.executeHttpMethod(getMethod);
 
             if (isSuccess(status)) {

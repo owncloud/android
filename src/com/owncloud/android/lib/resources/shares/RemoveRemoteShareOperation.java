@@ -72,8 +72,8 @@ public class RemoveRemoteShareOperation extends RemoteOperation {
             uriBuilder.appendEncodedPath(ShareUtils.SHARING_API_PATH);
             uriBuilder.appendEncodedPath(String.valueOf(mRemoteShareId));
 
-            DeleteMethod deleteMethod = new DeleteMethod(client.getOkHttpClient(),
-                    uriBuilder.build().toString());
+            DeleteMethod deleteMethod = new DeleteMethod(uriBuilder.build().toString());
+
             deleteMethod.addRequestHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE);
 
             int status = client.executeHttpMethod(deleteMethod);

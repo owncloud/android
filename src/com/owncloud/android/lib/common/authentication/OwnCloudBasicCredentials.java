@@ -24,6 +24,7 @@
 package com.owncloud.android.lib.common.authentication;
 
 import com.owncloud.android.lib.common.OwnCloudClient;
+import com.owncloud.android.lib.common.http.HttpClient;
 import com.owncloud.android.lib.common.http.interceptors.BasicAuthInterceptor;
 import com.owncloud.android.lib.common.http.interceptors.HttpInterceptor.RequestInterceptor;
 
@@ -35,8 +36,6 @@ import org.apache.commons.httpclient.auth.BasicScheme;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import okhttp3.Credentials;
 
 public class OwnCloudBasicCredentials implements OwnCloudCredentials {
 
@@ -65,7 +64,7 @@ public class OwnCloudBasicCredentials implements OwnCloudCredentials {
         List<String> authPrefs = new ArrayList<>(1);
         authPrefs.add(AuthPolicy.BASIC);
 
-        ArrayList<RequestInterceptor> requestInterceptors = client.getBaseOkHttpInterceptor().getRequestInterceptors();
+        ArrayList<RequestInterceptor> requestInterceptors = HttpClient.getOkHttpInterceptor().getRequestInterceptors();
 
         // Clear previous basic credentials
         for (RequestInterceptor requestInterceptor : requestInterceptors) {
@@ -74,9 +73,9 @@ public class OwnCloudBasicCredentials implements OwnCloudCredentials {
             }
         }
 
-        client.getBaseOkHttpInterceptor()
+        HttpClient.getOkHttpInterceptor()
                 .addRequestInterceptor(
-                        new BasicAuthInterceptor(Credentials.basic(mUsername, mPassword))
+                        new BasicAuthInterceptor(mUsername, mPassword)
                 );
 
         //TODO Update from here down

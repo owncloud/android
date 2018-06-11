@@ -130,7 +130,7 @@ public class GetRemoteShareesOperation extends RemoteOperation{
             uriBuilder.appendQueryParameter(PARAM_PAGE, String.valueOf(mPage));
             uriBuilder.appendQueryParameter(PARAM_PER_PAGE, String.valueOf(mPerPage));
 
-            GetMethod getMethod = new GetMethod(client.getOkHttpClient(), uriBuilder.build().toString());
+            GetMethod getMethod = new GetMethod(uriBuilder.build().toString());
             getMethod.addRequestHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE);
 
             int status = client.executeHttpMethod(getMethod);

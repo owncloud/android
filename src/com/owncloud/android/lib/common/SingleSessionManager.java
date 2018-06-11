@@ -45,7 +45,7 @@ import com.owncloud.android.lib.common.utils.Log_OC;
 
 /**
  * Implementation of {@link OwnCloudClientManager}
- * <p>
+ *
  * TODO check multithreading safety
  *
  * @author David A. Velasco
@@ -232,8 +232,5 @@ public class SingleSessionManager implements OwnCloudClientManager {
         if (!recentUri.equals(reusedClient.getBaseUri())) {
             reusedClient.setBaseUri(recentUri);
         }
-
     }
-
-
 }

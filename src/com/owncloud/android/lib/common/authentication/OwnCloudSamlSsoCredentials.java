@@ -45,7 +45,9 @@ public class OwnCloudSamlSsoCredentials implements OwnCloudCredentials {
         client.getParams().setAuthenticationPreemptive(false);
         client.getParams().setCredentialCharset(OwnCloudCredentialsFactory.CREDENTIAL_CHARSET);
         client.getParams().setCookiePolicy(CookiePolicy.BROWSER_COMPATIBILITY);
-        client.setFollowRedirects(false);
+
+        // TODO
+//        client.setFollowRedirects(false);
 
         Uri serverUri = client.getBaseUri();
 

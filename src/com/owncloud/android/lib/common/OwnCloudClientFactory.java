@@ -40,6 +40,7 @@ import android.os.Bundle;
 import com.owncloud.android.lib.common.accounts.AccountTypeUtils;
 import com.owncloud.android.lib.common.accounts.AccountUtils;
 import com.owncloud.android.lib.common.accounts.AccountUtils.AccountNotFoundException;
+import com.owncloud.android.lib.common.http.HttpClient;
 import com.owncloud.android.lib.common.network.NetworkUtils;
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentialsFactory;
 import com.owncloud.android.lib.common.utils.Log_OC;
@@ -175,11 +176,13 @@ public class OwnCloudClientFactory {
         
         OwnCloudClient client = new OwnCloudClient(uri, NetworkUtils.getMultiThreadedConnManager());
         client.setDefaultTimeouts(DEFAULT_DATA_TIMEOUT, DEFAULT_CONNECTION_TIMEOUT);
-        client.setFollowRedirects(followRedirects);
+
+        HttpClient.getOkHttpClient()
+                .newBuilder()
+                .followRedirects(followRedirects);
+
         client.setContext(context);
         
         return client;
     }
-    
-
 }
