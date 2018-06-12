@@ -37,6 +37,7 @@ import com.owncloud.android.lib.resources.users.GetRemoteUserAvatarOperation;
 import com.owncloud.android.lib.resources.users.GetRemoteUserInfoOperation;
 import com.owncloud.android.lib.resources.users.GetRemoteUserInfoOperation.UserInfo;
 import com.owncloud.android.lib.resources.users.GetRemoteUserQuotaOperation;
+import com.owncloud.android.lib.resources.users.GetRemoteUserQuotaOperation.RemoteQuota;
 import com.owncloud.android.operations.common.SyncOperation;
 
 import java.util.ArrayList;
@@ -110,8 +111,7 @@ public class GetUserProfileOperation extends SyncOperation {
 
                 if (remoteResult.isSuccess()) {
 
-                    GetRemoteUserQuotaOperation.Quota remoteQuota = (GetRemoteUserQuotaOperation.Quota)
-                            remoteResult.getData().get(0);
+                    RemoteQuota remoteQuota = (GetRemoteUserQuotaOperation.RemoteQuota) remoteResult.getData().get(0);
 
                     UserProfile.UserQuota userQuota = new UserProfile.UserQuota(
                             remoteQuota.getFree(),
