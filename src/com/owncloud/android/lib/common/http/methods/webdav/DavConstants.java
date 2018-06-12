@@ -24,52 +24,10 @@
 
 package com.owncloud.android.lib.common.http.methods.webdav;
 
-import java.io.IOException;
-import java.util.Set;
-
-import at.bitfire.dav4android.DavResource;
-import at.bitfire.dav4android.Property;
-import at.bitfire.dav4android.exception.DavException;
-import at.bitfire.dav4android.exception.HttpException;
-import at.bitfire.dav4android.exception.UnauthorizedException;
-import okhttp3.HttpUrl;
-
 /**
- * Propfind calls wrapper
  * @author David González Verdugo
  */
-public class PropfindMethod extends DavMethod {
-
-    private int mDepth;
-    private Property.Name[] mProperties;
-    private Set<DavResource> mMembers;
-
-    public PropfindMethod(HttpUrl httpUrl, int depth, Property.Name[] properties) {
-        super(httpUrl);
-        mDepth = depth;
-        mProperties = properties;
-    };
-
-    @Override
-    public int execute() throws IOException, HttpException, DavException {
-        try {
-            mDavResource.propfind(mDepth, mProperties);
-            mMembers = mDavResource.getMembers();
-        } catch (UnauthorizedException davException) {
-            // Do nothing, we will use the 401 code to handle the situation
-        }
-
-        mRequest = mDavResource.getRequest();
-        mResponse = mDavResource.getResponse();
-
-        return super.getStatusCode();
-    }
-
-    public int getDepth() {
-        return mDepth;
-    }
-
-    public Set<DavResource> getMembers() {
-        return mMembers;
-    }
+public class DavConstants {
+    public static final int DEPTH_0 = 0;
+    public static final int DEPTH_1 = 1;
 }

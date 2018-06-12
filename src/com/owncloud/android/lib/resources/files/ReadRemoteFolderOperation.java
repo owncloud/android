@@ -26,6 +26,9 @@ package com.owncloud.android.lib.resources.files;
 
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.http.HttpConstants;
+import com.owncloud.android.lib.common.http.HttpUtils;
+import com.owncloud.android.lib.common.http.methods.webdav.DavConstants;
+import com.owncloud.android.lib.common.http.methods.webdav.DavUtils;
 import com.owncloud.android.lib.common.http.methods.webdav.PropfindMethod;
 import com.owncloud.android.lib.common.network.WebdavUtils;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
@@ -35,7 +38,6 @@ import com.owncloud.android.lib.common.utils.Log_OC;
 import java.util.ArrayList;
 
 import at.bitfire.dav4android.DavResource;
-import okhttp3.HttpUrl;
 
 import static com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode.OK;
 
@@ -72,15 +74,14 @@ public class ReadRemoteFolderOperation extends RemoteOperation {
         RemoteOperationResult result = null;
 
         try {
-
             PropfindMethod propfindMethod = new PropfindMethod(
-                    HttpUrl.parse(client.getNewWebDavUri() + WebdavUtils.encodePath(mRemotePath)),
-                    1);
+                    HttpUtils.stringUrlToHttpUrl(client.getNewWebDavUri() + WebdavUtils.encodePath(mRemotePath)),
+                    DavConstants.DEPTH_1,
+                    DavUtils.getAllPropset());
 
             int status = client.executeHttpMethod(propfindMethod);
 
             if (isSuccess(status)) {
-
                 ArrayList<Object> mFolderAndFiles = new ArrayList<>();
 
                 // parse data from remote folder

@@ -24,6 +24,9 @@
 
 package com.owncloud.android.lib.common.http;
 
+/**
+ * @author David González Verdugo
+ */
 public class HttpConstants {
 
     /**
