@@ -24,7 +24,7 @@
 
 package com.owncloud.android.lib.common.http.methods.webdav;
 
-import com.owncloud.android.lib.common.http.HttpBaseMethod;
+import com.owncloud.android.lib.common.http.methods.HttpBaseMethod;
 
 import at.bitfire.dav4android.DavOCResource;
 import at.bitfire.dav4android.DavResource;
@@ -38,8 +38,8 @@ public abstract class DavMethod extends HttpBaseMethod {
 
     protected DavOCResource mDavResource;
 
-    public DavMethod(HttpUrl httpUrl) {
-        super();
+    protected DavMethod(HttpUrl httpUrl) {
+        super(httpUrl);
         mDavResource = new DavOCResource(
                 mOkHttpClient,
                 httpUrl

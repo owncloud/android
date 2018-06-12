@@ -28,7 +28,7 @@ import android.accounts.Account;
 import android.accounts.AccountsException;
 
 import com.owncloud.android.lib.common.accounts.AccountUtils.AccountNotFoundException;
-import com.owncloud.android.lib.common.http.HttpBaseMethod;
+import com.owncloud.android.lib.common.http.methods.HttpBaseMethod;
 import com.owncloud.android.lib.common.network.CertificateCombinedException;
 import com.owncloud.android.lib.common.utils.Log_OC;
 

@@ -32,15 +32,11 @@ import java.util.Locale;
 
 import android.net.Uri;
 
-import com.owncloud.android.lib.common.http.HttpBaseMethod;
+import com.owncloud.android.lib.common.http.methods.HttpBaseMethod;
 
-import org.apache.commons.httpclient.Header;
-import org.apache.commons.httpclient.HttpMethod;
 import org.apache.jackrabbit.webdav.property.DavPropertyName;
 import org.apache.jackrabbit.webdav.property.DavPropertyNameSet;
 import org.apache.jackrabbit.webdav.xml.Namespace;
-
-import okhttp3.Response;
 
 public class WebdavUtils {
     public static final SimpleDateFormat DISPLAY_DATE_FORMAT = new SimpleDateFormat(

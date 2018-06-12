@@ -24,12 +24,11 @@
 
 package com.owncloud.android.lib.common.http.methods.nonwebdav;
 
-import com.owncloud.android.lib.common.http.HttpBaseMethod;
+import com.owncloud.android.lib.common.http.methods.HttpBaseMethod;
 
 import java.io.IOException;
 
 import okhttp3.HttpUrl;
-import okhttp3.Request;
 
 /**
  * Wrapper to perform OkHttp calls
@@ -42,7 +41,8 @@ public abstract class HttpMethod extends HttpBaseMethod {
         super(httpUrl);
     }
 
-    public int executeRequest() throws IOException {
+    @Override
+    public int execute() throws IOException {
         mResponse = mOkHttpClient.newCall(mRequest).execute();
         return super.getStatusCode();
     }

@@ -29,6 +29,7 @@ import android.net.Uri;
 
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.http.HttpConstants;
+import com.owncloud.android.lib.common.http.HttpUtils;
 import com.owncloud.android.lib.common.http.methods.nonwebdav.PutMethod;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
@@ -204,7 +205,11 @@ public class UpdateRemoteShareOperation extends RemoteOperation {
             uriBuilder.appendEncodedPath(ShareUtils.SHARING_API_PATH.substring(1));
             uriBuilder.appendEncodedPath(Long.toString(mRemoteId));
 
-            PutMethod putMethod = new PutMethod(uriBuilder.build().toString(), formBody);
+            PutMethod putMethod = new PutMethod(
+                    HttpUtils.stringUrlToHttpUrl(uriBuilder.build().toString()),
+                    formBody
+            );
+
             putMethod.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=utf-8");
             putMethod.addRequestHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE);
 

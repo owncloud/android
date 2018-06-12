@@ -32,6 +32,7 @@ import android.net.Uri;
 
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.http.HttpConstants;
+import com.owncloud.android.lib.common.http.HttpUtils;
 import com.owncloud.android.lib.common.http.methods.nonwebdav.GetMethod;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
@@ -130,7 +131,10 @@ public class GetRemoteShareesOperation extends RemoteOperation{
             uriBuilder.appendQueryParameter(PARAM_PAGE, String.valueOf(mPage));
             uriBuilder.appendQueryParameter(PARAM_PER_PAGE, String.valueOf(mPerPage));
 
-            GetMethod getMethod = new GetMethod(uriBuilder.build().toString());
+            GetMethod getMethod = new GetMethod(
+                    HttpUtils.stringUrlToHttpUrl(uriBuilder.build().toString())
+            );
+
             getMethod.addRequestHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE);
 
             int status = client.executeHttpMethod(getMethod);

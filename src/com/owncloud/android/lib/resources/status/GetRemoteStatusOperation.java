@@ -31,6 +31,7 @@ import android.net.Uri;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.http.HttpClient;
 import com.owncloud.android.lib.common.http.HttpConstants;
+import com.owncloud.android.lib.common.http.HttpUtils;
 import com.owncloud.android.lib.common.http.methods.nonwebdav.GetMethod;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
@@ -77,13 +78,13 @@ public class GetRemoteStatusOperation extends RemoteOperation {
         boolean retval = false;
         String baseUrlSt = client.getBaseUri().toString();
         try {
-            String url = baseUrlSt + OwnCloudClient.STATUS_PATH;
-
             HttpClient.getOkHttpClient()
                     .newBuilder()
                     .followRedirects(false);
 
-            GetMethod getMethod = new GetMethod(url);
+            GetMethod getMethod = new GetMethod(
+                    HttpUtils.stringUrlToHttpUrl(baseUrlSt + OwnCloudClient.STATUS_PATH)
+            );
 
             int status = client.executeHttpMethod(getMethod);
 

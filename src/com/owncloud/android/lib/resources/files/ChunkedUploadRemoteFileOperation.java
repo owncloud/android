@@ -72,79 +72,81 @@ public class ChunkedUploadRemoteFileOperation extends UploadRemoteFileOperation 
 
         FileChannel channel = null;
         RandomAccessFile raf = null;
-        try {
-            File file = new File(mLocalPath);
-            raf = new RandomAccessFile(file, "r");
-            channel = raf.getChannel();
-            mEntity = new ChunkFromFileChannelRequestEntity(channel, mMimeType, CHUNK_SIZE, file);
-            synchronized (mDataTransferListeners) {
-                ((ProgressiveDataTransferer) mEntity)
-                    .addDatatransferProgressListeners(mDataTransferListeners);
-            }
 
-            long offset = 0;
-            String uriPrefix = client.getWebdavUri() + WebdavUtils.encodePath(mRemotePath) +
-                "-chunking-" + Math.abs((new Random()).nextInt(9000) + 1000) + "-";
-            long totalLength = file.length();
-            long chunkCount = (long) Math.ceil((double) totalLength / CHUNK_SIZE);
-            String chunkSizeStr = String.valueOf(CHUNK_SIZE);
-            String totalLengthStr = String.valueOf(file.length());
-            for (int chunkIndex = 0; chunkIndex < chunkCount; chunkIndex++, offset += CHUNK_SIZE) {
-                if (chunkIndex == chunkCount - 1) {
-                    chunkSizeStr = String.valueOf(CHUNK_SIZE * chunkCount - totalLength);
-                }
-                if (mPutMethod != null) {
-                    mPutMethod.releaseConnection();     // let the connection available
-                    // for other methods
-                }
-                mPutMethod = new PutMethod(uriPrefix + chunkCount + "-" + chunkIndex);
-                if (mRequiredEtag != null && mRequiredEtag.length() > 0) {
-                    mPutMethod.addRequestHeader(IF_MATCH_HEADER, "\"" + mRequiredEtag + "\"");
-                }
-                mPutMethod.addRequestHeader(OC_CHUNKED_HEADER, OC_CHUNKED_HEADER);
-                mPutMethod.addRequestHeader(OC_CHUNK_SIZE_HEADER, chunkSizeStr);
-                mPutMethod.addRequestHeader(OC_TOTAL_LENGTH_HEADER, totalLengthStr);
-
-                mPutMethod.addRequestHeader(OC_CHUNK_X_OC_MTIME_HEADER, mFileLastModifTimestamp);
-
-                ((ChunkFromFileChannelRequestEntity) mEntity).setOffset(offset);
-                mPutMethod.setRequestEntity(mEntity);
-                if (mCancellationRequested.get()) {
-                    mPutMethod.abort();
-                    // next method will throw an exception
-                }
-
-                if (chunkIndex == chunkCount - 1) {
-                    // Added a high timeout to the last chunk due to when the last chunk
-                    // arrives to the server with the last PUT, all chunks get assembled
-                    // within that PHP request, so last one takes longer.
-                    mPutMethod.getParams().setSoTimeout(LAST_CHUNK_TIMEOUT);
-                }
-
-                status = client.executeMethod(mPutMethod);
-
-                result = new RemoteOperationResult(
-                    isSuccess(status),
-                    mPutMethod
-                );
-
-                client.exhaustResponse(mPutMethod.getResponseBodyAsStream());
-                Log_OC.d(TAG, "Upload of " + mLocalPath + " to " + mRemotePath +
-                    ", chunk index " + chunkIndex + ", count " + chunkCount +
-                    ", HTTP result status " + status);
-
-                if (!isSuccess(status))
-                    break;
-            }
-
-        } finally {
-            if (channel != null)
-                channel.close();
-            if (raf != null)
-                raf.close();
-            if (mPutMethod != null)
-                mPutMethod.releaseConnection();    // let the connection available for other methods
-        }
+        //TODO
+//        try {
+//            File file = new File(mLocalPath);
+//            raf = new RandomAccessFile(file, "r");
+//            channel = raf.getChannel();
+//            mEntity = new ChunkFromFileChannelRequestEntity(channel, mMimeType, CHUNK_SIZE, file);
+//            synchronized (mDataTransferListeners) {
+//                ((ProgressiveDataTransferer) mEntity)
+//                    .addDatatransferProgressListeners(mDataTransferListeners);
+//            }
+//
+//            long offset = 0;
+//            String uriPrefix = client.getWebdavUri() + WebdavUtils.encodePath(mRemotePath) +
+//                "-chunking-" + Math.abs((new Random()).nextInt(9000) + 1000) + "-";
+//            long totalLength = file.length();
+//            long chunkCount = (long) Math.ceil((double) totalLength / CHUNK_SIZE);
+//            String chunkSizeStr = String.valueOf(CHUNK_SIZE);
+//            String totalLengthStr = String.valueOf(file.length());
+//            for (int chunkIndex = 0; chunkIndex < chunkCount; chunkIndex++, offset += CHUNK_SIZE) {
+//                if (chunkIndex == chunkCount - 1) {
+//                    chunkSizeStr = String.valueOf(CHUNK_SIZE * chunkCount - totalLength);
+//                }
+//                if (mPutMethod != null) {
+//                    mPutMethod.releaseConnection();     // let the connection available
+//                    // for other methods
+//                }
+//                mPutMethod = new PutMethod(uriPrefix + chunkCount + "-" + chunkIndex);
+//                if (mRequiredEtag != null && mRequiredEtag.length() > 0) {
+//                    mPutMethod.addRequestHeader(IF_MATCH_HEADER, "\"" + mRequiredEtag + "\"");
+//                }
+//                mPutMethod.addRequestHeader(OC_CHUNKED_HEADER, OC_CHUNKED_HEADER);
+//                mPutMethod.addRequestHeader(OC_CHUNK_SIZE_HEADER, chunkSizeStr);
+//                mPutMethod.addRequestHeader(OC_TOTAL_LENGTH_HEADER, totalLengthStr);
+//
+//                mPutMethod.addRequestHeader(OC_CHUNK_X_OC_MTIME_HEADER, mFileLastModifTimestamp);
+//
+//                ((ChunkFromFileChannelRequestEntity) mEntity).setOffset(offset);
+//                mPutMethod.setRequestEntity(mEntity);
+//                if (mCancellationRequested.get()) {
+//                    mPutMethod.abort();
+//                    // next method will throw an exception
+//                }
+//
+//                if (chunkIndex == chunkCount - 1) {
+//                    // Added a high timeout to the last chunk due to when the last chunk
+//                    // arrives to the server with the last PUT, all chunks get assembled
+//                    // within that PHP request, so last one takes longer.
+//                    mPutMethod.getParams().setSoTimeout(LAST_CHUNK_TIMEOUT);
+//                }
+//
+//                status = client.executeMethod(mPutMethod);
+//
+//                result = new RemoteOperationResult(
+//                    isSuccess(status),
+//                    mPutMethod
+//                );
+//
+//                client.exhaustResponse(mPutMethod.getResponseBodyAsStream());
+//                Log_OC.d(TAG, "Upload of " + mLocalPath + " to " + mRemotePath +
+//                    ", chunk index " + chunkIndex + ", count " + chunkCount +
+//                    ", HTTP result status " + status);
+//
+//                if (!isSuccess(status))
+//                    break;
+//            }
+//
+//        } finally {
+//            if (channel != null)
+//                channel.close();
+//            if (raf != null)
+//                raf.close();
+//            if (mPutMethod != null)
+//                mPutMethod.releaseConnection();    // let the connection available for other methods
+//        }
         return result;
     }
 

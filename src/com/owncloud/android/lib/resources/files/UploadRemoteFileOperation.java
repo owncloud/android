@@ -25,6 +25,7 @@
 package com.owncloud.android.lib.resources.files;
 
 import com.owncloud.android.lib.common.OwnCloudClient;
+import com.owncloud.android.lib.common.http.HttpConstants;
 import com.owncloud.android.lib.common.http.HttpUtils;
 import com.owncloud.android.lib.common.network.FileRequestEntity;
 import com.owncloud.android.lib.common.network.OnDatatransferProgressListener;
@@ -134,11 +135,6 @@ public class UploadRemoteFileOperation extends RemoteOperation {
         return result;
     }
 
-    public boolean isSuccess(int status) {
-        return ((status == HttpStatus.SC_OK || status == HttpStatus.SC_CREATED ||
-                status == HttpStatus.SC_NO_CONTENT));
-    }
-
     protected RemoteOperationResult uploadFile(OwnCloudClient client) throws IOException {
         RemoteOperationResult result;
         try {
@@ -203,5 +199,10 @@ public class UploadRemoteFileOperation extends RemoteOperation {
 //            if (mPutMethod != null)
 //                mPutMethod.abort();
 //        }
+    }
+
+    public boolean isSuccess(int status) {
+        return ((status == HttpConstants.HTTP_OK || status == HttpConstants.HTTP_CREATED ||
+                status == HttpConstants.HTTP_NO_CONTENT));
     }
 }

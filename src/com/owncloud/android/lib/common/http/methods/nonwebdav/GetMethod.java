@@ -34,20 +34,16 @@ import okhttp3.HttpUrl;
  */
 public class GetMethod extends HttpMethod {
 
-    public GetMethod(String httpUrl) {
-        super(httpUrl);
-    }
-
     public GetMethod(HttpUrl httpUrl) {
         super(httpUrl);
     }
 
     @Override
     public int execute() throws IOException {
-        mRequest.newBuilder()
+        mRequest = mRequest.newBuilder()
                 .get()
                 .build();
 
-        return super.executeRequest();
+        return super.execute();
     }
 }

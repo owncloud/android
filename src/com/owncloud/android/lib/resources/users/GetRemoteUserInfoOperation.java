@@ -24,14 +24,17 @@
 
 package com.owncloud.android.lib.resources.users;
 
-import java.util.ArrayList;
-import org.json.JSONObject;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.http.HttpConstants;
+import com.owncloud.android.lib.common.http.HttpUtils;
+import com.owncloud.android.lib.common.http.methods.nonwebdav.GetMethod;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
-import com.owncloud.android.lib.common.http.methods.nonwebdav.GetMethod;
+
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 import okhttp3.Request;
 
@@ -74,9 +77,10 @@ public class GetRemoteUserInfoOperation extends RemoteOperation {
                     .addHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE)
                     .build();
 
-            String url = client.getBaseUri() + OCS_ROUTE;
+            GetMethod getMethod = new GetMethod(
+                    HttpUtils.stringUrlToHttpUrl(client.getBaseUri() + OCS_ROUTE)
+            );
 
-            GetMethod getMethod = new GetMethod(url);
             int status = client.executeHttpMethod(getMethod);
 
             if (isSuccess(status)) {

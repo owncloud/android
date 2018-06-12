@@ -31,6 +31,7 @@ import android.net.Uri;
 
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.http.HttpConstants;
+import com.owncloud.android.lib.common.http.HttpUtils;
 import com.owncloud.android.lib.common.http.methods.nonwebdav.DeleteMethod;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
@@ -72,7 +73,8 @@ public class RemoveRemoteShareOperation extends RemoteOperation {
             uriBuilder.appendEncodedPath(ShareUtils.SHARING_API_PATH);
             uriBuilder.appendEncodedPath(String.valueOf(mRemoteShareId));
 
-            DeleteMethod deleteMethod = new DeleteMethod(uriBuilder.build().toString());
+            DeleteMethod deleteMethod = new DeleteMethod(
+                    HttpUtils.stringUrlToHttpUrl(uriBuilder.build().toString()));
 
             deleteMethod.addRequestHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE);
 

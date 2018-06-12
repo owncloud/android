@@ -22,7 +22,9 @@
  *
  */
 
-package com.owncloud.android.lib.common.http;
+package com.owncloud.android.lib.common.http.methods;
+
+import com.owncloud.android.lib.common.http.HttpClient;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -46,7 +48,7 @@ public abstract class HttpBaseMethod {
     protected Request mRequest;
     protected Response mResponse;
 
-    public HttpBaseMethod (HttpUrl httpUrl) {
+    protected HttpBaseMethod (HttpUrl httpUrl) {
         mOkHttpClient = HttpClient.getOkHttpClient();
         mRequest = new Request.Builder()
                 .url(httpUrl)
@@ -58,7 +60,6 @@ public abstract class HttpBaseMethod {
         return mRequest.headers();
     }
 
-    // Request headers
     public void addRequestHeader(String name, String value) {
         mRequest.newBuilder()
                 .addHeader(name, value)
