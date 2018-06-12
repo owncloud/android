@@ -99,8 +99,7 @@ public class ReadRemoteFolderOperation extends RemoteOperation {
                 result = new RemoteOperationResult(OK);
                 result.setData(mFolderAndFiles);
 
-            } else {
-                // synchronization failed
+            } else { // synchronization failed
                 result = new RemoteOperationResult(propfindMethod);
             }
 

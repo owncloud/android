@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import okhttp3.Headers;
+import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -45,13 +46,28 @@ public abstract class HttpBaseMethod {
     protected Request mRequest;
     protected Response mResponse;
 
-    public HttpBaseMethod () {
+    public HttpBaseMethod (HttpUrl httpUrl) {
         mOkHttpClient = HttpClient.getOkHttpClient();
+        mRequest = new Request.Builder()
+                .url(httpUrl)
+                .build();
     }
 
     // Request
     public Headers getRequestHeaders() {
         return mRequest.headers();
+    }
+
+    // Request headers
+    public void addRequestHeader(String name, String value) {
+        mRequest.newBuilder()
+                .addHeader(name, value)
+                .build();
+    }
+
+    public void setRequestHeader(String name, String value){
+        mRequest.newBuilder()
+                .header(name, value);
     }
 
     // Response

@@ -22,28 +22,52 @@
  *
  */
 
-package com.owncloud.android.lib.common.http.methods.nonwebdav;
-
-import com.owncloud.android.lib.common.http.HttpBaseMethod;
+package com.owncloud.android.lib.common.http.methods.webdav;
 
 import java.io.IOException;
 
+import at.bitfire.dav4android.exception.DavException;
+import at.bitfire.dav4android.exception.HttpException;
+import at.bitfire.dav4android.exception.UnauthorizedException;
 import okhttp3.HttpUrl;
-import okhttp3.Request;
+import okhttp3.RequestBody;
 
 /**
- * Wrapper to perform OkHttp calls
- *
+ * Put calls wrapper
  * @author David González Verdugo
  */
-public abstract class HttpMethod extends HttpBaseMethod {
+public class PutMethod extends DavMethod {
 
-    public HttpMethod(HttpUrl httpUrl) {
+    private RequestBody mRequestBody;
+    private String mIfMatchETag;
+    private boolean mIfNoneMatch;
+    private String mContentType;
+    private String mOcTotalLength;
+    private String mOcXOcMtimeHeader;
+
+    public PutMethod(HttpUrl httpUrl) {
         super(httpUrl);
-    }
+    };
 
-    public int executeRequest() throws IOException {
-        mResponse = mOkHttpClient.newCall(mRequest).execute();
+    @Override
+    public int execute() throws IOException, HttpException, DavException {
+        try {
+            mDavResource.put(
+                    mRequestBody,
+                    mIfMatchETag,
+                    mIfNoneMatch,
+                    mContentType,
+                    mOcTotalLength,
+                    mOcXOcMtimeHeader
+            );
+
+            mRequest = mDavResource.getRequest();
+            mResponse = mDavResource.getResponse();
+
+        } catch (UnauthorizedException davException) {
+            // Do nothing, we will use the 401 code to handle the situation
+        }
+
         return super.getStatusCode();
     }
 }

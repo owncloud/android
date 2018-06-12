@@ -25,6 +25,7 @@
 package com.owncloud.android.lib.resources.files;
 
 import com.owncloud.android.lib.common.OwnCloudClient;
+import com.owncloud.android.lib.common.http.HttpUtils;
 import com.owncloud.android.lib.common.network.FileRequestEntity;
 import com.owncloud.android.lib.common.network.OnDatatransferProgressListener;
 import com.owncloud.android.lib.common.network.ProgressiveDataTransferer;
@@ -32,10 +33,10 @@ import com.owncloud.android.lib.common.network.WebdavUtils;
 import com.owncloud.android.lib.common.operations.OperationCancelledException;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
+import com.owncloud.android.lib.common.http.methods.webdav.PutMethod;
 
 import org.apache.commons.httpclient.DefaultHttpMethodRetryHandler;
 import org.apache.commons.httpclient.HttpStatus;
-import org.apache.commons.httpclient.methods.PutMethod;
 import org.apache.commons.httpclient.methods.RequestEntity;
 import org.apache.commons.httpclient.params.HttpMethodParams;
 
@@ -44,6 +45,8 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
+
+import static com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode.OK;
 
 /**
  * Remote operation performing the upload of a remote file to the ownCloud server.
@@ -90,17 +93,20 @@ public class UploadRemoteFileOperation extends RemoteOperation {
     @Override
     protected RemoteOperationResult run(OwnCloudClient client) {
         RemoteOperationResult result = null;
-        DefaultHttpMethodRetryHandler oldRetryHandler =
-            (DefaultHttpMethodRetryHandler) client.getParams().getParameter(HttpMethodParams.RETRY_HANDLER);
+
+//        DefaultHttpMethodRetryHandler oldRetryHandler =
+//            (DefaultHttpMethodRetryHandler) client.getParams().getParameter(HttpMethodParams.RETRY_HANDLER);
 
         try {
+            // TODO
             // prevent that uploads are retried automatically by network library
-            client.getParams().setParameter(
-                HttpMethodParams.RETRY_HANDLER,
-                new DefaultHttpMethodRetryHandler(0, false)
-            );
+//            client.getParams().setParameter(
+//                HttpMethodParams.RETRY_HANDLER,
+//                new DefaultHttpMethodRetryHandler(0, false)
+//            );
 
-            mPutMethod = new PutMethod(client.getWebdavUri() + WebdavUtils.encodePath(mRemotePath));
+            mPutMethod = new PutMethod(
+                    HttpUtils.stringUrlToHttpUrl(client.getWebdavUri() + WebdavUtils.encodePath(mRemotePath)));
 
             if (mCancellationRequested.get()) {
                 // the operation was cancelled before getting it's turn to be executed in the queue of uploads
@@ -112,18 +118,18 @@ public class UploadRemoteFileOperation extends RemoteOperation {
             }
 
         } catch (Exception e) {
-            if (mPutMethod != null && mPutMethod.isAborted()) {
-                result = new RemoteOperationResult(new OperationCancelledException());
-
-            } else {
-                result = new RemoteOperationResult(e);
-            }
+//            if (mPutMethod != null && mPutMethod.isAborted()) {
+//                result = new RemoteOperationResult(new OperationCancelledException());
+//
+//            } else {
+//                result = new RemoteOperationResult(e);
+//            }
         } finally {
             // reset previous retry handler
-            client.getParams().setParameter(
-                HttpMethodParams.RETRY_HANDLER,
-                oldRetryHandler
-            );
+//            client.getParams().setParameter(
+//                HttpMethodParams.RETRY_HANDLER,
+//                oldRetryHandler
+//            );
         }
         return result;
     }
@@ -134,33 +140,37 @@ public class UploadRemoteFileOperation extends RemoteOperation {
     }
 
     protected RemoteOperationResult uploadFile(OwnCloudClient client) throws IOException {
-        int status;
         RemoteOperationResult result;
         try {
             File f = new File(mLocalPath);
-            mEntity  = new FileRequestEntity(f, mMimeType);
-            synchronized (mDataTransferListeners) {
-                ((ProgressiveDataTransferer)mEntity)
-                        .addDatatransferProgressListeners(mDataTransferListeners);
-            }
+
+            // TODO
+//            synchronized (mDataTransferListeners) {
+//                ((ProgressiveDataTransferer)mEntity)
+//                        .addDatatransferProgressListeners(mDataTransferListeners);
+//            }
+
             if (mRequiredEtag != null && mRequiredEtag.length() > 0) {
                 mPutMethod.addRequestHeader(IF_MATCH_HEADER, "\"" + mRequiredEtag + "\"");
             }
+
             mPutMethod.addRequestHeader(OC_TOTAL_LENGTH_HEADER, String.valueOf(f.length()));
 
             mPutMethod.addRequestHeader(OC_X_OC_MTIME_HEADER, mFileLastModifTimestamp);
 
-            mPutMethod.setRequestEntity(mEntity);
-            status = client.executeMethod(mPutMethod);
+            int status = client.executeHttpMethod(mPutMethod);
 
-            result = new RemoteOperationResult(
-                isSuccess(status),
-                mPutMethod
-            );
-            client.exhaustResponse(mPutMethod.getResponseBodyAsStream());
+            if (isSuccess(status)) {
+                result = new RemoteOperationResult(OK);
 
-        } finally {
-            mPutMethod.releaseConnection(); // let the connection available for other methods
+            } else { // synchronization failed
+                result = new RemoteOperationResult(mPutMethod);
+            }
+
+            client.exhaustResponse(mPutMethod.getResponseAsStream());
+
+        } catch (Exception e) {
+            result = new RemoteOperationResult(e);
         }
         return result;
     }
@@ -188,10 +198,10 @@ public class UploadRemoteFileOperation extends RemoteOperation {
     }
     
     public void cancel() {
-        synchronized (mCancellationRequested) {
-            mCancellationRequested.set(true);
-            if (mPutMethod != null)
-                mPutMethod.abort();
-        }
+//        synchronized (mCancellationRequested) {
+//            mCancellationRequested.set(true);
+//            if (mPutMethod != null)
+//                mPutMethod.abort();
+//        }
     }
 }

@@ -36,7 +36,7 @@ import okhttp3.HttpUrl;
  */
 public abstract class DavMethod extends HttpBaseMethod {
 
-    protected DavResource mDavResource;
+    protected DavOCResource mDavResource;
 
     public DavMethod(HttpUrl httpUrl) {
         super();
