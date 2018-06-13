@@ -31,11 +31,8 @@ import okhttp3.RequestBody;
 
 public class PutMethod extends HttpMethod{
 
-    private RequestBody mRequestBody;
-
-    public PutMethod(HttpUrl httpUrl, RequestBody requestBody){
+    public PutMethod(HttpUrl httpUrl){
         super(httpUrl);
-        mRequestBody = requestBody;
     }
 
     @Override

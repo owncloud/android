@@ -226,16 +226,15 @@ public class CreateRemoteShareOperation extends RemoteOperation {
                 formBodyBuilder.add(PARAM_PERMISSIONS, Integer.toString(mPermissions));
             }
 
-            FormBody formBody = formBodyBuilder.build();
-
             Uri requestUri = client.getBaseUri();
             Uri.Builder uriBuilder = requestUri.buildUpon();
             uriBuilder.appendEncodedPath(ShareUtils.SHARING_API_PATH);
 
             PostMethod postMethod = new PostMethod(
-                    HttpUtils.stringUrlToHttpUrl(uriBuilder.build().toString()),
-                    formBody
+                    HttpUtils.stringUrlToHttpUrl(uriBuilder.build().toString())
             );
+
+            postMethod.setRequestBody(formBodyBuilder.build());
 
             postMethod.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=utf-8");
             postMethod.addRequestHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE);

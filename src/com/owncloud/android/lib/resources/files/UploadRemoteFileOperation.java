@@ -47,6 +47,9 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
+
 import static com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode.OK;
 
 /**
@@ -60,10 +63,6 @@ import static com.owncloud.android.lib.common.operations.RemoteOperationResult.R
 public class UploadRemoteFileOperation extends RemoteOperation {
 
     private static final String TAG = UploadRemoteFileOperation.class.getSimpleName();
-
-    protected static final String OC_TOTAL_LENGTH_HEADER = "OC-Total-Length";
-    protected static final String OC_X_OC_MTIME_HEADER = "X-OC-Mtime";
-    protected static final String IF_MATCH_HEADER = "If-Match";
 
     protected String mLocalPath;
     protected String mRemotePath;
@@ -107,7 +106,7 @@ public class UploadRemoteFileOperation extends RemoteOperation {
 //            );
 
             mPutMethod = new PutMethod(
-                    HttpUtils.stringUrlToHttpUrl(client.getWebdavUri() + WebdavUtils.encodePath(mRemotePath)));
+                    HttpUtils.stringUrlToHttpUrl(client.getNewWebDavUri() + WebdavUtils.encodePath(mRemotePath)));
 
             if (mCancellationRequested.get()) {
                 // the operation was cancelled before getting it's turn to be executed in the queue of uploads
@@ -138,8 +137,8 @@ public class UploadRemoteFileOperation extends RemoteOperation {
     protected RemoteOperationResult uploadFile(OwnCloudClient client) throws IOException {
         RemoteOperationResult result;
         try {
-            File f = new File(mLocalPath);
-
+            // Headers
+            File fileToUpload = new File(mLocalPath);
             // TODO
 //            synchronized (mDataTransferListeners) {
 //                ((ProgressiveDataTransferer)mEntity)
@@ -147,12 +146,19 @@ public class UploadRemoteFileOperation extends RemoteOperation {
 //            }
 
             if (mRequiredEtag != null && mRequiredEtag.length() > 0) {
-                mPutMethod.addRequestHeader(IF_MATCH_HEADER, "\"" + mRequiredEtag + "\"");
+                mPutMethod.addRequestHeader(HttpConstants.IF_MATCH_HEADER, "\"" + mRequiredEtag + "\"");
             }
 
-            mPutMethod.addRequestHeader(OC_TOTAL_LENGTH_HEADER, String.valueOf(f.length()));
+            mPutMethod.addRequestHeader(HttpConstants.OC_TOTAL_LENGTH_HEADER, String.valueOf(fileToUpload.length()));
 
-            mPutMethod.addRequestHeader(OC_X_OC_MTIME_HEADER, mFileLastModifTimestamp);
+            mPutMethod.addRequestHeader(HttpConstants.OC_X_OC_MTIME_HEADER, mFileLastModifTimestamp);
+
+            // Request body
+            MediaType mediaType = MediaType.parse(mMimeType);
+
+            mPutMethod.setRequestBody(
+                    RequestBody.create(mediaType, fileToUpload)
+            );
 
             int status = client.executeHttpMethod(mPutMethod);
 

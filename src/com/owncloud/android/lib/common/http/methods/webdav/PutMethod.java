@@ -24,6 +24,8 @@
 
 package com.owncloud.android.lib.common.http.methods.webdav;
 
+import com.owncloud.android.lib.common.http.HttpConstants;
+
 import java.io.IOException;
 
 import at.bitfire.dav4android.exception.DavException;
@@ -38,13 +40,6 @@ import okhttp3.RequestBody;
  */
 public class PutMethod extends DavMethod {
 
-    private RequestBody mRequestBody;
-    private String mIfMatchETag;
-    private boolean mIfNoneMatch;
-    private String mContentType;
-    private String mOcTotalLength;
-    private String mOcXOcMtimeHeader;
-
     public PutMethod(HttpUrl httpUrl) {
         super(httpUrl);
     };
@@ -54,11 +49,13 @@ public class PutMethod extends DavMethod {
         try {
             mDavResource.put(
                     mRequestBody,
-                    mIfMatchETag,
-                    mIfNoneMatch,
-                    mContentType,
-                    mOcTotalLength,
-                    mOcXOcMtimeHeader
+                    super.getRequestHeader(HttpConstants.IF_MATCH_HEADER),
+                    // Save a file not known to exist, guaranteeing that another upload didn't happen
+                    // before, losing the data of the previous put
+                    true,
+                    super.getRequestHeader(HttpConstants.CONTENT_TYPE_HEADER),
+                    super.getRequestHeader(HttpConstants.OC_TOTAL_LENGTH_HEADER),
+                    super.getRequestHeader(HttpConstants.OC_X_OC_MTIME_HEADER)
             );
 
             mRequest = mDavResource.getRequest();

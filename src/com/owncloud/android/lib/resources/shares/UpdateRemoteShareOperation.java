@@ -206,9 +206,10 @@ public class UpdateRemoteShareOperation extends RemoteOperation {
             uriBuilder.appendEncodedPath(Long.toString(mRemoteId));
 
             PutMethod putMethod = new PutMethod(
-                    HttpUtils.stringUrlToHttpUrl(uriBuilder.build().toString()),
-                    formBody
+                    HttpUtils.stringUrlToHttpUrl(uriBuilder.build().toString())
             );
+
+            putMethod.setRequestBody(formBodyBuilder.build());
 
             putMethod.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=utf-8");
             putMethod.addRequestHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE);

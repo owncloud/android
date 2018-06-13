@@ -33,6 +33,7 @@ import okhttp3.Headers;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 
 /**
@@ -46,6 +47,7 @@ public abstract class HttpBaseMethod {
     public abstract int execute() throws Exception;
     protected OkHttpClient mOkHttpClient;
     protected Request mRequest;
+    protected RequestBody mRequestBody;
     protected Response mResponse;
 
     protected HttpBaseMethod (HttpUrl httpUrl) {
@@ -56,19 +58,28 @@ public abstract class HttpBaseMethod {
     }
 
     // Request
+    public String getRequestHeader(String name) {
+        return mRequest.header(name);
+    }
+
     public Headers getRequestHeaders() {
         return mRequest.headers();
     }
 
     public void addRequestHeader(String name, String value) {
-        mRequest.newBuilder()
+        mRequest = mRequest.newBuilder()
                 .addHeader(name, value)
                 .build();
     }
 
-    public void setRequestHeader(String name, String value){
-        mRequest.newBuilder()
-                .header(name, value);
+    public void setRequestHeader(String name, String value) {
+        mRequest = mRequest.newBuilder()
+                .header(name, value)
+                .build();
+    }
+
+    public void setRequestBody(RequestBody requestBody) {
+        mRequestBody = requestBody;
     }
 
     // Response

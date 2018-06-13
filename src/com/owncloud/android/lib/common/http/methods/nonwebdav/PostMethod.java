@@ -35,11 +35,8 @@ import okhttp3.RequestBody;
  */
 public class PostMethod extends HttpMethod {
 
-    private RequestBody mRequestBody;
-
-    public PostMethod(HttpUrl httpUrl, RequestBody requestBody){
+    public PostMethod(HttpUrl httpUrl){
         super(httpUrl);
-        mRequestBody = requestBody;
     }
 
     @Override
