@@ -56,6 +56,8 @@ import android.view.View;
 import com.owncloud.android.AppRater;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
+import com.owncloud.android.authentication.AccountAuthenticatorActivity;
+import com.owncloud.android.authentication.AuthenticatorActivity;
 import com.owncloud.android.authentication.FingerprintManager;
 import com.owncloud.android.authentication.PassCodeManager;
 import com.owncloud.android.authentication.PatternManager;
@@ -1025,7 +1027,14 @@ public class FileDisplayActivity extends FileActivity
                                 (synchResult.isException() && synchResult.getException()
                                     instanceof AuthenticatorException)) {
 
-                                showRequestAccountChangeNotice();
+                                // If we have saml enabled we consider the user to only have
+                                // one account with which he is logged into the app. This is because
+                                // only branded versions of the app have saml support.
+                                if(getString(R.string.auth_method_saml_web_sso).equals("on")) {
+                                    requestCredentialsUpdate();
+                                } else {
+                                    showRequestAccountChangeNotice();
+                                }
 
                             } else if (RemoteOperationResult.ResultCode.
                                     SSL_RECOVERABLE_PEER_UNVERIFIED.equals(
