@@ -27,6 +27,7 @@ package com.owncloud.android.lib.resources.files;
 import android.util.Log;
 
 import com.owncloud.android.lib.common.OwnCloudClient;
+import com.owncloud.android.lib.common.http.methods.webdav.CopyMethod;
 import com.owncloud.android.lib.common.network.WebdavUtils;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
@@ -37,9 +38,10 @@ import org.apache.commons.httpclient.HttpStatus;
 import org.apache.jackrabbit.webdav.DavException;
 import org.apache.jackrabbit.webdav.MultiStatusResponse;
 import org.apache.jackrabbit.webdav.Status;
-import org.apache.jackrabbit.webdav.client.methods.CopyMethod;
 
 import java.io.IOException;
+
+import okhttp3.HttpUrl;
 
 
 /**
@@ -106,32 +108,26 @@ public class CopyRemoteFileOperation extends RemoteOperation {
         }
 
         /// perform remote operation
-        CopyMethod copyMethod = null;
         RemoteOperationResult result = null;
         try {
-            copyMethod = new CopyMethod(
-                    client.getWebdavUri() + WebdavUtils.encodePath(mSrcRemotePath),
+            CopyMethod copyMethod = new CopyMethod(
+                    HttpUrl.parse(client.getWebdavUri() + WebdavUtils.encodePath(mSrcRemotePath)),
                     client.getWebdavUri() + WebdavUtils.encodePath(mTargetRemotePath),
-                    mOverwrite
-            );
-            int status = client.executeMethod(copyMethod, COPY_READ_TIMEOUT, COPY_CONNECTION_TIMEOUT);
+                    mOverwrite);
+            final int status = client.executeHttpMethod(copyMethod);
 
-            /// process response
-            if (status == HttpStatus.SC_MULTI_STATUS) {
-                result = processPartialError(copyMethod);
-
-            } else if (status == HttpStatus.SC_PRECONDITION_FAILED && !mOverwrite) {
+            if (status == HttpStatus.SC_PRECONDITION_FAILED && !mOverwrite) {
 
                 result = new RemoteOperationResult(ResultCode.INVALID_OVERWRITE);
-                client.exhaustResponse(copyMethod.getResponseBodyAsStream());
+                client.exhaustResponse(copyMethod.getResponseAsStream());
 
 
                 /// for other errors that could be explicitly handled, check first:
                 /// http://www.webdav.org/specs/rfc4918.html#rfc.section.9.9.4
 
             } else {
-                result = new RemoteOperationResult(isSuccess(status), copyMethod);
-                client.exhaustResponse(copyMethod.getResponseBodyAsStream());
+                result = new RemoteOperationResult(copyMethod);
+                client.exhaustResponse(copyMethod.getResponseAsStream());
             }
 
             Log.i(TAG, "Copy " + mSrcRemotePath + " to " + mTargetRemotePath + ": " +
@@ -142,63 +138,8 @@ public class CopyRemoteFileOperation extends RemoteOperation {
             Log.e(TAG, "Copy " + mSrcRemotePath + " to " + mTargetRemotePath + ": " +
                     result.getLogMessage(), e);
 
-        } finally {
-            if (copyMethod != null)
-                copyMethod.releaseConnection();
         }
 
         return result;
     }
-
-
-    /**
-     * Analyzes a multistatus response from the OC server to generate an appropriate result.
-     * <p/>
-     * In WebDAV, a COPY request on collections (folders) can be PARTIALLY successful: some
-     * children are copied, some other aren't.
-     * <p/>
-     * According to the WebDAV specification, a multistatus response SHOULD NOT include partial
-     * successes (201, 204) nor for descendants of already failed children (424) in the response
-     * entity. But SHOULD NOT != MUST NOT, so take carefully.
-     *
-     * @param copyMethod Copy operation just finished with a multistatus response
-     * @return A result for the {@link com.owncloud.android.lib.resources.files.CopyRemoteFileOperation} caller
-     * @throws java.io.IOException                       If the response body could not be parsed
-     * @throws org.apache.jackrabbit.webdav.DavException If the status code is other than MultiStatus or if obtaining
-     *                                                   the response XML document fails
-     */
-    private RemoteOperationResult processPartialError(CopyMethod copyMethod)
-            throws IOException, DavException {
-        // Adding a list of failed descendants to the result could be interesting; or maybe not.
-        // For the moment, let's take the easy way.
-
-        /// check that some error really occurred
-        MultiStatusResponse[] responses = copyMethod.getResponseBodyAsMultiStatus().getResponses();
-        Status[] status;
-        boolean failFound = false;
-        for (int i = 0; i < responses.length && !failFound; i++) {
-            status = responses[i].getStatus();
-            failFound = (
-                    status != null &&
-                            status.length > 0 &&
-                            status[0].getStatusCode() > 299
-            );
-        }
-
-        RemoteOperationResult result;
-        if (failFound) {
-            result = new RemoteOperationResult(ResultCode.PARTIAL_COPY_DONE);
-        } else {
-            result = new RemoteOperationResult(true, copyMethod);
-        }
-
-        return result;
-
-    }
-
-
-    protected boolean isSuccess(int status) {
-        return status == HttpStatus.SC_CREATED || status == HttpStatus.SC_NO_CONTENT;
-    }
-
 }
