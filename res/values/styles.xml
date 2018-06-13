@@ -246,7 +246,7 @@
         <item name="android:textSize">16sp</item>
     </style>
 
-    <!-- Authenticator Activitu -->
+    <!-- Authenticator Activity -->
     <style name="Theme.ownCloud.Authenticator"
         parent="Theme.ownCloud">
 
