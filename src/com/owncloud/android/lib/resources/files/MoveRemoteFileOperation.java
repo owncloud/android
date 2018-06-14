@@ -35,6 +35,8 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 
+import java.util.concurrent.TimeUnit;
+
 import okhttp3.HttpUrl;
 
 
@@ -111,6 +113,10 @@ public class MoveRemoteFileOperation extends RemoteOperation {
                     HttpUrl.parse( client.getWebdavUri() + WebdavUtils.encodePath(mSrcRemotePath)),
                 client.getWebdavUri() + WebdavUtils.encodePath(mTargetRemotePath),
                     mOverwrite);
+
+            move.setReadTimeout(MOVE_READ_TIMEOUT, TimeUnit.SECONDS);
+            move.setConnectionTimeout(MOVE_CONNECTION_TIMEOUT, TimeUnit.SECONDS);
+
             //int status = client.executeMethod(move, MOVE_READ_TIMEOUT, MOVE_CONNECTION_TIMEOUT);
             final int status = client.executeHttpMethod(move);
             /// process response

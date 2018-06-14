@@ -25,6 +25,7 @@
 package com.owncloud.android.lib.resources.files;
 
 import java.io.File;
+import java.util.concurrent.TimeUnit;
 
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.http.HttpConstants;
@@ -108,7 +109,10 @@ public class RenameRemoteFileOperation extends RemoteOperation {
             final MoveMethod move = new MoveMethod(HttpUrl.parse(client.getWebdavUri() +
                     WebdavUtils.encodePath(mOldRemotePath)),
                     client.getWebdavUri() + WebdavUtils.encodePath(mNewRemotePath), false);
-            //TODO: client.execute(move, RENAME_READ_TIMEOUT, RENAME_CONNECTION_TIMEOUT);
+
+            move.setReadTimeout(RENAME_READ_TIMEOUT, TimeUnit.SECONDS);
+            move.setConnectionTimeout(RENAME_READ_TIMEOUT, TimeUnit.SECONDS);
+
             final int status = client.executeHttpMethod(move);
             final RemoteOperationResult result =
                     (status == HttpConstants.HTTP_CREATED || status == HttpConstants.HTTP_NO_CONTENT)
