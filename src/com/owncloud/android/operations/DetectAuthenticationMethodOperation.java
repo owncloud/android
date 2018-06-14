@@ -87,8 +87,7 @@ public class DetectAuthenticationMethodOperation extends RemoteOperation {
         RemoteOperation operation = new ExistenceCheckRemoteOperation("", false);
         client.clearCredentials();
 
-        // TODO
-//        client.setFollowRedirects(false);
+        client.setFollowRedirects(false);
 
         // try to access the root folder, following redirections but not SAML SSO redirections
         result = operation.execute(client);
