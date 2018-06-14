@@ -24,19 +24,22 @@
 
 package com.owncloud.android.lib.resources.files;
 
-import android.os.RemoteException;
-
 import java.io.File;
 
-import org.apache.jackrabbit.webdav.client.methods.DavMethodBase;
-
 import com.owncloud.android.lib.common.OwnCloudClient;
+import com.owncloud.android.lib.common.http.HttpConstants;
+import com.owncloud.android.lib.common.http.methods.webdav.MoveMethod;
 import com.owncloud.android.lib.common.network.WebdavUtils;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
+
+import org.apache.commons.httpclient.HttpState;
+import org.apache.commons.httpclient.HttpStatus;
+
+import okhttp3.HttpUrl;
 
 
 /**
@@ -90,7 +93,7 @@ public class RenameRemoteFileOperation extends RemoteOperation {
     protected RemoteOperationResult run(OwnCloudClient client) {
         RemoteOperationResult result = null;
 
-        LocalMoveMethod move = null;
+        MoveMethod move = null;
 
         OwnCloudVersion version = client.getOwnCloudVersion();
         boolean versionWithForbiddenChars =
@@ -107,15 +110,20 @@ public class RenameRemoteFileOperation extends RemoteOperation {
                     return new RemoteOperationResult(ResultCode.INVALID_OVERWRITE);
                 }
 
-                move = new LocalMoveMethod(client.getWebdavUri() +
-                    WebdavUtils.encodePath(mOldRemotePath),
-                    client.getWebdavUri() + WebdavUtils.encodePath(mNewRemotePath));
-                client.executeMethod(move, RENAME_READ_TIMEOUT, RENAME_CONNECTION_TIMEOUT);
-                result = new RemoteOperationResult(move.succeeded(), move);
+                move = new MoveMethod(HttpUrl.parse(client.getWebdavUri() +
+                    WebdavUtils.encodePath(mOldRemotePath)),
+                    client.getWebdavUri() + WebdavUtils.encodePath(mNewRemotePath), false);
+                //TODO: client.execute(move, RENAME_READ_TIMEOUT, RENAME_CONNECTION_TIMEOUT);
+                final int status = client.executeHttpMethod(move);
+                if(status == HttpConstants.HTTP_CREATED || status == HttpConstants.HTTP_NO_CONTENT) {
+                    result = new RemoteOperationResult(ResultCode.OK);
+                } else {
+                    result = new RemoteOperationResult(move);
+                }
                 Log_OC.i(TAG, "Rename " + mOldRemotePath + " to " + mNewRemotePath + ": " +
                             result.getLogMessage()
                 );
-                client.exhaustResponse(move.getResponseBodyAsStream());
+                client.exhaustResponse(move.getResponseAsStream());
 
             } catch (Exception e) {
                 result = new RemoteOperationResult(e);
@@ -123,9 +131,6 @@ public class RenameRemoteFileOperation extends RemoteOperation {
                     ((mNewRemotePath == null) ? mNewName : mNewRemotePath) + ": " +
                     result.getLogMessage(), e);
 
-            } finally {
-                if (move != null)
-                    move.releaseConnection();
             }
 
         } else {
@@ -145,28 +150,6 @@ public class RenameRemoteFileOperation extends RemoteOperation {
             new ExistenceCheckRemoteOperation(mNewRemotePath, false);
         RemoteOperationResult exists = existenceCheckRemoteOperation.run(client);
         return exists.isSuccess();
-    }
-
-    /**
-     * Move operation
-     */
-    private class LocalMoveMethod extends DavMethodBase {
-
-        public LocalMoveMethod(String uri, String dest) {
-            super(uri);
-            addRequestHeader(new org.apache.commons.httpclient.Header("Destination", dest));
-        }
-
-        @Override
-        public String getName() {
-            return "MOVE";
-        }
-
-        @Override
-        protected boolean isSuccess(int status) {
-            return status == 201 || status == 204;
-        }
-
     }
 
 }

@@ -27,6 +27,7 @@ package com.owncloud.android.lib.resources.files;
 import android.util.Log;
 
 import com.owncloud.android.lib.common.OwnCloudClient;
+import com.owncloud.android.lib.common.http.HttpConstants;
 import com.owncloud.android.lib.common.http.methods.webdav.CopyMethod;
 import com.owncloud.android.lib.common.network.WebdavUtils;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
@@ -35,11 +36,6 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCo
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 
 import org.apache.commons.httpclient.HttpStatus;
-import org.apache.jackrabbit.webdav.DavException;
-import org.apache.jackrabbit.webdav.MultiStatusResponse;
-import org.apache.jackrabbit.webdav.Status;
-
-import java.io.IOException;
 
 import okhttp3.HttpUrl;
 
@@ -114,9 +110,12 @@ public class CopyRemoteFileOperation extends RemoteOperation {
                     HttpUrl.parse(client.getWebdavUri() + WebdavUtils.encodePath(mSrcRemotePath)),
                     client.getWebdavUri() + WebdavUtils.encodePath(mTargetRemotePath),
                     mOverwrite);
+            //TODO: apply timeout
             final int status = client.executeHttpMethod(copyMethod);
 
-            if (status == HttpStatus.SC_PRECONDITION_FAILED && !mOverwrite) {
+            if(status == HttpConstants.HTTP_CREATED || status == HttpConstants.HTTP_NO_CONTENT) {
+                result = new RemoteOperationResult(ResultCode.OK);
+            } else if (status == HttpStatus.SC_PRECONDITION_FAILED && !mOverwrite) {
 
                 result = new RemoteOperationResult(ResultCode.INVALID_OVERWRITE);
                 client.exhaustResponse(copyMethod.getResponseAsStream());
