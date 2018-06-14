@@ -35,13 +35,14 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 
-import okhttp3.HttpUrl;
+import java.util.concurrent.TimeUnit;
 
+import okhttp3.HttpUrl;
 
 /**
  * Remote operation moving a remote file or folder in the ownCloud server to a different folder
  * in the same account.
- * <p/>
+ *
  * Allows renaming the moving file/folder at the same time.
  *
  * @author David A. Velasco
@@ -58,7 +59,6 @@ public class CopyRemoteFileOperation extends RemoteOperation {
 
     private boolean mOverwrite;
 
-
     /**
      * Constructor.
      * <p/>
@@ -73,7 +73,6 @@ public class CopyRemoteFileOperation extends RemoteOperation {
         mTargetRemotePath = targetRemotePath;
         mOverwrite = overwrite;
     }
-
 
     /**
      * Performs the rename operation.
@@ -108,7 +107,10 @@ public class CopyRemoteFileOperation extends RemoteOperation {
                     HttpUrl.parse(client.getWebdavUri() + WebdavUtils.encodePath(mSrcRemotePath)),
                     client.getWebdavUri() + WebdavUtils.encodePath(mTargetRemotePath),
                     mOverwrite);
-            //TODO: apply timeout
+
+            copyMethod.setReadTimeout(COPY_READ_TIMEOUT, TimeUnit.SECONDS);
+            copyMethod.setConnectionTimeout(COPY_CONNECTION_TIMEOUT, TimeUnit.SECONDS);
+
             final int status = client.executeHttpMethod(copyMethod);
 
             if(status == HttpConstants.HTTP_CREATED || status == HttpConstants.HTTP_NO_CONTENT) {
@@ -134,7 +136,6 @@ public class CopyRemoteFileOperation extends RemoteOperation {
             result = new RemoteOperationResult(e);
             Log.e(TAG, "Copy " + mSrcRemotePath + " to " + mTargetRemotePath + ": " +
                     result.getLogMessage(), e);
-
         }
 
         return result;

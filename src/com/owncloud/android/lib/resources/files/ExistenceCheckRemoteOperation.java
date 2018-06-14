@@ -25,6 +25,7 @@
 package com.owncloud.android.lib.resources.files;
 
 import com.owncloud.android.lib.common.OwnCloudClient;
+import com.owncloud.android.lib.common.http.HttpClient;
 import com.owncloud.android.lib.common.http.HttpConstants;
 import com.owncloud.android.lib.common.http.HttpUtils;
 import com.owncloud.android.lib.common.http.methods.webdav.DavUtils;
@@ -34,6 +35,9 @@ import com.owncloud.android.lib.common.network.WebdavUtils;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
+
+import java.sql.Time;
+import java.util.concurrent.TimeUnit;
 
 import static com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode.OK;
 
@@ -89,6 +93,9 @@ public class ExistenceCheckRemoteOperation extends RemoteOperation {
                     HttpUtils.stringUrlToHttpUrl(client.getNewWebDavUri() + WebdavUtils.encodePath(mPath)),
                     0,
                     DavUtils.getAllPropset());
+
+            propfindMethod.setReadTimeout(TIMEOUT, TimeUnit.SECONDS);
+            propfindMethod.setConnectionTimeout(TIMEOUT, TimeUnit.SECONDS);
 
             int status = client.executeHttpMethod(propfindMethod);
 

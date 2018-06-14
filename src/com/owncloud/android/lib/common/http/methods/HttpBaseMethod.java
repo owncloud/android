@@ -28,6 +28,7 @@ import com.owncloud.android.lib.common.http.HttpClient;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.Headers;
 import okhttp3.HttpUrl;
@@ -54,6 +55,24 @@ public abstract class HttpBaseMethod {
         mOkHttpClient = HttpClient.getOkHttpClient();
         mRequest = new Request.Builder()
                 .url(httpUrl)
+                .build();
+    }
+
+    public void setReadTimeout(long readTimeout, TimeUnit timeUnit) {
+        mOkHttpClient = mOkHttpClient.newBuilder()
+                .readTimeout(readTimeout, timeUnit)
+                .build();
+    }
+
+    public void setConnectionTimeout(long connectionTimeout, TimeUnit timeUnit) {
+        mOkHttpClient = mOkHttpClient.newBuilder()
+                .readTimeout(connectionTimeout, timeUnit)
+                .build();
+    }
+
+    public void setFollowRedirects(boolean followRedirects) {
+        mOkHttpClient = mOkHttpClient.newBuilder()
+                .followRedirects(followRedirects)
                 .build();
     }
 

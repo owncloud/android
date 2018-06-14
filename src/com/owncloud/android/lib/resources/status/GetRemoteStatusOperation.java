@@ -40,7 +40,9 @@ import com.owncloud.android.lib.common.utils.Log_OC;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.sql.Time;
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 import static com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode.OK;
 
@@ -58,7 +60,7 @@ public class GetRemoteStatusOperation extends RemoteOperation {
      * Maximum time to wait for a response from the server when the connection is being tested,
      * in MILLISECONDs.
      */
-    public static final int TRY_CONNECTION_TIMEOUT = 5000;
+    public static final long TRY_CONNECTION_TIMEOUT = 5000;
 
     private static final String TAG = GetRemoteStatusOperation.class.getSimpleName();
 
@@ -78,13 +80,12 @@ public class GetRemoteStatusOperation extends RemoteOperation {
         boolean retval = false;
         String baseUrlSt = client.getBaseUri().toString();
         try {
-            HttpClient.getOkHttpClient()
-                    .newBuilder()
-                    .followRedirects(false);
-
             GetMethod getMethod = new GetMethod(
                     HttpUtils.stringUrlToHttpUrl(baseUrlSt + OwnCloudClient.STATUS_PATH)
             );
+
+            getMethod.setReadTimeout(TRY_CONNECTION_TIMEOUT, TimeUnit.SECONDS);
+            getMethod.setConnectionTimeout(TRY_CONNECTION_TIMEOUT, TimeUnit.SECONDS);
 
             int status = client.executeHttpMethod(getMethod);
 

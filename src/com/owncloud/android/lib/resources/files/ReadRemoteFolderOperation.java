@@ -79,6 +79,8 @@ public class ReadRemoteFolderOperation extends RemoteOperation {
                     DavConstants.DEPTH_1,
                     DavUtils.getAllPropset());
 
+            client.setFollowRedirects(true);
+
             int status = client.executeHttpMethod(propfindMethod);
 
             if (isSuccess(status)) {

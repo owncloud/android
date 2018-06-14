@@ -161,8 +161,7 @@ public class OwnCloudClientFactory {
      * @param context   Android context where the OwnCloudClient is being created.
      * @return          A OwnCloudClient object ready to be used
      */
-    public static OwnCloudClient createOwnCloudClient(Uri uri, Context context,
-                                                      boolean followRedirects) {
+    public static OwnCloudClient createOwnCloudClient(Uri uri, Context context, boolean followRedirects) {
         try {
             NetworkUtils.registerAdvancedSslContext(true, context);
         }  catch (GeneralSecurityException e) {
@@ -175,11 +174,10 @@ public class OwnCloudClientFactory {
         }
         
         OwnCloudClient client = new OwnCloudClient(uri, NetworkUtils.getMultiThreadedConnManager());
+
         client.setDefaultTimeouts(DEFAULT_DATA_TIMEOUT, DEFAULT_CONNECTION_TIMEOUT);
 
-        HttpClient.getOkHttpClient()
-                .newBuilder()
-                .followRedirects(followRedirects);
+        client.setFollowRedirects(followRedirects);
 
         client.setContext(context);
         

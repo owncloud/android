@@ -58,6 +58,7 @@ public class HttpClient {
                     .followRedirects(false)
                     .build();
         }
+
         return mOkHttpClient;
     }
 

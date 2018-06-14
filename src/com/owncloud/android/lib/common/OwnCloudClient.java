@@ -96,6 +96,7 @@ public class OwnCloudClient extends HttpClient {
     private boolean mSilentRefreshOfAccountCredentials = true;
 
     private String mRedirectedLocation;
+    private boolean mFollowRedirects;
 
     /**
      * Constructor
@@ -282,6 +283,7 @@ public class OwnCloudClient extends HttpClient {
         int status;
 
         do {
+            method.setFollowRedirects(mFollowRedirects);
             status = method.execute();
             repeatWithFreshCredentials = checkUnauthorizedAccess(status, repeatCounter);
             if (repeatWithFreshCredentials) {
@@ -667,5 +669,13 @@ public class OwnCloudClient extends HttpClient {
         return (mRedirectedLocation != null &&
                 (mRedirectedLocation.toUpperCase().contains("SAML") ||
                         mRedirectedLocation.toLowerCase().contains("wayf")));
+    }
+
+    public boolean isFollowRedirects() {
+        return mFollowRedirects;
+    }
+
+    public void setFollowRedirects(boolean followRedirects) {
+        this.mFollowRedirects = followRedirects;
     }
 }
