@@ -24,13 +24,6 @@
 
 package com.owncloud.android.lib.resources.files;
 
-import java.io.IOException;
-
-import org.apache.commons.httpclient.HttpStatus;
-import org.apache.jackrabbit.webdav.DavException;
-import org.apache.jackrabbit.webdav.MultiStatusResponse;
-import org.apache.jackrabbit.webdav.Status;
-
 import android.util.Log;
 
 import com.owncloud.android.lib.common.OwnCloudClient;
@@ -123,7 +116,7 @@ public class MoveRemoteFileOperation extends RemoteOperation {
             /// process response
             if(isSuccess(status)) {
                 result = new RemoteOperationResult(ResultCode.OK);
-            } else if (status == HttpStatus.SC_PRECONDITION_FAILED && !mOverwrite) {
+            } else if (status == HttpConstants.HTTP_PRECONDITION_FAILED && !mOverwrite) {
 
                 result = new RemoteOperationResult(ResultCode.INVALID_OVERWRITE);
                 client.exhaustResponse(move.getResponseAsStream());

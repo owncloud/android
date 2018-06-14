@@ -36,9 +36,6 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCo
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 
-import org.apache.commons.httpclient.HttpState;
-import org.apache.commons.httpclient.HttpStatus;
-
 import okhttp3.HttpUrl;
 
 
@@ -91,53 +88,45 @@ public class RenameRemoteFileOperation extends RemoteOperation {
      */
     @Override
     protected RemoteOperationResult run(OwnCloudClient client) {
-        RemoteOperationResult result = null;
 
-        MoveMethod move = null;
-
-        OwnCloudVersion version = client.getOwnCloudVersion();
-        boolean versionWithForbiddenChars =
+        final OwnCloudVersion version = client.getOwnCloudVersion();
+        final boolean versionWithForbiddenChars =
             (version != null && version.isVersionWithForbiddenCharacters());
-        boolean noInvalidChars = FileUtils.isValidPath(mNewRemotePath, versionWithForbiddenChars);
 
-        if (noInvalidChars) {
-            try {
-                if (mNewName.equals(mOldName)) {
-                    return new RemoteOperationResult(ResultCode.OK);
-                }
+        if(!FileUtils.isValidPath(mNewRemotePath, versionWithForbiddenChars))
+            return new RemoteOperationResult(ResultCode.INVALID_CHARACTER_IN_NAME);
 
-                if (targetPathIsUsed(client)) {
-                    return new RemoteOperationResult(ResultCode.INVALID_OVERWRITE);
-                }
-
-                move = new MoveMethod(HttpUrl.parse(client.getWebdavUri() +
-                    WebdavUtils.encodePath(mOldRemotePath)),
-                    client.getWebdavUri() + WebdavUtils.encodePath(mNewRemotePath), false);
-                //TODO: client.execute(move, RENAME_READ_TIMEOUT, RENAME_CONNECTION_TIMEOUT);
-                final int status = client.executeHttpMethod(move);
-                if(status == HttpConstants.HTTP_CREATED || status == HttpConstants.HTTP_NO_CONTENT) {
-                    result = new RemoteOperationResult(ResultCode.OK);
-                } else {
-                    result = new RemoteOperationResult(move);
-                }
-                Log_OC.i(TAG, "Rename " + mOldRemotePath + " to " + mNewRemotePath + ": " +
-                            result.getLogMessage()
-                );
-                client.exhaustResponse(move.getResponseAsStream());
-
-            } catch (Exception e) {
-                result = new RemoteOperationResult(e);
-                Log_OC.e(TAG, "Rename " + mOldRemotePath + " to " +
-                    ((mNewRemotePath == null) ? mNewName : mNewRemotePath) + ": " +
-                    result.getLogMessage(), e);
-
+        try {
+            if (mNewName.equals(mOldName)) {
+                return new RemoteOperationResult(ResultCode.OK);
             }
 
-        } else {
-            result = new RemoteOperationResult(ResultCode.INVALID_CHARACTER_IN_NAME);
-        }
+            if (targetPathIsUsed(client)) {
+                return new RemoteOperationResult(ResultCode.INVALID_OVERWRITE);
+            }
 
-        return result;
+            final MoveMethod move = new MoveMethod(HttpUrl.parse(client.getWebdavUri() +
+                    WebdavUtils.encodePath(mOldRemotePath)),
+                    client.getWebdavUri() + WebdavUtils.encodePath(mNewRemotePath), false);
+            //TODO: client.execute(move, RENAME_READ_TIMEOUT, RENAME_CONNECTION_TIMEOUT);
+            final int status = client.executeHttpMethod(move);
+            final RemoteOperationResult result =
+                    (status == HttpConstants.HTTP_CREATED || status == HttpConstants.HTTP_NO_CONTENT)
+                            ? new RemoteOperationResult(ResultCode.OK)
+                            : new RemoteOperationResult(move);
+
+            Log_OC.i(TAG, "Rename " + mOldRemotePath + " to " + mNewRemotePath + ": " +
+                    result.getLogMessage()
+            );
+            client.exhaustResponse(move.getResponseAsStream());
+            return result;
+        } catch (Exception e) {
+            final RemoteOperationResult result = new RemoteOperationResult(e);
+            Log_OC.e(TAG, "Rename " + mOldRemotePath + " to " +
+                    ((mNewRemotePath == null) ? mNewName : mNewRemotePath) + ": " +
+                    result.getLogMessage(), e);
+            return result;
+        }
     }
 
     /**

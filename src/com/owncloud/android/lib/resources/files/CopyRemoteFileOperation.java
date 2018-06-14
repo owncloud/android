@@ -35,8 +35,6 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 
-import org.apache.commons.httpclient.HttpStatus;
-
 import okhttp3.HttpUrl;
 
 
@@ -115,7 +113,7 @@ public class CopyRemoteFileOperation extends RemoteOperation {
 
             if(status == HttpConstants.HTTP_CREATED || status == HttpConstants.HTTP_NO_CONTENT) {
                 result = new RemoteOperationResult(ResultCode.OK);
-            } else if (status == HttpStatus.SC_PRECONDITION_FAILED && !mOverwrite) {
+            } else if (status == HttpConstants.HTTP_PRECONDITION_FAILED && !mOverwrite) {
 
                 result = new RemoteOperationResult(ResultCode.INVALID_OVERWRITE);
                 client.exhaustResponse(copyMethod.getResponseAsStream());
