@@ -27,6 +27,7 @@ package com.owncloud.android.lib.resources.files;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.http.HttpConstants;
 import com.owncloud.android.lib.common.http.HttpUtils;
+import com.owncloud.android.lib.common.network.FileRequestBody;
 import com.owncloud.android.lib.common.network.FileRequestEntity;
 import com.owncloud.android.lib.common.network.OnDatatransferProgressListener;
 import com.owncloud.android.lib.common.network.ProgressiveDataTransferer;
@@ -157,7 +158,7 @@ public class UploadRemoteFileOperation extends RemoteOperation {
             MediaType mediaType = MediaType.parse(mMimeType);
 
             mPutMethod.setRequestBody(
-                    RequestBody.create(mediaType, fileToUpload)
+                    FileRequestBody.create(mediaType, fileToUpload)
             );
 
             int status = client.executeHttpMethod(mPutMethod);

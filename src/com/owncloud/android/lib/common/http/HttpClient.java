@@ -39,31 +39,29 @@ import okhttp3.Protocol;
  */
 public class HttpClient {
 
-    private static OkHttpClient mOkHttpClient;
-    private static HttpInterceptor mOkHttpInterceptor;
+    private static OkHttpClient sOkHttpClient;
+    private static HttpInterceptor sOkHttpInterceptor;
 
     public static OkHttpClient getOkHttpClient() {
-        if (mOkHttpClient == null) {
-
-            mOkHttpClient = new OkHttpClient.Builder()
-                    .addInterceptor(mOkHttpInterceptor)
+        if (sOkHttpClient == null) {
+            sOkHttpClient = new OkHttpClient.Builder()
+                    .addInterceptor(getOkHttpInterceptor())
                     .protocols(Arrays.asList(Protocol.HTTP_1_1))
                     .followRedirects(false)
                     .build();
         }
-
-        return mOkHttpClient;
+        return sOkHttpClient;
     }
 
     public static HttpInterceptor getOkHttpInterceptor() {
-        if(mOkHttpInterceptor == null) {
-            mOkHttpInterceptor = new HttpInterceptor()
+        if (sOkHttpInterceptor == null) {
+            sOkHttpInterceptor = new HttpInterceptor()
                     .addRequestInterceptor(new UserAgentInterceptor(
                                     // TODO Try to get rid of this dependency
                                     OwnCloudClientManagerFactory.getUserAgent()
                             )
                     );
         }
-        return mOkHttpInterceptor;
+        return sOkHttpInterceptor;
     }
 }

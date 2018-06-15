@@ -105,7 +105,6 @@ public class MoveRemoteFileOperation extends RemoteOperation {
             return new RemoteOperationResult(ResultCode.INVALID_MOVE_INTO_DESCENDANT);
         }
 
-
         /// perform remote operation
         RemoteOperationResult result = null;
         try {

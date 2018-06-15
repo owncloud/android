@@ -175,7 +175,6 @@ public class GetRemoteUserAvatarOperation extends RemoteOperation {
                 } catch (IOException o) {
                     Log_OC.e(TAG, "Unexpected exception closing output stream ", o);
                 }
-                client.exhaustResponse(getMethod.getResponseAsStream());
             }
         }
 

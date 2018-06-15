@@ -42,13 +42,13 @@ import com.owncloud.android.lib.common.accounts.AccountUtils.AccountNotFoundExce
 
 public interface OwnCloudClientManager {
 
-	public OwnCloudClient getClientFor(OwnCloudAccount account, Context context)
+	OwnCloudClient getClientFor(OwnCloudAccount account, Context context)
             throws AccountNotFoundException, OperationCanceledException, AuthenticatorException,
             IOException;
     
-    public OwnCloudClient removeClientFor(OwnCloudAccount account);
+    OwnCloudClient removeClientFor(OwnCloudAccount account);
 
-    public void saveAllClients(Context context, String accountType)
+    void saveAllClients(Context context, String accountType)
 			throws AccountNotFoundException, AuthenticatorException, 
 			IOException, OperationCanceledException;
     
