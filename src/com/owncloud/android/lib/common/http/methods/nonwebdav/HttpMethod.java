@@ -28,6 +28,7 @@ import com.owncloud.android.lib.common.http.methods.HttpBaseMethod;
 
 import java.io.IOException;
 
+import okhttp3.Call;
 import okhttp3.HttpUrl;
 
 /**
@@ -37,13 +38,20 @@ import okhttp3.HttpUrl;
  */
 public abstract class HttpMethod extends HttpBaseMethod {
 
+    private Call mCall;
+
     public HttpMethod(HttpUrl httpUrl) {
         super(httpUrl);
     }
 
     @Override
     public int execute() throws IOException {
-        mResponse = mOkHttpClient.newCall(mRequest).execute();
+        mCall = mOkHttpClient.newCall(mRequest);
+        mResponse = mCall.execute();
         return super.getStatusCode();
+    }
+
+    public void abort() {
+        mCall.cancel();
     }
 }
