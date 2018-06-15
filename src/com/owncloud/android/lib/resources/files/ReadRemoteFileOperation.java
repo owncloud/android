@@ -23,10 +23,6 @@
  */
 package com.owncloud.android.lib.resources.files;
 
-import java.util.ArrayList;
-import java.util.Objects;
-import java.util.concurrent.TimeUnit;
-
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.http.HttpConstants;
 import com.owncloud.android.lib.common.http.methods.webdav.DavUtils;
@@ -36,11 +32,14 @@ import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
 
+import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
+
 import at.bitfire.dav4android.DavResource;
 import okhttp3.HttpUrl;
 
 import static com.owncloud.android.lib.common.http.methods.webdav.DavConstants.DEPTH_0;
-
+import static com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode.OK;
 
 /**
  * Remote operation performing the read a file from the ownCloud server.
@@ -56,7 +55,6 @@ public class ReadRemoteFileOperation extends RemoteOperation {
     private static final int SYNC_CONNECTION_TIMEOUT = 5000;
 
     private String mRemotePath;
-
 
     /**
      * Constructor
@@ -74,8 +72,8 @@ public class ReadRemoteFileOperation extends RemoteOperation {
      */
     @Override
     protected RemoteOperationResult run(OwnCloudClient client) {
-        PropfindMethod propfind = null;
-        RemoteOperationResult result = null;
+        PropfindMethod propfind;
+        RemoteOperationResult result;
 
         /// take the duty of check the server for the current state of the file there
         try {
@@ -92,14 +90,14 @@ public class ReadRemoteFileOperation extends RemoteOperation {
             if (status == HttpConstants.HTTP_MULTI_STATUS
                     || status == HttpConstants.HTTP_OK) {
                 // Parse response
-                final DavResource resource = propfind.getMembers().iterator().next();
+                final DavResource resource = propfind.getDavResource();
 
                 final RemoteFile file = new RemoteFile(resource, client.getAccount().getDisplayName());
 
                 ArrayList<Object> files = new ArrayList<>();
                 files.add(file);
 
-                result = new RemoteOperationResult(RemoteOperationResult.ResultCode.OK);
+                result = new RemoteOperationResult(OK);
                 result.setData(files);
 
             } else {
@@ -116,5 +114,4 @@ public class ReadRemoteFileOperation extends RemoteOperation {
 
         return result;
     }
-
 }
