@@ -21,6 +21,16 @@
       xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/file_action_select_all"
+        android:title="@string/actionbar_select_all"
+        android:showAsAction="never"/>
+
+    <item android:id="@+id/action_deselect_all"
+        android:title="@string/actionbar_deselect_all"
+        android:visible="true"
+        android:showAsAction="never"/>
+
+    <item
         android:id="@+id/action_share_file"
         android:title="@string/action_share"
         android:icon="@drawable/ic_action_share"
