@@ -27,7 +27,6 @@ package com.owncloud.android.lib.common.network;
 import java.util.Collection;
 
 
-
 public interface ProgressiveDataTransferer {
 
     public void addDatatransferProgressListener (OnDatatransferProgressListener listener);

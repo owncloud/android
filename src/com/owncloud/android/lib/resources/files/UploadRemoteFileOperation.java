@@ -27,20 +27,13 @@ package com.owncloud.android.lib.resources.files;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.http.HttpConstants;
 import com.owncloud.android.lib.common.http.HttpUtils;
+import com.owncloud.android.lib.common.http.methods.webdav.PutMethod;
 import com.owncloud.android.lib.common.network.FileRequestBody;
-import com.owncloud.android.lib.common.network.FileRequestEntity;
 import com.owncloud.android.lib.common.network.OnDatatransferProgressListener;
-import com.owncloud.android.lib.common.network.ProgressiveDataTransferer;
 import com.owncloud.android.lib.common.network.WebdavUtils;
 import com.owncloud.android.lib.common.operations.OperationCancelledException;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
-import com.owncloud.android.lib.common.http.methods.webdav.PutMethod;
-
-import org.apache.commons.httpclient.DefaultHttpMethodRetryHandler;
-import org.apache.commons.httpclient.HttpStatus;
-import org.apache.commons.httpclient.methods.RequestEntity;
-import org.apache.commons.httpclient.params.HttpMethodParams;
 
 import java.io.File;
 import java.io.IOException;
@@ -49,6 +42,7 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
 import static com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode.OK;
@@ -75,7 +69,7 @@ public class UploadRemoteFileOperation extends RemoteOperation {
     protected final AtomicBoolean mCancellationRequested = new AtomicBoolean(false);
     protected Set<OnDatatransferProgressListener> mDataTransferListeners = new HashSet<OnDatatransferProgressListener>();
 
-    protected RequestEntity mEntity = null;
+    protected FileRequestBody mFileRequestBody = null;
 
     public UploadRemoteFileOperation(String localPath, String remotePath, String mimeType,
                                      String fileLastModifTimestamp) {
@@ -138,13 +132,15 @@ public class UploadRemoteFileOperation extends RemoteOperation {
     protected RemoteOperationResult uploadFile(OwnCloudClient client) throws IOException {
         RemoteOperationResult result;
         try {
-            // Headers
             File fileToUpload = new File(mLocalPath);
-            // TODO
-//            synchronized (mDataTransferListeners) {
-//                ((ProgressiveDataTransferer)mEntity)
-//                        .addDatatransferProgressListeners(mDataTransferListeners);
-//            }
+
+            MediaType mediaType = MediaType.parse(mMimeType);
+
+            mFileRequestBody = new FileRequestBody(fileToUpload, mediaType);
+
+            synchronized (mDataTransferListeners) {
+                mFileRequestBody.addDatatransferProgressListeners(mDataTransferListeners);
+            }
 
             if (mRequiredEtag != null && mRequiredEtag.length() > 0) {
                 mPutMethod.addRequestHeader(HttpConstants.IF_MATCH_HEADER, "\"" + mRequiredEtag + "\"");
@@ -154,12 +150,12 @@ public class UploadRemoteFileOperation extends RemoteOperation {
 
             mPutMethod.addRequestHeader(HttpConstants.OC_X_OC_MTIME_HEADER, mFileLastModifTimestamp);
 
-            // Request body
-            MediaType mediaType = MediaType.parse(mMimeType);
+            RequestBody requestBody = new MultipartBody.Builder()
+                    .setType(MultipartBody.FORM)
+                    .addPart(mFileRequestBody)
+                    .build();
 
-            mPutMethod.setRequestBody(
-                    FileRequestBody.create(mediaType, fileToUpload)
-            );
+            mPutMethod.setRequestBody(requestBody);
 
             int status = client.executeHttpMethod(mPutMethod);
 
@@ -169,8 +165,6 @@ public class UploadRemoteFileOperation extends RemoteOperation {
             } else { // synchronization failed
                 result = new RemoteOperationResult(mPutMethod);
             }
-
-            client.exhaustResponse(mPutMethod.getResponseAsStream());
 
         } catch (Exception e) {
             result = new RemoteOperationResult(e);
@@ -186,8 +180,8 @@ public class UploadRemoteFileOperation extends RemoteOperation {
         synchronized (mDataTransferListeners) {
             mDataTransferListeners.add(listener);
         }
-        if (mEntity != null) {
-            ((ProgressiveDataTransferer)mEntity).addDatatransferProgressListener(listener);
+        if (mFileRequestBody != null) {
+            mFileRequestBody.addDatatransferProgressListener(listener);
         }
     }
     
@@ -195,8 +189,8 @@ public class UploadRemoteFileOperation extends RemoteOperation {
         synchronized (mDataTransferListeners) {
             mDataTransferListeners.remove(listener);
         }
-        if (mEntity != null) {
-            ((ProgressiveDataTransferer)mEntity).removeDatatransferProgressListener(listener);
+        if (mFileRequestBody != null) {
+            mFileRequestBody.removeDatatransferProgressListener(listener);
         }
     }
     

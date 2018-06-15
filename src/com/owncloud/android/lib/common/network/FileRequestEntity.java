@@ -25,6 +25,8 @@
 
 package com.owncloud.android.lib.common.network;
 
+import org.apache.commons.httpclient.methods.RequestEntity;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -37,10 +39,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
-import org.apache.commons.httpclient.methods.RequestEntity;
-
-import com.owncloud.android.lib.common.utils.Log_OC;
-
 
 
 /**
@@ -51,7 +49,7 @@ public class FileRequestEntity implements RequestEntity, ProgressiveDataTransfer
 
     final File mFile;
     final String mContentType;
-    Set<OnDatatransferProgressListener> mDataTransferListeners = new HashSet<OnDatatransferProgressListener>();
+    Set<OnDatatransferProgressListener> mDataTransferListeners = new HashSet<>();
 
     public FileRequestEntity(final File file, final String contentType) {
         super();
@@ -162,5 +160,4 @@ public class FileRequestEntity implements RequestEntity, ProgressiveDataTransfer
             return mWrapped;
         }
     }
-
 }
