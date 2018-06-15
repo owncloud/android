@@ -704,18 +704,6 @@ public class FileUploader extends Service
             }
         }
 
-
-        @Override
-        public void onTransferProgress(long progressRate, long totalTransferredSoFar,
-                                       long totalToTransfer, String fileName) {
-            String key = buildRemoteName(mCurrentUpload.getAccount().name, mCurrentUpload.getFile().getRemotePath());
-            WeakReference<OnDatatransferProgressListener> boundListenerRef = mBoundListeners.get(key);
-            if (boundListenerRef != null && boundListenerRef.get() != null) {
-                boundListenerRef.get().onTransferProgress(progressRate, totalTransferredSoFar,
-                        totalToTransfer, fileName);
-            }
-        }
-
         /**
          * Builds a key for the map of listeners.
          * <p/>
@@ -730,6 +718,14 @@ public class FileUploader extends Service
             return accountName + remotePath;
         }
 
+        @Override
+        public void onTransferProgress(long read, long transferred, long total, String absolutePath) {
+            String key = buildRemoteName(mCurrentUpload.getAccount().name, mCurrentUpload.getFile().getRemotePath());
+            WeakReference<OnDatatransferProgressListener> boundListenerRef = mBoundListeners.get(key);
+            if (boundListenerRef != null && boundListenerRef.get() != null) {
+                boundListenerRef.get().onTransferProgress(read, transferred, total, absolutePath);
+            }
+        }
     }
 
     /**
@@ -940,7 +936,6 @@ public class FileUploader extends Service
             String text = String.format(getString(R.string.uploader_upload_in_progress_content), percent, fileName);
             mNotificationBuilder.setContentText(text);
             mNotificationBuilder.setChannelId(UPLOAD_NOTIFICATION_CHANNEL_ID);
-
             mNotificationManager.notify(R.string.uploader_upload_in_progress_ticker, mNotificationBuilder.build());
         }
         mLastPercent = percent;
