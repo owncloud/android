@@ -24,18 +24,22 @@
 package com.owncloud.android.lib.resources.files;
 
 import java.util.ArrayList;
-
-import org.apache.commons.httpclient.HttpStatus;
-import org.apache.jackrabbit.webdav.DavConstants;
-import org.apache.jackrabbit.webdav.MultiStatus;
-import org.apache.jackrabbit.webdav.client.methods.PropFindMethod;
+import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 import com.owncloud.android.lib.common.OwnCloudClient;
-import com.owncloud.android.lib.common.network.WebdavEntry;
+import com.owncloud.android.lib.common.http.HttpConstants;
+import com.owncloud.android.lib.common.http.methods.webdav.DavUtils;
+import com.owncloud.android.lib.common.http.methods.webdav.PropfindMethod;
 import com.owncloud.android.lib.common.network.WebdavUtils;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
+
+import at.bitfire.dav4android.DavResource;
+import okhttp3.HttpUrl;
+
+import static com.owncloud.android.lib.common.http.methods.webdav.DavConstants.DEPTH_0;
 
 
 /**
@@ -70,38 +74,37 @@ public class ReadRemoteFileOperation extends RemoteOperation {
      */
     @Override
     protected RemoteOperationResult run(OwnCloudClient client) {
-        PropFindMethod propfind = null;
+        PropfindMethod propfind = null;
         RemoteOperationResult result = null;
 
         /// take the duty of check the server for the current state of the file there
         try {
             // remote request
-            propfind = new PropFindMethod(client.getWebdavUri() + WebdavUtils.encodePath(mRemotePath),
-                WebdavUtils.getFilePropSet(),    // PropFind Properties
-                DavConstants.DEPTH_0);
-            int status;
-            status = client.executeMethod(propfind, SYNC_READ_TIMEOUT, SYNC_CONNECTION_TIMEOUT);
+            propfind = new PropfindMethod(
+                    HttpUrl.parse(client.getWebdavUri() + WebdavUtils.encodePath(mRemotePath)),
+                    DEPTH_0,
+                    DavUtils.getAllPropset());
 
-            boolean isSuccess = (
-                status == HttpStatus.SC_MULTI_STATUS ||
-                    status == HttpStatus.SC_OK
-            );
-            if (isSuccess) {
+            propfind.setReadTimeout(SYNC_READ_TIMEOUT, TimeUnit.SECONDS);
+            propfind.setConnectionTimeout(SYNC_CONNECTION_TIMEOUT, TimeUnit.SECONDS);
+            final int status = client.executeHttpMethod(propfind);
+
+            if (status == HttpConstants.HTTP_MULTI_STATUS
+                    || status == HttpConstants.HTTP_OK) {
                 // Parse response
-                MultiStatus resp = propfind.getResponseBodyAsMultiStatus();
-                WebdavEntry we = new WebdavEntry(resp.getResponses()[0],
-                    client.getWebdavUri().getPath());
-                RemoteFile remoteFile = new RemoteFile(we);
-                ArrayList<Object> files = new ArrayList<Object>();
-                files.add(remoteFile);
+                final DavResource resource = propfind.getMembers().iterator().next();
 
-                // Result of the operation
-                result = new RemoteOperationResult(true, propfind);
+                final RemoteFile file = new RemoteFile(resource, client.getAccount().getDisplayName());
+
+                ArrayList<Object> files = new ArrayList<>();
+                files.add(file);
+
+                result = new RemoteOperationResult(RemoteOperationResult.ResultCode.OK);
                 result.setData(files);
 
             } else {
-                result = new RemoteOperationResult(false, propfind);
-                client.exhaustResponse(propfind.getResponseBodyAsStream());
+                result = new RemoteOperationResult(propfind);
+                client.exhaustResponse(propfind.getResponseAsStream());
             }
 
         } catch (Exception e) {
@@ -109,10 +112,8 @@ public class ReadRemoteFileOperation extends RemoteOperation {
             e.printStackTrace();
             Log_OC.e(TAG, "Synchronizing  file " + mRemotePath + ": " + result.getLogMessage(),
                 result.getException());
-        } finally {
-            if (propfind != null)
-                propfind.releaseConnection();
         }
+
         return result;
     }
 

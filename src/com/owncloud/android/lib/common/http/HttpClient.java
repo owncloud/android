@@ -44,7 +44,7 @@ public class HttpClient {
 
     public static OkHttpClient getOkHttpClient() {
         if (mOkHttpClient == null) {
-            
+
             mOkHttpClient = new OkHttpClient.Builder()
                     .addInterceptor(mOkHttpInterceptor)
                     .protocols(Arrays.asList(Protocol.HTTP_1_1))
