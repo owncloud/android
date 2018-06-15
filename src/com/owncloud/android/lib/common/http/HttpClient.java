@@ -44,14 +44,7 @@ public class HttpClient {
 
     public static OkHttpClient getOkHttpClient() {
         if (mOkHttpClient == null) {
-
-            mOkHttpInterceptor = new HttpInterceptor()
-                    .addRequestInterceptor(new UserAgentInterceptor(
-                                    // TODO Try to get rid of this dependency
-                                    OwnCloudClientManagerFactory.getUserAgent()
-                            )
-                    );
-
+            
             mOkHttpClient = new OkHttpClient.Builder()
                     .addInterceptor(mOkHttpInterceptor)
                     .protocols(Arrays.asList(Protocol.HTTP_1_1))
@@ -63,6 +56,14 @@ public class HttpClient {
     }
 
     public static HttpInterceptor getOkHttpInterceptor() {
+        if(mOkHttpInterceptor == null) {
+            mOkHttpInterceptor = new HttpInterceptor()
+                    .addRequestInterceptor(new UserAgentInterceptor(
+                                    // TODO Try to get rid of this dependency
+                                    OwnCloudClientManagerFactory.getUserAgent()
+                            )
+                    );
+        }
         return mOkHttpInterceptor;
     }
 }
