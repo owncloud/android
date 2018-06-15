@@ -360,15 +360,19 @@ public class UploadFileOperation extends SyncOperation {
             String timeStamp = timeStampLong.toString();
 
             /// perform the upload
-            if ( mChunked &&
-                    (new File(mFile.getStoragePath())).length() >
-                            ChunkedUploadRemoteFileOperation.CHUNK_SIZE ) {
-                mUploadOperation = new ChunkedUploadRemoteFileOperation(mFile.getStoragePath(),
+//            if (mChunked &&
+//                    new File(mFile.getStoragePath()).length() >
+//                            ChunkedUploadRemoteFileOperation.CHUNK_SIZE ) {
+//                mUploadOperation = new ChunkedUploadRemoteFileOperation(mFile.getStoragePath(),
+//                        mFile.getRemotePath(), mFile.getMimetype(), mFile.getEtagInConflict(), timeStamp);
+//            } else {
+//                mUploadOperation = new UploadRemoteFileOperation(mFile.getStoragePath(),
+//                        mFile.getRemotePath(), mFile.getMimetype(), mFile.getEtagInConflict(), timeStamp);
+//            }
+
+            mUploadOperation = new UploadRemoteFileOperation(mFile.getStoragePath(),
                         mFile.getRemotePath(), mFile.getMimetype(), mFile.getEtagInConflict(), timeStamp);
-            } else {
-                mUploadOperation = new UploadRemoteFileOperation(mFile.getStoragePath(),
-                        mFile.getRemotePath(), mFile.getMimetype(), mFile.getEtagInConflict(), timeStamp);
-            }
+
             Iterator <OnDatatransferProgressListener> listener = mDataTransferListeners.iterator();
             while (listener.hasNext()) {
                 mUploadOperation.addDatatransferProgressListener(listener.next());
