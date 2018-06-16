@@ -439,6 +439,10 @@ public class ExtendedListFragment extends Fragment
         }
     }
 
+    public ProgressBar getPoregressBar(){
+        return mProgressBar;
+    }
+
     /**
      * TODO doc
      * @param text
@@ -456,6 +460,11 @@ public class ExtendedListFragment extends Fragment
 
     public void setProgressBarAsIndeterminate(boolean indeterminate) {
         Log_OC.d(TAG, "Setting progress visibility to " + indeterminate);
+        if(indeterminate){
+            mProgressBar.setProgressDrawable(getContext().getDrawable(R.drawable.top_progress_bar_indeterminate));
+        } else{
+            mProgressBar.setProgressDrawable(getContext().getDrawable(R.drawable.top_progress_bar_determinate));
+        }
         mProgressBar.setIndeterminate(indeterminate);
         mProgressBar.postInvalidate();
     }
