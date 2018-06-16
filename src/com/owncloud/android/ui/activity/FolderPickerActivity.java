@@ -154,6 +154,7 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
             if (!mSyncInProgress) {
                 // In case folder list is empty
                 message = R.string.file_list_empty_moving;
+                listFragment.getProgressBar().setProgressDrawable(getDrawable(R.drawable.black_gradient));
             }
             listFragment.setMessageForEmptyList(getString(message));
         } else {
