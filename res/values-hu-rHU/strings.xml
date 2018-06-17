@@ -15,6 +15,8 @@
   <string name="actionbar_descending">Csökkenő</string>
   <string name="actionbar_sort_title">Rendezés elve</string>
   <string name="actionbar_sort_by_name">A-Z</string>
+  <string name="actionbar_sort_by_date">Legrégebbi - Legújabb</string>
+  <string name="actionbar_sort_by_size">Legkisebb - Legnagyobb</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Összes fájl</string>
@@ -24,7 +26,10 @@
   <string name="drawer_item_uploads_list">Feltöltések</string>
   <string name="drawer_close">Bezárás</string>
   <string name="drawer_open">Megnyitás</string>
+  <string name="drawer_loading_quota">Kvóta betöltése</string>
+  <string name="drawer_quota">%2$s-ből %1$sfelhasználva (%3$s%%)</string>
   <string name="drawer_unavailable_free_storage">%1$s használatban</string>
+  <string name="drawer_unavailable_used_storage">Nem áll rendelkezésre tárhelyhasználati információ</string>
   <string name="drawer_feedback">Visszajelzés</string>
   <string name="drawer_help">Súgó</string>
   <string name="prefs_category_general">Általános</string>
@@ -63,9 +68,11 @@
   <string name="passcode_already_set">A minta- és a jelszózárak nem kapcsolhatóak be egyszerre, előbb tiltsa le a jelszót</string>
   <string name="pattern_no_longer_required">A minta többé nem lesz bekérve</string>
   <string name="pattern_configure_your_pattern_explanation">A minta az app minden egyes indításakor be lesz kérve</string>
+  <string name="illegal_argument_exception_message">Érvényes MŰVELET szükséges</string>
   <string name="recommend_subject">Próbálja ki a(z) %1$s appot az okostelefonján!</string>
   <string name="recommend_text">Szeretnélek meghívni, hogy használd a(z) %1$s alkalmazást az okostelefonodon!\nTöltsd le innen: %2$s</string>
   <string name="auth_failure_snackbar">Sikertelen bejelentkezés</string>
+  <string name="auth_failure_snackbar_action">Fiók módosítása</string>
   <string name="auth_check_server">Kiszolgáló ellenőrzése</string>
   <string name="auth_host_url">Kiszolgálócím https://...</string>
   <string name="auth_username">Felhasználónév</string>
@@ -500,13 +507,29 @@
   <string name="media_service_notification_channel_description">Lásd a zenelejátszót</string>
   <string name="file_sync_notification_channel_name">Fájlszinkronizálás</string>
   <string name="file_sync_notification_channel_description">Lásd a fájlszinkronizálás eredményét</string>
+  <string name="rate_dialog_title">Értékeld a %1$sappot!</string>
+  <string name="rate_dialog_description">Ha szívesen használod az appot, kérlek értékeld. Visszajelzésed fontos számunkra.</string>
   <string name="button_no_thanks_name">NEM, KÖSZÖNÖM</string>
   <string name="button_later_name">KÉSŐBB</string>
   <string name="button_rate_now_name">ÉRTÉKELÉS MOST</string>
   <!--Welcome to oC intro features-->
+  <string name="welcome_feature_1_title">Valamennyi szinkronizált file kezelése</string>
+  <string name="welcome_feature_1_text">Másolhatsz, mozgathatsz, törölhetsz</string>
   <string name="welcome_feature_2_title">Fájlok és alkönyvtárak megosztása</string>
+  <string name="welcome_feature_2_text">Megoszthatsz magánban és nyilvánosan</string>
+  <string name="welcome_feature_3_title">Többszörös fiók</string>
+  <string name="welcome_feature_3_text">Kapcsolódás valamennyi ownCloud szerverhez</string>
   <string name="welcome_feature_4_title">Kamerafeltöltések</string>
+  <string name="welcome_feature_4_text">Fényképek/videok automatikusan feltöltve</string>
+  <string name="welcome_feature_5_title">Video streaming</string>
+  <string name="welcome_feature_5_text">Videók lejátszása letöltésük nélkül</string>
+  <string name="welcome_feature_6_title">Mintazár</string>
+  <string name="welcome_feature_6_text">Minta használata az ownCloud alkalmazás lezárására</string>
   <string name="welcome_feature_7_title">Ujjlenyomat zár</string>
+  <string name="welcome_feature_7_text">Ujjlenyomat használata az ownCloud alkalmazás lezárására</string>
   <string name="welcome_feature_8_title">GIF támogatás</string>
+  <string name="welcome_feature_8_text">Animált GIF-ek lejátszása</string>
   <string name="welcome_feature_9_title">Képek feltöltése kameráról</string>
+  <string name="welcome_feature_9_text">Fényképezés és azonnali feltöltés a szerverre</string>
+  <string name="no_borwser_installed_alert">Nincs böngésző telepítve. Telepítsen böngészőt a biztonságos bejelentkezés lehetővé tételéhez</string>
 </resources>
