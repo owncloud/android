@@ -31,12 +31,16 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.common.utils.Log_OC;
 
-import org.apache.commons.httpclient.NameValuePair;
-import org.apache.commons.httpclient.methods.PostMethod;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Map;
+
+import com.owncloud.android.lib.common.http.methods.nonwebdav.PostMethod;
+
+import okhttp3.HttpUrl;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 
 public class OAuth2RefreshAccessTokenOperation extends RemoteOperation {
 
@@ -73,68 +77,59 @@ public class OAuth2RefreshAccessTokenOperation extends RemoteOperation {
     @Override
     protected RemoteOperationResult run(OwnCloudClient client) {
 
-        RemoteOperationResult result = null;
-        PostMethod postMethod = null;
-
         try {
-            NameValuePair[] nameValuePairs = new NameValuePair[3];
-            nameValuePairs[0] = new NameValuePair(
-                OAuth2Constants.KEY_GRANT_TYPE,
-                OAuth2GrantType.REFRESH_TOKEN.getValue()    // always for this operation
-            );
-            nameValuePairs[1] = new NameValuePair(OAuth2Constants.KEY_CLIENT_ID, mClientId);
-            nameValuePairs[2] = new NameValuePair(OAuth2Constants.KEY_REFRESH_TOKEN, mRefreshToken);
+
+            final RequestBody requestBody = new MultipartBody.Builder()
+                    .setType(MultipartBody.FORM)
+                    .addFormDataPart(OAuth2Constants.KEY_GRANT_TYPE,
+                            OAuth2GrantType.REFRESH_TOKEN.getValue())
+                    .addFormDataPart(OAuth2Constants.KEY_CLIENT_ID, mClientId)
+                    .addFormDataPart(OAuth2Constants.KEY_REFRESH_TOKEN, mRefreshToken)
+                    .build();
 
             Uri.Builder uriBuilder = client.getBaseUri().buildUpon();
             uriBuilder.appendEncodedPath(mAccessTokenEndpointPath);
 
-            postMethod = new PostMethod(uriBuilder.build().toString());
-            postMethod.setRequestBody(nameValuePairs);
+            final PostMethod postMethod = new PostMethod(HttpUrl.parse(
+                    client.getBaseUri().buildUpon()
+                            .appendEncodedPath(mAccessTokenEndpointPath)
+                            .build()
+                            .toString()));
+            postMethod.setRequestBody(requestBody);
 
-            OwnCloudCredentials oauthCredentials = new OwnCloudBasicCredentials(
-                    mClientId,
-                    mClientSecret
-            );
 
-            OwnCloudCredentials oldCredentials = switchClientCredentials(oauthCredentials);
+            final OwnCloudCredentials oauthCredentials =
+                    new OwnCloudBasicCredentials(mClientId, mClientSecret);
 
-            client.executeMethod(postMethod);
-
+            // Do the B***S*** switch
+            final OwnCloudCredentials oldCredentials = switchClientCredentials(oauthCredentials);
+            client.executeHttpMethod(postMethod);
             switchClientCredentials(oldCredentials);
 
-            String response = postMethod.getResponseBodyAsString();
-            Log_OC.d(TAG, "OAUTH2: raw response from POST TOKEN: " + response);
+            final String responseData = postMethod.getResponseBodyAsString();
+            Log_OC.d(TAG, "OAUTH2: raw response from POST TOKEN: " + responseData);
 
-            if (response != null && response.length() > 0) {
-                JSONObject tokenJson = new JSONObject(response);
-                Map<String, String> accessTokenResult =
-                    mResponseParser.parseAccessTokenResult(tokenJson);
-                if (accessTokenResult.get(OAuth2Constants.KEY_ERROR) != null ||
-                        accessTokenResult.get(OAuth2Constants.KEY_ACCESS_TOKEN) == null) {
-                    result = new RemoteOperationResult(ResultCode.OAUTH2_ERROR);
+            if (responseData != null && responseData.length() > 0) {
+                final JSONObject tokenJson = new JSONObject(responseData);
 
-                } else {
-                    result = new RemoteOperationResult(true, postMethod);
-                    ArrayList<Object> data = new ArrayList<>();
-                    data.add(accessTokenResult);
-                    result.setData(data);
-                }
+                final Map<String, String> accessTokenResult =
+                        mResponseParser.parseAccessTokenResult(tokenJson);
+                final ArrayList<Object> resultData = new ArrayList<>(1);
+                resultData.add(accessTokenResult);
+                final RemoteOperationResult result = new RemoteOperationResult(ResultCode.OK);
+                result.setData(resultData);
+                return (accessTokenResult.get(OAuth2Constants.KEY_ERROR) != null ||
+                        accessTokenResult.get(OAuth2Constants.KEY_ACCESS_TOKEN) == null)
+                        ? new RemoteOperationResult(ResultCode.OAUTH2_ERROR)
+                        : result;
 
             } else {
-                result = new RemoteOperationResult(false, postMethod);
-                client.exhaustResponse(postMethod.getResponseBodyAsStream());
+                return new RemoteOperationResult(postMethod);
             }
 
         } catch (Exception e) {
-            result = new RemoteOperationResult(e);
-
-        } finally {
-            if (postMethod != null) {
-                postMethod.releaseConnection();    // let the connection available for other methods
-            }
+            return new RemoteOperationResult(e);
         }
-
-        return result;
     }
 
     private OwnCloudCredentials switchClientCredentials(OwnCloudCredentials newCredentials) {

@@ -31,18 +31,19 @@ import android.net.Uri;
 import com.owncloud.android.lib.common.authentication.OwnCloudBasicCredentials;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentials;
+import com.owncloud.android.lib.common.http.methods.nonwebdav.PostMethod;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 
-import org.apache.commons.httpclient.NameValuePair;
-import org.apache.commons.httpclient.methods.PostMethod;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
+
+import okhttp3.HttpUrl;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 
 
 public class OAuth2GetAccessTokenOperation extends RemoteOperation {
@@ -83,28 +84,34 @@ public class OAuth2GetAccessTokenOperation extends RemoteOperation {
     @Override
     protected RemoteOperationResult run(OwnCloudClient client) {
         RemoteOperationResult result = null;
-        PostMethod postMethod = null;
         
         try {
-            NameValuePair[] nameValuePairs = new NameValuePair[4];
-            nameValuePairs[0] = new NameValuePair(OAuth2Constants.KEY_GRANT_TYPE, mGrantType);
-            nameValuePairs[1] = new NameValuePair(OAuth2Constants.KEY_CODE, mCode);
-            nameValuePairs[2] = new NameValuePair(OAuth2Constants.KEY_REDIRECT_URI, mRedirectUri);
-            nameValuePairs[3] = new NameValuePair(OAuth2Constants.KEY_CLIENT_ID, mClientId);
+
+            final RequestBody requestBody = new MultipartBody.Builder()
+                    .setType(MultipartBody.FORM)
+                    .addFormDataPart(OAuth2Constants.KEY_GRANT_TYPE, mGrantType)
+                    .addFormDataPart(OAuth2Constants.KEY_CODE, mCode)
+                    .addFormDataPart(OAuth2Constants.KEY_REDIRECT_URI, mRedirectUri)
+                    .addFormDataPart(OAuth2Constants.KEY_CLIENT_ID, mClientId)
+                    .build();
 
             Uri.Builder uriBuilder = client.getBaseUri().buildUpon();
             uriBuilder.appendEncodedPath(mAccessTokenEndpointPath);
 
-            postMethod = new PostMethod(uriBuilder.build().toString());
-            postMethod.setRequestBody(nameValuePairs);
+            final PostMethod postMethod = new PostMethod(HttpUrl.parse(
+                    client.getBaseUri().buildUpon()
+                            .appendEncodedPath(mAccessTokenEndpointPath)
+                            .build()
+                            .toString()));
 
-            OwnCloudCredentials oauthCredentials = new OwnCloudBasicCredentials(
-                mClientId,
-                mClientSecret
-            );
+            postMethod.setRequestBody(requestBody);
+
+
+            // Do the B***S*** Switch and execute
+            OwnCloudCredentials oauthCredentials =
+                    new OwnCloudBasicCredentials(mClientId, mClientSecret);
             OwnCloudCredentials oldCredentials = switchClientCredentials(oauthCredentials);
-
-            client.executeMethod(postMethod);
+            client.executeHttpMethod(postMethod);
             switchClientCredentials(oldCredentials);
 
             String response = postMethod.getResponseBodyAsString();
@@ -117,25 +124,21 @@ public class OAuth2GetAccessTokenOperation extends RemoteOperation {
                     result = new RemoteOperationResult(ResultCode.OAUTH2_ERROR);
 
                 } else {
-                    result = new RemoteOperationResult(true, postMethod);
+                    result = new RemoteOperationResult(ResultCode.OK);
                     ArrayList<Object> data = new ArrayList<>();
                     data.add(accessTokenResult);
                     result.setData(data);
                 }
 
             } else {
-                result = new RemoteOperationResult(false, postMethod);
-                client.exhaustResponse(postMethod.getResponseBodyAsStream());
+                result = new RemoteOperationResult(ResultCode.OK);
+                client.exhaustResponse(postMethod.getResponseAsStream());
             }
 
         } catch (Exception e) {
             result = new RemoteOperationResult(e);
             
-        } finally {
-            if (postMethod != null)
-                postMethod.releaseConnection();    // let the connection available for other methods
         }
-        
         return result;
     }
 
