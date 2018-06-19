@@ -46,5 +46,4 @@ public class GetMethod extends HttpMethod {
 
         return super.execute();
     }
-
 }

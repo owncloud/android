@@ -38,8 +38,6 @@ import okhttp3.HttpUrl;
  */
 public abstract class HttpMethod extends HttpBaseMethod {
 
-    private Call mCall;
-
     public HttpMethod(HttpUrl httpUrl) {
         super(httpUrl);
     }
@@ -49,9 +47,5 @@ public abstract class HttpMethod extends HttpBaseMethod {
         mCall = mOkHttpClient.newCall(mRequest);
         mResponse = mCall.execute();
         return super.getStatusCode();
-    }
-
-    public void abort() {
-        mCall.cancel();
     }
 }

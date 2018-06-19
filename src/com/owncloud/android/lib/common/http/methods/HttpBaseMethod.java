@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.concurrent.TimeUnit;
 
+import okhttp3.Call;
 import okhttp3.Headers;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
@@ -50,6 +51,7 @@ public abstract class HttpBaseMethod {
     protected Request mRequest;
     protected RequestBody mRequestBody;
     protected Response mResponse;
+    protected Call mCall;
 
     protected HttpBaseMethod (HttpUrl httpUrl) {
         mOkHttpClient = HttpClient.getOkHttpClient();
@@ -124,5 +126,13 @@ public abstract class HttpBaseMethod {
 
     public String getResponseHeader(String headerName) {
         return mResponse.header(headerName);
+    }
+
+    public void abort() {
+        mCall.cancel();
+    }
+
+    public boolean isAborted() {
+        return mCall.isCanceled();
     }
 }

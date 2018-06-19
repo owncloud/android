@@ -24,16 +24,6 @@
 
 package com.owncloud.android.lib.resources.files;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
-import java.util.concurrent.atomic.AtomicBoolean;
-
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.http.HttpConstants;
 import com.owncloud.android.lib.common.http.methods.nonwebdav.GetMethod;
@@ -43,6 +33,16 @@ import com.owncloud.android.lib.common.operations.OperationCancelledException;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
+
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import okhttp3.HttpUrl;
 
@@ -98,7 +98,7 @@ public class DownloadRemoteFileOperation extends RemoteOperation {
 
 
     private RemoteOperationResult downloadFile(OwnCloudClient client, File targetFile) throws
-        IOException, OperationCancelledException {
+            Exception {
 
         RemoteOperationResult result;
         int status;
@@ -128,7 +128,7 @@ public class DownloadRemoteFileOperation extends RemoteOperation {
                 while ((readResult = bis.read(bytes)) != -1) {
                     synchronized (mCancellationRequested) {
                         if (mCancellationRequested.get()) {
-                             mGet.abort();
+                            mGet.abort();
                             throw new OperationCancelledException();
                         }
                     }
@@ -174,9 +174,6 @@ public class DownloadRemoteFileOperation extends RemoteOperation {
             result = isSuccess(status)
                     ? new RemoteOperationResult(RemoteOperationResult.ResultCode.OK)
                     : new RemoteOperationResult(mGet);
-
-        } catch (Exception e) {
-            return new RemoteOperationResult(e);
         } finally {
             if (fos != null) fos.close();
             if (bis != null) bis.close();

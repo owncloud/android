@@ -49,4 +49,14 @@ public abstract class DavMethod extends HttpBaseMethod {
     public DavResource getDavResource() {
         return mDavResource;
     }
+
+    @Override
+    public void abort() {
+        mDavResource.cancelCall();
+    }
+
+    @Override
+    public boolean isAborted() {
+        return mDavResource.isCallAborted();
+    }
 }

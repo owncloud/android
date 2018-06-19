@@ -113,13 +113,13 @@ public class UploadRemoteFileOperation extends RemoteOperation {
             }
 
         } catch (Exception e) {
-//            if (mPutMethod != null && mPutMethod.isAborted()) {
-//                result = new RemoteOperationResult(new OperationCancelledException());
-//
-//            } else {
-//                result = new RemoteOperationResult(e);
-//            }
+            if (mPutMethod != null && mPutMethod.isAborted()) {
+                result = new RemoteOperationResult(new OperationCancelledException());
+            } else {
+                result = new RemoteOperationResult(e);
+            }
         } finally {
+            // TODO
             // reset previous retry handler
 //            client.getParams().setParameter(
 //                HttpMethodParams.RETRY_HANDLER,
@@ -129,47 +129,41 @@ public class UploadRemoteFileOperation extends RemoteOperation {
         return result;
     }
 
-    protected RemoteOperationResult uploadFile(OwnCloudClient client) throws IOException {
-        RemoteOperationResult result;
-        try {
-            File fileToUpload = new File(mLocalPath);
+    protected RemoteOperationResult uploadFile(OwnCloudClient client) throws Exception {
 
-            MediaType mediaType = MediaType.parse(mMimeType);
+        File fileToUpload = new File(mLocalPath);
 
-            mFileRequestBody = new FileRequestBody(fileToUpload, mediaType);
+        MediaType mediaType = MediaType.parse(mMimeType);
 
-            synchronized (mDataTransferListeners) {
-                mFileRequestBody.addDatatransferProgressListeners(mDataTransferListeners);
-            }
+        mFileRequestBody = new FileRequestBody(fileToUpload, mediaType);
 
-            if (mRequiredEtag != null && mRequiredEtag.length() > 0) {
-                mPutMethod.addRequestHeader(HttpConstants.IF_MATCH_HEADER, "\"" + mRequiredEtag + "\"");
-            }
-
-            mPutMethod.addRequestHeader(HttpConstants.OC_TOTAL_LENGTH_HEADER, String.valueOf(fileToUpload.length()));
-
-            mPutMethod.addRequestHeader(HttpConstants.OC_X_OC_MTIME_HEADER, mFileLastModifTimestamp);
-
-            RequestBody requestBody = new MultipartBody.Builder()
-                    .setType(MultipartBody.FORM)
-                    .addPart(mFileRequestBody)
-                    .build();
-
-            mPutMethod.setRequestBody(requestBody);
-
-            int status = client.executeHttpMethod(mPutMethod);
-
-            if (isSuccess(status)) {
-                result = new RemoteOperationResult(OK);
-
-            } else { // synchronization failed
-                result = new RemoteOperationResult(mPutMethod);
-            }
-
-        } catch (Exception e) {
-            result = new RemoteOperationResult(e);
+        synchronized (mDataTransferListeners) {
+            mFileRequestBody.addDatatransferProgressListeners(mDataTransferListeners);
         }
-        return result;
+
+        if (mRequiredEtag != null && mRequiredEtag.length() > 0) {
+            mPutMethod.addRequestHeader(HttpConstants.IF_MATCH_HEADER, "\"" + mRequiredEtag + "\"");
+        }
+
+        mPutMethod.addRequestHeader(HttpConstants.OC_TOTAL_LENGTH_HEADER, String.valueOf(fileToUpload.length()));
+
+        mPutMethod.addRequestHeader(HttpConstants.OC_X_OC_MTIME_HEADER, mFileLastModifTimestamp);
+
+        RequestBody requestBody = new MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
+                .addPart(mFileRequestBody)
+                .build();
+
+        mPutMethod.setRequestBody(requestBody);
+
+        int status = client.executeHttpMethod(mPutMethod);
+
+        if (isSuccess(status)) {
+            return new RemoteOperationResult(OK);
+
+        } else { // synchronization failed
+            return new RemoteOperationResult(mPutMethod);
+        }
     }
 
     public Set<OnDatatransferProgressListener> getDataTransferListeners() {
@@ -195,11 +189,11 @@ public class UploadRemoteFileOperation extends RemoteOperation {
     }
     
     public void cancel() {
-//        synchronized (mCancellationRequested) {
-//            mCancellationRequested.set(true);
-//            if (mPutMethod != null)
-//                mPutMethod.abort();
-//        }
+        synchronized (mCancellationRequested) {
+            mCancellationRequested.set(true);
+            if (mPutMethod != null)
+                mPutMethod.abort();
+        }
     }
 
     public boolean isSuccess(int status) {
