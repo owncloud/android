@@ -23,6 +23,8 @@
  */
 package com.owncloud.android.lib.common.authentication;
 
+import android.app.DownloadManager;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +35,10 @@ import org.apache.commons.httpclient.auth.AuthState;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.authentication.oauth.BearerAuthScheme;
 import com.owncloud.android.lib.common.authentication.oauth.BearerCredentials;
+import com.owncloud.android.lib.common.http.HttpClient;
+import com.owncloud.android.lib.common.http.interceptors.BarearAuthInterceptor;
+import com.owncloud.android.lib.common.http.interceptors.BasicAuthInterceptor;
+import com.owncloud.android.lib.common.http.interceptors.HttpInterceptor;
 
 public class OwnCloudBearerCredentials implements OwnCloudCredentials {
 
@@ -48,6 +54,22 @@ public class OwnCloudBearerCredentials implements OwnCloudCredentials {
     public void applyTo(OwnCloudClient client) {
         AuthPolicy.registerAuthScheme(BearerAuthScheme.AUTH_POLICY, BearerAuthScheme.class);
         AuthPolicy.registerAuthScheme(AuthState.PREEMPTIVE_AUTH_SCHEME, BearerAuthScheme.class);
+
+        final ArrayList<HttpInterceptor.RequestInterceptor> requestInterceptors =
+                HttpClient.getOkHttpInterceptor().getRequestInterceptors();
+
+        // Clear previous basic credentials
+        for (HttpInterceptor.RequestInterceptor requestInterceptor : requestInterceptors) {
+            if (requestInterceptor instanceof BasicAuthInterceptor) {
+                requestInterceptors.remove(requestInterceptor);
+            }
+            if(requestInterceptor instanceof BarearAuthInterceptor) {
+                requestInterceptors.remove(requestInterceptor);
+            }
+        }
+
+        HttpClient.getOkHttpInterceptor()
+                .addRequestInterceptor(new BarearAuthInterceptor(mAccessToken));
 
         List<String> authPrefs = new ArrayList<>(1);
         authPrefs.add(BearerAuthScheme.AUTH_POLICY);

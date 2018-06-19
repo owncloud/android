@@ -25,7 +25,6 @@
 package com.owncloud.android.lib.resources.files;
 
 import com.owncloud.android.lib.common.OwnCloudClient;
-import com.owncloud.android.lib.common.http.HttpClient;
 import com.owncloud.android.lib.common.http.HttpConstants;
 import com.owncloud.android.lib.common.http.HttpUtils;
 import com.owncloud.android.lib.common.http.methods.webdav.DavUtils;
@@ -36,7 +35,6 @@ import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
 
-import java.sql.Time;
 import java.util.concurrent.TimeUnit;
 
 import static com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode.OK;
@@ -113,9 +111,9 @@ public class ExistenceCheckRemoteOperation extends RemoteOperation {
              *  207 MULTI_STATUS: path exists.
              */
 
-            result = isSuccess(status) ?
-                    new RemoteOperationResult(OK) :
-                    new RemoteOperationResult(propfindMethod);
+            result = isSuccess(status)
+                    ? new RemoteOperationResult(OK)
+                    : new RemoteOperationResult(propfindMethod);
 
             Log_OC.d(TAG, "Existence check for " + client.getWebdavUri() +
                     WebdavUtils.encodePath(mPath) + " targeting for " +
