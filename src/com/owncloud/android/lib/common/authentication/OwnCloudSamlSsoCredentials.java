@@ -23,12 +23,20 @@
  */
 package com.owncloud.android.lib.common.authentication;
 
-import org.apache.commons.httpclient.Cookie;
 import org.apache.commons.httpclient.cookie.CookiePolicy;
 
 import android.net.Uri;
 
 import com.owncloud.android.lib.common.OwnCloudClient;
+import com.owncloud.android.lib.common.http.HttpClient;
+import com.owncloud.android.lib.common.http.interceptors.BarearAuthInterceptor;
+import com.owncloud.android.lib.common.http.interceptors.BasicAuthInterceptor;
+import com.owncloud.android.lib.common.http.interceptors.HttpInterceptor;
+import com.owncloud.android.lib.common.http.interceptors.SamlAuthInterceptor;
+
+import java.util.ArrayList;
+
+import okhttp3.Cookie;
 
 public class OwnCloudSamlSsoCredentials implements OwnCloudCredentials {
 
@@ -46,26 +54,20 @@ public class OwnCloudSamlSsoCredentials implements OwnCloudCredentials {
         client.getParams().setCredentialCharset(OwnCloudCredentialsFactory.CREDENTIAL_CHARSET);
         client.getParams().setCookiePolicy(CookiePolicy.BROWSER_COMPATIBILITY);
 
-        // TODO
-//        client.setFollowRedirects(false);
+        final ArrayList<HttpInterceptor.RequestInterceptor> requestInterceptors =
+                HttpClient.getOkHttpInterceptor().getRequestInterceptors();
 
-        Uri serverUri = client.getBaseUri();
-
-        String[] cookies = mSessionCookie.split(";");
-        if (cookies.length > 0) {
-            Cookie cookie = null;
-            for (int i = 0; i < cookies.length; i++) {
-                int equalPos = cookies[i].indexOf('=');
-                if (equalPos >= 0) {
-                    cookie = new Cookie();
-                    cookie.setName(cookies[i].substring(0, equalPos));
-                    cookie.setValue(cookies[i].substring(equalPos + 1));
-                    cookie.setDomain(serverUri.getHost());    // VERY IMPORTANT
-                    cookie.setPath(serverUri.getPath());    // VERY IMPORTANT
-                    client.getState().addCookie(cookie);
-                }
+        // Clear previous basic credentials
+        for (HttpInterceptor.RequestInterceptor requestInterceptor : requestInterceptors) {
+            if (requestInterceptor instanceof BasicAuthInterceptor
+                    || requestInterceptor instanceof BarearAuthInterceptor
+                    || requestInterceptor instanceof SamlAuthInterceptor) {
+                requestInterceptors.remove(requestInterceptor);
             }
         }
+
+        HttpClient.getOkHttpInterceptor()
+                .addRequestInterceptor(new SamlAuthInterceptor(mSessionCookie));
     }
 
     @Override

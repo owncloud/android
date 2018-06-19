@@ -39,6 +39,7 @@ import com.owncloud.android.lib.common.http.HttpClient;
 import com.owncloud.android.lib.common.http.interceptors.BarearAuthInterceptor;
 import com.owncloud.android.lib.common.http.interceptors.BasicAuthInterceptor;
 import com.owncloud.android.lib.common.http.interceptors.HttpInterceptor;
+import com.owncloud.android.lib.common.http.interceptors.SamlAuthInterceptor;
 
 public class OwnCloudBearerCredentials implements OwnCloudCredentials {
 
@@ -60,11 +61,10 @@ public class OwnCloudBearerCredentials implements OwnCloudCredentials {
 
         // Clear previous basic credentials
         for (HttpInterceptor.RequestInterceptor requestInterceptor : requestInterceptors) {
-            if (requestInterceptor instanceof BasicAuthInterceptor) {
-                requestInterceptors.remove(requestInterceptor);
-            }
-            if(requestInterceptor instanceof BarearAuthInterceptor) {
-                requestInterceptors.remove(requestInterceptor);
+            if (requestInterceptor instanceof BasicAuthInterceptor
+                || requestInterceptor instanceof BarearAuthInterceptor
+                || requestInterceptor instanceof SamlAuthInterceptor) {
+                    requestInterceptors.remove(requestInterceptor);
             }
         }
 
