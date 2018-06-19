@@ -58,6 +58,11 @@ public class FileRequestBody extends RequestBody implements ProgressiveDataTrans
     }
 
     @Override
+    public long contentLength() {
+        return mFile.length();
+    }
+
+    @Override
     public void writeTo(BufferedSink sink) {
         Source source;
         Iterator<OnDatatransferProgressListener> it;

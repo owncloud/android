@@ -36,14 +36,11 @@ import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import okhttp3.MediaType;
-import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
 
 import static com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode.OK;
 
@@ -149,12 +146,7 @@ public class UploadRemoteFileOperation extends RemoteOperation {
 
         mPutMethod.addRequestHeader(HttpConstants.OC_X_OC_MTIME_HEADER, mFileLastModifTimestamp);
 
-        RequestBody requestBody = new MultipartBody.Builder()
-                .setType(MultipartBody.FORM)
-                .addPart(mFileRequestBody)
-                .build();
-
-        mPutMethod.setRequestBody(requestBody);
+        mPutMethod.setRequestBody(mFileRequestBody);
 
         int status = client.executeHttpMethod(mPutMethod);
 
