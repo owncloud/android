@@ -56,7 +56,6 @@ import android.view.View;
 import com.owncloud.android.AppRater;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
-import com.owncloud.android.authentication.AccountAuthenticatorActivity;
 import com.owncloud.android.authentication.AuthenticatorActivity;
 import com.owncloud.android.authentication.FingerprintManager;
 import com.owncloud.android.authentication.PassCodeManager;
