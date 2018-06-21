@@ -121,6 +121,7 @@ public class FileDisplayActivity extends FileActivity
 
     private View mLeftFragmentContainer;
     private View mRightFragmentContainer;
+    private View shadowView;
     private MenuItem mDescendingMenuItem;
     private MenuItem mSelectAllMenuItem;
     private Menu mMainMenu;
@@ -194,6 +195,7 @@ public class FileDisplayActivity extends FileActivity
 
         mLeftFragmentContainer = findViewById(R.id.left_fragment_container);
         mRightFragmentContainer = findViewById(R.id.right_fragment_container);
+        shadowView = findViewById(R.id.shadow_view);
 
         // Action bar setup
         getSupportActionBar().setHomeButtonEnabled(true);
@@ -1065,6 +1067,7 @@ public class FileDisplayActivity extends FileActivity
 
                 OCFileListFragment fileListFragment = getListOfFilesFragment();
                 if (fileListFragment != null) {
+                    shadowView.setVisibility(View.GONE);
                     fileListFragment.setProgressBarAsIndeterminate(mSyncInProgress);
                 }
                 Log_OC.d(TAG, "Setting progress visibility to " + mSyncInProgress);
@@ -1109,7 +1112,8 @@ public class FileDisplayActivity extends FileActivity
             if (!mSyncInProgress) {
                 // In case file list is empty
                 message = R.string.file_list_empty;
-                ocFileListFragment.getProgressBar().setProgressDrawable(getDrawable(R.drawable.black_gradient));
+                ocFileListFragment.getProgressBar().setVisibility(View.GONE);
+                shadowView.setVisibility(View.VISIBLE);
             }
             ocFileListFragment.setMessageForEmptyList(getString(message));
         } else {
@@ -1720,6 +1724,7 @@ public class FileDisplayActivity extends FileActivity
 
                         OCFileListFragment fileListFragment = getListOfFilesFragment();
                         if (fileListFragment != null) {
+                            shadowView.setVisibility(View.GONE);
                             fileListFragment.setProgressBarAsIndeterminate(true);
                         }
 
