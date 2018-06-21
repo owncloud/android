@@ -90,7 +90,7 @@ public class FileMenuFilter {
      *
      * @param menu              Options or context menu to filter.
      */
-    public void filter(Menu menu,boolean displaySelectAll,boolean displayDeselectAll) {
+    public void filter(Menu menu,boolean displaySelectAll,boolean displaySelectInverse) {
         if (mFiles == null || mFiles.size() <= 0) {
             hideAll(menu);
 
@@ -98,7 +98,7 @@ public class FileMenuFilter {
             List<Integer> toShow = new ArrayList<>();
             List<Integer> toHide = new ArrayList<>();
 
-            filter(toShow, toHide,displaySelectAll,displayDeselectAll);
+            filter(toShow, toHide,displaySelectAll,displaySelectInverse);
 
             MenuItem item;
             for (int i : toShow) {
@@ -137,7 +137,7 @@ public class FileMenuFilter {
      * @param toShow            List to save the options that must be shown in the menu.
      * @param toHide            List to save the options that must be shown in the menu.
      */
-    private void filter(List<Integer> toShow, List <Integer> toHide,boolean displaySelectAll,boolean displayDeselectAll) {
+    private void filter(List<Integer> toShow, List <Integer> toHide,boolean displaySelectAll,boolean displaySelectInverse) {
 
         boolean synchronizing = anyFileSynchronizing();
 
@@ -152,10 +152,10 @@ public class FileMenuFilter {
         } else{
             toHide.add(R.id.file_action_select_all);
         }
-        if(displayDeselectAll){
-            toShow.add(R.id.action_deselect_all);
+        if(displaySelectInverse){
+            toShow.add(R.id.action_select_inverse);
         } else{
-            toHide.add(R.id.action_deselect_all);
+            toHide.add(R.id.action_select_inverse);
         }
 
         // DOWNLOAD
