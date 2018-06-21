@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
 ownCloud Android client application
 
 Copyright (C) 2018 ownCloud GmbH.
@@ -17,52 +16,65 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="match_parent"
-	android:layout_height="match_parent"
-	android:filterTouchesWhenObscured="true"
-	android:orientation="vertical" >
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:filterTouchesWhenObscured="true"
+    android:orientation="vertical">
 
-	<include
-		layout="@layout/toolbar_standard" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-	<FrameLayout
-		android:layout_width="match_parent"
-		android:layout_height="0dip"
-		android:layout_weight="1"
-		android:id="@+id/fragment_container" />
+        <include layout="@layout/toolbar_standard" />
+
+        <View
+            android:id="@+id/shadow_view"
+            android:layout_width="match_parent"
+            android:layout_height="4dp"
+            android:background="@drawable/shadow_gradient"
+            android:visibility="gone" />
+
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="0dip"
+        android:layout_weight="1" />
 
 
-	<LinearLayout
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:gravity="center"
-		android:orientation="horizontal" >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
 
-		<android.support.v7.widget.AppCompatButton
-			android:id="@+id/folder_picker_btn_cancel"
-			android:theme="@style/Button.Secondary"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_weight="1"
-			android:text="@string/common_cancel" />
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/folder_picker_btn_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/common_cancel"
+            android:theme="@style/Button.Secondary" />
 
-		<ImageButton
-			android:id="@+id/folder_picker_btn_home"
-			android:layout_alignParentRight="true"
-			style="?android:buttonStyle"
-			android:src="@drawable/ic_home_black"
-			android:layout_width="50dp"
-			android:visibility="gone"
-			android:layout_height="match_parent" />
+        <ImageButton
+            android:id="@+id/folder_picker_btn_home"
+            style="?android:buttonStyle"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/ic_home_black"
+            android:visibility="gone" />
 
-		<android.support.v7.widget.AppCompatButton
-			android:id="@+id/folder_picker_btn_choose"
-			android:theme="@style/Button.Primary"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_weight="1"
-			android:text="@string/folder_picker_choose_button_text" />
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/folder_picker_btn_choose"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/folder_picker_choose_button_text"
+            android:theme="@style/Button.Primary" />
 
-	</LinearLayout>
+    </LinearLayout>
 
 </LinearLayout>
