@@ -1,23 +1,23 @@
 /* ownCloud Android Library is available under MIT license
  *   Copyright (C) 2018 ownCloud GmbH.
  *   Copyright (C) 2012  Bartek Przybylski
- *   
+ *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
  *   in the Software without restriction, including without limitation the rights
  *   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  *   copies of the Software, and to permit persons to whom the Software is
  *   furnished to do so, subject to the following conditions:
- *   
+ *
  *   The above copyright notice and this permission notice shall be included in
  *   all copies or substantial portions of the Software.
- *   
- *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, 
+ *
+ *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
  *   EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- *   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND 
- *   NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS 
- *   BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN 
- *   ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN 
+ *   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ *   NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
+ *   BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+ *   ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  *   CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *   THE SOFTWARE.
  *
@@ -35,6 +35,7 @@ import com.owncloud.android.lib.common.authentication.OwnCloudCredentialsFactory
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentialsFactory.OwnCloudAnonymousCredentials;
 import com.owncloud.android.lib.common.http.methods.HttpBaseMethod;
 import com.owncloud.android.lib.common.network.RedirectionPath;
+import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 
@@ -247,7 +248,7 @@ public class OwnCloudClient extends HttpClient {
             preventCrashDueToInvalidPort(method);
 
             Log_OC.d(TAG + " #" + mInstanceNumber, "REQUEST " +
-            method.getName() + " " + method.getPath());
+                    method.getName() + " " + method.getPath());
 
             //logCookiesAtRequest(method.getRequestHeaders(), "before");
             //logCookiesAtState("before");
@@ -292,6 +293,8 @@ public class OwnCloudClient extends HttpClient {
         } while (repeatWithFreshCredentials);
 
         return status;
+
+
     }
 
     private void checkFirstRedirection(HttpMethod method) {
@@ -338,10 +341,10 @@ public class OwnCloudClient extends HttpClient {
         RedirectionPath result = new RedirectionPath(status, MAX_REDIRECTIONS_COUNT);
 
         while (redirectionsCount < MAX_REDIRECTIONS_COUNT &&
-            (status == HttpStatus.SC_MOVED_PERMANENTLY ||
-                status == HttpStatus.SC_MOVED_TEMPORARILY ||
-                status == HttpStatus.SC_TEMPORARY_REDIRECT)
-            ) {
+                (status == HttpStatus.SC_MOVED_PERMANENTLY ||
+                        status == HttpStatus.SC_MOVED_TEMPORARILY ||
+                        status == HttpStatus.SC_TEMPORARY_REDIRECT)
+                ) {
 
             Header location = method.getResponseHeader("Location");
             if (location == null) {
@@ -351,7 +354,7 @@ public class OwnCloudClient extends HttpClient {
                 String locationStr = location.getValue();
 
                 Log_OC.d(TAG + " #" + mInstanceNumber,
-                    "Location to redirect: " + locationStr);
+                        "Location to redirect: " + locationStr);
 
                 result.addLocation(locationStr);
 
@@ -401,7 +404,7 @@ public class OwnCloudClient extends HttpClient {
 
             } catch (IOException io) {
                 Log_OC.e(TAG, "Unexpected exception while exhausting not interesting HTTP response;" +
-                    " will be IGNORED", io);
+                        " will be IGNORED", io);
             }
         }
     }
@@ -456,8 +459,8 @@ public class OwnCloudClient extends HttpClient {
         for (int i = 0; i < headers.length; i++) {
             if (headers[i].getName().toLowerCase().equals("cookie")) {
                 Log_OC.d(TAG + " #" + mInstanceNumber,
-                    "Cookies at request (" + when + ") (" + counter++ + "): " +
-                        headers[i].getValue());
+                        "Cookies at request (" + when + ") (" + counter++ + "): " +
+                                headers[i].getValue());
             }
         }
         if (counter == 0) {
@@ -473,10 +476,10 @@ public class OwnCloudClient extends HttpClient {
             Log_OC.d(TAG + " #" + mInstanceNumber, "Cookies at STATE (before)");
             for (int i = 0; i < cookies.length; i++) {
                 Log_OC.d(TAG + " #" + mInstanceNumber, "    (" + i + "):" +
-                    "\n        name: " + cookies[i].getName() +
-                    "\n        value: " + cookies[i].getValue() +
-                    "\n        domain: " + cookies[i].getDomain() +
-                    "\n        path: " + cookies[i].getPath()
+                        "\n        name: " + cookies[i].getName() +
+                        "\n        value: " + cookies[i].getValue() +
+                        "\n        domain: " + cookies[i].getDomain() +
+                        "\n        path: " + cookies[i].getPath()
                 );
             }
         }
@@ -487,7 +490,7 @@ public class OwnCloudClient extends HttpClient {
         for (int i = 0; i < headers.length; i++) {
             if (headers[i].getName().toLowerCase().equals("set-cookie")) {
                 Log_OC.d(TAG + " #" + mInstanceNumber,
-                    "Set-Cookie (" + counter++ + "): " + headers[i].getValue());
+                        "Set-Cookie (" + counter++ + "): " + headers[i].getValue());
             }
         }
         if (counter == 0) {
@@ -523,7 +526,7 @@ public class OwnCloudClient extends HttpClient {
         Log_OC.d(TAG, "       path: " + cookie.getPath());
         Log_OC.d(TAG, "       version: " + cookie.getVersion());
         Log_OC.d(TAG, "       expiryDate: " +
-            (cookie.getExpiryDate() != null ? cookie.getExpiryDate().toString() : "--"));
+                (cookie.getExpiryDate() != null ? cookie.getExpiryDate().toString() : "--"));
         Log_OC.d(TAG, "       comment: " + cookie.getComment());
         Log_OC.d(TAG, "       secure: " + cookie.getSecure());
     }
@@ -584,7 +587,7 @@ public class OwnCloudClient extends HttpClient {
 
             if (invalidated) {
                 if (getCredentials().authTokenCanBeRefreshed() &&
-                    repeatCounter < MAX_REPEAT_COUNT_WITH_FRESH_CREDENTIALS) {
+                        repeatCounter < MAX_REPEAT_COUNT_WITH_FRESH_CREDENTIALS) {
 
                     try {
                         mAccount.loadCredentials(mContext);
@@ -594,9 +597,9 @@ public class OwnCloudClient extends HttpClient {
 
                     } catch (AccountsException | IOException e) {
                         Log_OC.e(
-                            TAG,
-                            "Error while trying to refresh auth token for " + mAccount.getSavedAccount().name,
-                            e
+                                TAG,
+                                "Error while trying to refresh auth token for " + mAccount.getSavedAccount().name,
+                                e
                         );
                     }
                 }
@@ -627,7 +630,7 @@ public class OwnCloudClient extends HttpClient {
         boolean should = (httpStatusCode == HttpStatus.SC_UNAUTHORIZED || isIdPRedirection());   // invalid credentials
 
         should &= (mCredentials != null &&         // real credentials
-            !(mCredentials instanceof OwnCloudCredentialsFactory.OwnCloudAnonymousCredentials));
+                !(mCredentials instanceof OwnCloudCredentialsFactory.OwnCloudAnonymousCredentials));
 
         // test if have all the needed to effectively invalidate ...
         should &= (mAccount != null && mAccount.getSavedAccount() != null && mContext != null);
@@ -646,8 +649,8 @@ public class OwnCloudClient extends HttpClient {
     private boolean invalidateAccountCredentials() {
         AccountManager am = AccountManager.get(mContext);
         am.invalidateAuthToken(
-            mAccount.getSavedAccount().type,
-            mCredentials.getAuthToken()
+                mAccount.getSavedAccount().type,
+                mCredentials.getAuthToken()
         );
         am.clearPassword(mAccount.getSavedAccount()); // being strict, only needed for Basic Auth credentials
         return true;

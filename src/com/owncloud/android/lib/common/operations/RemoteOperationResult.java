@@ -53,8 +53,13 @@ import java.util.List;
 import java.util.Map;
 
 import javax.net.ssl.SSLException;
+import javax.net.ssl.SSLPeerUnverifiedException;
 
 import okhttp3.Headers;
+
+
+
+
 
 
 /**
@@ -191,17 +196,21 @@ public class RemoteOperationResult implements Serializable {
             mCode = ResultCode.ACCOUNT_EXCEPTION;
 
         } else if (e instanceof SSLException || e instanceof RuntimeException) {
-            CertificateCombinedException se = getCertificateCombinedException(e);
-            if (se != null) {
-                mException = se;
-                if (se.isRecoverable()) {
-                    mCode = ResultCode.SSL_RECOVERABLE_PEER_UNVERIFIED;
-                }
-            } else if (e instanceof RuntimeException) {
-                mCode = ResultCode.HOST_NOT_AVAILABLE;
-
+            if(e instanceof SSLPeerUnverifiedException) {
+                mCode = ResultCode.SSL_RECOVERABLE_PEER_UNVERIFIED;
             } else {
-                mCode = ResultCode.SSL_ERROR;
+                CertificateCombinedException se = getCertificateCombinedException(e);
+                if (se != null) {
+                    mException = se;
+                    if (se.isRecoverable()) {
+                        mCode = ResultCode.SSL_RECOVERABLE_PEER_UNVERIFIED;
+                    }
+                } else if (e instanceof RuntimeException) {
+                    mCode = ResultCode.HOST_NOT_AVAILABLE;
+
+                } else {
+                    mCode = ResultCode.SSL_ERROR;
+                }
             }
 
         } else if (e instanceof FileNotFoundException) {

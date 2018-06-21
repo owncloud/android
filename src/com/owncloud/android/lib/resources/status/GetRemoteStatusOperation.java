@@ -40,11 +40,15 @@ import com.owncloud.android.lib.common.utils.Log_OC;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.security.cert.CertPathValidatorException;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
+import javax.net.ssl.SSLPeerUnverifiedException;
+
 import static com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode.OK;
+import static com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode.SSL_RECOVERABLE_PEER_UNVERIFIED;
 
 /**
  * Checks if the server is valid and if the server supports the Share API
@@ -87,9 +91,15 @@ public class GetRemoteStatusOperation extends RemoteOperation {
             getMethod.setReadTimeout(TRY_CONNECTION_TIMEOUT, TimeUnit.SECONDS);
             getMethod.setConnectionTimeout(TRY_CONNECTION_TIMEOUT, TimeUnit.SECONDS);
 
-            int status = client.executeHttpMethod(getMethod);
+            int status;
+            try {
+                status = client.executeHttpMethod(getMethod);
+                mLatestResult = new RemoteOperationResult(OK);
+            } catch (SSLPeerUnverifiedException certEx) {
+                mLatestResult = new RemoteOperationResult(certEx);
+                return false;
+            }
 
-            mLatestResult = new RemoteOperationResult(OK);
 
             boolean isRedirectToNonSecureConnection = false;
 

@@ -24,11 +24,24 @@
 
 package com.owncloud.android.lib.common.http;
 
+import android.content.Context;
+
 import com.owncloud.android.lib.common.OwnCloudClientManagerFactory;
 import com.owncloud.android.lib.common.http.interceptors.HttpInterceptor;
 import com.owncloud.android.lib.common.http.interceptors.UserAgentInterceptor;
+import com.owncloud.android.lib.common.network.AdvancedX509TrustManager;
+import com.owncloud.android.lib.common.network.NetworkUtils;
+import com.owncloud.android.lib.common.utils.Log_OC;
+
+import org.apache.http.conn.ssl.BrowserCompatHostnameVerifier;
 
 import java.util.Arrays;
+
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Protocol;
@@ -38,17 +51,33 @@ import okhttp3.Protocol;
  * @author David González Verdugo
  */
 public class HttpClient {
+    private static final String TAG = HttpClient.class.toString();
 
     private static OkHttpClient sOkHttpClient;
     private static HttpInterceptor sOkHttpInterceptor;
+    private static Context sContext;
+
+    public static void setContext(Context context) {
+        sContext = context;
+    }
 
     public static OkHttpClient getOkHttpClient() {
         if (sOkHttpClient == null) {
-            sOkHttpClient = new OkHttpClient.Builder()
-                    .addInterceptor(getOkHttpInterceptor())
-                    .protocols(Arrays.asList(Protocol.HTTP_1_1))
-                    .followRedirects(false)
-                    .build();
+            try {
+                final X509TrustManager trustManager = new AdvancedX509TrustManager(
+                        NetworkUtils.getKnownServersStore(sContext));
+                final SSLContext sslContext = SSLContext.getInstance("TLS");
+                sslContext.init(null, new TrustManager[] {trustManager}, null);
+                sOkHttpClient = new OkHttpClient.Builder()
+                        .addInterceptor(getOkHttpInterceptor())
+                        .protocols(Arrays.asList(Protocol.HTTP_1_1))
+                        .followRedirects(false)
+                        .sslSocketFactory(sslContext.getSocketFactory(), trustManager)
+                        .hostnameVerifier(new BrowserCompatHostnameVerifier())
+                        .build();
+            } catch (Exception e) {
+                Log_OC.e(TAG, "Could not setup SSL system.", e);
+            }
         }
         return sOkHttpClient;
     }

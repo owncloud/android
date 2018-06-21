@@ -147,7 +147,7 @@ public class NetworkUtils {
      * @throws CertificateException         When an exception occurred while loading the certificates from the local 
      * 										trust store.
      */
-    private static KeyStore getKnownServersStore(Context context) 
+    public static KeyStore getKnownServersStore(Context context)
     		throws KeyStoreException, IOException, NoSuchAlgorithmException, CertificateException {
         if (mKnownServersStore == null) {
             //mKnownServersStore = KeyStore.getInstance("BKS");
