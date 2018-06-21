@@ -34,6 +34,7 @@ import com.owncloud.android.lib.common.network.WebdavUtils;
 import com.owncloud.android.lib.common.operations.OperationCancelledException;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
+import com.owncloud.android.lib.common.utils.Log_OC;
 
 import java.io.File;
 import java.util.HashSet;
@@ -86,19 +87,11 @@ public class UploadRemoteFileOperation extends RemoteOperation {
     protected RemoteOperationResult run(OwnCloudClient client) {
         RemoteOperationResult result = null;
 
-//        DefaultHttpMethodRetryHandler oldRetryHandler =
-//            (DefaultHttpMethodRetryHandler) client.getParams().getParameter(HttpMethodParams.RETRY_HANDLER);
-
         try {
-            // TODO
-            // prevent that uploads are retried automatically by network library
-//            client.getParams().setParameter(
-//                HttpMethodParams.RETRY_HANDLER,
-//                new DefaultHttpMethodRetryHandler(0, false)
-//            );
-
             mPutMethod = new PutMethod(
                     HttpUtils.stringUrlToHttpUrl(client.getNewWebDavUri() + WebdavUtils.encodePath(mRemotePath)));
+
+            mPutMethod.setRetryOnConnectionFailure(false);
 
             if (mCancellationRequested.get()) {
                 // the operation was cancelled before getting it's turn to be executed in the queue of uploads
@@ -107,22 +100,23 @@ public class UploadRemoteFileOperation extends RemoteOperation {
             } else {
                 // perform the upload
                 result = uploadFile(client);
+                Log_OC.i(TAG, "Upload of " + mLocalPath + " to " + mRemotePath + ": " +
+                        result.getLogMessage());
             }
 
         } catch (Exception e) {
+
             if (mPutMethod != null && mPutMethod.isAborted()) {
                 result = new RemoteOperationResult(new OperationCancelledException());
+                Log_OC.e(TAG, "Upload of " + mLocalPath + " to " + mRemotePath + ": " +
+                        result.getLogMessage(), new OperationCancelledException());
             } else {
                 result = new RemoteOperationResult(e);
+                Log_OC.e(TAG, "Upload of " + mLocalPath + " to " + mRemotePath + ": " +
+                        result.getLogMessage(), e);
             }
-        } finally {
-            // TODO
-            // reset previous retry handler
-//            client.getParams().setParameter(
-//                HttpMethodParams.RETRY_HANDLER,
-//                oldRetryHandler
-//            );
         }
+
         return result;
     }
 

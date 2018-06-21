@@ -60,6 +60,7 @@ public abstract class HttpBaseMethod {
                 .build();
     }
 
+    // Connection parameters
     public void setReadTimeout(long readTimeout, TimeUnit timeUnit) {
         mOkHttpClient = mOkHttpClient.newBuilder()
                 .readTimeout(readTimeout, timeUnit)
@@ -76,6 +77,16 @@ public abstract class HttpBaseMethod {
         mOkHttpClient = mOkHttpClient.newBuilder()
                 .followRedirects(followRedirects)
                 .build();
+    }
+
+    public void setRetryOnConnectionFailure(boolean retryOnConnectionFailure) {
+        mOkHttpClient = mOkHttpClient.newBuilder()
+                .retryOnConnectionFailure(retryOnConnectionFailure)
+                .build();
+    }
+
+    public boolean getRetryOnConnectionFailure() {
+        return mOkHttpClient.retryOnConnectionFailure();
     }
 
     // Request

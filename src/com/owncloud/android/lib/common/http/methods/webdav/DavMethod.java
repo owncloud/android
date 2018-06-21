@@ -26,6 +26,8 @@ package com.owncloud.android.lib.common.http.methods.webdav;
 
 import com.owncloud.android.lib.common.http.methods.HttpBaseMethod;
 
+import java.util.concurrent.TimeUnit;
+
 import at.bitfire.dav4android.DavOCResource;
 import at.bitfire.dav4android.DavResource;
 import okhttp3.HttpUrl;
@@ -58,5 +60,15 @@ public abstract class DavMethod extends HttpBaseMethod {
     @Override
     public boolean isAborted() {
         return mDavResource.isCallAborted();
+    }
+
+    @Override
+    public void setRetryOnConnectionFailure(boolean retryOnConnectionFailure) {
+        mDavResource.setRetryOnConnectionFailure(retryOnConnectionFailure);
+    }
+
+    @Override
+    public boolean getRetryOnConnectionFailure() {
+        return mDavResource.isRetryOnConnectionFailure();
     }
 }
