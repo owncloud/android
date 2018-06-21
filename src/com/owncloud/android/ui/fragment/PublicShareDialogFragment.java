@@ -45,7 +45,6 @@ import android.widget.TextView;
 
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.OCFile;
-import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.shares.OCShare;
 import com.owncloud.android.lib.resources.status.OCCapability;
@@ -316,7 +315,7 @@ public class PublicShareDialogFragment extends DialogFragment {
 
         // since the public link permission foo got a bit despagetified in the server somewhere
         // at 10.0.4 we don't need publicUploadPermission there anymore. By setting it to false
-        // it will not be send to the server.
+        // it will not be sent to the server.
 
         publicUploadPermission =
                 (mCapabilities.getVersionMayor() >= 10
