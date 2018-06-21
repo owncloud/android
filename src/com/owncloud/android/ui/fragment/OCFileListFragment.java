@@ -847,9 +847,13 @@ public class OCFileListFragment extends ExtendedListFragment {
 
                 return true;
             }
-            case R.id.action_deselect_all: {
+            case R.id.action_select_inverse: {
                 for(int i = 0;i < mAdapter.getCount();i++){
-                    getListView().setItemChecked(i,false);
+                    if(getListView().isItemChecked(i)) {
+                        getListView().setItemChecked(i, false);
+                    } else{
+                        getListView().setItemChecked(i,true);
+                    }
                 }
                 return true;
             }
