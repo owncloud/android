@@ -117,7 +117,6 @@ public class CreateRemoteFolderOperation extends RemoteOperation {
         } catch (Exception e) {
             result = new RemoteOperationResult(e);
             Log_OC.e(TAG, "Create directory " + mRemotePath + ": " + result.getLogMessage(), e);
-
         }
 
         return result;
@@ -128,6 +127,4 @@ public class CreateRemoteFolderOperation extends RemoteOperation {
             mCreateFullPath);
         return operation.execute(client);
     }
-
-
 }

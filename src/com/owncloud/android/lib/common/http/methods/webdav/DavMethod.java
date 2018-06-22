@@ -62,6 +62,22 @@ public abstract class DavMethod extends HttpBaseMethod {
         return mDavResource.isCallAborted();
     }
 
+    // Connection parameters
+    @Override
+    public void setReadTimeout(long readTimeout, TimeUnit timeUnit) {
+        mDavResource.setReadTimeout(readTimeout, timeUnit);
+    }
+
+    @Override
+    public void setConnectionTimeout(long connectionTimeout, TimeUnit timeUnit) {
+        mDavResource.setConnectionTimeout(connectionTimeout, timeUnit);
+    }
+
+    @Override
+    public void setFollowRedirects(boolean followRedirects) {
+        mDavResource.setFollowRedirects(followRedirects);
+    }
+
     @Override
     public void setRetryOnConnectionFailure(boolean retryOnConnectionFailure) {
         mDavResource.setRetryOnConnectionFailure(retryOnConnectionFailure);

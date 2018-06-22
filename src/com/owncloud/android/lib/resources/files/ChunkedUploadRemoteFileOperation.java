@@ -24,24 +24,15 @@
 
 package com.owncloud.android.lib.resources.files;
 
-import java.io.ByteArrayInputStream;
-import java.io.File;
+import com.owncloud.android.lib.common.OwnCloudClient;
+import com.owncloud.android.lib.common.http.HttpUtils;
+import com.owncloud.android.lib.common.http.methods.webdav.MkColMethod;
+import com.owncloud.android.lib.common.network.WebdavUtils;
+import com.owncloud.android.lib.common.operations.RemoteOperationResult;
+
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.RandomAccessFile;
 import java.nio.channels.FileChannel;
-import java.util.Random;
-
-import org.apache.commons.httpclient.methods.PutMethod;
-
-import com.owncloud.android.lib.common.OwnCloudClient;
-import com.owncloud.android.lib.common.network.ChunkFromFileChannelRequestEntity;
-import com.owncloud.android.lib.common.network.ProgressiveDataTransferer;
-import com.owncloud.android.lib.common.network.WebdavUtils;
-import com.owncloud.android.lib.common.operations.InvalidCharacterExceptionParser;
-import com.owncloud.android.lib.common.operations.RemoteOperationResult;
-import com.owncloud.android.lib.common.utils.Log_OC;
-
 
 public class ChunkedUploadRemoteFileOperation extends UploadRemoteFileOperation {
 
@@ -53,16 +44,17 @@ public class ChunkedUploadRemoteFileOperation extends UploadRemoteFileOperation 
     private static final String OC_CHUNK_X_OC_MTIME_HEADER = "X-OC-Mtime";
     private static final String TAG = ChunkedUploadRemoteFileOperation.class.getSimpleName();
 
+    private long mTransferId;
+
     public ChunkedUploadRemoteFileOperation(String storagePath, String remotePath, String mimeType,
                                             String fileLastModifTimestamp) {
         super(storagePath, remotePath, mimeType, fileLastModifTimestamp);
     }
 
-    public ChunkedUploadRemoteFileOperation(
-        String storagePath, String remotePath, String mimeType, String requiredEtag,
-        String fileLastModifTimestamp
-    ) {
+    public ChunkedUploadRemoteFileOperation(long transferId, String storagePath, String remotePath, String mimeType,
+                                            String requiredEtag, String fileLastModifTimestamp) {
         super(storagePath, remotePath, mimeType, requiredEtag, fileLastModifTimestamp);
+        mTransferId = transferId;
     }
 
     @Override
@@ -72,6 +64,19 @@ public class ChunkedUploadRemoteFileOperation extends UploadRemoteFileOperation 
 
         FileChannel channel = null;
         RandomAccessFile raf = null;
+
+        //MKCOL
+        try {
+            MkColMethod mkcol = new MkColMethod(
+                    HttpUtils.stringUrlToHttpUrl(client.getWebdavUri() + WebdavUtils.encodePath(mRemotePath))
+            );
+
+            String a = "";
+        } catch (Exception e) {
+
+            String b = "";
+        }
+
 
         //TODO
 //        try {
