@@ -28,7 +28,6 @@ package com.owncloud.android.lib.common.accounts;
 import java.io.IOException;
 
 import org.apache.commons.httpclient.Cookie;
-import org.apache.commons.httpclient.HttpStatus;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
@@ -38,12 +37,9 @@ import android.accounts.OperationCanceledException;
 import android.content.Context;
 import android.net.Uri;
 
-import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.lib.common.OwnCloudClient;
-import com.owncloud.android.lib.common.OwnCloudClientManagerFactory;
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentials;
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentialsFactory;
-import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 
@@ -239,7 +235,7 @@ public class AccountUtils {
             // Account Manager
             AccountManager am = AccountManager.get(context.getApplicationContext());
 
-            Uri serverUri = (client.getBaseUri() != null) ? client.getBaseUri() : client.getWebdavUri();
+            Uri serverUri = (client.getBaseUri() != null) ? client.getBaseUri() : client.getOldFilesWebdavUri();
 
             String cookiesString = am.getUserData(account, Constants.KEY_COOKIES);
             if (cookiesString != null) {

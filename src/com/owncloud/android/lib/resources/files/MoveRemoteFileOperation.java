@@ -109,8 +109,8 @@ public class MoveRemoteFileOperation extends RemoteOperation {
         RemoteOperationResult result = null;
         try {
             final MoveMethod move = new MoveMethod(
-                    HttpUrl.parse( client.getWebdavUri() + WebdavUtils.encodePath(mSrcRemotePath)),
-                client.getWebdavUri() + WebdavUtils.encodePath(mTargetRemotePath),
+                    HttpUrl.parse( client.getNewFilesWebDavUri() + WebdavUtils.encodePath(mSrcRemotePath)),
+                client.getNewFilesWebDavUri() + WebdavUtils.encodePath(mTargetRemotePath),
                     mOverwrite);
 
             move.setReadTimeout(MOVE_READ_TIMEOUT, TimeUnit.SECONDS);

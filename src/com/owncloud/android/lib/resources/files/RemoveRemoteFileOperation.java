@@ -66,7 +66,7 @@ public class RemoveRemoteFileOperation extends RemoteOperation {
 
         try {
             DeleteMethod deleteMethod = new DeleteMethod(
-                    HttpUtils.stringUrlToHttpUrl(client.getNewWebDavUri() + WebdavUtils.encodePath(mRemotePath))
+                    HttpUtils.stringUrlToHttpUrl(client.getNewFilesWebDavUri() + WebdavUtils.encodePath(mRemotePath))
             );
 
             int status = client.executeHttpMethod(deleteMethod);

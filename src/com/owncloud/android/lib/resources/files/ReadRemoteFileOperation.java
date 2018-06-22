@@ -79,7 +79,7 @@ public class ReadRemoteFileOperation extends RemoteOperation {
         try {
             // remote request
             propfind = new PropfindMethod(
-                    HttpUrl.parse(client.getWebdavUri() + WebdavUtils.encodePath(mRemotePath)),
+                    HttpUrl.parse(client.getNewFilesWebDavUri() + WebdavUtils.encodePath(mRemotePath)),
                     DEPTH_0,
                     DavUtils.getAllPropset());
 

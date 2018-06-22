@@ -88,7 +88,7 @@ public class ExistenceCheckRemoteOperation extends RemoteOperation {
 
 //            client.setFollowRedirects(false);
             PropfindMethod propfindMethod = new PropfindMethod(
-                    HttpUtils.stringUrlToHttpUrl(client.getNewWebDavUri() + WebdavUtils.encodePath(mPath)),
+                    HttpUtils.stringUrlToHttpUrl(client.getNewFilesWebDavUri() + WebdavUtils.encodePath(mPath)),
                     0,
                     DavUtils.getAllPropset());
 
@@ -115,14 +115,14 @@ public class ExistenceCheckRemoteOperation extends RemoteOperation {
                     ? new RemoteOperationResult(OK)
                     : new RemoteOperationResult(propfindMethod);
 
-            Log_OC.d(TAG, "Existence check for " + client.getWebdavUri() +
+            Log_OC.d(TAG, "Existence check for " + client.getOldFilesWebdavUri() +
                     WebdavUtils.encodePath(mPath) + " targeting for " +
                     (mSuccessIfAbsent ? " absence " : " existence ") +
                     "finished with HTTP status " + status + (!isSuccess(status) ? "(FAIL)" : ""));
 
         } catch (Exception e) {
             result = new RemoteOperationResult(e);
-            Log_OC.e(TAG, "Existence check for " + client.getWebdavUri() +
+            Log_OC.e(TAG, "Existence check for " + client.getOldFilesWebdavUri() +
                     WebdavUtils.encodePath(mPath) + " targeting for " +
                     (mSuccessIfAbsent ? " absence " : " existence ") + ": " +
                     result.getLogMessage(), result.getException());

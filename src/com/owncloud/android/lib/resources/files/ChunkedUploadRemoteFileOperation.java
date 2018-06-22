@@ -65,19 +65,6 @@ public class ChunkedUploadRemoteFileOperation extends UploadRemoteFileOperation 
         FileChannel channel = null;
         RandomAccessFile raf = null;
 
-        //MKCOL
-        try {
-            MkColMethod mkcol = new MkColMethod(
-                    HttpUtils.stringUrlToHttpUrl(client.getWebdavUri() + WebdavUtils.encodePath(mRemotePath))
-            );
-
-            String a = "";
-        } catch (Exception e) {
-
-            String b = "";
-        }
-
-
         //TODO
 //        try {
 //            File file = new File(mLocalPath);
@@ -90,7 +77,7 @@ public class ChunkedUploadRemoteFileOperation extends UploadRemoteFileOperation 
 //            }
 //
 //            long offset = 0;
-//            String uriPrefix = client.getWebdavUri() + WebdavUtils.encodePath(mRemotePath) +
+//            String uriPrefix = client.getOldWebdavUri() + WebdavUtils.encodePath(mRemotePath) +
 //                "-chunking-" + Math.abs((new Random()).nextInt(9000) + 1000) + "-";
 //            long totalLength = file.length();
 //            long chunkCount = (long) Math.ceil((double) totalLength / CHUNK_SIZE);
@@ -154,5 +141,4 @@ public class ChunkedUploadRemoteFileOperation extends UploadRemoteFileOperation 
 //        }
         return result;
     }
-
 }

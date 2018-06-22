@@ -35,7 +35,6 @@ public class FileUtils {
 
 	public static final String PATH_SEPARATOR = "/";
 
-
 	public static String getParentPath(String remotePath) {
 		String parentPath = new File(remotePath).getParent();
 		parentPath = parentPath.endsWith(PATH_SEPARATOR) ? parentPath : parentPath + PATH_SEPARATOR;
@@ -82,5 +81,4 @@ public class FileUtils {
 		}
 		return result;
 	}
-	
 }

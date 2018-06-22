@@ -104,8 +104,8 @@ public class CopyRemoteFileOperation extends RemoteOperation {
         RemoteOperationResult result = null;
         try {
             CopyMethod copyMethod = new CopyMethod(
-                    HttpUrl.parse(client.getWebdavUri() + WebdavUtils.encodePath(mSrcRemotePath)),
-                    client.getWebdavUri() + WebdavUtils.encodePath(mTargetRemotePath),
+                    HttpUrl.parse(client.getNewFilesWebDavUri() + WebdavUtils.encodePath(mSrcRemotePath)),
+                    client.getNewFilesWebDavUri() + WebdavUtils.encodePath(mTargetRemotePath),
                     mOverwrite);
 
             copyMethod.setReadTimeout(COPY_READ_TIMEOUT, TimeUnit.SECONDS);
