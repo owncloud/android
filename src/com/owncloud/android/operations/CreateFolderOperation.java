@@ -45,24 +45,26 @@ public class CreateFolderOperation extends SyncOperation {
     
     protected String mRemotePath;
     protected boolean mCreateFullPath;
+    private boolean mFolderToSaveChunks;
     
     /**
      * Constructor
      * 
      * @param createFullPath        'True' means that all the ancestor folders should be created
      *                              if don't exist yet.
+     * @param folderToSaveChunks    'True' means that the folder to create is to save upload chunks.
      */
-    public CreateFolderOperation(String remotePath, boolean createFullPath) {
+    public CreateFolderOperation(String remotePath, boolean createFullPath, boolean folderToSaveChunks) {
         mRemotePath = remotePath;
         mCreateFullPath = createFullPath;
-        
+        mFolderToSaveChunks = folderToSaveChunks;
     }
 
 
     @Override
     protected RemoteOperationResult run(OwnCloudClient client) {
         CreateRemoteFolderOperation operation = new CreateRemoteFolderOperation(mRemotePath,
-                mCreateFullPath);
+                mCreateFullPath, mFolderToSaveChunks);
         RemoteOperationResult result =  operation.execute(client);
         
         if (result.isSuccess()) {
