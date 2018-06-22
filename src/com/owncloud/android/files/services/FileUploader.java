@@ -62,8 +62,10 @@ import com.owncloud.android.lib.common.network.OnDatatransferProgressListener;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.common.utils.Log_OC;
+import com.owncloud.android.lib.resources.files.ChunkedUploadRemoteFileOperation;
 import com.owncloud.android.lib.resources.files.FileUtils;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
+import com.owncloud.android.operations.ChunkedUploadFileOperation;
 import com.owncloud.android.operations.UploadFileOperation;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.activity.UploadListActivity;
@@ -71,6 +73,7 @@ import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter;
 import com.owncloud.android.ui.notifications.NotificationUtils;
 import com.owncloud.android.utils.Extras;
 
+import java.io.File;
 import java.lang.ref.WeakReference;
 import java.util.AbstractList;
 import java.util.HashMap;
@@ -388,15 +391,29 @@ public class FileUploader extends Service
                     ocUpload.setWhileChargingOnly(isWhileChargingOnly);*/
                     ocUpload.setUploadStatus(UploadStatus.UPLOAD_IN_PROGRESS);
 
-                    newUpload = new UploadFileOperation(
-                            account,
-                            files[i],
-                            ocUpload,
-                            chunked,
-                            forceOverwrite,
-                            localAction,
-                            this
-                    );
+                    if(chunked && new File(files[i].getStoragePath()).length() >
+                            ChunkedUploadRemoteFileOperation.CHUNK_SIZE) {
+                        newUpload = new ChunkedUploadFileOperation(
+                                account,
+                                files[i],
+                                ocUpload,
+                                chunked,
+                                forceOverwrite,
+                                localAction,
+                                this
+                        );
+                    } else {
+                        newUpload = new UploadFileOperation(
+                                account,
+                                files[i],
+                                ocUpload,
+                                chunked,
+                                forceOverwrite,
+                                localAction,
+                                this
+                        );
+                    }
+
                     newUpload.setCreatedBy(createdBy);
                     if (isCreateRemoteFolder) {
                         newUpload.setRemoteFolderToBeCreated();
