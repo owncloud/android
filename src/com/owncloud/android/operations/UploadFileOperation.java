@@ -2,7 +2,8 @@
  *   ownCloud Android client application
  *
  *   @author David A. Velasco
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   @author David González Verdugo
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -23,6 +24,7 @@ package com.owncloud.android.operations;
 import android.accounts.Account;
 import android.content.Context;
 import android.net.Uri;
+
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.db.OCUpload;
 import com.owncloud.android.db.PreferenceManager;
@@ -35,7 +37,6 @@ import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.common.utils.Log_OC;
-import com.owncloud.android.lib.resources.files.ChunkedUploadRemoteFileOperation;
 import com.owncloud.android.lib.resources.files.ExistenceCheckRemoteOperation;
 import com.owncloud.android.lib.resources.files.ReadRemoteFileOperation;
 import com.owncloud.android.lib.resources.files.RemoteFile;
@@ -60,7 +61,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
-
 
 /**
  * Operation performing the update in the ownCloud server
@@ -104,34 +104,34 @@ public class UploadFileOperation extends SyncOperation {
     /**
      * OCFile which is to be uploaded.
      */
-    private OCFile mFile;
+    protected OCFile mFile;
     /**
      * Original OCFile which is to be uploaded in case file had to be renamed
      * (if forceOverwrite==false and remote file already exists).
      */
     private OCFile mOldFile;
-    private String mRemotePath = null;
-    private boolean mChunked = false;
-    private boolean mRemoteFolderToBeCreated = false;
-    private boolean mForceOverwrite = false;
-    private int mLocalBehaviour = FileUploader.LOCAL_BEHAVIOUR_COPY;
-    private int mCreatedBy = CREATED_BY_USER;
+    private String mRemotePath;
+    private boolean mChunked;
+    private boolean mRemoteFolderToBeCreated;
+    private boolean mForceOverwrite;
+    private int mLocalBehaviour;
+    private int mCreatedBy;
 
     private boolean mWasRenamed = false;
-    private long mOCUploadId = -1;
+    protected long mOCUploadId;
     /**
      * Local path to file which is to be uploaded (before any possible renaming or moving).
      */
     private String mOriginalStoragePath = null;
-    private Set<OnDatatransferProgressListener> mDataTransferListeners = new HashSet<OnDatatransferProgressListener>();
+    protected Set<OnDatatransferProgressListener> mDataTransferListeners = new HashSet<OnDatatransferProgressListener>();
     private OnRenameListener mRenameUploadListener;
 
-    private final AtomicBoolean mCancellationRequested = new AtomicBoolean(false);
+    protected final AtomicBoolean mCancellationRequested = new AtomicBoolean(false);
     private final AtomicBoolean mUploadStarted = new AtomicBoolean(false);
 
     private Context mContext;
 
-    private UploadRemoteFileOperation mUploadOperation;
+    protected UploadRemoteFileOperation mUploadOperation;
 
     protected RequestEntity mEntity = null;
 
@@ -309,7 +309,6 @@ public class UploadFileOperation extends SyncOperation {
             result = grantFolderExistence(remoteParentPath, client);
 
             if (!result.isSuccess()) {
-
                 return result;
             }
 
@@ -359,58 +358,8 @@ public class UploadFileOperation extends SyncOperation {
             Long timeStampLong = originalFile.lastModified()/1000;
             String timeStamp = timeStampLong.toString();
 
-            /// perform the upload
-            if (mChunked &&
-                    new File(mFile.getStoragePath()).length() >
-                            ChunkedUploadRemoteFileOperation.CHUNK_SIZE ) {
-                mUploadOperation = new ChunkedUploadRemoteFileOperation(mOCUploadId, mFile.getStoragePath(),
-                        mFile.getRemotePath(), mFile.getMimetype(), mFile.getEtagInConflict(), timeStamp);
-            } else {
-                mUploadOperation = new UploadRemoteFileOperation(mFile.getStoragePath(),
-                        mFile.getRemotePath(), mFile.getMimetype(), mFile.getEtagInConflict(), timeStamp);
-            }
-
-            mUploadOperation = new UploadRemoteFileOperation(mFile.getStoragePath(),
-                        mFile.getRemotePath(), mFile.getMimetype(), mFile.getEtagInConflict(), timeStamp);
-
-            Iterator <OnDatatransferProgressListener> listener = mDataTransferListeners.iterator();
-            while (listener.hasNext()) {
-                mUploadOperation.addDatatransferProgressListener(listener.next());
-            }
-
-            if (mCancellationRequested.get()) {
-                throw new OperationCancelledException();
-            }
-
-            result = mUploadOperation.execute(client);
-
-            /// move local temporal file or original file to its corresponding
-            // location in the ownCloud local folder
-            if (result.isSuccess()) {
-                if (mLocalBehaviour == FileUploader.LOCAL_BEHAVIOUR_FORGET) {
-                    String temporalPath = FileStorageUtils.getTemporalPath(mAccount.name) + mFile.getRemotePath();
-                    if (mOriginalStoragePath.equals(temporalPath)) {
-                        // delete local file is was pre-copied in temporary folder (see .ui.helpers.UriUploader)
-                        temporalFile = new File(temporalPath);
-                        temporalFile.delete();
-                    }
-                    mFile.setStoragePath("");
-
-                } else {
-                    mFile.setStoragePath(expectedPath);
-
-                    if (temporalFile != null) {         // FileUploader.LOCAL_BEHAVIOUR_COPY
-                        move(temporalFile, expectedFile);
-                    } else {                            // FileUploader.LOCAL_BEHAVIOUR_MOVE
-                        move(originalFile, expectedFile);
-                        getStorageManager().deleteFileInMediaScan(originalFile.getAbsolutePath());
-                    }
-                    getStorageManager().triggerMediaScan(expectedFile.getAbsolutePath());
-                }
-
-            } else if (result.getHttpCode() == HttpStatus.SC_PRECONDITION_FAILED ) {
-                result = new RemoteOperationResult(ResultCode.SYNC_CONFLICT);
-            }
+            // Perform the upload
+            result = uploadRemoteFile(client, temporalFile, originalFile, expectedPath, expectedFile, timeStamp);
 
         } catch (Exception e) {
             result = new RemoteOperationResult(e);
@@ -453,6 +402,69 @@ public class UploadFileOperation extends SyncOperation {
         return result;
     }
 
+    /**
+     * Upload file to server
+     * @param client
+     * @param temporalFile file copied locally before uploading the file
+     * @param originalFile local file to upload
+     * @param expectedPath path in which the file should be uploaded
+     * @param expectedFile
+     * @param timeStamp
+     * @return {@link RemoteOperationResult} representing the upload operation result
+     */
+    protected RemoteOperationResult uploadRemoteFile(OwnCloudClient client, File temporalFile, File originalFile,
+                                                   String expectedPath, File expectedFile, String timeStamp) {
+        RemoteOperationResult result;
+
+        try {
+            mUploadOperation = new UploadRemoteFileOperation(mFile.getStoragePath(), mFile.getRemotePath(),
+                    mFile.getMimetype(), mFile.getEtagInConflict(), timeStamp);
+
+            Iterator <OnDatatransferProgressListener> listener = mDataTransferListeners.iterator();
+            while (listener.hasNext()) {
+                mUploadOperation.addDatatransferProgressListener(listener.next());
+            }
+
+            if (mCancellationRequested.get()) {
+                throw new OperationCancelledException();
+            }
+
+            result = mUploadOperation.execute(client);
+
+            /// move local temporal file or original file to its corresponding
+            // location in the ownCloud local folder
+            if (result.isSuccess()) {
+                if (mLocalBehaviour == FileUploader.LOCAL_BEHAVIOUR_FORGET) {
+                    String temporalPath = FileStorageUtils.getTemporalPath(mAccount.name) + mFile.getRemotePath();
+                    if (mOriginalStoragePath.equals(temporalPath)) {
+                        // delete local file is was pre-copied in temporary folder (see .ui.helpers.UriUploader)
+                        temporalFile = new File(temporalPath);
+                        temporalFile.delete();
+                    }
+                    mFile.setStoragePath("");
+
+                } else {
+                    mFile.setStoragePath(expectedPath);
+
+                    if (temporalFile != null) {         // FileUploader.LOCAL_BEHAVIOUR_COPY
+                        move(temporalFile, expectedFile);
+                    } else {                            // FileUploader.LOCAL_BEHAVIOUR_MOVE
+                        move(originalFile, expectedFile);
+                        getStorageManager().deleteFileInMediaScan(originalFile.getAbsolutePath());
+                    }
+                    getStorageManager().triggerMediaScan(expectedFile.getAbsolutePath());
+                }
+
+            } else if (result.getHttpCode() == HttpStatus.SC_PRECONDITION_FAILED ) {
+                result = new RemoteOperationResult(ResultCode.SYNC_CONFLICT);
+            }
+        } catch (Exception e) {
+            result = new RemoteOperationResult(e);
+        }
+
+        return result;
+    }
+
 
     /**
      * Checks origin of current upload and network type to decide if should be delayed, according to
@@ -477,7 +489,7 @@ public class UploadFileOperation extends SyncOperation {
     /**
      * Checks the existence of the folder where the current file will be uploaded both
      * in the remote server and in the local database.
-     * <p/>
+     *
      * If the upload is set to enforce the creation of the folder, the method tries to
      * create it both remote and locally.
      *
@@ -489,7 +501,7 @@ public class UploadFileOperation extends SyncOperation {
         RemoteOperation operation = new ExistenceCheckRemoteOperation(pathToGrant, false);
         RemoteOperationResult result = operation.execute(client);
         if (!result.isSuccess() && result.getCode() == ResultCode.FILE_NOT_FOUND && mRemoteFolderToBeCreated) {
-            SyncOperation syncOp = new CreateFolderOperation(pathToGrant, true);
+            SyncOperation syncOp = new CreateFolderOperation(pathToGrant, true, false);
             result = syncOp.execute(client, getStorageManager());
         }
         if (result.isSuccess()) {

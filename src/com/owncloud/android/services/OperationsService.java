@@ -684,7 +684,7 @@ public class OperationsService extends Service {
                     String remotePath = operationIntent.getStringExtra(EXTRA_REMOTE_PATH);
                     boolean createFullPath = operationIntent.getBooleanExtra(EXTRA_CREATE_FULL_PATH,
                             true);
-                    operation = new CreateFolderOperation(remotePath, createFullPath);
+                    operation = new CreateFolderOperation(remotePath, createFullPath, false);
 
                 } else if (action.equals(ACTION_SYNC_FILE)) {
                     // Sync file
