@@ -908,7 +908,8 @@ public class FileUploader extends Service
                 .setProgress(100, 0, false)
                 .setContentText(
                         String.format(getString(R.string.uploader_upload_in_progress_content), 0, upload.getFileName()))
-                .setChannelId(UPLOAD_NOTIFICATION_CHANNEL_ID);
+                .setChannelId(UPLOAD_NOTIFICATION_CHANNEL_ID)
+                .setWhen(System.currentTimeMillis());
 
         /// includes a pending intent in the notification showing the details
         Intent showUploadListIntent = new Intent(this, UploadListActivity.class);
