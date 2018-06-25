@@ -434,8 +434,6 @@
   <string name="share_via_link_expiration_date_label">过期</string>
   <string name="share_via_link_password_label">密码</string>
   <string name="share_via_link_password_title">安全</string>
-  <string name="share_via_link_edit_permission_label">允许编辑</string>
-  <string name="share_via_link_show_file_listing_label">显示文件列表</string>
   <string name="share_get_public_link_button">获取链接</string>
   <string name="share_with_title">分享...</string>
   <string name="share_with_edit_title">与 %1$s 分享</string>

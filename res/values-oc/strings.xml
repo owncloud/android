@@ -354,7 +354,6 @@ En rason d\'aquesta modificacion, totes los fichièrs mandats amb de versions an
   <string name="share_via_link_expiration_date_label">Expiracion</string>
   <string name="share_via_link_password_label">Senhal</string>
   <string name="share_via_link_password_title">Securizat</string>
-  <string name="share_via_link_edit_permission_label">Permetre la modificacion</string>
   <string name="share_get_public_link_button">Obténer lo ligam</string>
   <string name="share_with_title">Partejar amb...</string>
   <string name="share_with_edit_title">Partejar amb %1$s</string>

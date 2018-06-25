@@ -370,7 +370,8 @@ Mesedez, baimendu berriz</string>
   <string name="share_confirm_public_link_button">Gorde</string>
   <string name="share_via_link_expiration_date_label">Iraungitzea</string>
   <string name="share_via_link_password_label">Pasahitza</string>
-  <string name="share_via_link_edit_permission_label">Baimendu editatzea</string>
+  <string name="share_via_link_edit_permission_read_only_label">Deskargatu / Ikusi</string>
+  <string name="share_via_link_edit_permission_read_and_write_label">Deskargatu / Ikusi / Kargatu</string>
   <string name="share_search">Bilatu</string>
   <string name="share_privilege_can_share">elkarbana dezake</string>
   <string name="share_privilege_can_edit">editatu dezake</string>

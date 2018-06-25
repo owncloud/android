@@ -440,8 +440,8 @@
   <string name="share_via_link_expiration_date_label">Skadim</string>
   <string name="share_via_link_password_label">Fjalëkalim</string>
   <string name="share_via_link_password_title">E siguruar</string>
-  <string name="share_via_link_edit_permission_label">Lejo përpunim</string>
-  <string name="share_via_link_show_file_listing_label">Shfaq listë kartelash</string>
+  <string name="share_via_link_edit_permission_read_only_label">Të shkarkojë / Të shohë</string>
+  <string name="share_via_link_edit_permission_read_and_write_label">Të shkarkojë / Të shohë / Të ngarkojë</string>
   <string name="share_get_public_link_button">Merreni lidhjen</string>
   <string name="share_with_title">Ndajeni me …</string>
   <string name="share_with_edit_title">Ndajeni me %1$s</string>

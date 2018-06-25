@@ -55,7 +55,6 @@
   <string name="share_confirm_public_link_button">Salveguardar</string>
   <string name="share_via_link_expiration_date_label">Expiration</string>
   <string name="share_via_link_password_label">Contrasigno</string>
-  <string name="share_via_link_edit_permission_label">Permitter modification</string>
   <string name="share_search">Cercar</string>
   <string name="share_privilege_can_share">pote compartir</string>
   <string name="share_privilege_can_edit">pote modificar</string>

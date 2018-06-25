@@ -400,8 +400,6 @@
   <string name="share_via_link_expiration_date_label">Expiração</string>
   <string name="share_via_link_password_label">Palavra-passe</string>
   <string name="share_via_link_password_title">Protegido</string>
-  <string name="share_via_link_edit_permission_label">Permitir edição</string>
-  <string name="share_via_link_show_file_listing_label">Mostrar listagem de ficheiros</string>
   <string name="share_get_public_link_button">Obter ligação</string>
   <string name="share_with_title">Partilhar com ...</string>
   <string name="share_with_edit_title">Partilhar com %1$s</string>

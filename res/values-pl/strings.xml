@@ -420,8 +420,8 @@
   <string name="share_via_link_expiration_date_label">Wygaśnięcie</string>
   <string name="share_via_link_password_label">Hasło</string>
   <string name="share_via_link_password_title">Zabezpieczone</string>
-  <string name="share_via_link_edit_permission_label">Pozwól na edycję</string>
-  <string name="share_via_link_show_file_listing_label">Pokaż kolejno listę plików</string>
+  <string name="share_via_link_edit_permission_read_only_label">Pobieranie / Podgląd</string>
+  <string name="share_via_link_edit_permission_read_and_write_label">Pobieranie / Podgląd / Wysyłanie</string>
   <string name="share_get_public_link_button">Pobierz link</string>
   <string name="share_with_title">Współdziel z ...</string>
   <string name="share_with_edit_title">Współdziel z %1$s</string>

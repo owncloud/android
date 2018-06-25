@@ -350,7 +350,6 @@
   <string name="share_via_link_expiration_date_label">Leeft of</string>
   <string name="share_via_link_password_label">Passwuert</string>
   <string name="share_via_link_password_title">Geséchert</string>
-  <string name="share_via_link_edit_permission_label">Beaarbechten erlaben</string>
   <string name="share_get_public_link_button">De Link kréien</string>
   <string name="share_with_title">Deele mat</string>
   <string name="share_with_edit_title">Mam %1$s deelen</string>

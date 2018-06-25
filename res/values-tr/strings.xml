@@ -389,8 +389,6 @@
   <string name="share_via_link_expiration_date_label">Bitiş</string>
   <string name="share_via_link_password_label">Parola</string>
   <string name="share_via_link_password_title">Güvenli</string>
-  <string name="share_via_link_edit_permission_label">Düzenlemeye izin ver</string>
-  <string name="share_via_link_show_file_listing_label">Dosya listesini göster</string>
   <string name="share_get_public_link_button">Bağlantıyı al</string>
   <string name="share_with_title">Şununla paylaş...</string>
   <string name="share_with_edit_title">%1$s ile paylaş</string>

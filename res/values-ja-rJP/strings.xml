@@ -426,8 +426,8 @@
   <string name="share_via_link_expiration_date_label">期限切れ</string>
   <string name="share_via_link_password_label">パスワード</string>
   <string name="share_via_link_password_title">セキュア</string>
-  <string name="share_via_link_edit_permission_label">編集を許可</string>
-  <string name="share_via_link_show_file_listing_label">ファイルリストを表示</string>
+  <string name="share_via_link_edit_permission_read_only_label">ダウンロード / 表示</string>
+  <string name="share_via_link_edit_permission_read_and_write_label">ダウンロード / 表示 / アップロード</string>
   <string name="share_get_public_link_button">リンクを取得</string>
   <string name="share_with_title">共有開始... </string>
   <string name="share_with_edit_title">%1$s と共有</string>

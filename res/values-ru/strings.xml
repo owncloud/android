@@ -443,8 +443,8 @@
   <string name="share_via_link_expiration_date_label">Срок действия</string>
   <string name="share_via_link_password_label">Пароль</string>
   <string name="share_via_link_password_title">Безопасный</string>
-  <string name="share_via_link_edit_permission_label">Разрешить редактирование</string>
-  <string name="share_via_link_show_file_listing_label">Показать список файлов</string>
+  <string name="share_via_link_edit_permission_read_only_label">Скачивание / Просмотр</string>
+  <string name="share_via_link_edit_permission_read_and_write_label">Скачивание / Просмотр / Закачка</string>
   <string name="share_get_public_link_button">Получить ссылку</string>
   <string name="share_with_title">Поделиться с …</string>
   <string name="share_with_edit_title">Поделиться с %1$s</string>

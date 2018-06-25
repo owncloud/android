@@ -105,8 +105,6 @@
   <string name="share_confirm_public_link_button">Bewaar</string>
   <string name="share_via_link_expiration_date_label">Verval</string>
   <string name="share_via_link_password_label">Wagwoord</string>
-  <string name="share_via_link_edit_permission_label">Staan wysiging toe</string>
-  <string name="share_via_link_show_file_listing_label">Toon lêerlys</string>
   <string name="share_search">Soek</string>
   <string name="share_privilege_can_share">kan deel</string>
   <string name="share_privilege_can_edit">kan wysig</string>

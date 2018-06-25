@@ -43,7 +43,6 @@
   <string name="share_confirm_public_link_button">Spremi</string>
   <string name="share_via_link_expiration_date_label">Istek</string>
   <string name="share_via_link_password_label">Lozinka</string>
-  <string name="share_via_link_edit_permission_label">Dozvolite izmjenu</string>
   <string name="share_search">Potraži</string>
   <string name="share_privilege_can_share">mogu dijeliti</string>
   <string name="share_privilege_can_edit">mogu mijenjati</string>

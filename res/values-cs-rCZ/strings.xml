@@ -411,8 +411,6 @@ správce systému.</string>
   <string name="share_via_link_expiration_date_label">Konec platnosti</string>
   <string name="share_via_link_password_label">Heslo</string>
   <string name="share_via_link_password_title">Zabezpečeno</string>
-  <string name="share_via_link_edit_permission_label">Povolit úpravy</string>
-  <string name="share_via_link_show_file_listing_label">Ukázat výpis souborů</string>
   <string name="share_get_public_link_button">Vytvořit odkaz</string>
   <string name="share_with_title">Sdílet s ...</string>
   <string name="share_with_edit_title">Sdílet s %1$s</string>

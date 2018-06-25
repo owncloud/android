@@ -260,8 +260,6 @@
   <string name="share_confirm_public_link_button">Lagra</string>
   <string name="share_via_link_expiration_date_label">Utløp</string>
   <string name="share_via_link_password_label">Passord</string>
-  <string name="share_via_link_edit_permission_label">Tillat endring</string>
-  <string name="share_via_link_show_file_listing_label">Vis fil listing</string>
   <string name="share_search">Søk</string>
   <string name="share_privilege_can_share">kan dela</string>
   <string name="share_privilege_can_edit">kan endra</string>

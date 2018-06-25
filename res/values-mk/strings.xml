@@ -275,7 +275,8 @@
   <string name="share_confirm_public_link_button">Сними</string>
   <string name="share_via_link_expiration_date_label">Истекување</string>
   <string name="share_via_link_password_label">Лозинка</string>
-  <string name="share_via_link_edit_permission_label">Овозможи уредување</string>
+  <string name="share_via_link_edit_permission_read_only_label">Превземи / Погледај</string>
+  <string name="share_via_link_edit_permission_read_and_write_label">Превземи / Погледај / Подигни</string>
   <string name="share_search">Барај</string>
   <string name="share_privilege_can_share">може да споделува</string>
   <string name="share_privilege_can_edit">може да се измени</string>

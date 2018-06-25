@@ -407,8 +407,6 @@
   <string name="share_via_link_expiration_date_label">Rennur út</string>
   <string name="share_via_link_password_label">Lykilorð</string>
   <string name="share_via_link_password_title">Öruggt</string>
-  <string name="share_via_link_edit_permission_label">Leyfa breytingar</string>
-  <string name="share_via_link_show_file_listing_label">Birta skráalista</string>
   <string name="share_get_public_link_button">Ná í tengil</string>
   <string name="share_with_title">Deila með ...</string>
   <string name="share_with_edit_title">Deila með %1$s</string>

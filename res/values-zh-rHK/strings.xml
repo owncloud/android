@@ -82,7 +82,6 @@
   <string name="share_cancel_public_link_button">取消</string>
   <string name="share_confirm_public_link_button">儲存</string>
   <string name="share_via_link_password_label">密碼</string>
-  <string name="share_via_link_edit_permission_label">容許編輯</string>
   <string name="share_search">尋找</string>
   <string name="share_privilege_can_share">可分享</string>
   <string name="share_privilege_can_edit">可編輯</string>

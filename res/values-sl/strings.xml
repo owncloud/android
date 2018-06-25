@@ -411,8 +411,6 @@
   <string name="share_via_link_expiration_date_label">Datum preteka</string>
   <string name="share_via_link_password_label">Geslo</string>
   <string name="share_via_link_password_title">Varovano</string>
-  <string name="share_via_link_edit_permission_label">Dovoli urejanje</string>
-  <string name="share_via_link_show_file_listing_label">Pokaži izpis datoteke</string>
   <string name="share_get_public_link_button">Pridobi povezavo</string>
   <string name="share_with_title">Omogoči souporabo z ...</string>
   <string name="share_with_edit_title">Omogoči souporabo z %1$s</string>

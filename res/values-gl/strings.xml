@@ -315,7 +315,6 @@ Descárgueo de aquí: %2$s</string>
   <string name="share_confirm_public_link_button">Gardar</string>
   <string name="share_via_link_expiration_date_label">Caducidade</string>
   <string name="share_via_link_password_label">Contrasinal</string>
-  <string name="share_via_link_edit_permission_label">Permitir a edición</string>
   <string name="share_with_title">Compartir con</string>
   <string name="share_search">Buscar</string>
   <string name="search_users_and_groups_hint">Buscar usuarios e grupos</string>

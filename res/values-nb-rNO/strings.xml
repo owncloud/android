@@ -434,8 +434,8 @@
   <string name="share_via_link_expiration_date_label">Utløpsdato</string>
   <string name="share_via_link_password_label">Passord</string>
   <string name="share_via_link_password_title">Sikret</string>
-  <string name="share_via_link_edit_permission_label">Tillat redigering</string>
-  <string name="share_via_link_show_file_listing_label">Vis filoppføringer</string>
+  <string name="share_via_link_edit_permission_read_only_label">Last ned / Se</string>
+  <string name="share_via_link_edit_permission_read_and_write_label">Last ned / Se / Last opp</string>
   <string name="share_get_public_link_button">Hent lenke</string>
   <string name="share_with_title">Del med ...</string>
   <string name="share_with_edit_title">Del med %1$s</string>

@@ -379,7 +379,6 @@
   <string name="share_via_link_expiration_date_label">Изтичане</string>
   <string name="share_via_link_password_label">Парола</string>
   <string name="share_via_link_password_title">Подсигурен</string>
-  <string name="share_via_link_edit_permission_label">Позволяване на редактиране</string>
   <string name="share_get_public_link_button">Получаване на връзка</string>
   <string name="share_with_title">Споделено с ...</string>
   <string name="share_with_edit_title">Сподели с %1$s</string>

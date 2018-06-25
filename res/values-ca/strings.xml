@@ -371,8 +371,6 @@
   <string name="share_via_link_expiration_date_label">Expiració</string>
   <string name="share_via_link_password_label">Contrasenya</string>
   <string name="share_via_link_password_title">Assegurat</string>
-  <string name="share_via_link_edit_permission_label">Permetre edició</string>
-  <string name="share_via_link_show_file_listing_label">Mostra el llistat d\'arxius</string>
   <string name="share_get_public_link_button">Obtén l\'enllaç</string>
   <string name="share_with_title">Comparteix amb ...</string>
   <string name="share_with_edit_title">Comparteix amb %1$s</string>

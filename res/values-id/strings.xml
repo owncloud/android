@@ -388,8 +388,6 @@
   <string name="share_via_link_expiration_date_label">Kedaluwarsa</string>
   <string name="share_via_link_password_label">Kata Sandi</string>
   <string name="share_via_link_password_title">Aman</string>
-  <string name="share_via_link_edit_permission_label">Izinkan penyuntingan</string>
-  <string name="share_via_link_show_file_listing_label">Tampilkan daftar file</string>
   <string name="share_with_title">Berbagi dengan ...</string>
   <string name="share_with_edit_title">Berbagi dengan %1$s</string>
   <string name="share_search">Cari</string>

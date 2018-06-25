@@ -435,8 +435,6 @@ Hieronder staan de lokale bestanden en de externe bestanden in %5$s waar ze naar
   <string name="share_via_link_expiration_date_label">Vervaltermijn</string>
   <string name="share_via_link_password_label">Wachtwoord</string>
   <string name="share_via_link_password_title">Beveiligd</string>
-  <string name="share_via_link_edit_permission_label">Toestaan bewerken</string>
-  <string name="share_via_link_show_file_listing_label">Tonen bestandenlijst</string>
   <string name="share_get_public_link_button">Ophalen link</string>
   <string name="share_with_title">Deel met ...</string>
   <string name="share_with_edit_title">Deel met %1$s</string>

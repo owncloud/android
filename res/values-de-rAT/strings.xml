@@ -93,7 +93,6 @@
   <string name="share_confirm_public_link_button">Speichern</string>
   <string name="share_via_link_expiration_date_label">Ablaufdatum</string>
   <string name="share_via_link_password_label">Passwort</string>
-  <string name="share_via_link_edit_permission_label">Bearbeitung erlauben</string>
   <string name="share_search">Suche</string>
   <string name="share_privilege_can_share">Kann teilen</string>
   <string name="share_privilege_can_edit">Kann bearbeiten</string>
