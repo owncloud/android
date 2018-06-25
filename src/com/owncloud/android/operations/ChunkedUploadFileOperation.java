@@ -48,6 +48,12 @@ public class ChunkedUploadFileOperation extends UploadFileOperation {
         RemoteOperationResult result = null;
 
         try {
+            // Step 1, create folder where we put the uploaded file chunks
+            result = createChunksFolder(String.valueOf(mOCUploadId));
+
+            if (!result.isSuccess()) return result;
+
+            // Step 2, start to upload chunks
             mUploadOperation = new ChunkedUploadRemoteFileOperation(mOCUploadId, mFile.getStoragePath(),
                     mFile.getRemotePath(), mFile.getMimetype(), mFile.getEtagInConflict(), timeStamp);
 
@@ -60,14 +66,7 @@ public class ChunkedUploadFileOperation extends UploadFileOperation {
                 throw new OperationCancelledException();
             }
 
-            // Step 1, create folder where we put the uploaded file chunks
-            result = createChunksFolder(String.valueOf(mOCUploadId));
-
-            if (!result.isSuccess()) return result;
-
-            // Step 2, start to upload chunks
-
-
+            result = mUploadOperation.execute(client);
 
             // Step 3, move file to final destination
 
