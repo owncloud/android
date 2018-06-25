@@ -43,7 +43,7 @@ import okio.Source;
  */
 public class FileRequestBody extends RequestBody implements ProgressiveDataTransferer {
 
-    private File mFile;
+    protected File mFile;
     private MediaType mContentType;
     Set<OnDatatransferProgressListener> mDataTransferListeners = new HashSet<>();
 
@@ -71,7 +71,7 @@ public class FileRequestBody extends RequestBody implements ProgressiveDataTrans
             long transferred = 0;
             long read;
 
-            while ((read = source.read(sink.buffer(), 2048)) != -1) {
+            while ((read = source.read(sink.buffer(), 4096)) != -1) {
                 transferred += read;
                 sink.flush();
                 synchronized (mDataTransferListeners) {

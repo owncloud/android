@@ -56,7 +56,7 @@ public class ChunkFromFileChannelRequestEntity implements RequestEntity, Progres
     private final File mFile;
     private long mOffset;
     private long mTransferred;
-    Set<OnDatatransferProgressListener> mDataTransferListeners = new HashSet<OnDatatransferProgressListener>();
+    Set<OnDatatransferProgressListener> mDataTransferListeners = new HashSet<>();
     private ByteBuffer mBuffer = ByteBuffer.allocate(4096);
 
     public ChunkFromFileChannelRequestEntity(
@@ -120,8 +120,8 @@ public class ChunkFromFileChannelRequestEntity implements RequestEntity, Progres
     
     
     public void writeRequest(final OutputStream out) throws IOException {
-        int readCount = 0;
-        Iterator<OnDatatransferProgressListener> it = null;
+        int readCount;
+        Iterator<OnDatatransferProgressListener> it;
 
         try {
             mChannel.position(mOffset);
@@ -161,7 +161,5 @@ public class ChunkFromFileChannelRequestEntity implements RequestEntity, Progres
         } catch (FileRequestEntity.WriteException we) {
             throw we.getWrapped();
         }
-            
     }
-
 }
