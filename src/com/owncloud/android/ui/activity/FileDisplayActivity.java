@@ -1025,7 +1025,14 @@ public class FileDisplayActivity extends FileActivity
                                 (synchResult.isException() && synchResult.getException()
                                     instanceof AuthenticatorException)) {
 
-                                showRequestAccountChangeNotice();
+                                // If we have saml enabled we consider the user to only have
+                                // one account with which he is logged into the app. This is because
+                                // only branded versions of the app have saml support.
+                                if(getString(R.string.auth_method_saml_web_sso).equals("on")) {
+                                    requestCredentialsUpdate();
+                                } else {
+                                    showRequestAccountChangeNotice();
+                                }
 
                             } else if (RemoteOperationResult.ResultCode.
                                     SSL_RECOVERABLE_PEER_UNVERIFIED.equals(
