@@ -75,7 +75,7 @@ public class HttpClient {
                         .protocols(Arrays.asList(Protocol.HTTP_1_1))
                         .followRedirects(false)
                         .sslSocketFactory(sslContext.getSocketFactory(), trustManager)
-                        .hostnameVerifier(new BrowserCompatHostnameVerifier())
+                        .hostnameVerifier(new BrowserCompatHostnameVerifier());
                 if(BuildConfig.DEBUG) {
                     clientBuilder.addNetworkInterceptor(new StethoInterceptor());
                 }
