@@ -27,8 +27,10 @@ package com.owncloud.android.lib.resources.files;
 import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import com.owncloud.android.lib.common.network.WebdavEntry;
+import com.owncloud.android.lib.common.utils.Log_OC;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -232,8 +234,9 @@ public class RemoteFile implements Parcelable, Serializable {
 
 
     private static String getRemotePathFromUrl(HttpUrl url, String displayName) {
-        final String pathToRemove = NEW_WEBDAV_FILES_PATH_4_0 + displayName;
-        return Uri.decode(url.encodedPath()).replace(pathToRemove, "");
+        final String davPath = NEW_WEBDAV_FILES_PATH_4_0 + displayName;
+        final String pathToOc = url.encodedPath().split(davPath)[0];
+        return Uri.decode(url.encodedPath()).replace(pathToOc + davPath, "");
     }
 
     /**

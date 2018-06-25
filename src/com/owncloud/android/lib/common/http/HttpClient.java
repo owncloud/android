@@ -26,6 +26,8 @@ package com.owncloud.android.lib.common.http;
 
 import android.content.Context;
 
+import com.facebook.stetho.okhttp3.StethoInterceptor;
+import com.owncloud.android.lib.BuildConfig;
 import com.owncloud.android.lib.common.OwnCloudClientManagerFactory;
 import com.owncloud.android.lib.common.http.interceptors.HttpInterceptor;
 import com.owncloud.android.lib.common.http.interceptors.UserAgentInterceptor;
@@ -68,13 +70,17 @@ public class HttpClient {
                         NetworkUtils.getKnownServersStore(sContext));
                 final SSLContext sslContext = SSLContext.getInstance("TLS");
                 sslContext.init(null, new TrustManager[] {trustManager}, null);
-                sOkHttpClient = new OkHttpClient.Builder()
+                OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder()
                         .addInterceptor(getOkHttpInterceptor())
                         .protocols(Arrays.asList(Protocol.HTTP_1_1))
                         .followRedirects(false)
                         .sslSocketFactory(sslContext.getSocketFactory(), trustManager)
                         .hostnameVerifier(new BrowserCompatHostnameVerifier())
-                        .build();
+                if(BuildConfig.DEBUG) {
+                    clientBuilder.addNetworkInterceptor(new StethoInterceptor());
+                }
+                sOkHttpClient = clientBuilder.build();
+
             } catch (Exception e) {
                 Log_OC.e(TAG, "Could not setup SSL system.", e);
             }
