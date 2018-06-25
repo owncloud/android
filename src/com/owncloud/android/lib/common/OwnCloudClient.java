@@ -58,7 +58,7 @@ public class OwnCloudClient extends HttpClient {
 
     public static final String WEBDAV_PATH_4_0 = "/remote.php/webdav";
     public static final String NEW_WEBDAV_FILES_PATH_4_0 = "/remote.php/dav/files/";
-    public static final String NEW_WEBDAV_UPLOADS_PATH_4_0 = "/remote.php/dav/files/";
+    public static final String NEW_WEBDAV_UPLOADS_PATH_4_0 = "/remote.php/dav/uploads/";
     public static final String STATUS_PATH = "/status.php";
     public static final String FILES_WEB_PATH = "/index.php/apps/files";
 

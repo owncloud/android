@@ -57,18 +57,17 @@ public class CreateRemoteFolderOperation extends RemoteOperation {
 
     private String mRemotePath;
     private boolean mCreateFullPath;
-    private boolean mFolderToSaveChunks;
+    protected boolean mFolderToSaveChunks;
 
     /**
      * Constructor
-     *  @param remotePath     Full path to the new directory to create in the remote server.
+     * @param remotePath     Full path to the new directory to create in the remote server.
      * @param createFullPath 'True' means that all the ancestor folders should be created.
-     * @param folderToSaveChunks 'True' means that the folder to create is to save upload chunks.
      */
-    public CreateRemoteFolderOperation(String remotePath, boolean createFullPath, boolean folderToSaveChunks) {
+    public CreateRemoteFolderOperation(String remotePath, boolean createFullPath) {
         mRemotePath = remotePath;
         mCreateFullPath = createFullPath;
-        mFolderToSaveChunks = folderToSaveChunks;
+        mFolderToSaveChunks = false;
     }
 
     /**
@@ -125,8 +124,7 @@ public class CreateRemoteFolderOperation extends RemoteOperation {
     }
 
     private RemoteOperationResult createParentFolder(String parentPath, OwnCloudClient client) {
-        RemoteOperation operation = new CreateRemoteFolderOperation(parentPath,
-            mCreateFullPath, mFolderToSaveChunks);
+        RemoteOperation operation = new CreateRemoteFolderOperation(parentPath, mCreateFullPath);
         return operation.execute(client);
     }
 }
