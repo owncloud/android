@@ -31,6 +31,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 
+import com.facebook.stetho.Stetho;
 import com.owncloud.android.authentication.FingerprintManager;
 import com.owncloud.android.authentication.PassCodeManager;
 import com.owncloud.android.authentication.PatternManager;
@@ -77,6 +78,10 @@ public class MainApp extends Application {
         MainApp.mContext = getApplicationContext();
 
         boolean isSamlAuth = AUTH_ON.equals(getString(R.string.auth_method_saml_web_sso));
+
+        if(BuildConfig.DEBUG) {
+            Stetho.initializeWithDefaults(this);
+        }
 
         OwnCloudClientManagerFactory.setUserAgent(getUserAgent());
         if (isSamlAuth) {
