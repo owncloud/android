@@ -3,7 +3,8 @@
  *
  *   @author David A. Velasco
  *   @author masensio
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   @author David González Verdugo
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -21,19 +22,15 @@
 
 package com.owncloud.android.operations;
 
-import com.owncloud.android.MainApp;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.lib.common.OwnCloudClient;
-import com.owncloud.android.lib.resources.files.CreateRemoteFolderOperation;
-import com.owncloud.android.lib.common.operations.OnRemoteOperationListener;
-import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
+import com.owncloud.android.lib.resources.files.CreateRemoteFolderOperation;
 import com.owncloud.android.operations.common.SyncOperation;
 import com.owncloud.android.utils.FileStorageUtils;
 
 import java.io.File;
-
 
 /**
  * Access to remote operation performing the creation of a new folder in the ownCloud server.
@@ -45,27 +42,26 @@ public class CreateFolderOperation extends SyncOperation {
     
     protected String mRemotePath;
     protected boolean mCreateFullPath;
-    private boolean mFolderToSaveChunks;
     
     /**
      * Constructor
      * 
      * @param createFullPath        'True' means that all the ancestor folders should be created
      *                              if don't exist yet.
-     * @param folderToSaveChunks    'True' means that the folder to create is to save upload chunks.
      */
-    public CreateFolderOperation(String remotePath, boolean createFullPath, boolean folderToSaveChunks) {
+    public CreateFolderOperation(String remotePath, boolean createFullPath) {
         mRemotePath = remotePath;
         mCreateFullPath = createFullPath;
-        mFolderToSaveChunks = folderToSaveChunks;
     }
 
 
     @Override
     protected RemoteOperationResult run(OwnCloudClient client) {
-        CreateRemoteFolderOperation operation = new CreateRemoteFolderOperation(mRemotePath,
-                mCreateFullPath, mFolderToSaveChunks);
-        RemoteOperationResult result =  operation.execute(client);
+        CreateRemoteFolderOperation createRemoteFolderOperation = new CreateRemoteFolderOperation(
+                mRemotePath,
+                mCreateFullPath
+        );
+        RemoteOperationResult result =  createRemoteFolderOperation.execute(client);
         
         if (result.isSuccess()) {
             OCFile newDir = saveFolderInDB();

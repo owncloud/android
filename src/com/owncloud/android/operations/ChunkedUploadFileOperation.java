@@ -68,6 +68,7 @@ public class ChunkedUploadFileOperation extends UploadFileOperation {
             // Step 2, start to upload chunks
 
 
+
             // Step 3, move file to final destination
 
         } catch (Exception e) {
@@ -78,7 +79,7 @@ public class ChunkedUploadFileOperation extends UploadFileOperation {
     }
 
     private RemoteOperationResult createChunksFolder(String remoteChunksFolder) {
-        SyncOperation syncOp = new CreateFolderOperation(remoteChunksFolder, false, true);
+        SyncOperation syncOp = new CreateChunksFolderOperation(remoteChunksFolder);
         return syncOp.execute(getClient(), getStorageManager());
     }
 }
