@@ -561,7 +561,8 @@ public class FileDownloader extends Service
                 .setContentText(
                         String.format(getString(R.string.downloader_download_in_progress_content), 0,
                                 new File(download.getSavePath()).getName()))
-                .setChannelId(DOWNLOAD_NOTIFICATION_CHANNEL_ID);
+                .setChannelId(DOWNLOAD_NOTIFICATION_CHANNEL_ID)
+                .setWhen(System.currentTimeMillis());
 
         /// includes a pending intent in the notification showing the details view of the file
         Intent showDetailsIntent = null;
