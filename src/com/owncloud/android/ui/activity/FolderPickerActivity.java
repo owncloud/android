@@ -54,6 +54,7 @@ import com.owncloud.android.ui.dialog.CreateFolderDialogFragment;
 import com.owncloud.android.ui.fragment.FileFragment;
 import com.owncloud.android.ui.fragment.OCFileListFragment;
 import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter;
+import com.owncloud.android.utils.FileStorageUtils;
 
 import java.util.ArrayList;
 
@@ -398,7 +399,7 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
         } else {
             try {
                 showSnackMessage(
-                    ErrorMessageAdapter.getResultMessage(result, operation, getResources())
+                        FileStorageUtils.getNewFolderName(((CreateFolderOperation) operation).getRemotePath()) + " " + getResources().getString(R.string.folder_already_exists)
                 );
 
             } catch (NotFoundException e) {
