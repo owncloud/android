@@ -24,6 +24,7 @@ package com.owncloud.android.operations;
 
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.lib.common.OwnCloudClient;
+
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.files.CreateRemoteFolderOperation;
@@ -52,6 +53,10 @@ public class CreateFolderOperation extends SyncOperation {
     public CreateFolderOperation(String remotePath, boolean createFullPath) {
         mRemotePath = remotePath;
         mCreateFullPath = createFullPath;
+    }
+
+    public String getRemotePath(){
+        return this.mRemotePath;
     }
 
     @Override

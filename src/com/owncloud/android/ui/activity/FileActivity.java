@@ -53,6 +53,7 @@ import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.common.utils.Log_OC;
+import com.owncloud.android.operations.CreateFolderOperation;
 import com.owncloud.android.operations.CreateShareWithShareeOperation;
 import com.owncloud.android.operations.GetSharesForFileOperation;
 import com.owncloud.android.operations.RemoveShareOperation;
@@ -339,6 +340,10 @@ public class FileActivity extends DrawerActivity
 
             result.getData();
 
+        } else if(operation instanceof CreateFolderOperation){
+            if(result.isException()){
+                showSnackMessage("Hey");
+            }
         }
     }
 

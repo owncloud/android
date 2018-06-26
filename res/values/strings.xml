@@ -461,6 +461,8 @@
     <string name="upload_copy_files">Copy file</string>
     <string name="upload_move_files">Move file</string>
 
+    <string name="folder_already_exists">already exists</string>
+
     <string name="pref_behaviour_entries_keep_file">kept in original folder</string>
     <string name="pref_behaviour_entries_move">moved to app folder</string>
 
