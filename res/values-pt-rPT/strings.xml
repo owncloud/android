@@ -24,6 +24,7 @@
   <string name="drawer_item_uploads_list">Envios</string>
   <string name="drawer_close">Fechar</string>
   <string name="drawer_open">Abrir</string>
+  <string name="drawer_unavailable_free_storage">%1$s em utilização</string>
   <string name="drawer_feedback">Opinião</string>
   <string name="drawer_help">Ajuda</string>
   <string name="prefs_category_general">Geral</string>
@@ -46,6 +47,8 @@
   <string name="prefs_remember_last_upload_location_summary">Lembrar a última localização de partilha dos carregamentos</string>
   <string name="recommend_subject">Experimente %1$s no seu telemóvel!</string>
   <string name="recommend_text">Eu quero convidá-lo a usar %1$s no seu telemóvel!\nTransfere  aqui: %2$s</string>
+  <string name="auth_failure_snackbar">A autenticação falhou</string>
+  <string name="auth_failure_snackbar_action">Mudar de conta</string>
   <string name="auth_check_server">Verificar servidor</string>
   <string name="auth_host_url">Endereço do servidor https://..</string>
   <string name="auth_username">Nome de Utilizador</string>
@@ -182,6 +185,7 @@
   <string name="pass_code_wrong">Código incorreto</string>
   <string name="pass_code_removed">Código removido</string>
   <string name="pass_code_stored">Código guardado</string>
+  <string name="fingerprint_confirm">Confirme a sua impressão digital para continuar</string>
   <string name="media_notif_ticker">%1$s reprodutor de música</string>
   <string name="media_state_playing">%1$s (a reproduzir)</string>
   <string name="media_state_loading">%1$s (a carregar)</string>
