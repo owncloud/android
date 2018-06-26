@@ -340,10 +340,6 @@ public class FileActivity extends DrawerActivity
 
             result.getData();
 
-        } else if(operation instanceof CreateFolderOperation){
-            if(result.isException()){
-                showSnackMessage("Hey");
-            }
         }
     }
 
