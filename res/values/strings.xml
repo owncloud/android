@@ -584,5 +584,7 @@
     <string name="welcome_feature_8_text">Play your animated GIF images</string>
     <string name="welcome_feature_9_title">Upload picture from camera</string>
     <string name="welcome_feature_9_text">Take a picture and upload it directly to your server</string>
+    <string name="welcome_feature_10_title">User quota</string>
+    <string name="welcome_feature_10_text">Know your used and available space</string>
     <string name="no_borwser_installed_alert">No browser installed. Please install a Browser in order to allow a secure login.</string>
 </resources>
