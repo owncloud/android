@@ -24,16 +24,15 @@
 
 package com.owncloud.android.lib.common.authentication.oauth;
 
-import org.apache.commons.httpclient.Credentials;
-import org.apache.commons.httpclient.util.LangUtils;
 
 /**
- * Bearer token {@link Credentials}
  *
  * @author David A. Velasco
  */
-public class BearerCredentials implements Credentials {
+public class BearerCredentials {
 
+    public static final int HASH_SEED = 17;
+    public static final int HASH_OFFSET = 37;
     
     private String mAccessToken;
     
@@ -76,9 +75,7 @@ public class BearerCredentials implements Credentials {
      * @return The hash code of the access token
      */
     public int hashCode() {
-        int hash = LangUtils.HASH_SEED;
-        hash = LangUtils.hashCode(hash, mAccessToken);
-        return hash;
+       return HASH_SEED * HASH_OFFSET + mAccessToken.hashCode();
     }
 
     /**
@@ -93,7 +90,7 @@ public class BearerCredentials implements Credentials {
         if (this == o) return true;
         if (this.getClass().equals(o.getClass())) {
             BearerCredentials that = (BearerCredentials) o;
-            if (LangUtils.equals(mAccessToken, that.mAccessToken)) {
+            if (mAccessToken.equals(that.mAccessToken)) {
                 return true;
             }
         }

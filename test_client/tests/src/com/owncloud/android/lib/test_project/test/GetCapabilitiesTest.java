@@ -29,8 +29,8 @@ import java.security.GeneralSecurityException;
 
 import junit.framework.AssertionFailedError;
 
-import org.apache.commons.httpclient.protocol.Protocol;
-import org.apache.commons.httpclient.protocol.ProtocolSocketFactory;
+
+
 
 import android.content.Context;
 import android.net.Uri;

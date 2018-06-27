@@ -35,7 +35,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
-import org.apache.commons.httpclient.methods.RequestEntity;
+
 
 import com.owncloud.android.lib.common.utils.Log_OC;
 
@@ -45,7 +45,7 @@ import com.owncloud.android.lib.common.utils.Log_OC;
  * 
  * @author David A. Velasco
  */
-public class ChunkFromFileChannelRequestEntity implements RequestEntity, ProgressiveDataTransferer {
+public class ChunkFromFileChannelRequestEntity implements ProgressiveDataTransferer {
 
     private static final String TAG = ChunkFromFileChannelRequestEntity.class.getSimpleName();
     

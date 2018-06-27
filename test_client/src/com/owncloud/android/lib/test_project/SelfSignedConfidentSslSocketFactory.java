@@ -41,12 +41,6 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
 
-import org.apache.commons.httpclient.ConnectTimeoutException;
-import org.apache.commons.httpclient.params.HttpConnectionParams;
-import org.apache.commons.httpclient.protocol.SecureProtocolSocketFactory;
-
-import com.owncloud.android.lib.common.network.AdvancedSslSocketFactory;
-
 
 /**
  * SelfSignedConfidentSslSocketFactory allows to create SSL {@link Socket}s 

@@ -28,14 +28,15 @@ import android.accounts.Account;
 import android.accounts.AccountsException;
 
 import com.owncloud.android.lib.common.accounts.AccountUtils.AccountNotFoundException;
+import com.owncloud.android.lib.common.http.HttpConstants;
 import com.owncloud.android.lib.common.http.methods.HttpBaseMethod;
 import com.owncloud.android.lib.common.network.CertificateCombinedException;
 import com.owncloud.android.lib.common.utils.Log_OC;
 
-import org.apache.commons.httpclient.ConnectTimeoutException;
-import org.apache.commons.httpclient.HttpException;
-import org.apache.commons.httpclient.HttpMethod;
-import org.apache.commons.httpclient.HttpStatus;
+
+
+
+
 import org.apache.jackrabbit.webdav.DavException;
 import org.json.JSONException;
 
@@ -55,6 +56,7 @@ import java.util.Map;
 import javax.net.ssl.SSLException;
 import javax.net.ssl.SSLPeerUnverifiedException;
 
+import at.bitfire.dav4android.exception.HttpException;
 import okhttp3.Headers;
 
 
@@ -180,9 +182,6 @@ public class RemoteOperationResult implements Serializable {
         } else if (e instanceof SocketTimeoutException) {
             mCode = ResultCode.TIMEOUT;
 
-        } else if (e instanceof ConnectTimeoutException) {
-            mCode = ResultCode.TIMEOUT;
-
         } else if (e instanceof MalformedURLException) {
             mCode = ResultCode.INCORRECT_ADDRESS;
 
@@ -228,64 +227,6 @@ public class RemoteOperationResult implements Serializable {
      *
      * Determines a {@link ResultCode} from the already executed method received as a parameter. Generally,
      * will depend on the HTTP code and HTTP response headers received. In some cases will inspect also the
-     * response body.
-     *
-     * @param success    The operation was considered successful or not.
-     * @param httpMethod HTTP/DAV method already executed which response will be examined to interpret the
-     *                   result.
-     */
-    // TODO Delete this
-    public RemoteOperationResult(boolean success, HttpMethod httpMethod) throws IOException {
-//        this(
-//                success,
-//                httpMethod.getStatusCode(),
-//                httpMethod.getStatusText(),
-//                httpMethod.getResponseHeaders()
-//        );
-
-        if (mHttpCode == HttpStatus.SC_BAD_REQUEST) {   // 400
-
-            String bodyResponse = httpMethod.getResponseBodyAsString();
-            // do not get for other HTTP codes!; could not be available
-
-            if (bodyResponse != null && bodyResponse.length() > 0) {
-                InputStream is = new ByteArrayInputStream(bodyResponse.getBytes());
-                InvalidCharacterExceptionParser xmlParser = new InvalidCharacterExceptionParser();
-                try {
-                    if (xmlParser.parseXMLResponse(is)) {
-                        mCode = ResultCode.INVALID_CHARACTER_DETECT_IN_SERVER;
-                    }
-
-                } catch (Exception e) {
-                    Log_OC.w(TAG, "Error reading exception from server: " + e.getMessage());
-                    // mCode stays as set in this(success, httpCode, headers)
-                }
-            }
-        }
-
-        if (mHttpCode == HttpStatus.SC_FORBIDDEN) {  // 403
-
-            parseErrorMessageAndSetCode(httpMethod, ResultCode.SPECIFIC_FORBIDDEN);
-        }
-
-        if (mHttpCode == HttpStatus.SC_UNSUPPORTED_MEDIA_TYPE) {    // 415
-
-            parseErrorMessageAndSetCode(httpMethod, ResultCode.SPECIFIC_UNSUPPORTED_MEDIA_TYPE);
-        }
-
-        if (mHttpCode == HttpStatus.SC_SERVICE_UNAVAILABLE) {   // 503
-
-            parseErrorMessageAndSetCode(httpMethod, ResultCode.SPECIFIC_SERVICE_UNAVAILABLE);
-        }
-    }
-
-    /**
-     * Public constructor from separate elements of an HTTP or DAV response.
-     *
-     * To be used when the result needs to be interpreted from the response of an HTTP/DAV method.
-     *
-     * Determines a {@link ResultCode} from the already executed method received as a parameter. Generally,
-     * will depend on the HTTP code and HTTP response headers received. In some cases will inspect also the
      * response body
      *
      * @param httpMethod
@@ -297,7 +238,7 @@ public class RemoteOperationResult implements Serializable {
                 httpMethod.getResponseHeaders()
         );
 
-        if (mHttpCode == HttpStatus.SC_BAD_REQUEST) {   // 400
+        if (mHttpCode == HttpConstants.HTTP_FORBIDDEN) {   // 400
             String bodyResponse = httpMethod.getResponseBodyAsString();
 
             // do not get for other HTTP codes!; could not be available
@@ -318,19 +259,19 @@ public class RemoteOperationResult implements Serializable {
 
         // before
         switch (mHttpCode) {
-            case HttpStatus.SC_FORBIDDEN:
+            case HttpConstants.HTTP_FORBIDDEN:
                 parseErrorMessageAndSetCode(
                         httpMethod.getResponseBodyAsString(),
                         ResultCode.SPECIFIC_FORBIDDEN
                 );
                 break;
-            case HttpStatus.SC_UNSUPPORTED_MEDIA_TYPE:
+            case HttpConstants.HTTP_UNSUPPORTED_MEDIA_TYPE:
                 parseErrorMessageAndSetCode(
                         httpMethod.getResponseBodyAsString(),
                         ResultCode.SPECIFIC_UNSUPPORTED_MEDIA_TYPE
                 );
                 break;
-            case HttpStatus.SC_SERVICE_UNAVAILABLE:
+            case HttpConstants.HTTP_SERVICE_UNAVAILABLE:
                 parseErrorMessageAndSetCode(
                         httpMethod.getResponseBodyAsString(),
                         ResultCode.SPECIFIC_SERVICE_UNAVAILABLE
@@ -340,36 +281,6 @@ public class RemoteOperationResult implements Serializable {
                 break;
         }
     }
-
-    /**
-     * Parse the error message included in the body response, if any, and set the specific result
-     * code
-     * @param httpMethod HTTP/DAV method already executed which response body will be parsed to get
-     *                   the specific error message
-     * @param resultCode specific result code
-     * @throws IOException
-     */
-    private void parseErrorMessageAndSetCode(HttpMethod httpMethod, ResultCode resultCode)
-            throws IOException {
-
-        String bodyResponse = httpMethod.getResponseBodyAsString();
-
-        if (bodyResponse != null && bodyResponse.length() > 0) {
-            InputStream is = new ByteArrayInputStream(bodyResponse.getBytes());
-            ErrorMessageParser xmlParser = new ErrorMessageParser();
-            try {
-                String errorMessage = xmlParser.parseXMLResponse(is);
-                if (errorMessage != "" && errorMessage != null) {
-                    mCode = resultCode;
-                    mHttpPhrase = errorMessage;
-                }
-            } catch (Exception e) {
-                Log_OC.w(TAG, "Error reading exception from server: " + e.getMessage());
-                // mCode stays as set in this(success, httpCode, headers)
-            }
-        }
-    }
-
 
     /**
      * Parse the error message included in the body response, if any, and set the specific result
@@ -403,8 +314,6 @@ public class RemoteOperationResult implements Serializable {
      * To be used when the result needs to be interpreted from HTTP response elements that could come from
      * different requests (WARNING: black magic, try to avoid).
      *
-     * If all the fields come from the same HTTP/DAV response, {@link #RemoteOperationResult(boolean, HttpMethod)}
-     * should be used instead.
      *
      * Determines a {@link ResultCode} depending on the HTTP code and HTTP response headers received.
      *
@@ -445,25 +354,25 @@ public class RemoteOperationResult implements Serializable {
 
         if (httpCode > 0) {
             switch (httpCode) {
-                case HttpStatus.SC_UNAUTHORIZED:                    // 401
+                case HttpConstants.HTTP_UNAUTHORIZED:                    // 401
                     mCode = ResultCode.UNAUTHORIZED;
                     break;
-                case HttpStatus.SC_FORBIDDEN:                       // 403
+                case HttpConstants.HTTP_FORBIDDEN:                       // 403
                     mCode = ResultCode.FORBIDDEN;
                     break;
-                case HttpStatus.SC_NOT_FOUND:                       // 404
+                case HttpConstants.HTTP_NOT_FOUND:                       // 404
                     mCode = ResultCode.FILE_NOT_FOUND;
                     break;
-                case HttpStatus.SC_CONFLICT:                        // 409
+                case HttpConstants.HTTP_CONFLICT:                        // 409
                     mCode = ResultCode.CONFLICT;
                     break;
-                case HttpStatus.SC_INTERNAL_SERVER_ERROR:           // 500
+                case HttpConstants.HTTP_INTERNAL_SERVER_ERROR:           // 500
                     mCode = ResultCode.INSTANCE_NOT_CONFIGURED;     // assuming too much...
                     break;
-                case HttpStatus.SC_SERVICE_UNAVAILABLE:             // 503
+                case HttpConstants.HTTP_SERVICE_UNAVAILABLE:             // 503
                     mCode = ResultCode.SERVICE_UNAVAILABLE;
                     break;
-                case HttpStatus.SC_INSUFFICIENT_STORAGE:            // 507
+                case HttpConstants.HTTP_INSUFFICIENT_STORAGE:            // 507
                     mCode = ResultCode.QUOTA_EXCEEDED;              // surprise!
                     break;
                 default:
@@ -547,9 +456,6 @@ public class RemoteOperationResult implements Serializable {
             } else if (mException instanceof SocketTimeoutException) {
                 return "Socket timeout exception";
 
-            } else if (mException instanceof ConnectTimeoutException) {
-                return "Connect timeout exception";
-
             } else if (mException instanceof MalformedURLException) {
                 return "Malformed URL exception";
 
@@ -628,7 +534,7 @@ public class RemoteOperationResult implements Serializable {
     }
 
     public boolean isServerFail() {
-        return (mHttpCode >= HttpStatus.SC_INTERNAL_SERVER_ERROR);
+        return (mHttpCode >= HttpConstants.HTTP_INTERNAL_SERVER_ERROR);
     }
 
     public boolean isException() {

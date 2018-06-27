@@ -27,7 +27,9 @@
 
 package com.owncloud.android.lib.common.network;
 
-import org.apache.commons.httpclient.HttpStatus;
+
+
+import com.owncloud.android.lib.common.http.HttpConstants;
 
 import java.util.Arrays;
 
@@ -108,7 +110,7 @@ public class RedirectionPath {
      */
     public String getLastPermanentLocation() {
         for (int i = mLastStatus; i >= 0; i--) {
-            if (mStatuses[i] == HttpStatus.SC_MOVED_PERMANENTLY && i <= mLastLocation) {
+            if (mStatuses[i] == HttpConstants.HTTP_MOVED_PERMANENTLY && i <= mLastLocation) {
                 return mLocations[i];
             }
         }

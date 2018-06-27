@@ -29,7 +29,7 @@ import java.util.Iterator;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-import org.apache.commons.httpclient.cookie.CookiePolicy;
+
 
 import android.accounts.Account;
 import android.accounts.AuthenticatorException;

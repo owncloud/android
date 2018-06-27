@@ -117,7 +117,7 @@ public class GetRemoteStatusOperation extends RemoteOperation {
 //                get = new GetMethod(redirectedLocation);
 //                status = client.executeRequest(get, TRY_CONNECTION_TIMEOUT, TRY_CONNECTION_TIMEOUT);
 //                mLatestResult = new RemoteOperationResult(
-//                    (status == HttpStatus.SC_OK),
+//                    (status == HttpConstants.HTTP_OK),
 //                    get
 //                );
 //                redirectedLocation = mLatestResult.getRedirectedLocation();

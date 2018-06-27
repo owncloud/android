@@ -31,11 +31,11 @@ import com.owncloud.android.lib.common.http.interceptors.HttpInterceptor;
 import com.owncloud.android.lib.common.http.interceptors.HttpInterceptor.RequestInterceptor;
 import com.owncloud.android.lib.common.http.interceptors.SamlAuthInterceptor;
 
-import org.apache.commons.httpclient.UsernamePasswordCredentials;
-import org.apache.commons.httpclient.auth.AuthPolicy;
-import org.apache.commons.httpclient.auth.AuthScope;
-import org.apache.commons.httpclient.auth.AuthState;
-import org.apache.commons.httpclient.auth.BasicScheme;
+
+
+
+
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,11 +62,6 @@ public class OwnCloudBasicCredentials implements OwnCloudCredentials {
 
     @Override
     public void applyTo(OwnCloudClient client) {
-        AuthPolicy.registerAuthScheme(AuthState.PREEMPTIVE_AUTH_SCHEME, BasicScheme.class);
-
-        List<String> authPrefs = new ArrayList<>(1);
-        authPrefs.add(AuthPolicy.BASIC);
-
         ArrayList<RequestInterceptor> requestInterceptors = HttpClient.getOkHttpInterceptor().getRequestInterceptors();
 
         // Clear previous basic credentials

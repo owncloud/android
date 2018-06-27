@@ -23,7 +23,7 @@
  */
 package com.owncloud.android.lib.common.authentication;
 
-import org.apache.commons.httpclient.cookie.CookiePolicy;
+
 
 import android.net.Uri;
 
