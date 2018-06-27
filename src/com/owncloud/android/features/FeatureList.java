@@ -66,6 +66,10 @@ public class FeatureList {
                     R.string.welcome_feature_8_text, "2.7.0", "2.6.1", SHOW_ON_UPGRADE),
             new FeatureItem(R.drawable.whats_new_upload_camera_picture, R.string.welcome_feature_9_title,
                     R.string.welcome_feature_9_text, "2.7.0", "2.6.1", SHOW_ON_UPGRADE),
+
+            // Features introduced in 2.8.0
+            new FeatureItem(R.drawable.whats_new_user_quota, R.string.welcome_feature_10_title,
+                    R.string.welcome_feature_10_text, "2.8.0", "0", SHOW_ON_UPGRADE)
     };
 
 
