@@ -70,17 +70,6 @@ public class OwnCloudBearerCredentials implements OwnCloudCredentials {
 
         HttpClient.getOkHttpInterceptor()
                 .addRequestInterceptor(new BarearAuthInterceptor(mAccessToken));
-
-        List<String> authPrefs = new ArrayList<>(1);
-        authPrefs.add(BearerAuthScheme.AUTH_POLICY);
-        client.getParams().setParameter(AuthPolicy.AUTH_SCHEME_PRIORITY, authPrefs);
-
-        client.getParams().setAuthenticationPreemptive(true);    // true enforces BASIC AUTH ; library is stupid
-        client.getParams().setCredentialCharset(OwnCloudCredentialsFactory.CREDENTIAL_CHARSET);
-        client.getState().setCredentials(
-            AuthScope.ANY,
-            new BearerCredentials(mAccessToken)
-        );
     }
 
     @Override

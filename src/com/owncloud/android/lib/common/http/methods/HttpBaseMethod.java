@@ -60,59 +60,19 @@ public abstract class HttpBaseMethod {
                 .build();
     }
 
-    // Connection parameters
-    public void setReadTimeout(long readTimeout, TimeUnit timeUnit) {
-        mOkHttpClient = mOkHttpClient.newBuilder()
-                .readTimeout(readTimeout, timeUnit)
-                .build();
+
+
+    public void abort() {
+        mCall.cancel();
     }
 
-    public void setConnectionTimeout(long connectionTimeout, TimeUnit timeUnit) {
-        mOkHttpClient = mOkHttpClient.newBuilder()
-                .readTimeout(connectionTimeout, timeUnit)
-                .build();
+    public boolean isAborted() {
+        return mCall.isCanceled();
     }
 
-    public void setFollowRedirects(boolean followRedirects) {
-        mOkHttpClient = mOkHttpClient.newBuilder()
-                .followRedirects(followRedirects)
-                .build();
-    }
-
-    public void setRetryOnConnectionFailure(boolean retryOnConnectionFailure) {
-        mOkHttpClient = mOkHttpClient.newBuilder()
-                .retryOnConnectionFailure(retryOnConnectionFailure)
-                .build();
-    }
-
-    public boolean getRetryOnConnectionFailure() {
-        return mOkHttpClient.retryOnConnectionFailure();
-    }
-
-    // Request
-    public String getRequestHeader(String name) {
-        return mRequest.header(name);
-    }
-
-    public Headers getRequestHeaders() {
-        return mRequest.headers();
-    }
-
-    public void addRequestHeader(String name, String value) {
-        mRequest = mRequest.newBuilder()
-                .addHeader(name, value)
-                .build();
-    }
-
-    public void setRequestHeader(String name, String value) {
-        mRequest = mRequest.newBuilder()
-                .header(name, value)
-                .build();
-    }
-
-    public void setRequestBody(RequestBody requestBody) {
-        mRequestBody = requestBody;
-    }
+    //////////////////////////////
+    //         Getter
+    //////////////////////////////
 
     // Response
     public int getStatusCode() {
@@ -139,11 +99,71 @@ public abstract class HttpBaseMethod {
         return mResponse.header(headerName);
     }
 
-    public void abort() {
-        mCall.cancel();
+    public HttpUrl getUrl() {
+        return mRequest.url();
     }
 
-    public boolean isAborted() {
-        return mCall.isCanceled();
+    public boolean getRetryOnConnectionFailure() {
+        return mOkHttpClient.retryOnConnectionFailure();
+    }
+
+    // Request
+    public String getRequestHeader(String name) {
+        return mRequest.header(name);
+    }
+
+    public Headers getRequestHeaders() {
+        return mRequest.headers();
+    }
+
+    //////////////////////////////
+    //         Setter
+    //////////////////////////////
+
+    // Connection parameters
+    public void setReadTimeout(long readTimeout, TimeUnit timeUnit) {
+        mOkHttpClient = mOkHttpClient.newBuilder()
+                .readTimeout(readTimeout, timeUnit)
+                .build();
+    }
+
+    public void setConnectionTimeout(long connectionTimeout, TimeUnit timeUnit) {
+        mOkHttpClient = mOkHttpClient.newBuilder()
+                .readTimeout(connectionTimeout, timeUnit)
+                .build();
+    }
+
+    public void setFollowRedirects(boolean followRedirects) {
+        mOkHttpClient = mOkHttpClient.newBuilder()
+                .followRedirects(followRedirects)
+                .build();
+    }
+
+    public void setRetryOnConnectionFailure(boolean retryOnConnectionFailure) {
+        mOkHttpClient = mOkHttpClient.newBuilder()
+                .retryOnConnectionFailure(retryOnConnectionFailure)
+                .build();
+    }
+
+    public void addRequestHeader(String name, String value) {
+        mRequest = mRequest.newBuilder()
+                .addHeader(name, value)
+                .build();
+    }
+
+    public void setRequestHeader(String name, String value) {
+        mRequest = mRequest.newBuilder()
+                .header(name, value)
+                .build();
+    }
+
+    public void setRequestBody(RequestBody requestBody) {
+        mRequestBody = requestBody;
+    }
+
+    public void setUrl(HttpUrl url) {
+        mRequest = mRequest.newBuilder()
+                .url(url)
+                .build();
     }
 }

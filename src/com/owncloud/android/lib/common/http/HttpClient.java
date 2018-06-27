@@ -25,6 +25,7 @@
 package com.owncloud.android.lib.common.http;
 
 import android.content.Context;
+import java.util.concurrent.TimeUnit;
 
 import com.facebook.stetho.okhttp3.StethoInterceptor;
 import com.owncloud.android.lib.BuildConfig;
@@ -39,9 +40,7 @@ import org.apache.http.conn.ssl.BrowserCompatHostnameVerifier;
 
 import java.util.Arrays;
 
-import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
@@ -58,6 +57,10 @@ public class HttpClient {
     private static OkHttpClient sOkHttpClient;
     private static HttpInterceptor sOkHttpInterceptor;
     private static Context sContext;
+
+    public HttpClient() {
+
+    }
 
     public static void setContext(Context context) {
         sContext = context;
@@ -98,5 +101,22 @@ public class HttpClient {
                     );
         }
         return sOkHttpInterceptor;
+    }
+
+    /**
+     * Sets the connection and wait-for-data timeouts to be applied by default to the methods
+     * performed by this client.
+     */
+    public void setDefaultTimeouts(int defaultDataTimeout, int defaultConnectionTimeout) {
+        OkHttpClient.Builder clientBuilder = getOkHttpClient().newBuilder();
+        if (defaultDataTimeout >= 0) {
+            clientBuilder
+                    .readTimeout(defaultDataTimeout, TimeUnit.MILLISECONDS)
+                    .writeTimeout(defaultDataTimeout, TimeUnit.MILLISECONDS);
+        }
+        if (defaultConnectionTimeout >= 0) {
+            clientBuilder.connectTimeout(defaultConnectionTimeout, TimeUnit.MILLISECONDS);
+        }
+        sOkHttpClient = clientBuilder.build();
     }
 }

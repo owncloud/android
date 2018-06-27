@@ -25,6 +25,13 @@
 package com.owncloud.android.lib.common.authentication;
 
 import com.owncloud.android.lib.common.OwnCloudClient;
+import com.owncloud.android.lib.common.http.HttpClient;
+import com.owncloud.android.lib.common.http.interceptors.BarearAuthInterceptor;
+import com.owncloud.android.lib.common.http.interceptors.BasicAuthInterceptor;
+import com.owncloud.android.lib.common.http.interceptors.HttpInterceptor;
+import com.owncloud.android.lib.common.http.interceptors.SamlAuthInterceptor;
+
+import java.util.ArrayList;
 
 public class OwnCloudCredentialsFactory {
 
@@ -64,8 +71,16 @@ public class OwnCloudCredentialsFactory {
 
         @Override
         public void applyTo(OwnCloudClient client) {
-            client.getState().clearCredentials();
-            client.getState().clearCookies();
+            ArrayList<HttpInterceptor.RequestInterceptor> requestInterceptors = HttpClient.getOkHttpInterceptor().getRequestInterceptors();
+
+            // Clear previous basic credentials
+            for (HttpInterceptor.RequestInterceptor requestInterceptor : requestInterceptors) {
+                if (requestInterceptor instanceof BasicAuthInterceptor
+                        || requestInterceptor instanceof BarearAuthInterceptor
+                        || requestInterceptor instanceof SamlAuthInterceptor) {
+                    requestInterceptors.remove(requestInterceptor);
+                }
+            }
         }
 
         @Override

@@ -82,12 +82,6 @@ public class OwnCloudBasicCredentials implements OwnCloudCredentials {
                 .addRequestInterceptor(
                         new BasicAuthInterceptor(mUsername, mPassword)
                 );
-
-        //TODO Update from here down
-        client.getParams().setParameter(AuthPolicy.AUTH_SCHEME_PRIORITY, authPrefs);
-        client.getParams().setAuthenticationPreemptive(mAuthenticationPreemptive);
-        client.getParams().setCredentialCharset(OwnCloudCredentialsFactory.CREDENTIAL_CHARSET);
-        client.getState().setCredentials(AuthScope.ANY, new UsernamePasswordCredentials(mUsername, mPassword));
     }
 
     @Override

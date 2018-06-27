@@ -26,8 +26,8 @@
 package com.owncloud.android.lib.common.accounts;
 
 import java.io.IOException;
-
-import org.apache.commons.httpclient.Cookie;
+import java.util.ArrayList;
+import java.util.List;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
@@ -42,6 +42,8 @@ import com.owncloud.android.lib.common.authentication.OwnCloudCredentials;
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentialsFactory;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
+
+import okhttp3.Cookie;
 
 public class AccountUtils {
 
@@ -217,7 +219,6 @@ public class AccountUtils {
 
     }
 
-
     /**
      * Restore the client cookies persisted in an account stored in the system AccountManager.
      *
@@ -239,19 +240,18 @@ public class AccountUtils {
 
             String cookiesString = am.getUserData(account, Constants.KEY_COOKIES);
             if (cookiesString != null) {
-                String[] cookies = cookiesString.split(";");
-                if (cookies.length > 0) {
-                    for (int i = 0; i < cookies.length; i++) {
-                        Cookie cookie = new Cookie();
-                        int equalPos = cookies[i].indexOf('=');
-                        cookie.setName(cookies[i].substring(0, equalPos));
-                        cookie.setValue(cookies[i].substring(equalPos + 1));
-                        cookie.setDomain(serverUri.getHost());    // VERY IMPORTANT
-                        cookie.setPath(serverUri.getPath());    // VERY IMPORTANT
-
-                        client.getState().addCookie(cookie);
-                    }
+                String[] rawCookies = cookiesString.split(";");
+                List<Cookie> cookieList = new ArrayList<>(rawCookies.length);
+                for(String rawCookie : rawCookies) {
+                    final int equalPos = rawCookie.indexOf('=');
+                    cookieList.add(new Cookie.Builder()
+                            .name(rawCookie.substring(0, equalPos))
+                            .value(rawCookie.substring(equalPos + 1))
+                            .domain(serverUri.getHost())
+                            .path(serverUri.getPath())
+                            .build());
                 }
+                client.setCookiesForCurrentAccount(cookieList);
             }
         }
     }
