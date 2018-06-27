@@ -57,21 +57,14 @@ public class FeatureList {
             new FeatureItem(R.drawable.whats_new_video_streaming, R.string.welcome_feature_5_title,
                     R.string.welcome_feature_5_text, "2.7.0", "0", SHOW_ON_FIRST_RUN),
 
-            // Features introduced in 2.7.0
-            new FeatureItem(R.drawable.whats_new_pattern_lock, R.string.welcome_feature_6_title,
-                    R.string.welcome_feature_6_text, "2.7.0", "2.6.1", SHOW_ON_UPGRADE),
-            new FeatureItem(R.drawable.whats_new_fingerprint_lock, R.string.welcome_feature_7_title,
-                    R.string.welcome_feature_7_text, "2.7.0", "2.6.1", SHOW_ON_UPGRADE),
-            new FeatureItem(R.drawable.whats_new_gif_support, R.string.welcome_feature_8_title,
-                    R.string.welcome_feature_8_text, "2.7.0", "2.6.1", SHOW_ON_UPGRADE),
-            new FeatureItem(R.drawable.whats_new_upload_camera_picture, R.string.welcome_feature_9_title,
-                    R.string.welcome_feature_9_text, "2.7.0", "2.6.1", SHOW_ON_UPGRADE),
-
             // Features introduced in 2.8.0
-            new FeatureItem(R.drawable.whats_new_user_quota, R.string.welcome_feature_10_title,
-                    R.string.welcome_feature_10_text, "2.8.0", "0", SHOW_ON_UPGRADE)
-            new FeatureItem(R.drawable.whats_new_new_icons, R.string.welcome_feature_11_title,
-                    R.string.welcome_feature_11_text, "2.8.0", "0", SHOW_ON_UPGRADE)
+            new FeatureItem(R.drawable.whats_new_user_quota, R.string.welcome_feature_6_title,
+                    R.string.welcome_feature_6_text, "2.8.0", "0", SHOW_ON_UPGRADE),
+            new FeatureItem(R.drawable.whats_new_new_icons, R.string.welcome_feature_7_title,
+                    R.string.welcome_feature_7_text, "2.8.0", "0", SHOW_ON_UPGRADE),
+            new FeatureItem(R.drawable.whats_new_new_pins, R.string.welcome_feature_8_title,
+                    R.string.welcome_feature_8_text, "2.8.0", "0", SHOW_ON_UPGRADE)
+
     };
 
 
