@@ -70,6 +70,8 @@ public class FeatureList {
             // Features introduced in 2.8.0
             new FeatureItem(R.drawable.whats_new_user_quota, R.string.welcome_feature_10_title,
                     R.string.welcome_feature_10_text, "2.8.0", "0", SHOW_ON_UPGRADE)
+            new FeatureItem(R.drawable.whats_new_new_icons, R.string.welcome_feature_11_title,
+                    R.string.welcome_feature_11_text, "2.8.0", "0", SHOW_ON_UPGRADE)
     };
 
 

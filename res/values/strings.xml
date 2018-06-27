@@ -586,5 +586,7 @@
     <string name="welcome_feature_9_text">Take a picture and upload it directly to your server</string>
     <string name="welcome_feature_10_title">User quota</string>
     <string name="welcome_feature_10_text">Know your used and available space</string>
+    <string name="welcome_feature_11_title">New pins</string>
+    <string name="welcome_feature_11_text">To download and set files as av. offline</string>
     <string name="no_borwser_installed_alert">No browser installed. Please install a Browser in order to allow a secure login.</string>
 </resources>
