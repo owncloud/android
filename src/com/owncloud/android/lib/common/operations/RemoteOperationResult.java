@@ -33,11 +33,6 @@ import com.owncloud.android.lib.common.http.methods.HttpBaseMethod;
 import com.owncloud.android.lib.common.network.CertificateCombinedException;
 import com.owncloud.android.lib.common.utils.Log_OC;
 
-
-
-
-
-import org.apache.jackrabbit.webdav.DavException;
 import org.json.JSONException;
 
 import java.io.ByteArrayInputStream;
@@ -56,6 +51,7 @@ import java.util.Map;
 import javax.net.ssl.SSLException;
 import javax.net.ssl.SSLPeerUnverifiedException;
 
+import at.bitfire.dav4android.exception.DavException;
 import at.bitfire.dav4android.exception.HttpException;
 import okhttp3.Headers;
 

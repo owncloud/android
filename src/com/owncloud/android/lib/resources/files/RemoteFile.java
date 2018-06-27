@@ -27,10 +27,6 @@ package com.owncloud.android.lib.resources.files;
 import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.Log;
-
-import com.owncloud.android.lib.common.network.WebdavEntry;
-import com.owncloud.android.lib.common.utils.Log_OC;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -187,21 +183,6 @@ public class RemoteFile implements Parcelable, Serializable {
             throw new IllegalArgumentException("Trying to create a OCFile with a non valid remote path: " + path);
         }
         mRemotePath = path;
-    }
-
-    public RemoteFile(WebdavEntry webdavEntry) {
-        this(webdavEntry.decodedPath());
-        this.setCreationTimestamp(webdavEntry.createTimestamp());
-        this.setLength(webdavEntry.contentLength());
-        this.setMimeType(webdavEntry.contentType());
-        this.setModifiedTimestamp(webdavEntry.modifiedTimestamp());
-        this.setEtag(webdavEntry.etag());
-        this.setPermissions(webdavEntry.permissions());
-        this.setRemoteId(webdavEntry.remoteId());
-        this.setSize(webdavEntry.size());
-        this.setQuotaUsedBytes(webdavEntry.quotaUsedBytes());
-        this.setQuotaAvailableBytes(webdavEntry.quotaAvailableBytes());
-        this.setPrivateLink(webdavEntry.privateLink());
     }
 
     public RemoteFile(final DavResource davResource, String displayName) {

@@ -18,7 +18,6 @@ allprojects {
 }
 
 dependencies {
-    api 'org.apache.jackrabbit:jackrabbit-webdav:2.12.4'
     api 'com.squareup.okhttp3:okhttp:3.10.0'
     api project(':dav4android')
 
