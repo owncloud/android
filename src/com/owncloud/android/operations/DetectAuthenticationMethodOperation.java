@@ -22,14 +22,15 @@ package com.owncloud.android.operations;
 import android.net.Uri;
 
 import com.owncloud.android.lib.common.OwnCloudClient;
+import com.owncloud.android.lib.common.http.HttpConstants;
 import com.owncloud.android.lib.common.operations.OnRemoteOperationListener;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.files.ExistenceCheckRemoteOperation;
 
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpStatus;
+
+
 
 import java.util.ArrayList;
 
@@ -100,7 +101,7 @@ public class DetectAuthenticationMethodOperation extends RemoteOperation {
         }
 
         // analyze response  
-        if (result.getHttpCode() == HttpStatus.SC_UNAUTHORIZED) {
+        if (result.getHttpCode() == HttpConstants.HTTP_UNAUTHORIZED) {
             ArrayList<String> authHeaders = result.getAuthenticateHeaders();
 
             for (String authHeader: authHeaders) {

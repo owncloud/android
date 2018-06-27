@@ -42,9 +42,10 @@ import com.owncloud.android.operations.UpdateSharePermissionsOperation;
 import com.owncloud.android.operations.UpdateShareViaLinkOperation;
 import com.owncloud.android.operations.UploadFileOperation;
 
-import org.apache.commons.httpclient.ConnectTimeoutException;
+
 
 import java.io.File;
+import java.net.SocketTimeoutException;
 
 /**
  * Class to choose proper error messages to show to the user depending on the results of operations,
@@ -208,9 +209,9 @@ public class ErrorMessageAdapter {
         switch(result.getCode()) {
             case WRONG_CONNECTION: return f.format(R.string.network_error_socket_exception);
             case NO_NETWORK_CONNECTION: return f.format(R.string.error_no_network_connection);
-            case TIMEOUT: return (result.getException() instanceof ConnectTimeoutException) ?
-                    f.format(R.string.network_error_connect_timeout_exception) :
-                    f.format(R.string.network_error_socket_timeout_exception);
+            case TIMEOUT: return (result.getException() instanceof SocketTimeoutException)
+                    ? f.format(R.string.network_error_socket_timeout_exception)
+                    : f.format(R.string.network_error_connect_timeout_exception);
             case HOST_NOT_AVAILABLE: return f.format(R.string.network_host_not_available);
             case SERVICE_UNAVAILABLE: return f.format(R.string.service_unavailable);
             case SSL_RECOVERABLE_PEER_UNVERIFIED: return f.format(R.string.ssl_certificate_not_trusted);
