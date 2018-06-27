@@ -43,18 +43,19 @@ import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.OwnCloudClientManagerFactory;
+import com.owncloud.android.lib.common.http.HttpConstants;
+import com.owncloud.android.lib.common.http.methods.nonwebdav.GetMethod;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 import com.owncloud.android.ui.DefaultAvatarTextDrawable;
 import com.owncloud.android.ui.adapter.DiskLruImageCache;
 import com.owncloud.android.utils.BitmapUtils;
 
-import org.apache.commons.httpclient.HttpStatus;
-import org.apache.commons.httpclient.methods.GetMethod;
-
 import java.io.File;
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
+
+import okhttp3.HttpUrl;
 
 /**
  * Manager for concurrent access to thumbnails cache.
@@ -296,10 +297,10 @@ public class ThumbnailsCacheManager {
                                         "/index.php/apps/files/api/v1/thumbnail/" +
                                         px + "/" + px + Uri.encode(file.getRemotePath(), "/");
                                 Log_OC.d("Thumbnail", "URI: " + uri);
-                                get = new GetMethod(uri);
-                                int status = mClient.executeMethod(get);
-                                if (status == HttpStatus.SC_OK) {
-                                    InputStream inputStream = get.getResponseBodyAsStream();
+                                get = new GetMethod(HttpUrl.parse(uri));
+                                int status = mClient.executeHttpMethod(get);
+                                if (status == HttpConstants.HTTP_OK) {
+                                    InputStream inputStream = get.getResponseAsStream();
                                     Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
                                     thumbnail = ThumbnailUtils.extractThumbnail(bitmap, px, px);
 
@@ -313,14 +314,10 @@ public class ThumbnailsCacheManager {
                                         addBitmapToCache(imageKey, thumbnail);
                                     }
                                 } else {
-                                    mClient.exhaustResponse(get.getResponseBodyAsStream());
+                                    mClient.exhaustResponse(get.getResponseAsStream());
                                 }
                             } catch (Exception e) {
                                 e.printStackTrace();
-                            } finally {
-                                if (get != null) {
-                                    get.releaseConnection();
-                                }
                             }
                         } else {
                             Log_OC.d(TAG, "Server too old");
@@ -525,10 +522,10 @@ public class ThumbnailsCacheManager {
                                 String uri = mClient.getBaseUri() + "" +
                                     "/index.php/avatar/" + AccountUtils.getUsernameOfAccount(mUsername) + "/" + px;
                                 Log_OC.d("Avatar", "URI: " + uri);
-                                get = new GetMethod(uri);
-                                int status = mClient.executeMethod(get);
-                                if (status == HttpStatus.SC_OK) {
-                                    InputStream inputStream = get.getResponseBodyAsStream();
+                                get = new GetMethod(HttpUrl.parse(uri));
+                                int status = mClient.executeHttpMethod(get);
+                                if (status == HttpConstants.HTTP_OK) {
+                                    InputStream inputStream = get.getResponseAsStream();
                                     Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
                                     avatarBitmap = ThumbnailUtils.extractThumbnail(bitmap, px, px);
 
@@ -537,14 +534,10 @@ public class ThumbnailsCacheManager {
                                         addBitmapToCache(imageKey, avatarBitmap);
                                     }
                                 } else {
-                                    mClient.exhaustResponse(get.getResponseBodyAsStream());
+                                    mClient.exhaustResponse(get.getResponseAsStream());
                                 }
                             } catch (Exception e) {
                                 Log_OC.e(TAG, "Error downloading avatar", e);
-                            } finally {
-                                if (get != null) {
-                                    get.releaseConnection();
-                                }
                             }
                         } else {
                             Log_OC.d(TAG, "Server too old");
