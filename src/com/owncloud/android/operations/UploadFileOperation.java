@@ -30,6 +30,7 @@ import com.owncloud.android.db.OCUpload;
 import com.owncloud.android.db.PreferenceManager;
 import com.owncloud.android.files.services.FileUploader;
 import com.owncloud.android.lib.common.OwnCloudClient;
+import com.owncloud.android.lib.common.http.HttpConstants;
 import com.owncloud.android.lib.common.network.OnDatatransferProgressListener;
 import com.owncloud.android.lib.common.network.ProgressiveDataTransferer;
 import com.owncloud.android.lib.common.operations.OperationCancelledException;
@@ -47,8 +48,8 @@ import com.owncloud.android.utils.FileStorageUtils;
 import com.owncloud.android.utils.MimetypeIconUtil;
 import com.owncloud.android.utils.UriUtils;
 
-import org.apache.commons.httpclient.HttpStatus;
-import org.apache.commons.httpclient.methods.RequestEntity;
+
+
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -132,8 +133,6 @@ public class UploadFileOperation extends SyncOperation {
     private Context mContext;
 
     protected UploadRemoteFileOperation mUploadOperation;
-
-    protected RequestEntity mEntity = null;
 
     public UploadFileOperation(Account account,
                                OCFile file,
@@ -257,9 +256,6 @@ public class UploadFileOperation extends SyncOperation {
         synchronized (mDataTransferListeners) {
             mDataTransferListeners.add(listener);
         }
-        if (mEntity != null) {
-            ((ProgressiveDataTransferer)mEntity).addDatatransferProgressListener(listener);
-        }
         if(mUploadOperation != null){
             mUploadOperation.addDatatransferProgressListener(listener);
         }
@@ -268,9 +264,6 @@ public class UploadFileOperation extends SyncOperation {
     public void removeDatatransferProgressListener(OnDatatransferProgressListener listener) {
         synchronized (mDataTransferListeners) {
             mDataTransferListeners.remove(listener);
-        }
-        if (mEntity != null) {
-            ((ProgressiveDataTransferer)mEntity).removeDatatransferProgressListener(listener);
         }
         if(mUploadOperation != null){
             mUploadOperation.removeDatatransferProgressListener(listener);
@@ -455,7 +448,7 @@ public class UploadFileOperation extends SyncOperation {
                     getStorageManager().triggerMediaScan(expectedFile.getAbsolutePath());
                 }
 
-            } else if (result.getHttpCode() == HttpStatus.SC_PRECONDITION_FAILED ) {
+            } else if (result.getHttpCode() == HttpConstants.HTTP_PRECONDITION_FAILED ) {
                 result = new RemoteOperationResult(ResultCode.SYNC_CONFLICT);
             }
         } catch (Exception e) {
