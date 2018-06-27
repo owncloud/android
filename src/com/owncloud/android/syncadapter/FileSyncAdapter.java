@@ -49,13 +49,13 @@ import com.owncloud.android.operations.SyncCapabilitiesOperation;
 import com.owncloud.android.operations.SynchronizeFolderOperation;
 import com.owncloud.android.ui.activity.ErrorsWhileCopyingHandlerActivity;
 
-import org.apache.jackrabbit.webdav.DavException;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import at.bitfire.dav4android.exception.DavException;
 
 /**
  * Implementation of {@link AbstractThreadedSyncAdapter} responsible for synchronizing 
