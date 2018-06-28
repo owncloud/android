@@ -1064,7 +1064,13 @@ public class FileDisplayActivity extends FileActivity
                         RemoteOperationResult.ResultCode.SSL_RECOVERABLE_PEER_UNVERIFIED)) {
                     mLastSslUntrustedServerResult = synchResult;
                 } else if (synchResult.getCode().equals(RemoteOperationResult.ResultCode.SPECIFIC_SERVICE_UNAVAILABLE)) {
-                    showRequestAccountChangeNotice();
+                    if(synchResult.getHttpCode() == 503) {
+                        if(synchResult.getHttpPhrase().contains("System in maintenance mode.")) {
+                            showSnackMessage(getString(R.string.in_maintenance_mode_message));
+                        }
+                    } else {
+                        showRequestAccountChangeNotice();
+                    }
                 }
             }
         }
