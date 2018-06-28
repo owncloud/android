@@ -24,8 +24,11 @@
 
 package com.owncloud.android.lib.common.network;
 
+import android.util.Log;
+
+import com.owncloud.android.lib.common.utils.Log_OC;
+
 import java.io.File;
-import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.util.Iterator;
@@ -33,9 +36,14 @@ import java.util.Iterator;
 import okhttp3.MediaType;
 import okio.BufferedSink;
 
+/**
+ * A Request body that represents a file chunk and include information about the progress when uploading it
+ *
+ * @author David González Verdugo
+ */
 public class ChunkFromFileRequestBody extends FileRequestBody {
 
-    private static final String TAG = ChunkFromFileChannelRequestEntity.class.getSimpleName();
+    private static final String TAG = ChunkFromFileRequestBody.class.getSimpleName();
 
     //private final File mFile;
     private final FileChannel mChannel;
@@ -58,6 +66,10 @@ public class ChunkFromFileRequestBody extends FileRequestBody {
         mTransferred = 0;
     }
 
+    @Override
+    public long contentLength() {
+        return mChunkSize;
+    }
 
     @Override
     public void writeTo(BufferedSink sink) {
@@ -70,8 +82,19 @@ public class ChunkFromFileRequestBody extends FileRequestBody {
             if (size == 0) size = -1;
             long maxCount = Math.min(mOffset + mChunkSize, mChannel.size());
             while (mChannel.position() < maxCount) {
+
+                Log_OC.d(TAG, "Sink buffer size: " + sink.buffer().size());
+
                 readCount = mChannel.read(mBuffer);
-                sink.write(mBuffer.array(), 0 ,readCount);
+
+                Log_OC.d(TAG, "Read " + readCount + " bytes from file channel to " + mBuffer.toString());
+
+                sink.buffer().write(mBuffer.array(), 0 ,readCount);
+
+                sink.flush();
+
+                Log_OC.d(TAG, "Write " + readCount + " bytes to sink buffer with size " + sink.buffer().size());
+
                 mBuffer.clear();
                 if (mTransferred < maxCount) {  // condition to avoid accumulate progress for repeated chunks
                     mTransferred += readCount;
@@ -84,9 +107,11 @@ public class ChunkFromFileRequestBody extends FileRequestBody {
                 }
             }
 
-            sink.flush();
+            Log.d(TAG, "Chunk with size " + mChunkSize + " written in request body");
 
-        } catch (IOException io) {
+        } catch (Exception exception) {
+
+            Log.e(TAG, exception.toString());
 //            // any read problem will be handled as if the file is not there
 //            if (io instanceof FileNotFoundException) {
 //                throw io;

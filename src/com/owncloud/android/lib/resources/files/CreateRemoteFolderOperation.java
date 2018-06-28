@@ -77,7 +77,7 @@ public class CreateRemoteFolderOperation extends RemoteOperation {
      */
     @Override
     protected RemoteOperationResult run(OwnCloudClient client) {
-        RemoteOperationResult result = null;
+        RemoteOperationResult result;
         OwnCloudVersion version = client.getOwnCloudVersion();
         boolean versionWithForbiddenChars =
             (version != null && version.isVersionWithForbiddenCharacters());
