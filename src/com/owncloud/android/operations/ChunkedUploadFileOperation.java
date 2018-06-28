@@ -68,7 +68,11 @@ public class ChunkedUploadFileOperation extends UploadFileOperation {
 
             result = mUploadOperation.execute(client);
 
+            // File chunks not properly uploaded
+            if (!result.isSuccess()) return result;
+
             // Step 3, move file to final destination
+
 
         } catch (Exception e) {
             result = new RemoteOperationResult(e);
