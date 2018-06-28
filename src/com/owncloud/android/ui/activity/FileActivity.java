@@ -560,14 +560,14 @@ public class FileActivity extends DrawerActivity
      */
     public void showSnackMessage(String message) {
         final View rootView = findViewById(android.R.id.content);
-        if(rootView == null) {
+        if(rootView != null) {
             Snackbar.make(
                     rootView,
                     message,
                     Snackbar.LENGTH_LONG)
                     .show();
         } else {
-            // I root view is not available don't let the app brake. show the notification anyway.
+            // If root view is not available don't let the app brake. show the notification anyway.
             Toast.makeText(this, message, Snackbar.LENGTH_LONG).show();
         }
     }
