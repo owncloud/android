@@ -23,10 +23,6 @@
  */
 package com.owncloud.android.lib.common.authentication;
 
-
-
-import android.net.Uri;
-
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.http.HttpClient;
 import com.owncloud.android.lib.common.http.interceptors.BarearAuthInterceptor;
@@ -36,7 +32,6 @@ import com.owncloud.android.lib.common.http.interceptors.SamlAuthInterceptor;
 
 import java.util.ArrayList;
 
-import okhttp3.Cookie;
 
 public class OwnCloudSamlSsoCredentials implements OwnCloudCredentials {
 

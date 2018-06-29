@@ -25,7 +25,6 @@
 
 package com.owncloud.android.lib.common;
 
-import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.accounts.AccountsException;
 import android.content.Context;
@@ -37,7 +36,6 @@ import com.owncloud.android.lib.common.authentication.OwnCloudCredentialsFactory
 import com.owncloud.android.lib.common.http.HttpClient;
 import com.owncloud.android.lib.common.http.HttpConstants;
 import com.owncloud.android.lib.common.http.methods.HttpBaseMethod;
-import com.owncloud.android.lib.common.http.methods.nonwebdav.HttpMethod;
 import com.owncloud.android.lib.common.network.RedirectionPath;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
@@ -45,9 +43,9 @@ import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.List;
 
+import at.bitfire.dav4android.exception.HttpException;
 import okhttp3.Cookie;
 import okhttp3.Headers;
 import okhttp3.HttpUrl;
@@ -136,9 +134,16 @@ public class OwnCloudClient extends HttpClient {
         int status;
 
         do {
-            //TODO Dav4Android doesn't allow follow redirections right now
-//            method.setFollowRedirects(mFollowRedirects);
-            status = method.execute();
+            try {
+                status = method.execute();
+            } catch (HttpException e) {
+                if(e.getMessage().contains(Integer.toString(HttpConstants.HTTP_MOVED_TEMPORARILY))) {
+                    status = followRedirection(method).getLastStatus();
+                } else {
+                    throw e;
+                }
+            }
+
             repeatWithFreshCredentials = checkUnauthorizedAccess(status, repeatCounter);
             if (repeatWithFreshCredentials) {
                 repeatCounter++;
@@ -148,41 +153,26 @@ public class OwnCloudClient extends HttpClient {
         return status;
     }
 
-    private void checkFirstRedirection(HttpMethod method) {
-        final String location = method.getResponseHeaders()
-                .get("location");
+    private int executeRedirectedHttpMethod (HttpBaseMethod method) throws Exception {
+        boolean repeatWithFreshCredentials;
+        int repeatCounter = 0;
+        int status;
 
-        if(location != null && !location.isEmpty()) {
-            mRedirectedLocation = location;
-        }
+        do {
+            status = method.execute();
+
+            repeatWithFreshCredentials = checkUnauthorizedAccess(status, repeatCounter);
+            if (repeatWithFreshCredentials) {
+                repeatCounter++;
+            }
+        } while (repeatWithFreshCredentials);
+
+        return status;
     }
 
-    /**
-     * Fix for https://github.com/owncloud/android/issues/1847#issuecomment-267558274
-     *
-     * The problem: default SocketFactory in HTTPClient 3.x for HTTP connections creates a separate thread
-     * to create the socket. When a port out of TCP bounds is passed, an exception is thrown in that
-     * separate thread, and our original thread is not able to catch it. This is not happenning with HTTPS
-     * connections because we had to define our own socket factory,
-     * {@link com.owncloud.android.lib.common.network.AdvancedSslSocketFactory}, and it does not mess with
-     * threads.
-     *
-     * The solution: validate the input (the port number) ourselves before let the work to HTTPClient 3.x.
-     *
-     * @param method HTTP method to run.
-     * @throws IllegalArgumentException If 'method' targets an invalid port in an HTTP URI.
-     */
-    private void preventCrashDueToInvalidPort(HttpMethod method) {
-        final int port = method.getUrl().port();
-        String scheme = method.getUrl().scheme().toLowerCase();
-        if ("http".equals(scheme) && port > 0xFFFF) {
-            // < 0 is not tested because -1 is used when no port number is specified in the URL;
-            // no problem, the network library will convert that in the default HTTP port
-            throw new IllegalArgumentException("Invalid port number " + port);
-        }
-    }
 
-    public RedirectionPath followRedirection(HttpMethod method) throws Exception {
+
+    public RedirectionPath followRedirection(HttpBaseMethod method) throws Exception {
         int redirectionsCount = 0;
         int status = method.getStatusCode();
         RedirectionPath result = new RedirectionPath(status, MAX_REDIRECTIONS_COUNT);
@@ -215,13 +205,19 @@ public class OwnCloudClient extends HttpClient {
                 if (destination != null) {
                     final int suffixIndex = location.lastIndexOf(WEBDAV_PATH_4_0);
                     final String redirectionBase = location.substring(0, suffixIndex);
-
                     final String destinationPath = destination.substring(mBaseUri.toString().length());
-                    final String redirectedDestination = redirectionBase + destinationPath;
 
-                    method.setRequestHeader("destination", destination);
+                    method.setRequestHeader("destination", redirectionBase + destinationPath);
                 }
-                status = executeHttpMethod(method);
+                try {
+                    status = executeRedirectedHttpMethod(method);
+                } catch (HttpException e) {
+                    if(e.getMessage().contains(Integer.toString(HttpConstants.HTTP_MOVED_TEMPORARILY))) {
+                        status = HttpConstants.HTTP_MOVED_TEMPORARILY;
+                    } else  {
+                        throw e;
+                    }
+                }
                 result.addStatus(status);
                 redirectionsCount++;
 

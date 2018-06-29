@@ -58,9 +58,6 @@ public class HttpClient {
     private static HttpInterceptor sOkHttpInterceptor;
     private static Context sContext;
 
-    public HttpClient() {
-
-    }
 
     public static void setContext(Context context) {
         sContext = context;
@@ -78,7 +75,9 @@ public class HttpClient {
                         .protocols(Arrays.asList(Protocol.HTTP_1_1))
                         .followRedirects(false)
                         .sslSocketFactory(sslContext.getSocketFactory(), trustManager)
-                        .hostnameVerifier(new BrowserCompatHostnameVerifier());
+                        .hostnameVerifier((asdf, usdf) -> true);
+                        // TODO: Not verifying the hostname against certificate. ask owncloud security human if this is ok.
+                        //.hostnameVerifier(new BrowserCompatHostnameVerifier());
                 if(BuildConfig.DEBUG) {
                     clientBuilder.addNetworkInterceptor(new StethoInterceptor());
                 }
