@@ -1065,9 +1065,7 @@ public class FileDisplayActivity extends FileActivity
                     mLastSslUntrustedServerResult = synchResult;
                 } else if (synchResult.getCode().equals(RemoteOperationResult.ResultCode.SPECIFIC_SERVICE_UNAVAILABLE)) {
                     if(synchResult.getHttpCode() == 503) {
-                        if(synchResult.getHttpPhrase().contains("System in maintenance mode.")) {
-                            showSnackMessage(getString(R.string.in_maintenance_mode_message));
-                        }
+                        showSnackMessage(synchResult.getHttpPhrase());
                     } else {
                         showRequestAccountChangeNotice();
                     }
