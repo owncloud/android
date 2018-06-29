@@ -1,5 +1,5 @@
 /* ownCloud Android Library is available under MIT license
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   Copyright (C) 2018 ownCloud GmbH.
  *   
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -24,6 +24,7 @@
 
 package com.owncloud.android.lib.resources.files;
 
+import android.net.Uri;
 import android.util.Log;
 
 import com.owncloud.android.lib.common.OwnCloudClient;
@@ -43,10 +44,11 @@ import okhttp3.HttpUrl;
 /**
  * Remote operation moving a remote file or folder in the ownCloud server to a different folder
  * in the same account.
- * <p>
+ *
  * Allows renaming the moving file/folder at the same time.
  *
  * @author David A. Velasco
+ * @author David González Verdugo
  */
 public class MoveRemoteFileOperation extends RemoteOperation {
 
@@ -59,7 +61,7 @@ public class MoveRemoteFileOperation extends RemoteOperation {
     private String mTargetRemotePath;
 
     private boolean mOverwrite;
-
+    protected boolean isChunkedFile;
 
     /**
      * Constructor.
@@ -76,6 +78,7 @@ public class MoveRemoteFileOperation extends RemoteOperation {
         mSrcRemotePath = srcRemotePath;
         mTargetRemotePath = targetRemotePath;
         mOverwrite = overwrite;
+        isChunkedFile = false;
     }
 
 
@@ -106,10 +109,15 @@ public class MoveRemoteFileOperation extends RemoteOperation {
         }
 
         /// perform remote operation
-        RemoteOperationResult result = null;
+        RemoteOperationResult result;
         try {
+
+            // After finishing a chunked upload, we have to move the resulting file from uploads folder to files one,
+            // so this uri has to be customizable
+            Uri srcWebDavUri = isChunkedFile ? client.getNewUploadsWebDavUri() : client.getNewFilesWebDavUri();
+
             final MoveMethod move = new MoveMethod(
-                    HttpUrl.parse( client.getNewFilesWebDavUri() + WebdavUtils.encodePath(mSrcRemotePath)),
+                    HttpUrl.parse(srcWebDavUri + WebdavUtils.encodePath(mSrcRemotePath)),
                 client.getNewFilesWebDavUri() + WebdavUtils.encodePath(mTargetRemotePath),
                     mOverwrite);
 
@@ -125,7 +133,6 @@ public class MoveRemoteFileOperation extends RemoteOperation {
 
                 result = new RemoteOperationResult(ResultCode.INVALID_OVERWRITE);
                 client.exhaustResponse(move.getResponseAsStream());
-
 
                 /// for other errors that could be explicitly handled, check first:
                 /// http://www.webdav.org/specs/rfc4918.html#rfc.section.9.9.4
@@ -151,5 +158,4 @@ public class MoveRemoteFileOperation extends RemoteOperation {
     protected boolean isSuccess(int status) {
         return status == HttpConstants.HTTP_CREATED || status == HttpConstants.HTTP_NO_CONTENT;
     }
-
 }
