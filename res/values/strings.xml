@@ -76,7 +76,6 @@
 
     <string name="auth_failure_snackbar">Authentication failed</string>
     <string name="auth_failure_snackbar_action">Change account</string>
-    <string name="in_maintenance_mode_message">Cloud is in maintenance mode.</string>
     <string name="auth_check_server">Check server</string>
     <string name="auth_host_url">Server address https://…</string>
     <string name="auth_username">Username</string>
