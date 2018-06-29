@@ -36,6 +36,7 @@ import com.owncloud.android.authentication.FingerprintManager;
 import com.owncloud.android.authentication.PassCodeManager;
 import com.owncloud.android.authentication.PatternManager;
 import com.owncloud.android.datamodel.ThumbnailsCacheManager;
+import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.OwnCloudClientManagerFactory;
 import com.owncloud.android.lib.common.OwnCloudClientManagerFactory.Policy;
 import com.owncloud.android.lib.common.authentication.oauth.OAuth2ClientConfiguration;
@@ -76,6 +77,8 @@ public class MainApp extends Application {
     public void onCreate(){
         super.onCreate();
         MainApp.mContext = getApplicationContext();
+
+        OwnCloudClient.setContext(mContext);
 
         boolean isSamlAuth = AUTH_ON.equals(getString(R.string.auth_method_saml_web_sso));
 
