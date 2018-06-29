@@ -2,7 +2,7 @@
  *   ownCloud Android client application
  *
  *   @author David A. Velasco
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -30,31 +30,25 @@ import com.owncloud.android.operations.common.SyncOperation;
 import com.owncloud.android.services.observer.FileObserverService;
 import com.owncloud.android.utils.FileStorageUtils;
 
-import android.accounts.Account;
-
 
 /**
- * Operation mmoving an {@link OCFile} to a different folder.
+ * Operation moving an {@link OCFile} to a different folder.
  */
 public class MoveFileOperation extends SyncOperation {
     
     //private static final String TAG = MoveFileOperation.class.getSimpleName();
     
-    private String mSrcPath;
-    private String mTargetParentPath;
-    
-    private OCFile mFile;
-
-    
+    protected String mSrcPath;
+    protected String mTargetParentPath;
+    protected OCFile mFile;
     
     /**
      * Constructor
      * 
      * @param srcPath           Remote path of the {@link OCFile} to move.
      * @param targetParentPath  Path to the folder where the file will be moved into.
-     * @param account           OwnCloud account containing both the file and the target folder 
      */
-    public MoveFileOperation(String srcPath, String targetParentPath, Account account) {
+    public MoveFileOperation(String srcPath, String targetParentPath) {
         mSrcPath = srcPath;
         mTargetParentPath = targetParentPath;
         if (!mTargetParentPath.endsWith(OCFile.PATH_SEPARATOR)) {
@@ -71,7 +65,7 @@ public class MoveFileOperation extends SyncOperation {
      */
     @Override
     protected RemoteOperationResult run(OwnCloudClient client) {
-        RemoteOperationResult result = null;
+        RemoteOperationResult result;
         
         /// 1. check move validity
         if (mTargetParentPath.startsWith(mSrcPath)) {
@@ -157,6 +151,4 @@ public class MoveFileOperation extends SyncOperation {
             true
         );
     }
-
-
 }
