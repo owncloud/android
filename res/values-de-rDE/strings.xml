@@ -444,6 +444,7 @@
   <string name="share_via_link_password_title">Gesichert</string>
   <string name="share_via_link_edit_permission_read_only_label">Herunterladen / Ansehen</string>
   <string name="share_via_link_edit_permission_read_and_write_label">Herunterladen / Ansehen / Hochladen</string>
+  <string name="share_via_link_edit_permission_upload_only_label">Nur Hochladen (Datei hineinziehen)</string>
   <string name="share_get_public_link_button">Link erstellen</string>
   <string name="share_with_title">Teilen mit ...</string>
   <string name="share_with_edit_title">Teilen mit %1$s</string>
