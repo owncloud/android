@@ -35,6 +35,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.channels.FileChannel;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.MediaType;
 
@@ -118,12 +119,12 @@ public class ChunkedUploadRemoteFileOperation extends UploadRemoteFileOperation 
 //                    // next method will throw an exception
 //                }
 
-//                if (chunkIndex == chunkCount - 1) {
-//                    // Added a high timeout to the last chunk due to when the last chunk
-//                    // arrives to the server with the last PUT, all chunks get assembled
-//                    // within that PHP request, so last one takes longer.
-//                    mPutMethod.getParams().setSoTimeout(LAST_CHUNK_TIMEOUT);
-//                }
+                if (chunkIndex == chunkCount - 1) {
+                    // Added a high timeout to the last chunk due to when the last chunk
+                    // arrives to the server with the last PUT, all chunks get assembled
+                    // within that PHP request, so last one takes longer.
+                    mPutMethod.setReadTimeout(LAST_CHUNK_TIMEOUT, TimeUnit.MILLISECONDS);
+                }
 
                 mPutMethod.setRequestBody(mFileRequestBody);
 
