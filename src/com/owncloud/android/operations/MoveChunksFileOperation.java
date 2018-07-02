@@ -29,14 +29,22 @@ import com.owncloud.android.lib.resources.files.MoveRemoteChunksFileOperation;
  * Operation moving a {@link OCFile} to its final destination after being upload in chunks
  */
 public class MoveChunksFileOperation extends MoveFileOperation {
+
+    private String mFileLastModifTimestamp;
+    private long mFileLength;
+
     /**
      * Constructor
-     *
-     * @param srcPath          Remote path of the {@link OCFile} to move.
-     * @param targetParentPath Path to the folder where the file will be moved into.
+     *  @param srcPath          Remote path of the {@link OCFile} to move.
+     * @param targetParentPath  Path to the folder where the file will be moved into.
+     * @param fileLastModifTimestamp Timestamp of last modification of file to move.
+     * @param fileLength        Total length of the file to move.
      */
-    public MoveChunksFileOperation(String srcPath, String targetParentPath) {
+    public MoveChunksFileOperation(String srcPath, String targetParentPath, String fileLastModifTimestamp,
+                                   long fileLength) {
         super(srcPath, targetParentPath);
+        mFileLastModifTimestamp = fileLastModifTimestamp;
+        mFileLength = fileLength;
     }
 
     @Override
@@ -45,7 +53,9 @@ public class MoveChunksFileOperation extends MoveFileOperation {
         MoveRemoteChunksFileOperation operation = new MoveRemoteChunksFileOperation(
                 mSrcPath,
                 mTargetParentPath,
-                false
+                false,
+                mFileLastModifTimestamp,
+                mFileLength
         );
 
         return operation.execute(client);
