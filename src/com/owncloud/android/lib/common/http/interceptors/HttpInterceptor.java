@@ -65,7 +65,7 @@ public class HttpInterceptor implements Interceptor {
         Response intercept(Response response) throws IOException;
     }
 
-    public HttpInterceptor addRequestInterceptor (RequestInterceptor requestInterceptor) {
+    public HttpInterceptor addRequestInterceptor(RequestInterceptor requestInterceptor) {
         mRequestInterceptors.add(requestInterceptor);
         return this;
     }
@@ -77,6 +77,27 @@ public class HttpInterceptor implements Interceptor {
 
     public ArrayList<RequestInterceptor> getRequestInterceptors() {
         return mRequestInterceptors;
+    }
+
+    private ArrayList<RequestHeaderInterceptor> getRequestHeaderInterceptors() {
+        ArrayList<RequestHeaderInterceptor> requestHeaderInterceptors = new ArrayList<>();
+
+        for (RequestInterceptor requestInterceptor : mRequestInterceptors) {
+            if (requestInterceptor instanceof RequestHeaderInterceptor) {
+                requestHeaderInterceptors.add((RequestHeaderInterceptor) requestInterceptor);
+            }
+        }
+
+        return requestHeaderInterceptors;
+    }
+
+    public void deleteRequestHeaderInterceptor(String headerName) {
+        for (RequestInterceptor requestInterceptor : mRequestInterceptors) {
+            if (requestInterceptor instanceof RequestHeaderInterceptor &&
+                    ((RequestHeaderInterceptor) requestInterceptor).getHeaderName().equals(headerName)) {
+                mRequestInterceptors.remove(requestInterceptor);
+            }
+        }
     }
 
     public ArrayList<ResponseInterceptor> getResponseInterceptors() {

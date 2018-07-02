@@ -24,6 +24,7 @@
 
 package com.owncloud.android.lib.common.http.methods.webdav;
 
+import com.owncloud.android.lib.common.http.HttpClient;
 import com.owncloud.android.lib.common.http.methods.HttpBaseMethod;
 
 import java.util.concurrent.TimeUnit;

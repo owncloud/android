@@ -60,8 +60,6 @@ public abstract class HttpBaseMethod {
                 .build();
     }
 
-
-
     public void abort() {
         mCall.cancel();
     }

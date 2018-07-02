@@ -1,5 +1,5 @@
 /* ownCloud Android Library is available under MIT license
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -26,12 +26,7 @@ package com.owncloud.android.lib.common.authentication;
 
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.http.HttpClient;
-import com.owncloud.android.lib.common.http.interceptors.BarearAuthInterceptor;
-import com.owncloud.android.lib.common.http.interceptors.BasicAuthInterceptor;
-import com.owncloud.android.lib.common.http.interceptors.HttpInterceptor;
-import com.owncloud.android.lib.common.http.interceptors.SamlAuthInterceptor;
-
-import java.util.ArrayList;
+import com.owncloud.android.lib.common.http.HttpConstants;
 
 public class OwnCloudCredentialsFactory {
 
@@ -71,16 +66,10 @@ public class OwnCloudCredentialsFactory {
 
         @Override
         public void applyTo(OwnCloudClient client) {
-            ArrayList<HttpInterceptor.RequestInterceptor> requestInterceptors = HttpClient.getOkHttpInterceptor().getRequestInterceptors();
-
             // Clear previous basic credentials
-            for (HttpInterceptor.RequestInterceptor requestInterceptor : requestInterceptors) {
-                if (requestInterceptor instanceof BasicAuthInterceptor
-                        || requestInterceptor instanceof BarearAuthInterceptor
-                        || requestInterceptor instanceof SamlAuthInterceptor) {
-                    requestInterceptors.remove(requestInterceptor);
-                }
-            }
+            HttpClient.deleteHeaderForAllRequests(HttpConstants.BASIC_AUTHORIZATION_HEADER);
+            HttpClient.deleteHeaderForAllRequests(HttpConstants.BEARER_AUTHORIZATION_HEADER);
+            HttpClient.deleteHeaderForAllRequests(HttpConstants.COOKIE_HEADER);
         }
 
         @Override
@@ -104,5 +93,4 @@ public class OwnCloudCredentialsFactory {
             return null;
         }
     }
-
 }

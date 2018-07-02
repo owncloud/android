@@ -25,18 +25,18 @@
 package com.owncloud.android.lib.common.http;
 
 import android.content.Context;
+
+import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 import com.facebook.stetho.okhttp3.StethoInterceptor;
 import com.owncloud.android.lib.BuildConfig;
 import com.owncloud.android.lib.common.OwnCloudClientManagerFactory;
 import com.owncloud.android.lib.common.http.interceptors.HttpInterceptor;
-import com.owncloud.android.lib.common.http.interceptors.UserAgentInterceptor;
+import com.owncloud.android.lib.common.http.interceptors.RequestHeaderInterceptor;
 import com.owncloud.android.lib.common.network.AdvancedX509TrustManager;
 import com.owncloud.android.lib.common.network.NetworkUtils;
 import com.owncloud.android.lib.common.utils.Log_OC;
-
-import org.apache.http.conn.ssl.BrowserCompatHostnameVerifier;
 
 import java.util.Arrays;
 
@@ -57,7 +57,6 @@ public class HttpClient {
     private static OkHttpClient sOkHttpClient;
     private static HttpInterceptor sOkHttpInterceptor;
     private static Context sContext;
-
 
     public static void setContext(Context context) {
         sContext = context;
@@ -90,14 +89,10 @@ public class HttpClient {
         return sOkHttpClient;
     }
 
-    public static HttpInterceptor getOkHttpInterceptor() {
+    private static HttpInterceptor getOkHttpInterceptor() {
         if (sOkHttpInterceptor == null) {
-            sOkHttpInterceptor = new HttpInterceptor()
-                    .addRequestInterceptor(new UserAgentInterceptor(
-                                    // TODO Try to get rid of this dependency
-                                    OwnCloudClientManagerFactory.getUserAgent()
-                            )
-                    );
+            sOkHttpInterceptor = new HttpInterceptor();
+            addHeaderForAllRequests(HttpConstants.USER_AGENT_HEADER, OwnCloudClientManagerFactory.getUserAgent());
         }
         return sOkHttpInterceptor;
     }
@@ -117,5 +112,21 @@ public class HttpClient {
             clientBuilder.connectTimeout(defaultConnectionTimeout, TimeUnit.MILLISECONDS);
         }
         sOkHttpClient = clientBuilder.build();
+    }
+
+    /**
+     * Add header that will be included for all the requests from now on
+     * @param headerName
+     * @param headerValue
+     */
+    public static void addHeaderForAllRequests(String headerName, String headerValue) {
+        getOkHttpInterceptor()
+                .addRequestInterceptor(
+                        new RequestHeaderInterceptor(headerName, headerValue)
+                );
+    }
+
+    public static void deleteHeaderForAllRequests(String headerName) {
+        getOkHttpInterceptor().deleteRequestHeaderInterceptor(headerName);
     }
 }

@@ -34,7 +34,7 @@ public class FileUtils {
 	private static final  String TAG = FileUtils.class.getSimpleName();
 
 	public static final String PATH_SEPARATOR = "/";
-	public static final String FINAl_CHUNKS_FILE = ".file";
+	public static final String FINAL_CHUNKS_FILE = ".file";
 
 	public static String getParentPath(String remotePath) {
 		String parentPath = new File(remotePath).getParent();

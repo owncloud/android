@@ -40,7 +40,6 @@ import java.util.concurrent.TimeUnit;
 
 import okhttp3.HttpUrl;
 
-
 /**
  * Remote operation moving a remote file or folder in the ownCloud server to a different folder
  * in the same account.
@@ -59,28 +58,29 @@ public class MoveRemoteFileOperation extends RemoteOperation {
 
     private String mSrcRemotePath;
     private String mTargetRemotePath;
-
     private boolean mOverwrite;
+
     protected boolean isChunkedFile;
+    protected String mFileLastModifTimestamp;
+    protected long mFileLength;
 
     /**
      * Constructor.
-     * <p>
+     *
      * TODO Paths should finish in "/" in the case of folders. ?
      *
      * @param srcRemotePath    Remote path of the file/folder to move.
-     * @param targetRemotePath Remove path desired for the file/folder after moving it.
+     * @param targetRemotePath Remote path desired for the file/folder after moving it.
      */
-    public MoveRemoteFileOperation(
-        String srcRemotePath, String targetRemotePath, boolean overwrite
-    ) {
+    public MoveRemoteFileOperation(String srcRemotePath,
+                                   String targetRemotePath,
+                                   boolean overwrite) {
 
         mSrcRemotePath = srcRemotePath;
         mTargetRemotePath = targetRemotePath;
         mOverwrite = overwrite;
         isChunkedFile = false;
     }
-
 
     /**
      * Performs the rename operation.
@@ -121,6 +121,11 @@ public class MoveRemoteFileOperation extends RemoteOperation {
                 client.getNewFilesWebDavUri() + WebdavUtils.encodePath(mTargetRemotePath),
                     mOverwrite);
 
+            if (isChunkedFile) {
+                move.addRequestHeader(HttpConstants.OC_X_OC_MTIME_HEADER, mFileLastModifTimestamp);
+                move.addRequestHeader(HttpConstants.OC_TOTAL_LENGTH_HEADER, String.valueOf(mFileLength));
+            }
+
             move.setReadTimeout(MOVE_READ_TIMEOUT, TimeUnit.SECONDS);
             move.setConnectionTimeout(MOVE_CONNECTION_TIMEOUT, TimeUnit.SECONDS);
 
@@ -149,7 +154,6 @@ public class MoveRemoteFileOperation extends RemoteOperation {
             result = new RemoteOperationResult(e);
             Log.e(TAG, "Move " + mSrcRemotePath + " to " + mTargetRemotePath + ": " +
                 result.getLogMessage(), e);
-
         }
 
         return result;

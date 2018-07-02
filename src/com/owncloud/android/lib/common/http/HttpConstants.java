@@ -33,10 +33,10 @@ public class HttpConstants {
      *************************************************** HEADERS ***********************************************
      ***********************************************************************************************************/
 
-    /***********************************************************************************************************
-     *************************************************** HEADERS ***********************************************
-     ***********************************************************************************************************/
-
+    public static final String BASIC_AUTHORIZATION_HEADER = "Authorization";
+    public static final String COOKIE_HEADER = "Cookie";
+    public static final String BEARER_AUTHORIZATION_HEADER = "Bearer ";
+    public static final String USER_AGENT_HEADER = "User-Agent";
     public static final String IF_MATCH_HEADER = "If-Match";
     public static final String IF_NONE_MATCH_HEADER = "If-None-Match";
     public static final String CONTENT_TYPE_HEADER = "Content-Type";

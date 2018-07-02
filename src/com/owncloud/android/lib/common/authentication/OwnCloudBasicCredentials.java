@@ -25,20 +25,9 @@ package com.owncloud.android.lib.common.authentication;
 
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.http.HttpClient;
-import com.owncloud.android.lib.common.http.interceptors.BarearAuthInterceptor;
-import com.owncloud.android.lib.common.http.interceptors.BasicAuthInterceptor;
-import com.owncloud.android.lib.common.http.interceptors.HttpInterceptor;
-import com.owncloud.android.lib.common.http.interceptors.HttpInterceptor.RequestInterceptor;
-import com.owncloud.android.lib.common.http.interceptors.SamlAuthInterceptor;
+import com.owncloud.android.lib.common.http.HttpConstants;
 
-
-
-
-
-
-
-import java.util.ArrayList;
-import java.util.List;
+import okhttp3.Credentials;
 
 public class OwnCloudBasicCredentials implements OwnCloudCredentials {
 
@@ -62,21 +51,13 @@ public class OwnCloudBasicCredentials implements OwnCloudCredentials {
 
     @Override
     public void applyTo(OwnCloudClient client) {
-        ArrayList<RequestInterceptor> requestInterceptors = HttpClient.getOkHttpInterceptor().getRequestInterceptors();
-
         // Clear previous basic credentials
-        for (HttpInterceptor.RequestInterceptor requestInterceptor : requestInterceptors) {
-            if (requestInterceptor instanceof BasicAuthInterceptor
-                    || requestInterceptor instanceof BarearAuthInterceptor
-                    || requestInterceptor instanceof SamlAuthInterceptor) {
-                requestInterceptors.remove(requestInterceptor);
-            }
-        }
+        HttpClient.deleteHeaderForAllRequests(HttpConstants.BASIC_AUTHORIZATION_HEADER);
+        HttpClient.deleteHeaderForAllRequests(HttpConstants.BEARER_AUTHORIZATION_HEADER);
+        HttpClient.deleteHeaderForAllRequests(HttpConstants.COOKIE_HEADER);
 
-        HttpClient.getOkHttpInterceptor()
-                .addRequestInterceptor(
-                        new BasicAuthInterceptor(mUsername, mPassword)
-                );
+        HttpClient.addHeaderForAllRequests(HttpConstants.BASIC_AUTHORIZATION_HEADER,
+                Credentials.basic(mUsername, mPassword));
     }
 
     @Override
@@ -98,5 +79,4 @@ public class OwnCloudBasicCredentials implements OwnCloudCredentials {
     public boolean authTokenCanBeRefreshed() {
         return false;
     }
-
 }

@@ -54,16 +54,13 @@ public class ChunkedUploadRemoteFileOperation extends UploadRemoteFileOperation 
     private static final int LAST_CHUNK_TIMEOUT = 900000; //15 mins.
 
     public static final long CHUNK_SIZE = 1024000;
-    private static final String OC_CHUNKED_HEADER = "OC-Chunked";
-    private static final String OC_CHUNK_SIZE_HEADER = "OC-Chunk-Size";
-    private static final String OC_CHUNK_X_OC_MTIME_HEADER = "X-OC-Mtime";
     private static final String TAG = ChunkedUploadRemoteFileOperation.class.getSimpleName();
 
     private long mTransferId;
 
-    public ChunkedUploadRemoteFileOperation(long transferId, String storagePath, String remotePath, String mimeType,
+    public ChunkedUploadRemoteFileOperation(long transferId, String localPath, String remotePath, String mimeType,
                                             String requiredEtag, String fileLastModifTimestamp) {
-        super(storagePath, remotePath, mimeType, requiredEtag, fileLastModifTimestamp);
+        super(localPath, remotePath, mimeType, requiredEtag, fileLastModifTimestamp);
         mTransferId = transferId;
     }
 
@@ -92,14 +89,9 @@ public class ChunkedUploadRemoteFileOperation extends UploadRemoteFileOperation 
             String uriPrefix = client.getNewUploadsWebDavUri() + FileUtils.PATH_SEPARATOR + String.valueOf(mTransferId);
             long totalLength = fileToUpload.length();
             long chunkCount = (long) Math.ceil((double) totalLength / CHUNK_SIZE);
-            String chunkSizeStr = String.valueOf(CHUNK_SIZE);
             String totalLengthStr = String.valueOf(fileToUpload.length());
 
             for (int chunkIndex = 0; chunkIndex < chunkCount; chunkIndex++, offset += CHUNK_SIZE) {
-                if (chunkIndex == chunkCount - 1) {
-                    chunkSizeStr = String.valueOf(CHUNK_SIZE * chunkCount - totalLength);
-                }
-
                 mPutMethod = new PutMethod(
                         HttpUtils.stringUrlToHttpUrl(uriPrefix + FileUtils.PATH_SEPARATOR + chunkIndex)
                 );
@@ -107,10 +99,6 @@ public class ChunkedUploadRemoteFileOperation extends UploadRemoteFileOperation 
                 if (mRequiredEtag != null && mRequiredEtag.length() > 0) {
                     mPutMethod.addRequestHeader(IF_MATCH_HEADER, "\"" + mRequiredEtag + "\"");
                 }
-
-                mPutMethod.addRequestHeader(OC_TOTAL_LENGTH_HEADER, totalLengthStr);
-
-//                mPutMethod.addRequestHeader(OC_CHUNK_X_OC_MTIME_HEADER, mFileLastModifTimestamp);
 
 //                ((ChunkFromFileChannelRequestEntity) mEntity).setOffset(offset);
 //                mPutMethod.setRequestEntity(mEntity);
