@@ -74,7 +74,7 @@ public class CreateFolderOperation extends SyncOperation {
                 Log_OC.w(TAG, "Local folder " + localPath + " was not fully created");
             }
         } else {
-            Log_OC.e(TAG, mRemotePath + "hasn't been created");
+            Log_OC.e(TAG, mRemotePath + " hasn't been created");
         }
         
         return result;

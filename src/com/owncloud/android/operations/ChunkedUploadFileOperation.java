@@ -38,9 +38,9 @@ import java.util.Iterator;
 
 public class ChunkedUploadFileOperation extends UploadFileOperation {
 
-    public ChunkedUploadFileOperation(Account account, OCFile file, OCUpload upload, boolean chunked,
-                                      boolean forceOverwrite, int localBehaviour, Context context) {
-        super(account, file, upload, chunked, forceOverwrite, localBehaviour, context);
+    public ChunkedUploadFileOperation(Account account, OCFile file, OCUpload upload, boolean forceOverwrite,
+                                      int localBehaviour, Context context) {
+        super(account, file, upload, forceOverwrite, localBehaviour, context);
     }
 
     @Override
@@ -72,8 +72,11 @@ public class ChunkedUploadFileOperation extends UploadFileOperation {
             // File chunks not properly uploaded
             if (!result.isSuccess()) return result;
 
-            // Step 3, move file to final destination
+            // Step 3, move remote file to final remote destination
             moveChunksFileToFinalDestination(timeStamp, mFile.getFileLength());
+
+            // Step 4, move local file to final local destination
+            moveTemporalOriginalFiles(temporalFile, originalFile, expectedPath, expectedFile);
 
         } catch (Exception e) {
             result = new RemoteOperationResult(e);
