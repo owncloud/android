@@ -52,7 +52,6 @@ import static com.owncloud.android.lib.common.operations.RemoteOperationResult.R
 public class ChunkedUploadRemoteFileOperation extends UploadRemoteFileOperation {
 
     private static final int LAST_CHUNK_TIMEOUT = 900000; //15 mins.
-
     public static final long CHUNK_SIZE = 1024000;
     private static final String TAG = ChunkedUploadRemoteFileOperation.class.getSimpleName();
 
@@ -66,9 +65,8 @@ public class ChunkedUploadRemoteFileOperation extends UploadRemoteFileOperation 
 
     @Override
     protected RemoteOperationResult uploadFile(OwnCloudClient client) throws IOException {
-        int status = -1;
+        int status;
         RemoteOperationResult result = null;
-
         FileChannel channel = null;
         RandomAccessFile raf = null;
 
@@ -89,7 +87,6 @@ public class ChunkedUploadRemoteFileOperation extends UploadRemoteFileOperation 
             String uriPrefix = client.getNewUploadsWebDavUri() + FileUtils.PATH_SEPARATOR + String.valueOf(mTransferId);
             long totalLength = fileToUpload.length();
             long chunkCount = (long) Math.ceil((double) totalLength / CHUNK_SIZE);
-            String totalLengthStr = String.valueOf(fileToUpload.length());
 
             for (int chunkIndex = 0; chunkIndex < chunkCount; chunkIndex++, offset += CHUNK_SIZE) {
                 mPutMethod = new PutMethod(
@@ -100,8 +97,8 @@ public class ChunkedUploadRemoteFileOperation extends UploadRemoteFileOperation 
                     mPutMethod.addRequestHeader(IF_MATCH_HEADER, "\"" + mRequiredEtag + "\"");
                 }
 
-//                ((ChunkFromFileChannelRequestEntity) mEntity).setOffset(offset);
-//                mPutMethod.setRequestEntity(mEntity);
+                ((ChunkFromFileRequestBody) mFileRequestBody).setOffset(offset);
+
 //                if (mCancellationRequested.get()) {
 //                    mPutMethod.abort();
 //                    // next method will throw an exception
@@ -137,8 +134,6 @@ public class ChunkedUploadRemoteFileOperation extends UploadRemoteFileOperation 
                 channel.close();
             if (raf != null)
                 raf.close();
-//            if (mPutMethod != null)
-//                mPutMethod.releaseConnection();    // let the connection available for other methods
         }
         return result;
     }

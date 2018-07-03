@@ -1,5 +1,7 @@
 package com.owncloud.android.lib.common.http.methods.webdav;
 
+import com.owncloud.android.lib.common.http.HttpConstants;
+
 import at.bitfire.dav4android.exception.UnauthorizedException;
 import okhttp3.HttpUrl;
 
@@ -16,7 +18,12 @@ public class MoveMethod extends DavMethod {
     @Override
     public int execute() throws Exception {
         try {
-            mDavResource.move(destinationUrl, forceOverride);
+            mDavResource.move(
+                    destinationUrl,
+                    forceOverride,
+                    super.getRequestHeader(HttpConstants.OC_TOTAL_LENGTH_HEADER),
+                    super.getRequestHeader(HttpConstants.OC_X_OC_MTIME_HEADER)
+            );
 
             mRequest = mDavResource.getRequest();
             mResponse = mDavResource.getResponse();

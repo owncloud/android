@@ -29,6 +29,7 @@ import android.util.Log;
 import com.owncloud.android.lib.common.utils.Log_OC;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.util.Iterator;
@@ -68,7 +69,11 @@ public class ChunkFromFileRequestBody extends FileRequestBody {
 
     @Override
     public long contentLength() {
-        return mChunkSize;
+        try {
+            return Math.min(mChunkSize, mChannel.size() - mChannel.position());
+        } catch (IOException e) {
+            return mChunkSize;
+        }
     }
 
     @Override
@@ -82,6 +87,7 @@ public class ChunkFromFileRequestBody extends FileRequestBody {
             if (size == 0) size = -1;
             long maxCount = Math.min(mOffset + mChunkSize, mChannel.size());
             while (mChannel.position() < maxCount) {
+
 
                 Log_OC.d(TAG, "Sink buffer size: " + sink.buffer().size());
 
@@ -121,5 +127,9 @@ public class ChunkFromFileRequestBody extends FileRequestBody {
 //                throw fnf;
 //            }
         }
+    }
+
+    public void setOffset(long offset) {
+        this.mOffset = offset;
     }
 }
