@@ -376,8 +376,8 @@ public class FileUploader extends Service
             }
             // at this point variable "OCFile[] files" is loaded correctly.
 
-            String uploadKey = null;
-            UploadFileOperation newUpload = null;
+            String uploadKey;
+            UploadFileOperation newUpload;
             try {
                 for (int i = 0; i < files.length; i++) {
 
@@ -397,7 +397,6 @@ public class FileUploader extends Service
                                 account,
                                 files[i],
                                 ocUpload,
-                                chunked,
                                 forceOverwrite,
                                 localAction,
                                 this
@@ -407,7 +406,6 @@ public class FileUploader extends Service
                                 account,
                                 files[i],
                                 ocUpload,
-                                chunked,
                                 forceOverwrite,
                                 localAction,
                                 this
@@ -463,7 +461,6 @@ public class FileUploader extends Service
                     account,
                     null,
                     upload,
-                    chunked,
                     upload.isForceOverwrite(),  // TODO should be read from DB?
                     upload.getLocalAction(),    // TODO should be read from DB?
                     this

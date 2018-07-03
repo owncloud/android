@@ -50,7 +50,7 @@ public class CreateChunksFolderOperation extends CreateFolderOperation {
         if (result.isSuccess()) {
             Log_OC.w(TAG, "Remote chunks folder " + mRemotePath + " was created");
         } else {
-            Log_OC.e(TAG, mRemotePath + "hasn't been created");
+            Log_OC.e(TAG, mRemotePath + " hasn't been created");
         }
 
         return result;
