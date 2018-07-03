@@ -445,6 +445,7 @@
   <string name="share_via_link_password_title">Безопасный</string>
   <string name="share_via_link_edit_permission_read_only_label">Скачивание / Просмотр</string>
   <string name="share_via_link_edit_permission_read_and_write_label">Скачивание / Просмотр / Закачка</string>
+  <string name="share_via_link_edit_permission_upload_only_label">Только закачка (перетащить файл сюда)</string>
   <string name="share_get_public_link_button">Получить ссылку</string>
   <string name="share_with_title">Поделиться с …</string>
   <string name="share_with_edit_title">Поделиться с %1$s</string>
