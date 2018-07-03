@@ -85,7 +85,7 @@ public class UploadRemoteFileOperation extends RemoteOperation {
 
     @Override
     protected RemoteOperationResult run(OwnCloudClient client) {
-        RemoteOperationResult result = null;
+        RemoteOperationResult result;
 
         try {
             mPutMethod = new PutMethod(
@@ -96,7 +96,6 @@ public class UploadRemoteFileOperation extends RemoteOperation {
             if (mCancellationRequested.get()) {
                 // the operation was cancelled before getting it's turn to be executed in the queue of uploads
                 result = new RemoteOperationResult(new OperationCancelledException());
-
             } else {
                 // perform the upload
                 result = uploadFile(client);
