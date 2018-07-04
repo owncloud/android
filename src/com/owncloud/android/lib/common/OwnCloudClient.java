@@ -46,6 +46,7 @@ import java.io.InputStream;
 import java.util.List;
 
 import at.bitfire.dav4android.exception.HttpException;
+import at.bitfire.dav4android.exception.RedirectException;
 import okhttp3.Cookie;
 import okhttp3.Headers;
 import okhttp3.HttpUrl;
@@ -131,16 +132,21 @@ public class OwnCloudClient extends HttpClient {
 
         boolean repeatWithFreshCredentials;
         int repeatCounter = 0;
-        int status;
+        int status = -1;
 
         do {
             try {
                 status = method.execute();
-            } catch (HttpException e) {
-                if(e.getMessage().contains(Integer.toString(HttpConstants.HTTP_MOVED_TEMPORARILY))) {
+                checkFirstRedirection(method);
+                if(mFollowRedirects) {
                     status = followRedirection(method).getLastStatus();
-                } else {
-                    throw e;
+                }
+            } catch (RedirectException e) {
+                // redirect must be handled twice. Once for dav4droid and once okhttp redirect errors
+                status = e.getStatus();
+                mRedirectedLocation = e.getRedirectLocation();
+                if(mFollowRedirects) {
+                    status = followRedirection(method).getLastStatus();
                 }
             }
 
@@ -151,6 +157,14 @@ public class OwnCloudClient extends HttpClient {
         } while (repeatWithFreshCredentials);
 
         return status;
+    }
+
+    private void checkFirstRedirection(HttpBaseMethod method) {
+
+        final String location = method.getResponseHeader("location");
+        if(location != null && !location.isEmpty()) {
+            mRedirectedLocation = location;
+        }
     }
 
     private int executeRedirectedHttpMethod (HttpBaseMethod method) throws Exception {

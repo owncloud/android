@@ -47,6 +47,7 @@ public abstract class DavMethod extends HttpBaseMethod {
                 mOkHttpClient,
                 httpUrl
         );
+        mDavResource.setFollowRedirects(false);
     }
 
     public DavResource getDavResource() {
