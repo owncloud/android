@@ -188,6 +188,7 @@ public class SynchronizeFolderOperation extends SyncOperation {
         mFailsInFileSyncsFound = 0;
         mConflictsFound = 0;
         mForgottenLocalFiles.clear();
+        client.setFollowRedirects(false);
 
         try {
             // get locally cached information about folder
