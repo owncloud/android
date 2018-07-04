@@ -21,7 +21,6 @@
 
 package com.owncloud.android.operations;
 
-import com.owncloud.android.MainApp;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
@@ -29,19 +28,15 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCo
 import com.owncloud.android.lib.resources.files.RemoveRemoteFileOperation;
 import com.owncloud.android.operations.common.SyncOperation;
 
-
 /**
  * Remote operation performing the removal of a remote file or folder in the ownCloud server.
  */
 public class RemoveFileOperation extends SyncOperation {
-    
-    // private static final String TAG = RemoveFileOperation.class.getSimpleName();
-    
+
     OCFile mFileToRemove;
     String mRemotePath;
     boolean mOnlyLocalCopy;
-    
-    
+
     /**
      * Constructor
      * 
@@ -54,8 +49,7 @@ public class RemoveFileOperation extends SyncOperation {
         mRemotePath = remotePath;
         mOnlyLocalCopy = onlyLocalCopy;
     }
-    
-    
+
     /**
      * Getter for the file to remove (or removed, if the operation was successfully performed).
      * 
@@ -97,5 +91,4 @@ public class RemoveFileOperation extends SyncOperation {
         
         return result;
     }
-    
 }

@@ -22,38 +22,26 @@ package com.owncloud.android.operations;
 
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
-import com.owncloud.android.lib.common.utils.Log_OC;
-import com.owncloud.android.lib.resources.files.CreateRemoteFolderOperation;
-import com.owncloud.android.lib.resources.files.chunks.CreateRemoteChunkFolderOperation;
+import com.owncloud.android.lib.resources.files.chunks.RemoveRemoteChunksFolderOperation;
 
-public class CreateChunksFolderOperation extends CreateFolderOperation {
-
-    private static final String TAG = CreateChunksFolderOperation.class.getSimpleName();
-
+public class RemoveChunksFolderOperation extends RemoveFileOperation {
     /**
      * Constructor
      *
-     * @param remotePath         Path in which create the chunks folder in server
+     * @param remotePath    RemotePath of the OCFile instance describing the remote file or
+     *                      folder to remove from the server
      */
-    public CreateChunksFolderOperation(String remotePath) {
+    public RemoveChunksFolderOperation(String remotePath) {
         super(remotePath, false);
     }
 
     @Override
     protected RemoteOperationResult run(OwnCloudClient client) {
-        CreateRemoteChunkFolderOperation createRemoteChunkFolderOperation = new CreateRemoteChunkFolderOperation(
-                mRemotePath,
-                mCreateFullPath
+
+        RemoveRemoteChunksFolderOperation removeRemoteChunksFolderOperation = new RemoveRemoteChunksFolderOperation(
+                mRemotePath
         );
 
-        RemoteOperationResult result =  createRemoteChunkFolderOperation.execute(client);
-
-        if (result.isSuccess()) {
-            Log_OC.w(TAG, "Remote chunks folder " + mRemotePath + " was created");
-        } else {
-            Log_OC.e(TAG, mRemotePath + " hasn't been created");
-        }
-
-        return result;
+        return removeRemoteChunksFolderOperation.execute(client);
     }
 }
