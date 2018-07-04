@@ -89,7 +89,6 @@ public class UploadFileOperation extends SyncOperation {
         } // don't worry about not assigning size, the problems with localPath
         // are checked when the UploadFileOperation instance is created
 
-
         newFile.setMimetype(mimeType);
 
         return newFile;
