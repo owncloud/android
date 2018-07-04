@@ -22,7 +22,9 @@
  *
  */
 
-package com.owncloud.android.lib.resources.files;
+package com.owncloud.android.lib.resources.files.chunks;
+
+import com.owncloud.android.lib.resources.files.CreateRemoteFolderOperation;
 
 /**
  * Remote operation performing the creation of a new folder to save chunks during an upload to the ownCloud server.
@@ -38,6 +40,6 @@ public class CreateRemoteChunkFolderOperation extends CreateRemoteFolderOperatio
      */
     public CreateRemoteChunkFolderOperation(String remotePath, boolean createFullPath) {
         super(remotePath, createFullPath);
-        mFolderToSaveChunks = true;
+        createChunksFolder = true;
     }
 }

@@ -60,7 +60,7 @@ public class MoveRemoteFileOperation extends RemoteOperation {
     private String mTargetRemotePath;
     private boolean mOverwrite;
 
-    protected boolean isChunkedFile;
+    protected boolean moveChunkedFile = false;
     protected String mFileLastModifTimestamp;
     protected long mFileLength;
 
@@ -79,7 +79,6 @@ public class MoveRemoteFileOperation extends RemoteOperation {
         mSrcRemotePath = srcRemotePath;
         mTargetRemotePath = targetRemotePath;
         mOverwrite = overwrite;
-        isChunkedFile = false;
     }
 
     /**
@@ -111,17 +110,16 @@ public class MoveRemoteFileOperation extends RemoteOperation {
         /// perform remote operation
         RemoteOperationResult result;
         try {
-
             // After finishing a chunked upload, we have to move the resulting file from uploads folder to files one,
             // so this uri has to be customizable
-            Uri srcWebDavUri = isChunkedFile ? client.getNewUploadsWebDavUri() : client.getNewFilesWebDavUri();
+            Uri srcWebDavUri = moveChunkedFile ? client.getNewUploadsWebDavUri() : client.getNewFilesWebDavUri();
 
             final MoveMethod move = new MoveMethod(
                     HttpUrl.parse(srcWebDavUri + WebdavUtils.encodePath(mSrcRemotePath)),
                 client.getNewFilesWebDavUri() + WebdavUtils.encodePath(mTargetRemotePath),
                     mOverwrite);
 
-            if (isChunkedFile) {
+            if (moveChunkedFile) {
                 move.addRequestHeader(HttpConstants.OC_X_OC_MTIME_HEADER, mFileLastModifTimestamp);
                 move.addRequestHeader(HttpConstants.OC_TOTAL_LENGTH_HEADER, String.valueOf(mFileLength));
             }

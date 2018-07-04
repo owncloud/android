@@ -24,6 +24,8 @@
 
 package com.owncloud.android.lib.resources.files;
 
+import android.net.Uri;
+
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.http.HttpConstants;
 import com.owncloud.android.lib.common.http.HttpUtils;
@@ -46,6 +48,8 @@ public class RemoveRemoteFileOperation extends RemoteOperation {
     private static final String TAG = RemoveRemoteFileOperation.class.getSimpleName();
     private String mRemotePath;
 
+    protected boolean removeChunksFolder = false;
+
     /**
      * Constructor
      *
@@ -65,8 +69,10 @@ public class RemoveRemoteFileOperation extends RemoteOperation {
         RemoteOperationResult result;
 
         try {
+            Uri srcWebDavUri = removeChunksFolder ? client.getNewUploadsWebDavUri() : client.getNewFilesWebDavUri();
+
             DeleteMethod deleteMethod = new DeleteMethod(
-                    HttpUtils.stringUrlToHttpUrl(client.getNewFilesWebDavUri() + WebdavUtils.encodePath(mRemotePath))
+                    HttpUtils.stringUrlToHttpUrl(srcWebDavUri + WebdavUtils.encodePath(mRemotePath))
             );
 
             int status = client.executeHttpMethod(deleteMethod);

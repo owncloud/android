@@ -22,7 +22,7 @@
  *
  */
 
-package com.owncloud.android.lib.resources.files;
+package com.owncloud.android.lib.resources.files.chunks;
 
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.http.HttpUtils;
@@ -31,6 +31,8 @@ import com.owncloud.android.lib.common.network.ChunkFromFileRequestBody;
 import com.owncloud.android.lib.common.operations.OperationCancelledException;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
+import com.owncloud.android.lib.resources.files.FileUtils;
+import com.owncloud.android.lib.resources.files.UploadRemoteFileOperation;
 
 import java.io.File;
 import java.io.RandomAccessFile;

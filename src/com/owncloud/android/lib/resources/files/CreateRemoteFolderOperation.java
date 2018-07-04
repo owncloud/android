@@ -57,7 +57,7 @@ public class CreateRemoteFolderOperation extends RemoteOperation {
 
     private String mRemotePath;
     private boolean mCreateFullPath;
-    protected boolean mFolderToSaveChunks;
+    protected boolean createChunksFolder;
 
     /**
      * Constructor
@@ -67,7 +67,7 @@ public class CreateRemoteFolderOperation extends RemoteOperation {
     public CreateRemoteFolderOperation(String remotePath, boolean createFullPath) {
         mRemotePath = remotePath;
         mCreateFullPath = createFullPath;
-        mFolderToSaveChunks = false;
+        createChunksFolder = false;
     }
 
     /**
@@ -103,7 +103,7 @@ public class CreateRemoteFolderOperation extends RemoteOperation {
     private RemoteOperationResult createFolder(OwnCloudClient client) {
         RemoteOperationResult result;
         try {
-            Uri webDavUri = mFolderToSaveChunks ? client.getNewUploadsWebDavUri() : client.getNewFilesWebDavUri();
+            Uri webDavUri = createChunksFolder ? client.getNewUploadsWebDavUri() : client.getNewFilesWebDavUri();
             final MkColMethod mkcol = new MkColMethod(HttpUrl.parse(webDavUri + WebdavUtils.encodePath(mRemotePath)));
             mkcol.setReadTimeout(READ_TIMEOUT, TimeUnit.SECONDS);
             mkcol.setConnectionTimeout(CONNECTION_TIMEOUT, TimeUnit.SECONDS);
