@@ -1065,7 +1065,12 @@ public class FileDisplayActivity extends FileActivity
                     mLastSslUntrustedServerResult = synchResult;
                 } else if (synchResult.getCode().equals(RemoteOperationResult.ResultCode.SPECIFIC_SERVICE_UNAVAILABLE)) {
                     if(synchResult.getHttpCode() == 503) {
-                        showSnackMessage(synchResult.getHttpPhrase());
+                        if(synchResult.getHttpPhrase()
+                                .equals("Error: Call to a member function getUID() on null")) {
+                            showRequestAccountChangeNotice();
+                        } else {
+                            showSnackMessage(synchResult.getHttpPhrase());
+                        }
                     } else {
                         showRequestAccountChangeNotice();
                     }
