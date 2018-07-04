@@ -24,7 +24,7 @@
     <string name="share_api_link" formatted="false"></string>
     
     <!-- Flags to setup the authentication methods available in the app -->
-    <string name="auth_method_saml_web_sso" formatted="false">on</string>
+    <string name="auth_method_saml_web_sso" formatted="false">off</string>
     
     <!-- Flags to enable/disable some features -->
     <string name = "send_files_to_other_apps" formatted="false">on</string>
