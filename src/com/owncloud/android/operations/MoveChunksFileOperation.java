@@ -23,7 +23,7 @@ package com.owncloud.android.operations;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
-import com.owncloud.android.lib.resources.files.MoveRemoteChunksFileOperation;
+import com.owncloud.android.lib.resources.files.chunks.MoveRemoteChunksFileOperation;
 
 /**
  * Operation moving a {@link OCFile} to its final destination after being upload in chunks
@@ -35,7 +35,7 @@ public class MoveChunksFileOperation extends MoveFileOperation {
 
     /**
      * Constructor
-     *  @param srcPath          Remote path of the {@link OCFile} to move.
+     * @param srcPath          Remote path of the {@link OCFile} to move.
      * @param targetParentPath  Path to the folder where the file will be moved into.
      * @param fileLastModifTimestamp Timestamp of last modification of file to move.
      * @param fileLength        Total length of the file to move.

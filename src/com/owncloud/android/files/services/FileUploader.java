@@ -62,10 +62,11 @@ import com.owncloud.android.lib.common.network.OnDatatransferProgressListener;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.common.utils.Log_OC;
-import com.owncloud.android.lib.resources.files.ChunkedUploadRemoteFileOperation;
+import com.owncloud.android.lib.resources.files.chunks.ChunkedUploadRemoteFileOperation;
 import com.owncloud.android.lib.resources.files.FileUtils;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 import com.owncloud.android.operations.ChunkedUploadFileOperation;
+import com.owncloud.android.operations.RemoveChunksFolderOperation;
 import com.owncloud.android.operations.UploadFileOperation;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.activity.UploadListActivity;
@@ -561,7 +562,6 @@ public class FileUploader extends Service
          */
         public void cancel(OCUpload storedUpload) {
             cancel(storedUpload.getAccountName(), storedUpload.getRemotePath());
-
         }
 
         /**
@@ -894,11 +894,8 @@ public class FileUploader extends Service
                 notifyUploadResult(mCurrentUpload, uploadResult);
 
                 sendBroadcastUploadFinished(mCurrentUpload, uploadResult, removeResult.second);
-
             }
-
         }
-
     }
 
     /**
@@ -966,10 +963,22 @@ public class FileUploader extends Service
         // / cancelled operation or success -> silent removal of progress notification
         mNotificationManager.cancel(R.string.uploader_upload_in_progress_ticker);
 
-        // Show the result: success or fail notification
-        if (!uploadResult.isCancelled() &&
+        if (uploadResult.isCancelled() && upload instanceof ChunkedUploadFileOperation) {
+
+            RemoveChunksFolderOperation remoteChunksFolderOperation = new RemoveChunksFolderOperation(
+                    String.valueOf(upload.getOCUploadId())
+            );
+
+            RemoteOperationResult result = remoteChunksFolderOperation.execute(mUploadClient);
+
+            if (!result.isSuccess()) {
+                Log_OC.e(TAG, "Error deleting chunks folder after cancelling chunked upload");
+            }
+
+        } else if (!uploadResult.isCancelled() &&
             !uploadResult.getCode().equals(ResultCode.DELAYED_FOR_WIFI)) {
 
+            // Show the result: success or fail notification
             int tickerId = (uploadResult.isSuccess()) ? R.string.uploader_upload_succeeded_ticker :
                     R.string.uploader_upload_failed_ticker;
 
