@@ -15,7 +15,7 @@ public class CopyMethod extends DavMethod {
     }
 
     @Override
-    public int execute() throws Exception {
+    public int onExecute() throws Exception {
         try {
             mDavResource.copy(destinationUrl, forceOverride);
 

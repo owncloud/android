@@ -39,11 +39,11 @@ public class DeleteMethod extends HttpMethod{
     }
 
     @Override
-    public int execute() throws IOException {
+    public int onExecute() throws IOException {
         mRequest = mRequest.newBuilder()
                 .delete()
                 .build();
 
-        return super.execute();
+        return super.onExecute();
     }
 }

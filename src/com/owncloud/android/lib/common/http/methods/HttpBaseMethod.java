@@ -46,7 +46,6 @@ import okhttp3.Response;
  * @author David González Verdugo
  */
 public abstract class HttpBaseMethod {
-    public abstract int execute() throws Exception;
     protected OkHttpClient mOkHttpClient;
     protected Request mRequest;
     protected RequestBody mRequestBody;
@@ -60,6 +59,10 @@ public abstract class HttpBaseMethod {
                 .build();
     }
 
+    public int execute() throws Exception {
+        return onExecute();
+    }
+
     public void abort() {
         mCall.cancel();
     }
@@ -67,6 +70,13 @@ public abstract class HttpBaseMethod {
     public boolean isAborted() {
         return mCall.isCanceled();
     }
+
+
+    //////////////////////////////
+    //         For override
+    //////////////////////////////
+
+    protected abstract int onExecute() throws Exception;
 
     //////////////////////////////
     //         Getter

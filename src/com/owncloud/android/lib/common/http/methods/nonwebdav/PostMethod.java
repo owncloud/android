@@ -27,7 +27,6 @@ package com.owncloud.android.lib.common.http.methods.nonwebdav;
 import java.io.IOException;
 
 import okhttp3.HttpUrl;
-import okhttp3.RequestBody;
 
 /**
  * OkHttp post calls wrapper
@@ -40,11 +39,11 @@ public class PostMethod extends HttpMethod {
     }
 
     @Override
-    public int execute() throws IOException {
+    public int onExecute() throws IOException {
         mRequest = mRequest.newBuilder()
                 .post(mRequestBody)
                 .build();
 
-        return super.execute();
+        return super.onExecute();
     }
 }

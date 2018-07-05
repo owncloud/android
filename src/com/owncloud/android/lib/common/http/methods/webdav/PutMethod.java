@@ -45,7 +45,7 @@ public class PutMethod extends DavMethod {
     };
 
     @Override
-    public int execute() throws IOException, HttpException {
+    public int onExecute() throws IOException, HttpException {
         try {
             mDavResource.put(
                     mRequestBody,

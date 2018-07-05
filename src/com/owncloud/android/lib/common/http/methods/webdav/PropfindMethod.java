@@ -51,7 +51,7 @@ public class PropfindMethod extends DavMethod {
     };
 
     @Override
-    public int execute() throws IOException, HttpException, DavException {
+    public int onExecute() throws IOException, HttpException, DavException {
         try {
             mDavResource.propfind(mDepth, mProperties);
             mMembers = mDavResource.getMembers();

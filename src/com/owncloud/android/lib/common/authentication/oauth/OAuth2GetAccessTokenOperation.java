@@ -107,7 +107,7 @@ public class OAuth2GetAccessTokenOperation extends RemoteOperation {
             postMethod.setRequestBody(requestBody);
 
 
-            // Do the B***S*** Switch and execute
+            // Do the B***S*** Switch and onExecute
             OwnCloudCredentials oauthCredentials =
                     new OwnCloudBasicCredentials(mClientId, mClientSecret);
             OwnCloudCredentials oldCredentials = switchClientCredentials(oauthCredentials);

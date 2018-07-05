@@ -47,6 +47,8 @@ import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.SSLPeerUnverifiedException;
 
+import okhttp3.HttpUrl;
+
 import static com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode.OK;
 import static com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode.SSL_RECOVERABLE_PEER_UNVERIFIED;
 
@@ -100,28 +102,25 @@ public class GetRemoteStatusOperation extends RemoteOperation {
                 return false;
             }
 
-
+            client.setFollowRedirects(false);
             boolean isRedirectToNonSecureConnection = false;
+            String redirectedLocation = mLatestResult.getRedirectedLocation();
+            while (redirectedLocation != null && redirectedLocation.length() > 0
+                && !mLatestResult.isSuccess()) {
 
-            // TODO Check this, although OkHttp should take care of the redirections
-//            boolean isRedirectToNonSecureConnection = false;
-//            String redirectedLocation = mLatestResult.getRedirectedLocation();
-//            while (redirectedLocation != null && redirectedLocation.length() > 0
-//                && !mLatestResult.isSuccess()) {
-//
-//                isRedirectToNonSecureConnection |= (
-//                    baseUrlSt.startsWith(HTTPS_PREFIX) &&
-//                        redirectedLocation.startsWith(HTTP_PREFIX)
-//                );
-//                get.releaseConnection();
-//                get = new GetMethod(redirectedLocation);
-//                status = client.executeRequest(get, TRY_CONNECTION_TIMEOUT, TRY_CONNECTION_TIMEOUT);
-//                mLatestResult = new RemoteOperationResult(
-//                    (status == HttpConstants.HTTP_OK),
-//                    get
-//                );
-//                redirectedLocation = mLatestResult.getRedirectedLocation();
-//            }
+                isRedirectToNonSecureConnection |= (
+                    baseUrlSt.startsWith(HTTPS_PREFIX) &&
+                        redirectedLocation.startsWith(HTTP_PREFIX)
+                );
+
+                getMethod = new GetMethod(HttpUrl.parse(redirectedLocation));
+                getMethod.setReadTimeout(TRY_CONNECTION_TIMEOUT, TimeUnit.SECONDS);
+                getMethod.setConnectionTimeout(TRY_CONNECTION_TIMEOUT, TimeUnit.SECONDS);
+
+                status = client.executeHttpMethod(getMethod);
+                mLatestResult = new RemoteOperationResult(getMethod);
+                redirectedLocation = mLatestResult.getRedirectedLocation();
+            }
 
             if (isSuccess(status)) {
 

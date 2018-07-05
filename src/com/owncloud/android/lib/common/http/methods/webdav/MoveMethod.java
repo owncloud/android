@@ -16,7 +16,7 @@ public class MoveMethod extends DavMethod {
     }
 
     @Override
-    public int execute() throws Exception {
+    public int onExecute() throws Exception {
         try {
             mDavResource.move(
                     destinationUrl,

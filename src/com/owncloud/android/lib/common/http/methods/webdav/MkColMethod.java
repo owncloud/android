@@ -9,7 +9,7 @@ public class MkColMethod extends DavMethod {
     }
 
     @Override
-    public int execute() throws Exception {
+    public int onExecute() throws Exception {
         try {
             mDavResource.mkCol(null);
 

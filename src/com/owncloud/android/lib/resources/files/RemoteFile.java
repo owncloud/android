@@ -210,7 +210,9 @@ public class RemoteFile implements Parcelable, Serializable {
                 ? BigDecimal.valueOf(
                         properties.get(QuotaAvailableBytes.class).getQuotaAvailableBytes())
                 : BigDecimal.ZERO);
-        this.setPrivateLink(properties.get(OCPrivatelink.class).getLink());
+        this.setPrivateLink(properties.get(OCPrivatelink.class) != null
+                ? properties.get(OCPrivatelink.class).getLink()
+                : null);
     }
 
 

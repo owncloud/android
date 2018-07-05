@@ -31,6 +31,7 @@ import java.util.concurrent.TimeUnit;
 
 import at.bitfire.dav4android.DavOCResource;
 import at.bitfire.dav4android.DavResource;
+import at.bitfire.dav4android.exception.RedirectException;
 import okhttp3.HttpUrl;
 
 /**
@@ -50,9 +51,6 @@ public abstract class DavMethod extends HttpBaseMethod {
         mDavResource.setFollowRedirects(false);
     }
 
-    public DavResource getDavResource() {
-        return mDavResource;
-    }
 
     @Override
     public void abort() {
@@ -60,9 +58,18 @@ public abstract class DavMethod extends HttpBaseMethod {
     }
 
     @Override
-    public boolean isAborted() {
-        return mDavResource.isCallAborted();
+    public int execute() throws Exception {
+        try {
+             return onExecute();
+        } catch(RedirectException e) {
+            mResponse = getDavResource().getResponse();
+            return getStatusCode();
+        }
     }
+
+    //////////////////////////////
+    //         setter
+    //////////////////////////////
 
     // Connection parameters
     @Override
@@ -85,8 +92,26 @@ public abstract class DavMethod extends HttpBaseMethod {
         mDavResource.setRetryOnConnectionFailure(retryOnConnectionFailure);
     }
 
+    //////////////////////////////
+    //         getter
+    //////////////////////////////
+
     @Override
     public boolean getRetryOnConnectionFailure() {
         return mDavResource.isRetryOnConnectionFailure();
+    }
+
+    @Override
+    public boolean isAborted() {
+        return mDavResource.isCallAborted();
+    }
+
+
+    public DavResource getDavResource() {
+        return mDavResource;
+    }
+
+    public void setUrl(HttpUrl url) {
+        mDavResource = new DavOCResource(mOkHttpClient, url);
     }
 }

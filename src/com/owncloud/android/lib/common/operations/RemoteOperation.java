@@ -45,7 +45,7 @@ import okhttp3.OkHttpClient;
 /**
  * Operation which execution involves one or several interactions with an ownCloud server.
  *
- * Provides methods to execute the operation both synchronously or asynchronously.
+ * Provides methods to onExecute the operation both synchronously or asynchronously.
  *
  * @author David A. Velasco
  * @author David González Verdugo
@@ -115,10 +115,10 @@ public abstract class RemoteOperation implements Runnable {
      */
     public RemoteOperationResult execute(Account account, Context context) {
         if (account == null)
-            throw new IllegalArgumentException("Trying to execute a remote operation with a NULL " +
+            throw new IllegalArgumentException("Trying to onExecute a remote operation with a NULL " +
                     "Account");
         if (context == null)
-            throw new IllegalArgumentException("Trying to execute a remote operation with a NULL " +
+            throw new IllegalArgumentException("Trying to onExecute a remote operation with a NULL " +
                     "Context");
         mAccount = account;
         mContext = context.getApplicationContext();
@@ -138,7 +138,7 @@ public abstract class RemoteOperation implements Runnable {
      */
     public RemoteOperationResult execute(OwnCloudClient client) {
         if (client == null)
-            throw new IllegalArgumentException("Trying to execute a remote operation with a NULL " +
+            throw new IllegalArgumentException("Trying to onExecute a remote operation with a NULL " +
                     "OwnCloudClient");
         mClient = client;
         if (client.getAccount() != null) {
@@ -160,7 +160,7 @@ public abstract class RemoteOperation implements Runnable {
      */
     public RemoteOperationResult execute(OkHttpClient client, Context context) {
         if (client == null)
-            throw new IllegalArgumentException("Trying to execute a remote operation with a NULL " +
+            throw new IllegalArgumentException("Trying to onExecute a remote operation with a NULL " +
                     "OwnCloudClient");
         mHttpClient = client;
         mContext = context;
@@ -188,10 +188,10 @@ public abstract class RemoteOperation implements Runnable {
 
         if (account == null)
             throw new IllegalArgumentException
-                    ("Trying to execute a remote operation with a NULL Account");
+                    ("Trying to onExecute a remote operation with a NULL Account");
         if (context == null)
             throw new IllegalArgumentException
-                    ("Trying to execute a remote operation with a NULL Context");
+                    ("Trying to onExecute a remote operation with a NULL Context");
         // mAccount and mContext in the runnerThread to create below
         mAccount = account;
         mContext = context.getApplicationContext();
@@ -221,7 +221,7 @@ public abstract class RemoteOperation implements Runnable {
                           OnRemoteOperationListener listener, Handler listenerHandler) {
         if (client == null) {
             throw new IllegalArgumentException
-                    ("Trying to execute a remote operation with a NULL OwnCloudClient");
+                    ("Trying to onExecute a remote operation with a NULL OwnCloudClient");
         }
         mClient = client;
         if (client.getAccount() != null) {
@@ -231,7 +231,7 @@ public abstract class RemoteOperation implements Runnable {
 
         if (listener == null) {
             throw new IllegalArgumentException
-                    ("Trying to execute a remote operation asynchronously " +
+                    ("Trying to onExecute a remote operation asynchronously " +
                             "without a listener to notiy the result");
         }
         mListener = listener;
@@ -275,7 +275,7 @@ public abstract class RemoteOperation implements Runnable {
     }
 
     /**
-     * Run operation for asynchronous or synchronous 'execute' method.
+     * Run operation for asynchronous or synchronous 'onExecute' method.
      *
      * Considers and performs silent refresh of account credentials if possible, and if
      * {@link RemoteOperation#setSilentRefreshOfAccountCredentials(boolean)} was called with

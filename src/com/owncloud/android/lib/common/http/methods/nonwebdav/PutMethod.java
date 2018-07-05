@@ -27,7 +27,6 @@ package com.owncloud.android.lib.common.http.methods.nonwebdav;
 import java.io.IOException;
 
 import okhttp3.HttpUrl;
-import okhttp3.RequestBody;
 
 public class PutMethod extends HttpMethod{
 
@@ -36,11 +35,11 @@ public class PutMethod extends HttpMethod{
     }
 
     @Override
-    public int execute() throws IOException {
+    public int onExecute() throws IOException {
         mRequest = mRequest.newBuilder()
                 .put(mRequestBody)
                 .build();
 
-        return super.execute();
+        return super.onExecute();
     }
 }

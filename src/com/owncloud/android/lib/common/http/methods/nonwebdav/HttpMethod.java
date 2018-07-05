@@ -43,7 +43,7 @@ public abstract class HttpMethod extends HttpBaseMethod {
     }
 
     @Override
-    public int execute() throws IOException {
+    public int onExecute() throws IOException {
         mCall = mOkHttpClient.newCall(mRequest);
         mResponse = mCall.execute();
         return super.getStatusCode();

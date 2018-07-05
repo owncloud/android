@@ -39,11 +39,11 @@ public class GetMethod extends HttpMethod {
     }
 
     @Override
-    public int execute() throws IOException {
+    public int onExecute() throws IOException {
         mRequest = mRequest.newBuilder()
                 .get()
                 .build();
 
-        return super.execute();
+        return super.onExecute();
     }
 }

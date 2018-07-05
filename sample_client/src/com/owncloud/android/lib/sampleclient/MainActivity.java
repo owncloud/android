@@ -174,7 +174,7 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
 			});
 		}).start();
 //    	ReadRemoteFolderOperation refreshOperation = new ReadRemoteFolderOperation(FileUtils.PATH_SEPARATOR);
-//    	refreshOperation.execute(mClient, this, mHandler);
+//    	refreshOperation.onExecute(mClient, this, mHandler);
     }
     
     private void startUpload() {
@@ -210,7 +210,7 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
 
 //    	UploadRemoteFileOperation uploadOperation = new UploadRemoteFileOperation(fileToUpload.getAbsolutePath(), remotePath, mimeType, timeStamp);
 //    	uploadOperation.addDatatransferProgressListener(this);
-//    	uploadOperation.execute(mClient, this, mHandler);
+//    	uploadOperation.onExecute(mClient, this, mHandler);
     }
 
     private void startRemoteDeletion() {
@@ -237,7 +237,7 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
 
 
 //    	RemoveRemoteFileOperation removeOperation = new RemoveRemoteFileOperation(remotePath);
-//    	removeOperation.execute(mClient, this, mHandler);
+//    	removeOperation.onExecute(mClient, this, mHandler);
     }
 
     private void startDownload() {
@@ -268,7 +268,7 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
 
 //    	DownloadRemoteFileOperation downloadOperation = new DownloadRemoteFileOperation(remotePath, downFolder.getAbsolutePath());
 //    	downloadOperation.addDatatransferProgressListener(this);
-//    	downloadOperation.execute(mClient, this, mHandler);
+//    	downloadOperation.onExecute(mClient, this, mHandler);
     }
     
     @SuppressWarnings("deprecation")

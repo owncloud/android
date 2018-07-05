@@ -45,6 +45,7 @@ public class OwnCloudSamlSsoCredentials implements OwnCloudCredentials {
         HttpClient.deleteHeaderForAllRequests(HttpConstants.COOKIE_HEADER);
 
         HttpClient.addHeaderForAllRequests(HttpConstants.COOKIE_HEADER, mSessionCookie);
+        client.setFollowRedirects(false);
     }
 
     @Override

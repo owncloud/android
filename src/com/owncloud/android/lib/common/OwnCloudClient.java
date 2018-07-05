@@ -132,22 +132,13 @@ public class OwnCloudClient extends HttpClient {
 
         boolean repeatWithFreshCredentials;
         int repeatCounter = 0;
-        int status = -1;
+        int status;
 
         do {
-            try {
-                status = method.execute();
-                checkFirstRedirection(method);
-                if(mFollowRedirects) {
-                    status = followRedirection(method).getLastStatus();
-                }
-            } catch (RedirectException e) {
-                // redirect must be handled twice. Once for dav4droid and once okhttp redirect errors
-                status = e.getStatus();
-                mRedirectedLocation = e.getRedirectLocation();
-                if(mFollowRedirects) {
-                    status = followRedirection(method).getLastStatus();
-                }
+            status = method.execute();
+            checkFirstRedirection(method);
+            if(mFollowRedirects && !isIdPRedirection()) {
+                status = followRedirection(method).getLastStatus();
             }
 
             repeatWithFreshCredentials = checkUnauthorizedAccess(status, repeatCounter);
@@ -160,7 +151,6 @@ public class OwnCloudClient extends HttpClient {
     }
 
     private void checkFirstRedirection(HttpBaseMethod method) {
-
         final String location = method.getResponseHeader("location");
         if(location != null && !location.isEmpty()) {
             mRedirectedLocation = location;
@@ -414,7 +404,7 @@ public class OwnCloudClient extends HttpClient {
                     mOwnCloudClientManager.removeClientFor(mAccount);
                 }
             }
-            // else: execute will finish with status 401
+            // else: onExecute will finish with status 401
         }
 
         return credentialsWereRefreshed;
