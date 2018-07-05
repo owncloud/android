@@ -117,7 +117,7 @@ public class CopyAndUploadContentUrisTask extends AsyncTask<Object, Void, Result
     }
 
     /**
-     * @param params    Params to execute the task; see
+     * @param params    Params to onExecute the task; see
      *                  {@link #makeParamsToExecute(Account, Uri[], String[], int, ContentResolver)}
      *                  for further details.
      */
