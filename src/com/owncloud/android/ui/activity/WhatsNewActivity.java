@@ -42,7 +42,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.owncloud.android.BuildConfig;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountAuthenticatorActivity;
@@ -87,7 +86,6 @@ public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPa
                     mPager.setCurrentItem(mPager.getCurrentItem()+1, true);
                     mProgress.animateToStep(mPager.getCurrentItem()+1);
                 } else {
-                    onFinish();
                     finish();
                 }
                 updateNextButtonIfNeeded();
@@ -97,17 +95,21 @@ public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPa
         skipButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onFinish();
                 finish();
             }
         });
 
         updateNextButtonIfNeeded();
+
+        // Wizard already shown
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putInt(KEY_LAST_SEEN_VERSION_CODE, MainApp.getVersionCode());
+        editor.apply();
     }
 
     @Override
     public void onBackPressed() {
-        onFinish();
         super.onBackPressed();
     }
 
@@ -130,13 +132,6 @@ public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPa
         }
     }
 
-    private void onFinish() {
-        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
-        SharedPreferences.Editor editor = pref.edit();
-        editor.putInt(KEY_LAST_SEEN_VERSION_CODE, MainApp.getVersionCode());
-        editor.apply();
-    }
-
     static private int getLastSeenVersionCode() {
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(MainApp.getAppContext());
         return pref.getInt(KEY_LAST_SEEN_VERSION_CODE, 0);
@@ -146,15 +141,15 @@ public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPa
         if (getLastSeenVersionCode() != 0)
             return false;
         return AccountUtils.getCurrentOwnCloudAccount(MainApp.getAppContext()) == null;
-
     }
 
     static public void runIfNeeded(Context context) {
         if (context instanceof WhatsNewActivity)
             return;
 
-        if (shouldShow(context))
+        if (shouldShow(context)) {
             context.startActivity(new Intent(context, WhatsNewActivity.class));
+        }
     }
 
     static private boolean shouldShow(Context context) {
