@@ -116,7 +116,8 @@ public class ErrorMessageAdapter {
             return f.format(R.string.sync_file_nothing_to_do_msg);
         }
 
-        if((operation instanceof CreateShareViaLinkOperation
+        if((operation instanceof CreateShareWithShareeOperation
+                || operation instanceof CreateShareViaLinkOperation
                 || operation instanceof RemoveShareOperation
                 || operation instanceof UpdateShareViaLinkOperation
                 || operation instanceof UpdateSharePermissionsOperation)
@@ -177,13 +178,13 @@ public class ErrorMessageAdapter {
                 if(operation instanceof UpdateSharePermissionsOperation
                         || operation instanceof UpdateShareViaLinkOperation)
                     return f.forbidden(R.string.update_link_forbidden_permissions);
-            case INVALID_MOVE_INTO_DESCENDANT:return f.format(R.string.move_file_invalid_into_descendent);
+            case INVALID_MOVE_INTO_DESCENDANT:
+                    return f.format(R.string.move_file_invalid_into_descendent);
             case INVALID_OVERWRITE:
                 if(operation instanceof MoveFileOperation) return f.format(R.string.move_file_invalid_overwrite);
                 if(operation instanceof CopyFileOperation) return f.format(R.string.copy_file_invalid_overwrite);
             case CONFLICT:return f.format(R.string.move_file_error);
             case INVALID_COPY_INTO_DESCENDANT: return f.format(R.string.copy_file_invalid_into_descendent);
-
             default: return getCommonMessageForResult(operation, result, resources);
         }
     }

@@ -344,13 +344,10 @@ public class FileActivity extends DrawerActivity
 
     protected void showRequestAccountChangeNotice() {
         Snackbar.make(findViewById(android.R.id.content), R.string.auth_failure_snackbar, Snackbar.LENGTH_INDEFINITE)
-                .setAction(R.string.auth_failure_snackbar_action, new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Intent selectAccount = new Intent(FileActivity.this, ManageAccountsActivity.class);
-                                startActivity(selectAccount);
-                            }
-                        }).show();
+                .setAction(R.string.auth_failure_snackbar_action, v ->
+                    startActivity(
+                            new Intent(FileActivity.this, ManageAccountsActivity.class)))
+                .show();
     }
 
     /**
@@ -560,14 +557,14 @@ public class FileActivity extends DrawerActivity
      */
     public void showSnackMessage(String message) {
         final View rootView = findViewById(android.R.id.content);
-        if(rootView == null) {
+        if(rootView != null) {
             Snackbar.make(
                     rootView,
                     message,
                     Snackbar.LENGTH_LONG)
                     .show();
         } else {
-            // I root view is not available don't let the app brake. show the notification anyway.
+            // If root view is not available don't let the app brake. show the notification anyway.
             Toast.makeText(this, message, Snackbar.LENGTH_LONG).show();
         }
     }
