@@ -63,11 +63,6 @@ public class Log_OC {
         Log.w(TAG, message);
         appendLog(TAG+" : "+ message);
     }
-    
-    public static void wtf(String TAG, String message) {
-        Log.wtf(TAG, message);
-        appendLog(TAG+" : "+ message);
-    }
 
     /**
      * Start doing logging

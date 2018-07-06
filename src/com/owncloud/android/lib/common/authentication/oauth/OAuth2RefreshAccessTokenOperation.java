@@ -33,6 +33,7 @@ import com.owncloud.android.lib.common.utils.Log_OC;
 
 import org.json.JSONObject;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -90,7 +91,7 @@ public class OAuth2RefreshAccessTokenOperation extends RemoteOperation {
             Uri.Builder uriBuilder = client.getBaseUri().buildUpon();
             uriBuilder.appendEncodedPath(mAccessTokenEndpointPath);
 
-            final PostMethod postMethod = new PostMethod(HttpUrl.parse(
+            final PostMethod postMethod = new PostMethod(new URL(
                     client.getBaseUri().buildUpon()
                             .appendEncodedPath(mAccessTokenEndpointPath)
                             .build()

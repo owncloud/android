@@ -27,6 +27,7 @@ package com.owncloud.android.lib.common.http.methods.webdav;
 import com.owncloud.android.lib.common.http.HttpConstants;
 
 import java.io.IOException;
+import java.net.URL;
 
 import at.bitfire.dav4android.exception.DavException;
 import at.bitfire.dav4android.exception.HttpException;
@@ -40,8 +41,8 @@ import okhttp3.RequestBody;
  */
 public class PutMethod extends DavMethod {
 
-    public PutMethod(HttpUrl httpUrl) {
-        super(httpUrl);
+    public PutMethod(URL url) {
+        super(url);
     };
 
     @Override

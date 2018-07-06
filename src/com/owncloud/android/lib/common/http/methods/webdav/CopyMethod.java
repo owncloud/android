@@ -1,5 +1,7 @@
 package com.owncloud.android.lib.common.http.methods.webdav;
 
+import java.net.URL;
+
 import at.bitfire.dav4android.exception.UnauthorizedException;
 import okhttp3.HttpUrl;
 
@@ -8,8 +10,8 @@ public class CopyMethod extends DavMethod {
     final String destinationUrl;
     final boolean forceOverride;
 
-    public CopyMethod(HttpUrl httpUrl, String destinationUrl, boolean forceOverride) {
-        super(httpUrl);
+    public CopyMethod(URL url, String destinationUrl, boolean forceOverride) {
+        super(url);
         this.destinationUrl = destinationUrl;
         this.forceOverride = forceOverride;
     }

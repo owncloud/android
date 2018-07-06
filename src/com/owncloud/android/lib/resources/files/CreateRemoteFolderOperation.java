@@ -37,6 +37,7 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCo
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 
+import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.HttpUrl;
@@ -104,7 +105,7 @@ public class CreateRemoteFolderOperation extends RemoteOperation {
         RemoteOperationResult result;
         try {
             Uri webDavUri = createChunksFolder ? client.getNewUploadsWebDavUri() : client.getNewFilesWebDavUri();
-            final MkColMethod mkcol = new MkColMethod(HttpUrl.parse(webDavUri + WebdavUtils.encodePath(mRemotePath)));
+            final MkColMethod mkcol = new MkColMethod(new URL(webDavUri + WebdavUtils.encodePath(mRemotePath)));
             mkcol.setReadTimeout(READ_TIMEOUT, TimeUnit.SECONDS);
             mkcol.setConnectionTimeout(CONNECTION_TIMEOUT, TimeUnit.SECONDS);
             final int status = client.executeHttpMethod(mkcol);

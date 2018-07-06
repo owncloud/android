@@ -37,6 +37,7 @@ import com.owncloud.android.lib.common.utils.Log_OC;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.net.URL;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -102,7 +103,7 @@ public class DownloadRemoteFileOperation extends RemoteOperation {
         RemoteOperationResult result;
         int status;
         boolean savedFile = false;
-        mGet = new GetMethod(HttpUrl.parse(client.getNewFilesWebDavUri() + WebdavUtils.encodePath(mRemotePath)));
+        mGet = new GetMethod(new URL(client.getNewFilesWebDavUri() + WebdavUtils.encodePath(mRemotePath)));
         Iterator<OnDatatransferProgressListener> it;
 
         FileOutputStream fos = null;

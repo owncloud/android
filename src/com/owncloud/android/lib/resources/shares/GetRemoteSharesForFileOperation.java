@@ -36,6 +36,8 @@ import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
 
+import java.net.URL;
+
 import okhttp3.HttpUrl;
 
 /**
@@ -81,19 +83,16 @@ public class GetRemoteSharesForFileOperation extends RemoteOperation {
         RemoteOperationResult result;
 
         try {
+
             Uri requestUri = client.getBaseUri();
             Uri.Builder uriBuilder = requestUri.buildUpon();
             uriBuilder.appendEncodedPath(ShareUtils.SHARING_API_PATH);
+            uriBuilder.appendQueryParameter(PARAM_PATH, mRemoteFilePath);
+            uriBuilder.appendQueryParameter(PARAM_RESHARES, String.valueOf(mReshares));
+            uriBuilder.appendQueryParameter(PARAM_SUBFILES, String.valueOf(mSubfiles));
 
-            HttpUrl.Builder httpBuilder = HttpUrl
-                    .parse(uriBuilder.build().toString())
-                    .newBuilder();
+            GetMethod getMethod = new GetMethod(new URL(uriBuilder.build().toString()));
 
-            httpBuilder.addQueryParameter(PARAM_PATH, mRemoteFilePath);
-            httpBuilder.addQueryParameter(PARAM_RESHARES, String.valueOf(mReshares));
-            httpBuilder.addQueryParameter(PARAM_SUBFILES, String.valueOf(mSubfiles));
-
-            GetMethod getMethod = new GetMethod(httpBuilder.build());
             getMethod.addRequestHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE);
 
             int status = client.executeHttpMethod(getMethod);

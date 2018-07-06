@@ -29,9 +29,7 @@ import android.net.ConnectivityManager;
 import android.net.Uri;
 
 import com.owncloud.android.lib.common.OwnCloudClient;
-import com.owncloud.android.lib.common.http.HttpClient;
 import com.owncloud.android.lib.common.http.HttpConstants;
-import com.owncloud.android.lib.common.http.HttpUtils;
 import com.owncloud.android.lib.common.http.methods.nonwebdav.GetMethod;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
@@ -40,17 +38,13 @@ import com.owncloud.android.lib.common.utils.Log_OC;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.security.cert.CertPathValidatorException;
-import java.sql.Time;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.SSLPeerUnverifiedException;
 
-import okhttp3.HttpUrl;
-
 import static com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode.OK;
-import static com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode.SSL_RECOVERABLE_PEER_UNVERIFIED;
 
 /**
  * Checks if the server is valid and if the server supports the Share API
@@ -86,9 +80,7 @@ public class GetRemoteStatusOperation extends RemoteOperation {
         boolean retval = false;
         String baseUrlSt = client.getBaseUri().toString();
         try {
-            GetMethod getMethod = new GetMethod(
-                    HttpUtils.stringUrlToHttpUrl(baseUrlSt + OwnCloudClient.STATUS_PATH)
-            );
+            GetMethod getMethod = new GetMethod(new URL(baseUrlSt + OwnCloudClient.STATUS_PATH));
 
             getMethod.setReadTimeout(TRY_CONNECTION_TIMEOUT, TimeUnit.SECONDS);
             getMethod.setConnectionTimeout(TRY_CONNECTION_TIMEOUT, TimeUnit.SECONDS);
@@ -113,7 +105,7 @@ public class GetRemoteStatusOperation extends RemoteOperation {
                         redirectedLocation.startsWith(HTTP_PREFIX)
                 );
 
-                getMethod = new GetMethod(HttpUrl.parse(redirectedLocation));
+                getMethod = new GetMethod(new URL(redirectedLocation));
                 getMethod.setReadTimeout(TRY_CONNECTION_TIMEOUT, TimeUnit.SECONDS);
                 getMethod.setConnectionTimeout(TRY_CONNECTION_TIMEOUT, TimeUnit.SECONDS);
 

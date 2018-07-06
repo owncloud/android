@@ -31,12 +31,12 @@ import android.net.Uri;
 
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.http.HttpConstants;
-import com.owncloud.android.lib.common.http.HttpUtils;
 import com.owncloud.android.lib.common.http.methods.nonwebdav.PostMethod;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
 
+import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -230,9 +230,7 @@ public class CreateRemoteShareOperation extends RemoteOperation {
             Uri.Builder uriBuilder = requestUri.buildUpon();
             uriBuilder.appendEncodedPath(ShareUtils.SHARING_API_PATH);
 
-            PostMethod postMethod = new PostMethod(
-                    HttpUtils.stringUrlToHttpUrl(uriBuilder.build().toString())
-            );
+            PostMethod postMethod = new PostMethod(new URL(uriBuilder.build().toString()));
 
             postMethod.setRequestBody(formBodyBuilder.build());
 

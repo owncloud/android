@@ -1,11 +1,12 @@
 package com.owncloud.android.lib.common.http.methods.webdav;
 
+import java.net.URL;
+
 import at.bitfire.dav4android.exception.UnauthorizedException;
-import okhttp3.HttpUrl;
 
 public class MkColMethod extends DavMethod {
-    public MkColMethod(HttpUrl httpUrl) {
-        super(httpUrl);
+    public MkColMethod(URL url) {
+        super(url);
     }
 
     @Override

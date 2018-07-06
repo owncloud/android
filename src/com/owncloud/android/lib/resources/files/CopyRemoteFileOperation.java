@@ -35,6 +35,7 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 
+import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.HttpUrl;
@@ -103,8 +104,7 @@ public class CopyRemoteFileOperation extends RemoteOperation {
         /// perform remote operation
         RemoteOperationResult result = null;
         try {
-            CopyMethod copyMethod = new CopyMethod(
-                    HttpUrl.parse(client.getNewFilesWebDavUri() + WebdavUtils.encodePath(mSrcRemotePath)),
+            CopyMethod copyMethod = new CopyMethod(new URL(client.getNewFilesWebDavUri() + WebdavUtils.encodePath(mSrcRemotePath)),
                     client.getNewFilesWebDavUri() + WebdavUtils.encodePath(mTargetRemotePath),
                     mOverwrite);
 

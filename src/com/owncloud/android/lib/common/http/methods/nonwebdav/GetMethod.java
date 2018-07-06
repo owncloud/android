@@ -25,6 +25,7 @@
 package com.owncloud.android.lib.common.http.methods.nonwebdav;
 
 import java.io.IOException;
+import java.net.URL;
 
 import okhttp3.HttpUrl;
 
@@ -34,8 +35,8 @@ import okhttp3.HttpUrl;
  */
 public class GetMethod extends HttpMethod {
 
-    public GetMethod(HttpUrl httpUrl) {
-        super(httpUrl);
+    public GetMethod(URL url) {
+        super(url);
     }
 
     @Override

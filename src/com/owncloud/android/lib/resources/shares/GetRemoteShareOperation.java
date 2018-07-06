@@ -30,11 +30,12 @@ import android.net.Uri;
 
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.http.HttpConstants;
-import com.owncloud.android.lib.common.http.HttpUtils;
 import com.owncloud.android.lib.common.http.methods.nonwebdav.GetMethod;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
+
+import java.net.URL;
 
 /**
  * Get the data about a Share resource, known its remote ID.
@@ -64,9 +65,7 @@ public class GetRemoteShareOperation extends RemoteOperation {
             uriBuilder.appendEncodedPath(ShareUtils.SHARING_API_PATH);
             uriBuilder.appendEncodedPath(Long.toString(mRemoteId));
 
-            GetMethod getMethod = new GetMethod(
-                    HttpUtils.stringUrlToHttpUrl(uriBuilder.build().toString())
-            );
+            GetMethod getMethod = new GetMethod(new URL(uriBuilder.build().toString()));
 
             getMethod.addRequestHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE);
 

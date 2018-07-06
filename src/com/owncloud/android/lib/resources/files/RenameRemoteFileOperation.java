@@ -25,6 +25,7 @@
 package com.owncloud.android.lib.resources.files;
 
 import java.io.File;
+import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
 import com.owncloud.android.lib.common.OwnCloudClient;
@@ -106,7 +107,7 @@ public class RenameRemoteFileOperation extends RemoteOperation {
                 return new RemoteOperationResult(ResultCode.INVALID_OVERWRITE);
             }
 
-            final MoveMethod move = new MoveMethod(HttpUrl.parse(client.getNewFilesWebDavUri() +
+            final MoveMethod move = new MoveMethod(new URL(client.getNewFilesWebDavUri() +
                     WebdavUtils.encodePath(mOldRemotePath)),
                     client.getNewFilesWebDavUri() + WebdavUtils.encodePath(mNewRemotePath), false);
 

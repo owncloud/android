@@ -2,15 +2,16 @@ package com.owncloud.android.lib.common.http.methods.webdav;
 
 import com.owncloud.android.lib.common.http.HttpConstants;
 
+import java.net.URL;
+
 import at.bitfire.dav4android.exception.UnauthorizedException;
-import okhttp3.HttpUrl;
 
 public class MoveMethod extends DavMethod {
     final String destinationUrl;
     final boolean forceOverride;
 
-    public MoveMethod(HttpUrl httpUrl, String destinationUrl, boolean forceOverride) {
-        super(httpUrl);
+    public MoveMethod(URL url, String destinationUrl, boolean forceOverride) {
+        super(url);
         this.destinationUrl = destinationUrl;
         this.forceOverride = forceOverride;
     }

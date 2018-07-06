@@ -29,12 +29,12 @@ import android.net.Uri;
 
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.http.HttpConstants;
-import com.owncloud.android.lib.common.http.HttpUtils;
 import com.owncloud.android.lib.common.http.methods.nonwebdav.PutMethod;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
 
+import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -198,16 +198,12 @@ public class UpdateRemoteShareOperation extends RemoteOperation {
                 formBodyBuilder.add(PARAM_PERMISSIONS, Integer.toString(mPermissions));
             }
 
-            FormBody formBody = formBodyBuilder.build();
-
             Uri requestUri = client.getBaseUri();
             Uri.Builder uriBuilder = requestUri.buildUpon();
             uriBuilder.appendEncodedPath(ShareUtils.SHARING_API_PATH.substring(1));
             uriBuilder.appendEncodedPath(Long.toString(mRemoteId));
 
-            PutMethod putMethod = new PutMethod(
-                    HttpUtils.stringUrlToHttpUrl(uriBuilder.build().toString())
-            );
+            PutMethod putMethod = new PutMethod(new URL(uriBuilder.build().toString()));
 
             putMethod.setRequestBody(formBodyBuilder.build());
 

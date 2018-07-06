@@ -27,6 +27,7 @@ package com.owncloud.android.lib.common.http.methods.nonwebdav;
 import com.owncloud.android.lib.common.http.methods.HttpBaseMethod;
 
 import java.io.IOException;
+import java.net.URL;
 
 import okhttp3.Call;
 import okhttp3.HttpUrl;
@@ -38,8 +39,8 @@ import okhttp3.HttpUrl;
  */
 public abstract class HttpMethod extends HttpBaseMethod {
 
-    public HttpMethod(HttpUrl httpUrl) {
-        super(httpUrl);
+    public HttpMethod(URL url) {
+        super(url);
     }
 
     @Override

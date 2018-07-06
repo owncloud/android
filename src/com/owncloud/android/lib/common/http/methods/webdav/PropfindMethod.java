@@ -25,6 +25,7 @@
 package com.owncloud.android.lib.common.http.methods.webdav;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.Set;
 
 import at.bitfire.dav4android.DavResource;
@@ -44,8 +45,8 @@ public class PropfindMethod extends DavMethod {
     private Property.Name[] mProperties;
     private Set<DavResource> mMembers;
 
-    public PropfindMethod(HttpUrl httpUrl, int depth, Property.Name[] properties) {
-        super(httpUrl);
+    public PropfindMethod(URL url, int depth, Property.Name[] properties) {
+        super(url);
         mDepth = depth;
         mProperties = properties;
     };

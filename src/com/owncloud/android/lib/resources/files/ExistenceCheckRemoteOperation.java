@@ -26,7 +26,6 @@ package com.owncloud.android.lib.resources.files;
 
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.http.HttpConstants;
-import com.owncloud.android.lib.common.http.HttpUtils;
 import com.owncloud.android.lib.common.http.methods.webdav.DavUtils;
 import com.owncloud.android.lib.common.http.methods.webdav.PropfindMethod;
 import com.owncloud.android.lib.common.network.RedirectionPath;
@@ -35,6 +34,7 @@ import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
 
+import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
 import static com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode.OK;
@@ -53,9 +53,6 @@ public class ExistenceCheckRemoteOperation extends RemoteOperation {
     public static final int TIMEOUT = 10000;
 
     private static final String TAG = ExistenceCheckRemoteOperation.class.getSimpleName();
-
-    private static final int FORBIDDEN_ERROR = 403;
-    private static final int SERVICE_UNAVAILABLE_ERROR = 503;
 
     private String mPath;
     private boolean mSuccessIfAbsent;
@@ -79,23 +76,19 @@ public class ExistenceCheckRemoteOperation extends RemoteOperation {
 
     @Override
     protected RemoteOperationResult run(OwnCloudClient client) {
-        RemoteOperationResult result;
 
-        // TODO Complete redirection stuff, although OkHttp should follow redirections by default
-//        boolean previousFollowRedirects = client.getFollowRedirects();
 
         try {
-
             client.setFollowRedirects(true);
             PropfindMethod propfindMethod = new PropfindMethod(
-                    HttpUtils.stringUrlToHttpUrl(client.getNewFilesWebDavUri() + WebdavUtils.encodePath(mPath)),
+                    new URL(client.getNewFilesWebDavUri() + WebdavUtils.encodePath(mPath)),
                     0,
                     DavUtils.getAllPropset());
 
             propfindMethod.setReadTimeout(TIMEOUT, TimeUnit.SECONDS);
             propfindMethod.setConnectionTimeout(TIMEOUT, TimeUnit.SECONDS);
 
-            int status = client.executeHttpMethod(propfindMethod);
+            final int status = client.executeHttpMethod(propfindMethod);
 
             /**
              *  PROPFIND method
@@ -103,25 +96,25 @@ public class ExistenceCheckRemoteOperation extends RemoteOperation {
              *  207 MULTI_STATUS: path exists.
              */
 
-            result = isSuccess(status)
-                    ? new RemoteOperationResult(OK)
-                    : new RemoteOperationResult(propfindMethod);
-
             Log_OC.d(TAG, "Existence check for " + client.getNewFilesWebDavUri() +
                     WebdavUtils.encodePath(mPath) + " targeting for " +
                     (mSuccessIfAbsent ? " absence " : " existence ") +
                     "finished with HTTP status " + status + (!isSuccess(status) ? "(FAIL)" : ""));
 
+            return isSuccess(status)
+                    ? new RemoteOperationResult(OK)
+                    : new RemoteOperationResult(propfindMethod);
+
         } catch (Exception e) {
-            result = new RemoteOperationResult(e);
+            final RemoteOperationResult result = new RemoteOperationResult(e);
             Log_OC.e(TAG, "Existence check for " + client.getNewFilesWebDavUri() +
                     WebdavUtils.encodePath(mPath) + " targeting for " +
                     (mSuccessIfAbsent ? " absence " : " existence ") + ": " +
                     result.getLogMessage(), result.getException());
+            return result;
 
         }
 
-        return result;
     }
 
     /**

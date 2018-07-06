@@ -26,7 +26,6 @@ package com.owncloud.android.lib.resources.files;
 
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.http.HttpConstants;
-import com.owncloud.android.lib.common.http.HttpUtils;
 import com.owncloud.android.lib.common.http.methods.webdav.PutMethod;
 import com.owncloud.android.lib.common.network.FileRequestBody;
 import com.owncloud.android.lib.common.network.OnDatatransferProgressListener;
@@ -37,6 +36,7 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
 
 import java.io.File;
+import java.net.URL;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -89,7 +89,7 @@ public class UploadRemoteFileOperation extends RemoteOperation {
 
         try {
             mPutMethod = new PutMethod(
-                    HttpUtils.stringUrlToHttpUrl(client.getNewFilesWebDavUri() + WebdavUtils.encodePath(mRemotePath)));
+                    new URL(client.getNewFilesWebDavUri() + WebdavUtils.encodePath(mRemotePath)));
 
             mPutMethod.setRetryOnConnectionFailure(false);
 

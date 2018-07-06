@@ -31,7 +31,6 @@ import android.net.Uri;
 
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.http.HttpConstants;
-import com.owncloud.android.lib.common.http.HttpUtils;
 import com.owncloud.android.lib.common.http.methods.nonwebdav.GetMethod;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
@@ -39,6 +38,7 @@ import com.owncloud.android.lib.common.utils.Log_OC;
 
 import org.json.JSONObject;
 
+import java.net.URL;
 import java.util.ArrayList;
 
 import static com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode.OK;
@@ -129,9 +129,7 @@ public class GetRemoteCapabilitiesOperation extends RemoteOperation {
             uriBuilder.appendEncodedPath(OCS_ROUTE);    // avoid starting "/" in this method
             uriBuilder.appendQueryParameter(PARAM_FORMAT, VALUE_FORMAT);
 
-            GetMethod getMethod = new GetMethod(
-                    HttpUtils.stringUrlToHttpUrl(uriBuilder.build().toString())
-            );
+            GetMethod getMethod = new GetMethod(new URL(uriBuilder.build().toString()));
 
             getMethod.addRequestHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE);
 

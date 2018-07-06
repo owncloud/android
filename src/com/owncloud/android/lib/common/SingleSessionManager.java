@@ -57,10 +57,10 @@ public class SingleSessionManager implements OwnCloudClientManager {
     private static final String TAG = SingleSessionManager.class.getSimpleName();
 
     private ConcurrentMap<String, OwnCloudClient> mClientsWithKnownUsername =
-        new ConcurrentHashMap<String, OwnCloudClient>();
+        new ConcurrentHashMap<>();
 
     private ConcurrentMap<String, OwnCloudClient> mClientsWithUnknownUsername =
-        new ConcurrentHashMap<String, OwnCloudClient>();
+        new ConcurrentHashMap<>();
 
 
     @Override
@@ -80,8 +80,7 @@ public class SingleSessionManager implements OwnCloudClientManager {
         String sessionName = account.getCredentials() == null ? "" :
             AccountUtils.buildAccountName(
                 account.getBaseUri(),
-                account.getCredentials().getAuthToken()
-            );
+                account.getCredentials().getAuthToken());
 
         if (accountName != null) {
             client = mClientsWithKnownUsername.get(accountName);

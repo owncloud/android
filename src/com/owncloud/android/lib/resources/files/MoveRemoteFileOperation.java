@@ -36,6 +36,7 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 
+import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.HttpUrl;
@@ -115,7 +116,7 @@ public class MoveRemoteFileOperation extends RemoteOperation {
             Uri srcWebDavUri = moveChunkedFile ? client.getNewUploadsWebDavUri() : client.getNewFilesWebDavUri();
 
             final MoveMethod move = new MoveMethod(
-                    HttpUrl.parse(srcWebDavUri + WebdavUtils.encodePath(mSrcRemotePath)),
+                    new URL(srcWebDavUri + WebdavUtils.encodePath(mSrcRemotePath)),
                 client.getNewFilesWebDavUri() + WebdavUtils.encodePath(mTargetRemotePath),
                     mOverwrite);
 

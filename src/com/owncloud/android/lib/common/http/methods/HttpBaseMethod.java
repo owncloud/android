@@ -28,6 +28,7 @@ import com.owncloud.android.lib.common.http.HttpClient;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
@@ -52,10 +53,10 @@ public abstract class HttpBaseMethod {
     protected Response mResponse;
     protected Call mCall;
 
-    protected HttpBaseMethod (HttpUrl httpUrl) {
+    protected HttpBaseMethod (URL url) {
         mOkHttpClient = HttpClient.getOkHttpClient();
         mRequest = new Request.Builder()
-                .url(httpUrl)
+                .url(HttpUrl.parse(url.toString()))
                 .build();
     }
 

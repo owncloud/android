@@ -29,13 +29,12 @@ import android.net.Uri;
 
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.http.HttpConstants;
-import com.owncloud.android.lib.common.http.HttpUtils;
 import com.owncloud.android.lib.common.http.methods.nonwebdav.GetMethod;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
 
-import okhttp3.Request;
+import java.net.URL;
 
 /**
  * Get the data from the server about ALL the known shares owned by the requester.
@@ -59,7 +58,7 @@ public class GetRemoteSharesOperation extends RemoteOperation {
             uriBuilder.appendEncodedPath(ShareUtils.SHARING_API_PATH);
 
             GetMethod getMethod = new GetMethod(
-                    HttpUtils.stringUrlToHttpUrl(client.getBaseUri() + ShareUtils.SHARING_API_PATH)
+                    new URL(client.getBaseUri() + ShareUtils.SHARING_API_PATH)
             );
 
             getMethod.addRequestHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE);

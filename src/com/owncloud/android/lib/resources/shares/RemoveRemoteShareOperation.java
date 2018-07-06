@@ -31,13 +31,12 @@ import android.net.Uri;
 
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.http.HttpConstants;
-import com.owncloud.android.lib.common.http.HttpUtils;
 import com.owncloud.android.lib.common.http.methods.nonwebdav.DeleteMethod;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
 
-import okhttp3.Request;
+import java.net.URL;
 
 /**
  * Remove a share
@@ -74,7 +73,8 @@ public class RemoveRemoteShareOperation extends RemoteOperation {
             uriBuilder.appendEncodedPath(String.valueOf(mRemoteShareId));
 
             DeleteMethod deleteMethod = new DeleteMethod(
-                    HttpUtils.stringUrlToHttpUrl(uriBuilder.build().toString()));
+                    new URL(uriBuilder.build().toString())
+            );
 
             deleteMethod.addRequestHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE);
 

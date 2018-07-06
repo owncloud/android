@@ -32,6 +32,7 @@ import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
@@ -78,8 +79,7 @@ public class ReadRemoteFileOperation extends RemoteOperation {
         /// take the duty of check the server for the current state of the file there
         try {
             // remote request
-            propfind = new PropfindMethod(
-                    HttpUrl.parse(client.getNewFilesWebDavUri() + WebdavUtils.encodePath(mRemotePath)),
+            propfind = new PropfindMethod(new URL(client.getNewFilesWebDavUri() + WebdavUtils.encodePath(mRemotePath)),
                     DEPTH_0,
                     DavUtils.getAllPropset());
 

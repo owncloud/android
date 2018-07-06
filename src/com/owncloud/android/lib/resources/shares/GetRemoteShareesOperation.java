@@ -32,7 +32,6 @@ import android.net.Uri;
 
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.http.HttpConstants;
-import com.owncloud.android.lib.common.http.HttpUtils;
 import com.owncloud.android.lib.common.http.methods.nonwebdav.GetMethod;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
@@ -41,6 +40,7 @@ import com.owncloud.android.lib.common.utils.Log_OC;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.net.URL;
 import java.util.ArrayList;
 
 import static com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode.OK;
@@ -123,17 +123,15 @@ public class GetRemoteShareesOperation extends RemoteOperation{
 
         try{
             Uri requestUri = client.getBaseUri();
-            Uri.Builder uriBuilder = requestUri.buildUpon();
-            uriBuilder.appendEncodedPath(OCS_ROUTE);
-            uriBuilder.appendQueryParameter(PARAM_FORMAT, VALUE_FORMAT);
-            uriBuilder.appendQueryParameter(PARAM_ITEM_TYPE, VALUE_ITEM_TYPE);
-            uriBuilder.appendQueryParameter(PARAM_SEARCH, mSearchString);
-            uriBuilder.appendQueryParameter(PARAM_PAGE, String.valueOf(mPage));
-            uriBuilder.appendQueryParameter(PARAM_PER_PAGE, String.valueOf(mPerPage));
+            Uri.Builder uriBuilder = requestUri.buildUpon()
+                    .appendEncodedPath(OCS_ROUTE)
+                    .appendQueryParameter(PARAM_FORMAT, VALUE_FORMAT)
+                    .appendQueryParameter(PARAM_ITEM_TYPE, VALUE_ITEM_TYPE)
+                    .appendQueryParameter(PARAM_SEARCH, mSearchString)
+                    .appendQueryParameter(PARAM_PAGE, String.valueOf(mPage))
+                    .appendQueryParameter(PARAM_PER_PAGE, String.valueOf(mPerPage));
 
-            GetMethod getMethod = new GetMethod(
-                    HttpUtils.stringUrlToHttpUrl(uriBuilder.build().toString())
-            );
+            GetMethod getMethod = new GetMethod(new URL(uriBuilder.build().toString()));
 
             getMethod.addRequestHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE);
 

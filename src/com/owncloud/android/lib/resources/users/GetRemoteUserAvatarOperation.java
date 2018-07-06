@@ -27,7 +27,6 @@ package com.owncloud.android.lib.resources.users;
 
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.http.HttpConstants;
-import com.owncloud.android.lib.common.http.HttpUtils;
 import com.owncloud.android.lib.common.http.methods.nonwebdav.GetMethod;
 import com.owncloud.android.lib.common.network.WebdavUtils;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
@@ -39,6 +38,7 @@ import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 
 import static com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode.OK;
@@ -81,15 +81,12 @@ public class GetRemoteUserAvatarOperation extends RemoteOperation {
         ByteArrayOutputStream bos = null;
 
         try {
-            String url =
+            final String url =
                     client.getBaseUri() + NON_OFFICIAL_AVATAR_PATH +
                     client.getCredentials().getUsername() + "/" + mDimension;
-            ;
             Log_OC.d(TAG, "avatar URI: " + url);
 
-            getMethod = new GetMethod(
-                    HttpUtils.stringUrlToHttpUrl(url)
-            );
+            getMethod = new GetMethod(new URL(url));
 
             int status = client.executeHttpMethod(getMethod);
 
