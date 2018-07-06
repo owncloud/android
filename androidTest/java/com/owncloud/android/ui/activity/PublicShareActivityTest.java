@@ -74,7 +74,6 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.hasSibling;
 import static android.support.test.espresso.matcher.ViewMatchers.isChecked;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.isEnabled;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withEffectiveVisibility;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
@@ -196,6 +195,9 @@ public class PublicShareActivityTest {
     public void test_01_create_public_link_folder_defaults()
             throws IllegalArgumentException {
 
+        //Skipping the Welcome Wizard
+        onView(withId(R.id.skip)).perform(click());
+
         Log_OC.i(LOG_TAG, "Test Share Public Defaults Start");
         SystemClock.sleep(WAIT_INITIAL_MS);
 
@@ -227,16 +229,15 @@ public class PublicShareActivityTest {
     }
 
     /**
-     *  TEST CASE: Share publicly a folder (all options enabled)
-     *  PASSED IF:
-     *              - Link created and visible in share view
-     *              - "Allow editing", "Show file listing" (oC >= 10.0.1), "Password" and "Expiration" are enabled
+     *  TEST CASE: Share publicly a folder with DownloadV/View permission
+     *  PASSED IF: Link created and visible in share view with Download/View option
+     *
      */
     @Test
-    public void test_02_create_public_link_folder_all_enabled()
+    public void test_02_create_public_link_download_view_permission()
             throws IllegalArgumentException {
 
-        Log_OC.i(LOG_TAG, "Test Share Public All Enabled Start");
+        Log_OC.i(LOG_TAG, "Test Share Public with Download/View");
         SystemClock.sleep(WAIT_INITIAL_MS);
 
         //Select share option
@@ -244,18 +245,23 @@ public class PublicShareActivityTest {
 
         //Check that no links are already created
         onView(withId(R.id.shareNoPublicLinks)).check(matches(isDisplayed()));
+        SystemClock.sleep(WAIT_CONNECTION_MS);
+        onView(withId(R.id.addPublicLinkButton)).perform(click());
+        onView(withId(R.id.shareViaLinkNameValue)).perform(replaceText(nameShare));
 
-        //Depending the server version, send a name or not.
-        if (capabilities.getVersionMayor() >= VERSION_10) {
-            publicShareCreationAllEnabled(nameShare);
-        } else {
-            publicShareCreationAllEnabled(null);
-        }
+        //Enable the option for Download/View/Upload permissions
+        onView(withId(R.id.shareViaLinkEditPermissionReadOnly)).perform(click());
 
-        //Check the name,only in the case of ownCloud >= 10
-        if (capabilities.getVersionMayor() >= VERSION_10) {
-            onView(withText(nameShare)).check(matches(isDisplayed()));
-        }
+        onView(withId(R.id.saveButton)).perform(scrollTo(),click());
+        SystemClock.sleep(WAIT_CONNECTION_MS);
+
+        //Check that the sharing panel is displayed
+        onView(withId(R.id.parentPanel)).check(matches(isDisplayed()));
+        onView(withId(R.id.alertTitle)).check(matches(isDisplayed()));
+        pressBack();
+
+        //Check the name
+        onView(withText(nameShare)).check(matches(isDisplayed()));
         SystemClock.sleep(WAIT_CONNECTION_MS);
 
         //The message of "not links created yet" is gone
@@ -266,21 +272,136 @@ public class PublicShareActivityTest {
         SystemClock.sleep(WAIT_CONNECTION_MS);
 
         //Check the status of the sharing options
-        onView(withId(R.id.shareViaLinkEditPermissionSwitch)).check(matches(isChecked()));
-        if (isSupportedFileListing()) {
-            onView(withId(R.id.shareViaShowFileListingSwitch)).check(matches(isEnabled()));
-            onView(withId(R.id.shareViaShowFileListingSwitch)).check(matches(isChecked()));
-        }
-        onView(withId(R.id.shareViaLinkPasswordSwitch)).check(matches(isChecked()));
-        onView(withId(R.id.shareViaLinkExpirationSwitch)).check(matches(isChecked()));
+        onView(withId(R.id.shareViaLinkEditPermissionReadOnly)).check(matches(isChecked()));
 
-        onView(withId(R.id.cancelAddPublicLinkButton)).perform(scrollTo(), click());
+        onView(withId(R.id.shareViaLinkPasswordSwitch)).check(matches(not(isChecked())));
+        onView(withId(R.id.shareViaLinkExpirationSwitch)).check(matches(not(isChecked())));
+
+        onView(withId(R.id.cancelButton)).perform(scrollTo(), click());
         SystemClock.sleep(WAIT_CONNECTION_MS);
 
         //Remove the link
         deleteLink();
 
-        Log_OC.i(LOG_TAG, "Test Share Public All Enabled Passed");
+        Log_OC.i(LOG_TAG, "Test Share Public with Download/View");
+
+    }
+
+    /**
+     *  TEST CASE: Share publicly a folder woth DownloadV/View/Upload permission
+     *  PASSED IF: Link created and visible in share view with Download/View/Upload option
+     *
+     */
+    @Test
+    public void test_03_create_public_link_download_view_permission()
+            throws IllegalArgumentException {
+
+        Log_OC.i(LOG_TAG, "Test Share Public with Download/View/Upload");
+        SystemClock.sleep(WAIT_INITIAL_MS);
+
+        //Select share option
+        selectShare(folder2);
+
+        //Check that no links are already created
+        onView(withId(R.id.shareNoPublicLinks)).check(matches(isDisplayed()));
+        onView(withId(R.id.addPublicLinkButton)).perform(click());
+        onView(withId(R.id.shareViaLinkNameValue)).perform(replaceText(nameShare));
+
+        //Enable the option for Download/View/Upload permissions
+        onView(withId(R.id.shareViaLinkEditPermissionReadAndWrite)).perform(click());
+
+        onView(withId(R.id.saveButton)).perform(scrollTo(),click());
+        SystemClock.sleep(WAIT_CONNECTION_MS);
+
+        //Check that the sharing panel is displayed
+        onView(withId(R.id.parentPanel)).check(matches(isDisplayed()));
+        onView(withId(R.id.alertTitle)).check(matches(isDisplayed()));
+        pressBack();
+
+
+        //Check the name
+        onView(withText(nameShare)).check(matches(isDisplayed()));
+        SystemClock.sleep(WAIT_CONNECTION_MS);
+
+        //The message of "not links created yet" is gone
+        onView(withId(R.id.shareNoPublicLinks))
+                .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
+
+        onView(withId(R.id.editPublicLinkButton)).perform(click());
+        SystemClock.sleep(WAIT_CONNECTION_MS);
+
+        //Check the status of the sharing options
+        onView(withId(R.id.shareViaLinkEditPermissionReadAndWrite)).check(matches(isChecked()));
+
+        onView(withId(R.id.shareViaLinkPasswordSwitch)).check(matches(not(isChecked())));
+        onView(withId(R.id.shareViaLinkExpirationSwitch)).check(matches(not(isChecked())));
+
+        onView(withId(R.id.cancelButton)).perform(scrollTo(), click());
+        SystemClock.sleep(WAIT_CONNECTION_MS);
+
+        //Remove the link
+        deleteLink();
+
+        Log_OC.i(LOG_TAG, "Test Share Public with Download/View/Upload");
+
+    }
+
+
+    /**
+     *  TEST CASE: Share publicly a folder woth DownloadV/View/Upload permission
+     *  PASSED IF: Link created and visible in share view with Download/View/Upload option
+     *
+     */
+    @Test
+    public void test_04_create_public_link_upload_only()
+            throws IllegalArgumentException {
+
+        Log_OC.i(LOG_TAG, "Test Share Public with Upload only");
+        SystemClock.sleep(WAIT_INITIAL_MS);
+
+        //Select share option
+        selectShare(folder2);
+
+        //Check that no links are already created
+        onView(withId(R.id.shareNoPublicLinks)).check(matches(isDisplayed()));
+        onView(withId(R.id.addPublicLinkButton)).perform(click());
+        onView(withId(R.id.shareViaLinkNameValue)).perform(replaceText(nameShare));
+
+        //Enable the option for Download/View/Upload permissions
+        onView(withId(R.id.shareViaLinkEditPermissionUploadFiles)).perform(click());
+
+        onView(withId(R.id.saveButton)).perform(scrollTo(),click());
+        SystemClock.sleep(WAIT_CONNECTION_MS);
+
+        //Check that the sharing panel is displayed
+        onView(withId(R.id.parentPanel)).check(matches(isDisplayed()));
+        onView(withId(R.id.alertTitle)).check(matches(isDisplayed()));
+        pressBack();
+
+        //Check the name
+        onView(withText(nameShare)).check(matches(isDisplayed()));
+        SystemClock.sleep(WAIT_CONNECTION_MS);
+
+        //The message of "not links created yet" is gone
+        onView(withId(R.id.shareNoPublicLinks))
+                .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
+
+        onView(withId(R.id.editPublicLinkButton)).perform(click());
+        SystemClock.sleep(WAIT_CONNECTION_MS);
+
+        //Check the status of the sharing options
+        onView(withId(R.id.shareViaLinkEditPermissionUploadFiles)).check(matches(isChecked()));
+
+        onView(withId(R.id.shareViaLinkPasswordSwitch)).check(matches(not(isChecked())));
+        onView(withId(R.id.shareViaLinkExpirationSwitch)).check(matches(not(isChecked())));
+
+        onView(withId(R.id.cancelButton)).perform(scrollTo(), click());
+        SystemClock.sleep(WAIT_CONNECTION_MS);
+
+        //Remove the link
+        deleteLink();
+
+        Log_OC.i(LOG_TAG, "Test Share Public with Upload only");
 
     }
 
@@ -289,7 +410,7 @@ public class PublicShareActivityTest {
      *  PASSED IF: Link correctly copied in clipboard
      */
     @Test
-    public void test_03_get_link()
+    public void test_05_get_link()
             throws IllegalArgumentException {
 
         Log_OC.i(LOG_TAG, "Test Get Link Start");
@@ -319,202 +440,47 @@ public class PublicShareActivityTest {
     }
 
     /**
-     *  TEST CASE: Edit the name of a public folder. Only for oC >= 10
+     *  TEST CASE: Edit the name of a public folder.
      *  PASSED IF: Link has the new name in share view
      */
     @Test
-    public void test_04_edit_name() {
+    public void test_06_edit_name() {
 
         Log_OC.i(LOG_TAG, "Test Edit Link Name Start");
         SystemClock.sleep(WAIT_CONNECTION_MS);
 
-        //if ownCloud >= 10, we can handle the link name. If not... skipping test.
-        if (capabilities.getVersionMayor() >= VERSION_10) {
+        //Select share option
+        selectShare(folder);
 
-            //Select share option
-            selectShare(folder);
+        //Edit the link name
+        onView(withId(R.id.editPublicLinkButton)).perform(click());
+        SystemClock.sleep(WAIT_CONNECTION_MS);
+        onView(withId(R.id.shareViaLinkNameValue)).perform(replaceText(nameShareEdited));
 
-            //Edit the link name
-            onView(withId(R.id.editPublicLinkButton)).perform(click());
-            SystemClock.sleep(WAIT_CONNECTION_MS);
-            onView(withId(R.id.shareViaLinkNameValue)).perform(replaceText(nameShareEdited));
+        SystemClock.sleep(WAIT_CONNECTION_MS);
+        onView(withId(R.id.saveButton)).perform(scrollTo(),click());
+        SystemClock.sleep(WAIT_CONNECTION_MS);
 
-            SystemClock.sleep(WAIT_CONNECTION_MS);
-            onView(withId(R.id.confirmAddPublicLinkButton)).perform(scrollTo(),click());
-            SystemClock.sleep(WAIT_CONNECTION_MS);
+        //Check that the sharing panel is displayed
+        onView(withId(R.id.parentPanel)).check(matches(isDisplayed()));
+        onView(withId(R.id.alertTitle)).check(matches(isDisplayed()));
+        pressBack();
 
-            //Check that the sharing panel is displayed
-            onView(withId(R.id.parentPanel)).check(matches(isDisplayed()));
-            onView(withId(R.id.alertTitle)).check(matches(isDisplayed()));
-            pressBack();
-
-            //Check the name
-            onView(withText(nameShareEdited)).check(matches(isDisplayed()));
-
-            SystemClock.sleep(WAIT_CONNECTION_MS);
-        }
+        //Check the name
+        onView(withText(nameShareEdited)).check(matches(isDisplayed()));
 
         Log_OC.i(LOG_TAG, "Test Edit Link Name Passed");
     }
 
-    /**
-     *  TEST CASE: Edit the public folder by enabling "Allow Editing"
-     *  PASSED IF:
-     *             - "Allow editing" and "Show file listing" (oC >= 10) are enabled.
-     *             - "Password" and "Expiration date" are disabled.
-     */
-    @Test
-    public void test_05_enable_allow_edit()
-            throws IllegalArgumentException {
-
-        Log_OC.i(LOG_TAG, "Test Enable Allow Edit Start");
-        SystemClock.sleep(WAIT_CONNECTION_MS);
-
-        //Select share option
-        selectShare(folder);
-
-        //Edit the link enabling the "allow edit option"
-        onView(withId(R.id.editPublicLinkButton)).perform(click());
-        SystemClock.sleep(WAIT_CONNECTION_MS);
-
-        //Check file listing disabled + checked (default) if ownCloud >= 10
-        if (isSupportedFileListing()) {
-            onView(withId(R.id.shareViaShowFileListingSwitch)).check(matches(not(isEnabled())));
-            onView(withId(R.id.shareViaShowFileListingSwitch)).check(matches(isChecked()));
-        }
-
-        onView(withId(R.id.shareViaLinkEditPermissionSwitch)).perform(click());
-        SystemClock.sleep(WAIT_CONNECTION_MS);
-        onView(withId(R.id.confirmAddPublicLinkButton)).perform(scrollTo(), click());
-        SystemClock.sleep(WAIT_CONNECTION_MS);
-
-        //Skip the sharing panel
-        pressBack();
-        SystemClock.sleep(WAIT_CONNECTION_MS);
-
-        onView(withId(R.id.editPublicLinkButton)).perform(click());
-        SystemClock.sleep(WAIT_CONNECTION_MS);
-
-        //Check the status of the sharing options
-        onView(withId(R.id.shareViaLinkEditPermissionSwitch)).check(matches(isChecked()));
-        if (isSupportedFileListing()) {
-            onView(withId(R.id.shareViaShowFileListingSwitch)).check(matches(isEnabled()));
-            onView(withId(R.id.shareViaShowFileListingSwitch)).check(matches(isChecked()));
-        }
-        onView(withId(R.id.shareViaLinkPasswordSwitch)).check(matches(not(isChecked())));
-        onView(withId(R.id.shareViaLinkExpirationSwitch)).check(matches(not(isChecked())));
-
-        onView(withId(R.id.cancelAddPublicLinkButton)).perform(scrollTo(), click());
-
-        Log_OC.i(LOG_TAG, "Test Enable Allow Edit Passed");
-
-    }
-
-    /**
-     *  TEST CASE: Edit the public folder by switching "Show File Listing" ( oC >= 10.0.1 )
-     *  PASSED IF:
-     *          - if oC >= 10.0.1
-     *              * "Allow editing" is enabled and "Show file listing" (oC >= 10) is enabled.
-     *              * "Password" and "Expiration date" are disabled.
-     *          - if oC < 10.0.1
-     *              * "Show file listing" does not exist
-     */
-    @Test
-    public void test_06_file_listing_disabled()
-            throws IllegalArgumentException {
-
-        Log_OC.i(LOG_TAG, "Test File Listing Disable Start");
-
-        //Select share option
-        selectShare(folder);
-
-        //Edit the link
-        onView(withId(R.id.editPublicLinkButton)).perform(click());
-        SystemClock.sleep(WAIT_CONNECTION_MS);
-
-        //Only makes sense if "Show file listing" is supported
-        if (isSupportedFileListing()) {
-
-            onView(withId(R.id.shareViaShowFileListingSwitch)).check(matches(isEnabled()));
-            onView(withId(R.id.shareViaShowFileListingSwitch)).check(matches(isChecked()));
-            //Switching off
-            onView(withId(R.id.shareViaShowFileListingSwitch)).perform(click());
-            SystemClock.sleep(WAIT_CONNECTION_MS);
-            onView(withId(R.id.confirmAddPublicLinkButton)).perform(scrollTo(), click());
-            SystemClock.sleep(WAIT_CONNECTION_MS);
-
-            //Skip the sharing panel
-            pressBack();
-            SystemClock.sleep(WAIT_CONNECTION_MS);
-
-            onView(withId(R.id.editPublicLinkButton)).perform(click());
-            SystemClock.sleep(WAIT_CONNECTION_MS);
-
-            //Check options status
-            onView(withId(R.id.shareViaLinkEditPermissionSwitch)).check(matches(isChecked()));
-            onView(withId(R.id.shareViaShowFileListingSwitch)).check(matches(isEnabled()));
-            onView(withId(R.id.shareViaShowFileListingSwitch)).check(matches(not(isChecked())));
-            onView(withId(R.id.shareViaLinkPasswordSwitch)).check(matches(not(isChecked())));
-            onView(withId(R.id.shareViaLinkExpirationSwitch)).check(matches(not(isChecked())));
-
-        } else {  //Server with no support for "Show file listing"
-            onView(withId(R.id.shareViaShowFileListingSwitch)).check(matches(not(isDisplayed())));
-        }
-
-
-        Log_OC.i(LOG_TAG, "Test File Listing Disabled Passed");
-
-    }
-
-    /**
-     *  TEST CASE: Edit the public folder by switching "Allow editing" off ( oC >= 10.0.1 )
-     *  PASSED IF:
-     *          - if oC >= 10.0.1
-     *              * "Allow editing" is disabled and "Show file listing" (oC >= 10) is disabled and checked
-     *              * "Password" and "Expiration date" are disabled.
-     *          - if oC < 10.0.1
-     *              * Test skipped
-     */
-    @Test
-    public void test_07_file_listing_enabled()
-            throws IllegalArgumentException {
-
-        Log_OC.i(LOG_TAG, "Test File Listing Enabled Start");
-
-        //Select share option
-        selectShare(folder);
-
-        onView(withId(R.id.editPublicLinkButton)).perform(click());
-        SystemClock.sleep(WAIT_CONNECTION_MS);
-
-        //Only makes sense if ownCloud >= 10 and not 10.0.0
-        if (isSupportedFileListing()) {
-
-            //Switching "Allow editing" off to check "Show file listing" is checked and disabled
-            onView(withId(R.id.shareViaLinkEditPermissionSwitch)).perform(click());
-
-            //Check options status
-            onView(withId(R.id.shareViaLinkEditPermissionSwitch)).check(matches(not(isChecked())));
-            onView(withId(R.id.shareViaShowFileListingSwitch)).check(matches(not(isEnabled())));
-            onView(withId(R.id.shareViaShowFileListingSwitch)).check(matches(isChecked()));
-            onView(withId(R.id.shareViaLinkPasswordSwitch)).check(matches(not(isChecked())));
-            onView(withId(R.id.shareViaLinkExpirationSwitch)).check(matches(not(isChecked())));
-        }
-
-        //Switch on to following tests
-        onView(withId(R.id.shareViaLinkEditPermissionSwitch)).perform(click());
-
-        Log_OC.i(LOG_TAG, "Test File Listing Enabled Passed");
-    }
 
     /**
      *  TEST CASE: Edit the public folder by switching "Password" on and "Allow editing" off
      *  PASSED IF:
      *          - "Password" enabled
-     *          - "Allow editing" and "Expiration" disabled
+     *          - "Expiration" disabled
      */
     @Test
-    public void test_08_enable_password()
+    public void test_07_enable_password()
             throws IllegalArgumentException {
 
         Log_OC.i(LOG_TAG, "Test Enable Password Start");
@@ -526,14 +492,12 @@ public class PublicShareActivityTest {
         //Edit the link enabling the "enabling password"
         onView(withId(R.id.editPublicLinkButton)).perform(click());
         SystemClock.sleep(WAIT_CONNECTION_MS);
-        onView(withId(R.id.shareViaLinkEditPermissionSwitch)).perform(click());
-        SystemClock.sleep(WAIT_CONNECTION_MS);
         onView(withId(R.id.shareViaLinkPasswordSwitch)).perform(click());
         SystemClock.sleep(WAIT_CONNECTION_MS);
 
         //Setting a password... no matter which one
         onView(withId(R.id.shareViaLinkPasswordValue)).perform(scrollTo(), replaceText("a"));
-        onView(withId(R.id.confirmAddPublicLinkButton)).perform(scrollTo(), click());
+        onView(withId(R.id.saveButton)).perform(scrollTo(), click());
         SystemClock.sleep(WAIT_CONNECTION_MS);
 
         //Skipping the panel
@@ -544,11 +508,10 @@ public class PublicShareActivityTest {
         SystemClock.sleep(WAIT_CONNECTION_MS);
 
         //Check the status of the sharing options
-        onView(withId(R.id.shareViaLinkEditPermissionSwitch)).check(matches(not(isChecked())));
         onView(withId(R.id.shareViaLinkPasswordSwitch)).check(matches(isChecked()));
         onView(withId(R.id.shareViaLinkExpirationSwitch)).check(matches(not(isChecked())));
 
-        onView(withId(R.id.cancelAddPublicLinkButton)).perform(scrollTo(), click());
+        onView(withId(R.id.cancelButton)).perform(scrollTo(), click());
 
         Log_OC.i(LOG_TAG, "Test Enable Password Passed");
 
@@ -558,10 +521,10 @@ public class PublicShareActivityTest {
      *  TEST CASE: Edit the public folder by switching "Expiration Date" on and "Password" off
      *  PASSED IF:
      *          - "Expiration" enabled
-     *          - "Allow editing" and "Password" disabled
+     *          - "Password" disabled
      */
     @Test
-    public void test_09_enable_expiration()
+    public void test_08_enable_expiration()
             throws IllegalArgumentException {
 
         Log_OC.i(LOG_TAG, "Test Enable Expiration Start");
@@ -578,7 +541,7 @@ public class PublicShareActivityTest {
         onView(withId(R.id.shareViaLinkExpirationSwitch)).perform(scrollTo(), click());
         SystemClock.sleep(WAIT_CONNECTION_MS);
         onView(withId(android.R.id.button1)).perform(click());
-        onView(withId(R.id.confirmAddPublicLinkButton)).perform(scrollTo(), click());
+        onView(withId(R.id.saveButton)).perform(scrollTo(), click());
         SystemClock.sleep(WAIT_CONNECTION_MS);
 
         //Skip the sharing panel
@@ -589,11 +552,10 @@ public class PublicShareActivityTest {
         SystemClock.sleep(WAIT_CONNECTION_MS);
 
         //Check the status of the sharing options
-        onView(withId(R.id.shareViaLinkEditPermissionSwitch)).check(matches(not(isChecked())));
         onView(withId(R.id.shareViaLinkPasswordSwitch)).check(matches(not(isChecked())));
         onView(withId(R.id.shareViaLinkExpirationSwitch)).check(matches(isChecked()));
 
-        onView(withId(R.id.cancelAddPublicLinkButton)).perform(scrollTo(),click());
+        onView(withId(R.id.cancelButton)).perform(scrollTo(),click());
 
         Log_OC.i(LOG_TAG, "Test Enable Expiration Passed");
 
@@ -604,7 +566,7 @@ public class PublicShareActivityTest {
      *  PASSED IF: No links in share view
      */
     @Test
-    public void test_10_unshare_public()
+    public void test_09_unshare_public()
             throws IllegalArgumentException {
 
         Log_OC.i(LOG_TAG, "Test Unshare Public Start");
@@ -629,12 +591,10 @@ public class PublicShareActivityTest {
 
     /**
      *  TEST CASE: Check the multiple sharing
-     *  PASSED IF:
-     *          - if oc >= 10.0.1 = X public links created correctly
-     *          - if oc < 10.0.1 = No option available for creating more than one link
+     *  PASSED IF: Public links created correctly
      */
     @Test
-    public void test_11_share_multiple_links()
+    public void test_10_share_multiple_links()
             throws IllegalArgumentException {
 
         Log_OC.i(LOG_TAG, "Test Share Multiple Public Start");
@@ -648,19 +608,18 @@ public class PublicShareActivityTest {
             for (int i = 0; i < MULTIPLE_LINKS ; i++) {
                 publicShareCreationDefault(nameShareMultiple+i);
             }
-
-        } else {  //Servers < 10 hide the button
-            publicShareCreationDefault(null);
-            onView(withId(R.id.addPublicLinkButton))
-                    .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.INVISIBLE)));
         }
 
         Log_OC.i(LOG_TAG, "Test Unshare Public Passed");
 
     }
 
+    /**
+     *  TEST CASE: Remove all links
+     *  PASSED IF: No links fot the item
+     */
     @Test
-    public void test_12_remove_multiple_links()
+    public void test_11_remove_multiple_links()
             throws IllegalArgumentException {
 
         Log_OC.i(LOG_TAG, "Test Remove Multiple Public Start");
@@ -673,11 +632,6 @@ public class PublicShareActivityTest {
             for (int i = 0; i < MULTIPLE_LINKS ; i++) {
                 deleteLink(nameShareMultiple+i);
             }
-
-        } else {  //Servers < 10, only one link
-            deleteLink();
-            onView(withId(R.id.addPublicLinkButton))
-                    .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
         }
 
         Log_OC.i(LOG_TAG, "Test Remove Multiple Public Passed");
@@ -689,7 +643,7 @@ public class PublicShareActivityTest {
      *  PASSED IF: Link to the item in clipboard
      */
     @Test
-    public void test_13_permalink()
+    public void test_12_permalink()
             throws IllegalArgumentException {
 
         Log_OC.i(LOG_TAG, "Test Permalink Start");
@@ -714,7 +668,7 @@ public class PublicShareActivityTest {
 
         SystemClock.sleep(WAIT_CLIPBOARD_MS);
 
-        assertTrue(ERROR_MESSAGE, text.startsWith(testServerURL+"/index.php/f"));
+        assertTrue(ERROR_MESSAGE, text.startsWith(testServerURL+"/f"));
 
         Log_OC.i(LOG_TAG, "Test Permalink Passed");
 
@@ -726,7 +680,7 @@ public class PublicShareActivityTest {
      *  PASSED IF: No option to public in share view
      */
     @Test
-    public void test_14_capability_allow_public_links()
+    public void test_13_capability_allow_public_links()
             throws IllegalArgumentException {
 
         Log_OC.i(LOG_TAG, "Test Capability Public Links Start");
@@ -753,8 +707,8 @@ public class PublicShareActivityTest {
      *  TEST CASE: Capability "Allow editing" disabled
      *  PASSED IF: No option in public links to edit the content
      */
-    @Test
-    public void test_15_capability_allow_public_uploads()
+    /*@Test
+    public void test_14_capability_allow_public_uploads()
             throws IllegalArgumentException {
 
         Log_OC.i(LOG_TAG, "Test Capability Public Uploads Start");
@@ -774,21 +728,21 @@ public class PublicShareActivityTest {
         //Creation of the share link.
         onView(withId(R.id.addPublicLinkButton)).perform(click());
 
-        onView(withId(R.id.shareViaLinkEditPermissionSwitch)).check(matches(not(isDisplayed())));
+        onView(withId(R.id.shareViaLinkPermissionSwitch)).check(matches(not(isDisplayed())));
         if (isSupportedFileListing()) {
             onView(withId(R.id.shareViaShowFileListingSwitch)).check(matches(not(isDisplayed())));
         }
 
         Log_OC.i(LOG_TAG, "Test Capability Public Uploads Passed");
 
-    }
+    }*/
 
     /**
      *  TEST CASE: Share public a file (default options)
      *  PASSED IF: Link created and visible in share view (message of "no links" does not appear)
      */
     @Test
-    public void test_16_create_public_link_file()
+    public void test_15_create_public_link_file()
             throws IllegalArgumentException {
 
         Log_OC.i(LOG_TAG, "Test Share Public File Start");
@@ -827,7 +781,7 @@ public class PublicShareActivityTest {
      *
      */
     @Test
-    public void test_17_edit_options_file()
+    public void test_16_edit_options_file()
             throws IllegalArgumentException {
 
         Log_OC.i(LOG_TAG, "Test Enable Edit Options File Start");
@@ -844,10 +798,6 @@ public class PublicShareActivityTest {
         onView(withId(R.id.shareViaLinkPasswordSwitch)).check(matches(not(isChecked())));
         onView(withId(R.id.shareViaLinkExpirationSwitch)).check(matches(not(isChecked())));
 
-        //Allow editing not available for files
-        onView(withId(R.id.shareViaLinkEditPermissionSwitch)).check(matches(not(isDisplayed())));
-        onView(withId(R.id.shareViaShowFileListingSwitch)).check(matches(not(isDisplayed())));
-
         //Setting a password... no matter which one
         onView(withId(R.id.shareViaLinkPasswordSwitch)).perform(click());
         onView(withId(R.id.shareViaLinkPasswordValue)).perform(scrollTo(), replaceText("a"));
@@ -856,7 +806,7 @@ public class PublicShareActivityTest {
         onView(withId(R.id.shareViaLinkExpirationSwitch)).perform(click());
         SystemClock.sleep(WAIT_CONNECTION_MS);
         onView(withId(android.R.id.button1)).perform(click());
-        onView(withId(R.id.confirmAddPublicLinkButton)).perform(scrollTo(), click());
+        onView(withId(R.id.saveButton)).perform(scrollTo(), click());
         SystemClock.sleep(WAIT_CONNECTION_MS);
 
         //Skip the sharing panel
@@ -870,7 +820,7 @@ public class PublicShareActivityTest {
         onView(withId(R.id.shareViaLinkPasswordSwitch)).check(matches(isChecked()));
         onView(withId(R.id.shareViaLinkExpirationSwitch)).check(matches(isChecked()));
 
-        onView(withId(R.id.cancelAddPublicLinkButton)).perform(scrollTo(), click());
+        onView(withId(R.id.cancelButton)).perform(scrollTo(), click());
 
         Log_OC.i(LOG_TAG, "Test Enable Edit Options File Passed");
 
@@ -881,7 +831,7 @@ public class PublicShareActivityTest {
      *  PASSED IF: No links in share view
      */
     @Test
-    public void test_18_unshare_public_file()
+    public void test_17_unshare_public_file()
             throws IllegalArgumentException {
 
         Log_OC.i(LOG_TAG, "Test Unshare Public File Start");
@@ -920,7 +870,7 @@ public class PublicShareActivityTest {
         }
 
         SystemClock.sleep(WAIT_CONNECTION_MS);
-        onView(withId(R.id.confirmAddPublicLinkButton)).perform(scrollTo(),click());
+        onView(withId(R.id.saveButton)).perform(scrollTo(),click());
         SystemClock.sleep(WAIT_CONNECTION_MS);
 
         //Check that the sharing panel is displayed
@@ -937,20 +887,16 @@ public class PublicShareActivityTest {
 
         //Creation of the share link. Name only for servers >= 10
         onView(withId(R.id.addPublicLinkButton)).perform(click());
-
-        //Check server version and parameter null (or not) to handle the link name
-        if (capabilities.getVersionMayor() >= VERSION_10 && name!=null) {
-            onView(withId(R.id.shareViaLinkNameValue)).perform(replaceText(name));
-        }
+        onView(withId(R.id.shareViaLinkNameValue)).perform(replaceText(name));
 
         //Enable all options
-        onView(withId(R.id.shareViaLinkEditPermissionSwitch)).perform(click());
+        onView(withId(R.id.shareViaLinkEditPermissionReadOnly)).perform(click());
         onView(withId(R.id.shareViaLinkPasswordSwitch)).perform(click());
-        onView(withId(R.id.shareViaLinkPasswordValue)).perform(scrollTo(), replaceText("a"));
-        onView(withId(R.id.shareViaLinkExpirationSwitch)).perform(scrollTo(), click());
+        //onView(withId(R.id.shareViaLinkPasswordValue)).perform(scrollTo(), replaceText("a"));
+        //onView(withId(R.id.shareViaLinkExpirationSwitch)).perform(scrollTo(), click());
         SystemClock.sleep(WAIT_CONNECTION_MS);
         onView(withId(android.R.id.button1)).perform(click());
-        onView(withId(R.id.confirmAddPublicLinkButton)).perform(scrollTo(), click());
+        onView(withId(R.id.saveButton)).perform(scrollTo(), click());
         SystemClock.sleep(WAIT_CONNECTION_MS);
 
         //Check that the sharing panel is displayed
