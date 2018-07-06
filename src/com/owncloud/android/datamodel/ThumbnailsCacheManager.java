@@ -54,6 +54,7 @@ import com.owncloud.android.utils.BitmapUtils;
 import java.io.File;
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
+import java.net.URL;
 
 import okhttp3.HttpUrl;
 
@@ -297,7 +298,7 @@ public class ThumbnailsCacheManager {
                                         "/index.php/apps/files/api/v1/thumbnail/" +
                                         px + "/" + px + Uri.encode(file.getRemotePath(), "/");
                                 Log_OC.d("Thumbnail", "URI: " + uri);
-                                get = new GetMethod(HttpUrl.parse(uri));
+                                get = new GetMethod(new URL(uri));
                                 int status = mClient.executeHttpMethod(get);
                                 if (status == HttpConstants.HTTP_OK) {
                                     InputStream inputStream = get.getResponseAsStream();
@@ -522,7 +523,7 @@ public class ThumbnailsCacheManager {
                                 String uri = mClient.getBaseUri() + "" +
                                     "/index.php/avatar/" + AccountUtils.getUsernameOfAccount(mUsername) + "/" + px;
                                 Log_OC.d("Avatar", "URI: " + uri);
-                                get = new GetMethod(HttpUrl.parse(uri));
+                                get = new GetMethod(new URL(uri));
                                 int status = mClient.executeHttpMethod(get);
                                 if (status == HttpConstants.HTTP_OK) {
                                     InputStream inputStream = get.getResponseAsStream();
