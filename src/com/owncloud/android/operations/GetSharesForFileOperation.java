@@ -25,15 +25,13 @@ import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.shares.GetRemoteSharesForFileOperation;
-import com.owncloud.android.lib.resources.shares.OCShare;
+import com.owncloud.android.lib.resources.shares.ShareParserResult;
 import com.owncloud.android.operations.common.SyncOperation;
-
-import java.util.ArrayList;
 
 /**
  * Provide a list shares for a specific file.
  */
-public class GetSharesForFileOperation extends SyncOperation {
+public class GetSharesForFileOperation extends SyncOperation<ShareParserResult> {
     
     private static final String TAG = GetSharesForFileOperation.class.getSimpleName();
     
@@ -56,21 +54,17 @@ public class GetSharesForFileOperation extends SyncOperation {
         mSubfiles = subfiles;
     }
 
-    @Override
-    protected RemoteOperationResult run(OwnCloudClient client) {
-        GetRemoteSharesForFileOperation operation = new GetRemoteSharesForFileOperation(mPath, mReshares, mSubfiles);
-        RemoteOperationResult result = operation.execute(client);
+    protected RemoteOperationResult<ShareParserResult> run(OwnCloudClient client) {
+        GetRemoteSharesForFileOperation operation = new GetRemoteSharesForFileOperation(mPath,
+                mReshares, mSubfiles);
+
+        RemoteOperationResult<ShareParserResult> result = operation.execute(client);
 
         if (result.isSuccess()) {
 
             // Update DB with the response
-            Log_OC.d(TAG, "File = " + mPath + " Share list size  " + result.getData().size());
-            ArrayList<OCShare> shares = new ArrayList<OCShare>();
-            for(Object obj: result.getData()) {
-                shares.add((OCShare) obj);
-            }
-
-            getStorageManager().saveShares(shares);
+            Log_OC.d(TAG, "File = " + mPath + " Share list size  " + result.getData().getShares().size());
+            getStorageManager().saveShares(result.getData().getShares());
 
         } else if (result.getCode() == RemoteOperationResult.ResultCode.SHARE_NOT_FOUND) {
             // no share on the file - remove local shares

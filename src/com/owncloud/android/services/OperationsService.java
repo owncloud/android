@@ -370,7 +370,7 @@ public class OperationsService extends Service {
 
         public boolean dispatchResultIfFinished(int operationId,
                                                 OnRemoteOperationListener listener) {
-            Pair<RemoteOperation, RemoteOperationResult> undispatched = 
+            Pair<RemoteOperation, RemoteOperationResult> undispatched =
                     mUndispatchedFinishedOperations.remove(operationId);
             if (undispatched != null) {
                 listener.onRemoteOperationFinish(undispatched.first, undispatched.second);

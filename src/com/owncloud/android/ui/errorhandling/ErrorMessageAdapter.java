@@ -27,6 +27,7 @@ import android.support.annotation.Nullable;
 import com.owncloud.android.R;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
+import com.owncloud.android.lib.resources.shares.ShareParserResult;
 import com.owncloud.android.operations.CopyFileOperation;
 import com.owncloud.android.operations.CreateFolderOperation;
 import com.owncloud.android.operations.CreateShareViaLinkOperation;
@@ -121,10 +122,13 @@ public class ErrorMessageAdapter {
                 || operation instanceof CreateShareViaLinkOperation
                 || operation instanceof RemoveShareOperation
                 || operation instanceof UpdateShareViaLinkOperation
-                || operation instanceof UpdateSharePermissionsOperation)
-                && result.getData() != null
-                && result.getData().size() > 0) {
-            return result.getData().get(0).toString();
+                || operation instanceof UpdateSharePermissionsOperation)) {
+            RemoteOperationResult<ShareParserResult> shareResult =
+                    (RemoteOperationResult<ShareParserResult>) result;
+
+            return (shareResult.getData().getShares().size() > 0)
+                    ? shareResult.getData().getShares().get(0).toString()
+                    : shareResult.getData().getParserMessage();
         }
 
         switch (result.getCode()) {

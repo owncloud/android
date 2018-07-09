@@ -239,7 +239,7 @@ public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
      */
     private void updateCapabilities() {
         SyncCapabilitiesOperation getCapabilities = new SyncCapabilitiesOperation();
-        RemoteOperationResult  result = getCapabilities.execute(getStorageManager(), getContext());
+        RemoteOperationResult result = getCapabilities.execute(getStorageManager(), getContext());
         if (!result.isSuccess()) {
             mLastFailedResult = result;
         }

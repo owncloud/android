@@ -172,18 +172,10 @@ public class UsersAndGroupsSearchProvider extends ContentProvider {
 
         /// request to the OC server about users and groups matching userQuery
         GetRemoteShareesOperation searchRequest = new GetRemoteShareesOperation(
-                userQuery, REQUESTED_PAGE, RESULTS_PER_PAGE
-        );
-        RemoteOperationResult result = searchRequest.execute(account, getContext());
-        List<JSONObject> names = new ArrayList<JSONObject>();
-        if (result.isSuccess()) {
-            for (Object o : result.getData()) {
-                // Get JSonObjects from response
-                names.add((JSONObject) o);
-            }
-        } else {
-            showErrorMessage(result);
-        }
+                userQuery, REQUESTED_PAGE, RESULTS_PER_PAGE);
+        RemoteOperationResult<ArrayList<JSONObject>> result = searchRequest.execute(account, getContext());
+
+        ArrayList<JSONObject> names = result.getData();
 
         /// convert the responses from the OC server to the expected format
         if (names.size() > 0) {
@@ -281,13 +273,11 @@ public class UsersAndGroupsSearchProvider extends ContentProvider {
      */
     private void showErrorMessage(final RemoteOperationResult result) {
         Handler handler = new Handler(Looper.getMainLooper());
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                // The Toast must be shown in the main thread to grant that will be hidden correctly; otherwise
-                // the thread may die before, an exception will occur, and the message will be left on the screen
-                // until the app dies
 
+        // The Toast must be shown in the main thread to grant that will be hidden correctly; otherwise
+        // the thread may die before, an exception will occur, and the message will be left on the screen
+        // until the app dies
+        handler.post(() ->
                 Toast.makeText(
                         getContext().getApplicationContext(),
                         ErrorMessageAdapter.getResultMessage(
@@ -296,9 +286,7 @@ public class UsersAndGroupsSearchProvider extends ContentProvider {
                                 getContext().getResources()
                         ),
                         Toast.LENGTH_SHORT
-                ).show();
-            }
-        });
+                ).show());
     }
 
 }

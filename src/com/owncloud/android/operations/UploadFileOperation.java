@@ -33,9 +33,9 @@ import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.http.HttpConstants;
 import com.owncloud.android.lib.common.network.OnDatatransferProgressListener;
 import com.owncloud.android.lib.common.operations.OperationCancelledException;
+import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
-import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.files.ExistenceCheckRemoteOperation;
 import com.owncloud.android.lib.resources.files.ReadRemoteFileOperation;
@@ -398,7 +398,7 @@ public class UploadFileOperation extends SyncOperation {
      * @return {@link RemoteOperationResult} representing the upload operation result
      */
     protected RemoteOperationResult uploadRemoteFile(OwnCloudClient client, File temporalFile, File originalFile,
-                                                   String expectedPath, File expectedFile, String timeStamp) {
+                                                         String expectedPath, File expectedFile, String timeStamp) {
         RemoteOperationResult result;
 
         try {
@@ -786,9 +786,9 @@ public class UploadFileOperation extends SyncOperation {
         // TODO from the appropriate OC server version, get data from last PUT response headers, instead
         // TODO     of a new PROPFIND; the latter may fail, specially for chunked uploads
         ReadRemoteFileOperation operation = new ReadRemoteFileOperation(getRemotePath());
-        RemoteOperationResult result = operation.execute(client);
+        RemoteOperationResult<RemoteFile> result = operation.execute(client);
         if (result.isSuccess()) {
-            updateOCFile(file, (RemoteFile) result.getData().get(0));
+            updateOCFile(file, result.getData());
             file.setLastSyncDateForProperties(syncDate);
         } else {
             Log_OC.e(TAG, "Error reading properties of file after successful upload; this is gonna hurt...");

@@ -50,8 +50,8 @@ import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.OwnCloudClientManagerFactory;
 import com.owncloud.android.lib.common.network.OnDatatransferProgressListener;
-import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
+import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.files.FileUtils;
 import com.owncloud.android.operations.DownloadFileOperation;
@@ -487,8 +487,7 @@ public class FileDownloader extends Service
                             mCurrentDownload.getRemotePath()
                         );
                         downloadResult = new RemoteOperationResult(
-                            ResultCode.NO_NETWORK_CONNECTION
-                        );
+                            ResultCode.NO_NETWORK_CONNECTION);
                     } else {
                         Log_OC.v(
                             TAG,

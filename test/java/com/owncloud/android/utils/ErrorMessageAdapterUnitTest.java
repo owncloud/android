@@ -24,7 +24,6 @@ package com.owncloud.android.utils;
 import android.content.res.Resources;
 
 import com.owncloud.android.R;
-import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.operations.RemoveFileOperation;
 import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter;
 
