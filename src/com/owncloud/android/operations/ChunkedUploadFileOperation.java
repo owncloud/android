@@ -45,10 +45,11 @@ public class ChunkedUploadFileOperation extends UploadFileOperation {
 
     @Override
     protected RemoteOperationResult uploadRemoteFile(OwnCloudClient client, File temporalFile, File originalFile,
-                                                     String expectedPath, File expectedFile, String timeStamp) {
-        RemoteOperationResult result = null;
+                                                         String expectedPath, File expectedFile, String timeStamp) {
 
         try {
+            RemoteOperationResult result;
+
             // Step 1, create folder where we put the uploaded file chunks
             result = createChunksFolder(String.valueOf(mOCUploadId));
 
@@ -78,11 +79,10 @@ public class ChunkedUploadFileOperation extends UploadFileOperation {
             // Step 4, move local file to final local destination
             moveTemporalOriginalFiles(temporalFile, originalFile, expectedPath, expectedFile);
 
+            return result;
         } catch (Exception e) {
-            result = new RemoteOperationResult(e);
+            return new RemoteOperationResult(e);
         }
-
-        return result;
     }
 
     private RemoteOperationResult createChunksFolder(String remoteChunksFolder) {

@@ -23,8 +23,8 @@ package com.owncloud.android.operations;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.lib.common.OwnCloudClient;
-import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
+import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.resources.files.MoveRemoteFileOperation;
 import com.owncloud.android.operations.common.SyncOperation;
 import com.owncloud.android.services.observer.FileObserverService;
@@ -69,11 +69,11 @@ public class MoveFileOperation extends SyncOperation {
         
         /// 1. check move validity
         if (mTargetParentPath.startsWith(mSrcPath)) {
-            return new RemoteOperationResult(ResultCode.INVALID_MOVE_INTO_DESCENDANT);
+            return new RemoteOperationResult<>(ResultCode.INVALID_MOVE_INTO_DESCENDANT);
         }
         mFile = getStorageManager().getFileByPath(mSrcPath);
         if (mFile == null) {
-            return new RemoteOperationResult(ResultCode.FILE_NOT_FOUND);
+            return new RemoteOperationResult<>(ResultCode.FILE_NOT_FOUND);
         }
         
         /// 2. remote move

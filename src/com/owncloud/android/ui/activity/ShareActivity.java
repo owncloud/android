@@ -37,6 +37,7 @@ import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.shares.OCShare;
+import com.owncloud.android.lib.resources.shares.ShareParserResult;
 import com.owncloud.android.lib.resources.shares.ShareType;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 import com.owncloud.android.operations.CreateShareViaLinkOperation;
@@ -312,13 +313,13 @@ public class ShareActivity extends FileActivity
     }
 
     private void onCreateShareViaLinkOperationFinish(CreateShareViaLinkOperation operation,
-                                                     RemoteOperationResult result) {
+                                                     RemoteOperationResult<ShareParserResult> result) {
         if (result.isSuccess()) {
             updateFileFromDB();
 
             getPublicShareFragment().dismiss();
 
-            getFileOperationsHelper().copyOrSendPublicLink((OCShare)result.getData().get(0));
+            getFileOperationsHelper().copyOrSendPublicLink(result.getData().getShares().get(0));
 
         } else {
             getPublicShareFragment().showError(
@@ -328,13 +329,13 @@ public class ShareActivity extends FileActivity
     }
 
     private void onUpdateShareViaLinkOperationFinish(UpdateShareViaLinkOperation operation,
-                                                     RemoteOperationResult result) {
+                                                     RemoteOperationResult<ShareParserResult> result) {
         if (result.isSuccess()) {
             updateFileFromDB();
 
             getPublicShareFragment().dismiss();
 
-            getFileOperationsHelper().copyOrSendPublicLink((OCShare)result.getData().get(0));
+            getFileOperationsHelper().copyOrSendPublicLink(result.getData().getShares().get(0));
 
         } else {
             getPublicShareFragment().showError(

@@ -19,8 +19,6 @@
 
 package com.owncloud.android.operations;
 
-import android.net.Uri;
-
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.http.HttpConstants;
 import com.owncloud.android.lib.common.operations.OnRemoteOperationListener;
@@ -33,6 +31,7 @@ import com.owncloud.android.lib.resources.files.ExistenceCheckRemoteOperation;
 
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Operation to find out what authentication method requires
@@ -46,29 +45,11 @@ import java.util.ArrayList;
  * RemoteOperationResult)} returns in {@link RemoteOperationResult#getData()}
  * a value of {@link AuthenticationMethod}.
  */
-public class DetectAuthenticationMethodOperation extends RemoteOperation {
+public class DetectAuthenticationMethodOperation extends RemoteOperation<List<AuthenticationMethod>> {
 
     private static final String TAG = DetectAuthenticationMethodOperation.class.getSimpleName();
 
-    public enum AuthenticationMethod {
-        UNKNOWN,
-        NONE,
-        BASIC_HTTP_AUTH,
-        SAML_WEB_SSO,
-        BEARER_TOKEN;
 
-        public int getValue() {
-            return ordinal();
-        }
-
-        public static AuthenticationMethod fromValue(int value) {
-            if (value > -1 && value < values().length) {
-                return values()[value];
-            } else {
-                return null;
-            }
-        }
-    }
 
     /**
      *  Performs the operation.
@@ -80,69 +61,52 @@ public class DetectAuthenticationMethodOperation extends RemoteOperation {
      *  any, is requested by the server.
      */
     @Override
-    protected RemoteOperationResult run(OwnCloudClient client) {
-        RemoteOperationResult result;
-
+    protected RemoteOperationResult<List<AuthenticationMethod>> run(OwnCloudClient client) {
         ArrayList<AuthenticationMethod> allAvailableAuthMethods = new ArrayList<>();
 
-        RemoteOperation operation = new ExistenceCheckRemoteOperation("", false);
+        ExistenceCheckRemoteOperation operation = new ExistenceCheckRemoteOperation("", false);
         client.clearCredentials();
 
         client.setFollowRedirects(false);
 
         // try to access the root folder, following redirections but not SAML SSO redirections
-        result = operation.execute(client);
+        final RemoteOperationResult resultFromExistanceCheck = operation.execute(client);
+        RemoteOperationResult<List<AuthenticationMethod>> result =
+                new RemoteOperationResult<>(resultFromExistanceCheck.getCode());
 
         // analyze response  
-        if (result.getHttpCode() == HttpConstants.HTTP_UNAUTHORIZED) {
-            ArrayList<String> authHeaders = result.getAuthenticateHeaders();
-
+        if (resultFromExistanceCheck.getHttpCode() == HttpConstants.HTTP_UNAUTHORIZED) {
+            ArrayList<String> authHeaders = resultFromExistanceCheck.getAuthenticateHeaders();
             for (String authHeader: authHeaders) {
-
                 if (authHeader.startsWith("basic")) {
-
                     allAvailableAuthMethods.add(AuthenticationMethod.BASIC_HTTP_AUTH);
-
                 } else if (authHeader.startsWith("bearer")) {
-
                     allAvailableAuthMethods.add(AuthenticationMethod.BEARER_TOKEN);
                 }
             }
-
-        } else if (result.isSuccess()) {
-
+        } else if (resultFromExistanceCheck.isSuccess()) {
             allAvailableAuthMethods.add(AuthenticationMethod.NONE);
-
-        } else if (result.isIdPRedirection()) {
-
+        } else if (resultFromExistanceCheck.isIdPRedirection()) {
             allAvailableAuthMethods.add(AuthenticationMethod.SAML_WEB_SSO);
         }
 
         if (allAvailableAuthMethods.isEmpty()) {
-
             Log_OC.d(TAG, "Authentication method not found: ");
-
             allAvailableAuthMethods.add(AuthenticationMethod.UNKNOWN);
-
         } else {
-
             Log_OC.d(TAG, "Authentication methods found:");
-
             for (AuthenticationMethod authMetod: allAvailableAuthMethods) {
-
                 Log_OC.d(TAG, " " + authenticationMethodToString(authMetod));
             }
         }
 
         if (allAvailableAuthMethods.indexOf(authenticationMethodToString(AuthenticationMethod.UNKNOWN)) == -1) {
-            result = new RemoteOperationResult(result.getHttpCode(), result.getHttpPhrase(),null);
+            result = new RemoteOperationResult<>(result.getHttpCode(), result.getHttpPhrase(),null);
             // Force the result to be successful and continue with login
             result.setSuccess(true);
         }
 
-        ArrayList<Object> data = new ArrayList<>();
-        data.add(allAvailableAuthMethods);
-        result.setData(data);
+        result.setData(allAvailableAuthMethods);
         return result;  // same result instance, so that other errors
         // can be handled by the caller transparently
     }

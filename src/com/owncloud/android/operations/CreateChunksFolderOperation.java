@@ -23,7 +23,6 @@ package com.owncloud.android.operations;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
-import com.owncloud.android.lib.resources.files.CreateRemoteFolderOperation;
 import com.owncloud.android.lib.resources.files.chunks.CreateRemoteChunkFolderOperation;
 
 public class CreateChunksFolderOperation extends CreateFolderOperation {

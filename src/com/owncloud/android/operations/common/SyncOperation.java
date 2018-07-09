@@ -36,7 +36,7 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult;
  * 
  * Provides methods to onExecute the operation both synchronously or asynchronously.
  */
-public abstract class SyncOperation extends RemoteOperation {
+public abstract class SyncOperation<T> extends RemoteOperation<T> {
 
     //private static final String TAG = SyncOperation.class.getSimpleName();
 
@@ -59,7 +59,7 @@ public abstract class SyncOperation extends RemoteOperation {
      * @param context           Android context for the component calling the method.
      * @return                  Result of the operation.
      */
-    public RemoteOperationResult execute(FileDataStorageManager storageManager, Context context) {
+    public RemoteOperationResult<T> execute(FileDataStorageManager storageManager, Context context) {
         if (storageManager == null) {
             throw new IllegalArgumentException("Trying to onExecute a sync operation with a " +
                     "NULL storage manager");
@@ -82,7 +82,7 @@ public abstract class SyncOperation extends RemoteOperation {
      * @param storageManager    Instance of local repository to sync with remote.
      * @return                  Result of the operation.
      */
-    public RemoteOperationResult execute(OwnCloudClient client,
+    public RemoteOperationResult<T> execute(OwnCloudClient client,
                                          FileDataStorageManager storageManager) {
         if (storageManager == null)
             throw new IllegalArgumentException("Trying to onExecute a sync operation with a " +
