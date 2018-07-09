@@ -37,7 +37,6 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
 
 import java.net.URL;
-import java.util.ArrayList;
 
 import at.bitfire.dav4android.PropertyCollection;
 import at.bitfire.dav4android.property.QuotaAvailableBytes;
@@ -50,7 +49,7 @@ import static com.owncloud.android.lib.common.operations.RemoteOperationResult.R
  * @author marcello
  * @author David González Verdugo
  */
-public class GetRemoteUserQuotaOperation extends RemoteOperation {
+public class GetRemoteUserQuotaOperation extends RemoteOperation<GetRemoteUserQuotaOperation.RemoteQuota> {
 
     static public class RemoteQuota {
 
@@ -84,8 +83,8 @@ public class GetRemoteUserQuotaOperation extends RemoteOperation {
     }
 
     @Override
-    protected RemoteOperationResult run(OwnCloudClient client) {
-        RemoteOperationResult result = null;
+    protected RemoteOperationResult<RemoteQuota> run(OwnCloudClient client) {
+        RemoteOperationResult<RemoteQuota> result = null;
 
         try {
             PropfindMethod propfindMethod = new PropfindMethod(
@@ -99,22 +98,19 @@ public class GetRemoteUserQuotaOperation extends RemoteOperation {
             if (isSuccess(status)) {
                 RemoteQuota remoteQuota = readData(propfindMethod.getDavResource().getProperties());
 
-                result = new RemoteOperationResult(OK);
-
-                ArrayList<Object> data = new ArrayList<>();
-                data.add(remoteQuota);
+                result = new RemoteOperationResult<>(OK);
 
                 // Add data to the result
                 if (result.isSuccess()) {
-                    result.setData(data);
+                    result.setData(remoteQuota);
                 }
 
             } else { // synchronization failed
-                result = new RemoteOperationResult(propfindMethod);
+                result = new RemoteOperationResult<>(propfindMethod);
             }
 
         } catch (Exception e) {
-            result = new RemoteOperationResult(e);
+            result = new RemoteOperationResult<>(e);
 
 
         } finally {

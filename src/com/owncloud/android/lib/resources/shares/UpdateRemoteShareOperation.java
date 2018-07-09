@@ -51,7 +51,7 @@ import okhttp3.FormBody;
  * @author David González Verdugo
  */
 
-public class UpdateRemoteShareOperation extends RemoteOperation {
+public class UpdateRemoteShareOperation extends RemoteOperation<ShareParserResult> {
 
     private static final String TAG = GetRemoteShareOperation.class.getSimpleName();
 
@@ -163,8 +163,8 @@ public class UpdateRemoteShareOperation extends RemoteOperation {
     }
 
     @Override
-    protected RemoteOperationResult run(OwnCloudClient client) {
-        RemoteOperationResult result;
+    protected RemoteOperationResult<ShareParserResult> run(OwnCloudClient client) {
+        RemoteOperationResult<ShareParserResult> result;
 
         try {
             FormBody.Builder formBodyBuilder = new FormBody.Builder();
@@ -222,11 +222,11 @@ public class UpdateRemoteShareOperation extends RemoteOperation {
                 result = parser.parse(putMethod.getResponseBodyAsString());
 
             } else {
-                result = new RemoteOperationResult(putMethod);
+                result = new RemoteOperationResult<>(putMethod);
             }
 
         } catch (Exception e) {
-            result = new RemoteOperationResult(e);
+            result = new RemoteOperationResult<>(e);
             Log_OC.e(TAG, "Exception while Creating New Share", e);
         }
 

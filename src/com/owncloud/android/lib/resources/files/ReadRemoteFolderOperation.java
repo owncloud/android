@@ -49,7 +49,7 @@ import static com.owncloud.android.lib.common.operations.RemoteOperationResult.R
  * @author David González Verdugo
  */
 
-public class ReadRemoteFolderOperation extends RemoteOperation {
+public class ReadRemoteFolderOperation extends RemoteOperation<ArrayList<RemoteFile>> {
 
     private static final String TAG = ReadRemoteFolderOperation.class.getSimpleName();
 
@@ -70,8 +70,8 @@ public class ReadRemoteFolderOperation extends RemoteOperation {
      * @param client Client object to communicate with the remote ownCloud server.
      */
     @Override
-    protected RemoteOperationResult run(OwnCloudClient client) {
-        RemoteOperationResult result = null;
+    protected RemoteOperationResult<ArrayList<RemoteFile>> run(OwnCloudClient client) {
+        RemoteOperationResult<ArrayList<RemoteFile>> result = null;
 
         try {
             PropfindMethod propfindMethod = new PropfindMethod(
@@ -84,7 +84,7 @@ public class ReadRemoteFolderOperation extends RemoteOperation {
             int status = client.executeHttpMethod(propfindMethod);
 
             if (isSuccess(status)) {
-                ArrayList<Object> mFolderAndFiles = new ArrayList<>();
+                ArrayList<RemoteFile> mFolderAndFiles = new ArrayList<>();
 
                 // parse data from remote folder
                 mFolderAndFiles.add(
@@ -98,15 +98,15 @@ public class ReadRemoteFolderOperation extends RemoteOperation {
                 }
 
                 // Result of the operation
-                result = new RemoteOperationResult(OK);
+                result = new RemoteOperationResult<>(OK);
                 result.setData(mFolderAndFiles);
 
             } else { // synchronization failed
-                result = new RemoteOperationResult(propfindMethod);
+                result = new RemoteOperationResult<> (propfindMethod);
             }
 
         } catch (Exception e) {
-            result = new RemoteOperationResult(e);
+            result = new RemoteOperationResult<>(e);
         } finally {
             if (result.isSuccess()) {
                 Log_OC.i(TAG, "Synchronized " + mRemotePath + ": " + result.getLogMessage());

@@ -44,8 +44,6 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import okhttp3.HttpUrl;
-
 /**
  * Remote operation performing the download of a remote file in the ownCloud server.
  *
@@ -88,7 +86,7 @@ public class DownloadRemoteFileOperation extends RemoteOperation {
                 result.getLogMessage());
 
         } catch (Exception e) {
-            result = new RemoteOperationResult(e);
+            result = new RemoteOperationResult<>(e);
             Log_OC.e(TAG, "Download of " + mRemotePath + " to " + getTmpPath() + ": " +
                 result.getLogMessage(), e);
         }
@@ -172,8 +170,8 @@ public class DownloadRemoteFileOperation extends RemoteOperation {
             } // else, body read by RemoteOperationResult constructor
 
             result = isSuccess(status)
-                    ? new RemoteOperationResult(RemoteOperationResult.ResultCode.OK)
-                    : new RemoteOperationResult(mGet);
+                    ? new RemoteOperationResult<>(RemoteOperationResult.ResultCode.OK)
+                    : new RemoteOperationResult<>(mGet);
         } finally {
             if (fos != null) fos.close();
             if (bis != null) bis.close();

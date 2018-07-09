@@ -36,7 +36,7 @@ import java.util.Arrays;
 
 /**
  * Aggregate saving the list of URLs followed in a sequence of redirections during the exceution of a
- * {@link com.owncloud.android.lib.common.operations.RemoteOperation}, and the status codes corresponding to all
+ * {@link RemoteOperation}, and the status codes corresponding to all
  * of them.
  *
  * The last status code saved corresponds to the first response not being a redirection, unless the sequence exceeds

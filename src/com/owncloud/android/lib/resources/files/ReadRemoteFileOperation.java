@@ -33,11 +33,9 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
 
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 import at.bitfire.dav4android.DavResource;
-import okhttp3.HttpUrl;
 
 import static com.owncloud.android.lib.common.http.methods.webdav.DavConstants.DEPTH_0;
 import static com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode.OK;
@@ -49,7 +47,7 @@ import static com.owncloud.android.lib.common.operations.RemoteOperationResult.R
  * @author masensio
  */
 
-public class ReadRemoteFileOperation extends RemoteOperation {
+public class ReadRemoteFileOperation extends RemoteOperation<RemoteFile> {
 
     private static final String TAG = ReadRemoteFileOperation.class.getSimpleName();
     private static final int SYNC_READ_TIMEOUT = 40000;
@@ -72,9 +70,9 @@ public class ReadRemoteFileOperation extends RemoteOperation {
      * @param client Client object to communicate with the remote ownCloud server.
      */
     @Override
-    protected RemoteOperationResult run(OwnCloudClient client) {
+    protected RemoteOperationResult<RemoteFile> run(OwnCloudClient client) {
         PropfindMethod propfind;
-        RemoteOperationResult result;
+        RemoteOperationResult<RemoteFile> result;
 
         /// take the duty of check the server for the current state of the file there
         try {
@@ -94,19 +92,16 @@ public class ReadRemoteFileOperation extends RemoteOperation {
 
                 final RemoteFile file = new RemoteFile(resource, client.getAccount().getDisplayName());
 
-                ArrayList<Object> files = new ArrayList<>();
-                files.add(file);
-
-                result = new RemoteOperationResult(OK);
-                result.setData(files);
+                result = new RemoteOperationResult<>(OK);
+                result.setData(file);
 
             } else {
-                result = new RemoteOperationResult(propfind);
+                result = new RemoteOperationResult<>(propfind);
                 client.exhaustResponse(propfind.getResponseAsStream());
             }
 
         } catch (Exception e) {
-            result = new RemoteOperationResult(e);
+            result = new RemoteOperationResult<>(e);
             e.printStackTrace();
             Log_OC.e(TAG, "Synchronizing  file " + mRemotePath + ": " + result.getLogMessage(),
                 result.getException());

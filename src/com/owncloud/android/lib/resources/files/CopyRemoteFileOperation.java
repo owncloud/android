@@ -30,15 +30,13 @@ import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.http.HttpConstants;
 import com.owncloud.android.lib.common.http.methods.webdav.CopyMethod;
 import com.owncloud.android.lib.common.network.WebdavUtils;
+import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
-import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 
 import java.net.URL;
 import java.util.concurrent.TimeUnit;
-
-import okhttp3.HttpUrl;
 
 /**
  * Remote operation moving a remote file or folder in the ownCloud server to a different folder
@@ -89,16 +87,16 @@ public class CopyRemoteFileOperation extends RemoteOperation {
 
         /// check parameters
         if (!FileUtils.isValidPath(mTargetRemotePath, versionWithForbiddenChars)) {
-            return new RemoteOperationResult(ResultCode.INVALID_CHARACTER_IN_NAME);
+            return new RemoteOperationResult<>(ResultCode.INVALID_CHARACTER_IN_NAME);
         }
 
         if (mTargetRemotePath.equals(mSrcRemotePath)) {
             // nothing to do!
-            return new RemoteOperationResult(ResultCode.OK);
+            return new RemoteOperationResult<>(ResultCode.OK);
         }
 
         if (mTargetRemotePath.startsWith(mSrcRemotePath)) {
-            return new RemoteOperationResult(ResultCode.INVALID_COPY_INTO_DESCENDANT);
+            return new RemoteOperationResult<>(ResultCode.INVALID_COPY_INTO_DESCENDANT);
         }
 
         /// perform remote operation
@@ -114,10 +112,10 @@ public class CopyRemoteFileOperation extends RemoteOperation {
             final int status = client.executeHttpMethod(copyMethod);
 
             if(status == HttpConstants.HTTP_CREATED || status == HttpConstants.HTTP_NO_CONTENT) {
-                result = new RemoteOperationResult(ResultCode.OK);
+                result = new RemoteOperationResult<>(ResultCode.OK);
             } else if (status == HttpConstants.HTTP_PRECONDITION_FAILED && !mOverwrite) {
 
-                result = new RemoteOperationResult(ResultCode.INVALID_OVERWRITE);
+                result = new RemoteOperationResult<>(ResultCode.INVALID_OVERWRITE);
                 client.exhaustResponse(copyMethod.getResponseAsStream());
 
 
@@ -125,7 +123,7 @@ public class CopyRemoteFileOperation extends RemoteOperation {
                 /// http://www.webdav.org/specs/rfc4918.html#rfc.section.9.9.4
 
             } else {
-                result = new RemoteOperationResult(copyMethod);
+                result = new RemoteOperationResult<>(copyMethod);
                 client.exhaustResponse(copyMethod.getResponseAsStream());
             }
 
@@ -133,7 +131,7 @@ public class CopyRemoteFileOperation extends RemoteOperation {
                     result.getLogMessage());
 
         } catch (Exception e) {
-            result = new RemoteOperationResult(e);
+            result = new RemoteOperationResult<>(e);
             Log.e(TAG, "Copy " + mSrcRemotePath + " to " + mTargetRemotePath + ": " +
                     result.getLogMessage(), e);
         }

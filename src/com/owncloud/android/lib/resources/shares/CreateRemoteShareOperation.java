@@ -186,17 +186,13 @@ public class CreateRemoteShareOperation extends RemoteOperation {
         mPublicUpload = publicUpload;
     }
 
-    public boolean isGettingShareDetails() {
-        return mGetShareDetails;
-    }
-
     public void setGetShareDetails(boolean set) {
         mGetShareDetails = set;
     }
 
     @Override
-    protected RemoteOperationResult run(OwnCloudClient client) {
-        RemoteOperationResult result;
+    protected RemoteOperationResult<ShareParserResult> run(OwnCloudClient client) {
+        RemoteOperationResult<ShareParserResult> result;
 
         try {
             FormBody.Builder formBodyBuilder = new FormBody.Builder()
@@ -253,7 +249,7 @@ public class CreateRemoteShareOperation extends RemoteOperation {
 
                     // TODO Use executeHttpMethod
                     // retrieve more info - POST only returns the index of the new share
-                    OCShare emptyShare = (OCShare) result.getData().get(0);
+                    OCShare emptyShare = result.getData().getShares().get(0);
                     GetRemoteShareOperation getInfo = new GetRemoteShareOperation(
                             emptyShare.getRemoteId()
                     );
@@ -261,11 +257,11 @@ public class CreateRemoteShareOperation extends RemoteOperation {
                 }
 
             } else {
-                result = new RemoteOperationResult(postMethod);
+                result = new RemoteOperationResult<>(postMethod);
             }
 
         } catch (Exception e) {
-            result = new RemoteOperationResult(e);
+            result = new RemoteOperationResult<>(e);
             Log_OC.e(TAG, "Exception while Creating New Share", e);
         }
         return result;

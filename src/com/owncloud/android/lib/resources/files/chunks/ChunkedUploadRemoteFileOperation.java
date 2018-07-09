@@ -43,6 +43,7 @@ import okhttp3.MediaType;
 
 import static com.owncloud.android.lib.common.http.HttpConstants.IF_MATCH_HEADER;
 import static com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode.OK;
+import static com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode.OK;
 
 /**
  * Remote operation performing the chunked upload of a remote file to the ownCloud server.
@@ -100,7 +101,7 @@ public class ChunkedUploadRemoteFileOperation extends UploadRemoteFileOperation 
             ((ChunkFromFileRequestBody) mFileRequestBody).setOffset(offset);
 
             if (mCancellationRequested.get()) {
-                result = new RemoteOperationResult(new OperationCancelledException());
+                result = new RemoteOperationResult<>(new OperationCancelledException());
                 break;
             } else {
                 if (chunkIndex == chunkCount - 1) {
@@ -119,9 +120,9 @@ public class ChunkedUploadRemoteFileOperation extends UploadRemoteFileOperation 
                         ", HTTP result status " + status);
 
                 if (isSuccess(status)) {
-                    result = new RemoteOperationResult(OK);
+                    result = new RemoteOperationResult<>(OK);
                 } else {
-                    result = new RemoteOperationResult(mPutMethod);
+                    result = new RemoteOperationResult<>(mPutMethod);
                     break;
                 }
             }

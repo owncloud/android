@@ -38,8 +38,6 @@ import com.owncloud.android.lib.common.utils.Log_OC;
 
 import java.net.URL;
 
-import okhttp3.HttpUrl;
-
 /**
  * Provide a list shares for a specific file.
  * The input is the full path of the desired file.
@@ -49,7 +47,7 @@ import okhttp3.HttpUrl;
  * @author David A. Velasco
  * @author David González Verdugo
  */
-public class GetRemoteSharesForFileOperation extends RemoteOperation {
+public class GetRemoteSharesForFileOperation extends RemoteOperation<ShareParserResult> {
 
     private static final String TAG = GetRemoteSharesForFileOperation.class.getSimpleName();
 
@@ -79,8 +77,8 @@ public class GetRemoteSharesForFileOperation extends RemoteOperation {
     }
 
     @Override
-    protected RemoteOperationResult run(OwnCloudClient client) {
-        RemoteOperationResult result;
+    protected RemoteOperationResult<ShareParserResult> run(OwnCloudClient client) {
+        RemoteOperationResult<ShareParserResult> result;
 
         try {
 
@@ -107,13 +105,13 @@ public class GetRemoteSharesForFileOperation extends RemoteOperation {
                 result = parser.parse(getMethod.getResponseBodyAsString());
 
                 if (result.isSuccess()) {
-                    Log_OC.d(TAG, "Got " + result.getData().size() + " shares");
+                    Log_OC.d(TAG, "Got " + result.getData().getShares().size() + " shares");
                 }
             } else {
-                result = new RemoteOperationResult(getMethod);
+                result = new RemoteOperationResult<>(getMethod);
             }
         } catch (Exception e) {
-            result = new RemoteOperationResult(e);
+            result = new RemoteOperationResult<>(e);
             Log_OC.e(TAG, "Exception while getting shares", e);
         }
 

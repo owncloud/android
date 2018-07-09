@@ -78,13 +78,13 @@ public class RemoveRemoteFileOperation extends RemoteOperation {
             int status = client.executeHttpMethod(deleteMethod);
 
             result = isSuccess(status) ?
-                    new RemoteOperationResult(OK) :
-                    new RemoteOperationResult(deleteMethod);
+                    new RemoteOperationResult<>(OK) :
+                    new RemoteOperationResult<>(deleteMethod);
 
             Log_OC.i(TAG, "Remove " + mRemotePath + ": " + result.getLogMessage());
 
         } catch (Exception e) {
-            result = new RemoteOperationResult(e);
+            result = new RemoteOperationResult<>(e);
             Log_OC.e(TAG, "Remove " + mRemotePath + ": " + result.getLogMessage(), e);
         }
 

@@ -91,11 +91,11 @@ public class RemoveRemoteShareOperation extends RemoteOperation {
                 Log_OC.d(TAG, "Unshare " + mRemoteShareId + ": " + result.getLogMessage());
 
             } else {
-                result = new RemoteOperationResult(deleteMethod);
+                result = new RemoteOperationResult<>(deleteMethod);
             }
 
         } catch (Exception e) {
-            result = new RemoteOperationResult(e);
+            result = new RemoteOperationResult<>(e);
             Log_OC.e(TAG, "Unshare Link Exception " + result.getLogMessage(), e);
         }
 

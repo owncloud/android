@@ -95,7 +95,7 @@ public class UploadRemoteFileOperation extends RemoteOperation {
 
             if (mCancellationRequested.get()) {
                 // the operation was cancelled before getting it's turn to be executed in the queue of uploads
-                result = new RemoteOperationResult(new OperationCancelledException());
+                result = new RemoteOperationResult<>(new OperationCancelledException());
             } else {
                 // perform the upload
                 result = uploadFile(client);
@@ -106,11 +106,11 @@ public class UploadRemoteFileOperation extends RemoteOperation {
         } catch (Exception e) {
 
             if (mPutMethod != null && mPutMethod.isAborted()) {
-                result = new RemoteOperationResult(new OperationCancelledException());
+                result = new RemoteOperationResult<>(new OperationCancelledException());
                 Log_OC.e(TAG, "Upload of " + mLocalPath + " to " + mRemotePath + ": " +
                         result.getLogMessage(), new OperationCancelledException());
             } else {
-                result = new RemoteOperationResult(e);
+                result = new RemoteOperationResult<>(e);
                 Log_OC.e(TAG, "Upload of " + mLocalPath + " to " + mRemotePath + ": " +
                         result.getLogMessage(), e);
             }
@@ -119,7 +119,7 @@ public class UploadRemoteFileOperation extends RemoteOperation {
         return result;
     }
 
-    protected RemoteOperationResult uploadFile(OwnCloudClient client) throws Exception {
+    protected RemoteOperationResult<? extends Object> uploadFile(OwnCloudClient client) throws Exception {
 
         File fileToUpload = new File(mLocalPath);
 
@@ -144,10 +144,10 @@ public class UploadRemoteFileOperation extends RemoteOperation {
         int status = client.executeHttpMethod(mPutMethod);
 
         if (isSuccess(status)) {
-            return new RemoteOperationResult(OK);
+            return new RemoteOperationResult<>(OK);
 
         } else { // synchronization failed
-            return new RemoteOperationResult(mPutMethod);
+            return new RemoteOperationResult<>(mPutMethod);
         }
     }
 

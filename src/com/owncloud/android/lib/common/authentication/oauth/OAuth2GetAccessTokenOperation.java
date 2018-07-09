@@ -32,22 +32,20 @@ import com.owncloud.android.lib.common.authentication.OwnCloudBasicCredentials;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentials;
 import com.owncloud.android.lib.common.http.methods.nonwebdav.PostMethod;
+import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
-import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 
 import org.json.JSONObject;
 
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Map;
 
-import okhttp3.HttpUrl;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
 
-public class OAuth2GetAccessTokenOperation extends RemoteOperation {
+public class OAuth2GetAccessTokenOperation extends RemoteOperation<Map<String, String>> {
     
     private String mGrantType;
     private String mCode;
@@ -84,7 +82,7 @@ public class OAuth2GetAccessTokenOperation extends RemoteOperation {
 
     @Override
     protected RemoteOperationResult run(OwnCloudClient client) {
-        RemoteOperationResult result = null;
+        RemoteOperationResult<Map<String, String>> result = null;
         
         try {
 
@@ -122,22 +120,20 @@ public class OAuth2GetAccessTokenOperation extends RemoteOperation {
                     mResponseParser.parseAccessTokenResult(tokenJson);
                 if (accessTokenResult.get(OAuth2Constants.KEY_ERROR) != null ||
                         accessTokenResult.get(OAuth2Constants.KEY_ACCESS_TOKEN) == null) {
-                    result = new RemoteOperationResult(ResultCode.OAUTH2_ERROR);
+                    result = new RemoteOperationResult<>(ResultCode.OAUTH2_ERROR);
 
                 } else {
-                    result = new RemoteOperationResult(ResultCode.OK);
-                    ArrayList<Object> data = new ArrayList<>();
-                    data.add(accessTokenResult);
-                    result.setData(data);
+                    result = new RemoteOperationResult<>(ResultCode.OK);
+                    result.setData(accessTokenResult);
                 }
 
             } else {
-                result = new RemoteOperationResult(ResultCode.OK);
+                result = new RemoteOperationResult<>(ResultCode.OK);
                 client.exhaustResponse(postMethod.getResponseAsStream());
             }
 
         } catch (Exception e) {
-            result = new RemoteOperationResult(e);
+            result = new RemoteOperationResult<>(e);
             
         }
         return result;

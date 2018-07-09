@@ -39,7 +39,6 @@ import com.owncloud.android.lib.common.utils.Log_OC;
 import org.json.JSONObject;
 
 import java.net.URL;
-import java.util.ArrayList;
 
 import static com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode.OK;
 
@@ -50,7 +49,7 @@ import static com.owncloud.android.lib.common.operations.RemoteOperationResult.R
  * @author masensio
  * @author David González Verdugo
  */
-public class GetRemoteCapabilitiesOperation extends RemoteOperation {
+public class GetRemoteCapabilitiesOperation extends RemoteOperation<OCCapability> {
 
     private static final String TAG = GetRemoteCapabilitiesOperation.class.getSimpleName();
 
@@ -120,8 +119,8 @@ public class GetRemoteCapabilitiesOperation extends RemoteOperation {
     }
 
     @Override
-    protected RemoteOperationResult run(OwnCloudClient client) {
-        RemoteOperationResult result;
+    protected RemoteOperationResult<OCCapability> run(OwnCloudClient client) {
+        RemoteOperationResult<OCCapability> result;
 
         try {
             Uri requestUri = client.getBaseUri();
@@ -151,7 +150,6 @@ public class GetRemoteCapabilitiesOperation extends RemoteOperation {
                 String message = respMeta.getString(PROPERTY_MESSAGE);
 
                 if (statusProp) {
-                    ArrayList<Object> data = new ArrayList<Object>(); // For result data
                     OCCapability capability = new OCCapability();
                     // Add Version
                     if (respData.has(NODE_VERSION)) {
@@ -257,19 +255,18 @@ public class GetRemoteCapabilitiesOperation extends RemoteOperation {
                         }
                     }
                     // Result
-                    data.add(capability);
-                    result = new RemoteOperationResult(OK);
-                    result.setData(data);
+                    result = new RemoteOperationResult<>(OK);
+                    result.setData(capability);
 
                     Log_OC.d(TAG, "*** Get Capabilities completed ");
                 } else {
-                    result = new RemoteOperationResult(statuscode, message, null);
+                    result = new RemoteOperationResult<>(statuscode, message, null);
                     Log_OC.e(TAG, "Failed response while getting capabilities from the server ");
                     Log_OC.e(TAG, "*** status: " + statusProp + "; message: " + message);
                 }
 
             } else {
-                result = new RemoteOperationResult(getMethod);
+                result = new RemoteOperationResult<>(getMethod);
                 Log_OC.e(TAG, "Failed response while getting capabilities from the server ");
                 if (response != null) {
                     Log_OC.e(TAG, "*** status code: " + status + "; response message: " + response);
@@ -279,7 +276,7 @@ public class GetRemoteCapabilitiesOperation extends RemoteOperation {
             }
 
         } catch (Exception e) {
-            result = new RemoteOperationResult(e);
+            result = new RemoteOperationResult<>(e);
             Log_OC.e(TAG, "Exception while getting capabilities", e);
         }
         return result;

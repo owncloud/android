@@ -34,7 +34,6 @@ import com.owncloud.android.lib.common.utils.Log_OC;
 import org.json.JSONObject;
 
 import java.net.URL;
-import java.util.ArrayList;
 
 import okhttp3.Request;
 
@@ -67,8 +66,8 @@ public class GetRemoteUserInfoOperation extends RemoteOperation {
     }
 
     @Override
-    protected RemoteOperationResult run(OwnCloudClient client) {
-        RemoteOperationResult result;
+    protected RemoteOperationResult<UserInfo> run(OwnCloudClient client) {
+        RemoteOperationResult<UserInfo> result;
 
         //Get the user
         try {
@@ -93,14 +92,12 @@ public class GetRemoteUserInfoOperation extends RemoteOperation {
                 userInfo.mDisplayName = respData.getString(NODE_DISPLAY_NAME);
                 userInfo.mEmail = respData.getString(NODE_EMAIL);
 
-                result = new RemoteOperationResult(OK);
+                result = new RemoteOperationResult<>(OK);
 
-                ArrayList<Object> data = new ArrayList<>();
-                data.add(userInfo);
-                result.setData(data);
+                result.setData(userInfo);
 
             } else {
-                result = new RemoteOperationResult(getMethod);
+                result = new RemoteOperationResult<>(getMethod);
                 String response = getMethod.getResponseBodyAsString();
                 Log_OC.e(TAG, "Failed response while getting user information ");
                 if (getMethod != null) {
@@ -110,7 +107,7 @@ public class GetRemoteUserInfoOperation extends RemoteOperation {
                 }
             }
         } catch (Exception e) {
-            result = new RemoteOperationResult(e);
+            result = new RemoteOperationResult<>(e);
             Log_OC.e(TAG, "Exception while getting OC user information", e);
         }
 

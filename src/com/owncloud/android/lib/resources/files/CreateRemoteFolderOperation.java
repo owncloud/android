@@ -31,16 +31,14 @@ import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.http.HttpConstants;
 import com.owncloud.android.lib.common.http.methods.webdav.MkColMethod;
 import com.owncloud.android.lib.common.network.WebdavUtils;
+import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
-import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 
 import java.net.URL;
 import java.util.concurrent.TimeUnit;
-
-import okhttp3.HttpUrl;
 
 
 /**
@@ -94,7 +92,7 @@ public class CreateRemoteFolderOperation extends RemoteOperation {
             }
 
         } else {
-            result = new RemoteOperationResult(ResultCode.INVALID_CHARACTER_IN_NAME);
+            result = new RemoteOperationResult<>(ResultCode.INVALID_CHARACTER_IN_NAME);
         }
 
         return result;
@@ -111,13 +109,13 @@ public class CreateRemoteFolderOperation extends RemoteOperation {
             final int status = client.executeHttpMethod(mkcol);
 
             result = (status == HttpConstants.HTTP_CREATED)
-                    ? new RemoteOperationResult(ResultCode.OK)
-                    : new RemoteOperationResult(mkcol);
+                    ? new RemoteOperationResult<>(ResultCode.OK)
+                    : new RemoteOperationResult<>(mkcol);
             Log_OC.d(TAG, "Create directory " + mRemotePath + ": " + result.getLogMessage());
             client.exhaustResponse(mkcol.getResponseAsStream());
 
         } catch (Exception e) {
-            result = new RemoteOperationResult(e);
+            result = new RemoteOperationResult<>(e);
             Log_OC.e(TAG, "Create directory " + mRemotePath + ": " + result.getLogMessage(), e);
         }
 

@@ -44,7 +44,7 @@ import java.net.URL;
  * @author David González Verdugo
  */
 
-public class GetRemoteShareOperation extends RemoteOperation {
+public class GetRemoteShareOperation extends RemoteOperation<ShareParserResult> {
 
     private static final String TAG = GetRemoteShareOperation.class.getSimpleName();
 
@@ -57,7 +57,7 @@ public class GetRemoteShareOperation extends RemoteOperation {
 
     @Override
     protected RemoteOperationResult run(OwnCloudClient client) {
-        RemoteOperationResult result;
+        RemoteOperationResult<ShareParserResult> result;
 
         try {
             Uri requestUri = client.getBaseUri();
@@ -83,11 +83,11 @@ public class GetRemoteShareOperation extends RemoteOperation {
                 result = parser.parse(getMethod.getResponseBodyAsString());
 
             } else {
-                result = new RemoteOperationResult(getMethod);
+                result = new RemoteOperationResult<>(getMethod);
             }
 
         } catch (Exception e) {
-            result = new RemoteOperationResult(e);
+            result = new RemoteOperationResult<>(e);
             Log_OC.e(TAG, "Exception while getting remote shares ", e);
         }
         return result;

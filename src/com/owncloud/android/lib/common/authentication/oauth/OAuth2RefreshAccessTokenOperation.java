@@ -26,24 +26,22 @@ import android.net.Uri;
 import com.owncloud.android.lib.common.authentication.OwnCloudBasicCredentials;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentials;
+import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
-import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.common.utils.Log_OC;
 
 import org.json.JSONObject;
 
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Map;
 
 import com.owncloud.android.lib.common.http.methods.nonwebdav.PostMethod;
 
-import okhttp3.HttpUrl;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
-public class OAuth2RefreshAccessTokenOperation extends RemoteOperation {
+public class OAuth2RefreshAccessTokenOperation extends RemoteOperation<Map<String, String>> {
 
     private static final String TAG = OAuth2RefreshAccessTokenOperation.class.getSimpleName();
 
@@ -76,7 +74,7 @@ public class OAuth2RefreshAccessTokenOperation extends RemoteOperation {
     }
 
     @Override
-    protected RemoteOperationResult run(OwnCloudClient client) {
+    protected RemoteOperationResult<Map<String, String>> run(OwnCloudClient client) {
 
         try {
 
@@ -115,21 +113,20 @@ public class OAuth2RefreshAccessTokenOperation extends RemoteOperation {
 
                 final Map<String, String> accessTokenResult =
                         mResponseParser.parseAccessTokenResult(tokenJson);
-                final ArrayList<Object> resultData = new ArrayList<>(1);
-                resultData.add(accessTokenResult);
-                final RemoteOperationResult result = new RemoteOperationResult(ResultCode.OK);
-                result.setData(resultData);
+
+                final RemoteOperationResult<Map<String, String>> result = new RemoteOperationResult<>(ResultCode.OK);
+                result.setData(accessTokenResult);
                 return (accessTokenResult.get(OAuth2Constants.KEY_ERROR) != null ||
                         accessTokenResult.get(OAuth2Constants.KEY_ACCESS_TOKEN) == null)
-                        ? new RemoteOperationResult(ResultCode.OAUTH2_ERROR)
+                        ? new RemoteOperationResult<>(ResultCode.OAUTH2_ERROR)
                         : result;
 
             } else {
-                return new RemoteOperationResult(postMethod);
+                return new RemoteOperationResult<>(postMethod);
             }
 
         } catch (Exception e) {
-            return new RemoteOperationResult(e);
+            return new RemoteOperationResult<>(e);
         }
     }
 

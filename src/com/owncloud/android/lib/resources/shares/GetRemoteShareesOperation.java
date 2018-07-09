@@ -70,7 +70,7 @@ import static com.owncloud.android.lib.common.operations.RemoteOperationResult.R
  * @author David A. Velasco
  * @author David González Verdugo
  */
-public class GetRemoteShareesOperation extends RemoteOperation{
+public class GetRemoteShareesOperation extends RemoteOperation<ArrayList<JSONObject>> {
 
     private static final String TAG = GetRemoteShareesOperation.class.getSimpleName();
 
@@ -118,8 +118,8 @@ public class GetRemoteShareesOperation extends RemoteOperation{
     }
 
     @Override
-    protected RemoteOperationResult run(OwnCloudClient client) {
-        RemoteOperationResult result;
+    protected RemoteOperationResult<ArrayList<JSONObject>> run(OwnCloudClient client) {
+        RemoteOperationResult<ArrayList<JSONObject>> result;
 
         try{
             Uri requestUri = client.getBaseUri();
@@ -161,7 +161,7 @@ public class GetRemoteShareesOperation extends RemoteOperation{
                         respPartialRemotes
                 };
 
-                ArrayList<Object> data = new ArrayList<Object>(); // For result data
+                ArrayList<JSONObject> data = new ArrayList<>(); // For result data
                 for (int i=0; i<6; i++) {
                     for(int j=0; j< jsonResults[i].length(); j++){
                         JSONObject jsonResult = jsonResults[i].getJSONObject(j);
@@ -170,13 +170,13 @@ public class GetRemoteShareesOperation extends RemoteOperation{
                     }
                 }
 
-                result = new RemoteOperationResult(OK);
+                result = new RemoteOperationResult<>(OK);
                 result.setData(data);
 
                 Log_OC.d(TAG, "*** Get Users or groups completed " );
 
             } else {
-                result = new RemoteOperationResult(getMethod);
+                result = new RemoteOperationResult<>(getMethod);
                 Log_OC.e(TAG, "Failed response while getting users/groups from the server ");
                 if (response != null) {
                     Log_OC.e(TAG, "*** status code: " + status + "; response message: " + response);
@@ -185,7 +185,7 @@ public class GetRemoteShareesOperation extends RemoteOperation{
                 }
             }
         } catch (Exception e) {
-            result = new RemoteOperationResult(e);
+            result = new RemoteOperationResult<>(e);
             Log_OC.e(TAG, "Exception while getting users/groups", e);
         }
 

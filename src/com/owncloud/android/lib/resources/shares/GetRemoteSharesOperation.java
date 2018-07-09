@@ -75,10 +75,10 @@ public class GetRemoteSharesOperation extends RemoteOperation {
                 parser.setServerBaseUri(client.getBaseUri());
                 result = parser.parse(getMethod.getResponseBodyAsString());
             } else {
-                result = new RemoteOperationResult(getMethod);
+                result = new RemoteOperationResult<>(getMethod);
             }
         } catch (Exception e) {
-            result = new RemoteOperationResult(e);
+            result = new RemoteOperationResult<>(e);
             Log_OC.e(TAG, "Exception while getting remote shares ", e);
         }
 

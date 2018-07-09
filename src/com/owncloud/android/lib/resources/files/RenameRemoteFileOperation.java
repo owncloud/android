@@ -32,13 +32,11 @@ import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.http.HttpConstants;
 import com.owncloud.android.lib.common.http.methods.webdav.MoveMethod;
 import com.owncloud.android.lib.common.network.WebdavUtils;
+import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
-import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
-
-import okhttp3.HttpUrl;
 
 
 /**
@@ -96,15 +94,15 @@ public class RenameRemoteFileOperation extends RemoteOperation {
             (version != null && version.isVersionWithForbiddenCharacters());
 
         if(!FileUtils.isValidPath(mNewRemotePath, versionWithForbiddenChars))
-            return new RemoteOperationResult(ResultCode.INVALID_CHARACTER_IN_NAME);
+            return new RemoteOperationResult<>(ResultCode.INVALID_CHARACTER_IN_NAME);
 
         try {
             if (mNewName.equals(mOldName)) {
-                return new RemoteOperationResult(ResultCode.OK);
+                return new RemoteOperationResult<>(ResultCode.OK);
             }
 
             if (targetPathIsUsed(client)) {
-                return new RemoteOperationResult(ResultCode.INVALID_OVERWRITE);
+                return new RemoteOperationResult<>(ResultCode.INVALID_OVERWRITE);
             }
 
             final MoveMethod move = new MoveMethod(new URL(client.getNewFilesWebDavUri() +
@@ -117,8 +115,8 @@ public class RenameRemoteFileOperation extends RemoteOperation {
             final int status = client.executeHttpMethod(move);
             final RemoteOperationResult result =
                     (status == HttpConstants.HTTP_CREATED || status == HttpConstants.HTTP_NO_CONTENT)
-                            ? new RemoteOperationResult(ResultCode.OK)
-                            : new RemoteOperationResult(move);
+                            ? new RemoteOperationResult<>(ResultCode.OK)
+                            : new RemoteOperationResult<>(move);
 
             Log_OC.i(TAG, "Rename " + mOldRemotePath + " to " + mNewRemotePath + ": " +
                     result.getLogMessage()
@@ -126,7 +124,7 @@ public class RenameRemoteFileOperation extends RemoteOperation {
             client.exhaustResponse(move.getResponseAsStream());
             return result;
         } catch (Exception e) {
-            final RemoteOperationResult result = new RemoteOperationResult(e);
+            final RemoteOperationResult result = new RemoteOperationResult<>(e);
             Log_OC.e(TAG, "Rename " + mOldRemotePath + " to " +
                     ((mNewRemotePath == null) ? mNewName : mNewRemotePath) + ": " +
                     result.getLogMessage(), e);

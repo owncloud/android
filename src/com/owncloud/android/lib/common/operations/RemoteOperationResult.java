@@ -1,33 +1,9 @@
-/* ownCloud Android Library is available under MIT license
- *   Copyright (C) 2018 ownCloud GmbH.
- *
- *   Permission is hereby granted, free of charge, to any person obtaining a copy
- *   of this software and associated documentation files (the "Software"), to deal
- *   in the Software without restriction, including without limitation the rights
- *   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- *   copies of the Software, and to permit persons to whom the Software is
- *   furnished to do so, subject to the following conditions:
- *
- *   The above copyright notice and this permission notice shall be included in
- *   all copies or substantial portions of the Software.
- *
- *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- *   EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- *   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- *   NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
- *   BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
- *   ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
- *   CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- *   THE SOFTWARE.
- *
- */
-
 package com.owncloud.android.lib.common.operations;
 
 import android.accounts.Account;
 import android.accounts.AccountsException;
 
-import com.owncloud.android.lib.common.accounts.AccountUtils.AccountNotFoundException;
+import com.owncloud.android.lib.common.accounts.AccountUtils;
 import com.owncloud.android.lib.common.http.HttpConstants;
 import com.owncloud.android.lib.common.http.methods.HttpBaseMethod;
 import com.owncloud.android.lib.common.network.CertificateCombinedException;
@@ -55,21 +31,8 @@ import at.bitfire.dav4android.exception.DavException;
 import at.bitfire.dav4android.exception.HttpException;
 import okhttp3.Headers;
 
-
-
-
-
-
-/**
- * The result of a remote operation required to an ownCloud server.
- *
- * Provides a common classification of remote operation results for all the
- * application.
- *
- * @author David A. Velasco
- * @author David González Verdugo
- */
-public class RemoteOperationResult implements Serializable {
+public class RemoteOperationResult<T extends Object>
+        implements Serializable {
 
     /**
      * Generated - should be refreshed every time the class changes!!
@@ -139,8 +102,7 @@ public class RemoteOperationResult implements Serializable {
     private String mRedirectedLocation;
     private ArrayList<String> mAuthenticate = new ArrayList<>();
     private String mLastPermanentLocation = null;
-
-    private ArrayList<Object> mData;
+    private T mData = null;
 
     /**
      * Public constructor from result code.
@@ -154,7 +116,6 @@ public class RemoteOperationResult implements Serializable {
         mSuccess = (code == ResultCode.OK || code == ResultCode.OK_SSL ||
                 code == ResultCode.OK_NO_SSL ||
                 code == ResultCode.OK_REDIRECT_TO_NON_SECURE_CONNECTION);
-        mData = null;
     }
 
     /**
@@ -184,7 +145,7 @@ public class RemoteOperationResult implements Serializable {
         } else if (e instanceof UnknownHostException) {
             mCode = ResultCode.HOST_NOT_AVAILABLE;
 
-        } else if (e instanceof AccountNotFoundException) {
+        } else if (e instanceof AccountUtils.AccountNotFoundException) {
             mCode = ResultCode.ACCOUNT_NOT_FOUND;
 
         } else if (e instanceof AccountsException) {
@@ -332,7 +293,7 @@ public class RemoteOperationResult implements Serializable {
         }
         if (isIdPRedirection()) {
             // overrides default ResultCode.UNKNOWN
-            mCode = com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode.UNAUTHORIZED;
+            mCode = ResultCode.UNAUTHORIZED;
         }
     }
 
@@ -382,13 +343,6 @@ public class RemoteOperationResult implements Serializable {
         }
     }
 
-    public void setData(ArrayList<Object> items) {
-        mData = items;
-    }
-
-    public ArrayList<Object> getData() {
-        return mData;
-    }
 
     public boolean isSuccess() {
         return mSuccess;
@@ -476,9 +430,9 @@ public class RemoteOperationResult implements Serializable {
             } else if (mException instanceof IOException) {
                 return "Unrecovered transport exception";
 
-            } else if (mException instanceof AccountNotFoundException) {
+            } else if (mException instanceof AccountUtils.AccountNotFoundException) {
                 Account failedAccount =
-                        ((AccountNotFoundException) mException).getFailedAccount();
+                        ((AccountUtils.AccountNotFoundException) mException).getFailedAccount();
                 return mException.getMessage() + " (" +
                         (failedAccount != null ? failedAccount.name : "NULL") + ")";
 
@@ -574,5 +528,13 @@ public class RemoteOperationResult implements Serializable {
 
     public void setSuccess(boolean success) {
         this.mSuccess = success;
+    }
+
+    public void setData(T data) {
+        mData = data;
+    }
+
+    public T getData() {
+        return mData;
     }
 }

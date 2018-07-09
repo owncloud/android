@@ -102,19 +102,17 @@ public class ExistenceCheckRemoteOperation extends RemoteOperation {
                     "finished with HTTP status " + status + (!isSuccess(status) ? "(FAIL)" : ""));
 
             return isSuccess(status)
-                    ? new RemoteOperationResult(OK)
-                    : new RemoteOperationResult(propfindMethod);
+                    ? new RemoteOperationResult<>(OK)
+                    : new RemoteOperationResult<>(propfindMethod);
 
         } catch (Exception e) {
-            final RemoteOperationResult result = new RemoteOperationResult(e);
+            final RemoteOperationResult result = new RemoteOperationResult<>(e);
             Log_OC.e(TAG, "Existence check for " + client.getNewFilesWebDavUri() +
                     WebdavUtils.encodePath(mPath) + " targeting for " +
                     (mSuccessIfAbsent ? " absence " : " existence ") + ": " +
                     result.getLogMessage(), result.getException());
             return result;
-
         }
-
     }
 
     /**

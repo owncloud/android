@@ -39,7 +39,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.ArrayList;
 
 import static com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode.OK;
 
@@ -50,7 +49,7 @@ import static com.owncloud.android.lib.common.operations.RemoteOperationResult.R
  * @author David González Verdugo
  */
 
-public class GetRemoteUserAvatarOperation extends RemoteOperation {
+public class GetRemoteUserAvatarOperation extends RemoteOperation<GetRemoteUserAvatarOperation.ResultData> {
 
     private static final String TAG = GetRemoteUserAvatarOperation.class.getSimpleName();
 
@@ -73,9 +72,9 @@ public class GetRemoteUserAvatarOperation extends RemoteOperation {
     }
 
     @Override
-    protected RemoteOperationResult run(OwnCloudClient client) {
+    protected RemoteOperationResult<ResultData> run(OwnCloudClient client) {
         GetMethod getMethod = null;
-        RemoteOperationResult result;
+        RemoteOperationResult<ResultData> result;
         InputStream inputStream = null;
         BufferedInputStream bis = null;
         ByteArrayOutputStream bos = null;
@@ -107,9 +106,7 @@ public class GetRemoteUserAvatarOperation extends RemoteOperation {
                     Log_OC.e(
                         TAG, "Not an image, failing with no avatar"
                     );
-                    result = new RemoteOperationResult(
-                        RemoteOperationResult.ResultCode.FILE_NOT_FOUND
-                    );
+                    result = new RemoteOperationResult<>(RemoteOperationResult.ResultCode.FILE_NOT_FOUND);
                     return result;
                 }
 
@@ -136,19 +133,16 @@ public class GetRemoteUserAvatarOperation extends RemoteOperation {
                 }
 
                 // Result
-                result = new RemoteOperationResult(OK);
-                ResultData resultData = new ResultData(bos.toByteArray(), mimeType, etag);
-                ArrayList<Object> data = new ArrayList<Object>();
-                data.add(resultData);
-                result.setData(data);
+                result = new RemoteOperationResult<>(OK);
+                result.setData(new ResultData(bos.toByteArray(), mimeType, etag));
 
             } else {
-                result = new RemoteOperationResult(getMethod);
+                result = new RemoteOperationResult<>(getMethod);
                 client.exhaustResponse(getMethod.getResponseAsStream());
             }
 
         } catch (Exception e) {
-            result = new RemoteOperationResult(e);
+            result = new RemoteOperationResult<>(e);
             Log_OC.e(TAG, "Exception while getting OC user avatar", e);
 
         } finally {
