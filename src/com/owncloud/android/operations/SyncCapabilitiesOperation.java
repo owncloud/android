@@ -34,22 +34,22 @@ import com.owncloud.android.operations.common.SyncOperation;
 /**
  * Get and save capabilities from the server
  */
-public class SyncCapabilitiesOperation extends SyncOperation {
+public class SyncCapabilitiesOperation extends SyncOperation<OCCapability> {
 
     private static final String TAG = SyncCapabilitiesOperation.class.getName();
 
     @Override
-    protected RemoteOperationResult run(OwnCloudClient client) {
+    protected RemoteOperationResult<OCCapability> run(OwnCloudClient client) {
         OCCapability capabilities = null;
         OwnCloudVersion serverVersion = null;
 
         /// Get current value for capabilities from server
         GetRemoteCapabilitiesOperation getCapabilities = new GetRemoteCapabilitiesOperation();
-        RemoteOperationResult result = getCapabilities.execute(client);
+        RemoteOperationResult<OCCapability> result = getCapabilities.execute(client);
         if (result.isSuccess()){
             // Read data from the result
-            if( result.getData()!= null && result.getData().size() > 0) {
-                capabilities = (OCCapability) result.getData().get(0);
+            if(result.getData()!= null) {
+                capabilities = result.getData();
                 serverVersion = new OwnCloudVersion(capabilities.getVersionString());
             }
 
@@ -59,9 +59,9 @@ public class SyncCapabilitiesOperation extends SyncOperation {
             // server version is important; this fallback will try to get it from status.php
             // if capabilities API is not available
             GetRemoteStatusOperation getStatus = new GetRemoteStatusOperation(MainApp.getAppContext());
-            RemoteOperationResult statusResult = getStatus.execute(client);
+            RemoteOperationResult<OwnCloudVersion> statusResult = getStatus.execute(client);
             if (statusResult.isSuccess()) {
-                serverVersion = (OwnCloudVersion) (statusResult.getData().get(0));
+                serverVersion = statusResult.getData();
             }
         }
 

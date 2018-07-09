@@ -22,11 +22,11 @@ package com.owncloud.android.operations;
 
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.lib.common.OwnCloudClient;
-import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.resources.files.FileUtils;
 import com.owncloud.android.lib.resources.shares.GetRemoteShareOperation;
 import com.owncloud.android.lib.resources.shares.OCShare;
+import com.owncloud.android.lib.resources.shares.ShareParserResult;
 import com.owncloud.android.lib.resources.shares.ShareType;
 import com.owncloud.android.lib.resources.shares.UpdateRemoteShareOperation;
 import com.owncloud.android.operations.common.SyncOperation;
@@ -36,7 +36,7 @@ import com.owncloud.android.operations.common.SyncOperation;
  * Updates an existing public share for a given file
  */
 
-public class UpdateShareViaLinkOperation extends SyncOperation {
+public class UpdateShareViaLinkOperation extends SyncOperation<ShareParserResult> {
 
     private long mShareId;
     private String mName;
@@ -117,14 +117,13 @@ public class UpdateShareViaLinkOperation extends SyncOperation {
 
 
     @Override
-    protected RemoteOperationResult run(OwnCloudClient client) {
+    protected RemoteOperationResult<ShareParserResult> run(OwnCloudClient client) {
 
         OCShare storedShare = getStorageManager().getShareById(mShareId);
 
         if (storedShare == null || !ShareType.PUBLIC_LINK.equals(storedShare.getShareType())) {
-            return new RemoteOperationResult(
-                RemoteOperationResult.ResultCode.SHARE_NOT_FOUND
-            );
+            return new RemoteOperationResult<>(
+                RemoteOperationResult.ResultCode.SHARE_NOT_FOUND);
         }
 
         // Update remote share with password
@@ -136,14 +135,14 @@ public class UpdateShareViaLinkOperation extends SyncOperation {
         updateOp.setExpirationDate(mExpirationDateInMillis);
         updateOp.setPublicUpload(mPublicUpload);
         updateOp.setPermissions(mPermissions);
-        RemoteOperationResult result = updateOp.execute(client);
+        RemoteOperationResult<ShareParserResult> result = updateOp.execute(client);
 
         if (result.isSuccess()) {
             // Retrieve updated share / save directly with password? -> no; the password is not to be saved
-            RemoteOperation getShareOp = new GetRemoteShareOperation(storedShare.getRemoteId());
+            GetRemoteShareOperation getShareOp = new GetRemoteShareOperation(storedShare.getRemoteId());
             result = getShareOp.execute(client);
             if (result.isSuccess()) {
-                OCShare remoteShare = (OCShare) result.getData().get(0);
+                OCShare remoteShare = result.getData().getShares().get(0);
                 updateData(storedShare, remoteShare);
             }
         }

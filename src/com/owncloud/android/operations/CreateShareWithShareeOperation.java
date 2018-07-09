@@ -33,6 +33,7 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.resources.files.FileUtils;
 import com.owncloud.android.lib.resources.shares.CreateRemoteShareOperation;
 import com.owncloud.android.lib.resources.shares.OCShare;
+import com.owncloud.android.lib.resources.shares.ShareParserResult;
 import com.owncloud.android.lib.resources.shares.ShareType;
 import com.owncloud.android.operations.common.SyncOperation;
 
@@ -78,11 +79,11 @@ public class CreateShareWithShareeOperation extends SyncOperation {
                 mPermissions
         );
         operation.setGetShareDetails(true);
-        RemoteOperationResult result = operation.execute(client);
+        RemoteOperationResult<ShareParserResult> result = operation.execute(client);
 
         if (result.isSuccess()) {
-            if (result.getData().size() > 0) {
-                OCShare share = (OCShare) result.getData().get(0);
+            if (!result.getData().getShares().isEmpty()) {
+                OCShare share = result.getData().getShares().get(0);
                 updateData(share);
             } 
         }

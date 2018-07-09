@@ -26,11 +26,10 @@ import java.io.File;
 import java.io.IOException;
 
 import com.owncloud.android.MainApp;
-import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.lib.common.OwnCloudClient;
-import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
+import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.files.RenameRemoteFileOperation;
 import com.owncloud.android.operations.common.SyncOperation;
@@ -115,8 +114,7 @@ public class RenameFileOperation extends SyncOperation {
             
         } catch (IOException e) {
             Log_OC.e(TAG, "Rename " + mFile.getRemotePath() + " to " + ((mNewRemotePath==null) ?
-                    mNewName : mNewRemotePath) + ": " +
-                    ((result!= null) ? result.getLogMessage() : ""), e);
+                    mNewName : mNewRemotePath) + ": " + result.getLogMessage(), e);
         }
 
         return result;
