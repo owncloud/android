@@ -195,10 +195,12 @@ public class PublicShareActivityTest {
     public void test_01_create_public_link_folder_defaults()
             throws IllegalArgumentException {
 
+        Log_OC.i(LOG_TAG, "Test Share Public Defaults Start");
+        SystemClock.sleep(WAIT_INITIAL_MS);
+
         //Skipping the Welcome Wizard
         onView(withId(R.id.skip)).perform(click());
 
-        Log_OC.i(LOG_TAG, "Test Share Public Defaults Start");
         SystemClock.sleep(WAIT_INITIAL_MS);
 
         //Select share option
@@ -229,7 +231,7 @@ public class PublicShareActivityTest {
     }
 
     /**
-     *  TEST CASE: Share publicly a folder with DownloadV/View permission
+     *  TEST CASE: Share publicly a folder with Download/View permission
      *  PASSED IF: Link created and visible in share view with Download/View option
      *
      */
@@ -474,13 +476,13 @@ public class PublicShareActivityTest {
 
 
     /**
-     *  TEST CASE: Edit the public folder by switching "Password" on and "Allow editing" off
+     *  TEST CASE: Edit the public folder by switching "Password" on
      *  PASSED IF:
      *          - "Password" enabled
      *          - "Expiration" disabled
      */
     @Test
-    public void test_07_enable_password()
+    public void test_07_edit_link_enable_password()
             throws IllegalArgumentException {
 
         Log_OC.i(LOG_TAG, "Test Enable Password Start");
@@ -524,7 +526,7 @@ public class PublicShareActivityTest {
      *          - "Password" disabled
      */
     @Test
-    public void test_08_enable_expiration()
+    public void test_08_edit_link_enable_expiration()
             throws IllegalArgumentException {
 
         Log_OC.i(LOG_TAG, "Test Enable Expiration Start");
@@ -603,11 +605,9 @@ public class PublicShareActivityTest {
         //Select share option
         selectShare(folder);
 
-        if (isSupportedMultipleLinks()) {
-            onView(withId(R.id.addPublicLinkButton)).check(matches(isDisplayed()));
-            for (int i = 0; i < MULTIPLE_LINKS ; i++) {
-                publicShareCreationDefault(nameShareMultiple+i);
-            }
+        onView(withId(R.id.addPublicLinkButton)).check(matches(isDisplayed()));
+        for (int i = 0; i < MULTIPLE_LINKS ; i++) {
+            publicShareCreationDefault(nameShareMultiple+i);
         }
 
         Log_OC.i(LOG_TAG, "Test Unshare Public Passed");
@@ -628,10 +628,8 @@ public class PublicShareActivityTest {
         //Select share option
         selectShare(folder);
 
-        if (isSupportedMultipleLinks()) {
-            for (int i = 0; i < MULTIPLE_LINKS ; i++) {
-                deleteLink(nameShareMultiple+i);
-            }
+        for (int i = 0; i < MULTIPLE_LINKS ; i++) {
+            deleteLink(nameShareMultiple+i);
         }
 
         Log_OC.i(LOG_TAG, "Test Remove Multiple Public Passed");
@@ -704,10 +702,10 @@ public class PublicShareActivityTest {
     }
 
     /**
-     *  TEST CASE: Capability "Allow editing" disabled
-     *  PASSED IF: No option in public links to edit the content
+     *  TEST CASE: Capability "Allow uploads" disabled
+     *  PASSED IF: Only Download/View option displayed
      */
-    /*@Test
+    @Test
     public void test_14_capability_allow_public_uploads()
             throws IllegalArgumentException {
 
@@ -728,14 +726,13 @@ public class PublicShareActivityTest {
         //Creation of the share link.
         onView(withId(R.id.addPublicLinkButton)).perform(click());
 
-        onView(withId(R.id.shareViaLinkPermissionSwitch)).check(matches(not(isDisplayed())));
-        if (isSupportedFileListing()) {
-            onView(withId(R.id.shareViaShowFileListingSwitch)).check(matches(not(isDisplayed())));
-        }
+        onView(withId(R.id.shareViaLinkEditPermissionReadOnly)).check(matches(not(isDisplayed())));
+        onView(withId(R.id.shareViaLinkEditPermissionReadAndWrite)).check(matches(not(isDisplayed())));
+        onView(withId(R.id.shareViaLinkEditPermissionUploadFiles)).check(matches(not(isDisplayed())));
 
         Log_OC.i(LOG_TAG, "Test Capability Public Uploads Passed");
 
-    }*/
+    }
 
     /**
      *  TEST CASE: Share public a file (default options)
@@ -882,32 +879,6 @@ public class PublicShareActivityTest {
 
     }
 
-    //To create a new public link with all options enabled
-    private void publicShareCreationAllEnabled (String name) {
-
-        //Creation of the share link. Name only for servers >= 10
-        onView(withId(R.id.addPublicLinkButton)).perform(click());
-        onView(withId(R.id.shareViaLinkNameValue)).perform(replaceText(name));
-
-        //Enable all options
-        onView(withId(R.id.shareViaLinkEditPermissionReadOnly)).perform(click());
-        onView(withId(R.id.shareViaLinkPasswordSwitch)).perform(click());
-        //onView(withId(R.id.shareViaLinkPasswordValue)).perform(scrollTo(), replaceText("a"));
-        //onView(withId(R.id.shareViaLinkExpirationSwitch)).perform(scrollTo(), click());
-        SystemClock.sleep(WAIT_CONNECTION_MS);
-        onView(withId(android.R.id.button1)).perform(click());
-        onView(withId(R.id.saveButton)).perform(scrollTo(), click());
-        SystemClock.sleep(WAIT_CONNECTION_MS);
-
-        //Check that the sharing panel is displayed
-        onView(withId(R.id.parentPanel)).check(matches(isDisplayed()));
-        onView(withId(R.id.alertTitle)).check(matches(isDisplayed()));
-        pressBack();
-
-        SystemClock.sleep(WAIT_CONNECTION_MS);
-
-    }
-
 
     //Returns the permission of writing in device storage
     private int grantedPermission () {
@@ -934,12 +905,6 @@ public class PublicShareActivityTest {
     //True if server supports File Listing option
     private boolean isSupportedFileListing (){
             return capabilities.getFilesSharingPublicSupportsUploadOnly() == CapabilityBooleanType.TRUE;
-    }
-
-
-    //True if server supports multiple public links
-    private boolean isSupportedMultipleLinks (){
-        return capabilities.getFilesSharingPublicMultiple() == CapabilityBooleanType.TRUE;
     }
 
     //Delete a link. For non multiple servers.
