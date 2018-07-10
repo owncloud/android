@@ -513,12 +513,4 @@ Neem contact op met uw beheerder</string>
   <string name="welcome_feature_4_text">Uw afbeeldingen/video\'s automatisch uploaden</string>
   <string name="welcome_feature_5_title">Video streaming</string>
   <string name="welcome_feature_5_text">Speel uw video\'s af zonder te downloaden</string>
-  <string name="welcome_feature_6_title">Patroonontgrendeling</string>
-  <string name="welcome_feature_6_text">Gebruik een patroon om uw ownCloud app te vergrendelen</string>
-  <string name="welcome_feature_7_title">Vingerafdrukvergrendeling</string>
-  <string name="welcome_feature_7_text">Gebruik uw vingerafdruk om uw ownCloud app te vergrendelen</string>
-  <string name="welcome_feature_8_title">GIF ondersteuning</string>
-  <string name="welcome_feature_8_text">Speel uw geanimeerde GIF-afbeeldingen af</string>
-  <string name="welcome_feature_9_title">Upload foto vanaf de camera</string>
-  <string name="welcome_feature_9_text">Neem een foto en upload het direct naar uw server</string>
 </resources>

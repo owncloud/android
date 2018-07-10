@@ -525,13 +525,5 @@
   <string name="welcome_feature_4_text">รูปภาพ/วิดีโอ ของคุณถูกอัพโหลดโดยอัตโนมัติแล้ว</string>
   <string name="welcome_feature_5_title">กำลังสตรีมวิดีโอ</string>
   <string name="welcome_feature_5_text">เล่นวิดีโอของคุณโดยไม่ต้องดาวน์โหลด</string>
-  <string name="welcome_feature_6_title">รูปแบบการล็อค</string>
-  <string name="welcome_feature_6_text">ใช้รูปแบบเพื่อล็อกแอพพลิเคชันของคุณ</string>
-  <string name="welcome_feature_7_title">ล็อคด้วยลายนิ้วมือ</string>
-  <string name="welcome_feature_7_text">ใช้ลายนิ้วมือเพื่อล็อคแอพพลิเคชัน ownCloud ของคุณ</string>
-  <string name="welcome_feature_8_title">สนับสนุนรูปภาพ GIF</string>
-  <string name="welcome_feature_8_text">เล่นภาพ GIF ที่เป็นภาพเคลื่อนไหว</string>
-  <string name="welcome_feature_9_title">อัพโหลดรูปภาพจากกล้อง</string>
-  <string name="welcome_feature_9_text">ถ่ายภาพและอัพโหลดภาพโดยตรงไปยังเซิร์ฟเวอร์ของคุณ</string>
   <string name="no_borwser_installed_alert">โปรดติดตั้งเบราเซอร์ก่อนเพื่อให้สามารถล็อกอินได้อย่างปลอดภัย</string>
 </resources>

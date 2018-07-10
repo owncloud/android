@@ -528,13 +528,5 @@
   <string name="welcome_feature_4_text">Suas fotos/vídeos carregados automaticamente</string>
   <string name="welcome_feature_5_title">Transmissão de vídeo</string>
   <string name="welcome_feature_5_text">Assista seus vídeos sem baixá-los</string>
-  <string name="welcome_feature_6_title">Padrão de Bloqueio</string>
-  <string name="welcome_feature_6_text">Use um padrão para bloquear seu aplicativo ownCloud</string>
-  <string name="welcome_feature_7_title">Bloqueio por Impressão Digital</string>
-  <string name="welcome_feature_7_text">Use sua impressão digital para bloquear seu aplicativo ownCloud</string>
-  <string name="welcome_feature_8_title">Suporte GIF</string>
-  <string name="welcome_feature_8_text">Visualize suas imagens GIF animadas</string>
-  <string name="welcome_feature_9_title">Enviar imagem da câmera</string>
-  <string name="welcome_feature_9_text">Tire uma foto e envie diretamente para o seu servidor</string>
   <string name="no_borwser_installed_alert">Nenhum navegador instalado. Por favor, instale um navegador para permitir um login seguro.</string>
 </resources>

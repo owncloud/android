@@ -516,12 +516,4 @@
   <string name="welcome_feature_4_text">Dine bilder/videoer lastes opp automatisk</string>
   <string name="welcome_feature_5_title">Video strømming</string>
   <string name="welcome_feature_5_text">Spill av videoene dine uten å laste dem ned</string>
-  <string name="welcome_feature_6_title">Mønsterlås</string>
-  <string name="welcome_feature_6_text">Bruk et mønster for å låse din ownCloud-app</string>
-  <string name="welcome_feature_7_title">Fingeravtrykkslås</string>
-  <string name="welcome_feature_7_text">Bruk fingeravtrykk for å låse din ownCloud app</string>
-  <string name="welcome_feature_8_title">GIF støtte</string>
-  <string name="welcome_feature_8_text">Spill dine animerte GIF-bilder</string>
-  <string name="welcome_feature_9_title">Last opp bilde fra kamera</string>
-  <string name="welcome_feature_9_text">Ta et bilde og last det opp direkte på serveren</string>
 </resources>

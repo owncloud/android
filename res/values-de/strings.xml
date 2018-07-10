@@ -529,13 +529,5 @@
   <string name="welcome_feature_4_text">Deine Bilder/Videos werden automatisch hochgeladen</string>
   <string name="welcome_feature_5_title">Videostreaming</string>
   <string name="welcome_feature_5_text">Gib deine Videos wieder, ohne sie herunterzuladen</string>
-  <string name="welcome_feature_6_title">Mustersperre</string>
-  <string name="welcome_feature_6_text">Bitte die Mustersperre zum Sperren deiner Owncloud nutzen</string>
-  <string name="welcome_feature_7_title">Fingerabdrucksperre</string>
-  <string name="welcome_feature_7_text">Bitte Fingerabdruck zum Sperren deiner Owncloud nutzen</string>
-  <string name="welcome_feature_8_title">GIF-Unterstützung</string>
-  <string name="welcome_feature_8_text">Deine animierten GIF-Grafiken abspielen</string>
-  <string name="welcome_feature_9_title">Bild von der Kamera hochladen</string>
-  <string name="welcome_feature_9_text">Foto aufnehmen und direkt auf deinen Owncloud-Server hochladen</string>
   <string name="no_borwser_installed_alert">Es ist kein Browser installiert. Bitte installieren Sie zur sicheren Anmeldung einen Browser.</string>
 </resources>

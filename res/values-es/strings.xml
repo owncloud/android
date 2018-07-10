@@ -15,8 +15,8 @@
   <string name="actionbar_descending">Descendente</string>
   <string name="actionbar_sort_title">Ordenar por</string>
   <string name="actionbar_sort_by_name">A-Z</string>
-  <string name="actionbar_sort_by_date">Viejo - Nuevo</string>
-  <string name="actionbar_sort_by_size">Mas pequeño - Mas grande</string>
+  <string name="actionbar_sort_by_date">Más antiguo - Más nuevo</string>
+  <string name="actionbar_sort_by_size">Más pequeño - Más grande</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Todos los archivos</string>
@@ -29,7 +29,7 @@
   <string name="drawer_loading_quota">Cargando cuota</string>
   <string name="drawer_quota">%1$s de %2$s usado (%3$s %%)</string>
   <string name="drawer_unavailable_free_storage">%1$s en uso</string>
-  <string name="drawer_unavailable_used_storage">No hay información disponible sobre el uso de almacenamiento.</string>
+  <string name="drawer_unavailable_used_storage">No hay información de uso de almacenamiento disponible</string>
   <string name="drawer_feedback">Sugerencias</string>
   <string name="drawer_help">Ayuda</string>
   <string name="prefs_category_general">General</string>
@@ -38,12 +38,12 @@
   <string name="prefs_accounts">Cuentas</string>
   <string name="prefs_manage_accounts">Gestionar cuentas</string>
   <string name="prefs_passcode">Código de bloqueo</string>
-  <string name="prefs_fingerprint">Desbloqueo por huella</string>
-  <string name="prefs_fingerprint_summary">Configura una contraseña o establece un patrón de desbloqueo para habilitar esta opción</string>
-  <string name="prefs_camera_picture_upload">Subir Imágenes</string>
-  <string name="prefs_camera_picture_upload_summary">Sube automaticamente las fotos tomadas con la cámara</string>
-  <string name="prefs_camera_video_upload">Subir videos</string>
-  <string name="prefs_camera_video_upload_summary">Sube automaticamente los vídeos grabados con la cámara</string>
+  <string name="prefs_fingerprint">Bloqueo de huella digital</string>
+  <string name="prefs_fingerprint_summary">Habilitar código de acceso o bloqueo de patrón para habilitar esta opción</string>
+  <string name="prefs_camera_picture_upload">Cargas de imágenes</string>
+  <string name="prefs_camera_picture_upload_summary">Cargue automáticamente las fotos tomadas por cámara</string>
+  <string name="prefs_camera_video_upload">Cargas de videos</string>
+  <string name="prefs_camera_video_upload_summary">Cargue automáticamente los videos  grabados por cámara</string>
   <string name="prefs_log_title">Habilitar registro</string>
   <string name="prefs_log_summary">Esto es usado para registrar problemas</string>
   <string name="prefs_log_title_history">Historial del registro</string>
@@ -444,6 +444,7 @@
   <string name="share_via_link_password_title">Asegurado</string>
   <string name="share_via_link_edit_permission_read_only_label">Descargar / Ver</string>
   <string name="share_via_link_edit_permission_read_and_write_label">Descargar / Ver / Subir</string>
+  <string name="share_via_link_edit_permission_upload_only_label">Solo cargar (Archivar)</string>
   <string name="share_get_public_link_button">Obtener enlace</string>
   <string name="share_with_title">Compartir con...</string>
   <string name="share_with_edit_title">Compartir con %1$s</string>
@@ -526,13 +527,5 @@
   <string name="welcome_feature_4_text">Tus fotografías/vídeos automáticamente se subirán</string>
   <string name="welcome_feature_5_title">Retransmitir video</string>
   <string name="welcome_feature_5_text">Reproduce tus videos sin descargarlos</string>
-  <string name="welcome_feature_6_title">Patrón de desbloqueo</string>
-  <string name="welcome_feature_6_text">Usa un patrón de desbloqueo para tu aplicación de ownCloud</string>
-  <string name="welcome_feature_7_title">Bloqueo por huella</string>
-  <string name="welcome_feature_7_text">Usa tu huella para desbloquear tu aplicación de ownCloud</string>
-  <string name="welcome_feature_8_title">Soporta GIF</string>
-  <string name="welcome_feature_8_text">Reproduce tus imágenes GIF animadas</string>
-  <string name="welcome_feature_9_title">Subir imágen desde la cámara</string>
-  <string name="welcome_feature_9_text">Hacer fotografía y subirla directamente a tu Servidor</string>
   <string name="no_borwser_installed_alert">No hay navegador instalado, Por favor, instale uno para poder realizar un login seguro</string>
 </resources>

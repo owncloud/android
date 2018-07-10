@@ -16,6 +16,7 @@
   <string name="actionbar_sort_title">排序方式</string>
   <string name="actionbar_sort_by_name">A-Z</string>
   <string name="actionbar_sort_by_date">日期</string>
+  <string name="actionbar_sort_by_size">最小 - 最大</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">全部文件</string>
@@ -25,6 +26,7 @@
   <string name="drawer_item_uploads_list">上传</string>
   <string name="drawer_close">关闭</string>
   <string name="drawer_open">打开</string>
+  <string name="drawer_unavailable_used_storage">没有可用的储存使用量信息</string>
   <string name="drawer_feedback">反馈</string>
   <string name="drawer_help">帮助</string>
   <string name="prefs_category_general">常规</string>
@@ -66,6 +68,8 @@
   <string name="illegal_argument_exception_message">需要一个有效的 ACTION 传递意图</string>
   <string name="recommend_subject">在您的智能手机上试用 %1$s！</string>
   <string name="recommend_text">我邀请你在智能手机上使用 %1$s\n下载路径：%2$s</string>
+  <string name="auth_failure_snackbar">认证失败</string>
+  <string name="auth_failure_snackbar_action">更换账户</string>
   <string name="auth_check_server">检查服务器</string>
   <string name="auth_host_url">服务器地址 https://...</string>
   <string name="auth_username">用户名</string>
@@ -434,6 +438,8 @@
   <string name="share_via_link_expiration_date_label">过期</string>
   <string name="share_via_link_password_label">密码</string>
   <string name="share_via_link_password_title">安全</string>
+  <string name="share_via_link_edit_permission_read_only_label">下载 / 查看</string>
+  <string name="share_via_link_edit_permission_read_and_write_label">下载 / 查看 / 上传</string>
   <string name="share_get_public_link_button">获取链接</string>
   <string name="share_with_title">分享...</string>
   <string name="share_with_edit_title">与 %1$s 分享</string>
@@ -516,13 +522,5 @@
   <string name="welcome_feature_4_text">你的照片/视频将会自动上传</string>
   <string name="welcome_feature_5_title">流媒体视频</string>
   <string name="welcome_feature_5_text">无需下载模仿你的视频</string>
-  <string name="welcome_feature_6_title">图案锁</string>
-  <string name="welcome_feature_6_text">使用图案解锁你的ownCloud app</string>
-  <string name="welcome_feature_7_title">指纹锁</string>
-  <string name="welcome_feature_7_text">使用指纹解锁你的ownCloud app </string>
-  <string name="welcome_feature_8_title">GIF支持</string>
-  <string name="welcome_feature_8_text">播放动画GIF图片</string>
-  <string name="welcome_feature_9_title">拍照上传</string>
-  <string name="welcome_feature_9_text">拍照并直接上传到你的服务器</string>
   <string name="no_borwser_installed_alert">未安装浏览器。请安装浏览器以使用安全登陆。</string>
 </resources>

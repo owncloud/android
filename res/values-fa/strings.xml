@@ -15,6 +15,8 @@
   <string name="actionbar_descending">نزولی</string>
   <string name="actionbar_sort_title">چینش بر اساس</string>
   <string name="actionbar_sort_by_name">حروف الفبا</string>
+  <string name="actionbar_sort_by_date">قدیمی ترین - جدیدترین</string>
+  <string name="actionbar_sort_by_size">کوچکترین - بزرگترین</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">تمام پرونده‌ها</string>
@@ -32,6 +34,7 @@
   <string name="prefs_accounts">حساب‌ها</string>
   <string name="prefs_manage_accounts">مدیریت حساب‌ها</string>
   <string name="prefs_passcode">قفل رمزعبور</string>
+  <string name="prefs_fingerprint">قفل اثر انگشت</string>
   <string name="prefs_log_title">فعّال کردن گزارش گیری</string>
   <string name="prefs_log_summary">برای ثبت مشکلات استفاده می‌شود</string>
   <string name="prefs_log_title_history">تاریخچهٔ گزارش گیری</string>
@@ -43,8 +46,18 @@
   <string name="prefs_imprint">مهر زدن</string>
   <string name="prefs_remember_last_share_location">به خاطر سپردن موقعّیت هم‌رسانی</string>
   <string name="prefs_remember_last_upload_location_summary">به خاطر سپردن آخرین موقعیّت بارگذاری هم‌رسانی</string>
+  <string name="prefs_pattern">قفل الگو</string>
+  <string name="pattern_enter_pattern">لطفا الگوی خود را وارد کنید</string>
+  <string name="pattern_configure_pattern">الگوی خود را وارد کنید</string>
+  <string name="pattern_remove_pattern">الگوی خود را حذف کنید</string>
+  <string name="pattern_incorrect_pattern">الگوی اشتباه</string>
+  <string name="pattern_reenter_pattern">لطفا الگوی خود را مجدد وارد کنید</string>
+  <string name="pattern_not_same_pattern">الگو ها یکسان نیست</string>
+  <string name="pattern_stored">الگو ذخیره شد</string>
+  <string name="pattern_removed">الگو حذف شد</string>
   <string name="recommend_subject">‫%1$s را روی گوشی هوشمندتان بیازمایید!</string>
   <string name="recommend_text">می‌خوام ازت دعوت کنم که از %1$s رو گوشیت استفاده کنی!\nاز این‌جا بگیرش: %2$s</string>
+  <string name="auth_failure_snackbar">اعتبارسنجی ناموفق</string>
   <string name="auth_check_server">بررسی کارساز</string>
   <string name="auth_host_url">نشانی کارساز ‪https://…</string>
   <string name="auth_username">نام کاربری</string>
@@ -77,6 +90,7 @@
   <string name="file_list_file">پرونده</string>
   <string name="file_list_files">پرونده</string>
   <string name="filedetails_select_file">برای نمایش اطّلاعات اضافی، روی پرونده‌ای ضربه بزنید.</string>
+  <string name="upload_files_title">فایل ها</string>
   <string name="filedetails_size">اندازه:</string>
   <string name="filedetails_type">گونه:</string>
   <string name="filedetails_created">ایجاد شده:</string>
@@ -178,6 +192,7 @@
   <string name="pass_code_wrong">رمز نادرست</string>
   <string name="pass_code_removed">رمز حذف شد</string>
   <string name="pass_code_stored">رمز ذخیره شد</string>
+  <string name="fingerprint_success">اثر انگشت شناسایی شد</string>
   <string name="media_notif_ticker">%1$s پخش کننده موسیقی</string>
   <string name="media_state_playing">%1$s ( در حال پخش موسیقی )</string>
   <string name="media_state_loading">%1$s (درحال بارگذاری)</string>
@@ -292,6 +307,7 @@
   <string name="placeholder_media_time">12:23:45</string>
   <string name="camera_picture_upload_on_wifi">بارگذاری عکس‌ها فقط با وای‌فای</string>
   <string name="camera_video_upload_on_wifi">بارگذاری ویدیوها فقط با وای‌فای</string>
+  <string name="confirmation_disable_camera_uploads_title">تایید</string>
   <string name="conflict_title">تضاد در فایل</string>
   <string name="conflict_message">کدام فایل را می‌خواهید نگه دارید ؟ اگر هردو نسخه را میخواهید، یک عدد به اول نام فایل محلی اضافه خواهد شد.</string>
   <string name="conflict_keep_both">نگهداشتن هر دو</string>
@@ -358,6 +374,7 @@
   <string name="share_dialog_title">اشتراک گذاری</string>
   <string name="share_file">هم‌رسانی %1$s</string>
   <string name="share_with_user_section_title">کاربران و گروه ها</string>
+  <string name="share_via_link_section_title">لینک های عمومی</string>
   <string name="share_via_link_name_label">نام لینک</string>
   <string name="share_cancel_public_link_button">لغو</string>
   <string name="share_confirm_public_link_button">ذخیره</string>
@@ -388,13 +405,19 @@
   <string name="manage_space_title">مدیریت فضا</string>
   <string name="manage_space_clear_data">پاک‌سازی داده</string>
   <string name="manage_space_error">برخی پرونده‌ها نمي‌توانند حذف شوند.</string>
+  <string name="auth_forbidden">دسترسی غیر مجاز</string>
   <string name="actionbar_privacy_policy">سیاست حفظ حریم خصوصی</string>
   <string name="prefs_privacy_policy">سیاست حفظ حریم خصوصی</string>
   <string name="privacy_policy_error">خطایی رخ داد:</string>
   <string name="service_unavailable">سرور در دسترس نیست</string>
   <string name="share_warning_about_forwarding_public_links">هر کسی با پیوند به پرونده/پوشه دسترسی دارد</string>
+  <string name="share_via_link_default_password">*****</string>
   <string name="share_via_link_password_enforced_label">رمز عبور *</string>
   <string name="share_via_link_expiration_date_enforced_label">تاریخ انقضا *</string>
+  <string name="download_notification_channel_name">دانلود ها</string>
+  <string name="upload_notification_channel_name">آپلود ها</string>
+  <string name="button_no_thanks_name">نه ، ممنون</string>
+  <string name="button_later_name">بعدا</string>
   <plurals name="items_selected_count">
     <item quantity="one">‫%d گزیده</item>
     <item quantity="other">‫%d گزیده</item>

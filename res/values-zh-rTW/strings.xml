@@ -397,6 +397,8 @@
   <string name="share_via_link_expiration_date_label">過期</string>
   <string name="share_via_link_password_label">密碼</string>
   <string name="share_via_link_password_title">安全</string>
+  <string name="share_via_link_edit_permission_read_only_label">下載 / 檢視</string>
+  <string name="share_via_link_edit_permission_read_and_write_label">下載 / 檢視 / 上傳</string>
   <string name="share_get_public_link_button">取得連結</string>
   <string name="share_with_title">分享...</string>
   <string name="share_with_edit_title">與 %1$s 分享</string>

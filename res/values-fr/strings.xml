@@ -504,7 +504,4 @@ Ci-dessous la liste des fichiers locaux, et les fichiers distants dans %5$s auxq
   <string name="welcome_feature_3_text">Connectez-vous à tous vos serveurs ownCloud</string>
   <string name="welcome_feature_4_title">Téléversements de la caméra</string>
   <string name="welcome_feature_4_text">Vos images/vidéos ont été téléversées automatiquement</string>
-  <string name="welcome_feature_7_title">Verrouillage par empreinte</string>
-  <string name="welcome_feature_9_title">Téléverser une photo depuis la caméra</string>
-  <string name="welcome_feature_9_text">Prendre une photo et la téléverser directement sur votre serveur</string>
 </resources>

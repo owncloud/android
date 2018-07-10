@@ -489,5 +489,4 @@
   </plurals>
   <!--Welcome to oC intro features-->
   <string name="welcome_feature_4_title">カメラアップロード</string>
-  <string name="welcome_feature_7_title">指紋認証</string>
 </resources>
