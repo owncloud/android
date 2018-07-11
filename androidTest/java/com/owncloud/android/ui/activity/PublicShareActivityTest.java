@@ -251,7 +251,7 @@ public class PublicShareActivityTest {
         onView(withId(R.id.addPublicLinkButton)).perform(click());
         onView(withId(R.id.shareViaLinkNameValue)).perform(replaceText(nameShare));
 
-        //Enable the option for Download/View/Upload permissions
+        //Enable the option for Download/View permissions
         onView(withId(R.id.shareViaLinkEditPermissionReadOnly)).perform(click());
 
         onView(withId(R.id.saveButton)).perform(scrollTo(),click());
@@ -351,7 +351,7 @@ public class PublicShareActivityTest {
 
     /**
      *  TEST CASE: Share publicly a folder with Upload only permission
-     *  PASSED IF: Link created and visible in share view with Download/View/Upload option
+     *  PASSED IF: Link created and visible in share view with Upload only option
      *
      */
     @Test
