@@ -290,12 +290,12 @@ public class PublicShareActivityTest {
     }
 
     /**
-     *  TEST CASE: Share publicly a folder woth DownloadV/View/Upload permission
+     *  TEST CASE: Share publicly a folder with Download/View/Upload permission
      *  PASSED IF: Link created and visible in share view with Download/View/Upload option
      *
      */
     @Test
-    public void test_03_create_public_link_download_view_permission()
+    public void test_03_create_public_link_download_view_upload_permission()
             throws IllegalArgumentException {
 
         Log_OC.i(LOG_TAG, "Test Share Public with Download/View/Upload");
@@ -350,7 +350,7 @@ public class PublicShareActivityTest {
 
 
     /**
-     *  TEST CASE: Share publicly a folder woth DownloadV/View/Upload permission
+     *  TEST CASE: Share publicly a folder with Upload only permission
      *  PASSED IF: Link created and visible in share view with Download/View/Upload option
      *
      */
@@ -369,7 +369,7 @@ public class PublicShareActivityTest {
         onView(withId(R.id.addPublicLinkButton)).perform(click());
         onView(withId(R.id.shareViaLinkNameValue)).perform(replaceText(nameShare));
 
-        //Enable the option for Download/View/Upload permissions
+        //Enable the option for Upload only permissions
         onView(withId(R.id.shareViaLinkEditPermissionUploadFiles)).perform(click());
 
         onView(withId(R.id.saveButton)).perform(scrollTo(),click());
