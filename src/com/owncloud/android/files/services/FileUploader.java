@@ -897,6 +897,18 @@ public class FileUploader extends Service
         }
     }
 
+    private void removeChunksFolder(long ocUploadId) {
+        RemoveChunksFolderOperation remoteChunksFolderOperation = new RemoveChunksFolderOperation(
+                String.valueOf(ocUploadId)
+        );
+
+        RemoteOperationResult result = remoteChunksFolderOperation.execute(mUploadClient);
+
+        if (!result.isSuccess()) {
+            Log_OC.e(TAG, "Error deleting chunks folder after cancelling chunked upload");
+        }
+    }
+
     /**
      * Creates a status notification to show the upload progress
      *
@@ -963,18 +975,10 @@ public class FileUploader extends Service
         mNotificationManager.cancel(R.string.uploader_upload_in_progress_ticker);
 
         if (uploadResult.isCancelled() && upload instanceof ChunkedUploadFileOperation) {
+            removeChunksFolder(upload.getOCUploadId());
+        }
 
-            RemoveChunksFolderOperation remoteChunksFolderOperation = new RemoveChunksFolderOperation(
-                    String.valueOf(upload.getOCUploadId())
-            );
-
-            RemoteOperationResult result = remoteChunksFolderOperation.execute(mUploadClient);
-
-            if (!result.isSuccess()) {
-                Log_OC.e(TAG, "Error deleting chunks folder after cancelling chunked upload");
-            }
-
-        } else if (!uploadResult.isCancelled() &&
+        if (!uploadResult.isCancelled() &&
             !uploadResult.getCode().equals(ResultCode.DELAYED_FOR_WIFI)) {
 
             // Show the result: success or fail notification
