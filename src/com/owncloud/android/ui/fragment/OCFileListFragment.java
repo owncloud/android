@@ -195,10 +195,6 @@ public class OCFileListFragment extends ExtendedListFragment implements
         Log_OC.i(TAG, "onCreateView() end");
         return v;
     }
-
-    public ProgressBar getProgressBar(){
-        return getPoregressBar();
-    }
     
     @Override
     public void onDetach() {
