@@ -439,7 +439,7 @@ public class ExtendedListFragment extends Fragment
         }
     }
 
-    public ProgressBar getPoregressBar(){
+    public ProgressBar getProgressBar(){
         return mProgressBar;
     }
 

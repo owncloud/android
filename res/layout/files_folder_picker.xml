@@ -34,7 +34,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             android:layout_height="4dp"
             android:background="@drawable/shadow_gradient"
             android:visibility="gone" />
-
     </LinearLayout>
 
     <FrameLayout
@@ -42,7 +41,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         android:layout_width="match_parent"
         android:layout_height="0dip"
         android:layout_weight="1" />
-
 
     <LinearLayout
         android:layout_width="match_parent"
