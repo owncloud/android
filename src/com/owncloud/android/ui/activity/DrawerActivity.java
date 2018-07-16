@@ -64,7 +64,7 @@ public abstract class DrawerActivity extends ToolbarActivity {
     private static final int ACTION_MANAGE_ACCOUNTS = 101;
     private static final int MENU_ORDER_ACCOUNT = 1;
     private static final int MENU_ORDER_ACCOUNT_FUNCTION = 2;
-    private static final int USER_ITEMS_ALLOWD_BEFORE_REMOVING_CLOUD = 4;
+    private static final int USER_ITEMS_ALLOWED_BEFORE_REMOVING_CLOUD = 4;
 
     private float mMenuAccountAvatarRadiusDimension;
     private float mCurrentAccountAvatarRadiusDimension;
@@ -76,7 +76,7 @@ public abstract class DrawerActivity extends ToolbarActivity {
     private ImageView mAccountChooserToggle;
     private ImageView mAccountMiddleAccountAvatar;
     private ImageView mAccountEndAccountAvatar;
-    private ImageView mDrawerCloud;
+    private ImageView mDrawerLogo;
 
     private boolean mIsAccountChooserActive;
     private int mCheckedMenuItem = Menu.NONE;
@@ -106,14 +106,23 @@ public abstract class DrawerActivity extends ToolbarActivity {
     protected void setupDrawer() {
         mDrawerLayout = findViewById(R.id.drawer_layout);
         mNavigationView = findViewById(R.id.nav_view);
+        mDrawerLogo = findViewById(R.id.drawer_logo);
 
         if (mNavigationView != null) {
-            // Set background header image, if any
+            // Set background header image and logo, if any
             int drawer_header_background_id = getResources()
                     .getIdentifier("drawer_header_background", "drawable", getPackageName());
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && drawer_header_background_id != 0) {
-                findNavigationViewChildById(R.id.drawer_header_background)
-                        .setBackground(getDrawable(drawer_header_background_id));
+
+            int drawer_logo_id = getResources()
+                    .getIdentifier("drawer_logo", "drawable", getPackageName());
+
+            if (drawer_header_background_id != 0) {
+                ((ImageView) findNavigationViewChildById(R.id.drawer_header_background))
+                        .setImageResource(drawer_header_background_id);
+            }
+
+            if (drawer_logo_id != 0) {
+                mDrawerLogo.setImageResource(drawer_logo_id);
             }
 
             mAccountChooserToggle = (ImageView) findNavigationViewChildById(R.id.drawer_account_chooser_toogle);
@@ -122,8 +131,6 @@ public abstract class DrawerActivity extends ToolbarActivity {
 
             mAccountMiddleAccountAvatar = (ImageView) findNavigationViewChildById(R.id.drawer_account_middle);
             mAccountEndAccountAvatar = (ImageView) findNavigationViewChildById(R.id.drawer_account_end);
-
-            mDrawerCloud = findViewById(R.id.drawer_cloud);
 
             // on pre lollipop the light theme adds a black tint to icons with white coloring
             // ruining the generic avatars, so tinting for icons is deactivated pre lollipop
@@ -553,14 +560,14 @@ public abstract class DrawerActivity extends ToolbarActivity {
                 mNavigationView.getMenu().setGroupVisible(R.id.drawer_menu_accounts, true);
                 mNavigationView.getMenu().setGroupVisible(R.id.drawer_menu_standard, false);
                 mNavigationView.getMenu().setGroupVisible(R.id.drawer_menu_settings_etc, false);
-                if(mDrawerCloud != null && accountCount > USER_ITEMS_ALLOWD_BEFORE_REMOVING_CLOUD)
-                    mDrawerCloud.setVisibility(View.GONE);
+                if(mDrawerLogo != null && accountCount > USER_ITEMS_ALLOWED_BEFORE_REMOVING_CLOUD)
+                    mDrawerLogo.setVisibility(View.GONE);
             } else {
                 mAccountChooserToggle.setImageResource(R.drawable.ic_down);
                 mNavigationView.getMenu().setGroupVisible(R.id.drawer_menu_accounts, false);
                 mNavigationView.getMenu().setGroupVisible(R.id.drawer_menu_standard, true);
                 mNavigationView.getMenu().setGroupVisible(R.id.drawer_menu_settings_etc, true);
-                if(mDrawerCloud != null) mDrawerCloud.setVisibility(View.VISIBLE);
+                if(mDrawerLogo != null) mDrawerLogo.setVisibility(View.VISIBLE);
             }
         }
     }
