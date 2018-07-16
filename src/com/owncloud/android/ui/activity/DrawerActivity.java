@@ -110,19 +110,13 @@ public abstract class DrawerActivity extends ToolbarActivity {
 
         if (mNavigationView != null) {
             // Set background header image and logo, if any
-            int drawer_header_background_id = getResources()
-                    .getIdentifier("drawer_header_background", "drawable", getPackageName());
-
-            int drawer_logo_id = getResources()
-                    .getIdentifier("drawer_logo", "drawable", getPackageName());
-
-            if (drawer_header_background_id != 0) {
+            if (getResources().getBoolean(R.bool.use_drawer_background_header)) {
                 ((ImageView) findNavigationViewChildById(R.id.drawer_header_background))
-                        .setImageResource(drawer_header_background_id);
+                        .setImageResource(R.drawable.drawer_header_background);
             }
 
-            if (drawer_logo_id != 0) {
-                mDrawerLogo.setImageResource(drawer_logo_id);
+            if (getResources().getBoolean(R.bool.use_drawer_logo)) {
+                mDrawerLogo.setImageResource(R.drawable.drawer_logo);
             }
 
             mAccountChooserToggle = (ImageView) findNavigationViewChildById(R.id.drawer_account_chooser_toogle);
