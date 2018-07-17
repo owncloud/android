@@ -30,9 +30,12 @@ import android.os.Parcelable;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.List;
 
 import at.bitfire.dav4android.DavResource;
+import at.bitfire.dav4android.Property;
 import at.bitfire.dav4android.PropertyCollection;
+import at.bitfire.dav4android.Response;
 import at.bitfire.dav4android.property.CreationDate;
 import at.bitfire.dav4android.property.GetContentLength;
 import at.bitfire.dav4android.property.GetContentType;
@@ -183,36 +186,45 @@ public class RemoteFile implements Parcelable, Serializable {
             throw new IllegalArgumentException("Trying to create a OCFile with a non valid remote path: " + path);
         }
         mRemotePath = path;
+        mCreationTimestamp = 0;
+        mLength = 0;
+        mMimeType = "DIR";
+        mQuotaUsedBytes = BigDecimal.ZERO;
+        mQuotaAvailableBytes = BigDecimal.ZERO;
+        mPrivateLink = null;
     }
 
-    public RemoteFile(final DavResource davResource, String displayName) {
-        this(getRemotePathFromUrl(davResource.getLocation(), displayName));
-        final PropertyCollection properties = davResource.getProperties();
-        this.setCreationTimestamp(properties.get(CreationDate.class) != null
-                ? Long.parseLong(properties.get(CreationDate.class).getCreationDate())
-                : 0);
-        this.setLength(properties.get(GetContentLength.class) != null
-                ? properties.get(GetContentLength.class).getContentLength()
-                : 0);
-        this.setMimeType(properties.get(GetContentType.class) != null
-                ? properties.get(GetContentType.class).getType()
-                : "DIR");
-        this.setModifiedTimestamp(properties.get(GetLastModified.class).getLastModified());
-        this.setEtag(properties.get(GetETag.class).getETag());
-        this.setPermissions(properties.get(OCPermissions.class).getPermission());
-        this.setRemoteId(properties.get(OCId.class).getId());
-        this.setSize(properties.get(OCSize.class).getSize());
-        this.setQuotaUsedBytes(properties.get(QuotaUsedBytes.class) != null
-                ? BigDecimal.valueOf(
-                    properties.get(QuotaUsedBytes.class).getQuotaUsedBytes())
-                : BigDecimal.ZERO);
-        this.setQuotaAvailableBytes(properties.get(QuotaAvailableBytes.class) != null
-                ? BigDecimal.valueOf(
-                        properties.get(QuotaAvailableBytes.class).getQuotaAvailableBytes())
-                : BigDecimal.ZERO);
-        this.setPrivateLink(properties.get(OCPrivatelink.class) != null
-                ? properties.get(OCPrivatelink.class).getLink()
-                : null);
+    public RemoteFile(final Response davResource, String displayName) {
+        this(getRemotePathFromUrl(davResource.getHref(), displayName));
+        final List<Property> properties = davResource.getProperties();
+
+        for(Property property : properties) {
+            if(property instanceof CreationDate)
+                this.setCreationTimestamp(
+                        Long.parseLong(((CreationDate) property).getCreationDate()));
+            if(property instanceof GetContentLength)
+                this.setLength(((GetContentLength) property).getContentLength());
+            if(property instanceof  GetContentType)
+                this.setMimeType(((GetContentType) property).getType());
+            if(property instanceof GetLastModified)
+                this.setModifiedTimestamp(((GetLastModified) property).getLastModified());
+            if(property instanceof GetETag)
+                this.setEtag(((GetETag) property).getETag());
+            if(property instanceof OCPermissions)
+                this.setPermissions(((OCPermissions) property).getPermission());
+            if(property instanceof OCId)
+                this.setRemoteId(((OCId) property).getId());
+            if(property instanceof OCSize)
+                this.setSize(((OCSize) property).getSize());
+            if(property instanceof  QuotaUsedBytes)
+                this.setQuotaUsedBytes(
+                        BigDecimal.valueOf(((QuotaUsedBytes) property).getQuotaUsedBytes()));
+            if(property instanceof QuotaAvailableBytes)
+                this.setQuotaAvailableBytes(
+                        BigDecimal.valueOf(((QuotaAvailableBytes) property).getQuotaAvailableBytes()));
+            if(property instanceof OCPrivatelink)
+                this.setPrivateLink(((OCPrivatelink) property).getLink());
+        }
     }
 
 

@@ -87,10 +87,9 @@ public class ReadRemoteFileOperation extends RemoteOperation<RemoteFile> {
 
             if (status == HttpConstants.HTTP_MULTI_STATUS
                     || status == HttpConstants.HTTP_OK) {
-                // Parse response
-                final DavResource resource = propfind.getDavResource();
 
-                final RemoteFile file = new RemoteFile(resource, client.getAccount().getDisplayName());
+                final RemoteFile file = new RemoteFile(propfind.getRoot(),
+                        client.getAccount().getDisplayName());
 
                 result = new RemoteOperationResult<>(OK);
                 result.setData(file);

@@ -26,14 +26,13 @@ package com.owncloud.android.lib.common.http.methods.webdav;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.Set;
-
-import at.bitfire.dav4android.DavResource;
+import java.util.ArrayList;
+import java.util.List;
 import at.bitfire.dav4android.Property;
+import at.bitfire.dav4android.Response;
 import at.bitfire.dav4android.exception.DavException;
-import at.bitfire.dav4android.exception.HttpException;
 import at.bitfire.dav4android.exception.UnauthorizedException;
-import okhttp3.HttpUrl;
+import kotlin.Unit;
 
 /**
  * Propfind calls wrapper
@@ -41,27 +40,47 @@ import okhttp3.HttpUrl;
  */
 public class PropfindMethod extends DavMethod {
 
-    private int mDepth;
-    private Property.Name[] mProperties;
-    private Set<DavResource> mMembers;
+    // request
+    private final int mDepth;
+    private final Property.Name[] mPropertiesToRequest;
 
-    public PropfindMethod(URL url, int depth, Property.Name[] properties) {
+    // response
+    private final List<Response> mMembers;
+    private Response mRoot;
+
+    public PropfindMethod(URL url, int depth, Property.Name[] propertiesToRequest) {
         super(url);
         mDepth = depth;
-        mProperties = properties;
-    };
+        mPropertiesToRequest = propertiesToRequest;
+        mMembers = new ArrayList<>();
+        mRoot = null;
+    }
 
     @Override
-    public int onExecute() throws IOException, HttpException, DavException {
+    public int onExecute() throws IOException, DavException {
         try {
-            mDavResource.propfind(mDepth, mProperties);
-            mMembers = mDavResource.getMembers();
+            mDavResource.propfind(mDepth, mPropertiesToRequest,
+                    (Response response, Response.HrefRelation hrefRelation) -> {
+                        switch (hrefRelation) {
+                            case MEMBER:
+                                mMembers.add(response);
+                                break;
+                            case SELF:
+                                mRoot = response;
+                                break;
+                            case OTHER:
+                            default:
+                        }
+
+                        return Unit.INSTANCE;
+            }, response -> {
+                mResponse = response;
+                return Unit.INSTANCE;
+            });
         } catch (UnauthorizedException davException) {
             // Do nothing, we will use the 401 code to handle the situation
+            return davException.getCode();
         }
-
-        mRequest = mDavResource.getRequest();
-        mResponse = mDavResource.getResponse();
 
         return super.getStatusCode();
     }
@@ -70,7 +89,11 @@ public class PropfindMethod extends DavMethod {
         return mDepth;
     }
 
-    public Set<DavResource> getMembers() {
+    public List<Response> getMembers() {
         return mMembers;
+    }
+
+    public Response getRoot() {
+        return mRoot;
     }
 }

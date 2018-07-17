@@ -38,6 +38,7 @@ import java.net.URL;
 import java.util.ArrayList;
 
 import at.bitfire.dav4android.DavResource;
+import at.bitfire.dav4android.Response;
 
 import static com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode.OK;
 
@@ -88,11 +89,11 @@ public class ReadRemoteFolderOperation extends RemoteOperation<ArrayList<RemoteF
 
                 // parse data from remote folder
                 mFolderAndFiles.add(
-                        new RemoteFile(propfindMethod.getDavResource(), client.getAccount().getDisplayName())
+                        new RemoteFile(propfindMethod.getRoot(), client.getAccount().getDisplayName())
                 );
 
                 // loop to update every child
-                for (DavResource resource : propfindMethod.getMembers()) {
+                for (Response resource : propfindMethod.getMembers()) {
                     RemoteFile file = new RemoteFile(resource, client.getAccount().getDisplayName());
                     mFolderAndFiles.add(file);
                 }

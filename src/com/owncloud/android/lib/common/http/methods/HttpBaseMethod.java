@@ -52,9 +52,11 @@ public abstract class HttpBaseMethod {
     protected RequestBody mRequestBody;
     protected Response mResponse;
     protected Call mCall;
+    protected URL mUrl;
 
     protected HttpBaseMethod (URL url) {
         mOkHttpClient = HttpClient.getOkHttpClient();
+        mUrl = url;
         mRequest = new Request.Builder()
                 .url(HttpUrl.parse(url.toString()))
                 .build();

@@ -37,7 +37,9 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
 
 import java.net.URL;
+import java.util.List;
 
+import at.bitfire.dav4android.Property;
 import at.bitfire.dav4android.PropertyCollection;
 import at.bitfire.dav4android.property.QuotaAvailableBytes;
 import at.bitfire.dav4android.property.QuotaUsedBytes;
@@ -90,13 +92,12 @@ public class GetRemoteUserQuotaOperation extends RemoteOperation<GetRemoteUserQu
             PropfindMethod propfindMethod = new PropfindMethod(
                     new URL(client.getNewFilesWebDavUri() + WebdavUtils.encodePath(mRemotePath)),
                     DEPTH_0,
-                    DavUtils.getQuotaPropSet()
-            );
+                    DavUtils.getQuotaPropSet());
 
             int status = client.executeHttpMethod(propfindMethod);
 
             if (isSuccess(status)) {
-                RemoteQuota remoteQuota = readData(propfindMethod.getDavResource().getProperties());
+                RemoteQuota remoteQuota = readData(propfindMethod.getRoot().getProperties());
 
                 result = new RemoteOperationResult<>(OK);
 
@@ -139,10 +140,16 @@ public class GetRemoteUserQuotaOperation extends RemoteOperation<GetRemoteUserQu
      * @param properties WebDAV properties containing quota data
      * @return new {@link RemoteQuota} instance representing the data read from the server
      */
-    private RemoteQuota readData(PropertyCollection properties) {
+    private RemoteQuota readData(List<Property> properties) {
+        long quotaAvailable = 0;
+        long quotaUsed = 0;
 
-        long quotaAvailable = properties.get(QuotaAvailableBytes.class).getQuotaAvailableBytes();
-        long quotaUsed = properties.get(QuotaUsedBytes.class).getQuotaUsedBytes();
+        for(Property property : properties) {
+            if(property instanceof QuotaAvailableBytes)
+                quotaAvailable = ((QuotaAvailableBytes) property).getQuotaAvailableBytes();
+            if(property instanceof QuotaUsedBytes)
+                quotaUsed = ((QuotaUsedBytes) property).getQuotaUsedBytes();
+        }
 
         // If there's a special case, quota available will contain a negative code
         // -1, PENDING: Not computed yet, e.g. external storage mounted but folder sizes need scanning

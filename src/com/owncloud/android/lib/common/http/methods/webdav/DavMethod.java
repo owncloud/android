@@ -30,6 +30,7 @@ import com.owncloud.android.lib.common.http.methods.HttpBaseMethod;
 import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
+import at.bitfire.dav4android.Constants;
 import at.bitfire.dav4android.DavOCResource;
 import at.bitfire.dav4android.DavResource;
 import at.bitfire.dav4android.exception.RedirectException;
@@ -47,14 +48,14 @@ public abstract class DavMethod extends HttpBaseMethod {
         super(url);
         mDavResource = new DavOCResource(
                 mOkHttpClient,
-                HttpUrl.parse(url.toString()));
-        mDavResource.setFollowRedirects(false);
+                HttpUrl.parse(mUrl.toString()),
+                Constants.INSTANCE.getLog());
     }
 
 
     @Override
     public void abort() {
-        mDavResource.cancelCall();
+        //TODO: abort here
     }
 
     @Override
@@ -62,7 +63,6 @@ public abstract class DavMethod extends HttpBaseMethod {
         try {
              return onExecute();
         } catch(RedirectException e) {
-            mResponse = getDavResource().getResponse();
             return getStatusCode();
         }
     }
@@ -74,22 +74,38 @@ public abstract class DavMethod extends HttpBaseMethod {
     // Connection parameters
     @Override
     public void setReadTimeout(long readTimeout, TimeUnit timeUnit) {
-        mDavResource.setReadTimeout(readTimeout, timeUnit);
+        super.setReadTimeout(readTimeout, timeUnit);
+        mDavResource = new DavOCResource(
+                mOkHttpClient,
+                HttpUrl.parse(mUrl.toString()),
+                Constants.INSTANCE.getLog());
     }
 
     @Override
     public void setConnectionTimeout(long connectionTimeout, TimeUnit timeUnit) {
-        mDavResource.setConnectionTimeout(connectionTimeout, timeUnit);
+        super.setConnectionTimeout(connectionTimeout, timeUnit);
+        mDavResource = new DavOCResource(
+                mOkHttpClient,
+                HttpUrl.parse(mUrl.toString()),
+                Constants.INSTANCE.getLog());
     }
 
     @Override
     public void setFollowRedirects(boolean followRedirects) {
-        mDavResource.setFollowRedirects(followRedirects);
+        super.setFollowRedirects(followRedirects);
+        mDavResource = new DavOCResource(
+                mOkHttpClient,
+                HttpUrl.parse(mUrl.toString()),
+                Constants.INSTANCE.getLog());
     }
 
     @Override
     public void setRetryOnConnectionFailure(boolean retryOnConnectionFailure) {
-        mDavResource.setRetryOnConnectionFailure(retryOnConnectionFailure);
+        super.setRetryOnConnectionFailure(retryOnConnectionFailure);
+        mDavResource = new DavOCResource(
+                mOkHttpClient,
+                HttpUrl.parse(mUrl.toString()),
+                Constants.INSTANCE.getLog());
     }
 
     //////////////////////////////
@@ -98,20 +114,19 @@ public abstract class DavMethod extends HttpBaseMethod {
 
     @Override
     public boolean getRetryOnConnectionFailure() {
-        return mDavResource.isRetryOnConnectionFailure();
+        return false; //TODO: implement me
     }
 
     @Override
     public boolean isAborted() {
-        return mDavResource.isCallAborted();
+        return true; //TODO: implement me
     }
 
-
-    public DavResource getDavResource() {
-        return mDavResource;
-    }
-
-    public void setUrl(HttpUrl url) {
-        mDavResource = new DavOCResource(mOkHttpClient, url);
+    public void setUrl(URL url) {
+        mUrl = url;
+        mDavResource = new DavOCResource(
+                mOkHttpClient,
+                HttpUrl.parse(mUrl.toString()),
+                Constants.INSTANCE.getLog());
     }
 }

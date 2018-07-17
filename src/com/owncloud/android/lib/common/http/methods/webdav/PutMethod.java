@@ -32,8 +32,11 @@ import java.net.URL;
 import at.bitfire.dav4android.exception.DavException;
 import at.bitfire.dav4android.exception.HttpException;
 import at.bitfire.dav4android.exception.UnauthorizedException;
+import kotlin.Unit;
+import kotlin.jvm.functions.Function1;
 import okhttp3.HttpUrl;
 import okhttp3.RequestBody;
+import okhttp3.Response;
 
 /**
  * Put calls wrapper
@@ -51,16 +54,12 @@ public class PutMethod extends DavMethod {
             mDavResource.put(
                     mRequestBody,
                     super.getRequestHeader(HttpConstants.IF_MATCH_HEADER),
-                    // Save a file not known to exist, guaranteeing that another upload didn't happen
-                    // before, losing the data of the previous put
-                    true,
                     super.getRequestHeader(HttpConstants.CONTENT_TYPE_HEADER),
                     super.getRequestHeader(HttpConstants.OC_TOTAL_LENGTH_HEADER),
-                    super.getRequestHeader(HttpConstants.OC_X_OC_MTIME_HEADER)
-            );
-
-            mRequest = mDavResource.getRequest();
-            mResponse = mDavResource.getResponse();
+                    super.getRequestHeader(HttpConstants.OC_X_OC_MTIME_HEADER), response -> {
+                        mResponse = response;
+                        return Unit.INSTANCE;
+                    });
 
         } catch (UnauthorizedException davException) {
             // Do nothing, we will use the 401 code to handle the situation
