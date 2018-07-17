@@ -106,16 +106,17 @@ public abstract class DrawerActivity extends ToolbarActivity {
     protected void setupDrawer() {
         mDrawerLayout = findViewById(R.id.drawer_layout);
         mNavigationView = findViewById(R.id.nav_view);
-        mDrawerLogo = findViewById(R.id.drawer_logo);
 
         if (mNavigationView != null) {
+            mDrawerLogo = findViewById(R.id.drawer_logo);
+
             // Set background header image and logo, if any
             if (getResources().getBoolean(R.bool.use_drawer_background_header)) {
                 ((ImageView) findNavigationViewChildById(R.id.drawer_header_background))
                         .setImageResource(R.drawable.drawer_header_background);
             }
 
-            if (getResources().getBoolean(R.bool.use_drawer_logo)) {
+            if (mDrawerLogo != null && getResources().getBoolean(R.bool.use_drawer_logo)) {
                 mDrawerLogo.setImageResource(R.drawable.drawer_logo);
             }
 
