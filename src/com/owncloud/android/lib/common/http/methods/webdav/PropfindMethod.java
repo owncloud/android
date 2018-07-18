@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+
 import at.bitfire.dav4android.Property;
 import at.bitfire.dav4android.Response;
 import at.bitfire.dav4android.exception.DavException;
@@ -71,18 +72,17 @@ public class PropfindMethod extends DavMethod {
                             case OTHER:
                             default:
                         }
-
                         return Unit.INSTANCE;
-            }, response -> {
-                mResponse = response;
-                return Unit.INSTANCE;
-            });
+                    }, response -> {
+                        mResponse = response;
+                        return Unit.INSTANCE;
+                    });
         } catch (UnauthorizedException davException) {
             // Do nothing, we will use the 401 code to handle the situation
             return davException.getCode();
         }
 
-        return super.getStatusCode();
+        return getStatusCode();
     }
 
     public int getDepth() {

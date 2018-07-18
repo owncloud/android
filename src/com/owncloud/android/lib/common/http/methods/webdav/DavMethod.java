@@ -24,7 +24,6 @@
 
 package com.owncloud.android.lib.common.http.methods.webdav;
 
-import com.owncloud.android.lib.common.http.HttpClient;
 import com.owncloud.android.lib.common.http.methods.HttpBaseMethod;
 
 import java.net.URL;
@@ -32,7 +31,6 @@ import java.util.concurrent.TimeUnit;
 
 import at.bitfire.dav4android.Constants;
 import at.bitfire.dav4android.DavOCResource;
-import at.bitfire.dav4android.DavResource;
 import at.bitfire.dav4android.exception.RedirectException;
 import okhttp3.HttpUrl;
 
@@ -61,8 +59,8 @@ public abstract class DavMethod extends HttpBaseMethod {
     @Override
     public int execute() throws Exception {
         try {
-             return onExecute();
-        } catch(RedirectException e) {
+            return onExecute();
+        } catch (RedirectException e) {
             return getStatusCode();
         }
     }

@@ -77,7 +77,6 @@ public class ExistenceCheckRemoteOperation extends RemoteOperation {
     @Override
     protected RemoteOperationResult run(OwnCloudClient client) {
 
-
         try {
             client.setFollowRedirects(true);
             PropfindMethod propfindMethod = new PropfindMethod(

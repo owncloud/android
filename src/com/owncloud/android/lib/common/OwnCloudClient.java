@@ -175,8 +175,6 @@ public class OwnCloudClient extends HttpClient {
         return status;
     }
 
-
-
     public RedirectionPath followRedirection(HttpBaseMethod method) throws Exception {
         int redirectionsCount = 0;
         int status = method.getStatusCode();
