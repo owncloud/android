@@ -91,6 +91,8 @@
 
     <!-- To enable/disable app rate feature -->
     <bool name="enable_rate_me_feature">true</bool>
+
+    <!-- Header images -->
+    <bool name="use_drawer_background_header">true</bool>
+    <bool name="use_drawer_logo">true</bool>
 </resources>
-
-

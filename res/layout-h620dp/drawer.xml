@@ -30,10 +30,9 @@
         app:menu="@menu/drawer_menu">
 
         <ImageView
-            android:id="@+id/drawer_cloud"
+            android:id="@+id/drawer_logo"
             android:layout_width="match_parent"
             android:layout_height="220dp"
-            android:src="@drawable/drawer_logo"
             android:scaleType="centerInside"
             android:layout_gravity="bottom"
             android:layout_margin="@dimen/standard_margin"
