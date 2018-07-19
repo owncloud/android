@@ -2,7 +2,8 @@
  *   ownCloud Android client application
  *
  *   @author LukeOwncloud
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   @author Christian Schabesberger
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -126,6 +127,7 @@ public class ConnectivityActionReceiver extends BroadcastReceiver {
         //  and reproduced in Nexus 5 with Android 6.
 
 
+        // TODO check if this helps us
         /**
          * Possible alternative attending ConnectivityManager.CONNECTIVITY_ACTION.
          *
@@ -198,32 +200,4 @@ public class ConnectivityActionReceiver extends BroadcastReceiver {
             );
         }
     }
-
-    private void wifiDisconnected(Context context) {
-        // TODO something smart
-
-        // NOTE: explicit cancellation of only-wifi camera uploads is not needed anymore, since currently:
-        //  - any upload in progress will be interrupted due to the lack of connectivity while the device
-        //      reconnects through other network interface;
-        //  - FileUploader checks camera upload settings and connection state before executing each
-        //    upload operation, so other pending camera uploads after the current one will not be run
-        //    (currently are silently moved to FAILED state)
-    }
-
-
-    static public void enableActionReceiver(Context context) {
-        PackageManager pm = context.getPackageManager();
-        ComponentName compName = new ComponentName(context.getApplicationContext(), ConnectivityActionReceiver.class);
-        pm.setComponentEnabledSetting(compName, PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
-                PackageManager.DONT_KILL_APP);
-    }
-
-    static public void disableActionReceiver(Context context) {
-        PackageManager pm = context.getPackageManager();
-        ComponentName compName = new ComponentName(context.getApplicationContext(), ConnectivityActionReceiver.class);
-        pm.setComponentEnabledSetting(compName, PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-                PackageManager.DONT_KILL_APP);
-    }
-
-
 }

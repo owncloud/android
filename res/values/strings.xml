@@ -13,10 +13,11 @@
     <string name="actionbar_see_details">Details</string>
     <string name="actionbar_send_file">Send</string>
     <string name="actionbar_sort">Sort</string>
+    <string name="actionbar_descending">Descending</string>
     <string name="actionbar_sort_title">Sort by</string>
     <string name="actionbar_sort_by_name">A-Z</string>
-    <string name="actionbar_sort_by_date">Newest - Oldest</string>
-    <string name="actionbar_sort_by_size">Biggest - Smallest</string>
+    <string name="actionbar_sort_by_date">Oldest - Newest</string>
+    <string name="actionbar_sort_by_size">Smallest - Largest</string>
     <!-- TODO re-enable when "Accounts" is available in Navigation Drawer -->
     <!--<string name="drawer_item_accounts">Accounts</string>-->
     <string name="drawer_item_all_files">All files</string>
@@ -26,6 +27,12 @@
     <string name="drawer_item_uploads_list">Uploads</string>
     <string name="drawer_close">Close</string>
     <string name="drawer_open">Open</string>
+    <string name="drawer_loading_quota">Loading quota</string>
+    <string name="drawer_quota">%1$s of %2$s used (%3$s %%)</string>
+    <string name="drawer_unavailable_free_storage">%1$s in use</string>
+    <string name="drawer_unavailable_used_storage">No storage usage information available</string>
+    <string name="drawer_feedback">Feedback</string>
+    <string name="drawer_help">Help</string>
     <string name="prefs_category_general">General</string>
     <string name="prefs_category_more">More</string>
     <string name="prefs_category_security">Security</string>
@@ -67,6 +74,8 @@
     <string name="recommend_subject">"Try %1$s on your smartphone!"</string>
     <string name="recommend_text">"I want to invite you to use %1$s on your smartphone!\nDownload here: %2$s"</string>
 
+    <string name="auth_failure_snackbar">Authentication failed</string>
+    <string name="auth_failure_snackbar_action">Change account</string>
     <string name="auth_check_server">Check server</string>
     <string name="auth_host_url">Server address https://…</string>
     <string name="auth_username">Username</string>
@@ -469,8 +478,9 @@
     <string name="share_via_link_expiration_date_label">Expiration</string>
     <string name="share_via_link_password_label">Password</string>
     <string name="share_via_link_password_title">Secured</string>
-    <string name="share_via_link_edit_permission_label">Allow editing</string>
-    <string name="share_via_link_show_file_listing_label">Show file listing</string>
+    <string name="share_via_link_edit_permission_read_only_label">Download / View</string>
+    <string name="share_via_link_edit_permission_read_and_write_label">Download / View / Upload</string>
+    <string name="share_via_link_edit_permission_upload_only_label">Upload Only (File Drop)</string>
     <string name="share_get_public_link_button">Get link</string>
     <string name="share_with_title">Share with &#8230;</string>
     <string name="share_with_edit_title">Share with %1$s</string>
@@ -566,12 +576,11 @@
     <string name="welcome_feature_4_text">Your pictures/videos automatically uploaded</string>
     <string name="welcome_feature_5_title">Video streaming</string>
     <string name="welcome_feature_5_text">Play your videos without downloading them</string>
-    <string name="welcome_feature_6_title">Pattern lock</string>
-    <string name="welcome_feature_6_text">Use a pattern to lock your ownCloud app</string>
-    <string name="welcome_feature_7_title">Fingerprint lock</string>
-    <string name="welcome_feature_7_text">Use your fingerprint to lock your ownCloud app</string>
-    <string name="welcome_feature_8_title">GIF support</string>
-    <string name="welcome_feature_8_text">Play your animated GIF images</string>
-    <string name="welcome_feature_9_title">Upload picture from camera</string>
-    <string name="welcome_feature_9_text">Take a picture and upload it directly to your server</string>
+    <string name="welcome_feature_6_title">User quota</string>
+    <string name="welcome_feature_6_text">Know your used and available space</string>
+    <string name="welcome_feature_7_title">New icons</string>
+    <string name="welcome_feature_7_text">To download and set files as av. offline</string>
+    <string name="welcome_feature_8_title">New pins</string>
+    <string name="welcome_feature_8_text">For syncing, downloaded and av. offline files</string>
+    <string name="no_borwser_installed_alert">No browser installed. Please install a Browser in order to allow a secure login.</string>
 </resources>

@@ -290,7 +290,7 @@ public class UsersAndGroupsSearchProvider extends ContentProvider {
 
                 Toast.makeText(
                         getContext().getApplicationContext(),
-                        ErrorMessageAdapter.getErrorCauseMessage(
+                        ErrorMessageAdapter.getResultMessage(
                                 result,
                                 null,
                                 getContext().getResources()

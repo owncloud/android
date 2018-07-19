@@ -4,8 +4,9 @@
  *   @author Bartek Przybylski
  *   @author masensio
  *   @author David A. Velasco
+ *   @author Christian Schabesberger
  *   Copyright (C) 2011 Bartek Przybylski
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -95,16 +96,16 @@ public class PassCodeActivity extends AppCompatActivity {
 
         setContentView(R.layout.passcodelock);
 
-        mBCancel = (Button) findViewById(R.id.cancel);
-        mPassCodeHdr = (TextView) findViewById(R.id.header);
-        mPassCodeHdrExplanation = (TextView) findViewById(R.id.explanation);
-        mPassCodeEditTexts[0] = (EditText) findViewById(R.id.txt0);
+        mBCancel = findViewById(R.id.cancel);
+        mPassCodeHdr = findViewById(R.id.header);
+        mPassCodeHdrExplanation = findViewById(R.id.explanation);
+        mPassCodeEditTexts[0] = findViewById(R.id.txt0);
         mPassCodeEditTexts[0].requestFocus();
         getWindow().setSoftInputMode(
                 android.view.WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
-        mPassCodeEditTexts[1] = (EditText) findViewById(R.id.txt1);
-        mPassCodeEditTexts[2] = (EditText) findViewById(R.id.txt2);
-        mPassCodeEditTexts[3] = (EditText) findViewById(R.id.txt3);
+        mPassCodeEditTexts[1] = findViewById(R.id.txt1);
+        mPassCodeEditTexts[2] = findViewById(R.id.txt2);
+        mPassCodeEditTexts[3] = findViewById(R.id.txt3);
 
         if (ACTION_CHECK.equals(getIntent().getAction())) {
             /// this is a pass code request; the user has to input the right value

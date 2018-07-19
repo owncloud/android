@@ -12,10 +12,9 @@
   <string name="actionbar_see_details">Podrobnosti</string>
   <string name="actionbar_send_file">Odeslat</string>
   <string name="actionbar_sort">Seřadit</string>
+  <string name="actionbar_descending">Klesající</string>
   <string name="actionbar_sort_title">Seřadit podle</string>
   <string name="actionbar_sort_by_name">A-Z</string>
-  <string name="actionbar_sort_by_date">Od nejnovějšího</string>
-  <string name="actionbar_sort_by_size">Od největšího</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Všechny soubory</string>
@@ -25,6 +24,8 @@
   <string name="drawer_item_uploads_list">Nahrání</string>
   <string name="drawer_close">Zavřít</string>
   <string name="drawer_open">Otevřít</string>
+  <string name="drawer_feedback">Odezva</string>
+  <string name="drawer_help">Nápověda</string>
   <string name="prefs_category_general">Obecné</string>
   <string name="prefs_category_more">Více</string>
   <string name="prefs_category_security">Zabezpečení</string>
@@ -410,8 +411,6 @@ správce systému.</string>
   <string name="share_via_link_expiration_date_label">Konec platnosti</string>
   <string name="share_via_link_password_label">Heslo</string>
   <string name="share_via_link_password_title">Zabezpečeno</string>
-  <string name="share_via_link_edit_permission_label">Povolit úpravy</string>
-  <string name="share_via_link_show_file_listing_label">Ukázat výpis souborů</string>
   <string name="share_get_public_link_button">Vytvořit odkaz</string>
   <string name="share_with_title">Sdílet s ...</string>
   <string name="share_with_edit_title">Sdílet s %1$s</string>
@@ -478,6 +477,7 @@ správce systému.</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d vybrán</item>
     <item quantity="few">%d vybrány</item>
+    <item quantity="many">%d vybráno</item>
     <item quantity="other">%d vybráno</item>
   </plurals>
   <!--Welcome to oC intro features-->

@@ -1,8 +1,10 @@
 /**
  *   ownCloud Android client application
  *
+ *   @author Bartek Przybylski
+ *   @author Christian Schabesberger
  *   Copyright (C) 2012 Bartek Przybylski
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -559,7 +561,8 @@ public class FileDownloader extends Service
                 .setContentText(
                         String.format(getString(R.string.downloader_download_in_progress_content), 0,
                                 new File(download.getSavePath()).getName()))
-                .setChannelId(DOWNLOAD_NOTIFICATION_CHANNEL_ID);
+                .setChannelId(DOWNLOAD_NOTIFICATION_CHANNEL_ID)
+                .setWhen(System.currentTimeMillis());
 
         /// includes a pending intent in the notification showing the details view of the file
         Intent showDetailsIntent = null;
@@ -651,7 +654,7 @@ public class FileDownloader extends Service
             }
 
             mNotificationBuilder.setContentText(
-                    ErrorMessageAdapter.getErrorCauseMessage(downloadResult, download,
+                    ErrorMessageAdapter.getResultMessage(downloadResult, download,
                             getResources())
             );
             mNotificationBuilder.setChannelId(DOWNLOAD_NOTIFICATION_CHANNEL_ID);

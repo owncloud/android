@@ -2,7 +2,8 @@
  *   ownCloud Android client application
  *
  *   @author David A. Velasco
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   @author Christian Schabesberger
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -39,7 +40,7 @@ import android.net.wifi.WifiManager.WifiLock;
 import android.os.FileObserver;
 import android.os.IBinder;
 import android.os.PowerManager;
-import android.support.v7.app.NotificationCompat;
+import android.support.v4.app.NotificationCompat;
 import android.widget.Toast;
 
 import com.owncloud.android.R;
@@ -110,8 +111,8 @@ public class MediaService extends Service implements OnCompletionListener, OnPre
         PREPARING,      
         PLAYING,        
         PAUSED 
-    };
-    
+    }
+
 
     /** Current state */
     private State mState = State.STOPPED;

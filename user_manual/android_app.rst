@@ -33,6 +33,26 @@ When you download your ownCloud Android App from the Google Play store, it will 
 
 It will either update automatically or give you a notification that an upgrade is available. If you are using an ownCloud Android app from a custom repository, e.g., your employer, then it will update in accordance with their policies.
 
+New Features Wizard
+-------------------
+
+.. versionadded:: 2.7.0
+
+The first time that you use the Android app, you will see the New Features Wizard.
+The wizard, similar to wizards in other applications and operating systems, gives you a quick overview of the new features in the Android App, so that you’re familiar with them as quickly as possible.
+
+The new features covered in the wizard are:
+
+- :ref:`Pattern Lock <pattern_and_fingerprint_lock_label>`
+- :ref:`Fingerprint Lock <pattern_and_fingerprint_lock_label>`
+- :ref:`GIF Support <gif_support_label>`
+- :ref:`Upload picture from camera <upload_pictures_directly_from_the_camera_label>`
+
+.. figure:: images/new-features-wizard/new-features-wizard-step-owncloud-android-app.png
+   :alt: New features wizard in the ownCloud Android app.
+
+   The New Features Wizard in the ownCloud Android app.
+
 Connecting to Your ownCloud Server
 ----------------------------------
 
@@ -202,6 +222,20 @@ This will display the options available for that link, including *"Allow editing
 After the options have been suitably configured, click *"Save"* to create the link.
 If you do not want to create the public link, click *"Cancel"*.
 
+.. _gif_support_label:
+
+GIF Support
+~~~~~~~~~~~
+
+.. versionadded:: 2.7.0
+
+If you upload animated GIFs, when viewing them they will be animated and not render as a still image, as in the example GIF below.
+
+.. figure:: images/gif-support-owncloud-android-app.gif
+   :alt: View animated GIFs in the ownCloud Android app.
+
+   View animated GIFs in the ownCloud Android app.
+
 Creating New Content
 ~~~~~~~~~~~~~~~~~~~~
 
@@ -217,8 +251,25 @@ Click the overflow button at the top right (that's the one with three vertical d
 *"Grid view"* toggles between grid and list view. *"Refresh account"* syncs with the server, and *"Sort"* gives you the option to sort your files by date, or alphabetically.
 
 .. figure:: images/android-6.png
-   :alt: Top-right menu.   
-   
+   :alt: Top-right menu.
+
+.. _upload_pictures_directly_from_the_camera_label:
+
+Upload Pictures Directly From The Camera
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. versionadded:: 2.7.0
+
+.. figure:: images/camera/share-from-camera-owncloud-android-app.jpg
+   :alt: Uploading pictures directly from the camera in the ownCloud Android app, steps 1 - 3.
+
+   Uploading pictures directly from the camera in the ownCloud Android app, steps 1 - 3.
+
+Images can be uploaded directly from the camera.
+To do so, similar to uploading a file or creating a new folder, when viewing all files, click the *"Plus icon"*, then the *"Upload"* button in the popup list (which is the first icon).
+From there, under *"Upload to ownCloud"*, click *"Picture from camera"*.
+The camera app will then start, and the picture that you take can be directly uploaded to your ownCloud server.
+
 Working With Multiple Files
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -272,8 +323,10 @@ Application Settings
 
 Use the *"Settings"* screen to control your ownCloud applications settings and functionality. 
 
-.. figure:: images/android-settings-page.jpg
-   :alt: the Settings screen.
+.. figure:: images/android-settings-page.png
+   :alt: The Settings Screen in the ownCloud Android App.
+
+   The Settings Screen in the ownCloud Android App.
 
 Camera Uploads
 ~~~~~~~~~~~~~~
@@ -305,6 +358,9 @@ Tap it and enter the name of the new folder in the *Folder name* dialog.
 Then, tap the newly created folder and tap *Choose* in the bottom right-hand corner. 
 You'll see that the path has been updated.
 
+Security
+--------
+
 Passcode Locks & Pins
 ~~~~~~~~~~~~~~~~~~~~~
 
@@ -319,6 +375,37 @@ The bottom section of the *"Settings"* screen has links to:
 - Recommend to a friend
 - Feedback 
 - The version number
+
+.. _pattern_and_fingerprint_lock_label:
+
+Pattern Lock and Fingerprint Lock
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. versionadded:: 2.7.0
+
+In addition to the Passcode Lock and Pins, you also have the ability to use both a pattern and a fingerprint lock to protect access to your ownCloud app and its data.
+To enable one or both, under *"Settings"* -> *"Security"*, choose which one(s) you want to enable.
+
+.. note:: To use the Fingerprint Lock, the Pattern Lock has to be enabled.
+
+.. figure:: images/security/fingerprint-and-pattern-lock-enabled-disabled-owncloud-android-app.png
+   :alt: Enable or disable the Fingerprint and Pattern Lock in the ownCloud Android app.
+
+   Enable or disable the Fingerprint and Pattern Lock in the ownCloud Android app.
+
+.. figure:: images/security/fingerprint-and-pattern-lock-owncloud-android-app.png
+   :alt: The Pattern Lock and Fingerprint Lock in the ownCloud Android app.
+
+   The Pattern Lock and Fingerprint Lock in the ownCloud Android app.
+
+After you enable the pattern lock, you will need to create a pattern and then confirm it to access the ownCloud app, just as you would if you've enabled that for access to the phone itself.
+If you later disable pattern lock, you will need to enter your pattern again.
+
+If you enable the fingerprint lock, you will need to provide one of your already stored fingerprint patterns to access the ownCloud app.
+
+.. note::
+   If fingerprint lock is enabled, but you don’t want to use it, you can cancel
+   the fingerprint lock prompt and fallback to using the pattern lock instead.
 
 .. Links
    

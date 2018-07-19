@@ -2,8 +2,9 @@
  *   ownCloud Android client application
  *
  *   @author David A. Velasco
+ *   @author Christian Schabesberger
  *   Copyright (C) 2011  Bartek Przybylski
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -107,11 +108,11 @@ public class LocalFileListAdapter extends BaseAdapter implements ListAdapter {
         if (mFiles != null && mFiles.length > position) {
             File file = mFiles[position];
             
-            TextView fileName = (TextView) view.findViewById(R.id.Filename);
+            TextView fileName = view.findViewById(R.id.Filename);
             String name = file.getName();
             fileName.setText(name);
             
-            ImageView fileIcon = (ImageView) view.findViewById(R.id.thumbnail);
+            ImageView fileIcon = view.findViewById(R.id.thumbnail);
 
             /** Cancellation needs do be checked and done before changing the drawable in fileIcon, or
              * {@link ThumbnailsCacheManager#cancelPotentialThumbnailWork} will NEVER cancel any task.
@@ -125,10 +126,10 @@ public class LocalFileListAdapter extends BaseAdapter implements ListAdapter {
             }
             fileIcon.setTag(file.hashCode());
 
-            TextView fileSizeV = (TextView) view.findViewById(R.id.file_size);
-            TextView fileSizeSeparatorV = (TextView) view.findViewById(R.id.file_separator);
-            TextView lastModV = (TextView) view.findViewById(R.id.last_mod);
-            ImageView checkBoxV = (ImageView) view.findViewById(R.id.custom_checkbox);
+            TextView fileSizeV = view.findViewById(R.id.file_size);
+            TextView fileSizeSeparatorV = view.findViewById(R.id.file_separator);
+            TextView lastModV = view.findViewById(R.id.last_mod);
+            ImageView checkBoxV = view.findViewById(R.id.custom_checkbox);
             lastModV.setVisibility(View.VISIBLE);
             lastModV.setText(DisplayUtils.getRelativeTimestamp(mContext, file.lastModified()));
 
@@ -187,8 +188,7 @@ public class LocalFileListAdapter extends BaseAdapter implements ListAdapter {
             }
 
             // not GONE; the alignment changes; ugly way to keep it
-            view.findViewById(R.id.localFileIndicator).setVisibility(View.INVISIBLE);   
-            view.findViewById(R.id.favoriteIcon).setVisibility(View.GONE);
+            view.findViewById(R.id.localFileIndicator).setVisibility(View.INVISIBLE);
             
             view.findViewById(R.id.sharedIcon).setVisibility(View.GONE);
         }

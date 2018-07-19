@@ -2,7 +2,8 @@
  *   ownCloud Android client application
  *
  *   @author David A. Velasco
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   @author Christian Schabesberger
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -166,9 +167,9 @@ public class ShareLinkToDialog  extends DialogFragment {
         }
         
         private void bindView(int position, View row) {
-            TextView label = (TextView) row.findViewById(R.id.title);
+            TextView label = row.findViewById(R.id.title);
             label.setText(getItem(position).loadLabel(mPackageManager));
-            ImageView icon = (ImageView) row.findViewById(R.id.icon);
+            ImageView icon = row.findViewById(R.id.icon);
             icon.setImageDrawable(getItem(position).loadIcon(mPackageManager));
         }
     }

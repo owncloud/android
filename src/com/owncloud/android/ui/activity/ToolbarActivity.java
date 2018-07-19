@@ -2,7 +2,8 @@
  *   ownCloud Android client application
  *
  *   @author Andy Scherzinger
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   @author Christian Schabesberger
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -43,7 +44,7 @@ public abstract class ToolbarActivity extends BaseActivity {
      * want to use the toolbar.
      */
     protected void setupToolbar() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
     }
 

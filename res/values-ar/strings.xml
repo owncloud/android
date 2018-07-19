@@ -14,8 +14,6 @@
   <string name="actionbar_sort">ترتيب</string>
   <string name="actionbar_sort_title">ترتيب بـ</string>
   <string name="actionbar_sort_by_name">أ-ي</string>
-  <string name="actionbar_sort_by_date">الاحدث - الاقدم</string>
-  <string name="actionbar_sort_by_size">الاضخم - الاصغر</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">كل الملفات</string>
@@ -25,6 +23,8 @@
   <string name="drawer_item_uploads_list">التحميلات</string>
   <string name="drawer_close">إغلاق</string>
   <string name="drawer_open">افتح</string>
+  <string name="drawer_feedback">ملاحظات</string>
+  <string name="drawer_help">المساعدة</string>
   <string name="prefs_category_general">عام</string>
   <string name="prefs_category_more">المزيد</string>
   <string name="prefs_category_security">الأمان</string>
@@ -267,7 +267,6 @@
   <string name="share_confirm_public_link_button">حفظ</string>
   <string name="share_via_link_expiration_date_label">إنتهاء</string>
   <string name="share_via_link_password_label">كلمة السر</string>
-  <string name="share_via_link_edit_permission_label">السماح بالتعديلات</string>
   <string name="share_search">البحث</string>
   <string name="share_privilege_can_share">يمكن المشاركة</string>
   <string name="share_privilege_can_edit">يمكن التحرير</string>

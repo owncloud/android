@@ -5,8 +5,9 @@
  *  @author masensio
  *  @author Juan Carlos González Cabrero
  *  @author David A. Velasco
+ *  @author Christian Schabesberger
  *  Copyright (C) 2012  Bartek Przybylski
- *  Copyright (C) 2016 ownCloud GmbH.
+ *  Copyright (C) 2018 ownCloud GmbH.
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License version 2,
@@ -404,7 +405,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
         setupToolbar();
         ActionBar actionBar = getSupportActionBar();
 
-        ListView mListView = (ListView) findViewById(android.R.id.list);
+        ListView mListView = findViewById(android.R.id.list);
 
         String current_dir = mParents.peek();
         if (current_dir.equals("")) {
@@ -433,10 +434,10 @@ public class ReceiveExternalFilesActivity extends FileActivity
             );
             mListView.setAdapter(sa);
 
-            Button btnChooseFolder = (Button) findViewById(R.id.uploader_choose_folder);
+            Button btnChooseFolder = findViewById(R.id.uploader_choose_folder);
             btnChooseFolder.setOnClickListener(this);
 
-            Button btnNewFolder = (Button) findViewById(R.id.uploader_cancel);
+            Button btnNewFolder = findViewById(R.id.uploader_cancel);
             btnNewFolder.setOnClickListener(this);
 
             mListView.setOnItemClickListener(this);
@@ -570,7 +571,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
         } else {
             try {
                 showSnackMessage(
-                    ErrorMessageAdapter.getErrorCauseMessage(result, operation, getResources())
+                    ErrorMessageAdapter.getResultMessage(result, operation, getResources())
                 );
 
             } catch (NotFoundException e) {
@@ -611,7 +612,6 @@ public class ReceiveExternalFilesActivity extends FileActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main_menu, menu);
-        menu.findItem(R.id.action_sort).setVisible(false);
         menu.findItem(R.id.action_switch_view).setVisible(false);
         menu.findItem(R.id.action_sync_account).setVisible(false);
         return true;
@@ -792,8 +792,8 @@ public class ReceiveExternalFilesActivity extends FileActivity
         builder.setPositiveButton(R.string.uploader_btn_upload_text, null);
         builder.setNegativeButton(R.string.common_cancel, null);
 
-        final TextInputEditText input = (TextInputEditText) dialogView.findViewById(R.id.inputFileName);
-        final TextInputLayout inputLayout = (TextInputLayout) dialogView.findViewById(R.id.inputTextLayout);
+        final TextInputEditText input = dialogView.findViewById(R.id.inputFileName);
+        final TextInputLayout inputLayout = dialogView.findViewById(R.id.inputTextLayout);
 
         input.addTextChangedListener(new TextWatcher() {
             @Override

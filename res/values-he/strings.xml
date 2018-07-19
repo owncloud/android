@@ -12,10 +12,9 @@
   <string name="actionbar_see_details">פרטים</string>
   <string name="actionbar_send_file">שליחה</string>
   <string name="actionbar_sort">מיון</string>
+  <string name="actionbar_descending">יורד</string>
   <string name="actionbar_sort_title">מיון על בסיס</string>
   <string name="actionbar_sort_by_name">א-ת</string>
-  <string name="actionbar_sort_by_date">חדש ביותר - ישן ביותר</string>
-  <string name="actionbar_sort_by_size">גדול ביותר - קטן ביותר</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">כל הקבצים</string>
@@ -25,6 +24,8 @@
   <string name="drawer_item_uploads_list">העלאות</string>
   <string name="drawer_close">סגירה</string>
   <string name="drawer_open">פתיחה</string>
+  <string name="drawer_feedback">משוב</string>
+  <string name="drawer_help">עזרה</string>
   <string name="prefs_category_general">כללי</string>
   <string name="prefs_category_more">יותר</string>
   <string name="prefs_category_security">אבטחה</string>
@@ -423,8 +424,6 @@
   <string name="share_via_link_expiration_date_label">תפוגה</string>
   <string name="share_via_link_password_label">סיסמא</string>
   <string name="share_via_link_password_title">מאובטח</string>
-  <string name="share_via_link_edit_permission_label">אישור עריכה</string>
-  <string name="share_via_link_show_file_listing_label">הצגת רשומת קובץ</string>
   <string name="share_get_public_link_button">קבלת קישור</string>
   <string name="share_with_title">שיתף עם...</string>
   <string name="share_with_edit_title">שיתף עם %1$s</string>
@@ -490,6 +489,8 @@
   <string name="file_sync_notification_channel_description">הצגת תוצאות סנכרון קבצים</string>
   <plurals name="items_selected_count">
     <item quantity="one">נבחר %d</item>
+    <item quantity="two">נבחרו %d</item>
+    <item quantity="many">נבחרו %d</item>
     <item quantity="other">נבחרו %d</item>
   </plurals>
   <!--Welcome to oC intro features-->

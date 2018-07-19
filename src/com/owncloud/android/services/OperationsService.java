@@ -3,7 +3,8 @@
  *
  *   @author David A. Velasco
  *   @author David González Verdugo
- *   Copyright (C) 2017 ownCloud GmbH.
+ *   @author Christian Schabesberger
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -521,7 +522,6 @@ public class OperationsService extends Service {
                     }
                 }
                 
-                //sendBroadcastOperationFinished(mLastTarget, mCurrentOperation, result);
                 mService.dispatchResultToOperationListeners(mCurrentOperation, result);
             }
         }
@@ -757,8 +757,6 @@ public class OperationsService extends Service {
         } else {
             intent.putExtra(EXTRA_SERVER_URL, target.mServerUrl);
         }
-        //LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(this);
-        //lbm.sendBroadcast(intent);
         mLocalBroadcastManager.sendBroadcast(intent);
     }
 
@@ -816,7 +814,7 @@ public class OperationsService extends Service {
         if (count == 0) {
             Pair<RemoteOperation, RemoteOperationResult> undispatched =
                     new Pair<>(operation, result);
-            mUndispatchedFinishedOperations.put(((Runnable) operation).hashCode(), undispatched);
+            mUndispatchedFinishedOperations.put(operation.hashCode(), undispatched);
         }
         Log_OC.d(TAG, "Called " + count + " listeners");
     }

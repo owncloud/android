@@ -17,6 +17,7 @@
   <string name="drawer_item_settings">Podešavanja</string>
   <string name="drawer_close">Zatvori</string>
   <string name="drawer_open">Otvori</string>
+  <string name="drawer_help">Pomoć</string>
   <string name="prefs_category_general">Opšte</string>
   <string name="prefs_category_more">Vise</string>
   <string name="prefs_accounts">Nalozi</string>
@@ -91,7 +92,6 @@
   <string name="share_confirm_public_link_button">Sačuvaj</string>
   <string name="share_via_link_expiration_date_label">Isticanje</string>
   <string name="share_via_link_password_label">Lozinka</string>
-  <string name="share_via_link_edit_permission_label">Dozvoli uređivanje</string>
   <string name="share_search">Traži</string>
   <string name="share_privilege_can_share">može da deli</string>
   <string name="share_privilege_can_edit">može da menja</string>

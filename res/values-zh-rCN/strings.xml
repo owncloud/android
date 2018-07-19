@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="about_android">%1$s Android app</string>
+  <string name="about_android">%1$s Android 应用</string>
   <string name="about_version">版本：%1$s</string>
   <string name="actionbar_sync">刷新帐户</string>
   <string name="actionbar_upload">上传</string>
@@ -12,10 +12,11 @@
   <string name="actionbar_see_details">详细信息</string>
   <string name="actionbar_send_file">发送</string>
   <string name="actionbar_sort">排序</string>
+  <string name="actionbar_descending">逆序</string>
   <string name="actionbar_sort_title">排序方式</string>
   <string name="actionbar_sort_by_name">A-Z</string>
-  <string name="actionbar_sort_by_date">最新 - 最早</string>
-  <string name="actionbar_sort_by_size">最大 - 最小</string>
+  <string name="actionbar_sort_by_date">日期</string>
+  <string name="actionbar_sort_by_size">最小 - 最大</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">全部文件</string>
@@ -25,12 +26,17 @@
   <string name="drawer_item_uploads_list">上传</string>
   <string name="drawer_close">关闭</string>
   <string name="drawer_open">打开</string>
+  <string name="drawer_unavailable_used_storage">没有可用的储存使用量信息</string>
+  <string name="drawer_feedback">反馈</string>
+  <string name="drawer_help">帮助</string>
   <string name="prefs_category_general">常规</string>
   <string name="prefs_category_more">更多</string>
   <string name="prefs_category_security">安全</string>
   <string name="prefs_accounts">账号</string>
   <string name="prefs_manage_accounts">管理账号</string>
   <string name="prefs_passcode">密码锁</string>
+  <string name="prefs_fingerprint">指纹锁</string>
+  <string name="prefs_fingerprint_summary">使用密码或图案锁定以启用此选项</string>
   <string name="prefs_camera_picture_upload">图片上传</string>
   <string name="prefs_camera_picture_upload_summary">自动上传相机拍摄的图片</string>
   <string name="prefs_camera_video_upload">视频上传</string>
@@ -46,8 +52,24 @@
   <string name="prefs_imprint">版本说明</string>
   <string name="prefs_remember_last_share_location">记住共享位置</string>
   <string name="prefs_remember_last_upload_location_summary">记住上次共享上传的位置</string>
+  <string name="prefs_pattern">图案锁</string>
+  <string name="pattern_enter_pattern">请输入图案</string>
+  <string name="pattern_configure_pattern">输入图案</string>
+  <string name="pattern_remove_pattern">移除图案</string>
+  <string name="pattern_incorrect_pattern">图案不正确</string>
+  <string name="pattern_reenter_pattern">请再次输入图案</string>
+  <string name="pattern_not_same_pattern">两次图案输入不一致</string>
+  <string name="pattern_stored">图案已保存</string>
+  <string name="pattern_removed">图案已移除</string>
+  <string name="pattern_already_set">图案锁和密码锁无法同时启用，请先禁用图案锁</string>
+  <string name="passcode_already_set">图案锁和密码锁无法同时启用，请先禁用密码锁</string>
+  <string name="pattern_no_longer_required">不再询问输入图案锁</string>
+  <string name="pattern_configure_your_pattern_explanation">每次启动app时均需要输入图案解锁</string>
+  <string name="illegal_argument_exception_message">需要一个有效的 ACTION 传递意图</string>
   <string name="recommend_subject">在您的智能手机上试用 %1$s！</string>
   <string name="recommend_text">我邀请你在智能手机上使用 %1$s\n下载路径：%2$s</string>
+  <string name="auth_failure_snackbar">认证失败</string>
+  <string name="auth_failure_snackbar_action">更换账户</string>
   <string name="auth_check_server">检查服务器</string>
   <string name="auth_host_url">服务器地址 https://...</string>
   <string name="auth_username">用户名</string>
@@ -184,6 +206,13 @@
   <string name="pass_code_wrong">错误的密码</string>
   <string name="pass_code_removed">移除的密码</string>
   <string name="pass_code_stored">存储的密码</string>
+  <string name="fingerprint_confirm">确认您的指纹以继续下一步</string>
+  <string name="fingerprint_hint">触摸传感器</string>
+  <string name="fingerprint_not_recognized">指纹无法识别，请重试</string>
+  <string name="fingerprint_success">指纹已识别</string>
+  <string name="fingerprint_not_hardware_detected">此设备不支持指纹验证</string>
+  <string name="fingerprint_not_enrolled_fingerprints">请至少录入一个指纹以使用此功能</string>
+  <string name="fingerprint_not_granted_permissions">指纹权限未授权</string>
   <string name="media_notif_ticker">%1$s 音乐播放器</string>
   <string name="media_state_playing">%1$s (播放中)</string>
   <string name="media_state_loading">%1$s (载入中)</string>
@@ -203,6 +232,7 @@
   <string name="media_rewind_description">后退按钮</string>
   <string name="media_play_pause_description">播放暂停按钮</string>
   <string name="media_forward_description">快进按钮</string>
+  <string name="upload_from_camera_title">从相机获取照片</string>
   <string name="auth_getting_authorization">认证中...</string>
   <string name="auth_trying_to_login">尝试登录中...</string>
   <string name="auth_no_net_conn_title">没有网络连接</string>
@@ -408,8 +438,8 @@
   <string name="share_via_link_expiration_date_label">过期</string>
   <string name="share_via_link_password_label">密码</string>
   <string name="share_via_link_password_title">安全</string>
-  <string name="share_via_link_edit_permission_label">允许编辑</string>
-  <string name="share_via_link_show_file_listing_label">显示文件列表</string>
+  <string name="share_via_link_edit_permission_read_only_label">下载 / 查看</string>
+  <string name="share_via_link_edit_permission_read_and_write_label">下载 / 查看 / 上传</string>
   <string name="share_get_public_link_button">获取链接</string>
   <string name="share_with_title">分享...</string>
   <string name="share_with_edit_title">与 %1$s 分享</string>
@@ -473,9 +503,24 @@
   <string name="media_service_notification_channel_description">查看音乐播放器</string>
   <string name="file_sync_notification_channel_name">文件同步</string>
   <string name="file_sync_notification_channel_description">查看文件同步结果</string>
+  <string name="rate_dialog_title">评价 %1$s 应用！</string>
+  <string name="rate_dialog_description">如果你喜欢此app，能否占用你一些时间投票？您的反馈对我们非常重要。</string>
+  <string name="button_no_thanks_name">不，谢谢</string>
+  <string name="button_later_name">稍晚时候</string>
+  <string name="button_rate_now_name">现在投票</string>
   <plurals name="items_selected_count">
     <item quantity="other">%d 已选择</item>
   </plurals>
   <!--Welcome to oC intro features-->
+  <string name="welcome_feature_1_title">管理您所有同步的文件</string>
+  <string name="welcome_feature_1_text">你可以复制，移动，删除</string>
+  <string name="welcome_feature_2_title">分享文件和文件夹</string>
+  <string name="welcome_feature_2_text">你可以公开或者私密分享</string>
+  <string name="welcome_feature_3_title">多账号</string>
+  <string name="welcome_feature_3_text">连接到你所有的ownCloud服务器</string>
   <string name="welcome_feature_4_title">相机上传</string>
+  <string name="welcome_feature_4_text">你的照片/视频将会自动上传</string>
+  <string name="welcome_feature_5_title">流媒体视频</string>
+  <string name="welcome_feature_5_text">无需下载模仿你的视频</string>
+  <string name="no_borwser_installed_alert">未安装浏览器。请安装浏览器以使用安全登陆。</string>
 </resources>

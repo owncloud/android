@@ -11,6 +11,7 @@
   <!--TODO re-enable when "On Device" is available
     <string name="drawer_item_on_device">On device</string>-->
   <string name="drawer_open">Aperi</string>
+  <string name="drawer_help">Adjuta</string>
   <string name="prefs_category_general">General</string>
   <string name="prefs_category_more">Plus</string>
   <string name="prefs_category_security">Securitate</string>
@@ -54,7 +55,6 @@
   <string name="share_confirm_public_link_button">Salveguardar</string>
   <string name="share_via_link_expiration_date_label">Expiration</string>
   <string name="share_via_link_password_label">Contrasigno</string>
-  <string name="share_via_link_edit_permission_label">Permitter modification</string>
   <string name="share_search">Cercar</string>
   <string name="share_privilege_can_share">pote compartir</string>
   <string name="share_privilege_can_edit">pote modificar</string>

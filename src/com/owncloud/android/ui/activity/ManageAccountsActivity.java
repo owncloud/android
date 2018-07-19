@@ -2,7 +2,8 @@
  * ownCloud Android client application
  *
  * @author Andy Scherzinger
- * Copyright (C) 2016 ownCloud GmbH.
+ * @author Christian Schabesberger
+ * Copyright (C) 2018 ownCloud GmbH.
  * <p/>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -92,7 +93,7 @@ public class ManageAccountsActivity extends FileActivity
 
         setContentView(R.layout.accounts_layout);
 
-        mListView = (ListView) findViewById(R.id.account_list);
+        mListView = findViewById(R.id.account_list);
         mListView.setFilterTouchesWhenObscured(true);
 
         setupToolbar();

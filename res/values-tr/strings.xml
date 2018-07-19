@@ -12,10 +12,9 @@
   <string name="actionbar_see_details">Ayrıntılar</string>
   <string name="actionbar_send_file">Gönder</string>
   <string name="actionbar_sort">Sırala</string>
+  <string name="actionbar_descending">Azalan</string>
   <string name="actionbar_sort_title">Şuna göre sırala</string>
   <string name="actionbar_sort_by_name">A-Z</string>
-  <string name="actionbar_sort_by_date">En Yeni - En Eski</string>
-  <string name="actionbar_sort_by_size">En Büyük - En Küçük</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Tüm dosyalar</string>
@@ -25,6 +24,8 @@
   <string name="drawer_item_uploads_list">Yüklemeler</string>
   <string name="drawer_close">Kapat</string>
   <string name="drawer_open">Aç</string>
+  <string name="drawer_feedback">Geribildirim</string>
+  <string name="drawer_help">Yardım</string>
   <string name="prefs_category_general">Genel</string>
   <string name="prefs_category_more">Daha fazla</string>
   <string name="prefs_category_security">Güvenlik</string>
@@ -388,8 +389,6 @@
   <string name="share_via_link_expiration_date_label">Bitiş</string>
   <string name="share_via_link_password_label">Parola</string>
   <string name="share_via_link_password_title">Güvenli</string>
-  <string name="share_via_link_edit_permission_label">Düzenlemeye izin ver</string>
-  <string name="share_via_link_show_file_listing_label">Dosya listesini göster</string>
   <string name="share_get_public_link_button">Bağlantıyı al</string>
   <string name="share_with_title">Şununla paylaş...</string>
   <string name="share_with_edit_title">%1$s ile paylaş</string>

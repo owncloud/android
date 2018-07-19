@@ -12,10 +12,9 @@
   <string name="actionbar_see_details">Detaljer</string>
   <string name="actionbar_send_file">Send</string>
   <string name="actionbar_sort">Sortér</string>
+  <string name="actionbar_descending">Oppefra</string>
   <string name="actionbar_sort_title">Sortér efter</string>
   <string name="actionbar_sort_by_name">A-Å</string>
-  <string name="actionbar_sort_by_date">Nyeste - Ældste</string>
-  <string name="actionbar_sort_by_size">Største - Mindste</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Alle filer</string>
@@ -25,6 +24,8 @@
   <string name="drawer_item_uploads_list">Uploade filer</string>
   <string name="drawer_close">Luk</string>
   <string name="drawer_open">Åbn</string>
+  <string name="drawer_feedback">Feedback</string>
+  <string name="drawer_help">Hjælp</string>
   <string name="prefs_category_general">Generel</string>
   <string name="prefs_category_more">Mere</string>
   <string name="prefs_category_security">Sikkerhed</string>
@@ -397,8 +398,6 @@
   <string name="share_via_link_expiration_date_label">Udløb</string>
   <string name="share_via_link_password_label">Kodeord</string>
   <string name="share_via_link_password_title">Sikret</string>
-  <string name="share_via_link_edit_permission_label">Tillad redigering</string>
-  <string name="share_via_link_show_file_listing_label">Vis filliste</string>
   <string name="share_get_public_link_button">Hent link</string>
   <string name="share_with_title">Del med ...</string>
   <string name="share_with_edit_title">Del med %1$s</string>

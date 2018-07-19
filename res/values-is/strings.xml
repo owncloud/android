@@ -14,8 +14,6 @@
   <string name="actionbar_sort">Raða</string>
   <string name="actionbar_sort_title">Raða sem</string>
   <string name="actionbar_sort_by_name">A-Z</string>
-  <string name="actionbar_sort_by_date">Nýjast - Elst</string>
-  <string name="actionbar_sort_by_size">Stærst - Minnst</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Allar skrár</string>
@@ -25,6 +23,8 @@
   <string name="drawer_item_uploads_list">Uploads</string>
   <string name="drawer_close">Loka</string>
   <string name="drawer_open">Opna</string>
+  <string name="drawer_feedback">Umsögn</string>
+  <string name="drawer_help">Hjálp</string>
   <string name="prefs_category_general">Almennt</string>
   <string name="prefs_category_more">Meira</string>
   <string name="prefs_category_security">Öryggi</string>
@@ -407,8 +407,6 @@
   <string name="share_via_link_expiration_date_label">Rennur út</string>
   <string name="share_via_link_password_label">Lykilorð</string>
   <string name="share_via_link_password_title">Öruggt</string>
-  <string name="share_via_link_edit_permission_label">Leyfa breytingar</string>
-  <string name="share_via_link_show_file_listing_label">Birta skráalista</string>
   <string name="share_get_public_link_button">Ná í tengil</string>
   <string name="share_with_title">Deila með ...</string>
   <string name="share_with_edit_title">Deila með %1$s</string>

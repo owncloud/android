@@ -14,8 +14,6 @@
   <string name="actionbar_sort">Sorteer</string>
   <string name="actionbar_sort_title">Sorteer volgens</string>
   <string name="actionbar_sort_by_name">A-Z</string>
-  <string name="actionbar_sort_by_date">Nuutste - Oudste</string>
-  <string name="actionbar_sort_by_size">Grootste - Kleinste</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Alle lêers</string>
@@ -25,6 +23,8 @@
   <string name="drawer_item_uploads_list">Oplaaie</string>
   <string name="drawer_close">Sluit</string>
   <string name="drawer_open">Open</string>
+  <string name="drawer_feedback">Terugvoer</string>
+  <string name="drawer_help">Hulp</string>
   <string name="prefs_category_general">Algemeen</string>
   <string name="prefs_category_more">Nog</string>
   <string name="prefs_category_security">Sekuriteit</string>
@@ -105,8 +105,6 @@
   <string name="share_confirm_public_link_button">Bewaar</string>
   <string name="share_via_link_expiration_date_label">Verval</string>
   <string name="share_via_link_password_label">Wagwoord</string>
-  <string name="share_via_link_edit_permission_label">Staan wysiging toe</string>
-  <string name="share_via_link_show_file_listing_label">Toon lêerlys</string>
   <string name="share_search">Soek</string>
   <string name="share_privilege_can_share">kan deel</string>
   <string name="share_privilege_can_edit">kan wysig</string>

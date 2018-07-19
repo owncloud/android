@@ -32,7 +32,6 @@ import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
@@ -49,7 +48,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.app.AlertDialog;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -63,11 +61,11 @@ import com.owncloud.android.authentication.PassCodeManager;
 import com.owncloud.android.authentication.PatternManager;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
+import com.owncloud.android.db.PreferenceManager;
 import com.owncloud.android.files.services.FileDownloader;
 import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder;
 import com.owncloud.android.files.services.FileUploader;
 import com.owncloud.android.files.services.FileUploader.FileUploaderBinder;
-import com.owncloud.android.files.services.IndexedForest;
 import com.owncloud.android.files.services.TransferRequester;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
@@ -99,6 +97,7 @@ import com.owncloud.android.ui.preview.PreviewVideoActivity;
 import com.owncloud.android.ui.preview.PreviewVideoFragment;
 import com.owncloud.android.utils.DisplayUtils;
 import com.owncloud.android.utils.Extras;
+import com.owncloud.android.utils.FileStorageUtils;
 import com.owncloud.android.utils.PermissionUtil;
 
 import java.io.File;
@@ -112,7 +111,7 @@ import static com.owncloud.android.db.PreferenceManager.getSortOrder;
  * Displays, what files the user has available in his ownCloud. This is the main view.
  */
 
-public class FileDisplayActivity extends HookActivity
+public class FileDisplayActivity extends FileActivity
         implements FileFragment.ContainerActivity, OnEnforceableRefreshListener {
 
     private SyncBroadcastReceiver mSyncBroadcastReceiver;
@@ -120,9 +119,10 @@ public class FileDisplayActivity extends HookActivity
     private DownloadBroadcastReceiver mDownloadBroadcastReceiver;
     private RemoteOperationResult mLastSslUntrustedServerResult = null;
 
-    private boolean mDualPane;
     private View mLeftFragmentContainer;
     private View mRightFragmentContainer;
+    private MenuItem mDescendingMenuItem;
+    private Menu mMainMenu;
 
     private static final String KEY_WAITING_TO_PREVIEW = "WAITING_TO_PREVIEW";
     private static final String KEY_SYNC_IN_PROGRESS = "SYNC_IN_PROGRESS";
@@ -150,7 +150,6 @@ public class FileDisplayActivity extends HookActivity
 
     private LocalBroadcastManager mLocalBroadcastManager;
 
-    private IndexedForest<FileDisplayActivity> mPendingCameraUploads = new IndexedForest<>();
 
     FilesUploadHelper mFilesUploadHelper;
 
@@ -158,9 +157,7 @@ public class FileDisplayActivity extends HookActivity
     protected void onCreate(Bundle savedInstanceState) {
         Log_OC.v(TAG, "onCreate() start");
 
-        super.onCreate(savedInstanceState); // this calls onAccountChanged() when ownCloud Account
-        // is valid
-
+        super.onCreate(savedInstanceState); // this calls onAccountChanged() when ownCloud Account is valid
 
         mLocalBroadcastManager = LocalBroadcastManager.getInstance(this);
 
@@ -194,7 +191,6 @@ public class FileDisplayActivity extends HookActivity
         // setup drawer
         setupDrawer(R.id.nav_all_files);
 
-        mDualPane = getResources().getBoolean(R.bool.large_land_layout);
         mLeftFragmentContainer = findViewById(R.id.left_fragment_container);
         mRightFragmentContainer = findViewById(R.id.right_fragment_container);
 
@@ -453,15 +449,7 @@ public class FileDisplayActivity extends HookActivity
 
 
     private void updateFragmentsVisibility(boolean existsSecondFragment) {
-        if (mDualPane) {
-            if (mLeftFragmentContainer.getVisibility() != View.VISIBLE) {
-                mLeftFragmentContainer.setVisibility(View.VISIBLE);
-            }
-            if (mRightFragmentContainer.getVisibility() != View.VISIBLE) {
-                mRightFragmentContainer.setVisibility(View.VISIBLE);
-            }
-
-        } else if (existsSecondFragment) {
+        if (existsSecondFragment) {
             if (mLeftFragmentContainer.getVisibility() != View.GONE) {
                 mLeftFragmentContainer.setVisibility(View.GONE);
             }
@@ -522,7 +510,6 @@ public class FileDisplayActivity extends HookActivity
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         boolean drawerOpen = isDrawerOpen();
-        menu.findItem(R.id.action_sort).setVisible(!drawerOpen);
         menu.findItem(R.id.action_sync_account).setVisible(!drawerOpen);
         menu.findItem(R.id.action_switch_view).setVisible(!drawerOpen);
 
@@ -541,13 +528,19 @@ public class FileDisplayActivity extends HookActivity
 
         inflater.inflate(R.menu.main_menu, menu);
         menu.findItem(R.id.action_create_dir).setVisible(false);
+
+        mDescendingMenuItem = menu.findItem(R.id.action_sort_descending);
+        mMainMenu = menu;
+
+        recoverSortMenuFormPreferences(menu);
+
         return true;
     }
 
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        boolean retval = true;
+
+
         switch (item.getItemId()) {
             case R.id.action_sync_account: {
                 startSynchronization();
@@ -560,7 +553,7 @@ public class FileDisplayActivity extends HookActivity
                 boolean inRootFolder = currentDir != null && currentDir.getParentId() == 0;
                 boolean fileFragmentVisible = second != null && second.getFile() != null;
 
-                if (!inRootFolder || (fileFragmentVisible && !mDualPane)) {
+                if (!inRootFolder || (fileFragmentVisible)) {
                     onBackPressed();
                 } else if (isDrawerOpen()) {
                     closeDrawer();
@@ -569,29 +562,20 @@ public class FileDisplayActivity extends HookActivity
                 }
                 break;
             }
-            case R.id.action_sort: {
-                Integer sortOrder = getSortOrder(this);
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle(R.string.actionbar_sort_title)
-                        .setSingleChoiceItems(R.array.actionbar_sort_by_options, sortOrder,
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        switch (which) {
-                                            case 0:
-                                                sortByName(true);
-                                                break;
-                                            case 1:
-                                                sortByDate(false);
-                                                break;
-                                            case 2:
-                                                sortBySize(false);
-                                        }
-
-                                        dialog.dismiss();
-                                    }
-                                });
-                builder.create().show();
+            case R.id.action_sort_descending: {
+                item.setChecked(!item.isChecked());
+                final boolean sortAscending = !item.isChecked();
+                PreferenceManager.setSortAscending(sortAscending, this);
+                switch (getSortOrder(this)) {
+                    case FileStorageUtils.SORT_NAME:
+                        sortByName(sortAscending);
+                        break;
+                    case FileStorageUtils.SORT_DATE:
+                        sortByDate(sortAscending);
+                        break;
+                    case FileStorageUtils.SORT_SIZE:
+                        sortBySize(sortAscending);
+                }
                 break;
             }
             case R.id.action_switch_view: {
@@ -608,10 +592,41 @@ public class FileDisplayActivity extends HookActivity
                 }
                 return true;
             }
+            case R.id.action_sort_by_date:
+                item.setChecked(true);
+                sortByDate(PreferenceManager.getSortAscending(this));
+                return true;
+            case R.id.action_sort_by_name:
+                item.setChecked(true);
+                sortByName(PreferenceManager.getSortAscending(this));
+                return true;
+            case R.id.action_sort_by_size:
+                item.setChecked(true);
+                sortBySize(PreferenceManager.getSortAscending(this));
+                return true;
             default:
-                retval = super.onOptionsItemSelected(item);
         }
-        return retval;
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void recoverSortMenuFormPreferences(Menu menu) {
+        // setup sort menu
+        if(menu != null) {
+            mDescendingMenuItem.setChecked(!PreferenceManager.getSortAscending(this));
+
+            switch (getSortOrder(this)) {
+                case FileStorageUtils.SORT_NAME:
+                    menu.findItem(R.id.action_sort_by_name).setChecked(true);
+                    break;
+                case FileStorageUtils.SORT_DATE:
+                    menu.findItem(R.id.action_sort_by_date).setChecked(true);
+                    break;
+                case FileStorageUtils.SORT_SIZE:
+                    menu.findItem(R.id.action_sort_by_size).setChecked(true);
+                default:
+            }
+        }
     }
 
     private void startSynchronization() {
@@ -837,7 +852,7 @@ public class FileDisplayActivity extends HookActivity
         } else {
             // all closed
             OCFileListFragment listOfFiles = getListOfFilesFragment();
-            if (mDualPane || getSecondFragment() == null) {
+            if (getSecondFragment() == null) {
                 OCFile currentDir = getCurrentDir();
                 if (currentDir == null || currentDir.getParentId() == FileDataStorageManager.ROOT_PARENT_ID) {
                     finish();
@@ -901,6 +916,9 @@ public class FileDisplayActivity extends HookActivity
         mDownloadBroadcastReceiver = new DownloadBroadcastReceiver();
         mLocalBroadcastManager.registerReceiver(mDownloadBroadcastReceiver, downloadIntentFilter);
 
+        recoverSortMenuFormPreferences(mMainMenu);
+
+
         Log_OC.v(TAG, "onResume() end");
 
     }
@@ -927,13 +945,9 @@ public class FileDisplayActivity extends HookActivity
     }
 
     public boolean isFabOpen() {
-        if(getListOfFilesFragment() != null
+        return getListOfFilesFragment() != null
                 && getListOfFilesFragment().getFabMain() != null
-                && getListOfFilesFragment().getFabMain().isExpanded()) {
-            return true;
-        } else {
-            return false;
-        }
+                && getListOfFilesFragment().getFabMain().isExpanded();
     }
 
     private class SyncBroadcastReceiver extends BroadcastReceiver {
@@ -1011,7 +1025,14 @@ public class FileDisplayActivity extends HookActivity
                                 (synchResult.isException() && synchResult.getException()
                                     instanceof AuthenticatorException)) {
 
-                                requestCredentialsUpdate();
+                                // If we have saml enabled we consider the user to only have
+                                // one account with which he is logged into the app. This is because
+                                // only branded versions of the app have saml support.
+                                if(getString(R.string.auth_method_saml_web_sso).equals("on")) {
+                                    requestCredentialsUpdate();
+                                } else {
+                                    showRequestAccountChangeNotice();
+                                }
 
                             } else if (RemoteOperationResult.ResultCode.
                                     SSL_RECOVERABLE_PEER_UNVERIFIED.equals(
@@ -1043,9 +1064,16 @@ public class FileDisplayActivity extends HookActivity
                         RemoteOperationResult.ResultCode.SSL_RECOVERABLE_PEER_UNVERIFIED)) {
                     mLastSslUntrustedServerResult = synchResult;
                 } else if (synchResult.getCode().equals(RemoteOperationResult.ResultCode.SPECIFIC_SERVICE_UNAVAILABLE)) {
-                    showSnackMessage(
-                            ErrorMessageAdapter.getErrorCauseMessage(synchResult, null, getResources())
-                    );
+                    if(synchResult.getHttpCode() == 503) {
+                        if(synchResult.getHttpPhrase()
+                                .equals("Error: Call to a member function getUID() on null")) {
+                            showRequestAccountChangeNotice();
+                        } else {
+                            showSnackMessage(synchResult.getHttpPhrase());
+                        }
+                    } else {
+                        showRequestAccountChangeNotice();
+                    }
                 }
             }
         }
@@ -1326,14 +1354,7 @@ public class FileDisplayActivity extends HookActivity
         if (chosenFile == null) {
             chosenFile = getFile();     // if no file is passed, current file decides
         }
-        if (mDualPane) {
-            // in dual pane mode, keep the focus of title an action bar in the current folder
-            super.updateActionBarTitleAndHomeButton(getCurrentDir());
-
-        } else {
-            super.updateActionBarTitleAndHomeButton(chosenFile);
-        }
-
+        super.updateActionBarTitleAndHomeButton(chosenFile);
     }
 
     @Override
@@ -1455,7 +1476,7 @@ public class FileDisplayActivity extends HookActivity
                                              RemoteOperationResult result) {
 
         showSnackMessage(
-            ErrorMessageAdapter.getErrorCauseMessage(result, operation, getResources())
+            ErrorMessageAdapter.getResultMessage(result, operation, getResources())
         );
 
         if (result.isSuccess()) {
@@ -1497,7 +1518,7 @@ public class FileDisplayActivity extends HookActivity
         } else {
             try {
                 showSnackMessage(
-                    ErrorMessageAdapter.getErrorCauseMessage(result, operation, getResources())
+                    ErrorMessageAdapter.getResultMessage(result, operation, getResources())
                 );
 
             } catch (NotFoundException e) {
@@ -1519,7 +1540,7 @@ public class FileDisplayActivity extends HookActivity
         } else {
             try {
                 showSnackMessage(
-                    ErrorMessageAdapter.getErrorCauseMessage(result, operation, getResources())
+                    ErrorMessageAdapter.getResultMessage(result, operation, getResources())
                 );
 
             } catch (NotFoundException e) {
@@ -1553,7 +1574,7 @@ public class FileDisplayActivity extends HookActivity
 
         } else {
             showSnackMessage(
-                ErrorMessageAdapter.getErrorCauseMessage(result, operation, getResources())
+                ErrorMessageAdapter.getResultMessage(result, operation, getResources())
             );
 
             if (result.isSslRecoverableException()) {
@@ -1579,7 +1600,7 @@ public class FileDisplayActivity extends HookActivity
 
             } else if (getSecondFragment() == null) {
                 showSnackMessage(
-                    ErrorMessageAdapter.getErrorCauseMessage(result, operation, getResources())
+                    ErrorMessageAdapter.getResultMessage(result, operation, getResources())
                 );
             }
         }
@@ -1611,7 +1632,7 @@ public class FileDisplayActivity extends HookActivity
         } else {
             try {
                 showSnackMessage(
-                    ErrorMessageAdapter.getErrorCauseMessage(result, operation, getResources())
+                    ErrorMessageAdapter.getResultMessage(result, operation, getResources())
                 );
 
             } catch (NotFoundException e) {

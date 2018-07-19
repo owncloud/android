@@ -12,10 +12,9 @@
   <string name="actionbar_see_details">Podrobnosti</string>
   <string name="actionbar_send_file">Pošlji</string>
   <string name="actionbar_sort">Razvrsti</string>
+  <string name="actionbar_descending">Padajoče</string>
   <string name="actionbar_sort_title">Razvrsti ...</string>
   <string name="actionbar_sort_by_name">A-Z</string>
-  <string name="actionbar_sort_by_date">Novejše – Starejše</string>
-  <string name="actionbar_sort_by_size">Največje – Najmanjše</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Vse datoteke</string>
@@ -25,6 +24,8 @@
   <string name="drawer_item_uploads_list">Poslano</string>
   <string name="drawer_close">Zapri</string>
   <string name="drawer_open">Odpri</string>
+  <string name="drawer_feedback">Pošlji sporočilo razvijalcem programa</string>
+  <string name="drawer_help">Pomoč</string>
   <string name="prefs_category_general">Splošno</string>
   <string name="prefs_category_more">Več</string>
   <string name="prefs_category_security">Varnost</string>
@@ -410,8 +411,6 @@
   <string name="share_via_link_expiration_date_label">Datum preteka</string>
   <string name="share_via_link_password_label">Geslo</string>
   <string name="share_via_link_password_title">Varovano</string>
-  <string name="share_via_link_edit_permission_label">Dovoli urejanje</string>
-  <string name="share_via_link_show_file_listing_label">Pokaži izpis datoteke</string>
   <string name="share_get_public_link_button">Pridobi povezavo</string>
   <string name="share_with_title">Omogoči souporabo z ...</string>
   <string name="share_with_edit_title">Omogoči souporabo z %1$s</string>

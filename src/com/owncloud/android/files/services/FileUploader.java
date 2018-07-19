@@ -5,9 +5,10 @@
  *  @author masensio
  *  @author LukeOwnCloud
  *  @author David A. Velasco
+ *  @author Christian Schabesberger
  *
  *  Copyright (C) 2012 Bartek Przybylski
- *  Copyright (C) 2016 ownCloud GmbH.
+ *  Copyright (C) 2018 ownCloud GmbH.
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License version 2,
@@ -188,10 +189,6 @@ public class FileUploader extends Service
     public void onRenameUpload() {
         mUploadsStorageManager.updateDatabaseUploadStart(mCurrentUpload);
         sendBroadcastUploadStarted(mCurrentUpload);
-    }
-
-    public static class UploadRequester {
-
     }
 
     /**
@@ -911,7 +908,8 @@ public class FileUploader extends Service
                 .setProgress(100, 0, false)
                 .setContentText(
                         String.format(getString(R.string.uploader_upload_in_progress_content), 0, upload.getFileName()))
-                .setChannelId(UPLOAD_NOTIFICATION_CHANNEL_ID);
+                .setChannelId(UPLOAD_NOTIFICATION_CHANNEL_ID)
+                .setWhen(System.currentTimeMillis());
 
         /// includes a pending intent in the notification showing the details
         Intent showUploadListIntent = new Intent(this, UploadListActivity.class);
@@ -981,7 +979,7 @@ public class FileUploader extends Service
                     .setOngoing(false)
                     .setProgress(0, 0, false);
 
-            content = ErrorMessageAdapter.getErrorCauseMessage(
+            content = ErrorMessageAdapter.getResultMessage(
                     uploadResult, upload, getResources()
             );
 

@@ -3,7 +3,8 @@
  *
  * @author David A. Velasco
  * @author David González Verdugo
- * Copyright (C) 2017 ownCloud GmbH.
+ * @author Christian Schabesberger
+ * Copyright (C) 2018 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -87,18 +88,18 @@ public class PreviewVideoActivity extends FileActivity implements ExoPlayer.Even
 
         setContentView(R.layout.video_preview);
 
-        simpleExoPlayerView = (SimpleExoPlayerView) findViewById(R.id.video_player);
+        simpleExoPlayerView = findViewById(R.id.video_player);
 
         // Hide sync bar
-        ProgressBar syncProgressBar = (ProgressBar) findViewById(R.id.syncProgressBar);
+        ProgressBar syncProgressBar = findViewById(R.id.syncProgressBar);
         syncProgressBar.setVisibility(View.GONE);
 
         // Hide full screen button
-        ImageButton fullScreen = (ImageButton) findViewById(R.id.fullscreen_button);
+        ImageButton fullScreen = findViewById(R.id.fullscreen_button);
         fullScreen.setVisibility(View.GONE);
 
         // Show exit full screen button
-        ImageButton exitFullScreen = (ImageButton) findViewById(R.id.exit_fullscreen_button);
+        ImageButton exitFullScreen = findViewById(R.id.exit_fullscreen_button);
         exitFullScreen.setVisibility(View.VISIBLE);
 
         exitFullScreen.setOnClickListener(new View.OnClickListener() {

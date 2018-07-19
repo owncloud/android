@@ -11,6 +11,7 @@
   <string name="actionbar_see_details">Detalles</string>
   <string name="actionbar_send_file">Enviar</string>
   <string name="actionbar_sort">Ordenar</string>
+  <string name="actionbar_descending">Descendente</string>
   <string name="actionbar_sort_title">Ordenar por</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
@@ -21,6 +22,8 @@
   <string name="drawer_item_uploads_list">Envíos</string>
   <string name="drawer_close">Pechar</string>
   <string name="drawer_open">Abrir</string>
+  <string name="drawer_feedback">Comentarios</string>
+  <string name="drawer_help">Axuda</string>
   <string name="prefs_category_general">Xeral</string>
   <string name="prefs_category_more">Máis</string>
   <string name="prefs_category_security">Seguridade</string>
@@ -312,7 +315,6 @@ Descárgueo de aquí: %2$s</string>
   <string name="share_confirm_public_link_button">Gardar</string>
   <string name="share_via_link_expiration_date_label">Caducidade</string>
   <string name="share_via_link_password_label">Contrasinal</string>
-  <string name="share_via_link_edit_permission_label">Permitir a edición</string>
   <string name="share_with_title">Compartir con</string>
   <string name="share_search">Buscar</string>
   <string name="search_users_and_groups_hint">Buscar usuarios e grupos</string>

@@ -13,6 +13,8 @@
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <!--TODO re-enable when "On Device" is available
     <string name="drawer_item_on_device">On device</string>-->
+  <string name="drawer_feedback">Rückmeldung</string>
+  <string name="drawer_help">Hilfe</string>
   <string name="prefs_category_general">Allgemein</string>
   <string name="prefs_accounts">Konten</string>
   <string name="prefs_log_summary">Dies wird verwendet um Probleme aufzuzeichnen</string>
@@ -91,7 +93,6 @@
   <string name="share_confirm_public_link_button">Speichern</string>
   <string name="share_via_link_expiration_date_label">Ablaufdatum</string>
   <string name="share_via_link_password_label">Passwort</string>
-  <string name="share_via_link_edit_permission_label">Bearbeitung erlauben</string>
   <string name="share_search">Suche</string>
   <string name="share_privilege_can_share">Kann teilen</string>
   <string name="share_privilege_can_edit">Kann bearbeiten</string>

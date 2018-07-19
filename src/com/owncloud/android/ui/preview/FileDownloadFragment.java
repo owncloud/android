@@ -2,7 +2,8 @@
  *   ownCloud Android client application
  *
  *   @author David A. Velasco
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   @author Christian Schabesberger
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -135,7 +136,7 @@ public class FileDownloadFragment extends FileFragment implements OnClickListene
 
         View rootView = inflater.inflate(R.layout.file_download_fragment, container, false);
         
-        mProgressBar = (ProgressBar)rootView.findViewById(R.id.progressBar);
+        mProgressBar = rootView.findViewById(R.id.progressBar);
         DisplayUtils.colorPreLollipopHorizontalProgressBar(mProgressBar);
 
         (rootView.findViewById(R.id.cancelBtn)).setOnClickListener(this);
@@ -200,7 +201,7 @@ public class FileDownloadFragment extends FileFragment implements OnClickListene
 
 
     /**
-     * Enables or disables buttons for a file being downloaded
+     * Enables buttons for a file being downloaded
      */
     private void setButtonsForTransferring(View rootView) {
         if (rootView != null) {
@@ -208,7 +209,7 @@ public class FileDownloadFragment extends FileFragment implements OnClickListene
 
             // show the progress bar for the transfer
             rootView.findViewById(R.id.progressBar).setVisibility(View.VISIBLE);
-            TextView progressText = (TextView) rootView.findViewById(R.id.progressText);
+            TextView progressText = rootView.findViewById(R.id.progressText);
             progressText.setText(R.string.downloader_download_in_progress_ticker);
             progressText.setVisibility(View.VISIBLE);
 
@@ -230,7 +231,7 @@ public class FileDownloadFragment extends FileFragment implements OnClickListene
             rootView.findViewById(R.id.progressBar).setVisibility(View.GONE);
 
             // updates the text message
-            TextView progressText = (TextView) rootView.findViewById(R.id.progressText);
+            TextView progressText = rootView.findViewById(R.id.progressText);
             progressText.setText(R.string.common_loading);
             progressText.setVisibility(View.VISIBLE);
 

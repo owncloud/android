@@ -22,7 +22,6 @@
 
 package com.owncloud.android.ui.activity;
 
-import android.accounts.Account;
 import android.app.SearchManager;
 import android.content.Intent;
 import android.net.Uri;
@@ -323,7 +322,7 @@ public class ShareActivity extends FileActivity
 
         } else {
             getPublicShareFragment().showError(
-                    ErrorMessageAdapter.getErrorCauseMessage(result, operation, getResources())
+                    ErrorMessageAdapter.getResultMessage(result, operation, getResources())
             );
         }
     }
@@ -339,7 +338,7 @@ public class ShareActivity extends FileActivity
 
         } else {
             getPublicShareFragment().showError(
-                    ErrorMessageAdapter.getErrorCauseMessage(result, operation, getResources())
+                    ErrorMessageAdapter.getResultMessage(result, operation, getResources())
             );
         }
     }

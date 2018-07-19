@@ -14,8 +14,6 @@
   <string name="actionbar_sort">Urutkan</string>
   <string name="actionbar_sort_title">Urutan</string>
   <string name="actionbar_sort_by_name">A-Z</string>
-  <string name="actionbar_sort_by_date">Terbaru - Terlama</string>
-  <string name="actionbar_sort_by_size">Terbesar - Terkecil</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Semua berkas</string>
@@ -25,6 +23,8 @@
   <string name="drawer_item_uploads_list">Unggah</string>
   <string name="drawer_close">Tutup</string>
   <string name="drawer_open">Buka</string>
+  <string name="drawer_feedback">Umpan balik</string>
+  <string name="drawer_help">Bantuan</string>
   <string name="prefs_category_general">Umum</string>
   <string name="prefs_category_more">Lainnya</string>
   <string name="prefs_category_security">Keamanan</string>
@@ -388,8 +388,6 @@
   <string name="share_via_link_expiration_date_label">Kedaluwarsa</string>
   <string name="share_via_link_password_label">Kata Sandi</string>
   <string name="share_via_link_password_title">Aman</string>
-  <string name="share_via_link_edit_permission_label">Izinkan penyuntingan</string>
-  <string name="share_via_link_show_file_listing_label">Tampilkan daftar file</string>
   <string name="share_with_title">Berbagi dengan ...</string>
   <string name="share_with_edit_title">Berbagi dengan %1$s</string>
   <string name="share_search">Cari</string>

@@ -12,10 +12,11 @@
   <string name="actionbar_see_details">Details</string>
   <string name="actionbar_send_file">Senden</string>
   <string name="actionbar_sort">Sortieren</string>
+  <string name="actionbar_descending">Absteigend</string>
   <string name="actionbar_sort_title">Sortieren nach</string>
   <string name="actionbar_sort_by_name">A-Z</string>
-  <string name="actionbar_sort_by_date">Neueste - Älteste</string>
-  <string name="actionbar_sort_by_size">Größte - Kleinste</string>
+  <string name="actionbar_sort_by_date">Älteste - Neueste</string>
+  <string name="actionbar_sort_by_size">Kleinste - Größte</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Alle Dateien</string>
@@ -25,6 +26,12 @@
   <string name="drawer_item_uploads_list">Uploads</string>
   <string name="drawer_close">Schließen</string>
   <string name="drawer_open">Öffnen</string>
+  <string name="drawer_loading_quota">Kontingent zum Hochladen</string>
+  <string name="drawer_quota">%1$s von %2$s verwendet (%3$s%%)</string>
+  <string name="drawer_unavailable_free_storage">%1$s wird verwendet</string>
+  <string name="drawer_unavailable_used_storage">Keine Speichernutzungsinformationen verfügbar</string>
+  <string name="drawer_feedback">Rückmeldungen</string>
+  <string name="drawer_help">Hilfe</string>
   <string name="prefs_category_general">Allgemein</string>
   <string name="prefs_category_more">Mehr</string>
   <string name="prefs_category_security">Sicherheit</string>
@@ -64,6 +71,8 @@
   <string name="illegal_argument_exception_message">Eine gültige AKTION wird zur Weitergabe benötigt</string>
   <string name="recommend_subject">%1$s auf Ihrem Smartphone ausprobieren!</string>
   <string name="recommend_text">Ich möchte Sie einladen, %1$s auf Ihrem Smartphone zu verwenden!\nHier herunterladen: %2$s</string>
+  <string name="auth_failure_snackbar">Authentifizierung fehlgeschlagen.</string>
+  <string name="auth_failure_snackbar_action">Konto ändern</string>
   <string name="auth_check_server">Server überprüfen</string>
   <string name="auth_host_url">Server-Adresse https://…</string>
   <string name="auth_username">Benutzername</string>
@@ -433,8 +442,9 @@
   <string name="share_via_link_expiration_date_label">Ablaufdatum</string>
   <string name="share_via_link_password_label">Passwort</string>
   <string name="share_via_link_password_title">Gesichert</string>
-  <string name="share_via_link_edit_permission_label">Bearbeitung erlauben</string>
-  <string name="share_via_link_show_file_listing_label">Dateiliste anzeigen</string>
+  <string name="share_via_link_edit_permission_read_only_label">Herunterladen / Ansehen</string>
+  <string name="share_via_link_edit_permission_read_and_write_label">Herunterladen / Ansehen / Hochladen</string>
+  <string name="share_via_link_edit_permission_upload_only_label">Nur Hochladen (Datei hineinziehen)</string>
   <string name="share_get_public_link_button">Link erstellen</string>
   <string name="share_with_title">Teilen mit ...</string>
   <string name="share_with_edit_title">Teilen mit %1$s</string>
@@ -518,12 +528,5 @@
   <string name="welcome_feature_4_text">Ihre Bilder/Videos werden automatisch hochgeladen</string>
   <string name="welcome_feature_5_title">Videostreaming</string>
   <string name="welcome_feature_5_text">Geben Sie Ihre Videos wieder, ohne sie herunterzuladen</string>
-  <string name="welcome_feature_6_title">Mustersperre</string>
-  <string name="welcome_feature_6_text">Bitte die Mustersperre zum Sperren Ihrer Owncloud nutzen</string>
-  <string name="welcome_feature_7_title">Fingerabdrucksperre</string>
-  <string name="welcome_feature_7_text">Bitte Fingerabdruck zum Sperren Ihrer Owncloud nutzen</string>
-  <string name="welcome_feature_8_title">GIF-Unterstützung</string>
-  <string name="welcome_feature_8_text">Ihre animierten GIF-Grafiken abspielen</string>
-  <string name="welcome_feature_9_title">Bild von der Kamera hochladen</string>
-  <string name="welcome_feature_9_text">Foto aufnehmen und direkt auf Ihren Owncloud-Server hochladen</string>
+  <string name="no_borwser_installed_alert">Es ist kein Browser installiert. Bitte installieren Sie zur sicheren Anmeldung einen Browser.</string>
 </resources>

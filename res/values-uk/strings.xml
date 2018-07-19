@@ -14,8 +14,6 @@
   <string name="actionbar_sort">Сортувати</string>
   <string name="actionbar_sort_title">Сортувати за</string>
   <string name="actionbar_sort_by_name">А-Я</string>
-  <string name="actionbar_sort_by_date">Новіші - Старіші</string>
-  <string name="actionbar_sort_by_size">Найбільші - Найменші</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Усі файли</string>
@@ -25,6 +23,8 @@
   <string name="drawer_item_uploads_list">Завантажень</string>
   <string name="drawer_close">Закрити</string>
   <string name="drawer_open">Відкрити</string>
+  <string name="drawer_feedback">Зворотній зв\'язок</string>
+  <string name="drawer_help">Допомога</string>
   <string name="prefs_category_general">Основне</string>
   <string name="prefs_category_more">Більше</string>
   <string name="prefs_category_security">Безпека</string>
@@ -396,8 +396,6 @@
   <string name="share_via_link_expiration_date_label">Закінчення</string>
   <string name="share_via_link_password_label">Пароль</string>
   <string name="share_via_link_password_title">Забезпечено</string>
-  <string name="share_via_link_edit_permission_label">Дозволити редагування</string>
-  <string name="share_via_link_show_file_listing_label">Показати список файлів</string>
   <string name="share_get_public_link_button">Отримати посилання</string>
   <string name="share_with_title">Поділитися з</string>
   <string name="share_with_edit_title">Поділитися з %1$s</string>
@@ -455,6 +453,7 @@
   <plurals name="items_selected_count">
     <item quantity="one">Вибрано %d</item>
     <item quantity="few">Вибрано %d</item>
+    <item quantity="many">Вибрано %d</item>
     <item quantity="other">Вибрано %d</item>
   </plurals>
   <!--Welcome to oC intro features-->

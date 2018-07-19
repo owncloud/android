@@ -1,8 +1,10 @@
 /**
  *   ownCloud Android client application
  *
+ *   @author Bartek Przybylski
+ *   @author Christian Schabesberger
  *   Copyright (C) 2012 Bartek Przybylski
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -31,11 +33,12 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.support.v7.widget.AppCompatEditText;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.widget.EditText;
 
-public class ActionEditText extends EditText {
+public class ActionEditText extends AppCompatEditText {
     private String s;
     private String optionOneString;
     private int optionOneColor;
@@ -73,7 +76,7 @@ public class ActionEditText extends EditText {
         getDrawingRect(mButtonRect);
         mButtonRect.top += 10;
         mButtonRect.bottom -= 10;
-        mButtonRect.left = (int) (getWidth() - mTextBounds.width() - 18);
+        mButtonRect.left = getWidth() - mTextBounds.width() - 18;
         mButtonRect.right = getWidth() - 10;
         btn_rect = mButtonRect;
 

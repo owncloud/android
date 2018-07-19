@@ -12,6 +12,7 @@
   <string name="actionbar_see_details">Detaloj</string>
   <string name="actionbar_send_file">Sendi</string>
   <string name="actionbar_sort">Ordigi</string>
+  <string name="actionbar_descending">Malsuprenirece</string>
   <string name="actionbar_sort_title">Ordigi laŭ</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
@@ -22,6 +23,7 @@
   <string name="drawer_item_uploads_list">Alŝutoj</string>
   <string name="drawer_close">Fermi</string>
   <string name="drawer_open">Malfermi</string>
+  <string name="drawer_help">Helpo</string>
   <string name="prefs_category_general">Ĝeneralo</string>
   <string name="prefs_category_more">Pli</string>
   <string name="prefs_category_security">Sekuro</string>
@@ -261,7 +263,6 @@
   <string name="share_via_link_expiration_date_label">Eksvalidiĝo</string>
   <string name="share_via_link_password_label">Pasvorto</string>
   <string name="share_via_link_password_title">Sekurigita</string>
-  <string name="share_via_link_edit_permission_label">Permesi redakton</string>
   <string name="share_get_public_link_button">Ekhavi ligilon</string>
   <string name="share_search">Serĉi</string>
   <string name="search_users_and_groups_hint">Serĉi uzantojn kaj grupojn</string>

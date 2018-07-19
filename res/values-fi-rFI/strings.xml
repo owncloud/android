@@ -12,10 +12,9 @@
   <string name="actionbar_see_details">Tiedot</string>
   <string name="actionbar_send_file">Lähetä</string>
   <string name="actionbar_sort">Lajittele</string>
+  <string name="actionbar_descending">Laskevasti</string>
   <string name="actionbar_sort_title">Lajittelujärjestys</string>
   <string name="actionbar_sort_by_name">A-Ö</string>
-  <string name="actionbar_sort_by_date">Uusin - vanhin</string>
-  <string name="actionbar_sort_by_size">Suurin - pienin</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Kaikki tiedostot</string>
@@ -25,6 +24,8 @@
   <string name="drawer_item_uploads_list">Lataukset</string>
   <string name="drawer_close">Sulje</string>
   <string name="drawer_open">Avaa</string>
+  <string name="drawer_feedback">Palaute</string>
+  <string name="drawer_help">Ohje</string>
   <string name="prefs_category_general">Yleiset</string>
   <string name="prefs_category_more">Enemmän</string>
   <string name="prefs_category_security">Tietoturva</string>
@@ -367,8 +368,6 @@
   <string name="share_via_link_expiration_date_label">Erääntyminen</string>
   <string name="share_via_link_password_label">Salasana</string>
   <string name="share_via_link_password_title">Turvattu</string>
-  <string name="share_via_link_edit_permission_label">Salli muokkaus</string>
-  <string name="share_via_link_show_file_listing_label">Näytä tiedostolistaus</string>
   <string name="share_get_public_link_button">Hanki linkki</string>
   <string name="share_with_title">Jaa…</string>
   <string name="share_with_edit_title">Jaa käyttäjän %1$s kanssa</string>

@@ -14,8 +14,6 @@
   <string name="actionbar_sort">Sortare</string>
   <string name="actionbar_sort_title">Sortare după</string>
   <string name="actionbar_sort_by_name">A-Z</string>
-  <string name="actionbar_sort_by_date">Mai noi - Mai vechi</string>
-  <string name="actionbar_sort_by_size">Mai mare - Mai mic</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Toate fișierele</string>
@@ -25,6 +23,8 @@
   <string name="drawer_item_uploads_list">Încărcări</string>
   <string name="drawer_close">Închide</string>
   <string name="drawer_open">Deschide</string>
+  <string name="drawer_feedback">Feedback</string>
+  <string name="drawer_help">Ajutor</string>
   <string name="prefs_category_general">General</string>
   <string name="prefs_category_more">Mai mult</string>
   <string name="prefs_category_security">Securitate</string>
@@ -394,8 +394,6 @@
   <string name="share_via_link_expiration_date_label">Expiră</string>
   <string name="share_via_link_password_label">Parolă</string>
   <string name="share_via_link_password_title">Securizat</string>
-  <string name="share_via_link_edit_permission_label">Permite editarea</string>
-  <string name="share_via_link_show_file_listing_label">Arată lista de fișiere</string>
   <string name="share_get_public_link_button">Obține legătura</string>
   <string name="share_with_title">Pratajează cu ...</string>
   <string name="share_with_edit_title">Partajează cu %1$s</string>

@@ -12,10 +12,9 @@
   <string name="actionbar_see_details">Λεπτομέρειες</string>
   <string name="actionbar_send_file">Αποστολή</string>
   <string name="actionbar_sort">Ταξινόμηση</string>
+  <string name="actionbar_descending">Φθίνουσα</string>
   <string name="actionbar_sort_title">Ταξινόμηση κατά</string>
   <string name="actionbar_sort_by_name">A-Ω</string>
-  <string name="actionbar_sort_by_date">Νεότερο - παλαιότερο</string>
-  <string name="actionbar_sort_by_size">Μέγιστο - ελάχιστο</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Όλα τα αρχεία</string>
@@ -25,6 +24,8 @@
   <string name="drawer_item_uploads_list">Μεταφορτώσεις</string>
   <string name="drawer_close">Κλείσιμο</string>
   <string name="drawer_open">Άνοιγμα</string>
+  <string name="drawer_feedback">Σχόλια </string>
+  <string name="drawer_help">Βοήθεια</string>
   <string name="prefs_category_general">Γενικά</string>
   <string name="prefs_category_more">Περισσότερα</string>
   <string name="prefs_category_security">Ασφάλεια</string>
@@ -396,8 +397,6 @@
   <string name="share_via_link_expiration_date_label">Λήξη</string>
   <string name="share_via_link_password_label">Συνθηματικό</string>
   <string name="share_via_link_password_title">Ασφαλίστηκε</string>
-  <string name="share_via_link_edit_permission_label">Επιτρέπεται η επεξεργασία</string>
-  <string name="share_via_link_show_file_listing_label">Εμφάνιση αρχείου καταγραφής</string>
   <string name="share_get_public_link_button">Λήψη συνδέσμου</string>
   <string name="share_with_title">Διαμοιρασμός με ...</string>
   <string name="share_with_edit_title">Διαμοιρασμός με %1$s</string>

@@ -12,10 +12,9 @@
   <string name="actionbar_see_details">자세한 정보</string>
   <string name="actionbar_send_file">보내기</string>
   <string name="actionbar_sort">정렬</string>
+  <string name="actionbar_descending">내림차순</string>
   <string name="actionbar_sort_title">정렬 순서</string>
   <string name="actionbar_sort_by_name">A-Z</string>
-  <string name="actionbar_sort_by_date">최근 - 예전</string>
-  <string name="actionbar_sort_by_size">큰 것 - 작은 것</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">모든 파일</string>
@@ -25,6 +24,8 @@
   <string name="drawer_item_uploads_list">업로드</string>
   <string name="drawer_close">닫기</string>
   <string name="drawer_open">열기</string>
+  <string name="drawer_feedback">피드백</string>
+  <string name="drawer_help">도움말</string>
   <string name="prefs_category_general">일반</string>
   <string name="prefs_category_more">더 보기</string>
   <string name="prefs_category_security">보안</string>
@@ -425,8 +426,6 @@
   <string name="share_via_link_expiration_date_label">만료</string>
   <string name="share_via_link_password_label">암호</string>
   <string name="share_via_link_password_title">보호됨</string>
-  <string name="share_via_link_edit_permission_label">편집 허용</string>
-  <string name="share_via_link_show_file_listing_label">파일 목록 보기</string>
   <string name="share_get_public_link_button">링크 얻기</string>
   <string name="share_with_title">다음과 공유…</string>
   <string name="share_with_edit_title">%1$s 님과 공유</string>
@@ -501,6 +500,4 @@
   <!--Welcome to oC intro features-->
   <string name="welcome_feature_4_title">카메라 업로드</string>
   <string name="welcome_feature_5_title">비디오 스트리밍</string>
-  <string name="welcome_feature_6_title">패턴 잠금</string>
-  <string name="welcome_feature_7_title">지문 잠금</string>
 </resources>

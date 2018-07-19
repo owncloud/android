@@ -2,7 +2,8 @@
  *   ownCloud Android client application
  *
  *   @author David A. Velasco
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   @author David González Verdugo
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -35,6 +36,7 @@ import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.users.GetRemoteUserAvatarOperation;
 import com.owncloud.android.lib.resources.users.GetRemoteUserInfoOperation;
 import com.owncloud.android.lib.resources.users.GetRemoteUserInfoOperation.UserInfo;
+import com.owncloud.android.lib.resources.users.GetRemoteUserQuotaOperation;
 import com.owncloud.android.operations.common.SyncOperation;
 
 import java.util.ArrayList;
@@ -48,6 +50,16 @@ public class GetUserProfileOperation extends SyncOperation {
 
     private static final String TAG = GetUserProfileOperation.class.getName();
 
+    private String mRemotePath;
+
+    /**
+     * Constructor
+     *
+     * @param remotePath Remote path of the file.
+     */
+    public GetUserProfileOperation (String remotePath) {
+        mRemotePath = remotePath;
+    }
 
     /**
      * Performs the operation.
@@ -63,13 +75,15 @@ public class GetUserProfileOperation extends SyncOperation {
     @Override
     protected RemoteOperationResult run(OwnCloudClient client) {
 
-        UserProfile userProfile = null;
-        RemoteOperationResult result = null;
+        UserProfile userProfile;
 
         try {
             /// get display name
             GetRemoteUserInfoOperation getDisplayName = new GetRemoteUserInfoOperation();
             RemoteOperationResult remoteResult = getDisplayName.execute(client);
+
+            UserProfilesRepository userProfilesRepository = UserProfilesRepository.getUserProfilesRepository();
+
             if (remoteResult.isSuccess()) {
                 // store display name with account data
                 AccountManager accountManager = AccountManager.get(MainApp.getAppContext());
@@ -89,59 +103,79 @@ public class GetUserProfileOperation extends SyncOperation {
                     userInfo.mEmail
                 );
 
-                /// get avatar (optional for success)
-                int dimension = getAvatarDimension();
-                UserProfile.UserAvatar currentUserAvatar =
-                    getUserProfilesRepository().getAvatar(storedAccount.name);
-                GetRemoteUserAvatarOperation getAvatarOperation = new GetRemoteUserAvatarOperation(
-                    dimension,
-                    (currentUserAvatar == null) ? "" : currentUserAvatar.getEtag()
-                );
-                remoteResult = getAvatarOperation.execute(client);
+                /// get quota
+                GetRemoteUserQuotaOperation getRemoteUserQuotaOperation = new GetRemoteUserQuotaOperation(mRemotePath);
+
+                remoteResult = getRemoteUserQuotaOperation.execute(client);
+
                 if (remoteResult.isSuccess()) {
-                    GetRemoteUserAvatarOperation.ResultData avatar =
-                        (GetRemoteUserAvatarOperation.ResultData) remoteResult.getData().get(0);
 
-                    //
-                    byte[] avatarData = avatar.getAvatarData();
-                    String avatarKey = ThumbnailsCacheManager.addAvatarToCache(
-                        storedAccount.name,
-                        avatarData,
-                        dimension
+                    GetRemoteUserQuotaOperation.Quota remoteQuota = (GetRemoteUserQuotaOperation.Quota)
+                            remoteResult.getData().get(0);
+
+                    UserProfile.UserQuota userQuota = new UserProfile.UserQuota(
+                            remoteQuota.getFree(),
+                            remoteQuota.getRelative(),
+                            remoteQuota.getTotal(),
+                            remoteQuota.getUsed()
                     );
 
-                    UserProfile.UserAvatar userAvatar = new UserProfile.UserAvatar(
-                        avatarKey, avatar.getMimeType(), avatar.getEtag()
+                    userProfile.setQuota(userQuota);
+
+                    /// get avatar (optional for success)
+                    int dimension = getAvatarDimension();
+                    UserProfile.UserAvatar currentUserAvatar = userProfilesRepository.getAvatar(storedAccount.name);
+
+                    GetRemoteUserAvatarOperation getAvatarOperation = new GetRemoteUserAvatarOperation(
+                            dimension,
+                            (currentUserAvatar == null) ? "" : currentUserAvatar.getEtag()
                     );
-                    userProfile.setAvatar(userAvatar);
+                    remoteResult = getAvatarOperation.execute(client);
 
-                } else if (remoteResult.getCode().equals(
-                    RemoteOperationResult.ResultCode.FILE_NOT_FOUND
-                )) {
-                    Log_OC.i(TAG, "No avatar available, removing cached copy");
-                    getUserProfilesRepository().deleteAvatar(storedAccount.name);
-                    ThumbnailsCacheManager.removeAvatarFromCache(storedAccount.name);
+                    if (remoteResult.isSuccess()) {
+                        GetRemoteUserAvatarOperation.ResultData avatar =
+                                (GetRemoteUserAvatarOperation.ResultData) remoteResult.getData().get(0);
 
-                }   // others are ignored, including 304 (not modified), so the avatar is only stored
+                        byte[] avatarData = avatar.getAvatarData();
+                        String avatarKey = ThumbnailsCacheManager.addAvatarToCache(
+                                storedAccount.name,
+                                avatarData,
+                                dimension
+                        );
+
+                        UserProfile.UserAvatar userAvatar = new UserProfile.UserAvatar(
+                                avatarKey, avatar.getMimeType(), avatar.getEtag()
+                        );
+                        userProfile.setAvatar(userAvatar);
+
+                    } else if (remoteResult.getCode().equals(RemoteOperationResult.ResultCode.FILE_NOT_FOUND)) {
+                        Log_OC.i(TAG, "No avatar available, removing cached copy");
+                        userProfilesRepository.deleteAvatar(storedAccount.name);
+                        ThumbnailsCacheManager.removeAvatarFromCache(storedAccount.name);
+
+                    }   // others are ignored, including 304 (not modified), so the avatar is only stored
                     // if changed in the server :D
 
-                /// store userProfile
-                getUserProfilesRepository().update(userProfile);
+                    /// store userProfile
+                    userProfilesRepository.update(userProfile);
 
-                result = new RemoteOperationResult(RemoteOperationResult.ResultCode.OK);
-                ArrayList<Object> data = new ArrayList<>();
-                data.add(userProfile);
-                result.setData(data);
+                    RemoteOperationResult result =  new RemoteOperationResult(RemoteOperationResult.ResultCode.OK);
+                    ArrayList<Object> data = new ArrayList<>();
+                    data.add(userProfile);
+                    result.setData(data);
 
+                    return result;
+
+                } else {
+                    return remoteResult;
+                }
             } else {
-                result = remoteResult;
+                return remoteResult;
             }
         } catch (Exception e) {
             Log_OC.e(TAG, "Exception while getting user profile: ", e);
-            result = new RemoteOperationResult(e);
+            return new RemoteOperationResult(e);
         }
-
-        return result;
     }
 
     /**
@@ -153,20 +187,4 @@ public class GetUserProfileOperation extends SyncOperation {
         Resources r = MainApp.getAppContext().getResources();
         return Math.round(r.getDimension(R.dimen.file_avatar_size));
     }
-
-
-    /**
-     * Really bad place to have this. Only here to prevent go further with refactoring.
-     *
-     * @return  Reference to a {@link UserProfilesRepository}.
-     */
-    private static UserProfilesRepository getUserProfilesRepository() {
-        if (sUserProfilesRepository == null) {
-            sUserProfilesRepository = new UserProfilesRepository();
-        }
-        return sUserProfilesRepository;
-    }
-
-    private static UserProfilesRepository sUserProfilesRepository;
-
 }

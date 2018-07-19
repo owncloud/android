@@ -3,7 +3,8 @@
  *
  *   @author David A. Velasco
  *   @author David González Verdugo
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   @author Christian Schabesberger
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -53,10 +54,10 @@ public class PrivacyPolicyActivity extends ToolbarActivity  {
         setTitle(getText(R.string.actionbar_privacy_policy));
 
         // Display the progress in a progress bar, like the browser app does.
-        final ProgressBar mProgressBar = (ProgressBar) findViewById(R.id.syncProgressBar);
+        final ProgressBar mProgressBar = findViewById(R.id.syncProgressBar);
         DisplayUtils.colorPreLollipopHorizontalProgressBar(mProgressBar);
 
-        WebView webview = (WebView) findViewById(R.id.privacyPolicyWebview);
+        WebView webview = findViewById(R.id.privacyPolicyWebview);
         webview.getSettings().setJavaScriptEnabled(true);
 
         // next two settings grant that non-responsive webs are zoomed out when loaded

@@ -12,10 +12,11 @@
   <string name="actionbar_see_details">Подробно</string>
   <string name="actionbar_send_file">Отправить</string>
   <string name="actionbar_sort">Упорядочить</string>
+  <string name="actionbar_descending">Убывающий </string>
   <string name="actionbar_sort_title">Упорядочить по</string>
   <string name="actionbar_sort_by_name">А-Я</string>
-  <string name="actionbar_sort_by_date">Новые - старые</string>
-  <string name="actionbar_sort_by_size">Большие - маленькие</string>
+  <string name="actionbar_sort_by_date">От старых к новым</string>
+  <string name="actionbar_sort_by_size">От маленьких к большим</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Все файлы</string>
@@ -25,6 +26,12 @@
   <string name="drawer_item_uploads_list">Загрузки</string>
   <string name="drawer_close">Закрыть</string>
   <string name="drawer_open">Открыть</string>
+  <string name="drawer_loading_quota">Загрузка квоты</string>
+  <string name="drawer_quota">Использовано %1$s из %2$s (%3$s %%)</string>
+  <string name="drawer_unavailable_free_storage">Использовано %1$s</string>
+  <string name="drawer_unavailable_used_storage">Нет данных о занятом объёме</string>
+  <string name="drawer_feedback">Обратная связь</string>
+  <string name="drawer_help">Помощь</string>
   <string name="prefs_category_general">Основные</string>
   <string name="prefs_category_more">Больше</string>
   <string name="prefs_category_security">Безопасность</string>
@@ -65,6 +72,8 @@
   <string name="recommend_subject">Попробуйте %1$s на вашем смартфоне!</string>
   <string name="recommend_text">Хочу предложить вам использовать %1$s на смартфоне!\nЗагрузить можно здесь: %2$s
 	</string>
+  <string name="auth_failure_snackbar">Аутентификация не удалась</string>
+  <string name="auth_failure_snackbar_action">Измените учётную запись</string>
   <string name="auth_check_server">Проверить сервер</string>
   <string name="auth_host_url">Адрес сервера https://...</string>
   <string name="auth_username">Имя пользователя</string>
@@ -434,8 +443,9 @@
   <string name="share_via_link_expiration_date_label">Срок действия</string>
   <string name="share_via_link_password_label">Пароль</string>
   <string name="share_via_link_password_title">Безопасный</string>
-  <string name="share_via_link_edit_permission_label">Разрешить редактирование</string>
-  <string name="share_via_link_show_file_listing_label">Показать список файлов</string>
+  <string name="share_via_link_edit_permission_read_only_label">Скачивание / Просмотр</string>
+  <string name="share_via_link_edit_permission_read_and_write_label">Скачивание / Просмотр / Закачка</string>
+  <string name="share_via_link_edit_permission_upload_only_label">Только закачка (перетащить файл сюда)</string>
   <string name="share_get_public_link_button">Получить ссылку</string>
   <string name="share_with_title">Поделиться с …</string>
   <string name="share_with_edit_title">Поделиться с %1$s</string>
@@ -520,12 +530,5 @@
   <string name="welcome_feature_4_text">Ваши снимки и видео загружаются автоматически</string>
   <string name="welcome_feature_5_title"> Потоковое видео</string>
   <string name="welcome_feature_5_text">Проигрывайте ваши ролики, не скачивая их</string>
-  <string name="welcome_feature_6_title">Блокировка графическим ключом</string>
-  <string name="welcome_feature_6_text">Используйте графический ключ для блокировки вашего приложения ownCloud</string>
-  <string name="welcome_feature_7_title">Блокировка по отпечатку пальца</string>
-  <string name="welcome_feature_7_text">Используйте ваш отпечаток пальца для блокировки приложения ownCloud</string>
-  <string name="welcome_feature_8_title">Поддержка GIF</string>
-  <string name="welcome_feature_8_text">Проигрывайте ваши анимированные изображения GIF</string>
-  <string name="welcome_feature_9_title">Закачивайте изображение из камеры</string>
-  <string name="welcome_feature_9_text">Сделайте снимок и отправьте его прямо на ваш сервер</string>
+  <string name="no_borwser_installed_alert">Не установлен никакой браузер. Пожалуйста, установите браузер для поддержки безопасного входа.</string>
 </resources>

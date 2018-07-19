@@ -150,23 +150,23 @@ public class ExtendedListFragment extends Fragment
 
         View v = inflater.inflate(R.layout.list_fragment, null);
 
-        mProgressBar = (ProgressBar) v.findViewById(R.id.syncProgressBar);
+        mProgressBar = v.findViewById(R.id.syncProgressBar);
 
-        mListView = (ExtendedListView)(v.findViewById(R.id.list_root));
+        mListView = v.findViewById(R.id.list_root);
         mListView.setOnItemClickListener(this);
         mListFooterView = inflater.inflate(R.layout.list_footer, null, false);
 
-        mGridView = (GridViewWithHeaderAndFooter) (v.findViewById(R.id.grid_root));
+        mGridView = v.findViewById(R.id.grid_root);
         mGridView.setNumColumns(GridView.AUTO_FIT);
         mGridView.setOnItemClickListener(this);
 
         mGridFooterView = inflater.inflate(R.layout.list_footer, null, false);
 
         // Pull-down to refresh layout
-        mRefreshListLayout = (SwipeRefreshLayout) v.findViewById(R.id.swipe_containing_list);
-        mRefreshGridLayout = (SwipeRefreshLayout) v.findViewById(R.id.swipe_containing_grid);
-        mRefreshEmptyLayout = (SwipeRefreshLayout) v.findViewById(R.id.swipe_containing_empty);
-        mEmptyListMessage = (TextView) v.findViewById(R.id.empty_list_view);
+        mRefreshListLayout = v.findViewById(R.id.swipe_containing_list);
+        mRefreshGridLayout = v.findViewById(R.id.swipe_containing_grid);
+        mRefreshEmptyLayout = v.findViewById(R.id.swipe_containing_empty);
+        mEmptyListMessage = v.findViewById(R.id.empty_list_view);
         
         onCreateSwipeToRefresh(mRefreshListLayout);
         onCreateSwipeToRefresh(mRefreshGridLayout);
@@ -175,10 +175,10 @@ public class ExtendedListFragment extends Fragment
         mListView.setEmptyView(mRefreshEmptyLayout);
         mGridView.setEmptyView(mRefreshEmptyLayout);
 
-        mFabMain = (FloatingActionsMenu) v.findViewById(R.id.fab_main);
-        mFabUpload = (FloatingActionButton) v.findViewById(R.id.fab_upload);
-        mFabMkdir = (FloatingActionButton) v.findViewById(R.id.fab_mkdir);
-        mFabUploadFromApp = (FloatingActionButton) v.findViewById(R.id.fab_upload_from_app);
+        mFabMain = v.findViewById(R.id.fab_main);
+        mFabUpload = v.findViewById(R.id.fab_upload);
+        mFabMkdir = v.findViewById(R.id.fab_mkdir);
+        mFabUploadFromApp = v.findViewById(R.id.fab_upload_from_app);
 
         mCurrentListView = mListView;   // list by default
         if (savedInstanceState != null) {

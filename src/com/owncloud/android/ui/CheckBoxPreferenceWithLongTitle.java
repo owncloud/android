@@ -1,7 +1,8 @@
 /**
  *   ownCloud Android client application
  *
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   @author Christian Schabesberger
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -41,7 +42,7 @@ public class CheckBoxPreferenceWithLongTitle extends CheckBoxPreference{
     @Override
     protected void onBindView(View view) {
         super.onBindView(view);
-        TextView titleView = (TextView) view.findViewById(android.R.id.title);
+        TextView titleView = view.findViewById(android.R.id.title);
         titleView.setSingleLine(false);
         titleView.setMaxLines(3);
         titleView.setEllipsize(null);

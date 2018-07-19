@@ -1,6 +1,8 @@
 /**
  *   ownCloud Android client application
  *
+ *   @author Brtosz Przybylski
+ *   @author Christian Schabesberger
  *   Copyright (C) 2018 Bartosz Przybylski
  *   Copyright (C) 2018 ownCloud GmbH.
  *
@@ -40,7 +42,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.owncloud.android.BuildConfig;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountAuthenticatorActivity;
@@ -65,8 +66,8 @@ public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.whats_new_activity);
 
-        mProgress = (ProgressIndicator) findViewById(R.id.progressIndicator);
-        mPager = (ViewPager)findViewById(R.id.contentPanel);
+        mProgress = findViewById(R.id.progressIndicator);
+        mPager = findViewById(R.id.contentPanel);
         boolean isBeta = MainApp.isBeta();
 
         FeaturesViewAdapter adapter = new FeaturesViewAdapter(getSupportFragmentManager(),
@@ -77,7 +78,7 @@ public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPa
         mPager.addOnPageChangeListener(this);
 
 
-        mForwardFinishButton = (ImageButton) findViewById(R.id.forward);
+        mForwardFinishButton = findViewById(R.id.forward);
         mForwardFinishButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -85,27 +86,30 @@ public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPa
                     mPager.setCurrentItem(mPager.getCurrentItem()+1, true);
                     mProgress.animateToStep(mPager.getCurrentItem()+1);
                 } else {
-                    onFinish();
                     finish();
                 }
                 updateNextButtonIfNeeded();
             }
         });
-        Button skipButton = (Button) findViewById(R.id.skip);
+        Button skipButton = findViewById(R.id.skip);
         skipButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onFinish();
                 finish();
             }
         });
 
         updateNextButtonIfNeeded();
+
+        // Wizard already shown
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putInt(KEY_LAST_SEEN_VERSION_CODE, MainApp.getVersionCode());
+        editor.apply();
     }
 
     @Override
     public void onBackPressed() {
-        onFinish();
         super.onBackPressed();
     }
 
@@ -128,13 +132,6 @@ public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPa
         }
     }
 
-    private void onFinish() {
-        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
-        SharedPreferences.Editor editor = pref.edit();
-        editor.putInt(KEY_LAST_SEEN_VERSION_CODE, MainApp.getVersionCode());
-        editor.apply();
-    }
-
     static private int getLastSeenVersionCode() {
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(MainApp.getAppContext());
         return pref.getInt(KEY_LAST_SEEN_VERSION_CODE, 0);
@@ -144,15 +141,15 @@ public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPa
         if (getLastSeenVersionCode() != 0)
             return false;
         return AccountUtils.getCurrentOwnCloudAccount(MainApp.getAppContext()) == null;
-
     }
 
     static public void runIfNeeded(Context context) {
         if (context instanceof WhatsNewActivity)
             return;
 
-        if (shouldShow(context))
+        if (shouldShow(context)) {
             context.startActivity(new Intent(context, WhatsNewActivity.class));
+        }
     }
 
     static private boolean shouldShow(Context context) {
@@ -224,15 +221,15 @@ public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPa
         public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
             View v = inflater.inflate(R.layout.whats_new_element, container, false);
 
-            ImageView iv = (ImageView)v.findViewById(R.id.whatsNewImage);
+            ImageView iv = v.findViewById(R.id.whatsNewImage);
             if (mItem.shouldShowImage())
                 iv.setImageResource(mItem.getImage());
 
-            TextView tv2 = (TextView)v.findViewById(R.id.whatsNewTitle);
+            TextView tv2 = v.findViewById(R.id.whatsNewTitle);
             if (mItem.shouldShowTitleText())
                 tv2.setText(mItem.getTitleText());
 
-            tv2 = (TextView)v.findViewById(R.id.whatsNewText);
+            tv2 = v.findViewById(R.id.whatsNewText);
             if (mItem.shouldShowContentText())
                 tv2.setText(mItem.getContentText());
 

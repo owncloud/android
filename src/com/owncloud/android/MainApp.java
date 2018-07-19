@@ -4,6 +4,7 @@
  *   @author masensio
  *   @author David A. Velasco
  *   @author David González Verdugo
+ *   @author Christian Schabesberger
  *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
@@ -40,6 +41,9 @@ import com.owncloud.android.lib.common.authentication.oauth.OAuth2ClientConfigur
 import com.owncloud.android.lib.common.authentication.oauth.OAuth2ProvidersRegistry;
 import com.owncloud.android.lib.common.authentication.oauth.OwnCloudOAuth2Provider;
 import com.owncloud.android.lib.common.utils.Log_OC;
+import com.owncloud.android.ui.activity.FingerprintActivity;
+import com.owncloud.android.ui.activity.PassCodeActivity;
+import com.owncloud.android.ui.activity.PatternLockActivity;
 import com.owncloud.android.ui.activity.WhatsNewActivity;
 
 
@@ -123,11 +127,17 @@ public class MainApp extends Application {
             @Override
             public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
                 Log_OC.d(activity.getClass().getSimpleName(),  "onCreate(Bundle) starting" );
-                WhatsNewActivity.runIfNeeded(activity);
                 PassCodeManager.getPassCodeManager().onActivityCreated(activity);
                 PatternManager.getPatternManager().onActivityCreated(activity);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     FingerprintManager.getFingerprintManager(activity).onActivityCreated(activity);
+                }
+                // If there's any lock protection, don't show wizard at this point, show it when lock activities
+                // have finished
+                if (!(activity instanceof PassCodeActivity) &&
+                        !(activity instanceof PatternLockActivity) &&
+                        !(activity instanceof FingerprintActivity)) {
+                    WhatsNewActivity.runIfNeeded(activity);
                 }
             }
 
@@ -158,6 +168,11 @@ public class MainApp extends Application {
                 PatternManager.getPatternManager().onActivityStopped(activity);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     FingerprintManager.getFingerprintManager(activity).onActivityStopped(activity);
+                }
+                if (activity instanceof PassCodeActivity ||
+                        activity instanceof PatternLockActivity ||
+                        activity instanceof FingerprintActivity) {
+                    WhatsNewActivity.runIfNeeded(activity);
                 }
             }
 
@@ -256,7 +271,7 @@ public class MainApp extends Application {
             String versionName = packageInfo.versionName;
             if (versionName.contains(BETA_VERSION)){
                 isBeta = true;
-            };
+            }
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }

@@ -12,10 +12,9 @@
   <string name="actionbar_see_details">Detaljer</string>
   <string name="actionbar_send_file">Send</string>
   <string name="actionbar_sort">Sorter</string>
+  <string name="actionbar_descending">Synkende</string>
   <string name="actionbar_sort_title">Sorter etter</string>
   <string name="actionbar_sort_by_name">A-Z</string>
-  <string name="actionbar_sort_by_date">Nyest - Eldst</string>
-  <string name="actionbar_sort_by_size">Størst - Minst</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Alle filer</string>
@@ -25,6 +24,8 @@
   <string name="drawer_item_uploads_list">Opplastinger</string>
   <string name="drawer_close">Lukk</string>
   <string name="drawer_open">Åpne</string>
+  <string name="drawer_feedback">Tilbakemelding</string>
+  <string name="drawer_help">Hjelp</string>
   <string name="prefs_category_general">Generelt</string>
   <string name="prefs_category_more">Mer</string>
   <string name="prefs_category_security">Sikkerhet</string>
@@ -433,8 +434,8 @@
   <string name="share_via_link_expiration_date_label">Utløpsdato</string>
   <string name="share_via_link_password_label">Passord</string>
   <string name="share_via_link_password_title">Sikret</string>
-  <string name="share_via_link_edit_permission_label">Tillat redigering</string>
-  <string name="share_via_link_show_file_listing_label">Vis filoppføringer</string>
+  <string name="share_via_link_edit_permission_read_only_label">Last ned / Se</string>
+  <string name="share_via_link_edit_permission_read_and_write_label">Last ned / Se / Last opp</string>
   <string name="share_get_public_link_button">Hent lenke</string>
   <string name="share_with_title">Del med ...</string>
   <string name="share_with_edit_title">Del med %1$s</string>
@@ -498,6 +499,8 @@
   <string name="media_service_notification_channel_description">Se musikk spiller</string>
   <string name="file_sync_notification_channel_name">Fil synkronisering</string>
   <string name="file_sync_notification_channel_description">Se resultat av fil synkronisering</string>
+  <string name="button_no_thanks_name">NEI TAKK</string>
+  <string name="button_later_name">SENERE</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d valgt</item>
     <item quantity="other">%d valgte</item>
@@ -513,12 +516,4 @@
   <string name="welcome_feature_4_text">Dine bilder/videoer lastes opp automatisk</string>
   <string name="welcome_feature_5_title">Video strømming</string>
   <string name="welcome_feature_5_text">Spill av videoene dine uten å laste dem ned</string>
-  <string name="welcome_feature_6_title">Mønsterlås</string>
-  <string name="welcome_feature_6_text">Bruk et mønster for å låse din ownCloud-app</string>
-  <string name="welcome_feature_7_title">Fingeravtrykkslås</string>
-  <string name="welcome_feature_7_text">Bruk fingeravtrykk for å låse din ownCloud app</string>
-  <string name="welcome_feature_8_title">GIF støtte</string>
-  <string name="welcome_feature_8_text">Spill dine animerte GIF-bilder</string>
-  <string name="welcome_feature_9_title">Last opp bilde fra kamera</string>
-  <string name="welcome_feature_9_text">Ta et bilde og last det opp direkte på serveren</string>
 </resources>

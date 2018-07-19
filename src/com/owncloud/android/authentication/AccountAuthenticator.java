@@ -2,8 +2,9 @@
  *   ownCloud Android client application
  *
  *   @author David A. Velasco
+ *   @author Christian Schabesberger
  *   Copyright (C) 2012  Bartek Przybylski
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -84,8 +85,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
     @Override
     public Bundle addAccount(AccountAuthenticatorResponse response,
             String accountType, String authTokenType,
-            String[] requiredFeatures, Bundle options)
-            throws NetworkErrorException {
+            String[] requiredFeatures, Bundle options) {
         Log_OC.i(TAG, "Adding account with type " + accountType
                 + " and auth token " + authTokenType);
         
@@ -140,7 +140,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
      */
     @Override
     public Bundle confirmCredentials(AccountAuthenticatorResponse response,
-            Account account, Bundle options) throws NetworkErrorException {
+            Account account, Bundle options) {
         try {
             validateAccountType(account.type);
         } catch (AuthenticatorException e) {
@@ -173,8 +173,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
      */
     @Override
     public Bundle getAuthToken(AccountAuthenticatorResponse response,
-            Account account, String authTokenType, Bundle options)
-            throws NetworkErrorException {
+            Account account, String authTokenType, Bundle options) {
         /// validate parameters
         try {
             validateAccountType(account.type);
@@ -229,7 +228,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
 
     @Override
     public Bundle hasFeatures(AccountAuthenticatorResponse response,
-            Account account, String[] features) throws NetworkErrorException {
+            Account account, String[] features) {
         final Bundle result = new Bundle();
         result.putBoolean(AccountManager.KEY_BOOLEAN_RESULT, true);
         return result;
@@ -237,8 +236,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
 
     @Override
     public Bundle updateCredentials(AccountAuthenticatorResponse response,
-            Account account, String authTokenType, Bundle options)
-            throws NetworkErrorException {
+            Account account, String authTokenType, Bundle options) {
         final Intent intent = new Intent(mContext, AuthenticatorActivity.class);
         intent.putExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE,
                 response);
@@ -317,25 +315,6 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
             super(AccountManager.ERROR_CODE_UNSUPPORTED_OPERATION,
                     "Unsupported auth token type");
         }
-    }
-
-    public static class UnsupportedFeaturesException extends
-            AuthenticatorException {
-        public static final long serialVersionUID = 1L;
-
-        public UnsupportedFeaturesException() {
-            super(AccountManager.ERROR_CODE_UNSUPPORTED_OPERATION,
-                    "Unsupported features");
-        }
-    }
-
-    public static class AccessDeniedException extends AuthenticatorException {
-        public AccessDeniedException(int code, String errorMsg) {
-            super(AccountManager.ERROR_CODE_INVALID_RESPONSE, "Access Denied");
-        }
-
-        private static final long serialVersionUID = 1L;
-
     }
 
     private boolean canBeRefreshed(String authTokenType) {

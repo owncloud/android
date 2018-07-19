@@ -7,6 +7,7 @@
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <!--TODO re-enable when "On Device" is available
     <string name="drawer_item_on_device">On device</string>-->
+  <string name="drawer_help">సహాయం</string>
   <string name="prefs_category_more">మరిన్ని</string>
   <string name="prefs_help">సహాయం</string>
   <string name="auth_username">వాడుకరి పేరు</string>

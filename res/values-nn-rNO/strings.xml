@@ -14,8 +14,6 @@
   <string name="actionbar_sort">Sorter</string>
   <string name="actionbar_sort_title">Sorter etter</string>
   <string name="actionbar_sort_by_name">A-Å</string>
-  <string name="actionbar_sort_by_date">Nyast - elst</string>
-  <string name="actionbar_sort_by_size">Størst - minst</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Alle filer</string>
@@ -25,6 +23,8 @@
   <string name="drawer_item_uploads_list">Opplastingar</string>
   <string name="drawer_close">Lukk</string>
   <string name="drawer_open">Opne</string>
+  <string name="drawer_feedback">Tilbakemelding</string>
+  <string name="drawer_help">Hjelp</string>
   <string name="prefs_category_general">Generelt</string>
   <string name="prefs_category_more">Meir</string>
   <string name="prefs_category_security">Tryggleik</string>
@@ -260,8 +260,6 @@
   <string name="share_confirm_public_link_button">Lagra</string>
   <string name="share_via_link_expiration_date_label">Utløp</string>
   <string name="share_via_link_password_label">Passord</string>
-  <string name="share_via_link_edit_permission_label">Tillat endring</string>
-  <string name="share_via_link_show_file_listing_label">Vis fil listing</string>
   <string name="share_search">Søk</string>
   <string name="share_privilege_can_share">kan dela</string>
   <string name="share_privilege_can_edit">kan endra</string>

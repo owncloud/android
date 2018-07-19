@@ -14,8 +14,6 @@
   <string name="actionbar_sort">Sortera</string>
   <string name="actionbar_sort_title">Sortera efter</string>
   <string name="actionbar_sort_by_name">A-Ö</string>
-  <string name="actionbar_sort_by_date">Nyast - Äldst</string>
-  <string name="actionbar_sort_by_size">Störst - Minst</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Alla filer</string>
@@ -25,6 +23,8 @@
   <string name="drawer_item_uploads_list">Uppladdningar</string>
   <string name="drawer_close">Stäng</string>
   <string name="drawer_open">Öppna</string>
+  <string name="drawer_feedback">Feedback</string>
+  <string name="drawer_help">Hjälp</string>
   <string name="prefs_category_general">Allmänt</string>
   <string name="prefs_category_more">Mer</string>
   <string name="prefs_category_security">Säkerhet</string>
@@ -396,8 +396,6 @@
   <string name="share_via_link_expiration_date_label">Upphör</string>
   <string name="share_via_link_password_label">Lösenord</string>
   <string name="share_via_link_password_title">Säkrad</string>
-  <string name="share_via_link_edit_permission_label">Tillåt redigering</string>
-  <string name="share_via_link_show_file_listing_label">Visa fillistning</string>
   <string name="share_get_public_link_button">Hämta länk</string>
   <string name="share_with_title">Dela med</string>
   <string name="share_with_edit_title">Dela med %1$s</string>

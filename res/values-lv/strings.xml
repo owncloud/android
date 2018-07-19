@@ -20,6 +20,8 @@
   <string name="drawer_item_settings">Iestatījumi</string>
   <string name="drawer_close">Aizvērt</string>
   <string name="drawer_open">Atvērt</string>
+  <string name="drawer_feedback">Atsauksmes</string>
+  <string name="drawer_help">Palīdzība</string>
   <string name="prefs_category_general">Vispārīgi</string>
   <string name="prefs_category_more">Vairāk</string>
   <string name="prefs_category_security">Drošība</string>

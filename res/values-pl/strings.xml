@@ -12,10 +12,11 @@
   <string name="actionbar_see_details">Szczegóły</string>
   <string name="actionbar_send_file">Wyślij</string>
   <string name="actionbar_sort">Sortuj</string>
+  <string name="actionbar_descending">Malejąco</string>
   <string name="actionbar_sort_title">Sortuj według</string>
   <string name="actionbar_sort_by_name">A-Z</string>
-  <string name="actionbar_sort_by_date">Najnowsze - Najstarsze</string>
-  <string name="actionbar_sort_by_size">Największe - Najmniejsze</string>
+  <string name="actionbar_sort_by_date">Najstarsze - Najnowsze</string>
+  <string name="actionbar_sort_by_size">Najmniejsze - Największe</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Wszystkie pliki</string>
@@ -25,6 +26,11 @@
   <string name="drawer_item_uploads_list">Wysłane</string>
   <string name="drawer_close">Zamknij</string>
   <string name="drawer_open">Otwórz</string>
+  <string name="drawer_quota">Wykorzystano %1$s z %2$s (%3$s %%)</string>
+  <string name="drawer_unavailable_free_storage">%1$s w użyciu</string>
+  <string name="drawer_unavailable_used_storage">Brak informacji o zużyciu pamięci</string>
+  <string name="drawer_feedback">Wsparcie</string>
+  <string name="drawer_help">Pomoc</string>
   <string name="prefs_category_general">Ogólne</string>
   <string name="prefs_category_more">Więcej</string>
   <string name="prefs_category_security">Bezpieczeństwo</string>
@@ -58,6 +64,8 @@
   <string name="pattern_stored">Wzór odblokowania zapisany</string>
   <string name="recommend_subject">Wypróbuj %1$s na swoim smartphonie!</string>
   <string name="recommend_text">Chciałbym zaprosić Cię do używania %1$s na swoim smartfonie!\nŚciągnij tutaj: %2$s</string>
+  <string name="auth_failure_snackbar">Uwierzytelnianie nieudane</string>
+  <string name="auth_failure_snackbar_action">Zmień konto</string>
   <string name="auth_check_server">Sprawdź serwer</string>
   <string name="auth_host_url">Adres serwera https://...</string>
   <string name="auth_username">Nazwa użytkownika</string>
@@ -194,6 +202,12 @@
   <string name="pass_code_wrong">Kod PIN nieprawidłowy</string>
   <string name="pass_code_removed">Kod PIN został usunięty</string>
   <string name="pass_code_stored">Kod PIN został zapisany</string>
+  <string name="fingerprint_confirm">Potwierdź odciskiem palca aby kontynuować</string>
+  <string name="fingerprint_hint">Czujnik dotykowy</string>
+  <string name="fingerprint_not_recognized">Nierozpoznany odcisk palca, spróbuj jeszcze raz</string>
+  <string name="fingerprint_success">Odcisk palca rozpoznany</string>
+  <string name="fingerprint_not_hardware_detected">To urządzenie nie obsługuje autoryzacji odciskiem palca</string>
+  <string name="fingerprint_not_enrolled_fingerprints">Zarejestruj przynajmniej jeden odcisk palca aby skorzystać z tej funkcji</string>
   <string name="media_notif_ticker">%1$s odtwarzacz muzyki</string>
   <string name="media_state_playing">%1$s (odtwarzany)</string>
   <string name="media_state_loading">%1$s (wczytywany)</string>
@@ -213,6 +227,7 @@
   <string name="media_rewind_description">Przycisk przewijania</string>
   <string name="media_play_pause_description">Przycisk odtwarzania / pauzowania</string>
   <string name="media_forward_description">Przycisk przewijania do przodu</string>
+  <string name="upload_from_camera_title">Obraz z kamery</string>
   <string name="auth_getting_authorization">Autoryzowanie...</string>
   <string name="auth_trying_to_login">Próba logowania</string>
   <string name="auth_no_net_conn_title">Brak połączenia sieciowego</string>
@@ -419,8 +434,8 @@
   <string name="share_via_link_expiration_date_label">Wygaśnięcie</string>
   <string name="share_via_link_password_label">Hasło</string>
   <string name="share_via_link_password_title">Zabezpieczone</string>
-  <string name="share_via_link_edit_permission_label">Pozwól na edycję</string>
-  <string name="share_via_link_show_file_listing_label">Pokaż kolejno listę plików</string>
+  <string name="share_via_link_edit_permission_read_only_label">Pobieranie / Podgląd</string>
+  <string name="share_via_link_edit_permission_read_and_write_label">Pobieranie / Podgląd / Wysyłanie</string>
   <string name="share_get_public_link_button">Pobierz link</string>
   <string name="share_with_title">Współdziel z ...</string>
   <string name="share_with_edit_title">Współdziel z %1$s</string>
@@ -484,6 +499,11 @@
   <string name="media_service_notification_channel_description">Zobacz odtwarzacz muzyki</string>
   <string name="file_sync_notification_channel_name">Synchronizacja pliku</string>
   <string name="file_sync_notification_channel_description">Zobacz wynik synchronizacji plików</string>
+  <string name="rate_dialog_title">Oceń aplikację %1$s!</string>
+  <string name="rate_dialog_description">Jeśli jesteś zadowolony z tej aplikacji, to może poświęcisz chwilę aby ją ocenić? Twoja opinia jest dla nas bardzo ważna.</string>
+  <string name="button_no_thanks_name">NIE, DZIĘKUJĘ</string>
+  <string name="button_later_name">PÓŹNIEJ</string>
+  <string name="button_rate_now_name">OCEŃ TERAZ</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d wybrany</item>
     <item quantity="few">wybrano: %d</item>
@@ -491,6 +511,8 @@
     <item quantity="other">wybrano: %d</item>
   </plurals>
   <!--Welcome to oC intro features-->
+  <string name="welcome_feature_1_title">Zarządzaj wszystkimi synchronizowanymi plikami</string>
+  <string name="welcome_feature_1_text">Możesz kopiować, przenosić, usuwać</string>
+  <string name="welcome_feature_2_title">Udostępnij pliki i foldery</string>
   <string name="welcome_feature_4_title">Wrzucanie kamery</string>
-  <string name="welcome_feature_7_title">Blokada odciskiem palca</string>
 </resources>

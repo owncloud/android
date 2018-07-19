@@ -12,10 +12,9 @@
   <string name="actionbar_see_details">Detalji</string>
   <string name="actionbar_send_file">Pošaljite</string>
   <string name="actionbar_sort">Sortiraj</string>
+  <string name="actionbar_descending">Silazno</string>
   <string name="actionbar_sort_title">Sortiraj po</string>
   <string name="actionbar_sort_by_name">A-Z</string>
-  <string name="actionbar_sort_by_date">Noviji - Stariji</string>
-  <string name="actionbar_sort_by_size">Veći - Manji</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Sve datoteke</string>
@@ -25,6 +24,8 @@
   <string name="drawer_item_uploads_list">Upload-i</string>
   <string name="drawer_close">Zatvori</string>
   <string name="drawer_open">Otvorite</string>
+  <string name="drawer_feedback">Povratna informacija</string>
+  <string name="drawer_help">Pomoć</string>
   <string name="prefs_category_general">Općenito</string>
   <string name="prefs_category_more">više</string>
   <string name="prefs_category_security">Sigurnost</string>
@@ -161,7 +162,6 @@
   <string name="share_confirm_public_link_button">Spremi</string>
   <string name="share_via_link_expiration_date_label">Istjeće</string>
   <string name="share_via_link_password_label">Lozinka</string>
-  <string name="share_via_link_edit_permission_label">Omogući uređivanje</string>
   <string name="share_search">pretraži</string>
   <string name="share_privilege_can_share">Dijeljenje moguće</string>
   <string name="share_privilege_can_edit">Uređivanje moguće</string>

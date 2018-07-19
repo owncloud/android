@@ -24,7 +24,6 @@
 package com.owncloud.android.ui.activity;
 
 import android.accounts.Account;
-import android.accounts.AccountManager;
 import android.accounts.AuthenticatorException;
 import android.content.ComponentName;
 import android.content.Context;
@@ -37,6 +36,8 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.view.View;
+import android.widget.Toast;
 
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
@@ -46,7 +47,6 @@ import com.owncloud.android.files.services.FileDownloader;
 import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder;
 import com.owncloud.android.files.services.FileUploader;
 import com.owncloud.android.files.services.FileUploader.FileUploaderBinder;
-import com.owncloud.android.lib.common.accounts.AccountUtils.Constants;
 import com.owncloud.android.lib.common.network.CertificateCombinedException;
 import com.owncloud.android.lib.common.operations.OnRemoteOperationListener;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
@@ -298,7 +298,7 @@ public class FileActivity extends DrawerActivity
 
             if (result.getCode() == ResultCode.UNAUTHORIZED) {
                 showSnackMessage(
-                    ErrorMessageAdapter.getErrorCauseMessage(result, operation, getResources())
+                    ErrorMessageAdapter.getResultMessage(result, operation, getResources())
                 );
             }
 
@@ -318,7 +318,7 @@ public class FileActivity extends DrawerActivity
 
             } else if (result.getCode() != ResultCode.CANCELLED) {
                 showSnackMessage(
-                    ErrorMessageAdapter.getErrorCauseMessage(result, operation, getResources())
+                    ErrorMessageAdapter.getResultMessage(result, operation, getResources())
                 );
             }
 
@@ -331,7 +331,7 @@ public class FileActivity extends DrawerActivity
 
             } else {
                 showSnackMessage(
-                    ErrorMessageAdapter.getErrorCauseMessage(result, operation, getResources())
+                    ErrorMessageAdapter.getResultMessage(result, operation, getResources())
                 );
             }
 
@@ -340,6 +340,14 @@ public class FileActivity extends DrawerActivity
             result.getData();
 
         }
+    }
+
+    protected void showRequestAccountChangeNotice() {
+        Snackbar.make(findViewById(android.R.id.content), R.string.auth_failure_snackbar, Snackbar.LENGTH_INDEFINITE)
+                .setAction(R.string.auth_failure_snackbar_action, v ->
+                    startActivity(
+                            new Intent(FileActivity.this, ManageAccountsActivity.class)))
+                .show();
     }
 
     /**
@@ -548,12 +556,16 @@ public class FileActivity extends DrawerActivity
      * @param message       Message to show.
      */
     public void showSnackMessage(String message) {
-        Snackbar snackbar = Snackbar.make(
-            findViewById(android.R.id.content),
-            message,
-            Snackbar.LENGTH_LONG
-        );
-        snackbar.show();
+        final View rootView = findViewById(android.R.id.content);
+        if(rootView != null) {
+            Snackbar.make(
+                    rootView,
+                    message,
+                    Snackbar.LENGTH_LONG)
+                    .show();
+        } else {
+            // If root view is not available don't let the app brake. show the notification anyway.
+            Toast.makeText(this, message, Snackbar.LENGTH_LONG).show();
+        }
     }
-
 }

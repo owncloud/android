@@ -5,26 +5,33 @@
   <string name="actionbar_sync">Freskoni llogarinë</string>
   <string name="actionbar_upload">Ngarkoni</string>
   <string name="actionbar_upload_from_apps">Lëndë nga aplikacione të tjera</string>
-  <string name="actionbar_upload_files">Kartelat</string>
+  <string name="actionbar_upload_files">Kartela</string>
   <string name="actionbar_open_with">Hape me</string>
   <string name="actionbar_mkdir">Dosje e re</string>
   <string name="actionbar_settings">Rregullime</string>
   <string name="actionbar_see_details">Hollësi</string>
   <string name="actionbar_send_file">Dërgoje</string>
   <string name="actionbar_sort">Renditi</string>
+  <string name="actionbar_descending">Në rend zbritës</string>
   <string name="actionbar_sort_title">Renditi sipas</string>
   <string name="actionbar_sort_by_name">A-Z</string>
-  <string name="actionbar_sort_by_date">Më e reja - Më e vjetra</string>
-  <string name="actionbar_sort_by_size">Më e madhja - Më e vogla</string>
+  <string name="actionbar_sort_by_date">Më e vjetra - Më e reja</string>
+  <string name="actionbar_sort_by_size">Më e vogla - Më e madhja</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Krejt kartelat</string>
   <!--TODO re-enable when "On Device" is available
     <string name="drawer_item_on_device">On device</string>-->
-  <string name="drawer_item_settings">Parametra</string>
+  <string name="drawer_item_settings">Rregullime</string>
   <string name="drawer_item_uploads_list">Ngarkime</string>
   <string name="drawer_close">Mbylle</string>
   <string name="drawer_open">Hape</string>
+  <string name="drawer_loading_quota">Kuotë ngarkimesh</string>
+  <string name="drawer_quota">%1$s nga %2$s e përdorur (%3$s %%)</string>
+  <string name="drawer_unavailable_free_storage">%1$s në përdorim</string>
+  <string name="drawer_unavailable_used_storage">S’ka të dhëna mbi përdorim depozitimi</string>
+  <string name="drawer_feedback">Përshtypje</string>
+  <string name="drawer_help">Ndihmë</string>
   <string name="prefs_category_general">Të përgjithshme</string>
   <string name="prefs_category_more">Më tepër</string>
   <string name="prefs_category_security">Siguri</string>
@@ -64,6 +71,8 @@
   <string name="illegal_argument_exception_message">Lypset një VEPRIM i vlefshëm te Synimi që u dha</string>
   <string name="recommend_subject">Provojeni %1$s te telefoni juaj!</string>
   <string name="recommend_text">Dua t\’ju ftoj të përdorni %1$s në telefonin tuaj!\nShkarkojeni prej këtu: %2$s</string>
+  <string name="auth_failure_snackbar">Mirëfilltësimi dështoi</string>
+  <string name="auth_failure_snackbar_action">Ndryshoni llogari</string>
   <string name="auth_check_server">Kontrollo shërbyesin</string>
   <string name="auth_host_url">Adresë https://… e shërbyesit</string>
   <string name="auth_username">Emër përdoruesi</string>
@@ -98,8 +107,8 @@
   <string name="filedetails_select_file">Prekni mbi një kartelë që të shfaqen të dhëna shtesë.</string>
   <string name="upload_to">Ngarkoje te %1$s</string>
   <string name="upload_files_title">Kartela</string>
-  <string name="filedetails_size">Madhësia:</string>
-  <string name="filedetails_type">Lloji:</string>
+  <string name="filedetails_size">Madhësi:</string>
+  <string name="filedetails_type">Lloj:</string>
   <string name="filedetails_created">Krijuar më:</string>
   <string name="filedetails_modified">Ndryshuar më:</string>
   <string name="filedetails_download">Shkarkoje</string>
@@ -134,7 +143,7 @@
   <string name="uploader_upload_failed_ticker">Ngarkimi dështoi</string>
   <string name="uploader_upload_failed_content_single">Ngarkimi i %1$s s\’u plotësua dot</string>
   <string name="uploader_upload_failed_credentials_error">Ngarkimi dështoi, lypset të bëni hyrjen sërish</string>
-  <string name="uploader_upload_failed_ssl_certificate_not_trusted">Certifikata e shërbyesit s\’është e besueshme</string>
+  <string name="uploader_upload_failed_ssl_certificate_not_trusted">Dëshmia e shërbyesit s\’është e besuar</string>
   <string name="uploader_upload_text_dialog_title">Jepni një emër për kartelën e re</string>
   <string name="uploader_upload_text_dialog_filename_error_empty">Emri i kartelës s\’duhet të jetë i zbrazët</string>
   <string name="uploader_upload_text_dialog_filename_error_length_max">Emri i kartelës s\’duhet të jetë më shumë se %d shenja</string>
@@ -179,7 +188,7 @@
   <string name="sync_fail_content_unauthorized">Fjalëkalim i pavlefshëm për %1$s</string>
   <string name="sync_conflicts_in_favourites_ticker">U hasën përplasje</string>
   <string name="sync_conflicts_in_favourites_content">%1$d kartela kept-in-sync s\’u njëkohësuan dot</string>
-  <string name="sync_fail_in_favourites_ticker">Kartelat e mbajtura në njëkohësim dështuan</string>
+  <string name="sync_fail_in_favourites_ticker">Kartelat kept-in-sync dështuan</string>
   <string name="sync_fail_in_favourites_content">Lënda e %1$d kartelave s\’u njëkohësua dot (%2$d përplasje)</string>
   <string name="sync_foreign_files_forgotten_ticker">Disa kartela vendore u harruan</string>
   <string name="sync_foreign_files_forgotten_content">%1$d kartela nga dosja %2$s s\’u kopjuan dot</string>
@@ -431,8 +440,9 @@
   <string name="share_via_link_expiration_date_label">Skadim</string>
   <string name="share_via_link_password_label">Fjalëkalim</string>
   <string name="share_via_link_password_title">E siguruar</string>
-  <string name="share_via_link_edit_permission_label">Lejo përpunim</string>
-  <string name="share_via_link_show_file_listing_label">Shfaq listë kartelash</string>
+  <string name="share_via_link_edit_permission_read_only_label">Të shkarkojë / Të shohë</string>
+  <string name="share_via_link_edit_permission_read_and_write_label">Të shkarkojë / Të shohë / Të ngarkojë</string>
+  <string name="share_via_link_edit_permission_upload_only_label">Vetëm Ngarkime (Me Lënie Kartelash)</string>
   <string name="share_get_public_link_button">Merreni lidhjen</string>
   <string name="share_with_title">Ndajeni me …</string>
   <string name="share_with_edit_title">Ndajeni me %1$s</string>
@@ -516,12 +526,5 @@
   <string name="welcome_feature_4_text">Fotot/videot tuaja të ngarkuara automatikisht</string>
   <string name="welcome_feature_5_title">Transmetim videosh</string>
   <string name="welcome_feature_5_text">Luajini videot tuaja pa i shkarkuar</string>
-  <string name="welcome_feature_6_title">Kyçje me rregullsi</string>
-  <string name="welcome_feature_6_text">Përdorni një rregullsi për të kyçur aplikacionin tuaj ownCloud</string>
-  <string name="welcome_feature_7_title">Kyçje me shenja gishtash</string>
-  <string name="welcome_feature_7_text">Përdorni shenja gishtash tuaja për të kyçur aplikacionin tuaj ownCloud</string>
-  <string name="welcome_feature_8_title">Mbulim GIF-esh</string>
-  <string name="welcome_feature_8_text">Luani figurat tuaja të animuara GIF</string>
-  <string name="welcome_feature_9_title">Ngarko foto nga kamerë</string>
-  <string name="welcome_feature_9_text">Bëni një foto dhe ngarkojeni drejt e te shërbyesi juaj</string>
+  <string name="no_borwser_installed_alert">S’ka shfletues të instaluar. Ju lutemi, instaloni një Shfletues, që të mund të lejohet hyrje e sigurt.</string>
 </resources>
