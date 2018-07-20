@@ -50,10 +50,9 @@ public abstract class DavMethod extends HttpBaseMethod {
                 Constants.INSTANCE.getLog());
     }
 
-
     @Override
     public void abort() {
-        //TODO: abort here
+        mDavResource.cancelCall();
     }
 
     @Override
@@ -117,7 +116,7 @@ public abstract class DavMethod extends HttpBaseMethod {
 
     @Override
     public boolean isAborted() {
-        return true; //TODO: implement me
+        return mDavResource.isCallAborted();
     }
 
     public void setUrl(URL url) {
