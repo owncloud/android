@@ -48,6 +48,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -162,13 +163,19 @@ public class FileDisplayActivity extends FileActivity
 
         mLocalBroadcastManager = LocalBroadcastManager.getInstance(this);
 
+        if (savedInstanceState != null) {
+            Log.d(TAG, savedInstanceState.toString());
+        }
+
         /// Load of saved instance state
         if (savedInstanceState != null) {
             mFileWaitingToPreview = savedInstanceState.getParcelable(FileDisplayActivity.KEY_WAITING_TO_PREVIEW);
             mSyncInProgress = savedInstanceState.getBoolean(KEY_SYNC_IN_PROGRESS);
             mWaitingToSend = savedInstanceState.getParcelable(FileDisplayActivity.KEY_WAITING_TO_SEND);
             mFilesUploadHelper = savedInstanceState.getParcelable(KEY_UPLOAD_HELPER);
-            mFilesUploadHelper.init(this, getAccount().name);
+            if (getAccount() != null) {
+                mFilesUploadHelper.init(this, getAccount().name);
+            }
         } else {
             mFileWaitingToPreview = null;
             mSyncInProgress = false;

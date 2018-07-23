@@ -78,7 +78,7 @@ public class GetServerInfoOperation extends RemoteOperation<GetServerInfoOperati
         // first: check the status of the server (including its version)
         GetRemoteStatusOperation getStatusOperation = new GetRemoteStatusOperation(mContext);
         final RemoteOperationResult<OwnCloudVersion> remoteStatusResult = getStatusOperation.execute(client);
-        RemoteOperationResult<ServerInfo> result = new RemoteOperationResult<>(remoteStatusResult.getCode());
+        RemoteOperationResult<ServerInfo> result = new RemoteOperationResult(remoteStatusResult);
 
         if (remoteStatusResult.isSuccess()) {
             // second: get authentication method required by the server
