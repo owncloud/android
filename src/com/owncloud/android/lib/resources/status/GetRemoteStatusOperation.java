@@ -31,6 +31,7 @@ import android.net.Uri;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.http.HttpConstants;
 import com.owncloud.android.lib.common.http.methods.nonwebdav.GetMethod;
+import com.owncloud.android.lib.common.network.CertificateCombinedException;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
@@ -41,6 +42,8 @@ import org.json.JSONObject;
 import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
+import javax.net.ssl.SSLException;
+import javax.net.ssl.SSLHandshakeException;
 import javax.net.ssl.SSLPeerUnverifiedException;
 
 import static com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode.OK;
@@ -88,8 +91,8 @@ public class GetRemoteStatusOperation extends RemoteOperation<OwnCloudVersion> {
             try {
                 status = client.executeHttpMethod(getMethod);
                 mLatestResult = new RemoteOperationResult(OK);
-            } catch (SSLPeerUnverifiedException certEx) {
-                mLatestResult = new RemoteOperationResult(certEx);
+            } catch (SSLException sslE) {
+                mLatestResult = new RemoteOperationResult(sslE);
                 return false;
             }
 

@@ -119,6 +119,22 @@ public class RemoteOperationResult<T extends Object>
     }
 
     /**
+     * Create a new RemoteOperationResult based on the result given by a previous one.
+     * It does not copy the data.
+     * @param prevRemoteOperation
+     */
+    public RemoteOperationResult(RemoteOperationResult prevRemoteOperation) {
+        mCode = prevRemoteOperation.mCode;
+        mHttpCode = prevRemoteOperation.mHttpCode;
+        mHttpPhrase = prevRemoteOperation.mHttpPhrase;
+        mAuthenticate = prevRemoteOperation.mAuthenticate;
+        mException = prevRemoteOperation.mException;
+        mLastPermanentLocation = prevRemoteOperation.mLastPermanentLocation;
+        mSuccess = prevRemoteOperation.mSuccess;
+        mRedirectedLocation = prevRemoteOperation.mRedirectedLocation;
+    }
+
+    /**
      * Public constructor from exception.
      *
      * To be used when an exception prevented the end of the {@link RemoteOperation}.
