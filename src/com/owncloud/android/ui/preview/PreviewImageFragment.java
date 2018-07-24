@@ -261,7 +261,7 @@ public class PreviewImageFragment extends FileFragment {
                 mContainerActivity,
                 getActivity()
             );
-            mf.filter(menu,false,false);
+            mf.filter(menu, false, false);
         }
 
         // additional restriction for this fragment 

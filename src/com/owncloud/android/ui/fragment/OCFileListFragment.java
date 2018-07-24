@@ -535,7 +535,7 @@ public class OCFileListFragment extends ExtendedListFragment {
                 mContainerActivity,
                 getActivity()
             );
-            mf.filter(menu,mEnableSelectAll,true);
+            mf.filter(menu, mEnableSelectAll, true);
             return true;
         }
 
@@ -786,8 +786,8 @@ public class OCFileListFragment extends ExtendedListFragment {
     }
 
     public void selectAll(){
-        for(int i = 0;i < mAdapter.getCount();i++){
-            getListView().setItemChecked(i,true);
+        for(int i = 0; i < mAdapter.getCount(); i++) {
+            getListView().setItemChecked(i, true);
         }
     }
 
@@ -844,7 +844,6 @@ public class OCFileListFragment extends ExtendedListFragment {
         switch (menuId) {
             case R.id.file_action_select_all: {
                 selectAll();
-
                 return true;
             }
             case R.id.action_select_inverse: {

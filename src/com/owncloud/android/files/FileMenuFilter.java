@@ -90,7 +90,7 @@ public class FileMenuFilter {
      *
      * @param menu              Options or context menu to filter.
      */
-    public void filter(Menu menu,boolean displaySelectAll,boolean displaySelectInverse) {
+    public void filter(Menu menu, boolean displaySelectAll, boolean displaySelectInverse) {
         if (mFiles == null || mFiles.size() <= 0) {
             hideAll(menu);
 
@@ -98,7 +98,7 @@ public class FileMenuFilter {
             List<Integer> toShow = new ArrayList<>();
             List<Integer> toHide = new ArrayList<>();
 
-            filter(toShow, toHide,displaySelectAll,displaySelectInverse);
+            filter(toShow, toHide, displaySelectAll, displaySelectInverse);
 
             MenuItem item;
             for (int i : toShow) {
@@ -137,7 +137,7 @@ public class FileMenuFilter {
      * @param toShow            List to save the options that must be shown in the menu.
      * @param toHide            List to save the options that must be shown in the menu.
      */
-    private void filter(List<Integer> toShow, List <Integer> toHide,boolean displaySelectAll,boolean displaySelectInverse) {
+    private void filter(List<Integer> toShow, List <Integer> toHide, boolean displaySelectAll, boolean displaySelectInverse) {
 
         boolean synchronizing = anyFileSynchronizing();
 

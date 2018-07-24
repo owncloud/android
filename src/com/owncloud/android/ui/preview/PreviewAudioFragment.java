@@ -325,7 +325,7 @@ public class PreviewAudioFragment extends FileFragment {
             mContainerActivity,
             getActivity()
         );
-        mf.filter(menu,false,false);
+        mf.filter(menu, false, false);
 
         // additional restriction for this fragment 
         // TODO allow renaming in PreviewAudioFragment

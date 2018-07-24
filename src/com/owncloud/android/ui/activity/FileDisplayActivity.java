@@ -48,6 +48,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -549,6 +550,7 @@ public class FileDisplayActivity extends FileActivity
         switch (item.getItemId()) {
             case R.id.action_select_all: {
                 getListOfFilesFragment().selectAll();
+                break;
             }
             case R.id.action_sync_account: {
                 startSynchronization();
