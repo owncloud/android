@@ -33,9 +33,9 @@ public class HttpConstants {
      *************************************************** HEADERS ***********************************************
      ***********************************************************************************************************/
 
-    public static final String BASIC_AUTHORIZATION_HEADER = "Authorization";
+    public static final String AUTHORIZATION_HEADER = "Authorization";
     public static final String COOKIE_HEADER = "Cookie";
-    public static final String BEARER_AUTHORIZATION_HEADER = "Bearer ";
+    public static final String BEARER_AUTHORIZATION_KEY = "Bearer ";
     public static final String USER_AGENT_HEADER = "User-Agent";
     public static final String IF_MATCH_HEADER = "If-Match";
     public static final String IF_NONE_MATCH_HEADER = "If-None-Match";

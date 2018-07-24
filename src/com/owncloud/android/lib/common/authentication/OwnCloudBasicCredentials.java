@@ -52,11 +52,10 @@ public class OwnCloudBasicCredentials implements OwnCloudCredentials {
     @Override
     public void applyTo(OwnCloudClient client) {
         // Clear previous basic credentials
-        HttpClient.deleteHeaderForAllRequests(HttpConstants.BASIC_AUTHORIZATION_HEADER);
-        HttpClient.deleteHeaderForAllRequests(HttpConstants.BEARER_AUTHORIZATION_HEADER);
+        HttpClient.deleteHeaderForAllRequests(HttpConstants.AUTHORIZATION_HEADER);
         HttpClient.deleteHeaderForAllRequests(HttpConstants.COOKIE_HEADER);
 
-        HttpClient.addHeaderForAllRequests(HttpConstants.BASIC_AUTHORIZATION_HEADER,
+        HttpClient.addHeaderForAllRequests(HttpConstants.AUTHORIZATION_HEADER,
                 Credentials.basic(mUsername, mPassword));
     }
 

@@ -40,11 +40,11 @@ public class OwnCloudBearerCredentials implements OwnCloudCredentials {
     @Override
     public void applyTo(OwnCloudClient client) {
         // Clear previous credentials
-        HttpClient.deleteHeaderForAllRequests(HttpConstants.BASIC_AUTHORIZATION_HEADER);
-        HttpClient.deleteHeaderForAllRequests(HttpConstants.BEARER_AUTHORIZATION_HEADER);
+        HttpClient.deleteHeaderForAllRequests(HttpConstants.AUTHORIZATION_HEADER);
         HttpClient.deleteHeaderForAllRequests(HttpConstants.COOKIE_HEADER);
 
-        HttpClient.addHeaderForAllRequests(HttpConstants.BEARER_AUTHORIZATION_HEADER, mAccessToken);
+        HttpClient.addHeaderForAllRequests(HttpConstants.AUTHORIZATION_HEADER,
+                HttpConstants.BEARER_AUTHORIZATION_KEY + mAccessToken);
     }
 
     @Override
