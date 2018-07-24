@@ -75,7 +75,6 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
 
     protected Button mCancelBtn;
     protected Button mChooseBtn;
-    private View mShadowView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,7 +95,6 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
         setupToolbar();
         getSupportActionBar().setDisplayShowTitleEnabled(true);
 
-        mShadowView = findViewById(R.id.shadow_view);
         // sets message for empty list of folders
         setBackgroundText();
 
@@ -157,7 +155,7 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
                 // In case folder list is empty
                 message = R.string.file_list_empty_moving;
                 listFragment.getProgressBar().setVisibility(View.GONE);
-                mShadowView.setVisibility(View.VISIBLE);
+                listFragment.getShadowView().setVisibility(View.VISIBLE);
             }
             listFragment.setMessageForEmptyList(getString(message));
         } else {
@@ -210,7 +208,6 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
 
         OCFileListFragment fileListFragment = getListOfFilesFragment();
         if (fileListFragment != null) {
-            mShadowView.setVisibility(View.GONE);
             fileListFragment.setProgressBarAsIndeterminate(true);
         }
 
@@ -492,7 +489,6 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
 
                 OCFileListFragment fileListFragment = getListOfFilesFragment();
                 if (fileListFragment != null) {
-                    mShadowView.setVisibility(View.GONE);
                     fileListFragment.setProgressBarAsIndeterminate(mSyncInProgress);
                 }
 
