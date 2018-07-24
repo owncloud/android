@@ -21,20 +21,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     android:filterTouchesWhenObscured="true"
     android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <include layout="@layout/toolbar_standard" />
-
-        <View
-            android:id="@+id/shadow_view"
-            android:layout_width="match_parent"
-            android:layout_height="4dp"
-            android:background="@drawable/shadow_gradient"
-            android:visibility="gone" />
-    </LinearLayout>
+    <include layout="@layout/toolbar_standard" />
 
     <FrameLayout
         android:id="@+id/fragment_container"
