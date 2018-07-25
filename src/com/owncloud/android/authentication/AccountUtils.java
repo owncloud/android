@@ -2,7 +2,7 @@
  *   ownCloud Android client application
  *
  *   Copyright (C) 2012  Bartek Przybylski
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -317,8 +317,9 @@ public class AccountUtils {
         if (account != null) {
             // capabilities are now the preferred source for version info
             FileDataStorageManager fileDataStorageManager = new FileDataStorageManager(
-                account,
-                MainApp.getAppContext().getContentResolver()
+                    MainApp.getAppContext(),
+                    account,
+                    MainApp.getAppContext().getContentResolver()
             );
             OCCapability capability = fileDataStorageManager.getCapability(account.name);
             if (capability != null) {

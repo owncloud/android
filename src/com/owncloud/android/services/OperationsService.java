@@ -468,7 +468,8 @@ public class OperationsService extends Service {
                             mOwnCloudClient.setOwnCloudVersion(version);
 
                             mStorageManager = new FileDataStorageManager(
-                                    mLastTarget.mAccount, 
+                                    mService,
+                                    mLastTarget.mAccount,
                                     mService.getContentResolver()
                             );
                         } else {

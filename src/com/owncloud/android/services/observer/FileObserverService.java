@@ -2,8 +2,9 @@
  *   ownCloud Android client application
  *
  *   @author David A. Velasco
+ *   @author David González Verdugo
  *   Copyright (C) 2012 Bartek Przybylski
- *   Copyright (C) 2017 ownCloud GmbH.
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -21,12 +22,6 @@
 
 package com.owncloud.android.services.observer;
 
-import java.io.File;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
 import android.accounts.Account;
 import android.app.Service;
 import android.content.BroadcastReceiver;
@@ -41,13 +36,17 @@ import com.owncloud.android.MainApp;
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
-import com.owncloud.android.db.PreferenceManager;
 import com.owncloud.android.files.services.FileDownloader;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.operations.SynchronizeFileOperation;
 import com.owncloud.android.utils.Extras;
 import com.owncloud.android.utils.FileStorageUtils;
 
+import java.io.File;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Service keeping a list of {@link AvailableOfflineObserver} instances that watch for local
@@ -213,8 +212,9 @@ public class FileObserverService extends Service {
     private void startObservation() {
         Log_OC.d(TAG, "Loading all available offline files from database to start watching them");
         FileDataStorageManager fds = new FileDataStorageManager(
-            null,   // this is dangerous - handle with care
-            getContentResolver()
+                getApplicationContext(),
+                null,   // this is dangerous - handle with care
+                getContentResolver()
         );
 
         List<Pair<OCFile, String>> availableOfflineFiles = fds.getAvailableOfflineFilesFromEveryAccount();
