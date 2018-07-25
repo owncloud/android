@@ -3,8 +3,9 @@
  *
  *   @author Bartek Przybylski
  *   @author David A. Velasco
+ *   @author David González Verdugo
  *   Copyright (C) 2011  Bartek Przybylski
- *   Copyright (C) 2017 ownCloud GmbH.
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -165,7 +166,7 @@ public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
 
         this.setAccount(account);
         this.setContentProviderClient(providerClient);
-        this.setStorageManager(new FileDataStorageManager(account, providerClient));
+        this.setStorageManager(new FileDataStorageManager(getContext(), account, providerClient));
         
         try {
             this.initClientForCurrentAccount();

@@ -97,7 +97,7 @@ public class ErrorsWhileCopyingHandlerActivity  extends AppCompatActivity
         mAccount = intent.getParcelableExtra(EXTRA_ACCOUNT);
         mRemotePaths = intent.getStringArrayListExtra(EXTRA_REMOTE_PATHS);
         mLocalPaths = intent.getStringArrayListExtra(EXTRA_LOCAL_PATHS);
-        mStorageManager = new FileDataStorageManager(mAccount, getContentResolver());
+        mStorageManager = new FileDataStorageManager(this, mAccount, getContentResolver());
         mHandler = new Handler();
         if (mCurrentDialog != null) {
             mCurrentDialog.dismiss();

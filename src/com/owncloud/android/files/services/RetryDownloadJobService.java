@@ -29,7 +29,7 @@ public class RetryDownloadJobService extends JobService {
         // retrying the download
         if (account != null) {
             FileDataStorageManager fileDataStorageManager = new FileDataStorageManager(
-                account,
+                    this, account,
                 getContentResolver()
             );
 

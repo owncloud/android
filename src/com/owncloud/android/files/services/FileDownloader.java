@@ -441,7 +441,7 @@ public class FileDownloader extends Service
                         !mCurrentAccount.equals(mCurrentDownload.getAccount())) {
                     mCurrentAccount = mCurrentDownload.getAccount();
                     mStorageManager = new FileDataStorageManager(
-                            mCurrentAccount,
+                            this, mCurrentAccount,
                             getContentResolver()
                     );
                 }   // else, reuse storage manager from previous operation

@@ -6,6 +6,7 @@
  *  @author LukeOwnCloud
  *  @author David A. Velasco
  *  @author Christian Schabesberger
+ *  @author David González Verdugo
  *
  *  Copyright (C) 2012 Bartek Przybylski
  *  Copyright (C) 2018 ownCloud GmbH.
@@ -813,6 +814,7 @@ public class FileUploader extends Service
                         !mCurrentAccount.equals(mCurrentUpload.getAccount())) {
                     mCurrentAccount = mCurrentUpload.getAccount();
                     mStorageManager = new FileDataStorageManager(
+                            getApplicationContext(),
                             mCurrentAccount,
                             getContentResolver()
                     );
