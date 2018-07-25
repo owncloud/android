@@ -154,7 +154,7 @@ public abstract class BaseActivity extends AppCompatActivity {
      */
     protected void onAccountSet(boolean stateWasRecovered) {
         if (getAccount() != null) {
-            mStorageManager = new FileDataStorageManager(getAccount(), getContentResolver());
+            mStorageManager = new FileDataStorageManager(this, getAccount(), getContentResolver());
             mCapabilities = mStorageManager.getCapability(mCurrentAccount.name);
         } else {
             Log_OC.e(TAG, "onAccountChanged was called with NULL account associated!");

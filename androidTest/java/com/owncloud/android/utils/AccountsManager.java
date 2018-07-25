@@ -33,10 +33,10 @@ import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.accounts.AccountUtils;
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentialsFactory;
 import com.owncloud.android.lib.common.network.NetworkUtils;
+import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.resources.status.GetRemoteCapabilitiesOperation;
 import com.owncloud.android.lib.resources.status.OCCapability;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
-
 
 public class AccountsManager {
 
@@ -127,8 +127,7 @@ public class AccountsManager {
 
     //Save capabilities (in device DB)
     public static void saveCapabilities (OCCapability capabilities, String server, String user){
-        FileDataStorageManager fm = new FileDataStorageManager(
-                new Account(buildAccountName(user, server), accountType),
+        FileDataStorageManager fm = new FileDataStorageManager(new Account(buildAccountName(user, server), accountType),
                 MainApp.getAppContext().getContentResolver());
         fm.saveCapabilities (capabilities);
     }

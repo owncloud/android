@@ -3,7 +3,7 @@
  *
  *   @author Bartosz Przybylski
  *   Copyright (C) 2015  Bartosz Przybylski
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -48,7 +48,7 @@ public class RootCursor extends MatrixCursor {
 
     public void addRoot(Account account, Context context) {
         final FileDataStorageManager manager =
-                new FileDataStorageManager(account, context.getContentResolver());
+                new FileDataStorageManager(context, account, context.getContentResolver());
         final OCFile mainDir = manager.getFileByPath("/");
         newRow().add(Root.COLUMN_ROOT_ID, account.name)
                 .add(Root.COLUMN_DOCUMENT_ID, mainDir.getFileId())
@@ -56,7 +56,5 @@ public class RootCursor extends MatrixCursor {
                 .add(Root.COLUMN_TITLE, context.getString(R.string.app_name))
                 .add(Root.COLUMN_ICON, R.mipmap.icon)
                 .add(Root.COLUMN_FLAGS, Root.FLAG_SUPPORTS_SEARCH);
-
     }
-
 }
