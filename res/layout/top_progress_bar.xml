@@ -19,7 +19,6 @@
         android:layout_width="match_parent"
         android:layout_height="4dp"
         android:background="@drawable/shadow_gradient"
-        android:visibility="gone"
         android:padding="0dp"
         android:layout_margin="0dp"
         android:layout_gravity="top"/>
