@@ -42,7 +42,6 @@ import com.owncloud.android.R;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.ui.ExtendedListView;
 import com.owncloud.android.ui.activity.OnEnforceableRefreshListener;
-import com.owncloud.android.ui.adapter.FileListListAdapter;
 
 import java.util.ArrayList;
 
