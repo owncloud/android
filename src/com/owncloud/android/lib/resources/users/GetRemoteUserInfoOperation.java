@@ -48,7 +48,7 @@ import static com.owncloud.android.lib.common.operations.RemoteOperationResult.R
  * @author David González Verdugo
  */
 
-public class GetRemoteUserInfoOperation extends RemoteOperation {
+public class GetRemoteUserInfoOperation extends RemoteOperation<GetRemoteUserInfoOperation.UserInfo> {
 
     private static final String TAG = GetRemoteUserInfoOperation.class.getSimpleName();
 
