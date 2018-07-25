@@ -123,10 +123,12 @@ public class ErrorMessageAdapter {
                 || operation instanceof RemoveShareOperation
                 || operation instanceof UpdateShareViaLinkOperation
                 || operation instanceof UpdateSharePermissionsOperation)) {
-            RemoteOperationResult<ShareParserResult> shareResult =
-                    (RemoteOperationResult<ShareParserResult>) result;
 
-            return (shareResult.getData().getShares().size() > 0)
+            RemoteOperationResult<ShareParserResult> shareResult = (RemoteOperationResult<ShareParserResult>) result;
+
+            return (shareResult.getData()!= null
+                    && shareResult.getData().getShares() != null
+                    && shareResult.getData().getShares().size() > 0)
                     ? shareResult.getData().getShares().get(0).toString()
                     : shareResult.getData().getParserMessage();
         }
