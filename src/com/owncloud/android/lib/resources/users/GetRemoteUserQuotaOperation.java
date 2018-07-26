@@ -40,7 +40,6 @@ import java.net.URL;
 import java.util.List;
 
 import at.bitfire.dav4android.Property;
-import at.bitfire.dav4android.PropertyCollection;
 import at.bitfire.dav4android.property.QuotaAvailableBytes;
 import at.bitfire.dav4android.property.QuotaUsedBytes;
 

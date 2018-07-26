@@ -32,9 +32,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 
-import at.bitfire.dav4android.DavResource;
 import at.bitfire.dav4android.Property;
-import at.bitfire.dav4android.PropertyCollection;
 import at.bitfire.dav4android.Response;
 import at.bitfire.dav4android.property.CreationDate;
 import at.bitfire.dav4android.property.GetContentLength;
