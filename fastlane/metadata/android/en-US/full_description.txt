@@ -1,0 +1,6 @@
+ownCloud is a free software package you can install on a server to manage files,
+contacts, calendars, music, pictures and much more. This is the official Android
+app which enables you to browse all of your ownCloud synced files, create and
+edit new files, share these files and folders with co-workers, and keep the
+contents of those folders in sync across all of your devices. Simply copy a file
+into a directory on your server and ownCloud does the rest.
