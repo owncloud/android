@@ -31,10 +31,4 @@
     <style name="Theme.ownCloud.Toolbar.Drawer">
         <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
-
-    <!-- Authenticator Activitu -->
-    <style name="Theme.ownCloud.Authenticator"
-        parent="Theme.ownCloud">
-        <item name="android:windowTranslucentStatus">true</item>
-    </style>
 </resources>
