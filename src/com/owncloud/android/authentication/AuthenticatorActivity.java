@@ -1249,18 +1249,12 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             }
             
         } else {
-
             mServerIsValid = false;
         }
-
-
-
 
         if (mServerIsValid) {
             updateAuthenticationPreFragmentVisibility();
         }
-
-
 
         // refresh UI
         showRefreshButton(!mServerIsValid);

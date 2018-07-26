@@ -17,7 +17,7 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
-<RelativeLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -34,9 +34,7 @@
         android:layout_height="match_parent"
         android:layout_gravity="center"
         android:fillViewport="true"
-        android:orientation="vertical"
-        android:filterTouchesWhenObscured="true"
-        >
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -81,6 +79,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="0dp"
+                android:layout_marginTop="60dp"
                 >
 
                 <EditText
@@ -102,7 +101,7 @@
                 <ImageButton
                     android:id="@+id/embeddedRefreshButton"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_gravity="center_vertical|right"
                     android:layout_marginRight="5dp"
                     android:background="@android:color/transparent"
@@ -110,8 +109,7 @@
                     android:padding="0dp"
                     android:scaleType="fitCenter"
                     android:src="@drawable/ic_action_refresh_white"
-                    android:visibility="gone"
-                    />
+                    android:visibility="gone" />
             </FrameLayout>
 
             <TextView
@@ -137,7 +135,8 @@
                 android:inputType="textNoSuggestions"
                 style="@style/EditText.Authenticator"
                 android:theme="@style/EditText.Authenticator"
-                android:visibility="gone" />
+                android:visibility="gone"
+                android:layout_marginTop="40dp"/>
 
             <EditText
                 android:id="@+id/account_password"
@@ -156,13 +155,13 @@
                 android:id="@+id/auth_status_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
+                android:layout_marginBottom="30dp"
                 android:contentDescription="@string/auth_unauthorized"
                 android:drawablePadding="5dp"
                 android:gravity="center_vertical"
                 android:text="@string/auth_unauthorized"
                 android:textColor="@color/login_text_color"
-                android:visibility="gone" />
+                android:visibility="gone"/>
 
             <android.support.v7.widget.AppCompatButton
                 android:id="@+id/buttonOK"
@@ -172,8 +171,7 @@
                 android:contentDescription="@string/setup_btn_connect"
                 android:enabled="true"
                 android:text="@string/setup_btn_connect"
-                android:theme="@style/Button.Authenticator"
-                />
+                android:theme="@style/Button.Authenticator"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -193,10 +191,7 @@
                     android:textColor="@color/login_text_color"/>
 
             </LinearLayout>
-
         </LinearLayout>
-
     </ScrollView>
-
-</RelativeLayout>
+</FrameLayout>
 
