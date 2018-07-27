@@ -38,7 +38,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:gravity="center"
             android:orientation="vertical"
             android:padding="8dp">
@@ -47,8 +47,7 @@
                 android:id="@+id/thumbnail"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
-                android:layout_marginBottom="20dp"
-                android:layout_marginTop="30dp"
+                android:layout_marginBottom="40dp"
                 android:contentDescription="@string/app_name"
                 android:src="@drawable/logo"/>
 
@@ -78,9 +77,7 @@
                 android:id="@+id/hostUrlFrame"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="0dp"
-                android:layout_marginTop="60dp"
-                >
+                android:layout_marginBottom="0dp">
 
                 <EditText
                     android:id="@+id/hostUrlInput"
@@ -135,8 +132,7 @@
                 android:inputType="textNoSuggestions"
                 style="@style/EditText.Authenticator"
                 android:theme="@style/EditText.Authenticator"
-                android:visibility="gone"
-                android:layout_marginTop="40dp"/>
+                android:visibility="gone"/>
 
             <EditText
                 android:id="@+id/account_password"
@@ -155,7 +151,7 @@
                 android:id="@+id/auth_status_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="30dp"
+                android:layout_marginBottom="10dp"
                 android:contentDescription="@string/auth_unauthorized"
                 android:drawablePadding="5dp"
                 android:gravity="center_vertical"
@@ -175,8 +171,8 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center|bottom">
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal">
 
                 <Button
                     android:id="@+id/welcome_link"
