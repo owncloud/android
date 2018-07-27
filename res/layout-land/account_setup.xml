@@ -64,7 +64,7 @@
 
                 <LinearLayout
                     android:id="@+id/LinearLayout1"
-                    android:layout_width="match_parent"
+                    android:layout_width="400dp"
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:orientation="vertical"
@@ -96,8 +96,7 @@
                         android:id="@+id/hostUrlFrame"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="0dp"
-                        >
+                        android:layout_marginBottom="0dp">
 
                         <EditText
                             android:id="@+id/hostUrlInput"
@@ -194,7 +193,7 @@
 
             <android.support.v7.widget.AppCompatButton
                 android:id="@+id/buttonOK"
-                android:layout_width="match_parent"
+                android:layout_width="400dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:contentDescription="@string/setup_btn_connect"
