@@ -41,22 +41,22 @@
     <dependency>
         <groupId>org.seleniumhq.selenium</groupId>
         <artifactId>selenium-java</artifactId>
-        <version>2.45.0</version>
+        <version>3.0.0</version>
     </dependency>
     <dependency>
         <groupId>io.selendroid</groupId>
-        <version>0.9.0</version>
+        <version>0.15.0</version>
         <artifactId>selendroid-standalone</artifactId>
     </dependency>
     <dependency>
         <groupId>io.selendroid</groupId>
-        <version>0.9.0</version>
+        <version>0.17.0</version>
         <artifactId>selendroid-client</artifactId>
     </dependency>
     <dependency>
         <groupId>io.appium</groupId>
         <artifactId>java-client</artifactId>
-        <version>2.2.0</version>
+        <version>5.0.0</version>
     </dependency>
     <dependency>
         <groupId>commons-lang</groupId>
@@ -66,7 +66,7 @@
     <dependency>
         <groupId>org.apache.httpcomponents</groupId>
         <artifactId>httpclient</artifactId>
-        <version>4.3.1</version>
+        <version>4.5.2</version>
     </dependency>
     <dependency>
     	<groupId>com.google.android</groupId>
