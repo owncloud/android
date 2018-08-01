@@ -36,7 +36,7 @@ import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 public class ShareUtils {
 
 	// OCS Route
-	public static final String SHARING_API_PATH ="/ocs/v1.php/apps/files_sharing/api/v1/shares"; 
+	public static final String SHARING_API_PATH ="ocs/v1.php/apps/files_sharing/api/v1/shares";
 
     // String to build the link with the token of a share:
     public static final String SHARING_LINK_PATH_BEFORE_VERSION_8 = "/public.php?service=files&t=";

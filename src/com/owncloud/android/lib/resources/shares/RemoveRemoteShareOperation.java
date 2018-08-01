@@ -1,7 +1,8 @@
 /* ownCloud Android Library is available under MIT license
  *   @author masensio
  *   @author David A. Velasco
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   @author David González Verdugo
+ *   Copyright (C) 2018 ownCloud GmbH.
  *   
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -26,13 +27,15 @@
 
 package com.owncloud.android.lib.resources.shares;
 
-import org.apache.commons.httpclient.HttpStatus;
-import org.apache.jackrabbit.webdav.client.methods.DeleteMethod;
+import android.net.Uri;
 
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
+
+import org.apache.commons.httpclient.HttpStatus;
+import org.apache.jackrabbit.webdav.client.methods.DeleteMethod;
 
 /**
  * Remove a share
@@ -57,14 +60,18 @@ public class RemoveRemoteShareOperation extends RemoteOperation {
 
     @Override
     protected RemoteOperationResult run(OwnCloudClient client) {
-        RemoteOperationResult result = null;
-        int status = -1;
+        RemoteOperationResult result;
+        int status;
 
         DeleteMethod delete = null;
 
         try {
-            String id = "/" + String.valueOf(mRemoteShareId);
-            delete = new DeleteMethod(client.getBaseUri() + ShareUtils.SHARING_API_PATH + id);
+            Uri requestUri = client.getBaseUri();
+            Uri.Builder uriBuilder = requestUri.buildUpon();
+            uriBuilder.appendEncodedPath(ShareUtils.SHARING_API_PATH);
+            uriBuilder.appendEncodedPath(String.valueOf(mRemoteShareId));
+
+            delete = new DeleteMethod(uriBuilder.build().toString());
 
             delete.addRequestHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE);
 
@@ -79,7 +86,7 @@ public class RemoveRemoteShareOperation extends RemoteOperation {
                 );
                 result = parser.parse(response);
 
-                Log_OC.d(TAG, "Unshare " + id + ": " + result.getLogMessage());
+                Log_OC.d(TAG, "Unshare " + mRemoteShareId + ": " + result.getLogMessage());
 
             } else {
                 result = new RemoteOperationResult(false, delete);

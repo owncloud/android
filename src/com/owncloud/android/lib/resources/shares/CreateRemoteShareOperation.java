@@ -1,7 +1,8 @@
 /* ownCloud Android Library is available under MIT license
  *   @author masensio
  *   @author David A. Velasco
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   @author David González Verdugo
+ *   Copyright (C) 2018 ownCloud GmbH.
  *   
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -26,13 +27,15 @@
 
 package com.owncloud.android.lib.resources.shares;
 
-import org.apache.commons.httpclient.HttpStatus;
-import org.apache.commons.httpclient.methods.PostMethod;
+import android.net.Uri;
 
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
+
+import org.apache.commons.httpclient.HttpStatus;
+import org.apache.commons.httpclient.methods.PostMethod;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -187,14 +190,18 @@ public class CreateRemoteShareOperation extends RemoteOperation {
 
     @Override
     protected RemoteOperationResult run(OwnCloudClient client) {
-        RemoteOperationResult result = null;
-        int status = -1;
+        RemoteOperationResult result;
+        int status;
 
         PostMethod post = null;
 
         try {
+            Uri requestUri = client.getBaseUri();
+            Uri.Builder uriBuilder = requestUri.buildUpon();
+            uriBuilder.appendEncodedPath(ShareUtils.SHARING_API_PATH);
+
             // Post Method
-            post = new PostMethod(client.getBaseUri() + ShareUtils.SHARING_API_PATH);
+            post = new PostMethod(uriBuilder.build().toString());
 
             post.setRequestHeader("Content-Type",
                     "application/x-www-form-urlencoded; charset=utf-8"); // necessary for special characters

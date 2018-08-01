@@ -1,6 +1,7 @@
 /* ownCloud Android Library is available under MIT license
  *   @author David A. Velasco
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   @author David González Verdugo
+ *   Copyright (C) 2018 ownCloud GmbH.
  *   
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -24,6 +25,8 @@
  */
 
 package com.owncloud.android.lib.resources.shares;
+
+import android.net.Uri;
 
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
@@ -59,7 +62,12 @@ public class GetRemoteShareOperation extends RemoteOperation {
 
         // Get the response
         try {
-            get = new GetMethod(client.getBaseUri() + ShareUtils.SHARING_API_PATH + "/" + Long.toString(mRemoteId));
+            Uri requestUri = client.getBaseUri();
+            Uri.Builder uriBuilder = requestUri.buildUpon();
+            uriBuilder.appendEncodedPath(ShareUtils.SHARING_API_PATH);
+            uriBuilder.appendEncodedPath(Long.toString(mRemoteId));
+
+            get = new GetMethod(uriBuilder.build().toString());
             get.addRequestHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE);
 
             status = client.executeMethod(get);

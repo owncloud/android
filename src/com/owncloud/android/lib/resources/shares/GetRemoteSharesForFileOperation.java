@@ -1,7 +1,8 @@
 /* ownCloud Android Library is available under MIT license
  *   @author masensio
  *   @author David A. Velasco
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   @author David González Verdugo
+ *   Copyright (C) 2018 ownCloud GmbH.
  *   
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -26,14 +27,16 @@
 
 package com.owncloud.android.lib.resources.shares;
 
-import org.apache.commons.httpclient.HttpStatus;
-import org.apache.commons.httpclient.NameValuePair;
-import org.apache.commons.httpclient.methods.GetMethod;
+import android.net.Uri;
 
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
+
+import org.apache.commons.httpclient.HttpStatus;
+import org.apache.commons.httpclient.NameValuePair;
+import org.apache.commons.httpclient.methods.GetMethod;
 
 /**
  * Provide a list shares for a specific file.
@@ -77,8 +80,12 @@ public class GetRemoteSharesForFileOperation extends RemoteOperation {
         GetMethod get = null;
 
         try {
+            Uri requestUri = client.getBaseUri();
+            Uri.Builder uriBuilder = requestUri.buildUpon();
+            uriBuilder.appendEncodedPath(ShareUtils.SHARING_API_PATH);
+
             // Get Method
-            get = new GetMethod(client.getBaseUri() + ShareUtils.SHARING_API_PATH);
+            get = new GetMethod(uriBuilder.build().toString());
 
             // Add Parameters to Get Method
             get.setQueryString(new NameValuePair[]{
