@@ -50,7 +50,7 @@ public class GetRemoteCapabilitiesOperation extends RemoteOperation {
 
 
     // OCS Routes
-    private static final String OCS_ROUTE = "ocs/v1.php/cloud/capabilities";
+    private static final String OCS_ROUTE = "ocs/v2.php/cloud/capabilities";
 
     // Arguments - names
     private static final String PARAM_FORMAT = "format";

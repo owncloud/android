@@ -1,6 +1,7 @@
 /* ownCloud Android Library is available under MIT license
  *   @author David A. Velasco
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   @author David González Verdugo
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -70,7 +71,7 @@ public class ShareToRemoteOperationResultParser {
             return new RemoteOperationResult(RemoteOperationResult.ResultCode.WRONG_SERVER_RESPONSE);
         }
 
-        RemoteOperationResult result = null;
+        RemoteOperationResult result;
         ArrayList<Object> resultData = new ArrayList<Object>();
 
         try {

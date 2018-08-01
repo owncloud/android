@@ -74,8 +74,8 @@ public class GetRemoteSharesForFileOperation extends RemoteOperation {
 
     @Override
     protected RemoteOperationResult run(OwnCloudClient client) {
-        RemoteOperationResult result = null;
-        int status = -1;
+        RemoteOperationResult result;
+        int status;
 
         GetMethod get = null;
 
@@ -132,5 +132,4 @@ public class GetRemoteSharesForFileOperation extends RemoteOperation {
     private boolean isSuccess(int status) {
         return (status == HttpStatus.SC_OK);
     }
-
 }

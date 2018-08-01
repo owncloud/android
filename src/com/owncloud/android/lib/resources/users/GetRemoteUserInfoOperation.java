@@ -48,7 +48,7 @@ public class GetRemoteUserInfoOperation extends RemoteOperation {
     private static final String TAG = GetRemoteUserInfoOperation.class.getSimpleName();
 
     // OCS Route
-    private static final String OCS_ROUTE = "/ocs/v1.php/cloud/user?format=json";
+    private static final String OCS_ROUTE = "/ocs/v2.php/cloud/user?format=json";
 
     // JSON Node names
     private static final String NODE_OCS = "ocs";
@@ -125,5 +125,4 @@ public class GetRemoteUserInfoOperation extends RemoteOperation {
         public String mDisplayName = "";
         public String mEmail = "";
     }
-
 }
