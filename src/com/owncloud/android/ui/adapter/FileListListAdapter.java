@@ -6,6 +6,7 @@
  * @author David A. Velasco
  * @author masensio
  * @author Christian Schabesberger
+ * @author David González Verdugo
  * Copyright (C) 2011  Bartek Przybylski
  * Copyright (C) 2018 ownCloud GmbH.
  * <p>
@@ -23,9 +24,6 @@
  */
 package com.owncloud.android.ui.adapter;
 
-
-import java.util.ArrayList;
-import java.util.Vector;
 
 import android.accounts.Account;
 import android.content.Context;
@@ -57,6 +55,10 @@ import com.owncloud.android.utils.DisplayUtils;
 import com.owncloud.android.utils.FileStorageUtils;
 import com.owncloud.android.utils.MimetypeIconUtil;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Vector;
+
 
 /**
  * This Adapter populates a ListView with all files and folders in an ownCloud
@@ -65,7 +67,8 @@ import com.owncloud.android.utils.MimetypeIconUtil;
 public class FileListListAdapter extends BaseAdapter implements ListAdapter {
 
     private Context mContext;
-    private Vector<OCFile> mFiles = null;
+    private Vector<OCFile> mImmutableFilesList = null; // List containing the database files, doesn't change with search
+    private Vector<OCFile> mFiles = null; // List that can be changed when using search
     private boolean mJustFolders;
 
     private FileDataStorageManager mStorageManager;
@@ -136,7 +139,6 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
         LayoutInflater inflator = (LayoutInflater) mContext
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-
         if (mFiles != null && mFiles.size() > position) {
             file = mFiles.get(position);
         }
@@ -200,7 +202,6 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
                         file.getFileLength(), mContext
                     ));
 
-
                 case GRID_ITEM:
                     // filename
                     fileName = view.findViewById(R.id.Filename);
@@ -221,14 +222,10 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
                     } else {
                         sharedIconV.setVisibility(View.GONE);
                     }
-
-
                     break;
             }
 
             // For all Views
-
-
             setIconPinAcordingToFilesLocalState(localStateView, file);
 
             final ImageView checkBoxV = view.findViewById(R.id.custom_checkbox);
@@ -374,9 +371,12 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
             mStorageManager = updatedStorageManager;
             mAccount = AccountUtils.getCurrentOwnCloudAccount(mContext);
         }
+
         if (mStorageManager != null) {
             // TODO Enable when "On Device" is recovered ?
-            mFiles = mStorageManager.getFolderContent(folder/*, onlyOnDevice*/);
+            mImmutableFilesList = mStorageManager.getFolderContent(folder/*, onlyOnDevice*/);
+
+            mFiles = mImmutableFilesList;
 
             if (mJustFolders) {
                 mFiles = getFolders(mFiles);
@@ -420,7 +420,6 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
         notifyDataSetChanged();
     }
 
-
     public ArrayList<OCFile> getCheckedItems(AbsListView parentList) {
         SparseBooleanArray checkedPositions = parentList.getCheckedItemPositions();
         ArrayList<OCFile> files = new ArrayList<>();
@@ -434,5 +433,38 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
             }
         }
         return files;
+    }
+
+    public void filterBySearch(String query) {
+        query = query.toLowerCase();
+
+        // Load all the files again
+        mFiles = (Vector<OCFile>) mImmutableFilesList.clone();
+
+        List<OCFile> filteredList = new ArrayList<>();
+
+        // Gather files matching the query
+        for (OCFile fileToAdd : mFiles) {
+            final String nameOfTheFileToAdd = fileToAdd.getFileName().toLowerCase();
+            if (nameOfTheFileToAdd.contains(query)) {
+                filteredList.add(fileToAdd);
+            }
+        }
+
+        // Remove not matching files from the filelist
+        for (int i = mFiles.size() - 1; i >= 0; i--) {
+            if (!filteredList.contains(mFiles.get(i))) {
+                mFiles.remove(i);
+            }
+        }
+
+        // Add matching files to the filelist
+        for (int i = 0; i < filteredList.size(); i++) {
+            if (!mFiles.contains(filteredList.get(i))) {
+                mFiles.add(i, filteredList.get(i));
+            }
+        }
+
+        notifyDataSetChanged();
     }
 }
