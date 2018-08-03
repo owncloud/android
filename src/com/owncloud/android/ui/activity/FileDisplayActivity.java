@@ -895,6 +895,10 @@ public class FileDisplayActivity extends FileActivity
         Log_OC.v(TAG, "onSaveInstanceState() end");
     }
 
+    public Menu getMainMenu() {
+        return mMainMenu;
+    }
+
     @Override
     protected void onResume() {
         Log_OC.v(TAG, "onResume() start");
