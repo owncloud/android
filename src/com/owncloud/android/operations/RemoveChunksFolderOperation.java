@@ -37,7 +37,6 @@ public class RemoveChunksFolderOperation extends RemoveFileOperation {
 
     @Override
     protected RemoteOperationResult run(OwnCloudClient client) {
-
         RemoveRemoteChunksFolderOperation removeRemoteChunksFolderOperation = new RemoveRemoteChunksFolderOperation(
                 mRemotePath
         );

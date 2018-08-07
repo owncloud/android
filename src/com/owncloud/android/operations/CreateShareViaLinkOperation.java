@@ -4,7 +4,8 @@
  * @author masensio
  * @author David A. Velasco
  * @author David González Verdugo
- * Copyright (C) 2017 ownCloud GmbH.
+ * @author Christian Schabesberger
+ * Copyright (C) 2018 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -21,11 +22,6 @@
 
 package com.owncloud.android.operations;
 
-/**
- * Creates a new public share for a given file
- */
-
-
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
@@ -36,6 +32,9 @@ import com.owncloud.android.lib.resources.shares.ShareParserResult;
 import com.owncloud.android.lib.resources.shares.ShareType;
 import com.owncloud.android.operations.common.SyncOperation;
 
+/**
+ * Creates a new public share for a given file
+ */
 public class CreateShareViaLinkOperation extends SyncOperation<ShareParserResult> {
 
     private String mPath;

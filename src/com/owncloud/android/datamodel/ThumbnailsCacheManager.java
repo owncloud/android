@@ -56,8 +56,6 @@ import java.io.InputStream;
 import java.lang.ref.WeakReference;
 import java.net.URL;
 
-import okhttp3.HttpUrl;
-
 /**
  * Manager for concurrent access to thumbnails cache.
  */
@@ -301,7 +299,7 @@ public class ThumbnailsCacheManager {
                                 get = new GetMethod(new URL(uri));
                                 int status = mClient.executeHttpMethod(get);
                                 if (status == HttpConstants.HTTP_OK) {
-                                    InputStream inputStream = get.getResponseAsStream();
+                                    InputStream inputStream = get.getResponseBodyAsStream();
                                     Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
                                     thumbnail = ThumbnailUtils.extractThumbnail(bitmap, px, px);
 
@@ -315,7 +313,7 @@ public class ThumbnailsCacheManager {
                                         addBitmapToCache(imageKey, thumbnail);
                                     }
                                 } else {
-                                    mClient.exhaustResponse(get.getResponseAsStream());
+                                    mClient.exhaustResponse(get.getResponseBodyAsStream());
                                 }
                             } catch (Exception e) {
                                 e.printStackTrace();
@@ -526,7 +524,7 @@ public class ThumbnailsCacheManager {
                                 get = new GetMethod(new URL(uri));
                                 int status = mClient.executeHttpMethod(get);
                                 if (status == HttpConstants.HTTP_OK) {
-                                    InputStream inputStream = get.getResponseAsStream();
+                                    InputStream inputStream = get.getResponseBodyAsStream();
                                     Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
                                     avatarBitmap = ThumbnailUtils.extractThumbnail(bitmap, px, px);
 
@@ -535,7 +533,7 @@ public class ThumbnailsCacheManager {
                                         addBitmapToCache(imageKey, avatarBitmap);
                                     }
                                 } else {
-                                    mClient.exhaustResponse(get.getResponseAsStream());
+                                    mClient.exhaustResponse(get.getResponseBodyAsStream());
                                 }
                             } catch (Exception e) {
                                 Log_OC.e(TAG, "Error downloading avatar", e);

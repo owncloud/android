@@ -54,7 +54,6 @@ public class CreateFolderOperation extends SyncOperation {
         mCreateFullPath = createFullPath;
     }
 
-
     @Override
     protected RemoteOperationResult run(OwnCloudClient client) {
         CreateRemoteFolderOperation createRemoteFolderOperation = new CreateRemoteFolderOperation(

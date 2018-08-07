@@ -3,7 +3,8 @@
  *
  * @author David A. Velasco
  * @author masensio
- * Copyright (C) 2017 ownCloud GmbH.
+ * @author Christian Schabesberger
+ * Copyright (C) 2018 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -47,7 +48,6 @@ public class GetServerInfoOperation extends RemoteOperation<GetServerInfoOperati
 
     private String mUrl;
     private Context mContext;
-
     private ServerInfo mResultData;
 
     /**
@@ -64,7 +64,6 @@ public class GetServerInfoOperation extends RemoteOperation<GetServerInfoOperati
         mResultData = new ServerInfo();
     }
 
-
     /**
      * Performs the operation
      *
@@ -74,7 +73,6 @@ public class GetServerInfoOperation extends RemoteOperation<GetServerInfoOperati
      */
     @Override
     protected RemoteOperationResult<ServerInfo> run(OwnCloudClient client) {
-
         // first: check the status of the server (including its version)
         GetRemoteStatusOperation getStatusOperation = new GetRemoteStatusOperation(mContext);
         final RemoteOperationResult<OwnCloudVersion> remoteStatusResult = getStatusOperation.execute(client);
@@ -100,14 +98,12 @@ public class GetServerInfoOperation extends RemoteOperation<GetServerInfoOperati
         return result;
     }
 
-
     private RemoteOperationResult<List<AuthenticationMethod>> detectAuthorizationMethod(OwnCloudClient client) {
         Log_OC.d(TAG, "Trying empty authorization to detect authentication method");
         DetectAuthenticationMethodOperation operation =
             new DetectAuthenticationMethodOperation();
         return operation.execute(client);
     }
-
 
     private String trimWebdavSuffix(String url) {
         if (url == null) {
@@ -123,7 +119,6 @@ public class GetServerInfoOperation extends RemoteOperation<GetServerInfoOperati
         return url;
     }
 
-
     private String normalizeProtocolPrefix(String url, boolean isSslConn) {
         if (!url.toLowerCase().startsWith("http://") &&
             !url.toLowerCase().startsWith("https://")) {
@@ -135,7 +130,6 @@ public class GetServerInfoOperation extends RemoteOperation<GetServerInfoOperati
         }
         return url;
     }
-
 
     public static class ServerInfo {
         public OwnCloudVersion mVersion = null;
