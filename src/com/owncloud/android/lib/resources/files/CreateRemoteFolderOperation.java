@@ -90,14 +90,12 @@ public class CreateRemoteFolderOperation extends RemoteOperation {
                     result = createFolder(client);    // second (and last) try
                 }
             }
-
         } else {
             result = new RemoteOperationResult<>(ResultCode.INVALID_CHARACTER_IN_NAME);
         }
 
         return result;
     }
-
 
     private RemoteOperationResult createFolder(OwnCloudClient client) {
         RemoteOperationResult result;
@@ -112,7 +110,7 @@ public class CreateRemoteFolderOperation extends RemoteOperation {
                     ? new RemoteOperationResult<>(ResultCode.OK)
                     : new RemoteOperationResult<>(mkcol);
             Log_OC.d(TAG, "Create directory " + mRemotePath + ": " + result.getLogMessage());
-            client.exhaustResponse(mkcol.getResponseAsStream());
+            client.exhaustResponse(mkcol.getResponseBodyAsStream());
 
         } catch (Exception e) {
             result = new RemoteOperationResult<>(e);

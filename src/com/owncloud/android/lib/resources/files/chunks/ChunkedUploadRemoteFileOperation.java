@@ -43,7 +43,6 @@ import okhttp3.MediaType;
 
 import static com.owncloud.android.lib.common.http.HttpConstants.IF_MATCH_HEADER;
 import static com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode.OK;
-import static com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode.OK;
 
 /**
  * Remote operation performing the chunked upload of a remote file to the ownCloud server.

@@ -116,9 +116,8 @@ public class OwnCloudAccount {
      * @throws IOException
      * @throws OperationCanceledException
      */
-    public void loadCredentials(Context context)
-        throws AccountNotFoundException, AuthenticatorException,
-                IOException, OperationCanceledException {
+    public void loadCredentials(Context context) throws AuthenticatorException,
+            IOException, OperationCanceledException {
 
         if (context == null) {
             throw new IllegalArgumentException("Parameter 'context' cannot be null");

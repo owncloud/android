@@ -25,11 +25,8 @@
 package com.owncloud.android.lib.common.http;
 
 import android.content.Context;
-
-import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
-import com.facebook.stetho.okhttp3.StethoInterceptor;
 import com.owncloud.android.lib.BuildConfig;
 import com.owncloud.android.lib.common.OwnCloudClientManagerFactory;
 import com.owncloud.android.lib.common.http.interceptors.HttpInterceptor;
@@ -77,9 +74,6 @@ public class HttpClient {
                         .hostnameVerifier((asdf, usdf) -> true);
                         // TODO: Not verifying the hostname against certificate. ask owncloud security human if this is ok.
                         //.hostnameVerifier(new BrowserCompatHostnameVerifier());
-                if(BuildConfig.DEBUG) {
-                    clientBuilder.addNetworkInterceptor(new StethoInterceptor());
-                }
                 sOkHttpClient = clientBuilder.build();
 
             } catch (Exception e) {
@@ -93,6 +87,7 @@ public class HttpClient {
         if (sOkHttpInterceptor == null) {
             sOkHttpInterceptor = new HttpInterceptor();
             addHeaderForAllRequests(HttpConstants.USER_AGENT_HEADER, OwnCloudClientManagerFactory.getUserAgent());
+            addHeaderForAllRequests(HttpConstants.PARAM_SINGLE_COOKIE_HEADER, "true");
         }
         return sOkHttpInterceptor;
     }

@@ -1,5 +1,5 @@
 /* ownCloud Android Library is available under MIT license
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   Copyright (C) 2018 ownCloud GmbH.
  *   
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -24,9 +24,6 @@
 
 package com.owncloud.android.lib.common;
 
-import java.io.IOException;
-import java.security.GeneralSecurityException;
-
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.accounts.AccountManagerFuture;
@@ -40,11 +37,10 @@ import android.os.Bundle;
 import com.owncloud.android.lib.common.accounts.AccountTypeUtils;
 import com.owncloud.android.lib.common.accounts.AccountUtils;
 import com.owncloud.android.lib.common.accounts.AccountUtils.AccountNotFoundException;
-import com.owncloud.android.lib.common.http.HttpClient;
-import com.owncloud.android.lib.common.network.NetworkUtils;
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentialsFactory;
-import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
+
+import java.io.IOException;
 
 public class OwnCloudClientFactory {
     
@@ -123,9 +119,6 @@ public class OwnCloudClientFactory {
 
 
         } else {
-            //String password = am.getPassword(account);
-            //String password = am.blockingGetAuthToken(account, MainApp.getAuthTokenTypePass(),
-            // false);
             AccountManagerFuture<Bundle> future =  am.getAuthToken(
                 account,
                 AccountTypeUtils.getAuthTokenTypePass(account.type),

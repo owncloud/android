@@ -110,7 +110,7 @@ public class DownloadRemoteFileOperation extends RemoteOperation {
             status = client.executeHttpMethod(mGet);
             if (isSuccess(status)) {
                 targetFile.createNewFile();
-                bis = new BufferedInputStream(mGet.getResponseAsStream());
+                bis = new BufferedInputStream(mGet.getResponseBodyAsStream());
                 fos = new FileOutputStream(targetFile);
                 long transferred = 0;
 
@@ -160,12 +160,12 @@ public class DownloadRemoteFileOperation extends RemoteOperation {
                     }
 
                 } else {
-                    client.exhaustResponse(mGet.getResponseAsStream());
+                    client.exhaustResponse(mGet.getResponseBodyAsStream());
                     // TODO some kind of error control!
                 }
 
             } else if (status != FORBIDDEN_ERROR && status != SERVICE_UNAVAILABLE_ERROR) {
-                client.exhaustResponse(mGet.getResponseAsStream());
+                client.exhaustResponse(mGet.getResponseBodyAsStream());
 
             } // else, body read by RemoteOperationResult constructor
 

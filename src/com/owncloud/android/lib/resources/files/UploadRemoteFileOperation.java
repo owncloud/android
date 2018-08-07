@@ -136,7 +136,6 @@ public class UploadRemoteFileOperation extends RemoteOperation {
         }
 
         mPutMethod.addRequestHeader(HttpConstants.OC_TOTAL_LENGTH_HEADER, String.valueOf(fileToUpload.length()));
-
         mPutMethod.addRequestHeader(HttpConstants.OC_X_OC_MTIME_HEADER, mFileLastModifTimestamp);
 
         mPutMethod.setRequestBody(mFileRequestBody);

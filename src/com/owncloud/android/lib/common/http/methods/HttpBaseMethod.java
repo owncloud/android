@@ -74,7 +74,6 @@ public abstract class HttpBaseMethod {
         return mCall.isCanceled();
     }
 
-
     //////////////////////////////
     //         For override
     //////////////////////////////
@@ -98,7 +97,7 @@ public abstract class HttpBaseMethod {
         return mResponse.body().string();
     }
 
-    public InputStream getResponseAsStream() {
+    public InputStream getResponseBodyAsStream() {
         return mResponse.body().byteStream();
     }
 

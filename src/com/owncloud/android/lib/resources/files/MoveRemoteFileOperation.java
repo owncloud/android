@@ -126,7 +126,6 @@ public class MoveRemoteFileOperation extends RemoteOperation {
             move.setReadTimeout(MOVE_READ_TIMEOUT, TimeUnit.SECONDS);
             move.setConnectionTimeout(MOVE_CONNECTION_TIMEOUT, TimeUnit.SECONDS);
 
-            //int status = client.executeMethod(move, MOVE_READ_TIMEOUT, MOVE_CONNECTION_TIMEOUT);
             final int status = client.executeHttpMethod(move);
             /// process response
             if(isSuccess(status)) {
@@ -134,14 +133,14 @@ public class MoveRemoteFileOperation extends RemoteOperation {
             } else if (status == HttpConstants.HTTP_PRECONDITION_FAILED && !mOverwrite) {
 
                 result = new RemoteOperationResult<>(ResultCode.INVALID_OVERWRITE);
-                client.exhaustResponse(move.getResponseAsStream());
+                client.exhaustResponse(move.getResponseBodyAsStream());
 
                 /// for other errors that could be explicitly handled, check first:
                 /// http://www.webdav.org/specs/rfc4918.html#rfc.section.9.9.4
 
             } else {
                 result = new RemoteOperationResult<>(move);
-                client.exhaustResponse(move.getResponseAsStream());
+                client.exhaustResponse(move.getResponseBodyAsStream());
             }
 
             Log.i(TAG, "Move " + mSrcRemotePath + " to " + mTargetRemotePath + ": " +

@@ -1,5 +1,5 @@
 /* ownCloud Android Library is available under MIT license
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   Copyright (C) 2018 ownCloud GmbH.
  *   
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -45,6 +45,7 @@ import java.util.concurrent.TimeUnit;
  * Allows renaming the moving file/folder at the same time.
  *
  * @author David A. Velasco
+ * @author Christian Schabesberger
  */
 public class CopyRemoteFileOperation extends RemoteOperation {
 
@@ -116,7 +117,7 @@ public class CopyRemoteFileOperation extends RemoteOperation {
             } else if (status == HttpConstants.HTTP_PRECONDITION_FAILED && !mOverwrite) {
 
                 result = new RemoteOperationResult<>(ResultCode.INVALID_OVERWRITE);
-                client.exhaustResponse(copyMethod.getResponseAsStream());
+                client.exhaustResponse(copyMethod.getResponseBodyAsStream());
 
 
                 /// for other errors that could be explicitly handled, check first:
@@ -124,7 +125,7 @@ public class CopyRemoteFileOperation extends RemoteOperation {
 
             } else {
                 result = new RemoteOperationResult<>(copyMethod);
-                client.exhaustResponse(copyMethod.getResponseAsStream());
+                client.exhaustResponse(copyMethod.getResponseBodyAsStream());
             }
 
             Log.i(TAG, "Copy " + mSrcRemotePath + " to " + mTargetRemotePath + ": " +

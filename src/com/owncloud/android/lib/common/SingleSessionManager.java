@@ -1,5 +1,5 @@
 /* ownCloud Android Library is available under MIT license
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   Copyright (C) 2018 ownCloud GmbH.
  *   
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -50,6 +50,7 @@ import com.owncloud.android.lib.common.utils.Log_OC;
  *
  * @author David A. Velasco
  * @author masensio
+ * @author Christian Schabesberger
  */
 
 public class SingleSessionManager implements OwnCloudClientManager {

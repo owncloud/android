@@ -1,5 +1,5 @@
 /* ownCloud Android Library is available under MIT license
- *   Copyright (C) 2017 ownCloud GmbH.
+ *   Copyright (C) 2018 ownCloud GmbH.
  *   Copyright (C) 2012  Bartek Przybylski
  *   
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -25,10 +25,6 @@
 
 package com.owncloud.android.lib.common.accounts;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.accounts.AccountsException;
@@ -42,6 +38,10 @@ import com.owncloud.android.lib.common.authentication.OwnCloudCredentials;
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentialsFactory;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import okhttp3.Cookie;
 
@@ -59,10 +59,22 @@ public class AccountUtils {
      */
     public static String getWebDavUrlForAccount(Context context, Account account)
         throws AccountNotFoundException {
+        String webDavUrlForAccount = "";
 
-        return getBaseUrlForAccount(context, account) + OwnCloudClient.WEBDAV_PATH_4_0;
+        try {
+            OwnCloudCredentials ownCloudCredentials = getCredentialsForAccount(context, account);
+            webDavUrlForAccount = getBaseUrlForAccount(context, account) + OwnCloudClient.NEW_WEBDAV_FILES_PATH_4_0
+                    + ownCloudCredentials.getUsername();
+        } catch (OperationCanceledException e) {
+            e.printStackTrace();
+        } catch (AuthenticatorException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return webDavUrlForAccount;
     }
-
 
     /**
      * Extracts url server from the account
@@ -83,7 +95,6 @@ public class AccountUtils {
 
         return baseurl;
     }
-
 
     /**
      * Get the username corresponding to an OC account.
@@ -130,7 +141,7 @@ public class AccountUtils {
     public static OwnCloudCredentials getCredentialsForAccount(Context context, Account account)
         throws OperationCanceledException, AuthenticatorException, IOException {
 
-        OwnCloudCredentials credentials = null;
+        OwnCloudCredentials credentials;
         AccountManager am = AccountManager.get(context);
 
         String supportsOAuth2 = am.getUserData(account, AccountUtils.Constants.KEY_SUPPORTS_OAUTH2);
@@ -174,9 +185,7 @@ public class AccountUtils {
         }
 
         return credentials;
-
     }
-
 
     public static String buildAccountNameOld(Uri serverBaseUrl, String username) {
         if (serverBaseUrl.getScheme() == null) {
@@ -216,7 +225,6 @@ public class AccountUtils {
                 // Log_OC.d(TAG, "Saving Cookies: "+ cookiesString );
             }
         }
-
     }
 
     /**
@@ -236,7 +244,7 @@ public class AccountUtils {
             // Account Manager
             AccountManager am = AccountManager.get(context.getApplicationContext());
 
-            Uri serverUri = (client.getBaseUri() != null) ? client.getBaseUri() : client.getOldFilesWebdavUri();
+            Uri serverUri = (client.getBaseUri() != null) ? client.getBaseUri() : client.getNewFilesWebDavUri();
 
             String cookiesString = am.getUserData(account, Constants.KEY_COOKIES);
             if (cookiesString != null) {
@@ -274,7 +282,6 @@ public class AccountUtils {
             return mFailedAccount;
         }
     }
-
 
     public static class Constants {
         /**
@@ -316,5 +323,4 @@ public class AccountUtils {
         public static final String KEY_OAUTH2_REFRESH_TOKEN = "oc_oauth2_refresh_token";
 
     }
-
 }

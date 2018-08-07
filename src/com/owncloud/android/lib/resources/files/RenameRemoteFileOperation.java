@@ -57,7 +57,6 @@ public class RenameRemoteFileOperation extends RemoteOperation {
     private String mNewName;
     private String mNewRemotePath;
 
-
     /**
      * Constructor
      *
@@ -121,7 +120,7 @@ public class RenameRemoteFileOperation extends RemoteOperation {
             Log_OC.i(TAG, "Rename " + mOldRemotePath + " to " + mNewRemotePath + ": " +
                     result.getLogMessage()
             );
-            client.exhaustResponse(move.getResponseAsStream());
+            client.exhaustResponse(move.getResponseBodyAsStream());
             return result;
         } catch (Exception e) {
             final RemoteOperationResult result = new RemoteOperationResult<>(e);
@@ -143,5 +142,4 @@ public class RenameRemoteFileOperation extends RemoteOperation {
         RemoteOperationResult exists = existenceCheckRemoteOperation.run(client);
         return exists.isSuccess();
     }
-
 }

@@ -42,6 +42,7 @@ public class HttpConstants {
     public static final String CONTENT_TYPE_HEADER = "Content-Type";
     public static final String OC_TOTAL_LENGTH_HEADER = "OC-Total-Length";
     public static final String OC_X_OC_MTIME_HEADER = "X-OC-Mtime";
+    public static final String PARAM_SINGLE_COOKIE_HEADER = "http.protocol.single-cookie-header";
 
     /***********************************************************************************************************
      ************************************************ STATUS CODES *********************************************

@@ -35,8 +35,6 @@ import com.owncloud.android.lib.common.utils.Log_OC;
 import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
-import at.bitfire.dav4android.DavResource;
-
 import static com.owncloud.android.lib.common.http.methods.webdav.DavConstants.DEPTH_0;
 import static com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode.OK;
 
@@ -96,7 +94,7 @@ public class ReadRemoteFileOperation extends RemoteOperation<RemoteFile> {
 
             } else {
                 result = new RemoteOperationResult<>(propfind);
-                client.exhaustResponse(propfind.getResponseAsStream());
+                client.exhaustResponse(propfind.getResponseBodyAsStream());
             }
 
         } catch (Exception e) {

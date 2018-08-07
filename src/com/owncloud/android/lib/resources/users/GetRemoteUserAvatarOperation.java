@@ -33,7 +33,6 @@ import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
 
-
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -41,7 +40,6 @@ import java.io.InputStream;
 import java.net.URL;
 
 import static com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode.OK;
-
 
 /**
  * Gets avatar about the user logged in, if available
@@ -113,7 +111,7 @@ public class GetRemoteUserAvatarOperation extends RemoteOperation<GetRemoteUserA
                 mimeType = contentType;
 
                 /// download will be performed to a buffer
-                inputStream = getMethod.getResponseAsStream();
+                inputStream = getMethod.getResponseBodyAsStream();
                 bis = new BufferedInputStream(inputStream);
                 bos = new ByteArrayOutputStream(totalToTransfer);
 
@@ -138,7 +136,7 @@ public class GetRemoteUserAvatarOperation extends RemoteOperation<GetRemoteUserA
 
             } else {
                 result = new RemoteOperationResult<>(getMethod);
-                client.exhaustResponse(getMethod.getResponseAsStream());
+                client.exhaustResponse(getMethod.getResponseBodyAsStream());
             }
 
         } catch (Exception e) {

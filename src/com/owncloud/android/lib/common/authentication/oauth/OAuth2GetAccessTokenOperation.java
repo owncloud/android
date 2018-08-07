@@ -1,7 +1,8 @@
 /* ownCloud Android Library is available under MIT license
  *
  *   @author David A. Velasco
- *   Copyright (C) 2017 ownCloud GmbH.
+ *   @author Christian Schabesberger
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -105,8 +106,6 @@ public class OAuth2GetAccessTokenOperation extends RemoteOperation<Map<String, S
 
             postMethod.setRequestBody(requestBody);
 
-
-            // Do the B***S*** Switch and onExecute
             OwnCloudCredentials oauthCredentials =
                     new OwnCloudBasicCredentials(mClientId, mClientSecret);
             OwnCloudCredentials oldCredentials = switchClientCredentials(oauthCredentials);
@@ -129,7 +128,7 @@ public class OAuth2GetAccessTokenOperation extends RemoteOperation<Map<String, S
 
             } else {
                 result = new RemoteOperationResult<>(ResultCode.OK);
-                client.exhaustResponse(postMethod.getResponseAsStream());
+                client.exhaustResponse(postMethod.getResponseBodyAsStream());
             }
 
         } catch (Exception e) {
@@ -144,5 +143,4 @@ public class OAuth2GetAccessTokenOperation extends RemoteOperation<Map<String, S
         getClient().setCredentials(newCredentials);
         return previousCredentials;
     }
-
 }

@@ -81,10 +81,10 @@ public abstract class RemoteOperation<T extends Object> implements Runnable {
 
         if (account == null)
             throw new IllegalArgumentException
-                    ("Trying to onExecute a remote operation with a NULL Account");
+                    ("Trying to execute a remote operation with a NULL Account");
         if (context == null)
             throw new IllegalArgumentException
-                    ("Trying to onExecute a remote operation with a NULL Context");
+                    ("Trying to execute a remote operation with a NULL Context");
         // mAccount and mContext in the runnerThread to create below
         mAccount = account;
         mContext = context.getApplicationContext();
@@ -114,7 +114,7 @@ public abstract class RemoteOperation<T extends Object> implements Runnable {
                           OnRemoteOperationListener listener, Handler listenerHandler) {
         if (client == null) {
             throw new IllegalArgumentException
-                    ("Trying to onExecute a remote operation with a NULL OwnCloudClient");
+                    ("Trying to execute a remote operation with a NULL OwnCloudClient");
         }
         mClient = client;
         if (client.getAccount() != null) {
@@ -124,7 +124,7 @@ public abstract class RemoteOperation<T extends Object> implements Runnable {
 
         if (listener == null) {
             throw new IllegalArgumentException
-                    ("Trying to onExecute a remote operation asynchronously " +
+                    ("Trying to execute a remote operation asynchronously " +
                             "without a listener to notiy the result");
         }
         mListener = listener;
@@ -182,10 +182,10 @@ public abstract class RemoteOperation<T extends Object> implements Runnable {
      */
     public RemoteOperationResult<T> execute(Account account, Context context) {
         if (account == null)
-            throw new IllegalArgumentException("Trying to onExecute a remote operation with a NULL " +
+            throw new IllegalArgumentException("Trying to execute a remote operation with a NULL " +
                     "Account");
         if (context == null)
-            throw new IllegalArgumentException("Trying to onExecute a remote operation with a NULL " +
+            throw new IllegalArgumentException("Trying to execute a remote operation with a NULL " +
                     "Context");
         mAccount = account;
         mContext = context.getApplicationContext();
@@ -205,7 +205,7 @@ public abstract class RemoteOperation<T extends Object> implements Runnable {
      */
     public RemoteOperationResult<T> execute(OwnCloudClient client) {
         if (client == null)
-            throw new IllegalArgumentException("Trying to onExecute a remote operation with a NULL " +
+            throw new IllegalArgumentException("Trying to execute a remote operation with a NULL " +
                     "OwnCloudClient");
         mClient = client;
         if (client.getAccount() != null) {
@@ -227,7 +227,7 @@ public abstract class RemoteOperation<T extends Object> implements Runnable {
      */
     public RemoteOperationResult<T> execute(OkHttpClient client, Context context) {
         if (client == null)
-            throw new IllegalArgumentException("Trying to onExecute a remote operation with a NULL " +
+            throw new IllegalArgumentException("Trying to execute a remote operation with a NULL " +
                     "OwnCloudClient");
         mHttpClient = client;
         mContext = context;
@@ -283,5 +283,4 @@ public abstract class RemoteOperation<T extends Object> implements Runnable {
             mListener.onRemoteOperationFinish(RemoteOperation.this, resultToSend);
         }
     }
-
 }

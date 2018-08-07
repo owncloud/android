@@ -1,5 +1,5 @@
 /* ownCloud Android Library is available under MIT license
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -43,7 +43,7 @@ import static com.owncloud.android.lib.common.operations.RemoteOperationResult.R
  * Operation to check the existence or absence of a path in a remote server.
  *
  * @author David A. Velasco
- * @author David GonzálezVerdugo
+ * @author David González Verdugo
  */
 public class ExistenceCheckRemoteOperation extends RemoteOperation {
 

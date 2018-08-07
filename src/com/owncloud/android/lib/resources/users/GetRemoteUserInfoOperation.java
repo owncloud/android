@@ -35,10 +35,7 @@ import org.json.JSONObject;
 
 import java.net.URL;
 
-import okhttp3.Request;
-
 import static com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode.OK;
-
 
 /**
  * Gets information (id, display name, and e-mail address) about the user logged in.
@@ -71,11 +68,6 @@ public class GetRemoteUserInfoOperation extends RemoteOperation<GetRemoteUserInf
 
         //Get the user
         try {
-            final Request request = new Request.Builder()
-                    .url(client.getBaseUri() + OCS_ROUTE)
-                    .addHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE)
-                    .build();
-
             GetMethod getMethod = new GetMethod(new URL(client.getBaseUri() + OCS_ROUTE));
 
             int status = client.executeHttpMethod(getMethod);

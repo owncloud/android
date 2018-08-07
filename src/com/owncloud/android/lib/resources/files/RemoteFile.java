@@ -1,5 +1,5 @@
 /* ownCloud Android Library is available under MIT license
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   Copyright (C) 2018 ownCloud GmbH.
  *   
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -53,6 +53,7 @@ import static com.owncloud.android.lib.common.OwnCloudClient.NEW_WEBDAV_FILES_PA
  * Contains the data of a Remote File from a WebDavEntry
  *
  * @author masensio
+ * @author Christian Schabesberger
  */
 
 public class RemoteFile implements Parcelable, Serializable {

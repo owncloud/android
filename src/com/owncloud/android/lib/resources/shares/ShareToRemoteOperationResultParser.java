@@ -1,6 +1,7 @@
 /* ownCloud Android Library is available under MIT license
  *   @author David A. Velasco
  *   @author David González Verdugo
+ *   @author Christian Schabesberger
  *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -138,5 +139,4 @@ public class ShareToRemoteOperationResultParser {
 
         return result;
     }
-
 }

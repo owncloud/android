@@ -2,8 +2,9 @@
  *   ownCloud Android client application
  *
  *   @author David González Verdugo
+ *   @author Christian Schabesberger
  *
- *   Copyright (C) 2017 ownCloud GmbH.
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -77,7 +78,6 @@ public class OAuth2RefreshAccessTokenOperation extends RemoteOperation<Map<Strin
     protected RemoteOperationResult<Map<String, String>> run(OwnCloudClient client) {
 
         try {
-
             final RequestBody requestBody = new MultipartBody.Builder()
                     .setType(MultipartBody.FORM)
                     .addFormDataPart(OAuth2Constants.KEY_GRANT_TYPE,
@@ -96,11 +96,8 @@ public class OAuth2RefreshAccessTokenOperation extends RemoteOperation<Map<Strin
                             .toString()));
             postMethod.setRequestBody(requestBody);
 
+            final OwnCloudCredentials oauthCredentials = new OwnCloudBasicCredentials(mClientId, mClientSecret);
 
-            final OwnCloudCredentials oauthCredentials =
-                    new OwnCloudBasicCredentials(mClientId, mClientSecret);
-
-            // Do the B***S*** switch
             final OwnCloudCredentials oldCredentials = switchClientCredentials(oauthCredentials);
             client.executeHttpMethod(postMethod);
             switchClientCredentials(oldCredentials);
@@ -120,7 +117,6 @@ public class OAuth2RefreshAccessTokenOperation extends RemoteOperation<Map<Strin
                         accessTokenResult.get(OAuth2Constants.KEY_ACCESS_TOKEN) == null)
                         ? new RemoteOperationResult<>(ResultCode.OAUTH2_ERROR)
                         : result;
-
             } else {
                 return new RemoteOperationResult<>(postMethod);
             }
@@ -135,5 +131,4 @@ public class OAuth2RefreshAccessTokenOperation extends RemoteOperation<Map<Strin
         getClient().setCredentials(newCredentials);
         return previousCredentials;
     }
-
 }

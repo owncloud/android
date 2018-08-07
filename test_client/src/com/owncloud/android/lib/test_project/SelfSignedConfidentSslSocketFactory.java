@@ -1,5 +1,5 @@
 /* ownCloud Android Library is available under MIT license
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   Copyright (C) 2018 ownCloud GmbH.
  *   
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -41,7 +41,6 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
 
-
 /**
  * SelfSignedConfidentSslSocketFactory allows to create SSL {@link Socket}s 
  * that accepts self-signed server certificates.
@@ -49,6 +48,7 @@ import javax.net.ssl.X509TrustManager;
  * WARNING: this SHOULD NOT be used in productive environments.
  * 
  * @author David A. Velasco
+ * @author Christian Schabesberger
  */
 
 public class SelfSignedConfidentSslSocketFactory implements SecureProtocolSocketFactory {
@@ -182,6 +182,4 @@ public class SelfSignedConfidentSslSocketFactory implements SecureProtocolSocket
 			return null;
 		}
 	}
-	
-
 }

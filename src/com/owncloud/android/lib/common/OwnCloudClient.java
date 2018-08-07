@@ -25,36 +25,36 @@
 
 package com.owncloud.android.lib.common;
 
+import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.accounts.AccountsException;
+import android.accounts.AuthenticatorException;
+import android.accounts.OperationCanceledException;
 import android.content.Context;
 import android.net.Uri;
 
+import com.owncloud.android.lib.common.accounts.AccountUtils;
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentials;
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentialsFactory;
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentialsFactory.OwnCloudAnonymousCredentials;
 import com.owncloud.android.lib.common.http.HttpClient;
 import com.owncloud.android.lib.common.http.HttpConstants;
 import com.owncloud.android.lib.common.http.methods.HttpBaseMethod;
-import com.owncloud.android.lib.common.http.methods.webdav.CopyMethod;
 import com.owncloud.android.lib.common.network.RedirectionPath;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
-
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
 import at.bitfire.dav4android.exception.HttpException;
-import at.bitfire.dav4android.exception.RedirectException;
 import okhttp3.Cookie;
 import okhttp3.Headers;
 import okhttp3.HttpUrl;
 
 public class OwnCloudClient extends HttpClient {
 
-    public static final String WEBDAV_PATH_4_0 = "/remote.php/webdav";
     public static final String NEW_WEBDAV_FILES_PATH_4_0 = "/remote.php/dav/files/";
     public static final String NEW_WEBDAV_UPLOADS_PATH_4_0 = "/remote.php/dav/uploads/";
     public static final String STATUS_PATH = "/status.php";
@@ -63,8 +63,6 @@ public class OwnCloudClient extends HttpClient {
     private static final String TAG = OwnCloudClient.class.getSimpleName();
     private static final int MAX_REDIRECTIONS_COUNT = 3;
     private static final int MAX_REPEAT_COUNT_WITH_FRESH_CREDENTIALS = 1;
-    private static final String PARAM_SINGLE_COOKIE_HEADER = "http.protocol.single-cookie-header";
-    private static final boolean PARAM_SINGLE_COOKIE_HEADER_VALUE = true;
     private static final String PARAM_PROTOCOL_VERSION = "http.protocol.version";
 
     private static byte[] sExhaustBuffer = new byte[1024];
@@ -100,15 +98,6 @@ public class OwnCloudClient extends HttpClient {
 
         mInstanceNumber = sIntanceCounter++;
         Log_OC.d(TAG + " #" + mInstanceNumber, "Creating OwnCloudClient");
-
-        //TODO
-//        getParams().setCookiePolicy(CookiePolicy.IGNORE_COOKIES);
-//        getParams().setParameter(
-//            PARAM_SINGLE_COOKIE_HEADER,             // to avoid problems with some web servers
-//            PARAM_SINGLE_COOKIE_HEADER_VALUE
-//        );
-
-//        applyProxySettings();
 
         clearCredentials();
     }
@@ -198,7 +187,7 @@ public class OwnCloudClient extends HttpClient {
 
                 // Release the connection to avoid reach the max number of connections per host
                 // due to it will be set a different url
-                exhaustResponse(method.getResponseAsStream());
+                exhaustResponse(method.getResponseBodyAsStream());
 
                 method.setUrl(HttpUrl.parse(location));
                 final String destination = method.getRequestHeader("Destination") != null
@@ -206,7 +195,7 @@ public class OwnCloudClient extends HttpClient {
                         : method.getRequestHeader("destination");
 
                 if (destination != null) {
-                    final int suffixIndex = location.lastIndexOf(WEBDAV_PATH_4_0);
+                    final int suffixIndex = location.lastIndexOf(getNewFilesWebDavUri().toString());
                     final String redirectionBase = location.substring(0, suffixIndex);
                     final String destinationPath = destination.substring(mBaseUri.toString().length());
 
@@ -250,10 +239,6 @@ public class OwnCloudClient extends HttpClient {
         }
     }
 
-    public Uri getOldFilesWebdavUri() {
-        return Uri.parse(mBaseUri + WEBDAV_PATH_4_0);
-    }
-
     public Uri getNewFilesWebDavUri() {
         return mCredentials instanceof OwnCloudAnonymousCredentials
                 ? Uri.parse(mBaseUri + NEW_WEBDAV_FILES_PATH_4_0)
@@ -286,6 +271,15 @@ public class OwnCloudClient extends HttpClient {
 
     public final OwnCloudCredentials getCredentials() {
         return mCredentials;
+    }
+
+    private void logCookie(Cookie cookie) {
+        Log_OC.d(TAG, "Cookie name: " + cookie.name());
+        Log_OC.d(TAG, "       value: " + cookie.value());
+        Log_OC.d(TAG, "       domain: " + cookie.domain());
+        Log_OC.d(TAG, "       path: " + cookie.path());
+        Log_OC.d(TAG, "       expiryDate: " + cookie.expiresAt());
+        Log_OC.d(TAG, "       secure: " + cookie.secure());
     }
 
     private void logCookiesAtRequest(Headers headers, String when) {
@@ -330,16 +324,6 @@ public class OwnCloudClient extends HttpClient {
         getOkHttpClient().cookieJar().saveFromResponse(HttpUrl.parse(
                 getAccount().getBaseUri().toString()), cookies);
     }
-
-    private void logCookie(Cookie cookie) {
-        Log_OC.d(TAG, "Cookie name: " + cookie.name());
-        Log_OC.d(TAG, "       value: " + cookie.value());
-        Log_OC.d(TAG, "       domain: " + cookie.domain());
-        Log_OC.d(TAG, "       path: " + cookie.path());
-        Log_OC.d(TAG, "       expiryDate: " + cookie.expiresAt());
-        Log_OC.d(TAG, "       secure: " + cookie.secure());
-    }
-
 
     public void setOwnCloudVersion(OwnCloudVersion version) {
         mVersion = version;

@@ -37,7 +37,6 @@ import com.owncloud.android.lib.common.utils.Log_OC;
 import java.net.URL;
 import java.util.ArrayList;
 
-import at.bitfire.dav4android.DavResource;
 import at.bitfire.dav4android.Response;
 
 import static com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode.OK;
