@@ -46,7 +46,6 @@ public class ChunkedUploadFileOperation extends UploadFileOperation {
     @Override
     protected RemoteOperationResult uploadRemoteFile(OwnCloudClient client, File temporalFile, File originalFile,
                                                          String expectedPath, File expectedFile, String timeStamp) {
-
         try {
             RemoteOperationResult result;
 
