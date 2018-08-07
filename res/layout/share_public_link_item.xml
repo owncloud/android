@@ -64,7 +64,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:padding="@dimen/standard_half_padding"
-            android:src="@drawable/ic_navigate_next" />
+            android:src="@drawable/ic_lead_pencil_grey" />
 
     </LinearLayout>
 
