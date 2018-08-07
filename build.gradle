@@ -74,9 +74,6 @@ dependencies {
         exclude group: "com.android.support"
     }
 
-    // Used for network and database debuging
-    debugImplementation 'com.facebook.stetho:stetho:1.5.0'
-
     //Zooming Android ImageView.
     implementation 'com.github.chrisbanes:PhotoView:2.0.0'
 }

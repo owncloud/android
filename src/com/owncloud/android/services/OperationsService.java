@@ -353,7 +353,7 @@ public class OperationsService extends Service {
          * 
          * Calls startService to make the operation is processed by the ServiceHandler.
          * 
-         * @param operationIntent       Intent describing a new operation to queue and onExecute.
+         * @param operationIntent       Intent describing a new operation to queue and execute.
          * @return                      Identifier of the operation created, or null if failed.
          */
         public long queueNewOperation(Intent operationIntent) {
@@ -534,7 +534,7 @@ public class OperationsService extends Service {
      * 
      * TODO - move to ServiceHandler (probably)
      * 
-     * @param operationIntent       Intent describing a new operation to queue and onExecute.
+     * @param operationIntent       Intent describing a new operation to queue and execute.
      * @return                      Pair with the new operation object and the information about its
      *                              target server.
      */

@@ -49,8 +49,6 @@ public class DetectAuthenticationMethodOperation extends RemoteOperation<List<Au
 
     private static final String TAG = DetectAuthenticationMethodOperation.class.getSimpleName();
 
-
-
     /**
      *  Performs the operation.
      *
@@ -70,13 +68,13 @@ public class DetectAuthenticationMethodOperation extends RemoteOperation<List<Au
         client.setFollowRedirects(false);
 
         // try to access the root folder, following redirections but not SAML SSO redirections
-        final RemoteOperationResult resultFromExistanceCheck = operation.execute(client);
+        final RemoteOperationResult resultFromExistenceCheck = operation.execute(client);
         RemoteOperationResult<List<AuthenticationMethod>> result =
-                new RemoteOperationResult<>(resultFromExistanceCheck.getCode());
+                new RemoteOperationResult<>(resultFromExistenceCheck.getCode());
 
         // analyze response  
-        if (resultFromExistanceCheck.getHttpCode() == HttpConstants.HTTP_UNAUTHORIZED) {
-            ArrayList<String> authHeaders = resultFromExistanceCheck.getAuthenticateHeaders();
+        if (resultFromExistenceCheck.getHttpCode() == HttpConstants.HTTP_UNAUTHORIZED) {
+            ArrayList<String> authHeaders = resultFromExistenceCheck.getAuthenticateHeaders();
             for (String authHeader: authHeaders) {
                 if (authHeader.startsWith("basic")) {
                     allAvailableAuthMethods.add(AuthenticationMethod.BASIC_HTTP_AUTH);
@@ -84,9 +82,9 @@ public class DetectAuthenticationMethodOperation extends RemoteOperation<List<Au
                     allAvailableAuthMethods.add(AuthenticationMethod.BEARER_TOKEN);
                 }
             }
-        } else if (resultFromExistanceCheck.isSuccess()) {
+        } else if (resultFromExistenceCheck.isSuccess()) {
             allAvailableAuthMethods.add(AuthenticationMethod.NONE);
-        } else if (resultFromExistanceCheck.isIdPRedirection()) {
+        } else if (resultFromExistenceCheck.isIdPRedirection()) {
             allAvailableAuthMethods.add(AuthenticationMethod.SAML_WEB_SSO);
         }
 
