@@ -69,7 +69,7 @@
   <string name="auth_password">パスワード</string>
   <string name="auth_register">%1$sは初めてですか？</string>
   <string name="sync_string_files">ファイル</string>
-  <string name="setup_btn_connect">接続</string>
+  <string name="setup_btn_login">接続</string>
   <string name="uploader_btn_upload_text">アップロード</string>
   <string name="uploader_top_message">アップロードフォルダーを選択</string>
   <string name="uploader_wrn_no_account_title">アカウントが見つかりません</string>

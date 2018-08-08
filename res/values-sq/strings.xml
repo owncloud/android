@@ -79,7 +79,7 @@
   <string name="auth_password">Fjalëkalim</string>
   <string name="auth_register">Rishtar te %1$s?</string>
   <string name="sync_string_files">Kartela</string>
-  <string name="setup_btn_connect">Lidhuni</string>
+  <string name="setup_btn_login">Lidhuni</string>
   <string name="uploader_btn_upload_text">Ngarkoni</string>
   <string name="uploader_top_message">Zgjidhni dosje ngarkimi</string>
   <string name="uploader_wrn_no_account_title">S\’u gjet llogari</string>

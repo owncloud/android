@@ -71,7 +71,7 @@
   <string name="auth_password">Passord</string>
   <string name="auth_register">Ny med %1$s?</string>
   <string name="sync_string_files">Filer</string>
-  <string name="setup_btn_connect">Koble til</string>
+  <string name="setup_btn_login">Koble til</string>
   <string name="uploader_btn_upload_text">Last opp</string>
   <string name="uploader_top_message">Velg mappe for opplasting</string>
   <string name="uploader_wrn_no_account_title">Ingen konto funnet</string>

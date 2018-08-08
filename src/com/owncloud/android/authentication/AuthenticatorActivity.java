@@ -42,6 +42,7 @@ import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.net.http.SslError;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -301,33 +302,23 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         /// load user interface
         setContentView(R.layout.account_setup);
 
+        // Set login color or background
+        if (!getResources().getBoolean(R.bool.use_login_background_image)) {
+            findViewById(R.id.login_layout).setBackgroundColor(
+                    getResources().getColor(R.color.login_background_color)
+            );
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            findViewById(R.id.login_background_image).setVisibility(View.VISIBLE);
+        }
+
         /// initialize general UI elements
         initOverallUi();
 
         mOkButton = findViewById(R.id.buttonOK);
-        mOkButton.setOnClickListener(new View.OnClickListener() {
+        mOkButton.setOnClickListener(view -> onOkClick());
 
-            @Override
-            public void onClick(View v) {
-                onOkClick();
-            }
-        });
-
-        findViewById(R.id.centeredRefreshButton).setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                checkOcServer();
-            }
-        });
-
-        findViewById(R.id.embeddedRefreshButton).setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                checkOcServer();
-            }
-        });
+        findViewById(R.id.centeredRefreshButton).setOnClickListener(view -> checkOcServer());
+        findViewById(R.id.embeddedRefreshButton).setOnClickListener(view -> checkOcServer());
 
 
         /// initialize block to be moved to single Fragment to check server and get info about it 
@@ -540,7 +531,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
                 if (mOkButton.isEnabled() &&
                         !mServerInfo.mBaseUrl.equals(
                                 normalizeUrl(s.toString(), mServerInfo.mIsSslConn))) {
-                    mOkButton.setEnabled(false);
+                    mOkButton.setVisibility(View.GONE);
                 }
             }
 
@@ -622,8 +613,12 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         }
         updateAuthenticationPreFragmentVisibility();
         showAuthStatus();
-        mOkButton.setEnabled(mServerIsValid);
 
+        if (mServerIsValid) {
+            mOkButton.setVisibility(View.VISIBLE);
+        } else {
+            mOkButton.setVisibility(View.GONE);
+        }
         
         /// step 3 - bind listeners
         // bindings for password input field
@@ -886,7 +881,11 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             // check server again only if the user changed something in the field
             checkOcServer();
         } else {
-            mOkButton.setEnabled(mServerIsValid);
+            if (mServerIsValid) {
+                mOkButton.setVisibility(View.VISIBLE);
+            } else {
+                mOkButton.setVisibility(View.GONE);
+            }
             showRefreshButton(!mServerIsValid);
         }
     }
@@ -896,7 +895,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         String uri = mHostUrlInput.getText().toString().trim();
         mServerIsValid = false;
         mServerIsChecked = false;
-        mOkButton.setEnabled(false);
+        mOkButton.setVisibility(View.GONE);
         mServerInfo = new GetServerInfoOperation.ServerInfo();
         showRefreshButton(false);
 
@@ -1009,7 +1008,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             mServerStatusIcon = R.drawable.common_error_white;
             mServerStatusText = getResources().getString(R.string.auth_wtf_reenter_URL);
             showServerStatus();
-            mOkButton.setEnabled(false);
+            mOkButton.setVisibility(View.GONE);
             return;
         }
 
@@ -1259,7 +1258,11 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         // refresh UI
         showRefreshButton(!mServerIsValid);
         showServerStatus();
-        mOkButton.setEnabled(mServerIsValid);
+        if (mServerIsValid) {
+            mOkButton.setVisibility(View.VISIBLE);
+        } else {
+            mOkButton.setVisibility(View.GONE);
+        }
         
         /// very special case (TODO: move to a common place for all the remote operations)
         if (result.getCode() == ResultCode.SSL_RECOVERABLE_PEER_UNVERIFIED) {
@@ -1529,7 +1532,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
             // update input controls state
             showRefreshButton(true);
-            mOkButton.setEnabled(false);
+            mOkButton.setVisibility(View.GONE);
 
             // very special case (TODO: move to a common place for all the remote operations)
             if (result.getCode() == ResultCode.SSL_RECOVERABLE_PEER_UNVERIFIED) {

@@ -79,7 +79,7 @@
   <string name="auth_password">Passwort</string>
   <string name="auth_register">Ist %1$s neu für Sie?</string>
   <string name="sync_string_files">Dateien</string>
-  <string name="setup_btn_connect">Verbinden</string>
+  <string name="setup_btn_login">Verbinden</string>
   <string name="uploader_btn_upload_text">Hochladen</string>
   <string name="uploader_top_message">Hochladeordner auswählen</string>
   <string name="uploader_wrn_no_account_title">Kein Konto gefunden</string>

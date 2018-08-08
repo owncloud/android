@@ -37,7 +37,7 @@
   <string name="auth_password">Գաղտնաբառ</string>
   <string name="auth_register">Նո՞ր ես %1$s</string>
   <string name="sync_string_files">Ֆայլեր</string>
-  <string name="setup_btn_connect">Միանալ</string>
+  <string name="setup_btn_login">Միանալ</string>
   <string name="uploader_btn_upload_text">Բեռնել</string>
   <string name="uploader_wrn_no_account_title">Հաշիվ չգտնվեց</string>
   <string name="file_list_seconds_ago">վրկ. առաջ</string>

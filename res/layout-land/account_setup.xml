@@ -24,10 +24,12 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <ImageView
+        android:id="@+id/login_background_image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
-        android:src="@drawable/login_background"/>
+        android:src="@drawable/login_background_image"
+        android:visibility="invisible"/>
 
     <RelativeLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -38,6 +40,7 @@
         >
 
         <LinearLayout
+            android:id="@+id/login_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_above="@+id/bottom_block"
@@ -196,10 +199,10 @@
                 android:layout_width="400dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:contentDescription="@string/setup_btn_connect"
-                android:enabled="false"
-                android:text="@string/setup_btn_connect"
-                android:theme="@style/Button.Authenticator"/>
+                android:contentDescription="@string/setup_btn_login"
+                android:text="@string/setup_btn_login"
+                android:theme="@style/Button.Authenticator"
+                android:visibility="gone"/>
 
             <LinearLayout
                 android:layout_width="match_parent"

@@ -53,7 +53,7 @@
   <string name="auth_password">Kodeord</string>
   <string name="auth_register">Ny med %1$s</string>
   <string name="sync_string_files">Filer</string>
-  <string name="setup_btn_connect">Tilslut</string>
+  <string name="setup_btn_login">Tilslut</string>
   <string name="uploader_btn_upload_text">Upload</string>
   <string name="uploader_top_message">Vælg upload mappe</string>
   <string name="uploader_wrn_no_account_title">Ingen konto fundet</string>

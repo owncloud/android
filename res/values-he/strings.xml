@@ -68,7 +68,7 @@
   <string name="auth_password">ססמה</string>
   <string name="auth_register">חדש ב- %1$s?</string>
   <string name="sync_string_files">קבצים</string>
-  <string name="setup_btn_connect">התחברות</string>
+  <string name="setup_btn_login">התחברות</string>
   <string name="uploader_btn_upload_text">העלאה</string>
   <string name="uploader_top_message">יש לבחור בתיקיית העלאה</string>
   <string name="uploader_wrn_no_account_title">לא נמצא חשבון</string>

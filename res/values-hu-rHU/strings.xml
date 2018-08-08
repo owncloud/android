@@ -79,7 +79,7 @@
   <string name="auth_password">Jelszó</string>
   <string name="auth_register">Új Önnek a(z) %1$s?</string>
   <string name="sync_string_files">Fájlok</string>
-  <string name="setup_btn_connect">Kapcsolódás</string>
+  <string name="setup_btn_login">Kapcsolódás</string>
   <string name="uploader_btn_upload_text">Feltöltés</string>
   <string name="uploader_top_message">Válasszon feltöltési mappát</string>
   <string name="uploader_wrn_no_account_title">Nincs ilyen felhasználói fiók</string>

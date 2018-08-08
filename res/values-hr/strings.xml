@@ -51,7 +51,7 @@
   <string name="auth_password">Lozinka</string>
   <string name="auth_register">Novi %1$s?</string>
   <string name="sync_string_files">Datoteke</string>
-  <string name="setup_btn_connect">Poveži</string>
+  <string name="setup_btn_login">Poveži</string>
   <string name="uploader_btn_upload_text">Učitaj</string>
   <string name="uploader_top_message">Izaberi upload mapu</string>
   <string name="uploader_wrn_no_account_title">Račun nije nađen</string>

@@ -52,7 +52,7 @@
   <string name="auth_password">Sandi</string>
   <string name="auth_register">Baru di %1$s?</string>
   <string name="sync_string_files">Berkas</string>
-  <string name="setup_btn_connect">Sambungkan</string>
+  <string name="setup_btn_login">Sambungkan</string>
   <string name="uploader_btn_upload_text">Unggah</string>
   <string name="uploader_top_message">Pilih folder unggah</string>
   <string name="uploader_wrn_no_account_title">Tidak ada akun yang ditemukan</string>

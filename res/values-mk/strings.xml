@@ -57,7 +57,7 @@
   <string name="auth_password">Лозинка</string>
   <string name="auth_register">Нови во %1$s?</string>
   <string name="sync_string_files">Датотеки</string>
-  <string name="setup_btn_connect">Поврзи се</string>
+  <string name="setup_btn_login">Поврзи се</string>
   <string name="uploader_btn_upload_text">Подигни</string>
   <string name="uploader_top_message">Избери папка за качување:</string>
   <string name="uploader_wrn_no_account_title">Не е пронајдена сметка</string>
