@@ -50,7 +50,7 @@
   <string name="auth_password">Пароль</string>
   <string name="auth_register">Вперше в %1$s?</string>
   <string name="sync_string_files">Файли</string>
-  <string name="setup_btn_connect">З\'єднати</string>
+  <string name="setup_btn_login">З\'єднати</string>
   <string name="uploader_btn_upload_text">Відвантажити</string>
   <string name="uploader_top_message">Вибрати теку для відвантаження</string>
   <string name="uploader_wrn_no_account_title">Не знайдено облікового запису</string>

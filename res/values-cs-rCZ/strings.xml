@@ -57,7 +57,7 @@ Automaticky nahrát video snímané kamerou
   <string name="auth_password">Heslo</string>
   <string name="auth_register">Nováček s %1$s?</string>
   <string name="sync_string_files">Soubory</string>
-  <string name="setup_btn_connect">Připojit</string>
+  <string name="setup_btn_login">Připojit</string>
   <string name="uploader_btn_upload_text">Nahrát</string>
   <string name="uploader_top_message">Vybrat adresář k nahrávání</string>
   <string name="uploader_wrn_no_account_title">Nenalezen žádný účet</string>

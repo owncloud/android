@@ -54,7 +54,7 @@
   <string name="auth_password">Mật khẩu</string>
   <string name="auth_register">Lần đầu mới đến %1$s?</string>
   <string name="sync_string_files">Tập tin</string>
-  <string name="setup_btn_connect">Kết nối</string>
+  <string name="setup_btn_login">Kết nối</string>
   <string name="uploader_btn_upload_text">Tải lên</string>
   <string name="uploader_top_message">Chọn thư mục tải lên</string>
   <string name="uploader_wrn_no_account_title">Không tìm thấy tài khoản</string>

@@ -19,14 +19,15 @@
 -->
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent">
 
     <ImageView
+        android:id="@+id/login_background_image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
-        android:src="@drawable/login_background"/>
+        android:src="@drawable/login_background_image"
+        android:visibility="invisible"/>
 
     <ScrollView
         android:id="@+id/scroll"
@@ -37,12 +38,13 @@
         android:orientation="vertical">
 
         <LinearLayout
-            android:layout_width="400dp"
+            android:id="@+id/login_layout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
             android:layout_gravity="center"
+            android:gravity="center"
             android:orientation="vertical"
-            android:padding="8dp">
+            android:padding="10dp">
 
             <ImageView
                 android:id="@+id/thumbnail"
@@ -78,10 +80,12 @@
                 android:id="@+id/hostUrlFrame"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="0dp">
+                android:layout_marginBottom="0dp"
+                >
 
                 <EditText
                     android:id="@+id/hostUrlInput"
+                    style="@style/EditText.Authenticator"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
@@ -90,7 +94,6 @@
                     android:hint="@string/auth_host_url"
                     android:inputType="textUri"
                     android:paddingRight="55dp"
-                    style="@style/EditText.Authenticator"
                     android:theme="@style/EditText.Authenticator">
 
                     <requestFocus/>
@@ -107,7 +110,7 @@
                     android:padding="0dp"
                     android:scaleType="fitCenter"
                     android:src="@drawable/ic_action_refresh_white"
-                    android:visibility="gone" />
+                    android:visibility="gone"/>
             </FrameLayout>
 
             <TextView
@@ -125,18 +128,19 @@
 
             <EditText
                 android:id="@+id/account_username"
+                style="@style/EditText.Authenticator"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:contentDescription="@string/auth_username"
                 android:ems="10"
                 android:hint="@string/auth_username"
                 android:inputType="textNoSuggestions"
-                style="@style/EditText.Authenticator"
                 android:theme="@style/EditText.Authenticator"
                 android:visibility="gone"/>
 
             <EditText
                 android:id="@+id/account_password"
+                style="@style/EditText.Authenticator"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:contentDescription="@string/auth_password"
@@ -144,9 +148,8 @@
                 android:ems="10"
                 android:hint="@string/auth_password"
                 android:inputType="textPassword"
-                style="@style/EditText.Authenticator"
                 android:theme="@style/EditText.Authenticator"
-                android:visibility="gone" />
+                android:visibility="gone"/>
 
             <TextView
                 android:id="@+id/auth_status_text"
@@ -165,10 +168,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:contentDescription="@string/setup_btn_connect"
-                android:enabled="true"
-                android:text="@string/setup_btn_connect"
-                android:theme="@style/Button.Authenticator"/>
+                android:contentDescription="@string/setup_btn_login"
+                android:text="@string/setup_btn_login"
+                android:theme="@style/Button.Authenticator"
+                android:visibility="gone"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -181,14 +184,13 @@
                     android:layout_height="wrap_content"
                     android:background="@android:color/transparent"
                     android:contentDescription="@string/auth_register"
+                    android:gravity="center"
                     android:onClick="onRegisterClick"
                     android:paddingBottom="5dp"
                     android:paddingTop="5dp"
                     android:text="@string/auth_register"
                     android:textColor="@color/login_text_color"/>
-
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
 </FrameLayout>
-

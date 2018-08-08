@@ -66,7 +66,7 @@
   <string name="auth_password">Pasahitza</string>
   <string name="auth_register">Berria %1$s-n?</string>
   <string name="sync_string_files">Fitxategiak</string>
-  <string name="setup_btn_connect">Konektatu</string>
+  <string name="setup_btn_login">Konektatu</string>
   <string name="uploader_btn_upload_text">Igo</string>
   <string name="uploader_top_message">Hautatu igoera karpeta</string>
   <string name="uploader_wrn_no_account_title">Ez da konturik aurkitu</string>

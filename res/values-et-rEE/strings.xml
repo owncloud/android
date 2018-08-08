@@ -51,7 +51,7 @@
   <string name="auth_password">Parool</string>
   <string name="auth_register">Uus %1$s kasutaja?</string>
   <string name="sync_string_files">Failid</string>
-  <string name="setup_btn_connect">Ühenda</string>
+  <string name="setup_btn_login">Ühenda</string>
   <string name="uploader_btn_upload_text">Lae üles</string>
   <string name="uploader_top_message">Vali üleslaadimiste kaust</string>
   <string name="uploader_wrn_no_account_title">Kontot ei leitud</string>

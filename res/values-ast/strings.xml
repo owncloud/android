@@ -50,7 +50,7 @@
   <string name="auth_password">Contraseña</string>
   <string name="auth_register">Nuevu en %1$s?</string>
   <string name="sync_string_files">Ficheros</string>
-  <string name="setup_btn_connect">Coneutar</string>
+  <string name="setup_btn_login">Coneutar</string>
   <string name="uploader_btn_upload_text">Xubir</string>
   <string name="uploader_top_message">Esbilla la carpeta de xuba</string>
   <string name="uploader_wrn_no_account_title">Nun s\'alcontró la cuenta</string>

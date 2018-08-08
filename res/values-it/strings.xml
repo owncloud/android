@@ -74,7 +74,7 @@
   <string name="auth_password">Password</string>
   <string name="auth_register">Prima volta su %1$s?</string>
   <string name="sync_string_files">File</string>
-  <string name="setup_btn_connect">Connetti</string>
+  <string name="setup_btn_login">Connetti</string>
   <string name="uploader_btn_upload_text">Carica</string>
   <string name="uploader_top_message">Scegli la cartella di caricamento</string>
   <string name="uploader_wrn_no_account_title">Nessun account trovato</string>

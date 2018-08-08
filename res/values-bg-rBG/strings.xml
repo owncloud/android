@@ -50,7 +50,7 @@
   <string name="auth_password">Парола</string>
   <string name="auth_register">Нов в %1$s?</string>
   <string name="sync_string_files">Файлове</string>
-  <string name="setup_btn_connect">Свързване</string>
+  <string name="setup_btn_login">Свързване</string>
   <string name="uploader_btn_upload_text">Качване</string>
   <string name="uploader_top_message">Избери папка за качване</string>
   <string name="uploader_wrn_no_account_title">Няма открит профил</string>

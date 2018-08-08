@@ -43,7 +43,7 @@
   <string name="auth_password">ਪਾਸਵਰ</string>
   <string name="auth_register">%1$s ਲਈ ਨਵੇਂ ਹੋ?</string>
   <string name="sync_string_files">ਫਾਇਲਾਂ</string>
-  <string name="setup_btn_connect">ਕੁਨੈਕਟ</string>
+  <string name="setup_btn_login">ਕੁਨੈਕਟ</string>
   <string name="uploader_btn_upload_text">ਅੱਪਲੋਡ</string>
   <string name="uploader_top_message">ਅੱਪਲੋਡ ਫੋਲਡਰ ਚੁਣੋ:</string>
   <string name="uploader_wrn_no_account_title">ਕੋਈ ਅਕਾਊਂਟ ਨਹੀਂ ਲੱਭਾ</string>
