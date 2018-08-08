@@ -148,15 +148,10 @@ public class CreateShareViaLinkOperation extends SyncOperation<ShareParserResult
         RemoteOperationResult<ShareParserResult> result = createOp.execute(client);
 
         if (result.isSuccess()) {
-            if (result.getData().getShares().size() > 0) {
+            if (result.getData() != null && result.getData().getShares() != null &&
+                    result.getData().getShares().size() > 0) {
                 ShareParserResult shareParserResult = result.getData();
-                if(shareParserResult.getShares().size() != 0) {
-                    updateData(shareParserResult.getShares().get(0));
-                } else {
-                    result = new RemoteOperationResult<>(
-                            RemoteOperationResult.ResultCode.SHARE_NOT_FOUND);
-                    result.setData(shareParserResult);
-                }
+                updateData(shareParserResult.getShares().get(0));
             } else {
                 result = new RemoteOperationResult<>(RemoteOperationResult.ResultCode.SHARE_NOT_FOUND);
             }
