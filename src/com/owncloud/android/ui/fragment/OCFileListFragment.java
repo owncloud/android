@@ -250,6 +250,7 @@ public class OCFileListFragment extends ExtendedListFragment implements SearchVi
         super.onCreateOptionsMenu(menu, inflater);
         SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
         searchView.setMaxWidth(Integer.MAX_VALUE);
+        searchView.setQueryHint(getResources().getString(R.string.actionbar_search));
         searchView.setOnQueryTextListener(this);
     }
 
