@@ -1112,7 +1112,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
     private void onNoBrowserInstalled() {
         new AlertDialog.Builder(this)
                 .setMessage(R.string.no_borwser_installed_alert)
-                .setPositiveButton(R.string.common_ok, new DialogInterface.OnClickListener() {
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();

@@ -96,8 +96,8 @@ public class RenameFileDialogFragment
         // Build the dialog  
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setView(v)
-               .setPositiveButton(R.string.common_ok, this)
-               .setNegativeButton(R.string.common_cancel, this)
+               .setPositiveButton(android.R.string.ok, this)
+               .setNegativeButton(android.R.string.cancel, this)
                .setTitle(R.string.rename_dialog_title);
         Dialog d = builder.create();
         d.getWindow().setSoftInputMode(LayoutParams.SOFT_INPUT_STATE_VISIBLE);

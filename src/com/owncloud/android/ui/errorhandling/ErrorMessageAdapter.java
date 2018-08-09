@@ -270,7 +270,7 @@ public class ErrorMessageAdapter {
         if (operation instanceof CopyFileOperation) return f.format(R.string.copy_file_error);
 
         // if everything else failes
-        if(result.isSuccess()) return f.format(R.string.common_ok);
+        if(result.isSuccess()) return f.format(android.R.string.ok);
         else return f.format(R.string.common_error_unknown);
     }
 }

@@ -121,7 +121,6 @@
     <string name="common_remove_upload">Remove upload</string>
     <string name="common_retry_upload">Retry upload</string>
     <string name="common_cancel_sync">Cancel sync</string>
-    <string name="common_cancel">Cancel</string>
     <string name="common_back">Back</string>
     <string name="common_save_exit">Save &amp; exit</string>
     <string name="common_error">Error</string>
