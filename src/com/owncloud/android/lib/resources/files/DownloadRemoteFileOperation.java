@@ -154,7 +154,8 @@ public class DownloadRemoteFileOperation extends RemoteOperation {
                         Log_OC.e(TAG, "Could not read modification time from response downloading " + mRemotePath);
                     }
 
-                    // TODO mEtag = WebdavUtils.getEtagFromResponse(mGet);
+                    mEtag = WebdavUtils.getEtagFromResponse(mGet);
+
                     if (mEtag.length() == 0) {
                         Log_OC.e(TAG, "Could not read eTag from response downloading " + mRemotePath);
                     }
