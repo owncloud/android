@@ -226,7 +226,7 @@ public class FileDisplayActivity extends FileActivity
                 // Show explanation to the user and then request permission
                 Snackbar snackbar = Snackbar.make(findViewById(R.id.ListLayout), R.string.permission_storage_access,
                         Snackbar.LENGTH_INDEFINITE)
-                        .setAction(R.string.common_ok, new View.OnClickListener() {
+                        .setAction(android.R.string.ok, new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 PermissionUtil.requestWriteExternalStoreagePermission(FileDisplayActivity.this);
