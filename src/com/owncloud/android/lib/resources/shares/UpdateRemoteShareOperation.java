@@ -208,7 +208,7 @@ public class UpdateRemoteShareOperation extends RemoteOperation {
         try {
             Uri requestUri = client.getBaseUri();
             Uri.Builder uriBuilder = requestUri.buildUpon();
-            uriBuilder.appendEncodedPath(ShareUtils.SHARING_API_PATH.substring(1));
+            uriBuilder.appendEncodedPath(ShareUtils.SHARING_API_PATH);
             uriBuilder.appendEncodedPath(Long.toString(mRemoteId));
             uriString = uriBuilder.build().toString();
 

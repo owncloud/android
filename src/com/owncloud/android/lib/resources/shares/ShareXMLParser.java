@@ -1,5 +1,5 @@
 /* ownCloud Android Library is available under MIT license
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   Copyright (C) 2018 ownCloud GmbH.
  *   
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -41,7 +41,7 @@ import com.owncloud.android.lib.resources.files.FileUtils;
 /**
  * Parser for Share API Response
  * @author masensio
- *
+ * @author David González Verdugo
  */
 
 public class ShareXMLParser {
@@ -82,7 +82,7 @@ public class ShareXMLParser {
 
 	private static final String TYPE_FOLDER = "folder";
 	
-	private static final int SUCCESS = 100;
+	private static final int SUCCESS = 200;
 	private static final int ERROR_WRONG_PARAMETER = 400;
 	private static final int ERROR_FORBIDDEN = 403;
 	private static final int ERROR_NOT_FOUND = 404;
@@ -172,7 +172,7 @@ public class ShareXMLParser {
 	 */
 	private ArrayList<OCShare> readOCS (XmlPullParser parser) throws XmlPullParserException,
 			IOException {
-		ArrayList<OCShare> shares = new ArrayList<OCShare>();
+		ArrayList<OCShare> shares = new ArrayList<>();
 		parser.require(XmlPullParser.START_TAG,  ns , NODE_OCS);
 		while (parser.next() != XmlPullParser.END_TAG) {
 			if (parser.getEventType() != XmlPullParser.START_TAG) {
@@ -190,8 +190,6 @@ public class ShareXMLParser {
 
 		}
 		return shares;
-
-
 	}
 
 	/**
@@ -439,5 +437,4 @@ public class ShareXMLParser {
 			}
 		}
 	}
-
 }
