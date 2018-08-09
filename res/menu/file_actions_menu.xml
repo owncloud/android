@@ -45,7 +45,7 @@
     <item
         android:id="@+id/action_sync_file"
         android:title="@string/filedetails_sync_file"
-        android:icon="@drawable/ic_action_refresh_white"
+        android:icon="@drawable/ic_action_refresh"
         app:showAsAction="ifRoom"
         android:orderInCategory="1" />
     <item
