@@ -25,15 +25,11 @@
 
 package com.owncloud.android.lib.common;
 
-import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.accounts.AccountsException;
-import android.accounts.AuthenticatorException;
-import android.accounts.OperationCanceledException;
 import android.content.Context;
 import android.net.Uri;
 
-import com.owncloud.android.lib.common.accounts.AccountUtils;
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentials;
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentialsFactory;
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentialsFactory.OwnCloudAnonymousCredentials;
@@ -42,6 +38,7 @@ import com.owncloud.android.lib.common.http.HttpConstants;
 import com.owncloud.android.lib.common.http.methods.HttpBaseMethod;
 import com.owncloud.android.lib.common.network.RedirectionPath;
 import com.owncloud.android.lib.common.utils.Log_OC;
+import com.owncloud.android.lib.common.utils.RandomUtils;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 
 import java.io.IOException;
@@ -52,6 +49,8 @@ import at.bitfire.dav4android.exception.HttpException;
 import okhttp3.Cookie;
 import okhttp3.Headers;
 import okhttp3.HttpUrl;
+
+import static com.owncloud.android.lib.common.http.HttpConstants.OC_X_REQUEST_ID;
 
 public class OwnCloudClient extends HttpClient {
 
@@ -125,6 +124,14 @@ public class OwnCloudClient extends HttpClient {
         int status;
 
         do {
+            // Clean previous request id. This is a bit hacky but is the only way to add request headers in WebDAV
+            // methods by using Dav4Android
+            deleteHeaderForAllRequests(OC_X_REQUEST_ID);
+
+            // Header to allow tracing requests in apache and ownCloud logs
+            addHeaderForAllRequests(OC_X_REQUEST_ID,
+                    RandomUtils.generateRandomString(RandomUtils.generateRandomInteger(20, 200)));
+
             status = method.execute();
             checkFirstRedirection(method);
             if(mFollowRedirects && !isIdPRedirection()) {
