@@ -231,7 +231,7 @@ GIF Support
 
 If you upload animated GIFs, when viewing them they will be animated and not render as a still image, as in the example GIF below.
 
-.. figure:: images/gif-support-owncloud-android-app.gif
+.. figure:: images/gif-support-owncloud-android-app.png
    :alt: View animated GIFs in the ownCloud Android app.
 
    View animated GIFs in the ownCloud Android app.
