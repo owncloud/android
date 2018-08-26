@@ -791,6 +791,10 @@ public class OCFileListFragment extends ExtendedListFragment {
         }
     }
 
+    public int getNoOfItems(){
+        return getListView().getCount();
+    }
+
     /**
      * Start the appropriate action(s) on the currently selected files given menu selected by the user.
      *
