@@ -26,6 +26,7 @@ package com.owncloud.android.lib.common.http.interceptors;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import okhttp3.Interceptor;
 import okhttp3.Request;
@@ -92,10 +93,12 @@ public class HttpInterceptor implements Interceptor {
     }
 
     public void deleteRequestHeaderInterceptor(String headerName) {
-        for (RequestInterceptor requestInterceptor : mRequestInterceptors) {
-            if (requestInterceptor instanceof RequestHeaderInterceptor &&
-                    ((RequestHeaderInterceptor) requestInterceptor).getHeaderName().equals(headerName)) {
-                mRequestInterceptors.remove(requestInterceptor);
+        Iterator<RequestInterceptor> requestInterceptorIterator = mRequestInterceptors.iterator();
+        while (requestInterceptorIterator.hasNext()) {
+            RequestInterceptor currentRequestInterceptor = requestInterceptorIterator.next();
+            if (currentRequestInterceptor instanceof RequestHeaderInterceptor &&
+                    ((RequestHeaderInterceptor) currentRequestInterceptor).getHeaderName().equals(headerName)) {
+                requestInterceptorIterator.remove();
             }
         }
     }
