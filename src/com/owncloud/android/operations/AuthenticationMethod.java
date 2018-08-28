@@ -21,7 +21,6 @@
 package com.owncloud.android.operations;
 
 public enum AuthenticationMethod {
-    UNKNOWN,
     NONE,
     BASIC_HTTP_AUTH,
     SAML_WEB_SSO,
