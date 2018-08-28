@@ -148,7 +148,7 @@ public class OwnCloudClient extends HttpClient {
     }
 
     private void checkFirstRedirection(HttpBaseMethod method) {
-        final String location = method.getResponseHeader("location");
+        final String location = method.getResponseHeader(HttpConstants.LOCATION_HEADER_LOWER);
         if(location != null && !location.isEmpty()) {
             mRedirectedLocation = location;
         }
@@ -182,9 +182,9 @@ public class OwnCloudClient extends HttpClient {
                         status == HttpConstants.HTTP_TEMPORARY_REDIRECT)
                 ) {
 
-            final String location = method.getResponseHeader("Location") != null
-                    ? method.getResponseHeader("Location")
-                    : method.getResponseHeader("location");
+            final String location = method.getResponseHeader(HttpConstants.LOCATION_HEADER) != null
+                    ? method.getResponseHeader(HttpConstants.LOCATION_HEADER)
+                    : method.getResponseHeader(HttpConstants.LOCATION_HEADER_LOWER);
             if (location != null) {
 
                 Log_OC.d(TAG + " #" + mInstanceNumber,
@@ -458,7 +458,7 @@ public class OwnCloudClient extends HttpClient {
                         mRedirectedLocation.toLowerCase().contains("wayf")));
     }
 
-    public boolean isFollowRedirects() {
+    public boolean followRedirects() {
         return mFollowRedirects;
     }
 

@@ -32,7 +32,6 @@ import java.util.List;
 import at.bitfire.dav4android.Property;
 import at.bitfire.dav4android.Response;
 import at.bitfire.dav4android.exception.DavException;
-import at.bitfire.dav4android.exception.UnauthorizedException;
 import kotlin.Unit;
 
 /**
@@ -58,29 +57,24 @@ public class PropfindMethod extends DavMethod {
     }
 
     @Override
-    public int onExecute() throws IOException, DavException {
-        try {
-            mDavResource.propfind(mDepth, mPropertiesToRequest,
-                    (Response response, Response.HrefRelation hrefRelation) -> {
-                        switch (hrefRelation) {
-                            case MEMBER:
-                                mMembers.add(response);
-                                break;
-                            case SELF:
-                                mRoot = response;
-                                break;
-                            case OTHER:
-                            default:
-                        }
-                        return Unit.INSTANCE;
-                    }, response -> {
-                        mResponse = response;
-                        return Unit.INSTANCE;
-                    });
-        } catch (UnauthorizedException davException) {
-            // Do nothing, we will use the 401 code to handle the situation
-            return davException.getCode();
-        }
+    public int onExecute() throws IOException, DavException{
+        mDavResource.propfind(mDepth, mPropertiesToRequest,
+                (Response response, Response.HrefRelation hrefRelation) -> {
+                    switch (hrefRelation) {
+                        case MEMBER:
+                            mMembers.add(response);
+                            break;
+                        case SELF:
+                            mRoot = response;
+                            break;
+                        case OTHER:
+                        default:
+                    }
+                    return Unit.INSTANCE;
+                }, response -> {
+                    mResponse = response;
+                    return Unit.INSTANCE;
+                });
 
         return getStatusCode();
     }

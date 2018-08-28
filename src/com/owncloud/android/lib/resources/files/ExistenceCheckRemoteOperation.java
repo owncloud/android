@@ -82,8 +82,8 @@ public class ExistenceCheckRemoteOperation extends RemoteOperation {
             PropfindMethod propfindMethod = new PropfindMethod(
                     new URL(client.getNewFilesWebDavUri() + WebdavUtils.encodePath(mPath)),
                     0,
-                    DavUtils.getAllPropset());
-
+                    DavUtils.getAllPropset()
+            );
             propfindMethod.setReadTimeout(TIMEOUT, TimeUnit.SECONDS);
             propfindMethod.setConnectionTimeout(TIMEOUT, TimeUnit.SECONDS);
 

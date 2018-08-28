@@ -24,6 +24,7 @@
 
 package com.owncloud.android.lib.common.http.methods.webdav;
 
+import com.owncloud.android.lib.common.http.HttpConstants;
 import com.owncloud.android.lib.common.http.methods.HttpBaseMethod;
 
 import java.net.URL;
@@ -31,8 +32,12 @@ import java.util.concurrent.TimeUnit;
 
 import at.bitfire.dav4android.Constants;
 import at.bitfire.dav4android.DavOCResource;
+import at.bitfire.dav4android.exception.HttpException;
 import at.bitfire.dav4android.exception.RedirectException;
 import okhttp3.HttpUrl;
+import okhttp3.Protocol;
+import okhttp3.Response;
+import okhttp3.ResponseBody;
 
 /**
  * Wrapper to perform WebDAV (dav4android) calls
@@ -59,13 +64,36 @@ public abstract class DavMethod extends HttpBaseMethod {
     public int execute() throws Exception {
         try {
             return onExecute();
-        } catch (RedirectException e) {
-            return getStatusCode();
+        } catch (HttpException httpException) {
+            // Modify responses with information gathered from exceptions
+            if (httpException instanceof RedirectException) {
+                mResponse = new Response.Builder()
+                        .header(
+                                HttpConstants.LOCATION_HEADER, ((RedirectException) httpException).getRedirectLocation()
+                        )
+                        .code(httpException.getCode())
+                        .request(mRequest)
+                        .message(httpException.getMessage())
+                        .protocol(Protocol.HTTP_1_1)
+                        .build();
+
+            } else if (mResponse != null) {
+                ResponseBody responseBody = ResponseBody.create(
+                        mResponse.body().contentType(),
+                        httpException.getResponseBody()
+                );
+
+                mResponse = mResponse.newBuilder()
+                        .body(responseBody)
+                        .build();
+            }
+
+            return httpException.getCode();
         }
     }
 
     //////////////////////////////
-    //         setter
+    //         Setter
     //////////////////////////////
 
     // Connection parameters
@@ -106,7 +134,7 @@ public abstract class DavMethod extends HttpBaseMethod {
     }
 
     //////////////////////////////
-    //         getter
+    //         Getter
     //////////////////////////////
 
     @Override

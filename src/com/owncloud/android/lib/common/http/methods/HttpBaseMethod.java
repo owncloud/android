@@ -41,8 +41,8 @@ import okhttp3.Response;
 
 /**
  * Wrapper to perform http calls transparently by using:
- *  - OkHttp for non webdav methods
- *  - Dav4Android for webdav methods
+ * - OkHttp for non webdav methods
+ * - Dav4Android for webdav methods
  *
  * @author David González Verdugo
  */
@@ -54,7 +54,7 @@ public abstract class HttpBaseMethod {
     protected Call mCall;
     protected URL mUrl;
 
-    protected HttpBaseMethod (URL url) {
+    protected HttpBaseMethod(URL url) {
         mOkHttpClient = HttpClient.getOkHttpClient();
         mUrl = url;
         mRequest = new Request.Builder()
@@ -84,7 +84,22 @@ public abstract class HttpBaseMethod {
     //         Getter
     //////////////////////////////
 
+    // Request
+
+    public Headers getRequestHeaders() {
+        return mRequest.headers();
+    }
+
+    public String getRequestHeader(String name) {
+        return mRequest.header(name);
+    }
+
+    public HttpUrl getUrl() {
+        return mRequest.url();
+    }
+
     // Response
+
     public int getStatusCode() {
         return mResponse.code();
     }
@@ -109,21 +124,8 @@ public abstract class HttpBaseMethod {
         return mResponse.header(headerName);
     }
 
-    public HttpUrl getUrl() {
-        return mRequest.url();
-    }
-
     public boolean getRetryOnConnectionFailure() {
         return mOkHttpClient.retryOnConnectionFailure();
-    }
-
-    // Request
-    public String getRequestHeader(String name) {
-        return mRequest.header(name);
-    }
-
-    public Headers getRequestHeaders() {
-        return mRequest.headers();
     }
 
     //////////////////////////////
@@ -131,6 +133,7 @@ public abstract class HttpBaseMethod {
     //////////////////////////////
 
     // Connection parameters
+
     public void setReadTimeout(long readTimeout, TimeUnit timeUnit) {
         mOkHttpClient = mOkHttpClient.newBuilder()
                 .readTimeout(readTimeout, timeUnit)
@@ -155,12 +158,20 @@ public abstract class HttpBaseMethod {
                 .build();
     }
 
+    // Request
+
     public void addRequestHeader(String name, String value) {
         mRequest = mRequest.newBuilder()
                 .addHeader(name, value)
                 .build();
     }
 
+    /**
+     * Sets a header and replace it if already exists with that name
+     *
+     * @param name  header name
+     * @param value header value
+     */
     public void setRequestHeader(String name, String value) {
         mRequest = mRequest.newBuilder()
                 .header(name, value)
