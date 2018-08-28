@@ -67,12 +67,10 @@ public class DetectAuthenticationMethodOperation extends RemoteOperation<List<Au
 
         client.setFollowRedirects(false);
 
-        // try to access the root folder, following redirections but not SAML SSO redirections
+        // Step 1: check whether the root folder exists, following redirections but not SAML SSO redirections
         final RemoteOperationResult resultFromExistenceCheck = operation.execute(client);
-        RemoteOperationResult<List<AuthenticationMethod>> result =
-                new RemoteOperationResult<>(resultFromExistenceCheck.getCode());
 
-        // analyze response  
+        // Step 2: look for authentication methods
         if (resultFromExistenceCheck.getHttpCode() == HttpConstants.HTTP_UNAUTHORIZED) {
             ArrayList<String> authHeaders = resultFromExistenceCheck.getAuthenticateHeaders();
             for (String authHeader: authHeaders) {
@@ -88,23 +86,23 @@ public class DetectAuthenticationMethodOperation extends RemoteOperation<List<Au
             allAvailableAuthMethods.add(AuthenticationMethod.SAML_WEB_SSO);
         }
 
+        // Step 3: prepare result with available authentication methods
+        RemoteOperationResult<List<AuthenticationMethod>> result = new RemoteOperationResult<>(resultFromExistenceCheck);
+
         if (allAvailableAuthMethods.isEmpty()) {
             Log_OC.d(TAG, "Authentication method not found: ");
-            allAvailableAuthMethods.add(AuthenticationMethod.UNKNOWN);
         } else {
             Log_OC.d(TAG, "Authentication methods found:");
             for (AuthenticationMethod authMetod: allAvailableAuthMethods) {
                 Log_OC.d(TAG, " " + authenticationMethodToString(authMetod));
             }
-        }
 
-        if (allAvailableAuthMethods.indexOf(authenticationMethodToString(AuthenticationMethod.UNKNOWN)) == -1) {
             result = new RemoteOperationResult<>(result.getHttpCode(), result.getHttpPhrase(),null);
-            // Force the result to be successful and continue with login
             result.setSuccess(true);
         }
 
         result.setData(allAvailableAuthMethods);
+
         return result;  // same result instance, so that other errors
         // can be handled by the caller transparently
     }
