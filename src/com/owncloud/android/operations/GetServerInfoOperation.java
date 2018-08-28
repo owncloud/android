@@ -90,7 +90,7 @@ public class GetServerInfoOperation extends RemoteOperation<GetServerInfoOperati
                 mResultData.mAuthMethods = detectAuthResult.getData();
                 result.setData(mResultData);
             } else {
-                result = new RemoteOperationResult<>(detectAuthResult.getCode());
+                result = new RemoteOperationResult<>(detectAuthResult);
                 mResultData.mAuthMethods =  detectAuthResult.getData();
                 result.setData(mResultData);
             }
@@ -100,8 +100,7 @@ public class GetServerInfoOperation extends RemoteOperation<GetServerInfoOperati
 
     private RemoteOperationResult<List<AuthenticationMethod>> detectAuthorizationMethod(OwnCloudClient client) {
         Log_OC.d(TAG, "Trying empty authorization to detect authentication method");
-        DetectAuthenticationMethodOperation operation =
-            new DetectAuthenticationMethodOperation();
+        DetectAuthenticationMethodOperation operation = new DetectAuthenticationMethodOperation();
         return operation.execute(client);
     }
 
