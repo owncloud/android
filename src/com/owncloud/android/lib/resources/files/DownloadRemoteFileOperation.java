@@ -156,6 +156,9 @@ public class DownloadRemoteFileOperation extends RemoteOperation {
 
                     mEtag = WebdavUtils.getEtagFromResponse(mGet);
 
+                    // Get rid of extra quotas
+                    mEtag = mEtag.replace("\"", "");
+
                     if (mEtag.length() == 0) {
                         Log_OC.e(TAG, "Could not read eTag from response downloading " + mRemotePath);
                     }
