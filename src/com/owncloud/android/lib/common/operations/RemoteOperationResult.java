@@ -235,7 +235,7 @@ public class RemoteOperationResult<T extends Object>
                 httpMethod.getResponseHeaders()
         );
 
-        if (mHttpCode == HttpConstants.HTTP_FORBIDDEN) {   // 400
+        if (mHttpCode == HttpConstants.HTTP_BAD_REQUEST) {   // 400
             String bodyResponse = httpMethod.getResponseBodyAsString();
 
             // do not get for other HTTP codes!; could not be available
