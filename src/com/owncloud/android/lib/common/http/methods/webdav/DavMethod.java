@@ -51,7 +51,7 @@ public abstract class DavMethod extends HttpBaseMethod {
         super(url);
         mDavResource = new DavOCResource(
                 mOkHttpClient,
-                HttpUrl.parse(mUrl.toString()),
+                HttpUrl.parse(url.toString()),
                 Constants.INSTANCE.getLog());
     }
 
@@ -102,7 +102,7 @@ public abstract class DavMethod extends HttpBaseMethod {
         super.setReadTimeout(readTimeout, timeUnit);
         mDavResource = new DavOCResource(
                 mOkHttpClient,
-                HttpUrl.parse(mUrl.toString()),
+                HttpUrl.parse(mRequest.url().toString()),
                 Constants.INSTANCE.getLog());
     }
 
@@ -111,7 +111,7 @@ public abstract class DavMethod extends HttpBaseMethod {
         super.setConnectionTimeout(connectionTimeout, timeUnit);
         mDavResource = new DavOCResource(
                 mOkHttpClient,
-                HttpUrl.parse(mUrl.toString()),
+                HttpUrl.parse(mRequest.url().toString()),
                 Constants.INSTANCE.getLog());
     }
 
@@ -120,7 +120,7 @@ public abstract class DavMethod extends HttpBaseMethod {
         super.setFollowRedirects(followRedirects);
         mDavResource = new DavOCResource(
                 mOkHttpClient,
-                HttpUrl.parse(mUrl.toString()),
+                HttpUrl.parse(mRequest.url().toString()),
                 Constants.INSTANCE.getLog());
     }
 
@@ -129,7 +129,16 @@ public abstract class DavMethod extends HttpBaseMethod {
         super.setRetryOnConnectionFailure(retryOnConnectionFailure);
         mDavResource = new DavOCResource(
                 mOkHttpClient,
-                HttpUrl.parse(mUrl.toString()),
+                HttpUrl.parse(mRequest.url().toString()),
+                Constants.INSTANCE.getLog());
+    }
+
+    @Override
+    public void setUrl(HttpUrl url){
+        super.setUrl(url);
+        mDavResource = new DavOCResource(
+                mOkHttpClient,
+                HttpUrl.parse(mRequest.url().toString()),
                 Constants.INSTANCE.getLog());
     }
 
@@ -145,13 +154,5 @@ public abstract class DavMethod extends HttpBaseMethod {
     @Override
     public boolean isAborted() {
         return mDavResource.isCallAborted();
-    }
-
-    public void setUrl(URL url) {
-        mUrl = url;
-        mDavResource = new DavOCResource(
-                mOkHttpClient,
-                HttpUrl.parse(mUrl.toString()),
-                Constants.INSTANCE.getLog());
     }
 }

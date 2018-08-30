@@ -77,8 +77,9 @@ public class ExistenceCheckRemoteOperation extends RemoteOperation {
     @Override
     protected RemoteOperationResult run(OwnCloudClient client) {
 
+        boolean previousFollowRedirects = client.followRedirects();
+
         try {
-            client.setFollowRedirects(true);
             PropfindMethod propfindMethod = new PropfindMethod(
                     new URL(client.getNewFilesWebDavUri() + WebdavUtils.encodePath(mPath)),
                     0,
@@ -87,7 +88,13 @@ public class ExistenceCheckRemoteOperation extends RemoteOperation {
             propfindMethod.setReadTimeout(TIMEOUT, TimeUnit.SECONDS);
             propfindMethod.setConnectionTimeout(TIMEOUT, TimeUnit.SECONDS);
 
-            final int status = client.executeHttpMethod(propfindMethod);
+            client.setFollowRedirects(false);
+            int status = client.executeHttpMethod(propfindMethod);
+
+            if (previousFollowRedirects) {
+                mRedirectionPath = client.followRedirection(propfindMethod);
+                status = mRedirectionPath.getLastStatus();
+            }
 
             /**
              *  PROPFIND method
@@ -111,6 +118,8 @@ public class ExistenceCheckRemoteOperation extends RemoteOperation {
                     (mSuccessIfAbsent ? " absence " : " existence ") + ": " +
                     result.getLogMessage(), result.getException());
             return result;
+        } finally {
+            client.setFollowRedirects(previousFollowRedirects);
         }
     }
 

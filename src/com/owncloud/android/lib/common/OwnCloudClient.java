@@ -178,7 +178,7 @@ public class OwnCloudClient extends HttpClient {
     public RedirectionPath followRedirection(HttpBaseMethod method) throws Exception {
         int redirectionsCount = 0;
         int status = method.getStatusCode();
-        RedirectionPath result = new RedirectionPath(status, MAX_REDIRECTIONS_COUNT);
+        RedirectionPath redirectionPath = new RedirectionPath(status, MAX_REDIRECTIONS_COUNT);
 
         while (redirectionsCount < MAX_REDIRECTIONS_COUNT &&
                 (status == HttpConstants.HTTP_MOVED_PERMANENTLY ||
@@ -189,12 +189,12 @@ public class OwnCloudClient extends HttpClient {
             final String location = method.getResponseHeader(HttpConstants.LOCATION_HEADER) != null
                     ? method.getResponseHeader(HttpConstants.LOCATION_HEADER)
                     : method.getResponseHeader(HttpConstants.LOCATION_HEADER_LOWER);
-            if (location != null) {
 
+            if (location != null) {
                 Log_OC.d(TAG + " #" + mInstanceNumber,
                         "Location to redirect: " + location);
 
-                result.addLocation(location);
+                redirectionPath.addLocation(location);
 
                 // Release the connection to avoid reach the max number of connections per host
                 // due to it will be set a different url
@@ -221,7 +221,7 @@ public class OwnCloudClient extends HttpClient {
                         throw e;
                     }
                 }
-                result.addStatus(status);
+                redirectionPath.addStatus(status);
                 redirectionsCount++;
 
             } else {
@@ -229,7 +229,7 @@ public class OwnCloudClient extends HttpClient {
                 status = HttpConstants.HTTP_NOT_FOUND;
             }
         }
-        return result;
+        return redirectionPath;
     }
 
     /**

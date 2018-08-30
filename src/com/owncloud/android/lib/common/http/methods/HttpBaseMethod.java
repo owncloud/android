@@ -52,11 +52,9 @@ public abstract class HttpBaseMethod {
     protected RequestBody mRequestBody;
     protected Response mResponse;
     protected Call mCall;
-    protected URL mUrl;
 
     protected HttpBaseMethod(URL url) {
         mOkHttpClient = HttpClient.getOkHttpClient();
-        mUrl = url;
         mRequest = new Request.Builder()
                 .url(HttpUrl.parse(url.toString()))
                 .build();
@@ -94,10 +92,6 @@ public abstract class HttpBaseMethod {
         return mRequest.header(name);
     }
 
-    public HttpUrl getUrl() {
-        return mRequest.url();
-    }
-
     // Response
 
     public int getStatusCode() {
@@ -109,11 +103,17 @@ public abstract class HttpBaseMethod {
     }
 
     public String getResponseBodyAsString() throws IOException {
-        return mResponse.body().string();
+        if (mResponse.body() != null) {
+            return mResponse.body().string();
+        }
+        return null;
     }
 
     public InputStream getResponseBodyAsStream() {
-        return mResponse.body().byteStream();
+        if (mResponse.body() != null) {
+            return mResponse.body().byteStream();
+        }
+        return null;
     }
 
     public Headers getResponseHeaders() {

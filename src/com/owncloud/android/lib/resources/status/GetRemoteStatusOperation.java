@@ -83,17 +83,19 @@ public class GetRemoteStatusOperation extends RemoteOperation<OwnCloudVersion> {
             getMethod.setReadTimeout(TRY_CONNECTION_TIMEOUT, TimeUnit.SECONDS);
             getMethod.setConnectionTimeout(TRY_CONNECTION_TIMEOUT, TimeUnit.SECONDS);
 
+            client.setFollowRedirects(false);
+            boolean isRedirectToNonSecureConnection = false;
             int status;
             try {
                 status = client.executeHttpMethod(getMethod);
-                mLatestResult = new RemoteOperationResult(OK);
+                mLatestResult = isSuccess(status)
+                        ? new RemoteOperationResult<>(OK)
+                        : new RemoteOperationResult<>(getMethod);
             } catch (SSLException sslE) {
                 mLatestResult = new RemoteOperationResult(sslE);
                 return false;
             }
 
-            client.setFollowRedirects(false);
-            boolean isRedirectToNonSecureConnection = false;
             String redirectedLocation = mLatestResult.getRedirectedLocation();
             while (redirectedLocation != null && redirectedLocation.length() > 0
                 && !mLatestResult.isSuccess()) {
