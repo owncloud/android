@@ -117,6 +117,10 @@ public class OwnCloudClient extends HttpClient {
         mCredentials.applyTo(this);
     }
 
+    public void applyCredentials() {
+        mCredentials.applyTo(this);
+    }
+
     public int executeHttpMethod (HttpBaseMethod method) throws Exception {
 
         boolean repeatWithFreshCredentials;

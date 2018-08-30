@@ -145,7 +145,7 @@ public abstract class RemoteOperation<T extends Object> implements Runnable {
                 OwnCloudAccount ocAccount = new OwnCloudAccount(mAccount, mContext);
                 mClient = OwnCloudClientManagerFactory.getDefaultSingleton().
                         getClientFor(ocAccount, mContext);
-
+                mClient.applyCredentials();
             } else {
                 throw new IllegalStateException("Trying to run a remote operation " +
                         "asynchronously with no client and no chance to create one (no account)");
