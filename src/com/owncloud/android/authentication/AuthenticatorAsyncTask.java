@@ -65,15 +65,15 @@ public class AuthenticatorAsyncTask  extends AsyncTask<Object, Void, RemoteOpera
             client.setCredentials(credentials);
 
             // Operation - try credentials
-            ExistenceCheckRemoteOperation operation = new ExistenceCheckRemoteOperation(
+            ExistenceCheckRemoteOperation existenceCheckRemoteOperation = new ExistenceCheckRemoteOperation(
                     REMOTE_PATH,
                     SUCCESS_IF_ABSENT
             );
-            result = operation.execute(client);
+            result = existenceCheckRemoteOperation.execute(client);
 
             String targetUrlAfterPermanentRedirection = null;
-            if (operation.wasRedirected()) {
-                RedirectionPath redirectionPath = operation.getRedirectionPath();
+            if (existenceCheckRemoteOperation.wasRedirected()) {
+                RedirectionPath redirectionPath = existenceCheckRemoteOperation.getRedirectionPath();
                 targetUrlAfterPermanentRedirection = redirectionPath.getLastPermanentLocation();
             }
 

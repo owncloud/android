@@ -19,6 +19,8 @@
 
 package com.owncloud.android.operations;
 
+import android.net.Uri;
+
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.http.HttpConstants;
 import com.owncloud.android.lib.common.operations.OnRemoteOperationListener;
@@ -26,9 +28,6 @@ import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.files.ExistenceCheckRemoteOperation;
-
-
-
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,7 +67,14 @@ public class DetectAuthenticationMethodOperation extends RemoteOperation<List<Au
         client.setFollowRedirects(false);
 
         // Step 1: check whether the root folder exists, following redirections but not SAML SSO redirections
-        final RemoteOperationResult resultFromExistenceCheck = operation.execute(client);
+        RemoteOperationResult resultFromExistenceCheck = operation.execute(client);
+        String redirectedLocation = resultFromExistenceCheck.getRedirectedLocation();
+        while (redirectedLocation != null && redirectedLocation.length() > 0 &&
+                !resultFromExistenceCheck.isIdPRedirection()) {
+            client.setBaseUri(Uri.parse(resultFromExistenceCheck.getRedirectedLocation()));
+            resultFromExistenceCheck = operation.execute(client);
+            redirectedLocation = resultFromExistenceCheck.getRedirectedLocation();
+        }
 
         // Step 2: look for authentication methods
         if (resultFromExistenceCheck.getHttpCode() == HttpConstants.HTTP_UNAUTHORIZED) {
