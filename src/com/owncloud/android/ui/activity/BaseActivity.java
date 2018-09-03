@@ -9,6 +9,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 
 import com.owncloud.android.MainApp;
 import com.owncloud.android.authentication.AccountUtils;
@@ -259,6 +261,17 @@ public abstract class BaseActivity extends AppCompatActivity {
             if (mMandatoryCreation && !accountWasSet) {
                 finish();
             }
+        }
+    }
+
+    public void hideSoftKeyboard() {
+        View focusedView = getCurrentFocus();
+        if (focusedView != null) {
+            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+            inputMethodManager.hideSoftInputFromWindow(
+                    focusedView.getWindowToken(),
+                    0
+            );
         }
     }
 }
