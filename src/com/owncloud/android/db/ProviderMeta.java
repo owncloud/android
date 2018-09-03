@@ -34,7 +34,7 @@ import com.owncloud.android.MainApp;
 public class ProviderMeta {
 
     public static final String DB_NAME = "filelist";
-    public static final int DB_VERSION = 23;
+    public static final int DB_VERSION = 24;
 
     private ProviderMeta() {
     }
@@ -165,6 +165,7 @@ public class ProviderMeta {
         public static final String UPLOADS_UPLOAD_END_TIMESTAMP = "upload_end_timestamp";
         public static final String UPLOADS_LAST_RESULT = "last_result";
         public static final String UPLOADS_CREATED_BY = "created_by";
+        public static final String UPLOADS_CHUNKED_UPLOAD_ID = "chunked_upload_id";
 
         public static final String UPLOADS_DEFAULT_SORT_ORDER =
                 ProviderTableMeta._ID  + " collate nocase desc";

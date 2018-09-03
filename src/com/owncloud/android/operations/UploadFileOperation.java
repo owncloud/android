@@ -113,7 +113,8 @@ public class UploadFileOperation extends SyncOperation {
     private int mCreatedBy;
 
     private boolean mWasRenamed = false;
-    protected long mOCUploadId;
+    private long mOCUploadId;
+
     /**
      * Local path to file which is to be uploaded (before any possible renaming or moving).
      */
@@ -163,7 +164,8 @@ public class UploadFileOperation extends SyncOperation {
         mContext = context;
         mOCUploadId = upload.getUploadId();
         mCreatedBy = upload.getCreatedBy();
-        mRemoteFolderToBeCreated = upload.isCreateRemoteFolder();
+        mRemoteFolderToBeCreated = upload.createsRemoteFolder();
+
     }
 
     public Account getAccount() {

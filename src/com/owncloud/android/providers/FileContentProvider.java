@@ -212,6 +212,8 @@ public class FileContentProvider extends ContentProvider {
                 ProviderTableMeta.UPLOADS_UPLOAD_END_TIMESTAMP);
         mUploadProjectionMap.put(ProviderTableMeta.UPLOADS_LAST_RESULT, ProviderTableMeta.UPLOADS_LAST_RESULT);
         mUploadProjectionMap.put(ProviderTableMeta.UPLOADS_CREATED_BY, ProviderTableMeta.UPLOADS_CREATED_BY);
+        mUploadProjectionMap.put(ProviderTableMeta.UPLOADS_CHUNKED_UPLOAD_ID,
+                ProviderTableMeta.UPLOADS_CHUNKED_UPLOAD_ID);
     }
 
     @Override
@@ -1047,6 +1049,20 @@ public class FileContentProvider extends ContentProvider {
                 }
             }
 
+            if (oldVersion < 24 && newVersion >= 24) {
+                Log_OC.i("SQL", "Entering in the #2 ADD in onUpgrade");
+                db.beginTransaction();
+                try {
+                    db.execSQL("ALTER TABLE " + ProviderTableMeta.UPLOADS_TABLE_NAME +
+                            " ADD COLUMN " + ProviderTableMeta.UPLOADS_CHUNKED_UPLOAD_ID + " TEXT " +
+                            " DEFAULT NULL");
+                    db.setTransactionSuccessful();
+                    upgraded = true;
+                } finally {
+                    db.endTransaction();
+                }
+            }
+
             if (!upgraded) {
                 Log_OC.i("SQL", "OUT of the ADD in onUpgrade; oldVersion == " + oldVersion +
                         ", newVersion == " + newVersion);
@@ -1151,7 +1167,8 @@ public class FileContentProvider extends ContentProvider {
                 + ProviderTableMeta.UPLOADS_IS_CREATE_REMOTE_FOLDER + " INTEGER, "  // boolean
                 + ProviderTableMeta.UPLOADS_UPLOAD_END_TIMESTAMP + " INTEGER, "
                 + ProviderTableMeta.UPLOADS_LAST_RESULT + " INTEGER, "     // Upload LastResult
-                + ProviderTableMeta.UPLOADS_CREATED_BY + " INTEGER );"    // Upload createdBy
+                + ProviderTableMeta.UPLOADS_CREATED_BY + " INTEGER, "     // Upload createdBy
+                + ProviderTableMeta.UPLOADS_CHUNKED_UPLOAD_ID + " TEXT );"    // Upload chunkedUploadId
         );
     }
 

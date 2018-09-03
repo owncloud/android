@@ -38,9 +38,12 @@ import java.util.Iterator;
 
 public class ChunkedUploadFileOperation extends UploadFileOperation {
 
+    private String mTransferId;
+
     public ChunkedUploadFileOperation(Account account, OCFile file, OCUpload upload, boolean forceOverwrite,
                                       int localBehaviour, Context context) {
         super(account, file, upload, forceOverwrite, localBehaviour, context);
+        mTransferId = upload.getChunkedUploadId();
     }
 
     @Override
@@ -50,12 +53,12 @@ public class ChunkedUploadFileOperation extends UploadFileOperation {
             RemoteOperationResult result;
 
             // Step 1, create folder where we put the uploaded file chunks
-            result = createChunksFolder(String.valueOf(mOCUploadId));
+            result = createChunksFolder(String.valueOf(mTransferId));
 
             if (!result.isSuccess()) return result;
 
             // Step 2, start to upload chunks
-            mUploadOperation = new ChunkedUploadRemoteFileOperation(mOCUploadId, mFile.getStoragePath(),
+            mUploadOperation = new ChunkedUploadRemoteFileOperation(mTransferId, mFile.getStoragePath(),
                     mFile.getRemotePath(), mFile.getMimetype(), mFile.getEtagInConflict(), timeStamp);
 
             Iterator<OnDatatransferProgressListener> listener = mDataTransferListeners.iterator();
@@ -91,7 +94,7 @@ public class ChunkedUploadFileOperation extends UploadFileOperation {
 
     private RemoteOperationResult moveChunksFileToFinalDestination(String fileLastModifTimestamp, long fileLength) {
         SyncOperation syncOperation = new MoveChunksFileOperation(
-                String.valueOf(mOCUploadId + FileUtils.PATH_SEPARATOR + FileUtils.FINAL_CHUNKS_FILE),
+                String.valueOf(mTransferId + FileUtils.PATH_SEPARATOR + FileUtils.FINAL_CHUNKS_FILE),
                 mFile.getRemotePath(),
                 fileLastModifTimestamp,
                 fileLength
