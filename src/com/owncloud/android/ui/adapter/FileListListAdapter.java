@@ -438,8 +438,7 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
     public void filterBySearch(String query) {
         query = query.toLowerCase();
 
-        // Load all the files again
-        mFiles = (Vector<OCFile>) mImmutableFilesList.clone();
+        clearFilterBySearch();
 
         List<OCFile> filteredList = new ArrayList<>();
 
@@ -465,6 +464,11 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
             }
         }
 
+        notifyDataSetChanged();
+    }
+
+    public void clearFilterBySearch() {
+        mFiles = (Vector<OCFile>) mImmutableFilesList.clone();
         notifyDataSetChanged();
     }
 }
