@@ -159,5 +159,4 @@ public abstract class FileFragment extends Fragment {
         void onBrowsedDownTo(OCFile folder);
 
     }
-
 }
