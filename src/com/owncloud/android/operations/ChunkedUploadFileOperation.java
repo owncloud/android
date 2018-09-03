@@ -43,7 +43,7 @@ public class ChunkedUploadFileOperation extends UploadFileOperation {
     public ChunkedUploadFileOperation(Account account, OCFile file, OCUpload upload, boolean forceOverwrite,
                                       int localBehaviour, Context context) {
         super(account, file, upload, forceOverwrite, localBehaviour, context);
-        mTransferId = upload.getChunkedUploadId();
+        mTransferId = upload.getTransferId();
     }
 
     @Override
