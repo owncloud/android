@@ -74,6 +74,7 @@ import com.owncloud.android.ui.activity.UploadListActivity;
 import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter;
 import com.owncloud.android.ui.notifications.NotificationUtils;
 import com.owncloud.android.utils.Extras;
+import com.owncloud.android.utils.SecurityUtils;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
@@ -379,7 +380,7 @@ public class FileUploader extends Service
             // at this point variable "OCFile[] files" is loaded correctly.
 
             String uploadKey;
-            UploadFileOperation newUpload;
+            UploadFileOperation newUploadFileOperation;
             try {
                 for (int i = 0; i < files.length; i++) {
 
@@ -395,7 +396,9 @@ public class FileUploader extends Service
 
                     if(chunked && new File(files[i].getStoragePath()).length() >
                             ChunkedUploadRemoteFileOperation.CHUNK_SIZE) {
-                        newUpload = new ChunkedUploadFileOperation(
+                        ocUpload.setChunkedUploadId(
+                                SecurityUtils.stringToMD5Hash(files[i].getRemotePath()) + System.currentTimeMillis());
+                        newUploadFileOperation = new ChunkedUploadFileOperation(
                                 account,
                                 files[i],
                                 ocUpload,
@@ -404,7 +407,7 @@ public class FileUploader extends Service
                                 this
                         );
                     } else {
-                        newUpload = new UploadFileOperation(
+                        newUploadFileOperation = new UploadFileOperation(
                                 account,
                                 files[i],
                                 ocUpload,
@@ -414,19 +417,19 @@ public class FileUploader extends Service
                         );
                     }
 
-                    newUpload.setCreatedBy(createdBy);
+                    newUploadFileOperation.setCreatedBy(createdBy);
                     if (isCreateRemoteFolder) {
-                        newUpload.setRemoteFolderToBeCreated();
+                        newUploadFileOperation.setRemoteFolderToBeCreated();
                     }
-                    newUpload.addDatatransferProgressListener(this);
-                    newUpload.addDatatransferProgressListener((FileUploaderBinder) mBinder);
+                    newUploadFileOperation.addDatatransferProgressListener(this);
+                    newUploadFileOperation.addDatatransferProgressListener((FileUploaderBinder) mBinder);
 
-                    newUpload.addRenameUploadListener(this);
+                    newUploadFileOperation.addRenameUploadListener(this);
 
                     Pair<String, String> putResult = mPendingUploads.putIfAbsent(
                             account.name,
                             files[i].getRemotePath(),
-                            newUpload
+                            newUploadFileOperation
                     );
                     if (putResult != null) {
                         uploadKey = putResult.first;
@@ -434,7 +437,7 @@ public class FileUploader extends Service
 
                         // Save upload in database
                         long id = mUploadsStorageManager.storeUpload(ocUpload);
-                        newUpload.setOCUploadId(id);
+                        newUploadFileOperation.setOCUploadId(id);
                     }
                 }
 
