@@ -1712,13 +1712,17 @@ public class FileDataStorageManager {
     public void triggerMediaScan(String path) {
         if (path != null) {
             Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-            intent.setData(
-                    FileProvider.getUriForFile(
-                            mContext.getApplicationContext(),
-                            mContext.getResources().getString(R.string.file_provider_authority),
-                            new File(path)
-                    )
-            );
+            try {
+                intent.setData(
+                        FileProvider.getUriForFile(
+                                mContext.getApplicationContext(),
+                                mContext.getResources().getString(R.string.file_provider_authority),
+                                new File(path)
+                        )
+                );
+            } catch (IllegalArgumentException illegalArgumentException) {
+                intent.setData(Uri.fromFile(new File(path)));
+            }
             MainApp.getAppContext().sendBroadcast(intent);
         }
     }
