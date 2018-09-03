@@ -56,9 +56,9 @@ public class ChunkedUploadRemoteFileOperation extends UploadRemoteFileOperation 
     public static final long CHUNK_SIZE = 1024000;
     private static final String TAG = ChunkedUploadRemoteFileOperation.class.getSimpleName();
 
-    private long mTransferId;
+    private String mTransferId;
 
-    public ChunkedUploadRemoteFileOperation(long transferId, String localPath, String remotePath, String mimeType,
+    public ChunkedUploadRemoteFileOperation(String transferId, String localPath, String remotePath, String mimeType,
                                             String requiredEtag, String fileLastModifTimestamp) {
         super(localPath, remotePath, mimeType, requiredEtag, fileLastModifTimestamp);
         mTransferId = transferId;
