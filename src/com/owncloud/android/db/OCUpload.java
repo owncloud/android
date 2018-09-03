@@ -104,7 +104,7 @@ public class OCUpload implements Parcelable {
     /*
      * Used to identify remote chunks folders
      */
-    private String mChunkedUploadId;
+    private String mTransferId;
 
 
     /**
@@ -157,7 +157,7 @@ public class OCUpload implements Parcelable {
         mUploadStatus = UploadStatus.UPLOAD_IN_PROGRESS;
         mLastResult = UploadResult.UNKNOWN;
         mCreatedBy = UploadFileOperation.CREATED_BY_USER;
-        mChunkedUploadId = "";
+        mTransferId = "";
     }
 
     // Getters & Setters
@@ -316,12 +316,12 @@ public class OCUpload implements Parcelable {
         return mUploadEndTimeStamp;
     }
 
-    public void setChunkedUploadId(String chunkedUploadId) {
-        mChunkedUploadId = chunkedUploadId;
+    public void setTransferId(String transferId) {
+        mTransferId = transferId;
     }
 
-    public String getChunkedUploadId() {
-        return mChunkedUploadId;
+    public String getTransferId() {
+        return mTransferId;
     }
 
     /**
@@ -368,6 +368,7 @@ public class OCUpload implements Parcelable {
         mLocalPath = source.readString();
         mRemotePath = source.readString();
         mAccountName = source.readString();
+        mFileSize = source.readLong();
         mLocalAction = source.readInt();
         mForceOverwrite = (source.readInt() == 1);
         mCreatesRemoteFolder = (source.readInt() == 1);
@@ -383,7 +384,7 @@ public class OCUpload implements Parcelable {
             mLastResult = UploadResult.UNKNOWN;
         }
         mCreatedBy = source.readInt();
-        mChunkedUploadId = source.readString();
+        mTransferId = source.readString();
     }
 
 
@@ -398,6 +399,7 @@ public class OCUpload implements Parcelable {
         dest.writeString(mLocalPath);
         dest.writeString(mRemotePath);
         dest.writeString(mAccountName);
+        dest.writeLong(mFileSize);
         dest.writeInt(mLocalAction);
         dest.writeInt(mForceOverwrite ? 1 : 0);
         dest.writeInt(mCreatesRemoteFolder ? 1 : 0);
@@ -405,7 +407,7 @@ public class OCUpload implements Parcelable {
         dest.writeLong(mUploadEndTimeStamp);
         dest.writeString(((mLastResult == null) ? "" : mLastResult.name()));
         dest.writeInt(mCreatedBy);
-        dest.writeString(mChunkedUploadId);
+        dest.writeString(mTransferId);
     }
 
     enum CanUploadFileNowStatus {NOW, LATER, FILE_GONE, ERROR}

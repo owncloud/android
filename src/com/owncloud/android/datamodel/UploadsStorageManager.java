@@ -115,7 +115,7 @@ public class UploadsStorageManager extends Observable {
         cv.put(ProviderTableMeta.UPLOADS_IS_CREATE_REMOTE_FOLDER, ocUpload.createsRemoteFolder() ? 1 : 0);
         cv.put(ProviderTableMeta.UPLOADS_LAST_RESULT, ocUpload.getLastResult().getValue());
         cv.put(ProviderTableMeta.UPLOADS_CREATED_BY, ocUpload.getCreatedBy());
-        cv.put(ProviderTableMeta.UPLOADS_CHUNKED_UPLOAD_ID, ocUpload.getChunkedUploadId());
+        cv.put(ProviderTableMeta.UPLOADS_TRANSFER_ID, ocUpload.getTransferId());
 
         Uri result = getDB().insert(ProviderTableMeta.CONTENT_URI_UPLOADS, cv);
 
@@ -147,7 +147,7 @@ public class UploadsStorageManager extends Observable {
         cv.put(ProviderTableMeta.UPLOADS_STATUS, ocUpload.getUploadStatus().value);
         cv.put(ProviderTableMeta.UPLOADS_LAST_RESULT, ocUpload.getLastResult().getValue());
         cv.put(ProviderTableMeta.UPLOADS_UPLOAD_END_TIMESTAMP, ocUpload.getUploadEndTimestamp());
-        cv.put(ProviderTableMeta.UPLOADS_CHUNKED_UPLOAD_ID, ocUpload.getChunkedUploadId());
+        cv.put(ProviderTableMeta.UPLOADS_TRANSFER_ID, ocUpload.getTransferId());
 
         int result = getDB().update(ProviderTableMeta.CONTENT_URI_UPLOADS,
                 cv,
@@ -364,7 +364,7 @@ public class UploadsStorageManager extends Observable {
             upload.setLastResult(UploadResult.fromValue(
                     c.getInt(c.getColumnIndex(ProviderTableMeta.UPLOADS_LAST_RESULT))));
             upload.setCreatedBy(c.getInt(c.getColumnIndex(ProviderTableMeta.UPLOADS_CREATED_BY)));
-            upload.setChunkedUploadId(c.getString(c.getColumnIndex(ProviderTableMeta.UPLOADS_CHUNKED_UPLOAD_ID)));
+            upload.setTransferId(c.getString(c.getColumnIndex(ProviderTableMeta.UPLOADS_TRANSFER_ID)));
         }
         return upload;
     }

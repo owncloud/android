@@ -319,8 +319,7 @@ public class FileUploader extends Service
         boolean chunked = ocv.isChunkedUploadSupported();
 
         if (!retry) {
-            if (!(intent.hasExtra(KEY_LOCAL_FILE) ||
-                    intent.hasExtra(KEY_FILE))) {
+            if (!(intent.hasExtra(KEY_LOCAL_FILE) || intent.hasExtra(KEY_FILE))) {
                 Log_OC.e(TAG, "Not enough information provided in intent");
                 return Service.START_NOT_STICKY;
             }
@@ -396,7 +395,7 @@ public class FileUploader extends Service
 
                     if(chunked && new File(files[i].getStoragePath()).length() >
                             ChunkedUploadRemoteFileOperation.CHUNK_SIZE) {
-                        ocUpload.setChunkedUploadId(
+                        ocUpload.setTransferId(
                                 SecurityUtils.stringToMD5Hash(files[i].getRemotePath()) + System.currentTimeMillis());
                         newUploadFileOperation = new ChunkedUploadFileOperation(
                                 account,
@@ -462,24 +461,39 @@ public class FileUploader extends Service
             }
             OCUpload upload = intent.getParcelableExtra(KEY_RETRY_UPLOAD);
 
-            UploadFileOperation newUpload = new UploadFileOperation(
-                    account,
-                    null,
-                    upload,
-                    upload.isForceOverwrite(),  // TODO should be read from DB?
-                    upload.getLocalAction(),    // TODO should be read from DB?
-                    this
-            );
+            UploadFileOperation newUploadFileOperation;
 
-            newUpload.addDatatransferProgressListener(this);
-            newUpload.addDatatransferProgressListener((FileUploaderBinder) mBinder);
+            if(chunked && upload.getFileSize() > ChunkedUploadRemoteFileOperation.CHUNK_SIZE) {
+                upload.setTransferId(
+                        SecurityUtils.stringToMD5Hash(upload.getRemotePath()) + System.currentTimeMillis());
+                newUploadFileOperation = new ChunkedUploadFileOperation(
+                        account,
+                        null,
+                        upload,
+                        upload.isForceOverwrite(),
+                        upload.getLocalAction(),
+                        this
+                );
+            } else {
+                newUploadFileOperation = new UploadFileOperation(
+                        account,
+                        null,
+                        upload,
+                        upload.isForceOverwrite(),
+                        upload.getLocalAction(),
+                        this
+                );
+            }
 
-            newUpload.addRenameUploadListener(this);
+            newUploadFileOperation.addDatatransferProgressListener(this);
+            newUploadFileOperation.addDatatransferProgressListener((FileUploaderBinder) mBinder);
+
+            newUploadFileOperation.addRenameUploadListener(this);
 
             Pair<String, String> putResult = mPendingUploads.putIfAbsent(
                     account.name,
                     upload.getRemotePath(),
-                    newUpload
+                    newUploadFileOperation
                     );
             if (putResult != null) {
                 String uploadKey = putResult.first;
