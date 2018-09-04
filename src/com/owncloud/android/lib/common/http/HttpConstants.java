@@ -40,12 +40,14 @@ public class HttpConstants {
     public static final String IF_MATCH_HEADER = "If-Match";
     public static final String IF_NONE_MATCH_HEADER = "If-None-Match";
     public static final String CONTENT_TYPE_HEADER = "Content-Type";
+    public static final String CONTENT_LENGTH_HEADER = "Content-Length";
     public static final String OC_TOTAL_LENGTH_HEADER = "OC-Total-Length";
     public static final String OC_X_OC_MTIME_HEADER = "X-OC-Mtime";
     public static final String PARAM_SINGLE_COOKIE_HEADER = "http.protocol.single-cookie-header";
     public static final String OC_X_REQUEST_ID = "X-Request-ID";
     public static final String LOCATION_HEADER = "Location";
     public static final String LOCATION_HEADER_LOWER = "location";
+    public static final String CONTENT_TYPE_URLENCODED_UTF8 = "application/x-www-form-urlencoded; charset=utf-8";
 
     /***********************************************************************************************************
      ************************************************ STATUS CODES *********************************************

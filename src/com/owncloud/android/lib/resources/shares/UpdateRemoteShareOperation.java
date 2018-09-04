@@ -200,14 +200,14 @@ public class UpdateRemoteShareOperation extends RemoteOperation<ShareParserResul
 
             Uri requestUri = client.getBaseUri();
             Uri.Builder uriBuilder = requestUri.buildUpon();
-            uriBuilder.appendEncodedPath(ShareUtils.SHARING_API_PATH.substring(1));
+            uriBuilder.appendEncodedPath(ShareUtils.SHARING_API_PATH);
             uriBuilder.appendEncodedPath(Long.toString(mRemoteId));
 
             PutMethod putMethod = new PutMethod(new URL(uriBuilder.build().toString()));
 
             putMethod.setRequestBody(formBodyBuilder.build());
 
-            putMethod.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=utf-8");
+            putMethod.setRequestHeader(HttpConstants.CONTENT_TYPE_HEADER, HttpConstants.CONTENT_TYPE_URLENCODED_UTF8);
             putMethod.addRequestHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE);
 
             int status = client.executeHttpMethod(putMethod);

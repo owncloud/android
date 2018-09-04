@@ -46,13 +46,11 @@ import static com.owncloud.android.lib.common.operations.RemoteOperationResult.R
  * @author David A. Velasco
  * @author David González Verdugo
  */
-
 public class GetRemoteUserAvatarOperation extends RemoteOperation<GetRemoteUserAvatarOperation.ResultData> {
 
     private static final String TAG = GetRemoteUserAvatarOperation.class.getSimpleName();
 
     private static final String NON_OFFICIAL_AVATAR_PATH = "/index.php/avatar/";
-    private static final String IF_NONE_MATCH_HEADER = "If-None-Match";
 
     /** Desired size in pixels of the squared image */
     private int mDimension;
@@ -62,7 +60,6 @@ public class GetRemoteUserAvatarOperation extends RemoteOperation<GetRemoteUserA
      * if its Etag changed.
      */
     private String mCurrentEtag;
-
 
     public GetRemoteUserAvatarOperation(int dimension, String currentEtag) {
         mDimension = dimension;
@@ -90,7 +87,7 @@ public class GetRemoteUserAvatarOperation extends RemoteOperation<GetRemoteUserA
             if (isSuccess(status)) {
                 // find out size of file to read
                 int totalToTransfer = 0;
-                String contentLength = getMethod.getResponseHeader("Content-Length");
+                String contentLength = getMethod.getResponseHeader(HttpConstants.CONTENT_LENGTH_HEADER);
 
                 if (contentLength != null && contentLength.length() > 0) {
                     totalToTransfer = Integer.parseInt(contentLength);
@@ -98,7 +95,7 @@ public class GetRemoteUserAvatarOperation extends RemoteOperation<GetRemoteUserA
 
                 // find out MIME-type!
                 String mimeType;
-                String contentType = getMethod.getResponseHeader("Content-Type");
+                String contentType = getMethod.getResponseHeader(HttpConstants.CONTENT_TYPE_HEADER);
 
                 if (contentType == null || !contentType.startsWith("image")) {
                     Log_OC.e(

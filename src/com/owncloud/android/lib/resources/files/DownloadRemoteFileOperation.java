@@ -114,7 +114,7 @@ public class DownloadRemoteFileOperation extends RemoteOperation {
                 fos = new FileOutputStream(targetFile);
                 long transferred = 0;
 
-                String contentLength = mGet.getResponseHeader("Content-Length");
+                String contentLength = mGet.getResponseHeader(HttpConstants.CONTENT_LENGTH_HEADER);
                 long totalToTransfer =
                         (contentLength != null
                                 && contentLength.length() > 0)

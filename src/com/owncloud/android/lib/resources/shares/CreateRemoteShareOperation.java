@@ -230,7 +230,7 @@ public class CreateRemoteShareOperation extends RemoteOperation {
 
             postMethod.setRequestBody(formBodyBuilder.build());
 
-            postMethod.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=utf-8");
+            postMethod.setRequestHeader(HttpConstants.CONTENT_TYPE_HEADER, HttpConstants.CONTENT_TYPE_URLENCODED_UTF8);
             postMethod.addRequestHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE);
 
             int status = client.executeHttpMethod(postMethod);
