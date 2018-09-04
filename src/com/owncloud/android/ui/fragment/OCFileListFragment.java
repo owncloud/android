@@ -90,7 +90,8 @@ import java.util.List;
  *
  * TODO refactor to get rid of direct dependency on FileDisplayActivity
  */
-public class OCFileListFragment extends ExtendedListFragment implements SearchView.OnQueryTextListener {
+public class OCFileListFragment extends ExtendedListFragment implements
+        SearchView.OnQueryTextListener, View.OnFocusChangeListener {
 
     private static final String TAG = OCFileListFragment.class.getSimpleName();
 
@@ -253,6 +254,7 @@ public class OCFileListFragment extends ExtendedListFragment implements SearchVi
         mSearchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
         mSearchView.setMaxWidth(Integer.MAX_VALUE);
         mSearchView.setQueryHint(getResources().getString(R.string.actionbar_search));
+        mSearchView.setOnQueryTextFocusChangeListener(this);
         mSearchView.setOnQueryTextListener(this);
     }
 
@@ -427,6 +429,15 @@ public class OCFileListFragment extends ExtendedListFragment implements SearchVi
     public boolean onQueryTextChange(String query) {
         mFileListAdapter.filterBySearch(query);
         return true;
+    }
+
+    @Override
+    public void onFocusChange(View v, boolean hasFocus) {
+        if (hasFocus) {
+            setMessageForEmptyList(getString(R.string.local_file_list_search_with_no_matches));
+        } else { // Set default message for empty list of files
+            ((FileDisplayActivity) getActivity()).setBackgroundText();
+        }
     }
 
     /**

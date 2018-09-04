@@ -103,6 +103,7 @@
     <string name="file_list_no_app_for_file_type">No app found for file type</string>
     <string name="local_file_list_empty">There are no files in this folder.</string>
     <string name="local_file_list_empty_just_folders">There are no folders in this folder.</string>
+    <string name="local_file_list_search_with_no_matches">No matches for this search</string>
     <string name="upload_list_empty">No uploads available.</string>
     <string name="file_list_folder">folder</string>
     <string name="file_list_folders">folders</string>

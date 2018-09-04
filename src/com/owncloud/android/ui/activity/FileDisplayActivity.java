@@ -1096,7 +1096,7 @@ public class FileDisplayActivity extends FileActivity
      * Show a text message on screen view for notifying user if content is
      * loading or folder is empty
      */
-    private void setBackgroundText() {
+    public void setBackgroundText() {
         OCFileListFragment ocFileListFragment = getListOfFilesFragment();
         if (ocFileListFragment != null) {
             if(mSelectAllMenuItem != null) {
