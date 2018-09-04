@@ -194,8 +194,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
             // Gets an auth token from the AccountManager's cache. If no auth token is cached for
             // this account, null will be returned
             accessToken = am.peekAuthToken(account, authTokenType);
-            if (accessToken == null &&
-                canBeRefreshed(authTokenType)) {
+            if (accessToken == null && canBeRefreshed(authTokenType)) {
                 accessToken = refreshToken(account, authTokenType, am);
             }
         }
