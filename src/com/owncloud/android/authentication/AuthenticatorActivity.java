@@ -303,7 +303,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         /// load user interface
         setContentView(R.layout.account_setup);
 
-        // Set login color or background
+        // Set login background color or image
         if (!getResources().getBoolean(R.bool.use_login_background_image)) {
             findViewById(R.id.login_layout).setBackgroundColor(
                     getResources().getColor(R.color.login_background_color)
