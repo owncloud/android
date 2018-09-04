@@ -59,6 +59,10 @@ public class HttpClient {
         sContext = context;
     }
 
+    public Context getContext() {
+        return sContext;
+    }
+
     public static OkHttpClient getOkHttpClient() {
         if (sOkHttpClient == null) {
             try {

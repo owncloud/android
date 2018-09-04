@@ -27,7 +27,6 @@ package com.owncloud.android.lib.common;
 
 import android.accounts.AccountManager;
 import android.accounts.AccountsException;
-import android.content.Context;
 import android.net.Uri;
 
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentials;
@@ -65,18 +64,11 @@ public class OwnCloudClient extends HttpClient {
     private static final String PARAM_PROTOCOL_VERSION = "http.protocol.version";
 
     private static byte[] sExhaustBuffer = new byte[1024];
-
     private static int sIntanceCounter = 0;
     private OwnCloudCredentials mCredentials = null;
     private int mInstanceNumber = 0;
-
     private Uri mBaseUri;
-
     private OwnCloudVersion mVersion = null;
-
-    /// next too attributes are a very ugly dependency, added to grant silent retry of OAuth token when needed ;
-    /// see #shouldInvalidateCredentials and #invalidateCredentials for more details
-    private Context mContext;
     private OwnCloudAccount mAccount;
 
     /**
@@ -344,10 +336,6 @@ public class OwnCloudClient extends HttpClient {
         return mVersion;
     }
 
-    public Context getContext() {
-        return mContext;
-    }
-
     public void setAccount(OwnCloudAccount account) {
         this.mAccount = account;
     }
@@ -378,7 +366,7 @@ public class OwnCloudClient extends HttpClient {
                         repeatCounter < MAX_REPEAT_COUNT_WITH_FRESH_CREDENTIALS) {
 
                     try {
-                        mAccount.loadCredentials(mContext);
+                        mAccount.loadCredentials(getContext());
                         // if mAccount.getCredentials().length() == 0 --> refresh failed
                         setCredentials(mAccount.getCredentials());
                         credentialsWereRefreshed = true;
@@ -421,7 +409,7 @@ public class OwnCloudClient extends HttpClient {
                 !(mCredentials instanceof OwnCloudCredentialsFactory.OwnCloudAnonymousCredentials));
 
         // test if have all the needed to effectively invalidate ...
-        should &= (mAccount != null && mAccount.getSavedAccount() != null && mContext != null);
+        should &= (mAccount != null && mAccount.getSavedAccount() != null && getContext() != null);
 
         return should;
     }
@@ -435,7 +423,7 @@ public class OwnCloudClient extends HttpClient {
      * @return                  'True' if invalidation was successful, 'false' otherwise.
      */
     private boolean invalidateAccountCredentials() {
-        AccountManager am = AccountManager.get(mContext);
+        AccountManager am = AccountManager.get(getContext());
         am.invalidateAuthToken(
                 mAccount.getSavedAccount().type,
                 mCredentials.getAuthToken()

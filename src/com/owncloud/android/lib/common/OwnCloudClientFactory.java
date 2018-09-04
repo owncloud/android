@@ -154,7 +154,8 @@ public class OwnCloudClientFactory {
      * @param context   Android context where the OwnCloudClient is being created.
      * @return          A OwnCloudClient object ready to be used
      */
-    public static OwnCloudClient createOwnCloudClient(Uri uri, Context context, boolean followRedirects) {
+    public static OwnCloudClient createOwnCloudClient(Uri uri, Context context,
+                                                      boolean followRedirects) {
         OwnCloudClient client = new OwnCloudClient(uri);
 
         client.setDefaultTimeouts(DEFAULT_DATA_TIMEOUT, DEFAULT_CONNECTION_TIMEOUT);
