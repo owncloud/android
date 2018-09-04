@@ -48,7 +48,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -501,15 +500,6 @@ public class FileDisplayActivity extends FileActivity
     }
 
     protected void refreshListOfFilesFragment(boolean reloadData) {
-        if(mSelectAllMenuItem != null) {
-            Log.e(TAG, "11");
-            if (getListOfFilesFragment().getNoOfItems() == 0) {
-                mSelectAllMenuItem.setVisible(false);
-            } else {
-                Log.e(TAG, "1");
-                mSelectAllMenuItem.setVisible(true);
-            }
-        }
         OCFileListFragment fileListFragment = getListOfFilesFragment();
         if (fileListFragment != null) {
             fileListFragment.listDirectory(reloadData);
@@ -1105,6 +1095,12 @@ public class FileDisplayActivity extends FileActivity
     private void setBackgroundText() {
         OCFileListFragment ocFileListFragment = getListOfFilesFragment();
         if (ocFileListFragment != null) {
+            if(mSelectAllMenuItem != null) {
+                mSelectAllMenuItem.setVisible(true);
+                if (ocFileListFragment.getNoOfItems() == 0) {
+                    mSelectAllMenuItem.setVisible(false);
+                }
+            }
             int message = R.string.file_list_loading;
             if (!mSyncInProgress) {
                 // In case file list is empty
