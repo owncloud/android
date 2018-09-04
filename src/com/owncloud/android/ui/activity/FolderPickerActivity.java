@@ -399,7 +399,7 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
         } else {
             try {
                 showSnackMessage(
-                        FileStorageUtils.getNewFolderName(((CreateFolderOperation) operation).getRemotePath()) + " " + getResources().getString(R.string.folder_already_exists)
+                        operation.getNewFolderName() + " " + getResources().getString(R.string.folder_already_exists)
                 );
 
             } catch (NotFoundException e) {
