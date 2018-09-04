@@ -209,7 +209,8 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
     /// Authentication PRE-Fragment elements
     private EditText mUsernameInput;
     private EditText mPasswordInput;
-    private View mOkButton;
+    private View mCheckServerButton;
+    private View mLoginButton;
     private TextView mAuthStatusView;
 
     private String mAuthStatusText = "";
@@ -314,12 +315,17 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         /// initialize general UI elements
         initOverallUi();
 
-        mOkButton = findViewById(R.id.buttonOK);
-        mOkButton.setOnClickListener(view -> onOkClick());
+        mCheckServerButton = findViewById(R.id.embeddedCheckServerButton);
+
+        mCheckServerButton.setOnClickListener(view -> {
+            checkOcServer();
+        });
 
         findViewById(R.id.centeredRefreshButton).setOnClickListener(view -> checkOcServer());
         findViewById(R.id.embeddedRefreshButton).setOnClickListener(view -> checkOcServer());
 
+        mLoginButton = findViewById(R.id.loginButton);
+        mLoginButton.setOnClickListener(view -> onLoginClick());
 
         /// initialize block to be moved to single Fragment to check server and get info about it 
         initServerPreFragment(savedInstanceState);
@@ -528,10 +534,10 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             
             @Override
             public void afterTextChanged(Editable s) {
-                if (mOkButton.isEnabled() &&
+                if (mLoginButton.isEnabled() &&
                         !mServerInfo.mBaseUrl.equals(
                                 normalizeUrl(s.toString(), mServerInfo.mIsSslConn))) {
-                    mOkButton.setVisibility(View.GONE);
+                    mLoginButton.setVisibility(View.GONE);
                 }
             }
 
@@ -550,21 +556,15 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             }
         };
 
-
-        // TODO find out if this is really necessary, or if it can done in a different way
-        findViewById(R.id.scroll).setOnTouchListener(new OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    if (mHostUrlInput.hasFocus()) {
-                        checkOcServer();
-                    }
+        findViewById(R.id.scroll).setOnTouchListener((view, event) -> {
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                if (mHostUrlInput.hasFocus()) {
+                    checkOcServer();
                 }
-                return false;
             }
+            return false;
         });
-     
-        
+
         /// step 4 - mark automatic check to be started when OperationsService is ready
         mPendingAutoCheck = (savedInstanceState == null && 
                 (mAction != ACTION_CREATE || checkHostUrl));
@@ -615,9 +615,9 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         showAuthStatus();
 
         if (mServerIsValid) {
-            mOkButton.setVisibility(View.VISIBLE);
+            mLoginButton.setVisibility(View.VISIBLE);
         } else {
-            mOkButton.setVisibility(View.GONE);
+            mLoginButton.setVisibility(View.GONE);
         }
         
         /// step 3 - bind listeners
@@ -882,9 +882,9 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             checkOcServer();
         } else {
             if (mServerIsValid) {
-                mOkButton.setVisibility(View.VISIBLE);
+                mLoginButton.setVisibility(View.VISIBLE);
             } else {
-                mOkButton.setVisibility(View.GONE);
+                mLoginButton.setVisibility(View.GONE);
             }
             showRefreshButton(!mServerIsValid);
         }
@@ -895,7 +895,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         String uri = mHostUrlInput.getText().toString().trim();
         mServerIsValid = false;
         mServerIsChecked = false;
-        mOkButton.setVisibility(View.GONE);
+        mLoginButton.setVisibility(View.GONE);
         mServerInfo = new GetServerInfoOperation.ServerInfo();
         showRefreshButton(false);
 
@@ -1000,7 +1000,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
      * 
      * IMPORTANT ENTRY POINT 4
      */
-    public void onOkClick() {
+    public void onLoginClick() {
         // this check should be unnecessary
         if (mServerInfo.mVersion == null || 
                 mServerInfo.mBaseUrl == null ||
@@ -1008,7 +1008,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             mServerStatusIcon = R.drawable.common_error;
             mServerStatusText = getResources().getString(R.string.auth_wtf_reenter_URL);
             showServerStatus();
-            mOkButton.setVisibility(View.GONE);
+            mLoginButton.setVisibility(View.GONE);
             return;
         }
 
@@ -1259,9 +1259,9 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         showRefreshButton(!mServerIsValid);
         showServerStatus();
         if (mServerIsValid) {
-            mOkButton.setVisibility(View.VISIBLE);
+            mLoginButton.setVisibility(View.VISIBLE);
         } else {
-            mOkButton.setVisibility(View.GONE);
+            mLoginButton.setVisibility(View.GONE);
         }
         
         /// very special case (TODO: move to a common place for all the remote operations)
@@ -1532,7 +1532,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
             // update input controls state
             showRefreshButton(true);
-            mOkButton.setVisibility(View.GONE);
+            mLoginButton.setVisibility(View.GONE);
 
             // very special case (TODO: move to a common place for all the remote operations)
             if (result.getCode() == ResultCode.SSL_RECOVERABLE_PEER_UNVERIFIED) {
@@ -1816,14 +1816,15 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             mAuthStatusView.setCompoundDrawablesWithIntrinsicBounds(mAuthStatusIcon, 0, 0, 0);
             mAuthStatusView.setVisibility(View.VISIBLE);
         }
-    }     
-
+    }
 
     private void showRefreshButton (boolean show) {
         if (show)  {
+            mCheckServerButton.setVisibility(View.GONE);
             mRefreshButton.setVisibility(View.VISIBLE);
         } else {
             mRefreshButton.setVisibility(View.GONE);
+            mCheckServerButton.setVisibility(View.VISIBLE);
         }
     }
 
@@ -1854,8 +1855,8 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
     public boolean onEditorAction(TextView inputField, int actionId, KeyEvent event) {
         if (actionId == EditorInfo.IME_ACTION_DONE && inputField != null && 
                 inputField.equals(mPasswordInput)) {
-            if (mOkButton.isEnabled()) {
-                mOkButton.performClick();
+            if (mLoginButton.isEnabled()) {
+                mLoginButton.performClick();
             }
 
         } else if (actionId == EditorInfo.IME_ACTION_NEXT && inputField != null && 
@@ -1904,13 +1905,11 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
 
     private void getRemoteUserNameOperation(String sessionCookie) {
-        
         Intent getUserNameIntent = new Intent();
         getUserNameIntent.setAction(OperationsService.ACTION_GET_USER_NAME);
         getUserNameIntent.putExtra(OperationsService.EXTRA_SERVER_URL, mServerInfo.mBaseUrl);
         getUserNameIntent.putExtra(OperationsService.EXTRA_COOKIE, sessionCookie);
 
-        
         if (mOperationsServiceBinder != null) {
             mWaitingForOpId = mOperationsServiceBinder.queueNewOperation(getUserNameIntent);
         }

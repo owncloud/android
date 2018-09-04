@@ -186,7 +186,7 @@ public class SAMLAuthenticatorActivityTest {
         SystemClock.sleep(WAIT_INITIAL_MS);
 
         // Check that login button is disabled
-        onView(withId(R.id.buttonOK)).check(matches(not(isEnabled())));
+        onView(withId(R.id.loginButton)).check(matches(not(isEnabled())));
 
         onView(withId(R.id.hostUrlInput)).perform(replaceText(testServerURL));
 
@@ -206,7 +206,7 @@ public class SAMLAuthenticatorActivityTest {
         onView(withId(R.id.server_status_text)).check(matches(withText(R.string.auth_secure_connection)));
 
         //Go to idp webview
-        onView(withId(R.id.buttonOK)).perform(click());
+        onView(withId(R.id.loginButton)).perform(click());
 
         SystemClock.sleep(WAIT_CONNECTION_MS);
 
@@ -236,7 +236,7 @@ public class SAMLAuthenticatorActivityTest {
 
         Log_OC.i(LOG_TAG, "Test Check Login SAML Orientation Changes Start");
 
-        onView(withId(R.id.buttonOK)).check(matches(not(isEnabled())));
+        onView(withId(R.id.loginButton)).check(matches(not(isEnabled())));
 
         onView(withId(R.id.hostUrlInput)).perform(replaceText(testServerURL));
 
@@ -254,7 +254,7 @@ public class SAMLAuthenticatorActivityTest {
         onView(withId(R.id.server_status_text)).check(matches(withText(R.string.auth_secure_connection)));
 
         //Go to idp webview
-        onView(withId(R.id.buttonOK)).perform(click());
+        onView(withId(R.id.loginButton)).perform(click());
 
         SystemClock.sleep(WAIT_CONNECTION_MS);
 
