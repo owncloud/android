@@ -61,14 +61,6 @@ public class FileStorageUtils {
     public static Boolean mSortAscendingUpload = true;
 
     /**
-     * Get the folder name of the folder to be created from its path.
-     */
-    public static String getNewFolderName(String path){
-        String[] tokens = path.split("/");
-        return tokens[tokens.length - 1];
-    }
-
-    /**
      * Get local storage path for all data of the app in public storages.
      */
     public static String getDataFolder() {
