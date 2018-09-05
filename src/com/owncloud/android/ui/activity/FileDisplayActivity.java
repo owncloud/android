@@ -122,6 +122,7 @@ public class FileDisplayActivity extends FileActivity
     private View mLeftFragmentContainer;
     private View mRightFragmentContainer;
     private MenuItem mDescendingMenuItem;
+    private MenuItem mSelectAllMenuItem;
     private Menu mMainMenu;
 
     private static final String KEY_WAITING_TO_PREVIEW = "WAITING_TO_PREVIEW";
@@ -530,6 +531,10 @@ public class FileDisplayActivity extends FileActivity
         menu.findItem(R.id.action_create_dir).setVisible(false);
 
         mDescendingMenuItem = menu.findItem(R.id.action_sort_descending);
+        mSelectAllMenuItem = menu.findItem(R.id.action_select_all);
+        if(getSecondFragment() == null) {
+            mSelectAllMenuItem.setVisible(true);
+        }
         mMainMenu = menu;
 
         recoverSortMenuFormPreferences(menu);
@@ -542,6 +547,10 @@ public class FileDisplayActivity extends FileActivity
 
 
         switch (item.getItemId()) {
+            case R.id.action_select_all: {
+                getListOfFilesFragment().selectAll();
+                break;
+            }
             case R.id.action_sync_account: {
                 startSynchronization();
                 break;
@@ -1086,6 +1095,12 @@ public class FileDisplayActivity extends FileActivity
     private void setBackgroundText() {
         OCFileListFragment ocFileListFragment = getListOfFilesFragment();
         if (ocFileListFragment != null) {
+            if(mSelectAllMenuItem != null) {
+                mSelectAllMenuItem.setVisible(true);
+                if (ocFileListFragment.getNoOfItems() == 0) {
+                    mSelectAllMenuItem.setVisible(false);
+                }
+            }
             int message = R.string.file_list_loading;
             if (!mSyncInProgress) {
                 // In case file list is empty

@@ -298,7 +298,7 @@ public class PreviewTextFragment extends FileFragment {
                     mContainerActivity,
                     getActivity()
             );
-            mf.filter(menu);
+            mf.filter(menu, false, false);
         }
 
         // additional restriction for this fragment

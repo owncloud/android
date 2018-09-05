@@ -72,7 +72,6 @@ import com.owncloud.android.ui.dialog.ConfirmationDialogFragment;
 import com.owncloud.android.ui.dialog.CreateFolderDialogFragment;
 import com.owncloud.android.ui.dialog.RemoveFilesDialogFragment;
 import com.owncloud.android.ui.dialog.RenameFileDialogFragment;
-import com.owncloud.android.ui.helpers.FilesUploadHelper;
 import com.owncloud.android.ui.helpers.SparseBooleanArrayParcelable;
 import com.owncloud.android.ui.preview.PreviewAudioFragment;
 import com.owncloud.android.ui.preview.PreviewImageFragment;
@@ -110,6 +109,8 @@ public class OCFileListFragment extends ExtendedListFragment {
 
     private OCFile mFile = null;
     private FileListListAdapter mAdapter;
+
+    private boolean mEnableSelectAll = true;
 
     private int mStatusBarColorActionMode;
     private int mStatusBarColor;
@@ -482,6 +483,13 @@ public class OCFileListFragment extends ExtendedListFragment {
         public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
             getListView().invalidateViews();
             mode.invalidate();
+            if(mAdapter.getCheckedItems(getListView()).size() == mAdapter.getCount()){
+                mEnableSelectAll = false;
+            } else{
+                if(!checked) {
+                    mEnableSelectAll = true;
+                }
+            }
         }
 
         /**
@@ -527,8 +535,7 @@ public class OCFileListFragment extends ExtendedListFragment {
                 mContainerActivity,
                 getActivity()
             );
-            mf.filter(menu);
-
+            mf.filter(menu, mEnableSelectAll, true);
             return true;
         }
 
@@ -778,6 +785,16 @@ public class OCFileListFragment extends ExtendedListFragment {
                 ((FileActivity) mContainerActivity).getAccount(), file);
     }
 
+    public void selectAll(){
+        for(int i = 0; i < mAdapter.getCount(); i++) {
+            getListView().setItemChecked(i, true);
+        }
+    }
+
+    public int getNoOfItems(){
+        return getListView().getCount();
+    }
+
     /**
      * Start the appropriate action(s) on the currently selected files given menu selected by the user.
      *
@@ -794,6 +811,7 @@ public class OCFileListFragment extends ExtendedListFragment {
             switch (menuId) {
                 case R.id.action_share_file: {
                     mContainerActivity.getFileOperationsHelper().showShareFile(singleFile);
+                    mEnableSelectAll = false;
                     return true;
                 }
                 case R.id.action_open_file_with: {
@@ -828,6 +846,20 @@ public class OCFileListFragment extends ExtendedListFragment {
 
         /// actions possible on a batch of files
         switch (menuId) {
+            case R.id.file_action_select_all: {
+                selectAll();
+                return true;
+            }
+            case R.id.action_select_inverse: {
+                for(int i = 0;i < mAdapter.getCount();i++){
+                    if(getListView().isItemChecked(i)) {
+                        getListView().setItemChecked(i, false);
+                    } else{
+                        getListView().setItemChecked(i,true);
+                    }
+                }
+                return true;
+            }
             case R.id.action_remove_file: {
                 RemoveFilesDialogFragment dialog = RemoveFilesDialogFragment.newInstance(checkedFiles);
                 dialog.show(getFragmentManager(), ConfirmationDialogFragment.FTAG_CONFIRMATION);
