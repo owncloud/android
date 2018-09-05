@@ -64,7 +64,7 @@
   <string name="auth_password">گذرواژه</string>
   <string name="auth_register">در %1$s تازه واردید؟</string>
   <string name="sync_string_files">پرونده‌ها</string>
-  <string name="setup_btn_connect">اتّصال</string>
+  <string name="setup_btn_login">اتّصال</string>
   <string name="uploader_btn_upload_text">بارگذاری</string>
   <string name="uploader_top_message">گزینش پوشهٔ بارگذاری</string>
   <string name="uploader_wrn_no_account_title">هیچ حسابی پیدا نشد</string>

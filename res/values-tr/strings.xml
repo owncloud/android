@@ -51,7 +51,7 @@
   <string name="auth_password">Parola</string>
   <string name="auth_register">%1$s sizin için yeni mi?</string>
   <string name="sync_string_files">Dosyalar</string>
-  <string name="setup_btn_connect">Bağlan</string>
+  <string name="setup_btn_login">Bağlan</string>
   <string name="uploader_btn_upload_text">Yükle</string>
   <string name="uploader_top_message">Yükleme klasörü seç</string>
   <string name="uploader_wrn_no_account_title">Hesap bulunamadı</string>

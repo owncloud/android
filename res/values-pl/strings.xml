@@ -72,7 +72,7 @@
   <string name="auth_password">Hasło</string>
   <string name="auth_register">Nowe %1$s?</string>
   <string name="sync_string_files">Pliki</string>
-  <string name="setup_btn_connect">Połącz</string>
+  <string name="setup_btn_login">Połącz</string>
   <string name="uploader_btn_upload_text">Wyślij</string>
   <string name="uploader_top_message">Wybierz folder do wgrywania plików</string>
   <string name="uploader_wrn_no_account_title">Nie znaleziono konta</string>

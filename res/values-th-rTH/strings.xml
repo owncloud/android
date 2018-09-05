@@ -79,7 +79,7 @@
   <string name="auth_password">รหัสผ่าน</string>
   <string name="auth_register">ใหม่จนถึง %1$s?</string>
   <string name="sync_string_files">ไฟล์</string>
-  <string name="setup_btn_connect">เชื่อมต่อ</string>
+  <string name="setup_btn_login">เชื่อมต่อ</string>
   <string name="uploader_btn_upload_text">อัพโหลด</string>
   <string name="uploader_top_message">เลือกโฟลเดอร์ที่ต้องการอัพโหลด</string>
   <string name="uploader_wrn_no_account_title">ไม่พบบัญชีที่ต้องการ</string>

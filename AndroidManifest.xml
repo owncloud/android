@@ -187,7 +187,8 @@
         <activity
             android:name=".authentication.AuthenticatorActivity"
             android:exported="true"
-            android:launchMode="singleTask">
+            android:launchMode="singleTask"
+            android:theme="@style/Theme.ownCloud.Authenticator">
             <intent-filter>
                 <action android:name="com.owncloud.android.workaround.accounts.CREATE" />
 

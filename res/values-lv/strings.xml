@@ -35,7 +35,7 @@
   <string name="auth_username">Lietotājvārds</string>
   <string name="auth_password">Parole</string>
   <string name="sync_string_files">Datnes</string>
-  <string name="setup_btn_connect">Savienoties</string>
+  <string name="setup_btn_login">Savienoties</string>
   <string name="uploader_btn_upload_text">Augšupielādēt</string>
   <string name="uploader_wrn_no_account_title">Nav atrastu kontu</string>
   <string name="uploader_wrn_no_account_setup_btn_text">Iestatīt</string>

@@ -38,7 +38,7 @@
   <string name="auth_username">Gebruikersnaam</string>
   <string name="auth_password">Wagwoord</string>
   <string name="sync_string_files">Lêers</string>
-  <string name="setup_btn_connect">Verbind</string>
+  <string name="setup_btn_login">Verbind</string>
   <string name="uploader_btn_upload_text">Laai Op</string>
   <string name="file_list_seconds_ago">sekondes gelede</string>
   <string name="file_list_loading">Laai tans…</string>

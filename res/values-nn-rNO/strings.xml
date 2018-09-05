@@ -50,7 +50,7 @@
   <string name="auth_password">Passord</string>
   <string name="auth_register">Fersk brukar av %1$s?</string>
   <string name="sync_string_files">Filer</string>
-  <string name="setup_btn_connect">Kopla til</string>
+  <string name="setup_btn_login">Kopla til</string>
   <string name="uploader_btn_upload_text">Last opp</string>
   <string name="uploader_top_message">Vel mappe for opplasting</string>
   <string name="uploader_wrn_no_account_title">Fann ingen konto</string>

@@ -68,7 +68,7 @@
   <string name="auth_password">암호</string>
   <string name="auth_register">%1$s의 새로운 사용자인가요?</string>
   <string name="sync_string_files">파일</string>
-  <string name="setup_btn_connect">연결</string>
+  <string name="setup_btn_login">연결</string>
   <string name="uploader_btn_upload_text">업로드</string>
   <string name="uploader_top_message">업로드 폴더 선택:</string>
   <string name="uploader_wrn_no_account_title">계정 없음</string>

@@ -50,7 +50,7 @@
   <string name="auth_password">Slaptažodis</string>
   <string name="auth_register">Naujas į %1$s?</string>
   <string name="sync_string_files">Failai</string>
-  <string name="setup_btn_connect">Prisijungti</string>
+  <string name="setup_btn_login">Prisijungti</string>
   <string name="uploader_btn_upload_text">Įkelti</string>
   <string name="uploader_top_message">Pasirinkti įkėlimo katalogą</string>
   <string name="uploader_wrn_no_account_title">Paskyrų nerasta</string>

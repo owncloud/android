@@ -76,7 +76,7 @@
   <string name="auth_password">密码</string>
   <string name="auth_register">初次使用 %1$s?</string>
   <string name="sync_string_files">文件</string>
-  <string name="setup_btn_connect">连接</string>
+  <string name="setup_btn_login">连接</string>
   <string name="uploader_btn_upload_text">上传</string>
   <string name="uploader_top_message">选择上传目录</string>
   <string name="uploader_wrn_no_account_title">未找到账号</string>
