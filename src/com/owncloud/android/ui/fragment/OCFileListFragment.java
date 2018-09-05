@@ -5,6 +5,7 @@
  *   @author masensio
  *   @author David A. Velasco
  *   @author Christian Schabesberger
+ *   @author David González Verdugo
  *   Copyright (C) 2011  Bartek Przybylski
  *   Copyright (C) 2018 ownCloud GmbH.
  *
@@ -37,6 +38,7 @@ import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.SearchView;
 import android.util.SparseBooleanArray;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
@@ -88,7 +90,8 @@ import java.util.List;
  *
  * TODO refactor to get rid of direct dependency on FileDisplayActivity
  */
-public class OCFileListFragment extends ExtendedListFragment {
+public class OCFileListFragment extends ExtendedListFragment implements
+        SearchView.OnQueryTextListener, View.OnFocusChangeListener {
 
     private static final String TAG = OCFileListFragment.class.getSimpleName();
 
@@ -108,7 +111,7 @@ public class OCFileListFragment extends ExtendedListFragment {
     private FileFragment.ContainerActivity mContainerActivity;
 
     private OCFile mFile = null;
-    private FileListListAdapter mAdapter;
+    private FileListListAdapter mFileListAdapter;
 
     private boolean mEnableSelectAll = true;
 
@@ -119,6 +122,8 @@ public class OCFileListFragment extends ExtendedListFragment {
     private boolean miniFabClicked = false;
     private ActionMode mActiveActionMode;
     private OCFileListFragment.MultiChoiceModeListener mMultiChoiceModeListener;
+
+    private SearchView mSearchView;
 
 
     /**
@@ -213,12 +218,12 @@ public class OCFileListFragment extends ExtendedListFragment {
         boolean justFolders = isShowingJustFolders();
         setFooterEnabled(!justFolders);
 
-        mAdapter = new FileListListAdapter(
+        mFileListAdapter = new FileListListAdapter(
                 justFolders,
                 getActivity(),
                 mContainerActivity
         );
-        setListAdapter(mAdapter);
+        setListAdapter(mFileListAdapter);
 
         Bundle args = getArguments();
         mHideFab = (args != null) && args.getBoolean(ARG_HIDE_FAB, false);
@@ -241,6 +246,16 @@ public class OCFileListFragment extends ExtendedListFragment {
                 removeFabLabels();
             }
         }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        mSearchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        mSearchView.setMaxWidth(Integer.MAX_VALUE);
+        mSearchView.setQueryHint(getResources().getString(R.string.actionbar_search));
+        mSearchView.setOnQueryTextFocusChangeListener(this);
+        mSearchView.setOnQueryTextListener(this);
     }
 
     /**
@@ -405,6 +420,26 @@ public class OCFileListFragment extends ExtendedListFragment {
                 com.getbase.floatingactionbutton.R.id.fab_label)).setVisibility(View.GONE);
     }
 
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String query) {
+        mFileListAdapter.filterBySearch(query);
+        return true;
+    }
+
+    @Override
+    public void onFocusChange(View v, boolean hasFocus) {
+        if (hasFocus) {
+            setMessageForEmptyList(getString(R.string.local_file_list_search_with_no_matches));
+        } else { // Set default message for empty list of files
+            ((FileDisplayActivity) getActivity()).setBackgroundText();
+        }
+    }
+
     /**
      * Handler for multiple selection mode.
      *
@@ -436,7 +471,7 @@ public class OCFileListFragment extends ExtendedListFragment {
 
         @Override
         public void onDrawerOpened(View drawerView) {
-            // nothing to do
+            clearLocalSearchView();
         }
 
         /**
@@ -483,7 +518,7 @@ public class OCFileListFragment extends ExtendedListFragment {
         public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
             getListView().invalidateViews();
             mode.invalidate();
-            if(mAdapter.getCheckedItems(getListView()).size() == mAdapter.getCount()){
+            if(mFileListAdapter.getCheckedItems(getListView()).size() == mFileListAdapter.getCount()){
                 mEnableSelectAll = false;
             } else{
                 if(!checked) {
@@ -521,7 +556,7 @@ public class OCFileListFragment extends ExtendedListFragment {
          */
         @Override
         public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-            List<OCFile> checkedFiles = mAdapter.getCheckedItems(getListView());
+            List<OCFile> checkedFiles = mFileListAdapter.getCheckedItems(getListView());
             final int checkedCount = checkedFiles.size();
             String title = getResources().getQuantityString(
                 R.plurals.items_selected_count,
@@ -587,6 +622,14 @@ public class OCFileListFragment extends ExtendedListFragment {
             if (sbap != null) {
                 mSelectionWhenActionModeClosedByDrawer = sbap.getSparseBooleanArray();
             }
+        }
+    }
+
+    private void clearLocalSearchView() {
+        ((FileDisplayActivity) getActivity()).hideSoftKeyboard();
+        mFileListAdapter.clearFilterBySearch();
+        if (mSearchView != null) {
+            mSearchView.onActionViewCollapsed();
         }
     }
 
@@ -673,7 +716,6 @@ public class OCFileListFragment extends ExtendedListFragment {
         if(isInPowerSaveMode()) {
             listDirectory(file);
         } else {
-
             Animation fadeOutFront = AnimationUtils.loadAnimation(getContext(), R.anim.dir_fadeout_front);
             Handler eventHandler = new Handler();
 
@@ -722,7 +764,7 @@ public class OCFileListFragment extends ExtendedListFragment {
 
     @Override
     public void onItemClick(AdapterView<?> l, View v, int position, long id) {
-        OCFile file = (OCFile) mAdapter.getItem(position);
+        OCFile file = (OCFile) mFileListAdapter.getItem(position);
         if (file != null) {
             if (file.isFolder()) {
                 listDirectoryWithAnimationDown(file);
@@ -730,7 +772,6 @@ public class OCFileListFragment extends ExtendedListFragment {
                 mContainerActivity.onBrowsedDownTo(file);
                 // save index and top position
                 saveIndexAndTopPosition(position);
-
             } else { /// Click on a file
                 if (PreviewImageFragment.canBePreviewed(file)) {
                     // preview image - it handles the sync, if needed
@@ -786,7 +827,7 @@ public class OCFileListFragment extends ExtendedListFragment {
     }
 
     public void selectAll(){
-        for(int i = 0; i < mAdapter.getCount(); i++) {
+        for(int i = 0; i < mFileListAdapter.getCount(); i++) {
             getListView().setItemChecked(i, true);
         }
     }
@@ -802,7 +843,7 @@ public class OCFileListFragment extends ExtendedListFragment {
      * @return              'true' if the menu selection started any action, 'false' otherwise.
      */
     public boolean onFileActionChosen(int menuId) {
-        final ArrayList<OCFile> checkedFiles = mAdapter.getCheckedItems(getListView());
+        final ArrayList<OCFile> checkedFiles = mFileListAdapter.getCheckedItems(getListView());
         if (checkedFiles.size() <= 0) return false;
 
         if (checkedFiles.size() == 1) {
@@ -851,7 +892,7 @@ public class OCFileListFragment extends ExtendedListFragment {
                 return true;
             }
             case R.id.action_select_inverse: {
-                for(int i = 0;i < mAdapter.getCount();i++){
+                for(int i = 0;i < mFileListAdapter.getCount();i++){
                     if(getListView().isItemChecked(i)) {
                         getListView().setItemChecked(i, false);
                     } else{
@@ -951,24 +992,23 @@ public class OCFileListFragment extends ExtendedListFragment {
             }
 
             // TODO Enable when "On Device" is recovered ?
-            mAdapter.swapDirectory(directory, storageManager/*, onlyOnDevice*/);
+            mFileListAdapter.swapDirectory(directory, storageManager/*, onlyOnDevice*/);
             if (mFile == null || !mFile.equals(directory)) {
                 mCurrentListView.setSelection(0);
             }
             mFile = directory;
 
             updateLayout();
-
         }
     }
 
     private void updateLayout() {
         if (!isShowingJustFolders()) {
             int filesCount = 0, foldersCount = 0;
-            int count = mAdapter.getCount();
+            int count = mFileListAdapter.getCount();
             OCFile file;
             for (int i=0; i < count ; i++) {
-                file = (OCFile) mAdapter.getItem(i);
+                file = (OCFile) mFileListAdapter.getItem(i);
                 if (file.isFolder()) {
                     foldersCount++;
                 } else {
@@ -992,6 +1032,7 @@ public class OCFileListFragment extends ExtendedListFragment {
             setFooterText(generateFooterText(filesCount, foldersCount));
         }
         invalidateActionMode();
+        clearLocalSearchView();
     }
 
     private void invalidateActionMode() {
@@ -1041,15 +1082,15 @@ public class OCFileListFragment extends ExtendedListFragment {
     }
 
     public void sortByName(boolean descending) {
-        mAdapter.setSortOrder(FileStorageUtils.SORT_NAME, descending);
+        mFileListAdapter.setSortOrder(FileStorageUtils.SORT_NAME, descending);
     }
 
     public void sortByDate(boolean descending) {
-        mAdapter.setSortOrder(FileStorageUtils.SORT_DATE, descending);
+        mFileListAdapter.setSortOrder(FileStorageUtils.SORT_DATE, descending);
     }
 
     public void sortBySize(boolean descending) {
-        mAdapter.setSortOrder(FileStorageUtils.SORT_SIZE, descending);
+        mFileListAdapter.setSortOrder(FileStorageUtils.SORT_SIZE, descending);
     }
 
     /**
@@ -1151,5 +1192,4 @@ public class OCFileListFragment extends ExtendedListFragment {
         );
         snackbar.show();
     }
-
 }
