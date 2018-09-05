@@ -1109,6 +1109,8 @@ public class FileDisplayActivity extends FileActivity
             if (!mSyncInProgress) {
                 // In case file list is empty
                 message = R.string.file_list_empty;
+                ocFileListFragment.getProgressBar().setVisibility(View.GONE);
+                ocFileListFragment.getShadowView().setVisibility(View.VISIBLE);
             }
             ocFileListFragment.setMessageForEmptyList(getString(message));
         } else {
