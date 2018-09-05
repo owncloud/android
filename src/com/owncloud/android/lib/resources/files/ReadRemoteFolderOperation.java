@@ -88,12 +88,12 @@ public class ReadRemoteFolderOperation extends RemoteOperation<ArrayList<RemoteF
 
                 // parse data from remote folder
                 mFolderAndFiles.add(
-                        new RemoteFile(propfindMethod.getRoot(), client.getAccount().getDisplayName())
+                        new RemoteFile(propfindMethod.getRoot(), client.getCredentials().getUsername())
                 );
 
                 // loop to update every child
                 for (Response resource : propfindMethod.getMembers()) {
-                    RemoteFile file = new RemoteFile(resource, client.getAccount().getDisplayName());
+                    RemoteFile file = new RemoteFile(resource, client.getCredentials().getUsername());
                     mFolderAndFiles.add(file);
                 }
 

@@ -193,8 +193,8 @@ public class RemoteFile implements Parcelable, Serializable {
         mPrivateLink = null;
     }
 
-    public RemoteFile(final Response davResource, String displayName) {
-        this(getRemotePathFromUrl(davResource.getHref(), displayName));
+    public RemoteFile(final Response davResource, String userName) {
+        this(getRemotePathFromUrl(davResource.getHref(), userName));
         final List<Property> properties = davResource.getProperties();
 
         for(Property property : properties) {
