@@ -518,7 +518,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
         public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
             getListView().invalidateViews();
             mode.invalidate();
-            if(mAdapter.getCheckedItems(getListView()).size() == mAdapter.getCount()){
+            if(mFileListAdapter.getCheckedItems(getListView()).size() == mFileListAdapter.getCount()){
                 mEnableSelectAll = false;
             } else{
                 if(!checked) {
@@ -827,7 +827,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
     }
 
     public void selectAll(){
-        for(int i = 0; i < mAdapter.getCount(); i++) {
+        for(int i = 0; i < mFileListAdapter.getCount(); i++) {
             getListView().setItemChecked(i, true);
         }
     }
@@ -892,7 +892,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
                 return true;
             }
             case R.id.action_select_inverse: {
-                for(int i = 0;i < mAdapter.getCount();i++){
+                for(int i = 0;i < mFileListAdapter.getCount();i++){
                     if(getListView().isItemChecked(i)) {
                         getListView().setItemChecked(i, false);
                     } else{
