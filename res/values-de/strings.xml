@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="about_android">%1$s Android App</string>
+  <string name="about_android">%1$s Android-App</string>
   <string name="about_version">Version %1$s</string>
   <string name="actionbar_sync">Konto aktualisieren</string>
   <string name="actionbar_upload">Datei hochladen</string>
@@ -80,7 +80,7 @@
   <string name="auth_password">Passwort</string>
   <string name="auth_register">Ist %1$s neu für dich?</string>
   <string name="sync_string_files">Dateien</string>
-  <string name="setup_btn_login">Verbinden</string>
+  <string name="setup_btn_login">Anmelden</string>
   <string name="uploader_btn_upload_text">Hochladen</string>
   <string name="uploader_top_message">Hochladeordner auswählen</string>
   <string name="uploader_wrn_no_account_title">Kein Account gefunden</string>
@@ -385,6 +385,7 @@
   <string name="log_send_no_mail_app">Es wurde keine App gefunden die Logs verschicken kann. Bitte installiere eine App die E-Mails verschicken kann.</string>
   <string name="log_send_mail_subject">%1$s Android-App Meldungen</string>
   <string name="log_progress_dialog_text">Daten werden geladen</string>
+  <string name="actionbar_select_all">Alle auswählen</string>
   <string name="saml_authentication_required_text">Legitimierung benötigt</string>
   <string name="saml_authentication_wrong_pass">Falsches Passwort</string>
   <string name="actionbar_move">Verschieben</string>
@@ -529,5 +530,9 @@
   <string name="welcome_feature_4_text">Deine Bilder/Videos werden automatisch hochgeladen</string>
   <string name="welcome_feature_5_title">Videostreaming</string>
   <string name="welcome_feature_5_text">Gib deine Videos wieder, ohne sie herunterzuladen</string>
+  <string name="welcome_feature_6_text">Kenne Deinen verfügbaren und freien Speicherplatz</string>
+  <string name="welcome_feature_7_title">Neue Icons</string>
+  <string name="welcome_feature_7_text">Um Dateien herunterzuladen und als offline verfügbar zu markieren</string>
+  <string name="welcome_feature_8_title">Neue Pins</string>
   <string name="no_borwser_installed_alert">Es ist kein Browser installiert. Bitte installieren Sie zur sicheren Anmeldung einen Browser.</string>
 </resources>

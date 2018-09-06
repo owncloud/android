@@ -2,6 +2,7 @@
 <resources>
   <string name="about_android">%1$s Android-App</string>
   <string name="about_version">Version %1$s</string>
+  <string name="actionbar_search">Ordner durchsuchen</string>
   <string name="actionbar_sync">Konto aktualisieren</string>
   <string name="actionbar_upload">Datei hochladen</string>
   <string name="actionbar_upload_from_apps">Inhalt von anderen Apps</string>
@@ -79,7 +80,7 @@
   <string name="auth_password">Passwort</string>
   <string name="auth_register">Ist %1$s neu für Sie?</string>
   <string name="sync_string_files">Dateien</string>
-  <string name="setup_btn_login">Verbinden</string>
+  <string name="setup_btn_login">Anmelden</string>
   <string name="uploader_btn_upload_text">Hochladen</string>
   <string name="uploader_top_message">Hochladeordner auswählen</string>
   <string name="uploader_wrn_no_account_title">Kein Konto gefunden</string>
@@ -384,6 +385,7 @@
   <string name="log_send_no_mail_app">Keine App zum Versenden der Meldungen gefunden. Bitte installieren Sie die Mail-App!</string>
   <string name="log_send_mail_subject">%1$s Android-App Meldungen</string>
   <string name="log_progress_dialog_text">Lade Daten…</string>
+  <string name="actionbar_select_all">Alle auswählen</string>
   <string name="saml_authentication_required_text">Legitimierung benötigt</string>
   <string name="saml_authentication_wrong_pass">Falsches Passwort</string>
   <string name="actionbar_move">Verschieben</string>
@@ -528,5 +530,11 @@
   <string name="welcome_feature_4_text">Ihre Bilder/Videos werden automatisch hochgeladen</string>
   <string name="welcome_feature_5_title">Videostreaming</string>
   <string name="welcome_feature_5_text">Geben Sie Ihre Videos wieder, ohne sie herunterzuladen</string>
+  <string name="welcome_feature_6_title">Speicher-Kontingent</string>
+  <string name="welcome_feature_6_text">Benutzten und verfügbaren Speicher zeigen</string>
+  <string name="welcome_feature_7_title">Neue Symbole</string>
+  <string name="welcome_feature_7_text">Herunterladen und Dateien als \"offline\" markieren</string>
+  <string name="welcome_feature_8_title">Neue PINs</string>
+  <string name="welcome_feature_8_text">Synchronisieren, heruntergeladene und \"offline\" Dateien</string>
   <string name="no_borwser_installed_alert">Es ist kein Browser installiert. Bitte installieren Sie zur sicheren Anmeldung einen Browser.</string>
 </resources>

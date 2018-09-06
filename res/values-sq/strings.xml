@@ -2,6 +2,7 @@
 <resources>
   <string name="about_android">Aplikacion %1$s Android</string>
   <string name="about_version">versioni %1$s</string>
+  <string name="actionbar_search">Kërko në këtë dosje</string>
   <string name="actionbar_sync">Freskoni llogarinë</string>
   <string name="actionbar_upload">Ngarkoni</string>
   <string name="actionbar_upload_from_apps">Lëndë nga aplikacione të tjera</string>
@@ -79,7 +80,7 @@
   <string name="auth_password">Fjalëkalim</string>
   <string name="auth_register">Rishtar te %1$s?</string>
   <string name="sync_string_files">Kartela</string>
-  <string name="setup_btn_login">Lidhuni</string>
+  <string name="setup_btn_login">Hyni</string>
   <string name="uploader_btn_upload_text">Ngarkoni</string>
   <string name="uploader_top_message">Zgjidhni dosje ngarkimi</string>
   <string name="uploader_wrn_no_account_title">S\’u gjet llogari</string>
@@ -382,6 +383,7 @@
   <string name="log_send_no_mail_app">S\’u gjet aplikacion për dërgim regjistrimesh. Ju lutemi, instaloni një aplikacion email-esh.</string>
   <string name="log_send_mail_subject">Regjistra aplikacioni %1$s për Android</string>
   <string name="log_progress_dialog_text">Po ngarkohen të dhëna …</string>
+  <string name="actionbar_select_all">Përzgjidhi krejt</string>
   <string name="saml_authentication_required_text">Lypset mirëfilltësim</string>
   <string name="saml_authentication_wrong_pass">Fjalëkalim i gabuar</string>
   <string name="actionbar_move">Zhvendose</string>
@@ -526,5 +528,10 @@
   <string name="welcome_feature_4_text">Fotot/videot tuaja të ngarkuara automatikisht</string>
   <string name="welcome_feature_5_title">Transmetim videosh</string>
   <string name="welcome_feature_5_text">Luajini videot tuaja pa i shkarkuar</string>
+  <string name="welcome_feature_6_title">Kuota përdoruesi</string>
+  <string name="welcome_feature_6_text">Njihni sa hapësirë keni përdorur dhe sa keni të lirë</string>
+  <string name="welcome_feature_7_title">Ikona të reja</string>
+  <string name="welcome_feature_7_text">Për shkarkim dhe caktim kartelash si av. <em>offline</em></string>
+  <string name="welcome_feature_8_text">Për kartela njëkohësimi, të shkarkuara dhe av. <em>offline</em></string>
   <string name="no_borwser_installed_alert">S’ka shfletues të instaluar. Ju lutemi, instaloni një Shfletues, që të mund të lejohet hyrje e sigurt.</string>
 </resources>

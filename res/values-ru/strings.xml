@@ -2,6 +2,7 @@
 <resources>
   <string name="about_android">%1$s для Android</string>
   <string name="about_version">версия %1$s</string>
+  <string name="actionbar_search">Поиск в этой папке</string>
   <string name="actionbar_sync">Обновить учетную запись</string>
   <string name="actionbar_upload">Загрузить</string>
   <string name="actionbar_upload_from_apps">Содержимое из других приложений</string>
@@ -80,7 +81,7 @@
   <string name="auth_password">Пароль</string>
   <string name="auth_register">Незнакомы с %1$s?</string>
   <string name="sync_string_files">Файлы</string>
-  <string name="setup_btn_login">Подключиться</string>
+  <string name="setup_btn_login">Войти</string>
   <string name="uploader_btn_upload_text">Загрузить</string>
   <string name="uploader_top_message">Выбрать каталог для загрузки</string>
   <string name="uploader_wrn_no_account_title">Учётная запись не найдена</string>
@@ -385,6 +386,7 @@
   <string name="log_send_no_mail_app">Программа для отправки журналов не найдена. Пожалуйста установите почтовую программу.</string>
   <string name="log_send_mail_subject">Журналы %1$s для Android</string>
   <string name="log_progress_dialog_text">Загрузка данных ...</string>
+  <string name="actionbar_select_all">Выделить все</string>
   <string name="saml_authentication_required_text">Требуется аутентификация </string>
   <string name="saml_authentication_wrong_pass">Неправильный пароль</string>
   <string name="actionbar_move">Переместить</string>
@@ -462,10 +464,10 @@
   <string name="share_privilege_can_edit_delete">удалить</string>
   <string name="edit_share_unshare">Остановить общий доступ</string>
   <string name="edit_share_done">завершено</string>
-  <string name="action_retry_uploads">Повтор не удался</string>
-  <string name="action_clear_failed_uploads">Очистка не удалась</string>
-  <string name="action_clear_successful_uploads">Очистка удалась</string>
-  <string name="action_clear_finished_uploads">Очистить все завершённые</string>
+  <string name="action_retry_uploads">Повторить неудавшиеся</string>
+  <string name="action_clear_failed_uploads">Очистить неудавшиеся</string>
+  <string name="action_clear_successful_uploads">Очистить удавшиеся</string>
+  <string name="action_clear_finished_uploads">Очистить завершённые</string>
   <string name="action_switch_grid_view">Сетка</string>
   <string name="action_switch_list_view">Список</string>
   <string name="manage_space_title">Управление свободным местом</string>
@@ -530,5 +532,11 @@
   <string name="welcome_feature_4_text">Ваши снимки и видео загружаются автоматически</string>
   <string name="welcome_feature_5_title"> Потоковое видео</string>
   <string name="welcome_feature_5_text">Проигрывайте ваши ролики, не скачивая их</string>
+  <string name="welcome_feature_6_title">Квота пользователя</string>
+  <string name="welcome_feature_6_text">Знайте ваше занятое и доступное пространство</string>
+  <string name="welcome_feature_7_title">Новые значки</string>
+  <string name="welcome_feature_7_text">Чтобы скачать и сделать файлы доступными без сети</string>
+  <string name="welcome_feature_8_title">Новые пометки</string>
+  <string name="welcome_feature_8_text">Для синхронизируемых, скачанных и файлов, доступных без сети</string>
   <string name="no_borwser_installed_alert">Не установлен никакой браузер. Пожалуйста, установите браузер для поддержки безопасного входа.</string>
 </resources>

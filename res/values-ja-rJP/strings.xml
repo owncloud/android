@@ -69,7 +69,7 @@
   <string name="auth_password">パスワード</string>
   <string name="auth_register">%1$sは初めてですか？</string>
   <string name="sync_string_files">ファイル</string>
-  <string name="setup_btn_login">接続</string>
+  <string name="setup_btn_login">ログイン</string>
   <string name="uploader_btn_upload_text">アップロード</string>
   <string name="uploader_top_message">アップロードフォルダーを選択</string>
   <string name="uploader_wrn_no_account_title">アカウントが見つかりません</string>
@@ -368,6 +368,7 @@
   <string name="log_send_no_mail_app">ログを送信するアプリが見つかりませんでした。メールアプリをインストールしてください。</string>
   <string name="log_send_mail_subject">%1$s アンドロイドアプリログ</string>
   <string name="log_progress_dialog_text">データの読込中 ...</string>
+  <string name="actionbar_select_all">すべて選択</string>
   <string name="saml_authentication_required_text">認証を必要とする</string>
   <string name="saml_authentication_wrong_pass">パスワードが間違っています</string>
   <string name="actionbar_move">移動</string>

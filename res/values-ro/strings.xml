@@ -50,7 +50,7 @@
   <string name="auth_password">Parolă</string>
   <string name="auth_register">Nou la %1$s?</string>
   <string name="sync_string_files">Fișiere</string>
-  <string name="setup_btn_login">Conectare</string>
+  <string name="setup_btn_login">Autentificare</string>
   <string name="uploader_btn_upload_text">Încărcare</string>
   <string name="uploader_top_message">Alege dosarul pentru încărcare</string>
   <string name="uploader_wrn_no_account_title">Nici un cont găsit</string>
@@ -338,6 +338,7 @@
   <string name="log_send_no_mail_app">Nu s-a găsit nicio aplicație de trimitere a logurilor. Te rog instalează o aplicație de e-mail.</string>
   <string name="log_send_mail_subject">%1$s înregistrările app-ului Android</string>
   <string name="log_progress_dialog_text">Încărcare date...</string>
+  <string name="actionbar_select_all">Selectează tot</string>
   <string name="saml_authentication_required_text">Autentificare necesară</string>
   <string name="saml_authentication_wrong_pass">Parolă greșită</string>
   <string name="actionbar_move">Mută</string>

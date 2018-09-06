@@ -79,7 +79,7 @@
   <string name="auth_password">Jelszó</string>
   <string name="auth_register">Új Önnek a(z) %1$s?</string>
   <string name="sync_string_files">Fájlok</string>
-  <string name="setup_btn_login">Kapcsolódás</string>
+  <string name="setup_btn_login">Bejelentkezés</string>
   <string name="uploader_btn_upload_text">Feltöltés</string>
   <string name="uploader_top_message">Válasszon feltöltési mappát</string>
   <string name="uploader_wrn_no_account_title">Nincs ilyen felhasználói fiók</string>
@@ -384,6 +384,7 @@
   <string name="log_send_no_mail_app">Nem található alkalmazás a naplók küldésére. Telepítsen egy levél alkalmazást.</string>
   <string name="log_send_mail_subject">%1$s Android-alkalmazások naplói</string>
   <string name="log_progress_dialog_text">Adatok betöltése ...</string>
+  <string name="actionbar_select_all">Összes kijelölése</string>
   <string name="saml_authentication_required_text">Felhasználóazonosítás szükséges</string>
   <string name="saml_authentication_wrong_pass">Hibás jelszó</string>
   <string name="actionbar_move">Mozgatás</string>

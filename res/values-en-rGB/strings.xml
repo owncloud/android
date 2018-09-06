@@ -50,7 +50,7 @@
   <string name="auth_password">Password</string>
   <string name="auth_register">New to %1$s?</string>
   <string name="sync_string_files">Files</string>
-  <string name="setup_btn_login">Connect</string>
+  <string name="setup_btn_login">Log in</string>
   <string name="uploader_btn_upload_text">Upload</string>
   <string name="uploader_top_message">Choose upload folder</string>
   <string name="uploader_wrn_no_account_title">No account found</string>
@@ -323,6 +323,7 @@
   <string name="log_send_no_mail_app">No app for sending logs found. Please install a mail app.</string>
   <string name="log_send_mail_subject">%1$s Android app logs</string>
   <string name="log_progress_dialog_text">Loading data …</string>
+  <string name="actionbar_select_all">Select all</string>
   <string name="saml_authentication_required_text">Authentication required</string>
   <string name="saml_authentication_wrong_pass">Incorrect password</string>
   <string name="actionbar_move">Move</string>
