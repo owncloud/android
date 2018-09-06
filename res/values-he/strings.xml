@@ -68,7 +68,7 @@
   <string name="auth_password">ססמה</string>
   <string name="auth_register">חדש ב- %1$s?</string>
   <string name="sync_string_files">קבצים</string>
-  <string name="setup_btn_login">התחברות</string>
+  <string name="setup_btn_login">כניסה</string>
   <string name="uploader_btn_upload_text">העלאה</string>
   <string name="uploader_top_message">יש לבחור בתיקיית העלאה</string>
   <string name="uploader_wrn_no_account_title">לא נמצא חשבון</string>
@@ -366,6 +366,7 @@
   <string name="log_send_no_mail_app">לא נמצא יישום לשליחת לוגים. יש להתקין יישום mail.</string>
   <string name="log_send_mail_subject">%1$s לוגים של יישום אנדרואיד</string>
   <string name="log_progress_dialog_text">טעינת מידע...</string>
+  <string name="actionbar_select_all">לבחור הכול</string>
   <string name="saml_authentication_required_text">נדרש אימות</string>
   <string name="saml_authentication_wrong_pass">סיסמא שגוייה</string>
   <string name="actionbar_move">העברה</string>

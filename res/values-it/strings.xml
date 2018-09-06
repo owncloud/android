@@ -74,7 +74,7 @@
   <string name="auth_password">Password</string>
   <string name="auth_register">Prima volta su %1$s?</string>
   <string name="sync_string_files">File</string>
-  <string name="setup_btn_login">Connetti</string>
+  <string name="setup_btn_login">Accedi</string>
   <string name="uploader_btn_upload_text">Carica</string>
   <string name="uploader_top_message">Scegli la cartella di caricamento</string>
   <string name="uploader_wrn_no_account_title">Nessun account trovato</string>
@@ -379,6 +379,7 @@
   <string name="log_send_no_mail_app">Non è stata trovata alcuna applicazione per l\'invio dei log. Installa un client di posta.</string>
   <string name="log_send_mail_subject">Registri applicazione %1$s Android</string>
   <string name="log_progress_dialog_text">Caricamento dati in corso...</string>
+  <string name="actionbar_select_all">Seleziona tutto</string>
   <string name="saml_authentication_required_text">Autenticazione richiesta</string>
   <string name="saml_authentication_wrong_pass">Password errata</string>
   <string name="actionbar_move">Sposta</string>

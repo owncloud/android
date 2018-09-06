@@ -72,7 +72,7 @@
   <string name="auth_password">Hasło</string>
   <string name="auth_register">Nowe %1$s?</string>
   <string name="sync_string_files">Pliki</string>
-  <string name="setup_btn_login">Połącz</string>
+  <string name="setup_btn_login">Zaloguj</string>
   <string name="uploader_btn_upload_text">Wyślij</string>
   <string name="uploader_top_message">Wybierz folder do wgrywania plików</string>
   <string name="uploader_wrn_no_account_title">Nie znaleziono konta</string>
@@ -376,6 +376,7 @@
   <string name="log_send_no_mail_app">Brak aplikacji do wysyłania logów. Zainstaluj klienta poczty.</string>
   <string name="log_send_mail_subject">%1$s Logi aplikacji Android</string>
   <string name="log_progress_dialog_text">Ładowanie danych...</string>
+  <string name="actionbar_select_all">Wybierz wszystko</string>
   <string name="saml_authentication_required_text">Wymagana autoryzacja</string>
   <string name="saml_authentication_wrong_pass">Złe hasło</string>
   <string name="actionbar_move">Przenieś</string>

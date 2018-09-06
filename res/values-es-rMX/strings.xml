@@ -54,7 +54,7 @@
   <string name="auth_password">Contraseña</string>
   <string name="auth_register">¿Nuevo en %1$s?</string>
   <string name="sync_string_files">Archivos</string>
-  <string name="setup_btn_login">Conectar</string>
+  <string name="setup_btn_login">Entrar</string>
   <string name="uploader_btn_upload_text">Subir</string>
   <string name="uploader_top_message">Elige carpeta de subida</string>
   <string name="uploader_wrn_no_account_title">No se encontró la cuenta</string>
@@ -352,6 +352,7 @@
   <string name="log_send_no_mail_app">Aplicación para enviar registros no encontrada. Por favor instale una aplicación de correo.</string>
   <string name="log_send_mail_subject">Se han encontrado %1$s logs de la app Android</string>
   <string name="log_progress_dialog_text">Cargando datos ...</string>
+  <string name="actionbar_select_all">Seleccionar todo</string>
   <string name="saml_authentication_required_text">Se necesita autenticación</string>
   <string name="saml_authentication_wrong_pass">Contraseña incorrecta</string>
   <string name="actionbar_move">Mover</string>

@@ -2,6 +2,7 @@
 <resources>
   <string name="about_android">%1$s Aplicação Android</string>
   <string name="about_version">versão %1$s</string>
+  <string name="actionbar_search">Procurar esta pasta</string>
   <string name="actionbar_sync">Atualizar conta</string>
   <string name="actionbar_upload">Enviar</string>
   <string name="actionbar_upload_from_apps">Conteúdo de outras aplicações</string>
@@ -57,7 +58,7 @@
   <string name="auth_password">Palavra-passe</string>
   <string name="auth_register">Novo em %1$s?</string>
   <string name="sync_string_files">Ficheiros</string>
-  <string name="setup_btn_login">Ligar</string>
+  <string name="setup_btn_login">Iniciar sessão</string>
   <string name="uploader_btn_upload_text">Enviar</string>
   <string name="uploader_top_message">Escolha a pasta de envio</string>
   <string name="uploader_wrn_no_account_title">Nenhuma conta encontrada</string>
@@ -352,6 +353,7 @@
   <string name="log_send_no_mail_app">Não foi encontrada nenhuma app para enviar logs. Por favor, instale uma aplicação de envio.</string>
   <string name="log_send_mail_subject">%1$s registos de aplicação Android</string>
   <string name="log_progress_dialog_text">A carregar dados ...</string>
+  <string name="actionbar_select_all">Selecionar todos</string>
   <string name="saml_authentication_required_text">Autenticação necessária</string>
   <string name="saml_authentication_wrong_pass">Palavra-passe errada</string>
   <string name="actionbar_move">Mover</string>

@@ -2,6 +2,7 @@
 <resources>
   <string name="about_android">%1$s Aplicativo Android</string>
   <string name="about_version">versão %1$s</string>
+  <string name="actionbar_search">Procurar no diretório atual</string>
   <string name="actionbar_sync">Atualizar conta</string>
   <string name="actionbar_upload">Enviar</string>
   <string name="actionbar_upload_from_apps">Conteúdo de outros apps</string>
@@ -79,7 +80,7 @@
   <string name="auth_password">Senha</string>
   <string name="auth_register">Novo para %1$s?</string>
   <string name="sync_string_files">Arquivos</string>
-  <string name="setup_btn_login">Conectar</string>
+  <string name="setup_btn_login">Entrar</string>
   <string name="uploader_btn_upload_text">Enviar</string>
   <string name="uploader_top_message">Escolher pasta para envio</string>
   <string name="uploader_wrn_no_account_title">Nenhuma conta encontrada</string>
@@ -384,6 +385,7 @@
   <string name="log_send_no_mail_app">Nenhum aplicativo para envio de logs foi encontrado. Por favor instale um aplicativo de e-mail</string>
   <string name="log_send_mail_subject">%1$s logs do Android app</string>
   <string name="log_progress_dialog_text">Carregando dados ...</string>
+  <string name="actionbar_select_all">Selecionar tudo</string>
   <string name="saml_authentication_required_text">Autenticação é requerida</string>
   <string name="saml_authentication_wrong_pass">Senha incorreta</string>
   <string name="actionbar_move">Mover</string>
@@ -528,5 +530,11 @@
   <string name="welcome_feature_4_text">Suas fotos/vídeos carregados automaticamente</string>
   <string name="welcome_feature_5_title">Transmissão de vídeo</string>
   <string name="welcome_feature_5_text">Assista seus vídeos sem baixá-los</string>
+  <string name="welcome_feature_6_title">Cota do usuário</string>
+  <string name="welcome_feature_6_text">Saiba sobre seu espaço usado e disponível</string>
+  <string name="welcome_feature_7_title">Novos icones</string>
+  <string name="welcome_feature_7_text">Para baixar e definir arquivos como av. desligado</string>
+  <string name="welcome_feature_8_title">Novos pinos</string>
+  <string name="welcome_feature_8_text">Para sincronização, baixado e av. arquivos offline</string>
   <string name="no_borwser_installed_alert">Nenhum navegador instalado. Por favor, instale um navegador para permitir um login seguro.</string>
 </resources>

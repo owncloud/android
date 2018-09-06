@@ -52,7 +52,7 @@
   <string name="auth_password">Sandi</string>
   <string name="auth_register">Baru di %1$s?</string>
   <string name="sync_string_files">Berkas</string>
-  <string name="setup_btn_login">Sambungkan</string>
+  <string name="setup_btn_login">Masuk</string>
   <string name="uploader_btn_upload_text">Unggah</string>
   <string name="uploader_top_message">Pilih folder unggah</string>
   <string name="uploader_wrn_no_account_title">Tidak ada akun yang ditemukan</string>
@@ -333,6 +333,7 @@
   <string name="log_send_no_mail_app">Tidak ada aplikasi untuk mengirim log yang ditemukan. Pasang aplikasi email</string>
   <string name="log_send_mail_subject">%1$s Android apl log</string>
   <string name="log_progress_dialog_text">Memuat data ...</string>
+  <string name="actionbar_select_all">Pilih Semua</string>
   <string name="saml_authentication_required_text">Diperlukan otentikasi</string>
   <string name="saml_authentication_wrong_pass">Sandi salah</string>
   <string name="actionbar_move">Pindah</string>

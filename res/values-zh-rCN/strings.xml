@@ -26,6 +26,9 @@
   <string name="drawer_item_uploads_list">上传</string>
   <string name="drawer_close">关闭</string>
   <string name="drawer_open">打开</string>
+  <string name="drawer_loading_quota">载入用量限制</string>
+  <string name="drawer_quota">%2$s 中的 %1$s 已使用 (%3$s %%)</string>
+  <string name="drawer_unavailable_free_storage">%1$s 已使用</string>
   <string name="drawer_unavailable_used_storage">没有可用的储存使用量信息</string>
   <string name="drawer_feedback">反馈</string>
   <string name="drawer_help">帮助</string>
@@ -76,7 +79,7 @@
   <string name="auth_password">密码</string>
   <string name="auth_register">初次使用 %1$s?</string>
   <string name="sync_string_files">文件</string>
-  <string name="setup_btn_login">连接</string>
+  <string name="setup_btn_login">登录</string>
   <string name="uploader_btn_upload_text">上传</string>
   <string name="uploader_top_message">选择上传目录</string>
   <string name="uploader_wrn_no_account_title">未找到账号</string>
@@ -380,6 +383,7 @@
   <string name="log_send_no_mail_app">无法发送日志，请安装邮箱应用。</string>
   <string name="log_send_mail_subject">%1$s Android 程序日志</string>
   <string name="log_progress_dialog_text">加载数据...</string>
+  <string name="actionbar_select_all">全部选择</string>
   <string name="saml_authentication_required_text">需要认证</string>
   <string name="saml_authentication_wrong_pass">错误密码</string>
   <string name="actionbar_move">移动</string>
@@ -440,6 +444,7 @@
   <string name="share_via_link_password_title">安全</string>
   <string name="share_via_link_edit_permission_read_only_label">下载 / 查看</string>
   <string name="share_via_link_edit_permission_read_and_write_label">下载 / 查看 / 上传</string>
+  <string name="share_via_link_edit_permission_upload_only_label">仅上传(File Drop))</string>
   <string name="share_get_public_link_button">获取链接</string>
   <string name="share_with_title">分享...</string>
   <string name="share_with_edit_title">与 %1$s 分享</string>
@@ -522,5 +527,11 @@
   <string name="welcome_feature_4_text">你的照片/视频将会自动上传</string>
   <string name="welcome_feature_5_title">流媒体视频</string>
   <string name="welcome_feature_5_text">无需下载模仿你的视频</string>
+  <string name="welcome_feature_6_title">用户用量限制</string>
+  <string name="welcome_feature_6_text">了解您已使用与可用的空间</string>
+  <string name="welcome_feature_7_title">新图标</string>
+  <string name="welcome_feature_7_text">下载并设置文件为离线 av. </string>
+  <string name="welcome_feature_8_title">新标记</string>
+  <string name="welcome_feature_8_text">对于同步,下载并离线 av.文件</string>
   <string name="no_borwser_installed_alert">未安装浏览器。请安装浏览器以使用安全登陆。</string>
 </resources>

@@ -54,7 +54,7 @@
   <string name="auth_password">Lykilorð</string>
   <string name="auth_register">Nýr í %1$s?</string>
   <string name="sync_string_files">Skrár</string>
-  <string name="setup_btn_login">Tengjast</string>
+  <string name="setup_btn_login">Skrá inn</string>
   <string name="uploader_btn_upload_text">Senda inn</string>
   <string name="uploader_top_message">Veldu innsendingamöppu</string>
   <string name="uploader_wrn_no_account_title">Enginn notandaaðgangur fannst</string>
@@ -349,6 +349,7 @@
   <string name="log_send_no_mail_app">Ekkert forrit fannst til að senda annála. Settu upp eitthvað tölvupóstforrit.</string>
   <string name="log_send_mail_subject">%1$s annálar Android-forrita</string>
   <string name="log_progress_dialog_text">Hleð inn gögnum …</string>
+  <string name="actionbar_select_all">Velja allt</string>
   <string name="saml_authentication_required_text">Auðkenningar krafist</string>
   <string name="saml_authentication_wrong_pass">Rangt lykilorð</string>
   <string name="actionbar_move">Færa</string>
@@ -407,6 +408,8 @@
   <string name="share_via_link_expiration_date_label">Rennur út</string>
   <string name="share_via_link_password_label">Lykilorð</string>
   <string name="share_via_link_password_title">Öruggt</string>
+  <string name="share_via_link_edit_permission_read_only_label">Sækja / Skoða</string>
+  <string name="share_via_link_edit_permission_read_and_write_label">Sækja / Skoða / Senda inn</string>
   <string name="share_get_public_link_button">Ná í tengil</string>
   <string name="share_with_title">Deila með ...</string>
   <string name="share_with_edit_title">Deila með %1$s</string>

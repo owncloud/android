@@ -2,6 +2,7 @@
 <resources>
   <string name="about_android">แอปสำหรับแอนดรอยด์ %1$s</string>
   <string name="about_version">รุ่น %1$s</string>
+  <string name="actionbar_search">ค้นหาโฟลเดอร์นี้</string>
   <string name="actionbar_sync">ฟื้นฟูบัญชี</string>
   <string name="actionbar_upload">อัพโหลดไฟล์</string>
   <string name="actionbar_upload_from_apps">เนื้อหาจากแอพฯ อื่นๆ</string>
@@ -79,7 +80,7 @@
   <string name="auth_password">รหัสผ่าน</string>
   <string name="auth_register">ใหม่จนถึง %1$s?</string>
   <string name="sync_string_files">ไฟล์</string>
-  <string name="setup_btn_login">เชื่อมต่อ</string>
+  <string name="setup_btn_login">เข้าสู่ระบบ</string>
   <string name="uploader_btn_upload_text">อัพโหลด</string>
   <string name="uploader_top_message">เลือกโฟลเดอร์ที่ต้องการอัพโหลด</string>
   <string name="uploader_wrn_no_account_title">ไม่พบบัญชีที่ต้องการ</string>
@@ -382,6 +383,7 @@
   <string name="log_send_no_mail_app">ไม่พบแอพสำหรับส่งข้อมูล log กรุณาติดตั้งแอพสำหรับส่งเมล</string>
   <string name="log_send_mail_subject">%1$s ข้อมูล log สำหรับแอพแอนดรอยด์</string>
   <string name="log_progress_dialog_text">กำลังโหลดข้อมูล ...</string>
+  <string name="actionbar_select_all">เลือกทั้งหมด</string>
   <string name="saml_authentication_required_text">จำเป็นต้องยืนยันตัวตน</string>
   <string name="saml_authentication_wrong_pass">รหัสผ่านไม่ถูกต้อง</string>
   <string name="actionbar_move">ย้าย</string>
@@ -525,5 +527,11 @@
   <string name="welcome_feature_4_text">รูปภาพ/วิดีโอ ของคุณถูกอัพโหลดโดยอัตโนมัติแล้ว</string>
   <string name="welcome_feature_5_title">กำลังสตรีมวิดีโอ</string>
   <string name="welcome_feature_5_text">เล่นวิดีโอของคุณโดยไม่ต้องดาวน์โหลด</string>
+  <string name="welcome_feature_6_title">โควต้าของผู้ใช้</string>
+  <string name="welcome_feature_6_text">รู้ขนาดพื้นที่ที่ใช้ไปแล้วและที่ยังเหลืออยู่ของคุณ</string>
+  <string name="welcome_feature_7_title">ไอคอนใหม่</string>
+  <string name="welcome_feature_7_text">เพื่อดาวน์โหลดและตั้งค่าไฟล์เป็น av ออฟไลน์</string>
+  <string name="welcome_feature_8_title">พินใหม่</string>
+  <string name="welcome_feature_8_text">เพื่อประสานข้อมูลหรือดาวน์โหลดและไฟล์ av ออฟไลน์</string>
   <string name="no_borwser_installed_alert">โปรดติดตั้งเบราเซอร์ก่อนเพื่อให้สามารถล็อกอินได้อย่างปลอดภัย</string>
 </resources>

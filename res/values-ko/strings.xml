@@ -2,6 +2,7 @@
 <resources>
   <string name="about_android">%1$s Android 앱</string>
   <string name="about_version">버전 %1$s</string>
+  <string name="actionbar_search">이 폴더에서 검색</string>
   <string name="actionbar_sync">계정 새로 고침</string>
   <string name="actionbar_upload">업로드</string>
   <string name="actionbar_upload_from_apps">다른 앱의 콘텐츠</string>
@@ -68,7 +69,7 @@
   <string name="auth_password">암호</string>
   <string name="auth_register">%1$s의 새로운 사용자인가요?</string>
   <string name="sync_string_files">파일</string>
-  <string name="setup_btn_login">연결</string>
+  <string name="setup_btn_login">로그인</string>
   <string name="uploader_btn_upload_text">업로드</string>
   <string name="uploader_top_message">업로드 폴더 선택:</string>
   <string name="uploader_wrn_no_account_title">계정 없음</string>
@@ -368,6 +369,7 @@
   <string name="log_send_no_mail_app">로그를 보내는 데 사용할 수 있는 앱이 없습니다. 이메일 앱을 설치하십시오.</string>
   <string name="log_send_mail_subject">%1$s Android 앱 로그</string>
   <string name="log_progress_dialog_text">데이터 불러오는 중…</string>
+  <string name="actionbar_select_all">모두 선택</string>
   <string name="saml_authentication_required_text">인증 필요함</string>
   <string name="saml_authentication_wrong_pass">잘못된 암호</string>
   <string name="actionbar_move">이동</string>
