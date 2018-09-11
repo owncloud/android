@@ -1,3 +1,14 @@
+## 2.9.0 beta v1 (September 2018)
+- Switch apache and jackrabbit deprecated libraries to more modern and active library, OkHttp
+- Search in current folder
+- Select all/inverse files
+- New login view
+- Show re-shares
+
+- UI improvements, including:
+  + Change edit share icon
+  + New gradient in top of the list of files
+
 ## 2.8.0 (July 2018)
 - Side menu redesign
 - User quota in side menu
@@ -38,7 +49,6 @@
   + Fix guest account showing an empty file list
   + Hide keyboard when going back from select user view
   + Fix black "downloading screen" message when downloading an image offline.
-  
 
 ## 2.7.0 (April 2018)
 - Fingerprint lock
