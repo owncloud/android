@@ -37,6 +37,7 @@ import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentials;
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentialsFactory;
 import com.owncloud.android.lib.common.utils.Log_OC;
+import com.owncloud.android.lib.resources.files.FileUtils;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 
 import java.io.IOException;
@@ -256,7 +257,11 @@ public class AccountUtils {
                             .name(rawCookie.substring(0, equalPos))
                             .value(rawCookie.substring(equalPos + 1))
                             .domain(serverUri.getHost())
-                            .path(serverUri.getPath())
+                            .path(
+                                    serverUri.getPath().equals("")
+                                            ? FileUtils.PATH_SEPARATOR
+                                            : serverUri.getPath()
+                            )
                             .build());
                 }
                 client.setCookiesForCurrentAccount(cookieList);
