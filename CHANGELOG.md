@@ -4,7 +4,6 @@
 - Select all/inverse files
 - New login view
 - Show re-shares
-
 - UI improvements, including:
   + Change edit share icon
   + New gradient in top of the list of files
