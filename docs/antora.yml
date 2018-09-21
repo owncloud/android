@@ -2,4 +2,5 @@ name: android
 title: Android App
 version: master
 
-nav: []
+nav:
+- modules/ROOT/nav.adoc
