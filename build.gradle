@@ -76,6 +76,7 @@ dependencies {
 
     //Zooming Android ImageView.
     implementation 'com.github.chrisbanes:PhotoView:2.0.0'
+    implementation 'com.gitlab.ownclouders:dav4android:oc_support'
 }
 
 tasks.withType(Test) {
