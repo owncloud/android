@@ -14,14 +14,14 @@ allprojects {
     repositories {
         google()
         jcenter()
+        maven { url 'https://jitpack.io' }
     }
 }
 
 dependencies {
     api 'com.squareup.okhttp3:okhttp:3.10.0'
-    api project(':dav4android')
-
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.2.51"
+    implementation 'com.gitlab.ownclouders:dav4android:oc_support'
 }
 
 android {
