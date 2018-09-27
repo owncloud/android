@@ -1,4 +1,0 @@
-ownCloud Android App Manual
-===========================
-
-release_notes android_app

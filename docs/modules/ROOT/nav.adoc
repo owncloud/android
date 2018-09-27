@@ -1,3 +1,3 @@
-* xref:index.adoc[User Manual]
+* The Android App
 ** xref:android_app.adoc[Android App]
 ** xref:release_notes.adoc[Release Notes]
