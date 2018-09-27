@@ -1,5 +1,5 @@
 name: android
-title: ownCloud Android App Documentation
+title: The Android App
 version: master
 start_page: ROOT:android_app.adoc
 nav:
