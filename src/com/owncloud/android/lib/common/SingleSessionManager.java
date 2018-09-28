@@ -26,12 +26,14 @@ package com.owncloud.android.lib.common;
 
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 
 
 import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.accounts.AuthenticatorException;
 import android.accounts.OperationCanceledException;
 import android.content.Context;
@@ -42,6 +44,8 @@ import com.owncloud.android.lib.common.accounts.AccountUtils;
 import com.owncloud.android.lib.common.accounts.AccountUtils.AccountNotFoundException;
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentials;
 import com.owncloud.android.lib.common.utils.Log_OC;
+
+import okhttp3.Cookie;
 
 /**
  * Implementation of {@link OwnCloudClientManager}
@@ -108,6 +112,8 @@ public class SingleSessionManager implements OwnCloudClientManager {
             reusingKnown = true;
         }
 
+        account.loadCredentials(context);
+
         if (client == null) {
             // no client to reuse - create a new one
             client = OwnCloudClientFactory.createOwnCloudClient(
@@ -121,7 +127,6 @@ public class SingleSessionManager implements OwnCloudClientManager {
             // enable cookie tracking
             AccountUtils.restoreCookies(account.getSavedAccount(), client, context);
 
-            account.loadCredentials(context);
             client.setCredentials(account.getCredentials());
             if (accountName != null) {
                 mClientsWithKnownUsername.put(accountName, client);
@@ -140,6 +145,7 @@ public class SingleSessionManager implements OwnCloudClientManager {
                 Log_OC.v(TAG, "reusing client for session " + sessionName);
             }
             keepCredentialsUpdated(account, client);
+            keepCookiesUpdated(context, account, client);
             keepUriUpdated(account, client);
         }
 
@@ -213,12 +219,20 @@ public class SingleSessionManager implements OwnCloudClientManager {
         }
     }
 
-
     private void keepCredentialsUpdated(OwnCloudAccount account, OwnCloudClient reusedClient) {
         OwnCloudCredentials recentCredentials = account.getCredentials();
         if (recentCredentials != null && !recentCredentials.getAuthToken().equals(
             reusedClient.getCredentials().getAuthToken())) {
             reusedClient.setCredentials(recentCredentials);
+        }
+    }
+
+    private void keepCookiesUpdated(Context context, OwnCloudAccount account, OwnCloudClient reusedClient) {
+        AccountManager am = AccountManager.get(context.getApplicationContext());
+        String currentCookies = am.getUserData(account.getSavedAccount(), AccountUtils.Constants.KEY_COOKIES);
+        String previousCookies = reusedClient.getCookiesString();
+        if (currentCookies != null && previousCookies != "" && !currentCookies.equals(previousCookies)) {
+            AccountUtils.restoreCookies(account.getSavedAccount(), reusedClient, context);
         }
     }
 

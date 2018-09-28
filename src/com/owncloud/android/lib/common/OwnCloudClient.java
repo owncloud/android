@@ -316,8 +316,12 @@ public class OwnCloudClient extends HttpClient {
 
     public String getCookiesString() {
         String cookiesString = "";
-        for (Cookie cookie : getCookiesFromUrl(HttpUrl.parse(mBaseUri.toString()))) {
-            cookiesString += cookie.toString() + ";";
+        List<Cookie> cookieList = getCookiesFromUrl(HttpUrl.parse(mBaseUri.toString()));
+
+        if (cookieList != null) {
+            for (Cookie cookie : cookieList) {
+                cookiesString += cookie.toString() + ";";
+            }
         }
 
         return cookiesString;
