@@ -32,7 +32,6 @@ import android.content.Context;
 
 import com.owncloud.android.lib.common.accounts.AccountUtils.AccountNotFoundException;
 
-
 /**
  * Manager to create and reuse OwnCloudClient instances to access remote OC servers. 
  * 
@@ -43,8 +42,8 @@ import com.owncloud.android.lib.common.accounts.AccountUtils.AccountNotFoundExce
 
 public interface OwnCloudClientManager {
 
-	OwnCloudClient getClientFor(OwnCloudAccount account, Context context)
-            throws AccountNotFoundException, OperationCanceledException, AuthenticatorException,
+	OwnCloudClient getClientFor(OwnCloudAccount account, Context context) throws AccountNotFoundException,
+			OperationCanceledException, AuthenticatorException,
             IOException;
     
     OwnCloudClient removeClientFor(OwnCloudAccount account);

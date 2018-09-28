@@ -215,7 +215,6 @@ public class AccountUtils {
     }
 
     public static void saveClient(OwnCloudClient client, Account savedAccount, Context context) {
-
         // Account Manager
         AccountManager ac = AccountManager.get(context.getApplicationContext());
 
@@ -223,7 +222,7 @@ public class AccountUtils {
             String cookiesString = client.getCookiesString();
             if (!"".equals(cookiesString)) {
                 ac.setUserData(savedAccount, Constants.KEY_COOKIES, cookiesString);
-                // Log_OC.d(TAG, "Saving Cookies: "+ cookiesString );
+                 Log_OC.d(TAG, "Saving Cookies: "+ cookiesString );
             }
         }
     }
@@ -252,7 +251,9 @@ public class AccountUtils {
                 String[] rawCookies = cookiesString.split(";");
                 List<Cookie> cookieList = new ArrayList<>(rawCookies.length);
                 for(String rawCookie : rawCookies) {
+                    rawCookie = rawCookie.replace(" ", "");
                     final int equalPos = rawCookie.indexOf('=');
+                    if (equalPos == -1) continue;
                     cookieList.add(new Cookie.Builder()
                             .name(rawCookie.substring(0, equalPos))
                             .value(rawCookie.substring(equalPos + 1))

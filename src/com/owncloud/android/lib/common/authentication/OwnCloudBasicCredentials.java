@@ -35,18 +35,15 @@ public class OwnCloudBasicCredentials implements OwnCloudCredentials {
 
     private String mUsername;
     private String mPassword;
-    private boolean mAuthenticationPreemptive;
 
     public OwnCloudBasicCredentials(String username, String password) {
         mUsername = username != null ? username : "";
         mPassword = password != null ? password : "";
-        mAuthenticationPreemptive = true;
     }
 
     public OwnCloudBasicCredentials(String username, String password, boolean preemptiveMode) {
         mUsername = username != null ? username : "";
         mPassword = password != null ? password : "";
-        mAuthenticationPreemptive = preemptiveMode;
     }
 
     @Override

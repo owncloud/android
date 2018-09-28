@@ -25,9 +25,7 @@
 package com.owncloud.android.lib.common.http;
 
 import android.content.Context;
-import java.util.concurrent.TimeUnit;
 
-import com.owncloud.android.lib.BuildConfig;
 import com.owncloud.android.lib.common.OwnCloudClientManagerFactory;
 import com.owncloud.android.lib.common.http.interceptors.HttpInterceptor;
 import com.owncloud.android.lib.common.http.interceptors.RequestHeaderInterceptor;
@@ -35,12 +33,19 @@ import com.owncloud.android.lib.common.network.AdvancedX509TrustManager;
 import com.owncloud.android.lib.common.network.NetworkUtils;
 import com.owncloud.android.lib.common.utils.Log_OC;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
+import okhttp3.Cookie;
+import okhttp3.CookieJar;
+import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Protocol;
 
@@ -54,6 +59,7 @@ public class HttpClient {
     private static OkHttpClient sOkHttpClient;
     private static HttpInterceptor sOkHttpInterceptor;
     private static Context sContext;
+    private static HashMap<String, List<Cookie>> sCookieStore = new HashMap<>();
 
     public static void setContext(Context context) {
         sContext = context;
@@ -70,12 +76,28 @@ public class HttpClient {
                         NetworkUtils.getKnownServersStore(sContext));
                 final SSLContext sslContext = SSLContext.getInstance("TLS");
                 sslContext.init(null, new TrustManager[] {trustManager}, null);
+
+                // Automatic cookie handling, NOT PERSISTENT
+                CookieJar cookieJar = new CookieJar() {
+                    @Override
+                    public void saveFromResponse(HttpUrl url, List<Cookie> cookies) {
+                        sCookieStore.put(url.host(), cookies);
+                    }
+
+                    @Override
+                    public List<Cookie> loadForRequest(HttpUrl url) {
+                        List<Cookie> cookies = sCookieStore.get(url.host());
+                        return cookies != null ? cookies : new ArrayList<>();
+                    }
+                };
+
                 OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder()
                         .addInterceptor(getOkHttpInterceptor())
                         .protocols(Arrays.asList(Protocol.HTTP_1_1))
                         .followRedirects(false)
                         .sslSocketFactory(sslContext.getSocketFactory(), trustManager)
-                        .hostnameVerifier((asdf, usdf) -> true);
+                        .hostnameVerifier((asdf, usdf) -> true)
+                        .cookieJar(cookieJar);
                         // TODO: Not verifying the hostname against certificate. ask owncloud security human if this is ok.
                         //.hostnameVerifier(new BrowserCompatHostnameVerifier());
                 sOkHttpClient = clientBuilder.build();
@@ -127,5 +149,13 @@ public class HttpClient {
 
     public static void deleteHeaderForAllRequests(String headerName) {
         getOkHttpInterceptor().deleteRequestHeaderInterceptor(headerName);
+    }
+
+    public List<Cookie> getCookiesFromUrl(HttpUrl httpUrl) {
+        return sCookieStore.get(httpUrl.host());
+    }
+
+    public void clearCookies() {
+        sCookieStore.clear();
     }
 }

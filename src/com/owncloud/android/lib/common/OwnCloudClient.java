@@ -29,6 +29,7 @@ import android.accounts.AccountManager;
 import android.accounts.AccountsException;
 import android.net.Uri;
 
+import com.owncloud.android.lib.common.accounts.AccountUtils;
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentials;
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentialsFactory;
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentialsFactory.OwnCloudAnonymousCredentials;
@@ -91,6 +92,7 @@ public class OwnCloudClient extends HttpClient {
         Log_OC.d(TAG + " #" + mInstanceNumber, "Creating OwnCloudClient");
 
         clearCredentials();
+        clearCookies();
     }
 
     public void setCredentials(OwnCloudCredentials credentials) {
@@ -111,6 +113,10 @@ public class OwnCloudClient extends HttpClient {
 
     public void applyCredentials() {
         mCredentials.applyTo(this);
+    }
+
+    public void applyCookies() {
+        AccountUtils.restoreCookies(this.getAccount().getSavedAccount(), this, getContext());
     }
 
     public int executeHttpMethod (HttpBaseMethod method) throws Exception {
@@ -308,15 +314,9 @@ public class OwnCloudClient extends HttpClient {
         }
     }
 
-    public List<Cookie> getCookiesFromCurrentAccount() {
-        return getOkHttpClient().cookieJar().loadForRequest(HttpUrl.parse(
-                getAccount().getBaseUri().toString()));
-    }
-
     public String getCookiesString() {
-
         String cookiesString = "";
-        for (Cookie cookie : getCookiesFromCurrentAccount()) {
+        for (Cookie cookie : getCookiesFromUrl(HttpUrl.parse(mBaseUri.toString()))) {
             cookiesString += cookie.toString() + ";";
         }
 
@@ -324,8 +324,10 @@ public class OwnCloudClient extends HttpClient {
     }
 
     public void setCookiesForCurrentAccount(List<Cookie> cookies) {
-        getOkHttpClient().cookieJar().saveFromResponse(HttpUrl.parse(
-                getAccount().getBaseUri().toString()), cookies);
+        getOkHttpClient().cookieJar().saveFromResponse(
+                HttpUrl.parse(getAccount().getBaseUri().toString()),
+                cookies
+        );
     }
 
     public void setOwnCloudVersion(OwnCloudVersion version) {

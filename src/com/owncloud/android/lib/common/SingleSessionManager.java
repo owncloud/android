@@ -65,9 +65,8 @@ public class SingleSessionManager implements OwnCloudClientManager {
 
 
     @Override
-    public OwnCloudClient getClientFor(OwnCloudAccount account, Context context)
-        throws AccountNotFoundException, OperationCanceledException, AuthenticatorException,
-        IOException {
+    public OwnCloudClient getClientFor(OwnCloudAccount account, Context context) throws OperationCanceledException,
+            AuthenticatorException, IOException {
 
         if (Log.isLoggable(TAG, Log.DEBUG)) {
             Log_OC.d(TAG, "getClientFor starting ");
@@ -221,7 +220,6 @@ public class SingleSessionManager implements OwnCloudClientManager {
             reusedClient.getCredentials().getAuthToken())) {
             reusedClient.setCredentials(recentCredentials);
         }
-
     }
 
     // this method is just a patch; we need to distinguish accounts in the same host but
