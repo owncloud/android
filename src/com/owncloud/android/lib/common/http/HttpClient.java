@@ -36,7 +36,9 @@ import com.owncloud.android.lib.common.utils.Log_OC;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.SSLContext;
@@ -81,7 +83,13 @@ public class HttpClient {
                 CookieJar cookieJar = new CookieJar() {
                     @Override
                     public void saveFromResponse(HttpUrl url, List<Cookie> cookies) {
-                        sCookieStore.put(url.host(), cookies);
+                        // Avoid duplicated cookies
+                        Set<Cookie> nonDuplicatedCookiesSet = new HashSet<>();
+                        nonDuplicatedCookiesSet.addAll(cookies);
+                        List<Cookie> nonDuplicatedCookiesList = new ArrayList<>();
+                        nonDuplicatedCookiesList.addAll(nonDuplicatedCookiesSet);
+
+                        sCookieStore.put(url.host(), nonDuplicatedCookiesList);
                     }
 
                     @Override
