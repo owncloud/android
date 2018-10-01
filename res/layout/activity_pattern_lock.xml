@@ -48,7 +48,7 @@
             android:id="@+id/cancel_pattern"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/common_cancel"
+            android:text="@android:string/cancel"
             android:theme="@style/Button.Primary" />
 
     </LinearLayout>

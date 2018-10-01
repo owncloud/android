@@ -54,7 +54,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_toRightOf="@id/pattern_lock_view"
-                android:text="@string/common_cancel"
+                android:text="@android:string/cancel"
                 android:theme="@style/Button.Primary" />
 
         </RelativeLayout>
