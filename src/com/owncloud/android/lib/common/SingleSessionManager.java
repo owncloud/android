@@ -224,12 +224,7 @@ public class SingleSessionManager implements OwnCloudClientManager {
     }
 
     private void keepCredentialsUpdated(OwnCloudAccount account, OwnCloudClient reusedClient) {
-        OwnCloudCredentials recentCredentials = account.getCredentials();
-        if (recentCredentials != null && !recentCredentials.getAuthToken().equals(
-            reusedClient.getCredentials().getAuthToken())) {
-            reusedClient.setCredentials(recentCredentials);
-            reusedClient.applyCredentials();
-        }
+        reusedClient.applyCredentials();
     }
 
     private void keepCookiesUpdated(Context context, OwnCloudAccount account, OwnCloudClient reusedClient) {
