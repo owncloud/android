@@ -135,6 +135,22 @@ public class HttpClient {
         sOkHttpClient = clientBuilder.build();
     }
 
+    public void disableAutomaticCookiesHandling() {
+        OkHttpClient.Builder clientBuilder = getOkHttpClient().newBuilder();
+        clientBuilder.cookieJar(new CookieJar() {
+            @Override
+            public void saveFromResponse(HttpUrl url, List<Cookie> cookies) {
+                // DO NOTHING
+            }
+
+            @Override
+            public List<Cookie> loadForRequest(HttpUrl url) {
+                return new ArrayList<>();
+            }
+        });
+        sOkHttpClient = clientBuilder.build();
+    }
+
     /**
      * Add header that will be included for all the requests from now on
      * @param headerName

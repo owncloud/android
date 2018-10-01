@@ -51,6 +51,7 @@ public abstract class HttpBaseMethod {
     protected Request mRequest;
     protected RequestBody mRequestBody;
     protected Response mResponse;
+    protected String mResponseBodyString;
     protected Call mCall;
 
     protected HttpBaseMethod(URL url) {
@@ -103,10 +104,11 @@ public abstract class HttpBaseMethod {
     }
 
     public String getResponseBodyAsString() throws IOException {
-        if (mResponse.body() != null) {
-            return mResponse.body().string();
+        if (mResponseBodyString == null && mResponse.body() != null) {
+            mResponseBodyString = mResponse.body().string();
         }
-        return null;
+
+        return mResponseBodyString;
     }
 
     public InputStream getResponseBodyAsStream() {
