@@ -24,14 +24,6 @@
 
 package com.owncloud.android.lib.common;
 
-import java.io.IOException;
-import java.util.Iterator;
-import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
-
-
-
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.accounts.AuthenticatorException;
@@ -41,12 +33,13 @@ import android.net.Uri;
 import android.util.Log;
 
 import com.owncloud.android.lib.common.accounts.AccountUtils;
-import com.owncloud.android.lib.common.accounts.AccountUtils.AccountNotFoundException;
-import com.owncloud.android.lib.common.authentication.OwnCloudCredentials;
 import com.owncloud.android.lib.common.authentication.OwnCloudSamlSsoCredentials;
 import com.owncloud.android.lib.common.utils.Log_OC;
 
-import okhttp3.Cookie;
+import java.io.IOException;
+import java.util.Iterator;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 /**
  * Implementation of {@link OwnCloudClientManager}
@@ -114,8 +107,6 @@ public class SingleSessionManager implements OwnCloudClientManager {
             reusingKnown = true;
         }
 
-        account.loadCredentials(context);
-
         if (client == null) {
             // no client to reuse - create a new one
             client = OwnCloudClientFactory.createOwnCloudClient(
@@ -126,6 +117,7 @@ public class SingleSessionManager implements OwnCloudClientManager {
             client.setContext(context);
             client.setOwnCloudClientManager(this);
 
+            account.loadCredentials(context);
             client.setCredentials(account.getCredentials());
 
             if (client.getCredentials() instanceof OwnCloudSamlSsoCredentials) {
@@ -149,7 +141,7 @@ public class SingleSessionManager implements OwnCloudClientManager {
                 Log_OC.v(TAG, "reusing client for session " + sessionName);
             }
 
-            keepCredentialsUpdated(account, client);
+            keepCredentialsUpdated(client);
             keepCookiesUpdated(context, account, client);
             keepUriUpdated(account, client);
         }
@@ -163,7 +155,6 @@ public class SingleSessionManager implements OwnCloudClientManager {
 
     @Override
     public OwnCloudClient removeClientFor(OwnCloudAccount account) {
-
         if (Log.isLoggable(TAG, Log.DEBUG)) {
             Log_OC.d(TAG, "removeClientFor starting ");
         }
@@ -198,9 +189,7 @@ public class SingleSessionManager implements OwnCloudClientManager {
 
 
     @Override
-    public void saveAllClients(Context context, String accountType)
-        throws AccountNotFoundException, AuthenticatorException, IOException,
-        OperationCanceledException {
+    public void saveAllClients(Context context, String accountType) {
 
         if (Log.isLoggable(TAG, Log.DEBUG)) {
             Log_OC.d(TAG, "Saving sessions... ");
@@ -223,7 +212,7 @@ public class SingleSessionManager implements OwnCloudClientManager {
         }
     }
 
-    private void keepCredentialsUpdated(OwnCloudAccount account, OwnCloudClient reusedClient) {
+    private void keepCredentialsUpdated(OwnCloudClient reusedClient) {
         reusedClient.applyCredentials();
     }
 
