@@ -1,7 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="about_android">%1$s для Android</string>
-  <string name="about_version">версия %1$s</string>
   <string name="actionbar_search">Поиск в этой папке</string>
   <string name="actionbar_sync">Обновить учетную запись</string>
   <string name="actionbar_upload">Загрузить</string>
@@ -18,11 +16,7 @@
   <string name="actionbar_sort_by_name">А-Я</string>
   <string name="actionbar_sort_by_date">От старых к новым</string>
   <string name="actionbar_sort_by_size">От маленьких к большим</string>
-  <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
-  <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Все файлы</string>
-  <!--TODO re-enable when "On Device" is available
-    <string name="drawer_item_on_device">On device</string>-->
   <string name="drawer_item_settings">Настройки</string>
   <string name="drawer_item_uploads_list">Загрузки</string>
   <string name="drawer_close">Закрыть</string>
@@ -101,6 +95,7 @@
   <string name="file_list_no_app_for_file_type">Не найдено приложение для типа файла</string>
   <string name="local_file_list_empty">В этом каталоге нет файлов.</string>
   <string name="local_file_list_empty_just_folders">В этом каталоге нет каталогов.</string>
+  <string name="local_file_list_search_with_no_matches">Нет соответствий для этого поиска</string>
   <string name="upload_list_empty">Нет доступных загрузок.</string>
   <string name="file_list_folder">каталог</string>
   <string name="file_list_folders">каталоги</string>
@@ -120,15 +115,13 @@
   <string name="action_share">Общий доступ</string>
   <string name="common_yes">Да</string>
   <string name="common_no">Нет</string>
-  <string name="common_ok">ОК</string>
   <string name="common_remove_upload">Удалить загрузку</string>
   <string name="common_retry_upload">Повторить загрузку</string>
   <string name="common_cancel_sync">Отменить синхронизацию</string>
-  <string name="common_cancel">Отмена</string>
   <string name="common_back">Назад</string>
   <string name="common_save_exit">Сохранить и выйти</string>
   <string name="common_error">Ошибка</string>
-  <string name="common_loading">Загрузка ...</string>
+  <string name="common_loading">Загрузка...</string>
   <string name="common_unknown">неизвестно</string>
   <string name="common_error_unknown">Неизвестная ошибка</string>
   <string name="common_pending">Ожидается</string>
@@ -136,9 +129,7 @@
   <string name="change_password">Сменить пароль</string>
   <string name="delete_account">Удалить аккаунт</string>
   <string name="create_account">Создать учётную запись</string>
-  <string name="upload_chooser_title">Загрузить из ...</string>
   <string name="uploader_info_dirname">Имя каталога</string>
-  <string name="uploader_upload_in_progress_ticker">Загрузка ...</string>
   <string name="uploader_upload_in_progress_content">%1$d%% Загружается %2$s</string>
   <string name="uploader_upload_succeeded_ticker">Загрузка завершена</string>
   <string name="uploader_upload_succeeded_content_single">%1$s загружено</string>
@@ -155,8 +146,6 @@
   <string name="uploads_view_group_current_uploads">Текущие</string>
   <string name="uploads_view_group_failed_uploads">Не удалось (тапните для повторения)</string>
   <string name="uploads_view_group_finished_uploads">Загружено</string>
-  <string name="uploads_view_group_file_count">%d Файла(ов)</string>
-  <string name="uploads_view_group_file_count_single">%d Файл</string>
   <string name="uploads_view_upload_status_succeeded">Завершённые</string>
   <string name="uploads_view_upload_status_cancelled">Отменён</string>
   <string name="uploads_view_upload_status_paused">На паузе</string>
@@ -174,7 +163,6 @@
   <string name="uploads_view_upload_status_waiting_for_wifi">Ожидание соединения по wifi</string>
   <string name="uploads_view_later_waiting_to_upload">Ожидается загрузка</string>
   <string name="uploads_view_unsupported_media_type">Неподдерживаемый тип медиаданных</string>
-  <string name="downloader_download_in_progress_ticker">Скачивание ...</string>
   <string name="downloader_download_in_progress_content">%1$d%% Скачивается %2$s</string>
   <string name="downloader_download_succeeded_ticker">Скачивание завершено</string>
   <string name="downloader_download_succeeded_content">%1$s скачено</string>
@@ -238,8 +226,7 @@
   <string name="media_play_pause_description">Воспроизведение или пауза</string>
   <string name="media_forward_description">Перемотка вперед</string>
   <string name="upload_from_camera_title">Изображение из камеры</string>
-  <string name="auth_getting_authorization">Получение авторизации</string>
-  <string name="auth_trying_to_login">Попытка входа ...</string>
+  <string name="auth_getting_authorization">Выполняется авторизация...</string>
   <string name="auth_no_net_conn_title">Нет подключения к сети</string>
   <string name="auth_nossl_plain_ok_title">Защищённое соединение недоступно.</string>
   <string name="auth_connection_established">Соединение установлено</string>
@@ -294,7 +281,6 @@
   <string name="wait_checking_credentials">Проверка сохранённых учётных данных</string>
   <string name="filedisplay_unexpected_bad_get_content">Неизвестная ошибка; выберите этот файл из другого приложения</string>
   <string name="filedisplay_no_file_selected">Файлы не выбраны</string>
-  <string name="activity_chooser_title">Отправить ссылку ...</string>
   <string name="wait_for_tmp_copy_from_private_storage">Копирование файла из частной хранилища</string>
   <string name="oauth_check_onoff">Войти через oAuth2</string>
   <string name="oauth_login_connection">Подключение к oAuth2 серверу...</string>
@@ -385,8 +371,9 @@
   <string name="log_send_history_button">История отправок</string>
   <string name="log_send_no_mail_app">Программа для отправки журналов не найдена. Пожалуйста установите почтовую программу.</string>
   <string name="log_send_mail_subject">Журналы %1$s для Android</string>
-  <string name="log_progress_dialog_text">Загрузка данных ...</string>
+  <string name="log_progress_dialog_text">Загрузка данных…</string>
   <string name="actionbar_select_all">Выделить все</string>
+  <string name="actionbar_select_inverse">Выбрать наоборот</string>
   <string name="saml_authentication_required_text">Требуется аутентификация </string>
   <string name="saml_authentication_wrong_pass">Неправильный пароль</string>
   <string name="actionbar_move">Переместить</string>
@@ -424,8 +411,6 @@
   <string name="prefs_camera_upload_source_path_title">Каталог камеры (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">обязательно</string>
   <string name="prefs_camera_upload_source_path_title_optional">не обязательно</string>
-  <string name="prefs_camera_upload_behaviour_dialogTitle">Исходный файл будет ...</string>
-  <string name="prefs_camera_upload_behaviour_title">Исходный файл будет ...</string>
   <string name="upload_copy_files">Копировать файл</string>
   <string name="upload_move_files">Переместить файл</string>
   <string name="pref_behaviour_entries_keep_file">остался в исходной папке</string>
@@ -449,7 +434,7 @@
   <string name="share_via_link_edit_permission_read_and_write_label">Скачивание / Просмотр / Закачка</string>
   <string name="share_via_link_edit_permission_upload_only_label">Только закачка (перетащить файл сюда)</string>
   <string name="share_get_public_link_button">Получить ссылку</string>
-  <string name="share_with_title">Поделиться с …</string>
+  <string name="share_with_title">Поделиться с</string>
   <string name="share_with_edit_title">Поделиться с %1$s</string>
   <string name="share_search">Найти</string>
   <string name="search_users_and_groups_hint">Поиск пользователей и групп</string>

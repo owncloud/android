@@ -1,7 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="about_android">اپ اندروید %1$s</string>
-  <string name="about_version">نسخه %1$s</string>
   <string name="actionbar_sync">تازه‌سازی حساب</string>
   <string name="actionbar_upload">بارگذاری</string>
   <string name="actionbar_upload_from_apps">محتوا از دیگر اپ‌ها</string>
@@ -17,11 +15,7 @@
   <string name="actionbar_sort_by_name">حروف الفبا</string>
   <string name="actionbar_sort_by_date">قدیمی ترین - جدیدترین</string>
   <string name="actionbar_sort_by_size">کوچکترین - بزرگترین</string>
-  <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
-  <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">تمام پرونده‌ها</string>
-  <!--TODO re-enable when "On Device" is available
-    <string name="drawer_item_on_device">On device</string>-->
   <string name="drawer_item_settings">تنظیمات</string>
   <string name="drawer_item_uploads_list">بارگذاری‌ها</string>
   <string name="drawer_close">بستن</string>
@@ -102,15 +96,13 @@
   <string name="action_share">هم‌رسانی</string>
   <string name="common_yes">بله</string>
   <string name="common_no">نه</string>
-  <string name="common_ok">قبول</string>
   <string name="common_remove_upload">برداشتن بارگذاری</string>
   <string name="common_retry_upload">تلاش دوباره</string>
   <string name="common_cancel_sync">لغو هم‌گام سازی</string>
-  <string name="common_cancel">لغو</string>
   <string name="common_back">بازگشت</string>
   <string name="common_save_exit">ذخیره و خروج</string>
   <string name="common_error">خطا</string>
-  <string name="common_loading">درحال بار کردن…</string>
+  <string name="common_loading">در حال بار کردن…</string>
   <string name="common_unknown">نامشخّص</string>
   <string name="common_error_unknown">خطای نامشخّص</string>
   <string name="common_pending">در انتظار</string>
@@ -118,9 +110,7 @@
   <string name="change_password">تغییر گذرواژه</string>
   <string name="delete_account">برداشتن حساب</string>
   <string name="create_account">ایجاد حساب</string>
-  <string name="upload_chooser_title">بارگذاری از…</string>
   <string name="uploader_info_dirname">نام پوشه</string>
-  <string name="uploader_upload_in_progress_ticker">در حال بارگذاری…</string>
   <string name="uploader_upload_in_progress_content">%1$d%% در حال بارگذاری %2$s</string>
   <string name="uploader_upload_succeeded_ticker">بارگذاری موفق شد</string>
   <string name="uploader_upload_succeeded_content_single">‫%1$s بارگذاشته شد</string>
@@ -137,8 +127,6 @@
   <string name="uploads_view_group_current_uploads">جاری</string>
   <string name="uploads_view_group_failed_uploads">شکست خورده (ضربه برای تلاش دوباره)</string>
   <string name="uploads_view_group_finished_uploads">بارگذاری شده</string>
-  <string name="uploads_view_group_file_count">%d فایل‌</string>
-  <string name="uploads_view_group_file_count_single">%d پرونده</string>
   <string name="uploads_view_upload_status_succeeded">کامل شده</string>
   <string name="uploads_view_upload_status_cancelled">لغو شده</string>
   <string name="uploads_view_upload_status_paused">مکث شده</string>
@@ -156,7 +144,6 @@
   <string name="uploads_view_upload_status_waiting_for_wifi">در حال انتظار برای اتّصال وای‌فای</string>
   <string name="uploads_view_later_waiting_to_upload">درحال انتظار برای بارگذاری</string>
   <string name="uploads_view_unsupported_media_type">گونهٔ رسانهٔ پشتبانی نشده</string>
-  <string name="downloader_download_in_progress_ticker">در حال بارگیری…</string>
   <string name="downloader_download_in_progress_content">%1$d%% در حال بارگیری %2$s</string>
   <string name="downloader_download_succeeded_ticker">بارگیری موفق شد</string>
   <string name="downloader_download_succeeded_content">‫%1$s بارگیری شد</string>
@@ -212,8 +199,6 @@
   <string name="media_rewind_description">دکمه عقبگرد</string>
   <string name="media_play_pause_description">دکمه پخش یا توقف</string>
   <string name="media_forward_description">دکمه رو به جلو سریع</string>
-  <string name="auth_getting_authorization">گرفتن مجوز ...</string>
-  <string name="auth_trying_to_login">تلاش برای ورود ...</string>
   <string name="auth_no_net_conn_title">هیچ ارتباطی به شبکه موجود نیست</string>
   <string name="auth_nossl_plain_ok_title">اتصال امن در دسترس نیست</string>
   <string name="auth_connection_established">اتصال برقرار شد</string>
@@ -268,7 +253,6 @@
   <string name="wait_checking_credentials">بررسی گواهی‌نامه‌های ذخیره شده</string>
   <string name="filedisplay_unexpected_bad_get_content">مشکل غیر متقربه، لطفا پرونده را از یک برنامه متفاوت انتخاب کنید.</string>
   <string name="filedisplay_no_file_selected">هیچ پرونده‌ای انتخاب نشده است</string>
-  <string name="activity_chooser_title">ارسال لینک به ...</string>
   <string name="wait_for_tmp_copy_from_private_storage">کپی کردن فایل از حافظه خصوصی</string>
   <string name="oauth_check_onoff">ورود با oAuth2   </string>
   <string name="oauth_login_connection">اتصال به کارساز OAuth2…</string>
@@ -337,7 +321,7 @@
   <string name="drawer_manage_accounts">مدیریت حساب‌ها</string>
   <string name="actionbar_logger">لاگ‌ها</string>
   <string name="log_send_history_button">فرستادن تاریخچه</string>
-  <string name="log_progress_dialog_text">بار کردن داده…</string>
+  <string name="log_progress_dialog_text">بارگذاری داده...</string>
   <string name="actionbar_select_all">انتخاب همه</string>
   <string name="saml_authentication_required_text">احراز هویت مورد نیاز است</string>
   <string name="saml_authentication_wrong_pass">رمز عبور اشتباه است</string>
@@ -383,7 +367,7 @@
   <string name="share_via_link_password_label">گذرواژه</string>
   <string name="share_via_link_password_title">امن شده</string>
   <string name="share_get_public_link_button">گرفتن پیوند</string>
-  <string name="share_with_title">هم‌رسانی با…</string>
+  <string name="share_with_title">به اشتراک گذاشتن با</string>
   <string name="share_with_edit_title">هم‌رسانی با %1$s</string>
   <string name="share_search">جست‌و‌جو</string>
   <string name="search_users_and_groups_hint">جست‌وجوی کاربران و گروه‌ها</string>

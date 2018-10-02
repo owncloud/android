@@ -1,7 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="about_android">Applicazione per Android di %1$s</string>
-  <string name="about_version">versione %1$s</string>
   <string name="actionbar_sync">Aggiorna account</string>
   <string name="actionbar_upload">Carica un file</string>
   <string name="actionbar_upload_from_apps">Contenuti da altre applicazioni</string>
@@ -16,11 +14,7 @@
   <string name="actionbar_sort_title">Ordina per</string>
   <string name="actionbar_sort_by_name">A-Z</string>
   <string name="actionbar_sort_by_date">Più vecchio - Più Recente</string>
-  <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
-  <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Tutti i file</string>
-  <!--TODO re-enable when "On Device" is available
-    <string name="drawer_item_on_device">On device</string>-->
   <string name="drawer_item_settings">Impostazioni</string>
   <string name="drawer_item_uploads_list">Caricamenti</string>
   <string name="drawer_close">Chiudi</string>
@@ -113,11 +107,9 @@
   <string name="action_share">Condividi</string>
   <string name="common_yes">Sì</string>
   <string name="common_no">No</string>
-  <string name="common_ok">OK</string>
   <string name="common_remove_upload">Rimuovi caricamento</string>
   <string name="common_retry_upload">Riprova caricamento</string>
   <string name="common_cancel_sync">Annulla sincronizzazione</string>
-  <string name="common_cancel">Annulla</string>
   <string name="common_back">Indietro</string>
   <string name="common_save_exit">Salva ed esci</string>
   <string name="common_error">Errore</string>
@@ -129,9 +121,7 @@
   <string name="change_password">Modifica la password</string>
   <string name="delete_account">Rimuovi account</string>
   <string name="create_account">Crea account</string>
-  <string name="upload_chooser_title">Carica file da...</string>
   <string name="uploader_info_dirname">Nome della cartella</string>
-  <string name="uploader_upload_in_progress_ticker">Caricamento in corso...</string>
   <string name="uploader_upload_in_progress_content">%1$d%% Caricamento di %2$s</string>
   <string name="uploader_upload_succeeded_ticker">Caricamento effettuato</string>
   <string name="uploader_upload_succeeded_content_single">%1$s caricato</string>
@@ -148,8 +138,6 @@
   <string name="uploads_view_group_current_uploads">Attuale</string>
   <string name="uploads_view_group_failed_uploads">Non riuscito (tocca per riprovare)</string>
   <string name="uploads_view_group_finished_uploads">Caricati</string>
-  <string name="uploads_view_group_file_count">%d file</string>
-  <string name="uploads_view_group_file_count_single">%d file</string>
   <string name="uploads_view_upload_status_succeeded">Completati</string>
   <string name="uploads_view_upload_status_cancelled">Annullati</string>
   <string name="uploads_view_upload_status_paused">Sospesi</string>
@@ -167,7 +155,6 @@
   <string name="uploads_view_upload_status_waiting_for_wifi">In attesa della connettività wifi</string>
   <string name="uploads_view_later_waiting_to_upload">In attesa di caricamento</string>
   <string name="uploads_view_unsupported_media_type">Formato non supportato</string>
-  <string name="downloader_download_in_progress_ticker">Scaricamento in corso...</string>
   <string name="downloader_download_in_progress_content">%1$d%% Scaricamento di %2$s</string>
   <string name="downloader_download_succeeded_ticker">Scaricamento effettuato</string>
   <string name="downloader_download_succeeded_content">%1$s scaricato</string>
@@ -231,8 +218,7 @@
   <string name="media_play_pause_description">Pulsante Riproduci o pausa</string>
   <string name="media_forward_description">Pulsante Avanti veloce</string>
   <string name="upload_from_camera_title">Immagine dalla fotocamera</string>
-  <string name="auth_getting_authorization">Recupero delle autorizzazioni in corso...</string>
-  <string name="auth_trying_to_login">Tentativo di accesso in corso...</string>
+  <string name="auth_getting_authorization">Autorizzazione in corso...</string>
   <string name="auth_no_net_conn_title">Nessuna connessione di rete</string>
   <string name="auth_nossl_plain_ok_title">Connessione sicura disponibile.</string>
   <string name="auth_connection_established">Connessione stabilita</string>
@@ -287,7 +273,6 @@
   <string name="wait_checking_credentials">Controllo delle credenziali memorizzate</string>
   <string name="filedisplay_unexpected_bad_get_content">Problema inatteso; prova un\'altra applicazione per selezionare il file</string>
   <string name="filedisplay_no_file_selected">Non è stato selezionato alcun file</string>
-  <string name="activity_chooser_title">Invia collegamento a...</string>
   <string name="wait_for_tmp_copy_from_private_storage">Copia file dall\'archiviazione privata</string>
   <string name="oauth_check_onoff">Accesso con oAuth2.</string>
   <string name="oauth_login_connection">Connessione al server OAuth2...</string>
@@ -417,8 +402,6 @@
   <string name="prefs_camera_upload_source_path_title">Cartella della fotocamera (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">richiesto</string>
   <string name="prefs_camera_upload_source_path_title_optional">opzionale</string>
-  <string name="prefs_camera_upload_behaviour_dialogTitle">Il fil originale sarà...</string>
-  <string name="prefs_camera_upload_behaviour_title">Il fil originale sarà...</string>
   <string name="upload_copy_files">Copia file</string>
   <string name="upload_move_files">Sposta file</string>
   <string name="pref_behaviour_entries_keep_file">lasciato nella cartella originale</string>
@@ -441,7 +424,7 @@
   <string name="share_via_link_edit_permission_read_only_label">Scarica / visiona</string>
   <string name="share_via_link_edit_permission_read_and_write_label">Scarica / Visiona / Carica</string>
   <string name="share_get_public_link_button">Ottieni collegamento</string>
-  <string name="share_with_title">Condividi con...</string>
+  <string name="share_with_title">Condividi con</string>
   <string name="share_with_edit_title">Condividi con %1$s</string>
   <string name="share_search">Cerca</string>
   <string name="search_users_and_groups_hint">Cerca utenti e gruppi</string>

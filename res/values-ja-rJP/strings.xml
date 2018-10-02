@@ -1,7 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="about_android">%1$s Androidアプリ</string>
-  <string name="about_version">バージョン %1$s</string>
   <string name="actionbar_sync">アカウントを同期</string>
   <string name="actionbar_upload">アップロード</string>
   <string name="actionbar_upload_from_apps">他アプリからのコンテンツ</string>
@@ -15,11 +13,7 @@
   <string name="actionbar_descending">降順</string>
   <string name="actionbar_sort_title">ソート: </string>
   <string name="actionbar_sort_by_name">名前順</string>
-  <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
-  <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">すべてのファイル</string>
-  <!--TODO re-enable when "On Device" is available
-    <string name="drawer_item_on_device">On device</string>-->
   <string name="drawer_item_settings">設定</string>
   <string name="drawer_item_uploads_list">アップロード</string>
   <string name="drawer_close">閉じる</string>
@@ -108,11 +102,9 @@
   <string name="action_share">共有</string>
   <string name="common_yes">はい</string>
   <string name="common_no">いいえ</string>
-  <string name="common_ok">OK</string>
   <string name="common_remove_upload">アップロードを削除</string>
   <string name="common_retry_upload">アップロード再実行</string>
   <string name="common_cancel_sync">同期のキャンセル</string>
-  <string name="common_cancel">キャンセル</string>
   <string name="common_back">戻る</string>
   <string name="common_save_exit">保存 &amp; 終了</string>
   <string name="common_error">エラー</string>
@@ -124,9 +116,7 @@
   <string name="change_password">パスワードを変更</string>
   <string name="delete_account">アカウント削除</string>
   <string name="create_account">アカウントを作成</string>
-  <string name="upload_chooser_title">アップロード …</string>
   <string name="uploader_info_dirname">フォルダー名</string>
-  <string name="uploader_upload_in_progress_ticker">アップロード中...</string>
   <string name="uploader_upload_in_progress_content">%1$d%% アップロード中 %2$s</string>
   <string name="uploader_upload_succeeded_ticker">アップロード完了</string>
   <string name="uploader_upload_succeeded_content_single">%1$s は正常にアップロードされました</string>
@@ -143,8 +133,6 @@
   <string name="uploads_view_group_current_uploads">現在</string>
   <string name="uploads_view_group_failed_uploads">失敗(タップして再試行)</string>
   <string name="uploads_view_group_finished_uploads">アップロード済み</string>
-  <string name="uploads_view_group_file_count">%d 個のファイル</string>
-  <string name="uploads_view_group_file_count_single">%d 個のファイル</string>
   <string name="uploads_view_upload_status_succeeded">完了</string>
   <string name="uploads_view_upload_status_cancelled">キャンセル済</string>
   <string name="uploads_view_upload_status_paused">停止中</string>
@@ -162,7 +150,6 @@
   <string name="uploads_view_upload_status_waiting_for_wifi">WiFiの接続を待っています</string>
   <string name="uploads_view_later_waiting_to_upload">アップロード待ち</string>
   <string name="uploads_view_unsupported_media_type">サポートされていない形式のメディア</string>
-  <string name="downloader_download_in_progress_ticker">ダウンロード中 ...</string>
   <string name="downloader_download_in_progress_content">%1$d%% ダウンロード中 %2$s</string>
   <string name="downloader_download_succeeded_ticker">ダウンロードに成功</string>
   <string name="downloader_download_succeeded_content">%1$s は正常にダウンロードされました</string>
@@ -224,7 +211,6 @@
   <string name="media_forward_description">早送りボタン</string>
   <string name="upload_from_camera_title">カメラのピクチャー</string>
   <string name="auth_getting_authorization">認証中...</string>
-  <string name="auth_trying_to_login">ログイン試行中...</string>
   <string name="auth_no_net_conn_title">ネットワークに接続されていません</string>
   <string name="auth_nossl_plain_ok_title">暗号化通信が利用できません。</string>
   <string name="auth_connection_established">接続が確立しました</string>
@@ -279,7 +265,6 @@
   <string name="wait_checking_credentials">保存された資格情報をチェック</string>
   <string name="filedisplay_unexpected_bad_get_content">予期せぬ問題；他のアプリでファイルを選択してみてください。</string>
   <string name="filedisplay_no_file_selected">ファイルは選択されていません</string>
-  <string name="activity_chooser_title">リンクを送信…</string>
   <string name="wait_for_tmp_copy_from_private_storage">プライベートストレージからファイルをコピー中</string>
   <string name="oauth_check_onoff">oAuth2でログイン</string>
   <string name="oauth_login_connection">OAuth2サーバーに接続中...</string>
@@ -367,7 +352,7 @@
   <string name="log_send_history_button">履歴を送信</string>
   <string name="log_send_no_mail_app">ログを送信するアプリが見つかりませんでした。メールアプリをインストールしてください。</string>
   <string name="log_send_mail_subject">%1$s アンドロイドアプリログ</string>
-  <string name="log_progress_dialog_text">データの読込中 ...</string>
+  <string name="log_progress_dialog_text">読込中 ...</string>
   <string name="actionbar_select_all">すべて選択</string>
   <string name="saml_authentication_required_text">認証を必要とする</string>
   <string name="saml_authentication_wrong_pass">パスワードが間違っています</string>
@@ -406,8 +391,6 @@
   <string name="prefs_camera_upload_source_path_title">カメラフォルダー (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">必須</string>
   <string name="prefs_camera_upload_source_path_title_optional">任意</string>
-  <string name="prefs_camera_upload_behaviour_dialogTitle">オリジナルファイルについて</string>
-  <string name="prefs_camera_upload_behaviour_title">オリジナルファイルについて</string>
   <string name="upload_copy_files">ファイルをコピー</string>
   <string name="upload_move_files">ファイルを移動</string>
   <string name="pref_behaviour_entries_keep_file">元のフォルダーに保持</string>
@@ -430,7 +413,7 @@
   <string name="share_via_link_edit_permission_read_only_label">ダウンロード / 表示</string>
   <string name="share_via_link_edit_permission_read_and_write_label">ダウンロード / 表示 / アップロード</string>
   <string name="share_get_public_link_button">リンクを取得</string>
-  <string name="share_with_title">共有開始... </string>
+  <string name="share_with_title">共有者</string>
   <string name="share_with_edit_title">%1$s と共有</string>
   <string name="share_search">検索</string>
   <string name="search_users_and_groups_hint">ユーザーとグループを検索</string>
