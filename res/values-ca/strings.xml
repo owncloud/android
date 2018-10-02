@@ -1,7 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="about_android">%1$s Aplicació d\'Android</string>
-  <string name="about_version">versió %1$s</string>
   <string name="actionbar_sync">Actualitza compte</string>
   <string name="actionbar_upload">Puja un fitxer</string>
   <string name="actionbar_upload_from_apps">Contingut d\'altres aplicacions</string>
@@ -17,11 +15,7 @@
   <string name="actionbar_sort_by_name">A-Z</string>
   <string name="actionbar_sort_by_date">Antic - Nou</string>
   <string name="actionbar_sort_by_size">Petit - Gran</string>
-  <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
-  <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Tots els fitxers</string>
-  <!--TODO re-enable when "On Device" is available
-    <string name="drawer_item_on_device">On device</string>-->
   <string name="drawer_item_settings">Configuració</string>
   <string name="drawer_item_uploads_list">Fitxers carregats</string>
   <string name="drawer_close">Tanca</string>
@@ -118,11 +112,9 @@
   <string name="action_share">Comparteix</string>
   <string name="common_yes">Sí</string>
   <string name="common_no">No</string>
-  <string name="common_ok">D\'acord</string>
   <string name="common_remove_upload">Esborra els fitxers carregats</string>
   <string name="common_retry_upload">Torna a intentar la càrrega</string>
   <string name="common_cancel_sync">Cancel·la la sincronització</string>
-  <string name="common_cancel">Cancel·la</string>
   <string name="common_back">Enrera</string>
   <string name="common_save_exit">Desa i surt</string>
   <string name="common_error">Error</string>
@@ -134,9 +126,7 @@
   <string name="change_password">Canvia la contrasenya</string>
   <string name="delete_account">Elimina el compte</string>
   <string name="create_account">Crea un compte</string>
-  <string name="upload_chooser_title">Puja fitxer des de ...</string>
   <string name="uploader_info_dirname">Nom de la carpeta</string>
-  <string name="uploader_upload_in_progress_ticker">S\'està pujant ...</string>
   <string name="uploader_upload_in_progress_content">%1$d%% Pujant %2$s</string>
   <string name="uploader_upload_succeeded_ticker">La pujada ha estat correcte</string>
   <string name="uploader_upload_succeeded_content_single">%1$s s\'ha carregat correctament</string>
@@ -153,8 +143,6 @@
   <string name="uploads_view_group_current_uploads">Actual</string>
   <string name="uploads_view_group_failed_uploads">Error (toca per tornar a intentar)</string>
   <string name="uploads_view_group_finished_uploads">Carregat</string>
-  <string name="uploads_view_group_file_count">%d Fitxers</string>
-  <string name="uploads_view_group_file_count_single">%d Fitxer</string>
   <string name="uploads_view_upload_status_succeeded">Completat</string>
   <string name="uploads_view_upload_status_cancelled">S\'ha cancel·lat</string>
   <string name="uploads_view_upload_status_paused">Pausat</string>
@@ -172,7 +160,6 @@
   <string name="uploads_view_upload_status_waiting_for_wifi">Esperant connectivitat wifi</string>
   <string name="uploads_view_later_waiting_to_upload">S\'està esperant per pujar-ho</string>
   <string name="uploads_view_unsupported_media_type">Arxiu media no suportat</string>
-  <string name="downloader_download_in_progress_ticker">S\'està baixant ...</string>
   <string name="downloader_download_in_progress_content">%1$d%% pujant %2$s</string>
   <string name="downloader_download_succeeded_ticker">La baixada ha estat correcte</string>
   <string name="downloader_download_succeeded_content">%1$s descarregat</string>
@@ -236,8 +223,7 @@
   <string name="media_play_pause_description">Botó de reproducció o pausa</string>
   <string name="media_forward_description">Botó de reproducció ràpida</string>
   <string name="upload_from_camera_title">Fotografia de la càmera</string>
-  <string name="auth_getting_authorization">Recuperant autorització ...</string>
-  <string name="auth_trying_to_login">Intentat accedir ...</string>
+  <string name="auth_getting_authorization">S\'està autenticant...</string>
   <string name="auth_no_net_conn_title">Sense connexió de xarxa</string>
   <string name="auth_nossl_plain_ok_title">La connexió segura no està disponible.</string>
   <string name="auth_connection_established">S\'ha establert la connexió</string>
@@ -291,7 +277,6 @@
   <string name="wait_checking_credentials">Comprovant les credencials emmagatzemades</string>
   <string name="filedisplay_unexpected_bad_get_content">S\'ha produït un problema inesperat; proveu una altra aplicació per seleccionar el fitxer</string>
   <string name="filedisplay_no_file_selected">No heu seleccionat cap fitxer</string>
-  <string name="activity_chooser_title">Envia l\'enllaç a...</string>
   <string name="wait_for_tmp_copy_from_private_storage">Copiant fitxer des de emmagatzemament privat</string>
   <string name="oauth_check_onoff">Accés amb oAuth2</string>
   <string name="oauth_login_connection">Connectant al servidor OAuth2...</string>
@@ -420,8 +405,6 @@
   <string name="prefs_camera_upload_source_path_title">Carpeta de la Càmera(%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">requerit</string>
   <string name="prefs_camera_upload_source_path_title_optional">opcional</string>
-  <string name="prefs_camera_upload_behaviour_dialogTitle">El fitxer original serà...</string>
-  <string name="prefs_camera_upload_behaviour_title">El fitxer original serà...</string>
   <string name="upload_copy_files">Copiar fitxer</string>
   <string name="upload_move_files">Moure fitxer</string>
   <string name="pref_behaviour_entries_keep_file">conserva\'t en la carpeta original</string>
@@ -445,7 +428,7 @@
   <string name="share_via_link_edit_permission_read_and_write_label">Descarregar / Veure / Pujar</string>
   <string name="share_via_link_edit_permission_upload_only_label">Només per Pujar (arrossegueu els arxius)</string>
   <string name="share_get_public_link_button">Obtén l\'enllaç</string>
-  <string name="share_with_title">Comparteix amb ...</string>
+  <string name="share_with_title">Comparteix amb</string>
   <string name="share_with_edit_title">Comparteix amb %1$s</string>
   <string name="share_search">Cerca</string>
   <string name="search_users_and_groups_hint">Cerca usuaris i grups</string>

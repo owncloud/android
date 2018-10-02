@@ -1,7 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="about_android">%1$s Aplikasi Android</string>
-  <string name="about_version">versi %1$s</string>
   <string name="actionbar_sync">Segarkan akun</string>
   <string name="actionbar_upload">Unggah</string>
   <string name="actionbar_upload_from_apps">Konten dari aplikasi lain</string>
@@ -14,11 +12,7 @@
   <string name="actionbar_sort">Urutkan</string>
   <string name="actionbar_sort_title">Urutan</string>
   <string name="actionbar_sort_by_name">A-Z</string>
-  <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
-  <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Semua berkas</string>
-  <!--TODO re-enable when "On Device" is available
-    <string name="drawer_item_on_device">On device</string>-->
   <string name="drawer_item_settings">Pengaturan</string>
   <string name="drawer_item_uploads_list">Unggah</string>
   <string name="drawer_close">Tutup</string>
@@ -89,15 +83,13 @@
   <string name="action_share">Bagikan</string>
   <string name="common_yes">Ya</string>
   <string name="common_no">Tidak</string>
-  <string name="common_ok">Oke</string>
   <string name="common_remove_upload">Hapus unggahan</string>
   <string name="common_retry_upload">Coba unggah lagi</string>
   <string name="common_cancel_sync">Batalkan sinkron</string>
-  <string name="common_cancel">Batal</string>
   <string name="common_back">Kembali</string>
   <string name="common_save_exit">Simpan &amp; keluar</string>
   <string name="common_error">Kesalahan</string>
-  <string name="common_loading">Memuat ...</string>
+  <string name="common_loading">Memuat...</string>
   <string name="common_unknown">tidak diketahui</string>
   <string name="common_error_unknown">Kesalahan tidak diketahui</string>
   <string name="common_pending">Tertunda</string>
@@ -105,9 +97,7 @@
   <string name="change_password">Ubah sandi</string>
   <string name="delete_account">Hapus akun</string>
   <string name="create_account">Buat akun</string>
-  <string name="upload_chooser_title">Unggah dari...</string>
   <string name="uploader_info_dirname">Nama folder</string>
-  <string name="uploader_upload_in_progress_ticker">Mengungggah...</string>
   <string name="uploader_upload_in_progress_content">%1$d%% Mengunggah %2$s</string>
   <string name="uploader_upload_succeeded_ticker">Berhasil mengunggah</string>
   <string name="uploader_upload_succeeded_content_single">%1$s diunggah</string>
@@ -124,8 +114,6 @@
   <string name="uploads_view_group_current_uploads">Saat ini</string>
   <string name="uploads_view_group_failed_uploads">Gagal (klik untuk coba lagi)</string>
   <string name="uploads_view_group_finished_uploads">Terunggah</string>
-  <string name="uploads_view_group_file_count">%d Berkas</string>
-  <string name="uploads_view_group_file_count_single">%d Berkas</string>
   <string name="uploads_view_upload_status_succeeded">Selesai</string>
   <string name="uploads_view_upload_status_cancelled">Dibatalkan</string>
   <string name="uploads_view_upload_status_paused">Jeda</string>
@@ -143,7 +131,6 @@
   <string name="uploads_view_upload_status_waiting_for_wifi">Menunggu koneksi wifi</string>
   <string name="uploads_view_later_waiting_to_upload">Menunggu unggahan</string>
   <string name="uploads_view_unsupported_media_type">Jenis media tidak didukung</string>
-  <string name="downloader_download_in_progress_ticker">Mengunduh...</string>
   <string name="downloader_download_in_progress_content">%1$d%% Mengunduh %2$s</string>
   <string name="downloader_download_succeeded_ticker">Berhasil mengunduh</string>
   <string name="downloader_download_succeeded_content">%1$s terunduh</string>
@@ -199,8 +186,7 @@
   <string name="media_rewind_description">Tombol mundur</string>
   <string name="media_play_pause_description">Tombol main dan jeda</string>
   <string name="media_forward_description">Tombol maju</string>
-  <string name="auth_getting_authorization">Mendapatkan otorisasi ...</string>
-  <string name="auth_trying_to_login">Mencoba log in ...</string>
+  <string name="auth_getting_authorization">Mendapatkan otorisasi...</string>
   <string name="auth_no_net_conn_title">Tidak ada koneksi internet</string>
   <string name="auth_nossl_plain_ok_title">Sambungan aman tidak tersedia</string>
   <string name="auth_connection_established">Sambungan dibuat</string>
@@ -254,7 +240,6 @@
   <string name="wait_a_moment">Tunggu sebentar</string>
   <string name="filedisplay_unexpected_bad_get_content">Masalah tidak terduga, silahkan pilih berkas dari apl yang berbeda</string>
   <string name="filedisplay_no_file_selected">Tidak ada berkas yang terpilih</string>
-  <string name="activity_chooser_title">Kirim taukan ke</string>
   <string name="wait_for_tmp_copy_from_private_storage">Menyalin berkas dari penyimpanan pribadi</string>
   <string name="oauth_check_onoff">Masuk dengan oAuth2</string>
   <string name="ssl_validator_reason_cert_not_trusted">- Sertifikat server tidak terpercaya</string>
@@ -332,7 +317,7 @@
   <string name="log_send_history_button">Kirim riwayat</string>
   <string name="log_send_no_mail_app">Tidak ada aplikasi untuk mengirim log yang ditemukan. Pasang aplikasi email</string>
   <string name="log_send_mail_subject">%1$s Android apl log</string>
-  <string name="log_progress_dialog_text">Memuat data ...</string>
+  <string name="log_progress_dialog_text">Memuat data...</string>
   <string name="actionbar_select_all">Pilih Semua</string>
   <string name="saml_authentication_required_text">Diperlukan otentikasi</string>
   <string name="saml_authentication_wrong_pass">Sandi salah</string>
@@ -368,8 +353,6 @@
   <string name="prefs_camera_upload_source_path_title">Folder kamera (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">Diperlukan</string>
   <string name="prefs_camera_upload_source_path_title_optional">Pilihan</string>
-  <string name="prefs_camera_upload_behaviour_dialogTitle">File asli akan di</string>
-  <string name="prefs_camera_upload_behaviour_title">File asli akan di</string>
   <string name="upload_copy_files">Salin file</string>
   <string name="upload_move_files">Pindahkan file</string>
   <string name="pref_behaviour_entries_keep_file">Disimpan dalam folder asli</string>
@@ -389,7 +372,7 @@
   <string name="share_via_link_expiration_date_label">Kedaluwarsa</string>
   <string name="share_via_link_password_label">Kata Sandi</string>
   <string name="share_via_link_password_title">Aman</string>
-  <string name="share_with_title">Berbagi dengan ...</string>
+  <string name="share_with_title">Bagikan dengan</string>
   <string name="share_with_edit_title">Berbagi dengan %1$s</string>
   <string name="share_search">Cari</string>
   <string name="search_users_and_groups_hint">Cari pengguna dan kelompok</string>

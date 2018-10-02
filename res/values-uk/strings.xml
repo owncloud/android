@@ -1,7 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="about_android">%1$s Android-додаток</string>
-  <string name="about_version">версія %1$s</string>
   <string name="actionbar_sync">Оновити обліковий запис</string>
   <string name="actionbar_upload">Відвантажити</string>
   <string name="actionbar_upload_from_apps">Вміст із інших додатків</string>
@@ -17,11 +15,7 @@
   <string name="actionbar_sort_by_name">А-Я</string>
   <string name="actionbar_sort_by_date">Старіші - Новіші</string>
   <string name="actionbar_sort_by_size">Найменші - Найбільші</string>
-  <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
-  <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Усі файли</string>
-  <!--TODO re-enable when "On Device" is available
-    <string name="drawer_item_on_device">On device</string>-->
   <string name="drawer_item_settings">Налаштування</string>
   <string name="drawer_item_uploads_list">Завантажень</string>
   <string name="drawer_close">Закрити</string>
@@ -104,15 +98,13 @@
   <string name="action_share">Поділитися</string>
   <string name="common_yes">Так</string>
   <string name="common_no">Ні</string>
-  <string name="common_ok">OK</string>
   <string name="common_remove_upload">Вилучити надсилання</string>
   <string name="common_retry_upload">Повторити надсилання</string>
   <string name="common_cancel_sync">Відмінити синхронізацію</string>
-  <string name="common_cancel">Відмінити</string>
   <string name="common_back">Назад</string>
   <string name="common_save_exit">Зберегти та вийти</string>
   <string name="common_error">Помилка</string>
-  <string name="common_loading">Завантаження...</string>
+  <string name="common_loading">Завантаження…</string>
   <string name="common_unknown">невідомо</string>
   <string name="common_error_unknown">Невідома помилка</string>
   <string name="common_pending">Очікування</string>
@@ -120,9 +112,7 @@
   <string name="change_password">Змінити пароль</string>
   <string name="delete_account">Видалити обліковий запис</string>
   <string name="create_account">Створити обліковий запис</string>
-  <string name="upload_chooser_title">Завантажити з …</string>
   <string name="uploader_info_dirname">Ім\'я теки</string>
-  <string name="uploader_upload_in_progress_ticker">Завантаження …</string>
   <string name="uploader_upload_in_progress_content">%1$d%% Надсилання %2$s</string>
   <string name="uploader_upload_succeeded_ticker">Успішно відвантажено</string>
   <string name="uploader_upload_succeeded_content_single">%1$s завантажено</string>
@@ -139,8 +129,6 @@
   <string name="uploads_view_group_current_uploads">Поточний</string>
   <string name="uploads_view_group_failed_uploads">Помилка (натисніть для нової спроби)</string>
   <string name="uploads_view_group_finished_uploads">Вивантажено</string>
-  <string name="uploads_view_group_file_count">%d файлів</string>
-  <string name="uploads_view_group_file_count_single">%d файл</string>
   <string name="uploads_view_upload_status_succeeded">Завершено</string>
   <string name="uploads_view_upload_status_cancelled">Відмінено</string>
   <string name="uploads_view_upload_status_paused">Призупинено</string>
@@ -158,7 +146,6 @@
   <string name="uploads_view_upload_status_waiting_for_wifi">Очікування на безпровідний зв\'язок </string>
   <string name="uploads_view_later_waiting_to_upload">Очікування відвантаження</string>
   <string name="uploads_view_unsupported_media_type">Тип носія не підтримується</string>
-  <string name="downloader_download_in_progress_ticker">Завантаження …</string>
   <string name="downloader_download_in_progress_content">%1$d%% Завантаження %2$s</string>
   <string name="downloader_download_succeeded_ticker">Успішно завантажено</string>
   <string name="downloader_download_succeeded_content">%1$s завантажено</string>
@@ -214,8 +201,7 @@
   <string name="media_rewind_description">Перемотка назад</string>
   <string name="media_play_pause_description">Відтворення або пауза</string>
   <string name="media_forward_description">Перемотка вперед</string>
-  <string name="auth_getting_authorization">Отримання дозволу ...</string>
-  <string name="auth_trying_to_login">Спроба входу ...</string>
+  <string name="auth_getting_authorization">Виконується вхід...</string>
   <string name="auth_no_net_conn_title">Відсутнє підключення до мережі</string>
   <string name="auth_nossl_plain_ok_title">Безпечне з\'єднання не доступне.</string>
   <string name="auth_connection_established">З\'єднання встановлено</string>
@@ -270,7 +256,6 @@
   <string name="wait_checking_credentials">Перевірка збережених облікових даних</string>
   <string name="filedisplay_unexpected_bad_get_content">Несподівані проблеми ; будь ласка, спробуйте використати іншу програму для вибору файлу</string>
   <string name="filedisplay_no_file_selected">Не обрано файл</string>
-  <string name="activity_chooser_title">Надіслати посилання...</string>
   <string name="wait_for_tmp_copy_from_private_storage">Копіювання файлу з приватного сховища</string>
   <string name="oauth_check_onoff">Увійти через oAuth2</string>
   <string name="ssl_validator_header">Справжність сервера не може бути перевірена</string>
@@ -354,7 +339,7 @@
   <string name="log_send_history_button">Надіслати історію</string>
   <string name="log_send_no_mail_app">Не знайдено програм для висилання журналів. Будь ласка, встановіть поштову програму.</string>
   <string name="log_send_mail_subject">%1$s Android лог додатку</string>
-  <string name="log_progress_dialog_text">Завантаження даних ...</string>
+  <string name="log_progress_dialog_text">Завантаження даних...</string>
   <string name="actionbar_select_all">Вибрати всі</string>
   <string name="saml_authentication_required_text">Потрібна аутентифікація</string>
   <string name="saml_authentication_wrong_pass">Невірний пароль</string>
@@ -391,10 +376,6 @@
   <string name="prefs_camera_upload_source_path_title">Тека камери (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">вимагається</string>
   <string name="prefs_camera_upload_source_path_title_optional">необов\'язково</string>
-  <string name="prefs_camera_upload_behaviour_dialogTitle">
-Оригінальний файл буде...</string>
-  <string name="prefs_camera_upload_behaviour_title">
-Оригінальний файл буде...</string>
   <string name="upload_copy_files">Копіювати файл</string>
   <string name="upload_move_files">Перемістити файл</string>
   <string name="pref_behaviour_entries_keep_file">залишено в оригінальній теці</string>
@@ -415,7 +396,7 @@
   <string name="share_via_link_password_label">Пароль</string>
   <string name="share_via_link_password_title">Забезпечено</string>
   <string name="share_get_public_link_button">Отримати посилання</string>
-  <string name="share_with_title">Поділитися з</string>
+  <string name="share_with_title">Опублікувати для</string>
   <string name="share_with_edit_title">Поділитися з %1$s</string>
   <string name="share_search">Пошук</string>
   <string name="search_users_and_groups_hint">Пошук користувачів і груп</string>

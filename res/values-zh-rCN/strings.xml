@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="about_android">%1$s Android 应用</string>
-  <string name="about_version">版本：%1$s</string>
+  <string name="actionbar_search">在此文件夹搜索</string>
   <string name="actionbar_sync">刷新帐户</string>
   <string name="actionbar_upload">上传</string>
   <string name="actionbar_upload_from_apps">来自其它应用的内容</string>
@@ -17,11 +16,7 @@
   <string name="actionbar_sort_by_name">A-Z</string>
   <string name="actionbar_sort_by_date">日期</string>
   <string name="actionbar_sort_by_size">最小 - 最大</string>
-  <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
-  <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">全部文件</string>
-  <!--TODO re-enable when "On Device" is available
-    <string name="drawer_item_on_device">On device</string>-->
   <string name="drawer_item_settings">设置</string>
   <string name="drawer_item_uploads_list">上传</string>
   <string name="drawer_close">关闭</string>
@@ -99,6 +94,7 @@
   <string name="file_list_no_app_for_file_type">没有支持此文件的应用</string>
   <string name="local_file_list_empty">在该文件夹中不存在文件。</string>
   <string name="local_file_list_empty_just_folders">在该文件夹中不存在其它文件夹。</string>
+  <string name="local_file_list_search_with_no_matches">此次搜索没有找到匹配的结果</string>
   <string name="upload_list_empty">没有可用的上传任务。</string>
   <string name="file_list_folder">文件夹</string>
   <string name="file_list_folders">文件夹</string>
@@ -118,11 +114,9 @@
   <string name="action_share">共享</string>
   <string name="common_yes">是</string>
   <string name="common_no">否</string>
-  <string name="common_ok">确定</string>
   <string name="common_remove_upload">移除上传任务</string>
   <string name="common_retry_upload">重试上传任务</string>
   <string name="common_cancel_sync">取消同步</string>
-  <string name="common_cancel">取消</string>
   <string name="common_back">返回</string>
   <string name="common_save_exit">保存并退出</string>
   <string name="common_error">错误</string>
@@ -134,9 +128,7 @@
   <string name="change_password">修改密码</string>
   <string name="delete_account">删除账号</string>
   <string name="create_account">创建账号</string>
-  <string name="upload_chooser_title">上传自...</string>
   <string name="uploader_info_dirname">文件夹名称</string>
-  <string name="uploader_upload_in_progress_ticker">上传...</string>
   <string name="uploader_upload_in_progress_content">%1$d%% 上传 %2$s</string>
   <string name="uploader_upload_succeeded_ticker">上传成功</string>
   <string name="uploader_upload_succeeded_content_single">%1$s 上传成功</string>
@@ -153,8 +145,6 @@
   <string name="uploads_view_group_current_uploads">当前</string>
   <string name="uploads_view_group_failed_uploads">失败。(轻按以重试)</string>
   <string name="uploads_view_group_finished_uploads">已上传</string>
-  <string name="uploads_view_group_file_count">%d 个文件</string>
-  <string name="uploads_view_group_file_count_single">%d文件</string>
   <string name="uploads_view_upload_status_succeeded">完成</string>
   <string name="uploads_view_upload_status_cancelled">已取消</string>
   <string name="uploads_view_upload_status_paused">已暂停</string>
@@ -172,7 +162,6 @@
   <string name="uploads_view_upload_status_waiting_for_wifi">等待WiFi连接</string>
   <string name="uploads_view_later_waiting_to_upload">等待上传...</string>
   <string name="uploads_view_unsupported_media_type">不支持的媒体类型</string>
-  <string name="downloader_download_in_progress_ticker">下载中...</string>
   <string name="downloader_download_in_progress_content">%1$d%% 下载中 %2$s</string>
   <string name="downloader_download_succeeded_ticker">下载成功</string>
   <string name="downloader_download_succeeded_content">%1$s 下载成功</string>
@@ -236,8 +225,7 @@
   <string name="media_play_pause_description">播放暂停按钮</string>
   <string name="media_forward_description">快进按钮</string>
   <string name="upload_from_camera_title">从相机获取照片</string>
-  <string name="auth_getting_authorization">认证中...</string>
-  <string name="auth_trying_to_login">尝试登录中...</string>
+  <string name="auth_getting_authorization">正在认证...</string>
   <string name="auth_no_net_conn_title">没有网络连接</string>
   <string name="auth_nossl_plain_ok_title">安全连接不可用。</string>
   <string name="auth_connection_established">连接已建立。</string>
@@ -292,7 +280,6 @@
   <string name="wait_checking_credentials">正在检查已保存的凭据</string>
   <string name="filedisplay_unexpected_bad_get_content">未知问题；请试试用其他程序选择此文件</string>
   <string name="filedisplay_no_file_selected">未选择文件</string>
-  <string name="activity_chooser_title">发送链接给 …</string>
   <string name="wait_for_tmp_copy_from_private_storage">从私有存储中拷贝文件</string>
   <string name="oauth_check_onoff">使用oAuth2登陆</string>
   <string name="oauth_login_connection">正在连接到 OAuth2 服务…</string>
@@ -382,8 +369,9 @@
   <string name="log_send_history_button">发送历史日志</string>
   <string name="log_send_no_mail_app">无法发送日志，请安装邮箱应用。</string>
   <string name="log_send_mail_subject">%1$s Android 程序日志</string>
-  <string name="log_progress_dialog_text">加载数据...</string>
+  <string name="log_progress_dialog_text">载入数据...</string>
   <string name="actionbar_select_all">全部选择</string>
+  <string name="actionbar_select_inverse">反向选择</string>
   <string name="saml_authentication_required_text">需要认证</string>
   <string name="saml_authentication_wrong_pass">错误密码</string>
   <string name="actionbar_move">移动</string>
@@ -421,8 +409,6 @@
   <string name="prefs_camera_upload_source_path_title">相机文件夹 (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">必需</string>
   <string name="prefs_camera_upload_source_path_title_optional">可选</string>
-  <string name="prefs_camera_upload_behaviour_dialogTitle">原始文件将会...</string>
-  <string name="prefs_camera_upload_behaviour_title">原始文件将会...</string>
   <string name="upload_copy_files">复制文件</string>
   <string name="upload_move_files">移动文件</string>
   <string name="pref_behaviour_entries_keep_file">保留在原始文件夹</string>
@@ -446,7 +432,7 @@
   <string name="share_via_link_edit_permission_read_and_write_label">下载 / 查看 / 上传</string>
   <string name="share_via_link_edit_permission_upload_only_label">仅上传(File Drop))</string>
   <string name="share_get_public_link_button">获取链接</string>
-  <string name="share_with_title">分享...</string>
+  <string name="share_with_title">分享至</string>
   <string name="share_with_edit_title">与 %1$s 分享</string>
   <string name="share_search">搜索</string>
   <string name="search_users_and_groups_hint">搜索用户和组</string>
