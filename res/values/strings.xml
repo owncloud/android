@@ -300,6 +300,7 @@
     <string name="filedisplay_no_file_selected">No file was selected</string>
     <string name="activity_chooser_title">Send link to</string>
     <string name="wait_for_tmp_copy_from_private_storage">Copying file from private storage</string>
+    <string name="method_not_allowed">Method Not Allowed</string>
 
     <string name="oauth_check_onoff">Login with oAuth2</string>
     <string name="oauth_login_connection">Connecting to OAuth2 server…</string>

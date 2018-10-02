@@ -1,6 +1,7 @@
 /**
  *   ownCloud Android client application
  *
+ *   @author Shashvat Kedia
  *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
@@ -399,7 +400,7 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
         } else {
             try {
                 showSnackMessage(
-                        operation.getNewFolderName() + " " + getResources().getString(R.string.folder_already_exists)
+                        ErrorMessageAdapter.getResultMessage(result,operation,getResources())
                 );
 
             } catch (NotFoundException e) {

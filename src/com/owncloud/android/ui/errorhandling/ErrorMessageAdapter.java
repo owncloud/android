@@ -3,6 +3,7 @@
  *
  * @author masensio
  * @author Christian Schabesberger
+ * @author Shashvat Kedia
  * Copyright (C) 2018 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
@@ -135,6 +136,12 @@ public class ErrorMessageAdapter {
             }
         }
 
+        if(operation instanceof CreateFolderOperation && result.getHttpPhrase() != null && result.getHttpPhrase().length() > 0){
+            if(result.getHttpCode() == 405 && result.getHttpPhrase().equalsIgnoreCase(f.format(R.string.method_not_allowed))){
+                return ((CreateFolderOperation) operation).getNewFolderName() + " " + f.format(R.string.folder_already_exists);
+            }
+        }
+
         switch (result.getCode()) {
             case LOCAL_STORAGE_FULL:
                 return f.format(R.string.error__upload__local_file_not_copied,
@@ -194,7 +201,8 @@ public class ErrorMessageAdapter {
                 if(operation instanceof CopyFileOperation) return f.format(R.string.copy_file_invalid_overwrite);
             case CONFLICT:return f.format(R.string.move_file_error);
             case INVALID_COPY_INTO_DESCENDANT: return f.format(R.string.copy_file_invalid_into_descendent);
-            default: return getCommonMessageForResult(operation, result, resources);
+            default:
+                return getCommonMessageForResult(operation, result, resources);
         }
     }
 
