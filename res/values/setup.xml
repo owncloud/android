@@ -58,6 +58,7 @@
     
     <!-- Help, imprint and feedback -->
     <bool name="help_enabled">true</bool>
+    <bool name="sync_calendar_contacts_enabled">true</bool>
     <bool name="imprint_enabled">false</bool> 
     <bool name="recommend_enabled">true</bool>
     <bool name="feedback_enabled">true</bool>
@@ -70,6 +71,7 @@
     <string name="mail_recommend" formatted="false">"mailto:"</string>
     <string name="mail_feedback" formatted="false">"mailto:apps@owncloud.com"</string>
     <string name="url_app_download" formatted="false">"https://play.google.com/store/apps/details?id=com.owncloud.android"</string>
+    <string name="url_sync_calendar_contacts">"https://play.google.com/store/apps/details?id=at.bitfire.davdroid"</string>
 
     <!--Destination mail for sending log files -->
     <string name="mail_logger" formatted="false"></string>

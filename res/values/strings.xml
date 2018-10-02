@@ -47,6 +47,8 @@
     <string name="prefs_log_summary_history">This shows the recorded logs</string>
     <string name="prefs_log_delete_history_button">Delete history</string>
     <string name="prefs_help">Help</string>
+    <string name="prefs_sync_calendar_contacts">Sync your contacts, calendars and tasks</string>
+    <string name="prefs_sync_calendar_contacts_summary">Install DAVdroid</string>
     <string name="prefs_recommend">Recommend to a friend</string>
     <string name="prefs_feedback">Feedback</string>
     <string name="prefs_imprint">Imprint</string>
