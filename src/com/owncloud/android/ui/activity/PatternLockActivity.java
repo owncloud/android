@@ -93,7 +93,9 @@ public class PatternLockActivity extends AppCompatActivity {
             mPatternExplanation.setVisibility(View.INVISIBLE);
             setCancelButtonEnabled(false);
         } else if (ACTION_REQUEST_WITH_RESULT.equals(getIntent().getAction())) {
-            //This block is executed when the user is setting the pattern lock (i.e enabling the pattern lock)
+            /**
+             * This block is executed when the user is setting the pattern lock (i.e enabling the pattern lock)
+             */
             if (savedInstanceState != null) {
                 mPatternPresent = savedInstanceState.getBoolean(KEY_CONFIRMING_PATTERN);
                 mPatternValue = savedInstanceState.getString(KEY_PATTERN_STRING);
@@ -112,7 +114,9 @@ public class PatternLockActivity extends AppCompatActivity {
                 setCancelButtonEnabled(true);
             }
         } else if (ACTION_CHECK_WITH_RESULT.equals(getIntent().getAction())) {
-            //This block is executed when the user is removing the pattern lock (i.e disabling the pattern lock)
+            /**
+             * This block is executed when the user is removing the pattern lock (i.e disabling the pattern lock)
+             */
             mPatternHeader.setText(R.string.pattern_remove_pattern);
             mPatternExplanation.setText(getResources().getString(R.string.pattern_no_longer_required));
             mPatternExplanation.setVisibility(View.VISIBLE);
