@@ -1660,7 +1660,6 @@ public class FileDisplayActivity extends FileActivity
                 showSnackMessage(
                         ErrorMessageAdapter.getResultMessage(result, operation, getResources())
                 );
-
             } catch (NotFoundException e) {
                 Log_OC.e(TAG, "Error while trying to show fail message ", e);
             }
