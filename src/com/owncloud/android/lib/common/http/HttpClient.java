@@ -102,6 +102,9 @@ public class HttpClient {
                 OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder()
                         .addInterceptor(getOkHttpInterceptor())
                         .protocols(Arrays.asList(Protocol.HTTP_1_1))
+                        .readTimeout(HttpConstants.DEFAULT_DATA_TIMEOUT, TimeUnit.MILLISECONDS)
+                        .writeTimeout(HttpConstants.DEFAULT_DATA_TIMEOUT, TimeUnit.MILLISECONDS)
+                        .connectTimeout(HttpConstants.DEFAULT_CONNECTION_TIMEOUT, TimeUnit.MILLISECONDS)
                         .followRedirects(false)
                         .sslSocketFactory(sslContext.getSocketFactory(), trustManager)
                         .hostnameVerifier((asdf, usdf) -> true)
@@ -124,23 +127,6 @@ public class HttpClient {
             addHeaderForAllRequests(HttpConstants.PARAM_SINGLE_COOKIE_HEADER, "true");
         }
         return sOkHttpInterceptor;
-    }
-
-    /**
-     * Sets the connection and wait-for-data timeouts to be applied by default to the methods
-     * performed by this client.
-     */
-    public void setDefaultTimeouts(int defaultDataTimeout, int defaultConnectionTimeout) {
-        OkHttpClient.Builder clientBuilder = getOkHttpClient().newBuilder();
-        if (defaultDataTimeout >= 0) {
-            clientBuilder
-                    .readTimeout(defaultDataTimeout, TimeUnit.MILLISECONDS)
-                    .writeTimeout(defaultDataTimeout, TimeUnit.MILLISECONDS);
-        }
-        if (defaultConnectionTimeout >= 0) {
-            clientBuilder.connectTimeout(defaultConnectionTimeout, TimeUnit.MILLISECONDS);
-        }
-        sOkHttpClient = clientBuilder.build();
     }
 
     public void disableAutomaticCookiesHandling() {

@@ -48,7 +48,6 @@ import com.owncloud.android.lib.common.authentication.OwnCloudCredentials;
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentialsFactory;
 import com.owncloud.android.lib.common.network.NetworkUtils;
 import com.owncloud.android.lib.test_project.R;
-import com.owncloud.android.lib.test_project.SelfSignedConfidentSslSocketFactory;
 
 
 /**

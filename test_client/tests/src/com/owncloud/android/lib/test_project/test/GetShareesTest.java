@@ -43,7 +43,6 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.resources.shares.GetRemoteShareesOperation;
 import com.owncloud.android.lib.resources.shares.ShareType;
 import com.owncloud.android.lib.test_project.R;
-import com.owncloud.android.lib.test_project.SelfSignedConfidentSslSocketFactory;
 
 import android.content.Context;
 import android.net.Uri;

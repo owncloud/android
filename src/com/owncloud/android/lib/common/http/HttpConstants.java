@@ -174,4 +174,14 @@ public class HttpConstants {
     public static final int HTTP_HTTP_VERSION_NOT_SUPPORTED = 505;
     // 507 Insufficient Storage (WebDAV - RFC 2518)
     public static final int HTTP_INSUFFICIENT_STORAGE = 507;
+
+    /***********************************************************************************************************
+     *************************************************** TIMEOUTS **********************************************
+     ***********************************************************************************************************/
+
+    /** Default timeout for waiting data from the server */
+    public static final int DEFAULT_DATA_TIMEOUT = 60000;
+
+    /** Default timeout for establishing a connection */
+    public static final int DEFAULT_CONNECTION_TIMEOUT = 60000;
 }

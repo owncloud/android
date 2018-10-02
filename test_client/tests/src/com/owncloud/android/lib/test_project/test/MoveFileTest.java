@@ -41,7 +41,6 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.resources.files.MoveRemoteFileOperation;
 import com.owncloud.android.lib.test_project.R;
-import com.owncloud.android.lib.test_project.SelfSignedConfidentSslSocketFactory;
 import com.owncloud.android.lib.test_project.TestActivity;
 
 import android.content.Context;

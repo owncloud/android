@@ -50,7 +50,6 @@ import com.owncloud.android.lib.resources.shares.RemoveRemoteShareOperation;
 import com.owncloud.android.lib.resources.shares.ShareType;
 import com.owncloud.android.lib.resources.shares.UpdateRemoteShareOperation;
 import com.owncloud.android.lib.test_project.R;
-import com.owncloud.android.lib.test_project.SelfSignedConfidentSslSocketFactory;
 import com.owncloud.android.lib.test_project.TestActivity;
 
 /**

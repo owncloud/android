@@ -45,12 +45,6 @@ import java.io.IOException;
 public class OwnCloudClientFactory {
     
     final private static String TAG = OwnCloudClientFactory.class.getSimpleName();
-    
-    /** Default timeout for waiting data from the server */
-    public static final int DEFAULT_DATA_TIMEOUT = 60000;
-    
-    /** Default timeout for establishing a connection */
-    public static final int DEFAULT_CONNECTION_TIMEOUT = 60000;
 
     /**
      * Creates a OwnCloudClient setup for an ownCloud account
@@ -156,8 +150,6 @@ public class OwnCloudClientFactory {
     public static OwnCloudClient createOwnCloudClient(Uri uri, Context context,
                                                       boolean followRedirects) {
         OwnCloudClient client = new OwnCloudClient(uri);
-
-        client.setDefaultTimeouts(DEFAULT_DATA_TIMEOUT, DEFAULT_CONNECTION_TIMEOUT);
 
         client.setFollowRedirects(followRedirects);
 
