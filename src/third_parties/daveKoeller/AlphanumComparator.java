@@ -39,9 +39,9 @@ import com.owncloud.android.datamodel.OCFile;
  *
  * To use this class:
  *   Use the static "sort" method from the java.util.Collections class:
- *   Collections.sort(your list, new AlphanumComparatorOCFile());
+ *   Collections.sort(your list, new AlphanumComparator());
  */
-public class AlphanumComparatorOCFile implements Comparator<OCFile>
+public class AlphanumComparator implements Comparator<OCFile>
 {
     private final boolean isDigit(char ch)
     {

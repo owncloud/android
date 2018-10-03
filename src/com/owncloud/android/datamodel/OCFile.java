@@ -23,6 +23,7 @@
 package com.owncloud.android.datamodel;
 
 
+import android.accounts.Account;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.net.Uri;
@@ -34,12 +35,13 @@ import android.support.v4.content.FileProvider;
 import android.webkit.MimeTypeMap;
 
 import com.owncloud.android.R;
+import com.owncloud.android.lib.common.accounts.AccountUtils;
 import com.owncloud.android.lib.common.network.WebdavUtils;
 import com.owncloud.android.lib.common.utils.Log_OC;
 
 import java.io.File;
 
-import third_parties.daveKoeller.AlphanumComparatorOCFile;
+import third_parties.daveKoeller.AlphanumComparator;
 
 public class OCFile implements Parcelable, Comparable<OCFile> {
 
@@ -576,7 +578,7 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
         } else if (another.isFolder()) {
             return 1;
         }
-        return new AlphanumComparatorOCFile().compare(this, another);
+        return new AlphanumComparator().compare(this, another);
     }
 
     @Override
