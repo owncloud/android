@@ -21,10 +21,13 @@
  */
 package com.owncloud.android.ui.adapter;
 
+import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.datamodel.ThumbnailsCacheManager;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.preference.Preference;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,15 +39,18 @@ import android.widget.TextView;
 
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.ThumbnailsCacheManager;
+import com.owncloud.android.db.PreferenceManager;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.utils.BitmapUtils;
 import com.owncloud.android.utils.DisplayUtils;
+import com.owncloud.android.utils.FileStorageUtils;
 import com.owncloud.android.utils.MimetypeIconUtil;
 
 import java.io.File;
 import java.io.FileFilter;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.Vector;
 
 /**
  * This Adapter populates a ListView with all files and directories contained
@@ -247,4 +253,14 @@ public class LocalFileListAdapter extends BaseAdapter implements ListAdapter {
         }
         notifyDataSetChanged();
     }
+
+    public void setSortOrder(int order,boolean isAscending){
+        PreferenceManager.setSortOrder(order,mContext);
+        PreferenceManager.setSortAscending(isAscending,mContext);
+        FileStorageUtils.mSortOrder = order;
+        FileStorageUtils.mSortAscending = isAscending;
+       // FileStorageUtils.sortFolder(transformedFiles);
+        notifyDataSetChanged();
+    }
+
 }
