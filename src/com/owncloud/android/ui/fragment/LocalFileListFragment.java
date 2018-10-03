@@ -38,7 +38,6 @@ import android.widget.ListView;
 import com.owncloud.android.R;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.ui.adapter.LocalFileListAdapter;
-import com.owncloud.android.utils.FileStorageUtils;
 
 
 /**
@@ -166,17 +165,6 @@ public class LocalFileListFragment extends ExtendedListFragment {
         }
     }
 
-    public void sortByName(boolean isAscending){
-        mAdapter.setSortOrder(FileStorageUtils.SORT_NAME,isAscending);
-    }
-
-    public void sortBySize(boolean isAscending){
-        mAdapter.setSortOrder(FileStorageUtils.SORT_NAME,isAscending);
-    }
-
-    public void sortByDate(boolean isAscending){
-        mAdapter.setSortOrder(FileStorageUtils.SORT_NAME,isAscending);
-    }
     
     /**
      * Browse up to the parent folder of the current one.
