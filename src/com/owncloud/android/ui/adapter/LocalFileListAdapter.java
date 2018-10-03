@@ -21,6 +21,7 @@
  */
 package com.owncloud.android.ui.adapter;
 
+import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.datamodel.ThumbnailsCacheManager;
 
 import android.content.Context;
@@ -35,16 +36,18 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.owncloud.android.R;
-import com.owncloud.android.datamodel.ThumbnailsCacheManager;
+import com.owncloud.android.db.PreferenceManager;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.utils.BitmapUtils;
 import com.owncloud.android.utils.DisplayUtils;
+import com.owncloud.android.utils.FileStorageUtils;
 import com.owncloud.android.utils.MimetypeIconUtil;
 
 import java.io.File;
 import java.io.FileFilter;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.Vector;
 
 /**
  * This Adapter populates a ListView with all files and directories contained
@@ -246,5 +249,32 @@ public class LocalFileListAdapter extends BaseAdapter implements ListAdapter {
             });
         }
         notifyDataSetChanged();
+    }
+
+    public void setSortOrder(Integer order,boolean isAscending){
+        PreferenceManager.setSortOrder(order,mContext);
+        PreferenceManager.setSortAscending(isAscending,mContext);
+        FileStorageUtils.mSortOrder = order;
+        FileStorageUtils.mSortAscending = isAscending;
+        Vector<OCFile> transformedFiles = transform(mFiles);
+        FileStorageUtils.sortFolder(transformedFiles);
+        mFiles = deform(transformedFiles);
+        notifyDataSetChanged();
+    }
+
+    private Vector<OCFile> transform(File[] mFiles){
+        Vector<OCFile> listOfFiles = new Vector<OCFile>();
+        for(int i=0;i<mFiles.length;i++){
+            listOfFiles.add(new OCFile(mFiles[i].getAbsolutePath()));
+        }
+        return listOfFiles;
+    }
+
+    private File[] deform(Vector<OCFile> listOfSortedFiles){
+        File[] fileArray = new File[listOfSortedFiles.size()];
+        for(int i=0;i<listOfSortedFiles.size();i++){
+            fileArray[i] = new File(listOfSortedFiles.get(i).getRemotePath());
+        }
+        return fileArray;
     }
 }

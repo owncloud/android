@@ -194,6 +194,7 @@ public class FileDisplayActivity extends FileActivity
 
         // setup drawer
         setupDrawer(R.id.nav_all_files);
+        setupDrawer(R.id.nav_all_files);
 
         mLeftFragmentContainer = findViewById(R.id.left_fragment_container);
         mRightFragmentContainer = findViewById(R.id.right_fragment_container);

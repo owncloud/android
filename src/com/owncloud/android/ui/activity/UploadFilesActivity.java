@@ -31,6 +31,8 @@ import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.ActionBar;
+import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -48,6 +50,7 @@ import com.owncloud.android.ui.dialog.ConfirmationDialogFragment.ConfirmationDia
 import com.owncloud.android.ui.dialog.LoadingDialog;
 import com.owncloud.android.ui.fragment.LocalFileListFragment;
 import com.owncloud.android.ui.helpers.FilesUploadHelper;
+import com.owncloud.android.utils.FileStorageUtils;
 
 import java.io.File;
 
@@ -125,8 +128,7 @@ public class UploadFilesActivity extends FileActivity implements
 
         mFileListFragment = (LocalFileListFragment)
                 getSupportFragmentManager().findFragmentById(R.id.local_files_list);
-        
-        
+
         // Set input controllers
         mCancelBtn = findViewById(R.id.upload_files_btn_cancel);
         mCancelBtn.setOnClickListener(this);
@@ -197,6 +199,12 @@ public class UploadFilesActivity extends FileActivity implements
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        getMenuInflater().inflate(R.menu.sort_menu,menu);
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         boolean retval = true;
         switch (item.getItemId()) {
@@ -206,12 +214,51 @@ public class UploadFilesActivity extends FileActivity implements
                 }
                 break;
             }
+            case R.id.action_sort_descending:
+                item.setChecked(!item.isChecked());
+                boolean isAscending = !item.isChecked();
+                com.owncloud.android.db.PreferenceManager.setSortAscending(isAscending,this);
+                switch(com.owncloud.android.db.PreferenceManager.getSortOrder(this)){
+                    case FileStorageUtils.SORT_NAME:
+                        sortByName(isAscending);
+                        break;
+                    case FileStorageUtils.SORT_SIZE:
+                        sortBySize(isAscending);
+                        break;
+                    case FileStorageUtils.SORT_DATE:
+                        sortByDate(isAscending);
+                        break;
+                }
+                break;
+            case R.id.action_sort_by_name:
+                item.setChecked(true);
+                sortByName(com.owncloud.android.db.PreferenceManager.getSortAscending(this));
+                break;
+            case R.id.action_sort_by_size:
+                item.setChecked(true);
+                sortBySize(com.owncloud.android.db.PreferenceManager.getSortAscending(this));
+                break;
+            case R.id.action_sort_by_date:
+                item.setChecked(true);
+                sortByDate(com.owncloud.android.db.PreferenceManager.getSortAscending(this));
+                break;
             default:
                 retval = super.onOptionsItemSelected(item);
         }
         return retval;
     }
 
+    private void sortByName(boolean isAscending){
+        mFileListFragment.sortByName(isAscending);
+    }
+
+    private void sortBySize(boolean isAscending){
+        mFileListFragment.sortBySize(isAscending);
+    }
+
+    private void sortByDate(boolean isAscending){
+        mFileListFragment.sortByDate(isAscending);
+    }
     
     @Override
     public boolean onNavigationItemSelected(int itemPosition, long itemId) {
