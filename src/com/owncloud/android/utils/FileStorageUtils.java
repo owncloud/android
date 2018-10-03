@@ -30,6 +30,7 @@ import android.net.Uri;
 import android.os.Environment;
 import android.os.StatFs;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.webkit.MimeTypeMap;
 
 import com.owncloud.android.MainApp;
@@ -43,7 +44,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Vector;
 
-import third_parties.daveKoeller.AlphanumComparator;
+import third_parties.daveKoeller.AlphanumComparatorOCFile;
 
 
 /**
@@ -227,7 +228,7 @@ public class FileStorageUtils {
             files = FileStorageUtils.sortBySize(files);
             break;
         }
-       
+
         return files;
     }
     
@@ -254,6 +255,7 @@ public class FileStorageUtils {
                 } else if (o2.isFolder()) {
                     return 1;
                 } else if (o1.getModificationTimestamp() == 0 || o2.getModificationTimestamp() == 0){
+                    Log.e("AAAAA","1111111");
                     return 0;
                 } else {
                     Long obj1 = o1.getModificationTimestamp();
@@ -313,13 +315,13 @@ public class FileStorageUtils {
         Collections.sort(files, new Comparator<OCFile>() {
             public int compare(OCFile o1, OCFile o2) {
                 if (o1.isFolder() && o2.isFolder()) {
-                    return val * new AlphanumComparator().compare(o1, o2);
+                    return val * new AlphanumComparatorOCFile().compare(o1, o2);
                 } else if (o1.isFolder()) {
                     return -1;
                 } else if (o2.isFolder()) {
                     return 1;
                 }
-                return val * new AlphanumComparator().compare(o1, o2);
+                return val * new AlphanumComparatorOCFile().compare(o1, o2);
             }
         });
         
