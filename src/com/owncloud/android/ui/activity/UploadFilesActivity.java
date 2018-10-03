@@ -31,7 +31,6 @@ import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.ActionBar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -91,6 +90,7 @@ public class UploadFilesActivity extends FileActivity implements
 
     private RadioButton mRadioBtnCopyFiles;
     private RadioButton mRadioBtnMoveFiles;
+    private Menu mMainMenu;
     private int requestCode;
 
     FilesUploadHelper mFilesUploadHelper;
@@ -201,6 +201,8 @@ public class UploadFilesActivity extends FileActivity implements
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
         getMenuInflater().inflate(R.menu.sort_menu,menu);
+        mMainMenu = menu;
+        recoverSortMenuState(menu);
         return true;
     }
 
@@ -248,6 +250,12 @@ public class UploadFilesActivity extends FileActivity implements
         return retval;
     }
 
+    @Override
+    protected void onResume(){
+        recoverSortMenuState(mMainMenu);
+        super.onResume();
+    }
+
     private void sortByName(boolean isAscending){
         mFileListFragment.sortByName(isAscending);
     }
@@ -258,6 +266,21 @@ public class UploadFilesActivity extends FileActivity implements
 
     private void sortByDate(boolean isAscending){
         mFileListFragment.sortByDate(isAscending);
+    }
+
+    private void recoverSortMenuState(Menu menu){
+        menu.findItem(R.id.action_sort_descending).setChecked(com.owncloud.android.db.PreferenceManager.getSortAscending(this));
+        switch(com.owncloud.android.db.PreferenceManager.getSortOrder(this)){
+            case FileStorageUtils.SORT_NAME:
+                menu.findItem(R.id.action_sort_by_name).setChecked(true);
+                break;
+            case FileStorageUtils.SORT_SIZE:
+                menu.findItem(R.id.action_sort_by_size).setChecked(true);
+                break;
+            case FileStorageUtils.SORT_DATE:
+                menu.findItem(R.id.action_sort_by_date).setChecked(true);
+                break;
+        }
     }
     
     @Override
