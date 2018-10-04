@@ -1,24 +1,23 @@
 /**
- *   ownCloud Android client application
+ * ownCloud Android client application
  *
- *   @author David A. Velasco
- *   @author Christian Schabesberger
- *   @author Shashvat Kedia
- *   Copyright (C) 2011  Bartek Przybylski
- *   Copyright (C) 2018 ownCloud GmbH.
- *
- *   This program is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License version 2,
- *   as published by the Free Software Foundation.
- *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
- *
- *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * @author David A. Velasco
+ * @author Christian Schabesberger
+ * @author Shashvat Kedia
+ * Copyright (C) 2011  Bartek Przybylski
+ * Copyright (C) 2018 ownCloud GmbH.
+ * <p>
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
+ * <p>
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package com.owncloud.android.ui.adapter;
 
@@ -26,7 +25,6 @@ import com.owncloud.android.datamodel.ThumbnailsCacheManager;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,12 +46,9 @@ import java.io.File;
 import java.io.FileFilter;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Comparator;
-import java.util.Vector;
 
 import third_parties.daveKoeller.AlphanumComparatorFile;
-import third_parties.daveKoeller.AlphanumComparatorOCFile;
 
 /**
  * This Adapter populates a ListView with all files and directories contained
@@ -68,8 +63,8 @@ public class LocalFileListAdapter extends BaseAdapter implements ListAdapter {
     private File[] mFiles = null;
     private boolean mJustFolders;
     private ListView parentList;
-    private ArrayList<FileObject> checkedFiles = new ArrayList<FileObject>();
-    
+    private ArrayList<File> checkedFiles = new ArrayList<File>();
+
     public LocalFileListAdapter(File directory, boolean justFolders, Context context) {
         mContext = context;
         mJustFolders = justFolders;
@@ -118,11 +113,11 @@ public class LocalFileListAdapter extends BaseAdapter implements ListAdapter {
         }
         if (mFiles != null && mFiles.length > position) {
             File file = mFiles[position];
-            
+
             TextView fileName = view.findViewById(R.id.Filename);
             String name = file.getName();
             fileName.setText(name);
-            
+
             ImageView fileIcon = view.findViewById(R.id.thumbnail);
 
             /** Cancellation needs do be checked and done before changing the drawable in fileIcon, or
@@ -150,27 +145,25 @@ public class LocalFileListAdapter extends BaseAdapter implements ListAdapter {
                 fileSizeV.setText(DisplayUtils.bytesToHumanReadable(file.length(), mContext));
 
                 parentList = (ListView) parent;
-                if (parentList.getChoiceMode() == ListView.CHOICE_MODE_NONE) { 
+                if (parentList.getChoiceMode() == ListView.CHOICE_MODE_NONE) {
                     checkBoxV.setVisibility(View.GONE);
                 } else {
-                    if (parentList.isItemChecked(position) || checkedFiles.contains(new FileObject((File) getItem(position),true))) {
+                    if (checkedFiles.contains(mFiles[position])) {
+                        parentList.setItemChecked(position, true);
                         checkBoxV.setImageResource(R.drawable.ic_checkbox_marked);
-                        checkedFiles.get(position).selected = true;
-                        Log.e("AAA","11");
                     } else {
                         checkBoxV.setImageResource(R.drawable.ic_checkbox_blank_outline);
-                        checkedFiles.get(position).selected = false;
                     }
                     checkBoxV.setVisibility(View.VISIBLE);
                 }
-                
-             // get Thumbnail if file is image
-                if (BitmapUtils.isImage(file)){
-                // Thumbnail in Cache?
+
+                // get Thumbnail if file is image
+                if (BitmapUtils.isImage(file)) {
+                    // Thumbnail in Cache?
                     Bitmap thumbnail = ThumbnailsCacheManager.getBitmapFromDiskCache(
                             String.valueOf(file.hashCode())
                     );
-                    if (thumbnail != null){
+                    if (thumbnail != null) {
                         fileIcon.setImageBitmap(thumbnail);
                     } else {
 
@@ -180,11 +173,11 @@ public class LocalFileListAdapter extends BaseAdapter implements ListAdapter {
                                     new ThumbnailsCacheManager.ThumbnailGenerationTask(fileIcon);
                             thumbnail = ThumbnailsCacheManager.mDefaultImg;
                             final ThumbnailsCacheManager.AsyncThumbnailDrawable asyncDrawable =
-                                new ThumbnailsCacheManager.AsyncThumbnailDrawable(
-                                    mContext.getResources(),
-                                    thumbnail, 
-                                    task
-                                );
+                                    new ThumbnailsCacheManager.AsyncThumbnailDrawable(
+                                            mContext.getResources(),
+                                            thumbnail,
+                                            task
+                                    );
                             fileIcon.setImageDrawable(asyncDrawable);
                             task.execute(file);
                             Log_OC.v(TAG, "Executing task to generate a new thumbnail");
@@ -193,7 +186,7 @@ public class LocalFileListAdapter extends BaseAdapter implements ListAdapter {
                     }
                 } else {
                     fileIcon.setImageResource(MimetypeIconUtil.getFileTypeIconId(null, file.getName()));
-                }  
+                }
 
             } else {
                 fileSizeSeparatorV.setVisibility(View.GONE);
@@ -203,10 +196,40 @@ public class LocalFileListAdapter extends BaseAdapter implements ListAdapter {
 
             // not GONE; the alignment changes; ugly way to keep it
             view.findViewById(R.id.localFileIndicator).setVisibility(View.INVISIBLE);
-            
+
             view.findViewById(R.id.sharedIcon).setVisibility(View.GONE);
         }
         return view;
+    }
+
+    public void checkFile(File file) {
+        checkedFiles.add(file);
+    }
+
+    public void uncheckFile(File file) {
+        checkedFiles.remove(file);
+    }
+
+    public ArrayList<String> getCheckedFiles(){
+        ArrayList<String> representation = new ArrayList<String>();
+        for(int i=0;i<mFiles.length;i++){
+            if(checkedFiles.contains(mFiles[i])){
+                representation.add(mFiles[i].getName());
+            }
+        }
+        return representation;
+    }
+
+    public void setCheckedFiles(ArrayList<String> files){
+        if(files != null && files.size() > 0){
+            checkedFiles.clear();
+            for(int i=0;i<mFiles.length;i++){
+                if(files.contains(mFiles[i].getName())){
+                    checkedFiles.add(mFiles[i]);
+                    files.remove(mFiles[i].getName());
+                }
+            }
+        }
     }
 
     @Override
@@ -251,25 +274,22 @@ public class LocalFileListAdapter extends BaseAdapter implements ListAdapter {
                     }
                     return compareNames(lhs, rhs);
                 }
-            
+
                 private int compareNames(File lhs, File rhs) {
-                    return lhs.getName().toLowerCase().compareTo(rhs.getName().toLowerCase());                
+                    return lhs.getName().toLowerCase().compareTo(rhs.getName().toLowerCase());
                 }
-            
+
             });
-            for(int i=0;i<mFiles.length;i++){
-                checkedFiles.add(new FileObject(mFiles[i],false));
-            }
         }
         notifyDataSetChanged();
     }
 
-    public void setSortOrder(Integer order,boolean isAscending){
-        PreferenceManager.setSortOrder(order,mContext);
-        PreferenceManager.setSortAscending(isAscending,mContext);
+    public void setSortOrder(Integer order, boolean isAscending) {
+        PreferenceManager.setSortOrder(order, mContext);
+        PreferenceManager.setSortAscending(isAscending, mContext);
         FileStorageUtils.mSortOrder = order;
         FileStorageUtils.mSortAscending = isAscending;
-        if(mFiles != null && mFiles.length > 0) {
+        if (mFiles != null && mFiles.length > 0) {
             int val;
             if (FileStorageUtils.mSortAscending) {
                 val = 1;
@@ -330,28 +350,12 @@ public class LocalFileListAdapter extends BaseAdapter implements ListAdapter {
                     });
                     break;
             }
-            ArrayList<FileObject> temp = new ArrayList<FileObject>();
-            for (int i = 0; i < mFiles.length; i++) {
-                if(parentList != null) {
+            if (parentList != null) {
+                for (int i = 0; i < mFiles.length; i++) {
                     parentList.setItemChecked(i, false);
                 }
-                temp.add(new FileObject(mFiles[i],checkedFiles.contains(new FileObject(mFiles[i],true))));
             }
-            checkedFiles.clear();
-            checkedFiles.addAll(temp);
-            temp = null;
             notifyDataSetChanged();
         }
     }
-
-    public class FileObject{
-        private File file;
-        private boolean selected;
-
-        public FileObject(File file,boolean selected){
-            this.file = file;
-            this.selected = selected;
-        }
-    }
-
 }
