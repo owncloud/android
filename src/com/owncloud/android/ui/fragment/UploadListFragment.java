@@ -29,7 +29,7 @@ import android.widget.ExpandableListView;
 import android.widget.ListView;
 
 import com.owncloud.android.R;
-import com.owncloud.android.db.OCUpload;
+import com.owncloud.android.datamodel.OCUpload;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.adapter.ExpandableUploadListAdapter;

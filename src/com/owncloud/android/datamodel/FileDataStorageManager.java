@@ -2131,8 +2131,8 @@ public class FileDataStorageManager {
      *
      * @return      List with all the files set by the user as available offline.
      */
-    public List<Pair<OCFile, String>> getAvailableOfflineFilesFromEveryAccount() {
-        List<Pair<OCFile, String>> result = new ArrayList<>();
+    public OCFilesForAccount getAvailableOfflineFilesFromEveryAccount() {
+        List<OCFilesForAccount.OCFileForAccount> avOfflineFilesFromEveryAccount = new ArrayList<>();
 
         Cursor cursorOnKeptInSync = null;
         try {
@@ -2154,7 +2154,9 @@ public class FileDataStorageManager {
                     accountName = cursorOnKeptInSync.getString(
                         cursorOnKeptInSync.getColumnIndex(ProviderTableMeta.FILE_ACCOUNT_OWNER)
                     );
-                    result.add(new Pair<>(file, accountName));
+                    OCFilesForAccount.OCFileForAccount ocFileForAccount =
+                            new OCFilesForAccount.OCFileForAccount(file, accountName);
+                    avOfflineFilesFromEveryAccount.add(ocFileForAccount);
                 } while (cursorOnKeptInSync.moveToNext());
             }
 
@@ -2167,6 +2169,6 @@ public class FileDataStorageManager {
             }
         }
 
-        return result;
+        return new OCFilesForAccount(avOfflineFilesFromEveryAccount);
     }
 }

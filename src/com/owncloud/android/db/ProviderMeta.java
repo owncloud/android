@@ -45,8 +45,9 @@ public class ProviderMeta {
         public static final String CAPABILITIES_TABLE_NAME = "capabilities";
         public static final String UPLOADS_TABLE_NAME = "list_of_uploads";
         public static final String USER_AVATARS__TABLE_NAME = "user_avatars";
-        public static final String USER_QUOTAS_TABLE_NAME = "user_quotas";
         public static final String CAMERA_UPLOADS_SYNC_TABLE_NAME = "camera_uploads_sync";
+        public static final String USER_QUOTAS_TABLE_NAME = "user_quotas";
+        public static final String AVAILABLE_OFFLINE_SYNC_TABLE_NAME = "available_offline_sync";
 
         public static final Uri CONTENT_URI = Uri.parse("content://"
                 + MainApp.getAuthority() + "/");
@@ -64,6 +65,8 @@ public class ProviderMeta {
                 + MainApp.getAuthority() + "/cameraUploadsSync");
         public static final Uri CONTENT_URI_QUOTAS = Uri.parse("content://"
                 + MainApp.getAuthority() + "/quotas");
+        public static final Uri CONTENT_URI_AVAILABLE_OFFLINE_SYNC = Uri.parse("content://"
+                + MainApp.getAuthority() + "/availableOfflineSync");
 
         public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.owncloud.file";
         public static final String CONTENT_TYPE_ITEM = "vnd.android.cursor.item/vnd.owncloud.file";
@@ -176,6 +179,12 @@ public class ProviderMeta {
         public static final String USER_AVATARS__ETAG = "etag";
         public static final String USER_AVATARS__MIME_TYPE = "mime_type";
 
+        // Columns of camera upload synchronization table
+        public static final String PICTURES_LAST_SYNC_TIMESTAMP = "pictures_last_sync_date";
+        public static final String VIDEOS_LAST_SYNC_TIMESTAMP = "videos_last_sync_date";
+        public static final String CAMERA_UPLOADS_SYNC_DEFAULT_SORT_ORDER =
+                ProviderTableMeta._ID  + " collate nocase asc";
+
         // Columns of user_quotas table
         public static final String USER_QUOTAS__ACCOUNT_NAME = "account_name";
         public static final String USER_QUOTAS__FREE = "free";
@@ -183,10 +192,9 @@ public class ProviderMeta {
         public static final String USER_QUOTAS__TOTAL = "total";
         public static final String USER_QUOTAS__USED = "used";
 
-        // Columns of camera upload table
-        public static final String PICTURES_LAST_SYNC_TIMESTAMP = "pictures_last_sync_date";
-        public static final String VIDEOS_LAST_SYNC_TIMESTAMP = "videos_last_sync_date";
-        public static final String CAMERA_UPLOADS_SYNC_DEFAULT_SORT_ORDER =
+        // Columns of available offline synchronization table
+        public static final String AVAILABLE_OFFLINE_LAST_SYNC_TIMESTAMP = "available_offline_last_sync_date";
+        public static final String AVAILABLE_OFFLINE_SYNC_DEFAULT_SORT_ORDER =
                 ProviderTableMeta._ID  + " collate nocase asc";
     }
 }
