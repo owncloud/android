@@ -37,10 +37,13 @@ import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.datamodel.ThumbnailsCacheManager;
 import com.owncloud.android.datamodel.ThumbnailsCacheManager.AsyncThumbnailDrawable;
+import com.owncloud.android.db.PreferenceManager;
 import com.owncloud.android.utils.DisplayUtils;
+import com.owncloud.android.utils.FileStorageUtils;
 import com.owncloud.android.utils.MimetypeIconUtil;
 
 import java.util.List;
+import java.util.Vector;
 
 public class ReceiveExternalFilesAdapter extends BaseAdapter implements ListAdapter {
 
@@ -145,5 +148,15 @@ public class ReceiveExternalFilesAdapter extends BaseAdapter implements ListAdap
         return vi;
     }
 
+    public void setSortOrder(Integer order, boolean isAscending) {
+        PreferenceManager.setSortOrder(order, mContext);
+        PreferenceManager.setSortAscending(isAscending, mContext);
+        FileStorageUtils.mSortOrder = order;
+        FileStorageUtils.mSortAscending = isAscending;
+        if(mFiles != null && mFiles.size() > 0){
+            FileStorageUtils.sortFolder((Vector<OCFile>) mFiles);
+        }
+        notifyDataSetChanged();
+    }
 
 }
