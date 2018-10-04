@@ -3,6 +3,7 @@
  *
  *   @author David A. Velasco
  *   @author Christian Schabesberger
+ *   @author Shashvat Kedia
  *   Copyright (C) 2011  Bartek Przybylski
  *   Copyright (C) 2018 ownCloud GmbH.
  *
@@ -21,11 +22,11 @@
  */
 package com.owncloud.android.ui.adapter;
 
-import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.datamodel.ThumbnailsCacheManager;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,9 +46,14 @@ import com.owncloud.android.utils.MimetypeIconUtil;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Vector;
+
+import third_parties.daveKoeller.AlphanumComparatorFile;
+import third_parties.daveKoeller.AlphanumComparatorOCFile;
 
 /**
  * This Adapter populates a ListView with all files and directories contained
@@ -61,6 +67,8 @@ public class LocalFileListAdapter extends BaseAdapter implements ListAdapter {
     private File mFolder;
     private File[] mFiles = null;
     private boolean mJustFolders;
+    private ListView parentList;
+    private ArrayList<FileObject> checkedFiles = new ArrayList<FileObject>();
     
     public LocalFileListAdapter(File directory, boolean justFolders, Context context) {
         mContext = context;
@@ -141,14 +149,17 @@ public class LocalFileListAdapter extends BaseAdapter implements ListAdapter {
                 fileSizeV.setVisibility(View.VISIBLE);
                 fileSizeV.setText(DisplayUtils.bytesToHumanReadable(file.length(), mContext));
 
-                ListView parentList = (ListView) parent;
+                parentList = (ListView) parent;
                 if (parentList.getChoiceMode() == ListView.CHOICE_MODE_NONE) { 
                     checkBoxV.setVisibility(View.GONE);
                 } else {
-                    if (parentList.isItemChecked(position)) {
+                    if (parentList.isItemChecked(position) || checkedFiles.contains(new FileObject((File) getItem(position),true))) {
                         checkBoxV.setImageResource(R.drawable.ic_checkbox_marked);
+                        checkedFiles.get(position).selected = true;
+                        Log.e("AAA","11");
                     } else {
                         checkBoxV.setImageResource(R.drawable.ic_checkbox_blank_outline);
+                        checkedFiles.get(position).selected = false;
                     }
                     checkBoxV.setVisibility(View.VISIBLE);
                 }
@@ -195,7 +206,6 @@ public class LocalFileListAdapter extends BaseAdapter implements ListAdapter {
             
             view.findViewById(R.id.sharedIcon).setVisibility(View.GONE);
         }
-
         return view;
     }
 
@@ -247,6 +257,9 @@ public class LocalFileListAdapter extends BaseAdapter implements ListAdapter {
                 }
             
             });
+            for(int i=0;i<mFiles.length;i++){
+                checkedFiles.add(new FileObject(mFiles[i],false));
+            }
         }
         notifyDataSetChanged();
     }
@@ -256,25 +269,89 @@ public class LocalFileListAdapter extends BaseAdapter implements ListAdapter {
         PreferenceManager.setSortAscending(isAscending,mContext);
         FileStorageUtils.mSortOrder = order;
         FileStorageUtils.mSortAscending = isAscending;
-        Vector<OCFile> transformedFiles = transform(mFiles);
-        FileStorageUtils.sortFolder(transformedFiles);
-        mFiles = deform(transformedFiles);
-        notifyDataSetChanged();
+        if(mFiles != null && mFiles.length > 0) {
+            int val;
+            if (FileStorageUtils.mSortAscending) {
+                val = 1;
+            } else {
+                val = -1;
+            }
+            switch (PreferenceManager.getSortOrder(mContext)) {
+                case FileStorageUtils.SORT_NAME:
+                    Arrays.sort(mFiles, new Comparator<File>() {
+                        public int compare(File o1, File o2) {
+                            if (o1.isDirectory() && o2.isDirectory()) {
+                                return val * new AlphanumComparatorFile().compare(o1, o2);
+                            } else if (o1.isDirectory()) {
+                                return -1;
+                            } else if (o2.isDirectory()) {
+                                return 1;
+                            }
+                            return val * new AlphanumComparatorFile().compare(o1, o2);
+                        }
+                    });
+                    break;
+                case FileStorageUtils.SORT_SIZE:
+                    Arrays.sort(mFiles, new Comparator<File>() {
+                        public int compare(File o1, File o2) {
+                            if (o1.isDirectory() && o2.isDirectory()) {
+                                Long obj1 = o1.length();
+                                return val * obj1.compareTo(o2.length());
+                            } else if (o1.isDirectory()) {
+                                return -1;
+                            } else if (o2.isDirectory()) {
+                                return 1;
+                            } else if (o1.length() == 0 || o2.length() == 0) {
+                                return 0;
+                            } else {
+                                Long obj1 = o1.length();
+                                return val * obj1.compareTo(o2.length());
+                            }
+                        }
+                    });
+                    break;
+                case FileStorageUtils.SORT_DATE:
+                    Arrays.sort(mFiles, new Comparator<File>() {
+                        public int compare(File o1, File o2) {
+                            if (o1.isDirectory() && o2.isDirectory()) {
+                                Long obj1 = o1.lastModified();
+                                return val * obj1.compareTo(o2.lastModified());
+                            } else if (o1.isDirectory()) {
+                                return -1;
+                            } else if (o2.isDirectory()) {
+                                return 1;
+                            } else if (o1.lastModified() == 0 || o2.lastModified() == 0) {
+                                return 0;
+                            } else {
+                                Long obj1 = o1.lastModified();
+                                return val * obj1.compareTo(o2.lastModified());
+                            }
+                        }
+                    });
+                    break;
+            }
+            ArrayList<FileObject> temp = new ArrayList<FileObject>();
+            for (int i = 0; i < mFiles.length; i++) {
+                if(parentList != null) {
+                    parentList.setItemChecked(i, false);
+                }
+                temp.add(new FileObject(mFiles[i],checkedFiles.contains(new FileObject(mFiles[i],true))));
+            }
+            checkedFiles.clear();
+            checkedFiles.addAll(temp);
+            temp = null;
+            notifyDataSetChanged();
+        }
     }
 
-    private Vector<OCFile> transform(File[] mFiles){
-        Vector<OCFile> listOfFiles = new Vector<OCFile>();
-        for(int i=0;i<mFiles.length;i++){
-            listOfFiles.add(new OCFile(mFiles[i].getAbsolutePath()));
+    public class FileObject{
+        private File file;
+        private boolean selected;
+
+        public FileObject(File file,boolean selected){
+            this.file = file;
+            this.selected = selected;
         }
-        return listOfFiles;
     }
 
-    private File[] deform(Vector<OCFile> listOfSortedFiles){
-        File[] fileArray = new File[listOfSortedFiles.size()];
-        for(int i=0;i<listOfSortedFiles.size();i++){
-            fileArray[i] = new File(listOfSortedFiles.get(i).getRemotePath());
-        }
-        return fileArray;
-    }
 }
