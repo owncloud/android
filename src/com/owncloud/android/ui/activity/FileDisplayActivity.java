@@ -81,7 +81,6 @@ import com.owncloud.android.operations.RenameFileOperation;
 import com.owncloud.android.operations.SynchronizeFileOperation;
 import com.owncloud.android.operations.UploadFileOperation;
 import com.owncloud.android.operations.common.SyncOperation;
-import com.owncloud.android.services.observer.FileObserverService;
 import com.owncloud.android.syncadapter.FileSyncAdapter;
 import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter;
 import com.owncloud.android.ui.fragment.FileDetailFragment;
@@ -180,9 +179,6 @@ public class FileDisplayActivity extends FileActivity
             mFileWaitingToPreview = null;
             mSyncInProgress = false;
             mWaitingToSend = null;
-
-            /// grant that FileObserverService is watching favorite files
-            FileObserverService.initialize(this);
 
             mFilesUploadHelper = new FilesUploadHelper(this,
                     getAccount() == null ? "" : getAccount().name);

@@ -22,8 +22,6 @@
 
 package com.owncloud.android.datamodel;
 
-
-import android.accounts.Account;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.net.Uri;
@@ -35,7 +33,6 @@ import android.support.v4.content.FileProvider;
 import android.webkit.MimeTypeMap;
 
 import com.owncloud.android.R;
-import com.owncloud.android.lib.common.accounts.AccountUtils;
 import com.owncloud.android.lib.common.network.WebdavUtils;
 import com.owncloud.android.lib.common.utils.Log_OC;
 

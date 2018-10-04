@@ -17,7 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.db;
+package com.owncloud.android.datamodel;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -27,8 +27,6 @@ import android.os.Parcelable;
  * is enabled.
  */
 public class OCCameraUploadSync implements Parcelable {
-
-    private static final String TAG = OCUpload.class.getSimpleName();
 
     private long mId;
 
@@ -88,7 +86,6 @@ public class OCCameraUploadSync implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-
         dest.writeLong(mId);
         dest.writeLong(mPicturesLastSync);
         dest.writeLong(mVideosLastSync);

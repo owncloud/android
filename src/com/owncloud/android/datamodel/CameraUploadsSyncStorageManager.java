@@ -24,7 +24,6 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 
-import com.owncloud.android.db.OCCameraUploadSync;
 import com.owncloud.android.db.ProviderMeta;
 import com.owncloud.android.lib.common.utils.Log_OC;
 
@@ -44,7 +43,7 @@ public class CameraUploadsSyncStorageManager extends Observable {
     }
 
     /**
-     * Stores an camera upload sync object in DB
+     * Stores a camera upload sync object in DB
      *
      * @param ocCameraUploadSync      Camera upload sync object to store
      * @return camera upload sync id, -1 if the insert process fails

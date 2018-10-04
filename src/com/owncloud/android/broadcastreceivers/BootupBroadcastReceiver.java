@@ -22,7 +22,6 @@
 package com.owncloud.android.broadcastreceivers;
 
 import com.owncloud.android.lib.common.utils.Log_OC;
-import com.owncloud.android.services.observer.FileObserverService;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -52,6 +51,6 @@ public class BootupBroadcastReceiver extends BroadcastReceiver {
             return;
         }
         Log_OC.d(TAG, "Starting file observer service...");
-        FileObserverService.initialize(context);
+//        FileObserverService.initialize(context);
     }
 }
