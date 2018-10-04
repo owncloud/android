@@ -269,17 +269,22 @@ public class UploadFilesActivity extends FileActivity implements
     }
 
     private void recoverSortMenuState(Menu menu){
-        menu.findItem(R.id.action_sort_descending).setChecked(com.owncloud.android.db.PreferenceManager.getSortAscending(this));
-        switch(com.owncloud.android.db.PreferenceManager.getSortOrder(this)){
-            case FileStorageUtils.SORT_NAME:
-                menu.findItem(R.id.action_sort_by_name).setChecked(true);
-                break;
-            case FileStorageUtils.SORT_SIZE:
-                menu.findItem(R.id.action_sort_by_size).setChecked(true);
-                break;
-            case FileStorageUtils.SORT_DATE:
-                menu.findItem(R.id.action_sort_by_date).setChecked(true);
-                break;
+        if(menu != null) {
+            menu.findItem(R.id.action_sort_descending).setChecked(!com.owncloud.android.db.PreferenceManager.getSortAscending(this));
+            switch (com.owncloud.android.db.PreferenceManager.getSortOrder(this)) {
+                case FileStorageUtils.SORT_NAME:
+                    menu.findItem(R.id.action_sort_by_name).setChecked(true);
+                    sortByName(com.owncloud.android.db.PreferenceManager.getSortAscending(this));
+                    break;
+                case FileStorageUtils.SORT_SIZE:
+                    menu.findItem(R.id.action_sort_by_size).setChecked(true);
+                    sortBySize(com.owncloud.android.db.PreferenceManager.getSortAscending(this));
+                    break;
+                case FileStorageUtils.SORT_DATE:
+                    menu.findItem(R.id.action_sort_by_date).setChecked(true);
+                    sortByDate(com.owncloud.android.db.PreferenceManager.getSortAscending(this));
+                    break;
+            }
         }
     }
     

@@ -43,7 +43,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Vector;
 
-import third_parties.daveKoeller.AlphanumComparator;
+import third_parties.daveKoeller.AlphanumComparatorOCFile;
 
 
 /**
@@ -313,13 +313,13 @@ public class FileStorageUtils {
         Collections.sort(files, new Comparator<OCFile>() {
             public int compare(OCFile o1, OCFile o2) {
                 if (o1.isFolder() && o2.isFolder()) {
-                    return val * new AlphanumComparator().compare(o1, o2);
+                    return val * new AlphanumComparatorOCFile().compare(o1, o2);
                 } else if (o1.isFolder()) {
                     return -1;
                 } else if (o2.isFolder()) {
                     return 1;
                 }
-                return val * new AlphanumComparator().compare(o1, o2);
+                return val * new AlphanumComparatorOCFile().compare(o1, o2);
             }
         });
         

@@ -3,6 +3,7 @@
  *
  *   @author David A. Velasco
  *   @author Christian Schabesberger
+ *   @author Shashvat Kedia
  *   Copyright (C) 2011  Bartek Przybylski
  *   Copyright (C) 2018 ownCloud GmbH.
  *
