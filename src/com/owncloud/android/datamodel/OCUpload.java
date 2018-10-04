@@ -21,7 +21,7 @@
  *
  */
 
-package com.owncloud.android.db;
+package com.owncloud.android.datamodel;
 
 import android.accounts.Account;
 import android.content.Context;
@@ -29,9 +29,8 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.owncloud.android.authentication.AccountUtils;
-import com.owncloud.android.datamodel.OCFile;
-import com.owncloud.android.datamodel.UploadsStorageManager;
 import com.owncloud.android.datamodel.UploadsStorageManager.UploadStatus;
+import com.owncloud.android.db.UploadResult;
 import com.owncloud.android.files.services.FileUploader;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.operations.UploadFileOperation;

@@ -27,7 +27,7 @@ import android.os.Build;
 import android.os.PersistableBundle;
 
 import com.owncloud.android.datamodel.CameraUploadsSyncStorageManager;
-import com.owncloud.android.db.OCCameraUploadSync;
+import com.owncloud.android.datamodel.OCCameraUploadSync;
 import com.owncloud.android.db.PreferenceManager.CameraUploadsConfiguration;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.utils.Extras;
@@ -60,8 +60,20 @@ public class CameraUploadsHandler {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 
+            // DB Connection
+            CameraUploadsSyncStorageManager cameraUploadsSyncStorageManager = new
+                    CameraUploadsSyncStorageManager(mContext.getContentResolver());
+
+            OCCameraUploadSync ocCameraUploadSync = cameraUploadsSyncStorageManager.
+                    getCameraUploadSync(null, null, null);
+
             // Initialize synchronization timestamps for pictures/videos, if needed
-            initializeCameraUploadSync();
+            if (ocCameraUploadSync == null ||
+                    ocCameraUploadSync.getPicturesLastSync() == 0 ||
+                    ocCameraUploadSync.getVideosLastSync() == 0) {
+
+                initializeCameraUploadSync(cameraUploadsSyncStorageManager, ocCameraUploadSync);
+            }
 
             ComponentName serviceComponent = new ComponentName(mContext,
                     CameraUploadsSyncJobService.class);
@@ -112,19 +124,13 @@ public class CameraUploadsHandler {
      * period in which to check the pictures/videos saved, discarding those created before enabling
      * Camera Uploads feature
      */
-    private void initializeCameraUploadSync() {
+    private void initializeCameraUploadSync(CameraUploadsSyncStorageManager cameraUploadsSyncStorageManager,
+                                            OCCameraUploadSync ocCameraUploadSync) {
 
         // Set synchronization timestamps not needed
         if (!mCameraUploadsConfig.isEnabledForPictures() && !mCameraUploadsConfig.isEnabledForVideos()) {
             return;
         }
-
-        // DB connection
-        CameraUploadsSyncStorageManager mCameraUploadsSyncStorageManager = new
-                CameraUploadsSyncStorageManager(mContext.getContentResolver());
-
-        OCCameraUploadSync ocCameraUploadSync = mCameraUploadsSyncStorageManager.
-                getCameraUploadSync(null, null, null);
 
         long timeStamp = System.currentTimeMillis();
 
@@ -139,31 +145,21 @@ public class CameraUploadsHandler {
 
             Log_OC.d(TAG, "Storing synchronization timestamp in database");
 
-            mCameraUploadsSyncStorageManager.storeCameraUploadSync(firstOcCameraUploadSync);
+            cameraUploadsSyncStorageManager.storeCameraUploadSync(firstOcCameraUploadSync);
 
         } else {
 
-            if (ocCameraUploadSync.getPicturesLastSync() != 0 &&
-                    ocCameraUploadSync.getVideosLastSync() != 0) {
-
-                // Synchronization timestamps already initialized
-                return;
-            }
-
-
             if (ocCameraUploadSync.getPicturesLastSync() == 0 && mCameraUploadsConfig.isEnabledForPictures()) {
-
                 // Pictures synchronization timestamp not initialized yet, initialize it
                 ocCameraUploadSync.setPicturesLastSync(timeStamp);
             }
 
             if (ocCameraUploadSync.getVideosLastSync() == 0 && mCameraUploadsConfig.isEnabledForVideos()) {
-
                 // Videos synchronization timestamp not initialized yet, initialize it
                 ocCameraUploadSync.setVideosLastSync(timeStamp);
             }
 
-            mCameraUploadsSyncStorageManager.updateCameraUploadSync(ocCameraUploadSync);
+            cameraUploadsSyncStorageManager.updateCameraUploadSync(ocCameraUploadSync);
         }
     }
 
@@ -172,23 +168,18 @@ public class CameraUploadsHandler {
      * @param lastSyncTimestamp
      */
     public void updatePicturesLastSync(long lastSyncTimestamp){
-
         // DB connection
-        CameraUploadsSyncStorageManager mCameraUploadsSyncStorageManager = new
+        CameraUploadsSyncStorageManager cameraUploadsSyncStorageManager = new
                 CameraUploadsSyncStorageManager(mContext.getContentResolver());
 
-        OCCameraUploadSync ocCameraUploadSync = mCameraUploadsSyncStorageManager.
+        OCCameraUploadSync ocCameraUploadSync = cameraUploadsSyncStorageManager.
                 getCameraUploadSync(null, null, null);
 
         if (ocCameraUploadSync == null) {
-
             return;
-
         } else {
-
             ocCameraUploadSync.setPicturesLastSync(lastSyncTimestamp);
-
-            mCameraUploadsSyncStorageManager.updateCameraUploadSync(ocCameraUploadSync);
+            cameraUploadsSyncStorageManager.updateCameraUploadSync(ocCameraUploadSync);
         }
     }
 
@@ -198,21 +189,17 @@ public class CameraUploadsHandler {
      */
     public void updateVideosLastSync(long lastSyncTimestamp){
         // DB connection
-        CameraUploadsSyncStorageManager mCameraUploadsSyncStorageManager = new
+        CameraUploadsSyncStorageManager cameraUploadsSyncStorageManager = new
                 CameraUploadsSyncStorageManager(mContext.getContentResolver());
 
-        OCCameraUploadSync ocCameraUploadSync = mCameraUploadsSyncStorageManager.
+        OCCameraUploadSync ocCameraUploadSync = cameraUploadsSyncStorageManager.
                 getCameraUploadSync(null, null, null);
 
         if (ocCameraUploadSync == null) {
-
             return;
-
         } else {
-
             ocCameraUploadSync.setVideosLastSync(lastSyncTimestamp);
-
-            mCameraUploadsSyncStorageManager.updateCameraUploadSync(ocCameraUploadSync);
+            cameraUploadsSyncStorageManager.updateCameraUploadSync(ocCameraUploadSync);
         }
     }
 

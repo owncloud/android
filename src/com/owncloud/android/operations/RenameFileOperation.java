@@ -33,7 +33,6 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.files.RenameRemoteFileOperation;
 import com.owncloud.android.operations.common.SyncOperation;
-import com.owncloud.android.services.observer.FileObserverService;
 import com.owncloud.android.utils.FileStorageUtils;
 
 
@@ -179,21 +178,21 @@ public class RenameFileOperation extends SyncOperation {
     }
 
     private void pauseObservation() {
-        FileObserverService.observeFile(
-            MainApp.getAppContext(),
-            mFile,
-            getStorageManager().getAccount(),
-            false
-        );
+//        FileObserverService.observeFile(
+//            MainApp.getAppContext(),
+//            mFile,
+//            getStorageManager().getAccount(),
+//            false
+//        );
     }
 
     private void resumeObservation() {
-        FileObserverService.observeFile(
-            MainApp.getAppContext(),
-            mFile,
-            getStorageManager().getAccount(),
-            true
-        );
+//        FileObserverService.observeFile(
+//            MainApp.getAppContext(),
+//            mFile,
+//            getStorageManager().getAccount(),
+//            true
+//        );
     }
 
     /**

@@ -212,7 +212,6 @@ public class SynchronizeFileOperation extends SyncOperation {
                     getStorageManager().saveConflict(mLocalFile, null);
                 }
             }
-
         }
 
         Log_OC.i(TAG, "Synchronizing " + mAccount.name + ", file " + mLocalFile.getRemotePath() +
