@@ -93,7 +93,7 @@ public class ThumbnailsCacheManager {
                         // Check if media is mounted or storage is built-in, if so, 
                         // try and use external cache dir; otherwise use internal cache dir
                         final String cachePath = 
-                                MainApp.getAppContext().getExternalCacheDir().getPath() + 
+                                MainApp.getAppContext().getExternalCacheDir().getPath() +
                                 File.separator + CACHE_FOLDER;
                         Log_OC.d(TAG, "create dir: " + cachePath);
                         final File diskCacheDir = new File(cachePath);

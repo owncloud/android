@@ -126,7 +126,14 @@ public class TransferRequester {
         intent.putExtra(FileUploader.KEY_LOCAL_BEHAVIOUR, behaviour);
         intent.putExtra(FileUploader.KEY_FORCE_OVERWRITE, forceOverwrite);
 
-        context.startService(intent);
+        // Since in Android O and above the apps in background are not allowed to start background
+        // services and available offline feature may try to do it, this is the way to proceed
+        if (context instanceof AvailableOfflineSyncJobService && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            intent.putExtra(FileUploader.KEY_IS_AVAILABLE_OFFLINE_FILE, true);
+            context.startForegroundService(intent);
+        } else {
+            context.startService(intent);
+        }
     }
 
     /**

@@ -34,7 +34,7 @@ import com.owncloud.android.MainApp;
 public class ProviderMeta {
 
     public static final String DB_NAME = "filelist";
-    public static final int DB_VERSION = 24;
+    public static final int DB_VERSION = 23;
 
     private ProviderMeta() {
     }
@@ -47,7 +47,6 @@ public class ProviderMeta {
         public static final String USER_AVATARS__TABLE_NAME = "user_avatars";
         public static final String CAMERA_UPLOADS_SYNC_TABLE_NAME = "camera_uploads_sync";
         public static final String USER_QUOTAS_TABLE_NAME = "user_quotas";
-        public static final String AVAILABLE_OFFLINE_SYNC_TABLE_NAME = "available_offline_sync";
 
         public static final Uri CONTENT_URI = Uri.parse("content://"
                 + MainApp.getAuthority() + "/");
@@ -65,8 +64,6 @@ public class ProviderMeta {
                 + MainApp.getAuthority() + "/cameraUploadsSync");
         public static final Uri CONTENT_URI_QUOTAS = Uri.parse("content://"
                 + MainApp.getAuthority() + "/quotas");
-        public static final Uri CONTENT_URI_AVAILABLE_OFFLINE_SYNC = Uri.parse("content://"
-                + MainApp.getAuthority() + "/availableOfflineSync");
 
         public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.owncloud.file";
         public static final String CONTENT_TYPE_ITEM = "vnd.android.cursor.item/vnd.owncloud.file";
@@ -191,10 +188,5 @@ public class ProviderMeta {
         public static final String USER_QUOTAS__RELATIVE = "relative";
         public static final String USER_QUOTAS__TOTAL = "total";
         public static final String USER_QUOTAS__USED = "used";
-
-        // Columns of available offline synchronization table
-        public static final String AVAILABLE_OFFLINE_LAST_SYNC_TIMESTAMP = "available_offline_last_sync_date";
-        public static final String AVAILABLE_OFFLINE_SYNC_DEFAULT_SORT_ORDER =
-                ProviderTableMeta._ID  + " collate nocase asc";
     }
 }

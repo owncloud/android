@@ -4,7 +4,8 @@
  *   @author masensio
  *   @author David A. Velasco
  *   @author Juan Carlos González Cabrero
- *   Copyright (C) 2017 ownCloud GmbH.
+ *   @author David González Verdugo
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -33,7 +34,6 @@ import android.webkit.MimeTypeMap;
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.OCFile;
-import com.owncloud.android.datamodel.OCFilesForAccount;
 import com.owncloud.android.files.services.AvailableOfflineHandler;
 import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder;
 import com.owncloud.android.files.services.FileUploader.FileUploaderBinder;
@@ -49,9 +49,6 @@ import com.owncloud.android.ui.dialog.ShareLinkToDialog;
 import java.util.Collection;
 import java.util.List;
 
-/**
- *
- */
 public class FileOperationsHelper {
 
     private static final String TAG = FileOperationsHelper.class.getSimpleName();
@@ -500,11 +497,7 @@ public class FileOperationsHelper {
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
                     AvailableOfflineHandler availableOfflineHandler =
                             new AvailableOfflineHandler(mFileActivity, mFileActivity.getAccount().name);
-
-                   OCFilesForAccount availableOfflineFilesForAccount =
-                           mFileActivity.getStorageManager().getAvailableOfflineFilesFromEveryAccount();
-
-                    availableOfflineHandler.scheduleAvailableOfflineJob(availableOfflineFilesForAccount);
+                    availableOfflineHandler.scheduleAvailableOfflineJob();
                 }
 
                 /// immediate content synchronization
@@ -671,7 +664,6 @@ public class FileOperationsHelper {
      * @param link link to share
      */
     private void shareLink(String link) {
-
         Intent intentToShareLink = new Intent(Intent.ACTION_SEND);
         intentToShareLink.putExtra(Intent.EXTRA_TEXT, link);
         intentToShareLink.setType("text/plain");
