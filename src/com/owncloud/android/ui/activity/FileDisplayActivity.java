@@ -1672,8 +1672,8 @@ public class FileDisplayActivity extends FileActivity
         // If the file is not being downloaded, start the download
         if (!mDownloaderBinder.isDownloading(account, mFileWaitingToPreview)) {
             Intent i = new Intent(this, FileDownloader.class);
-            i.putExtra(FileDownloader.EXTRA_ACCOUNT, account);
-            i.putExtra(FileDownloader.EXTRA_FILE, mFileWaitingToPreview);
+            i.putExtra(FileDownloader.KEY_ACCOUNT, account);
+            i.putExtra(FileDownloader.KEY_FILE, mFileWaitingToPreview);
             startService(i);
         }
     }
@@ -1741,8 +1741,8 @@ public class FileDisplayActivity extends FileActivity
         Account account = getAccount();
         if (!mDownloaderBinder.isDownloading(account, mFileWaitingToPreview)) {
             Intent i = new Intent(this, FileDownloader.class);
-            i.putExtra(FileDownloader.EXTRA_ACCOUNT, account);
-            i.putExtra(FileDownloader.EXTRA_FILE, file);
+            i.putExtra(FileDownloader.KEY_ACCOUNT, account);
+            i.putExtra(FileDownloader.KEY_FILE, file);
             startService(i);
         }
     }

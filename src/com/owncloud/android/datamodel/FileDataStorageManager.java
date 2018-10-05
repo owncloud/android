@@ -2131,19 +2131,19 @@ public class FileDataStorageManager {
      *
      * @return      List with all the files set by the user as available offline.
      */
-    public OCFilesForAccount getAvailableOfflineFilesFromEveryAccount() {
-        List<OCFilesForAccount.OCFileForAccount> avOfflineFilesFromEveryAccount = new ArrayList<>();
+    public List<Pair<OCFile, String>> getAvailableOfflineFilesFromEveryAccount() {
+        List<Pair<OCFile, String>> result = new ArrayList<>();
 
         Cursor cursorOnKeptInSync = null;
         try {
             // query for any favorite file in any OC account
             cursorOnKeptInSync = getContentResolver().query(
-                ProviderTableMeta.CONTENT_URI,
-                null,
-                ProviderTableMeta.FILE_KEEP_IN_SYNC + " = ?",
-                new String[] { String.valueOf(OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE.getValue()) },
-                // do NOT get also AVAILABLE_OFFLINE_PARENT: only those SET BY THE USER (files or folders)
-                null
+                    ProviderTableMeta.CONTENT_URI,
+                    null,
+                    ProviderTableMeta.FILE_KEEP_IN_SYNC + " = ?",
+                    new String[] { String.valueOf(OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE.getValue()) },
+                    // do NOT get also AVAILABLE_OFFLINE_PARENT: only those SET BY THE USER (files or folders)
+                    null
             );
 
             if (cursorOnKeptInSync != null && cursorOnKeptInSync.moveToFirst()) {
@@ -2152,11 +2152,9 @@ public class FileDataStorageManager {
                 do {
                     file = createFileInstance(cursorOnKeptInSync);
                     accountName = cursorOnKeptInSync.getString(
-                        cursorOnKeptInSync.getColumnIndex(ProviderTableMeta.FILE_ACCOUNT_OWNER)
+                            cursorOnKeptInSync.getColumnIndex(ProviderTableMeta.FILE_ACCOUNT_OWNER)
                     );
-                    OCFilesForAccount.OCFileForAccount ocFileForAccount =
-                            new OCFilesForAccount.OCFileForAccount(file, accountName);
-                    avOfflineFilesFromEveryAccount.add(ocFileForAccount);
+                    result.add(new Pair<>(file, accountName));
                 } while (cursorOnKeptInSync.moveToNext());
             }
 
@@ -2169,6 +2167,6 @@ public class FileDataStorageManager {
             }
         }
 
-        return new OCFilesForAccount(avOfflineFilesFromEveryAccount);
+        return result;
     }
 }

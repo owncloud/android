@@ -28,14 +28,11 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
+import android.support.v4.util.Pair;
 
-import com.google.gson.Gson;
 import com.owncloud.android.authentication.AccountUtils;
-import com.owncloud.android.datamodel.AvailableOfflineSyncStorageManager;
 import com.owncloud.android.datamodel.FileDataStorageManager;
-import com.owncloud.android.datamodel.OCAvailableOfflineSync;
 import com.owncloud.android.datamodel.OCFile;
-import com.owncloud.android.datamodel.OCFilesForAccount;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.operations.SynchronizeFileOperation;
@@ -44,6 +41,7 @@ import com.owncloud.android.utils.Extras;
 import com.owncloud.android.utils.FileStorageUtils;
 
 import java.io.File;
+import java.util.List;
 
 /**
  * Job to watch for local changes in available offline files (formerly known as kept-in-sync files) and try to
@@ -67,9 +65,6 @@ public class AvailableOfflineSyncJobService extends JobService {
 
         private final JobService mAvailableOfflineJobService;
 
-        private AvailableOfflineSyncStorageManager mAvailableOfflineSyncStorageManager;
-        private OCAvailableOfflineSync mOcAvailableOfflineSync;
-
         public AvailableOfflineJobTask(JobService mAvailableOfflineJobService) {
             this.mAvailableOfflineJobService = mAvailableOfflineJobService;
         }
@@ -77,92 +72,84 @@ public class AvailableOfflineSyncJobService extends JobService {
         @Override
         protected JobParameters doInBackground(JobParameters... jobParams) {
 
-            mAvailableOfflineSyncStorageManager = new AvailableOfflineSyncStorageManager(
-                    mAvailableOfflineJobService.getContentResolver()
-            );
+            String accountName = jobParams[0].getExtras().getString(Extras.EXTRA_ACCOUNT_NAME);
 
-            String availableOfflineFilesJson = jobParams[0].getExtras()
-                    .getString(Extras.EXTRA_AVAILABLE_OFFLINE_FILES_FOR_ACCOUNT);
-            Gson gson = new Gson();
+            Account account = AccountUtils.getOwnCloudAccountByName(mAvailableOfflineJobService, accountName);
 
-            OCFilesForAccount availableOfflineFilesForAccount = gson.fromJson(
-                    availableOfflineFilesJson,
-                    OCFilesForAccount.class
-            );
+            FileDataStorageManager fileDataStorageManager = new FileDataStorageManager(account,
+                    mAvailableOfflineJobService.getContentResolver());
+
+            List<Pair<OCFile, String>> availableOfflineFilesFromEveryAccount = fileDataStorageManager.
+                    getAvailableOfflineFilesFromEveryAccount();
 
             // Cancel periodic job if there's no available offline files to watch for local changes
-            if (availableOfflineFilesForAccount.getFilesForAccount().isEmpty()) {
+            if (availableOfflineFilesFromEveryAccount.isEmpty()) {
                 cancelPeriodicJob(jobParams[0].getJobId());
                 return jobParams[0];
-
             } else {
-                syncAvailableOfflineFiles(availableOfflineFilesForAccount);
+                syncAvailableOfflineFiles(availableOfflineFilesFromEveryAccount);
             }
 
             return jobParams[0];
         }
 
-        private void syncAvailableOfflineFiles(OCFilesForAccount availableOfflineFilesForAccount) {
-            mOcAvailableOfflineSync = mAvailableOfflineSyncStorageManager.getAvailableOfflineSync(
-                    null, null, null);
+        private void syncAvailableOfflineFiles(List<Pair<OCFile, String>> availableOfflineFilesForAccount) {
+            for (Pair<OCFile, String> fileForAccount : availableOfflineFilesForAccount) {
 
-            for (OCFilesForAccount.OCFileForAccount fileForAccount :
-                    availableOfflineFilesForAccount.getFilesForAccount()) {
-
-                String localPath = fileForAccount.getFile().getStoragePath();
+                String localPath = fileForAccount.first.getStoragePath();
 
                 if (localPath == null) {
                     localPath = FileStorageUtils.getDefaultSavePathFor(
-                            fileForAccount.getAccountName(),
-                            fileForAccount.getFile()
+                            fileForAccount.second,
+                            fileForAccount.first
                     );
                 }
 
-                File availableOfflineFile = new File(localPath);
+                File localFile = new File(localPath);
 
-                if (availableOfflineFile.lastModified() <= mOcAvailableOfflineSync.getAvailableOfflineLastSync()) {
-                    Log_OC.i(TAG, "File " + localPath + " modified before period to check, ignoring");
+                if (localFile.lastModified() <= fileForAccount.first.getLastSyncDateForData()) {
+                    Log_OC.i(TAG, "File " + localPath + " already synchronized, ignoring");
                     continue;
                 }
 
-                startSyncOperation(availableOfflineFile, fileForAccount.getAccountName());
+                startSyncOperation(fileForAccount.first, fileForAccount.second);
             }
         }
 
         /**
          * Triggers an operation to synchronize the contents of a recently modified available offline file with
          * its remote counterpart in the associated ownCloud account.
-         * @param availableOffline file to synchronize
+         * @param availableOfflineFile file to synchronize
          * @param accountName account to which upload the available offline file
          */
-        private void startSyncOperation(File availableOffline, String accountName) {
+        private void startSyncOperation(OCFile availableOfflineFile, String accountName) {
+            Log_OC.i(
+                    TAG,
+                    String.format(
+                            "Requested synchronization for file %1s",
+                            availableOfflineFile.getFileName()
+                    )
+            );
+
             Account mAccount = AccountUtils.getOwnCloudAccountByName(mAvailableOfflineJobService, accountName);
 
             FileDataStorageManager storageManager =
                     new FileDataStorageManager(mAccount, mAvailableOfflineJobService.getContentResolver());
-            // a fresh object is needed; many things could have occurred to the file
-            // since it was registered to observe again, assuming that local files
-            // are linked to a remote file AT MOST, SOMETHING TO BE DONE;
-            OCFile file = storageManager.getFileByLocalPath(
-                    availableOffline.getPath() + File.separator + availableOffline.getName()
-            );
-            if (file == null) {
-                Log_OC.w(TAG, "Could not find OC file for " + availableOffline.getPath() +
-                        File.separator + availableOffline.getName());
-            } else {
-                SynchronizeFileOperation sfo =
-                        new SynchronizeFileOperation(file, null, mAccount, false,
-                                mAvailableOfflineJobService);
-                RemoteOperationResult result = sfo.execute(storageManager, mAvailableOfflineJobService);
-                if (result.getCode() == RemoteOperationResult.ResultCode.SYNC_CONFLICT) {
-                    // ISSUE 5: if the user is not running the app (this is a service!),
-                    // this can be very intrusive; a notification should be preferred
-                    Intent i = new Intent(mAvailableOfflineJobService, ConflictsResolveActivity.class);
-                    i.setFlags(i.getFlags() | Intent.FLAG_ACTIVITY_NEW_TASK);
-                    i.putExtra(ConflictsResolveActivity.EXTRA_FILE, file);
-                    i.putExtra(ConflictsResolveActivity.EXTRA_ACCOUNT, mAccount);
-                    mAvailableOfflineJobService.startActivity(i);
-                }
+
+            SynchronizeFileOperation synchronizeFileOperation =
+                    new SynchronizeFileOperation(availableOfflineFile, null, mAccount, false,
+                            mAvailableOfflineJobService);
+            RemoteOperationResult result = synchronizeFileOperation.
+                    execute(storageManager, mAvailableOfflineJobService);
+
+            if (result.getCode() == RemoteOperationResult.ResultCode.SYNC_CONFLICT) {
+                // ISSUE 5: if the user is not running the app (this is a service!),
+                // this can be very intrusive; a notification should be preferred
+                Intent i = new Intent(mAvailableOfflineJobService, ConflictsResolveActivity.class);
+                i.setFlags(i.getFlags() | Intent.FLAG_ACTIVITY_NEW_TASK);
+                i.putExtra(ConflictsResolveActivity.EXTRA_FILE, availableOfflineFile);
+                i.putExtra(ConflictsResolveActivity.EXTRA_ACCOUNT, mAccount);
+                mAvailableOfflineJobService.startActivity(i);
             }
         }
 

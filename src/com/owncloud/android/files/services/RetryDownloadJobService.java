@@ -67,8 +67,8 @@ public class RetryDownloadJobService extends JobService {
             if (ocFile != null) {
                 // Retry download
                 Intent i = new Intent(this, FileDownloader.class);
-                i.putExtra(FileDownloader.EXTRA_ACCOUNT, account);
-                i.putExtra(FileDownloader.EXTRA_FILE, ocFile);
+                i.putExtra(FileDownloader.KEY_ACCOUNT, account);
+                i.putExtra(FileDownloader.KEY_FILE, ocFile);
                 this.startService(i);
             } else {
                 Log_OC.w(
