@@ -3,6 +3,7 @@
  *
  *   @author Bartek Przybylski
  *   @author Christian Schabesberger
+ *   @author David González Verdugo
  *   Copyright (C) 2012 Bartek Przybylski
  *   Copyright (C) 2018 ownCloud GmbH.
  *
@@ -31,6 +32,7 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
+import android.os.Build;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.IBinder;
@@ -74,12 +76,12 @@ import java.util.Vector;
 public class FileDownloader extends Service
         implements OnDatatransferProgressListener, OnAccountsUpdateListener {
 
-    public static final String EXTRA_ACCOUNT = "ACCOUNT";
-    public static final String EXTRA_FILE = "FILE";
+    public static final String KEY_ACCOUNT = "ACCOUNT";
+    public static final String KEY_FILE = "FILE";
+    public static final String KEY_IS_AVAILABLE_OFFLINE_FILE = "KEY_IS_AVAILABLE_OFFLINE_FILE";
 
     private static final String DOWNLOAD_ADDED_MESSAGE = "DOWNLOAD_ADDED";
     private static final String DOWNLOAD_FINISH_MESSAGE = "DOWNLOAD_FINISH";
-
     private static final String DOWNLOAD_NOTIFICATION_CHANNEL_ID = "DOWNLOAD_NOTIFICATION_CHANNEL";
 
     private static final String TAG = FileDownloader.class.getSimpleName();
@@ -116,7 +118,10 @@ public class FileDownloader extends Service
     public void onCreate() {
         super.onCreate();
         Log_OC.d(TAG, "Creating service");
+
         mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+
+        mNotificationBuilder = NotificationUtils.newNotificationBuilder(this);
 
         // Configure notification channel
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
@@ -180,14 +185,25 @@ public class FileDownloader extends Service
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log_OC.d(TAG, "Starting command with id " + startId);
 
-        if (!intent.hasExtra(EXTRA_ACCOUNT) ||
-                !intent.hasExtra(EXTRA_FILE)
+        boolean isAvailableOfflineFile = intent.getBooleanExtra(KEY_IS_AVAILABLE_OFFLINE_FILE, false);
+
+        if (isAvailableOfflineFile && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            /**
+             * After calling startForegroundService method from {@link TransferRequester} for camera uploads, we have
+             * to call this within five seconds after the service is created to avoid an error
+             */
+            Log_OC.d(TAG, "Starting FileDownloader service in foreground");
+            startForeground(1, mNotificationBuilder.build());
+        }
+
+        if (!intent.hasExtra(KEY_ACCOUNT) ||
+                !intent.hasExtra(KEY_FILE)
                 ) {
             Log_OC.e(TAG, "Not enough information provided in intent");
             return START_NOT_STICKY;
         } else {
-            final Account account = intent.getParcelableExtra(EXTRA_ACCOUNT);
-            final OCFile file = intent.getParcelableExtra(EXTRA_FILE);
+            final Account account = intent.getParcelableExtra(KEY_ACCOUNT);
+            final OCFile file = intent.getParcelableExtra(KEY_FILE);
             AbstractList<String> requestedDownloads = new Vector<>();
             try {
                 DownloadFileOperation newDownload = new DownloadFileOperation(account, file);
@@ -550,7 +566,6 @@ public class FileDownloader extends Service
 
         /// create status notification with a progress bar
         mLastPercent = 0;
-        mNotificationBuilder = NotificationUtils.newNotificationBuilder(this);
         mNotificationBuilder
                 .setSmallIcon(R.drawable.notification_icon)
                 .setTicker(getString(R.string.downloader_download_in_progress_ticker))

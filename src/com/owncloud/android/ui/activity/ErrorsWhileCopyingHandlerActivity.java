@@ -69,7 +69,7 @@ public class ErrorsWhileCopyingHandlerActivity  extends AppCompatActivity
     private static final String TAG = ErrorsWhileCopyingHandlerActivity.class.getSimpleName();
     
     public static final String EXTRA_ACCOUNT =
-            ErrorsWhileCopyingHandlerActivity.class.getCanonicalName() + ".EXTRA_ACCOUNT";
+            ErrorsWhileCopyingHandlerActivity.class.getCanonicalName() + ".KEY_ACCOUNT";
     public static final String EXTRA_LOCAL_PATHS =
             ErrorsWhileCopyingHandlerActivity.class.getCanonicalName() + ".EXTRA_LOCAL_PATHS";
     public static final String EXTRA_REMOTE_PATHS =

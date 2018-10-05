@@ -27,10 +27,6 @@ import android.os.Build;
 import android.os.PersistableBundle;
 import android.support.annotation.RequiresApi;
 
-import com.google.gson.Gson;
-import com.owncloud.android.datamodel.AvailableOfflineSyncStorageManager;
-import com.owncloud.android.datamodel.OCAvailableOfflineSync;
-import com.owncloud.android.datamodel.OCFilesForAccount;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.utils.Extras;
 
@@ -60,20 +56,9 @@ public class AvailableOfflineHandler {
 
     /**
      * Schedule a periodic job to check whether available offline files recently updated need to be uploaded
-     * @param availableOfflineFilesForAccount
      */
-    public void scheduleAvailableOfflineJob(OCFilesForAccount availableOfflineFilesForAccount) {
+    public void scheduleAvailableOfflineJob() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-
-            // DB Connection
-            AvailableOfflineSyncStorageManager availableOfflineSyncStorageManager = new
-                    AvailableOfflineSyncStorageManager(mContext.getContentResolver());
-
-            // Update synchronization timestamp for available offline
-            Log_OC.d(TAG, "Updating synchronization timestamp in database");
-            long timeStamp = System.currentTimeMillis();
-            OCAvailableOfflineSync ocAvailableOfflineSync = new OCAvailableOfflineSync(timeStamp);
-            availableOfflineSyncStorageManager.storeAvailableOfflineSync(ocAvailableOfflineSync);
 
             ComponentName serviceComponent = new ComponentName(mContext, AvailableOfflineSyncJobService.class);
             JobInfo.Builder builder;
@@ -90,40 +75,13 @@ public class AvailableOfflineHandler {
 
             extras.putInt(Extras.EXTRA_AVAILABLE_OFFLINE_SYNC_JOB_ID, JOB_ID_AVAILABLE_OFFLINE);
 
-            // Passing complex objects to a JobService is not possible due to persistence reasons, so let's transform
-            // available offline files for account into a json object
-            Gson gson = new Gson();
-            String availableOfflineFilesJson = gson.toJson(availableOfflineFilesForAccount);
-
-            extras.putString(
-                    Extras.EXTRA_AVAILABLE_OFFLINE_FILES_FOR_ACCOUNT, availableOfflineFilesJson
-            );
+            extras.putString(Extras.EXTRA_ACCOUNT_NAME, mAccountName);
 
             builder.setExtras(extras);
 
             Log_OC.d(TAG, "Scheduling an AvailableOfflineSyncJobService");
 
             mJobScheduler.schedule(builder.build());
-        }
-    }
-
-    /**
-     * Update timestamp (in milliseconds) from which to start checking available offline files to synchronie
-     * @param availableOfflinelastSyncTimestamp
-     */
-    public void updateAvailableOfflineLastSync(long availableOfflinelastSyncTimestamp){
-        // DB connection
-        AvailableOfflineSyncStorageManager availableOfflineSyncStorageManager = new
-                AvailableOfflineSyncStorageManager(mContext.getContentResolver());
-
-        OCAvailableOfflineSync ocAvailableOfflineSync = availableOfflineSyncStorageManager.
-                getAvailableOfflineSync(null, null, null);
-
-        if (ocAvailableOfflineSync == null) {
-            return;
-        } else {
-            ocAvailableOfflineSync.setAvailableOfflineLastSync(availableOfflinelastSyncTimestamp);
-            availableOfflineSyncStorageManager.updateAvailableOfflineSync(ocAvailableOfflineSync);
         }
     }
 }

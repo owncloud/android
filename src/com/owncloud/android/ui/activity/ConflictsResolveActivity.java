@@ -67,8 +67,8 @@ public class ConflictsResolveActivity extends FileActivity implements OnConflict
             case SERVER:
                 // use server version -> delete local, request download
                 Intent intent = new Intent(this, FileDownloader.class);
-                intent.putExtra(FileDownloader.EXTRA_ACCOUNT, getAccount());
-                intent.putExtra(FileDownloader.EXTRA_FILE, getFile());
+                intent.putExtra(FileDownloader.KEY_ACCOUNT, getAccount());
+                intent.putExtra(FileDownloader.KEY_FILE, getFile());
                 startService(intent);
                 finish();
                 return;
