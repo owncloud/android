@@ -90,9 +90,9 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
         mTransferServiceGetter = transferServiceGetter;
 
         // Read sorting order, default to sort by name ascending
-        FileStorageUtils.mSortOrder = PreferenceManager.getSortOrder(mContext);
-        FileStorageUtils.mSortAscending = PreferenceManager.getSortAscending(mContext);
-        
+        FileStorageUtils.mSortOrderFileDisp = PreferenceManager.getSortOrder(mContext, FileStorageUtils.FILE_DISPLAY_SORT);
+        FileStorageUtils.mSortAscendingFileDisp = PreferenceManager.getSortAscending(mContext, FileStorageUtils.FILE_DISPLAY_SORT);
+
         // initialise thumbnails cache on background thread
         new ThumbnailsCacheManager.InitDiskCacheTask().execute();
     }
@@ -199,7 +199,7 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
                     fileSizeSeparatorV.setVisibility(View.VISIBLE);
                     fileSizeV.setVisibility(View.VISIBLE);
                     fileSizeV.setText(DisplayUtils.bytesToHumanReadable(
-                        file.getFileLength(), mContext
+                            file.getFileLength(), mContext
                     ));
 
                 case GRID_ITEM:
@@ -235,7 +235,7 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
             AbsListView parentList = (AbsListView) parent;
             if (parentList.getChoiceMode() != AbsListView.CHOICE_MODE_NONE &&
                     parentList.getCheckedItemCount() > 0
-                ) {
+                    ) {
                 if (parentList.isItemChecked(position)) {
                     view.setBackgroundColor(mContext.getResources().getColor(
                             R.color.selected_item_background));
@@ -249,7 +249,7 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
                 checkBoxV.setVisibility(View.VISIBLE);
             }
 
-            if(file.isFolder()) {
+            if (file.isFolder()) {
                 // Folder
                 fileIcon.setImageResource(
                         MimetypeIconUtil.getFolderTypeIconId(
@@ -275,9 +275,9 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
                             }
                             final ThumbnailsCacheManager.AsyncThumbnailDrawable asyncDrawable =
                                     new ThumbnailsCacheManager.AsyncThumbnailDrawable(
-                                        mContext.getResources(),
-                                        thumbnail,
-                                        task
+                                            mContext.getResources(),
+                                            thumbnail,
+                                            task
                                     );
                             fileIcon.setImageDrawable(asyncDrawable);
                             task.execute(file);
@@ -335,7 +335,7 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
                 localStateView.setImageResource(R.drawable.downloaded_pin);
             }
 
-            if(file.isAvailableOffline()) {
+            if (file.isAvailableOffline()) {
                 localStateView.setVisibility(View.VISIBLE);
                 localStateView.setImageResource(R.drawable.offline_available_pin);
             }
@@ -385,15 +385,15 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
             mFiles = null;
         }
 
-        mFiles = FileStorageUtils.sortFolder(mFiles);
+        mFiles = FileStorageUtils.sortFolderFileDisp(mFiles);
         notifyDataSetChanged();
     }
 
     /**
      * Filter for getting only the folders
      *
-     * @param files             Collection of files to filter
-     * @return                  Folders in the input
+     * @param files Collection of files to filter
+     * @return Folders in the input
      */
     public Vector<OCFile> getFolders(Vector<OCFile> files) {
         Vector<OCFile> ret = new Vector<>();
@@ -410,13 +410,13 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
 
     public void setSortOrder(Integer order, boolean ascending) {
 
-        PreferenceManager.setSortOrder(order, mContext);
-        PreferenceManager.setSortAscending(ascending, mContext);
-        
-        FileStorageUtils.mSortOrder = order;
-        FileStorageUtils.mSortAscending = ascending;
+        PreferenceManager.setSortOrder(order, mContext, FileStorageUtils.FILE_DISPLAY_SORT);
+        PreferenceManager.setSortAscending(ascending, mContext, FileStorageUtils.FILE_DISPLAY_SORT);
 
-        mFiles = FileStorageUtils.sortFolder(mFiles);
+        FileStorageUtils.mSortOrderFileDisp = order;
+        FileStorageUtils.mSortAscendingFileDisp = ascending;
+
+        mFiles = FileStorageUtils.sortFolderFileDisp(mFiles);
         notifyDataSetChanged();
     }
 
@@ -424,11 +424,11 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
         SparseBooleanArray checkedPositions = parentList.getCheckedItemPositions();
         ArrayList<OCFile> files = new ArrayList<>();
         Object item;
-        for (int i=0; i < checkedPositions.size(); i++) {
+        for (int i = 0; i < checkedPositions.size(); i++) {
             if (checkedPositions.valueAt(i)) {
                 item = getItem(checkedPositions.keyAt(i));
                 if (item != null) {
-                    files.add((OCFile)item);
+                    files.add((OCFile) item);
                 }
             }
         }

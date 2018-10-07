@@ -50,20 +50,26 @@ public class LocalFileListFragment extends ExtendedListFragment {
 
     private final String OUT_STATE_CHECKED_FILES = "out_state_checked_files";
 
-    /** Reference to the Activity which this fragment is attached to. For callbacks */
+    /**
+     * Reference to the Activity which this fragment is attached to. For callbacks
+     */
     private LocalFileListFragment.ContainerActivity mContainerActivity;
 
-    /** Directory to show */
+    /**
+     * Directory to show
+     */
     private File mDirectory = null;
 
-    /** Adapter to connect the data from the directory with the View object */
+    /**
+     * Adapter to connect the data from the directory with the View object
+     */
     private LocalFileListAdapter mAdapter = null;
 
 
     /**
      * Public factory method to create new {@link LocalFileListFragment} instances.
      *
-     * @param   justFolders     When 'true', only folders will be shown to the user, not files
+     * @param justFolders When 'true', only folders will be shown to the user, not files
      * @return New fragment with arguments set
      */
     public static LocalFileListFragment newInstance(boolean justFolders) {
@@ -136,7 +142,7 @@ public class LocalFileListFragment extends ExtendedListFragment {
         mDirectory = mContainerActivity.getCurrentFolder();
         mAdapter = new LocalFileListAdapter(mDirectory, isShowingJustFolders(), getActivity());
         setListAdapter(mAdapter);
-        if(savedInstanceState != null){
+        if (savedInstanceState != null) {
             mAdapter.setCheckedFiles(savedInstanceState.getStringArrayList(OUT_STATE_CHECKED_FILES));
         }
         Log_OC.i(TAG, "onActivityCreated() stop");
@@ -228,7 +234,7 @@ public class LocalFileListFragment extends ExtendedListFragment {
      * it will either refresh the last known directory. list the root
      * if there never was a directory.
      *
-     * @param directory     Directory to be listed
+     * @param directory Directory to be listed
      */
     public void listFolder(File directory) {
 
@@ -283,9 +289,10 @@ public class LocalFileListFragment extends ExtendedListFragment {
 
 
     @Override
-    public void onSaveInstanceState(Bundle savedInstanceState){
-        savedInstanceState.putStringArrayList(OUT_STATE_CHECKED_FILES,mAdapter.getCheckedFiles());
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        savedInstanceState.putStringArrayList(OUT_STATE_CHECKED_FILES, mAdapter.getCheckedFiles());
     }
+
     /**
      * Interface to implement by any Activity that includes some instance of LocalFileListFragment
      */
@@ -294,7 +301,7 @@ public class LocalFileListFragment extends ExtendedListFragment {
         /**
          * Callback method invoked when a directory is clicked by the user on the files list
          *
-         * @param folder    Folder shown in the item clicked by the user
+         * @param folder Folder shown in the item clicked by the user
          */
         void onFolderClicked(File folder);
 
@@ -302,7 +309,7 @@ public class LocalFileListFragment extends ExtendedListFragment {
          * Callback method invoked when a file (non directory)
          * is clicked by the user on the files list
          *
-         * @param file      File shown in the item clicked by the user
+         * @param file File shown in the item clicked by the user
          */
         void onFileClicked(File file);
 
