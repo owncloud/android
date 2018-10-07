@@ -23,6 +23,8 @@
  */
 
 package third_parties.daveKoeller;
+
+import java.io.File;
 import java.text.Collator;
 import java.util.Comparator;
 
@@ -31,32 +33,31 @@ import com.owncloud.android.datamodel.OCFile;
 /**
  * This is an updated version with enhancements made by Daniel Migowski,
  * Andre Bogus, and David Koelle
- *
+ * <p>
  * To convert to use Templates (Java 1.5+):
- *   - Change "implements Comparator" to "implements Comparator<String>"
- *   - Change "compare(Object o1, Object o2)" to "compare(String s1, String s2)"
- *   - Remove the type checking and casting in compare().
- *
+ * - Change "implements Comparator" to "implements Comparator<String>"
+ * - Change "compare(Object o1, Object o2)" to "compare(String s1, String s2)"
+ * - Remove the type checking and casting in compare().
+ * <p>
  * To use this class:
- *   Use the static "sort" method from the java.util.Collections class:
- *   Collections.sort(your list, new AlphanumComparatorOCFile());
+ * Use the static "sort" method from the java.util.Collections class:
+ * Collections.sort(your list, new AlphanumComparator());
  */
-public class AlphanumComparatorOCFile implements Comparator<OCFile>
-{
-    private final boolean isDigit(char ch)
-    {
+public class AlphanumComparator implements Comparator<Object> {
+    private final boolean isDigit(char ch) {
         return ch >= 48 && ch <= 57;
     }
 
-    /** Length of string is passed in for improved efficiency (only need to calculate it once) **/
-    private final String getChunk(String s, int slength, int marker){
+    /**
+     * Length of string is passed in for improved efficiency (only need to calculate it once)
+     **/
+    private final String getChunk(String s, int slength, int marker) {
         StringBuilder chunk = new StringBuilder();
         char c = s.charAt(marker);
         chunk.append(c);
         marker++;
-        if (isDigit(c)){
-            while (marker < slength)
-            {
+        if (isDigit(c)) {
+            while (marker < slength) {
                 c = s.charAt(marker);
                 if (!isDigit(c))
                     break;
@@ -64,8 +65,7 @@ public class AlphanumComparatorOCFile implements Comparator<OCFile>
                 marker++;
             }
         } else {
-            while (marker < slength)
-            {
+            while (marker < slength) {
                 c = s.charAt(marker);
                 if (isDigit(c))
                     break;
@@ -76,9 +76,15 @@ public class AlphanumComparatorOCFile implements Comparator<OCFile>
         return chunk.toString();
     }
 
-    public int compare(OCFile o1, OCFile o2){
-        String s1 = o1.getRemotePath().toLowerCase();
-        String s2 = o2.getRemotePath().toLowerCase();
+    public int compare(Object o1, Object o2) {
+        String s1 = null, s2 = null;
+        if (o1 instanceof OCFile) {
+            s1 = ((OCFile) o1).getRemotePath().toLowerCase();
+            s2 = ((OCFile) o2).getRemotePath().toLowerCase();
+        } else if (o1 instanceof File) {
+            s1 = ((File) o1).getAbsolutePath().toLowerCase();
+            s2 = ((File) o2).getAbsolutePath().toLowerCase();
+        }
 
         int thisMarker = 0;
         int thatMarker = 0;

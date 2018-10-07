@@ -48,8 +48,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 
-import third_parties.daveKoeller.AlphanumComparatorFile;
-
 /**
  * This Adapter populates a ListView with all files and directories contained
  * in a local directory
@@ -210,21 +208,21 @@ public class LocalFileListAdapter extends BaseAdapter implements ListAdapter {
         checkedFiles.remove(file);
     }
 
-    public ArrayList<String> getCheckedFiles(){
+    public ArrayList<String> getCheckedFiles() {
         ArrayList<String> representation = new ArrayList<String>();
-        for(int i=0;i<mFiles.length;i++){
-            if(checkedFiles.contains(mFiles[i])){
+        for (int i = 0; i < mFiles.length; i++) {
+            if (checkedFiles.contains(mFiles[i])) {
                 representation.add(mFiles[i].getName());
             }
         }
         return representation;
     }
 
-    public void setCheckedFiles(ArrayList<String> files){
-        if(files != null && files.size() > 0){
+    public void setCheckedFiles(ArrayList<String> files) {
+        if (files != null && files.size() > 0) {
             checkedFiles.clear();
-            for(int i=0;i<mFiles.length;i++){
-                if(files.contains(mFiles[i].getName())){
+            for (int i = 0; i < mFiles.length; i++) {
+                if (files.contains(mFiles[i].getName())) {
                     checkedFiles.add(mFiles[i]);
                     files.remove(mFiles[i].getName());
                 }
@@ -249,7 +247,8 @@ public class LocalFileListAdapter extends BaseAdapter implements ListAdapter {
 
     /**
      * Change the adapted directory for a new one
-     * @param directory     New file to adapt. Can be NULL, meaning "no content to adapt".
+     *
+     * @param directory New file to adapt. Can be NULL, meaning "no content to adapt".
      */
     public void swapDirectory(File directory) {
         if (directory == null) {
@@ -285,71 +284,12 @@ public class LocalFileListAdapter extends BaseAdapter implements ListAdapter {
     }
 
     public void setSortOrder(Integer order, boolean isAscending) {
-        PreferenceManager.setSortOrder(order, mContext);
-        PreferenceManager.setSortAscending(isAscending, mContext);
-        FileStorageUtils.mSortOrder = order;
-        FileStorageUtils.mSortAscending = isAscending;
+        PreferenceManager.setSortOrder(order, mContext, FileStorageUtils.UPLOAD_SORT);
+        PreferenceManager.setSortAscending(isAscending, mContext, FileStorageUtils.UPLOAD_SORT);
+        FileStorageUtils.mSortOrderUpload = order;
+        FileStorageUtils.mSortAscendingUpload = isAscending;
         if (mFiles != null && mFiles.length > 0) {
-            int val;
-            if (FileStorageUtils.mSortAscending) {
-                val = 1;
-            } else {
-                val = -1;
-            }
-            switch (PreferenceManager.getSortOrder(mContext)) {
-                case FileStorageUtils.SORT_NAME:
-                    Arrays.sort(mFiles, new Comparator<File>() {
-                        public int compare(File o1, File o2) {
-                            if (o1.isDirectory() && o2.isDirectory()) {
-                                return val * new AlphanumComparatorFile().compare(o1, o2);
-                            } else if (o1.isDirectory()) {
-                                return -1;
-                            } else if (o2.isDirectory()) {
-                                return 1;
-                            }
-                            return val * new AlphanumComparatorFile().compare(o1, o2);
-                        }
-                    });
-                    break;
-                case FileStorageUtils.SORT_SIZE:
-                    Arrays.sort(mFiles, new Comparator<File>() {
-                        public int compare(File o1, File o2) {
-                            if (o1.isDirectory() && o2.isDirectory()) {
-                                Long obj1 = o1.length();
-                                return val * obj1.compareTo(o2.length());
-                            } else if (o1.isDirectory()) {
-                                return -1;
-                            } else if (o2.isDirectory()) {
-                                return 1;
-                            } else if (o1.length() == 0 || o2.length() == 0) {
-                                return 0;
-                            } else {
-                                Long obj1 = o1.length();
-                                return val * obj1.compareTo(o2.length());
-                            }
-                        }
-                    });
-                    break;
-                case FileStorageUtils.SORT_DATE:
-                    Arrays.sort(mFiles, new Comparator<File>() {
-                        public int compare(File o1, File o2) {
-                            if (o1.isDirectory() && o2.isDirectory()) {
-                                Long obj1 = o1.lastModified();
-                                return val * obj1.compareTo(o2.lastModified());
-                            } else if (o1.isDirectory()) {
-                                return -1;
-                            } else if (o2.isDirectory()) {
-                                return 1;
-                            } else if (o1.lastModified() == 0 || o2.lastModified() == 0) {
-                                return 0;
-                            } else {
-                                Long obj1 = o1.lastModified();
-                                return val * obj1.compareTo(o2.lastModified());
-                            }
-                        }
-                    });
-                    break;
-            }
+            mFiles = FileStorageUtils.sortFolderUpload(mFiles);
             if (parentList != null) {
                 for (int i = 0; i < mFiles.length; i++) {
                     parentList.setItemChecked(i, false);

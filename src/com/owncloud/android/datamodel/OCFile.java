@@ -38,7 +38,7 @@ import com.owncloud.android.lib.common.utils.Log_OC;
 
 import java.io.File;
 
-import third_parties.daveKoeller.AlphanumComparatorOCFile;
+import third_parties.daveKoeller.AlphanumComparator;
 
 public class OCFile implements Parcelable, Comparable<OCFile> {
 
@@ -575,7 +575,7 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
         } else if (another.isFolder()) {
             return 1;
         }
-        return new AlphanumComparatorOCFile().compare(this, another);
+        return new AlphanumComparator().compare(this, another);
     }
 
     @Override

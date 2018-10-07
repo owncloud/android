@@ -5,6 +5,7 @@
  *  @author David A. Velasco
  *  @author David González Verdugo
  *  @author Christian Schabesberger
+ *  @author Shashvat Kedia
  *  Copyright (C) 2011  Bartek Przybylski
  *  Copyright (C) 2018 ownCloud GmbH.
  *
@@ -578,8 +579,8 @@ public class FileDisplayActivity extends FileActivity
             case R.id.action_sort_descending: {
                 item.setChecked(!item.isChecked());
                 final boolean sortAscending = !item.isChecked();
-                PreferenceManager.setSortAscending(sortAscending, this);
-                switch (getSortOrder(this)) {
+                PreferenceManager.setSortAscending(sortAscending, this,FileStorageUtils.FILE_DISPLAY_SORT);
+                switch (getSortOrder(this,FileStorageUtils.FILE_DISPLAY_SORT)) {
                     case FileStorageUtils.SORT_NAME:
                         sortByName(sortAscending);
                         break;
@@ -607,15 +608,15 @@ public class FileDisplayActivity extends FileActivity
             }
             case R.id.action_sort_by_date:
                 item.setChecked(true);
-                sortByDate(PreferenceManager.getSortAscending(this));
+                sortByDate(PreferenceManager.getSortAscending(this,FileStorageUtils.FILE_DISPLAY_SORT));
                 return true;
             case R.id.action_sort_by_name:
                 item.setChecked(true);
-                sortByName(PreferenceManager.getSortAscending(this));
+                sortByName(PreferenceManager.getSortAscending(this,FileStorageUtils.FILE_DISPLAY_SORT));
                 return true;
             case R.id.action_sort_by_size:
                 item.setChecked(true);
-                sortBySize(PreferenceManager.getSortAscending(this));
+                sortBySize(PreferenceManager.getSortAscending(this,FileStorageUtils.FILE_DISPLAY_SORT));
                 return true;
             default:
         }
@@ -626,9 +627,9 @@ public class FileDisplayActivity extends FileActivity
     private void recoverSortMenuFormPreferences(Menu menu) {
         // setup sort menu
         if(menu != null) {
-            mDescendingMenuItem.setChecked(!PreferenceManager.getSortAscending(this));
+            mDescendingMenuItem.setChecked(!PreferenceManager.getSortAscending(this,FileStorageUtils.FILE_DISPLAY_SORT));
 
-            switch (getSortOrder(this)) {
+            switch (getSortOrder(this,FileStorageUtils.FILE_DISPLAY_SORT)) {
                 case FileStorageUtils.SORT_NAME:
                     menu.findItem(R.id.action_sort_by_name).setChecked(true);
                     break;
