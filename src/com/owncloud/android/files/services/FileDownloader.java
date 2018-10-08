@@ -189,7 +189,8 @@ public class FileDownloader extends Service
 
         if (isAvailableOfflineFile && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             /**
-             * After calling startForegroundService method from {@link TransferRequester} for camera uploads, we have
+             * After calling startForegroundService method from
+             * {@link com.owncloud.android.operations.SynchronizeFileOperation}, we have
              * to call this within five seconds after the service is created to avoid an error
              */
             Log_OC.d(TAG, "Starting FileDownloader service in foreground");
