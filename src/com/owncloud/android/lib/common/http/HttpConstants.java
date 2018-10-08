@@ -48,6 +48,8 @@ public class HttpConstants {
     public static final String LOCATION_HEADER = "Location";
     public static final String LOCATION_HEADER_LOWER = "location";
     public static final String CONTENT_TYPE_URLENCODED_UTF8 = "application/x-www-form-urlencoded; charset=utf-8";
+    public static final String ACCEPT_ENCODING_HEADER = "Accept-Encoding";
+    public static final String ACCEPT_ENCODING_IDENTITY = "identity";
 
     /***********************************************************************************************************
      ************************************************ STATUS CODES *********************************************

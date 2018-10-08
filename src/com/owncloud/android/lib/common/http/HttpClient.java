@@ -125,6 +125,7 @@ public class HttpClient {
             sOkHttpInterceptor = new HttpInterceptor();
             addHeaderForAllRequests(HttpConstants.USER_AGENT_HEADER, OwnCloudClientManagerFactory.getUserAgent());
             addHeaderForAllRequests(HttpConstants.PARAM_SINGLE_COOKIE_HEADER, "true");
+            addHeaderForAllRequests(HttpConstants.ACCEPT_ENCODING_HEADER, HttpConstants.ACCEPT_ENCODING_IDENTITY);
         }
         return sOkHttpInterceptor;
     }
