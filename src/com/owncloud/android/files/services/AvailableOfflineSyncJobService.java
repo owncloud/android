@@ -46,7 +46,8 @@ import java.util.List;
 /**
  * Job to watch for local changes in available offline files (formerly known as kept-in-sync files) and try to
  * synchronize them with the OC server.
- * This job should be executed every 15 minutes since a file is set as available offline for the first time
+ * This job should be executed every 15 minutes since a file is set as available offline for the first time and stopped
+ * when there's no available offline files
  */
 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 public class AvailableOfflineSyncJobService extends JobService {
@@ -120,7 +121,7 @@ public class AvailableOfflineSyncJobService extends JobService {
          * Triggers an operation to synchronize the contents of a recently modified available offline file with
          * its remote counterpart in the associated ownCloud account.
          * @param availableOfflineFile file to synchronize
-         * @param accountName account to which upload the available offline file
+         * @param accountName account to synchronize the available offline file with
          */
         private void startSyncOperation(OCFile availableOfflineFile, String accountName) {
             Log_OC.i(
@@ -139,12 +140,13 @@ public class AvailableOfflineSyncJobService extends JobService {
             SynchronizeFileOperation synchronizeFileOperation =
                     new SynchronizeFileOperation(availableOfflineFile, null, mAccount, false,
                             mAvailableOfflineJobService);
+
             RemoteOperationResult result = synchronizeFileOperation.
                     execute(storageManager, mAvailableOfflineJobService);
 
             if (result.getCode() == RemoteOperationResult.ResultCode.SYNC_CONFLICT) {
-                // ISSUE 5: if the user is not running the app (this is a service!),
-                // this can be very intrusive; a notification should be preferred
+                // If the user is not running the app, this can be very intrusive so show a notification to solve
+                // the conflicts
                 Intent i = new Intent(mAvailableOfflineJobService, ConflictsResolveActivity.class);
                 i.setFlags(i.getFlags() | Intent.FLAG_ACTIVITY_NEW_TASK);
                 i.putExtra(ConflictsResolveActivity.EXTRA_FILE, availableOfflineFile);

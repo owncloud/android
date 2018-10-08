@@ -963,7 +963,6 @@ public class FileUploader extends Service
                     mNotificationBuilder.build());
         }// else wait until the upload really start (onTransferProgress is called), so that if it's discarded
         // due to lack of Wifi, no notification is shown
-        // TODO generalize for automated uploads
     }
 
     /**
