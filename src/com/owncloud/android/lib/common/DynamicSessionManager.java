@@ -56,11 +56,8 @@ public class DynamicSessionManager implements OwnCloudClientManager {
     }
 
     @Override
-    public void saveAllClients(Context context, String accountType)
-        throws AccountUtils.AccountNotFoundException,
-                AuthenticatorException, IOException, OperationCanceledException {
+    public void saveAllClients(Context context, String accountType) {
         mSimpleFactoryManager.saveAllClients(context, accountType);
         mSingleSessionManager.saveAllClients(context, accountType);
     }
-
 }
