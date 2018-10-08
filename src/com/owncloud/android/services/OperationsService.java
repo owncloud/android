@@ -138,9 +138,9 @@ public class OperationsService extends Service {
             new ConcurrentHashMap<>();
 
     private static class Target {
-        public Uri mServerUrl = null;
-        public Account mAccount = null;
-        public String mCookie = null;
+        public Uri mServerUrl;
+        public Account mAccount;
+        public String mCookie;
 
         public Target(Account account, Uri serverUrl, String cookie) {
             mAccount = account;
@@ -408,8 +408,8 @@ public class OperationsService extends Service {
     private static class ServiceHandler extends Handler {
         // don't make it a final class, and don't remove the static ; lint will warn about a p
         // ossible memory leak
-        
-        
+
+
         OperationsService mService;
 
 
@@ -452,13 +452,14 @@ public class OperationsService extends Service {
             if (next != null) {
                 
                 mCurrentOperation = next.second;
-                RemoteOperationResult result = null;
+                RemoteOperationResult result;
                 try {
                     /// prepare client object to send the request to the ownCloud server
                     if (mLastTarget == null || !mLastTarget.equals(next.first)) {
                         mLastTarget = next.first;
+                        OwnCloudAccount ocAccount;
                         if (mLastTarget.mAccount != null) {
-                            OwnCloudAccount ocAccount = new OwnCloudAccount(mLastTarget.mAccount, mService);
+                            ocAccount = new OwnCloudAccount(mLastTarget.mAccount, mService);
                             mOwnCloudClient = OwnCloudClientManagerFactory.getDefaultSingleton().
                                     getClientFor(ocAccount, mService);
 
@@ -474,17 +475,19 @@ public class OperationsService extends Service {
                             );
                         } else {
                             OwnCloudCredentials credentials = null;
-                            if (mLastTarget.mCookie != null &&
-                                    mLastTarget.mCookie.length() > 0) {
+                            if (mLastTarget.mCookie != null && mLastTarget.mCookie.length() > 0) { // SAML SSO
                                 // just used for GetUserName
-                                // TODO refactor to run GetUserName as AsyncTask in the context of
-                                // AuthenticatorActivity
+                                // TODO refactor to run GetUserName as AsyncTask in the context of AuthenticatorActivity
                                 credentials = OwnCloudCredentialsFactory.newSamlSsoCredentials(
-                                        null,                   // unknown
-                                        mLastTarget.mCookie);   // SAML SSO
+                                        null,                  // unknown
+                                        mLastTarget.mCookie);           // SAML cookie
+                                ocAccount = new OwnCloudAccount(mLastTarget.mServerUrl, credentials);
+                                // Force to create client with new SAML cookies when a session expires
+                                OwnCloudClientManagerFactory.getDefaultSingleton().removeClientFor(ocAccount);
+                            } else {
+                                ocAccount = new OwnCloudAccount(mLastTarget.mServerUrl, credentials);
                             }
-                            OwnCloudAccount ocAccount = new OwnCloudAccount(
-                                    mLastTarget.mServerUrl, credentials);
+
                             mOwnCloudClient = OwnCloudClientManagerFactory.getDefaultSingleton().
                                     getClientFor(ocAccount, mService);
                             mStorageManager = null;
