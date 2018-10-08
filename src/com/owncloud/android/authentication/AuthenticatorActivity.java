@@ -213,6 +213,8 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
     private View mLoginButton;
     private TextView mAuthStatusView;
 
+    private TextWatcher mUsernamePasswordInputWatcher;
+
     private String mAuthStatusText = "";
 
     private int mAuthStatusIcon = 0;
@@ -556,6 +558,28 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             }
         };
 
+        mUsernamePasswordInputWatcher = new TextWatcher(){
+
+            @Override
+            public void afterTextChanged(Editable s){
+                if(BASIC_TOKEN_TYPE.equals(mAuthTokenType)){
+                    if(mUsernameInput.getText().length() > 0 && mPasswordInput.getText().length() >  0){
+                        mLoginButton.setVisibility(View.VISIBLE);
+                    } else{
+                        mLoginButton.setVisibility(View.GONE);
+                    }
+                }
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s,int start,int count,int after){
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s,int start,int before,int count){
+            }
+        };
+
         findViewById(R.id.scroll).setOnTouchListener((view, event) -> {
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 if (mHostUrlInput.hasFocus()) {
@@ -614,7 +638,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         updateAuthenticationPreFragmentVisibility();
         showAuthStatus();
 
-        if (mServerIsValid) {
+        if (mServerIsValid && !BASIC_TOKEN_TYPE.equals(mAuthTokenType)) {
             mLoginButton.setVisibility(View.VISIBLE);
         } else {
             mLoginButton.setVisibility(View.GONE);
@@ -752,6 +776,8 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         // bound here to avoid spurious changes triggered by Android on device rotations
         mHostUrlInput.setOnFocusChangeListener(this);
         mHostUrlInput.addTextChangedListener(mHostUrlInputWatcher);
+        mUsernameInput.addTextChangedListener(mUsernamePasswordInputWatcher);
+        mPasswordInput.addTextChangedListener(mUsernamePasswordInputWatcher);
 
         if (mOperationsServiceBinder != null) {
             doOnResumeAndBound();
@@ -764,7 +790,9 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         if (mOperationsServiceBinder != null) {
             mOperationsServiceBinder.removeOperationListener(this);
         }
-        
+
+        mUsernameInput.removeTextChangedListener(mUsernamePasswordInputWatcher);
+        mPasswordInput.removeTextChangedListener(mUsernamePasswordInputWatcher);
         mHostUrlInput.removeTextChangedListener(mHostUrlInputWatcher);
         mHostUrlInput.setOnFocusChangeListener(null);
 
@@ -775,6 +803,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
     protected void onDestroy() {
 
         mHostUrlInputWatcher = null;
+        mUsernamePasswordInputWatcher = null;
         
         if (mOperationsServiceConnection != null) {
             unbindService(mOperationsServiceConnection);
@@ -881,7 +910,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             // check server again only if the user changed something in the field
             checkOcServer();
         } else {
-            if (mServerIsValid) {
+            if (mServerIsValid && !BASIC_TOKEN_TYPE.equals(mAuthTokenType)) {
                 mLoginButton.setVisibility(View.VISIBLE);
             } else {
                 mLoginButton.setVisibility(View.GONE);
@@ -1256,7 +1285,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         // refresh UI
         showRefreshButton(!mServerIsValid);
         showServerStatus();
-        if (mServerIsValid) {
+        if (mServerIsValid && !BASIC_TOKEN_TYPE.equals(mAuthTokenType)) {
             mLoginButton.setVisibility(View.VISIBLE);
         } else {
             mLoginButton.setVisibility(View.GONE);
