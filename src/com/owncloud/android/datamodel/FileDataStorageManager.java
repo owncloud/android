@@ -4,6 +4,7 @@
  *   @author Bartek Przybylski
  *   @author Christian Schabesberger
  *   @author David González Verdugo
+ *
  *   Copyright (C) 2012  Bartek Przybylski
  *   Copyright (C) 2018 ownCloud GmbH.
  *

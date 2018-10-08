@@ -32,7 +32,7 @@ import com.owncloud.android.utils.Extras;
 
 /**
  * Schedule the periodic job responsible for synchronizing available offline files, a.k.a. kept-in-sync files, that
- * have been updated locally with the remote server
+ * have been updated locally, with the remote server
  */
 public class AvailableOfflineHandler {
 
@@ -55,7 +55,7 @@ public class AvailableOfflineHandler {
     }
 
     /**
-     * Schedule a periodic job to check whether available offline files recently updated need to be uploaded
+     * Schedule a periodic job to check whether recently updated available offline files need to be synchronized
      */
     public void scheduleAvailableOfflineJob() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
