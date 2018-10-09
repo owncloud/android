@@ -31,16 +31,19 @@ package com.owncloud.android.lib.resources.shares;
 import android.net.Uri;
 
 import com.owncloud.android.lib.common.OwnCloudClient;
+import com.owncloud.android.lib.common.http.HttpConstants;
+import com.owncloud.android.lib.common.http.methods.nonwebdav.GetMethod;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
 
-import org.apache.commons.httpclient.HttpStatus;
-import org.apache.commons.httpclient.methods.GetMethod;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.net.URL;
 import java.util.ArrayList;
+
+import static com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode.OK;
 
 /**
  * Created by masensio on 08/10/2015.
@@ -62,8 +65,12 @@ import java.util.ArrayList;
  *
  * Status codes:
  *    100 - successful
+ *
+ * @author masensio
+ * @author David A. Velasco
+ * @author David González Verdugo
  */
-public class GetRemoteShareesOperation extends RemoteOperation{
+public class GetRemoteShareesOperation extends RemoteOperation<ArrayList<JSONObject>> {
 
     private static final String TAG = GetRemoteShareesOperation.class.getSimpleName();
 
@@ -80,7 +87,6 @@ public class GetRemoteShareesOperation extends RemoteOperation{
     // Arguments - constant values
     private static final String VALUE_FORMAT = "json";
     private static final String VALUE_ITEM_TYPE = "file";         //  to get the server search for users / groups
-
 
     // JSON Node names
     private static final String NODE_OCS = "ocs";
@@ -112,29 +118,27 @@ public class GetRemoteShareesOperation extends RemoteOperation{
     }
 
     @Override
-    protected RemoteOperationResult run(OwnCloudClient client) {
-        RemoteOperationResult result;
-        int status;
-        GetMethod get = null;
+    protected RemoteOperationResult<ArrayList<JSONObject>> run(OwnCloudClient client) {
+        RemoteOperationResult<ArrayList<JSONObject>> result;
 
         try{
             Uri requestUri = client.getBaseUri();
-            Uri.Builder uriBuilder = requestUri.buildUpon();
-            uriBuilder.appendEncodedPath(OCS_ROUTE);
-            uriBuilder.appendQueryParameter(PARAM_FORMAT, VALUE_FORMAT);
-            uriBuilder.appendQueryParameter(PARAM_ITEM_TYPE, VALUE_ITEM_TYPE);
-            uriBuilder.appendQueryParameter(PARAM_SEARCH, mSearchString);
-            uriBuilder.appendQueryParameter(PARAM_PAGE, String.valueOf(mPage));
-            uriBuilder.appendQueryParameter(PARAM_PER_PAGE, String.valueOf(mPerPage));
+            Uri.Builder uriBuilder = requestUri.buildUpon()
+                    .appendEncodedPath(OCS_ROUTE)
+                    .appendQueryParameter(PARAM_FORMAT, VALUE_FORMAT)
+                    .appendQueryParameter(PARAM_ITEM_TYPE, VALUE_ITEM_TYPE)
+                    .appendQueryParameter(PARAM_SEARCH, mSearchString)
+                    .appendQueryParameter(PARAM_PAGE, String.valueOf(mPage))
+                    .appendQueryParameter(PARAM_PER_PAGE, String.valueOf(mPerPage));
 
-            // Get Method
-            get = new GetMethod(uriBuilder.build().toString());
-            get.addRequestHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE);
+            GetMethod getMethod = new GetMethod(new URL(uriBuilder.build().toString()));
 
-            status = client.executeMethod(get);
+            getMethod.addRequestHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE);
+
+            int status = client.executeHttpMethod(getMethod);
+            String response = getMethod.getResponseBodyAsString();
 
             if(isSuccess(status)) {
-                String response = get.getResponseBodyAsString();
                 Log_OC.d(TAG, "Successful response: " + response);
 
                 // Parse the response
@@ -157,7 +161,7 @@ public class GetRemoteShareesOperation extends RemoteOperation{
                         respPartialRemotes
                 };
 
-                ArrayList<Object> data = new ArrayList<Object>(); // For result data
+                ArrayList<JSONObject> data = new ArrayList<>(); // For result data
                 for (int i=0; i<6; i++) {
                     for(int j=0; j< jsonResults[i].length(); j++){
                         JSONObject jsonResult = jsonResults[i].getJSONObject(j);
@@ -166,15 +170,13 @@ public class GetRemoteShareesOperation extends RemoteOperation{
                     }
                 }
 
-                // Result
-                result = new RemoteOperationResult(true, get);
+                result = new RemoteOperationResult<>(OK);
                 result.setData(data);
 
                 Log_OC.d(TAG, "*** Get Users or groups completed " );
 
             } else {
-                result = new RemoteOperationResult(false, get);
-                String response = get.getResponseBodyAsString();
+                result = new RemoteOperationResult<>(getMethod);
                 Log_OC.e(TAG, "Failed response while getting users/groups from the server ");
                 if (response != null) {
                     Log_OC.e(TAG, "*** status code: " + status + "; response message: " + response);
@@ -182,20 +184,15 @@ public class GetRemoteShareesOperation extends RemoteOperation{
                     Log_OC.e(TAG, "*** status code: " + status);
                 }
             }
-
         } catch (Exception e) {
-            result = new RemoteOperationResult(e);
+            result = new RemoteOperationResult<>(e);
             Log_OC.e(TAG, "Exception while getting users/groups", e);
-
-        } finally {
-            if (get != null) {
-                get.releaseConnection();
-            }
         }
+
         return result;
     }
 
     private boolean isSuccess(int status) {
-        return (status == HttpStatus.SC_OK);
+        return (status == HttpConstants.HTTP_OK);
     }
 }

@@ -27,14 +27,16 @@
 
 package com.owncloud.android.lib.common.network;
 
-import org.apache.commons.httpclient.HttpStatus;
+
+
+import com.owncloud.android.lib.common.http.HttpConstants;
 
 import java.util.Arrays;
 
 
 /**
  * Aggregate saving the list of URLs followed in a sequence of redirections during the exceution of a
- * {@link com.owncloud.android.lib.common.operations.RemoteOperation}, and the status codes corresponding to all
+ * {@link RemoteOperation}, and the status codes corresponding to all
  * of them.
  *
  * The last status code saved corresponds to the first response not being a redirection, unless the sequence exceeds
@@ -108,7 +110,7 @@ public class RedirectionPath {
      */
     public String getLastPermanentLocation() {
         for (int i = mLastStatus; i >= 0; i--) {
-            if (mStatuses[i] == HttpStatus.SC_MOVED_PERMANENTLY && i <= mLastLocation) {
+            if (mStatuses[i] == HttpConstants.HTTP_MOVED_PERMANENTLY && i <= mLastLocation) {
                 return mLocations[i];
             }
         }

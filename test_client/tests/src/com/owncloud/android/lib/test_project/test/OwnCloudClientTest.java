@@ -27,12 +27,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.SocketTimeoutException;
 import java.security.GeneralSecurityException;
-import org.apache.commons.httpclient.ConnectTimeoutException;
-import org.apache.commons.httpclient.HttpException;
-import org.apache.commons.httpclient.methods.HeadMethod;
-import org.apache.commons.httpclient.protocol.Protocol;
-import org.apache.commons.httpclient.protocol.ProtocolSocketFactory;
-import org.apache.commons.httpclient.HttpStatus;
+
+
+
+
+
+
 import org.apache.jackrabbit.webdav.DavConstants;
 import org.apache.jackrabbit.webdav.client.methods.PropFindMethod;
 
@@ -48,7 +48,6 @@ import com.owncloud.android.lib.common.authentication.OwnCloudCredentials;
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentialsFactory;
 import com.owncloud.android.lib.common.network.NetworkUtils;
 import com.owncloud.android.lib.test_project.R;
-import com.owncloud.android.lib.test_project.SelfSignedConfidentSslSocketFactory;
 
 
 /**
@@ -314,7 +313,7 @@ public class OwnCloudClientTest extends AndroidTestCase {
 					DavConstants.DEPTH_0);
 			int status = client.executeMethod(propfind);
 			assertEquals("WebDAV request did not work on WebDAV URI", 
-					HttpStatus.SC_MULTI_STATUS, status);
+					HttpConstants.HTTP_MULTI_STATUS, status);
 			
         } catch (IOException e) {
         	Log.e(TAG, "Exception in PROPFIND method execution", e);

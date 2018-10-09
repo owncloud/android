@@ -1,5 +1,5 @@
 /* ownCloud Android Library is available under MIT license
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -24,48 +24,36 @@
 package com.owncloud.android.lib.common.authentication;
 
 import com.owncloud.android.lib.common.OwnCloudClient;
+import com.owncloud.android.lib.common.http.HttpClient;
+import com.owncloud.android.lib.common.http.HttpConstants;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.commons.httpclient.UsernamePasswordCredentials;
-import org.apache.commons.httpclient.auth.AuthPolicy;
-import org.apache.commons.httpclient.auth.AuthScope;
-import org.apache.commons.httpclient.auth.AuthState;
-import org.apache.commons.httpclient.auth.BasicScheme;
+import okhttp3.Credentials;
 
 public class OwnCloudBasicCredentials implements OwnCloudCredentials {
 
+    private static final String TAG = OwnCloudCredentials.class.getSimpleName();
+
     private String mUsername;
     private String mPassword;
-    private boolean mAuthenticationPreemptive;
 
     public OwnCloudBasicCredentials(String username, String password) {
         mUsername = username != null ? username : "";
         mPassword = password != null ? password : "";
-        mAuthenticationPreemptive = true;
     }
 
     public OwnCloudBasicCredentials(String username, String password, boolean preemptiveMode) {
         mUsername = username != null ? username : "";
         mPassword = password != null ? password : "";
-        mAuthenticationPreemptive = preemptiveMode;
     }
 
     @Override
     public void applyTo(OwnCloudClient client) {
-        AuthPolicy.registerAuthScheme(AuthState.PREEMPTIVE_AUTH_SCHEME, BasicScheme.class);
+        // Clear previous basic credentials
+        HttpClient.deleteHeaderForAllRequests(HttpConstants.AUTHORIZATION_HEADER);
+        HttpClient.deleteHeaderForAllRequests(HttpConstants.COOKIE_HEADER);
 
-        List<String> authPrefs = new ArrayList<String>(1);
-        authPrefs.add(AuthPolicy.BASIC);
-        client.getParams().setParameter(AuthPolicy.AUTH_SCHEME_PRIORITY, authPrefs);
-
-        client.getParams().setAuthenticationPreemptive(mAuthenticationPreemptive);
-        client.getParams().setCredentialCharset(OwnCloudCredentialsFactory.CREDENTIAL_CHARSET);
-        client.getState().setCredentials(
-            AuthScope.ANY,
-            new UsernamePasswordCredentials(mUsername, mPassword)
-        );
+        HttpClient.addHeaderForAllRequests(HttpConstants.AUTHORIZATION_HEADER,
+                Credentials.basic(mUsername, mPassword));
     }
 
     @Override
@@ -87,5 +75,4 @@ public class OwnCloudBasicCredentials implements OwnCloudCredentials {
     public boolean authTokenCanBeRefreshed() {
         return false;
     }
-
 }

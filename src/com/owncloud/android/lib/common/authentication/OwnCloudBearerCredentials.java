@@ -1,5 +1,5 @@
 /* ownCloud Android Library is available under MIT license
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -23,16 +23,9 @@
  */
 package com.owncloud.android.lib.common.authentication;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.commons.httpclient.auth.AuthPolicy;
-import org.apache.commons.httpclient.auth.AuthScope;
-import org.apache.commons.httpclient.auth.AuthState;
-
 import com.owncloud.android.lib.common.OwnCloudClient;
-import com.owncloud.android.lib.common.authentication.oauth.BearerAuthScheme;
-import com.owncloud.android.lib.common.authentication.oauth.BearerCredentials;
+import com.owncloud.android.lib.common.http.HttpClient;
+import com.owncloud.android.lib.common.http.HttpConstants;
 
 public class OwnCloudBearerCredentials implements OwnCloudCredentials {
 
@@ -46,19 +39,12 @@ public class OwnCloudBearerCredentials implements OwnCloudCredentials {
 
     @Override
     public void applyTo(OwnCloudClient client) {
-        AuthPolicy.registerAuthScheme(BearerAuthScheme.AUTH_POLICY, BearerAuthScheme.class);
-        AuthPolicy.registerAuthScheme(AuthState.PREEMPTIVE_AUTH_SCHEME, BearerAuthScheme.class);
+        // Clear previous credentials
+        HttpClient.deleteHeaderForAllRequests(HttpConstants.AUTHORIZATION_HEADER);
+        HttpClient.deleteHeaderForAllRequests(HttpConstants.COOKIE_HEADER);
 
-        List<String> authPrefs = new ArrayList<>(1);
-        authPrefs.add(BearerAuthScheme.AUTH_POLICY);
-        client.getParams().setParameter(AuthPolicy.AUTH_SCHEME_PRIORITY, authPrefs);
-
-        client.getParams().setAuthenticationPreemptive(true);    // true enforces BASIC AUTH ; library is stupid
-        client.getParams().setCredentialCharset(OwnCloudCredentialsFactory.CREDENTIAL_CHARSET);
-        client.getState().setCredentials(
-            AuthScope.ANY,
-            new BearerCredentials(mAccessToken)
-        );
+        HttpClient.addHeaderForAllRequests(HttpConstants.AUTHORIZATION_HEADER,
+                HttpConstants.BEARER_AUTHORIZATION_KEY + mAccessToken);
     }
 
     @Override
@@ -81,5 +67,4 @@ public class OwnCloudBearerCredentials implements OwnCloudCredentials {
     public boolean authTokenCanBeRefreshed() {
         return true;
     }
-
 }

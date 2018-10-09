@@ -24,6 +24,17 @@
 
 package com.owncloud.android.lib.common.operations;
 
+import android.accounts.Account;
+import android.accounts.AccountsException;
+
+import com.owncloud.android.lib.common.accounts.AccountUtils;
+import com.owncloud.android.lib.common.http.HttpConstants;
+import com.owncloud.android.lib.common.http.methods.HttpBaseMethod;
+import com.owncloud.android.lib.common.network.CertificateCombinedException;
+import com.owncloud.android.lib.common.utils.Log_OC;
+
+import org.json.JSONException;
+
 import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -34,35 +45,18 @@ import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-
-import android.accounts.Account;
-import android.accounts.AccountsException;
-
-import com.owncloud.android.lib.common.accounts.AccountUtils.AccountNotFoundException;
-import com.owncloud.android.lib.common.network.CertificateCombinedException;
-import com.owncloud.android.lib.common.utils.Log_OC;
-
-import org.apache.commons.httpclient.ConnectTimeoutException;
-import org.apache.commons.httpclient.Header;
-import org.apache.commons.httpclient.HttpException;
-import org.apache.commons.httpclient.HttpMethod;
-import org.apache.commons.httpclient.HttpStatus;
-import org.apache.jackrabbit.webdav.DavException;
-import org.json.JSONException;
+import java.util.List;
+import java.util.Map;
 
 import javax.net.ssl.SSLException;
+import javax.net.ssl.SSLPeerUnverifiedException;
 
+import at.bitfire.dav4android.exception.DavException;
+import at.bitfire.dav4android.exception.HttpException;
+import okhttp3.Headers;
 
-/**
- * The result of a remote operation required to an ownCloud server.
- *
- * Provides a common classification of remote operation results for all the
- * application.
- *
- * @author David A. Velasco
- * @author David González Verdugo
- */
-public class RemoteOperationResult implements Serializable {
+public class RemoteOperationResult<T extends Object>
+        implements Serializable {
 
     /**
      * Generated - should be refreshed every time the class changes!!
@@ -132,8 +126,7 @@ public class RemoteOperationResult implements Serializable {
     private String mRedirectedLocation;
     private ArrayList<String> mAuthenticate = new ArrayList<>();
     private String mLastPermanentLocation = null;
-
-    private ArrayList<Object> mData;
+    private T mData = null;
 
     /**
      * Public constructor from result code.
@@ -147,7 +140,22 @@ public class RemoteOperationResult implements Serializable {
         mSuccess = (code == ResultCode.OK || code == ResultCode.OK_SSL ||
                 code == ResultCode.OK_NO_SSL ||
                 code == ResultCode.OK_REDIRECT_TO_NON_SECURE_CONNECTION);
-        mData = null;
+    }
+
+    /**
+     * Create a new RemoteOperationResult based on the result given by a previous one.
+     * It does not copy the data.
+     * @param prevRemoteOperation
+     */
+    public RemoteOperationResult(RemoteOperationResult prevRemoteOperation) {
+        mCode = prevRemoteOperation.mCode;
+        mHttpCode = prevRemoteOperation.mHttpCode;
+        mHttpPhrase = prevRemoteOperation.mHttpPhrase;
+        mAuthenticate = prevRemoteOperation.mAuthenticate;
+        mException = prevRemoteOperation.mException;
+        mLastPermanentLocation = prevRemoteOperation.mLastPermanentLocation;
+        mSuccess = prevRemoteOperation.mSuccess;
+        mRedirectedLocation = prevRemoteOperation.mRedirectedLocation;
     }
 
     /**
@@ -171,33 +179,34 @@ public class RemoteOperationResult implements Serializable {
         } else if (e instanceof SocketTimeoutException) {
             mCode = ResultCode.TIMEOUT;
 
-        } else if (e instanceof ConnectTimeoutException) {
-            mCode = ResultCode.TIMEOUT;
-
         } else if (e instanceof MalformedURLException) {
             mCode = ResultCode.INCORRECT_ADDRESS;
 
         } else if (e instanceof UnknownHostException) {
             mCode = ResultCode.HOST_NOT_AVAILABLE;
 
-        } else if (e instanceof AccountNotFoundException) {
+        } else if (e instanceof AccountUtils.AccountNotFoundException) {
             mCode = ResultCode.ACCOUNT_NOT_FOUND;
 
         } else if (e instanceof AccountsException) {
             mCode = ResultCode.ACCOUNT_EXCEPTION;
 
         } else if (e instanceof SSLException || e instanceof RuntimeException) {
-            CertificateCombinedException se = getCertificateCombinedException(e);
-            if (se != null) {
-                mException = se;
-                if (se.isRecoverable()) {
-                    mCode = ResultCode.SSL_RECOVERABLE_PEER_UNVERIFIED;
-                }
-            } else if (e instanceof RuntimeException) {
-                mCode = ResultCode.HOST_NOT_AVAILABLE;
-
+            if(e instanceof SSLPeerUnverifiedException) {
+                mCode = ResultCode.SSL_RECOVERABLE_PEER_UNVERIFIED;
             } else {
-                mCode = ResultCode.SSL_ERROR;
+                CertificateCombinedException se = getCertificateCombinedException(e);
+                if (se != null) {
+                    mException = se;
+                    if (se.isRecoverable()) {
+                        mCode = ResultCode.SSL_RECOVERABLE_PEER_UNVERIFIED;
+                    }
+                } else if (e instanceof RuntimeException) {
+                    mCode = ResultCode.HOST_NOT_AVAILABLE;
+
+                } else {
+                    mCode = ResultCode.SSL_ERROR;
+                }
             }
 
         } else if (e instanceof FileNotFoundException) {
@@ -206,7 +215,6 @@ public class RemoteOperationResult implements Serializable {
         } else {
             mCode = ResultCode.UNKNOWN_ERROR;
         }
-
     }
 
     /**
@@ -216,25 +224,21 @@ public class RemoteOperationResult implements Serializable {
      *
      * Determines a {@link ResultCode} from the already executed method received as a parameter. Generally,
      * will depend on the HTTP code and HTTP response headers received. In some cases will inspect also the
-     * response body.
+     * response body
      *
-     * @param success    The operation was considered successful or not.
-     * @param httpMethod HTTP/DAV method already executed which response will be examined to interpret the
-     *                   result.
+     * @param httpMethod
+     * @throws IOException
      */
-    public RemoteOperationResult(boolean success, HttpMethod httpMethod) throws IOException {
-        this(
-                success,
-                httpMethod.getStatusCode(),
-                httpMethod.getStatusText(),
+    public RemoteOperationResult(HttpBaseMethod httpMethod) throws IOException {
+        this(httpMethod.getStatusCode(),
+                httpMethod.getStatusMessage(),
                 httpMethod.getResponseHeaders()
         );
 
-        if (mHttpCode == HttpStatus.SC_BAD_REQUEST) {   // 400
-
+        if (mHttpCode == HttpConstants.HTTP_BAD_REQUEST) {   // 400
             String bodyResponse = httpMethod.getResponseBodyAsString();
-            // do not get for other HTTP codes!; could not be available
 
+            // do not get for other HTTP codes!; could not be available
             if (bodyResponse != null && bodyResponse.length() > 0) {
                 InputStream is = new ByteArrayInputStream(bodyResponse.getBytes());
                 InvalidCharacterExceptionParser xmlParser = new InvalidCharacterExceptionParser();
@@ -250,34 +254,40 @@ public class RemoteOperationResult implements Serializable {
             }
         }
 
-        if (mHttpCode == HttpStatus.SC_FORBIDDEN) {  // 403
-
-            parseErrorMessageAndSetCode(httpMethod, ResultCode.SPECIFIC_FORBIDDEN);
-        }
-
-        if (mHttpCode == HttpStatus.SC_UNSUPPORTED_MEDIA_TYPE) {    // 415
-
-            parseErrorMessageAndSetCode(httpMethod, ResultCode.SPECIFIC_UNSUPPORTED_MEDIA_TYPE);
-        }
-
-        if (mHttpCode == HttpStatus.SC_SERVICE_UNAVAILABLE) {   // 503
-
-            parseErrorMessageAndSetCode(httpMethod, ResultCode.SPECIFIC_SERVICE_UNAVAILABLE);
+        // before
+        switch (mHttpCode) {
+            case HttpConstants.HTTP_FORBIDDEN:
+                parseErrorMessageAndSetCode(
+                        httpMethod.getResponseBodyAsString(),
+                        ResultCode.SPECIFIC_FORBIDDEN
+                );
+                break;
+            case HttpConstants.HTTP_UNSUPPORTED_MEDIA_TYPE:
+                parseErrorMessageAndSetCode(
+                        httpMethod.getResponseBodyAsString(),
+                        ResultCode.SPECIFIC_UNSUPPORTED_MEDIA_TYPE
+                );
+                break;
+            case HttpConstants.HTTP_SERVICE_UNAVAILABLE:
+                parseErrorMessageAndSetCode(
+                        httpMethod.getResponseBodyAsString(),
+                        ResultCode.SPECIFIC_SERVICE_UNAVAILABLE
+                );
+                break;
+            default:
+                break;
         }
     }
 
     /**
      * Parse the error message included in the body response, if any, and set the specific result
      * code
-     * @param httpMethod HTTP/DAV method already executed which response body will be parsed to get
-     *                   the specific error message
-     * @param resultCode specific result code
+     *
+     * @param bodyResponse okHttp response body
+     * @param resultCode our own custom result code
      * @throws IOException
      */
-    private void parseErrorMessageAndSetCode(HttpMethod httpMethod, ResultCode resultCode)
-            throws IOException {
-
-        String bodyResponse = httpMethod.getResponseBodyAsString();
+    private void parseErrorMessageAndSetCode(String bodyResponse, ResultCode resultCode) {
 
         if (bodyResponse != null && bodyResponse.length() > 0) {
             InputStream is = new ByteArrayInputStream(bodyResponse.getBytes());
@@ -301,31 +311,29 @@ public class RemoteOperationResult implements Serializable {
      * To be used when the result needs to be interpreted from HTTP response elements that could come from
      * different requests (WARNING: black magic, try to avoid).
      *
-     * If all the fields come from the same HTTP/DAV response, {@link #RemoteOperationResult(boolean, HttpMethod)}
-     * should be used instead.
      *
      * Determines a {@link ResultCode} depending on the HTTP code and HTTP response headers received.
      *
-     * @param success     The operation was considered successful or not.
      * @param httpCode    HTTP status code returned by an HTTP/DAV method.
      * @param httpPhrase  HTTP status line phrase returned by an HTTP/DAV method
-     * @param httpHeaders HTTP response header returned by an HTTP/DAV method
+     * @param headers HTTP response header returned by an HTTP/DAV method
      */
-    public RemoteOperationResult(boolean success, int httpCode, String httpPhrase, Header[] httpHeaders) {
-        this(success, httpCode, httpPhrase);
-        if (httpHeaders != null) {
-            for (Header httpHeader : httpHeaders) {
-                if ("location".equals(httpHeader.getName().toLowerCase())) {
-                    mRedirectedLocation = httpHeader.getValue();
+    public RemoteOperationResult(int httpCode, String httpPhrase, Headers headers) {
+        this(httpCode, httpPhrase);
+        if (headers != null) {
+            for (Map.Entry<String, List<String>> header : headers.toMultimap().entrySet()) {
+                if ("location".equals(header.getKey().toLowerCase())) {
+                    mRedirectedLocation = header.getValue().get(0);
                     continue;
                 }
-                if ("www-authenticate".equals(httpHeader.getName().toLowerCase())) {
-                    mAuthenticate.add(httpHeader.getValue().toLowerCase());
+                if ("www-authenticate".equals(header.getKey().toLowerCase())) {
+                    mAuthenticate.add(header.getValue().get(0).toLowerCase());
                 }
             }
         }
         if (isIdPRedirection()) {
-            mCode = ResultCode.UNAUTHORIZED;    // overrides default ResultCode.UNKNOWN
+            // overrides default ResultCode.UNKNOWN
+            mCode = ResultCode.UNAUTHORIZED;
         }
     }
 
@@ -334,58 +342,47 @@ public class RemoteOperationResult implements Serializable {
      *
      * Determines a {@link ResultCode} depending of the type of the exception.
      *
-     * @param success    Operation was successful or not.
      * @param httpCode   HTTP status code returned by the HTTP/DAV method.
      * @param httpPhrase HTTP status line phrase returned by the HTTP/DAV method
      */
-    private RemoteOperationResult(boolean success, int httpCode, String httpPhrase) {
-        mSuccess = success;
+    private RemoteOperationResult(int httpCode, String httpPhrase) {
         mHttpCode = httpCode;
         mHttpPhrase = httpPhrase;
 
-        if (success) {
-            mCode = ResultCode.OK;
-
-        } else if (httpCode > 0) {
+        if (httpCode > 0) {
             switch (httpCode) {
-                case HttpStatus.SC_UNAUTHORIZED:                    // 401
+                case HttpConstants.HTTP_UNAUTHORIZED:                    // 401
                     mCode = ResultCode.UNAUTHORIZED;
                     break;
-                case HttpStatus.SC_FORBIDDEN:                       // 403
+                case HttpConstants.HTTP_FORBIDDEN:                       // 403
                     mCode = ResultCode.FORBIDDEN;
                     break;
-                case HttpStatus.SC_NOT_FOUND:                       // 404
+                case HttpConstants.HTTP_NOT_FOUND:                       // 404
                     mCode = ResultCode.FILE_NOT_FOUND;
                     break;
-                case HttpStatus.SC_CONFLICT:                        // 409
+                case HttpConstants.HTTP_CONFLICT:                        // 409
                     mCode = ResultCode.CONFLICT;
                     break;
-                case HttpStatus.SC_INTERNAL_SERVER_ERROR:           // 500
+                case HttpConstants.HTTP_INTERNAL_SERVER_ERROR:           // 500
                     mCode = ResultCode.INSTANCE_NOT_CONFIGURED;     // assuming too much...
                     break;
-                case HttpStatus.SC_SERVICE_UNAVAILABLE:             // 503
+                case HttpConstants.HTTP_SERVICE_UNAVAILABLE:             // 503
                     mCode = ResultCode.SERVICE_UNAVAILABLE;
                     break;
-                case HttpStatus.SC_INSUFFICIENT_STORAGE:            // 507
+                case HttpConstants.HTTP_INSUFFICIENT_STORAGE:            // 507
                     mCode = ResultCode.QUOTA_EXCEEDED;              // surprise!
                     break;
                 default:
                     mCode = ResultCode.UNHANDLED_HTTP_CODE;         // UNKNOWN ERROR
                     Log_OC.d(TAG,
                             "RemoteOperationResult has processed UNHANDLED_HTTP_CODE: " +
+
                                     mHttpCode + " " + mHttpPhrase
                     );
             }
         }
     }
 
-    public void setData(ArrayList<Object> items) {
-        mData = items;
-    }
-
-    public ArrayList<Object> getData() {
-        return mData;
-    }
 
     public boolean isSuccess() {
         return mSuccess;
@@ -449,9 +446,6 @@ public class RemoteOperationResult implements Serializable {
             } else if (mException instanceof SocketTimeoutException) {
                 return "Socket timeout exception";
 
-            } else if (mException instanceof ConnectTimeoutException) {
-                return "Connect timeout exception";
-
             } else if (mException instanceof MalformedURLException) {
                 return "Malformed URL exception";
 
@@ -476,9 +470,9 @@ public class RemoteOperationResult implements Serializable {
             } else if (mException instanceof IOException) {
                 return "Unrecovered transport exception";
 
-            } else if (mException instanceof AccountNotFoundException) {
+            } else if (mException instanceof AccountUtils.AccountNotFoundException) {
                 Account failedAccount =
-                        ((AccountNotFoundException) mException).getFailedAccount();
+                        ((AccountUtils.AccountNotFoundException) mException).getFailedAccount();
                 return mException.getMessage() + " (" +
                         (failedAccount != null ? failedAccount.name : "NULL") + ")";
 
@@ -530,7 +524,7 @@ public class RemoteOperationResult implements Serializable {
     }
 
     public boolean isServerFail() {
-        return (mHttpCode >= HttpStatus.SC_INTERNAL_SERVER_ERROR);
+        return (mHttpCode >= HttpConstants.HTTP_INTERNAL_SERVER_ERROR);
     }
 
     public boolean isException() {
@@ -572,4 +566,15 @@ public class RemoteOperationResult implements Serializable {
         mLastPermanentLocation = lastPermanentLocation;
     }
 
+    public void setSuccess(boolean success) {
+        this.mSuccess = success;
+    }
+
+    public void setData(T data) {
+        mData = data;
+    }
+
+    public T getData() {
+        return mData;
+    }
 }

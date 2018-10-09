@@ -1,5 +1,5 @@
 /* ownCloud Android Library is available under MIT license
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   Copyright (C) 2018 ownCloud GmbH.
  *   
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -24,14 +24,8 @@
 
 package com.owncloud.android.lib.common;
 
-import java.io.IOException;
-import java.util.Iterator;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
-
-import org.apache.commons.httpclient.cookie.CookiePolicy;
-
 import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.accounts.AuthenticatorException;
 import android.accounts.OperationCanceledException;
 import android.content.Context;
@@ -39,17 +33,23 @@ import android.net.Uri;
 import android.util.Log;
 
 import com.owncloud.android.lib.common.accounts.AccountUtils;
-import com.owncloud.android.lib.common.accounts.AccountUtils.AccountNotFoundException;
-import com.owncloud.android.lib.common.authentication.OwnCloudCredentials;
+import com.owncloud.android.lib.common.authentication.OwnCloudSamlSsoCredentials;
 import com.owncloud.android.lib.common.utils.Log_OC;
+
+import java.io.IOException;
+import java.util.Iterator;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 /**
  * Implementation of {@link OwnCloudClientManager}
- * <p>
+ *
  * TODO check multithreading safety
  *
  * @author David A. Velasco
  * @author masensio
+ * @author Christian Schabesberger
+ * @author David González Verdugo
  */
 
 public class SingleSessionManager implements OwnCloudClientManager {
@@ -57,16 +57,15 @@ public class SingleSessionManager implements OwnCloudClientManager {
     private static final String TAG = SingleSessionManager.class.getSimpleName();
 
     private ConcurrentMap<String, OwnCloudClient> mClientsWithKnownUsername =
-        new ConcurrentHashMap<String, OwnCloudClient>();
+        new ConcurrentHashMap<>();
 
     private ConcurrentMap<String, OwnCloudClient> mClientsWithUnknownUsername =
-        new ConcurrentHashMap<String, OwnCloudClient>();
+        new ConcurrentHashMap<>();
 
 
     @Override
-    public OwnCloudClient getClientFor(OwnCloudAccount account, Context context)
-        throws AccountNotFoundException, OperationCanceledException, AuthenticatorException,
-        IOException {
+    public OwnCloudClient getClientFor(OwnCloudAccount account, Context context) throws OperationCanceledException,
+            AuthenticatorException, IOException {
 
         if (Log.isLoggable(TAG, Log.DEBUG)) {
             Log_OC.d(TAG, "getClientFor starting ");
@@ -80,8 +79,7 @@ public class SingleSessionManager implements OwnCloudClientManager {
         String sessionName = account.getCredentials() == null ? "" :
             AccountUtils.buildAccountName(
                 account.getBaseUri(),
-                account.getCredentials().getAuthToken()
-            );
+                account.getCredentials().getAuthToken());
 
         if (accountName != null) {
             client = mClientsWithKnownUsername.get(accountName);
@@ -115,16 +113,17 @@ public class SingleSessionManager implements OwnCloudClientManager {
                 account.getBaseUri(),
                 context.getApplicationContext(),
                 true);    // TODO remove dependency on OwnCloudClientFactory
-            client.getParams().setCookiePolicy(CookiePolicy.BROWSER_COMPATIBILITY);
             client.setAccount(account);
             client.setContext(context);
             client.setOwnCloudClientManager(this);
 
-            // enable cookie tracking
-            AccountUtils.restoreCookies(account.getSavedAccount(), client, context);
-
             account.loadCredentials(context);
             client.setCredentials(account.getCredentials());
+
+            if (client.getCredentials() instanceof OwnCloudSamlSsoCredentials) {
+                client.disableAutomaticCookiesHandling();
+            }
+
             if (accountName != null) {
                 mClientsWithKnownUsername.put(accountName, client);
                 if (Log.isLoggable(TAG, Log.VERBOSE)) {
@@ -141,7 +140,9 @@ public class SingleSessionManager implements OwnCloudClientManager {
             if (!reusingKnown && Log.isLoggable(TAG, Log.VERBOSE)) {
                 Log_OC.v(TAG, "reusing client for session " + sessionName);
             }
-            keepCredentialsUpdated(account, client);
+
+            keepCredentialsUpdated(client);
+            keepCookiesUpdated(context, account, client);
             keepUriUpdated(account, client);
         }
 
@@ -154,7 +155,6 @@ public class SingleSessionManager implements OwnCloudClientManager {
 
     @Override
     public OwnCloudClient removeClientFor(OwnCloudAccount account) {
-
         if (Log.isLoggable(TAG, Log.DEBUG)) {
             Log_OC.d(TAG, "removeClientFor starting ");
         }
@@ -185,14 +185,11 @@ public class SingleSessionManager implements OwnCloudClientManager {
             Log_OC.d(TAG, "removeClientFor finishing ");
         }
         return null;
-
     }
 
 
     @Override
-    public void saveAllClients(Context context, String accountType)
-        throws AccountNotFoundException, AuthenticatorException, IOException,
-        OperationCanceledException {
+    public void saveAllClients(Context context, String accountType) {
 
         if (Log.isLoggable(TAG, Log.DEBUG)) {
             Log_OC.d(TAG, "Saving sessions... ");
@@ -215,14 +212,19 @@ public class SingleSessionManager implements OwnCloudClientManager {
         }
     }
 
+    private void keepCredentialsUpdated(OwnCloudClient reusedClient) {
+        reusedClient.applyCredentials();
+    }
 
-    private void keepCredentialsUpdated(OwnCloudAccount account, OwnCloudClient reusedClient) {
-        OwnCloudCredentials recentCredentials = account.getCredentials();
-        if (recentCredentials != null && !recentCredentials.getAuthToken().equals(
-            reusedClient.getCredentials().getAuthToken())) {
-            reusedClient.setCredentials(recentCredentials);
+    private void keepCookiesUpdated(Context context, OwnCloudAccount account, OwnCloudClient reusedClient) {
+        AccountManager am = AccountManager.get(context.getApplicationContext());
+        if (am != null && account.getSavedAccount() != null) {
+            String recentCookies = am.getUserData(account.getSavedAccount(), AccountUtils.Constants.KEY_COOKIES);
+            String previousCookies = reusedClient.getCookiesString();
+            if (recentCookies != null && previousCookies != "" && !recentCookies.equals(previousCookies)) {
+                AccountUtils.restoreCookies(account.getSavedAccount(), reusedClient, context);
+            }
         }
-
     }
 
     // this method is just a patch; we need to distinguish accounts in the same host but
@@ -232,8 +234,5 @@ public class SingleSessionManager implements OwnCloudClientManager {
         if (!recentUri.equals(reusedClient.getBaseUri())) {
             reusedClient.setBaseUri(recentUri);
         }
-
     }
-
-
 }

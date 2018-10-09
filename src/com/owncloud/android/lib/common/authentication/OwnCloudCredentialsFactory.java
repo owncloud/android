@@ -1,5 +1,5 @@
 /* ownCloud Android Library is available under MIT license
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -25,6 +25,8 @@
 package com.owncloud.android.lib.common.authentication;
 
 import com.owncloud.android.lib.common.OwnCloudClient;
+import com.owncloud.android.lib.common.http.HttpClient;
+import com.owncloud.android.lib.common.http.HttpConstants;
 
 public class OwnCloudCredentialsFactory {
 
@@ -64,8 +66,9 @@ public class OwnCloudCredentialsFactory {
 
         @Override
         public void applyTo(OwnCloudClient client) {
-            client.getState().clearCredentials();
-            client.getState().clearCookies();
+            // Clear previous basic credentials
+            HttpClient.deleteHeaderForAllRequests(HttpConstants.AUTHORIZATION_HEADER);
+            HttpClient.deleteHeaderForAllRequests(HttpConstants.COOKIE_HEADER);
         }
 
         @Override
@@ -89,5 +92,4 @@ public class OwnCloudCredentialsFactory {
             return null;
         }
     }
-
 }

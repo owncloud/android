@@ -1,5 +1,5 @@
 /* ownCloud Android Library is available under MIT license
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   Copyright (C) 2018 ownCloud GmbH.
  *   
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -24,40 +24,41 @@
 
 package com.owncloud.android.lib.resources.status;
 
-import java.util.ArrayList;
-
-import org.apache.commons.httpclient.HttpStatus;
-import org.apache.commons.httpclient.methods.GetMethod;
-import org.apache.commons.httpclient.params.HttpMethodParams;
-import org.apache.commons.httpclient.params.HttpParams;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.Uri;
 
 import com.owncloud.android.lib.common.OwnCloudClient;
-import com.owncloud.android.lib.common.OwnCloudClientManagerFactory;
-import com.owncloud.android.lib.common.accounts.AccountUtils;
+import com.owncloud.android.lib.common.http.HttpConstants;
+import com.owncloud.android.lib.common.http.methods.nonwebdav.GetMethod;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.net.URL;
+import java.util.concurrent.TimeUnit;
+import javax.net.ssl.SSLException;
+
+import static com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode.OK;
 
 /**
  * Checks if the server is valid and if the server supports the Share API
  *
  * @author David A. Velasco
  * @author masensio
+ * @author David González Verdugo
  */
 
-public class GetRemoteStatusOperation extends RemoteOperation {
+public class GetRemoteStatusOperation extends RemoteOperation<OwnCloudVersion> {
 
     /**
      * Maximum time to wait for a response from the server when the connection is being tested,
      * in MILLISECONDs.
      */
-    public static final int TRY_CONNECTION_TIMEOUT = 5000;
+    public static final long TRY_CONNECTION_TIMEOUT = 5000;
 
     private static final String TAG = GetRemoteStatusOperation.class.getSimpleName();
 
@@ -66,7 +67,7 @@ public class GetRemoteStatusOperation extends RemoteOperation {
     private static final String HTTPS_PREFIX = "https://";
     private static final String HTTP_PREFIX = "http://";
 
-    private RemoteOperationResult mLatestResult;
+    private RemoteOperationResult<OwnCloudVersion> mLatestResult;
     private Context mContext;
 
     public GetRemoteStatusOperation(Context context) {
@@ -75,20 +76,25 @@ public class GetRemoteStatusOperation extends RemoteOperation {
 
     private boolean tryConnection(OwnCloudClient client) {
         boolean retval = false;
-        GetMethod get = null;
         String baseUrlSt = client.getBaseUri().toString();
         try {
-            get = new GetMethod(baseUrlSt + OwnCloudClient.STATUS_PATH);
+            GetMethod getMethod = new GetMethod(new URL(baseUrlSt + OwnCloudClient.STATUS_PATH));
 
-            HttpParams params = get.getParams().getDefaultParams();
-            params.setParameter(HttpMethodParams.USER_AGENT,
-                OwnCloudClientManagerFactory.getUserAgent());
-            get.getParams().setDefaults(params);
+            getMethod.setReadTimeout(TRY_CONNECTION_TIMEOUT, TimeUnit.SECONDS);
+            getMethod.setConnectionTimeout(TRY_CONNECTION_TIMEOUT, TimeUnit.SECONDS);
 
             client.setFollowRedirects(false);
             boolean isRedirectToNonSecureConnection = false;
-            int status = client.executeMethod(get, TRY_CONNECTION_TIMEOUT, TRY_CONNECTION_TIMEOUT);
-            mLatestResult = new RemoteOperationResult((status == HttpStatus.SC_OK), get);
+            int status;
+            try {
+                status = client.executeHttpMethod(getMethod);
+                mLatestResult = isSuccess(status)
+                        ? new RemoteOperationResult<>(OK)
+                        : new RemoteOperationResult<>(getMethod);
+            } catch (SSLException sslE) {
+                mLatestResult = new RemoteOperationResult(sslE);
+                return false;
+            }
 
             String redirectedLocation = mLatestResult.getRedirectedLocation();
             while (redirectedLocation != null && redirectedLocation.length() > 0
@@ -98,61 +104,53 @@ public class GetRemoteStatusOperation extends RemoteOperation {
                     baseUrlSt.startsWith(HTTPS_PREFIX) &&
                         redirectedLocation.startsWith(HTTP_PREFIX)
                 );
-                get.releaseConnection();
-                get = new GetMethod(redirectedLocation);
-                status = client.executeMethod(get, TRY_CONNECTION_TIMEOUT, TRY_CONNECTION_TIMEOUT);
-                mLatestResult = new RemoteOperationResult(
-                    (status == HttpStatus.SC_OK),
-                    get
-                );
+
+                getMethod = new GetMethod(new URL(redirectedLocation));
+                getMethod.setReadTimeout(TRY_CONNECTION_TIMEOUT, TimeUnit.SECONDS);
+                getMethod.setConnectionTimeout(TRY_CONNECTION_TIMEOUT, TimeUnit.SECONDS);
+
+                status = client.executeHttpMethod(getMethod);
+                mLatestResult = new RemoteOperationResult<>(getMethod);
                 redirectedLocation = mLatestResult.getRedirectedLocation();
             }
 
-            String response = get.getResponseBodyAsString();
-            if (status == HttpStatus.SC_OK) {
-                JSONObject json = new JSONObject(response);
-                if (!json.getBoolean(NODE_INSTALLED)) {
+            if (isSuccess(status)) {
+
+                JSONObject respJSON = new JSONObject(getMethod.getResponseBodyAsString());
+                if (!respJSON.getBoolean(NODE_INSTALLED)) {
                     mLatestResult = new RemoteOperationResult(
-                        RemoteOperationResult.ResultCode.INSTANCE_NOT_CONFIGURED);
+                            RemoteOperationResult.ResultCode.INSTANCE_NOT_CONFIGURED);
                 } else {
-                    String version = json.getString(NODE_VERSION);
+                    String version = respJSON.getString(NODE_VERSION);
                     OwnCloudVersion ocVersion = new OwnCloudVersion(version);
                     /// the version object will be returned even if the version is invalid, no error code;
                     /// every app will decide how to act if (ocVersion.isVersionValid() == false)
 
                     if (isRedirectToNonSecureConnection) {
-                        mLatestResult = new RemoteOperationResult(
+                        mLatestResult = new RemoteOperationResult<>(
                             RemoteOperationResult.ResultCode.
-                                OK_REDIRECT_TO_NON_SECURE_CONNECTION
-                        );
+                                OK_REDIRECT_TO_NON_SECURE_CONNECTION);
                     } else {
-                        mLatestResult = new RemoteOperationResult(
+                        mLatestResult = new RemoteOperationResult<>(
                             baseUrlSt.startsWith(HTTPS_PREFIX) ?
                                 RemoteOperationResult.ResultCode.OK_SSL :
-                                RemoteOperationResult.ResultCode.OK_NO_SSL
-                        );
+                                RemoteOperationResult.ResultCode.OK_NO_SSL);
                     }
 
-                    ArrayList<Object> data = new ArrayList<Object>();
-                    data.add(ocVersion);
-                    mLatestResult.setData(data);
+                    mLatestResult.setData(ocVersion);
                     retval = true;
                 }
 
             } else {
-                mLatestResult = new RemoteOperationResult(false, get);
+                mLatestResult = new RemoteOperationResult<>(getMethod);
             }
 
         } catch (JSONException e) {
-            mLatestResult = new RemoteOperationResult(
+            mLatestResult = new RemoteOperationResult<>(
                 RemoteOperationResult.ResultCode.INSTANCE_NOT_CONFIGURED);
 
         } catch (Exception e) {
-            mLatestResult = new RemoteOperationResult(e);
-
-        } finally {
-            if (get != null)
-                get.releaseConnection();
+            mLatestResult = new RemoteOperationResult<>(e);
         }
 
         if (mLatestResult.isSuccess()) {
@@ -177,9 +175,9 @@ public class GetRemoteStatusOperation extends RemoteOperation {
     }
 
     @Override
-    protected RemoteOperationResult run(OwnCloudClient client) {
+    protected RemoteOperationResult<OwnCloudVersion> run(OwnCloudClient client) {
         if (!isOnline()) {
-            return new RemoteOperationResult(RemoteOperationResult.ResultCode.NO_NETWORK_CONNECTION);
+            return new RemoteOperationResult<>(RemoteOperationResult.ResultCode.NO_NETWORK_CONNECTION);
         }
         String baseUriStr = client.getBaseUri().toString();
         if (baseUriStr.startsWith(HTTP_PREFIX) || baseUriStr.startsWith(HTTPS_PREFIX)) {
@@ -197,4 +195,7 @@ public class GetRemoteStatusOperation extends RemoteOperation {
         return mLatestResult;
     }
 
+    private boolean isSuccess(int status) {
+        return (status == HttpConstants.HTTP_OK);
+    }
 }

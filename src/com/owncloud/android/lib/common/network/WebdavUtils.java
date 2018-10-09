@@ -32,11 +32,7 @@ import java.util.Locale;
 
 import android.net.Uri;
 
-import org.apache.commons.httpclient.Header;
-import org.apache.commons.httpclient.HttpMethod;
-import org.apache.jackrabbit.webdav.property.DavPropertyName;
-import org.apache.jackrabbit.webdav.property.DavPropertyNameSet;
-import org.apache.jackrabbit.webdav.xml.Namespace;
+import com.owncloud.android.lib.common.http.methods.HttpBaseMethod;
 
 public class WebdavUtils {
     public static final SimpleDateFormat DISPLAY_DATE_FORMAT = new SimpleDateFormat(
@@ -86,72 +82,6 @@ public class WebdavUtils {
     }
 
     /**
-     * Builds a DavPropertyNameSet with all prop
-     * For using instead of DavConstants.PROPFIND_ALL_PROP
-     * @return
-     */
-    public static DavPropertyNameSet getAllPropSet(){
-        DavPropertyNameSet propSet = new DavPropertyNameSet();
-        propSet.add(DavPropertyName.DISPLAYNAME);
-        propSet.add(DavPropertyName.GETCONTENTTYPE);
-        propSet.add(DavPropertyName.RESOURCETYPE);
-        propSet.add(DavPropertyName.GETCONTENTLENGTH);
-        propSet.add(DavPropertyName.GETLASTMODIFIED);
-        propSet.add(DavPropertyName.CREATIONDATE);
-        propSet.add(DavPropertyName.GETETAG);
-        propSet.add(DavPropertyName.create(WebdavEntry.PROPERTY_QUOTA_USED_BYTES));
-        propSet.add(DavPropertyName.create(WebdavEntry.PROPERTY_QUOTA_AVAILABLE_BYTES));
-        propSet.add(WebdavEntry.EXTENDED_PROPERTY_NAME_PERMISSIONS,
-                Namespace.getNamespace(WebdavEntry.NAMESPACE_OC));
-        propSet.add(WebdavEntry.EXTENDED_PROPERTY_NAME_REMOTE_ID,
-                Namespace.getNamespace(WebdavEntry.NAMESPACE_OC));
-        propSet.add(WebdavEntry.EXTENDED_PROPERTY_NAME_SIZE,
-                Namespace.getNamespace(WebdavEntry.NAMESPACE_OC));
-        propSet.add(WebdavEntry.EXTENDED_PROPERTY_NAME_PRIVATE_LINK,
-            Namespace.getNamespace(WebdavEntry.NAMESPACE_OC));
-
-        return propSet;
-    }
-
-    /**
-     * Builds a DavPropertyNameSet with properties for files
-     * @return
-     */
-    public static DavPropertyNameSet getFilePropSet(){
-        DavPropertyNameSet propSet = new DavPropertyNameSet();
-        propSet.add(DavPropertyName.DISPLAYNAME);
-        propSet.add(DavPropertyName.GETCONTENTTYPE);
-        propSet.add(DavPropertyName.RESOURCETYPE);
-        propSet.add(DavPropertyName.GETCONTENTLENGTH);
-        propSet.add(DavPropertyName.GETLASTMODIFIED);
-        propSet.add(DavPropertyName.CREATIONDATE);
-        propSet.add(DavPropertyName.GETETAG);
-        propSet.add(WebdavEntry.EXTENDED_PROPERTY_NAME_PERMISSIONS,
-                Namespace.getNamespace(WebdavEntry.NAMESPACE_OC));
-        propSet.add(WebdavEntry.EXTENDED_PROPERTY_NAME_REMOTE_ID,
-                Namespace.getNamespace(WebdavEntry.NAMESPACE_OC));
-        propSet.add(WebdavEntry.EXTENDED_PROPERTY_NAME_SIZE,
-                Namespace.getNamespace(WebdavEntry.NAMESPACE_OC));
-        propSet.add(WebdavEntry.EXTENDED_PROPERTY_NAME_SIZE,
-            Namespace.getNamespace(WebdavEntry.NAMESPACE_OC));
-        propSet.add(WebdavEntry.EXTENDED_PROPERTY_NAME_PRIVATE_LINK,
-            Namespace.getNamespace(WebdavEntry.NAMESPACE_OC));
-
-        return propSet;
-    }
-
-    /**
-     * Builds a DavPropertyNameSet with properties for user quotas
-     * @return set of quota properties
-     */
-    public static DavPropertyNameSet getQuotaPropSet() {
-        DavPropertyNameSet propSet = new DavPropertyNameSet();
-        propSet.add(DavPropertyName.create(WebdavEntry.PROPERTY_QUOTA_AVAILABLE_BYTES));
-        propSet.add(DavPropertyName.create(WebdavEntry.PROPERTY_QUOTA_USED_BYTES));
-        return propSet;
-    }
-
-    /**
      *
      * @param rawEtag
      * @return
@@ -169,28 +99,26 @@ public class WebdavUtils {
         return rawEtag;
     }
 
-
     /**
      *
-     * @param method
-     * @return
+     * @param httpBaseMethod from which to get the etag
+     * @return etag from response
      */
-    public static String getEtagFromResponse(HttpMethod method) {
-        Header eTag = method.getResponseHeader("OC-ETag");
+    public static String getEtagFromResponse(HttpBaseMethod httpBaseMethod) {
+        String eTag = httpBaseMethod.getResponseHeader("OC-ETag");
         if (eTag == null) {
-            eTag = method.getResponseHeader("oc-etag");
+            eTag = httpBaseMethod.getResponseHeader("oc-etag");
         }
         if (eTag == null) {
-            eTag = method.getResponseHeader("ETag");
+            eTag = httpBaseMethod.getResponseHeader("ETag");
         }
         if (eTag == null) {
-            eTag = method.getResponseHeader("etag");
+            eTag = httpBaseMethod.getResponseHeader("etag");
         }
         String result = "";
         if (eTag != null) {
-            result = parseEtag(eTag.getValue());
+            result = eTag;
         }
         return result;
     }
-
 }

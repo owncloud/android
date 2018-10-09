@@ -1,5 +1,5 @@
 /* ownCloud Android Library is available under MIT license
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   Copyright (C) 2018 ownCloud GmbH.
  *   
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -24,9 +24,6 @@
 
 package com.owncloud.android.lib.common;
 
-import java.io.IOException;
-import java.security.GeneralSecurityException;
-
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.accounts.AccountManagerFuture;
@@ -40,21 +37,14 @@ import android.os.Bundle;
 import com.owncloud.android.lib.common.accounts.AccountTypeUtils;
 import com.owncloud.android.lib.common.accounts.AccountUtils;
 import com.owncloud.android.lib.common.accounts.AccountUtils.AccountNotFoundException;
-import com.owncloud.android.lib.common.network.NetworkUtils;
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentialsFactory;
-import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
+
+import java.io.IOException;
 
 public class OwnCloudClientFactory {
     
     final private static String TAG = OwnCloudClientFactory.class.getSimpleName();
-    
-    /** Default timeout for waiting data from the server */
-    public static final int DEFAULT_DATA_TIMEOUT = 60000;
-    
-    /** Default timeout for establishing a connection */
-    public static final int DEFAULT_CONNECTION_TIMEOUT = 60000;
-
 
     /**
      * Creates a OwnCloudClient setup for an ownCloud account
@@ -122,9 +112,6 @@ public class OwnCloudClientFactory {
 
 
         } else {
-            //String password = am.getPassword(account);
-            //String password = am.blockingGetAuthToken(account, MainApp.getAuthTokenTypePass(),
-            // false);
             AccountManagerFuture<Bundle> future =  am.getAuthToken(
                 account,
                 AccountTypeUtils.getAuthTokenTypePass(account.type),
@@ -162,24 +149,12 @@ public class OwnCloudClientFactory {
      */
     public static OwnCloudClient createOwnCloudClient(Uri uri, Context context,
                                                       boolean followRedirects) {
-        try {
-            NetworkUtils.registerAdvancedSslContext(true, context);
-        }  catch (GeneralSecurityException e) {
-            Log_OC.e(TAG, "Advanced SSL Context could not be loaded. Default SSL management in" +
-                    " the system will be used for HTTPS connections", e);
-            
-        } catch (IOException e) {
-            Log_OC.e(TAG, "The local server truststore could not be read. Default SSL management" +
-                    " in the system will be used for HTTPS connections", e);
-        }
-        
-        OwnCloudClient client = new OwnCloudClient(uri, NetworkUtils.getMultiThreadedConnManager());
-        client.setDefaultTimeouts(DEFAULT_DATA_TIMEOUT, DEFAULT_CONNECTION_TIMEOUT);
+        OwnCloudClient client = new OwnCloudClient(uri);
+
         client.setFollowRedirects(followRedirects);
+
         client.setContext(context);
         
         return client;
     }
-    
-
 }

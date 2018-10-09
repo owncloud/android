@@ -14,12 +14,14 @@ allprojects {
     repositories {
         google()
         jcenter()
+        maven { url 'https://jitpack.io' }
     }
 }
 
 dependencies {
-    api 'org.apache.jackrabbit:jackrabbit-webdav:2.12.4'
     api 'com.squareup.okhttp3:okhttp:3.10.0'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.2.51"
+    implementation 'com.gitlab.ownclouders:dav4android:oc_support'
 }
 
 android {
@@ -51,5 +53,9 @@ android {
 
     lintOptions {
         abortOnError false
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 }

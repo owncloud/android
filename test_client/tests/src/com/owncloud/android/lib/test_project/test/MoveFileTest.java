@@ -29,9 +29,9 @@ import java.security.GeneralSecurityException;
 
 import junit.framework.AssertionFailedError;
 
-import org.apache.commons.httpclient.HttpStatus;
-import org.apache.commons.httpclient.protocol.Protocol;
-import org.apache.commons.httpclient.protocol.ProtocolSocketFactory;
+
+
+
 
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.OwnCloudClientFactory;
@@ -41,7 +41,6 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.resources.files.MoveRemoteFileOperation;
 import com.owncloud.android.lib.test_project.R;
-import com.owncloud.android.lib.test_project.SelfSignedConfidentSslSocketFactory;
 import com.owncloud.android.lib.test_project.TestActivity;
 
 import android.content.Context;
@@ -373,7 +372,7 @@ public class MoveFileTest extends RemoteTest {
 				false
 		);
 		result = moveOperation.execute(mClient);
-		assertTrue(result.getHttpCode() == HttpStatus.SC_CONFLICT);
+		assertTrue(result.getHttpCode() == HttpConstants.HTTP_CONFLICT);
 
 		// target location (renaming) has invalid characters
 		moveOperation = new MoveRemoteFileOperation(

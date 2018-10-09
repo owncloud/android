@@ -1,5 +1,5 @@
 /* ownCloud Android Library is available under MIT license
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   Copyright (C) 2018 ownCloud GmbH.
  *   
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -24,26 +24,28 @@
 
 package com.owncloud.android.lib.resources.users;
 
-import java.util.ArrayList;
-
-import org.apache.commons.httpclient.HttpStatus;
-import org.apache.commons.httpclient.methods.GetMethod;
-import org.json.JSONObject;
-
 import com.owncloud.android.lib.common.OwnCloudClient;
+import com.owncloud.android.lib.common.http.HttpConstants;
+import com.owncloud.android.lib.common.http.methods.nonwebdav.GetMethod;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
 
+import org.json.JSONObject;
+
+import java.net.URL;
+
+import static com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode.OK;
 
 /**
  * Gets information (id, display name, and e-mail address) about the user logged in.
  *
  * @author masensio
  * @author David A. Velasco
+ * @author David González Verdugo
  */
 
-public class GetRemoteUserInfoOperation extends RemoteOperation {
+public class GetRemoteUserInfoOperation extends RemoteOperation<GetRemoteUserInfoOperation.UserInfo> {
 
     private static final String TAG = GetRemoteUserInfoOperation.class.getSimpleName();
 
@@ -61,22 +63,19 @@ public class GetRemoteUserInfoOperation extends RemoteOperation {
     }
 
     @Override
-    protected RemoteOperationResult run(OwnCloudClient client) {
-        RemoteOperationResult result = null;
-        int status = -1;
-        GetMethod get = null;
+    protected RemoteOperationResult<UserInfo> run(OwnCloudClient client) {
+        RemoteOperationResult<UserInfo> result;
 
         //Get the user
         try {
-            get = new GetMethod(client.getBaseUri() + OCS_ROUTE);
-            get.addRequestHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE);
-            status = client.executeMethod(get);
+            GetMethod getMethod = new GetMethod(new URL(client.getBaseUri() + OCS_ROUTE));
+
+            int status = client.executeHttpMethod(getMethod);
+
             if (isSuccess(status)) {
-                String response = get.getResponseBodyAsString();
                 Log_OC.d(TAG, "Successful response");
 
-                // Parse the response
-                JSONObject respJSON = new JSONObject(response);
+                JSONObject respJSON = new JSONObject(getMethod.getResponseBodyAsString());
                 JSONObject respOCS = respJSON.getJSONObject(NODE_OCS);
                 JSONObject respData = respOCS.getJSONObject(NODE_DATA);
 
@@ -85,40 +84,31 @@ public class GetRemoteUserInfoOperation extends RemoteOperation {
                 userInfo.mDisplayName = respData.getString(NODE_DISPLAY_NAME);
                 userInfo.mEmail = respData.getString(NODE_EMAIL);
 
-                // Result
-                result = new RemoteOperationResult(true, get);
-                // Username in result.data
-                ArrayList<Object> data = new ArrayList<Object>();
-                data.add(userInfo);
-                result.setData(data);
+                result = new RemoteOperationResult<>(OK);
+
+                result.setData(userInfo);
 
             } else {
-                result = new RemoteOperationResult(false, get);
-                String response = get.getResponseBodyAsString();
+                result = new RemoteOperationResult<>(getMethod);
+                String response = getMethod.getResponseBodyAsString();
                 Log_OC.e(TAG, "Failed response while getting user information ");
-                if (response != null) {
+                if (getMethod != null) {
                     Log_OC.e(TAG, "*** status code: " + status + " ; response message: " + response);
                 } else {
                     Log_OC.e(TAG, "*** status code: " + status);
                 }
             }
         } catch (Exception e) {
-            result = new RemoteOperationResult(e);
+            result = new RemoteOperationResult<>(e);
             Log_OC.e(TAG, "Exception while getting OC user information", e);
-
-        } finally {
-            if (get != null) {
-                get.releaseConnection();
-            }
         }
 
         return result;
     }
 
     private boolean isSuccess(int status) {
-        return (status == HttpStatus.SC_OK);
+        return (status == HttpConstants.HTTP_OK);
     }
-
 
     public static class UserInfo {
         public String mId = "";

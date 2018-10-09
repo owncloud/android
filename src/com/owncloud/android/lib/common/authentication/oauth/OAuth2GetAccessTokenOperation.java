@@ -1,7 +1,8 @@
 /* ownCloud Android Library is available under MIT license
  *
  *   @author David A. Velasco
- *   Copyright (C) 2017 ownCloud GmbH.
+ *   @author Christian Schabesberger
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -31,21 +32,21 @@ import android.net.Uri;
 import com.owncloud.android.lib.common.authentication.OwnCloudBasicCredentials;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentials;
+import com.owncloud.android.lib.common.http.methods.nonwebdav.PostMethod;
+import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
-import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 
-import org.apache.commons.httpclient.NameValuePair;
-import org.apache.commons.httpclient.methods.PostMethod;
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.net.URL;
 import java.util.Map;
 
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 
-public class OAuth2GetAccessTokenOperation extends RemoteOperation {
+
+public class OAuth2GetAccessTokenOperation extends RemoteOperation<Map<String, String>> {
     
     private String mGrantType;
     private String mCode;
@@ -82,29 +83,33 @@ public class OAuth2GetAccessTokenOperation extends RemoteOperation {
 
     @Override
     protected RemoteOperationResult run(OwnCloudClient client) {
-        RemoteOperationResult result = null;
-        PostMethod postMethod = null;
+        RemoteOperationResult<Map<String, String>> result = null;
         
         try {
-            NameValuePair[] nameValuePairs = new NameValuePair[4];
-            nameValuePairs[0] = new NameValuePair(OAuth2Constants.KEY_GRANT_TYPE, mGrantType);
-            nameValuePairs[1] = new NameValuePair(OAuth2Constants.KEY_CODE, mCode);
-            nameValuePairs[2] = new NameValuePair(OAuth2Constants.KEY_REDIRECT_URI, mRedirectUri);
-            nameValuePairs[3] = new NameValuePair(OAuth2Constants.KEY_CLIENT_ID, mClientId);
+
+            final RequestBody requestBody = new MultipartBody.Builder()
+                    .setType(MultipartBody.FORM)
+                    .addFormDataPart(OAuth2Constants.KEY_GRANT_TYPE, mGrantType)
+                    .addFormDataPart(OAuth2Constants.KEY_CODE, mCode)
+                    .addFormDataPart(OAuth2Constants.KEY_REDIRECT_URI, mRedirectUri)
+                    .addFormDataPart(OAuth2Constants.KEY_CLIENT_ID, mClientId)
+                    .build();
 
             Uri.Builder uriBuilder = client.getBaseUri().buildUpon();
             uriBuilder.appendEncodedPath(mAccessTokenEndpointPath);
 
-            postMethod = new PostMethod(uriBuilder.build().toString());
-            postMethod.setRequestBody(nameValuePairs);
+            final PostMethod postMethod = new PostMethod(new URL(
+                    client.getBaseUri().buildUpon()
+                            .appendEncodedPath(mAccessTokenEndpointPath)
+                            .build()
+                            .toString()));
 
-            OwnCloudCredentials oauthCredentials = new OwnCloudBasicCredentials(
-                mClientId,
-                mClientSecret
-            );
+            postMethod.setRequestBody(requestBody);
+
+            OwnCloudCredentials oauthCredentials =
+                    new OwnCloudBasicCredentials(mClientId, mClientSecret);
             OwnCloudCredentials oldCredentials = switchClientCredentials(oauthCredentials);
-
-            client.executeMethod(postMethod);
+            client.executeHttpMethod(postMethod);
             switchClientCredentials(oldCredentials);
 
             String response = postMethod.getResponseBodyAsString();
@@ -114,28 +119,22 @@ public class OAuth2GetAccessTokenOperation extends RemoteOperation {
                     mResponseParser.parseAccessTokenResult(tokenJson);
                 if (accessTokenResult.get(OAuth2Constants.KEY_ERROR) != null ||
                         accessTokenResult.get(OAuth2Constants.KEY_ACCESS_TOKEN) == null) {
-                    result = new RemoteOperationResult(ResultCode.OAUTH2_ERROR);
+                    result = new RemoteOperationResult<>(ResultCode.OAUTH2_ERROR);
 
                 } else {
-                    result = new RemoteOperationResult(true, postMethod);
-                    ArrayList<Object> data = new ArrayList<>();
-                    data.add(accessTokenResult);
-                    result.setData(data);
+                    result = new RemoteOperationResult<>(ResultCode.OK);
+                    result.setData(accessTokenResult);
                 }
 
             } else {
-                result = new RemoteOperationResult(false, postMethod);
+                result = new RemoteOperationResult<>(ResultCode.OK);
                 client.exhaustResponse(postMethod.getResponseBodyAsStream());
             }
 
         } catch (Exception e) {
-            result = new RemoteOperationResult(e);
+            result = new RemoteOperationResult<>(e);
             
-        } finally {
-            if (postMethod != null)
-                postMethod.releaseConnection();    // let the connection available for other methods
         }
-        
         return result;
     }
 
@@ -144,5 +143,4 @@ public class OAuth2GetAccessTokenOperation extends RemoteOperation {
         getClient().setCredentials(newCredentials);
         return previousCredentials;
     }
-
 }

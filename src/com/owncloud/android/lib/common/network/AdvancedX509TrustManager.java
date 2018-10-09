@@ -100,7 +100,7 @@ public class AdvancedX509TrustManager implements X509TrustManager {
      * @see javax.net.ssl.X509TrustManager#checkServerTrusted(X509Certificate[],
      *      String authType)
      */
-    public void checkServerTrusted(X509Certificate[] certificates, String authType) throws CertificateException {
+    public void checkServerTrusted(X509Certificate[] certificates, String authType) {
         if (!isKnownServer(certificates[0])) {
         	CertificateCombinedException result = new CertificateCombinedException(certificates[0]);
         	try {

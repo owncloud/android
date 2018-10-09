@@ -28,42 +28,36 @@
 package com.owncloud.android.lib.resources.users;
 
 import com.owncloud.android.lib.common.OwnCloudClient;
-import com.owncloud.android.lib.common.network.WebdavEntry;
+import com.owncloud.android.lib.common.http.HttpConstants;
+import com.owncloud.android.lib.common.http.methods.webdav.DavUtils;
+import com.owncloud.android.lib.common.http.methods.webdav.PropfindMethod;
 import com.owncloud.android.lib.common.network.WebdavUtils;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
 
-import org.apache.commons.httpclient.HttpStatus;
-import org.apache.jackrabbit.webdav.DavConstants;
-import org.apache.jackrabbit.webdav.MultiStatus;
-import org.apache.jackrabbit.webdav.client.methods.PropFindMethod;
+import java.net.URL;
+import java.util.List;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.util.ArrayList;
+import at.bitfire.dav4android.Property;
+import at.bitfire.dav4android.property.QuotaAvailableBytes;
+import at.bitfire.dav4android.property.QuotaUsedBytes;
+
+import static com.owncloud.android.lib.common.http.methods.webdav.DavConstants.DEPTH_0;
+import static com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode.OK;
 
 /**
  * @author marcello
  * @author David González Verdugo
  */
-public class GetRemoteUserQuotaOperation extends RemoteOperation {
+public class GetRemoteUserQuotaOperation extends RemoteOperation<GetRemoteUserQuotaOperation.RemoteQuota> {
 
-    static public class Quota {
-
-        // Not computed yet, e.g. external storage mounted but folder sizes need scanning
-        public static final int PENDING_FREE_QUOTA = -1;
-
-        // Storage not accessible, e.g. external storage with no API to ask for the free space
-        public static final int UNKNOWN_FREE_QUOTA = -2;
-
-        // Quota using all the storage
-        public static final int UNLIMITED_FREE_QUOTA = -3;
+    static public class RemoteQuota {
 
         long mFree, mUsed, mTotal;
         double mRelative;
 
-        public Quota(long free, long used, long total, double relative) {
+        public RemoteQuota(long free, long used, long total, double relative) {
             mFree = free;
             mUsed = used;
             mTotal = total;
@@ -90,45 +84,36 @@ public class GetRemoteUserQuotaOperation extends RemoteOperation {
     }
 
     @Override
-    protected RemoteOperationResult run(OwnCloudClient client) {
-        RemoteOperationResult result = null;
-        PropFindMethod query = null;
+    protected RemoteOperationResult<RemoteQuota> run(OwnCloudClient client) {
+        RemoteOperationResult<RemoteQuota> result = null;
 
         try {
-            // remote request
-            query = new PropFindMethod(client.getWebdavUri() + WebdavUtils.encodePath(mRemotePath),
-                    WebdavUtils.getQuotaPropSet(),
-                    DavConstants.DEPTH_0);
+            PropfindMethod propfindMethod = new PropfindMethod(
+                    new URL(client.getNewFilesWebDavUri() + WebdavUtils.encodePath(mRemotePath)),
+                    DEPTH_0,
+                    DavUtils.getQuotaPropSet());
 
-            int status = client.executeMethod(query);
+            int status = client.executeHttpMethod(propfindMethod);
 
             if (isSuccess(status)) {
-                // get data from remote folder
-                MultiStatus dataInServer = query.getResponseBodyAsMultiStatus();
-                Quota quota = readData(dataInServer, client);
+                RemoteQuota remoteQuota = readData(propfindMethod.getRoot().getProperties());
 
-                // Result of the operation
-                result = new RemoteOperationResult(true, query);
-
-                ArrayList<Object> data = new ArrayList<>();
-                data.add(quota);
+                result = new RemoteOperationResult<>(OK);
 
                 // Add data to the result
                 if (result.isSuccess()) {
-                    result.setData(data);
+                    result.setData(remoteQuota);
                 }
-            } else {
-                // synchronization failed
-                result = new RemoteOperationResult(false, query);
+
+            } else { // synchronization failed
+                result = new RemoteOperationResult<>(propfindMethod);
             }
 
         } catch (Exception e) {
-            result = new RemoteOperationResult(e);
+            result = new RemoteOperationResult<>(e);
 
 
         } finally {
-            if (query != null)
-                query.releaseConnection();  // let the connection available for other methods
             if (result.isSuccess()) {
                 Log_OC.i(TAG, "Get quota from " + mRemotePath + ": " + result.getLogMessage());
             } else {
@@ -145,46 +130,47 @@ public class GetRemoteUserQuotaOperation extends RemoteOperation {
     }
 
     private boolean isSuccess(int status) {
-        return status == HttpStatus.SC_MULTI_STATUS || status == HttpStatus.SC_OK;
+        return status == HttpConstants.HTTP_MULTI_STATUS || status == HttpConstants.HTTP_OK;
     }
 
     /**
      * Read the data retrieved from the server about the quota
      *
-     * @param remoteData Full response got from the server with the data of the quota
-     * @param client     Client instance to the remote server where the data were retrieved
-     * @return new Quota instance representing the data read from the server
+     * @param properties WebDAV properties containing quota data
+     * @return new {@link RemoteQuota} instance representing the data read from the server
      */
-    private Quota readData(MultiStatus remoteData, OwnCloudClient client) {
+    private RemoteQuota readData(List<Property> properties) {
+        long quotaAvailable = 0;
+        long quotaUsed = 0;
 
-        // parse data from remote folder
-        WebdavEntry we = new WebdavEntry(remoteData.getResponses()[0], client.getWebdavUri().getPath());
+        for(Property property : properties) {
+            if(property instanceof QuotaAvailableBytes)
+                quotaAvailable = ((QuotaAvailableBytes) property).getQuotaAvailableBytes();
+            if(property instanceof QuotaUsedBytes)
+                quotaUsed = ((QuotaUsedBytes) property).getQuotaUsedBytes();
+        }
 
-        // If there's a special case, available bytes will contain a negative code
+        // If there's a special case, quota available will contain a negative code
         // -1, PENDING: Not computed yet, e.g. external storage mounted but folder sizes need scanning
         // -2, UNKNOWN: Storage not accessible, e.g. external storage with no API to ask for the free space
         // -3, UNLIMITED: Quota using all the storage
-        if (we.quotaAvailableBytes().compareTo(new BigDecimal(1)) == -1) {
-            return new Quota(
-                    we.quotaAvailableBytes().longValue(),
-                    we.quotaUsedBytes().longValue(),
+        if (quotaAvailable < 0) {
+            return new RemoteQuota(
+                    quotaAvailable,
+                    quotaUsed,
                     0,
                     0
             );
-
         } else {
+            long totalQuota = quotaAvailable + quotaUsed;
+            double relativeQuota = (double)(quotaUsed * 100)/totalQuota;
+            double roundedRelativeQuota = Math.round(relativeQuota * 100)/100.0d;
 
-            BigDecimal totalQuota = we.quotaAvailableBytes().add(we.quotaUsedBytes());
-
-            BigDecimal relativeQuota = we.quotaUsedBytes()
-                    .multiply(new BigDecimal(100))
-                    .divide(totalQuota, 2, RoundingMode.HALF_UP);
-
-            return new Quota(
-                    we.quotaAvailableBytes().longValue(),
-                    we.quotaUsedBytes().longValue(),
-                    totalQuota.longValue(),
-                    relativeQuota.doubleValue()
+            return new RemoteQuota(
+                    quotaAvailable,
+                    quotaUsed,
+                    totalQuota,
+                    roundedRelativeQuota
             );
         }
     }

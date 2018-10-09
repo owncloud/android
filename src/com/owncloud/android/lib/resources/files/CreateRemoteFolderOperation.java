@@ -24,15 +24,21 @@
 
 package com.owncloud.android.lib.resources.files;
 
-import org.apache.jackrabbit.webdav.client.methods.MkColMethod;
+
+import android.net.Uri;
 
 import com.owncloud.android.lib.common.OwnCloudClient;
+import com.owncloud.android.lib.common.http.HttpConstants;
+import com.owncloud.android.lib.common.http.methods.webdav.MkColMethod;
 import com.owncloud.android.lib.common.network.WebdavUtils;
+import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
-import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
+
+import java.net.URL;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -48,20 +54,19 @@ public class CreateRemoteFolderOperation extends RemoteOperation {
     private static final int READ_TIMEOUT = 30000;
     private static final int CONNECTION_TIMEOUT = 5000;
 
-
-    protected String mRemotePath;
-    protected boolean mCreateFullPath;
+    private String mRemotePath;
+    private boolean mCreateFullPath;
+    protected boolean createChunksFolder;
 
     /**
      * Constructor
-     *
      * @param remotePath     Full path to the new directory to create in the remote server.
-     * @param createFullPath 'True' means that all the ancestor folders should be created
-     *                       if don't exist yet.
+     * @param createFullPath 'True' means that all the ancestor folders should be created.
      */
     public CreateRemoteFolderOperation(String remotePath, boolean createFullPath) {
         mRemotePath = remotePath;
         mCreateFullPath = createFullPath;
+        createChunksFolder = false;
     }
 
     /**
@@ -71,7 +76,7 @@ public class CreateRemoteFolderOperation extends RemoteOperation {
      */
     @Override
     protected RemoteOperationResult run(OwnCloudClient client) {
-        RemoteOperationResult result = null;
+        RemoteOperationResult result;
         OwnCloudVersion version = client.getOwnCloudVersion();
         boolean versionWithForbiddenChars =
             (version != null && version.isVersionWithForbiddenCharacters());
@@ -85,41 +90,38 @@ public class CreateRemoteFolderOperation extends RemoteOperation {
                     result = createFolder(client);    // second (and last) try
                 }
             }
-
         } else {
-            result = new RemoteOperationResult(ResultCode.INVALID_CHARACTER_IN_NAME);
+            result = new RemoteOperationResult<>(ResultCode.INVALID_CHARACTER_IN_NAME);
         }
 
         return result;
     }
 
-
     private RemoteOperationResult createFolder(OwnCloudClient client) {
-        RemoteOperationResult result = null;
-        MkColMethod mkcol = null;
+        RemoteOperationResult result;
         try {
-            mkcol = new MkColMethod(client.getWebdavUri() + WebdavUtils.encodePath(mRemotePath));
-            client.executeMethod(mkcol, READ_TIMEOUT, CONNECTION_TIMEOUT);
-            result = new RemoteOperationResult(mkcol.succeeded(), mkcol);
+            Uri webDavUri = createChunksFolder ? client.getNewUploadsWebDavUri() : client.getNewFilesWebDavUri();
+            final MkColMethod mkcol = new MkColMethod(new URL(webDavUri + WebdavUtils.encodePath(mRemotePath)));
+            mkcol.setReadTimeout(READ_TIMEOUT, TimeUnit.SECONDS);
+            mkcol.setConnectionTimeout(CONNECTION_TIMEOUT, TimeUnit.SECONDS);
+            final int status = client.executeHttpMethod(mkcol);
+
+            result = (status == HttpConstants.HTTP_CREATED)
+                    ? new RemoteOperationResult<>(ResultCode.OK)
+                    : new RemoteOperationResult<>(mkcol);
             Log_OC.d(TAG, "Create directory " + mRemotePath + ": " + result.getLogMessage());
             client.exhaustResponse(mkcol.getResponseBodyAsStream());
 
         } catch (Exception e) {
-            result = new RemoteOperationResult(e);
+            result = new RemoteOperationResult<>(e);
             Log_OC.e(TAG, "Create directory " + mRemotePath + ": " + result.getLogMessage(), e);
-
-        } finally {
-            if (mkcol != null)
-                mkcol.releaseConnection();
         }
+
         return result;
     }
 
     private RemoteOperationResult createParentFolder(String parentPath, OwnCloudClient client) {
-        RemoteOperation operation = new CreateRemoteFolderOperation(parentPath,
-            mCreateFullPath);
+        RemoteOperation operation = new CreateRemoteFolderOperation(parentPath, mCreateFullPath);
         return operation.execute(client);
     }
-
-
 }

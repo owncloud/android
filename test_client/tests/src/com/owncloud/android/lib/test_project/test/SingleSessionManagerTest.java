@@ -25,8 +25,8 @@ package com.owncloud.android.lib.test_project.test;
 
 import java.security.GeneralSecurityException;
 
-import org.apache.commons.httpclient.protocol.Protocol;
-import org.apache.commons.httpclient.protocol.ProtocolSocketFactory;
+
+
 
 import android.net.Uri;
 import android.test.AndroidTestCase;
@@ -36,7 +36,6 @@ import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.SingleSessionManager;
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentialsFactory;
 import com.owncloud.android.lib.test_project.R;
-import com.owncloud.android.lib.test_project.SelfSignedConfidentSslSocketFactory;
 
 import junit.framework.AssertionFailedError;
 

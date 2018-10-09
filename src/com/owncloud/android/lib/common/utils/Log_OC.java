@@ -1,15 +1,13 @@
 package com.owncloud.android.lib.common.utils;
 
+import android.util.Log;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-
-import android.os.Environment;
-import android.util.Log;
-
 
 public class Log_OC {
     private static final String SIMPLE_DATE_FORMAT = "yyyy/MM/dd HH:mm:ss";
@@ -61,11 +59,6 @@ public class Log_OC {
     
     public static void w(String TAG, String message) {
         Log.w(TAG, message);
-        appendLog(TAG+" : "+ message);
-    }
-    
-    public static void wtf(String TAG, String message) {
-        Log.wtf(TAG, message);
         appendLog(TAG+" : "+ message);
     }
 

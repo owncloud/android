@@ -1,5 +1,5 @@
 /* ownCloud Android Library is available under MIT license
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   Copyright (C) 2018 ownCloud GmbH.
  *   
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -24,28 +24,32 @@
 
 package com.owncloud.android.lib.resources.files;
 
-import org.apache.commons.httpclient.HttpStatus;
-import org.apache.jackrabbit.webdav.client.methods.DeleteMethod;
+import android.net.Uri;
 
 import com.owncloud.android.lib.common.OwnCloudClient;
+import com.owncloud.android.lib.common.http.HttpConstants;
+import com.owncloud.android.lib.common.http.methods.nonwebdav.DeleteMethod;
 import com.owncloud.android.lib.common.network.WebdavUtils;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
+
+import java.net.URL;
+
+import static com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode.OK;
 
 /**
  * Remote operation performing the removal of a remote file or folder in the ownCloud server.
  *
  * @author David A. Velasco
  * @author masensio
+ * @author David González Verdugo
  */
 public class RemoveRemoteFileOperation extends RemoteOperation {
     private static final String TAG = RemoveRemoteFileOperation.class.getSimpleName();
-
-    private static final int REMOVE_READ_TIMEOUT = 30000;
-    private static final int REMOVE_CONNECTION_TIMEOUT = 5000;
-
     private String mRemotePath;
+
+    protected boolean removeChunksFolder = false;
 
     /**
      * Constructor
@@ -63,30 +67,31 @@ public class RemoveRemoteFileOperation extends RemoteOperation {
      */
     @Override
     protected RemoteOperationResult run(OwnCloudClient client) {
-        RemoteOperationResult result = null;
-        DeleteMethod delete = null;
+        RemoteOperationResult result;
 
         try {
-            delete = new DeleteMethod(client.getWebdavUri() + WebdavUtils.encodePath(mRemotePath));
-            int status = client.executeMethod(delete, REMOVE_READ_TIMEOUT, REMOVE_CONNECTION_TIMEOUT);
+            Uri srcWebDavUri = removeChunksFolder ? client.getNewUploadsWebDavUri() : client.getNewFilesWebDavUri();
 
-            delete.getResponseBodyAsString();   // exhaust the response, although not interesting
-            result = new RemoteOperationResult(
-                (delete.succeeded() || status == HttpStatus.SC_NOT_FOUND),
-                delete
-            );
+            DeleteMethod deleteMethod = new DeleteMethod(
+                    new URL(srcWebDavUri + WebdavUtils.encodePath(mRemotePath)));
+
+            int status = client.executeHttpMethod(deleteMethod);
+
+            result = isSuccess(status) ?
+                    new RemoteOperationResult<>(OK) :
+                    new RemoteOperationResult<>(deleteMethod);
+
             Log_OC.i(TAG, "Remove " + mRemotePath + ": " + result.getLogMessage());
 
         } catch (Exception e) {
-            result = new RemoteOperationResult(e);
+            result = new RemoteOperationResult<>(e);
             Log_OC.e(TAG, "Remove " + mRemotePath + ": " + result.getLogMessage(), e);
-
-        } finally {
-            if (delete != null)
-                delete.releaseConnection();
         }
 
         return result;
     }
 
+    private boolean isSuccess(int status) {
+        return status == HttpConstants.HTTP_OK || status == HttpConstants.HTTP_NO_CONTENT;
+    }
 }

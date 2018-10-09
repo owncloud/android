@@ -29,9 +29,9 @@ import java.security.GeneralSecurityException;
 
 import junit.framework.AssertionFailedError;
 
-import org.apache.commons.httpclient.HttpStatus;
-import org.apache.commons.httpclient.protocol.Protocol;
-import org.apache.commons.httpclient.protocol.ProtocolSocketFactory;
+
+
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -43,7 +43,6 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.resources.shares.GetRemoteShareesOperation;
 import com.owncloud.android.lib.resources.shares.ShareType;
 import com.owncloud.android.lib.test_project.R;
-import com.owncloud.android.lib.test_project.SelfSignedConfidentSslSocketFactory;
 
 import android.content.Context;
 import android.net.Uri;
@@ -184,11 +183,11 @@ public class GetShareesTest extends RemoteTest {
 		// search for sharees including wrong page values
 		getShareesOperation = new GetRemoteShareesOperation("a", 0, 50);
 		result = getShareesOperation.execute(mClient);
-		assertTrue(!result.isSuccess() && result.getHttpCode() == HttpStatus.SC_BAD_REQUEST);
+		assertTrue(!result.isSuccess() && result.getHttpCode() == HttpConstants.HTTP_BAD_REQUEST);
 		
 		getShareesOperation = new GetRemoteShareesOperation("a", 1, 0);
 		result = getShareesOperation.execute(mClient);
-		assertTrue(!result.isSuccess() && result.getHttpCode() == HttpStatus.SC_BAD_REQUEST);
+		assertTrue(!result.isSuccess() && result.getHttpCode() == HttpConstants.HTTP_BAD_REQUEST);
 	}
 	
 	/**
@@ -237,11 +236,11 @@ public class GetShareesTest extends RemoteTest {
 		// search for sharees including wrong page values
 		getShareesOperation = new GetRemoteShareesOperation("@", 0, 50);
 		result = getShareesOperation.execute(mClient);
-		assertTrue(!result.isSuccess() && result.getHttpCode() == HttpStatus.SC_BAD_REQUEST);
+		assertTrue(!result.isSuccess() && result.getHttpCode() == HttpConstants.HTTP_BAD_REQUEST);
 		
 		getShareesOperation = new GetRemoteShareesOperation("@", 1, 0);
 		result = getShareesOperation.execute(mClient);
-		assertTrue(!result.isSuccess() && result.getHttpCode() == HttpStatus.SC_BAD_REQUEST);
+		assertTrue(!result.isSuccess() && result.getHttpCode() == HttpConstants.HTTP_BAD_REQUEST);
 	}
 	
 	@Override

@@ -1,5 +1,5 @@
 /* ownCloud Android Library is available under MIT license
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -23,12 +23,9 @@
  */
 package com.owncloud.android.lib.common.authentication;
 
-import org.apache.commons.httpclient.Cookie;
-import org.apache.commons.httpclient.cookie.CookiePolicy;
-
-import android.net.Uri;
-
 import com.owncloud.android.lib.common.OwnCloudClient;
+import com.owncloud.android.lib.common.http.HttpClient;
+import com.owncloud.android.lib.common.http.HttpConstants;
 
 public class OwnCloudSamlSsoCredentials implements OwnCloudCredentials {
 
@@ -42,28 +39,12 @@ public class OwnCloudSamlSsoCredentials implements OwnCloudCredentials {
 
     @Override
     public void applyTo(OwnCloudClient client) {
-        client.getParams().setAuthenticationPreemptive(false);
-        client.getParams().setCredentialCharset(OwnCloudCredentialsFactory.CREDENTIAL_CHARSET);
-        client.getParams().setCookiePolicy(CookiePolicy.BROWSER_COMPATIBILITY);
+        // Clear previous credentials
+        HttpClient.deleteHeaderForAllRequests(HttpConstants.AUTHORIZATION_HEADER);
+        HttpClient.deleteHeaderForAllRequests(HttpConstants.COOKIE_HEADER);
+
+        HttpClient.addHeaderForAllRequests(HttpConstants.COOKIE_HEADER, mSessionCookie);
         client.setFollowRedirects(false);
-
-        Uri serverUri = client.getBaseUri();
-
-        String[] cookies = mSessionCookie.split(";");
-        if (cookies.length > 0) {
-            Cookie cookie = null;
-            for (int i = 0; i < cookies.length; i++) {
-                int equalPos = cookies[i].indexOf('=');
-                if (equalPos >= 0) {
-                    cookie = new Cookie();
-                    cookie.setName(cookies[i].substring(0, equalPos));
-                    cookie.setValue(cookies[i].substring(equalPos + 1));
-                    cookie.setDomain(serverUri.getHost());    // VERY IMPORTANT
-                    cookie.setPath(serverUri.getPath());    // VERY IMPORTANT
-                    client.getState().addCookie(cookie);
-                }
-            }
-        }
     }
 
     @Override
@@ -86,5 +67,4 @@ public class OwnCloudSamlSsoCredentials implements OwnCloudCredentials {
     public boolean authTokenCanBeRefreshed() {
         return false;
     }
-
 }

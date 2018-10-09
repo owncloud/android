@@ -1,5 +1,5 @@
 /* ownCloud Android Library is available under MIT license
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   Copyright (C) 2018 ownCloud GmbH.
  *   
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -24,18 +24,36 @@
 
 package com.owncloud.android.lib.resources.files;
 
-import java.io.Serializable;
-import java.math.BigDecimal;
-
+import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.owncloud.android.lib.common.network.WebdavEntry;
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.List;
+
+import at.bitfire.dav4android.Property;
+import at.bitfire.dav4android.Response;
+import at.bitfire.dav4android.property.CreationDate;
+import at.bitfire.dav4android.property.GetContentLength;
+import at.bitfire.dav4android.property.GetContentType;
+import at.bitfire.dav4android.property.GetETag;
+import at.bitfire.dav4android.property.GetLastModified;
+import at.bitfire.dav4android.property.QuotaAvailableBytes;
+import at.bitfire.dav4android.property.QuotaUsedBytes;
+import at.bitfire.dav4android.property.owncloud.OCId;
+import at.bitfire.dav4android.property.owncloud.OCPermissions;
+import at.bitfire.dav4android.property.owncloud.OCPrivatelink;
+import at.bitfire.dav4android.property.owncloud.OCSize;
+import okhttp3.HttpUrl;
+
+import static com.owncloud.android.lib.common.OwnCloudClient.NEW_WEBDAV_FILES_PATH_4_0;
 
 /**
  * Contains the data of a Remote File from a WebDavEntry
  *
  * @author masensio
+ * @author Christian Schabesberger
  */
 
 public class RemoteFile implements Parcelable, Serializable {
@@ -156,7 +174,7 @@ public class RemoteFile implements Parcelable, Serializable {
 
     /**
      * Create new {@link RemoteFile} with given path.
-     * <p>
+     *
      * The path received must be URL-decoded. Path separator must be OCFile.PATH_SEPARATOR, and it must be the first character in 'path'.
      *
      * @param path The remote path of the file.
@@ -167,21 +185,52 @@ public class RemoteFile implements Parcelable, Serializable {
             throw new IllegalArgumentException("Trying to create a OCFile with a non valid remote path: " + path);
         }
         mRemotePath = path;
+        mCreationTimestamp = 0;
+        mLength = 0;
+        mMimeType = "DIR";
+        mQuotaUsedBytes = BigDecimal.ZERO;
+        mQuotaAvailableBytes = BigDecimal.ZERO;
+        mPrivateLink = null;
     }
 
-    public RemoteFile(WebdavEntry webdavEntry) {
-        this(webdavEntry.decodedPath());
-        this.setCreationTimestamp(webdavEntry.createTimestamp());
-        this.setLength(webdavEntry.contentLength());
-        this.setMimeType(webdavEntry.contentType());
-        this.setModifiedTimestamp(webdavEntry.modifiedTimestamp());
-        this.setEtag(webdavEntry.etag());
-        this.setPermissions(webdavEntry.permissions());
-        this.setRemoteId(webdavEntry.remoteId());
-        this.setSize(webdavEntry.size());
-        this.setQuotaUsedBytes(webdavEntry.quotaUsedBytes());
-        this.setQuotaAvailableBytes(webdavEntry.quotaAvailableBytes());
-        this.setPrivateLink(webdavEntry.privateLink());
+    public RemoteFile(final Response davResource, String userName) {
+        this(getRemotePathFromUrl(davResource.getHref(), userName));
+        final List<Property> properties = davResource.getProperties();
+
+        for(Property property : properties) {
+            if(property instanceof CreationDate)
+                this.setCreationTimestamp(
+                        Long.parseLong(((CreationDate) property).getCreationDate()));
+            if(property instanceof GetContentLength)
+                this.setLength(((GetContentLength) property).getContentLength());
+            if(property instanceof  GetContentType)
+                this.setMimeType(((GetContentType) property).getType());
+            if(property instanceof GetLastModified)
+                this.setModifiedTimestamp(((GetLastModified) property).getLastModified());
+            if(property instanceof GetETag)
+                this.setEtag(((GetETag) property).getETag());
+            if(property instanceof OCPermissions)
+                this.setPermissions(((OCPermissions) property).getPermission());
+            if(property instanceof OCId)
+                this.setRemoteId(((OCId) property).getId());
+            if(property instanceof OCSize)
+                this.setSize(((OCSize) property).getSize());
+            if(property instanceof  QuotaUsedBytes)
+                this.setQuotaUsedBytes(
+                        BigDecimal.valueOf(((QuotaUsedBytes) property).getQuotaUsedBytes()));
+            if(property instanceof QuotaAvailableBytes)
+                this.setQuotaAvailableBytes(
+                        BigDecimal.valueOf(((QuotaAvailableBytes) property).getQuotaAvailableBytes()));
+            if(property instanceof OCPrivatelink)
+                this.setPrivateLink(((OCPrivatelink) property).getLink());
+        }
+    }
+
+
+    private static String getRemotePathFromUrl(HttpUrl url, String displayName) {
+        final String davPath = NEW_WEBDAV_FILES_PATH_4_0 + displayName;
+        final String pathToOc = url.encodedPath().split(davPath)[0];
+        return Uri.decode(url.encodedPath()).replace(pathToOc + davPath, "");
     }
 
     /**
@@ -262,5 +311,4 @@ public class RemoteFile implements Parcelable, Serializable {
         dest.writeSerializable(mQuotaAvailableBytes);
         dest.writeString(mPrivateLink);
     }
-
 }

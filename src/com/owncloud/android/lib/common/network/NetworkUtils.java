@@ -29,19 +29,13 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.security.GeneralSecurityException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManager;
 
-import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
-import org.apache.commons.httpclient.protocol.Protocol;
-import org.apache.http.conn.ssl.BrowserCompatHostnameVerifier;
 import org.apache.http.conn.ssl.X509HostnameVerifier;
 
 import android.content.Context;
@@ -64,67 +58,7 @@ public class NetworkUtils {
     /** Standard name for protocol TLS version 1.0 in JSSE API */
     public static final String PROTOCOL_TLSv1_0 = "TLSv1";
 
-    /** Connection manager for all the OwnCloudClients */
-    private static MultiThreadedHttpConnectionManager mConnManager = null;
-    
-    private static Protocol mDefaultHttpsProtocol = null;
-
-    private static AdvancedSslSocketFactory mAdvancedSslSocketFactory = null;
-
     private static X509HostnameVerifier mHostnameVerifier = null;
-    
-    
-    /**
-     * Registers or unregisters the proper components for advanced SSL handling.
-     * @throws IOException 
-     */
-    @SuppressWarnings("deprecation")
-	public static void registerAdvancedSslContext(boolean register, Context context) 
-    		throws GeneralSecurityException, IOException {
-        Protocol pr = null;
-        try {
-            pr = Protocol.getProtocol("https");
-            if (pr != null && mDefaultHttpsProtocol == null) {
-                mDefaultHttpsProtocol = pr;
-            }
-        } catch (IllegalStateException e) {
-            // nothing to do here; really
-        }
-        boolean isRegistered = (pr != null && pr.getSocketFactory() instanceof AdvancedSslSocketFactory);
-        if (register && !isRegistered) {
-            Protocol.registerProtocol("https", new Protocol("https", getAdvancedSslSocketFactory(context), 443));
-            
-        } else if (!register && isRegistered) {
-            if (mDefaultHttpsProtocol != null) {
-                Protocol.registerProtocol("https", mDefaultHttpsProtocol);
-            }
-        }
-    }
-    
-    public static AdvancedSslSocketFactory getAdvancedSslSocketFactory(Context context) 
-    		throws GeneralSecurityException, IOException {
-        if (mAdvancedSslSocketFactory  == null) {
-            KeyStore trustStore = getKnownServersStore(context);
-            AdvancedX509TrustManager trustMgr = new AdvancedX509TrustManager(trustStore);
-            TrustManager[] tms = new TrustManager[] { trustMgr };
-                
-            SSLContext sslContext;
-            try {
-            	sslContext = SSLContext.getInstance("TLSv1.2");
-            } catch (NoSuchAlgorithmException e) {
-            	Log_OC.w(TAG, "TLSv1.2 is not supported in this device; falling through TLSv1.0");
-            	sslContext = SSLContext.getInstance("TLSv1");
-            	// should be available in any device; see reference of supported protocols in 
-            	// http://developer.android.com/reference/javax/net/ssl/SSLSocket.html
-            }
-            sslContext.init(null, tms, null);
-                    
-            mHostnameVerifier = new BrowserCompatHostnameVerifier();
-            mAdvancedSslSocketFactory = new AdvancedSslSocketFactory(sslContext, trustMgr, mHostnameVerifier);
-        }
-        return mAdvancedSslSocketFactory;
-    }
-
 
     private static String LOCAL_TRUSTSTORE_FILENAME = "knownServers.bks";
     
@@ -147,7 +81,7 @@ public class NetworkUtils {
      * @throws CertificateException         When an exception occurred while loading the certificates from the local 
      * 										trust store.
      */
-    private static KeyStore getKnownServersStore(Context context) 
+    public static KeyStore getKnownServersStore(Context context)
     		throws KeyStoreException, IOException, NoSuchAlgorithmException, CertificateException {
         if (mKnownServersStore == null) {
             //mKnownServersStore = KeyStore.getInstance("BKS");
@@ -182,16 +116,6 @@ public class NetworkUtils {
         } finally {
             fos.close();
         }
-    }
-    
-    
-    static public MultiThreadedHttpConnectionManager getMultiThreadedConnManager() {
-        if (mConnManager == null) {
-            mConnManager = new MultiThreadedHttpConnectionManager();
-            mConnManager.getParams().setDefaultMaxConnectionsPerHost(5);
-            mConnManager.getParams().setMaxTotalConnections(5);
-        }
-        return mConnManager;
     }
 
     public static boolean isCertInKnownServersStore(Certificate cert, Context context) 

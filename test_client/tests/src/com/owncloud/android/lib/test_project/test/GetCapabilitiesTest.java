@@ -29,8 +29,8 @@ import java.security.GeneralSecurityException;
 
 import junit.framework.AssertionFailedError;
 
-import org.apache.commons.httpclient.protocol.Protocol;
-import org.apache.commons.httpclient.protocol.ProtocolSocketFactory;
+
+
 
 import android.content.Context;
 import android.net.Uri;
@@ -43,7 +43,6 @@ import com.owncloud.android.lib.common.network.NetworkUtils;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.resources.status.GetRemoteCapabilitiesOperation;
 import com.owncloud.android.lib.test_project.R;
-import com.owncloud.android.lib.test_project.SelfSignedConfidentSslSocketFactory;
 
 /**
  * Class to test GetRemoteCapabilitiesOperation

@@ -1,22 +1,22 @@
 /* ownCloud Android Library is available under MIT license
- *   Copyright (C) 2016 ownCloud GmbH.
- *   
+ *   Copyright (C) 2018 ownCloud GmbH.
+ *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
  *   in the Software without restriction, including without limitation the rights
  *   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  *   copies of the Software, and to permit persons to whom the Software is
  *   furnished to do so, subject to the following conditions:
- *   
+ *
  *   The above copyright notice and this permission notice shall be included in
  *   all copies or substantial portions of the Software.
- *   
- *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, 
+ *
+ *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
  *   EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- *   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND 
- *   NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS 
- *   BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN 
- *   ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN 
+ *   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ *   NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
+ *   BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+ *   ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  *   CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *   THE SOFTWARE.
  *
@@ -24,33 +24,36 @@
 
 package com.owncloud.android.lib.resources.files;
 
-import java.util.ArrayList;
-
-import org.apache.commons.httpclient.HttpStatus;
-import org.apache.jackrabbit.webdav.DavConstants;
-import org.apache.jackrabbit.webdav.MultiStatus;
-import org.apache.jackrabbit.webdav.client.methods.PropFindMethod;
-
 import com.owncloud.android.lib.common.OwnCloudClient;
-import com.owncloud.android.lib.common.network.WebdavEntry;
+import com.owncloud.android.lib.common.http.HttpConstants;
+import com.owncloud.android.lib.common.http.methods.webdav.DavConstants;
+import com.owncloud.android.lib.common.http.methods.webdav.DavUtils;
+import com.owncloud.android.lib.common.http.methods.webdav.PropfindMethod;
 import com.owncloud.android.lib.common.network.WebdavUtils;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
+
+import java.net.URL;
+import java.util.ArrayList;
+
+import at.bitfire.dav4android.Response;
+
+import static com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode.OK;
 
 /**
  * Remote operation performing the read of remote file or folder in the ownCloud server.
  *
  * @author David A. Velasco
  * @author masensio
+ * @author David González Verdugo
  */
 
-public class ReadRemoteFolderOperation extends RemoteOperation {
+public class ReadRemoteFolderOperation extends RemoteOperation<ArrayList<RemoteFile>> {
 
     private static final String TAG = ReadRemoteFolderOperation.class.getSimpleName();
 
     private String mRemotePath;
-    private ArrayList<Object> mFolderAndFiles;
 
     /**
      * Constructor
@@ -67,110 +70,60 @@ public class ReadRemoteFolderOperation extends RemoteOperation {
      * @param client Client object to communicate with the remote ownCloud server.
      */
     @Override
-    protected RemoteOperationResult run(OwnCloudClient client) {
-        RemoteOperationResult result = null;
-        PropFindMethod query = null;
+    protected RemoteOperationResult<ArrayList<RemoteFile>> run(OwnCloudClient client) {
+        RemoteOperationResult<ArrayList<RemoteFile>> result = null;
 
         try {
-            // remote request
-            query = new PropFindMethod(client.getWebdavUri() + WebdavUtils.encodePath(mRemotePath),
-                WebdavUtils.getAllPropSet(),    // PropFind Properties
-                DavConstants.DEPTH_1);
-            int status = client.executeMethod(query);
+            PropfindMethod propfindMethod = new PropfindMethod(
+                    new URL(client.getNewFilesWebDavUri() + WebdavUtils.encodePath(mRemotePath)),
+                    DavConstants.DEPTH_1,
+                    DavUtils.getAllPropset());
 
-            // check and process response
-            boolean isSuccess = (
-                status == HttpStatus.SC_MULTI_STATUS ||
-                    status == HttpStatus.SC_OK
-            );
-            if (isSuccess) {
-                // get data from remote folder
-                MultiStatus dataInServer = query.getResponseBodyAsMultiStatus();
-                readData(dataInServer, client);
+            client.setFollowRedirects(true);
+
+            int status = client.executeHttpMethod(propfindMethod);
+
+            if (isSuccess(status)) {
+                ArrayList<RemoteFile> mFolderAndFiles = new ArrayList<>();
+
+                // parse data from remote folder
+                mFolderAndFiles.add(
+                        new RemoteFile(propfindMethod.getRoot(), client.getCredentials().getUsername())
+                );
+
+                // loop to update every child
+                for (Response resource : propfindMethod.getMembers()) {
+                    RemoteFile file = new RemoteFile(resource, client.getCredentials().getUsername());
+                    mFolderAndFiles.add(file);
+                }
 
                 // Result of the operation
-                result = new RemoteOperationResult(true, query);
-                // Add data to the result
-                if (result.isSuccess()) {
-                    result.setData(mFolderAndFiles);
-                }
-            } else {
-                // synchronization failed
-                result = new RemoteOperationResult(false, query);
+                result = new RemoteOperationResult<>(OK);
+                result.setData(mFolderAndFiles);
+
+            } else { // synchronization failed
+                result = new RemoteOperationResult<> (propfindMethod);
             }
 
         } catch (Exception e) {
-            result = new RemoteOperationResult(e);
-
-
+            result = new RemoteOperationResult<>(e);
         } finally {
-            if (query != null)
-                query.releaseConnection();  // let the connection available for other methods
             if (result.isSuccess()) {
                 Log_OC.i(TAG, "Synchronized " + mRemotePath + ": " + result.getLogMessage());
             } else {
                 if (result.isException()) {
                     Log_OC.e(TAG, "Synchronized " + mRemotePath + ": " + result.getLogMessage(),
-                        result.getException());
+                            result.getException());
                 } else {
                     Log_OC.e(TAG, "Synchronized " + mRemotePath + ": " + result.getLogMessage());
                 }
             }
-
         }
         return result;
     }
 
-    public boolean isMultiStatus(int status) {
-        return (status == HttpStatus.SC_MULTI_STATUS);
-    }
-
-    /**
-     * Read the data retrieved from the server about the contents of the target folder
-     *
-     * @param remoteData Full response got from the server with the data of the target
-     *                   folder and its direct children.
-     * @param client     Client instance to the remote server where the data were
-     *                   retrieved.
-     * @return
-     */
-    private void readData(MultiStatus remoteData, OwnCloudClient client) {
-        mFolderAndFiles = new ArrayList<Object>();
-
-        // parse data from remote folder 
-        WebdavEntry we = new WebdavEntry(remoteData.getResponses()[0],
-            client.getWebdavUri().getPath());
-        mFolderAndFiles.add(fillOCFile(we));
-
-        // loop to update every child
-        RemoteFile remoteFile = null;
-        for (int i = 1; i < remoteData.getResponses().length; ++i) {
-            /// new OCFile instance with the data from the server
-            we = new WebdavEntry(remoteData.getResponses()[i], client.getWebdavUri().getPath());
-            remoteFile = fillOCFile(we);
-            mFolderAndFiles.add(remoteFile);
-        }
-    }
-
-    /**
-     * Creates and populates a new {@link RemoteFile} object with the data read from the server.
-     *
-     * @param we WebDAV entry read from the server for a WebDAV resource (remote file or folder).
-     * @return New OCFile instance representing the remote resource described by we.
-     */
-    private RemoteFile fillOCFile(WebdavEntry we) {
-        RemoteFile file = new RemoteFile(we.decodedPath());
-        file.setCreationTimestamp(we.createTimestamp());
-        file.setLength(we.contentLength());
-        file.setMimeType(we.contentType());
-        file.setModifiedTimestamp(we.modifiedTimestamp());
-        file.setEtag(we.etag());
-        file.setPermissions(we.permissions());
-        file.setRemoteId(we.remoteId());
-        file.setSize(we.size());
-        file.setQuotaUsedBytes(we.quotaUsedBytes());
-        file.setQuotaAvailableBytes(we.quotaAvailableBytes());
-        file.setPrivateLink(we.privateLink());
-        return file;
+    private boolean isSuccess(int status) {
+        return status == HttpConstants.HTTP_MULTI_STATUS ||
+                status == HttpConstants.HTTP_OK;
     }
 }

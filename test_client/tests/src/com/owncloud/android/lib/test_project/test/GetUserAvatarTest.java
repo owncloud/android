@@ -31,7 +31,7 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.resources.users.GetRemoteUserAvatarOperation.ResultData;
 import com.owncloud.android.lib.test_project.TestActivity;
 
-import org.apache.commons.httpclient.HttpStatus;
+
 
 /**
  * Class to test {@link GetRemoteUserAvatarOperation}
@@ -81,7 +81,7 @@ public class GetUserAvatarTest extends RemoteTest {
         // request again, with the just received etag
         result = mActivity.getUserAvatar(AVATAR_DIMENSION, etag);
         assertFalse(result.isSuccess());
-        assertTrue(result.getHttpCode() == HttpStatus.SC_NOT_MODIFIED);
+        assertTrue(result.getHttpCode() == HttpConstants.HTTP_NOT_MODIFIED);
     }
     */
 

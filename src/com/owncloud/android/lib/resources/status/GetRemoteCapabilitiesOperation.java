@@ -24,30 +24,34 @@
  *
  */
 
+
 package com.owncloud.android.lib.resources.status;
 
 import android.net.Uri;
 
 import com.owncloud.android.lib.common.OwnCloudClient;
+import com.owncloud.android.lib.common.http.HttpConstants;
+import com.owncloud.android.lib.common.http.methods.nonwebdav.GetMethod;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
 
-import org.apache.commons.httpclient.HttpStatus;
-import org.apache.commons.httpclient.methods.GetMethod;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
+import java.net.URL;
+
+import static com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode.OK;
 
 /**
  * Get the Capabilities from the server
- *
  * Save in Result.getData in a OCCapability object
+ *
+ * @author masensio
+ * @author David González Verdugo
  */
-public class GetRemoteCapabilitiesOperation extends RemoteOperation {
+public class GetRemoteCapabilitiesOperation extends RemoteOperation<OCCapability> {
 
     private static final String TAG = GetRemoteCapabilitiesOperation.class.getSimpleName();
-
 
     // OCS Routes
     private static final String OCS_ROUTE = "ocs/v2.php/cloud/capabilities";
@@ -115,10 +119,8 @@ public class GetRemoteCapabilitiesOperation extends RemoteOperation {
     }
 
     @Override
-    protected RemoteOperationResult run(OwnCloudClient client) {
-        RemoteOperationResult result = null;
-        int status;
-        GetMethod get = null;
+    protected RemoteOperationResult<OCCapability> run(OwnCloudClient client) {
+        RemoteOperationResult<OCCapability> result;
 
         try {
             Uri requestUri = client.getBaseUri();
@@ -126,14 +128,14 @@ public class GetRemoteCapabilitiesOperation extends RemoteOperation {
             uriBuilder.appendEncodedPath(OCS_ROUTE);    // avoid starting "/" in this method
             uriBuilder.appendQueryParameter(PARAM_FORMAT, VALUE_FORMAT);
 
-            // Get Method
-            get = new GetMethod(uriBuilder.build().toString());
-            get.addRequestHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE);
+            GetMethod getMethod = new GetMethod(new URL(uriBuilder.build().toString()));
 
-            status = client.executeMethod(get);
+            getMethod.addRequestHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE);
 
+            int status = client.executeHttpMethod(getMethod);
+
+            String response = getMethod.getResponseBodyAsString();
             if(isSuccess(status)) {
-                String response = get.getResponseBodyAsString();
                 Log_OC.d(TAG, "Successful response: " + response);
 
                 // Parse the response
@@ -148,7 +150,6 @@ public class GetRemoteCapabilitiesOperation extends RemoteOperation {
                 String message = respMeta.getString(PROPERTY_MESSAGE);
 
                 if (statusProp) {
-                    ArrayList<Object> data = new ArrayList<Object>(); // For result data
                     OCCapability capability = new OCCapability();
                     // Add Version
                     if (respData.has(NODE_VERSION)) {
@@ -254,20 +255,18 @@ public class GetRemoteCapabilitiesOperation extends RemoteOperation {
                         }
                     }
                     // Result
-                    data.add(capability);
-                    result = new RemoteOperationResult(true, get);
-                    result.setData(data);
+                    result = new RemoteOperationResult<>(OK);
+                    result.setData(capability);
 
                     Log_OC.d(TAG, "*** Get Capabilities completed ");
                 } else {
-                    result = new RemoteOperationResult(statusProp, statuscode, null, null);
+                    result = new RemoteOperationResult<>(statuscode, message, null);
                     Log_OC.e(TAG, "Failed response while getting capabilities from the server ");
                     Log_OC.e(TAG, "*** status: " + statusProp + "; message: " + message);
                 }
 
             } else {
-                result = new RemoteOperationResult(false, get);
-                String response = get.getResponseBodyAsString();
+                result = new RemoteOperationResult<>(getMethod);
                 Log_OC.e(TAG, "Failed response while getting capabilities from the server ");
                 if (response != null) {
                     Log_OC.e(TAG, "*** status code: " + status + "; response message: " + response);
@@ -277,18 +276,13 @@ public class GetRemoteCapabilitiesOperation extends RemoteOperation {
             }
 
         } catch (Exception e) {
-            result = new RemoteOperationResult(e);
+            result = new RemoteOperationResult<>(e);
             Log_OC.e(TAG, "Exception while getting capabilities", e);
-
-        } finally {
-            if (get != null) {
-                get.releaseConnection();
-            }
         }
         return result;
     }
 
     private boolean isSuccess(int status) {
-        return (status == HttpStatus.SC_OK);
+        return (status == HttpConstants.HTTP_OK);
     }
 }

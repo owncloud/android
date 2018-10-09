@@ -24,17 +24,17 @@
 
 package com.owncloud.android.lib.resources.files;
 
-import android.os.RemoteException;
-
 import java.io.File;
-
-import org.apache.jackrabbit.webdav.client.methods.DavMethodBase;
+import java.net.URL;
+import java.util.concurrent.TimeUnit;
 
 import com.owncloud.android.lib.common.OwnCloudClient;
+import com.owncloud.android.lib.common.http.HttpConstants;
+import com.owncloud.android.lib.common.http.methods.webdav.MoveMethod;
 import com.owncloud.android.lib.common.network.WebdavUtils;
+import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
-import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 
@@ -56,7 +56,6 @@ public class RenameRemoteFileOperation extends RemoteOperation {
     private String mOldRemotePath;
     private String mNewName;
     private String mNewRemotePath;
-
 
     /**
      * Constructor
@@ -88,51 +87,48 @@ public class RenameRemoteFileOperation extends RemoteOperation {
      */
     @Override
     protected RemoteOperationResult run(OwnCloudClient client) {
-        RemoteOperationResult result = null;
 
-        LocalMoveMethod move = null;
-
-        OwnCloudVersion version = client.getOwnCloudVersion();
-        boolean versionWithForbiddenChars =
+        final OwnCloudVersion version = client.getOwnCloudVersion();
+        final boolean versionWithForbiddenChars =
             (version != null && version.isVersionWithForbiddenCharacters());
-        boolean noInvalidChars = FileUtils.isValidPath(mNewRemotePath, versionWithForbiddenChars);
 
-        if (noInvalidChars) {
-            try {
-                if (mNewName.equals(mOldName)) {
-                    return new RemoteOperationResult(ResultCode.OK);
-                }
+        if(!FileUtils.isValidPath(mNewRemotePath, versionWithForbiddenChars))
+            return new RemoteOperationResult<>(ResultCode.INVALID_CHARACTER_IN_NAME);
 
-                if (targetPathIsUsed(client)) {
-                    return new RemoteOperationResult(ResultCode.INVALID_OVERWRITE);
-                }
-
-                move = new LocalMoveMethod(client.getWebdavUri() +
-                    WebdavUtils.encodePath(mOldRemotePath),
-                    client.getWebdavUri() + WebdavUtils.encodePath(mNewRemotePath));
-                client.executeMethod(move, RENAME_READ_TIMEOUT, RENAME_CONNECTION_TIMEOUT);
-                result = new RemoteOperationResult(move.succeeded(), move);
-                Log_OC.i(TAG, "Rename " + mOldRemotePath + " to " + mNewRemotePath + ": " +
-                            result.getLogMessage()
-                );
-                client.exhaustResponse(move.getResponseBodyAsStream());
-
-            } catch (Exception e) {
-                result = new RemoteOperationResult(e);
-                Log_OC.e(TAG, "Rename " + mOldRemotePath + " to " +
-                    ((mNewRemotePath == null) ? mNewName : mNewRemotePath) + ": " +
-                    result.getLogMessage(), e);
-
-            } finally {
-                if (move != null)
-                    move.releaseConnection();
+        try {
+            if (mNewName.equals(mOldName)) {
+                return new RemoteOperationResult<>(ResultCode.OK);
             }
 
-        } else {
-            result = new RemoteOperationResult(ResultCode.INVALID_CHARACTER_IN_NAME);
-        }
+            if (targetPathIsUsed(client)) {
+                return new RemoteOperationResult<>(ResultCode.INVALID_OVERWRITE);
+            }
 
-        return result;
+            final MoveMethod move = new MoveMethod(new URL(client.getNewFilesWebDavUri() +
+                    WebdavUtils.encodePath(mOldRemotePath)),
+                    client.getNewFilesWebDavUri() + WebdavUtils.encodePath(mNewRemotePath), false);
+
+            move.setReadTimeout(RENAME_READ_TIMEOUT, TimeUnit.SECONDS);
+            move.setConnectionTimeout(RENAME_READ_TIMEOUT, TimeUnit.SECONDS);
+
+            final int status = client.executeHttpMethod(move);
+            final RemoteOperationResult result =
+                    (status == HttpConstants.HTTP_CREATED || status == HttpConstants.HTTP_NO_CONTENT)
+                            ? new RemoteOperationResult<>(ResultCode.OK)
+                            : new RemoteOperationResult<>(move);
+
+            Log_OC.i(TAG, "Rename " + mOldRemotePath + " to " + mNewRemotePath + ": " +
+                    result.getLogMessage()
+            );
+            client.exhaustResponse(move.getResponseBodyAsStream());
+            return result;
+        } catch (Exception e) {
+            final RemoteOperationResult result = new RemoteOperationResult<>(e);
+            Log_OC.e(TAG, "Rename " + mOldRemotePath + " to " +
+                    ((mNewRemotePath == null) ? mNewName : mNewRemotePath) + ": " +
+                    result.getLogMessage(), e);
+            return result;
+        }
     }
 
     /**
@@ -146,27 +142,4 @@ public class RenameRemoteFileOperation extends RemoteOperation {
         RemoteOperationResult exists = existenceCheckRemoteOperation.run(client);
         return exists.isSuccess();
     }
-
-    /**
-     * Move operation
-     */
-    private class LocalMoveMethod extends DavMethodBase {
-
-        public LocalMoveMethod(String uri, String dest) {
-            super(uri);
-            addRequestHeader(new org.apache.commons.httpclient.Header("Destination", dest));
-        }
-
-        @Override
-        public String getName() {
-            return "MOVE";
-        }
-
-        @Override
-        protected boolean isSuccess(int status) {
-            return status == 201 || status == 204;
-        }
-
-    }
-
 }

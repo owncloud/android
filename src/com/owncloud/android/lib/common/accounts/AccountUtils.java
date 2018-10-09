@@ -1,5 +1,5 @@
 /* ownCloud Android Library is available under MIT license
- *   Copyright (C) 2017 ownCloud GmbH.
+ *   Copyright (C) 2018 ownCloud GmbH.
  *   Copyright (C) 2012  Bartek Przybylski
  *   
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -25,11 +25,6 @@
 
 package com.owncloud.android.lib.common.accounts;
 
-import java.io.IOException;
-
-import org.apache.commons.httpclient.Cookie;
-import org.apache.commons.httpclient.HttpStatus;
-
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.accounts.AccountsException;
@@ -38,14 +33,18 @@ import android.accounts.OperationCanceledException;
 import android.content.Context;
 import android.net.Uri;
 
-import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.lib.common.OwnCloudClient;
-import com.owncloud.android.lib.common.OwnCloudClientManagerFactory;
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentials;
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentialsFactory;
-import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
+import com.owncloud.android.lib.resources.files.FileUtils;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import okhttp3.Cookie;
 
 public class AccountUtils {
 
@@ -61,10 +60,22 @@ public class AccountUtils {
      */
     public static String getWebDavUrlForAccount(Context context, Account account)
         throws AccountNotFoundException {
+        String webDavUrlForAccount = "";
 
-        return getBaseUrlForAccount(context, account) + OwnCloudClient.WEBDAV_PATH_4_0;
+        try {
+            OwnCloudCredentials ownCloudCredentials = getCredentialsForAccount(context, account);
+            webDavUrlForAccount = getBaseUrlForAccount(context, account) + OwnCloudClient.NEW_WEBDAV_FILES_PATH_4_0
+                    + ownCloudCredentials.getUsername();
+        } catch (OperationCanceledException e) {
+            e.printStackTrace();
+        } catch (AuthenticatorException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return webDavUrlForAccount;
     }
-
 
     /**
      * Extracts url server from the account
@@ -85,7 +96,6 @@ public class AccountUtils {
 
         return baseurl;
     }
-
 
     /**
      * Get the username corresponding to an OC account.
@@ -132,7 +142,7 @@ public class AccountUtils {
     public static OwnCloudCredentials getCredentialsForAccount(Context context, Account account)
         throws OperationCanceledException, AuthenticatorException, IOException {
 
-        OwnCloudCredentials credentials = null;
+        OwnCloudCredentials credentials;
         AccountManager am = AccountManager.get(context);
 
         String supportsOAuth2 = am.getUserData(account, AccountUtils.Constants.KEY_SUPPORTS_OAUTH2);
@@ -176,9 +186,7 @@ public class AccountUtils {
         }
 
         return credentials;
-
     }
-
 
     public static String buildAccountNameOld(Uri serverBaseUrl, String username) {
         if (serverBaseUrl.getScheme() == null) {
@@ -207,7 +215,6 @@ public class AccountUtils {
     }
 
     public static void saveClient(OwnCloudClient client, Account savedAccount, Context context) {
-
         // Account Manager
         AccountManager ac = AccountManager.get(context.getApplicationContext());
 
@@ -215,12 +222,10 @@ public class AccountUtils {
             String cookiesString = client.getCookiesString();
             if (!"".equals(cookiesString)) {
                 ac.setUserData(savedAccount, Constants.KEY_COOKIES, cookiesString);
-                // Log_OC.d(TAG, "Saving Cookies: "+ cookiesString );
+                 Log_OC.d(TAG, "Saving Cookies: "+ cookiesString );
             }
         }
-
     }
-
 
     /**
      * Restore the client cookies persisted in an account stored in the system AccountManager.
@@ -239,23 +244,28 @@ public class AccountUtils {
             // Account Manager
             AccountManager am = AccountManager.get(context.getApplicationContext());
 
-            Uri serverUri = (client.getBaseUri() != null) ? client.getBaseUri() : client.getWebdavUri();
+            Uri serverUri = (client.getBaseUri() != null) ? client.getBaseUri() : client.getNewFilesWebDavUri();
 
             String cookiesString = am.getUserData(account, Constants.KEY_COOKIES);
             if (cookiesString != null) {
-                String[] cookies = cookiesString.split(";");
-                if (cookies.length > 0) {
-                    for (int i = 0; i < cookies.length; i++) {
-                        Cookie cookie = new Cookie();
-                        int equalPos = cookies[i].indexOf('=');
-                        cookie.setName(cookies[i].substring(0, equalPos));
-                        cookie.setValue(cookies[i].substring(equalPos + 1));
-                        cookie.setDomain(serverUri.getHost());    // VERY IMPORTANT
-                        cookie.setPath(serverUri.getPath());    // VERY IMPORTANT
-
-                        client.getState().addCookie(cookie);
-                    }
+                String[] rawCookies = cookiesString.split(";");
+                List<Cookie> cookieList = new ArrayList<>(rawCookies.length);
+                for(String rawCookie : rawCookies) {
+                    rawCookie = rawCookie.replace(" ", "");
+                    final int equalPos = rawCookie.indexOf('=');
+                    if (equalPos == -1) continue;
+                    cookieList.add(new Cookie.Builder()
+                            .name(rawCookie.substring(0, equalPos))
+                            .value(rawCookie.substring(equalPos + 1))
+                            .domain(serverUri.getHost())
+                            .path(
+                                    serverUri.getPath().equals("")
+                                            ? FileUtils.PATH_SEPARATOR
+                                            : serverUri.getPath()
+                            )
+                            .build());
                 }
+                client.setCookiesForCurrentAccount(cookieList);
             }
         }
     }
@@ -278,7 +288,6 @@ public class AccountUtils {
             return mFailedAccount;
         }
     }
-
 
     public static class Constants {
         /**
@@ -320,5 +329,4 @@ public class AccountUtils {
         public static final String KEY_OAUTH2_REFRESH_TOKEN = "oc_oauth2_refresh_token";
 
     }
-
 }

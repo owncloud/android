@@ -37,14 +37,13 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.resources.files.CopyRemoteFileOperation;
 import com.owncloud.android.lib.test_project.R;
-import com.owncloud.android.lib.test_project.SelfSignedConfidentSslSocketFactory;
 import com.owncloud.android.lib.test_project.TestActivity;
 
 import junit.framework.AssertionFailedError;
 
-import org.apache.commons.httpclient.HttpStatus;
-import org.apache.commons.httpclient.protocol.Protocol;
-import org.apache.commons.httpclient.protocol.ProtocolSocketFactory;
+
+
+
 
 import java.io.File;
 import java.security.GeneralSecurityException;
@@ -373,7 +372,7 @@ public class CopyFileTest extends ActivityInstrumentationTestCase2<TestActivity>
                 false
         );
         result = copyOperation.execute(mClient);
-        assertTrue(result.getHttpCode() == HttpStatus.SC_CONFLICT);
+        assertTrue(result.getHttpCode() == HttpConstants.HTTP_CONFLICT);
 
         // target location (renaming) has invalid characters
         copyOperation = new CopyRemoteFileOperation(
