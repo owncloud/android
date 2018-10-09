@@ -48,34 +48,7 @@
     <item android:id="@+id/action_sort"
         android:orderInCategory="2"
         android:title="@string/actionbar_sort">
-        <menu
-            android:id="@+id/sort_menu">
-
-            <group
-                android:id="@+id/sort_group"
-                android:checkableBehavior="single">
-                <item
-                    android:id="@+id/action_sort_by_name"
-                    android:title="@string/actionbar_sort_by_name"
-                    android:orderInCategory="2"/>
-                <item
-                    android:id="@+id/action_sort_by_date"
-                    android:title="@string/actionbar_sort_by_date"
-                    android:orderInCategory="2"/>
-                <item
-                    android:id="@+id/action_sort_by_size"
-                    android:title="@string/actionbar_sort_by_size"
-                    android:orderInCategory="2"/>
-            </group>
-
-            <item
-                android:id="@+id/action_sort_descending"
-                android:orderInCategory="3"
-                android:title="@string/actionbar_descending"
-                android:checkable="true"
-                android:checked="false"/>
-
-        </menu>
+        <menu></menu>
     </item>
 
     <item
