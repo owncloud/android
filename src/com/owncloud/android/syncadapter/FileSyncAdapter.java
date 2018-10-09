@@ -3,8 +3,9 @@
  *
  *   @author Bartek Przybylski
  *   @author David A. Velasco
+ *   @author David González Verdugo
  *   Copyright (C) 2011  Bartek Przybylski
- *   Copyright (C) 2017 ownCloud GmbH.
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -49,13 +50,13 @@ import com.owncloud.android.operations.SyncCapabilitiesOperation;
 import com.owncloud.android.operations.SynchronizeFolderOperation;
 import com.owncloud.android.ui.activity.ErrorsWhileCopyingHandlerActivity;
 
-import org.apache.jackrabbit.webdav.DavException;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import at.bitfire.dav4android.exception.DavException;
 
 /**
  * Implementation of {@link AbstractThreadedSyncAdapter} responsible for synchronizing 
@@ -165,7 +166,7 @@ public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
 
         this.setAccount(account);
         this.setContentProviderClient(providerClient);
-        this.setStorageManager(new FileDataStorageManager(account, providerClient));
+        this.setStorageManager(new FileDataStorageManager(getContext(), account, providerClient));
         
         try {
             this.initClientForCurrentAccount();
@@ -239,7 +240,7 @@ public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
      */
     private void updateCapabilities() {
         SyncCapabilitiesOperation getCapabilities = new SyncCapabilitiesOperation();
-        RemoteOperationResult  result = getCapabilities.execute(getStorageManager(), getContext());
+        RemoteOperationResult result = getCapabilities.execute(getStorageManager(), getContext());
         if (!result.isSuccess()) {
             mLastFailedResult = result;
         }

@@ -194,8 +194,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
             // Gets an auth token from the AccountManager's cache. If no auth token is cached for
             // this account, null will be returned
             accessToken = am.peekAuthToken(account, authTokenType);
-            if (accessToken == null &&
-                canBeRefreshed(authTokenType)) {
+            if (accessToken == null && canBeRefreshed(authTokenType)) {
                 accessToken = refreshToken(account, authTokenType, am);
             }
         }
@@ -352,14 +351,14 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
                 true
             );
 
-            RemoteOperationResult result = oAuth2RefreshAccessTokenOperation.execute(client);
+            RemoteOperationResult<Map<String, String>> result = oAuth2RefreshAccessTokenOperation.execute(client);
             if (!result.isSuccess()) {
                 Log_OC.e(TAG, "Failed to refresh access token");
                 return null;
             }
 
             // Get new access and refresh tokens
-            Map<String, String> tokens = (Map<String, String>) (result.getData().get(0));
+            Map<String, String> tokens = result.getData();
 
             accessToken = tokens.get(OAuth2Constants.KEY_ACCESS_TOKEN);
 

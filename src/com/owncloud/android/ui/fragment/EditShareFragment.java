@@ -40,6 +40,7 @@ import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.shares.OCShare;
+import com.owncloud.android.lib.resources.shares.ShareParserResult;
 import com.owncloud.android.lib.resources.shares.SharePermissionsBuilder;
 import com.owncloud.android.lib.resources.shares.ShareType;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
@@ -409,7 +410,7 @@ public class EditShareFragment extends DialogFragment {
      *
      * @param result        Result of an update on the edited {@link OCShare} permissions.
      */
-    public void onUpdateSharePermissionsFinished(RemoteOperationResult result) {
+    public void onUpdateSharePermissionsFinished(RemoteOperationResult<ShareParserResult> result) {
         if (result.isSuccess()) {
             refreshUiFromDB(getView());
         } else {

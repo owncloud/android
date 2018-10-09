@@ -2,7 +2,8 @@
  *   ownCloud Android client application
  *
  *   @author David A. Velasco
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   @author David González Verdugo
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -336,7 +337,7 @@ public class AvailableOfflineObserver extends FileObserver {
      */
     private void startSyncOperation(String fileName) {
         FileDataStorageManager storageManager = 
-                new FileDataStorageManager(mAccount, mContext.getContentResolver());
+                new FileDataStorageManager(mContext, mAccount, mContext.getContentResolver());
         // a fresh object is needed; many things could have occurred to the file
         // since it was registered to observe again, assuming that local files
         // are linked to a remote file AT MOST, SOMETHING TO BE DONE;

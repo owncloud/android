@@ -625,7 +625,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
     }
 
     private void clearLocalSearchView() {
-        ((FileDisplayActivity) getActivity()).hideSoftKeyboard();
+        ((FileActivity) getActivity()).hideSoftKeyboard();
         mFileListAdapter.clearFilterBySearch();
         if (mSearchView != null) {
             mSearchView.onActionViewCollapsed();

@@ -27,6 +27,7 @@ import android.support.annotation.Nullable;
 import com.owncloud.android.R;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
+import com.owncloud.android.lib.resources.shares.ShareParserResult;
 import com.owncloud.android.operations.CopyFileOperation;
 import com.owncloud.android.operations.CreateFolderOperation;
 import com.owncloud.android.operations.CreateShareViaLinkOperation;
@@ -42,9 +43,10 @@ import com.owncloud.android.operations.UpdateSharePermissionsOperation;
 import com.owncloud.android.operations.UpdateShareViaLinkOperation;
 import com.owncloud.android.operations.UploadFileOperation;
 
-import org.apache.commons.httpclient.ConnectTimeoutException;
+
 
 import java.io.File;
+import java.net.SocketTimeoutException;
 
 /**
  * Class to choose proper error messages to show to the user depending on the results of operations,
@@ -120,10 +122,15 @@ public class ErrorMessageAdapter {
                 || operation instanceof CreateShareViaLinkOperation
                 || operation instanceof RemoveShareOperation
                 || operation instanceof UpdateShareViaLinkOperation
-                || operation instanceof UpdateSharePermissionsOperation)
-                && result.getData() != null
-                && result.getData().size() > 0) {
-            return result.getData().get(0).toString();
+                || operation instanceof UpdateSharePermissionsOperation)) {
+
+            RemoteOperationResult<ShareParserResult> shareResult = (RemoteOperationResult<ShareParserResult>) result;
+
+            return (shareResult.getData()!= null
+                    && shareResult.getData().getShares() != null
+                    && shareResult.getData().getShares().size() > 0)
+                    ? shareResult.getData().getShares().get(0).toString()
+                    : shareResult.getData().getParserMessage();
         }
 
         switch (result.getCode()) {
@@ -208,9 +215,9 @@ public class ErrorMessageAdapter {
         switch(result.getCode()) {
             case WRONG_CONNECTION: return f.format(R.string.network_error_socket_exception);
             case NO_NETWORK_CONNECTION: return f.format(R.string.error_no_network_connection);
-            case TIMEOUT: return (result.getException() instanceof ConnectTimeoutException) ?
-                    f.format(R.string.network_error_connect_timeout_exception) :
-                    f.format(R.string.network_error_socket_timeout_exception);
+            case TIMEOUT: return (result.getException() instanceof SocketTimeoutException)
+                    ? f.format(R.string.network_error_socket_timeout_exception)
+                    : f.format(R.string.network_error_connect_timeout_exception);
             case HOST_NOT_AVAILABLE: return f.format(R.string.network_host_not_available);
             case SERVICE_UNAVAILABLE: return f.format(R.string.service_unavailable);
             case SSL_RECOVERABLE_PEER_UNVERIFIED: return f.format(R.string.ssl_certificate_not_trusted);

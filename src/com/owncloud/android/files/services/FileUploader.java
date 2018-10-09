@@ -6,6 +6,7 @@
  *  @author LukeOwnCloud
  *  @author David A. Velasco
  *  @author Christian Schabesberger
+ *  @author David González Verdugo
  *
  *  Copyright (C) 2012 Bartek Przybylski
  *  Copyright (C) 2018 ownCloud GmbH.
@@ -59,18 +60,23 @@ import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.OwnCloudClientManagerFactory;
 import com.owncloud.android.lib.common.network.OnDatatransferProgressListener;
-import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
+import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
+import com.owncloud.android.lib.resources.files.chunks.ChunkedUploadRemoteFileOperation;
 import com.owncloud.android.lib.resources.files.FileUtils;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
+import com.owncloud.android.operations.ChunkedUploadFileOperation;
+import com.owncloud.android.operations.RemoveChunksFolderOperation;
 import com.owncloud.android.operations.UploadFileOperation;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.activity.UploadListActivity;
 import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter;
 import com.owncloud.android.ui.notifications.NotificationUtils;
 import com.owncloud.android.utils.Extras;
+import com.owncloud.android.utils.SecurityUtils;
 
+import java.io.File;
 import java.lang.ref.WeakReference;
 import java.util.AbstractList;
 import java.util.HashMap;
@@ -313,8 +319,7 @@ public class FileUploader extends Service
         boolean chunked = ocv.isChunkedUploadSupported();
 
         if (!retry) {
-            if (!(intent.hasExtra(KEY_LOCAL_FILE) ||
-                    intent.hasExtra(KEY_FILE))) {
+            if (!(intent.hasExtra(KEY_LOCAL_FILE) || intent.hasExtra(KEY_FILE))) {
                 Log_OC.e(TAG, "Not enough information provided in intent");
                 return Service.START_NOT_STICKY;
             }
@@ -373,8 +378,8 @@ public class FileUploader extends Service
             }
             // at this point variable "OCFile[] files" is loaded correctly.
 
-            String uploadKey = null;
-            UploadFileOperation newUpload = null;
+            String uploadKey;
+            UploadFileOperation newUploadFileOperation;
             try {
                 for (int i = 0; i < files.length; i++) {
 
@@ -388,28 +393,42 @@ public class FileUploader extends Service
                     ocUpload.setWhileChargingOnly(isWhileChargingOnly);*/
                     ocUpload.setUploadStatus(UploadStatus.UPLOAD_IN_PROGRESS);
 
-                    newUpload = new UploadFileOperation(
-                            account,
-                            files[i],
-                            ocUpload,
-                            chunked,
-                            forceOverwrite,
-                            localAction,
-                            this
-                    );
-                    newUpload.setCreatedBy(createdBy);
-                    if (isCreateRemoteFolder) {
-                        newUpload.setRemoteFolderToBeCreated();
+                    if(chunked && new File(files[i].getStoragePath()).length() >
+                            ChunkedUploadRemoteFileOperation.CHUNK_SIZE) {
+                        ocUpload.setTransferId(
+                                SecurityUtils.stringToMD5Hash(files[i].getRemotePath()) + System.currentTimeMillis());
+                        newUploadFileOperation = new ChunkedUploadFileOperation(
+                                account,
+                                files[i],
+                                ocUpload,
+                                forceOverwrite,
+                                localAction,
+                                this
+                        );
+                    } else {
+                        newUploadFileOperation = new UploadFileOperation(
+                                account,
+                                files[i],
+                                ocUpload,
+                                forceOverwrite,
+                                localAction,
+                                this
+                        );
                     }
-                    newUpload.addDatatransferProgressListener(this);
-                    newUpload.addDatatransferProgressListener((FileUploaderBinder) mBinder);
 
-                    newUpload.addRenameUploadListener(this);
+                    newUploadFileOperation.setCreatedBy(createdBy);
+                    if (isCreateRemoteFolder) {
+                        newUploadFileOperation.setRemoteFolderToBeCreated();
+                    }
+                    newUploadFileOperation.addDatatransferProgressListener(this);
+                    newUploadFileOperation.addDatatransferProgressListener((FileUploaderBinder) mBinder);
+
+                    newUploadFileOperation.addRenameUploadListener(this);
 
                     Pair<String, String> putResult = mPendingUploads.putIfAbsent(
                             account.name,
                             files[i].getRemotePath(),
-                            newUpload
+                            newUploadFileOperation
                     );
                     if (putResult != null) {
                         uploadKey = putResult.first;
@@ -417,7 +436,7 @@ public class FileUploader extends Service
 
                         // Save upload in database
                         long id = mUploadsStorageManager.storeUpload(ocUpload);
-                        newUpload.setOCUploadId(id);
+                        newUploadFileOperation.setOCUploadId(id);
                     }
                 }
 
@@ -442,25 +461,39 @@ public class FileUploader extends Service
             }
             OCUpload upload = intent.getParcelableExtra(KEY_RETRY_UPLOAD);
 
-            UploadFileOperation newUpload = new UploadFileOperation(
-                    account,
-                    null,
-                    upload,
-                    chunked,
-                    upload.isForceOverwrite(),  // TODO should be read from DB?
-                    upload.getLocalAction(),    // TODO should be read from DB?
-                    this
-            );
+            UploadFileOperation newUploadFileOperation;
 
-            newUpload.addDatatransferProgressListener(this);
-            newUpload.addDatatransferProgressListener((FileUploaderBinder) mBinder);
+            if(chunked && upload.getFileSize() > ChunkedUploadRemoteFileOperation.CHUNK_SIZE) {
+                upload.setTransferId(
+                        SecurityUtils.stringToMD5Hash(upload.getRemotePath()) + System.currentTimeMillis());
+                newUploadFileOperation = new ChunkedUploadFileOperation(
+                        account,
+                        null,
+                        upload,
+                        upload.isForceOverwrite(),
+                        upload.getLocalAction(),
+                        this
+                );
+            } else {
+                newUploadFileOperation = new UploadFileOperation(
+                        account,
+                        null,
+                        upload,
+                        upload.isForceOverwrite(),
+                        upload.getLocalAction(),
+                        this
+                );
+            }
 
-            newUpload.addRenameUploadListener(this);
+            newUploadFileOperation.addDatatransferProgressListener(this);
+            newUploadFileOperation.addDatatransferProgressListener((FileUploaderBinder) mBinder);
+
+            newUploadFileOperation.addRenameUploadListener(this);
 
             Pair<String, String> putResult = mPendingUploads.putIfAbsent(
                     account.name,
                     upload.getRemotePath(),
-                    newUpload
+                    newUploadFileOperation
                     );
             if (putResult != null) {
                 String uploadKey = putResult.first;
@@ -547,7 +580,6 @@ public class FileUploader extends Service
          */
         public void cancel(OCUpload storedUpload) {
             cancel(storedUpload.getAccountName(), storedUpload.getRemotePath());
-
         }
 
         /**
@@ -568,7 +600,6 @@ public class FileUploader extends Service
                 upload = mCurrentUpload;
             }
             if (upload != null) {
-                boolean pending = !upload.isUploadInProgress();
                 upload.cancel();
                 // need to update now table in mUploadsStorageManager,
                 // since the operation will not get to be run by FileUploader#uploadFile
@@ -704,18 +735,6 @@ public class FileUploader extends Service
             }
         }
 
-
-        @Override
-        public void onTransferProgress(long progressRate, long totalTransferredSoFar,
-                                       long totalToTransfer, String fileName) {
-            String key = buildRemoteName(mCurrentUpload.getAccount().name, mCurrentUpload.getFile().getRemotePath());
-            WeakReference<OnDatatransferProgressListener> boundListenerRef = mBoundListeners.get(key);
-            if (boundListenerRef != null && boundListenerRef.get() != null) {
-                boundListenerRef.get().onTransferProgress(progressRate, totalTransferredSoFar,
-                        totalToTransfer, fileName);
-            }
-        }
-
         /**
          * Builds a key for the map of listeners.
          * <p/>
@@ -730,6 +749,14 @@ public class FileUploader extends Service
             return accountName + remotePath;
         }
 
+        @Override
+        public void onTransferProgress(long read, long transferred, long total, String absolutePath) {
+            String key = buildRemoteName(mCurrentUpload.getAccount().name, mCurrentUpload.getFile().getRemotePath());
+            WeakReference<OnDatatransferProgressListener> boundListenerRef = mBoundListeners.get(key);
+            if (boundListenerRef != null && boundListenerRef.get() != null) {
+                boundListenerRef.get().onTransferProgress(read, transferred, total, absolutePath);
+            }
+        }
     }
 
     /**
@@ -804,6 +831,7 @@ public class FileUploader extends Service
                         !mCurrentAccount.equals(mCurrentUpload.getAccount())) {
                     mCurrentAccount = mCurrentUpload.getAccount();
                     mStorageManager = new FileDataStorageManager(
+                            getApplicationContext(),
                             mCurrentAccount,
                             getContentResolver()
                     );
@@ -856,8 +884,7 @@ public class FileUploader extends Service
                             mCurrentUpload.getRemotePath()
                         );
                         uploadResult = new RemoteOperationResult(
-                            ResultCode.NO_NETWORK_CONNECTION
-                        );
+                            ResultCode.NO_NETWORK_CONNECTION);
                     } else {
                         Log_OC.v(
                             TAG,
@@ -885,11 +912,20 @@ public class FileUploader extends Service
                 notifyUploadResult(mCurrentUpload, uploadResult);
 
                 sendBroadcastUploadFinished(mCurrentUpload, uploadResult, removeResult.second);
-
             }
-
         }
+    }
 
+    private void removeChunksFolder(long ocUploadId) {
+        RemoveChunksFolderOperation remoteChunksFolderOperation = new RemoveChunksFolderOperation(
+                String.valueOf(ocUploadId)
+        );
+
+        RemoteOperationResult result = remoteChunksFolderOperation.execute(mUploadClient);
+
+        if (!result.isSuccess()) {
+            Log_OC.e(TAG, "Error deleting chunks folder after cancelling chunked upload");
+        }
     }
 
     /**
@@ -940,7 +976,6 @@ public class FileUploader extends Service
             String text = String.format(getString(R.string.uploader_upload_in_progress_content), percent, fileName);
             mNotificationBuilder.setContentText(text);
             mNotificationBuilder.setChannelId(UPLOAD_NOTIFICATION_CHANNEL_ID);
-
             mNotificationManager.notify(R.string.uploader_upload_in_progress_ticker, mNotificationBuilder.build());
         }
         mLastPercent = percent;
@@ -958,10 +993,14 @@ public class FileUploader extends Service
         // / cancelled operation or success -> silent removal of progress notification
         mNotificationManager.cancel(R.string.uploader_upload_in_progress_ticker);
 
-        // Show the result: success or fail notification
+        if (uploadResult.isCancelled() && upload instanceof ChunkedUploadFileOperation) {
+            removeChunksFolder(upload.getOCUploadId());
+        }
+
         if (!uploadResult.isCancelled() &&
             !uploadResult.getCode().equals(ResultCode.DELAYED_FOR_WIFI)) {
 
+            // Show the result: success or fail notification
             int tickerId = (uploadResult.isSuccess()) ? R.string.uploader_upload_succeeded_ticker :
                     R.string.uploader_upload_failed_ticker;
 

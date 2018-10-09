@@ -3,21 +3,21 @@
  *
  * @author David A. Velasco
  * @author Juan Carlos González Cabrero
- * Copyright (C) 2016 ownCloud GmbH.
- * <p/>
+ * @author David González Verdugo
+ * Copyright (C) 2018 ownCloud GmbH.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
  * as published by the Free Software Foundation.
- * <p/>
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * <p/>
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 
 package com.owncloud.android.providers;
 
@@ -51,9 +51,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
-
 
 /**
  * Content provider for search suggestions, to search for users and groups existing in an ownCloud server.
@@ -172,18 +170,10 @@ public class UsersAndGroupsSearchProvider extends ContentProvider {
 
         /// request to the OC server about users and groups matching userQuery
         GetRemoteShareesOperation searchRequest = new GetRemoteShareesOperation(
-                userQuery, REQUESTED_PAGE, RESULTS_PER_PAGE
-        );
-        RemoteOperationResult result = searchRequest.execute(account, getContext());
-        List<JSONObject> names = new ArrayList<JSONObject>();
-        if (result.isSuccess()) {
-            for (Object o : result.getData()) {
-                // Get JSonObjects from response
-                names.add((JSONObject) o);
-            }
-        } else {
-            showErrorMessage(result);
-        }
+                userQuery, REQUESTED_PAGE, RESULTS_PER_PAGE);
+        RemoteOperationResult<ArrayList<JSONObject>> result = searchRequest.execute(account, getContext());
+
+        ArrayList<JSONObject> names = result.getData();
 
         /// convert the responses from the OC server to the expected format
         if (names.size() > 0) {
@@ -206,7 +196,10 @@ public class UsersAndGroupsSearchProvider extends ContentProvider {
                 sSuggestAuthority + DATA_REMOTE_SUFFIX
             ).build();
 
-            FileDataStorageManager manager = new FileDataStorageManager(account, getContext().getContentResolver());
+            FileDataStorageManager manager = new FileDataStorageManager(
+                    getContext(),
+                    account, getContext().getContentResolver()
+            );
             boolean federatedShareAllowed = manager.getCapability(account.name).getFilesSharingFederationOutgoing()
                     .isTrue();
 
@@ -281,13 +274,11 @@ public class UsersAndGroupsSearchProvider extends ContentProvider {
      */
     private void showErrorMessage(final RemoteOperationResult result) {
         Handler handler = new Handler(Looper.getMainLooper());
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                // The Toast must be shown in the main thread to grant that will be hidden correctly; otherwise
-                // the thread may die before, an exception will occur, and the message will be left on the screen
-                // until the app dies
 
+        // The Toast must be shown in the main thread to grant that will be hidden correctly; otherwise
+        // the thread may die before, an exception will occur, and the message will be left on the screen
+        // until the app dies
+        handler.post(() ->
                 Toast.makeText(
                         getContext().getApplicationContext(),
                         ErrorMessageAdapter.getResultMessage(
@@ -296,9 +287,7 @@ public class UsersAndGroupsSearchProvider extends ContentProvider {
                                 getContext().getResources()
                         ),
                         Toast.LENGTH_SHORT
-                ).show();
-            }
-        });
+                ).show());
     }
 
 }

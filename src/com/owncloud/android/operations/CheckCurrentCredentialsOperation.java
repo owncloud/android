@@ -2,7 +2,8 @@
  *   ownCloud Android client application
  *
  *   @author David A. Velasco
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   @author Christian Schabesberger
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -34,7 +35,7 @@ import java.util.ArrayList;
 /**
  * Checks validity of currently stored credentials for a given OC account
  */
-public class CheckCurrentCredentialsOperation extends SyncOperation {
+public class CheckCurrentCredentialsOperation extends SyncOperation<Account> {
 
     private Account mAccount = null;
 
@@ -46,19 +47,17 @@ public class CheckCurrentCredentialsOperation extends SyncOperation {
     }
 
     @Override
-    protected RemoteOperationResult run(OwnCloudClient client) {
-        RemoteOperationResult result = null;
+    protected RemoteOperationResult<Account> run(OwnCloudClient client) {
         if (!getStorageManager().getAccount().name.equals(mAccount.name)) {
-            result = new RemoteOperationResult(new IllegalStateException(
-                "Account to validate is not the account connected to!")
-            );
+            return new RemoteOperationResult<>(new IllegalStateException(
+                "Account to validate is not the account connected to!"));
         } else {
             RemoteOperation check = new ExistenceCheckRemoteOperation(OCFile.ROOT_PATH, false);
-            result = check.execute(client);
-            ArrayList<Object> data = new ArrayList<Object>();
-            data.add(mAccount);
-            result.setData(data);
+            final RemoteOperationResult existenceCheckResult = check.execute(client);
+            final RemoteOperationResult<Account> result
+                    = new RemoteOperationResult<>(existenceCheckResult.getCode());
+            result.setData(mAccount);
+            return result;
         }
-        return result;
     }
 }

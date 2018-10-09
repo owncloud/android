@@ -81,7 +81,7 @@ public class OCUpload implements Parcelable {
     /**
      * Create destination folder?
      */
-    private boolean mIsCreateRemoteFolder;
+    private boolean mCreatesRemoteFolder;
     /**
      * Status of upload (later, in_progress, ...).
      */
@@ -100,6 +100,11 @@ public class OCUpload implements Parcelable {
      * When the upload ended
      */
     private long mUploadEndTimeStamp;
+
+    /*
+     * Used to identify remote chunks folders
+     */
+    private String mTransferId;
 
 
     /**
@@ -148,10 +153,11 @@ public class OCUpload implements Parcelable {
         mId = -1;
         mLocalAction = FileUploader.LOCAL_BEHAVIOUR_COPY;
         mForceOverwrite = false;
-        mIsCreateRemoteFolder = false;
+        mCreatesRemoteFolder = false;
         mUploadStatus = UploadStatus.UPLOAD_IN_PROGRESS;
         mLastResult = UploadResult.UNKNOWN;
         mCreatedBy = UploadFileOperation.CREATED_BY_USER;
+        mTransferId = "";
     }
 
     // Getters & Setters
@@ -267,17 +273,17 @@ public class OCUpload implements Parcelable {
     }
 
     /**
-     * @return the isCreateRemoteFolder
+     * @return true if remote folder needs to be created, false otherwise
      */
-    public boolean isCreateRemoteFolder() {
-        return mIsCreateRemoteFolder;
+    public boolean createsRemoteFolder() {
+        return mCreatesRemoteFolder;
     }
 
     /**
-     * @param isCreateRemoteFolder the isCreateRemoteFolder to set
+     * @param mCreatesRemoteFolder folder needs to be created or not
      */
-    public void setCreateRemoteFolder(boolean isCreateRemoteFolder) {
-        this.mIsCreateRemoteFolder = isCreateRemoteFolder;
+    public void setCreateRemoteFolder(boolean mCreatesRemoteFolder) {
+        this.mCreatesRemoteFolder = mCreatesRemoteFolder;
     }
 
     /**
@@ -308,6 +314,14 @@ public class OCUpload implements Parcelable {
 
     public long getUploadEndTimestamp(){
         return mUploadEndTimeStamp;
+    }
+
+    public void setTransferId(String transferId) {
+        mTransferId = transferId;
+    }
+
+    public String getTransferId() {
+        return mTransferId;
     }
 
     /**
@@ -354,9 +368,10 @@ public class OCUpload implements Parcelable {
         mLocalPath = source.readString();
         mRemotePath = source.readString();
         mAccountName = source.readString();
+        mFileSize = source.readLong();
         mLocalAction = source.readInt();
         mForceOverwrite = (source.readInt() == 1);
-        mIsCreateRemoteFolder = (source.readInt() == 1);
+        mCreatesRemoteFolder = (source.readInt() == 1);
         try {
             mUploadStatus = UploadStatus.valueOf(source.readString());
         } catch (IllegalArgumentException x) {
@@ -369,6 +384,7 @@ public class OCUpload implements Parcelable {
             mLastResult = UploadResult.UNKNOWN;
         }
         mCreatedBy = source.readInt();
+        mTransferId = source.readString();
     }
 
 
@@ -383,13 +399,15 @@ public class OCUpload implements Parcelable {
         dest.writeString(mLocalPath);
         dest.writeString(mRemotePath);
         dest.writeString(mAccountName);
+        dest.writeLong(mFileSize);
         dest.writeInt(mLocalAction);
         dest.writeInt(mForceOverwrite ? 1 : 0);
-        dest.writeInt(mIsCreateRemoteFolder ? 1 : 0);
+        dest.writeInt(mCreatesRemoteFolder ? 1 : 0);
         dest.writeString(mUploadStatus.name());
         dest.writeLong(mUploadEndTimeStamp);
         dest.writeString(((mLastResult == null) ? "" : mLastResult.name()));
         dest.writeInt(mCreatedBy);
+        dest.writeString(mTransferId);
     }
 
     enum CanUploadFileNowStatus {NOW, LATER, FILE_GONE, ERROR}
