@@ -4,17 +4,17 @@
  * @author David A. Velasco
  * @author David González Verdugo
  * @author Shashvat Kedia
- * Copyright (C) 2017 ownCloud GmbH.
- *
+ * Copyright (C) 2018 ownCloud GmbH.
+ * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
  * as published by the Free Software Foundation.
- *
+ * <p>
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -152,11 +152,13 @@ public abstract class PreferenceManager {
      * @param context Caller {@link Context}, used to access to shared preferences manager.
      * @return sort order     the sort order, default is {@link FileStorageUtils#SORT_NAME} (sort by name)
      */
-    public static int getSortOrder(Context context,int flag) {
-        if(flag == FileStorageUtils.FILE_DISPLAY_SORT){
-            return getDefaultSharedPreferences(context).getInt(AUTO_PREF__SORT_ORDER_FILE_DISP, FileStorageUtils.SORT_NAME);
-        } else{
-            return getDefaultSharedPreferences(context).getInt(AUTO_PREF__SORT_ORDER_UPLOAD, FileStorageUtils.SORT_DATE);
+    public static int getSortOrder(Context context, int flag) {
+        if (flag == FileStorageUtils.FILE_DISPLAY_SORT) {
+            return getDefaultSharedPreferences(context)
+                    .getInt(AUTO_PREF__SORT_ORDER_FILE_DISP, FileStorageUtils.SORT_NAME);
+        } else {
+            return getDefaultSharedPreferences(context)
+                    .getInt(AUTO_PREF__SORT_ORDER_UPLOAD, FileStorageUtils.SORT_DATE);
         }
     }
 
@@ -166,10 +168,10 @@ public abstract class PreferenceManager {
      * @param order   the sort order
      * @param context Caller {@link Context}, used to access to shared preferences manager.
      */
-    public static void setSortOrder(int order, Context context,int flag) {
-        if(flag == FileStorageUtils.FILE_DISPLAY_SORT){
+    public static void setSortOrder(int order, Context context, int flag) {
+        if (flag == FileStorageUtils.FILE_DISPLAY_SORT) {
             saveIntPreference(AUTO_PREF__SORT_ORDER_FILE_DISP, order, context);
-        } else{
+        } else {
             saveIntPreference(AUTO_PREF__SORT_ORDER_UPLOAD, order, context);
         }
     }
@@ -180,11 +182,13 @@ public abstract class PreferenceManager {
      * @param context Caller {@link Context}, used to access to shared preferences manager.
      * @return ascending order     the ascending order, default is true
      */
-    public static boolean getSortAscending(Context context,int flag) {
-        if(flag == FileStorageUtils.FILE_DISPLAY_SORT){
-            return getDefaultSharedPreferences(context).getBoolean(AUTO_PREF__SORT_ASCENDING_FILE_DISP, true);
-        } else{
-            return getDefaultSharedPreferences(context).getBoolean(AUTO_PREF__SORT_ASCENDING_UPLOAD, true);
+    public static boolean getSortAscending(Context context, int flag) {
+        if (flag == FileStorageUtils.FILE_DISPLAY_SORT) {
+            return getDefaultSharedPreferences(context)
+                    .getBoolean(AUTO_PREF__SORT_ASCENDING_FILE_DISP, true);
+        } else {
+            return getDefaultSharedPreferences(context)
+                    .getBoolean(AUTO_PREF__SORT_ASCENDING_UPLOAD, true);
         }
     }
 
@@ -194,10 +198,10 @@ public abstract class PreferenceManager {
      * @param ascending flag if sorting is ascending or descending
      * @param context   Caller {@link Context}, used to access to shared preferences manager.
      */
-    public static void setSortAscending(boolean ascending, Context context,int flag) {
-        if(flag == FileStorageUtils.FILE_DISPLAY_SORT){
+    public static void setSortAscending(boolean ascending, Context context, int flag) {
+        if (flag == FileStorageUtils.FILE_DISPLAY_SORT) {
             saveBooleanPreference(AUTO_PREF__SORT_ASCENDING_FILE_DISP, ascending, context);
-        } else{
+        } else {
             saveBooleanPreference(AUTO_PREF__SORT_ASCENDING_UPLOAD, ascending, context);
         }
     }
@@ -230,7 +234,7 @@ public abstract class PreferenceManager {
     public static class CameraUploadsConfiguration {
 
         public static final String DEFAULT_SOURCE_PATH = Environment.getExternalStoragePublicDirectory(
-            Environment.DIRECTORY_DCIM
+                Environment.DIRECTORY_DCIM
         ).getAbsolutePath() + "/Camera";
 
         private boolean mEnabledForPictures;
