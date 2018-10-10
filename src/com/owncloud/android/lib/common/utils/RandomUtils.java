@@ -25,6 +25,7 @@
 package com.owncloud.android.lib.common.utils;
 
 import java.util.Random;
+import java.util.UUID;
 
 /**
  * Class with methods to generate random values
@@ -59,5 +60,12 @@ public class RandomUtils {
     public static int generateRandomInteger(int min, int max) {
         Random r = new Random();
         return r.nextInt(max-min) + min;
+    }
+
+    /**
+     * @return random UUID
+     */
+    public static String generateRandomUUID() {
+        return UUID.randomUUID().toString();
     }
 }
