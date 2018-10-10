@@ -2126,7 +2126,7 @@ public class FileDataStorageManager {
 
     /**
      * Get a collection with all the files set by the user as available offline, from all the accounts
-     * in the device.
+     * in the device, putting away the folders
      *
      * This is the only method working with a NULL account in {@link #mAccount}. Not something to do often.
      *
@@ -2155,7 +2155,9 @@ public class FileDataStorageManager {
                     accountName = cursorOnKeptInSync.getString(
                             cursorOnKeptInSync.getColumnIndex(ProviderTableMeta.FILE_ACCOUNT_OWNER)
                     );
-                    result.add(new Pair<>(file, accountName));
+                    if (!file.isFolder()) {
+                        result.add(new Pair<>(file, accountName));
+                    }
                 } while (cursorOnKeptInSync.moveToNext());
             }
 
