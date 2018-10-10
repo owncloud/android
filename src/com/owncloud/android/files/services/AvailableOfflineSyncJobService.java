@@ -77,8 +77,9 @@ public class AvailableOfflineSyncJobService extends JobService {
 
             Account account = AccountUtils.getOwnCloudAccountByName(mAvailableOfflineJobService, accountName);
 
-            FileDataStorageManager fileDataStorageManager = new FileDataStorageManager(account,
-                    mAvailableOfflineJobService.getContentResolver());
+            FileDataStorageManager fileDataStorageManager = new FileDataStorageManager(
+                    mAvailableOfflineJobService, account, mAvailableOfflineJobService.getContentResolver()
+            );
 
             List<Pair<OCFile, String>> availableOfflineFilesFromEveryAccount = fileDataStorageManager.
                     getAvailableOfflineFilesFromEveryAccount();
@@ -135,7 +136,9 @@ public class AvailableOfflineSyncJobService extends JobService {
             Account mAccount = AccountUtils.getOwnCloudAccountByName(mAvailableOfflineJobService, accountName);
 
             FileDataStorageManager storageManager =
-                    new FileDataStorageManager(mAccount, mAvailableOfflineJobService.getContentResolver());
+                    new FileDataStorageManager(
+                            mAvailableOfflineJobService, mAccount, mAvailableOfflineJobService.getContentResolver()
+                    );
 
             SynchronizeFileOperation synchronizeFileOperation =
                     new SynchronizeFileOperation(availableOfflineFile, null, mAccount, false,

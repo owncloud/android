@@ -1,4 +1,3 @@
-
 /**
  * ownCloud Android client application
  *
@@ -213,6 +212,8 @@ public class FileContentProvider extends ContentProvider {
                 ProviderTableMeta.UPLOADS_UPLOAD_END_TIMESTAMP);
         mUploadProjectionMap.put(ProviderTableMeta.UPLOADS_LAST_RESULT, ProviderTableMeta.UPLOADS_LAST_RESULT);
         mUploadProjectionMap.put(ProviderTableMeta.UPLOADS_CREATED_BY, ProviderTableMeta.UPLOADS_CREATED_BY);
+        mUploadProjectionMap.put(ProviderTableMeta.UPLOADS_TRANSFER_ID,
+                ProviderTableMeta.UPLOADS_TRANSFER_ID);
     }
 
     @Override
@@ -430,7 +431,6 @@ public class FileContentProvider extends ContentProvider {
                     throw new SQLException("ERROR " + uri);
                 }
                 return insertedCameraUploadUri;
-
             case QUOTAS:
                 Uri insertedQuotaUri;
                 long quotaId = db.insert(ProviderTableMeta.USER_QUOTAS_TABLE_NAME, null,
@@ -443,7 +443,6 @@ public class FileContentProvider extends ContentProvider {
                     throw new SQLException("ERROR " + uri);
                 }
                 return insertedQuotaUri;
-
             default:
                 throw new IllegalArgumentException("Unknown uri id: " + uri);
         }
@@ -628,6 +627,7 @@ public class FileContentProvider extends ContentProvider {
 
     @Override
     public int update(@NonNull Uri uri, ContentValues values, String selection, String[] selectionArgs) {
+
         int count = 0;
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
         db.beginTransaction();
@@ -667,12 +667,10 @@ public class FileContentProvider extends ContentProvider {
                 return ret;
             case CAMERA_UPLOADS_SYNC:
                 return db.update(
-                        ProviderTableMeta.CAMERA_UPLOADS_SYNC_TABLE_NAME, values, selection, selectionArgs
-                );
+                        ProviderTableMeta.CAMERA_UPLOADS_SYNC_TABLE_NAME, values, selection,
+                        selectionArgs);
             case QUOTAS:
-                return db.update(
-                        ProviderTableMeta.USER_QUOTAS_TABLE_NAME, values, selection, selectionArgs
-                );
+                return db.update(ProviderTableMeta.USER_QUOTAS_TABLE_NAME, values, selection, selectionArgs);
             default:
                 return db.update(
                         ProviderTableMeta.FILE_TABLE_NAME, values, selection, selectionArgs
@@ -1051,6 +1049,20 @@ public class FileContentProvider extends ContentProvider {
                 }
             }
 
+            if (oldVersion < 24 && newVersion >= 24) {
+                Log_OC.i("SQL", "Entering in the #24 ADD in onUpgrade");
+                db.beginTransaction();
+                try {
+                    db.execSQL("ALTER TABLE " + ProviderTableMeta.UPLOADS_TABLE_NAME +
+                            " ADD COLUMN " + ProviderTableMeta.UPLOADS_TRANSFER_ID + " TEXT " +
+                            " DEFAULT NULL");
+                    db.setTransactionSuccessful();
+                    upgraded = true;
+                } finally {
+                    db.endTransaction();
+                }
+            }
+
             if (!upgraded) {
                 Log_OC.i("SQL", "OUT of the ADD in onUpgrade; oldVersion == " + oldVersion +
                         ", newVersion == " + newVersion);
@@ -1155,7 +1167,8 @@ public class FileContentProvider extends ContentProvider {
                 + ProviderTableMeta.UPLOADS_IS_CREATE_REMOTE_FOLDER + " INTEGER, "  // boolean
                 + ProviderTableMeta.UPLOADS_UPLOAD_END_TIMESTAMP + " INTEGER, "
                 + ProviderTableMeta.UPLOADS_LAST_RESULT + " INTEGER, "     // Upload LastResult
-                + ProviderTableMeta.UPLOADS_CREATED_BY + " INTEGER );"    // Upload createdBy
+                + ProviderTableMeta.UPLOADS_CREATED_BY + " INTEGER, "     // Upload createdBy
+                + ProviderTableMeta.UPLOADS_TRANSFER_ID + " TEXT );"    // Upload chunkedUploadId
         );
     }
 
