@@ -47,5 +47,4 @@ public class Extras {
 
     // for Available offline
     public static final String EXTRA_AVAILABLE_OFFLINE_SYNC_JOB_ID = "EXTRA_AVAILABLE_OFFLINE_SYNC_JOB_ID";
-    public static final String EXTRA_AVAILABLE_OFFLINE_FILES_FOR_ACCOUNT = "EXTRA_AVAILABLE_OFFLINE_FILES_FOR_ACCOUNT";
 }
