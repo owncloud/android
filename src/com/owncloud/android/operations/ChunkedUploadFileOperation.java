@@ -24,7 +24,7 @@ import android.accounts.Account;
 import android.content.Context;
 
 import com.owncloud.android.datamodel.OCFile;
-import com.owncloud.android.db.OCUpload;
+import com.owncloud.android.datamodel.OCUpload;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.network.OnDatatransferProgressListener;
 import com.owncloud.android.lib.common.operations.OperationCancelledException;
