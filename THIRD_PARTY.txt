@@ -75,3 +75,14 @@ The third party software included and used by this project is:
     Licensed under Apache License, Version 2.0.
     Included in the ownCloud client APK.
     See https://github.com/chrisbanes/PhotoView
+
+ * Dav4android
+    Licensed under Mozilla Public License, Version 2.0.
+    Included in the ownCloud client APK.
+    See https://gitlab.com/bitfireAT/dav4android
+
+ * Gson, version 2.8.5
+    Copyright 2008 Google Inc.
+    Licensed under Apache License, Version 2.0.
+    Included in the ownCloud client APK.
+    See https://github.com/google/gson
