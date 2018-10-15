@@ -3,10 +3,7 @@
  *
  *   @author David A. Velasco
  *   @author masensio
-<<<<<<< HEAD
  *   @author David González Verdugo
-=======
->>>>>>> Code review fixes
  *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
