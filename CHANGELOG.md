@@ -1,3 +1,11 @@
+## 2.9.0 beta v2 (October 2018)
+- Bug fixes, including:
+  + Fix some crashes:
+    - When rebooting the device
+    - When copying, moving files or choosing a folder within camera uploads feature
+  + Fix some failing downloads
+  + Fix pattern lock being asked very often after disabling fingerprint lock
+
 ## 2.9.0 beta v1 (September 2018)
 - Switch apache and jackrabbit deprecated libraries to more modern and active library, OkHttp
 - Search in current folder
