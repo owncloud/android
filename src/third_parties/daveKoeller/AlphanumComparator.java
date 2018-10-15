@@ -24,7 +24,6 @@
 
 package third_parties.daveKoeller;
 
-import java.io.File;
 import java.text.Collator;
 import java.util.Comparator;
 
@@ -43,7 +42,7 @@ import com.owncloud.android.datamodel.OCFile;
  * Use the static "sort" method from the java.util.Collections class:
  * Collections.sort(your list, new AlphanumComparator());
  */
-public class AlphanumComparator implements Comparator<Object> {
+public class AlphanumComparator implements Comparator<OCFile> {
     private final boolean isDigit(char ch) {
         return ch >= 48 && ch <= 57;
     }
@@ -76,15 +75,9 @@ public class AlphanumComparator implements Comparator<Object> {
         return chunk.toString();
     }
 
-    public int compare(Object o1, Object o2) {
-        String s1 = null, s2 = null;
-        if (o1 instanceof OCFile) {
-            s1 = ((OCFile) o1).getRemotePath().toLowerCase();
-            s2 = ((OCFile) o2).getRemotePath().toLowerCase();
-        } else if (o1 instanceof File) {
-            s1 = ((File) o1).getAbsolutePath().toLowerCase();
-            s2 = ((File) o2).getAbsolutePath().toLowerCase();
-        }
+    public int compare(OCFile o1, OCFile o2) {
+        String s1 = o1.getRemotePath().toLowerCase();
+        String s2 = o2.getRemotePath().toLowerCase();
 
         int thisMarker = 0;
         int thatMarker = 0;

@@ -469,7 +469,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
         FileStorageUtils.mSortOrderFileDisp = PreferenceManager.getSortOrder(this, FileStorageUtils.FILE_DISPLAY_SORT);
         FileStorageUtils.mSortAscendingFileDisp = PreferenceManager.getSortAscending(this, FileStorageUtils.FILE_DISPLAY_SORT);
 
-        files = FileStorageUtils.sortFolderFileDisp(files);
+        files = FileStorageUtils.sortFolder(files,FileStorageUtils.mSortOrderFileDisp,FileStorageUtils.mSortAscendingFileDisp);
         return files;
     }
 
