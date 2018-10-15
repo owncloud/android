@@ -21,6 +21,7 @@
  */
 package com.owncloud.android.ui.adapter;
 
+import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.datamodel.ThumbnailsCacheManager;
 
 import android.content.Context;
@@ -47,6 +48,7 @@ import java.io.FileFilter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.Vector;
 
 /**
  * This Adapter populates a ListView with all files and directories contained
@@ -289,7 +291,8 @@ public class LocalFileListAdapter extends BaseAdapter implements ListAdapter {
         FileStorageUtils.mSortOrderUpload = order;
         FileStorageUtils.mSortAscendingUpload = isAscending;
         if (mFiles != null && mFiles.length > 0) {
-            mFiles = FileStorageUtils.sortFolderUpload(mFiles);
+            mFiles = transformVecOCFile(FileStorageUtils.sortFolder(transformFileArray(mFiles),
+                    FileStorageUtils.mSortOrderUpload,FileStorageUtils.mSortAscendingUpload));
             if (parentList != null) {
                 for (int i = 0; i < mFiles.length; i++) {
                     parentList.setItemChecked(i, false);
@@ -297,5 +300,26 @@ public class LocalFileListAdapter extends BaseAdapter implements ListAdapter {
             }
             notifyDataSetChanged();
         }
+    }
+
+    private Vector<OCFile> transformFileArray(File[] files){
+        Vector<OCFile> transformedFiles = new Vector<OCFile>();
+        OCFile transformedFile = null;
+        for(int i=0;i<files.length;i++){
+            transformedFile = new OCFile(files[i].getAbsolutePath());
+            transformedFile.setModificationTimestamp(files[i].lastModified());
+            transformedFile.setFileLength(files[i].length());
+            transformedFile.setMimetype(files[i].isDirectory() ? "DIR" : transformedFile.getMimetype());
+            transformedFiles.add(transformedFile);
+        }
+        return transformedFiles;
+    }
+
+    private File[] transformVecOCFile(Vector<OCFile> files){
+        File[] transformedFiles = new File[files.size()];
+        for(int i=0;i<files.size();i++){
+            transformedFiles[i] = new File(files.get(i).getRemotePath());
+        }
+        return transformedFiles;
     }
 }

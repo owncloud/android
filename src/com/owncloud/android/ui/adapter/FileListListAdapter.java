@@ -7,6 +7,7 @@
  * @author masensio
  * @author Christian Schabesberger
  * @author David González Verdugo
+ * @author Shashvat Kedia
  * Copyright (C) 2011  Bartek Przybylski
  * Copyright (C) 2018 ownCloud GmbH.
  * <p>
@@ -385,7 +386,7 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
             mFiles = null;
         }
 
-        mFiles = FileStorageUtils.sortFolderFileDisp(mFiles);
+        mFiles = FileStorageUtils.sortFolder(mFiles,FileStorageUtils.mSortOrderFileDisp,FileStorageUtils.mSortAscendingFileDisp);
         notifyDataSetChanged();
     }
 
@@ -416,7 +417,7 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
         FileStorageUtils.mSortOrderFileDisp = order;
         FileStorageUtils.mSortAscendingFileDisp = ascending;
 
-        mFiles = FileStorageUtils.sortFolderFileDisp(mFiles);
+        mFiles = FileStorageUtils.sortFolder(mFiles,FileStorageUtils.mSortOrderFileDisp,FileStorageUtils.mSortAscendingFileDisp);
         notifyDataSetChanged();
     }
 

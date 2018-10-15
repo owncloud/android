@@ -85,7 +85,7 @@ public class PreviewImagePagerAdapter extends FragmentStatePagerAdapter {
         // TODO Enable when "On Device" is recovered ?
         mImageFiles = mStorageManager.getFolderImages(parentFolder/*, false*/);
 
-        mImageFiles = FileStorageUtils.sortFolderFileDisp(mImageFiles);
+        mImageFiles = FileStorageUtils.sortFolder(mImageFiles,FileStorageUtils.mSortOrderFileDisp,FileStorageUtils.mSortAscendingFileDisp);
 
         mObsoleteFragments = new HashSet<>();
         mObsoletePositions = new HashSet<>();
