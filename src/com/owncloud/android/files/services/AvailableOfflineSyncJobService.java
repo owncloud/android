@@ -148,13 +148,14 @@ public class AvailableOfflineSyncJobService extends JobService {
                     execute(storageManager, mAvailableOfflineJobService);
 
             if (result.getCode() == RemoteOperationResult.ResultCode.SYNC_CONFLICT) {
+
                 // If the user is not running the app, this can be very intrusive so show a notification to solve
                 // the conflicts
-                Intent i = new Intent(mAvailableOfflineJobService, ConflictsResolveActivity.class);
-                i.setFlags(i.getFlags() | Intent.FLAG_ACTIVITY_NEW_TASK);
-                i.putExtra(ConflictsResolveActivity.EXTRA_FILE, availableOfflineFile);
-                i.putExtra(ConflictsResolveActivity.EXTRA_ACCOUNT, mAccount);
-                mAvailableOfflineJobService.startActivity(i);
+                Intent intent = new Intent(mAvailableOfflineJobService, ConflictsResolveActivity.class);
+                intent.setFlags(intent.getFlags() | Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.putExtra(ConflictsResolveActivity.EXTRA_FILE, availableOfflineFile);
+                intent.putExtra(ConflictsResolveActivity.EXTRA_ACCOUNT, mAccount);
+                mAvailableOfflineJobService.startActivity(intent);
             }
         }
 

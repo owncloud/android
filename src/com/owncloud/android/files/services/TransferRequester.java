@@ -4,7 +4,7 @@
  * @author David A. Velasco
  * @author David González Verdugo
  *
- * Copyright (C) 2017 ownCloud GmbH.
+ * Copyright (C) 2018 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -29,11 +29,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.PersistableBundle;
+import android.support.v4.content.ContextCompat;
 
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.OCFile;
-import com.owncloud.android.datamodel.UploadsStorageManager;
 import com.owncloud.android.datamodel.OCUpload;
+import com.owncloud.android.datamodel.UploadsStorageManager;
 import com.owncloud.android.db.PreferenceManager;
 import com.owncloud.android.db.UploadResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
@@ -126,14 +127,7 @@ public class TransferRequester {
         intent.putExtra(FileUploader.KEY_LOCAL_BEHAVIOUR, behaviour);
         intent.putExtra(FileUploader.KEY_FORCE_OVERWRITE, forceOverwrite);
 
-        // Since in Android O and above the apps in background are not allowed to start background
-        // services and available offline feature may try to do it, this is the way to proceed
-        if (context instanceof AvailableOfflineSyncJobService && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            intent.putExtra(FileUploader.KEY_IS_AVAILABLE_OFFLINE_FILE, true);
-            context.startForegroundService(intent);
-        } else {
-            context.startService(intent);
-        }
+        ContextCompat.startForegroundService(context, intent);
     }
 
     /**

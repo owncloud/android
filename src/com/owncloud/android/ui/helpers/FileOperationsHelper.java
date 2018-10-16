@@ -497,7 +497,7 @@ public class FileOperationsHelper {
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
                     AvailableOfflineHandler availableOfflineHandler =
                             new AvailableOfflineHandler(mFileActivity, mFileActivity.getAccount().name);
-                    availableOfflineHandler.scheduleAvailableOfflineJob();
+                    availableOfflineHandler.scheduleAvailableOfflineJob(mFileActivity);
                 }
 
                 /// immediate content synchronization
