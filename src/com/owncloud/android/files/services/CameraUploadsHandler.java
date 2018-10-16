@@ -46,23 +46,21 @@ public class CameraUploadsHandler {
     private static final int JOB_ID_CAMERA_UPLOAD = 1;
 
     private CameraUploadsConfiguration mCameraUploadsConfig; // Camera uploads configuration, set by the user
-    private Context mContext;
 
-    public CameraUploadsHandler(Context context, CameraUploadsConfiguration cameraUploadsConfiguration) {
+    public CameraUploadsHandler(CameraUploadsConfiguration cameraUploadsConfiguration) {
         mCameraUploadsConfig = cameraUploadsConfiguration;
-        mContext = context;
     }
 
     /**
      * Schedule a periodic job to check pictures and videos to be uploaded
      */
-    public void scheduleCameraUploadsSyncJob() {
+    public void scheduleCameraUploadsSyncJob(Context context) {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 
             // DB Connection
             CameraUploadsSyncStorageManager cameraUploadsSyncStorageManager = new
-                    CameraUploadsSyncStorageManager(mContext.getContentResolver());
+                    CameraUploadsSyncStorageManager(context.getContentResolver());
 
             OCCameraUploadSync ocCameraUploadSync = cameraUploadsSyncStorageManager.
                     getCameraUploadSync(null, null, null);
@@ -75,8 +73,7 @@ public class CameraUploadsHandler {
                 initializeCameraUploadSync(cameraUploadsSyncStorageManager, ocCameraUploadSync);
             }
 
-            ComponentName serviceComponent = new ComponentName(mContext,
-                    CameraUploadsSyncJobService.class);
+            ComponentName serviceComponent = new ComponentName(context, CameraUploadsSyncJobService.class);
             JobInfo.Builder builder;
 
             builder = new JobInfo.Builder(JOB_ID_CAMERA_UPLOAD, serviceComponent);
@@ -112,8 +109,7 @@ public class CameraUploadsHandler {
 
             Log_OC.d(TAG, "Scheduling a CameraUploadsSyncJobService");
 
-            JobScheduler jobScheduler = (JobScheduler) mContext.getSystemService(Context.
-                    JOB_SCHEDULER_SERVICE);
+            JobScheduler jobScheduler = (JobScheduler) context.getSystemService(Context.JOB_SCHEDULER_SERVICE);
 
             jobScheduler.schedule(builder.build());
         }
@@ -167,10 +163,10 @@ public class CameraUploadsHandler {
      * Update timestamp (in milliseconds) from which to start checking pictures to upload
      * @param lastSyncTimestamp
      */
-    public void updatePicturesLastSync(long lastSyncTimestamp){
+    public void updatePicturesLastSync(Context context, long lastSyncTimestamp){
         // DB connection
         CameraUploadsSyncStorageManager cameraUploadsSyncStorageManager = new
-                CameraUploadsSyncStorageManager(mContext.getContentResolver());
+                CameraUploadsSyncStorageManager(context.getContentResolver());
 
         OCCameraUploadSync ocCameraUploadSync = cameraUploadsSyncStorageManager.
                 getCameraUploadSync(null, null, null);
@@ -187,10 +183,10 @@ public class CameraUploadsHandler {
      * Update timestamp (in milliseconds) from which to start checking videos to upload
      * @param lastSyncTimestamp
      */
-    public void updateVideosLastSync(long lastSyncTimestamp){
+    public void updateVideosLastSync(Context context, long lastSyncTimestamp){
         // DB connection
         CameraUploadsSyncStorageManager cameraUploadsSyncStorageManager = new
-                CameraUploadsSyncStorageManager(mContext.getContentResolver());
+                CameraUploadsSyncStorageManager(context.getContentResolver());
 
         OCCameraUploadSync ocCameraUploadSync = cameraUploadsSyncStorageManager.
                 getCameraUploadSync(null, null, null);

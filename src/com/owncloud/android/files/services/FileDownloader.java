@@ -78,7 +78,6 @@ public class FileDownloader extends Service
 
     public static final String KEY_ACCOUNT = "ACCOUNT";
     public static final String KEY_FILE = "FILE";
-    public static final String KEY_IS_AVAILABLE_OFFLINE_FILE = "KEY_IS_AVAILABLE_OFFLINE_FILE";
 
     private static final String DOWNLOAD_ADDED_MESSAGE = "DOWNLOAD_ADDED";
     private static final String DOWNLOAD_FINISH_MESSAGE = "DOWNLOAD_FINISH";
@@ -185,17 +184,8 @@ public class FileDownloader extends Service
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log_OC.d(TAG, "Starting command with id " + startId);
 
-        boolean isAvailableOfflineFile = intent.getBooleanExtra(KEY_IS_AVAILABLE_OFFLINE_FILE, false);
-
-        if (isAvailableOfflineFile && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            /**
-             * After calling startForegroundService method from
-             * {@link com.owncloud.android.operations.SynchronizeFileOperation}, we have
-             * to call this within five seconds after the service is created to avoid an error
-             */
-            Log_OC.d(TAG, "Starting FileDownloader service in foreground");
-            startForeground(1, mNotificationBuilder.build());
-        }
+        // Starting service in foreground, since killing this service would be disruptive to the user
+        startForeground(1, mNotificationBuilder.build());
 
         if (!intent.hasExtra(KEY_ACCOUNT) ||
                 !intent.hasExtra(KEY_FILE)

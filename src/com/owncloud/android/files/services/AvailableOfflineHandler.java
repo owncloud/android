@@ -43,45 +43,41 @@ public class AvailableOfflineHandler {
     // configuration
     private static final int JOB_ID_AVAILABLE_OFFLINE = 2;
 
-    private Context mContext;
     private String mAccountName;
     private JobScheduler mJobScheduler;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public AvailableOfflineHandler(Context context, String accountName) {
-        mContext = context;
         mAccountName = accountName;
-        mJobScheduler = (JobScheduler) mContext.getSystemService(Context.JOB_SCHEDULER_SERVICE);
+        mJobScheduler = (JobScheduler) context.getSystemService(Context.JOB_SCHEDULER_SERVICE);
     }
 
     /**
      * Schedule a periodic job to check whether recently updated available offline files need to be synchronized
      */
-    public void scheduleAvailableOfflineJob() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    public void scheduleAvailableOfflineJob(Context context) {
+        ComponentName serviceComponent = new ComponentName(context, AvailableOfflineSyncJobService.class);
+        JobInfo.Builder builder;
 
-            ComponentName serviceComponent = new ComponentName(mContext, AvailableOfflineSyncJobService.class);
-            JobInfo.Builder builder;
+        builder = new JobInfo.Builder(JOB_ID_AVAILABLE_OFFLINE, serviceComponent);
 
-            builder = new JobInfo.Builder(JOB_ID_AVAILABLE_OFFLINE, serviceComponent);
+        builder.setPersisted(true);
 
-            builder.setPersisted(true);
+        // Execute job every 15 minutes
+        builder.setPeriodic(MILLISECONDS_INTERVAL_AVAILABLE_OFFLINE);
 
-            // Execute job every 15 minutes
-            builder.setPeriodic(MILLISECONDS_INTERVAL_AVAILABLE_OFFLINE);
+        // Extra data
+        PersistableBundle extras = new PersistableBundle();
 
-            // Extra data
-            PersistableBundle extras = new PersistableBundle();
+        extras.putInt(Extras.EXTRA_AVAILABLE_OFFLINE_SYNC_JOB_ID, JOB_ID_AVAILABLE_OFFLINE);
 
-            extras.putInt(Extras.EXTRA_AVAILABLE_OFFLINE_SYNC_JOB_ID, JOB_ID_AVAILABLE_OFFLINE);
+        extras.putString(Extras.EXTRA_ACCOUNT_NAME, mAccountName);
 
-            extras.putString(Extras.EXTRA_ACCOUNT_NAME, mAccountName);
+        builder.setExtras(extras);
 
-            builder.setExtras(extras);
+        Log_OC.d(TAG, "Scheduling an AvailableOfflineSyncJobService");
 
-            Log_OC.d(TAG, "Scheduling an AvailableOfflineSyncJobService");
-
-            mJobScheduler.schedule(builder.build());
-        }
+        mJobScheduler.schedule(builder.build());
     }
 }

@@ -26,6 +26,7 @@ import android.accounts.Account;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.support.v4.content.ContextCompat;
 
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.files.services.AvailableOfflineSyncJobService;
@@ -247,14 +248,8 @@ public class SynchronizeFileOperation extends SyncOperation {
         intent.putExtra(FileDownloader.KEY_ACCOUNT, mAccount);
         intent.putExtra(FileDownloader.KEY_FILE, file);
 
-        // Since in Android O and above the apps in background are not allowed to start background
-        // services and available offline feature may try to do it, this is the way to proceed
-        if (mContext instanceof AvailableOfflineSyncJobService && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            intent.putExtra(FileDownloader.KEY_IS_AVAILABLE_OFFLINE_FILE, true);
-            mContext.startForegroundService(intent);
-        } else {
-            mContext.startService(intent);
-        }
+        ContextCompat.startForegroundService(mContext, intent);
+
         mTransferWasRequested = true;
     }
 
