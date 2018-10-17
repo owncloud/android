@@ -51,7 +51,7 @@ import java.util.List;
  */
 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 public class AvailableOfflineSyncJobService extends JobService {
-    private static final String TAG = AvailableOfflineSyncJobService.class.getName();
+    private static final String TAG = "AvOfflineSyncJobService";
 
     @Override
     public boolean onStartJob(JobParameters jobParameters) {
