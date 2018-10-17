@@ -132,7 +132,7 @@ public class UploadRemoteFileOperation extends RemoteOperation {
         }
 
         if (mRequiredEtag != null && mRequiredEtag.length() > 0) {
-            mPutMethod.addRequestHeader(HttpConstants.IF_MATCH_HEADER, "\"" + mRequiredEtag + "\"");
+            mPutMethod.addRequestHeader(HttpConstants.IF_MATCH_HEADER, mRequiredEtag);
         }
 
         mPutMethod.addRequestHeader(HttpConstants.OC_TOTAL_LENGTH_HEADER, String.valueOf(fileToUpload.length()));
