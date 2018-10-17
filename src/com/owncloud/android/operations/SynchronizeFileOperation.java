@@ -58,6 +58,7 @@ public class SynchronizeFileOperation extends SyncOperation {
     private Context mContext;
 
     private boolean mTransferWasRequested = false;
+    private boolean mRequestedFromAvOfflineService;
 
     /**
      * Constructor for "full synchronization mode".
@@ -83,6 +84,7 @@ public class SynchronizeFileOperation extends SyncOperation {
         mAccount = account;
         mPushOnly = false;
         mContext = context;
+        mRequestedFromAvOfflineService = false;
     }
 
 
@@ -105,13 +107,15 @@ public class SynchronizeFileOperation extends SyncOperation {
      *                         trying to upload local changes; upload operation will take care of not overwriting
      *                         remote content if there are unnoticed changes on the server.
      * @param context          Android context; needed to start transfers.
+     * @param requestedFromAvOfflineService When 'true' will perform some specific operations
      */
     public SynchronizeFileOperation(
             OCFile localFile,
             OCFile serverFile,
             Account account,
             boolean pushOnly,
-            Context context
+            Context context,
+            boolean requestedFromAvOfflineService
     ) {
 
         mLocalFile = localFile;
@@ -130,6 +134,7 @@ public class SynchronizeFileOperation extends SyncOperation {
         mAccount = account;
         mPushOnly = pushOnly;
         mContext = context;
+        mRequestedFromAvOfflineService = requestedFromAvOfflineService;
     }
 
 
@@ -232,7 +237,8 @@ public class SynchronizeFileOperation extends SyncOperation {
      */
     private void requestForUpload(OCFile file) {
         TransferRequester requester = new TransferRequester();
-        requester.uploadUpdate(mContext, mAccount, file, FileUploader.LOCAL_BEHAVIOUR_MOVE, true);
+        requester.uploadUpdate(mContext, mAccount, file, FileUploader.LOCAL_BEHAVIOUR_MOVE, true,
+                mRequestedFromAvOfflineService);
 
         mTransferWasRequested = true;
     }
@@ -248,7 +254,14 @@ public class SynchronizeFileOperation extends SyncOperation {
         intent.putExtra(FileDownloader.KEY_ACCOUNT, mAccount);
         intent.putExtra(FileDownloader.KEY_FILE, file);
 
-        ContextCompat.startForegroundService(mContext, intent);
+        // Since in Android O and above the apps in background are not allowed to start background
+        // services and available offline feature may try to do it, this is the way to proceed
+        if (mRequestedFromAvOfflineService && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            intent.putExtra(FileDownloader.KEY_IS_AVAILABLE_OFFLINE_FILE, true);
+            mContext.startForegroundService(intent);
+        } else {
+            mContext.startService(intent);
+        }
 
         mTransferWasRequested = true;
     }

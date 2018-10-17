@@ -114,6 +114,7 @@ public class FileUploader extends Service
     protected static final String KEY_LOCAL_FILE = "LOCAL_FILE";
     protected static final String KEY_REMOTE_FILE = "REMOTE_FILE";
     protected static final String KEY_MIME_TYPE = "MIME_TYPE";
+    protected static final String KEY_IS_AVAILABLE_OFFLINE_FILE = "KEY_IS_AVAILABLE_OFFLINE_FILE";
 
     /**
      * Call this Service with only this Intent key if all pending uploads are to be retried.
@@ -292,8 +293,18 @@ public class FileUploader extends Service
 
         int createdBy = intent.getIntExtra(KEY_CREATED_BY, UploadFileOperation.CREATED_BY_USER);
 
-        // Starting service in foreground, since killing this service would be disruptive to the user
-        startForeground(1, mNotificationBuilder.build());
+        boolean isAvailableOfflineFile = intent.getBooleanExtra(KEY_IS_AVAILABLE_OFFLINE_FILE, false);
+
+        if (((createdBy == CREATED_AS_CAMERA_UPLOAD_PICTURE || createdBy == CREATED_AS_CAMERA_UPLOAD_VIDEO) ||
+                isAvailableOfflineFile) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            /**
+             * After calling startForegroundService method from {@link TransferRequester} for camera uploads or
+             * available offline, we have to call this within five seconds after the service is created to avoid
+             * an error
+             */
+            Log_OC.d(TAG, "Starting FileUploader service in foreground");
+            startForeground(1, mNotificationBuilder.build());
+        }
 
         boolean retry = intent.getBooleanExtra(KEY_RETRY, false);
         AbstractList<String> requestedUploads = new Vector<String>();
