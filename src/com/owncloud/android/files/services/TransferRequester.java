@@ -119,7 +119,7 @@ public class TransferRequester {
      * Call to update multiple files already uploaded
      */
     private void uploadsUpdate(Context context, Account account, OCFile[] existingFiles, Integer behaviour,
-                               Boolean forceOverwrite) {
+                               Boolean forceOverwrite, boolean requestedFromAvOfflineService) {
         Intent intent = new Intent(context, FileUploader.class);
 
         intent.putExtra(FileUploader.KEY_ACCOUNT, account);
@@ -127,16 +127,24 @@ public class TransferRequester {
         intent.putExtra(FileUploader.KEY_LOCAL_BEHAVIOUR, behaviour);
         intent.putExtra(FileUploader.KEY_FORCE_OVERWRITE, forceOverwrite);
 
-        ContextCompat.startForegroundService(context, intent);
+        // Since in Android O and above the apps in background are not allowed to start background
+        // services and available offline feature may try to do it, this is the way to proceed
+        if (requestedFromAvOfflineService && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            intent.putExtra(FileUploader.KEY_IS_AVAILABLE_OFFLINE_FILE, true);
+            context.startForegroundService(intent);
+        } else {
+            context.startService(intent);
+        }
     }
 
     /**
      * Call to update a dingle file already uploaded
      */
     public void uploadUpdate(Context context, Account account, OCFile existingFile, Integer behaviour,
-                             Boolean forceOverwrite) {
+                             Boolean forceOverwrite, boolean requestedFromAvOfflineService) {
 
-        uploadsUpdate(context, account, new OCFile[]{existingFile}, behaviour, forceOverwrite);
+        uploadsUpdate(context, account, new OCFile[]{existingFile}, behaviour, forceOverwrite,
+                requestedFromAvOfflineService);
     }
 
 

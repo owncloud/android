@@ -442,7 +442,8 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
                     remoteFile,
                     mAccount,
                     serverUnchanged,
-                    mContext
+                    mContext,
+                        false
                 );
                 mFilesToSyncContents.add(operation);
             }

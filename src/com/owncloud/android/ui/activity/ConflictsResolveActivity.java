@@ -78,7 +78,7 @@ public class ConflictsResolveActivity extends FileActivity implements OnConflict
         }
 
         TransferRequester requester = new TransferRequester();
-        requester.uploadUpdate(this, getAccount(), getFile(), behaviour, forceOverwrite);
+        requester.uploadUpdate(this, getAccount(), getFile(), behaviour, forceOverwrite, false);
         finish();
     }
 
