@@ -60,10 +60,10 @@ public class PreviewImagePagerAdapter extends FragmentStatePagerAdapter {
     /**
      * Constructor.
      *
-     * @param fragmentManager   {@link FragmentManager} instance that will handle
-     *                          the {@link Fragment}s provided by the adapter.
-     * @param parentFolder      Folder where images will be searched for.
-     * @param storageManager    Bridge to database.
+     * @param fragmentManager {@link FragmentManager} instance that will handle
+     *                        the {@link Fragment}s provided by the adapter.
+     * @param parentFolder    Folder where images will be searched for.
+     * @param storageManager  Bridge to database.
      */
     public PreviewImagePagerAdapter(FragmentManager fragmentManager, OCFile parentFolder,
                                     Account account, FileDataStorageManager storageManager /*,
@@ -85,7 +85,7 @@ public class PreviewImagePagerAdapter extends FragmentStatePagerAdapter {
         // TODO Enable when "On Device" is recovered ?
         mImageFiles = mStorageManager.getFolderImages(parentFolder/*, false*/);
 
-        mImageFiles = FileStorageUtils.sortFolder(mImageFiles,FileStorageUtils.mSortOrderFileDisp,FileStorageUtils.mSortAscendingFileDisp);
+        mImageFiles = FileStorageUtils.sortFolder(mImageFiles, FileStorageUtils.mSortOrderFileDisp, FileStorageUtils.mSortAscendingFileDisp);
 
         mObsoleteFragments = new HashSet<>();
         mObsoletePositions = new HashSet<>();

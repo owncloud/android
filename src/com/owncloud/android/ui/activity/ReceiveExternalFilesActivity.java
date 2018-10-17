@@ -469,7 +469,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
         FileStorageUtils.mSortOrderFileDisp = PreferenceManager.getSortOrder(this, FileStorageUtils.FILE_DISPLAY_SORT);
         FileStorageUtils.mSortAscendingFileDisp = PreferenceManager.getSortAscending(this, FileStorageUtils.FILE_DISPLAY_SORT);
 
-        files = FileStorageUtils.sortFolder(files,FileStorageUtils.mSortOrderFileDisp,FileStorageUtils.mSortAscendingFileDisp);
+        files = FileStorageUtils.sortFolder(files, FileStorageUtils.mSortOrderFileDisp, FileStorageUtils.mSortAscendingFileDisp);
         return files;
     }
 
@@ -747,9 +747,9 @@ public class ReceiveExternalFilesActivity extends FileActivity
     /**
      * Show an error dialog, forcing the user to click a single button to exit the activity
      *
-     * @param messageResId      Resource id of the message to show in the dialog.
-     * @param messageResTitle   Resource id of the title to show in the dialog. 0 to show default alert message.
-     *                          -1 to show no title.
+     * @param messageResId    Resource id of the message to show in the dialog.
+     * @param messageResTitle Resource id of the title to show in the dialog. 0 to show default alert message.
+     *                        -1 to show no title.
      */
     private void showErrorDialog(int messageResId, int messageResTitle) {
 
@@ -870,8 +870,9 @@ public class ReceiveExternalFilesActivity extends FileActivity
     /**
      * Suggest a filename based on the extras in the intent.
      * Show soft keyboard when no filename could be suggested.
+     *
      * @param alertDialog AlertDialog
-     * @param input EditText The view where to place the filename in.
+     * @param input       EditText The view where to place the filename in.
      */
     private void setFileNameFromIntent(AlertDialog alertDialog, EditText input) {
         String subject = getIntent().getStringExtra(Intent.EXTRA_SUBJECT);

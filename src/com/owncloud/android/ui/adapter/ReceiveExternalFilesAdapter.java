@@ -97,7 +97,7 @@ public class ReceiveExternalFilesAdapter extends BaseAdapter implements ListAdap
 
         TextView filename = vi.findViewById(R.id.filename);
         filename.setText(file.getFileName());
-        
+
         ImageView fileIcon = vi.findViewById(R.id.thumbnail);
         fileIcon.setTag(file.getFileId());
 
@@ -122,15 +122,15 @@ public class ReceiveExternalFilesAdapter extends BaseAdapter implements ListAdap
             } else {
                 // generate new Thumbnail
                 if (ThumbnailsCacheManager.cancelPotentialThumbnailWork(file, fileIcon)) {
-                    final ThumbnailsCacheManager.ThumbnailGenerationTask task = 
-                            new ThumbnailsCacheManager.ThumbnailGenerationTask(fileIcon, mStorageManager, 
+                    final ThumbnailsCacheManager.ThumbnailGenerationTask task =
+                            new ThumbnailsCacheManager.ThumbnailGenerationTask(fileIcon, mStorageManager,
                                     mAccount);
                     if (thumbnail == null) {
                         thumbnail = ThumbnailsCacheManager.mDefaultImg;
                     }
                     final AsyncThumbnailDrawable asyncDrawable = new AsyncThumbnailDrawable(
-                            mContext.getResources(), 
-                            thumbnail, 
+                            mContext.getResources(),
+                            thumbnail,
                             task
                     );
                     fileIcon.setImageDrawable(asyncDrawable);
