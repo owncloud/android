@@ -291,8 +291,11 @@ public class LocalFileListAdapter extends BaseAdapter implements ListAdapter {
         FileStorageUtils.mSortOrderUpload = order;
         FileStorageUtils.mSortAscendingUpload = isAscending;
         if (mFiles != null && mFiles.length > 0) {
-            mFiles = transformVecOCFile(FileStorageUtils.sortFolder(transformFileArray(mFiles),
-                    FileStorageUtils.mSortOrderUpload,FileStorageUtils.mSortAscendingUpload));
+            mFiles = transformVecOCFilesToFilesArr(
+                    FileStorageUtils.sortFolder(transformFilesArrToVecOCFiles(mFiles),
+                    FileStorageUtils.mSortOrderUpload,
+                    FileStorageUtils.mSortAscendingUpload)
+            );
             if (parentList != null) {
                 for (int i = 0; i < mFiles.length; i++) {
                     parentList.setItemChecked(i, false);
@@ -302,7 +305,7 @@ public class LocalFileListAdapter extends BaseAdapter implements ListAdapter {
         }
     }
 
-    private Vector<OCFile> transformFileArray(File[] files){
+    private Vector<OCFile> transformFilesArrToVecOCFiles(File[] files){
         Vector<OCFile> transformedFiles = new Vector<OCFile>();
         OCFile transformedFile = null;
         for(int i=0;i<files.length;i++){
@@ -315,7 +318,7 @@ public class LocalFileListAdapter extends BaseAdapter implements ListAdapter {
         return transformedFiles;
     }
 
-    private File[] transformVecOCFile(Vector<OCFile> files){
+    private File[] transformVecOCFilesToFilesArr(Vector<OCFile> files){
         File[] transformedFiles = new File[files.size()];
         for(int i=0;i<files.size();i++){
             transformedFiles[i] = new File(files.get(i).getRemotePath());

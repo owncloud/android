@@ -219,7 +219,8 @@ public class UploadFilesActivity extends FileActivity implements
             case R.id.action_sort_descending:
                 item.setChecked(!item.isChecked());
                 boolean isAscending = !item.isChecked();
-                com.owncloud.android.db.PreferenceManager.setSortAscending(isAscending,this,FileStorageUtils.UPLOAD_SORT);
+                com.owncloud.android.db.PreferenceManager.setSortAscending(isAscending,
+                        this,FileStorageUtils.UPLOAD_SORT);
                 switch(com.owncloud.android.db.PreferenceManager.getSortOrder(this,FileStorageUtils.UPLOAD_SORT)){
                     case FileStorageUtils.SORT_NAME:
                         sortByName(isAscending);
