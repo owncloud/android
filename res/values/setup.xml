@@ -36,6 +36,8 @@
     <color name="login_text_color">@color/white</color>
     <color name="login_text_hint_color">#dddddd</color>
     <color name="login_background_color">@color/owncloud_blue</color>
+    <color name="login_connection_text_color">@color/white</color>
+    <color name="login_credentials_text_color">@color/white</color>
     <color name="login_button_background_color">@color/white</color>
     <color name="login_button_text_color">@color/color_accent</color>
     <color name="background_color">#FFFFFF</color>
