@@ -29,7 +29,6 @@ import android.accounts.AccountManager;
 import android.accounts.AccountsException;
 import android.net.Uri;
 
-import com.owncloud.android.lib.common.accounts.AccountUtils;
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentials;
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentialsFactory;
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentialsFactory.OwnCloudAnonymousCredentials;
@@ -116,22 +115,16 @@ public class OwnCloudClient extends HttpClient {
     }
 
     public int executeHttpMethod (HttpBaseMethod method) throws Exception {
-
         boolean repeatWithFreshCredentials;
         int repeatCounter = 0;
         int status;
 
         do {
-            // Clean previous request id. This is a bit hacky but is the only way to add request headers in WebDAV
-            // methods by using Dav4Android
-            deleteHeaderForAllRequests(OC_X_REQUEST_ID);
-
-            // Header to allow tracing requests in apache and ownCloud logs
-            addHeaderForAllRequests(OC_X_REQUEST_ID,
-                    RandomUtils.generateRandomString(RandomUtils.generateRandomInteger(20, 200)));
+            setRequestId(method);
 
             status = method.execute();
             checkFirstRedirection(method);
+
             if(mFollowRedirects && !isIdPRedirection()) {
                 status = followRedirection(method).getLastStatus();
             }
@@ -158,6 +151,8 @@ public class OwnCloudClient extends HttpClient {
         int status;
 
         do {
+            setRequestId(method);
+
             status = method.execute();
 
             repeatWithFreshCredentials = checkUnauthorizedAccess(status, repeatCounter);
@@ -167,6 +162,19 @@ public class OwnCloudClient extends HttpClient {
         } while (repeatWithFreshCredentials);
 
         return status;
+    }
+
+    private void setRequestId(HttpBaseMethod method) {
+        // Clean previous request id. This is a bit hacky but is the only way to add request headers in WebDAV
+        // methods by using Dav4Android
+        deleteHeaderForAllRequests(OC_X_REQUEST_ID);
+
+        String requestId = RandomUtils.generateRandomUUID();
+
+        // Header to allow tracing requests in apache and ownCloud logs
+        addHeaderForAllRequests(OC_X_REQUEST_ID, RandomUtils.generateRandomUUID());
+
+        Log_OC.d(TAG, "Executing " + method.getClass().getSimpleName() + " in request with id " + requestId);
     }
 
     public RedirectionPath followRedirection(HttpBaseMethod method) throws Exception {
