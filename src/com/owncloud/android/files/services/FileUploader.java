@@ -212,18 +212,18 @@ public class FileUploader extends Service
 
         // Configure notification channel
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            NotificationChannel mNotificationChannel;
+            NotificationChannel notificationChannel;
             // The user-visible name of the channel.
             CharSequence name = getString(R.string.upload_notification_channel_name);
             // The user-visible description of the channel.
             String description = getString(R.string.upload_notification_channel_description);
             // Set importance low: show the notification everywhere but with no sound
             int importance = NotificationManager.IMPORTANCE_LOW;
-            mNotificationChannel = new NotificationChannel(UPLOAD_NOTIFICATION_CHANNEL_ID,
+            notificationChannel = new NotificationChannel(UPLOAD_NOTIFICATION_CHANNEL_ID,
                     name, importance);
             // Configure the notification channel.
-            mNotificationChannel.setDescription(description);
-            mNotificationManager.createNotificationChannel(mNotificationChannel);
+            notificationChannel.setDescription(description);
+            mNotificationManager.createNotificationChannel(notificationChannel);
         }
 
         HandlerThread thread = new HandlerThread("FileUploaderThread",
