@@ -2141,9 +2141,12 @@ public class FileDataStorageManager {
             cursorOnKeptInSync = getContentResolver().query(
                     ProviderTableMeta.CONTENT_URI,
                     null,
-                    ProviderTableMeta.FILE_KEEP_IN_SYNC + " = ?",
-                    new String[] { String.valueOf(OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE.getValue()) },
-                    // do NOT get also AVAILABLE_OFFLINE_PARENT: only those SET BY THE USER (files or folders)
+                    ProviderTableMeta.FILE_KEEP_IN_SYNC + " = ? OR " +
+                            ProviderTableMeta.FILE_KEEP_IN_SYNC + " = ?",
+                    new String[]{
+                            String.valueOf(OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE.getValue()),
+                            String.valueOf(OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE_PARENT.getValue())
+                    },
                     null
             );
 
