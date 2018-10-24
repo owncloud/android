@@ -26,16 +26,16 @@ import android.accounts.Account;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
-import android.support.v4.content.ContextCompat;
 
+import com.owncloud.android.BuildConfig;
+import com.owncloud.android.MainApp;
 import com.owncloud.android.datamodel.OCFile;
-import com.owncloud.android.files.services.AvailableOfflineSyncJobService;
 import com.owncloud.android.files.services.FileDownloader;
 import com.owncloud.android.files.services.FileUploader;
 import com.owncloud.android.files.services.TransferRequester;
 import com.owncloud.android.lib.common.OwnCloudClient;
-import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
+import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.files.ReadRemoteFileOperation;
 import com.owncloud.android.lib.resources.files.RemoteFile;
@@ -223,8 +223,10 @@ public class SynchronizeFileOperation extends SyncOperation {
             }
         }
 
-        Log_OC.i(TAG, "Synchronizing " + mAccount.name + ", file " + mLocalFile.getRemotePath() +
-                ": " + result.getLogMessage());
+        if (BuildConfig.DEBUG || MainApp.isBeta()) {
+            Log_OC.i(TAG, "Synchronizing " + mAccount.name + ", file " + mLocalFile.getRemotePath() +
+                    ": " + result.getLogMessage());
+        }
 
         return result;
     }
