@@ -34,6 +34,8 @@ import android.support.annotation.RequiresApi;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.util.Pair;
 
+import com.owncloud.android.BuildConfig;
+import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.FileDataStorageManager;
@@ -109,15 +111,17 @@ public class AvailableOfflineSyncJobService extends JobService {
 
                 if (localPath == null) {
                     localPath = FileStorageUtils.getDefaultSavePathFor(
-                            fileForAccount.second,
-                            fileForAccount.first
+                            fileForAccount.second, // Account name
+                            fileForAccount.first   // OCFile
                     );
                 }
 
                 File localFile = new File(localPath);
 
-                if (localFile.lastModified() <= fileForAccount.first.getLastSyncDateForData()) {
-                    Log_OC.i(TAG, "File " + localPath + " already synchronized, ignoring");
+                if (localFile.lastModified() <= fileForAccount.first.getLastSyncDateForData() &&
+                        (BuildConfig.DEBUG || MainApp.isBeta())) {
+                    Log_OC.i(TAG, "File " + fileForAccount.first.getFileName() + " already synchronized " +
+                            "in account " + fileForAccount.second + ", ignoring");
                     continue;
                 }
 
