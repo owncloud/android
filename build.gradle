@@ -22,15 +22,18 @@ ext {
 }
 
 repositories {
-    jcenter()
-    google()
-
-    maven {
-        url "https://jitpack.io"
-    }
-
     flatDir {
         dirs 'libs'
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        jcenter()
+        maven {
+            url "https://jitpack.io"
+        }
     }
 }
 
