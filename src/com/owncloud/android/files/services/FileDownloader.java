@@ -260,7 +260,7 @@ public class FileDownloader extends Service
     public void onAccountsUpdated(Account[] accounts) {
          //review the current download and cancel it if its account doesn't exist
         if (mCurrentDownload != null &&
-                !AccountUtils.exists(mCurrentDownload.getAccount(), getApplicationContext())) {
+                !AccountUtils.exists(mCurrentDownload.getAccount().name, getApplicationContext())) {
             mCurrentDownload.cancel();
         }
         // The rest of downloads are cancelled when they try to start
@@ -438,7 +438,7 @@ public class FileDownloader extends Service
         if (mCurrentDownload != null) {
 
             /// Check account existence
-            if (!AccountUtils.exists(mCurrentDownload.getAccount(), this)) {
+            if (!AccountUtils.exists(mCurrentDownload.getAccount().name, this)) {
                 Log_OC.w(
                     TAG,
                     "Account " + mCurrentDownload.getAccount().name +

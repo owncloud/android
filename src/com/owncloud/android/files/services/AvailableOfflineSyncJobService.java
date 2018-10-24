@@ -136,13 +136,16 @@ public class AvailableOfflineSyncJobService extends JobService {
          * @param accountName account to synchronize the available offline file with
          */
         private void startSyncOperation(OCFile availableOfflineFile, String accountName) {
-            Log_OC.i(
-                    TAG,
-                    String.format(
-                            "Requested synchronization for file %1s",
-                            availableOfflineFile.getFileName()
-                    )
-            );
+            if (BuildConfig.DEBUG || MainApp.isBeta()) {
+                Log_OC.i(
+                        TAG,
+                        String.format(
+                                "Requested synchronization for file %1s in account %2s",
+                                availableOfflineFile.getFileName(),
+                                accountName
+                        )
+                );
+            }
 
             Account account = AccountUtils.getOwnCloudAccountByName(mAvailableOfflineJobService, accountName);
 
@@ -223,7 +226,7 @@ public class AvailableOfflineSyncJobService extends JobService {
 
             jobScheduler.cancel(jobId);
 
-            Log_OC.d(TAG, "No available offline to check, cancelling the periodic job");
+            Log_OC.d(TAG, "No available offline files to check, cancelling the periodic job");
         }
 
         @Override
