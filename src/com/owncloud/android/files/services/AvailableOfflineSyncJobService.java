@@ -120,7 +120,7 @@ public class AvailableOfflineSyncJobService extends JobService {
 
                 if (localFile.lastModified() <= fileForAccount.first.getLastSyncDateForData() &&
                         (BuildConfig.DEBUG || MainApp.isBeta())) {
-                    Log_OC.i(TAG, "File " + fileForAccount.first.getFileName() + " already synchronized " +
+                    Log_OC.i(TAG, "File " + fileForAccount.first.getRemotePath() + " already synchronized " +
                             "in account " + fileForAccount.second + ", ignoring");
                     continue;
                 }
@@ -141,7 +141,7 @@ public class AvailableOfflineSyncJobService extends JobService {
                         TAG,
                         String.format(
                                 "Requested synchronization for file %1s in account %2s",
-                                availableOfflineFile.getFileName(),
+                                availableOfflineFile.getRemotePath(),
                                 accountName
                         )
                 );
@@ -198,7 +198,7 @@ public class AvailableOfflineSyncJobService extends JobService {
                     .setContentTitle(mAvailableOfflineJobService.getString(R.string.conflict_title))
                     .setContentText(String.format(
                             mAvailableOfflineJobService.getString(R.string.conflict_description),
-                            availableOfflineFile.getFileName())
+                            availableOfflineFile.getRemotePath())
                     )
                     .setAutoCancel(true);
 
@@ -213,7 +213,15 @@ public class AvailableOfflineSyncJobService extends JobService {
                             showConflictActivityIntent, 0)
             );
 
-            notificationManager.notify(R.string.conflict_title, notificationBuilder.build());
+            int notificationId = 0;
+
+            // We need a notification id for each file in conflict, let's use the file id but in a safe way
+            if ((int) availableOfflineFile.getFileId() >= Integer.MIN_VALUE && (int) availableOfflineFile.getFileId() <=
+                    Integer.MAX_VALUE) {
+                notificationId = (int) availableOfflineFile.getFileId();
+            }
+
+            notificationManager.notify(notificationId, notificationBuilder.build());
         }
 
         /**
