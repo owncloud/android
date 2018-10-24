@@ -126,11 +126,13 @@ public class ErrorMessageAdapter {
 
             RemoteOperationResult<ShareParserResult> shareResult = (RemoteOperationResult<ShareParserResult>) result;
 
-            return (shareResult.getData()!= null
-                    && shareResult.getData().getShares() != null
-                    && shareResult.getData().getShares().size() > 0)
-                    ? shareResult.getData().getShares().get(0).toString()
-                    : shareResult.getData().getParserMessage();
+            if (shareResult.getData() != null) {
+                if (shareResult.getData().getShares() != null && shareResult.getData().getShares().size() > 0) {
+                    return shareResult.getData().getShares().get(0).toString();
+                } else {
+                    return shareResult.getData().getParserMessage();
+                }
+            }
         }
 
         switch (result.getCode()) {
