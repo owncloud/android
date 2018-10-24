@@ -90,13 +90,13 @@ public class AccountUtils {
     }
 
     
-    public static boolean exists(Account account, Context context) {
+    public static boolean exists(String accountName, Context context) {
         Account[] ocAccounts = getAccounts(context);
 
-        if (account != null && account.name != null) {
-            int lastAtPos = account.name.lastIndexOf("@");
-            String hostAndPort = account.name.substring(lastAtPos + 1);
-            String username = account.name.substring(0, lastAtPos);
+        if (accountName != null) {
+            int lastAtPos = accountName.lastIndexOf("@");
+            String hostAndPort = accountName.substring(lastAtPos + 1);
+            String username = accountName.substring(0, lastAtPos);
             String otherHostAndPort, otherUsername;
             Locale currentLocale = context.getResources().getConfiguration().locale;
             for (Account otherAccount : ocAccounts) {

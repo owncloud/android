@@ -315,7 +315,7 @@ public class FileUploader extends Service
         }
 
         Account account = intent.getParcelableExtra(KEY_ACCOUNT);
-        if (!AccountUtils.exists(account, getApplicationContext())) {
+        if (!AccountUtils.exists(account.name, getApplicationContext())) {
             return Service.START_NOT_STICKY;
         }
         OwnCloudVersion ocv = AccountUtils.getServerVersion(account);
@@ -544,7 +544,7 @@ public class FileUploader extends Service
     public void onAccountsUpdated(Account[] accounts) {
         // Review current upload, and cancel it if its account doen't exist
         if (mCurrentUpload != null &&
-                !AccountUtils.exists(mCurrentUpload.getAccount(), getApplicationContext())) {
+                !AccountUtils.exists(mCurrentUpload.getAccount().name, getApplicationContext())) {
             mCurrentUpload.cancel();
         }
         // The rest of uploads are cancelled when they try to start
@@ -809,7 +809,7 @@ public class FileUploader extends Service
         if (mCurrentUpload != null) {
 
             /// Check account existence
-            if (!AccountUtils.exists(mCurrentUpload.getAccount(), this)) {
+            if (!AccountUtils.exists(mCurrentUpload.getAccount().name, this)) {
                 Log_OC.w(
                     TAG,
                     "Account " + mCurrentUpload.getAccount().name +

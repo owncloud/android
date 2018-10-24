@@ -1568,7 +1568,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         String accountName = com.owncloud.android.lib.common.accounts.AccountUtils.
                 buildAccountName(uri, username);
         Account newAccount = new Account(accountName, MainApp.getAccountType());
-        if (AccountUtils.exists(newAccount, getApplicationContext())) {
+        if (AccountUtils.exists(newAccount.name, getApplicationContext())) {
             // fail - not a new account, but an existing one; disallow
             RemoteOperationResult result = new RemoteOperationResult(ResultCode.ACCOUNT_NOT_NEW);
             updateAuthStatusIconAndText(result);

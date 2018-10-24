@@ -43,6 +43,7 @@ import android.support.v4.util.Pair;
 
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
+import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.db.ProviderMeta.ProviderTableMeta;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.shares.OCShare;
@@ -631,7 +632,6 @@ public class FileDataStorageManager {
         }
         return success;
     }
-
 
     public boolean removeFolder(OCFile folder, boolean removeDBData, boolean removeLocalContent) {
         boolean success = true;
@@ -2158,7 +2158,7 @@ public class FileDataStorageManager {
                     accountName = cursorOnKeptInSync.getString(
                             cursorOnKeptInSync.getColumnIndex(ProviderTableMeta.FILE_ACCOUNT_OWNER)
                     );
-                    if (!file.isFolder()) {
+                    if (!file.isFolder() && AccountUtils.exists(accountName, mContext)) {
                         result.add(new Pair<>(file, accountName));
                     }
                 } while (cursorOnKeptInSync.moveToNext());
