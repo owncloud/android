@@ -281,7 +281,15 @@ public class LocalFileListAdapter extends BaseAdapter implements ListAdapter {
                 }
 
             });
+            if(mFiles.length > 0) {
+                mFiles = transformVecOCFilesToFilesArr(
+                        FileStorageUtils.sortFolder(transformFilesArrToVecOCFiles(mFiles),
+                        FileStorageUtils.mSortOrderUpload,
+                        FileStorageUtils.mSortAscendingUpload)
+                );
+            }
         }
+
         notifyDataSetChanged();
     }
 
