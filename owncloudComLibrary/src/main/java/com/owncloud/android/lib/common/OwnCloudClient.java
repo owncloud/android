@@ -61,12 +61,11 @@ public class OwnCloudClient extends HttpClient {
     private static final String TAG = OwnCloudClient.class.getSimpleName();
     private static final int MAX_REDIRECTIONS_COUNT = 3;
     private static final int MAX_REPEAT_COUNT_WITH_FRESH_CREDENTIALS = 1;
-    private static final String PARAM_PROTOCOL_VERSION = "http.protocol.version";
 
     private static byte[] sExhaustBuffer = new byte[1024];
     private static int sIntanceCounter = 0;
     private OwnCloudCredentials mCredentials = null;
-    private int mInstanceNumber = 0;
+    private int mInstanceNumber;
     private Uri mBaseUri;
     private OwnCloudVersion mVersion = null;
     private OwnCloudAccount mAccount;
@@ -330,16 +329,16 @@ public class OwnCloudClient extends HttpClient {
     }
 
     public String getCookiesString() {
-        String cookiesString = "";
+        StringBuilder cookiesString = new StringBuilder();
         List<Cookie> cookieList = getCookiesFromUrl(HttpUrl.parse(mBaseUri.toString()));
 
         if (cookieList != null) {
             for (Cookie cookie : cookieList) {
-                cookiesString += cookie.toString() + ";";
+                cookiesString.append(cookie.toString()).append(";");
             }
         }
 
-        return cookiesString;
+        return cookiesString.toString();
     }
 
     public void setCookiesForCurrentAccount(List<Cookie> cookies) {
