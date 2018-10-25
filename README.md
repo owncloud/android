@@ -44,9 +44,7 @@ ownCloud Android Library is available under MIT license. See the file LICENSE.md
 
 #### Third party libraries
 
-ownCloud Android Library uses Apache JackRabbit, version 2.2.5. Copyright (C) 2004-2010 The Apache Software Foundation. Licensed under Apache License, Version 2.0.
-
-Apache JackRabbit depends on Commons HTTPClient version 3.1 and SLF4j version 1.7.5; both included also. Copyright (C) 2004-2010 The Apache Software Foundation. Licensed under Apache License, Version 2.0.
+ownCloud Android Library uses OkHttp version 3.10, licensed under Apache License and version 2.0. Besides, it uses Dav4Android, licensed under Mozilla Public License, v. 2.0
    
 
 ### Compatibility
