@@ -79,7 +79,11 @@ dependencies {
 
     //Zooming Android ImageView.
     implementation 'com.github.chrisbanes:PhotoView:2.0.0'
+
     implementation 'com.gitlab.ownclouders:dav4android:oc_support'
+
+    // Convert Java Objects into JSON and back
+    implementation 'com.google.code.gson:gson:2.8.5'
 }
 
 tasks.withType(Test) {
@@ -94,8 +98,8 @@ android {
 
     defaultConfig {
 
-        manifestPlaceholders.versionCode = "20800100"
-        manifestPlaceholders.versionName = "2.9.0-beta.1"
+        manifestPlaceholders.versionCode = "20800200"
+        manifestPlaceholders.versionName = "2.9.0-beta.2"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 

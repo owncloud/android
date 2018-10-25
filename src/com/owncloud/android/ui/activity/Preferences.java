@@ -241,7 +241,7 @@ public class Preferences extends PreferenceActivity {
         CameraUploadsConfiguration configuration = com.owncloud.android.db.PreferenceManager.
                 getCameraUploadsConfiguration(this);
 
-        mCameraUploadsHandler = new CameraUploadsHandler(this, configuration);
+        mCameraUploadsHandler = new CameraUploadsHandler(configuration);
 
         /**
          * Security
@@ -520,7 +520,7 @@ public class Preferences extends PreferenceActivity {
                                 } else if (which == DialogInterface.BUTTON_POSITIVE) {
                                     mPrefCameraUploadsCategory.removePreference(mPrefCameraPictureUploadsWiFi);
                                     mPrefCameraUploadsCategory.removePreference(mPrefCameraPictureUploadsPath);
-                                    mCameraUploadsHandler.updatePicturesLastSync(0);
+                                    mCameraUploadsHandler.updatePicturesLastSync(getApplicationContext(), 0);
                                 }
                                 dismissConfirmationDialog(builder);
                             }
@@ -560,7 +560,7 @@ public class Preferences extends PreferenceActivity {
                                 } else if (which == DialogInterface.BUTTON_POSITIVE) {
                                     mPrefCameraUploadsCategory.removePreference(mPrefCameraVideoUploadsWiFi);
                                     mPrefCameraUploadsCategory.removePreference(mPrefCameraVideoUploadsPath);
-                                    mCameraUploadsHandler.updateVideosLastSync(0);
+                                    mCameraUploadsHandler.updateVideosLastSync(getApplicationContext(), 0);
                                 }
                                 dismissConfirmationDialog(builder);
                             }
@@ -659,8 +659,8 @@ public class Preferences extends PreferenceActivity {
 
             if (!previousSourcePath.equals(data.getStringExtra(LocalFolderPickerActivity.EXTRA_PATH))) {
                 long currentTimeStamp = System.currentTimeMillis();
-                mCameraUploadsHandler.updatePicturesLastSync(currentTimeStamp);
-                mCameraUploadsHandler.updateVideosLastSync(currentTimeStamp);
+                mCameraUploadsHandler.updatePicturesLastSync(getApplicationContext(), currentTimeStamp);
+                mCameraUploadsHandler.updateVideosLastSync(getApplicationContext(), currentTimeStamp);
             }
 
             mSourcePath = data.getStringExtra(LocalFolderPickerActivity.EXTRA_PATH);
@@ -799,7 +799,7 @@ public class Preferences extends PreferenceActivity {
 
             mCameraUploadsHandler.setCameraUploadsConfig(configuration);
 
-            mCameraUploadsHandler.scheduleCameraUploadsSyncJob();
+            mCameraUploadsHandler.scheduleCameraUploadsSyncJob(getApplicationContext());
         }
 
         super.onStop();

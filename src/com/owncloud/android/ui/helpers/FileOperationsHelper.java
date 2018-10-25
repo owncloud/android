@@ -4,7 +4,8 @@
  *   @author masensio
  *   @author David A. Velasco
  *   @author Juan Carlos González Cabrero
- *   Copyright (C) 2017 ownCloud GmbH.
+ *   @author David González Verdugo
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -33,6 +34,7 @@ import android.webkit.MimeTypeMap;
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.OCFile;
+import com.owncloud.android.files.services.AvailableOfflineHandler;
 import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder;
 import com.owncloud.android.files.services.FileUploader.FileUploaderBinder;
 import com.owncloud.android.lib.common.utils.Log_OC;
@@ -40,7 +42,6 @@ import com.owncloud.android.lib.resources.shares.OCShare;
 import com.owncloud.android.lib.resources.shares.ShareType;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 import com.owncloud.android.services.OperationsService;
-import com.owncloud.android.services.observer.FileObserverService;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.activity.ShareActivity;
 import com.owncloud.android.ui.dialog.ShareLinkToDialog;
@@ -48,9 +49,6 @@ import com.owncloud.android.ui.dialog.ShareLinkToDialog;
 import java.util.Collection;
 import java.util.List;
 
-/**
- *
- */
 public class FileOperationsHelper {
 
     private static final String TAG = FileOperationsHelper.class.getSimpleName();
@@ -495,13 +493,12 @@ public class FileOperationsHelper {
             boolean success = mFileActivity.getStorageManager().saveLocalAvailableOfflineStatus(file);
 
             if (success) {
-                /// register the OCFile instance in the observer service to monitor local updates
-                FileObserverService.observeFile(
-                    mFileActivity,
-                    file,
-                    mFileActivity.getAccount(),
-                    isAvailableOffline
-                );
+                // Schedule job to check to watch for local changes in available offline files and sync them
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                    AvailableOfflineHandler availableOfflineHandler =
+                            new AvailableOfflineHandler(mFileActivity, mFileActivity.getAccount().name);
+                    availableOfflineHandler.scheduleAvailableOfflineJob(mFileActivity);
+                }
 
                 /// immediate content synchronization
                 if (OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE == file.getAvailableOfflineStatus()) {
@@ -667,7 +664,6 @@ public class FileOperationsHelper {
      * @param link link to share
      */
     private void shareLink(String link) {
-
         Intent intentToShareLink = new Intent(Intent.ACTION_SEND);
         intentToShareLink.putExtra(Intent.EXTRA_TEXT, link);
         intentToShareLink.setType("text/plain");

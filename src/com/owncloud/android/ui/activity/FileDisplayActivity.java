@@ -81,7 +81,6 @@ import com.owncloud.android.operations.RenameFileOperation;
 import com.owncloud.android.operations.SynchronizeFileOperation;
 import com.owncloud.android.operations.UploadFileOperation;
 import com.owncloud.android.operations.common.SyncOperation;
-import com.owncloud.android.services.observer.FileObserverService;
 import com.owncloud.android.syncadapter.FileSyncAdapter;
 import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter;
 import com.owncloud.android.ui.fragment.FileDetailFragment;
@@ -180,9 +179,6 @@ public class FileDisplayActivity extends FileActivity
             mFileWaitingToPreview = null;
             mSyncInProgress = false;
             mWaitingToSend = null;
-
-            /// grant that FileObserverService is watching favorite files
-            FileObserverService.initialize(this);
 
             mFilesUploadHelper = new FilesUploadHelper(this,
                     getAccount() == null ? "" : getAccount().name);
@@ -1676,8 +1672,8 @@ public class FileDisplayActivity extends FileActivity
         // If the file is not being downloaded, start the download
         if (!mDownloaderBinder.isDownloading(account, mFileWaitingToPreview)) {
             Intent i = new Intent(this, FileDownloader.class);
-            i.putExtra(FileDownloader.EXTRA_ACCOUNT, account);
-            i.putExtra(FileDownloader.EXTRA_FILE, mFileWaitingToPreview);
+            i.putExtra(FileDownloader.KEY_ACCOUNT, account);
+            i.putExtra(FileDownloader.KEY_FILE, mFileWaitingToPreview);
             startService(i);
         }
     }
@@ -1745,8 +1741,8 @@ public class FileDisplayActivity extends FileActivity
         Account account = getAccount();
         if (!mDownloaderBinder.isDownloading(account, mFileWaitingToPreview)) {
             Intent i = new Intent(this, FileDownloader.class);
-            i.putExtra(FileDownloader.EXTRA_ACCOUNT, account);
-            i.putExtra(FileDownloader.EXTRA_FILE, file);
+            i.putExtra(FileDownloader.KEY_ACCOUNT, account);
+            i.putExtra(FileDownloader.KEY_FILE, file);
             startService(i);
         }
     }
