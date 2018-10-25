@@ -97,9 +97,8 @@ android {
     compileSdkVersion 26
 
     defaultConfig {
-
-        manifestPlaceholders.versionCode = "20800200"
-        manifestPlaceholders.versionName = "2.9.0-beta.2"
+        manifestPlaceholders.versionCode = "20900000"
+        manifestPlaceholders.versionName = "2.9.0"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
