@@ -172,7 +172,7 @@ public class OwnCloudClient extends HttpClient {
         String requestId = RandomUtils.generateRandomUUID();
 
         // Header to allow tracing requests in apache and ownCloud logs
-        addHeaderForAllRequests(OC_X_REQUEST_ID, RandomUtils.generateRandomUUID());
+        addHeaderForAllRequests(OC_X_REQUEST_ID, requestId);
 
         Log_OC.d(TAG, "Executing " + method.getClass().getSimpleName() + " in request with id " + requestId);
     }
