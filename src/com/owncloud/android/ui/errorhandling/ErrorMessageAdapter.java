@@ -136,12 +136,6 @@ public class ErrorMessageAdapter {
             }
         }
 
-        if(operation instanceof CreateFolderOperation && result.getHttpPhrase() != null && result.getHttpPhrase().length() > 0){
-            if(result.getHttpCode() == 405 && result.getHttpPhrase().equalsIgnoreCase(f.format(R.string.method_not_allowed))){
-                return ((CreateFolderOperation) operation).getNewFolderName() + " " + f.format(R.string.folder_already_exists);
-            }
-        }
-
         switch (result.getCode()) {
             case LOCAL_STORAGE_FULL:
                 return f.format(R.string.error__upload__local_file_not_copied,
@@ -285,7 +279,6 @@ public class ErrorMessageAdapter {
             return f.format(R.string.sync_folder_failed_content,
                     new File(((SynchronizeFolderOperation) operation).getFolderPath()).getName());
         if (operation instanceof CopyFileOperation) return f.format(R.string.copy_file_error);
-
         // if everything else failes
         if(result.isSuccess()) return f.format(android.R.string.ok);
         else return f.format(R.string.common_error_unknown);
