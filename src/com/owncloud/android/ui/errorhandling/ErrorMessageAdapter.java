@@ -3,7 +3,6 @@
  *
  * @author masensio
  * @author Christian Schabesberger
- * @author Shashvat Kedia
  * Copyright (C) 2018 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
@@ -134,11 +133,6 @@ public class ErrorMessageAdapter {
                 } else {
                     return shareResult.getData().getParserMessage();
                 }
-            }
-        }
-        if(result.getHttpCode() == HttpConstants.HTTP_METHOD_NOT_ALLOWED){
-            if(!result.isSuccess() && result.getHttpPhrase() != null && result.getHttpPhrase().length() > 0){
-                return result.getHttpPhrase();
             }
         }
         switch (result.getCode()) {
