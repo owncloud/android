@@ -69,7 +69,8 @@ public class UploadFileOperation extends SyncOperation {
     public static final int CREATED_AS_CAMERA_UPLOAD_PICTURE = 1;
     public static final int CREATED_AS_CAMERA_UPLOAD_VIDEO = 2;
 
-    public static OCFile obtainNewOCFileToUpload(String remotePath, String localPath, String mimeType) {
+    public static OCFile obtainNewOCFileToUpload(String remotePath, String localPath, String mimeType,
+                                                 Context context) {
 
         // MIME type
         if (mimeType == null || mimeType.length() <= 0) {
@@ -77,7 +78,9 @@ public class UploadFileOperation extends SyncOperation {
         }
 
         OCFile newFile = new OCFile(remotePath);
-        newFile.setStoragePath(localPath);
+        newFile.setStoragePath(
+                localPath.startsWith("/data") && localPath.contains(context.getPackageName()) ? "" : localPath
+        );
         newFile.setLastSyncDateForProperties(0);
         newFile.setLastSyncDateForData(0);
 
@@ -118,7 +121,7 @@ public class UploadFileOperation extends SyncOperation {
     /**
      * Local path to file which is to be uploaded (before any possible renaming or moving).
      */
-    private String mOriginalStoragePath = null;
+    private String mOriginalStoragePath;
     protected Set<OnDatatransferProgressListener> mDataTransferListeners = new HashSet<OnDatatransferProgressListener>();
     private OnRenameListener mRenameUploadListener;
 
@@ -152,7 +155,8 @@ public class UploadFileOperation extends SyncOperation {
             mFile = obtainNewOCFileToUpload(
                     upload.getRemotePath(),
                     upload.getLocalPath(),
-                    upload.getMimeType()
+                    upload.getMimeType(),
+                    context
             );
         } else {
             mFile = file;

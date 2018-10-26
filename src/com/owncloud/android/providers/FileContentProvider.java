@@ -40,7 +40,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
+import android.os.CancellationSignal;
+import android.os.ParcelFileDescriptor;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
 import com.owncloud.android.MainApp;
@@ -55,6 +58,7 @@ import com.owncloud.android.lib.resources.shares.ShareType;
 import com.owncloud.android.utils.FileStorageUtils;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -1312,7 +1316,20 @@ public class FileContentProvider extends ContentProvider {
         } finally {
             c.close();
         }
+    }
 
+    @Nullable
+    @Override
+    public ParcelFileDescriptor openFile(@NonNull Uri uri, @NonNull String mode, @Nullable CancellationSignal signal)
+            throws FileNotFoundException {
+        return super.openFile(uri, mode, signal);
+    }
+
+
+    @Nullable
+    @Override
+    public ParcelFileDescriptor openFile(@NonNull Uri uri, @NonNull String mode) throws FileNotFoundException {
+        return super.openFile(uri, mode);
     }
 
     /**
