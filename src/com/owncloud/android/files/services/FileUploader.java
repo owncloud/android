@@ -307,7 +307,7 @@ public class FileUploader extends Service
         }
 
         boolean retry = intent.getBooleanExtra(KEY_RETRY, false);
-        AbstractList<String> requestedUploads = new Vector<String>();
+        AbstractList<String> requestedUploads = new Vector<>();
 
         if (!intent.hasExtra(KEY_ACCOUNT)) {
             Log_OC.e(TAG, "Not enough information provided in intent");
@@ -370,7 +370,8 @@ public class FileUploader extends Service
                     files[i] = UploadFileOperation.obtainNewOCFileToUpload(
                             remotePaths[i],
                             localPaths[i],
-                            ((mimeTypes != null) ? mimeTypes[i] : null)
+                            ((mimeTypes != null) ? mimeTypes[i] : null),
+                            getApplicationContext()
                     );
                     if (files[i] == null) {
                         Log_OC.e(TAG, "obtainNewOCFileToUpload() returned null for remotePaths[i]:" + remotePaths[i]

@@ -24,6 +24,8 @@ package com.owncloud.android.providers.cursors;
 import android.annotation.TargetApi;
 import android.database.MatrixCursor;
 import android.os.Build;
+import android.os.Bundle;
+import android.provider.DocumentsContract;
 import android.provider.DocumentsContract.Document;
 
 import com.owncloud.android.datamodel.OCFile;
@@ -37,6 +39,8 @@ public class FileCursor extends MatrixCursor {
             Document.COLUMN_MIME_TYPE, Document.COLUMN_SIZE,
             Document.COLUMN_FLAGS, Document.COLUMN_LAST_MODIFIED
     };
+
+    private Bundle mExtras = Bundle.EMPTY;
 
     public FileCursor(String[] projection) {
         super(projection != null ? projection : DEFAULT_DOCUMENT_PROJECTION);
@@ -57,5 +61,15 @@ public class FileCursor extends MatrixCursor {
                 .add(Document.COLUMN_FLAGS, flags)
                 .add(Document.COLUMN_ICON, iconRes)
                 .add(Document.COLUMN_MIME_TYPE, mimeType);
+    }
+
+    public void setMoreToSync(boolean hasMoreToSync) {
+        mExtras = new Bundle();
+        mExtras.putBoolean(DocumentsContract.EXTRA_LOADING, hasMoreToSync);
+    }
+
+    @Override
+    public Bundle getExtras() {
+        return mExtras;
     }
 }
