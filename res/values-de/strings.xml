@@ -1,5 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+  <string name="about_android">1%1$s für Android</string>
+  <string name="about_version">Version %1$s</string>
   <string name="actionbar_search">Diesen Ordner durchsuchen</string>
   <string name="actionbar_sync">Konto aktualisieren</string>
   <string name="actionbar_upload">Datei hochladen</string>
@@ -53,8 +55,7 @@
   <string name="prefs_pattern">Mustersperre</string>
   <string name="pattern_enter_pattern">Bitte gib dein Muster ein</string>
   <string name="pattern_configure_pattern">Gib dein Muster ein</string>
-  <string name="pattern_remove_pattern">Entferne dein Muster
-</string>
+  <string name="pattern_remove_pattern">Entferne dein Muster</string>
   <string name="pattern_incorrect_pattern">Falsches Muster</string>
   <string name="pattern_reenter_pattern">Muster bitte erneut eingeben</string>
   <string name="pattern_not_same_pattern">Die Muster stimmen nicht überein</string>
@@ -129,7 +130,9 @@
   <string name="change_password">Passwort ändern</string>
   <string name="delete_account">Benutzerkonto löschen</string>
   <string name="create_account">Account erstellen</string>
+  <string name="upload_chooser_title">Hochladen von (Quelle)</string>
   <string name="uploader_info_dirname">Ordnername</string>
+  <string name="uploader_upload_in_progress_ticker">Lade hoch...</string>
   <string name="uploader_upload_in_progress_content">%1$d%% Hochladen %2$s</string>
   <string name="uploader_upload_succeeded_ticker">Hochladen erfolgreich</string>
   <string name="uploader_upload_succeeded_content_single">%1$s hochgeladen</string>
@@ -146,6 +149,8 @@
   <string name="uploads_view_group_current_uploads">Wird hochgeladen</string>
   <string name="uploads_view_group_failed_uploads">Fehlgeschlagen (Tippen zum Wiederholen)</string>
   <string name="uploads_view_group_finished_uploads">Hochgeladen</string>
+  <string name="uploads_view_group_file_count">%d Dateien</string>
+  <string name="uploads_view_group_file_count_single">%d Datei</string>
   <string name="uploads_view_upload_status_succeeded">Fertiggestellt</string>
   <string name="uploads_view_upload_status_cancelled">abgebrochen</string>
   <string name="uploads_view_upload_status_paused">pausiert</string>
@@ -163,6 +168,7 @@
   <string name="uploads_view_upload_status_waiting_for_wifi">warten auf eine WLAN Verbindung </string>
   <string name="uploads_view_later_waiting_to_upload">Warten auf hochladen</string>
   <string name="uploads_view_unsupported_media_type">Nicht unterstützter Medientyp</string>
+  <string name="downloader_download_in_progress_ticker">Lade herunter...</string>
   <string name="downloader_download_in_progress_content">%1$d%% Herunterladen %2$s</string>
   <string name="downloader_download_succeeded_ticker">Herunterladen erfolgreich</string>
   <string name="downloader_download_succeeded_content">%1$s heruntergeladen</string>
@@ -227,6 +233,7 @@
   <string name="media_forward_description">Vorspulen Knopf</string>
   <string name="upload_from_camera_title">Kamerabild</string>
   <string name="auth_getting_authorization">Autorisierung empfangen…</string>
+  <string name="auth_trying_to_login">Anmeldung läuft ...</string>
   <string name="auth_no_net_conn_title">Keine Netzwerkverbindung</string>
   <string name="auth_nossl_plain_ok_title">Sichere Verbindung nicht verfügbar.</string>
   <string name="auth_connection_established">Verbindung hergestellt</string>
@@ -281,6 +288,7 @@
   <string name="wait_checking_credentials">Überprüfe gespeicherte Anmeldeinformationen</string>
   <string name="filedisplay_unexpected_bad_get_content">Ein unerwartetes Problem ist aufgetreten. Bitte versuche, die Datei in einer anderen App zu öffnen</string>
   <string name="filedisplay_no_file_selected">Es wurde keine Datei ausgewählt.</string>
+  <string name="activity_chooser_title">Link senden an </string>
   <string name="wait_for_tmp_copy_from_private_storage">Kopiere Datei vom privatem Speicher</string>
   <string name="oauth_check_onoff">Anmelden mit oAuth2</string>
   <string name="oauth_login_connection">Verbinde zum OAuth2-Server...</string>
@@ -373,6 +381,7 @@
   <string name="log_send_mail_subject">%1$s Android-App Meldungen</string>
   <string name="log_progress_dialog_text">Lade Daten…</string>
   <string name="actionbar_select_all">Alle auswählen</string>
+  <string name="actionbar_select_inverse">Selektion umkehren</string>
   <string name="saml_authentication_required_text">Legitimierung benötigt</string>
   <string name="saml_authentication_wrong_pass">Falsches Passwort</string>
   <string name="actionbar_move">Verschieben</string>
@@ -410,6 +419,8 @@
   <string name="prefs_camera_upload_source_path_title">Kamera-Ordner (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">Benötigt</string>
   <string name="prefs_camera_upload_source_path_title_optional">Optional</string>
+  <string name="prefs_camera_upload_behaviour_dialogTitle">Originale Datei wird</string>
+  <string name="prefs_camera_upload_behaviour_title">Originale Datei wird</string>
   <string name="upload_copy_files">kopiere Datei</string>
   <string name="upload_move_files">verschiebe Datei</string>
   <string name="pref_behaviour_entries_keep_file">im Originalordner behalten</string>
