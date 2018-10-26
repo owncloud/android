@@ -274,6 +274,11 @@ public class RemoteOperationResult<T extends Object>
                         ResultCode.SPECIFIC_SERVICE_UNAVAILABLE
                 );
                 break;
+            case HttpConstants.HTTP_METHOD_NOT_ALLOWED:
+                parseErrorMessageAndSetCode(
+                        httpMethod.getResponseBodyAsString(),
+                        ResultCode.SPECIFIC_SERVICE_UNAVAILABLE
+                );
             default:
                 break;
         }
