@@ -55,10 +55,6 @@ public class CreateFolderOperation extends SyncOperation {
         mCreateFullPath = createFullPath;
     }
 
-    public String getNewFolderName(){
-        return new OCFile(mRemotePath).getFileName();
-    }
-
     @Override
     protected RemoteOperationResult run(OwnCloudClient client) {
         CreateRemoteFolderOperation createRemoteFolderOperation = new CreateRemoteFolderOperation(
