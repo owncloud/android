@@ -577,11 +577,11 @@
     <string name="welcome_feature_4_text">Your pictures/videos automatically uploaded</string>
     <string name="welcome_feature_5_title">Video streaming</string>
     <string name="welcome_feature_5_text">Play your videos without downloading them</string>
-    <string name="welcome_feature_6_title">User quota</string>
-    <string name="welcome_feature_6_text">Know your used and available space</string>
-    <string name="welcome_feature_7_title">New icons</string>
-    <string name="welcome_feature_7_text">To download and set files as av. offline</string>
-    <string name="welcome_feature_8_title">New pins</string>
-    <string name="welcome_feature_8_text">For syncing, downloaded and av. offline files</string>
+    <string name="welcome_feature_6_title">Search in current folder</string>
+    <string name="welcome_feature_6_text">Filter your files by name</string>
+    <string name="welcome_feature_7_title">Select all</string>
+    <string name="welcome_feature_7_text">Select all files at once</string>
+    <string name="welcome_feature_8_title">Available offline</string>
+    <string name="welcome_feature_8_text">Your files automatically synchronized</string>
     <string name="no_borwser_installed_alert">No browser installed. Please install a Browser in order to allow a secure login.</string>
 </resources>
