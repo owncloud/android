@@ -150,12 +150,12 @@ public class ReceiveExternalFilesAdapter extends BaseAdapter implements ListAdap
     }
 
     public void setSortOrder(Integer order, boolean isAscending) {
-        PreferenceManager.setSortOrder(order, mContext);
-        PreferenceManager.setSortAscending(isAscending, mContext);
-        FileStorageUtils.mSortOrder = order;
-        FileStorageUtils.mSortAscending = isAscending;
+        PreferenceManager.setSortOrder(order, mContext,FileStorageUtils.FILE_DISPLAY_SORT);
+        PreferenceManager.setSortAscending(isAscending, mContext,FileStorageUtils.FILE_DISPLAY_SORT);
+        FileStorageUtils.mSortOrderFileDisp = order;
+        FileStorageUtils.mSortAscendingFileDisp = isAscending;
         if(mFiles != null && mFiles.size() > 0){
-            FileStorageUtils.sortFolder((Vector<OCFile>) mFiles);
+            FileStorageUtils.sortFolder((Vector<OCFile>) mFiles,FileStorageUtils.mSortOrderFileDisp,FileStorageUtils.mSortAscendingFileDisp);
         }
         notifyDataSetChanged();
     }

@@ -653,8 +653,8 @@ public class ReceiveExternalFilesActivity extends FileActivity
             case R.id.action_sort_descending:
                 item.setChecked(!item.isChecked());
                 boolean isAscending = !item.isChecked();
-                com.owncloud.android.db.PreferenceManager.setSortAscending(isAscending,this);
-                switch(com.owncloud.android.db.PreferenceManager.getSortOrder(this)) {
+                com.owncloud.android.db.PreferenceManager.setSortAscending(isAscending,this,FileStorageUtils.FILE_DISPLAY_SORT);
+                switch(com.owncloud.android.db.PreferenceManager.getSortOrder(this,FileStorageUtils.FILE_DISPLAY_SORT)) {
                     case FileStorageUtils.SORT_NAME:
                         sortByName(isAscending);
                         break;
@@ -668,15 +668,15 @@ public class ReceiveExternalFilesActivity extends FileActivity
                 break;
             case R.id.action_sort_by_name:
                 item.setChecked(true);
-                sortByName(com.owncloud.android.db.PreferenceManager.getSortAscending(this));
+                sortByName(com.owncloud.android.db.PreferenceManager.getSortAscending(this,FileStorageUtils.FILE_DISPLAY_SORT));
                 break;
             case R.id.action_sort_by_size:
                 item.setChecked(true);
-                sortBySize(com.owncloud.android.db.PreferenceManager.getSortAscending(this));
+                sortBySize(com.owncloud.android.db.PreferenceManager.getSortAscending(this,FileStorageUtils.FILE_DISPLAY_SORT));
                 break;
             case R.id.action_sort_by_date:
                 item.setChecked(true);
-                sortByDate(com.owncloud.android.db.PreferenceManager.getSortAscending(this));
+                sortByDate(com.owncloud.android.db.PreferenceManager.getSortAscending(this,FileStorageUtils.FILE_DISPLAY_SORT));
                 break;
             default:
                 retval = super.onOptionsItemSelected(item);
@@ -702,19 +702,19 @@ public class ReceiveExternalFilesActivity extends FileActivity
 
     private void recoverSortMenuState(Menu menu){
         if(menu != null) {
-            menu.findItem(R.id.action_sort_descending).setChecked(!com.owncloud.android.db.PreferenceManager.getSortAscending(this));
-            switch (com.owncloud.android.db.PreferenceManager.getSortOrder(this)) {
+            menu.findItem(R.id.action_sort_descending).setChecked(!com.owncloud.android.db.PreferenceManager.getSortAscending(this,FileStorageUtils.FILE_DISPLAY_SORT));
+            switch (com.owncloud.android.db.PreferenceManager.getSortOrder(this,FileStorageUtils.FILE_DISPLAY_SORT)) {
                 case FileStorageUtils.SORT_NAME:
                     menu.findItem(R.id.action_sort_by_name).setChecked(true);
-                    sortByName(com.owncloud.android.db.PreferenceManager.getSortAscending(this));
+                    sortByName(com.owncloud.android.db.PreferenceManager.getSortAscending(this,FileStorageUtils.FILE_DISPLAY_SORT));
                     break;
                 case FileStorageUtils.SORT_SIZE:
                     menu.findItem(R.id.action_sort_by_size).setChecked(true);
-                    sortBySize(com.owncloud.android.db.PreferenceManager.getSortAscending(this));
+                    sortBySize(com.owncloud.android.db.PreferenceManager.getSortAscending(this,FileStorageUtils.FILE_DISPLAY_SORT));
                     break;
                 case FileStorageUtils.SORT_DATE:
                     menu.findItem(R.id.action_sort_by_date).setChecked(true);
-                    sortByDate(com.owncloud.android.db.PreferenceManager.getSortAscending(this));
+                    sortByDate(com.owncloud.android.db.PreferenceManager.getSortAscending(this,FileStorageUtils.FILE_DISPLAY_SORT));
                     break;
             }
         }
