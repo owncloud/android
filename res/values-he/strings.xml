@@ -479,4 +479,6 @@
   </plurals>
   <!--Welcome to oC intro features-->
   <string name="welcome_feature_4_title">העלאות מהמצלמה</string>
+  <string name="welcome_feature_7_title">לבחור הכול</string>
+  <string name="welcome_feature_8_title">זמין במצב לא מקוון</string>
 </resources>

@@ -509,11 +509,7 @@
   <string name="welcome_feature_4_text">Fotos i Vídeos carregats automàticament</string>
   <string name="welcome_feature_5_title">Transmissió de vídeo</string>
   <string name="welcome_feature_5_text">Reprodueix els vídeos sense descarregar-los</string>
-  <string name="welcome_feature_6_title">Quota d\'usuari</string>
-  <string name="welcome_feature_6_text">Conegui l\'espai utilitzat i disponible</string>
-  <string name="welcome_feature_7_title">Noves icones</string>
-  <string name="welcome_feature_7_text">Per descarregar i marcar fitxers com disponibles fora de linea</string>
-  <string name="welcome_feature_8_title">Nous PINS</string>
-  <string name="welcome_feature_8_text">Per sincronitzar, descarregar i marcar fitxers com disponibles fora de linea</string>
+  <string name="welcome_feature_7_title">Seleccionar tot</string>
+  <string name="welcome_feature_8_title">Disponible fora de línia</string>
   <string name="no_borwser_installed_alert">Ningun navegador instal·lat. Si us plau, instal·la un navegador per permetre un inici de sessió segur.</string>
 </resources>

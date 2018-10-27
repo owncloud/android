@@ -464,4 +464,5 @@
   <!--Welcome to oC intro features-->
   <string name="welcome_feature_5_title">Потокове відео</string>
   <string name="welcome_feature_5_text">Переглядайте відео не завантажуючи його</string>
+  <string name="welcome_feature_7_title">Вибрати всі</string>
 </resources>

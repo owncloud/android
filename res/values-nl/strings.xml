@@ -499,4 +499,6 @@ Neem contact op met uw beheerder</string>
   <string name="welcome_feature_4_text">Uw afbeeldingen/video\'s automatisch uploaden</string>
   <string name="welcome_feature_5_title">Video streaming</string>
   <string name="welcome_feature_5_text">Speel uw video\'s af zonder te downloaden</string>
+  <string name="welcome_feature_7_title">Alles selecteren</string>
+  <string name="welcome_feature_8_title">Beschikbaar off-line</string>
 </resources>

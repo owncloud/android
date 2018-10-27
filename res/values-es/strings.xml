@@ -334,6 +334,7 @@
   <string name="confirmation_disable_pictures_upload_message">¿Está seguro de que desea deshabilitar esta opción ?  Las imagenes pendientes no se subiran.</string>
   <string name="confirmation_disable_videos_upload_message">¿Está seguro de que desea deshabilitar esta opción ? Los videos pendientes no se subiran.</string>
   <string name="conflict_title">Conflicto con archivo</string>
+  <string name="conflict_description">Hay un conflicto en el archivo %1$s, pulsar para resolverlo</string>
   <string name="conflict_message">¿Cuáles archivos desea mantener? Si selecciona ambas versiones, el archivo local tendrá un número añadido a su nombre.</string>
   <string name="conflict_keep_both">Mantener ambos</string>
   <string name="conflict_use_local_version">versión local</string>
@@ -527,11 +528,7 @@
   <string name="welcome_feature_4_text">Tus fotografías/vídeos automáticamente se subirán</string>
   <string name="welcome_feature_5_title">Retransmitir video</string>
   <string name="welcome_feature_5_text">Reproduce tus videos sin descargarlos</string>
-  <string name="welcome_feature_6_title">Cuota de usuario</string>
-  <string name="welcome_feature_6_text">Sepa su espacio usado y disponible</string>
-  <string name="welcome_feature_7_title">Nuevos iconos</string>
-  <string name="welcome_feature_7_text">Para descargar y establecer archivos disp. sin conexión</string>
-  <string name="welcome_feature_8_title">Nuevos pines</string>
-  <string name="welcome_feature_8_text">Sincronización , descarga y ficheros fuera de línea</string>
+  <string name="welcome_feature_7_title">Seleccionar todo</string>
+  <string name="welcome_feature_8_title">Disponible offline</string>
   <string name="no_borwser_installed_alert">No hay un navegador instalado, Por favor, instale uno para poder realizar un login seguro</string>
 </resources>

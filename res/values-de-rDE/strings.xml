@@ -527,11 +527,7 @@
   <string name="welcome_feature_4_text">Ihre Bilder/Videos werden automatisch hochgeladen</string>
   <string name="welcome_feature_5_title">Videostreaming</string>
   <string name="welcome_feature_5_text">Geben Sie Ihre Videos wieder, ohne sie herunterzuladen</string>
-  <string name="welcome_feature_6_title">Speicher-Kontingent</string>
-  <string name="welcome_feature_6_text">Benutzten und verfügbaren Speicher zeigen</string>
-  <string name="welcome_feature_7_title">Neue Symbole</string>
-  <string name="welcome_feature_7_text">Herunterladen und Dateien als \"offline\" markieren</string>
-  <string name="welcome_feature_8_title">Neue PINs</string>
-  <string name="welcome_feature_8_text">Synchronisieren, heruntergeladene und \"offline\" Dateien</string>
+  <string name="welcome_feature_7_title">Alle auswählen</string>
+  <string name="welcome_feature_8_title">Offline verfügbar</string>
   <string name="no_borwser_installed_alert">Es ist kein Browser installiert. Bitte installieren Sie zur sicheren Anmeldung einen Browser.</string>
 </resources>

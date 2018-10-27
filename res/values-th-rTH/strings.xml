@@ -525,11 +525,7 @@
   <string name="welcome_feature_4_text">รูปภาพ/วิดีโอ ของคุณถูกอัพโหลดโดยอัตโนมัติแล้ว</string>
   <string name="welcome_feature_5_title">กำลังสตรีมวิดีโอ</string>
   <string name="welcome_feature_5_text">เล่นวิดีโอของคุณโดยไม่ต้องดาวน์โหลด</string>
-  <string name="welcome_feature_6_title">โควต้าของผู้ใช้</string>
-  <string name="welcome_feature_6_text">รู้ขนาดพื้นที่ที่ใช้ไปแล้วและที่ยังเหลืออยู่ของคุณ</string>
-  <string name="welcome_feature_7_title">ไอคอนใหม่</string>
-  <string name="welcome_feature_7_text">เพื่อดาวน์โหลดและตั้งค่าไฟล์เป็น av ออฟไลน์</string>
-  <string name="welcome_feature_8_title">พินใหม่</string>
-  <string name="welcome_feature_8_text">เพื่อประสานข้อมูลหรือดาวน์โหลดและไฟล์ av ออฟไลน์</string>
+  <string name="welcome_feature_7_title">เลือกทั้งหมด</string>
+  <string name="welcome_feature_8_title">การทำงานแบบออฟไลน์พร้อมใช้งาน</string>
   <string name="no_borwser_installed_alert">โปรดติดตั้งเบราเซอร์ก่อนเพื่อให้สามารถล็อกอินได้อย่างปลอดภัย</string>
 </resources>

@@ -333,6 +333,7 @@
   <string name="confirmation_disable_pictures_upload_message">Jeni i sigurt se doni të çaktivizohet kjo veçori? Fotot e mbetura nuk do të ngarkohen</string>
   <string name="confirmation_disable_videos_upload_message">Jeni i sigurt se doni të çaktivizohet kjo veçori? Videot e mbetura nuk do të ngarkohen</string>
   <string name="conflict_title">Përplasje kartelash</string>
+  <string name="conflict_description">Ka një kundërshti në kartelën %1$s, prekeni që të zgjidhet</string>
   <string name="conflict_message">Cilat kartela doni të mbani? Nëse përzgjidhni të dy versionet, kartelës vendore do t\’i shtohet një numër te emri.</string>
   <string name="conflict_keep_both">Mbaji të dyja</string>
   <string name="conflict_use_local_version">versionin vendor</string>
@@ -526,10 +527,7 @@
   <string name="welcome_feature_4_text">Fotot/videot tuaja të ngarkuara automatikisht</string>
   <string name="welcome_feature_5_title">Transmetim videosh</string>
   <string name="welcome_feature_5_text">Luajini videot tuaja pa i shkarkuar</string>
-  <string name="welcome_feature_6_title">Kuota përdoruesi</string>
-  <string name="welcome_feature_6_text">Njihni sa hapësirë keni përdorur dhe sa keni të lirë</string>
-  <string name="welcome_feature_7_title">Ikona të reja</string>
-  <string name="welcome_feature_7_text">Për shkarkim dhe caktim kartelash si av. <em>offline</em></string>
-  <string name="welcome_feature_8_text">Për kartela njëkohësimi, të shkarkuara dhe av. <em>offline</em></string>
+  <string name="welcome_feature_7_title">Përzgjidhi krejt</string>
+  <string name="welcome_feature_8_title">I passhëm jo në linjë</string>
   <string name="no_borwser_installed_alert">S’ka shfletues të instaluar. Ju lutemi, instaloni një Shfletues, që të mund të lejohet hyrje e sigurt.</string>
 </resources>

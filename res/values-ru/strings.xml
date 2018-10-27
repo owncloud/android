@@ -530,11 +530,7 @@
   <string name="welcome_feature_4_text">Ваши снимки и видео загружаются автоматически</string>
   <string name="welcome_feature_5_title"> Потоковое видео</string>
   <string name="welcome_feature_5_text">Проигрывайте ваши ролики, не скачивая их</string>
-  <string name="welcome_feature_6_title">Квота пользователя</string>
-  <string name="welcome_feature_6_text">Знайте ваше занятое и доступное пространство</string>
-  <string name="welcome_feature_7_title">Новые значки</string>
-  <string name="welcome_feature_7_text">Чтобы скачать и сделать файлы доступными без сети</string>
-  <string name="welcome_feature_8_title">Новые пометки</string>
-  <string name="welcome_feature_8_text">Для синхронизируемых, скачанных и файлов, доступных без сети</string>
+  <string name="welcome_feature_7_title">Выделить все</string>
+  <string name="welcome_feature_8_title">Доступно автономно</string>
   <string name="no_borwser_installed_alert">Не установлен никакой браузер. Пожалуйста, установите браузер для поддержки безопасного входа.</string>
 </resources>
