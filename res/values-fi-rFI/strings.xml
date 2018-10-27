@@ -486,11 +486,6 @@
   <string name="welcome_feature_4_text">Kuvasi/videosi lähetetään automaattisesti</string>
   <string name="welcome_feature_5_title">Videoiden striimaus</string>
   <string name="welcome_feature_5_text">Toista videosi lataamatta niitä</string>
-  <string name="welcome_feature_6_title">Tiedostokiintiö</string>
-  <string name="welcome_feature_6_text">Tiedä käytetty ja käytettävissä oleva tallennustilasi</string>
-  <string name="welcome_feature_7_title">Uudet kuvakkeet</string>
-  <string name="welcome_feature_7_text">Latauksille ja Offline tilassa oleville tiedostoille</string>
-  <string name="welcome_feature_8_title">Uudet pinnit</string>
-  <string name="welcome_feature_8_text">Sykronoinnille, ladatulle ja Offline tilassa oleville tiedostoille</string>
+  <string name="welcome_feature_7_title">Valitse kaikki</string>
   <string name="no_borwser_installed_alert">Selainta ei asennettu. Ole hyvä ja asenna selain jotta turvallinen kirjautuminen on mahdollista.</string>
 </resources>

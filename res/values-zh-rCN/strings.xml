@@ -526,11 +526,6 @@
   <string name="welcome_feature_4_text">你的照片/视频将会自动上传</string>
   <string name="welcome_feature_5_title">流媒体视频</string>
   <string name="welcome_feature_5_text">无需下载模仿你的视频</string>
-  <string name="welcome_feature_6_title">用户用量限制</string>
-  <string name="welcome_feature_6_text">了解您已使用与可用的空间</string>
-  <string name="welcome_feature_7_title">新图标</string>
-  <string name="welcome_feature_7_text">下载并设置文件为离线 av. </string>
-  <string name="welcome_feature_8_title">新标记</string>
-  <string name="welcome_feature_8_text">对于同步,下载并离线 av.文件</string>
+  <string name="welcome_feature_7_title">全部选择</string>
   <string name="no_borwser_installed_alert">未安装浏览器。请安装浏览器以使用安全登陆。</string>
 </resources>

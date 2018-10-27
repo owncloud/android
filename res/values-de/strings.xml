@@ -526,11 +526,7 @@
   <string name="welcome_feature_4_text">Deine Bilder/Videos werden automatisch hochgeladen</string>
   <string name="welcome_feature_5_title">Videostreaming</string>
   <string name="welcome_feature_5_text">Gib deine Videos wieder, ohne sie herunterzuladen</string>
-  <string name="welcome_feature_6_title">Speichergrenze</string>
-  <string name="welcome_feature_6_text">Kenne Deinen verfügbaren und freien Speicherplatz</string>
-  <string name="welcome_feature_7_title">Neue Icons</string>
-  <string name="welcome_feature_7_text">Um Dateien herunterzuladen und als offline verfügbar zu markieren</string>
-  <string name="welcome_feature_8_title">Neue Pins</string>
-  <string name="welcome_feature_8_text">Synchronisieren, heruntergeladene und offline Dateien</string>
+  <string name="welcome_feature_7_title">Alle auswählen</string>
+  <string name="welcome_feature_8_title">Offline verfügbar</string>
   <string name="no_borwser_installed_alert">Es ist kein Browser installiert. Bitte installieren Sie zur sicheren Anmeldung einen Browser.</string>
 </resources>

@@ -441,4 +441,6 @@
     <item quantity="other">%d valgte</item>
   </plurals>
   <!--Welcome to oC intro features-->
+  <string name="welcome_feature_7_title">Vælg alle</string>
+  <string name="welcome_feature_8_title">Tilgængelig offline</string>
 </resources>
