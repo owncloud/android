@@ -1,6 +1,7 @@
 /**
  *   ownCloud Android client application
  *
+ *   @author Shashvat Kedia
  *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
@@ -54,6 +55,7 @@ import com.owncloud.android.ui.dialog.CreateFolderDialogFragment;
 import com.owncloud.android.ui.fragment.FileFragment;
 import com.owncloud.android.ui.fragment.OCFileListFragment;
 import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter;
+import com.owncloud.android.utils.FileStorageUtils;
 
 import java.util.ArrayList;
 
@@ -398,7 +400,7 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
         } else {
             try {
                 showSnackMessage(
-                    ErrorMessageAdapter.getResultMessage(result, operation, getResources())
+                        ErrorMessageAdapter.getResultMessage(result,operation,getResources())
                 );
 
             } catch (NotFoundException e) {
