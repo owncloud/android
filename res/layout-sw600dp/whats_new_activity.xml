@@ -19,7 +19,7 @@
         android:layout_marginLeft="@dimen/standard_margin"
         android:layout_marginRight="@dimen/standard_margin"
         android:layout_marginBottom="@dimen/standard_margin"
-        android:layout_weight="11"
+        android:layout_weight="10"
         android:orientation="horizontal"
         android:weightSum="3">
 
@@ -31,7 +31,8 @@
             android:layout_gravity="center_vertical|center_horizontal"
             android:layout_weight="1"
             android:text="@string/welcome_feature_skip_button"
-            android:textColor="@color/white" />
+            android:textColor="@color/white"
+            android:textSize="14sp" />
 
         <com.owncloud.android.ui.whatsnew.ProgressIndicator
             android:id="@+id/progressIndicator"
@@ -54,8 +55,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:padding="@dimen/standard_padding"
-                android:src="@drawable/ic_arrow_forward"
-                android:contentDescription="" />
+                android:src="@drawable/ic_arrow_forward" />
         </LinearLayout>
     </LinearLayout>
 

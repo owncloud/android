@@ -123,6 +123,7 @@
     <string name="common_remove_upload">Remove upload</string>
     <string name="common_retry_upload">Retry upload</string>
     <string name="common_cancel_sync">Cancel sync</string>
+    <string name="common_cancel">Cancel</string>
     <string name="common_back">Back</string>
     <string name="common_save_exit">Save &amp; exit</string>
     <string name="common_error">Error</string>
@@ -567,6 +568,7 @@
     </plurals>
 
     <!-- Welcome to oC intro features -->
+    <string name="welcome_feature_skip_button">Skip</string>
     <string name="welcome_feature_1_title">Manage all your synced files</string>
     <string name="welcome_feature_1_text">You can copy, move, delete</string>
     <string name="welcome_feature_2_title">Share files and folders</string>
