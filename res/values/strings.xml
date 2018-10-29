@@ -72,6 +72,11 @@
     <string name="recommend_subject">Try %1$s on your smartphone!</string>
     <string name="recommend_text">"I want to invite you to use %1$s on your smartphone!\nDownload here: %2$s"</string>
 
+    <string name="home_button_pressed">Home button pressed</string>
+    <string name="entering_pip_mode">Entering PIP mode</string>
+    <string name="pip_mode_enabled">PIP mode enabled</string>
+    <string name="pip_mode_disabled">PIP mode disabled</string>
+
     <string name="auth_failure_snackbar">Authentication failed</string>
     <string name="auth_failure_snackbar_action">Change account</string>
     <string name="auth_check_server">Check server</string>

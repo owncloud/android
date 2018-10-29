@@ -21,11 +21,16 @@
 
 package com.owncloud.android.ui.preview;
 
+import android.app.PictureInPictureParams;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
@@ -74,6 +79,10 @@ public class PreviewVideoActivity extends FileActivity implements ExoPlayer.Even
 
     private boolean mAutoplay; // when 'true', the playback starts immediately with the activity
     private long mPlaybackPosition; // continue the playback in the specified position
+
+    private boolean wasInPipMode = false;
+    private boolean inPipMode = false;
+    private boolean playerStillplaying = false;
 
     private static final int NOT_FOUND_ERROR = 404;
 
@@ -127,14 +136,29 @@ public class PreviewVideoActivity extends FileActivity implements ExoPlayer.Even
     public void onResume() {
         super.onResume();
         Log_OC.v(TAG, "onResume");
-        preparePlayer();
+        if(!wasInPipMode) {
+            preparePlayer();
+            wasInPipMode = false;
+        }
     }
 
     @Override
     public void onPause() {
         super.onPause();
         Log_OC.v(TAG, "onPause");
-        releasePlayer();
+        if(playerStillplaying){
+            Log_OC.d(TAG,getString(R.string.entering_pip_mode));
+            if(Build.VERSION.SDK_INT >= 26){
+                Log_OC.d(TAG,getString(R.string.entering_pip_mode));
+                wasInPipMode = true;
+                inPipMode = true;
+                PictureInPictureParams.Builder pictureInPictureParamsBuilder = new PictureInPictureParams.Builder();
+                enterPictureInPictureMode(pictureInPictureParamsBuilder.build());
+            }
+        }
+        if(!inPipMode) {
+            releasePlayer();
+        }
     }
 
     @Override
@@ -197,6 +221,16 @@ public class PreviewVideoActivity extends FileActivity implements ExoPlayer.Even
         player.prepare(mediaSource);
     }
 
+    @Override
+    public void onPictureInPictureModeChanged (boolean isInPictureInPictureMode, Configuration newConfig){
+        if(isInPictureInPictureMode){
+            Log_OC.d(TAG,getString(R.string.pip_mode_enabled));
+        } else{
+            inPipMode = false;
+            Log_OC.d(TAG,getString(R.string.pip_mode_disabled));
+        }
+    }
+
     private void releasePlayer() {
         if (player != null) {
             mAutoplay = player.getPlayWhenReady();
@@ -254,6 +288,11 @@ public class PreviewVideoActivity extends FileActivity implements ExoPlayer.Even
 
     @Override
     public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
+        if((playWhenReady && playbackState == ExoPlayer.STATE_READY) || playWhenReady){
+            playerStillplaying = true;
+        } else if(playbackState == ExoPlayer.STATE_ENDED){
+            playerStillplaying = false;
+        }
         // Do nothing.
     }
 
