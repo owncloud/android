@@ -6,7 +6,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.2.1'
+        classpath 'com.android.tools.build:gradle:3.1.2'
     }
 }
 
@@ -27,7 +27,7 @@ android {
     defaultConfig {
         versionCode = 100039
         versionName = "1.0.39"
-        minSdkVersion = 16
+        minSdkVersion 16
     }
 
     sourceSets {
