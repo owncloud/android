@@ -447,6 +447,7 @@
     <item quantity="other">%d επιλέχτηκαν</item>
   </plurals>
   <!--Welcome to oC intro features-->
+  <string name="welcome_feature_skip_button">Παράβλεψη</string>
   <string name="welcome_feature_7_title">Επιλογή όλων</string>
   <string name="welcome_feature_8_title">Διαθέσιμο εκτός σύνδεσης</string>
 </resources>

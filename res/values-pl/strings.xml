@@ -499,6 +499,7 @@
     <item quantity="other">wybrano: %d</item>
   </plurals>
   <!--Welcome to oC intro features-->
+  <string name="welcome_feature_skip_button">Pomiń</string>
   <string name="welcome_feature_1_title">Zarządzaj wszystkimi synchronizowanymi plikami</string>
   <string name="welcome_feature_1_text">Możesz kopiować, przenosić, usuwać</string>
   <string name="welcome_feature_2_title">Udostępnij pliki i foldery</string>

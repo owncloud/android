@@ -490,6 +490,7 @@
     <item quantity="other">%d valgte</item>
   </plurals>
   <!--Welcome to oC intro features-->
+  <string name="welcome_feature_skip_button">Hopp over</string>
   <string name="welcome_feature_1_title">Administrer alle dine synkroniserte filer</string>
   <string name="welcome_feature_1_text">Du kan kopiere, flytte, slette</string>
   <string name="welcome_feature_2_title">Del filer og mapper</string>

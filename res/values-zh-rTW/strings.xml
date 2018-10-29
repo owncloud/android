@@ -439,6 +439,7 @@
     <item quantity="other">%d 已選取</item>
   </plurals>
   <!--Welcome to oC intro features-->
+  <string name="welcome_feature_skip_button">略過</string>
   <string name="welcome_feature_4_title">相機上傳</string>
   <string name="welcome_feature_7_title">全選</string>
   <string name="welcome_feature_8_title">離線可使用</string>

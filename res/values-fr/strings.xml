@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+  <string name="actionbar_search">Rechercher dans ce dossier</string>
   <string name="actionbar_sync">Actualiser le compte</string>
   <string name="actionbar_upload">Téléverser</string>
   <string name="actionbar_upload_from_apps">Contenu d\'autres applications</string>
@@ -13,11 +14,15 @@
   <string name="actionbar_descending">Décroissant</string>
   <string name="actionbar_sort_title">Trier</string>
   <string name="actionbar_sort_by_name">A-Z</string>
+  <string name="actionbar_sort_by_date">Du plus ancien au plus récent</string>
+  <string name="actionbar_sort_by_size">Du plus petit au plus grand</string>
   <string name="drawer_item_all_files">Tous les fichiers</string>
   <string name="drawer_item_settings">Paramètres</string>
   <string name="drawer_item_uploads_list">Envois</string>
   <string name="drawer_close">Fermer</string>
   <string name="drawer_open">Ouvrir</string>
+  <string name="drawer_loading_quota">Chargement du quota</string>
+  <string name="drawer_unavailable_used_storage">Aucune information d\'utilisation du stockage disponible</string>
   <string name="drawer_feedback">Notifications</string>
   <string name="drawer_help">Aide...</string>
   <string name="prefs_category_general">Général</string>
@@ -37,6 +42,8 @@
   <string name="prefs_log_summary_history">Cela affiche les logs enregistrés</string>
   <string name="prefs_log_delete_history_button">Supprimer l\'historique</string>
   <string name="prefs_help">Aide</string>
+  <string name="prefs_sync_calendar_contacts">Synchronisez vos contacts, agendas et tâches</string>
+  <string name="prefs_sync_calendar_contacts_summary">Installer DAVdroid</string>
   <string name="prefs_recommend">Recommander à un ami</string>
   <string name="prefs_feedback">Commentaires</string>
   <string name="prefs_imprint">Mentions</string>
@@ -47,6 +54,8 @@
   <string name="recommend_subject">Essayez %1$s sur votre smartphone !</string>
   <string name="recommend_text">J\'aimerais vous inviter à utiliser %1$s sur votre smartphone !
 Téléchargez-le ici : %2$s</string>
+  <string name="auth_failure_snackbar">Connexion échouée</string>
+  <string name="auth_failure_snackbar_action">Changer de compte</string>
   <string name="auth_check_server">Vérifier le serveur</string>
   <string name="auth_host_url">Adresse du serveur https://…</string>
   <string name="auth_username">Nom d\'utilisateur</string>
@@ -106,6 +115,7 @@ Téléchargez-le ici : %2$s</string>
   <string name="delete_account">Supprimer le compte</string>
   <string name="create_account">Créer un compte</string>
   <string name="uploader_info_dirname">Nom du dossier</string>
+  <string name="uploader_upload_in_progress_ticker">Téléversement ...</string>
   <string name="uploader_upload_in_progress_content">Envoi du fichier %2$s : %1$d%% effectués</string>
   <string name="uploader_upload_succeeded_ticker">Téléversement réussi</string>
   <string name="uploader_upload_succeeded_content_single">%1$s téléversé</string>
@@ -139,6 +149,7 @@ Téléchargez-le ici : %2$s</string>
   <string name="uploads_view_upload_status_waiting_for_wifi">En attente d\'une connexion wifi</string>
   <string name="uploads_view_later_waiting_to_upload">En attente de chargement</string>
   <string name="uploads_view_unsupported_media_type">Type de média non pris en charge</string>
+  <string name="downloader_download_in_progress_ticker">Téléchargement ...</string>
   <string name="downloader_download_in_progress_content">Téléchargement en cours de %2$s, %1$d%% effectués</string>
   <string name="downloader_download_succeeded_ticker">Téléchargement réussi</string>
   <string name="downloader_download_succeeded_content">%1$s téléchargé</string>
@@ -260,6 +271,7 @@ Ci-dessous la liste des fichiers locaux, et les fichiers distants dans %5$s auxq
   <string name="wait_checking_credentials">Vérification des identifiants enregistrés</string>
   <string name="filedisplay_unexpected_bad_get_content">Problème inattendu. Veuillez essayer une autre application pour la sélection du fichier</string>
   <string name="filedisplay_no_file_selected">Aucun fichier sélectionné</string>
+  <string name="activity_chooser_title">Envoyer le lien vers </string>
   <string name="wait_for_tmp_copy_from_private_storage">Copie du fichier depuis le stockage privé</string>
   <string name="oauth_check_onoff">Connexion avec oAuth2</string>
   <string name="oauth_login_connection">Connexion au serveur OAuth2…</string>
@@ -480,6 +492,7 @@ Ci-dessous la liste des fichiers locaux, et les fichiers distants dans %5$s auxq
     <item quantity="other">%d sélectionnés</item>
   </plurals>
   <!--Welcome to oC intro features-->
+  <string name="welcome_feature_skip_button">Passer</string>
   <string name="welcome_feature_1_title">Gérez vos fichiers synchronisés</string>
   <string name="welcome_feature_1_text">Vous pouvez les copier, les déplacer, les supprimer</string>
   <string name="welcome_feature_2_title">Partager fichiers et dossiers</string>
@@ -488,6 +501,9 @@ Ci-dessous la liste des fichiers locaux, et les fichiers distants dans %5$s auxq
   <string name="welcome_feature_3_text">Connectez-vous à tous vos serveurs ownCloud</string>
   <string name="welcome_feature_4_title">Téléversements de la caméra</string>
   <string name="welcome_feature_4_text">Vos images/vidéos ont été téléversées automatiquement</string>
+  <string name="welcome_feature_5_title">Streaming vidéo</string>
+  <string name="welcome_feature_5_text">Lire vos vidéos sans les télécharger</string>
+  <string name="welcome_feature_6_title">Rechercher dans le dossier actuel</string>
   <string name="welcome_feature_7_title">Tout sélectionner</string>
   <string name="welcome_feature_8_title">Disponible hors-ligne</string>
 </resources>

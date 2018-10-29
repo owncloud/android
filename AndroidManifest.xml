@@ -226,7 +226,9 @@
         <activity
             android:name=".ui.activity.UploadListActivity"
             android:theme="@style/Theme.ownCloud.Toolbar.Drawer" />
-        <activity android:name=".ui.activity.WhatsNewActivity" />
+        <activity android:name=".ui.activity.WhatsNewActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            />
 
         <receiver
             android:name=".broadcastreceivers.ConnectivityActionReceiver"

@@ -115,7 +115,7 @@ Download hier: %2$s</string>
   <string name="common_pending">In behandeling</string>
   <string name="about_title">Over</string>
   <string name="change_password">Wijzig wachtwoord</string>
-  <string name="delete_account">Verwijder account</string>
+  <string name="delete_account">Account uitloggen</string>
   <string name="create_account">Maak account aan</string>
   <string name="uploader_info_dirname">Mapnaam</string>
   <string name="uploader_upload_in_progress_content">%1$d%% Uploaden %2$s</string>
@@ -489,6 +489,7 @@ Neem contact op met uw beheerder</string>
     <item quantity="other">%d geselecteerd</item>
   </plurals>
   <!--Welcome to oC intro features-->
+  <string name="welcome_feature_skip_button">Sla over</string>
   <string name="welcome_feature_1_title">Beheer al uw gesynchroniseerde bestanden</string>
   <string name="welcome_feature_1_text">U kunt kopiëren, verplaatsen, verwijderen</string>
   <string name="welcome_feature_2_title">Deel bestanden en mappen</string>
