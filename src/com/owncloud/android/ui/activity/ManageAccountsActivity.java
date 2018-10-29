@@ -284,7 +284,7 @@ public class ManageAccountsActivity extends FileActivity
     public void run(AccountManagerFuture<Boolean> future) {
         if (future != null && future.isDone()) {
             Account account = new Account(mAccountBeingRemoved, MainApp.getAccountType());
-            if (!AccountUtils.exists(account, MainApp.getAppContext())) {
+            if (!AccountUtils.exists(account.name, MainApp.getAppContext())) {
                 // Cancel transfers of the removed account
                 if (mUploaderBinder != null) {
                     mUploaderBinder.cancel(account);
@@ -317,7 +317,6 @@ public class ManageAccountsActivity extends FileActivity
                     AccountUtils.setCurrentOwnCloudAccount(this, accountName);
                 }
             }
-
         }
     }
 

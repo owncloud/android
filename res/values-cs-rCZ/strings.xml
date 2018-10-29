@@ -467,4 +467,6 @@ správce systému.</string>
   </plurals>
   <!--Welcome to oC intro features-->
   <string name="welcome_feature_4_title">Nahrávání fotoaparátu</string>
+  <string name="welcome_feature_7_title">Vybrat vše</string>
+  <string name="welcome_feature_8_title">Dostupné offline</string>
 </resources>

@@ -506,5 +506,6 @@
   <string name="welcome_feature_4_text">Fényképek/videok automatikusan feltöltve</string>
   <string name="welcome_feature_5_title">Video streaming</string>
   <string name="welcome_feature_5_text">Videók lejátszása letöltésük nélkül</string>
+  <string name="welcome_feature_7_title">Összes kijelölése</string>
   <string name="no_borwser_installed_alert">Nincs böngésző telepítve. Telepítsen böngészőt a biztonságos bejelentkezés lehetővé tételéhez</string>
 </resources>

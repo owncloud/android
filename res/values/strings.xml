@@ -347,6 +347,7 @@
     <string name="confirmation_disable_pictures_upload_message">Are you sure you want to disable this feature? The pending pictures will not be uploaded</string>
     <string name="confirmation_disable_videos_upload_message">Are you sure you want to disable this feature? The pending videos will not be uploaded</string>
     <string name="conflict_title">File conflict</string>
+    <string name="conflict_description">There is a conflict in file %1$s, tap to solve it</string>
     <string name="conflict_message">Which files do you want to keep? If you select both versions, the local file will have a number added to its name.</string>
     <string name="conflict_keep_both">Keep both</string>
     <string name="conflict_use_local_version">local version</string>
@@ -578,11 +579,11 @@
     <string name="welcome_feature_4_text">Your pictures/videos automatically uploaded</string>
     <string name="welcome_feature_5_title">Video streaming</string>
     <string name="welcome_feature_5_text">Play your videos without downloading them</string>
-    <string name="welcome_feature_6_title">User quota</string>
-    <string name="welcome_feature_6_text">Know your used and available space</string>
-    <string name="welcome_feature_7_title">New icons</string>
-    <string name="welcome_feature_7_text">To download and set files as av. offline</string>
-    <string name="welcome_feature_8_title">New pins</string>
-    <string name="welcome_feature_8_text">For syncing, downloaded and av. offline files</string>
+    <string name="welcome_feature_6_title">Search in current folder</string>
+    <string name="welcome_feature_6_text">Filter your files by name</string>
+    <string name="welcome_feature_7_title">Select all</string>
+    <string name="welcome_feature_7_text">Select all files at once</string>
+    <string name="welcome_feature_8_title">Available offline</string>
+    <string name="welcome_feature_8_text">Your files automatically synchronized</string>
     <string name="no_borwser_installed_alert">No browser installed. Please install a Browser in order to allow a secure login.</string>
 </resources>

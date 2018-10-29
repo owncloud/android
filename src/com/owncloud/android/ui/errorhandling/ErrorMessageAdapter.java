@@ -25,6 +25,7 @@ import android.content.res.Resources;
 import android.support.annotation.Nullable;
 
 import com.owncloud.android.R;
+import com.owncloud.android.lib.common.http.HttpConstants;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.resources.shares.ShareParserResult;
@@ -126,13 +127,14 @@ public class ErrorMessageAdapter {
 
             RemoteOperationResult<ShareParserResult> shareResult = (RemoteOperationResult<ShareParserResult>) result;
 
-            return (shareResult.getData()!= null
-                    && shareResult.getData().getShares() != null
-                    && shareResult.getData().getShares().size() > 0)
-                    ? shareResult.getData().getShares().get(0).toString()
-                    : shareResult.getData().getParserMessage();
+            if (shareResult.getData() != null) {
+                if (shareResult.getData().getShares() != null && shareResult.getData().getShares().size() > 0) {
+                    return shareResult.getData().getShares().get(0).toString();
+                } else {
+                    return shareResult.getData().getParserMessage();
+                }
+            }
         }
-
         switch (result.getCode()) {
             case LOCAL_STORAGE_FULL:
                 return f.format(R.string.error__upload__local_file_not_copied,
@@ -192,7 +194,8 @@ public class ErrorMessageAdapter {
                 if(operation instanceof CopyFileOperation) return f.format(R.string.copy_file_invalid_overwrite);
             case CONFLICT:return f.format(R.string.move_file_error);
             case INVALID_COPY_INTO_DESCENDANT: return f.format(R.string.copy_file_invalid_into_descendent);
-            default: return getCommonMessageForResult(operation, result, resources);
+            default:
+                return getCommonMessageForResult(operation, result, resources);
         }
     }
 
@@ -275,7 +278,6 @@ public class ErrorMessageAdapter {
             return f.format(R.string.sync_folder_failed_content,
                     new File(((SynchronizeFolderOperation) operation).getFolderPath()).getName());
         if (operation instanceof CopyFileOperation) return f.format(R.string.copy_file_error);
-
         // if everything else failes
         if(result.isSuccess()) return f.format(android.R.string.ok);
         else return f.format(R.string.common_error_unknown);

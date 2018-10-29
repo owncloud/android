@@ -1317,7 +1317,7 @@ public class FileContentProvider extends ContentProvider {
 
     /**
      * Grants that total count of successful uploads stored is not greater than MAX_SUCCESSFUL_UPLOADS.
-     * 
+     *
      * Removes older uploads if needed.
      */
     private void trimSuccessfulUploads(SQLiteDatabase db) {

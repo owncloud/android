@@ -54,7 +54,7 @@ import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.datamodel.UploadsStorageManager;
 import com.owncloud.android.datamodel.UploadsStorageManager.UploadStatus;
-import com.owncloud.android.db.OCUpload;
+import com.owncloud.android.datamodel.OCUpload;
 import com.owncloud.android.db.UploadResult;
 import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.lib.common.OwnCloudClient;
@@ -114,6 +114,7 @@ public class FileUploader extends Service
     protected static final String KEY_LOCAL_FILE = "LOCAL_FILE";
     protected static final String KEY_REMOTE_FILE = "REMOTE_FILE";
     protected static final String KEY_MIME_TYPE = "MIME_TYPE";
+    protected static final String KEY_IS_AVAILABLE_OFFLINE_FILE = "KEY_IS_AVAILABLE_OFFLINE_FILE";
 
     /**
      * Call this Service with only this Intent key if all pending uploads are to be retried.
@@ -211,18 +212,18 @@ public class FileUploader extends Service
 
         // Configure notification channel
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            NotificationChannel mNotificationChannel;
+            NotificationChannel notificationChannel;
             // The user-visible name of the channel.
             CharSequence name = getString(R.string.upload_notification_channel_name);
             // The user-visible description of the channel.
             String description = getString(R.string.upload_notification_channel_description);
             // Set importance low: show the notification everywhere but with no sound
             int importance = NotificationManager.IMPORTANCE_LOW;
-            mNotificationChannel = new NotificationChannel(UPLOAD_NOTIFICATION_CHANNEL_ID,
+            notificationChannel = new NotificationChannel(UPLOAD_NOTIFICATION_CHANNEL_ID,
                     name, importance);
             // Configure the notification channel.
-            mNotificationChannel.setDescription(description);
-            mNotificationManager.createNotificationChannel(mNotificationChannel);
+            notificationChannel.setDescription(description);
+            mNotificationManager.createNotificationChannel(notificationChannel);
         }
 
         HandlerThread thread = new HandlerThread("FileUploaderThread",
@@ -292,14 +293,16 @@ public class FileUploader extends Service
 
         int createdBy = intent.getIntExtra(KEY_CREATED_BY, UploadFileOperation.CREATED_BY_USER);
 
-        if ((createdBy == CREATED_AS_CAMERA_UPLOAD_PICTURE || createdBy == CREATED_AS_CAMERA_UPLOAD_VIDEO) &&
-                Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        boolean isAvailableOfflineFile = intent.getBooleanExtra(KEY_IS_AVAILABLE_OFFLINE_FILE, false);
 
+        if (((createdBy == CREATED_AS_CAMERA_UPLOAD_PICTURE || createdBy == CREATED_AS_CAMERA_UPLOAD_VIDEO) ||
+                isAvailableOfflineFile) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             /**
-             * After calling startForegroundService method from {@link TransferRequester} for camera uploads, we have
-             * to call this within five seconds after the service is created to avoid an error
+             * After calling startForegroundService method from {@link TransferRequester} for camera uploads or
+             * available offline, we have to call this within five seconds after the service is created to avoid
+             * an error
              */
-            Log_OC.d(TAG, "Starting service in foreground");
+            Log_OC.d(TAG, "Starting FileUploader service in foreground");
             startForeground(1, mNotificationBuilder.build());
         }
 
@@ -312,7 +315,7 @@ public class FileUploader extends Service
         }
 
         Account account = intent.getParcelableExtra(KEY_ACCOUNT);
-        if (!AccountUtils.exists(account, getApplicationContext())) {
+        if (!AccountUtils.exists(account.name, getApplicationContext())) {
             return Service.START_NOT_STICKY;
         }
         OwnCloudVersion ocv = AccountUtils.getServerVersion(account);
@@ -541,7 +544,7 @@ public class FileUploader extends Service
     public void onAccountsUpdated(Account[] accounts) {
         // Review current upload, and cancel it if its account doen't exist
         if (mCurrentUpload != null &&
-                !AccountUtils.exists(mCurrentUpload.getAccount(), getApplicationContext())) {
+                !AccountUtils.exists(mCurrentUpload.getAccount().name, getApplicationContext())) {
             mCurrentUpload.cancel();
         }
         // The rest of uploads are cancelled when they try to start
@@ -806,7 +809,7 @@ public class FileUploader extends Service
         if (mCurrentUpload != null) {
 
             /// Check account existence
-            if (!AccountUtils.exists(mCurrentUpload.getAccount(), this)) {
+            if (!AccountUtils.exists(mCurrentUpload.getAccount().name, this)) {
                 Log_OC.w(
                     TAG,
                     "Account " + mCurrentUpload.getAccount().name +
@@ -960,7 +963,6 @@ public class FileUploader extends Service
                     mNotificationBuilder.build());
         }// else wait until the upload really start (onTransferProgress is called), so that if it's discarded
         // due to lack of Wifi, no notification is shown
-        // TODO generalize for automated uploads
     }
 
     /**

@@ -466,4 +466,6 @@
   </plurals>
   <!--Welcome to oC intro features-->
   <string name="welcome_feature_4_title">Pošiljanje posnetkov s kamero</string>
+  <string name="welcome_feature_7_title">izberi vse</string>
+  <string name="welcome_feature_8_title">Na voljo za rabo brez povezave</string>
 </resources>

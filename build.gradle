@@ -7,8 +7,8 @@
 
 buildscript {
     repositories {
-        jcenter()
         google()
+        jcenter()
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.2.1'
@@ -22,15 +22,18 @@ ext {
 }
 
 repositories {
-    jcenter()
-    google()
-
-    maven {
-        url "https://jitpack.io"
-    }
-
     flatDir {
         dirs 'libs'
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        jcenter()
+        maven {
+            url "https://jitpack.io"
+        }
     }
 }
 
@@ -76,7 +79,11 @@ dependencies {
 
     //Zooming Android ImageView.
     implementation 'com.github.chrisbanes:PhotoView:2.0.0'
+
     implementation 'com.gitlab.ownclouders:dav4android:oc_support'
+
+    // Convert Java Objects into JSON and back
+    implementation 'com.google.code.gson:gson:2.8.5'
 }
 
 tasks.withType(Test) {
@@ -90,9 +97,8 @@ android {
     compileSdkVersion 26
 
     defaultConfig {
-
-        manifestPlaceholders.versionCode = "20800100"
-        manifestPlaceholders.versionName = "2.9.0-beta.1"
+        manifestPlaceholders.versionCode = "20900000"
+        manifestPlaceholders.versionName = "2.9.0"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         minSdkVersion 14
@@ -125,6 +131,7 @@ android {
 
         // move whole local unit tests structure as a whole from src/test/* to test/*
         test.setRoot('test')
+
 
         // move whole instrumented tests structure as a whole from src/androidTest/* to androidTest/*
         androidTest.setRoot('androidTest')

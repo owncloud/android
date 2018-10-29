@@ -1,5 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+  <string name="about_android">%1$s për Android</string>
+  <string name="about_version">Version %1$s</string>
   <string name="actionbar_search">Kërko në këtë dosje</string>
   <string name="actionbar_sync">Freskoni llogarinë</string>
   <string name="actionbar_upload">Ngarkoni</string>
@@ -45,6 +47,8 @@
   <string name="prefs_log_summary_history">Kjo shfaq regjistrimet e bëra</string>
   <string name="prefs_log_delete_history_button">Fshije historikun</string>
   <string name="prefs_help">Ndihmë</string>
+  <string name="prefs_sync_calendar_contacts">Njëkohësoni kontaktet, kalendarët dhe punët tuaja</string>
+  <string name="prefs_sync_calendar_contacts_summary">Instalo DAVdroid</string>
   <string name="prefs_recommend">Këshillojani një shoku</string>
   <string name="prefs_feedback">Përshtypje</string>
   <string name="prefs_imprint">Imprint</string>
@@ -128,7 +132,9 @@
   <string name="change_password">Ndryshoni fjalëkalimin</string>
   <string name="delete_account">Hiqe llogarinë</string>
   <string name="create_account">Krijoni llogari</string>
+  <string name="upload_chooser_title">Ngarkoje prej</string>
   <string name="uploader_info_dirname">Emër dosjeje</string>
+  <string name="uploader_upload_in_progress_ticker">Po ngarkohet…</string>
   <string name="uploader_upload_in_progress_content">%1$d%% Po ngarkohet %2$s</string>
   <string name="uploader_upload_succeeded_ticker">Ngarkimi doli me sukses</string>
   <string name="uploader_upload_succeeded_content_single">%1$s u ngarkua</string>
@@ -145,6 +151,8 @@
   <string name="uploads_view_group_current_uploads">Të tanishëm</string>
   <string name="uploads_view_group_failed_uploads">Dështoi (prekeni që të riprovohet)</string>
   <string name="uploads_view_group_finished_uploads">U ngarkua</string>
+  <string name="uploads_view_group_file_count">%d kartela</string>
+  <string name="uploads_view_group_file_count_single">%d kartelë</string>
   <string name="uploads_view_upload_status_succeeded">Të plotësuara</string>
   <string name="uploads_view_upload_status_cancelled">Anuluar</string>
   <string name="uploads_view_upload_status_paused">Pushuar</string>
@@ -162,6 +170,7 @@
   <string name="uploads_view_upload_status_waiting_for_wifi">Po pritet për lidhje wifi</string>
   <string name="uploads_view_later_waiting_to_upload">Po pritet për ngarkim</string>
   <string name="uploads_view_unsupported_media_type">Lloj media i pambuluar</string>
+  <string name="downloader_download_in_progress_ticker">Po shkarkohet…</string>
   <string name="downloader_download_in_progress_content">%1$d%% Shkarkim %2$s</string>
   <string name="downloader_download_succeeded_ticker">Shkarkimi doli me sukses</string>
   <string name="downloader_download_succeeded_content">%1$s u shkarkua</string>
@@ -226,6 +235,7 @@
   <string name="media_forward_description">Butoni Përpara</string>
   <string name="upload_from_camera_title">Foto nga kamera</string>
   <string name="auth_getting_authorization">Po merret autorizim…</string>
+  <string name="auth_trying_to_login">Po provohet të hyhet…</string>
   <string name="auth_no_net_conn_title">Pa lidhje rrjeti</string>
   <string name="auth_nossl_plain_ok_title">S\’ka lidhje të sigurt.</string>
   <string name="auth_connection_established">Lidhja u vendos</string>
@@ -279,6 +289,7 @@
   <string name="wait_checking_credentials">Po kontrollohen kredenciale të depozituara</string>
   <string name="filedisplay_unexpected_bad_get_content">Problem i papritur; ju lutemi, përzgjidhni një kartelë nga një aplikacion tjetër</string>
   <string name="filedisplay_no_file_selected">S\’u përzgjodh kartelë</string>
+  <string name="activity_chooser_title">Dërgo lidhje te</string>
   <string name="wait_for_tmp_copy_from_private_storage">Po kopjohet kartelë nga depo private</string>
   <string name="oauth_check_onoff">Hyrje me oAuth2</string>
   <string name="oauth_login_connection">Po lidhet te shërbyesi OAuth2…</string>
@@ -322,6 +333,7 @@
   <string name="confirmation_disable_pictures_upload_message">Jeni i sigurt se doni të çaktivizohet kjo veçori? Fotot e mbetura nuk do të ngarkohen</string>
   <string name="confirmation_disable_videos_upload_message">Jeni i sigurt se doni të çaktivizohet kjo veçori? Videot e mbetura nuk do të ngarkohen</string>
   <string name="conflict_title">Përplasje kartelash</string>
+  <string name="conflict_description">Ka një kundërshti në kartelën %1$s, prekeni që të zgjidhet</string>
   <string name="conflict_message">Cilat kartela doni të mbani? Nëse përzgjidhni të dy versionet, kartelës vendore do t\’i shtohet një numër te emri.</string>
   <string name="conflict_keep_both">Mbaji të dyja</string>
   <string name="conflict_use_local_version">versionin vendor</string>
@@ -408,6 +420,8 @@
   <string name="prefs_camera_upload_source_path_title">Dosje kamere (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">e domosdoshme</string>
   <string name="prefs_camera_upload_source_path_title_optional">opsionale</string>
+  <string name="prefs_camera_upload_behaviour_dialogTitle">Kartela origjinale do të jetë</string>
+  <string name="prefs_camera_upload_behaviour_title">Kartela origjinale do të jetë</string>
   <string name="upload_copy_files">Kopjoje kartelën</string>
   <string name="upload_move_files">Lëvize kartelën</string>
   <string name="pref_behaviour_entries_keep_file">mbajtur në dosjen origjinale</string>
@@ -513,10 +527,7 @@
   <string name="welcome_feature_4_text">Fotot/videot tuaja të ngarkuara automatikisht</string>
   <string name="welcome_feature_5_title">Transmetim videosh</string>
   <string name="welcome_feature_5_text">Luajini videot tuaja pa i shkarkuar</string>
-  <string name="welcome_feature_6_title">Kuota përdoruesi</string>
-  <string name="welcome_feature_6_text">Njihni sa hapësirë keni përdorur dhe sa keni të lirë</string>
-  <string name="welcome_feature_7_title">Ikona të reja</string>
-  <string name="welcome_feature_7_text">Për shkarkim dhe caktim kartelash si av. <em>offline</em></string>
-  <string name="welcome_feature_8_text">Për kartela njëkohësimi, të shkarkuara dhe av. <em>offline</em></string>
+  <string name="welcome_feature_7_title">Përzgjidhi krejt</string>
+  <string name="welcome_feature_8_title">I passhëm jo në linjë</string>
   <string name="no_borwser_installed_alert">S’ka shfletues të instaluar. Ju lutemi, instaloni një Shfletues, që të mund të lejohet hyrje e sigurt.</string>
 </resources>

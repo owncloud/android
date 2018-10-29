@@ -1,5 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+  <string name="about_android">%1$sสำหรับแอนดรอยด์ </string>
+  <string name="about_version">รุ่น %1$s</string>
   <string name="actionbar_search">ค้นหาโฟลเดอร์นี้</string>
   <string name="actionbar_sync">ฟื้นฟูบัญชี</string>
   <string name="actionbar_upload">อัพโหลดไฟล์</string>
@@ -45,6 +47,8 @@
   <string name="prefs_log_summary_history">สิ่งนี้จะแสดง log ที่ถูกบันทึกไว้</string>
   <string name="prefs_log_delete_history_button">ลบประวัติย้อนหลัง</string>
   <string name="prefs_help">ช่วยเหลือ</string>
+  <string name="prefs_sync_calendar_contacts">ประสานข้อมูลรายชื่อผู้ติดต่อ ปฏิทิน และงานของคุณ</string>
+  <string name="prefs_sync_calendar_contacts_summary">ติดตั้ง DAVdroid</string>
   <string name="prefs_recommend">แนะนำให้เพื่อน</string>
   <string name="prefs_feedback">ข้อเสนอแนะ</string>
   <string name="prefs_imprint">ประทับ</string>
@@ -128,7 +132,9 @@
   <string name="change_password">เปลี่ยนรหัสผ่าน</string>
   <string name="delete_account">ลบบัญชี</string>
   <string name="create_account">สร้างบัญชีใหม่</string>
+  <string name="upload_chooser_title">อัพโหลดจาก</string>
   <string name="uploader_info_dirname">ชื่อโฟลเดอร์</string>
+  <string name="uploader_upload_in_progress_ticker">กำลังอัพโหลด</string>
   <string name="uploader_upload_in_progress_content">%1$d%% กำลังอัพโหลด %2$s</string>
   <string name="uploader_upload_succeeded_ticker">อัพโหลดเสร็จสิ้น</string>
   <string name="uploader_upload_succeeded_content_single">อัพโหลด %1$s แล้ว</string>
@@ -145,6 +151,8 @@
   <string name="uploads_view_group_current_uploads">ปัจจุบัน</string>
   <string name="uploads_view_group_failed_uploads">ล้มเหลว (แตะเพื่อลองอีกครั้ง)</string>
   <string name="uploads_view_group_finished_uploads">ถูกอัพโหลด</string>
+  <string name="uploads_view_group_file_count">%d ไฟล์</string>
+  <string name="uploads_view_group_file_count_single">%d ไฟล์</string>
   <string name="uploads_view_upload_status_succeeded">เสร็จสมบูรณ์</string>
   <string name="uploads_view_upload_status_cancelled">ยกเลิกแล้ว</string>
   <string name="uploads_view_upload_status_paused">หยุดชั่วคราวแล้ว</string>
@@ -162,6 +170,7 @@
   <string name="uploads_view_upload_status_waiting_for_wifi">กำลังรอการเชื่อมต่อ WiFi</string>
   <string name="uploads_view_later_waiting_to_upload">กำลังรอที่จะอัพโหลด</string>
   <string name="uploads_view_unsupported_media_type">ประเภทของสื่อไม่ได้รับการสนับสนุน</string>
+  <string name="downloader_download_in_progress_ticker">กำลังดาวน์โหลด...</string>
   <string name="downloader_download_in_progress_content">%1$d%% กำลังดาวน์โหลด %2$s</string>
   <string name="downloader_download_succeeded_ticker">ดาวน์โหลดเสร็จสิ้น</string>
   <string name="downloader_download_succeeded_content">ดาวน์โหลด %1$s แล้ว</string>
@@ -226,6 +235,7 @@
   <string name="media_forward_description">ปุ่มเลื่อนไปข้างหน้า</string>
   <string name="upload_from_camera_title">รูปภาพจากกล้อง</string>
   <string name="auth_getting_authorization">ได้รับการอนุมัติ ...</string>
+  <string name="auth_trying_to_login">กำลังเข้าสู่ระบบ...</string>
   <string name="auth_no_net_conn_title">ไม่มีการเชื่อมต่อเครือข่ายใดๆ</string>
   <string name="auth_nossl_plain_ok_title">การเชื่อมต่อแบบปลอดภัยไม่สามารถใช้งานได้</string>
   <string name="auth_connection_established">ติดตั้งการเชื่อมต่อแล้ว</string>
@@ -279,6 +289,7 @@
   <string name="wait_checking_credentials">กำลังตรวจสอบข้อมูลประจำตัวที่เก็บไว้</string>
   <string name="filedisplay_unexpected_bad_get_content">มีปัญหาเกิดขึ้น กรุณาเลือกไฟล์งานแอพฯอื่นๆ</string>
   <string name="filedisplay_no_file_selected">ไม่มีไฟล์ที่ถูกเลือก</string>
+  <string name="activity_chooser_title">ส่งลิงก์ไปที่</string>
   <string name="wait_for_tmp_copy_from_private_storage">คัดลอกไฟล์จากพื้นที่จัดเก็บส่วนตัว</string>
   <string name="oauth_check_onoff">เข้าสู่ระบบด้วย oAuth2</string>
   <string name="oauth_login_connection">กำลังเชื่อมต่อกับเซิร์ฟเวอร์ OAuth2 ...</string>
@@ -408,6 +419,8 @@
   <string name="prefs_camera_upload_source_path_title">โฟลเดอร์ของกล้อง (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">สิ่งจำเป็นต้องใช้</string>
   <string name="prefs_camera_upload_source_path_title_optional">ตัวเลือก</string>
+  <string name="prefs_camera_upload_behaviour_dialogTitle">ไฟล์ต้นฉบับจะเป็น</string>
+  <string name="prefs_camera_upload_behaviour_title">ไฟล์ต้นฉบับจะเป็น</string>
   <string name="upload_copy_files">คัดลอกไฟล์</string>
   <string name="upload_move_files">ย้ายไฟล์</string>
   <string name="pref_behaviour_entries_keep_file">เก็บไว้ในโฟลเดอร์ต้นฉบับ</string>
@@ -512,11 +525,7 @@
   <string name="welcome_feature_4_text">รูปภาพ/วิดีโอ ของคุณถูกอัพโหลดโดยอัตโนมัติแล้ว</string>
   <string name="welcome_feature_5_title">กำลังสตรีมวิดีโอ</string>
   <string name="welcome_feature_5_text">เล่นวิดีโอของคุณโดยไม่ต้องดาวน์โหลด</string>
-  <string name="welcome_feature_6_title">โควต้าของผู้ใช้</string>
-  <string name="welcome_feature_6_text">รู้ขนาดพื้นที่ที่ใช้ไปแล้วและที่ยังเหลืออยู่ของคุณ</string>
-  <string name="welcome_feature_7_title">ไอคอนใหม่</string>
-  <string name="welcome_feature_7_text">เพื่อดาวน์โหลดและตั้งค่าไฟล์เป็น av ออฟไลน์</string>
-  <string name="welcome_feature_8_title">พินใหม่</string>
-  <string name="welcome_feature_8_text">เพื่อประสานข้อมูลหรือดาวน์โหลดและไฟล์ av ออฟไลน์</string>
+  <string name="welcome_feature_7_title">เลือกทั้งหมด</string>
+  <string name="welcome_feature_8_title">การทำงานแบบออฟไลน์พร้อมใช้งาน</string>
   <string name="no_borwser_installed_alert">โปรดติดตั้งเบราเซอร์ก่อนเพื่อให้สามารถล็อกอินได้อย่างปลอดภัย</string>
 </resources>

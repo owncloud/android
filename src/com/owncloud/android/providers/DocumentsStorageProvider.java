@@ -104,8 +104,8 @@ public class DocumentsStorageProvider extends DocumentsProvider {
         if (!file.isDown()) {
 
             Intent i = new Intent(getContext(), FileDownloader.class);
-            i.putExtra(FileDownloader.EXTRA_ACCOUNT, mCurrentStorageManager.getAccount());
-            i.putExtra(FileDownloader.EXTRA_FILE, file);
+            i.putExtra(FileDownloader.KEY_ACCOUNT, mCurrentStorageManager.getAccount());
+            i.putExtra(FileDownloader.KEY_FILE, file);
             getContext().startService(i);
 
             do {

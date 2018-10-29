@@ -66,30 +66,20 @@ public class ConflictsResolveDialog extends DialogFragment {
                    .setTitle(R.string.conflict_title)
                    .setMessage(String.format(getString(R.string.conflict_message), remotepath))
                    .setPositiveButton(R.string.conflict_use_local_version,
-                       new DialogInterface.OnClickListener() {
-
-                           @Override
-                           public void onClick(DialogInterface dialog, int which) {
+                           (dialog, which) -> {
                                if (mListener != null)
                                    mListener.conflictDecisionMade(Decision.OVERWRITE);
-                           }
-                       })
+                           })
                    .setNeutralButton(R.string.conflict_keep_both,
-                       new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                if (mListener != null)
-                                    mListener.conflictDecisionMade(Decision.KEEP_BOTH);
-                            }
-                        })
+                           (dialog, which) -> {
+                               if (mListener != null)
+                                   mListener.conflictDecisionMade(Decision.KEEP_BOTH);
+                           })
                    .setNegativeButton(R.string.conflict_use_server_version,
-                       new DialogInterface.OnClickListener() {
-                           @Override
-                           public void onClick(DialogInterface dialog, int which) {
+                           (dialog, which) -> {
                                if (mListener != null)
                                    mListener.conflictDecisionMade(Decision.SERVER);
-                           }
-                   })
+                           })
                    .create();
     }
     

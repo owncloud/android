@@ -4,7 +4,7 @@
  * @author David A. Velasco
  * @author David González Verdugo
  *
- * Copyright (C) 2017 ownCloud GmbH.
+ * Copyright (C) 2018 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -29,11 +29,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.PersistableBundle;
+import android.support.v4.content.ContextCompat;
 
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.OCFile;
+import com.owncloud.android.datamodel.OCUpload;
 import com.owncloud.android.datamodel.UploadsStorageManager;
-import com.owncloud.android.db.OCUpload;
 import com.owncloud.android.db.PreferenceManager;
 import com.owncloud.android.db.UploadResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
@@ -118,7 +119,7 @@ public class TransferRequester {
      * Call to update multiple files already uploaded
      */
     private void uploadsUpdate(Context context, Account account, OCFile[] existingFiles, Integer behaviour,
-                               Boolean forceOverwrite) {
+                               Boolean forceOverwrite, boolean requestedFromAvOfflineService) {
         Intent intent = new Intent(context, FileUploader.class);
 
         intent.putExtra(FileUploader.KEY_ACCOUNT, account);
@@ -126,16 +127,24 @@ public class TransferRequester {
         intent.putExtra(FileUploader.KEY_LOCAL_BEHAVIOUR, behaviour);
         intent.putExtra(FileUploader.KEY_FORCE_OVERWRITE, forceOverwrite);
 
-        context.startService(intent);
+        // Since in Android O and above the apps in background are not allowed to start background
+        // services and available offline feature may try to do it, this is the way to proceed
+        if (requestedFromAvOfflineService && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            intent.putExtra(FileUploader.KEY_IS_AVAILABLE_OFFLINE_FILE, true);
+            context.startForegroundService(intent);
+        } else {
+            context.startService(intent);
+        }
     }
 
     /**
      * Call to update a dingle file already uploaded
      */
     public void uploadUpdate(Context context, Account account, OCFile existingFile, Integer behaviour,
-                             Boolean forceOverwrite) {
+                             Boolean forceOverwrite, boolean requestedFromAvOfflineService) {
 
-        uploadsUpdate(context, account, new OCFile[]{existingFile}, behaviour, forceOverwrite);
+        uploadsUpdate(context, account, new OCFile[]{existingFile}, behaviour, forceOverwrite,
+                requestedFromAvOfflineService);
     }
 
 

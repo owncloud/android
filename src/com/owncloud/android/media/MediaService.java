@@ -275,7 +275,7 @@ public class MediaService extends Service implements OnCompletionListener, OnPre
             @Override
             public void onAccountsUpdated(Account[] accounts) {
                 // stop playback if account of the played media files was removed
-                if (mAccount != null && !AccountUtils.exists(mAccount, MediaService.this)) {
+                if (mAccount != null && !AccountUtils.exists(mAccount.name, MediaService.this)) {
                     processStopRequest(false);
                 }
             }

@@ -28,7 +28,7 @@ import android.support.annotation.RequiresApi;
 
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.datamodel.UploadsStorageManager;
-import com.owncloud.android.db.OCUpload;
+import com.owncloud.android.datamodel.OCUpload;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.utils.Extras;
 

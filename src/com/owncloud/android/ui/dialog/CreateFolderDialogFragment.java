@@ -62,7 +62,6 @@ public class CreateFolderDialogFragment
         args.putParcelable(ARG_PARENT_FOLDER, parentFolder);
         frag.setArguments(args);
         return frag;
-        
     }
 
     private OCFile mParentFolder;
