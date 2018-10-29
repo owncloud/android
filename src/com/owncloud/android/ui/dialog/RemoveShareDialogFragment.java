@@ -22,7 +22,6 @@ package com.owncloud.android.ui.dialog;
 
 /**
  *  Dialog requiring confirmation before removing a share.
- * 
  *  Triggers the removal according to the user response.
  */
 

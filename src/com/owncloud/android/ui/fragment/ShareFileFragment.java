@@ -5,7 +5,8 @@
  * @author David A. Velasco
  * @author Juan Carlos González Cabrero
  * @author David González Verdugo
- * Copyright (C) 2017 ownCloud GmbH.
+ * @author Christian Schabesberger
+ * Copyright (C) 2018 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -182,7 +183,7 @@ public class ShareFileFragment extends Fragment
 
         // Setup layout
         // Image
-        ImageView icon = (ImageView) view.findViewById(R.id.shareFileIcon);
+        ImageView icon = view.findViewById(R.id.shareFileIcon);
         icon.setImageResource(MimetypeIconUtil.getFileTypeIconId(mFile.getMimetype(),
                 mFile.getFileName()));
         if (mFile.isImage()) {
@@ -193,10 +194,10 @@ public class ShareFileFragment extends Fragment
             }
         }
         // Name
-        TextView fileNameHeader = (TextView) view.findViewById(R.id.shareFileName);
+        TextView fileNameHeader = view.findViewById(R.id.shareFileName);
         fileNameHeader.setText(mFile.getFileName());
         // Size
-        TextView size = (TextView) view.findViewById(R.id.shareFileSize);
+        TextView size = view.findViewById(R.id.shareFileSize);
         if (mFile.isFolder()) {
             size.setVisibility(View.GONE);
         } else {
@@ -204,32 +205,37 @@ public class ShareFileFragment extends Fragment
         }
 
         // Private link button
-        ImageView getPrivateLinkButton = (ImageView) view.findViewById(R.id.getPrivateLinkButton);
+        ImageView getPrivateLinkButton = view.findViewById(R.id.getPrivateLinkButton);
+        if (mFile.getPrivateLink() == null || mFile.getPrivateLink().isEmpty()) {
+            getPrivateLinkButton.setVisibility(View.INVISIBLE);
 
-        getPrivateLinkButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mListener.copyOrSendPrivateLink(mAccount, mFile);
-            }
-        });
+        } else {
+            getPrivateLinkButton.setVisibility(View.VISIBLE);
 
-        getPrivateLinkButton.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                // Show a toast message explaining what a private link is
-                Toast.makeText(getActivity(), R.string.private_link_info, Toast.LENGTH_LONG).show();
-                return true;
-            }
-        });
+            getPrivateLinkButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mListener.copyOrSendPrivateLink(mFile);
+                }
+            });
+
+            getPrivateLinkButton.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    // Show a toast message explaining what a private link is
+                    Toast.makeText(getActivity(), R.string.private_link_info, Toast.LENGTH_LONG).show();
+                    return true;
+                }
+            });
+        }
 
         OwnCloudVersion serverVersion = AccountUtils.getServerVersion(mAccount);
         final boolean shareWithUsersEnable = (serverVersion != null && serverVersion.isSearchUsersSupported());
 
-        TextView shareNoUsers = (TextView) view.findViewById(R.id.shareNoUsers);
+        TextView shareNoUsers = view.findViewById(R.id.shareNoUsers);
 
         //  Add User/Groups Button
-        ImageButton addUserGroupButton = (ImageButton)
-                view.findViewById(R.id.addUserButton);
+        ImageButton addUserGroupButton = view.findViewById(R.id.addUserButton);
 
         // Change the sharing text depending on the server version (at least version 8.2 is needed
         // for sharing with other users)
@@ -258,8 +264,7 @@ public class ShareFileFragment extends Fragment
         });
 
         //  Add Public Link Button
-        ImageButton addPublicLinkButton = (ImageButton)
-                view.findViewById(R.id.addPublicLinkButton);
+        ImageButton addPublicLinkButton = view.findViewById(R.id.addPublicLinkButton);
 
         addPublicLinkButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -430,8 +435,8 @@ public class ShareFileFragment extends Fragment
         );
 
         // Show data
-        TextView noShares = (TextView) getView().findViewById(R.id.shareNoUsers);
-        ListView usersList = (ListView) getView().findViewById(R.id.shareUsersList);
+        TextView noShares = getView().findViewById(R.id.shareNoUsers);
+        ListView usersList = getView().findViewById(R.id.shareUsersList);
 
         if (mPrivateShares.size() > 0) {
             noShares.setVisibility(View.GONE);
@@ -444,7 +449,7 @@ public class ShareFileFragment extends Fragment
         }
 
         // Set Scroll to initial position
-        ScrollView scrollView = (ScrollView) getView().findViewById(R.id.shareScroll);
+        ScrollView scrollView = getView().findViewById(R.id.shareScroll);
         scrollView.scrollTo(0, 0);
     }
 
@@ -510,8 +515,8 @@ public class ShareFileFragment extends Fragment
         );
 
         // Show data
-        TextView noPublicLinks = (TextView) getView().findViewById(R.id.shareNoPublicLinks);
-        ListView publicLinksList = (ListView) getView().findViewById(R.id.sharePublicLinksList);
+        TextView noPublicLinks = getView().findViewById(R.id.shareNoPublicLinks);
+        ListView publicLinksList = getView().findViewById(R.id.sharePublicLinksList);
 
         // Show or hide public links and no public links message
         if (mPublicLinks.size() > 0) {
@@ -539,7 +544,7 @@ public class ShareFileFragment extends Fragment
         }
 
         // Set Scroll to initial position
-        ScrollView scrollView = (ScrollView) getView().findViewById(R.id.shareScroll);
+        ScrollView scrollView = getView().findViewById(R.id.shareScroll);
         scrollView.scrollTo(0, 0);
     }
 

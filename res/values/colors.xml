@@ -3,7 +3,7 @@
   ownCloud Android client application
 
   Copyright (C) 2012  Bartek Przybylski
-  Copyright (C) 2016 ownCloud GmbH.
+  Copyright (C) 2018 ownCloud GmbH.
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License version 2,
@@ -33,6 +33,7 @@
     <color name="list_item_lastmod_and_filesize_text">@color/secondaryTextColor</color>
     <color name="black">#000000</color>
     <color name="white">#FFFFFF</color>
+    <color name="white_transparent">#4DFFFFFF</color>
     <color name="fab_white">#fafafa</color>
     <color name="white_pressed">#f1f1f1</color>
     <color name="half_black">#808080</color>
@@ -47,10 +48,11 @@
     <color name="secondaryTextColor">#a0a0a0</color>
     <color name="listItemHighlighted">#f8f8f8</color>
     <color name="highlightTextColor">#55739a</color>
+    <color name="grey">#A5ABAF</color>
 
     <color name="dialog_list_item">#1F1F1F</color>
 
-    <!-- special transparent action bar colors for image preview -->
+    <!-- special transparent_cloud action bar colors for image preview -->
     <color name="owncloud_blue_transparent">#201D2D44</color>
     <color name="owncloud_blue_dark_transparent">#40162233</color>
 
@@ -59,5 +61,8 @@
 
     <!-- Warning message background -->
     <color name="warning_background_color">#E0E0E0</color>
+
+    <color name="warning">#f4511e</color>
+    <color name="success">#009688</color>
 
 </resources>

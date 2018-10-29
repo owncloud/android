@@ -11,8 +11,11 @@
   <!--TODO re-enable when "On Device" is available
     <string name="drawer_item_on_device">On device</string>-->
   <string name="drawer_open">გახსნა</string>
+  <string name="drawer_feedback">უკუკავშირი</string>
+  <string name="drawer_help">დახმარება</string>
   <string name="prefs_category_general">ზოგადი</string>
   <string name="prefs_category_more">უფრო მეტი</string>
+  <string name="prefs_category_security">უსაფრთხოება</string>
   <string name="prefs_accounts">ანგარიში</string>
   <string name="prefs_help">დახმარება</string>
   <string name="prefs_feedback">უკუკავშირი</string>
@@ -20,7 +23,7 @@
   <string name="auth_username">მომხმარებლის სახელი</string>
   <string name="auth_password">პაროლი</string>
   <string name="sync_string_files">ფაილები</string>
-  <string name="setup_btn_connect">დაკავშირება</string>
+  <string name="setup_btn_login">დაკავშირება</string>
   <string name="uploader_btn_upload_text">ატვირთვა</string>
   <string name="uploader_wrn_no_account_title">ანგარიში ვერ მოიძებნა</string>
   <string name="uploader_wrn_no_account_setup_btn_text">დაყენება</string>
@@ -114,14 +117,12 @@
   <string name="ssl_validator_label_validity_to">ვისზე:</string>
   <string name="ssl_validator_label_signature">სიგნატურა:</string>
   <string name="ssl_validator_label_signature_algorithm">ალგორითმი:</string>
-  <string name="instant_upload_path">/ეგრევე ატვირთვა</string>
   <string name="conflict_keep_both">დატოვე ორივე</string>
   <string name="activity_chooser_send_file_title">გაგზავნა</string>
   <string name="clipboard_text_copied">კოპირებულია კლიპბორდში</string>
   <string name="network_error_socket_timeout_exception">სერვერმა გვიპასუხა ძალიან გვიან</string>
   <string name="prefs_category_accounts">ანგარიში</string>
   <string name="folder_picker_choose_button_text">არჩევა</string>
-  <string name="prefs_category_details">დეტალური ინფორმაცია</string>
   <string name="auth_host_address">სერვერის მისამართი</string>
   <string name="share_dialog_title">გაზიარება</string>
   <string name="share_cancel_public_link_button">უარყოფა</string>
@@ -132,4 +133,5 @@
   <string name="share_privilege_can_edit">შეგიძლია შეცვლა</string>
   <string name="share_privilege_can_edit_create">შექმნა</string>
   <string name="share_privilege_can_edit_delete">წაშლა</string>
+  <!--Welcome to oC intro features-->
 </resources>

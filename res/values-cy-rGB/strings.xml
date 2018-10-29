@@ -10,6 +10,7 @@
   <!--TODO re-enable when "On Device" is available
     <string name="drawer_item_on_device">On device</string>-->
   <string name="drawer_open">Agor</string>
+  <string name="drawer_help">Cymorth</string>
   <string name="prefs_category_general">Cyffredinol</string>
   <string name="prefs_accounts">Cyfrifon</string>
   <string name="prefs_help">Cymorth</string>
@@ -17,7 +18,7 @@
   <string name="auth_username">Enw defnyddiwr</string>
   <string name="auth_password">Cyfrinair</string>
   <string name="sync_string_files">Ffeiliau</string>
-  <string name="setup_btn_connect">Cysylltu</string>
+  <string name="setup_btn_login">Cysylltu</string>
   <string name="uploader_btn_upload_text">Llwytho i fyny</string>
   <string name="uploader_wrn_no_account_title">Heb ganfod cyfrif</string>
   <string name="uploader_wrn_no_account_setup_btn_text">Gosod</string>
@@ -106,13 +107,11 @@
   <string name="ssl_validator_label_validity_to">I:</string>
   <string name="ssl_validator_label_signature">Llofnod:</string>
   <string name="ssl_validator_label_signature_algorithm">Algorithm:</string>
-  <string name="instant_upload_path">/LlwythoSyth</string>
   <string name="conflict_keep_both">Cadw\'r ddau</string>
   <string name="activity_chooser_send_file_title">Anfon</string>
   <string name="network_error_socket_timeout_exception">Cymrodd y gweinydd rhy hir i ymateb</string>
   <string name="prefs_category_accounts">Cyfrifon</string>
   <string name="folder_picker_choose_button_text">Dewisiwch</string>
-  <string name="prefs_category_details">Manylion</string>
   <string name="share_dialog_title">Rhannu</string>
   <string name="share_cancel_public_link_button">Diddymu</string>
   <string name="share_confirm_public_link_button">Cadw</string>
@@ -121,4 +120,5 @@
   <string name="share_privilege_can_edit">yn gallu golygu</string>
   <string name="share_privilege_can_edit_create">creu</string>
   <string name="share_privilege_can_edit_delete">dileu</string>
+  <!--Welcome to oC intro features-->
 </resources>

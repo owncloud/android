@@ -4,8 +4,9 @@
  *   @author Bartek Przybylski
  *   @author David A. Velasco
  *   @author masensio
+ *   @author David González Verdugo
  *   Copyright (C) 2011  Bartek Przybylski
- *   Copyright (C) 2017 ownCloud GmbH.
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -33,7 +34,7 @@ import com.owncloud.android.MainApp;
 public class ProviderMeta {
 
     public static final String DB_NAME = "filelist";
-    public static final int DB_VERSION = 20;
+    public static final int DB_VERSION = 24;
 
     private ProviderMeta() {
     }
@@ -44,6 +45,8 @@ public class ProviderMeta {
         public static final String CAPABILITIES_TABLE_NAME = "capabilities";
         public static final String UPLOADS_TABLE_NAME = "list_of_uploads";
         public static final String USER_AVATARS__TABLE_NAME = "user_avatars";
+        public static final String CAMERA_UPLOADS_SYNC_TABLE_NAME = "camera_uploads_sync";
+        public static final String USER_QUOTAS_TABLE_NAME = "user_quotas";
 
         public static final Uri CONTENT_URI = Uri.parse("content://"
                 + MainApp.getAuthority() + "/");
@@ -57,6 +60,10 @@ public class ProviderMeta {
                 + MainApp.getAuthority() + "/capabilities");
         public static final Uri CONTENT_URI_UPLOADS = Uri.parse("content://"
                 + MainApp.getAuthority() + "/uploads");
+        public static final Uri CONTENT_URI_CAMERA_UPLOADS_SYNC = Uri.parse("content://"
+                + MainApp.getAuthority() + "/cameraUploadsSync");
+        public static final Uri CONTENT_URI_QUOTAS = Uri.parse("content://"
+                + MainApp.getAuthority() + "/quotas");
 
         public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.owncloud.file";
         public static final String CONTENT_TYPE_ITEM = "vnd.android.cursor.item/vnd.owncloud.file";
@@ -84,6 +91,7 @@ public class ProviderMeta {
         public static final String FILE_UPDATE_THUMBNAIL = "update_thumbnail";
         public static final String FILE_IS_DOWNLOADING= "is_downloading";
         public static final String FILE_ETAG_IN_CONFLICT = "etag_in_conflict";
+        public static final String FILE_PRIVATE_LINK = "private_link";
 
         public static final String FILE_DEFAULT_SORT_ORDER = FILE_NAME
                 + " collate nocase asc";
@@ -109,7 +117,7 @@ public class ProviderMeta {
         public static final String OCSHARES_NAME = "name";
         public static final String OCSHARES_URL = "url";
 
-        public static final String OCSHARES_DEFAULT_SORT_ORDER = OCSHARES_FILE_SOURCE 
+        public static final String OCSHARES_DEFAULT_SORT_ORDER = OCSHARES_FILE_SOURCE
                 + " collate nocase asc";
 
         // Columns of capabilities table
@@ -157,14 +165,28 @@ public class ProviderMeta {
         public static final String UPLOADS_UPLOAD_END_TIMESTAMP = "upload_end_timestamp";
         public static final String UPLOADS_LAST_RESULT = "last_result";
         public static final String UPLOADS_CREATED_BY = "created_by";
+        public static final String UPLOADS_TRANSFER_ID = "transfer_id";
 
-        public static final String UPLOADS_DEFAULT_SORT_ORDER = ProviderTableMeta._ID  + " collate nocase desc";
-
+        public static final String UPLOADS_DEFAULT_SORT_ORDER =
+                ProviderTableMeta._ID  + " collate nocase desc";
 
         // Columns of user_avatars table
         public static final String USER_AVATARS__ACCOUNT_NAME = "account_name";
         public static final String USER_AVATARS__CACHE_KEY = "cache_key";
         public static final String USER_AVATARS__ETAG = "etag";
         public static final String USER_AVATARS__MIME_TYPE = "mime_type";
+
+        // Columns of camera upload synchronization table
+        public static final String PICTURES_LAST_SYNC_TIMESTAMP = "pictures_last_sync_date";
+        public static final String VIDEOS_LAST_SYNC_TIMESTAMP = "videos_last_sync_date";
+        public static final String CAMERA_UPLOADS_SYNC_DEFAULT_SORT_ORDER =
+                ProviderTableMeta._ID  + " collate nocase asc";
+
+        // Columns of user_quotas table
+        public static final String USER_QUOTAS__ACCOUNT_NAME = "account_name";
+        public static final String USER_QUOTAS__FREE = "free";
+        public static final String USER_QUOTAS__RELATIVE = "relative";
+        public static final String USER_QUOTAS__TOTAL = "total";
+        public static final String USER_QUOTAS__USED = "used";
     }
 }

@@ -1,22 +1,23 @@
 /**
- *  ownCloud Android client application
+ * ownCloud Android client application
  *
- *  @author LukeOwncloud
- *  @author David A. Velasco
- *  @author masensio
- *  Copyright (C) 2016 ownCloud GmbH.
+ * @author LukeOwncloud
+ * @author David A. Velasco
+ * @author masensio
+ * @author David González Verdugo
+ * Copyright (C) 2017 ownCloud GmbH.
  *
- *  This program is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License version 2,
- *  as published by the Free Software Foundation.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
  *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- *  You should have received a copy of the GNU General Public License
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package com.owncloud.android.datamodel;
 
@@ -25,7 +26,6 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 
-import com.owncloud.android.db.OCUpload;
 import com.owncloud.android.db.ProviderMeta.ProviderTableMeta;
 import com.owncloud.android.db.UploadResult;
 import com.owncloud.android.files.services.FileUploader;
@@ -111,9 +111,10 @@ public class UploadsStorageManager extends Observable {
         cv.put(ProviderTableMeta.UPLOADS_STATUS, ocUpload.getUploadStatus().value);
         cv.put(ProviderTableMeta.UPLOADS_LOCAL_BEHAVIOUR, ocUpload.getLocalAction());
         cv.put(ProviderTableMeta.UPLOADS_FORCE_OVERWRITE, ocUpload.isForceOverwrite() ? 1 : 0);
-        cv.put(ProviderTableMeta.UPLOADS_IS_CREATE_REMOTE_FOLDER, ocUpload.isCreateRemoteFolder() ? 1 : 0);
+        cv.put(ProviderTableMeta.UPLOADS_IS_CREATE_REMOTE_FOLDER, ocUpload.createsRemoteFolder() ? 1 : 0);
         cv.put(ProviderTableMeta.UPLOADS_LAST_RESULT, ocUpload.getLastResult().getValue());
-        cv.put(ProviderTableMeta.UPLOADS_CREATED_BY, ocUpload.getCreadtedBy());
+        cv.put(ProviderTableMeta.UPLOADS_CREATED_BY, ocUpload.getCreatedBy());
+        cv.put(ProviderTableMeta.UPLOADS_TRANSFER_ID, ocUpload.getTransferId());
 
         Uri result = getDB().insert(ProviderTableMeta.CONTENT_URI_UPLOADS, cv);
 
@@ -145,14 +146,15 @@ public class UploadsStorageManager extends Observable {
         cv.put(ProviderTableMeta.UPLOADS_STATUS, ocUpload.getUploadStatus().value);
         cv.put(ProviderTableMeta.UPLOADS_LAST_RESULT, ocUpload.getLastResult().getValue());
         cv.put(ProviderTableMeta.UPLOADS_UPLOAD_END_TIMESTAMP, ocUpload.getUploadEndTimestamp());
+        cv.put(ProviderTableMeta.UPLOADS_TRANSFER_ID, ocUpload.getTransferId());
 
         int result = getDB().update(ProviderTableMeta.CONTENT_URI_UPLOADS,
-            cv,
-            ProviderTableMeta._ID + "=?",
-            new String[]{String.valueOf(ocUpload.getUploadId())}
+                cv,
+                ProviderTableMeta._ID + "=?",
+                new String[]{String.valueOf(ocUpload.getUploadId())}
         );
 
-        Log_OC.d(TAG, "updateUpload returns with: " + result + " for file: " + ocUpload.getLocalPath());
+        Log_OC.d(TAG, "updateCameraUploadSync returns with: " + result + " for file: " + ocUpload.getLocalPath());
         if (result != 1) {
             Log_OC.e(TAG, "Failed to update item " + ocUpload.getLocalPath() + " into upload db.");
         } else {
@@ -164,7 +166,6 @@ public class UploadsStorageManager extends Observable {
 
     private int updateUploadInternal(Cursor c, UploadStatus status, UploadResult result, String remotePath,
                                      String localPath) {
-
         int r = 0;
         while (c.moveToNext()) {
             // read upload object and update
@@ -172,22 +173,21 @@ public class UploadsStorageManager extends Observable {
 
             String path = c.getString(c.getColumnIndex(ProviderTableMeta.UPLOADS_LOCAL_PATH));
             Log_OC.v(
-                TAG,
-                "Updating " + path + " with status:" + status + " and result:"
-                    + (result == null ? "null" : result.toString()) + " (old:"
-                    + upload.toFormattedString() + ")");
+                    TAG,
+                    "Updating " + path + " with status:" + status + " and result:"
+                            + (result == null ? "null" : result.toString()) + " (old:"
+                            + upload.toFormattedString() + ")");
 
             upload.setUploadStatus(status);
             upload.setLastResult(result);
             upload.setRemotePath(remotePath);
-            if(localPath != null) {
+            if (localPath != null) {
                 upload.setLocalPath(localPath);
             }
             upload.setUploadEndTimestamp(Calendar.getInstance().getTimeInMillis());
 
             // store update upload object to db
             r = updateUpload(upload);
-
         }
 
         return r;
@@ -218,7 +218,7 @@ public class UploadsStorageManager extends Observable {
 
         if (c.getCount() != 1) {
             Log_OC.e(TAG, c.getCount() + " items for id=" + id
-                + " available in UploadDb. Expected 1. Failed to update upload db.");
+                    + " available in UploadDb. Expected 1. Failed to update upload db.");
         } else {
             returnValue = updateUploadInternal(c, status, result, remotePath, localPath);
         }
@@ -248,7 +248,7 @@ public class UploadsStorageManager extends Observable {
     public int removeUpload(OCUpload upload) {
         int result = getDB().delete(
                 ProviderTableMeta.CONTENT_URI_UPLOADS,
-                ProviderTableMeta._ID + "=?" ,
+                ProviderTableMeta._ID + "=?",
                 new String[]{Long.toString(upload.getUploadId())}
         );
         Log_OC.d(TAG, "delete returns " + result + " for upload " + upload);
@@ -269,7 +269,7 @@ public class UploadsStorageManager extends Observable {
     public int removeUpload(String accountName, String remotePath) {
         int result = getDB().delete(
                 ProviderTableMeta.CONTENT_URI_UPLOADS,
-                ProviderTableMeta.UPLOADS_ACCOUNT_NAME + "=? AND " + ProviderTableMeta.UPLOADS_REMOTE_PATH + "=?" ,
+                ProviderTableMeta.UPLOADS_ACCOUNT_NAME + "=? AND " + ProviderTableMeta.UPLOADS_REMOTE_PATH + "=?",
                 new String[]{accountName, remotePath}
         );
         Log_OC.d(TAG, "delete returns " + result + " for file " + remotePath + " in " + accountName);
@@ -305,13 +305,13 @@ public class UploadsStorageManager extends Observable {
 
     public OCUpload getLastUploadFor(OCFile file, String accountName) {
         OCUpload[] uploads = getUploads(
-            ProviderTableMeta.UPLOADS_REMOTE_PATH + "== ? AND " +
-                ProviderTableMeta.UPLOADS_ACCOUNT_NAME + "== ?",
-            new String[] {
-                file.getRemotePath(),
-                accountName
-            },
-            ProviderTableMeta.UPLOADS_UPLOAD_END_TIMESTAMP + " desc"
+                ProviderTableMeta.UPLOADS_REMOTE_PATH + "== ? AND " +
+                        ProviderTableMeta.UPLOADS_ACCOUNT_NAME + "== ?",
+                new String[]{
+                        file.getRemotePath(),
+                        accountName
+                },
+                ProviderTableMeta.UPLOADS_UPLOAD_END_TIMESTAMP + " desc"
         );
         return (uploads.length > 0 ? uploads[0] : null);
     }
@@ -334,7 +334,6 @@ public class UploadsStorageManager extends Observable {
                     list[c.getPosition()] = upload;
                 }
             } while (c.moveToNext());
-
         }
         c.close();
 
@@ -364,6 +363,7 @@ public class UploadsStorageManager extends Observable {
             upload.setLastResult(UploadResult.fromValue(
                     c.getInt(c.getColumnIndex(ProviderTableMeta.UPLOADS_LAST_RESULT))));
             upload.setCreatedBy(c.getInt(c.getColumnIndex(ProviderTableMeta.UPLOADS_CREATED_BY)));
+            upload.setTransferId(c.getString(c.getColumnIndex(ProviderTableMeta.UPLOADS_TRANSFER_ID)));
         }
         return upload;
     }
@@ -372,11 +372,15 @@ public class UploadsStorageManager extends Observable {
      * Get all uploads which are currently being uploaded or waiting in the queue to be uploaded.
      */
     public OCUpload[] getCurrentAndPendingUploads() {
+
         return getUploads(
-            ProviderTableMeta.UPLOADS_STATUS + "==" + UploadStatus.UPLOAD_IN_PROGRESS.value + " OR " +
-            ProviderTableMeta.UPLOADS_LAST_RESULT + "==" + UploadResult.DELAYED_FOR_WIFI.getValue(),
-            null,
-            null
+                ProviderTableMeta.UPLOADS_STATUS + "== ? OR " +
+                        ProviderTableMeta.UPLOADS_LAST_RESULT + "== ?",
+                new String[]{
+                        String.valueOf(UploadStatus.UPLOAD_IN_PROGRESS.value),
+                        String.valueOf(UploadResult.DELAYED_FOR_WIFI.getValue())
+                },
+                null
         );
     }
 
@@ -385,9 +389,11 @@ public class UploadsStorageManager extends Observable {
      */
     public OCUpload[] getFailedUploads() {
         return getUploads(
-            ProviderTableMeta.UPLOADS_STATUS + "==" + UploadStatus.UPLOAD_FAILED.value,
-            null,
-            null
+                ProviderTableMeta.UPLOADS_STATUS + "== ?",
+                new String[]{
+                        String.valueOf(UploadStatus.UPLOAD_FAILED.value)
+                },
+                null
         );
     }
 
@@ -396,22 +402,27 @@ public class UploadsStorageManager extends Observable {
      */
     public OCUpload[] getFinishedUploads() {
         return getUploads(
-            ProviderTableMeta.UPLOADS_STATUS + "==" + UploadStatus.UPLOAD_SUCCEEDED.value,
-            null,
-            null
+                ProviderTableMeta.UPLOADS_STATUS + "== ?",
+                new String[]{
+                        String.valueOf(UploadStatus.UPLOAD_SUCCEEDED.value)
+                },
+                null
         );
     }
 
     /**
      * Get all failed uploads, except for those that were not performed due to lack of Wifi connection
-     * @return      Array of failed uploads, except for those that were not performed due to lack of Wifi connection.
+     * @return Array of failed uploads, except for those that were not performed due to lack of Wifi connection.
      */
     public OCUpload[] getFailedButNotDelayedForWifiUploads() {
         return getUploads(
-            ProviderTableMeta.UPLOADS_STATUS + "==" + UploadStatus.UPLOAD_FAILED.value + " AND " +
-                ProviderTableMeta.UPLOADS_LAST_RESULT + "<>" + UploadResult.DELAYED_FOR_WIFI.getValue(),
-            null,
-            null
+                ProviderTableMeta.UPLOADS_STATUS + "== ?" + UploadStatus.UPLOAD_FAILED.value + " AND " +
+                        ProviderTableMeta.UPLOADS_LAST_RESULT + "<> ?",
+                new String[]{
+                        String.valueOf(UploadStatus.UPLOAD_FAILED.value),
+                        String.valueOf(UploadResult.DELAYED_FOR_WIFI.getValue())
+                },
+                null
         );
     }
 
@@ -421,10 +432,10 @@ public class UploadsStorageManager extends Observable {
 
     public long clearFailedButNotDelayedForWifiUploads() {
         long result = getDB().delete(
-            ProviderTableMeta.CONTENT_URI_UPLOADS,
-            ProviderTableMeta.UPLOADS_STATUS + "==" + UploadStatus.UPLOAD_FAILED.value + " AND " +
-                ProviderTableMeta.UPLOADS_LAST_RESULT + "<>" + UploadResult.DELAYED_FOR_WIFI.getValue(),
-            null
+                ProviderTableMeta.CONTENT_URI_UPLOADS,
+                ProviderTableMeta.UPLOADS_STATUS + "==" + UploadStatus.UPLOAD_FAILED.value + " AND " +
+                        ProviderTableMeta.UPLOADS_LAST_RESULT + "<>" + UploadResult.DELAYED_FOR_WIFI.getValue(),
+                null
         );
         Log_OC.d(TAG, "delete all failed uploads but those delayed for Wifi");
         if (result > 0) {
@@ -436,7 +447,7 @@ public class UploadsStorageManager extends Observable {
     public long clearSuccessfulUploads() {
         long result = getDB().delete(
                 ProviderTableMeta.CONTENT_URI_UPLOADS,
-                ProviderTableMeta.UPLOADS_STATUS + "=="+ UploadStatus.UPLOAD_SUCCEEDED.value, null
+                ProviderTableMeta.UPLOADS_STATUS + "==" + UploadStatus.UPLOAD_SUCCEEDED.value, null
         );
         Log_OC.d(TAG, "delete all successful uploads");
         if (result > 0) {
@@ -452,7 +463,7 @@ public class UploadsStorageManager extends Observable {
         long result = getDB().delete(
                 ProviderTableMeta.CONTENT_URI_UPLOADS,
                 ProviderTableMeta.UPLOADS_STATUS + "=? OR " + ProviderTableMeta.UPLOADS_STATUS + "=? AND " +
-                ProviderTableMeta.UPLOADS_LAST_RESULT + "<>" + UploadResult.DELAYED_FOR_WIFI.getValue(),
+                        ProviderTableMeta.UPLOADS_LAST_RESULT + "<>" + UploadResult.DELAYED_FOR_WIFI.getValue(),
                 whereArgs
         );
         Log_OC.d(TAG, "delete all finished uploads");
@@ -465,34 +476,36 @@ public class UploadsStorageManager extends Observable {
     /**
      * Updates the persistent upload database with upload result.
      */
-    public void updateDatabaseUploadResult(RemoteOperationResult uploadResult, UploadFileOperation upload) {
+    public void updateDatabaseUploadResult(RemoteOperationResult uploadResult,
+                                           UploadFileOperation uploadFileOperation) {
         // result: success or fail notification
-        Log_OC.d(TAG, "updateDataseUploadResult uploadResult: " + uploadResult + " upload: " + upload);
+        Log_OC.d(TAG, "updateDataseUploadResult uploadResult: " + uploadResult + " upload: " +
+                uploadFileOperation);
 
         if (uploadResult.isCancelled()) {
             removeUpload(
-                upload.getAccount().name,
-                upload.getRemotePath()
+                    uploadFileOperation.getAccount().name,
+                    uploadFileOperation.getRemotePath()
             );
         } else {
-            String localPath = (FileUploader.LOCAL_BEHAVIOUR_MOVE == upload.getLocalBehaviour())
-                ? upload.getStoragePath() : null;
+            String localPath = (FileUploader.LOCAL_BEHAVIOUR_MOVE == uploadFileOperation.getLocalBehaviour())
+                    ? uploadFileOperation.getStoragePath() : null;
 
             if (uploadResult.isSuccess()) {
                 updateUploadStatus(
-                    upload.getOCUploadId(),
-                    UploadStatus.UPLOAD_SUCCEEDED,
-                    UploadResult.UPLOADED,
-                    upload.getRemotePath(),
-                    localPath
+                        uploadFileOperation.getOCUploadId(),
+                        UploadStatus.UPLOAD_SUCCEEDED,
+                        UploadResult.UPLOADED,
+                        uploadFileOperation.getRemotePath(),
+                        localPath
                 );
             } else {
                 updateUploadStatus(
-                    upload.getOCUploadId(),
-                    UploadStatus.UPLOAD_FAILED,
-                    UploadResult.fromOperationResult(uploadResult),
-                    upload.getRemotePath(),
-                    localPath
+                        uploadFileOperation.getOCUploadId(),
+                        UploadStatus.UPLOAD_FAILED,
+                        UploadResult.fromOperationResult(uploadResult),
+                        uploadFileOperation.getRemotePath(),
+                        localPath
                 );
             }
         }
@@ -501,16 +514,16 @@ public class UploadsStorageManager extends Observable {
     /**
      * Updates the persistent upload database with an upload now in progress.
      */
-    public void updateDatabaseUploadStart(UploadFileOperation upload) {
-        String localPath = (FileUploader.LOCAL_BEHAVIOUR_MOVE == upload.getLocalBehaviour())
-            ? upload.getStoragePath() : null;
+    public void updateDatabaseUploadStart(UploadFileOperation uploadFileOperation) {
+        String localPath = (FileUploader.LOCAL_BEHAVIOUR_MOVE == uploadFileOperation.getLocalBehaviour())
+                ? uploadFileOperation.getStoragePath() : null;
 
         updateUploadStatus(
-            upload.getOCUploadId(),
-            UploadStatus.UPLOAD_IN_PROGRESS,
-            UploadResult.UNKNOWN,
-            upload.getRemotePath(),
-            localPath
+                uploadFileOperation.getOCUploadId(),
+                UploadStatus.UPLOAD_IN_PROGRESS,
+                UploadResult.UNKNOWN,
+                uploadFileOperation.getRemotePath(),
+                localPath
         );
     }
 
@@ -519,24 +532,24 @@ public class UploadsStorageManager extends Observable {
      * Changes the status of any in progress upload from UploadStatus.UPLOAD_IN_PROGRESS
      * to UploadStatus.UPLOAD_FAILED
      *
-     * @return      Number of uploads which status was changed.
+     * @return Number of uploads which status was changed.
      */
-    public int failInProgressUploads(UploadResult fail) {
+    public int failInProgressUploads(UploadResult uploadResult) {
         Log_OC.v(TAG, "Updating state of any killed upload");
 
         ContentValues cv = new ContentValues();
         cv.put(ProviderTableMeta.UPLOADS_STATUS, UploadStatus.UPLOAD_FAILED.getValue());
         cv.put(
-            ProviderTableMeta.UPLOADS_LAST_RESULT,
-            fail != null ? fail.getValue() : UploadResult.UNKNOWN.getValue()
+                ProviderTableMeta.UPLOADS_LAST_RESULT,
+                uploadResult != null ? uploadResult.getValue() : UploadResult.UNKNOWN.getValue()
         );
         cv.put(ProviderTableMeta.UPLOADS_UPLOAD_END_TIMESTAMP, Calendar.getInstance().getTimeInMillis());
 
         int result = getDB().update(
-            ProviderTableMeta.CONTENT_URI_UPLOADS,
-            cv,
-            ProviderTableMeta.UPLOADS_STATUS + "=?",
-            new String[]{String.valueOf(UploadStatus.UPLOAD_IN_PROGRESS.getValue())}
+                ProviderTableMeta.CONTENT_URI_UPLOADS,
+                cv,
+                ProviderTableMeta.UPLOADS_STATUS + "=?",
+                new String[]{String.valueOf(UploadStatus.UPLOAD_IN_PROGRESS.getValue())}
         );
 
         if (result == 0) {
@@ -547,5 +560,4 @@ public class UploadsStorageManager extends Observable {
         }
         return result;
     }
-
 }

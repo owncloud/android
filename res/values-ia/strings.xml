@@ -11,14 +11,16 @@
   <!--TODO re-enable when "On Device" is available
     <string name="drawer_item_on_device">On device</string>-->
   <string name="drawer_open">Aperi</string>
+  <string name="drawer_help">Adjuta</string>
   <string name="prefs_category_general">General</string>
   <string name="prefs_category_more">Plus</string>
+  <string name="prefs_category_security">Securitate</string>
   <string name="prefs_accounts">Contos</string>
   <string name="prefs_help">Adjuta</string>
   <string name="auth_username">Nomine de usator</string>
   <string name="auth_password">Contrasigno</string>
   <string name="sync_string_files">Files</string>
-  <string name="setup_btn_connect">Connecte</string>
+  <string name="setup_btn_login">Connecte</string>
   <string name="uploader_btn_upload_text">Incargar</string>
   <string name="uploader_wrn_no_account_title">Nulle contos trovate</string>
   <string name="file_list_seconds_ago">secundas passate</string>
@@ -48,17 +50,16 @@
   <string name="prefs_category_accounts">Contos</string>
   <string name="saml_authentication_wrong_pass">Contrasigno errate</string>
   <string name="folder_picker_choose_button_text">Seliger</string>
-  <string name="prefs_category_details">Detalios</string>
   <string name="share_dialog_title">Compartir</string>
   <string name="share_cancel_public_link_button">Cancellar</string>
   <string name="share_confirm_public_link_button">Salveguardar</string>
   <string name="share_via_link_expiration_date_label">Expiration</string>
   <string name="share_via_link_password_label">Contrasigno</string>
-  <string name="share_via_link_edit_permission_label">Permitter modification</string>
   <string name="share_search">Cercar</string>
   <string name="share_privilege_can_share">pote compartir</string>
   <string name="share_privilege_can_edit">pote modificar</string>
   <string name="share_privilege_can_edit_create">crear</string>
   <string name="share_privilege_can_edit_change">cambiar</string>
   <string name="share_privilege_can_edit_delete">deler</string>
+  <!--Welcome to oC intro features-->
 </resources>

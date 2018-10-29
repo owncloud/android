@@ -2,7 +2,9 @@
  *   ownCloud Android client application
  *
  *   @author David A. Velasco
- *   Copyright (C) 2016  ownCloud GmbH.
+ *   @author David González Verdugo
+ *   @author Christian Schabesberger
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -39,7 +41,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 
-import com.ortiz.touch.ExtendedViewPager;
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.FileDataStorageManager;
@@ -71,7 +72,7 @@ public class PreviewImageActivity extends FileActivity implements
     
     private static final int INITIAL_HIDE_DELAY = 0; // immediate hide
 
-    private ExtendedViewPager mViewPager;
+    private ViewPager mViewPager;
     private PreviewImagePagerAdapter mPreviewImagePagerAdapter;
     private int mSavedPosition = 0;
     private boolean mHasSavedPosition = false;
@@ -144,7 +145,7 @@ public class PreviewImageActivity extends FileActivity implements
             /*, MainApp.getOnlyOnDevice()*/
         );
 
-        mViewPager = (ExtendedViewPager) findViewById(R.id.fragmentPager);
+        mViewPager = findViewById(R.id.fragmentPager);
         int position = mHasSavedPosition ? mSavedPosition :
                 mPreviewImagePagerAdapter.getFilePosition(getFile());
         position = (position >= 0) ? position : 0;
@@ -263,9 +264,9 @@ public class PreviewImageActivity extends FileActivity implements
                 mUploaderBinder = null;
             }
         }
-    };    
-    
-    
+    }
+
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         boolean returnValue;
@@ -354,7 +355,7 @@ public class PreviewImageActivity extends FileActivity implements
             getHandler().post(new Runnable() {
                 @Override
                 public void run() {
-                    onPageSelected(fPosition);;
+                    onPageSelected(fPosition);
                 }
             });
         }
@@ -488,5 +489,4 @@ public class PreviewImageActivity extends FileActivity implements
         backToDisplayActivity();
         super.allFilesOption();
     }
-
 }

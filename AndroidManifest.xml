@@ -17,13 +17,15 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.owncloud.android"
     android:versionCode="${versionCode}"
     android:versionName="${versionName}">
 
     <uses-sdk
         android:minSdkVersion="14"
-        android:targetSdkVersion="24" />
+        android:targetSdkVersion="26"
+        tools:overrideLibrary="android.support.customtabs"/>
 
     <!--
          GET_ACCOUNTS is needed for API < 23.
@@ -61,6 +63,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.USE_FINGERPRINT" />
 
     <application
         android:name=".MainApp"
@@ -102,7 +105,7 @@
         </activity>
         <activity
             android:name=".ui.activity.Preferences"
-            android:theme="@style/Theme.ownCloud"></activity>
+            android:theme="@style/Theme.ownCloud" />
         <activity
             android:name=".ui.preview.PreviewImageActivity"
             android:theme="@style/Theme.ownCloud.Overlay" />
@@ -129,17 +132,22 @@
                 android:name="android.content.SyncAdapter"
                 android:resource="@xml/syncadapter_files" />
         </service>
-
         <service
             android:name=".files.services.RetryUploadJobService"
+            android:exported="true"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+        <service
+            android:name=".files.services.RetryDownloadJobService"
+            android:exported="true"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+        <service
+            android:name=".files.services.CameraUploadsSyncJobService"
             android:permission="android.permission.BIND_JOB_SERVICE"
             android:exported="true">
         </service>
-
         <service
-            android:name=".files.services.RetryDownloadJobService"
-            android:permission="android.permission.BIND_JOB_SERVICE"
-            android:exported="true">
+            android:name=".files.services.AvailableOfflineSyncJobService"
+            android:permission="android.permission.BIND_JOB_SERVICE">
         </service>
 
         <provider
@@ -148,7 +156,8 @@
             android:enabled="true"
             android:exported="true"
             android:label="@string/sync_string_files"
-            android:syncable="true" />
+            android:syncable="true"
+            />
         <provider
             android:name=".providers.UsersAndGroupsSearchProvider"
             android:authorities="@string/search_suggest_authority"
@@ -181,11 +190,21 @@
         <activity
             android:name=".authentication.AuthenticatorActivity"
             android:exported="true"
-            android:launchMode="singleTask">
+            android:launchMode="singleTask"
+            android:theme="@style/Theme.ownCloud.Authenticator">
             <intent-filter>
                 <action android:name="com.owncloud.android.workaround.accounts.CREATE" />
 
                 <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="oc" android:host="android.owncloud.com" />
             </intent-filter>
         </activity>
 
@@ -204,43 +223,23 @@
         <activity
             android:name=".ui.activity.ErrorsWhileCopyingHandlerActivity"
             android:theme="@style/Theme.ownCloud" />
-        <activity android:name=".ui.activity.LogHistoryActivity" />
+        <activity android:name=".ui.activity.LogHistoryActivity" android:configChanges="orientation|screenSize"/>
         <activity android:name=".ui.errorhandling.ErrorShowActivity" />
         <activity
             android:name=".ui.activity.UploadListActivity"
             android:theme="@style/Theme.ownCloud.Toolbar.Drawer" />
+        <activity android:name=".ui.activity.WhatsNewActivity" />
 
         <receiver
             android:name=".broadcastreceivers.ConnectivityActionReceiver"
             android:enabled="true"
             android:label="ConnectivityActionReceiver">
-
             <intent-filter>
+
                 <!-- action android:name="android.net.conn.CONNECTIVITY_CHANGE"/ -->
                 <action android:name="android.net.wifi.STATE_CHANGE" />
             </intent-filter>
         </receiver>
-
-        <receiver android:name=".broadcastreceivers.BootupBroadcastReceiver">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-            </intent-filter>
-        </receiver>
-
-        <receiver android:name=".broadcastreceivers.InstantUploadBroadcastReceiver">
-            <intent-filter>
-                <action android:name="android.hardware.action.NEW_PICTURE" />
-
-                <data android:mimeType="image/*" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.hardware.action.NEW_VIDEO" />
-
-                <data android:mimeType="video/*" />
-            </intent-filter>
-        </receiver>
-
-        <service android:name=".services.observer.FileObserverService" />
 
         <activity
             android:name=".ui.activity.CopyToClipboardActivity"
@@ -267,11 +266,12 @@
             android:name=".ui.activity.ManageSpaceActivity"
             android:label="@string/manage_space_title"
             android:theme="@style/Theme.ownCloud" />
-        <activity android:name=".ui.activity.PrivacyPolicyActivity"></activity>
-        <activity android:name=".ui.preview.PreviewVideoActivity"
+        <activity android:name=".ui.activity.PrivacyPolicyActivity" />
+        <activity
+            android:name=".ui.preview.PreviewVideoActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
-            android:theme="@style/Theme.ownCloud.Fullscreen">
-        </activity>
+            android:theme="@style/Theme.ownCloud.Fullscreen" />
+        <activity android:name=".ui.activity.PatternLockActivity" />
+        <activity android:name=".ui.activity.FingerprintActivity"/>
     </application>
-
 </manifest>

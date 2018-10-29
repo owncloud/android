@@ -1,7 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="about_android">%1$s Aplicación de Android</string>
-  <string name="about_version">versión %1$s</string>
   <string name="actionbar_sync">Actualizar cuenta</string>
   <string name="actionbar_upload">Subir</string>
   <string name="actionbar_upload_from_apps">Contenido de otras aplicaciones</string>
@@ -14,26 +12,23 @@
   <string name="actionbar_sort">Ordenar</string>
   <string name="actionbar_sort_title">Ordenar por</string>
   <string name="actionbar_sort_by_name">A-Z</string>
-  <string name="actionbar_sort_by_date">Mas nuevo - Mas antiguo</string>
-  <string name="actionbar_sort_by_size">Mas grande - Mas pequeño</string>
-  <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
-  <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Todos los archivos</string>
-  <!--TODO re-enable when "On Device" is available
-    <string name="drawer_item_on_device">On device</string>-->
   <string name="drawer_item_settings">Ajustes</string>
   <string name="drawer_item_uploads_list">Subidas</string>
   <string name="drawer_close">Cerrar</string>
   <string name="drawer_open">Abrir</string>
+  <string name="drawer_feedback">Mensajes de retroalimentación</string>
+  <string name="drawer_help">Ayuda</string>
   <string name="prefs_category_general">General</string>
   <string name="prefs_category_more">Más</string>
+  <string name="prefs_category_security">Seguridad</string>
   <string name="prefs_accounts">Cuentas</string>
   <string name="prefs_manage_accounts">Gestionar cuentas</string>
   <string name="prefs_passcode">Contraseña</string>
-  <string name="prefs_instant_upload">Subida instantánea de imágenes</string>
-  <string name="prefs_instant_upload_summary">Sube instantáneamente las fotos tomadas con la cámara</string>
-  <string name="prefs_instant_video_upload">Subidas instantáneas de video</string>
-  <string name="prefs_instant_video_upload_summary">Sube instantáneamente los vídeos grabados con la cámara</string>
+  <string name="prefs_camera_picture_upload">Cargar imagenes</string>
+  <string name="prefs_camera_picture_upload_summary">Cargar fotos automáticamente tomadas por la cámara</string>
+  <string name="prefs_camera_video_upload">Cargar videos</string>
+  <string name="prefs_camera_video_upload_summary">Cargar videos atuomáticamente tomadas por la cámara</string>
   <string name="prefs_log_title">Habilitar registro</string>
   <string name="prefs_log_summary">Esto es usado para registrar problemas</string>
   <string name="prefs_log_title_history">Historial del registro</string>
@@ -53,7 +48,7 @@
   <string name="auth_password">Contraseña</string>
   <string name="auth_register">¿Nuevo en %1$s?</string>
   <string name="sync_string_files">Archivos</string>
-  <string name="setup_btn_connect">Conectar</string>
+  <string name="setup_btn_login">Entrar</string>
   <string name="uploader_btn_upload_text">Subir</string>
   <string name="uploader_top_message">Elige carpeta de subida</string>
   <string name="uploader_wrn_no_account_title">No se encontró la cuenta</string>
@@ -79,6 +74,8 @@
   <string name="file_list_file">fichero</string>
   <string name="file_list_files">ficheros</string>
   <string name="filedetails_select_file">Pulsa sobre un archivo para mostrar información adicional.</string>
+  <string name="upload_to">Cargar a %1$s</string>
+  <string name="upload_files_title">Archivos</string>
   <string name="filedetails_size">Tamaño:</string>
   <string name="filedetails_type">Tipo:</string>
   <string name="filedetails_created">Creado:</string>
@@ -90,11 +87,9 @@
   <string name="action_share">Compartir</string>
   <string name="common_yes">Sí</string>
   <string name="common_no">No</string>
-  <string name="common_ok">Aceptar</string>
   <string name="common_remove_upload">Quitar los datos para subir</string>
   <string name="common_retry_upload">Reintentar la subida</string>
   <string name="common_cancel_sync">Cancelar sincronización</string>
-  <string name="common_cancel">Cancelar</string>
   <string name="common_back">Volver</string>
   <string name="common_save_exit">Guardar &amp; salir</string>
   <string name="common_error">Error</string>
@@ -106,9 +101,7 @@
   <string name="change_password">Cambiar contraseña</string>
   <string name="delete_account">Eliminar cuenta</string>
   <string name="create_account">Crear cuenta</string>
-  <string name="upload_chooser_title">Subir desde...</string>
   <string name="uploader_info_dirname">Nombre de la carpeta</string>
-  <string name="uploader_upload_in_progress_ticker">Subiendo...</string>
   <string name="uploader_upload_in_progress_content">%1$d%% Subiendo %2$s</string>
   <string name="uploader_upload_succeeded_ticker">Subido con éxito</string>
   <string name="uploader_upload_succeeded_content_single">%1$s subido</string>
@@ -125,8 +118,6 @@
   <string name="uploads_view_group_current_uploads">Actual</string>
   <string name="uploads_view_group_failed_uploads">Fallido (presiona para reintentarlo)</string>
   <string name="uploads_view_group_finished_uploads">Subidos</string>
-  <string name="uploads_view_group_file_count">%d Archivos</string>
-  <string name="uploads_view_group_file_count_single">%d Archivo</string>
   <string name="uploads_view_upload_status_succeeded">Completada</string>
   <string name="uploads_view_upload_status_cancelled">Cancelado</string>
   <string name="uploads_view_upload_status_paused">Pausado</string>
@@ -144,7 +135,6 @@
   <string name="uploads_view_upload_status_waiting_for_wifi">Esperando a la conexión wifi</string>
   <string name="uploads_view_later_waiting_to_upload">Esperando para subir</string>
   <string name="uploads_view_unsupported_media_type">Tipo de medio no soportado</string>
-  <string name="downloader_download_in_progress_ticker">Descargando...</string>
   <string name="downloader_download_in_progress_content">%1$d%% Descargado de %2$s</string>
   <string name="downloader_download_succeeded_ticker">Descarga completa</string>
   <string name="downloader_download_succeeded_content">%1$s descargado</string>
@@ -200,8 +190,7 @@
   <string name="media_rewind_description">Botón de rebobinado</string>
   <string name="media_play_pause_description">Botón de reproducción o pausa </string>
   <string name="media_forward_description">Botón avance rápido</string>
-  <string name="auth_getting_authorization">Obteniendo autorización...</string>
-  <string name="auth_trying_to_login">Intentando iniciar sesión ...</string>
+  <string name="upload_from_camera_title">Imagenes desde la cámara</string>
   <string name="auth_no_net_conn_title">Sin conexión de red</string>
   <string name="auth_nossl_plain_ok_title">Conexión segura no disponible.</string>
   <string name="auth_connection_established">Conexión establecida</string>
@@ -256,7 +245,6 @@
   <string name="wait_checking_credentials">Comprobando las credenciales guardadas</string>
   <string name="filedisplay_unexpected_bad_get_content">Problema inesperado; por favor, pruebe otra app para seleccionar el archivo</string>
   <string name="filedisplay_no_file_selected">No hay ficheros seleccionados.</string>
-  <string name="activity_chooser_title">Enviar enlace a...</string>
   <string name="wait_for_tmp_copy_from_private_storage">Copiando el archivo desde el almacenamiento privado.</string>
   <string name="oauth_check_onoff">Ingresar con oAuth2</string>
   <string name="oauth_login_connection">Conectando al servidor OAuth2</string>
@@ -293,9 +281,12 @@
   <string name="placeholder_filesize">389 KB</string>
   <string name="placeholder_timestamp">2012/05/18 12:23 PM</string>
   <string name="placeholder_media_time">12:23:45</string>
-  <string name="instant_upload_on_wifi">Subir fotos por wifi únicamente</string>
-  <string name="instant_video_upload_on_wifi">Subir archivos por wifi únicamente</string>
-  <string name="instant_upload_path">/Subidas Instantáneas</string>
+  <string name="camera_picture_upload_on_wifi">Subir fotos por wifi únicamente</string>
+  <string name="camera_video_upload_on_wifi">Subir archivos por wifi únicamente</string>
+  <string name="camera_upload_path">/CargasDesdeLaCamara</string>
+  <string name="confirmation_disable_camera_uploads_title">Confirmar</string>
+  <string name="confirmation_disable_pictures_upload_message">¿Seguro/a que desea deshabilitar esta función? Las imagenes pendientes no se subirán</string>
+  <string name="confirmation_disable_videos_upload_message">¿Seguro/a que desea deshabilitar esta función? Los videos pendientes no se subirán</string>
   <string name="conflict_title">Conflicto con archivo</string>
   <string name="conflict_message">¿Cuáles archivos desea mantener? Si selecciona ambas versiones, el archivo local tendrá un número añadido a su nombre.</string>
   <string name="conflict_keep_both">Mantener ambos</string>
@@ -304,7 +295,7 @@
   <string name="preview_image_description">Previsualización de imagen</string>
   <string name="preview_image_error_unknown_format">No se puede mostrar la imagen</string>
   <string name="error__upload__local_file_not_copied">%1$s se pudo copiar a la carpeta local %2$s</string>
-  <string name="prefs_instant_upload_path_title">Ruta de subida</string>
+  <string name="prefs_camera_picture_upload_path_title">Ruta de carga de imagenes</string>
   <string name="share_link_no_support_share_api">La función Compartir no está activada en su servidor. Contacte a su
 		administrador.</string>
   <string name="share_link_file_no_exist">No se puede compartir. Revise si el archivo existe</string>
@@ -344,7 +335,7 @@
   <string name="log_send_history_button">Mandar historial.</string>
   <string name="log_send_no_mail_app">Aplicación para enviar registros no encontrada. Por favor instale una aplicación de correo.</string>
   <string name="log_send_mail_subject">Se han encontrado %1$s logs de la app Android</string>
-  <string name="log_progress_dialog_text">Cargando datos ...</string>
+  <string name="actionbar_select_all">Seleccionar todo</string>
   <string name="saml_authentication_required_text">Se necesita autenticación</string>
   <string name="saml_authentication_wrong_pass">Contraseña incorrecta</string>
   <string name="actionbar_move">Mover</string>
@@ -360,9 +351,8 @@
   <string name="copy_file_invalid_overwrite">El fichero ya existe en el directorio de destino</string>
   <string name="copy_file_error">Hubo un error al tratar de copiar este archivo o carpeta</string>
   <string name="forbidden_permissions_copy">para copiar este archivo</string>
-  <string name="prefs_category_instant_uploading">Subidas instantáneas</string>
-  <string name="prefs_category_details">Detalles</string>
-  <string name="prefs_instant_video_upload_path_title">Ruta de subida de vídeo </string>
+  <string name="prefs_category_camera_upload">Cargas de la cámara</string>
+  <string name="prefs_camera_video_upload_path_title">Ruta de carga de videos</string>
   <string name="sync_folder_failed_content">La sincronización de la carpeta %1$s no se pudo completar</string>
   <string name="shared_subject_header">compartido</string>
   <string name="with_you_subject_header">con usted</string>
@@ -380,11 +370,9 @@
   <string name="file_list__footer__files">%1$d archivos</string>
   <string name="file_list__footer__files_and_folder">%1$d archivos, 1 carpeta</string>
   <string name="file_list__footer__files_and_folders">%1$d archivos, %2$d carpetas</string>
-  <string name="prefs_instant_upload_source_path_title">Carpeta de la Camera (%1$s)</string>
-  <string name="prefs_instant_upload_source_path_title_required">requerido</string>
-  <string name="prefs_instant_upload_source_path_title_optional">opcional</string>
-  <string name="prefs_instant_behaviour_dialogTitle">El archivo original será...</string>
-  <string name="prefs_instant_behaviour_title">El archivo original será...</string>
+  <string name="prefs_camera_upload_source_path_title">Carpeta de la Camera (%1$s)</string>
+  <string name="prefs_camera_upload_source_path_title_required">requerido</string>
+  <string name="prefs_camera_upload_source_path_title_optional">opcional</string>
   <string name="upload_copy_files">Copiar archivo</string>
   <string name="upload_move_files">Mover archivo</string>
   <string name="pref_behaviour_entries_keep_file">dejado en la carpeta original</string>
@@ -404,10 +392,8 @@
   <string name="share_via_link_expiration_date_label">Caducidad</string>
   <string name="share_via_link_password_label">Contraseña</string>
   <string name="share_via_link_password_title">Asegurado</string>
-  <string name="share_via_link_edit_permission_label">Permitir edición</string>
-  <string name="share_via_link_show_file_listing_label">Mostrar lista de archivos</string>
   <string name="share_get_public_link_button">Obtener enlace</string>
-  <string name="share_with_title">Compartir con...</string>
+  <string name="share_with_title">Compartir con</string>
   <string name="share_with_edit_title">Compartir con %1$s</string>
   <string name="share_search">Buscar</string>
   <string name="search_users_and_groups_hint">Buscar usuarios y grupos</string>
@@ -459,9 +445,20 @@
   <string name="share_via_link_expiration_date_explanation_label">El enlace público expirará no más tarde de %1$d días después de su creación</string>
   <string name="share_via_link_default_name_template">%1$s enlace</string>
   <string name="private_link_info">Este es un enlace privado, solo las personas que tienen acceso al archivo/carpeta pueden usarlo. Úsalo como un enlace permanente para ti mismo o para señalar a otros a los archivos dentro de las acciones.</string>
-  <string name="file_private_link_error">Se produjo un error al intentar obtener el enlace privado para el archivo</string>
+  <string name="file_private_link_error">El enlace privado no está disponible para este archivo</string>
+  <string name="download_notification_channel_name">Descargas</string>
+  <string name="download_notification_channel_description">Ver el nombre y progreso del archivo a descargar</string>
+  <string name="upload_notification_channel_name">Cargas</string>
+  <string name="upload_notification_channel_description">Ver el nombre y progreso del archivo a subir</string>
+  <string name="media_service_notification_channel_name">Reproductor de música</string>
+  <string name="media_service_notification_channel_description">Ver reproductor de música</string>
+  <string name="file_sync_notification_channel_name">Sincronización de archivos</string>
+  <string name="file_sync_notification_channel_description">Ver resultados de la sincronización de archivos</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d seleccionado</item>
     <item quantity="other">%d seleccionados</item>
   </plurals>
+  <!--Welcome to oC intro features-->
+  <string name="welcome_feature_4_title">Cargas de la cámara</string>
+  <string name="welcome_feature_7_title">Seleccionar todo</string>
 </resources>

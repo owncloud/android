@@ -2,7 +2,8 @@
  *   ownCloud Android client application
  *
  *   @author masensio
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   @author Christian Schabesberger
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -52,10 +53,10 @@ public class ManageSpaceActivity extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setTitle(R.string.manage_space_title);
 
-        TextView descriptionTextView = (TextView) findViewById(R.id.general_description);
+        TextView descriptionTextView = findViewById(R.id.general_description);
         descriptionTextView.setText(getString(R.string.manage_space_description, getString(R.string.app_name)));
 
-        Button clearDataButton = (Button) findViewById(R.id.clearDataButton);
+        Button clearDataButton = findViewById(R.id.clearDataButton);
         clearDataButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -95,6 +96,8 @@ public class ManageSpaceActivity extends AppCompatActivity {
                     .getDefaultSharedPreferences(getApplicationContext());
 
             boolean passCodeEnable = appPrefs.getBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false);
+            boolean patternEnabled = appPrefs.getBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN,false);
+            boolean fingerprintEnabled = appPrefs.getBoolean(FingerprintActivity.PREFERENCE_SET_FINGERPRINT,false);
 
             String passCodeDigits[] = new String[4];
             if (passCodeEnable) {
@@ -102,6 +105,10 @@ public class ManageSpaceActivity extends AppCompatActivity {
                 passCodeDigits[1] = appPrefs.getString(PassCodeActivity.PREFERENCE_PASSCODE_D2, null);
                 passCodeDigits[2] = appPrefs.getString(PassCodeActivity.PREFERENCE_PASSCODE_D3, null);
                 passCodeDigits[3] = appPrefs.getString(PassCodeActivity.PREFERENCE_PASSCODE_D4, null);
+            }
+            String patternValue = new String();
+            if(patternEnabled){
+                patternValue = appPrefs.getString(PatternLockActivity.KEY_PATTERN,null);
             }
 
             // Clear data
@@ -122,7 +129,16 @@ public class ManageSpaceActivity extends AppCompatActivity {
                 appPrefsEditor.putString(PassCodeActivity.PREFERENCE_PASSCODE_D4, passCodeDigits[3]);
             }
 
+            // Recover pattern
+            if(patternEnabled){
+                appPrefsEditor.putString(PatternLockActivity.KEY_PATTERN,patternValue);
+            }
+
+            // Reenable fingerprint
+            appPrefsEditor.putBoolean(FingerprintActivity.PREFERENCE_SET_FINGERPRINT, fingerprintEnabled);
+
             appPrefsEditor.putBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, passCodeEnable);
+            appPrefsEditor.putBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN,patternEnabled);
             result = result && appPrefsEditor.commit();
 
             return result;
@@ -133,9 +149,9 @@ public class ManageSpaceActivity extends AppCompatActivity {
             super.onPostExecute(result);
             if (!result) {
                 Snackbar snackbar = Snackbar.make(
-                    findViewById(android.R.id.content),
-                    R.string.manage_space_clear_data,
-                    Snackbar.LENGTH_LONG
+                        findViewById(android.R.id.content),
+                        R.string.manage_space_clear_data,
+                        Snackbar.LENGTH_LONG
                 );
                 snackbar.show();
 

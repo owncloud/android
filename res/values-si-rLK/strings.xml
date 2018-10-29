@@ -8,6 +8,7 @@
   <!--TODO re-enable when "On Device" is available
     <string name="drawer_item_on_device">On device</string>-->
   <string name="drawer_open">විවෘත කරන්න</string>
+  <string name="drawer_help">උදව්</string>
   <string name="prefs_category_general">සාමාන්‍යයෙන්</string>
   <string name="prefs_category_more">වැඩි</string>
   <string name="prefs_accounts">ගිණුම්</string>
@@ -16,12 +17,12 @@
   <string name="auth_username">පරිශීලක නම</string>
   <string name="auth_password">මුර පදය</string>
   <string name="sync_string_files">ගොනු</string>
-  <string name="setup_btn_connect">සම්බන්ධ වන්න</string>
+  <string name="setup_btn_login">සම්බන්ධ වන්න</string>
   <string name="uploader_btn_upload_text">උඩුගත කිරීම</string>
   <string name="uploader_wrn_no_account_title">ගිණුමක් හමු නොවුණි</string>
   <string name="uploader_wrn_no_account_setup_btn_text">ස්ථාපනය</string>
   <string name="uploader_wrn_no_account_quit_btn_text">නික්මෙන්න</string>
-  <string name="file_list_seconds_ago">තත්පරයන්ට පෙර</string>
+  <string name="file_list_seconds_ago">මදකට පෙර</string>
   <string name="file_list_empty">මෙහි කිසිවක් නොමැත. යමක් උඩුගත කරන්න</string>
   <string name="file_list_folder">ෆෝල්ඩරය</string>
   <string name="file_list_folders">ෆෝල්ඩර</string>
@@ -82,4 +83,5 @@
   <string name="share_privilege_can_edit">සංස්කරණය කළ හැක</string>
   <string name="share_privilege_can_edit_create">සදන්න</string>
   <string name="share_privilege_can_edit_delete">මකන්න</string>
+  <!--Welcome to oC intro features-->
 </resources>

@@ -11,6 +11,7 @@
   <string name="actionbar_see_details">Detalles</string>
   <string name="actionbar_send_file">Enviar</string>
   <string name="actionbar_sort">Ordenar</string>
+  <string name="actionbar_descending">Descendente</string>
   <string name="actionbar_sort_title">Ordenar por</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
@@ -21,17 +22,17 @@
   <string name="drawer_item_uploads_list">Envíos</string>
   <string name="drawer_close">Pechar</string>
   <string name="drawer_open">Abrir</string>
+  <string name="drawer_feedback">Comentarios</string>
+  <string name="drawer_help">Axuda</string>
   <string name="prefs_category_general">Xeral</string>
   <string name="prefs_category_more">Máis</string>
+  <string name="prefs_category_security">Seguridade</string>
   <string name="prefs_accounts">Contas</string>
   <string name="prefs_manage_accounts">Xestionar as contas</string>
   <string name="prefs_passcode">Código de bloqueo</string>
-  <string name="prefs_instant_upload">Envío instantáneo de fotos</string>
-  <string name="prefs_instant_upload_summary">Enviar instantaneamente as fotos tiradas coa cámara</string>
-  <string name="prefs_instant_video_upload">Envío instantáneo de vídeos</string>
-  <string name="prefs_instant_video_upload_summary">Enviar instantaneamente os vídeos gravados coa cámara</string>
   <string name="prefs_log_summary">Isto empregase para rexistrar os problemas</string>
   <string name="prefs_log_summary_history">Isto amosa os rexistros gravados</string>
+  <string name="prefs_log_delete_history_button">Eliminar historial</string>
   <string name="prefs_help">Axuda</string>
   <string name="prefs_recommend">Recomendar a un amigo</string>
   <string name="prefs_feedback">Comentarios</string>
@@ -41,16 +42,20 @@
   <string name="recommend_subject">Tente %1$s no seu teléfono intelixente!</string>
   <string name="recommend_text">Quero convidalo a empregar %1$s no seu teléfono intelixente!
 Descárgueo de aquí: %2$s</string>
+  <string name="auth_check_server">Comprobar servidor</string>
   <string name="auth_host_url">Enderezo do servidor https://…</string>
   <string name="auth_username">Nome de usuario</string>
   <string name="auth_password">Contrasinal</string>
   <string name="auth_register">Novo en %1$s?</string>
   <string name="sync_string_files">Ficheiros</string>
-  <string name="setup_btn_connect">Conectar</string>
+  <string name="setup_btn_login">Conectar</string>
   <string name="uploader_btn_upload_text">Enviar</string>
+  <string name="uploader_top_message">Escoller cartafol a cargar</string>
   <string name="uploader_wrn_no_account_title">Non se atoparon contas</string>
+  <string name="uploader_wrn_no_account_text">Non hai contas %1$sno teu dispositivo. Por favor configura primero unha conta.</string>
   <string name="uploader_wrn_no_account_setup_btn_text">Instalación</string>
   <string name="uploader_wrn_no_account_quit_btn_text">Saír</string>
+  <string name="uploader_error_title_no_file_to_upload">Ningún ficheiro para actualizar </string>
   <string name="uploader_error_title_file_cannot_be_uploaded">Non é posíbel subir o ficheiro</string>
   <string name="uploader_error_message_source_file_not_copied">Produciuse un erro ao copiar o ficheiro a un cartafol temporal. Proba a envialo de novo.</string>
   <string name="file_list_seconds_ago">segundos atrás</string>
@@ -233,7 +238,6 @@ Descárgueo de aquí: %2$s</string>
   <string name="placeholder_filesize">389 KB</string>
   <string name="placeholder_timestamp">2012/05/18 12:23 PM</string>
   <string name="placeholder_media_time">12:23:45</string>
-  <string name="instant_upload_path">/EnvíoInstantáneo</string>
   <string name="conflict_title">Conflito de ficheiro</string>
   <string name="conflict_message">Que ficheiros quere conservar? Se selecciona ambas versións, o ficheiro copiado terá un número engadido ao nome.</string>
   <string name="conflict_keep_both">Manter ambos</string>
@@ -287,7 +291,6 @@ Descárgueo de aquí: %2$s</string>
   <string name="copy_file_invalid_overwrite">Este ficheiro xa existe no cartafol de destino</string>
   <string name="copy_file_error">Oconteceu un erro mentras se intentaba copiar este ficheiro ou cartafol</string>
   <string name="forbidden_permissions_copy">copiar este ficheiro</string>
-  <string name="prefs_category_details">Detalles</string>
   <string name="sync_folder_failed_content">A sincronización do cartafol %1$s non se completou</string>
   <string name="shared_subject_header">compartido</string>
   <string name="with_you_subject_header">con vostede</string>
@@ -312,7 +315,6 @@ Descárgueo de aquí: %2$s</string>
   <string name="share_confirm_public_link_button">Gardar</string>
   <string name="share_via_link_expiration_date_label">Caducidade</string>
   <string name="share_via_link_password_label">Contrasinal</string>
-  <string name="share_via_link_edit_permission_label">Permitir a edición</string>
   <string name="share_with_title">Compartir con</string>
   <string name="share_search">Buscar</string>
   <string name="search_users_and_groups_hint">Buscar usuarios e grupos</string>
@@ -329,4 +331,5 @@ Descárgueo de aquí: %2$s</string>
   <string name="share_via_link_default_password">*****</string>
   <string name="share_via_link_password_enforced_label">Contrasinal *</string>
   <string name="share_via_link_expiration_date_enforced_label">Caducidade *</string>
+  <!--Welcome to oC intro features-->
 </resources>

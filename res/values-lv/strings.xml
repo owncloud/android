@@ -20,13 +20,12 @@
   <string name="drawer_item_settings">Iestatījumi</string>
   <string name="drawer_close">Aizvērt</string>
   <string name="drawer_open">Atvērt</string>
+  <string name="drawer_feedback">Atsauksmes</string>
+  <string name="drawer_help">Palīdzība</string>
   <string name="prefs_category_general">Vispārīgi</string>
   <string name="prefs_category_more">Vairāk</string>
+  <string name="prefs_category_security">Drošība</string>
   <string name="prefs_accounts">Konti</string>
-  <string name="prefs_instant_upload">Automātiskā bilžu augšuplāde</string>
-  <string name="prefs_instant_upload_summary">Automātiski augšuplādēt tikko uzņemtās bildes</string>
-  <string name="prefs_instant_video_upload">Automātiskā video augšuplāde</string>
-  <string name="prefs_instant_video_upload_summary">Automātiski augšuplādēt tikko uzņemtos video</string>
   <string name="prefs_log_summary">Šo lieto lai ierakstītu informāciju par problēmām</string>
   <string name="prefs_log_summary_history">Šis parāda ierakstu žurnālu</string>
   <string name="prefs_help">Palīdzība</string>
@@ -36,7 +35,7 @@
   <string name="auth_username">Lietotājvārds</string>
   <string name="auth_password">Parole</string>
   <string name="sync_string_files">Datnes</string>
-  <string name="setup_btn_connect">Savienoties</string>
+  <string name="setup_btn_login">Savienoties</string>
   <string name="uploader_btn_upload_text">Augšupielādēt</string>
   <string name="uploader_wrn_no_account_title">Nav atrastu kontu</string>
   <string name="uploader_wrn_no_account_setup_btn_text">Iestatīt</string>
@@ -75,6 +74,7 @@
   <string name="uploader_upload_succeeded_ticker">Augšupielāde ir veiksmīga</string>
   <string name="uploader_upload_failed_ticker">Neizdevās augšupielādēt</string>
   <string name="uploader_upload_failed_content_single">Nevarēja pabeigt %1$s augšupielādēšanu</string>
+  <string name="uploader_upload_text_filename_hint">Datnes nosaukums</string>
   <string name="uploads_view_group_current_uploads">Pašreizējais</string>
   <string name="uploads_view_upload_status_succeeded">Pabeigts</string>
   <string name="uploads_view_upload_status_cancelled">Atcelts</string>
@@ -102,6 +102,7 @@
   <string name="common_rename">Pārsaukt</string>
   <string name="common_remove">Izņemt</string>
   <string name="confirmation_remove_local">Tikai lokālos</string>
+  <string name="confirmation_remove_public_share_title">Noņemt saiti</string>
   <string name="remove_success_msg">Veiksmīgi izņemts</string>
   <string name="remove_fail_msg">Neizdevās izņemt</string>
   <string name="rename_dialog_title">Ievadīt jaunu nosaukumu</string>
@@ -135,7 +136,6 @@
   <string name="ssl_validator_label_signature">Paraksts:</string>
   <string name="ssl_validator_label_signature_algorithm">Algoritms:</string>
   <string name="placeholder_filetype">PNG attēls</string>
-  <string name="instant_upload_path">/TūlītējaAugšupielāde</string>
   <string name="conflict_keep_both">Paturēt abas</string>
   <string name="preview_image_error_unknown_format">Šo attēlu nevar attēlot</string>
   <string name="share_link_password_title">Ievadiet paroli</string>
@@ -156,7 +156,6 @@
   <string name="folder_picker_choose_button_text">Izvēlieties</string>
   <string name="forbidden_permissions_move">lai pārvietotu šo datni</string>
   <string name="forbidden_permissions_copy">lai kopētu šo datni</string>
-  <string name="prefs_category_details">Detaļas</string>
   <string name="shared_subject_header">koplietots</string>
   <string name="with_you_subject_header">ar jums</string>
   <string name="auth_host_address">Servera adrese</string>
@@ -166,10 +165,14 @@
   <string name="share_dialog_title">Dalīties</string>
   <string name="share_cancel_public_link_button">Atcelt</string>
   <string name="share_confirm_public_link_button">Saglabāt</string>
+  <string name="share_via_link_expiration_date_label">Termiņš</string>
   <string name="share_via_link_password_label">Parole</string>
   <string name="share_search">Meklēt</string>
   <string name="share_privilege_can_share">Var dalīties</string>
   <string name="share_privilege_can_edit">var rediģēt</string>
   <string name="share_privilege_can_edit_create">izveidot</string>
+  <string name="share_privilege_can_edit_change">veikt izmaiņas</string>
   <string name="share_privilege_can_edit_delete">dzēst</string>
+  <string name="share_warning_about_forwarding_public_links">Katram, kuram ir saite, ir pieeja datnei/mapei</string>
+  <!--Welcome to oC intro features-->
 </resources>

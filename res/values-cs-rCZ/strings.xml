@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="about_android">%1$s Aplikace pro Android</string>
-  <string name="about_version">verze %1$s</string>
+  <string name="actionbar_search">Hledat v tomto adresáři</string>
   <string name="actionbar_sync">Obnovit účet</string>
   <string name="actionbar_upload">Nahrát</string>
   <string name="actionbar_upload_from_apps">Obsah z ostatních aplikací</string>
@@ -12,31 +11,31 @@
   <string name="actionbar_see_details">Podrobnosti</string>
   <string name="actionbar_send_file">Odeslat</string>
   <string name="actionbar_sort">Seřadit</string>
+  <string name="actionbar_descending">Klesající</string>
   <string name="actionbar_sort_title">Seřadit podle</string>
   <string name="actionbar_sort_by_name">A-Z</string>
-  <string name="actionbar_sort_by_date">Od nejnovějšího</string>
-  <string name="actionbar_sort_by_size">Od největšího</string>
-  <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
-  <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Všechny soubory</string>
-  <!--TODO re-enable when "On Device" is available
-    <string name="drawer_item_on_device">On device</string>-->
   <string name="drawer_item_settings">Nastavení</string>
   <string name="drawer_item_uploads_list">Nahrání</string>
   <string name="drawer_close">Zavřít</string>
   <string name="drawer_open">Otevřít</string>
+  <string name="drawer_feedback">Odezva</string>
+  <string name="drawer_help">Nápověda</string>
   <string name="prefs_category_general">Obecné</string>
   <string name="prefs_category_more">Více</string>
+  <string name="prefs_category_security">Zabezpečení</string>
   <string name="prefs_accounts">Účty</string>
   <string name="prefs_manage_accounts">Spravovat účty</string>
   <string name="prefs_passcode">Zámek bezpečnostního kódu</string>
-  <string name="prefs_instant_upload">Okamžité nahrávání obrázků</string>
-  <string name="prefs_instant_upload_summary">Okamžitě nahrávat vytvořené fotografie</string>
-  <string name="prefs_instant_video_upload">Okamžité nahrávání videa</string>
-  <string name="prefs_instant_video_upload_summary">Okamžitě odesílat nahrané video</string>
+  <string name="prefs_camera_picture_upload">Nahrání obrázku</string>
+  <string name="prefs_camera_picture_upload_summary">Automaticky nahrát obrázky snímané kamerou</string>
+  <string name="prefs_camera_video_upload">Nahrání videa</string>
+  <string name="prefs_camera_video_upload_summary">
+Automaticky nahrát video snímané kamerou
+</string>
   <string name="prefs_log_title">Povolit logování</string>
   <string name="prefs_log_summary">Použito k zaznamenávání problémů</string>
-  <string name="prefs_log_title_history">Historie logu</string>
+  <string name="prefs_log_title_history">Historie logování</string>
   <string name="prefs_log_summary_history">Zobrazuje zaznamenané logy</string>
   <string name="prefs_log_delete_history_button">Smazat historii</string>
   <string name="prefs_help">Nápověda</string>
@@ -53,7 +52,7 @@
   <string name="auth_password">Heslo</string>
   <string name="auth_register">Nováček s %1$s?</string>
   <string name="sync_string_files">Soubory</string>
-  <string name="setup_btn_connect">Připojit</string>
+  <string name="setup_btn_login">Přihlásit</string>
   <string name="uploader_btn_upload_text">Nahrát</string>
   <string name="uploader_top_message">Vybrat adresář k nahrávání</string>
   <string name="uploader_wrn_no_account_title">Nenalezen žádný účet</string>
@@ -79,6 +78,8 @@
   <string name="file_list_file">soubor</string>
   <string name="file_list_files">souborů</string>
   <string name="filedetails_select_file">Více informací získáte klepnutím na soubor.</string>
+  <string name="upload_to">Nahrát do %1$s</string>
+  <string name="upload_files_title">Soubory</string>
   <string name="filedetails_size">Velikost:</string>
   <string name="filedetails_type">Typ:</string>
   <string name="filedetails_created">Vytvořen:</string>
@@ -90,15 +91,13 @@
   <string name="action_share">Sdílet</string>
   <string name="common_yes">Ano</string>
   <string name="common_no">Ne</string>
-  <string name="common_ok">OK</string>
   <string name="common_remove_upload">Odstranit nahrávání</string>
   <string name="common_retry_upload">Opakovat nahrání</string>
   <string name="common_cancel_sync">Zrušit synchronizaci</string>
-  <string name="common_cancel">Zrušit</string>
   <string name="common_back">Zpět</string>
   <string name="common_save_exit">Uložit &amp; ukončit</string>
   <string name="common_error">Chyba</string>
-  <string name="common_loading">Načítání ...</string>
+  <string name="common_loading">Načítání...</string>
   <string name="common_unknown">neznámý</string>
   <string name="common_error_unknown">Neznámá chyba</string>
   <string name="common_pending">Nevyřízené</string>
@@ -106,9 +105,7 @@
   <string name="change_password">Změnit heslo</string>
   <string name="delete_account">Odebrat účet</string>
   <string name="create_account">Vytvořit účet</string>
-  <string name="upload_chooser_title">Nahrát z ...</string>
   <string name="uploader_info_dirname">Název adresáře</string>
-  <string name="uploader_upload_in_progress_ticker">Odesílám...</string>
   <string name="uploader_upload_in_progress_content">%1$d%% Odesílám %2$s</string>
   <string name="uploader_upload_succeeded_ticker">Odesílání úspěšné</string>
   <string name="uploader_upload_succeeded_content_single">%1$s nahráno</string>
@@ -125,8 +122,6 @@
   <string name="uploads_view_group_current_uploads">Aktuální</string>
   <string name="uploads_view_group_failed_uploads">Selhalo (dotykem opakovat)</string>
   <string name="uploads_view_group_finished_uploads">Odesláno</string>
-  <string name="uploads_view_group_file_count">%d souborů</string>
-  <string name="uploads_view_group_file_count_single">%d Soubor</string>
   <string name="uploads_view_upload_status_succeeded">Dokončeno</string>
   <string name="uploads_view_upload_status_cancelled">Zrušeno</string>
   <string name="uploads_view_upload_status_paused">Pozastaveno</string>
@@ -144,7 +139,6 @@
   <string name="uploads_view_upload_status_waiting_for_wifi">Čekání na wifi připojení</string>
   <string name="uploads_view_later_waiting_to_upload">Čekání na nahrávání</string>
   <string name="uploads_view_unsupported_media_type">Nepodporovaný typ média</string>
-  <string name="downloader_download_in_progress_ticker">Stahuji ...</string>
   <string name="downloader_download_in_progress_content">%1$d%% Stahuji %2$s</string>
   <string name="downloader_download_succeeded_ticker">Stažení úspěšné</string>
   <string name="downloader_download_succeeded_content">%1$s staženo</string>
@@ -200,8 +194,8 @@
   <string name="media_rewind_description">Tlačítko Přetočit</string>
   <string name="media_play_pause_description">Tlačítko Přehrát/Pozastavit</string>
   <string name="media_forward_description">Tlačítko Rychle vpřed</string>
-  <string name="auth_getting_authorization">Příjem autorizace ...</string>
-  <string name="auth_trying_to_login">Pokus o přihlášení ...</string>
+  <string name="upload_from_camera_title">Obrázek z kamery</string>
+  <string name="auth_getting_authorization">Kontroluji pověření...</string>
   <string name="auth_no_net_conn_title">Žádné síťové spojení</string>
   <string name="auth_nossl_plain_ok_title">Zabezpečené spojení není k dispozici</string>
   <string name="auth_connection_established">Spojení navázáno</string>
@@ -255,7 +249,6 @@
   <string name="wait_checking_credentials">Ověřování uložených přihlašovacích údajů</string>
   <string name="filedisplay_unexpected_bad_get_content">Neočekávaný problém - zkuste zvolit soubor jinou aplikací</string>
   <string name="filedisplay_no_file_selected">Žádný soubor nebyl vybrán</string>
-  <string name="activity_chooser_title">Odeslat odkaz ...</string>
   <string name="wait_for_tmp_copy_from_private_storage">Kopírování souboru z privátního úložiště</string>
   <string name="oauth_check_onoff">Přihlásit se s oAuth2</string>
   <string name="oauth_login_connection">Připojování k OAuth2 server</string>
@@ -292,9 +285,11 @@
   <string name="placeholder_filesize">389 KB</string>
   <string name="placeholder_timestamp">2012/05/18 12:23 PM</string>
   <string name="placeholder_media_time">12:23:45</string>
-  <string name="instant_upload_on_wifi">Nahrávat obrázky pouze přes wifi</string>
-  <string name="instant_video_upload_on_wifi">Odesílat videa pouze přes wifi</string>
-  <string name="instant_upload_path">/InstantUpload</string>
+  <string name="camera_picture_upload_on_wifi">Nahrávat obrázky pouze přes wifi</string>
+  <string name="camera_video_upload_on_wifi">Odesílat videa pouze přes wifi</string>
+  <string name="confirmation_disable_camera_uploads_title">Potvrzení</string>
+  <string name="confirmation_disable_pictures_upload_message">Opravdu chcete tuto funkci deaktivovat? Nevyřízené obrázky nebudou nahrány</string>
+  <string name="confirmation_disable_videos_upload_message">Opravdu chcete tuto funkci deaktivovat? Nevyřízená videa nebudou nahrána</string>
   <string name="conflict_title">Konflikt souboru</string>
   <string name="conflict_message">Které soubory chcete ponechat? Pokud zvolíte obě verze, zkopírovaný soubor bude mít název doplněný o číslo.</string>
   <string name="conflict_keep_both">Ponechat oba</string>
@@ -303,7 +298,7 @@
   <string name="preview_image_description">Náhled obrázku</string>
   <string name="preview_image_error_unknown_format">Obrázek nelze zobrazit</string>
   <string name="error__upload__local_file_not_copied">%1$s nelze zkopírovat do místního adresáře %2$s</string>
-  <string name="prefs_instant_upload_path_title">Cesta pro nahrání</string>
+  <string name="prefs_camera_picture_upload_path_title">Cesta k nahrání obrázku</string>
   <string name="share_link_no_support_share_api">Je nám líto, ale sdílení není na vašem serveru povoleno. Kontaktujte svého
 správce systému.</string>
   <string name="share_link_file_no_exist">Nelze sdílet. Zkontrolujte prosím že soubor existuje</string>
@@ -343,7 +338,8 @@ správce systému.</string>
   <string name="log_send_history_button">Historie odesílání</string>
   <string name="log_send_no_mail_app">Nenalezena aplikace pro odesílání logů. Nainstalujte prosím emailovou aplikaci.</string>
   <string name="log_send_mail_subject">%1$s logy aplikace pro Android</string>
-  <string name="log_progress_dialog_text">Nahrávání dat ...</string>
+  <string name="log_progress_dialog_text">Načítání dat…</string>
+  <string name="actionbar_select_all">Vybrat vše</string>
   <string name="saml_authentication_required_text">Vyžadováno přihlášení</string>
   <string name="saml_authentication_wrong_pass">Nesprávné heslo</string>
   <string name="actionbar_move">Přesunout</string>
@@ -359,9 +355,8 @@ správce systému.</string>
   <string name="copy_file_invalid_overwrite">Soubor již v cílovém adresáři existuje</string>
   <string name="copy_file_error">Při pokusu o zkopírování tohoto souboru či adresáře došlo k chybě</string>
   <string name="forbidden_permissions_copy">pro zkopírování tohoto souboru</string>
-  <string name="prefs_category_instant_uploading">Okamžitá odesílání</string>
-  <string name="prefs_category_details">Podrobnosti</string>
-  <string name="prefs_instant_video_upload_path_title">Cesta pro nahrání videí</string>
+  <string name="prefs_category_camera_upload">Nahrávání fotoaparátu</string>
+  <string name="prefs_camera_video_upload_path_title">Cesta k nahrání videa</string>
   <string name="sync_folder_failed_content">Synchronizaci adresáře %1$s nelze dokončit</string>
   <string name="shared_subject_header">sdílené</string>
   <string name="with_you_subject_header">s vámi</string>
@@ -379,11 +374,9 @@ správce systému.</string>
   <string name="file_list__footer__files">%1$d soubory(ů)</string>
   <string name="file_list__footer__files_and_folder">%1$d soubory(ů), 1 adresář</string>
   <string name="file_list__footer__files_and_folders">%1$d soubory(ů), %2$d adresáře(ů)</string>
-  <string name="prefs_instant_upload_source_path_title">Adresář fotoaparátu (%1$s)</string>
-  <string name="prefs_instant_upload_source_path_title_required">vyžadován</string>
-  <string name="prefs_instant_upload_source_path_title_optional">nepovinný</string>
-  <string name="prefs_instant_behaviour_dialogTitle">Originální soubor bude...</string>
-  <string name="prefs_instant_behaviour_title">Originální soubor bude...</string>
+  <string name="prefs_camera_upload_source_path_title">Adresář fotoaparátu (%1$s)</string>
+  <string name="prefs_camera_upload_source_path_title_required">vyžadován</string>
+  <string name="prefs_camera_upload_source_path_title_optional">nepovinný</string>
   <string name="upload_copy_files">Zkopírovat soubor</string>
   <string name="upload_move_files">Přesunout soubor</string>
   <string name="pref_behaviour_entries_keep_file">ponechán ve výchozím adresáři</string>
@@ -403,10 +396,8 @@ správce systému.</string>
   <string name="share_via_link_expiration_date_label">Konec platnosti</string>
   <string name="share_via_link_password_label">Heslo</string>
   <string name="share_via_link_password_title">Zabezpečeno</string>
-  <string name="share_via_link_edit_permission_label">Povolit úpravy</string>
-  <string name="share_via_link_show_file_listing_label">Ukázat výpis souborů</string>
   <string name="share_get_public_link_button">Vytvořit odkaz</string>
-  <string name="share_with_title">Sdílet s ...</string>
+  <string name="share_with_title">Sdílet s</string>
   <string name="share_with_edit_title">Sdílet s %1$s</string>
   <string name="share_search">Hledat</string>
   <string name="search_users_and_groups_hint">Prohledat uživatele a skupiny</string>
@@ -459,10 +450,23 @@ správce systému.</string>
   <string name="share_via_link_expiration_date_explanation_label">Platnost tohoto veřejného odkazu skončí nejpozději %1$d dní po jeho vytvoření</string>
   <string name="share_via_link_default_name_template">%1$s odkaz</string>
   <string name="private_link_info">Toto je soukromý odkaz, pouze osoby s přístupem k souboru/složce jej mohou použít. Použijte jej jako trvalý odkaz pro sebe nebo přejděte k souborům v rámci sdílených souborů</string>
-  <string name="file_private_link_error">Při pokusu o získání soukromého odkazu na soubor došlo k chybě</string>
+  <string name="file_private_link_error">Soukromý odkaz není pro tento soubor k dispozici</string>
+  <string name="download_notification_channel_name">Stažení</string>
+  <string name="download_notification_channel_description">Ukázat název souboru a průběh stahování</string>
+  <string name="upload_notification_channel_name">Nahrání</string>
+  <string name="upload_notification_channel_description">Ukázat název souboru a průběh nahrávání</string>
+  <string name="media_service_notification_channel_name">Hudební přehrávač</string>
+  <string name="media_service_notification_channel_description">Přehrát přehrávač hudby</string>
+  <string name="file_sync_notification_channel_name">Synchronizace souborů</string>
+  <string name="file_sync_notification_channel_description">Zobrazit výsledek synchronizace souborů</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d vybrán</item>
     <item quantity="few">%d vybrány</item>
+    <item quantity="many">%d vybráno</item>
     <item quantity="other">%d vybráno</item>
   </plurals>
+  <!--Welcome to oC intro features-->
+  <string name="welcome_feature_4_title">Nahrávání fotoaparátu</string>
+  <string name="welcome_feature_7_title">Vybrat vše</string>
+  <string name="welcome_feature_8_title">Dostupné offline</string>
 </resources>

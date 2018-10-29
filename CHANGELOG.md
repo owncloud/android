@@ -1,3 +1,108 @@
+## 2.9.0 beta v2 (October 2018)
+- Bug fixes, including:
+  + Fix some crashes:
+    - When rebooting the device
+    - When copying, moving files or choosing a folder within camera uploads feature
+  + Fix some failing downloads
+  + Fix pattern lock being asked very often after disabling fingerprint lock
+
+## 2.9.0 beta v1 (September 2018)
+- Switch apache and jackrabbit deprecated libraries to more modern and active library, OkHttp
+- Search in current folder
+- Select all/inverse files
+- New login view
+- Show re-shares
+- UI improvements, including:
+  + Change edit share icon
+  + New gradient in top of the list of files
+
+## 2.8.0 (July 2018)
+- Side menu redesign
+- User quota in side menu
+- Descending option when sorting
+- New downloaded/offline icons and pins
+- One panel design for tablets
+- Custom tabs for OAuth
+- Improve public link sharing permissions for folders
+- Redirect to login view when SAML session expires
+- UI improvements, including:
+  + Fab button above snackbar
+  + Toggle to control password visibility when sharing via link
+  + Adaptive icons support (Android 8 required)
+- Bug fixes, including:
+  + Fix block for deleted basic/oauth accounts
+  + Fix available offline when renaming files
+  + Fix camera directory not selectable in root
+  + Fix guest account showing an empty file list
+  + Hide keyboard when going back from select user view
+  + Fix black "downloading screen" message when downloading an image offline
+  + Show proper timestamp in uploads/downloads notification
+  + Fix sharing when disabling files versioning app in server
+
+## 2.8.0 beta v1 (May 2018)
+- Side menu redesign
+- User quota in side menu
+- Descending option when sorting
+- New downloaded/offline icons and pins
+- One panel design for tablets
+- Custom tabs for OAuth
+- UI improvements, including:
+  + Fab button above snackbar
+  + Toggle to control password visibility when sharing via link
+- Bug fixes, including:
+  + Fix block for deleted basic/oauth accounts
+  + Fix available offline when renaming files
+  + Fix camera directory not selectable in root
+  + Fix guest account showing an empty file list
+  + Hide keyboard when going back from select user view
+  + Fix black "downloading screen" message when downloading an image offline.
+
+## 2.7.0 (April 2018)
+- Fingerprint lock
+- Pattern lock (contribution)
+- Upload picture directly from camera (contribution)
+- GIF support
+- New features wizard
+- UI improvements, including:
+  + Display file size during upload (contribution)
+  + Animations when switching folders
+- Bug fixes, including:
+  + Hide always visible notification in Android 8
+
+## 2.7.0 beta v1 (March 2018)
+- Fingerprint lock
+- Pattern lock (contribution)
+- Upload picture directly from camera (contribution)
+- GIF support
+- New features wizard
+- UI improvements, including:
+  + Display file size during upload (contribution)
+- Bug fixes, including:
+  + Hide always visible notification in Android 8
+
+## 2.6.0 (February 2018)
+- Camera uploads, replacing instant uploads (Android 5 or higher required)
+- Android 8 support
+- Notification channels (Android 8 required)
+- Private link (OC X required)
+- Fixed typos in some translations
+
+## 2.5.1 beta v1 (November 2017)
+- Camera uploads (replacing instant uploads)
+- Android O support
+- Notification channels (Android O required)
+- Private link (OC X required)
+- Fixed typos in some translations
+
+## 2.5.0 (October 2017)
+- OAuth2 support
+- Show file listing option (anonymous upload) when sharing a folder (OC X required)
+- First approach to fix instant uploads
+- UI improvements, including:
+  + Hide share icon when resharing is forbidden
+  + Improve feedback when uploading infected files
+- Bug fixes
+
 ## 2.4.0 (May 2017)
 - Video streaming
 - Multiple public links per file (OC X required)

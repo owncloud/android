@@ -3,7 +3,8 @@
  *
  * @author David A. Velasco
  * @author David González Verdugo
- * Copyright (C) 2017 ownCloud GmbH.
+ * @author Christian Schabesberger
+ * Copyright (C) 2018 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -173,13 +174,13 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
 
         View view = inflater.inflate(R.layout.video_preview, container, false);
 
-        mProgressBar = (ProgressBar) view.findViewById(R.id.syncProgressBar);
+        mProgressBar = view.findViewById(R.id.syncProgressBar);
         DisplayUtils.colorPreLollipopHorizontalProgressBar(mProgressBar);
         mProgressBar.setVisibility(View.GONE);
 
-        simpleExoPlayerView = (SimpleExoPlayerView) view.findViewById(R.id.video_player);
+        simpleExoPlayerView = view.findViewById(R.id.video_player);
 
-        fullScreenButton = (ImageButton) view.findViewById(R.id.fullscreen_button);
+        fullScreenButton = view.findViewById(R.id.fullscreen_button);
 
         fullScreenButton.setOnClickListener(this);
 
@@ -352,7 +353,7 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
                 mContainerActivity,
                 getActivity()
         );
-        mf.filter(menu);
+        mf.filter(menu, false, false);
 
         // additional restrictions for this fragment
 
@@ -602,6 +603,7 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
         Log_OC.v(TAG, "onConfigurationChanged " + this);
     }
 

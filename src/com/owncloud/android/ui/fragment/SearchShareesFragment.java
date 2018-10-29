@@ -3,7 +3,8 @@
  *
  *   @author masensio
  *   @author David A. Velasco
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   @author Christian Schabesberger
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -115,7 +116,7 @@ public class SearchShareesFragment extends Fragment implements ShareUserListAdap
         View view = inflater.inflate(R.layout.search_users_groups_layout, container, false);
 
         // Get the SearchView and set the searchable configuration
-        SearchView searchView = (SearchView) view.findViewById(R.id.searchView);
+        SearchView searchView = view.findViewById(R.id.searchView);
         SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
         searchView.setSearchableInfo(searchManager.getSearchableInfo(
                 getActivity().getComponentName())   // assumes parent activity is the searchable activity
@@ -181,7 +182,7 @@ public class SearchShareesFragment extends Fragment implements ShareUserListAdap
         );
 
         // Show data
-        ListView usersList = (ListView) getView().findViewById(R.id.searchUsersListView);
+        ListView usersList = getView().findViewById(R.id.searchUsersListView);
 
         if (mShares.size() > 0) {
             usersList.setVisibility(View.VISIBLE);
@@ -218,9 +219,27 @@ public class SearchShareesFragment extends Fragment implements ShareUserListAdap
     }
 
     @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        hideSoftKeyboard();
+    }
+
+    @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    private void hideSoftKeyboard() {
+        if (getView() != null) {
+            View searchView = getView().findViewById(R.id.searchView);
+            if (searchView != null) {
+                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (imm != null) {
+                    imm.hideSoftInputFromWindow(searchView.getWindowToken(), 0);
+                }
+            }
+        }
     }
 
     @Override

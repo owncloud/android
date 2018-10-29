@@ -3,7 +3,8 @@
  *
  *   @author masensio
  *   @author David A. Velasco
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   @author Christian Schabesberger
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -46,25 +47,25 @@ public class SslErrorViewAdapter implements SslUntrustedCertDialog.ErrorViewAdap
         
         /// refresh
         if (mSslError.hasError(SslError.SSL_UNTRUSTED)) {
-            ((TextView)dialogView.findViewById(R.id.reason_cert_not_trusted)).setVisibility(View.VISIBLE);
+            dialogView.findViewById(R.id.reason_cert_not_trusted).setVisibility(View.VISIBLE);
         } else {
             dialogView.findViewById(R.id.reason_cert_not_trusted).setVisibility(View.GONE);
         }
         
         if (mSslError.hasError(SslError.SSL_EXPIRED)) {
-            ((TextView)dialogView.findViewById(R.id.reason_cert_expired)).setVisibility(View.VISIBLE);
+            dialogView.findViewById(R.id.reason_cert_expired).setVisibility(View.VISIBLE);
         } else {
             dialogView.findViewById(R.id.reason_cert_expired).setVisibility(View.GONE);
         }
         
         if (mSslError.getPrimaryError() == SslError.SSL_NOTYETVALID) {
-            ((TextView)dialogView.findViewById(R.id.reason_cert_not_yet_valid)).setVisibility(View.VISIBLE);
+            dialogView.findViewById(R.id.reason_cert_not_yet_valid).setVisibility(View.VISIBLE);
         } else {
             dialogView.findViewById(R.id.reason_cert_not_yet_valid).setVisibility(View.GONE);
         }
         
         if (mSslError.getPrimaryError() == SslError.SSL_IDMISMATCH) {
-            ((TextView)dialogView.findViewById(R.id.reason_hostname_not_verified)).setVisibility(View.VISIBLE);
+            dialogView.findViewById(R.id.reason_hostname_not_verified).setVisibility(View.VISIBLE);
         } else {
             dialogView.findViewById(R.id.reason_hostname_not_verified).setVisibility(View.GONE);
         }

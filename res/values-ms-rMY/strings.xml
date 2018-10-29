@@ -7,12 +7,14 @@
   <string name="actionbar_settings">Set</string>
   <string name="actionbar_send_file">Hantar</string>
   <string name="actionbar_sort">Susun</string>
+  <string name="actionbar_descending">Menurun</string>
   <string name="actionbar_sort_title">Susun mengikut</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <!--TODO re-enable when "On Device" is available
     <string name="drawer_item_on_device">On device</string>-->
   <string name="drawer_open">Buka</string>
+  <string name="drawer_help">Bantuan</string>
   <string name="prefs_category_general">Umum</string>
   <string name="prefs_category_more">Lanjutan</string>
   <string name="prefs_accounts">Akaun</string>
@@ -20,7 +22,7 @@
   <string name="auth_username">Nama pengguna</string>
   <string name="auth_password">Kata laluan</string>
   <string name="sync_string_files">Fail-fail</string>
-  <string name="setup_btn_connect">Berhubung</string>
+  <string name="setup_btn_login">Berhubung</string>
   <string name="uploader_btn_upload_text">Muat naik</string>
   <string name="uploader_wrn_no_account_title">Tiada akaun dijumpai</string>
   <string name="uploader_wrn_no_account_quit_btn_text">Berhenti</string>
@@ -62,4 +64,5 @@
   <string name="share_search">Cari</string>
   <string name="share_privilege_can_share">boleh berkongsi</string>
   <string name="share_privilege_can_edit">boleh mengubah</string>
+  <!--Welcome to oC intro features-->
 </resources>

@@ -1,8 +1,9 @@
 # [ownCloud](https://owncloud.org) Android app
-[![](https://owncloud.org/wp-content/themes/owncloudorgnew/assets/img/clients/buttons/googleplay.png)](https://play.google.com/store/apps/details?id=com.owncloud.android)
 
-[![](https://lh3.googleusercontent.com/dJv5wNQ-_pm8QR25lbcwrSAJ_8TPDlk4z9B5CADN40A9KWWoDmGuchK3rMkKthBBTw=h500)](https://play.google.com/store/apps/details?id=com.owncloud.android) [![](https://lh3.googleusercontent.com/v8I1GBePMpg-68TTTcal2LrNLHK1dmKWULxpNgZyGPu0LpXkbUWZooKiLrw331z9Q-c=h500)](https://play.google.com/store/apps/details?id=com.owncloud.android) [![](https://lh3.googleusercontent.com/NsSPoFha6hqyukQKAKSZWPNo_vt6gshMBlHjnlpowUCHO8-ZLjeslPh82nAttoA-Au8=h500)](https://play.google.com/store/apps/details?id=com.owncloud.android)
+<a href="https://play.google.com/store/apps/details?id=com.owncloud.android"><img src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" height="75"></a><a href="https://f-droid.org/packages/com.owncloud.android/"><img src="https://f-droid.org/badge/get-it-on.png" height="75"></a>
 
+<img src="readme_resources/filelist_device.png" width="280"/> <img src="readme_resources/photos_device.png" width="280"/> <img src="readme_resources/share_device.png" width="280" />
+ 
 ## Join development!
 
 **Build status:** master ![](https://api.travis-ci.org/owncloud/android.svg?branch=master) stable ![](https://api.travis-ci.org/owncloud/android.svg?branch=stable)
@@ -12,6 +13,22 @@ Easy starting points are also reviewing [pull requests](https://github.com/owncl
 
 **IRC channel:** [#owncloud-android](https://webchat.freenode.net/?channels=owncloud-android) on freenode IRC
 
-**Beta version** [beta version](https://github.com/owncloud/android/raw/beta/apks/latest.apk)
-
 **License:** [GPLv2](https://github.com/owncloud/android/blob/master/LICENSE.txt)
+
+## Join testing!
+
+If you are interested in testing the new features before being released and give us your feedback, please try out our beta channels:
+
+**Play Store**
+
+1. Download ownCloud app from Play Store.
+2. Go to ownCloud tab in Play Store and scroll down to the end of the view.
+3. Press the **I'M IN** button to join the beta program and your final app will be replaced with the beta one.
+
+Note: If you want to use the ownCloud production version you have to leave the beta program, uninstall the app, and reinstall the production version.
+
+**F-Droid**
+
+1. Go to ownCloud tab in F-Droid.
+2. Open versions section.
+3. Download the latest version that contains beta in the name.

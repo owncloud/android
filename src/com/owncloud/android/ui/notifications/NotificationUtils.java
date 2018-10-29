@@ -19,8 +19,6 @@
 
 package com.owncloud.android.ui.notifications;
 
-import java.util.Random;
-
 import android.app.NotificationManager;
 import android.content.Context;
 import android.os.Handler;
@@ -29,6 +27,8 @@ import android.os.Process;
 import android.support.v4.app.NotificationCompat;
 
 import com.owncloud.android.R;
+
+import java.util.Random;
 
 public class NotificationUtils {
 
@@ -51,7 +51,6 @@ public class NotificationUtils {
         return new NotificationCompat.Builder(context).
             setColor(context.getResources().getColor(R.color.primary));
     }
-
 
     public static void cancelWithDelay(
             final NotificationManager notificationManager,

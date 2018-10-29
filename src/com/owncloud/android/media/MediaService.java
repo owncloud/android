@@ -2,7 +2,8 @@
  *   ownCloud Android client application
  *
  *   @author David A. Velasco
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   @author Christian Schabesberger
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -23,6 +24,7 @@ package com.owncloud.android.media;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.accounts.OnAccountsUpdateListener;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -38,7 +40,7 @@ import android.net.wifi.WifiManager.WifiLock;
 import android.os.FileObserver;
 import android.os.IBinder;
 import android.os.PowerManager;
-import android.support.v7.app.NotificationCompat;
+import android.support.v4.app.NotificationCompat;
 import android.widget.Toast;
 
 import com.owncloud.android.R;
@@ -65,6 +67,9 @@ public class MediaService extends Service implements OnCompletionListener, OnPre
 
     private static final String MY_PACKAGE = MediaService.class.getPackage() != null ?
             MediaService.class.getPackage().getName() : "com.owncloud.android.media";
+
+    private static final String MEDIA_SERVICE_NOTIFICATION_CHANNEL_ID =
+            "MEDIA_SERVICE_NOTIFICATION_CHANNEL";
     
     /// Intent actions that we are prepared to handle
     public static final String ACTION_PLAY_FILE = MY_PACKAGE + ".action.PLAY_FILE";
@@ -106,8 +111,8 @@ public class MediaService extends Service implements OnCompletionListener, OnPre
         PREPARING,      
         PLAYING,        
         PAUSED 
-    };
-    
+    }
+
 
     /** Current state */
     private State mState = State.STOPPED;
@@ -238,10 +243,27 @@ public class MediaService extends Service implements OnCompletionListener, OnPre
         super.onCreate();
         Log_OC.d(TAG, "Creating ownCloud media service");
 
-        mWifiLock = ((WifiManager) getSystemService(Context.WIFI_SERVICE)).
+        mWifiLock = ((WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE)).
                 createWifiLock(WifiManager.WIFI_MODE_FULL, MEDIA_WIFI_LOCK_TAG);
 
         mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+
+        // Configure notification channel
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            NotificationChannel mNotificationChannel;
+            // The user-visible name of the channel.
+            CharSequence name = getString(R.string.media_service_notification_channel_name);
+            // The user-visible description of the channel.
+            String description = getString(R.string.media_service_notification_channel_description);
+            // Set importance low: show the notification everywhere but with no sound
+            int importance = NotificationManager.IMPORTANCE_LOW;
+            mNotificationChannel = new NotificationChannel(MEDIA_SERVICE_NOTIFICATION_CHANNEL_ID,
+                    name, importance);
+            // Configure the notification channel.
+            mNotificationChannel.setDescription(description);
+            mNotificationManager.createNotificationChannel(mNotificationChannel);
+        }
+
         mNotificationBuilder = new NotificationCompat.Builder(this);
         mNotificationBuilder.setColor(this.getResources().getColor(R.color.primary));
         mAudioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
@@ -253,7 +275,7 @@ public class MediaService extends Service implements OnCompletionListener, OnPre
             @Override
             public void onAccountsUpdated(Account[] accounts) {
                 // stop playback if account of the played media files was removed
-                if (mAccount != null && !AccountUtils.exists(mAccount, MediaService.this)) {
+                if (mAccount != null && !AccountUtils.exists(mAccount.name, MediaService.this)) {
                     processStopRequest(false);
                 }
             }
@@ -605,6 +627,7 @@ public class MediaService extends Service implements OnCompletionListener, OnPre
         mNotificationBuilder.setTicker(ticker);
         mNotificationBuilder.setContentTitle(ticker);
         mNotificationBuilder.setContentText(content);
+        mNotificationBuilder.setChannelId(MEDIA_SERVICE_NOTIFICATION_CHANNEL_ID);
 
         mNotificationManager.notify(R.string.media_notif_ticker, mNotificationBuilder.build());
     }
@@ -638,6 +661,7 @@ public class MediaService extends Service implements OnCompletionListener, OnPre
                 PendingIntent.FLAG_UPDATE_CURRENT));
         mNotificationBuilder.setContentTitle(ticker);
         mNotificationBuilder.setContentText(content);
+        mNotificationBuilder.setChannelId(MEDIA_SERVICE_NOTIFICATION_CHANNEL_ID);
 
         startForeground(R.string.media_notif_ticker, mNotificationBuilder.build());
     }

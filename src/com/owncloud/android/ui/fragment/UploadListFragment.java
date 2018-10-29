@@ -2,7 +2,8 @@
  *   ownCloud Android client application
  *
  *   @author LukeOwncloud
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   @author Christian Schabesberger
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -28,7 +29,7 @@ import android.widget.ExpandableListView;
 import android.widget.ListView;
 
 import com.owncloud.android.R;
-import com.owncloud.android.db.OCUpload;
+import com.owncloud.android.datamodel.OCUpload;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.adapter.ExpandableUploadListAdapter;
@@ -131,7 +132,7 @@ public class UploadListFragment extends ExpandableListFragment {
          * @param file
          * @return return true if click was handled.
          */
-        public boolean onUploadItemClick(OCUpload file);
+        boolean onUploadItemClick(OCUpload file);
 
     }
 

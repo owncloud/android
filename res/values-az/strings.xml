@@ -17,13 +17,12 @@
   <!--TODO re-enable when "On Device" is available
     <string name="drawer_item_on_device">On device</string>-->
   <string name="drawer_open">Aç</string>
+  <string name="drawer_feedback">Geriyə cavab</string>
+  <string name="drawer_help">Kömək</string>
   <string name="prefs_category_general">Ümumi</string>
   <string name="prefs_category_more">Daha da</string>
+  <string name="prefs_category_security">Təhlükəsizlik</string>
   <string name="prefs_accounts">Hesablar</string>
-  <string name="prefs_instant_upload">Ani şəkil yükləmələri</string>
-  <string name="prefs_instant_upload_summary">Kamera vasitəsi ilə götürülmüş şəkillərin tez yüklənməsi</string>
-  <string name="prefs_instant_video_upload">Ani video yükləmələri</string>
-  <string name="prefs_instant_video_upload_summary">Kamera vasitəsi ilə yazılmış videoların tez yüklənməsi</string>
   <string name="prefs_log_summary">Bu problemlərin jurnal edilməsi üçün istifadə edilir</string>
   <string name="prefs_log_summary_history">Bu, yazılmış jurnalları göstərir</string>
   <string name="prefs_help">Kömək</string>
@@ -39,7 +38,7 @@
   <string name="auth_password">Şifrə</string>
   <string name="auth_register">Yeni edək %1$s?</string>
   <string name="sync_string_files">Fayllar</string>
-  <string name="setup_btn_connect">Qoşul</string>
+  <string name="setup_btn_login">Qoşul</string>
   <string name="uploader_btn_upload_text">Serverə yüklə</string>
   <string name="uploader_wrn_no_account_title">Hesab tapılmadı</string>
   <string name="uploader_wrn_no_account_setup_btn_text">Qurulum</string>
@@ -196,7 +195,6 @@ Aşağıda göstərilən %5$s-də olan daxili və xarici fayl(lar) link edilmiş
   <string name="placeholder_filesize">389 KB</string>
   <string name="placeholder_timestamp">2012/05/18 12:23</string>
   <string name="placeholder_media_time">12:23:45</string>
-  <string name="instant_upload_path">/CəldYükləmə</string>
   <string name="conflict_keep_both">Birlikdə saxla</string>
   <string name="preview_image_description">Şəkili göstər</string>
   <string name="preview_image_error_unknown_format">Bu şəkil göstərilə bilməz</string>
@@ -238,7 +236,6 @@ inzibatçınızla əlaqə saxlayasınız.</string>
   <string name="move_file_error">Fayl və ya qovluğun köçürülməsi müddətində səhv baş verdi</string>
   <string name="forbidden_permissions_move">bu faylı köçürtmək</string>
   <string name="copy_file_invalid_overwrite">Fayl artıq mənsəb qovluğunda mövcuddur</string>
-  <string name="prefs_category_details">Detallar</string>
   <string name="subject_user_shared_with_you">%1$s paylaşdı \"%2$s\" sizinlə</string>
   <string name="auth_refresh_button">Qoşulmanı yenilə</string>
   <string name="auth_host_address">Server ünvanı</string>
@@ -251,4 +248,5 @@ inzibatçınızla əlaqə saxlayasınız.</string>
   <string name="share_privilege_can_share">yayımlaya bilərsiniz</string>
   <string name="share_privilege_can_edit">dəyişmək olar</string>
   <string name="share_privilege_can_edit_delete">sil</string>
+  <!--Welcome to oC intro features-->
 </resources>

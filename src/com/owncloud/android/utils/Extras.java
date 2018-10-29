@@ -2,6 +2,7 @@
  *  ownCloud Android client application
  *
  *  @author David A. Velasco
+ *  @author David González Verdugo
  *
  *  Copyright (C) 2017 ownCloud GmbH.
  *
@@ -36,5 +37,14 @@ public class Extras {
     public static final String EXTRA_OLD_FILE_PATH = "OLD_FILE_PATH";
     public static final String EXTRA_UPLOAD_RESULT = "RESULT";
 
+    // for Camera uploads
+    public static final String EXTRA_CAMERA_UPLOADS_SYNC_JOB_ID = "EXTRA_CAMERA_UPLOADS_SYNC_JOB_ID";
+    public static final String EXTRA_CAMERA_UPLOADS_PICTURES_PATH = "EXTRA_CAMERA_UPLOADS_PICTURES_PATH";
+    public static final String EXTRA_CAMERA_UPLOADS_VIDEOS_PATH = "EXTRA_CAMERA_UPLOADS_VIDEOS_PATH";
+    public static final String EXTRA_CAMERA_UPLOADS_SOURCE_PATH = "EXTRA_CAMERA_UPLOADS_SOURCE_PATH";
+    public static final String EXTRA_CAMERA_UPLOADS_BEHAVIOR_AFTER_UPLOAD =
+            "EXTRA_CAMERA_UPLOADS_BEHAVIOR_AFTER_UPLOAD";
 
+    // for Available offline
+    public static final String EXTRA_AVAILABLE_OFFLINE_SYNC_JOB_ID = "EXTRA_AVAILABLE_OFFLINE_SYNC_JOB_ID";
 }

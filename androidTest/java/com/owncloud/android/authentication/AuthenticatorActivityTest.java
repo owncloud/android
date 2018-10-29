@@ -1,8 +1,9 @@
 /**
  *   ownCloud Android client application
  *
- *   Copyright (C) 2017 ownCloud GmbH.
+ *   Copyright (C) 2018 ownCloud GmbH.
  *   @author Jesús Recio (@jesmrec)
+ *   @author Christian Schabesberger
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -117,7 +118,6 @@ public class AuthenticatorActivityTest {
         testServerURL = arguments.getString("TEST_SERVER_URL");
         servertype = ServerType.fromValue(Integer.parseInt(arguments.getString("TRUSTED")));
         isLookup = Boolean.parseBoolean(arguments.getString("TEST_LOOKUP"));
-
         // UiDevice available from API level 17
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
             UiDevice uiDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
@@ -135,6 +135,7 @@ public class AuthenticatorActivityTest {
                 e.printStackTrace();
             }
         }
+
     }
 
     /**
@@ -144,7 +145,14 @@ public class AuthenticatorActivityTest {
     @Test
     //@SdkSuppress(minSdkVersion = Build.VERSION_CODES.M)
     public void test1_check_certif_not_secure_no_accept()
-            throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+            throws IllegalArgumentException {
+
+        //Skipping the Welcome Wizard
+        onView(withId(R.id.skip)).perform(click());
+
+        //Check that credentials fields are initially hidden
+        onView(withId(R.id.account_username)).check(matches(not(isDisplayed())));
+        onView(withId(R.id.account_password)).check(matches(not(isDisplayed())));
 
 
         Log_OC.i(LOG_TAG, "Test not accept not secure start");
@@ -153,14 +161,13 @@ public class AuthenticatorActivityTest {
                 servertype == ServerType.REDIRECTED_NON_SECURE ) {
 
             // Check that login button is disabled
-            onView(withId(R.id.buttonOK))
+            onView(withId(R.id.loginButton))
                     .check(matches(not(isEnabled())));
 
             // Type server url
             onView(withId(R.id.hostUrlInput))
                     .perform(replaceText(testServerURL), closeSoftKeyboard());
-            onView(withId(R.id.account_username)).perform(click());
-
+            onView(withId(R.id.scroll)).perform(click());
             SystemClock.sleep(WAIT_CONNECTION_MS);
 
             //certif not accepted
@@ -169,7 +176,7 @@ public class AuthenticatorActivityTest {
             SystemClock.sleep(WAIT_CONNECTION_MS);
 
             // Check that login button keeps on being disabled
-            onView(withId(R.id.buttonOK))
+            onView(withId(R.id.loginButton))
                     .check(matches(not(isEnabled())));
 
             // Check that SSL server is not trusted
@@ -188,7 +195,7 @@ public class AuthenticatorActivityTest {
     @Test
     //@SdkSuppress(minSdkVersion = Build.VERSION_CODES.M)
     public void test2_check_certif_not_secure()
-            throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+            throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
 
 
         Log_OC.i(LOG_TAG, "Test accept not secure start");
@@ -198,14 +205,13 @@ public class AuthenticatorActivityTest {
                 servertype == ServerType.REDIRECTED_NON_SECURE) {
 
             // Check that login button is disabled
-            onView(withId(R.id.buttonOK))
+            onView(withId(R.id.loginButton))
                     .check(matches(not(isEnabled())));
 
             // Type server url
             onView(withId(R.id.hostUrlInput))
                     .perform(replaceText(testServerURL), closeSoftKeyboard());
-            onView(withId(R.id.account_username)).perform(click());
-
+            onView(withId(R.id.scroll)).perform(click());
             SystemClock.sleep(WAIT_CONNECTION_MS);
 
             //Check untrusted certificate, opening the details
@@ -233,7 +239,7 @@ public class AuthenticatorActivityTest {
             onView(withId(R.id.account_password))
                     .perform(replaceText(testPassword), closeSoftKeyboard());
 
-            onView(withId(R.id.buttonOK)).perform(click());
+            onView(withId(R.id.loginButton)).perform(click());
 
             // Check that the Activity ends after clicking
             SystemClock.sleep(WAIT_LOGIN_MS);
@@ -257,7 +263,7 @@ public class AuthenticatorActivityTest {
      */
     @Test
     public void test3_check_login()
-            throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+            throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
 
         Log_OC.i(LOG_TAG, "Test Check Login Correct Start");
 
@@ -265,7 +271,7 @@ public class AuthenticatorActivityTest {
         SystemClock.sleep(WAIT_INITIAL_MS);
 
         // Check that login button is disabled
-        onView(withId(R.id.buttonOK)).check(matches(not(isEnabled())));
+        onView(withId(R.id.loginButton)).check(matches(not(isEnabled())));
 
         setFields(testServerURL, testUser, testPassword);
 
@@ -290,7 +296,7 @@ public class AuthenticatorActivityTest {
      */
     @Test
     public void test4_login_orientation_changes()
-            throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+            throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
 
         Log_OC.i(LOG_TAG, "Test Check Login Orientation Changes Start");
 
@@ -300,6 +306,9 @@ public class AuthenticatorActivityTest {
 
         onView(withId(R.id.hostUrlInput)).perform(closeSoftKeyboard(),
                 replaceText(testServerURL), closeSoftKeyboard());
+        onView(withId(R.id.scroll)).perform(click());
+        SystemClock.sleep(WAIT_CONNECTION_MS);
+
         onView(withId(R.id.account_username)).perform(click(),
                 replaceText(testUser), closeSoftKeyboard());
         onView(withId(R.id.account_password)).perform(click(),
@@ -309,7 +318,7 @@ public class AuthenticatorActivityTest {
         mActivityRule.getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         SystemClock.sleep(WAIT_CHANGE_MS);
 
-        onView(withId(R.id.buttonOK)).perform(closeSoftKeyboard(), click());
+        onView(withId(R.id.loginButton)).perform(closeSoftKeyboard(), click());
 
         // Check that the Activity ends after clicking
         SystemClock.sleep(WAIT_LOGIN_MS);
@@ -330,12 +339,12 @@ public class AuthenticatorActivityTest {
      */
     @Test
     public void test5_check_login_special_characters()
-            throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+            throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
 
         Log_OC.i(LOG_TAG, "Test Check Login Special Characters Start");
 
         // Check that login button is disabled
-        onView(withId(R.id.buttonOK)).check(matches(not(isEnabled())));
+        onView(withId(R.id.loginButton)).check(matches(not(isEnabled())));
 
         setFields(testServerURL, testUser2, testPassword2);
 
@@ -360,12 +369,12 @@ public class AuthenticatorActivityTest {
      */
     @Test
     public void test6_check_login_incorrect()
-            throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+            throws IllegalArgumentException {
 
         Log_OC.i(LOG_TAG, "Test Check Login Incorrect Start");
 
         // Check that login button is disabled
-        onView(withId(R.id.buttonOK)).check(matches(not(isEnabled())));
+        onView(withId(R.id.loginButton)).check(matches(not(isEnabled())));
 
         setFields(testServerURL, USER_INEXISTENT, testPassword);
 
@@ -382,7 +391,7 @@ public class AuthenticatorActivityTest {
      */
     @Test
     public void test7_check_existing_account()
-            throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+            throws IllegalArgumentException {
 
         Log_OC.i(LOG_TAG, "Test Check Existing Account Start");
 
@@ -393,7 +402,7 @@ public class AuthenticatorActivityTest {
             AccountsManager.addAccount(targetContext, testServerURL, testUser, testPassword);
 
             // Check that login button is disabled
-            onView(withId(R.id.buttonOK)).check(matches(not(isEnabled())));
+            onView(withId(R.id.loginButton)).check(matches(not(isEnabled())));
 
             setFields(testServerURL, testUser, testPassword);
 
@@ -410,12 +419,12 @@ public class AuthenticatorActivityTest {
      */
     @Test
     public void test8_check_login_blanks()
-            throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+            throws IllegalArgumentException {
 
         Log_OC.i(LOG_TAG, "Test Check Blanks Login Start");
 
         // Check that login button is disabled
-        onView(withId(R.id.buttonOK)).check(matches(not(isEnabled())));
+        onView(withId(R.id.loginButton)).check(matches(not(isEnabled())));
 
         setFields(testServerURL, "", "");
 
@@ -431,14 +440,14 @@ public class AuthenticatorActivityTest {
      */
     @Test
     public void test9_check_login_trimmed_blanks()
-            throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+            throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
 
         Log_OC.i(LOG_TAG, "Test Check Trimmed Blanks Start");
 
         String UserBlanks = "    " + testUser + "         ";
 
         // Check that login button is disabled
-        onView(withId(R.id.buttonOK)).check(matches(not(isEnabled())));
+        onView(withId(R.id.loginButton)).check(matches(not(isEnabled())));
 
         setFields(testServerURL, UserBlanks, testPassword);
 
@@ -462,14 +471,14 @@ public class AuthenticatorActivityTest {
      */
     @Test
     public void test_10_check_url_from_browser()
-            throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+            throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
 
         Log_OC.i(LOG_TAG, "Test Check URL Browser Start");
 
         String connectionString = testServerURL + SUFFIX_BROWSER;
 
         // Check that login button is disabled
-        onView(withId(R.id.buttonOK)).check(matches(not(isEnabled())));
+        onView(withId(R.id.loginButton)).check(matches(not(isEnabled())));
 
         setFields(connectionString, testUser2, testPassword2);
 
@@ -493,14 +502,13 @@ public class AuthenticatorActivityTest {
      */
     @Test
     public void test_11_check_url_uppercase()
-            throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+            throws IllegalArgumentException {
 
         Log_OC.i(LOG_TAG, "Test Check URL Uppercase Start");
 
         onView(withId(R.id.hostUrlInput))
                 .perform(replaceText(testServerURL.toUpperCase()), closeSoftKeyboard());
-        onView(withId(R.id.account_username)).perform(click());
-
+        onView(withId(R.id.scroll)).perform(click());
         SystemClock.sleep(WAIT_CONNECTION_MS);
 
         checkStatusMessage();
@@ -518,8 +526,7 @@ public class AuthenticatorActivityTest {
         // Type server url
         onView(withId(R.id.hostUrlInput))
                 .perform(replaceText(connectionString), closeSoftKeyboard());
-        onView(withId(R.id.account_username)).perform(click());
-
+        onView(withId(R.id.scroll)).perform(click());
         SystemClock.sleep(WAIT_CONNECTION_MS);
 
         checkStatusMessage();
@@ -531,7 +538,7 @@ public class AuthenticatorActivityTest {
         // Type user pass
         onView(withId(R.id.account_password))
                 .perform(replaceText(password), closeSoftKeyboard());
-        onView(withId(R.id.buttonOK)).perform(click());
+        onView(withId(R.id.loginButton)).perform(click());
     }
 
 
@@ -561,7 +568,7 @@ public class AuthenticatorActivityTest {
     }
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() {
         AccountsManager.deleteAllAccounts(targetContext);
     }
 }

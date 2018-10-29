@@ -3,8 +3,9 @@
  *
  *   @author David A. Velasco
  *   @author David González Verdugo
+ *   @author Christian Schabesberger
  *   Copyright (C) 2011  Bartek Przybylski
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -23,7 +24,6 @@
 package com.owncloud.android.ui.activity;
 
 import android.accounts.Account;
-import android.accounts.AccountManager;
 import android.accounts.AuthenticatorException;
 import android.content.ComponentName;
 import android.content.Context;
@@ -36,6 +36,8 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.view.View;
+import android.widget.Toast;
 
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
@@ -45,7 +47,6 @@ import com.owncloud.android.files.services.FileDownloader;
 import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder;
 import com.owncloud.android.files.services.FileUploader;
 import com.owncloud.android.files.services.FileUploader.FileUploaderBinder;
-import com.owncloud.android.lib.common.accounts.AccountUtils.Constants;
 import com.owncloud.android.lib.common.network.CertificateCombinedException;
 import com.owncloud.android.lib.common.operations.OnRemoteOperationListener;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
@@ -87,6 +88,7 @@ public class FileActivity extends DrawerActivity
     private static final String KEY_WAITING_FOR_OP_ID = "WAITING_FOR_OP_ID";
     private static final String KEY_ACTION_BAR_TITLE = "ACTION_BAR_TITLE";
 
+    // go to a high number, since the low numbers are usded by android
     public static final int REQUEST_CODE__UPDATE_CREDENTIALS = 0;
     public static final int REQUEST_CODE__LAST_SHARED = REQUEST_CODE__UPDATE_CREDENTIALS;
 
@@ -96,7 +98,7 @@ public class FileActivity extends DrawerActivity
     private static final String DIALOG_UNTRUSTED_CERT = "DIALOG_UNTRUSTED_CERT";
     private static final String DIALOG_CERT_NOT_SAVED = "DIALOG_CERT_NOT_SAVED";
 
-     /** Main {@link OCFile} handled by the activity.*/
+    /** Main {@link OCFile} handled by the activity.*/
     private OCFile mFile;
 
     /** Flag to signal if the activity is launched by a notification */
@@ -135,7 +137,7 @@ public class FileActivity extends DrawerActivity
             mFromNotification = savedInstanceState.getBoolean(FileActivity.EXTRA_FROM_NOTIFICATION);
             mFileOperationsHelper.setOpIdWaitingFor(
                     savedInstanceState.getLong(KEY_WAITING_FOR_OP_ID, Long.MAX_VALUE)
-                    );
+            );
             if (getSupportActionBar() != null) {
                 getSupportActionBar().setTitle(savedInstanceState.getString(KEY_ACTION_BAR_TITLE));
             }
@@ -147,7 +149,7 @@ public class FileActivity extends DrawerActivity
         }
 
         AccountUtils.updateAccountVersion(this); // best place, before any access to AccountManager
-                                                 // or database
+        // or database
 
         setAccount(account, savedInstanceState != null);
 
@@ -281,7 +283,7 @@ public class FileActivity extends DrawerActivity
     @Override
     public void onRemoteOperationFinish(RemoteOperation operation, RemoteOperationResult result) {
         Log_OC.d(TAG, "Received result of operation in FileActivity - common behaviour for all the "
-            + "FileActivities ");
+                + "FileActivities ");
 
         mFileOperationsHelper.setOpIdWaitingFor(Long.MAX_VALUE);
 
@@ -289,14 +291,14 @@ public class FileActivity extends DrawerActivity
 
         if (!result.isSuccess() && (
                 result.getCode() == ResultCode.UNAUTHORIZED ||
-                (result.isException() && result.getException() instanceof AuthenticatorException)
-                )) {
+                        (result.isException() && result.getException() instanceof AuthenticatorException)
+        )) {
 
             requestCredentialsUpdate();
 
             if (result.getCode() == ResultCode.UNAUTHORIZED) {
                 showSnackMessage(
-                    ErrorMessageAdapter.getErrorCauseMessage(result, operation, getResources())
+                        ErrorMessageAdapter.getResultMessage(result, operation, getResources())
                 );
             }
 
@@ -316,7 +318,7 @@ public class FileActivity extends DrawerActivity
 
             } else if (result.getCode() != ResultCode.CANCELLED) {
                 showSnackMessage(
-                    ErrorMessageAdapter.getErrorCauseMessage(result, operation, getResources())
+                        ErrorMessageAdapter.getResultMessage(result, operation, getResources())
                 );
             }
 
@@ -329,7 +331,7 @@ public class FileActivity extends DrawerActivity
 
             } else {
                 showSnackMessage(
-                    ErrorMessageAdapter.getErrorCauseMessage(result, operation, getResources())
+                        ErrorMessageAdapter.getResultMessage(result, operation, getResources())
                 );
             }
 
@@ -338,6 +340,14 @@ public class FileActivity extends DrawerActivity
             result.getData();
 
         }
+    }
+
+    protected void showRequestAccountChangeNotice() {
+        Snackbar.make(findViewById(android.R.id.content), R.string.auth_failure_snackbar, Snackbar.LENGTH_INDEFINITE)
+                .setAction(R.string.auth_failure_snackbar_action, v ->
+                        startActivity(
+                                new Intent(FileActivity.this, ManageAccountsActivity.class)))
+                .show();
     }
 
     /**
@@ -382,7 +392,7 @@ public class FileActivity extends DrawerActivity
         SslUntrustedCertDialog dialog = (SslUntrustedCertDialog) fm.findFragmentByTag(DIALOG_UNTRUSTED_CERT);
         if(dialog == null) {
             dialog = SslUntrustedCertDialog.newInstanceForFullSslError(
-                (CertificateCombinedException) result.getException());
+                    (CertificateCombinedException) result.getException());
             FragmentTransaction ft = fm.beginTransaction();
             dialog.show(ft, DIALOG_UNTRUSTED_CERT);
         }
@@ -530,7 +540,7 @@ public class FileActivity extends DrawerActivity
     @Override
     public void onFailedSavingCertificate() {
         ConfirmationDialogFragment dialog = ConfirmationDialogFragment.newInstance(
-            R.string.ssl_validator_not_saved, new String[]{}, 0, R.string.common_ok, -1, -1
+            R.string.ssl_validator_not_saved, new String[]{}, 0, android.R.string.ok, -1, -1
         );
         dialog.show(getSupportFragmentManager(), DIALOG_CERT_NOT_SAVED);
     }
@@ -546,12 +556,16 @@ public class FileActivity extends DrawerActivity
      * @param message       Message to show.
      */
     public void showSnackMessage(String message) {
-        Snackbar snackbar = Snackbar.make(
-            findViewById(android.R.id.content),
-            message,
-            Snackbar.LENGTH_LONG
-        );
-        snackbar.show();
+        final View rootView = findViewById(android.R.id.content);
+        if(rootView != null) {
+            Snackbar.make(
+                    rootView,
+                    message,
+                    Snackbar.LENGTH_LONG)
+                    .show();
+        } else {
+            // If root view is not available don't let the app brake. show the notification anyway.
+            Toast.makeText(this, message, Snackbar.LENGTH_LONG).show();
+        }
     }
-
 }

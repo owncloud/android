@@ -10,7 +10,9 @@
   <!--TODO re-enable when "On Device" is available
     <string name="drawer_item_on_device">On device</string>-->
   <string name="drawer_open">Otvori</string>
+  <string name="drawer_help">Pomoć</string>
   <string name="prefs_category_more">Više</string>
+  <string name="prefs_category_security">Sigurnost</string>
   <string name="prefs_help">Pomoć</string>
   <string name="auth_username">Korisničko ime</string>
   <string name="auth_password">Lozinka</string>
@@ -41,11 +43,11 @@
   <string name="share_confirm_public_link_button">Spremi</string>
   <string name="share_via_link_expiration_date_label">Istek</string>
   <string name="share_via_link_password_label">Lozinka</string>
-  <string name="share_via_link_edit_permission_label">Dozvolite izmjenu</string>
   <string name="share_search">Potraži</string>
   <string name="share_privilege_can_share">mogu dijeliti</string>
   <string name="share_privilege_can_edit">mogu mijenjati</string>
   <string name="share_privilege_can_edit_create">kreiraj</string>
   <string name="share_privilege_can_edit_change">izmjeni</string>
   <string name="share_privilege_can_edit_delete">izbriši</string>
+  <!--Welcome to oC intro features-->
 </resources>

@@ -1,8 +1,12 @@
 /**
  *   ownCloud Android client application
  *
+ *   @author Bartek Przybylski
+ *   @author Christian Schabesberger
+ *   @author David González Verdugo
+ *
  *   Copyright (C) 2012  Bartek Przybylski
- *   Copyright (C) 2017 ownCloud GmbH.
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -27,15 +31,19 @@ import android.content.ContentProviderResult;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.content.OperationApplicationException;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.RemoteException;
 import android.provider.MediaStore;
+import android.support.v4.content.FileProvider;
 import android.support.v4.util.Pair;
 
 import com.owncloud.android.MainApp;
+import com.owncloud.android.R;
+import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.db.ProviderMeta.ProviderTableMeta;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.shares.OCShare;
@@ -62,23 +70,25 @@ import java.util.Vector;
 public class FileDataStorageManager {
 
     public static final int ROOT_PARENT_ID = 0;
+    private static String TAG = FileDataStorageManager.class.getSimpleName();
 
     private ContentResolver mContentResolver;
     private ContentProviderClient mContentProviderClient;
     private Account mAccount;
+    private Context mContext;
 
-    private static String TAG = FileDataStorageManager.class.getSimpleName();
-
-    public FileDataStorageManager(Account account, ContentResolver cr) {
+    public FileDataStorageManager(Context activity, Account account, ContentResolver cr) {
         mContentProviderClient = null;
         mContentResolver = cr;
         mAccount = account;
+        mContext = activity;
     }
 
-    public FileDataStorageManager(Account account, ContentProviderClient cp) {
+    public FileDataStorageManager(Context activity, Account account, ContentProviderClient cp) {
         mContentProviderClient = cp;
         mContentResolver = null;
         mAccount = account;
+        mContext = activity;
     }
 
     public void setAccount(Account account) {
@@ -96,7 +106,6 @@ public class FileDataStorageManager {
     public ContentProviderClient getContentProviderClient() {
         return mContentProviderClient;
     }
-
 
     public OCFile getFileByPath(String path) {
         Cursor c = getFileCursorForValue(ProviderTableMeta.FILE_PATH, path);
@@ -119,6 +128,29 @@ public class FileDataStorageManager {
         OCFile file = null;
         if (c != null) {
             if (c.moveToFirst()) {
+                file = createFileInstance(c);
+            }
+            c.close();
+        }
+        return file;
+    }
+
+
+    /**
+     * This will return a OCFile by its given FileId here refered as the remoteId.
+     * Its the fileId ownCloud Core uses to identify a file even if its name has changed.
+     *
+     * An Explenation about how to use ETags an those FileIds can be found here:
+     * <a href="https://github.com/owncloud/client/wiki/Etags-and-file-ids" />
+     *
+     * @param remoteID
+     * @return
+     */
+    public OCFile getFileByRemoteId(String remoteID) {
+        Cursor c = getFileCursorForValue(ProviderTableMeta.FILE_REMOTE_ID, remoteID);
+        OCFile file = null;
+        if(c != null) {
+            if(c.moveToFirst()) {
                 file = createFileInstance(c);
             }
             c.close();
@@ -203,6 +235,7 @@ public class FileDataStorageManager {
         cv.put(ProviderTableMeta.FILE_UPDATE_THUMBNAIL, file.needsUpdateThumbnail());
         cv.put(ProviderTableMeta.FILE_IS_DOWNLOADING, file.isDownloading());
         cv.put(ProviderTableMeta.FILE_ETAG_IN_CONFLICT, file.getEtagInConflict());
+        cv.put(ProviderTableMeta.FILE_PRIVATE_LINK, file.getPrivateLink());
 
         boolean sameRemotePath = fileExists(file.getRemotePath());
         if (sameRemotePath ||
@@ -311,6 +344,7 @@ public class FileDataStorageManager {
             cv.put(ProviderTableMeta.FILE_UPDATE_THUMBNAIL, file.needsUpdateThumbnail());
             cv.put(ProviderTableMeta.FILE_IS_DOWNLOADING, file.isDownloading());
             cv.put(ProviderTableMeta.FILE_ETAG_IN_CONFLICT, file.getEtagInConflict());
+            cv.put(ProviderTableMeta.FILE_PRIVATE_LINK, file.getPrivateLink());
 
             boolean existsByPath = fileExists(file.getRemotePath());
             if (existsByPath || fileExists(file.getFileId())) {
@@ -386,6 +420,7 @@ public class FileDataStorageManager {
         cv.put(ProviderTableMeta.FILE_SHARED_WITH_SHAREE, folder.isSharedWithSharee() ? 1 : 0);
         cv.put(ProviderTableMeta.FILE_PERMISSIONS, folder.getPermissions());
         cv.put(ProviderTableMeta.FILE_REMOTE_ID, folder.getRemoteId());
+        cv.put(ProviderTableMeta.FILE_PRIVATE_LINK, folder.getPrivateLink());
 
         operations.add(ContentProviderOperation.newUpdate(ProviderTableMeta.CONTENT_URI).
                 withValues(cv).
@@ -597,7 +632,6 @@ public class FileDataStorageManager {
         }
         return success;
     }
-
 
     public boolean removeFolder(OCFile folder, boolean removeDBData, boolean removeLocalContent) {
         boolean success = true;
@@ -1082,16 +1116,17 @@ public class FileDataStorageManager {
             file.setEtag(c.getString(c.getColumnIndex(ProviderTableMeta.FILE_ETAG)));
             file.setTreeEtag(c.getString(c.getColumnIndex(ProviderTableMeta.FILE_TREE_ETAG)));
             file.setSharedViaLink(c.getInt(
-                    c.getColumnIndex(ProviderTableMeta.FILE_SHARED_VIA_LINK)) == 1 ? true : false);
+                    c.getColumnIndex(ProviderTableMeta.FILE_SHARED_VIA_LINK)) == 1);
             file.setSharedWithSharee(c.getInt(
-                    c.getColumnIndex(ProviderTableMeta.FILE_SHARED_WITH_SHAREE)) == 1 ? true : false);
+                    c.getColumnIndex(ProviderTableMeta.FILE_SHARED_WITH_SHAREE)) == 1);
             file.setPermissions(c.getString(c.getColumnIndex(ProviderTableMeta.FILE_PERMISSIONS)));
             file.setRemoteId(c.getString(c.getColumnIndex(ProviderTableMeta.FILE_REMOTE_ID)));
             file.setNeedsUpdateThumbnail(c.getInt(
-                    c.getColumnIndex(ProviderTableMeta.FILE_UPDATE_THUMBNAIL)) == 1 ? true : false);
+                    c.getColumnIndex(ProviderTableMeta.FILE_UPDATE_THUMBNAIL)) == 1);
             file.setDownloading(c.getInt(
-                    c.getColumnIndex(ProviderTableMeta.FILE_IS_DOWNLOADING)) == 1 ? true : false);
+                    c.getColumnIndex(ProviderTableMeta.FILE_IS_DOWNLOADING)) == 1);
             file.setEtagInConflict(c.getString(c.getColumnIndex(ProviderTableMeta.FILE_ETAG_IN_CONFLICT)));
+            file.setPrivateLink(c.getString(c.getColumnIndex(ProviderTableMeta.FILE_PRIVATE_LINK)));
 
         }
         return file;
@@ -1675,10 +1710,20 @@ public class FileDataStorageManager {
         return publicShares;
     }
 
-    public static void triggerMediaScan(String path) {
+    public void triggerMediaScan(String path) {
         if (path != null) {
             Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-            intent.setData(Uri.fromFile(new File(path)));
+            try {
+                intent.setData(
+                        FileProvider.getUriForFile(
+                                mContext.getApplicationContext(),
+                                mContext.getResources().getString(R.string.file_provider_authority),
+                                new File(path)
+                        )
+                );
+            } catch (IllegalArgumentException illegalArgumentException) {
+                intent.setData(Uri.fromFile(new File(path)));
+            }
             MainApp.getAppContext().sendBroadcast(intent);
         }
     }
@@ -1989,10 +2034,9 @@ public class FileDataStorageManager {
                                 + e.getMessage());
             }
         }
-
         return c;
-
     }
+
     public OCCapability getCapability(String accountName){
         OCCapability capability = null;
         Cursor c = getCapabilityCursorForAccount(accountName);
@@ -2082,7 +2126,7 @@ public class FileDataStorageManager {
 
     /**
      * Get a collection with all the files set by the user as available offline, from all the accounts
-     * in the device.
+     * in the device, putting away the folders
      *
      * This is the only method working with a NULL account in {@link #mAccount}. Not something to do often.
      *
@@ -2095,12 +2139,15 @@ public class FileDataStorageManager {
         try {
             // query for any favorite file in any OC account
             cursorOnKeptInSync = getContentResolver().query(
-                ProviderTableMeta.CONTENT_URI,
-                null,
-                ProviderTableMeta.FILE_KEEP_IN_SYNC + " = ?",
-                new String[] { String.valueOf(OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE.getValue()) },
-                // do NOT get also AVAILABLE_OFFLINE_PARENT: only those SET BY THE USER (files or folders)
-                null
+                    ProviderTableMeta.CONTENT_URI,
+                    null,
+                    ProviderTableMeta.FILE_KEEP_IN_SYNC + " = ? OR " +
+                            ProviderTableMeta.FILE_KEEP_IN_SYNC + " = ?",
+                    new String[]{
+                            String.valueOf(OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE.getValue()),
+                            String.valueOf(OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE_PARENT.getValue())
+                    },
+                    null
             );
 
             if (cursorOnKeptInSync != null && cursorOnKeptInSync.moveToFirst()) {
@@ -2109,9 +2156,11 @@ public class FileDataStorageManager {
                 do {
                     file = createFileInstance(cursorOnKeptInSync);
                     accountName = cursorOnKeptInSync.getString(
-                        cursorOnKeptInSync.getColumnIndex(ProviderTableMeta.FILE_ACCOUNT_OWNER)
+                            cursorOnKeptInSync.getColumnIndex(ProviderTableMeta.FILE_ACCOUNT_OWNER)
                     );
-                    result.add(new Pair<>(file, accountName));
+                    if (!file.isFolder() && AccountUtils.exists(accountName, mContext)) {
+                        result.add(new Pair<>(file, accountName));
+                    }
                 } while (cursorOnKeptInSync.moveToNext());
             }
 
@@ -2126,5 +2175,4 @@ public class FileDataStorageManager {
 
         return result;
     }
-
 }

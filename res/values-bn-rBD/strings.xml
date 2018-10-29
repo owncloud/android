@@ -15,13 +15,12 @@
   <!--TODO re-enable when "On Device" is available
     <string name="drawer_item_on_device">On device</string>-->
   <string name="drawer_open">খোল</string>
+  <string name="drawer_feedback">মতামত</string>
+  <string name="drawer_help">সহায়িকা</string>
   <string name="prefs_category_general">সাধারণ</string>
   <string name="prefs_category_more">বেশী</string>
+  <string name="prefs_category_security">নিরাপত্তা</string>
   <string name="prefs_accounts">একাউন্ট</string>
-  <string name="prefs_instant_upload">দ্রুত ছবি আপলোড</string>
-  <string name="prefs_instant_upload_summary">ক্যামেরা থেকে তোলা ছবি তৎক্ষণাৎ আপলোড</string>
-  <string name="prefs_instant_video_upload">দ্রুত ভিডিও আপলোড</string>
-  <string name="prefs_instant_video_upload_summary">ক্যামেরায় রেকর্ড করা ভিডিও তৎক্ষণাৎ আপলোড</string>
   <string name="prefs_log_summary">সমস্যা তালিকাভুক্ত করার জায়গা</string>
   <string name="prefs_log_summary_history">রেকর্ডেড লগ এখানে দেখেন</string>
   <string name="prefs_help">সহায়িকা</string>
@@ -34,7 +33,7 @@
   <string name="auth_password">কূটশব্দ</string>
   <string name="auth_register">%1$s এ নতুন?</string>
   <string name="sync_string_files">ফাইল</string>
-  <string name="setup_btn_connect">সংযুক্ত হও</string>
+  <string name="setup_btn_login">সংযুক্ত হও</string>
   <string name="uploader_btn_upload_text">আপলোড</string>
   <string name="uploader_wrn_no_account_title">কোন একাউন্ট খুঁজে পাওয়া গেল না</string>
   <string name="uploader_wrn_no_account_setup_btn_text">সেট-আপ</string>
@@ -183,7 +182,6 @@
   <string name="placeholder_filesize">৩৮৯ কেবি</string>
   <string name="placeholder_timestamp">2012/05/18 12:23 PM</string>
   <string name="placeholder_media_time">12:23:45</string>
-  <string name="instant_upload_path">/তাৎক্ষণিক আপলোড</string>
   <string name="conflict_keep_both">উভয়কে রাখ</string>
   <string name="preview_image_description">ছবি প্রাকদর্শন</string>
   <string name="preview_image_error_unknown_format">ছবিটি প্রদর্শন করা যাবেনা</string>
@@ -214,7 +212,6 @@
   <string name="file_list_empty_moving">এখানে কিছু নেই। একটি ফোল্ডার যোগ করতে পারেন!</string>
   <string name="folder_picker_choose_button_text">বেছে নিন</string>
   <string name="move_file_not_found">সরাতে ব্যার্থ হলো। ফাইলটি রয়েছে কিনা দেখুন।</string>
-  <string name="prefs_category_details">বিস্তারিত</string>
   <string name="auth_host_address">সার্ভার ঠিকানা</string>
   <string name="share_dialog_title">ভাগাভাগি কর</string>
   <string name="share_cancel_public_link_button">বাতিল</string>
@@ -225,4 +222,5 @@
   <string name="share_privilege_can_edit">সম্পাদনা করতে পারবেন</string>
   <string name="share_privilege_can_edit_create">তৈরী করুন</string>
   <string name="share_privilege_can_edit_delete">মুছে ফেল</string>
+  <!--Welcome to oC intro features-->
 </resources>

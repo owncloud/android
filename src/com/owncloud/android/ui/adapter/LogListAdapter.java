@@ -1,7 +1,8 @@
 /**
  *   ownCloud Android client application
  *
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   @author David González Verdugo
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -19,56 +20,99 @@
 
 package com.owncloud.android.ui.adapter;
 
-import java.io.File;
+import android.support.v7.widget.RecyclerView;
+import com.owncloud.android.logs.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.owncloud.android.R;
 
-import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
-import android.os.Environment;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.TextView;
+import org.w3c.dom.Text;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 
+/**
+ * Built a logs container which will be displayed as a list
+ */
+public class LogListAdapter extends RecyclerView.Adapter<LogListAdapter.LogViewHolder>{
 
-public class LogListAdapter extends ArrayAdapter<String> {
-    private Context context = null;
-    private String[] values;
-    private Uri fileUri = null;
-   
-    
-    public LogListAdapter(Context context, String[] values) {
-        super(context, R.layout.log_item, values);
-        this.context = context;
-        this.values = values;
+    private ArrayList<Log> mLogs;
+
+    public LogListAdapter(ArrayList<Log> mLogs) {
+        this.mLogs = mLogs;
+    }
+
+    /**
+     * Define the view for each log in the list
+     */
+    public static class LogViewHolder extends RecyclerView.ViewHolder {
+
+        public final TextView mLogTimeStamp;
+        public final TextView mLogContent;
+
+        public LogViewHolder(View view) {
+
+            super(view);
+
+            mLogTimeStamp = view.findViewById(R.id.logTimestamp);
+            mLogContent = view.findViewById(R.id.logContent);
+        }
+    }
+
+    /**
+     * Create the view for each log in the list
+     *
+     * @param viewGroup
+     * @param i
+     * @return
+     */
+    @Override
+    public LogViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+        final View v = LayoutInflater.from(viewGroup.getContext())
+                .inflate(R.layout.log_item, viewGroup, false);
+        final LogViewHolder holder = new LogViewHolder(v);
+        return holder;
+    }
+
+    /**
+     * Fill in each log in the list
+     *
+     * @param holder
+     * @param position
+     */
+    @Override
+    public void onBindViewHolder(LogViewHolder holder, int position) {
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+
+        String logTimestamp = simpleDateFormat.format(mLogs.get(position).getLogTimestamp());
+
+        holder.mLogTimeStamp.setText(logTimestamp);
+        holder.mLogContent.setText(String.valueOf(mLogs.get(position).getLogContent()));
     }
 
     @Override
-    public View getView(final int position, View convertView, ViewGroup parent) {
-        LayoutInflater inflater = (LayoutInflater) context
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View rowView = inflater.inflate(R.layout.log_item, parent, false);
-        TextView listText = (TextView) rowView.findViewById(R.id.log_item_single);
-        listText.setText(values[position]);
-        listText.setTextSize(15);
-        fileUri = Uri.fromFile(new File(Environment.getExternalStorageDirectory()+File.separator+"owncloud"+File.separator+"log"+File.separator+values[position]));
-        listText.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
-                emailIntent.setType("text/rtf");
-                emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "OwnCloud Logfile");
-                emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, "This is a automatic E-mail send by owncloud/android");
-                emailIntent.putExtra(android.content.Intent.EXTRA_STREAM, fileUri);
-                emailIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                context.startActivity(Intent.createChooser(emailIntent, "Send mail..."));
-            }
-        });
-        return rowView;
+    public int getItemCount() {
+        return mLogs.size();
+    }
+
+    /**
+     * Get all logs from the list
+     *
+     * @return all the logs
+     */
+    public ArrayList<Log> getAllLogs() {
+        return mLogs;
+    }
+
+    /**
+     * Delete all the logs from the list
+     */
+    public void clearLogs() {
+        mLogs.clear();
+        notifyDataSetChanged();
     }
 }

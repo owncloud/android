@@ -2,7 +2,8 @@
  *   ownCloud Android client application
  *
  *   @author masensio
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   @author David González Verdugo
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -47,7 +48,7 @@ public class GetSharesForFileAsyncTask extends AsyncTask<Object, Void, Pair<Remo
     private final WeakReference<OnRemoteOperationListener> mListener;
 
     public GetSharesForFileAsyncTask(OnRemoteOperationListener listener) {
-        mListener = new WeakReference<OnRemoteOperationListener>(listener);
+        mListener = new WeakReference<>(listener);
     }
 
     @Override
@@ -63,7 +64,7 @@ public class GetSharesForFileAsyncTask extends AsyncTask<Object, Void, Pair<Remo
 
             try {
                 // Get shares request
-                operation = new GetSharesForFileOperation(file.getRemotePath(), false, false);
+                operation = new GetSharesForFileOperation(file.getRemotePath(), true, false);
                 OwnCloudAccount ocAccount = new OwnCloudAccount(
                         account,
                         MainApp.getAppContext()
@@ -73,11 +74,11 @@ public class GetSharesForFileAsyncTask extends AsyncTask<Object, Void, Pair<Remo
                 result = operation.execute(client, fileDataStorageManager);
 
             } catch (Exception e) {
-                result = new RemoteOperationResult(e);
+                result = new RemoteOperationResult<>(e);
                 Log_OC.e(TAG, "Exception while getting shares", e);
             }
         } else {
-            result = new RemoteOperationResult(RemoteOperationResult.ResultCode.UNKNOWN_ERROR);
+            result = new RemoteOperationResult<>(RemoteOperationResult.ResultCode.UNKNOWN_ERROR);
         }
 
         return new Pair(operation, result);
@@ -97,5 +98,4 @@ public class GetSharesForFileAsyncTask extends AsyncTask<Object, Void, Pair<Remo
             }
         }
     }
-
 }

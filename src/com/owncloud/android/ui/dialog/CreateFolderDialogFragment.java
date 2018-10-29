@@ -2,7 +2,8 @@
  *   ownCloud Android client application
  *
  *   @author David A. Velasco
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   @author Christian Schabesberger
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -61,7 +62,6 @@ public class CreateFolderDialogFragment
         args.putParcelable(ARG_PARENT_FOLDER, parentFolder);
         frag.setArguments(args);
         return frag;
-        
     }
 
     private OCFile mParentFolder;
@@ -76,15 +76,15 @@ public class CreateFolderDialogFragment
         View v = inflater.inflate(R.layout.edit_box_dialog, null);
         
         // Setup layout 
-        EditText inputText = ((EditText)v.findViewById(R.id.user_input));
+        EditText inputText = v.findViewById(R.id.user_input);
         inputText.setText("");
         inputText.requestFocus();
         
         // Build the dialog  
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setView(v)
-               .setPositiveButton(R.string.common_ok, this)
-               .setNegativeButton(R.string.common_cancel, this)
+               .setPositiveButton(android.R.string.ok, this)
+               .setNegativeButton(android.R.string.cancel, this)
                .setTitle(R.string.uploader_info_dirname);
         Dialog d = builder.create();
         d.getWindow().setSoftInputMode(LayoutParams.SOFT_INPUT_STATE_VISIBLE);
@@ -131,7 +131,7 @@ public class CreateFolderDialogFragment
      */
     private void showSnackMessage(int messageResource) {
         Snackbar snackbar = Snackbar.make(
-            getActivity().findViewById(android.R.id.content),
+            getActivity().findViewById(R.id.coordinator_layout),
             messageResource,
             Snackbar.LENGTH_LONG
         );

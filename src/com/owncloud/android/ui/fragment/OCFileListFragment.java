@@ -4,8 +4,10 @@
  *   @author Bartek Przybylski
  *   @author masensio
  *   @author David A. Velasco
+ *   @author Christian Schabesberger
+ *   @author David González Verdugo
  *   Copyright (C) 2011  Bartek Przybylski
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -23,25 +25,35 @@
 package com.owncloud.android.ui.fragment;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.PowerManager;
 import android.preference.PreferenceManager;
+import android.support.design.widget.BottomSheetBehavior;
+import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.SearchView;
 import android.util.SparseBooleanArray;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -78,7 +90,8 @@ import java.util.List;
  *
  * TODO refactor to get rid of direct dependency on FileDisplayActivity
  */
-public class OCFileListFragment extends ExtendedListFragment {
+public class OCFileListFragment extends ExtendedListFragment implements
+        SearchView.OnQueryTextListener, View.OnFocusChangeListener {
 
     private static final String TAG = OCFileListFragment.class.getSimpleName();
 
@@ -98,7 +111,9 @@ public class OCFileListFragment extends ExtendedListFragment {
     private FileFragment.ContainerActivity mContainerActivity;
 
     private OCFile mFile = null;
-    private FileListListAdapter mAdapter;
+    private FileListListAdapter mFileListAdapter;
+
+    private boolean mEnableSelectAll = true;
 
     private int mStatusBarColorActionMode;
     private int mStatusBarColor;
@@ -107,6 +122,8 @@ public class OCFileListFragment extends ExtendedListFragment {
     private boolean miniFabClicked = false;
     private ActionMode mActiveActionMode;
     private OCFileListFragment.MultiChoiceModeListener mMultiChoiceModeListener;
+
+    private SearchView mSearchView;
 
 
     /**
@@ -177,7 +194,6 @@ public class OCFileListFragment extends ExtendedListFragment {
         Log_OC.i(TAG, "onCreateView() end");
         return v;
     }
-
     
     @Override
     public void onDetach() {
@@ -201,12 +217,12 @@ public class OCFileListFragment extends ExtendedListFragment {
         boolean justFolders = isShowingJustFolders();
         setFooterEnabled(!justFolders);
 
-        mAdapter = new FileListListAdapter(
+        mFileListAdapter = new FileListListAdapter(
                 justFolders,
                 getActivity(),
                 mContainerActivity
         );
-        setListAdapter(mAdapter);
+        setListAdapter(mFileListAdapter);
 
         Bundle args = getArguments();
         mHideFab = (args != null) && args.getBoolean(ARG_HIDE_FAB, false);
@@ -229,6 +245,16 @@ public class OCFileListFragment extends ExtendedListFragment {
                 removeFabLabels();
             }
         }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        mSearchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        mSearchView.setMaxWidth(Integer.MAX_VALUE);
+        mSearchView.setQueryHint(getResources().getString(R.string.actionbar_search));
+        mSearchView.setOnQueryTextFocusChangeListener(this);
+        mSearchView.setOnQueryTextListener(this);
     }
 
     /**
@@ -257,8 +283,40 @@ public class OCFileListFragment extends ExtendedListFragment {
         getFabUpload().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                UploadFilesActivity.startUploadActivityForResult(getActivity(), ((FileActivity) getActivity())
-                        .getAccount(), FileDisplayActivity.REQUEST_CODE__SELECT_FILES_FROM_FILE_SYSTEM);
+                Log_OC.e(TAG,"Clicked" + getContext().toString());
+                final View uploadBottomSheet = getLayoutInflater().inflate(R.layout.upload_bottom_sheet_fragment,null);
+                final BottomSheetDialog dialog = new BottomSheetDialog(getContext());
+                dialog.setContentView(uploadBottomSheet);
+                final LinearLayout uploadFilesLinearLayout = uploadBottomSheet.findViewById(R.id.files_linear_layout);
+                LinearLayout uploadFromCameraLinearLayout = uploadBottomSheet.findViewById(R.id.upload_from_camera_linear_layout);
+                TextView uploadToTextView = uploadBottomSheet.findViewById(R.id.upload_to_text_view);
+                uploadFilesLinearLayout.setOnTouchListener(new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        UploadFilesActivity.startUploadActivityForResult(getActivity(), ((FileActivity) getActivity())
+                                .getAccount(), FileDisplayActivity.REQUEST_CODE__SELECT_FILES_FROM_FILE_SYSTEM);
+                        dialog.hide();
+                        return false;
+                    }
+                });
+                uploadFromCameraLinearLayout.setOnTouchListener(new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+
+                        ((FileDisplayActivity) getActivity()).getFilesUploadHelper().uploadFromCamera(FileDisplayActivity.REQUEST_CODE__UPLOAD_FROM_CAMERA);
+                        dialog.hide();
+                        return false;
+                    }
+                });
+                uploadToTextView.setText(String.format(getResources().getString(R.string.upload_to),getResources().getString(R.string.app_name)));
+                final BottomSheetBehavior uploadBottomSheetBehavior = BottomSheetBehavior.from((View) uploadBottomSheet.getParent());
+                dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                    @Override
+                    public void onShow(DialogInterface dialog) {
+                        uploadBottomSheetBehavior.setPeekHeight(uploadBottomSheet.getMeasuredHeight());
+                    }
+                });
+                dialog.show();
                 getFabMain().collapse();
                 recordMiniFabClick();
             }
@@ -361,6 +419,26 @@ public class OCFileListFragment extends ExtendedListFragment {
                 com.getbase.floatingactionbutton.R.id.fab_label)).setVisibility(View.GONE);
     }
 
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String query) {
+        mFileListAdapter.filterBySearch(query);
+        return true;
+    }
+
+    @Override
+    public void onFocusChange(View v, boolean hasFocus) {
+        if (hasFocus) {
+            setMessageForEmptyList(getString(R.string.local_file_list_search_with_no_matches));
+        } else { // Set default message for empty list of files
+            ((FileDisplayActivity) getActivity()).setBackgroundText();
+        }
+    }
+
     /**
      * Handler for multiple selection mode.
      *
@@ -392,7 +470,7 @@ public class OCFileListFragment extends ExtendedListFragment {
 
         @Override
         public void onDrawerOpened(View drawerView) {
-            // nothing to do
+            clearLocalSearchView();
         }
 
         /**
@@ -439,6 +517,13 @@ public class OCFileListFragment extends ExtendedListFragment {
         public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
             getListView().invalidateViews();
             mode.invalidate();
+            if(mFileListAdapter.getCheckedItems(getListView()).size() == mFileListAdapter.getCount()){
+                mEnableSelectAll = false;
+            } else{
+                if(!checked) {
+                    mEnableSelectAll = true;
+                }
+            }
         }
 
         /**
@@ -470,7 +555,7 @@ public class OCFileListFragment extends ExtendedListFragment {
          */
         @Override
         public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-            List<OCFile> checkedFiles = mAdapter.getCheckedItems(getListView());
+            List<OCFile> checkedFiles = mFileListAdapter.getCheckedItems(getListView());
             final int checkedCount = checkedFiles.size();
             String title = getResources().getQuantityString(
                 R.plurals.items_selected_count,
@@ -484,8 +569,7 @@ public class OCFileListFragment extends ExtendedListFragment {
                 mContainerActivity,
                 getActivity()
             );
-            mf.filter(menu);
-
+            mf.filter(menu, mEnableSelectAll, true);
             return true;
         }
 
@@ -537,6 +621,14 @@ public class OCFileListFragment extends ExtendedListFragment {
             if (sbap != null) {
                 mSelectionWhenActionModeClosedByDrawer = sbap.getSparseBooleanArray();
             }
+        }
+    }
+
+    private void clearLocalSearchView() {
+        ((FileActivity) getActivity()).hideSoftKeyboard();
+        mFileListAdapter.clearFilterBySearch();
+        if (mSearchView != null) {
+            mSearchView.onActionViewCollapsed();
         }
     }
 
@@ -607,8 +699,7 @@ public class OCFileListFragment extends ExtendedListFragment {
             }   // exit is granted because storageManager.getFileByPath("/") never returns null
             mFile = parentDir;
 
-            // TODO Enable when "On Device" is recovered ?
-            listDirectory(mFile /*, MainApp.getOnlyOnDevice()*/);
+            listDirectoryWidthAnimationUp(mFile);
 
             onRefresh(false);
 
@@ -620,19 +711,66 @@ public class OCFileListFragment extends ExtendedListFragment {
         return moveCount;
     }
 
+    private void listDirectoryWithAnimationDown(final OCFile file) {
+        if(isInPowerSaveMode()) {
+            listDirectory(file);
+        } else {
+            Animation fadeOutFront = AnimationUtils.loadAnimation(getContext(), R.anim.dir_fadeout_front);
+            Handler eventHandler = new Handler();
+
+            // This is a ugly hack for getting rid of the "ArrayOutOfBound" exception we get when we
+            // call listDirectory() from the Animation callback
+            eventHandler.postDelayed(() -> {
+                listDirectory(file);
+                Animation fadeInBack = AnimationUtils.loadAnimation(getContext(), R.anim.dir_fadein_back);
+                getListView().setAnimation(fadeInBack);
+            }, getResources().getInteger(R.integer.folder_animation_duration));
+            getListView().startAnimation(fadeOutFront);
+        }
+    }
+
+    private boolean isInPowerSaveMode() {
+        PowerManager powerManager = (PowerManager)
+                getActivity().getSystemService(Context.POWER_SERVICE);
+        return android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
+                && powerManager.isPowerSaveMode();
+    }
+
+    private void listDirectoryWidthAnimationUp(final OCFile file) {
+        if(isInPowerSaveMode()) {
+            listDirectory(file);
+        } else {
+            if (getListView().getVisibility() == View.GONE) {
+                listDirectory(file);
+                Animation fadeInFront = AnimationUtils.loadAnimation(getContext(), R.anim.dir_fadein_front);
+                getListView().startAnimation(fadeInFront);
+                return;
+            }
+
+            Handler eventHandler = new Handler();
+            Animation fadeOutBack = AnimationUtils.loadAnimation(getContext(), R.anim.dir_fadeout_back);
+
+            // This is a ugly hack for getting rid of the "ArrayOutOfBound" exception we get when we
+            // call listDirectory() from the Animation callback
+            eventHandler.postDelayed(() -> {
+                listDirectory(file);
+                Animation fadeInFront = AnimationUtils.loadAnimation(getContext(), R.anim.dir_fadein_front);
+                getListView().startAnimation(fadeInFront);
+            }, getResources().getInteger(R.integer.folder_animation_duration));
+            getListView().startAnimation(fadeOutBack);
+        }
+    }
+
     @Override
     public void onItemClick(AdapterView<?> l, View v, int position, long id) {
-        OCFile file = (OCFile) mAdapter.getItem(position);
+        OCFile file = (OCFile) mFileListAdapter.getItem(position);
         if (file != null) {
             if (file.isFolder()) {
-                // update state and view of this fragment
-                // TODO Enable when "On Device" is recovered ?
-                listDirectory(file/*, MainApp.getOnlyOnDevice()*/);
+                listDirectoryWithAnimationDown(file);
                 // then, notify parent activity to let it update its state and view
                 mContainerActivity.onBrowsedDownTo(file);
                 // save index and top position
                 saveIndexAndTopPosition(position);
-
             } else { /// Click on a file
                 if (PreviewImageFragment.canBePreviewed(file)) {
                     // preview image - it handles the sync, if needed
@@ -687,6 +825,16 @@ public class OCFileListFragment extends ExtendedListFragment {
                 ((FileActivity) mContainerActivity).getAccount(), file);
     }
 
+    public void selectAll(){
+        for(int i = 0; i < mFileListAdapter.getCount(); i++) {
+            getListView().setItemChecked(i, true);
+        }
+    }
+
+    public int getNoOfItems(){
+        return getListView().getCount();
+    }
+
     /**
      * Start the appropriate action(s) on the currently selected files given menu selected by the user.
      *
@@ -694,7 +842,7 @@ public class OCFileListFragment extends ExtendedListFragment {
      * @return              'true' if the menu selection started any action, 'false' otherwise.
      */
     public boolean onFileActionChosen(int menuId) {
-        final ArrayList<OCFile> checkedFiles = mAdapter.getCheckedItems(getListView());
+        final ArrayList<OCFile> checkedFiles = mFileListAdapter.getCheckedItems(getListView());
         if (checkedFiles.size() <= 0) return false;
 
         if (checkedFiles.size() == 1) {
@@ -703,6 +851,7 @@ public class OCFileListFragment extends ExtendedListFragment {
             switch (menuId) {
                 case R.id.action_share_file: {
                     mContainerActivity.getFileOperationsHelper().showShareFile(singleFile);
+                    mEnableSelectAll = false;
                     return true;
                 }
                 case R.id.action_open_file_with: {
@@ -737,6 +886,20 @@ public class OCFileListFragment extends ExtendedListFragment {
 
         /// actions possible on a batch of files
         switch (menuId) {
+            case R.id.file_action_select_all: {
+                selectAll();
+                return true;
+            }
+            case R.id.action_select_inverse: {
+                for(int i = 0;i < mFileListAdapter.getCount();i++){
+                    if(getListView().isItemChecked(i)) {
+                        getListView().setItemChecked(i, false);
+                    } else{
+                        getListView().setItemChecked(i,true);
+                    }
+                }
+                return true;
+            }
             case R.id.action_remove_file: {
                 RemoveFilesDialogFragment dialog = RemoveFilesDialogFragment.newInstance(checkedFiles);
                 dialog.show(getFragmentManager(), ConfirmationDialogFragment.FTAG_CONFIRMATION);
@@ -828,24 +991,23 @@ public class OCFileListFragment extends ExtendedListFragment {
             }
 
             // TODO Enable when "On Device" is recovered ?
-            mAdapter.swapDirectory(directory, storageManager/*, onlyOnDevice*/);
+            mFileListAdapter.swapDirectory(directory, storageManager/*, onlyOnDevice*/);
             if (mFile == null || !mFile.equals(directory)) {
                 mCurrentListView.setSelection(0);
             }
             mFile = directory;
 
             updateLayout();
-
         }
     }
 
     private void updateLayout() {
         if (!isShowingJustFolders()) {
             int filesCount = 0, foldersCount = 0;
-            int count = mAdapter.getCount();
+            int count = mFileListAdapter.getCount();
             OCFile file;
             for (int i=0; i < count ; i++) {
-                file = (OCFile) mAdapter.getItem(i);
+                file = (OCFile) mFileListAdapter.getItem(i);
                 if (file.isFolder()) {
                     foldersCount++;
                 } else {
@@ -854,8 +1016,6 @@ public class OCFileListFragment extends ExtendedListFragment {
                     }
                 }
             }
-            // set footer text
-            setFooterText(generateFooterText(filesCount, foldersCount));
 
             // decide grid vs list view
             OwnCloudVersion version = AccountUtils.getServerVersion(
@@ -866,8 +1026,12 @@ public class OCFileListFragment extends ExtendedListFragment {
             } else {
                 switchToListView();
             }
+
+            // set footer text
+            setFooterText(generateFooterText(filesCount, foldersCount));
         }
         invalidateActionMode();
+        clearLocalSearchView();
     }
 
     private void invalidateActionMode() {
@@ -917,15 +1081,15 @@ public class OCFileListFragment extends ExtendedListFragment {
     }
 
     public void sortByName(boolean descending) {
-        mAdapter.setSortOrder(FileStorageUtils.SORT_NAME, descending);
+        mFileListAdapter.setSortOrder(FileStorageUtils.SORT_NAME, descending);
     }
 
     public void sortByDate(boolean descending) {
-        mAdapter.setSortOrder(FileStorageUtils.SORT_DATE, descending);
+        mFileListAdapter.setSortOrder(FileStorageUtils.SORT_DATE, descending);
     }
 
     public void sortBySize(boolean descending) {
-        mAdapter.setSortOrder(FileStorageUtils.SORT_SIZE, descending);
+        mFileListAdapter.setSortOrder(FileStorageUtils.SORT_SIZE, descending);
     }
 
     /**
@@ -1021,11 +1185,10 @@ public class OCFileListFragment extends ExtendedListFragment {
      */
     private void showSnackMessage(int messageResource) {
         Snackbar snackbar = Snackbar.make(
-            getActivity().findViewById(android.R.id.content),
+            getActivity().findViewById(R.id.coordinator_layout),
             messageResource,
             Snackbar.LENGTH_LONG
         );
         snackbar.show();
     }
-
 }

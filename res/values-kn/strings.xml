@@ -10,7 +10,9 @@
   <!--TODO re-enable when "On Device" is available
     <string name="drawer_item_on_device">On device</string>-->
   <string name="drawer_open">ತೆರೆ</string>
+  <string name="drawer_help">﻿ಸಹಾಯ</string>
   <string name="prefs_category_more">﻿ಇನ್ನಷ್ಟು</string>
+  <string name="prefs_category_security">﻿ಭದ್ರತೆ</string>
   <string name="prefs_help">﻿ಸಹಾಯ</string>
   <string name="prefs_imprint">ಮುದ್ರೆ</string>
   <string name="auth_username">﻿ಬಳಕೆಯ ಹೆಸರು</string>
@@ -40,11 +42,11 @@
   <string name="share_confirm_public_link_button">﻿ಉಳಿಸಿ</string>
   <string name="share_via_link_expiration_date_label">﻿ಮುಕ್ತಾಯ</string>
   <string name="share_via_link_password_label">ಗುಪ್ತಪದ</string>
-  <string name="share_via_link_edit_permission_label">﻿ಸಂಪಾದನೆಗೆ ಅವಕಾಶ ಮಾಡಿಕೊಡಿ</string>
   <string name="share_search">﻿ಹುಡುಕು</string>
   <string name="share_privilege_can_share">﻿ಹಂಚಿಕೊಳ್ಳಬಹುದು</string>
   <string name="share_privilege_can_edit">﻿ಸಂಪಾದಿಸಬಹುದು</string>
   <string name="share_privilege_can_edit_create">ಸೃಷ್ಟಿಸು</string>
   <string name="share_privilege_can_edit_change">﻿ಬದಲಾವಣೆ</string>
   <string name="share_privilege_can_edit_delete">﻿ಅಳಿಸಿ</string>
+  <!--Welcome to oC intro features-->
 </resources>

@@ -22,15 +22,13 @@
   <string name="drawer_item_uploads_list">ਅੱਪਲੋਡਜ਼</string>
   <string name="drawer_close">ਬੰਦ</string>
   <string name="drawer_open">ਖੋਲੋ</string>
+  <string name="drawer_feedback">ਸੁਝਾਅ</string>
+  <string name="drawer_help">ਮਦਦ</string>
   <string name="prefs_category_general">ਆਮ</string>
   <string name="prefs_category_more">ਹੋਰ</string>
   <string name="prefs_accounts">ਅਕਾਊਂਟ</string>
   <string name="prefs_manage_accounts">ਅਕਾਊਂਟ ਪ੍ਰਬੰਧਨ</string>
   <string name="prefs_passcode">ਪਾਸਕੋਡ ਲਾਕ</string>
-  <string name="prefs_instant_upload">ਤੁਰੰਤ ਤਸਵੀਰ ਅੱਪਲੋਡ</string>
-  <string name="prefs_instant_upload_summary">ਕੈਮਰੇ ਨਾਲ ਦਰਜ ਤਸਵੀਰਾਂ ਤੁਰੰਤ ਅੱਪਲੋਡ ਕਰੋ</string>
-  <string name="prefs_instant_video_upload">ਤੁਰੰਤ ਵੀਡੀਓ ਅੱਪਲੋਡ</string>
-  <string name="prefs_instant_video_upload_summary">ਕੈਮਰੇ ਨਾਲ ਦਰਜ ਵੀਡੀਓ ਤੁਰੰਤ ਅੱਪਲੋਡ ਕਰੋ</string>
   <string name="prefs_log_title">ਲਾਗ ਰੱਖਣਾ ਚਾਲੂ</string>
   <string name="prefs_log_title_history">ਲਾਗਿੰਗ ਅਤੀਤ</string>
   <string name="prefs_log_summary_history">ਇਹ ਦਰਜ ਲੌਗ ਵਿਖਾਉਂਦਾ ਹੈ</string>
@@ -45,7 +43,7 @@
   <string name="auth_password">ਪਾਸਵਰ</string>
   <string name="auth_register">%1$s ਲਈ ਨਵੇਂ ਹੋ?</string>
   <string name="sync_string_files">ਫਾਇਲਾਂ</string>
-  <string name="setup_btn_connect">ਕੁਨੈਕਟ</string>
+  <string name="setup_btn_login">ਕੁਨੈਕਟ</string>
   <string name="uploader_btn_upload_text">ਅੱਪਲੋਡ</string>
   <string name="uploader_top_message">ਅੱਪਲੋਡ ਫੋਲਡਰ ਚੁਣੋ:</string>
   <string name="uploader_wrn_no_account_title">ਕੋਈ ਅਕਾਊਂਟ ਨਹੀਂ ਲੱਭਾ</string>
@@ -159,7 +157,6 @@
   <string name="conflict_title">ਫਾਈਲ ਅਪਵਾਦ</string>
   <string name="conflict_keep_both">ਦੋਵੇਂ ਰੱਖੋ</string>
   <string name="preview_image_description">ਚਿੱਤਰ ਝਲਕ</string>
-  <string name="prefs_instant_upload_path_title">ਅੱਪਲੋਡ ਮਾਰਗ</string>
   <string name="share_link_password_title">ਇੱਕ ਪਾਸਵਰਡ ਭਰੋ</string>
   <string name="share_link_empty_password">ਤੁਹਾਨੂੰ ਇੱਕ ਪਾਸਵਰਡ ਦੇਣਾ ਪਵੇਗਾ</string>
   <string name="activity_chooser_send_file_title">ਭੇਜੋ</string>
@@ -167,7 +164,6 @@
   <string name="prefs_category_accounts">ਅਕਾਊਂਟ</string>
   <string name="drawer_manage_accounts">ਅਕਾਊਂਟ ਪ੍ਰਬੰਧਨ</string>
   <string name="folder_picker_choose_button_text">ਚੁਣੋ</string>
-  <string name="prefs_category_details">ਵੇਰਵ</string>
   <string name="auth_host_address">ਸਰਵਰ ਐਡਰੈਸ</string>
   <string name="username">ਯੂਜ਼ਰ-ਨਾਂ</string>
   <string name="file_list__footer__folder">1 ਫੋਲਡਰ</string>
@@ -180,7 +176,6 @@
   <string name="share_cancel_public_link_button">ਰੱਦ ਕਰੋ</string>
   <string name="share_via_link_password_label">ਪਾਸਵਰ</string>
   <string name="share_via_link_password_title">ਸੁਰੱਖਿਅਤ</string>
-  <string name="share_via_link_edit_permission_label">ਸੰਪਾਦਨ ਦੀ ਇਜ਼ਾਜਤ</string>
   <string name="share_get_public_link_button">ਲਿੰਕ ਪ੍ਰਾਪਤ ਕਰੋ</string>
   <string name="share_search">ਖੋਜ</string>
   <string name="share_privilege_can_edit_create">ਬਣਾਓ</string>
@@ -189,4 +184,5 @@
   <string name="edit_share_unshare">ਸਾਂਝਾ ਕਰਨਾ ਬੰਦ ਕਰੋ</string>
   <string name="manage_space_title">ਜਗ੍ਹਾਂ ਪ੍ਰਬੰਧਨ</string>
   <string name="manage_space_clear_data">ਡਾਟਾ ਸਾਫ਼ ਕਰੋ</string>
+  <!--Welcome to oC intro features-->
 </resources>

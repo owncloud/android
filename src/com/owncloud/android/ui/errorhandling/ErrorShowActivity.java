@@ -2,7 +2,8 @@
  *   ownCloud Android client application
  *
  *   @author LukeOwncloud
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   @author Christian Schabesberger
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -38,7 +39,7 @@ public class ErrorShowActivity extends Activity {
 		Log.e(TAG, "ErrorShowActivity was called. See above for StackTrace.");
 		Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler(this));
 		setContentView(R.layout.errorhandling_showerror);
-		mError = (TextView) findViewById(R.id.errorTextView);
+		mError = findViewById(R.id.errorTextView);
 		mError.setText(getIntent().getStringExtra("error"));
 
 	}

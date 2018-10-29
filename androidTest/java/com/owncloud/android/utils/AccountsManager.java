@@ -38,7 +38,6 @@ import com.owncloud.android.lib.resources.status.GetRemoteCapabilitiesOperation;
 import com.owncloud.android.lib.resources.status.OCCapability;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 
-
 public class AccountsManager {
 
     private static String accountType = "owncloud";
@@ -128,8 +127,7 @@ public class AccountsManager {
 
     //Save capabilities (in device DB)
     public static void saveCapabilities (OCCapability capabilities, String server, String user){
-        FileDataStorageManager fm = new FileDataStorageManager(
-                new Account(buildAccountName(user, server), accountType),
+        FileDataStorageManager fm = new FileDataStorageManager(new Account(buildAccountName(user, server), accountType),
                 MainApp.getAppContext().getContentResolver());
         fm.saveCapabilities (capabilities);
     }

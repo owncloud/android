@@ -1,3 +1,24 @@
+/**
+ *   ownCloud Android client application
+ *
+ *   @author David A. Velasco
+ *   @author David González Verdugo
+ *   Copyright (C) 2018 ownCloud GmbH.
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License version 2,
+ *   as published by the Free Software Foundation.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
 package com.owncloud.android.files.services;
 
 import android.accounts.Account;
@@ -29,7 +50,7 @@ public class RetryDownloadJobService extends JobService {
         // retrying the download
         if (account != null) {
             FileDataStorageManager fileDataStorageManager = new FileDataStorageManager(
-                account,
+                    this, account,
                 getContentResolver()
             );
 
@@ -37,7 +58,8 @@ public class RetryDownloadJobService extends JobService {
                 Extras.EXTRA_REMOTE_PATH
             );
 
-            Log_OC.d(TAG, String.format("Retrying download of %1s in %2s", fileRemotePath, accountName));
+            Log_OC.d(TAG, String.format("Retrying download of %1s in %2s", fileRemotePath,
+                    accountName));
 
             // Get download file from database
             OCFile ocFile = fileDataStorageManager.getFileByPath(fileRemotePath);
@@ -45,8 +67,8 @@ public class RetryDownloadJobService extends JobService {
             if (ocFile != null) {
                 // Retry download
                 Intent i = new Intent(this, FileDownloader.class);
-                i.putExtra(FileDownloader.EXTRA_ACCOUNT, account);
-                i.putExtra(FileDownloader.EXTRA_FILE, ocFile);
+                i.putExtra(FileDownloader.KEY_ACCOUNT, account);
+                i.putExtra(FileDownloader.KEY_FILE, ocFile);
                 this.startService(i);
             } else {
                 Log_OC.w(
@@ -76,5 +98,4 @@ public class RetryDownloadJobService extends JobService {
     public boolean onStopJob(JobParameters jobParameters) {
         return true;
     }
-
 }

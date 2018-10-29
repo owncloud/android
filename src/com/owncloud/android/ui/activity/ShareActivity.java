@@ -5,7 +5,9 @@
  * @author David A. Velasco
  * @author Juan Carlos González Cabrero
  * @author David González Verdugo
- * Copyright (C) 2017 ownCloud GmbH.
+ * @author Christian Schabesberger
+ * Copyright (C) 2018 ownCloud GmbH.
+ *
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -22,7 +24,6 @@
 
 package com.owncloud.android.ui.activity;
 
-import android.accounts.Account;
 import android.app.SearchManager;
 import android.content.Intent;
 import android.net.Uri;
@@ -38,6 +39,7 @@ import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.shares.OCShare;
+import com.owncloud.android.lib.resources.shares.ShareParserResult;
 import com.owncloud.android.lib.resources.shares.ShareType;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 import com.owncloud.android.operations.CreateShareViaLinkOperation;
@@ -138,8 +140,8 @@ public class ShareActivity extends FileActivity
     }
 
     @Override
-    public void copyOrSendPrivateLink(Account account, OCFile file) {
-        getFileOperationsHelper().copyOrSendPrivateLink(account, file);
+    public void copyOrSendPrivateLink(OCFile file) {
+        getFileOperationsHelper().copyOrSendPrivateLink(file);
     }
 
     private void doShareWith(String shareeName, String dataAuthority) {
@@ -313,33 +315,33 @@ public class ShareActivity extends FileActivity
     }
 
     private void onCreateShareViaLinkOperationFinish(CreateShareViaLinkOperation operation,
-                                                     RemoteOperationResult result) {
+                                                     RemoteOperationResult<ShareParserResult> result) {
         if (result.isSuccess()) {
             updateFileFromDB();
 
             getPublicShareFragment().dismiss();
 
-            getFileOperationsHelper().copyOrSendPublicLink((OCShare)result.getData().get(0));
+            getFileOperationsHelper().copyOrSendPublicLink(result.getData().getShares().get(0));
 
         } else {
             getPublicShareFragment().showError(
-                    ErrorMessageAdapter.getErrorCauseMessage(result, operation, getResources())
+                    ErrorMessageAdapter.getResultMessage(result, operation, getResources())
             );
         }
     }
 
     private void onUpdateShareViaLinkOperationFinish(UpdateShareViaLinkOperation operation,
-                                                     RemoteOperationResult result) {
+                                                     RemoteOperationResult<ShareParserResult> result) {
         if (result.isSuccess()) {
             updateFileFromDB();
 
             getPublicShareFragment().dismiss();
 
-            getFileOperationsHelper().copyOrSendPublicLink((OCShare)result.getData().get(0));
+            getFileOperationsHelper().copyOrSendPublicLink(result.getData().getShares().get(0));
 
         } else {
             getPublicShareFragment().showError(
-                    ErrorMessageAdapter.getErrorCauseMessage(result, operation, getResources())
+                    ErrorMessageAdapter.getResultMessage(result, operation, getResources())
             );
         }
     }

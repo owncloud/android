@@ -3,8 +3,9 @@
  *
  *   @author Bartek Przybylski
  *   @author David A. Velasco
+ *   @author David González Verdugo
  *   Copyright (C) 2011  Bartek Przybylski
- *   Copyright (C) 2017 ownCloud GmbH.
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -22,28 +23,9 @@
 
 package com.owncloud.android.syncadapter;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.jackrabbit.webdav.DavException;
-
-import com.owncloud.android.R;
-import com.owncloud.android.authentication.AuthenticatorActivity;
-import com.owncloud.android.datamodel.FileDataStorageManager;
-import com.owncloud.android.datamodel.OCFile;
-import com.owncloud.android.lib.common.accounts.AccountUtils;
-import com.owncloud.android.lib.common.operations.RemoteOperationResult;
-import com.owncloud.android.operations.SyncCapabilitiesOperation;
-import com.owncloud.android.operations.SynchronizeFolderOperation;
-import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
-import com.owncloud.android.lib.common.utils.Log_OC;
-import com.owncloud.android.ui.activity.ErrorsWhileCopyingHandlerActivity;
-
 import android.accounts.Account;
 import android.accounts.AccountsException;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.AbstractThreadedSyncAdapter;
@@ -56,6 +38,25 @@ import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.util.Pair;
+
+import com.owncloud.android.R;
+import com.owncloud.android.authentication.AuthenticatorActivity;
+import com.owncloud.android.datamodel.FileDataStorageManager;
+import com.owncloud.android.datamodel.OCFile;
+import com.owncloud.android.lib.common.operations.RemoteOperationResult;
+import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
+import com.owncloud.android.lib.common.utils.Log_OC;
+import com.owncloud.android.operations.SyncCapabilitiesOperation;
+import com.owncloud.android.operations.SynchronizeFolderOperation;
+import com.owncloud.android.ui.activity.ErrorsWhileCopyingHandlerActivity;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import at.bitfire.dav4android.exception.DavException;
 
 /**
  * Implementation of {@link AbstractThreadedSyncAdapter} responsible for synchronizing 
@@ -88,6 +89,7 @@ public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
 
     private static final int MAX_REPEAT_COUNTER = 1;
 
+    private static final String FILE_SYNC_NOTIFICATION_CHANNEL_ID = "FILE_SYNC_NOTIFICATION_CHANNEL";
 
     /** Time stamp for the current synchronization process, used to distinguish fresh data */
     private long mCurrentSyncTime;
@@ -120,7 +122,6 @@ public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
 
     /** To send broadcast messages not visible out of the app */
     private LocalBroadcastManager mLocalBroadcastManager;
-
 
     /**
      * Creates a {@link FileSyncAdapter}
@@ -165,7 +166,7 @@ public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
 
         this.setAccount(account);
         this.setContentProviderClient(providerClient);
-        this.setStorageManager(new FileDataStorageManager(account, providerClient));
+        this.setStorageManager(new FileDataStorageManager(getContext(), account, providerClient));
         
         try {
             this.initClientForCurrentAccount();
@@ -180,7 +181,6 @@ public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
         Log_OC.d(TAG, "Synchronization of ownCloud account " + account.name + " starting");
         sendLocalBroadcast(EVENT_FULL_SYNC_START, null, null);  // message to signal the start
                                                                 // of the synchronization to the UI
-        
         try {
             updateCapabilities();
             mCurrentSyncTime = System.currentTimeMillis();
@@ -191,8 +191,7 @@ public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
                 Log_OC.d(TAG, "Leaving synchronization before synchronizing the root folder " +
                         "because cancelation request");
             }
-            
-            
+
         } finally {
             // it's important making this although very unexpected errors occur;
             // that's the reason for the finally
@@ -241,7 +240,7 @@ public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
      */
     private void updateCapabilities() {
         SyncCapabilitiesOperation getCapabilities = new SyncCapabilitiesOperation();
-        RemoteOperationResult  result = getCapabilities.execute(getStorageManager(), getContext());
+        RemoteOperationResult result = getCapabilities.execute(getStorageManager(), getContext());
         if (!result.isSuccess()) {
             mLastFailedResult = result;
         }
@@ -537,8 +536,30 @@ public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
      * @param builder       Notification builder, already set up.
      */
     private void showNotification(int id, NotificationCompat.Builder builder) {
-        ((NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE))
-            .notify(id, builder.build());
+
+        NotificationManager mNotificationManager = ((NotificationManager) getContext().
+                getSystemService(Context.NOTIFICATION_SERVICE));
+
+        // Configure notification channel
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            NotificationChannel mNotificationChannel;
+            // The user-visible name of the channel.
+            CharSequence name = getContext().getString(R.string.file_sync_notification_channel_name);
+            // The user-visible description of the channel.
+            String description = getContext().getString(R.string.
+                    file_sync_notification_channel_description);
+            // Set importance low: show the notification everywhere but with no sound
+            int importance = NotificationManager.IMPORTANCE_LOW;
+            mNotificationChannel = new NotificationChannel(FILE_SYNC_NOTIFICATION_CHANNEL_ID,
+                    name, importance);
+            // Configure the notification channel.
+            mNotificationChannel.setDescription(description);
+            mNotificationManager.createNotificationChannel(mNotificationChannel);
+        }
+
+        builder.setChannelId(FILE_SYNC_NOTIFICATION_CHANNEL_ID);
+
+        mNotificationManager.notify(id, builder.build());
     }
     /**
      * Shorthand translation

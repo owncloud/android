@@ -2,7 +2,7 @@
  *   ownCloud Android client application
  *
  *   @author David A. Velasco
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -17,7 +17,6 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-
 
 package com.owncloud.android.utils;
 
@@ -67,7 +66,7 @@ public class ErrorMessageAdapterUnitTest {
             .thenReturn(MOCK_TO_DELETE);
 
         // ... when method under test is called ...
-        String errorMessage = ErrorMessageAdapter.getErrorCauseMessage(
+        String errorMessage = ErrorMessageAdapter.getResultMessage(
             new RemoteOperationResult(RemoteOperationResult.ResultCode.FORBIDDEN),
             new RemoveFileOperation(PATH_TO_DELETE, false),
             mMockResources

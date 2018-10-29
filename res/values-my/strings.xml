@@ -5,6 +5,7 @@
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <!--TODO re-enable when "On Device" is available
     <string name="drawer_item_on_device">On device</string>-->
+  <string name="drawer_help">အကူအညီ</string>
   <string name="prefs_help">အကူအညီ</string>
   <string name="auth_username">သုံးစွဲသူအမည်</string>
   <string name="auth_password">စကားဝှက်</string>
@@ -21,4 +22,5 @@
   <string name="share_privilege_can_edit">ပြင်ဆင်နိုင်</string>
   <string name="share_privilege_can_edit_create">ဖန်တီးမည်</string>
   <string name="share_privilege_can_edit_delete">ဖျက်မည်</string>
+  <!--Welcome to oC intro features-->
 </resources>
