@@ -115,7 +115,8 @@ public class RemoteOperationResult<T extends Object>
         LOCAL_FILE_NOT_FOUND,
         SERVICE_UNAVAILABLE,
         SPECIFIC_SERVICE_UNAVAILABLE,
-        SPECIFIC_UNSUPPORTED_MEDIA_TYPE
+        SPECIFIC_UNSUPPORTED_MEDIA_TYPE,
+        SPECIFIC_METHOD_NOT_ALLOWED
     }
 
     private boolean mSuccess = false;
@@ -274,6 +275,11 @@ public class RemoteOperationResult<T extends Object>
                         ResultCode.SPECIFIC_SERVICE_UNAVAILABLE
                 );
                 break;
+            case HttpConstants.HTTP_METHOD_NOT_ALLOWED:
+                parseErrorMessageAndSetCode(
+                        httpMethod.getResponseBodyAsString(),
+                        ResultCode.SPECIFIC_METHOD_NOT_ALLOWED
+                );
             default:
                 break;
         }
