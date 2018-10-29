@@ -136,7 +136,7 @@
                 android:gravity="center_vertical"
                 android:minHeight="32dp"
                 android:text="@string/auth_testing_connection"
-                android:textColor="@color/login_text_color"/>
+                android:textColor="@color/login_connection_text_color"/>
 
             <EditText
                 android:id="@+id/account_username"
@@ -172,7 +172,7 @@
                 android:drawablePadding="5dp"
                 android:gravity="center_vertical"
                 android:text="@string/auth_unauthorized"
-                android:textColor="@color/login_text_color"
+                android:textColor="@color/login_credentials_text_color"
                 android:visibility="gone"/>
 
             <android.support.v7.widget.AppCompatButton
