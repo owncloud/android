@@ -4,7 +4,6 @@
     package="com.owncloud.android.workaround.accounts">
 
     <uses-sdk
-        android:minSdkVersion="16"
         android:targetSdkVersion="26"
         tools:overrideLibrary="android.support.customtabs"/>
 

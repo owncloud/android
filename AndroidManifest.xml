@@ -23,7 +23,6 @@
     android:versionName="${versionName}">
 
     <uses-sdk
-        android:minSdkVersion="14"
         android:targetSdkVersion="26"
         tools:overrideLibrary="android.support.customtabs"/>
 
@@ -225,7 +224,9 @@
         <activity
             android:name=".ui.activity.UploadListActivity"
             android:theme="@style/Theme.ownCloud.Toolbar.Drawer" />
-        <activity android:name=".ui.activity.WhatsNewActivity" />
+        <activity android:name=".ui.activity.WhatsNewActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            />
 
         <receiver
             android:name=".broadcastreceivers.ConnectivityActionReceiver"
