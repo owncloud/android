@@ -235,11 +235,11 @@ public class CreateRemoteShareOperation extends RemoteOperation {
 
             int status = client.executeHttpMethod(postMethod);
 
-            if (isSuccess(status)) {
+            ShareToRemoteOperationResultParser parser = new ShareToRemoteOperationResultParser(
+                    new ShareXMLParser()
+            );
 
-                ShareToRemoteOperationResultParser parser = new ShareToRemoteOperationResultParser(
-                        new ShareXMLParser()
-                );
+            if (isSuccess(status)) {
                 parser.setOneOrMoreSharesRequired(true);
                 parser.setOwnCloudVersion(client.getOwnCloudVersion());
                 parser.setServerBaseUri(client.getBaseUri());
@@ -257,7 +257,7 @@ public class CreateRemoteShareOperation extends RemoteOperation {
                 }
 
             } else {
-                result = new RemoteOperationResult<>(postMethod);
+                result = parser.parse(postMethod.getResponseBodyAsString());
             }
 
         } catch (Exception e) {
