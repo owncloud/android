@@ -374,6 +374,12 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
             item.setVisible(false);
             item.setEnabled(false);
         }
+
+        item = menu.findItem(R.id.action_search);
+        if (item != null) {
+            item.setVisible(false);
+            item.setEnabled(false);
+        }
     }
 
     /**

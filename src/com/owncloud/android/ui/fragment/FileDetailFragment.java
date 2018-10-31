@@ -266,6 +266,12 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
             item.setVisible(false);
             item.setEnabled(false);
         }
+
+        item = menu.findItem(R.id.action_search);
+        if (item != null) {
+            item.setVisible(false);
+            item.setEnabled(false);
+        }
     }
 
 
