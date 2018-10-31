@@ -115,19 +115,14 @@ public class AccountsManager {
 
     //Get server capabilities
     public static OCCapability getCapabilities (String server, String user, String pass) {
-        GetRemoteCapabilitiesOperation getCapabilities = new GetRemoteCapabilitiesOperation();
-        OwnCloudClient client = new OwnCloudClient(Uri.parse(server),
-                NetworkUtils.getMultiThreadedConnManager());
-        client.setCredentials(
-                OwnCloudCredentialsFactory.newBasicCredentials(user, pass));
-        RemoteOperationResult result = getCapabilities.execute(client);
-        return (OCCapability) result.getData().get(0);
+        //REDO -> need mocks or integration with new networking stuff
+        return new OCCapability();
 
     }
 
     //Save capabilities (in device DB)
-    public static void saveCapabilities (OCCapability capabilities, String server, String user){
-        FileDataStorageManager fm = new FileDataStorageManager(new Account(buildAccountName(user, server), accountType),
+    public static void saveCapabilities (Context context, OCCapability capabilities, String server, String user){
+        FileDataStorageManager fm = new FileDataStorageManager(context, new Account(buildAccountName(user, server), accountType),
                 MainApp.getAppContext().getContentResolver());
         fm.saveCapabilities (capabilities);
     }
