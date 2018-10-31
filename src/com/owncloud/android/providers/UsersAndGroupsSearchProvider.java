@@ -172,8 +172,16 @@ public class UsersAndGroupsSearchProvider extends ContentProvider {
         GetRemoteShareesOperation searchRequest = new GetRemoteShareesOperation(
                 userQuery, REQUESTED_PAGE, RESULTS_PER_PAGE);
         RemoteOperationResult<ArrayList<JSONObject>> result = searchRequest.execute(account, getContext());
+        ArrayList<JSONObject> names = new ArrayList<>();
 
-        ArrayList<JSONObject> names = result.getData();
+        if (result.isSuccess()) {
+            for (Object o : result.getData()) {
+                // Get JSonObjects from response
+                names.add((JSONObject) o);
+            }
+        } else {
+            showErrorMessage(result);
+        }
 
         /// convert the responses from the OC server to the expected format
         if (names.size() > 0) {
