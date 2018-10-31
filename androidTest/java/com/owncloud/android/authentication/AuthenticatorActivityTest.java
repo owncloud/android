@@ -271,7 +271,7 @@ public class AuthenticatorActivityTest {
         SystemClock.sleep(WAIT_INITIAL_MS);
 
         // Check that login button is disabled
-        onView(withId(R.id.loginButton)).check(matches(not(isEnabled())));
+        onView(withId(R.id.loginButton)).check(matches(not(isDisplayed())));
 
         setFields(testServerURL, testUser, testPassword);
 
@@ -344,7 +344,7 @@ public class AuthenticatorActivityTest {
         Log_OC.i(LOG_TAG, "Test Check Login Special Characters Start");
 
         // Check that login button is disabled
-        onView(withId(R.id.loginButton)).check(matches(not(isEnabled())));
+        onView(withId(R.id.loginButton)).check(matches(not(isDisplayed())));
 
         setFields(testServerURL, testUser2, testPassword2);
 
@@ -374,7 +374,7 @@ public class AuthenticatorActivityTest {
         Log_OC.i(LOG_TAG, "Test Check Login Incorrect Start");
 
         // Check that login button is disabled
-        onView(withId(R.id.loginButton)).check(matches(not(isEnabled())));
+        onView(withId(R.id.loginButton)).check(matches(not(isDisplayed())));
 
         setFields(testServerURL, USER_INEXISTENT, testPassword);
 
@@ -402,7 +402,7 @@ public class AuthenticatorActivityTest {
             AccountsManager.addAccount(targetContext, testServerURL, testUser, testPassword);
 
             // Check that login button is disabled
-            onView(withId(R.id.loginButton)).check(matches(not(isEnabled())));
+            onView(withId(R.id.loginButton)).check(matches(not(isDisplayed())));
 
             setFields(testServerURL, testUser, testPassword);
 
@@ -424,7 +424,7 @@ public class AuthenticatorActivityTest {
         Log_OC.i(LOG_TAG, "Test Check Blanks Login Start");
 
         // Check that login button is disabled
-        onView(withId(R.id.loginButton)).check(matches(not(isEnabled())));
+        onView(withId(R.id.loginButton)).check(matches(not(isDisplayed())));
 
         setFields(testServerURL, "", "");
 
@@ -447,7 +447,7 @@ public class AuthenticatorActivityTest {
         String UserBlanks = "    " + testUser + "         ";
 
         // Check that login button is disabled
-        onView(withId(R.id.loginButton)).check(matches(not(isEnabled())));
+        onView(withId(R.id.loginButton)).check(matches(not(isDisplayed())));
 
         setFields(testServerURL, UserBlanks, testPassword);
 
@@ -478,7 +478,7 @@ public class AuthenticatorActivityTest {
         String connectionString = testServerURL + SUFFIX_BROWSER;
 
         // Check that login button is disabled
-        onView(withId(R.id.loginButton)).check(matches(not(isEnabled())));
+        onView(withId(R.id.loginButton)).check(matches(not(isDisplayed())));
 
         setFields(connectionString, testUser2, testPassword2);
 
@@ -526,7 +526,7 @@ public class AuthenticatorActivityTest {
         // Type server url
         onView(withId(R.id.hostUrlInput))
                 .perform(replaceText(connectionString), closeSoftKeyboard());
-        onView(withId(R.id.scroll)).perform(click());
+        onView(withId(R.id.embeddedCheckServerButton)).perform(click());
         SystemClock.sleep(WAIT_CONNECTION_MS);
 
         checkStatusMessage();
