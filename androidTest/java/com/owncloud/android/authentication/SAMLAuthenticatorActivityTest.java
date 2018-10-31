@@ -186,7 +186,7 @@ public class SAMLAuthenticatorActivityTest {
 
         SystemClock.sleep(WAIT_INITIAL_MS);
 
-        // Check that login button is disabled
+        // Check that login button is hidden
         onView(withId(R.id.loginButton)).check(matches(not(isDisplayed())));
 
         onView(withId(R.id.hostUrlInput)).perform(replaceText(testServerURL));
@@ -237,6 +237,7 @@ public class SAMLAuthenticatorActivityTest {
 
         Log_OC.i(LOG_TAG, "Test Check Login SAML Orientation Changes Start");
 
+        // Check that login button is hidden
         onView(withId(R.id.loginButton)).check(matches(not(isDisplayed())));
 
         onView(withId(R.id.hostUrlInput)).perform(replaceText(testServerURL));
