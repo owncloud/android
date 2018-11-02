@@ -493,6 +493,13 @@ public class ReceiveExternalFilesActivity extends FileActivity
         if (getIntent().getAction().equals(Intent.ACTION_SEND)) {
             mStreamsToUpload = new ArrayList<>();
             mStreamsToUpload.add(getIntent().getParcelableExtra(Intent.EXTRA_STREAM));
+            if (mStreamsToUpload.get(0) != null) {
+                String streamToUpload = mStreamsToUpload.get(0).toString();
+                if (streamToUpload.contains("/data") && streamToUpload.contains(getPackageName()) &&
+                        !streamToUpload.contains(getCacheDir().getPath())) {
+                    finish();
+                }
+            }
         } else if (getIntent().getAction().equals(Intent.ACTION_SEND_MULTIPLE)) {
             mStreamsToUpload = getIntent().getParcelableArrayListExtra(Intent.EXTRA_STREAM);
         }
