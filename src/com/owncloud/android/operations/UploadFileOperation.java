@@ -33,9 +33,9 @@ import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.http.HttpConstants;
 import com.owncloud.android.lib.common.network.OnDatatransferProgressListener;
 import com.owncloud.android.lib.common.operations.OperationCancelledException;
-import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
+import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.files.ExistenceCheckRemoteOperation;
 import com.owncloud.android.lib.resources.files.ReadRemoteFileOperation;
@@ -78,9 +78,8 @@ public class UploadFileOperation extends SyncOperation {
         }
 
         OCFile newFile = new OCFile(remotePath);
-        newFile.setStoragePath(
-                localPath.startsWith("/data") && localPath.contains(context.getPackageName()) ? "" : localPath
-        );
+
+        newFile.setStoragePath(localPath);
         newFile.setLastSyncDateForProperties(0);
         newFile.setLastSyncDateForData(0);
 

@@ -35,6 +35,7 @@ import android.webkit.MimeTypeMap;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.OCFile;
+import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.files.RemoteFile;
 
 import java.io.File;
@@ -50,6 +51,8 @@ import third_parties.daveKoeller.AlphanumComparator;
  * Static methods to help in access to local file system.
  */
 public class FileStorageUtils {
+    private static final String TAG = FileStorageUtils.class.getSimpleName();
+
     public static final int SORT_NAME = 0;
     public static final int SORT_DATE = 1;
     public static final int SORT_SIZE = 2;
@@ -348,4 +351,24 @@ public class FileStorageUtils {
         return (result != null) ? result : "";
     }
 
+    public static boolean deleteDir(File dir) {
+        if (dir != null && dir.isDirectory()) {
+            String[] children = dir.list();
+            if (children != null) {
+                for (int i = 0; i < children.length; i++) {
+                    boolean success = deleteDir(new File(dir, children[i]));
+                    if (!success) {
+                        Log_OC.w(TAG, "File NOT deleted " + children[i]);
+                        return false;
+                    } else {
+                        Log_OC.d(TAG, "File deleted " + children[i]);
+                    }
+                }
+            } else {
+                return false;
+            }
+        }
+
+        return dir.delete();
+    }
 }
