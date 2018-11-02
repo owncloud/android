@@ -385,10 +385,10 @@ public class FileUploader extends Service
             String uploadKey;
             UploadFileOperation newUploadFileOperation;
             try {
-                for (int i = 0; i < files.length; i++) {
+                for (OCFile ocFile : files) {
 
-                    OCUpload ocUpload = new OCUpload(files[i], account);
-                    ocUpload.setFileSize(files[i].getFileLength());
+                    OCUpload ocUpload = new OCUpload(ocFile, account);
+                    ocUpload.setFileSize(ocFile.getFileLength());
                     ocUpload.setForceOverwrite(forceOverwrite);
                     ocUpload.setCreateRemoteFolder(isCreateRemoteFolder);
                     ocUpload.setCreatedBy(createdBy);
@@ -397,13 +397,13 @@ public class FileUploader extends Service
                     ocUpload.setWhileChargingOnly(isWhileChargingOnly);*/
                     ocUpload.setUploadStatus(UploadStatus.UPLOAD_IN_PROGRESS);
 
-                    if(chunked && new File(files[i].getStoragePath()).length() >
+                    if(chunked && new File(ocFile.getStoragePath()).length() >
                             ChunkedUploadRemoteFileOperation.CHUNK_SIZE) {
                         ocUpload.setTransferId(
-                                SecurityUtils.stringToMD5Hash(files[i].getRemotePath()) + System.currentTimeMillis());
+                                SecurityUtils.stringToMD5Hash(ocFile.getRemotePath()) + System.currentTimeMillis());
                         newUploadFileOperation = new ChunkedUploadFileOperation(
                                 account,
-                                files[i],
+                                ocFile,
                                 ocUpload,
                                 forceOverwrite,
                                 localAction,
@@ -412,7 +412,7 @@ public class FileUploader extends Service
                     } else {
                         newUploadFileOperation = new UploadFileOperation(
                                 account,
-                                files[i],
+                                ocFile,
                                 ocUpload,
                                 forceOverwrite,
                                 localAction,
@@ -431,7 +431,7 @@ public class FileUploader extends Service
 
                     Pair<String, String> putResult = mPendingUploads.putIfAbsent(
                             account.name,
-                            files[i].getRemotePath(),
+                            ocFile.getRemotePath(),
                             newUploadFileOperation
                     );
                     if (putResult != null) {
@@ -1072,6 +1072,7 @@ public class FileUploader extends Service
                         mNotificationManager,
                         R.string.uploader_upload_succeeded_ticker,
                         2000);
+
             }
         }
     }
