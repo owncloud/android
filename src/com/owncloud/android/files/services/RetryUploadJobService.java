@@ -54,7 +54,7 @@ public class RetryUploadJobService extends JobService {
         if (ocUpload != null) {
             // Retry the upload
             TransferRequester requester = new TransferRequester();
-            requester.retry(this, ocUpload);
+            requester.retry(this, ocUpload, true);
 
         } else {
             // easy if the user deletes the upload in uploads view before recovering network

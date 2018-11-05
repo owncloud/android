@@ -388,7 +388,7 @@ public class ExpandableUploadListAdapter extends BaseExpandableListAdapter imple
                             File file = new File(upload.getLocalPath());
                             if (file.exists()) {
                                 TransferRequester requester = new TransferRequester();
-                                requester.retry(mParentActivity, upload);
+                                requester.retry(mParentActivity, upload, false);
                                 refreshView();
                             } else {
                                 final String message = String.format(

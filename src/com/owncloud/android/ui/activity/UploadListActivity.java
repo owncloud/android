@@ -200,7 +200,7 @@ public class UploadListActivity extends FileActivity implements UploadListFragme
                 }
             case R.id.action_retry_uploads:
                 TransferRequester requester = new TransferRequester();
-                requester.retryFailedUploads(this, null, null);
+                requester.retryFailedUploads(this, null, null, false);
                 break;
 
             case R.id.action_clear_failed_uploads:
@@ -248,7 +248,8 @@ public class UploadListActivity extends FileActivity implements UploadListFragme
             requester.retryFailedUploads(
                 this,
                 account,
-                UploadResult.CREDENTIAL_ERROR
+                UploadResult.CREDENTIAL_ERROR,
+                    false
             );
         }
     }
@@ -272,7 +273,7 @@ public class UploadListActivity extends FileActivity implements UploadListFragme
             } else {
                 // already updated -> just retry!
                 TransferRequester requester = new TransferRequester();
-                requester.retryFailedUploads(this, account, UploadResult.CREDENTIAL_ERROR);
+                requester.retryFailedUploads(this, account, UploadResult.CREDENTIAL_ERROR, false);
             }
 
         } else {
