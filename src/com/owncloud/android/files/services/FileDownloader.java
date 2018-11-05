@@ -79,6 +79,7 @@ public class FileDownloader extends Service
     public static final String KEY_ACCOUNT = "ACCOUNT";
     public static final String KEY_FILE = "FILE";
     public static final String KEY_IS_AVAILABLE_OFFLINE_FILE = "KEY_IS_AVAILABLE_OFFLINE_FILE";
+    public static final String KEY_RETRY_DOWNLOAD = "KEY_RETRY_DOWNLOAD";
 
     private static final String DOWNLOAD_ADDED_MESSAGE = "DOWNLOAD_ADDED";
     private static final String DOWNLOAD_FINISH_MESSAGE = "DOWNLOAD_FINISH";
@@ -186,12 +187,13 @@ public class FileDownloader extends Service
         Log_OC.d(TAG, "Starting command with id " + startId);
 
         boolean isAvailableOfflineFile = intent.getBooleanExtra(KEY_IS_AVAILABLE_OFFLINE_FILE, false);
+        boolean retryDownload = intent.getBooleanExtra(KEY_RETRY_DOWNLOAD, false);
 
-        if (isAvailableOfflineFile && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && (isAvailableOfflineFile || retryDownload)) {
             /**
-             * After calling startForegroundService method from
-             * {@link com.owncloud.android.operations.SynchronizeFileOperation}, we have to call this within
-             * five seconds after the service is created to avoid an error
+             * We have to call this within five seconds after the service is created with startForegroundService when:
+             * - Checking available offline files in background
+             * - Retry downloads in background, e.g. when recovering wifi connection
              */
             Log_OC.d(TAG, "Starting FileDownloader service in foreground");
             startForeground(1, mNotificationBuilder.build());
@@ -421,6 +423,7 @@ public class FileDownloader extends Service
                 }
             }
             Log_OC.d(TAG, "Stopping after command with id " + msg.arg1);
+            mService.stopForeground(true);
             mService.stopSelf(msg.arg1);
         }
     }

@@ -3,6 +3,7 @@
  *
  *   @author LukeOwncloud
  *   @author Christian Schabesberger
+ *   @author David González Verdugo
  *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
@@ -167,32 +168,30 @@ public class ConnectivityActionReceiver extends BroadcastReceiver {
                 ) {
 
             Handler h = new Handler(Looper.getMainLooper());
-            h.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    Log_OC.d(TAG, "Requesting retry of camera uploads (& friends)");
-                    TransferRequester requester = new TransferRequester();
+            h.postDelayed(() -> {
+                Log_OC.d(TAG, "Requesting retry of camera uploads (& friends)");
+                TransferRequester requester = new TransferRequester();
 
-                    //Avoid duplicate uploads, because uploads retry is also managed in FileUploader
-                    //by using jobs in versions 5 or higher
-                    if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.LOLLIPOP) {
-
-                        requester.retryFailedUploads(
-                                MainApp.getAppContext(),
-                                null,
-                                // for the interrupted when Wifi fell, if any
-                                // (side effect: any upload failed due to network error will be
-                                // retried too, instant or not)
-                                UploadResult.NETWORK_CONNECTION
-                        );
-                    }
-
+                //Avoid duplicate uploads, because uploads retry is also managed in FileUploader
+                //by using jobs in versions 5 or higher
+                if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.LOLLIPOP) {
                     requester.retryFailedUploads(
-                        MainApp.getAppContext(),
-                        null,
-                        UploadResult.DELAYED_FOR_WIFI       // for the rest of enqueued when Wifi fell
+                            MainApp.getAppContext(),
+                            null,
+                            // for the interrupted when Wifi fell, if any
+                            // (side effect: any upload failed due to network error will be
+                            // retried too, instant or not)
+                            UploadResult.NETWORK_CONNECTION,
+                            true
                     );
                 }
+
+                requester.retryFailedUploads(
+                    MainApp.getAppContext(),
+                    null,
+                    UploadResult.DELAYED_FOR_WIFI,       // for the rest of enqueued when Wifi fell
+                        true
+                );
             },
                 500
             );
