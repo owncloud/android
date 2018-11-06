@@ -115,16 +115,12 @@ public class FileUploader extends Service
     protected static final String KEY_REMOTE_FILE = "REMOTE_FILE";
     protected static final String KEY_MIME_TYPE = "MIME_TYPE";
     protected static final String KEY_IS_AVAILABLE_OFFLINE_FILE = "KEY_IS_AVAILABLE_OFFLINE_FILE";
+    protected static final String KEY_REQUESTED_FROM_WIFI_BACK_EVENT = "KEY_REQUESTED_FROM_WIFI_BACK_EVENT";
 
     /**
      * Call this Service with only this Intent key if all pending uploads are to be retried.
      */
     protected static final String KEY_RETRY = "KEY_RETRY";
-//    /**
-//     * Call this Service with KEY_RETRY and KEY_RETRY_REMOTE_PATH to retry
-//     * upload of file identified by KEY_RETRY_REMOTE_PATH.
-//     */
-//    private static final String KEY_RETRY_REMOTE_PATH = "KEY_RETRY_REMOTE_PATH";
     /**
      * Call this Service with KEY_RETRY and KEY_RETRY_UPLOAD to retry
      * upload of file identified by KEY_RETRY_UPLOAD.
@@ -294,9 +290,13 @@ public class FileUploader extends Service
         int createdBy = intent.getIntExtra(KEY_CREATED_BY, UploadFileOperation.CREATED_BY_USER);
 
         boolean isAvailableOfflineFile = intent.getBooleanExtra(KEY_IS_AVAILABLE_OFFLINE_FILE, false);
+        boolean isRequestedFromWifiBackEvent = intent.getBooleanExtra(
+                KEY_REQUESTED_FROM_WIFI_BACK_EVENT, false
+        );
 
-        if (((createdBy == CREATED_AS_CAMERA_UPLOAD_PICTURE || createdBy == CREATED_AS_CAMERA_UPLOAD_VIDEO) ||
-                isAvailableOfflineFile) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if ((createdBy == CREATED_AS_CAMERA_UPLOAD_PICTURE || createdBy == CREATED_AS_CAMERA_UPLOAD_VIDEO ||
+                isAvailableOfflineFile || isRequestedFromWifiBackEvent) &&
+                Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             /**
              * After calling startForegroundService method from {@link TransferRequester} for camera uploads or
              * available offline, we have to call this within five seconds after the service is created to avoid
@@ -307,7 +307,7 @@ public class FileUploader extends Service
         }
 
         boolean retry = intent.getBooleanExtra(KEY_RETRY, false);
-        AbstractList<String> requestedUploads = new Vector<String>();
+        AbstractList<String> requestedUploads = new Vector<>();
 
         if (!intent.hasExtra(KEY_ACCOUNT)) {
             Log_OC.e(TAG, "Not enough information provided in intent");
@@ -370,7 +370,8 @@ public class FileUploader extends Service
                     files[i] = UploadFileOperation.obtainNewOCFileToUpload(
                             remotePaths[i],
                             localPaths[i],
-                            ((mimeTypes != null) ? mimeTypes[i] : null)
+                            ((mimeTypes != null) ? mimeTypes[i] : null),
+                            getApplicationContext()
                     );
                     if (files[i] == null) {
                         Log_OC.e(TAG, "obtainNewOCFileToUpload() returned null for remotePaths[i]:" + remotePaths[i]
@@ -384,10 +385,10 @@ public class FileUploader extends Service
             String uploadKey;
             UploadFileOperation newUploadFileOperation;
             try {
-                for (int i = 0; i < files.length; i++) {
+                for (OCFile ocFile : files) {
 
-                    OCUpload ocUpload = new OCUpload(files[i], account);
-                    ocUpload.setFileSize(files[i].getFileLength());
+                    OCUpload ocUpload = new OCUpload(ocFile, account);
+                    ocUpload.setFileSize(ocFile.getFileLength());
                     ocUpload.setForceOverwrite(forceOverwrite);
                     ocUpload.setCreateRemoteFolder(isCreateRemoteFolder);
                     ocUpload.setCreatedBy(createdBy);
@@ -396,13 +397,13 @@ public class FileUploader extends Service
                     ocUpload.setWhileChargingOnly(isWhileChargingOnly);*/
                     ocUpload.setUploadStatus(UploadStatus.UPLOAD_IN_PROGRESS);
 
-                    if(chunked && new File(files[i].getStoragePath()).length() >
+                    if(chunked && new File(ocFile.getStoragePath()).length() >
                             ChunkedUploadRemoteFileOperation.CHUNK_SIZE) {
                         ocUpload.setTransferId(
-                                SecurityUtils.stringToMD5Hash(files[i].getRemotePath()) + System.currentTimeMillis());
+                                SecurityUtils.stringToMD5Hash(ocFile.getRemotePath()) + System.currentTimeMillis());
                         newUploadFileOperation = new ChunkedUploadFileOperation(
                                 account,
-                                files[i],
+                                ocFile,
                                 ocUpload,
                                 forceOverwrite,
                                 localAction,
@@ -411,7 +412,7 @@ public class FileUploader extends Service
                     } else {
                         newUploadFileOperation = new UploadFileOperation(
                                 account,
-                                files[i],
+                                ocFile,
                                 ocUpload,
                                 forceOverwrite,
                                 localAction,
@@ -430,7 +431,7 @@ public class FileUploader extends Service
 
                     Pair<String, String> putResult = mPendingUploads.putIfAbsent(
                             account.name,
-                            files[i].getRemotePath(),
+                            ocFile.getRemotePath(),
                             newUploadFileOperation
                     );
                     if (putResult != null) {
@@ -1071,6 +1072,7 @@ public class FileUploader extends Service
                         mNotificationManager,
                         R.string.uploader_upload_succeeded_ticker,
                         2000);
+
             }
         }
     }

@@ -88,6 +88,8 @@ public class RefreshFolderOperation extends SyncOperation<ArrayList<RemoteFile>>
 
     private LocalBroadcastManager mLocalBroadcastManager;
 
+    private boolean syncVersionAndProfileEnabled = true;
+
     /**
      * Creates a new instance of {@link RefreshFolderOperation}.
      * 
@@ -126,7 +128,7 @@ public class RefreshFolderOperation extends SyncOperation<ArrayList<RemoteFile>>
         mLocalFolder = getStorageManager().getFileByPath(mLocalFolder.getRemotePath());
 
         // only in root folder: sync server version and user profile
-        if (OCFile.ROOT_PATH.equals(mLocalFolder.getRemotePath())) {
+        if (OCFile.ROOT_PATH.equals(mLocalFolder.getRemotePath()) && syncVersionAndProfileEnabled) {
             OwnCloudVersion serverVersion = syncCapabilitiesAndGetServerVersion();
             mIsShareSupported = serverVersion.isSharedSupported();
             syncUserProfile();
@@ -181,6 +183,16 @@ public class RefreshFolderOperation extends SyncOperation<ArrayList<RemoteFile>>
             serverVersion = AccountUtils.getServerVersion(mAccount);
         }
         return serverVersion;
+    }
+
+    /**
+     * Normally user profile and owncloud version get synchronized if you sync the root directory.
+     * With this you can override this behaviour and disable it, which is useful for the DocumentsProvider
+     *
+     * @param syncVersionAndProfileEnabled disables/enables sync Version/Profile when syncing root DIR
+     */
+    public void syncVersionAndProfileEnabled(boolean syncVersionAndProfileEnabled) {
+        this.syncVersionAndProfileEnabled = syncVersionAndProfileEnabled;
     }
 
     /**

@@ -6,6 +6,7 @@
  * @author Juan Carlos González Cabrero
  * @author David A. Velasco
  * @author Christian Schabesberger
+ * @author David González Verdugo
  * Copyright (C) 2012  Bartek Przybylski
  * Copyright (C) 2018 ownCloud GmbH.
  * <p>
@@ -32,10 +33,10 @@ import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.IntentFilter;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Resources.NotFoundException;
 import android.net.Uri;
 import android.os.Bundle;
@@ -77,13 +78,14 @@ import com.owncloud.android.operations.RefreshFolderOperation;
 import com.owncloud.android.operations.common.SyncOperation;
 import com.owncloud.android.syncadapter.FileSyncAdapter;
 import com.owncloud.android.ui.adapter.ReceiveExternalFilesAdapter;
+import com.owncloud.android.ui.asynctasks.CopyAndUploadContentUrisTask;
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment;
 import com.owncloud.android.ui.dialog.CreateFolderDialogFragment;
-import com.owncloud.android.ui.asynctasks.CopyAndUploadContentUrisTask;
 import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter;
 import com.owncloud.android.ui.fragment.TaskRetainerFragment;
 import com.owncloud.android.ui.helpers.UriUploader;
 import com.owncloud.android.utils.DisplayUtils;
+import com.owncloud.android.utils.Extras;
 import com.owncloud.android.utils.FileStorageUtils;
 
 import java.io.File;
@@ -113,6 +115,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
 
     private LocalBroadcastManager mLocalBroadcastManager;
     private SyncBroadcastReceiver mSyncBroadcastReceiver;
+    private UploadBroadcastReceiver mUploadBroadcastReceiver;
     private boolean mSyncInProgress = false;
     private boolean mAccountSelected;
     private boolean mAccountSelectionShowing;
@@ -160,6 +163,12 @@ public class ReceiveExternalFilesActivity extends FileActivity
         mLocalBroadcastManager = LocalBroadcastManager.getInstance(this);
         mLocalBroadcastManager.registerReceiver(mSyncBroadcastReceiver, syncIntentFilter);
 
+        // Listen for upload messages
+        IntentFilter uploadIntentFilter = new IntentFilter(FileUploader.getUploadFinishMessage());
+        uploadIntentFilter.addAction(FileUploader.getUploadStartMessage());
+        mUploadBroadcastReceiver = new UploadBroadcastReceiver();
+        mLocalBroadcastManager.registerReceiver(mUploadBroadcastReceiver, uploadIntentFilter);
+
         // Init Fragment without UI to retain AsyncTask across configuration changes
         FragmentManager fm = getSupportFragmentManager();
         TaskRetainerFragment taskRetainerFragment =
@@ -169,7 +178,6 @@ public class ReceiveExternalFilesActivity extends FileActivity
             fm.beginTransaction()
                     .add(taskRetainerFragment, TaskRetainerFragment.FTAG_TASK_RETAINER_FRAGMENT).commit();
         }   // else, Fragment already created and retained across configuration change
-
     }
 
     @Override
@@ -485,6 +493,13 @@ public class ReceiveExternalFilesActivity extends FileActivity
         if (getIntent().getAction().equals(Intent.ACTION_SEND)) {
             mStreamsToUpload = new ArrayList<>();
             mStreamsToUpload.add(getIntent().getParcelableExtra(Intent.EXTRA_STREAM));
+            if (mStreamsToUpload.get(0) != null) {
+                String streamToUpload = mStreamsToUpload.get(0).toString();
+                if (streamToUpload.contains("/data") && streamToUpload.contains(getPackageName()) &&
+                        !streamToUpload.contains(getCacheDir().getPath())) {
+                    finish();
+                }
+            }
         } else if (getIntent().getAction().equals(Intent.ACTION_SEND_MULTIPLE)) {
             mStreamsToUpload = getIntent().getParcelableArrayListExtra(Intent.EXTRA_STREAM);
         }
@@ -821,25 +836,22 @@ public class ReceiveExternalFilesActivity extends FileActivity
             @Override
             public void onShow(DialogInterface dialog) {
                 Button button = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
-                button.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        String fileName = input.getText().toString();
-                        String error = null;
-                        if (fileName.length() > MAX_FILENAME_LENGTH) {
-                            error = String.format(getString(R.string.uploader_upload_text_dialog_filename_error_length_max), MAX_FILENAME_LENGTH);
-                        } else if (fileName.length() == 0) {
-                            error = getString(R.string.uploader_upload_text_dialog_filename_error_empty);
-                        } else {
-                            fileName += ".txt";
-                            Uri fileUri = savePlainTextToFile(fileName);
-                            mStreamsToUpload.clear();
-                            mStreamsToUpload.add(fileUri);
-                            uploadFiles();
-                        }
-                        inputLayout.setErrorEnabled(error != null);
-                        inputLayout.setError(error);
+                button.setOnClickListener(view -> {
+                    String fileName = input.getText().toString();
+                    String error = null;
+                    if (fileName.length() > MAX_FILENAME_LENGTH) {
+                        error = String.format(getString(R.string.uploader_upload_text_dialog_filename_error_length_max), MAX_FILENAME_LENGTH);
+                    } else if (fileName.length() == 0) {
+                        error = getString(R.string.uploader_upload_text_dialog_filename_error_empty);
+                    } else {
+                        fileName += ".txt";
+                        Uri fileUri = savePlainTextToFile(fileName);
+                        mStreamsToUpload.clear();
+                        mStreamsToUpload.add(fileUri);
+                        uploadFiles();
                     }
+                    inputLayout.setErrorEnabled(error != null);
+                    inputLayout.setError(error);
                 });
             }
         });
@@ -861,6 +873,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
             outputStream.write(content.getBytes());
             outputStream.close();
             uri = Uri.fromFile(tmpFile);
+
         } catch (IOException e) {
             Log_OC.w(TAG, "Failed to create temp file for uploading plain text: " + e.getMessage());
         }
@@ -887,6 +900,20 @@ public class ReceiveExternalFilesActivity extends FileActivity
             Window window = alertDialog.getWindow();
             if (window != null)
                 window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+        }
+    }
+
+    private class UploadBroadcastReceiver extends BroadcastReceiver {
+        /**
+         * If the upload is text shared from other apps and was successfully uploaded -> delete cache
+         */
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            boolean success = intent.getBooleanExtra(Extras.EXTRA_UPLOAD_RESULT, false);
+            String localPath = intent.getStringExtra(Extras.EXTRA_OLD_FILE_PATH);
+            if (success && localPath.contains(getCacheDir().getPath())) {
+                FileStorageUtils.deleteDir(getCacheDir());
+            }
         }
     }
 }
