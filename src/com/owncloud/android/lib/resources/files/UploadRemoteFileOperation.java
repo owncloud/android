@@ -89,7 +89,7 @@ public class UploadRemoteFileOperation extends RemoteOperation {
 
         try {
             mPutMethod = new PutMethod(
-                    new URL(client.getNewFilesWebDavUri() + WebdavUtils.encodePath(mRemotePath)));
+                    new URL(client.getUserFilesWebDavUri() + WebdavUtils.encodePath(mRemotePath)));
 
             mPutMethod.setRetryOnConnectionFailure(false);
 

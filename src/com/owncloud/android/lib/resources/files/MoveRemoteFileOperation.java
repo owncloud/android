@@ -111,11 +111,11 @@ public class MoveRemoteFileOperation extends RemoteOperation {
         try {
             // After finishing a chunked upload, we have to move the resulting file from uploads folder to files one,
             // so this uri has to be customizable
-            Uri srcWebDavUri = moveChunkedFile ? client.getNewUploadsWebDavUri() : client.getNewFilesWebDavUri();
+            Uri srcWebDavUri = moveChunkedFile ? client.getUploadsWebDavUri() : client.getUserFilesWebDavUri();
 
             final MoveMethod move = new MoveMethod(
                     new URL(srcWebDavUri + WebdavUtils.encodePath(mSrcRemotePath)),
-                client.getNewFilesWebDavUri() + WebdavUtils.encodePath(mTargetRemotePath),
+                client.getUserFilesWebDavUri() + WebdavUtils.encodePath(mTargetRemotePath),
                     mOverwrite);
 
             if (moveChunkedFile) {

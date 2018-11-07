@@ -29,6 +29,7 @@ import android.accounts.AccountManager;
 import android.accounts.AccountsException;
 import android.net.Uri;
 
+import com.owncloud.android.lib.common.accounts.AccountUtils;
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentials;
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentialsFactory;
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentialsFactory.OwnCloudAnonymousCredentials;
@@ -53,8 +54,8 @@ import static com.owncloud.android.lib.common.http.HttpConstants.OC_X_REQUEST_ID
 
 public class OwnCloudClient extends HttpClient {
 
-    public static final String NEW_WEBDAV_FILES_PATH_4_0 = "/remote.php/dav/files/";
-    public static final String NEW_WEBDAV_UPLOADS_PATH_4_0 = "/remote.php/dav/uploads/";
+    public static final String WEBDAV_FILES_PATH_4_0 = "/remote.php/dav/files/";
+    public static final String WEBDAV_UPLOADS_PATH_4_0 = "/remote.php/dav/uploads/";
     public static final String STATUS_PATH = "/status.php";
     public static final String FILES_WEB_PATH = "/index.php/apps/files";
 
@@ -79,7 +80,6 @@ public class OwnCloudClient extends HttpClient {
 
     private String mRedirectedLocation;
     private boolean mFollowRedirects;
-
 
     public OwnCloudClient(Uri baseUri) {
         if (baseUri == null) {
@@ -208,7 +208,7 @@ public class OwnCloudClient extends HttpClient {
                         : method.getRequestHeader("destination");
 
                 if (destination != null) {
-                    final int suffixIndex = location.lastIndexOf(getNewFilesWebDavUri().toString());
+                    final int suffixIndex = location.lastIndexOf(getUserFilesWebDavUri().toString());
                     final String redirectionBase = location.substring(0, suffixIndex);
                     final String destinationPath = destination.substring(mBaseUri.toString().length());
 
@@ -252,16 +252,26 @@ public class OwnCloudClient extends HttpClient {
         }
     }
 
-    public Uri getNewFilesWebDavUri() {
-        return mCredentials instanceof OwnCloudAnonymousCredentials
-                ? Uri.parse(mBaseUri + NEW_WEBDAV_FILES_PATH_4_0)
-                : Uri.parse(mBaseUri + NEW_WEBDAV_FILES_PATH_4_0 + mCredentials.getUsername());
+    public Uri getBaseFilesWebDavUri(){
+        return Uri.parse(mBaseUri + WEBDAV_FILES_PATH_4_0);
     }
 
-    public Uri getNewUploadsWebDavUri() {
+    public Uri getUserFilesWebDavUri() {
         return mCredentials instanceof OwnCloudAnonymousCredentials
-                ? Uri.parse(mBaseUri + NEW_WEBDAV_UPLOADS_PATH_4_0)
-                : Uri.parse(mBaseUri + NEW_WEBDAV_UPLOADS_PATH_4_0 + mCredentials.getUsername());
+                ? Uri.parse(mBaseUri + WEBDAV_FILES_PATH_4_0)
+                : Uri.parse(mBaseUri + WEBDAV_FILES_PATH_4_0 + AccountUtils.getUserId(
+                        mAccount.getSavedAccount(), getContext()
+                )
+        );
+    }
+
+    public Uri getUploadsWebDavUri() {
+        return mCredentials instanceof OwnCloudAnonymousCredentials
+                ? Uri.parse(mBaseUri + WEBDAV_UPLOADS_PATH_4_0)
+                : Uri.parse(mBaseUri + WEBDAV_UPLOADS_PATH_4_0 + AccountUtils.getUserId(
+                        mAccount.getSavedAccount(), getContext()
+                )
+        );
     }
 
     /**

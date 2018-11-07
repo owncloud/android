@@ -75,7 +75,7 @@ public class ReadRemoteFolderOperation extends RemoteOperation<ArrayList<RemoteF
 
         try {
             PropfindMethod propfindMethod = new PropfindMethod(
-                    new URL(client.getNewFilesWebDavUri() + WebdavUtils.encodePath(mRemotePath)),
+                    new URL(client.getUserFilesWebDavUri() + WebdavUtils.encodePath(mRemotePath)),
                     DavConstants.DEPTH_1,
                     DavUtils.getAllPropset());
 

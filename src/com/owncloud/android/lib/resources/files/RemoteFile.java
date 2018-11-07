@@ -47,7 +47,7 @@ import at.bitfire.dav4android.property.owncloud.OCPrivatelink;
 import at.bitfire.dav4android.property.owncloud.OCSize;
 import okhttp3.HttpUrl;
 
-import static com.owncloud.android.lib.common.OwnCloudClient.NEW_WEBDAV_FILES_PATH_4_0;
+import static com.owncloud.android.lib.common.OwnCloudClient.WEBDAV_FILES_PATH_4_0;
 
 /**
  * Contains the data of a Remote File from a WebDavEntry
@@ -228,7 +228,7 @@ public class RemoteFile implements Parcelable, Serializable {
 
 
     private static String getRemotePathFromUrl(HttpUrl url, String displayName) {
-        final String davPath = NEW_WEBDAV_FILES_PATH_4_0 + displayName;
+        final String davPath = WEBDAV_FILES_PATH_4_0 + displayName;
         final String pathToOc = url.encodedPath().split(davPath)[0];
         return Uri.decode(url.encodedPath()).replace(pathToOc + davPath, "");
     }

@@ -56,6 +56,7 @@ public class ExistenceCheckRemoteOperation extends RemoteOperation {
 
     private String mPath;
     private boolean mSuccessIfAbsent;
+    private boolean mIsLogin;
 
     /**
      * Sequence of redirections followed. Available only after executing the operation
@@ -68,10 +69,13 @@ public class ExistenceCheckRemoteOperation extends RemoteOperation {
      * @param remotePath      Path to append to the URL owned by the client instance.
      * @param successIfAbsent When 'true', the operation finishes in success if the path does
      *                        NOT exist in the remote server (HTTP 404).
+     * @param isLogin         When `true`, the username won't be added at the end of the PROPFIND url since is not
+     *                        needed to check user credentials
      */
-    public ExistenceCheckRemoteOperation(String remotePath, boolean successIfAbsent) {
+    public ExistenceCheckRemoteOperation(String remotePath, boolean successIfAbsent, boolean isLogin) {
         mPath = (remotePath != null) ? remotePath : "";
         mSuccessIfAbsent = successIfAbsent;
+        mIsLogin = isLogin;
     }
 
     @Override
@@ -80,8 +84,11 @@ public class ExistenceCheckRemoteOperation extends RemoteOperation {
         boolean previousFollowRedirects = client.followRedirects();
 
         try {
+            String stringUrl = mIsLogin ?
+                    client.getBaseFilesWebDavUri().toString() :
+                    client.getUserFilesWebDavUri() + WebdavUtils.encodePath(mPath);
             PropfindMethod propfindMethod = new PropfindMethod(
-                    new URL(client.getNewFilesWebDavUri() + WebdavUtils.encodePath(mPath)),
+                    new URL(stringUrl),
                     0,
                     DavUtils.getAllPropset()
             );
@@ -102,9 +109,8 @@ public class ExistenceCheckRemoteOperation extends RemoteOperation {
              *  207 MULTI_STATUS: path exists.
              */
 
-            Log_OC.d(TAG, "Existence check for " + client.getNewFilesWebDavUri() +
-                    WebdavUtils.encodePath(mPath) + " targeting for " +
-                    (mSuccessIfAbsent ? " absence " : " existence ") +
+            Log_OC.d(TAG, "Existence check for " + stringUrl + WebdavUtils.encodePath(mPath) +
+                    " targeting for " + (mSuccessIfAbsent ? " absence " : " existence ") +
                     "finished with HTTP status " + status + (!isSuccess(status) ? "(FAIL)" : ""));
 
             return isSuccess(status)
@@ -113,7 +119,7 @@ public class ExistenceCheckRemoteOperation extends RemoteOperation {
 
         } catch (Exception e) {
             final RemoteOperationResult result = new RemoteOperationResult<>(e);
-            Log_OC.e(TAG, "Existence check for " + client.getNewFilesWebDavUri() +
+            Log_OC.e(TAG, "Existence check for " + client.getUserFilesWebDavUri() +
                     WebdavUtils.encodePath(mPath) + " targeting for " +
                     (mSuccessIfAbsent ? " absence " : " existence ") + ": " +
                     result.getLogMessage(), result.getException());
