@@ -33,10 +33,13 @@
     <bool name = "warning_sharing_public_link" >true</bool>
     
     <!-- Colors -->
-    <color name="login_text_color">#000000</color>
-    <color name="login_text_hint_color">#757575</color>
-    <color name="login_background_color">#FFFFFF</color>
-    <color name="login_logo_background_color">#FFFFFF</color>
+    <color name="login_text_color">@color/white</color>
+    <color name="login_text_hint_color">#dddddd</color>
+    <color name="login_background_color">@color/owncloud_blue</color>
+    <color name="login_connection_text_color">@color/white</color>
+    <color name="login_credentials_text_color">@color/white</color>
+    <color name="login_button_background_color">@color/white</color>
+    <color name="login_button_text_color">@color/color_accent</color>
     <color name="background_color">#FFFFFF</color>
     <color name="actionbar_start_color">@color/primary</color>
     <color name="primary_button_background_color">@color/color_accent</color>
@@ -57,6 +60,7 @@
     
     <!-- Help, imprint and feedback -->
     <bool name="help_enabled">true</bool>
+    <bool name="sync_calendar_contacts_enabled">true</bool>
     <bool name="imprint_enabled">false</bool> 
     <bool name="recommend_enabled">true</bool>
     <bool name="feedback_enabled">true</bool>
@@ -69,6 +73,7 @@
     <string name="mail_recommend" formatted="false">"mailto:"</string>
     <string name="mail_feedback" formatted="false">"mailto:apps@owncloud.com"</string>
     <string name="url_app_download" formatted="false">"https://play.google.com/store/apps/details?id=com.owncloud.android"</string>
+    <string name="url_sync_calendar_contacts">"https://play.google.com/store/apps/details?id=at.bitfire.davdroid"</string>
 
     <!--Destination mail for sending log files -->
     <string name="mail_logger" formatted="false"></string>
@@ -91,6 +96,9 @@
 
     <!-- To enable/disable app rate feature -->
     <bool name="enable_rate_me_feature">true</bool>
+
+    <!-- Login background -->
+    <bool name="use_login_background_image">true</bool>
 
     <!-- Header images -->
     <bool name="use_drawer_background_header">true</bool>

@@ -298,7 +298,7 @@ public class PreviewTextFragment extends FileFragment {
                     mContainerActivity,
                     getActivity()
             );
-            mf.filter(menu);
+            mf.filter(menu, false, false);
         }
 
         // additional restriction for this fragment
@@ -347,6 +347,12 @@ public class PreviewTextFragment extends FileFragment {
         }
 
         item = menu.findItem(R.id.action_sort);
+        if (item != null) {
+            item.setVisible(false);
+            item.setEnabled(false);
+        }
+
+        item = menu.findItem(R.id.action_search);
         if (item != null) {
             item.setVisible(false);
             item.setEnabled(false);

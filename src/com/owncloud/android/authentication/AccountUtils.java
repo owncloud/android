@@ -2,7 +2,7 @@
  *   ownCloud Android client application
  *
  *   Copyright (C) 2012  Bartek Przybylski
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -42,7 +42,7 @@ public class AccountUtils {
 
     private static final String TAG = AccountUtils.class.getSimpleName();
 
-    public static final String WEBDAV_PATH_4_0_AND_LATER = "/remote.php/webdav";
+    public static final String WEBDAV_PATH_4_0_AND_LATER = "/remote.php/dav";
     private static final String ODAV_PATH = "/remote.php/odav";
     private static final String SAML_SSO_PATH = "/remote.php/webdav";
 
@@ -90,13 +90,13 @@ public class AccountUtils {
     }
 
     
-    public static boolean exists(Account account, Context context) {
+    public static boolean exists(String accountName, Context context) {
         Account[] ocAccounts = getAccounts(context);
 
-        if (account != null && account.name != null) {
-            int lastAtPos = account.name.lastIndexOf("@");
-            String hostAndPort = account.name.substring(lastAtPos + 1);
-            String username = account.name.substring(0, lastAtPos);
+        if (accountName != null) {
+            int lastAtPos = accountName.lastIndexOf("@");
+            String hostAndPort = accountName.substring(lastAtPos + 1);
+            String username = accountName.substring(0, lastAtPos);
             String otherHostAndPort, otherUsername;
             Locale currentLocale = context.getResources().getConfiguration().locale;
             for (Account otherAccount : ocAccounts) {
@@ -294,7 +294,6 @@ public class AccountUtils {
         int pos = url.lastIndexOf(WEBDAV_PATH_4_0_AND_LATER);
         if (pos >= 0) {
             url = url.substring(0, pos);
-
         } else {
             pos = url.lastIndexOf(ODAV_PATH);
             if (pos >= 0) {
@@ -317,8 +316,9 @@ public class AccountUtils {
         if (account != null) {
             // capabilities are now the preferred source for version info
             FileDataStorageManager fileDataStorageManager = new FileDataStorageManager(
-                account,
-                MainApp.getAppContext().getContentResolver()
+                    MainApp.getAppContext(),
+                    account,
+                    MainApp.getAppContext().getContentResolver()
             );
             OCCapability capability = fileDataStorageManager.getCapability(account.name);
             if (capability != null) {

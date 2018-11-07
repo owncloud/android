@@ -3,7 +3,8 @@
  *
  * @author David A. Velasco
  * @author masensio
- * Copyright (C) 2017 ownCloud GmbH.
+ * @author Christian Schabesberger
+ * Copyright (C) 2018 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -20,20 +21,19 @@
 
 package com.owncloud.android.operations;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import android.content.Context;
 
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.lib.common.OwnCloudClient;
+import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
-import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.status.GetRemoteStatusOperation;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
-import com.owncloud.android.operations.DetectAuthenticationMethodOperation.AuthenticationMethod;
 
-import android.content.Context;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Get basic information from an ownCloud server given its URL.
@@ -42,13 +42,12 @@ import android.content.Context;
  * and finds out what authentication method is needed to access files in it.
  */
 
-public class GetServerInfoOperation extends RemoteOperation {
+public class GetServerInfoOperation extends RemoteOperation<GetServerInfoOperation.ServerInfo> {
 
     private static final String TAG = GetServerInfoOperation.class.getSimpleName();
 
     private String mUrl;
     private Context mContext;
-
     private ServerInfo mResultData;
 
     /**
@@ -65,7 +64,6 @@ public class GetServerInfoOperation extends RemoteOperation {
         mResultData = new ServerInfo();
     }
 
-
     /**
      * Performs the operation
      *
@@ -74,41 +72,37 @@ public class GetServerInfoOperation extends RemoteOperation {
      *              Call {@link RemoteOperationResult#getData()}.get(0) to get it.
      */
     @Override
-    protected RemoteOperationResult run(OwnCloudClient client) {
-
+    protected RemoteOperationResult<ServerInfo> run(OwnCloudClient client) {
         // first: check the status of the server (including its version)
-        GetRemoteStatusOperation getStatus = new GetRemoteStatusOperation(mContext);
-        RemoteOperationResult result = getStatus.execute(client);
+        GetRemoteStatusOperation getStatusOperation = new GetRemoteStatusOperation(mContext);
+        final RemoteOperationResult<OwnCloudVersion> remoteStatusResult = getStatusOperation.execute(client);
+        RemoteOperationResult<ServerInfo> result = new RemoteOperationResult(remoteStatusResult);
 
-        if (result.isSuccess()) {
+        if (remoteStatusResult.isSuccess()) {
             // second: get authentication method required by the server
-            mResultData.mVersion = (OwnCloudVersion) (result.getData().get(0));
-            mResultData.mIsSslConn = (result.getCode() == ResultCode.OK_SSL);
+            mResultData.mVersion = remoteStatusResult.getData();
+            mResultData.mIsSslConn = (remoteStatusResult.getCode() == ResultCode.OK_SSL);
             mResultData.mBaseUrl = normalizeProtocolPrefix(mUrl, mResultData.mIsSslConn);
-            RemoteOperationResult detectAuthResult = detectAuthorizationMethod(client);
+            final RemoteOperationResult<List<AuthenticationMethod>> detectAuthResult = detectAuthorizationMethod(client);
 
             // third: merge results
             if (detectAuthResult.isSuccess()) {
-                mResultData.mAuthMethods =
-                    (ArrayList<AuthenticationMethod>) detectAuthResult.getData().get(0);
-                ArrayList<Object> data = new ArrayList<Object>();
-                data.add(mResultData);
-                result.setData(data);
+                mResultData.mAuthMethods = detectAuthResult.getData();
+                result.setData(mResultData);
             } else {
-                result = detectAuthResult;
+                result = new RemoteOperationResult<>(detectAuthResult);
+                mResultData.mAuthMethods =  detectAuthResult.getData();
+                result.setData(mResultData);
             }
         }
         return result;
     }
 
-
-    private RemoteOperationResult detectAuthorizationMethod(OwnCloudClient client) {
+    private RemoteOperationResult<List<AuthenticationMethod>> detectAuthorizationMethod(OwnCloudClient client) {
         Log_OC.d(TAG, "Trying empty authorization to detect authentication method");
-        DetectAuthenticationMethodOperation operation =
-            new DetectAuthenticationMethodOperation();
+        DetectAuthenticationMethodOperation operation = new DetectAuthenticationMethodOperation();
         return operation.execute(client);
     }
-
 
     private String trimWebdavSuffix(String url) {
         if (url == null) {
@@ -124,7 +118,6 @@ public class GetServerInfoOperation extends RemoteOperation {
         return url;
     }
 
-
     private String normalizeProtocolPrefix(String url, boolean isSslConn) {
         if (!url.toLowerCase().startsWith("http://") &&
             !url.toLowerCase().startsWith("https://")) {
@@ -137,11 +130,10 @@ public class GetServerInfoOperation extends RemoteOperation {
         return url;
     }
 
-
     public static class ServerInfo {
         public OwnCloudVersion mVersion = null;
         public String mBaseUrl = "";
-        public ArrayList<AuthenticationMethod> mAuthMethods = new ArrayList<>();
+        public List<AuthenticationMethod> mAuthMethods = new ArrayList<>();
         public boolean mIsSslConn = false;
     }
 }

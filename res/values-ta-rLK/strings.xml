@@ -19,7 +19,7 @@
   <string name="auth_username">பயனாளர் பெயர்</string>
   <string name="auth_password">கடவுச்சொல்</string>
   <string name="sync_string_files">கோப்புகள்</string>
-  <string name="setup_btn_connect">இணைக்க</string>
+  <string name="setup_btn_login">இணைக்க</string>
   <string name="uploader_btn_upload_text">பதிவேற்றுக</string>
   <string name="uploader_wrn_no_account_title">ஒரு கணக்கும் அறியப்படவில்லை</string>
   <string name="uploader_wrn_no_account_setup_btn_text">அமைப்பு</string>

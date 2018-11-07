@@ -46,7 +46,7 @@ import com.owncloud.android.lib.common.utils.Log_OC;
 
 import java.util.Arrays;
 
-public class PassCodeActivity extends AppCompatActivity {
+public class PassCodeActivity extends BaseActivity {
 
     private static final String TAG = PassCodeActivity.class.getSimpleName();
 
@@ -340,18 +340,6 @@ public class PassCodeActivity extends AppCompatActivity {
                         R.string.pass_code_mismatch, R.string.pass_code_configure_your_pass_code, View.VISIBLE
                 );
             }
-        }
-    }
-
-    private void hideSoftKeyboard() {
-        View focusedView = getCurrentFocus();
-        if (focusedView != null) {
-            InputMethodManager inputMethodManager =
-                    (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-            inputMethodManager.hideSoftInputFromWindow(
-                    focusedView.getWindowToken(),
-                    0
-            );
         }
     }
 

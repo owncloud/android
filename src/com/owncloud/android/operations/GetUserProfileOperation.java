@@ -37,9 +37,8 @@ import com.owncloud.android.lib.resources.users.GetRemoteUserAvatarOperation;
 import com.owncloud.android.lib.resources.users.GetRemoteUserInfoOperation;
 import com.owncloud.android.lib.resources.users.GetRemoteUserInfoOperation.UserInfo;
 import com.owncloud.android.lib.resources.users.GetRemoteUserQuotaOperation;
+import com.owncloud.android.lib.resources.users.GetRemoteUserQuotaOperation.RemoteQuota;
 import com.owncloud.android.operations.common.SyncOperation;
-
-import java.util.ArrayList;
 
 /**
  * Get and save user's profile from the server.
@@ -75,19 +74,20 @@ public class GetUserProfileOperation extends SyncOperation {
     @Override
     protected RemoteOperationResult run(OwnCloudClient client) {
 
+
         UserProfile userProfile;
 
         try {
             /// get display name
             GetRemoteUserInfoOperation getDisplayName = new GetRemoteUserInfoOperation();
-            RemoteOperationResult remoteResult = getDisplayName.execute(client);
+            final RemoteOperationResult<UserInfo> userInfoOperationResult = getDisplayName.execute(client);
 
             UserProfilesRepository userProfilesRepository = UserProfilesRepository.getUserProfilesRepository();
 
-            if (remoteResult.isSuccess()) {
+            if (userInfoOperationResult.isSuccess()) {
                 // store display name with account data
                 AccountManager accountManager = AccountManager.get(MainApp.getAppContext());
-                UserInfo userInfo = (UserInfo) remoteResult.getData().get(0);
+                UserInfo userInfo = userInfoOperationResult.getData();
                 Account storedAccount = getStorageManager().getAccount();
                 accountManager.setUserData(
                     storedAccount,
@@ -106,12 +106,11 @@ public class GetUserProfileOperation extends SyncOperation {
                 /// get quota
                 GetRemoteUserQuotaOperation getRemoteUserQuotaOperation = new GetRemoteUserQuotaOperation(mRemotePath);
 
-                remoteResult = getRemoteUserQuotaOperation.execute(client);
+                final RemoteOperationResult<RemoteQuota> quotaOperationResult = getRemoteUserQuotaOperation.execute(client);
 
-                if (remoteResult.isSuccess()) {
+                if (quotaOperationResult.isSuccess()) {
 
-                    GetRemoteUserQuotaOperation.Quota remoteQuota = (GetRemoteUserQuotaOperation.Quota)
-                            remoteResult.getData().get(0);
+                    RemoteQuota remoteQuota = quotaOperationResult.getData();
 
                     UserProfile.UserQuota userQuota = new UserProfile.UserQuota(
                             remoteQuota.getFree(),
@@ -128,13 +127,15 @@ public class GetUserProfileOperation extends SyncOperation {
 
                     GetRemoteUserAvatarOperation getAvatarOperation = new GetRemoteUserAvatarOperation(
                             dimension,
-                            (currentUserAvatar == null) ? "" : currentUserAvatar.getEtag()
-                    );
-                    remoteResult = getAvatarOperation.execute(client);
+                            (currentUserAvatar == null)
+                                    ? ""
+                                    : currentUserAvatar.getEtag());
 
-                    if (remoteResult.isSuccess()) {
-                        GetRemoteUserAvatarOperation.ResultData avatar =
-                                (GetRemoteUserAvatarOperation.ResultData) remoteResult.getData().get(0);
+                    RemoteOperationResult<GetRemoteUserAvatarOperation.ResultData> avatarOperationResult =
+                            getAvatarOperation.execute(client);
+
+                    if (avatarOperationResult.isSuccess()) {
+                        GetRemoteUserAvatarOperation.ResultData avatar = avatarOperationResult.getData();
 
                         byte[] avatarData = avatar.getAvatarData();
                         String avatarKey = ThumbnailsCacheManager.addAvatarToCache(
@@ -148,7 +149,7 @@ public class GetUserProfileOperation extends SyncOperation {
                         );
                         userProfile.setAvatar(userAvatar);
 
-                    } else if (remoteResult.getCode().equals(RemoteOperationResult.ResultCode.FILE_NOT_FOUND)) {
+                    } else if (quotaOperationResult.getCode().equals(RemoteOperationResult.ResultCode.FILE_NOT_FOUND)) {
                         Log_OC.i(TAG, "No avatar available, removing cached copy");
                         userProfilesRepository.deleteAvatar(storedAccount.name);
                         ThumbnailsCacheManager.removeAvatarFromCache(storedAccount.name);
@@ -159,18 +160,17 @@ public class GetUserProfileOperation extends SyncOperation {
                     /// store userProfile
                     userProfilesRepository.update(userProfile);
 
-                    RemoteOperationResult result =  new RemoteOperationResult(RemoteOperationResult.ResultCode.OK);
-                    ArrayList<Object> data = new ArrayList<>();
-                    data.add(userProfile);
-                    result.setData(data);
+                    RemoteOperationResult<UserProfile> result =
+                            new RemoteOperationResult<>(RemoteOperationResult.ResultCode.OK);
+                    result.setData(userProfile);
 
                     return result;
 
                 } else {
-                    return remoteResult;
+                    return quotaOperationResult;
                 }
             } else {
-                return remoteResult;
+                return userInfoOperationResult;
             }
         } catch (Exception e) {
             Log_OC.e(TAG, "Exception while getting user profile: ", e);

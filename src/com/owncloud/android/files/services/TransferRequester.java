@@ -4,7 +4,7 @@
  * @author David A. Velasco
  * @author David González Verdugo
  *
- * Copyright (C) 2017 ownCloud GmbH.
+ * Copyright (C) 2018 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -29,11 +29,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.PersistableBundle;
+import android.support.v4.content.ContextCompat;
 
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.OCFile;
+import com.owncloud.android.datamodel.OCUpload;
 import com.owncloud.android.datamodel.UploadsStorageManager;
-import com.owncloud.android.db.OCUpload;
 import com.owncloud.android.db.PreferenceManager;
 import com.owncloud.android.db.UploadResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
@@ -118,7 +119,7 @@ public class TransferRequester {
      * Call to update multiple files already uploaded
      */
     private void uploadsUpdate(Context context, Account account, OCFile[] existingFiles, Integer behaviour,
-                               Boolean forceOverwrite) {
+                               Boolean forceOverwrite, boolean requestedFromAvOfflineJobService) {
         Intent intent = new Intent(context, FileUploader.class);
 
         intent.putExtra(FileUploader.KEY_ACCOUNT, account);
@@ -126,29 +127,37 @@ public class TransferRequester {
         intent.putExtra(FileUploader.KEY_LOCAL_BEHAVIOUR, behaviour);
         intent.putExtra(FileUploader.KEY_FORCE_OVERWRITE, forceOverwrite);
 
-        context.startService(intent);
+        // Since in Android O and above the apps in background are not allowed to start background
+        // services and available offline feature may try to do it, this is the way to proceed
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && requestedFromAvOfflineJobService) {
+            intent.putExtra(FileUploader.KEY_IS_AVAILABLE_OFFLINE_FILE, true);
+            context.startForegroundService(intent);
+        } else {
+            context.startService(intent);
+        }
     }
 
     /**
      * Call to update a dingle file already uploaded
      */
     public void uploadUpdate(Context context, Account account, OCFile existingFile, Integer behaviour,
-                             Boolean forceOverwrite) {
+                             Boolean forceOverwrite, boolean requestedFromAvOfflineJobService) {
 
-        uploadsUpdate(context, account, new OCFile[]{existingFile}, behaviour, forceOverwrite);
+        uploadsUpdate(context, account, new OCFile[]{existingFile}, behaviour, forceOverwrite,
+                requestedFromAvOfflineJobService);
     }
 
 
     /**
      * Call to retry upload identified by remotePath
      */
-    public void retry(Context context, OCUpload upload) {
+    public void retry(Context context, OCUpload upload, boolean requestedFromWifiBackEvent) {
         if (upload != null && context != null) {
             Account account = AccountUtils.getOwnCloudAccountByName(
                     context,
                     upload.getAccountName()
             );
-            retry(context, account, upload);
+            retry(context, account, upload, requestedFromWifiBackEvent);
 
         } else {
             throw new IllegalArgumentException("Null parameter!");
@@ -164,8 +173,11 @@ public class TransferRequester {
      *                          uploads of all accounts will be retried.
      * @param uploadResult      If not null, only failed uploads with the result specified will be retried;
      *                          otherwise, failed uploads due to any result will be retried.
+     * @param requestedFromWifiBackEvent  true if the retry was requested because wifi connection was back,
+     *                                    false otherwise
      */
-    public void retryFailedUploads(Context context, Account account, UploadResult uploadResult) {
+    public void retryFailedUploads(Context context, Account account, UploadResult uploadResult, 
+                                   boolean requestedFromWifiBackEvent) {
         UploadsStorageManager uploadsStorageManager = new UploadsStorageManager(context.getContentResolver());
         OCUpload[] failedUploads = uploadsStorageManager.getFailedUploads();
         Account currentAccount = null;
@@ -178,7 +190,7 @@ public class TransferRequester {
                         !currentAccount.name.equals(failedUpload.getAccountName())) {
                     currentAccount = failedUpload.getAccount(context);
                 }
-                retry(context, currentAccount, failedUpload);
+                retry(context, currentAccount, failedUpload, requestedFromWifiBackEvent);
             }
         }
     }
@@ -189,8 +201,10 @@ public class TransferRequester {
      * @param context           Caller {@link Context}
      * @param account           OC account where the upload will be retried.
      * @param upload            Persisted upload to retry.
+     * @param requestedFromWifiBackEvent true if the retry was requested because wifi connection was back,
+     *                                   false otherwise
      */
-    private void retry(Context context, Account account, OCUpload upload) {
+    private void retry(Context context, Account account, OCUpload upload, boolean requestedFromWifiBackEvent) {
         if (upload != null) {
             Intent intent = new Intent(context, FileUploader.class);
             intent.putExtra(FileUploader.KEY_RETRY, true);
@@ -198,9 +212,13 @@ public class TransferRequester {
             intent.putExtra(FileUploader.KEY_RETRY_UPLOAD, upload);
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && (upload.getCreatedBy() ==
-                    CREATED_AS_CAMERA_UPLOAD_PICTURE || upload.getCreatedBy() == CREATED_AS_CAMERA_UPLOAD_VIDEO)) {
+                    CREATED_AS_CAMERA_UPLOAD_PICTURE || upload.getCreatedBy() == CREATED_AS_CAMERA_UPLOAD_VIDEO ||
+                    requestedFromWifiBackEvent)) {
                 // Since in Android O the apps in background are not allowed to start background
                 // services and camera uploads feature may try to do it, this is the way to proceed
+                if (requestedFromWifiBackEvent) {
+                    intent.putExtra(FileUploader.KEY_REQUESTED_FROM_WIFI_BACK_EVENT, true);
+                }
                 context.startForegroundService(intent);
             } else {
                 context.startService(intent);

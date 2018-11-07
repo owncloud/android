@@ -75,6 +75,10 @@
             android:key="help"
             android:title="@string/prefs_help" />
         <Preference
+            android:key="syncCalendarContacts"
+            android:title="@string/prefs_sync_calendar_contacts"
+            android:summary="@string/prefs_sync_calendar_contacts_summary"/>
+        <Preference
             android:key="recommend"
             android:title="@string/prefs_recommend" />
         <Preference

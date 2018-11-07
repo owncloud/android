@@ -688,7 +688,7 @@ public class PublicShareActivityTest {
 
         SystemClock.sleep(WAIT_CONNECTION_MS);
 
-        AccountsManager.saveCapabilities(capabilities, testServerURL, testUser);
+        AccountsManager.saveCapabilities(targetContext ,capabilities, testServerURL, testUser);
 
         //Select share option
         selectShare(folder2);
@@ -716,7 +716,7 @@ public class PublicShareActivityTest {
 
         SystemClock.sleep(WAIT_CONNECTION_MS);
 
-        AccountsManager.saveCapabilities(capabilities, testServerURL, testUser);
+        AccountsManager.saveCapabilities(targetContext, capabilities, testServerURL, testUser);
 
         //Select share option
         selectShare(folder2);

@@ -49,7 +49,7 @@
   <string name="auth_password">Heslo</string>
   <string name="auth_register">Ste nový v %1$s?</string>
   <string name="sync_string_files">Súbory</string>
-  <string name="setup_btn_connect">Pripojiť</string>
+  <string name="setup_btn_login">Pripojiť</string>
   <string name="uploader_btn_upload_text">Nahrať</string>
   <string name="uploader_top_message">Vyberte adresár na nahrávanie</string>
   <string name="uploader_wrn_no_account_title">Účet sa nenašiel</string>

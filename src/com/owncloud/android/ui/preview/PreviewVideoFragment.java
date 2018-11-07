@@ -353,7 +353,7 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
                 mContainerActivity,
                 getActivity()
         );
-        mf.filter(menu);
+        mf.filter(menu, false, false);
 
         // additional restrictions for this fragment
 
@@ -370,6 +370,12 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
         }
 
         item = menu.findItem(R.id.action_sync_account);
+        if (item != null) {
+            item.setVisible(false);
+            item.setEnabled(false);
+        }
+
+        item = menu.findItem(R.id.action_search);
         if (item != null) {
             item.setVisible(false);
             item.setEnabled(false);

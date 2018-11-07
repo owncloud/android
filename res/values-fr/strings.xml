@@ -1,7 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="about_android">Application Android %1$s</string>
-  <string name="about_version">version %1$s</string>
   <string name="actionbar_sync">Actualiser le compte</string>
   <string name="actionbar_upload">Téléverser</string>
   <string name="actionbar_upload_from_apps">Contenu d\'autres applications</string>
@@ -15,11 +13,7 @@
   <string name="actionbar_descending">Décroissant</string>
   <string name="actionbar_sort_title">Trier</string>
   <string name="actionbar_sort_by_name">A-Z</string>
-  <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
-  <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Tous les fichiers</string>
-  <!--TODO re-enable when "On Device" is available
-    <string name="drawer_item_on_device">On device</string>-->
   <string name="drawer_item_settings">Paramètres</string>
   <string name="drawer_item_uploads_list">Envois</string>
   <string name="drawer_close">Fermer</string>
@@ -59,7 +53,7 @@ Téléchargez-le ici : %2$s</string>
   <string name="auth_password">Mot de passe</string>
   <string name="auth_register">Nouveau dans %1$s ?</string>
   <string name="sync_string_files">Fichiers</string>
-  <string name="setup_btn_connect">Connecter</string>
+  <string name="setup_btn_login">Se connecter</string>
   <string name="uploader_btn_upload_text">Téléverser</string>
   <string name="uploader_top_message">Choisir le dossier de téléversement</string>
   <string name="uploader_wrn_no_account_title">Aucun compte n\'a été trouvé</string>
@@ -97,15 +91,13 @@ Téléchargez-le ici : %2$s</string>
   <string name="action_share">Partager</string>
   <string name="common_yes">Oui</string>
   <string name="common_no">Non</string>
-  <string name="common_ok">OK</string>
   <string name="common_remove_upload">Retirer le téléversement</string>
   <string name="common_retry_upload">Réessayer le téléversement</string>
   <string name="common_cancel_sync">Annuler la synchronisation</string>
-  <string name="common_cancel">Annuler</string>
   <string name="common_back">Retour</string>
   <string name="common_save_exit">Enregistrer et quitter</string>
   <string name="common_error">Erreur</string>
-  <string name="common_loading">Chargement…</string>
+  <string name="common_loading">Chargement...</string>
   <string name="common_unknown">Inconnu</string>
   <string name="common_error_unknown">Erreur inconnue </string>
   <string name="common_pending">En attente</string>
@@ -113,9 +105,7 @@ Téléchargez-le ici : %2$s</string>
   <string name="change_password">Changer de mot de passe</string>
   <string name="delete_account">Supprimer le compte</string>
   <string name="create_account">Créer un compte</string>
-  <string name="upload_chooser_title">Téléverser un fichier depuis…</string>
   <string name="uploader_info_dirname">Nom du dossier</string>
-  <string name="uploader_upload_in_progress_ticker">Téléversement…</string>
   <string name="uploader_upload_in_progress_content">Envoi du fichier %2$s : %1$d%% effectués</string>
   <string name="uploader_upload_succeeded_ticker">Téléversement réussi</string>
   <string name="uploader_upload_succeeded_content_single">%1$s téléversé</string>
@@ -132,8 +122,6 @@ Téléchargez-le ici : %2$s</string>
   <string name="uploads_view_group_current_uploads">En ce moment</string>
   <string name="uploads_view_group_failed_uploads">Échoué (appuyer pour réessayer)</string>
   <string name="uploads_view_group_finished_uploads">Téléversé</string>
-  <string name="uploads_view_group_file_count">%d Fichiers</string>
-  <string name="uploads_view_group_file_count_single">%d fichiers</string>
   <string name="uploads_view_upload_status_succeeded">Terminé</string>
   <string name="uploads_view_upload_status_cancelled">Annulé</string>
   <string name="uploads_view_upload_status_paused">En pause</string>
@@ -151,7 +139,6 @@ Téléchargez-le ici : %2$s</string>
   <string name="uploads_view_upload_status_waiting_for_wifi">En attente d\'une connexion wifi</string>
   <string name="uploads_view_later_waiting_to_upload">En attente de chargement</string>
   <string name="uploads_view_unsupported_media_type">Type de média non pris en charge</string>
-  <string name="downloader_download_in_progress_ticker">Téléchargement en cours…</string>
   <string name="downloader_download_in_progress_content">Téléchargement en cours de %2$s, %1$d%% effectués</string>
   <string name="downloader_download_succeeded_ticker">Téléchargement réussi</string>
   <string name="downloader_download_succeeded_content">%1$s téléchargé</string>
@@ -218,8 +205,7 @@ Ci-dessous la liste des fichiers locaux, et les fichiers distants dans %5$s auxq
   <string name="media_play_pause_description">Bouton de lecture ou de pause</string>
   <string name="media_forward_description">Bouton d\'avance rapide</string>
   <string name="upload_from_camera_title">Image de la caméra</string>
-  <string name="auth_getting_authorization">Contrôle d\'autorisation ...</string>
-  <string name="auth_trying_to_login">Tentative de connexion ...</string>
+  <string name="auth_getting_authorization">Demande d\'autorisation…</string>
   <string name="auth_no_net_conn_title">Pas de connexion réseau</string>
   <string name="auth_nossl_plain_ok_title">Connexion sécurisée non disponible</string>
   <string name="auth_connection_established">Connexion établie</string>
@@ -274,7 +260,6 @@ Ci-dessous la liste des fichiers locaux, et les fichiers distants dans %5$s auxq
   <string name="wait_checking_credentials">Vérification des identifiants enregistrés</string>
   <string name="filedisplay_unexpected_bad_get_content">Problème inattendu. Veuillez essayer une autre application pour la sélection du fichier</string>
   <string name="filedisplay_no_file_selected">Aucun fichier sélectionné</string>
-  <string name="activity_chooser_title">Envoyer le lien vers…</string>
   <string name="wait_for_tmp_copy_from_private_storage">Copie du fichier depuis le stockage privé</string>
   <string name="oauth_check_onoff">Connexion avec oAuth2</string>
   <string name="oauth_login_connection">Connexion au serveur OAuth2…</string>
@@ -364,7 +349,8 @@ Ci-dessous la liste des fichiers locaux, et les fichiers distants dans %5$s auxq
   <string name="log_send_history_button">Envoyer l\'Historique</string>
   <string name="log_send_no_mail_app">Aucune application n\'a été trouvée pour envoyer les journaux. Veuillez installer une application de messagerie !</string>
   <string name="log_send_mail_subject">Journaux de l\'application Android %1$s</string>
-  <string name="log_progress_dialog_text">Chargement des données …</string>
+  <string name="log_progress_dialog_text">Chargement des données…</string>
+  <string name="actionbar_select_all">Tout sélectionner</string>
   <string name="saml_authentication_required_text">Authentification requise</string>
   <string name="saml_authentication_wrong_pass">Mot de passe incorrect</string>
   <string name="actionbar_move">Déplacer</string>
@@ -402,8 +388,6 @@ Ci-dessous la liste des fichiers locaux, et les fichiers distants dans %5$s auxq
   <string name="prefs_camera_upload_source_path_title">Dossier de l\'appareil photo (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">Requis</string>
   <string name="prefs_camera_upload_source_path_title_optional">Optionnel</string>
-  <string name="prefs_camera_upload_behaviour_dialogTitle">Le fichier original sera...</string>
-  <string name="prefs_camera_upload_behaviour_title">Le fichier original sera...</string>
   <string name="upload_copy_files">Copier le fichier</string>
   <string name="upload_move_files">Déplacer le fichier</string>
   <string name="pref_behaviour_entries_keep_file">gardé dans le dossier original</string>
@@ -426,7 +410,7 @@ Ci-dessous la liste des fichiers locaux, et les fichiers distants dans %5$s auxq
   <string name="share_via_link_edit_permission_read_only_label">Télécharger / Voir</string>
   <string name="share_via_link_edit_permission_read_and_write_label">Télécharger / Voir / Téléverser</string>
   <string name="share_get_public_link_button">Obtenir le lien</string>
-  <string name="share_with_title">Partager avec ...</string>
+  <string name="share_with_title">Partager avec</string>
   <string name="share_with_edit_title">Partager avec %1$s</string>
   <string name="share_search">Rechercher</string>
   <string name="search_users_and_groups_hint">Chercher parmi les utilisateurs et groupes</string>
@@ -504,4 +488,6 @@ Ci-dessous la liste des fichiers locaux, et les fichiers distants dans %5$s auxq
   <string name="welcome_feature_3_text">Connectez-vous à tous vos serveurs ownCloud</string>
   <string name="welcome_feature_4_title">Téléversements de la caméra</string>
   <string name="welcome_feature_4_text">Vos images/vidéos ont été téléversées automatiquement</string>
+  <string name="welcome_feature_7_title">Tout sélectionner</string>
+  <string name="welcome_feature_8_title">Disponible hors-ligne</string>
 </resources>

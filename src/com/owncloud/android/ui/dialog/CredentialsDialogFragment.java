@@ -100,8 +100,8 @@ public class CredentialsDialogFragment extends DialogFragment
                 .setTitle(getActivity().getText(R.string.saml_authentication_required_text))
                 .setView(ll)
                 .setCancelable(false)
-                .setPositiveButton(R.string.common_ok, this)
-                .setNegativeButton(R.string.common_cancel, this);
+                .setPositiveButton(android.R.string.ok, this)
+                .setNegativeButton(android.R.string.cancel, this);
 
         Dialog d = authDialog.create();
         d.getWindow().setSoftInputMode(LayoutParams.SOFT_INPUT_STATE_VISIBLE);

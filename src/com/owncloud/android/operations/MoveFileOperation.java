@@ -2,7 +2,7 @@
  *   ownCloud Android client application
  *
  *   @author David A. Velasco
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -20,41 +20,33 @@
 
 package com.owncloud.android.operations;
 
-import com.owncloud.android.MainApp;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.lib.common.OwnCloudClient;
-import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
+import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.resources.files.MoveRemoteFileOperation;
 import com.owncloud.android.operations.common.SyncOperation;
-import com.owncloud.android.services.observer.FileObserverService;
 import com.owncloud.android.utils.FileStorageUtils;
-
-import android.accounts.Account;
 
 
 /**
- * Operation mmoving an {@link OCFile} to a different folder.
+ * Operation moving an {@link OCFile} to a different folder.
  */
 public class MoveFileOperation extends SyncOperation {
     
     //private static final String TAG = MoveFileOperation.class.getSimpleName();
     
-    private String mSrcPath;
-    private String mTargetParentPath;
-    
-    private OCFile mFile;
-
-    
+    protected String mSrcPath;
+    protected String mTargetParentPath;
+    protected OCFile mFile;
     
     /**
      * Constructor
      * 
      * @param srcPath           Remote path of the {@link OCFile} to move.
      * @param targetParentPath  Path to the folder where the file will be moved into.
-     * @param account           OwnCloud account containing both the file and the target folder 
      */
-    public MoveFileOperation(String srcPath, String targetParentPath, Account account) {
+    public MoveFileOperation(String srcPath, String targetParentPath) {
         mSrcPath = srcPath;
         mTargetParentPath = targetParentPath;
         if (!mTargetParentPath.endsWith(OCFile.PATH_SEPARATOR)) {
@@ -71,15 +63,15 @@ public class MoveFileOperation extends SyncOperation {
      */
     @Override
     protected RemoteOperationResult run(OwnCloudClient client) {
-        RemoteOperationResult result = null;
+        RemoteOperationResult result;
         
         /// 1. check move validity
         if (mTargetParentPath.startsWith(mSrcPath)) {
-            return new RemoteOperationResult(ResultCode.INVALID_MOVE_INTO_DESCENDANT);
+            return new RemoteOperationResult<>(ResultCode.INVALID_MOVE_INTO_DESCENDANT);
         }
         mFile = getStorageManager().getFileByPath(mSrcPath);
         if (mFile == null) {
-            return new RemoteOperationResult(ResultCode.FILE_NOT_FOUND);
+            return new RemoteOperationResult<>(ResultCode.FILE_NOT_FOUND);
         }
         
         /// 2. remote move
@@ -96,48 +88,15 @@ public class MoveFileOperation extends SyncOperation {
         
         /// 3. local move
         if (result.isSuccess()) {
-            // stop observing changes if available offline
-            boolean isAvailableOffline = mFile.getAvailableOfflineStatus().equals(
-                OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE
-            );
-                // OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE_PARENT requires no action
-            if (isAvailableOffline) {
-                stopObservation();
-            }
-
             getStorageManager().moveLocalFile(mFile, targetPath, mTargetParentPath);
 
             // adjust available offline status after move resume observation of file after rename
             OCFile updatedFile = getStorageManager().getFileById(mFile.getFileId());
             OCFile.AvailableOfflineStatus updatedAvOffStatus = updatedFile.getAvailableOfflineStatus();
-
-            if (updatedAvOffStatus == OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE) {
-                resumeObservation(targetPath);
-
-            } else if (updatedAvOffStatus == OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE_PARENT) {
-                // enforce ancestor to rescan subfolders for immediate observation
-                OCFile ancestor = getStorageManager().getAvailableOfflineAncestorOf(updatedFile);
-                FileObserverService.observeFile(
-                    MainApp.getAppContext(),
-                    ancestor,
-                    getStorageManager().getAccount(),
-                    true
-                );
-            }
-
         }
         // TODO handle ResultCode.PARTIAL_MOVE_DONE in client Activity, for the moment
         
         return result;
-    }
-
-    private void stopObservation() {
-        FileObserverService.observeFile(
-            MainApp.getAppContext(),
-            mFile,
-            getStorageManager().getAccount(),
-            false
-        );
     }
 
     private void resumeObservation(String targetPath) {
@@ -150,13 +109,5 @@ public class MoveFileOperation extends SyncOperation {
                 updatedFile
             )
         );
-        FileObserverService.observeFile(
-            MainApp.getAppContext(),
-            updatedFile,
-            getStorageManager().getAccount(),
-            true
-        );
     }
-
-
 }

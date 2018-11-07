@@ -77,27 +77,18 @@ public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPa
         mPager.setAdapter(adapter);
         mPager.addOnPageChangeListener(this);
 
-
         mForwardFinishButton = findViewById(R.id.forward);
-        mForwardFinishButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (mProgress.hasNextStep()) {
-                    mPager.setCurrentItem(mPager.getCurrentItem()+1, true);
-                    mProgress.animateToStep(mPager.getCurrentItem()+1);
-                } else {
-                    finish();
-                }
-                updateNextButtonIfNeeded();
-            }
-        });
-        Button skipButton = findViewById(R.id.skip);
-        skipButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        mForwardFinishButton.setOnClickListener(view -> {
+            if (mProgress.hasNextStep()) {
+                mPager.setCurrentItem(mPager.getCurrentItem()+1, true);
+                mProgress.animateToStep(mPager.getCurrentItem()+1);
+            } else {
                 finish();
             }
+            updateNextButtonIfNeeded();
         });
+        Button skipButton = findViewById(R.id.skip);
+        skipButton.setOnClickListener(view -> finish());
 
         updateNextButtonIfNeeded();
 

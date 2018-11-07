@@ -3,6 +3,7 @@
  *
  *   @author Bartosz Przybylski
  *   @author Christian Schabesberger
+ *   @author David González Verdugo
  *   Copyright (C) 2015  Bartosz Przybylski
  *   Copyright (C) 2018 ownCloud GmbH.
  *
@@ -29,15 +30,21 @@ import android.content.Intent;
 import android.content.res.AssetFileDescriptor;
 import android.database.Cursor;
 import android.graphics.Point;
+import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.CancellationSignal;
 import android.os.ParcelFileDescriptor;
+import android.provider.DocumentsContract;
 import android.provider.DocumentsProvider;
 
+import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.files.services.FileDownloader;
+import com.owncloud.android.lib.common.utils.Log_OC;
+import com.owncloud.android.operations.RefreshFolderOperation;
 import com.owncloud.android.providers.cursors.FileCursor;
 import com.owncloud.android.providers.cursors.RootCursor;
 
@@ -49,6 +56,15 @@ import java.util.Vector;
 
 @TargetApi(Build.VERSION_CODES.KITKAT)
 public class DocumentsStorageProvider extends DocumentsProvider {
+
+    private static final String TAG = DocumentsStorageProvider.class.toString();
+
+    /**
+     * If a directory requires to sync, it will write the id of the directory into this variable.
+     * After the sync function gets triggered again over the same directory, it will see that a sync got already
+     * triggered, and does not need to be triggered again. This way a endless loop is prevented.
+     */
+    private long requestedFolderIdForSync = -1;
 
     private FileDataStorageManager mCurrentStorageManager = null;
     private static Map<Long, FileDataStorageManager> mRootIdToStorageManager;
@@ -79,17 +95,58 @@ public class DocumentsStorageProvider extends DocumentsProvider {
 
     @Override
     public Cursor queryChildDocuments(String parentDocumentId, String[] projection, String sortOrder) {
-
         final long folderId = Long.parseLong(parentDocumentId);
         updateCurrentStorageManagerIfNeeded(folderId);
 
-        final FileCursor result = new FileCursor(projection);
+        final FileCursor resultCursor = new FileCursor(projection);
 
         final OCFile browsedDir = mCurrentStorageManager.getFileById(folderId);
-        for (OCFile file : mCurrentStorageManager.getFolderContent(browsedDir))
-            result.addFile(file);
 
-        return result;
+        // Create result cursor before syncing folder again, in order to enable faster loading
+        for (OCFile file : mCurrentStorageManager.getFolderContent(browsedDir))
+            resultCursor.addFile(file);
+
+        /**
+         * This will start syncing the current folder. User will only see this after updating his view with a
+         * pull down, or by accessing the folder again.
+         */
+        if (requestedFolderIdForSync != folderId) {
+            // register for sync
+            syncDirectoryWithServer(parentDocumentId, resultCursor);
+            requestedFolderIdForSync = folderId;
+            final Bundle extrasBundle = new Bundle();
+            extrasBundle.putBoolean(DocumentsContract.EXTRA_LOADING, true);
+            resultCursor.setMoreToSync(true);
+        } else {
+            requestedFolderIdForSync = -1;
+        }
+
+        return resultCursor;
+    }
+
+    private void syncDirectoryWithServer(String parentDocumentId, FileCursor cursor) {
+        final long folderId = Long.parseLong(parentDocumentId);
+        final RefreshFolderOperation refreshFolderOperation = new RefreshFolderOperation(
+                mCurrentStorageManager.getFileById(folderId),
+                false,
+                false,
+                mCurrentStorageManager.getAccount(),
+                getContext());
+        refreshFolderOperation.syncVersionAndProfileEnabled(false);
+
+        final ContentResolver contentResolver = getContext().getContentResolver();
+        Log_OC.e(TAG, parentDocumentId);
+
+        final Uri browsedDirIdUri = DocumentsContract.buildChildDocumentsUri(
+                getContext().getString(R.string.document_provider_authority),
+                parentDocumentId);
+        cursor.setNotificationUri(contentResolver,
+                browsedDirIdUri);
+        Thread thread = new Thread(() -> {
+            refreshFolderOperation.execute(mCurrentStorageManager, getContext());
+            contentResolver.notifyChange(browsedDirIdUri, null);
+        });
+        thread.start();
     }
 
     @Override
@@ -103,8 +160,8 @@ public class DocumentsStorageProvider extends DocumentsProvider {
         if (!file.isDown()) {
 
             Intent i = new Intent(getContext(), FileDownloader.class);
-            i.putExtra(FileDownloader.EXTRA_ACCOUNT, mCurrentStorageManager.getAccount());
-            i.putExtra(FileDownloader.EXTRA_FILE, file);
+            i.putExtra(FileDownloader.KEY_ACCOUNT, mCurrentStorageManager.getAccount());
+            i.putExtra(FileDownloader.KEY_FILE, file);
             getContext().startService(i);
 
             do {
@@ -125,8 +182,10 @@ public class DocumentsStorageProvider extends DocumentsProvider {
     }
 
     @Override
-    public AssetFileDescriptor openDocumentThumbnail(String documentId, Point sizeHint, CancellationSignal signal) throws FileNotFoundException {
-        long docId = Long.parseLong(documentId);
+    public AssetFileDescriptor openDocumentThumbnail(String documentId, Point sizeHint, CancellationSignal signal)
+            throws FileNotFoundException {
+
+        final long docId = Long.parseLong(documentId);
         updateCurrentStorageManagerIfNeeded(docId);
 
         OCFile file = mCurrentStorageManager.getFileById(docId);
@@ -153,6 +212,9 @@ public class DocumentsStorageProvider extends DocumentsProvider {
     }
 
     private void updateCurrentStorageManagerIfNeeded(long docId) {
+        if (mRootIdToStorageManager == null) {
+            initiateStorageMap();
+        }
         if (mCurrentStorageManager == null ||
                 (mRootIdToStorageManager.containsKey(docId) &&
                         mCurrentStorageManager != mRootIdToStorageManager.get(docId))) {
@@ -167,14 +229,13 @@ public class DocumentsStorageProvider extends DocumentsProvider {
     }
 
     private void initiateStorageMap() {
-
-        mRootIdToStorageManager = new HashMap<Long, FileDataStorageManager>();
+        mRootIdToStorageManager = new HashMap<>();
 
         ContentResolver contentResolver = getContext().getContentResolver();
 
         for (Account account : AccountUtils.getAccounts(getContext())) {
             final FileDataStorageManager storageManager =
-                    new FileDataStorageManager(account, contentResolver);
+                    new FileDataStorageManager(getContext(), account, contentResolver);
             final OCFile rootDir = storageManager.getFileByPath("/");
             mRootIdToStorageManager.put(rootDir.getFileId(), storageManager);
         }

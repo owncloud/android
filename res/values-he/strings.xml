@@ -1,7 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="about_android">יישום אנדרואיד %1$s</string>
-  <string name="about_version">גרסה %1$s</string>
   <string name="actionbar_sync">רענון חשבון</string>
   <string name="actionbar_upload">העלאה</string>
   <string name="actionbar_upload_from_apps">תוכן מיישומים אחרים</string>
@@ -15,11 +13,7 @@
   <string name="actionbar_descending">יורד</string>
   <string name="actionbar_sort_title">מיון על בסיס</string>
   <string name="actionbar_sort_by_name">א-ת</string>
-  <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
-  <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">כל הקבצים</string>
-  <!--TODO re-enable when "On Device" is available
-    <string name="drawer_item_on_device">On device</string>-->
   <string name="drawer_item_settings">הגדרות</string>
   <string name="drawer_item_uploads_list">העלאות</string>
   <string name="drawer_close">סגירה</string>
@@ -68,7 +62,7 @@
   <string name="auth_password">ססמה</string>
   <string name="auth_register">חדש ב- %1$s?</string>
   <string name="sync_string_files">קבצים</string>
-  <string name="setup_btn_connect">התחברות</string>
+  <string name="setup_btn_login">כניסה</string>
   <string name="uploader_btn_upload_text">העלאה</string>
   <string name="uploader_top_message">יש לבחור בתיקיית העלאה</string>
   <string name="uploader_wrn_no_account_title">לא נמצא חשבון</string>
@@ -107,11 +101,9 @@
   <string name="action_share">שיתוף</string>
   <string name="common_yes">כן</string>
   <string name="common_no">לא</string>
-  <string name="common_ok">אישור</string>
   <string name="common_remove_upload">הסרת העלאה</string>
   <string name="common_retry_upload">נסיון נוסף להעלאה</string>
   <string name="common_cancel_sync">ביטול סנכרון</string>
-  <string name="common_cancel">ביטול</string>
   <string name="common_back">אחורה</string>
   <string name="common_save_exit">שמירה ויציאה</string>
   <string name="common_error">שגיאה</string>
@@ -123,9 +115,7 @@
   <string name="change_password">שינוי ססמה</string>
   <string name="delete_account">הסרת חשבון</string>
   <string name="create_account">יצירת חשבון</string>
-  <string name="upload_chooser_title">העלאה מהמיקום …</string>
   <string name="uploader_info_dirname">שם התיקייה</string>
-  <string name="uploader_upload_in_progress_ticker">מתבצעת העלאה …</string>
   <string name="uploader_upload_in_progress_content">%1$d%% בהעלאה %2$s</string>
   <string name="uploader_upload_succeeded_ticker">ההעלאה הצליחה</string>
   <string name="uploader_upload_succeeded_content_single">%1$s הועלו</string>
@@ -142,8 +132,6 @@
   <string name="uploads_view_group_current_uploads">נוכחי</string>
   <string name="uploads_view_group_failed_uploads">נכשל (יש להקיש לניסיון נוסף)</string>
   <string name="uploads_view_group_finished_uploads">הועלה</string>
-  <string name="uploads_view_group_file_count">%d קבצים</string>
-  <string name="uploads_view_group_file_count_single">%d קובץ</string>
   <string name="uploads_view_upload_status_succeeded">הושלם</string>
   <string name="uploads_view_upload_status_cancelled">בוטל</string>
   <string name="uploads_view_upload_status_paused">מושהה</string>
@@ -161,7 +149,6 @@
   <string name="uploads_view_upload_status_waiting_for_wifi">מחכה לחיבור WiFi</string>
   <string name="uploads_view_later_waiting_to_upload">ממתין להעלאה</string>
   <string name="uploads_view_unsupported_media_type">סוג מדיה לא נתמך</string>
-  <string name="downloader_download_in_progress_ticker">בהורדה …</string>
   <string name="downloader_download_in_progress_content">%1$d%% בהורדה %2$s</string>
   <string name="downloader_download_succeeded_ticker">ההורדה הצליחה</string>
   <string name="downloader_download_succeeded_content">%1$s הורדו</string>
@@ -218,8 +205,7 @@
   <string name="media_play_pause_description">לחצן ניגון או השהייה</string>
   <string name="media_forward_description">לחצן הרצה קדימה</string>
   <string name="upload_from_camera_title">תמונה ממצלמה</string>
-  <string name="auth_getting_authorization">מקבל אימות...</string>
-  <string name="auth_trying_to_login">מנסה להתחבר...</string>
+  <string name="auth_getting_authorization">מקבל אישורים...</string>
   <string name="auth_no_net_conn_title">אין חיבור לאינטרנט</string>
   <string name="auth_nossl_plain_ok_title">אין חיבור מוצפן זמין.</string>
   <string name="auth_connection_established">החיבור נוצר</string>
@@ -274,7 +260,6 @@
   <string name="wait_checking_credentials">בודק אישורים שמורים</string>
   <string name="filedisplay_unexpected_bad_get_content">תקלה בלתי צפויה ; נא לבחור בקובץ מיישום אחר</string>
   <string name="filedisplay_no_file_selected">לא נבחרו קבצים</string>
-  <string name="activity_chooser_title">שליחת קישור אל ...</string>
   <string name="wait_for_tmp_copy_from_private_storage">מעתיק קובץ מאחסון פרטי</string>
   <string name="oauth_check_onoff">התחברות באמצעות oAuth2</string>
   <string name="oauth_login_connection">מתחבר לשרת OAuth2...</string>
@@ -366,6 +351,7 @@
   <string name="log_send_no_mail_app">לא נמצא יישום לשליחת לוגים. יש להתקין יישום mail.</string>
   <string name="log_send_mail_subject">%1$s לוגים של יישום אנדרואיד</string>
   <string name="log_progress_dialog_text">טעינת מידע...</string>
+  <string name="actionbar_select_all">לבחור הכול</string>
   <string name="saml_authentication_required_text">נדרש אימות</string>
   <string name="saml_authentication_wrong_pass">סיסמא שגוייה</string>
   <string name="actionbar_move">העברה</string>
@@ -403,8 +389,6 @@
   <string name="prefs_camera_upload_source_path_title">תיקיית מצלמה (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">נדרש</string>
   <string name="prefs_camera_upload_source_path_title_optional">אופציונלי</string>
-  <string name="prefs_camera_upload_behaviour_dialogTitle">תיקייה מקורית תהיה...</string>
-  <string name="prefs_camera_upload_behaviour_title">תיקייה מקורית תהיה...</string>
   <string name="upload_copy_files">העתקת קובץ</string>
   <string name="upload_move_files">העברת קובץ</string>
   <string name="pref_behaviour_entries_keep_file">נשמר בתיקייה מקורית</string>
@@ -425,7 +409,7 @@
   <string name="share_via_link_password_label">סיסמא</string>
   <string name="share_via_link_password_title">מאובטח</string>
   <string name="share_get_public_link_button">קבלת קישור</string>
-  <string name="share_with_title">שיתף עם...</string>
+  <string name="share_with_title">שיתוף עם</string>
   <string name="share_with_edit_title">שיתף עם %1$s</string>
   <string name="share_search">חיפוש</string>
   <string name="search_users_and_groups_hint">חיפוש משתמשים וקבוצות</string>
@@ -495,4 +479,6 @@
   </plurals>
   <!--Welcome to oC intro features-->
   <string name="welcome_feature_4_title">העלאות מהמצלמה</string>
+  <string name="welcome_feature_7_title">לבחור הכול</string>
+  <string name="welcome_feature_8_title">זמין במצב לא מקוון</string>
 </resources>

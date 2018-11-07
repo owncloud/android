@@ -49,7 +49,7 @@
   <string name="auth_password">Лозинка</string>
   <string name="auth_register">Нов вам је %1$s?</string>
   <string name="sync_string_files">Фајлови</string>
-  <string name="setup_btn_connect">Повежи се</string>
+  <string name="setup_btn_login">Повежи се</string>
   <string name="uploader_btn_upload_text">Отпреми</string>
   <string name="uploader_wrn_no_account_title">Нема налога</string>
   <string name="uploader_wrn_no_account_text">Нема %1$s налога на вашем уређају. Најпре подесите налог.</string>

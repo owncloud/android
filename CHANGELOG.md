@@ -1,3 +1,42 @@
+## 2.9.0 (November 2018)
+- Search in current folder
+- Select all/inverse files (contribution)
+- Improve available offline files synchronization and conflict resolution (Android 5 or higher required)
+- Sort files in file picker when uploading (contribution)
+- Access ownCloud files from files apps, even with files not downloaded
+- New login view
+- Show re-shares
+- Switch apache and jackrabbit deprecated network libraries to more modern and active library, OkHttp + Dav4Android
+- UI improvements, including:
+  + Change edit share icon
+  + New gradient in top of the list of files (contribution)
+  + More accurate message when creating folders with the same name (contribution)
+- Bug fixes, including:
+  + Fix some crashes:
+    - When rebooting the device
+    - When copying, moving files or choosing a folder within camera uploads feature
+    - When creating private/public link
+  + Fix some failing downloads
+  + Fix pattern lock being asked very often after disabling fingerprint lock (contribution)
+
+## 2.9.0 beta v2 (October 2018)
+- Bug fixes, including:
+  + Fix some crashes:
+    - When rebooting the device
+    - When copying, moving files or choosing a folder within camera uploads feature
+  + Fix some failing downloads
+  + Fix pattern lock being asked very often after disabling fingerprint lock
+
+## 2.9.0 beta v1 (September 2018)
+- Switch apache and jackrabbit deprecated libraries to more modern and active library, OkHttp
+- Search in current folder
+- Select all/inverse files
+- New login view
+- Show re-shares
+- UI improvements, including:
+  + Change edit share icon
+  + New gradient in top of the list of files
+
 ## 2.8.0 (July 2018)
 - Side menu redesign
 - User quota in side menu
@@ -38,7 +77,6 @@
   + Fix guest account showing an empty file list
   + Hide keyboard when going back from select user view
   + Fix black "downloading screen" message when downloading an image offline.
-  
 
 ## 2.7.0 (April 2018)
 - Fingerprint lock

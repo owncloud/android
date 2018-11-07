@@ -1,7 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="about_android">%1$s Android приложение</string>
-  <string name="about_version">версия %1$s</string>
   <string name="actionbar_sync">Обновяви профила</string>
   <string name="actionbar_upload">Качване</string>
   <string name="actionbar_upload_from_apps">Съдържание от други приложения</string>
@@ -14,11 +12,7 @@
   <string name="actionbar_sort">Сортиране</string>
   <string name="actionbar_sort_title">Сортирай по</string>
   <string name="actionbar_sort_by_name">А - Я</string>
-  <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
-  <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Всички файлове</string>
-  <!--TODO re-enable when "On Device" is available
-    <string name="drawer_item_on_device">On device</string>-->
   <string name="drawer_item_settings">Настройки</string>
   <string name="drawer_item_uploads_list">Качено</string>
   <string name="drawer_close">Затвори</string>
@@ -50,7 +44,7 @@
   <string name="auth_password">Парола</string>
   <string name="auth_register">Нов в %1$s?</string>
   <string name="sync_string_files">Файлове</string>
-  <string name="setup_btn_connect">Свързване</string>
+  <string name="setup_btn_login">Вписване</string>
   <string name="uploader_btn_upload_text">Качване</string>
   <string name="uploader_top_message">Избери папка за качване</string>
   <string name="uploader_wrn_no_account_title">Няма открит профил</string>
@@ -87,15 +81,13 @@
   <string name="action_share">Споделяне</string>
   <string name="common_yes">Да</string>
   <string name="common_no">Не</string>
-  <string name="common_ok">ОК</string>
   <string name="common_remove_upload">Премахване каченото</string>
   <string name="common_retry_upload">Повторно качване</string>
   <string name="common_cancel_sync">Отмени синхронизирането</string>
-  <string name="common_cancel">Отказ</string>
   <string name="common_back">Назад</string>
   <string name="common_save_exit">Записши &amp; съшествуващ</string>
   <string name="common_error">Грешка</string>
-  <string name="common_loading">Зареждане...</string>
+  <string name="common_loading">Зарежда…</string>
   <string name="common_unknown">несяна</string>
   <string name="common_error_unknown">Непозната грешка</string>
   <string name="common_pending">Чакащо</string>
@@ -103,9 +95,7 @@
   <string name="change_password">Промяна на парола</string>
   <string name="delete_account">Премахни потребителя</string>
   <string name="create_account">Създаване на профил</string>
-  <string name="upload_chooser_title">Качване от...</string>
   <string name="uploader_info_dirname">Име на папката</string>
-  <string name="uploader_upload_in_progress_ticker">Качване...</string>
   <string name="uploader_upload_in_progress_content">%1$d%% Качване %2$s</string>
   <string name="uploader_upload_succeeded_ticker">Качването е успешно.</string>
   <string name="uploader_upload_succeeded_content_single">%1$s качено</string>
@@ -119,7 +109,6 @@
   <string name="uploads_view_group_current_uploads">Текущ</string>
   <string name="uploads_view_group_failed_uploads">Неуспешно (натисни за нов опит)</string>
   <string name="uploads_view_group_finished_uploads">Качени</string>
-  <string name="uploads_view_group_file_count">%d Файла</string>
   <string name="uploads_view_upload_status_succeeded">Завършено</string>
   <string name="uploads_view_upload_status_cancelled">Отказано</string>
   <string name="uploads_view_upload_status_paused">Паузирано</string>
@@ -135,7 +124,6 @@
   <string name="uploads_view_upload_status_unknown_fail">Непозната грешка.</string>
   <string name="uploads_view_upload_status_waiting_for_wifi">Изчакване на уайрлес връзка</string>
   <string name="uploads_view_later_waiting_to_upload">Изчакване за качване</string>
-  <string name="downloader_download_in_progress_ticker">Изтегляне...</string>
   <string name="downloader_download_in_progress_content">%1$d%% Сваляне %2$s</string>
   <string name="downloader_download_succeeded_ticker">Изтеглянето е успешно.</string>
   <string name="downloader_download_succeeded_content">%1$s свалено</string>
@@ -190,8 +178,7 @@
   <string name="media_rewind_description">Бутон за превъртане</string>
   <string name="media_play_pause_description">Бутон пусни / пауза </string>
   <string name="media_forward_description">Бутон за превъртане напред</string>
-  <string name="auth_getting_authorization">Получаване оторизация</string>
-  <string name="auth_trying_to_login">Опитва се да влезе</string>
+  <string name="auth_getting_authorization">Получване на оторизация...</string>
   <string name="auth_no_net_conn_title">Няма интернет връзка</string>
   <string name="auth_nossl_plain_ok_title">Няма сигурна връзка</string>
   <string name="auth_connection_established">Осъществена връзка</string>
@@ -245,7 +232,6 @@
   <string name="wait_checking_credentials">Проверка съхранените пълномощия</string>
   <string name="filedisplay_unexpected_bad_get_content">Неочакван проблем; моля, изберете файла от друга програма.</string>
   <string name="filedisplay_no_file_selected">Не е избран файл</string>
-  <string name="activity_chooser_title">Изпращане на връзката до...</string>
   <string name="wait_for_tmp_copy_from_private_storage">Копира файла от личното хранилище</string>
   <string name="oauth_check_onoff">Вписване с oAuth2</string>
   <string name="ssl_validator_header">Идентичността на сървъра не може да бъде потвърдена</string>
@@ -327,7 +313,8 @@
   <string name="log_send_history_button">Изпрати историята</string>
   <string name="log_send_no_mail_app">Не е намерено приложение за изпращане на логове. Моля инсталирайте e-mail приложение</string>
   <string name="log_send_mail_subject">%1$s Android журнали на приложенията</string>
-  <string name="log_progress_dialog_text">Зареждане на данни ...</string>
+  <string name="log_progress_dialog_text">Зареждане на данни...</string>
+  <string name="actionbar_select_all">Избери всички</string>
   <string name="saml_authentication_required_text">Нужна е идентификация</string>
   <string name="saml_authentication_wrong_pass">Грешна парола</string>
   <string name="actionbar_move">Премести</string>
@@ -363,8 +350,6 @@
   <string name="prefs_camera_upload_source_path_title">Папка за камерата (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">задължителен</string>
   <string name="prefs_camera_upload_source_path_title_optional">по избор</string>
-  <string name="prefs_camera_upload_behaviour_dialogTitle">Оригиналният файл ще бъде...</string>
-  <string name="prefs_camera_upload_behaviour_title">Оригиналният файл ще бъде...</string>
   <string name="upload_copy_files">Копиране на файл</string>
   <string name="upload_move_files">Преместване на файл</string>
   <string name="pref_behaviour_entries_keep_file">запази в оригиналната папка</string>
@@ -380,7 +365,7 @@
   <string name="share_via_link_password_label">Парола</string>
   <string name="share_via_link_password_title">Подсигурен</string>
   <string name="share_get_public_link_button">Получаване на връзка</string>
-  <string name="share_with_title">Споделено с ...</string>
+  <string name="share_with_title">Сподели с</string>
   <string name="share_with_edit_title">Сподели с %1$s</string>
   <string name="share_search">Търсене</string>
   <string name="search_users_and_groups_hint">Търси потребители и групи</string>
@@ -419,4 +404,5 @@
     <item quantity="other">%d избран</item>
   </plurals>
   <!--Welcome to oC intro features-->
+  <string name="welcome_feature_7_title">Избери всички</string>
 </resources>

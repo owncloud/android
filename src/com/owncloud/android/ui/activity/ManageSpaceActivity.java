@@ -35,6 +35,7 @@ import android.widget.TextView;
 
 import com.owncloud.android.R;
 import com.owncloud.android.lib.common.utils.Log_OC;
+import com.owncloud.android.utils.FileStorageUtils;
 
 import java.io.File;
 
@@ -171,7 +172,7 @@ public class ManageSpaceActivity extends AppCompatActivity {
                     for (String s : children) {
                         if (!LIB_FOLDER.equals(s)) {
                             File fileToDelete = new File(appDir, s);
-                            clearResult = clearResult && deleteDir(fileToDelete);
+                            clearResult = clearResult && FileStorageUtils.deleteDir(fileToDelete);
                             Log_OC.d(TAG, "Clear Application Data, File: " + fileToDelete.getName() + " DELETED *****");
                         }
                     }
@@ -180,27 +181,6 @@ public class ManageSpaceActivity extends AppCompatActivity {
                 }
             }
             return  clearResult;
-        }
-
-        public boolean deleteDir(File dir) {
-            if (dir != null && dir.isDirectory()) {
-                String[] children = dir.list();
-                if (children != null) {
-                    for (int i = 0; i < children.length; i++) {
-                        boolean success = deleteDir(new File(dir, children[i]));
-                        if (!success) {
-                            Log_OC.w(TAG, "File NOT deleted " + children[i]);
-                            return false;
-                        } else {
-                            Log_OC.d(TAG, "File deleted " + children[i]);
-                        }
-                    }
-                } else {
-                    return false;
-                }
-            }
-
-            return dir.delete();
         }
     }
 }

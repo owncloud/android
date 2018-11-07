@@ -35,12 +35,10 @@ import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
-import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceManager;
 import android.support.annotation.LayoutRes;
-import android.support.annotation.RequiresApi;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatDelegate;
@@ -155,17 +153,14 @@ public class Preferences extends PreferenceActivity {
         mPrefCameraPictureUploadsPath = findPreference("camera_picture_uploads_path");
         if (mPrefCameraPictureUploadsPath != null) {
 
-            mPrefCameraPictureUploadsPath.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    if (!mUploadPath.endsWith(OCFile.PATH_SEPARATOR)) {
-                        mUploadPath += OCFile.PATH_SEPARATOR;
-                    }
-                    Intent intent = new Intent(Preferences.this, UploadPathActivity.class);
-                    intent.putExtra(UploadPathActivity.KEY_CAMERA_UPLOAD_PATH, mUploadPath);
-                    startActivityForResult(intent, ACTION_SELECT_UPLOAD_PATH);
-                    return true;
+            mPrefCameraPictureUploadsPath.setOnPreferenceClickListener(preference -> {
+                if (!mUploadPath.endsWith(OCFile.PATH_SEPARATOR)) {
+                    mUploadPath += OCFile.PATH_SEPARATOR;
                 }
+                Intent intent = new Intent(Preferences.this, UploadPathActivity.class);
+                intent.putExtra(UploadPathActivity.KEY_CAMERA_UPLOAD_PATH, mUploadPath);
+                startActivityForResult(intent, ACTION_SELECT_UPLOAD_PATH);
+                return true;
             });
         }
 
@@ -176,35 +171,28 @@ public class Preferences extends PreferenceActivity {
 
         toggleCameraUploadsPictureOptions(true, ((CheckBoxPreference) mPrefCameraPictureUploads).isChecked());
 
-        mPrefCameraPictureUploads.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
-
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                boolean enableCameraUploadsPicture = (Boolean) newValue;
-                toggleCameraUploadsPictureOptions(false, enableCameraUploadsPicture);
-                toggleCameraUploadsCommonOptions(
-                        ((CheckBoxPreference) mPrefCameraVideoUploads).isChecked(),
-                        enableCameraUploadsPicture
-                );
-                return true;
-            }
+        mPrefCameraPictureUploads.setOnPreferenceChangeListener((preference, newValue) -> {
+            boolean enableCameraUploadsPicture = (Boolean) newValue;
+            toggleCameraUploadsPictureOptions(false, enableCameraUploadsPicture);
+            toggleCameraUploadsCommonOptions(
+                    ((CheckBoxPreference) mPrefCameraVideoUploads).isChecked(),
+                    enableCameraUploadsPicture
+            );
+            return true;
         });
 
         // Videos
         mPrefCameraVideoUploadsPath = findPreference("camera_video_uploads_path");
         if (mPrefCameraVideoUploadsPath != null) {
 
-            mPrefCameraVideoUploadsPath.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    if (!mUploadVideoPath.endsWith(OCFile.PATH_SEPARATOR)) {
-                        mUploadVideoPath += OCFile.PATH_SEPARATOR;
-                    }
-                    Intent intent = new Intent(Preferences.this, UploadPathActivity.class);
-                    intent.putExtra(UploadPathActivity.KEY_CAMERA_UPLOAD_PATH, mUploadVideoPath);
-                    startActivityForResult(intent, ACTION_SELECT_UPLOAD_VIDEO_PATH);
-                    return true;
+            mPrefCameraVideoUploadsPath.setOnPreferenceClickListener(preference -> {
+                if (!mUploadVideoPath.endsWith(OCFile.PATH_SEPARATOR)) {
+                    mUploadVideoPath += OCFile.PATH_SEPARATOR;
                 }
+                Intent intent = new Intent(Preferences.this, UploadPathActivity.class);
+                intent.putExtra(UploadPathActivity.KEY_CAMERA_UPLOAD_PATH, mUploadVideoPath);
+                startActivityForResult(intent, ACTION_SELECT_UPLOAD_VIDEO_PATH);
+                return true;
             });
         }
 
@@ -226,19 +214,16 @@ public class Preferences extends PreferenceActivity {
 
         mPrefCameraUploadsSourcePath = findPreference("camera_uploads_source_path");
         if (mPrefCameraUploadsSourcePath != null) {
-            mPrefCameraUploadsSourcePath.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    if (!mSourcePath.endsWith(File.separator)) {
-                        mSourcePath += File.separator;
-                    }
-                    LocalFolderPickerActivity.startLocalFolderPickerActivityForResult(
-                            Preferences.this,
-                            mSourcePath,
-                            ACTION_SELECT_SOURCE_PATH
-                    );
-                    return true;
+            mPrefCameraUploadsSourcePath.setOnPreferenceClickListener(preference -> {
+                if (!mSourcePath.endsWith(File.separator)) {
+                    mSourcePath += File.separator;
                 }
+                LocalFolderPickerActivity.startLocalFolderPickerActivityForResult(
+                        Preferences.this,
+                        mSourcePath,
+                        ACTION_SELECT_SOURCE_PATH
+                );
+                return true;
             });
         } else {
             Log_OC.e(TAG, "Lost preference camera_uploads_source_path");
@@ -256,7 +241,7 @@ public class Preferences extends PreferenceActivity {
         CameraUploadsConfiguration configuration = com.owncloud.android.db.PreferenceManager.
                 getCameraUploadsConfiguration(this);
 
-        mCameraUploadsHandler = new CameraUploadsHandler(this, configuration);
+        mCameraUploadsHandler = new CameraUploadsHandler(configuration);
 
         /**
          * Security
@@ -269,25 +254,22 @@ public class Preferences extends PreferenceActivity {
         // Passcode lock
         if (pPasscode != null) {
 
-            pPasscode.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
-                @Override
-                public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    Intent i = new Intent(getApplicationContext(), PassCodeActivity.class);
-                    Boolean incoming = (Boolean) newValue;
-                    SharedPreferences appPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                    patternSet = appPrefs.getBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN,false);
-                    if(patternSet){
-                        showSnackMessage(R.string.pattern_already_set);
-                    }
-                    else {
-                        i.setAction(incoming ? PassCodeActivity.ACTION_REQUEST_WITH_RESULT :
-                                        PassCodeActivity.ACTION_CHECK_WITH_RESULT);
-
-                        startActivityForResult(i, incoming ? ACTION_REQUEST_PASSCODE : ACTION_CONFIRM_PASSCODE);
-                    }
-                    // Don't update just yet, we will decide on it in onActivityResult
-                    return false;
+            pPasscode.setOnPreferenceChangeListener((preference, newValue) -> {
+                Intent i = new Intent(getApplicationContext(), PassCodeActivity.class);
+                Boolean incoming = (Boolean) newValue;
+                SharedPreferences appPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                patternSet = appPrefs.getBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN,false);
+                if(patternSet){
+                    showSnackMessage(R.string.pattern_already_set);
                 }
+                else {
+                    i.setAction(incoming ? PassCodeActivity.ACTION_REQUEST_WITH_RESULT :
+                                    PassCodeActivity.ACTION_CHECK_WITH_RESULT);
+
+                    startActivityForResult(i, incoming ? ACTION_REQUEST_PASSCODE : ACTION_CONFIRM_PASSCODE);
+                }
+                // Don't update just yet, we will decide on it in onActivityResult
+                return false;
             });
         }
 
@@ -295,23 +277,20 @@ public class Preferences extends PreferenceActivity {
         pPattern = (CheckBoxPreference) findPreference(PatternLockActivity.PREFERENCE_SET_PATTERN);
         if (pPattern != null) {
 
-            pPattern.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
-                @Override
-                public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    Intent intent = new Intent(getApplicationContext(), PatternLockActivity.class);
-                    Boolean state = (Boolean) newValue;
-                    SharedPreferences appPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                    passcodeSet = appPrefs.getBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE,false);
-                    if(passcodeSet){
-                        showSnackMessage(R.string.passcode_already_set);
-                    }
-                    else {
-                        intent.setAction(state ? PatternLockActivity.ACTION_REQUEST_WITH_RESULT :
-                                PatternLockActivity.ACTION_CHECK_WITH_RESULT);
-                        startActivityForResult(intent, state ? ACTION_REQUEST_PATTERN : ACTION_CONFIRM_PATTERN);
-                    }
-                    return false;
+            pPattern.setOnPreferenceChangeListener((preference, newValue) -> {
+                Intent intent = new Intent(getApplicationContext(), PatternLockActivity.class);
+                Boolean state = (Boolean) newValue;
+                SharedPreferences appPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                passcodeSet = appPrefs.getBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE,false);
+                if(passcodeSet){
+                    showSnackMessage(R.string.passcode_already_set);
                 }
+                else {
+                    intent.setAction(state ? PatternLockActivity.ACTION_REQUEST_WITH_RESULT :
+                            PatternLockActivity.ACTION_CHECK_WITH_RESULT);
+                    startActivityForResult(intent, state ? ACTION_REQUEST_PATTERN : ACTION_CONFIRM_PATTERN);
+                }
+                return false;
             });
         }
 
@@ -328,30 +307,26 @@ public class Preferences extends PreferenceActivity {
                 pFingerprint.setSummary(R.string.prefs_fingerprint_summary);
             }
 
-            pFingerprint.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
-                @RequiresApi(api = Build.VERSION_CODES.M)
-                @Override
-                public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    Boolean incoming = (Boolean) newValue;
+            pFingerprint.setOnPreferenceChangeListener((preference, newValue) -> {
+                Boolean incoming = (Boolean) newValue;
 
-                    // Fingerprint not supported
-                    if (incoming && mFingerprintManager != null && !mFingerprintManager.isHardwareDetected()) {
+                // Fingerprint not supported
+                if (incoming && mFingerprintManager != null && !mFingerprintManager.isHardwareDetected()) {
 
-                        showSnackMessage(R.string.fingerprint_not_hardware_detected);
+                    showSnackMessage(R.string.fingerprint_not_hardware_detected);
 
-                        return false;
-                    }
-
-                    // No fingerprints enrolled yet
-                    if (incoming && mFingerprintManager != null && !mFingerprintManager.hasEnrolledFingerprints()) {
-
-                        showSnackMessage(R.string.fingerprint_not_enrolled_fingerprints);
-
-                        return false;
-                    }
-
-                    return true;
+                    return false;
                 }
+
+                // No fingerprints enrolled yet
+                if (incoming && mFingerprintManager != null && !mFingerprintManager.hasEnrolledFingerprints()) {
+
+                    showSnackMessage(R.string.fingerprint_not_enrolled_fingerprints);
+
+                    return false;
+                }
+
+                return true;
             });
         }
 
@@ -364,20 +339,36 @@ public class Preferences extends PreferenceActivity {
         Preference pHelp = findPreference("help");
         if (pHelp != null) {
             if (helpEnabled) {
-                pHelp.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-                    @Override
-                    public boolean onPreferenceClick(Preference preference) {
-                        String helpWeb = (String) getText(R.string.url_help);
-                        if (helpWeb != null && helpWeb.length() > 0) {
-                            Uri uriUrl = Uri.parse(helpWeb);
-                            Intent intent = new Intent(Intent.ACTION_VIEW, uriUrl);
-                            startActivity(intent);
-                        }
-                        return true;
+                pHelp.setOnPreferenceClickListener(preference -> {
+                    String helpWeb = (String) getText(R.string.url_help);
+                    if (helpWeb != null && helpWeb.length() > 0) {
+                        Uri uriUrl = Uri.parse(helpWeb);
+                        Intent intent = new Intent(Intent.ACTION_VIEW, uriUrl);
+                        startActivity(intent);
                     }
+                    return true;
                 });
             } else {
                 preferenceCategory.removePreference(pHelp);
+            }
+        }
+
+        Preference pSyncCalendarContacts = findPreference("syncCalendarContacts");
+
+        boolean syncCalendarContactsEnabled = getResources().getBoolean(R.bool.sync_calendar_contacts_enabled);
+        if (pSyncCalendarContacts != null) {
+            if(syncCalendarContactsEnabled) {
+                pSyncCalendarContacts.setOnPreferenceClickListener(preference -> {
+                    String syncCalendarContactsUrl = (String) getText(R.string.url_sync_calendar_contacts);
+                    if (syncCalendarContactsUrl != null && syncCalendarContactsUrl.length() > 0) {
+                        Uri uriUrl = Uri.parse(syncCalendarContactsUrl);
+                        Intent intent = new Intent(Intent.ACTION_VIEW, uriUrl);
+                        startActivity(intent);
+                    }
+                    return true;
+                });
+            } else {
+                preferenceCategory.removePreference(pSyncCalendarContacts);
             }
         }
 
@@ -385,31 +376,28 @@ public class Preferences extends PreferenceActivity {
         Preference pRecommend = findPreference("recommend");
         if (pRecommend != null) {
             if (recommendEnabled) {
-                pRecommend.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-                    @Override
-                    public boolean onPreferenceClick(Preference preference) {
+                pRecommend.setOnPreferenceClickListener(preference -> {
 
-                        Intent intent = new Intent(Intent.ACTION_SENDTO);
-                        intent.setType("text/plain");
-                        intent.setData(Uri.parse(getString(R.string.mail_recommend)));
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    Intent intent = new Intent(Intent.ACTION_SENDTO);
+                    intent.setType("text/plain");
+                    intent.setData(Uri.parse(getString(R.string.mail_recommend)));
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-                        String appName = getString(R.string.app_name);
-                        String downloadUrl = getString(R.string.url_app_download);
+                    String appName = getString(R.string.app_name);
+                    String downloadUrl = getString(R.string.url_app_download);
 
-                        String recommendSubject =
-                                String.format(getString(R.string.recommend_subject),
-                                        appName);
-                        String recommendText = String.format(getString(R.string.recommend_text),
-                                appName, downloadUrl);
+                    String recommendSubject =
+                            String.format(getString(R.string.recommend_subject),
+                                    appName);
+                    String recommendText = String.format(getString(R.string.recommend_text),
+                            appName, downloadUrl);
 
-                        intent.putExtra(Intent.EXTRA_SUBJECT, recommendSubject);
-                        intent.putExtra(Intent.EXTRA_TEXT, recommendText);
-                        startActivity(intent);
+                    intent.putExtra(Intent.EXTRA_SUBJECT, recommendSubject);
+                    intent.putExtra(Intent.EXTRA_TEXT, recommendText);
+                    startActivity(intent);
 
-                        return (true);
+                    return (true);
 
-                    }
                 });
             } else {
                 preferenceCategory.removePreference(pRecommend);
@@ -420,22 +408,19 @@ public class Preferences extends PreferenceActivity {
         Preference pFeedback = findPreference("feedback");
         if (pFeedback != null) {
             if (feedbackEnabled) {
-                pFeedback.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-                    @Override
-                    public boolean onPreferenceClick(Preference preference) {
-                        String feedbackMail = (String) getText(R.string.mail_feedback);
-                        String feedback = getText(R.string.prefs_feedback) +
-                                " - android v" + appVersion;
-                        Intent intent = new Intent(Intent.ACTION_SENDTO);
-                        intent.setType("text/plain");
-                        intent.putExtra(Intent.EXTRA_SUBJECT, feedback);
+                pFeedback.setOnPreferenceClickListener(preference -> {
+                    String feedbackMail = (String) getText(R.string.mail_feedback);
+                    String feedback = getText(R.string.prefs_feedback) +
+                            " - android v" + appVersion;
+                    Intent intent = new Intent(Intent.ACTION_SENDTO);
+                    intent.setType("text/plain");
+                    intent.putExtra(Intent.EXTRA_SUBJECT, feedback);
 
-                        intent.setData(Uri.parse(feedbackMail));
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(intent);
+                    intent.setData(Uri.parse(feedbackMail));
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
 
-                        return true;
-                    }
+                    return true;
                 });
             } else {
                 preferenceCategory.removePreference(pFeedback);
@@ -446,14 +431,11 @@ public class Preferences extends PreferenceActivity {
         Preference pPrivacyPolicy = findPreference("privacyPolicy");
         if (pPrivacyPolicy != null) {
             if (privacyPolicyEnabled) {
-                pPrivacyPolicy.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-                    @Override
-                    public boolean onPreferenceClick(Preference preference) {
-                        Intent privacyPolicyIntent = new Intent(getApplicationContext(), PrivacyPolicyActivity.class);
-                        startActivity(privacyPolicyIntent);
+                pPrivacyPolicy.setOnPreferenceClickListener(preference -> {
+                    Intent privacyPolicyIntent = new Intent(getApplicationContext(), PrivacyPolicyActivity.class);
+                    startActivity(privacyPolicyIntent);
 
-                        return true;
-                    }
+                    return true;
                 });
             } else {
                 preferenceCategory.removePreference(pPrivacyPolicy);
@@ -465,14 +447,11 @@ public class Preferences extends PreferenceActivity {
         Preference pLogger = findPreference("logger");
         if (pLogger != null) {
             if (loggerEnabled) {
-                pLogger.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-                    @Override
-                    public boolean onPreferenceClick(Preference preference) {
-                        Intent loggerIntent = new Intent(getApplicationContext(), LogHistoryActivity.class);
-                        startActivity(loggerIntent);
+                pLogger.setOnPreferenceClickListener(preference -> {
+                    Intent loggerIntent = new Intent(getApplicationContext(), LogHistoryActivity.class);
+                    startActivity(loggerIntent);
 
-                        return true;
-                    }
+                    return true;
                 });
             } else {
                 preferenceCategory.removePreference(pLogger);
@@ -483,17 +462,14 @@ public class Preferences extends PreferenceActivity {
         Preference pImprint = findPreference("imprint");
         if (pImprint != null) {
             if (imprintEnabled) {
-                pImprint.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-                    @Override
-                    public boolean onPreferenceClick(Preference preference) {
-                        String imprintWeb = (String) getText(R.string.url_imprint);
-                        if (imprintWeb != null && imprintWeb.length() > 0) {
-                            Uri uriUrl = Uri.parse(imprintWeb);
-                            Intent intent = new Intent(Intent.ACTION_VIEW, uriUrl);
-                            startActivity(intent);
-                        }
-                        return true;
+                pImprint.setOnPreferenceClickListener(preference -> {
+                    String imprintWeb = (String) getText(R.string.url_imprint);
+                    if (imprintWeb != null && imprintWeb.length() > 0) {
+                        Uri uriUrl = Uri.parse(imprintWeb);
+                        Intent intent = new Intent(Intent.ACTION_VIEW, uriUrl);
+                        startActivity(intent);
                     }
+                    return true;
                 });
             } else {
                 preferenceCategory.removePreference(pImprint);
@@ -544,7 +520,7 @@ public class Preferences extends PreferenceActivity {
                                 } else if (which == DialogInterface.BUTTON_POSITIVE) {
                                     mPrefCameraUploadsCategory.removePreference(mPrefCameraPictureUploadsWiFi);
                                     mPrefCameraUploadsCategory.removePreference(mPrefCameraPictureUploadsPath);
-                                    mCameraUploadsHandler.updatePicturesLastSync(0);
+                                    mCameraUploadsHandler.updatePicturesLastSync(getApplicationContext(), 0);
                                 }
                                 dismissConfirmationDialog(builder);
                             }
@@ -584,7 +560,7 @@ public class Preferences extends PreferenceActivity {
                                 } else if (which == DialogInterface.BUTTON_POSITIVE) {
                                     mPrefCameraUploadsCategory.removePreference(mPrefCameraVideoUploadsWiFi);
                                     mPrefCameraUploadsCategory.removePreference(mPrefCameraVideoUploadsPath);
-                                    mCameraUploadsHandler.updateVideosLastSync(0);
+                                    mCameraUploadsHandler.updateVideosLastSync(getApplicationContext(), 0);
                                 }
                                 dismissConfirmationDialog(builder);
                             }
@@ -683,8 +659,8 @@ public class Preferences extends PreferenceActivity {
 
             if (!previousSourcePath.equals(data.getStringExtra(LocalFolderPickerActivity.EXTRA_PATH))) {
                 long currentTimeStamp = System.currentTimeMillis();
-                mCameraUploadsHandler.updatePicturesLastSync(currentTimeStamp);
-                mCameraUploadsHandler.updateVideosLastSync(currentTimeStamp);
+                mCameraUploadsHandler.updatePicturesLastSync(getApplicationContext(), currentTimeStamp);
+                mCameraUploadsHandler.updateVideosLastSync(getApplicationContext(), currentTimeStamp);
             }
 
             mSourcePath = data.getStringExtra(LocalFolderPickerActivity.EXTRA_PATH);
@@ -823,7 +799,7 @@ public class Preferences extends PreferenceActivity {
 
             mCameraUploadsHandler.setCameraUploadsConfig(configuration);
 
-            mCameraUploadsHandler.scheduleCameraUploadsSyncJob();
+            mCameraUploadsHandler.scheduleCameraUploadsSyncJob(getApplicationContext());
         }
 
         super.onStop();

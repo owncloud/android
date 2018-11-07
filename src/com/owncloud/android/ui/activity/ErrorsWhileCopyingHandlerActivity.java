@@ -69,7 +69,7 @@ public class ErrorsWhileCopyingHandlerActivity  extends AppCompatActivity
     private static final String TAG = ErrorsWhileCopyingHandlerActivity.class.getSimpleName();
     
     public static final String EXTRA_ACCOUNT =
-            ErrorsWhileCopyingHandlerActivity.class.getCanonicalName() + ".EXTRA_ACCOUNT";
+            ErrorsWhileCopyingHandlerActivity.class.getCanonicalName() + ".KEY_ACCOUNT";
     public static final String EXTRA_LOCAL_PATHS =
             ErrorsWhileCopyingHandlerActivity.class.getCanonicalName() + ".EXTRA_LOCAL_PATHS";
     public static final String EXTRA_REMOTE_PATHS =
@@ -97,7 +97,7 @@ public class ErrorsWhileCopyingHandlerActivity  extends AppCompatActivity
         mAccount = intent.getParcelableExtra(EXTRA_ACCOUNT);
         mRemotePaths = intent.getStringArrayListExtra(EXTRA_REMOTE_PATHS);
         mLocalPaths = intent.getStringArrayListExtra(EXTRA_LOCAL_PATHS);
-        mStorageManager = new FileDataStorageManager(mAccount, getContentResolver());
+        mStorageManager = new FileDataStorageManager(this, mAccount, getContentResolver());
         mHandler = new Handler();
         if (mCurrentDialog != null) {
             mCurrentDialog.dismiss();

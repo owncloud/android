@@ -1,7 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="about_android">%1$s Android app</string>
-  <string name="about_version">version %1$s</string>
   <string name="actionbar_sync">Genindlæs konto</string>
   <string name="actionbar_upload">Upload</string>
   <string name="actionbar_upload_from_apps">Indhold fra andre apps</string>
@@ -15,11 +13,7 @@
   <string name="actionbar_descending">Oppefra</string>
   <string name="actionbar_sort_title">Sortér efter</string>
   <string name="actionbar_sort_by_name">A-Å</string>
-  <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
-  <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Alle filer</string>
-  <!--TODO re-enable when "On Device" is available
-    <string name="drawer_item_on_device">On device</string>-->
   <string name="drawer_item_settings">Indstillinger</string>
   <string name="drawer_item_uploads_list">Uploade filer</string>
   <string name="drawer_close">Luk</string>
@@ -53,7 +47,7 @@
   <string name="auth_password">Kodeord</string>
   <string name="auth_register">Ny med %1$s</string>
   <string name="sync_string_files">Filer</string>
-  <string name="setup_btn_connect">Tilslut</string>
+  <string name="setup_btn_login">Log ind</string>
   <string name="uploader_btn_upload_text">Upload</string>
   <string name="uploader_top_message">Vælg upload mappe</string>
   <string name="uploader_wrn_no_account_title">Ingen konto fundet</string>
@@ -90,11 +84,9 @@
   <string name="action_share">Del</string>
   <string name="common_yes">Ja</string>
   <string name="common_no">Nej</string>
-  <string name="common_ok">OK</string>
   <string name="common_remove_upload">Fjern upload</string>
   <string name="common_retry_upload">Prøv at sende igen</string>
   <string name="common_cancel_sync">Annuller synk</string>
-  <string name="common_cancel">Annuller</string>
   <string name="common_back">Tilbage</string>
   <string name="common_save_exit">Gem &amp; afslut</string>
   <string name="common_error">Fejl</string>
@@ -106,9 +98,7 @@
   <string name="change_password">Skift kodeord</string>
   <string name="delete_account">Fjern konto</string>
   <string name="create_account">Opret konto</string>
-  <string name="upload_chooser_title">Upload fra ...</string>
   <string name="uploader_info_dirname">Mappenavn</string>
-  <string name="uploader_upload_in_progress_ticker">Uploader ...</string>
   <string name="uploader_upload_in_progress_content">%1$d%% Uploader %2$s</string>
   <string name="uploader_upload_succeeded_ticker">Upload færdig</string>
   <string name="uploader_upload_succeeded_content_single">%1$s uploadet</string>
@@ -125,8 +115,6 @@
   <string name="uploads_view_group_current_uploads">Nuværende</string>
   <string name="uploads_view_group_failed_uploads">Fejlet (tryk for at prøve igen)</string>
   <string name="uploads_view_group_finished_uploads">Sendt</string>
-  <string name="uploads_view_group_file_count">%d filer</string>
-  <string name="uploads_view_group_file_count_single">%d Fil</string>
   <string name="uploads_view_upload_status_succeeded">Fuldført</string>
   <string name="uploads_view_upload_status_cancelled">Annulléret</string>
   <string name="uploads_view_upload_status_paused">Pauset</string>
@@ -144,7 +132,6 @@
   <string name="uploads_view_upload_status_waiting_for_wifi">Venter på wifi-forbindelse</string>
   <string name="uploads_view_later_waiting_to_upload">Venter med upload</string>
   <string name="uploads_view_unsupported_media_type">Ikke-understøttet medietype</string>
-  <string name="downloader_download_in_progress_ticker">Downloader ...</string>
   <string name="downloader_download_in_progress_content">%1$d%% Downloader %2$s</string>
   <string name="downloader_download_succeeded_ticker">Download fuldført</string>
   <string name="downloader_download_succeeded_content">%1$s downloadet</string>
@@ -200,8 +187,7 @@
   <string name="media_rewind_description">Tilbagespolingsknap</string>
   <string name="media_play_pause_description">Afspil eller pause knap</string>
   <string name="media_forward_description">Hurtigt fremad-knap</string>
-  <string name="auth_getting_authorization">Henter tilladelser ...</string>
-  <string name="auth_trying_to_login">Forsøger at logge ind ...</string>
+  <string name="auth_getting_authorization">Forsøger godkendelse...</string>
   <string name="auth_no_net_conn_title">Ingen netværksforbindelse</string>
   <string name="auth_nossl_plain_ok_title">Sikker forbindelse ikke tilgængelig.</string>
   <string name="auth_connection_established">Forbindelse oprettet</string>
@@ -255,7 +241,6 @@
   <string name="wait_checking_credentials">Kontrollerer gemte legitimationsoplysninger</string>
   <string name="filedisplay_unexpected_bad_get_content">Uventet problem; prøv venligst en anden applikation til at vælge filen</string>
   <string name="filedisplay_no_file_selected">Ingen fil blev valgt</string>
-  <string name="activity_chooser_title">Send link til ...</string>
   <string name="wait_for_tmp_copy_from_private_storage">Kopierer fil fra privat lager.</string>
   <string name="oauth_check_onoff">Log på med oAuth2</string>
   <string name="ssl_validator_header">Serverens identitet kunne ikke bekræftes</string>
@@ -342,6 +327,7 @@
   <string name="log_send_no_mail_app">Ingen app til afsendelse af logs fundet. Installer venligst en mail-app.</string>
   <string name="log_send_mail_subject">%1$s Android-app - logge</string>
   <string name="log_progress_dialog_text">Indlæser data ...</string>
+  <string name="actionbar_select_all">Vælg alle</string>
   <string name="saml_authentication_required_text">Godkendelse påkrævet</string>
   <string name="saml_authentication_wrong_pass">Forkert kodeord</string>
   <string name="actionbar_move">Flyt</string>
@@ -377,8 +363,6 @@
   <string name="prefs_camera_upload_source_path_title">Kamera mappe (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">Krævet</string>
   <string name="prefs_camera_upload_source_path_title_optional">Valgfri</string>
-  <string name="prefs_camera_upload_behaviour_dialogTitle">Original fil bliver...</string>
-  <string name="prefs_camera_upload_behaviour_title">Original fil bliver...</string>
   <string name="upload_copy_files">Kopier fil</string>
   <string name="upload_move_files">Flyt fil</string>
   <string name="pref_behaviour_entries_keep_file">opbevares i den oprindelige mappe</string>
@@ -399,7 +383,7 @@
   <string name="share_via_link_password_label">Kodeord</string>
   <string name="share_via_link_password_title">Sikret</string>
   <string name="share_get_public_link_button">Hent link</string>
-  <string name="share_with_title">Del med ...</string>
+  <string name="share_with_title">Del med</string>
   <string name="share_with_edit_title">Del med %1$s</string>
   <string name="share_search">Søg</string>
   <string name="search_users_and_groups_hint">Søg brugere og grupper</string>
@@ -457,4 +441,6 @@
     <item quantity="other">%d valgte</item>
   </plurals>
   <!--Welcome to oC intro features-->
+  <string name="welcome_feature_7_title">Vælg alle</string>
+  <string name="welcome_feature_8_title">Tilgængelig offline</string>
 </resources>

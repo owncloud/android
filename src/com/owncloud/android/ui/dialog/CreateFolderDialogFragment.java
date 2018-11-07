@@ -62,7 +62,6 @@ public class CreateFolderDialogFragment
         args.putParcelable(ARG_PARENT_FOLDER, parentFolder);
         frag.setArguments(args);
         return frag;
-        
     }
 
     private OCFile mParentFolder;
@@ -84,8 +83,8 @@ public class CreateFolderDialogFragment
         // Build the dialog  
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setView(v)
-               .setPositiveButton(R.string.common_ok, this)
-               .setNegativeButton(R.string.common_cancel, this)
+               .setPositiveButton(android.R.string.ok, this)
+               .setNegativeButton(android.R.string.cancel, this)
                .setTitle(R.string.uploader_info_dirname);
         Dialog d = builder.create();
         d.getWindow().setSoftInputMode(LayoutParams.SOFT_INPUT_STATE_VISIBLE);

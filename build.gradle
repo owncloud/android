@@ -7,8 +7,8 @@
 
 buildscript {
     repositories {
-        jcenter()
         google()
+        jcenter()
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.1.2'
@@ -22,15 +22,18 @@ ext {
 }
 
 repositories {
-    jcenter()
-    google()
-
-    maven {
-        url "https://jitpack.io"
-    }
-
     flatDir {
         dirs 'libs'
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        jcenter()
+        maven {
+            url "https://jitpack.io"
+        }
     }
 }
 
@@ -52,38 +55,35 @@ dependencies {
     implementation 'com.getbase:floatingactionbutton:1.10.1'
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     implementation "com.android.support:customtabs:${supportLibraryVersion}"
-    implementation group: 'commons-io', name: 'commons-io', version: '2.5'
-
+    implementation 'commons-io:commons-io:2.5'
     /// dependencies for local unit tests
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.mockito:mockito-core:1.10.19'
-
     /// dependencies for instrumented tests
     // JUnit4 Rules
     androidTestImplementation 'com.android.support.test:rules:0.5'
-
     // Android JUnit Runner
     androidTestImplementation 'com.android.support.test:runner:0.5'
-
     // Espresso core
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:2.2.2'
-
     // Espresso web
     androidTestImplementation 'com.android.support.test.espresso:espresso-web:2.2.2'
-
     // UIAutomator - for cross-app UI tests, and to grant screen is turned on in Espresso tests
     androidTestImplementation 'com.android.support.test.uiautomator:uiautomator-v18:2.1.2'
-
     // fix conflict in dependencies; see http://g.co/androidstudio/app-test-app-conflict for details
     androidTestImplementation "com.android.support:support-annotations:${supportLibraryVersion}"
-
     // Image loading
-    implementation ("com.github.bumptech.glide:glide:4.6.1") {
+    implementation('com.github.bumptech.glide:glide:4.6.1') {
         exclude group: "com.android.support"
     }
 
     //Zooming Android ImageView.
-    implementation "com.github.chrisbanes:PhotoView:2.0.0"
+    implementation 'com.github.chrisbanes:PhotoView:2.0.0'
+
+    implementation 'com.gitlab.ownclouders:dav4android:oc_support'
+
+    // Convert Java Objects into JSON and back
+    implementation 'com.google.code.gson:gson:2.8.5'
 }
 
 tasks.withType(Test) {
@@ -97,9 +97,8 @@ android {
     compileSdkVersion 26
 
     defaultConfig {
-
-        manifestPlaceholders.versionCode = "20800000"
-        manifestPlaceholders.versionName = "2.8.0"
+        manifestPlaceholders.versionCode = "20900000"
+        manifestPlaceholders.versionName = "2.9.0"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
@@ -131,6 +130,7 @@ android {
 
         // move whole local unit tests structure as a whole from src/test/* to test/*
         test.setRoot('test')
+
 
         // move whole instrumented tests structure as a whole from src/androidTest/* to androidTest/*
         androidTest.setRoot('androidTest')

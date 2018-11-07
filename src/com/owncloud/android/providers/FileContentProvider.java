@@ -40,7 +40,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
+import android.os.CancellationSignal;
+import android.os.ParcelFileDescriptor;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
 import com.owncloud.android.MainApp;
@@ -55,6 +58,7 @@ import com.owncloud.android.lib.resources.shares.ShareType;
 import com.owncloud.android.utils.FileStorageUtils;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -212,6 +216,8 @@ public class FileContentProvider extends ContentProvider {
                 ProviderTableMeta.UPLOADS_UPLOAD_END_TIMESTAMP);
         mUploadProjectionMap.put(ProviderTableMeta.UPLOADS_LAST_RESULT, ProviderTableMeta.UPLOADS_LAST_RESULT);
         mUploadProjectionMap.put(ProviderTableMeta.UPLOADS_CREATED_BY, ProviderTableMeta.UPLOADS_CREATED_BY);
+        mUploadProjectionMap.put(ProviderTableMeta.UPLOADS_TRANSFER_ID,
+                ProviderTableMeta.UPLOADS_TRANSFER_ID);
     }
 
     @Override
@@ -1047,6 +1053,20 @@ public class FileContentProvider extends ContentProvider {
                 }
             }
 
+            if (oldVersion < 24 && newVersion >= 24) {
+                Log_OC.i("SQL", "Entering in the #24 ADD in onUpgrade");
+                db.beginTransaction();
+                try {
+                    db.execSQL("ALTER TABLE " + ProviderTableMeta.UPLOADS_TABLE_NAME +
+                            " ADD COLUMN " + ProviderTableMeta.UPLOADS_TRANSFER_ID + " TEXT " +
+                            " DEFAULT NULL");
+                    db.setTransactionSuccessful();
+                    upgraded = true;
+                } finally {
+                    db.endTransaction();
+                }
+            }
+
             if (!upgraded) {
                 Log_OC.i("SQL", "OUT of the ADD in onUpgrade; oldVersion == " + oldVersion +
                         ", newVersion == " + newVersion);
@@ -1151,7 +1171,8 @@ public class FileContentProvider extends ContentProvider {
                 + ProviderTableMeta.UPLOADS_IS_CREATE_REMOTE_FOLDER + " INTEGER, "  // boolean
                 + ProviderTableMeta.UPLOADS_UPLOAD_END_TIMESTAMP + " INTEGER, "
                 + ProviderTableMeta.UPLOADS_LAST_RESULT + " INTEGER, "     // Upload LastResult
-                + ProviderTableMeta.UPLOADS_CREATED_BY + " INTEGER );"    // Upload createdBy
+                + ProviderTableMeta.UPLOADS_CREATED_BY + " INTEGER, "     // Upload createdBy
+                + ProviderTableMeta.UPLOADS_TRANSFER_ID + " TEXT );"    // Upload chunkedUploadId
         );
     }
 
@@ -1295,12 +1316,25 @@ public class FileContentProvider extends ContentProvider {
         } finally {
             c.close();
         }
+    }
 
+    @Nullable
+    @Override
+    public ParcelFileDescriptor openFile(@NonNull Uri uri, @NonNull String mode, @Nullable CancellationSignal signal)
+            throws FileNotFoundException {
+        return super.openFile(uri, mode, signal);
+    }
+
+
+    @Nullable
+    @Override
+    public ParcelFileDescriptor openFile(@NonNull Uri uri, @NonNull String mode) throws FileNotFoundException {
+        return super.openFile(uri, mode);
     }
 
     /**
      * Grants that total count of successful uploads stored is not greater than MAX_SUCCESSFUL_UPLOADS.
-     * 
+     *
      * Removes older uploads if needed.
      */
     private void trimSuccessfulUploads(SQLiteDatabase db) {

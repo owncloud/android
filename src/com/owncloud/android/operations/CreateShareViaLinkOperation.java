@@ -4,7 +4,8 @@
  * @author masensio
  * @author David A. Velasco
  * @author David González Verdugo
- * Copyright (C) 2017 ownCloud GmbH.
+ * @author Christian Schabesberger
+ * Copyright (C) 2018 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -21,25 +22,20 @@
 
 package com.owncloud.android.operations;
 
-/**
- * Creates a new public share for a given file
- */
-
-
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.lib.common.OwnCloudClient;
-import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.resources.files.FileUtils;
 import com.owncloud.android.lib.resources.shares.CreateRemoteShareOperation;
-import com.owncloud.android.lib.resources.shares.GetRemoteSharesForFileOperation;
 import com.owncloud.android.lib.resources.shares.OCShare;
+import com.owncloud.android.lib.resources.shares.ShareParserResult;
 import com.owncloud.android.lib.resources.shares.ShareType;
 import com.owncloud.android.operations.common.SyncOperation;
 
-import java.util.ArrayList;
-
-public class CreateShareViaLinkOperation extends SyncOperation {
+/**
+ * Creates a new public share for a given file
+ */
+public class CreateShareViaLinkOperation extends SyncOperation<ShareParserResult> {
 
     private String mPath;
     private String mName;
@@ -135,7 +131,7 @@ public class CreateShareViaLinkOperation extends SyncOperation {
     }
 
     @Override
-    protected RemoteOperationResult run(OwnCloudClient client) {
+    protected RemoteOperationResult<ShareParserResult> run(OwnCloudClient client) {
         CreateRemoteShareOperation createOp = new CreateRemoteShareOperation(
                 mPath,
                 ShareType.PUBLIC_LINK,
@@ -149,22 +145,15 @@ public class CreateShareViaLinkOperation extends SyncOperation {
         createOp.setPublicUpload(mPublicUpload);
         createOp.setPermissions(mPermissions);
         createOp.setExpirationDate(mExpirationDateInMillis);
-        RemoteOperationResult result = createOp.execute(client);
+        RemoteOperationResult<ShareParserResult> result = createOp.execute(client);
 
         if (result.isSuccess()) {
-            if (result.getData().size() > 0) {
-                Object item = result.getData().get(0);
-                if (item instanceof OCShare) {
-                    updateData((OCShare) item);
-                } else {
-                    ArrayList<Object> data = result.getData();
-                    result = new RemoteOperationResult(
-                            RemoteOperationResult.ResultCode.SHARE_NOT_FOUND
-                    );
-                    result.setData(data);
-                }
+            if (result.getData() != null && result.getData().getShares() != null &&
+                    result.getData().getShares().size() > 0) {
+                ShareParserResult shareParserResult = result.getData();
+                updateData(shareParserResult.getShares().get(0));
             } else {
-                result = new RemoteOperationResult(RemoteOperationResult.ResultCode.SHARE_NOT_FOUND);
+                result = new RemoteOperationResult<>(RemoteOperationResult.ResultCode.SHARE_NOT_FOUND);
             }
         }
 

@@ -3,6 +3,7 @@
  *
  *   @author Bartek Przybylski
  *   @author Christian Schabesberger
+ *   @author David González Verdugo
  *   Copyright (C) 2012 Bartek Przybylski
  *   Copyright (C) 2018 ownCloud GmbH.
  *
@@ -31,6 +32,7 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
+import android.os.Build;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.IBinder;
@@ -50,8 +52,8 @@ import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.OwnCloudClientManagerFactory;
 import com.owncloud.android.lib.common.network.OnDatatransferProgressListener;
-import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
+import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.files.FileUtils;
 import com.owncloud.android.operations.DownloadFileOperation;
@@ -74,12 +76,13 @@ import java.util.Vector;
 public class FileDownloader extends Service
         implements OnDatatransferProgressListener, OnAccountsUpdateListener {
 
-    public static final String EXTRA_ACCOUNT = "ACCOUNT";
-    public static final String EXTRA_FILE = "FILE";
+    public static final String KEY_ACCOUNT = "ACCOUNT";
+    public static final String KEY_FILE = "FILE";
+    public static final String KEY_IS_AVAILABLE_OFFLINE_FILE = "KEY_IS_AVAILABLE_OFFLINE_FILE";
+    public static final String KEY_RETRY_DOWNLOAD = "KEY_RETRY_DOWNLOAD";
 
     private static final String DOWNLOAD_ADDED_MESSAGE = "DOWNLOAD_ADDED";
     private static final String DOWNLOAD_FINISH_MESSAGE = "DOWNLOAD_FINISH";
-
     private static final String DOWNLOAD_NOTIFICATION_CHANNEL_ID = "DOWNLOAD_NOTIFICATION_CHANNEL";
 
     private static final String TAG = FileDownloader.class.getSimpleName();
@@ -116,7 +119,10 @@ public class FileDownloader extends Service
     public void onCreate() {
         super.onCreate();
         Log_OC.d(TAG, "Creating service");
+
         mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+
+        mNotificationBuilder = NotificationUtils.newNotificationBuilder(this);
 
         // Configure notification channel
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
@@ -180,14 +186,27 @@ public class FileDownloader extends Service
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log_OC.d(TAG, "Starting command with id " + startId);
 
-        if (!intent.hasExtra(EXTRA_ACCOUNT) ||
-                !intent.hasExtra(EXTRA_FILE)
+        boolean isAvailableOfflineFile = intent.getBooleanExtra(KEY_IS_AVAILABLE_OFFLINE_FILE, false);
+        boolean retryDownload = intent.getBooleanExtra(KEY_RETRY_DOWNLOAD, false);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && (isAvailableOfflineFile || retryDownload)) {
+            /**
+             * We have to call this within five seconds after the service is created with startForegroundService when:
+             * - Checking available offline files in background
+             * - Retry downloads in background, e.g. when recovering wifi connection
+             */
+            Log_OC.d(TAG, "Starting FileDownloader service in foreground");
+            startForeground(1, mNotificationBuilder.build());
+        }
+
+        if (!intent.hasExtra(KEY_ACCOUNT) ||
+                !intent.hasExtra(KEY_FILE)
                 ) {
             Log_OC.e(TAG, "Not enough information provided in intent");
             return START_NOT_STICKY;
         } else {
-            final Account account = intent.getParcelableExtra(EXTRA_ACCOUNT);
-            final OCFile file = intent.getParcelableExtra(EXTRA_FILE);
+            final Account account = intent.getParcelableExtra(KEY_ACCOUNT);
+            final OCFile file = intent.getParcelableExtra(KEY_FILE);
             AbstractList<String> requestedDownloads = new Vector<>();
             try {
                 DownloadFileOperation newDownload = new DownloadFileOperation(account, file);
@@ -243,7 +262,7 @@ public class FileDownloader extends Service
     public void onAccountsUpdated(Account[] accounts) {
          //review the current download and cancel it if its account doesn't exist
         if (mCurrentDownload != null &&
-                !AccountUtils.exists(mCurrentDownload.getAccount(), getApplicationContext())) {
+                !AccountUtils.exists(mCurrentDownload.getAccount().name, getApplicationContext())) {
             mCurrentDownload.cancel();
         }
         // The rest of downloads are cancelled when they try to start
@@ -404,6 +423,7 @@ public class FileDownloader extends Service
                 }
             }
             Log_OC.d(TAG, "Stopping after command with id " + msg.arg1);
+            mService.stopForeground(true);
             mService.stopSelf(msg.arg1);
         }
     }
@@ -421,7 +441,7 @@ public class FileDownloader extends Service
         if (mCurrentDownload != null) {
 
             /// Check account existence
-            if (!AccountUtils.exists(mCurrentDownload.getAccount(), this)) {
+            if (!AccountUtils.exists(mCurrentDownload.getAccount().name, this)) {
                 Log_OC.w(
                     TAG,
                     "Account " + mCurrentDownload.getAccount().name +
@@ -441,7 +461,7 @@ public class FileDownloader extends Service
                         !mCurrentAccount.equals(mCurrentDownload.getAccount())) {
                     mCurrentAccount = mCurrentDownload.getAccount();
                     mStorageManager = new FileDataStorageManager(
-                            mCurrentAccount,
+                            this, mCurrentAccount,
                             getContentResolver()
                     );
                 }   // else, reuse storage manager from previous operation
@@ -487,8 +507,7 @@ public class FileDownloader extends Service
                             mCurrentDownload.getRemotePath()
                         );
                         downloadResult = new RemoteOperationResult(
-                            ResultCode.NO_NETWORK_CONNECTION
-                        );
+                            ResultCode.NO_NETWORK_CONNECTION);
                     } else {
                         Log_OC.v(
                             TAG,
@@ -551,7 +570,6 @@ public class FileDownloader extends Service
 
         /// create status notification with a progress bar
         mLastPercent = 0;
-        mNotificationBuilder = NotificationUtils.newNotificationBuilder(this);
         mNotificationBuilder
                 .setSmallIcon(R.drawable.notification_icon)
                 .setTicker(getString(R.string.downloader_download_in_progress_ticker))

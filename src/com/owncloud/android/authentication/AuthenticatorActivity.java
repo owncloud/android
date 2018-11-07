@@ -42,6 +42,7 @@ import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.net.http.SslError;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -101,7 +102,7 @@ import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 import com.owncloud.android.lib.resources.users.GetRemoteUserInfoOperation;
 import com.owncloud.android.lib.resources.users.GetRemoteUserInfoOperation.UserInfo;
-import com.owncloud.android.operations.DetectAuthenticationMethodOperation.AuthenticationMethod;
+import com.owncloud.android.operations.AuthenticationMethod;
 import com.owncloud.android.operations.GetServerInfoOperation;
 import com.owncloud.android.services.OperationsService;
 import com.owncloud.android.services.OperationsService.OperationsServiceBinder;
@@ -201,14 +202,15 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
     private boolean mServerIsValid = false;
     private boolean mPendingAutoCheck = false;
 
-    private GetServerInfoOperation.ServerInfo mServerInfo = 
+    private GetServerInfoOperation.ServerInfo mServerInfo =
             new GetServerInfoOperation.ServerInfo();
     
     
     /// Authentication PRE-Fragment elements
     private EditText mUsernameInput;
     private EditText mPasswordInput;
-    private View mOkButton;
+    private View mCheckServerButton;
+    private View mLoginButton;
     private TextView mAuthStatusView;
 
     private String mAuthStatusText = "";
@@ -301,34 +303,29 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         /// load user interface
         setContentView(R.layout.account_setup);
 
+        // Set login background color or image
+        if (!getResources().getBoolean(R.bool.use_login_background_image)) {
+            findViewById(R.id.login_layout).setBackgroundColor(
+                    getResources().getColor(R.color.login_background_color)
+            );
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            findViewById(R.id.login_background_image).setVisibility(View.VISIBLE);
+        }
+
         /// initialize general UI elements
         initOverallUi();
 
-        mOkButton = findViewById(R.id.buttonOK);
-        mOkButton.setOnClickListener(new View.OnClickListener() {
+        mCheckServerButton = findViewById(R.id.embeddedCheckServerButton);
 
-            @Override
-            public void onClick(View v) {
-                onOkClick();
-            }
+        mCheckServerButton.setOnClickListener(view -> {
+            checkOcServer();
         });
 
-        findViewById(R.id.centeredRefreshButton).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.centeredRefreshButton).setOnClickListener(view -> checkOcServer());
+        findViewById(R.id.embeddedRefreshButton).setOnClickListener(view -> checkOcServer());
 
-            @Override
-            public void onClick(View v) {
-                checkOcServer();
-            }
-        });
-
-        findViewById(R.id.embeddedRefreshButton).setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                checkOcServer();
-            }
-        });
-
+        mLoginButton = findViewById(R.id.loginButton);
+        mLoginButton.setOnClickListener(view -> onLoginClick());
 
         /// initialize block to be moved to single Fragment to check server and get info about it 
         initServerPreFragment(savedInstanceState);
@@ -537,10 +534,10 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             
             @Override
             public void afterTextChanged(Editable s) {
-                if (mOkButton.isEnabled() &&
+                if (mLoginButton.isEnabled() &&
                         !mServerInfo.mBaseUrl.equals(
                                 normalizeUrl(s.toString(), mServerInfo.mIsSslConn))) {
-                    mOkButton.setEnabled(false);
+                    mLoginButton.setVisibility(View.GONE);
                 }
             }
 
@@ -559,21 +556,15 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             }
         };
 
-
-        // TODO find out if this is really necessary, or if it can done in a different way
-        findViewById(R.id.scroll).setOnTouchListener(new OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    if (mHostUrlInput.hasFocus()) {
-                        checkOcServer();
-                    }
+        findViewById(R.id.scroll).setOnTouchListener((view, event) -> {
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                if (mHostUrlInput.hasFocus()) {
+                    checkOcServer();
                 }
-                return false;
             }
+            return false;
         });
-     
-        
+
         /// step 4 - mark automatic check to be started when OperationsService is ready
         mPendingAutoCheck = (savedInstanceState == null && 
                 (mAction != ACTION_CREATE || checkHostUrl));
@@ -622,8 +613,12 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         }
         updateAuthenticationPreFragmentVisibility();
         showAuthStatus();
-        mOkButton.setEnabled(mServerIsValid);
 
+        if (mServerIsValid) {
+            mLoginButton.setVisibility(View.VISIBLE);
+        } else {
+            mLoginButton.setVisibility(View.GONE);
+        }
         
         /// step 3 - bind listeners
         // bindings for password input field
@@ -886,7 +881,11 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             // check server again only if the user changed something in the field
             checkOcServer();
         } else {
-            mOkButton.setEnabled(mServerIsValid);
+            if (mServerIsValid) {
+                mLoginButton.setVisibility(View.VISIBLE);
+            } else {
+                mLoginButton.setVisibility(View.GONE);
+            }
             showRefreshButton(!mServerIsValid);
         }
     }
@@ -896,7 +895,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         String uri = mHostUrlInput.getText().toString().trim();
         mServerIsValid = false;
         mServerIsChecked = false;
-        mOkButton.setEnabled(false);
+        mLoginButton.setVisibility(View.GONE);
         mServerInfo = new GetServerInfoOperation.ServerInfo();
         showRefreshButton(false);
 
@@ -1001,7 +1000,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
      * 
      * IMPORTANT ENTRY POINT 4
      */
-    public void onOkClick() {
+    public void onLoginClick() {
         // this check should be unnecessary
         if (mServerInfo.mVersion == null || 
                 mServerInfo.mBaseUrl == null ||
@@ -1009,7 +1008,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             mServerStatusIcon = R.drawable.common_error;
             mServerStatusText = getResources().getString(R.string.auth_wtf_reenter_URL);
             showServerStatus();
-            mOkButton.setEnabled(false);
+            mLoginButton.setVisibility(View.GONE);
             return;
         }
 
@@ -1113,7 +1112,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
     private void onNoBrowserInstalled() {
         new AlertDialog.Builder(this)
                 .setMessage(R.string.no_borwser_installed_alert)
-                .setPositiveButton(R.string.common_ok, new DialogInterface.OnClickListener() {
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
@@ -1137,14 +1136,12 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         /// Show SAML-based SSO web dialog
         ArrayList<String> targetUrls = new ArrayList<>();
         targetUrls.add(
-            mServerInfo.mBaseUrl
-                + AccountUtils.getWebdavPath(mServerInfo.mVersion, mAuthTokenType)
-        );
+                mServerInfo.mBaseUrl
+                        + AccountUtils.getWebdavPath(mServerInfo.mVersion, mAuthTokenType));
         LoginWebViewDialog dialog = LoginWebViewDialog.newInstance(
-            targetUrls.get(0),
-            targetUrls,
-            AuthenticationMethod.SAML_WEB_SSO
-        );
+                targetUrls.get(0),
+                targetUrls,
+                AuthenticationMethod.SAML_WEB_SSO);
         dialog.show(getSupportFragmentManager(), SAML_DIALOG_TAG);
     }
 
@@ -1178,14 +1175,14 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
      *
      * @param result    Result of {@link GetRemoteUserInfoOperation} performed.
      */
-    private void onGetUserNameFinish(RemoteOperationResult result) {
+    private void onGetUserNameFinish(RemoteOperationResult<UserInfo> result) {
         mWaitingForOpId = Long.MAX_VALUE;
         if (result.isSuccess()) {
             boolean success = false;
             // WARNING: using mDisplayName was a path used because, in the past, mId was not avialable
             // in servers with SAML; now seems that changed, and this needs to be updated. Meanwhile,
             // for any other authentication method, please 
-            String username = ((UserInfo) result.getData().get(0)).mDisplayName;
+            String username = result.getData().mDisplayName;
 
             if (mAction == ACTION_CREATE) {
                 mUsernameInput.setText(username);
@@ -1212,7 +1209,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
      *
      * @param result        Result of the check.
      */
-    private void onGetServerInfoFinish(RemoteOperationResult result) {
+    private void onGetServerInfoFinish(RemoteOperationResult<GetServerInfoOperation.ServerInfo> result) {
         /// update activity state
         mServerIsChecked = true;
         mWaitingForOpId = Long.MAX_VALUE;
@@ -1226,7 +1223,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             //      2. server is installed
             //      3. we got the server version
             //      4. we got the authentication method required by the server 
-            mServerInfo = (GetServerInfoOperation.ServerInfo) (result.getData().get(0));
+            mServerInfo = result.getData();
 
             mServerIsValid = true;
 
@@ -1249,7 +1246,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             }
             
         } else {
-
             mServerIsValid = false;
         }
 
@@ -1260,7 +1256,11 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         // refresh UI
         showRefreshButton(!mServerIsValid);
         showServerStatus();
-        mOkButton.setEnabled(mServerIsValid);
+        if (mServerIsValid) {
+            mLoginButton.setVisibility(View.VISIBLE);
+        } else {
+            mLoginButton.setVisibility(View.GONE);
+        }
         
         /// very special case (TODO: move to a common place for all the remote operations)
         if (result.getCode() == ResultCode.SSL_RECOVERABLE_PEER_UNVERIFIED) {
@@ -1428,7 +1428,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
      * 
      * @param result Result of the operation.
      */
-    private void onGetOAuthAccessTokenFinish(RemoteOperationResult result) {
+    private void onGetOAuthAccessTokenFinish(RemoteOperationResult<Map<String, String>> result) {
         mWaitingForOpId = Long.MAX_VALUE;
         dismissDialog(WAIT_DIALOG_TAG);
 
@@ -1439,7 +1439,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
             /// time to test the retrieved access token on the ownCloud server
             @SuppressWarnings("unchecked")
-            Map<String, String> tokens = (Map<String, String>)(result.getData().get(0));
+            Map<String, String> tokens = result.getData();
             mAuthToken = tokens.get(OAuth2Constants.KEY_ACCESS_TOKEN);
 
             mRefreshToken = tokens.get(OAuth2Constants.KEY_REFRESH_TOKEN);
@@ -1477,7 +1477,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             Log_OC.d(TAG, "Successful access - time to save the account");
 
             boolean success = false;
-            String username = ((UserInfo) result.getData().get(0)).mId;
+            String username = ((RemoteOperationResult<UserInfo>) result).getData().mId;
 
             if (mAction == ACTION_CREATE) {
 
@@ -1519,7 +1519,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             /// the server
             mServerIsChecked = true;
             mServerIsValid = false;
-            mServerInfo = new GetServerInfoOperation.ServerInfo();  
+            mServerInfo = new GetServerInfoOperation.ServerInfo();
 
             // update status icon and text
             updateServerStatusIconAndText(result);
@@ -1530,7 +1530,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
             // update input controls state
             showRefreshButton(true);
-            mOkButton.setEnabled(false);
+            mLoginButton.setVisibility(View.GONE);
 
             // very special case (TODO: move to a common place for all the remote operations)
             if (result.getCode() == ResultCode.SSL_RECOVERABLE_PEER_UNVERIFIED) {
@@ -1551,7 +1551,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
      * 
      * TODO Decide how to name the OAuth accounts
      */
-    private boolean createAccount(RemoteOperationResult authResult) {
+    private boolean createAccount(RemoteOperationResult<UserInfo> authResult) {
         /// create and save new ownCloud account
         boolean isOAuth = AccountTypeUtils.
                 getAuthTokenTypeAccessToken(MainApp.getAccountType()).equals(mAuthTokenType);
@@ -1568,9 +1568,9 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         String accountName = com.owncloud.android.lib.common.accounts.AccountUtils.
                 buildAccountName(uri, username);
         Account newAccount = new Account(accountName, MainApp.getAccountType());
-        if (AccountUtils.exists(newAccount, getApplicationContext())) {
+        if (AccountUtils.exists(newAccount.name, getApplicationContext())) {
             // fail - not a new account, but an existing one; disallow
-            RemoteOperationResult result = new RemoteOperationResult(ResultCode.ACCOUNT_NOT_NEW); 
+            RemoteOperationResult result = new RemoteOperationResult(ResultCode.ACCOUNT_NOT_NEW);
             updateAuthStatusIconAndText(result);
             showAuthStatus();
             Log_OC.d(TAG, result.getLogMessage());
@@ -1624,7 +1624,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             );
             if (authResult.getData() != null) {
                 try {
-                    UserInfo userInfo = (UserInfo) authResult.getData().get(0);
+                    UserInfo userInfo = (UserInfo) authResult.getData();
                     mAccountMgr.setUserData(
                         mAccount, Constants.KEY_DISPLAY_NAME, userInfo.mDisplayName
                     );
@@ -1814,14 +1814,15 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             mAuthStatusView.setCompoundDrawablesWithIntrinsicBounds(mAuthStatusIcon, 0, 0, 0);
             mAuthStatusView.setVisibility(View.VISIBLE);
         }
-    }     
-
+    }
 
     private void showRefreshButton (boolean show) {
         if (show)  {
+            mCheckServerButton.setVisibility(View.GONE);
             mRefreshButton.setVisibility(View.VISIBLE);
         } else {
             mRefreshButton.setVisibility(View.GONE);
+            mCheckServerButton.setVisibility(View.VISIBLE);
         }
     }
 
@@ -1852,8 +1853,8 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
     public boolean onEditorAction(TextView inputField, int actionId, KeyEvent event) {
         if (actionId == EditorInfo.IME_ACTION_DONE && inputField != null && 
                 inputField.equals(mPasswordInput)) {
-            if (mOkButton.isEnabled()) {
-                mOkButton.performClick();
+            if (mLoginButton.isEnabled()) {
+                mLoginButton.performClick();
             }
 
         } else if (actionId == EditorInfo.IME_ACTION_NEXT && inputField != null && 
@@ -1902,13 +1903,11 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
 
     private void getRemoteUserNameOperation(String sessionCookie) {
-        
         Intent getUserNameIntent = new Intent();
         getUserNameIntent.setAction(OperationsService.ACTION_GET_USER_NAME);
         getUserNameIntent.putExtra(OperationsService.EXTRA_SERVER_URL, mServerInfo.mBaseUrl);
         getUserNameIntent.putExtra(OperationsService.EXTRA_COOKIE, sessionCookie);
 
-        
         if (mOperationsServiceBinder != null) {
             mWaitingForOpId = mOperationsServiceBinder.queueNewOperation(getUserNameIntent);
         }

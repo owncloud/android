@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="about_android">%1$s Aplicação Android</string>
-  <string name="about_version">versão %1$s</string>
+  <string name="actionbar_search">Procurar esta pasta</string>
   <string name="actionbar_sync">Atualizar conta</string>
   <string name="actionbar_upload">Enviar</string>
   <string name="actionbar_upload_from_apps">Conteúdo de outras aplicações</string>
@@ -17,11 +16,7 @@
   <string name="actionbar_sort_by_name">A-Z</string>
   <string name="actionbar_sort_by_date">Antigo - Novo</string>
   <string name="actionbar_sort_by_size">Pequeno - Grande</string>
-  <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
-  <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Todos os ficheiros</string>
-  <!--TODO re-enable when "On Device" is available
-    <string name="drawer_item_on_device">On device</string>-->
   <string name="drawer_item_settings">Definições</string>
   <string name="drawer_item_uploads_list">Envios</string>
   <string name="drawer_close">Fechar</string>
@@ -57,7 +52,7 @@
   <string name="auth_password">Palavra-passe</string>
   <string name="auth_register">Novo em %1$s?</string>
   <string name="sync_string_files">Ficheiros</string>
-  <string name="setup_btn_connect">Ligar</string>
+  <string name="setup_btn_login">Iniciar sessão</string>
   <string name="uploader_btn_upload_text">Enviar</string>
   <string name="uploader_top_message">Escolha a pasta de envio</string>
   <string name="uploader_wrn_no_account_title">Nenhuma conta encontrada</string>
@@ -96,11 +91,9 @@
   <string name="action_share">Partilhar</string>
   <string name="common_yes">Sim</string>
   <string name="common_no">Não</string>
-  <string name="common_ok">OK</string>
   <string name="common_remove_upload">Remover envio</string>
   <string name="common_retry_upload">Repetir envio</string>
   <string name="common_cancel_sync">Cancelar sincronização</string>
-  <string name="common_cancel">Cancelar</string>
   <string name="common_back">Voltar</string>
   <string name="common_save_exit">Guardar e sair</string>
   <string name="common_error">Erro</string>
@@ -112,9 +105,7 @@
   <string name="change_password">Alterar palavra-passe</string>
   <string name="delete_account">Remover conta</string>
   <string name="create_account">Criar conta</string>
-  <string name="upload_chooser_title">Enviar de...</string>
   <string name="uploader_info_dirname">Nome da pasta</string>
-  <string name="uploader_upload_in_progress_ticker">A enviar...</string>
   <string name="uploader_upload_in_progress_content">%1$d%%  A enviar %2$s</string>
   <string name="uploader_upload_succeeded_ticker">Envio bem sucedido</string>
   <string name="uploader_upload_succeeded_content_single">%1$s carregado</string>
@@ -131,8 +122,6 @@
   <string name="uploads_view_group_current_uploads">Atual</string>
   <string name="uploads_view_group_failed_uploads">Falhou (toque para repetir)</string>
   <string name="uploads_view_group_finished_uploads">Enviado</string>
-  <string name="uploads_view_group_file_count">%d Ficheiros</string>
-  <string name="uploads_view_group_file_count_single">%d Ficheiro</string>
   <string name="uploads_view_upload_status_succeeded">Concluído</string>
   <string name="uploads_view_upload_status_cancelled">Cancelado</string>
   <string name="uploads_view_upload_status_paused">Em pausa</string>
@@ -150,7 +139,6 @@
   <string name="uploads_view_upload_status_waiting_for_wifi">A aguardar pela ligação wi-fi</string>
   <string name="uploads_view_later_waiting_to_upload">A aguardar para enviar</string>
   <string name="uploads_view_unsupported_media_type">Tipo de mídia não suportada</string>
-  <string name="downloader_download_in_progress_ticker">A transferir…</string>
   <string name="downloader_download_in_progress_content">%1$d%% A transferir %2$s</string>
   <string name="downloader_download_succeeded_ticker">Transferência bem sucedida</string>
   <string name="downloader_download_succeeded_content">%1$s transferido</string>
@@ -210,7 +198,6 @@
   <string name="media_forward_description">Botão de avanço rápido</string>
   <string name="upload_from_camera_title">Fotografia da camera</string>
   <string name="auth_getting_authorization">A obter autorização...</string>
-  <string name="auth_trying_to_login">A tentar iniciar a sessão...</string>
   <string name="auth_no_net_conn_title">Nenhuma ligação de rede</string>
   <string name="auth_nossl_plain_ok_title">Ligação segura indisponível.</string>
   <string name="auth_connection_established">Ligação estabelecida</string>
@@ -264,7 +251,6 @@
   <string name="wait_checking_credentials">Verificando as credenciais guardadas</string>
   <string name="filedisplay_unexpected_bad_get_content">Erro inesperado, por favor, seleccione o ficheiro de uma aplicação diferente.</string>
   <string name="filedisplay_no_file_selected">Nenhum ficheiro foi seleccionado</string>
-  <string name="activity_chooser_title">Enviar hiperligação para...</string>
   <string name="wait_for_tmp_copy_from_private_storage">A copiar o ficheiro do armazenamento privado</string>
   <string name="oauth_check_onoff">Iniciar sessão com oAuth2</string>
   <string name="oauth_login_connection">A ligar ao servidor OAuth2...</string>
@@ -351,7 +337,8 @@
   <string name="log_send_history_button">Histórico de envio</string>
   <string name="log_send_no_mail_app">Não foi encontrada nenhuma app para enviar logs. Por favor, instale uma aplicação de envio.</string>
   <string name="log_send_mail_subject">%1$s registos de aplicação Android</string>
-  <string name="log_progress_dialog_text">A carregar dados ...</string>
+  <string name="log_progress_dialog_text">A carregar os dados...</string>
+  <string name="actionbar_select_all">Selecionar todos</string>
   <string name="saml_authentication_required_text">Autenticação necessária</string>
   <string name="saml_authentication_wrong_pass">Palavra-passe errada</string>
   <string name="actionbar_move">Mover</string>
@@ -388,8 +375,6 @@
   <string name="prefs_camera_upload_source_path_title">Pasta da Camara (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">obrigatório</string>
   <string name="prefs_camera_upload_source_path_title_optional">opcional</string>
-  <string name="prefs_camera_upload_behaviour_dialogTitle">O ficheiro original será...</string>
-  <string name="prefs_camera_upload_behaviour_title">O ficheiro original será...</string>
   <string name="upload_copy_files">Copiar ficheiro</string>
   <string name="upload_move_files">Mover ficheiro</string>
   <string name="pref_behaviour_entries_keep_file">mantido na pasta original</string>
@@ -410,7 +395,7 @@
   <string name="share_via_link_password_label">Palavra-passe</string>
   <string name="share_via_link_password_title">Protegido</string>
   <string name="share_get_public_link_button">Obter ligação</string>
-  <string name="share_with_title">Partilhar com ...</string>
+  <string name="share_with_title">Partilhar com</string>
   <string name="share_with_edit_title">Partilhar com %1$s</string>
   <string name="share_search">Procurar</string>
   <string name="search_users_and_groups_hint">Pesquisar utilizadores e grupos</string>
@@ -473,4 +458,6 @@
     <item quantity="other">%d selecionados</item>
   </plurals>
   <!--Welcome to oC intro features-->
+  <string name="welcome_feature_7_title">Selecionar todos</string>
+  <string name="welcome_feature_8_title">Disponível off-line</string>
 </resources>

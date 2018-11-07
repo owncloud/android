@@ -50,7 +50,7 @@
   <string name="auth_password">Contraseña</string>
   <string name="auth_register">Nuevu en %1$s?</string>
   <string name="sync_string_files">Ficheros</string>
-  <string name="setup_btn_connect">Coneutar</string>
+  <string name="setup_btn_login">Aniciar sesión</string>
   <string name="uploader_btn_upload_text">Xubir</string>
   <string name="uploader_top_message">Esbilla la carpeta de xuba</string>
   <string name="uploader_wrn_no_account_title">Nun s\'alcontró la cuenta</string>
@@ -320,6 +320,7 @@
   <string name="log_send_no_mail_app">Nun s\'atopó nenguna aplicación pa unviar rexistros.  Por favor instala una aplicación de corréu electrónicu</string>
   <string name="log_send_mail_subject">Aplicación de rexistros d\'Android %1$s</string>
   <string name="log_progress_dialog_text">Cargando datos ...</string>
+  <string name="actionbar_select_all">Esbillar too</string>
   <string name="saml_authentication_required_text">Necesítase autenticación</string>
   <string name="saml_authentication_wrong_pass">Contraseña incorreuta</string>
   <string name="actionbar_move">Mover</string>

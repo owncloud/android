@@ -1,7 +1,8 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="about_android">แอปสำหรับแอนดรอยด์ %1$s</string>
+  <string name="about_android">%1$sสำหรับแอนดรอยด์ </string>
   <string name="about_version">รุ่น %1$s</string>
+  <string name="actionbar_search">ค้นหาโฟลเดอร์นี้</string>
   <string name="actionbar_sync">ฟื้นฟูบัญชี</string>
   <string name="actionbar_upload">อัพโหลดไฟล์</string>
   <string name="actionbar_upload_from_apps">เนื้อหาจากแอพฯ อื่นๆ</string>
@@ -17,11 +18,7 @@
   <string name="actionbar_sort_by_name">A-Z</string>
   <string name="actionbar_sort_by_date">จากเก่า-ใหม่</string>
   <string name="actionbar_sort_by_size">เล็กที่สุด - ใหญ่ที่สุด</string>
-  <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
-  <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">ไฟล์ทั้งหมด</string>
-  <!--TODO re-enable when "On Device" is available
-    <string name="drawer_item_on_device">On device</string>-->
   <string name="drawer_item_settings">ตั้งค่า</string>
   <string name="drawer_item_uploads_list">อัพโหลด</string>
   <string name="drawer_close">ปิด</string>
@@ -50,6 +47,8 @@
   <string name="prefs_log_summary_history">สิ่งนี้จะแสดง log ที่ถูกบันทึกไว้</string>
   <string name="prefs_log_delete_history_button">ลบประวัติย้อนหลัง</string>
   <string name="prefs_help">ช่วยเหลือ</string>
+  <string name="prefs_sync_calendar_contacts">ประสานข้อมูลรายชื่อผู้ติดต่อ ปฏิทิน และงานของคุณ</string>
+  <string name="prefs_sync_calendar_contacts_summary">ติดตั้ง DAVdroid</string>
   <string name="prefs_recommend">แนะนำให้เพื่อน</string>
   <string name="prefs_feedback">ข้อเสนอแนะ</string>
   <string name="prefs_imprint">ประทับ</string>
@@ -79,7 +78,7 @@
   <string name="auth_password">รหัสผ่าน</string>
   <string name="auth_register">ใหม่จนถึง %1$s?</string>
   <string name="sync_string_files">ไฟล์</string>
-  <string name="setup_btn_connect">เชื่อมต่อ</string>
+  <string name="setup_btn_login">เข้าสู่ระบบ</string>
   <string name="uploader_btn_upload_text">อัพโหลด</string>
   <string name="uploader_top_message">เลือกโฟลเดอร์ที่ต้องการอัพโหลด</string>
   <string name="uploader_wrn_no_account_title">ไม่พบบัญชีที่ต้องการ</string>
@@ -99,6 +98,7 @@
   <string name="file_list_no_app_for_file_type">ไม่พบแอพฯที่ตรงกับประเภทของไฟล์</string>
   <string name="local_file_list_empty">ยังไม่มีไฟล์ในโฟลเดอร์นี้</string>
   <string name="local_file_list_empty_just_folders">ไม่มีโฟลเดอร์ในโฟลเดอร์นี้</string>
+  <string name="local_file_list_search_with_no_matches">ไม่พบสิ่งที่คุณกำลังค้นหา</string>
   <string name="upload_list_empty">ไม่พบการอัพโหลดใดๆ</string>
   <string name="file_list_folder">โฟลเดอร์</string>
   <string name="file_list_folders">โฟลเดอร์</string>
@@ -118,15 +118,13 @@
   <string name="action_share">แชร์</string>
   <string name="common_yes">ตกลง</string>
   <string name="common_no">ไม่ตกลง</string>
-  <string name="common_ok">ตกลง</string>
   <string name="common_remove_upload">ลบอัพโหลด</string>
   <string name="common_retry_upload">ลองอัพโหลดใหม่อีกครั้ง</string>
   <string name="common_cancel_sync">ยกเลิกการผสานข้อมูล</string>
-  <string name="common_cancel">ยกเลิก</string>
   <string name="common_back">ย้อนกลับ</string>
   <string name="common_save_exit">บันทึก &amp; ออก</string>
   <string name="common_error">ข้อผิดพลาด</string>
-  <string name="common_loading">กำลังโหลด ...</string>
+  <string name="common_loading">กำลังโหลด...</string>
   <string name="common_unknown">ไม่รู้จัก</string>
   <string name="common_error_unknown">ข้อผิดพลาดที่ไม่ทราบสาเหตุ</string>
   <string name="common_pending">อยู่ระหว่างดำเนินการ</string>
@@ -134,9 +132,9 @@
   <string name="change_password">เปลี่ยนรหัสผ่าน</string>
   <string name="delete_account">ลบบัญชี</string>
   <string name="create_account">สร้างบัญชีใหม่</string>
-  <string name="upload_chooser_title">อัพโหลดไฟล์จาก ...</string>
+  <string name="upload_chooser_title">อัพโหลดจาก</string>
   <string name="uploader_info_dirname">ชื่อโฟลเดอร์</string>
-  <string name="uploader_upload_in_progress_ticker">กำลังอัพโหลด ...</string>
+  <string name="uploader_upload_in_progress_ticker">กำลังอัพโหลด</string>
   <string name="uploader_upload_in_progress_content">%1$d%% กำลังอัพโหลด %2$s</string>
   <string name="uploader_upload_succeeded_ticker">อัพโหลดเสร็จสิ้น</string>
   <string name="uploader_upload_succeeded_content_single">อัพโหลด %1$s แล้ว</string>
@@ -172,7 +170,7 @@
   <string name="uploads_view_upload_status_waiting_for_wifi">กำลังรอการเชื่อมต่อ WiFi</string>
   <string name="uploads_view_later_waiting_to_upload">กำลังรอที่จะอัพโหลด</string>
   <string name="uploads_view_unsupported_media_type">ประเภทของสื่อไม่ได้รับการสนับสนุน</string>
-  <string name="downloader_download_in_progress_ticker">กำลังดาวน์โหลด ...</string>
+  <string name="downloader_download_in_progress_ticker">กำลังดาวน์โหลด...</string>
   <string name="downloader_download_in_progress_content">%1$d%% กำลังดาวน์โหลด %2$s</string>
   <string name="downloader_download_succeeded_ticker">ดาวน์โหลดเสร็จสิ้น</string>
   <string name="downloader_download_succeeded_content">ดาวน์โหลด %1$s แล้ว</string>
@@ -236,8 +234,8 @@
   <string name="media_play_pause_description">เล่นหรือกดปุ่มหยุดชั่วคราว</string>
   <string name="media_forward_description">ปุ่มเลื่อนไปข้างหน้า</string>
   <string name="upload_from_camera_title">รูปภาพจากกล้อง</string>
-  <string name="auth_getting_authorization">กำลังตรวจสอบสิทธิ์การเข้าใช้งาน ...</string>
-  <string name="auth_trying_to_login">กำลังพยายามเข้าสู่ระบบ ...</string>
+  <string name="auth_getting_authorization">ได้รับการอนุมัติ ...</string>
+  <string name="auth_trying_to_login">กำลังเข้าสู่ระบบ...</string>
   <string name="auth_no_net_conn_title">ไม่มีการเชื่อมต่อเครือข่ายใดๆ</string>
   <string name="auth_nossl_plain_ok_title">การเชื่อมต่อแบบปลอดภัยไม่สามารถใช้งานได้</string>
   <string name="auth_connection_established">ติดตั้งการเชื่อมต่อแล้ว</string>
@@ -291,7 +289,7 @@
   <string name="wait_checking_credentials">กำลังตรวจสอบข้อมูลประจำตัวที่เก็บไว้</string>
   <string name="filedisplay_unexpected_bad_get_content">มีปัญหาเกิดขึ้น กรุณาเลือกไฟล์งานแอพฯอื่นๆ</string>
   <string name="filedisplay_no_file_selected">ไม่มีไฟล์ที่ถูกเลือก</string>
-  <string name="activity_chooser_title">ส่งลิงก์ไปยัง ...</string>
+  <string name="activity_chooser_title">ส่งลิงก์ไปที่</string>
   <string name="wait_for_tmp_copy_from_private_storage">คัดลอกไฟล์จากพื้นที่จัดเก็บส่วนตัว</string>
   <string name="oauth_check_onoff">เข้าสู่ระบบด้วย oAuth2</string>
   <string name="oauth_login_connection">กำลังเชื่อมต่อกับเซิร์ฟเวอร์ OAuth2 ...</string>
@@ -382,6 +380,8 @@
   <string name="log_send_no_mail_app">ไม่พบแอพสำหรับส่งข้อมูล log กรุณาติดตั้งแอพสำหรับส่งเมล</string>
   <string name="log_send_mail_subject">%1$s ข้อมูล log สำหรับแอพแอนดรอยด์</string>
   <string name="log_progress_dialog_text">กำลังโหลดข้อมูล ...</string>
+  <string name="actionbar_select_all">เลือกทั้งหมด</string>
+  <string name="actionbar_select_inverse">เลือกตรงกันข้าม</string>
   <string name="saml_authentication_required_text">จำเป็นต้องยืนยันตัวตน</string>
   <string name="saml_authentication_wrong_pass">รหัสผ่านไม่ถูกต้อง</string>
   <string name="actionbar_move">ย้าย</string>
@@ -419,8 +419,8 @@
   <string name="prefs_camera_upload_source_path_title">โฟลเดอร์ของกล้อง (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">สิ่งจำเป็นต้องใช้</string>
   <string name="prefs_camera_upload_source_path_title_optional">ตัวเลือก</string>
-  <string name="prefs_camera_upload_behaviour_dialogTitle">ไฟล์ต้นฉบับ...</string>
-  <string name="prefs_camera_upload_behaviour_title">ไฟล์ต้นฉบับ...</string>
+  <string name="prefs_camera_upload_behaviour_dialogTitle">ไฟล์ต้นฉบับจะเป็น</string>
+  <string name="prefs_camera_upload_behaviour_title">ไฟล์ต้นฉบับจะเป็น</string>
   <string name="upload_copy_files">คัดลอกไฟล์</string>
   <string name="upload_move_files">ย้ายไฟล์</string>
   <string name="pref_behaviour_entries_keep_file">เก็บไว้ในโฟลเดอร์ต้นฉบับ</string>
@@ -444,7 +444,7 @@
   <string name="share_via_link_edit_permission_read_and_write_label">ดาวน์โหลด ดู หรืออัพโหลด</string>
   <string name="share_via_link_edit_permission_upload_only_label">อัพโหลดโดยการ (วางไฟล์) เท่านั้น</string>
   <string name="share_get_public_link_button">รับลิงก์</string>
-  <string name="share_with_title">แชร์กับ ...</string>
+  <string name="share_with_title">แชร์ให้กับ</string>
   <string name="share_with_edit_title">แชร์กับ %1$s</string>
   <string name="share_search">ค้นหา</string>
   <string name="search_users_and_groups_hint">ค้นหาผู้ใช้และกลุ่ม</string>
@@ -525,5 +525,7 @@
   <string name="welcome_feature_4_text">รูปภาพ/วิดีโอ ของคุณถูกอัพโหลดโดยอัตโนมัติแล้ว</string>
   <string name="welcome_feature_5_title">กำลังสตรีมวิดีโอ</string>
   <string name="welcome_feature_5_text">เล่นวิดีโอของคุณโดยไม่ต้องดาวน์โหลด</string>
+  <string name="welcome_feature_7_title">เลือกทั้งหมด</string>
+  <string name="welcome_feature_8_title">การทำงานแบบออฟไลน์พร้อมใช้งาน</string>
   <string name="no_borwser_installed_alert">โปรดติดตั้งเบราเซอร์ก่อนเพื่อให้สามารถล็อกอินได้อย่างปลอดภัย</string>
 </resources>

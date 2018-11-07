@@ -3,7 +3,8 @@
  *
  *   @author David A. Velasco
  *   @author masensio
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   @author David González Verdugo
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -21,19 +22,16 @@
 
 package com.owncloud.android.operations;
 
-import com.owncloud.android.MainApp;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.lib.common.OwnCloudClient;
-import com.owncloud.android.lib.resources.files.CreateRemoteFolderOperation;
-import com.owncloud.android.lib.common.operations.OnRemoteOperationListener;
-import com.owncloud.android.lib.common.operations.RemoteOperation;
+
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
+import com.owncloud.android.lib.resources.files.CreateRemoteFolderOperation;
 import com.owncloud.android.operations.common.SyncOperation;
 import com.owncloud.android.utils.FileStorageUtils;
 
 import java.io.File;
-
 
 /**
  * Access to remote operation performing the creation of a new folder in the ownCloud server.
@@ -55,15 +53,15 @@ public class CreateFolderOperation extends SyncOperation {
     public CreateFolderOperation(String remotePath, boolean createFullPath) {
         mRemotePath = remotePath;
         mCreateFullPath = createFullPath;
-        
     }
-
 
     @Override
     protected RemoteOperationResult run(OwnCloudClient client) {
-        CreateRemoteFolderOperation operation = new CreateRemoteFolderOperation(mRemotePath,
-                mCreateFullPath);
-        RemoteOperationResult result =  operation.execute(client);
+        CreateRemoteFolderOperation createRemoteFolderOperation = new CreateRemoteFolderOperation(
+                mRemotePath,
+                mCreateFullPath
+        );
+        RemoteOperationResult result =  createRemoteFolderOperation.execute(client);
         
         if (result.isSuccess()) {
             OCFile newDir = saveFolderInDB();
@@ -76,7 +74,7 @@ public class CreateFolderOperation extends SyncOperation {
                 Log_OC.w(TAG, "Local folder " + localPath + " was not fully created");
             }
         } else {
-            Log_OC.e(TAG, mRemotePath + "hasn't been created");
+            Log_OC.e(TAG, mRemotePath + " hasn't been created");
         }
         
         return result;

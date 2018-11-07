@@ -1,7 +1,8 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="about_android">%1$s Android-App</string>
+  <string name="about_android">%1$s Android App</string>
   <string name="about_version">Version %1$s</string>
+  <string name="actionbar_search">Ordner durchsuchen</string>
   <string name="actionbar_sync">Konto aktualisieren</string>
   <string name="actionbar_upload">Datei hochladen</string>
   <string name="actionbar_upload_from_apps">Inhalt von anderen Apps</string>
@@ -17,11 +18,7 @@
   <string name="actionbar_sort_by_name">A-Z</string>
   <string name="actionbar_sort_by_date">Älteste - Neueste</string>
   <string name="actionbar_sort_by_size">Kleinste - Größte</string>
-  <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
-  <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Alle Dateien</string>
-  <!--TODO re-enable when "On Device" is available
-    <string name="drawer_item_on_device">On device</string>-->
   <string name="drawer_item_settings">Einstellungen</string>
   <string name="drawer_item_uploads_list">Uploads</string>
   <string name="drawer_close">Schließen</string>
@@ -50,6 +47,8 @@
   <string name="prefs_log_summary_history">Dies zeigt die gespeicherten Protokolle</string>
   <string name="prefs_log_delete_history_button">Verlauf löschen</string>
   <string name="prefs_help">Hilfe</string>
+  <string name="prefs_sync_calendar_contacts">Synchronisiere deine Kontakte, deinen Kalender und deine Aufgaben</string>
+  <string name="prefs_sync_calendar_contacts_summary">Installiere DAVdroid</string>
   <string name="prefs_recommend">Dies einem Freund empfehlen</string>
   <string name="prefs_feedback">Rückmeldungen</string>
   <string name="prefs_imprint">Impressum</string>
@@ -79,7 +78,7 @@
   <string name="auth_password">Passwort</string>
   <string name="auth_register">Ist %1$s neu für Sie?</string>
   <string name="sync_string_files">Dateien</string>
-  <string name="setup_btn_connect">Verbinden</string>
+  <string name="setup_btn_login">Anmelden</string>
   <string name="uploader_btn_upload_text">Hochladen</string>
   <string name="uploader_top_message">Hochladeordner auswählen</string>
   <string name="uploader_wrn_no_account_title">Kein Konto gefunden</string>
@@ -99,6 +98,7 @@
   <string name="file_list_no_app_for_file_type">Keine Applikationen für diesen Dateityp gefunden</string>
   <string name="local_file_list_empty">Es befinden sich keine Dateien in diesem Ordner.</string>
   <string name="local_file_list_empty_just_folders">Es befinden sich keine Ordner in diesem Ordner.</string>
+  <string name="local_file_list_search_with_no_matches">Keine Suchergebnisse gefunden</string>
   <string name="upload_list_empty">Keine Uploads verfügbar</string>
   <string name="file_list_folder">Ordner</string>
   <string name="file_list_folders">Ordner</string>
@@ -118,15 +118,13 @@
   <string name="action_share">Teilen</string>
   <string name="common_yes">Ja</string>
   <string name="common_no">Nein</string>
-  <string name="common_ok">OK</string>
   <string name="common_remove_upload">Upload entfernen</string>
   <string name="common_retry_upload">Upload wiederholen</string>
   <string name="common_cancel_sync">Synchronisation abbrechen</string>
-  <string name="common_cancel">Abbrechen</string>
   <string name="common_back">Zurück</string>
   <string name="common_save_exit">Speichern &amp; Schließen</string>
   <string name="common_error">Fehler</string>
-  <string name="common_loading">Lade …</string>
+  <string name="common_loading">Lade…</string>
   <string name="common_unknown">unbekannt</string>
   <string name="common_error_unknown">Unbekannter Fehler</string>
   <string name="common_pending">Ausstehend</string>
@@ -236,7 +234,7 @@
   <string name="media_play_pause_description">Abspielen oder Pausieren Button</string>
   <string name="media_forward_description">Vorspulen Button</string>
   <string name="upload_from_camera_title">Kamerabild</string>
-  <string name="auth_getting_authorization">Autorisierung empfangen...</string>
+  <string name="auth_getting_authorization">Legitimierung empfangen …</string>
   <string name="auth_trying_to_login">Anmeldeversuch...</string>
   <string name="auth_no_net_conn_title">Keine Netzwerkverbindung</string>
   <string name="auth_nossl_plain_ok_title">Sichere Verbindung nicht verfügbar.</string>
@@ -384,6 +382,7 @@
   <string name="log_send_no_mail_app">Keine App zum Versenden der Meldungen gefunden. Bitte installieren Sie die Mail-App!</string>
   <string name="log_send_mail_subject">%1$s Android-App Meldungen</string>
   <string name="log_progress_dialog_text">Lade Daten…</string>
+  <string name="actionbar_select_all">Alle auswählen</string>
   <string name="saml_authentication_required_text">Legitimierung benötigt</string>
   <string name="saml_authentication_wrong_pass">Falsches Passwort</string>
   <string name="actionbar_move">Verschieben</string>
@@ -446,7 +445,7 @@
   <string name="share_via_link_edit_permission_read_and_write_label">Herunterladen / Ansehen / Hochladen</string>
   <string name="share_via_link_edit_permission_upload_only_label">Nur Hochladen (Datei hineinziehen)</string>
   <string name="share_get_public_link_button">Link erstellen</string>
-  <string name="share_with_title">Teilen mit ...</string>
+  <string name="share_with_title">Teilen mit</string>
   <string name="share_with_edit_title">Teilen mit %1$s</string>
   <string name="share_search">Suche</string>
   <string name="search_users_and_groups_hint">Nach Benutzern und Gruppen suchen</string>
@@ -528,5 +527,7 @@
   <string name="welcome_feature_4_text">Ihre Bilder/Videos werden automatisch hochgeladen</string>
   <string name="welcome_feature_5_title">Videostreaming</string>
   <string name="welcome_feature_5_text">Geben Sie Ihre Videos wieder, ohne sie herunterzuladen</string>
+  <string name="welcome_feature_7_title">Alle auswählen</string>
+  <string name="welcome_feature_8_title">Offline verfügbar</string>
   <string name="no_borwser_installed_alert">Es ist kein Browser installiert. Bitte installieren Sie zur sicheren Anmeldung einen Browser.</string>
 </resources>

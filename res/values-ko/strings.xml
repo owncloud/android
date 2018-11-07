@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="about_android">%1$s Android 앱</string>
-  <string name="about_version">버전 %1$s</string>
+  <string name="actionbar_search">이 폴더에서 검색</string>
   <string name="actionbar_sync">계정 새로 고침</string>
   <string name="actionbar_upload">업로드</string>
   <string name="actionbar_upload_from_apps">다른 앱의 콘텐츠</string>
@@ -15,11 +14,7 @@
   <string name="actionbar_descending">내림차순</string>
   <string name="actionbar_sort_title">정렬 순서</string>
   <string name="actionbar_sort_by_name">A-Z</string>
-  <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
-  <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">모든 파일</string>
-  <!--TODO re-enable when "On Device" is available
-    <string name="drawer_item_on_device">On device</string>-->
   <string name="drawer_item_settings">설정</string>
   <string name="drawer_item_uploads_list">업로드</string>
   <string name="drawer_close">닫기</string>
@@ -68,7 +63,7 @@
   <string name="auth_password">암호</string>
   <string name="auth_register">%1$s의 새로운 사용자인가요?</string>
   <string name="sync_string_files">파일</string>
-  <string name="setup_btn_connect">연결</string>
+  <string name="setup_btn_login">로그인</string>
   <string name="uploader_btn_upload_text">업로드</string>
   <string name="uploader_top_message">업로드 폴더 선택:</string>
   <string name="uploader_wrn_no_account_title">계정 없음</string>
@@ -106,11 +101,9 @@
   <string name="action_share">공유</string>
   <string name="common_yes">예</string>
   <string name="common_no">아니요</string>
-  <string name="common_ok">확인</string>
   <string name="common_remove_upload">업로드 항목 제거</string>
   <string name="common_retry_upload">다시 업로드</string>
   <string name="common_cancel_sync">동기화 취소</string>
-  <string name="common_cancel">취소</string>
   <string name="common_back">뒤로</string>
   <string name="common_save_exit">저장하고 끝내기</string>
   <string name="common_error">오류</string>
@@ -122,9 +115,7 @@
   <string name="change_password">암호 변경</string>
   <string name="delete_account">계정 삭제</string>
   <string name="create_account">계정 만들기</string>
-  <string name="upload_chooser_title">다음에서 업로드…</string>
   <string name="uploader_info_dirname">폴더 이름</string>
-  <string name="uploader_upload_in_progress_ticker">업로드 중…</string>
   <string name="uploader_upload_in_progress_content">%1$d%% %2$s 업로드 중</string>
   <string name="uploader_upload_succeeded_ticker">업로드 성공</string>
   <string name="uploader_upload_succeeded_content_single">%1$s 업로드 완료</string>
@@ -141,8 +132,6 @@
   <string name="uploads_view_group_current_uploads">현재</string>
   <string name="uploads_view_group_failed_uploads">실패함(눌러서 다시 시도)</string>
   <string name="uploads_view_group_finished_uploads">업로드됨</string>
-  <string name="uploads_view_group_file_count">파일 %d개</string>
-  <string name="uploads_view_group_file_count_single">파일 %d개</string>
   <string name="uploads_view_upload_status_succeeded">완료됨</string>
   <string name="uploads_view_upload_status_cancelled">취소됨</string>
   <string name="uploads_view_upload_status_paused">일시 정지됨</string>
@@ -160,7 +149,6 @@
   <string name="uploads_view_upload_status_waiting_for_wifi">Wi-Fi 연결을 기다리는 중</string>
   <string name="uploads_view_later_waiting_to_upload">업로드 대기 중</string>
   <string name="uploads_view_unsupported_media_type">지원하지 않는 미디어 형식</string>
-  <string name="downloader_download_in_progress_ticker">다운로드 중…</string>
   <string name="downloader_download_in_progress_content">%1$d%% %2$s 다운로드 중</string>
   <string name="downloader_download_succeeded_ticker">다운로드됨</string>
   <string name="downloader_download_succeeded_content">%1$s 다운로드됨</string>
@@ -221,8 +209,7 @@
   <string name="media_rewind_description">되감기 단추</string>
   <string name="media_play_pause_description">재생 혹은 일시 정지 단추</string>
   <string name="media_forward_description">빨리감기 단추</string>
-  <string name="auth_getting_authorization">인증 중…</string>
-  <string name="auth_trying_to_login">로그인 시도 중…</string>
+  <string name="auth_getting_authorization">인증 정보 가져오는 중...</string>
   <string name="auth_no_net_conn_title">네트워크에 연결할 수 없음</string>
   <string name="auth_nossl_plain_ok_title">암호화된 연결을 사용할 수 없습니다.</string>
   <string name="auth_connection_established">연결됨</string>
@@ -277,7 +264,6 @@
   <string name="wait_checking_credentials">저장된 인증 정보 확인 중</string>
   <string name="filedisplay_unexpected_bad_get_content">예상하지 못한 오류입니다. 다른 앱에서 파일을 선택하십시오</string>
   <string name="filedisplay_no_file_selected">선택한 파일 없음</string>
-  <string name="activity_chooser_title">다음으로 링크 보내기…</string>
   <string name="wait_for_tmp_copy_from_private_storage">개인 저장소에서 파일 복사</string>
   <string name="oauth_check_onoff">oAuth2로 로그인</string>
   <string name="oauth_login_connection">OAuth2 서버에 연결 중…</string>
@@ -367,7 +353,8 @@
   <string name="log_send_history_button">기록 보내기</string>
   <string name="log_send_no_mail_app">로그를 보내는 데 사용할 수 있는 앱이 없습니다. 이메일 앱을 설치하십시오.</string>
   <string name="log_send_mail_subject">%1$s Android 앱 로그</string>
-  <string name="log_progress_dialog_text">데이터 불러오는 중…</string>
+  <string name="log_progress_dialog_text">데이터 불러오는 중...</string>
+  <string name="actionbar_select_all">모두 선택</string>
   <string name="saml_authentication_required_text">인증 필요함</string>
   <string name="saml_authentication_wrong_pass">잘못된 암호</string>
   <string name="actionbar_move">이동</string>
@@ -405,8 +392,6 @@
   <string name="prefs_camera_upload_source_path_title">카메라 폴더(%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">필수</string>
   <string name="prefs_camera_upload_source_path_title_optional">선택</string>
-  <string name="prefs_camera_upload_behaviour_dialogTitle">원래 파일은...</string>
-  <string name="prefs_camera_upload_behaviour_title">원래 파일은...</string>
   <string name="upload_copy_files">파일 복사</string>
   <string name="upload_move_files">파일 이동</string>
   <string name="pref_behaviour_entries_keep_file">원래 폴더에 유지됨</string>
@@ -427,7 +412,7 @@
   <string name="share_via_link_password_label">암호</string>
   <string name="share_via_link_password_title">보호됨</string>
   <string name="share_get_public_link_button">링크 얻기</string>
-  <string name="share_with_title">다음과 공유…</string>
+  <string name="share_with_title">다음으로 공유</string>
   <string name="share_with_edit_title">%1$s 님과 공유</string>
   <string name="share_search">검색</string>
   <string name="search_users_and_groups_hint">사용자와 그룹 검색</string>
@@ -500,4 +485,6 @@
   <!--Welcome to oC intro features-->
   <string name="welcome_feature_4_title">카메라 업로드</string>
   <string name="welcome_feature_5_title">비디오 스트리밍</string>
+  <string name="welcome_feature_7_title">모두 선택</string>
+  <string name="welcome_feature_8_title">오프라인 사용 가능</string>
 </resources>

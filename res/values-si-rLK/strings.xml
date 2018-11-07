@@ -17,7 +17,7 @@
   <string name="auth_username">පරිශීලක නම</string>
   <string name="auth_password">මුර පදය</string>
   <string name="sync_string_files">ගොනු</string>
-  <string name="setup_btn_connect">සම්බන්ධ වන්න</string>
+  <string name="setup_btn_login">සම්බන්ධ වන්න</string>
   <string name="uploader_btn_upload_text">උඩුගත කිරීම</string>
   <string name="uploader_wrn_no_account_title">ගිණුමක් හමු නොවුණි</string>
   <string name="uploader_wrn_no_account_setup_btn_text">ස්ථාපනය</string>

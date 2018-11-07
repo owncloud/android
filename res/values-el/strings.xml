@@ -1,7 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="about_android">%1$s για εφαρμογή  Android </string>
-  <string name="about_version">έκδοση %1$s</string>
   <string name="actionbar_sync">Ανανέωση λογαριασμού</string>
   <string name="actionbar_upload">Μεταφόρτωση</string>
   <string name="actionbar_upload_from_apps">Περιεχόμενο από άλλες εφαρμογές</string>
@@ -15,11 +13,7 @@
   <string name="actionbar_descending">Φθίνουσα</string>
   <string name="actionbar_sort_title">Ταξινόμηση κατά</string>
   <string name="actionbar_sort_by_name">A-Ω</string>
-  <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
-  <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Όλα τα αρχεία</string>
-  <!--TODO re-enable when "On Device" is available
-    <string name="drawer_item_on_device">On device</string>-->
   <string name="drawer_item_settings">Ρυθμίσεις</string>
   <string name="drawer_item_uploads_list">Μεταφορτώσεις</string>
   <string name="drawer_close">Κλείσιμο</string>
@@ -51,7 +45,7 @@
   <string name="auth_password">Συνθηματικό</string>
   <string name="auth_register">Νέοι στο %1$s;</string>
   <string name="sync_string_files">Αρχεία</string>
-  <string name="setup_btn_connect">Σύνδεση</string>
+  <string name="setup_btn_login">Είσοδος</string>
   <string name="uploader_btn_upload_text">Μεταφόρτωση</string>
   <string name="uploader_top_message">Επιλογή φακέλου μεταφορτώσεων</string>
   <string name="uploader_wrn_no_account_title">Δεν βρέθηκε λογαριασμός</string>
@@ -88,15 +82,13 @@
   <string name="action_share">Μοιράσου</string>
   <string name="common_yes">Ναι</string>
   <string name="common_no">Όχι</string>
-  <string name="common_ok">ΟΚ</string>
   <string name="common_remove_upload">Απομακρύνετε την αναφόρτωση</string>
   <string name="common_retry_upload">Ξαναπροσπαθήστε την αναφόρτωση</string>
   <string name="common_cancel_sync">Ακύρωση συγχρονισμού</string>
-  <string name="common_cancel">Άκυρο</string>
   <string name="common_back">Πίσω</string>
   <string name="common_save_exit">Αποθήκευση &amp; συντομογραφία;έξοδος</string>
   <string name="common_error">Σφάλμα</string>
-  <string name="common_loading">Φόρτωση ...</string>
+  <string name="common_loading">Φορτώνει...</string>
   <string name="common_unknown">Αγνωστο</string>
   <string name="common_error_unknown">Άγνωστο σφάλμα</string>
   <string name="common_pending">Εκκρεμεί</string>
@@ -104,9 +96,7 @@
   <string name="change_password">Αλλαγή κωδικού πρόσβασης</string>
   <string name="delete_account">Αφαίρεση λογαριασμού</string>
   <string name="create_account">Δημιουργία λογαριασμού</string>
-  <string name="upload_chooser_title">Μεταφόρτωση από ...</string>
   <string name="uploader_info_dirname">Όνομα φακέλου</string>
-  <string name="uploader_upload_in_progress_ticker">Μεταφόρτωση ...</string>
   <string name="uploader_upload_in_progress_content">%1$d%% Μεταφορτώνονται %2$s</string>
   <string name="uploader_upload_succeeded_ticker">Η μεταφόρτωση ολοκληρώθηκε επιτυχώς</string>
   <string name="uploader_upload_succeeded_content_single">%1$s του ποσοστού αναφορτώθηκε</string>
@@ -123,8 +113,6 @@
   <string name="uploads_view_group_current_uploads">Τρέχων</string>
   <string name="uploads_view_group_failed_uploads">Ανεπιτυχώς (πατήστε για να ξαναπροσπαθήσετε)</string>
   <string name="uploads_view_group_finished_uploads">Αναφορτώθηκε</string>
-  <string name="uploads_view_group_file_count">%d Αρχεία</string>
-  <string name="uploads_view_group_file_count_single">%d ποσοστό αρχείου</string>
   <string name="uploads_view_upload_status_succeeded">Ολοκληρώθηκε</string>
   <string name="uploads_view_upload_status_cancelled">Ακυρώθηκε</string>
   <string name="uploads_view_upload_status_paused">Είναι σε παύση</string>
@@ -142,7 +130,6 @@
   <string name="uploads_view_upload_status_waiting_for_wifi">Εν αναμονή σύνδεσης στο τοπικό δίκτυο</string>
   <string name="uploads_view_later_waiting_to_upload">Αναμονή αναφόρτωσης</string>
   <string name="uploads_view_unsupported_media_type">Μη υποστηριζόμενος τύπος πολυμέσων</string>
-  <string name="downloader_download_in_progress_ticker">Λήψη ...</string>
   <string name="downloader_download_in_progress_content">%1$d%% Λαμβάνονται %2$s</string>
   <string name="downloader_download_succeeded_ticker">Η λήψη ολοκληρώθηκε επιτυχώς</string>
   <string name="downloader_download_succeeded_content">%1$s ποσοστό ανάκτησης</string>
@@ -198,8 +185,7 @@
   <string name="media_rewind_description">Κουμπί επαναφοράς</string>
   <string name="media_play_pause_description">Κουμπί αναπαραγωγής ή παύσης</string>
   <string name="media_forward_description">Κουμπί προώθησης</string>
-  <string name="auth_getting_authorization">Αναμένοντας την πιστοποίηση....</string>
-  <string name="auth_trying_to_login">Προσπαθήστε να συνδεθείτε....</string>
+  <string name="auth_getting_authorization">Λήψη πιστοποίησης...</string>
   <string name="auth_no_net_conn_title">Δεν υπάρχει σύνδεση στο δίκτυο</string>
   <string name="auth_nossl_plain_ok_title">Μη διαθέσιμη ασφαλής σύνδεση.</string>
   <string name="auth_connection_established">Επετεύχθη σύνδεση</string>
@@ -254,7 +240,6 @@
   <string name="wait_checking_credentials">Γίνεται έλεγχος αποθηκευμένων διαπιστευτηρίων</string>
   <string name="filedisplay_unexpected_bad_get_content">Απροσδόκητο σφάλμα - παρακαλώ επιλέξτε το αρχείο από μια άλλη εφαρμογή</string>
   <string name="filedisplay_no_file_selected">Δεν επιλέχθηκαν αρχεία </string>
-  <string name="activity_chooser_title">Αποστολή συνδέσμου σε ...</string>
   <string name="wait_for_tmp_copy_from_private_storage">Αντιγραφή αρχείου από ιδιωτικό αποθηκευτικό χώρο</string>
   <string name="oauth_check_onoff">Σύνδεση με oAuth2</string>
   <string name="oauth_login_connection">Γίνεται σύνδεση με τον διακομιστή OAuth2...</string>
@@ -341,6 +326,7 @@
   <string name="log_send_no_mail_app">Δεν βρέθηκε εφαρμογή για αποστολή ιστορικού. Παρακαλούμε εγκαταστήστε μια εφαρμογή αλληλογραφίας.</string>
   <string name="log_send_mail_subject">%1$s αναφορές της εφαρμογής Android</string>
   <string name="log_progress_dialog_text">Φόρτωση δεδομένων....</string>
+  <string name="actionbar_select_all">Επιλογή όλων</string>
   <string name="saml_authentication_required_text">Απαιτείται πιστοποίηση</string>
   <string name="saml_authentication_wrong_pass">Εσφαλμένος κωδικός πρόσβασης</string>
   <string name="actionbar_move">Μετακίνηση</string>
@@ -376,8 +362,6 @@
   <string name="prefs_camera_upload_source_path_title">Φάκελος κάμερας (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">απαιτείται</string>
   <string name="prefs_camera_upload_source_path_title_optional">προαιρετικό</string>
-  <string name="prefs_camera_upload_behaviour_dialogTitle">Το αρχικό αρχείο θα είναι ...</string>
-  <string name="prefs_camera_upload_behaviour_title">Το αρχικό αρχείο θα είναι ...</string>
   <string name="upload_copy_files">Αντιγραφή αρχείου</string>
   <string name="upload_move_files">Μετακίνηση αρχείου</string>
   <string name="pref_behaviour_entries_keep_file">διατηρήθηκε στον αρχικό φάκελο</string>
@@ -398,7 +382,7 @@
   <string name="share_via_link_password_label">Συνθηματικό</string>
   <string name="share_via_link_password_title">Ασφαλίστηκε</string>
   <string name="share_get_public_link_button">Λήψη συνδέσμου</string>
-  <string name="share_with_title">Διαμοιρασμός με ...</string>
+  <string name="share_with_title">Διαμοιρασμός με</string>
   <string name="share_with_edit_title">Διαμοιρασμός με %1$s</string>
   <string name="share_search">Αναζήτηση</string>
   <string name="search_users_and_groups_hint">Αναζήτηση χρηστών και ομάδων</string>
@@ -463,4 +447,6 @@
     <item quantity="other">%d επιλέχτηκαν</item>
   </plurals>
   <!--Welcome to oC intro features-->
+  <string name="welcome_feature_7_title">Επιλογή όλων</string>
+  <string name="welcome_feature_8_title">Διαθέσιμο εκτός σύνδεσης</string>
 </resources>

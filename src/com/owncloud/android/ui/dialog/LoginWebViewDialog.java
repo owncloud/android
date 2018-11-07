@@ -50,12 +50,12 @@ import com.owncloud.android.authentication.BaseWebViewClient;
 import com.owncloud.android.authentication.SAMLWebViewClient;
 import com.owncloud.android.authentication.SAMLWebViewClient.SsoWebViewClientListener;
 import com.owncloud.android.lib.common.utils.Log_OC;
-import com.owncloud.android.operations.DetectAuthenticationMethodOperation.AuthenticationMethod;
+import com.owncloud.android.operations.AuthenticationMethod;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.owncloud.android.operations.DetectAuthenticationMethodOperation.AuthenticationMethod.SAML_WEB_SSO;
+import static com.owncloud.android.operations.AuthenticationMethod.SAML_WEB_SSO;
 
 
 /**

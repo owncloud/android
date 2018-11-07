@@ -3,6 +3,8 @@
  *
  *   @author Bartek Przybylski
  *   @author Christian Schabesberger
+ *   @author David González Verdugo
+ *
  *   Copyright (C) 2012  Bartek Przybylski
  *   Copyright (C) 2018 ownCloud GmbH.
  *
@@ -29,15 +31,19 @@ import android.content.ContentProviderResult;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.content.OperationApplicationException;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.RemoteException;
 import android.provider.MediaStore;
+import android.support.v4.content.FileProvider;
 import android.support.v4.util.Pair;
 
 import com.owncloud.android.MainApp;
+import com.owncloud.android.R;
+import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.db.ProviderMeta.ProviderTableMeta;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.shares.OCShare;
@@ -64,23 +70,25 @@ import java.util.Vector;
 public class FileDataStorageManager {
 
     public static final int ROOT_PARENT_ID = 0;
+    private static String TAG = FileDataStorageManager.class.getSimpleName();
 
     private ContentResolver mContentResolver;
     private ContentProviderClient mContentProviderClient;
     private Account mAccount;
+    private Context mContext;
 
-    private static String TAG = FileDataStorageManager.class.getSimpleName();
-
-    public FileDataStorageManager(Account account, ContentResolver cr) {
+    public FileDataStorageManager(Context activity, Account account, ContentResolver cr) {
         mContentProviderClient = null;
         mContentResolver = cr;
         mAccount = account;
+        mContext = activity;
     }
 
-    public FileDataStorageManager(Account account, ContentProviderClient cp) {
+    public FileDataStorageManager(Context activity, Account account, ContentProviderClient cp) {
         mContentProviderClient = cp;
         mContentResolver = null;
         mAccount = account;
+        mContext = activity;
     }
 
     public void setAccount(Account account) {
@@ -98,7 +106,6 @@ public class FileDataStorageManager {
     public ContentProviderClient getContentProviderClient() {
         return mContentProviderClient;
     }
-
 
     public OCFile getFileByPath(String path) {
         Cursor c = getFileCursorForValue(ProviderTableMeta.FILE_PATH, path);
@@ -625,7 +632,6 @@ public class FileDataStorageManager {
         }
         return success;
     }
-
 
     public boolean removeFolder(OCFile folder, boolean removeDBData, boolean removeLocalContent) {
         boolean success = true;
@@ -1707,7 +1713,17 @@ public class FileDataStorageManager {
     public void triggerMediaScan(String path) {
         if (path != null) {
             Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-            intent.setData(Uri.fromFile(new File(path)));
+            try {
+                intent.setData(
+                        FileProvider.getUriForFile(
+                                mContext.getApplicationContext(),
+                                mContext.getResources().getString(R.string.file_provider_authority),
+                                new File(path)
+                        )
+                );
+            } catch (IllegalArgumentException illegalArgumentException) {
+                intent.setData(Uri.fromFile(new File(path)));
+            }
             MainApp.getAppContext().sendBroadcast(intent);
         }
     }
@@ -2110,7 +2126,7 @@ public class FileDataStorageManager {
 
     /**
      * Get a collection with all the files set by the user as available offline, from all the accounts
-     * in the device.
+     * in the device, putting away the folders
      *
      * This is the only method working with a NULL account in {@link #mAccount}. Not something to do often.
      *
@@ -2123,12 +2139,15 @@ public class FileDataStorageManager {
         try {
             // query for any favorite file in any OC account
             cursorOnKeptInSync = getContentResolver().query(
-                ProviderTableMeta.CONTENT_URI,
-                null,
-                ProviderTableMeta.FILE_KEEP_IN_SYNC + " = ?",
-                new String[] { String.valueOf(OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE.getValue()) },
-                // do NOT get also AVAILABLE_OFFLINE_PARENT: only those SET BY THE USER (files or folders)
-                null
+                    ProviderTableMeta.CONTENT_URI,
+                    null,
+                    ProviderTableMeta.FILE_KEEP_IN_SYNC + " = ? OR " +
+                            ProviderTableMeta.FILE_KEEP_IN_SYNC + " = ?",
+                    new String[]{
+                            String.valueOf(OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE.getValue()),
+                            String.valueOf(OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE_PARENT.getValue())
+                    },
+                    null
             );
 
             if (cursorOnKeptInSync != null && cursorOnKeptInSync.moveToFirst()) {
@@ -2137,9 +2156,11 @@ public class FileDataStorageManager {
                 do {
                     file = createFileInstance(cursorOnKeptInSync);
                     accountName = cursorOnKeptInSync.getString(
-                        cursorOnKeptInSync.getColumnIndex(ProviderTableMeta.FILE_ACCOUNT_OWNER)
+                            cursorOnKeptInSync.getColumnIndex(ProviderTableMeta.FILE_ACCOUNT_OWNER)
                     );
-                    result.add(new Pair<>(file, accountName));
+                    if (!file.isFolder() && AccountUtils.exists(accountName, mContext)) {
+                        result.add(new Pair<>(file, accountName));
+                    }
                 } while (cursorOnKeptInSync.moveToNext());
             }
 

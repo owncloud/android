@@ -1,7 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="about_android">%1$s aplicație Android</string>
-  <string name="about_version">versiunea %1$s</string>
   <string name="actionbar_sync">Reîmprospătați contul</string>
   <string name="actionbar_upload">Încarcă</string>
   <string name="actionbar_upload_from_apps">Conținut de la alte aplicații</string>
@@ -14,11 +12,7 @@
   <string name="actionbar_sort">Sortare</string>
   <string name="actionbar_sort_title">Sortare după</string>
   <string name="actionbar_sort_by_name">A-Z</string>
-  <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
-  <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Toate fișierele</string>
-  <!--TODO re-enable when "On Device" is available
-    <string name="drawer_item_on_device">On device</string>-->
   <string name="drawer_item_settings">Setări</string>
   <string name="drawer_item_uploads_list">Încărcări</string>
   <string name="drawer_close">Închide</string>
@@ -50,7 +44,7 @@
   <string name="auth_password">Parolă</string>
   <string name="auth_register">Nou la %1$s?</string>
   <string name="sync_string_files">Fișiere</string>
-  <string name="setup_btn_connect">Conectare</string>
+  <string name="setup_btn_login">Autentificare</string>
   <string name="uploader_btn_upload_text">Încărcare</string>
   <string name="uploader_top_message">Alege dosarul pentru încărcare</string>
   <string name="uploader_wrn_no_account_title">Nici un cont găsit</string>
@@ -87,11 +81,9 @@
   <string name="action_share">Partajează</string>
   <string name="common_yes">Da</string>
   <string name="common_no">Nu</string>
-  <string name="common_ok">OK</string>
   <string name="common_remove_upload">Sterge incarcarea</string>
   <string name="common_retry_upload">Reincearca incarcarea</string>
   <string name="common_cancel_sync">Anuleaza sincronizarea</string>
-  <string name="common_cancel">Anulează</string>
   <string name="common_back">Înapoi</string>
   <string name="common_save_exit">Salvează &amp;amps ieși.</string>
   <string name="common_error">Eroare</string>
@@ -103,9 +95,7 @@
   <string name="change_password">Schimbă parola</string>
   <string name="delete_account">Sterge contul</string>
   <string name="create_account">Crează cont</string>
-  <string name="upload_chooser_title">Încarcă din...</string>
   <string name="uploader_info_dirname">Nume director</string>
-  <string name="uploader_upload_in_progress_ticker">Se încărcarcă...</string>
   <string name="uploader_upload_in_progress_content">%1$d%% Se încarcă %2$s</string>
   <string name="uploader_upload_succeeded_ticker">Încărcat cu succes</string>
   <string name="uploader_upload_succeeded_content_single">%1$s incarcat</string>
@@ -122,8 +112,6 @@
   <string name="uploads_view_group_current_uploads">Curent</string>
   <string name="uploads_view_group_failed_uploads">Eroare (atinge pentru a reîncerca)</string>
   <string name="uploads_view_group_finished_uploads">Încărcat</string>
-  <string name="uploads_view_group_file_count">%d Fișiere</string>
-  <string name="uploads_view_group_file_count_single">%d Fișier</string>
   <string name="uploads_view_upload_status_succeeded">Terminat</string>
   <string name="uploads_view_upload_status_cancelled">Anulat</string>
   <string name="uploads_view_upload_status_paused">oprit</string>
@@ -141,7 +129,6 @@
   <string name="uploads_view_upload_status_waiting_for_wifi">Se asteapta conexiune WiFi</string>
   <string name="uploads_view_later_waiting_to_upload">Se așteaptă încărcarea</string>
   <string name="uploads_view_unsupported_media_type">Tip media nesuportat</string>
-  <string name="downloader_download_in_progress_ticker">Se descarcă...</string>
   <string name="downloader_download_in_progress_content">%1$d%% Se descarcă %2$s</string>
   <string name="downloader_download_succeeded_ticker">Descărcarea a reușit</string>
   <string name="downloader_download_succeeded_content">%1$s descarcat</string>
@@ -197,8 +184,7 @@
   <string name="media_rewind_description">Butonul rewind</string>
   <string name="media_play_pause_description">Buton de play sau pauză </string>
   <string name="media_forward_description">Butonul pentru repede înainte</string>
-  <string name="auth_getting_authorization">Obținem permisiunea...</string>
-  <string name="auth_trying_to_login">Încercăm să intrăm în cont...</string>
+  <string name="auth_getting_authorization">Obținerea autorizației...</string>
   <string name="auth_no_net_conn_title">Nu exista conexiune</string>
   <string name="auth_nossl_plain_ok_title">Conexiune securizată indisponibilă</string>
   <string name="auth_connection_established">Conexiune stabilită</string>
@@ -252,7 +238,6 @@
   <string name="wait_checking_credentials">Verific datele stocate</string>
   <string name="filedisplay_unexpected_bad_get_content">Problema neasteptata ; selectati fisierul dintr-o aplicatie diferita </string>
   <string name="filedisplay_no_file_selected">Nu a fost selectat nici un fișier</string>
-  <string name="activity_chooser_title">Trimite legătura la ...</string>
   <string name="wait_for_tmp_copy_from_private_storage">Copiere fișier din stocare privată</string>
   <string name="oauth_check_onoff">Întră în cont cu oAuth2</string>
   <string name="oauth_login_connection">Conectare la serverul OAuth2...</string>
@@ -337,7 +322,8 @@
   <string name="log_send_history_button">Istoric trimiteri</string>
   <string name="log_send_no_mail_app">Nu s-a găsit nicio aplicație de trimitere a logurilor. Te rog instalează o aplicație de e-mail.</string>
   <string name="log_send_mail_subject">%1$s înregistrările app-ului Android</string>
-  <string name="log_progress_dialog_text">Încărcare date...</string>
+  <string name="log_progress_dialog_text">Datele se încarcă...</string>
+  <string name="actionbar_select_all">Selectează tot</string>
   <string name="saml_authentication_required_text">Autentificare necesară</string>
   <string name="saml_authentication_wrong_pass">Parolă greșită</string>
   <string name="actionbar_move">Mută</string>
@@ -373,8 +359,6 @@
   <string name="prefs_camera_upload_source_path_title">Dosarul camerei (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">necesar</string>
   <string name="prefs_camera_upload_source_path_title_optional">opțional</string>
-  <string name="prefs_camera_upload_behaviour_dialogTitle">Fișierul original va fi...</string>
-  <string name="prefs_camera_upload_behaviour_title">Fișierul original va fi...</string>
   <string name="upload_copy_files">Copiază fișier</string>
   <string name="upload_move_files">Mută fișier</string>
   <string name="pref_behaviour_entries_keep_file">păstrat in dosarul original</string>
@@ -395,7 +379,7 @@
   <string name="share_via_link_password_label">Parolă</string>
   <string name="share_via_link_password_title">Securizat</string>
   <string name="share_get_public_link_button">Obține legătura</string>
-  <string name="share_with_title">Pratajează cu ...</string>
+  <string name="share_with_title">Partajat cu</string>
   <string name="share_with_edit_title">Partajează cu %1$s</string>
   <string name="share_search">Căutare</string>
   <string name="search_users_and_groups_hint">Caută utilizatori sau grupuri</string>
@@ -457,4 +441,5 @@ Te rog ia legătura cu administratorul</string>
   <string name="file_sync_notification_channel_name">Sincronizare fișiere</string>
   <string name="file_sync_notification_channel_description">Vizualizează rezultatul sincronizării</string>
   <!--Welcome to oC intro features-->
+  <string name="welcome_feature_7_title">Selectează tot</string>
 </resources>

@@ -15,7 +15,7 @@
   <string name="auth_username">ناوی به‌کارهێنه‌ر</string>
   <string name="auth_password">وشەی تێپەربو</string>
   <string name="sync_string_files">په‌ڕگەکان</string>
-  <string name="setup_btn_connect">بەستنەوە</string>
+  <string name="setup_btn_login">بەستنەوە</string>
   <string name="uploader_btn_upload_text">بارکردن</string>
   <string name="uploader_wrn_no_account_title">هیچ هەژمارێک نه‌دۆزرایه‌وه‌</string>
   <string name="uploader_wrn_no_account_setup_btn_text">جێگیرکردن</string>

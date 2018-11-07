@@ -49,7 +49,7 @@
   <string name="auth_password">Passwuert</string>
   <string name="auth_register">Nei bei %1$s?</string>
   <string name="sync_string_files">Fichieren</string>
-  <string name="setup_btn_connect">Verbannen</string>
+  <string name="setup_btn_login">Verbannen</string>
   <string name="uploader_btn_upload_text">Eroplueden</string>
   <string name="uploader_top_message">Dossier fir eropzelueden auswielen</string>
   <string name="uploader_wrn_no_account_title">Keen Account fonnt</string>
