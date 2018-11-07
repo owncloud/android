@@ -63,8 +63,15 @@ public class FeatureList {
             new FeatureItem(R.drawable.whats_new_select_all, R.string.welcome_feature_7_title,
                     R.string.welcome_feature_7_text, "2.9.0", "0", SHOW_ON_UPGRADE),
             new FeatureItem(R.drawable.whats_new_av_offline_jobs, R.string.welcome_feature_8_title,
-                    R.string.welcome_feature_8_text, "2.9.0", "0", SHOW_ON_UPGRADE)
+                    R.string.welcome_feature_8_text, "2.9.0", "0", SHOW_ON_UPGRADE),
 
+            // Features introduced in 2.9.1
+            new FeatureItem(R.drawable.whats_new_current_folder_search, R.string.welcome_feature_6_title,
+                    R.string.welcome_feature_6_text, "2.9.1", "0", SHOW_ON_UPGRADE),
+            new FeatureItem(R.drawable.whats_new_select_all, R.string.welcome_feature_7_title,
+                    R.string.welcome_feature_7_text, "2.9.1", "0", SHOW_ON_UPGRADE),
+            new FeatureItem(R.drawable.whats_new_av_offline_jobs, R.string.welcome_feature_8_title,
+                    R.string.welcome_feature_8_text, "2.9.1", "0", SHOW_ON_UPGRADE)
     };
 
 
