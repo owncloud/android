@@ -189,7 +189,7 @@ public class AccountUtils {
     }
 
     /**
-     * Get the user id corresponding OC account.
+     * Get the user id corresponding to an OC account.
      * @param account ownCloud account
      * @return        user id
      */
