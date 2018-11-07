@@ -2,7 +2,8 @@
  * ownCloud Android client application
  *
  * @author David A. Velasco
- * Copyright (C) 2017 ownCloud GmbH.
+ * @author David González Verdugo
+ * Copyright (C) 2018 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -61,7 +62,8 @@ public class DetectAuthenticationMethodOperation extends RemoteOperation<List<Au
     protected RemoteOperationResult<List<AuthenticationMethod>> run(OwnCloudClient client) {
         ArrayList<AuthenticationMethod> allAvailableAuthMethods = new ArrayList<>();
 
-        ExistenceCheckRemoteOperation operation = new ExistenceCheckRemoteOperation("", false);
+        ExistenceCheckRemoteOperation operation = new ExistenceCheckRemoteOperation("", false,
+                false);
         client.clearCredentials();
 
         client.setFollowRedirects(false);

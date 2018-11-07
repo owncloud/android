@@ -3,6 +3,7 @@
  *
  *   @author David A. Velasco
  *   @author Christian Schabesberger
+ *   @author David González Verdugo
  *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
@@ -52,7 +53,8 @@ public class CheckCurrentCredentialsOperation extends SyncOperation<Account> {
             return new RemoteOperationResult<>(new IllegalStateException(
                 "Account to validate is not the account connected to!"));
         } else {
-            RemoteOperation check = new ExistenceCheckRemoteOperation(OCFile.ROOT_PATH, false);
+            RemoteOperation check = new ExistenceCheckRemoteOperation(OCFile.ROOT_PATH, false,
+                    false);
             final RemoteOperationResult existenceCheckResult = check.execute(client);
             final RemoteOperationResult<Account> result
                     = new RemoteOperationResult<>(existenceCheckResult.getCode());
