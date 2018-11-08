@@ -324,7 +324,7 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
         int foldersToExpand = 0;
         for (int i=1; i<folderAndFiles.size(); i++) {
             /// new OCFile instance with the data from the server
-            r = (RemoteFile) folderAndFiles.get(i);
+            r = folderAndFiles.get(i);
             remoteFile = FileStorageUtils.createOCFileFrom(r);
 
             /// new OCFile instance to merge fresh data from server with local state

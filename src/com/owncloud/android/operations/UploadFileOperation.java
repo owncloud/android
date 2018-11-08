@@ -502,7 +502,7 @@ public class UploadFileOperation extends SyncOperation {
      * will be uploaded.
      */
     private RemoteOperationResult grantFolderExistence(String pathToGrant, OwnCloudClient client) {
-        RemoteOperation operation = new ExistenceCheckRemoteOperation(pathToGrant, false);
+        RemoteOperation operation = new ExistenceCheckRemoteOperation(pathToGrant, false, false);
         RemoteOperationResult result = operation.execute(client);
         if (!result.isSuccess() && result.getCode() == ResultCode.FILE_NOT_FOUND && mRemoteFolderToBeCreated) {
             SyncOperation syncOp = new CreateFolderOperation(pathToGrant, true);
@@ -608,7 +608,7 @@ public class UploadFileOperation extends SyncOperation {
 
     private boolean existsFile(OwnCloudClient client, String remotePath){
         ExistenceCheckRemoteOperation existsOperation =
-                new ExistenceCheckRemoteOperation(remotePath, false);
+                new ExistenceCheckRemoteOperation(remotePath, false, false);
         RemoteOperationResult result = existsOperation.execute(client);
         return result.isSuccess();
     }

@@ -1,3 +1,8 @@
+## 2.9.1 (November 2018)
+- Bug fixes for LDAP users using uid:
+  + Fix login not working
+  + Fix empty list of files
+
 ## 2.9.0 (November 2018)
 - Search in current folder
 - Select all/inverse files (contribution)
