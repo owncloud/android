@@ -25,6 +25,7 @@
 package com.owncloud.android.lib.resources.files;
 
 import com.owncloud.android.lib.common.OwnCloudClient;
+import com.owncloud.android.lib.common.accounts.AccountUtils;
 import com.owncloud.android.lib.common.http.HttpConstants;
 import com.owncloud.android.lib.common.http.methods.webdav.DavConstants;
 import com.owncloud.android.lib.common.http.methods.webdav.DavUtils;
@@ -75,7 +76,7 @@ public class ReadRemoteFolderOperation extends RemoteOperation<ArrayList<RemoteF
 
         try {
             PropfindMethod propfindMethod = new PropfindMethod(
-                    new URL(client.getNewFilesWebDavUri() + WebdavUtils.encodePath(mRemotePath)),
+                    new URL(client.getUserFilesWebDavUri() + WebdavUtils.encodePath(mRemotePath)),
                     DavConstants.DEPTH_1,
                     DavUtils.getAllPropset());
 
@@ -88,12 +89,12 @@ public class ReadRemoteFolderOperation extends RemoteOperation<ArrayList<RemoteF
 
                 // parse data from remote folder
                 mFolderAndFiles.add(
-                        new RemoteFile(propfindMethod.getRoot(), client.getCredentials().getUsername())
+                        new RemoteFile(propfindMethod.getRoot(), AccountUtils.getUserId(mAccount, mContext))
                 );
 
                 // loop to update every child
                 for (Response resource : propfindMethod.getMembers()) {
-                    RemoteFile file = new RemoteFile(resource, client.getCredentials().getUsername());
+                    RemoteFile file = new RemoteFile(resource, AccountUtils.getUserId(mAccount, mContext));
                     mFolderAndFiles.add(file);
                 }
 

@@ -64,7 +64,7 @@ public class AccountUtils {
 
         try {
             OwnCloudCredentials ownCloudCredentials = getCredentialsForAccount(context, account);
-            webDavUrlForAccount = getBaseUrlForAccount(context, account) + OwnCloudClient.NEW_WEBDAV_FILES_PATH_4_0
+            webDavUrlForAccount = getBaseUrlForAccount(context, account) + OwnCloudClient.WEBDAV_FILES_PATH_4_0
                     + ownCloudCredentials.getUsername();
         } catch (OperationCanceledException e) {
             e.printStackTrace();
@@ -188,6 +188,16 @@ public class AccountUtils {
         return credentials;
     }
 
+    /**
+     * Get the user id corresponding to an OC account.
+     * @param account ownCloud account
+     * @return        user id
+     */
+    public static String getUserId(Account account, Context context) {
+        AccountManager accountMgr = AccountManager.get(context);
+        return accountMgr.getUserData(account, Constants.KEY_ID);
+    }
+
     public static String buildAccountNameOld(Uri serverBaseUrl, String username) {
         if (serverBaseUrl.getScheme() == null) {
             serverBaseUrl = Uri.parse("https://" + serverBaseUrl.toString());
@@ -244,7 +254,7 @@ public class AccountUtils {
             // Account Manager
             AccountManager am = AccountManager.get(context.getApplicationContext());
 
-            Uri serverUri = (client.getBaseUri() != null) ? client.getBaseUri() : client.getNewFilesWebDavUri();
+            Uri serverUri = (client.getBaseUri() != null) ? client.getBaseUri() : client.getUserFilesWebDavUri();
 
             String cookiesString = am.getUserData(account, Constants.KEY_COOKIES);
             if (cookiesString != null) {
@@ -317,6 +327,11 @@ public class AccountUtils {
          * OC account version
          */
         public static final String KEY_OC_ACCOUNT_VERSION = "oc_account_version";
+
+        /**
+         * User's id
+         */
+        public static final String KEY_ID = "oc_id";
 
         /**
          * User's display name

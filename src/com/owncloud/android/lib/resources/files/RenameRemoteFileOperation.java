@@ -104,9 +104,9 @@ public class RenameRemoteFileOperation extends RemoteOperation {
                 return new RemoteOperationResult<>(ResultCode.INVALID_OVERWRITE);
             }
 
-            final MoveMethod move = new MoveMethod(new URL(client.getNewFilesWebDavUri() +
+            final MoveMethod move = new MoveMethod(new URL(client.getUserFilesWebDavUri() +
                     WebdavUtils.encodePath(mOldRemotePath)),
-                    client.getNewFilesWebDavUri() + WebdavUtils.encodePath(mNewRemotePath), false);
+                    client.getUserFilesWebDavUri() + WebdavUtils.encodePath(mNewRemotePath), false);
 
             move.setReadTimeout(RENAME_READ_TIMEOUT, TimeUnit.SECONDS);
             move.setConnectionTimeout(RENAME_READ_TIMEOUT, TimeUnit.SECONDS);
@@ -138,7 +138,7 @@ public class RenameRemoteFileOperation extends RemoteOperation {
      */
     private boolean targetPathIsUsed(OwnCloudClient client) {
         ExistenceCheckRemoteOperation existenceCheckRemoteOperation =
-            new ExistenceCheckRemoteOperation(mNewRemotePath, false);
+            new ExistenceCheckRemoteOperation(mNewRemotePath, false, false);
         RemoteOperationResult exists = existenceCheckRemoteOperation.run(client);
         return exists.isSuccess();
     }

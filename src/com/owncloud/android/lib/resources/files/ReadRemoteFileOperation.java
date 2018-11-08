@@ -24,6 +24,7 @@
 package com.owncloud.android.lib.resources.files;
 
 import com.owncloud.android.lib.common.OwnCloudClient;
+import com.owncloud.android.lib.common.accounts.AccountUtils;
 import com.owncloud.android.lib.common.http.HttpConstants;
 import com.owncloud.android.lib.common.http.methods.webdav.DavUtils;
 import com.owncloud.android.lib.common.http.methods.webdav.PropfindMethod;
@@ -43,6 +44,7 @@ import static com.owncloud.android.lib.common.operations.RemoteOperationResult.R
  *
  * @author David A. Velasco
  * @author masensio
+ * @author David González Verdugo
  */
 
 public class ReadRemoteFileOperation extends RemoteOperation<RemoteFile> {
@@ -75,7 +77,7 @@ public class ReadRemoteFileOperation extends RemoteOperation<RemoteFile> {
         /// take the duty of check the server for the current state of the file there
         try {
             // remote request
-            propfind = new PropfindMethod(new URL(client.getNewFilesWebDavUri() + WebdavUtils.encodePath(mRemotePath)),
+            propfind = new PropfindMethod(new URL(client.getUserFilesWebDavUri() + WebdavUtils.encodePath(mRemotePath)),
                     DEPTH_0,
                     DavUtils.getAllPropset());
 
@@ -86,7 +88,7 @@ public class ReadRemoteFileOperation extends RemoteOperation<RemoteFile> {
             if (status == HttpConstants.HTTP_MULTI_STATUS
                     || status == HttpConstants.HTTP_OK) {
 
-                final RemoteFile file = new RemoteFile(propfind.getRoot(), client.getCredentials().getUsername());
+                final RemoteFile file = new RemoteFile(propfind.getRoot(), AccountUtils.getUserId(mAccount, mContext));
 
                 result = new RemoteOperationResult<>(OK);
                 result.setData(file);

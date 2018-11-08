@@ -89,7 +89,7 @@ public class GetRemoteUserQuotaOperation extends RemoteOperation<GetRemoteUserQu
 
         try {
             PropfindMethod propfindMethod = new PropfindMethod(
-                    new URL(client.getNewFilesWebDavUri() + WebdavUtils.encodePath(mRemotePath)),
+                    new URL(client.getUserFilesWebDavUri() + WebdavUtils.encodePath(mRemotePath)),
                     DEPTH_0,
                     DavUtils.getQuotaPropSet());
 

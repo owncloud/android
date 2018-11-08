@@ -100,7 +100,7 @@ public class CreateRemoteFolderOperation extends RemoteOperation {
     private RemoteOperationResult createFolder(OwnCloudClient client) {
         RemoteOperationResult result;
         try {
-            Uri webDavUri = createChunksFolder ? client.getNewUploadsWebDavUri() : client.getNewFilesWebDavUri();
+            Uri webDavUri = createChunksFolder ? client.getUploadsWebDavUri() : client.getUserFilesWebDavUri();
             final MkColMethod mkcol = new MkColMethod(new URL(webDavUri + WebdavUtils.encodePath(mRemotePath)));
             mkcol.setReadTimeout(READ_TIMEOUT, TimeUnit.SECONDS);
             mkcol.setConnectionTimeout(CONNECTION_TIMEOUT, TimeUnit.SECONDS);
