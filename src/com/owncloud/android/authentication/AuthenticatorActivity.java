@@ -47,6 +47,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
+import android.security.KeyChain;
+import android.security.KeyChainAliasCallback;
+import android.support.annotation.Nullable;
 import android.support.customtabs.CustomTabsClient;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.customtabs.CustomTabsServiceConnection;
@@ -120,6 +123,7 @@ import java.util.List;
 import java.util.Map;
 
 import static android.content.Intent.ACTION_VIEW;
+import static com.owncloud.android.lib.common.http.HttpClient.DEFAULT_ALIAS;
 
 /**
  * This Activity is used to add an ownCloud account to the App
@@ -127,7 +131,7 @@ import static android.content.Intent.ACTION_VIEW;
 public class AuthenticatorActivity extends AccountAuthenticatorActivity
         implements  OnRemoteOperationListener, OnFocusChangeListener, OnEditorActionListener,
         SsoWebViewClientListener, OnSslUntrustedCertListener,
-        AuthenticatorAsyncTask.OnAuthenticatorTaskListener {
+        AuthenticatorAsyncTask.OnAuthenticatorTaskListener, KeyChainAliasCallback {
 
     private static final String TAG = AuthenticatorActivity.class.getSimpleName();
 
@@ -302,6 +306,9 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
         /// load user interface
         setContentView(R.layout.account_setup);
+
+        // Open certificates dialog
+        chooseCert();
 
         // Set login background color or image
         if (!getResources().getBoolean(R.bool.use_login_background_image)) {
@@ -1867,6 +1874,11 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         return false;   // always return false to grant that the software keyboard is hidden anyway
     }
 
+    @Override
+    public void alias(@Nullable String alias) {
+        // Save it to SharedPreferences
+    }
+
     private abstract static class RightDrawableOnTouchListener implements OnTouchListener  {
 
         private int fuzz = 75;
@@ -1977,7 +1989,15 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         FragmentTransaction ft = fm.beginTransaction();
         ft.addToBackStack(null);
         dialog.show(ft, UNTRUSTED_CERT_DIALOG_TAG);
+    }
 
+    private void chooseCert() {
+        KeyChain.choosePrivateKeyAlias(this, this, // Callback
+                new String[] {"RSA", "DSA"}, // Any key types.
+                null, // Any issuers.
+                null, // Any host
+                -1, // Any port
+                DEFAULT_ALIAS);
     }
 
     public void onSavedCertificate() {
