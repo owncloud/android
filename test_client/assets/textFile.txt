@@ -1,3 +1,0 @@
-This is a simple text file.
-
-To make some tests.
