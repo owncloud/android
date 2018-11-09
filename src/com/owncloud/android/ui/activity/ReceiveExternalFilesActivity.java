@@ -628,6 +628,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main_menu, menu);
+        inflater.inflate(R.menu.sort_menu,menu.findItem(R.id.action_sort).getSubMenu());
         menu.findItem(R.id.action_switch_view).setVisible(false);
         menu.findItem(R.id.action_sync_account).setVisible(false);
         mMainMenu = menu;
