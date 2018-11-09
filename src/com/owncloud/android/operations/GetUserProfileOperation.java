@@ -73,8 +73,6 @@ public class GetUserProfileOperation extends SyncOperation {
      */
     @Override
     protected RemoteOperationResult run(OwnCloudClient client) {
-
-
         UserProfile userProfile;
 
         try {
@@ -93,6 +91,11 @@ public class GetUserProfileOperation extends SyncOperation {
                     storedAccount,
                     AccountUtils.Constants.KEY_DISPLAY_NAME,    // keep also there, for the moment
                     userInfo.mDisplayName
+                );
+                accountManager.setUserData(
+                        storedAccount,
+                        AccountUtils.Constants.KEY_ID,
+                        userInfo.mId
                 );
 
                 // map user info into UserProfile instance
