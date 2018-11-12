@@ -41,32 +41,32 @@
 
 === Additions
 
-* https://cloud.owncloud.com/index.php/f/4181598:[Added OAuth 2 support] 
-* https://cloud.owncloud.com/index.php/f/4181604:[Show file listing option (anonymous upload) when sharing a folder (_requires ownCloud X_)]
+* Added OAuth 2 support
+* Show file listing option (anonymous upload) when sharing a folder (_requires ownCloud X_)
 
 == Changes in 2.4.0
 
 === Additions
 
-* https://cloud.owncloud.com/index.php/f/4095432:[Video streaming] 
-* https://cloud.owncloud.com/index.php/f/4095427:[Multiple public links per file (_requires ownCloud X_)]
+* Video streaming 
+* Multiple public links per file (_requires ownCloud X_)
 
 == Changes in 2.2.0
 
 === Additions
 
 * New navigation drawer, with avatar and account switch
-* https://cloud.owncloud.com/index.php/f/4008948:[New account manager, accessible from navigation drawer]
-* https://cloud.owncloud.com/index.php/f/4008946:[Can set folders as Available Offline]
+* New account manager, accessible from navigation drawer
+* Can set folders as Available Offline
 
 == Changes in 2.1.1
 
 === Additions
 
-* https://cloud.owncloud.com/index.php/f/3931961:[Select your camera folder to upload pictures or videos from any camera app]
+* Select your camera folder to upload pictures or videos from any camera app
 
 == Changes in 2.1.0
 
 === Additions
 
-* https://cloud.owncloud.com/index.php/f/3923478:[Select and handle multiple files]
+* Select and handle multiple files
