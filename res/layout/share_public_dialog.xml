@@ -115,6 +115,15 @@
                 android:inputType="textPassword"
                 android:visibility="gone" />
 
+            <EditText
+                android:id="@+id/share_via_link_re_password_value"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/standard_half_margin"
+                android:layout_marginRight="@dimen/standard_half_margin"
+                android:inputType="textPassword"
+                android:visibility="gone"/>
+
             <RelativeLayout
                 android:id="@+id/shareViaLinkExpirationSection"
                 android:layout_width="match_parent"

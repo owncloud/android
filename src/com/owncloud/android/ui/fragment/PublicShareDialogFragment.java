@@ -4,6 +4,7 @@
  * @author David A. Velasco
  * @author David González Verdugo
  * @author Christian Schabesberger
+ * @author Shashvat Kedia
  * Copyright (C) 2018 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -114,6 +115,7 @@ public class PublicShareDialogFragment extends DialogFragment {
     private TextView mPasswordLabel;
     private SwitchCompat mPasswordSwitch;
     private EditText mPasswordValueEdit;
+    private EditText mPasswordReValueEdit;
     private TextView mExpirationDateLabel;
     private SwitchCompat mExpirationDateSwitch;
     private TextView mExpirationDateExplanationLabel;
@@ -213,6 +215,7 @@ public class PublicShareDialogFragment extends DialogFragment {
         mPasswordLabel = view.findViewById(R.id.shareViaLinkPasswordLabel);
         mPasswordSwitch = view.findViewById(R.id.shareViaLinkPasswordSwitch);
         mPasswordValueEdit = view.findViewById(R.id.shareViaLinkPasswordValue);
+        mPasswordReValueEdit = view.findViewById(R.id.share_via_link_re_password_value);
         mExpirationDateLabel = view.findViewById(R.id.shareViaLinkExpirationLabel);
         mExpirationDateSwitch = view.findViewById(R.id.shareViaLinkExpirationSwitch);
         mExpirationDateExplanationLabel = view.findViewById(R.id.shareViaLinkExpirationExplanationLabel);
@@ -254,7 +257,9 @@ public class PublicShareDialogFragment extends DialogFragment {
 
                 setPasswordSwitchChecked(true);
                 mPasswordValueEdit.setVisibility(View.VISIBLE);
+                mPasswordReValueEdit.setVisibility(View.VISIBLE);
                 mPasswordValueEdit.setHint(R.string.share_via_link_default_password);
+                mPasswordReValueEdit.setHint(R.string.share_via_link_default_password);
             }
 
             if (mPublicShare.getExpirationDate() != 0) {
@@ -289,64 +294,70 @@ public class PublicShareDialogFragment extends DialogFragment {
         // Get data filled by user
         final String publicLinkName = mNameValueEdit.getText().toString();
         String publicLinkPassword = mPasswordValueEdit.getText().toString();
+        String publicLinkPasswordRe = mPasswordReValueEdit.getText().toString();
         final long publicLinkExpirationDateInMillis = getExpirationDateValueInMillis();
+        if(publicLinkPassword.equals(publicLinkPasswordRe)) {
+            final int publicLinkPermissions;
+            boolean publicUploadPermission;
 
-        final int publicLinkPermissions;
-        boolean publicUploadPermission;
-
-        switch (mPermissionRadioGroup.getCheckedRadioButtonId()) {
-            case R.id.shareViaLinkEditPermissionUploadFiles:
-                publicLinkPermissions = OCShare.CREATE_PERMISSION_FLAG;
-                publicUploadPermission = true;
-                break;
-            case R.id.shareViaLinkEditPermissionReadAndWrite:
-                publicLinkPermissions = OCShare.CREATE_PERMISSION_FLAG
-                        | OCShare.DELETE_PERMISSION_FLAG
-                        | OCShare.UPDATE_PERMISSION_FLAG
-                        | OCShare.READ_PERMISSION_FLAG;
-                publicUploadPermission = true;
-                break;
-            case R.id.shareViaLinkEditPermissionReadOnly:
-            default:
-                publicLinkPermissions = OCShare.READ_PERMISSION_FLAG;
-                publicUploadPermission = false;
-                break;
-        }
-
-        // since the public link permission foo got a bit despagetified in the server somewhere
-        // at 10.0.4 we don't need publicUploadPermission there anymore. By setting it to false
-        // it will not be sent to the server.
-
-        publicUploadPermission =
-                (mCapabilities.getVersionMayor() >= 10
-                    && (mCapabilities.getVersionMinor() > 1
-                        || mCapabilities.getVersionMicro() > 3))
-                && publicUploadPermission;
-
-        if (!updating()) { // Creating a new public share
-            ((FileActivity) getActivity()).getFileOperationsHelper().
-                    shareFileViaLink(mFile,
-                            publicLinkName,
-                            publicLinkPassword,
-                            publicLinkExpirationDateInMillis,
-                            false,
-                            publicLinkPermissions);
-
-        } else { // Updating an existing public share
-            if (!mPasswordSwitch.isChecked()) {
-                publicLinkPassword = "";
-            } else if (mPasswordValueEdit.length() == 0) {
-                // User has not added a new password, so do not update it
-                publicLinkPassword = null;
+            switch (mPermissionRadioGroup.getCheckedRadioButtonId()) {
+                case R.id.shareViaLinkEditPermissionUploadFiles:
+                    publicLinkPermissions = OCShare.CREATE_PERMISSION_FLAG;
+                    publicUploadPermission = true;
+                    break;
+                case R.id.shareViaLinkEditPermissionReadAndWrite:
+                    publicLinkPermissions = OCShare.CREATE_PERMISSION_FLAG
+                            | OCShare.DELETE_PERMISSION_FLAG
+                            | OCShare.UPDATE_PERMISSION_FLAG
+                            | OCShare.READ_PERMISSION_FLAG;
+                    publicUploadPermission = true;
+                    break;
+                case R.id.shareViaLinkEditPermissionReadOnly:
+                default:
+                    publicLinkPermissions = OCShare.READ_PERMISSION_FLAG;
+                    publicUploadPermission = false;
+                    break;
             }
 
-            ((FileActivity) getActivity()).getFileOperationsHelper().
-                    updateShareViaLink(mPublicShare,
-                            publicLinkName,
-                            publicLinkPassword,
-                            publicLinkExpirationDateInMillis,
-                            publicUploadPermission,
-                            publicLinkPermissions);
+            // since the public link permission foo got a bit despagetified in the server somewhere
+            // at 10.0.4 we don't need publicUploadPermission there anymore. By setting it to false
+            // it will not be sent to the server.
+
+            publicUploadPermission =
+                    (mCapabilities.getVersionMayor() >= 10
+                            && (mCapabilities.getVersionMinor() > 1
+                            || mCapabilities.getVersionMicro() > 3))
+                            && publicUploadPermission;
+
+            if (!updating()) { // Creating a new public share
+                ((FileActivity) getActivity()).getFileOperationsHelper().
+                        shareFileViaLink(mFile,
+                                publicLinkName,
+                                publicLinkPassword,
+                                publicLinkExpirationDateInMillis,
+                                false,
+                                publicLinkPermissions);
+
+            } else { // Updating an existing public share
+                if (!mPasswordSwitch.isChecked()) {
+                    publicLinkPassword = "";
+                    publicLinkPasswordRe = "";
+                } else if (mPasswordValueEdit.length() == 0) {
+                    // User has not added a new password, so do not update it
+                    publicLinkPassword = null;
+                    publicLinkPasswordRe = null;
+                }
+
+                ((FileActivity) getActivity()).getFileOperationsHelper().
+                        updateShareViaLink(mPublicShare,
+                                publicLinkName,
+                                publicLinkPassword,
+                                publicLinkExpirationDateInMillis,
+                                publicUploadPermission,
+                                publicLinkPermissions);
+            }
+        } else{
+            showError(getString(R.string.re_enter_password_correctly));
         }
     }
 
@@ -364,6 +375,15 @@ public class PublicShareDialogFragment extends DialogFragment {
             public boolean onDrawableTouch(final MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_UP) {
                     onViewPasswordClick();
+                }
+                return true;
+            }
+        });
+        mPasswordReValueEdit.setOnTouchListener(new RightDrawableOnTouchListener() {
+            @Override
+            public boolean onDrawableTouch(MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    onViewRePasswordClick();
                 }
                 return true;
             }
@@ -437,6 +457,17 @@ public class PublicShareDialogFragment extends DialogFragment {
         }
     }
 
+    private void onViewRePasswordClick(){
+        if(getView() != null){
+            if(isRePasswordVisible()){
+                hideRePassword();
+            } else{
+                showRePassword();
+            }
+            mPasswordReValueEdit.setSelection(mPasswordReValueEdit.getSelectionStart(),mPasswordReValueEdit.getSelectionEnd());
+        }
+    }
+
     private void showViewPasswordButton() {
         int drawable = isPasswordVisible()
                 ? R.drawable.ic_view
@@ -446,10 +477,25 @@ public class PublicShareDialogFragment extends DialogFragment {
         }
     }
 
+    private void showViewRePasswordButton(){
+        int drawable = isRePasswordVisible()
+                ? R.drawable.ic_view
+                : R.drawable.ic_hide;
+        if(getView() != null){
+            mPasswordReValueEdit.setCompoundDrawablesWithIntrinsicBounds(0,0,drawable,0);
+        }
+    }
+
     private boolean isPasswordVisible() {
         return (getView() != null) &&
                 ((mPasswordValueEdit.getInputType() & InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD)
                     == InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+    }
+
+    private boolean isRePasswordVisible(){
+        return (getView() != null) &
+                ((mPasswordReValueEdit.getInputType() & InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD)
+                == InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
     }
 
     private void hidePasswordButton() {
@@ -468,6 +514,16 @@ public class PublicShareDialogFragment extends DialogFragment {
         }
     }
 
+    private void showRePassword() {
+        if(getView() != null){
+            mPasswordReValueEdit.setInputType(
+                    InputType.TYPE_CLASS_TEXT |
+                            InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD |
+                            InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
+            showViewRePasswordButton();
+        }
+    }
+
     private void hidePassword() {
         if (getView() != null) {
             mPasswordValueEdit.setInputType(
@@ -475,6 +531,16 @@ public class PublicShareDialogFragment extends DialogFragment {
                                     InputType.TYPE_TEXT_VARIATION_PASSWORD |
                                     InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
             showViewPasswordButton();
+        }
+    }
+
+    private void hideRePassword(){
+        if(getView() != null){
+            mPasswordReValueEdit.setInputType(
+                    InputType.TYPE_CLASS_TEXT |
+                            InputType.TYPE_TEXT_VARIATION_PASSWORD |
+                            InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
+            showViewRePasswordButton();
         }
     }
 
@@ -554,6 +620,7 @@ public class PublicShareDialogFragment extends DialogFragment {
             if (isChecked) {
                 mPasswordValueEdit.setVisibility(View.VISIBLE);
                 mPasswordValueEdit.requestFocus();
+                mPasswordReValueEdit.setVisibility(View.VISIBLE);
 
                 // Show keyboard to fill in the password
                 InputMethodManager mgr = (InputMethodManager) getActivity().getSystemService(
@@ -563,6 +630,8 @@ public class PublicShareDialogFragment extends DialogFragment {
             } else {
                 mPasswordValueEdit.setVisibility(View.GONE);
                 mPasswordValueEdit.getText().clear();
+                mPasswordReValueEdit.setVisibility(View.GONE);
+                mPasswordReValueEdit.getText().clear();
             }
         }
     }

@@ -69,6 +69,8 @@
     <string name="pattern_configure_your_pattern_explanation">The pattern will be requested every time the app is started</string>
     <string name="illegal_argument_exception_message">A valid ACTION is needed in the Intent passed to</string>
 
+    <string name="re_enter_password_correctly">Re-enter password correctly</string>
+
     <string name="recommend_subject">Try %1$s on your smartphone!</string>
     <string name="recommend_text">"I want to invite you to use %1$s on your smartphone!\nDownload here: %2$s"</string>
 
