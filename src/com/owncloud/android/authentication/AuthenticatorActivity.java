@@ -308,7 +308,9 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         setContentView(R.layout.account_setup);
 
         // Open certificates dialog
-        chooseCert();
+        if (!getResources().getBoolean(R.bool.certificates_chrome_custom_tabs)) {
+            chooseCert();
+        }
 
         // Set login background color or image
         if (!getResources().getBoolean(R.bool.use_login_background_image)) {
@@ -900,43 +902,48 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
     private void checkOcServer() {
         String uri = mHostUrlInput.getText().toString().trim();
-        mServerIsValid = false;
-        mServerIsChecked = false;
-        mLoginButton.setVisibility(View.GONE);
-        mServerInfo = new GetServerInfoOperation.ServerInfo();
-        showRefreshButton(false);
 
-        if (uri.length() != 0) {
-            uri = stripIndexPhpOrAppsFiles(uri, mHostUrlInput);
-            uri = subdomainToLower(uri, mHostUrlInput);
-
-            // Handle internationalized domain names
-            try {
-                uri = DisplayUtils.convertIdn(uri, true);
-            } catch (IllegalArgumentException ex) {
-                // Let Owncloud library check the error of the malformed URI
-            }
-
-            mServerStatusText = getResources().getString(R.string.auth_testing_connection);
-            mServerStatusIcon = R.drawable.progress_small;
-            showServerStatus();
-            
-            Intent getServerInfoIntent = new Intent();
-            getServerInfoIntent.setAction(OperationsService.ACTION_GET_SERVER_INFO);
-            getServerInfoIntent.putExtra(
-                    OperationsService.EXTRA_SERVER_URL,
-                    normalizeUrlSuffix(uri)
-            );
-            if (mOperationsServiceBinder != null) {
-                mWaitingForOpId = mOperationsServiceBinder.queueNewOperation(getServerInfoIntent);
-            } else {
-              Log_OC.e(TAG, "Server check tried with OperationService unbound!" );
-            }
-            
+        if (getResources().getBoolean(R.bool.certificates_chrome_custom_tabs)) {
+            openUrlWithCustomTab(uri);
         } else {
-            mServerStatusText = "";
-            mServerStatusIcon = 0;
-            showServerStatus();
+            mServerIsValid = false;
+            mServerIsChecked = false;
+            mLoginButton.setVisibility(View.GONE);
+            mServerInfo = new GetServerInfoOperation.ServerInfo();
+            showRefreshButton(false);
+
+            if (uri.length() != 0) {
+                uri = stripIndexPhpOrAppsFiles(uri, mHostUrlInput);
+                uri = subdomainToLower(uri, mHostUrlInput);
+
+                // Handle internationalized domain names
+                try {
+                    uri = DisplayUtils.convertIdn(uri, true);
+                } catch (IllegalArgumentException ex) {
+                    // Let Owncloud library check the error of the malformed URI
+                }
+
+                mServerStatusText = getResources().getString(R.string.auth_testing_connection);
+                mServerStatusIcon = R.drawable.progress_small;
+                showServerStatus();
+
+                Intent getServerInfoIntent = new Intent();
+                getServerInfoIntent.setAction(OperationsService.ACTION_GET_SERVER_INFO);
+                getServerInfoIntent.putExtra(
+                        OperationsService.EXTRA_SERVER_URL,
+                        normalizeUrlSuffix(uri)
+                );
+                if (mOperationsServiceBinder != null) {
+                    mWaitingForOpId = mOperationsServiceBinder.queueNewOperation(getServerInfoIntent);
+                } else {
+                    Log_OC.e(TAG, "Server check tried with OperationService unbound!");
+                }
+
+            } else {
+                mServerStatusText = "";
+                mServerStatusIcon = 0;
+                showServerStatus();
+            }
         }
     }
 

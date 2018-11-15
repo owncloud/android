@@ -103,4 +103,7 @@
     <!-- Header images -->
     <bool name="use_drawer_background_header">true</bool>
     <bool name="use_drawer_logo">true</bool>
+
+    <!-- Client side certificates -->
+    <bool name="certificates_chrome_custom_tabs">true</bool>
 </resources>
