@@ -385,6 +385,7 @@ public class FileDisplayActivity extends FileActivity
 
     /**
      * Choose the second fragment that is going to be shown
+     *
      * @param file used to decide which fragment should be chosen
      * @return a new second fragment instance if it has not been chosen before, or the fragment
      * previously chosen otherwhise
@@ -824,7 +825,7 @@ public class FileDisplayActivity extends FileActivity
     /**
      * Request the operation for moving the file/folder from one path to another
      *
-     * @param data       Intent received
+     * @param data Intent received
      */
     private void requestMoveOperation(Intent data) {
         OCFile folderToMoveAt = data.getParcelableExtra(FolderPickerActivity.EXTRA_FOLDER);
@@ -835,7 +836,7 @@ public class FileDisplayActivity extends FileActivity
     /**
      * Request the operation for copying the file/folder from one path to another
      *
-     * @param data       Intent received
+     * @param data Intent received
      */
     private void requestCopyOperation(Intent data) {
         OCFile folderToMoveAt = data.getParcelableExtra(FolderPickerActivity.EXTRA_FOLDER);
@@ -1501,9 +1502,11 @@ public class FileDisplayActivity extends FileActivity
     private void onRemoveFileOperationFinish(RemoveFileOperation operation,
                                              RemoteOperationResult result) {
 
-        showSnackMessage(
-                ErrorMessageAdapter.getResultMessage(result, operation, getResources())
-        );
+        if(getListOfFilesFragment().getNoOfItems() == 2 || result.isException()) {
+            showSnackMessage(
+                    ErrorMessageAdapter.getResultMessage(result, operation, getResources())
+            );
+        }
 
         if (result.isSuccess()) {
             OCFile removedFile = operation.getFile();
@@ -1686,9 +1689,9 @@ public class FileDisplayActivity extends FileActivity
 
     /**
      * Starts an operation to refresh the requested folder.
-     *
+     * <p>
      * The operation is run in a new background thread created on the fly.
-     *
+     * <p>
      * The refresh updates is a "light sync": properties of regular files in folder are updated (including
      * associated shares), but not their contents. Only the contents of files marked to be kept-in-sync are
      * synchronized too.
