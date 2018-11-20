@@ -1,3 +1,6 @@
+## 2.9.2 (November 2018)
+- Bug fixes for users with username containing spaces
+
 ## 2.9.1 (November 2018)
 - Bug fixes for LDAP users using uid:
   + Fix login not working
