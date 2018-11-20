@@ -1,26 +1,26 @@
 /**
  * ownCloud Android client application
  *
- *  @author Bartek Przybylski
- *  @author masensio
- *  @author Juan Carlos González Cabrero
- *  @author David A. Velasco
- *  @author Christian Schabesberger
- *  @author Shashvat Kedia
- *  Copyright (C) 2012  Bartek Przybylski
- *  Copyright (C) 2018 ownCloud GmbH.
- *
- *  This program is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License version 2,
- *  as published by the Free Software Foundation.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * @author Bartek Przybylski
+ * @author masensio
+ * @author Juan Carlos González Cabrero
+ * @author David A. Velasco
+ * @author Christian Schabesberger
+ * @author Shashvat Kedia
+ * Copyright (C) 2012  Bartek Przybylski
+ * Copyright (C) 2018 ownCloud GmbH.
+ * <p>
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
+ * <p>
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package com.owncloud.android.ui.activity;
@@ -440,7 +440,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
             files = sortFileList(files);
 
             mAdapter = new ReceiveExternalFilesAdapter(
-                this, files, getStorageManager(), getAccount());
+                    this, files, getStorageManager(), getAccount());
             mListView.setAdapter(mAdapter);
 
             Button btnChooseFolder = findViewById(R.id.uploader_choose_folder);
@@ -628,7 +628,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main_menu, menu);
-        inflater.inflate(R.menu.sort_menu,menu.findItem(R.id.action_sort).getSubMenu());
+        inflater.inflate(R.menu.sort_menu, menu.findItem(R.id.action_sort).getSubMenu());
         menu.findItem(R.id.action_switch_view).setVisible(false);
         menu.findItem(R.id.action_sync_account).setVisible(false);
         mMainMenu = menu;
@@ -654,8 +654,8 @@ public class ReceiveExternalFilesActivity extends FileActivity
             case R.id.action_sort_descending:
                 item.setChecked(!item.isChecked());
                 boolean isAscending = !item.isChecked();
-                com.owncloud.android.db.PreferenceManager.setSortAscending(isAscending,this,FileStorageUtils.FILE_DISPLAY_SORT);
-                switch(com.owncloud.android.db.PreferenceManager.getSortOrder(this,FileStorageUtils.FILE_DISPLAY_SORT)) {
+                PreferenceManager.setSortAscending(isAscending, this, FileStorageUtils.FILE_DISPLAY_SORT);
+                switch (PreferenceManager.getSortOrder(this, FileStorageUtils.FILE_DISPLAY_SORT)) {
                     case FileStorageUtils.SORT_NAME:
                         sortByName(isAscending);
                         break;
@@ -669,15 +669,15 @@ public class ReceiveExternalFilesActivity extends FileActivity
                 break;
             case R.id.action_sort_by_name:
                 item.setChecked(true);
-                sortByName(com.owncloud.android.db.PreferenceManager.getSortAscending(this,FileStorageUtils.FILE_DISPLAY_SORT));
+                sortByName(PreferenceManager.getSortAscending(this, FileStorageUtils.FILE_DISPLAY_SORT));
                 break;
             case R.id.action_sort_by_size:
                 item.setChecked(true);
-                sortBySize(com.owncloud.android.db.PreferenceManager.getSortAscending(this,FileStorageUtils.FILE_DISPLAY_SORT));
+                sortBySize(PreferenceManager.getSortAscending(this, FileStorageUtils.FILE_DISPLAY_SORT));
                 break;
             case R.id.action_sort_by_date:
                 item.setChecked(true);
-                sortByDate(com.owncloud.android.db.PreferenceManager.getSortAscending(this,FileStorageUtils.FILE_DISPLAY_SORT));
+                sortByDate(PreferenceManager.getSortAscending(this, FileStorageUtils.FILE_DISPLAY_SORT));
                 break;
             default:
                 retval = super.onOptionsItemSelected(item);
@@ -686,42 +686,45 @@ public class ReceiveExternalFilesActivity extends FileActivity
     }
 
     @Override
-    protected void onResume(){
+    protected void onResume() {
         recoverSortMenuState(mMainMenu);
         super.onResume();
     }
 
-    private void sortByName(boolean isAscending){
-        mAdapter.setSortOrder(FileStorageUtils.SORT_NAME,isAscending);
-    }
-    private void sortBySize(boolean isAscending){
-        mAdapter.setSortOrder(FileStorageUtils.SORT_SIZE,isAscending);
-    }
-    private void sortByDate(boolean isAscending){
-        mAdapter.setSortOrder(FileStorageUtils.SORT_DATE,isAscending);
+    private void sortByName(boolean isAscending) {
+        mAdapter.setSortOrder(FileStorageUtils.SORT_NAME, isAscending);
     }
 
-    private void recoverSortMenuState(Menu menu){
-        if(menu != null) {
-            menu.findItem(R.id.action_sort_descending).setChecked(!com.owncloud.android.db.PreferenceManager.getSortAscending(this,FileStorageUtils.FILE_DISPLAY_SORT));
-            switch (com.owncloud.android.db.PreferenceManager.getSortOrder(this,FileStorageUtils.FILE_DISPLAY_SORT)) {
+    private void sortBySize(boolean isAscending) {
+        mAdapter.setSortOrder(FileStorageUtils.SORT_SIZE, isAscending);
+    }
+
+    private void sortByDate(boolean isAscending) {
+        mAdapter.setSortOrder(FileStorageUtils.SORT_DATE, isAscending);
+    }
+
+    private void recoverSortMenuState(Menu menu) {
+        if (menu != null) {
+            menu.findItem(R.id.action_sort_descending).setChecked(
+                    !PreferenceManager.getSortAscending(this, FileStorageUtils.FILE_DISPLAY_SORT));
+            switch (PreferenceManager.getSortOrder(this, FileStorageUtils.FILE_DISPLAY_SORT)) {
                 case FileStorageUtils.SORT_NAME:
                     menu.findItem(R.id.action_sort_by_name).setChecked(true);
-                    sortByName(com.owncloud.android.db.PreferenceManager.getSortAscending(this,FileStorageUtils.FILE_DISPLAY_SORT));
+                    sortByName(PreferenceManager.getSortAscending(this, FileStorageUtils.FILE_DISPLAY_SORT));
                     break;
                 case FileStorageUtils.SORT_SIZE:
                     menu.findItem(R.id.action_sort_by_size).setChecked(true);
-                    sortBySize(com.owncloud.android.db.PreferenceManager.getSortAscending(this,FileStorageUtils.FILE_DISPLAY_SORT));
+                    sortBySize(PreferenceManager.getSortAscending(this, FileStorageUtils.FILE_DISPLAY_SORT));
                     break;
                 case FileStorageUtils.SORT_DATE:
                     menu.findItem(R.id.action_sort_by_date).setChecked(true);
-                    sortByDate(com.owncloud.android.db.PreferenceManager.getSortAscending(this,FileStorageUtils.FILE_DISPLAY_SORT));
+                    sortByDate(PreferenceManager.getSortAscending(this, FileStorageUtils.FILE_DISPLAY_SORT));
                     break;
             }
         }
     }
 
-    private OCFile getCurrentFolder(){
+    private OCFile getCurrentFolder() {
         OCFile file = mFile;
         if (file != null) {
             if (file.isFolder()) {
