@@ -148,6 +148,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
     private static final String KEY_SERVER_AUTH_METHOD = "SERVER_AUTH_METHOD";
     private static final String KEY_WAITING_FOR_OP_ID = "WAITING_FOR_OP_ID";
     private static final String KEY_AUTH_TOKEN = "AUTH_TOKEN";
+    private static final String KEY_LOGIN_BUTTON_VISIBLE = "LOGIN_BUTTON_VISIBLE";
 
     private static final String AUTH_ON = "on";
 
@@ -201,6 +202,8 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
     private boolean mServerIsValid = false;
     private boolean mPendingAutoCheck = false;
 
+    private boolean mLoginButtonVisible = false;
+
     private GetServerInfoOperation.ServerInfo mServerInfo =
             new GetServerInfoOperation.ServerInfo();
 
@@ -250,7 +253,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
     /**
      * {@inheritDoc}
-     *
+     * <p>
      * IMPORTANT ENTRY POINT 1: activity is shown to the user
      */
     @Override
@@ -299,6 +302,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             mAuthTokenType = savedInstanceState.getString(KEY_AUTH_TOKEN_TYPE);
             mWaitingForOpId = savedInstanceState.getLong(KEY_WAITING_FOR_OP_ID);
             mIsFirstAuthAttempt = savedInstanceState.getBoolean(KEY_AUTH_IS_FIRST_ATTEMPT_TAG);
+            mLoginButtonVisible = savedInstanceState.getBoolean(KEY_LOGIN_BUTTON_VISIBLE);
         }
 
         /// load user interface
@@ -326,6 +330,11 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         findViewById(R.id.embeddedRefreshButton).setOnClickListener(view -> checkOcServer());
 
         mLoginButton = findViewById(R.id.loginButton);
+        if (mLoginButtonVisible) {
+            mLoginButton.setVisibility(View.VISIBLE);
+        } else {
+            mLoginButton.setVisibility(View.GONE);
+        }
         mLoginButton.setOnClickListener(view -> onLoginClick());
 
         /// initialize block to be moved to single Fragment to check server and get info about it 
@@ -462,8 +471,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
 
     /**
-     *
-     * @param savedInstanceState        Saved activity state, as in {{@link #onCreate(Bundle)}
+     * @param savedInstanceState Saved activity state, as in {{@link #onCreate(Bundle)}
      */
     private void initServerPreFragment(Bundle savedInstanceState) {
         boolean checkHostUrl = true;
@@ -539,6 +547,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
                         !mServerInfo.mBaseUrl.equals(
                                 normalizeUrl(s.toString(), mServerInfo.mIsSslConn))) {
                     mLoginButton.setVisibility(View.GONE);
+                    mLoginButtonVisible = false;
                 }
             }
 
@@ -564,8 +573,10 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
                 if (BASIC_TOKEN_TYPE.equals(mAuthTokenType)) {
                     if (mUsernameInput.getText().length() > 0 && mPasswordInput.getText().length() > 0) {
                         mLoginButton.setVisibility(View.VISIBLE);
+                        mLoginButtonVisible = true;
                     } else {
                         mLoginButton.setVisibility(View.GONE);
+                        mLoginButtonVisible = false;
                     }
                 }
             }
@@ -595,8 +606,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
 
     /**
-     *
-     * @param savedInstanceState        Saved activity state, as in {{@link #onCreate(Bundle)}
+     * @param savedInstanceState Saved activity state, as in {{@link #onCreate(Bundle)}
      */
     private void initAuthorizationPreFragment(Bundle savedInstanceState) {
 
@@ -639,8 +649,10 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
         if (mServerIsValid && !BASIC_TOKEN_TYPE.equals(mAuthTokenType)) {
             mLoginButton.setVisibility(View.VISIBLE);
+            mLoginButtonVisible = true;
         } else {
             mLoginButton.setVisibility(View.GONE);
+            mLoginButtonVisible = false;
         }
 
         /// step 3 - bind listeners
@@ -681,7 +693,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
     /**
      * Saves relevant state before {@link #onPause()}
-     *
+     * <p>
      * See {@link super#onSaveInstanceState(Bundle)}
      */
     @Override
@@ -700,6 +712,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         outState.putBoolean(KEY_SERVER_VALID, mServerIsValid);
         outState.putBoolean(KEY_IS_SSL_CONN, mServerInfo.mIsSslConn);
         outState.putString(KEY_HOST_URL_TEXT, mServerInfo.mBaseUrl);
+        outState.putBoolean(KEY_LOGIN_BUTTON_VISIBLE, mLoginButtonVisible);
         if (mServerInfo.mVersion != null) {
             outState.putString(KEY_OC_VERSION, mServerInfo.mVersion.getVersion());
         }
@@ -764,7 +777,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
     }
 
     /**
-     * The redirection triggered by the OAuth authentication server as response to the 
+     * The redirection triggered by the OAuth authentication server as response to the
      * GET AUTHORIZATION, and deferred in {@link #onNewIntent(Intent)}, is processed here.
      */
     @Override
@@ -819,7 +832,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
 
     /**
-     * Parses the redirection with the response to the GET AUTHORIZATION request to the 
+     * Parses the redirection with the response to the GET AUTHORIZATION request to the
      * OAuth server and requests for the access token (GET ACCESS TOKEN)
      *
      * @param capturedUriFromOAuth2Redirection Redirection after authorization code request ends
@@ -893,11 +906,11 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
     /**
      * Handles changes in focus on the text input for the server URL.
-     *
-     * IMPORTANT ENTRY POINT 2: When (!hasFocus), user wrote the server URL and changed to 
+     * <p>
+     * IMPORTANT ENTRY POINT 2: When (!hasFocus), user wrote the server URL and changed to
      * other field. The operation to check the existence of the server in the entered URL is
-     * started. 
-     *
+     * started.
+     * <p>
      * When hasFocus:    user 'comes back' to write again the server URL.
      */
     private void onUrlInputFocusLost() {
@@ -908,8 +921,10 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         } else {
             if (mServerIsValid && !BASIC_TOKEN_TYPE.equals(mAuthTokenType)) {
                 mLoginButton.setVisibility(View.VISIBLE);
+                mLoginButtonVisible = true;
             } else {
                 mLoginButton.setVisibility(View.GONE);
+                mLoginButtonVisible = false;
             }
             showRefreshButton(!mServerIsValid);
         }
@@ -921,6 +936,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         mServerIsValid = false;
         mServerIsChecked = false;
         mLoginButton.setVisibility(View.GONE);
+        mLoginButtonVisible = false;
         mServerInfo = new GetServerInfoOperation.ServerInfo();
         showRefreshButton(false);
 
@@ -961,12 +977,12 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
     /**
      * Handles changes in focus on the text input for the password (basic authorization).
-     *
+     * <p>
      * When (hasFocus), the button to toggle password visibility is shown.
-     *
+     * <p>
      * When (!hasFocus), the button is made invisible and the password is hidden.
      *
-     * @param hasFocus          'True' if focus is received, 'false' if is lost
+     * @param hasFocus 'True' if focus is received, 'false' if is lost
      */
     private void onPasswordFocusChanged(boolean hasFocus) {
         if (hasFocus) {
@@ -1016,13 +1032,13 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
     /**
      * Checks the credentials of the user in the root of the ownCloud server
      * before creating a new local account.
-     *
+     * <p>
      * For basic authorization, a check of existence of the root folder is
      * performed.
-     *
-     * For OAuth, starts the flow to get an access token; the credentials test 
+     * <p>
+     * For OAuth, starts the flow to get an access token; the credentials test
      * is postponed until it is available.
-     *
+     * <p>
      * IMPORTANT ENTRY POINT 4
      */
     public void onLoginClick() {
@@ -1034,6 +1050,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             mServerStatusText = getResources().getString(R.string.auth_wtf_reenter_URL);
             showServerStatus();
             mLoginButton.setVisibility(View.GONE);
+            mLoginButtonVisible = false;
             return;
         }
 
@@ -1050,7 +1067,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
 
     /**
-     * Tests the credentials entered by the user performing a check of existence on 
+     * Tests the credentials entered by the user performing a check of existence on
      * the root folder of the ownCloud server.
      */
     private void checkBasicAuthorization() {
@@ -1082,8 +1099,8 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
 
     /**
-     * Starts the OAuth 'grant type' flow to get an access token, with 
-     * a GET AUTHORIZATION request to the BUILT-IN authorization server. 
+     * Starts the OAuth 'grant type' flow to get an access token, with
+     * a GET AUTHORIZATION request to the BUILT-IN authorization server.
      */
     private void startOauthorization() {
         // be gentle with the user
@@ -1172,7 +1189,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
     /**
      * Callback method invoked when a RemoteOperation executed by this Activity finishes.
-     *
+     * <p>
      * Dispatches the operation flow to the right method.
      */
     @Override
@@ -1198,7 +1215,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
      * get their userId in {@link AuthenticatorAsyncTask}, that calls back here via
      * {@link #onAuthenticatorTaskCallback(RemoteOperationResult)}
      *
-     * @param result    Result of {@link GetRemoteUserInfoOperation} performed.
+     * @param result Result of {@link GetRemoteUserInfoOperation} performed.
      */
     private void onGetUserNameFinish(RemoteOperationResult<UserInfo> result) {
         mWaitingForOpId = Long.MAX_VALUE;
@@ -1232,7 +1249,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
      * Processes the result of the server check performed when the user finishes the enter of the
      * server URL.
      *
-     * @param result        Result of the check.
+     * @param result Result of the check.
      */
     private void onGetServerInfoFinish(RemoteOperationResult<GetServerInfoOperation.ServerInfo> result) {
         /// update activity state
@@ -1283,8 +1300,10 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         showServerStatus();
         if (mServerIsValid && !BASIC_TOKEN_TYPE.equals(mAuthTokenType)) {
             mLoginButton.setVisibility(View.VISIBLE);
+            mLoginButtonVisible = true;
         } else {
             mLoginButton.setVisibility(View.GONE);
+            mLoginButtonVisible = false;
         }
 
         /// very special case (TODO: move to a common place for all the remote operations)
@@ -1370,8 +1389,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
     /**
      * Chooses the right icon and text to show to the user for the received operation result.
      *
-     * @param result    Result of a remote operation performed in this activity
-     *
+     * @param result Result of a remote operation performed in this activity
      */
     private void updateServerStatusIconAndText(RemoteOperationResult result) {
         mServerStatusIcon = R.drawable.common_error;    // the most common case in the switch below
@@ -1408,7 +1426,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
     /**
      * Chooses the right icon and text to show to the user for the received operation result.
      *
-     * @param result    Result of a remote operation performed in this activity
+     * @param result Result of a remote operation performed in this activity
      */
     private void updateAuthStatusIconAndText(RemoteOperationResult result) {
         mAuthStatusIcon = R.drawable.common_error; // the most common case in the switch below
@@ -1486,10 +1504,10 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
     /**
      * Processes the result of the access check performed to try the user credentials.
-     *
+     * <p>
      * Creates a new account through the AccountManager.
      *
-     * @param result        Result of the operation.
+     * @param result Result of the operation.
      */
     @Override
     public void onAuthenticatorTaskCallback(RemoteOperationResult result) {
@@ -1555,6 +1573,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             // update input controls state
             showRefreshButton(true);
             mLoginButton.setVisibility(View.GONE);
+            mLoginButtonVisible = false;
 
             // very special case (TODO: move to a common place for all the remote operations)
             if (result.getCode() == ResultCode.SSL_RECOVERABLE_PEER_UNVERIFIED) {
@@ -1569,10 +1588,10 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
     }
 
     /**
-     * Creates a new account through the Account Authenticator that started this activity. 
-     *
+     * Creates a new account through the Account Authenticator that started this activity.
+     * <p>
      * This makes the account permanent.
-     *
+     * <p>
      * TODO Decide how to name the OAuth accounts
      */
     private boolean createAccount(RemoteOperationResult<UserInfo> authResult) {
@@ -1675,7 +1694,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
     /**
      * Update an existing account
-     *
+     * <p>
      * Check if the username of the account to update is the same as the username in the current
      * account, calling {@link #updateAccountAuthentication()} if so and showing an error otherwise
      *
@@ -1714,10 +1733,10 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
     /**
      * Updates the authentication token.
-     *
+     * <p>
      * Sets the proper response so that the AccountAuthenticator that started this activity
      * saves a new authorization token for mAccount.
-     *
+     * <p>
      * Kills the session kept by OwnCloudClientManager so that a new one will be created with
      * the new credentials when needed.
      */
@@ -1796,7 +1815,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
     /**
      * Starts and activity to open the 'new account' page in the ownCloud web site
      *
-     * @param view      'Account register' button
+     * @param view 'Account register' button
      */
     public void onRegisterClick(View view) {
         Intent register = new Intent(
@@ -1810,7 +1829,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
     /**
      * Updates the content and visibility state of the icon and text associated
      * to the last check on the ownCloud server.
-     *
      */
     private void showServerStatus() {
         if (mServerStatusIcon == 0 && (mServerStatusText == null || mServerStatusText.length() == 0)) {
@@ -1852,8 +1870,8 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
     /**
      * Called when the eye icon in the password field is clicked.
-     *
-     * Toggles the visibility of the password in the field. 
+     * <p>
+     * Toggles the visibility of the password in the field.
      */
     public void onViewPasswordClick() {
         int selectionStart = mPasswordInput.getSelectionStart();
@@ -1868,10 +1886,10 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
 
     /**
-     *  Called when the 'action' button in an IME is pressed ('enter' in software keyboard).
-     *
-     *  Used to trigger the authentication check when the user presses 'enter' after writing the 
-     *  password, or to throw the server test when the only field on screen is the URL input field.
+     * Called when the 'action' button in an IME is pressed ('enter' in software keyboard).
+     * <p>
+     * Used to trigger the authentication check when the user presses 'enter' after writing the
+     * password, or to throw the server test when the only field on screen is the URL input field.
      */
     @Override
     public boolean onEditorAction(TextView inputField, int actionId, KeyEvent event) {
@@ -1970,7 +1988,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
 
     /**
-     * Show untrusted cert dialog 
+     * Show untrusted cert dialog
      */
     public void showUntrustedCertDialog(
             X509Certificate x509Certificate, SslError error, SslErrorHandler handler
@@ -1991,7 +2009,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
 
     /**
-     * Show untrusted cert dialog 
+     * Show untrusted cert dialog
      */
     private void showUntrustedCertDialog(RemoteOperationResult result) {
         // Show a dialog with the certificate info
@@ -2049,7 +2067,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
 
     /**
-     * Implements callback methods for service binding. 
+     * Implements callback methods for service binding.
      */
     private class OperationsServiceConnection implements ServiceConnection {
 
@@ -2079,8 +2097,9 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
     /**
      * Create and show dialog for request authentication to the user
-     * @param webView   Web view to embed into the authentication dialog.
-     * @param handler   Object responsible for catching and recovering HTTP authentication fails.
+     *
+     * @param webView Web view to embed into the authentication dialog.
+     * @param handler Object responsible for catching and recovering HTTP authentication fails.
      */
     public void createAuthenticationDialog(WebView webView, HttpAuthHandler handler) {
 
