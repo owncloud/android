@@ -10,7 +10,7 @@
         android:id="@+id/contentPanel"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="90">
+        android:layout_weight="89">
     </android.support.v4.view.ViewPager>
 
     <LinearLayout
@@ -54,8 +54,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:padding="@dimen/standard_padding"
-                android:src="@drawable/ic_arrow_forward"
-                android:contentDescription="" />
+                android:src="@drawable/ic_arrow_forward" />
         </LinearLayout>
     </LinearLayout>
 
