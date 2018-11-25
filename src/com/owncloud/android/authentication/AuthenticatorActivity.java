@@ -148,7 +148,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
     private static final String KEY_SERVER_AUTH_METHOD = "SERVER_AUTH_METHOD";
     private static final String KEY_WAITING_FOR_OP_ID = "WAITING_FOR_OP_ID";
     private static final String KEY_AUTH_TOKEN = "AUTH_TOKEN";
-    private static final String KEY_LOGIN_BUTTON_VISIBLE = "LOGIN_BUTTON_VISIBLE";
 
     private static final String AUTH_ON = "on";
 
@@ -201,8 +200,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
     private boolean mServerIsChecked = false;
     private boolean mServerIsValid = false;
     private boolean mPendingAutoCheck = false;
-
-    private boolean mLoginButtonVisible = false;
 
     private GetServerInfoOperation.ServerInfo mServerInfo =
             new GetServerInfoOperation.ServerInfo();
@@ -302,7 +299,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             mAuthTokenType = savedInstanceState.getString(KEY_AUTH_TOKEN_TYPE);
             mWaitingForOpId = savedInstanceState.getLong(KEY_WAITING_FOR_OP_ID);
             mIsFirstAuthAttempt = savedInstanceState.getBoolean(KEY_AUTH_IS_FIRST_ATTEMPT_TAG);
-            mLoginButtonVisible = savedInstanceState.getBoolean(KEY_LOGIN_BUTTON_VISIBLE);
         }
 
         /// load user interface
@@ -330,11 +326,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         findViewById(R.id.embeddedRefreshButton).setOnClickListener(view -> checkOcServer());
 
         mLoginButton = findViewById(R.id.loginButton);
-        if (mLoginButtonVisible) {
-            mLoginButton.setVisibility(View.VISIBLE);
-        } else {
-            mLoginButton.setVisibility(View.GONE);
-        }
         mLoginButton.setOnClickListener(view -> onLoginClick());
 
         /// initialize block to be moved to single Fragment to check server and get info about it 
@@ -547,7 +538,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
                         !mServerInfo.mBaseUrl.equals(
                                 normalizeUrl(s.toString(), mServerInfo.mIsSslConn))) {
                     mLoginButton.setVisibility(View.GONE);
-                    mLoginButtonVisible = false;
                 }
             }
 
@@ -571,12 +561,10 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             @Override
             public void afterTextChanged(Editable s) {
                 if (BASIC_TOKEN_TYPE.equals(mAuthTokenType)) {
-                    if (mUsernameInput.getText().length() > 0 && mPasswordInput.getText().length() > 0) {
+                    if (mUsernameInput.getText().toString().trim().length() > 0 && mPasswordInput.getText().toString().trim().length() > 0) {
                         mLoginButton.setVisibility(View.VISIBLE);
-                        mLoginButtonVisible = true;
                     } else {
                         mLoginButton.setVisibility(View.GONE);
-                        mLoginButtonVisible = false;
                     }
                 }
             }
@@ -649,10 +637,8 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
         if (mServerIsValid && !BASIC_TOKEN_TYPE.equals(mAuthTokenType)) {
             mLoginButton.setVisibility(View.VISIBLE);
-            mLoginButtonVisible = true;
         } else {
             mLoginButton.setVisibility(View.GONE);
-            mLoginButtonVisible = false;
         }
 
         /// step 3 - bind listeners
@@ -712,7 +698,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         outState.putBoolean(KEY_SERVER_VALID, mServerIsValid);
         outState.putBoolean(KEY_IS_SSL_CONN, mServerInfo.mIsSslConn);
         outState.putString(KEY_HOST_URL_TEXT, mServerInfo.mBaseUrl);
-        outState.putBoolean(KEY_LOGIN_BUTTON_VISIBLE, mLoginButtonVisible);
         if (mServerInfo.mVersion != null) {
             outState.putString(KEY_OC_VERSION, mServerInfo.mVersion.getVersion());
         }
@@ -759,7 +744,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         if (inProgress) {
             String username = savedInstanceState.getString(KEY_USERNAME);
             String password = savedInstanceState.getString(KEY_PASSWORD);
-
             OwnCloudCredentials credentials = null;
             if (BASIC_TOKEN_TYPE.equals(mAuthTokenType)) {
                 String version = savedInstanceState.getString(KEY_OC_VERSION);
@@ -789,6 +773,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         mHostUrlInput.addTextChangedListener(mHostUrlInputWatcher);
         mUsernameInput.addTextChangedListener(mUsernamePasswordInputWatcher);
         mPasswordInput.addTextChangedListener(mUsernamePasswordInputWatcher);
+        mUsernamePasswordInputWatcher.afterTextChanged(null);
 
         if (mOperationsServiceBinder != null) {
             doOnResumeAndBound();
@@ -921,10 +906,8 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         } else {
             if (mServerIsValid && !BASIC_TOKEN_TYPE.equals(mAuthTokenType)) {
                 mLoginButton.setVisibility(View.VISIBLE);
-                mLoginButtonVisible = true;
             } else {
                 mLoginButton.setVisibility(View.GONE);
-                mLoginButtonVisible = false;
             }
             showRefreshButton(!mServerIsValid);
         }
@@ -936,7 +919,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         mServerIsValid = false;
         mServerIsChecked = false;
         mLoginButton.setVisibility(View.GONE);
-        mLoginButtonVisible = false;
         mServerInfo = new GetServerInfoOperation.ServerInfo();
         showRefreshButton(false);
 
@@ -1050,7 +1032,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             mServerStatusText = getResources().getString(R.string.auth_wtf_reenter_URL);
             showServerStatus();
             mLoginButton.setVisibility(View.GONE);
-            mLoginButtonVisible = false;
             return;
         }
 
@@ -1300,10 +1281,8 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         showServerStatus();
         if (mServerIsValid && !BASIC_TOKEN_TYPE.equals(mAuthTokenType)) {
             mLoginButton.setVisibility(View.VISIBLE);
-            mLoginButtonVisible = true;
         } else {
             mLoginButton.setVisibility(View.GONE);
-            mLoginButtonVisible = false;
         }
 
         /// very special case (TODO: move to a common place for all the remote operations)
@@ -1573,7 +1552,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             // update input controls state
             showRefreshButton(true);
             mLoginButton.setVisibility(View.GONE);
-            mLoginButtonVisible = false;
 
             // very special case (TODO: move to a common place for all the remote operations)
             if (result.getCode() == ResultCode.SSL_RECOVERABLE_PEER_UNVERIFIED) {
