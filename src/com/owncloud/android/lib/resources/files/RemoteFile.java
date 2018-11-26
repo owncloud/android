@@ -226,11 +226,20 @@ public class RemoteFile implements Parcelable, Serializable {
         }
     }
 
-
+    /**
+     * Retrieves a relative path from a remote file url
+     *
+     * Example: url:port/remote.php/dav/files/username/Documents/text.txt => /Documents/text.txt
+     *
+     * @param url remote file url
+     * @param userId file owner
+     * @return remote relative path of the file
+     */
     private static String getRemotePathFromUrl(HttpUrl url, String userId) {
-        final String davPath = WEBDAV_FILES_PATH_4_0 + Uri.encode(userId);
-        final String pathToOc = url.encodedPath().split(davPath)[0];
-        return Uri.decode(url.encodedPath().replace(pathToOc + davPath, ""));
+        final String davFilesPath = WEBDAV_FILES_PATH_4_0 + userId;
+        final String absoluteDavPath = Uri.decode(url.encodedPath());
+        final String pathToOc = absoluteDavPath.split(davFilesPath)[0];
+        return absoluteDavPath.replace(pathToOc + davFilesPath, "");
     }
 
     /**
