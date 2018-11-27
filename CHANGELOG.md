@@ -1,3 +1,6 @@
+## 2.9.3 (November 2018)
+- Bug fixes for users with username containing @ character
+
 ## 2.9.2 (November 2018)
 - Bug fixes for users with username containing spaces
 
