@@ -91,12 +91,10 @@ Telecargatz-lo aicí : %2$s</string>
   <string name="action_share">Partejar</string>
   <string name="common_yes">Òc</string>
   <string name="common_no">Non</string>
-  <string name="common_ok">D\'acòrdi</string>
-  <string name="common_remove_upload">Levar lo mandadís</string>
+    <string name="common_remove_upload">Levar lo mandadís</string>
   <string name="common_retry_upload">Tornar ensajar lo mandadís</string>
   <string name="common_cancel_sync">Anullar la sincronizacion</string>
-  <string name="common_cancel">Anullar</string>
-  <string name="common_back">Retorn</string>
+    <string name="common_back">Retorn</string>
   <string name="common_save_exit">Enregistrar e quitar</string>
   <string name="common_error">Error</string>
   <string name="common_loading">Cargament…</string>

@@ -37,9 +37,7 @@
   <string name="action_share">බෙදා හදා ගන්න</string>
   <string name="common_yes">ඔව්</string>
   <string name="common_no">එපා</string>
-  <string name="common_ok">හරි</string>
-  <string name="common_cancel">එපා</string>
-  <string name="common_error">දෝශය</string>
+    <string name="common_error">දෝශය</string>
   <string name="about_title">පිළිබඳව</string>
   <string name="change_password">මුරපදය වෙනස් කිරීම</string>
   <string name="create_account">ගිණුම සාදන්න</string>

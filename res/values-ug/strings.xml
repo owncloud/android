@@ -35,9 +35,7 @@
   <string name="action_share">ھەمبەھىر</string>
   <string name="common_yes">ھەئە</string>
   <string name="common_no">ياق</string>
-  <string name="common_ok">جەزملە</string>
-  <string name="common_cancel">ۋاز كەچ</string>
-  <string name="common_error">خاتالىق</string>
+    <string name="common_error">خاتالىق</string>
   <string name="common_error_unknown">يوچۇن خاتالىق</string>
   <string name="common_pending">كۈتۈۋاتىدۇ</string>
   <string name="change_password">ئىم ئۆزگەرت</string>

@@ -35,9 +35,7 @@
   <string name="action_share">Rhannu</string>
   <string name="common_yes">Ie</string>
   <string name="common_no">Na</string>
-  <string name="common_ok">Iawn</string>
-  <string name="common_cancel">Diddymu</string>
-  <string name="common_error">Gwall</string>
+    <string name="common_error">Gwall</string>
   <string name="common_pending">I ddod</string>
   <string name="about_title">Ynglyn â</string>
   <string name="create_account">Creu cyfrif</string>

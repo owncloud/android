@@ -69,11 +69,9 @@
   <string name="action_share">ਸਾਂਝਾ ਕਰੋ</string>
   <string name="common_yes">ਹਾਂ</string>
   <string name="common_no">ਨਹੀਂ</string>
-  <string name="common_ok">ਠੀਕ ਹੈ</string>
-  <string name="common_remove_upload">ਅੱਪਲੋਡ ਹਟਾਓ</string>
+    <string name="common_remove_upload">ਅੱਪਲੋਡ ਹਟਾਓ</string>
   <string name="common_cancel_sync">ਸਮਕਾਲਣਾ ਰੱਦ ਕਰੋ</string>
-  <string name="common_cancel">ਰੱਦ ਕਰੋ</string>
-  <string name="common_back">ਪਿੱਛੇ</string>
+    <string name="common_back">ਪਿੱਛੇ</string>
   <string name="common_save_exit">ਸੰਭਾਲੋ ਅਤੇ ਬੰਦ ਕਰੋ</string>
   <string name="common_error">ਗਲਤੀ</string>
   <string name="common_loading">...ਲੋਡ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ</string>

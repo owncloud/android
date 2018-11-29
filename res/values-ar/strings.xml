@@ -79,11 +79,9 @@
   <string name="action_share">شارك</string>
   <string name="common_yes">نعم</string>
   <string name="common_no">لا</string>
-  <string name="common_ok">تم</string>
   <string name="common_remove_upload">إحذف الرفع</string>
   <string name="common_retry_upload">عاود الرفع ثانية</string>
   <string name="common_cancel_sync">ألغ المزامنة</string>
-  <string name="common_cancel">إلغاء</string>
   <string name="common_back">رجوع</string>
   <string name="common_save_exit">حفظ &amp; خروج</string>
   <string name="common_error">خطأ</string>

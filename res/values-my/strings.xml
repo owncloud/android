@@ -14,9 +14,7 @@
   <string name="filedetails_download">ဒေါင်းလုတ်</string>
   <string name="common_yes">ဟုတ်</string>
   <string name="common_no">မဟုတ်ဘူး</string>
-  <string name="common_ok">အိုကေ</string>
-  <string name="common_cancel">ပယ်ဖျက်မည်</string>
-  <string name="folder_picker_choose_button_text">ရွေးချယ်</string>
+    <string name="folder_picker_choose_button_text">ရွေးချယ်</string>
   <string name="share_cancel_public_link_button">ပယ်ဖျက်မည်</string>
   <string name="share_via_link_password_label">စကားဝှက်</string>
   <string name="share_privilege_can_edit">ပြင်ဆင်နိုင်</string>

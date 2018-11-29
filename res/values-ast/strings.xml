@@ -85,12 +85,10 @@
   <string name="action_share">Compartir</string>
   <string name="common_yes">Sí</string>
   <string name="common_no">Non</string>
-  <string name="common_ok">Aceutar</string>
-  <string name="common_remove_upload">Desaniciar xuba</string>
+    <string name="common_remove_upload">Desaniciar xuba</string>
   <string name="common_retry_upload">Reintentar xuba</string>
   <string name="common_cancel_sync">Encaboxar sincronización</string>
-  <string name="common_cancel">Encaboxar</string>
-  <string name="common_back">Atrás</string>
+    <string name="common_back">Atrás</string>
   <string name="common_save_exit">Guardar y colar</string>
   <string name="common_error">Fallu</string>
   <string name="common_loading">Cargando ...</string>
