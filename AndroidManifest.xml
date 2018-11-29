@@ -33,9 +33,5 @@
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
     <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
 
-    <uses-sdk
-        android:minSdkVersion="14"
-        android:targetSdkVersion="26" />
-
 </manifest>
 
