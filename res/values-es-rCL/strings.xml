@@ -36,9 +36,7 @@
   <string name="action_share">Compartir</string>
   <string name="common_yes">Si</string>
   <string name="common_no">No</string>
-  <string name="common_ok">OK</string>
-  <string name="common_cancel">Cancelar</string>
-  <string name="common_error">Error</string>
+    <string name="common_error">Error</string>
   <string name="common_loading">Cargando ...</string>
   <string name="common_error_unknown">Error desconocido</string>
   <string name="about_title">Acerca de</string>

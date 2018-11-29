@@ -20,9 +20,7 @@
   <string name="action_share">اشتراک</string>
   <string name="common_yes">ہاں</string>
   <string name="common_no">نہیں</string>
-  <string name="common_ok">اوکے</string>
-  <string name="common_cancel">منسوخ کریں</string>
-  <string name="common_error">ایرر</string>
+    <string name="common_error">ایرر</string>
   <string name="common_error_unknown">غیر معروف خرابی</string>
   <string name="uploads_view_upload_status_unknown_fail">غیر معروف خرابی</string>
   <string name="common_rename">نام بدلیں</string>

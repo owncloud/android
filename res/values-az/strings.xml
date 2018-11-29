@@ -60,9 +60,7 @@
   <string name="action_share">Paylaş</string>
   <string name="common_yes">Bəli</string>
   <string name="common_no">Xeyir</string>
-  <string name="common_ok">Oldu</string>
-  <string name="common_cancel">Dayandır</string>
-  <string name="common_error">Səhv</string>
+    <string name="common_error">Səhv</string>
   <string name="common_loading">Yüklənir...</string>
   <string name="common_error_unknown">Bəlli olmayan səhv baş verdi</string>
   <string name="common_pending">Gözləmə</string>

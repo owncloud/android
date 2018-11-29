@@ -56,9 +56,7 @@
   <string name="action_share">Կիսվել</string>
   <string name="common_yes">Այո</string>
   <string name="common_no">Ոչ</string>
-  <string name="common_ok">Լավ</string>
-  <string name="common_cancel">Չեղարկել</string>
-  <string name="common_back">Հետ</string>
+    <string name="common_back">Հետ</string>
   <string name="common_error">Սխալ</string>
   <string name="common_unknown">անհայտ</string>
   <string name="common_error_unknown">Անհայտ սխալ</string>

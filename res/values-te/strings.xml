@@ -15,9 +15,7 @@
   <string name="file_list_seconds_ago">క్షణాల క్రితం</string>
   <string name="common_yes">అవును</string>
   <string name="common_no">కాదు</string>
-  <string name="common_ok">సరే</string>
-  <string name="common_cancel">రద్దుచేయి</string>
-  <string name="common_error">పొరపాటు</string>
+    <string name="common_error">పొరపాటు</string>
   <string name="uploader_info_dirname">సంచయం పేరు</string>
   <string name="activity_chooser_send_file_title">పంపించు</string>
   <string name="auth_host_address">సేవకి చిరునామా</string>

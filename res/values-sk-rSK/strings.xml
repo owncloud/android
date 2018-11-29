@@ -76,11 +76,9 @@
   <string name="action_share">Zdieľať</string>
   <string name="common_yes">Áno</string>
   <string name="common_no">Nie</string>
-  <string name="common_ok">OK</string>
-  <string name="common_retry_upload">Opakovať nahrávanie</string>
+    <string name="common_retry_upload">Opakovať nahrávanie</string>
   <string name="common_cancel_sync">Zrušiť synchronizáciu</string>
-  <string name="common_cancel">Zrušiť</string>
-  <string name="common_back">Späť</string>
+    <string name="common_back">Späť</string>
   <string name="common_error">Chyba</string>
   <string name="common_loading">Načítavam...</string>
   <string name="common_unknown">neznámy</string>

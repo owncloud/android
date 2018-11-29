@@ -31,8 +31,7 @@
   <string name="setup_btn_login">जुड़ें </string>
   <string name="uploader_btn_upload_text">अपलोड </string>
   <string name="action_share">साझा करें</string>
-  <string name="common_cancel">रद्द करें </string>
-  <string name="common_error">त्रुटि</string>
+    <string name="common_error">त्रुटि</string>
   <string name="uploader_upload_failed_ticker">अपलोड विफल हुआ</string>
   <string name="uploader_upload_failed_credentials_error">अपलोड विफल हुआ, आपको फिर से प्रवेश करना होगा</string>
   <string name="ssl_validator_btn_details_see">विवरण </string>

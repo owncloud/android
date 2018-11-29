@@ -23,9 +23,7 @@
   <string name="action_share">﻿ಹಂಚಿಕೊಳ್ಳಿ</string>
   <string name="common_yes">﻿ಹೌದು</string>
   <string name="common_no">﻿ಇಲ್ಲ</string>
-  <string name="common_ok">ಸರಿ</string>
-  <string name="common_cancel">﻿ರದ್ದು</string>
-  <string name="common_error">﻿ತಪ್ಪಾಗಿದೆ</string>
+    <string name="common_error">﻿ತಪ್ಪಾಗಿದೆ</string>
   <string name="common_error_unknown">ಗೊತ್ತಿಲ್ಲದ ದೋಷ</string>
   <string name="common_pending">﻿ಬಾಕಿ ಇದೆ</string>
   <string name="change_password">ಗುಪ್ತ ಪದವನ್ನು ಬದಲಾಯಿಸಿ</string>

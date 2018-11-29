@@ -106,12 +106,10 @@
   <string name="action_share">Compartir</string>
   <string name="common_yes">Sí</string>
   <string name="common_no">No</string>
-  <string name="common_ok">Aceptar</string>
-  <string name="common_remove_upload">Eliminar carga</string>
+    <string name="common_remove_upload">Eliminar carga</string>
   <string name="common_retry_upload">Reintentar carga</string>
   <string name="common_cancel_sync">Cancelar sincronización</string>
-  <string name="common_cancel">Cancelar</string>
-  <string name="common_back">Volver</string>
+    <string name="common_back">Volver</string>
   <string name="common_save_exit">Guardar &amp; Salir</string>
   <string name="common_error">Error</string>
   <string name="common_loading">Cargando ...</string>

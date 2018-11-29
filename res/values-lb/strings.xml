@@ -83,12 +83,10 @@
   <string name="action_share">Deelen</string>
   <string name="common_yes">Jo</string>
   <string name="common_no">Nee</string>
-  <string name="common_ok">OK</string>
-  <string name="common_remove_upload">Den Upload ewech huelen</string>
+    <string name="common_remove_upload">Den Upload ewech huelen</string>
   <string name="common_retry_upload">Upload nach emol probéieren</string>
   <string name="common_cancel_sync">Synchronisatioun ofbriechen</string>
-  <string name="common_cancel">Ofbriechen</string>
-  <string name="common_back">Zeréck</string>
+    <string name="common_back">Zeréck</string>
   <string name="common_error">Feeler</string>
   <string name="common_loading">Et gëtt gelueden ...</string>
   <string name="common_unknown">Onbekannt</string>
