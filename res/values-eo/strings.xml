@@ -60,9 +60,7 @@
   <string name="action_share">Kunhavigi</string>
   <string name="common_yes">Jes</string>
   <string name="common_no">Ne</string>
-  <string name="common_ok">Akcepti</string>
-  <string name="common_cancel_sync">Nuligi sinkronigon</string>
-  <string name="common_cancel">Nuligi</string>
+    <string name="common_cancel_sync">Nuligi sinkronigon</string>
   <string name="common_back">Antaŭen</string>
   <string name="common_save_exit">Konservi kaj eliri</string>
   <string name="common_error">Eraro</string>

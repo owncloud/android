@@ -105,12 +105,10 @@
   <string name="action_share">Partekatu</string>
   <string name="common_yes">Bai</string>
   <string name="common_no">Ez</string>
-  <string name="common_ok">Ados</string>
-  <string name="common_remove_upload">Kargatutako ezabatu</string>
+    <string name="common_remove_upload">Kargatutako ezabatu</string>
   <string name="common_retry_upload">Karga saiatu berriro</string>
   <string name="common_cancel_sync">Sinkronizazioa gelditu</string>
-  <string name="common_cancel">Ezeztatu</string>
-  <string name="common_back">Atzera</string>
+    <string name="common_back">Atzera</string>
   <string name="common_save_exit">Gorde &amp; irten</string>
   <string name="common_error">Errorea</string>
   <string name="common_loading">Kargatzen ...</string>

@@ -88,12 +88,10 @@
   <string name="action_share">Dijeljenje</string>
   <string name="common_yes">Da</string>
   <string name="common_no">Ne</string>
-  <string name="common_ok">U redu</string>
-  <string name="common_remove_upload">Izbriši poslano</string>
+    <string name="common_remove_upload">Izbriši poslano</string>
   <string name="common_retry_upload">Pokušaj ponovo poslati</string>
   <string name="common_cancel_sync">Odustani od sinhronizacije</string>
-  <string name="common_cancel">Odustani</string>
-  <string name="common_back">Natrag</string>
+    <string name="common_back">Natrag</string>
   <string name="common_save_exit">Spremi &amp; izađi</string>
   <string name="common_error">Greška</string>
   <string name="common_loading">Učitavanje...</string>

@@ -87,12 +87,10 @@
   <string name="action_share">Del</string>
   <string name="common_yes">Ja</string>
   <string name="common_no">Nei</string>
-  <string name="common_ok">Greitt</string>
-  <string name="common_remove_upload">Fjern opplasting</string>
+    <string name="common_remove_upload">Fjern opplasting</string>
   <string name="common_retry_upload">Forsøk opplasting på ny</string>
   <string name="common_cancel_sync">Avbryt synkronisering</string>
-  <string name="common_cancel">Avbryt</string>
-  <string name="common_back">Tilbake</string>
+    <string name="common_back">Tilbake</string>
   <string name="common_save_exit">Lagre &amp; avslutt</string>
   <string name="common_error">Feil</string>
   <string name="common_loading">Lastar...</string>

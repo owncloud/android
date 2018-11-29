@@ -40,9 +40,7 @@
   <string name="action_share">გაზიარება</string>
   <string name="common_yes">კი</string>
   <string name="common_no">არა</string>
-  <string name="common_ok">დიახ</string>
-  <string name="common_cancel">გაუქმება</string>
-  <string name="common_error">შეცდომა</string>
+    <string name="common_error">შეცდომა</string>
   <string name="common_error_unknown">უცნობი შეცდომა</string>
   <string name="common_pending">მოცდის რეჟიმში</string>
   <string name="about_title">ჩვენს შესახებ</string>

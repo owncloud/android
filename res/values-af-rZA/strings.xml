@@ -50,9 +50,7 @@
   <string name="action_share">Deel</string>
   <string name="common_yes">Ja</string>
   <string name="common_no">Nee</string>
-  <string name="common_ok">OK</string>
-  <string name="common_cancel">Kanseleer</string>
-  <string name="common_back">Terug</string>
+    <string name="common_back">Terug</string>
   <string name="common_error">Fout</string>
   <string name="common_error_unknown">Onbekende fout</string>
   <string name="common_pending">Hangend</string>

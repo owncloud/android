@@ -93,12 +93,10 @@
   <string name="action_share">Chia sẻ</string>
   <string name="common_yes">Yes</string>
   <string name="common_no">Không</string>
-  <string name="common_ok">Chấp nhận</string>
-  <string name="common_remove_upload">Loại bỏ bản tải lên</string>
+    <string name="common_remove_upload">Loại bỏ bản tải lên</string>
   <string name="common_retry_upload">Thử tải lên lại</string>
   <string name="common_cancel_sync">Hủy đồng bộ</string>
-  <string name="common_cancel">Hủy</string>
-  <string name="common_back">Trở lại</string>
+    <string name="common_back">Trở lại</string>
   <string name="common_save_exit">Lưu &amp; thoát</string>
   <string name="common_error">Lỗi</string>
   <string name="common_loading">Đang tải...</string>

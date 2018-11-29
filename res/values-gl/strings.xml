@@ -77,9 +77,7 @@ Descárgueo de aquí: %2$s</string>
   <string name="action_share">Compartir</string>
   <string name="common_yes">Si</string>
   <string name="common_no">Non</string>
-  <string name="common_ok">Aceptar</string>
-  <string name="common_cancel">Cancelar</string>
-  <string name="common_back">Atrás</string>
+    <string name="common_back">Atrás</string>
   <string name="common_save_exit">Gardaer e saír.</string>
   <string name="common_error">Erro</string>
   <string name="common_loading">Cargando ...</string>
