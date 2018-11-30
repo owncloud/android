@@ -23,8 +23,6 @@
     android:versionName="${versionName}">
 
     <uses-sdk
-        android:minSdkVersion="14"
-        android:targetSdkVersion="26"
         tools:overrideLibrary="android.support.customtabs"/>
 
     <!--
