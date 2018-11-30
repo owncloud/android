@@ -3,16 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.owncloud.android.workaround.accounts">
 
-    <uses-sdk
-        android:minSdkVersion="16"
-        android:targetSdkVersion="26"
-        tools:overrideLibrary="android.support.customtabs"/>
+    <uses-sdk tools:overrideLibrary="android.support.customtabs" />
 
     <application
         android:allowBackup="false"
         android:icon="@mipmap/workaround_app_icon"
         android:label="@string/workaround_app_name"
-        >
+        tools:ignore="GoogleAppIndexingWarning">
         <service
             android:name=".AccountAuthenticatorService"
             android:exported="false">
