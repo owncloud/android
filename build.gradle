@@ -11,7 +11,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.1.2'
+        classpath 'com.android.tools.build:gradle:3.2.1'
     }
 }
 
@@ -97,6 +97,9 @@ android {
     compileSdkVersion 26
 
     defaultConfig {
+        minSdkVersion 14
+        targetSdkVersion 26
+
         manifestPlaceholders.versionCode = "20900300"
         manifestPlaceholders.versionName = "2.9.3"
 
