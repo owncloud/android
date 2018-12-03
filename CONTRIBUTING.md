@@ -52,6 +52,8 @@ NOTE: You must sign the [Contributor Agreement][agreement] before your changes c
 
 It is possible you see the next message from time to time.
 
+<img src="docs_resources/out_of_date_branch.png" />
+
 To fix this and make sure your contribution branch is updated with official android/master, you need to perform the next steps:
 * Checkout your master branch: ```git checkout master```
 * Get and apply official android/master branch changes in your master branch: ```git fetch upstream``` + ```git rebase upstream/master```. Now you have your master branch updated with official master branch changes.
