@@ -34,11 +34,11 @@ Next steps will assume you have a Github account and that you will get the code 
 
 * In a web browser, go to https://github.com/owncloud/android, and click the 'Fork' button near the top right corner.
 * Open a terminal and go on with the next steps in it.
-* Clone your forked repository: ```git clone --recursive git@github.com:YOURGITHUBNAME/android.git```.
+* Clone your forked repository: ```git clone --recursive https://github.com/YOURGITHUBNAME/android.git```.
 * Move to the project folder with ```cd android```.
-* Pull any changes from your remote branch 'master': ```git pull origin master```
-* Make official ownCloud repo known as upstream: ```git remote add upstream git@github.com:owncloud/android.git```
-* Make sure to get the latest changes from official android/master branch: ```git pull upstream master```
+* Fetch and apply any changes from your remote branch 'master': ```git fetch``` + ```git rebase```
+* Make official ownCloud repo known as upstream: ```git remote add upstream https://github.com/owncloud/android.git```
+* Make sure to get and apply the latest changes from official android/master branch: ```git fetch upstream``` + ```git rebase upstream/master``
 
 At this point you can continue using different tools to build the project. Section 2 and 3 describe the existing alternatives.
 
