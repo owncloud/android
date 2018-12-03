@@ -38,7 +38,7 @@ Next steps will assume you have a Github account and that you will get the code 
 * Move to the project folder with ```cd android```.
 * Fetch and apply any changes from your remote branch 'master': ```git fetch``` + ```git rebase```
 * Make official ownCloud repo known as upstream: ```git remote add upstream https://github.com/owncloud/android.git```
-* Make sure to get and apply the latest changes from official android/master branch: ```git fetch upstream``` + ```git rebase upstream/master``
+* Make sure to get and apply the latest changes from official android/master branch: ```git fetch upstream``` + ```git rebase upstream/master```
 
 At this point you can continue using different tools to build the project. Section 2 and 3 describe the existing alternatives.
 
