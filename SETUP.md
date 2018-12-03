@@ -18,8 +18,8 @@ The [Android SDK][3] is necessary to build the app. There are different options 
 Open a terminal and type 'android' to start the Android SDK Manager. To build the ownCloud for Android app you will need to install at least the next SDK packages:
 
 * Android SDK Tools and Android SDK Platform-tools (already installed); upgrade to their last versions is usually a good idea.
-* Android SDK Build-Tools 24.0.2.
-* Android 7.0 (API 24), SDK Platform; needed to build the owncloud app.
+* No longer need to specify a version for the build tools, Gradle plugin uses the minimum required version by default.
+* Android 8.0 (API 26), SDK Platform; needed to build the owncloud app.
 
 Install any other package you consider interesting, such as emulators.
 
