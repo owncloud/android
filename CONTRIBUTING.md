@@ -27,8 +27,8 @@ Thanks for wanting to contribute source code to ownCloud. That's great!
 Before we're able to merge your code into the ownCloud app for Android, you need to sign our [Contributor Agreement][agreement].
 
 ### Guidelines
-* Contribute your code in the branch 'master'. It will give us a better chance to test your code before merging it with stable code.
-* For your first contribution, start a pull request on master and send us the signed [Contributor Agreement][agreement].
+* Contribute your code in a feature, fix or cleanup branch by using  ```feature/feature_name```, ```fix/fix_name``` or ```cleanup/cleanup_name``` branch names. Be sure your feature, fix or cleanup branches are updated with latest changes in official android/master, it will give us a better chance to test your code before merging it with stable code.
+* Once you are done with your code, start a pull request to merge your contribution into official android/master and send us the signed [Contributor Agreement][agreement].
 * Keep on using pull requests for your next contributions although you own write permissions.
 
 [agreement]: http://owncloud.org/about/contributor-agreement/
@@ -37,26 +37,29 @@ Before we're able to merge your code into the ownCloud app for Android, you need
 
 * Please follow [SETUP.md](https://github.com/owncloud/android/blob/master/SETUP.md) to setup ownCloud Android app work environment.
 
-
 ### 2. Create pull request:
 
 NOTE: You must sign the [Contributor Agreement][agreement] before your changes can be accepted!
 
-* Commit your changes locally: ```git commit -a```
-* Push your changes to your GitHub repo: ```git push```
+* Create new feature, fix or cleanup branch from your master branch: ```git checkout -b feature/feature_name```
+* Register your changes: git add filename
+* Commit your changes locally: ```git commit -m "Brief description of the changes performed"```
+* Push your changes to your GitHub repo: ```git push origin feature/feature_name```
 * Browse to https://github.com/YOURGITHUBNAME/android/pulls and issue pull request
 * Enter description and send pull request.
 
-### 3. Create another pull request:
+### 3. Update your contribution branch with master changes:
 
-To make sure your new pull request does not contain commits which are already contained in previous PRs, create a new branch which is a clone of upstream/master.
+It is possible you see the next message from time to time.
 
-* ```git fetch upstream```
-* ```git checkout -b my_new_master_branch upstream/master```
-* If you want to rename that branch later: ```git checkout -b my_new_master_branch_with_new_name```
-* Push branch to server: ```git push -u origin name_of_local_master_branch```
-* Use GitHub to issue PR
+<img src="docs_resources/out_of_date_branch.png" />
 
+To fix this and make sure your contribution branch is updated with official android/master, you need to perform the next steps:
+* Checkout your master branch: ```git checkout master```
+* Get and apply official android/master branch changes in your master branch: ```git fetch upstream``` + ```git rebase upstream/master```. Now you have your master branch updated with official master branch changes.
+* Checkout your contribution branch: ```git checkout feature/feature_name```
+* Rebase contribution branch with master to put your contribution commits after the last commit of master branch, ensuring a clean commits history: ```git rebase master```. If there's some conflicts, solve it by using rebase in different steps.
+* Push branch to server: ```git push -f origin feature/feature_name```. At this point, the message ```This branch is out-of-date with the base branch``` should disappear.
 
 
 ## Translations
