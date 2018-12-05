@@ -51,7 +51,7 @@ public class InitialTest {
     private static final String ANDROID_SETTINGS_PACKAGE = "com.android.settings";
     private static final String SETTINGS_DATA_USAGE_OPTION = "Data usage";
 
-    private static final int LAUNCH_TIMEOUT = 5000;
+    private static final int LAUNCH_TIMEOUT = 5000; 
 
     private UiDevice mDevice;
 
