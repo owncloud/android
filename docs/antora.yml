@@ -1,6 +1,6 @@
 name: android
 title: The Android App
-version: master
+version: latest
 start_page: ROOT:android_app.adoc
 nav:
 - modules/ROOT/nav.adoc
