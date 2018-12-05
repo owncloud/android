@@ -6,7 +6,7 @@
  * @author Juan Carlos González Cabrero
  * @author David A. Velasco
  * @author Christian Schabesberger
- * @author David González Verdugo
+ * @author Shashvat Kedia
  * Copyright (C) 2012  Bartek Przybylski
  * Copyright (C) 2018 ownCloud GmbH.
  * <p>
@@ -116,6 +116,8 @@ public class ReceiveExternalFilesActivity extends FileActivity
     private LocalBroadcastManager mLocalBroadcastManager;
     private SyncBroadcastReceiver mSyncBroadcastReceiver;
     private UploadBroadcastReceiver mUploadBroadcastReceiver;
+    private ReceiveExternalFilesAdapter mAdapter;
+    private Menu mMainMenu;
     private boolean mSyncInProgress = false;
     private boolean mAccountSelected;
     private boolean mAccountSelectionShowing;
@@ -437,10 +439,9 @@ public class ReceiveExternalFilesActivity extends FileActivity
             Vector<OCFile> files = getStorageManager().getFolderContent(mFile/*, false*/);
             files = sortFileList(files);
 
-            ReceiveExternalFilesAdapter sa = new ReceiveExternalFilesAdapter(
-                    this, files, getStorageManager(), getAccount()
-            );
-            mListView.setAdapter(sa);
+            mAdapter = new ReceiveExternalFilesAdapter(
+                    this, files, getStorageManager(), getAccount());
+            mListView.setAdapter(mAdapter);
 
             Button btnChooseFolder = findViewById(R.id.uploader_choose_folder);
             btnChooseFolder.setOnClickListener(this);
@@ -627,8 +628,11 @@ public class ReceiveExternalFilesActivity extends FileActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main_menu, menu);
+        inflater.inflate(R.menu.sort_menu, menu.findItem(R.id.action_sort).getSubMenu());
         menu.findItem(R.id.action_switch_view).setVisible(false);
         menu.findItem(R.id.action_sync_account).setVisible(false);
+        mMainMenu = menu;
+        recoverSortMenuState(menu);
         return true;
     }
 
@@ -647,11 +651,77 @@ public class ReceiveExternalFilesActivity extends FileActivity
                     onBackPressed();
                 }
                 break;
-
+            case R.id.action_sort_descending:
+                item.setChecked(!item.isChecked());
+                boolean isAscending = !item.isChecked();
+                PreferenceManager.setSortAscending(isAscending, this, FileStorageUtils.FILE_DISPLAY_SORT);
+                switch (PreferenceManager.getSortOrder(this, FileStorageUtils.FILE_DISPLAY_SORT)) {
+                    case FileStorageUtils.SORT_NAME:
+                        sortByName(isAscending);
+                        break;
+                    case FileStorageUtils.SORT_SIZE:
+                        sortBySize(isAscending);
+                        break;
+                    case FileStorageUtils.SORT_DATE:
+                        sortByDate(isAscending);
+                        break;
+                }
+                break;
+            case R.id.action_sort_by_name:
+                item.setChecked(true);
+                sortByName(PreferenceManager.getSortAscending(this, FileStorageUtils.FILE_DISPLAY_SORT));
+                break;
+            case R.id.action_sort_by_size:
+                item.setChecked(true);
+                sortBySize(PreferenceManager.getSortAscending(this, FileStorageUtils.FILE_DISPLAY_SORT));
+                break;
+            case R.id.action_sort_by_date:
+                item.setChecked(true);
+                sortByDate(PreferenceManager.getSortAscending(this, FileStorageUtils.FILE_DISPLAY_SORT));
+                break;
             default:
                 retval = super.onOptionsItemSelected(item);
         }
         return retval;
+    }
+
+    @Override
+    protected void onResume() {
+        recoverSortMenuState(mMainMenu);
+        super.onResume();
+    }
+
+    private void sortByName(boolean isAscending) {
+        mAdapter.setSortOrder(FileStorageUtils.SORT_NAME, isAscending);
+    }
+
+    private void sortBySize(boolean isAscending) {
+        mAdapter.setSortOrder(FileStorageUtils.SORT_SIZE, isAscending);
+    }
+
+    private void sortByDate(boolean isAscending) {
+        mAdapter.setSortOrder(FileStorageUtils.SORT_DATE, isAscending);
+    }
+
+    private void recoverSortMenuState(Menu menu) {
+        if (menu != null) {
+            menu.findItem(R.id.action_sort_descending).setChecked(
+                    !PreferenceManager.getSortAscending(this, FileStorageUtils.FILE_DISPLAY_SORT));
+            switch (PreferenceManager.getSortOrder(this, FileStorageUtils.FILE_DISPLAY_SORT)) {
+                case FileStorageUtils.SORT_NAME:
+                    menu.findItem(R.id.action_sort_by_name).setChecked(true);
+                    sortByName(PreferenceManager.getSortAscending(this, FileStorageUtils.FILE_DISPLAY_SORT));
+                    break;
+                case FileStorageUtils.SORT_SIZE:
+                    menu.findItem(R.id.action_sort_by_size).setChecked(true);
+                    sortBySize(PreferenceManager.getSortAscending(this, FileStorageUtils.FILE_DISPLAY_SORT));
+                    break;
+                case FileStorageUtils.SORT_DATE:
+                    menu.findItem(R.id.action_sort_by_date).setChecked(true);
+                    sortByDate(PreferenceManager.getSortAscending(this, FileStorageUtils.FILE_DISPLAY_SORT));
+                    break;
+            }
+        }
     }
 
     private OCFile getCurrentFolder() {
