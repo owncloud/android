@@ -1,5 +1,5 @@
 name: android
-title: The Android App
+title: Mobile app for Android
 version: latest
 start_page: ROOT:android_app.adoc
 nav:
