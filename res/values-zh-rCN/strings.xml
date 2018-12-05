@@ -334,6 +334,7 @@
   <string name="confirmation_disable_pictures_upload_message">你确定要禁用这项功能吗？未上传的图片将不会被上传</string>
   <string name="confirmation_disable_videos_upload_message">你确定要禁用这项功能吗？未上传的视频将不会被上传</string>
   <string name="conflict_title">文件冲突</string>
+  <string name="conflict_description">冲突文件 %1$s，点击解决</string>
   <string name="conflict_message">您想要保留哪个文件？如果您同时选中了两个版本，本地的文件的文件名将被加上一个数字</string>
   <string name="conflict_keep_both">保留两者</string>
   <string name="conflict_use_local_version">本地版本</string>
@@ -516,6 +517,7 @@
     <item quantity="other">%d 已选择</item>
   </plurals>
   <!--Welcome to oC intro features-->
+  <string name="welcome_feature_skip_button">跳过</string>
   <string name="welcome_feature_1_title">管理您所有同步的文件</string>
   <string name="welcome_feature_1_text">你可以复制，移动，删除</string>
   <string name="welcome_feature_2_title">分享文件和文件夹</string>
@@ -526,6 +528,11 @@
   <string name="welcome_feature_4_text">你的照片/视频将会自动上传</string>
   <string name="welcome_feature_5_title">流媒体视频</string>
   <string name="welcome_feature_5_text">无需下载模仿你的视频</string>
+  <string name="welcome_feature_6_title">在当前文件夹内搜索</string>
+  <string name="welcome_feature_6_text">按文件名筛选文件</string>
   <string name="welcome_feature_7_title">全部选择</string>
+  <string name="welcome_feature_7_text">一下子选中全部文件</string>
+  <string name="welcome_feature_8_title">离线可用</string>
+  <string name="welcome_feature_8_text">文件自动同步</string>
   <string name="no_borwser_installed_alert">未安装浏览器。请安装浏览器以使用安全登陆。</string>
 </resources>

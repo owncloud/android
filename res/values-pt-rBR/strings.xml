@@ -519,6 +519,7 @@
     <item quantity="other">%d selecionados</item>
   </plurals>
   <!--Welcome to oC intro features-->
+  <string name="welcome_feature_skip_button">Pular</string>
   <string name="welcome_feature_1_title">Gerencie todos os seus arquivos sincronizados</string>
   <string name="welcome_feature_1_text">Você pode copiar, mover, excluir</string>
   <string name="welcome_feature_2_title">Compartilhe arquivos e pastas</string>
@@ -529,7 +530,11 @@
   <string name="welcome_feature_4_text">Suas fotos/vídeos carregados automaticamente</string>
   <string name="welcome_feature_5_title">Transmissão de vídeo</string>
   <string name="welcome_feature_5_text">Assista seus vídeos sem baixá-los</string>
+  <string name="welcome_feature_6_title">Pesquisar na pasta corrente</string>
+  <string name="welcome_feature_6_text">Filtrar seus arquivos por nomes</string>
   <string name="welcome_feature_7_title">Selecionar tudo</string>
+  <string name="welcome_feature_7_text">Selecione todos os arquivos de uma só vez</string>
   <string name="welcome_feature_8_title">Disponível offline</string>
+  <string name="welcome_feature_8_text">Seus arquivos sincronizados automaticamente</string>
   <string name="no_borwser_installed_alert">Nenhum navegador instalado. Por favor, instale um navegador para permitir um login seguro.</string>
 </resources>

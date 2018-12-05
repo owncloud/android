@@ -456,6 +456,7 @@
     <item quantity="other">%d valið</item>
   </plurals>
   <!--Welcome to oC intro features-->
+  <string name="welcome_feature_skip_button">Sleppa</string>
   <string name="welcome_feature_4_title">Innsendingar úr myndavél</string>
   <string name="welcome_feature_7_title">Velja allt</string>
   <string name="welcome_feature_8_title">Tiltækt án nettengingar</string>

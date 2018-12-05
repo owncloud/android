@@ -394,6 +394,8 @@
   <string name="share_via_link_expiration_date_label">Expiração</string>
   <string name="share_via_link_password_label">Palavra-passe</string>
   <string name="share_via_link_password_title">Protegido</string>
+  <string name="share_via_link_edit_permission_read_only_label">Transferir / Ver
+</string>
   <string name="share_get_public_link_button">Obter ligação</string>
   <string name="share_with_title">Partilhar com</string>
   <string name="share_with_edit_title">Partilhar com %1$s</string>
@@ -458,6 +460,7 @@
     <item quantity="other">%d selecionados</item>
   </plurals>
   <!--Welcome to oC intro features-->
+  <string name="welcome_feature_skip_button">Ignorar</string>
   <string name="welcome_feature_7_title">Selecionar todos</string>
   <string name="welcome_feature_8_title">Disponível off-line</string>
 </resources>

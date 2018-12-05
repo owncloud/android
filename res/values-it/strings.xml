@@ -497,6 +497,7 @@ Il Download del file inizierà automaticamente</string>
     <item quantity="other">%d selezionati</item>
   </plurals>
   <!--Welcome to oC intro features-->
+  <string name="welcome_feature_skip_button">Salta</string>
   <string name="welcome_feature_1_title">Gestisci tutti i fuoi file sincronizzati</string>
   <string name="welcome_feature_1_text">Puoi copiare, muovere, cancellare</string>
   <string name="welcome_feature_2_title">Condividi files e cartelle</string>

@@ -47,6 +47,8 @@
   <string name="prefs_log_summary_history">Dies zeigt die gespeicherten Protokollierungen</string>
   <string name="prefs_log_delete_history_button">Verlauf löschen</string>
   <string name="prefs_help">Hilfe</string>
+  <string name="prefs_sync_calendar_contacts">Synchronisiere deine Kontakte, Kalendar und Aufgaben</string>
+  <string name="prefs_sync_calendar_contacts_summary">Installiere DAVdroid</string>
   <string name="prefs_recommend">Empfehle dies einem Freund</string>
   <string name="prefs_feedback">Rückmeldungen</string>
   <string name="prefs_imprint">Impressum</string>
@@ -332,6 +334,7 @@
   <string name="confirmation_disable_pictures_upload_message">Sind Sie sicher, dass Sie dieses Feature deaktivieren möchten? Alle eingereihten Bilder werden nicht hochgeladen</string>
   <string name="confirmation_disable_videos_upload_message">Sind Sie sicher, dass Sie dieses Feature deaktivieren möchten? Alle eingereihten Videos werden nicht hochgeladen</string>
   <string name="conflict_title">Dateikonfilikt</string>
+  <string name="conflict_description">Ein Konflikt ist in der Datei %1$s aufgetreten, hier tippen um dies zu lösen</string>
   <string name="conflict_message">Welche Datei möchtest du behalten? Wenn du beide Versionen auswählst, wird der lokalen Datei eine Zahl am Ende Ihres Dateiname angehangen.</string>
   <string name="conflict_keep_both">Beide behalten</string>
   <string name="conflict_use_local_version">Lokale Version</string>
@@ -506,7 +509,7 @@
   <string name="media_service_notification_channel_description">Musik-Player anzeigen</string>
   <string name="file_sync_notification_channel_name">Datei - Synchronisation</string>
   <string name="file_sync_notification_channel_description">Ergebnis der Datei - Synchronisation anzeigen</string>
-  <string name="rate_dialog_title">Bitte %1$s bewerten</string>
+  <string name="rate_dialog_title">Bitte %1$s bewerten!</string>
   <string name="rate_dialog_description">Wenn dir diese App gefällt, nimm dir bitte etwas Zeit, um diese zu bewerten. Dein Feedback ist für uns wichtig.</string>
   <string name="button_no_thanks_name">Nein, Danke</string>
   <string name="button_later_name">Später</string>
@@ -516,6 +519,7 @@
     <item quantity="other">%d ausgewählt</item>
   </plurals>
   <!--Welcome to oC intro features-->
+  <string name="welcome_feature_skip_button">Überspringen</string>
   <string name="welcome_feature_1_title">Verwalte alle deine synchronisierten Dateien</string>
   <string name="welcome_feature_1_text">Du kannst kopieren, verschieben, löschen</string>
   <string name="welcome_feature_2_title">Dateien und Ordner teilen</string>
@@ -526,7 +530,11 @@
   <string name="welcome_feature_4_text">Deine Bilder/Videos werden automatisch hochgeladen</string>
   <string name="welcome_feature_5_title">Videostreaming</string>
   <string name="welcome_feature_5_text">Gib deine Videos wieder, ohne sie herunterzuladen</string>
+  <string name="welcome_feature_6_title">Suche im aktuellen Ordner</string>
+  <string name="welcome_feature_6_text">Filter deine Dateien nach Namen</string>
   <string name="welcome_feature_7_title">Alle auswählen</string>
+  <string name="welcome_feature_7_text">Wähle alle Dateien aus</string>
   <string name="welcome_feature_8_title">Offline verfügbar</string>
+  <string name="welcome_feature_8_text">Deine Dateien werden automatisch Synchronisiert</string>
   <string name="no_borwser_installed_alert">Es ist kein Browser installiert. Bitte installieren Sie zur sicheren Anmeldung einen Browser.</string>
 </resources>

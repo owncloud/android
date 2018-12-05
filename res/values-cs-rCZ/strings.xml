@@ -466,6 +466,7 @@ správce systému.</string>
     <item quantity="other">%d vybráno</item>
   </plurals>
   <!--Welcome to oC intro features-->
+  <string name="welcome_feature_skip_button">Přeskočit</string>
   <string name="welcome_feature_4_title">Nahrávání fotoaparátu</string>
   <string name="welcome_feature_7_title">Vybrat vše</string>
   <string name="welcome_feature_8_title">Dostupné offline</string>

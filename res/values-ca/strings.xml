@@ -499,6 +499,7 @@
     <item quantity="other">%d seleccionats</item>
   </plurals>
   <!--Welcome to oC intro features-->
+  <string name="welcome_feature_skip_button">Ometre</string>
   <string name="welcome_feature_1_title">Gestioneu tots els arxius sincronitzats</string>
   <string name="welcome_feature_1_text">Pots copiar, moure, borrar</string>
   <string name="welcome_feature_2_title">Comparteix fitxers i carpetes</string>

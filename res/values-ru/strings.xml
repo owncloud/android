@@ -335,6 +335,7 @@
   <string name="confirmation_disable_pictures_upload_message">Вы уверены, что хотите отключить эту возможность? Последующие изображения не будут загружены</string>
   <string name="confirmation_disable_videos_upload_message">Вы уверены, что хотите отключить эту возможность? Последующие видеозаписи не будут загружены</string>
   <string name="conflict_title">Конфликт файлов</string>
+  <string name="conflict_description">Конфликт в файле %1$s, нажмите чтобы разрешить его</string>
   <string name="conflict_message">Какие файлы Вы хотите сохранить? При выборе обеих версий, к названию локального файла будет добавлена цифра</string>
   <string name="conflict_keep_both">Сохранить оба</string>
   <string name="conflict_use_local_version">локальная версия</string>
@@ -520,6 +521,7 @@
     <item quantity="other">Выбрано %d</item>
   </plurals>
   <!--Welcome to oC intro features-->
+  <string name="welcome_feature_skip_button">Пропустить</string>
   <string name="welcome_feature_1_title">Управляйте всеми вашими засинхронизированными файлами</string>
   <string name="welcome_feature_1_text">Вы можете копировать, перемещать, удалять</string>
   <string name="welcome_feature_2_title">Делитесь файлами и папками</string>
@@ -530,7 +532,11 @@
   <string name="welcome_feature_4_text">Ваши снимки и видео загружаются автоматически</string>
   <string name="welcome_feature_5_title"> Потоковое видео</string>
   <string name="welcome_feature_5_text">Проигрывайте ваши ролики, не скачивая их</string>
+  <string name="welcome_feature_6_title">Поиск в текущей папке</string>
+  <string name="welcome_feature_6_text">Фильтрация ваших файлов по имени</string>
   <string name="welcome_feature_7_title">Выделить все</string>
+  <string name="welcome_feature_7_text">Выбор всех файлов за один раз</string>
   <string name="welcome_feature_8_title">Доступно автономно</string>
+  <string name="welcome_feature_8_text">Ваши файлы синхронизируются автоматически</string>
   <string name="no_borwser_installed_alert">Не установлен никакой браузер. Пожалуйста, установите браузер для поддержки безопасного входа.</string>
 </resources>

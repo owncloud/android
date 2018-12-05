@@ -395,6 +395,8 @@
   <string name="share_via_link_expiration_date_label">Закінчення</string>
   <string name="share_via_link_password_label">Пароль</string>
   <string name="share_via_link_password_title">Забезпечено</string>
+  <string name="share_via_link_edit_permission_read_only_label">Завантаження / Перегляд</string>
+  <string name="share_via_link_edit_permission_read_and_write_label">Завантаження / Перегляд / Вивантаження</string>
   <string name="share_get_public_link_button">Отримати посилання</string>
   <string name="share_with_title">Опублікувати для</string>
   <string name="share_with_edit_title">Поділитися з %1$s</string>

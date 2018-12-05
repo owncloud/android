@@ -429,5 +429,6 @@
     <item quantity="other">%d terpilih</item>
   </plurals>
   <!--Welcome to oC intro features-->
+  <string name="welcome_feature_skip_button">Lewati</string>
   <string name="welcome_feature_7_title">Pilih Semua</string>
 </resources>
