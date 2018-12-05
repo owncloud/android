@@ -50,7 +50,7 @@ NOTE: You must sign the [Contributor Agreement][agreement] before your changes c
 
 ### 3. Update your contribution branch with master changes:
 
-It is possible you see the next message from time to time.
+It is possible you see the next message from time to time in your PR.
 
 <img src="docs_resources/out_of_date_branch.png" />
 
