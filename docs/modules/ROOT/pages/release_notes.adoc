@@ -1,6 +1,6 @@
 = Release Notes
 
-* xref:#_changes_in_2_7_0[Changes in 2.8.0]
+* xref:#_changes_in_2_8_0[Changes in 2.8.0]
 * xref:#_changes_in_2_7_0[Changes in 2.7.0]
 * xref:#_changes_in_2_6_0[Changes in 2.6.0]
 * xref:#_changes_in_2_5_0[Changes in 2.5.0]
