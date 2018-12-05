@@ -2,7 +2,8 @@
  *   ownCloud Android client application
  *
  *   @author David A. Velasco
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   @author Christian Schabesberger
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -29,16 +30,13 @@ import com.owncloud.android.lib.common.operations.OnRemoteOperationListener;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 
-
 /**
  * Operation which execution involves both interactions with an ownCloud server and
  * with local data in the device.
  * 
  * Provides methods to execute the operation both synchronously or asynchronously.
  */
-public abstract class SyncOperation extends RemoteOperation {
-
-    //private static final String TAG = SyncOperation.class.getSimpleName();
+public abstract class SyncOperation<T> extends RemoteOperation<T> {
 
     private FileDataStorageManager mStorageManager;
     
@@ -59,7 +57,7 @@ public abstract class SyncOperation extends RemoteOperation {
      * @param context           Android context for the component calling the method.
      * @return                  Result of the operation.
      */
-    public RemoteOperationResult execute(FileDataStorageManager storageManager, Context context) {
+    public RemoteOperationResult<T> execute(FileDataStorageManager storageManager, Context context) {
         if (storageManager == null) {
             throw new IllegalArgumentException("Trying to execute a sync operation with a " +
                     "NULL storage manager");
@@ -82,7 +80,7 @@ public abstract class SyncOperation extends RemoteOperation {
      * @param storageManager    Instance of local repository to sync with remote.
      * @return                  Result of the operation.
      */
-    public RemoteOperationResult execute(OwnCloudClient client,
+    public RemoteOperationResult<T> execute(OwnCloudClient client,
                                          FileDataStorageManager storageManager) {
         if (storageManager == null)
             throw new IllegalArgumentException("Trying to execute a sync operation with a " +
@@ -139,5 +137,4 @@ public abstract class SyncOperation extends RemoteOperation {
         mStorageManager = storageManager;
         return super.execute(client, listener, listenerHandler);
     }
-
 }

@@ -1,8 +1,9 @@
 /**
  *   ownCloud Android client application
  *
- *   Copyright (C) 2017 ownCloud GmbH.
+ *   Copyright (C) 2018 ownCloud GmbH.
  *   @author Jesús Recio (@jesmrec)
+ *   @author Christian Schabesberger
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -54,6 +55,7 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.isEnabled;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
@@ -178,14 +180,14 @@ public class SAMLAuthenticatorActivityTest {
      */
     @Test
     public void test1_check_login_saml()
-            throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+            throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
 
         Log_OC.i(LOG_TAG, "Test Check Login SAML Start");
 
         SystemClock.sleep(WAIT_INITIAL_MS);
 
-        // Check that login button is disabled
-        onView(withId(R.id.buttonOK)).check(matches(not(isEnabled())));
+        // Check that login button is hidden
+        onView(withId(R.id.loginButton)).check(matches(not(isDisplayed())));
 
         onView(withId(R.id.hostUrlInput)).perform(replaceText(testServerURL));
 
@@ -205,7 +207,7 @@ public class SAMLAuthenticatorActivityTest {
         onView(withId(R.id.server_status_text)).check(matches(withText(R.string.auth_secure_connection)));
 
         //Go to idp webview
-        onView(withId(R.id.buttonOK)).perform(click());
+        onView(withId(R.id.loginButton)).perform(click());
 
         SystemClock.sleep(WAIT_CONNECTION_MS);
 
@@ -231,11 +233,12 @@ public class SAMLAuthenticatorActivityTest {
 
     @Test
     public void test2_check_login_saml_orientation_changes()
-            throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+            throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
 
         Log_OC.i(LOG_TAG, "Test Check Login SAML Orientation Changes Start");
 
-        onView(withId(R.id.buttonOK)).check(matches(not(isEnabled())));
+        // Check that login button is hidden
+        onView(withId(R.id.loginButton)).check(matches(not(isDisplayed())));
 
         onView(withId(R.id.hostUrlInput)).perform(replaceText(testServerURL));
 
@@ -253,7 +256,7 @@ public class SAMLAuthenticatorActivityTest {
         onView(withId(R.id.server_status_text)).check(matches(withText(R.string.auth_secure_connection)));
 
         //Go to idp webview
-        onView(withId(R.id.buttonOK)).perform(click());
+        onView(withId(R.id.loginButton)).perform(click());
 
         SystemClock.sleep(WAIT_CONNECTION_MS);
 
@@ -283,7 +286,7 @@ public class SAMLAuthenticatorActivityTest {
     }
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() {
         AccountsManager.deleteAllAccounts(targetContext);
     }
 }

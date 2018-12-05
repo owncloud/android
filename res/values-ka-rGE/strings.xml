@@ -11,6 +11,8 @@
   <!--TODO re-enable when "On Device" is available
     <string name="drawer_item_on_device">On device</string>-->
   <string name="drawer_open">გახსნა</string>
+  <string name="drawer_feedback">უკუკავშირი</string>
+  <string name="drawer_help">დახმარება</string>
   <string name="prefs_category_general">ზოგადი</string>
   <string name="prefs_category_more">უფრო მეტი</string>
   <string name="prefs_category_security">უსაფრთხოება</string>
@@ -21,7 +23,7 @@
   <string name="auth_username">მომხმარებლის სახელი</string>
   <string name="auth_password">პაროლი</string>
   <string name="sync_string_files">ფაილები</string>
-  <string name="setup_btn_connect">დაკავშირება</string>
+  <string name="setup_btn_login">დაკავშირება</string>
   <string name="uploader_btn_upload_text">ატვირთვა</string>
   <string name="uploader_wrn_no_account_title">ანგარიში ვერ მოიძებნა</string>
   <string name="uploader_wrn_no_account_setup_btn_text">დაყენება</string>
@@ -38,9 +40,7 @@
   <string name="action_share">გაზიარება</string>
   <string name="common_yes">კი</string>
   <string name="common_no">არა</string>
-  <string name="common_ok">დიახ</string>
-  <string name="common_cancel">გაუქმება</string>
-  <string name="common_error">შეცდომა</string>
+    <string name="common_error">შეცდომა</string>
   <string name="common_error_unknown">უცნობი შეცდომა</string>
   <string name="common_pending">მოცდის რეჟიმში</string>
   <string name="about_title">ჩვენს შესახებ</string>

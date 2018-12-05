@@ -3,7 +3,8 @@
  *
  *   @author David A. Velasco
  *   @author masensio
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   @author Christian Schabesberger
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -21,27 +22,22 @@
 
 package com.owncloud.android.operations;
 
-import com.owncloud.android.MainApp;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.lib.common.OwnCloudClient;
-import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
+import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.resources.files.RemoveRemoteFileOperation;
 import com.owncloud.android.operations.common.SyncOperation;
-
 
 /**
  * Remote operation performing the removal of a remote file or folder in the ownCloud server.
  */
 public class RemoveFileOperation extends SyncOperation {
-    
-    // private static final String TAG = RemoveFileOperation.class.getSimpleName();
-    
+
     OCFile mFileToRemove;
     String mRemotePath;
     boolean mOnlyLocalCopy;
-    
-    
+
     /**
      * Constructor
      * 
@@ -54,8 +50,7 @@ public class RemoveFileOperation extends SyncOperation {
         mRemotePath = remotePath;
         mOnlyLocalCopy = onlyLocalCopy;
     }
-    
-    
+
     /**
      * Getter for the file to remove (or removed, if the operation was successfully performed).
      * 
@@ -83,19 +78,16 @@ public class RemoveFileOperation extends SyncOperation {
             if (result.isSuccess() || result.getCode() == ResultCode.FILE_NOT_FOUND) {
                 localRemovalFailed = !(getStorageManager().removeFile(mFileToRemove, true, true));
             }
-            
+
         } else {
             localRemovalFailed = !(getStorageManager().removeFile(mFileToRemove, false, true));
-            if (!localRemovalFailed) {
-                result = new RemoteOperationResult(ResultCode.OK);
-            }
+            if (!localRemovalFailed)
+                return new RemoteOperationResult(ResultCode.OK);
         }
         
-        if (localRemovalFailed) {
-            result = new RemoteOperationResult(ResultCode.LOCAL_STORAGE_NOT_REMOVED);
-        }
+        if (localRemovalFailed)
+            return new RemoteOperationResult(ResultCode.LOCAL_STORAGE_NOT_REMOVED);
         
         return result;
     }
-    
 }

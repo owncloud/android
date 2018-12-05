@@ -1,7 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="about_android">%1$s Android app</string>
-  <string name="about_version">verzió: %1$s</string>
   <string name="actionbar_sync">Fiók frissítése</string>
   <string name="actionbar_upload">Feltöltés</string>
   <string name="actionbar_upload_from_apps">Más alkalmazásokból származó tartalom</string>
@@ -15,15 +13,19 @@
   <string name="actionbar_descending">Csökkenő</string>
   <string name="actionbar_sort_title">Rendezés elve</string>
   <string name="actionbar_sort_by_name">A-Z</string>
-  <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
-  <!--<string name="drawer_item_accounts">Accounts</string>-->
+  <string name="actionbar_sort_by_date">Legrégebbi - Legújabb</string>
+  <string name="actionbar_sort_by_size">Legkisebb - Legnagyobb</string>
   <string name="drawer_item_all_files">Összes fájl</string>
-  <!--TODO re-enable when "On Device" is available
-    <string name="drawer_item_on_device">On device</string>-->
   <string name="drawer_item_settings">Beállítások</string>
   <string name="drawer_item_uploads_list">Feltöltések</string>
   <string name="drawer_close">Bezárás</string>
   <string name="drawer_open">Megnyitás</string>
+  <string name="drawer_loading_quota">Kvóta betöltése</string>
+  <string name="drawer_quota">%2$s-ből %1$sfelhasználva (%3$s%%)</string>
+  <string name="drawer_unavailable_free_storage">%1$s használatban</string>
+  <string name="drawer_unavailable_used_storage">Nem áll rendelkezésre tárhelyhasználati információ</string>
+  <string name="drawer_feedback">Visszajelzés</string>
+  <string name="drawer_help">Súgó</string>
   <string name="prefs_category_general">Általános</string>
   <string name="prefs_category_more">Több</string>
   <string name="prefs_category_security">Biztonság</string>
@@ -60,15 +62,18 @@
   <string name="passcode_already_set">A minta- és a jelszózárak nem kapcsolhatóak be egyszerre, előbb tiltsa le a jelszót</string>
   <string name="pattern_no_longer_required">A minta többé nem lesz bekérve</string>
   <string name="pattern_configure_your_pattern_explanation">A minta az app minden egyes indításakor be lesz kérve</string>
+  <string name="illegal_argument_exception_message">Érvényes MŰVELET szükséges</string>
   <string name="recommend_subject">Próbálja ki a(z) %1$s appot az okostelefonján!</string>
   <string name="recommend_text">Szeretnélek meghívni, hogy használd a(z) %1$s alkalmazást az okostelefonodon!\nTöltsd le innen: %2$s</string>
+  <string name="auth_failure_snackbar">Sikertelen bejelentkezés</string>
+  <string name="auth_failure_snackbar_action">Fiók módosítása</string>
   <string name="auth_check_server">Kiszolgáló ellenőrzése</string>
   <string name="auth_host_url">Kiszolgálócím https://...</string>
   <string name="auth_username">Felhasználónév</string>
   <string name="auth_password">Jelszó</string>
   <string name="auth_register">Új Önnek a(z) %1$s?</string>
   <string name="sync_string_files">Fájlok</string>
-  <string name="setup_btn_connect">Kapcsolódás</string>
+  <string name="setup_btn_login">Bejelentkezés</string>
   <string name="uploader_btn_upload_text">Feltöltés</string>
   <string name="uploader_top_message">Válasszon feltöltési mappát</string>
   <string name="uploader_wrn_no_account_title">Nincs ilyen felhasználói fiók</string>
@@ -107,11 +112,9 @@
   <string name="action_share">Megosztás</string>
   <string name="common_yes">Igen</string>
   <string name="common_no">Nem</string>
-  <string name="common_ok">OK</string>
   <string name="common_remove_upload">Feltöltés eltávolítása</string>
   <string name="common_retry_upload">Feltöltés ismétlése</string>
   <string name="common_cancel_sync">Szinkronizálás megszakítása</string>
-  <string name="common_cancel">Mégsee</string>
   <string name="common_back">Vissza</string>
   <string name="common_save_exit">Mentés és kilépés</string>
   <string name="common_error">Hiba</string>
@@ -123,9 +126,7 @@
   <string name="change_password">Jelszó megváltoztatása</string>
   <string name="delete_account">Fiók eltávolítása</string>
   <string name="create_account">Fiók létrehozása</string>
-  <string name="upload_chooser_title">Feltöltés innen…</string>
   <string name="uploader_info_dirname">Mappanév</string>
-  <string name="uploader_upload_in_progress_ticker">Feltöltés…</string>
   <string name="uploader_upload_in_progress_content">%1$d%% Feltöltés: %2$s</string>
   <string name="uploader_upload_succeeded_ticker">Feltöltés sikeres</string>
   <string name="uploader_upload_succeeded_content_single">%1$s feltöltve </string>
@@ -142,8 +143,6 @@
   <string name="uploads_view_group_current_uploads">Jelenlegi</string>
   <string name="uploads_view_group_failed_uploads">Sikertelen (koppintson az újrapróbálkozáshoz)</string>
   <string name="uploads_view_group_finished_uploads">Feltöltve</string>
-  <string name="uploads_view_group_file_count">%d fájl</string>
-  <string name="uploads_view_group_file_count_single">%d fájl</string>
   <string name="uploads_view_upload_status_succeeded">Kész</string>
   <string name="uploads_view_upload_status_cancelled">Megszakítva</string>
   <string name="uploads_view_upload_status_paused">Szüneteltetve</string>
@@ -161,7 +160,6 @@
   <string name="uploads_view_upload_status_waiting_for_wifi">Várakozás a wifi kapcsolatra</string>
   <string name="uploads_view_later_waiting_to_upload">Várakozás a feltöltésre</string>
   <string name="uploads_view_unsupported_media_type">Nem támogatott médiatípus</string>
-  <string name="downloader_download_in_progress_ticker">Letöltés…</string>
   <string name="downloader_download_in_progress_content">%1$d%% Letöltés: %2$s</string>
   <string name="downloader_download_succeeded_ticker">A letöltés sikeres</string>
   <string name="downloader_download_succeeded_content">%1$s letöltve </string>
@@ -225,8 +223,6 @@
   <string name="media_play_pause_description">Lejátszás vagy szüneteltetés gomb</string>
   <string name="media_forward_description">Gyors előretekerés gomb</string>
   <string name="upload_from_camera_title">Kép a kamerából</string>
-  <string name="auth_getting_authorization">Engedély megszerzése…</string>
-  <string name="auth_trying_to_login">Bejelentkezési kísérlet…</string>
   <string name="auth_no_net_conn_title">Nincs hálózati kapcsolat</string>
   <string name="auth_nossl_plain_ok_title">Biztonságos kapcsolat nem érhető el.</string>
   <string name="auth_connection_established">Kapcsolat létrejött</string>
@@ -281,7 +277,6 @@
   <string name="wait_checking_credentials">A tárolt hitelesítő adatok ellenőrzése</string>
   <string name="filedisplay_unexpected_bad_get_content">Váratlan hiba; válassza ki a fájlt egy másik alkalmazásból</string>
   <string name="filedisplay_no_file_selected">Egy fájl sincs kiválasztva</string>
-  <string name="activity_chooser_title">Hivatkozás küldése…</string>
   <string name="wait_for_tmp_copy_from_private_storage">Fájl másolása magántárolóból</string>
   <string name="oauth_check_onoff">OAuth2 bejelentkezés</string>
   <string name="oauth_login_connection">Csatlakozás az OAuth2 kiszolgálóhoz…</string>
@@ -372,7 +367,8 @@
   <string name="log_send_history_button">Előzmények küldése</string>
   <string name="log_send_no_mail_app">Nem található alkalmazás a naplók küldésére. Telepítsen egy levél alkalmazást.</string>
   <string name="log_send_mail_subject">%1$s Android-alkalmazások naplói</string>
-  <string name="log_progress_dialog_text">Adatok betöltése ...</string>
+  <string name="log_progress_dialog_text">Adatok betöltése...</string>
+  <string name="actionbar_select_all">Összes kijelölése</string>
   <string name="saml_authentication_required_text">Felhasználóazonosítás szükséges</string>
   <string name="saml_authentication_wrong_pass">Hibás jelszó</string>
   <string name="actionbar_move">Mozgatás</string>
@@ -410,8 +406,6 @@
   <string name="prefs_camera_upload_source_path_title">Kamera mappa (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">kötelező</string>
   <string name="prefs_camera_upload_source_path_title_optional">választható</string>
-  <string name="prefs_camera_upload_behaviour_dialogTitle">Eredeti fájl lesz ...</string>
-  <string name="prefs_camera_upload_behaviour_title">Eredeti fájl lesz ...</string>
   <string name="upload_copy_files">Fájl másolása</string>
   <string name="upload_move_files">Fájl mozgatása</string>
   <string name="pref_behaviour_entries_keep_file">eredeti mappában tárolva</string>
@@ -431,10 +425,10 @@
   <string name="share_via_link_expiration_date_label">Lejárat</string>
   <string name="share_via_link_password_label">Jelszó</string>
   <string name="share_via_link_password_title">biztosított</string>
-  <string name="share_via_link_edit_permission_label">Szerkesztheti</string>
-  <string name="share_via_link_show_file_listing_label">Mutassa a fájl listázásokat</string>
+  <string name="share_via_link_edit_permission_read_only_label">Letöltés / Megjelenítés</string>
+  <string name="share_via_link_edit_permission_read_and_write_label">Letöltés / Megjelenítés / Feltöltés</string>
   <string name="share_get_public_link_button">A link</string>
-  <string name="share_with_title">Oszd ...</string>
+  <string name="share_with_title">Kivel osztom meg</string>
   <string name="share_with_edit_title">Oszd%1$s</string>
   <string name="share_search">Keresés</string>
   <string name="search_users_and_groups_hint">Felhasználók és csoportok keresése</string>
@@ -496,7 +490,22 @@
   <string name="media_service_notification_channel_description">Lásd a zenelejátszót</string>
   <string name="file_sync_notification_channel_name">Fájlszinkronizálás</string>
   <string name="file_sync_notification_channel_description">Lásd a fájlszinkronizálás eredményét</string>
+  <string name="rate_dialog_title">Értékeld a %1$sappot!</string>
+  <string name="rate_dialog_description">Ha szívesen használod az appot, kérlek értékeld. Visszajelzésed fontos számunkra.</string>
+  <string name="button_no_thanks_name">NEM, KÖSZÖNÖM</string>
+  <string name="button_later_name">KÉSŐBB</string>
+  <string name="button_rate_now_name">ÉRTÉKELÉS MOST</string>
   <!--Welcome to oC intro features-->
+  <string name="welcome_feature_1_title">Valamennyi szinkronizált file kezelése</string>
+  <string name="welcome_feature_1_text">Másolhatsz, mozgathatsz, törölhetsz</string>
+  <string name="welcome_feature_2_title">Fájlok és alkönyvtárak megosztása</string>
+  <string name="welcome_feature_2_text">Megoszthatsz magánban és nyilvánosan</string>
+  <string name="welcome_feature_3_title">Többszörös fiók</string>
+  <string name="welcome_feature_3_text">Kapcsolódás valamennyi ownCloud szerverhez</string>
   <string name="welcome_feature_4_title">Kamerafeltöltések</string>
-  <string name="welcome_feature_7_title">Ujjlenyomat zár</string>
+  <string name="welcome_feature_4_text">Fényképek/videok automatikusan feltöltve</string>
+  <string name="welcome_feature_5_title">Video streaming</string>
+  <string name="welcome_feature_5_text">Videók lejátszása letöltésük nélkül</string>
+  <string name="welcome_feature_7_title">Összes kijelölése</string>
+  <string name="no_borwser_installed_alert">Nincs böngésző telepítve. Telepítsen böngészőt a biztonságos bejelentkezés lehetővé tételéhez</string>
 </resources>

@@ -1,7 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="about_android">Applicazione per Android di %1$s</string>
-  <string name="about_version">versione %1$s</string>
   <string name="actionbar_sync">Aggiorna account</string>
   <string name="actionbar_upload">Carica un file</string>
   <string name="actionbar_upload_from_apps">Contenuti da altre applicazioni</string>
@@ -15,15 +13,16 @@
   <string name="actionbar_descending">Decrescente</string>
   <string name="actionbar_sort_title">Ordina per</string>
   <string name="actionbar_sort_by_name">A-Z</string>
-  <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
-  <!--<string name="drawer_item_accounts">Accounts</string>-->
+  <string name="actionbar_sort_by_date">Più vecchio - Più Recente</string>
   <string name="drawer_item_all_files">Tutti i file</string>
-  <!--TODO re-enable when "On Device" is available
-    <string name="drawer_item_on_device">On device</string>-->
   <string name="drawer_item_settings">Impostazioni</string>
   <string name="drawer_item_uploads_list">Caricamenti</string>
   <string name="drawer_close">Chiudi</string>
   <string name="drawer_open">Apri</string>
+  <string name="drawer_unavailable_free_storage">%1$s in uso</string>
+  <string name="drawer_unavailable_used_storage">Nessuna informazione sullo spazio disponibile</string>
+  <string name="drawer_feedback">Segnalazioni</string>
+  <string name="drawer_help">Aiuto</string>
   <string name="prefs_category_general">Generale</string>
   <string name="prefs_category_more">Altro</string>
   <string name="prefs_category_security">Protezione</string>
@@ -69,7 +68,7 @@
   <string name="auth_password">Password</string>
   <string name="auth_register">Prima volta su %1$s?</string>
   <string name="sync_string_files">File</string>
-  <string name="setup_btn_connect">Connetti</string>
+  <string name="setup_btn_login">Accedi</string>
   <string name="uploader_btn_upload_text">Carica</string>
   <string name="uploader_top_message">Scegli la cartella di caricamento</string>
   <string name="uploader_wrn_no_account_title">Nessun account trovato</string>
@@ -108,11 +107,9 @@
   <string name="action_share">Condividi</string>
   <string name="common_yes">Sì</string>
   <string name="common_no">No</string>
-  <string name="common_ok">OK</string>
   <string name="common_remove_upload">Rimuovi caricamento</string>
   <string name="common_retry_upload">Riprova caricamento</string>
   <string name="common_cancel_sync">Annulla sincronizzazione</string>
-  <string name="common_cancel">Annulla</string>
   <string name="common_back">Indietro</string>
   <string name="common_save_exit">Salva ed esci</string>
   <string name="common_error">Errore</string>
@@ -124,9 +121,7 @@
   <string name="change_password">Modifica la password</string>
   <string name="delete_account">Rimuovi account</string>
   <string name="create_account">Crea account</string>
-  <string name="upload_chooser_title">Carica file da...</string>
   <string name="uploader_info_dirname">Nome della cartella</string>
-  <string name="uploader_upload_in_progress_ticker">Caricamento in corso...</string>
   <string name="uploader_upload_in_progress_content">%1$d%% Caricamento di %2$s</string>
   <string name="uploader_upload_succeeded_ticker">Caricamento effettuato</string>
   <string name="uploader_upload_succeeded_content_single">%1$s caricato</string>
@@ -143,8 +138,6 @@
   <string name="uploads_view_group_current_uploads">Attuale</string>
   <string name="uploads_view_group_failed_uploads">Non riuscito (tocca per riprovare)</string>
   <string name="uploads_view_group_finished_uploads">Caricati</string>
-  <string name="uploads_view_group_file_count">%d file</string>
-  <string name="uploads_view_group_file_count_single">%d file</string>
   <string name="uploads_view_upload_status_succeeded">Completati</string>
   <string name="uploads_view_upload_status_cancelled">Annullati</string>
   <string name="uploads_view_upload_status_paused">Sospesi</string>
@@ -162,7 +155,6 @@
   <string name="uploads_view_upload_status_waiting_for_wifi">In attesa della connettività wifi</string>
   <string name="uploads_view_later_waiting_to_upload">In attesa di caricamento</string>
   <string name="uploads_view_unsupported_media_type">Formato non supportato</string>
-  <string name="downloader_download_in_progress_ticker">Scaricamento in corso...</string>
   <string name="downloader_download_in_progress_content">%1$d%% Scaricamento di %2$s</string>
   <string name="downloader_download_succeeded_ticker">Scaricamento effettuato</string>
   <string name="downloader_download_succeeded_content">%1$s scaricato</string>
@@ -226,8 +218,7 @@
   <string name="media_play_pause_description">Pulsante Riproduci o pausa</string>
   <string name="media_forward_description">Pulsante Avanti veloce</string>
   <string name="upload_from_camera_title">Immagine dalla fotocamera</string>
-  <string name="auth_getting_authorization">Recupero delle autorizzazioni in corso...</string>
-  <string name="auth_trying_to_login">Tentativo di accesso in corso...</string>
+  <string name="auth_getting_authorization">Autorizzazione in corso...</string>
   <string name="auth_no_net_conn_title">Nessuna connessione di rete</string>
   <string name="auth_nossl_plain_ok_title">Connessione sicura disponibile.</string>
   <string name="auth_connection_established">Connessione stabilita</string>
@@ -282,7 +273,6 @@
   <string name="wait_checking_credentials">Controllo delle credenziali memorizzate</string>
   <string name="filedisplay_unexpected_bad_get_content">Problema inatteso; prova un\'altra applicazione per selezionare il file</string>
   <string name="filedisplay_no_file_selected">Non è stato selezionato alcun file</string>
-  <string name="activity_chooser_title">Invia collegamento a...</string>
   <string name="wait_for_tmp_copy_from_private_storage">Copia file dall\'archiviazione privata</string>
   <string name="oauth_check_onoff">Accesso con oAuth2.</string>
   <string name="oauth_login_connection">Connessione al server OAuth2...</string>
@@ -374,6 +364,7 @@
   <string name="log_send_no_mail_app">Non è stata trovata alcuna applicazione per l\'invio dei log. Installa un client di posta.</string>
   <string name="log_send_mail_subject">Registri applicazione %1$s Android</string>
   <string name="log_progress_dialog_text">Caricamento dati in corso...</string>
+  <string name="actionbar_select_all">Seleziona tutto</string>
   <string name="saml_authentication_required_text">Autenticazione richiesta</string>
   <string name="saml_authentication_wrong_pass">Password errata</string>
   <string name="actionbar_move">Sposta</string>
@@ -411,8 +402,6 @@
   <string name="prefs_camera_upload_source_path_title">Cartella della fotocamera (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">richiesto</string>
   <string name="prefs_camera_upload_source_path_title_optional">opzionale</string>
-  <string name="prefs_camera_upload_behaviour_dialogTitle">Il fil originale sarà...</string>
-  <string name="prefs_camera_upload_behaviour_title">Il fil originale sarà...</string>
   <string name="upload_copy_files">Copia file</string>
   <string name="upload_move_files">Sposta file</string>
   <string name="pref_behaviour_entries_keep_file">lasciato nella cartella originale</string>
@@ -432,10 +421,10 @@
   <string name="share_via_link_expiration_date_label">Scadenza</string>
   <string name="share_via_link_password_label">Password</string>
   <string name="share_via_link_password_title">Protetto</string>
-  <string name="share_via_link_edit_permission_label">Consenti la modifica</string>
-  <string name="share_via_link_show_file_listing_label">Mostra elenco dei file</string>
+  <string name="share_via_link_edit_permission_read_only_label">Scarica / visiona</string>
+  <string name="share_via_link_edit_permission_read_and_write_label">Scarica / Visiona / Carica</string>
   <string name="share_get_public_link_button">Ottieni collegamento</string>
-  <string name="share_with_title">Condividi con...</string>
+  <string name="share_with_title">Condividi con</string>
   <string name="share_with_edit_title">Condividi con %1$s</string>
   <string name="share_search">Cerca</string>
   <string name="search_users_and_groups_hint">Cerca utenti e gruppi</string>
@@ -508,6 +497,7 @@ Il Download del file inizierà automaticamente</string>
     <item quantity="other">%d selezionati</item>
   </plurals>
   <!--Welcome to oC intro features-->
+  <string name="welcome_feature_skip_button">Salta</string>
   <string name="welcome_feature_1_title">Gestisci tutti i fuoi file sincronizzati</string>
   <string name="welcome_feature_1_text">Puoi copiare, muovere, cancellare</string>
   <string name="welcome_feature_2_title">Condividi files e cartelle</string>
@@ -518,12 +508,7 @@ Il Download del file inizierà automaticamente</string>
   <string name="welcome_feature_4_text">Le tue foto e video saranno automaticamente inviati al server</string>
   <string name="welcome_feature_5_title">Flusso video</string>
   <string name="welcome_feature_5_text">Guarda i tuoi filmati senza doverli scaricare</string>
-  <string name="welcome_feature_6_title">Sequenza di blocco</string>
-  <string name="welcome_feature_6_text">Usa una sequenza di blocco per bloccare la tua app ownCloud</string>
-  <string name="welcome_feature_7_title">Blocco con impronta digitale</string>
-  <string name="welcome_feature_7_text">Usa tua impronta digitale per bloccare la app ownCloud</string>
-  <string name="welcome_feature_8_title">Supporto GIF</string>
-  <string name="welcome_feature_8_text">Visualizza le tue GIF animate</string>
-  <string name="welcome_feature_9_title">Carica le foto dalla camera</string>
-  <string name="welcome_feature_9_text">Scatta una foto e mandala direttamente al tuo server</string>
+  <string name="welcome_feature_7_title">Seleziona tutto</string>
+  <string name="welcome_feature_8_title">Disponibile non in linea</string>
+  <string name="no_borwser_installed_alert">Nessun browser installato. Si prega di installarne uno in modo da consentire un accesso sicuro.</string>
 </resources>

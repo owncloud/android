@@ -44,4 +44,7 @@ public class Extras {
     public static final String EXTRA_CAMERA_UPLOADS_SOURCE_PATH = "EXTRA_CAMERA_UPLOADS_SOURCE_PATH";
     public static final String EXTRA_CAMERA_UPLOADS_BEHAVIOR_AFTER_UPLOAD =
             "EXTRA_CAMERA_UPLOADS_BEHAVIOR_AFTER_UPLOAD";
+
+    // for Available offline
+    public static final String EXTRA_AVAILABLE_OFFLINE_SYNC_JOB_ID = "EXTRA_AVAILABLE_OFFLINE_SYNC_JOB_ID";
 }

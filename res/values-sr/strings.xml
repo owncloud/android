@@ -22,6 +22,8 @@
   <string name="drawer_item_uploads_list">Отпремања</string>
   <string name="drawer_close">Затвори</string>
   <string name="drawer_open">Отвори</string>
+  <string name="drawer_feedback">Ваше мишљење</string>
+  <string name="drawer_help">Помоћ</string>
   <string name="prefs_category_general">Опште</string>
   <string name="prefs_category_more">Остало</string>
   <string name="prefs_category_security">Безбедност</string>
@@ -47,7 +49,7 @@
   <string name="auth_password">Лозинка</string>
   <string name="auth_register">Нов вам је %1$s?</string>
   <string name="sync_string_files">Фајлови</string>
-  <string name="setup_btn_connect">Повежи се</string>
+  <string name="setup_btn_login">Повежи се</string>
   <string name="uploader_btn_upload_text">Отпреми</string>
   <string name="uploader_wrn_no_account_title">Нема налога</string>
   <string name="uploader_wrn_no_account_text">Нема %1$s налога на вашем уређају. Најпре подесите налог.</string>
@@ -73,10 +75,8 @@
   <string name="action_share">Дељење</string>
   <string name="common_yes">Да</string>
   <string name="common_no">Не</string>
-  <string name="common_ok">У реду</string>
-  <string name="common_cancel_sync">Откажи синхронизацију</string>
-  <string name="common_cancel">Откажи</string>
-  <string name="common_back">Назад</string>
+    <string name="common_cancel_sync">Откажи синхронизацију</string>
+    <string name="common_back">Назад</string>
   <string name="common_save_exit">Сачувај и изађи</string>
   <string name="common_error">Грешка</string>
   <string name="common_loading">Учитавам...</string>
@@ -344,7 +344,6 @@
   <string name="share_via_link_expiration_date_label">Истиче</string>
   <string name="share_via_link_password_label">Лозинка</string>
   <string name="share_via_link_password_title">Обезбеђен</string>
-  <string name="share_via_link_edit_permission_label">уређивање</string>
   <string name="share_get_public_link_button">Добави везу</string>
   <string name="share_search">Тражи</string>
   <string name="search_users_and_groups_hint">Претражи кориснике и групе</string>

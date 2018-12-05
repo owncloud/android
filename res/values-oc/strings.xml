@@ -23,6 +23,8 @@
   <string name="drawer_item_uploads_list">Cargaments</string>
   <string name="drawer_close">Tampar</string>
   <string name="drawer_open">Dobrir</string>
+  <string name="drawer_feedback">Comentaris</string>
+  <string name="drawer_help">Ajuda</string>
   <string name="prefs_category_general">General</string>
   <string name="prefs_category_more">Mai</string>
   <string name="prefs_category_security">Seguretat</string>
@@ -53,7 +55,7 @@ Telecargatz-lo aicí : %2$s</string>
   <string name="auth_password">Senhal</string>
   <string name="auth_register">Novèl dins %1$s ?</string>
   <string name="sync_string_files">Fichièrs</string>
-  <string name="setup_btn_connect">Connectar</string>
+  <string name="setup_btn_login">Connectar</string>
   <string name="uploader_btn_upload_text">Mandar</string>
   <string name="uploader_top_message">Causir lo dorsièr de mandadís</string>
   <string name="uploader_wrn_no_account_title">Cap de compte es pas estat trobat</string>
@@ -89,12 +91,10 @@ Telecargatz-lo aicí : %2$s</string>
   <string name="action_share">Partejar</string>
   <string name="common_yes">Òc</string>
   <string name="common_no">Non</string>
-  <string name="common_ok">D\'acòrdi</string>
-  <string name="common_remove_upload">Levar lo mandadís</string>
+    <string name="common_remove_upload">Levar lo mandadís</string>
   <string name="common_retry_upload">Tornar ensajar lo mandadís</string>
   <string name="common_cancel_sync">Anullar la sincronizacion</string>
-  <string name="common_cancel">Anullar</string>
-  <string name="common_back">Retorn</string>
+    <string name="common_back">Retorn</string>
   <string name="common_save_exit">Enregistrar e quitar</string>
   <string name="common_error">Error</string>
   <string name="common_loading">Cargament…</string>
@@ -352,7 +352,6 @@ En rason d\'aquesta modificacion, totes los fichièrs mandats amb de versions an
   <string name="share_via_link_expiration_date_label">Expiracion</string>
   <string name="share_via_link_password_label">Senhal</string>
   <string name="share_via_link_password_title">Securizat</string>
-  <string name="share_via_link_edit_permission_label">Permetre la modificacion</string>
   <string name="share_get_public_link_button">Obténer lo ligam</string>
   <string name="share_with_title">Partejar amb...</string>
   <string name="share_with_edit_title">Partejar amb %1$s</string>

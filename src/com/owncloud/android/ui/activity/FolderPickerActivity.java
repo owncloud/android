@@ -1,7 +1,8 @@
 /**
  *   ownCloud Android client application
  *
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   @author Shashvat Kedia
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -54,6 +55,7 @@ import com.owncloud.android.ui.dialog.CreateFolderDialogFragment;
 import com.owncloud.android.ui.fragment.FileFragment;
 import com.owncloud.android.ui.fragment.OCFileListFragment;
 import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter;
+import com.owncloud.android.utils.FileStorageUtils;
 
 import java.util.ArrayList;
 
@@ -154,6 +156,8 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
             if (!mSyncInProgress) {
                 // In case folder list is empty
                 message = R.string.file_list_empty_moving;
+                listFragment.getProgressBar().setVisibility(View.GONE);
+                listFragment.getShadowView().setVisibility(View.VISIBLE);
             }
             listFragment.setMessageForEmptyList(getString(message));
         } else {
@@ -250,7 +254,6 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
         inflater.inflate(R.menu.main_menu, menu);
         menu.findItem(R.id.action_switch_view).setVisible(false);
         menu.findItem(R.id.action_sync_account).setVisible(false);
-        menu.findItem(R.id.action_sort).setVisible(false);
         return true;
     }
 
@@ -346,9 +349,9 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
      * Set per-view controllers
      */
     private void initControls(){
-        mCancelBtn = (Button) findViewById(R.id.folder_picker_btn_cancel);
+        mCancelBtn = findViewById(R.id.folder_picker_btn_cancel);
         mCancelBtn.setOnClickListener(this);
-        mChooseBtn = (Button) findViewById(R.id.folder_picker_btn_choose);
+        mChooseBtn = findViewById(R.id.folder_picker_btn_choose);
         mChooseBtn.setOnClickListener(this);
     }
     
@@ -397,7 +400,7 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
         } else {
             try {
                 showSnackMessage(
-                    ErrorMessageAdapter.getErrorCauseMessage(result, operation, getResources())
+                        ErrorMessageAdapter.getResultMessage(result,operation,getResources())
                 );
 
             } catch (NotFoundException e) {

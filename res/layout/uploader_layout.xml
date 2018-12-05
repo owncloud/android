@@ -23,7 +23,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:filterTouchesWhenObscured="true"
-    android:orientation="vertical" >
+    android:orientation="vertical">
 
     <include
         layout="@layout/toolbar_standard" />
@@ -32,16 +32,14 @@
         android:id="@+id/upload_list"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        >
+        android:layout_weight="1">
 
         <ListView
             android:id="@android:id/list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:divider="@color/list_divider_background"
-            android:dividerHeight="1dip"
-            >
+            android:dividerHeight="1dip">
         </ListView>
 
     </FrameLayout>
@@ -49,7 +47,7 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:src="@drawable/uploader_list_separator"/>
+        android:src="@drawable/uploader_list_separator" />
 
     <LinearLayout
         android:id="@+id/upload_actions"
@@ -65,9 +63,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:layout_weight="1"
-            android:text="@string/common_cancel"
-            android:theme="@style/Button.Secondary"
-            />
+            android:text="@android:string/cancel"
+            android:theme="@style/Button.Secondary" />
 
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/uploader_choose_folder"
@@ -76,8 +73,7 @@
             android:layout_gravity="bottom"
             android:layout_weight="1"
             android:text="@string/uploader_btn_upload_text"
-            android:theme="@style/Button.Primary"
-            />
+            android:theme="@style/Button.Primary" />
 
     </LinearLayout>
 </LinearLayout>

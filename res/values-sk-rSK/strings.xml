@@ -23,6 +23,8 @@
   <string name="drawer_item_uploads_list">Nahranie</string>
   <string name="drawer_close">Zavrieť</string>
   <string name="drawer_open">Otvoriť</string>
+  <string name="drawer_feedback">Spätná väzba</string>
+  <string name="drawer_help">Pomoc</string>
   <string name="prefs_category_general">Všeobecné</string>
   <string name="prefs_category_more">Viac</string>
   <string name="prefs_category_security">Zabezpečenie</string>
@@ -47,7 +49,7 @@
   <string name="auth_password">Heslo</string>
   <string name="auth_register">Ste nový v %1$s?</string>
   <string name="sync_string_files">Súbory</string>
-  <string name="setup_btn_connect">Pripojiť</string>
+  <string name="setup_btn_login">Pripojiť</string>
   <string name="uploader_btn_upload_text">Nahrať</string>
   <string name="uploader_top_message">Vyberte adresár na nahrávanie</string>
   <string name="uploader_wrn_no_account_title">Účet sa nenašiel</string>
@@ -74,11 +76,9 @@
   <string name="action_share">Zdieľať</string>
   <string name="common_yes">Áno</string>
   <string name="common_no">Nie</string>
-  <string name="common_ok">OK</string>
-  <string name="common_retry_upload">Opakovať nahrávanie</string>
+    <string name="common_retry_upload">Opakovať nahrávanie</string>
   <string name="common_cancel_sync">Zrušiť synchronizáciu</string>
-  <string name="common_cancel">Zrušiť</string>
-  <string name="common_back">Späť</string>
+    <string name="common_back">Späť</string>
   <string name="common_error">Chyba</string>
   <string name="common_loading">Načítavam...</string>
   <string name="common_unknown">neznámy</string>
@@ -313,7 +313,6 @@
   <string name="share_via_link_expiration_date_label">Koniec platnosti</string>
   <string name="share_via_link_password_label">Heslo</string>
   <string name="share_via_link_password_title">Zabezpečené</string>
-  <string name="share_via_link_edit_permission_label">Povoliť úpravy</string>
   <string name="share_search">Hľadať</string>
   <string name="search_users_and_groups_hint">Vyhľadať používateľov alebo skupiny</string>
   <string name="share_group_clarification">%1$s (skupina)</string>

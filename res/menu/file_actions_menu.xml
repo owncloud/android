@@ -21,6 +21,16 @@
       xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/file_action_select_all"
+        android:title="@string/actionbar_select_all"
+        android:showAsAction="never"/>
+
+    <item android:id="@+id/action_select_inverse"
+        android:title="@string/actionbar_select_inverse"
+        android:visible="true"
+        android:showAsAction="never"/>
+
+    <item
         android:id="@+id/action_share_file"
         android:title="@string/action_share"
         android:icon="@drawable/ic_action_share"
@@ -35,7 +45,7 @@
     <item
         android:id="@+id/action_sync_file"
         android:title="@string/filedetails_sync_file"
-        android:icon="@drawable/ic_action_refresh_white"
+        android:icon="@drawable/ic_action_refresh"
         app:showAsAction="ifRoom"
         android:orderInCategory="1" />
     <item

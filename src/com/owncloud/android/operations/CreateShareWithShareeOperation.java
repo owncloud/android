@@ -3,7 +3,8 @@
  *
  *   @author masensio
  *   @author David A. Velasco
- *   Copyright (C) 2017 ownCloud GmbH.
+ *   @author Christian Schabesberger
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -21,11 +22,6 @@
 
 package com.owncloud.android.operations;
 
-/**
- * Creates a new private share for a given file
- */
-
-
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.lib.common.OwnCloudClient;
@@ -33,9 +29,13 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.resources.files.FileUtils;
 import com.owncloud.android.lib.resources.shares.CreateRemoteShareOperation;
 import com.owncloud.android.lib.resources.shares.OCShare;
+import com.owncloud.android.lib.resources.shares.ShareParserResult;
 import com.owncloud.android.lib.resources.shares.ShareType;
 import com.owncloud.android.operations.common.SyncOperation;
 
+/**
+ * Creates a new private share for a given file
+ */
 public class CreateShareWithShareeOperation extends SyncOperation {
 
     protected FileDataStorageManager mStorageManager;
@@ -78,11 +78,11 @@ public class CreateShareWithShareeOperation extends SyncOperation {
                 mPermissions
         );
         operation.setGetShareDetails(true);
-        RemoteOperationResult result = operation.execute(client);
+        RemoteOperationResult<ShareParserResult> result = operation.execute(client);
 
         if (result.isSuccess()) {
-            if (result.getData().size() > 0) {
-                OCShare share = (OCShare) result.getData().get(0);
+            if (!result.getData().getShares().isEmpty()) {
+                OCShare share = result.getData().getShares().get(0);
                 updateData(share);
             } 
         }
@@ -108,5 +108,4 @@ public class CreateShareWithShareeOperation extends SyncOperation {
             getStorageManager().saveFile(file);
         }
     }
-
 }

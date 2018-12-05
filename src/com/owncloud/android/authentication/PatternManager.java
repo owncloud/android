@@ -76,9 +76,9 @@ public class PatternManager {
             // Do not ask for pattern if fingerprint is enabled
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && FingerprintManager.getFingerprintManager(activity).
                     isFingerPrintEnabled()) {
+                mVisibleActivitiesCounter++;
                 return;
             }
-
             checkPattern(activity);
         }
         mVisibleActivitiesCounter++;

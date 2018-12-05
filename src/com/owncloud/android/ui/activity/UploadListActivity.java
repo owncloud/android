@@ -4,7 +4,8 @@
  *   @author LukeOwncloud
  *   @author David A. Velasco
  *   @author masensio
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   @author Christian Schabesberger
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -43,7 +44,7 @@ import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.datamodel.UploadsStorageManager;
-import com.owncloud.android.db.OCUpload;
+import com.owncloud.android.datamodel.OCUpload;
 import com.owncloud.android.db.UploadResult;
 import com.owncloud.android.files.services.FileUploader;
 import com.owncloud.android.files.services.FileUploader.FileUploaderBinder;
@@ -199,7 +200,7 @@ public class UploadListActivity extends FileActivity implements UploadListFragme
                 }
             case R.id.action_retry_uploads:
                 TransferRequester requester = new TransferRequester();
-                requester.retryFailedUploads(this, null, null);
+                requester.retryFailedUploads(this, null, null, false);
                 break;
 
             case R.id.action_clear_failed_uploads:
@@ -247,7 +248,8 @@ public class UploadListActivity extends FileActivity implements UploadListFragme
             requester.retryFailedUploads(
                 this,
                 account,
-                UploadResult.CREDENTIAL_ERROR
+                UploadResult.CREDENTIAL_ERROR,
+                    false
             );
         }
     }
@@ -263,7 +265,7 @@ public class UploadListActivity extends FileActivity implements UploadListFragme
             // Do not call super in this case; more refactoring needed around onRemoteOeprationFinish :'(
             getFileOperationsHelper().setOpIdWaitingFor(Long.MAX_VALUE);
             dismissLoadingDialog();
-            Account account = (Account) result.getData().get(0);
+            Account account = ((RemoteOperationResult<Account>) result).getData();
             if (!result.isSuccess()) {
 
                 requestCredentialsUpdate();
@@ -271,7 +273,7 @@ public class UploadListActivity extends FileActivity implements UploadListFragme
             } else {
                 // already updated -> just retry!
                 TransferRequester requester = new TransferRequester();
-                requester.retryFailedUploads(this, account, UploadResult.CREDENTIAL_ERROR);
+                requester.retryFailedUploads(this, account, UploadResult.CREDENTIAL_ERROR, false);
             }
 
         } else {
@@ -321,7 +323,7 @@ public class UploadListActivity extends FileActivity implements UploadListFragme
                 mUploaderBinder = null;
             }
         }
-    };
+    }
 
     /**
      * Once the file upload has changed its status -> update uploads list view

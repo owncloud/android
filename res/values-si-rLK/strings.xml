@@ -8,6 +8,7 @@
   <!--TODO re-enable when "On Device" is available
     <string name="drawer_item_on_device">On device</string>-->
   <string name="drawer_open">විවෘත කරන්න</string>
+  <string name="drawer_help">උදව්</string>
   <string name="prefs_category_general">සාමාන්‍යයෙන්</string>
   <string name="prefs_category_more">වැඩි</string>
   <string name="prefs_accounts">ගිණුම්</string>
@@ -16,7 +17,7 @@
   <string name="auth_username">පරිශීලක නම</string>
   <string name="auth_password">මුර පදය</string>
   <string name="sync_string_files">ගොනු</string>
-  <string name="setup_btn_connect">සම්බන්ධ වන්න</string>
+  <string name="setup_btn_login">සම්බන්ධ වන්න</string>
   <string name="uploader_btn_upload_text">උඩුගත කිරීම</string>
   <string name="uploader_wrn_no_account_title">ගිණුමක් හමු නොවුණි</string>
   <string name="uploader_wrn_no_account_setup_btn_text">ස්ථාපනය</string>
@@ -36,9 +37,7 @@
   <string name="action_share">බෙදා හදා ගන්න</string>
   <string name="common_yes">ඔව්</string>
   <string name="common_no">එපා</string>
-  <string name="common_ok">හරි</string>
-  <string name="common_cancel">එපා</string>
-  <string name="common_error">දෝශය</string>
+    <string name="common_error">දෝශය</string>
   <string name="about_title">පිළිබඳව</string>
   <string name="change_password">මුරපදය වෙනස් කිරීම</string>
   <string name="create_account">ගිණුම සාදන්න</string>

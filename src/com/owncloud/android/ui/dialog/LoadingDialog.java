@@ -1,7 +1,8 @@
 /**
  *   ownCloud Android client application
  *
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   @author Christian Schabesberger
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -68,12 +69,12 @@ public class LoadingDialog extends DialogFragment {
         View v = inflater.inflate(R.layout.loading_dialog, container,  false);
         
         // set message
-        TextView tv  = (TextView) v.findViewById(R.id.loadingText);
+        TextView tv  = v.findViewById(R.id.loadingText);
         int messageId = getArguments().getInt(ARG_MESSAGE_ID, R.string.placeholder_sentence);
         tv.setText(messageId);
 
         // set progress wheel color
-        ProgressBar progressBar  = (ProgressBar) v.findViewById(R.id.loadingBar);
+        ProgressBar progressBar  = v.findViewById(R.id.loadingBar);
         progressBar.getIndeterminateDrawable().setColorFilter(
             ContextCompat.getColor(getActivity(), R.color.color_accent),
             PorterDuff.Mode.SRC_IN
@@ -97,10 +98,7 @@ public class LoadingDialog extends DialogFragment {
                 public boolean onKey(DialogInterface dialog, int keyCode,
                                      KeyEvent event) {
 
-                    if( keyCode == KeyEvent.KEYCODE_BACK) {
-                        return true;
-                    }
-                    return false;
+                    return keyCode == KeyEvent.KEYCODE_BACK;
                 }
             };
             dialog.setOnKeyListener(keyListener);

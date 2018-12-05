@@ -42,7 +42,6 @@ import com.owncloud.android.R;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.ui.ExtendedListView;
 import com.owncloud.android.ui.activity.OnEnforceableRefreshListener;
-import com.owncloud.android.ui.adapter.FileListListAdapter;
 
 import java.util.ArrayList;
 
@@ -65,6 +64,7 @@ public class ExtendedListFragment extends Fragment
     protected static final String ARG_JUST_FOLDERS = ExtendedListFragment.class.getCanonicalName() + ".JUST_FOLDERS";
 
     private ProgressBar mProgressBar;
+    private View mShadowView;
 
     protected SwipeRefreshLayout mRefreshListLayout;
     private SwipeRefreshLayout mRefreshGridLayout;
@@ -150,23 +150,24 @@ public class ExtendedListFragment extends Fragment
 
         View v = inflater.inflate(R.layout.list_fragment, null);
 
-        mProgressBar = (ProgressBar) v.findViewById(R.id.syncProgressBar);
+        mProgressBar = v.findViewById(R.id.syncProgressBar);
+        mShadowView = v.findViewById(R.id.shadow_view);
 
-        mListView = (ExtendedListView)(v.findViewById(R.id.list_root));
+        mListView = v.findViewById(R.id.list_root);
         mListView.setOnItemClickListener(this);
         mListFooterView = inflater.inflate(R.layout.list_footer, null, false);
 
-        mGridView = (GridViewWithHeaderAndFooter) (v.findViewById(R.id.grid_root));
+        mGridView = v.findViewById(R.id.grid_root);
         mGridView.setNumColumns(GridView.AUTO_FIT);
         mGridView.setOnItemClickListener(this);
 
         mGridFooterView = inflater.inflate(R.layout.list_footer, null, false);
 
         // Pull-down to refresh layout
-        mRefreshListLayout = (SwipeRefreshLayout) v.findViewById(R.id.swipe_containing_list);
-        mRefreshGridLayout = (SwipeRefreshLayout) v.findViewById(R.id.swipe_containing_grid);
-        mRefreshEmptyLayout = (SwipeRefreshLayout) v.findViewById(R.id.swipe_containing_empty);
-        mEmptyListMessage = (TextView) v.findViewById(R.id.empty_list_view);
+        mRefreshListLayout = v.findViewById(R.id.swipe_containing_list);
+        mRefreshGridLayout = v.findViewById(R.id.swipe_containing_grid);
+        mRefreshEmptyLayout = v.findViewById(R.id.swipe_containing_empty);
+        mEmptyListMessage = v.findViewById(R.id.empty_list_view);
         
         onCreateSwipeToRefresh(mRefreshListLayout);
         onCreateSwipeToRefresh(mRefreshGridLayout);
@@ -175,10 +176,10 @@ public class ExtendedListFragment extends Fragment
         mListView.setEmptyView(mRefreshEmptyLayout);
         mGridView.setEmptyView(mRefreshEmptyLayout);
 
-        mFabMain = (FloatingActionsMenu) v.findViewById(R.id.fab_main);
-        mFabUpload = (FloatingActionButton) v.findViewById(R.id.fab_upload);
-        mFabMkdir = (FloatingActionButton) v.findViewById(R.id.fab_mkdir);
-        mFabUploadFromApp = (FloatingActionButton) v.findViewById(R.id.fab_upload_from_app);
+        mFabMain = v.findViewById(R.id.fab_main);
+        mFabUpload = v.findViewById(R.id.fab_upload);
+        mFabMkdir = v.findViewById(R.id.fab_mkdir);
+        mFabUploadFromApp = v.findViewById(R.id.fab_upload_from_app);
 
         mCurrentListView = mListView;   // list by default
         if (savedInstanceState != null) {
@@ -439,6 +440,14 @@ public class ExtendedListFragment extends Fragment
         }
     }
 
+    public ProgressBar getProgressBar(){
+        return mProgressBar;
+    }
+
+    public View getShadowView(){
+        return mShadowView;
+    }
+
     /**
      * TODO doc
      * @param text
@@ -456,6 +465,8 @@ public class ExtendedListFragment extends Fragment
 
     public void setProgressBarAsIndeterminate(boolean indeterminate) {
         Log_OC.d(TAG, "Setting progress visibility to " + indeterminate);
+        mShadowView.setVisibility(View.GONE);
+        mProgressBar.setVisibility(View.VISIBLE);
         mProgressBar.setIndeterminate(indeterminate);
         mProgressBar.postInvalidate();
     }

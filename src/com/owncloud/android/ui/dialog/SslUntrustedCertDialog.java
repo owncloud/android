@@ -3,7 +3,8 @@
  *
  *   @author masensio
  *   @author David A. Velasco
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   @author Christian Schabesberger
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -139,13 +140,13 @@ public class SslUntrustedCertDialog extends DialogFragment {
             ((ViewGroup)mView.getParent()).removeView(mView);
         }
         
-        Button ok = (Button) mView.findViewById(R.id.ok);
+        Button ok = mView.findViewById(R.id.ok);
         ok.setOnClickListener(new OnCertificateTrusted());
         
-        Button cancel = (Button) mView.findViewById(R.id.cancel);
+        Button cancel = mView.findViewById(R.id.cancel);
         cancel.setOnClickListener(new OnCertificateNotTrusted());
         
-        Button details = (Button) mView.findViewById(R.id.details_btn);
+        Button details = mView.findViewById(R.id.details_btn);
         details.setOnClickListener(new OnClickListener() {
 
             @Override
@@ -226,9 +227,9 @@ public class SslUntrustedCertDialog extends DialogFragment {
     
     
     public interface OnSslUntrustedCertListener {
-        public void onSavedCertificate();
-        public void onFailedSavingCertificate();
-        public void onCancelCertificate();
+        void onSavedCertificate();
+        void onFailedSavingCertificate();
+        void onCancelCertificate();
     }
     
     public interface ErrorViewAdapter {

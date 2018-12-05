@@ -10,6 +10,7 @@
   <!--TODO re-enable when "On Device" is available
     <string name="drawer_item_on_device">On device</string>-->
   <string name="drawer_open">திறக்க</string>
+  <string name="drawer_help">உதவி</string>
   <string name="prefs_category_general">பொதுவான</string>
   <string name="prefs_category_more">மேலதிக</string>
   <string name="prefs_accounts">கணக்குகள்</string>
@@ -18,7 +19,7 @@
   <string name="auth_username">பயனாளர் பெயர்</string>
   <string name="auth_password">கடவுச்சொல்</string>
   <string name="sync_string_files">கோப்புகள்</string>
-  <string name="setup_btn_connect">இணைக்க</string>
+  <string name="setup_btn_login">இணைக்க</string>
   <string name="uploader_btn_upload_text">பதிவேற்றுக</string>
   <string name="uploader_wrn_no_account_title">ஒரு கணக்கும் அறியப்படவில்லை</string>
   <string name="uploader_wrn_no_account_setup_btn_text">அமைப்பு</string>
@@ -35,9 +36,7 @@
   <string name="action_share">பகிர்வு</string>
   <string name="common_yes">ஆம்</string>
   <string name="common_no">இல்லை</string>
-  <string name="common_ok">சரி </string>
-  <string name="common_cancel">இரத்து செய்க</string>
-  <string name="common_back">பின்னுக்கு</string>
+    <string name="common_back">பின்னுக்கு</string>
   <string name="common_error">வழு</string>
   <string name="common_pending">நிலுவையிலுள்ள</string>
   <string name="about_title">பற்றி</string>

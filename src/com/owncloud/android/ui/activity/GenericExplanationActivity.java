@@ -2,7 +2,8 @@
  *   ownCloud Android client application
  *
  *   @author David A. Velasco
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   @author Christian Schabesberger
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -66,12 +67,12 @@ public class GenericExplanationActivity  extends AppCompatActivity {
         setContentView(R.layout.generic_explanation);
         
         if (message != null) {
-            TextView textView = (TextView) findViewById(R.id.message);
+            TextView textView = findViewById(R.id.message);
             textView.setText(message);
             textView.setMovementMethod(new ScrollingMovementMethod());
         }
         
-        ListView listView = (ListView) findViewById(R.id.list);
+        ListView listView = findViewById(R.id.list);
         if (list != null && list.size() > 0) {
             //ListAdapter adapter = new ArrayAdapter<String>(this,
             // android.R.layout.simple_list_item_1, list);
@@ -108,7 +109,7 @@ public class GenericExplanationActivity  extends AppCompatActivity {
             if (view != null)  {
                 if (mList2 != null && mList2.size() > 0 && position >= 0 &&
                         position < mList2.size()) {
-                    TextView text2 = (TextView) view.findViewById(android.R.id.text2);
+                    TextView text2 = view.findViewById(android.R.id.text2);
                     if (text2 != null) {
                         text2.setText(mList2.get(position));
                     }

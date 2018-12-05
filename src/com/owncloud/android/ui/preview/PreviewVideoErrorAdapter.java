@@ -3,7 +3,8 @@
  *
  * @author David A. Velasco
  * @author David González Verdugo
- * Copyright (C) 2017 ownCloud GmbH.
+ * @author Christian Schabesberger
+ * Copyright (C) 2018 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -50,31 +51,17 @@ public class PreviewVideoErrorAdapter {
      */
     public static PreviewVideoError handlePreviewVideoError(ExoPlaybackException error,
                                                             Context context) {
-
-        PreviewVideoError previewVideoError = null;
-
         switch (error.type) {
-
             case ExoPlaybackException.TYPE_SOURCE:
-
-                previewVideoError = handlePlayerSourceError(error, context);
-
-                break;
-
+                return handlePlayerSourceError(error, context);
             case ExoPlaybackException.TYPE_UNEXPECTED:
-
-                previewVideoError = handlePlayerUnexpectedError(error, context);
-
-                break;
-
+                return handlePlayerError(error.getUnexpectedException().getMessage(), context);
             case ExoPlaybackException.TYPE_RENDERER:
-
-                previewVideoError = handlePlayerRendererError(error, context);
-
-                break;
+                return handlePlayerError(error.getRendererException().getMessage(), context);
+            default:
+                // this error will not appear, however it's now covered anyway
+                return handlePlayerError("Unknown Exoplayer error", context);
         }
-
-        return previewVideoError;
     }
 
     /**
@@ -87,140 +74,69 @@ public class PreviewVideoErrorAdapter {
     private static PreviewVideoError handlePlayerSourceError(ExoPlaybackException error,
                                                              Context context) {
 
-        PreviewVideoError previewVideoError;
-        IOException sourceException = error.getSourceException();
+        //PreviewVideoError previewVideoError;
+        final IOException sourceException = error.getSourceException();
+        final Throwable cause = sourceException.getCause();
 
-        if (sourceException.getCause() != null &&
-            sourceException.getCause().getCause() instanceof CertificateException) {
-                // Current certificate untrusted
+        if(cause != null) {
+            if(cause.getCause() instanceof CertificateException)
+                return new PreviewVideoError(
+                        context.getString(R.string.streaming_certificate_error), true,false);
 
-            previewVideoError = new PreviewVideoError(
-                    context.getString(R.string.streaming_certificate_error),
-                    true,
-                    false);
-
-        } else if (sourceException.getCause() != null &&
-            sourceException.getCause() instanceof UnknownHostException) {
-                // Cannot connect with the server
-
-            previewVideoError = new PreviewVideoError(
-                    context.getString(R.string.network_error_socket_exception),
-                    false,
-                    false);
-
-        } else if (sourceException instanceof UnrecognizedInputFormatException) {
-
-            // Unsupported video file format
-            // Important: this error is also thrown when the SAML session is expired an OC server
-            // redirects to the IDP.
-            // To handle this case, the parent folder is refreshed and login view is shown
-
-            previewVideoError = new PreviewVideoError(
-                    context.getString(R.string.streaming_unrecognized_input),
-                    true,
-                    true);
-
-        } else if (sourceException instanceof HttpDataSource.InvalidResponseCodeException
-
-                && ((HttpDataSource.InvalidResponseCodeException) sourceException)
-                        .responseCode == NOT_FOUND_ERROR) {
-            // Video file no longer exists in the server
-
-            previewVideoError = new PreviewVideoError(
-                context.getString(R.string.streaming_file_not_found_error),
-                false,
-                false);
-
-        } else if (sourceException.getCause() != null &&
-            sourceException.getCause() instanceof EOFException) {
+            // Cannot connect with the server
+            if(sourceException.getCause() instanceof UnknownHostException)
+                return new PreviewVideoError(
+                        context.getString(R.string.network_error_socket_exception), false, false);
 
             // trying to access to a part of the video not available now;
             // ALSO: error obtained when (SAML) session expired while playing the video. To handle
             // this case, the parent folder is refreshed and login view is shown
-
-            previewVideoError = new PreviewVideoError(
-                context.getString(R.string.streaming_position_not_available),
-                false,
-                true
-            );
-
-        } else if (sourceException instanceof HttpDataSource.InvalidResponseCodeException
-
-                && ((HttpDataSource.InvalidResponseCodeException) sourceException)
-                    .responseCode == TEMPORARY_REDIRECTION) {
-                    // redirections are allowed, but crossed redirections not
-
-            previewVideoError = new PreviewVideoError(
-                    context.getString(R.string.streaming_crossed_redirection),
-                    true,
-                    false);
-        } else {
-
-            String message = context.getString(R.string.previewing_video_common_error);
-
-            previewVideoError = new PreviewVideoError(message, true, false);
+            if (sourceException.getCause() != null &&
+                    sourceException.getCause() instanceof EOFException)
+                return new PreviewVideoError(
+                        context.getString(R.string.streaming_position_not_available), false, true);
         }
 
-        return previewVideoError;
+        // Unsupported video file format
+        // Important: this error is also thrown when the SAML session is expired an OC server
+        // redirects to the IDP.
+        // To handle this case, the parent folder is refreshed and login view is shown
+        if(sourceException instanceof UnrecognizedInputFormatException)
+            return new PreviewVideoError(
+                    context.getString(R.string.streaming_unrecognized_input), true, true);
+
+        if (sourceException instanceof HttpDataSource.InvalidResponseCodeException) {
+
+            // Video file no longer exists in the server
+            if(((HttpDataSource.InvalidResponseCodeException) sourceException).responseCode == NOT_FOUND_ERROR)
+                return new PreviewVideoError(
+                        context.getString(R.string.streaming_file_not_found_error), false, false);
+
+            // redirections are allowed, but crossed redirections not
+            if((((HttpDataSource.InvalidResponseCodeException) sourceException).responseCode == TEMPORARY_REDIRECTION))
+                return new PreviewVideoError(
+                    context.getString(R.string.streaming_crossed_redirection), true, false);
+        }
+
+        // if error could not be detected properly
+        return new PreviewVideoError(context.getString(R.string.previewing_video_common_error), true, false);
     }
 
     /**
      * Handle video player unexpected exceptions and create a PreviewVideoError with the appropriate
      * info
      *
-     * @param error Exoplayer unexpected exception
+     * @param errorMessage Exoplayer exception message exception
      * @param context
      * @return preview video error after processing the Exoplayer unexpected exception
      */
-    private static PreviewVideoError handlePlayerUnexpectedError(ExoPlaybackException error,
+    private static PreviewVideoError handlePlayerError(final String errorMessage,
                                                                  Context context) {
-
-        PreviewVideoError previewVideoError;
-
-        String message = error.getUnexpectedException().getMessage();
-
-        if (message != null) {
-
-            previewVideoError = new PreviewVideoError(message, false, false);
-
-        } else {
-
-            previewVideoError = new PreviewVideoError(
-                    context.getString(R.string.previewing_video_common_error),
-                    false,
-                    false);
-
-        }
-
-        return previewVideoError;
+        return (errorMessage != null)
+                ? new PreviewVideoError(errorMessage, false, false)
+                : new PreviewVideoError(
+                        context.getString(R.string.previewing_video_common_error), false, false);
     }
 
-    /**
-     * Handle video player renderer exceptions and create a PreviewVideoError with the appropriate
-     * info
-     * @param error Exoplayer renderer exception
-     * @param context
-     * @return preview video error after processing the Exoplayer renderer exception
-     */
-    private static PreviewVideoError handlePlayerRendererError(ExoPlaybackException error,
-                                                               Context context) {
 
-        PreviewVideoError previewVideoError;
-
-        String message = error.getRendererException().getMessage();
-
-        if (message != null) {
-
-            previewVideoError = new PreviewVideoError(message, false, false);
-
-        } else {
-
-            previewVideoError = new PreviewVideoError(
-                    context.getString(R.string.previewing_video_common_error),
-                    false,
-                    false);
-        }
-
-        return previewVideoError;
-    }
 }

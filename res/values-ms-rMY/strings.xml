@@ -14,6 +14,7 @@
   <!--TODO re-enable when "On Device" is available
     <string name="drawer_item_on_device">On device</string>-->
   <string name="drawer_open">Buka</string>
+  <string name="drawer_help">Bantuan</string>
   <string name="prefs_category_general">Umum</string>
   <string name="prefs_category_more">Lanjutan</string>
   <string name="prefs_accounts">Akaun</string>
@@ -21,7 +22,7 @@
   <string name="auth_username">Nama pengguna</string>
   <string name="auth_password">Kata laluan</string>
   <string name="sync_string_files">Fail-fail</string>
-  <string name="setup_btn_connect">Berhubung</string>
+  <string name="setup_btn_login">Berhubung</string>
   <string name="uploader_btn_upload_text">Muat naik</string>
   <string name="uploader_wrn_no_account_title">Tiada akaun dijumpai</string>
   <string name="uploader_wrn_no_account_quit_btn_text">Berhenti</string>
@@ -38,9 +39,7 @@
   <string name="action_share">Kongsi</string>
   <string name="common_yes">Ya</string>
   <string name="common_no">Tidak</string>
-  <string name="common_ok">OK</string>
-  <string name="common_cancel">Batal</string>
-  <string name="common_back">Kembali</string>
+    <string name="common_back">Kembali</string>
   <string name="common_error">Ralat</string>
   <string name="common_pending">Dalam proses</string>
   <string name="about_title">Mengenai</string>

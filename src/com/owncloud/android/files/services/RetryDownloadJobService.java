@@ -1,3 +1,24 @@
+/**
+ *   ownCloud Android client application
+ *
+ *   @author David A. Velasco
+ *   @author David González Verdugo
+ *   Copyright (C) 2018 ownCloud GmbH.
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License version 2,
+ *   as published by the Free Software Foundation.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
 package com.owncloud.android.files.services;
 
 import android.accounts.Account;
@@ -6,6 +27,7 @@ import android.app.job.JobService;
 import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
+import android.support.v4.content.ContextCompat;
 
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.FileDataStorageManager;
@@ -29,7 +51,7 @@ public class RetryDownloadJobService extends JobService {
         // retrying the download
         if (account != null) {
             FileDataStorageManager fileDataStorageManager = new FileDataStorageManager(
-                account,
+                    this, account,
                 getContentResolver()
             );
 
@@ -45,10 +67,11 @@ public class RetryDownloadJobService extends JobService {
 
             if (ocFile != null) {
                 // Retry download
-                Intent i = new Intent(this, FileDownloader.class);
-                i.putExtra(FileDownloader.EXTRA_ACCOUNT, account);
-                i.putExtra(FileDownloader.EXTRA_FILE, ocFile);
-                this.startService(i);
+                Intent intent = new Intent(this, FileDownloader.class);
+                intent.putExtra(FileDownloader.KEY_ACCOUNT, account);
+                intent.putExtra(FileDownloader.KEY_FILE, ocFile);
+                intent.putExtra(FileDownloader.KEY_RETRY_DOWNLOAD, true);
+                ContextCompat.startForegroundService(this, intent);
             } else {
                 Log_OC.w(
                     TAG,

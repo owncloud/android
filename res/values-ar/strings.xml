@@ -23,6 +23,8 @@
   <string name="drawer_item_uploads_list">التحميلات</string>
   <string name="drawer_close">إغلاق</string>
   <string name="drawer_open">افتح</string>
+  <string name="drawer_feedback">ملاحظات</string>
+  <string name="drawer_help">المساعدة</string>
   <string name="prefs_category_general">عام</string>
   <string name="prefs_category_more">المزيد</string>
   <string name="prefs_category_security">الأمان</string>
@@ -45,7 +47,7 @@
   <string name="auth_password">كلمة السر</string>
   <string name="auth_register">جديد في %1$s ؟</string>
   <string name="sync_string_files">الملفات</string>
-  <string name="setup_btn_connect">اتصال</string>
+  <string name="setup_btn_login">اتصال</string>
   <string name="uploader_btn_upload_text">رفع</string>
   <string name="uploader_wrn_no_account_title">لم يتم العثور على أي حساب</string>
   <string name="uploader_wrn_no_account_text">لا توجد حسابات %1$s على جهازك.  أنت بحاجة لإعداد حساب في البداية.</string>
@@ -77,11 +79,9 @@
   <string name="action_share">شارك</string>
   <string name="common_yes">نعم</string>
   <string name="common_no">لا</string>
-  <string name="common_ok">تم</string>
   <string name="common_remove_upload">إحذف الرفع</string>
   <string name="common_retry_upload">عاود الرفع ثانية</string>
   <string name="common_cancel_sync">ألغ المزامنة</string>
-  <string name="common_cancel">إلغاء</string>
   <string name="common_back">رجوع</string>
   <string name="common_save_exit">حفظ &amp; خروج</string>
   <string name="common_error">خطأ</string>
@@ -265,7 +265,6 @@
   <string name="share_confirm_public_link_button">حفظ</string>
   <string name="share_via_link_expiration_date_label">إنتهاء</string>
   <string name="share_via_link_password_label">كلمة السر</string>
-  <string name="share_via_link_edit_permission_label">السماح بالتعديلات</string>
   <string name="share_search">البحث</string>
   <string name="share_privilege_can_share">يمكن المشاركة</string>
   <string name="share_privilege_can_edit">يمكن التحرير</string>

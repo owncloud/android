@@ -22,6 +22,8 @@
   <string name="drawer_item_uploads_list">Envíos</string>
   <string name="drawer_close">Pechar</string>
   <string name="drawer_open">Abrir</string>
+  <string name="drawer_feedback">Comentarios</string>
+  <string name="drawer_help">Axuda</string>
   <string name="prefs_category_general">Xeral</string>
   <string name="prefs_category_more">Máis</string>
   <string name="prefs_category_security">Seguridade</string>
@@ -46,7 +48,7 @@ Descárgueo de aquí: %2$s</string>
   <string name="auth_password">Contrasinal</string>
   <string name="auth_register">Novo en %1$s?</string>
   <string name="sync_string_files">Ficheiros</string>
-  <string name="setup_btn_connect">Conectar</string>
+  <string name="setup_btn_login">Conectar</string>
   <string name="uploader_btn_upload_text">Enviar</string>
   <string name="uploader_top_message">Escoller cartafol a cargar</string>
   <string name="uploader_wrn_no_account_title">Non se atoparon contas</string>
@@ -75,9 +77,7 @@ Descárgueo de aquí: %2$s</string>
   <string name="action_share">Compartir</string>
   <string name="common_yes">Si</string>
   <string name="common_no">Non</string>
-  <string name="common_ok">Aceptar</string>
-  <string name="common_cancel">Cancelar</string>
-  <string name="common_back">Atrás</string>
+    <string name="common_back">Atrás</string>
   <string name="common_save_exit">Gardaer e saír.</string>
   <string name="common_error">Erro</string>
   <string name="common_loading">Cargando ...</string>
@@ -313,7 +313,6 @@ Descárgueo de aquí: %2$s</string>
   <string name="share_confirm_public_link_button">Gardar</string>
   <string name="share_via_link_expiration_date_label">Caducidade</string>
   <string name="share_via_link_password_label">Contrasinal</string>
-  <string name="share_via_link_edit_permission_label">Permitir a edición</string>
   <string name="share_with_title">Compartir con</string>
   <string name="share_search">Buscar</string>
   <string name="search_users_and_groups_hint">Buscar usuarios e grupos</string>

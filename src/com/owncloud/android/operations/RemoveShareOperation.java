@@ -2,7 +2,8 @@
  *   ownCloud Android client application
  *
  *   @author David A. Velasco
- *   Copyright (C) 2017 ownCloud GmbH.
+ *   @author David González Verdugo
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -22,12 +23,13 @@ package com.owncloud.android.operations;
 
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.lib.common.OwnCloudClient;
-import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
+import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.files.ExistenceCheckRemoteOperation;
 import com.owncloud.android.lib.resources.shares.OCShare;
 import com.owncloud.android.lib.resources.shares.RemoveRemoteShareOperation;
+import com.owncloud.android.lib.resources.shares.ShareParserResult;
 import com.owncloud.android.lib.resources.shares.ShareType;
 import com.owncloud.android.operations.common.SyncOperation;
 
@@ -48,7 +50,7 @@ public class RemoveShareOperation extends SyncOperation {
     }
 
     @Override
-    protected RemoteOperationResult run(OwnCloudClient client) {
+    protected RemoteOperationResult<ShareParserResult> run(OwnCloudClient client) {
         RemoteOperationResult result;
         
         // Get OCShare from local storage
@@ -100,7 +102,7 @@ public class RemoveShareOperation extends SyncOperation {
             }
 
         } else {
-            result = new RemoteOperationResult(ResultCode.SHARE_NOT_FOUND);
+            result = new RemoteOperationResult<>(ResultCode.SHARE_NOT_FOUND);
         }
 
         return result;
@@ -108,7 +110,7 @@ public class RemoveShareOperation extends SyncOperation {
     
     private boolean notExistFile(OwnCloudClient client, String remotePath){
         ExistenceCheckRemoteOperation existsOperation =
-                new ExistenceCheckRemoteOperation(remotePath, true);
+                new ExistenceCheckRemoteOperation(remotePath, true, false);
         RemoteOperationResult result = existsOperation.execute(client);
         return result.isSuccess();
     }

@@ -24,6 +24,8 @@
   <string name="drawer_item_uploads_list">Üleslaadimised</string>
   <string name="drawer_close">Sulge</string>
   <string name="drawer_open">Ava</string>
+  <string name="drawer_feedback">Tagasiside</string>
+  <string name="drawer_help">Abiinfo</string>
   <string name="prefs_category_general">Üldine</string>
   <string name="prefs_category_more">Rohkem</string>
   <string name="prefs_category_security">Turvalisus</string>
@@ -49,7 +51,7 @@
   <string name="auth_password">Parool</string>
   <string name="auth_register">Uus %1$s kasutaja?</string>
   <string name="sync_string_files">Failid</string>
-  <string name="setup_btn_connect">Ühenda</string>
+  <string name="setup_btn_login">Ühenda</string>
   <string name="uploader_btn_upload_text">Lae üles</string>
   <string name="uploader_top_message">Vali üleslaadimiste kaust</string>
   <string name="uploader_wrn_no_account_title">Kontot ei leitud</string>
@@ -76,9 +78,7 @@
   <string name="action_share">Jaga</string>
   <string name="common_yes">Jah</string>
   <string name="common_no">Ei</string>
-  <string name="common_ok">OK</string>
-  <string name="common_cancel">Loobu</string>
-  <string name="common_back">Tagasi</string>
+    <string name="common_back">Tagasi</string>
   <string name="common_save_exit">Salvesta &amp; välju</string>
   <string name="common_error">Viga</string>
   <string name="common_loading">Laadimine ...</string>
@@ -328,8 +328,6 @@ Allpool on loend kohalikest failidest ning serveris asuvatest failidest %5$s, mi
   <string name="share_via_link_expiration_date_label">Aegumine</string>
   <string name="share_via_link_password_label">Parool</string>
   <string name="share_via_link_password_title">Turvatud</string>
-  <string name="share_via_link_edit_permission_label">Luba muutmine</string>
-  <string name="share_via_link_show_file_listing_label">Näita failide nimekirja</string>
   <string name="share_get_public_link_button">Hangi link</string>
   <string name="share_with_title">Jaga ...</string>
   <string name="share_search">Otsi</string>

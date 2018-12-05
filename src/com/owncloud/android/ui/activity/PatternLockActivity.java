@@ -80,9 +80,9 @@ public class PatternLockActivity extends AppCompatActivity {
         * it is set to true when the pattern is set and when the pattern is removed.
          */
         boolean mPatternExpShouldVisible = false;
-        mPatternHeader = (TextView) findViewById(R.id.header_pattern);
-        mPatternExplanation = (TextView) findViewById(R.id.explanation_pattern);
-        mPatternLockView = (PatternLockView) findViewById(R.id.pattern_lock_view);
+        mPatternHeader = findViewById(R.id.header_pattern);
+        mPatternExplanation = findViewById(R.id.explanation_pattern);
+        mPatternLockView = findViewById(R.id.pattern_lock_view);
         mPatternLockView.clearPattern();
         if (ACTION_CHECK.equals(getIntent().getAction())) {
             /**
@@ -93,7 +93,9 @@ public class PatternLockActivity extends AppCompatActivity {
             mPatternExplanation.setVisibility(View.INVISIBLE);
             setCancelButtonEnabled(false);
         } else if (ACTION_REQUEST_WITH_RESULT.equals(getIntent().getAction())) {
-            //This block is executed when the user is setting the pattern lock (i.e enabling the pattern lock)
+            /**
+             * This block is executed when the user is setting the pattern lock (i.e enabling the pattern lock)
+             */
             if (savedInstanceState != null) {
                 mPatternPresent = savedInstanceState.getBoolean(KEY_CONFIRMING_PATTERN);
                 mPatternValue = savedInstanceState.getString(KEY_PATTERN_STRING);
@@ -112,7 +114,9 @@ public class PatternLockActivity extends AppCompatActivity {
                 setCancelButtonEnabled(true);
             }
         } else if (ACTION_CHECK_WITH_RESULT.equals(getIntent().getAction())) {
-            //This block is executed when the user is removing the pattern lock (i.e disabling the pattern lock)
+            /**
+             * This block is executed when the user is removing the pattern lock (i.e disabling the pattern lock)
+             */
             mPatternHeader.setText(R.string.pattern_remove_pattern);
             mPatternExplanation.setText(getResources().getString(R.string.pattern_no_longer_required));
             mPatternExplanation.setVisibility(View.VISIBLE);
@@ -240,10 +244,7 @@ public class PatternLockActivity extends AppCompatActivity {
 
     protected boolean confirmPattern() {
         mPatternPresent = false;
-        if (mNewPatternValue != null && mNewPatternValue.equals(mPatternValue)) {
-            return true;
-        }
-        return false;
+        return mNewPatternValue != null && mNewPatternValue.equals(mPatternValue);
     }
 
     private void showErrorAndRestart(int errorMessage, int headerMessage,
@@ -264,10 +265,7 @@ public class PatternLockActivity extends AppCompatActivity {
         SharedPreferences appPrefs = PreferenceManager
                 .getDefaultSharedPreferences(getApplicationContext());
         String savedPattern = appPrefs.getString(KEY_PATTERN, null);
-        if (savedPattern != null && savedPattern.equals(mPatternValue)) {
-            return true;
-        }
-        return false;
+        return savedPattern != null && savedPattern.equals(mPatternValue);
     }
 
     /**
@@ -277,7 +275,7 @@ public class PatternLockActivity extends AppCompatActivity {
      * @param enabled  'True' makes the cancel button available, 'false' hides it.
      */
     protected void setCancelButtonEnabled(boolean enabled) {
-        Button cancelButton = (Button) findViewById(R.id.cancel_pattern);
+        Button cancelButton = findViewById(R.id.cancel_pattern);
         if (enabled) {
             cancelButton.setVisibility(View.VISIBLE);
             cancelButton.setOnClickListener(new View.OnClickListener() {

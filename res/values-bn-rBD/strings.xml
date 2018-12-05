@@ -15,6 +15,8 @@
   <!--TODO re-enable when "On Device" is available
     <string name="drawer_item_on_device">On device</string>-->
   <string name="drawer_open">খোল</string>
+  <string name="drawer_feedback">মতামত</string>
+  <string name="drawer_help">সহায়িকা</string>
   <string name="prefs_category_general">সাধারণ</string>
   <string name="prefs_category_more">বেশী</string>
   <string name="prefs_category_security">নিরাপত্তা</string>
@@ -31,7 +33,7 @@
   <string name="auth_password">কূটশব্দ</string>
   <string name="auth_register">%1$s এ নতুন?</string>
   <string name="sync_string_files">ফাইল</string>
-  <string name="setup_btn_connect">সংযুক্ত হও</string>
+  <string name="setup_btn_login">সংযুক্ত হও</string>
   <string name="uploader_btn_upload_text">আপলোড</string>
   <string name="uploader_wrn_no_account_title">কোন একাউন্ট খুঁজে পাওয়া গেল না</string>
   <string name="uploader_wrn_no_account_setup_btn_text">সেট-আপ</string>
@@ -49,9 +51,7 @@
   <string name="action_share">ভাগাভাগি কর</string>
   <string name="common_yes">হ্যাঁ</string>
   <string name="common_no">না</string>
-  <string name="common_ok">তথাস্তু</string>
-  <string name="common_cancel">বাতিল</string>
-  <string name="common_back">পেছনে যাও</string>
+    <string name="common_back">পেছনে যাও</string>
   <string name="common_error">সমস্যা</string>
   <string name="common_loading">লোড চলছে....</string>
   <string name="common_error_unknown">অজানা জটিলতা</string>

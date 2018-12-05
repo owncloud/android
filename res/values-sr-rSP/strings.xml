@@ -17,6 +17,7 @@
   <string name="drawer_item_settings">Podešavanja</string>
   <string name="drawer_close">Zatvori</string>
   <string name="drawer_open">Otvori</string>
+  <string name="drawer_help">Pomoć</string>
   <string name="prefs_category_general">Opšte</string>
   <string name="prefs_category_more">Vise</string>
   <string name="prefs_accounts">Nalozi</string>
@@ -29,7 +30,7 @@
   <string name="auth_username">Korisničko ime</string>
   <string name="auth_password">Lozinka</string>
   <string name="sync_string_files">Fajlovi</string>
-  <string name="setup_btn_connect">Poveži</string>
+  <string name="setup_btn_login">Poveži</string>
   <string name="uploader_btn_upload_text">Pošalji</string>
   <string name="uploader_wrn_no_account_title">Nalog nije nađen</string>
   <string name="uploader_wrn_no_account_quit_btn_text">Napusti</string>
@@ -46,9 +47,7 @@
   <string name="action_share">Deljenje</string>
   <string name="common_yes">Da</string>
   <string name="common_no">Ne</string>
-  <string name="common_ok">Ok</string>
-  <string name="common_cancel">Otkaži</string>
-  <string name="common_error">Greška</string>
+    <string name="common_error">Greška</string>
   <string name="common_error_unknown">Nepoznata greška</string>
   <string name="common_pending">Na čekanju</string>
   <string name="about_title">O programu</string>
@@ -91,7 +90,6 @@
   <string name="share_confirm_public_link_button">Sačuvaj</string>
   <string name="share_via_link_expiration_date_label">Isticanje</string>
   <string name="share_via_link_password_label">Lozinka</string>
-  <string name="share_via_link_edit_permission_label">Dozvoli uređivanje</string>
   <string name="share_search">Traži</string>
   <string name="share_privilege_can_share">može da deli</string>
   <string name="share_privilege_can_edit">može da menja</string>

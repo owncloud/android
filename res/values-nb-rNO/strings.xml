@@ -1,7 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="about_android">%1$s Android app</string>
-  <string name="about_version">versjon %1$s</string>
   <string name="actionbar_sync">Oppdater konto</string>
   <string name="actionbar_upload">Last opp</string>
   <string name="actionbar_upload_from_apps">Innhold fra andre applikasjoner</string>
@@ -15,15 +13,13 @@
   <string name="actionbar_descending">Synkende</string>
   <string name="actionbar_sort_title">Sorter etter</string>
   <string name="actionbar_sort_by_name">A-Z</string>
-  <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
-  <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Alle filer</string>
-  <!--TODO re-enable when "On Device" is available
-    <string name="drawer_item_on_device">On device</string>-->
   <string name="drawer_item_settings">Innstillinger</string>
   <string name="drawer_item_uploads_list">Opplastinger</string>
   <string name="drawer_close">Lukk</string>
   <string name="drawer_open">Åpne</string>
+  <string name="drawer_feedback">Tilbakemelding</string>
+  <string name="drawer_help">Hjelp</string>
   <string name="prefs_category_general">Generelt</string>
   <string name="prefs_category_more">Mer</string>
   <string name="prefs_category_security">Sikkerhet</string>
@@ -69,7 +65,7 @@
   <string name="auth_password">Passord</string>
   <string name="auth_register">Ny med %1$s?</string>
   <string name="sync_string_files">Filer</string>
-  <string name="setup_btn_connect">Koble til</string>
+  <string name="setup_btn_login">Logg inn</string>
   <string name="uploader_btn_upload_text">Last opp</string>
   <string name="uploader_top_message">Velg mappe for opplasting</string>
   <string name="uploader_wrn_no_account_title">Ingen konto funnet</string>
@@ -108,11 +104,9 @@
   <string name="action_share">Delt ressurs</string>
   <string name="common_yes">Ja</string>
   <string name="common_no">Nei</string>
-  <string name="common_ok">OK</string>
   <string name="common_remove_upload">Fjern opplasting</string>
   <string name="common_retry_upload">Prøv å laste opp igjen.</string>
   <string name="common_cancel_sync">Avbryt synkronisering</string>
-  <string name="common_cancel">Avbryt</string>
   <string name="common_back">Tilbake</string>
   <string name="common_save_exit">Lagre &amp; avslutt</string>
   <string name="common_error">Feil</string>
@@ -124,9 +118,7 @@
   <string name="change_password">Endre passord</string>
   <string name="delete_account">Fjern konto</string>
   <string name="create_account">Opprett konto</string>
-  <string name="upload_chooser_title">Last opp fra...</string>
   <string name="uploader_info_dirname">Mappenavn</string>
-  <string name="uploader_upload_in_progress_ticker">Laster opp...</string>
   <string name="uploader_upload_in_progress_content">%1$d%% Laster opp %2$s</string>
   <string name="uploader_upload_succeeded_ticker">Opplasting fullført</string>
   <string name="uploader_upload_succeeded_content_single">%1$s lastet opp</string>
@@ -143,8 +135,6 @@
   <string name="uploads_view_group_current_uploads">Nåværende</string>
   <string name="uploads_view_group_failed_uploads">Feilet (trykk for å prøve igjen)</string>
   <string name="uploads_view_group_finished_uploads">Opplastet</string>
-  <string name="uploads_view_group_file_count">%d filer</string>
-  <string name="uploads_view_group_file_count_single">%d Fil</string>
   <string name="uploads_view_upload_status_succeeded">Ferdig</string>
   <string name="uploads_view_upload_status_cancelled">Avbrutt</string>
   <string name="uploads_view_upload_status_paused">Pauset</string>
@@ -162,7 +152,6 @@
   <string name="uploads_view_upload_status_waiting_for_wifi">Venter på trådløstilkobling</string>
   <string name="uploads_view_later_waiting_to_upload">Venter på å laste op</string>
   <string name="uploads_view_unsupported_media_type">Mediatypen er ikke støttet</string>
-  <string name="downloader_download_in_progress_ticker">Laster ned...</string>
   <string name="downloader_download_in_progress_content">%1$d%% Laster ned %2$s</string>
   <string name="downloader_download_succeeded_ticker">Nedlasting fullført</string>
   <string name="downloader_download_succeeded_content">%1$s lastet ned</string>
@@ -226,8 +215,7 @@
   <string name="media_play_pause_description">Spill eller pause</string>
   <string name="media_forward_description">Spol fremover</string>
   <string name="upload_from_camera_title">Bilde fra kamera</string>
-  <string name="auth_getting_authorization">Henter autorisasjon ..</string>
-  <string name="auth_trying_to_login">Prøver å logge inn ..</string>
+  <string name="auth_getting_authorization">Henter godkjenning...</string>
   <string name="auth_no_net_conn_title">Ingen nettverkstilkobling</string>
   <string name="auth_nossl_plain_ok_title">Sikker tilkobling ikke tilgjengelig.</string>
   <string name="auth_connection_established">Tilkobling opprettet</string>
@@ -282,7 +270,6 @@
   <string name="wait_checking_credentials">Sjekker lagrede påloggingsdetaljer</string>
   <string name="filedisplay_unexpected_bad_get_content">Uforventet problem; vennligst velg filen fra en annen applikasjon</string>
   <string name="filedisplay_no_file_selected">Ingen fil ble valgt</string>
-  <string name="activity_chooser_title">Send lenke til ...</string>
   <string name="wait_for_tmp_copy_from_private_storage">Kopierer fil fra privat lager</string>
   <string name="oauth_check_onoff">Logg inn med oAuth2</string>
   <string name="oauth_login_connection">Kobler til OAuth2-server...</string>
@@ -373,7 +360,8 @@
   <string name="log_send_history_button">Send historik</string>
   <string name="log_send_no_mail_app">Ingen app for sending av logger funnet. Installer epost-app.</string>
   <string name="log_send_mail_subject">%1$s Android app logger</string>
-  <string name="log_progress_dialog_text">Laster data ...</string>
+  <string name="log_progress_dialog_text">Laster data...</string>
+  <string name="actionbar_select_all">Velg alle</string>
   <string name="saml_authentication_required_text">Autentisering kreves</string>
   <string name="saml_authentication_wrong_pass">Feil passord</string>
   <string name="actionbar_move">Flytt</string>
@@ -411,8 +399,6 @@
   <string name="prefs_camera_upload_source_path_title">Kamera-mappe (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">obligatorisk</string>
   <string name="prefs_camera_upload_source_path_title_optional">valgfri</string>
-  <string name="prefs_camera_upload_behaviour_dialogTitle">Opprinnelig fil vil bli...</string>
-  <string name="prefs_camera_upload_behaviour_title">Opprinnelig fil vil bli...</string>
   <string name="upload_copy_files">Kopier fil</string>
   <string name="upload_move_files">Flytt fil</string>
   <string name="pref_behaviour_entries_keep_file">beholdt i opprinnelig mappe</string>
@@ -432,10 +418,10 @@
   <string name="share_via_link_expiration_date_label">Utløpsdato</string>
   <string name="share_via_link_password_label">Passord</string>
   <string name="share_via_link_password_title">Sikret</string>
-  <string name="share_via_link_edit_permission_label">Tillat redigering</string>
-  <string name="share_via_link_show_file_listing_label">Vis filoppføringer</string>
+  <string name="share_via_link_edit_permission_read_only_label">Last ned / Se</string>
+  <string name="share_via_link_edit_permission_read_and_write_label">Last ned / Se / Last opp</string>
   <string name="share_get_public_link_button">Hent lenke</string>
-  <string name="share_with_title">Del med ...</string>
+  <string name="share_with_title">Del med</string>
   <string name="share_with_edit_title">Del med %1$s</string>
   <string name="share_search">Søk</string>
   <string name="search_users_and_groups_hint">Søk etter brukere og grupper</string>
@@ -504,6 +490,7 @@
     <item quantity="other">%d valgte</item>
   </plurals>
   <!--Welcome to oC intro features-->
+  <string name="welcome_feature_skip_button">Hopp over</string>
   <string name="welcome_feature_1_title">Administrer alle dine synkroniserte filer</string>
   <string name="welcome_feature_1_text">Du kan kopiere, flytte, slette</string>
   <string name="welcome_feature_2_title">Del filer og mapper</string>
@@ -514,12 +501,6 @@
   <string name="welcome_feature_4_text">Dine bilder/videoer lastes opp automatisk</string>
   <string name="welcome_feature_5_title">Video strømming</string>
   <string name="welcome_feature_5_text">Spill av videoene dine uten å laste dem ned</string>
-  <string name="welcome_feature_6_title">Mønsterlås</string>
-  <string name="welcome_feature_6_text">Bruk et mønster for å låse din ownCloud-app</string>
-  <string name="welcome_feature_7_title">Fingeravtrykkslås</string>
-  <string name="welcome_feature_7_text">Bruk fingeravtrykk for å låse din ownCloud app</string>
-  <string name="welcome_feature_8_title">GIF støtte</string>
-  <string name="welcome_feature_8_text">Spill dine animerte GIF-bilder</string>
-  <string name="welcome_feature_9_title">Last opp bilde fra kamera</string>
-  <string name="welcome_feature_9_text">Ta et bilde og last det opp direkte på serveren</string>
+  <string name="welcome_feature_7_title">Velg alle</string>
+  <string name="welcome_feature_8_title">Tilgjengelig frakoblet</string>
 </resources>

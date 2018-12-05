@@ -23,6 +23,8 @@
   <string name="drawer_item_uploads_list">Oplaaie</string>
   <string name="drawer_close">Sluit</string>
   <string name="drawer_open">Open</string>
+  <string name="drawer_feedback">Terugvoer</string>
+  <string name="drawer_help">Hulp</string>
   <string name="prefs_category_general">Algemeen</string>
   <string name="prefs_category_more">Nog</string>
   <string name="prefs_category_security">Sekuriteit</string>
@@ -36,7 +38,7 @@
   <string name="auth_username">Gebruikersnaam</string>
   <string name="auth_password">Wagwoord</string>
   <string name="sync_string_files">Lêers</string>
-  <string name="setup_btn_connect">Verbind</string>
+  <string name="setup_btn_login">Verbind</string>
   <string name="uploader_btn_upload_text">Laai Op</string>
   <string name="file_list_seconds_ago">sekondes gelede</string>
   <string name="file_list_loading">Laai tans…</string>
@@ -48,9 +50,7 @@
   <string name="action_share">Deel</string>
   <string name="common_yes">Ja</string>
   <string name="common_no">Nee</string>
-  <string name="common_ok">OK</string>
-  <string name="common_cancel">Kanseleer</string>
-  <string name="common_back">Terug</string>
+    <string name="common_back">Terug</string>
   <string name="common_error">Fout</string>
   <string name="common_error_unknown">Onbekende fout</string>
   <string name="common_pending">Hangend</string>
@@ -103,8 +103,6 @@
   <string name="share_confirm_public_link_button">Bewaar</string>
   <string name="share_via_link_expiration_date_label">Verval</string>
   <string name="share_via_link_password_label">Wagwoord</string>
-  <string name="share_via_link_edit_permission_label">Staan wysiging toe</string>
-  <string name="share_via_link_show_file_listing_label">Toon lêerlys</string>
   <string name="share_search">Soek</string>
   <string name="share_privilege_can_share">kan deel</string>
   <string name="share_privilege_can_edit">kan wysig</string>

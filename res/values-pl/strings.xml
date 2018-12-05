@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="about_android">%1$s Aplikacja Android</string>
-  <string name="about_version">wersja %1$s</string>
+  <string name="actionbar_search">Szukaj w tym folderze</string>
   <string name="actionbar_sync">Odśwież konto</string>
   <string name="actionbar_upload">Wyślij plik</string>
   <string name="actionbar_upload_from_apps">Zawartość z innych aplikacji</string>
@@ -15,15 +14,19 @@
   <string name="actionbar_descending">Malejąco</string>
   <string name="actionbar_sort_title">Sortuj według</string>
   <string name="actionbar_sort_by_name">A-Z</string>
-  <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
-  <!--<string name="drawer_item_accounts">Accounts</string>-->
+  <string name="actionbar_sort_by_date">Najstarsze - Najnowsze</string>
+  <string name="actionbar_sort_by_size">Najmniejsze - Największe</string>
   <string name="drawer_item_all_files">Wszystkie pliki</string>
-  <!--TODO re-enable when "On Device" is available
-    <string name="drawer_item_on_device">On device</string>-->
   <string name="drawer_item_settings">Ustawienia</string>
   <string name="drawer_item_uploads_list">Wysłane</string>
   <string name="drawer_close">Zamknij</string>
   <string name="drawer_open">Otwórz</string>
+  <string name="drawer_loading_quota">Oblicam wielkość</string>
+  <string name="drawer_quota">Wykorzystano %1$s z %2$s (%3$s %%)</string>
+  <string name="drawer_unavailable_free_storage">%1$s w użyciu</string>
+  <string name="drawer_unavailable_used_storage">Brak informacji o zużyciu pamięci</string>
+  <string name="drawer_feedback">Wsparcie</string>
+  <string name="drawer_help">Pomoc</string>
   <string name="prefs_category_general">Ogólne</string>
   <string name="prefs_category_more">Więcej</string>
   <string name="prefs_category_security">Bezpieczeństwo</string>
@@ -57,13 +60,15 @@
   <string name="pattern_stored">Wzór odblokowania zapisany</string>
   <string name="recommend_subject">Wypróbuj %1$s na swoim smartphonie!</string>
   <string name="recommend_text">Chciałbym zaprosić Cię do używania %1$s na swoim smartfonie!\nŚciągnij tutaj: %2$s</string>
+  <string name="auth_failure_snackbar">Uwierzytelnianie nieudane</string>
+  <string name="auth_failure_snackbar_action">Zmień konto</string>
   <string name="auth_check_server">Sprawdź serwer</string>
   <string name="auth_host_url">Adres serwera https://...</string>
   <string name="auth_username">Nazwa użytkownika</string>
   <string name="auth_password">Hasło</string>
   <string name="auth_register">Nowe %1$s?</string>
   <string name="sync_string_files">Pliki</string>
-  <string name="setup_btn_connect">Połącz</string>
+  <string name="setup_btn_login">Zaloguj</string>
   <string name="uploader_btn_upload_text">Wyślij</string>
   <string name="uploader_top_message">Wybierz folder do wgrywania plików</string>
   <string name="uploader_wrn_no_account_title">Nie znaleziono konta</string>
@@ -83,6 +88,7 @@
   <string name="file_list_no_app_for_file_type">Nie znaleziono aplikacji dla tego rodzaju pliku</string>
   <string name="local_file_list_empty">Nie ma plików w tym folderze.</string>
   <string name="local_file_list_empty_just_folders">W tym folderze nie ma żadnych folderów.</string>
+  <string name="local_file_list_search_with_no_matches">Brak wyników wyszukiwania</string>
   <string name="upload_list_empty">Brak przesłanych plików.</string>
   <string name="file_list_folder">folder</string>
   <string name="file_list_folders">foldery</string>
@@ -102,15 +108,13 @@
   <string name="action_share">Udostępnij</string>
   <string name="common_yes">Tak</string>
   <string name="common_no">Nie</string>
-  <string name="common_ok">OK</string>
   <string name="common_remove_upload">Usuń</string>
   <string name="common_retry_upload">Spróbuj przesłać jeszcze raz</string>
   <string name="common_cancel_sync">Anuluj synchronizację</string>
-  <string name="common_cancel">Anuluj</string>
   <string name="common_back">Wróć</string>
   <string name="common_save_exit">Zapisz i wyjdź</string>
   <string name="common_error">Błąd</string>
-  <string name="common_loading">Wczytuję ...</string>
+  <string name="common_loading">Wczytywanie...</string>
   <string name="common_unknown">nieznane</string>
   <string name="common_error_unknown">Nieznany błąd</string>
   <string name="common_pending">Oczekujące</string>
@@ -118,9 +122,7 @@
   <string name="change_password">Zmień hasło</string>
   <string name="delete_account">Usuń konto</string>
   <string name="create_account">Utwórz konto</string>
-  <string name="upload_chooser_title">Wyślij plik z …</string>
   <string name="uploader_info_dirname">Nazwa folderu</string>
-  <string name="uploader_upload_in_progress_ticker">Wysyłam…</string>
   <string name="uploader_upload_in_progress_content">%1$d%% Wysyłanie %2$s</string>
   <string name="uploader_upload_succeeded_ticker">Wysyłanie zakończone powodzeniem</string>
   <string name="uploader_upload_succeeded_content_single">Wysłano %1$s</string>
@@ -137,8 +139,6 @@
   <string name="uploads_view_group_current_uploads">Bieżący</string>
   <string name="uploads_view_group_failed_uploads">Błąd (kliknij, by ponowić)</string>
   <string name="uploads_view_group_finished_uploads">Wysłane</string>
-  <string name="uploads_view_group_file_count">%d plików</string>
-  <string name="uploads_view_group_file_count_single">%d plik</string>
   <string name="uploads_view_upload_status_succeeded">Ukończono</string>
   <string name="uploads_view_upload_status_cancelled">Przerwano</string>
   <string name="uploads_view_upload_status_paused">Zatrzymano</string>
@@ -156,7 +156,6 @@
   <string name="uploads_view_upload_status_waiting_for_wifi">Oczekiwanie na połączenie bezprzewodowe</string>
   <string name="uploads_view_later_waiting_to_upload">Oczekuję na przesyłanie</string>
   <string name="uploads_view_unsupported_media_type">Nieobsługiwany typ nośnika</string>
-  <string name="downloader_download_in_progress_ticker">Pobieranie …</string>
   <string name="downloader_download_in_progress_content">%1$d%% Pobieranie %2$s</string>
   <string name="downloader_download_succeeded_ticker">Pobieranie zakończone</string>
   <string name="downloader_download_succeeded_content">%1$s pobrano</string>
@@ -193,6 +192,13 @@
   <string name="pass_code_wrong">Kod PIN nieprawidłowy</string>
   <string name="pass_code_removed">Kod PIN został usunięty</string>
   <string name="pass_code_stored">Kod PIN został zapisany</string>
+  <string name="fingerprint_confirm">Potwierdź odciskiem palca aby kontynuować</string>
+  <string name="fingerprint_hint">Czujnik dotykowy</string>
+  <string name="fingerprint_not_recognized">Nierozpoznany odcisk palca, spróbuj jeszcze raz</string>
+  <string name="fingerprint_success">Odcisk palca rozpoznany</string>
+  <string name="fingerprint_not_hardware_detected">To urządzenie nie obsługuje autoryzacji odciskiem palca</string>
+  <string name="fingerprint_not_enrolled_fingerprints">Zarejestruj przynajmniej jeden odcisk palca aby skorzystać z tej funkcji</string>
+  <string name="fingerprint_not_granted_permissions">Nie przydzielono uprawnień dla odcisku palca</string>
   <string name="media_notif_ticker">%1$s odtwarzacz muzyki</string>
   <string name="media_state_playing">%1$s (odtwarzany)</string>
   <string name="media_state_loading">%1$s (wczytywany)</string>
@@ -212,8 +218,8 @@
   <string name="media_rewind_description">Przycisk przewijania</string>
   <string name="media_play_pause_description">Przycisk odtwarzania / pauzowania</string>
   <string name="media_forward_description">Przycisk przewijania do przodu</string>
-  <string name="auth_getting_authorization">Autoryzowanie...</string>
-  <string name="auth_trying_to_login">Próba logowania</string>
+  <string name="upload_from_camera_title">Obraz z kamery</string>
+  <string name="auth_getting_authorization">Pobieram autoryzację...</string>
   <string name="auth_no_net_conn_title">Brak połączenia sieciowego</string>
   <string name="auth_nossl_plain_ok_title">Nie można nawiązać bezpiecznego połączenia.</string>
   <string name="auth_connection_established">Połączenie nawiązane</string>
@@ -268,7 +274,6 @@
   <string name="wait_checking_credentials">Sprawdzanie danych</string>
   <string name="filedisplay_unexpected_bad_get_content">Nieoczekiwany problem; spróbuj wybrać plik z innej aplikacji</string>
   <string name="filedisplay_no_file_selected">Nie wybrano żadnych plików</string>
-  <string name="activity_chooser_title">Wyślij link do ...</string>
   <string name="wait_for_tmp_copy_from_private_storage">Kopiowanie pliku z prywatnego zasobu</string>
   <string name="oauth_check_onoff">Loguj przez oAuth2</string>
   <string name="oauth_login_connection">Łącze do serwera OAuth2...</string>
@@ -359,7 +364,8 @@
   <string name="log_send_history_button">Wyślij historię</string>
   <string name="log_send_no_mail_app">Brak aplikacji do wysyłania logów. Zainstaluj klienta poczty.</string>
   <string name="log_send_mail_subject">%1$s Logi aplikacji Android</string>
-  <string name="log_progress_dialog_text">Ładowanie danych...</string>
+  <string name="log_progress_dialog_text">Ładuję dane...</string>
+  <string name="actionbar_select_all">Wybierz wszystko</string>
   <string name="saml_authentication_required_text">Wymagana autoryzacja</string>
   <string name="saml_authentication_wrong_pass">Złe hasło</string>
   <string name="actionbar_move">Przenieś</string>
@@ -397,8 +403,6 @@
   <string name="prefs_camera_upload_source_path_title">Folder aparatu (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">wymagane</string>
   <string name="prefs_camera_upload_source_path_title_optional">opcjonalne</string>
-  <string name="prefs_camera_upload_behaviour_dialogTitle">Oryginalny plik zostanie...</string>
-  <string name="prefs_camera_upload_behaviour_title">Oryginalny plik zostanie...</string>
   <string name="upload_copy_files">Kopiuj plik</string>
   <string name="upload_move_files">Przenieś plik</string>
   <string name="pref_behaviour_entries_keep_file">zachowany w oryginalnym folderze</string>
@@ -418,10 +422,10 @@
   <string name="share_via_link_expiration_date_label">Wygaśnięcie</string>
   <string name="share_via_link_password_label">Hasło</string>
   <string name="share_via_link_password_title">Zabezpieczone</string>
-  <string name="share_via_link_edit_permission_label">Pozwól na edycję</string>
-  <string name="share_via_link_show_file_listing_label">Pokaż kolejno listę plików</string>
+  <string name="share_via_link_edit_permission_read_only_label">Pobieranie / Podgląd</string>
+  <string name="share_via_link_edit_permission_read_and_write_label">Pobieranie / Podgląd / Wysyłanie</string>
   <string name="share_get_public_link_button">Pobierz link</string>
-  <string name="share_with_title">Współdziel z ...</string>
+  <string name="share_with_title">Współdziel z</string>
   <string name="share_with_edit_title">Współdziel z %1$s</string>
   <string name="share_search">Wyszukaj</string>
   <string name="search_users_and_groups_hint">Szukaj użytkowników i grup</string>
@@ -483,6 +487,11 @@
   <string name="media_service_notification_channel_description">Zobacz odtwarzacz muzyki</string>
   <string name="file_sync_notification_channel_name">Synchronizacja pliku</string>
   <string name="file_sync_notification_channel_description">Zobacz wynik synchronizacji plików</string>
+  <string name="rate_dialog_title">Oceń aplikację %1$s!</string>
+  <string name="rate_dialog_description">Jeśli jesteś zadowolony z tej aplikacji, to może poświęcisz chwilę aby ją ocenić? Twoja opinia jest dla nas bardzo ważna.</string>
+  <string name="button_no_thanks_name">NIE, DZIĘKUJĘ</string>
+  <string name="button_later_name">PÓŹNIEJ</string>
+  <string name="button_rate_now_name">OCEŃ TERAZ</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d wybrany</item>
     <item quantity="few">wybrano: %d</item>
@@ -490,6 +499,15 @@
     <item quantity="other">wybrano: %d</item>
   </plurals>
   <!--Welcome to oC intro features-->
+  <string name="welcome_feature_skip_button">Pomiń</string>
+  <string name="welcome_feature_1_title">Zarządzaj wszystkimi synchronizowanymi plikami</string>
+  <string name="welcome_feature_1_text">Możesz kopiować, przenosić, usuwać</string>
+  <string name="welcome_feature_2_title">Udostępnij pliki i foldery</string>
+  <string name="welcome_feature_2_text">Możesz udostępniać prywatnie i publicznie</string>
+  <string name="welcome_feature_3_text">Podłącz do twoich wszystkich serwerów ownCloud</string>
   <string name="welcome_feature_4_title">Wrzucanie kamery</string>
-  <string name="welcome_feature_7_title">Blokada odciskiem palca</string>
+  <string name="welcome_feature_4_text">Automatyczne wysyłanie twoich zdjęć oraz wideo </string>
+  <string name="welcome_feature_5_text">Odtwarzaj twoje pliki wideo bez pobierania</string>
+  <string name="welcome_feature_7_title">Wybierz wszystko</string>
+  <string name="welcome_feature_8_title">Dostępne w trybie offline</string>
 </resources>

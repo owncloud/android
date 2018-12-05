@@ -1,7 +1,7 @@
 ###################################################################
   ownCloud Android client
 
-  Copyright (C) 2016 ownCloud GmbH.
+  Copyright (C) 2018 ownCloud GmbH.
   Copyright (C) 2012  Bartek Przybylski
 ###################################################################
 
@@ -36,14 +36,6 @@ that govern this software, for the purposes they are being used.
 
 The third party software included and used by this project is:
 
- * Apache JackRabbit, version 2.2.5.
-   Copyright (C) 2004-2010 The Apache Software Foundation.
-   Licensed under Apache License, Version 2.0.
-   Placed at libs/jackrabbit-webdav-2.2.5-jar-with-dependencies.jar
-   The jar file must be included in the ownCloud client APK.
-   Original license document included at libs/LICENSE.txt
-   See http://jackrabbit.apache.org/
-
  * Transifex client.
    Copyright (C) Transifex.
    Licensed under GNU General Public License.
@@ -75,3 +67,19 @@ The third party software included and used by this project is:
     Licensed under Apache License, Version 2.0.
     Included in the ownCloud client APK.
     See https://github.com/chrisbanes/PhotoView
+
+ * Gson, version 2.8.5
+    Copyright 2008 Google Inc.
+    Licensed under Apache License, Version 2.0.
+    Included in the ownCloud client APK.
+    See https://github.com/google/gson
+
+ * OkHttp, version 3.10
+   Licensed under Apache License, Version 2.0.
+   Included in the ownCloud client APK.
+   See https://github.com/square/okhttp
+
+ * Dav4Android
+   Licensed under Mozilla Public License, Version 2.0.
+   Included in the ownCloud client APK.
+   See https://gitlab.com/bitfireAT/dav4android

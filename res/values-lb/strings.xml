@@ -22,6 +22,8 @@
   <string name="drawer_item_uploads_list">Uploads</string>
   <string name="drawer_close">Zoumaachen</string>
   <string name="drawer_open">Opmaachen</string>
+  <string name="drawer_feedback">Feedback</string>
+  <string name="drawer_help">Hëllef</string>
   <string name="prefs_category_general">Allgemeng</string>
   <string name="prefs_category_more">Méi</string>
   <string name="prefs_category_security">Sécherheet</string>
@@ -47,7 +49,7 @@
   <string name="auth_password">Passwuert</string>
   <string name="auth_register">Nei bei %1$s?</string>
   <string name="sync_string_files">Fichieren</string>
-  <string name="setup_btn_connect">Verbannen</string>
+  <string name="setup_btn_login">Verbannen</string>
   <string name="uploader_btn_upload_text">Eroplueden</string>
   <string name="uploader_top_message">Dossier fir eropzelueden auswielen</string>
   <string name="uploader_wrn_no_account_title">Keen Account fonnt</string>
@@ -81,12 +83,10 @@
   <string name="action_share">Deelen</string>
   <string name="common_yes">Jo</string>
   <string name="common_no">Nee</string>
-  <string name="common_ok">OK</string>
-  <string name="common_remove_upload">Den Upload ewech huelen</string>
+    <string name="common_remove_upload">Den Upload ewech huelen</string>
   <string name="common_retry_upload">Upload nach emol probéieren</string>
   <string name="common_cancel_sync">Synchronisatioun ofbriechen</string>
-  <string name="common_cancel">Ofbriechen</string>
-  <string name="common_back">Zeréck</string>
+    <string name="common_back">Zeréck</string>
   <string name="common_error">Feeler</string>
   <string name="common_loading">Et gëtt gelueden ...</string>
   <string name="common_unknown">Onbekannt</string>
@@ -348,7 +348,6 @@
   <string name="share_via_link_expiration_date_label">Leeft of</string>
   <string name="share_via_link_password_label">Passwuert</string>
   <string name="share_via_link_password_title">Geséchert</string>
-  <string name="share_via_link_edit_permission_label">Beaarbechten erlaben</string>
   <string name="share_get_public_link_button">De Link kréien</string>
   <string name="share_with_title">Deele mat</string>
   <string name="share_with_edit_title">Mam %1$s deelen</string>

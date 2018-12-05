@@ -1,16 +1,35 @@
+// Gradle build file
+
+buildscript {
+    repositories {
+        google()
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.2.1'
+    }
+}
+
 apply plugin: 'com.android.application'
 
+repositories {
+    google()
+    jcenter()
+}
+
 dependencies {
-    compile fileTree(dir: 'libs', include: '*.jar')
+    implementation fileTree(dir: 'libs', include: '*.jar')
 }
 
 android {
     compileSdkVersion 26
-    buildToolsVersion '26.0.2'
 
     defaultConfig {
-        versionCode = 100038
-        versionName = "1.0.38"
+        minSdkVersion 14
+        targetSdkVersion 26
+
+        versionCode = 100040
+        versionName = "1.0.40"
     }
 
     sourceSets {
@@ -25,7 +44,7 @@ android {
         }
 
         // Move the tests to tests/java, tests/res, etc...
-        instrumentTest.setRoot('tests')
+        androidTest.setRoot('tests')
 
         // Move the build types to build-types/<type>
         // For instance, build-types/debug/java, build-types/debug/AndroidManifest.xml, ...

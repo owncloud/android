@@ -75,7 +75,7 @@
         android:layout_alignParentRight="true"
         android:layout_below="@+id/fingerprintTouch"
         android:layout_marginTop="@dimen/standard_half_margin"
-        android:text="@string/common_cancel"
+        android:text="@android:string/cancel"
         android:theme="@style/Button.Primary"/>
 
 </RelativeLayout>

@@ -22,6 +22,8 @@
   <string name="drawer_item_uploads_list">ਅੱਪਲੋਡਜ਼</string>
   <string name="drawer_close">ਬੰਦ</string>
   <string name="drawer_open">ਖੋਲੋ</string>
+  <string name="drawer_feedback">ਸੁਝਾਅ</string>
+  <string name="drawer_help">ਮਦਦ</string>
   <string name="prefs_category_general">ਆਮ</string>
   <string name="prefs_category_more">ਹੋਰ</string>
   <string name="prefs_accounts">ਅਕਾਊਂਟ</string>
@@ -41,7 +43,7 @@
   <string name="auth_password">ਪਾਸਵਰ</string>
   <string name="auth_register">%1$s ਲਈ ਨਵੇਂ ਹੋ?</string>
   <string name="sync_string_files">ਫਾਇਲਾਂ</string>
-  <string name="setup_btn_connect">ਕੁਨੈਕਟ</string>
+  <string name="setup_btn_login">ਕੁਨੈਕਟ</string>
   <string name="uploader_btn_upload_text">ਅੱਪਲੋਡ</string>
   <string name="uploader_top_message">ਅੱਪਲੋਡ ਫੋਲਡਰ ਚੁਣੋ:</string>
   <string name="uploader_wrn_no_account_title">ਕੋਈ ਅਕਾਊਂਟ ਨਹੀਂ ਲੱਭਾ</string>
@@ -67,11 +69,9 @@
   <string name="action_share">ਸਾਂਝਾ ਕਰੋ</string>
   <string name="common_yes">ਹਾਂ</string>
   <string name="common_no">ਨਹੀਂ</string>
-  <string name="common_ok">ਠੀਕ ਹੈ</string>
-  <string name="common_remove_upload">ਅੱਪਲੋਡ ਹਟਾਓ</string>
+    <string name="common_remove_upload">ਅੱਪਲੋਡ ਹਟਾਓ</string>
   <string name="common_cancel_sync">ਸਮਕਾਲਣਾ ਰੱਦ ਕਰੋ</string>
-  <string name="common_cancel">ਰੱਦ ਕਰੋ</string>
-  <string name="common_back">ਪਿੱਛੇ</string>
+    <string name="common_back">ਪਿੱਛੇ</string>
   <string name="common_save_exit">ਸੰਭਾਲੋ ਅਤੇ ਬੰਦ ਕਰੋ</string>
   <string name="common_error">ਗਲਤੀ</string>
   <string name="common_loading">...ਲੋਡ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ</string>
@@ -174,7 +174,6 @@
   <string name="share_cancel_public_link_button">ਰੱਦ ਕਰੋ</string>
   <string name="share_via_link_password_label">ਪਾਸਵਰ</string>
   <string name="share_via_link_password_title">ਸੁਰੱਖਿਅਤ</string>
-  <string name="share_via_link_edit_permission_label">ਸੰਪਾਦਨ ਦੀ ਇਜ਼ਾਜਤ</string>
   <string name="share_get_public_link_button">ਲਿੰਕ ਪ੍ਰਾਪਤ ਕਰੋ</string>
   <string name="share_search">ਖੋਜ</string>
   <string name="share_privilege_can_edit_create">ਬਣਾਓ</string>

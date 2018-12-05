@@ -1,7 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="about_android">%1$s Android app</string>
-  <string name="about_version">versie %1$s</string>
   <string name="actionbar_sync">Account verversen</string>
   <string name="actionbar_upload">Uploaden</string>
   <string name="actionbar_upload_from_apps">Inhoud van andere apps</string>
@@ -14,15 +12,13 @@
   <string name="actionbar_sort">Sorteren</string>
   <string name="actionbar_sort_title">Sorteer op</string>
   <string name="actionbar_sort_by_name">A-Z</string>
-  <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
-  <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Alle bestanden</string>
-  <!--TODO re-enable when "On Device" is available
-    <string name="drawer_item_on_device">On device</string>-->
   <string name="drawer_item_settings">Instellingen</string>
   <string name="drawer_item_uploads_list">Uploads</string>
   <string name="drawer_close">Sluiten</string>
   <string name="drawer_open">Open</string>
+  <string name="drawer_feedback">Feedback</string>
+  <string name="drawer_help">Help</string>
   <string name="prefs_category_general">Algemeen</string>
   <string name="prefs_category_more">Meer</string>
   <string name="prefs_category_security">Beveiliging</string>
@@ -68,7 +64,7 @@ Download hier: %2$s</string>
   <string name="auth_password">Wachtwoord</string>
   <string name="auth_register">Nieuw bij %1$s?</string>
   <string name="sync_string_files">Bestanden</string>
-  <string name="setup_btn_connect">Verbinden</string>
+  <string name="setup_btn_login">Meld u aan</string>
   <string name="uploader_btn_upload_text">Uploaden</string>
   <string name="uploader_top_message">Kies een uploadmap</string>
   <string name="uploader_wrn_no_account_title">Geen account gevonden</string>
@@ -107,11 +103,9 @@ Download hier: %2$s</string>
   <string name="action_share">Deel</string>
   <string name="common_yes">Ja</string>
   <string name="common_no">Nee</string>
-  <string name="common_ok">OK</string>
   <string name="common_remove_upload">Verwijder upload</string>
   <string name="common_retry_upload">Probeer upload opnieuw</string>
   <string name="common_cancel_sync">Sync annuleren</string>
-  <string name="common_cancel">Annuleren</string>
   <string name="common_back">Terug</string>
   <string name="common_save_exit">Opslaan &amp; einde</string>
   <string name="common_error">Fout</string>
@@ -121,11 +115,9 @@ Download hier: %2$s</string>
   <string name="common_pending">In behandeling</string>
   <string name="about_title">Over</string>
   <string name="change_password">Wijzig wachtwoord</string>
-  <string name="delete_account">Verwijder account</string>
+  <string name="delete_account">Account uitloggen</string>
   <string name="create_account">Maak account aan</string>
-  <string name="upload_chooser_title">Upload van ...</string>
   <string name="uploader_info_dirname">Mapnaam</string>
-  <string name="uploader_upload_in_progress_ticker">Uploaden ...</string>
   <string name="uploader_upload_in_progress_content">%1$d%% Uploaden %2$s</string>
   <string name="uploader_upload_succeeded_ticker">Upload succesvol</string>
   <string name="uploader_upload_succeeded_content_single">%1$s geüpload</string>
@@ -142,8 +134,6 @@ Download hier: %2$s</string>
   <string name="uploads_view_group_current_uploads">Huidige</string>
   <string name="uploads_view_group_failed_uploads">Mislukt (tik om opnieuw te proberen)</string>
   <string name="uploads_view_group_finished_uploads">Geüpload</string>
-  <string name="uploads_view_group_file_count">%d bestanden</string>
-  <string name="uploads_view_group_file_count_single">%d bestand</string>
   <string name="uploads_view_upload_status_succeeded">Afgerond</string>
   <string name="uploads_view_upload_status_cancelled">Geannuleerd</string>
   <string name="uploads_view_upload_status_paused">Gepauzeerd</string>
@@ -161,7 +151,6 @@ Download hier: %2$s</string>
   <string name="uploads_view_upload_status_waiting_for_wifi">Wachten op een wifi-verbinding</string>
   <string name="uploads_view_later_waiting_to_upload">Wachten om te uploaden</string>
   <string name="uploads_view_unsupported_media_type">Niet ondersteund media type</string>
-  <string name="downloader_download_in_progress_ticker">Downloaden ...</string>
   <string name="downloader_download_in_progress_content">%1$d%% Aan het downloaden %2$s</string>
   <string name="downloader_download_succeeded_ticker">Downloaden gelukt</string>
   <string name="downloader_download_succeeded_content">%1$s gedownload.</string>
@@ -227,8 +216,7 @@ Hieronder staan de lokale bestanden en de externe bestanden in %5$s waar ze naar
   <string name="media_play_pause_description">Speel of pauze knop</string>
   <string name="media_forward_description">Doorspoel knop</string>
   <string name="upload_from_camera_title">Afbeelding vanaf de camera</string>
-  <string name="auth_getting_authorization">Autoririseren...</string>
-  <string name="auth_trying_to_login">Proberen om in the loggen...</string>
+  <string name="auth_getting_authorization">Ophalen autorisaties...</string>
   <string name="auth_no_net_conn_title">Geen netwerkverbinding</string>
   <string name="auth_nossl_plain_ok_title">Veilige verbinding niet beschikbaar.</string>
   <string name="auth_connection_established">Verbinding tot stand gebracht</string>
@@ -283,7 +271,6 @@ Hieronder staan de lokale bestanden en de externe bestanden in %5$s waar ze naar
   <string name="wait_checking_credentials">Opgeslagen inloggegevens nakijken</string>
   <string name="filedisplay_unexpected_bad_get_content">Onverwacht probleem; probeer een andere app om het bestand te selecteren</string>
   <string name="filedisplay_no_file_selected">Er werd geen bestand geselecteerd</string>
-  <string name="activity_chooser_title">Verstuur link naar ...</string>
   <string name="wait_for_tmp_copy_from_private_storage">Kopiëren bestand vanaf privéopslag</string>
   <string name="oauth_check_onoff">Inloggen met oAuth2</string>
   <string name="oauth_login_connection">Verbinden met OAuth2 server…</string>
@@ -374,7 +361,8 @@ Hieronder staan de lokale bestanden en de externe bestanden in %5$s waar ze naar
   <string name="log_send_history_button">Verstuur geschiedenis</string>
   <string name="log_send_no_mail_app">Geen applicatie gevonden voor het versturen van de logs. Installeer een mail applicatie.</string>
   <string name="log_send_mail_subject">%1$s Android app logs</string>
-  <string name="log_progress_dialog_text">Laden data …</string>
+  <string name="log_progress_dialog_text">Laden data...</string>
+  <string name="actionbar_select_all">Alles selecteren</string>
   <string name="saml_authentication_required_text">Authenticatie vereist</string>
   <string name="saml_authentication_wrong_pass">Onjuist wachtwoord</string>
   <string name="actionbar_move">Verplaatsen</string>
@@ -412,8 +400,6 @@ Hieronder staan de lokale bestanden en de externe bestanden in %5$s waar ze naar
   <string name="prefs_camera_upload_source_path_title">Cameramap (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">vereist</string>
   <string name="prefs_camera_upload_source_path_title_optional">optioneel</string>
-  <string name="prefs_camera_upload_behaviour_dialogTitle">Originele bestand zal zijn...</string>
-  <string name="prefs_camera_upload_behaviour_title">Originele bestand zal zijn...</string>
   <string name="upload_copy_files">Kopiëren bestand</string>
   <string name="upload_move_files">Verplaatsen bestand</string>
   <string name="pref_behaviour_entries_keep_file">bewaard in originele map</string>
@@ -433,10 +419,10 @@ Hieronder staan de lokale bestanden en de externe bestanden in %5$s waar ze naar
   <string name="share_via_link_expiration_date_label">Vervaltermijn</string>
   <string name="share_via_link_password_label">Wachtwoord</string>
   <string name="share_via_link_password_title">Beveiligd</string>
-  <string name="share_via_link_edit_permission_label">Toestaan bewerken</string>
-  <string name="share_via_link_show_file_listing_label">Tonen bestandenlijst</string>
+  <string name="share_via_link_edit_permission_read_only_label">Download / Bekijk</string>
+  <string name="share_via_link_edit_permission_read_and_write_label">Download / Bekijk / Upload</string>
   <string name="share_get_public_link_button">Ophalen link</string>
-  <string name="share_with_title">Deel met ...</string>
+  <string name="share_with_title">Deel met</string>
   <string name="share_with_edit_title">Deel met %1$s</string>
   <string name="share_search">Zoeken</string>
   <string name="search_users_and_groups_hint">Zoeken naar gebruikers en groepen</string>
@@ -503,6 +489,7 @@ Neem contact op met uw beheerder</string>
     <item quantity="other">%d geselecteerd</item>
   </plurals>
   <!--Welcome to oC intro features-->
+  <string name="welcome_feature_skip_button">Sla over</string>
   <string name="welcome_feature_1_title">Beheer al uw gesynchroniseerde bestanden</string>
   <string name="welcome_feature_1_text">U kunt kopiëren, verplaatsen, verwijderen</string>
   <string name="welcome_feature_2_title">Deel bestanden en mappen</string>
@@ -513,12 +500,6 @@ Neem contact op met uw beheerder</string>
   <string name="welcome_feature_4_text">Uw afbeeldingen/video\'s automatisch uploaden</string>
   <string name="welcome_feature_5_title">Video streaming</string>
   <string name="welcome_feature_5_text">Speel uw video\'s af zonder te downloaden</string>
-  <string name="welcome_feature_6_title">Patroonontgrendeling</string>
-  <string name="welcome_feature_6_text">Gebruik een patroon om uw ownCloud app te vergrendelen</string>
-  <string name="welcome_feature_7_title">Vingerafdrukvergrendeling</string>
-  <string name="welcome_feature_7_text">Gebruik uw vingerafdruk om uw ownCloud app te vergrendelen</string>
-  <string name="welcome_feature_8_title">GIF ondersteuning</string>
-  <string name="welcome_feature_8_text">Speel uw geanimeerde GIF-afbeeldingen af</string>
-  <string name="welcome_feature_9_title">Upload foto vanaf de camera</string>
-  <string name="welcome_feature_9_text">Neem een foto en upload het direct naar uw server</string>
+  <string name="welcome_feature_7_title">Alles selecteren</string>
+  <string name="welcome_feature_8_title">Beschikbaar off-line</string>
 </resources>

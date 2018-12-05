@@ -21,6 +21,8 @@
   <string name="drawer_item_uploads_list">Բեռնումներ</string>
   <string name="drawer_close">Փակել</string>
   <string name="drawer_open">Բացել</string>
+  <string name="drawer_feedback">Արձագանք</string>
+  <string name="drawer_help">Օգնություն</string>
   <string name="prefs_category_general">Ընդհանուր</string>
   <string name="prefs_category_more">Ավելի</string>
   <string name="prefs_category_security">Անվտանգություն</string>
@@ -35,7 +37,7 @@
   <string name="auth_password">Գաղտնաբառ</string>
   <string name="auth_register">Նո՞ր ես %1$s</string>
   <string name="sync_string_files">Ֆայլեր</string>
-  <string name="setup_btn_connect">Միանալ</string>
+  <string name="setup_btn_login">Միանալ</string>
   <string name="uploader_btn_upload_text">Բեռնել</string>
   <string name="uploader_wrn_no_account_title">Հաշիվ չգտնվեց</string>
   <string name="file_list_seconds_ago">վրկ. առաջ</string>
@@ -54,9 +56,7 @@
   <string name="action_share">Կիսվել</string>
   <string name="common_yes">Այո</string>
   <string name="common_no">Ոչ</string>
-  <string name="common_ok">Լավ</string>
-  <string name="common_cancel">Չեղարկել</string>
-  <string name="common_back">Հետ</string>
+    <string name="common_back">Հետ</string>
   <string name="common_error">Սխալ</string>
   <string name="common_unknown">անհայտ</string>
   <string name="common_error_unknown">Անհայտ սխալ</string>
@@ -188,7 +188,6 @@
   <string name="share_confirm_public_link_button">Պահել</string>
   <string name="share_via_link_expiration_date_label">Վավ. ժամկետ</string>
   <string name="share_via_link_password_label">Գաղտնաբառ</string>
-  <string name="share_via_link_edit_permission_label">Թույլատրել խմբագրումը</string>
   <string name="share_get_public_link_button">Ստանալ հղում</string>
   <string name="share_with_edit_title">Կիսվել %1$sի հետ</string>
   <string name="share_search">Փնտրել</string>

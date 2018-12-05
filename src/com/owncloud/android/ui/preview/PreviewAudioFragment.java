@@ -2,7 +2,8 @@
  *   ownCloud Android client application
  *
  *   @author David A. Velasco
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   @author Christian Schabesberger
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -149,9 +150,9 @@ public class PreviewAudioFragment extends FileFragment {
         Log_OC.v(TAG, "onCreateView");
 
         View view = inflater.inflate(R.layout.preview_audio_fragment, container, false);
-        mImagePreview = (ImageView) view.findViewById(R.id.image_preview);
-        mMediaController = (MediaControlView) view.findViewById(R.id.media_controller);
-        mProgressBar = (ProgressBar)view.findViewById(R.id.syncProgressBar);
+        mImagePreview = view.findViewById(R.id.image_preview);
+        mMediaController = view.findViewById(R.id.media_controller);
+        mProgressBar = view.findViewById(R.id.syncProgressBar);
         DisplayUtils.colorPreLollipopHorizontalProgressBar(mProgressBar);
 
         return view;
@@ -324,7 +325,7 @@ public class PreviewAudioFragment extends FileFragment {
             mContainerActivity,
             getActivity()
         );
-        mf.filter(menu);
+        mf.filter(menu, false, false);
 
         // additional restriction for this fragment 
         // TODO allow renaming in PreviewAudioFragment

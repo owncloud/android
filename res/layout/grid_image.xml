@@ -49,22 +49,11 @@
 
         <ImageView
             android:id="@+id/localFileIndicator"
-            android:layout_width="@dimen/file_icon_size"
-            android:layout_height="@dimen/file_icon_size"
+            android:layout_width="@dimen/file_indicator_pin_size_grid"
+            android:layout_height="@dimen/file_indicator_pin_size_grid"
             android:layout_gravity="bottom|right"
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="4dp"
-            android:layout_marginRight="4dp"
-            android:src="@drawable/ic_synced" />
-
-        <ImageView
-            android:id="@+id/favoriteIcon"
-            android:layout_width="15dp"
-            android:layout_height="15dp"
-            android:layout_gravity="bottom|right"
-            android:layout_marginBottom="4dp"
-            android:layout_marginRight="4dp"
-            android:src="@drawable/ic_available_offline" />
+            android:layout_margin="4dp"
+            android:src="@drawable/sync_pin" />
 
         <ImageView
             android:id="@+id/custom_checkbox"

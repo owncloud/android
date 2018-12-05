@@ -13,6 +13,8 @@
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <!--TODO re-enable when "On Device" is available
     <string name="drawer_item_on_device">On device</string>-->
+  <string name="drawer_feedback">Rückmeldung</string>
+  <string name="drawer_help">Hilfe</string>
   <string name="prefs_category_general">Allgemein</string>
   <string name="prefs_accounts">Konten</string>
   <string name="prefs_log_summary">Dies wird verwendet um Probleme aufzuzeichnen</string>
@@ -27,7 +29,7 @@
   <string name="auth_password">Passwort</string>
   <string name="auth_register">Neu bei %1$s?</string>
   <string name="sync_string_files">Dateien</string>
-  <string name="setup_btn_connect">Verbinden</string>
+  <string name="setup_btn_login">Verbinden</string>
   <string name="uploader_btn_upload_text">Hochladen</string>
   <string name="uploader_wrn_no_account_title">Kein Benutzerkonto gefunden</string>
   <string name="uploader_wrn_no_account_quit_btn_text">Schließen</string>
@@ -47,9 +49,7 @@
   <string name="action_share">Freigeben</string>
   <string name="common_yes">Ja</string>
   <string name="common_no">Nein</string>
-  <string name="common_ok">OK</string>
-  <string name="common_cancel">Abbrechen</string>
-  <string name="common_back">Zurück</string>
+    <string name="common_back">Zurück</string>
   <string name="common_error">Fehler</string>
   <string name="common_loading">Lade ...</string>
   <string name="common_error_unknown">Unbekannter Fehler</string>
@@ -91,7 +91,6 @@
   <string name="share_confirm_public_link_button">Speichern</string>
   <string name="share_via_link_expiration_date_label">Ablaufdatum</string>
   <string name="share_via_link_password_label">Passwort</string>
-  <string name="share_via_link_edit_permission_label">Bearbeitung erlauben</string>
   <string name="share_search">Suche</string>
   <string name="share_privilege_can_share">Kann teilen</string>
   <string name="share_privilege_can_edit">Kann bearbeiten</string>

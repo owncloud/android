@@ -23,6 +23,7 @@
   <string name="drawer_item_uploads_list">Alŝutoj</string>
   <string name="drawer_close">Fermi</string>
   <string name="drawer_open">Malfermi</string>
+  <string name="drawer_help">Helpo</string>
   <string name="prefs_category_general">Ĝeneralo</string>
   <string name="prefs_category_more">Pli</string>
   <string name="prefs_category_security">Sekuro</string>
@@ -36,7 +37,7 @@
   <string name="auth_password">Pasvorto</string>
   <string name="auth_register">Ĉu nova je %1$s?</string>
   <string name="sync_string_files">Dosieroj</string>
-  <string name="setup_btn_connect">Konekti</string>
+  <string name="setup_btn_login">Konekti</string>
   <string name="uploader_btn_upload_text">Alŝuti</string>
   <string name="uploader_wrn_no_account_title">Neniu konto troviĝis</string>
   <string name="uploader_wrn_no_account_setup_btn_text">Agordi</string>
@@ -59,9 +60,7 @@
   <string name="action_share">Kunhavigi</string>
   <string name="common_yes">Jes</string>
   <string name="common_no">Ne</string>
-  <string name="common_ok">Akcepti</string>
-  <string name="common_cancel_sync">Nuligi sinkronigon</string>
-  <string name="common_cancel">Nuligi</string>
+    <string name="common_cancel_sync">Nuligi sinkronigon</string>
   <string name="common_back">Antaŭen</string>
   <string name="common_save_exit">Konservi kaj eliri</string>
   <string name="common_error">Eraro</string>
@@ -262,7 +261,6 @@
   <string name="share_via_link_expiration_date_label">Eksvalidiĝo</string>
   <string name="share_via_link_password_label">Pasvorto</string>
   <string name="share_via_link_password_title">Sekurigita</string>
-  <string name="share_via_link_edit_permission_label">Permesi redakton</string>
   <string name="share_get_public_link_button">Ekhavi ligilon</string>
   <string name="share_search">Serĉi</string>
   <string name="search_users_and_groups_hint">Serĉi uzantojn kaj grupojn</string>

@@ -1,17 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.owncloud.android.workaround.accounts"
-    >
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.owncloud.android.workaround.accounts">
 
-    <uses-sdk
-        android:minSdkVersion="16"
-        android:targetSdkVersion="26" />
+    <uses-sdk tools:overrideLibrary="android.support.customtabs" />
 
     <application
         android:allowBackup="false"
         android:icon="@mipmap/workaround_app_icon"
         android:label="@string/workaround_app_name"
-        >
+        tools:ignore="GoogleAppIndexingWarning">
         <service
             android:name=".AccountAuthenticatorService"
             android:exported="false">

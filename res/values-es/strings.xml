@@ -1,7 +1,8 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="about_android">%1$s Aplicación de Android</string>
-  <string name="about_version">versión %1$s</string>
+  <string name="about_android">%1$s para Android</string>
+  <string name="about_version">Versión %1$s</string>
+  <string name="actionbar_search">Buscar en esta carpeta</string>
   <string name="actionbar_sync">Actualizar cuenta</string>
   <string name="actionbar_upload">Subir</string>
   <string name="actionbar_upload_from_apps">Contenido de otras aplicaciones</string>
@@ -12,36 +13,42 @@
   <string name="actionbar_see_details">Detalles</string>
   <string name="actionbar_send_file">Enviar</string>
   <string name="actionbar_sort">Ordenar</string>
-  <string name="actionbar_descending">Descente</string>
+  <string name="actionbar_descending">Descendente</string>
   <string name="actionbar_sort_title">Ordenar por</string>
   <string name="actionbar_sort_by_name">A-Z</string>
-  <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
-  <!--<string name="drawer_item_accounts">Accounts</string>-->
+  <string name="actionbar_sort_by_date">Más antiguo - Más nuevo</string>
+  <string name="actionbar_sort_by_size">Más pequeño - Más grande</string>
   <string name="drawer_item_all_files">Todos los archivos</string>
-  <!--TODO re-enable when "On Device" is available
-    <string name="drawer_item_on_device">On device</string>-->
   <string name="drawer_item_settings">Ajustes</string>
   <string name="drawer_item_uploads_list">Subidas</string>
   <string name="drawer_close">Cerrar</string>
   <string name="drawer_open">Abrir</string>
+  <string name="drawer_loading_quota">Cargando cuota</string>
+  <string name="drawer_quota">%1$s de %2$s usado (%3$s %%)</string>
+  <string name="drawer_unavailable_free_storage">%1$s en uso</string>
+  <string name="drawer_unavailable_used_storage">No hay información de uso de almacenamiento disponible</string>
+  <string name="drawer_feedback">Sugerencias</string>
+  <string name="drawer_help">Ayuda</string>
   <string name="prefs_category_general">General</string>
   <string name="prefs_category_more">Más</string>
   <string name="prefs_category_security">Seguridad</string>
   <string name="prefs_accounts">Cuentas</string>
   <string name="prefs_manage_accounts">Gestionar cuentas</string>
   <string name="prefs_passcode">Código de bloqueo</string>
-  <string name="prefs_fingerprint">Desbloqueo por huella</string>
-  <string name="prefs_fingerprint_summary">Configura una contraseña o establece un patrón de desbloqueo para habilitar esta opción</string>
-  <string name="prefs_camera_picture_upload">Subir Imágenes</string>
-  <string name="prefs_camera_picture_upload_summary">Sube automaticamente las fotos tomadas con la cámara</string>
-  <string name="prefs_camera_video_upload">Subir videos</string>
-  <string name="prefs_camera_video_upload_summary">Sube automaticamente los vídeos grabados con la cámara</string>
+  <string name="prefs_fingerprint">Bloqueo de huella digital</string>
+  <string name="prefs_fingerprint_summary">Habilitar código de acceso o bloqueo de patrón para habilitar esta opción</string>
+  <string name="prefs_camera_picture_upload">Cargas de imágenes</string>
+  <string name="prefs_camera_picture_upload_summary">Carga automáticamente las fotos tomadas por cámara</string>
+  <string name="prefs_camera_video_upload">Cargas de videos</string>
+  <string name="prefs_camera_video_upload_summary">Cargue automáticamente los videos  grabados por cámara</string>
   <string name="prefs_log_title">Habilitar registro</string>
   <string name="prefs_log_summary">Esto es usado para registrar problemas</string>
   <string name="prefs_log_title_history">Historial del registro</string>
   <string name="prefs_log_summary_history">Esto muestra los registros grabados</string>
   <string name="prefs_log_delete_history_button">Eliminar Historial</string>
   <string name="prefs_help">Ayuda</string>
+  <string name="prefs_sync_calendar_contacts">Sincronice sus contactos, calendarios y tareas</string>
+  <string name="prefs_sync_calendar_contacts_summary">Instalar DAVdroid</string>
   <string name="prefs_recommend">Recomendar a un amigo</string>
   <string name="prefs_feedback">Mensajes de retroalimentación</string>
   <string name="prefs_imprint">Imprimir</string>
@@ -60,16 +67,18 @@
   <string name="passcode_already_set">El patrón y el código de bloqueo no pueden ser habilitados al mismo tiempo, por favor deshabilite primero el código de bloqueo</string>
   <string name="pattern_no_longer_required">El patrón no será requerido nuevamente</string>
   <string name="pattern_configure_your_pattern_explanation">El patrón será requerido cada vez que se inicie la aplicación</string>
-  <string name="illegal_argument_exception_message">Se necesita una acción valida</string>
+  <string name="illegal_argument_exception_message">Se necesita una ACCIÓN válida</string>
   <string name="recommend_subject">¡Prueba  %1$s en su smarthphone!</string>
   <string name="recommend_text">¡Quiero invitarle a usar %1$s en su smartphone!\nDescárguelo aquí: %2$s</string>
+  <string name="auth_failure_snackbar">Fallo en la autenticación</string>
+  <string name="auth_failure_snackbar_action">Cambiar cuenta</string>
   <string name="auth_check_server">Verificar servidor</string>
   <string name="auth_host_url">Dirección del servidor https://…</string>
   <string name="auth_username">Nombre de usuario</string>
   <string name="auth_password">Contraseña</string>
   <string name="auth_register">¿Nuevo en %1$s?</string>
   <string name="sync_string_files">Archivos</string>
-  <string name="setup_btn_connect">Conectar</string>
+  <string name="setup_btn_login">Iniciar sesión</string>
   <string name="uploader_btn_upload_text">Subir</string>
   <string name="uploader_top_message">Elige carpeta de subida</string>
   <string name="uploader_wrn_no_account_title">No se encontró la cuenta</string>
@@ -89,6 +98,7 @@
   <string name="file_list_no_app_for_file_type">No se han encontrado apps para ese tipo de archivos</string>
   <string name="local_file_list_empty">No hay archivos en esta carpeta.</string>
   <string name="local_file_list_empty_just_folders">No hay carpetas en esta carpeta.</string>
+  <string name="local_file_list_search_with_no_matches">No hay coincidencias para esta buscar</string>
   <string name="upload_list_empty">Sin datos para subir.</string>
   <string name="file_list_folder">carpeta</string>
   <string name="file_list_folders">carpetas</string>
@@ -108,11 +118,9 @@
   <string name="action_share">Compartir</string>
   <string name="common_yes">Sí</string>
   <string name="common_no">No</string>
-  <string name="common_ok">Aceptar</string>
   <string name="common_remove_upload">Quitar los datos para subir</string>
   <string name="common_retry_upload">Reintentar la subida</string>
   <string name="common_cancel_sync">Cancelar sincronización</string>
-  <string name="common_cancel">Cancelar</string>
   <string name="common_back">Volver</string>
   <string name="common_save_exit">Guardar &amp; salir</string>
   <string name="common_error">Error</string>
@@ -124,7 +132,7 @@
   <string name="change_password">Cambiar contraseña</string>
   <string name="delete_account">Eliminar cuenta</string>
   <string name="create_account">Crear cuenta</string>
-  <string name="upload_chooser_title">Subir desde...</string>
+  <string name="upload_chooser_title">Subir desde</string>
   <string name="uploader_info_dirname">Nombre de la carpeta</string>
   <string name="uploader_upload_in_progress_ticker">Subiendo...</string>
   <string name="uploader_upload_in_progress_content">%1$d%% Subiendo %2$s</string>
@@ -143,8 +151,8 @@
   <string name="uploads_view_group_current_uploads">Actual</string>
   <string name="uploads_view_group_failed_uploads">Fallido (presiona para reintentarlo)</string>
   <string name="uploads_view_group_finished_uploads">Subidos</string>
-  <string name="uploads_view_group_file_count">%d archivos</string>
-  <string name="uploads_view_group_file_count_single">%d Archivo</string>
+  <string name="uploads_view_group_file_count">archivos %d</string>
+  <string name="uploads_view_group_file_count_single">archivo %d</string>
   <string name="uploads_view_upload_status_succeeded">Completada</string>
   <string name="uploads_view_upload_status_cancelled">Cancelado</string>
   <string name="uploads_view_upload_status_paused">Pausado</string>
@@ -161,7 +169,7 @@
   <string name="uploads_view_upload_status_unknown_fail">Error desconocido</string>
   <string name="uploads_view_upload_status_waiting_for_wifi">Esperando a la conexión wifi</string>
   <string name="uploads_view_later_waiting_to_upload">Esperando para subir</string>
-  <string name="uploads_view_unsupported_media_type">Tipo de medio no soportado</string>
+  <string name="uploads_view_unsupported_media_type">Tipo de archivo no soportado</string>
   <string name="downloader_download_in_progress_ticker">Descargando...</string>
   <string name="downloader_download_in_progress_content">%1$d%% Descargado de %2$s</string>
   <string name="downloader_download_succeeded_ticker">Descarga completa</string>
@@ -226,8 +234,8 @@
   <string name="media_play_pause_description">Botón de reproducción o pausa </string>
   <string name="media_forward_description">Botón avance rápido</string>
   <string name="upload_from_camera_title">Imagen de la cámara</string>
-  <string name="auth_getting_authorization">Obteniendo autorización...</string>
-  <string name="auth_trying_to_login">Intentando iniciar sesión ...</string>
+  <string name="auth_getting_authorization">Consiguiendo autorización...</string>
+  <string name="auth_trying_to_login">Tratando de iniciar sesión...</string>
   <string name="auth_no_net_conn_title">Sin conexión de red</string>
   <string name="auth_nossl_plain_ok_title">Conexión segura no disponible.</string>
   <string name="auth_connection_established">Conexión establecida</string>
@@ -282,7 +290,7 @@
   <string name="wait_checking_credentials">Comprobando las credenciales guardadas</string>
   <string name="filedisplay_unexpected_bad_get_content">Problema inesperado; por favor, pruebe otra app para seleccionar el archivo</string>
   <string name="filedisplay_no_file_selected">No hay ficheros seleccionados.</string>
-  <string name="activity_chooser_title">Enviar enlace a...</string>
+  <string name="activity_chooser_title">Enviar enlace a</string>
   <string name="wait_for_tmp_copy_from_private_storage">Copiando el archivo desde el almacenamiento privado.</string>
   <string name="oauth_check_onoff">Ingresar con oAuth2</string>
   <string name="oauth_login_connection">Conectando al servidor OAuth2 ....</string>
@@ -326,6 +334,7 @@
   <string name="confirmation_disable_pictures_upload_message">¿Está seguro de que desea deshabilitar esta opción ?  Las imagenes pendientes no se subiran.</string>
   <string name="confirmation_disable_videos_upload_message">¿Está seguro de que desea deshabilitar esta opción ? Los videos pendientes no se subiran.</string>
   <string name="conflict_title">Conflicto con archivo</string>
+  <string name="conflict_description">Hay un conflicto en el archivo %1$s, pulsar para resolverlo</string>
   <string name="conflict_message">¿Cuáles archivos desea mantener? Si selecciona ambas versiones, el archivo local tendrá un número añadido a su nombre.</string>
   <string name="conflict_keep_both">Mantener ambos</string>
   <string name="conflict_use_local_version">versión local</string>
@@ -373,7 +382,9 @@
   <string name="log_send_history_button">Mandar historial.</string>
   <string name="log_send_no_mail_app">Aplicación para enviar registros no encontrada. Por favor instale una aplicación de correo.</string>
   <string name="log_send_mail_subject">Se han encontrado %1$s logs de la app Android</string>
-  <string name="log_progress_dialog_text">Cargando datos ...</string>
+  <string name="log_progress_dialog_text">Cargando datos...</string>
+  <string name="actionbar_select_all">Seleccionar todo</string>
+  <string name="actionbar_select_inverse">Seleccionar inverso</string>
   <string name="saml_authentication_required_text">Se necesita autenticación</string>
   <string name="saml_authentication_wrong_pass">Contraseña incorrecta</string>
   <string name="actionbar_move">Mover</string>
@@ -411,8 +422,8 @@
   <string name="prefs_camera_upload_source_path_title">Carpeta de cámara (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">requerido</string>
   <string name="prefs_camera_upload_source_path_title_optional">opcional</string>
-  <string name="prefs_camera_upload_behaviour_dialogTitle">El archivo original será...</string>
-  <string name="prefs_camera_upload_behaviour_title">El archivo original será...</string>
+  <string name="prefs_camera_upload_behaviour_dialogTitle">Archivo original será</string>
+  <string name="prefs_camera_upload_behaviour_title">Archivo original será</string>
   <string name="upload_copy_files">Copiar archivo</string>
   <string name="upload_move_files">Mover archivo</string>
   <string name="pref_behaviour_entries_keep_file">dejado en la carpeta original</string>
@@ -432,10 +443,11 @@
   <string name="share_via_link_expiration_date_label">Vencimiento</string>
   <string name="share_via_link_password_label">Contraseña</string>
   <string name="share_via_link_password_title">Asegurado</string>
-  <string name="share_via_link_edit_permission_label">Permitir edición</string>
-  <string name="share_via_link_show_file_listing_label">Mostrar listado de archivos</string>
+  <string name="share_via_link_edit_permission_read_only_label">Descargar / Ver</string>
+  <string name="share_via_link_edit_permission_read_and_write_label">Descargar / Ver / Subir</string>
+  <string name="share_via_link_edit_permission_upload_only_label">Solo cargar (Archivar)</string>
   <string name="share_get_public_link_button">Obtener enlace</string>
-  <string name="share_with_title">Compartir con...</string>
+  <string name="share_with_title">Compartir con</string>
   <string name="share_with_edit_title">Compartir con %1$s</string>
   <string name="share_search">Buscar</string>
   <string name="search_users_and_groups_hint">Buscar usuarios y grupos</string>
@@ -506,6 +518,7 @@
     <item quantity="other">%d seleccionado</item>
   </plurals>
   <!--Welcome to oC intro features-->
+  <string name="welcome_feature_skip_button">Omitir</string>
   <string name="welcome_feature_1_title">Administra todos tus archivos sincronizados</string>
   <string name="welcome_feature_1_text">Puedes copiar, mover y eliminar</string>
   <string name="welcome_feature_2_title">Compartir archivos y carpetas</string>
@@ -516,12 +529,11 @@
   <string name="welcome_feature_4_text">Tus fotografías/vídeos automáticamente se subirán</string>
   <string name="welcome_feature_5_title">Retransmitir video</string>
   <string name="welcome_feature_5_text">Reproduce tus videos sin descargarlos</string>
-  <string name="welcome_feature_6_title">Patrón de desbloqueo</string>
-  <string name="welcome_feature_6_text">Usa un patrón de desbloqueo para tu aplicación de ownCloud</string>
-  <string name="welcome_feature_7_title">Bloqueo por huella</string>
-  <string name="welcome_feature_7_text">Usa tu huella para desbloquear tu aplicación de ownCloud</string>
-  <string name="welcome_feature_8_title">Soporta GIF</string>
-  <string name="welcome_feature_8_text">Reproduce tus imágenes GIF animadas</string>
-  <string name="welcome_feature_9_title">Subir imágen desde la cámara</string>
-  <string name="welcome_feature_9_text">Hacer fotografía y subirla directamente a tu Servidor</string>
+  <string name="welcome_feature_6_title">Buscar en la actual carpeta</string>
+  <string name="welcome_feature_6_text">Filtrar archivos por su nombre</string>
+  <string name="welcome_feature_7_title">Seleccionar todo</string>
+  <string name="welcome_feature_7_text">Seleccione todos sus archivos de una vez</string>
+  <string name="welcome_feature_8_title">Disponible offline</string>
+  <string name="welcome_feature_8_text">Sus archivos sincronizados automáticamente</string>
+  <string name="no_borwser_installed_alert">No hay un navegador instalado, Por favor, instale uno para poder realizar un login seguro</string>
 </resources>

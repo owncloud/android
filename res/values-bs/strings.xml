@@ -10,6 +10,7 @@
   <!--TODO re-enable when "On Device" is available
     <string name="drawer_item_on_device">On device</string>-->
   <string name="drawer_open">Otvori</string>
+  <string name="drawer_help">Pomoć</string>
   <string name="prefs_category_more">Više</string>
   <string name="prefs_category_security">Sigurnost</string>
   <string name="prefs_help">Pomoć</string>
@@ -21,9 +22,7 @@
   <string name="action_share">Dijeli</string>
   <string name="common_yes">Da</string>
   <string name="common_no">Ne</string>
-  <string name="common_ok">Ok</string>
-  <string name="common_cancel">Odustani</string>
-  <string name="common_error">Greška</string>
+    <string name="common_error">Greška</string>
   <string name="common_error_unknown">Nepoznata greška</string>
   <string name="common_pending">Na čekanju</string>
   <string name="change_password">Promijeni lozinku</string>
@@ -42,7 +41,6 @@
   <string name="share_confirm_public_link_button">Spremi</string>
   <string name="share_via_link_expiration_date_label">Istek</string>
   <string name="share_via_link_password_label">Lozinka</string>
-  <string name="share_via_link_edit_permission_label">Dozvolite izmjenu</string>
   <string name="share_search">Potraži</string>
   <string name="share_privilege_can_share">mogu dijeliti</string>
   <string name="share_privilege_can_edit">mogu mijenjati</string>

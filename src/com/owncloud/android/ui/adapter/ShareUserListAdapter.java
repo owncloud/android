@@ -2,7 +2,8 @@
  *   ownCloud Android client application
  *
  *   @author masensio
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   @author Christian Schabesberger
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -76,8 +77,8 @@ public class ShareUserListAdapter extends ArrayAdapter {
         if (mShares != null && mShares.size() > position) {
             OCShare share = mShares.get(position);
 
-            TextView userName = (TextView) view.findViewById(R.id.userOrGroupName);
-            ImageView iconView = (ImageView) view.findViewById(R.id.icon);
+            TextView userName = view.findViewById(R.id.userOrGroupName);
+            ImageView iconView = view.findViewById(R.id.icon);
             String name = share.getSharedWithDisplayName();
             Drawable icon = getContext().getResources().getDrawable(R.drawable.ic_user);
             if (share.getShareType() == ShareType.GROUP) {
@@ -88,7 +89,7 @@ public class ShareUserListAdapter extends ArrayAdapter {
             iconView.setImageDrawable(icon);
 
             /// bind listener to edit privileges
-            final ImageView editShareButton = (ImageView) view.findViewById(R.id.editShareButton);
+            final ImageView editShareButton = view.findViewById(R.id.editShareButton);
             editShareButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -97,7 +98,7 @@ public class ShareUserListAdapter extends ArrayAdapter {
             });
 
             /// bind listener to unshare
-            final ImageView unshareButton = (ImageView) view.findViewById(R.id.unshareButton);
+            final ImageView unshareButton = view.findViewById(R.id.unshareButton);
             unshareButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

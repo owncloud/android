@@ -9,6 +9,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 
 import com.owncloud.android.MainApp;
 import com.owncloud.android.authentication.AccountUtils;
@@ -71,7 +73,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onRestart() {
         Log_OC.v(TAG, "onRestart() start");
         super.onRestart();
-        boolean validAccount = (mCurrentAccount != null && AccountUtils.exists(mCurrentAccount, this));
+        boolean validAccount = (mCurrentAccount != null && AccountUtils.exists(mCurrentAccount.name, this));
         if (!validAccount) {
             swapToDefaultAccount();
         }
@@ -152,7 +154,7 @@ public abstract class BaseActivity extends AppCompatActivity {
      */
     protected void onAccountSet(boolean stateWasRecovered) {
         if (getAccount() != null) {
-            mStorageManager = new FileDataStorageManager(getAccount(), getContentResolver());
+            mStorageManager = new FileDataStorageManager(this, getAccount(), getContentResolver());
             mCapabilities = mStorageManager.getCapability(mCurrentAccount.name);
         } else {
             Log_OC.e(TAG, "onAccountChanged was called with NULL account associated!");
@@ -259,6 +261,17 @@ public abstract class BaseActivity extends AppCompatActivity {
             if (mMandatoryCreation && !accountWasSet) {
                 finish();
             }
+        }
+    }
+
+    public void hideSoftKeyboard() {
+        View focusedView = getCurrentFocus();
+        if (focusedView != null) {
+            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+            inputMethodManager.hideSoftInputFromWindow(
+                    focusedView.getWindowToken(),
+                    0
+            );
         }
     }
 }

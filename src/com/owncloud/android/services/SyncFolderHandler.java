@@ -1,7 +1,7 @@
 /**
  *   ownCloud Android client application
  *
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -115,6 +115,7 @@ class SyncFolderHandler extends Handler {
                 if (mCurrentAccount == null || !mCurrentAccount.equals(account)) {
                     mCurrentAccount = account;
                     mStorageManager = new FileDataStorageManager(
+                            mService,
                             account,
                             mService.getContentResolver()
                     );

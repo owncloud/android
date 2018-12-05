@@ -17,6 +17,8 @@
   <!--TODO re-enable when "On Device" is available
     <string name="drawer_item_on_device">On device</string>-->
   <string name="drawer_open">Aç</string>
+  <string name="drawer_feedback">Geriyə cavab</string>
+  <string name="drawer_help">Kömək</string>
   <string name="prefs_category_general">Ümumi</string>
   <string name="prefs_category_more">Daha da</string>
   <string name="prefs_category_security">Təhlükəsizlik</string>
@@ -36,7 +38,7 @@
   <string name="auth_password">Şifrə</string>
   <string name="auth_register">Yeni edək %1$s?</string>
   <string name="sync_string_files">Fayllar</string>
-  <string name="setup_btn_connect">Qoşul</string>
+  <string name="setup_btn_login">Qoşul</string>
   <string name="uploader_btn_upload_text">Serverə yüklə</string>
   <string name="uploader_wrn_no_account_title">Hesab tapılmadı</string>
   <string name="uploader_wrn_no_account_setup_btn_text">Qurulum</string>
@@ -58,9 +60,7 @@
   <string name="action_share">Paylaş</string>
   <string name="common_yes">Bəli</string>
   <string name="common_no">Xeyir</string>
-  <string name="common_ok">Oldu</string>
-  <string name="common_cancel">Dayandır</string>
-  <string name="common_error">Səhv</string>
+    <string name="common_error">Səhv</string>
   <string name="common_loading">Yüklənir...</string>
   <string name="common_error_unknown">Bəlli olmayan səhv baş verdi</string>
   <string name="common_pending">Gözləmə</string>

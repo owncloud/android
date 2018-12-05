@@ -10,6 +10,8 @@
   <!--TODO re-enable when "On Device" is available
     <string name="drawer_item_on_device">On device</string>-->
   <string name="drawer_open">ئاچ</string>
+  <string name="drawer_feedback">قايتۇرما ئىنكاس</string>
+  <string name="drawer_help">ياردەم</string>
   <string name="prefs_category_general">ئادەتتىكى</string>
   <string name="prefs_category_more">تېخىمۇ كۆپ</string>
   <string name="prefs_category_security">بىخەتەرلىك</string>
@@ -19,7 +21,7 @@
   <string name="auth_username">ئىشلەتكۈچى ئاتى</string>
   <string name="auth_password">ئىم</string>
   <string name="sync_string_files">ھۆججەتلەر</string>
-  <string name="setup_btn_connect">باغلان</string>
+  <string name="setup_btn_login">باغلان</string>
   <string name="uploader_btn_upload_text">يۈكلە</string>
   <string name="uploader_wrn_no_account_title">ھېسابات تېپىلمىدى</string>
   <string name="uploader_wrn_no_account_setup_btn_text">تەڭشەك</string>
@@ -33,9 +35,7 @@
   <string name="action_share">ھەمبەھىر</string>
   <string name="common_yes">ھەئە</string>
   <string name="common_no">ياق</string>
-  <string name="common_ok">جەزملە</string>
-  <string name="common_cancel">ۋاز كەچ</string>
-  <string name="common_error">خاتالىق</string>
+    <string name="common_error">خاتالىق</string>
   <string name="common_error_unknown">يوچۇن خاتالىق</string>
   <string name="common_pending">كۈتۈۋاتىدۇ</string>
   <string name="change_password">ئىم ئۆزگەرت</string>

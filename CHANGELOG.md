@@ -1,3 +1,94 @@
+## 2.9.3 (November 2018)
+- Bug fixes for users with username containing @ character
+
+## 2.9.2 (November 2018)
+- Bug fixes for users with username containing spaces
+
+## 2.9.1 (November 2018)
+- Bug fixes for LDAP users using uid:
+  + Fix login not working
+  + Fix empty list of files
+
+## 2.9.0 (November 2018)
+- Search in current folder
+- Select all/inverse files (contribution)
+- Improve available offline files synchronization and conflict resolution (Android 5 or higher required)
+- Sort files in file picker when uploading (contribution)
+- Access ownCloud files from files apps, even with files not downloaded
+- New login view
+- Show re-shares
+- Switch apache and jackrabbit deprecated network libraries to more modern and active library, OkHttp + Dav4Android
+- UI improvements, including:
+  + Change edit share icon
+  + New gradient in top of the list of files (contribution)
+  + More accurate message when creating folders with the same name (contribution)
+- Bug fixes, including:
+  + Fix some crashes:
+    - When rebooting the device
+    - When copying, moving files or choosing a folder within camera uploads feature
+    - When creating private/public link
+  + Fix some failing downloads
+  + Fix pattern lock being asked very often after disabling fingerprint lock (contribution)
+
+## 2.9.0 beta v2 (October 2018)
+- Bug fixes, including:
+  + Fix some crashes:
+    - When rebooting the device
+    - When copying, moving files or choosing a folder within camera uploads feature
+  + Fix some failing downloads
+  + Fix pattern lock being asked very often after disabling fingerprint lock
+
+## 2.9.0 beta v1 (September 2018)
+- Switch apache and jackrabbit deprecated libraries to more modern and active library, OkHttp
+- Search in current folder
+- Select all/inverse files
+- New login view
+- Show re-shares
+- UI improvements, including:
+  + Change edit share icon
+  + New gradient in top of the list of files
+
+## 2.8.0 (July 2018)
+- Side menu redesign
+- User quota in side menu
+- Descending option when sorting
+- New downloaded/offline icons and pins
+- One panel design for tablets
+- Custom tabs for OAuth
+- Improve public link sharing permissions for folders
+- Redirect to login view when SAML session expires
+- UI improvements, including:
+  + Fab button above snackbar
+  + Toggle to control password visibility when sharing via link
+  + Adaptive icons support (Android 8 required)
+- Bug fixes, including:
+  + Fix block for deleted basic/oauth accounts
+  + Fix available offline when renaming files
+  + Fix camera directory not selectable in root
+  + Fix guest account showing an empty file list
+  + Hide keyboard when going back from select user view
+  + Fix black "downloading screen" message when downloading an image offline
+  + Show proper timestamp in uploads/downloads notification
+  + Fix sharing when disabling files versioning app in server
+
+## 2.8.0 beta v1 (May 2018)
+- Side menu redesign
+- User quota in side menu
+- Descending option when sorting
+- New downloaded/offline icons and pins
+- One panel design for tablets
+- Custom tabs for OAuth
+- UI improvements, including:
+  + Fab button above snackbar
+  + Toggle to control password visibility when sharing via link
+- Bug fixes, including:
+  + Fix block for deleted basic/oauth accounts
+  + Fix available offline when renaming files
+  + Fix camera directory not selectable in root
+  + Fix guest account showing an empty file list
+  + Hide keyboard when going back from select user view
+  + Fix black "downloading screen" message when downloading an image offline.
+
 ## 2.7.0 (April 2018)
 - Fingerprint lock
 - Pattern lock (contribution)

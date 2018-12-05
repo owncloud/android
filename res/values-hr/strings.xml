@@ -24,6 +24,8 @@
   <string name="drawer_item_uploads_list">Upload-i</string>
   <string name="drawer_close">Zatvori</string>
   <string name="drawer_open">Otvorite</string>
+  <string name="drawer_feedback">Povratna informacija</string>
+  <string name="drawer_help">Pomoć</string>
   <string name="prefs_category_general">Općenito</string>
   <string name="prefs_category_more">više</string>
   <string name="prefs_category_security">Sigurnost</string>
@@ -49,7 +51,7 @@
   <string name="auth_password">Lozinka</string>
   <string name="auth_register">Novi %1$s?</string>
   <string name="sync_string_files">Datoteke</string>
-  <string name="setup_btn_connect">Poveži</string>
+  <string name="setup_btn_login">Poveži</string>
   <string name="uploader_btn_upload_text">Učitaj</string>
   <string name="uploader_top_message">Izaberi upload mapu</string>
   <string name="uploader_wrn_no_account_title">Račun nije nađen</string>
@@ -86,12 +88,10 @@
   <string name="action_share">Dijeljenje</string>
   <string name="common_yes">Da</string>
   <string name="common_no">Ne</string>
-  <string name="common_ok">U redu</string>
-  <string name="common_remove_upload">Izbriši poslano</string>
+    <string name="common_remove_upload">Izbriši poslano</string>
   <string name="common_retry_upload">Pokušaj ponovo poslati</string>
   <string name="common_cancel_sync">Odustani od sinhronizacije</string>
-  <string name="common_cancel">Odustani</string>
-  <string name="common_back">Natrag</string>
+    <string name="common_back">Natrag</string>
   <string name="common_save_exit">Spremi &amp; izađi</string>
   <string name="common_error">Greška</string>
   <string name="common_loading">Učitavanje...</string>
@@ -160,7 +160,6 @@
   <string name="share_confirm_public_link_button">Spremi</string>
   <string name="share_via_link_expiration_date_label">Istjeće</string>
   <string name="share_via_link_password_label">Lozinka</string>
-  <string name="share_via_link_edit_permission_label">Omogući uređivanje</string>
   <string name="share_search">pretraži</string>
   <string name="share_privilege_can_share">Dijeljenje moguće</string>
   <string name="share_privilege_can_edit">Uređivanje moguće</string>

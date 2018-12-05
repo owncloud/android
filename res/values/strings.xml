@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <string name="about_android">%1$s Android app</string>
-    <string name="about_version">version %1$s</string>
+    <string name="about_android">%1$s for Android</string>
+    <string name="about_version">Version %1$s</string>
+    <string name="actionbar_search">Search this folder</string>
     <string name="actionbar_sync">Refresh account</string>
     <string name="actionbar_upload">Upload</string>
     <string name="actionbar_upload_from_apps">Content from other apps</string>
@@ -17,16 +17,18 @@
     <string name="actionbar_sort_title">Sort by</string>
     <string name="actionbar_sort_by_name">A-Z</string>
     <string name="actionbar_sort_by_date">Oldest - Newest</string>
-    <string name="actionbar_sort_by_size">Smallest - Biggest</string>
-    <!-- TODO re-enable when "Accounts" is available in Navigation Drawer -->
-    <!--<string name="drawer_item_accounts">Accounts</string>-->
+    <string name="actionbar_sort_by_size">Smallest - Largest</string>
     <string name="drawer_item_all_files">All files</string>
-    <!-- TODO re-enable when "On Device" is available
-    <string name="drawer_item_on_device">On device</string>-->
     <string name="drawer_item_settings">Settings</string>
     <string name="drawer_item_uploads_list">Uploads</string>
     <string name="drawer_close">Close</string>
     <string name="drawer_open">Open</string>
+    <string name="drawer_loading_quota">Loading quota</string>
+    <string name="drawer_quota">%1$s of %2$s used (%3$s %%)</string>
+    <string name="drawer_unavailable_free_storage">%1$s in use</string>
+    <string name="drawer_unavailable_used_storage">No storage usage information available</string>
+    <string name="drawer_feedback">Feedback</string>
+    <string name="drawer_help">Help</string>
     <string name="prefs_category_general">General</string>
     <string name="prefs_category_more">More</string>
     <string name="prefs_category_security">Security</string>
@@ -45,6 +47,8 @@
     <string name="prefs_log_summary_history">This shows the recorded logs</string>
     <string name="prefs_log_delete_history_button">Delete history</string>
     <string name="prefs_help">Help</string>
+    <string name="prefs_sync_calendar_contacts">Sync your contacts, calendars and tasks</string>
+    <string name="prefs_sync_calendar_contacts_summary">Install DAVdroid</string>
     <string name="prefs_recommend">Recommend to a friend</string>
     <string name="prefs_feedback">Feedback</string>
     <string name="prefs_imprint">Imprint</string>
@@ -65,16 +69,18 @@
     <string name="pattern_configure_your_pattern_explanation">The pattern will be requested every time the app is started</string>
     <string name="illegal_argument_exception_message">A valid ACTION is needed in the Intent passed to</string>
 
-    <string name="recommend_subject">"Try %1$s on your smartphone!"</string>
+    <string name="recommend_subject">Try %1$s on your smartphone!</string>
     <string name="recommend_text">"I want to invite you to use %1$s on your smartphone!\nDownload here: %2$s"</string>
 
+    <string name="auth_failure_snackbar">Authentication failed</string>
+    <string name="auth_failure_snackbar_action">Change account</string>
     <string name="auth_check_server">Check server</string>
-    <string name="auth_host_url">Server address https://…</string>
+    <string name="auth_host_url">Server address https://&#8230;</string>
     <string name="auth_username">Username</string>
     <string name="auth_password">Password</string>
     <string name="auth_register">New to %1$s?</string>
     <string name="sync_string_files">Files</string>
-    <string name="setup_btn_connect">Connect</string>
+    <string name="setup_btn_login">Log in</string>
     <string name="uploader_btn_upload_text">Upload</string>
     <string name="uploader_top_message">Choose upload folder</string>
     <string name="uploader_wrn_no_account_title">No account found</string>
@@ -94,6 +100,7 @@
     <string name="file_list_no_app_for_file_type">No app found for file type</string>
     <string name="local_file_list_empty">There are no files in this folder.</string>
     <string name="local_file_list_empty_just_folders">There are no folders in this folder.</string>
+    <string name="local_file_list_search_with_no_matches">No matches for this search</string>
     <string name="upload_list_empty">No uploads available.</string>
     <string name="file_list_folder">folder</string>
     <string name="file_list_folders">folders</string>
@@ -113,15 +120,13 @@
     <string name="action_share">Share</string>
     <string name="common_yes">Yes</string>
     <string name="common_no">No</string>
-    <string name="common_ok">OK</string>
     <string name="common_remove_upload">Remove upload</string>
     <string name="common_retry_upload">Retry upload</string>
     <string name="common_cancel_sync">Cancel sync</string>
-    <string name="common_cancel">Cancel</string>
     <string name="common_back">Back</string>
     <string name="common_save_exit">Save &amp; exit</string>
     <string name="common_error">Error</string>
-    <string name="common_loading">Loading &#8230;</string>
+    <string name="common_loading">Loading&#8230;</string>
     <string name="common_unknown">unknown</string>
     <string name="common_error_unknown">Unknown error</string>
     <string name="common_pending">Pending</string>
@@ -129,9 +134,9 @@
     <string name="change_password">Change password</string>
     <string name="delete_account">Remove account</string>
     <string name="create_account">Create account</string>
-    <string name="upload_chooser_title">Upload from &#8230;</string>
+    <string name="upload_chooser_title">Upload from</string>
     <string name="uploader_info_dirname">Folder name</string>
-    <string name="uploader_upload_in_progress_ticker">Uploading &#8230;</string>
+    <string name="uploader_upload_in_progress_ticker">Uploading&#8230;</string>
     <string name="uploader_upload_in_progress_content">%1$d%% Uploading %2$s</string>
     <string name="uploader_upload_succeeded_ticker">Upload succeeded</string>
     <string name="uploader_upload_succeeded_content_single">%1$s uploaded</string>
@@ -148,8 +153,8 @@
     <string name="uploads_view_group_current_uploads">Current</string>
     <string name="uploads_view_group_failed_uploads">Failed (tap to retry)</string>
     <string name="uploads_view_group_finished_uploads">Uploaded</string>
-    <string name="uploads_view_group_file_count">%d Files</string>
-    <string name="uploads_view_group_file_count_single">%d File</string>
+    <string name="uploads_view_group_file_count">%d files</string>
+    <string name="uploads_view_group_file_count_single">%d file</string>
     <string name="uploads_view_upload_status_succeeded">Completed</string>
     <string name="uploads_view_upload_status_cancelled">Cancelled</string>
     <string name="uploads_view_upload_status_paused">Paused</string>
@@ -167,7 +172,7 @@
     <string name="uploads_view_upload_status_waiting_for_wifi">Waiting for wifi connectivity</string>
     <string name="uploads_view_later_waiting_to_upload">Waiting to upload</string>
     <string name="uploads_view_unsupported_media_type">Unsupported media type</string>
-    <string name="downloader_download_in_progress_ticker">Downloading &#8230;</string>
+    <string name="downloader_download_in_progress_ticker">Downloading&#8230;</string>
     <string name="downloader_download_in_progress_content">%1$d%% Downloading %2$s</string>
     <string name="downloader_download_succeeded_ticker">Download succeeded</string>
     <string name="downloader_download_succeeded_content">%1$s downloaded</string>
@@ -189,11 +194,11 @@
     <string name="sync_foreign_files_forgotten_content">%1$d files out of the %2$s folder could not be copied into</string>
     <string name="sync_foreign_files_forgotten_explanation">As of version 1.3.16, files uploaded from this device are copied into the local %1$s folder to prevent data loss when a single file is synced with multiple accounts.\n\nDue to this change, all files uploaded in previous versions of this app were copied into the %2$s folder. However, an error prevented the completion of this operation during account synchronization. You may either leave the file(s) as is and remove the link to %3$s, or move the file(s) into the %1$s folder and retain the link to %4$s.\n\nListed below are the local file(s), and the remote file(s) in %5$s they were linked to.</string>
     <string name="sync_current_folder_was_removed">Folder %1$s does not exist anymore</string>
-    <string name="foreign_files_move">"Move all"</string>
-    <string name="foreign_files_success">"All files were moved"</string>
-    <string name="foreign_files_fail">"Some files could not be moved"</string>
-    <string name="foreign_files_local_text">"Local: %1$s"</string>
-    <string name="foreign_files_remote_text">"Remote: %1$s"</string>
+    <string name="foreign_files_move">Move all</string>
+    <string name="foreign_files_success">All files were moved</string>
+    <string name="foreign_files_fail">Some files could not be moved</string>
+    <string name="foreign_files_local_text">Local: %1$s</string>
+    <string name="foreign_files_remote_text">Remote: %1$s</string>
     <string name="upload_query_move_foreign_files">There is not enough space to copy the selected files into the %1$s folder. Would you like to move them instead? </string>
 
     <string name="pass_code_enter_pass_code">Please insert your passcode</string>
@@ -214,10 +219,10 @@
     <string name="fingerprint_not_enrolled_fingerprints">Register at least one fingerprint to use this feature</string>
     <string name="fingerprint_not_granted_permissions">Fingerprint permissions not granted</string>
 
-    <string name="media_notif_ticker">"%1$s music player"</string>
-    <string name="media_state_playing">"%1$s (playing)"</string>
-    <string name="media_state_loading">"%1$s (loading)"</string>
-    <string name="media_event_done">"%1$s playback finished"</string>
+    <string name="media_notif_ticker">%1$s music player</string>
+    <string name="media_state_playing">%1$s (playing)</string>
+    <string name="media_state_loading">%1$s (loading)</string>
+    <string name="media_event_done">%1$s playback finished</string>
     <string name="media_err_nothing_to_play">No media file found</string>
     <string name="media_err_no_account">No account provided</string>
     <string name="media_err_not_in_owncloud">File not in a valid account</string>
@@ -235,8 +240,8 @@
     <string name="media_forward_description">Fast forward button</string>
     <string name="upload_from_camera_title">Picture from camera</string>
 
-    <string name="auth_getting_authorization">Getting authorization &#8230;</string>
-    <string name="auth_trying_to_login">Trying to log in &#8230;</string>
+    <string name="auth_getting_authorization">Getting authorization&#8230;</string>
+    <string name="auth_trying_to_login">Trying to log in&#8230;</string>
     <string name="auth_no_net_conn_title">No network connection</string>
     <string name="auth_nossl_plain_ok_title">Secure connection unavailable.</string>
     <string name="auth_connection_established">Connection established</string>
@@ -271,14 +276,14 @@
     <string name="unset_available_offline">Unset as available offline</string>
     <string name="common_rename">Rename</string>
     <string name="common_remove">Remove</string>
-    <string name="confirmation_remove_file_alert">"Do you really want to remove %1$s?"</string>
-    <string name="confirmation_remove_folder_alert">"Do you really want to remove %1$s and its contents?"</string>
+    <string name="confirmation_remove_file_alert">Do you really want to remove %1$s?</string>
+    <string name="confirmation_remove_folder_alert">Do you really want to remove %1$s and its contents?</string>
     <string name="confirmation_remove_local">Local only</string>
-    <string name="confirmation_remove_account_alert">"Do you really want to remove the account %1$s?"</string>
+    <string name="confirmation_remove_account_alert">Do you really want to remove the account %1$s?</string>
     <string name="confirmation_remove_public_share_title">Remove link</string>
-    <string name="confirmation_remove_public_share_message">"Do you really want to remove %1$s?"</string>
-    <string name="remove_success_msg">"Removal succeeded"</string>
-    <string name="remove_fail_msg">"Removal failed"</string>
+    <string name="confirmation_remove_public_share_message">Do you really want to remove %1$s?</string>
+    <string name="remove_success_msg">Removal succeeded</string>
+    <string name="remove_fail_msg">Removal failed</string>
     <string name="rename_dialog_title">Enter a new name</string>
     <string name="available_offline_inherited_msg">A folder that containing this file is available offline</string>
     <string name="rename_local_fail_msg">"Local copy could not be renamed; try a different name"</string>
@@ -293,7 +298,7 @@
     <string name="wait_checking_credentials">Checking stored credentials</string>
     <string name="filedisplay_unexpected_bad_get_content">"Unexpected problem ; please select the file from a different app"</string>
     <string name="filedisplay_no_file_selected">No file was selected</string>
-    <string name="activity_chooser_title">Send link to &#8230;</string>
+    <string name="activity_chooser_title">Send link to</string>
     <string name="wait_for_tmp_copy_from_private_storage">Copying file from private storage</string>
 
     <string name="oauth_check_onoff">Login with oAuth2</string>
@@ -341,6 +346,7 @@
     <string name="confirmation_disable_pictures_upload_message">Are you sure you want to disable this feature? The pending pictures will not be uploaded</string>
     <string name="confirmation_disable_videos_upload_message">Are you sure you want to disable this feature? The pending videos will not be uploaded</string>
     <string name="conflict_title">File conflict</string>
+    <string name="conflict_description">There is a conflict in file %1$s, tap to solve it</string>
     <string name="conflict_message">Which files do you want to keep? If you select both versions, the local file will have a number added to its name.</string>
     <string name="conflict_keep_both">Keep both</string>
     <string name="conflict_use_local_version">local version</string>
@@ -398,7 +404,10 @@
     <string name="log_send_history_button">Send history</string>
     <string name="log_send_no_mail_app">No app for sending logs found. Please install a mail app.</string>
     <string name="log_send_mail_subject">%1$s Android app logs</string>
-    <string name="log_progress_dialog_text">Loading data &#8230;</string>
+    <string name="log_progress_dialog_text">Loading data&#8230;</string>
+
+    <string name="actionbar_select_all">Select all</string>
+    <string name="actionbar_select_inverse">Select inverse</string>
 
     <string name="saml_authentication_required_text">Authentication required</string>
     <string name="saml_authentication_wrong_pass">Wrong password</string>
@@ -447,8 +456,8 @@
     <string name="prefs_camera_upload_source_path_title">Camera folder (%1$s)</string>
     <string name="prefs_camera_upload_source_path_title_required">required</string>
     <string name="prefs_camera_upload_source_path_title_optional">optional</string>
-    <string name="prefs_camera_upload_behaviour_dialogTitle">Original file will be...</string>
-    <string name="prefs_camera_upload_behaviour_title">Original file will be...</string>
+    <string name="prefs_camera_upload_behaviour_dialogTitle">Original file will be</string>
+    <string name="prefs_camera_upload_behaviour_title">Original file will be</string>
     <string name="upload_copy_files">Copy file</string>
     <string name="upload_move_files">Move file</string>
 
@@ -470,10 +479,11 @@
     <string name="share_via_link_expiration_date_label">Expiration</string>
     <string name="share_via_link_password_label">Password</string>
     <string name="share_via_link_password_title">Secured</string>
-    <string name="share_via_link_edit_permission_label">Allow editing</string>
-    <string name="share_via_link_show_file_listing_label">Show file listing</string>
+    <string name="share_via_link_edit_permission_read_only_label">Download / View</string>
+    <string name="share_via_link_edit_permission_read_and_write_label">Download / View / Upload</string>
+    <string name="share_via_link_edit_permission_upload_only_label">Upload Only (File Drop)</string>
     <string name="share_get_public_link_button">Get link</string>
-    <string name="share_with_title">Share with &#8230;</string>
+    <string name="share_with_title">Share with</string>
     <string name="share_with_edit_title">Share with %1$s</string>
 
     <string name="share_search">Search</string>
@@ -515,7 +525,7 @@
 
     <string name="actionbar_privacy_policy">Privacy policy</string>
     <string name="prefs_privacy_policy">Privacy policy</string>
-    <string name="privacy_policy_error">"An error has occurred: "</string>
+    <string name="privacy_policy_error">An error has occurred: </string>
     <string name="service_unavailable">Server is unavailable</string>
 
     <string name="streaming_certificate_error">Streaming cannot be initialized because your server certificate is untrusted. File download will start automatically</string>
@@ -557,6 +567,7 @@
     </plurals>
 
     <!-- Welcome to oC intro features -->
+    <string name="welcome_feature_skip_button">Skip</string>
     <string name="welcome_feature_1_title">Manage all your synced files</string>
     <string name="welcome_feature_1_text">You can copy, move, delete</string>
     <string name="welcome_feature_2_title">Share files and folders</string>
@@ -567,12 +578,11 @@
     <string name="welcome_feature_4_text">Your pictures/videos automatically uploaded</string>
     <string name="welcome_feature_5_title">Video streaming</string>
     <string name="welcome_feature_5_text">Play your videos without downloading them</string>
-    <string name="welcome_feature_6_title">Pattern lock</string>
-    <string name="welcome_feature_6_text">Use a pattern to lock your ownCloud app</string>
-    <string name="welcome_feature_7_title">Fingerprint lock</string>
-    <string name="welcome_feature_7_text">Use your fingerprint to lock your ownCloud app</string>
-    <string name="welcome_feature_8_title">GIF support</string>
-    <string name="welcome_feature_8_text">Play your animated GIF images</string>
-    <string name="welcome_feature_9_title">Upload picture from camera</string>
-    <string name="welcome_feature_9_text">Take a picture and upload it directly to your server</string>
+    <string name="welcome_feature_6_title">Search in current folder</string>
+    <string name="welcome_feature_6_text">Filter your files by name</string>
+    <string name="welcome_feature_7_title">Select all</string>
+    <string name="welcome_feature_7_text">Select all files at once</string>
+    <string name="welcome_feature_8_title">Available offline</string>
+    <string name="welcome_feature_8_text">Your files automatically synchronized</string>
+    <string name="no_borwser_installed_alert">No browser installed. Please install a Browser in order to allow a secure login.</string>
 </resources>

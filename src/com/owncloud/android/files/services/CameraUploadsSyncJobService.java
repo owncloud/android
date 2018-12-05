@@ -2,7 +2,8 @@
  * ownCloud Android client application
  *
  * @author David González Verdugo
- * Copyright (C) 2017 ownCloud GmbH.
+ * @author Christian Schabesberger
+ * Copyright (C) 2018 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -30,7 +31,7 @@ import android.support.annotation.RequiresApi;
 
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.CameraUploadsSyncStorageManager;
-import com.owncloud.android.db.OCCameraUploadSync;
+import com.owncloud.android.datamodel.OCCameraUploadSync;
 import com.owncloud.android.db.PreferenceManager;
 import com.owncloud.android.db.PreferenceManager.CameraUploadsConfiguration;
 import com.owncloud.android.lib.common.utils.Log_OC;
@@ -40,7 +41,6 @@ import com.owncloud.android.utils.MimetypeIconUtil;
 
 import java.io.File;
 import java.util.Arrays;
-import java.util.Comparator;
 
 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 public class CameraUploadsSyncJobService extends JobService {
@@ -77,13 +77,12 @@ public class CameraUploadsSyncJobService extends JobService {
 
         @Override
         protected JobParameters doInBackground(JobParameters... jobParams) {
-
             // Cancel periodic job if feature is disabled
-            CameraUploadsConfiguration mCameraUploadsConfiguration = PreferenceManager.
+            CameraUploadsConfiguration cameraUploadsConfiguration = PreferenceManager.
                     getCameraUploadsConfiguration(mCameraUploadsSyncJobService);
 
-            if (!mCameraUploadsConfiguration.isEnabledForPictures() &&
-                    !mCameraUploadsConfiguration.isEnabledForVideos()) {
+            if (!cameraUploadsConfiguration.isEnabledForPictures() &&
+                    !cameraUploadsConfiguration.isEnabledForVideos()) {
                 cancelPeriodicJob(jobParams[0].getJobId());
 
                 return jobParams[0];
@@ -126,29 +125,21 @@ public class CameraUploadsSyncJobService extends JobService {
             }
 
             if (localFiles != null) {
-
                 localFiles = orderFilesByCreationTimestamp(localFiles);
 
                 for (File localFile : localFiles) {
-
                     handleFile(localFile);
                 }
             }
 
             Log_OC.d(TAG, "All files synced, finishing job");
-
         }
 
         private File[] orderFilesByCreationTimestamp(File[] localFiles) {
-
-            Arrays.sort(localFiles, new Comparator<File>() {
-                public int compare(File file1, File file2) {
-                    return Long.compare(file1.lastModified(), file2.lastModified());
-                }
-            });
+            Arrays.sort(localFiles, (file1, file2) -> Long.compare(file1.lastModified(), file2.lastModified()));
 
             return localFiles;
-        };
+        }
 
         /**
          * Request the upload of a file just created if matches the criteria of the current
@@ -271,7 +262,7 @@ public class CameraUploadsSyncJobService extends JobService {
             jobScheduler.cancel(jobId);
 
             Log_OC.d(TAG, "Camera uploads disabled, cancelling the periodic job");
-        };
+        }
     }
 
     @Override

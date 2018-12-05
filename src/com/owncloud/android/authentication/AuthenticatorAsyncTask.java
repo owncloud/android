@@ -2,7 +2,7 @@
  *   ownCloud Android client application
  *
  *   @author masensio on 09/02/2015.
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -65,15 +65,16 @@ public class AuthenticatorAsyncTask  extends AsyncTask<Object, Void, RemoteOpera
             client.setCredentials(credentials);
 
             // Operation - try credentials
-            ExistenceCheckRemoteOperation operation = new ExistenceCheckRemoteOperation(
+            ExistenceCheckRemoteOperation existenceCheckRemoteOperation = new ExistenceCheckRemoteOperation(
                     REMOTE_PATH,
-                    SUCCESS_IF_ABSENT
+                    SUCCESS_IF_ABSENT,
+                    true
             );
-            result = operation.execute(client);
+            result = existenceCheckRemoteOperation.execute(client);
 
             String targetUrlAfterPermanentRedirection = null;
-            if (operation.wasRedirected()) {
-                RedirectionPath redirectionPath = operation.getRedirectionPath();
+            if (existenceCheckRemoteOperation.wasRedirected()) {
+                RedirectionPath redirectionPath = existenceCheckRemoteOperation.getRedirectionPath();
                 targetUrlAfterPermanentRedirection = redirectionPath.getLastPermanentLocation();
             }
 

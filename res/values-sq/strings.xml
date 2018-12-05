@@ -1,7 +1,8 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="about_android">Aplikacion %1$s Android</string>
-  <string name="about_version">versioni %1$s</string>
+  <string name="about_android">%1$s për Android</string>
+  <string name="about_version">Version %1$s</string>
+  <string name="actionbar_search">Kërko në këtë dosje</string>
   <string name="actionbar_sync">Freskoni llogarinë</string>
   <string name="actionbar_upload">Ngarkoni</string>
   <string name="actionbar_upload_from_apps">Lëndë nga aplikacione të tjera</string>
@@ -17,15 +18,17 @@
   <string name="actionbar_sort_by_name">A-Z</string>
   <string name="actionbar_sort_by_date">Më e vjetra - Më e reja</string>
   <string name="actionbar_sort_by_size">Më e vogla - Më e madhja</string>
-  <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
-  <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Krejt kartelat</string>
-  <!--TODO re-enable when "On Device" is available
-    <string name="drawer_item_on_device">On device</string>-->
   <string name="drawer_item_settings">Rregullime</string>
   <string name="drawer_item_uploads_list">Ngarkime</string>
   <string name="drawer_close">Mbylle</string>
   <string name="drawer_open">Hape</string>
+  <string name="drawer_loading_quota">Kuotë ngarkimesh</string>
+  <string name="drawer_quota">%1$s nga %2$s e përdorur (%3$s %%)</string>
+  <string name="drawer_unavailable_free_storage">%1$s në përdorim</string>
+  <string name="drawer_unavailable_used_storage">S’ka të dhëna mbi përdorim depozitimi</string>
+  <string name="drawer_feedback">Përshtypje</string>
+  <string name="drawer_help">Ndihmë</string>
   <string name="prefs_category_general">Të përgjithshme</string>
   <string name="prefs_category_more">Më tepër</string>
   <string name="prefs_category_security">Siguri</string>
@@ -44,6 +47,8 @@
   <string name="prefs_log_summary_history">Kjo shfaq regjistrimet e bëra</string>
   <string name="prefs_log_delete_history_button">Fshije historikun</string>
   <string name="prefs_help">Ndihmë</string>
+  <string name="prefs_sync_calendar_contacts">Njëkohësoni kontaktet, kalendarët dhe punët tuaja</string>
+  <string name="prefs_sync_calendar_contacts_summary">Instalo DAVdroid</string>
   <string name="prefs_recommend">Këshillojani një shoku</string>
   <string name="prefs_feedback">Përshtypje</string>
   <string name="prefs_imprint">Imprint</string>
@@ -65,13 +70,15 @@
   <string name="illegal_argument_exception_message">Lypset një VEPRIM i vlefshëm te Synimi që u dha</string>
   <string name="recommend_subject">Provojeni %1$s te telefoni juaj!</string>
   <string name="recommend_text">Dua t\’ju ftoj të përdorni %1$s në telefonin tuaj!\nShkarkojeni prej këtu: %2$s</string>
+  <string name="auth_failure_snackbar">Mirëfilltësimi dështoi</string>
+  <string name="auth_failure_snackbar_action">Ndryshoni llogari</string>
   <string name="auth_check_server">Kontrollo shërbyesin</string>
   <string name="auth_host_url">Adresë https://… e shërbyesit</string>
   <string name="auth_username">Emër përdoruesi</string>
   <string name="auth_password">Fjalëkalim</string>
   <string name="auth_register">Rishtar te %1$s?</string>
   <string name="sync_string_files">Kartela</string>
-  <string name="setup_btn_connect">Lidhuni</string>
+  <string name="setup_btn_login">Hyni</string>
   <string name="uploader_btn_upload_text">Ngarkoni</string>
   <string name="uploader_top_message">Zgjidhni dosje ngarkimi</string>
   <string name="uploader_wrn_no_account_title">S\’u gjet llogari</string>
@@ -91,6 +98,7 @@
   <string name="file_list_no_app_for_file_type">S\’u gjet aplikacion për llojin e kartelës</string>
   <string name="local_file_list_empty">Në këtë dosje s\’ka kartela.</string>
   <string name="local_file_list_empty_just_folders">S\’ka dosje brenda kësaj dosjeje.</string>
+  <string name="local_file_list_search_with_no_matches">S’ka përputhje për këtë kërkim</string>
   <string name="upload_list_empty">S\’ka ngarkime te gatshme.</string>
   <string name="file_list_folder">dosje</string>
   <string name="file_list_folders">dosje</string>
@@ -110,15 +118,13 @@
   <string name="action_share">Ndaje</string>
   <string name="common_yes">Po</string>
   <string name="common_no">Jo</string>
-  <string name="common_ok">OK</string>
   <string name="common_remove_upload">Hiqe ngarkimin</string>
   <string name="common_retry_upload">Riprovo ngarkimin</string>
   <string name="common_cancel_sync">Anuloje njëkohësimin</string>
-  <string name="common_cancel">Anuloje</string>
   <string name="common_back">Mbrapsht</string>
   <string name="common_save_exit">Ruaje &amp; dil</string>
   <string name="common_error">Gabim</string>
-  <string name="common_loading">Po ngarkohet …</string>
+  <string name="common_loading">Po ngarkohet…</string>
   <string name="common_unknown">i panjohur</string>
   <string name="common_error_unknown">Gabim i panjohur</string>
   <string name="common_pending">Në pritje</string>
@@ -126,9 +132,9 @@
   <string name="change_password">Ndryshoni fjalëkalimin</string>
   <string name="delete_account">Hiqe llogarinë</string>
   <string name="create_account">Krijoni llogari</string>
-  <string name="upload_chooser_title">Ngarkojeni prej …</string>
+  <string name="upload_chooser_title">Ngarkoje prej</string>
   <string name="uploader_info_dirname">Emër dosjeje</string>
-  <string name="uploader_upload_in_progress_ticker">Po ngarkohet …</string>
+  <string name="uploader_upload_in_progress_ticker">Po ngarkohet…</string>
   <string name="uploader_upload_in_progress_content">%1$d%% Po ngarkohet %2$s</string>
   <string name="uploader_upload_succeeded_ticker">Ngarkimi doli me sukses</string>
   <string name="uploader_upload_succeeded_content_single">%1$s u ngarkua</string>
@@ -146,7 +152,7 @@
   <string name="uploads_view_group_failed_uploads">Dështoi (prekeni që të riprovohet)</string>
   <string name="uploads_view_group_finished_uploads">U ngarkua</string>
   <string name="uploads_view_group_file_count">%d kartela</string>
-  <string name="uploads_view_group_file_count_single">Kartelë %d</string>
+  <string name="uploads_view_group_file_count_single">%d kartelë</string>
   <string name="uploads_view_upload_status_succeeded">Të plotësuara</string>
   <string name="uploads_view_upload_status_cancelled">Anuluar</string>
   <string name="uploads_view_upload_status_paused">Pushuar</string>
@@ -164,7 +170,7 @@
   <string name="uploads_view_upload_status_waiting_for_wifi">Po pritet për lidhje wifi</string>
   <string name="uploads_view_later_waiting_to_upload">Po pritet për ngarkim</string>
   <string name="uploads_view_unsupported_media_type">Lloj media i pambuluar</string>
-  <string name="downloader_download_in_progress_ticker">Po shkarkohet …</string>
+  <string name="downloader_download_in_progress_ticker">Po shkarkohet…</string>
   <string name="downloader_download_in_progress_content">%1$d%% Shkarkim %2$s</string>
   <string name="downloader_download_succeeded_ticker">Shkarkimi doli me sukses</string>
   <string name="downloader_download_succeeded_content">%1$s u shkarkua</string>
@@ -228,8 +234,8 @@
   <string name="media_play_pause_description">Butoni Luaje ose Pushoje</string>
   <string name="media_forward_description">Butoni Përpara</string>
   <string name="upload_from_camera_title">Foto nga kamera</string>
-  <string name="auth_getting_authorization">Po merret autorizim …</string>
-  <string name="auth_trying_to_login">Po provohet hyrja …</string>
+  <string name="auth_getting_authorization">Po merret autorizim…</string>
+  <string name="auth_trying_to_login">Po provohet të hyhet…</string>
   <string name="auth_no_net_conn_title">Pa lidhje rrjeti</string>
   <string name="auth_nossl_plain_ok_title">S\’ka lidhje të sigurt.</string>
   <string name="auth_connection_established">Lidhja u vendos</string>
@@ -283,7 +289,7 @@
   <string name="wait_checking_credentials">Po kontrollohen kredenciale të depozituara</string>
   <string name="filedisplay_unexpected_bad_get_content">Problem i papritur; ju lutemi, përzgjidhni një kartelë nga një aplikacion tjetër</string>
   <string name="filedisplay_no_file_selected">S\’u përzgjodh kartelë</string>
-  <string name="activity_chooser_title">Dërgoni lidhje te …</string>
+  <string name="activity_chooser_title">Dërgo lidhje te</string>
   <string name="wait_for_tmp_copy_from_private_storage">Po kopjohet kartelë nga depo private</string>
   <string name="oauth_check_onoff">Hyrje me oAuth2</string>
   <string name="oauth_login_connection">Po lidhet te shërbyesi OAuth2…</string>
@@ -327,6 +333,7 @@
   <string name="confirmation_disable_pictures_upload_message">Jeni i sigurt se doni të çaktivizohet kjo veçori? Fotot e mbetura nuk do të ngarkohen</string>
   <string name="confirmation_disable_videos_upload_message">Jeni i sigurt se doni të çaktivizohet kjo veçori? Videot e mbetura nuk do të ngarkohen</string>
   <string name="conflict_title">Përplasje kartelash</string>
+  <string name="conflict_description">Ka një kundërshti në kartelën %1$s, prekeni që të zgjidhet</string>
   <string name="conflict_message">Cilat kartela doni të mbani? Nëse përzgjidhni të dy versionet, kartelës vendore do t\’i shtohet një numër te emri.</string>
   <string name="conflict_keep_both">Mbaji të dyja</string>
   <string name="conflict_use_local_version">versionin vendor</string>
@@ -373,7 +380,9 @@
   <string name="log_send_history_button">Historik dërgimesh</string>
   <string name="log_send_no_mail_app">S\’u gjet aplikacion për dërgim regjistrimesh. Ju lutemi, instaloni një aplikacion email-esh.</string>
   <string name="log_send_mail_subject">Regjistra aplikacioni %1$s për Android</string>
-  <string name="log_progress_dialog_text">Po ngarkohen të dhëna …</string>
+  <string name="log_progress_dialog_text">Po ngarkohen të dhëna…</string>
+  <string name="actionbar_select_all">Përzgjidhi krejt</string>
+  <string name="actionbar_select_inverse">Përzgjidhe së prapthi</string>
   <string name="saml_authentication_required_text">Lypset mirëfilltësim</string>
   <string name="saml_authentication_wrong_pass">Fjalëkalim i gabuar</string>
   <string name="actionbar_move">Zhvendose</string>
@@ -411,8 +420,8 @@
   <string name="prefs_camera_upload_source_path_title">Dosje kamere (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">e domosdoshme</string>
   <string name="prefs_camera_upload_source_path_title_optional">opsionale</string>
-  <string name="prefs_camera_upload_behaviour_dialogTitle">Kartela origjinale do të jetë...</string>
-  <string name="prefs_camera_upload_behaviour_title">Kartela origjinale do të jetë...</string>
+  <string name="prefs_camera_upload_behaviour_dialogTitle">Kartela origjinale do të jetë</string>
+  <string name="prefs_camera_upload_behaviour_title">Kartela origjinale do të jetë</string>
   <string name="upload_copy_files">Kopjoje kartelën</string>
   <string name="upload_move_files">Lëvize kartelën</string>
   <string name="pref_behaviour_entries_keep_file">mbajtur në dosjen origjinale</string>
@@ -432,10 +441,11 @@
   <string name="share_via_link_expiration_date_label">Skadim</string>
   <string name="share_via_link_password_label">Fjalëkalim</string>
   <string name="share_via_link_password_title">E siguruar</string>
-  <string name="share_via_link_edit_permission_label">Lejo përpunim</string>
-  <string name="share_via_link_show_file_listing_label">Shfaq listë kartelash</string>
+  <string name="share_via_link_edit_permission_read_only_label">Të shkarkojë / Të shohë</string>
+  <string name="share_via_link_edit_permission_read_and_write_label">Të shkarkojë / Të shohë / Të ngarkojë</string>
+  <string name="share_via_link_edit_permission_upload_only_label">Vetëm Ngarkime (Me Lënie Kartelash)</string>
   <string name="share_get_public_link_button">Merreni lidhjen</string>
-  <string name="share_with_title">Ndajeni me …</string>
+  <string name="share_with_title">Ndajeni me</string>
   <string name="share_with_edit_title">Ndajeni me %1$s</string>
   <string name="share_search">Kërko</string>
   <string name="search_users_and_groups_hint">Kërkoni për grupe dhe përdorues</string>
@@ -507,6 +517,7 @@
     <item quantity="other">%d të përzgjedhur</item>
   </plurals>
   <!--Welcome to oC intro features-->
+  <string name="welcome_feature_skip_button">Anashkalojeni</string>
   <string name="welcome_feature_1_title">Administroni krejt kartelat tuaja të njëkohësuara</string>
   <string name="welcome_feature_1_text">Mund të kopjoni, lëvizni, fshini</string>
   <string name="welcome_feature_2_title">Ndani me të tjerët kartela dhe dosje</string>
@@ -517,12 +528,11 @@
   <string name="welcome_feature_4_text">Fotot/videot tuaja të ngarkuara automatikisht</string>
   <string name="welcome_feature_5_title">Transmetim videosh</string>
   <string name="welcome_feature_5_text">Luajini videot tuaja pa i shkarkuar</string>
-  <string name="welcome_feature_6_title">Kyçje me rregullsi</string>
-  <string name="welcome_feature_6_text">Përdorni një rregullsi për të kyçur aplikacionin tuaj ownCloud</string>
-  <string name="welcome_feature_7_title">Kyçje me shenja gishtash</string>
-  <string name="welcome_feature_7_text">Përdorni shenja gishtash tuaja për të kyçur aplikacionin tuaj ownCloud</string>
-  <string name="welcome_feature_8_title">Mbulim GIF-esh</string>
-  <string name="welcome_feature_8_text">Luani figurat tuaja të animuara GIF</string>
-  <string name="welcome_feature_9_title">Ngarko foto nga kamerë</string>
-  <string name="welcome_feature_9_text">Bëni një foto dhe ngarkojeni drejt e te shërbyesi juaj</string>
+  <string name="welcome_feature_6_title">Kërko në dosjen e tanishme</string>
+  <string name="welcome_feature_6_text">Filtrojini kartelat tuaja sipas emrash</string>
+  <string name="welcome_feature_7_title">Përzgjidhi krejt</string>
+  <string name="welcome_feature_7_text">Përzgjidhini krejt kartelat njëherësh</string>
+  <string name="welcome_feature_8_title">I passhëm jo në linjë</string>
+  <string name="welcome_feature_8_text">Kartelat tuaja u njëkohësuan vetvetiu</string>
+  <string name="no_borwser_installed_alert">S’ka shfletues të instaluar. Ju lutemi, instaloni një Shfletues, që të mund të lejohet hyrje e sigurt.</string>
 </resources>

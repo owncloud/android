@@ -136,7 +136,7 @@ public class FileDownloadFragment extends FileFragment implements OnClickListene
 
         View rootView = inflater.inflate(R.layout.file_download_fragment, container, false);
         
-        mProgressBar = (ProgressBar)rootView.findViewById(R.id.progressBar);
+        mProgressBar = rootView.findViewById(R.id.progressBar);
         DisplayUtils.colorPreLollipopHorizontalProgressBar(mProgressBar);
 
         (rootView.findViewById(R.id.cancelBtn)).setOnClickListener(this);
@@ -209,7 +209,7 @@ public class FileDownloadFragment extends FileFragment implements OnClickListene
 
             // show the progress bar for the transfer
             rootView.findViewById(R.id.progressBar).setVisibility(View.VISIBLE);
-            TextView progressText = (TextView) rootView.findViewById(R.id.progressText);
+            TextView progressText = rootView.findViewById(R.id.progressText);
             progressText.setText(R.string.downloader_download_in_progress_ticker);
             progressText.setVisibility(View.VISIBLE);
 
@@ -231,7 +231,7 @@ public class FileDownloadFragment extends FileFragment implements OnClickListene
             rootView.findViewById(R.id.progressBar).setVisibility(View.GONE);
 
             // updates the text message
-            TextView progressText = (TextView) rootView.findViewById(R.id.progressText);
+            TextView progressText = rootView.findViewById(R.id.progressText);
             progressText.setText(R.string.common_loading);
             progressText.setVisibility(View.VISIBLE);
 

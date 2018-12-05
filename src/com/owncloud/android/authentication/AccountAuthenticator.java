@@ -85,8 +85,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
     @Override
     public Bundle addAccount(AccountAuthenticatorResponse response,
             String accountType, String authTokenType,
-            String[] requiredFeatures, Bundle options)
-            throws NetworkErrorException {
+            String[] requiredFeatures, Bundle options) {
         Log_OC.i(TAG, "Adding account with type " + accountType
                 + " and auth token " + authTokenType);
         
@@ -141,7 +140,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
      */
     @Override
     public Bundle confirmCredentials(AccountAuthenticatorResponse response,
-            Account account, Bundle options) throws NetworkErrorException {
+            Account account, Bundle options) {
         try {
             validateAccountType(account.type);
         } catch (AuthenticatorException e) {
@@ -174,8 +173,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
      */
     @Override
     public Bundle getAuthToken(AccountAuthenticatorResponse response,
-            Account account, String authTokenType, Bundle options)
-            throws NetworkErrorException {
+            Account account, String authTokenType, Bundle options) {
         /// validate parameters
         try {
             validateAccountType(account.type);
@@ -196,8 +194,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
             // Gets an auth token from the AccountManager's cache. If no auth token is cached for
             // this account, null will be returned
             accessToken = am.peekAuthToken(account, authTokenType);
-            if (accessToken == null &&
-                canBeRefreshed(authTokenType)) {
+            if (accessToken == null && canBeRefreshed(authTokenType)) {
                 accessToken = refreshToken(account, authTokenType, am);
             }
         }
@@ -230,7 +227,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
 
     @Override
     public Bundle hasFeatures(AccountAuthenticatorResponse response,
-            Account account, String[] features) throws NetworkErrorException {
+            Account account, String[] features) {
         final Bundle result = new Bundle();
         result.putBoolean(AccountManager.KEY_BOOLEAN_RESULT, true);
         return result;
@@ -238,8 +235,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
 
     @Override
     public Bundle updateCredentials(AccountAuthenticatorResponse response,
-            Account account, String authTokenType, Bundle options)
-            throws NetworkErrorException {
+            Account account, String authTokenType, Bundle options) {
         final Intent intent = new Intent(mContext, AuthenticatorActivity.class);
         intent.putExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE,
                 response);
@@ -355,14 +351,14 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
                 true
             );
 
-            RemoteOperationResult result = oAuth2RefreshAccessTokenOperation.execute(client);
+            RemoteOperationResult<Map<String, String>> result = oAuth2RefreshAccessTokenOperation.execute(client);
             if (!result.isSuccess()) {
                 Log_OC.e(TAG, "Failed to refresh access token");
                 return null;
             }
 
             // Get new access and refresh tokens
-            Map<String, String> tokens = (Map<String, String>) (result.getData().get(0));
+            Map<String, String> tokens = result.getData();
 
             accessToken = tokens.get(OAuth2Constants.KEY_ACCESS_TOKEN);
 
