@@ -1,6 +1,6 @@
 name: android
 title: Mobile app for Android
 version: latest
-start_page: ROOT:android_app.adoc
+start_page: ROOT:index.adoc
 nav:
 - modules/ROOT/nav.adoc
