@@ -2,6 +2,7 @@
 Release Notes
 =============
 
+- `Changes in 2.8.0`_
 - `Changes in 2.7.0`_
 - `Changes in 2.6.0`_
 - `Changes in 2.5.0`_
@@ -9,6 +10,16 @@ Release Notes
 - `Changes in 2.2.0`_
 - `Changes in 2.1.1`_
 - `Changes in 2.1.0`_
+
+Changes in 2.8.0
+----------------
+
+- Side menu redesign with user quota
+- New icons to download/set available offline and new pins for syncing/downloaded/av. offline files
+- New sort descending option
+- Redesign public sharing options for folders
+- OAuth2 chrome custom tabs 
+- One panel for tablets in landscape
 
 Changes in 2.7.0
 ----------------
