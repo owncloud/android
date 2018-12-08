@@ -7,16 +7,16 @@
  * @author Christian Schabesberger
  * Copyright (C) 2011  Bartek Przybylski
  * Copyright (C) 2018 ownCloud GmbH.
- *
+ * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
  * as published by the Free Software Foundation.
- *
+ * <p>
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -63,7 +63,7 @@ import java.io.File;
 
 /**
  * An Activity that allows the user to change the application's settings.
- *
+ * <p>
  * It proxies the necessary calls via {@link android.support.v7.app.AppCompatDelegate} to be used
  * with AppCompat.
  */
@@ -136,7 +136,7 @@ public class Preferences extends PreferenceActivity {
             temp = "";
             Log_OC.e(TAG, "Error while showing about dialog", e);
         }
-        final String appVersion = temp;
+        final String appVersion = temp + " " + BuildConfig.BUILD_TYPE + " " + BuildConfig.COMMIT_SHA1;
 
         // Register context menu for list of preferences.
         registerForContextMenu(getListView());
@@ -485,6 +485,13 @@ public class Preferences extends PreferenceActivity {
                     getString(R.string.app_name)
             ));
             pAboutApp.setSummary(String.format(getString(R.string.about_version), appVersion));
+            pAboutApp.setOnPreferenceClickListener(preference -> {
+                String commitUrl = BuildConfig.GIT_REMOTE + "/commit/" + BuildConfig.COMMIT_SHA1;
+                Uri uriUrl = Uri.parse(commitUrl);
+                Intent intent = new Intent(Intent.ACTION_VIEW, uriUrl);
+                startActivity(intent);
+                return true;
+            });
         }
     }
 
