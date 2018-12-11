@@ -439,8 +439,8 @@ public class PublicShareDialogFragment extends DialogFragment {
 
     private void showViewPasswordButton() {
         int drawable = isPasswordVisible()
-                ? R.drawable.ic_view
-                : R.drawable.ic_hide;
+                ? R.drawable.ic_view_black
+                : R.drawable.ic_hide_black;
         if (getView() != null) {
             mPasswordValueEdit.setCompoundDrawablesWithIntrinsicBounds(0, 0, drawable, 0);
         }
