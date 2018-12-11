@@ -51,11 +51,6 @@ public class RemoveFileOperation extends SyncOperation {
         mOnlyLocalCopy = onlyLocalCopy;
     }
 
-    public RemoveFileOperation(String remotePath,boolean onlyLocalCopy,boolean lastFile){
-        mRemotePath = remotePath;
-        mOnlyLocalCopy = onlyLocalCopy;
-    }
-
     /**
      * Getter for the file to remove (or removed, if the operation was successfully performed).
      * 

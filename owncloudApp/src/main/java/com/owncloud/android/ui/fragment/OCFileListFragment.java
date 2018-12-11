@@ -6,6 +6,7 @@
  *   @author David A. Velasco
  *   @author Christian Schabesberger
  *   @author David González Verdugo
+ *   @author Shashvat Kedia
  *   Copyright (C) 2011  Bartek Przybylski
  *   Copyright (C) 2018 ownCloud GmbH.
  *
@@ -437,6 +438,10 @@ public class OCFileListFragment extends ExtendedListFragment implements
         } else { // Set default message for empty list of files
             ((FileDisplayActivity) getActivity()).setBackgroundText();
         }
+    }
+
+    public boolean isCheckedItemsZero(){
+        return mFileListAdapter.getCheckedItems(getListView()).size() == 1;
     }
 
     /**
