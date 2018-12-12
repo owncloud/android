@@ -499,10 +499,9 @@ public class Preferences extends PreferenceActivity {
         if (isChecked) {
             mPrefCameraUploadsCategory.addPreference(mPrefCameraPictureUploadsWiFi);
             mPrefCameraUploadsCategory.addPreference(mPrefCameraPictureUploadsPath);
-            showSimpleDialog(getString(R.string.proper_pics_folder_warning_camera_upload),
-                    (dialog, which) -> {
-                        dialog.dismiss();
-                    });
+            if (!initializing) {
+                showSimpleDialog(getString(R.string.proper_pics_folder_warning_camera_upload));
+            }
         } else {
             if (!initializing) {
                 showConfirmationDialog(getString(R.string.confirmation_disable_pictures_upload_message),
@@ -537,10 +536,9 @@ public class Preferences extends PreferenceActivity {
         if (isChecked) {
             mPrefCameraUploadsCategory.addPreference(mPrefCameraVideoUploadsWiFi);
             mPrefCameraUploadsCategory.addPreference(mPrefCameraVideoUploadsPath);
-            showSimpleDialog(getString(R.string.proper_videos_folder_warning_camera_upload),
-                    (dialog, which) -> {
-                        dialog.dismiss();
-                    });
+            if (!initializing) {
+                showSimpleDialog(getString(R.string.proper_videos_folder_warning_camera_upload));
+            }
         } else {
             if (!initializing) {
                 showConfirmationDialog(getString(R.string.confirmation_disable_videos_upload_message),
@@ -935,13 +933,14 @@ public class Preferences extends PreferenceActivity {
     /**
      * Show a simple dialog with a message
      * @param message message to show in the dialog
-     * @param listener to handle button clicks
      */
-    private void showSimpleDialog(String message, DialogInterface.OnClickListener listener) {
+    private void showSimpleDialog(String message) {
         AlertDialog alertDialog = new AlertDialog.Builder(this).create();
         alertDialog.setTitle(R.string.common_important);
         alertDialog.setMessage(message);
-        alertDialog.setButton(DialogInterface.BUTTON_NEUTRAL, getString(android.R.string.ok), listener);
+        alertDialog.setButton(DialogInterface.BUTTON_NEUTRAL, getString(android.R.string.ok), (dialog, which) -> {
+            dialog.dismiss();
+        });
         alertDialog.show();
     }
 }
