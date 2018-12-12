@@ -52,7 +52,7 @@ import static com.owncloud.android.lib.common.operations.RemoteOperationResult.R
  * @author David González Verdugo
  */
 
-public class GetRemoteStatusOperation extends RemoteOperation<OwnCloudVersion> {
+public class GetRemoteStatusOperation extends RemoteOperation<com.owncloud.android.lib.resources.status.OwnCloudVersion> {
 
     /**
      * Maximum time to wait for a response from the server when the connection is being tested,
@@ -67,7 +67,7 @@ public class GetRemoteStatusOperation extends RemoteOperation<OwnCloudVersion> {
     private static final String HTTPS_PREFIX = "https://";
     private static final String HTTP_PREFIX = "http://";
 
-    private RemoteOperationResult<OwnCloudVersion> mLatestResult;
+    private RemoteOperationResult<com.owncloud.android.lib.resources.status.OwnCloudVersion> mLatestResult;
     private Context mContext;
 
     public GetRemoteStatusOperation(Context context) {
@@ -122,7 +122,7 @@ public class GetRemoteStatusOperation extends RemoteOperation<OwnCloudVersion> {
                             RemoteOperationResult.ResultCode.INSTANCE_NOT_CONFIGURED);
                 } else {
                     String version = respJSON.getString(NODE_VERSION);
-                    OwnCloudVersion ocVersion = new OwnCloudVersion(version);
+                    com.owncloud.android.lib.resources.status.OwnCloudVersion ocVersion = new com.owncloud.android.lib.resources.status.OwnCloudVersion(version);
                     /// the version object will be returned even if the version is invalid, no error code;
                     /// every app will decide how to act if (ocVersion.isVersionValid() == false)
 
@@ -175,7 +175,7 @@ public class GetRemoteStatusOperation extends RemoteOperation<OwnCloudVersion> {
     }
 
     @Override
-    protected RemoteOperationResult<OwnCloudVersion> run(OwnCloudClient client) {
+    protected RemoteOperationResult<com.owncloud.android.lib.resources.status.OwnCloudVersion> run(OwnCloudClient client) {
         if (!isOnline()) {
             return new RemoteOperationResult<>(RemoteOperationResult.ResultCode.NO_NETWORK_CONNECTION);
         }
