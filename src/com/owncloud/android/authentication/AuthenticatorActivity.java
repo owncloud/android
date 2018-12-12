@@ -343,7 +343,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
     @Override
     public void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        if(intent.getAction().equals(ACTION_VIEW)) {
+        if (intent != null && intent.getAction() != null && intent.getAction().equals(ACTION_VIEW)) {
             getOAuth2AccessTokenFromCapturedRedirection(intent.getData());
         }
     }
