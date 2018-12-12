@@ -6,6 +6,7 @@
  * @author masensio
  * @author David González Verdugo
  * @author Christian Schabesberger
+ * @author Shashvat Kedia
  * Copyright (C) 2012  Bartek Przybylski
  * Copyright (C) 2018 ownCloud GmbH.
  * <p>
@@ -1282,7 +1283,12 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         if (mServerIsValid && !BASIC_TOKEN_TYPE.equals(mAuthTokenType)) {
             mLoginButton.setVisibility(View.VISIBLE);
         } else {
-            mLoginButton.setVisibility(View.GONE);
+            if (mServerIsValid && mUsernameInput.getText().length() > 0 &&
+                    mPasswordInput.getText().length() > 0) {
+                mLoginButton.setVisibility(View.VISIBLE);
+            } else {
+                mLoginButton.setVisibility(View.GONE);
+            }
         }
 
         /// very special case (TODO: move to a common place for all the remote operations)
