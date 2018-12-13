@@ -477,16 +477,16 @@ public class UploadFileOperation extends SyncOperation {
      * @return      'True' if the upload was delayed until WiFi connectivity is available, 'false' otherwise.
      */
     private boolean delayForWifi() {
-        boolean delayCameraUploadsPicture = (
-                isCameraUploadsPicture() &&  PreferenceManager.cameraPictureUploadViaWiFiOnly(mContext)
-        );
-        boolean delayCameraUploadsVideo = (
-                isCameraUploadsVideo() && PreferenceManager.cameraVideoUploadViaWiFiOnly(mContext)
-        );
-        return (
-                (delayCameraUploadsPicture || delayCameraUploadsVideo) &&
-                        !ConnectivityUtils.isAppConnectedViaWiFi(mContext)
-        );
+        switch(getCreatedBy()){
+            case CREATED_AS_CAMERA_UPLOAD_PICTURE:
+                return isCameraUploadsPicture() &&  PreferenceManager.cameraPictureUploadViaWiFiOnly(mContext);
+            case CREATED_AS_CAMERA_UPLOAD_VIDEO:
+                return isCameraUploadsVideo() && PreferenceManager.cameraVideoUploadViaWiFiOnly(mContext);
+            case CREATED_BY_USER:
+                return !ConnectivityUtils.isAppConnectedViaWiFi(mContext);
+        }
+        //cannot happen
+        return false;
     }
 
 
