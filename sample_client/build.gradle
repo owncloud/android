@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 
 dependencies {
-    implementation project(':owncloudComLib')
+    implementation project(':owncloud-android-library')
 }
 
 android {

@@ -302,7 +302,7 @@ public class AccountUtils {
     public static class Constants {
         /**
          * Version should be 3 numbers separated by dot so it can be parsed by
-         * {@link com.owncloud.android.lib.resources.status.OwnCloudVersion}
+         * {@link OwnCloudVersion}
          */
         public static final String KEY_OC_VERSION = "oc_version";
         /**
