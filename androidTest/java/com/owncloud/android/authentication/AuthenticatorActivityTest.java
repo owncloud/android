@@ -160,7 +160,7 @@ public class AuthenticatorActivityTest {
         if (servertype == ServerType.HTTPS_NON_SECURE ||
                 servertype == ServerType.REDIRECTED_NON_SECURE ) {
 
-            // Check that login button is disabled
+            // Check that login button is not displayed
             onView(withId(R.id.loginButton))
                     .check(matches(not(isDisplayed())));
 
@@ -175,7 +175,7 @@ public class AuthenticatorActivityTest {
 
             SystemClock.sleep(WAIT_CONNECTION_MS);
 
-            // Check that login button keeps on being disabled
+            // Check that login button keeps on not being displayed
             onView(withId(R.id.loginButton))
                     .check(matches(not(isDisplayed())));
 
@@ -204,7 +204,7 @@ public class AuthenticatorActivityTest {
         if (servertype == ServerType.HTTPS_NON_SECURE ||
                 servertype == ServerType.REDIRECTED_NON_SECURE) {
 
-            // Check that login button is disabled
+            // Check that login button is not displayed
             onView(withId(R.id.loginButton))
                     .check(matches(not(isDisplayed())));
 
