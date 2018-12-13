@@ -162,12 +162,12 @@ public class AuthenticatorActivityTest {
 
             // Check that login button is disabled
             onView(withId(R.id.loginButton))
-                    .check(matches(not(isEnabled())));
+                    .check(matches(not(isDisplayed())));
 
             // Type server url
             onView(withId(R.id.hostUrlInput))
                     .perform(replaceText(testServerURL), closeSoftKeyboard());
-            onView(withId(R.id.scroll)).perform(click());
+            onView(withId(R.id.embeddedCheckServerButton)).perform(click());
             SystemClock.sleep(WAIT_CONNECTION_MS);
 
             //certif not accepted
@@ -177,7 +177,7 @@ public class AuthenticatorActivityTest {
 
             // Check that login button keeps on being disabled
             onView(withId(R.id.loginButton))
-                    .check(matches(not(isEnabled())));
+                    .check(matches(not(isDisplayed())));
 
             // Check that SSL server is not trusted
             onView(withId(R.id.server_status_text))
@@ -206,12 +206,12 @@ public class AuthenticatorActivityTest {
 
             // Check that login button is disabled
             onView(withId(R.id.loginButton))
-                    .check(matches(not(isEnabled())));
+                    .check(matches(not(isDisplayed())));
 
             // Type server url
             onView(withId(R.id.hostUrlInput))
                     .perform(replaceText(testServerURL), closeSoftKeyboard());
-            onView(withId(R.id.scroll)).perform(click());
+            onView(withId(R.id.embeddedCheckServerButton)).perform(click());
             SystemClock.sleep(WAIT_CONNECTION_MS);
 
             //Check untrusted certificate, opening the details
@@ -309,10 +309,8 @@ public class AuthenticatorActivityTest {
         onView(withId(R.id.scroll)).perform(click());
         SystemClock.sleep(WAIT_CONNECTION_MS);
 
-        onView(withId(R.id.account_username)).perform(click(),
-                replaceText(testUser), closeSoftKeyboard());
-        onView(withId(R.id.account_password)).perform(click(),
-                replaceText(testPassword), closeSoftKeyboard());
+        onView(withId(R.id.account_username)).perform(replaceText(testUser), closeSoftKeyboard());
+        onView(withId(R.id.account_password)).perform(replaceText(testPassword), closeSoftKeyboard());
 
         //Set portrait
         mActivityRule.getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -415,31 +413,10 @@ public class AuthenticatorActivityTest {
     }
 
     /**
-     *  Login without credentials (Negative test)
-     */
-    @Test
-    public void test8_check_login_blanks()
-            throws IllegalArgumentException {
-
-        Log_OC.i(LOG_TAG, "Test Check Blanks Login Start");
-
-        // Check that login button is hidden
-        onView(withId(R.id.loginButton)).check(matches(not(isDisplayed())));
-
-        setFields(testServerURL, "", "");
-
-        //check that the credentials are not correct
-        onView(withId(R.id.auth_status_text)).check(matches(withText(R.string.auth_unauthorized)));
-
-        Log_OC.i(LOG_TAG, "Test Check Blanks Login Passed");
-
-    }
-
-    /**
      *  Login with an username that contains blanks before and after.
      */
     @Test
-    public void test9_check_login_trimmed_blanks()
+    public void test8_check_login_trimmed_blanks()
             throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
 
         Log_OC.i(LOG_TAG, "Test Check Trimmed Blanks Start");
@@ -470,7 +447,7 @@ public class AuthenticatorActivityTest {
      *  Login with server URL copied and pasted from web browser
      */
     @Test
-    public void test_10_check_url_from_browser()
+    public void test9_check_url_from_browser()
             throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
 
         Log_OC.i(LOG_TAG, "Test Check URL Browser Start");
@@ -501,14 +478,14 @@ public class AuthenticatorActivityTest {
      *  Login with server URL in uppercase
      */
     @Test
-    public void test_11_check_url_uppercase()
+    public void test_10_check_url_uppercase()
             throws IllegalArgumentException {
 
         Log_OC.i(LOG_TAG, "Test Check URL Uppercase Start");
 
         onView(withId(R.id.hostUrlInput))
                 .perform(replaceText(testServerURL.toUpperCase()), closeSoftKeyboard());
-        onView(withId(R.id.scroll)).perform(click());
+        onView(withId(R.id.embeddedCheckServerButton)).perform(click());
         SystemClock.sleep(WAIT_CONNECTION_MS);
 
         checkStatusMessage();
