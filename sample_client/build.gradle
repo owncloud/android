@@ -5,11 +5,11 @@ dependencies {
 }
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 26
 
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 28
+        targetSdkVersion 26
     }
 
     lintOptions {
