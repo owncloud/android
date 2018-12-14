@@ -67,7 +67,12 @@
             android:orderInCategory="0"
             android:id="@+id/nav_uploads"
             android:icon="@drawable/ic_uploads"
-            android:title="@string/drawer_item_uploads_list" />
+            android:title="@string/drawer_item_uploads_list"/>
+        <item
+            android:orderInCategory="0"
+            android:id="@+id/shared_by_link"
+            android:icon="@drawable/copy_link"
+            android:title="@string/drawer_item_shared_by_link"/>
     </group>
 
     <group android:id="@+id/drawer_menu_settings_etc">

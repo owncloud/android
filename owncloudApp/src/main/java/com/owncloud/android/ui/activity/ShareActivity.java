@@ -68,9 +68,9 @@ public class ShareActivity extends FileActivity
     private static final String TAG = ShareActivity.class.getSimpleName();
 
     private static final String TAG_SHARE_FRAGMENT = "SHARE_FRAGMENT";
-    private static final String TAG_SEARCH_FRAGMENT = "SEARCH_USER_AND_GROUPS_FRAGMENT";
-    private static final String TAG_EDIT_SHARE_FRAGMENT = "EDIT_SHARE_FRAGMENT";
-    private static final String TAG_PUBLIC_SHARE_DIALOG_FRAGMENT = "PUBLIC_SHARE_DIALOG_FRAGMENT";
+    public static final String TAG_SEARCH_FRAGMENT = "SEARCH_USER_AND_GROUPS_FRAGMENT";
+    public static final String TAG_EDIT_SHARE_FRAGMENT = "EDIT_SHARE_FRAGMENT";
+    public static final String TAG_PUBLIC_SHARE_DIALOG_FRAGMENT = "PUBLIC_SHARE_DIALOG_FRAGMENT";
     public static final String TAG_REMOVE_SHARE_DIALOG_FRAGMENT = "REMOVE_SHARE_DIALOG_FRAGMENT";
 
     GetSharesForFileAsyncTask mGetSharesForFileAsyncTask;

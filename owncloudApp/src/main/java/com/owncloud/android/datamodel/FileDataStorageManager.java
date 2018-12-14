@@ -1,5 +1,26 @@
 /**
- * ownCloud Android client application
+ *   ownCloud Android client application
+ *
+ *   @author Bartek Przybylski
+ *   @author Christian Schabesberger
+ *   @author David González Verdugo
+ *   @author Shashvat Kedia
+ *
+ *   Copyright (C) 2012  Bartek Przybylski
+ *   Copyright (C) 2018 ownCloud GmbH.
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License version 2,
+ *   as published by the Free Software Foundation.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+>>>>>>> Shared by link added to Drawer
  *
  * @author Bartek Przybylski
  * @author Christian Schabesberger
@@ -1006,6 +1027,28 @@ public class FileDataStorageManager {
         file.setParentId(FileDataStorageManager.ROOT_PARENT_ID);
         saveFile(file);
         return file;
+    }
+
+    public Vector<OCShare> getPublicSharesForAnAccount(String accountName){
+        Vector<OCShare> allShares = new Vector<OCShare>();
+        Vector<OCFile> files = getAllFiles(OCFile.ROOT_PATH);
+        for(OCFile file : files){
+            allShares.addAll(getPublicSharesForAFile(file.getRemotePath(),accountName));
+        }
+        return allShares;
+    }
+
+    private Vector<OCFile> getAllFiles(String path){
+        Vector<OCFile> files = getFolderContent(getFileByPath(path));
+        Vector<OCFile> temp = new Vector<OCFile>();
+        for(OCFile file : files){
+            if(file.isFolder()){
+                temp.addAll(getAllFiles(file.getRemotePath()));
+            //    files.addAll(getAllFiles(file.getRemotePath()));
+            }
+        }
+        files.addAll(temp);
+        return files;
     }
 
     private boolean fileExists(String cmp_key, String value) {
