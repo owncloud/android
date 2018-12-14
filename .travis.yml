@@ -7,7 +7,7 @@ branches:
   - master
 install:
 # Let's use the new command 'sdkmanager' to install Android SDK components
-- yes | sdkmanager --verbose "build-tools;26.0.2"
+- yes | sdkmanager --verbose "build-tools;26.0.3"
 - yes | sdkmanager --verbose "platform-tools"
 - yes | sdkmanager --verbose "tools"
 - yes | sdkmanager --verbose "platforms;android-26"

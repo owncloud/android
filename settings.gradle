@@ -1,2 +1,2 @@
-include ':'
+include ':owncloud-android-library'
 include ':sample_client'
