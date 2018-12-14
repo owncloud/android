@@ -75,11 +75,12 @@ android {
         }
     }
 
-    applicationVariants.all { variant ->
-        def appName = System.env.OC_APP_NAME
-        if (appName) {
-            appName += "_jb_workaround"
-        }
-        setOutputFileName(variant, appName, project)
-    }
+//    applicationVariants.all { variant ->
+//        def appName = System.env.OC_APP_NAME
+//        if (appName) {
+//            appName += "_jb_workaround"
+//        }
+//        setOutputFileName(variant, appName, project)
+//    }
+
 }

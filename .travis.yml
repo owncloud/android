@@ -26,14 +26,14 @@ script:
 # force init of adb way before any Gradle task that uses ADB; prevents a timeout error that skips emulators of android-24
   - adb devices
 # build app and assemble APK, in debug mode
-  - ./gradlew assembleDebug
+  - ./gradlew :app:assembleDebug
 # run all the local unit tests of app module
-  - ./gradlew :testDebug
+  - ./gradlew :app:testDebug
 # run all the instrumented tests of app module - DISABLED until we get an stable setup for Espresso in Travis
-# - ./gradlew connectedDebugAndroidTest --info
+# - ./gradlew :app:connectedDebugAndroidTest --info
 # install app, then assemble and install instrumented tests of app module
-#  - ./gradlew :installDebug
-#  - ./gradlew :installDebugAndroidTest
+#  - ./gradlew :app:installDebug
+#  - ./gradlew :app:installDebugAndroidTest
 # run sample instrumented unit test
 #  - adb shell am instrument -w -e debug false -e class com.owncloud.android.datamodel.OCFileUnitTest com.owncloud.android.test/android.support.test.runner.AndroidJUnitRunner
 env:
