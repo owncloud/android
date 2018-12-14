@@ -28,12 +28,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.IBinder;
-//import android.util.Log;
 
 public class AccountAuthenticatorService extends Service {
 
     private AccountAuthenticator mAuthenticator;
-    //static final public String ACCOUNT_TYPE = "owncloud";
 
     @Override
     public void onCreate() {
@@ -45,23 +43,23 @@ public class AccountAuthenticatorService extends Service {
     public IBinder onBind(Intent intent) {
         return mAuthenticator.getIBinder();
     }
-    
-    
+
+
     public static class AccountAuthenticator extends AbstractAccountAuthenticator {
 
-        public static final String KEY_AUTH_TOKEN_TYPE = "authTokenType";
-        public static final String KEY_REQUIRED_FEATURES = "requiredFeatures";
-        public static final String KEY_LOGIN_OPTIONS = "loginOptions";
-    	
-    	public AccountAuthenticator(Context context) {
+        static final String KEY_AUTH_TOKEN_TYPE = "authTokenType";
+        static final String KEY_REQUIRED_FEATURES = "requiredFeatures";
+        static final String KEY_LOGIN_OPTIONS = "loginOptions";
+
+        AccountAuthenticator(Context context) {
             super(context);
         }
 
         @Override
         public Bundle addAccount(AccountAuthenticatorResponse response,
-                String accountType, String authTokenType,
-                String[] requiredFeatures, Bundle options) {
-        	//Log.e("WORKAROUND", "Yes, WORKAROUND takes the control here");
+                                 String accountType, String authTokenType,
+                                 String[] requiredFeatures, Bundle options) {
+            //Log.e("WORKAROUND", "Yes, WORKAROUND takes the control here");
             final Intent intent = new Intent("com.owncloud.android.workaround.accounts.CREATE");
             intent.putExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE,
                     response);
@@ -81,22 +79,22 @@ public class AccountAuthenticatorService extends Service {
             //return getCommonResultBundle();
         }
 
-        
-		@Override
+
+        @Override
         public Bundle confirmCredentials(AccountAuthenticatorResponse response,
-                Account account, Bundle options) {
+                                         Account account, Bundle options) {
             return getCommonResultBundle();
         }
 
         @Override
         public Bundle editProperties(AccountAuthenticatorResponse response,
-                String accountType) {
+                                     String accountType) {
             return getCommonResultBundle();
         }
 
         @Override
         public Bundle getAuthToken(AccountAuthenticatorResponse response,
-                Account account, String authTokenType, Bundle options) {
+                                   Account account, String authTokenType, Bundle options) {
             return getCommonResultBundle();
         }
 
@@ -107,13 +105,13 @@ public class AccountAuthenticatorService extends Service {
 
         @Override
         public Bundle hasFeatures(AccountAuthenticatorResponse response,
-                Account account, String[] features) {
+                                  Account account, String[] features) {
             return getCommonResultBundle();
         }
 
         @Override
         public Bundle updateCredentials(AccountAuthenticatorResponse response,
-                Account account, String authTokenType, Bundle options) {
+                                        Account account, String authTokenType, Bundle options) {
             return getCommonResultBundle();
         }
 
@@ -125,11 +123,11 @@ public class AccountAuthenticatorService extends Service {
         }
 
         private Bundle getCommonResultBundle() {
-        	Bundle resultBundle = new Bundle();
+            Bundle resultBundle = new Bundle();
             resultBundle.putInt(AccountManager.KEY_ERROR_CODE, AccountManager.ERROR_CODE_UNSUPPORTED_OPERATION);
             resultBundle.putString(AccountManager.KEY_ERROR_MESSAGE, "This is just a workaround, not a real account authenticator");
             return resultBundle;
-		}
+        }
 
     }
 }
