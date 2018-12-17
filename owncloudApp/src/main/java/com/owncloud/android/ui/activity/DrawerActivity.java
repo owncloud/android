@@ -54,6 +54,7 @@ import com.owncloud.android.lib.resources.shares.OCShare;
 import com.owncloud.android.utils.DisplayUtils;
 import com.owncloud.android.utils.PreferenceUtils;
 
+import java.util.ArrayList;
 import java.util.Vector;
 
 /**
@@ -65,7 +66,7 @@ public abstract class DrawerActivity extends ToolbarActivity {
     private static final String TAG = DrawerActivity.class.getSimpleName();
     private static final String KEY_IS_ACCOUNT_CHOOSER_ACTIVE = "IS_ACCOUNT_CHOOSER_ACTIVE";
     private static final String KEY_CHECKED_MENU_ITEM = "CHECKED_MENU_ITEM";
-    public static final String KEY_ALL_SHARES_FOR_AN_ACCOUNT = "ALL_SHARES_FOR_AN_ACCOUNT";
+    public static final String KEY_ACCOUNT = "ACCOUNT";
     private static final int ACTION_MANAGE_ACCOUNTS = 101;
     private static final int MENU_ORDER_ACCOUNT = 1;
     private static final int MENU_ORDER_ACCOUNT_FUNCTION = 2;
@@ -225,11 +226,9 @@ public abstract class DrawerActivity extends ToolbarActivity {
                             //     refreshDirectory();
                             //     break;
                             case R.id.shared_by_link:
-                                Vector<OCShare> allShares = getStorageManager()
-                                        .getPublicSharesForAnAccount(getStorageManager().getAccount().name);
                                 Intent sharedByLinkIntent = new Intent(getApplicationContext(),
                                         SharedByLinkActivity.class);
-                                sharedByLinkIntent.putExtra(KEY_ALL_SHARES_FOR_AN_ACCOUNT,allShares);
+                                sharedByLinkIntent.putExtra(KEY_ACCOUNT,getStorageManager().getAccount());
                                 startActivity(sharedByLinkIntent);
                                 break;
                             case R.id.nav_uploads:

@@ -19,6 +19,7 @@
 
 package com.owncloud.android.ui.activity;
 
+import android.accounts.Account;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
@@ -30,12 +31,17 @@ import android.widget.TextView;
 
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.OCFile;
+import com.owncloud.android.lib.common.operations.RemoteOperation;
+import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.resources.shares.OCShare;
+import com.owncloud.android.lib.resources.shares.ShareParserResult;
+import com.owncloud.android.operations.RemoveShareOperation;
+import com.owncloud.android.operations.UpdateShareViaLinkOperation;
 import com.owncloud.android.ui.adapter.SharePublicLinkListAdapter;
 import com.owncloud.android.ui.dialog.RemoveShareDialogFragment;
+import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter;
 import com.owncloud.android.ui.fragment.EditShareFragment;
 import com.owncloud.android.ui.fragment.PublicShareDialogFragment;
-import com.owncloud.android.ui.fragment.SearchShareesFragment;
 import com.owncloud.android.ui.fragment.ShareFragmentListener;
 
 import java.util.ArrayList;
@@ -44,7 +50,12 @@ public class SharedByLinkActivity extends FileActivity implements
         SharePublicLinkListAdapter.SharePublicLinkAdapterListener, ShareFragmentListener {
     private final String TAG = SharedByLinkActivity.class.getSimpleName();
 
+    private ListView allSharesList;
+    private TextView noShares;
+    private  SharePublicLinkListAdapter adapter;
+
     private ArrayList<OCShare> allShares;
+    private Account account;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,15 +64,28 @@ public class SharedByLinkActivity extends FileActivity implements
         setupToolbar();
         setupDrawer(R.id.shared_by_link);
         getSupportActionBar().setTitle(getString(R.string.drawer_item_shared_by_link));
-        allShares = getIntent().getExtras().getParcelableArrayList(DrawerActivity.KEY_ALL_SHARES_FOR_AN_ACCOUNT);
-        ListView allSharesList = (ListView) findViewById(R.id.all_shares_list);
-        TextView noShares = (TextView) findViewById(R.id.no_shares_text_view);
+        allSharesList = (ListView) findViewById(R.id.all_shares_list);
+        noShares = (TextView) findViewById(R.id.no_shares_text_view);
+        account = getIntent().getExtras().getParcelable(DrawerActivity.KEY_ACCOUNT);
+        setAccount(account,savedInstanceState != null);
+    }
+
+    @Override
+    protected void onAccountSet(boolean stateWasRecovered){
+        super.onAccountSet(stateWasRecovered);
+        allShares = getStorageManager().getPublicSharesForAnAccount(account.name);
+        setUpAllSharesList();
+    }
+
+    private void setUpAllSharesList(){
         if(allShares.size() > 0){
             allSharesList.setVisibility(View.VISIBLE);
-            SharePublicLinkListAdapter adapter = new SharePublicLinkListAdapter(getApplicationContext(),R.layout.share_user_item,allShares,this);
+            adapter = new SharePublicLinkListAdapter(getApplicationContext(),R.layout.share_user_item,allShares,this);
             allSharesList.setAdapter(adapter);
+            noShares.setVisibility(View.INVISIBLE);
         } else{
             noShares.setVisibility(View.VISIBLE);
+            allSharesList.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -81,28 +105,14 @@ public class SharedByLinkActivity extends FileActivity implements
 
     @Override
     public void copyOrSendPrivateLink(OCFile file) {
-        getFileOperationsHelper().copyOrSendPrivateLink(file);
     }
 
     @Override
     public void showSearchUsersAndGroups() {
-        Fragment searchFragment = SearchShareesFragment.newInstance(getFile(), getAccount());
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.share_fragment_container, searchFragment, ShareActivity.TAG_SEARCH_FRAGMENT);
-        ft.addToBackStack(null);    // BACK button will recover the ShareFragment
-        ft.commit();
     }
 
     @Override
     public void showEditPrivateShare(OCShare share) {
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        Fragment prev = getSupportFragmentManager().findFragmentByTag(ShareActivity.TAG_EDIT_SHARE_FRAGMENT);
-        if (prev != null) {
-            ft.remove(prev);
-        }
-        ft.addToBackStack(null);
-        DialogFragment newFragment = EditShareFragment.newInstance(share, getFile(), getAccount());
-        newFragment.show(ft, ShareActivity.TAG_EDIT_SHARE_FRAGMENT);
     }
 
     @Override
@@ -116,20 +126,6 @@ public class SharedByLinkActivity extends FileActivity implements
 
     @Override
     public void showAddPublicShare(String defaultLinkName) {
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        Fragment prev = getSupportFragmentManager().findFragmentByTag(ShareActivity.TAG_PUBLIC_SHARE_DIALOG_FRAGMENT);
-        if (prev != null) {
-            ft.remove(prev);
-        }
-        ft.addToBackStack(null);
-
-        // Create and show the dialog
-        DialogFragment newFragment = PublicShareDialogFragment.newInstanceToCreate(
-                getFile(),
-                getAccount(),
-                defaultLinkName
-        );
-        newFragment.show(ft, ShareActivity.TAG_PUBLIC_SHARE_DIALOG_FRAGMENT);
     }
 
     @Override
@@ -170,5 +166,49 @@ public class SharedByLinkActivity extends FileActivity implements
         DialogFragment newFragment = PublicShareDialogFragment.newInstanceToUpdate(getFile(), share,
                 getAccount());
         newFragment.show(ft, ShareActivity.TAG_PUBLIC_SHARE_DIALOG_FRAGMENT);
+    }
+
+    @Override
+    public void onRemoteOperationFinish(RemoteOperation operation, RemoteOperationResult result){
+        super.onRemoteOperationFinish(operation,result);
+        if(result.isSuccess()){
+            PublicShareDialogFragment publicShareDialogFragment = getPublicShareDialogFragment();
+            if(publicShareDialogFragment != null &&
+                    publicShareDialogFragment.isAdded()){
+                publicShareDialogFragment.refreshModelFromStorageManager();
+            }
+            updateShares();
+        }
+        if(operation instanceof UpdateShareViaLinkOperation){
+            onUpdateShareViaLinkOperationFinish((UpdateShareViaLinkOperation) operation,result);
+        }
+        if(operation instanceof RemoveShareOperation && result.isSuccess() &&
+                (EditShareFragment) getSupportFragmentManager()
+                        .findFragmentByTag(ShareActivity.TAG_EDIT_SHARE_FRAGMENT) != null){
+            getSupportFragmentManager().popBackStack();
+        }
+    }
+
+    private void onUpdateShareViaLinkOperationFinish(UpdateShareViaLinkOperation operation,
+                                                     RemoteOperationResult<ShareParserResult>  result){
+        if(result.isSuccess()){
+            getPublicShareDialogFragment().dismiss();
+            setFile(new OCFile(result.getData().getShares().get(0).getPath()));
+            getFileOperationsHelper().copyOrSendPublicLink(result.getData().getShares().get(0));
+            updateShares();
+        } else{
+            getPublicShareDialogFragment().showError(
+                    ErrorMessageAdapter.getResultMessage(result,operation,getResources()));
+        }
+    }
+
+    private void updateShares(){
+        allShares = getStorageManager().getPublicSharesForAnAccount(account.name);
+        setUpAllSharesList();
+    }
+
+    private PublicShareDialogFragment getPublicShareDialogFragment(){
+        return  (PublicShareDialogFragment) getSupportFragmentManager()
+                .findFragmentByTag(ShareActivity.TAG_PUBLIC_SHARE_DIALOG_FRAGMENT);
     }
 }
