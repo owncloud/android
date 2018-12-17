@@ -32,7 +32,6 @@ import com.owncloud.android.R;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.lib.resources.shares.OCShare;
 import com.owncloud.android.ui.adapter.SharePublicLinkListAdapter;
-import com.owncloud.android.ui.asynctasks.GetSharesForFileAsyncTask;
 import com.owncloud.android.ui.dialog.RemoveShareDialogFragment;
 import com.owncloud.android.ui.fragment.EditShareFragment;
 import com.owncloud.android.ui.fragment.PublicShareDialogFragment;
