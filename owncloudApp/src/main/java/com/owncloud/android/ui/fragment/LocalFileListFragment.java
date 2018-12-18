@@ -131,6 +131,33 @@ public class LocalFileListFragment extends ExtendedListFragment {
         mAdapter.setSortOrder(FileStorageUtils.SORT_DATE, isAscending);
     }
 
+    public void selectAll(){
+        for(int i = 0; i < mAdapter.getCount(); i++) {
+            File file = (File) mAdapter.getItem(i);
+            if(!file.isDirectory()){
+                ((ImageView) getView().findViewById(R.id.custom_checkbox)).setImageResource(R.drawable.ic_checkbox_marked);
+                mAdapter.checkFile(file);
+            }
+        }
+        mAdapter.notifyDataSetChanged();
+    }
+
+    public void selectInverse(){
+        for(int i=0;i<mAdapter.getCount();i++){
+            File file = (File) mAdapter.getItem(i);
+            if(!file.isDirectory()){
+                ImageView checkBox = (ImageView) getView().findViewById(R.id.custom_checkbox);
+                if(mCurrentListView.isItemChecked(i)){
+                    checkBox.setImageResource(R.drawable.ic_checkbox_blank_outline);
+                    mAdapter.uncheckFile(file);
+                } else{
+                    checkBox.setImageResource(R.drawable.ic_checkbox_marked);
+                    mAdapter.checkFile(file);
+                }
+            }
+        }
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -146,6 +173,10 @@ public class LocalFileListFragment extends ExtendedListFragment {
             mAdapter.setCheckedFiles(savedInstanceState.getStringArrayList(OUT_STATE_CHECKED_FILES));
         }
         Log_OC.i(TAG, "onActivityCreated() stop");
+    }
+
+    public LocalFileListAdapter getAdapter(){
+        return mAdapter;
     }
 
     @Override
@@ -267,7 +298,7 @@ public class LocalFileListFragment extends ExtendedListFragment {
 
 
     /**
-     * Returns the fule paths to the files checked by the user
+     * Returns the file paths to the files checked by the user
      *
      * @return File paths to the files checked by the user.
      */
