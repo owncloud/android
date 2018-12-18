@@ -32,7 +32,15 @@ import com.owncloud.android.lib.common.http.interceptors.RequestHeaderIntercepto
 import com.owncloud.android.lib.common.network.AdvancedX509TrustManager;
 import com.owncloud.android.lib.common.network.NetworkUtils;
 import com.owncloud.android.lib.common.utils.Log_OC;
+import okhttp3.Cookie;
+import okhttp3.CookieJar;
+import okhttp3.HttpUrl;
+import okhttp3.OkHttpClient;
+import okhttp3.Protocol;
 
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -41,18 +49,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
-
-import okhttp3.Cookie;
-import okhttp3.CookieJar;
-import okhttp3.HttpUrl;
-import okhttp3.OkHttpClient;
-import okhttp3.Protocol;
-
 /**
  * Client used to perform network operations
+ *
  * @author David González Verdugo
  */
 public class HttpClient {
@@ -63,21 +62,13 @@ public class HttpClient {
     private static Context sContext;
     private static HashMap<String, List<Cookie>> sCookieStore = new HashMap<>();
 
-    public static void setContext(Context context) {
-        sContext = context;
-    }
-
-    public Context getContext() {
-        return sContext;
-    }
-
     public static OkHttpClient getOkHttpClient() {
         if (sOkHttpClient == null) {
             try {
                 final X509TrustManager trustManager = new AdvancedX509TrustManager(
                         NetworkUtils.getKnownServersStore(sContext));
                 final SSLContext sslContext = SSLContext.getInstance("TLS");
-                sslContext.init(null, new TrustManager[] {trustManager}, null);
+                sslContext.init(null, new TrustManager[]{trustManager}, null);
 
                 // Automatic cookie handling, NOT PERSISTENT
                 CookieJar cookieJar = new CookieJar() {
@@ -109,8 +100,8 @@ public class HttpClient {
                         .sslSocketFactory(sslContext.getSocketFactory(), trustManager)
                         .hostnameVerifier((asdf, usdf) -> true)
                         .cookieJar(cookieJar);
-                        // TODO: Not verifying the hostname against certificate. ask owncloud security human if this is ok.
-                        //.hostnameVerifier(new BrowserCompatHostnameVerifier());
+                // TODO: Not verifying the hostname against certificate. ask owncloud security human if this is ok.
+                //.hostnameVerifier(new BrowserCompatHostnameVerifier());
                 sOkHttpClient = clientBuilder.build();
 
             } catch (Exception e) {
@@ -130,6 +121,31 @@ public class HttpClient {
         return sOkHttpInterceptor;
     }
 
+    /**
+     * Add header that will be included for all the requests from now on
+     *
+     * @param headerName
+     * @param headerValue
+     */
+    public static void addHeaderForAllRequests(String headerName, String headerValue) {
+        getOkHttpInterceptor()
+                .addRequestInterceptor(
+                        new RequestHeaderInterceptor(headerName, headerValue)
+                );
+    }
+
+    public static void deleteHeaderForAllRequests(String headerName) {
+        getOkHttpInterceptor().deleteRequestHeaderInterceptor(headerName);
+    }
+
+    public Context getContext() {
+        return sContext;
+    }
+
+    public static void setContext(Context context) {
+        sContext = context;
+    }
+
     public void disableAutomaticCookiesHandling() {
         OkHttpClient.Builder clientBuilder = getOkHttpClient().newBuilder();
         clientBuilder.cookieJar(new CookieJar() {
@@ -144,22 +160,6 @@ public class HttpClient {
             }
         });
         sOkHttpClient = clientBuilder.build();
-    }
-
-    /**
-     * Add header that will be included for all the requests from now on
-     * @param headerName
-     * @param headerValue
-     */
-    public static void addHeaderForAllRequests(String headerName, String headerValue) {
-        getOkHttpInterceptor()
-                .addRequestInterceptor(
-                        new RequestHeaderInterceptor(headerName, headerValue)
-                );
-    }
-
-    public static void deleteHeaderForAllRequests(String headerName) {
-        getOkHttpInterceptor().deleteRequestHeaderInterceptor(headerName);
     }
 
     public List<Cookie> getCookiesFromUrl(HttpUrl httpUrl) {

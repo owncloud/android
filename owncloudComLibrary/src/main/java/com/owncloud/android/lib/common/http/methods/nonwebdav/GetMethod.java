@@ -27,10 +27,9 @@ package com.owncloud.android.lib.common.http.methods.nonwebdav;
 import java.io.IOException;
 import java.net.URL;
 
-import okhttp3.HttpUrl;
-
 /**
  * OkHttp get calls wrapper
+ *
  * @author David González Verdugo
  */
 public class GetMethod extends HttpMethod {

@@ -39,7 +39,7 @@ public class OwnCloudCredentialsFactory {
     }
 
     public static OwnCloudCredentials newBasicCredentials(
-        String username, String password, boolean preemptiveMode
+            String username, String password, boolean preemptiveMode
     ) {
         return new OwnCloudBasicCredentials(username, password, preemptiveMode);
     }

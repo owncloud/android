@@ -29,42 +29,37 @@ package com.owncloud.android.lib.common.authentication.oauth;
 
 import android.net.Uri;
 
-import com.owncloud.android.lib.common.authentication.OwnCloudBasicCredentials;
 import com.owncloud.android.lib.common.OwnCloudClient;
+import com.owncloud.android.lib.common.authentication.OwnCloudBasicCredentials;
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentials;
 import com.owncloud.android.lib.common.http.methods.nonwebdav.PostMethod;
-import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
-
+import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import org.json.JSONObject;
 
 import java.net.URL;
 import java.util.Map;
 
-import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
-
-
 public class OAuth2GetAccessTokenOperation extends RemoteOperation<Map<String, String>> {
-    
+
+    private final String mAccessTokenEndpointPath;
+    private final OAuth2ResponseParser mResponseParser;
     private String mGrantType;
     private String mCode;
     private String mClientId;
     private String mClientSecret;
     private String mRedirectUri;
-    private final String mAccessTokenEndpointPath;
-
-    private final OAuth2ResponseParser mResponseParser;
-
 
     public OAuth2GetAccessTokenOperation(
-        String grantType,
-        String code,
-        String clientId,
-        String secretId,
-        String redirectUri,
-        String accessTokenEndpointPath
+            String grantType,
+            String code,
+            String clientId,
+            String secretId,
+            String redirectUri,
+            String accessTokenEndpointPath
     ) {
         mClientId = clientId;
         mClientSecret = secretId;
@@ -73,9 +68,9 @@ public class OAuth2GetAccessTokenOperation extends RemoteOperation<Map<String, S
         mCode = code;
 
         mAccessTokenEndpointPath =
-            accessTokenEndpointPath != null ?
-                accessTokenEndpointPath :
-                OwnCloudOAuth2Provider.ACCESS_TOKEN_ENDPOINT_PATH
+                accessTokenEndpointPath != null ?
+                        accessTokenEndpointPath :
+                        OwnCloudOAuth2Provider.ACCESS_TOKEN_ENDPOINT_PATH
         ;
 
         mResponseParser = new OAuth2ResponseParser();
@@ -84,7 +79,7 @@ public class OAuth2GetAccessTokenOperation extends RemoteOperation<Map<String, S
     @Override
     protected RemoteOperationResult run(OwnCloudClient client) {
         RemoteOperationResult<Map<String, String>> result = null;
-        
+
         try {
 
             final RequestBody requestBody = new MultipartBody.Builder()
@@ -116,7 +111,7 @@ public class OAuth2GetAccessTokenOperation extends RemoteOperation<Map<String, S
             if (response != null && response.length() > 0) {
                 JSONObject tokenJson = new JSONObject(response);
                 Map<String, String> accessTokenResult =
-                    mResponseParser.parseAccessTokenResult(tokenJson);
+                        mResponseParser.parseAccessTokenResult(tokenJson);
                 if (accessTokenResult.get(OAuth2Constants.KEY_ERROR) != null ||
                         accessTokenResult.get(OAuth2Constants.KEY_ACCESS_TOKEN) == null) {
                     result = new RemoteOperationResult<>(ResultCode.OAUTH2_ERROR);
@@ -133,7 +128,7 @@ public class OAuth2GetAccessTokenOperation extends RemoteOperation<Map<String, S
 
         } catch (Exception e) {
             result = new RemoteOperationResult<>(e);
-            
+
         }
         return result;
     }

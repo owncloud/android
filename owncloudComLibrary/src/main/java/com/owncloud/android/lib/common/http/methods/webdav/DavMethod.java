@@ -24,23 +24,23 @@
 
 package com.owncloud.android.lib.common.http.methods.webdav;
 
-import com.owncloud.android.lib.common.http.HttpConstants;
-import com.owncloud.android.lib.common.http.methods.HttpBaseMethod;
-
-import java.net.URL;
-import java.util.concurrent.TimeUnit;
-
 import at.bitfire.dav4android.Constants;
 import at.bitfire.dav4android.DavOCResource;
 import at.bitfire.dav4android.exception.HttpException;
 import at.bitfire.dav4android.exception.RedirectException;
+import com.owncloud.android.lib.common.http.HttpConstants;
+import com.owncloud.android.lib.common.http.methods.HttpBaseMethod;
 import okhttp3.HttpUrl;
 import okhttp3.Protocol;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 
+import java.net.URL;
+import java.util.concurrent.TimeUnit;
+
 /**
  * Wrapper to perform WebDAV (dav4android) calls
+ *
  * @author David González Verdugo
  */
 public abstract class DavMethod extends HttpBaseMethod {
@@ -125,16 +125,7 @@ public abstract class DavMethod extends HttpBaseMethod {
     }
 
     @Override
-    public void setRetryOnConnectionFailure(boolean retryOnConnectionFailure) {
-        super.setRetryOnConnectionFailure(retryOnConnectionFailure);
-        mDavResource = new DavOCResource(
-                mOkHttpClient,
-                HttpUrl.parse(mRequest.url().toString()),
-                Constants.INSTANCE.getLog());
-    }
-
-    @Override
-    public void setUrl(HttpUrl url){
+    public void setUrl(HttpUrl url) {
         super.setUrl(url);
         mDavResource = new DavOCResource(
                 mOkHttpClient,
@@ -142,13 +133,22 @@ public abstract class DavMethod extends HttpBaseMethod {
                 Constants.INSTANCE.getLog());
     }
 
+    @Override
+    public boolean getRetryOnConnectionFailure() {
+        return false; //TODO: implement me
+    }
+
     //////////////////////////////
     //         Getter
     //////////////////////////////
 
     @Override
-    public boolean getRetryOnConnectionFailure() {
-        return false; //TODO: implement me
+    public void setRetryOnConnectionFailure(boolean retryOnConnectionFailure) {
+        super.setRetryOnConnectionFailure(retryOnConnectionFailure);
+        mDavResource = new DavOCResource(
+                mOkHttpClient,
+                HttpUrl.parse(mRequest.url().toString()),
+                Constants.INSTANCE.getLog());
     }
 
     @Override

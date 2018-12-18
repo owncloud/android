@@ -181,9 +181,13 @@ public class HttpConstants {
      *************************************************** TIMEOUTS **********************************************
      ***********************************************************************************************************/
 
-    /** Default timeout for waiting data from the server */
+    /**
+     * Default timeout for waiting data from the server
+     */
     public static final int DEFAULT_DATA_TIMEOUT = 60000;
 
-    /** Default timeout for establishing a connection */
+    /**
+     * Default timeout for establishing a connection
+     */
     public static final int DEFAULT_CONNECTION_TIMEOUT = 60000;
 }

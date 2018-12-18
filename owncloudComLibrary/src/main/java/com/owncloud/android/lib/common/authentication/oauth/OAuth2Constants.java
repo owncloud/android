@@ -26,34 +26,34 @@
 
 package com.owncloud.android.lib.common.authentication.oauth;
 
-/** 
+/**
  * Constant values for OAuth 2 protocol.
- * 
+ * <p>
  * Includes required and optional parameter NAMES used in the 'authorization code' grant type.
  */
 
 public class OAuth2Constants {
-    
+
     /// Parameters to send to the Authorization Endpoint
     public static final String KEY_RESPONSE_TYPE = "response_type";
     public static final String KEY_REDIRECT_URI = "redirect_uri";
     public static final String KEY_CLIENT_ID = "client_id";
     public static final String KEY_SCOPE = "scope";
-    public static final String KEY_STATE = "state"; 
-    
+    public static final String KEY_STATE = "state";
+
     /// Additional parameters to send to the Token Endpoint
     public static final String KEY_GRANT_TYPE = "grant_type";
     public static final String KEY_CODE = "code";
 
     // Used to get the Access Token using Refresh Token
     public static final String OAUTH2_REFRESH_TOKEN_GRANT_TYPE = "refresh_token";
-    
+
     /// Parameters received in an OK response from the Token Endpoint 
     public static final String KEY_ACCESS_TOKEN = "access_token";
     public static final String KEY_TOKEN_TYPE = "token_type";
     public static final String KEY_EXPIRES_IN = "expires_in";
     public static final String KEY_REFRESH_TOKEN = "refresh_token";
-    
+
     /// Parameters in an ERROR response
     public static final String KEY_ERROR = "error";
     public static final String KEY_ERROR_DESCRIPTION = "error_description";

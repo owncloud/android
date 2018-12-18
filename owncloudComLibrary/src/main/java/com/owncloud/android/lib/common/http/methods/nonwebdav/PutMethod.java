@@ -27,11 +27,9 @@ package com.owncloud.android.lib.common.http.methods.nonwebdav;
 import java.io.IOException;
 import java.net.URL;
 
-import okhttp3.HttpUrl;
+public class PutMethod extends HttpMethod {
 
-public class PutMethod extends HttpMethod{
-
-    public PutMethod(URL url){
+    public PutMethod(URL url) {
         super(url);
     }
 

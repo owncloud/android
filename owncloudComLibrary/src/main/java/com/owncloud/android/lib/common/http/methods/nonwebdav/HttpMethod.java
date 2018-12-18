@@ -29,9 +29,6 @@ import com.owncloud.android.lib.common.http.methods.HttpBaseMethod;
 import java.io.IOException;
 import java.net.URL;
 
-import okhttp3.Call;
-import okhttp3.HttpUrl;
-
 /**
  * Wrapper to perform OkHttp calls
  *

@@ -1,22 +1,22 @@
 /* ownCloud Android Library is available under MIT license
  *   Copyright (C) 2018 ownCloud GmbH.
- *   
+ *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
  *   in the Software without restriction, including without limitation the rights
  *   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  *   copies of the Software, and to permit persons to whom the Software is
  *   furnished to do so, subject to the following conditions:
- *   
+ *
  *   The above copyright notice and this permission notice shall be included in
  *   all copies or substantial portions of the Software.
- *   
- *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, 
+ *
+ *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
  *   EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- *   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND 
- *   NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS 
- *   BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN 
- *   ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN 
+ *   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ *   NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
+ *   BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+ *   ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  *   CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *   THE SOFTWARE.
  *
@@ -27,10 +27,6 @@ package com.owncloud.android.lib.resources.files;
 import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
-
-import java.io.Serializable;
-import java.math.BigDecimal;
-import java.util.List;
 
 import at.bitfire.dav4android.Property;
 import at.bitfire.dav4android.Response;
@@ -47,6 +43,10 @@ import at.bitfire.dav4android.property.owncloud.OCPrivatelink;
 import at.bitfire.dav4android.property.owncloud.OCSize;
 import okhttp3.HttpUrl;
 
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.List;
+
 import static com.owncloud.android.lib.common.OwnCloudClient.WEBDAV_FILES_PATH_4_0;
 
 /**
@@ -59,10 +59,23 @@ import static com.owncloud.android.lib.common.OwnCloudClient.WEBDAV_FILES_PATH_4
 public class RemoteFile implements Parcelable, Serializable {
 
     /**
+     * Parcelable Methods
+     */
+    public static final Parcelable.Creator<RemoteFile> CREATOR = new Parcelable.Creator<RemoteFile>() {
+        @Override
+        public RemoteFile createFromParcel(Parcel source) {
+            return new RemoteFile(source);
+        }
+
+        @Override
+        public RemoteFile[] newArray(int size) {
+            return new RemoteFile[size];
+        }
+    };
+    /**
      * Generated - should be refreshed every time the class changes!!
      */
     private static final long serialVersionUID = -8965995357413958539L;
-    
     private String mRemotePath;
     private String mMimeType;
     private long mLength;
@@ -75,6 +88,100 @@ public class RemoteFile implements Parcelable, Serializable {
     private BigDecimal mQuotaUsedBytes;
     private BigDecimal mQuotaAvailableBytes;
     private String mPrivateLink;
+
+    public RemoteFile() {
+        resetData();
+    }
+
+    /**
+     * Create new {@link RemoteFile} with given path.
+     * <p>
+     * The path received must be URL-decoded. Path separator must be OCFile.PATH_SEPARATOR, and it must be the first character in 'path'.
+     *
+     * @param path The remote path of the file.
+     */
+    public RemoteFile(String path) {
+        resetData();
+        if (path == null || path.length() <= 0 || !path.startsWith(FileUtils.PATH_SEPARATOR)) {
+            throw new IllegalArgumentException("Trying to create a OCFile with a non valid remote path: " + path);
+        }
+        mRemotePath = path;
+        mCreationTimestamp = 0;
+        mLength = 0;
+        mMimeType = "DIR";
+        mQuotaUsedBytes = BigDecimal.ZERO;
+        mQuotaAvailableBytes = BigDecimal.ZERO;
+        mPrivateLink = null;
+    }
+
+    public RemoteFile(final Response davResource, String userId) {
+        this(getRemotePathFromUrl(davResource.getHref(), userId));
+        final List<Property> properties = davResource.getProperties();
+
+        for (Property property : properties) {
+            if (property instanceof CreationDate) {
+                this.setCreationTimestamp(
+                        Long.parseLong(((CreationDate) property).getCreationDate()));
+            }
+            if (property instanceof GetContentLength) {
+                this.setLength(((GetContentLength) property).getContentLength());
+            }
+            if (property instanceof GetContentType) {
+                this.setMimeType(((GetContentType) property).getType());
+            }
+            if (property instanceof GetLastModified) {
+                this.setModifiedTimestamp(((GetLastModified) property).getLastModified());
+            }
+            if (property instanceof GetETag) {
+                this.setEtag(((GetETag) property).getETag());
+            }
+            if (property instanceof OCPermissions) {
+                this.setPermissions(((OCPermissions) property).getPermission());
+            }
+            if (property instanceof OCId) {
+                this.setRemoteId(((OCId) property).getId());
+            }
+            if (property instanceof OCSize) {
+                this.setSize(((OCSize) property).getSize());
+            }
+            if (property instanceof QuotaUsedBytes) {
+                this.setQuotaUsedBytes(
+                        BigDecimal.valueOf(((QuotaUsedBytes) property).getQuotaUsedBytes()));
+            }
+            if (property instanceof QuotaAvailableBytes) {
+                this.setQuotaAvailableBytes(
+                        BigDecimal.valueOf(((QuotaAvailableBytes) property).getQuotaAvailableBytes()));
+            }
+            if (property instanceof OCPrivatelink) {
+                this.setPrivateLink(((OCPrivatelink) property).getLink());
+            }
+        }
+    }
+
+    /**
+     * Reconstruct from parcel
+     *
+     * @param source The source parcel
+     */
+    protected RemoteFile(Parcel source) {
+        readFromParcel(source);
+    }
+
+    /**
+     * Retrieves a relative path from a remote file url
+     * <p>
+     * Example: url:port/remote.php/dav/files/username/Documents/text.txt => /Documents/text.txt
+     *
+     * @param url    remote file url
+     * @param userId file owner
+     * @return remote relative path of the file
+     */
+    private static String getRemotePathFromUrl(HttpUrl url, String userId) {
+        final String davFilesPath = WEBDAV_FILES_PATH_4_0 + userId;
+        final String absoluteDavPath = Uri.decode(url.encodedPath());
+        final String pathToOc = absoluteDavPath.split(davFilesPath)[0];
+        return absoluteDavPath.replace(pathToOc + davFilesPath, "");
+    }
 
     /**
      * Getters and Setters
@@ -168,80 +275,6 @@ public class RemoteFile implements Parcelable, Serializable {
         mPrivateLink = privateLink;
     }
 
-    public RemoteFile() {
-        resetData();
-    }
-
-    /**
-     * Create new {@link RemoteFile} with given path.
-     *
-     * The path received must be URL-decoded. Path separator must be OCFile.PATH_SEPARATOR, and it must be the first character in 'path'.
-     *
-     * @param path The remote path of the file.
-     */
-    public RemoteFile(String path) {
-        resetData();
-        if (path == null || path.length() <= 0 || !path.startsWith(FileUtils.PATH_SEPARATOR)) {
-            throw new IllegalArgumentException("Trying to create a OCFile with a non valid remote path: " + path);
-        }
-        mRemotePath = path;
-        mCreationTimestamp = 0;
-        mLength = 0;
-        mMimeType = "DIR";
-        mQuotaUsedBytes = BigDecimal.ZERO;
-        mQuotaAvailableBytes = BigDecimal.ZERO;
-        mPrivateLink = null;
-    }
-
-    public RemoteFile(final Response davResource, String userId) {
-        this(getRemotePathFromUrl(davResource.getHref(), userId));
-        final List<Property> properties = davResource.getProperties();
-
-        for(Property property : properties) {
-            if(property instanceof CreationDate)
-                this.setCreationTimestamp(
-                        Long.parseLong(((CreationDate) property).getCreationDate()));
-            if(property instanceof GetContentLength)
-                this.setLength(((GetContentLength) property).getContentLength());
-            if(property instanceof  GetContentType)
-                this.setMimeType(((GetContentType) property).getType());
-            if(property instanceof GetLastModified)
-                this.setModifiedTimestamp(((GetLastModified) property).getLastModified());
-            if(property instanceof GetETag)
-                this.setEtag(((GetETag) property).getETag());
-            if(property instanceof OCPermissions)
-                this.setPermissions(((OCPermissions) property).getPermission());
-            if(property instanceof OCId)
-                this.setRemoteId(((OCId) property).getId());
-            if(property instanceof OCSize)
-                this.setSize(((OCSize) property).getSize());
-            if(property instanceof  QuotaUsedBytes)
-                this.setQuotaUsedBytes(
-                        BigDecimal.valueOf(((QuotaUsedBytes) property).getQuotaUsedBytes()));
-            if(property instanceof QuotaAvailableBytes)
-                this.setQuotaAvailableBytes(
-                        BigDecimal.valueOf(((QuotaAvailableBytes) property).getQuotaAvailableBytes()));
-            if(property instanceof OCPrivatelink)
-                this.setPrivateLink(((OCPrivatelink) property).getLink());
-        }
-    }
-
-    /**
-     * Retrieves a relative path from a remote file url
-     *
-     * Example: url:port/remote.php/dav/files/username/Documents/text.txt => /Documents/text.txt
-     *
-     * @param url remote file url
-     * @param userId file owner
-     * @return remote relative path of the file
-     */
-    private static String getRemotePathFromUrl(HttpUrl url, String userId) {
-        final String davFilesPath = WEBDAV_FILES_PATH_4_0 + userId;
-        final String absoluteDavPath = Uri.decode(url.encodedPath());
-        final String pathToOc = absoluteDavPath.split(davFilesPath)[0];
-        return absoluteDavPath.replace(pathToOc + davFilesPath, "");
-    }
-
     /**
      * Used internally. Reset all file properties
      */
@@ -258,31 +291,6 @@ public class RemoteFile implements Parcelable, Serializable {
         mQuotaUsedBytes = null;
         mQuotaAvailableBytes = null;
         mPrivateLink = null;
-    }
-
-    /**
-     * Parcelable Methods
-     */
-    public static final Parcelable.Creator<RemoteFile> CREATOR = new Parcelable.Creator<RemoteFile>() {
-        @Override
-        public RemoteFile createFromParcel(Parcel source) {
-            return new RemoteFile(source);
-        }
-
-        @Override
-        public RemoteFile[] newArray(int size) {
-            return new RemoteFile[size];
-        }
-    };
-
-
-    /**
-     * Reconstruct from parcel
-     *
-     * @param source The source parcel
-     */
-    protected RemoteFile(Parcel source) {
-        readFromParcel(source);
     }
 
     public void readFromParcel(Parcel source) {

@@ -33,6 +33,7 @@ import com.owncloud.android.lib.common.http.methods.nonwebdav.PutMethod;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
+import okhttp3.FormBody;
 
 import java.net.URL;
 import java.text.DateFormat;
@@ -40,11 +41,9 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
-import okhttp3.FormBody;
-
 /**
  * Updates parameters of an existing Share resource, known its remote ID.
- *
+ * <p>
  * Allow updating several parameters, triggering a request to the server per parameter.
  *
  * @author David A. Velasco
@@ -63,7 +62,6 @@ public class UpdateRemoteShareOperation extends RemoteOperation<ShareParserResul
     private static final String FORMAT_EXPIRATION_DATE = "yyyy-MM-dd";
     private static final String ENTITY_CONTENT_TYPE = "application/x-www-form-urlencoded";
     private static final String ENTITY_CHARSET = "UTF-8";
-
 
     /**
      * Identifier of the share to update
@@ -91,7 +89,6 @@ public class UpdateRemoteShareOperation extends RemoteOperation<ShareParserResul
     private Boolean mPublicUpload;
     private String mName;
 
-
     /**
      * Constructor. No update is initialized by default, need to be applied with setters below.
      *
@@ -105,13 +102,12 @@ public class UpdateRemoteShareOperation extends RemoteOperation<ShareParserResul
         mPermissions = OCShare.DEFAULT_PERMISSION;
     }
 
-
     /**
      * Set name to update in Share resource. Ignored by servers previous to version 10.0.0
      *
-     * @param name     Name to set to the target share.
-     *                 Empty string clears the current name.
-     *                 Null results in no update applied to the name.
+     * @param name Name to set to the target share.
+     *             Empty string clears the current name.
+     *             Null results in no update applied to the name.
      */
     public void setName(String name) {
         this.mName = name;
@@ -128,7 +124,6 @@ public class UpdateRemoteShareOperation extends RemoteOperation<ShareParserResul
         mPassword = password;
     }
 
-
     /**
      * Set expiration date to update in Share resource.
      *
@@ -140,7 +135,6 @@ public class UpdateRemoteShareOperation extends RemoteOperation<ShareParserResul
     public void setExpirationDate(long expirationDateInMillis) {
         mExpirationDateInMillis = expirationDateInMillis;
     }
-
 
     /**
      * Set permissions to update in Share resource.
@@ -155,8 +149,8 @@ public class UpdateRemoteShareOperation extends RemoteOperation<ShareParserResul
     /**
      * Enable upload permissions to update in Share resource.
      *
-     * @param publicUpload  Upload permission to set to the target share.
-     *                      Null results in no update applied to the upload permission.
+     * @param publicUpload Upload permission to set to the target share.
+     *                     Null results in no update applied to the upload permission.
      */
     public void setPublicUpload(Boolean publicUpload) {
         mPublicUpload = publicUpload;

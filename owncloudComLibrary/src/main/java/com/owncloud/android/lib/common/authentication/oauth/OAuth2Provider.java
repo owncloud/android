@@ -31,16 +31,9 @@ public interface OAuth2Provider {
     /**
      * {@link OAuth2RequestBuilder} implementation for this provider.
      *
-     * @return      {@link OAuth2RequestBuilder} implementation.
+     * @return {@link OAuth2RequestBuilder} implementation.
      */
     OAuth2RequestBuilder getOperationBuilder();
-
-
-    /**
-     * Set configuration of the client that will use this {@link OAuth2Provider}
-     * @param oAuth2ClientConfiguration     Configuration of the client that will use this {@link OAuth2Provider}
-     */
-    void setClientConfiguration(OAuth2ClientConfiguration oAuth2ClientConfiguration);
 
     /**
      * Configuration of the client that is using this {@link OAuth2Provider}
@@ -48,19 +41,25 @@ public interface OAuth2Provider {
      */
     OAuth2ClientConfiguration getClientConfiguration();
 
-
     /**
-     * Set base URI to authorization server.
+     * Set configuration of the client that will use this {@link OAuth2Provider}
      *
-     * @param authorizationServerUri        Set base URL to authorization server.
+     * @param oAuth2ClientConfiguration Configuration of the client that will use this {@link OAuth2Provider}
      */
-    void setAuthorizationServerUri(String authorizationServerUri);
+    void setClientConfiguration(OAuth2ClientConfiguration oAuth2ClientConfiguration);
 
     /**
      * base URI to authorization server.
      *
-     * @return      Base URL to authorization server.
+     * @return Base URL to authorization server.
      */
     String getAuthorizationServerUri();
+
+    /**
+     * Set base URI to authorization server.
+     *
+     * @param authorizationServerUri Set base URL to authorization server.
+     */
+    void setAuthorizationServerUri(String authorizationServerUri);
 
 }

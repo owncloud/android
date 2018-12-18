@@ -98,7 +98,7 @@ public class GetRemoteSharesForFileOperation extends RemoteOperation<ShareParser
             if (isSuccess(status)) {
                 // Parse xml response and obtain the list of shares
                 ShareToRemoteOperationResultParser parser = new ShareToRemoteOperationResultParser(
-                    new ShareXMLParser()
+                        new ShareXMLParser()
                 );
                 parser.setOwnCloudVersion(client.getOwnCloudVersion());
                 parser.setServerBaseUri(client.getBaseUri());

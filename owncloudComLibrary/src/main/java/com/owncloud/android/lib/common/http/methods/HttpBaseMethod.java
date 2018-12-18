@@ -25,12 +25,6 @@
 package com.owncloud.android.lib.common.http.methods;
 
 import com.owncloud.android.lib.common.http.HttpClient;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.util.concurrent.TimeUnit;
-
 import okhttp3.Call;
 import okhttp3.Headers;
 import okhttp3.HttpUrl;
@@ -38,6 +32,11 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Wrapper to perform http calls transparently by using:
@@ -136,6 +135,12 @@ public abstract class HttpBaseMethod {
 
     // Connection parameters
 
+    public void setRetryOnConnectionFailure(boolean retryOnConnectionFailure) {
+        mOkHttpClient = mOkHttpClient.newBuilder()
+                .retryOnConnectionFailure(retryOnConnectionFailure)
+                .build();
+    }
+
     public void setReadTimeout(long readTimeout, TimeUnit timeUnit) {
         mOkHttpClient = mOkHttpClient.newBuilder()
                 .readTimeout(readTimeout, timeUnit)
@@ -151,12 +156,6 @@ public abstract class HttpBaseMethod {
     public void setFollowRedirects(boolean followRedirects) {
         mOkHttpClient = mOkHttpClient.newBuilder()
                 .followRedirects(followRedirects)
-                .build();
-    }
-
-    public void setRetryOnConnectionFailure(boolean retryOnConnectionFailure) {
-        mOkHttpClient = mOkHttpClient.newBuilder()
-                .retryOnConnectionFailure(retryOnConnectionFailure)
                 .build();
     }
 

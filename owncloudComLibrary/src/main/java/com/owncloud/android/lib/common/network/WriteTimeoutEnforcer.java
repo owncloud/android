@@ -1,22 +1,22 @@
 /* ownCloud Android Library is available under MIT license
  *   Copyright (C) 2017 ownCloud GmbH.
- *   
+ *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
  *   in the Software without restriction, including without limitation the rights
  *   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  *   copies of the Software, and to permit persons to whom the Software is
  *   furnished to do so, subject to the following conditions:
- *   
+ *
  *   The above copyright notice and this permission notice shall be included in
  *   all copies or substantial portions of the Software.
- *   
- *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, 
+ *
+ *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
  *   EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- *   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND 
- *   NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS 
- *   BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN 
- *   ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN 
+ *   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ *   NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
+ *   BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+ *   ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  *   CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *   THE SOFTWARE.
  *
@@ -32,18 +32,17 @@ import java.lang.reflect.Method;
 import java.net.Socket;
 import java.util.concurrent.atomic.AtomicReference;
 
-
 /**
  * Enforces, if possible, a write timeout for a socket.
- *
+ * <p>
  * Built as a singleton.
- *
+ * <p>
  * Tries to hit something like this:
  * https://android.googlesource.com/platform/external/conscrypt/+/lollipop-release/src/main/java/org/conscrypt/OpenSSLSocketImpl.java#1005
- *
+ * <p>
  * Minimizes the chances of getting stalled in PUT/POST request if the network interface is lost while
  * writing the entity into the outwards sockect.
- *
+ * <p>
  * It happens. See https://github.com/owncloud/android/issues/1684#issuecomment-295306015
  *
  * @author David A. Velasco
@@ -56,36 +55,33 @@ public class WriteTimeoutEnforcer {
 
     private static final String METHOD_NAME = "setSoWriteTimeout";
 
-
     private final WeakReference<Class<?>> mSocketClassRef;
     private final WeakReference<Method> mSetSoWriteTimeoutMethodRef;
-
 
     /**
      * Private constructor, class is a singleton.
      *
-     * @param socketClass               Underlying implementation class of {@link Socket} used to connect
-     *                                  with the server.
-     * @param setSoWriteTimeoutMethod   Name of the method to call to set a write timeout in the socket.
+     * @param socketClass             Underlying implementation class of {@link Socket} used to connect
+     *                                with the server.
+     * @param setSoWriteTimeoutMethod Name of the method to call to set a write timeout in the socket.
      */
     private WriteTimeoutEnforcer(Class<?> socketClass, Method setSoWriteTimeoutMethod) {
         mSocketClassRef = new WeakReference<Class<?>>(socketClass);
         mSetSoWriteTimeoutMethodRef =
-            (setSoWriteTimeoutMethod == null) ?
-                null :
-                new WeakReference<>(setSoWriteTimeoutMethod)
+                (setSoWriteTimeoutMethod == null) ?
+                        null :
+                        new WeakReference<>(setSoWriteTimeoutMethod)
         ;
     }
-
 
     /**
      * Calls the {@code #setSoWrite(int)} method of the underlying implementation
      * of {@link Socket} if exists.
-
+     * <p>
      * Creates and initializes the single instance of the class when needed
      *
-     * @param writeTimeoutMilliseconds  Write timeout to set, in milliseconds.
-     * @param socket                    Client socket to connect with the server.
+     * @param writeTimeoutMilliseconds Write timeout to set, in milliseconds.
+     * @param socket                   Client socket to connect with the server.
      */
     public static void setSoWriteTimeout(int writeTimeoutMilliseconds, Socket socket) {
         final Method setSoWriteTimeoutMethod = getMethod(socket);
@@ -93,9 +89,9 @@ public class WriteTimeoutEnforcer {
             try {
                 setSoWriteTimeoutMethod.invoke(socket, writeTimeoutMilliseconds);
                 Log_OC.i(
-                    TAG,
-                    "Write timeout set in socket, writeTimeoutMilliseconds: "
-                        + writeTimeoutMilliseconds
+                        TAG,
+                        "Write timeout set in socket, writeTimeoutMilliseconds: "
+                                + writeTimeoutMilliseconds
                 );
 
             } catch (IllegalArgumentException e) {
@@ -112,13 +108,12 @@ public class WriteTimeoutEnforcer {
         }
     }
 
-
     /**
      * Gets the method to invoke trying to minimize the cost of reflection reusing objects cached
      * in static members.
      *
-     * @param socket    Instance of the socket to use in connection with server.
-     * @return          Method to call to set a write timeout in the socket.
+     * @param socket Instance of the socket to use in connection with server.
+     * @return Method to call to set a write timeout in the socket.
      */
     private static Method getMethod(Socket socket) {
         final Class<?> socketClass = socket.getClass();
@@ -137,20 +132,19 @@ public class WriteTimeoutEnforcer {
         } else {
             final Method cachedSetSoWriteTimeoutMethod = instance.mSetSoWriteTimeoutMethodRef.get();
             return (cachedSetSoWriteTimeoutMethod == null) ?
-                initFrom(socketClass) :
-                cachedSetSoWriteTimeoutMethod
-            ;
+                    initFrom(socketClass) :
+                    cachedSetSoWriteTimeoutMethod
+                    ;
         }
     }
 
-
     /**
      * Singleton initializer.
-     *
+     * <p>
      * Uses reflection to extract and 'cache' the method to invoke to set a write timouet in a socket.
      *
-     * @param socketClass   Underlying class providing the implementation of {@link Socket}.
-     * @return              Method to call to set a write timeout in the socket.
+     * @param socketClass Underlying class providing the implementation of {@link Socket}.
+     * @return Method to call to set a write timeout in the socket.
      */
     private static Method initFrom(Class<?> socketClass) {
         Log_OC.i(TAG, "Socket implementation: " + socketClass.getCanonicalName());
@@ -162,8 +156,8 @@ public class WriteTimeoutEnforcer {
 
         } catch (NoSuchMethodException e) {
             Log_OC.i(
-                TAG,
-                "Could not find (SocketImpl)#setSoWriteTimeout(int) method - write timeout not supported"
+                    TAG,
+                    "Could not find (SocketImpl)#setSoWriteTimeout(int) method - write timeout not supported"
             );
         }
         mSingleInstance.set(new WriteTimeoutEnforcer(socketClass, setSoWriteTimeoutMethod));

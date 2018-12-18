@@ -24,14 +24,6 @@
 
 package com.owncloud.android.lib.common;
 
-
-import java.io.IOException;
-
-import com.owncloud.android.lib.common.accounts.AccountUtils;
-import com.owncloud.android.lib.common.accounts.AccountUtils.AccountNotFoundException;
-import com.owncloud.android.lib.common.authentication.OwnCloudCredentials;
-import com.owncloud.android.lib.common.authentication.OwnCloudCredentialsFactory;
-
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.accounts.AuthenticatorException;
@@ -39,27 +31,33 @@ import android.accounts.OperationCanceledException;
 import android.content.Context;
 import android.net.Uri;
 
+import com.owncloud.android.lib.common.accounts.AccountUtils;
+import com.owncloud.android.lib.common.accounts.AccountUtils.AccountNotFoundException;
+import com.owncloud.android.lib.common.authentication.OwnCloudCredentials;
+import com.owncloud.android.lib.common.authentication.OwnCloudCredentialsFactory;
+
+import java.io.IOException;
+
 /**
  * OwnCloud Account
- * 
+ *
  * @author David A. Velasco
  */
 public class OwnCloudAccount {
 
-    private Uri mBaseUri; 
-    
+    private Uri mBaseUri;
+
     private OwnCloudCredentials mCredentials;
 
     private String mDisplayName;
-    
+
     private String mSavedAccountName;
 
     private Account mSavedAccount;
 
-
     /**
      * Constructor for already saved OC accounts.
-     *
+     * <p>
      * Do not use for anonymous credentials.
      */
     public OwnCloudAccount(Account savedAccount, Context context) throws AccountNotFoundException {
@@ -77,19 +75,18 @@ public class OwnCloudAccount {
 
         AccountManager ama = AccountManager.get(context.getApplicationContext());
         String baseUrl = ama.getUserData(mSavedAccount, AccountUtils.Constants.KEY_OC_BASE_URL);
-        if (baseUrl == null ) {
+        if (baseUrl == null) {
             throw new AccountNotFoundException(mSavedAccount, "Account not found", null);
         }
         mBaseUri = Uri.parse(AccountUtils.getBaseUrlForAccount(context, mSavedAccount));
         mDisplayName = ama.getUserData(mSavedAccount, AccountUtils.Constants.KEY_DISPLAY_NAME);
     }
 
-
     /**
      * Constructor for non yet saved OC accounts.
      *
-     * @param baseUri           URI to the OC server to get access to.
-     * @param credentials       Credentials to authenticate in the server. NULL is valid for anonymous credentials.
+     * @param baseUri     URI to the OC server to get access to.
+     * @param credentials Credentials to authenticate in the server. NULL is valid for anonymous credentials.
      */
     public OwnCloudAccount(Uri baseUri, OwnCloudCredentials credentials) {
         if (baseUri == null) {
@@ -99,13 +96,12 @@ public class OwnCloudAccount {
         mSavedAccountName = null;
         mBaseUri = baseUri;
         mCredentials = credentials != null ?
-            credentials : OwnCloudCredentialsFactory.getAnonymousCredentials();
+                credentials : OwnCloudCredentialsFactory.getAnonymousCredentials();
         String username = mCredentials.getUsername();
         if (username != null) {
             mSavedAccountName = AccountUtils.buildAccountName(mBaseUri, username);
         }
     }
-
 
     /**
      * Method for deferred load of account attributes from AccountManager
@@ -131,13 +127,13 @@ public class OwnCloudAccount {
     public Uri getBaseUri() {
         return mBaseUri;
     }
-            
+
     public OwnCloudCredentials getCredentials() {
         return mCredentials;
     }
-    
+
     public String getName() {
-    	return mSavedAccountName;
+        return mSavedAccountName;
     }
 
     public Account getSavedAccount() {

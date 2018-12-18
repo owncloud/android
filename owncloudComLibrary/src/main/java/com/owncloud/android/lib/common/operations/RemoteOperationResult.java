@@ -27,14 +27,18 @@ package com.owncloud.android.lib.common.operations;
 import android.accounts.Account;
 import android.accounts.AccountsException;
 
+import at.bitfire.dav4android.exception.DavException;
+import at.bitfire.dav4android.exception.HttpException;
 import com.owncloud.android.lib.common.accounts.AccountUtils;
 import com.owncloud.android.lib.common.http.HttpConstants;
 import com.owncloud.android.lib.common.http.methods.HttpBaseMethod;
 import com.owncloud.android.lib.common.network.CertificateCombinedException;
 import com.owncloud.android.lib.common.utils.Log_OC;
-
+import okhttp3.Headers;
 import org.json.JSONException;
 
+import javax.net.ssl.SSLException;
+import javax.net.ssl.SSLPeerUnverifiedException;
 import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -48,13 +52,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import javax.net.ssl.SSLException;
-import javax.net.ssl.SSLPeerUnverifiedException;
-
-import at.bitfire.dav4android.exception.DavException;
-import at.bitfire.dav4android.exception.HttpException;
-import okhttp3.Headers;
-
 public class RemoteOperationResult<T extends Object>
         implements Serializable {
 
@@ -64,61 +61,6 @@ public class RemoteOperationResult<T extends Object>
     private static final long serialVersionUID = 4968939884332372230L;
 
     private static final String TAG = RemoteOperationResult.class.getSimpleName();
-
-    public enum ResultCode {
-        OK,
-        OK_SSL,
-        OK_NO_SSL,
-        UNHANDLED_HTTP_CODE,
-        UNAUTHORIZED,
-        FILE_NOT_FOUND,
-        INSTANCE_NOT_CONFIGURED,
-        UNKNOWN_ERROR,
-        WRONG_CONNECTION,
-        TIMEOUT,
-        INCORRECT_ADDRESS,
-        HOST_NOT_AVAILABLE,
-        NO_NETWORK_CONNECTION,
-        SSL_ERROR,
-        SSL_RECOVERABLE_PEER_UNVERIFIED,
-        BAD_OC_VERSION,
-        CANCELLED,
-        INVALID_LOCAL_FILE_NAME,
-        INVALID_OVERWRITE,
-        CONFLICT,
-        OAUTH2_ERROR,
-        SYNC_CONFLICT,
-        LOCAL_STORAGE_FULL,
-        LOCAL_STORAGE_NOT_MOVED,
-        LOCAL_STORAGE_NOT_COPIED,
-        OAUTH2_ERROR_ACCESS_DENIED,
-        QUOTA_EXCEEDED,
-        ACCOUNT_NOT_FOUND,
-        ACCOUNT_EXCEPTION,
-        ACCOUNT_NOT_NEW,
-        ACCOUNT_NOT_THE_SAME,
-        INVALID_CHARACTER_IN_NAME,
-        SHARE_NOT_FOUND,
-        LOCAL_STORAGE_NOT_REMOVED,
-        FORBIDDEN,
-        SHARE_FORBIDDEN,
-        SPECIFIC_FORBIDDEN,
-        OK_REDIRECT_TO_NON_SECURE_CONNECTION,
-        INVALID_MOVE_INTO_DESCENDANT,
-        INVALID_COPY_INTO_DESCENDANT,
-        PARTIAL_MOVE_DONE,
-        PARTIAL_COPY_DONE,
-        SHARE_WRONG_PARAMETER,
-        WRONG_SERVER_RESPONSE,
-        INVALID_CHARACTER_DETECT_IN_SERVER,
-        DELAYED_FOR_WIFI,
-        LOCAL_FILE_NOT_FOUND,
-        SERVICE_UNAVAILABLE,
-        SPECIFIC_SERVICE_UNAVAILABLE,
-        SPECIFIC_UNSUPPORTED_MEDIA_TYPE,
-        SPECIFIC_METHOD_NOT_ALLOWED
-    }
-
     private boolean mSuccess = false;
     private int mHttpCode = -1;
     private String mHttpPhrase = null;
@@ -128,10 +70,9 @@ public class RemoteOperationResult<T extends Object>
     private ArrayList<String> mAuthenticate = new ArrayList<>();
     private String mLastPermanentLocation = null;
     private T mData = null;
-
     /**
      * Public constructor from result code.
-     *
+     * <p>
      * To be used when the caller takes the responsibility of interpreting the result of a {@link RemoteOperation}
      *
      * @param code {@link ResultCode} decided by the caller.
@@ -146,6 +87,7 @@ public class RemoteOperationResult<T extends Object>
     /**
      * Create a new RemoteOperationResult based on the result given by a previous one.
      * It does not copy the data.
+     *
      * @param prevRemoteOperation
      */
     public RemoteOperationResult(RemoteOperationResult prevRemoteOperation) {
@@ -161,9 +103,9 @@ public class RemoteOperationResult<T extends Object>
 
     /**
      * Public constructor from exception.
-     *
+     * <p>
      * To be used when an exception prevented the end of the {@link RemoteOperation}.
-     *
+     * <p>
      * Determines a {@link ResultCode} depending on the type of the exception.
      *
      * @param e Exception that interrupted the {@link RemoteOperation}
@@ -193,7 +135,7 @@ public class RemoteOperationResult<T extends Object>
             mCode = ResultCode.ACCOUNT_EXCEPTION;
 
         } else if (e instanceof SSLException || e instanceof RuntimeException) {
-            if(e instanceof SSLPeerUnverifiedException) {
+            if (e instanceof SSLPeerUnverifiedException) {
                 mCode = ResultCode.SSL_RECOVERABLE_PEER_UNVERIFIED;
             } else {
                 CertificateCombinedException se = getCertificateCombinedException(e);
@@ -220,9 +162,9 @@ public class RemoteOperationResult<T extends Object>
 
     /**
      * Public constructor from separate elements of an HTTP or DAV response.
-     *
+     * <p>
      * To be used when the result needs to be interpreted from the response of an HTTP/DAV method.
-     *
+     * <p>
      * Determines a {@link ResultCode} from the already executed method received as a parameter. Generally,
      * will depend on the HTTP code and HTTP response headers received. In some cases will inspect also the
      * response body
@@ -286,43 +228,17 @@ public class RemoteOperationResult<T extends Object>
     }
 
     /**
-     * Parse the error message included in the body response, if any, and set the specific result
-     * code
-     *
-     * @param bodyResponse okHttp response body
-     * @param resultCode our own custom result code
-     * @throws IOException
-     */
-    private void parseErrorMessageAndSetCode(String bodyResponse, ResultCode resultCode) {
-
-        if (bodyResponse != null && bodyResponse.length() > 0) {
-            InputStream is = new ByteArrayInputStream(bodyResponse.getBytes());
-            ErrorMessageParser xmlParser = new ErrorMessageParser();
-            try {
-                String errorMessage = xmlParser.parseXMLResponse(is);
-                if (errorMessage != "" && errorMessage != null) {
-                    mCode = resultCode;
-                    mHttpPhrase = errorMessage;
-                }
-            } catch (Exception e) {
-                Log_OC.w(TAG, "Error reading exception from server: " + e.getMessage());
-                // mCode stays as set in this(success, httpCode, headers)
-            }
-        }
-    }
-
-    /**
      * Public constructor from separate elements of an HTTP or DAV response.
-     *
+     * <p>
      * To be used when the result needs to be interpreted from HTTP response elements that could come from
      * different requests (WARNING: black magic, try to avoid).
-     *
-     *
+     * <p>
+     * <p>
      * Determines a {@link ResultCode} depending on the HTTP code and HTTP response headers received.
      *
-     * @param httpCode    HTTP status code returned by an HTTP/DAV method.
-     * @param httpPhrase  HTTP status line phrase returned by an HTTP/DAV method
-     * @param headers HTTP response header returned by an HTTP/DAV method
+     * @param httpCode   HTTP status code returned by an HTTP/DAV method.
+     * @param httpPhrase HTTP status line phrase returned by an HTTP/DAV method
+     * @param headers    HTTP response header returned by an HTTP/DAV method
      */
     public RemoteOperationResult(int httpCode, String httpPhrase, Headers headers) {
         this(httpCode, httpPhrase);
@@ -345,7 +261,7 @@ public class RemoteOperationResult<T extends Object>
 
     /**
      * Private constructor for results built interpreting a HTTP or DAV response.
-     *
+     * <p>
      * Determines a {@link ResultCode} depending of the type of the exception.
      *
      * @param httpCode   HTTP status code returned by the HTTP/DAV method.
@@ -389,9 +305,38 @@ public class RemoteOperationResult<T extends Object>
         }
     }
 
+    /**
+     * Parse the error message included in the body response, if any, and set the specific result
+     * code
+     *
+     * @param bodyResponse okHttp response body
+     * @param resultCode   our own custom result code
+     * @throws IOException
+     */
+    private void parseErrorMessageAndSetCode(String bodyResponse, ResultCode resultCode) {
+
+        if (bodyResponse != null && bodyResponse.length() > 0) {
+            InputStream is = new ByteArrayInputStream(bodyResponse.getBytes());
+            ErrorMessageParser xmlParser = new ErrorMessageParser();
+            try {
+                String errorMessage = xmlParser.parseXMLResponse(is);
+                if (errorMessage != "" && errorMessage != null) {
+                    mCode = resultCode;
+                    mHttpPhrase = errorMessage;
+                }
+            } catch (Exception e) {
+                Log_OC.w(TAG, "Error reading exception from server: " + e.getMessage());
+                // mCode stays as set in this(success, httpCode, headers)
+            }
+        }
+    }
 
     public boolean isSuccess() {
         return mSuccess;
+    }
+
+    public void setSuccess(boolean success) {
+        this.mSuccess = success;
     }
 
     public boolean isCancelled() {
@@ -459,10 +404,11 @@ public class RemoteOperationResult<T extends Object>
                 return "Unknown host exception";
 
             } else if (mException instanceof CertificateCombinedException) {
-                if (((CertificateCombinedException) mException).isRecoverable())
+                if (((CertificateCombinedException) mException).isRecoverable()) {
                     return "SSL recoverable exception";
-                else
+                } else {
                     return "SSL exception";
+                }
 
             } else if (mException instanceof SSLException) {
                 return "SSL exception";
@@ -572,15 +518,65 @@ public class RemoteOperationResult<T extends Object>
         mLastPermanentLocation = lastPermanentLocation;
     }
 
-    public void setSuccess(boolean success) {
-        this.mSuccess = success;
+    public T getData() {
+        return mData;
     }
 
     public void setData(T data) {
         mData = data;
     }
 
-    public T getData() {
-        return mData;
+    public enum ResultCode {
+        OK,
+        OK_SSL,
+        OK_NO_SSL,
+        UNHANDLED_HTTP_CODE,
+        UNAUTHORIZED,
+        FILE_NOT_FOUND,
+        INSTANCE_NOT_CONFIGURED,
+        UNKNOWN_ERROR,
+        WRONG_CONNECTION,
+        TIMEOUT,
+        INCORRECT_ADDRESS,
+        HOST_NOT_AVAILABLE,
+        NO_NETWORK_CONNECTION,
+        SSL_ERROR,
+        SSL_RECOVERABLE_PEER_UNVERIFIED,
+        BAD_OC_VERSION,
+        CANCELLED,
+        INVALID_LOCAL_FILE_NAME,
+        INVALID_OVERWRITE,
+        CONFLICT,
+        OAUTH2_ERROR,
+        SYNC_CONFLICT,
+        LOCAL_STORAGE_FULL,
+        LOCAL_STORAGE_NOT_MOVED,
+        LOCAL_STORAGE_NOT_COPIED,
+        OAUTH2_ERROR_ACCESS_DENIED,
+        QUOTA_EXCEEDED,
+        ACCOUNT_NOT_FOUND,
+        ACCOUNT_EXCEPTION,
+        ACCOUNT_NOT_NEW,
+        ACCOUNT_NOT_THE_SAME,
+        INVALID_CHARACTER_IN_NAME,
+        SHARE_NOT_FOUND,
+        LOCAL_STORAGE_NOT_REMOVED,
+        FORBIDDEN,
+        SHARE_FORBIDDEN,
+        SPECIFIC_FORBIDDEN,
+        OK_REDIRECT_TO_NON_SECURE_CONNECTION,
+        INVALID_MOVE_INTO_DESCENDANT,
+        INVALID_COPY_INTO_DESCENDANT,
+        PARTIAL_MOVE_DONE,
+        PARTIAL_COPY_DONE,
+        SHARE_WRONG_PARAMETER,
+        WRONG_SERVER_RESPONSE,
+        INVALID_CHARACTER_DETECT_IN_SERVER,
+        DELAYED_FOR_WIFI,
+        LOCAL_FILE_NOT_FOUND,
+        SERVICE_UNAVAILABLE,
+        SPECIFIC_SERVICE_UNAVAILABLE,
+        SPECIFIC_UNSUPPORTED_MEDIA_TYPE,
+        SPECIFIC_METHOD_NOT_ALLOWED
     }
 }

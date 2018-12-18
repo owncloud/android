@@ -34,105 +34,110 @@ import java.io.InputStream;
 
 /**
  * Parser for server exceptions
+ *
  * @author davidgonzalez
  */
 public class ErrorMessageParser {
-	// No namespaces
-	private static final String ns = null;
+    // No namespaces
+    private static final String ns = null;
 
-	// Nodes for XML Parser
-	private static final String NODE_ERROR = "d:error";
-	private static final String NODE_MESSAGE = "s:message";
+    // Nodes for XML Parser
+    private static final String NODE_ERROR = "d:error";
+    private static final String NODE_MESSAGE = "s:message";
 
-	/**
-	 * Parse exception response
-	 * @param is
-	 * @return errorMessage for an exception
-	 * @throws XmlPullParserException
-	 * @throws IOException
-	 */
-	public String parseXMLResponse(InputStream is) throws XmlPullParserException,
-			IOException {
-		String errorMessage = "";
+    /**
+     * Parse exception response
+     *
+     * @param is
+     * @return errorMessage for an exception
+     * @throws XmlPullParserException
+     * @throws IOException
+     */
+    public String parseXMLResponse(InputStream is) throws XmlPullParserException,
+            IOException {
+        String errorMessage = "";
 
-		try {
-			// XMLPullParser
-			XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
-			factory.setNamespaceAware(true);
+        try {
+            // XMLPullParser
+            XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+            factory.setNamespaceAware(true);
 
-			XmlPullParser parser = Xml.newPullParser();
-			parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
-			parser.setInput(is, null);
-			parser.nextTag();
-			errorMessage = readError(parser);
+            XmlPullParser parser = Xml.newPullParser();
+            parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
+            parser.setInput(is, null);
+            parser.nextTag();
+            errorMessage = readError(parser);
 
-		} finally {
-			is.close();
-		}
-		return errorMessage;
-	}
+        } finally {
+            is.close();
+        }
+        return errorMessage;
+    }
 
-	/**
-	 * Parse OCS node
-	 * @param parser
-	 * @return reason for exception
-	 * @throws XmlPullParserException
-	 * @throws IOException
-	 */
-	private String readError (XmlPullParser parser) throws XmlPullParserException, IOException {
-		String errorMessage = "";
-		parser.require(XmlPullParser.START_TAG,  ns , NODE_ERROR);
-		while (parser.next() != XmlPullParser.END_TAG) {
-			if (parser.getEventType() != XmlPullParser.START_TAG) {
-				continue;
-			}
-			String name = parser.getName();
-			// read NODE_MESSAGE
-			if (name.equalsIgnoreCase(NODE_MESSAGE)) {
-				errorMessage = readText(parser);
-			} else {
-				skip(parser);
-			}
-		}
-		return errorMessage;
-	}
+    /**
+     * Parse OCS node
+     *
+     * @param parser
+     * @return reason for exception
+     * @throws XmlPullParserException
+     * @throws IOException
+     */
+    private String readError(XmlPullParser parser) throws XmlPullParserException, IOException {
+        String errorMessage = "";
+        parser.require(XmlPullParser.START_TAG, ns, NODE_ERROR);
+        while (parser.next() != XmlPullParser.END_TAG) {
+            if (parser.getEventType() != XmlPullParser.START_TAG) {
+                continue;
+            }
+            String name = parser.getName();
+            // read NODE_MESSAGE
+            if (name.equalsIgnoreCase(NODE_MESSAGE)) {
+                errorMessage = readText(parser);
+            } else {
+                skip(parser);
+            }
+        }
+        return errorMessage;
+    }
 
-	/**
-	 * Skip tags in parser procedure
-	 * @param parser
-	 * @throws XmlPullParserException
-	 * @throws IOException
-	 */
-	private void skip(XmlPullParser parser) throws XmlPullParserException, IOException {
-		if (parser.getEventType() != XmlPullParser.START_TAG) {
-			throw new IllegalStateException();
-		}
-		int depth = 1;
-		while (depth != 0) {
-			switch (parser.next()) {
-				case XmlPullParser.END_TAG:
-					depth--;
-					break;
-				case XmlPullParser.START_TAG:
-					depth++;
-					break;
-			}
-		}
-	}
+    /**
+     * Skip tags in parser procedure
+     *
+     * @param parser
+     * @throws XmlPullParserException
+     * @throws IOException
+     */
+    private void skip(XmlPullParser parser) throws XmlPullParserException, IOException {
+        if (parser.getEventType() != XmlPullParser.START_TAG) {
+            throw new IllegalStateException();
+        }
+        int depth = 1;
+        while (depth != 0) {
+            switch (parser.next()) {
+                case XmlPullParser.END_TAG:
+                    depth--;
+                    break;
+                case XmlPullParser.START_TAG:
+                    depth++;
+                    break;
+            }
+        }
+    }
 
-	/**
-	 * Read the text from a node
-	 * @param parser
-	 * @return Text of the node
-	 * @throws IOException
-	 * @throws XmlPullParserException
-	 */
-	private String readText(XmlPullParser parser) throws IOException, XmlPullParserException {
-		String result = "";
-		if (parser.next() == XmlPullParser.TEXT) {
-			result = parser.getText();
-			parser.nextTag();
-		}
-		return result;
-	}
+    /**
+     * Read the text from a node
+     *
+     * @param parser
+     * @return Text of the node
+     * @throws IOException
+     * @throws XmlPullParserException
+     */
+    private String readText(XmlPullParser parser) throws IOException, XmlPullParserException {
+        String result = "";
+        if (parser.next() == XmlPullParser.TEXT) {
+            result = parser.getText();
+            parser.nextTag();
+        }
+        return result;
+    }
 }

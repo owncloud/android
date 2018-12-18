@@ -26,19 +26,17 @@ package com.owncloud.android.lib.common.network;
 
 import android.util.Log;
 
-import com.owncloud.android.lib.common.utils.Log_OC;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
+import okio.BufferedSink;
+import okio.Okio;
+import okio.Source;
 
 import java.io.File;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
-
-import okhttp3.MediaType;
-import okhttp3.RequestBody;
-import okio.BufferedSink;
-import okio.Okio;
-import okio.Source;
 
 /**
  * A Request body that represents a file and include information about the progress when uploading it

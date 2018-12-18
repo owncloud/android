@@ -11,7 +11,7 @@ import java.io.IOException;
 
 /**
  * Dynamic implementation of {@link OwnCloudClientManager}.
- *
+ * <p>
  * Wraps instances of {@link SingleSessionManager} and {@link SimpleFactoryManager} and delegates on one
  * or the other depending on the known version of the server corresponding to the {@link OwnCloudAccount}
  *
@@ -26,17 +26,17 @@ public class DynamicSessionManager implements OwnCloudClientManager {
 
     @Override
     public OwnCloudClient getClientFor(OwnCloudAccount account, Context context)
-        throws AccountUtils.AccountNotFoundException,
-                OperationCanceledException, AuthenticatorException, IOException {
+            throws AccountUtils.AccountNotFoundException,
+            OperationCanceledException, AuthenticatorException, IOException {
 
         OwnCloudVersion ownCloudVersion = null;
         if (account.getSavedAccount() != null) {
             ownCloudVersion = AccountUtils.getServerVersionForAccount(
-                account.getSavedAccount(), context
+                    account.getSavedAccount(), context
             );
         }
 
-        if (ownCloudVersion !=  null && ownCloudVersion.isSessionMonitoringSupported()) {
+        if (ownCloudVersion != null && ownCloudVersion.isSessionMonitoringSupported()) {
             return mSingleSessionManager.getClientFor(account, context);
         } else {
             return mSimpleFactoryManager.getClientFor(account, context);

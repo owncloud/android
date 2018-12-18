@@ -68,22 +68,22 @@ public class OwnCloudOAuth2RequestBuilder implements OAuth2RequestBuilder {
         if (mGrantType != OAuth2GrantType.AUTHORIZATION_CODE &&
                 mGrantType != OAuth2GrantType.REFRESH_TOKEN) {
             throw new UnsupportedOperationException(
-                "Unsupported grant type. Only " +
-                    OAuth2GrantType.AUTHORIZATION_CODE.getValue() + " and " +
-                        OAuth2GrantType.REFRESH_TOKEN + " are supported"
+                    "Unsupported grant type. Only " +
+                            OAuth2GrantType.AUTHORIZATION_CODE.getValue() + " and " +
+                            OAuth2GrantType.REFRESH_TOKEN + " are supported"
             );
         }
         OAuth2ClientConfiguration clientConfiguration = mOAuth2Provider.getClientConfiguration();
 
-        switch(mRequest) {
+        switch (mRequest) {
             case CREATE_ACCESS_TOKEN:
                 return new OAuth2GetAccessTokenOperation(
-                    mGrantType.getValue(),
-                    mCode,
-                    clientConfiguration.getClientId(),
-                    clientConfiguration.getClientSecret(),
-                    clientConfiguration.getRedirectUri(),
-                    mOAuth2Provider.getAccessTokenEndpointPath()
+                        mGrantType.getValue(),
+                        mCode,
+                        clientConfiguration.getClientId(),
+                        clientConfiguration.getClientSecret(),
+                        clientConfiguration.getRedirectUri(),
+                        mOAuth2Provider.getAccessTokenEndpointPath()
                 );
 
             case REFRESH_ACCESS_TOKEN:
@@ -95,7 +95,7 @@ public class OwnCloudOAuth2RequestBuilder implements OAuth2RequestBuilder {
                 );
             default:
                 throw new UnsupportedOperationException(
-                    "Unsupported request"
+                        "Unsupported request"
                 );
         }
     }
@@ -104,26 +104,26 @@ public class OwnCloudOAuth2RequestBuilder implements OAuth2RequestBuilder {
     public String buildUri() {
         if (OAuth2GrantType.AUTHORIZATION_CODE != mGrantType) {
             throw new UnsupportedOperationException(
-                "Unsupported grant type. Only " +
-                    OAuth2GrantType.AUTHORIZATION_CODE.getValue() + " is supported by this provider"
+                    "Unsupported grant type. Only " +
+                            OAuth2GrantType.AUTHORIZATION_CODE.getValue() + " is supported by this provider"
             );
         }
         OAuth2ClientConfiguration clientConfiguration = mOAuth2Provider.getClientConfiguration();
         Uri uri;
         Uri.Builder uriBuilder;
-        switch(mRequest) {
+        switch (mRequest) {
             case GET_AUTHORIZATION_CODE:
                 uri = Uri.parse(mOAuth2Provider.getAuthorizationServerUri());
                 uriBuilder = uri.buildUpon();
                 uriBuilder.appendEncodedPath(mOAuth2Provider.getAuthorizationCodeEndpointPath());
                 uriBuilder.appendQueryParameter(
-                    OAuth2Constants.KEY_RESPONSE_TYPE, OAuth2Constants.OAUTH2_RESPONSE_TYPE_CODE
+                        OAuth2Constants.KEY_RESPONSE_TYPE, OAuth2Constants.OAUTH2_RESPONSE_TYPE_CODE
                 );
                 uriBuilder.appendQueryParameter(
-                    OAuth2Constants.KEY_REDIRECT_URI, clientConfiguration.getRedirectUri()
+                        OAuth2Constants.KEY_REDIRECT_URI, clientConfiguration.getRedirectUri()
                 );
                 uriBuilder.appendQueryParameter(
-                    OAuth2Constants.KEY_CLIENT_ID, clientConfiguration.getClientId()
+                        OAuth2Constants.KEY_CLIENT_ID, clientConfiguration.getClientId()
                 );
 
                 uri = uriBuilder.build();
@@ -134,13 +134,13 @@ public class OwnCloudOAuth2RequestBuilder implements OAuth2RequestBuilder {
                 uriBuilder = uri.buildUpon();
                 uriBuilder.appendEncodedPath(mOAuth2Provider.getAccessTokenEndpointPath());
                 uriBuilder.appendQueryParameter(
-                    OAuth2Constants.KEY_RESPONSE_TYPE, OAuth2Constants.OAUTH2_RESPONSE_TYPE_CODE
+                        OAuth2Constants.KEY_RESPONSE_TYPE, OAuth2Constants.OAUTH2_RESPONSE_TYPE_CODE
                 );
                 uriBuilder.appendQueryParameter(
-                    OAuth2Constants.KEY_REDIRECT_URI, clientConfiguration.getRedirectUri()
+                        OAuth2Constants.KEY_REDIRECT_URI, clientConfiguration.getRedirectUri()
                 );
                 uriBuilder.appendQueryParameter(
-                    OAuth2Constants.KEY_CLIENT_ID, clientConfiguration.getClientId()
+                        OAuth2Constants.KEY_CLIENT_ID, clientConfiguration.getClientId()
                 );
 
                 uri = uriBuilder.build();
@@ -148,7 +148,7 @@ public class OwnCloudOAuth2RequestBuilder implements OAuth2RequestBuilder {
 
             default:
                 throw new UnsupportedOperationException(
-                    "Unsupported request"
+                        "Unsupported request"
                 );
         }
     }

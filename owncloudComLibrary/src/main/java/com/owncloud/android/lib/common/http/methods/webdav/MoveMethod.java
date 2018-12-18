@@ -25,13 +25,13 @@
 package com.owncloud.android.lib.common.http.methods.webdav;
 
 import com.owncloud.android.lib.common.http.HttpConstants;
+import kotlin.Unit;
 
 import java.net.URL;
 
-import kotlin.Unit;
-
 /**
  * Move calls wrapper
+ *
  * @author Christian Schabesberger
  * @author David González Verdugo
  */

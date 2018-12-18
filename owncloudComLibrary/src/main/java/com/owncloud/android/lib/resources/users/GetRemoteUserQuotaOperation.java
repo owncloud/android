@@ -27,6 +27,9 @@
 
 package com.owncloud.android.lib.resources.users;
 
+import at.bitfire.dav4android.Property;
+import at.bitfire.dav4android.property.QuotaAvailableBytes;
+import at.bitfire.dav4android.property.QuotaUsedBytes;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.http.HttpConstants;
 import com.owncloud.android.lib.common.http.methods.webdav.DavUtils;
@@ -39,10 +42,6 @@ import com.owncloud.android.lib.common.utils.Log_OC;
 import java.net.URL;
 import java.util.List;
 
-import at.bitfire.dav4android.Property;
-import at.bitfire.dav4android.property.QuotaAvailableBytes;
-import at.bitfire.dav4android.property.QuotaUsedBytes;
-
 import static com.owncloud.android.lib.common.http.methods.webdav.DavConstants.DEPTH_0;
 import static com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode.OK;
 
@@ -52,26 +51,7 @@ import static com.owncloud.android.lib.common.operations.RemoteOperationResult.R
  */
 public class GetRemoteUserQuotaOperation extends RemoteOperation<GetRemoteUserQuotaOperation.RemoteQuota> {
 
-    static public class RemoteQuota {
-
-        long mFree, mUsed, mTotal;
-        double mRelative;
-
-        public RemoteQuota(long free, long used, long total, double relative) {
-            mFree = free;
-            mUsed = used;
-            mTotal = total;
-            mRelative = relative;
-        }
-
-        public long getFree() { return mFree; }
-        public long getUsed() { return mUsed; }
-        public long getTotal() { return mTotal; }
-        public double getRelative() { return mRelative; }
-    }
-
     private static final String TAG = GetRemoteUserQuotaOperation.class.getSimpleName();
-
     private String mRemotePath;
 
     /**
@@ -112,7 +92,6 @@ public class GetRemoteUserQuotaOperation extends RemoteOperation<GetRemoteUserQu
         } catch (Exception e) {
             result = new RemoteOperationResult<>(e);
 
-
         } finally {
             if (result.isSuccess()) {
                 Log_OC.i(TAG, "Get quota from " + mRemotePath + ": " + result.getLogMessage());
@@ -143,11 +122,13 @@ public class GetRemoteUserQuotaOperation extends RemoteOperation<GetRemoteUserQu
         long quotaAvailable = 0;
         long quotaUsed = 0;
 
-        for(Property property : properties) {
-            if(property instanceof QuotaAvailableBytes)
+        for (Property property : properties) {
+            if (property instanceof QuotaAvailableBytes) {
                 quotaAvailable = ((QuotaAvailableBytes) property).getQuotaAvailableBytes();
-            if(property instanceof QuotaUsedBytes)
+            }
+            if (property instanceof QuotaUsedBytes) {
                 quotaUsed = ((QuotaUsedBytes) property).getQuotaUsedBytes();
+            }
         }
 
         // If there's a special case, quota available will contain a negative code
@@ -163,8 +144,8 @@ public class GetRemoteUserQuotaOperation extends RemoteOperation<GetRemoteUserQu
             );
         } else {
             long totalQuota = quotaAvailable + quotaUsed;
-            double relativeQuota = (double)(quotaUsed * 100)/totalQuota;
-            double roundedRelativeQuota = Math.round(relativeQuota * 100)/100.0d;
+            double relativeQuota = (double) (quotaUsed * 100) / totalQuota;
+            double roundedRelativeQuota = Math.round(relativeQuota * 100) / 100.0d;
 
             return new RemoteQuota(
                     quotaAvailable,
@@ -172,6 +153,35 @@ public class GetRemoteUserQuotaOperation extends RemoteOperation<GetRemoteUserQu
                     totalQuota,
                     roundedRelativeQuota
             );
+        }
+    }
+
+    static public class RemoteQuota {
+
+        long mFree, mUsed, mTotal;
+        double mRelative;
+
+        public RemoteQuota(long free, long used, long total, double relative) {
+            mFree = free;
+            mUsed = used;
+            mTotal = total;
+            mRelative = relative;
+        }
+
+        public long getFree() {
+            return mFree;
+        }
+
+        public long getUsed() {
+            return mUsed;
+        }
+
+        public long getTotal() {
+            return mTotal;
+        }
+
+        public double getRelative() {
+            return mRelative;
         }
     }
 }

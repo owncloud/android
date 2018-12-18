@@ -27,29 +27,22 @@ package com.owncloud.android.lib.resources.status;
 /**
  * Enum for Boolean Type in OCCapability parameters, with values:
  * -1 - Unknown
- *  0 - False
- *  1 - True
+ * 0 - False
+ * 1 - True
  */
 public enum CapabilityBooleanType {
-    UNKNOWN (-1),
-    FALSE (0),
-    TRUE (1);
+    UNKNOWN(-1),
+    FALSE(0),
+    TRUE(1);
 
     private int value;
 
-    CapabilityBooleanType(int value)
-    {
+    CapabilityBooleanType(int value) {
         this.value = value;
     }
 
-    public int getValue() {
-        return value;
-    }
-
-    public static CapabilityBooleanType fromValue(int value)
-    {
-        switch (value)
-        {
+    public static CapabilityBooleanType fromValue(int value) {
+        switch (value) {
             case -1:
                 return UNKNOWN;
             case 0:
@@ -60,23 +53,27 @@ public enum CapabilityBooleanType {
         return null;
     }
 
-    public static CapabilityBooleanType fromBooleanValue(boolean boolValue){
-        if (boolValue){
+    public static CapabilityBooleanType fromBooleanValue(boolean boolValue) {
+        if (boolValue) {
             return TRUE;
         } else {
             return FALSE;
         }
     }
 
-    public boolean isUnknown(){
+    public int getValue() {
+        return value;
+    }
+
+    public boolean isUnknown() {
         return getValue() == -1;
     }
 
-    public boolean isFalse(){
+    public boolean isFalse() {
         return getValue() == 0;
     }
 
-    public boolean isTrue(){
+    public boolean isTrue() {
         return getValue() == 1;
     }
 

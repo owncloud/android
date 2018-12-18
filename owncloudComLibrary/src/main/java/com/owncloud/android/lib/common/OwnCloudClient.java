@@ -29,6 +29,7 @@ import android.accounts.AccountManager;
 import android.accounts.AccountsException;
 import android.net.Uri;
 
+import at.bitfire.dav4android.exception.HttpException;
 import com.owncloud.android.lib.common.accounts.AccountUtils;
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentials;
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentialsFactory;
@@ -40,15 +41,13 @@ import com.owncloud.android.lib.common.network.RedirectionPath;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.common.utils.RandomUtils;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
+import okhttp3.Cookie;
+import okhttp3.Headers;
+import okhttp3.HttpUrl;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
-
-import at.bitfire.dav4android.exception.HttpException;
-import okhttp3.Cookie;
-import okhttp3.Headers;
-import okhttp3.HttpUrl;
 
 import static com.owncloud.android.lib.common.http.HttpConstants.OC_X_REQUEST_ID;
 
@@ -94,15 +93,6 @@ public class OwnCloudClient extends HttpClient {
         clearCookies();
     }
 
-    public void setCredentials(OwnCloudCredentials credentials) {
-        if (credentials != null) {
-            mCredentials = credentials;
-            mCredentials.applyTo(this);
-        } else {
-            clearCredentials();
-        }
-    }
-
     public void clearCredentials() {
         if (!(mCredentials instanceof OwnCloudAnonymousCredentials)) {
             mCredentials = OwnCloudCredentialsFactory.getAnonymousCredentials();
@@ -114,7 +104,7 @@ public class OwnCloudClient extends HttpClient {
         mCredentials.applyTo(this);
     }
 
-    public int executeHttpMethod (HttpBaseMethod method) throws Exception {
+    public int executeHttpMethod(HttpBaseMethod method) throws Exception {
         boolean repeatWithFreshCredentials;
         int repeatCounter = 0;
         int status;
@@ -125,7 +115,7 @@ public class OwnCloudClient extends HttpClient {
             status = method.execute();
             checkFirstRedirection(method);
 
-            if(mFollowRedirects && !isIdPRedirection()) {
+            if (mFollowRedirects && !isIdPRedirection()) {
                 status = followRedirection(method).getLastStatus();
             }
 
@@ -140,12 +130,12 @@ public class OwnCloudClient extends HttpClient {
 
     private void checkFirstRedirection(HttpBaseMethod method) {
         final String location = method.getResponseHeader(HttpConstants.LOCATION_HEADER_LOWER);
-        if(location != null && !location.isEmpty()) {
+        if (location != null && !location.isEmpty()) {
             mRedirectedLocation = location;
         }
     }
 
-    private int executeRedirectedHttpMethod (HttpBaseMethod method) throws Exception {
+    private int executeRedirectedHttpMethod(HttpBaseMethod method) throws Exception {
         boolean repeatWithFreshCredentials;
         int repeatCounter = 0;
         int status;
@@ -217,9 +207,9 @@ public class OwnCloudClient extends HttpClient {
                 try {
                     status = executeRedirectedHttpMethod(method);
                 } catch (HttpException e) {
-                    if(e.getMessage().contains(Integer.toString(HttpConstants.HTTP_MOVED_TEMPORARILY))) {
+                    if (e.getMessage().contains(Integer.toString(HttpConstants.HTTP_MOVED_TEMPORARILY))) {
                         status = HttpConstants.HTTP_MOVED_TEMPORARILY;
-                    } else  {
+                    } else {
                         throw e;
                     }
                 }
@@ -242,7 +232,9 @@ public class OwnCloudClient extends HttpClient {
     public void exhaustResponse(InputStream responseBodyAsStream) {
         if (responseBodyAsStream != null) {
             try {
-                while (responseBodyAsStream.read(sExhaustBuffer) >= 0) ;
+                while (responseBodyAsStream.read(sExhaustBuffer) >= 0) {
+                    ;
+                }
                 responseBodyAsStream.close();
 
             } catch (IOException io) {
@@ -252,7 +244,7 @@ public class OwnCloudClient extends HttpClient {
         }
     }
 
-    public Uri getBaseFilesWebDavUri(){
+    public Uri getBaseFilesWebDavUri() {
         return Uri.parse(mBaseUri + WEBDAV_FILES_PATH_4_0);
     }
 
@@ -260,7 +252,7 @@ public class OwnCloudClient extends HttpClient {
         return mCredentials instanceof OwnCloudAnonymousCredentials
                 ? Uri.parse(mBaseUri + WEBDAV_FILES_PATH_4_0)
                 : Uri.parse(mBaseUri + WEBDAV_FILES_PATH_4_0 + AccountUtils.getUserId(
-                        mAccount.getSavedAccount(), getContext()
+                mAccount.getSavedAccount(), getContext()
                 )
         );
     }
@@ -269,14 +261,18 @@ public class OwnCloudClient extends HttpClient {
         return mCredentials instanceof OwnCloudAnonymousCredentials
                 ? Uri.parse(mBaseUri + WEBDAV_UPLOADS_PATH_4_0)
                 : Uri.parse(mBaseUri + WEBDAV_UPLOADS_PATH_4_0 + AccountUtils.getUserId(
-                        mAccount.getSavedAccount(), getContext()
+                mAccount.getSavedAccount(), getContext()
                 )
         );
     }
 
+    public Uri getBaseUri() {
+        return mBaseUri;
+    }
+
     /**
      * Sets the root URI to the ownCloud server.
-     *
+     * <p>
      * Use with care.
      *
      * @param uri
@@ -288,12 +284,17 @@ public class OwnCloudClient extends HttpClient {
         mBaseUri = uri;
     }
 
-    public Uri getBaseUri() {
-        return mBaseUri;
-    }
-
     public final OwnCloudCredentials getCredentials() {
         return mCredentials;
+    }
+
+    public void setCredentials(OwnCloudCredentials credentials) {
+        if (credentials != null) {
+            mCredentials = credentials;
+            mCredentials.applyTo(this);
+        } else {
+            clearCredentials();
+        }
     }
 
     private void logCookie(Cookie cookie) {
@@ -348,27 +349,27 @@ public class OwnCloudClient extends HttpClient {
         );
     }
 
-    public void setOwnCloudVersion(OwnCloudVersion version) {
-        mVersion = version;
-    }
-
     public OwnCloudVersion getOwnCloudVersion() {
         return mVersion;
     }
 
-    public void setAccount(OwnCloudAccount account) {
-        this.mAccount = account;
+    public void setOwnCloudVersion(OwnCloudVersion version) {
+        mVersion = version;
     }
 
     public OwnCloudAccount getAccount() {
         return mAccount;
     }
 
+    public void setAccount(OwnCloudAccount account) {
+        this.mAccount = account;
+    }
+
     /**
      * Checks the status code of an execution and decides if should be repeated with fresh credentials.
-     *
+     * <p>
      * Invalidates current credentials if the request failed as anauthorized.
-     *
+     * <p>
      * Refresh current credentials if possible, and marks a retry.
      *
      * @param status
@@ -416,10 +417,9 @@ public class OwnCloudClient extends HttpClient {
      * Determines if credentials should be invalidated according the to the HTTPS status
      * of a network request just performed.
      *
-     * @param httpStatusCode    Result of the last request ran with the 'credentials' belows.
-
-     * @return                  'True' if credentials should and might be invalidated, 'false' if shouldn't or
-     *                          cannot be invalidated with the given arguments.
+     * @param httpStatusCode Result of the last request ran with the 'credentials' belows.
+     * @return 'True' if credentials should and might be invalidated, 'false' if shouldn't or
+     * cannot be invalidated with the given arguments.
      */
     private boolean shouldInvalidateAccountCredentials(int httpStatusCode) {
 
@@ -437,10 +437,10 @@ public class OwnCloudClient extends HttpClient {
     /**
      * Invalidates credentials stored for the given account in the system  {@link AccountManager} and in
      * current {@link OwnCloudClientManagerFactory#getDefaultSingleton()} instance.
-     *
+     * <p>
      * {@link #shouldInvalidateAccountCredentials(int)} should be called first.
      *
-     * @return                  'True' if invalidation was successful, 'false' otherwise.
+     * @return 'True' if invalidation was successful, 'false' otherwise.
      */
     private boolean invalidateAccountCredentials() {
         AccountManager am = AccountManager.get(getContext());
@@ -462,6 +462,7 @@ public class OwnCloudClient extends HttpClient {
 
     /**
      * Check if the redirection is to an identity provider such as SAML or wayf
+     *
      * @return true if the redirection location includes SAML or wayf, false otherwise
      */
     private boolean isIdPRedirection() {

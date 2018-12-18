@@ -24,16 +24,17 @@
 
 package com.owncloud.android.lib.common.http.interceptors;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-
 import okhttp3.Interceptor;
 import okhttp3.Request;
 import okhttp3.Response;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
+
 /**
  * Http interceptor to use multiple interceptors in the same {@link okhttp3.OkHttpClient} instance
+ *
  * @author David González Verdugo
  */
 public class HttpInterceptor implements Interceptor {
@@ -58,20 +59,12 @@ public class HttpInterceptor implements Interceptor {
         return response;
     }
 
-    public interface RequestInterceptor {
-        Request intercept(Request request) throws IOException;
-    }
-
-    public interface ResponseInterceptor {
-        Response intercept(Response response) throws IOException;
-    }
-
     public HttpInterceptor addRequestInterceptor(RequestInterceptor requestInterceptor) {
         mRequestInterceptors.add(requestInterceptor);
         return this;
     }
 
-    public HttpInterceptor addResponseInterceptor (ResponseInterceptor responseInterceptor) {
+    public HttpInterceptor addResponseInterceptor(ResponseInterceptor responseInterceptor) {
         mResponseInterceptors.add(responseInterceptor);
         return this;
     }
@@ -105,5 +98,13 @@ public class HttpInterceptor implements Interceptor {
 
     public ArrayList<ResponseInterceptor> getResponseInterceptors() {
         return mResponseInterceptors;
+    }
+
+    public interface RequestInterceptor {
+        Request intercept(Request request) throws IOException;
+    }
+
+    public interface ResponseInterceptor {
+        Response intercept(Response response) throws IOException;
     }
 }

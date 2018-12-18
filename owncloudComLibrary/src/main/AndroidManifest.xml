@@ -22,11 +22,11 @@
    THE SOFTWARE.
 
  -->
- 
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.owncloud.android.lib"
+
+<manifest package="com.owncloud.android.lib"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:versionCode="1"
-    android:versionName="1.0" >
+    android:versionName="1.0">
 
     <!-- USE_CREDENTIALS, MANAGE_ACCOUNTS and AUTHENTICATE_ACCOUNTS are needed for API < 23.
         In API >= 23 the do not exist anymore -->

@@ -1,22 +1,22 @@
 /* ownCloud Android Library is available under MIT license
  *   Copyright (C) 2016 ownCloud GmbH.
- *   
+ *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
  *   in the Software without restriction, including without limitation the rights
  *   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  *   copies of the Software, and to permit persons to whom the Software is
  *   furnished to do so, subject to the following conditions:
- *   
+ *
  *   The above copyright notice and this permission notice shall be included in
  *   all copies or substantial portions of the Software.
- *   
- *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, 
+ *
+ *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
  *   EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- *   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND 
- *   NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS 
- *   BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN 
- *   ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN 
+ *   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ *   NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
+ *   BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+ *   ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  *   CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *   THE SOFTWARE.
  *
@@ -56,9 +56,8 @@ public class DownloadRemoteFileOperation extends RemoteOperation {
     private static final String TAG = DownloadRemoteFileOperation.class.getSimpleName();
     private static final int FORBIDDEN_ERROR = 403;
     private static final int SERVICE_UNAVAILABLE_ERROR = 503;
-
-    private Set<OnDatatransferProgressListener> mDataTransferListeners = new HashSet<>();
     private final AtomicBoolean mCancellationRequested = new AtomicBoolean(false);
+    private Set<OnDatatransferProgressListener> mDataTransferListeners = new HashSet<>();
     private long mModificationTimestamp = 0;
     private String mEtag = "";
     private GetMethod mGet;
@@ -83,17 +82,16 @@ public class DownloadRemoteFileOperation extends RemoteOperation {
             tmpFile.getParentFile().mkdirs();
             result = downloadFile(client, tmpFile);
             Log_OC.i(TAG, "Download of " + mRemotePath + " to " + getTmpPath() + ": " +
-                result.getLogMessage());
+                    result.getLogMessage());
 
         } catch (Exception e) {
             result = new RemoteOperationResult<>(e);
             Log_OC.e(TAG, "Download of " + mRemotePath + " to " + getTmpPath() + ": " +
-                result.getLogMessage(), e);
+                    result.getLogMessage(), e);
         }
 
         return result;
     }
-
 
     private RemoteOperationResult downloadFile(OwnCloudClient client, File targetFile) throws
             Exception {
@@ -118,8 +116,8 @@ public class DownloadRemoteFileOperation extends RemoteOperation {
                 long totalToTransfer =
                         (contentLength != null
                                 && contentLength.length() > 0)
-                        ? Long.parseLong(contentLength)
-                        : 0;
+                                ? Long.parseLong(contentLength)
+                                : 0;
 
                 byte[] bytes = new byte[4096];
                 int readResult;
@@ -136,7 +134,7 @@ public class DownloadRemoteFileOperation extends RemoteOperation {
                         it = mDataTransferListeners.iterator();
                         while (it.hasNext()) {
                             it.next().onTransferProgress(readResult, transferred, totalToTransfer,
-                                targetFile.getName());
+                                    targetFile.getName());
                         }
                     }
                 }
@@ -144,8 +142,8 @@ public class DownloadRemoteFileOperation extends RemoteOperation {
                     savedFile = true;
                     final String modificationTime =
                             mGet.getResponseHeaders().get("Last-Modified") != null
-                            ? mGet.getResponseHeaders().get("Last-Modified")
-                            :  mGet.getResponseHeader("last-modified");
+                                    ? mGet.getResponseHeaders().get("Last-Modified")
+                                    : mGet.getResponseHeader("last-modified");
 
                     if (modificationTime != null) {
                         final Date d = WebdavUtils.parseResponseDate(modificationTime);
@@ -177,8 +175,12 @@ public class DownloadRemoteFileOperation extends RemoteOperation {
                     ? new RemoteOperationResult<>(RemoteOperationResult.ResultCode.OK)
                     : new RemoteOperationResult<>(mGet);
         } finally {
-            if (fos != null) fos.close();
-            if (bis != null) bis.close();
+            if (fos != null) {
+                fos.close();
+            }
+            if (bis != null) {
+                bis.close();
+            }
             if (!savedFile && targetFile.exists()) {
                 targetFile.delete();
             }

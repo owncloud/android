@@ -35,8 +35,8 @@ public class CreateRemoteChunkFolderOperation extends CreateRemoteFolderOperatio
     /**
      * Constructor
      *
-     * @param remotePath         Full path to the new directory to create in the remote server.
-     * @param createFullPath     'True' means that all the ancestor folders should be created.
+     * @param remotePath     Full path to the new directory to create in the remote server.
+     * @param createFullPath 'True' means that all the ancestor folders should be created.
      */
     public CreateRemoteChunkFolderOperation(String remotePath, boolean createFullPath) {
         super(remotePath, createFullPath);
