@@ -244,7 +244,7 @@ public class LogHistoryActivity extends ToolbarActivity {
             if (logFile.exists()) {
 
                 Uri mExposedLogFileUri = FileProvider.getUriForFile(this, this.
-                        getString(R.string.file_provider_authority), logFile);
+                        getString(R.string.dynamic_file_provider_authority), logFile);
 
                 uris.add(mExposedLogFileUri);
             }

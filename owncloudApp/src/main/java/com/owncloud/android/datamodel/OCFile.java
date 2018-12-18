@@ -303,9 +303,9 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
                 // Use the FileProvider to get a content URI
                 try {
                     mExposedFileUri = FileProvider.getUriForFile(
-                            context,
-                            context.getString(R.string.file_provider_authority),
-                            new File(mLocalPath)
+                        context,
+                        context.getString(R.string.dynamic_file_provider_authority),
+                        new File(mLocalPath)
                     );
                 } catch (IllegalArgumentException e) {
                     Log_OC.e(TAG, "File can't be exported");

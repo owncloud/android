@@ -1714,7 +1714,7 @@ public class FileDataStorageManager {
                 intent.setData(
                         FileProvider.getUriForFile(
                                 mContext.getApplicationContext(),
-                                mContext.getResources().getString(R.string.file_provider_authority),
+                                mContext.getResources().getString(R.string.dynamic_file_provider_authority),
                                 new File(path)
                         )
                 );

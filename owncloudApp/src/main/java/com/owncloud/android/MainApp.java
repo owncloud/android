@@ -212,11 +212,11 @@ public class MainApp extends Application {
     }
 
     public static String getAuthority() {
-        return getAppContext().getResources().getString(R.string.authority);
+        return getAppContext().getResources().getString(R.string.dynamic_authority);
     }
 
     public static String getAuthTokenType() {
-        return getAppContext().getResources().getString(R.string.authority);
+        return getAppContext().getResources().getString(R.string.dynamic_authority);
     }
 
     public static String getDBFile() {

@@ -102,7 +102,7 @@ public class UsersAndGroupsSearchProvider extends ContentProvider {
     public boolean onCreate() {
         try {
             sSuggestAuthority = getContext().getResources().
-                    getString(R.string.search_suggest_authority);
+                getString(R.string.dynamic_search_suggest_authority);
 
             // init share types
             sShareTypes.put(sSuggestAuthority + DATA_USER_SUFFIX, ShareType.USER);

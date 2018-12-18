@@ -489,7 +489,7 @@ public class FileContentProvider extends ContentProvider {
     public boolean onCreate() {
         mDbHelper = new DataBaseHelper(getContext());
 
-        String authority = getContext().getResources().getString(R.string.authority);
+        String authority = getContext().getResources().getString(R.string.dynamic_authority);
         mUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
         mUriMatcher.addURI(authority, null, ROOT_DIRECTORY);
         mUriMatcher.addURI(authority, "file/", SINGLE_FILE);

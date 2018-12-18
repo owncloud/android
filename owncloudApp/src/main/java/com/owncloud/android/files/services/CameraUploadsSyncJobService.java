@@ -87,7 +87,7 @@ public class CameraUploadsSyncJobService extends JobService {
             if (!cameraUploadsConfiguration.isEnabledForPictures() &&
                     !cameraUploadsConfiguration.isEnabledForVideos()) {
                 cancelPeriodicJob(jobParams[0].getJobId());
-
+                Log_OC.d(TAG, "upload disabled");
                 return jobParams[0];
             }
 

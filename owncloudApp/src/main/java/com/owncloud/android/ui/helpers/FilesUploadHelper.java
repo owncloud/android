@@ -176,8 +176,8 @@ public class FilesUploadHelper implements Parcelable {
         File photoFile = createImageFile();
         if (photoFile != null) {
             Uri photoUri = FileProvider.getUriForFile(activity.getApplicationContext(),
-                    activity.getResources().getString(R.string.file_provider_authority), photoFile);
-            pictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
+                    activity.getResources().getString(R.string.dynamic_file_provider_authority),photoFile);
+            pictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,photoUri);
         }
         if (pictureIntent.resolveActivity(activity.getPackageManager()) != null) {
             activity.startActivityForResult(pictureIntent, requestCode);

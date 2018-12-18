@@ -117,12 +117,22 @@ android {
     buildTypes {
 
         release {
+            resValue "string", "app_name_buildtype", "@string/app_name"
+            resValue "string", "dynamic_authority", "@string/authority"
+            resValue "string", "dynamic_search_suggest_authority", "@string/search_suggest_authority"
+            resValue "string", "dynamic_document_provider_authority",  "@string/document_provider_authority"
+            resValue "string", "dynamic_file_provider_authority",  "@string/file_provider_authority"
             if (System.env.OC_RELEASE_KEYSTORE) {
                 signingConfig signingConfigs.release
             }
         }
 
         debug {
+            resValue "string", "app_name_buildtype", "Debug ownCloud"
+            resValue "string", "dynamic_authority", getDebugValueFromStrings("authority")
+            resValue "string", "dynamic_search_suggest_authority", getDebugValueFromStrings("search_suggest_authority")
+            resValue "string", "dynamic_document_provider_authority", getDebugValueFromStrings("document_provider_authority")
+            resValue "string", "dynamic_file_provider_authority", getDebugValueFromStrings("file_provider_authority")
             applicationIdSuffix ".debug"
         }
     }
@@ -130,6 +140,18 @@ android {
     applicationVariants.all { variant ->
         def appName = System.env.OC_APP_NAME
         setOutputFileName(variant, appName, project)
+    }
+}
+
+def getDebugValueFromStrings(String value) {
+    try {
+        def stringsFile = file("./src/main/res/values/setup.xml")
+        return new XmlParser().parse(stringsFile).string.find {
+            it.@name.equals value
+        }.text() + ".debug"
+    } catch (e) {
+        println(e)
+        throw e
     }
 }
 

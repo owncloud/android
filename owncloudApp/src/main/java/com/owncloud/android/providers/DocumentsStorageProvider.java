@@ -140,7 +140,7 @@ public class DocumentsStorageProvider extends DocumentsProvider {
         Log_OC.e(TAG, parentDocumentId);
 
         final Uri browsedDirIdUri = DocumentsContract.buildChildDocumentsUri(
-                getContext().getString(R.string.document_provider_authority),
+                getContext().getString(R.string.dynamic_document_provider_authority),
                 parentDocumentId);
         cursor.setNotificationUri(contentResolver,
                 browsedDirIdUri);
