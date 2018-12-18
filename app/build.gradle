@@ -144,14 +144,14 @@ def setOutputFileName(variant, appName, callerProject) {
 
     def originalFile = variant.outputs[0].outputFile
     def originalName = originalFile.name
-    logger.info("$variant.name: originalName is $originalName")
+    println "originalName is $originalName"
 
     def newName = ""
 
     if (appName) {
         newName += appName
     } else {
-        newName += callerProject.archivesBaseName
+        newName += "owncloud"
     }
 
     def versionName = "$variant.mergedFlavor.versionName"
@@ -170,7 +170,7 @@ def setOutputFileName(variant, appName, callerProject) {
 
     newName += originalName.substring(callerProject.archivesBaseName.length())
 
-    logger.info("$variant.name: newName is $newName")
+    println "$variant.name: newName is $newName"
 
     variant.outputs.all {
         outputFileName = new File(".", newName)
