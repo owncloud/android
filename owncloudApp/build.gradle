@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
 
 def commitSHA1 = 'COMMIT_SHA1'
 def gitRemote = 'GIT_REMOTE'
@@ -44,10 +45,32 @@ dependencies {
     //Zooming Android ImageView.
     implementation 'com.github.chrisbanes:PhotoView:2.1.4'
 
+    // WebDAV network library
     implementation 'com.gitlab.ownclouders:dav4android:oc_support'
 
     // Convert Java Objects into JSON and back
     implementation 'com.google.code.gson:gson:2.8.5'
+
+    // Kotlin
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
+
+    // Architecture lifecycle components
+    implementation "android.arch.lifecycle:extensions:$archLifecycleVersion"
+    implementation "android.arch.lifecycle:viewmodel:$archLifecycleVersion"
+    kapt "android.arch.lifecycle:compiler:$archLifecycleVersion"
+
+    // Room
+    implementation "android.arch.persistence.room:runtime:$roomVersion"
+    kapt "android.arch.persistence.room:compiler:$roomVersion"
+
+    // Coroutines
+    api "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines"
+    api "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines"
+
+    // Testing
+    androidTestImplementation "android.arch.persistence.room:testing:$roomVersion"
+    testImplementation "junit:junit:$junit_version"
+    testImplementation "android.arch.core:core-testing:$archLifecycleVersion"
 }
 
 tasks.withType(Test) {
