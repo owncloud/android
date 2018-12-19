@@ -60,11 +60,11 @@ tasks.withType(Test) {
 }
 
 android {
-    compileSdkVersion 26
+    compileSdkVersion 28
 
     defaultConfig {
-        minSdkVersion 14
-        targetSdkVersion 26
+        minSdkVersion 15
+        targetSdkVersion 28
 
         versionCode = 20900300
         versionName = "2.9.3"
