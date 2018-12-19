@@ -170,7 +170,6 @@ public class UploadFilesActivity extends FileActivity implements
         Intent callingIntent = getIntent();
         Bundle data = callingIntent.getExtras();
         requestCode = (int) data.get(REQUEST_CODE_KEY);
-
         Log_OC.d(TAG, "onCreate() end");
     }
 
@@ -206,6 +205,8 @@ public class UploadFilesActivity extends FileActivity implements
         mItemSelectAll = (MenuItem) menu.findItem(R.id.action_select_all);
         mItemSelectInverse = (MenuItem) menu.findItem(R.id.action_select_inverse);
         recoverSortMenuState(menu);
+        setSelectAllMenuItemState();
+        setSelectInverseMenuItemState();
         return true;
     }
 
@@ -320,12 +321,24 @@ public class UploadFilesActivity extends FileActivity implements
             finish();
             return;
         }
+        int noOfFilesSelected = mFileListFragment.restoreNoOfFilesSelected();
         popDirname();
         mFileListFragment.browseUp();
         mCurrentDir = mFileListFragment.getCurrentFolder();
         if (mCurrentDir.getParentFile() == null) {
             ActionBar actionBar = getSupportActionBar();
             actionBar.setDisplayHomeAsUpEnabled(false);
+        }
+        int noOfFiles = mFileListFragment.getAdapter().getNoOfFilesInDir();
+        if(noOfFilesSelected == noOfFiles){
+            mItemSelectAll.setVisible(false);
+        } else{
+            mItemSelectAll.setVisible(true);
+        }
+        if(noOfFiles > 0){
+            mItemSelectInverse.setVisible(true);
+        } else{
+            mItemSelectInverse.setVisible(false);
         }
     }
 
@@ -431,7 +444,6 @@ public class UploadFilesActivity extends FileActivity implements
         if (mFileListFragment.getAdapter().getNoOfFilesInDir()
                 == mFileListFragment.getCheckedFilePaths().length) {
             mItemSelectAll.setVisible(false);
-
         } else {
             mItemSelectAll.setVisible(true);
         }
@@ -444,12 +456,10 @@ public class UploadFilesActivity extends FileActivity implements
      * if the directory contains other directories but no files).
      */
     private void setSelectInverseMenuItemState(){
-        if (mFileListFragment.getAdapter().getNoOfFilesInDir()
-                == mFileListFragment.getCheckedFilePaths().length) {
-            mItemSelectInverse.setVisible(false);
-
-        } else {
+        if (mFileListFragment.getAdapter().getNoOfFilesInDir() > 0){
             mItemSelectInverse.setVisible(true);
+        } else {
+            mItemSelectInverse.setVisible(false);
         }
     }
 

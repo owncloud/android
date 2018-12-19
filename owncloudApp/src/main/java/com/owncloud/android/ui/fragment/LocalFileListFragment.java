@@ -49,6 +49,7 @@ public class LocalFileListFragment extends ExtendedListFragment {
     private static final String TAG = LocalFileListFragment.class.getName();
 
     private final String OUT_STATE_CHECKED_FILES = "out_state_checked_files";
+    private static final String OUT_STATE_NO_OF_FILES_SELECTED = "NO_OF_FILES_SELECTED";
 
     /**
      * Reference to the Activity which this fragment is attached to. For callbacks
@@ -65,6 +66,7 @@ public class LocalFileListFragment extends ExtendedListFragment {
      */
     private LocalFileListAdapter mAdapter = null;
 
+    private ArrayList<Integer> mNoOfFilesSelected;
 
     /**
      * Public factory method to create new {@link LocalFileListFragment} instances.
@@ -136,6 +138,7 @@ public class LocalFileListFragment extends ExtendedListFragment {
             File file = (File) mAdapter.getItem(i);
             if(!file.isDirectory()){
                 ((ImageView) getView().findViewById(R.id.custom_checkbox)).setImageResource(R.drawable.ic_checkbox_marked);
+                mCurrentListView.setItemChecked(i,true);
                 mAdapter.checkFile(file);
             }
         }
@@ -149,13 +152,27 @@ public class LocalFileListFragment extends ExtendedListFragment {
                 ImageView checkBox = (ImageView) getView().findViewById(R.id.custom_checkbox);
                 if(mCurrentListView.isItemChecked(i)){
                     checkBox.setImageResource(R.drawable.ic_checkbox_blank_outline);
+                    mCurrentListView.setItemChecked(i,false);
                     mAdapter.uncheckFile(file);
                 } else{
                     checkBox.setImageResource(R.drawable.ic_checkbox_marked);
+                    mCurrentListView.setItemChecked(i,true);
                     mAdapter.checkFile(file);
                 }
             }
         }
+        mAdapter.notifyDataSetChanged();
+    }
+
+    public void storeNoOfFilesSelected(){
+        mNoOfFilesSelected.add(getCheckedFilePaths().length - 1);
+    }
+
+    public int restoreNoOfFilesSelected(){
+        if(mNoOfFilesSelected.size() > 0){
+            return mNoOfFilesSelected.remove(mNoOfFilesSelected.size() - 1);
+        }
+        return 0;
     }
 
     /**
@@ -171,6 +188,9 @@ public class LocalFileListFragment extends ExtendedListFragment {
         setListAdapter(mAdapter);
         if (savedInstanceState != null) {
             mAdapter.setCheckedFiles(savedInstanceState.getStringArrayList(OUT_STATE_CHECKED_FILES));
+            mNoOfFilesSelected = savedInstanceState.getIntegerArrayList(OUT_STATE_NO_OF_FILES_SELECTED);
+        } else{
+            mNoOfFilesSelected = new ArrayList<Integer>();
         }
         Log_OC.i(TAG, "onActivityCreated() stop");
     }
@@ -197,6 +217,7 @@ public class LocalFileListFragment extends ExtendedListFragment {
         if (file != null) {
             /// Click on a directory
             if (file.isDirectory()) {
+                storeNoOfFilesSelected();
                 // just local updates
                 listFolder(file);
                 // notify the click to container Activity
@@ -258,7 +279,6 @@ public class LocalFileListFragment extends ExtendedListFragment {
     public void listFolder() {
         listFolder(null);
     }
-
 
     /**
      * Lists the given directory on the view. When the input parameter is null,
@@ -322,6 +342,7 @@ public class LocalFileListFragment extends ExtendedListFragment {
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         savedInstanceState.putStringArrayList(OUT_STATE_CHECKED_FILES, mAdapter.getCheckedFiles());
+        savedInstanceState.putIntegerArrayList(OUT_STATE_NO_OF_FILES_SELECTED,mNoOfFilesSelected);
     }
 
     /**
