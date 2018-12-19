@@ -8,6 +8,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Locale;
 
 public class Log_OC {
     private static final String SIMPLE_DATE_FORMAT = "yyyy/MM/dd HH:mm:ss";
@@ -114,7 +115,6 @@ public class Log_OC {
             mFolder = null;
             mBuf = null;
             isMaxFileSizeReached = false;
-            isEnabled = false;
 
         } catch (IOException e) {
             // Because we are stopping logging, we only log to Android console.
@@ -134,8 +134,8 @@ public class Log_OC {
         File folderLogs = new File(mFolder + File.separator);
         if(folderLogs.isDirectory()){
             String[] myFiles = folderLogs.list();
-            for (int i=0; i<myFiles.length; i++) {
-                File myFile = new File(folderLogs, myFiles[i]);
+            for (String myFile1 : myFiles) {
+                File myFile = new File(folderLogs, myFile1);
                 myFile.delete();
             }
         }
@@ -174,15 +174,12 @@ public class Log_OC {
                 isMaxFileSizeReached = false;
             }
 
-	        String timeStamp = new SimpleDateFormat(SIMPLE_DATE_FORMAT).format(Calendar.getInstance().getTime());
+	        String timeStamp = new SimpleDateFormat(SIMPLE_DATE_FORMAT, Locale.ENGLISH).format(Calendar.getInstance().getTime());
 
 	        try {
 	            mBuf = new BufferedWriter(new FileWriter(mLogFile, true));
 	            mBuf.newLine();
-	            mBuf.write(timeStamp);
-	            mBuf.newLine();
-	            mBuf.write(text);
-	            mBuf.newLine();
+	            mBuf.write(timeStamp+" "+text);
 	        } catch (IOException e) {
 	            e.printStackTrace();
 	        } finally {
