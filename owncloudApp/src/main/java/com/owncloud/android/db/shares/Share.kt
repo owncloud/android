@@ -9,7 +9,7 @@ data class Share(
         @PrimaryKey val id: Long,
         val fileSource: Long,
         val itemSource: Long,
-        val type: ShareType,
+        val type: Int,
         val shareWith: String,
         val path: String,
         val permissions: Int,
