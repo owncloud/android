@@ -15,6 +15,6 @@ interface ShareDao: SharesLocalDataSource {
             "AND accountOwner = :accountName AND type IN(:shareTypes)"
     )
     override fun sharesForAFile(
-        filePath: String, accountName: String, shareTypes: List<ShareType>
+        filePath: String, accountName: String, shareTypes: List<Int>
     ): LiveData<List<Share>>
 }
