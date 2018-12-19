@@ -142,10 +142,10 @@
         <service
             android:name=".files.services.CameraUploadsSyncJobService"
             android:exported="true"
-            android:permission="android.permission.BIND_JOB_SERVICE"></service>
+            android:permission="android.permission.BIND_JOB_SERVICE" />
         <service
             android:name=".files.services.AvailableOfflineSyncJobService"
-            android:permission="android.permission.BIND_JOB_SERVICE"></service>
+            android:permission="android.permission.BIND_JOB_SERVICE" />
 
         <provider
             android:name=".providers.FileContentProvider"
@@ -270,6 +270,7 @@
             android:theme="@style/Theme.ownCloud.Fullscreen" />
         <activity android:name=".ui.activity.PatternLockActivity" />
         <activity android:name=".ui.activity.FingerprintActivity" />
+        <activity android:name=".ui.activity.SharedByLinkActivity" />
     </application>
 
 </manifest>
