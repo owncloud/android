@@ -440,7 +440,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
         }
     }
 
-    public boolean isCheckedItemsZero(){
+    public boolean isSingleItemChecked(){
         return mFileListAdapter.getCheckedItems(getListView()).size() == 1;
     }
 
