@@ -25,7 +25,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.os.Build;
 import android.os.PersistableBundle;
-import android.support.annotation.RequiresApi;
+import androidx.annotation.RequiresApi;
 
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.utils.Extras;

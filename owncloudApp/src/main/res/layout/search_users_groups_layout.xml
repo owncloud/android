@@ -25,7 +25,7 @@
     android:minWidth="@dimen/share_user_groups_width"
     android:orientation="vertical">
 
-    <android.support.v7.widget.SearchView
+    <androidx.appcompat.widget.SearchView
         android:id="@+id/searchView"
         style="@style/ownCloud.SearchView"
         android:layout_width="match_parent"

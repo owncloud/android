@@ -12,7 +12,7 @@ EXCEPT: ExpandableListView must be used for @+id/swipe_refresh_files_emptyView
     android:filterTouchesWhenObscured="true"
     >
 
-    <android.support.v4.widget.SwipeRefreshLayout
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipe_refresh_files"
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
@@ -22,9 +22,9 @@ EXCEPT: ExpandableListView must be used for @+id/swipe_refresh_files_emptyView
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
         
-    </android.support.v4.widget.SwipeRefreshLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-    <android.support.v4.widget.SwipeRefreshLayout
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipe_refresh_files_emptyView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -44,5 +44,5 @@ EXCEPT: ExpandableListView must be used for @+id/swipe_refresh_files_emptyView
 			        android:visibility="visible" />
 
         </ScrollView>
-    </android.support.v4.widget.SwipeRefreshLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </FrameLayout>

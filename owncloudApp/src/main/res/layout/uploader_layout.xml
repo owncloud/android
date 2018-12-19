@@ -57,7 +57,7 @@
         android:orientation="horizontal"
         android:padding="@dimen/standard_padding">
 
-        <android.support.v7.widget.AppCompatButton
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/uploader_cancel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -66,7 +66,7 @@
             android:text="@android:string/cancel"
             android:theme="@style/Button.Secondary" />
 
-        <android.support.v7.widget.AppCompatButton
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/uploader_choose_folder"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -30,8 +30,8 @@ import android.graphics.Matrix;
 import android.graphics.BitmapFactory.Options;
 import android.media.ExifInterface;
 import android.net.Uri;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
+import androidx.core.graphics.drawable.RoundedBitmapDrawable;
+import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.webkit.MimeTypeMap;
 
 import java.io.File;

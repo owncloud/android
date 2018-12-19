@@ -27,7 +27,7 @@ package com.owncloud.android.ui.dialog;
 
 import android.app.Dialog;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.owncloud.android.R;
 import com.owncloud.android.lib.common.utils.Log_OC;

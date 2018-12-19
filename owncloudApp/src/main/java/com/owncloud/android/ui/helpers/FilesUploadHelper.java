@@ -29,7 +29,7 @@ import android.os.Environment;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.provider.MediaStore;
-import android.support.v4.content.FileProvider;
+import androidx.core.content.FileProvider;
 
 import com.owncloud.android.R;
 import com.owncloud.android.lib.common.utils.Log_OC;

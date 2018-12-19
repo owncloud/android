@@ -19,7 +19,6 @@
 
 package com.owncloud.android.ui.adapter;
 
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +28,8 @@ import com.owncloud.android.R;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * Built a logs container which will be displayed as a list

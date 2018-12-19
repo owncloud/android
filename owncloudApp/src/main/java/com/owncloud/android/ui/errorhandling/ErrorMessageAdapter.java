@@ -22,10 +22,9 @@
 package com.owncloud.android.ui.errorhandling;
 
 import android.content.res.Resources;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 import com.owncloud.android.R;
-import com.owncloud.android.lib.common.http.HttpConstants;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.resources.shares.ShareParserResult;

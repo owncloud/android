@@ -22,7 +22,7 @@ import android.accounts.Account;
 import android.content.ContentResolver;
 import android.net.Uri;
 import android.os.Parcelable;
-import android.support.v4.app.FragmentManager;
+import androidx.fragment.app.FragmentManager;
 
 import com.owncloud.android.R;
 import com.owncloud.android.files.services.FileUploader;
