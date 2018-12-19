@@ -479,9 +479,9 @@ public class UploadFileOperation extends SyncOperation {
     private boolean delayForWifi() {
         switch(getCreatedBy()){
             case CREATED_AS_CAMERA_UPLOAD_PICTURE:
-                return isCameraUploadsPicture() &&  PreferenceManager.cameraPictureUploadViaWiFiOnly(mContext);
+                return PreferenceManager.cameraPictureUploadViaWiFiOnly(mContext);
             case CREATED_AS_CAMERA_UPLOAD_VIDEO:
-                return isCameraUploadsVideo() && PreferenceManager.cameraVideoUploadViaWiFiOnly(mContext);
+                return PreferenceManager.cameraVideoUploadViaWiFiOnly(mContext);
             case CREATED_BY_USER:
                 return !ConnectivityUtils.isAppConnectedViaWiFi(mContext);
         }
