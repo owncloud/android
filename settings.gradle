@@ -1,2 +1,2 @@
-include ':lib'
+include ':owncloudComLibrary'
 include ':sample_client'
