@@ -1,4 +1,4 @@
-/**
+/*
  * ownCloud Android client application
  *
  * @author David González Verdugo
@@ -27,6 +27,7 @@ import android.widget.TextView;
 
 import com.owncloud.android.R;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 /**

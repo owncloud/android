@@ -1,24 +1,23 @@
-/**
- *   ownCloud Android client application
+/*
+ * ownCloud Android client application
  *
- *   @author Bartek Przybylski
- *   @author David A. Velasco
- *   @author David González Verdugo
- *   Copyright (C) 2011  Bartek Przybylski
- *   Copyright (C) 2018 ownCloud GmbH.
- *
- *   This program is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License version 2,
- *   as published by the Free Software Foundation.
- *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
- *
- *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * @author Bartek Przybylski
+ * @author David A. Velasco
+ * @author David González Verdugo
+ * Copyright (C) 2011  Bartek Przybylski
+ * Copyright (C) 2018 ownCloud GmbH.
+ * <p>
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
+ * <p>
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package com.owncloud.android.utils;
@@ -55,17 +54,16 @@ import java.util.Map;
  * A helper class for some string operations.
  */
 public class DisplayUtils {
-    private static final String TAG = DisplayUtils.class.getSimpleName();
-    
+
     private static final String OWNCLOUD_APP_NAME = "ownCloud";
-    
-    private static final String[] sizeSuffixes = { "B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB" };
-    private static final int[] sizeScales = { 0, 0, 1, 1, 1, 2, 2, 2, 2 };
+
+    private static final String[] sizeSuffixes = {"B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"};
+    private static final int[] sizeScales = {0, 0, 1, 1, 1, 2, 2, 2, 2};
 
     private static Map<String, String> mimeType2HumanReadable;
 
     static {
-        mimeType2HumanReadable = new HashMap<String, String>();
+        mimeType2HumanReadable = new HashMap<>();
         // images
         mimeType2HumanReadable.put("image/jpeg", "JPEG image");
         mimeType2HumanReadable.put("image/jpg", "JPEG image");
@@ -82,8 +80,8 @@ public class DisplayUtils {
     /**
      * Converts the file size in bytes to human readable output.
      * <ul>
-     *     <li>appends a size suffix, e.g. B, KB, MB etc.</li>
-     *     <li>rounds the size based on the suffix to 0,1 or 2 decimals</li>
+     * <li>appends a size suffix, e.g. B, KB, MB etc.</li>
+     * <li>rounds the size based on the suffix to 0,1 or 2 decimals</li>
      * </ul>
      *
      * @param bytes Input file size
@@ -117,7 +115,7 @@ public class DisplayUtils {
     /**
      * Converts MIME types like "image/jpg" to more end user friendly output
      * like "JPG image".
-     * 
+     *
      * @param mimetype MIME type to convert
      * @return A human friendly version of the MIME type
      */
@@ -132,6 +130,7 @@ public class DisplayUtils {
 
     /**
      * Converts Unix time to human readable format
+     *
      * @param milliseconds that have passed since 01/01/1970
      * @return The human readable time for the users locale
      */
@@ -140,7 +139,7 @@ public class DisplayUtils {
         DateFormat df = DateFormat.getDateTimeInstance();
         return df.format(date);
     }
-    
+
     public static int getSeasonalIconId() {
         if (Calendar.getInstance().get(Calendar.DAY_OF_YEAR) >= 354 &&
                 MainApp.getAppContext().getString(R.string.app_name).equals(OWNCLOUD_APP_NAME)) {
@@ -149,10 +148,11 @@ public class DisplayUtils {
             return R.mipmap.icon;
         }
     }
-    
+
     /**
      * Converts an internationalized domain name (IDN) in an URL to and from ASCII/Unicode.
-     * @param url the URL where the domain name should be converted
+     *
+     * @param url     the URL where the domain name should be converted
      * @param toASCII if true converts from Unicode to ASCII, if false converts from ASCII to Unicode
      * @return the URL containing the converted domain name
      */
@@ -160,38 +160,34 @@ public class DisplayUtils {
     public static String convertIdn(String url, boolean toASCII) {
 
         String urlNoDots = url;
-        String dots="";
+        String dots = "";
         while (urlNoDots.startsWith(".")) {
             urlNoDots = url.substring(1);
             dots = dots + ".";
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
-            // Find host name after '//' or '@'
-            int hostStart = 0;
-            if  (urlNoDots.indexOf("//") != -1) {
-                hostStart = url.indexOf("//") + "//".length();
-            } else if (url.indexOf("@") != -1) {
-                hostStart = url.indexOf("@") + "@".length();
-            }
-
-            int hostEnd = url.substring(hostStart).indexOf("/");
-            // Handle URL which doesn't have a path (path is implicitly '/')
-            hostEnd = (hostEnd == -1 ? urlNoDots.length() : hostStart + hostEnd);
-
-            String host = urlNoDots.substring(hostStart, hostEnd);
-            host = (toASCII ? IDN.toASCII(host) : IDN.toUnicode(host));
-
-            return dots + urlNoDots.substring(0, hostStart) + host + urlNoDots.substring(hostEnd);
-        } else {
-            return dots + url;
+        // Find host name after '//' or '@'
+        int hostStart = 0;
+        if (urlNoDots.contains("//")) {
+            hostStart = url.indexOf("//") + "//".length();
+        } else if (url.contains("@")) {
+            hostStart = url.indexOf("@") + "@".length();
         }
+
+        int hostEnd = url.substring(hostStart).indexOf("/");
+        // Handle URL which doesn't have a path (path is implicitly '/')
+        hostEnd = (hostEnd == -1 ? urlNoDots.length() : hostStart + hostEnd);
+
+        String host = urlNoDots.substring(hostStart, hostEnd);
+        host = (toASCII ? IDN.toASCII(host) : IDN.toUnicode(host));
+
+        return dots + urlNoDots.substring(0, hostStart) + host + urlNoDots.substring(hostEnd);
     }
 
     /**
      * calculates the relative time string based on the given modificaion timestamp.
      *
-     * @param context the app's context
+     * @param context               the app's context
      * @param modificationTimestamp the UNIX timestamp of the file modification time.
      * @return a relative time string
      */
@@ -201,16 +197,16 @@ public class DisplayUtils {
     }
 
     @SuppressWarnings("deprecation")
-    public static CharSequence getRelativeDateTimeString (
+    public static CharSequence getRelativeDateTimeString(
             Context c, long time, long minResolution, long transitionResolution, int flags
-            ){
-        
-        CharSequence dateString = "";
-        
+    ) {
+
+        CharSequence dateString;
+
         // in Future
-        if (time > System.currentTimeMillis()){
+        if (time > System.currentTimeMillis()) {
             return DisplayUtils.unixTimeToHumanReadable(time);
-        } 
+        }
         // < 60 seconds -> seconds ago
         else if ((System.currentTimeMillis() - time) < 60 * 1000) {
             return c.getString(R.string.file_list_seconds_ago);
@@ -232,13 +228,14 @@ public class DisplayUtils {
 
     /**
      * Update the passed path removing the last "/" if it is not the root folder
+     *
      * @param path
      */
     public static String getPathWithoutLastSlash(String path) {
 
         // Remove last slash from path
-        if (path.length() > 1 && path.charAt(path.length()-1) == OCFile.PATH_SEPARATOR.charAt(0)) {
-            path = path.substring(0, path.length()-1);
+        if (path.length() > 1 && path.charAt(path.length() - 1) == OCFile.PATH_SEPARATOR.charAt(0)) {
+            path = path.substring(0, path.length() - 1);
         }
         return path;
     }
@@ -247,18 +244,14 @@ public class DisplayUtils {
     /**
      * Gets the screen size in pixels in a backwards compatible way
      *
-     * @param caller        Activity calling; needed to get access to the {@link android.view.WindowManager}
-     * @return              Size in pixels of the screen, or default {@link Point} if caller is null
+     * @param caller Activity calling; needed to get access to the {@link android.view.WindowManager}
+     * @return Size in pixels of the screen, or default {@link Point} if caller is null
      */
     public static Point getScreenSize(Activity caller) {
         Point size = new Point();
         if (caller != null) {
             Display display = caller.getWindowManager().getDefaultDisplay();
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB_MR2) {
-                display.getSize(size);
-            } else {
-                size.set(display.getWidth(), display.getHeight());
-            }
+            display.getSize(size);
         }
         return size;
     }
@@ -285,7 +278,7 @@ public class DisplayUtils {
         if (seekBar != null && Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             colorPreLollipopHorizontalProgressBar(seekBar);
 
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                 int color = seekBar.getResources().getColor(R.color.color_accent);
                 seekBar.getThumb().setColorFilter(color, PorterDuff.Mode.SRC_IN);
                 seekBar.getThumb().setColorFilter(color, PorterDuff.Mode.SRC_IN);
@@ -296,7 +289,7 @@ public class DisplayUtils {
     /**
      * set the owncloud standard colors for the snackbar.
      *
-     * @param context the context relevant for setting the color according to the context's theme
+     * @param context  the context relevant for setting the color according to the context's theme
      * @param snackbar the snackbar to be colored
      */
     public static void colorSnackbar(Context context, Snackbar snackbar) {
@@ -306,36 +299,35 @@ public class DisplayUtils {
 
     /**
      * Show the avatar corresponding to the received account in an {@ImageView}.
-     *
+     * <p>
      * The avatar is shown if available locally in {@link ThumbnailsCacheManager}. The avatar is not
      * fetched from the server if not available.
-     *
+     * <p>
      * If there is no avatar stored, a colored icon is generated with the first letter of the account username.
-     *
+     * <p>
      * If this is not possible either, a predefined user icon is shown instead.
      *
-     * @param account           OC account which avatar will be shown.
-     * @param displayView       The image view to set the avatar on.
-     * @param displayRadius     The radius of the circle where the avatar will be clipped into.
-     * @param fetchFromServer   When 'true', if there is no avatar stored in the cache, it's fetched from
-     *                          the server. When 'false', server is not accessed, the fallback avatar is
-     *                          generated instead. USE WITH CARE, probably to be removed in the future.
-     *
+     * @param account         OC account which avatar will be shown.
+     * @param displayView     The image view to set the avatar on.
+     * @param displayRadius   The radius of the circle where the avatar will be clipped into.
+     * @param fetchFromServer When 'true', if there is no avatar stored in the cache, it's fetched from
+     *                        the server. When 'false', server is not accessed, the fallback avatar is
+     *                        generated instead. USE WITH CARE, probably to be removed in the future.
      */
     public static void showAccountAvatar(
-        Account account,
-        ImageView displayView,
-        float displayRadius,
-        boolean fetchFromServer
+            Account account,
+            ImageView displayView,
+            float displayRadius,
+            boolean fetchFromServer
     ) {
         if (account != null) {
             // not just accessibility support, used to know what account is bound to each imageView
             displayView.setContentDescription(account.name);
 
             final ThumbnailsCacheManager.GetAvatarTask task =
-                new ThumbnailsCacheManager.GetAvatarTask(
-                    displayView, account, displayRadius, fetchFromServer
-                );
+                    new ThumbnailsCacheManager.GetAvatarTask(
+                            displayView, account, displayRadius, fetchFromServer
+                    );
             task.execute();
         }
     }
