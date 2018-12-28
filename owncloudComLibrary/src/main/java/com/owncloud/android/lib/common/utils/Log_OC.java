@@ -136,7 +136,7 @@ public class Log_OC {
             String[] myFiles = folderLogs.list();
             for (String myFile1 : myFiles) {
                 File myFile = new File(folderLogs, myFile1);
-                myFile.delete();
+                Log_OC.d("delete file", myFile.getAbsoluteFile() + " " + myFile.delete());
             }
         }
     }
