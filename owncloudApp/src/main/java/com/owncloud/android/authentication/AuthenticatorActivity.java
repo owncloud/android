@@ -27,6 +27,7 @@ package com.owncloud.android.authentication;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.ActivityNotFoundException;
@@ -915,8 +916,13 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
     }
 
 
+    @SuppressLint("SetTextI18n")
     private void checkOcServer() {
         String uri = mHostUrlInput.getText().toString().trim();
+        if (!uri.startsWith("http")) {
+            mHostUrlInput.setText("https://" + uri);
+            uri = mHostUrlInput.getText().toString();
+        }
         mServerIsValid = false;
         mServerIsChecked = false;
         mLoginButton.setVisibility(View.GONE);
