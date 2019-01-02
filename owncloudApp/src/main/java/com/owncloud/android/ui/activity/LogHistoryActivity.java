@@ -70,10 +70,10 @@ public class LogHistoryActivity extends ToolbarActivity {
         setContentView(R.layout.logs);
         setupToolbar();
 
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         mLogsRecycler = findViewById(R.id.log_recycler);
         mLogsRecycler.setHasFixedSize(true);
-        mLogsRecycler.setLayoutManager(mLayoutManager);
+        mLogsRecycler.setLayoutManager(layoutManager);
 
         setTitle(getText(R.string.actionbar_logger));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
