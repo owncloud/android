@@ -71,7 +71,7 @@ public class ShareToRemoteOperationResultParser {
         }
 
         RemoteOperationResult<ShareParserResult> result;
-        final ArrayList<OCShare> resultData = new ArrayList<>();
+        final ArrayList<RemoteShare> resultData = new ArrayList<>();
 
         try {
             // Parse xml response and obtain the list of shares
@@ -80,13 +80,13 @@ public class ShareToRemoteOperationResultParser {
                 Log_OC.w(TAG, "No ShareXmlParser provided, creating new instance ");
                 mShareXmlParser = new ShareXMLParser();
             }
-            List<OCShare> shares = mShareXmlParser.parseXMLResponse(is);
+            List<RemoteShare> shares = mShareXmlParser.parseXMLResponse(is);
 
             if (mShareXmlParser.isSuccess()) {
                 if ((shares != null && shares.size() > 0) || !mOneOrMoreSharesRequired) {
                     result = new RemoteOperationResult<>(RemoteOperationResult.ResultCode.OK);
                     if (shares != null) {
-                        for (OCShare share : shares) {
+                        for (RemoteShare share : shares) {
                             resultData.add(share);
                             // build the share link if not in the response
                             // (needed for OC servers < 9.0.0, see ShareXMLParser.java#line256)

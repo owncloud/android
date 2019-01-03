@@ -99,7 +99,7 @@ public class UpdateRemoteShareOperation extends RemoteOperation<ShareParserResul
         mPassword = null;               // no update
         mExpirationDateInMillis = 0;    // no update
         mPublicUpload = null;
-        mPermissions = OCShare.DEFAULT_PERMISSION;
+        mPermissions = RemoteShare.DEFAULT_PERMISSION;
     }
 
     /**

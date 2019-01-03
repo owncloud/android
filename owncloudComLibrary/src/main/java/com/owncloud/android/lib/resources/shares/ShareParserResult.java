@@ -28,15 +28,15 @@ package com.owncloud.android.lib.resources.shares;
 import java.util.ArrayList;
 
 public class ShareParserResult {
-    private ArrayList<OCShare> shares;
+    private ArrayList<RemoteShare> shares;
     private String parserMessage;
 
-    public ShareParserResult(ArrayList<OCShare> shares, String parserMessage) {
+    public ShareParserResult(ArrayList<RemoteShare> shares, String parserMessage) {
         this.shares = shares;
         this.parserMessage = parserMessage;
     }
 
-    public ArrayList<OCShare> getShares() {
+    public ArrayList<RemoteShare> getShares() {
         return shares;
     }
 

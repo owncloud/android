@@ -214,7 +214,7 @@ public class CreateRemoteShareOperation extends RemoteOperation {
             if (mPassword != null && mPassword.length() > 0) {
                 formBodyBuilder.add(PARAM_PASSWORD, mPassword);
             }
-            if (OCShare.DEFAULT_PERMISSION != mPermissions) {
+            if (RemoteShare.DEFAULT_PERMISSION != mPermissions) {
                 formBodyBuilder.add(PARAM_PERMISSIONS, Integer.toString(mPermissions));
             }
 
@@ -245,7 +245,7 @@ public class CreateRemoteShareOperation extends RemoteOperation {
 
                     // TODO Use executeHttpMethod
                     // retrieve more info - POST only returns the index of the new share
-                    OCShare emptyShare = result.getData().getShares().get(0);
+                    RemoteShare emptyShare = result.getData().getShares().get(0);
                     GetRemoteShareOperation getInfo = new GetRemoteShareOperation(
                             emptyShare.getRemoteId()
                     );
