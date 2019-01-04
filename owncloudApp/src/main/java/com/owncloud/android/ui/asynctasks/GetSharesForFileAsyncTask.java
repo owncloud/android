@@ -54,7 +54,7 @@ public class GetSharesForFileAsyncTask extends AsyncTask<Object, Void, Pair<Remo
     protected Pair<RemoteOperation, RemoteOperationResult> doInBackground(Object... params) {
 
         GetSharesForFileOperation operation = null;
-        RemoteOperationResult result = null;
+        RemoteOperationResult result;
 
         if (params != null && params.length == 3) {
             OCFile file = (OCFile) params[0];

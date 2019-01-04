@@ -39,7 +39,7 @@ import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
-import com.owncloud.android.lib.resources.shares.OCShare;
+import com.owncloud.android.lib.resources.shares.RemoteShare;
 import com.owncloud.android.lib.resources.shares.ShareParserResult;
 import com.owncloud.android.lib.resources.shares.ShareType;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
@@ -62,8 +62,7 @@ import com.owncloud.android.utils.PreferenceUtils;
  * Activity for sharing files
  */
 
-public class ShareActivity extends FileActivity
-        implements ShareFragmentListener {
+public class ShareActivity extends FileActivity implements ShareFragmentListener {
 
     private static final String TAG = ShareActivity.class.getSimpleName();
 
@@ -167,7 +166,7 @@ public class ShareActivity extends FileActivity
         boolean isFederated = ShareType.FEDERATED.equals(shareType);
 
         if (getFile().isSharedWithMe()) {
-            return OCShare.READ_PERMISSION_FLAG;    // minimum permissions
+            return RemoteShare.READ_PERMISSION_FLAG;    // minimum permissions
 
         } else if (isFederated) {
             OwnCloudVersion serverVersion =
@@ -175,21 +174,21 @@ public class ShareActivity extends FileActivity
             if (serverVersion != null && serverVersion.isNotReshareableFederatedSupported()) {
                 return (
                         getFile().isFolder() ?
-                                OCShare.FEDERATED_PERMISSIONS_FOR_FOLDER_AFTER_OC9 :
-                                OCShare.FEDERATED_PERMISSIONS_FOR_FILE_AFTER_OC9
+                                RemoteShare.FEDERATED_PERMISSIONS_FOR_FOLDER_AFTER_OC9 :
+                                RemoteShare.FEDERATED_PERMISSIONS_FOR_FILE_AFTER_OC9
                 );
             } else {
                 return (
                         getFile().isFolder() ?
-                                OCShare.FEDERATED_PERMISSIONS_FOR_FOLDER_UP_TO_OC9 :
-                                OCShare.FEDERATED_PERMISSIONS_FOR_FILE_UP_TO_OC9
+                                RemoteShare.FEDERATED_PERMISSIONS_FOR_FOLDER_UP_TO_OC9 :
+                                RemoteShare.FEDERATED_PERMISSIONS_FOR_FILE_UP_TO_OC9
                 );
             }
         } else {
             return (
                     getFile().isFolder() ?
-                            OCShare.MAXIMUM_PERMISSIONS_FOR_FOLDER :
-                            OCShare.MAXIMUM_PERMISSIONS_FOR_FILE
+                            RemoteShare.MAXIMUM_PERMISSIONS_FOR_FOLDER :
+                            RemoteShare.MAXIMUM_PERMISSIONS_FOR_FILE
             );
         }
     }
@@ -204,7 +203,7 @@ public class ShareActivity extends FileActivity
     }
 
     @Override
-    public void showEditPrivateShare(OCShare share) {
+    public void showEditPrivateShare(RemoteShare share) {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         Fragment prev = getSupportFragmentManager().findFragmentByTag(TAG_EDIT_SHARE_FRAGMENT);
         if (prev != null) {
@@ -220,7 +219,7 @@ public class ShareActivity extends FileActivity
 
     @Override
     // Call to Remove share operation
-    public void removeShare(OCShare share) {
+    public void removeShare(RemoteShare share) {
         getFileOperationsHelper().removeShare(share);
     }
 
@@ -259,7 +258,7 @@ public class ShareActivity extends FileActivity
     }
 
     @Override
-    public void showEditPublicShare(OCShare share) {
+    public void showEditPublicShare(RemoteShare share) {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         Fragment prev = getSupportFragmentManager().findFragmentByTag(TAG_PUBLIC_SHARE_DIALOG_FRAGMENT);
         if (prev != null) {
@@ -274,7 +273,7 @@ public class ShareActivity extends FileActivity
     }
 
     @Override
-    public void copyOrSendPublicLink(OCShare share) {
+    public void copyOrSendPublicLink(RemoteShare share) {
         getFileOperationsHelper().copyOrSendPublicLink(share);
     }
 

@@ -1,5 +1,5 @@
 /* ownCloud Android Library is available under MIT license
- *   Copyright (C) 2018 ownCloud GmbH.
+ *   Copyright (C) 2019 ownCloud GmbH.
  *   
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -22,7 +22,7 @@
  *
  */
 
-package com.owncloud.android.db.shares
+package com.owncloud.android.shares.db
 
 /**
  * Enum for Share Type, with values:
