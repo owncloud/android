@@ -27,7 +27,7 @@ import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.resources.files.FileUtils;
 import com.owncloud.android.lib.resources.shares.CreateRemoteShareOperation;
-import com.owncloud.android.lib.resources.shares.OCShare;
+import com.owncloud.android.lib.resources.shares.RemoteShare;
 import com.owncloud.android.lib.resources.shares.ShareParserResult;
 import com.owncloud.android.lib.resources.shares.ShareType;
 import com.owncloud.android.operations.common.SyncOperation;
@@ -59,7 +59,7 @@ public class CreateShareViaLinkOperation extends SyncOperation<ShareParserResult
         mPassword = null;
         mExpirationDateInMillis = 0;
         mPublicUpload = null;
-        mPermissions = OCShare.DEFAULT_PERMISSION;
+        mPermissions = RemoteShare.DEFAULT_PERMISSION;
     }
 
     /**
@@ -160,7 +160,7 @@ public class CreateShareViaLinkOperation extends SyncOperation<ShareParserResult
         return result;
     }
 
-    private void updateData(OCShare share) {
+    private void updateData(RemoteShare share) {
         // Update DB with the response
         share.setPath(mPath);
         if (mPath.endsWith(FileUtils.PATH_SEPARATOR)) {

@@ -39,7 +39,7 @@ import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
-import com.owncloud.android.lib.resources.shares.OCShare;
+import com.owncloud.android.lib.resources.shares.RemoteShare;
 import com.owncloud.android.lib.resources.shares.ShareParserResult;
 import com.owncloud.android.lib.resources.shares.SharePermissionsBuilder;
 import com.owncloud.android.lib.resources.shares.ShareType;
@@ -66,7 +66,7 @@ public class EditShareFragment extends DialogFragment {
     };
 
     /** Share to show & edit, received as a parameter in construction time */
-    private OCShare mShare;
+    private RemoteShare mShare;
 
     /** File bound to mShare, received as a parameter in construction time */
     private OCFile mFile;
@@ -80,12 +80,12 @@ public class EditShareFragment extends DialogFragment {
     /**
      * Public factory method to create new EditShareFragment instances.
      *
-     * @param shareToEdit   An {@link OCShare} to show and edit in the fragment
+     * @param shareToEdit   An {@link RemoteShare} to show and edit in the fragment
      * @param sharedFile    The {@link OCFile} bound to 'shareToEdit'
      * @param account       The ownCloud account holding 'sharedFile'
      * @return A new instance of fragment EditShareFragment.
      */
-    public static EditShareFragment newInstance(OCShare shareToEdit, OCFile sharedFile, Account account) {
+    public static EditShareFragment newInstance(RemoteShare shareToEdit, OCFile sharedFile, Account account) {
         EditShareFragment fragment = new EditShareFragment();
         Bundle args = new Bundle();
         args.putParcelable(ARG_SHARE, shareToEdit);
@@ -161,7 +161,7 @@ public class EditShareFragment extends DialogFragment {
     }
 
     /**
-     * Updates the UI with the current permissions in the edited {@link OCShare}
+     * Updates the UI with the current permissions in the edited {@link RemoteShare}
      *
      * @param editShareView     Root view in the fragment.
      */
@@ -182,13 +182,13 @@ public class EditShareFragment extends DialogFragment {
             if (isFederated && !isNotReshareableFederatedSupported) {
                 compound.setVisibility(View.INVISIBLE);
             }
-            compound.setChecked((sharePermissions & OCShare.SHARE_PERMISSION_FLAG) > 0);
+            compound.setChecked((sharePermissions & RemoteShare.SHARE_PERMISSION_FLAG) > 0);
 
             compound = editShareView.findViewById(R.id.canEditSwitch);
             int anyUpdatePermission =
-                    OCShare.CREATE_PERMISSION_FLAG |
-                            OCShare.UPDATE_PERMISSION_FLAG |
-                            OCShare.DELETE_PERMISSION_FLAG;
+                    RemoteShare.CREATE_PERMISSION_FLAG |
+                            RemoteShare.UPDATE_PERMISSION_FLAG |
+                            RemoteShare.DELETE_PERMISSION_FLAG;
             boolean canEdit = (sharePermissions & anyUpdatePermission) > 0;
             compound.setChecked(canEdit);
 
@@ -198,15 +198,15 @@ public class EditShareFragment extends DialogFragment {
                 /// TODO change areEditOptionsAvailable in order to delete !isFederated
                 // from checking when iOS is ready
                 compound = editShareView.findViewById(R.id.canEditCreateCheckBox);
-                compound.setChecked((sharePermissions & OCShare.CREATE_PERMISSION_FLAG) > 0);
+                compound.setChecked((sharePermissions & RemoteShare.CREATE_PERMISSION_FLAG) > 0);
                 compound.setVisibility((canEdit) ? View.VISIBLE : View.GONE);
 
                 compound = editShareView.findViewById(R.id.canEditChangeCheckBox);
-                compound.setChecked((sharePermissions & OCShare.UPDATE_PERMISSION_FLAG) > 0);
+                compound.setChecked((sharePermissions & RemoteShare.UPDATE_PERMISSION_FLAG) > 0);
                 compound.setVisibility((canEdit) ? View.VISIBLE : View.GONE);
 
                 compound = editShareView.findViewById(R.id.canEditDeleteCheckBox);
-                compound.setChecked((sharePermissions & OCShare.DELETE_PERMISSION_FLAG) > 0);
+                compound.setChecked((sharePermissions & RemoteShare.DELETE_PERMISSION_FLAG) > 0);
                 compound.setVisibility((canEdit) ? View.VISIBLE : View.GONE);
             }
 
@@ -403,9 +403,9 @@ public class EditShareFragment extends DialogFragment {
     }
 
     /**
-     * Updates the UI after the result of an update operation on the edited {@link OCShare} permissions.
+     * Updates the UI after the result of an update operation on the edited {@link RemoteShare} permissions.
      *
-     * @param result        Result of an update on the edited {@link OCShare} permissions.
+     * @param result        Result of an update on the edited {@link RemoteShare} permissions.
      */
     public void onUpdateSharePermissionsFinished(RemoteOperationResult<ShareParserResult> result) {
         if (result.isSuccess()) {
@@ -416,7 +416,7 @@ public class EditShareFragment extends DialogFragment {
     }
 
     /**
-     * Get {@link OCShare} instance from DB and updates the UI.
+     * Get {@link RemoteShare} instance from DB and updates the UI.
      *
      * Depends on the parent Activity provides a {@link com.owncloud.android.datamodel.FileDataStorageManager}
      * instance ready to use. If not ready, does nothing.
@@ -428,7 +428,7 @@ public class EditShareFragment extends DialogFragment {
     }
 
     /**
-     * Get {@link OCShare} instance from DB and updates the UI.
+     * Get {@link RemoteShare} instance from DB and updates the UI.
      *
      * Depends on the parent Activity provides a {@link com.owncloud.android.datamodel.FileDataStorageManager}
      * instance ready to use. If not ready, does nothing.
@@ -447,7 +447,7 @@ public class EditShareFragment extends DialogFragment {
     }
 
     /**
-     * Updates the permissions of the {@link OCShare} according to the values set in the UI
+     * Updates the permissions of the {@link RemoteShare} according to the values set in the UI
      */
     private void updatePermissionsToShare() {
         SharePermissionsBuilder spb = new SharePermissionsBuilder();

@@ -30,5 +30,5 @@ interface LocalSharesDataSource {
         shareTypes: List<Int>
     ): LiveData<List<OCShare>>
 
-    fun insert(OCShare: OCShare)
+    fun insert(ocShare: OCShare)
 }
