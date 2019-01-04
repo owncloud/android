@@ -3,6 +3,7 @@
  *
  * @author masensio
  * @author David A. Velasco
+ * @author David González Verdugo
  * Copyright (C) 2016 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
@@ -21,11 +22,12 @@
 package com.owncloud.android.ui.fragment;
 
 import com.owncloud.android.datamodel.OCFile;
-import com.owncloud.android.lib.resources.shares.OCShare;
+import com.owncloud.android.lib.resources.shares.RemoteShare;
+import com.owncloud.android.shares.db.OCShare;
 
 /**
  * This interface must be implemented by activities that contain this
- * fragment to allow an interaction in fragments handling {@link OCShare}s
+ * fragment to allow an interaction in fragments handling {@link RemoteShare}s
  * to be communicated to the parent activity and potentially other fragments
  * contained in that activity.
  *

@@ -2,7 +2,8 @@
  * ownCloud Android client application
  *
  * @author David A. Velasco
- * Copyright (C) 2017 ownCloud GmbH.
+ * @author David González Verdugo
+ * Copyright (C) 2019 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -24,7 +25,7 @@ import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.resources.files.FileUtils;
 import com.owncloud.android.lib.resources.shares.GetRemoteShareOperation;
-import com.owncloud.android.lib.resources.shares.OCShare;
+import com.owncloud.android.lib.resources.shares.RemoteShare;
 import com.owncloud.android.lib.resources.shares.ShareParserResult;
 import com.owncloud.android.lib.resources.shares.ShareType;
 import com.owncloud.android.lib.resources.shares.UpdateRemoteShareOperation;
@@ -55,7 +56,7 @@ public class UpdateShareViaLinkOperation extends SyncOperation<ShareParserResult
         mPassword = null;
         mExpirationDateInMillis = 0;
         mPublicUpload = null;
-        mPermissions = OCShare.DEFAULT_PERMISSION;
+        mPermissions = RemoteShare.DEFAULT_PERMISSION;
     }
 
     /**
@@ -114,7 +115,7 @@ public class UpdateShareViaLinkOperation extends SyncOperation<ShareParserResult
     @Override
     protected RemoteOperationResult<ShareParserResult> run(OwnCloudClient client) {
 
-        OCShare storedShare = getStorageManager().getShareById(mShareId);
+        RemoteShare storedShare = getStorageManager().getShareById(mShareId);
 
         if (storedShare == null || !ShareType.PUBLIC_LINK.equals(storedShare.getShareType())) {
             return new RemoteOperationResult<>(
@@ -137,7 +138,7 @@ public class UpdateShareViaLinkOperation extends SyncOperation<ShareParserResult
             GetRemoteShareOperation getShareOp = new GetRemoteShareOperation(storedShare.getRemoteId());
             result = getShareOp.execute(client);
             if (result.isSuccess()) {
-                OCShare remoteShare = result.getData().getShares().get(0);
+                RemoteShare remoteShare = result.getData().getShares().get(0);
                 updateData(storedShare, remoteShare);
             }
         }
@@ -145,7 +146,7 @@ public class UpdateShareViaLinkOperation extends SyncOperation<ShareParserResult
         return result;
     }
 
-    private void updateData(OCShare oldShare, OCShare newShare) {
+    private void updateData(RemoteShare oldShare, RemoteShare newShare) {
         // undesired magic - TODO map remote OCShare class to proper local OCShare class
         newShare.setPath(oldShare.getPath());
         if (oldShare.getPath().endsWith(FileUtils.PATH_SEPARATOR)) {

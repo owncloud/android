@@ -46,7 +46,7 @@ import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.datamodel.ThumbnailsCacheManager;
 import com.owncloud.android.lib.common.utils.Log_OC;
-import com.owncloud.android.lib.resources.shares.OCShare;
+import com.owncloud.android.lib.resources.shares.RemoteShare;
 import com.owncloud.android.lib.resources.status.OCCapability;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 import com.owncloud.android.ui.activity.FileActivity;
@@ -113,7 +113,7 @@ public class ShareFileFragment extends Fragment
     /**
      * List of private shares bound to the file
      */
-    private ArrayList<OCShare> mPrivateShares;
+    private ArrayList<RemoteShare> mPrivateShares;
 
     /**
      * Adapter to show private shares
@@ -123,7 +123,7 @@ public class ShareFileFragment extends Fragment
     /**
      *  List of public links bound to the file
      */
-    private ArrayList<OCShare> mPublicLinks;
+    private ArrayList<RemoteShare> mPublicLinks;
 
     /**
      * Adapter to show public shares
@@ -295,7 +295,7 @@ public class ShareFileFragment extends Fragment
         // Inspect public links for default names already used
         boolean isDefaultNameSet = false;
         String number;
-        for (OCShare share : mPublicLinks) {
+        for (RemoteShare share : mPublicLinks) {
             if (defaultName.equals(share.getName())) {
                 isDefaultNameSet = true;
             } else if (share.getName().matches(defaultNameNumberedRegex)) {
@@ -340,19 +340,19 @@ public class ShareFileFragment extends Fragment
     }
 
     @Override
-    public void copyOrSendPublicLink(OCShare share) {
+    public void copyOrSendPublicLink(RemoteShare share) {
         //GetLink from the server and show ShareLinkToDialog
         mListener.copyOrSendPublicLink(share);
     }
 
     @Override
-    public void removePublicShare(OCShare share) {
+    public void removePublicShare(RemoteShare share) {
         RemoveShareDialogFragment dialog = RemoveShareDialogFragment.newInstance(share);
         dialog.show(getFragmentManager(), ShareActivity.TAG_REMOVE_SHARE_DIALOG_FRAGMENT);
     }
 
     @Override
-    public void editPublicShare(OCShare share) {
+    public void editPublicShare(RemoteShare share) {
         mListener.showEditPublicShare(share);
     }
 
@@ -458,14 +458,14 @@ public class ShareFileFragment extends Fragment
     }
 
     @Override
-    public void unshareButtonPressed(OCShare share) {
+    public void unshareButtonPressed(RemoteShare share) {
         // Unshare
         Log_OC.d(TAG, "Removing private share with " + share.getSharedWithDisplayName());
         mListener.removeShare(share);
     }
 
     @Override
-    public void editShare(OCShare share) {
+    public void editShare(RemoteShare share) {
         // move to fragment to edit share
         Log_OC.d(TAG, "Editing " + share.getSharedWithDisplayName());
         mListener.showEditPrivateShare(share);
