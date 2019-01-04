@@ -37,7 +37,7 @@ import com.owncloud.android.files.services.AvailableOfflineHandler;
 import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder;
 import com.owncloud.android.files.services.FileUploader.FileUploaderBinder;
 import com.owncloud.android.lib.common.utils.Log_OC;
-import com.owncloud.android.lib.resources.shares.OCShare;
+import com.owncloud.android.lib.resources.shares.RemoteShare;
 import com.owncloud.android.lib.resources.shares.ShareType;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 import com.owncloud.android.services.OperationsService;
@@ -227,12 +227,12 @@ public class FileOperationsHelper {
     }
 
     /**
-     * Show dialog to allow the user to choose an app to send the link of an {@link OCShare},
+     * Show dialog to allow the user to choose an app to send the link of an {@link RemoteShare},
      * or copy it to clipboard.
      *
-     * @param share     {@link OCShare} which link will be sent to the app chosen by the user.
+     * @param share     {@link RemoteShare} which link will be sent to the app chosen by the user.
      */
-    public void copyOrSendPublicLink(OCShare share) {
+    public void copyOrSendPublicLink(RemoteShare share) {
         String link = share.getShareLink();
         if (link.length() <= 0) {
             mFileActivity.showSnackMessage(
@@ -286,9 +286,9 @@ public class FileOperationsHelper {
      * Helper method to remove an existing share, no matter if public or private.
      * Starts a request to do it in {@link OperationsService}
      *
-     * @param share      The {@link OCShare} to remove (unshare).
+     * @param share      The {@link RemoteShare} to remove (unshare).
      */
-    public void removeShare(OCShare share) {
+    public void removeShare(RemoteShare share) {
 
         Intent unshareService = new Intent(mFileActivity, OperationsService.class);
         unshareService.setAction(OperationsService.ACTION_UNSHARE);
@@ -331,10 +331,10 @@ public class FileOperationsHelper {
      * Updates a share on a file to set its access permissions.
      * Starts a request to do it in {@link OperationsService}
      *
-     * @param share                     {@link OCShare} instance which permissions will be updated.
+     * @param share                     {@link RemoteShare} instance which permissions will be updated.
      * @param permissions               New permissions to set. A value <= 0 makes no update.
      */
-    public void setPermissionsToShareWithSharee(OCShare share, int permissions) {
+    public void setPermissionsToShareWithSharee(RemoteShare share, int permissions) {
         Intent updateShareIntent = new Intent(mFileActivity, OperationsService.class);
         updateShareIntent.setAction(OperationsService.ACTION_UPDATE_SHARE_WITH_SHAREE);
         updateShareIntent.putExtra(OperationsService.EXTRA_ACCOUNT, mFileActivity.getAccount());
@@ -361,12 +361,12 @@ public class FileOperationsHelper {
      * @param permissions               Optional permissions to allow or not specific actions in the folder
      */
     public void updateShareViaLink(
-            OCShare share,
-            String name,
-            String password,
-            long expirationTimeInMillis,
-            boolean uploadToFolderPermission,
-            int permissions
+        RemoteShare share,
+        String name,
+        String password,
+        long expirationTimeInMillis,
+        boolean uploadToFolderPermission,
+        int permissions
     ) {
         // Set password updating share
         Intent updateShareIntent = new Intent(mFileActivity, OperationsService.class);

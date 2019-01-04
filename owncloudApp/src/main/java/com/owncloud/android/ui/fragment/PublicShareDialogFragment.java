@@ -46,7 +46,7 @@ import androidx.fragment.app.DialogFragment;
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.lib.common.utils.Log_OC;
-import com.owncloud.android.lib.resources.shares.OCShare;
+import com.owncloud.android.lib.resources.shares.RemoteShare;
 import com.owncloud.android.lib.resources.status.OCCapability;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 import com.owncloud.android.ui.activity.FileActivity;
@@ -78,7 +78,7 @@ public class PublicShareDialogFragment extends DialogFragment {
     /**
      * Existing share to update. If NULL, the dialog will create a new share for mFile.
      */
-    private OCShare mPublicShare;
+    private RemoteShare mPublicShare;
 
     /*
      * OC account holding the file to share, received as a parameter in construction time
@@ -157,7 +157,7 @@ public class PublicShareDialogFragment extends DialogFragment {
      * @param   publicShare           Public share to update.
      */
     public static PublicShareDialogFragment newInstanceToUpdate(OCFile fileToShare,
-                                                                OCShare publicShare,
+                                                                RemoteShare publicShare,
                                                                 Account account
     ) {
         PublicShareDialogFragment publicShareDialogFragment = new PublicShareDialogFragment();
@@ -235,13 +235,13 @@ public class PublicShareDialogFragment extends DialogFragment {
             mNameValueEdit.setText(mPublicShare.getName());
 
             switch (mPublicShare.getPermissions()) {
-                case (OCShare.CREATE_PERMISSION_FLAG
-                        | OCShare.DELETE_PERMISSION_FLAG
-                        | OCShare.UPDATE_PERMISSION_FLAG
-                        | OCShare.READ_PERMISSION_FLAG):
+                case (RemoteShare.CREATE_PERMISSION_FLAG
+                        | RemoteShare.DELETE_PERMISSION_FLAG
+                        | RemoteShare.UPDATE_PERMISSION_FLAG
+                        | RemoteShare.READ_PERMISSION_FLAG):
                     mReadWriteButton.setChecked(true);
                     break;
-                case OCShare.CREATE_PERMISSION_FLAG:
+                case RemoteShare.CREATE_PERMISSION_FLAG:
                     mUploadOnlyButton.setChecked(true);
                     break;
                 default:
@@ -294,19 +294,19 @@ public class PublicShareDialogFragment extends DialogFragment {
 
         switch (mPermissionRadioGroup.getCheckedRadioButtonId()) {
             case R.id.shareViaLinkEditPermissionUploadFiles:
-                publicLinkPermissions = OCShare.CREATE_PERMISSION_FLAG;
+                publicLinkPermissions = RemoteShare.CREATE_PERMISSION_FLAG;
                 publicUploadPermission = true;
                 break;
             case R.id.shareViaLinkEditPermissionReadAndWrite:
-                publicLinkPermissions = OCShare.CREATE_PERMISSION_FLAG
-                        | OCShare.DELETE_PERMISSION_FLAG
-                        | OCShare.UPDATE_PERMISSION_FLAG
-                        | OCShare.READ_PERMISSION_FLAG;
+                publicLinkPermissions = RemoteShare.CREATE_PERMISSION_FLAG
+                        | RemoteShare.DELETE_PERMISSION_FLAG
+                        | RemoteShare.UPDATE_PERMISSION_FLAG
+                        | RemoteShare.READ_PERMISSION_FLAG;
                 publicUploadPermission = true;
                 break;
             case R.id.shareViaLinkEditPermissionReadOnly:
             default:
-                publicLinkPermissions = OCShare.READ_PERMISSION_FLAG;
+                publicLinkPermissions = RemoteShare.READ_PERMISSION_FLAG;
                 publicUploadPermission = false;
                 break;
         }

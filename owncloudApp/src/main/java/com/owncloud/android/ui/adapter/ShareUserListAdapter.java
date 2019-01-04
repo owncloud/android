@@ -31,8 +31,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.owncloud.android.R;
-import com.owncloud.android.lib.resources.shares.OCShare;
 import com.owncloud.android.lib.resources.shares.ShareType;
+import com.owncloud.android.shares.db.OCShare;
 import com.owncloud.android.utils.PreferenceUtils;
 
 import java.util.ArrayList;

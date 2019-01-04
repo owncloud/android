@@ -2,7 +2,8 @@
  * ownCloud Android client application
  *
  * @author David A. Velasco
- * Copyright (C) 2016 ownCloud GmbH.
+ * @author David González Verdugo
+ * Copyright (C) 2019 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -23,7 +24,7 @@ import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.resources.files.FileUtils;
 import com.owncloud.android.lib.resources.shares.GetRemoteShareOperation;
-import com.owncloud.android.lib.resources.shares.OCShare;
+import com.owncloud.android.lib.resources.shares.RemoteShare;
 import com.owncloud.android.lib.resources.shares.ShareParserResult;
 import com.owncloud.android.lib.resources.shares.UpdateRemoteShareOperation;
 import com.owncloud.android.operations.common.SyncOperation;
@@ -41,7 +42,7 @@ public class UpdateSharePermissionsOperation extends SyncOperation<ShareParserRe
     /**
      * Constructor
      *
-     * @param shareId       Private {@link OCShare} to update. Mandatory argument
+     * @param shareId       Private {@link RemoteShare} to update. Mandatory argument
      */
     public UpdateSharePermissionsOperation(long shareId) {
         mShareId = shareId;
@@ -61,7 +62,7 @@ public class UpdateSharePermissionsOperation extends SyncOperation<ShareParserRe
     @Override
     protected RemoteOperationResult<ShareParserResult> run(OwnCloudClient client) {
 
-        OCShare share = getStorageManager().getShareById(mShareId); // ShareType.USER | ShareType.GROUP
+        RemoteShare share = getStorageManager().getShareById(mShareId); // ShareType.USER | ShareType.GROUP
 
         if (share == null) {
             // TODO try to get remote share before failing?
@@ -82,7 +83,7 @@ public class UpdateSharePermissionsOperation extends SyncOperation<ShareParserRe
             GetRemoteShareOperation getShareOp = new GetRemoteShareOperation(share.getRemoteId());
             result = getShareOp.execute(client);
             if (result.isSuccess()) {
-                share = (OCShare) result.getData().getShares().get(0);
+                share = result.getData().getShares().get(0);
                 // TODO check permissions are being saved
                 updateData(share);
             }
@@ -95,7 +96,7 @@ public class UpdateSharePermissionsOperation extends SyncOperation<ShareParserRe
         return mPath;
     }
 
-    private void updateData(OCShare share) {
+    private void updateData(RemoteShare share) {
         // Update DB with the response
         share.setPath(mPath);   // TODO - check if may be moved to UpdateRemoteShareOperation
         if (mPath.endsWith(FileUtils.PATH_SEPARATOR)) {
