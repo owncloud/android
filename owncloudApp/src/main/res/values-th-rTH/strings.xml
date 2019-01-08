@@ -128,6 +128,7 @@
   <string name="common_unknown">ไม่รู้จัก</string>
   <string name="common_error_unknown">ข้อผิดพลาดที่ไม่ทราบสาเหตุ</string>
   <string name="common_pending">อยู่ระหว่างดำเนินการ</string>
+  <string name="common_important">สำคัญ</string>
   <string name="about_title">เกี่ยวกับเรา</string>
   <string name="change_password">เปลี่ยนรหัสผ่าน</string>
   <string name="delete_account">ลบบัญชี</string>

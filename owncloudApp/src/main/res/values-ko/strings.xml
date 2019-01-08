@@ -111,6 +111,7 @@
   <string name="common_unknown">알 수 없음</string>
   <string name="common_error_unknown">알 수 없는 오류</string>
   <string name="common_pending">대기 중</string>
+  <string name="common_important">중요</string>
   <string name="about_title">정보</string>
   <string name="change_password">암호 변경</string>
   <string name="delete_account">계정 삭제</string>

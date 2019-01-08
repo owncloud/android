@@ -128,6 +128,7 @@
   <string name="common_unknown">desconocido</string>
   <string name="common_error_unknown">Error desconocido</string>
   <string name="common_pending">Pendiente</string>
+  <string name="common_important">Importante</string>
   <string name="about_title">Acerca de</string>
   <string name="change_password">Cambiar contraseña</string>
   <string name="delete_account">Eliminar cuenta</string>

@@ -97,6 +97,7 @@
   <string name="common_unknown">óþekkt</string>
   <string name="common_error_unknown">Óþekkt villa</string>
   <string name="common_pending">Í bið</string>
+  <string name="common_important">Mikilvægt</string>
   <string name="about_title">Um hugbúnaðinn</string>
   <string name="change_password">Breyta lykilorði</string>
   <string name="delete_account">Fjarlægja notandaaðgang</string>

@@ -128,6 +128,7 @@
   <string name="common_unknown">未知</string>
   <string name="common_error_unknown">未知错误</string>
   <string name="common_pending">等待</string>
+  <string name="common_important">重要</string>
   <string name="about_title">关于</string>
   <string name="change_password">修改密码</string>
   <string name="delete_account">删除账号</string>

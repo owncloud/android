@@ -122,6 +122,7 @@
   <string name="common_unknown">ismeretlen</string>
   <string name="common_error_unknown">Ismeretlen hiba</string>
   <string name="common_pending">Folyamatban</string>
+  <string name="common_important">Fontos</string>
   <string name="about_title">Névjegy</string>
   <string name="change_password">Jelszó megváltoztatása</string>
   <string name="delete_account">Fiók eltávolítása</string>

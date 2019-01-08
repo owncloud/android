@@ -1,5 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+  <string name="about_android">%1$sna Androida</string>
+  <string name="about_version">Wersja %1$s</string>
   <string name="actionbar_search">Szukaj w tym folderze</string>
   <string name="actionbar_sync">Odśwież konto</string>
   <string name="actionbar_upload">Wyślij plik</string>
@@ -45,6 +47,8 @@
   <string name="prefs_log_summary_history">To pokazuje zapisane logi</string>
   <string name="prefs_log_delete_history_button">Wyczyść historię</string>
   <string name="prefs_help">Pomoc</string>
+  <string name="prefs_sync_calendar_contacts">Synchronizuj swoje kontakty, kalendarze i zadania</string>
+  <string name="prefs_sync_calendar_contacts_summary">Zainstaluj DAVdroid</string>
   <string name="prefs_recommend">Poleć znajomemu</string>
   <string name="prefs_feedback">Wsparcie</string>
   <string name="prefs_imprint">Stopka</string>
@@ -58,6 +62,11 @@
   <string name="pattern_reenter_pattern">Proszę wpisz ponownie swój wzór odblokowania</string>
   <string name="pattern_not_same_pattern">Wprowadzone wzory odblokowania różnią się</string>
   <string name="pattern_stored">Wzór odblokowania zapisany</string>
+  <string name="pattern_removed">Wzór odblokowywania usunięty</string>
+  <string name="pattern_already_set">Wzór odblokowywania i hasło nie mogą być włączone równocześnie, proszę wyłączyć wzór odblokowywania</string>
+  <string name="passcode_already_set">Wzór odblokowywania i hasło nie mogą być włączone jednocześnie, proszę wyłączyć hasło</string>
+  <string name="pattern_no_longer_required">Nie będziesz więcej pytany o wzór odblokowywania</string>
+  <string name="pattern_configure_your_pattern_explanation">Wzór odblokowywania będzie wymagany przy każdorazowym uruchomieniu aplikacji</string>
   <string name="recommend_subject">Wypróbuj %1$s na swoim smartphonie!</string>
   <string name="recommend_text">Chciałbym zaprosić Cię do używania %1$s na swoim smartfonie!\nŚciągnij tutaj: %2$s</string>
   <string name="auth_failure_snackbar">Uwierzytelnianie nieudane</string>
@@ -118,6 +127,7 @@
   <string name="common_unknown">nieznane</string>
   <string name="common_error_unknown">Nieznany błąd</string>
   <string name="common_pending">Oczekujące</string>
+  <string name="common_important">Ważne</string>
   <string name="about_title">O aplikacji</string>
   <string name="change_password">Zmień hasło</string>
   <string name="delete_account">Usuń konto</string>
@@ -139,6 +149,8 @@
   <string name="uploads_view_group_current_uploads">Bieżący</string>
   <string name="uploads_view_group_failed_uploads">Błąd (kliknij, by ponowić)</string>
   <string name="uploads_view_group_finished_uploads">Wysłane</string>
+  <string name="uploads_view_group_file_count">%dplików</string>
+  <string name="uploads_view_group_file_count_single">%dplik</string>
   <string name="uploads_view_upload_status_succeeded">Ukończono</string>
   <string name="uploads_view_upload_status_cancelled">Przerwano</string>
   <string name="uploads_view_upload_status_paused">Zatrzymano</string>
@@ -156,6 +168,7 @@
   <string name="uploads_view_upload_status_waiting_for_wifi">Oczekiwanie na połączenie bezprzewodowe</string>
   <string name="uploads_view_later_waiting_to_upload">Oczekuję na przesyłanie</string>
   <string name="uploads_view_unsupported_media_type">Nieobsługiwany typ nośnika</string>
+  <string name="downloader_download_in_progress_ticker">Pobieranie …</string>
   <string name="downloader_download_in_progress_content">%1$d%% Pobieranie %2$s</string>
   <string name="downloader_download_succeeded_ticker">Pobieranie zakończone</string>
   <string name="downloader_download_succeeded_content">%1$s pobrano</string>
@@ -274,6 +287,7 @@
   <string name="wait_checking_credentials">Sprawdzanie danych</string>
   <string name="filedisplay_unexpected_bad_get_content">Nieoczekiwany problem; spróbuj wybrać plik z innej aplikacji</string>
   <string name="filedisplay_no_file_selected">Nie wybrano żadnych plików</string>
+  <string name="activity_chooser_title">Wyślij link do</string>
   <string name="wait_for_tmp_copy_from_private_storage">Kopiowanie pliku z prywatnego zasobu</string>
   <string name="oauth_check_onoff">Loguj przez oAuth2</string>
   <string name="oauth_login_connection">Łącze do serwera OAuth2...</string>
@@ -317,6 +331,7 @@
   <string name="confirmation_disable_pictures_upload_message">Czy jesteś pewien że chcesz dezaktywować tą usługę ? Oczekujące obrazy nie zostaną wrzucone</string>
   <string name="confirmation_disable_videos_upload_message">Czy jesteś pewien że chcesz dezaktywować tą usługę ? Oczekujące filmy nie zostaną wrzucone</string>
   <string name="conflict_title">Konflikt pliku</string>
+  <string name="conflict_description">W pliku %1$swystąpił konflikt, stuknij żeby go rozwiązać</string>
   <string name="conflict_message">Które pliki chcesz zachować? Jeśli wybierzesz obie wersje, do nazwy pliku lokalnego zostanie dodana liczba.</string>
   <string name="conflict_keep_both">Zatrzymaj oba</string>
   <string name="conflict_use_local_version">wersja lokalna</string>
@@ -366,6 +381,7 @@
   <string name="log_send_mail_subject">%1$s Logi aplikacji Android</string>
   <string name="log_progress_dialog_text">Ładuję dane...</string>
   <string name="actionbar_select_all">Wybierz wszystko</string>
+  <string name="actionbar_select_inverse">Zaznacz odwrotnie</string>
   <string name="saml_authentication_required_text">Wymagana autoryzacja</string>
   <string name="saml_authentication_wrong_pass">Złe hasło</string>
   <string name="actionbar_move">Przenieś</string>
@@ -403,6 +419,8 @@
   <string name="prefs_camera_upload_source_path_title">Folder aparatu (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">wymagane</string>
   <string name="prefs_camera_upload_source_path_title_optional">opcjonalne</string>
+  <string name="prefs_camera_upload_behaviour_dialogTitle">Oryginalny plik zostanie</string>
+  <string name="prefs_camera_upload_behaviour_title">Oryginalny plik zostanie</string>
   <string name="upload_copy_files">Kopiuj plik</string>
   <string name="upload_move_files">Przenieś plik</string>
   <string name="pref_behaviour_entries_keep_file">zachowany w oryginalnym folderze</string>

@@ -111,6 +111,7 @@
   <string name="common_unknown">לא ידוע</string>
   <string name="common_error_unknown">שגיאה בלתי ידועה</string>
   <string name="common_pending">ממתין</string>
+  <string name="common_important">חשוב</string>
   <string name="about_title">על אודות</string>
   <string name="change_password">שינוי ססמה</string>
   <string name="delete_account">הסרת חשבון</string>

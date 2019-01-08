@@ -96,6 +96,7 @@
   <string name="common_unknown">未知</string>
   <string name="common_error_unknown">未知的錯誤</string>
   <string name="common_pending">等候中</string>
+  <string name="common_important">重要</string>
   <string name="about_title">關於</string>
   <string name="change_password">變更密碼</string>
   <string name="delete_account">刪除帳號</string>
