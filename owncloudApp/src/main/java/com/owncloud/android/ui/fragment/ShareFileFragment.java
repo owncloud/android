@@ -348,7 +348,7 @@ public class ShareFileFragment extends Fragment
     @Override
     public void removePublicShare(RemoteShare share) {
         RemoveShareDialogFragment dialog = RemoveShareDialogFragment.newInstance(share);
-        dialog.show(getFragmentManager(), ShareActivity.TAG_REMOVE_SHARE_DIALOG_FRAGMENT);
+        dialog.show(getFragmentManager(), ShareActivity.Companion.getTAG_REMOVE_SHARE_DIALOG_FRAGMENT());
     }
 
     @Override

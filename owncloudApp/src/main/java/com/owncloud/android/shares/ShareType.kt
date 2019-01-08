@@ -22,7 +22,7 @@
  *
  */
 
-package com.owncloud.android.shares.db
+package com.owncloud.android.shares
 
 /**
  * Enum for Share Type, with values:
