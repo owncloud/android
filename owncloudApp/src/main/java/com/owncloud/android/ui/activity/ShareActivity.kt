@@ -25,6 +25,10 @@
 package com.owncloud.android.ui.activity
 
 import android.app.SearchManager
+import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModel
+import android.arch.lifecycle.ViewModelProvider
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -32,9 +36,14 @@ import android.support.v4.app.DialogFragment
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentTransaction
 import android.view.MenuItem
+import com.owncloud.android.MainApp
 
 import com.owncloud.android.R
 import com.owncloud.android.datamodel.OCFile
+import com.owncloud.android.lib.common.OwnCloudAccount
+import com.owncloud.android.lib.common.OwnCloudClient
+import com.owncloud.android.lib.common.OwnCloudClientFactory
+import com.owncloud.android.lib.common.OwnCloudClientManagerFactory
 import com.owncloud.android.lib.common.operations.RemoteOperation
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.common.utils.Log_OC
@@ -48,6 +57,7 @@ import com.owncloud.android.operations.RemoveShareOperation
 import com.owncloud.android.operations.UpdateSharePermissionsOperation
 import com.owncloud.android.operations.UpdateShareViaLinkOperation
 import com.owncloud.android.providers.UsersAndGroupsSearchProvider
+import com.owncloud.android.shares.viewmodel.ShareViewModel
 import com.owncloud.android.ui.asynctasks.GetSharesForFileAsyncTask
 import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter
 import com.owncloud.android.ui.fragment.EditShareFragment
@@ -119,10 +129,33 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
 
     }
 
+    protected inline fun <VM : ViewModel> viewModelFactory(crossinline f: () -> VM) =
+        object : ViewModelProvider.Factory {
+            override fun <T : ViewModel> create(aClass: Class<T>): T = f() as T
+        }
+
     override fun onAccountSet(stateWasRecovered: Boolean) {
         super.onAccountSet(stateWasRecovered)
 
+        val shareViewModel: ShareViewModel = ViewModelProviders.of(this, viewModelFactory {
+            ShareViewModel(
+                application,
+                this,
+                OwnCloudClientManagerFactory.getDefaultSingleton().getClientFor(
+                    OwnCloudAccount(account, this),
+                    this
+                ),
+                file.remotePath,
+                listOf(ShareType.PUBLIC_LINK.value)
+            )
+        }).get(ShareViewModel::class.java)
 
+        shareViewModel.sharesForFile.observe(
+            this,
+            Observer { sharesForFile ->
+                Log_OC.d(TAG, sharesForFile.toString())
+            }
+        )
         //        // Load data into the list
         //        Log_OC.d(TAG, "Refreshing lists on account set");
         //        refreshSharesFromStorageManager();
@@ -303,11 +336,11 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
         }
 
         if (operation is CreateShareViaLinkOperation) {
-            onCreateShareViaLinkOperationFinish(operation, result)
+            onCreateShareViaLinkOperationFinish(operation, result as RemoteOperationResult<ShareParserResult>)
         }
 
         if (operation is UpdateShareViaLinkOperation) {
-            onUpdateShareViaLinkOperationFinish(operation, result)
+            onUpdateShareViaLinkOperationFinish(operation, result as RemoteOperationResult<ShareParserResult>)
         }
 
         if (operation is RemoveShareOperation && result.isSuccess && editShareFragment != null) {
@@ -317,7 +350,7 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
         if (operation is UpdateSharePermissionsOperation
             && editShareFragment != null && editShareFragment!!.isAdded
         ) {
-            editShareFragment!!.onUpdateSharePermissionsFinished(result)
+            editShareFragment!!.onUpdateSharePermissionsFinished(result as RemoteOperationResult<ShareParserResult>?)
         }
     }
 
