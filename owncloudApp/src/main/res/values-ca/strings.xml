@@ -122,6 +122,7 @@
   <string name="common_unknown">desconegut</string>
   <string name="common_error_unknown">Error desconegut</string>
   <string name="common_pending">Pendent</string>
+  <string name="common_important">Important</string>
   <string name="about_title">Quant a</string>
   <string name="change_password">Canvia la contrasenya</string>
   <string name="delete_account">Elimina el compte</string>

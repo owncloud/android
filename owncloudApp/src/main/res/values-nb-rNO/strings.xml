@@ -114,6 +114,7 @@
   <string name="common_unknown">ukjent</string>
   <string name="common_error_unknown">Ukjent feil</string>
   <string name="common_pending">Venter</string>
+  <string name="common_important">Viktig</string>
   <string name="about_title">Om</string>
   <string name="change_password">Endre passord</string>
   <string name="delete_account">Fjern konto</string>

@@ -108,6 +108,7 @@
   <string name="common_unknown">невідомо</string>
   <string name="common_error_unknown">Невідома помилка</string>
   <string name="common_pending">Очікування</string>
+  <string name="common_important">Важливий</string>
   <string name="about_title">Про</string>
   <string name="change_password">Змінити пароль</string>
   <string name="delete_account">Видалити обліковий запис</string>

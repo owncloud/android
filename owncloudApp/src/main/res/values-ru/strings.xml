@@ -129,6 +129,7 @@
   <string name="common_unknown">неизвестно</string>
   <string name="common_error_unknown">Неизвестная ошибка</string>
   <string name="common_pending">Ожидается</string>
+  <string name="common_important">Важный</string>
   <string name="about_title">О программе</string>
   <string name="change_password">Сменить пароль</string>
   <string name="delete_account">Удалить аккаунт</string>
