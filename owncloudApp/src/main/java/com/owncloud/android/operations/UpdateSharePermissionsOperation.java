@@ -28,6 +28,7 @@ import com.owncloud.android.lib.resources.shares.RemoteShare;
 import com.owncloud.android.lib.resources.shares.ShareParserResult;
 import com.owncloud.android.lib.resources.shares.UpdateRemoteShareOperation;
 import com.owncloud.android.operations.common.SyncOperation;
+import com.owncloud.android.shares.db.OCShare;
 
 /**
  * Updates an existing private share for a given file
@@ -62,7 +63,7 @@ public class UpdateSharePermissionsOperation extends SyncOperation<ShareParserRe
     @Override
     protected RemoteOperationResult<ShareParserResult> run(OwnCloudClient client) {
 
-        RemoteShare share = getStorageManager().getShareById(mShareId); // ShareType.USER | ShareType.GROUP
+        OCShare share = getStorageManager().getShareById(mShareId); // ShareType.USER | ShareType.GROUP
 
         if (share == null) {
             // TODO try to get remote share before failing?
@@ -83,9 +84,9 @@ public class UpdateSharePermissionsOperation extends SyncOperation<ShareParserRe
             GetRemoteShareOperation getShareOp = new GetRemoteShareOperation(share.getRemoteId());
             result = getShareOp.execute(client);
             if (result.isSuccess()) {
-                share = result.getData().getShares().get(0);
+                RemoteShare remoteShare = result.getData().getShares().get(0);
                 // TODO check permissions are being saved
-                updateData(share);
+                updateData(remoteShare);
             }
         }
 

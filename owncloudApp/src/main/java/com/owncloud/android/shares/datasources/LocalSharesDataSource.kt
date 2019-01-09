@@ -24,6 +24,7 @@ import com.owncloud.android.shares.db.OCShare
 
 interface LocalSharesDataSource {
     fun shares(): LiveData<List<OCShare>>
+
     fun sharesForAFile(
         filePath: String,
         accountName: String,
@@ -31,4 +32,6 @@ interface LocalSharesDataSource {
     ): LiveData<List<OCShare>>
 
     fun insert(ocShare: OCShare)
+
+    fun insert(ocShares: List<OCShare>)
 }
