@@ -41,7 +41,7 @@ data class OCShare(
     val userId: Long,
     val remoteId: Long,
     val shareLink: String,
-    val accountOwner: String
+    var accountOwner: String
 ) {
     constructor(remoteShare: RemoteShare) : this(
         remoteShare.id,
@@ -60,13 +60,10 @@ data class OCShare(
         remoteShare.userId,
         remoteShare.remoteId,
         remoteShare.shareLink,
-        "admin"
-    ) {
-
-    }
+        ""
+    )
 
     companion object {
-
         /**
          * Generated - should be refreshed every time the class changes!!
          */

@@ -25,8 +25,9 @@ import android.arch.lifecycle.LiveData
 import android.content.Context
 import com.owncloud.android.db.OwncloudDatabase
 import com.owncloud.android.lib.common.OwnCloudClient
-import com.owncloud.android.shares.ShareRepository
-import com.owncloud.android.shares.ShareRepositoryImpl
+import com.owncloud.android.lib.resources.shares.ShareType
+import com.owncloud.android.shares.repository.ShareRepository
+import com.owncloud.android.shares.repository.OCShareRepository
 import com.owncloud.android.shares.datasources.OCRemoteSharesDataSource
 import com.owncloud.android.shares.db.OCShare
 import kotlinx.coroutines.*
@@ -38,9 +39,9 @@ import kotlin.coroutines.CoroutineContext
 class ShareViewModel(
     application: Application,
     context: Context,
-    client: OwnCloudClient,
-    filePath: String,
-    shareTypes: List<Int>
+    val client: OwnCloudClient,
+    val filePath: String,
+    shareTypes: List<ShareType>
 ) : AndroidViewModel(application) {
 
     private var parentJob = Job()
@@ -54,7 +55,7 @@ class ShareViewModel(
 
     init {
         val shareDao = OwncloudDatabase.getDatabase(context).shareDao()
-        shareRepository = ShareRepositoryImpl(
+        shareRepository = OCShareRepository(
             shareDao,
             OCRemoteSharesDataSource(client)
         )
@@ -63,9 +64,13 @@ class ShareViewModel(
             client.account.name,
             shareTypes
         )
+        fetchSharesForFileFromServer()
+    }
+
+    fun fetchSharesForFileFromServer() {
         scope.launch {
             withContext(Dispatchers.IO) {
-                shareRepository.fetchSharesForFileFromServer(filePath, false, false)
+                shareRepository.fetchSharesForFileFromServer(filePath, client.account.name,false, false)
             }
         }
     }

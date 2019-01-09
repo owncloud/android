@@ -25,11 +25,11 @@ import android.arch.persistence.room.Room
 import android.arch.persistence.room.RoomDatabase
 import android.content.Context
 import com.owncloud.android.shares.db.OCShare
-import com.owncloud.android.shares.db.ShareDao
+import com.owncloud.android.shares.db.OCShareDao
 
 @Database(entities = [OCShare::class], version = 1, exportSchema = false)
 abstract class OwncloudDatabase : RoomDatabase() {
-    abstract fun shareDao(): ShareDao
+    abstract fun shareDao(): OCShareDao
 
     companion object {
         @Volatile

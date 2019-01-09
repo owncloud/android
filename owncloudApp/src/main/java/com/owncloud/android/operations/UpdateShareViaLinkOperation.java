@@ -30,6 +30,7 @@ import com.owncloud.android.lib.resources.shares.ShareParserResult;
 import com.owncloud.android.lib.resources.shares.ShareType;
 import com.owncloud.android.lib.resources.shares.UpdateRemoteShareOperation;
 import com.owncloud.android.operations.common.SyncOperation;
+import com.owncloud.android.shares.db.OCShare;
 
 /**
  * Updates an existing public share for a given file
@@ -115,7 +116,7 @@ public class UpdateShareViaLinkOperation extends SyncOperation<ShareParserResult
     @Override
     protected RemoteOperationResult<ShareParserResult> run(OwnCloudClient client) {
 
-        RemoteShare storedShare = getStorageManager().getShareById(mShareId);
+        OCShare storedShare = getStorageManager().getShareById(mShareId);
 
         if (storedShare == null || !ShareType.PUBLIC_LINK.equals(storedShare.getShareType())) {
             return new RemoteOperationResult<>(
@@ -146,7 +147,7 @@ public class UpdateShareViaLinkOperation extends SyncOperation<ShareParserResult
         return result;
     }
 
-    private void updateData(RemoteShare oldShare, RemoteShare newShare) {
+    private void updateData(OCShare oldShare, RemoteShare newShare) {
         // undesired magic - TODO map remote OCShare class to proper local OCShare class
         newShare.setPath(oldShare.getPath());
         if (oldShare.getPath().endsWith(FileUtils.PATH_SEPARATOR)) {

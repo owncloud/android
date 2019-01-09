@@ -22,15 +22,14 @@
 package com.owncloud.android.ui.fragment;
 
 import com.owncloud.android.datamodel.OCFile;
-import com.owncloud.android.lib.resources.shares.RemoteShare;
 import com.owncloud.android.shares.db.OCShare;
 
 /**
  * This interface must be implemented by activities that contain this
- * fragment to allow an interaction in fragments handling {@link RemoteShare}s
+ * fragment to allow an interaction in fragments handling {@link OCShare}s
  * to be communicated to the parent activity and potentially other fragments
  * contained in that activity.
- *
+ * <p>
  * See the Android Training lesson <a href=
  * "http://developer.android.com/training/basics/fragments/communicating.html"
  * >Communicating with Other Fragments</a> for more information.

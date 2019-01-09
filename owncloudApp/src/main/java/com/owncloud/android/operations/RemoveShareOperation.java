@@ -65,7 +65,7 @@ public class RemoveShareOperation extends SyncOperation {
             if (result.isSuccess()) {
                 Log_OC.d(TAG, "Share id = " + share.getRemoteId() + " deleted");
 
-                ShareType shareType = share.getShareType();
+                ShareType shareType = ShareType.fromValue(share.getShareType());
                 if (ShareType.PUBLIC_LINK.equals(shareType)) {
 
                     // Check if it is the last public share
