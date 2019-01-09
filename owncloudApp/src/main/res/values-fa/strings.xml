@@ -106,6 +106,7 @@
   <string name="common_unknown">نامشخّص</string>
   <string name="common_error_unknown">خطای نامشخّص</string>
   <string name="common_pending">در انتظار</string>
+  <string name="common_important">مهم</string>
   <string name="about_title">درباره</string>
   <string name="change_password">تغییر گذرواژه</string>
   <string name="delete_account">برداشتن حساب</string>

@@ -91,6 +91,7 @@
   <string name="common_unknown">necunoscut</string>
   <string name="common_error_unknown">Eroare necunoscută</string>
   <string name="common_pending">În așteptare</string>
+  <string name="common_important">Important</string>
   <string name="about_title">Despre</string>
   <string name="change_password">Schimbă parola</string>
   <string name="delete_account">Sterge contul</string>

@@ -101,6 +101,7 @@ Automaticky nahrát video snímané kamerou
   <string name="common_unknown">neznámý</string>
   <string name="common_error_unknown">Neznámá chyba</string>
   <string name="common_pending">Nevyřízené</string>
+  <string name="common_important">Důležité</string>
   <string name="about_title">O aplikaci</string>
   <string name="change_password">Změnit heslo</string>
   <string name="delete_account">Odebrat účet</string>
@@ -396,6 +397,8 @@ správce systému.</string>
   <string name="share_via_link_expiration_date_label">Konec platnosti</string>
   <string name="share_via_link_password_label">Heslo</string>
   <string name="share_via_link_password_title">Zabezpečeno</string>
+  <string name="share_via_link_edit_permission_read_only_label">Stáhnout / zobrazit</string>
+  <string name="share_via_link_edit_permission_read_and_write_label">Stáhnout / zobrazit / nahrát</string>
   <string name="share_get_public_link_button">Vytvořit odkaz</string>
   <string name="share_with_title">Sdílet s</string>
   <string name="share_with_edit_title">Sdílet s %1$s</string>

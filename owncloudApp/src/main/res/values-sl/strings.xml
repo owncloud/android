@@ -1,5 +1,8 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+  <string name="about_android">%1$s za Android</string>
+  <string name="about_version">Verzija %1$s</string>
+  <string name="actionbar_search">Preiščite to mapo</string>
   <string name="actionbar_sync">Osveži račun</string>
   <string name="actionbar_upload">Pošiljanje</string>
   <string name="actionbar_upload_from_apps">Vsebino, vezano na druge programe</string>
@@ -13,11 +16,16 @@
   <string name="actionbar_descending">Padajoče</string>
   <string name="actionbar_sort_title">Razvrsti ...</string>
   <string name="actionbar_sort_by_name">A-Z</string>
+  <string name="actionbar_sort_by_date">Starejše - Novejše</string>
+  <string name="actionbar_sort_by_size">Manjše - Večje</string>
   <string name="drawer_item_all_files">Vse datoteke</string>
   <string name="drawer_item_settings">Nastavitve</string>
   <string name="drawer_item_uploads_list">Poslano</string>
   <string name="drawer_close">Zapri</string>
   <string name="drawer_open">Odpri</string>
+  <string name="drawer_quota">%1$s od %2$s uporabljeno (%3$s %%)</string>
+  <string name="drawer_unavailable_free_storage">%1$s v uporabi</string>
+  <string name="drawer_unavailable_used_storage">Trenutno ni na voljo nobenih podatkov o porabi prostora.</string>
   <string name="drawer_feedback">Pošlji sporočilo razvijalcem programa</string>
   <string name="drawer_help">Pomoč</string>
   <string name="prefs_category_general">Splošno</string>
@@ -26,6 +34,7 @@
   <string name="prefs_accounts">Računi</string>
   <string name="prefs_manage_accounts">Upravljanje z računi</string>
   <string name="prefs_passcode">Zakleni dostop s kodo PIN</string>
+  <string name="prefs_fingerprint">Zaklepanje z prstnim odtisom</string>
   <string name="prefs_camera_picture_upload">Hipno pošiljanje slik</string>
   <string name="prefs_camera_picture_upload_summary">Hipno pošiljanje slik, zajetih s kamero, na strežnik</string>
   <string name="prefs_camera_video_upload">Hipno pošiljanje posnetkov</string>
@@ -98,6 +107,7 @@
   <string name="common_unknown">neznano</string>
   <string name="common_error_unknown">Neznana napaka</string>
   <string name="common_pending">V čakanju ...</string>
+  <string name="common_important">Pomembno</string>
   <string name="about_title">O oblaku %1$s</string>
   <string name="change_password">Spremeni geslo</string>
   <string name="delete_account">Odstrani račun</string>

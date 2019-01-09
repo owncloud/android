@@ -95,6 +95,7 @@
   <string name="common_unknown">okänt</string>
   <string name="common_error_unknown">Okänt fel</string>
   <string name="common_pending">Väntar</string>
+  <string name="common_important">Viktigt</string>
   <string name="about_title">Om</string>
   <string name="change_password">Ändra lösenord</string>
   <string name="delete_account">Radera konto</string>

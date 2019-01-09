@@ -128,6 +128,7 @@
   <string name="common_unknown">i panjohur</string>
   <string name="common_error_unknown">Gabim i panjohur</string>
   <string name="common_pending">Në pritje</string>
+  <string name="common_important">E rëndësishme</string>
   <string name="about_title">Rreth</string>
   <string name="change_password">Ndryshoni fjalëkalimin</string>
   <string name="delete_account">Hiqe llogarinë</string>

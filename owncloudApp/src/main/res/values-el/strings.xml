@@ -92,6 +92,7 @@
   <string name="common_unknown">Αγνωστο</string>
   <string name="common_error_unknown">Άγνωστο σφάλμα</string>
   <string name="common_pending">Εκκρεμεί</string>
+  <string name="common_important">Σημαντικό </string>
   <string name="about_title">Σχετικά</string>
   <string name="change_password">Αλλαγή κωδικού πρόσβασης</string>
   <string name="delete_account">Αφαίρεση λογαριασμού</string>
