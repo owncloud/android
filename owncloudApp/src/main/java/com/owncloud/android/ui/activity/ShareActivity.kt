@@ -25,46 +25,23 @@
 package com.owncloud.android.ui.activity
 
 import android.app.SearchManager
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModel
-import android.arch.lifecycle.ViewModelProvider
-import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
-import android.support.v4.app.DialogFragment
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentTransaction
 import android.view.MenuItem
-import com.owncloud.android.MainApp
-
 import com.owncloud.android.R
 import com.owncloud.android.datamodel.OCFile
-import com.owncloud.android.lib.common.OwnCloudAccount
-import com.owncloud.android.lib.common.OwnCloudClient
-import com.owncloud.android.lib.common.OwnCloudClientFactory
-import com.owncloud.android.lib.common.OwnCloudClientManagerFactory
 import com.owncloud.android.lib.common.operations.RemoteOperation
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.common.utils.Log_OC
 import com.owncloud.android.lib.resources.shares.RemoteShare
 import com.owncloud.android.lib.resources.shares.ShareParserResult
 import com.owncloud.android.lib.resources.shares.ShareType
-import com.owncloud.android.lib.resources.status.OwnCloudVersion
-import com.owncloud.android.operations.CreateShareViaLinkOperation
-import com.owncloud.android.operations.GetSharesForFileOperation
-import com.owncloud.android.operations.RemoveShareOperation
-import com.owncloud.android.operations.UpdateSharePermissionsOperation
-import com.owncloud.android.operations.UpdateShareViaLinkOperation
+import com.owncloud.android.operations.*
 import com.owncloud.android.providers.UsersAndGroupsSearchProvider
-import com.owncloud.android.shares.viewmodel.ShareViewModel
+import com.owncloud.android.shares.db.OCShare
 import com.owncloud.android.ui.asynctasks.GetSharesForFileAsyncTask
 import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter
-import com.owncloud.android.ui.fragment.EditShareFragment
-import com.owncloud.android.ui.fragment.PublicShareDialogFragment
-import com.owncloud.android.ui.fragment.SearchShareesFragment
-import com.owncloud.android.ui.fragment.ShareFileFragment
-import com.owncloud.android.ui.fragment.ShareFragmentListener
+import com.owncloud.android.ui.fragment.*
 
 
 /**
@@ -129,41 +106,17 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
 
     }
 
-    protected inline fun <VM : ViewModel> viewModelFactory(crossinline f: () -> VM) =
-        object : ViewModelProvider.Factory {
-            override fun <T : ViewModel> create(aClass: Class<T>): T = f() as T
-        }
-
     override fun onAccountSet(stateWasRecovered: Boolean) {
         super.onAccountSet(stateWasRecovered)
+        // Load data into the list
+        Log_OC.d(TAG, "Refreshing lists on account set");
 
-        val shareViewModel: ShareViewModel = ViewModelProviders.of(this, viewModelFactory {
-            ShareViewModel(
-                application,
-                this,
-                OwnCloudClientManagerFactory.getDefaultSingleton().getClientFor(
-                    OwnCloudAccount(account, this),
-                    this
-                ),
-                file.remotePath,
-                listOf(ShareType.PUBLIC_LINK.value)
-            )
-        }).get(ShareViewModel::class.java)
+        // TODO New Android Components
+//        refreshSharesFromStorageManager();
 
-        shareViewModel.sharesForFile.observe(
-            this,
-            Observer { sharesForFile ->
-                Log_OC.d(TAG, sharesForFile.toString())
-            }
-        )
-        //        // Load data into the list
-        //        Log_OC.d(TAG, "Refreshing lists on account set");
-        //        refreshSharesFromStorageManager();
-        //
-        //        // Request for a refresh of the data through the server (starts an Async Task)
-        //        refreshSharesFromServer();
+        // Request for a refresh of the data through the server (starts an Async Task)
+//        refreshSharesFromServer();
     }
-
 
     override fun onNewIntent(intent: Intent) {
         // Verify the action and get the query
@@ -246,7 +199,7 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
         ft.commit()
     }
 
-    override fun showEditPrivateShare(share: RemoteShare) {
+    override fun showEditPrivateShare(share: OCShare) {
         val ft = supportFragmentManager.beginTransaction()
         val prev = supportFragmentManager.findFragmentByTag(TAG_EDIT_SHARE_FRAGMENT)
         if (prev != null) {
@@ -261,7 +214,7 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
     }
 
     override// Call to Remove share operation
-    fun removeShare(share: RemoteShare) {
+    fun removeShare(share: OCShare) {
         fileOperationsHelper.removeShare(share)
     }
 
@@ -297,7 +250,7 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
         newFragment.show(ft, TAG_PUBLIC_SHARE_DIALOG_FRAGMENT)
     }
 
-    override fun showEditPublicShare(share: RemoteShare) {
+    override fun showEditPublicShare(share: OCShare) {
         val ft = supportFragmentManager.beginTransaction()
         val prev = supportFragmentManager.findFragmentByTag(TAG_PUBLIC_SHARE_DIALOG_FRAGMENT)
         if (prev != null) {
@@ -313,7 +266,7 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
         newFragment.show(ft, TAG_PUBLIC_SHARE_DIALOG_FRAGMENT)
     }
 
-    override fun copyOrSendPublicLink(share: RemoteShare) {
+    override fun copyOrSendPublicLink(share: OCShare) {
         fileOperationsHelper.copyOrSendPublicLink(share)
     }
 
@@ -363,7 +316,7 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
 
             publicShareFragment!!.dismiss()
 
-            fileOperationsHelper.copyOrSendPublicLink(result.data.shares[0])
+            fileOperationsHelper.copyOrSendPublicLink(OCShare(result.data.shares[0]))
 
         } else {
             publicShareFragment!!.showError(
@@ -381,7 +334,7 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
 
             publicShareFragment!!.dismiss()
 
-            fileOperationsHelper.copyOrSendPublicLink(result.data.shares[0])
+            fileOperationsHelper.copyOrSendPublicLink(OCShare(result.data.shares[0]))
 
         } else {
             publicShareFragment!!.showError(
@@ -399,7 +352,7 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
         if (shareFileFragment != null && shareFileFragment.isAdded) {   // only if added to the view hierarchy!!
             shareFileFragment.refreshCapabilitiesFromDB()
             shareFileFragment.refreshUsersOrGroupsListFromDB()
-            shareFileFragment.refreshPublicSharesListFromDB()
+            shareFileFragment.observePublicShares()
         }
 
         val searchShareesFragment = searchFragment

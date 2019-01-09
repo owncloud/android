@@ -17,29 +17,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.shares.db
+package com.owncloud.android.shares.repository
 
 import android.arch.lifecycle.LiveData
-import android.arch.persistence.room.Dao
-import android.arch.persistence.room.Insert
-import android.arch.persistence.room.OnConflictStrategy
-import android.arch.persistence.room.Query
+import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.shares.datasources.LocalSharesDataSource
+import com.owncloud.android.shares.datasources.RemoteSharesDataSource
+import com.owncloud.android.shares.db.OCShare
 
-@Dao
-interface ShareDao : LocalSharesDataSource {
-    @Query("SELECT * from shares_table ORDER BY id")
-    override fun shares(): LiveData<List<OCShare>>
-
-    @Query(
-        "SELECT * from shares_table " +
-                "WHERE path = :filePath " +
-                "AND accountOwner = :accountName AND shareType IN(:shareTypes)"
-    )
-    override fun sharesForAFile(
-        filePath: String, accountName: String, shareTypes: List<Int>
+interface ShareRepository {
+    fun getSharesForFile(
+        filePath: String,
+        accountName: String,
+        shareTypes: List<ShareType>
     ): LiveData<List<OCShare>>
 
-    @Insert (onConflict = OnConflictStrategy.REPLACE)
-    override fun insert(ocShare: OCShare)
+    fun fetchSharesForFileFromServer(filePath: String, accountName: String, reshares: Boolean, subfiles: Boolean)
 }
