@@ -44,6 +44,7 @@ import com.owncloud.android.lib.resources.shares.ShareParserResult;
 import com.owncloud.android.lib.resources.shares.SharePermissionsBuilder;
 import com.owncloud.android.lib.resources.shares.ShareType;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
+import com.owncloud.android.shares.db.OCShare;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.utils.PreferenceUtils;
 
@@ -66,7 +67,7 @@ public class EditShareFragment extends DialogFragment {
     };
 
     /** Share to show & edit, received as a parameter in construction time */
-    private RemoteShare mShare;
+    private OCShare mShare;
 
     /** File bound to mShare, received as a parameter in construction time */
     private OCFile mFile;
@@ -80,15 +81,16 @@ public class EditShareFragment extends DialogFragment {
     /**
      * Public factory method to create new EditShareFragment instances.
      *
-     * @param shareToEdit   An {@link RemoteShare} to show and edit in the fragment
+     * @param shareToEdit   An {@link OCShare} to show and edit in the fragment
      * @param sharedFile    The {@link OCFile} bound to 'shareToEdit'
      * @param account       The ownCloud account holding 'sharedFile'
      * @return A new instance of fragment EditShareFragment.
      */
-    public static EditShareFragment newInstance(RemoteShare shareToEdit, OCFile sharedFile, Account account) {
+    public static EditShareFragment newInstance(OCShare shareToEdit, OCFile sharedFile, Account account) {
         EditShareFragment fragment = new EditShareFragment();
         Bundle args = new Bundle();
-        args.putParcelable(ARG_SHARE, shareToEdit);
+        // TODO New Android Components
+//        args.putParcelable(ARG_SHARE, shareToEdit);
         args.putParcelable(ARG_FILE, sharedFile);
         args.putParcelable(ARG_ACCOUNT, account);
         fragment.setArguments(args);
@@ -157,7 +159,8 @@ public class EditShareFragment extends DialogFragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putParcelable(ARG_SHARE, mShare);
+        // TODO New Android Components
+//        outState.putParcelable(ARG_SHARE, mShare);
     }
 
     /**

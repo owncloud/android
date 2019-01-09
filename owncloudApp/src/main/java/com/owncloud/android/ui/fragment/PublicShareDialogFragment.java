@@ -49,6 +49,7 @@ import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.shares.RemoteShare;
 import com.owncloud.android.lib.resources.status.OCCapability;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
+import com.owncloud.android.shares.db.OCShare;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.dialog.ExpirationDatePickerDialogFragment;
 import com.owncloud.android.utils.DateUtils;
@@ -157,13 +158,14 @@ public class PublicShareDialogFragment extends DialogFragment {
      * @param   publicShare           Public share to update.
      */
     public static PublicShareDialogFragment newInstanceToUpdate(OCFile fileToShare,
-                                                                RemoteShare publicShare,
+                                                                OCShare publicShare,
                                                                 Account account
     ) {
         PublicShareDialogFragment publicShareDialogFragment = new PublicShareDialogFragment();
         Bundle args = new Bundle();
         args.putParcelable(ARG_FILE, fileToShare);
-        args.putParcelable(ARG_SHARE, publicShare);
+        // TODO New Android Components
+//        args.putParcelable(ARG_SHARE, publicShare);
         args.putParcelable(ARG_ACCOUNT, account);
         publicShareDialogFragment.setArguments(args);
         return publicShareDialogFragment;

@@ -34,6 +34,7 @@ import com.owncloud.android.R;
 import com.owncloud.android.lib.resources.shares.ShareType;
 import com.owncloud.android.shares.db.OCShare;
 import com.owncloud.android.utils.PreferenceUtils;
+import com.owncloud.android.shares.db.OCShare;
 
 import java.util.ArrayList;
 
@@ -90,7 +91,7 @@ public class ShareUserListAdapter extends ArrayAdapter {
                     name :
                     name + " (" + share.getSharedWithAdditionalInfo() + ")";
             Drawable icon = getContext().getResources().getDrawable(R.drawable.ic_user);
-            if (share.getShareType() == ShareType.GROUP) {
+            if (share.getShareType() == ShareType.GROUP.getValue()) {
                 name = getContext().getString(R.string.share_group_clarification, name);
                 icon = getContext().getResources().getDrawable(R.drawable.ic_group);
             }
