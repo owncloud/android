@@ -63,8 +63,8 @@ android {
         minSdkVersion 14
         targetSdkVersion 26
 
-        manifestPlaceholders.versionCode = "20900300"
-        manifestPlaceholders.versionName = "2.9.3"
+        versionCode = 20900300
+        versionName = "2.9.3"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 

@@ -18,9 +18,7 @@
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.owncloud.android"
-    android:versionCode="${versionCode}"
-    android:versionName="${versionName}">
+    package="com.owncloud.android">
 
     <uses-sdk
         tools:overrideLibrary="android.support.customtabs"/>
