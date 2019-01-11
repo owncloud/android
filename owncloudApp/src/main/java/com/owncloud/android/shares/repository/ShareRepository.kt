@@ -20,17 +20,18 @@
 package com.owncloud.android.shares.repository
 
 import android.arch.lifecycle.LiveData
+import com.owncloud.android.Resource
 import com.owncloud.android.lib.resources.shares.ShareType
-import com.owncloud.android.shares.datasources.LocalSharesDataSource
-import com.owncloud.android.shares.datasources.RemoteSharesDataSource
 import com.owncloud.android.shares.db.OCShare
 
 interface ShareRepository {
-    fun getSharesForFile(
+    fun loadSharesForFile(
         filePath: String,
         accountName: String,
-        shareTypes: List<ShareType>
-    ): LiveData<List<OCShare>>
+        shareTypes: List<ShareType>,
+        reshares: Boolean,
+        subfiles: Boolean
+    )
 
-    fun fetchSharesForFileFromServer(filePath: String, accountName: String, reshares: Boolean, subfiles: Boolean)
+    fun getSharesForFileAsLiveData() : LiveData<Resource<List<OCShare>>>
 }

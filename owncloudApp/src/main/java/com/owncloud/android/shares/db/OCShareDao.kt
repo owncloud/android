@@ -36,9 +36,9 @@ interface OCShareDao : LocalSharesDataSource {
                 "WHERE path = :filePath " +
                 "AND accountOwner = :accountName AND shareType IN (:shareTypes)"
     )
-    override fun sharesForAFile(
+    override fun getSharesForFile(
         filePath: String, accountName: String, shareTypes: List<Int>
-    ): LiveData<List<OCShare>>
+    ): List<OCShare>
 
     @Insert (onConflict = OnConflictStrategy.REPLACE)
     override fun insert(ocShare: OCShare)
