@@ -20,11 +20,15 @@
 package com.owncloud.android.shares.datasources
 
 import android.app.Application
-import com.owncloud.android.lib.resources.shares.RemoteShare
+import com.owncloud.android.lib.common.operations.RemoteOperationResult
+import com.owncloud.android.lib.resources.shares.ShareParserResult
 import com.owncloud.android.shares.db.OCShare
-import java.util.*
 
 interface RemoteSharesDataSource {
     suspend fun getShares(application: Application): List<OCShare>
-    fun getSharesForAFile(path: String, reshares: Boolean, subfiles: Boolean): ArrayList<RemoteShare>
+    fun getSharesForAFile(
+        path: String,
+        reshares: Boolean,
+        subfiles: Boolean
+    ): RemoteOperationResult<ShareParserResult>
 }

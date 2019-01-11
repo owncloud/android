@@ -25,11 +25,11 @@ import com.owncloud.android.shares.db.OCShare
 interface LocalSharesDataSource {
     fun shares(): LiveData<List<OCShare>>
 
-    fun sharesForAFile(
+    fun getSharesForFile(
         filePath: String,
         accountName: String,
         shareTypes: List<Int>
-    ): LiveData<List<OCShare>>
+    ): List<OCShare>
 
     fun insert(ocShare: OCShare)
 
