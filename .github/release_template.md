@@ -25,6 +25,7 @@ AC:
  - [ ] [GIT] merge master branch into stable, in owncloud/android-library
  - [ ] [GIT] merge master branch into stable, in owncloud/android
  - [ ] [DIS] push OC JB workaround app to Play Store
+ - [ ] [DOC] Update owncloud.org/download version numbers (notify rocketchat #marketing)
 
 
 _____
