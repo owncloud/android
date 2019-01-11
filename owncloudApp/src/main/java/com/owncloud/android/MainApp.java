@@ -121,7 +121,7 @@ public class MainApp extends Application {
             Log_OC.setLogDataFolder(dataFolder);
 
             Log_OC.startLogging(Environment.getExternalStorageDirectory().getAbsolutePath());
-            Log_OC.d("Debug", "start logging");
+            Log_OC.d(BuildConfig.BUILD_TYPE, "start logging " + BuildConfig.VERSION_NAME);
         }
 
         // register global protection with pass code, pattern lock and fingerprint lock
