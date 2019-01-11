@@ -34,6 +34,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import com.owncloud.android.R
+import com.owncloud.android.Status
 import com.owncloud.android.ViewModelFactory
 import com.owncloud.android.authentication.AccountUtils
 import com.owncloud.android.datamodel.OCFile
@@ -305,6 +306,21 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
         return view
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        shareViewModel = ViewModelProviders.of(this, ViewModelFactory.build {
+            ShareViewModel(
+                activity?.application!!,
+                this.context!!,
+                OwnCloudClientManagerFactory.getDefaultSingleton().getClientFor(
+                    OwnCloudAccount(mAccount, this.context),
+                    this.context
+                ),
+                mFile?.remotePath!!,
+                listOf(ShareType.PUBLIC_LINK)
+            )
+        }).get(ShareViewModel::class.java)
+    }
+
     override fun copyOrSendPublicLink(share: OCShare) {
         //GetLink from the server and show ShareLinkToDialog
         mListener!!.copyOrSendPublicLink(share)
@@ -435,32 +451,26 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
     fun observePublicShares() {
         if (isPublicShareDisabled) {
             hidePublicShare()
-
-        } else{
-            shareViewModel = ViewModelProviders.of(this, ViewModelFactory.build {
-              ShareViewModel(
-                  activity?.application!!,
-                  this.context!!,
-                  OwnCloudClientManagerFactory.getDefaultSingleton().getClientFor(
-                      OwnCloudAccount(mAccount, this.context),
-                      this.context
-                  ),
-                  mFile?.remotePath!!,
-                  listOf(ShareType.PUBLIC_LINK)
-              )
-            }).get(ShareViewModel::class.java)
-        }
-
-        shareViewModel.sharesForFile.observe(
-            this,
-            android.arch.lifecycle.Observer {
-                    sharesForFile ->
-                run {
-                    mPublicLinks = sharesForFile as ArrayList<OCShare>
-                    updateListOfPublicLinks()
+        } else {
+            shareViewModel.sharesForFile.observe(
+                this,
+                android.arch.lifecycle.Observer { resource ->
+                    if (resource != null) {
+                        when(resource.status) {
+                            Status.SUCCESS -> {
+                                mPublicLinks = resource.data as ArrayList<OCShare>
+                                updateListOfPublicLinks()
+                            }
+                            Status.ERROR -> {
+                                mPublicLinks = resource.data as ArrayList<OCShare>
+                                updateListOfPublicLinks()
+                                println(resource.message)
+                            }
+                        }
+                    }
                 }
-            }
-        )
+            )
+        }
     }
 
     /**
