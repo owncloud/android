@@ -1,0 +1,82 @@
+= Release Notes
+
+* xref:#_changes_in_2_8_0[Changes in 2.8.0]
+* xref:#_changes_in_2_7_0[Changes in 2.7.0]
+* xref:#_changes_in_2_6_0[Changes in 2.6.0]
+* xref:#_changes_in_2_5_0[Changes in 2.5.0]
+* xref:#_changes_in_2_4_0[Changes in 2.4.0]
+* xref:#_changes_in_2_2_0[Changes in 2.2.0]
+* xref:#_changes_in_2_1_1[Changes in 2.1.1]
+* xref:#_changes_in_2_1_0[Changes in 2.1.0]
+
+== Changes in 2.8.0
+
+* Side menu redesign with user quota
+* New icons to download/set available offline and new pins for syncing/downloaded/av. offline files
+* New sort descending option
+* Redesign public sharing options for folders
+* OAuth2 chrome custom tabs 
+* One panel for tablets in landscape
+
+== Changes in 2.7.0
+
+=== Additions
+
+* Fingerprint lock
+* Pattern lock
+* Upload picture directly from camera
+* GIF support
+* New features wizard
+
+=== Fixes
+
+* Display file size during upload
+* Hide always visible notification in Android 8
+* Animations when switching folders
+
+== Changes in 2.6.0
+
+=== Additions
+
+* Camera uploads, replacing instant uploads (Android 5 or higher required)
+* Android 8 support
+* Notification channels (Android 8 required)
+* Private link (ownCloud X required)
+
+=== Fixes
+
+* Typos in some translations
+
+== Changes in 2.5.0
+
+=== Additions
+
+* Added OAuth 2 support
+* Show file listing option (anonymous upload) when sharing a folder (_requires ownCloud X_)
+
+== Changes in 2.4.0
+
+=== Additions
+
+* Video streaming 
+* Multiple public links per file (_requires ownCloud X_)
+
+== Changes in 2.2.0
+
+=== Additions
+
+* New navigation drawer, with avatar and account switch
+* New account manager, accessible from navigation drawer
+* Can set folders as Available Offline
+
+== Changes in 2.1.1
+
+=== Additions
+
+* Select your camera folder to upload pictures or videos from any camera app
+
+== Changes in 2.1.0
+
+=== Additions
+
+* Select and handle multiple files
