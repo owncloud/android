@@ -1,5 +1,8 @@
 apply plugin: 'com.android.application'
 
+def commitSHA1 = 'COMMIT_SHA1'
+def gitRemote = 'GIT_REMOTE'
+
 configurations.all {
     resolutionStrategy {
         force "com.android.support:support-annotations:${supportLibraryVersion}"
@@ -65,6 +68,9 @@ android {
 
         versionCode = 20900300
         versionName = "2.9.3"
+
+        buildConfigField "String", gitRemote, "\"" + getGitOriginRemote() + "\""
+        buildConfigField "String", commitSHA1, "\"" + getLatestGitHash() + "\""
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
@@ -175,4 +181,17 @@ def setOutputFileName(variant, appName, callerProject) {
     variant.outputs.all {
         outputFileName = new File(".", newName)
     }
+}
+
+static def getLatestGitHash() {
+    def process = "git rev-parse --short HEAD".execute()
+    return process.text.toString().trim()
+}
+
+static def getGitOriginRemote() {
+    def process = "git remote -v".execute()
+    def values = process.text.toString().trim().split("\\r\\n|\\n|\\r")
+
+    def found = values.find { it.startsWith("origin") && it.endsWith("(push)") }
+    return found.replace("origin", "").replace("(push)", "").replace(".git", "").trim()
 }
