@@ -46,7 +46,7 @@ import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.lib.resources.status.OCCapability
 import com.owncloud.android.lib.resources.status.OwnCloudVersion
 import com.owncloud.android.shares.db.OCShare
-import com.owncloud.android.shares.viewmodel.ShareViewModel
+import com.owncloud.android.shares.viewmodel.OCShareViewModel
 import com.owncloud.android.ui.activity.FileActivity
 import com.owncloud.android.ui.activity.ShareActivity
 import com.owncloud.android.ui.adapter.SharePublicLinkListAdapter
@@ -191,7 +191,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
     private val addPublicLinkButton: ImageButton
         get() = view!!.findViewById<View>(R.id.addPublicLinkButton) as ImageButton
 
-    private lateinit var shareViewModel: ShareViewModel
+    private lateinit var ocShareViewModel: OCShareViewModel
 
     /**
      * {@inheritDoc}
@@ -307,8 +307,8 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        shareViewModel = ViewModelProviders.of(this, ViewModelFactory.build {
-            ShareViewModel(
+        ocShareViewModel = ViewModelProviders.of(this, ViewModelFactory.build {
+            OCShareViewModel(
                 activity?.application!!,
                 OwnCloudClientManagerFactory.getDefaultSingleton().getClientFor(
                     OwnCloudAccount(mAccount, this.context),
@@ -317,9 +317,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
                 mFile?.remotePath!!,
                 listOf(ShareType.PUBLIC_LINK)
             )
-        }).get(ShareViewModel::class.java)
-
-        shareViewModel.fetchShares()
+        }).get(OCShareViewModel::class.java)
     }
 
     override fun copyOrSendPublicLink(share: OCShare) {
@@ -453,7 +451,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
         if (isPublicShareDisabled) {
             hidePublicShare()
         } else {
-            shareViewModel.sharesForFile.observe(
+            ocShareViewModel.sharesForFile.observe(
                 this,
                 android.arch.lifecycle.Observer { resource ->
                     when (resource?.status) {
@@ -463,8 +461,6 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
                         }
                         Status.ERROR -> {
                             view?.let { Snackbar.make(it, resource.message.toString(), Snackbar.LENGTH_SHORT).show() }
-                            mPublicLinks = resource.data as ArrayList<OCShare>
-                            updateListOfPublicLinks()
                         }
                         else -> {}
                     }
