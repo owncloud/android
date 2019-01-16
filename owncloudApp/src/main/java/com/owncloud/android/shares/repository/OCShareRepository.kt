@@ -26,21 +26,15 @@ import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.shares.datasources.LocalSharesDataSource
 import com.owncloud.android.shares.datasources.RemoteSharesDataSource
 import com.owncloud.android.shares.db.OCShare
-import kotlinx.coroutines.*
-import kotlin.coroutines.CoroutineContext
 
 class OCShareRepository(
     private val localSharesDataSource: LocalSharesDataSource,
     private val remoteShareSharesDataSource: RemoteSharesDataSource
 ) : ShareRepository {
 
-    private var parentJob = Job()
-    // By default all the coroutines launched in this scope should be using the Main dispatcher
-    private val coroutineContext: CoroutineContext
-        get() = parentJob + Dispatchers.Main
-    private val scope = CoroutineScope(coroutineContext)
-
-    val sharesForFile: MutableLiveData<Resource<List<OCShare>>> = MutableLiveData();
+    private val _errors = MutableLiveData<Resource<List<OCShare>>>()
+    val errors: LiveData<Resource<List<OCShare>>>
+        get() = _errors
 
     override fun loadSharesForFile(
         filePath: String,
@@ -49,48 +43,39 @@ class OCShareRepository(
         reshares: Boolean,
         subfiles: Boolean
     ) {
-
-        scope.launch { // All operations below will be executed in Main Thread (UI) except the server and database ones
-
-            val remoteOperationResult = withContext(Dispatchers.IO) {
-                remoteShareSharesDataSource.getSharesForAFile(filePath, false, false)
-            }
-
-            if (remoteOperationResult.isSuccess) {
-                val localShares = remoteOperationResult.data.shares.map { remoteShare -> OCShare(remoteShare) }
-
-                withContext(Dispatchers.IO) {
-                    for (localShare in localShares) {
-                        localShare.accountOwner = accountName
-                        localSharesDataSource.insert(localShare)
+        try {
+            remoteShareSharesDataSource.getSharesForFile(filePath, reshares, subfiles)
+                .also { remoteOperationResult ->
+                    if (remoteOperationResult.isSuccess) {
+                        val localShares = remoteOperationResult.data.shares.map { remoteShare ->
+                            val localShare = OCShare(remoteShare)
+                            localShare.accountOwner = accountName
+                            localShare
+                        }
+                        localSharesDataSource.insert(localShares)
+                    } else {
+                        _errors.postValue(
+                            Resource.error(
+                                remoteOperationResult.logMessage,
+                                localSharesDataSource.getSharesForFile(filePath, accountName, shareTypes)
+                            )
+                        )
                     }
                 }
-
-                sharesForFile.postValue(
-                    Resource.success(
-                        withContext(Dispatchers.IO) {
-                            localSharesDataSource.getSharesForFile(
-                                filePath, accountName, shareTypes.map { shareType -> shareType.value }
-                            )
-                        }
-                    )
+        } catch (ex: Exception) {
+            _errors.postValue(
+                Resource.error(
+                    ex.localizedMessage,
+                    localSharesDataSource.getSharesForFile(filePath, accountName, shareTypes)
                 )
-            } else {
-                sharesForFile.postValue(
-                    Resource.error(
-                        remoteOperationResult.logMessage,
-                        withContext(Dispatchers.IO) {
-                            localSharesDataSource.getSharesForFile(
-                                filePath, accountName, shareTypes.map { shareType -> shareType.value }
-                            )
-                        }
-                    )
-                )
-            }
+            )
         }
     }
 
-    override fun getSharesForFileAsLiveData(): LiveData<Resource<List<OCShare>>> {
-        return sharesForFile
-    }
+    override fun getSharesForFileAsLiveData(
+        filePath: String,
+        accountName: String,
+        shareTypes: List<ShareType>
+    ): LiveData<List<OCShare>> =
+        localSharesDataSource.getSharesForFileAsLiveData(filePath, accountName, shareTypes)
 }
