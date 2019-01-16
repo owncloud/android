@@ -87,7 +87,7 @@ public class RemoveFileOperation extends SyncOperation {
         
         if (localRemovalFailed)
             return new RemoteOperationResult(ResultCode.LOCAL_STORAGE_NOT_REMOVED);
-        
+
         return result;
     }
 }
