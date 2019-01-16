@@ -28,7 +28,7 @@ data class Resource<out T>(val status: Status, val data: T?, val message: String
             return Resource(SUCCESS, data, null)
         }
 
-        fun <T> error(msg: String, data: T?): Resource<T> {
+        fun <T> error(msg: String, data: T? = null): Resource<T> {
             return Resource(ERROR, data, msg)
         }
 
