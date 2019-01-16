@@ -34,9 +34,5 @@ interface ShareRepository {
         shareTypes: List<ShareType>,
         reshares: Boolean,
         subfiles: Boolean
-    )
-
-    fun getSharesForFileAsLiveData(
-        filePath: String, accountName: String, shareTypes: List<ShareType>
-    ): LiveData<List<OCShare>>
+    ): LiveData<Resource<List<OCShare>>>
 }
