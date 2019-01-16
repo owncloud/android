@@ -20,29 +20,40 @@
 package com.owncloud.android.shares.db
 
 import android.arch.lifecycle.LiveData
-import android.arch.persistence.room.Dao
-import android.arch.persistence.room.Insert
-import android.arch.persistence.room.OnConflictStrategy
-import android.arch.persistence.room.Query
-import com.owncloud.android.shares.datasources.LocalSharesDataSource
+import android.arch.persistence.room.*
 
 @Dao
-interface OCShareDao : LocalSharesDataSource {
+abstract class OCShareDao {
     @Query("SELECT * from shares_table ORDER BY id")
-    override fun shares(): LiveData<List<OCShare>>
+    abstract fun shares(): LiveData<List<OCShare>>
 
     @Query(
         "SELECT * from shares_table " +
                 "WHERE path = :filePath " +
                 "AND accountOwner = :accountName AND shareType IN (:shareTypes)"
     )
-    override fun getSharesForFile(
+    abstract fun getSharesForFile(
         filePath: String, accountName: String, shareTypes: List<Int>
     ): List<OCShare>
 
-    @Insert (onConflict = OnConflictStrategy.REPLACE)
-    override fun insert(ocShare: OCShare)
+    @Query(
+        "SELECT * from shares_table " +
+                "WHERE path = :filePath " +
+                "AND accountOwner = :accountName AND shareType IN (:shareTypes)"
+    )
+    abstract fun getSharesForFileAsLiveData(
+        filePath: String, accountName: String, shareTypes: List<Int>
+    ): LiveData<List<OCShare>>
 
     @Insert (onConflict = OnConflictStrategy.REPLACE)
-    override fun insert(ocShares: List<OCShare>)
+    abstract fun insert(ocShares: List<OCShare>)
+
+    @Query("DELETE from shares_table WHERE path IN (:paths)")
+    abstract fun clear(paths: List<String>)
+
+    @Transaction
+    open fun replace(ocShares: List<OCShare>) {
+        clear(ocShares.map { it.path })
+        insert(ocShares)
+    }
 }

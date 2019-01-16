@@ -31,7 +31,7 @@ class OCRemoteSharesDataSource(private val client: OwnCloudClient) : RemoteShare
         return listOf() //TODO
     }
 
-    override fun getSharesForAFile(
+    override fun getSharesForFile(
         path: String,
         reshares: Boolean,
         subfiles: Boolean

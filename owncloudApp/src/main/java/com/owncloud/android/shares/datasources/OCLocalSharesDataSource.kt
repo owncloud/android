@@ -22,21 +22,25 @@ package com.owncloud.android.shares.datasources
 import android.arch.lifecycle.LiveData
 import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.shares.db.OCShare
+import com.owncloud.android.shares.db.OCShareDao
 
-interface LocalSharesDataSource {
-    fun shares(): LiveData<List<OCShare>>
+class OCLocalSharesDataSource(private val ocShareDao: OCShareDao) : LocalSharesDataSource {
 
-    fun getSharesForFile(
+    override fun shares(): LiveData<List<OCShare>> = ocShareDao.shares()
+
+    override fun getSharesForFile(
         filePath: String,
         accountName: String,
         shareTypes: List<ShareType>
-    ): List<OCShare>
+    ): List<OCShare> =
+        ocShareDao.getSharesForFile(filePath, accountName, shareTypes.map { it.value })
 
-    fun getSharesForFileAsLiveData(
+    override fun getSharesForFileAsLiveData(
         filePath: String,
         accountName: String,
         shareTypes: List<ShareType>
-    ): LiveData<List<OCShare>>
+    ): LiveData<List<OCShare>> =
+        ocShareDao.getSharesForFileAsLiveData(filePath, accountName, shareTypes.map { it.value })
 
-    fun insert(ocShares: List<OCShare>)
+    override fun insert(ocShares: List<OCShare>) = ocShareDao.replace(ocShares)
 }
