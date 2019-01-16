@@ -26,7 +26,7 @@ import com.owncloud.android.shares.db.OCShare
 
 interface RemoteSharesDataSource {
     suspend fun getShares(application: Application): List<OCShare>
-    fun getSharesForAFile(
+    fun getSharesForFile(
         path: String,
         reshares: Boolean,
         subfiles: Boolean
