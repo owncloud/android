@@ -25,7 +25,6 @@ import com.owncloud.android.lib.resources.shares.RemoteShare
 
 @Entity(tableName = "shares_table")
 data class OCShare(
-    @PrimaryKey val id: Long,
     val fileSource: Long,
     val itemSource: Long,
     val shareType: Int,
@@ -43,8 +42,10 @@ data class OCShare(
     val shareLink: String,
     var accountOwner: String
 ) {
+
+    @PrimaryKey(autoGenerate = true) var id: Int = 0
+
     constructor(remoteShare: RemoteShare) : this(
-        remoteShare.id,
         remoteShare.fileSource,
         remoteShare.itemSource,
         remoteShare.shareType.value,
