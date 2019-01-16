@@ -373,7 +373,7 @@ public class FileOperationsHelper {
         Intent updateShareIntent = new Intent(mFileActivity, OperationsService.class);
         updateShareIntent.setAction(OperationsService.ACTION_UPDATE_SHARE_VIA_LINK);
         updateShareIntent.putExtra(OperationsService.EXTRA_ACCOUNT, mFileActivity.getAccount());
-        updateShareIntent.putExtra(OperationsService.EXTRA_SHARE_ID, share.getId());
+//        updateShareIntent.putExtra(OperationsService.EXTRA_SHARE_ID, share.getId());
 
         updateShareIntent.putExtra(
                 OperationsService.EXTRA_SHARE_NAME,

@@ -90,7 +90,7 @@ class ShareViewModel(
         launch {
             withContext(Dispatchers.IO) {
                 shareRepository.loadSharesForFile(
-                    filePath, client.account.name, shareTypes, false, false
+                    filePath, client.account.name, shareTypes, true, false
                 )
             }
         }

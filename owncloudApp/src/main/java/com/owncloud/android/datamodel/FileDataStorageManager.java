@@ -1191,7 +1191,7 @@ public class FileDataStorageManager {
             if (result_uri != null) {
                 long new_id = Long.parseLong(result_uri.getPathSegments()
                         .get(1));
-                share.setId(new_id);
+//                share.setId(new_id);
             }
         }
 
