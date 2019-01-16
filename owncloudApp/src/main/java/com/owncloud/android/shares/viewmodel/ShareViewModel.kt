@@ -20,42 +20,79 @@
 package com.owncloud.android.shares.viewmodel
 
 import android.app.Application
-import android.arch.lifecycle.AndroidViewModel
-import android.arch.lifecycle.LiveData
-import android.content.Context
+import android.arch.lifecycle.*
 import com.owncloud.android.Resource
 import com.owncloud.android.db.OwncloudDatabase
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.resources.shares.ShareType
+import com.owncloud.android.shares.datasources.OCLocalSharesDataSource
 import com.owncloud.android.shares.datasources.OCRemoteSharesDataSource
 import com.owncloud.android.shares.db.OCShare
 import com.owncloud.android.shares.repository.OCShareRepository
 import com.owncloud.android.shares.repository.ShareRepository
+import com.owncloud.android.utils.distinctUntilChanged
+import kotlinx.coroutines.*
+import kotlin.coroutines.CoroutineContext
 
 /**
  * View Model to keep a reference to the share repository and an up-to-date list of a shares
  */
 class ShareViewModel(
     application: Application,
-    context: Context,
-    val client: OwnCloudClient,
-    val filePath: String,
-    shareTypes: List<ShareType>
-) : AndroidViewModel(application) {
+    private val client: OwnCloudClient,
+    private val filePath: String,
+    private val shareTypes: List<ShareType>
+) : AndroidViewModel(application), CoroutineScope {
+
+    private val job = Job()
+
+    override val coroutineContext: CoroutineContext
+        get() = Dispatchers.Main + job
 
     private val shareRepository: ShareRepository
+
     val sharesForFile: LiveData<Resource<List<OCShare>>>
 
     init {
-        val shareDao = OwncloudDatabase.getDatabase(context).shareDao()
+        val shareDao = OwncloudDatabase.getDatabase(application).shareDao()
 
         shareRepository = OCShareRepository(
-            shareDao,
+            OCLocalSharesDataSource(shareDao),
             OCRemoteSharesDataSource(client)
         )
 
-        sharesForFile = shareRepository.getSharesForFileAsLiveData()
+        /**
+         * Observe two different livedata objects and react on change events from them
+         * - Shares livedata from Room to detect changes in database
+         * - Errors livedata from remote operations
+         */
+        sharesForFile = MediatorLiveData<Resource<List<OCShare>>>().apply {
+            val database = shareRepository.getSharesForFileAsLiveData(
+                filePath, client.account.name, shareTypes
+            )
 
-        shareRepository.loadSharesForFile(filePath, client.account.name, shareTypes, false, false)
+            addSource(database.distinctUntilChanged()) { shares ->
+                this.value = Resource.success(shares)
+            }
+
+            addSource(shareRepository.errors) { error ->
+                this.value = error
+            }
+        }
+    }
+
+    override fun onCleared() {
+        job.cancel()
+        super.onCleared()
+    }
+
+    fun fetchShares() {
+        launch {
+            withContext(Dispatchers.IO) {
+                shareRepository.loadSharesForFile(
+                    filePath, client.account.name, shareTypes, false, false
+                )
+            }
+        }
     }
 }

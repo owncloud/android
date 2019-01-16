@@ -310,7 +310,6 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
         shareViewModel = ViewModelProviders.of(this, ViewModelFactory.build {
             ShareViewModel(
                 activity?.application!!,
-                this.context!!,
                 OwnCloudClientManagerFactory.getDefaultSingleton().getClientFor(
                     OwnCloudAccount(mAccount, this.context),
                     this.context
@@ -319,6 +318,8 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
                 listOf(ShareType.PUBLIC_LINK)
             )
         }).get(ShareViewModel::class.java)
+
+        shareViewModel.fetchShares()
     }
 
     override fun copyOrSendPublicLink(share: OCShare) {
@@ -455,18 +456,17 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
             shareViewModel.sharesForFile.observe(
                 this,
                 android.arch.lifecycle.Observer { resource ->
-                    if (resource != null) {
-                        when(resource.status) {
-                            Status.SUCCESS -> {
-                                mPublicLinks = resource.data as ArrayList<OCShare>
-                                updateListOfPublicLinks()
-                            }
-                            Status.ERROR -> {
-                                mPublicLinks = resource.data as ArrayList<OCShare>
-                                updateListOfPublicLinks()
-                                println(resource.message)
-                            }
+                    when (resource?.status) {
+                        Status.SUCCESS -> {
+                            mPublicLinks = resource.data as ArrayList<OCShare>
+                            updateListOfPublicLinks()
                         }
+                        Status.ERROR -> {
+                            view?.let { Snackbar.make(it, resource.message.toString(), Snackbar.LENGTH_SHORT).show() }
+                            mPublicLinks = resource.data as ArrayList<OCShare>
+                            updateListOfPublicLinks()
+                        }
+                        else -> {}
                     }
                 }
             )
