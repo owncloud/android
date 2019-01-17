@@ -352,7 +352,7 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
         if (shareFileFragment != null && shareFileFragment.isAdded) {   // only if added to the view hierarchy!!
             shareFileFragment.refreshCapabilitiesFromDB()
             shareFileFragment.refreshUsersOrGroupsListFromDB()
-            shareFileFragment.observePublicShares()
+            shareFileFragment.initPublicShares()
         }
 
         val searchShareesFragment = searchFragment

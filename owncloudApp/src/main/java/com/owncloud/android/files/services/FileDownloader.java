@@ -665,7 +665,7 @@ public class FileDownloader extends Service
             }
 
             mNotificationBuilder.setContentText(
-                    ErrorMessageAdapter.getResultMessage(downloadResult, download,
+                    ErrorMessageAdapter.Companion.getResultMessage(downloadResult, download,
                             getResources())
             );
             mNotificationBuilder.setChannelId(DOWNLOAD_NOTIFICATION_CHANNEL_ID);

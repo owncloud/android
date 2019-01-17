@@ -52,9 +52,7 @@ class OCShareRepository(
 
             override fun saveCallResult(item: ShareParserResult) {
                 val localShares = item.shares.map { remoteShare ->
-                    val localShare = OCShare(remoteShare)
-                    localShare.accountOwner = accountName
-                    localShare
+                    OCShare(remoteShare).also { it.accountOwner = accountName }
                 }
 
                 launch {
