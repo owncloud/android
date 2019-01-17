@@ -27,13 +27,13 @@
     <HorizontalScrollView
         android:layout_width="match_parent"
         android:layout_weight="1"
+        android:layout_margin="@dimen/standard_half_margin"
         android:layout_height="match_parent">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/log_recycler"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="@dimen/standard_margin"
             android:scrollbars="vertical" />
 
     </HorizontalScrollView>
