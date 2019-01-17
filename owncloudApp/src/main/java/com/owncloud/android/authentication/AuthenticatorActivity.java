@@ -1385,12 +1385,12 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
             case OK_REDIRECT_TO_NON_SECURE_CONNECTION:
                 mServerStatusIcon = R.drawable.ic_lock_open;
-                mServerStatusText = ErrorMessageAdapter.getResultMessage(result, null, getResources());
+                mServerStatusText = ErrorMessageAdapter.Companion.getResultMessage(result, null, getResources());
                 break;
             case NO_NETWORK_CONNECTION:
                 mServerStatusIcon = R.drawable.no_network;
             default:
-                mServerStatusText = ErrorMessageAdapter.getResultMessage(result, null, getResources());
+                mServerStatusText = ErrorMessageAdapter.Companion.getResultMessage(result, null, getResources());
         }
     }
 
@@ -1421,7 +1421,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             case NO_NETWORK_CONNECTION:
                 mAuthStatusIcon = R.drawable.no_network;
             default:
-                mAuthStatusText = ErrorMessageAdapter.getResultMessage(result, null, getResources());
+                mAuthStatusText = ErrorMessageAdapter.Companion.getResultMessage(result, null, getResources());
         }
     }
 
