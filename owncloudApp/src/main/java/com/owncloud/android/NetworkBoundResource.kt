@@ -86,7 +86,8 @@ abstract class NetworkBoundResource<ResultType, RequestType> : CoroutineScope {
                     } else {
                         errors.postValue(
                             Resource.error(
-                                remoteOperationResult.logMessage
+                                remoteOperationResult.code,
+                                exception = remoteOperationResult.exception
                             )
                         )
                     }
@@ -96,7 +97,7 @@ abstract class NetworkBoundResource<ResultType, RequestType> : CoroutineScope {
         } catch (ex: Exception) {
             errors.postValue(
                 Resource.error(
-                    ex.localizedMessage
+                    msg = ex.localizedMessage
                 )
             )
         }
