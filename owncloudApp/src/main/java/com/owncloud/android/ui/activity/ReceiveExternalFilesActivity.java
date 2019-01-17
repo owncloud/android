@@ -591,7 +591,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
         } else {
             try {
                 showSnackMessage(
-                        ErrorMessageAdapter.getResultMessage(result, operation, getResources())
+                        ErrorMessageAdapter.Companion.getResultMessage(result, operation, getResources())
                 );
 
             } catch (NotFoundException e) {

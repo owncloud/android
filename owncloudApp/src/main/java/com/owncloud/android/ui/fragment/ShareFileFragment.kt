@@ -52,6 +52,7 @@ import com.owncloud.android.ui.activity.ShareActivity
 import com.owncloud.android.ui.adapter.SharePublicLinkListAdapter
 import com.owncloud.android.ui.adapter.ShareUserListAdapter
 import com.owncloud.android.ui.dialog.RemoveShareDialogFragment
+import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter
 import com.owncloud.android.utils.DisplayUtils
 import com.owncloud.android.utils.MimetypeIconUtil
 import java.util.*
@@ -347,7 +348,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
         refreshUsersOrGroupsListFromDB()
 
         // Load data of public share, if exists
-        observePublicShares()
+        initPublicShares()
     }
 
     override fun onAttach(activity: Activity?) {
@@ -439,15 +440,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
         mListener!!.showEditPrivateShare(share)
     }
 
-    /**
-     * Listen public shares for changes in database
-     *
-     * Takes into account server capabilities before reading database.
-     *
-     * Depends on the parent Activity provides a [com.owncloud.android.datamodel.FileDataStorageManager]
-     * instance ready to use. If not ready, does nothing.
-     */
-    fun observePublicShares() {
+    fun initPublicShares() {
         if (isPublicShareDisabled) {
             hidePublicShare()
         } else {
@@ -460,7 +453,13 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
                             updateListOfPublicLinks()
                         }
                         Status.ERROR -> {
-                            view?.let { Snackbar.make(it, resource.message.toString(), Snackbar.LENGTH_SHORT).show() }
+                            val errorMessage = ErrorMessageAdapter.getErrorMessage(
+                                resource.code,
+                                resource.exception,
+                                resources
+                            )
+
+                            view?.let { Snackbar.make(it, errorMessage, Snackbar.LENGTH_SHORT).show() }
                         }
                         else -> {}
                     }

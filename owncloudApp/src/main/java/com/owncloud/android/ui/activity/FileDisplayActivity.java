@@ -1486,7 +1486,7 @@ public class FileDisplayActivity extends FileActivity
 
         if (getListOfFilesFragment().isSingleItemChecked() || result.isException() || !result.isSuccess()) {
             showSnackMessage(
-                    ErrorMessageAdapter.getResultMessage(result, operation, getResources())
+                    ErrorMessageAdapter.Companion.getResultMessage(result, operation, getResources())
             );
         }
 
@@ -1528,7 +1528,7 @@ public class FileDisplayActivity extends FileActivity
         } else {
             try {
                 showSnackMessage(
-                        ErrorMessageAdapter.getResultMessage(result, operation, getResources())
+                        ErrorMessageAdapter.Companion.getResultMessage(result, operation, getResources())
                 );
 
             } catch (NotFoundException e) {
@@ -1550,7 +1550,7 @@ public class FileDisplayActivity extends FileActivity
         } else {
             try {
                 showSnackMessage(
-                        ErrorMessageAdapter.getResultMessage(result, operation, getResources())
+                        ErrorMessageAdapter.Companion.getResultMessage(result, operation, getResources())
                 );
 
             } catch (NotFoundException e) {
@@ -1584,7 +1584,7 @@ public class FileDisplayActivity extends FileActivity
 
         } else {
             showSnackMessage(
-                    ErrorMessageAdapter.getResultMessage(result, operation, getResources())
+                    ErrorMessageAdapter.Companion.getResultMessage(result, operation, getResources())
             );
 
             if (result.isSslRecoverableException()) {
@@ -1609,7 +1609,7 @@ public class FileDisplayActivity extends FileActivity
 
             } else if (getSecondFragment() == null) {
                 showSnackMessage(
-                        ErrorMessageAdapter.getResultMessage(result, operation, getResources())
+                        ErrorMessageAdapter.Companion.getResultMessage(result, operation, getResources())
                 );
             }
         }
@@ -1641,7 +1641,7 @@ public class FileDisplayActivity extends FileActivity
         } else {
             try {
                 showSnackMessage(
-                        ErrorMessageAdapter.getResultMessage(result, operation, getResources())
+                        ErrorMessageAdapter.Companion.getResultMessage(result, operation, getResources())
                 );
             } catch (NotFoundException e) {
                 Log_OC.e(TAG, "Error while trying to show fail message ", e);

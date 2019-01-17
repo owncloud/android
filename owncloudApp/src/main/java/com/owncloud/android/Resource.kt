@@ -15,25 +15,35 @@
  */
 
 package com.owncloud.android
+
 import com.owncloud.android.Status.ERROR
-import com.owncloud.android.Status.LOADING
 import com.owncloud.android.Status.SUCCESS
+import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode
+import java.lang.Exception
+
 /**
  * A generic class that holds a value with its loading status.
  * @param <T>
 </T> */
-data class Resource<out T>(val status: Status, val data: T?, val message: String?) {
+data class Resource<out T>(
+    val status: Status,
+    val code: ResultCode?,
+    val data: T? = null,
+    val msg: String? = null,
+    val exception: Exception? = null
+) {
     companion object {
         fun <T> success(data: T?): Resource<T> {
-            return Resource(SUCCESS, data, null)
+            return Resource(SUCCESS, ResultCode.OK, data)
         }
 
-        fun <T> error(msg: String, data: T? = null): Resource<T> {
-            return Resource(ERROR, data, msg)
-        }
-
-        fun <T> loading(data: T?): Resource<T> {
-            return Resource(LOADING, data, null)
+        fun <T> error(
+            code: ResultCode? = null,
+            data: T? = null,
+            msg: String? = null,
+            exception: Exception? = null
+        ): Resource<T> {
+            return Resource(ERROR, code, data, msg, exception)
         }
     }
 }
