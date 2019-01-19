@@ -138,9 +138,9 @@ public class Log_OC {
         File folderLogs = new File(mFolder + File.separator);
         if (folderLogs.isDirectory()) {
             String[] myFiles = folderLogs.list();
-            for (String myFile1 : myFiles) {
-                File myFile = new File(folderLogs, myFile1);
-                Log_OC.d("delete file", myFile.getAbsoluteFile() + " " + myFile.delete());
+            for (String fileName : myFiles) {
+                File fileInFolder = new File(folderLogs, fileName);
+                Log_OC.d("delete file", fileInFolder.getAbsoluteFile() + " " + fileInFolder.delete());
             }
         }
     }
