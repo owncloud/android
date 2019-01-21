@@ -53,7 +53,6 @@ class GetSharesForFileOperation
         val result = operation.execute(client)
 
         if (result.isSuccess) {
-
             // Update DB with the response
             Log_OC.d(TAG, "File = " + mPath + " Share list size  " + result.data.shares.size)
             storageManager.saveShares(result.data.shares)
@@ -61,7 +60,6 @@ class GetSharesForFileOperation
         } else if (result.code == RemoteOperationResult.ResultCode.SHARE_NOT_FOUND) {
             // no share on the file - remove local shares
             storageManager.removeSharesForFile(mPath)
-
         }
 
         return result
