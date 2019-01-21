@@ -24,6 +24,7 @@ import android.arch.persistence.room.Database
 import android.arch.persistence.room.Room
 import android.arch.persistence.room.RoomDatabase
 import android.content.Context
+import android.support.annotation.VisibleForTesting
 import com.owncloud.android.shares.db.OCShare
 import com.owncloud.android.shares.db.OCShareDao
 
@@ -52,6 +53,14 @@ abstract class OwncloudDatabase : RoomDatabase() {
                 INSTANCE = instance
                 instance
             }
+        }
+
+        @VisibleForTesting
+        fun switchToInMemory(context: Context) {
+            INSTANCE = Room.inMemoryDatabaseBuilder(
+                context.applicationContext,
+                OwncloudDatabase::class.java
+            ).build()
         }
     }
 }
