@@ -19,30 +19,51 @@
 
 package com.owncloud.android.shares.db
 
+import android.arch.persistence.room.ColumnInfo
 import android.arch.persistence.room.Entity
 import android.arch.persistence.room.PrimaryKey
+import android.content.ContentValues
+import com.owncloud.android.db.ProviderMeta.ProviderTableMeta
 import com.owncloud.android.lib.resources.shares.RemoteShare
 
-@Entity(tableName = "shares_table")
+/**
+ * Represents one record of the Shares table.
+ */
+@Entity(tableName = ProviderTableMeta.OCSHARES_TABLE_NAME)
 data class OCShare(
+    @ColumnInfo(name = ProviderTableMeta.OCSHARES_FILE_SOURCE)
     val fileSource: Long,
+    @ColumnInfo(name = ProviderTableMeta.OCSHARES_ITEM_SOURCE)
     val itemSource: Long,
+    @ColumnInfo(name = ProviderTableMeta.OCSHARES_SHARE_TYPE)
     val shareType: Int,
+    @ColumnInfo(name = ProviderTableMeta.OCSHARES_SHARE_WITH)
     val shareWith: String,
+    @ColumnInfo(name = ProviderTableMeta.OCSHARES_PATH)
     val path: String,
+    @ColumnInfo(name = ProviderTableMeta.OCSHARES_PERMISSIONS)
     val permissions: Int,
+    @ColumnInfo(name = ProviderTableMeta.OCSHARES_SHARED_DATE)
     val sharedDate: Long,
+    @ColumnInfo(name = ProviderTableMeta.OCSHARES_EXPIRATION_DATE)
     val expirationDate: Long,
+    @ColumnInfo(name = ProviderTableMeta.OCSHARES_TOKEN)
     val token: String,
+    @ColumnInfo(name = ProviderTableMeta.OCSHARES_SHARE_WITH_DISPLAY_NAME)
     val sharedWithDisplayName: String,
-    val name: String,
+    @ColumnInfo(name = ProviderTableMeta.OCSHARES_IS_DIRECTORY)
     val isFolder: Boolean,
+    @ColumnInfo(name = ProviderTableMeta.OCSHARES_USER_ID)
     val userId: Long,
+    @ColumnInfo(name = ProviderTableMeta.OCSHARES_ID_REMOTE_SHARED)
     val remoteId: Long,
-    val shareLink: String,
-    var accountOwner: String
+    @ColumnInfo(name = ProviderTableMeta.OCSHARES_ACCOUNT_OWNER)
+    var accountOwner: String,
+    @ColumnInfo(name = ProviderTableMeta.OCSHARES_NAME)
+    val name: String,
+    @ColumnInfo(name = ProviderTableMeta.OCSHARES_SHARE_LINK)
+    val shareLink: String
 ) {
-
     @PrimaryKey(autoGenerate = true) var id: Int = 0
 
     constructor(remoteShare: RemoteShare) : this(
@@ -56,15 +77,16 @@ data class OCShare(
         remoteShare.expirationDate,
         remoteShare.token,
         remoteShare.sharedWithDisplayName,
-        remoteShare.name,
         remoteShare.isFolder,
         remoteShare.userId,
         remoteShare.remoteId,
-        remoteShare.shareLink,
-        ""
+        "",
+        remoteShare.name,
+        remoteShare.shareLink
     )
 
     companion object {
+
         /**
          * Generated - should be refreshed every time the class changes!!
          */
@@ -94,5 +116,26 @@ data class OCShare(
                 DELETE_PERMISSION_FLAG
         const val FEDERATED_PERMISSIONS_FOR_FOLDER_AFTER_OC9 =
             FEDERATED_PERMISSIONS_FOR_FOLDER_UP_TO_OC9 + SHARE_PERMISSION_FLAG
+
+        fun fromContentValues(values: ContentValues): OCShare {
+            return OCShare(
+                values.getAsLong(ProviderTableMeta.OCSHARES_FILE_SOURCE),
+                values.getAsLong(ProviderTableMeta.OCSHARES_ITEM_SOURCE),
+                values.getAsInteger(ProviderTableMeta.OCSHARES_SHARE_TYPE),
+                values.getAsString(ProviderTableMeta.OCSHARES_SHARE_WITH),
+                values.getAsString(ProviderTableMeta.OCSHARES_PATH),
+                values.getAsInteger(ProviderTableMeta.OCSHARES_PERMISSIONS),
+                values.getAsLong(ProviderTableMeta.OCSHARES_SHARED_DATE),
+                values.getAsLong(ProviderTableMeta.OCSHARES_EXPIRATION_DATE),
+                values.getAsString(ProviderTableMeta.OCSHARES_TOKEN),
+                values.getAsString(ProviderTableMeta.OCSHARES_SHARE_WITH_DISPLAY_NAME),
+                values.getAsBoolean(ProviderTableMeta.OCSHARES_IS_DIRECTORY),
+                values.getAsLong(ProviderTableMeta.OCSHARES_USER_ID),
+                values.getAsLong(ProviderTableMeta.OCSHARES_ID_REMOTE_SHARED),
+                values.getAsString(ProviderTableMeta.OCSHARES_ACCOUNT_OWNER),
+                values.getAsString(ProviderTableMeta.OCSHARES_NAME),
+                values.getAsString(ProviderTableMeta.OCSHARES_SHARE_LINK)
+            )
+        }
     }
 }
