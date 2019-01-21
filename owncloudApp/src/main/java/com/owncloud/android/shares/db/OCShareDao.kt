@@ -21,34 +21,41 @@ package com.owncloud.android.shares.db
 
 import android.arch.lifecycle.LiveData
 import android.arch.persistence.room.*
+import android.database.Cursor
+import com.owncloud.android.db.ProviderMeta.ProviderTableMeta
 
 @Dao
 abstract class OCShareDao {
-    @Query("SELECT * from shares_table ORDER BY id")
+    @Query("SELECT * from " + ProviderTableMeta.OCSHARES_TABLE_NAME + " ORDER BY id")
     abstract fun shares(): LiveData<List<OCShare>>
 
     @Query(
-        "SELECT * from shares_table " +
-                "WHERE path = :filePath " +
-                "AND accountOwner = :accountName AND shareType IN (:shareTypes)"
+        "SELECT * from " + ProviderTableMeta.OCSHARES_TABLE_NAME + " WHERE " +
+                ProviderTableMeta.OCSHARES_PATH + " = :filePath AND " +
+                ProviderTableMeta.OCSHARES_ACCOUNT_OWNER + " = :accountName AND " +
+                ProviderTableMeta.OCSHARES_SHARE_TYPE + " IN (:shareTypes)"
     )
     abstract fun getSharesForFile(
         filePath: String, accountName: String, shareTypes: List<Int>
     ): List<OCShare>
 
     @Query(
-        "SELECT * from shares_table " +
-                "WHERE path = :filePath " +
-                "AND accountOwner = :accountName AND shareType IN (:shareTypes)"
+        "SELECT * from " + ProviderTableMeta.OCSHARES_TABLE_NAME + " WHERE " +
+                ProviderTableMeta.OCSHARES_PATH + " = :filePath AND " +
+                ProviderTableMeta.OCSHARES_ACCOUNT_OWNER + " = :accountName AND " +
+                ProviderTableMeta.OCSHARES_SHARE_TYPE + " IN (:shareTypes)"
     )
     abstract fun getSharesForFileAsLiveData(
         filePath: String, accountName: String, shareTypes: List<Int>
     ): LiveData<List<OCShare>>
 
-    @Insert (onConflict = OnConflictStrategy.REPLACE)
-    abstract fun insert(ocShares: List<OCShare>)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    abstract fun insert(ocShares: List<OCShare>): List<Long>
 
-    @Query("DELETE from shares_table WHERE path IN (:paths)")
+    @Query(
+        "DELETE from " + ProviderTableMeta.OCSHARES_TABLE_NAME + " WHERE " +
+                ProviderTableMeta.OCSHARES_PATH + " IN (:paths)"
+    )
     abstract fun clear(paths: List<String>)
 
     @Transaction
@@ -56,4 +63,7 @@ abstract class OCShareDao {
         clear(ocShares.map { it.path })
         insert(ocShares)
     }
+
+    @Query("SELECT * from " + ProviderTableMeta.OCSHARES_TABLE_NAME + " ORDER BY id")
+    abstract fun allShares(): Cursor
 }
