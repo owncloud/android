@@ -8,6 +8,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Locale;
 
 public class Log_OC {
     private static final String SIMPLE_DATE_FORMAT = "yyyy/MM/dd HH:mm:ss";
@@ -25,50 +26,53 @@ public class Log_OC {
     private static boolean isMaxFileSizeReached = false;
     private static boolean isEnabled = false;
 
-    public static void setLogDataFolder(String logFolder){
-    	mOwncloudDataFolderLog = logFolder;
+    public static void setLogDataFolder(String logFolder) {
+        mOwncloudDataFolderLog = logFolder;
     }
 
-    public static void i(String TAG, String message){
+    public static void i(String TAG, String message) {
         Log.i(TAG, message);
-        appendLog(TAG+" : "+ message);
+        appendLog(TAG + " : " + message);
     }
 
-    public static void d(String TAG, String message){
+    public static void d(String TAG, String message) {
         Log.d(TAG, message);
         appendLog(TAG + " : " + message);
     }
+
     public static void d(String TAG, String message, Exception e) {
         Log.d(TAG, message, e);
-        appendLog(TAG + " : " + message + " Exception : "+ e.getStackTrace());
+        appendLog(TAG + " : " + message + " Exception : " + e.getStackTrace());
     }
-    public static void e(String TAG, String message){
+
+    public static void e(String TAG, String message) {
         Log.e(TAG, message);
         appendLog(TAG + " : " + message);
     }
-    
+
     public static void e(String TAG, String message, Throwable e) {
         Log.e(TAG, message, e);
-        appendLog(TAG+" : " + message +" Exception : " + e.getStackTrace());
+        appendLog(TAG + " : " + message + " Exception : " + e.getStackTrace());
     }
-    
-    public static void v(String TAG, String message){
+
+    public static void v(String TAG, String message) {
         Log.v(TAG, message);
-        appendLog(TAG+" : "+ message);
+        appendLog(TAG + " : " + message);
     }
-    
+
     public static void w(String TAG, String message) {
         Log.w(TAG, message);
-        appendLog(TAG+" : "+ message);
+        appendLog(TAG + " : " + message);
     }
 
     /**
      * Start doing logging
+     *
      * @param storagePath : directory for keeping logs
      */
     synchronized public static void startLogging(String storagePath) {
-		String logPath = storagePath + File.separator +
-			mOwncloudDataFolderLog + File.separator + LOG_FOLDER_NAME;
+        String logPath = storagePath + File.separator +
+                mOwncloudDataFolderLog + File.separator + LOG_FOLDER_NAME;
         mFolder = new File(logPath);
         mLogFile = new File(mFolder + File.separator + mLogFileNames[0]);
 
@@ -80,7 +84,7 @@ public class Log_OC {
             Log.d("LOG_OC", "Log file created");
         }
 
-        try { 
+        try {
 
             // Create the current log file if does not exist
             mLogFile.createNewFile();
@@ -94,10 +98,10 @@ public class Log_OC {
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            if(mBuf != null) {
+            if (mBuf != null) {
                 try {
                     mBuf.close();
-                } catch(IOException e) {
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
@@ -106,15 +110,15 @@ public class Log_OC {
 
     synchronized public static void stopLogging() {
         try {
-			if (mBuf != null)
+            if (mBuf != null) {
                 mBuf.close();
+            }
             isEnabled = false;
 
             mLogFile = null;
             mFolder = null;
             mBuf = null;
             isMaxFileSizeReached = false;
-            isEnabled = false;
 
         } catch (IOException e) {
             // Because we are stopping logging, we only log to Android console.
@@ -132,15 +136,15 @@ public class Log_OC {
      */
     public static void deleteHistoryLogging() {
         File folderLogs = new File(mFolder + File.separator);
-        if(folderLogs.isDirectory()){
+        if (folderLogs.isDirectory()) {
             String[] myFiles = folderLogs.list();
-            for (int i=0; i<myFiles.length; i++) {
-                File myFile = new File(folderLogs, myFiles[i]);
-                myFile.delete();
+            for (String fileName : myFiles) {
+                File fileInFolder = new File(folderLogs, fileName);
+                Log_OC.d("delete file", fileInFolder.getAbsoluteFile() + " " + fileInFolder.delete());
             }
         }
     }
-    
+
     /**
      * Append the info of the device
      */
@@ -152,9 +156,10 @@ public class Log_OC {
         appendLog("Version-Codename : " + android.os.Build.VERSION.CODENAME);
         appendLog("Version-Release : " + android.os.Build.VERSION.RELEASE);
     }
-    
+
     /**
      * Append to the log file the info passed
+     *
      * @param text : text for adding to the log file
      */
     synchronized private static void appendLog(String text) {
@@ -174,18 +179,15 @@ public class Log_OC {
                 isMaxFileSizeReached = false;
             }
 
-	        String timeStamp = new SimpleDateFormat(SIMPLE_DATE_FORMAT).format(Calendar.getInstance().getTime());
+            String timeStamp = new SimpleDateFormat(SIMPLE_DATE_FORMAT, Locale.ENGLISH).format(Calendar.getInstance().getTime());
 
-	        try {
-	            mBuf = new BufferedWriter(new FileWriter(mLogFile, true));
-	            mBuf.newLine();
-	            mBuf.write(timeStamp);
-	            mBuf.newLine();
-	            mBuf.write(text);
-	            mBuf.newLine();
-	        } catch (IOException e) {
-	            e.printStackTrace();
-	        } finally {
+            try {
+                mBuf = new BufferedWriter(new FileWriter(mLogFile, true));
+                mBuf.newLine();
+                mBuf.write(timeStamp + " " + text);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
                 try {
                     mBuf.close();
                 } catch (IOException e) {
