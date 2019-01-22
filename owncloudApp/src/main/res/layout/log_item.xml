@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ownCloud Android client application
 
   Copyright (C) 2016 ownCloud GmbH.
@@ -16,24 +15,10 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_marginHorizontal="@dimen/standard_margin"
-              android:layout_marginVertical="@dimen/standard_half_margin"
-              android:filterTouchesWhenObscured="true"
-              android:orientation="vertical">
-
-    <TextView
-        android:id="@+id/logTimestamp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="adios"/>
-
-    <TextView
-        android:id="@+id/logContent"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="hola"/>
-
-</LinearLayout>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/logContent"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:lines="1"
+    tools:text="hola" />

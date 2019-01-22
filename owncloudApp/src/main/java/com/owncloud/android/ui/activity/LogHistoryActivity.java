@@ -1,4 +1,4 @@
-/**
+/*
  *   ownCloud Android client application
  *
  *   @author David González Verdugo
@@ -33,13 +33,10 @@ import android.support.v4.content.FileProvider;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.Button;
 
 import com.owncloud.android.R;
 import com.owncloud.android.lib.common.utils.Log_OC;
-import com.owncloud.android.logs.Log;
 import com.owncloud.android.ui.adapter.LogListAdapter;
 import com.owncloud.android.ui.dialog.LoadingDialog;
 import com.owncloud.android.utils.FileStorageUtils;
@@ -49,10 +46,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 
 public class LogHistoryActivity extends ToolbarActivity {
@@ -66,7 +60,6 @@ public class LogHistoryActivity extends ToolbarActivity {
     private String mLogPath = FileStorageUtils.getLogPath();
     private File mLogDIR = null;
 
-    private RecyclerView.LayoutManager mLayoutManager;
     private RecyclerView mLogsRecycler;
     private LogListAdapter mLogListAdapter;
 
@@ -77,32 +70,22 @@ public class LogHistoryActivity extends ToolbarActivity {
         setContentView(R.layout.logs);
         setupToolbar();
 
-        mLayoutManager = new LinearLayoutManager(this);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         mLogsRecycler = findViewById(R.id.log_recycler);
         mLogsRecycler.setHasFixedSize(true);
-        mLogsRecycler.setLayoutManager(mLayoutManager);
+        mLogsRecycler.setLayoutManager(layoutManager);
 
         setTitle(getText(R.string.actionbar_logger));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         Button deleteHistoryButton = findViewById(R.id.deleteLogHistoryButton);
         Button sendHistoryButton = findViewById(R.id.sendLogHistoryButton);
 
-        deleteHistoryButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Log_OC.deleteHistoryLogging();
-                finish();
-            }
+        deleteHistoryButton.setOnClickListener(v -> {
+            Log_OC.deleteHistoryLogging();
+            finish();
         });
 
-        sendHistoryButton.setOnClickListener(new OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                sendMail();
-            }
-        });
+        sendHistoryButton.setOnClickListener(v -> sendMail());
 
         if (savedInstanceState == null) {
             if (mLogPath != null) {
@@ -152,11 +135,10 @@ public class LogHistoryActivity extends ToolbarActivity {
             emailAddress = "";
         }
 
-        ArrayList<Uri> uris = new ArrayList<Uri>();
+        ArrayList<Uri> uris = new ArrayList<>();
 
         // Convert from paths to Android friendly Parcelable Uri's
-        for (String file : Log_OC.getLogFileNames())
-        {
+        for (String file : Log_OC.getLogFileNames()) {
             File logFile = new File(mLogPath, file);
             if (logFile.exists()) {
 
@@ -189,17 +171,15 @@ public class LogHistoryActivity extends ToolbarActivity {
     }
 
     /**
-     *
      * Class for loading the log data async
-     *
      */
-    private class LoadingLogTask extends AsyncTask<String, Void, ArrayList<Log>> {
+    private class LoadingLogTask extends AsyncTask<String, Void, ArrayList<String>> {
 
-        protected ArrayList<Log> doInBackground(String... args) {
+        protected ArrayList<String> doInBackground(String... args) {
             return readLogFile();
         }
 
-        protected void onPostExecute(ArrayList<Log> result) {
+        protected void onPostExecute(ArrayList<String> result) {
             if (result != null) {
                 mLogListAdapter = new LogListAdapter(result);
                 mLogsRecycler.setAdapter(mLogListAdapter);
@@ -210,58 +190,34 @@ public class LogHistoryActivity extends ToolbarActivity {
         /**
          * Read and show log file info
          */
-        private ArrayList<Log> readLogFile() {
+        private ArrayList<String> readLogFile() {
             String[] logFileName = Log_OC.getLogFileNames();
-            ArrayList<Log> logList = new ArrayList<>();
+            ArrayList<String> logList = new ArrayList<>();
             BufferedReader br = null;
 
             try {
                 String line;
-                for (int i = logFileName.length-1; i >= 0; i--) {
-                    File file = new File(mLogPath,logFileName[i]);
+                for (int i = logFileName.length - 1; i >= 0; i--) {
+                    File file = new File(mLogPath, logFileName[i]);
                     if (file.exists()) {
                         // Check if FileReader is ready
                         if (new FileReader(file).ready()) {
                             br = new BufferedReader(new FileReader(file));
-                            Date timestamp = null;
-                            int count = 0;
 
                             while ((line = br.readLine()) != null) {
-                                switch (count) {
-                                    case 0: // Empty line, skip it
-                                        count++;
-                                        break;
-
-                                    case 1: // Log timestamp
-                                        try {
-                                            SimpleDateFormat simpleDateFormat =
-                                                    new SimpleDateFormat("yyyy/MM/dd H:mm:ss");
-                                            timestamp = simpleDateFormat.parse(line);
-                                        } catch (ParseException e) {
-                                            e.printStackTrace();
-                                        }
-                                        count++;
-                                        break;
-
-                                    case 2: // Log content, create the instance
-                                        logList.add(new Log(timestamp, line));
-                                        count = 0;
-                                        break;
-                                }
+                                logList.add(line);
                             }
                         }
                     }
                 }
-            }
-            catch (IOException e) {
-                Log_OC.d(TAG, e.getMessage().toString());
+            } catch (IOException e) {
+                Log_OC.d(TAG, e.getMessage());
 
             } finally {
                 if (br != null) {
                     try {
                         br.close();
-                    } catch (IOException e) {
-                        // ignore
+                    } catch (IOException ignored) {
                     }
                 }
             }
@@ -283,7 +239,7 @@ public class LogHistoryActivity extends ToolbarActivity {
     /**
      * Dismiss loading dialog
      */
-    public void dismissLoadingDialog(){
+    public void dismissLoadingDialog() {
         Fragment frag = getSupportFragmentManager().findFragmentByTag(DIALOG_WAIT_TAG);
         if (frag != null) {
             LoadingDialog loading = (LoadingDialog) frag;
