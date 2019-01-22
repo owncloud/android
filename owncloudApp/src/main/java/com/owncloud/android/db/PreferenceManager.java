@@ -57,6 +57,11 @@ public abstract class PreferenceManager {
     private static final String PREF__CAMERA_VIDEO_UPLOADS_PATH = "camera_video_uploads_path";
     private static final String PREF__CAMERA_UPLOADS_BEHAVIOUR = "camera_uploads_behaviour";
     private static final String PREF__CAMERA_UPLOADS_SOURCE = "camera_uploads_source_path";
+    private static final String PREF__USER_UPLOADS_WIFI_ONLY = "user_upload_on_wifi";
+
+    public static boolean wifiOnlyUploadEnabled(Context context) {
+        return getDefaultSharedPreferences(context).getBoolean(PREF__USER_UPLOADS_WIFI_ONLY, false);
+    }
 
     public static boolean cameraPictureUploadEnabled(Context context) {
         return getDefaultSharedPreferences(context).getBoolean(PREF__CAMERA_PICTURE_UPLOADS_ENABLED, false);
