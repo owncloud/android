@@ -132,6 +132,8 @@ public class FileContentProvider extends ContentProvider {
         mShareProjectionMap.put(ProviderTableMeta.OCSHARES_TOKEN, ProviderTableMeta.OCSHARES_TOKEN);
         mShareProjectionMap.put(ProviderTableMeta.OCSHARES_SHARE_WITH_DISPLAY_NAME,
                 ProviderTableMeta.OCSHARES_SHARE_WITH_DISPLAY_NAME);
+        mShareProjectionMap.put(ProviderTableMeta.OCSHARES_SHARE_WITH_ADDITIONAL_INFO,
+                ProviderTableMeta.OCSHARES_SHARE_WITH_ADDITIONAL_INFO);
         mShareProjectionMap.put(ProviderTableMeta.OCSHARES_IS_DIRECTORY,
                 ProviderTableMeta.OCSHARES_IS_DIRECTORY);
         mShareProjectionMap.put(ProviderTableMeta.OCSHARES_USER_ID, ProviderTableMeta.OCSHARES_USER_ID);
@@ -1091,6 +1093,10 @@ public class FileContentProvider extends ContentProvider {
                             " ADD COLUMN " +
                             ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_UPLOAD_ONLY +
                             " INTEGER DEFAULT NULL");
+
+                    db.execSQL("ALTER TABLE " + ProviderTableMeta.OCSHARES_TABLE_NAME +
+                            " ADD COLUMN " + ProviderTableMeta.OCSHARES_SHARE_WITH_ADDITIONAL_INFO + " TEXT " +
+                            " DEFAULT NULL");
                     db.setTransactionSuccessful();
                     upgraded = true;
                 } finally {
@@ -1149,6 +1155,7 @@ public class FileContentProvider extends ContentProvider {
                 + ProviderTableMeta.OCSHARES_EXPIRATION_DATE + " INTEGER, "
                 + ProviderTableMeta.OCSHARES_TOKEN + " TEXT, "
                 + ProviderTableMeta.OCSHARES_SHARE_WITH_DISPLAY_NAME + " TEXT, "
+                + ProviderTableMeta.OCSHARES_SHARE_WITH_ADDITIONAL_INFO + " TEXT, "
                 + ProviderTableMeta.OCSHARES_IS_DIRECTORY + " INTEGER, "  // boolean
                 + ProviderTableMeta.OCSHARES_USER_ID + " INTEGER, "
                 + ProviderTableMeta.OCSHARES_ID_REMOTE_SHARED + " INTEGER,"

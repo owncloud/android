@@ -110,6 +110,7 @@ public class ProviderMeta {
         public static final String OCSHARES_EXPIRATION_DATE = "expiration_date";
         public static final String OCSHARES_TOKEN = "token";
         public static final String OCSHARES_SHARE_WITH_DISPLAY_NAME = "shared_with_display_name";
+        public static final String OCSHARES_SHARE_WITH_ADDITIONAL_INFO = "share_with_additional_info";
         public static final String OCSHARES_IS_DIRECTORY = "is_directory";
         public static final String OCSHARES_USER_ID = "user_id";
         public static final String OCSHARES_ID_REMOTE_SHARED = "id_remote_shared";

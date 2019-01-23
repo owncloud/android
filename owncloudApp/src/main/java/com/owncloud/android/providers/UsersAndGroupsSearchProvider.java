@@ -219,6 +219,18 @@ public class UsersAndGroupsSearchProvider extends ContentProvider {
                     int type = value.getInt(GetRemoteShareesOperation.PROPERTY_SHARE_TYPE);
                     String shareWith = value.getString(GetRemoteShareesOperation.PROPERTY_SHARE_WITH);
 
+                    try {
+                        String shareWithAdditionalInfo = value.getString(
+                                GetRemoteShareesOperation.PROPERTY_SHARE_WITH_ADDITIONAL_INFO);
+
+                        userName = shareWithAdditionalInfo.isEmpty() ?
+                                userName :
+                                userName + " (" + shareWithAdditionalInfo + ")";
+
+                    } catch (JSONException e) {
+                        Log_OC.e(TAG, "Exception while parsing shareWithAdditionalInfo", e);
+                    }
+
                     if (ShareType.GROUP.getValue() == type) {
                         displayName = getContext().getString(R.string.share_group_clarification, userName);
                         icon = R.drawable.ic_group;
