@@ -36,6 +36,7 @@ import com.owncloud.android.lib.common.http.methods.nonwebdav.GetMethod;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -46,24 +47,24 @@ import static com.owncloud.android.lib.common.operations.RemoteOperationResult.R
 
 /**
  * Created by masensio on 08/10/2015.
- * <p>
+ *
  * Retrieves a list of sharees (possible targets of a share) from the ownCloud server.
- * <p>
+ *
  * Currently only handles users and groups. Users in other OC servers (federation) should be added later.
- * <p>
+ *
  * Depends on SHAREE API. {@See https://github.com/owncloud/documentation/issues/1626}
- * <p>
+ *
  * Syntax:
- * Entry point: ocs/v2.php/apps/files_sharing/api/v1/sharees
- * HTTP method: GET
- * url argument: itemType - string, required
- * url argument: format - string, optional
- * url argument: search - string, optional
- * url arguments: perPage - int, optional
- * url arguments: page - int, optional
- * <p>
+ *    Entry point: ocs/v2.php/apps/files_sharing/api/v1/sharees
+ *    HTTP method: GET
+ *    url argument: itemType - string, required
+ *    url argument: format - string, optional
+ *    url argument: search - string, optional
+ *    url arguments: perPage - int, optional
+ *    url arguments: page - int, optional
+ *
  * Status codes:
- * 100 - successful
+ *    100 - successful
  *
  * @author masensio
  * @author David A. Velasco
@@ -71,22 +72,22 @@ import static com.owncloud.android.lib.common.operations.RemoteOperationResult.R
  */
 public class GetRemoteShareesOperation extends RemoteOperation<ArrayList<JSONObject>> {
 
-    public static final String NODE_VALUE = "value";
-    public static final String PROPERTY_LABEL = "label";
-    public static final String PROPERTY_SHARE_TYPE = "shareType";
-    public static final String PROPERTY_SHARE_WITH = "shareWith";
     private static final String TAG = GetRemoteShareesOperation.class.getSimpleName();
+
     // OCS Routes
     private static final String OCS_ROUTE = "ocs/v2.php/apps/files_sharing/api/v1/sharees";    // from OC 8.2
+
     // Arguments - names
     private static final String PARAM_FORMAT = "format";
     private static final String PARAM_ITEM_TYPE = "itemType";
     private static final String PARAM_SEARCH = "search";
     private static final String PARAM_PAGE = "page";                //  default = 1
     private static final String PARAM_PER_PAGE = "perPage";         //  default = 200
+
     // Arguments - constant values
     private static final String VALUE_FORMAT = "json";
     private static final String VALUE_ITEM_TYPE = "file";         //  to get the server search for users / groups
+
     // JSON Node names
     private static final String NODE_OCS = "ocs";
     private static final String NODE_DATA = "data";
@@ -94,6 +95,12 @@ public class GetRemoteShareesOperation extends RemoteOperation<ArrayList<JSONObj
     private static final String NODE_USERS = "users";
     private static final String NODE_GROUPS = "groups";
     private static final String NODE_REMOTES = "remotes";
+    public static final String NODE_VALUE = "value";
+    public static final String PROPERTY_LABEL = "label";
+    public static final String PROPERTY_SHARE_TYPE = "shareType";
+    public static final String PROPERTY_SHARE_WITH = "shareWith";
+    public static final String PROPERTY_SHARE_WITH_ADDITIONAL_INFO = "shareWithAdditionalInfo";
+
     private String mSearchString;
     private int mPage;
     private int mPerPage;
@@ -101,9 +108,9 @@ public class GetRemoteShareesOperation extends RemoteOperation<ArrayList<JSONObj
     /**
      * Constructor
      *
-     * @param searchString string for searching users, optional
-     * @param page         page index in the list of results; beginning in 1
-     * @param perPage      maximum number of results in a single page
+     * @param searchString  	string for searching users, optional
+     * @param page			    page index in the list of results; beginning in 1
+     * @param perPage           maximum number of results in a single page
      */
     public GetRemoteShareesOperation(String searchString, int page, int perPage) {
         mSearchString = searchString;
@@ -115,7 +122,7 @@ public class GetRemoteShareesOperation extends RemoteOperation<ArrayList<JSONObj
     protected RemoteOperationResult<ArrayList<JSONObject>> run(OwnCloudClient client) {
         RemoteOperationResult<ArrayList<JSONObject>> result;
 
-        try {
+        try{
             Uri requestUri = client.getBaseUri();
             Uri.Builder uriBuilder = requestUri.buildUpon()
                     .appendEncodedPath(OCS_ROUTE)
@@ -132,7 +139,7 @@ public class GetRemoteShareesOperation extends RemoteOperation<ArrayList<JSONObj
             int status = client.executeHttpMethod(getMethod);
             String response = getMethod.getResponseBodyAsString();
 
-            if (isSuccess(status)) {
+            if(isSuccess(status)) {
                 Log_OC.d(TAG, "Successful response: " + response);
 
                 // Parse the response
@@ -156,8 +163,8 @@ public class GetRemoteShareesOperation extends RemoteOperation<ArrayList<JSONObj
                 };
 
                 ArrayList<JSONObject> data = new ArrayList<>(); // For result data
-                for (int i = 0; i < 6; i++) {
-                    for (int j = 0; j < jsonResults[i].length(); j++) {
+                for (int i=0; i<6; i++) {
+                    for(int j=0; j< jsonResults[i].length(); j++){
                         JSONObject jsonResult = jsonResults[i].getJSONObject(j);
                         data.add(jsonResult);
                         Log_OC.d(TAG, "*** Added item: " + jsonResult.getString(PROPERTY_LABEL));
@@ -167,7 +174,7 @@ public class GetRemoteShareesOperation extends RemoteOperation<ArrayList<JSONObj
                 result = new RemoteOperationResult<>(OK);
                 result.setData(data);
 
-                Log_OC.d(TAG, "*** Get Users or groups completed ");
+                Log_OC.d(TAG, "*** Get Users or groups completed " );
 
             } else {
                 result = new RemoteOperationResult<>(getMethod);
