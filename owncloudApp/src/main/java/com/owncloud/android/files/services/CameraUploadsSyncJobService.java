@@ -45,7 +45,7 @@ import java.util.Arrays;
 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 public class CameraUploadsSyncJobService extends JobService {
 
-    private static final String TAG = CameraUploadsSyncJobService.class.getName();
+    private static final String TAG = CameraUploadsSyncJobService.class.getSimpleName();
 
     @Override
     public boolean onStartJob(JobParameters jobParameters) {
@@ -57,8 +57,7 @@ public class CameraUploadsSyncJobService extends JobService {
         return true; // True because we have a thread still running in background
     }
 
-    private static class CameraUploadsSyncJobTask extends AsyncTask<JobParameters, Void,
-            JobParameters> {
+    private static class CameraUploadsSyncJobTask extends AsyncTask<JobParameters, Void, JobParameters> {
 
         private final JobService mCameraUploadsSyncJobService;
 
@@ -182,6 +181,7 @@ public class CameraUploadsSyncJobService extends JobService {
 
             if (mOCCameraUploadSync == null) {
                 Log_OC.d(TAG, "There's no timestamp to compare with in database yet, not continue");
+                return;
             }
 
             // Check file timestamp
