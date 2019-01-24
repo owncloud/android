@@ -21,13 +21,15 @@ package com.owncloud.android.shares.db
 
 import android.arch.lifecycle.LiveData
 import android.arch.persistence.room.*
-import android.database.Cursor
 import com.owncloud.android.db.ProviderMeta.ProviderTableMeta
 
 @Dao
 abstract class OCShareDao {
     @Query("SELECT * from " + ProviderTableMeta.OCSHARES_TABLE_NAME + " ORDER BY id")
-    abstract fun shares(): LiveData<List<OCShare>>
+    abstract fun getAllShares(): List<OCShare>
+
+    @Query("SELECT * from " + ProviderTableMeta.OCSHARES_TABLE_NAME + " ORDER BY id")
+    abstract fun getAllSharesAsLiveData(): LiveData<List<OCShare>>
 
     @Query(
         "SELECT * from " + ProviderTableMeta.OCSHARES_TABLE_NAME + " WHERE " +
@@ -63,7 +65,4 @@ abstract class OCShareDao {
         clear(ocShares.map { it.path })
         insert(ocShares)
     }
-
-    @Query("SELECT * from " + ProviderTableMeta.OCSHARES_TABLE_NAME + " ORDER BY id")
-    abstract fun allShares(): Cursor
 }
