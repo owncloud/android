@@ -17,7 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.provider
+package com.owncloud.android.shares.provider
 
 import android.content.ContentResolver
 import android.content.ContentValues
