@@ -26,7 +26,7 @@ import com.owncloud.android.shares.db.OCShareDao
 
 class OCLocalSharesDataSource(private val ocShareDao: OCShareDao) : LocalSharesDataSource {
 
-    override fun shares(): LiveData<List<OCShare>> = ocShareDao.shares()
+    override fun shares(): LiveData<List<OCShare>> = ocShareDao.getAllSharesAsLiveData()
 
     override fun getSharesForFile(
         filePath: String,
