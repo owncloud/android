@@ -98,7 +98,7 @@ class ErrorMessageAdapter {
          */
         fun getResultMessage(
             result: RemoteOperationResult<*>,
-            operation: RemoteOperation<*>,
+            operation: RemoteOperation<*>?,
             resources: Resources
         ): String? {
             val f = Formatter(resources)
@@ -160,8 +160,10 @@ class ErrorMessageAdapter {
                         R.string.filename_forbidden_charaters_from_server
                     )
                 }
-                RemoteOperationResult.ResultCode.INVALID_CHARACTER_DETECT_IN_SERVER -> return f.format(R.string.filename_forbidden_charaters_from_server)
-                RemoteOperationResult.ResultCode.QUOTA_EXCEEDED -> return f.format(R.string.failed_upload_quota_exceeded_text)
+                RemoteOperationResult.ResultCode.INVALID_CHARACTER_DETECT_IN_SERVER ->
+                    return f.format(R.string.filename_forbidden_charaters_from_server)
+                RemoteOperationResult.ResultCode.QUOTA_EXCEEDED ->
+                    return f.format(R.string.failed_upload_quota_exceeded_text)
                 RemoteOperationResult.ResultCode.FILE_NOT_FOUND -> {
                     if (operation is UploadFileOperation)
                         return f.format(R.string.uploads_view_upload_status_failed_folder_error)
@@ -174,10 +176,13 @@ class ErrorMessageAdapter {
                             R.string.sync_current_folder_was_removed,
                             File(operation.folderPath).name
                         )
-                    return if (operation is CopyFileOperation) f.format(R.string.copy_file_not_found) else f.format(R.string.rename_local_fail_msg)
+                    return if (operation is CopyFileOperation)
+                        f.format(R.string.copy_file_not_found) else f.format(R.string.rename_local_fail_msg)
                 }
-                RemoteOperationResult.ResultCode.INVALID_LOCAL_FILE_NAME -> return f.format(R.string.rename_local_fail_msg)
-                RemoteOperationResult.ResultCode.INVALID_CHARACTER_IN_NAME -> return f.format(R.string.filename_forbidden_characters)
+                RemoteOperationResult.ResultCode.INVALID_LOCAL_FILE_NAME ->
+                    return f.format(R.string.rename_local_fail_msg)
+                RemoteOperationResult.ResultCode.INVALID_CHARACTER_IN_NAME ->
+                    return f.format(R.string.filename_forbidden_characters)
                 RemoteOperationResult.ResultCode.SHARE_NOT_FOUND -> {
                     if (operation is CreateShareViaLinkOperation)
                         return f.format(R.string.share_link_file_no_exist)
@@ -189,28 +194,30 @@ class ErrorMessageAdapter {
                         return f.forbidden(R.string.share_link_forbidden_permissions)
                     if (operation is RemoveShareOperation)
                         return f.forbidden(R.string.unshare_link_forbidden_permissions)
-                    return if (operation is UpdateSharePermissionsOperation || operation is UpdateShareViaLinkOperation) f.forbidden(
-                        R.string.update_link_forbidden_permissions
-                    ) else f.format(R.string.move_file_invalid_into_descendent)
+                    return if (operation is UpdateSharePermissionsOperation || operation is UpdateShareViaLinkOperation)
+                        f.forbidden(R.string.update_link_forbidden_permissions)
+                    else f.format(R.string.move_file_invalid_into_descendent)
                 }
                 RemoteOperationResult.ResultCode.SHARE_FORBIDDEN -> {
                     if (operation is CreateShareViaLinkOperation)
                         return f.forbidden(R.string.share_link_forbidden_permissions)
                     if (operation is RemoveShareOperation)
                         return f.forbidden(R.string.unshare_link_forbidden_permissions)
-                    return if (operation is UpdateSharePermissionsOperation || operation is UpdateShareViaLinkOperation) f.forbidden(
+                    return if (
+                        operation is UpdateSharePermissionsOperation || operation is UpdateShareViaLinkOperation
+                    ) f.forbidden(
                         R.string.update_link_forbidden_permissions
                     ) else f.format(R.string.move_file_invalid_into_descendent)
                 }
                 RemoteOperationResult.ResultCode.INVALID_MOVE_INTO_DESCENDANT -> return f.format(R.string.move_file_invalid_into_descendent)
                 RemoteOperationResult.ResultCode.INVALID_OVERWRITE -> {
                     if (operation is MoveFileOperation) return f.format(R.string.move_file_invalid_overwrite)
-                    return if (operation is CopyFileOperation) f.format(R.string.copy_file_invalid_overwrite) else f.format(
-                        R.string.move_file_error
-                    )
+                    return if (operation is CopyFileOperation) f.format(R.string.copy_file_invalid_overwrite)
+                    else f.format(R.string.move_file_error)
                 }
                 RemoteOperationResult.ResultCode.CONFLICT -> return f.format(R.string.move_file_error)
-                RemoteOperationResult.ResultCode.INVALID_COPY_INTO_DESCENDANT -> return f.format(R.string.copy_file_invalid_into_descendent)
+                RemoteOperationResult.ResultCode.INVALID_COPY_INTO_DESCENDANT ->
+                    return f.format(R.string.copy_file_invalid_into_descendent)
                 else -> return getCommonMessageForResult(operation, result, resources)
             }
         }
@@ -279,7 +286,7 @@ class ErrorMessageAdapter {
          * @return User message corresponding to 'result'.
          */
         private fun getCommonMessageForResult(
-            operation: RemoteOperation<*>,
+            operation: RemoteOperation<*>?,
             result: RemoteOperationResult<*>,
             res: Resources
         ): String? {
@@ -288,27 +295,45 @@ class ErrorMessageAdapter {
 
             if (result.isSuccess) return ""
             when (result.code) {
-                RemoteOperationResult.ResultCode.WRONG_CONNECTION -> return f.format(R.string.network_error_socket_exception)
-                RemoteOperationResult.ResultCode.NO_NETWORK_CONNECTION -> return f.format(R.string.error_no_network_connection)
-                RemoteOperationResult.ResultCode.TIMEOUT -> return if (result.exception is SocketTimeoutException)
-                    f.format(R.string.network_error_socket_timeout_exception)
-                else
-                    f.format(R.string.network_error_connect_timeout_exception)
-                RemoteOperationResult.ResultCode.HOST_NOT_AVAILABLE -> return f.format(R.string.network_host_not_available)
-                RemoteOperationResult.ResultCode.SERVICE_UNAVAILABLE -> return f.format(R.string.service_unavailable)
-                RemoteOperationResult.ResultCode.SSL_RECOVERABLE_PEER_UNVERIFIED -> return f.format(R.string.ssl_certificate_not_trusted)
-                RemoteOperationResult.ResultCode.BAD_OC_VERSION -> return f.format(R.string.auth_bad_oc_version_title)
-                RemoteOperationResult.ResultCode.INCORRECT_ADDRESS -> return f.format(R.string.auth_incorrect_address_title)
-                RemoteOperationResult.ResultCode.SSL_ERROR -> return f.format(R.string.auth_ssl_general_error_title)
-                RemoteOperationResult.ResultCode.UNAUTHORIZED -> return f.format(R.string.auth_unauthorized)
-                RemoteOperationResult.ResultCode.INSTANCE_NOT_CONFIGURED -> return f.format(R.string.auth_not_configured_title)
-                RemoteOperationResult.ResultCode.FILE_NOT_FOUND -> return f.format(R.string.auth_incorrect_path_title)
-                RemoteOperationResult.ResultCode.OAUTH2_ERROR -> return f.format(R.string.auth_oauth_error)
-                RemoteOperationResult.ResultCode.OAUTH2_ERROR_ACCESS_DENIED -> return f.format(R.string.auth_oauth_error_access_denied)
-                RemoteOperationResult.ResultCode.ACCOUNT_NOT_NEW -> return f.format(R.string.auth_account_not_new)
-                RemoteOperationResult.ResultCode.ACCOUNT_NOT_THE_SAME -> return f.format(R.string.auth_account_not_the_same)
-                RemoteOperationResult.ResultCode.OK_REDIRECT_TO_NON_SECURE_CONNECTION -> return f.format(R.string.auth_redirect_non_secure_connection_title)
-                else -> if (result.httpPhrase != null && result.httpPhrase.length > 0) return result.httpPhrase
+                RemoteOperationResult.ResultCode.WRONG_CONNECTION ->
+                    return f.format(R.string.network_error_socket_exception)
+                RemoteOperationResult.ResultCode.NO_NETWORK_CONNECTION ->
+                    return f.format(R.string.error_no_network_connection)
+                RemoteOperationResult.ResultCode.TIMEOUT ->
+                    return if (result.exception is SocketTimeoutException)
+                        f.format(R.string.network_error_socket_timeout_exception)
+                    else
+                        f.format(R.string.network_error_connect_timeout_exception)
+                RemoteOperationResult.ResultCode.HOST_NOT_AVAILABLE ->
+                    return f.format(R.string.network_host_not_available)
+                RemoteOperationResult.ResultCode.SERVICE_UNAVAILABLE ->
+                    return f.format(R.string.service_unavailable)
+                RemoteOperationResult.ResultCode.SSL_RECOVERABLE_PEER_UNVERIFIED ->
+                    return f.format(R.string.ssl_certificate_not_trusted)
+                RemoteOperationResult.ResultCode.BAD_OC_VERSION ->
+                    return f.format(R.string.auth_bad_oc_version_title)
+                RemoteOperationResult.ResultCode.INCORRECT_ADDRESS ->
+                    return f.format(R.string.auth_incorrect_address_title)
+                RemoteOperationResult.ResultCode.SSL_ERROR ->
+                    return f.format(R.string.auth_ssl_general_error_title)
+                RemoteOperationResult.ResultCode.UNAUTHORIZED ->
+                    return f.format(R.string.auth_unauthorized)
+                RemoteOperationResult.ResultCode.INSTANCE_NOT_CONFIGURED ->
+                    return f.format(R.string.auth_not_configured_title)
+                RemoteOperationResult.ResultCode.FILE_NOT_FOUND ->
+                    return f.format(R.string.auth_incorrect_path_title)
+                RemoteOperationResult.ResultCode.OAUTH2_ERROR ->
+                    return f.format(R.string.auth_oauth_error)
+                RemoteOperationResult.ResultCode.OAUTH2_ERROR_ACCESS_DENIED ->
+                    return f.format(R.string.auth_oauth_error_access_denied)
+                RemoteOperationResult.ResultCode.ACCOUNT_NOT_NEW ->
+                    return f.format(R.string.auth_account_not_new)
+                RemoteOperationResult.ResultCode.ACCOUNT_NOT_THE_SAME ->
+                    return f.format(R.string.auth_account_not_the_same)
+                RemoteOperationResult.ResultCode.OK_REDIRECT_TO_NON_SECURE_CONNECTION ->
+                    return f.format(R.string.auth_redirect_non_secure_connection_title)
+                else -> if (result.httpPhrase != null && result.httpPhrase.length > 0)
+                    return result.httpPhrase
             }
 
             return getGenericErrorMessageForOperation(operation, result, res)
@@ -322,7 +347,7 @@ class ErrorMessageAdapter {
          * @return User message corresponding to a generic error of 'operation'.
          */
         private fun getGenericErrorMessageForOperation(
-            operation: RemoteOperation<*>,
+            operation: RemoteOperation<*>?,
             result: RemoteOperationResult<*>,
             res: Resources
         ): String? {
