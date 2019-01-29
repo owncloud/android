@@ -202,8 +202,8 @@ public class UploadFilesActivity extends FileActivity implements
         getMenuInflater().inflate(R.menu.upload_files_menu, menu);
         getMenuInflater().inflate(R.menu.sort_menu, menu.findItem(R.id.action_sort).getSubMenu());
         mMainMenu = menu;
-        mItemSelectAll = (MenuItem) menu.findItem(R.id.action_select_all);
-        mItemSelectInverse = (MenuItem) menu.findItem(R.id.action_select_inverse);
+        mItemSelectAll = menu.findItem(R.id.action_select_all);
+        mItemSelectInverse = menu.findItem(R.id.action_select_inverse);
         recoverSortMenuState(menu);
         setSelectAllMenuItemState();
         setSelectInverseMenuItemState();
@@ -330,14 +330,14 @@ public class UploadFilesActivity extends FileActivity implements
             actionBar.setDisplayHomeAsUpEnabled(false);
         }
         int noOfFiles = mFileListFragment.getAdapter().getNoOfFilesInDir();
-        if(noOfFilesSelected == noOfFiles){
+        if (noOfFilesSelected == noOfFiles) {
             mItemSelectAll.setVisible(false);
-        } else{
+        } else {
             mItemSelectAll.setVisible(true);
         }
-        if(noOfFiles > 0){
+        if (noOfFiles > 0) {
             mItemSelectInverse.setVisible(true);
-        } else{
+        } else {
             mItemSelectInverse.setVisible(false);
         }
     }
@@ -440,9 +440,9 @@ public class UploadFilesActivity extends FileActivity implements
      * between number of files that have been selected and the
      * number of files present in current directory.
      */
-    private void setSelectAllMenuItemState(){
-        if (mFileListFragment.getAdapter().getNoOfFilesInDir()
-                == mFileListFragment.getCheckedFilePaths().length) {
+    private void setSelectAllMenuItemState() {
+        if (mFileListFragment.getAdapter().getNoOfFilesInDir() ==
+                mFileListFragment.getCheckedFilePaths().length) {
             mItemSelectAll.setVisible(false);
         } else {
             mItemSelectAll.setVisible(true);
@@ -455,8 +455,8 @@ public class UploadFilesActivity extends FileActivity implements
      * number of files present in current directory (as it should be disabled
      * if the directory contains other directories but no files).
      */
-    private void setSelectInverseMenuItemState(){
-        if (mFileListFragment.getAdapter().getNoOfFilesInDir() > 0){
+    private void setSelectInverseMenuItemState() {
+        if (mFileListFragment.getAdapter().getNoOfFilesInDir() > 0) {
             mItemSelectInverse.setVisible(true);
         } else {
             mItemSelectInverse.setVisible(false);
