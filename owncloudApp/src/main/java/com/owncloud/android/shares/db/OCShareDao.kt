@@ -25,30 +25,14 @@ import com.owncloud.android.db.ProviderMeta.ProviderTableMeta
 
 @Dao
 abstract class OCShareDao {
-    @Query("SELECT * from " + ProviderTableMeta.OCSHARES_TABLE_NAME + " ORDER BY id")
-    abstract fun getAllShares(): List<OCShare>
-
-    @Query("SELECT * from " + ProviderTableMeta.OCSHARES_TABLE_NAME + " ORDER BY id")
-    abstract fun getAllSharesAsLiveData(): LiveData<List<OCShare>>
-
     @Query(
         "SELECT * from " + ProviderTableMeta.OCSHARES_TABLE_NAME + " WHERE " +
                 ProviderTableMeta.OCSHARES_PATH + " = :filePath AND " +
-                ProviderTableMeta.OCSHARES_ACCOUNT_OWNER + " = :accountName AND " +
-                ProviderTableMeta.OCSHARES_SHARE_TYPE + " IN (:shareTypes)"
-    )
-    abstract fun getSharesForFile(
-        filePath: String, accountName: String, shareTypes: List<Int>
-    ): List<OCShare>
-
-    @Query(
-        "SELECT * from " + ProviderTableMeta.OCSHARES_TABLE_NAME + " WHERE " +
-                ProviderTableMeta.OCSHARES_PATH + " = :filePath AND " +
-                ProviderTableMeta.OCSHARES_ACCOUNT_OWNER + " = :accountName AND " +
+                ProviderTableMeta.OCSHARES_ACCOUNT_OWNER + " = :accountOwner AND " +
                 ProviderTableMeta.OCSHARES_SHARE_TYPE + " IN (:shareTypes)"
     )
     abstract fun getSharesForFileAsLiveData(
-        filePath: String, accountName: String, shareTypes: List<Int>
+        filePath: String, accountOwner: String, shareTypes: List<Int>
     ): LiveData<List<OCShare>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -56,13 +40,16 @@ abstract class OCShareDao {
 
     @Query(
         "DELETE from " + ProviderTableMeta.OCSHARES_TABLE_NAME + " WHERE " +
-                ProviderTableMeta.OCSHARES_PATH + " IN (:paths)"
+                ProviderTableMeta.OCSHARES_PATH + " = :filePath AND " +
+                ProviderTableMeta.OCSHARES_ACCOUNT_OWNER + " = :accountOwner"
     )
-    abstract fun clear(paths: List<String>)
+    abstract fun delete(filePath: String, accountOwner: String)
 
     @Transaction
     open fun replace(ocShares: List<OCShare>) {
-        clear(ocShares.map { it.path })
+        for (ocShare in ocShares) {
+            delete(ocShare.path, ocShare.accountOwner)
+        }
         insert(ocShares)
     }
 }
