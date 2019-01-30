@@ -23,6 +23,7 @@ import android.support.test.InstrumentationRegistry
 import com.android.example.github.util.LiveDataTestUtil.getValue
 import com.owncloud.android.db.OwncloudDatabase
 import com.owncloud.android.lib.resources.shares.ShareType
+import com.owncloud.android.utils.TestUtil
 import junit.framework.Assert.assertEquals
 import org.hamcrest.CoreMatchers.notNullValue
 import org.hamcrest.MatcherAssert.assertThat
@@ -56,26 +57,23 @@ class OCShareDaoTest {
     fun insertPublicSharesFromDifferentFilesAndRead() {
         ocShareDao.insert(
             listOf(
-                publicShareWithNameAndLink(
-                    "/Photos/",
-                    true,
-                    "admin@server",
-                    "Photos folder link",
-                    "http://server:port/s/1"
+                TestUtil.createShare(
+                    path = "/Photos/",
+                    isFolder = true,
+                    name = "Photos folder link",
+                    shareLink = "http://server:port/s/1"
                 ),
-                publicShareWithNameAndLink(
-                    "/Photos/image1.jpg",
-                    false,
-                    "admin@server",
-                    "Image 1 link",
-                    "http://server:port/s/2"
+                TestUtil.createShare(
+                    path = "/Photos/image1.jpg",
+                    isFolder = false,
+                    name = "Image 1 link",
+                    shareLink = "http://server:port/s/2"
                 ),
-                publicShareWithNameAndLink(
-                    "/Photos/image2.jpg",
-                    false,
-                    "admin@server",
-                    "Image 2 link",
-                    "http://server:port/s/3"
+                TestUtil.createShare(
+                    path = "/Photos/image2.jpg",
+                    isFolder = false,
+                    name = "Image 2 link",
+                    shareLink = "http://server:port/s/3"
                 )
             )
         )
@@ -127,26 +125,26 @@ class OCShareDaoTest {
     fun insertPublicSharesFromDifferentAccountsAndRead() {
         ocShareDao.insert(
             listOf(
-                publicShareWithNameAndLink(
-                    "/Documents/document1.docx",
-                    false,
-                    "user1@server",
-                    "Document 1 link",
-                    "http://server:port/s/1"
+                TestUtil.createShare(
+                    path = "/Documents/document1.docx",
+                    isFolder = false,
+                    accountOwner = "user1@server",
+                    name = "Document 1 link",
+                    shareLink = "http://server:port/s/1"
                 ),
-                publicShareWithNameAndLink(
-                    "/Documents/document1.docx",
-                    false,
-                    "user2@server",
-                    "Document 1 link",
-                    "http://server:port/s/2"
+                TestUtil.createShare(
+                    path = "/Documents/document1.docx",
+                    isFolder = false,
+                    accountOwner = "user2@server",
+                    name = "Document 1 link",
+                    shareLink = "http://server:port/s/2"
                 ),
-                publicShareWithNameAndLink(
-                    "/Documents/document1.docx",
-                    false,
-                    "user3@server",
-                    "Document 1 link",
-                    "http://server:port/s/3"
+                TestUtil.createShare(
+                    path = "/Documents/document1.docx",
+                    isFolder = false,
+                    accountOwner = "user3@server",
+                    name = "Document 1 link",
+                    shareLink = "http://server:port/s/3"
                 )
             )
         )
@@ -198,12 +196,12 @@ class OCShareDaoTest {
     fun getNonExistingPublicShare() {
         ocShareDao.insert(
             listOf(
-                publicShareWithNameAndLink(
-                    "/Videos/video1.mp4",
-                    false,
-                    "user@server",
-                    "Video 1 link",
-                    "http://server:port/s/1"
+                TestUtil.createShare(
+                    path = "/Videos/video1.mp4",
+                    isFolder = false,
+                    accountOwner = "user@server",
+                    name = "Video 1 link",
+                    shareLink = "http://server:port/s/1"
                 )
             )
         )
@@ -222,24 +220,22 @@ class OCShareDaoTest {
     fun replacePublicShareIfAlreadyExists_exists() {
         ocShareDao.insert(
             listOf(
-                publicShareWithNameAndLink(
-                    "/Texts/text1.txt",
-                    false,
-                    "admin@server",
-                    "Text 1 link",
-                    "http://server:port/s/1"
+                TestUtil.createShare(
+                    path = "/Texts/text1.txt",
+                    isFolder = false,
+                    name = "Text 1 link",
+                    shareLink = "http://server:port/s/1"
                 )
             )
         )
 
         ocShareDao.replace(
             listOf( // Update link name
-                publicShareWithNameAndLink(
-                    "/Texts/text1.txt",
-                    false,
-                    "admin@server",
-                    "Text new link",
-                    "http://server:port/s/1"
+                TestUtil.createShare(
+                    path = "/Texts/text1.txt",
+                    isFolder = false,
+                    name = "Text new link",
+                    shareLink = "http://server:port/s/1"
                 )
             )
         )
@@ -259,24 +255,22 @@ class OCShareDaoTest {
     fun replacePublicShareIfAlreadyExists_doesNotExist() {
         ocShareDao.insert(
             listOf(
-                publicShareWithNameAndLink(
-                    "/Texts/text1.txt",
-                    false,
-                    "admin@server",
-                    "Text 1 link",
-                    "http://server:port/s/1"
+                TestUtil.createShare(
+                    path = "/Texts/text1.txt",
+                    isFolder = false,
+                    name = "Text 1 link",
+                    shareLink = "http://server:port/s/1"
                 )
             )
         )
 
         ocShareDao.replace(
             listOf( // New link
-                publicShareWithNameAndLink(
-                    "/Texts/text2.txt",
-                    false,
-                    "admin@server",
-                    "Text 2 link",
-                    "http://server:port/s/2"
+                TestUtil.createShare(
+                    path = "/Texts/text2.txt",
+                    isFolder = false,
+                    name = "Text 2 link",
+                    shareLink = "http://server:port/s/2"
                 )
             )
         )
@@ -301,32 +295,5 @@ class OCShareDaoTest {
         assertThat(text2Shares, notNullValue())
         assertEquals(text2Shares.size, 1)
         assertEquals(text2Shares.get(0).name, "Text 2 link")
-    }
-
-    fun publicShareWithNameAndLink(
-        path: String,
-        isFolder: Boolean,
-        accountOwner: String,
-        name: String,
-        shareLink: String
-    ): OCShare {
-        return OCShare(
-            7,
-            7,
-            3,
-            "",
-            path,
-            1,
-            1542628397,
-            0,
-            "pwdasd12dasdWZ",
-            "",
-            isFolder,
-            -1,
-            1,
-            accountOwner,
-            name,
-            shareLink
-        )
     }
 }
