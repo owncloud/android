@@ -24,14 +24,6 @@ import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.shares.db.OCShare
 
 interface LocalSharesDataSource {
-    fun shares(): LiveData<List<OCShare>>
-
-    fun getSharesForFile(
-        filePath: String,
-        accountName: String,
-        shareTypes: List<ShareType>
-    ): List<OCShare>
-
     fun getSharesForFileAsLiveData(
         filePath: String,
         accountName: String,
