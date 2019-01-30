@@ -334,6 +334,8 @@
   <string name="confirmation_disable_camera_uploads_title">确认</string>
   <string name="confirmation_disable_pictures_upload_message">你确定要禁用这项功能吗？未上传的图片将不会被上传</string>
   <string name="confirmation_disable_videos_upload_message">你确定要禁用这项功能吗？未上传的视频将不会被上传</string>
+  <string name="proper_pics_folder_warning_camera_upload">请确保选择的文件夹是你使用的相机保存相片的位置，否则，该功能将无法检测到你的相片。请记住相片拍摄后15分钟会被上传。</string>
+  <string name="proper_videos_folder_warning_camera_upload">请确保选择的文件夹是你使用的相机保存录制视频的位置，否则，该功能将无法检测到你拍摄的视频。请记住视频拍摄后15分钟会被上传。</string>
   <string name="conflict_title">文件冲突</string>
   <string name="conflict_description">冲突文件 %1$s，点击解决</string>
   <string name="conflict_message">您想要保留哪个文件？如果您同时选中了两个版本，本地的文件的文件名将被加上一个数字</string>

@@ -333,6 +333,8 @@
   <string name="confirmation_disable_camera_uploads_title">Ripohojeni</string>
   <string name="confirmation_disable_pictures_upload_message">Jeni i sigurt se doni të çaktivizohet kjo veçori? Fotot e mbetura nuk do të ngarkohen</string>
   <string name="confirmation_disable_videos_upload_message">Jeni i sigurt se doni të çaktivizohet kjo veçori? Videot e mbetura nuk do të ngarkohen</string>
+  <string name="proper_pics_folder_warning_camera_upload">Ju lutemi, sigurohuni që dosja e përzgjedhur është ajo ku kamera që po përdorni ruan fotot e bëra. Përndryshe, veçoria s’do të jetë në gjendje të pikasë fotot tuaja. Kini parasysh që fotot do të ngarkohen të paktën 15 minuta pasi të jenë bërë.</string>
+  <string name="proper_videos_folder_warning_camera_upload">Ju lutemi, sigurohuni që dosja e përzgjedhur është ajo ku kamera që po përdorni ruan videot e regjistruara. Përndryshe, veçoria s’do të jetë në gjendje të pikasë videot tuaja. Kini parasysh që videot do të ngarkohen të paktën 15 minuta pasi të jenë regjistruar.</string>
   <string name="conflict_title">Përplasje kartelash</string>
   <string name="conflict_description">Ka një kundërshti në kartelën %1$s, prekeni që të zgjidhet</string>
   <string name="conflict_message">Cilat kartela doni të mbani? Nëse përzgjidhni të dy versionet, kartelës vendore do t\’i shtohet një numër te emri.</string>

@@ -333,6 +333,8 @@
   <string name="confirmation_disable_camera_uploads_title">ยืนยัน</string>
   <string name="confirmation_disable_pictures_upload_message">ต้องการปิดใช้งานคุณลักษณะนี้? รูปภาพที่ค้างอยู่จะไม่ถูกอัพโหลด</string>
   <string name="confirmation_disable_videos_upload_message">ต้องการปิดใช้งานคุณลักษณะนี้? วีดีโอที่ค้างอยู่จะไม่ถูกอัพโหลด</string>
+  <string name="proper_pics_folder_warning_camera_upload">โปรดตรวจสอบให้แน่ใจว่าโฟลเดอร์ที่เลือกเป็นตำแหน่งที่กล้องที่คุณใช้บันทึกภาพถ่าย มิฉะนั้นคุณสมบัตินี้จะไม่สามารถตรวจจับภาพถ่ายของคุณ โปรดทราบว่าระบบจะอัพโหลดวิดีโออย่างน้อย 15 นาทีหลังจากบันทึก</string>
+  <string name="proper_videos_folder_warning_camera_upload">โปรดตรวจสอบให้แน่ใจว่าโฟลเดอร์ที่เลือกเป็นตำแหน่งที่กล้องที่คุณใช้บันทึกวิดีโอ มิฉะนั้นคุณสมบัตินี้จะไม่สามารถตรวจจับวิดีโอของคุณ โปรดทราบว่าระบบจะอัพโหลดวิดีโออย่างน้อย 15 นาทีหลังจากบันทึก</string>
   <string name="conflict_title">ไฟล์ที่มีปัญหา</string>
   <string name="conflict_description">แตะเพื่อแก้ปัญหาไฟล์ %1$s</string>
   <string name="conflict_message">ไฟล์ใดที่คุณต้องการที่จะเก็บ? เลือกวางทับไฟล์เดิมหรือ เขียนไฟล์ใหม่จะเพิ่มตัวเลขไปยังชื่อของมัน</string>

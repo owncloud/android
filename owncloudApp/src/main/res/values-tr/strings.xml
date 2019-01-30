@@ -1,5 +1,8 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+  <string name="about_android">Android için %1$s</string>
+  <string name="about_version">Sürüm %1$s</string>
+  <string name="actionbar_search">Bu klasörü ara</string>
   <string name="actionbar_sync">Hesabı yenile</string>
   <string name="actionbar_upload">Yükle</string>
   <string name="actionbar_upload_from_apps">Diğer uygulamalardan içerik</string>
@@ -13,11 +16,16 @@
   <string name="actionbar_descending">Azalan</string>
   <string name="actionbar_sort_title">Şuna göre sırala</string>
   <string name="actionbar_sort_by_name">A-Z</string>
+  <string name="actionbar_sort_by_date">Eskiden yeniye</string>
+  <string name="actionbar_sort_by_size">Küçükten büyüğe</string>
   <string name="drawer_item_all_files">Tüm dosyalar</string>
   <string name="drawer_item_settings">Ayarlar</string>
   <string name="drawer_item_uploads_list">Yüklemeler</string>
   <string name="drawer_close">Kapat</string>
   <string name="drawer_open">Aç</string>
+  <string name="drawer_loading_quota">Kota yükleniyor</string>
+  <string name="drawer_unavailable_free_storage">%1$s kullanımda</string>
+  <string name="drawer_unavailable_used_storage">Depolama kullanım bilgisi yok</string>
   <string name="drawer_feedback">Geribildirim</string>
   <string name="drawer_help">Yardım</string>
   <string name="prefs_category_general">Genel</string>
@@ -26,19 +34,36 @@
   <string name="prefs_accounts">Hesaplar</string>
   <string name="prefs_manage_accounts">Hesapları yönet</string>
   <string name="prefs_passcode">Parola kod kilidi</string>
+  <string name="prefs_fingerprint">Parmak izi kilidi</string>
+  <string name="prefs_camera_picture_upload">Fotoğraf yüklemeleri</string>
+  <string name="prefs_camera_picture_upload_summary">Kamera ile çekilen fotoğrafları otomatik olarak karşıya yükle</string>
+  <string name="prefs_camera_video_upload">Video yüklemeleri</string>
+  <string name="prefs_camera_video_upload_summary">Kamera ile kaydedilen kameraları otomatik olarak karşıya yükle</string>
   <string name="prefs_log_title">Günlüğü etkinleştir</string>
   <string name="prefs_log_summary">Bu, sorunları günlük dosyasına kaydetmek için kullanılır</string>
   <string name="prefs_log_title_history">Günlük geçmişi</string>
   <string name="prefs_log_summary_history">Bu, kayıtlı günlük dosyalarını görüntüler</string>
   <string name="prefs_log_delete_history_button">Geçmişi sil</string>
   <string name="prefs_help">Yardım</string>
+  <string name="prefs_sync_calendar_contacts">Kişilerinizi, takviminizi ve görevlerinizi senkronize edin</string>
+  <string name="prefs_sync_calendar_contacts_summary">DAVdroid\'i yükle</string>
   <string name="prefs_recommend">Bir arkadaşa öner</string>
   <string name="prefs_feedback">Geribildirim</string>
   <string name="prefs_imprint">İzlenim</string>
   <string name="prefs_remember_last_share_location">Konum paylaşmayı hatırla</string>
   <string name="prefs_remember_last_upload_location_summary">Son paylaşma yükleme konumunu hatırla</string>
+  <string name="prefs_pattern">Desen kilidi</string>
+  <string name="pattern_enter_pattern">Lütfen deseninizi girin</string>
+  <string name="pattern_configure_pattern">Deseninizi girin</string>
+  <string name="pattern_remove_pattern">Deseninizi kaldırın</string>
+  <string name="pattern_incorrect_pattern">Geçersiz desen</string>
+  <string name="pattern_reenter_pattern">Lütfen deseninizi tekrar girin</string>
+  <string name="pattern_not_same_pattern">Desenler aynı değil</string>
+  <string name="pattern_stored">Desen kaydedildi</string>
+  <string name="pattern_removed">Desen kaldırıldı</string>
   <string name="recommend_subject">%1$s uygulamasını akıllı telefonunda dene!</string>
   <string name="recommend_text">Seni, akıllı telefonunda %1$s kullanmaya davet ediyorum!\nBuradan indirebilirsin: %2$s</string>
+  <string name="auth_failure_snackbar_action">Hesabı değiştir</string>
   <string name="auth_check_server">Sunucuyu denetle</string>
   <string name="auth_host_url">Sunucu adresi https://…</string>
   <string name="auth_username">Kullanıcı Adı</string>
@@ -71,6 +96,7 @@
   <string name="file_list_file">dosya</string>
   <string name="file_list_files">dosya</string>
   <string name="filedetails_select_file">Ek bilgileri görmek için dosyaya dokunun.</string>
+  <string name="upload_files_title">Dosyalar</string>
   <string name="filedetails_size">Boyut:</string>
   <string name="filedetails_type">Tür:</string>
   <string name="filedetails_created">Oluşturulma:</string>
@@ -98,6 +124,7 @@
   <string name="delete_account">Hesabı kaldır</string>
   <string name="create_account">Hesap oluştur</string>
   <string name="uploader_info_dirname">Klasör adı</string>
+  <string name="uploader_upload_in_progress_ticker">Yükleniyor...</string>
   <string name="uploader_upload_in_progress_content">%%%1$d Yüklenen: %2$s</string>
   <string name="uploader_upload_succeeded_ticker">Yükleme başarılı</string>
   <string name="uploader_upload_succeeded_content_single">%1$s yüklendi</string>
@@ -113,6 +140,8 @@
   <string name="uploads_view_group_current_uploads">Geçerli</string>
   <string name="uploads_view_group_failed_uploads">Başarısız (tekrar denemek için dokun)</string>
   <string name="uploads_view_group_finished_uploads">Yüklendi</string>
+  <string name="uploads_view_group_file_count">%d dosya</string>
+  <string name="uploads_view_group_file_count_single">%d dosya</string>
   <string name="uploads_view_upload_status_succeeded">Tamamlandı</string>
   <string name="uploads_view_upload_status_cancelled">İptal edildi</string>
   <string name="uploads_view_upload_status_paused">Durduruldu</string>
@@ -129,6 +158,7 @@
   <string name="uploads_view_upload_status_unknown_fail">Bilinmeyen hata</string>
   <string name="uploads_view_upload_status_waiting_for_wifi">Kablosuz bağlantısı bekleniyor</string>
   <string name="uploads_view_later_waiting_to_upload">Yüklemek için bekliyor</string>
+  <string name="downloader_download_in_progress_ticker">İndiriliyor...</string>
   <string name="downloader_download_in_progress_content">%%%1$d İndirilen: %2$s</string>
   <string name="downloader_download_succeeded_ticker">İndirme başarılı</string>
   <string name="downloader_download_succeeded_content">%1$s indirildi.</string>
@@ -275,6 +305,7 @@
   <string name="placeholder_media_time">12:23:45</string>
   <string name="camera_picture_upload_on_wifi">Fotoğrafları sadece kablosuz bağlantıda (WiFi) yükle</string>
   <string name="camera_video_upload_on_wifi">Videoları sadece kablosuz bağlantıda (WiFi) yükle</string>
+  <string name="confirmation_disable_camera_uploads_title">Onayla</string>
   <string name="conflict_title">Dosya çakışması</string>
   <string name="conflict_message">Hangi dosyaları saklamak istiyorsunuz? Her ikisini de saklamayı seçerseniz yerel dosyanın adına bir sayı eklenecek.</string>
   <string name="conflict_keep_both">İkisini de koru</string>

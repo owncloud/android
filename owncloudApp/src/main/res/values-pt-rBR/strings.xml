@@ -334,6 +334,8 @@
   <string name="confirmation_disable_camera_uploads_title">Confirmar</string>
   <string name="confirmation_disable_pictures_upload_message">Tem certeza de que deseja desativar esse recurso? As imagens pendentes não serão carregadas</string>
   <string name="confirmation_disable_videos_upload_message">Tem certeza de que deseja desativar esse recurso? Os vídeos pendentes não serão carregadas</string>
+  <string name="proper_pics_folder_warning_camera_upload">Por favor, verifique se a pasta selecionada é onde a câmera que você está usando salva as fotos tiradas. Caso contrário, o recurso não poderá detectar suas fotos. Tenha em mente que as fotos serão enviadas em pelo menos 15 minutos depois de serem tiradas.</string>
+  <string name="proper_videos_folder_warning_camera_upload">Por favor, verifique se a pasta selecionada é onde a câmera que você está usando salva os vídeos gravados. Caso contrário, o recurso não poderá detectar seus vídeos. Tenha em mente que os vídeos serão enviados em pelo menos 15 minutos depois de serem gravados.</string>
   <string name="conflict_title">Conflito de arquivo</string>
   <string name="conflict_description">Há um conflito no arquivo %1$s, toque para resolvê-lo</string>
   <string name="conflict_message">Quais arquivos você deseja manter? Se você selecionar ambas as versões, o arquivo local terá um número adicionado ao seu nome.</string>

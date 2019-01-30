@@ -1,5 +1,8 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+  <string name="about_android">%1$s fyrir Android</string>
+  <string name="about_version">Útgáfa %1$s</string>
+  <string name="actionbar_search">Leita í þessari möppu</string>
   <string name="actionbar_sync">Endurlesa aðgang</string>
   <string name="actionbar_upload">Senda inn</string>
   <string name="actionbar_upload_from_apps">Efni frá öðrum forritum</string>
@@ -10,13 +13,19 @@
   <string name="actionbar_see_details">Nánar</string>
   <string name="actionbar_send_file">Senda</string>
   <string name="actionbar_sort">Raða</string>
+  <string name="actionbar_descending">Lækkandi</string>
   <string name="actionbar_sort_title">Raða sem</string>
   <string name="actionbar_sort_by_name">A-Z</string>
+  <string name="actionbar_sort_by_date">Elsta - Nýjasta</string>
+  <string name="actionbar_sort_by_size">Minnst - Stærst</string>
   <string name="drawer_item_all_files">Allar skrár</string>
   <string name="drawer_item_settings">Stillingar</string>
   <string name="drawer_item_uploads_list">Uploads</string>
   <string name="drawer_close">Loka</string>
   <string name="drawer_open">Opna</string>
+  <string name="drawer_loading_quota">Hleð inn kvóta</string>
+  <string name="drawer_quota">%1$s af %2$s notað (%3$s %%)</string>
+  <string name="drawer_unavailable_free_storage">%1$s í notkun</string>
   <string name="drawer_feedback">Umsögn</string>
   <string name="drawer_help">Hjálp</string>
   <string name="prefs_category_general">Almennt</string>
@@ -25,6 +34,7 @@
   <string name="prefs_accounts">Notandaaðgangar</string>
   <string name="prefs_manage_accounts">Sýsla með notandaaðganga</string>
   <string name="prefs_passcode">Læsing með lykilkóða</string>
+  <string name="prefs_fingerprint">Fingrafaralæsing</string>
   <string name="prefs_camera_picture_upload">Innsendar myndir</string>
   <string name="prefs_camera_picture_upload_summary">Hlaða sjálfvirkt inn myndum teknum á myndavél</string>
   <string name="prefs_camera_video_upload">Innsend myndskeið</string>
@@ -40,8 +50,19 @@
   <string name="prefs_imprint">Prenta</string>
   <string name="prefs_remember_last_share_location">Muna staðsetningu sameignar</string>
   <string name="prefs_remember_last_upload_location_summary">Muna staðsetningu á síðustu innhleðslu sameignar</string>
+  <string name="prefs_pattern">Læsing með mynstri</string>
+  <string name="pattern_enter_pattern">Settu inn mynstrið þitt</string>
+  <string name="pattern_configure_pattern">Settu inn mynstrið þitt</string>
+  <string name="pattern_remove_pattern">Fjarlægðu mynstrið þitt</string>
+  <string name="pattern_incorrect_pattern">Rangt mynstur</string>
+  <string name="pattern_reenter_pattern">Settu aftur inn mynstrið þitt</string>
+  <string name="pattern_not_same_pattern">Mynstrin eru ekki eins</string>
+  <string name="pattern_stored">Mynstur geymt</string>
+  <string name="pattern_removed">Mynstur fjarlægt</string>
   <string name="recommend_subject">Prófaðu %1$s á snjallsímanum þínum!</string>
   <string name="recommend_text">Ég vil gjarnan bjóða þér að nota %1$s á snjallsímanum þínum!\nSæktu það hér: %2$s</string>
+  <string name="auth_failure_snackbar">Auðkenning mistókst</string>
+  <string name="auth_failure_snackbar_action">Skipta um notandaaðgang</string>
   <string name="auth_check_server">Athuga með þjón</string>
   <string name="auth_host_url">Vistfang þjóns https://…</string>
   <string name="auth_username">Notandanafn</string>
@@ -68,6 +89,7 @@
   <string name="file_list_no_app_for_file_type">Engin forrit fundust fyrir skráategundina</string>
   <string name="local_file_list_empty">Það eru engar skrár í þessari möppu.</string>
   <string name="local_file_list_empty_just_folders">Það eru engar möppur í þessari möppu.</string>
+  <string name="local_file_list_search_with_no_matches">Engar samsvaranir fundust fyrir þessa leit</string>
   <string name="upload_list_empty">Engar innsendingar tiltækar.</string>
   <string name="file_list_folder">mappa</string>
   <string name="file_list_folders">möppur</string>
@@ -102,7 +124,9 @@
   <string name="change_password">Breyta lykilorði</string>
   <string name="delete_account">Fjarlægja notandaaðgang</string>
   <string name="create_account">Stofna aðgang</string>
+  <string name="upload_chooser_title">Senda inn úr</string>
   <string name="uploader_info_dirname">Nafn möppu</string>
+  <string name="uploader_upload_in_progress_ticker">Sendi inn ...</string>
   <string name="uploader_upload_in_progress_content">%1$d%% Sendi inn %2$s</string>
   <string name="uploader_upload_succeeded_ticker">Innsending tókst</string>
   <string name="uploader_upload_succeeded_content_single">%1$s sent inn</string>
@@ -119,6 +143,8 @@
   <string name="uploads_view_group_current_uploads">Núverandi</string>
   <string name="uploads_view_group_failed_uploads">Mistókst (bankaðu til að reyna aftur)</string>
   <string name="uploads_view_group_finished_uploads">Hlaðið inn</string>
+  <string name="uploads_view_group_file_count">%d skrár</string>
+  <string name="uploads_view_group_file_count_single">%d skrá</string>
   <string name="uploads_view_upload_status_succeeded">Lokið</string>
   <string name="uploads_view_upload_status_cancelled">Hætt við</string>
   <string name="uploads_view_upload_status_paused">Í bið</string>
@@ -136,6 +162,7 @@
   <string name="uploads_view_upload_status_waiting_for_wifi">Bíð eftir þráðlausri nettengingu</string>
   <string name="uploads_view_later_waiting_to_upload">Bíð eftir að senda inn</string>
   <string name="uploads_view_unsupported_media_type">Óstudd gerð gagnamiðils</string>
+  <string name="downloader_download_in_progress_ticker">Sæki ...</string>
   <string name="downloader_download_in_progress_content">%1$d%% Sæki %2$s</string>
   <string name="downloader_download_succeeded_ticker">Niðurhal tókst</string>
   <string name="downloader_download_succeeded_content">%1$s niðurhalað</string>
@@ -172,6 +199,7 @@
   <string name="pass_code_wrong">Rangur lykilkóði</string>
   <string name="pass_code_removed">Fjarlægði lykilkóða</string>
   <string name="pass_code_stored">Geymdi lykilkóða</string>
+  <string name="fingerprint_hint">Snertiskynjari</string>
   <string name="media_notif_ticker">%1$s tónlistarspilari</string>
   <string name="media_state_playing">%1$s (afspilun)</string>
   <string name="media_state_loading">%1$s (hleð)</string>
@@ -192,6 +220,8 @@
   <string name="media_play_pause_description">Afspilun-eða-hlé hnappur</string>
   <string name="media_forward_description">Spóla-hratt-áfram hnappur</string>
   <string name="upload_from_camera_title">Mynd úr myndavél</string>
+  <string name="auth_getting_authorization">Fæ heimild ...</string>
+  <string name="auth_trying_to_login">Reyni að skrá inn …</string>
   <string name="auth_no_net_conn_title">Engin nettenging</string>
   <string name="auth_nossl_plain_ok_title">Örugg tenging ekki tiltæk.</string>
   <string name="auth_connection_established">Tengingu komið á</string>
@@ -246,6 +276,7 @@
   <string name="wait_checking_credentials">Athuga vistuð auðkenni</string>
   <string name="filedisplay_unexpected_bad_get_content">Óvænt vandamál; veldu skrána úr öðru forriti</string>
   <string name="filedisplay_no_file_selected">Engin skrá var valin</string>
+  <string name="activity_chooser_title">Senda tengil til</string>
   <string name="wait_for_tmp_copy_from_private_storage">Afrita skrá úr einkageymslu</string>
   <string name="oauth_check_onoff">Skrá inn með oAuth2</string>
   <string name="oauth_login_connection">Tengist við OAuth2-þjón…</string>
@@ -333,7 +364,9 @@
   <string name="log_send_history_button">Ferill sendinga</string>
   <string name="log_send_no_mail_app">Ekkert forrit fannst til að senda annála. Settu upp eitthvað tölvupóstforrit.</string>
   <string name="log_send_mail_subject">%1$s annálar Android-forrita</string>
+  <string name="log_progress_dialog_text">Hleð inn gögnum …</string>
   <string name="actionbar_select_all">Velja allt</string>
+  <string name="actionbar_select_inverse">Snúa við vali</string>
   <string name="saml_authentication_required_text">Auðkenningar krafist</string>
   <string name="saml_authentication_wrong_pass">Rangt lykilorð</string>
   <string name="actionbar_move">Færa</string>
@@ -371,6 +404,8 @@
   <string name="prefs_camera_upload_source_path_title">Myndavélarmappa (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">krafist</string>
   <string name="prefs_camera_upload_source_path_title_optional">valkvætt</string>
+  <string name="prefs_camera_upload_behaviour_dialogTitle">Upprunaleg skrá verður</string>
+  <string name="prefs_camera_upload_behaviour_title">Upprunaleg skrá verður</string>
   <string name="upload_copy_files">Afrita skrá</string>
   <string name="upload_move_files">Færa skrá</string>
   <string name="pref_behaviour_entries_keep_file">áfram í upprunalegri möppu</string>
@@ -452,13 +487,27 @@
   <string name="media_service_notification_channel_description">Skoða tónlistarspilara</string>
   <string name="file_sync_notification_channel_name">Samstilling skráa</string>
   <string name="file_sync_notification_channel_description">Skoða nuðurstöður samstillingar skráa</string>
+  <string name="rate_dialog_title">Gefðu %1$s forritinu einkunn!</string>
+  <string name="button_no_thanks_name">NEI TAKK</string>
+  <string name="button_later_name">SÍÐAR</string>
+  <string name="button_rate_now_name">GEFA EINKUNN NÚNA</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d valið</item>
     <item quantity="other">%d valið</item>
   </plurals>
   <!--Welcome to oC intro features-->
   <string name="welcome_feature_skip_button">Sleppa</string>
+  <string name="welcome_feature_1_title">Sýslaðu með samstilltu skrárnar þínar</string>
+  <string name="welcome_feature_1_text">Þú getur afritað, eytt, fært</string>
+  <string name="welcome_feature_2_title">Deilt skrám og möppum</string>
+  <string name="welcome_feature_2_text">Þú getur deilt persónulega eða opinberlega</string>
+  <string name="welcome_feature_3_text">Tengst við öll ownCloud tölvuskýin þín</string>
   <string name="welcome_feature_4_title">Innsendingar úr myndavél</string>
+  <string name="welcome_feature_5_title">Streyming myndskeiða</string>
+  <string name="welcome_feature_6_title">Leita í fyrirliggjandi möppu</string>
+  <string name="welcome_feature_6_text">Síaðu skrárnar þínar eftir heiti þeirra</string>
   <string name="welcome_feature_7_title">Velja allt</string>
+  <string name="welcome_feature_7_text">Veldu allar skrár í einu</string>
   <string name="welcome_feature_8_title">Tiltækt án nettengingar</string>
+  <string name="welcome_feature_8_text">Skrárnar þínar eru sjálfvirkt samstilltar</string>
 </resources>
