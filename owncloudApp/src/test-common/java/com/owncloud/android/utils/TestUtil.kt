@@ -1,0 +1,60 @@
+/**
+ * ownCloud Android client application
+ *
+ * @author David González Verdugo
+ * Copyright (C) 2019 ownCloud GmbH.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+package com.owncloud.android.utils
+
+import com.owncloud.android.shares.db.OCShare
+
+object TestUtil {
+    fun createShare(
+        fileSource: Long = 7,
+        itemSource: Long = 7,
+        shareType: Int = 3, // Public share by default
+        shareWith: String = "",
+        path: String,
+        permissions: Int = 1,
+        sharedDate: Long = 1542628397,
+        expirationDate: Long = 0,
+        token: String = "pwdasd12dasdWZ",
+        sharedWithDisplayName: String = "",
+        isFolder: Boolean,
+        userId: Long = -1,
+        remoteId: Long = 1,
+        accountOwner: String = "admin@server",
+        name: String,
+        shareLink: String
+    ) = OCShare(
+        fileSource,
+        itemSource,
+        shareType,
+        shareWith,
+        path,
+        permissions,
+        sharedDate,
+        expirationDate,
+        token,
+        sharedWithDisplayName,
+        isFolder,
+        userId,
+        remoteId,
+        accountOwner,
+        name,
+        shareLink
+    )
+}
