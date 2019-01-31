@@ -48,7 +48,7 @@ class SharesContentProviderTest {
     }
 
     @Test
-    fun share_initiallyEmpty() {
+    fun initiallyEmptySharesQuery() {
         val cursor = mContentResolver!!.query(
             ProviderTableMeta.CONTENT_URI_SHARE,
             null, null, null, null
@@ -59,7 +59,7 @@ class SharesContentProviderTest {
     }
 
     @Test
-    fun share_insert() {
+    fun insertPublicShares() {
         val itemUri = mContentResolver!!.bulkInsert(
             ProviderTableMeta.CONTENT_URI_SHARE,
             arrayOf(
@@ -72,7 +72,7 @@ class SharesContentProviderTest {
     }
 
     @Test
-    fun share_query_all_shares() {
+    fun allSharesQuery() {
         val itemUri = mContentResolver!!.bulkInsert(
             ProviderTableMeta.CONTENT_URI_SHARE,
             arrayOf(
@@ -131,7 +131,7 @@ class SharesContentProviderTest {
     }
 
     @Test(expected = IllegalArgumentException::class)
-    fun share_query_projection() {
+    fun sharesProjectionQuery() {
         val itemUri = mContentResolver!!.bulkInsert(
             ProviderTableMeta.CONTENT_URI_SHARE,
             arrayOf(
@@ -169,7 +169,7 @@ class SharesContentProviderTest {
     }
 
     @Test
-    fun share_query_selection() {
+    fun sharesSelectionQuery() {
         val itemUri = mContentResolver!!.bulkInsert(
             ProviderTableMeta.CONTENT_URI_SHARE,
             arrayOf(
@@ -211,7 +211,7 @@ class SharesContentProviderTest {
     }
 
     @Test
-    fun share_query_projection_selection() {
+    fun sharesProjectionSelectionQuery() {
         val itemUri = mContentResolver!!.bulkInsert(
             ProviderTableMeta.CONTENT_URI_SHARE,
             arrayOf(

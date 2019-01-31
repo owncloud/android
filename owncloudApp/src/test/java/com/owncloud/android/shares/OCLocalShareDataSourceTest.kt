@@ -39,7 +39,8 @@ class OCLocalDataSourceTest {
     private lateinit var ocLocalSharesDataSource: OCLocalSharesDataSource
     private val ocSharesDao = mock(OCShareDao::class.java)
 
-    @Rule @JvmField
+    @Rule
+    @JvmField
     var rule: TestRule = InstantTaskExecutorRule()
 
     @Before
@@ -47,7 +48,7 @@ class OCLocalDataSourceTest {
         val db = mock(OwncloudDatabase::class.java)
         `when`(db.shareDao()).thenReturn(ocSharesDao)
 
-        val sharesAsLiveData : MutableLiveData<List<OCShare>> = MutableLiveData()
+        val sharesAsLiveData: MutableLiveData<List<OCShare>> = MutableLiveData()
         sharesAsLiveData.value = listOf(
             TestUtil.createShare(
                 path = "/Photos/",
@@ -71,11 +72,29 @@ class OCLocalDataSourceTest {
             sharesAsLiveData
         )
 
+        val newShareAsLiveData: MutableLiveData<List<OCShare>> = MutableLiveData()
+        newShareAsLiveData.value = listOf(
+            TestUtil.createShare(
+                path = "/Photos/",
+                isFolder = true,
+                name = "Photos 2 link",
+                shareLink = "http://server:port/s/3"
+            )
+        )
+
+        `when`(
+            ocSharesDao.getSharesForFileAsLiveData(
+                "/Photos/", "admin@server", listOf(ShareType.PUBLIC_LINK.value)
+            )
+        ).thenReturn(
+            newShareAsLiveData
+        )
+
         ocLocalSharesDataSource = OCLocalSharesDataSource(ocSharesDao)
     }
 
     @Test
-    fun retrievePublicShares() {
+    fun readPublicShares() {
         val shares = getValue(
             ocLocalSharesDataSource.getSharesForFileAsLiveData(
                 "/Photos/image1.jpg", "admin@server", listOf(ShareType.PUBLIC_LINK)
@@ -93,5 +112,31 @@ class OCLocalDataSourceTest {
         assertEquals(shares.get(1).isFolder, false)
         assertEquals(shares.get(1).name, "Image link")
         assertEquals(shares.get(1).shareLink, "http://server:port/s/2")
+    }
+
+    @Test
+    fun insertPublicSharesAndRead() {
+        ocLocalSharesDataSource.insert(
+            listOf(
+                TestUtil.createShare(
+                    path = "/Photos/",
+                    isFolder = true,
+                    name = "Photos 2 link",
+                    shareLink = "http://server:port/s/3"
+                )
+            )
+        )
+
+        val shares = getValue(
+            ocLocalSharesDataSource.getSharesForFileAsLiveData(
+                "/Photos/", "admin@server", listOf(ShareType.PUBLIC_LINK)
+            )
+        )
+
+        assertEquals(shares.size, 1)
+        assertEquals(shares.get(0).path, "/Photos/")
+        assertEquals(shares.get(0).isFolder, true)
+        assertEquals(shares.get(0).name, "Photos 2 link")
+        assertEquals(shares.get(0).shareLink, "http://server:port/s/3")
     }
 }
