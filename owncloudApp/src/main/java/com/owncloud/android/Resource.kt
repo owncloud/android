@@ -16,8 +16,9 @@
 
 package com.owncloud.android
 
-import com.owncloud.android.Status.ERROR
 import com.owncloud.android.Status.SUCCESS
+import com.owncloud.android.Status.ERROR
+import com.owncloud.android.Status.LOADING
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode
 import java.lang.Exception
 
@@ -27,7 +28,7 @@ import java.lang.Exception
 </T> */
 data class Resource<out T>(
     val status: Status,
-    val code: ResultCode?,
+    val code: ResultCode? = null,
     val data: T? = null,
     val msg: String? = null,
     val exception: Exception? = null
@@ -44,6 +45,10 @@ data class Resource<out T>(
             exception: Exception? = null
         ): Resource<T> {
             return Resource(ERROR, code, data, msg, exception)
+        }
+
+        fun <T> loading(): Resource<T> {
+            return Resource(LOADING)
         }
     }
 }
