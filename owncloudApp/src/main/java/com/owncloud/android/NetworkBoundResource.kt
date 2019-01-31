@@ -48,6 +48,7 @@ abstract class NetworkBoundResource<ResultType, RequestType> : CoroutineScope {
     private val result = MediatorLiveData<Resource<ResultType>>()
 
     private val errors = MutableLiveData<Resource<ResultType>>()
+    private val loading = MutableLiveData<Resource<ResultType>>()
 
     private val job = Job()
 
@@ -58,17 +59,21 @@ abstract class NetworkBoundResource<ResultType, RequestType> : CoroutineScope {
         val dbSource = loadFromDb()
 
         /**
-         * Observe two different livedata objects and react on change events from them
+         * Result will observe two different livedata objects and react on change events from them
          * - Shares livedata from Room to detect changes in database
          * - Errors livedata from remote operations
+         * - Loading status
          */
-
         result.addSource(dbSource) { newData ->
             result.value = Resource.success(newData)
         }
 
         result.addSource(errors) { error ->
             result.value = error
+        }
+
+        result.addSource(loading) {
+            result.value = it
         }
 
         fetchFromNetwork(dbSource)
@@ -79,6 +84,10 @@ abstract class NetworkBoundResource<ResultType, RequestType> : CoroutineScope {
         try {
             launch {
                 withContext(Dispatchers.IO) {
+                    loading.postValue(
+                        Resource.loading()
+                    )
+
                     val remoteOperationResult = createCall()
 
                     if (remoteOperationResult.isSuccess) {
