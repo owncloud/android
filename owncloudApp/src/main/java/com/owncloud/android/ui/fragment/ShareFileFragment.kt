@@ -449,10 +449,14 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
                 android.arch.lifecycle.Observer { resource ->
                     when (resource?.status) {
                         Status.SUCCESS -> {
+                            (activity as ShareActivity).dismissLoadingDialog()
+
                             mPublicLinks = resource.data as ArrayList<OCShare>
                             updateListOfPublicLinks()
                         }
                         Status.ERROR -> {
+                            (activity as ShareActivity).dismissLoadingDialog()
+
                             val errorMessage = ErrorMessageAdapter.getErrorMessage(
                                 resource.code,
                                 resource.exception,
@@ -460,6 +464,9 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
                             )
 
                             view?.let { Snackbar.make(it, errorMessage, Snackbar.LENGTH_SHORT).show() }
+                        }
+                        Status.LOADING -> {
+                            (activity as ShareActivity).showLoadingDialog(R.string.common_loading)
                         }
                         else -> {}
                     }
