@@ -40,51 +40,58 @@ import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 
-import java.util.Formatter;
-import java.util.Locale;
-
 import com.owncloud.android.R;
 import com.owncloud.android.utils.DisplayUtils;
+import com.owncloud.android.utils.PreferenceUtils;
+
+import java.util.Formatter;
+import java.util.Locale;
 
 
 /**
  * View containing controls for a {@link MediaPlayer}. 
- * 
+ *
  * Holds buttons "play / pause", "rewind", "fast forward" 
  * and a progress slider. 
- * 
+ *
  * It synchronizes itself with the state of the 
  * {@link MediaPlayer}.
  */
 
 public class MediaControlView extends FrameLayout implements OnClickListener, OnSeekBarChangeListener {
 
-    private MediaPlayerControl  mPlayer;
-    private Context             mContext;
-    private View                mRoot;
-    private ProgressBar         mProgress;
-    private TextView            mEndTime, mCurrentTime;
-    private boolean             mDragging;
-    private static final int    SHOW_PROGRESS = 1;
-    StringBuilder               mFormatBuilder;
-    Formatter                   mFormatter;
-    private ImageButton         mPauseButton;
-    private ImageButton         mFfwdButton;
-    private ImageButton         mRewButton;
-    
+    private MediaPlayerControl mPlayer;
+    private Context mContext;
+    private View mRoot;
+    private ProgressBar mProgress;
+    private TextView mEndTime, mCurrentTime;
+    private boolean mDragging;
+    private static final int SHOW_PROGRESS = 1;
+    StringBuilder mFormatBuilder;
+    Formatter mFormatter;
+    private ImageButton mPauseButton;
+    private ImageButton mFfwdButton;
+    private ImageButton mRewButton;
+
     public MediaControlView(Context context, AttributeSet attrs) {
         super(context, attrs);
         mContext = context;
-        
+
         FrameLayout.LayoutParams frameParams = new FrameLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT
         );
         LayoutInflater inflate = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mRoot = inflate.inflate(R.layout.media_control, null);
+
+        // Allow or disallow touches with other visible windows
+        mRoot.setFilterTouchesWhenObscured(
+                PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(context)
+        );
+
         initControllerView(mRoot);
         addView(mRoot, frameParams);
-        
+
         setFocusable(true);
         setFocusableInTouchMode(true);
         setDescendantFocusability(ViewGroup.FOCUS_AFTER_DESCENDANTS);

@@ -29,15 +29,17 @@ import android.view.View;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import com.owncloud.android.R;
 import com.owncloud.android.utils.DisplayUtils;
+import com.owncloud.android.utils.PreferenceUtils;
 
 /**
  * Activity to show the privacy policy to the user
  */
-public class PrivacyPolicyActivity extends ToolbarActivity  {
+public class PrivacyPolicyActivity extends ToolbarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +56,12 @@ public class PrivacyPolicyActivity extends ToolbarActivity  {
         // Display the progress in a progress bar, like the browser app does.
         final ProgressBar mProgressBar = findViewById(R.id.syncProgressBar);
         DisplayUtils.colorPreLollipopHorizontalProgressBar(mProgressBar);
+
+        // Allow or disallow touches with other visible windows
+        LinearLayout activityPrivacyPolicyLayout = findViewById(R.id.activityPrivacyPolicyLayout);
+        activityPrivacyPolicyLayout.setFilterTouchesWhenObscured(
+                PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(this)
+        );
 
         WebView webview = findViewById(R.id.privacyPolicyWebview);
         webview.getSettings().setJavaScriptEnabled(true);

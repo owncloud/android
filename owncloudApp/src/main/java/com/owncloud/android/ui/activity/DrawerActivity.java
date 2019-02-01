@@ -51,6 +51,7 @@ import com.owncloud.android.datamodel.UserProfilesRepository;
 import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.utils.DisplayUtils;
+import com.owncloud.android.utils.PreferenceUtils;
 
 /**
  * Base class to handle setup of the drawer implementation including user switching and avatar fetching and fallback
@@ -105,7 +106,18 @@ public abstract class DrawerActivity extends ToolbarActivity {
      */
     protected void setupDrawer() {
         mDrawerLayout = findViewById(R.id.drawer_layout);
+
+        // Allow or disallow touches with other visible windows
+        mDrawerLayout.setFilterTouchesWhenObscured(
+                PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(this)
+        );
+
         mNavigationView = findViewById(R.id.nav_view);
+
+        // Allow or disallow touches with other visible windows
+        mNavigationView.setFilterTouchesWhenObscured(
+                PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(this)
+        );
 
         if (mNavigationView != null) {
             mDrawerLogo = findViewById(R.id.drawer_logo);

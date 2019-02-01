@@ -34,11 +34,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.utils.DisplayUtils;
+import com.owncloud.android.utils.PreferenceUtils;
 
 
 /**
@@ -127,30 +129,31 @@ public class FileDownloadFragment extends FileFragment implements OnClickListene
                 setFile((OCFile) savedInstanceState.getParcelable(FileDownloadFragment.EXTRA_FILE));
                 mAccount = savedInstanceState.getParcelable(FileDownloadFragment.EXTRA_ACCOUNT);
                 mError = savedInstanceState.getBoolean(FileDownloadFragment.EXTRA_ERROR);
-            }
-            else {
+            } else {
                 mIgnoreFirstSavedState = false;
             }
         }
 
         View rootView = inflater.inflate(R.layout.file_download_fragment, container, false);
-        
+
         mProgressBar = rootView.findViewById(R.id.progressBar);
         DisplayUtils.colorPreLollipopHorizontalProgressBar(mProgressBar);
 
         (rootView.findViewById(R.id.cancelBtn)).setOnClickListener(this);
-        
-        (rootView.findViewById(R.id.fileDownloadLL)).setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((PreviewImageActivity) getActivity()).toggleFullScreen();
-            }
-        });
+
+        LinearLayout fileDownloadLL = getActivity().findViewById(R.id.fileDownloadLL);
+
+        fileDownloadLL.setFilterTouchesWhenObscured(
+                PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(getContext())
+        );
+
+        fileDownloadLL.setOnClickListener(v ->
+                ((PreviewImageActivity) getActivity()).toggleFullScreen()
+        );
 
         if (mError) {
             setButtonsForRemote(rootView);
-        }
-        else {
+        } else {
             setButtonsForTransferring(rootView);
         }
 

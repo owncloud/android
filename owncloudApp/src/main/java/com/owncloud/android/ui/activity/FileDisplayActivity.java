@@ -100,6 +100,7 @@ import com.owncloud.android.utils.DisplayUtils;
 import com.owncloud.android.utils.Extras;
 import com.owncloud.android.utils.FileStorageUtils;
 import com.owncloud.android.utils.PermissionUtil;
+import com.owncloud.android.utils.PreferenceUtils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -526,10 +527,12 @@ public class FileDisplayActivity extends FileActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
 
-        // Prevent tapjacking
+        // Allow or disallow touches with other visible windows
         View actionBarView = findViewById(R.id.action_bar);
         if (actionBarView != null) {
-            actionBarView.setFilterTouchesWhenObscured(true);
+            actionBarView.setFilterTouchesWhenObscured(
+                    PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(getApplicationContext())
+            );
         }
 
         inflater.inflate(R.menu.main_menu, menu);

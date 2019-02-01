@@ -59,6 +59,7 @@ import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.activity.FileDisplayActivity;
 import com.owncloud.android.ui.fragment.FileFragment;
 import com.owncloud.android.utils.Extras;
+import com.owncloud.android.utils.PreferenceUtils;
 
 
 /**
@@ -138,14 +139,18 @@ public class PreviewImageActivity extends FileActivity implements
 
         // TODO Enable when "On Device" is recovered ?
         mPreviewImagePagerAdapter = new PreviewImagePagerAdapter(
-            getSupportFragmentManager(),
-            parentFolder,
-            getAccount(),
-            getStorageManager()
-            /*, MainApp.getOnlyOnDevice()*/
+                getSupportFragmentManager(),
+                parentFolder,
+                getAccount(),
+                getStorageManager()
+                /*, MainApp.getOnlyOnDevice()*/
         );
 
         mViewPager = findViewById(R.id.fragmentPager);
+        mViewPager.setFilterTouchesWhenObscured(
+                PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(this)
+        );
+
         int position = mHasSavedPosition ? mSavedPosition :
                 mPreviewImagePagerAdapter.getFilePosition(getFile());
         position = (position >= 0) ? position : 0;

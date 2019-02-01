@@ -21,11 +21,13 @@
  */
 package com.owncloud.android.ui.adapter;
 
-import com.owncloud.android.R;
-import com.owncloud.android.ui.dialog.SslUntrustedCertDialog;
 import android.net.http.SslError;
 import android.view.View;
-import android.widget.TextView;
+import android.widget.LinearLayout;
+
+import com.owncloud.android.R;
+import com.owncloud.android.ui.dialog.SslUntrustedCertDialog;
+import com.owncloud.android.utils.PreferenceUtils;
 
 /**
  * Dialog to show an Untrusted Certificate
@@ -42,6 +44,12 @@ public class SslErrorViewAdapter implements SslUntrustedCertDialog.ErrorViewAdap
     
     @Override
     public void updateErrorView(View dialogView) {
+        // Allow or disallow touches with other visible windows
+        LinearLayout manageSpace = dialogView.findViewById(R.id.root);
+        manageSpace.setFilterTouchesWhenObscured(
+                PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(dialogView.getContext())
+        );
+
         /// clean
         dialogView.findViewById(R.id.reason_no_info_about_error).setVisibility(View.GONE);
         

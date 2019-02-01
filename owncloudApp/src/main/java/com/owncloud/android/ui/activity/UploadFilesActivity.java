@@ -49,6 +49,7 @@ import com.owncloud.android.ui.dialog.LoadingDialog;
 import com.owncloud.android.ui.fragment.LocalFileListFragment;
 import com.owncloud.android.ui.helpers.FilesUploadHelper;
 import com.owncloud.android.utils.FileStorageUtils;
+import com.owncloud.android.utils.PreferenceUtils;
 
 import java.io.File;
 
@@ -125,6 +126,12 @@ public class UploadFilesActivity extends FileActivity implements
 
         // Inflate and set the layout view
         setContentView(R.layout.upload_files_layout);
+
+        // Allow or disallow touches with other visible windows
+        LinearLayout uploadFilesLayout = findViewById(R.id.upload_files_layout);
+        uploadFilesLayout.setFilterTouchesWhenObscured(
+                PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(this)
+        );
 
         mFileListFragment = (LocalFileListFragment)
                 getSupportFragmentManager().findFragmentById(R.id.local_files_list);

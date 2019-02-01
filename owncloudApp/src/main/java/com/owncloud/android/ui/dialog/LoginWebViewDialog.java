@@ -51,6 +51,7 @@ import com.owncloud.android.authentication.SAMLWebViewClient;
 import com.owncloud.android.authentication.SAMLWebViewClient.SsoWebViewClientListener;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.operations.AuthenticationMethod;
+import com.owncloud.android.utils.PreferenceUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -165,6 +166,11 @@ public class LoginWebViewDialog extends DialogFragment {
         // Inflate layout of the dialog  
         RelativeLayout ssoRootView = (RelativeLayout) inflater.inflate(R.layout.webview_dialog,
                 container, false);  // null parent view because it will go in the dialog layout
+
+        // Allow or disallow touches with other visible windows
+        ssoRootView.setFilterTouchesWhenObscured(
+                PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(getContext())
+        );
         
         if (mWebView == null) {
             // initialize the WebView

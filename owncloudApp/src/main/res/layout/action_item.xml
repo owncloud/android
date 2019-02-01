@@ -1,9 +1,8 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ownCloud Android client application
 
   Copyright (C) 2012  Bartek Przybylski
-  Copyright (C) 2016 ownCloud GmbH.
+  Copyright (C) 2019 ownCloud GmbH.
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License version 2,
@@ -17,30 +16,27 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
-<LinearLayout
-	xmlns:android="http://schemas.android.com/apk/res/android"
-	android:orientation="horizontal"
-	android:layout_width="match_parent"
-	android:layout_height="wrap_content" 
-	android:clickable="true"
-	android:focusable="true"
-	android:background="@drawable/action_item_btn"
-	android:filterTouchesWhenObscured="true"
-	>
-        	
-	<ImageView
-		android:id="@+id/icon" 
-		android:layout_width="wrap_content" 
-		android:layout_height="wrap_content"/>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/action_item_btn"
+    android:clickable="true"
+    android:focusable="true"
+    android:orientation="horizontal">
 
-	<TextView 
-		android:id="@+id/title"
-		android:layout_width="match_parent"
-		android:layout_height="match_parent"
-		android:gravity="center_vertical"
-		android:paddingLeft="5dip"
-		android:paddingRight="10dip"
-		android:text="Chart"
-		android:textColor="#fff"/>
-									         
+    <ImageView
+        android:id="@+id/icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:paddingLeft="5dip"
+        android:paddingRight="10dip"
+        android:text="Chart"
+        android:textColor="#fff" />
+
 </LinearLayout>         

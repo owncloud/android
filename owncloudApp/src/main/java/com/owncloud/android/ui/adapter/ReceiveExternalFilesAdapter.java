@@ -95,6 +95,11 @@ public class ReceiveExternalFilesAdapter extends BaseAdapter implements ListAdap
         View vi = convertView;
         if (convertView == null) {
             vi = mInflater.inflate(R.layout.uploader_list_item_layout, parent, false);
+
+            // Allow or disallow touches with other visible windows
+            vi.setFilterTouchesWhenObscured(
+                    PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(mContext)
+            );
         }
 
         OCFile file = mFiles.get(position);

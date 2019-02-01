@@ -150,6 +150,10 @@ public class PreviewAudioFragment extends FileFragment {
         Log_OC.v(TAG, "onCreateView");
 
         View view = inflater.inflate(R.layout.preview_audio_fragment, container, false);
+        view.setFilterTouchesWhenObscured(
+                PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(getContext())
+        );
+
         mImagePreview = view.findViewById(R.id.image_preview);
         mMediaController = view.findViewById(R.id.media_controller);
         mProgressBar = view.findViewById(R.id.syncProgressBar);

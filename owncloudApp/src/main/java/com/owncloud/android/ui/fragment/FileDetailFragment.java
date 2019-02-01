@@ -53,6 +53,7 @@ import com.owncloud.android.ui.dialog.RemoveFilesDialogFragment;
 import com.owncloud.android.ui.dialog.RenameFileDialogFragment;
 import com.owncloud.android.utils.DisplayUtils;
 import com.owncloud.android.utils.MimetypeIconUtil;
+import com.owncloud.android.utils.PreferenceUtils;
 
 
 /**
@@ -101,6 +102,12 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
         super();
         mAccount = null;
         mLayout = R.layout.file_details_empty;
+
+        // Allow or disallow touches with other visible windows
+        LinearLayout fileDetailsEmptyLayout = getActivity().findViewById(R.id.fileDetailsEmptyLayout);
+        fileDetailsEmptyLayout.setFilterTouchesWhenObscured(
+                PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(getContext())
+        );
     }
 
     @Override
@@ -115,22 +122,28 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
+                             Bundle savedInstanceState) {
 
-        setFile((OCFile) getArguments().getParcelable(ARG_FILE));
+        setFile(getArguments().getParcelable(ARG_FILE));
         mAccount = getArguments().getParcelable(ARG_ACCOUNT);
 
         if (savedInstanceState != null) {
-            setFile((OCFile) savedInstanceState.getParcelable(FileActivity.EXTRA_FILE));
+            setFile(savedInstanceState.getParcelable(FileActivity.EXTRA_FILE));
             mAccount = savedInstanceState.getParcelable(FileActivity.EXTRA_ACCOUNT);
         }
 
         if (getFile() != null && mAccount != null) {
             mLayout = R.layout.file_details_fragment;
+
+            // Allow or disallow touches with other visible windows
+            ScrollView fdScrollView = getActivity().findViewById(R.id.fdScrollView);
+            fdScrollView.setFilterTouchesWhenObscured(
+                    PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(getContext())
+            );
         }
 
         mView = inflater.inflate(mLayout, null);
-        
+
         if (mLayout == R.layout.file_details_fragment) {
             mView.findViewById(R.id.fdCancelBtn).setOnClickListener(this);
         }

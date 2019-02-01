@@ -53,6 +53,7 @@ import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.utils.DisplayUtils;
 import com.owncloud.android.utils.MimetypeIconUtil;
+import com.owncloud.android.utils.PreferenceUtils;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
@@ -727,6 +728,11 @@ public class ExpandableUploadListAdapter extends BaseExpandableListAdapter imple
             LayoutInflater inflater = (LayoutInflater) mParentActivity
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.upload_list_group, null);
+
+            // Allow or disallow touches with other visible windows
+            convertView.setFilterTouchesWhenObscured(
+                    PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(mParentActivity)
+            );
         }
         TextView tvGroupName = convertView.findViewById(R.id.uploadListGroupName);
         TextView tvFileCount = convertView.findViewById(R.id.textViewFileCount);

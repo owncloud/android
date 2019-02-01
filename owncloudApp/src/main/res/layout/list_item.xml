@@ -23,7 +23,6 @@
     android:background="@drawable/list_selector"
     android:orientation="vertical"
     android:layout_height="72dp"
-    android:filterTouchesWhenObscured="true"
     >
 
     <LinearLayout

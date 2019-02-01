@@ -33,6 +33,7 @@ import android.widget.TextView;
 import com.owncloud.android.R;
 import com.owncloud.android.lib.resources.shares.OCShare;
 import com.owncloud.android.lib.resources.shares.ShareType;
+import com.owncloud.android.utils.PreferenceUtils;
 
 import java.util.ArrayList;
 
@@ -73,6 +74,11 @@ public class ShareUserListAdapter extends ArrayAdapter {
         LayoutInflater inflator = (LayoutInflater) mContext
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflator.inflate(R.layout.share_user_item, parent, false);
+
+        // Allow or disallow touches with other visible windows
+        view.setFilterTouchesWhenObscured(
+                PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(mContext)
+        );
 
         if (mShares != null && mShares.size() > position) {
             OCShare share = mShares.get(position);

@@ -71,6 +71,7 @@ import android.webkit.SslErrorHandler;
 import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
@@ -113,6 +114,7 @@ import com.owncloud.android.ui.dialog.SslUntrustedCertDialog;
 import com.owncloud.android.ui.dialog.SslUntrustedCertDialog.OnSslUntrustedCertListener;
 import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter;
 import com.owncloud.android.utils.DisplayUtils;
+import com.owncloud.android.utils.PreferenceUtils;
 
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
@@ -305,9 +307,15 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         /// load user interface
         setContentView(R.layout.account_setup);
 
+        // Allow or disallow touches with other visible windows
+        FrameLayout loginLayout = findViewById(R.id.login_layout);
+        loginLayout.setFilterTouchesWhenObscured(
+                PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(this)
+        );
+
         // Set login background color or image
         if (!getResources().getBoolean(R.bool.use_login_background_image)) {
-            findViewById(R.id.login_layout).setBackgroundColor(
+            loginLayout.setBackgroundColor(
                     getResources().getColor(R.color.login_background_color)
             );
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {

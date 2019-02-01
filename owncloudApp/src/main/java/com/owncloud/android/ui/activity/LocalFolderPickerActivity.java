@@ -3,6 +3,7 @@
  *
  *   @author David A. Velasco
  *   @author Christian Schabesberger
+ *   @author David González Verdugo
  *   Copyright (C) 2019 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
@@ -33,10 +34,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 
 import com.owncloud.android.R;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.ui.fragment.LocalFileListFragment;
+import com.owncloud.android.utils.PreferenceUtils;
 
 import java.io.File;
 
@@ -99,6 +102,13 @@ public class LocalFolderPickerActivity extends ToolbarActivity implements LocalF
 
         // inflate and set the layout view
         setContentView(R.layout.files_folder_picker);   // beware - inflated in other activities too
+
+        // Allow or disallow touches with other visible windows
+        LinearLayout filesFolderPickerLayout = findViewById(R.id.filesFolderPickerLayout);
+        filesFolderPickerLayout.setFilterTouchesWhenObscured(
+                PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(this)
+        );
+
         if (savedInstanceState == null) {
             createFragments();
        }

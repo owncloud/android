@@ -3,17 +3,18 @@
  *
  * @author Shashvat Kedia
  * @author Christian Schabesberger
+ * @author David González Verdugo
  * Copyright (C) 2019 ownCloud GmbH.
- * <p>
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
  * as published by the Free Software Foundation.
- * <p>
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * <p>
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -22,6 +23,7 @@ package com.owncloud.android.ui.activity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.preference.PreferenceManager;
 import com.google.android.material.snackbar.Snackbar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -30,6 +32,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.andrognito.patternlockview.PatternLockView;
@@ -38,6 +41,7 @@ import com.andrognito.patternlockview.utils.PatternLockUtils;
 import com.owncloud.android.BuildConfig;
 import com.owncloud.android.R;
 import com.owncloud.android.lib.common.utils.Log_OC;
+import com.owncloud.android.utils.PreferenceUtils;
 
 import java.util.List;
 
@@ -74,10 +78,17 @@ public class PatternLockActivity extends AppCompatActivity {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
         }
         setContentView(R.layout.activity_pattern_lock);
+
+        // Allow or disallow touches with other visible windows
+        RelativeLayout activityPatternLockLayout = findViewById(R.id.activityPatternLockLayout);
+        activityPatternLockLayout.setFilterTouchesWhenObscured(
+                PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(this)
+        );
+
         String mPatternHeaderViewText = "";
         /**
-        * mPatternExpShouldVisible holds the boolean value that signifies weather the patternExpView should be visible or not.
-        * it is set to true when the pattern is set and when the pattern is removed.
+         * mPatternExpShouldVisible holds the boolean value that signifies weather the patternExpView should be visible or not.
+         * it is set to true when the pattern is set and when the pattern is removed.
          */
         boolean mPatternExpShouldVisible = false;
         mPatternHeader = findViewById(R.id.header_pattern);

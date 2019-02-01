@@ -29,13 +29,14 @@ import com.google.android.material.snackbar.Snackbar;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.owncloud.android.R;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.utils.FileStorageUtils;
+import com.owncloud.android.utils.PreferenceUtils;
 
 import java.io.File;
 
@@ -50,6 +51,12 @@ public class ManageSpaceActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage_space);
 
+        // Allow or disallow touches with other visible windows
+        LinearLayout manageSpaceLayout = findViewById(R.id.manage_space_layout);
+        manageSpaceLayout.setFilterTouchesWhenObscured(
+                PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(this)
+        );
+
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setTitle(R.string.manage_space_title);
@@ -58,12 +65,9 @@ public class ManageSpaceActivity extends AppCompatActivity {
         descriptionTextView.setText(getString(R.string.manage_space_description, getString(R.string.app_name)));
 
         Button clearDataButton = findViewById(R.id.clearDataButton);
-        clearDataButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ClearDataAsynTask clearDataTask = new ClearDataAsynTask();
-                clearDataTask.execute();
-            }
+        clearDataButton.setOnClickListener(v -> {
+            ClearDataAsynTask clearDataTask = new ClearDataAsynTask();
+            clearDataTask.execute();
         });
     }
 

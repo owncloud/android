@@ -46,6 +46,7 @@ import com.owncloud.android.ui.dialog.LoadingDialog;
 import com.owncloud.android.ui.dialog.RemoveFilesDialogFragment;
 import com.owncloud.android.ui.fragment.FileFragment;
 import com.owncloud.android.utils.DisplayUtils;
+import com.owncloud.android.utils.PreferenceUtils;
 
 import java.io.BufferedWriter;
 import java.io.FileInputStream;
@@ -110,8 +111,11 @@ public class PreviewTextFragment extends FileFragment {
         super.onCreateView(inflater, container, savedInstanceState);
         Log_OC.e(TAG, "onCreateView");
 
-
         View ret = inflater.inflate(R.layout.preview_text_fragment, container, false);
+        ret.setFilterTouchesWhenObscured(
+                PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(getContext())
+        );
+
         mProgressBar = ret.findViewById(R.id.syncProgressBar);
         DisplayUtils.colorPreLollipopHorizontalProgressBar(mProgressBar);
         mTextPreview = ret.findViewById(R.id.text_preview);

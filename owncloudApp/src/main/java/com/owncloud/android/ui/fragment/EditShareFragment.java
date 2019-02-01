@@ -45,6 +45,7 @@ import com.owncloud.android.lib.resources.shares.SharePermissionsBuilder;
 import com.owncloud.android.lib.resources.shares.ShareType;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 import com.owncloud.android.ui.activity.FileActivity;
+import com.owncloud.android.utils.PreferenceUtils;
 
 import java.util.Locale;
 
@@ -143,7 +144,12 @@ public class EditShareFragment extends DialogFragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.edit_share_layout, container, false);
 
-        ((TextView)view.findViewById(R.id.editShareTitle)).setText(
+        // Allow or disallow touches with other visible windows
+        view.setFilterTouchesWhenObscured(
+                PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(getContext())
+        );
+
+        ((TextView) view.findViewById(R.id.editShareTitle)).setText(
                 getResources().getString(R.string.share_with_edit_title, mShare.getSharedWithDisplayName()));
 
         // Setup layout

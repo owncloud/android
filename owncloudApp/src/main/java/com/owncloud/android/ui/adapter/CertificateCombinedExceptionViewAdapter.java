@@ -21,12 +21,13 @@
  */
 package com.owncloud.android.ui.adapter;
 
+import android.view.View;
+import android.widget.LinearLayout;
+
 import com.owncloud.android.R;
 import com.owncloud.android.lib.common.network.CertificateCombinedException;
 import com.owncloud.android.ui.dialog.SslUntrustedCertDialog;
-
-import android.view.View;
-import android.widget.TextView;
+import com.owncloud.android.utils.PreferenceUtils;
 
 /**
  * TODO
@@ -44,6 +45,12 @@ public class CertificateCombinedExceptionViewAdapter implements SslUntrustedCert
     
     @Override
     public void updateErrorView(View dialogView) {
+        // Allow or disallow touches with other visible windows
+        LinearLayout manageSpace = dialogView.findViewById(R.id.root);
+        manageSpace.setFilterTouchesWhenObscured(
+                PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(dialogView.getContext())
+        );
+
         /// clean
         dialogView.findViewById(R.id.reason_no_info_about_error).setVisibility(View.GONE);
        

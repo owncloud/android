@@ -38,6 +38,7 @@ import android.widget.TextView;
 
 import com.owncloud.android.AppRater;
 import com.owncloud.android.R;
+import com.owncloud.android.utils.PreferenceUtils;
 
 public class RateMeDialog extends DialogFragment {
 
@@ -75,7 +76,12 @@ public class RateMeDialog extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Create a view by inflating desired layout
-        View v = inflater.inflate(R.layout.rate_me_dialog, container,  false);
+        View v = inflater.inflate(R.layout.rate_me_dialog, container, false);
+
+        // Allow or disallow touches with other visible windows
+        v.setFilterTouchesWhenObscured(
+                PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(getContext())
+        );
 
         Button rateNowButton = v.findViewById(R.id.button_rate_now);
         Button laterButton = v.findViewById(R.id.button_later);

@@ -81,6 +81,7 @@ import com.owncloud.android.ui.preview.PreviewImageFragment;
 import com.owncloud.android.ui.preview.PreviewTextFragment;
 import com.owncloud.android.ui.preview.PreviewVideoFragment;
 import com.owncloud.android.utils.FileStorageUtils;
+import com.owncloud.android.utils.PreferenceUtils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -235,17 +236,23 @@ public class OCFileListFragment extends ExtendedListFragment implements
 
             // detect if a mini FAB has ever been clicked
             final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-            if(prefs.getLong(KEY_FAB_EVER_CLICKED, 0) > 0) {
+            if (prefs.getLong(KEY_FAB_EVER_CLICKED, 0) > 0) {
                 miniFabClicked = true;
             }
 
             // add labels to the min FABs when none of them has ever been clicked on
-            if(!miniFabClicked) {
+            if (!miniFabClicked) {
                 setFabLabels();
             } else {
                 removeFabLabels();
             }
         }
+
+        // Allow or disallow touches with other visible windows
+        CoordinatorLayout coordinatorLayout = getActivity().findViewById(R.id.coordinator_layout);
+        coordinatorLayout.setFilterTouchesWhenObscured(
+                PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(getContext())
+        );
     }
 
     @Override

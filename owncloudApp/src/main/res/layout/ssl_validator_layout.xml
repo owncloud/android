@@ -24,7 +24,6 @@
     android:gravity="center"
     android:orientation="vertical"
     android:padding="16dp"
-    android:filterTouchesWhenObscured="true"
     >
 
 	<TextView

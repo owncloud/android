@@ -40,6 +40,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -48,26 +49,28 @@ import com.owncloud.android.R;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.lib.common.utils.Log_OC;
-
 import com.owncloud.android.ui.dialog.LoadingDialog;
 import com.owncloud.android.utils.FileStorageUtils;
+import com.owncloud.android.utils.PreferenceUtils;
 
+import java.io.File;
+import java.util.ArrayList;
 
 
 /**
  * Activity reporting errors occurred when local files uploaded to an ownCloud account with an app
  * in version under 1.3.16 where being copied to the ownCloud local folder.
- * 
+ *
  * Allows the user move the files to the ownCloud local folder. let them unlinked to the remote
  * files.
- * 
+ *
  * Shown when the error notification summarizing the list of errors is clicked by the user.
  */
-public class ErrorsWhileCopyingHandlerActivity  extends AppCompatActivity
+public class ErrorsWhileCopyingHandlerActivity extends AppCompatActivity
         implements OnClickListener {
 
     private static final String TAG = ErrorsWhileCopyingHandlerActivity.class.getSimpleName();
-    
+
     public static final String EXTRA_ACCOUNT =
             ErrorsWhileCopyingHandlerActivity.class.getCanonicalName() + ".KEY_ACCOUNT";
     public static final String EXTRA_LOCAL_PATHS =
@@ -114,7 +117,13 @@ public class ErrorsWhileCopyingHandlerActivity  extends AppCompatActivity
                 appName, appName, appName, appName, mAccount.name);
         textView.setText(message);
         textView.setMovementMethod(new ScrollingMovementMethod());
-        
+
+        // Allow or disallow touches with other visible windows
+        LinearLayout alertDialogListViewLayout = findViewById(R.id.alertDialogListViewLayout);
+        alertDialogListViewLayout.setFilterTouchesWhenObscured(
+                PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(this)
+        );
+
         /// load the list of local and remote files that failed
         ListView listView = findViewById(R.id.list);
         if (mLocalPaths != null && mLocalPaths.size() > 0) {
