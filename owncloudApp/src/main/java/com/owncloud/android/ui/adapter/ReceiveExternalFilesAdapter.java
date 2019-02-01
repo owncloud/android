@@ -4,6 +4,7 @@
  *   @author Tobias Kaminsky
  *   @author Christian Schabesberger
  *   @author Shashvat Kedia
+ *   @author David González Verdugo
  *   Copyright (C) 2019 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
@@ -42,6 +43,7 @@ import com.owncloud.android.db.PreferenceManager;
 import com.owncloud.android.utils.DisplayUtils;
 import com.owncloud.android.utils.FileStorageUtils;
 import com.owncloud.android.utils.MimetypeIconUtil;
+import com.owncloud.android.utils.PreferenceUtils;
 
 import java.util.List;
 import java.util.Vector;
