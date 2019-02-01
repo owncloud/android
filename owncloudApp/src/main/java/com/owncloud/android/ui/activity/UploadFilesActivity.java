@@ -138,6 +138,10 @@ public class UploadFilesActivity extends FileActivity implements
         mFileListFragment = (LocalFileListFragment)
                 getSupportFragmentManager().findFragmentById(R.id.local_files_list);
 
+        mFileListFragment.getView().setFilterTouchesWhenObscured(
+                PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(this)
+        );
+
         // Set input controllers
         mCancelBtn = findViewById(R.id.upload_files_btn_cancel);
         mCancelBtn.setOnClickListener(this);
