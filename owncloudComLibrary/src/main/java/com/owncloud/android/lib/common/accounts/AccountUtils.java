@@ -1,23 +1,23 @@
 /* ownCloud Android Library is available under MIT license
  *   Copyright (C) 2018 ownCloud GmbH.
  *   Copyright (C) 2012  Bartek Przybylski
- *   
+ *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
  *   in the Software without restriction, including without limitation the rights
  *   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  *   copies of the Software, and to permit persons to whom the Software is
  *   furnished to do so, subject to the following conditions:
- *   
+ *
  *   The above copyright notice and this permission notice shall be included in
  *   all copies or substantial portions of the Software.
- *   
- *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, 
+ *
+ *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
  *   EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- *   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND 
- *   NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS 
- *   BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN 
- *   ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN 
+ *   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ *   NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
+ *   BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+ *   ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  *   CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *   THE SOFTWARE.
  *
@@ -39,12 +39,11 @@ import com.owncloud.android.lib.common.authentication.OwnCloudCredentialsFactory
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.files.FileUtils;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
+import okhttp3.Cookie;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import okhttp3.Cookie;
 
 public class AccountUtils {
 
@@ -53,13 +52,13 @@ public class AccountUtils {
     /**
      * Constructs full url to host and webdav resource basing on host version
      *
-     * @param context               Valid Android {@link Context}, needed to access the {@link AccountManager}
-     * @param account               A stored ownCloud {@link Account}
-     * @return                      Full URL to WebDAV endpoint in the server corresponding to 'account'.
+     * @param context Valid Android {@link Context}, needed to access the {@link AccountManager}
+     * @param account A stored ownCloud {@link Account}
+     * @return Full URL to WebDAV endpoint in the server corresponding to 'account'.
      * @throws AccountNotFoundException When 'account' is unknown for the AccountManager
      */
     public static String getWebDavUrlForAccount(Context context, Account account)
-        throws AccountNotFoundException {
+            throws AccountNotFoundException {
         String webDavUrlForAccount = "";
 
         try {
@@ -80,19 +79,20 @@ public class AccountUtils {
     /**
      * Extracts url server from the account
      *
-     * @param context               Valid Android {@link Context}, needed to access the {@link AccountManager}
-     * @param account               A stored ownCloud {@link Account}
-     * @return                      Full URL to the server corresponding to 'account', ending in the base path
-     *                              common to all API endpoints.
+     * @param context Valid Android {@link Context}, needed to access the {@link AccountManager}
+     * @param account A stored ownCloud {@link Account}
+     * @return Full URL to the server corresponding to 'account', ending in the base path
+     * common to all API endpoints.
      * @throws AccountNotFoundException When 'account' is unknown for the AccountManager
      */
     public static String getBaseUrlForAccount(Context context, Account account)
-        throws AccountNotFoundException {
+            throws AccountNotFoundException {
         AccountManager ama = AccountManager.get(context.getApplicationContext());
         String baseurl = ama.getUserData(account, Constants.KEY_OC_BASE_URL);
 
-        if (baseurl == null)
+        if (baseurl == null) {
             throw new AccountNotFoundException(account, "Account not found", null);
+        }
 
         return baseurl;
     }
@@ -116,8 +116,8 @@ public class AccountUtils {
     /**
      * Get the stored server version corresponding to an OC account.
      *
-     * @param account   An OC account
-     * @param context   Application context
+     * @param account An OC account
+     * @param context Application context
      * @return Version of the OC server, according to last check
      */
     public static OwnCloudVersion getServerVersionForAccount(Account account, Context context) {
@@ -140,7 +140,7 @@ public class AccountUtils {
      * @throws OperationCanceledException
      */
     public static OwnCloudCredentials getCredentialsForAccount(Context context, Account account)
-        throws OperationCanceledException, AuthenticatorException, IOException {
+            throws OperationCanceledException, AuthenticatorException, IOException {
 
         OwnCloudCredentials credentials;
         AccountManager am = AccountManager.get(context);
@@ -158,30 +158,30 @@ public class AccountUtils {
 
         if (isOauth2) {
             String accessToken = am.blockingGetAuthToken(
-                account,
-                AccountTypeUtils.getAuthTokenTypeAccessToken(account.type),
-                false);
+                    account,
+                    AccountTypeUtils.getAuthTokenTypeAccessToken(account.type),
+                    false);
 
             credentials = OwnCloudCredentialsFactory.newBearerCredentials(username, accessToken);
 
         } else if (isSamlSso) {
             String accessToken = am.blockingGetAuthToken(
-                account,
-                AccountTypeUtils.getAuthTokenTypeSamlSessionCookie(account.type),
-                false);
+                    account,
+                    AccountTypeUtils.getAuthTokenTypeSamlSessionCookie(account.type),
+                    false);
 
             credentials = OwnCloudCredentialsFactory.newSamlSsoCredentials(username, accessToken);
 
         } else {
             String password = am.blockingGetAuthToken(
-                account,
-                AccountTypeUtils.getAuthTokenTypePass(account.type),
-                false);
+                    account,
+                    AccountTypeUtils.getAuthTokenTypePass(account.type),
+                    false);
 
             credentials = OwnCloudCredentialsFactory.newBasicCredentials(
-                username,
-                password,
-                version.isPreemptiveAuthenticationPreferred()
+                    username,
+                    password,
+                    version.isPreemptiveAuthenticationPreferred()
             );
         }
 
@@ -190,8 +190,9 @@ public class AccountUtils {
 
     /**
      * Get the user id corresponding to an OC account.
+     *
      * @param account ownCloud account
-     * @return        user id
+     * @return user id
      */
     public static String getUserId(Account account, Context context) {
         AccountManager accountMgr = AccountManager.get(context);
@@ -232,7 +233,7 @@ public class AccountUtils {
             String cookiesString = client.getCookiesString();
             if (!"".equals(cookiesString)) {
                 ac.setUserData(savedAccount, Constants.KEY_COOKIES, cookiesString);
-                 Log_OC.d(TAG, "Saving Cookies: "+ cookiesString );
+                Log_OC.d(TAG, "Saving Cookies: " + cookiesString);
             }
         }
     }
@@ -240,9 +241,9 @@ public class AccountUtils {
     /**
      * Restore the client cookies persisted in an account stored in the system AccountManager.
      *
-     * @param account           Stored account.
-     * @param client            Client to restore cookies in.
-     * @param context           Android context used to access the system AccountManager.
+     * @param account Stored account.
+     * @param client  Client to restore cookies in.
+     * @param context Android context used to access the system AccountManager.
      */
     public static void restoreCookies(Account account, OwnCloudClient client, Context context) {
         if (account == null) {
@@ -260,10 +261,12 @@ public class AccountUtils {
             if (cookiesString != null) {
                 String[] rawCookies = cookiesString.split(";");
                 List<Cookie> cookieList = new ArrayList<>(rawCookies.length);
-                for(String rawCookie : rawCookies) {
+                for (String rawCookie : rawCookies) {
                     rawCookie = rawCookie.replace(" ", "");
                     final int equalPos = rawCookie.indexOf('=');
-                    if (equalPos == -1) continue;
+                    if (equalPos == -1) {
+                        continue;
+                    }
                     cookieList.add(new Cookie.Builder()
                             .name(rawCookie.substring(0, equalPos))
                             .value(rawCookie.substring(equalPos + 1))

@@ -47,23 +47,23 @@ public class OwnCloudOAuth2Provider implements OAuth2Provider {
     }
 
     @Override
-    public void setClientConfiguration(OAuth2ClientConfiguration oAuth2ClientConfiguration) {
-        mClientConfiguration = oAuth2ClientConfiguration;
-    }
-
-    @Override
     public OAuth2ClientConfiguration getClientConfiguration() {
         return mClientConfiguration;
     }
 
     @Override
-    public void setAuthorizationServerUri(String authorizationServerUri) {
-        mAuthorizationServerUrl = authorizationServerUri;
+    public void setClientConfiguration(OAuth2ClientConfiguration oAuth2ClientConfiguration) {
+        mClientConfiguration = oAuth2ClientConfiguration;
     }
 
     @Override
     public String getAuthorizationServerUri() {
         return mAuthorizationServerUrl;
+    }
+
+    @Override
+    public void setAuthorizationServerUri(String authorizationServerUri) {
+        mAuthorizationServerUrl = authorizationServerUri;
     }
 
     public String getAccessTokenEndpointPath() {

@@ -1,58 +1,51 @@
 /**
- *   ownCloud Android client application
+ * ownCloud Android client application
  *
- *   @author David González Verdugo
- *   @author Christian Schabesberger
- *
- *   Copyright (C) 2018 ownCloud GmbH.
- *
- *   This program is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License version 2,
- *   as published by the Free Software Foundation.
- *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
- *
- *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * @author David González Verdugo
+ * @author Christian Schabesberger
+ * <p>
+ * Copyright (C) 2018 ownCloud GmbH.
+ * <p>
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
+ * <p>
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package com.owncloud.android.lib.common.authentication.oauth;
 
 import android.net.Uri;
 
-import com.owncloud.android.lib.common.authentication.OwnCloudBasicCredentials;
 import com.owncloud.android.lib.common.OwnCloudClient;
+import com.owncloud.android.lib.common.authentication.OwnCloudBasicCredentials;
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentials;
-import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
+import com.owncloud.android.lib.common.http.methods.nonwebdav.PostMethod;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
+import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.common.utils.Log_OC;
-
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import org.json.JSONObject;
 
 import java.net.URL;
 import java.util.Map;
 
-import com.owncloud.android.lib.common.http.methods.nonwebdav.PostMethod;
-
-import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
-
 public class OAuth2RefreshAccessTokenOperation extends RemoteOperation<Map<String, String>> {
 
     private static final String TAG = OAuth2RefreshAccessTokenOperation.class.getSimpleName();
-
+    private final String mAccessTokenEndpointPath;
+    private final OAuth2ResponseParser mResponseParser;
     private String mClientId;
     private String mClientSecret;
     private String mRefreshToken;
-
-    private final String mAccessTokenEndpointPath;
-
-    private final OAuth2ResponseParser mResponseParser;
 
     public OAuth2RefreshAccessTokenOperation(
             String clientId,

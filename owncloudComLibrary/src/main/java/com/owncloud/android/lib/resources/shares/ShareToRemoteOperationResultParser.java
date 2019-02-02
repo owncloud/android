@@ -32,7 +32,6 @@ import android.net.Uri;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
-
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.ByteArrayInputStream;
@@ -49,7 +48,6 @@ public class ShareToRemoteOperationResultParser {
     private boolean mOneOrMoreSharesRequired = false;
     private OwnCloudVersion mOwnCloudVersion = null;
     private Uri mServerBaseUri = null;
-
 
     public ShareToRemoteOperationResultParser(ShareXMLParser shareXmlParser) {
         mShareXmlParser = shareXmlParser;
@@ -94,7 +92,7 @@ public class ShareToRemoteOperationResultParser {
                             // (needed for OC servers < 9.0.0, see ShareXMLParser.java#line256)
                             if (share.getShareType() == ShareType.PUBLIC_LINK
                                     && (share.getShareLink() == null
-                                        || share.getShareLink().length() <= 0)
+                                    || share.getShareLink().length() <= 0)
                                     && share.getToken().length() > 0) {
                                 if (mServerBaseUri != null) {
                                     String sharingLinkPath = ShareUtils.getSharingLinkPath(mOwnCloudVersion);
@@ -112,11 +110,11 @@ public class ShareToRemoteOperationResultParser {
                     Log_OC.e(TAG, "Successful status with no share in the response");
                 }
 
-            } else if (mShareXmlParser.isWrongParameter()){
+            } else if (mShareXmlParser.isWrongParameter()) {
                 result = new RemoteOperationResult<>(RemoteOperationResult.ResultCode.SHARE_WRONG_PARAMETER);
                 result.setData(new ShareParserResult(null, mShareXmlParser.getMessage()));
 
-            } else if (mShareXmlParser.isNotFound()){
+            } else if (mShareXmlParser.isNotFound()) {
                 result = new RemoteOperationResult<>(RemoteOperationResult.ResultCode.SHARE_NOT_FOUND);
                 result.setData(new ShareParserResult(null, mShareXmlParser.getMessage()));
 

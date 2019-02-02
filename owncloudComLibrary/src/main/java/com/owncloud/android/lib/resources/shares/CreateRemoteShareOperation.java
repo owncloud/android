@@ -35,14 +35,13 @@ import com.owncloud.android.lib.common.http.methods.nonwebdav.PostMethod;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
+import okhttp3.FormBody;
 
 import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
-
-import okhttp3.FormBody;
 
 /**
  * Creates a new share.  This allows sharing with a user or group or as a link.
@@ -133,12 +132,11 @@ public class CreateRemoteShareOperation extends RemoteOperation {
         mGetShareDetails = false;        // defaults to false for backwards compatibility
     }
 
-
     /**
      * Set name to create in Share resource. Ignored by servers previous to version 10.0.0
      *
-     * @param name     Name to set to the target share.
-     *                 Null or empty string result in no value set for the name.
+     * @param name Name to set to the target share.
+     *             Null or empty string result in no value set for the name.
      */
     public void setName(String name) {
         this.mName = (name == null) ? "" : name;
@@ -154,7 +152,6 @@ public class CreateRemoteShareOperation extends RemoteOperation {
         mPassword = password;
     }
 
-
     /**
      * Set expiration date to create in Share resource.
      *
@@ -164,7 +161,6 @@ public class CreateRemoteShareOperation extends RemoteOperation {
     public void setExpirationDate(long expirationDateInMillis) {
         mExpirationDateInMillis = expirationDateInMillis;
     }
-
 
     /**
      * Set permissions to create in Share resource.

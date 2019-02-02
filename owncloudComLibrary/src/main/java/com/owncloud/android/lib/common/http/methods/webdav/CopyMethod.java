@@ -24,12 +24,13 @@
 
 package com.owncloud.android.lib.common.http.methods.webdav;
 
-import java.net.URL;
-
 import kotlin.Unit;
+
+import java.net.URL;
 
 /**
  * Copy calls wrapper
+ *
  * @author Christian Schabesberger
  * @author David González Verdugo
  */

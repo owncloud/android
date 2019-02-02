@@ -22,7 +22,7 @@
    THE SOFTWARE.
 
  -->
- 
+
 <resources>
     <dimen name="frame_height">120dp</dimen>
 </resources>

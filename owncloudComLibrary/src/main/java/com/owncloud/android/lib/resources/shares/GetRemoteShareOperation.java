@@ -50,7 +50,6 @@ public class GetRemoteShareOperation extends RemoteOperation<ShareParserResult> 
 
     private long mRemoteId;
 
-
     public GetRemoteShareOperation(long remoteId) {
         mRemoteId = remoteId;
     }

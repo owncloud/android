@@ -1,22 +1,22 @@
 /* ownCloud Android Library is available under MIT license
  *   Copyright (C) 2018 ownCloud GmbH.
- *   
+ *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
  *   in the Software without restriction, including without limitation the rights
  *   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  *   copies of the Software, and to permit persons to whom the Software is
  *   furnished to do so, subject to the following conditions:
- *   
+ *
  *   The above copyright notice and this permission notice shall be included in
  *   all copies or substantial portions of the Software.
- *   
- *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, 
+ *
+ *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
  *   EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- *   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND 
- *   NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS 
- *   BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN 
- *   ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN 
+ *   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ *   NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
+ *   BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+ *   ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  *   CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *   THE SOFTWARE.
  *
@@ -34,13 +34,12 @@ import com.owncloud.android.lib.common.http.methods.nonwebdav.GetMethod;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import javax.net.ssl.SSLException;
 import java.net.URL;
 import java.util.concurrent.TimeUnit;
-import javax.net.ssl.SSLException;
 
 import static com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode.OK;
 
@@ -98,11 +97,11 @@ public class GetRemoteStatusOperation extends RemoteOperation<OwnCloudVersion> {
 
             String redirectedLocation = mLatestResult.getRedirectedLocation();
             while (redirectedLocation != null && redirectedLocation.length() > 0
-                && !mLatestResult.isSuccess()) {
+                    && !mLatestResult.isSuccess()) {
 
                 isRedirectToNonSecureConnection |= (
-                    baseUrlSt.startsWith(HTTPS_PREFIX) &&
-                        redirectedLocation.startsWith(HTTP_PREFIX)
+                        baseUrlSt.startsWith(HTTPS_PREFIX) &&
+                                redirectedLocation.startsWith(HTTP_PREFIX)
                 );
 
                 getMethod = new GetMethod(new URL(redirectedLocation));
@@ -128,13 +127,13 @@ public class GetRemoteStatusOperation extends RemoteOperation<OwnCloudVersion> {
 
                     if (isRedirectToNonSecureConnection) {
                         mLatestResult = new RemoteOperationResult<>(
-                            RemoteOperationResult.ResultCode.
-                                OK_REDIRECT_TO_NON_SECURE_CONNECTION);
+                                RemoteOperationResult.ResultCode.
+                                        OK_REDIRECT_TO_NON_SECURE_CONNECTION);
                     } else {
                         mLatestResult = new RemoteOperationResult<>(
-                            baseUrlSt.startsWith(HTTPS_PREFIX) ?
-                                RemoteOperationResult.ResultCode.OK_SSL :
-                                RemoteOperationResult.ResultCode.OK_NO_SSL);
+                                baseUrlSt.startsWith(HTTPS_PREFIX) ?
+                                        RemoteOperationResult.ResultCode.OK_SSL :
+                                        RemoteOperationResult.ResultCode.OK_NO_SSL);
                     }
 
                     mLatestResult.setData(ocVersion);
@@ -147,7 +146,7 @@ public class GetRemoteStatusOperation extends RemoteOperation<OwnCloudVersion> {
 
         } catch (JSONException e) {
             mLatestResult = new RemoteOperationResult<>(
-                RemoteOperationResult.ResultCode.INSTANCE_NOT_CONFIGURED);
+                    RemoteOperationResult.ResultCode.INSTANCE_NOT_CONFIGURED);
 
         } catch (Exception e) {
             mLatestResult = new RemoteOperationResult<>(e);
@@ -158,7 +157,7 @@ public class GetRemoteStatusOperation extends RemoteOperation<OwnCloudVersion> {
 
         } else if (mLatestResult.getException() != null) {
             Log_OC.e(TAG, "Connection check at " + baseUrlSt + ": " + mLatestResult.getLogMessage(),
-                mLatestResult.getException());
+                    mLatestResult.getException());
 
         } else {
             Log_OC.e(TAG, "Connection check at " + baseUrlSt + ": " + mLatestResult.getLogMessage());
@@ -169,9 +168,9 @@ public class GetRemoteStatusOperation extends RemoteOperation<OwnCloudVersion> {
 
     private boolean isOnline() {
         ConnectivityManager cm = (ConnectivityManager) mContext
-            .getSystemService(Context.CONNECTIVITY_SERVICE);
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
         return cm != null && cm.getActiveNetworkInfo() != null
-            && cm.getActiveNetworkInfo().isConnectedOrConnecting();
+                && cm.getActiveNetworkInfo().isConnectedOrConnecting();
     }
 
     @Override

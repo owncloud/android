@@ -33,58 +33,58 @@
         style="@style/ButtonStyle"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:text="@string/refresh"
         android:onClick="onClickHandler"
+        android:text="@string/refresh"
         />
 
     <ListView
         android:id="@+id/list_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-		android:layout_below="@+id/button_refresh"
         android:layout_above="@+id/button_upload"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
+        android:layout_below="@+id/button_refresh"
         >
     </ListView>
 
     <Button
         android:id="@+id/button_upload"
         style="@style/ButtonStyle"
-        android:layout_alignParentLeft="true"
         android:layout_above="@+id/frame"
-        android:text="@string/upload"
+        android:layout_alignParentLeft="true"
         android:onClick="onClickHandler"
+        android:text="@string/upload"
         />
 
     <TextView
         android:id="@+id/upload_progress"
         style="@style/ProgressStyle"
-        android:layout_below="@id/list_view"
         android:layout_above="@id/frame"
-        android:layout_toRightOf="@id/button_upload"
+        android:layout_below="@id/list_view"
         android:layout_toLeftOf="@+id/button_delete_remote"
+        android:layout_toRightOf="@id/button_upload"
         android:gravity="center"
-        android:textSize="14sp"
         android:text="0%"
+        android:textSize="14sp"
         />
 
     <Button
         android:id="@id/button_delete_remote"
         style="@style/ButtonStyle"
-        android:layout_alignParentRight="true"
         android:layout_above="@id/frame"
-        android:text="@string/delete_remote_file"
+        android:layout_alignParentRight="true"
         android:onClick="onClickHandler"
+        android:text="@string/delete_remote_file"
         />
 
     <FrameLayout
         android:id="@id/frame"
         android:layout_width="match_parent"
         android:layout_height="@dimen/frame_height"
+        android:layout_above="@+id/button_download"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
-        android:layout_above="@+id/button_download"
         >
     </FrameLayout>
 
@@ -93,20 +93,20 @@
         style="@style/ButtonStyle"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:text="@string/download"
         android:onClick="onClickHandler"
+        android:text="@string/download"
         />
 
     <TextView
         android:id="@+id/download_progress"
         style="@style/ProgressStyle"
-        android:layout_below="@id/frame"
         android:layout_alignParentBottom="true"
-        android:layout_toRightOf="@id/button_download"
+        android:layout_below="@id/frame"
         android:layout_toLeftOf="@+id/button_delete_local"
+        android:layout_toRightOf="@id/button_download"
         android:gravity="center"
-        android:textSize="14sp"
         android:text="0%"
+        android:textSize="14sp"
         />
 
     <Button
@@ -114,8 +114,8 @@
         style="@style/ButtonStyle"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:text="@string/delete_local_file"
         android:onClick="onClickHandler"
+        android:text="@string/delete_local_file"
         />
 
 </RelativeLayout>

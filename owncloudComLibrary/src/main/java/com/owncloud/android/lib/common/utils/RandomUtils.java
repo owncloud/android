@@ -39,7 +39,6 @@ public class RandomUtils {
 
     /**
      * @param length the number of random chars to be generated
-     *
      * @return String containing random chars
      */
     public static String generateRandomString(int length) {
@@ -59,7 +58,7 @@ public class RandomUtils {
      */
     public static int generateRandomInteger(int min, int max) {
         Random r = new Random();
-        return r.nextInt(max-min) + min;
+        return r.nextInt(max - min) + min;
     }
 
     /**

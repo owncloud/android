@@ -26,7 +26,6 @@
 
 package com.owncloud.android.lib.common.authentication.oauth;
 
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,20 +35,13 @@ public class OAuth2ProvidersRegistry {
 
     private OAuth2Provider mDefaultProvider = null;
 
-    private OAuth2ProvidersRegistry () {
-    }
-
-    /**
-     * See https://en.wikipedia.org/wiki/Initialization-on-demand_holder_idiom
-     */
-    private static class LazyHolder {
-        private static final OAuth2ProvidersRegistry INSTANCE = new OAuth2ProvidersRegistry();
+    private OAuth2ProvidersRegistry() {
     }
 
     /**
      * Singleton accesor.
      *
-     * @return     Singleton isntance of {@link OAuth2ProvidersRegistry}
+     * @return Singleton isntance of {@link OAuth2ProvidersRegistry}
      */
     public static OAuth2ProvidersRegistry getInstance() {
         return LazyHolder.INSTANCE;
@@ -58,8 +50,8 @@ public class OAuth2ProvidersRegistry {
     /**
      * Register an {@link OAuth2Provider} with the name passed as parameter.
      *
-     * @param name              Name to bind 'oAuthProvider' in the registry.
-     * @param oAuth2Provider    An {@link OAuth2Provider} instance to keep in the registry.
+     * @param name           Name to bind 'oAuthProvider' in the registry.
+     * @param oAuth2Provider An {@link OAuth2Provider} instance to keep in the registry.
      * @throws IllegalArgumentException if 'name' or 'oAuthProvider' are null.
      */
     public void registerProvider(String name, OAuth2Provider oAuth2Provider) {
@@ -89,7 +81,7 @@ public class OAuth2ProvidersRegistry {
     /**
      * Get default {@link OAuth2Provider}.
      *
-     * @return      Default provider, or NULL if there is no provider.
+     * @return Default provider, or NULL if there is no provider.
      */
     public OAuth2Provider getProvider() {
         return mDefaultProvider;
@@ -98,8 +90,8 @@ public class OAuth2ProvidersRegistry {
     /**
      * Get {@link OAuth2Provider} registered with the name passed as parameter.
      *
-     * @param name  Name used to register the desired {@link OAuth2Provider}
-     * @return      {@link OAuth2Provider} registered with the name 'name'
+     * @param name Name used to register the desired {@link OAuth2Provider}
+     * @return {@link OAuth2Provider} registered with the name 'name'
      */
     public OAuth2Provider getProvider(String name) {
         return mProviders.get(name);
@@ -108,8 +100,8 @@ public class OAuth2ProvidersRegistry {
     /**
      * Sets the {@link OAuth2Provider} registered with the name passed as parameter as the default provider
      *
-     * @param name  Name used to register the {@link OAuth2Provider} to set as default.
-     * @return      {@link OAuth2Provider} set as default, or NULL if no provider was registered with 'name'.
+     * @param name Name used to register the {@link OAuth2Provider} to set as default.
+     * @return {@link OAuth2Provider} set as default, or NULL if no provider was registered with 'name'.
      */
     public OAuth2Provider setDefaultProvider(String name) {
         OAuth2Provider toDefault = mProviders.get(name);
@@ -117,6 +109,13 @@ public class OAuth2ProvidersRegistry {
             mDefaultProvider = toDefault;
         }
         return toDefault;
+    }
+
+    /**
+     * See https://en.wikipedia.org/wiki/Initialization-on-demand_holder_idiom
+     */
+    private static class LazyHolder {
+        private static final OAuth2ProvidersRegistry INSTANCE = new OAuth2ProvidersRegistry();
     }
 
 }

@@ -35,110 +35,116 @@ import java.io.InputStream;
 
 /**
  * Parser for Invalid Character server exception
+ *
  * @author masensio
  */
 public class InvalidCharacterExceptionParser {
 
     private static final String EXCEPTION_STRING = "OC\\Connector\\Sabre\\Exception\\InvalidPath";
-	private static final String EXCEPTION_UPLOAD_STRING = "OCP\\Files\\InvalidPathException";
+    private static final String EXCEPTION_UPLOAD_STRING = "OCP\\Files\\InvalidPathException";
 
     // No namespaces
-	private static final String ns = null;
+    private static final String ns = null;
 
     // Nodes for XML Parser
     private static final String NODE_ERROR = "d:error";
-	private static final String NODE_EXCEPTION = "s:exception";
+    private static final String NODE_EXCEPTION = "s:exception";
+
     /**
-	 * Parse is as an Invalid Path Exception
-	 * @param is
-	 * @return if The exception is an Invalid Char Exception
-	 * @throws XmlPullParserException
-	 * @throws IOException
-	 */
-	public boolean parseXMLResponse(InputStream is) throws XmlPullParserException,
+     * Parse is as an Invalid Path Exception
+     *
+     * @param is
+     * @return if The exception is an Invalid Char Exception
+     * @throws XmlPullParserException
+     * @throws IOException
+     */
+    public boolean parseXMLResponse(InputStream is) throws XmlPullParserException,
             IOException {
         boolean result = false;
 
-		try {
-			// XMLPullParser
-			XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
-			factory.setNamespaceAware(true);
+        try {
+            // XMLPullParser
+            XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+            factory.setNamespaceAware(true);
 
-			XmlPullParser parser = Xml.newPullParser();
-			parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
-			parser.setInput(is, null);
-			parser.nextTag();
-			result = readError(parser);
+            XmlPullParser parser = Xml.newPullParser();
+            parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
+            parser.setInput(is, null);
+            parser.nextTag();
+            result = readError(parser);
 
-		} finally {
-			is.close();
-		}
-		return result;
-	}
+        } finally {
+            is.close();
+        }
+        return result;
+    }
 
-	/**
-	 * Parse OCS node
-	 * @param parser
-	 * @return List of ShareRemoteFiles
-	 * @throws XmlPullParserException
-	 * @throws IOException
-	 */
-	private boolean readError (XmlPullParser parser) throws XmlPullParserException, IOException {
-		String exception = "";
-		parser.require(XmlPullParser.START_TAG,  ns , NODE_ERROR);
-		while (parser.next() != XmlPullParser.END_TAG) {
-			if (parser.getEventType() != XmlPullParser.START_TAG) {
-				continue;
-			}
-			String name = parser.getName();
-			// read NODE_EXCEPTION
-			if (name.equalsIgnoreCase(NODE_EXCEPTION)) {
-				exception = readText(parser);
-			} else {
-				skip(parser);
-			}
+    /**
+     * Parse OCS node
+     *
+     * @param parser
+     * @return List of ShareRemoteFiles
+     * @throws XmlPullParserException
+     * @throws IOException
+     */
+    private boolean readError(XmlPullParser parser) throws XmlPullParserException, IOException {
+        String exception = "";
+        parser.require(XmlPullParser.START_TAG, ns, NODE_ERROR);
+        while (parser.next() != XmlPullParser.END_TAG) {
+            if (parser.getEventType() != XmlPullParser.START_TAG) {
+                continue;
+            }
+            String name = parser.getName();
+            // read NODE_EXCEPTION
+            if (name.equalsIgnoreCase(NODE_EXCEPTION)) {
+                exception = readText(parser);
+            } else {
+                skip(parser);
+            }
 
-		}
-		return exception.equalsIgnoreCase(EXCEPTION_STRING) ||
-				exception.equalsIgnoreCase(EXCEPTION_UPLOAD_STRING);
-	}
+        }
+        return exception.equalsIgnoreCase(EXCEPTION_STRING) ||
+                exception.equalsIgnoreCase(EXCEPTION_UPLOAD_STRING);
+    }
 
-	/**
-	 * Skip tags in parser procedure
-	 * @param parser
-	 * @throws XmlPullParserException
-	 * @throws IOException
-	 */
-	private void skip(XmlPullParser parser) throws XmlPullParserException, IOException {
-		if (parser.getEventType() != XmlPullParser.START_TAG) {
-			throw new IllegalStateException();
-		}
-		int depth = 1;
-		while (depth != 0) {
-			switch (parser.next()) {
-			case XmlPullParser.END_TAG:
-				depth--;
-				break;
-			case XmlPullParser.START_TAG:
-				depth++;
-				break;
-			}
-		}
-	}
+    /**
+     * Skip tags in parser procedure
+     *
+     * @param parser
+     * @throws XmlPullParserException
+     * @throws IOException
+     */
+    private void skip(XmlPullParser parser) throws XmlPullParserException, IOException {
+        if (parser.getEventType() != XmlPullParser.START_TAG) {
+            throw new IllegalStateException();
+        }
+        int depth = 1;
+        while (depth != 0) {
+            switch (parser.next()) {
+                case XmlPullParser.END_TAG:
+                    depth--;
+                    break;
+                case XmlPullParser.START_TAG:
+                    depth++;
+                    break;
+            }
+        }
+    }
 
-    	/**
-	 * Read the text from a node
-	 * @param parser
-	 * @return Text of the node
-	 * @throws IOException
-	 * @throws XmlPullParserException
-	 */
-	private String readText(XmlPullParser parser) throws IOException, XmlPullParserException {
-		String result = "";
-		if (parser.next() == XmlPullParser.TEXT) {
-			result = parser.getText();
-			parser.nextTag();
-		}
-		return result;
-	}
+    /**
+     * Read the text from a node
+     *
+     * @param parser
+     * @return Text of the node
+     * @throws IOException
+     * @throws XmlPullParserException
+     */
+    private String readText(XmlPullParser parser) throws IOException, XmlPullParserException {
+        String result = "";
+        if (parser.next() == XmlPullParser.TEXT) {
+            result = parser.getText();
+            parser.nextTag();
+        }
+        return result;
+    }
 }

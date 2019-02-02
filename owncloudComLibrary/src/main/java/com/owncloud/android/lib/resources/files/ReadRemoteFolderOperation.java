@@ -24,6 +24,7 @@
 
 package com.owncloud.android.lib.resources.files;
 
+import at.bitfire.dav4android.Response;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.accounts.AccountUtils;
 import com.owncloud.android.lib.common.http.HttpConstants;
@@ -37,8 +38,6 @@ import com.owncloud.android.lib.common.utils.Log_OC;
 
 import java.net.URL;
 import java.util.ArrayList;
-
-import at.bitfire.dav4android.Response;
 
 import static com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode.OK;
 
@@ -103,7 +102,7 @@ public class ReadRemoteFolderOperation extends RemoteOperation<ArrayList<RemoteF
                 result.setData(mFolderAndFiles);
 
             } else { // synchronization failed
-                result = new RemoteOperationResult<> (propfindMethod);
+                result = new RemoteOperationResult<>(propfindMethod);
             }
 
         } catch (Exception e) {

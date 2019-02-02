@@ -27,22 +27,19 @@
 
 package com.owncloud.android.lib.common.network;
 
-
-
 import com.owncloud.android.lib.common.http.HttpConstants;
 
 import java.util.Arrays;
-
 
 /**
  * Aggregate saving the list of URLs followed in a sequence of redirections during the exceution of a
  * {@link RemoteOperation}, and the status codes corresponding to all
  * of them.
- *
+ * <p>
  * The last status code saved corresponds to the first response not being a redirection, unless the sequence exceeds
  * the maximum length of redirections allowed by the {@link com.owncloud.android.lib.common.OwnCloudClient} instance
  * that ran the operation.
- *
+ * <p>
  * If no redirection was followed, the last (and first) status code contained corresponds to the original URL in the
  * request.
  */
@@ -59,9 +56,9 @@ public class RedirectionPath {
     /**
      * Public constructor.
      *
-     * @param status            Status code resulting of executing a request on the original URL.
-     * @param maxRedirections   Maximum number of redirections that will be contained.
-     * @throws IllegalArgumentException     If 'maxRedirections' is < 0
+     * @param status          Status code resulting of executing a request on the original URL.
+     * @param maxRedirections Maximum number of redirections that will be contained.
+     * @throws IllegalArgumentException If 'maxRedirections' is < 0
      */
     public RedirectionPath(int status, int maxRedirections) {
         if (maxRedirections < 0) {
@@ -75,7 +72,7 @@ public class RedirectionPath {
     /**
      * Adds a new location URL to the list of followed redirections.
      *
-     * @param location      URL extracted from a 'Location' header in a redirection.
+     * @param location URL extracted from a 'Location' header in a redirection.
      */
     public void addLocation(String location) {
         if (mLocations == null) {
@@ -86,11 +83,10 @@ public class RedirectionPath {
         }
     }
 
-
     /**
      * Adds a new status code to the list of status corresponding to followed redirections.
      *
-     * @param status     Status code from the response of another followed redirection.
+     * @param status Status code from the response of another followed redirection.
      */
     public void addStatus(int status) {
         if (mLastStatus < mStatuses.length - 1) {
@@ -99,14 +95,14 @@ public class RedirectionPath {
     }
 
     /**
-     * @return      Last status code saved.
+     * @return Last status code saved.
      */
     public int getLastStatus() {
         return mStatuses[mLastStatus];
     }
 
     /**
-     * @return      Last location followed corresponding to a permanent redirection (status code 301).
+     * @return Last location followed corresponding to a permanent redirection (status code 301).
      */
     public String getLastPermanentLocation() {
         for (int i = mLastStatus; i >= 0; i--) {
@@ -118,11 +114,10 @@ public class RedirectionPath {
     }
 
     /**
-     * @return      Count of locations.
+     * @return Count of locations.
      */
     public int getRedirectionsCount() {
         return mLastLocation + 1;
     }
-
 
 }

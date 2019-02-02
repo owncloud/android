@@ -24,7 +24,6 @@
  *
  */
 
-
 package com.owncloud.android.lib.resources.status;
 
 import android.net.Uri;
@@ -35,7 +34,6 @@ import com.owncloud.android.lib.common.http.methods.nonwebdav.GetMethod;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
-
 import org.json.JSONObject;
 
 import java.net.URL;
@@ -109,10 +107,8 @@ public class GetRemoteCapabilitiesOperation extends RemoteOperation<OCCapability
     private static final String PROPERTY_UNDELETE = "undelete";
     private static final String PROPERTY_VERSIONING = "versioning";
 
-
     /**
      * Constructor
-     *
      */
     public GetRemoteCapabilitiesOperation() {
 
@@ -135,7 +131,7 @@ public class GetRemoteCapabilitiesOperation extends RemoteOperation<OCCapability
             int status = client.executeHttpMethod(getMethod);
 
             String response = getMethod.getResponseBodyAsString();
-            if(isSuccess(status)) {
+            if (isSuccess(status)) {
                 Log_OC.d(TAG, "Successful response: " + response);
 
                 // Parse the response
@@ -185,12 +181,12 @@ public class GetRemoteCapabilitiesOperation extends RemoteOperation<OCCapability
                                 JSONObject respPublic = respFilesSharing.getJSONObject(NODE_PUBLIC);
                                 capability.setFilesSharingPublicEnabled(CapabilityBooleanType.fromBooleanValue(
                                         respPublic.getBoolean(PROPERTY_ENABLED)));
-                                if(respPublic.has(NODE_PASSWORD)) {
+                                if (respPublic.has(NODE_PASSWORD)) {
                                     capability.setFilesSharingPublicPasswordEnforced(
                                             CapabilityBooleanType.fromBooleanValue(
-                                            respPublic.getJSONObject(NODE_PASSWORD).getBoolean(PROPERTY_ENFORCED)));
+                                                    respPublic.getJSONObject(NODE_PASSWORD).getBoolean(PROPERTY_ENFORCED)));
                                 }
-                                if(respPublic.has(NODE_EXPIRE_DATE)){
+                                if (respPublic.has(NODE_EXPIRE_DATE)) {
                                     JSONObject respExpireDate = respPublic.getJSONObject(NODE_EXPIRE_DATE);
                                     capability.setFilesSharingPublicExpireDateEnabled(
                                             CapabilityBooleanType.fromBooleanValue(
@@ -205,7 +201,7 @@ public class GetRemoteCapabilitiesOperation extends RemoteOperation<OCCapability
                                                         respExpireDate.getBoolean(PROPERTY_ENFORCED)));
                                     }
                                 }
-                                if (respPublic.has(PROPERTY_UPLOAD)){
+                                if (respPublic.has(PROPERTY_UPLOAD)) {
                                     capability.setFilesSharingPublicUpload(CapabilityBooleanType.fromBooleanValue(
                                             respPublic.getBoolean(PROPERTY_UPLOAD)));
                                 }
@@ -230,13 +226,12 @@ public class GetRemoteCapabilitiesOperation extends RemoteOperation<OCCapability
                             if (respFilesSharing.has(NODE_FEDERATION)) {
                                 JSONObject respFederation = respFilesSharing.getJSONObject(NODE_FEDERATION);
                                 capability.setFilesSharingFederationOutgoing(
-                                CapabilityBooleanType.fromBooleanValue(respFederation.getBoolean(PROPERTY_OUTGOING)));
+                                        CapabilityBooleanType.fromBooleanValue(respFederation.getBoolean(PROPERTY_OUTGOING)));
                                 capability.setFilesSharingFederationIncoming(CapabilityBooleanType.fromBooleanValue(
                                         respFederation.getBoolean(PROPERTY_INCOMING)));
                             }
                             Log_OC.d(TAG, "*** Added " + NODE_FILES_SHARING);
                         }
-
 
                         if (respCapabilities.has(NODE_FILES)) {
                             JSONObject respFiles = respCapabilities.getJSONObject(NODE_FILES);

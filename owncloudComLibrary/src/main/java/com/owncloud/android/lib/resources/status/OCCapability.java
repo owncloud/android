@@ -101,7 +101,6 @@ public class OCCapability {
         mFilesVersioning = CapabilityBooleanType.UNKNOWN;
     }
 
-
     // Getters and Setters
     public String getAccountName() {
         return mAccountName;
@@ -159,7 +158,6 @@ public class OCCapability {
         this.mVersionEdition = versionEdition;
     }
 
-
     public int getCorePollinterval() {
         return mCorePollinterval;
     }
@@ -215,7 +213,6 @@ public class OCCapability {
     public void setFilesSharingPublicExpireDateEnforced(CapabilityBooleanType filesSharingPublicExpireDateEnforced) {
         this.mFilesSharingPublicExpireDateEnforced = filesSharingPublicExpireDateEnforced;
     }
-
 
     public CapabilityBooleanType getFilesSharingPublicSendMail() {
         return mFilesSharingPublicSendMail;

@@ -1,22 +1,22 @@
 /* ownCloud Android Library is available under MIT license
  *   Copyright (C) 2018 ownCloud GmbH.
- *   
+ *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
  *   in the Software without restriction, including without limitation the rights
  *   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  *   copies of the Software, and to permit persons to whom the Software is
  *   furnished to do so, subject to the following conditions:
- *   
+ *
  *   The above copyright notice and this permission notice shall be included in
  *   all copies or substantial portions of the Software.
- *   
- *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, 
+ *
+ *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
  *   EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- *   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND 
- *   NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS 
- *   BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN 
- *   ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN 
+ *   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ *   NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
+ *   BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+ *   ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  *   CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *   THE SOFTWARE.
  *
@@ -34,6 +34,7 @@ import com.owncloud.android.lib.common.operations.OperationCancelledException;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
+import okhttp3.MediaType;
 
 import java.io.File;
 import java.net.URL;
@@ -41,13 +42,11 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import okhttp3.MediaType;
-
 import static com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode.OK;
 
 /**
  * Remote operation performing the upload of a remote file to the ownCloud server.
- * 
+ *
  * @author David A. Velasco
  * @author masensio
  * @author David González Verdugo
@@ -56,15 +55,13 @@ import static com.owncloud.android.lib.common.operations.RemoteOperationResult.R
 public class UploadRemoteFileOperation extends RemoteOperation {
 
     private static final String TAG = UploadRemoteFileOperation.class.getSimpleName();
-
+    protected final AtomicBoolean mCancellationRequested = new AtomicBoolean(false);
     protected String mLocalPath;
     protected String mRemotePath;
     protected String mMimeType;
     protected String mFileLastModifTimestamp;
     protected PutMethod mPutMethod = null;
     protected String mRequiredEtag = null;
-
-    protected final AtomicBoolean mCancellationRequested = new AtomicBoolean(false);
     protected Set<OnDatatransferProgressListener> mDataTransferListeners = new HashSet<OnDatatransferProgressListener>();
 
     protected FileRequestBody mFileRequestBody = null;
@@ -153,8 +150,8 @@ public class UploadRemoteFileOperation extends RemoteOperation {
     public Set<OnDatatransferProgressListener> getDataTransferListeners() {
         return mDataTransferListeners;
     }
-    
-    public void addDatatransferProgressListener (OnDatatransferProgressListener listener) {
+
+    public void addDatatransferProgressListener(OnDatatransferProgressListener listener) {
         synchronized (mDataTransferListeners) {
             mDataTransferListeners.add(listener);
         }
@@ -162,7 +159,7 @@ public class UploadRemoteFileOperation extends RemoteOperation {
             mFileRequestBody.addDatatransferProgressListener(listener);
         }
     }
-    
+
     public void removeDatatransferProgressListener(OnDatatransferProgressListener listener) {
         synchronized (mDataTransferListeners) {
             mDataTransferListeners.remove(listener);
@@ -171,12 +168,13 @@ public class UploadRemoteFileOperation extends RemoteOperation {
             mFileRequestBody.removeDatatransferProgressListener(listener);
         }
     }
-    
+
     public void cancel() {
         synchronized (mCancellationRequested) {
             mCancellationRequested.set(true);
-            if (mPutMethod != null)
+            if (mPutMethod != null) {
                 mPutMethod.abort();
+            }
         }
     }
 

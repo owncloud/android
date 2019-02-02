@@ -31,7 +31,6 @@ import com.owncloud.android.lib.common.utils.Log_OC;
 import java.util.HashMap;
 import java.util.Map;
 
-
 public class OAuth2QueryParser {
 
     private static final String TAG = OAuth2QueryParser.class.getName();

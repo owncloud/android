@@ -1,22 +1,22 @@
 /* ownCloud Android Library is available under MIT license
  *   Copyright (C) 2018 ownCloud GmbH.
- *   
+ *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
  *   in the Software without restriction, including without limitation the rights
  *   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  *   copies of the Software, and to permit persons to whom the Software is
  *   furnished to do so, subject to the following conditions:
- *   
+ *
  *   The above copyright notice and this permission notice shall be included in
  *   all copies or substantial portions of the Software.
- *   
- *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, 
+ *
+ *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
  *   EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- *   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND 
- *   NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS 
- *   BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN 
- *   ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN 
+ *   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ *   NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
+ *   BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+ *   ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  *   CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *   THE SOFTWARE.
  *
@@ -43,7 +43,7 @@ import java.util.concurrent.ConcurrentMap;
 
 /**
  * Implementation of {@link OwnCloudClientManager}
- *
+ * <p>
  * TODO check multithreading safety
  *
  * @author David A. Velasco
@@ -57,11 +57,10 @@ public class SingleSessionManager implements OwnCloudClientManager {
     private static final String TAG = SingleSessionManager.class.getSimpleName();
 
     private ConcurrentMap<String, OwnCloudClient> mClientsWithKnownUsername =
-        new ConcurrentHashMap<>();
+            new ConcurrentHashMap<>();
 
     private ConcurrentMap<String, OwnCloudClient> mClientsWithUnknownUsername =
-        new ConcurrentHashMap<>();
-
+            new ConcurrentHashMap<>();
 
     @Override
     public OwnCloudClient getClientFor(OwnCloudAccount account, Context context) throws OperationCanceledException,
@@ -77,9 +76,9 @@ public class SingleSessionManager implements OwnCloudClientManager {
         OwnCloudClient client = null;
         String accountName = account.getName();
         String sessionName = account.getCredentials() == null ? "" :
-            AccountUtils.buildAccountName(
-                account.getBaseUri(),
-                account.getCredentials().getAuthToken());
+                AccountUtils.buildAccountName(
+                        account.getBaseUri(),
+                        account.getCredentials().getAuthToken());
 
         if (accountName != null) {
             client = mClientsWithKnownUsername.get(accountName);
@@ -110,9 +109,9 @@ public class SingleSessionManager implements OwnCloudClientManager {
         if (client == null) {
             // no client to reuse - create a new one
             client = OwnCloudClientFactory.createOwnCloudClient(
-                account.getBaseUri(),
-                context.getApplicationContext(),
-                true);    // TODO remove dependency on OwnCloudClientFactory
+                    account.getBaseUri(),
+                    context.getApplicationContext(),
+                    true);    // TODO remove dependency on OwnCloudClientFactory
             client.setAccount(account);
             client.setContext(context);
             client.setOwnCloudClientManager(this);
@@ -152,7 +151,6 @@ public class SingleSessionManager implements OwnCloudClientManager {
         return client;
     }
 
-
     @Override
     public OwnCloudClient removeClientFor(OwnCloudAccount account) {
         if (Log.isLoggable(TAG, Log.DEBUG)) {
@@ -187,7 +185,6 @@ public class SingleSessionManager implements OwnCloudClientManager {
         return null;
     }
 
-
     @Override
     public void saveAllClients(Context context, String accountType) {
 
@@ -202,9 +199,9 @@ public class SingleSessionManager implements OwnCloudClientManager {
             accountName = accountNames.next();
             account = new Account(accountName, accountType);
             AccountUtils.saveClient(
-                mClientsWithKnownUsername.get(accountName),
-                account,
-                context);
+                    mClientsWithKnownUsername.get(accountName),
+                    account,
+                    context);
         }
 
         if (Log.isLoggable(TAG, Log.DEBUG)) {

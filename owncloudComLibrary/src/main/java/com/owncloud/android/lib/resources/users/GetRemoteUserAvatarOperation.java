@@ -43,6 +43,7 @@ import static com.owncloud.android.lib.common.operations.RemoteOperationResult.R
 
 /**
  * Gets avatar about the user logged in, if available
+ *
  * @author David A. Velasco
  * @author David González Verdugo
  */
@@ -52,7 +53,9 @@ public class GetRemoteUserAvatarOperation extends RemoteOperation<GetRemoteUserA
 
     private static final String NON_OFFICIAL_AVATAR_PATH = "/index.php/avatar/";
 
-    /** Desired size in pixels of the squared image */
+    /**
+     * Desired size in pixels of the squared image
+     */
     private int mDimension;
 
     /**
@@ -77,7 +80,7 @@ public class GetRemoteUserAvatarOperation extends RemoteOperation<GetRemoteUserA
         try {
             final String url =
                     client.getBaseUri() + NON_OFFICIAL_AVATAR_PATH +
-                    client.getCredentials().getUsername() + "/" + mDimension;
+                            client.getCredentials().getUsername() + "/" + mDimension;
             Log_OC.d(TAG, "avatar URI: " + url);
 
             getMethod = new GetMethod(new URL(url));
@@ -99,7 +102,7 @@ public class GetRemoteUserAvatarOperation extends RemoteOperation<GetRemoteUserA
 
                 if (contentType == null || !contentType.startsWith("image")) {
                     Log_OC.e(
-                        TAG, "Not an image, failing with no avatar"
+                            TAG, "Not an image, failing with no avatar"
                     );
                     result = new RemoteOperationResult<>(RemoteOperationResult.ResultCode.FILE_NOT_FOUND);
                     return result;

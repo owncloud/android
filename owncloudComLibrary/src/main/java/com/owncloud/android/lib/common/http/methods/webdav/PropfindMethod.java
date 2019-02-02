@@ -24,18 +24,19 @@
 
 package com.owncloud.android.lib.common.http.methods.webdav;
 
-import java.io.IOException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-
 import at.bitfire.dav4android.Property;
 import at.bitfire.dav4android.Response;
 import at.bitfire.dav4android.exception.DavException;
 import kotlin.Unit;
 
+import java.io.IOException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Propfind calls wrapper
+ *
  * @author David González Verdugo
  */
 public class PropfindMethod extends DavMethod {
@@ -57,7 +58,7 @@ public class PropfindMethod extends DavMethod {
     }
 
     @Override
-    public int onExecute() throws IOException, DavException{
+    public int onExecute() throws IOException, DavException {
         mDavResource.propfind(mDepth, mPropertiesToRequest,
                 (Response response, Response.HrefRelation hrefRelation) -> {
                     switch (hrefRelation) {

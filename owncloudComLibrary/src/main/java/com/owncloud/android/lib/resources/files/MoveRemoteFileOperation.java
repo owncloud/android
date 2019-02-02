@@ -1,22 +1,22 @@
 /* ownCloud Android Library is available under MIT license
  *   Copyright (C) 2018 ownCloud GmbH.
- *   
+ *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
  *   in the Software without restriction, including without limitation the rights
  *   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  *   copies of the Software, and to permit persons to whom the Software is
  *   furnished to do so, subject to the following conditions:
- *   
+ *
  *   The above copyright notice and this permission notice shall be included in
  *   all copies or substantial portions of the Software.
- *   
- *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, 
+ *
+ *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
  *   EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- *   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND 
- *   NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS 
- *   BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN 
- *   ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN 
+ *   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ *   NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
+ *   BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+ *   ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  *   CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *   THE SOFTWARE.
  *
@@ -31,9 +31,9 @@ import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.http.HttpConstants;
 import com.owncloud.android.lib.common.http.methods.webdav.MoveMethod;
 import com.owncloud.android.lib.common.network.WebdavUtils;
-import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
+import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 
 import java.net.URL;
@@ -42,7 +42,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Remote operation moving a remote file or folder in the ownCloud server to a different folder
  * in the same account.
- *
+ * <p>
  * Allows renaming the moving file/folder at the same time.
  *
  * @author David A. Velasco
@@ -65,7 +65,7 @@ public class MoveRemoteFileOperation extends RemoteOperation {
 
     /**
      * Constructor.
-     *
+     * <p>
      * TODO Paths should finish in "/" in the case of folders. ?
      *
      * @param srcRemotePath    Remote path of the file/folder to move.
@@ -90,7 +90,7 @@ public class MoveRemoteFileOperation extends RemoteOperation {
 
         OwnCloudVersion version = client.getOwnCloudVersion();
         boolean versionWithForbiddenChars =
-            (version != null && version.isVersionWithForbiddenCharacters());
+                (version != null && version.isVersionWithForbiddenCharacters());
 
         /// check parameters
         if (!FileUtils.isValidPath(mTargetRemotePath, versionWithForbiddenChars)) {
@@ -115,7 +115,7 @@ public class MoveRemoteFileOperation extends RemoteOperation {
 
             final MoveMethod move = new MoveMethod(
                     new URL(srcWebDavUri + WebdavUtils.encodePath(mSrcRemotePath)),
-                client.getUserFilesWebDavUri() + WebdavUtils.encodePath(mTargetRemotePath),
+                    client.getUserFilesWebDavUri() + WebdavUtils.encodePath(mTargetRemotePath),
                     mOverwrite);
 
             if (moveChunkedFile) {
@@ -128,7 +128,7 @@ public class MoveRemoteFileOperation extends RemoteOperation {
 
             final int status = client.executeHttpMethod(move);
             /// process response
-            if(isSuccess(status)) {
+            if (isSuccess(status)) {
                 result = new RemoteOperationResult<>(ResultCode.OK);
             } else if (status == HttpConstants.HTTP_PRECONDITION_FAILED && !mOverwrite) {
 
@@ -144,12 +144,12 @@ public class MoveRemoteFileOperation extends RemoteOperation {
             }
 
             Log.i(TAG, "Move " + mSrcRemotePath + " to " + mTargetRemotePath + ": " +
-                result.getLogMessage());
+                    result.getLogMessage());
 
         } catch (Exception e) {
             result = new RemoteOperationResult<>(e);
             Log.e(TAG, "Move " + mSrcRemotePath + " to " + mTargetRemotePath + ": " +
-                result.getLogMessage(), e);
+                    result.getLogMessage(), e);
         }
 
         return result;

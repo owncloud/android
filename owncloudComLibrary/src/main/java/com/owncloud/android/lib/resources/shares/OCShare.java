@@ -1,22 +1,22 @@
 /* ownCloud Android Library is available under MIT license
  *   Copyright (C) 2017 ownCloud GmbH.
- *   
+ *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
  *   in the Software without restriction, including without limitation the rights
  *   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  *   copies of the Software, and to permit persons to whom the Software is
  *   furnished to do so, subject to the following conditions:
- *   
+ *
  *   The above copyright notice and this permission notice shall be included in
  *   all copies or substantial portions of the Software.
- *   
- *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, 
+ *
+ *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
  *   EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- *   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND 
- *   NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS 
- *   BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN 
- *   ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN 
+ *   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ *   NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
+ *   BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+ *   ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  *   CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *   THE SOFTWARE.
  *
@@ -24,15 +24,13 @@
 
 package com.owncloud.android.lib.resources.shares;
 
-import java.io.File;
-import java.io.Serializable;
-
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.files.FileUtils;
 
+import java.io.Serializable;
 
 /**
  * Contains the data of a Share from the Share API
@@ -42,13 +40,6 @@ import com.owncloud.android.lib.resources.files.FileUtils;
  */
 public class OCShare implements Parcelable, Serializable {
 
-    /**
-     * Generated - should be refreshed every time the class changes!!
-     */
-    private static final long serialVersionUID = 4124975224281327921L;
-
-    private static final String TAG = OCShare.class.getSimpleName();
-
     public static final int DEFAULT_PERMISSION = -1;
     public static final int READ_PERMISSION_FLAG = 1;
     public static final int UPDATE_PERMISSION_FLAG = 2;
@@ -56,29 +47,47 @@ public class OCShare implements Parcelable, Serializable {
     public static final int DELETE_PERMISSION_FLAG = 8;
     public static final int SHARE_PERMISSION_FLAG = 16;
     public static final int MAXIMUM_PERMISSIONS_FOR_FILE =
-        READ_PERMISSION_FLAG +
-            UPDATE_PERMISSION_FLAG +
-            SHARE_PERMISSION_FLAG;
+            READ_PERMISSION_FLAG +
+                    UPDATE_PERMISSION_FLAG +
+                    SHARE_PERMISSION_FLAG;
     public static final int MAXIMUM_PERMISSIONS_FOR_FOLDER =
-        MAXIMUM_PERMISSIONS_FOR_FILE +
-            CREATE_PERMISSION_FLAG +
-            DELETE_PERMISSION_FLAG;
+            MAXIMUM_PERMISSIONS_FOR_FILE +
+                    CREATE_PERMISSION_FLAG +
+                    DELETE_PERMISSION_FLAG;
     public static final int FEDERATED_PERMISSIONS_FOR_FILE_UP_TO_OC9 =
-        READ_PERMISSION_FLAG +
-            UPDATE_PERMISSION_FLAG;
+            READ_PERMISSION_FLAG +
+                    UPDATE_PERMISSION_FLAG;
     public static final int FEDERATED_PERMISSIONS_FOR_FILE_AFTER_OC9 =
-        READ_PERMISSION_FLAG +
-            UPDATE_PERMISSION_FLAG +
-            SHARE_PERMISSION_FLAG;
+            READ_PERMISSION_FLAG +
+                    UPDATE_PERMISSION_FLAG +
+                    SHARE_PERMISSION_FLAG;
     public static final int FEDERATED_PERMISSIONS_FOR_FOLDER_UP_TO_OC9 =
-        READ_PERMISSION_FLAG +
-            UPDATE_PERMISSION_FLAG +
-            CREATE_PERMISSION_FLAG +
-            DELETE_PERMISSION_FLAG;
+            READ_PERMISSION_FLAG +
+                    UPDATE_PERMISSION_FLAG +
+                    CREATE_PERMISSION_FLAG +
+                    DELETE_PERMISSION_FLAG;
     public static final int FEDERATED_PERMISSIONS_FOR_FOLDER_AFTER_OC9 =
-        FEDERATED_PERMISSIONS_FOR_FOLDER_UP_TO_OC9 +
-            SHARE_PERMISSION_FLAG;
+            FEDERATED_PERMISSIONS_FOR_FOLDER_UP_TO_OC9 +
+                    SHARE_PERMISSION_FLAG;
+    /**
+     * Parcelable Methods
+     */
+    public static final Parcelable.Creator<OCShare> CREATOR = new Parcelable.Creator<OCShare>() {
+        @Override
+        public OCShare createFromParcel(Parcel source) {
+            return new OCShare(source);
+        }
 
+        @Override
+        public OCShare[] newArray(int size) {
+            return new OCShare[size];
+        }
+    };
+    /**
+     * Generated - should be refreshed every time the class changes!!
+     */
+    private static final long serialVersionUID = 4124975224281327921L;
+    private static final String TAG = OCShare.class.getSimpleName();
     private long mId;
     private long mFileSource;
     private long mItemSource;
@@ -110,6 +119,17 @@ public class OCShare implements Parcelable, Serializable {
         mPath = path;
     }
 
+    /// Getters and Setters
+
+    /**
+     * Reconstruct from parcel
+     *
+     * @param source The source parcel
+     */
+    protected OCShare(Parcel source) {
+        readFromParcel(source);
+    }
+
     /**
      * Used internally. Reset all file properties
      */
@@ -131,8 +151,6 @@ public class OCShare implements Parcelable, Serializable {
         mShareLink = "";
         mName = "";
     }
-
-    /// Getters and Setters
 
     public long getId() {
         return mId;
@@ -266,30 +284,6 @@ public class OCShare implements Parcelable, Serializable {
         return ShareType.PUBLIC_LINK.equals(mShareType) && mShareWith.length() > 0;
     }
 
-    /**
-     * Parcelable Methods
-     */
-    public static final Parcelable.Creator<OCShare> CREATOR = new Parcelable.Creator<OCShare>() {
-        @Override
-        public OCShare createFromParcel(Parcel source) {
-            return new OCShare(source);
-        }
-
-        @Override
-        public OCShare[] newArray(int size) {
-            return new OCShare[size];
-        }
-    };
-
-    /**
-     * Reconstruct from parcel
-     *
-     * @param source The source parcel
-     */
-    protected OCShare(Parcel source) {
-        readFromParcel(source);
-    }
-
     public void readFromParcel(Parcel source) {
         mId = source.readLong();
 
@@ -314,12 +308,10 @@ public class OCShare implements Parcelable, Serializable {
         mName = source.readString();
     }
 
-
     @Override
     public int describeContents() {
         return this.hashCode();
     }
-
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {

@@ -22,13 +22,15 @@
    THE SOFTWARE.
 
  -->
- 
+
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
+
     <style name="ButtonStyle" parent="@android:style/Widget.Holo.Button">
         <item name="android:layout_width">120dp</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">12sp</item>
     </style>
+
     <style name="ProgressStyle" parent="@android:style/Widget.Holo.TextView">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
