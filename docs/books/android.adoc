@@ -1,0 +1,12 @@
+= ownCloud Android Application Manual
+The ownCloud Team <docs@owncloud.com>
+{revnumber}, {revdate}
+:source-highlighter: rouge
+:homepage: https://github.com/owncloud/android
+:listing-caption: Listing
+:toc:
+:toclevels: 1
+:icons: font
+:icon-set: octicon
+
+include::modules/ROOT/pages/index.adoc[leveloffset=+1]

@@ -1,6 +1,6 @@
 = Using the ownCloud Android App
 
-Accessing your files on your ownCloud server via the Web interface is easy and convenient, as you can use any Web browser on any operating system without installing special client software. 
+Accessing your files on your ownCloud server via the Web interface is easy and convenient, as you can use any Web browser on any operating system without installing special client software.
 However, the ownCloud Android app offers some advantages over the Web interface:
 
 * A simplified interface that fits nicely on a tablet or smartphone
@@ -18,19 +18,19 @@ The first time you log into a new ownCloud account, you'll see a screen with a d
 
 image:android-1.png[image]
 
-You will also find these links on your Personal page in the ownCloud Web interface. 
+You will also find these links on your Personal page in the ownCloud Web interface.
 Find source code and more information from the http://owncloud.org/install/#mobile[ownCloud download page]. Users of customized ownCloud Android apps, for example from their employer, should follow their employer's instructions.
 
 == Upgrading
 
 When you download your ownCloud Android App from the Google Play store, it will be upgraded just like any other Play Store application, according to your settings on your Android device.
 
-It will either update automatically or give you a notification that an upgrade is available. 
+It will either update automatically or give you a notification that an upgrade is available.
 If you are using an ownCloud Android app from a custom repository, e.g., your employer, then it will update in accordance with their policies.
 
 == New Features Wizard
 
-The first time that you use the Android app, you will see the _"New Features Wizard"_. 
+The first time that you use the Android app, you will see the _"New Features Wizard"_.
 The wizard, similar to wizards in other applications and operating systems, gives you a quick overview of the new features in the Android App, so that you’re familiar with them as quickly as possible.
 
 The new features covered in the wizard are:
@@ -45,25 +45,25 @@ New Features Wizard in the ownCloud Android app.]
 
 == Connecting to Your ownCloud Server
 
-The first time you run your ownCloud Android app, it opens to a configuration screen. 
-Enter your server URL, login name, password, and click the Connect button. 
+The first time you run your ownCloud Android app, it opens to a configuration screen.
+Enter your server URL, login name, password, and click the Connect button.
 Click the eyeball to the right of your password to expose your password.
 
 image:android-2.png[image]
 
-For best security, your ownCloud server should be http://info.ssl.com/article.aspx?id=10241[SSL-enabled] so that you can connect via HTTPS. 
-The ownCloud app will test your connection as soon as you provide it and tell you if you entered it correctly. 
-If your server has https://www.digitalocean.com/community/tutorials/how-to-create-a-self-signed-ssl-certificate-for-apache-in-ubuntu-16-04[a self-signed SSL certificate], you'll get a warning that it is not to be trusted. 
+For best security, your ownCloud server should be http://info.ssl.com/article.aspx?id=10241[SSL-enabled] so that you can connect via HTTPS.
+The ownCloud app will test your connection as soon as you provide it and tell you if you entered it correctly.
+If your server has https://www.digitalocean.com/community/tutorials/how-to-create-a-self-signed-ssl-certificate-for-apache-in-ubuntu-16-04[a self-signed SSL certificate], you'll get a warning that it is not to be trusted.
 If this happens, click the "YES" button to accept the certificate and complete your account setup.
 
 image:android-3.png[image]
 
-With that completed, you're now ready to use the Android application. 
+With that completed, you're now ready to use the Android application.
 At this point, you'll be on the _"All Files"_ screen, which you see below.
 
 image:android-all-files-overview.png[image]
 
-By clicking the main menu at the top left, you will be able to manage the core functionality of the app. 
+By clicking the main menu at the top left, you will be able to manage the core functionality of the app.
 The options are:
 
 * link:#manage-users-accounts[Manage Users Accounts]
@@ -73,17 +73,17 @@ The options are:
 
 == Manage Users Accounts
 
-Initially the path to this section isn't visible. 
+Initially the path to this section isn't visible.
 To get to it, first click the down arrow, in the user details section, which will replace the _"All Files"_ and _"Uploads"_ buttons with _"Add account"_ and _"Manage accounts"_.
 
 image:manage-user-accounts.png[image]
 
-Then, click _"Manage accounts"_. 
+Then, click _"Manage accounts"_.
 From there, you can see all of the currently active user accounts, along with a button to add a new account.
 
 === Viewing Accounts
 
-After clicking _"Manage accounts"_, you will see a list of the currently active accounts in the application, as in the screenshot below. 
+After clicking _"Manage accounts"_, you will see a list of the currently active accounts in the application, as in the screenshot below.
 Each entry in the list has shortcuts to:
 
 * View the user's files
@@ -94,17 +94,17 @@ image:android-manage-accounts.jpg[image]
 
 === Adding Accounts
 
-To add a new account is identical to creating the first account. 
+To add a new account is identical to creating the first account.
 Click _"Add account"_, and then follow the instructions in link:#connecting-to-your-owncloud-server[Connecting to Your ownCloud Server].
 
 === Removing Accounts & Logging Out
 
-To remove an account, click the rubbish bin icon, next to the key icon. 
-This will display a confirmation dialog, asking if you want to remove the account. 
+To remove an account, click the rubbish bin icon, next to the key icon.
+This will display a confirmation dialog, asking if you want to remove the account.
 If you click _"Yes"_, the account will be removed.
 
-This action also logs you out of the server and deletes the database with the list of files. 
-However, any files downloaded onto the device prior to removal will still be there afterwards. 
+This action also logs you out of the server and deletes the database with the list of files.
+However, any files downloaded onto the device prior to removal will still be there afterwards.
 You can find them in the public partition.
 
 image:android-remove-account-confirmation.jpg[image]
@@ -113,8 +113,8 @@ NOTE: There is no logout function that both logs out of your account *and* leave
 
 === Change User Passwords
 
-To change a user's password, click the key icon, next to the user's details. 
-This will display the user details page, with the ownCloud server URI and user account, pre-filled. 
+To change a user's password, click the key icon, next to the user's details.
+This will display the user details page, with the ownCloud server URI and user account, pre-filled.
 Enter a new password, and click _"Connect"_, and the password will be updated.
 
 image:android-13.png[image]
@@ -125,8 +125,8 @@ If you want extra security, please refer to the link:#passcode-locks-pins[Passco
 
 == All Files
 
-When you are in the _"All Files"_ view, all files that you have permission to access on your ownCloud server are displayed in your Android app. 
-However, they are not downloaded until you click on them. 
+When you are in the _"All Files"_ view, all files that you have permission to access on your ownCloud server are displayed in your Android app.
+However, they are not downloaded until you click on them.
 Downloaded files are marked with a green tick, on the top-right of the file's icon.
 
 image:android-all-files-view.jpg[image]
@@ -139,7 +139,7 @@ Then, a short press on the overflow button opens a menu with options for managin
 image:android-file-overflow-menu.jpg[image]
 
 When you are on your main Files page and you long press on any file or folder a list of options appears, which you can see in the image below.
-Some of them appear in the top bar. 
+Some of them appear in the top bar.
 The ones that don't fit in the top bar, appear in the list of options when pressing the overflow button.
 
 image:android-file-list-overflow-menu.jpg[image]
@@ -159,32 +159,32 @@ The dialog which appears shows a list of users and groups with whom the file is 
 
 image:multiple_share_link.png[image]
 
-From here you can: 
+From here you can:
 
-- Share one link to the file with users of the same ownCloud server 
-- Share the file with one or more users and groups 
-- Share one or more links to the file via a range of options 
-- Enable password protection 
+- Share one link to the file with users of the same ownCloud server
+- Share the file with one or more users and groups
+- Share one or more links to the file via a range of options
+- Enable password protection
 - Set a share expiration date
 
 To create a private link, click the link icon on the right of the file name.
 
 NOTE: Private link is available from ownCloud X.
 
-To share the file with a new user or group, click the plus sign next to _"Users and Groups"_, where you will be able to find and add them to the share list. 
+To share the file with a new user or group, click the plus sign next to _"Users and Groups"_, where you will be able to find and add them to the share list.
 After a user or group has been added, you can adjust the editing and on-sharing options available for them.
 
 NOTE: If your ownCloud server administrator has enabled username auto-completion, when you start typing user or group names they will auto-complete.
 
-You can create a Federated Share Link by entering the username and remote URL of the person you want to share with in this format: `user@domain.com`. 
-You don't have to guess; the Personal page in the ownCloud Web GUI tells the exact Federated Cloud ID. 
+You can create a Federated Share Link by entering the username and remote URL of the person you want to share with in this format: `user@domain.com`.
+You don't have to guess; the Personal page in the ownCloud Web GUI tells the exact Federated Cloud ID.
 Just ask them to copy and paste and send it to you.
 
 image:android-14.png[image]
 
-To create a public link, click the plus symbol next to _"Public Links"_. 
-This will display the options available for that link, including _"Allow editing"_, _"Password"_, and _"Expiration"_. 
-After the options have been suitably configured, click _"Save"_ to create the link. 
+To create a public link, click the plus symbol next to _"Public Links"_.
+This will display the options available for that link, including _"Allow editing"_, _"Password"_, and _"Expiration"_.
+After the options have been suitably configured, click _"Save"_ to create the link.
 If you do not want to create the public link, click _"Cancel"_.
 
 [[gif_support_label]]
@@ -198,13 +198,13 @@ image:gif-support-owncloud-android-app.png[View animated GIFs in the ownCloud An
 
 To add new content, whether files, folders, or content from other apps, click the blue button at the bottom right to expose the _"Upload"_, _"Content from other apps"_, and _"New folder"_ buttons.
 
-Use the _"Upload"_ button to add files to your ownCloud account from your Android filesystem. 
+Use the _"Upload"_ button to add files to your ownCloud account from your Android filesystem.
 Use _"Content from other apps"_ to upload files from Android apps, such as the Gallery app.
 
 image:android-4.png[image]
 
-Click the overflow button at the top right (that's the one with three vertical dots) to open a user menu. 
-_"Grid view"_ toggles between grid and list view. 
+Click the overflow button at the top right (that's the one with three vertical dots) to open a user menu.
+_"Grid view"_ toggles between grid and list view.
 _"Refresh account"_ syncs with the server, and _"Sort"_ gives you the option to sort your files by date, or alphabetically.
 
 image:android-6.png[image]
@@ -214,32 +214,32 @@ image:android-6.png[image]
 
 image:camera/share-from-camera-owncloud-android-app.jpg[Uploading pictures directly from the camera in the ownCloud Android app, steps 1 - 3.]
 
-Images can be uploaded directly from the camera. 
-To do so, similar to uploading a file or creating a new folder, when viewing all files, click the _"Plus icon"_, then the _"Upload"_ button in the popup list (which is the first icon). 
-From there, under _"Upload to ownCloud"_, click _"Picture from camera"_. 
+Images can be uploaded directly from the camera.
+To do so, similar to uploading a file or creating a new folder, when viewing all files, click the _"Plus icon"_, then the _"Upload"_ button in the popup list (which is the first icon).
+From there, under _"Upload to ownCloud"_, click _"Picture from camera"_.
 The camera app will then start, and the picture that you take can be directly uploaded to your ownCloud server.
 
 === Working With Multiple Files
 
-The Android application can perform some operations on multiple files simultaneously, such as refreshing and deleting. 
-To select multiple files, long select the first file that you want to work with; you will see a checkbox appear on the far right-hand side. 
+The Android application can perform some operations on multiple files simultaneously, such as refreshing and deleting.
+To select multiple files, long select the first file that you want to work with; you will see a checkbox appear on the far right-hand side.
 After that, check the checkbox next to all the other files that you want to perform the same operation on, and then perform the operation.
 
 image:select-multiple-files.png[image]
 
 === Uploading Files Taken From the Camera
 
-Pictures and videos can be uploaded from your smartphone after choosing the folder where they are stored. 
+Pictures and videos can be uploaded from your smartphone after choosing the folder where they are stored.
 To specify where they are located, in the _"Settings"_ options, under link:#camera-uploads[Camera uploads],
-enable one of _"Picture uploads"_ or _"Video uploads"_. 
+enable one of _"Picture uploads"_ or _"Video uploads"_.
 After that, a further option called _"Camera folder"_ will become visible, as in the screenshot below.
 
 image:specify-camera-folder.png[image]
 
 === Current Uploads
 
-The Uploads page displays the status of files currently uploading, a list of your recently uploaded files, and a Retry option for any failed uploads. 
-If credentials to access the file have changed, you'll see a credentials error. 
+The Uploads page displays the status of files currently uploading, a list of your recently uploaded files, and a Retry option for any failed uploads.
+If credentials to access the file have changed, you'll see a credentials error.
 Tap the file to retry, and you'll get a login screen to enter the new credentials.
 
 If the upload fails because you're trying to upload to a folder that you do not have permission to access, you will see a _"Permissions error"_.
@@ -249,8 +249,8 @@ image:current-uploads.png[image]
 
 === Make Folders Available Offline
 
-Folders can be made available for when no internet or mobile connectivity is available. 
-Doing so caches a copy of the folder and its contents locally to the device (assuming that sufficient disc space is available). 
+Folders can be made available for when no internet or mobile connectivity is available.
+Doing so caches a copy of the folder and its contents locally to the device (assuming that sufficient disc space is available).
 Depending on the number of folders selected for offline availability, how folders are made available offline works slightly differently.
 
 * *A single folder:* When a single folder is selected, click the More options menu, which opens a popup menu, and then select the first option, labeled: _"Set as available offline"_.
@@ -269,38 +269,38 @@ ownCloud Android App.]
 
 === Camera Uploads
 
-If you take photos or create videos with your Android device, they can be automatically uploaded to your ownCloud server. 
+If you take photos or create videos with your Android device, they can be automatically uploaded to your ownCloud server.
 To enable this, under _"Camera uploads"_ tap one or both of _Picture uploads_ or _Video uploads_.
 
 image:android-settings-camera-upload.png[image]
 
-By enabling these features any new photos or videos which you create will be automatically uploaded every 15 minutes. 
+By enabling these features any new photos or videos which you create will be automatically uploaded every 15 minutes.
 Photos and videos are not uploaded when they’re created, to focus on reliability, instead of immediacy, and to avoid battery draining caused by excessive checking of the camera folder.
 
 NOTE: Please be aware that if you used the earlier _Instant Uploads_ feature, you will lose the configuration and have to enable the "Camera uploads" feature if you want to use it, since it needs to be initialized and configured properly.
 
-If you’re concerned about mobile data usage, or have an account with limited data available, you can limit uploading to only when a WiFi is in use. 
-This option is visible once you've enabled the respective option. 
-For photos tap *"Upload pictures via wifi only"*. 
+If you’re concerned about mobile data usage, or have an account with limited data available, you can limit uploading to only when a WiFi is in use.
+This option is visible once you've enabled the respective option.
+For photos tap *"Upload pictures via wifi only"*.
 For videos tap *"Upload videos via wifi only"*.
 
-By default, photos and videos are uploaded to a directory called `/CameraUpload`. 
-However, you also have the option to use an existing directory, or to create a new one. 
+By default, photos and videos are uploaded to a directory called `/CameraUpload`.
+However, you also have the option to use an existing directory, or to create a new one.
 To change the upload location, tap on _Picture upload path_ under photos or _Video upload_ path under videos, and choose one of the folders displayed.
 
-To create a new folder, click the _More options_ menu, in the top right-hand corner. 
-This will display the menu option: _New folder_. 
+To create a new folder, click the _More options_ menu, in the top right-hand corner.
+This will display the menu option: _New folder_.
 Tap it and enter the name of the new folder in the _Folder name_ dialog.
-Then, tap the newly created folder and tap _Choose_ in the bottom right-hand corner. 
+Then, tap the newly created folder and tap _Choose_ in the bottom right-hand corner.
 You'll see that the path has been updated.
 
 == Security
 
 === Passcode Locks & Pins
 
-You can also set a passcode lock to further protect your files and folders. 
-And, if you want extra security, you can set a login PIN on your Android device, and also on your ownCloud account. 
-If you are using a shared Android device, other users can access your files in the file manager if you are sharing a single user account. 
+You can also set a passcode lock to further protect your files and folders.
+And, if you want extra security, you can set a login PIN on your Android device, and also on your ownCloud account.
+If you are using a shared Android device, other users can access your files in the file manager if you are sharing a single user account.
 To avoid this, you could set up multiple user accounts to protect your files.
 
 The bottom section of the _"Settings"_ screen has links to:
@@ -313,7 +313,7 @@ The bottom section of the _"Settings"_ screen has links to:
 [[pattern_and_fingerprint_lock_label]]
 === Pattern Lock and Fingerprint Lock
 
-In addition to the Passcode Lock and Pins, you also have the ability to use both a pattern and a fingerprint lock to protect access to your ownCloud app and its data. 
+In addition to the Passcode Lock and Pins, you also have the ability to use both a pattern and a fingerprint lock to protect access to your ownCloud app and its data.
 To enable one or both, under _"Settings"_ -> _"Security"_, choose which one(s) you want to enable.
 
 NOTE: To use the Fingerprint Lock, the Pattern Lock has to be enabled.
@@ -322,7 +322,7 @@ image:security/fingerprint-and-pattern-lock-enabled-disabled-owncloud-android-ap
 
 image:security/fingerprint-and-pattern-lock-owncloud-android-app.png[The Pattern Lock and Fingerprint Lock in the ownCloud Android app.]
 
-After you enable the pattern lock, you will need to create a pattern and then confirm it to access the ownCloud app, just as you would if you've enabled that for access to the phone itself. 
+After you enable the pattern lock, you will need to create a pattern and then confirm it to access the ownCloud app, just as you would if you've enabled that for access to the phone itself.
 If you later disable pattern lock, you will need to enter your pattern again.
 
 If you enable the fingerprint lock, you will need to provide one of your already stored fingerprint patterns to access the ownCloud app.

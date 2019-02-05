@@ -1,0 +1,77 @@
+workspace:
+  base: /drone
+  path: src
+
+branches:
+  - master
+
+clone:
+  git:
+    image: plugins/git:next
+    pull: true
+
+pipeline:
+  cache-restore:
+    image: plugins/s3-cache:1
+    pull: true
+    secrets: [ cache_s3_endpoint, cache_s3_access_key, cache_s3_secret_key ]
+    restore: true
+    when:
+      local: false
+
+  docs-deps:
+    image: owncloudci/nodejs:11
+    pull: true
+    commands:
+      - cd docs/
+      - yarn install
+
+  docs-validate:
+    image: owncloudci/nodejs:11
+    pull: true
+    commands:
+      - cd docs/
+      - yarn validate
+
+  docs-build:
+    image: owncloudci/nodejs:11
+    pull: true
+    commands:
+      - cd docs/
+      - yarn antora --url http://webserver:8080
+
+  docs-artifacts:
+    image: owncloud/ubuntu:latest
+    pull: true
+    commands:
+      - tree docs/public/
+
+  cache-rebuild:
+    image: plugins/s3-cache:1
+    pull: true
+    secrets: [ cache_s3_endpoint, cache_s3_access_key, cache_s3_secret_key ]
+    rebuild: true
+    mount:
+      - docs/cache
+    when:
+      local: false
+      event: [ push ]
+
+  cache-flush:
+    image: plugins/s3-cache:1
+    pull: true
+    secrets: [ cache_s3_endpoint, cache_s3_access_key, cache_s3_secret_key ]
+    flush: true
+    flush_age: 14
+    when:
+      local: false
+      event: [ push ]
+
+  notify-slack:
+    image: plugins/slack
+    secrets: [ slack_webhook ]
+    channel: mobile
+    when:
+      local: false
+      event: [ push ]
+      status: [ success, failure ]

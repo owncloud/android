@@ -1,0 +1,53 @@
+{
+  "private": true,
+  "name": "owncloud-android",
+  "description": "The ownCloud Android documentation",
+  "version": "1.0.0",
+  "license": "AGPL-3.0",
+  "author": "The ownCloud Team <docs@owncloud.com>",
+  "homepage": "https://github.com/owncloud/android#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/owncloud/android.git"
+  },
+  "bugs": {
+    "url": "https://github.com/owncloud/android/issues"
+  },
+  "contributors": [
+    {
+      "name": "Matthew Setter",
+      "email": "matthew@matthewsetter.com"
+    },
+    {
+      "name": "Martin Mattel",
+      "email": "github@diemattels.at"
+    },
+    {
+      "name": "Thomas Boerger",
+      "email": "tboerger@owncloud.com"
+    }
+  ],
+  "scripts": {
+    "prose": "write-good --parse **/*.adoc",
+    "serve": "http-server public/ -d -i",
+    "antora": "antora --stacktrace generate --cache-dir cache --redirect-facility disabled --generator ./generator/hook-books.js --clean site.yml",
+    "validate": "antora --stacktrace generate --cache-dir cache --redirect-facility disabled --generator ./generator/xref-validator.js --clean site.yml",
+    "linkcheck": "broken-link-checker --filter-level 3 --recursive --verbose"
+  },
+  "dependencies": {
+    "@antora/cli": "^2.0",
+    "@antora/site-generator-default": "^2.0"
+  },
+  "devDependencies": {
+    "broken-link-checker": "^0.7.8",
+    "http-server": "^0.11.1",
+    "write-good": "^0.13.1"
+  },
+  "keywords": [
+    "antora",
+    "asciidoc",
+    "documentation",
+    "owncloud",
+    "android"
+  ]
+}
