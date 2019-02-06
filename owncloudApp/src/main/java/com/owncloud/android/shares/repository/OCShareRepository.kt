@@ -35,6 +35,13 @@ class OCShareRepository(
     private val remoteShareSharesDataSource: RemoteSharesDataSource
 ) : ShareRepository, CoroutineScope {
 
+    companion object Factory {
+        fun create(
+            localSharesDataSource: LocalSharesDataSource,
+            remoteShareSharesDataSource: RemoteSharesDataSource
+        ): OCShareRepository = OCShareRepository(localSharesDataSource, remoteShareSharesDataSource)
+    }
+
     private val job = Job()
 
     override val coroutineContext: CoroutineContext

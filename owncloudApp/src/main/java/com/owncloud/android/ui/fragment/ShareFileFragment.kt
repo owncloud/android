@@ -310,11 +310,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         ocShareViewModel = ViewModelProviders.of(this, ViewModelFactory.build {
             OCShareViewModel(
-                activity?.application!!,
-                OwnCloudClientManagerFactory.getDefaultSingleton().getClientFor(
-                    OwnCloudAccount(mAccount, this.context),
-                    this.context
-                ),
+                mAccount!!,
                 mFile?.remotePath!!,
                 listOf(ShareType.PUBLIC_LINK)
             )
