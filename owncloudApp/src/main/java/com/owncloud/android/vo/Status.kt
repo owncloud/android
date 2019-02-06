@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.owncloud.android
+package com.owncloud.android.vo
 
 /**
  * Status of a resource that is provided to the UI.
@@ -26,5 +26,6 @@ package com.owncloud.android
 enum class Status {
     SUCCESS,
     ERROR,
-    LOADING
+    LOADING,
+    STOP_LOADING
 }

@@ -20,7 +20,7 @@
 package com.owncloud.android.shares.repository
 
 import android.arch.lifecycle.LiveData
-import com.owncloud.android.Resource
+import com.owncloud.android.vo.Resource
 import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.shares.db.OCShare
 

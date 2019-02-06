@@ -22,6 +22,11 @@ package com.owncloud.android.utils
 import com.owncloud.android.lib.resources.shares.RemoteShare
 import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.shares.db.OCShare
+import java.lang.reflect.AccessibleObject.setAccessible
+import org.junit.internal.Classes.getClass
+import android.accounts.Account
+
+
 
 object TestUtil {
     private fun createShare(
@@ -111,5 +116,18 @@ object TestUtil {
         remoteShare.shareLink = shareLink
 
         return remoteShare
+    }
+
+    fun createAccount(name: String, type: String) : Account {
+        val account = Account("MyAccount", "SomeType")
+        val nameField = account.javaClass.getDeclaredField("name")
+        nameField.isAccessible = true
+        nameField.set(account, name)
+
+        val typeField = account.javaClass.getDeclaredField("type")
+        typeField.isAccessible = true
+        typeField.set(account, type)
+
+        return account
     }
 }

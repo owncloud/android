@@ -23,7 +23,7 @@ import android.accounts.Account
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.ViewModel
 import com.owncloud.android.MainApp
-import com.owncloud.android.Resource
+import com.owncloud.android.vo.Resource
 import com.owncloud.android.lib.common.OwnCloudAccount
 import com.owncloud.android.lib.common.OwnCloudClientManagerFactory
 import com.owncloud.android.lib.resources.shares.ShareType
