@@ -20,11 +20,16 @@
 package com.owncloud.android.shares.datasources
 
 import android.arch.lifecycle.LiveData
+import com.owncloud.android.MainApp
+import com.owncloud.android.db.OwncloudDatabase
 import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.shares.db.OCShare
 import com.owncloud.android.shares.db.OCShareDao
 
-class OCLocalSharesDataSource(private val ocShareDao: OCShareDao) : LocalSharesDataSource {
+class OCLocalSharesDataSource(
+    private val ocShareDao: OCShareDao = OwncloudDatabase.getDatabase(MainApp.getAppContext()).shareDao()
+) : LocalSharesDataSource {
+
     override fun getSharesForFileAsLiveData(
         filePath: String,
         accountName: String,

@@ -76,10 +76,10 @@ abstract class NetworkBoundResource<ResultType, RequestType> : CoroutineScope {
             result.value = it
         }
 
-        fetchFromNetwork(dbSource)
+        fetchFromNetwork()
     }
 
-    private fun fetchFromNetwork(dbSource: LiveData<ResultType>) {
+    private fun fetchFromNetwork() {
 
         try {
             launch {

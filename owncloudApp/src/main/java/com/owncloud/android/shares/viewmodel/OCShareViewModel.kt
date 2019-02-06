@@ -19,12 +19,13 @@
 
 package com.owncloud.android.shares.viewmodel
 
-import android.app.Application
-import android.arch.lifecycle.AndroidViewModel
+import android.accounts.Account
 import android.arch.lifecycle.LiveData
+import android.arch.lifecycle.ViewModel
+import com.owncloud.android.MainApp
 import com.owncloud.android.Resource
-import com.owncloud.android.db.OwncloudDatabase
-import com.owncloud.android.lib.common.OwnCloudClient
+import com.owncloud.android.lib.common.OwnCloudAccount
+import com.owncloud.android.lib.common.OwnCloudClientManagerFactory
 import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.shares.datasources.OCLocalSharesDataSource
 import com.owncloud.android.shares.datasources.OCRemoteSharesDataSource
@@ -36,26 +37,21 @@ import com.owncloud.android.shares.repository.ShareRepository
  * View Model to keep a reference to the share repository and an up-to-date list of a shares
  */
 class OCShareViewModel(
-    application: Application,
-    private val client: OwnCloudClient,
-    private val filePath: String,
-    private val shareTypes: List<ShareType>
-) : AndroidViewModel(application) {
-
-    private var shareRepository: ShareRepository
-
-    val sharesForFile: LiveData<Resource<List<OCShare>>>
-
-    init {
-        val shareDao = OwncloudDatabase.getDatabase(application).shareDao()
-
-        shareRepository = OCShareRepository(
-            OCLocalSharesDataSource(shareDao),
-            OCRemoteSharesDataSource(client)
+    account: Account,
+    filePath: String,
+    shareTypes: List<ShareType>,
+    shareRepository: ShareRepository = OCShareRepository.create(
+        OCLocalSharesDataSource(),
+        OCRemoteSharesDataSource(
+            OwnCloudClientManagerFactory.getDefaultSingleton().getClientFor(
+                OwnCloudAccount(account, MainApp.getAppContext()),
+                MainApp.getAppContext()
+            )
         )
+    )
+) : ViewModel() {
 
-        sharesForFile = shareRepository.loadSharesForFile(
-            filePath, client.account.name, shareTypes, true, false
-        )
-    }
+    val sharesForFile: LiveData<Resource<List<OCShare>>> = shareRepository.loadSharesForFile(
+        filePath, account.name, shareTypes, true, false
+    )
 }
