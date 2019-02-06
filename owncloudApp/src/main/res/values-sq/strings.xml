@@ -26,7 +26,7 @@
   <string name="drawer_loading_quota">Kuotë ngarkimesh</string>
   <string name="drawer_quota">%1$s nga %2$s e përdorur (%3$s %%)</string>
   <string name="drawer_unavailable_free_storage">%1$s në përdorim</string>
-  <string name="drawer_unavailable_used_storage">S’ka të dhëna mbi përdorim depozitimi</string>
+  <string name="drawer_unavailable_used_storage">S\’ka të dhëna mbi përdorim depozitimi</string>
   <string name="drawer_feedback">Përshtypje</string>
   <string name="drawer_help">Ndihmë</string>
   <string name="prefs_category_general">Të përgjithshme</string>
@@ -60,12 +60,12 @@
   <string name="pattern_remove_pattern">Hiqeni rregullsinë tuaj</string>
   <string name="pattern_incorrect_pattern">Rregullsi e pasaktë</string>
   <string name="pattern_reenter_pattern">Ju lutemi, rijepeni rregullsinë tuaj</string>
-  <string name="pattern_not_same_pattern">Rregullsitë s’janë të njëjta</string>
+  <string name="pattern_not_same_pattern">Rregullsitë s\’janë të njëjta</string>
   <string name="pattern_stored">Rregullsia u Depozitua</string>
   <string name="pattern_removed">Rregullsia u Hoq</string>
-  <string name="pattern_already_set">Kyçjet e rregullsive dhe kodkalimeve s’mund të aktivizohen në të njëjtën kohë, ju lutemi, së pari çaktivizoni rregullsinë</string>
-  <string name="passcode_already_set">Kyçjet e rregullsive dhe kodkalimeve s’mund të aktivizohen në të njëjtën kohë, ju lutemi, së pari çaktivizoni kodkalimin</string>
-  <string name="pattern_no_longer_required">S’do të pyetet më për rregullsinë</string>
+  <string name="pattern_already_set">Kyçjet e rregullsive dhe kodkalimeve s\’mund të aktivizohen në të njëjtën kohë, ju lutemi, së pari çaktivizoni rregullsinë</string>
+  <string name="passcode_already_set">Kyçjet e rregullsive dhe kodkalimeve s\’mund të aktivizohen në të njëjtën kohë, ju lutemi, së pari çaktivizoni kodkalimin</string>
+  <string name="pattern_no_longer_required">S\’do të pyetet më për rregullsinë</string>
   <string name="pattern_configure_your_pattern_explanation">Rregullsia do të kërkohet sa herë që niset aplikacioni</string>
   <string name="illegal_argument_exception_message">Lypset një VEPRIM i vlefshëm te Synimi që u dha</string>
   <string name="recommend_subject">Provojeni %1$s te telefoni juaj!</string>
@@ -98,7 +98,7 @@
   <string name="file_list_no_app_for_file_type">S\’u gjet aplikacion për llojin e kartelës</string>
   <string name="local_file_list_empty">Në këtë dosje s\’ka kartela.</string>
   <string name="local_file_list_empty_just_folders">S\’ka dosje brenda kësaj dosjeje.</string>
-  <string name="local_file_list_search_with_no_matches">S’ka përputhje për këtë kërkim</string>
+  <string name="local_file_list_search_with_no_matches">S\’ka përputhje për këtë kërkim</string>
   <string name="upload_list_empty">S\’ka ngarkime te gatshme.</string>
   <string name="file_list_folder">dosje</string>
   <string name="file_list_folders">dosje</string>
@@ -214,7 +214,7 @@
   <string name="fingerprint_success">Shenjat e gishtave u njohën</string>
   <string name="fingerprint_not_hardware_detected">Kjo pajisje nuk mbulon mirëfilltësim përmes shenja gishtash</string>
   <string name="fingerprint_not_enrolled_fingerprints">Që të përdorni këtë veçori, regjistroni të paktën një palë shenja gishtash</string>
-  <string name="fingerprint_not_granted_permissions">S’janë akorduar leje shenjash gishtash</string>
+  <string name="fingerprint_not_granted_permissions">S\’janë akorduar leje shenjash gishtash</string>
   <string name="media_notif_ticker">Lojtësi %1$s i muzikës</string>
   <string name="media_state_playing">%1$s (po luhet)</string>
   <string name="media_state_loading">%1$s (po ngarkohet)</string>
@@ -333,8 +333,8 @@
   <string name="confirmation_disable_camera_uploads_title">Ripohojeni</string>
   <string name="confirmation_disable_pictures_upload_message">Jeni i sigurt se doni të çaktivizohet kjo veçori? Fotot e mbetura nuk do të ngarkohen</string>
   <string name="confirmation_disable_videos_upload_message">Jeni i sigurt se doni të çaktivizohet kjo veçori? Videot e mbetura nuk do të ngarkohen</string>
-  <string name="proper_pics_folder_warning_camera_upload">Ju lutemi, sigurohuni që dosja e përzgjedhur është ajo ku kamera që po përdorni ruan fotot e bëra. Përndryshe, veçoria s’do të jetë në gjendje të pikasë fotot tuaja. Kini parasysh që fotot do të ngarkohen të paktën 15 minuta pasi të jenë bërë.</string>
-  <string name="proper_videos_folder_warning_camera_upload">Ju lutemi, sigurohuni që dosja e përzgjedhur është ajo ku kamera që po përdorni ruan videot e regjistruara. Përndryshe, veçoria s’do të jetë në gjendje të pikasë videot tuaja. Kini parasysh që videot do të ngarkohen të paktën 15 minuta pasi të jenë regjistruar.</string>
+  <string name="proper_pics_folder_warning_camera_upload">Ju lutemi, sigurohuni që dosja e përzgjedhur është ajo ku kamera që po përdorni ruan fotot e bëra. Përndryshe, veçoria s\’do të jetë në gjendje të pikasë fotot tuaja. Kini parasysh që fotot do të ngarkohen të paktën 15 minuta pasi të jenë bërë.</string>
+  <string name="proper_videos_folder_warning_camera_upload">Ju lutemi, sigurohuni që dosja e përzgjedhur është ajo ku kamera që po përdorni ruan videot e regjistruara. Përndryshe, veçoria s\’do të jetë në gjendje të pikasë videot tuaja. Kini parasysh që videot do të ngarkohen të paktën 15 minuta pasi të jenë regjistruar.</string>
   <string name="conflict_title">Përplasje kartelash</string>
   <string name="conflict_description">Ka një kundërshti në kartelën %1$s, prekeni që të zgjidhet</string>
   <string name="conflict_message">Cilat kartela doni të mbani? Nëse përzgjidhni të dy versionet, kartelës vendore do t\’i shtohet një numër te emri.</string>
@@ -357,7 +357,7 @@
   <string name="activity_chooser_send_file_title">Dërgoje</string>
   <string name="copy_link">Kopjoje lidhjen</string>
   <string name="clipboard_text_copied">U kopjua te e papastra</string>
-  <string name="clipboard_no_text_to_copy">S\’u mor tekst për t’u kopjuar në të papastër</string>
+  <string name="clipboard_no_text_to_copy">S\’u mor tekst për t\’u kopjuar në të papastër</string>
   <string name="clipboard_uxexpected_error">Gabim i panjohur teksa kopjohej në të papastër</string>
   <string name="clipboard_label">Tekst i kopjuar prej %1$s</string>
   <string name="error_cant_bind_to_operations_service">Gabim kritik: nuk mund të kryhen veprime</string>
@@ -524,7 +524,7 @@
   <string name="welcome_feature_1_title">Administroni krejt kartelat tuaja të njëkohësuara</string>
   <string name="welcome_feature_1_text">Mund të kopjoni, lëvizni, fshini</string>
   <string name="welcome_feature_2_title">Ndani me të tjerët kartela dhe dosje</string>
-  <string name="welcome_feature_2_text">Mund t’i ndani privatisht ose publikisht</string>
+  <string name="welcome_feature_2_text">Mund t\’i ndani privatisht ose publikisht</string>
   <string name="welcome_feature_3_title">Llogari multi</string>
   <string name="welcome_feature_3_text">Lidhuni te krejt shërbyesit tuaj ownCloud</string>
   <string name="welcome_feature_4_title">Ngarkime nga kamera</string>
@@ -537,5 +537,5 @@
   <string name="welcome_feature_7_text">Përzgjidhini krejt kartelat njëherësh</string>
   <string name="welcome_feature_8_title">I passhëm jo në linjë</string>
   <string name="welcome_feature_8_text">Kartelat tuaja u njëkohësuan vetvetiu</string>
-  <string name="no_borwser_installed_alert">S’ka shfletues të instaluar. Ju lutemi, instaloni një Shfletues, që të mund të lejohet hyrje e sigurt.</string>
+  <string name="no_borwser_installed_alert">S\’ka shfletues të instaluar. Ju lutemi, instaloni një Shfletues, që të mund të lejohet hyrje e sigurt.</string>
 </resources>
