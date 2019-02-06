@@ -94,7 +94,6 @@ abstract class NetworkBoundResource<ResultType, RequestType> : CoroutineScope {
 
                     if (remoteOperationResult.isSuccess) {
                         saveCallResult(processResponse(remoteOperationResult))
-
                     } else {
                         errors.postValue(
                             Resource.error(
