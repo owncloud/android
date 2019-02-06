@@ -50,13 +50,13 @@ class OCLocalDataSourceTest {
 
         val sharesAsLiveData: MutableLiveData<List<OCShare>> = MutableLiveData()
         sharesAsLiveData.value = listOf(
-            TestUtil.createShare(
+            TestUtil.createPublicShare(
                 path = "/Photos/",
                 isFolder = true,
                 name = "Photos link",
                 shareLink = "http://server:port/s/1"
             ),
-            TestUtil.createShare(
+            TestUtil.createPublicShare(
                 path = "/Photos/image.jpg",
                 isFolder = false,
                 name = "Image link",
@@ -74,7 +74,7 @@ class OCLocalDataSourceTest {
 
         val newShareAsLiveData: MutableLiveData<List<OCShare>> = MutableLiveData()
         newShareAsLiveData.value = listOf(
-            TestUtil.createShare(
+            TestUtil.createPublicShare(
                 path = "/Photos/",
                 isFolder = true,
                 name = "Photos 2 link",
@@ -94,7 +94,7 @@ class OCLocalDataSourceTest {
     }
 
     @Test
-    fun readPublicShares() {
+    fun readLocalPublicShares() {
         val shares = getValue(
             ocLocalSharesDataSource.getSharesForFileAsLiveData(
                 "/Photos/image1.jpg", "admin@server", listOf(ShareType.PUBLIC_LINK)
@@ -118,7 +118,7 @@ class OCLocalDataSourceTest {
     fun insertPublicSharesAndRead() {
         ocLocalSharesDataSource.insert(
             listOf(
-                TestUtil.createShare(
+                TestUtil.createPublicShare(
                     path = "/Photos/",
                     isFolder = true,
                     name = "Photos 2 link",

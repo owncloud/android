@@ -11,7 +11,8 @@ buildscript {
         coroutines = '1.0.1'
 
         // Testing
-        junit_version = "4.12"
+        junitVersion = "4.12"
+        mockitoVersion = "2.24.0"
     }
 
     repositories {

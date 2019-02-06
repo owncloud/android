@@ -19,13 +19,15 @@
 
 package com.owncloud.android.utils
 
+import com.owncloud.android.lib.resources.shares.RemoteShare
+import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.shares.db.OCShare
 
 object TestUtil {
-    fun createShare(
+    private fun createShare(
         fileSource: Long = 7,
         itemSource: Long = 7,
-        shareType: Int = 3, // Public share by default
+        shareType: Int, // Public share by default
         shareWith: String = "",
         path: String,
         permissions: Int = 1,
@@ -57,4 +59,57 @@ object TestUtil {
         name,
         shareLink
     )
+
+    fun createPublicShare(
+        path: String,
+        isFolder: Boolean,
+        accountOwner: String = "admin@server",
+        name: String,
+        shareLink: String
+    ) = createShare(
+        shareType = 3,
+        path = path,
+        isFolder = isFolder,
+        accountOwner = accountOwner,
+        name = name,
+        shareLink = shareLink
+    )
+
+    fun createRemoteShare(
+        fileSource: Long = 7,
+        itemSource: Long = 7,
+        shareType: Int = 3, // Public share by default
+        shareWith: String = "",
+        path: String,
+        permissions: Int = 1,
+        sharedDate: Long = 1542628397,
+        expirationDate: Long = 0,
+        token: String = "pwdasd12dasdWZ",
+        sharedWithDisplayName: String = "",
+        isFolder: Boolean,
+        userId: Long = -1,
+        remoteId: Long = 1,
+        name: String,
+        shareLink: String
+    ): RemoteShare {
+        val remoteShare = RemoteShare();
+
+        remoteShare.fileSource = fileSource
+        remoteShare.itemSource = itemSource
+        remoteShare.shareType = ShareType.fromValue(shareType)
+        remoteShare.shareWith = shareWith
+        remoteShare.path = path
+        remoteShare.permissions = permissions
+        remoteShare.sharedDate = sharedDate
+        remoteShare.expirationDate = expirationDate
+        remoteShare.token = token
+        remoteShare.sharedWithDisplayName = sharedWithDisplayName
+        remoteShare.setIsFolder(isFolder)
+        remoteShare.userId = userId
+        remoteShare.setIdRemoteShared(remoteId)
+        remoteShare.name = name
+        remoteShare.shareLink = shareLink
+
+        return remoteShare
+    }
 }
