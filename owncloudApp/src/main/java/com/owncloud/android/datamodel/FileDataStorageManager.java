@@ -1153,7 +1153,7 @@ public class FileDataStorageManager {
         cv.put(ProviderTableMeta.OCSHARES_USER_ID, share.getUserId());
         cv.put(ProviderTableMeta.OCSHARES_ID_REMOTE_SHARED, share.getRemoteId());
         cv.put(ProviderTableMeta.OCSHARES_NAME, share.getName());
-        cv.put(ProviderTableMeta.OCSHARES_SHARE_LINK, share.getShareLink());
+        cv.put(ProviderTableMeta.OCSHARES_URL, share.getShareLink());
         cv.put(ProviderTableMeta.OCSHARES_ACCOUNT_OWNER, mAccount.name);
 
         if (shareExistsForRemoteId(share.getRemoteId())) {// for renamed files; no more delete and create
@@ -1309,42 +1309,26 @@ public class FileDataStorageManager {
 
     private OCShare createShareInstance(Cursor c) {
         OCShare share = null;
-        // TODO New Android Components
-//        if (c != null) {
-//            share = new OCShare(
-//                    c.getString(c.getColumnIndex(ProviderTableMeta.OCSHARES_PATH)));
-//            share.setId(c.getLong(c.getColumnIndex(ProviderTableMeta._ID)));
-//            share.setFileSource(c.getLong(c
-//                    .getColumnIndex(ProviderTableMeta.OCSHARES_ITEM_SOURCE)));
-//            share.setShareType(ShareType.fromValue(c.getInt(c
-//                    .getColumnIndex(ProviderTableMeta.OCSHARES_SHARE_TYPE))));
-//            share.setShareWith(c.getString(c
-//                    .getColumnIndex(ProviderTableMeta.OCSHARES_SHARE_WITH)));
-//            share.setPermissions(c.getInt(c
-//                    .getColumnIndex(ProviderTableMeta.OCSHARES_PERMISSIONS)));
-//            share.setSharedDate(c.getLong(c
-//                    .getColumnIndex(ProviderTableMeta.OCSHARES_SHARED_DATE)));
-//            share.setExpirationDate(c.getLong(c
-//                    .getColumnIndex(ProviderTableMeta.OCSHARES_EXPIRATION_DATE)));
-//            share.setToken(c.getString(c
-//                    .getColumnIndex(ProviderTableMeta.OCSHARES_TOKEN)));
-//            share.setSharedWithDisplayName(c.getString(c
-//                    .getColumnIndex(ProviderTableMeta.OCSHARES_SHARE_WITH_DISPLAY_NAME)));
-//            share.setIsFolder(c.getInt(
-//                    c.getColumnIndex(ProviderTableMeta.OCSHARES_IS_DIRECTORY)) == 1);
-//            share.setUserId(c.getLong(
-//                c.getColumnIndex(ProviderTableMeta.OCSHARES_USER_ID))
-//            );
-//            share.setIdRemoteShared(c.getLong(
-//                    c.getColumnIndex(ProviderTableMeta.OCSHARES_ID_REMOTE_SHARED))
-//            );
-//            share.setName(c.getString(
-//                c.getColumnIndex(ProviderTableMeta.OCSHARES_NAME)
-//            ));
-//            share.setShareLink(c.getString(
-//                c.getColumnIndex(ProviderTableMeta.OCSHARES_SHARE_LINK)
-//            ));
-//        }
+        if (c != null) {
+            share = new OCShare(
+                    c.getLong(c.getColumnIndex(ProviderTableMeta.OCSHARES_FILE_SOURCE)),
+                    c.getLong(c.getColumnIndex(ProviderTableMeta.OCSHARES_ITEM_SOURCE)),
+                    c.getInt(c.getColumnIndex(ProviderTableMeta.OCSHARES_SHARE_TYPE)),
+                    c.getString(c.getColumnIndex(ProviderTableMeta.OCSHARES_SHARE_WITH)),
+                    c.getString(c.getColumnIndex(ProviderTableMeta.OCSHARES_PATH)),
+                    c.getInt(c.getColumnIndex(ProviderTableMeta.OCSHARES_PERMISSIONS)),
+                    c.getLong(c.getColumnIndex(ProviderTableMeta.OCSHARES_SHARED_DATE)),
+                    c.getLong(c.getColumnIndex(ProviderTableMeta.OCSHARES_EXPIRATION_DATE)),
+                    c.getString(c.getColumnIndex(ProviderTableMeta.OCSHARES_TOKEN)),
+                    c.getString(c.getColumnIndex(ProviderTableMeta.OCSHARES_SHARE_WITH_DISPLAY_NAME)),
+                    c.getInt(c.getColumnIndex(ProviderTableMeta.OCSHARES_IS_DIRECTORY)) == 1,
+                    c.getLong(c.getColumnIndex(ProviderTableMeta.OCSHARES_USER_ID)),
+                    c.getLong(c.getColumnIndex(ProviderTableMeta.OCSHARES_ID_REMOTE_SHARED)),
+                    c.getString(c.getColumnIndex(ProviderTableMeta.OCSHARES_ACCOUNT_OWNER)),
+                    c.getString(c.getColumnIndex(ProviderTableMeta.OCSHARES_NAME)),
+                    c.getString(c.getColumnIndex(ProviderTableMeta.OCSHARES_URL))
+            );
+        }
         return share;
     }
 
@@ -1574,7 +1558,7 @@ public class FileDataStorageManager {
                 cv.put(ProviderTableMeta.OCSHARES_ID_REMOTE_SHARED, share.getRemoteId());
                 cv.put(ProviderTableMeta.OCSHARES_ACCOUNT_OWNER, mAccount.name);
                 cv.put(ProviderTableMeta.OCSHARES_NAME, share.getName());
-                cv.put(ProviderTableMeta.OCSHARES_SHARE_LINK, share.getShareLink());
+                cv.put(ProviderTableMeta.OCSHARES_URL, share.getShareLink());
 
                 // adding a new share resource
                 operations.add(
