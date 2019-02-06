@@ -14,11 +14,9 @@
  * limitations under the License.
  */
 
-package com.owncloud.android
+package com.owncloud.android.vo
 
-import com.owncloud.android.Status.SUCCESS
-import com.owncloud.android.Status.ERROR
-import com.owncloud.android.Status.LOADING
+import com.owncloud.android.vo.Status.*
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode
 import java.lang.Exception
 
@@ -49,6 +47,10 @@ data class Resource<out T>(
 
         fun <T> loading(): Resource<T> {
             return Resource(LOADING)
+        }
+
+        fun <T> stopLoading(): Resource<T> {
+            return Resource(STOP_LOADING)
         }
     }
 }

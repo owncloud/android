@@ -34,13 +34,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import com.owncloud.android.R
-import com.owncloud.android.Status
+import com.owncloud.android.vo.Status
 import com.owncloud.android.ViewModelFactory
 import com.owncloud.android.authentication.AccountUtils
 import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.datamodel.ThumbnailsCacheManager
-import com.owncloud.android.lib.common.OwnCloudAccount
-import com.owncloud.android.lib.common.OwnCloudClientManagerFactory
 import com.owncloud.android.lib.common.utils.Log_OC
 import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.lib.resources.status.OCCapability
@@ -445,24 +443,22 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
                 android.arch.lifecycle.Observer { resource ->
                     when (resource?.status) {
                         Status.SUCCESS -> {
-                            (activity as ShareActivity).dismissLoadingDialog()
-
                             mPublicLinks = resource.data as ArrayList<OCShare>
                             updateListOfPublicLinks()
                         }
                         Status.ERROR -> {
-                            (activity as ShareActivity).dismissLoadingDialog()
-
                             val errorMessage = ErrorMessageAdapter.getErrorMessage(
                                 resource.code,
                                 resource.exception,
                                 resources
                             )
-
                             view?.let { Snackbar.make(it, errorMessage, Snackbar.LENGTH_SHORT).show() }
                         }
                         Status.LOADING -> {
                             (activity as ShareActivity).showLoadingDialog(R.string.common_loading)
+                        }
+                        Status.STOP_LOADING -> {
+                            (activity as ShareActivity).dismissLoadingDialog()
                         }
                         else -> {}
                     }

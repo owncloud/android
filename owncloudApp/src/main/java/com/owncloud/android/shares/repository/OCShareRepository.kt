@@ -21,7 +21,7 @@ package com.owncloud.android.shares.repository
 
 import android.arch.lifecycle.LiveData
 import com.owncloud.android.NetworkBoundResource
-import com.owncloud.android.Resource
+import com.owncloud.android.vo.Resource
 import com.owncloud.android.lib.resources.shares.ShareParserResult
 import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.shares.datasources.LocalSharesDataSource
@@ -73,7 +73,7 @@ class OCShareRepository(
                 return localSharesDataSource.getSharesForFileAsLiveData(filePath, accountName, shareTypes)
             }
 
-            override fun createCall() = remoteShareSharesDataSource.getSharesForFile(filePath, reshares, subfiles)
+            override fun performCall() = remoteShareSharesDataSource.getSharesForFile(filePath, reshares, subfiles)
 
         }.asLiveData()
     }
