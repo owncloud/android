@@ -58,13 +58,17 @@ class OCShareRepository(
         return object : NetworkBoundResource<List<OCShare>, ShareParserResult>() {
 
             override fun saveCallResult(item: ShareParserResult) {
-                val localShares = item.shares.map { remoteShare ->
+                val sharesForFileFromServer = item.shares.map { remoteShare ->
                     OCShare(remoteShare).also { it.accountOwner = accountName }
+                }
+
+                if (sharesForFileFromServer.isEmpty()) {
+                    localSharesDataSource.delete(filePath, accountName)
                 }
 
                 launch {
                     withContext(Dispatchers.IO) {
-                        localSharesDataSource.insert(localShares)
+                        localSharesDataSource.insert(sharesForFileFromServer)
                     }
                 }
             }
