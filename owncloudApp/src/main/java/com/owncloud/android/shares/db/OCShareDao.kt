@@ -48,7 +48,9 @@ abstract class OCShareDao {
     @Transaction
     open fun replace(ocShares: List<OCShare>) {
         for (ocShare in ocShares) {
-            delete(ocShare.path, ocShare.accountOwner)
+            if (ocShare.path != null && ocShare.accountOwner != null) {
+                delete(ocShare.path, ocShare.accountOwner as String)
+            }
         }
         insert(ocShares)
     }

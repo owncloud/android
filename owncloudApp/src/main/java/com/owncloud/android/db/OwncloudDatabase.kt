@@ -35,7 +35,7 @@ abstract class OwncloudDatabase : RoomDatabase() {
     companion object {
         @Volatile
         private var INSTANCE: OwncloudDatabase? = null
-        const val DATABASE_NAME = "owncloud_database"
+        const val DATABASE_NAME = ProviderMeta.NEW_DB_NAME
 
         fun getDatabase(
             context: Context
@@ -47,9 +47,7 @@ abstract class OwncloudDatabase : RoomDatabase() {
                     context.applicationContext,
                     OwncloudDatabase::class.java,
                     DATABASE_NAME
-                )
-                    .fallbackToDestructiveMigration()
-                    .build()
+                ).build()
                 INSTANCE = instance
                 instance
             }

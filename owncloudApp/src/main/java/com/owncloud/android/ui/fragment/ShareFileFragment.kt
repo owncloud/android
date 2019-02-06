@@ -135,10 +135,10 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
             val usedNumbers = ArrayList<Int>()
             var isDefaultNameSet = false
             var number: String
-            for (share in mPublicLinks!!) {
+            for (share in mPublicLinks as ArrayList<OCShare>) {
                 if (defaultName == share.name) {
                     isDefaultNameSet = true
-                } else if (share.name.matches(defaultNameNumberedRegex.toRegex())) {
+                } else if (share.name?.matches(defaultNameNumberedRegex.toRegex())!!) {
                     number = share.name.replaceFirst(defaultNameNumberedRegex.toRegex(), "$1")
                     try {
                         usedNumbers.add(Integer.parseInt(number))
@@ -146,7 +146,6 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
                         Log_OC.e(TAG, "Wrong capture of number in share named " + share.name, e)
                         return ""
                     }
-
                 }
             }
 
