@@ -106,7 +106,7 @@ class SharesContentProviderTest {
 
         assertThat(
             cursor.getString(
-                cursor.getColumnIndexOrThrow(ProviderTableMeta.OCSHARES_SHARE_LINK)
+                cursor.getColumnIndexOrThrow(ProviderTableMeta.OCSHARES_URL)
             ),
             Matchers.`is`("http://server:port/s/10")
         )
@@ -122,7 +122,7 @@ class SharesContentProviderTest {
 
         assertThat(
             cursor.getString(
-                cursor.getColumnIndexOrThrow(ProviderTableMeta.OCSHARES_SHARE_LINK)
+                cursor.getColumnIndexOrThrow(ProviderTableMeta.OCSHARES_URL)
             ),
             Matchers.`is`("http://server:port/s/30")
         )
@@ -165,7 +165,7 @@ class SharesContentProviderTest {
         )
 
         // "Share link" column not requested within projection
-        cursor.getString(cursor.getColumnIndexOrThrow(ProviderTableMeta.OCSHARES_SHARE_LINK))
+        cursor.getString(cursor.getColumnIndexOrThrow(ProviderTableMeta.OCSHARES_URL))
     }
 
     @Test
@@ -204,7 +204,7 @@ class SharesContentProviderTest {
 
         assertThat(
             cursor.getString(
-                cursor.getColumnIndexOrThrow(ProviderTableMeta.OCSHARES_SHARE_LINK)
+                cursor.getColumnIndexOrThrow(ProviderTableMeta.OCSHARES_URL)
             ),
             Matchers.`is`("http://server:port/s/3000")
         )
@@ -227,7 +227,7 @@ class SharesContentProviderTest {
         // Get links of shares with "friends" in name
         val cursor = mContentResolver!!.query(
             ProviderTableMeta.CONTENT_URI_SHARE,
-            arrayOf(ProviderTableMeta.OCSHARES_SHARE_LINK),
+            arrayOf(ProviderTableMeta.OCSHARES_URL),
             ProviderTableMeta.OCSHARES_NAME + " LIKE ?",
             arrayOf("%friends link%"),
             null
@@ -240,7 +240,7 @@ class SharesContentProviderTest {
         assertThat(cursor.moveToFirst(), Matchers.`is`(true))
         assertThat(
             cursor.getString(
-                cursor.getColumnIndexOrThrow(ProviderTableMeta.OCSHARES_SHARE_LINK)
+                cursor.getColumnIndexOrThrow(ProviderTableMeta.OCSHARES_URL)
             ),
             Matchers.`is`("http://server:port/s/2000")
         )
@@ -248,7 +248,7 @@ class SharesContentProviderTest {
         assertThat(cursor.moveToNext(), Matchers.`is`(true))
         assertThat(
             cursor.getString(
-                cursor.getColumnIndexOrThrow(ProviderTableMeta.OCSHARES_SHARE_LINK)
+                cursor.getColumnIndexOrThrow(ProviderTableMeta.OCSHARES_URL)
             ),
             Matchers.`is`("http://server:port/s/3000")
         )
@@ -274,7 +274,7 @@ class SharesContentProviderTest {
         values.put(ProviderTableMeta.OCSHARES_ID_REMOTE_SHARED, 1)
         values.put(ProviderTableMeta.OCSHARES_ACCOUNT_OWNER, "admin@server")
         values.put(ProviderTableMeta.OCSHARES_NAME, name)
-        values.put(ProviderTableMeta.OCSHARES_SHARE_LINK, url)
+        values.put(ProviderTableMeta.OCSHARES_URL, url)
         return values
     }
 }
