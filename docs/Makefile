@@ -48,6 +48,6 @@ pdf:
 		-a revnumber=$(VERSION) \
 		-a revdate=$(REVDATE) \
 		--base-dir $(CURDIR) \
-		--out-file android/$(OUTPUT_VERSION)ownCloud_Android_Application_Manual.pdf \
+		--out-file android/$(OUTPUT_VERSION)ownCloud_Android_App_Manual.pdf \
 		--destination-dir $(BUILD_DIR) \
-		books/android.adoc
+		books/ownCloud_Android_App_Manual.adoc
