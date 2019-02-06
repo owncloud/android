@@ -22,11 +22,11 @@ package com.owncloud.android.shares.viewmodel
 import android.accounts.Account
 import android.arch.core.executor.testing.InstantTaskExecutorRule
 import android.arch.lifecycle.MutableLiveData
-import com.owncloud.android.Resource
 import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.shares.db.OCShare
 import com.owncloud.android.shares.repository.OCShareRepository
 import com.owncloud.android.utils.TestUtil
+import com.owncloud.android.vo.Resource
 import junit.framework.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
@@ -37,7 +37,7 @@ import org.mockito.Mockito.mock
 class OCShareViewModelTest {
     private lateinit var ocShareViewModel: OCShareViewModel
     private var ocShareRepository = mock(OCShareRepository::class.java)
-    private var account = mock(Account::class.java)
+    private var testAccount: Account = TestUtil.createAccount("admin@server", "test")
 
     @Rule
     @JvmField
@@ -45,7 +45,6 @@ class OCShareViewModelTest {
 
     @Before
     fun init() {
-        `when`(account.name).thenReturn("admin@server")
 
         val publicShares: List<OCShare> = listOf(
             TestUtil.createPublicShare(
@@ -78,7 +77,7 @@ class OCShareViewModelTest {
         )
 
         ocShareViewModel = OCShareViewModel(
-            account,
+            testAccount,
             "/Photos/image.jpg",
             listOf(ShareType.PUBLIC_LINK),
             ocShareRepository
