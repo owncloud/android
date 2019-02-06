@@ -33,14 +33,16 @@ import com.owncloud.android.MainApp;
 public class ProviderMeta {
 
     public static final String DB_NAME = "filelist";
+    public static final String NEW_DB_NAME = "owncloud_database";
     public static final int DB_VERSION = 25;
 
     private ProviderMeta() {
     }
 
+
     static public class ProviderTableMeta implements BaseColumns {
         public static final String FILE_TABLE_NAME = "filelist";
-        public static final String OCSHARES_TABLE_NAME = "shares";
+        public static final String OCSHARES_TABLE_NAME = "ocshares";
         public static final String CAPABILITIES_TABLE_NAME = "capabilities";
         public static final String UPLOADS_TABLE_NAME = "list_of_uploads";
         public static final String USER_AVATARS__TABLE_NAME = "user_avatars";
@@ -115,7 +117,7 @@ public class ProviderMeta {
         public static final String OCSHARES_ID_REMOTE_SHARED = "id_remote_shared";
         public static final String OCSHARES_ACCOUNT_OWNER = "owner_share";
         public static final String OCSHARES_NAME = "name";
-        public static final String OCSHARES_SHARE_LINK = "share_link";
+        public static final String OCSHARES_URL = "url";
 
         public static final String OCSHARES_DEFAULT_SORT_ORDER = OCSHARES_FILE_SOURCE
                 + " collate nocase asc";
