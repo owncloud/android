@@ -19,23 +19,21 @@
 
 package com.owncloud.android.shares.datasources
 
-import android.app.Application
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.shares.GetRemoteSharesForFileOperation
 import com.owncloud.android.lib.resources.shares.ShareParserResult
-import com.owncloud.android.shares.db.OCShare
 
-class OCRemoteSharesDataSource(private val client: OwnCloudClient) : RemoteSharesDataSource {
-    override suspend fun getShares(application: Application): List<OCShare> {
-        return listOf() //TODO
-    }
+class OCRemoteSharesDataSource(
+    private val client: OwnCloudClient
+) : RemoteSharesDataSource {
 
     override fun getSharesForFile(
         path: String,
         reshares: Boolean,
-        subfiles: Boolean
+        subfiles: Boolean,
+        getRemoteSharesForFileOperation: GetRemoteSharesForFileOperation
     ): RemoteOperationResult<ShareParserResult> {
-        return GetRemoteSharesForFileOperation(path, reshares, subfiles).execute(client)
+        return getRemoteSharesForFileOperation.execute(client)
     }
 }

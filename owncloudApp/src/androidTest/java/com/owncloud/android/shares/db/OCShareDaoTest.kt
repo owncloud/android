@@ -57,19 +57,19 @@ class OCShareDaoTest {
     fun insertPublicSharesFromDifferentFilesAndRead() {
         ocShareDao.insert(
             listOf(
-                TestUtil.createShare(
+                TestUtil.createPublicShare(
                     path = "/Photos/",
                     isFolder = true,
                     name = "Photos folder link",
                     shareLink = "http://server:port/s/1"
                 ),
-                TestUtil.createShare(
+                TestUtil.createPublicShare(
                     path = "/Photos/image1.jpg",
                     isFolder = false,
                     name = "Image 1 link",
                     shareLink = "http://server:port/s/2"
                 ),
-                TestUtil.createShare(
+                TestUtil.createPublicShare(
                     path = "/Photos/image2.jpg",
                     isFolder = false,
                     name = "Image 2 link",
@@ -125,21 +125,21 @@ class OCShareDaoTest {
     fun insertPublicSharesFromDifferentAccountsAndRead() {
         ocShareDao.insert(
             listOf(
-                TestUtil.createShare(
+                TestUtil.createPublicShare(
                     path = "/Documents/document1.docx",
                     isFolder = false,
                     accountOwner = "user1@server",
                     name = "Document 1 link",
                     shareLink = "http://server:port/s/1"
                 ),
-                TestUtil.createShare(
+                TestUtil.createPublicShare(
                     path = "/Documents/document1.docx",
                     isFolder = false,
                     accountOwner = "user2@server",
                     name = "Document 1 link",
                     shareLink = "http://server:port/s/2"
                 ),
-                TestUtil.createShare(
+                TestUtil.createPublicShare(
                     path = "/Documents/document1.docx",
                     isFolder = false,
                     accountOwner = "user3@server",
@@ -196,7 +196,7 @@ class OCShareDaoTest {
     fun getNonExistingPublicShare() {
         ocShareDao.insert(
             listOf(
-                TestUtil.createShare(
+                TestUtil.createPublicShare(
                     path = "/Videos/video1.mp4",
                     isFolder = false,
                     accountOwner = "user@server",
@@ -220,7 +220,7 @@ class OCShareDaoTest {
     fun replacePublicShareIfAlreadyExists_exists() {
         ocShareDao.insert(
             listOf(
-                TestUtil.createShare(
+                TestUtil.createPublicShare(
                     path = "/Texts/text1.txt",
                     isFolder = false,
                     name = "Text 1 link",
@@ -231,7 +231,7 @@ class OCShareDaoTest {
 
         ocShareDao.replace(
             listOf( // Update link name
-                TestUtil.createShare(
+                TestUtil.createPublicShare(
                     path = "/Texts/text1.txt",
                     isFolder = false,
                     name = "Text new link",
@@ -255,7 +255,7 @@ class OCShareDaoTest {
     fun replacePublicShareIfAlreadyExists_doesNotExist() {
         ocShareDao.insert(
             listOf(
-                TestUtil.createShare(
+                TestUtil.createPublicShare(
                     path = "/Texts/text1.txt",
                     isFolder = false,
                     name = "Text 1 link",
@@ -266,7 +266,7 @@ class OCShareDaoTest {
 
         ocShareDao.replace(
             listOf( // New link
-                TestUtil.createShare(
+                TestUtil.createPublicShare(
                     path = "/Texts/text2.txt",
                     isFolder = false,
                     name = "Text 2 link",
