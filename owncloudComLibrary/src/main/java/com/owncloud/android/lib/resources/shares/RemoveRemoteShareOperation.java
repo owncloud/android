@@ -50,7 +50,7 @@ public class RemoveRemoteShareOperation extends RemoteOperation {
 
     private static final String TAG = RemoveRemoteShareOperation.class.getSimpleName();
 
-    private int mRemoteShareId;
+    private long mRemoteShareId;
 
     /**
      * Constructor
@@ -58,7 +58,7 @@ public class RemoveRemoteShareOperation extends RemoteOperation {
      * @param remoteShareId Share ID
      */
 
-    public RemoveRemoteShareOperation(int remoteShareId) {
+    public RemoveRemoteShareOperation(long remoteShareId) {
         mRemoteShareId = remoteShareId;
     }
 
