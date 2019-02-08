@@ -257,7 +257,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         super.onCreate(savedInstanceState);
 
         /// protection against screen recording
-        if (!BuildConfig.DEBUG) {
+        if (!MainApp.isDeveloper()) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
         } // else, let it go, or taking screenshots & testing will not be possible
 

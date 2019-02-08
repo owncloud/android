@@ -565,6 +565,7 @@
     <string name="media_service_notification_channel_description">See music player</string>
     <string name="file_sync_notification_channel_name">File sync</string>
     <string name="file_sync_notification_channel_description">See file sync result</string>
+    <string name="clicks_to_be_developer">You %1$d clicks away to enable developer menus</string>
 
     <string name="rate_dialog_title">Rate %1$s app!</string>
     <string name="rate_dialog_description">If you enjoy using this app, could you take a moment to rate it? Your feedback is very important for us. </string>

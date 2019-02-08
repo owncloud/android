@@ -29,7 +29,6 @@ import android.preference.PreferenceManager;
 import android.view.WindowManager;
 
 import com.owncloud.android.MainApp;
-import com.owncloud.android.lib.BuildConfig;
 import com.owncloud.android.ui.activity.PassCodeActivity;
 
 import java.util.HashSet;
@@ -40,7 +39,7 @@ public class PassCodeManager {
     private static final Set<Class> sExemptOfPasscodeActivites;
 
     static {
-        sExemptOfPasscodeActivites = new HashSet<Class>();
+        sExemptOfPasscodeActivites = new HashSet<>();
         sExemptOfPasscodeActivites.add(PassCodeActivity.class);
         // other activities may be exempted, if needed
     }
@@ -57,14 +56,14 @@ public class PassCodeManager {
         return mPassCodeManagerInstance;
     }
 
-    private Long mTimestamp = 0l;
+    private Long mTimestamp = 0L;
     private int mVisibleActivitiesCounter = 0;
 
     protected PassCodeManager() {
     }
 
     public void onActivityCreated(Activity activity) {
-        if (!BuildConfig.DEBUG) {
+        if (!MainApp.isDeveloper()) {
             if (isPassCodeEnabled()) {
                 activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
             } else {
@@ -133,7 +132,7 @@ public class PassCodeManager {
     /**
      * This can be used for example for onActivityResult, where you don't want to re authenticate
      * again.
-     *
+     * <p>
      * USE WITH CARE
      */
     public void bayPassUnlockOnce() {
