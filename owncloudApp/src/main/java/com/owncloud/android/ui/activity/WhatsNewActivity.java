@@ -67,10 +67,9 @@ public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPa
 
         mProgress = findViewById(R.id.progressIndicator);
         mPager = findViewById(R.id.contentPanel);
-        boolean isBeta = MainApp.isBeta();
 
         FeaturesViewAdapter adapter = new FeaturesViewAdapter(getSupportFragmentManager(),
-                FeatureList.getFiltered(getLastSeenVersionCode(), isFirstRun(), isBeta));
+                FeatureList.getFiltered(getLastSeenVersionCode(), isFirstRun(), MainApp.isDeveloper()));
 
         mProgress.setNumberOfSteps(adapter.getCount());
         mPager.setAdapter(adapter);
@@ -144,15 +143,14 @@ public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPa
     }
 
     static private boolean shouldShow(Context context) {
-        boolean isBeta = MainApp.isBeta();
         boolean showWizard = context.getResources().getBoolean(R.bool.wizard_enabled);
         return showWizard &&
                 ((isFirstRun() && context instanceof AccountAuthenticatorActivity) ||
-                        (
-                                !(isFirstRun() && (context instanceof FileDisplayActivity)) &&
-                                        !(context instanceof PassCodeActivity) &&
-                                        (FeatureList.getFiltered(getLastSeenVersionCode(), isFirstRun(), isBeta).length > 0)
-                        ));
+                (
+                        !(isFirstRun() && (context instanceof FileDisplayActivity)) &&
+                        !(context instanceof PassCodeActivity) &&
+                        (FeatureList.getFiltered(getLastSeenVersionCode(), isFirstRun(), MainApp.isDeveloper()).length > 0)
+                ));
     }
 
     @Override
