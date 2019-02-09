@@ -19,21 +19,21 @@
 
 package com.owncloud.android.ui.adapter
 
+import android.content.Context
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-
-import com.owncloud.android.R
-
-import java.util.ArrayList
-
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.owncloud.android.R
+import java.util.*
 
 /**
  * Built a logs container which will be displayed as a list
  */
-class LogListAdapter(private val completeLogs: ArrayList<String>, filter: String) : RecyclerView.Adapter<LogListAdapter.LogViewHolder>() {
+class LogListAdapter(private val completeLogs: ArrayList<String>, filter: String, val context: Context) : RecyclerView.Adapter<LogListAdapter.LogViewHolder>() {
     private var filterLogs: List<String> = ArrayList()
 
     init {
@@ -74,6 +74,15 @@ class LogListAdapter(private val completeLogs: ArrayList<String>, filter: String
      */
     override fun onBindViewHolder(holder: LogViewHolder, position: Int) {
         holder.logContent.text = filterLogs[position]
+        if (filterLogs[position].contains(" E: ")) {
+            holder.logContent.setTextColor(Color.RED)
+        } else if (filterLogs[position].contains(" W: ")) {
+            holder.logContent.setTextColor(Color.MAGENTA)
+        } else if (filterLogs[position].contains(" V: ")) {
+            holder.logContent.setTextColor(Color.GRAY)
+        } else {
+            holder.logContent.setTextColor(ContextCompat.getColor(context, R.color.primary_dark))
+        }
     }
 
     override fun getItemCount(): Int {

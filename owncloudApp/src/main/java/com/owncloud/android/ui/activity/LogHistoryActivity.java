@@ -270,7 +270,7 @@ public class LogHistoryActivity extends ToolbarActivity {
 
         protected void onPostExecute(ArrayList<String> result) {
             if (result != null) {
-                mLogListAdapter = new LogListAdapter(result, mCurrentFilter);
+                mLogListAdapter = new LogListAdapter(result, mCurrentFilter, LogHistoryActivity.this);
                 mLogsRecycler.setAdapter(mLogListAdapter);
                 dismissLoadingDialog();
             }
