@@ -32,37 +32,37 @@ public class Log_OC {
 
     public static void i(String TAG, String message) {
         Log.i(TAG, message);
-        appendLog(TAG + " : " + message);
+        appendLog("I: " + TAG + " : " + message);
     }
 
     public static void d(String TAG, String message) {
         Log.d(TAG, message);
-        appendLog(TAG + " : " + message);
+        appendLog("D: " + TAG + " : " + message);
     }
 
     public static void d(String TAG, String message, Exception e) {
         Log.d(TAG, message, e);
-        appendLog(TAG + " : " + message + " Exception : " + e.getStackTrace());
+        appendLog("D: " + TAG + " : " + message + " Exception : " + e.getStackTrace());
     }
 
     public static void e(String TAG, String message) {
         Log.e(TAG, message);
-        appendLog(TAG + " : " + message);
+        appendLog("E: " + TAG + " : " + message);
     }
 
     public static void e(String TAG, String message, Throwable e) {
         Log.e(TAG, message, e);
-        appendLog(TAG + " : " + message + " Exception : " + e.getStackTrace());
+        appendLog("E: " + TAG + " : " + message + " Exception : " + e.getStackTrace());
     }
 
     public static void v(String TAG, String message) {
         Log.v(TAG, message);
-        appendLog(TAG + " : " + message);
+        appendLog("V: " + TAG + " : " + message);
     }
 
     public static void w(String TAG, String message) {
         Log.w(TAG, message);
-        appendLog(TAG + " : " + message);
+        appendLog("W: " + TAG + " : " + message);
     }
 
     /**
@@ -71,8 +71,7 @@ public class Log_OC {
      * @param storagePath : directory for keeping logs
      */
     synchronized public static void startLogging(String storagePath) {
-        String logPath = storagePath + File.separator +
-                mOwncloudDataFolderLog + File.separator + LOG_FOLDER_NAME;
+        String logPath = storagePath + File.separator + mOwncloudDataFolderLog + File.separator + LOG_FOLDER_NAME;
         mFolder = new File(logPath);
         mLogFile = new File(mFolder + File.separator + mLogFileNames[0]);
 
