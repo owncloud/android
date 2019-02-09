@@ -20,21 +20,19 @@
 
 package com.owncloud.android.ui.activity;
 
+import android.app.SearchManager;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
-import androidx.core.content.FileProvider;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.snackbar.Snackbar;
 import com.owncloud.android.R;
 import com.owncloud.android.lib.common.utils.Log_OC;
@@ -50,6 +48,7 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 
+
 public class LogHistoryActivity extends ToolbarActivity {
 
     private static final String MAIL_ATTACHMENT_TYPE = "text/plain";
@@ -63,6 +62,8 @@ public class LogHistoryActivity extends ToolbarActivity {
 
     private RecyclerView mLogsRecycler;
     private LogListAdapter mLogListAdapter;
+    private SearchView searchView;
+    private String mCurrentFilter = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,7 +85,9 @@ public class LogHistoryActivity extends ToolbarActivity {
         mLogsRecycler.setLayoutManager(layoutManager);
 
         setTitle(getText(R.string.actionbar_logger));
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
         Button deleteHistoryButton = findViewById(R.id.deleteLogHistoryButton);
         Button sendHistoryButton = findViewById(R.id.sendLogHistoryButton);
 
@@ -109,6 +112,85 @@ public class LogHistoryActivity extends ToolbarActivity {
                 task.execute();
             }
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.log_menu, menu);
+        MenuItem searchItem = menu.findItem(R.id.menu_search);
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+
+        if (searchItem != null) {
+            searchView = (SearchView) searchItem.getActionView();
+            //            searchView.setQueryHint(getString(R.string.text));
+        }
+        if (searchView != null) {
+            searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        }
+
+        if (searchView == null) {
+            return true;
+        }
+        SearchView.SearchAutoComplete searchAutoComplete = searchView.findViewById(R.id.search_src_text);
+
+        if (searchView != null && mCurrentFilter != null && !mCurrentFilter.equals("")) {
+            if (searchAutoComplete != null) {
+                searchAutoComplete.setText(mCurrentFilter);
+            }
+            searchView.setIconified(false);
+        } else {
+            if (searchAutoComplete != null) {
+                searchAutoComplete.setText("");
+            }
+            searchView.setIconified(true);
+        }
+
+        final SearchView.OnQueryTextListener queryTextListener = new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                setFilter2LogAdapter(newText);
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                setFilter2LogAdapter(query);
+                return true;
+            }
+        };
+        if (searchItem != null) {
+            searchItem.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
+                @Override
+                public boolean onMenuItemActionCollapse(MenuItem item) {
+                    setFilter2LogAdapter("");
+                    return true;  // Return true to collapse action view
+                }
+
+                @Override
+                public boolean onMenuItemActionExpand(MenuItem item) {
+                    // Do something when expanded
+                    return true;  // Return true to expand action view
+                }
+            });
+        }
+
+        if (null != searchView) {
+            searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+            searchView.setIconifiedByDefault(true);
+            searchView.setOnQueryTextListener(queryTextListener);
+            if (mCurrentFilter != null && !mCurrentFilter.equals("")) {
+                if (searchAutoComplete != null && searchItem != null) {
+                    searchItem.expandActionView();
+                    searchAutoComplete.setText(mCurrentFilter);
+                }
+            }
+        }
+        return true;
+    }
+
+    private void setFilter2LogAdapter(String filter) {
+        mLogListAdapter.setFilter(filter);
     }
 
     @Override
@@ -188,7 +270,7 @@ public class LogHistoryActivity extends ToolbarActivity {
 
         protected void onPostExecute(ArrayList<String> result) {
             if (result != null) {
-                mLogListAdapter = new LogListAdapter(result);
+                mLogListAdapter = new LogListAdapter(result, mCurrentFilter);
                 mLogsRecycler.setAdapter(mLogListAdapter);
                 dismissLoadingDialog();
             }
