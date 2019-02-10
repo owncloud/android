@@ -1,4 +1,4 @@
-/**
+/*
  * ownCloud Android client application
  *
  * @author Bartosz Przybylski
@@ -99,7 +99,7 @@ public class FeatureList {
             this.titleText = titleText;
             this.contentText = contentText;
             this.versionNumber = versionCodeFromString(version);
-            this.betaVersion = versionCodeFromString(betaVersion);
+            this.betaVersion = versionBetaCodeFromString(betaVersion);
             this.showOnInitialRun = showOnInitialRun;
         }
 
@@ -179,14 +179,24 @@ public class FeatureList {
     }
 
     private static int versionCodeFromString(String version) {
+        int versionCode = versionBetaCodeFromString(version);
+        if (versionCode == 0) {
+            Timber.w("Version string is incorrect %s", version);
+            return 0;
+        }
+
+        return versionCode;
+    }
+
+    private static int versionBetaCodeFromString(String version) {
         String[] v = version.split(Pattern.quote("."));
         if (v.length != 3) {
             Timber.d("Version string is incorrect %s", version);
             return 0;
         }
 
-        return Integer.parseInt(v[0]) * (int) (10e6) +
-                Integer.parseInt(v[1]) * (int) (10e4) +
-                Integer.parseInt(v[2]) * 100;
+        return Integer.parseInt(v[0])*(int)(10e6) +
+                Integer.parseInt(v[1])*(int)(10e4) +
+                Integer.parseInt(v[2])*100;
     }
 }
