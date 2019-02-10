@@ -8,5 +8,11 @@
         android:orderInCategory="100"
         app:showAsAction="always"
         android:title="@string/share_search"/>
+    <item
+        android:id="@+id/menu_logcat"
+        android:icon="@drawable/ic_lock_open"
+        android:orderInCategory="100"
+        app:showAsAction="never"
+        android:title="Logcat"/>
 
 </menu>
