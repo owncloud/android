@@ -2,6 +2,8 @@ package com.owncloud.android.lib.common.utils;
 
 import android.util.Log;
 
+import com.owncloud.android.lib.BuildConfig;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -21,7 +23,10 @@ public class Log_OC {
     private static File mFolder;
     private static BufferedWriter mBuf;
 
-    private static String[] mLogFileNames = {"currentLog.txt", "olderLog.txt"};
+    private static String[] mLogFileNames = {
+            "currentLog" + BuildConfig.BUILD_TYPE + ".txt",
+            "olderLog" + BuildConfig.BUILD_TYPE + ".txt"
+    };
 
     private static boolean isMaxFileSizeReached = false;
     private static boolean isEnabled = false;
