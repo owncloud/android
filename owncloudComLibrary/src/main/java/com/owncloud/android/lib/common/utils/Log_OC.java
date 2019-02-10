@@ -15,7 +15,7 @@ import java.util.Locale;
 public class Log_OC {
     private static final String SIMPLE_DATE_FORMAT = "yyyy/MM/dd HH:mm:ss";
     private static final String LOG_FOLDER_NAME = "log";
-    private static final long MAX_FILE_SIZE = 1000000; // 1MB
+    private static final long MAX_FILE_SIZE = 2000000; // 2MB
 
     private static String mOwncloudDataFolderLog = "owncloud_log";
 
