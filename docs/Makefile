@@ -2,7 +2,6 @@
 
 SHELL ?= bash
 
-BUILD_DIR ?= public
 FONTS_DIR ?= fonts
 STYLES_DIR ?= resources/themes
 
@@ -12,15 +11,20 @@ REVDATE ?= "$(shell date +'%B %d, %Y')"
 ifndef VERSION
 	ifneq ($(DRONE_TAG),)
 		VERSION ?= $(subst v,,$(DRONE_TAG))
-		OUTPUT_VERSION ?= $(VERSION)/
 	else
 		ifneq ($(DRONE_BRANCH),)
 			VERSION ?= $(subst /,,$(DRONE_BRANCH))
-			OUTPUT_VERSION ?= $(VERSION)/
 		else
-			VERSION ?= latest
-			OUTPUT_VERSION ?=
+			VERSION ?= master
 		endif
+	endif
+endif
+
+ifndef OUTPUT
+	ifneq ($(VERSION),master)
+		OUTPUT ?= build/android/$(VERSION)
+	else
+		OUTPUT ?= build/android
 	endif
 endif
 
@@ -29,16 +33,13 @@ endif
 #
 .PHONY: clean
 clean:
-	@echo "Cleaning up any artifacts from output dir"
-	@-rm -rf $(BUILD_DIR)
-	@echo
+	-rm -rf build/
 
 #
 # Generate PDF version of the manual.
 #
 .PHONY: pdf
 pdf:
-	@echo "Building PDF version of the manual"
 	asciidoctor-pdf \
 		-a pdf-stylesdir=$(STYLES_DIR)/ \
 		-a pdf-style=$(STYLE) \
@@ -48,6 +49,5 @@ pdf:
 		-a revnumber=$(VERSION) \
 		-a revdate=$(REVDATE) \
 		--base-dir $(CURDIR) \
-		--out-file android/$(OUTPUT_VERSION)ownCloud_Android_App_Manual.pdf \
-		--destination-dir $(BUILD_DIR) \
+		--out-file $(OUTPUT)/ownCloud_Android_App_Manual.pdf \
 		books/ownCloud_Android_App_Manual.adoc

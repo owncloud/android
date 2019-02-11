@@ -38,7 +38,14 @@ pipeline:
     pull: true
     commands:
       - cd docs/
-      - yarn antora --url http://webserver:8080
+      - yarn antora
+
+  docs-pdf:
+    image: owncloudci/asciidoctor:latest
+    pull: true
+    commands:
+      - cd docs/
+      - make pdf
 
   docs-artifacts:
     image: owncloud/ubuntu:latest
@@ -63,6 +70,20 @@ pipeline:
     secrets: [ cache_s3_endpoint, cache_s3_access_key, cache_s3_secret_key ]
     flush: true
     flush_age: 14
+    when:
+      local: false
+      event: [ push ]
+
+  upload-pdf:
+    image: plugins/s3-sync:1
+    pull: true
+    secrets: [ aws_access_key_id, aws_secret_access_key ]
+    bucket: uploads
+    endpoint: https://doc.owncloud.com
+    path_style: true
+    source: docs/build/
+    target: /deploy
+    delete: false
     when:
       local: false
       event: [ push ]
