@@ -33,7 +33,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -63,7 +62,7 @@ import java.io.File;
  *
  * Trying to get an instance with a NULL {@link OCFile} will produce an
  * {@link IllegalStateException}.
- * 
+ *
  * If the {@link OCFile} passed is not downloaded, an {@link IllegalStateException} is generated on
  * instantiation too.
  */
@@ -80,12 +79,10 @@ public class PreviewImageFragment extends FileFragment {
     private ProgressBar mProgressBar;
     private TransferProgressController mProgressController;
     private PhotoView mImageView;
-    private TextView mMessageView;
-    private ProgressBar mProgressWheel;
 
-    public Bitmap mBitmap = null;
+    private Bitmap mBitmap = null;
 
-    private Account mAccount = null;
+    private Account mAccount;
     private boolean mIgnoreFirstSavedState;
 
     /**
@@ -119,13 +116,13 @@ public class PreviewImageFragment extends FileFragment {
     }
 
 
-    
+
     /**
      *  Creates an empty fragment for image previews.
-     * 
+     *
      *  MUST BE KEPT: the system uses it when tries to reinstantiate a fragment automatically
      *  (for instance, when the device is turned a aside).
-     * 
+     *
      *  DO NOT CALL IT: an {@link OCFile} and {@link Account} must be provided for a successful
      *  construction
      */
@@ -141,7 +138,7 @@ public class PreviewImageFragment extends FileFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle args = getArguments();
-        setFile((OCFile)args.getParcelable(ARG_FILE));
+        setFile(args.getParcelable(ARG_FILE));
             // TODO better in super, but needs to check ALL the class extending FileFragment;
             // not right now
 
@@ -154,27 +151,22 @@ public class PreviewImageFragment extends FileFragment {
      * {@inheritDoc}
      */
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.preview_image_fragment, container, false);
         mProgressBar = view.findViewById(R.id.syncProgressBar);
         DisplayUtils.colorPreLollipopHorizontalProgressBar(mProgressBar);
         mImageView = view.findViewById(R.id.photo_view);
         mImageView.setVisibility(View.GONE);
-        mImageView.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(getActivity() != null) {
-                    ((PreviewImageActivity) getActivity()).toggleFullScreen();
-                }
+        mImageView.setOnClickListener(v -> {
+            if(getActivity() != null) {
+                ((PreviewImageActivity) getActivity()).toggleFullScreen();
             }
-
         });
-        mMessageView = view.findViewById(R.id.message);
-        mMessageView.setVisibility(View.GONE);
-        mProgressWheel = view.findViewById(R.id.progressWheel);
-        mProgressWheel.setVisibility(View.VISIBLE);
+        TextView messageview = view.findViewById(R.id.message);
+        messageview.setVisibility(View.GONE);
+        ProgressBar progressWheel = view.findViewById(R.id.progressWheel);
+        progressWheel.setVisibility(View.VISIBLE);
         return view;
     }
 
@@ -435,7 +427,7 @@ public class PreviewImageFragment extends FileFragment {
     /**
      * Helper method to test if an {@link OCFile} can be passed to a {@link PreviewImageFragment}
      * to be previewed.
-     * 
+     *
      * @param file      File to test if can be previewed.
      * @return          'True' if the file can be handled by the fragment.
      */

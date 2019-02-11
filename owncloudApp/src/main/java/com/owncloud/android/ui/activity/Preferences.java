@@ -1,4 +1,4 @@
-/**
+/*
  * ownCloud Android client application
  *
  * @author Bartek Przybylski
@@ -34,7 +34,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.Preference;
-import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceManager;
@@ -58,12 +57,13 @@ import com.owncloud.android.files.services.CameraUploadsHandler;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.utils.DisplayUtils;
 
-import java.io.File;
+import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
 
 /**
  * An Activity that allows the user to change the application's settings.
- * <p>
+ *
  * It proxies the necessary calls via {@link android.support.v7.app.AppCompatDelegate} to be used
  * with AppCompat.
  */
@@ -82,7 +82,6 @@ public class Preferences extends PreferenceActivity {
     private CheckBoxPreference pPasscode;
     private CheckBoxPreference pPattern;
     private CheckBoxPreference pFingerprint;
-    private Preference pAboutApp;
     private AppCompatDelegate mDelegate;
 
     private String mUploadPath;
@@ -100,8 +99,6 @@ public class Preferences extends PreferenceActivity {
     private Preference mPrefCameraVideoUploadsWiFi;
     private Preference mPrefCameraUploadsSourcePath;
     private Preference mPrefCameraUploadsBehaviour;
-
-    private PreferenceCategory mPrefSecurityCategory;
 
     private CameraUploadsHandler mCameraUploadsHandler;
 
@@ -145,7 +142,7 @@ public class Preferences extends PreferenceActivity {
             mFingerprintManager = FingerprintManager.getFingerprintManager(this);
         }
 
-        /**
+        /*
          * Camera uploads
          */
         // Pictures
@@ -199,16 +196,12 @@ public class Preferences extends PreferenceActivity {
         mPrefCameraVideoUploads = findPreference("camera_video_uploads");
         toggleCameraUploadsVideoOptions(true, ((CheckBoxPreference) mPrefCameraVideoUploads).isChecked());
 
-        mPrefCameraVideoUploads.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
-
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                toggleCameraUploadsVideoOptions(false, (Boolean) newValue);
-                toggleCameraUploadsCommonOptions(
-                        (Boolean) newValue,
-                        ((CheckBoxPreference) mPrefCameraPictureUploads).isChecked());
-                return true;
-            }
+        mPrefCameraVideoUploads.setOnPreferenceChangeListener((preference, newValue) -> {
+            toggleCameraUploadsVideoOptions(false, (Boolean) newValue);
+            toggleCameraUploadsCommonOptions(
+                    (Boolean) newValue,
+                    ((CheckBoxPreference) mPrefCameraPictureUploads).isChecked());
+            return true;
         });
 
         mPrefCameraUploadsSourcePath = findPreference("camera_uploads_source_path");
@@ -242,11 +235,11 @@ public class Preferences extends PreferenceActivity {
 
         mCameraUploadsHandler = new CameraUploadsHandler(configuration);
 
-        /**
+        /*
          * Security
          */
 
-        mPrefSecurityCategory = (PreferenceCategory) findPreference("security_category");
+        PreferenceCategory prefSecurityCategory = (PreferenceCategory) findPreference("security_category");
         pPasscode = (CheckBoxPreference) findPreference(PassCodeActivity.PREFERENCE_SET_PASSCODE);
         pFingerprint = (CheckBoxPreference) findPreference(FingerprintActivity.PREFERENCE_SET_FINGERPRINT);
 
@@ -257,13 +250,12 @@ public class Preferences extends PreferenceActivity {
                 Intent i = new Intent(getApplicationContext(), PassCodeActivity.class);
                 Boolean incoming = (Boolean) newValue;
                 SharedPreferences appPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                patternSet = appPrefs.getBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN,false);
-                if(patternSet){
+                patternSet = appPrefs.getBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN, false);
+                if (patternSet) {
                     showSnackMessage(R.string.pattern_already_set);
-                }
-                else {
+                } else {
                     i.setAction(incoming ? PassCodeActivity.ACTION_REQUEST_WITH_RESULT :
-                                    PassCodeActivity.ACTION_CHECK_WITH_RESULT);
+                            PassCodeActivity.ACTION_CHECK_WITH_RESULT);
 
                     startActivityForResult(i, incoming ? ACTION_REQUEST_PASSCODE : ACTION_CONFIRM_PASSCODE);
                 }
@@ -280,11 +272,10 @@ public class Preferences extends PreferenceActivity {
                 Intent intent = new Intent(getApplicationContext(), PatternLockActivity.class);
                 Boolean state = (Boolean) newValue;
                 SharedPreferences appPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                passcodeSet = appPrefs.getBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE,false);
-                if(passcodeSet){
+                passcodeSet = appPrefs.getBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false);
+                if (passcodeSet) {
                     showSnackMessage(R.string.passcode_already_set);
-                }
-                else {
+                } else {
                     intent.setAction(state ? PatternLockActivity.ACTION_REQUEST_WITH_RESULT :
                             PatternLockActivity.ACTION_CHECK_WITH_RESULT);
                     startActivityForResult(intent, state ? ACTION_REQUEST_PATTERN : ACTION_CONFIRM_PATTERN);
@@ -296,7 +287,7 @@ public class Preferences extends PreferenceActivity {
         // Fingerprint lock
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
 
-            mPrefSecurityCategory.removePreference(pFingerprint);
+            prefSecurityCategory.removePreference(pFingerprint);
 
         } else if (pFingerprint != null) {
 
@@ -329,10 +320,10 @@ public class Preferences extends PreferenceActivity {
             });
         }
 
-        /**
+        /*
          * More
          */
-        PreferenceCategory preferenceCategory = (PreferenceCategory) findPreference("more");
+        PreferenceCategory pCategoryMore = (PreferenceCategory) findPreference("more");
 
         boolean helpEnabled = getResources().getBoolean(R.bool.help_enabled);
         Preference pHelp = findPreference("help");
@@ -340,7 +331,7 @@ public class Preferences extends PreferenceActivity {
             if (helpEnabled) {
                 pHelp.setOnPreferenceClickListener(preference -> {
                     String helpWeb = (String) getText(R.string.url_help);
-                    if (helpWeb != null && helpWeb.length() > 0) {
+                    if (helpWeb.length() > 0) {
                         Uri uriUrl = Uri.parse(helpWeb);
                         Intent intent = new Intent(Intent.ACTION_VIEW, uriUrl);
                         startActivity(intent);
@@ -348,7 +339,7 @@ public class Preferences extends PreferenceActivity {
                     return true;
                 });
             } else {
-                preferenceCategory.removePreference(pHelp);
+                pCategoryMore.removePreference(pHelp);
             }
         }
 
@@ -356,10 +347,10 @@ public class Preferences extends PreferenceActivity {
 
         boolean syncCalendarContactsEnabled = getResources().getBoolean(R.bool.sync_calendar_contacts_enabled);
         if (pSyncCalendarContacts != null) {
-            if(syncCalendarContactsEnabled) {
+            if (syncCalendarContactsEnabled) {
                 pSyncCalendarContacts.setOnPreferenceClickListener(preference -> {
                     String syncCalendarContactsUrl = (String) getText(R.string.url_sync_calendar_contacts);
-                    if (syncCalendarContactsUrl != null && syncCalendarContactsUrl.length() > 0) {
+                    if (syncCalendarContactsUrl.length() > 0) {
                         Uri uriUrl = Uri.parse(syncCalendarContactsUrl);
                         Intent intent = new Intent(Intent.ACTION_VIEW, uriUrl);
                         startActivity(intent);
@@ -367,7 +358,7 @@ public class Preferences extends PreferenceActivity {
                     return true;
                 });
             } else {
-                preferenceCategory.removePreference(pSyncCalendarContacts);
+                pCategoryMore.removePreference(pSyncCalendarContacts);
             }
         }
 
@@ -378,7 +369,6 @@ public class Preferences extends PreferenceActivity {
                 pRecommend.setOnPreferenceClickListener(preference -> {
 
                     Intent intent = new Intent(Intent.ACTION_SENDTO);
-                    intent.setType("text/plain");
                     intent.setData(Uri.parse(getString(R.string.mail_recommend)));
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
@@ -386,8 +376,7 @@ public class Preferences extends PreferenceActivity {
                     String downloadUrl = getString(R.string.url_app_download);
 
                     String recommendSubject =
-                            String.format(getString(R.string.recommend_subject),
-                                    appName);
+                            String.format(getString(R.string.recommend_subject), appName);
                     String recommendText = String.format(getString(R.string.recommend_text),
                             appName, downloadUrl);
 
@@ -399,7 +388,7 @@ public class Preferences extends PreferenceActivity {
 
                 });
             } else {
-                preferenceCategory.removePreference(pRecommend);
+                pCategoryMore.removePreference(pRecommend);
             }
         }
 
@@ -412,7 +401,6 @@ public class Preferences extends PreferenceActivity {
                     String feedback = getText(R.string.prefs_feedback) +
                             " - android v" + appVersion;
                     Intent intent = new Intent(Intent.ACTION_SENDTO);
-                    intent.setType("text/plain");
                     intent.putExtra(Intent.EXTRA_SUBJECT, feedback);
 
                     intent.setData(Uri.parse(feedbackMail));
@@ -422,7 +410,7 @@ public class Preferences extends PreferenceActivity {
                     return true;
                 });
             } else {
-                preferenceCategory.removePreference(pFeedback);
+                pCategoryMore.removePreference(pFeedback);
             }
         }
 
@@ -437,7 +425,7 @@ public class Preferences extends PreferenceActivity {
                     return true;
                 });
             } else {
-                preferenceCategory.removePreference(pPrivacyPolicy);
+                pCategoryMore.removePreference(pPrivacyPolicy);
             }
         }
 
@@ -453,7 +441,7 @@ public class Preferences extends PreferenceActivity {
                     return true;
                 });
             } else {
-                preferenceCategory.removePreference(pLogger);
+                pCategoryMore.removePreference(pLogger);
             }
         }
 
@@ -463,7 +451,7 @@ public class Preferences extends PreferenceActivity {
             if (imprintEnabled) {
                 pImprint.setOnPreferenceClickListener(preference -> {
                     String imprintWeb = (String) getText(R.string.url_imprint);
-                    if (imprintWeb != null && imprintWeb.length() > 0) {
+                    if (imprintWeb.length() > 0) {
                         Uri uriUrl = Uri.parse(imprintWeb);
                         Intent intent = new Intent(Intent.ACTION_VIEW, uriUrl);
                         startActivity(intent);
@@ -471,14 +459,14 @@ public class Preferences extends PreferenceActivity {
                     return true;
                 });
             } else {
-                preferenceCategory.removePreference(pImprint);
+                pCategoryMore.removePreference(pImprint);
             }
         }
 
-        /**
+        /*
          * About App
          */
-        pAboutApp = findPreference("about_app");
+        Preference pAboutApp = findPreference("about_app");
         if (pAboutApp != null) {
             pAboutApp.setTitle(String.format(
                     getString(R.string.about_android),
@@ -586,11 +574,11 @@ public class Preferences extends PreferenceActivity {
                 PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         boolean passCodeState = appPrefs.getBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false);
         pPasscode.setChecked(passCodeState);
-        boolean patternState = appPrefs.getBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN,false);
+        boolean patternState = appPrefs.getBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN, false);
         pPattern.setChecked(patternState);
-        boolean fingerprintState = appPrefs.getBoolean(FingerprintActivity.PREFERENCE_SET_FINGERPRINT,false);
+        boolean fingerprintState = appPrefs.getBoolean(FingerprintActivity.PREFERENCE_SET_FINGERPRINT, false);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && mFingerprintManager!= null &&
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && mFingerprintManager != null &&
                 !mFingerprintManager.hasEnrolledFingerprints()) {
             fingerprintState = false;
         }
@@ -677,7 +665,7 @@ public class Preferences extends PreferenceActivity {
                             passcode.substring(i - 1, i));
                 }
                 appPrefs.putBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, true);
-                appPrefs.commit();
+                appPrefs.apply();
 
                 showSnackMessage(R.string.pass_code_stored);
 
@@ -691,33 +679,31 @@ public class Preferences extends PreferenceActivity {
                 SharedPreferences.Editor appPrefs = PreferenceManager
                         .getDefaultSharedPreferences(getApplicationContext()).edit();
                 appPrefs.putBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false);
-                appPrefs.commit();
+                appPrefs.apply();
                 showSnackMessage(R.string.pass_code_removed);
 
                 // Do not allow to use Fingerprint lock since Passcode lock has been disabled
                 disableFingerprint(getString(R.string.prefs_fingerprint_summary));
             }
-        }
-        else if(requestCode == ACTION_REQUEST_PATTERN && resultCode == RESULT_OK){ // Enable pattern
+        } else if (requestCode == ACTION_REQUEST_PATTERN && resultCode == RESULT_OK) { // Enable pattern
             String patternValue = data.getStringExtra(PatternLockActivity.KEY_PATTERN);
-            if(patternValue != null){
+            if (patternValue != null) {
                 SharedPreferences.Editor appPrefs = PreferenceManager.
                         getDefaultSharedPreferences(getApplicationContext()).edit();
-                appPrefs.putString(PatternLockActivity.KEY_PATTERN,patternValue);
-                appPrefs.putBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN,true);
-                appPrefs.commit();
+                appPrefs.putString(PatternLockActivity.KEY_PATTERN, patternValue);
+                appPrefs.putBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN, true);
+                appPrefs.apply();
                 showSnackMessage(R.string.pattern_stored);
 
                 // Allow to use Fingerprint lock since Pattern lock has been enabled
                 enableFingerprint();
             }
-        }
-        else if(requestCode == ACTION_CONFIRM_PATTERN && resultCode == RESULT_OK){ // Disable pattern
-            if(data.getBooleanExtra(PatternLockActivity.KEY_CHECK_RESULT,false)){
+        } else if (requestCode == ACTION_CONFIRM_PATTERN && resultCode == RESULT_OK) { // Disable pattern
+            if (data.getBooleanExtra(PatternLockActivity.KEY_CHECK_RESULT, false)) {
                 SharedPreferences.Editor appPrefs = PreferenceManager.
                         getDefaultSharedPreferences(getApplicationContext()).edit();
-                appPrefs.putBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN,false);
-                appPrefs.commit();
+                appPrefs.putBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN, false);
+                appPrefs.apply();
                 showSnackMessage(R.string.pattern_removed);
 
                 // Do not allow to use Fingerprint lock since Pattern lock has been disabled
@@ -730,6 +716,7 @@ public class Preferences extends PreferenceActivity {
         return getDelegate().getSupportActionBar();
     }
 
+    @NotNull
     @Override
     public MenuInflater getMenuInflater() {
         return getDelegate().getMenuInflater();
@@ -833,7 +820,7 @@ public class Preferences extends PreferenceActivity {
                 PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         SharedPreferences.Editor editor = appPrefs.edit();
         editor.putString("camera_picture_uploads_path", mUploadPath);
-        editor.commit();
+        editor.apply();
     }
 
     /**
@@ -856,7 +843,7 @@ public class Preferences extends PreferenceActivity {
                 PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         SharedPreferences.Editor editor = appPrefs.edit();
         editor.putString("camera_video_uploads_path", mUploadVideoPath);
-        editor.commit();
+        editor.apply();
     }
 
     /**
@@ -893,7 +880,7 @@ public class Preferences extends PreferenceActivity {
                 PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor editor = appPrefs.edit();
         editor.putString("camera_uploads_source_path", mSourcePath);
-        editor.commit();
+        editor.apply();
     }
 
     private void enableFingerprint() {
@@ -912,7 +899,7 @@ public class Preferences extends PreferenceActivity {
     /**
      * Show a temporary message in a Snackbar bound to the content view
      *
-     * @param messageResource       Message to show.
+     * @param messageResource Message to show.
      */
     private void showSnackMessage(int messageResource) {
         Snackbar snackbar = Snackbar.make(
@@ -925,7 +912,8 @@ public class Preferences extends PreferenceActivity {
 
     /**
      * Show a confirmation dialog to disable camera uploads
-     * @param message message to show in the dialog
+     *
+     * @param message  message to show in the dialog
      * @param listener to handle button clicks
      */
     private void showConfirmationDialog(String message, DialogInterface.OnClickListener listener) {
@@ -939,15 +927,14 @@ public class Preferences extends PreferenceActivity {
 
     /**
      * Show a simple dialog with a message
+     *
      * @param message message to show in the dialog
      */
     private void showSimpleDialog(String message) {
         AlertDialog alertDialog = new AlertDialog.Builder(this).create();
         alertDialog.setTitle(R.string.common_important);
         alertDialog.setMessage(message);
-        alertDialog.setButton(DialogInterface.BUTTON_NEUTRAL, getString(android.R.string.ok), (dialog, which) -> {
-            dialog.dismiss();
-        });
+        alertDialog.setButton(DialogInterface.BUTTON_NEUTRAL, getString(android.R.string.ok), (dialog, which) -> dialog.dismiss());
         alertDialog.show();
     }
 }
