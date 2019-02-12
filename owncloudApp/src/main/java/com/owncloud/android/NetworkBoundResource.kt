@@ -45,11 +45,9 @@ import com.owncloud.android.vo.Resource
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
 
-abstract class NetworkBoundResource<ResultType, RequestType> : CoroutineScope {
-    private val result = MediatorLiveData<Resource<ResultType>>()
+abstract class NetworkBoundResource<ResultType, RequestType>() : CoroutineScope {
 
-    private val errors = MutableLiveData<Resource<ResultType>>()
-    private val loading = MutableLiveData<Resource<ResultType>>()
+    private val result = MediatorLiveData<Resource<ResultType>>()
 
     private val job = Job()
 
@@ -58,16 +56,24 @@ abstract class NetworkBoundResource<ResultType, RequestType> : CoroutineScope {
 
     init {
         val dbSource = loadFromDb()
-
         /**
          * Result will observe two different livedata objects and react on change events from them
          * - Shares livedata from Room to detect changes in database
          * - Errors livedata from remote operations
          * - Loading status
          */
-        result.addSource(dbSource) { newData ->
-            result.value = Resource.success(newData)
+        result.addSource(dbSource) { data ->
+            if (shouldFetch(data)) {
+                fetchFromNetwork()
+            } else {
+                result.value = Resource.success(data)
+            }
         }
+    }
+
+    private fun fetchFromNetwork() {
+        val errors = MutableLiveData<Resource<ResultType>>()
+        val loading = MutableLiveData<Resource<ResultType>>()
 
         result.addSource(errors) { error ->
             result.value = error
@@ -77,23 +83,18 @@ abstract class NetworkBoundResource<ResultType, RequestType> : CoroutineScope {
             result.value = it
         }
 
-        fetchFromNetwork()
-    }
-
-    private fun fetchFromNetwork() {
-
         try {
             launch {
                 withContext(Dispatchers.IO) {
-
                     loading.postValue(
                         Resource.loading()
                     )
 
-                    val remoteOperationResult = performCall()
+                    val remoteOperationResult = createCall()
 
                     if (remoteOperationResult.isSuccess) {
                         saveCallResult(processResponse(remoteOperationResult))
+
                     } else {
                         errors.postValue(
                             Resource.error(
@@ -128,8 +129,11 @@ abstract class NetworkBoundResource<ResultType, RequestType> : CoroutineScope {
     protected abstract fun saveCallResult(item: RequestType)
 
     @MainThread
+    protected abstract fun shouldFetch(data: ResultType?): Boolean
+
+    @MainThread
     protected abstract fun loadFromDb(): LiveData<ResultType>
 
     @MainThread
-    protected abstract fun performCall(): RemoteOperationResult<RequestType>
+    protected abstract fun createCall(): RemoteOperationResult<RequestType>
 }
