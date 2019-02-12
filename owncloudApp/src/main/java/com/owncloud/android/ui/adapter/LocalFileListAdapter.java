@@ -107,9 +107,9 @@ public class LocalFileListAdapter extends BaseAdapter implements ListAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         View view = convertView;
         if (view == null) {
-            LayoutInflater inflator = (LayoutInflater) mContext
+            LayoutInflater inflater = (LayoutInflater) mContext
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = inflator.inflate(R.layout.list_item, null);
+            view = inflater.inflate(R.layout.list_item, null);
         }
         if (mFiles != null && mFiles.length > position) {
             File file = mFiles[position];
@@ -208,6 +208,13 @@ public class LocalFileListAdapter extends BaseAdapter implements ListAdapter {
 
     public void uncheckFile(File file) {
         checkedFiles.remove(file);
+    }
+
+    public boolean isAlreadyChecked(File file){
+        if(checkedFiles.contains(file)){
+            return true;
+        }
+        return false;
     }
 
     public ArrayList<String> getCheckedFiles() {
@@ -311,6 +318,18 @@ public class LocalFileListAdapter extends BaseAdapter implements ListAdapter {
             }
             notifyDataSetChanged();
         }
+    }
+
+    public int getNoOfFilesInDir(){
+        int count = 0;
+        if(mFiles != null) {
+            for (int i = 0; i < mFiles.length; i++) {
+                if (!mFiles[i].isDirectory()) {
+                    count++;
+                }
+            }
+        }
+        return count;
     }
 
     private Vector<OCFile> transformFilesArrToVecOCFiles(File[] files){
