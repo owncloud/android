@@ -5,7 +5,7 @@
  *   @author David A. Velasco
  *   @author Juan Carlos González Cabrero
  *   @author David González Verdugo
- *   Copyright (C) 2018 ownCloud GmbH.
+ *   Copyright (C) 2019 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
