@@ -210,6 +210,13 @@ public class LocalFileListAdapter extends BaseAdapter implements ListAdapter {
         checkedFiles.remove(file);
     }
 
+    public boolean isAlreadyChecked(File file){
+        if(checkedFiles.contains(file)){
+            return true;
+        }
+        return false;
+    }
+
     public ArrayList<String> getCheckedFiles() {
         ArrayList<String> representation = new ArrayList<String>();
         for (int i = 0; i < mFiles.length; i++) {

@@ -227,6 +227,7 @@ public class UploadFilesActivity extends FileActivity implements
             case R.id.action_select_inverse:
                 mFileListFragment.selectInverse();
                 setSelectAllMenuItemState();
+                break;
             case R.id.action_sort_descending:
                 item.setChecked(!item.isChecked());
                 boolean isAscending = !item.isChecked();

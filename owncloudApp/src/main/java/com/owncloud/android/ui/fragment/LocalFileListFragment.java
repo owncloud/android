@@ -136,7 +136,7 @@ public class LocalFileListFragment extends ExtendedListFragment {
     public void selectAll() {
         for (int i = 0; i < mAdapter.getCount(); i++) {
             File file = (File) mAdapter.getItem(i);
-            if (!file.isDirectory()) {
+            if (!file.isDirectory() && !mAdapter.isAlreadyChecked(file)) {
                 ((ImageView) getView().findViewById(R.id.custom_checkbox)).setImageResource(R.drawable.ic_checkbox_marked);
                 mCurrentListView.setItemChecked(i, true);
                 mAdapter.checkFile(file);
