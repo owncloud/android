@@ -1245,9 +1245,11 @@ public class FileDisplayActivity extends FileActivity
                 if (linkedToRemotePath == null || isAscendant(linkedToRemotePath)) {
                     refreshListOfFilesFragment(true);
                 }
+                String localFilePath = intent.getStringExtra(Extras.EXTRA_FILE_PATH);
                 refreshSecondFragment(
                         intent.getAction(),
                         downloadedRemotePath,
+                        localFilePath,
                         intent.getBooleanExtra(Extras.EXTRA_DOWNLOAD_RESULT, false)
                 );
                 invalidateOptionsMenu();
@@ -1286,7 +1288,7 @@ public class FileDisplayActivity extends FileActivity
         }
 
         protected void refreshSecondFragment(String downloadEvent, String downloadedRemotePath,
-                                             boolean success) {
+                                             String localFilePath, boolean success) {
             FileFragment secondFragment = getSecondFragment();
             if (secondFragment != null) {
                 boolean fragmentReplaced = false;
@@ -1326,8 +1328,13 @@ public class FileDisplayActivity extends FileActivity
                         }
                     }
                 }
-                if (!fragmentReplaced && downloadedRemotePath.equals(secondFragment.getFile().getRemotePath())) {
-                    secondFragment.onSyncEvent(downloadEvent, success, null);
+                if (/*!fragmentReplaced &&*/ downloadedRemotePath.equals(secondFragment.getFile().getRemotePath())) {
+                    OCFile fileInFragment = null;
+                    if (localFilePath != null) {
+                        fileInFragment = secondFragment.getFile();
+                        fileInFragment.setStoragePath(localFilePath);
+                    }
+                    secondFragment.onSyncEvent(downloadEvent, success, fileInFragment);
                 }
             }
         }
