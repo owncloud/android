@@ -1,5 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+  <string name="about_android">%1$s για Android</string>
+  <string name="about_version">Έκδοση %1$s</string>
   <string name="actionbar_sync">Ανανέωση λογαριασμού</string>
   <string name="actionbar_upload">Μεταφόρτωση</string>
   <string name="actionbar_upload_from_apps">Περιεχόμενο από άλλες εφαρμογές</string>
@@ -26,19 +28,29 @@
   <string name="prefs_accounts">Λογαριασμοί</string>
   <string name="prefs_manage_accounts">Διαχείριση λογαριασμών</string>
   <string name="prefs_passcode">Κλείδωμα κωδικού πρόσβασης</string>
+  <string name="prefs_camera_video_upload">Μεταφόρτωση βίντεο</string>
   <string name="prefs_log_title">Σύνδεση εφικτή</string>
   <string name="prefs_log_summary">Χρησιμοποιείται για την καταγραφή προβλημάτων</string>
   <string name="prefs_log_title_history">Φόρτωση ιστορικού</string>
   <string name="prefs_log_summary_history">Εδώ μπορείτε να δείτε το καταγεγραμμένο ιστορικό</string>
   <string name="prefs_log_delete_history_button">Διαγραφή ιστορικού</string>
   <string name="prefs_help">Βοήθεια</string>
+  <string name="prefs_sync_calendar_contacts_summary">Εγκατάσταση DAVdroid</string>
   <string name="prefs_recommend">Προτείνετε σε φίλο</string>
   <string name="prefs_feedback">Σχόλια </string>
   <string name="prefs_imprint">Αποτύπωμα</string>
   <string name="prefs_remember_last_share_location">Αποθήκευση σημείου διαμοιρασμού</string>
   <string name="prefs_remember_last_upload_location_summary">Αποθήκευση τελευταίου σημείου διαμοιρασμού μεταφόρτωσης</string>
+  <string name="pattern_enter_pattern">Παρακαλούμε εισάγετε το μοτίβο σας</string>
+  <string name="pattern_configure_pattern">Εισαγωγή μοτίβου</string>
+  <string name="pattern_remove_pattern">Αφαίρεση μοτίβου</string>
+  <string name="pattern_incorrect_pattern">Εσφαλμένο μοτίβο</string>
+  <string name="pattern_not_same_pattern">Τα μοτίβα δεν είναι ίδια</string>
+  <string name="pattern_stored">Αποθηκεύτηκε το μοτίβο</string>
+  <string name="pattern_removed">Αφαιρέθηκε το μοτίβο</string>
   <string name="recommend_subject">Δοκιμάστε %1$s στο κινητό σας!</string>
   <string name="recommend_text">Θα ήθελα να σε προσκαλέσω να χρησιμοποιήσεις το %1$s στο κινητό σου!\nΛήψη εδώ: %2$s</string>
+  <string name="auth_failure_snackbar_action">Αλλαγή λογριασμού</string>
   <string name="auth_check_server">Έλεγχος διακομιστή</string>
   <string name="auth_host_url">Διεύθυνση διακομιστή https://…</string>
   <string name="auth_username">Όνομα χρήστη</string>
@@ -71,6 +83,7 @@
   <string name="file_list_file">αρχείο</string>
   <string name="file_list_files">αρχεία</string>
   <string name="filedetails_select_file">Αγγίξτε κάποιο αρχείο για να προβάλετε περισσότερες πληροφορίες.</string>
+  <string name="upload_files_title">Αρχεία</string>
   <string name="filedetails_size">Μέγεθος:</string>
   <string name="filedetails_type">Τύπος:</string>
   <string name="filedetails_created">Δημιουργήθηκε:</string>
@@ -97,7 +110,9 @@
   <string name="change_password">Αλλαγή κωδικού πρόσβασης</string>
   <string name="delete_account">Αφαίρεση λογαριασμού</string>
   <string name="create_account">Δημιουργία λογαριασμού</string>
+  <string name="upload_chooser_title">Μεταφόρτωση από</string>
   <string name="uploader_info_dirname">Όνομα φακέλου</string>
+  <string name="uploader_upload_in_progress_ticker">Γίνεται μεταφόρτωση…</string>
   <string name="uploader_upload_in_progress_content">%1$d%% Μεταφορτώνονται %2$s</string>
   <string name="uploader_upload_succeeded_ticker">Η μεταφόρτωση ολοκληρώθηκε επιτυχώς</string>
   <string name="uploader_upload_succeeded_content_single">%1$s του ποσοστού αναφορτώθηκε</string>
@@ -114,6 +129,8 @@
   <string name="uploads_view_group_current_uploads">Τρέχων</string>
   <string name="uploads_view_group_failed_uploads">Ανεπιτυχώς (πατήστε για να ξαναπροσπαθήσετε)</string>
   <string name="uploads_view_group_finished_uploads">Αναφορτώθηκε</string>
+  <string name="uploads_view_group_file_count">%d αρχεία</string>
+  <string name="uploads_view_group_file_count_single">%d αρχείο</string>
   <string name="uploads_view_upload_status_succeeded">Ολοκληρώθηκε</string>
   <string name="uploads_view_upload_status_cancelled">Ακυρώθηκε</string>
   <string name="uploads_view_upload_status_paused">Είναι σε παύση</string>
@@ -131,6 +148,7 @@
   <string name="uploads_view_upload_status_waiting_for_wifi">Εν αναμονή σύνδεσης στο τοπικό δίκτυο</string>
   <string name="uploads_view_later_waiting_to_upload">Αναμονή αναφόρτωσης</string>
   <string name="uploads_view_unsupported_media_type">Μη υποστηριζόμενος τύπος πολυμέσων</string>
+  <string name="downloader_download_in_progress_ticker">Γίνεται λήψη…</string>
   <string name="downloader_download_in_progress_content">%1$d%% Λαμβάνονται %2$s</string>
   <string name="downloader_download_succeeded_ticker">Η λήψη ολοκληρώθηκε επιτυχώς</string>
   <string name="downloader_download_succeeded_content">%1$s ποσοστό ανάκτησης</string>
@@ -241,6 +259,7 @@
   <string name="wait_checking_credentials">Γίνεται έλεγχος αποθηκευμένων διαπιστευτηρίων</string>
   <string name="filedisplay_unexpected_bad_get_content">Απροσδόκητο σφάλμα - παρακαλώ επιλέξτε το αρχείο από μια άλλη εφαρμογή</string>
   <string name="filedisplay_no_file_selected">Δεν επιλέχθηκαν αρχεία </string>
+  <string name="activity_chooser_title">Αποστολή συνδέσμου σε</string>
   <string name="wait_for_tmp_copy_from_private_storage">Αντιγραφή αρχείου από ιδιωτικό αποθηκευτικό χώρο</string>
   <string name="oauth_check_onoff">Σύνδεση με oAuth2</string>
   <string name="oauth_login_connection">Γίνεται σύνδεση με τον διακομιστή OAuth2...</string>
@@ -343,6 +362,7 @@
   <string name="copy_file_invalid_overwrite">Το αρχείο υπάρχει ήδη στον φάκελο προορισμού</string>
   <string name="copy_file_error">Ένα σφάλμα προέκυψε κατά την προσπάθεια αντιγραφής αυτού του αρχείου ή φακέλου</string>
   <string name="forbidden_permissions_copy">για αντιγραφή αυτού του αρχείου</string>
+  <string name="prefs_category_camera_upload">Μεταφορτώσεις κάμερας</string>
   <string name="sync_folder_failed_content">Ο συγχρονισμός του φακέλου %1$s δεν μπορεί να ολοκληρωθεί</string>
   <string name="shared_subject_header">διαμοιρασμένα</string>
   <string name="with_you_subject_header">με εσάς</string>
@@ -449,6 +469,7 @@
   </plurals>
   <!--Welcome to oC intro features-->
   <string name="welcome_feature_skip_button">Παράβλεψη</string>
+  <string name="welcome_feature_4_title">Μεταφορτώσεις κάμερας</string>
   <string name="welcome_feature_7_title">Επιλογή όλων</string>
   <string name="welcome_feature_8_title">Διαθέσιμο εκτός σύνδεσης</string>
 </resources>
