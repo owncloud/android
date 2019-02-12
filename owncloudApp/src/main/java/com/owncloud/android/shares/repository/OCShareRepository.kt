@@ -21,31 +21,34 @@ package com.owncloud.android.shares.repository
 
 import android.arch.lifecycle.LiveData
 import com.owncloud.android.NetworkBoundResource
-import com.owncloud.android.vo.Resource
 import com.owncloud.android.lib.resources.shares.ShareParserResult
 import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.shares.datasources.LocalSharesDataSource
 import com.owncloud.android.shares.datasources.RemoteSharesDataSource
 import com.owncloud.android.shares.db.OCShare
+import com.owncloud.android.vo.Resource
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
 
 class OCShareRepository(
     private val localSharesDataSource: LocalSharesDataSource,
-    private val remoteShareSharesDataSource: RemoteSharesDataSource
+    private val remoteSharesDataSource: RemoteSharesDataSource
 ) : ShareRepository, CoroutineScope {
-
-    companion object Factory {
-        fun create(
-            localSharesDataSource: LocalSharesDataSource,
-            remoteShareSharesDataSource: RemoteSharesDataSource
-        ): OCShareRepository = OCShareRepository(localSharesDataSource, remoteShareSharesDataSource)
-    }
 
     private val job = Job()
 
     override val coroutineContext: CoroutineContext
         get() = Dispatchers.Main + job
+
+    companion object Factory {
+        fun create(
+            localSharesDataSource: LocalSharesDataSource,
+            remoteSharesDataSource: RemoteSharesDataSource
+        ): OCShareRepository = OCShareRepository(
+            localSharesDataSource,
+            remoteSharesDataSource
+        )
+    }
 
     override fun loadSharesForFile(
         filePath: String,
@@ -73,11 +76,15 @@ class OCShareRepository(
                 }
             }
 
+            override fun shouldFetch(data: List<OCShare>?): Boolean {
+                return data == null || data.isEmpty()
+            }
+
             override fun loadFromDb(): LiveData<List<OCShare>> {
                 return localSharesDataSource.getSharesForFileAsLiveData(filePath, accountName, shareTypes)
             }
 
-            override fun performCall() = remoteShareSharesDataSource.getSharesForFile(filePath, reshares, subfiles)
+            override fun createCall() = remoteSharesDataSource.getSharesForFile(filePath, reshares, subfiles)
 
         }.asLiveData()
     }
