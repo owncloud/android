@@ -41,8 +41,8 @@ class OCShareViewModel(
     filePath: String,
     shareTypes: List<ShareType>,
     shareRepository: ShareRepository = OCShareRepository.create(
-        OCLocalSharesDataSource(),
-        OCRemoteSharesDataSource(
+        localSharesDataSource = OCLocalSharesDataSource(),
+        remoteSharesDataSource = OCRemoteSharesDataSource(
             OwnCloudClientManagerFactory.getDefaultSingleton().getClientFor(
                 OwnCloudAccount(account, MainApp.getAppContext()),
                 MainApp.getAppContext()

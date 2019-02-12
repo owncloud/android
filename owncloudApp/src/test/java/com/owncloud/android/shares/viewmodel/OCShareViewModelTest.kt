@@ -31,9 +31,12 @@ import junit.framework.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.junit.runners.JUnit4
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.mock
 
+@RunWith(JUnit4::class)
 class OCShareViewModelTest {
     private lateinit var ocShareViewModel: OCShareViewModel
     private var ocShareRepository = mock(OCShareRepository::class.java)
