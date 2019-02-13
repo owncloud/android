@@ -1,72 +1,108 @@
+/**
+ * ownCloud Android client application
+ *
+ * @author David González Verdugo
+ * Copyright (C) 2019 ownCloud GmbH.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.owncloud.android
 
+import android.arch.core.executor.testing.InstantTaskExecutorRule
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
+import android.arch.lifecycle.Observer
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.shares.ShareParserResult
 import com.owncloud.android.shares.db.OCShare
+import com.owncloud.android.util.InstantAppExecutors
 import com.owncloud.android.utils.TestUtil
-import org.junit.Before
+import com.owncloud.android.utils.mock
+import com.owncloud.android.vo.Resource
+import org.hamcrest.CoreMatchers.`is`
+import org.hamcrest.MatcherAssert.assertThat
+import org.junit.Rule
 import org.junit.Test
-import java.util.concurrent.atomic.AtomicBoolean
+import org.mockito.Mockito.`when`
+import org.mockito.Mockito.verify
+import java.util.concurrent.atomic.AtomicReference
 
 class NetworkBoundResourceTest {
-    private lateinit var handleSaveCallResult: (ShareParserResult) -> Unit
-    private lateinit var handleShouldFetch: (List<OCShare>?) -> Boolean
     private val dbData = MutableLiveData<List<OCShare>>()
-    private lateinit var handleCreateCall: () -> RemoteOperationResult<ShareParserResult>
 
-    private lateinit var networkBoundResource: NetworkBoundResource<List<OCShare>, ShareParserResult>
-    private val fetchedOnce = AtomicBoolean(false)
-
-    @Before
-    fun init() {
-//        networkBoundResource = object : NetworkBoundResource<List<OCShare>, ShareParserResult>() {
-//            override fun saveCallResult(item: ShareParserResult) {
-//                handleSaveCallResult(item)
-//            }
-//
-//            override fun shouldFetch(data: List<OCShare>?): Boolean {
-//                return handleShouldFetch(data)
-//            }
-//
-//            override fun loadFromDb(): LiveData<List<OCShare>> {
-//                return dbData
-//            }
-//
-//            override fun createCall(): RemoteOperationResult<ShareParserResult> {
-//                return handleCreateCall()
-//            }
-//        }
-    }
+    @Rule
+    @JvmField
+    val instantExecutorRule = InstantTaskExecutorRule()
 
     @Test
     fun basicFromNetwork() {
-//        handleShouldFetch = { it == null }
-//        val fetchedDbValue = listOf(
-//            TestUtil.createPublicShare(
-//                path = "/Photos/image.jpg",
-//                isFolder = true,
-//                name = "Photos 1 link",
-//                shareLink = "http://server:port/s/1"
-//            )
-//        )
-//
-//        handleSaveCallResult = { foo ->
-//            saved.set(foo)
-//            dbData.setValue(fetchedDbValue)
-//        }
-//        val networkResult = Foo(1)
-//        handleCreateCall = { ApiUtil.createCall(Response.success(networkResult)) }
-//
-//        val observer = mock<Observer<Resource<Foo>>>()
-//        networkBoundResource.asLiveData().observeForever(observer)
-//        drain()
-//        verify(observer).onChanged(Resource.loading(null))
-//        reset(observer)
-//        dbData.value = null
-//        drain()
-//        assertThat(saved.get(), `is`(networkResult))
-//        verify(observer).onChanged(Resource.success(fetchedDbValue))
+        val saved = AtomicReference<List<OCShare>>()
+
+        val fetchedDbValue = listOf(
+            TestUtil.createPublicShare(
+                path = "/Photos/image.jpg",
+                isFolder = true,
+                name = "Photos 1 link",
+                shareLink = "http://server:port/s/1"
+            )
+        )
+
+        val networkResult = arrayListOf(
+            TestUtil.createRemoteShare(
+                path = "/Photos/image.jpg",
+                isFolder = true,
+                name = "Photos 1 link",
+                shareLink = "http://server:port/s/1"
+            )
+        )
+
+        var networkBoundResource =
+            object : NetworkBoundResource<List<OCShare>, ShareParserResult>(InstantAppExecutors()) {
+                override fun saveCallResult(shareParserResult: ShareParserResult) {
+                    saved.set(shareParserResult.shares.map { remoteShare ->
+                        OCShare(remoteShare).also { it.accountOwner = "admin@server" }
+                    })
+                    dbData.value = fetchedDbValue
+                }
+
+                override fun loadFromDb(): LiveData<List<OCShare>> {
+                    return dbData
+                }
+
+                override fun createCall(): RemoteOperationResult<ShareParserResult> {
+                    val remoteOperationResult = mock<RemoteOperationResult<ShareParserResult>>()
+
+                    `when`(remoteOperationResult.data).thenReturn(
+                        ShareParserResult(networkResult, "Succeed")
+                    )
+
+                    `when`(remoteOperationResult.isSuccess).thenReturn(true)
+
+                    return remoteOperationResult
+                }
+            }
+
+        val observer = mock<Observer<Resource<List<OCShare>>>>()
+
+        networkBoundResource.asLiveData().observeForever(observer)
+
+        assertThat(saved.get(), `is`(networkResult.map { remoteShare ->
+            OCShare(remoteShare).also { it.accountOwner = "admin@server" }
+        }))
+
+        verify(observer).onChanged(Resource.success(fetchedDbValue))
+
+        verify(observer).onChanged(Resource.stopLoading())
     }
 }
