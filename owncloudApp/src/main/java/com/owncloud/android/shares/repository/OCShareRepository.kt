@@ -57,8 +57,8 @@ class OCShareRepository(
 
         return object : NetworkBoundResource<List<OCShare>, ShareParserResult>(appExecutors) {
 
-            override fun saveCallResult(item: ShareParserResult) {
-                val sharesForFileFromServer = item.shares.map { remoteShare ->
+            override fun saveCallResult(shareParserResult: ShareParserResult) {
+                val sharesForFileFromServer = shareParserResult.shares.map { remoteShare ->
                     OCShare(remoteShare).also { it.accountOwner = accountName }
                 }
 
