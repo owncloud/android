@@ -24,6 +24,7 @@ import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Observer
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
+import com.owncloud.android.lib.resources.shares.RemoteShare
 import com.owncloud.android.lib.resources.shares.ShareParserResult
 import com.owncloud.android.shares.db.OCShare
 import com.owncloud.android.util.InstantAppExecutors
@@ -36,6 +37,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.verify
+import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicReference
 
 class NetworkBoundResourceTest {
@@ -94,7 +96,6 @@ class NetworkBoundResourceTest {
             }
 
         val observer = mock<Observer<Resource<List<OCShare>>>>()
-
         networkBoundResource.asLiveData().observeForever(observer)
 
         assertThat(saved.get(), `is`(networkResult.map { remoteShare ->
@@ -104,5 +105,83 @@ class NetworkBoundResourceTest {
         verify(observer).onChanged(Resource.success(fetchedDbValue))
 
         verify(observer).onChanged(Resource.stopLoading())
+    }
+
+    @Test
+    fun failureFromNetwork() {
+        val saved = AtomicBoolean(false)
+
+        val networkResult: ArrayList<RemoteShare> = arrayListOf()
+
+        var networkBoundResource =
+            object : NetworkBoundResource<List<OCShare>, ShareParserResult>(InstantAppExecutors()) {
+                override fun saveCallResult(shareParserResult: ShareParserResult) {
+                    saved.set(true)
+                }
+
+                override fun loadFromDb(): LiveData<List<OCShare>> {
+                    return dbData
+                }
+
+                override fun createCall(): RemoteOperationResult<ShareParserResult> {
+                    val remoteOperationResult = mock<RemoteOperationResult<ShareParserResult>>()
+
+                    `when`(remoteOperationResult.data).thenReturn(
+                        ShareParserResult(networkResult, "Failed")
+                    )
+
+                    `when`(remoteOperationResult.isSuccess).thenReturn(false)
+
+                    `when`(remoteOperationResult.code).thenReturn(RemoteOperationResult.ResultCode.UNAUTHORIZED)
+
+                    return remoteOperationResult
+                }
+            }
+
+        val observer = mock<Observer<Resource<List<OCShare>>>>()
+        networkBoundResource.asLiveData().observeForever(observer)
+
+        assertThat(saved.get(), `is`(false))
+
+        verify(observer).onChanged(
+            Resource.error(
+                RemoteOperationResult.ResultCode.UNAUTHORIZED
+            )
+        )
+    }
+
+    @Test
+    fun dbSuccessWithoutNetwork() {
+        val saved = AtomicBoolean(false)
+
+        var networkBoundResource =
+            object : NetworkBoundResource<List<OCShare>, ShareParserResult>(InstantAppExecutors()) {
+                override fun saveCallResult(shareParserResult: ShareParserResult) {
+                    saved.set(true)
+                }
+
+                override fun loadFromDb(): LiveData<List<OCShare>> {
+                    return dbData
+                }
+
+                override fun createCall(): RemoteOperationResult<ShareParserResult> {
+                    return mock()
+                }
+            }
+
+        val observer = mock<Observer<Resource<List<OCShare>>>>()
+        networkBoundResource.asLiveData().observeForever(observer)
+
+        val dbPublicShares = listOf(
+            TestUtil.createPublicShare(
+                path = "/Documents/document.jpg",
+                isFolder = true,
+                name = "Documents 1 link",
+                shareLink = "http://server:port/s/1"
+            )
+        )
+
+        dbData.value = dbPublicShares
+        verify(observer).onChanged(Resource.success(dbPublicShares))
     }
 }
