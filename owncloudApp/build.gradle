@@ -68,10 +68,6 @@ dependencies {
     // Room
     implementation "android.arch.persistence.room:runtime:$roomVersion"
     kapt "android.arch.persistence.room:compiler:$roomVersion"
-
-    // Coroutines
-    api "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines"
-    api "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines"
 }
 
 tasks.withType(Test) {
@@ -159,6 +155,10 @@ android {
     applicationVariants.all { variant ->
         def appName = System.env.OC_APP_NAME
         setOutputFileName(variant, appName, project)
+    }
+
+    testOptions {
+        unitTests.returnDefaultValues = true
     }
 }
 

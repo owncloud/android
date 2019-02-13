@@ -20,6 +20,7 @@
 package com.owncloud.android.shares.repository
 
 import android.arch.lifecycle.LiveData
+import com.owncloud.android.AppExecutors
 import com.owncloud.android.NetworkBoundResource
 import com.owncloud.android.lib.resources.shares.ShareParserResult
 import com.owncloud.android.lib.resources.shares.ShareType
@@ -27,24 +28,20 @@ import com.owncloud.android.shares.datasources.LocalSharesDataSource
 import com.owncloud.android.shares.datasources.RemoteSharesDataSource
 import com.owncloud.android.shares.db.OCShare
 import com.owncloud.android.vo.Resource
-import kotlinx.coroutines.*
-import kotlin.coroutines.CoroutineContext
 
 class OCShareRepository(
+    private val appExecutors: AppExecutors,
     private val localSharesDataSource: LocalSharesDataSource,
     private val remoteSharesDataSource: RemoteSharesDataSource
-) : ShareRepository, CoroutineScope {
-
-    private val job = Job()
-
-    override val coroutineContext: CoroutineContext
-        get() = Dispatchers.Main + job
+) : ShareRepository{
 
     companion object Factory {
         fun create(
+            appExecutors: AppExecutors = AppExecutors(),
             localSharesDataSource: LocalSharesDataSource,
             remoteSharesDataSource: RemoteSharesDataSource
         ): OCShareRepository = OCShareRepository(
+            appExecutors,
             localSharesDataSource,
             remoteSharesDataSource
         )
@@ -58,7 +55,7 @@ class OCShareRepository(
         subfiles: Boolean
     ): LiveData<Resource<List<OCShare>>> {
 
-        return object : NetworkBoundResource<List<OCShare>, ShareParserResult>() {
+        return object : NetworkBoundResource<List<OCShare>, ShareParserResult>(appExecutors) {
 
             override fun saveCallResult(item: ShareParserResult) {
                 val sharesForFileFromServer = item.shares.map { remoteShare ->
@@ -69,15 +66,7 @@ class OCShareRepository(
                     localSharesDataSource.delete(filePath, accountName)
                 }
 
-                launch {
-                    withContext(Dispatchers.IO) {
-                        localSharesDataSource.insert(sharesForFileFromServer)
-                    }
-                }
-            }
-
-            override fun shouldFetch(data: List<OCShare>?): Boolean {
-                return data == null || data.isEmpty()
+                localSharesDataSource.insert(sharesForFileFromServer)
             }
 
             override fun loadFromDb(): LiveData<List<OCShare>> {

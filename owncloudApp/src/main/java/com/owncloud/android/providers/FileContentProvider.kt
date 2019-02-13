@@ -37,6 +37,7 @@ import android.net.Uri
 import android.os.CancellationSignal
 import android.os.ParcelFileDescriptor
 import android.text.TextUtils
+import com.owncloud.android.AppExecutors
 import com.owncloud.android.MainApp
 import com.owncloud.android.R
 import com.owncloud.android.datamodel.OCFile
@@ -50,25 +51,18 @@ import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.shares.datasources.OCLocalSharesDataSource
 import com.owncloud.android.shares.db.OCShare
 import com.owncloud.android.utils.FileStorageUtils
-import kotlinx.coroutines.*
 import java.io.File
 import java.io.FileNotFoundException
 import java.util.*
-import kotlin.coroutines.CoroutineContext
 
 /**
  * The ContentProvider for the ownCloud App.
  */
-class FileContentProvider : ContentProvider(), CoroutineScope {
+class FileContentProvider(val appExecutors: AppExecutors = AppExecutors()) : ContentProvider() {
 
     private var mDbHelper: DataBaseHelper? = null
 
     private var mUriMatcher: UriMatcher? = null
-
-    private val job = Job()
-
-    override val coroutineContext: CoroutineContext
-        get() = Dispatchers.Main + job
 
     override fun delete(uri: Uri, where: String?, whereArgs: Array<String>?): Int {
         //Log_OC.d(TAG, "Deleting " + uri + " at provider " + this);
@@ -948,10 +942,8 @@ class FileContentProvider : ContentProvider(), CoroutineScope {
                     } while (cursor.moveToNext())
 
                     // Insert share list to the new shares table in new database
-                    launch {
-                        withContext(Dispatchers.IO) {
-                            OCLocalSharesDataSource().insert(shares)
-                        }
+                    appExecutors.diskIO().execute {
+                        OCLocalSharesDataSource().insert(shares)
                     }
 
                     // Drop old shares table from old database
