@@ -27,7 +27,7 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.PowerManager;
 import android.preference.PreferenceManager;
-import android.support.annotation.RequiresApi;
+import androidx.annotation.RequiresApi;
 import android.view.WindowManager;
 
 import com.owncloud.android.MainApp;

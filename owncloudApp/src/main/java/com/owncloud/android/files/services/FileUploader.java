@@ -43,8 +43,8 @@ import android.os.Looper;
 import android.os.Message;
 import android.os.Parcelable;
 import android.os.Process;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.content.LocalBroadcastManager;
+import androidx.core.app.NotificationCompat;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import android.util.Pair;
 
 import com.owncloud.android.R;
@@ -294,16 +294,23 @@ public class FileUploader extends Service
                 KEY_REQUESTED_FROM_WIFI_BACK_EVENT, false
         );
 
-        if ((createdBy == CREATED_AS_CAMERA_UPLOAD_PICTURE || createdBy == CREATED_AS_CAMERA_UPLOAD_VIDEO ||
-                isAvailableOfflineFile || isRequestedFromWifiBackEvent) &&
-                Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            /**
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            /*
              * After calling startForegroundService method from {@link TransferRequester} for camera uploads or
              * available offline, we have to call this within five seconds after the service is created to avoid
              * an error
              */
             Log_OC.d(TAG, "Starting FileUploader service in foreground");
-            startForeground(1, mNotificationBuilder.build());
+            mNotificationBuilder
+                    .setOngoing(true)
+                    .setSmallIcon(R.drawable.notification_icon)
+                    .setTicker(getString(R.string.uploader_upload_in_progress_ticker))
+                    .setContentTitle(getString(R.string.uploader_upload_in_progress_ticker))
+                    .setProgress(100, 0, false)
+                    .setContentText(String.format(getString(R.string.uploader_upload_in_progress_content), 0, ""))
+                    .setChannelId(UPLOAD_NOTIFICATION_CHANNEL_ID)
+                    .setWhen(System.currentTimeMillis());
+            startForeground(141, mNotificationBuilder.build());
         }
 
         boolean retry = intent.getBooleanExtra(KEY_RETRY, false);

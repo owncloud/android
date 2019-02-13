@@ -28,9 +28,9 @@ import java.util.Set;
 import java.util.Vector;
 
 import android.accounts.Account;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentStatePagerAdapter;
 import android.view.ViewGroup;
 
 import com.owncloud.android.datamodel.FileDataStorageManager;

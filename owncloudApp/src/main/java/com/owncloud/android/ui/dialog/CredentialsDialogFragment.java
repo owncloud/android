@@ -22,12 +22,12 @@ package com.owncloud.android.ui.dialog;
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AuthenticatorActivity;
 
-import android.support.v7.app.AlertDialog;
+import androidx.appcompat.app.AlertDialog;
 import android.app.Dialog;
-import android.support.v7.app.AlertDialog.Builder;
+import androidx.appcompat.app.AlertDialog.Builder;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
+import androidx.fragment.app.DialogFragment;
 import android.text.InputType;
 import android.view.WindowManager.LayoutParams;
 import android.webkit.HttpAuthHandler;

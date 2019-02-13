@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,7 +36,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.owncloud.android.R;
-import com.owncloud.android.utils.DisplayUtils;
 
 
 /**

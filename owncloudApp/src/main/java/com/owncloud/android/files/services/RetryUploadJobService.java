@@ -24,7 +24,7 @@ package com.owncloud.android.files.services;
 import android.app.job.JobParameters;
 import android.app.job.JobService;
 import android.os.Build;
-import android.support.annotation.RequiresApi;
+import androidx.annotation.RequiresApi;
 
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.datamodel.UploadsStorageManager;

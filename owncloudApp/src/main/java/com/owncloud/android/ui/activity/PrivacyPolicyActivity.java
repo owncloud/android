@@ -22,16 +22,14 @@
 
 package com.owncloud.android.ui.activity;
 
-import android.app.Activity;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
+import com.google.android.material.snackbar.Snackbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.owncloud.android.R;
 import com.owncloud.android.utils.DisplayUtils;

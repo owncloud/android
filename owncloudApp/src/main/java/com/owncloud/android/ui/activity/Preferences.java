@@ -37,10 +37,10 @@ import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceManager;
-import android.support.annotation.LayoutRes;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatDelegate;
+import androidx.annotation.LayoutRes;
+import com.google.android.material.snackbar.Snackbar;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatDelegate;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -64,7 +64,7 @@ import java.io.File;
 /**
  * An Activity that allows the user to change the application's settings.
  *
- * It proxies the necessary calls via {@link android.support.v7.app.AppCompatDelegate} to be used
+ * It proxies the necessary calls via {@link androidx.appcompat.app.AppCompatDelegate} to be used
  * with AppCompat.
  */
 public class Preferences extends PreferenceActivity {

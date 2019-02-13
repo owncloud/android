@@ -35,9 +35,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SyncResult;
 import android.os.Bundle;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v4.util.Pair;
+import androidx.core.app.NotificationCompat;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.core.util.Pair;
 
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AuthenticatorActivity;

@@ -20,8 +20,8 @@
 package com.owncloud.android.ui.controller;
 
 import android.accounts.Account;
-import android.support.annotation.UiThread;
-import android.support.annotation.WorkerThread;
+import androidx.annotation.UiThread;
+import androidx.annotation.WorkerThread;
 import android.view.View;
 import android.widget.ProgressBar;
 

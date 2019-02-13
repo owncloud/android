@@ -1,6 +1,6 @@
 package com.owncloud.android.datamodel;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 /**
  *   ownCloud Android client application

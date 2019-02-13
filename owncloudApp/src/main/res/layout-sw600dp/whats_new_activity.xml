@@ -6,12 +6,12 @@
               android:weightSum="100"
               android:background="@color/owncloud_blue_accent">
 
-    <android.support.v4.view.ViewPager
+    <androidx.viewpager.widget.ViewPager
         android:id="@+id/contentPanel"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="90">
-    </android.support.v4.view.ViewPager>
+    </androidx.viewpager.widget.ViewPager>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -23,7 +23,7 @@
         android:orientation="horizontal"
         android:weightSum="3">
 
-        <android.support.v7.widget.AppCompatButton
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/skip"
             style="@style/Button.Borderless"
             android:layout_width="0dp"

@@ -24,7 +24,7 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Process;
-import android.support.v4.app.NotificationCompat;
+import androidx.core.app.NotificationCompat;
 
 import com.owncloud.android.R;
 
@@ -33,12 +33,12 @@ import java.util.Random;
 public class NotificationUtils {
 
     /**
-     * Factory method for {@link android.support.v4.app.NotificationCompat.Builder} instances.
+     * Factory method for {@link androidx.core.app.NotificationCompat.Builder} instances.
      *
      * Not strictly needed from the moment when the minimum API level supported by the app
      * was raised to 14 (Android 4.0).
      *
-     * Formerly, returned a customized implementation of {@link android.support.v4.app.NotificationCompat.Builder}
+     * Formerly, returned a customized implementation of {@link androidx.core.app.NotificationCompat.Builder}
      * for Android API levels >= 8 and < 14.
      *
      * Kept in place for the extra abstraction level; notifications in the app need a review, and they

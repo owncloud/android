@@ -36,7 +36,6 @@ import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
 import android.os.Process;
-import android.support.v4.content.LocalBroadcastManager;
 import android.util.Pair;
 
 import com.owncloud.android.MainApp;
@@ -45,13 +44,13 @@ import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.OwnCloudClientManagerFactory;
+import com.owncloud.android.lib.common.accounts.AccountUtils.AccountNotFoundException;
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentials;
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentialsFactory;
-import com.owncloud.android.lib.common.accounts.AccountUtils.AccountNotFoundException;
 import com.owncloud.android.lib.common.authentication.oauth.OAuth2GrantType;
-import com.owncloud.android.lib.common.authentication.oauth.OAuth2RequestBuilder;
 import com.owncloud.android.lib.common.authentication.oauth.OAuth2Provider;
 import com.owncloud.android.lib.common.authentication.oauth.OAuth2ProvidersRegistry;
+import com.owncloud.android.lib.common.authentication.oauth.OAuth2RequestBuilder;
 import com.owncloud.android.lib.common.operations.OnRemoteOperationListener;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
@@ -82,6 +81,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ConcurrentMap;
 
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+
 public class OperationsService extends Service {
 
     private static final String TAG = OperationsService.class.getSimpleName();
@@ -89,7 +90,6 @@ public class OperationsService extends Service {
     public static final String EXTRA_ACCOUNT = "ACCOUNT";
     public static final String EXTRA_SERVER_URL = "SERVER_URL";
     public static final String EXTRA_OAUTH2_AUTHORIZATION_CODE = "OAUTH2_AUTHORIZATION_CODE";
-    public static final String EXTRA_OAUTH2_QUERY_PARAMETERS = "OAUTH2_AUTHORIZATION_QUERY_PARAMETERS";
     public static final String EXTRA_REMOTE_PATH = "REMOTE_PATH";
     public static final String EXTRA_NEWNAME = "NEWNAME";
     public static final String EXTRA_REMOVE_ONLY_LOCAL = "REMOVE_LOCAL_COPY";
@@ -151,11 +151,11 @@ public class OperationsService extends Service {
 
     private ServiceHandler mOperationsHandler;
     private OperationsServiceBinder mOperationsBinder;
-    
+
     private SyncFolderHandler mSyncFolderHandler;
 
     private LocalBroadcastManager mLocalBroadcastManager;
-    
+
     /**
      * Service initialization
      */
@@ -170,7 +170,7 @@ public class OperationsService extends Service {
         thread.start();
         mOperationsHandler = new ServiceHandler(thread.getLooper(), this);
         mOperationsBinder = new OperationsServiceBinder(mOperationsHandler);
-        
+
         /// Separated worker thread for download of folders (WIP)
         thread = new HandlerThread("Syncfolder thread", Process.THREAD_PRIORITY_BACKGROUND);
         thread.start();
@@ -219,7 +219,7 @@ public class OperationsService extends Service {
             msg.arg1 = startId;
             mOperationsHandler.sendMessage(msg);
         }
-        
+
         return START_NOT_STICKY;
     }
 

@@ -67,7 +67,7 @@
             android:textColor="@color/secondaryTextColor"/>
     </LinearLayout>
 
-    <android.support.v7.widget.AppCompatButton
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/fingerprintCancelButton"
         style="@style/Button.Primary"
         android:layout_width="wrap_content"

@@ -72,7 +72,7 @@
                     android:orientation="vertical"
                     android:padding="8dp">
 
-                    <android.support.v7.widget.AppCompatButton
+                    <androidx.appcompat.widget.AppCompatButton
                         android:id="@+id/centeredRefreshButton"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -205,7 +205,7 @@
             android:layout_alignParentBottom="true"
             android:orientation="vertical">
 
-            <android.support.v7.widget.AppCompatButton
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/loginButton"
                 android:layout_width="400dp"
                 android:layout_height="wrap_content"
