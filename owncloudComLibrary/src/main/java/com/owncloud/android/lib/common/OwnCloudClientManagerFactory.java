@@ -82,18 +82,13 @@ public class OwnCloudClientManagerFactory {
         if (sDefaultSingleton == null) {
             return false;
         }
-        if (policy == Policy.ALWAYS_NEW_CLIENT &&
-                !(sDefaultSingleton instanceof SimpleFactoryManager)) {
+        if (policy == Policy.ALWAYS_NEW_CLIENT && !(sDefaultSingleton instanceof SimpleFactoryManager)) {
             return true;
         }
-        if (policy == Policy.SINGLE_SESSION_PER_ACCOUNT &&
-                !(sDefaultSingleton instanceof SingleSessionManager)) {
-            return true;
-        }
-        return false;
+        return policy == Policy.SINGLE_SESSION_PER_ACCOUNT && !(sDefaultSingleton instanceof SingleSessionManager);
     }
 
-    public static enum Policy {
+    public enum Policy {
         ALWAYS_NEW_CLIENT,
         SINGLE_SESSION_PER_ACCOUNT,
         SINGLE_SESSION_PER_ACCOUNT_IF_SERVER_SUPPORTS_SERVER_MONITORING

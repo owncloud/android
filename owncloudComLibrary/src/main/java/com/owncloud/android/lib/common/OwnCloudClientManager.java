@@ -43,12 +43,10 @@ import java.io.IOException;
 public interface OwnCloudClientManager {
 
     OwnCloudClient getClientFor(OwnCloudAccount account, Context context) throws AccountNotFoundException,
-            OperationCanceledException, AuthenticatorException,
-            IOException;
+            OperationCanceledException, AuthenticatorException, IOException;
 
     OwnCloudClient removeClientFor(OwnCloudAccount account);
 
-    void saveAllClients(Context context, String accountType)
-            throws AccountNotFoundException, AuthenticatorException,
-            IOException, OperationCanceledException;
+    void saveAllClients(Context context, String accountType) throws AccountNotFoundException, AuthenticatorException, IOException,
+            OperationCanceledException;
 }

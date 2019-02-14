@@ -33,7 +33,6 @@ import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertPathValidatorException;
-import java.security.cert.CertStoreException;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateExpiredException;
 import java.security.cert.CertificateNotYetValidException;
@@ -46,20 +45,17 @@ public class AdvancedX509TrustManager implements X509TrustManager {
 
     private static final String TAG = AdvancedX509TrustManager.class.getSimpleName();
 
-    private X509TrustManager mStandardTrustManager = null;
+    private X509TrustManager mStandardTrustManager;
     private KeyStore mKnownServersKeyStore;
 
     /**
      * Constructor for AdvancedX509TrustManager
      *
      * @param knownServersKeyStore Local certificates store with server certificates explicitly trusted by the user.
-     * @throws CertStoreException When no default X509TrustManager instance was found in the system.
      */
-    public AdvancedX509TrustManager(KeyStore knownServersKeyStore)
-            throws NoSuchAlgorithmException, KeyStoreException, CertStoreException {
+    public AdvancedX509TrustManager(KeyStore knownServersKeyStore) throws NoSuchAlgorithmException, KeyStoreException {
         super();
-        TrustManagerFactory factory = TrustManagerFactory
-                .getInstance(TrustManagerFactory.getDefaultAlgorithm());
+        TrustManagerFactory factory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
         factory.init((KeyStore) null);
         mStandardTrustManager = findX509TrustManager(factory);
 
@@ -71,13 +67,12 @@ public class AdvancedX509TrustManager implements X509TrustManager {
      *
      * @param factory TrustManagerFactory to inspect in the search for a X509TrustManager
      * @return The first X509TrustManager found in factory.
-     * @throws CertStoreException When no X509TrustManager instance was found in factory
      */
-    private X509TrustManager findX509TrustManager(TrustManagerFactory factory) throws CertStoreException {
+    private X509TrustManager findX509TrustManager(TrustManagerFactory factory) {
         TrustManager tms[] = factory.getTrustManagers();
-        for (int i = 0; i < tms.length; i++) {
-            if (tms[i] instanceof X509TrustManager) {
-                return (X509TrustManager) tms[i];
+        for (TrustManager tm : tms) {
+            if (tm instanceof X509TrustManager) {
+                return (X509TrustManager) tm;
             }
         }
         return null;
@@ -116,7 +111,7 @@ public class AdvancedX509TrustManager implements X509TrustManager {
                     previousCause = cause;
                     cause = cause.getCause();
                 }
-                if (cause != null && cause instanceof CertPathValidatorException) {
+                if (cause instanceof CertPathValidatorException) {
                     result.setCertPathValidatorException((CertPathValidatorException) cause);
                 } else {
                     result.setOtherCertificateException(c);

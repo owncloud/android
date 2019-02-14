@@ -58,15 +58,8 @@ public class GetRemoteUserAvatarOperation extends RemoteOperation<GetRemoteUserA
      */
     private int mDimension;
 
-    /**
-     * Etag of current local copy of the avatar; if not null, remote avatar will be downloaded only
-     * if its Etag changed.
-     */
-    private String mCurrentEtag;
-
-    public GetRemoteUserAvatarOperation(int dimension, String currentEtag) {
+    public GetRemoteUserAvatarOperation(int dimension) {
         mDimension = dimension;
-        mCurrentEtag = currentEtag;
     }
 
     @Override
@@ -78,9 +71,7 @@ public class GetRemoteUserAvatarOperation extends RemoteOperation<GetRemoteUserA
         ByteArrayOutputStream bos = null;
 
         try {
-            final String url =
-                    client.getBaseUri() + NON_OFFICIAL_AVATAR_PATH +
-                            client.getCredentials().getUsername() + "/" + mDimension;
+            final String url = client.getBaseUri() + NON_OFFICIAL_AVATAR_PATH + client.getCredentials().getUsername() + "/" + mDimension;
             Log_OC.d(TAG, "avatar URI: " + url);
 
             getMethod = new GetMethod(new URL(url));
@@ -101,9 +92,7 @@ public class GetRemoteUserAvatarOperation extends RemoteOperation<GetRemoteUserA
                 String contentType = getMethod.getResponseHeader(HttpConstants.CONTENT_TYPE_HEADER);
 
                 if (contentType == null || !contentType.startsWith("image")) {
-                    Log_OC.e(
-                            TAG, "Not an image, failing with no avatar"
-                    );
+                    Log_OC.e(TAG, "Not an image, failing with no avatar");
                     result = new RemoteOperationResult<>(RemoteOperationResult.ResultCode.FILE_NOT_FOUND);
                     return result;
                 }
@@ -115,12 +104,10 @@ public class GetRemoteUserAvatarOperation extends RemoteOperation<GetRemoteUserA
                 bis = new BufferedInputStream(inputStream);
                 bos = new ByteArrayOutputStream(totalToTransfer);
 
-                long transferred = 0;
                 byte[] bytes = new byte[4096];
-                int readResult = 0;
+                int readResult;
                 while ((readResult = bis.read(bytes)) != -1) {
                     bos.write(bytes, 0, readResult);
-                    transferred += readResult;
                 }
                 // TODO check total bytes transferred?
 

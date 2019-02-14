@@ -41,9 +41,6 @@ public class BearerCredentials {
      * @param token The bearer token
      */
     public BearerCredentials(String token) {
-        /*if (token == null) {
-            throw new IllegalArgumentException("Bearer token may not be null");            
-        }*/
         mAccessToken = (token == null) ? "" : token;
     }
 
