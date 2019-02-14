@@ -62,8 +62,8 @@ android {
         minSdkVersion 15
         targetSdkVersion 28
 
-        versionCode = 20900300
-        versionName = "2.9.3"
+        versionCode = 21000100
+        versionName = "2.10.0-beta.1"
 
         buildConfigField "String", gitRemote, "\"" + getGitOriginRemote() + "\""
         buildConfigField "String", commitSHA1, "\"" + getLatestGitHash() + "\""
