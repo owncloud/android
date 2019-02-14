@@ -1,3 +1,15 @@
+## 2.10.0 beta v1 (February 2018)
+- Android 9 (P) support (contribution)
+- Select all and inverse when uploading files (contribution)
+- Batched notifications for file deletions (contribution)
+- Commit hash in settings (contribution)
+- UI improvements, including:
+  + Disable log in button when credentials are empty (contribution)
+  + Warning to properly set camera folder in camera uploads
+- Bug fixes, including:
+  + Some camera upload issues in Android 9 (P) (contribution)
+  + Fix eye icon not visible to show/hide password in public shares (contribution)
+
 ## 2.9.3 (November 2018)
 - Bug fixes for users with username containing @ character
 
