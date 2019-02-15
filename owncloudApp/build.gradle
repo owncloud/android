@@ -42,6 +42,8 @@ dependencies {
     androidTestImplementation 'androidx.annotation:annotation:1.0.1'
     androidTestImplementation "android.arch.persistence.room:testing:$roomVersion"
     androidTestImplementation "android.arch.core:core-testing:$archLifecycleVersion"
+    androidTestImplementation "org.mockito:mockito-android:$mockitoVersion"
+    androidTestImplementation "org.mockito:mockito-core:$mockitoVersion"
 
     // Image loading
     implementation('com.github.bumptech.glide:glide:4.6.1') {

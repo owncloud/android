@@ -20,9 +20,9 @@
 package com.owncloud.android.shares.db
 
 import android.support.test.InstrumentationRegistry
-import com.android.example.github.util.LiveDataTestUtil.getValue
 import com.owncloud.android.db.OwncloudDatabase
 import com.owncloud.android.lib.resources.shares.ShareType
+import com.owncloud.android.utils.LiveDataTestUtil.getValue
 import com.owncloud.android.utils.TestUtil
 import junit.framework.Assert.assertEquals
 import org.hamcrest.CoreMatchers.notNullValue
