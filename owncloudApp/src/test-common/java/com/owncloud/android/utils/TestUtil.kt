@@ -19,14 +19,10 @@
 
 package com.owncloud.android.utils
 
+import android.accounts.Account
 import com.owncloud.android.lib.resources.shares.RemoteShare
 import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.shares.db.OCShare
-import java.lang.reflect.AccessibleObject.setAccessible
-import org.junit.internal.Classes.getClass
-import android.accounts.Account
-
-
 
 object TestUtil {
     private fun createShare(
