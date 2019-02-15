@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.android.example.github.util
+package com.owncloud.android.utils
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.Observer
