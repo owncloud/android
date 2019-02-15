@@ -21,11 +21,11 @@ package com.owncloud.android.shares.datasources
 
 import android.arch.core.executor.testing.InstantTaskExecutorRule
 import android.arch.lifecycle.MutableLiveData
-import com.android.example.github.util.LiveDataTestUtil.getValue
 import com.owncloud.android.db.OwncloudDatabase
 import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.shares.db.OCShare
 import com.owncloud.android.shares.db.OCShareDao
+import com.owncloud.android.utils.LiveDataTestUtil.getValue
 import com.owncloud.android.utils.TestUtil
 import org.junit.Assert.assertEquals
 import org.junit.Before
