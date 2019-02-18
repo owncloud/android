@@ -23,7 +23,7 @@ dependencies {
 
     // Dependencies for unit tests
     testImplementation "junit:junit:$junitVersion"
-    testImplementation "android.arch.core:core-testing:$archLifecycleVersion"
+    testImplementation "androidx.arch.core:core-testing:$archLifecycleVersion"
     testImplementation "org.mockito:mockito-core:$mockitoVersion"
 
     // Dependencies for instrumented tests
@@ -40,8 +40,8 @@ dependencies {
     androidTestImplementation 'androidx.test.uiautomator:uiautomator:2.2.0'
     // fix conflict in dependencies; see http://g.co/androidstudio/app-test-app-conflict for details
     androidTestImplementation 'androidx.annotation:annotation:1.0.1'
-    androidTestImplementation "android.arch.persistence.room:testing:$roomVersion"
-    androidTestImplementation "android.arch.core:core-testing:$archLifecycleVersion"
+    androidTestImplementation "androidx.room:room-testing:$roomVersion"
+    androidTestImplementation "androidx.arch.core:core-testing:$archLifecycleVersion"
     androidTestImplementation "org.mockito:mockito-android:$mockitoVersion"
     androidTestImplementation "org.mockito:mockito-core:$mockitoVersion"
 
@@ -63,13 +63,13 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
 
     // Architecture lifecycle components
-    implementation "android.arch.lifecycle:extensions:$archLifecycleVersion"
-    implementation "android.arch.lifecycle:viewmodel:$archLifecycleVersion"
-    kapt "android.arch.lifecycle:compiler:$archLifecycleVersion"
+    implementation "androidx.lifecycle:lifecycle-extensions:$archLifecycleVersion"
+    implementation "androidx.lifecycle:lifecycle-viewmodel:$archLifecycleVersion"
+    kapt "androidx.lifecycle:lifecycle-compiler:$archLifecycleVersion"
 
     // Room
-    implementation "android.arch.persistence.room:runtime:$roomVersion"
-    kapt "android.arch.persistence.room:compiler:$roomVersion"
+    implementation "androidx.room:room-runtime:$roomVersion"
+    kapt "androidx.room:room-compiler:$roomVersion"
 }
 
 tasks.withType(Test) {

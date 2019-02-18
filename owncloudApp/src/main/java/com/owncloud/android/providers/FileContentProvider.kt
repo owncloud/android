@@ -25,8 +25,6 @@
 package com.owncloud.android.providers
 
 import android.accounts.AccountManager
-import android.arch.persistence.db.SupportSQLiteDatabase
-import android.arch.persistence.db.SupportSQLiteQueryBuilder
 import android.content.*
 import android.database.Cursor
 import android.database.SQLException
@@ -37,6 +35,8 @@ import android.net.Uri
 import android.os.CancellationSignal
 import android.os.ParcelFileDescriptor
 import android.text.TextUtils
+import androidx.sqlite.db.SupportSQLiteDatabase
+import androidx.sqlite.db.SupportSQLiteQueryBuilder
 import com.owncloud.android.AppExecutors
 import com.owncloud.android.MainApp
 import com.owncloud.android.R

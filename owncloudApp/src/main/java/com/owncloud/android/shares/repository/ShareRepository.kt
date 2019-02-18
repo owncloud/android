@@ -19,10 +19,10 @@
 
 package com.owncloud.android.shares.repository
 
-import android.arch.lifecycle.LiveData
-import com.owncloud.android.vo.Resource
+import androidx.lifecycle.LiveData
 import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.shares.db.OCShare
+import com.owncloud.android.vo.Resource
 
 interface ShareRepository {
     fun loadSharesForFile(
