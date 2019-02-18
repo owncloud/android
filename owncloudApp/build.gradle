@@ -27,6 +27,7 @@ dependencies {
     testImplementation "org.mockito:mockito-core:$mockitoVersion"
 
     // Dependencies for instrumented tests
+    androidTestImplementation 'androidx.test.ext:junit:1.1.0'
     // JUnit4 Rules
     androidTestImplementation 'androidx.test:rules:1.1.1'
     androidTestImplementation 'androidx.test.ext:junit:1.1.0'

@@ -20,8 +20,8 @@
 package com.owncloud.android.shares.viewmodel
 
 import android.accounts.Account
-import android.arch.core.executor.testing.InstantTaskExecutorRule
-import android.arch.lifecycle.MutableLiveData
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.lifecycle.MutableLiveData
 import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.shares.db.OCShare
 import com.owncloud.android.shares.repository.OCShareRepository
