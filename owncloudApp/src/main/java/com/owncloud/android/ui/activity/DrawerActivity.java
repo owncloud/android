@@ -29,11 +29,14 @@ import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
+import android.view.DisplayCutout;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -144,6 +147,39 @@ public abstract class DrawerActivity extends ToolbarActivity {
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
                 mNavigationView.setItemIconTintList(null);
             }
+
+            //Notch support
+            mNavigationView.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
+                @Override
+                public void onViewAttachedToWindow(View v) {
+
+                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+
+                        DisplayCutout displayCutout = v.getRootWindowInsets().getDisplayCutout();
+
+                        if (displayCutout != null) {
+                            RelativeLayout rl_drawer_active_user =
+                                    (RelativeLayout) findNavigationViewChildById(R.id.drawer_active_user);
+
+                            int orientation = getResources().getConfiguration().orientation;
+                            if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+                                int displayCutoutDP = (displayCutout.getSafeInsetTop()) /
+                                                (getResources().getDisplayMetrics().densityDpi /
+                                                        DisplayMetrics.DENSITY_DEFAULT);
+                                rl_drawer_active_user.getLayoutParams().height =
+                                        (int) getResources().getDimension(R.dimen.nav_drawer_header_height) +
+                                                displayCutoutDP;
+                            } else {
+                                rl_drawer_active_user.getLayoutParams().height =
+                                        (int) getResources().getDimension(R.dimen.nav_drawer_header_height);
+                            }
+                        }
+                    }
+                }
+                @Override
+                public void onViewDetachedFromWindow(View v) {
+                }
+            });
 
             setupDrawerContent(mNavigationView);
 
