@@ -19,7 +19,10 @@
 
 package com.owncloud.android.shares.db
 
-import android.support.test.InstrumentationRegistry
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.filters.SmallTest
+import androidx.test.platform.app.InstrumentationRegistry
 import com.owncloud.android.db.OwncloudDatabase
 import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.utils.LiveDataTestUtil.getValue
@@ -27,13 +30,23 @@ import com.owncloud.android.utils.TestUtil
 import junit.framework.Assert.assertEquals
 import org.hamcrest.CoreMatchers.notNullValue
 import org.hamcrest.MatcherAssert.assertThat
+import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
+import org.junit.runner.RunWith
 
+@RunWith(AndroidJUnit4::class)
+@SmallTest
 class OCShareDaoTest {
-    private var ocShareDao: OCShareDao
+    private lateinit var ocShareDao: OCShareDao
 
-    init {
-        val context = InstrumentationRegistry.getTargetContext()
+    @Rule
+    @JvmField
+    val instantExecutorRule = InstantTaskExecutorRule()
+
+    @Before
+    fun setUp() {
+        val context = InstrumentationRegistry.getInstrumentation().targetContext
         OwncloudDatabase.switchToInMemory(context)
         val db: OwncloudDatabase = OwncloudDatabase.getDatabase(context)
         ocShareDao = db.shareDao()
