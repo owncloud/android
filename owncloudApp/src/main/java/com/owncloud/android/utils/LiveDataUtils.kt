@@ -19,9 +19,9 @@
 
 package com.owncloud.android.utils
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MediatorLiveData
-import android.arch.lifecycle.Observer
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.Observer
 
 fun <T> LiveData<T>.distinctUntilChanged(): LiveData<T> {
     val distinctLiveData = MediatorLiveData<T>()

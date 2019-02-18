@@ -19,7 +19,7 @@
 
 package com.owncloud.android.shares.repository
 
-import android.arch.lifecycle.LiveData
+import androidx.lifecycle.LiveData
 import com.owncloud.android.AppExecutors
 import com.owncloud.android.NetworkBoundResource
 import com.owncloud.android.lib.resources.shares.ShareParserResult
