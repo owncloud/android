@@ -21,9 +21,9 @@ package com.owncloud.android.shares.provider
 
 import android.content.ContentResolver
 import android.content.ContentValues
-import android.support.test.InstrumentationRegistry
-import android.support.test.filters.SmallTest
-import android.support.test.runner.AndroidJUnit4
+import androidx.test.filters.SmallTest
+import androidx.test.platform.app.InstrumentationRegistry
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.owncloud.android.db.OwncloudDatabase
 import com.owncloud.android.db.ProviderMeta.ProviderTableMeta
 import org.hamcrest.Matchers
@@ -42,7 +42,7 @@ class SharesContentProviderTest {
 
     @Before
     fun setUp() {
-        val context = InstrumentationRegistry.getTargetContext()
+        val context = InstrumentationRegistry.getInstrumentation().targetContext
         OwncloudDatabase.switchToInMemory(context)
         mContentResolver = context.contentResolver
     }
