@@ -20,10 +20,9 @@
 package com.owncloud.android.shares.viewmodel
 
 import android.accounts.Account
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.ViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.ViewModel
 import com.owncloud.android.MainApp
-import com.owncloud.android.vo.Resource
 import com.owncloud.android.lib.common.OwnCloudAccount
 import com.owncloud.android.lib.common.OwnCloudClientManagerFactory
 import com.owncloud.android.lib.resources.shares.ShareType
@@ -32,6 +31,7 @@ import com.owncloud.android.shares.datasources.OCRemoteSharesDataSource
 import com.owncloud.android.shares.db.OCShare
 import com.owncloud.android.shares.repository.OCShareRepository
 import com.owncloud.android.shares.repository.ShareRepository
+import com.owncloud.android.vo.Resource
 
 /**
  * View Model to keep a reference to the share repository and an up-to-date list of a shares

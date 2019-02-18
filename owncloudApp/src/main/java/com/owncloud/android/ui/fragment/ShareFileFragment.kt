@@ -25,16 +25,17 @@ package com.owncloud.android.ui.fragment
 
 import android.accounts.Account
 import android.app.Activity
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.design.widget.Snackbar
-import android.support.v4.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
+import com.google.android.material.snackbar.Snackbar
 import com.owncloud.android.R
-import com.owncloud.android.vo.Status
 import com.owncloud.android.ViewModelFactory
 import com.owncloud.android.authentication.AccountUtils
 import com.owncloud.android.datamodel.OCFile
@@ -53,6 +54,8 @@ import com.owncloud.android.ui.dialog.RemoveShareDialogFragment
 import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter
 import com.owncloud.android.utils.DisplayUtils
 import com.owncloud.android.utils.MimetypeIconUtil
+import com.owncloud.android.vo.Resource
+import com.owncloud.android.vo.Status
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -439,7 +442,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
         } else {
             ocShareViewModel.sharesForFile.observe(
                 this,
-                android.arch.lifecycle.Observer { resource ->
+                Observer { resource ->
                     when (resource?.status) {
                         Status.SUCCESS -> {
                             mPublicLinks = resource.data as ArrayList<OCShare>
@@ -459,7 +462,9 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
                         Status.STOP_LOADING -> {
                             (activity as ShareActivity).dismissLoadingDialog()
                         }
-                        else -> {}
+                        else -> {
+                            Log.d(TAG, "Unknown status when observing shares")
+                        }
                     }
                 }
             )

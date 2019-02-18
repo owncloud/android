@@ -19,7 +19,7 @@
 
 package com.owncloud.android.shares.datasources
 
-import android.arch.lifecycle.LiveData
+import androidx.lifecycle.LiveData
 import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.shares.db.OCShare
 

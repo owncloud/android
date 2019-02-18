@@ -19,8 +19,8 @@
 
 package com.owncloud.android.shares.db
 
-import android.arch.lifecycle.LiveData
-import android.arch.persistence.room.*
+import androidx.lifecycle.LiveData
+import androidx.room.*
 import com.owncloud.android.db.ProviderMeta.ProviderTableMeta
 
 @Dao
