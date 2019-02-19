@@ -57,6 +57,7 @@ import com.owncloud.android.utils.DisplayUtils
 import com.owncloud.android.utils.MimetypeIconUtil
 import com.owncloud.android.vo.Resource
 import com.owncloud.android.vo.Status
+import java.io.File
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -463,10 +464,10 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
                             view?.let { Snackbar.make(it, errorMessage, Snackbar.LENGTH_SHORT).show() }
                         }
                         Status.LOADING -> {
-                            (activity as ShareActivity).showLoadingDialog(R.string.common_loading)
+                            (activity as FileActivity).showLoadingDialog(R.string.common_loading)
                         }
                         Status.STOP_LOADING -> {
-                            (activity as ShareActivity).dismissLoadingDialog()
+                            (activity as FileActivity).dismissLoadingDialog()
                         }
                         else -> {
                             Log.d(TAG, "Unknown status when observing shares")

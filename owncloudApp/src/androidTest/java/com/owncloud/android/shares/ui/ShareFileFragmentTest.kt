@@ -1,3 +1,22 @@
+/**
+ * ownCloud Android client application
+ *
+ * @author David González Verdugo
+ * Copyright (C) 2019 ownCloud GmbH.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.owncloud.android.shares.ui
 
 import android.accounts.Account
@@ -9,6 +28,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.ActivityTestRule
 import com.owncloud.android.R
 import com.owncloud.android.datamodel.OCFile
+import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.status.OwnCloudVersion
 import com.owncloud.android.shares.db.OCShare
 import com.owncloud.android.shares.viewmodel.OCShareViewModel
@@ -25,7 +45,7 @@ import org.mockito.Mockito.`when`
 import org.mockito.Mockito.mock
 
 @RunWith(AndroidJUnit4::class)
-class ShareFragmentTest {
+class ShareFileFragmentTest {
     @Rule
     @JvmField
     val activityRule = ActivityTestRule(TestShareFileActivity::class.java, true, true)
@@ -35,10 +55,9 @@ class ShareFragmentTest {
     private lateinit var ocShareViewModel: OCShareViewModel
 
     @Before
-    fun init() {
+    fun setUp() {
         val account = mock(Account::class.java)
         val ownCloudVersion = mock(OwnCloudVersion::class.java)
-
         `when`(ownCloudVersion.isSearchUsersSupported).thenReturn(true)
 
         shareFragment = ShareFileFragment.newInstance(
@@ -48,11 +67,9 @@ class ShareFragmentTest {
         )
 
         ocShareViewModel = mock(OCShareViewModel::class.java)
-
         `when`(ocShareViewModel.sharesForFile).thenReturn(sharesLiveData)
 
         shareFragment.mViewModelFactory = ViewModelUtil.createFor(ocShareViewModel)
-
         activityRule.activity.setFragment(shareFragment)
     }
 
@@ -64,6 +81,19 @@ class ShareFragmentTest {
     @Test
     fun showUsersAndGroupsSectionTitle() {
         onView(withText(R.string.share_with_user_section_title)).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun showLoadingDialog() {
+        sharesLiveData.postValue(Resource.loading())
+        onView(withId(R.id.loadingLayout)).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun showNoPublicShares() {
+        val publicShares = arrayListOf<OCShare>()
+        sharesLiveData.postValue(Resource.success(publicShares))
+        onView(withId(R.id.shareNoPublicLinks)).check(matches(withText(R.string.share_no_public_links)))
     }
 
     @Test
@@ -94,6 +124,12 @@ class ShareFragmentTest {
         onView(withText("Image link")).check(matches(isDisplayed()))
         onView(withText("Image link 2")).check(matches(isDisplayed()))
         onView(withText("Image link 3")).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun showError() {
+        sharesLiveData.postValue(Resource.error(RemoteOperationResult.ResultCode.SERVICE_UNAVAILABLE))
+        onView(withId(R.id.snackbar_text)).check(matches(withText(R.string.service_unavailable)))
     }
 
     fun getOCFileForTesting(name: String = "default"): OCFile {
