@@ -1,6 +1,7 @@
 /* ownCloud Android Library is available under MIT license
  *   @author masensio
  *   @author Semih Serhat Karakaya <karakayasemi@itu.edu.tr>
+ *   @author David González Verdugo
  *   Copyright (C) 2019 ownCloud GmbH.
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -74,6 +75,7 @@ public class GetRemoteCapabilitiesOperation extends RemoteOperation<OCCapability
     private static final String NODE_FILES_SHARING = "files_sharing";
     private static final String NODE_PUBLIC = "public";
     private static final String NODE_PASSWORD = "password";
+    private static final String NODE_ENFORCED_FOR = "enforced_for";
     private static final String NODE_EXPIRE_DATE = "expire_date";
     private static final String NODE_USER = "user";
     private static final String NODE_FEDERATION = "federation";
@@ -94,6 +96,9 @@ public class GetRemoteCapabilitiesOperation extends RemoteOperation<OCCapability
     private static final String PROPERTY_API_ENABLED = "api_enabled";
     private static final String PROPERTY_ENABLED = "enabled";
     private static final String PROPERTY_ENFORCED = "enforced";
+    private static final String PROPERTY_ENFORCED_READ_ONLY = "read_only";
+    private static final String PROPERTY_ENFORCED_READ_WRITE = "read_write";
+    private static final String PROPERTY_ENFORCED_UPLOAD_ONLY = "upload_only";
     private static final String PROPERTY_DAYS = "days";
     private static final String PROPERTY_SEND_MAIL = "send_mail";
     private static final String PROPERTY_UPLOAD = "upload";
@@ -181,10 +186,38 @@ public class GetRemoteCapabilitiesOperation extends RemoteOperation<OCCapability
                                 JSONObject respPublic = respFilesSharing.getJSONObject(NODE_PUBLIC);
                                 capability.setFilesSharingPublicEnabled(CapabilityBooleanType.fromBooleanValue(
                                         respPublic.getBoolean(PROPERTY_ENABLED)));
+
                                 if (respPublic.has(NODE_PASSWORD)) {
+                                    JSONObject respPassword = respPublic.getJSONObject(NODE_PASSWORD);
                                     capability.setFilesSharingPublicPasswordEnforced(
                                             CapabilityBooleanType.fromBooleanValue(
-                                                    respPublic.getJSONObject(NODE_PASSWORD).getBoolean(PROPERTY_ENFORCED)));
+                                                    respPublic.getJSONObject(NODE_PASSWORD).
+                                                            getBoolean(PROPERTY_ENFORCED)
+                                            )
+                                    );
+
+                                    if(respPassword.has(NODE_ENFORCED_FOR)) {
+                                        capability.setFilesSharingPublicPasswordEnforcedReadOnly(
+                                                CapabilityBooleanType.fromBooleanValue(
+                                                        respPassword.getJSONObject(NODE_ENFORCED_FOR).
+                                                                getBoolean(PROPERTY_ENFORCED_READ_ONLY)
+                                                )
+                                        );
+
+                                        capability.setFilesSharingPublicPasswordEnforcedReadWrite(
+                                                CapabilityBooleanType.fromBooleanValue(
+                                                        respPassword.getJSONObject(NODE_ENFORCED_FOR).
+                                                                getBoolean(PROPERTY_ENFORCED_READ_WRITE)
+                                                )
+                                        );
+
+                                        capability.setFilesSharingPublicPasswordEnforcedUploadOnly(
+                                                CapabilityBooleanType.fromBooleanValue(
+                                                        respPassword.getJSONObject(NODE_ENFORCED_FOR).
+                                                                getBoolean(PROPERTY_ENFORCED_UPLOAD_ONLY)
+                                                )
+                                        );
+                                    }
                                 }
                                 if (respPublic.has(NODE_EXPIRE_DATE)) {
                                     JSONObject respExpireDate = respPublic.getJSONObject(NODE_EXPIRE_DATE);

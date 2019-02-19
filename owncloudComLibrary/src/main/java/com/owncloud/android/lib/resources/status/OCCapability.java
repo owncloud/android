@@ -1,6 +1,7 @@
 /* ownCloud Android Library is available under MIT license
  *   @author masensio
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   @author David González Verdugo
+ *   Copyright (C) 2019 ownCloud GmbH.
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -49,6 +50,9 @@ public class OCCapability {
 
     private CapabilityBooleanType mFilesSharingPublicEnabled;
     private CapabilityBooleanType mFilesSharingPublicPasswordEnforced;
+    private CapabilityBooleanType mFilesSharingPublicPasswordEnforcedReadOnly;
+    private CapabilityBooleanType mFilesSharingPublicPasswordEnforcedReadWrite;
+    private CapabilityBooleanType mFilesSharingPublicPasswordEnforcedUploadOnly;
     private CapabilityBooleanType mFilesSharingPublicExpireDateEnabled;
     private int mFilesSharingPublicExpireDateDays;
     private CapabilityBooleanType mFilesSharingPublicExpireDateEnforced;
@@ -84,6 +88,9 @@ public class OCCapability {
         mFilesSharingApiEnabled = CapabilityBooleanType.UNKNOWN;
         mFilesSharingPublicEnabled = CapabilityBooleanType.UNKNOWN;
         mFilesSharingPublicPasswordEnforced = CapabilityBooleanType.UNKNOWN;
+        mFilesSharingPublicPasswordEnforcedReadOnly = CapabilityBooleanType.UNKNOWN;
+        mFilesSharingPublicPasswordEnforcedReadWrite = CapabilityBooleanType.UNKNOWN;
+        mFilesSharingPublicPasswordEnforcedUploadOnly = CapabilityBooleanType.UNKNOWN;
         mFilesSharingPublicExpireDateEnabled = CapabilityBooleanType.UNKNOWN;
         mFilesSharingPublicExpireDateDays = 0;
         mFilesSharingPublicExpireDateEnforced = CapabilityBooleanType.UNKNOWN;
@@ -188,6 +195,33 @@ public class OCCapability {
 
     public void setFilesSharingPublicPasswordEnforced(CapabilityBooleanType filesSharingPublicPasswordEnforced) {
         this.mFilesSharingPublicPasswordEnforced = filesSharingPublicPasswordEnforced;
+    }
+
+    public CapabilityBooleanType getFilesSharingPublicPasswordEnforcedReadOnly() {
+        return mFilesSharingPublicPasswordEnforcedReadOnly;
+    }
+
+    public void setFilesSharingPublicPasswordEnforcedReadOnly(
+            CapabilityBooleanType filesSharingPublicPasswordEnforcedReadOnly) {
+        this.mFilesSharingPublicPasswordEnforcedReadOnly = filesSharingPublicPasswordEnforcedReadOnly;
+    }
+
+    public CapabilityBooleanType getFilesSharingPublicPasswordEnforcedReadWrite() {
+        return mFilesSharingPublicPasswordEnforcedReadWrite;
+    }
+
+    public void setFilesSharingPublicPasswordEnforcedReadWrite(
+            CapabilityBooleanType filesSharingPublicPasswordEnforcedReadWrite) {
+        this.mFilesSharingPublicPasswordEnforcedReadWrite = filesSharingPublicPasswordEnforcedReadWrite;
+    }
+
+    public CapabilityBooleanType getFilesSharingPublicPasswordEnforcedUploadOnly() {
+        return mFilesSharingPublicPasswordEnforcedUploadOnly;
+    }
+
+    public void setFilesSharingPublicPasswordEnforcedUploadOnly(
+            CapabilityBooleanType filesSharingPublicPasswordEnforcedUploadOnly) {
+        this.mFilesSharingPublicPasswordEnforcedUploadOnly = filesSharingPublicPasswordEnforcedUploadOnly;
     }
 
     public CapabilityBooleanType getFilesSharingPublicExpireDateEnabled() {
