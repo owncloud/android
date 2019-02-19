@@ -1936,6 +1936,12 @@ public class FileDataStorageManager {
                 capability.getFilesSharingPublicEnabled().getValue());
         cv.put(ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED,
                 capability.getFilesSharingPublicPasswordEnforced().getValue());
+        cv.put(ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_READ_ONLY,
+                capability.getFilesSharingPublicPasswordEnforcedReadOnly().getValue());
+        cv.put(ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_READ_WRITE,
+                capability.getFilesSharingPublicPasswordEnforcedReadWrite().getValue());
+        cv.put(ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_UPLOAD_ONLY,
+                capability.getFilesSharingPublicPasswordEnforcedUploadOnly().getValue());
         cv.put(ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_ENABLED,
                 capability.getFilesSharingPublicExpireDateEnabled().getValue());
         cv.put(ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_DAYS,
@@ -2038,7 +2044,7 @@ public class FileDataStorageManager {
     }
 
     public OCCapability getCapability(String accountName){
-        OCCapability capability = null;
+        OCCapability capability;
         Cursor c = getCapabilityCursorForAccount(accountName);
 
         capability = new OCCapability();    // default value with all UNKNOWN
@@ -2076,6 +2082,12 @@ public class FileDataStorageManager {
                     .getColumnIndex(ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_ENABLED))));
             capability.setFilesSharingPublicPasswordEnforced(CapabilityBooleanType.fromValue(c.getInt(c
                     .getColumnIndex(ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED))));
+            capability.setFilesSharingPublicPasswordEnforcedReadOnly(CapabilityBooleanType.fromValue(c.getInt(c
+                    .getColumnIndex(ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_READ_ONLY))));
+            capability.setFilesSharingPublicPasswordEnforcedReadWrite(CapabilityBooleanType.fromValue(c.getInt(c
+                    .getColumnIndex(ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_READ_WRITE))));
+            capability.setFilesSharingPublicPasswordEnforcedUploadOnly(CapabilityBooleanType.fromValue(c.getInt(c
+                    .getColumnIndex(ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_UPLOAD_ONLY))));
             capability.setFilesSharingPublicExpireDateEnabled(CapabilityBooleanType.fromValue(c.getInt(c
                     .getColumnIndex(ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_ENABLED))));
             capability.setFilesSharingPublicExpireDateDays(c.getInt(c
