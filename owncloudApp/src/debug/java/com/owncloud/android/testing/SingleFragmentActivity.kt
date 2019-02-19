@@ -21,39 +21,12 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.fragment.app.Fragment
 import com.owncloud.android.R
-import com.owncloud.android.datamodel.OCFile
-import com.owncloud.android.shares.db.OCShare
 import com.owncloud.android.ui.activity.FileActivity
-import com.owncloud.android.ui.fragment.ShareFragmentListener
 
 /**
  * Used for testing fragments inside a fake activity.
  */
-class SingleFragmentActivity : FileActivity(), ShareFragmentListener{
-    override fun copyOrSendPrivateLink(file: OCFile?) {
-    }
-
-    override fun showSearchUsersAndGroups() {
-    }
-
-    override fun showEditPrivateShare(share: OCShare?) {
-    }
-
-    override fun refreshSharesFromServer() {
-    }
-
-    override fun removeShare(share: OCShare?) {
-    }
-
-    override fun showAddPublicShare(defaultLinkName: String?) {
-    }
-
-    override fun showEditPublicShare(share: OCShare?) {
-    }
-
-    override fun copyOrSendPublicLink(share: OCShare?) {
-    }
-
+open class SingleFragmentActivity : FileActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val content = FrameLayout(this).apply {
@@ -68,8 +41,8 @@ class SingleFragmentActivity : FileActivity(), ShareFragmentListener{
 
     fun setFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction()
-            .add(R.id.container, fragment, "TEST")
-            .commit()
+            .add(R.id.container, fragment, "TEST FRAGMENT")
+            .commitAllowingStateLoss()
     }
 
     fun replaceFragment(fragment: Fragment) {
