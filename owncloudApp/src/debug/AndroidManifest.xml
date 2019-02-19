@@ -20,7 +20,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <application tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".testing.SingleFragmentActivity"></activity>
+        <activity android:name=".testing.TestShareFileActivity"></activity>
     </application>
 
 </manifest>
