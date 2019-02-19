@@ -33,6 +33,7 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.snackbar.Snackbar
 import com.owncloud.android.R
@@ -117,6 +118,16 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
      * Capabilities of the server
      */
     private var mCapabilities: OCCapability? = null
+
+    private var mServerVersion: OwnCloudVersion? = null
+
+    var mViewModelFactory: ViewModelProvider.Factory = ViewModelFactory.build {
+        OCShareViewModel(
+            mAccount!!,
+            mFile?.remotePath!!,
+            listOf(ShareType.PUBLIC_LINK)
+        )
+    }
 
     private// Array with numbers already set in public link names
     // Inspect public links for default names already used
@@ -203,6 +214,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
         if (arguments != null) {
             mFile = arguments!!.getParcelable(ARG_FILE)
             mAccount = arguments!!.getParcelable(ARG_ACCOUNT)
+            mServerVersion = arguments!!.getParcelable(ARG_SERVER_VERSION)
         }
     }
 
@@ -262,8 +274,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
             }
         }
 
-        val serverVersion = AccountUtils.getServerVersion(mAccount)
-        val shareWithUsersEnable = serverVersion != null && serverVersion.isSearchUsersSupported
+        val shareWithUsersEnable = mServerVersion != null && mServerVersion!!.isSearchUsersSupported
 
         val shareNoUsers = view.findViewById<TextView>(R.id.shareNoUsers)
 
@@ -308,13 +319,8 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        ocShareViewModel = ViewModelProviders.of(this, ViewModelFactory.build {
-            OCShareViewModel(
-                mAccount!!,
-                mFile?.remotePath!!,
-                listOf(ShareType.PUBLIC_LINK)
-            )
-        }).get(OCShareViewModel::class.java)
+        ocShareViewModel = ViewModelProviders.of(this, mViewModelFactory).
+            get(OCShareViewModel::class.java)
     }
 
     override fun copyOrSendPublicLink(share: OCShare) {
@@ -599,7 +605,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
          */
         private val ARG_FILE = "FILE"
         private val ARG_ACCOUNT = "ACCOUNT"
-
+        private val ARG_SERVER_VERSION = "SERVER_VERSION"
 
         /**
          * Public factory method to create new ShareFileFragment instances.
@@ -608,11 +614,16 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
          * @param account     An ownCloud account
          * @return A new instance of fragment ShareFileFragment.
          */
-        fun newInstance(fileToShare: OCFile, account: Account): ShareFileFragment {
+        fun newInstance(
+            fileToShare: OCFile,
+            account: Account,
+            serverVersion: OwnCloudVersion? = AccountUtils.getServerVersion(account)
+        ): ShareFileFragment {
             val fragment = ShareFileFragment()
             val args = Bundle()
             args.putParcelable(ARG_FILE, fileToShare)
             args.putParcelable(ARG_ACCOUNT, account)
+            args.putParcelable(ARG_SERVER_VERSION, serverVersion)
             fragment.arguments = args
             return fragment
         }

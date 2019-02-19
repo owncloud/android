@@ -31,11 +31,13 @@ import com.owncloud.android.shares.datasources.OCRemoteSharesDataSource
 import com.owncloud.android.shares.db.OCShare
 import com.owncloud.android.shares.repository.OCShareRepository
 import com.owncloud.android.shares.repository.ShareRepository
+import com.owncloud.android.testing.OpenForTesting
 import com.owncloud.android.vo.Resource
 
 /**
  * View Model to keep a reference to the share repository and an up-to-date list of a shares
  */
+@OpenForTesting
 class OCShareViewModel(
     account: Account,
     filePath: String,

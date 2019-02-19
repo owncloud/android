@@ -2,6 +2,8 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 
+apply plugin: 'kotlin-allopen'
+
 def commitSHA1 = 'COMMIT_SHA1'
 def gitRemote = 'GIT_REMOTE'
 
@@ -78,6 +80,11 @@ tasks.withType(Test) {
     testLogging {
         events "passed", "skipped", "failed"
     }
+}
+
+allOpen {
+    // allows mocking for classes w/o directly opening them for release builds
+    annotation 'com.owncloud.android.testing.OpenClass'
 }
 
 android {
