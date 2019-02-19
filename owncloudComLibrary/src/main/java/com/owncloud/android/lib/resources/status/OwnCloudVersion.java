@@ -25,7 +25,10 @@
 
 package com.owncloud.android.lib.resources.status;
 
-public class OwnCloudVersion implements Comparable<OwnCloudVersion> {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class OwnCloudVersion implements Comparable<OwnCloudVersion>, Parcelable {
 
     public static final int MINIMUN_VERSION_FOR_CHUNKED_UPLOADS = 0x04050000; // 4.5
 
@@ -195,5 +198,16 @@ public class OwnCloudVersion implements Comparable<OwnCloudVersion> {
 
     public boolean isPublicSharingWriteOnlySupported() {
         return (mVersion >= MINIMUM_VERSION_WITH_WRITE_ONLY_PUBLIC_SHARING);
+    }
+
+    @Override
+    public int describeContents() {
+        return super.hashCode();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(mVersion);
+        dest.writeInt(mIsValid ? 1 : 0);
     }
 }
