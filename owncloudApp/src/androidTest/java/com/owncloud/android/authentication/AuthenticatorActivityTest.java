@@ -30,10 +30,10 @@ import android.os.Bundle;
 import android.os.RemoteException;
 import android.os.SystemClock;
 import androidx.test.InstrumentationRegistry;
+import androidx.test.filters.LargeTest;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.AndroidJUnit4;
 import androidx.test.uiautomator.UiDevice;
-import android.test.suitebuilder.annotation.LargeTest;
 
 import com.owncloud.android.R;
 import com.owncloud.android.lib.common.utils.Log_OC;

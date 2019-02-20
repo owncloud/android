@@ -37,13 +37,13 @@ import android.os.SystemClock;
 import androidx.test.InstrumentationRegistry;
 import androidx.test.espresso.FailureHandler;
 import androidx.test.espresso.matcher.ViewMatchers;
+import androidx.test.filters.LargeTest;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.AndroidJUnit4;
 import androidx.test.uiautomator.UiDevice;
 import androidx.test.uiautomator.UiObjectNotFoundException;
 import androidx.test.uiautomator.UiSelector;
 import androidx.core.content.ContextCompat;
-import android.test.suitebuilder.annotation.LargeTest;
 import android.view.View;
 
 import com.owncloud.android.R;
