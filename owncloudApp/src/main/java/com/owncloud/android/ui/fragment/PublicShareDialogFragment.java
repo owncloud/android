@@ -757,8 +757,7 @@ public class PublicShareDialogFragment extends DialogFragment {
         }
 
         // Set password label depending on the checked permission option
-        mPermissionRadioGroup.setOnCheckedChangeListener(
-                (group, checkedId) -> {
+        mPermissionRadioGroup.setOnCheckedChangeListener((group, checkedId) -> {
                     if (checkedId == mReadOnlyButton.getId()) {
                         if (mCapabilities.getFilesSharingPublicPasswordEnforcedReadOnly().isTrue()) {
                             setPasswordEnforced();
@@ -788,8 +787,7 @@ public class PublicShareDialogFragment extends DialogFragment {
                         mCapabilities.getFilesSharingPublicPasswordEnforcedUploadOnly().isTrue();
 
         // hide password switch if password is enforced to prevent it is removed
-        if (!hasPasswordEnforcedFor &&
-                mCapabilities.getFilesSharingPublicPasswordEnforced().isTrue()) {
+        if (!hasPasswordEnforcedFor && mCapabilities.getFilesSharingPublicPasswordEnforced().isTrue()) {
             setPasswordEnforced();
         }
     }
