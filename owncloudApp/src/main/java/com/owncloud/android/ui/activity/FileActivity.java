@@ -81,8 +81,6 @@ public class FileActivity extends DrawerActivity
 
     public static final String TAG = FileActivity.class.getSimpleName();
 
-    private static final String DIALOG_WAIT_TAG = "DIALOG_WAIT";
-
     private static final String KEY_WAITING_FOR_OP_ID = "WAITING_FOR_OP_ID";
     private static final String KEY_ACTION_BAR_TITLE = "ACTION_BAR_TITLE";
 
@@ -414,36 +412,6 @@ public class FileActivity extends DrawerActivity
         }
     }
 
-    /**
-     * Show loading dialog
-     */
-    public void showLoadingDialog(int messageId) {
-        // grant that only one waiting dialog is shown
-        dismissLoadingDialog();
-        // Construct dialog
-        Fragment frag = getSupportFragmentManager().findFragmentByTag(DIALOG_WAIT_TAG);
-        if (frag == null) {
-            Log_OC.d(TAG, "show loading dialog");
-            LoadingDialog loading = LoadingDialog.newInstance(messageId, false);
-            FragmentManager fm = getSupportFragmentManager();
-            FragmentTransaction ft = fm.beginTransaction();
-            loading.show(ft, DIALOG_WAIT_TAG);
-            fm.executePendingTransactions();
-        }
-    }
-
-    /**
-     * Dismiss loading dialog
-     */
-    public void dismissLoadingDialog() {
-        Fragment frag = getSupportFragmentManager().findFragmentByTag(DIALOG_WAIT_TAG);
-        if (frag != null) {
-            Log_OC.d(TAG, "dismiss loading dialog");
-            LoadingDialog loading = (LoadingDialog) frag;
-            loading.dismiss();
-        }
-    }
-
     private void doOnResumeAndBound() {
         mOperationsServiceBinder.addOperationListener(FileActivity.this, mHandler);
         long waitingForOpId = mFileOperationsHelper.getOpIdWaitingFor();
@@ -538,24 +506,5 @@ public class FileActivity extends DrawerActivity
     @Override
     public void onCancelCertificate() {
         // nothing to do
-    }
-
-    /**
-     * Show a temporary message in a Snackbar bound to the content view
-     *
-     * @param message       Message to show.
-     */
-    public void showSnackMessage(String message) {
-        final View rootView = findViewById(android.R.id.content);
-        if (rootView != null) {
-            Snackbar.make(
-                    rootView,
-                    message,
-                    Snackbar.LENGTH_LONG)
-                    .show();
-        } else {
-            // If root view is not available don't let the app brake. show the notification anyway.
-            Toast.makeText(this, message, Snackbar.LENGTH_LONG).show();
-        }
     }
 }

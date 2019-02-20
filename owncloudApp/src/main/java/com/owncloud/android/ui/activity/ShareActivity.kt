@@ -39,6 +39,7 @@ import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.operations.*
 import com.owncloud.android.providers.UsersAndGroupsSearchProvider
 import com.owncloud.android.shares.db.OCShare
+import com.owncloud.android.testing.OpenForTesting
 import com.owncloud.android.ui.asynctasks.GetSharesForFileAsyncTask
 import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter
 import com.owncloud.android.ui.fragment.*
@@ -47,7 +48,6 @@ import com.owncloud.android.ui.fragment.*
 /**
  * Activity for sharing files
  */
-
 class ShareActivity : FileActivity(), ShareFragmentListener {
 
     internal var mGetSharesForFileAsyncTask: GetSharesForFileAsyncTask? = null
