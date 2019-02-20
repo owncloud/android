@@ -1,23 +1,25 @@
 package com.owncloud.android.ui.activity;
 
-import android.accounts.Account;
-import android.accounts.AccountManager;
-import android.accounts.AccountManagerCallback;
-import android.accounts.AccountManagerFuture;
-import android.accounts.OperationCanceledException;
+import android.accounts.*;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import com.google.android.material.snackbar.Snackbar;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.status.OCCapability;
+import com.owncloud.android.ui.dialog.LoadingDialog;
 
 /**
  * Base Activity with common behaviour for activities dealing with ownCloud {@link Account}s .
@@ -54,6 +56,8 @@ public abstract class BaseActivity extends AppCompatActivity {
      * Access point to the cached database for the current ownCloud {@link Account}.
      */
     private FileDataStorageManager mStorageManager = null;
+
+    private static final String DIALOG_WAIT_TAG = "DIALOG_WAIT";
 
     @Override
     protected void onNewIntent(Intent intent) {
@@ -272,6 +276,55 @@ public abstract class BaseActivity extends AppCompatActivity {
                     focusedView.getWindowToken(),
                     0
             );
+        }
+    }
+
+    /**
+     * Show loading dialog
+     */
+    public void showLoadingDialog(int messageId) {
+        // grant that only one waiting dialog is shown
+        dismissLoadingDialog();
+        // Construct dialog
+        Fragment frag = getSupportFragmentManager().findFragmentByTag(DIALOG_WAIT_TAG);
+        if (frag == null) {
+            Log_OC.d(TAG, "show loading dialog");
+            LoadingDialog loading = LoadingDialog.newInstance(messageId, false);
+            FragmentManager fm = getSupportFragmentManager();
+            FragmentTransaction ft = fm.beginTransaction();
+            loading.show(ft, DIALOG_WAIT_TAG);
+            fm.executePendingTransactions();
+        }
+    }
+
+    /**
+     * Dismiss loading dialog
+     */
+    public void dismissLoadingDialog() {
+        Fragment frag = getSupportFragmentManager().findFragmentByTag(DIALOG_WAIT_TAG);
+        if (frag != null) {
+            Log_OC.d(TAG, "dismiss loading dialog");
+            LoadingDialog loading = (LoadingDialog) frag;
+            loading.dismiss();
+        }
+    }
+
+    /**
+     * Show a temporary message in a Snackbar bound to the content view
+     *
+     * @param message       Message to show.
+     */
+    public void showSnackMessage(String message) {
+        final View rootView = findViewById(android.R.id.content);
+        if(rootView != null) {
+            Snackbar.make(
+                    rootView,
+                    message,
+                    Snackbar.LENGTH_LONG)
+                    .show();
+        } else {
+            // If root view is not available don't let the app brake. show the notification anyway.
+            Toast.makeText(this, message, Snackbar.LENGTH_LONG).show();
         }
     }
 }

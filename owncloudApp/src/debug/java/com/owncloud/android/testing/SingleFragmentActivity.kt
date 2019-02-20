@@ -21,12 +21,12 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.fragment.app.Fragment
 import com.owncloud.android.R
-import com.owncloud.android.ui.activity.FileActivity
+import com.owncloud.android.ui.activity.BaseActivity
 
 /**
  * Used for testing fragments inside a fake activity.
  */
-open class SingleFragmentActivity : FileActivity() {
+open class SingleFragmentActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val content = FrameLayout(this).apply {

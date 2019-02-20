@@ -47,7 +47,7 @@ import com.owncloud.android.lib.resources.status.OCCapability
 import com.owncloud.android.lib.resources.status.OwnCloudVersion
 import com.owncloud.android.shares.db.OCShare
 import com.owncloud.android.shares.viewmodel.OCShareViewModel
-import com.owncloud.android.ui.activity.FileActivity
+import com.owncloud.android.ui.activity.BaseActivity
 import com.owncloud.android.ui.activity.ShareActivity
 import com.owncloud.android.ui.adapter.SharePublicLinkListAdapter
 import com.owncloud.android.ui.adapter.ShareUserListAdapter
@@ -55,9 +55,7 @@ import com.owncloud.android.ui.dialog.RemoveShareDialogFragment
 import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter
 import com.owncloud.android.utils.DisplayUtils
 import com.owncloud.android.utils.MimetypeIconUtil
-import com.owncloud.android.vo.Resource
 import com.owncloud.android.vo.Status
-import java.io.File
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -377,8 +375,8 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
      * instance ready to use. If not ready, does nothing.
      */
     fun refreshCapabilitiesFromDB() {
-        if ((mListener as FileActivity).storageManager != null) {
-            mCapabilities = (mListener as FileActivity).storageManager.getCapability(mAccount!!.name)
+        if ((mListener as BaseActivity).storageManager != null) {
+            mCapabilities = (mListener as BaseActivity).storageManager.getCapability(mAccount!!.name)
         }
     }
 
@@ -390,9 +388,9 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
      * instance ready to use. If not ready, does nothing.
      */
     fun refreshUsersOrGroupsListFromDB() {
-        if ((mListener as FileActivity).storageManager != null) {
+        if ((mListener as BaseActivity).storageManager != null) {
             // Get Users and Groups
-            mPrivateShares = (mListener as FileActivity).storageManager.getPrivateSharesForAFile(
+            mPrivateShares = (mListener as BaseActivity).storageManager.getPrivateSharesForAFile(
                 mFile!!.remotePath,
                 mAccount!!.name
             )
@@ -464,10 +462,10 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
                             view?.let { Snackbar.make(it, errorMessage, Snackbar.LENGTH_SHORT).show() }
                         }
                         Status.LOADING -> {
-                            (activity as FileActivity).showLoadingDialog(R.string.common_loading)
+                            (activity as BaseActivity).showLoadingDialog(R.string.common_loading)
                         }
                         Status.STOP_LOADING -> {
-                            (activity as FileActivity).dismissLoadingDialog()
+                            (activity as BaseActivity).dismissLoadingDialog()
                         }
                         else -> {
                             Log.d(TAG, "Unknown status when observing shares")
