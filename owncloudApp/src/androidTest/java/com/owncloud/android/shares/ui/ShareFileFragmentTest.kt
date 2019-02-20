@@ -127,6 +127,22 @@ class ShareFileFragmentTest {
     }
 
     @Test
+    fun fileSizeVisible(){
+        val publicShares = arrayListOf(
+                TestUtil.createPublicShare(
+                        path = "/Photos/image.jpg",
+                        isFolder = false,
+                        name = "Image link 1",
+                        shareLink = "http://server:port/s/1"
+                )
+        )
+        sharesLiveData.postValue(Resource.success(publicShares))
+        onView(withId(R.id.shareFileSize)).check(matches(isDisplayed()))
+
+    }
+
+
+    @Test
     fun showError() {
         sharesLiveData.postValue(Resource.error(RemoteOperationResult.ResultCode.SERVICE_UNAVAILABLE))
         onView(withId(R.id.snackbar_text)).check(matches(withText(R.string.service_unavailable)))
