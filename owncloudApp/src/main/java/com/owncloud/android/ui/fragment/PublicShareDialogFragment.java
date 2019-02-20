@@ -27,8 +27,6 @@ import android.content.Context;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import androidx.fragment.app.DialogFragment;
-import androidx.appcompat.widget.SwitchCompat;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -56,6 +54,9 @@ import com.owncloud.android.utils.DateUtils;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import androidx.appcompat.widget.SwitchCompat;
+import androidx.fragment.app.DialogFragment;
 
 public class PublicShareDialogFragment extends DialogFragment {
 
@@ -745,11 +746,49 @@ public class PublicShareDialogFragment extends DialogFragment {
                             mCapabilities.getFilesSharingPublicExpireDateDays()));
         }
 
+        // Set password label when opening the dialog
+        if (mReadOnlyButton.isChecked() &&
+                mCapabilities.getFilesSharingPublicPasswordEnforcedReadOnly().isTrue() ||
+                mReadWriteButton.isChecked() &&
+                        mCapabilities.getFilesSharingPublicPasswordEnforcedReadWrite().isTrue() ||
+                mUploadOnlyButton.isChecked() &&
+                        mCapabilities.getFilesSharingPublicPasswordEnforcedUploadOnly().isTrue()) {
+            setPasswordEnforced();
+        }
+
+        // Set password label depending on the checked permission option
+        mPermissionRadioGroup.setOnCheckedChangeListener((group, checkedId) -> {
+                    if (checkedId == mReadOnlyButton.getId()) {
+                        if (mCapabilities.getFilesSharingPublicPasswordEnforcedReadOnly().isTrue()) {
+                            setPasswordEnforced();
+                        } else {
+                            setPasswordNotEnforced();
+                        }
+                    } else if (checkedId == mReadWriteButton.getId()) {
+                        if (mCapabilities.getFilesSharingPublicPasswordEnforcedReadWrite().isTrue()) {
+                            setPasswordEnforced();
+                        } else {
+                            setPasswordNotEnforced();
+                        }
+                    } else if (checkedId == mUploadOnlyButton.getId()) {
+                        if (mCapabilities.getFilesSharingPublicPasswordEnforcedUploadOnly().isTrue()) {
+                            setPasswordEnforced();
+                        } else {
+                            setPasswordNotEnforced();
+                        }
+                    }
+                }
+        );
+
+        // When there's no password enforced for capability
+        boolean hasPasswordEnforcedFor =
+                mCapabilities.getFilesSharingPublicPasswordEnforcedReadOnly().isTrue() ||
+                        mCapabilities.getFilesSharingPublicPasswordEnforcedReadWrite().isTrue() ||
+                        mCapabilities.getFilesSharingPublicPasswordEnforcedUploadOnly().isTrue();
+
         // hide password switch if password is enforced to prevent it is removed
-        if (mCapabilities.getFilesSharingPublicPasswordEnforced().isTrue()) {
-            mPasswordLabel.setText(R.string.share_via_link_password_enforced_label);
-            mPasswordSwitch.setVisibility(View.GONE);
-            mPasswordValueEdit.setVisibility(View.VISIBLE);
+        if (!hasPasswordEnforcedFor && mCapabilities.getFilesSharingPublicPasswordEnforced().isTrue()) {
+            setPasswordEnforced();
         }
     }
 
@@ -768,6 +807,18 @@ public class PublicShareDialogFragment extends DialogFragment {
         }
 
         return -1;
+    }
+
+    private void setPasswordNotEnforced() {
+        mPasswordLabel.setText(R.string.share_via_link_password_label);
+        mPasswordSwitch.setVisibility(View.VISIBLE);
+        mPasswordValueEdit.setVisibility(View.GONE);
+    }
+
+    private void setPasswordEnforced() {
+        mPasswordLabel.setText(R.string.share_via_link_password_enforced_label);
+        mPasswordSwitch.setVisibility(View.GONE);
+        mPasswordValueEdit.setVisibility(View.VISIBLE);
     }
 
     /**

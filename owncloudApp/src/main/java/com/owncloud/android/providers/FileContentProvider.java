@@ -166,6 +166,12 @@ public class FileContentProvider extends ContentProvider {
                 ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_ENABLED);
         mCapabilityProjectionMap.put(ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED,
                 ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED);
+        mCapabilityProjectionMap.put(ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_READ_ONLY,
+                ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_READ_ONLY);
+        mCapabilityProjectionMap.put(ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_READ_WRITE,
+                ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_READ_WRITE);
+        mCapabilityProjectionMap.put(ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_UPLOAD_ONLY,
+                ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_UPLOAD_ONLY);
         mCapabilityProjectionMap.put(ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_ENABLED,
                 ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_ENABLED);
         mCapabilityProjectionMap.put(ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_DAYS,
@@ -1067,6 +1073,31 @@ public class FileContentProvider extends ContentProvider {
                 }
             }
 
+            if (oldVersion < 25 && newVersion >= 25) {
+                Log_OC.i("SQL", "Entering in the #25 ADD in onUpgrade");
+                db.beginTransaction();
+                try {
+                    db.execSQL("ALTER TABLE " + ProviderTableMeta.CAPABILITIES_TABLE_NAME +
+                            " ADD COLUMN " +
+                            ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_READ_ONLY +
+                            " INTEGER DEFAULT NULL");
+
+                    db.execSQL("ALTER TABLE " + ProviderTableMeta.CAPABILITIES_TABLE_NAME +
+                            " ADD COLUMN " +
+                            ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_READ_WRITE +
+                            " INTEGER DEFAULT NULL");
+
+                    db.execSQL("ALTER TABLE " + ProviderTableMeta.CAPABILITIES_TABLE_NAME +
+                            " ADD COLUMN " +
+                            ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_UPLOAD_ONLY +
+                            " INTEGER DEFAULT NULL");
+                    db.setTransactionSuccessful();
+                    upgraded = true;
+                } finally {
+                    db.endTransaction();
+                }
+            }
+
             if (!upgraded) {
                 Log_OC.i("SQL", "OUT of the ADD in onUpgrade; oldVersion == " + oldVersion +
                         ", newVersion == " + newVersion);
@@ -1140,6 +1171,9 @@ public class FileContentProvider extends ContentProvider {
                 + ProviderTableMeta.CAPABILITIES_SHARING_API_ENABLED + " INTEGER, " // boolean
                 + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_ENABLED + " INTEGER, "  // boolean
                 + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED + " INTEGER, "    // boolean
+                + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_READ_ONLY + " INTEGER, "   // boolean
+                + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_READ_WRITE + " INTEGER, "  // boolean
+                + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_UPLOAD_ONLY + " INTEGER, " // boolean
                 + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_ENABLED + " INTEGER, "  // boolean
                 + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_DAYS + " INTEGER, "
                 + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_ENFORCED + " INTEGER, " // boolean
