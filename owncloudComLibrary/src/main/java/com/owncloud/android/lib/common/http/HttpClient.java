@@ -26,6 +26,7 @@ package com.owncloud.android.lib.common.http;
 
 import android.content.Context;
 
+import android.os.Build;
 import com.owncloud.android.lib.common.OwnCloudClientManagerFactory;
 import com.owncloud.android.lib.common.http.interceptors.HttpInterceptor;
 import com.owncloud.android.lib.common.http.interceptors.RequestHeaderInterceptor;
@@ -39,8 +40,10 @@ import okhttp3.OkHttpClient;
 import okhttp3.Protocol;
 
 import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -67,8 +70,33 @@ public class HttpClient {
             try {
                 final X509TrustManager trustManager = new AdvancedX509TrustManager(
                         NetworkUtils.getKnownServersStore(sContext));
-                final SSLContext sslContext = SSLContext.getInstance("TLS");
+
+                SSLContext sslContext;
+
+                try {
+                    sslContext = SSLContext.getInstance("TLSv1.2");
+                } catch (NoSuchAlgorithmException tlsv12Exception) {
+                    try {
+                        Log_OC.w(TAG, "TLSv1.2 is not supported in this device; falling through TLSv1.1");
+                        sslContext = SSLContext.getInstance("TLSv1.1");
+                    } catch (NoSuchAlgorithmException tlsv11Exception) {
+                        Log_OC.w(TAG, "TLSv1.1 is not supported in this device; falling through TLSv1.0");
+                        sslContext = SSLContext.getInstance("TLSv1");
+                        // should be available in any device; see reference of supported protocols in
+                        // http://developer.android.com/reference/javax/net/ssl/SSLSocket.html
+                    }
+                }
+
                 sslContext.init(null, new TrustManager[]{trustManager}, null);
+
+                SSLSocketFactory sslSocketFactory;
+
+                if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
+                    // TLS v1.2 is disabled by default from API 16 to 19, use custom SSLSocketFactory to enable it
+                    sslSocketFactory = new TLSSocketFactory(sslContext.getSocketFactory());
+                } else {
+                    sslSocketFactory = sslContext.getSocketFactory();
+                }
 
                 // Automatic cookie handling, NOT PERSISTENT
                 CookieJar cookieJar = new CookieJar() {
@@ -97,7 +125,7 @@ public class HttpClient {
                         .writeTimeout(HttpConstants.DEFAULT_DATA_TIMEOUT, TimeUnit.MILLISECONDS)
                         .connectTimeout(HttpConstants.DEFAULT_CONNECTION_TIMEOUT, TimeUnit.MILLISECONDS)
                         .followRedirects(false)
-                        .sslSocketFactory(sslContext.getSocketFactory(), trustManager)
+                        .sslSocketFactory(sslSocketFactory, trustManager)
                         .hostnameVerifier((asdf, usdf) -> true)
                         .cookieJar(cookieJar);
                 // TODO: Not verifying the hostname against certificate. ask owncloud security human if this is ok.
