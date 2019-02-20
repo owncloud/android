@@ -79,6 +79,11 @@ class ShareFileFragmentTest {
     }
 
     @Test
+    fun showPrivateLink() {
+        onView(withId(R.id.getPrivateLinkButton)).check(matches(isDisplayed()))
+    }
+
+    @Test
     fun showUsersAndGroupsSectionTitle() {
         onView(withText(R.string.share_with_user_section_title)).check(matches(isDisplayed()))
     }
@@ -154,6 +159,7 @@ class ShareFileFragmentTest {
         file.fileName = name
         file.fileId = 9456985479
         file.remoteId = "1"
+        file.privateLink = "private link"
         return file
     }
 }
