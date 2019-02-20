@@ -89,6 +89,11 @@ class ShareFolderFragmentTest {
 
     }
 
+    @Test
+    fun hidePrivateLink() {
+        onView(withId(R.id.getPrivateLinkButton)).check(matches(not(isDisplayed())))
+    }
+
 
     fun getOCFolderForTesting(name: String = "default"): OCFile {
         var file = OCFile("/Photos")
@@ -97,6 +102,7 @@ class ShareFolderFragmentTest {
         file.fileId = 9456985479
         file.remoteId = "1"
         file.mimetype = "DIR"
+        file.privateLink = null
         return file
     }
 }
