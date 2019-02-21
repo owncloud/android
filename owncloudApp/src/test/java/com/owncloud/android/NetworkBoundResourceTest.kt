@@ -73,7 +73,7 @@ class NetworkBoundResourceTest {
             object : NetworkBoundResource<List<OCShare>, ShareParserResult>(InstantAppExecutors()) {
                 override fun saveCallResult(shareParserResult: ShareParserResult) {
                     saved.set(shareParserResult.shares.map { remoteShare ->
-                        OCShare(remoteShare).also { it.accountOwner = "admin@server" }
+                        OCShare.fromRemoteShare(remoteShare).also { it.accountOwner = "admin@server" }
                     })
                     dbData.value = fetchedDbValue
                 }
@@ -99,7 +99,7 @@ class NetworkBoundResourceTest {
         networkBoundResource.asLiveData().observeForever(observer)
 
         assertThat(saved.get(), `is`(networkResult.map { remoteShare ->
-            OCShare(remoteShare).also { it.accountOwner = "admin@server" }
+            OCShare.fromRemoteShare(remoteShare).also { it.accountOwner = "admin@server" }
         }))
 
         verify(observer).onChanged(Resource.success(fetchedDbValue))
