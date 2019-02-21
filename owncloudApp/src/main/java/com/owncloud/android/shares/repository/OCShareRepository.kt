@@ -59,7 +59,7 @@ class OCShareRepository(
 
             override fun saveCallResult(shareParserResult: ShareParserResult) {
                 val sharesForFileFromServer = shareParserResult.shares.map { remoteShare ->
-                    OCShare(remoteShare).also { it.accountOwner = accountName }
+                    OCShare.fromRemoteShare(remoteShare).also { it.accountOwner = accountName }
                 }
 
                 if (sharesForFileFromServer.isEmpty()) {

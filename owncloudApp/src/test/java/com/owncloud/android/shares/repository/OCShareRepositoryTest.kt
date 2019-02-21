@@ -109,7 +109,7 @@ class OCShareRepositoryTest {
         // Public shares are always retrieved from server and inserted in database if not empty list
         verify(localSharesDataSource).insert(
             remoteSharesForFile.map { remoteShare ->
-                OCShare(remoteShare).also { it.accountOwner = "admin@server" }
+                OCShare.fromRemoteShare(remoteShare).also { it.accountOwner = "admin@server" }
             }
         )
 

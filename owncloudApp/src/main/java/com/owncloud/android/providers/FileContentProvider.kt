@@ -923,6 +923,31 @@ class FileContentProvider(val appExecutors: AppExecutors = AppExecutors()) : Con
             }
 
             if (oldVersion < 25 && newVersion >= 25) {
+                Log_OC.i("SQL", "Entering in the #25 ADD in onUpgrade");
+                db.beginTransaction();
+                try {
+                    db.execSQL("ALTER TABLE " + ProviderTableMeta.CAPABILITIES_TABLE_NAME +
+                            " ADD COLUMN " +
+                            ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_READ_ONLY +
+                            " INTEGER DEFAULT NULL");
+
+                    db.execSQL("ALTER TABLE " + ProviderTableMeta.CAPABILITIES_TABLE_NAME +
+                            " ADD COLUMN " +
+                            ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_READ_WRITE +
+                            " INTEGER DEFAULT NULL");
+
+                    db.execSQL("ALTER TABLE " + ProviderTableMeta.CAPABILITIES_TABLE_NAME +
+                            " ADD COLUMN " +
+                            ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_UPLOAD_ONLY +
+                            " INTEGER DEFAULT NULL");
+                    db.setTransactionSuccessful();
+                    upgraded = true;
+                } finally {
+                    db.endTransaction();
+                }
+            }
+
+            if (oldVersion < 26 && newVersion >= 26) {
                 Log_OC.i("SQL", "Entering in #25 to migrate shares from SQLite to Room")
                 val cursor = db.query(
                     ProviderTableMeta.OCSHARES_TABLE_NAME,
@@ -938,7 +963,7 @@ class FileContentProvider(val appExecutors: AppExecutors = AppExecutors()) : Con
                     val shares = mutableListOf<OCShare>()
 
                     do {
-                        shares.add(OCShare(cursor))
+                        shares.add(OCShare.fromCursor(cursor))
                     } while (cursor.moveToNext())
 
                     // Insert share list to the new shares table in new database
@@ -1019,49 +1044,35 @@ class FileContentProvider(val appExecutors: AppExecutors = AppExecutors()) : Con
 
     private fun createCapabilitiesTable(db: SQLiteDatabase) {
         // Create capabilities table
-        db.execSQL(
-            "CREATE TABLE " + ProviderTableMeta.CAPABILITIES_TABLE_NAME + "("
-                    + ProviderTableMeta._ID + " INTEGER PRIMARY KEY, "
-                    + ProviderTableMeta.CAPABILITIES_ACCOUNT_NAME + " TEXT, "
-                    + ProviderTableMeta.CAPABILITIES_VERSION_MAYOR + " INTEGER, "
-                    + ProviderTableMeta.CAPABILITIES_VERSION_MINOR + " INTEGER, "
-                    + ProviderTableMeta.CAPABILITIES_VERSION_MICRO + " INTEGER, "
-                    + ProviderTableMeta.CAPABILITIES_VERSION_STRING + " TEXT, "
-                    + ProviderTableMeta.CAPABILITIES_VERSION_EDITION + " TEXT, "
-                    + ProviderTableMeta.CAPABILITIES_CORE_POLLINTERVAL + " INTEGER, "
-                    + ProviderTableMeta.CAPABILITIES_SHARING_API_ENABLED + " INTEGER, " // boolean
-
-                    + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_ENABLED + " INTEGER, "  // boolean
-
-                    + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED + " INTEGER, "    // boolean
-
-                    + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_ENABLED + " INTEGER, "  // boolean
-
-                    + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_DAYS + " INTEGER, "
-                    + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_ENFORCED + " INTEGER, " // boolean
-
-                    + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_SEND_MAIL + " INTEGER, "    // boolean
-
-                    + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_UPLOAD + " INTEGER, "       // boolean
-
-                    + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_MULTIPLE + " INTEGER, "     // boolean
-
-                    + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_SUPPORTS_UPLOAD_ONLY + " INTEGER, "     // boolean
-
-                    + ProviderTableMeta.CAPABILITIES_SHARING_USER_SEND_MAIL + " INTEGER, "      // boolean
-
-                    + ProviderTableMeta.CAPABILITIES_SHARING_RESHARING + " INTEGER, "           // boolean
-
-                    + ProviderTableMeta.CAPABILITIES_SHARING_FEDERATION_OUTGOING + " INTEGER, "     // boolean
-
-                    + ProviderTableMeta.CAPABILITIES_SHARING_FEDERATION_INCOMING + " INTEGER, "     // boolean
-
-                    + ProviderTableMeta.CAPABILITIES_FILES_BIGFILECHUNKING + " INTEGER, "   // boolean
-
-                    + ProviderTableMeta.CAPABILITIES_FILES_UNDELETE + " INTEGER, "  // boolean
-
-                    + ProviderTableMeta.CAPABILITIES_FILES_VERSIONING + " INTEGER );"
-        )   // boolean
+        db.execSQL("CREATE TABLE " + ProviderTableMeta.CAPABILITIES_TABLE_NAME + "("
+                + ProviderTableMeta._ID + " INTEGER PRIMARY KEY, "
+                + ProviderTableMeta.CAPABILITIES_ACCOUNT_NAME + " TEXT, "
+                + ProviderTableMeta.CAPABILITIES_VERSION_MAYOR + " INTEGER, "
+                + ProviderTableMeta.CAPABILITIES_VERSION_MINOR + " INTEGER, "
+                + ProviderTableMeta.CAPABILITIES_VERSION_MICRO + " INTEGER, "
+                + ProviderTableMeta.CAPABILITIES_VERSION_STRING + " TEXT, "
+                + ProviderTableMeta.CAPABILITIES_VERSION_EDITION + " TEXT, "
+                + ProviderTableMeta.CAPABILITIES_CORE_POLLINTERVAL + " INTEGER, "
+                + ProviderTableMeta.CAPABILITIES_SHARING_API_ENABLED + " INTEGER, " // boolean
+                + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_ENABLED + " INTEGER, "  // boolean
+                + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED + " INTEGER, "    // boolean
+                + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_READ_ONLY + " INTEGER, "   // boolean
+                + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_READ_WRITE + " INTEGER, "  // boolean
+                + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_UPLOAD_ONLY + " INTEGER, " // boolean
+                + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_ENABLED + " INTEGER, "  // boolean
+                + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_DAYS + " INTEGER, "
+                + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_ENFORCED + " INTEGER, " // boolean
+                + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_SEND_MAIL + " INTEGER, "    // boolean
+                + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_UPLOAD + " INTEGER, "       // boolean
+                + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_MULTIPLE + " INTEGER, "     // boolean
+                + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_SUPPORTS_UPLOAD_ONLY + " INTEGER, "     // boolean
+                + ProviderTableMeta.CAPABILITIES_SHARING_USER_SEND_MAIL + " INTEGER, "      // boolean
+                + ProviderTableMeta.CAPABILITIES_SHARING_RESHARING + " INTEGER, "           // boolean
+                + ProviderTableMeta.CAPABILITIES_SHARING_FEDERATION_OUTGOING + " INTEGER, "     // boolean
+                + ProviderTableMeta.CAPABILITIES_SHARING_FEDERATION_INCOMING + " INTEGER, "     // boolean
+                + ProviderTableMeta.CAPABILITIES_FILES_BIGFILECHUNKING + " INTEGER, "   // boolean
+                + ProviderTableMeta.CAPABILITIES_FILES_UNDELETE + " INTEGER, "  // boolean
+                + ProviderTableMeta.CAPABILITIES_FILES_VERSIONING + " INTEGER );")   // boolean
     }
 
     private fun createUploadsTable(db: SQLiteDatabase) {
@@ -1396,6 +1407,12 @@ class FileContentProvider(val appExecutors: AppExecutors = AppExecutors()) : Con
                     ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_ENABLED
             mCapabilityProjectionMap[ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED] =
                     ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED
+            mCapabilityProjectionMap[ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_READ_ONLY] =
+                    ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_READ_ONLY
+            mCapabilityProjectionMap[ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_READ_WRITE] =
+                    ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_READ_WRITE
+            mCapabilityProjectionMap[ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_UPLOAD_ONLY] =
+                    ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_UPLOAD_ONLY
             mCapabilityProjectionMap[ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_ENABLED] =
                     ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_ENABLED
             mCapabilityProjectionMap[ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_DAYS] =
