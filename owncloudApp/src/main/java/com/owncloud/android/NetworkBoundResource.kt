@@ -46,16 +46,18 @@ import com.owncloud.android.vo.Resource
 abstract class NetworkBoundResource<ResultType, RequestType>(
     private val appExecutors: AppExecutors
 ) {
+
+    /**
+     * Result will observe three different livedata objects and react on change events from them
+     * - Shares livedata from Room to detect changes in database
+     * - Errors livedata from remote operations
+     * - Loading status
+     */
     private val result = MediatorLiveData<Resource<ResultType>>()
 
     init {
         val dbSource = loadFromDb()
-        /**
-         * Result will observe two different livedata objects and react on change events from them
-         * - Shares livedata from Room to detect changes in database
-         * - Errors livedata from remote operations
-         * - Loading status
-         */
+
         result.addSource(dbSource) { data ->
             result.value = Resource.success(data)
         }
