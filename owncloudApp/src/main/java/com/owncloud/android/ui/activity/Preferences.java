@@ -145,7 +145,7 @@ public class Preferences extends PreferenceActivity {
         registerForContextMenu(getListView());
 
         getListView().setFilterTouchesWhenObscured(
-                PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(getApplicationContext())
+                PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(getApplicationContext())
         );
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {

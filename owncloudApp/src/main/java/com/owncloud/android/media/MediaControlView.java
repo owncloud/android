@@ -87,7 +87,7 @@ public class MediaControlView extends FrameLayout implements OnClickListener, On
 
         // Allow or disallow touches with other visible windows
         mRoot.setFilterTouchesWhenObscured(
-                PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(context)
+                PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(context)
         );
 
         initControllerView(mRoot);

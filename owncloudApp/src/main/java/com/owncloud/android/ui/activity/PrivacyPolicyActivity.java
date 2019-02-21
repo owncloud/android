@@ -60,7 +60,7 @@ public class PrivacyPolicyActivity extends ToolbarActivity {
         // Allow or disallow touches with other visible windows
         LinearLayout activityPrivacyPolicyLayout = findViewById(R.id.activityPrivacyPolicyLayout);
         activityPrivacyPolicyLayout.setFilterTouchesWhenObscured(
-                PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(this)
+                PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(this)
         );
 
         WebView webview = findViewById(R.id.privacyPolicyWebview);

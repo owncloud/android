@@ -55,7 +55,7 @@ public class ManageSpaceActivity extends AppCompatActivity {
         // Allow or disallow touches with other visible windows
         LinearLayout manageSpaceLayout = findViewById(R.id.manage_space_layout);
         manageSpaceLayout.setFilterTouchesWhenObscured(
-                PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(this)
+                PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(this)
         );
 
         ActionBar actionBar = getSupportActionBar();

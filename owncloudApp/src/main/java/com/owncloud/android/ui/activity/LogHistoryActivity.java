@@ -74,7 +74,7 @@ public class LogHistoryActivity extends ToolbarActivity {
         // Allow or disallow touches with other visible windows
         LinearLayout logsLayout = findViewById(R.id.logsLayout);
         logsLayout.setFilterTouchesWhenObscured(
-                PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(this)
+                PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(this)
         );
 
         setupToolbar();

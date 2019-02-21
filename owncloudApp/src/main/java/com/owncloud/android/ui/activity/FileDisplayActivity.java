@@ -531,7 +531,7 @@ public class FileDisplayActivity extends FileActivity
         View actionBarView = findViewById(R.id.action_bar);
         if (actionBarView != null) {
             actionBarView.setFilterTouchesWhenObscured(
-                    PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(getApplicationContext())
+                    PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(getApplicationContext())
             );
         }
 

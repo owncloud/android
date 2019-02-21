@@ -132,14 +132,14 @@ public class UploadFilesActivity extends FileActivity implements
         // Allow or disallow touches with other visible windows
         LinearLayout uploadFilesLayout = findViewById(R.id.upload_files_layout);
         uploadFilesLayout.setFilterTouchesWhenObscured(
-                PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(this)
+                PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(this)
         );
 
         mFileListFragment = (LocalFileListFragment)
                 getSupportFragmentManager().findFragmentById(R.id.local_files_list);
 
         mFileListFragment.getView().setFilterTouchesWhenObscured(
-                PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(this)
+                PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(this)
         );
 
         // Set input controllers

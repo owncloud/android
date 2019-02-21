@@ -153,7 +153,7 @@ public class PreviewAudioFragment extends FileFragment {
 
         View view = inflater.inflate(R.layout.preview_audio_fragment, container, false);
         view.setFilterTouchesWhenObscured(
-                PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(getContext())
+                PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(getContext())
         );
 
         mImagePreview = view.findViewById(R.id.image_preview);

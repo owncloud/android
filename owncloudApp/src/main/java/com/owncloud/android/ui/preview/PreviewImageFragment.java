@@ -157,7 +157,7 @@ public class PreviewImageFragment extends FileFragment {
 
         View view = inflater.inflate(R.layout.preview_image_fragment, container, false);
         view.setFilterTouchesWhenObscured(
-                PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(getContext())
+                PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(getContext())
         );
 
         mProgressBar = view.findViewById(R.id.syncProgressBar);

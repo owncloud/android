@@ -29,7 +29,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import com.google.android.material.snackbar.Snackbar;
-import androidx.appcompat.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
@@ -101,14 +100,14 @@ public class PassCodeActivity extends BaseActivity {
         // Allow or disallow touches with other visible windows
         LinearLayout passcodeLockLayout = findViewById(R.id.passcodeLockLayout);
         passcodeLockLayout.setFilterTouchesWhenObscured(
-                PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(this)
+                PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(this)
         );
 
         mBCancel = findViewById(R.id.cancel);
         mPassCodeHdr = findViewById(R.id.header);
         mPassCodeHdrExplanation = findViewById(R.id.explanation);
         mPassCodeHdrExplanation.setFilterTouchesWhenObscured(
-                PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(this)
+                PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(this)
         );
         mPassCodeEditTexts[0] = findViewById(R.id.txt0);
         mPassCodeEditTexts[0].requestFocus();

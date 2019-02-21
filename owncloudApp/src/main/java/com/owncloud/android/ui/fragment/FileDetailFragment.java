@@ -116,12 +116,12 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
         if (mLayout == R.layout.file_details_fragment) {
             RelativeLayout fileDetailsLayout = getActivity().findViewById(R.id.fileDetailsLayout);
             fileDetailsLayout.setFilterTouchesWhenObscured(
-                    PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(getContext())
+                    PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(getContext())
             );
         } else {
             LinearLayout fileDetailsEmptyLayout = getActivity().findViewById(R.id.fileDetailsEmptyLayout);
             fileDetailsEmptyLayout.setFilterTouchesWhenObscured(
-                    PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(getContext())
+                    PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(getContext())
             );
         }
     }

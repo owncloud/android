@@ -732,7 +732,7 @@ public class ExpandableUploadListAdapter extends BaseExpandableListAdapter imple
 
             // Allow or disallow touches with other visible windows
             convertView.setFilterTouchesWhenObscured(
-                    PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(mParentActivity)
+                    PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(mParentActivity)
             );
         }
         TextView tvGroupName = convertView.findViewById(R.id.uploadListGroupName);

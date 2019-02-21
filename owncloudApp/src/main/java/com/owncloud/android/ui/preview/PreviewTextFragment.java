@@ -113,7 +113,7 @@ public class PreviewTextFragment extends FileFragment {
 
         View ret = inflater.inflate(R.layout.preview_text_fragment, container, false);
         ret.setFilterTouchesWhenObscured(
-                PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(getContext())
+                PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(getContext())
         );
 
         mProgressBar = ret.findViewById(R.id.syncProgressBar);

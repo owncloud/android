@@ -40,8 +40,6 @@ import android.widget.TextView;
 import com.owncloud.android.R;
 import com.owncloud.android.utils.PreferenceUtils;
 
-import java.util.ArrayList;
-
 
 /**
  * Activity showing a text message and, optionally, a couple list of single or paired text strings.
@@ -79,7 +77,7 @@ public class GenericExplanationActivity extends AppCompatActivity {
         // Allow or disallow touches with other visible windows
         LinearLayout alertDialogListViewLayout = findViewById(R.id.alertDialogListViewLayout);
         alertDialogListViewLayout.setFilterTouchesWhenObscured(
-                PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(this)
+                PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(this)
         );
 
         ListView listView = findViewById(R.id.list);

@@ -45,7 +45,7 @@ public class ErrorShowActivity extends BaseActivity {
         // Allow or disallow touches with other visible windows
         ScrollView errorHandlingShowErrorScrollView = findViewById(R.id.errorHandlingShowErrorScrollView);
         errorHandlingShowErrorScrollView.setFilterTouchesWhenObscured(
-                PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(this)
+                PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(this)
         );
 
         mError = findViewById(R.id.errorTextView);

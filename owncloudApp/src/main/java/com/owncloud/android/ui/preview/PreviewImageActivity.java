@@ -148,7 +148,7 @@ public class PreviewImageActivity extends FileActivity implements
 
         mViewPager = findViewById(R.id.fragmentPager);
         mViewPager.setFilterTouchesWhenObscured(
-                PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(this)
+                PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(this)
         );
 
         int position = mHasSavedPosition ? mSavedPosition :

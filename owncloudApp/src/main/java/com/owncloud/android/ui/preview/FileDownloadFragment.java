@@ -34,7 +34,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -142,7 +141,7 @@ public class FileDownloadFragment extends FileFragment implements OnClickListene
         (rootView.findViewById(R.id.cancelBtn)).setOnClickListener(this);
 
         rootView.setFilterTouchesWhenObscured(
-                PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(getContext())
+                PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(getContext())
         );
 
         if (mError) {

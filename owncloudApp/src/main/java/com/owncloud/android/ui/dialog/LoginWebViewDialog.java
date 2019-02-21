@@ -169,7 +169,7 @@ public class LoginWebViewDialog extends DialogFragment {
 
         // Allow or disallow touches with other visible windows
         ssoRootView.setFilterTouchesWhenObscured(
-                PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(getContext())
+                PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(getContext())
         );
         
         if (mWebView == null) {

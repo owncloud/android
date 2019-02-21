@@ -96,7 +96,7 @@ public class ManageAccountsActivity extends FileActivity
 
         mListView = findViewById(R.id.account_list);
         mListView.setFilterTouchesWhenObscured(
-                PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(getApplicationContext())
+                PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(getApplicationContext())
         );
 
         setupToolbar();

@@ -147,7 +147,7 @@ public class EditShareFragment extends DialogFragment {
 
         // Allow or disallow touches with other visible windows
         view.setFilterTouchesWhenObscured(
-                PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(getContext())
+                PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(getContext())
         );
 
         ((TextView) view.findViewById(R.id.editShareTitle)).setText(

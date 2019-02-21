@@ -27,7 +27,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import com.google.android.material.snackbar.Snackbar;
 import androidx.appcompat.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -82,7 +81,7 @@ public class PatternLockActivity extends AppCompatActivity {
         // Allow or disallow touches with other visible windows
         RelativeLayout activityPatternLockLayout = findViewById(R.id.activityPatternLockLayout);
         activityPatternLockLayout.setFilterTouchesWhenObscured(
-                PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(this)
+                PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(this)
         );
 
         String mPatternHeaderViewText = "";

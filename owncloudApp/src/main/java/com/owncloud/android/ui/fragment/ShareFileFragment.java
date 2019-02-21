@@ -453,7 +453,7 @@ public class ShareFileFragment extends Fragment
 
         // Allow or disallow touches with other visible windows
         scrollView.setFilterTouchesWhenObscured(
-                PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(getContext())
+                PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(getContext())
         );
 
         // Set Scroll to initial position
@@ -555,7 +555,7 @@ public class ShareFileFragment extends Fragment
 
         // Allow or disallow touches with other visible windows
         scrollView.setFilterTouchesWhenObscured(
-                PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(getContext())
+                PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(getContext())
         );
 
         scrollView.scrollTo(0, 0);

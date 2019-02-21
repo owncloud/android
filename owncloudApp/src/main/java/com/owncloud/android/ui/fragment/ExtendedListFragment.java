@@ -159,7 +159,7 @@ public class ExtendedListFragment extends Fragment
         mListFooterView = inflater.inflate(R.layout.list_footer, null, false);
 
         mListFooterView.setFilterTouchesWhenObscured(
-                PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(getContext())
+                PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(getContext())
         );
 
         mGridView = v.findViewById(R.id.grid_root);
@@ -169,7 +169,7 @@ public class ExtendedListFragment extends Fragment
         mGridFooterView = inflater.inflate(R.layout.list_footer, null, false);
 
         mGridFooterView.setFilterTouchesWhenObscured(
-                PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(getContext())
+                PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(getContext())
         );
 
         // Pull-down to refresh layout

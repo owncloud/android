@@ -173,7 +173,7 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
                     view.setTag(ViewType.LIST_ITEM);
                     // Allow or disallow touches with other visible windows
                     view.setFilterTouchesWhenObscured(
-                            PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(mContext)
+                            PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(mContext)
                     );
                     break;
             }
@@ -192,7 +192,7 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
 
             // Allow or disallow touches with other visible windows
             linearLayout.setFilterTouchesWhenObscured(
-                    PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(mContext)
+                    PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(mContext)
             );
 
             switch (viewType) {

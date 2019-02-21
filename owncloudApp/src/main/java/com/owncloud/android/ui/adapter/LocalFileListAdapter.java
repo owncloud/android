@@ -114,7 +114,7 @@ public class LocalFileListAdapter extends BaseAdapter implements ListAdapter {
 
             // Allow or disallow touches with other visible windows
             view.setFilterTouchesWhenObscured(
-                    PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(mContext)
+                    PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(mContext)
             );
         }
         if (mFiles != null && mFiles.length > position) {

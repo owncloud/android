@@ -310,7 +310,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         // Allow or disallow touches with other visible windows
         FrameLayout loginLayout = findViewById(R.id.login_layout);
         loginLayout.setFilterTouchesWhenObscured(
-                PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(this)
+                PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(this)
         );
 
         // Set login background color or image

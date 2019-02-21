@@ -54,9 +54,6 @@ import com.owncloud.android.ui.dialog.LoadingDialog;
 import com.owncloud.android.utils.FileStorageUtils;
 import com.owncloud.android.utils.PreferenceUtils;
 
-import java.io.File;
-import java.util.ArrayList;
-
 
 /**
  * Activity reporting errors occurred when local files uploaded to an ownCloud account with an app
@@ -122,7 +119,7 @@ public class ErrorsWhileCopyingHandlerActivity extends AppCompatActivity
         // Allow or disallow touches with other visible windows
         LinearLayout alertDialogListViewLayout = findViewById(R.id.alertDialogListViewLayout);
         alertDialogListViewLayout.setFilterTouchesWhenObscured(
-                PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(this)
+                PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(this)
         );
 
         /// load the list of local and remote files that failed

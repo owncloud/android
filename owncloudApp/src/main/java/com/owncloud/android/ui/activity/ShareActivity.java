@@ -88,7 +88,7 @@ public class ShareActivity extends FileActivity
         // Allow or disallow touches with other visible windows
         LinearLayout shareActivityLayout = findViewById(R.id.share_activity_layout);
         shareActivityLayout.setFilterTouchesWhenObscured(
-                PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(this)
+                PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(this)
         );
 
         // Set back button

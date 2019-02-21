@@ -26,11 +26,9 @@ import android.accounts.Account;
 import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.appcompat.widget.SearchView;
-import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,7 +41,6 @@ import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.shares.OCShare;
 import com.owncloud.android.ui.activity.FileActivity;
-import com.owncloud.android.ui.activity.Preferences;
 import com.owncloud.android.ui.adapter.ShareUserListAdapter;
 import com.owncloud.android.utils.PreferenceUtils;
 
@@ -121,7 +118,7 @@ public class SearchShareesFragment extends Fragment implements ShareUserListAdap
 
         // Allow or disallow touches with other visible windows
         view.setFilterTouchesWhenObscured(
-                PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(getContext())
+                PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(getContext())
         );
 
         // Get the SearchView and set the searchable configuration

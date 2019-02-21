@@ -76,7 +76,7 @@ public class SharePublicLinkListAdapter extends ArrayAdapter{
 
         // Allow or disallow touches with other visible windows
         view.setFilterTouchesWhenObscured(
-                PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(mContext)
+                PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(mContext)
         );
 
         if (mPublicLinks != null && mPublicLinks.size() > position) {

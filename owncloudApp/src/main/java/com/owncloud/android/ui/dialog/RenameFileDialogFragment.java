@@ -83,7 +83,7 @@ public class RenameFileDialogFragment
 
         // Allow or disallow touches with other visible windows
         v.setFilterTouchesWhenObscured(
-                PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(getContext())
+                PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(getContext())
         );
         
         // Setup layout 

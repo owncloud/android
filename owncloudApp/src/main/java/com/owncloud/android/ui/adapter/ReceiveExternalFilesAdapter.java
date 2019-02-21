@@ -100,7 +100,7 @@ public class ReceiveExternalFilesAdapter extends BaseAdapter implements ListAdap
 
             // Allow or disallow touches with other visible windows
             vi.setFilterTouchesWhenObscured(
-                    PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(mContext)
+                    PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(mContext)
             );
         }
 

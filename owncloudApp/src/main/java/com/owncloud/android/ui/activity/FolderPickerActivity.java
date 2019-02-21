@@ -57,7 +57,6 @@ import com.owncloud.android.ui.dialog.CreateFolderDialogFragment;
 import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter;
 import com.owncloud.android.ui.fragment.FileFragment;
 import com.owncloud.android.ui.fragment.OCFileListFragment;
-import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter;
 import com.owncloud.android.utils.PreferenceUtils;
 
 import java.util.ArrayList;
@@ -92,7 +91,7 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
         // Allow or disallow touches with other visible windows
         LinearLayout filesFolderPickerLayout = findViewById(R.id.filesFolderPickerLayout);
         filesFolderPickerLayout.setFilterTouchesWhenObscured(
-                PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(this)
+                PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(this)
         );
         
         if (savedInstanceState == null) {
