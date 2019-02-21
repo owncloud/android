@@ -315,7 +315,7 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
 
             publicShareFragment!!.dismiss()
 
-            fileOperationsHelper.copyOrSendPublicLink(OCShare(result.data.shares[0]))
+            fileOperationsHelper.copyOrSendPublicLink(OCShare.fromRemoteShare(result.data.shares[0]))
 
         } else {
             publicShareFragment!!.showError(
@@ -333,7 +333,7 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
 
             publicShareFragment!!.dismiss()
 
-            fileOperationsHelper.copyOrSendPublicLink(OCShare(result.data.shares[0]))
+            fileOperationsHelper.copyOrSendPublicLink(OCShare.fromRemoteShare(result.data.shares[0]))
 
         } else {
             publicShareFragment!!.showError(
