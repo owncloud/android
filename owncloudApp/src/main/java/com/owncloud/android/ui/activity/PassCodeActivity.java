@@ -104,11 +104,6 @@ public class PassCodeActivity extends BaseActivity {
                 PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(this)
         );
 
-        LinearLayout manageSpace = findViewById(R.id.root);
-        manageSpace.setFilterTouchesWhenObscured(
-                PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(this)
-        );
-
         mBCancel = findViewById(R.id.cancel);
         mPassCodeHdr = findViewById(R.id.header);
         mPassCodeHdrExplanation = findViewById(R.id.explanation);

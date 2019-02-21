@@ -112,15 +112,13 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
         DisplayUtils.colorPreLollipopHorizontalProgressBar(progressBar);
         mProgressController.setProgressBar(progressBar);
 
+        // Allow or disallow touches with other visible windows
         if (mLayout == R.layout.file_details_fragment) {
-            // Allow or disallow touches with other visible windows
             RelativeLayout fileDetailsLayout = getActivity().findViewById(R.id.fileDetailsLayout);
             fileDetailsLayout.setFilterTouchesWhenObscured(
                     PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(getContext())
             );
-
         } else {
-            // Allow or disallow touches with other visible windows
             LinearLayout fileDetailsEmptyLayout = getActivity().findViewById(R.id.fileDetailsEmptyLayout);
             fileDetailsEmptyLayout.setFilterTouchesWhenObscured(
                     PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(getContext())
