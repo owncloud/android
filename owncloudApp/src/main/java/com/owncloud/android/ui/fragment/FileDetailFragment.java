@@ -33,11 +33,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
-import android.widget.ScrollView;
-import android.widget.TextView;
+import android.widget.*;
 
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
@@ -105,12 +101,6 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
         super();
         mAccount = null;
         mLayout = R.layout.file_details_empty;
-
-        // Allow or disallow touches with other visible windows
-        LinearLayout fileDetailsEmptyLayout = getActivity().findViewById(R.id.fileDetailsEmptyLayout);
-        fileDetailsEmptyLayout.setFilterTouchesWhenObscured(
-                PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(getContext())
-        );
     }
 
     @Override
@@ -121,6 +111,21 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
         ProgressBar progressBar = mView.findViewById(R.id.fdProgressBar);
         DisplayUtils.colorPreLollipopHorizontalProgressBar(progressBar);
         mProgressController.setProgressBar(progressBar);
+
+        if (mLayout == R.layout.file_details_fragment) {
+            // Allow or disallow touches with other visible windows
+            RelativeLayout fileDetailsLayout = getActivity().findViewById(R.id.fileDetailsLayout);
+            fileDetailsLayout.setFilterTouchesWhenObscured(
+                    PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(getContext())
+            );
+
+        } else {
+            // Allow or disallow touches with other visible windows
+            LinearLayout fileDetailsEmptyLayout = getActivity().findViewById(R.id.fileDetailsEmptyLayout);
+            fileDetailsEmptyLayout.setFilterTouchesWhenObscured(
+                    PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(getContext())
+            );
+        }
     }
 
     @Override
@@ -137,12 +142,6 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
 
         if (getFile() != null && mAccount != null) {
             mLayout = R.layout.file_details_fragment;
-
-            // Allow or disallow touches with other visible windows
-            ScrollView fdScrollView = getActivity().findViewById(R.id.fdScrollView);
-            fdScrollView.setFilterTouchesWhenObscured(
-                    PreferenceUtils.shouldAllowTouchesWithOtherVisibleWindows(getContext())
-            );
         }
 
         mView = inflater.inflate(mLayout, null);
