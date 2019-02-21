@@ -196,9 +196,11 @@ public class LocalFileListFragment extends ExtendedListFragment {
 
         // Allow or disallow touches with other visible windows
         CoordinatorLayout coordinatorLayout = getActivity().findViewById(R.id.coordinator_layout);
-        coordinatorLayout.setFilterTouchesWhenObscured(
-                PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(getContext())
-        );
+        if (coordinatorLayout != null) {
+            coordinatorLayout.setFilterTouchesWhenObscured(
+                    PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(getContext())
+            );
+        }
 
         Log_OC.i(TAG, "onActivityCreated() stop");
     }
