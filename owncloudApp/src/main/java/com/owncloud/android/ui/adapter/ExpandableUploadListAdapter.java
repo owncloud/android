@@ -213,6 +213,10 @@ public class ExpandableUploadListAdapter extends BaseExpandableListAdapter imple
                             Context.LAYOUT_INFLATER_SERVICE
                     );
             view = inflator.inflate(R.layout.upload_list_item, parent, false);
+            // Allow or disallow touches with other visible windows
+            view.setFilterTouchesWhenObscured(
+                    PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(mParentActivity)
+            );
         }
 
         if (uploadsItems != null && uploadsItems.length > position) {
