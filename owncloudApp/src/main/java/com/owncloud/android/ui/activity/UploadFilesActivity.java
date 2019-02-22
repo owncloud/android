@@ -4,6 +4,7 @@
  *   @author David A. Velasco
  *   @author Shashvat Kedia
  *   @author Christian Schabesberger
+ *   @author David González Verdugo
  *   Copyright (C) 2019 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
@@ -37,6 +38,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
@@ -49,6 +51,7 @@ import com.owncloud.android.ui.dialog.LoadingDialog;
 import com.owncloud.android.ui.fragment.LocalFileListFragment;
 import com.owncloud.android.ui.helpers.FilesUploadHelper;
 import com.owncloud.android.utils.FileStorageUtils;
+import com.owncloud.android.utils.PreferenceUtils;
 
 import java.io.File;
 
@@ -126,8 +129,18 @@ public class UploadFilesActivity extends FileActivity implements
         // Inflate and set the layout view
         setContentView(R.layout.upload_files_layout);
 
+        // Allow or disallow touches with other visible windows
+        LinearLayout uploadFilesLayout = findViewById(R.id.upload_files_layout);
+        uploadFilesLayout.setFilterTouchesWhenObscured(
+                PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(this)
+        );
+
         mFileListFragment = (LocalFileListFragment)
                 getSupportFragmentManager().findFragmentById(R.id.local_files_list);
+
+        mFileListFragment.getView().setFilterTouchesWhenObscured(
+                PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(this)
+        );
 
         // Set input controllers
         mCancelBtn = findViewById(R.id.upload_files_btn_cancel);

@@ -23,8 +23,7 @@
     android:layout_height="wrap_content"
     android:gravity="center"
     android:padding="@dimen/standard_padding"
-    android:orientation="vertical"
-    android:filterTouchesWhenObscured="true">
+    android:orientation="vertical">
 
 	<TextView
 		android:id="@+id/header"

@@ -10,16 +10,16 @@
  * @author Shashvat Kedia
  * Copyright (C) 2011  Bartek Przybylski
  * Copyright (C) 2019 ownCloud GmbH.
- * <p>
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
  * as published by the Free Software Foundation.
- * <p>
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * <p>
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -55,6 +55,7 @@ import com.owncloud.android.ui.activity.ComponentsGetter;
 import com.owncloud.android.utils.DisplayUtils;
 import com.owncloud.android.utils.FileStorageUtils;
 import com.owncloud.android.utils.MimetypeIconUtil;
+import com.owncloud.android.utils.PreferenceUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -170,12 +171,15 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
                 case LIST_ITEM:
                     view = inflator.inflate(R.layout.list_item, parent, false);
                     view.setTag(ViewType.LIST_ITEM);
+                    // Allow or disallow touches with other visible windows
+                    view.setFilterTouchesWhenObscured(
+                            PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(mContext)
+                    );
                     break;
             }
         }
 
         if (file != null) {
-
             final ImageView localStateView = view.findViewById(R.id.localFileIndicator);
             final ImageView fileIcon = view.findViewById(R.id.thumbnail);
 
@@ -185,6 +189,11 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
 
             final LinearLayout linearLayout = view.findViewById(R.id.ListItemLayout);
             linearLayout.setContentDescription("LinearLayout-" + name);
+
+            // Allow or disallow touches with other visible windows
+            linearLayout.setFilterTouchesWhenObscured(
+                    PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(mContext)
+            );
 
             switch (viewType) {
                 case LIST_ITEM:

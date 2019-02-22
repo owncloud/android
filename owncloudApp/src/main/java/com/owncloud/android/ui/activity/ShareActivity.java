@@ -32,6 +32,7 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import android.view.MenuItem;
+import android.widget.LinearLayout;
 
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.OCFile;
@@ -55,6 +56,7 @@ import com.owncloud.android.ui.fragment.PublicShareDialogFragment;
 import com.owncloud.android.ui.fragment.SearchShareesFragment;
 import com.owncloud.android.ui.fragment.ShareFileFragment;
 import com.owncloud.android.ui.fragment.ShareFragmentListener;
+import com.owncloud.android.utils.PreferenceUtils;
 
 
 /**
@@ -82,6 +84,12 @@ public class ShareActivity extends FileActivity
         mGetSharesForFileAsyncTask = null;
 
         setContentView(R.layout.share_activity);
+
+        // Allow or disallow touches with other visible windows
+        LinearLayout shareActivityLayout = findViewById(R.id.share_activity_layout);
+        shareActivityLayout.setFilterTouchesWhenObscured(
+                PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(this)
+        );
 
         // Set back button
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

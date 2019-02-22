@@ -4,6 +4,7 @@
  *   @author Bartek Przybylski
  *   @author David A. Velasco
  *   @author Christian Schabesberger
+ *   @author David González Verdugo
  *   Copyright (C) 2011  Bartek Przybylski
  *   Copyright (C) 2019 ownCloud GmbH.
  *
@@ -32,9 +33,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
+import android.widget.*;
 
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
@@ -53,6 +52,7 @@ import com.owncloud.android.ui.dialog.RemoveFilesDialogFragment;
 import com.owncloud.android.ui.dialog.RenameFileDialogFragment;
 import com.owncloud.android.utils.DisplayUtils;
 import com.owncloud.android.utils.MimetypeIconUtil;
+import com.owncloud.android.utils.PreferenceUtils;
 
 
 /**
@@ -111,17 +111,30 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
         ProgressBar progressBar = mView.findViewById(R.id.fdProgressBar);
         DisplayUtils.colorPreLollipopHorizontalProgressBar(progressBar);
         mProgressController.setProgressBar(progressBar);
+
+        // Allow or disallow touches with other visible windows
+        if (mLayout == R.layout.file_details_fragment) {
+            RelativeLayout fileDetailsLayout = getActivity().findViewById(R.id.fileDetailsLayout);
+            fileDetailsLayout.setFilterTouchesWhenObscured(
+                    PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(getContext())
+            );
+        } else {
+            LinearLayout fileDetailsEmptyLayout = getActivity().findViewById(R.id.fileDetailsEmptyLayout);
+            fileDetailsEmptyLayout.setFilterTouchesWhenObscured(
+                    PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(getContext())
+            );
+        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
+                             Bundle savedInstanceState) {
 
-        setFile((OCFile) getArguments().getParcelable(ARG_FILE));
+        setFile(getArguments().getParcelable(ARG_FILE));
         mAccount = getArguments().getParcelable(ARG_ACCOUNT);
 
         if (savedInstanceState != null) {
-            setFile((OCFile) savedInstanceState.getParcelable(FileActivity.EXTRA_FILE));
+            setFile(savedInstanceState.getParcelable(FileActivity.EXTRA_FILE));
             mAccount = savedInstanceState.getParcelable(FileActivity.EXTRA_ACCOUNT);
         }
 
@@ -130,7 +143,7 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
         }
 
         mView = inflater.inflate(mLayout, null);
-        
+
         if (mLayout == R.layout.file_details_fragment) {
             mView.findViewById(R.id.fdCancelBtn).setOnClickListener(this);
         }

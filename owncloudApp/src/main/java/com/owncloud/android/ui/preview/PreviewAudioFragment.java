@@ -3,6 +3,7 @@
  *
  *   @author David A. Velasco
  *   @author Christian Schabesberger
+ *   @author David González Verdugo
  *   Copyright (C) 2019 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
@@ -52,6 +53,7 @@ import com.owncloud.android.ui.dialog.ConfirmationDialogFragment;
 import com.owncloud.android.ui.dialog.RemoveFilesDialogFragment;
 import com.owncloud.android.ui.fragment.FileFragment;
 import com.owncloud.android.utils.DisplayUtils;
+import com.owncloud.android.utils.PreferenceUtils;
 
 
 /**
@@ -150,6 +152,10 @@ public class PreviewAudioFragment extends FileFragment {
         Log_OC.v(TAG, "onCreateView");
 
         View view = inflater.inflate(R.layout.preview_audio_fragment, container, false);
+        view.setFilterTouchesWhenObscured(
+                PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(getContext())
+        );
+
         mImagePreview = view.findViewById(R.id.image_preview);
         mMediaController = view.findViewById(R.id.media_controller);
         mProgressBar = view.findViewById(R.id.syncProgressBar);

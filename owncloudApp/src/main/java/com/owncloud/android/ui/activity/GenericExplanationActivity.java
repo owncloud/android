@@ -3,6 +3,7 @@
  *
  *   @author David A. Velasco
  *   @author Christian Schabesberger
+ *   @author David González Verdugo
  *   Copyright (C) 2019 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
@@ -31,20 +32,22 @@ import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.owncloud.android.R;
+import com.owncloud.android.utils.PreferenceUtils;
 
 
 /**
  * Activity showing a text message and, optionally, a couple list of single or paired text strings.
- * 
+ *
  * Added to show explanations for notifications when the user clicks on them, and there no place
  * better to show them.
  */
-public class GenericExplanationActivity  extends AppCompatActivity {
+public class GenericExplanationActivity extends AppCompatActivity {
 
     public static final String EXTRA_LIST = GenericExplanationActivity.class.getCanonicalName() +
             ".EXTRA_LIST";
@@ -52,25 +55,31 @@ public class GenericExplanationActivity  extends AppCompatActivity {
             ".EXTRA_LIST_2";
     public static final String MESSAGE = GenericExplanationActivity.class.getCanonicalName() +
             ".MESSAGE";
-    
-    
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
+
         Intent intent = getIntent();
-        String message = intent.getStringExtra(MESSAGE); 
+        String message = intent.getStringExtra(MESSAGE);
         ArrayList<String> list = intent.getStringArrayListExtra(EXTRA_LIST);
         ArrayList<String> list2 = intent.getStringArrayListExtra(EXTRA_LIST_2);
-        
+
         setContentView(R.layout.generic_explanation);
-        
+
         if (message != null) {
             TextView textView = findViewById(R.id.message);
             textView.setText(message);
             textView.setMovementMethod(new ScrollingMovementMethod());
         }
-        
+
+        // Allow or disallow touches with other visible windows
+        LinearLayout alertDialogListViewLayout = findViewById(R.id.alertDialogListViewLayout);
+        alertDialogListViewLayout.setFilterTouchesWhenObscured(
+                PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(this)
+        );
+
         ListView listView = findViewById(R.id.list);
         if (list != null && list.size() > 0) {
             //ListAdapter adapter = new ArrayAdapter<String>(this,

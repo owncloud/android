@@ -7,16 +7,16 @@
  * @author Christian Schabesberger
  * Copyright (C) 2011  Bartek Przybylski
  * Copyright (C) 2019 ownCloud GmbH.
- * <p>
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
  * as published by the Free Software Foundation.
- * <p>
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * <p>
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -56,6 +56,7 @@ import com.owncloud.android.db.PreferenceManager.CameraUploadsConfiguration;
 import com.owncloud.android.files.services.CameraUploadsHandler;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.utils.DisplayUtils;
+import com.owncloud.android.utils.PreferenceUtils;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -79,30 +80,35 @@ public class Preferences extends PreferenceActivity {
     private static final int ACTION_REQUEST_PATTERN = 7;
     private static final int ACTION_CONFIRM_PATTERN = 8;
 
-    private CheckBoxPreference pPasscode;
-    private CheckBoxPreference pPattern;
-    private CheckBoxPreference pFingerprint;
-    private AppCompatDelegate mDelegate;
-
-    private String mUploadPath;
-    private String mUploadVideoPath;
-    private String mSourcePath;
-    private boolean patternSet;
-    private boolean passcodeSet;
+    public static final String PREFERENCE_TOUCHES_WITH_OTHER_VISIBLE_WINDOWS = "touches_with_other_visible_windows";
 
     private PreferenceCategory mPrefCameraUploadsCategory;
-    private Preference mPrefCameraPictureUploads;
+    private CheckBoxPreference mPrefCameraPictureUploads;
     private Preference mPrefCameraPictureUploadsPath;
     private Preference mPrefCameraPictureUploadsWiFi;
-    private Preference mPrefCameraVideoUploads;
+    private CheckBoxPreference mPrefCameraVideoUploads;
     private Preference mPrefCameraVideoUploadsPath;
     private Preference mPrefCameraVideoUploadsWiFi;
     private Preference mPrefCameraUploadsSourcePath;
     private Preference mPrefCameraUploadsBehaviour;
 
+    private String mUploadPath;
+    private String mUploadVideoPath;
+    private String mSourcePath;
+
     private CameraUploadsHandler mCameraUploadsHandler;
 
+    private PreferenceCategory mPrefSecurityCategory;
+    private CheckBoxPreference mPasscode;
+    private CheckBoxPreference mPattern;
+    private CheckBoxPreference mFingerprint;
     private FingerprintManager mFingerprintManager;
+    private boolean patternSet;
+    private boolean passcodeSet;
+    private CheckBoxPreference mPrefTouchesWithOtherVisibleWindows;
+
+    private Preference mAboutApp;
+    private AppCompatDelegate mDelegate;
 
     @SuppressWarnings("deprecation")
     @Override
@@ -138,6 +144,10 @@ public class Preferences extends PreferenceActivity {
         // Register context menu for list of preferences.
         registerForContextMenu(getListView());
 
+        getListView().setFilterTouchesWhenObscured(
+                PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(getApplicationContext())
+        );
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             mFingerprintManager = FingerprintManager.getFingerprintManager(this);
         }
@@ -145,7 +155,10 @@ public class Preferences extends PreferenceActivity {
         /*
          * Camera uploads
          */
+
         // Pictures
+        mPrefCameraPictureUploads = (CheckBoxPreference) findPreference("camera_picture_uploads");
+
         mPrefCameraPictureUploadsPath = findPreference("camera_picture_uploads_path");
         if (mPrefCameraPictureUploadsPath != null) {
 
@@ -163,24 +176,24 @@ public class Preferences extends PreferenceActivity {
         mPrefCameraUploadsCategory = (PreferenceCategory) findPreference("camera_uploads_category");
 
         mPrefCameraPictureUploadsWiFi = findPreference("camera_picture_uploads_on_wifi");
-        mPrefCameraPictureUploads = findPreference("camera_picture_uploads");
 
-        toggleCameraUploadsPictureOptions(true, ((CheckBoxPreference) mPrefCameraPictureUploads).isChecked());
+        toggleCameraUploadsPictureOptions(true, mPrefCameraPictureUploads.isChecked());
 
         mPrefCameraPictureUploads.setOnPreferenceChangeListener((preference, newValue) -> {
             boolean enableCameraUploadsPicture = (Boolean) newValue;
             toggleCameraUploadsPictureOptions(false, enableCameraUploadsPicture);
             toggleCameraUploadsCommonOptions(
-                    ((CheckBoxPreference) mPrefCameraVideoUploads).isChecked(),
+                    mPrefCameraVideoUploads.isChecked(),
                     enableCameraUploadsPicture
             );
             return true;
         });
 
         // Videos
+        mPrefCameraVideoUploads = (CheckBoxPreference) findPreference("camera_video_uploads");
+
         mPrefCameraVideoUploadsPath = findPreference("camera_video_uploads_path");
         if (mPrefCameraVideoUploadsPath != null) {
-
             mPrefCameraVideoUploadsPath.setOnPreferenceClickListener(preference -> {
                 if (!mUploadVideoPath.endsWith(OCFile.PATH_SEPARATOR)) {
                     mUploadVideoPath += OCFile.PATH_SEPARATOR;
@@ -193,8 +206,7 @@ public class Preferences extends PreferenceActivity {
         }
 
         mPrefCameraVideoUploadsWiFi = findPreference("camera_video_uploads_on_wifi");
-        mPrefCameraVideoUploads = findPreference("camera_video_uploads");
-        toggleCameraUploadsVideoOptions(true, ((CheckBoxPreference) mPrefCameraVideoUploads).isChecked());
+        toggleCameraUploadsVideoOptions(true, mPrefCameraVideoUploads.isChecked());
 
         mPrefCameraVideoUploads.setOnPreferenceChangeListener((preference, newValue) -> {
             toggleCameraUploadsVideoOptions(false, (Boolean) newValue);
@@ -223,8 +235,9 @@ public class Preferences extends PreferenceActivity {
 
         mPrefCameraUploadsBehaviour = findPreference("camera_uploads_behaviour");
         toggleCameraUploadsCommonOptions(
-                ((CheckBoxPreference) mPrefCameraVideoUploads).isChecked(),
-                ((CheckBoxPreference) mPrefCameraPictureUploads).isChecked());
+                mPrefCameraVideoUploads.isChecked(),
+                mPrefCameraPictureUploads.isChecked()
+        );
 
         loadCameraUploadsPicturePath();
         loadCameraUploadsVideoPath();
@@ -239,14 +252,16 @@ public class Preferences extends PreferenceActivity {
          * Security
          */
 
-        PreferenceCategory prefSecurityCategory = (PreferenceCategory) findPreference("security_category");
-        pPasscode = (CheckBoxPreference) findPreference(PassCodeActivity.PREFERENCE_SET_PASSCODE);
-        pFingerprint = (CheckBoxPreference) findPreference(FingerprintActivity.PREFERENCE_SET_FINGERPRINT);
+        mPrefSecurityCategory = (PreferenceCategory) findPreference("security_category");
+        mPasscode = (CheckBoxPreference) findPreference(PassCodeActivity.PREFERENCE_SET_PASSCODE);
+        mPattern = (CheckBoxPreference) findPreference(PatternLockActivity.PREFERENCE_SET_PATTERN);
+        mFingerprint = (CheckBoxPreference) findPreference(FingerprintActivity.PREFERENCE_SET_FINGERPRINT);
+        mPrefTouchesWithOtherVisibleWindows =
+                (CheckBoxPreference) findPreference(PREFERENCE_TOUCHES_WITH_OTHER_VISIBLE_WINDOWS);
 
         // Passcode lock
-        if (pPasscode != null) {
-
-            pPasscode.setOnPreferenceChangeListener((preference, newValue) -> {
+        if (mPasscode != null) {
+            mPasscode.setOnPreferenceChangeListener((preference, newValue) -> {
                 Intent i = new Intent(getApplicationContext(), PassCodeActivity.class);
                 Boolean incoming = (Boolean) newValue;
                 SharedPreferences appPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
@@ -259,16 +274,14 @@ public class Preferences extends PreferenceActivity {
 
                     startActivityForResult(i, incoming ? ACTION_REQUEST_PASSCODE : ACTION_CONFIRM_PASSCODE);
                 }
-                // Don't update just yet, we will decide on it in onActivityResult
+                // Don't update this yet, we will decide it on onActivityResult
                 return false;
             });
         }
 
         // Pattern lock
-        pPattern = (CheckBoxPreference) findPreference(PatternLockActivity.PREFERENCE_SET_PATTERN);
-        if (pPattern != null) {
-
-            pPattern.setOnPreferenceChangeListener((preference, newValue) -> {
+        if (mPattern != null) {
+            mPattern.setOnPreferenceChangeListener((preference, newValue) -> {
                 Intent intent = new Intent(getApplicationContext(), PatternLockActivity.class);
                 Boolean state = (Boolean) newValue;
                 SharedPreferences appPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
@@ -286,18 +299,15 @@ public class Preferences extends PreferenceActivity {
 
         // Fingerprint lock
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-
-            prefSecurityCategory.removePreference(pFingerprint);
-
-        } else if (pFingerprint != null) {
-
+            mPrefSecurityCategory.removePreference(mFingerprint);
+        } else if (mFingerprint != null) {
             // Disable Fingerprint lock if Passcode or Pattern locks are disabled
-            if (pPasscode != null && pPattern != null && !pPasscode.isChecked() && !pPattern.isChecked()) {
-                pFingerprint.setEnabled(false);
-                pFingerprint.setSummary(R.string.prefs_fingerprint_summary);
+            if (mPasscode != null && mPattern != null && !mPasscode.isChecked() && !mPattern.isChecked()) {
+                mFingerprint.setEnabled(false);
+                mFingerprint.setSummary(R.string.prefs_fingerprint_summary);
             }
 
-            pFingerprint.setOnPreferenceChangeListener((preference, newValue) -> {
+            mFingerprint.setOnPreferenceChangeListener((preference, newValue) -> {
                 Boolean incoming = (Boolean) newValue;
 
                 // Fingerprint not supported
@@ -320,7 +330,38 @@ public class Preferences extends PreferenceActivity {
             });
         }
 
-        /*
+        if (mPrefTouchesWithOtherVisibleWindows != null) {
+            mPrefTouchesWithOtherVisibleWindows.setOnPreferenceChangeListener((preference, newValue) -> {
+                        SharedPreferences.Editor appPrefs = PreferenceManager.
+                                getDefaultSharedPreferences(getApplicationContext()).edit();
+
+                        if ((Boolean) newValue) {
+                            showConfirmationDialog(
+                                    getString(R.string.confirmation_touches_with_other_windows_title),
+                                    getString(R.string.confirmation_touches_with_other_windows_message),
+                                    (dialog, which) -> {
+                                        if (which == DialogInterface.BUTTON_POSITIVE) {
+                                            appPrefs.putBoolean(
+                                                    PREFERENCE_TOUCHES_WITH_OTHER_VISIBLE_WINDOWS,
+                                                    true
+                                            );
+                                        } else if (which == DialogInterface.BUTTON_NEGATIVE) {
+                                            mPrefTouchesWithOtherVisibleWindows.setChecked(false);
+                                        }
+                                        dialog.dismiss();
+                                    });
+                        } else {
+                            appPrefs.putBoolean(PREFERENCE_TOUCHES_WITH_OTHER_VISIBLE_WINDOWS, false);
+                        }
+
+                        appPrefs.apply();
+
+                        return true;
+                    }
+            );
+        }
+
+        /**
          * More
          */
         PreferenceCategory pCategoryMore = (PreferenceCategory) findPreference("more");
@@ -466,14 +507,14 @@ public class Preferences extends PreferenceActivity {
         /*
          * About App
          */
-        Preference pAboutApp = findPreference("about_app");
-        if (pAboutApp != null) {
-            pAboutApp.setTitle(String.format(
+        mAboutApp = findPreference("about_app");
+        if (mAboutApp != null) {
+            mAboutApp.setTitle(String.format(
                     getString(R.string.about_android),
                     getString(R.string.app_name)
             ));
-            pAboutApp.setSummary(String.format(getString(R.string.about_version), appVersion));
-            pAboutApp.setOnPreferenceClickListener(preference -> {
+            mAboutApp.setSummary(String.format(getString(R.string.about_version), appVersion));
+            mAboutApp.setOnPreferenceClickListener(preference -> {
                 String commitUrl = BuildConfig.GIT_REMOTE + "/commit/" + BuildConfig.COMMIT_SHA1;
                 Uri uriUrl = Uri.parse(commitUrl);
                 Intent intent = new Intent(Intent.ACTION_VIEW, uriUrl);
@@ -499,10 +540,12 @@ public class Preferences extends PreferenceActivity {
             }
         } else {
             if (!initializing) {
-                showConfirmationDialog(getString(R.string.confirmation_disable_pictures_upload_message),
+                showConfirmationDialog(
+                        getString(R.string.confirmation_disable_camera_uploads_title),
+                        getString(R.string.confirmation_disable_pictures_upload_message),
                         (dialog, which) -> {
                             if (which == DialogInterface.BUTTON_NEGATIVE) {
-                                ((CheckBoxPreference) mPrefCameraPictureUploads).setChecked(true);
+                                mPrefCameraPictureUploads.setChecked(true);
                                 mPrefCameraUploadsCategory.addPreference(mPrefCameraPictureUploadsWiFi);
                                 mPrefCameraUploadsCategory.addPreference(mPrefCameraPictureUploadsPath);
 
@@ -536,10 +579,12 @@ public class Preferences extends PreferenceActivity {
             }
         } else {
             if (!initializing) {
-                showConfirmationDialog(getString(R.string.confirmation_disable_videos_upload_message),
+                showConfirmationDialog(
+                        getString(R.string.confirmation_disable_camera_uploads_title),
+                        getString(R.string.confirmation_disable_videos_upload_message),
                         (dialog, which) -> {
                             if (which == DialogInterface.BUTTON_NEGATIVE) {
-                                ((CheckBoxPreference) mPrefCameraVideoUploads).setChecked(true);
+                                mPrefCameraVideoUploads.setChecked(true);
                                 mPrefCameraUploadsCategory.addPreference(mPrefCameraVideoUploadsWiFi);
                                 mPrefCameraUploadsCategory.addPreference(mPrefCameraVideoUploadsPath);
                             } else if (which == DialogInterface.BUTTON_POSITIVE) {
@@ -573,9 +618,9 @@ public class Preferences extends PreferenceActivity {
         SharedPreferences appPrefs =
                 PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         boolean passCodeState = appPrefs.getBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false);
-        pPasscode.setChecked(passCodeState);
+        mPasscode.setChecked(passCodeState);
         boolean patternState = appPrefs.getBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN, false);
-        pPattern.setChecked(patternState);
+        mPattern.setChecked(patternState);
         boolean fingerprintState = appPrefs.getBoolean(FingerprintActivity.PREFERENCE_SET_FINGERPRINT, false);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && mFingerprintManager != null &&
@@ -583,7 +628,7 @@ public class Preferences extends PreferenceActivity {
             fingerprintState = false;
         }
 
-        pFingerprint.setChecked(fingerprintState);
+        mFingerprint.setChecked(fingerprintState);
     }
 
     @Override
@@ -884,16 +929,16 @@ public class Preferences extends PreferenceActivity {
     }
 
     private void enableFingerprint() {
-        pFingerprint.setEnabled(true);
-        pFingerprint.setSummary(null);
+        mFingerprint.setEnabled(true);
+        mFingerprint.setSummary(null);
     }
 
     private void disableFingerprint(String summary) {
-        if (pFingerprint.isChecked()) {
-            pFingerprint.setChecked(false);
+        if (mFingerprint.isChecked()) {
+            mFingerprint.setChecked(false);
         }
-        pFingerprint.setEnabled(false);
-        pFingerprint.setSummary(summary);
+        mFingerprint.setEnabled(false);
+        mFingerprint.setSummary(summary);
     }
 
     /**
@@ -916,9 +961,9 @@ public class Preferences extends PreferenceActivity {
      * @param message  message to show in the dialog
      * @param listener to handle button clicks
      */
-    private void showConfirmationDialog(String message, DialogInterface.OnClickListener listener) {
+    private void showConfirmationDialog(String title, String message, DialogInterface.OnClickListener listener) {
         AlertDialog alertDialog = new AlertDialog.Builder(this).create();
-        alertDialog.setTitle(R.string.confirmation_disable_camera_uploads_title);
+        alertDialog.setTitle(title);
         alertDialog.setMessage(message);
         alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.common_no), listener);
         alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.common_yes), listener);

@@ -56,6 +56,7 @@ import com.owncloud.android.ui.adapter.ShareUserListAdapter;
 import com.owncloud.android.ui.dialog.RemoveShareDialogFragment;
 import com.owncloud.android.utils.DisplayUtils;
 import com.owncloud.android.utils.MimetypeIconUtil;
+import com.owncloud.android.utils.PreferenceUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -448,8 +449,14 @@ public class ShareFileFragment extends Fragment
             usersList.setVisibility(View.GONE);
         }
 
-        // Set Scroll to initial position
         ScrollView scrollView = getView().findViewById(R.id.shareScroll);
+
+        // Allow or disallow touches with other visible windows
+        scrollView.setFilterTouchesWhenObscured(
+                PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(getContext())
+        );
+
+        // Set Scroll to initial position
         scrollView.scrollTo(0, 0);
     }
 
@@ -545,6 +552,12 @@ public class ShareFileFragment extends Fragment
 
         // Set Scroll to initial position
         ScrollView scrollView = getView().findViewById(R.id.shareScroll);
+
+        // Allow or disallow touches with other visible windows
+        scrollView.setFilterTouchesWhenObscured(
+                PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(getContext())
+        );
+
         scrollView.scrollTo(0, 0);
     }
 

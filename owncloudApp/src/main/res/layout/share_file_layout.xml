@@ -19,7 +19,6 @@
     android:id="@+id/shareScroll"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:filterTouchesWhenObscured="true"
     tools:context="com.owncloud.android.ui.fragment.ShareFileFragment">
 
     <LinearLayout

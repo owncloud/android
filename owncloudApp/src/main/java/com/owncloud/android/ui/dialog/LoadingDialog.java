@@ -2,6 +2,7 @@
  *   ownCloud Android client application
  *
  *   @author Christian Schabesberger
+ *   @author David González Verdugo
  *   Copyright (C) 2019 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
@@ -20,6 +21,7 @@
 package com.owncloud.android.ui.dialog;
 
 import com.owncloud.android.R;
+import com.owncloud.android.utils.PreferenceUtils;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -66,20 +68,25 @@ public class LoadingDialog extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Create a view by inflating desired layout
-        View v = inflater.inflate(R.layout.loading_dialog, container,  false);
-        
+        View v = inflater.inflate(R.layout.loading_dialog, container, false);
+
+        // Allow or disallow touches with other visible windows
+        v.setFilterTouchesWhenObscured(
+                PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(getContext())
+        );
+
         // set message
-        TextView tv  = v.findViewById(R.id.loadingText);
+        TextView tv = v.findViewById(R.id.loadingText);
         int messageId = getArguments().getInt(ARG_MESSAGE_ID, R.string.placeholder_sentence);
         tv.setText(messageId);
 
         // set progress wheel color
-        ProgressBar progressBar  = v.findViewById(R.id.loadingBar);
+        ProgressBar progressBar = v.findViewById(R.id.loadingBar);
         progressBar.getIndeterminateDrawable().setColorFilter(
-            ContextCompat.getColor(getActivity(), R.color.color_accent),
-            PorterDuff.Mode.SRC_IN
+                ContextCompat.getColor(getActivity(), R.color.color_accent),
+                PorterDuff.Mode.SRC_IN
         );
-        
+
         return v;
     }
 

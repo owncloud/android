@@ -34,12 +34,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.PowerManager;
 import android.preference.PreferenceManager;
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.android.material.snackbar.Snackbar;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import androidx.appcompat.widget.SearchView;
 import android.util.SparseBooleanArray;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
@@ -58,6 +52,9 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.snackbar.Snackbar;
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.FileDataStorageManager;
@@ -81,10 +78,16 @@ import com.owncloud.android.ui.preview.PreviewImageFragment;
 import com.owncloud.android.ui.preview.PreviewTextFragment;
 import com.owncloud.android.ui.preview.PreviewVideoFragment;
 import com.owncloud.android.utils.FileStorageUtils;
+import com.owncloud.android.utils.PreferenceUtils;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
+import androidx.appcompat.widget.SearchView;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 /**
  * A Fragment that lists all files and folders in a given path.
@@ -235,17 +238,23 @@ public class OCFileListFragment extends ExtendedListFragment implements
 
             // detect if a mini FAB has ever been clicked
             final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-            if(prefs.getLong(KEY_FAB_EVER_CLICKED, 0) > 0) {
+            if (prefs.getLong(KEY_FAB_EVER_CLICKED, 0) > 0) {
                 miniFabClicked = true;
             }
 
             // add labels to the min FABs when none of them has ever been clicked on
-            if(!miniFabClicked) {
+            if (!miniFabClicked) {
                 setFabLabels();
             } else {
                 removeFabLabels();
             }
         }
+
+        // Allow or disallow touches with other visible windows
+        CoordinatorLayout coordinatorLayout = getActivity().findViewById(R.id.coordinator_layout);
+        coordinatorLayout.setFilterTouchesWhenObscured(
+                PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(getContext())
+        );
     }
 
     @Override

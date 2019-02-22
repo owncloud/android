@@ -3,6 +3,7 @@
  *
  *   @author David A. Velasco
  *   @author Christian Schabesberger
+ *   @author David González Verdugo
  *   Copyright (C) 2019 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
@@ -42,6 +43,7 @@ import com.owncloud.android.R;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.lib.resources.files.FileUtils;
 import com.owncloud.android.ui.activity.ComponentsGetter;
+import com.owncloud.android.utils.PreferenceUtils;
 
 
 /**
@@ -78,6 +80,11 @@ public class RenameFileDialogFragment
         // Inflate the layout for the dialog
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View v = inflater.inflate(R.layout.edit_box_dialog, null);
+
+        // Allow or disallow touches with other visible windows
+        v.setFilterTouchesWhenObscured(
+                PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(getContext())
+        );
         
         // Setup layout 
         String currentName = mTargetFile.getFileName();

@@ -21,9 +21,6 @@
  */
 package com.owncloud.android.ui.fragment;
 
-import java.io.File;
-import java.util.ArrayList;
-
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Environment;
@@ -34,11 +31,15 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
-
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import com.owncloud.android.R;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.ui.adapter.LocalFileListAdapter;
 import com.owncloud.android.utils.FileStorageUtils;
+import com.owncloud.android.utils.PreferenceUtils;
+
+import java.io.File;
+import java.util.ArrayList;
 
 
 /**
@@ -192,6 +193,15 @@ public class LocalFileListFragment extends ExtendedListFragment {
         } else {
             mNoOfFilesSelected = new ArrayList<>();
         }
+
+        // Allow or disallow touches with other visible windows
+        CoordinatorLayout coordinatorLayout = getActivity().findViewById(R.id.coordinator_layout);
+        if (coordinatorLayout != null) {
+            coordinatorLayout.setFilterTouchesWhenObscured(
+                    PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(getContext())
+            );
+        }
+
         Log_OC.i(TAG, "onActivityCreated() stop");
     }
 

@@ -42,6 +42,7 @@ import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.shares.OCShare;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.adapter.ShareUserListAdapter;
+import com.owncloud.android.utils.PreferenceUtils;
 
 import java.util.ArrayList;
 
@@ -114,6 +115,11 @@ public class SearchShareesFragment extends Fragment implements ShareUserListAdap
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.search_users_groups_layout, container, false);
+
+        // Allow or disallow touches with other visible windows
+        view.setFilterTouchesWhenObscured(
+                PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(getContext())
+        );
 
         // Get the SearchView and set the searchable configuration
         SearchView searchView = view.findViewById(R.id.searchView);

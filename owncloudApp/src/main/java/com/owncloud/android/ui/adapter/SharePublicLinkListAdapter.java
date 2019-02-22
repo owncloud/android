@@ -31,6 +31,7 @@ import android.widget.TextView;
 
 import com.owncloud.android.R;
 import com.owncloud.android.lib.resources.shares.OCShare;
+import com.owncloud.android.utils.PreferenceUtils;
 
 import java.util.ArrayList;
 
@@ -69,9 +70,14 @@ public class SharePublicLinkListAdapter extends ArrayAdapter{
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
 
-        LayoutInflater inflator = (LayoutInflater) mContext
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflator = (LayoutInflater) mContext.
+                getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflator.inflate(R.layout.share_public_link_item, parent, false);
+
+        // Allow or disallow touches with other visible windows
+        view.setFilterTouchesWhenObscured(
+                PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(mContext)
+        );
 
         if (mPublicLinks != null && mPublicLinks.size() > position) {
 

@@ -4,6 +4,7 @@
  *  @author LukeOwncloud
  *  @author masensio
  *  @author Christian Schabesberger
+ *  @author David González Verdugo
  *  Copyright (C) 2019 ownCloud GmbH.
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -53,6 +54,7 @@ import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.utils.DisplayUtils;
 import com.owncloud.android.utils.MimetypeIconUtil;
+import com.owncloud.android.utils.PreferenceUtils;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
@@ -211,6 +213,10 @@ public class ExpandableUploadListAdapter extends BaseExpandableListAdapter imple
                             Context.LAYOUT_INFLATER_SERVICE
                     );
             view = inflator.inflate(R.layout.upload_list_item, parent, false);
+            // Allow or disallow touches with other visible windows
+            view.setFilterTouchesWhenObscured(
+                    PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(mParentActivity)
+            );
         }
 
         if (uploadsItems != null && uploadsItems.length > position) {
@@ -727,6 +733,11 @@ public class ExpandableUploadListAdapter extends BaseExpandableListAdapter imple
             LayoutInflater inflater = (LayoutInflater) mParentActivity
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.upload_list_group, null);
+
+            // Allow or disallow touches with other visible windows
+            convertView.setFilterTouchesWhenObscured(
+                    PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(mParentActivity)
+            );
         }
         TextView tvGroupName = convertView.findViewById(R.id.uploadListGroupName);
         TextView tvFileCount = convertView.findViewById(R.id.textViewFileCount);
