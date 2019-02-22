@@ -152,13 +152,11 @@ public abstract class DrawerActivity extends ToolbarActivity {
             mNavigationView.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
                 @Override
                 public void onViewAttachedToWindow(View v) {
-
                     if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-
                         DisplayCutout displayCutout = v.getRootWindowInsets().getDisplayCutout();
 
                         if (displayCutout != null) {
-                            RelativeLayout rl_drawer_active_user =
+                            RelativeLayout rlDrawerActiveUser =
                                     (RelativeLayout) findNavigationViewChildById(R.id.drawer_active_user);
 
                             int orientation = getResources().getConfiguration().orientation;
@@ -166,11 +164,11 @@ public abstract class DrawerActivity extends ToolbarActivity {
                                 int displayCutoutDP = (displayCutout.getSafeInsetTop()) /
                                                 (getResources().getDisplayMetrics().densityDpi /
                                                         DisplayMetrics.DENSITY_DEFAULT);
-                                rl_drawer_active_user.getLayoutParams().height =
+                                rlDrawerActiveUser.getLayoutParams().height =
                                         (int) getResources().getDimension(R.dimen.nav_drawer_header_height) +
                                                 displayCutoutDP;
                             } else {
-                                rl_drawer_active_user.getLayoutParams().height =
+                                rlDrawerActiveUser.getLayoutParams().height =
                                         (int) getResources().getDimension(R.dimen.nav_drawer_header_height);
                             }
                         }
