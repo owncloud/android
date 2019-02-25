@@ -58,14 +58,16 @@ abstract class NetworkBoundResource<ResultType, RequestType>(
     init {
         val dbSource = loadFromDb()
 
-        result.addSource(dbSource) { data ->
-            result.value = Resource.success(data)
+        if (dbSource != null) {
+            result.addSource(dbSource) { data ->
+                result.value = Resource.success(data)
+            }
         }
 
-        fetchFromNetwork()
+        performNetworkOperation()
     }
 
-    private fun fetchFromNetwork() {
+    private fun performNetworkOperation() {
         val errors = MutableLiveData<Resource<ResultType>>()
         val loading = MutableLiveData<Resource<ResultType>>()
 
@@ -119,7 +121,7 @@ abstract class NetworkBoundResource<ResultType, RequestType>(
     protected abstract fun saveCallResult(item: RequestType)
 
     @MainThread
-    protected abstract fun loadFromDb(): LiveData<ResultType>
+    protected abstract fun loadFromDb(): LiveData<ResultType>?
 
     @MainThread
     protected abstract fun createCall(): RemoteOperationResult<RequestType>
