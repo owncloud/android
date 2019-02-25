@@ -6,17 +6,14 @@
  * @author Christian Schabesberger
  * Copyright (C) 2019 ownCloud GmbH.
  *
- *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
  * as published by the Free Software Foundation.
- *
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http:></http:>//www.gnu.org/licenses/>.
@@ -31,6 +28,7 @@ import android.graphics.Rect
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.text.InputType
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -44,8 +42,6 @@ import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.TextView
 
-import androidx.appcompat.widget.SwitchCompat
-import androidx.fragment.app.DialogFragment
 import com.owncloud.android.R
 import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.lib.common.utils.Log_OC
@@ -60,6 +56,20 @@ import com.owncloud.android.utils.DateUtils
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.Date
+
+import androidx.appcompat.widget.SwitchCompat
+import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
+import com.google.android.material.snackbar.Snackbar
+import com.owncloud.android.ViewModelFactory
+import com.owncloud.android.lib.resources.shares.ShareType
+import com.owncloud.android.operations.common.OperationType
+import com.owncloud.android.shares.viewmodel.OCShareViewModel
+import com.owncloud.android.ui.activity.BaseActivity
+import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter
+import com.owncloud.android.vo.Status
 
 class PublicShareDialogFragment : DialogFragment() {
 
@@ -155,6 +165,16 @@ class PublicShareDialogFragment : DialogFragment() {
                 .time
         } else -1
 
+    var mViewModelFactory: ViewModelProvider.Factory = ViewModelFactory.build {
+        OCShareViewModel(
+            mAccount!!,
+            mFile?.remotePath!!,
+            listOf(ShareType.PUBLIC_LINK)
+        )
+    }
+
+    private lateinit var ocShareViewModel: OCShareViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -214,10 +234,10 @@ class PublicShareDialogFragment : DialogFragment() {
             mNameValueEdit!!.setText(mPublicShare!!.name)
 
             when (mPublicShare!!.permissions) {
-                RemoteShare.CREATE_PERMISSION_FLAG or
-                        RemoteShare.DELETE_PERMISSION_FLAG or
-                        RemoteShare.UPDATE_PERMISSION_FLAG or
-                        RemoteShare.READ_PERMISSION_FLAG -> mReadWriteButton!!.isChecked = true
+                RemoteShare.CREATE_PERMISSION_FLAG
+                        or RemoteShare.DELETE_PERMISSION_FLAG
+                        or RemoteShare.UPDATE_PERMISSION_FLAG
+                        or RemoteShare.READ_PERMISSION_FLAG -> mReadWriteButton!!.isChecked = true
                 RemoteShare.CREATE_PERMISSION_FLAG -> mUploadOnlyButton!!.isChecked = true
                 else -> mReadOnlyButton!!.isChecked = true
             }
@@ -254,6 +274,10 @@ class PublicShareDialogFragment : DialogFragment() {
             .setOnClickListener { v -> dismiss() }
 
         return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        ocShareViewModel = ViewModelProviders.of(this, mViewModelFactory).get(OCShareViewModel::class.java)
     }
 
     private fun onSaveShareSetting() {
@@ -296,14 +320,50 @@ class PublicShareDialogFragment : DialogFragment() {
             mCapabilities!!.versionMayor >= 10 && (mCapabilities!!.versionMinor > 1 || mCapabilities!!.versionMicro > 3) && publicUploadPermission
 
         if (!updating()) { // Creating a new public share
-            (activity as FileActivity).fileOperationsHelper.shareFileViaLink(
-                mFile,
+            ocShareViewModel.insertPublicShareForFile(
+                mFile?.remotePath!!,
                 publicLinkName,
-                publicLinkPassword,
+                publicLinkPassword!!,
                 publicLinkExpirationDateInMillis,
                 false,
                 publicLinkPermissions
+            ).observe(
+                this,
+                Observer { resource ->
+                    when (resource?.status) {
+                        Status.SUCCESS -> {
+                            dismiss()
+                        }
+                        Status.ERROR -> {
+                            val errorMessage: String;
+                            if (resource.msg != null) {
+                                errorMessage = resource.msg;
+                            } else {
+                                errorMessage = ErrorMessageAdapter.getResultMessage(
+                                    resource.code,
+                                    resource.exception,
+                                    OperationType.CREATE_PUBLIC_SHARE,
+                                    resources
+                                )
+                            }
+                            showError(errorMessage)
+                        }
+                        Status.LOADING -> {
+                            (activity as BaseActivity).showLoadingDialog(R.string.common_loading)
+                        }
+                        Status.STOP_LOADING -> {
+                            (activity as BaseActivity).dismissLoadingDialog()
+                        }
+                    }
+                }
             )
+//            (activity as FileActivity).fileOperationsHelper.shareFileViaLink(
+//                    mFile,
+//                    publicLinkName,
+//                    publicLinkPassword,
+//                    publicLinkExpirationDateInMillis,
+//                    false,
+//                    publicLinkPermissions)
 
         } else { // Updating an existing public share
             if (!mPasswordSwitch!!.isChecked) {
@@ -818,5 +878,4 @@ class PublicShareDialogFragment : DialogFragment() {
             return publicShareDialogFragment
         }
     }
-
 }

@@ -22,6 +22,7 @@ package com.owncloud.android.shares.repository
 import androidx.lifecycle.LiveData
 import com.owncloud.android.AppExecutors
 import com.owncloud.android.NetworkBoundResource
+import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.lib.resources.shares.ShareParserResult
 import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.shares.datasources.LocalSharesDataSource
@@ -30,31 +31,30 @@ import com.owncloud.android.shares.db.OCShare
 import com.owncloud.android.vo.Resource
 
 class OCShareRepository(
-    private val appExecutors: AppExecutors,
-    private val localSharesDataSource: LocalSharesDataSource,
-    private val remoteSharesDataSource: RemoteSharesDataSource
-) : ShareRepository{
+        private val appExecutors: AppExecutors,
+        private val localSharesDataSource: LocalSharesDataSource,
+        private val remoteSharesDataSource: RemoteSharesDataSource
+) : ShareRepository {
 
     companion object Factory {
         fun create(
-            appExecutors: AppExecutors = AppExecutors(),
-            localSharesDataSource: LocalSharesDataSource,
-            remoteSharesDataSource: RemoteSharesDataSource
+                appExecutors: AppExecutors = AppExecutors(),
+                localSharesDataSource: LocalSharesDataSource,
+                remoteSharesDataSource: RemoteSharesDataSource
         ): OCShareRepository = OCShareRepository(
-            appExecutors,
-            localSharesDataSource,
-            remoteSharesDataSource
+                appExecutors,
+                localSharesDataSource,
+                remoteSharesDataSource
         )
     }
 
     override fun loadSharesForFile(
-        filePath: String,
-        accountName: String,
-        shareTypes: List<ShareType>,
-        reshares: Boolean,
-        subfiles: Boolean
+            filePath: String,
+            accountName: String,
+            shareTypes: List<ShareType>,
+            reshares: Boolean,
+            subfiles: Boolean
     ): LiveData<Resource<List<OCShare>>> {
-
         return object : NetworkBoundResource<List<OCShare>, ShareParserResult>(appExecutors) {
 
             override fun saveCallResult(shareParserResult: ShareParserResult) {
@@ -75,6 +75,35 @@ class OCShareRepository(
 
             override fun createCall() = remoteSharesDataSource.getSharesForFile(filePath, reshares, subfiles)
 
+        }.asLiveData()
+    }
+
+    override fun insertPublicShareForFile(
+            file: OCFile,
+            name: String,
+            password: String,
+            expirationTimeInMillis: Long,
+            uploadToFolderPermission: Boolean,
+            permissions: Int
+    ): LiveData<Resource<Unit>> {
+        return object : NetworkBoundResource<Unit, ShareParserResult>(appExecutors) {
+            override fun saveCallResult(item: ShareParserResult) {
+                println("EEEEHHHH")
+                TODO("Save share")
+            }
+
+            override fun loadFromDb(): LiveData<Unit>? {
+                return null // Insert operation, we do not need to get anything from database
+            }
+
+            override fun createCall() = remoteSharesDataSource.insertShareForFile(
+                    file.remotePath,
+                    ShareType.PUBLIC_LINK,
+                    "",
+                    uploadToFolderPermission,
+                    password,
+                    permissions
+            )
         }.asLiveData()
     }
 }

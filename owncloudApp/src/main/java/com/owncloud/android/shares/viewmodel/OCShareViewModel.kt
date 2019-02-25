@@ -23,6 +23,7 @@ import android.accounts.Account
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.owncloud.android.MainApp
+import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.lib.common.OwnCloudAccount
 import com.owncloud.android.lib.common.OwnCloudClientManagerFactory
 import com.owncloud.android.lib.resources.shares.ShareType
@@ -39,21 +40,34 @@ import com.owncloud.android.vo.Resource
  */
 @OpenForTesting
 class OCShareViewModel(
-    account: Account,
-    filePath: String,
-    shareTypes: List<ShareType>,
-    shareRepository: ShareRepository = OCShareRepository.create(
-        localSharesDataSource = OCLocalSharesDataSource(),
-        remoteSharesDataSource = OCRemoteSharesDataSource(
-            OwnCloudClientManagerFactory.getDefaultSingleton().getClientFor(
-                OwnCloudAccount(account, MainApp.getAppContext()),
-                MainApp.getAppContext()
-            )
+        account: Account,
+        val filePath: String,
+        shareTypes: List<ShareType>,
+        val shareRepository: ShareRepository = OCShareRepository.create(
+                localSharesDataSource = OCLocalSharesDataSource(),
+                remoteSharesDataSource = OCRemoteSharesDataSource(
+                        OwnCloudClientManagerFactory.getDefaultSingleton().getClientFor(
+                                OwnCloudAccount(account, MainApp.getAppContext()),
+                                MainApp.getAppContext()
+                        )
+                )
         )
-    )
 ) : ViewModel() {
 
     val sharesForFile: LiveData<Resource<List<OCShare>>> = shareRepository.loadSharesForFile(
-        filePath, account.name, shareTypes, true, false
+            filePath, account.name, shareTypes, true, false
     )
+
+    fun insertPublicShareForFile(
+            file: OCFile,
+            name: String,
+            password: String,
+            expirationTimeInMillis: Long,
+            uploadToFolderPermission: Boolean,
+            permissions: Int
+    ): LiveData<Resource<Unit>> {
+        return shareRepository.insertPublicShareForFile(
+                file, name, password, expirationTimeInMillis, uploadToFolderPermission, permissions
+        )
+    }
 }
