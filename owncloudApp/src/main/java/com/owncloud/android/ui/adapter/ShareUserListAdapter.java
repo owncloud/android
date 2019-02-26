@@ -3,6 +3,7 @@
  *
  *   @author masensio
  *   @author Christian Schabesberger
+ *   @author David González Verdugo
  *   Copyright (C) 2019 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
@@ -86,6 +87,9 @@ public class ShareUserListAdapter extends ArrayAdapter {
             TextView userName = view.findViewById(R.id.userOrGroupName);
             ImageView iconView = view.findViewById(R.id.icon);
             String name = share.getSharedWithDisplayName();
+            name = share.getSharedWithAdditionalInfo().isEmpty() ?
+                    name :
+                    name + " (" + share.getSharedWithAdditionalInfo() + ")";
             Drawable icon = getContext().getResources().getDrawable(R.drawable.ic_user);
             if (share.getShareType() == ShareType.GROUP) {
                 name = getContext().getString(R.string.share_group_clarification, name);
