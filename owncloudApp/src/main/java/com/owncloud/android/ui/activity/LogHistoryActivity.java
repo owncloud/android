@@ -63,7 +63,7 @@ public class LogHistoryActivity extends ToolbarActivity {
 
     private RecyclerView mLogsRecycler;
     private LogListAdapter mLogListAdapter;
-    private SearchView searchView;
+    private SearchView mSearchView;
     private String mCurrentFilter = "";
 
     @Override
@@ -123,28 +123,21 @@ public class LogHistoryActivity extends ToolbarActivity {
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
 
         if (searchItem != null) {
-            searchView = (SearchView) searchItem.getActionView();
-            //            searchView.setQueryHint(getString(R.string.text));
+            mSearchView = (SearchView) searchItem.getActionView();
         }
-        if (searchView != null) {
-            searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-        }
+        mSearchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        SearchView.SearchAutoComplete searchAutoComplete = mSearchView.findViewById(R.id.search_src_text);
 
-        if (searchView == null) {
-            return true;
-        }
-        SearchView.SearchAutoComplete searchAutoComplete = searchView.findViewById(R.id.search_src_text);
-
-        if (searchView != null && mCurrentFilter != null && !mCurrentFilter.equals("")) {
+        if (mCurrentFilter != null && !mCurrentFilter.equals("")) {
             if (searchAutoComplete != null) {
                 searchAutoComplete.setText(mCurrentFilter);
             }
-            searchView.setIconified(false);
+            mSearchView.setIconified(false);
         } else {
             if (searchAutoComplete != null) {
                 searchAutoComplete.setText("");
             }
-            searchView.setIconified(true);
+            mSearchView.setIconified(true);
         }
 
         final SearchView.OnQueryTextListener queryTextListener = new SearchView.OnQueryTextListener() {
@@ -176,10 +169,10 @@ public class LogHistoryActivity extends ToolbarActivity {
             });
         }
 
-        if (null != searchView) {
-            searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-            searchView.setIconifiedByDefault(true);
-            searchView.setOnQueryTextListener(queryTextListener);
+        if (null != mSearchView) {
+            mSearchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+            mSearchView.setIconifiedByDefault(true);
+            mSearchView.setOnQueryTextListener(queryTextListener);
             if (mCurrentFilter != null && !mCurrentFilter.equals("")) {
                 if (searchAutoComplete != null && searchItem != null) {
                     searchItem.expandActionView();
