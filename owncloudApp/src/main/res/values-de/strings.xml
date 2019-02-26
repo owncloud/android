@@ -37,6 +37,7 @@
   <string name="prefs_passcode">PIN gesperrt</string>
   <string name="prefs_fingerprint">Fingerabdrucksperre</string>
   <string name="prefs_fingerprint_summary">Passwort oder Wisch-Muster eingeben um diese Option zu  aktivieren</string>
+  <string name="confirmation_touches_with_other_windows_title">Willst Du diese Funktion wirklich einschalten?</string>
   <string name="prefs_camera_picture_upload">Bilder</string>
   <string name="prefs_camera_picture_upload_summary">Lade Fotos von der Kamera automatisch hoch</string>
   <string name="prefs_camera_video_upload">Videos</string>

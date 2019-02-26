@@ -37,6 +37,10 @@
   <string name="prefs_passcode">Bloqueio de senha</string>
   <string name="prefs_fingerprint">Bloqueio Impressão Digital</string>
   <string name="prefs_fingerprint_summary">Ativar senha ou bloqueio padrão para habilitar esta opção</string>
+  <string name="prefs_touches_with_other_visible_windows">Toques com outras janelas visíveis</string>
+  <string name="prefs_touches_with_other_visible_windows_summary">Permitir toques quando a visualização é obscurecida por outra janela visível. Ativá-lo para usar aplicativos de filtragem de luz.</string>
+  <string name="confirmation_touches_with_other_windows_title">Tem certeza de que deseja ativar esse recurso?</string>
+  <string name="confirmation_touches_with_other_windows_message">Use este recurso sob sua própria responsabilidade, um aplicativo malicioso pode tentar imitá-lo a executar algumas ações, sem saber, usando outras visualizações.</string>
   <string name="prefs_camera_picture_upload">Enviar fotos</string>
   <string name="prefs_camera_picture_upload_summary">Carregar automaticamente fotos tiradas pela câmera</string>
   <string name="prefs_camera_video_upload">Enviar vídeos</string>
