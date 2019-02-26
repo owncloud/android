@@ -20,10 +20,11 @@ dependencies {
     implementation 'commons-io:commons-io:2.6'
     /// dependencies for local unit tests
     testImplementation 'junit:junit:4.12'
-    testImplementation 'org.mockito:mockito-core:1.10.19'
+    testImplementation 'org.mockito:mockito-core:2.19.0'
     /// dependencies for instrumented tests
     // JUnit4 Rules
     androidTestImplementation 'androidx.test:rules:1.1.1'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.0'
     // Android JUnit Runner
     androidTestImplementation 'androidx.test:runner:1.1.1'
     // Espresso core

@@ -28,7 +28,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import androidx.test.InstrumentationRegistry;
 import androidx.test.filters.SdkSuppress;
-import androidx.test.runner.AndroidJUnit4;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.uiautomator.By;
 import androidx.test.uiautomator.UiDevice;
 import androidx.test.uiautomator.UiObject;
