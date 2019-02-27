@@ -52,6 +52,8 @@ data class OCShare(
     val token: String?,
     @ColumnInfo(name = ProviderTableMeta.OCSHARES_SHARE_WITH_DISPLAY_NAME)
     val sharedWithDisplayName: String?,
+    @ColumnInfo(name = ProviderTableMeta.OCSHARES_SHARE_WITH_ADDITIONAL_INFO)
+    val sharedWithAdditionalInfo: String?,
     @ColumnInfo(name = ProviderTableMeta.OCSHARES_IS_DIRECTORY)
     val isFolder: Boolean?,
     @ColumnInfo(name = ProviderTableMeta.OCSHARES_USER_ID)
@@ -111,6 +113,7 @@ data class OCShare(
                     remoteShare.expirationDate,
                     remoteShare.token,
                     remoteShare.sharedWithDisplayName,
+                    remoteShare.sharedWithAdditionalInfo,
                     remoteShare.isFolder,
                     remoteShare.userId,
                     remoteShare.remoteId,
@@ -132,6 +135,7 @@ data class OCShare(
                     cursor.getLong(cursor.getColumnIndex(ProviderTableMeta.OCSHARES_EXPIRATION_DATE)),
                     cursor.getString(cursor.getColumnIndex(ProviderTableMeta.OCSHARES_TOKEN)),
                     cursor.getString(cursor.getColumnIndex(ProviderTableMeta.OCSHARES_SHARE_WITH_DISPLAY_NAME)),
+                    cursor.getString(cursor.getColumnIndex(ProviderTableMeta.OCSHARES_SHARE_WITH_ADDITIONAL_INFO)),
                     cursor.getInt(cursor.getColumnIndex(ProviderTableMeta.OCSHARES_IS_DIRECTORY)) == 1,
                     cursor.getLong(cursor.getColumnIndex(ProviderTableMeta.OCSHARES_USER_ID)),
                     cursor.getLong(cursor.getColumnIndex(ProviderTableMeta.OCSHARES_ID_REMOTE_SHARED)),
@@ -153,6 +157,7 @@ data class OCShare(
                     values.getAsLong(ProviderTableMeta.OCSHARES_EXPIRATION_DATE),
                     values.getAsString(ProviderTableMeta.OCSHARES_TOKEN),
                     values.getAsString(ProviderTableMeta.OCSHARES_SHARE_WITH_DISPLAY_NAME),
+                    values.getAsString(ProviderTableMeta.OCSHARES_SHARE_WITH_ADDITIONAL_INFO),
                     values.getAsBoolean(ProviderTableMeta.OCSHARES_IS_DIRECTORY),
                     values.getAsLong(ProviderTableMeta.OCSHARES_USER_ID),
                     values.getAsLong(ProviderTableMeta.OCSHARES_ID_REMOTE_SHARED),
