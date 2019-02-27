@@ -1373,6 +1373,8 @@ class FileContentProvider(val appExecutors: AppExecutors = AppExecutors()) : Con
             mShareProjectionMap[ProviderTableMeta.OCSHARES_TOKEN] = ProviderTableMeta.OCSHARES_TOKEN
             mShareProjectionMap[ProviderTableMeta.OCSHARES_SHARE_WITH_DISPLAY_NAME] =
                     ProviderTableMeta.OCSHARES_SHARE_WITH_DISPLAY_NAME
+            mShareProjectionMap[ProviderTableMeta.OCSHARES_SHARE_WITH_ADDITIONAL_INFO] =
+                    ProviderTableMeta.OCSHARES_SHARE_WITH_ADDITIONAL_INFO
             mShareProjectionMap[ProviderTableMeta.OCSHARES_IS_DIRECTORY] = ProviderTableMeta.OCSHARES_IS_DIRECTORY
             mShareProjectionMap[ProviderTableMeta.OCSHARES_USER_ID] = ProviderTableMeta.OCSHARES_USER_ID
             mShareProjectionMap[ProviderTableMeta.OCSHARES_ID_REMOTE_SHARED] =

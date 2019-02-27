@@ -1321,6 +1321,7 @@ public class FileDataStorageManager {
                     c.getLong(c.getColumnIndex(ProviderTableMeta.OCSHARES_EXPIRATION_DATE)),
                     c.getString(c.getColumnIndex(ProviderTableMeta.OCSHARES_TOKEN)),
                     c.getString(c.getColumnIndex(ProviderTableMeta.OCSHARES_SHARE_WITH_DISPLAY_NAME)),
+                    c.getString(c.getColumnIndex(ProviderTableMeta.OCSHARES_SHARE_WITH_ADDITIONAL_INFO)),
                     c.getInt(c.getColumnIndex(ProviderTableMeta.OCSHARES_IS_DIRECTORY)) == 1,
                     c.getLong(c.getColumnIndex(ProviderTableMeta.OCSHARES_USER_ID)),
                     c.getLong(c.getColumnIndex(ProviderTableMeta.OCSHARES_ID_REMOTE_SHARED)),
