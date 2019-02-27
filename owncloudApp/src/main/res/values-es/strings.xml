@@ -37,6 +37,7 @@
   <string name="prefs_passcode">Código de bloqueo</string>
   <string name="prefs_fingerprint">Bloqueo de huella digital</string>
   <string name="prefs_fingerprint_summary">Habilitar código de acceso o bloqueo de patrón para habilitar esta opción</string>
+  <string name="confirmation_touches_with_other_windows_title">¿Está seguro que desea habilitar esta función?</string>
   <string name="prefs_camera_picture_upload">Cargas de imágenes</string>
   <string name="prefs_camera_picture_upload_summary">Carga automáticamente las fotos tomadas por cámara</string>
   <string name="prefs_camera_video_upload">Cargas de videos</string>
