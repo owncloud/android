@@ -96,7 +96,6 @@ public class PublicShareActivityTest {
     private static final String ERROR_MESSAGE = "BAD LINK";
     private static final String RESULT_CODE = "mResultCode";
     private static final String LOG_TAG = "PublicShareSuite";
-    private static final int VERSION_10 = 10;
     private static final int MULTIPLE_LINKS = 5;
 
     private Context targetContext = null;
@@ -198,28 +197,15 @@ public class PublicShareActivityTest {
         Log_OC.i(LOG_TAG, "Test Share Public Defaults Start");
         SystemClock.sleep(WAIT_INITIAL_MS);
 
-        //Skipping the Welcome Wizard
-        onView(withId(R.id.skip)).perform(click());
-
-        SystemClock.sleep(WAIT_INITIAL_MS);
-
         //Select share option
         selectShare(folder);
 
         //Check that no links are already created
         onView(withId(R.id.shareNoPublicLinks)).check(matches(isDisplayed()));
 
-        //Depending the server version, send a name or not.
-        if (capabilities.getVersionMayor() >= VERSION_10) {
-            publicShareCreationDefault(nameShare);
-        } else {
-            publicShareCreationDefault(null);
-        }
+        publicShareCreationDefault(nameShare);
 
-        //Check the name,only in the case of ownCloud >= 10
-        if (capabilities.getVersionMayor() >= VERSION_10) {
-            onView(withText(nameShare)).check(matches(isDisplayed()));
-        }
+        onView(withText(nameShare)).check(matches(isDisplayed()));
         SystemClock.sleep(WAIT_CONNECTION_MS);
 
         //The message of "not links created yet" is gone
@@ -751,17 +737,9 @@ public class PublicShareActivityTest {
         //Check that no links are already created
         onView(withId(R.id.shareNoPublicLinks)).check(matches(isDisplayed()));
 
-        //Depending the server version, send a name or not.
-        if (capabilities.getVersionMayor() >= VERSION_10) {
-            publicShareCreationDefault(nameShare);
-        } else {
-            publicShareCreationDefault(null);
-        }
+        publicShareCreationDefault(nameShare);
 
-        //Check the name,only in the case of ownCloud >= 10
-        if (capabilities.getVersionMayor() >= VERSION_10) {
-            onView(withText(nameShare)).check(matches(isDisplayed()));
-        }
+        onView(withText(nameShare)).check(matches(isDisplayed()));
         SystemClock.sleep(WAIT_CONNECTION_MS);
 
         //The message of "not links created yet" is gone
@@ -861,10 +839,7 @@ public class PublicShareActivityTest {
         //Creation of the share link. Name only for servers >= 10
         onView(withId(R.id.addPublicLinkButton)).perform(click());
 
-        //Check server version and parameter null (or not) to handle the link name
-        if (capabilities.getVersionMayor() >= VERSION_10 && name!=null) {
-            onView(withId(R.id.shareViaLinkNameValue)).perform(replaceText(name));
-        }
+        onView(withId(R.id.shareViaLinkNameValue)).perform(replaceText(name));
 
         SystemClock.sleep(WAIT_CONNECTION_MS);
         onView(withId(R.id.saveButton)).perform(scrollTo(),click());
