@@ -142,8 +142,7 @@ class PublicShareDialogFragment : DialogFragment() {
             val expirationDate = mExpirationDateValueLabel!!.text.toString()
             if (expirationDate.length > 0) {
                 try {
-                    publicLinkExpirationDateInMillis =
-                        ExpirationDatePickerDialogFragment.getDateFormat().parse(expirationDate).time
+                    publicLinkExpirationDateInMillis = ExpirationDatePickerDialogFragment.getDateFormat().parse(expirationDate).time
                 } catch (e: ParseException) {
                     Log_OC.e(TAG, "Error reading expiration date from input field", e)
                 }
@@ -160,8 +159,7 @@ class PublicShareDialogFragment : DialogFragment() {
 
             DateUtils.addDaysToDate(
                 Date(),
-                mCapabilities!!.filesSharingPublicExpireDateDays
-            )
+                mCapabilities!!.filesSharingPublicExpireDateDays)
                 .time
         } else -1
 
@@ -195,10 +193,8 @@ class PublicShareDialogFragment : DialogFragment() {
         return mPublicShare != null
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?): View? {
 
         val view = inflater.inflate(R.layout.share_public_dialog, container, false)
 
@@ -316,8 +312,7 @@ class PublicShareDialogFragment : DialogFragment() {
         // at 10.0.4 we don't need publicUploadPermission there anymore. By setting it to false
         // it will not be sent to the server.
 
-        publicUploadPermission =
-            mCapabilities!!.versionMayor >= 10 && (mCapabilities!!.versionMinor > 1 || mCapabilities!!.versionMicro > 3) && publicUploadPermission
+        publicUploadPermission = mCapabilities!!.versionMayor >= 10 && (mCapabilities!!.versionMinor > 1 || mCapabilities!!.versionMicro > 3) && publicUploadPermission
 
         if (!updating()) { // Creating a new public share
             ocShareViewModel.insertPublicShareForFile(
@@ -373,14 +368,12 @@ class PublicShareDialogFragment : DialogFragment() {
                 publicLinkPassword = null
             }
 
-            (activity as FileActivity).fileOperationsHelper.updateShareViaLink(
-                mPublicShare,
+            (activity as FileActivity).fileOperationsHelper.updateShareViaLink(mPublicShare,
                 publicLinkName,
                 publicLinkPassword,
                 publicLinkExpirationDateInMillis,
                 publicUploadPermission,
-                publicLinkPermissions
-            )
+                publicLinkPermissions)
         }
     }
 
@@ -425,8 +418,7 @@ class PublicShareDialogFragment : DialogFragment() {
                 if (x >= view.right - bounds.width() - fuzz &&
                     x <= view.right - view.paddingRight + fuzz &&
                     y >= view.paddingTop - fuzz &&
-                    y <= view.height - view.paddingBottom + fuzz
-                ) {
+                    y <= view.height - view.paddingBottom + fuzz) {
 
                     return onDrawableTouch(event)
                 }
@@ -465,10 +457,8 @@ class PublicShareDialogFragment : DialogFragment() {
             } else {
                 showPassword()
             }
-            mPasswordValueEdit!!.setSelection(
-                mPasswordValueEdit!!.selectionStart,
-                mPasswordValueEdit!!.selectionEnd
-            )
+            mPasswordValueEdit!!.setSelection(mPasswordValueEdit!!.selectionStart,
+                mPasswordValueEdit!!.selectionEnd)
         }
     }
 
@@ -562,8 +552,7 @@ class PublicShareDialogFragment : DialogFragment() {
 
                 // Show keyboard to fill in the password
                 val mgr = activity!!.getSystemService(
-                    Context.INPUT_METHOD_SERVICE
-                ) as InputMethodManager
+                    Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 mgr.showSoftInput(mPasswordValueEdit, InputMethodManager.SHOW_IMPLICIT)
 
             } else {
@@ -588,8 +577,7 @@ class PublicShareDialogFragment : DialogFragment() {
     /**
      * Listener for user actions that start any update on the expiration date for the public link.
      */
-    private inner class OnExpirationDateInteractionListener : CompoundButton.OnCheckedChangeListener,
-        View.OnClickListener, ExpirationDatePickerDialogFragment.DatePickerFragmentListener {
+    private inner class OnExpirationDateInteractionListener : CompoundButton.OnCheckedChangeListener, View.OnClickListener, ExpirationDatePickerDialogFragment.DatePickerFragmentListener {
 
         /**
          * Called by R.id.shareViaLinkExpirationSwitch to set or clear the expiration date.
@@ -608,13 +596,11 @@ class PublicShareDialogFragment : DialogFragment() {
                 // Show calendar to set the expiration date
                 val dialog = ExpirationDatePickerDialogFragment.newInstance(
                     expirationDateValueInMillis,
-                    imposedExpirationDate
-                )
+                    imposedExpirationDate)
                 dialog.setDatePickerListener(this)
                 dialog.show(
                     activity!!.supportFragmentManager,
-                    ExpirationDatePickerDialogFragment.DATE_PICKER_DIALOG
-                )
+                    ExpirationDatePickerDialogFragment.DATE_PICKER_DIALOG)
             } else {
                 mExpirationDateValueLabel!!.visibility = View.INVISIBLE
                 mExpirationDateValueLabel!!.text = ""
@@ -712,8 +698,7 @@ class PublicShareDialogFragment : DialogFragment() {
         if (!(isSharedFolder &&
                     serverVersion.isPublicSharingWriteOnlySupported &&
                     mCapabilities!!.filesSharingPublicSupportsUploadOnly.isTrue &&
-                    mCapabilities!!.filesSharingPublicUpload.isTrue)
-        ) {
+                    mCapabilities!!.filesSharingPublicUpload.isTrue)) {
             mPermissionRadioGroup!!.visibility = View.GONE
         }
 
@@ -739,17 +724,14 @@ class PublicShareDialogFragment : DialogFragment() {
             mExpirationDateLabel!!.setText(R.string.share_via_link_expiration_date_enforced_label)
             mExpirationDateSwitch!!.visibility = View.GONE
             mExpirationDateExplanationLabel!!.visibility = View.VISIBLE
-            mExpirationDateExplanationLabel!!.text = getString(
-                R.string.share_via_link_expiration_date_explanation_label,
-                mCapabilities!!.filesSharingPublicExpireDateDays
-            )
+            mExpirationDateExplanationLabel!!.text = getString(R.string.share_via_link_expiration_date_explanation_label,
+                mCapabilities!!.filesSharingPublicExpireDateDays)
         }
 
         // Set password label when opening the dialog
         if (mReadOnlyButton!!.isChecked && mCapabilities!!.filesSharingPublicPasswordEnforcedReadOnly.isTrue ||
             mReadWriteButton!!.isChecked && mCapabilities!!.filesSharingPublicPasswordEnforcedReadWrite.isTrue ||
-            mUploadOnlyButton!!.isChecked && mCapabilities!!.filesSharingPublicPasswordEnforcedUploadOnly.isTrue
-        ) {
+            mUploadOnlyButton!!.isChecked && mCapabilities!!.filesSharingPublicPasswordEnforcedUploadOnly.isTrue) {
             setPasswordEnforced()
         }
 
@@ -833,6 +815,7 @@ class PublicShareDialogFragment : DialogFragment() {
         private val ARG_DEFAULT_LINK_NAME = "DEFAULT_LINK_NAME"
         private val KEY_EXPIRATION_DATE = "EXPIRATION_DATE"
 
+
         /**
          * Create a new instance of PublicShareDialogFragment, providing fileToShare and account
          * as an argument.
@@ -865,8 +848,7 @@ class PublicShareDialogFragment : DialogFragment() {
          *
          * @param   publicShare           Public share to update.
          */
-        fun newInstanceToUpdate(
-            fileToShare: OCFile,
+        fun newInstanceToUpdate(fileToShare: OCFile,
             publicShare: OCShare,
             account: Account
         ): PublicShareDialogFragment {
@@ -878,4 +860,5 @@ class PublicShareDialogFragment : DialogFragment() {
             return publicShareDialogFragment
         }
     }
+
 }

@@ -40,16 +40,16 @@ abstract class OCShareDao {
 
     @Query(
         "DELETE from " + ProviderTableMeta.OCSHARES_TABLE_NAME + " WHERE " +
-                ProviderTableMeta.OCSHARES_PATH + " = :filePath AND " +
+                ProviderTableMeta.OCSHARES_NAME + " = :name AND " +
                 ProviderTableMeta.OCSHARES_ACCOUNT_OWNER + " = :accountOwner"
     )
-    abstract fun delete(filePath: String, accountOwner: String)
+    abstract fun delete(name: String, accountOwner: String)
 
     @Transaction
     open fun replace(ocShares: List<OCShare>) {
         for (ocShare in ocShares) {
-            if (ocShare.path != null && ocShare.accountOwner != null) {
-                delete(ocShare.path, ocShare.accountOwner as String)
+            if (ocShare.name != null && ocShare.accountOwner != null) {
+                delete(ocShare.name, ocShare.accountOwner as String)
             }
         }
         insert(ocShares)

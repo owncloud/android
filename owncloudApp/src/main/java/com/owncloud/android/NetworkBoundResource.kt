@@ -44,7 +44,7 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.vo.Resource
 
 abstract class NetworkBoundResource<ResultType, RequestType>(
-    private val appExecutors: AppExecutors
+        private val appExecutors: AppExecutors
 ) {
 
     /**
@@ -82,40 +82,37 @@ abstract class NetworkBoundResource<ResultType, RequestType>(
         try {
             appExecutors.networkIO().execute() {
                 loading.postValue(
-                    Resource.loading()
+                        Resource.loading()
                 )
 
                 val remoteOperationResult = createCall()
 
                 if (remoteOperationResult.isSuccess) {
-                    saveCallResult(processResponse(remoteOperationResult))
+                    saveCallResult(remoteOperationResult.data)
                 } else {
                     errors.postValue(
-                        Resource.error(
-                            remoteOperationResult.code,
-                            exception = remoteOperationResult.exception
-                        )
+                            Resource.error(
+                                    remoteOperationResult.code,
+                                    msg = remoteOperationResult.httpPhrase,
+                                    exception = remoteOperationResult.exception
+                            )
                     )
                 }
 
                 loading.postValue(
-                    Resource.stopLoading()
+                        Resource.stopLoading()
                 )
             }
         } catch (ex: Exception) {
             errors.postValue(
-                Resource.error(
-                    msg = ex.localizedMessage
-                )
+                    Resource.error(
+                            msg = ex.localizedMessage
+                    )
             )
         }
     }
 
     fun asLiveData() = result as LiveData<Resource<ResultType>>
-
-    @WorkerThread
-    protected open fun processResponse(remoteOperationResult: RemoteOperationResult<RequestType>) =
-        remoteOperationResult.data
 
     @WorkerThread
     protected abstract fun saveCallResult(item: RequestType)

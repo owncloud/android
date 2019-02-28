@@ -23,7 +23,6 @@ import android.accounts.Account
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.owncloud.android.MainApp
-import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.lib.common.OwnCloudAccount
 import com.owncloud.android.lib.common.OwnCloudClientManagerFactory
 import com.owncloud.android.lib.resources.shares.ShareType
@@ -40,7 +39,7 @@ import com.owncloud.android.vo.Resource
  */
 @OpenForTesting
 class OCShareViewModel(
-        account: Account,
+        val account: Account,
         val filePath: String,
         shareTypes: List<ShareType>,
         val shareRepository: ShareRepository = OCShareRepository.create(
@@ -59,7 +58,7 @@ class OCShareViewModel(
     )
 
     fun insertPublicShareForFile(
-            file: OCFile,
+            filePath: String,
             name: String,
             password: String,
             expirationTimeInMillis: Long,
@@ -67,7 +66,7 @@ class OCShareViewModel(
             permissions: Int
     ): LiveData<Resource<Unit>> {
         return shareRepository.insertPublicShareForFile(
-                file, name, password, expirationTimeInMillis, uploadToFolderPermission, permissions
+                filePath, account.name, permissions, name, password, expirationTimeInMillis, uploadToFolderPermission
         )
     }
 }
