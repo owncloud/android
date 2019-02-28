@@ -1,20 +1,19 @@
 /**
- *   ownCloud Android client application
- *
- *   Copyright (C) 2016 ownCloud GmbH.
- *
- *   This program is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License version 2,
- *   as published by the Free Software Foundation.
- *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
- *
- *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * ownCloud Android client application
+ * <p>
+ * Copyright (C) 2016 ownCloud GmbH.
+ * <p>
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
+ * <p>
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package com.owncloud.android.utils;
@@ -107,7 +106,7 @@ public class MimetypeIconUtil {
      * into account the MIME types known by ownCloud first.
      *
      * @param filename      Name of file
-     * @return              A single MIME type, "application/octet-stream" for unknown file extensions.
+     * @return A single MIME type, "application/octet-stream" for unknown file extensions.
      */
     public static String getBestMimeTypeByFilename(String filename) {
         List<String> candidates = determineMimeTypesByFilename(filename);
@@ -230,13 +229,20 @@ public class MimetypeIconUtil {
         MIMETYPE_TO_ICON_MAPPING.put("application/vnd.oasis.opendocument.text-master", R.drawable.file_doc);
         MIMETYPE_TO_ICON_MAPPING.put("application/vnd.oasis.opendocument.text-template", R.drawable.file_doc);
         MIMETYPE_TO_ICON_MAPPING.put("application/vnd.oasis.opendocument.text-web", R.drawable.file_doc);
-        MIMETYPE_TO_ICON_MAPPING.put("application/vnd.openxmlformats-officedocument.presentationml.presentation", R.drawable.file_ppt);
-        MIMETYPE_TO_ICON_MAPPING.put("application/vnd.openxmlformats-officedocument.presentationml.slideshow", R.drawable.file_ppt);
-        MIMETYPE_TO_ICON_MAPPING.put("application/vnd.openxmlformats-officedocument.presentationml.template", R.drawable.file_ppt);
-        MIMETYPE_TO_ICON_MAPPING.put("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", R.drawable.file_xls);
-        MIMETYPE_TO_ICON_MAPPING.put("application/vnd.openxmlformats-officedocument.spreadsheetml.template", R.drawable.file_xls);
-        MIMETYPE_TO_ICON_MAPPING.put("application/vnd.openxmlformats-officedocument.wordprocessingml.document", R.drawable.file_doc);
-        MIMETYPE_TO_ICON_MAPPING.put("application/vnd.openxmlformats-officedocument.wordprocessingml.template", R.drawable.file_doc);
+        MIMETYPE_TO_ICON_MAPPING.put("application/vnd.openxmlformats-officedocument.presentationml.presentation",
+                R.drawable.file_ppt);
+        MIMETYPE_TO_ICON_MAPPING.put("application/vnd.openxmlformats-officedocument.presentationml.slideshow",
+                R.drawable.file_ppt);
+        MIMETYPE_TO_ICON_MAPPING.put("application/vnd.openxmlformats-officedocument.presentationml.template",
+                R.drawable.file_ppt);
+        MIMETYPE_TO_ICON_MAPPING.put("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                R.drawable.file_xls);
+        MIMETYPE_TO_ICON_MAPPING.put("application/vnd.openxmlformats-officedocument.spreadsheetml.template",
+                R.drawable.file_xls);
+        MIMETYPE_TO_ICON_MAPPING.put("application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                R.drawable.file_doc);
+        MIMETYPE_TO_ICON_MAPPING.put("application/vnd.openxmlformats-officedocument.wordprocessingml.template",
+                R.drawable.file_doc);
         MIMETYPE_TO_ICON_MAPPING.put("application/x-7z-compressed", R.drawable.file_zip);
         MIMETYPE_TO_ICON_MAPPING.put("application/x-bin", R.drawable.file_application);
         MIMETYPE_TO_ICON_MAPPING.put("application/x-cbr", R.drawable.file_text);
@@ -300,7 +306,8 @@ public class MimetypeIconUtil {
         FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("7z", Collections.singletonList("application/x-7z-compressed"));
         FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("accdb", Collections.singletonList("application/msaccess"));
         FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("ai", Collections.singletonList("application/illustrator"));
-        FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("apk", Collections.singletonList("application/vnd.android.package-archive"));
+        FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("apk", Collections.singletonList("application/vnd.android" +
+                ".package-archive"));
         FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("arw", Collections.singletonList("image/x-dcraw"));
         FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("avi", Collections.singletonList("video/x-msvideo"));
         FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("bash", Collections.singletonList("text/x-shellscript"));
@@ -329,10 +336,13 @@ public class MimetypeIconUtil {
         FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("deb", Collections.singletonList("application/x-deb"));
         FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("dng", Collections.singletonList("image/x-dcraw"));
         FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("doc", Collections.singletonList("application/msword"));
-        FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("docm", Collections.singletonList("application/vnd.ms-word.document.macroEnabled.12"));
-        FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("docx", Collections.singletonList("application/vnd.openxmlformats-officedocument.wordprocessingml.document"));
+        FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("docm", Collections.singletonList("application/vnd.ms-word.document" +
+                ".macroEnabled.12"));
+        FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("docx", Collections.singletonList("application/vnd" +
+                ".openxmlformats-officedocument.wordprocessingml.document"));
         FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("dot", Collections.singletonList("application/msword"));
-        FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("dotx", Collections.singletonList("application/vnd.openxmlformats-officedocument.wordprocessingml.template"));
+        FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("dotx", Collections.singletonList("application/vnd" +
+                ".openxmlformats-officedocument.wordprocessingml.template"));
         FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("dv", Collections.singletonList("video/dv"));
         FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("eot", Collections.singletonList("application/vnd.ms-fontobject"));
         FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("epub", Collections.singletonList("application/epub+zip"));
@@ -360,7 +370,8 @@ public class MimetypeIconUtil {
         FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("k25", Collections.singletonList("image/x-dcraw"));
         FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("kdc", Collections.singletonList("image/x-dcraw"));
         FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("key", Collections.singletonList("application/x-iwork-keynote-sffkey"));
-        FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("keynote", Collections.singletonList("application/x-iwork-keynote-sffkey"));
+        FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("keynote", Collections.singletonList("application/x-iwork-keynote" +
+                "-sffkey"));
         FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("kra", Collections.singletonList("application/x-krita"));
         FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("m2t", Collections.singletonList("video/mp2t"));
         FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("m4v", Collections.singletonList("video/mp4"));
@@ -383,19 +394,26 @@ public class MimetypeIconUtil {
         FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("mts", Collections.singletonList("video/MP2T"));
         FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("mt2s", Collections.singletonList("video/MP2T"));
         FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("nef", Collections.singletonList("image/x-dcraw"));
-        FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("numbers", Collections.singletonList("application/x-iwork-numbers-sffnumbers"));
-        FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("odf", Collections.singletonList("application/vnd.oasis.opendocument.formula"));
-        FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("odg", Collections.singletonList("application/vnd.oasis.opendocument.graphics"));
-        FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("odp", Collections.singletonList("application/vnd.oasis.opendocument.presentation"));
-        FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("ods", Collections.singletonList("application/vnd.oasis.opendocument.spreadsheet"));
-        FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("odt", Collections.singletonList("application/vnd.oasis.opendocument.text"));
+        FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("numbers", Collections.singletonList("application/x-iwork-numbers" +
+                "-sffnumbers"));
+        FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("odf", Collections.singletonList("application/vnd.oasis.opendocument" +
+                ".formula"));
+        FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("odg", Collections.singletonList("application/vnd.oasis.opendocument" +
+                ".graphics"));
+        FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("odp", Collections.singletonList("application/vnd.oasis.opendocument" +
+                ".presentation"));
+        FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("ods", Collections.singletonList("application/vnd.oasis.opendocument" +
+                ".spreadsheet"));
+        FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("odt", Collections.singletonList("application/vnd.oasis.opendocument" +
+                ".text"));
         FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("oga", Collections.singletonList("audio/ogg"));
         FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("ogg", Collections.singletonList("audio/ogg"));
         FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("ogv", Collections.singletonList("video/ogg"));
         FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("opus", Collections.singletonList("audio/ogg"));
         FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("orf", Collections.singletonList("image/x-dcraw"));
         FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("otf", Collections.singletonList("application/font-sfnt"));
-        FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("pages", Collections.singletonList("application/x-iwork-pages-sffpages"));
+        FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("pages", Collections.singletonList("application/x-iwork-pages-sffpages"
+        ));
         FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("pdf", Collections.singletonList("application/pdf"));
         FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("pfb", Collections.singletonList("application/x-font"));
         FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("pef", Collections.singletonList("image/x-dcraw"));
@@ -403,16 +421,23 @@ public class MimetypeIconUtil {
         FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("pl", Collections.singletonList("application/x-perl"));
         FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("png", Collections.singletonList("image/png"));
         FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("pot", Collections.singletonList("application/vnd.ms-powerpoint"));
-        FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("potm", Collections.singletonList("application/vnd.ms-powerpoint.template.macroEnabled.12"));
-        FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("potx", Collections.singletonList("application/vnd.openxmlformats-officedocument.presentationml.template"));
+        FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("potm", Collections.singletonList("application/vnd.ms-powerpoint" +
+                ".template.macroEnabled.12"));
+        FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("potx", Collections.singletonList("application/vnd" +
+                ".openxmlformats-officedocument.presentationml.template"));
         FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("ppa", Collections.singletonList("application/vnd.ms-powerpoint"));
-        FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("ppam", Collections.singletonList("application/vnd.ms-powerpoint.addin.macroEnabled.12"));
+        FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("ppam", Collections.singletonList("application/vnd.ms-powerpoint.addin" +
+                ".macroEnabled.12"));
         FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("pps", Collections.singletonList("application/vnd.ms-powerpoint"));
-        FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("ppsm", Collections.singletonList("application/vnd.ms-powerpoint.slideshow.macroEnabled.12"));
-        FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("ppsx", Collections.singletonList("application/vnd.openxmlformats-officedocument.presentationml.slideshow"));
+        FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("ppsm", Collections.singletonList("application/vnd.ms-powerpoint" +
+                ".slideshow.macroEnabled.12"));
+        FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("ppsx", Collections.singletonList("application/vnd" +
+                ".openxmlformats-officedocument.presentationml.slideshow"));
         FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("ppt", Collections.singletonList("application/vnd.ms-powerpoint"));
-        FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("pptm", Collections.singletonList("application/vnd.ms-powerpoint.presentation.macroEnabled.12"));
-        FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("pptx", Collections.singletonList("application/vnd.openxmlformats-officedocument.presentationml.presentation"));
+        FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("pptm", Collections.singletonList("application/vnd.ms-powerpoint" +
+                ".presentation.macroEnabled.12"));
+        FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("pptx", Collections.singletonList("application/vnd" +
+                ".openxmlformats-officedocument.presentationml.presentation"));
         FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("ps", Collections.singletonList("application/postscript"));
         FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("psd", Collections.singletonList("application/x-photoshop"));
         FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("py", Collections.singletonList("text/x-python"));
@@ -427,7 +452,8 @@ public class MimetypeIconUtil {
         FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("srf", Collections.singletonList("image/x-dcraw"));
         FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("sr2", Collections.singletonList("image/x-dcraw"));
         FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("svg", Arrays.asList("image/svg+xml", "text/plain"));
-        FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("swf", Arrays.asList("application/x-shockwave-flash", "application/octet-stream"));
+        FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("swf", Arrays.asList("application/x-shockwave-flash", "application" +
+                "/octet-stream"));
         FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("tar", Collections.singletonList("application/x-tar"));
         FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("gz", Collections.singletonList("application/x-compressed"));
         FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("tex", Collections.singletonList("application/x-tex"));
@@ -445,14 +471,20 @@ public class MimetypeIconUtil {
         FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("wmv", Collections.singletonList("video/x-ms-wmv"));
         FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("xcf", Collections.singletonList("application/x-gimp"));
         FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("xla", Collections.singletonList("application/vnd.ms-excel"));
-        FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("xlam", Collections.singletonList("application/vnd.ms-excel.addin.macroEnabled.12"));
+        FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("xlam", Collections.singletonList("application/vnd.ms-excel.addin" +
+                ".macroEnabled.12"));
         FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("xls", Collections.singletonList("application/vnd.ms-excel"));
-        FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("xlsb", Collections.singletonList("application/vnd.ms-excel.sheet.binary.macroEnabled.12"));
-        FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("xlsm", Collections.singletonList("application/vnd.ms-excel.sheet.macroEnabled.12"));
-        FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("xlsx", Collections.singletonList("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"));
+        FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("xlsb", Collections.singletonList("application/vnd.ms-excel.sheet" +
+                ".binary.macroEnabled.12"));
+        FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("xlsm", Collections.singletonList("application/vnd.ms-excel.sheet" +
+                ".macroEnabled.12"));
+        FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("xlsx", Collections.singletonList("application/vnd" +
+                ".openxmlformats-officedocument.spreadsheetml.sheet"));
         FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("xlt", Collections.singletonList("application/vnd.ms-excel"));
-        FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("xltm", Collections.singletonList("application/vnd.ms-excel.template.macroEnabled.12"));
-        FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("xltx", Collections.singletonList("application/vnd.openxmlformats-officedocument.spreadsheetml.template"));
+        FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("xltm", Collections.singletonList("application/vnd.ms-excel.template" +
+                ".macroEnabled.12"));
+        FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("xltx", Collections.singletonList("application/vnd" +
+                ".openxmlformats-officedocument.spreadsheetml.template"));
         FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("xml", Arrays.asList("application/xml", "text/plain"));
         FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("xrf", Collections.singletonList("image/x-dcraw"));
         FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("yaml", Arrays.asList("application/yaml", "text/plain"));

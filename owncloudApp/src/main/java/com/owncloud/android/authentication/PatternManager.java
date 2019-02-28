@@ -99,7 +99,7 @@ public class PatternManager {
         }
     }
 
-    public void onFingerprintCancelled(Activity activity){
+    public void onFingerprintCancelled(Activity activity) {
         // Ask user for pattern
         checkPattern(activity);
     }
@@ -113,7 +113,7 @@ public class PatternManager {
     private boolean patternShouldBeRequested() {
         if ((System.currentTimeMillis() - timeStamp) > PATTERN_TIMEOUT &&
                 mVisibleActivitiesCounter <= 0
-                ) {
+        ) {
             return isPatternEnabled();
         }
         return false;
@@ -127,7 +127,7 @@ public class PatternManager {
     /**
      * This can be used for example for onActivityResult, where you don't want to re authenticate
      * again.
-     *
+     * <p>
      * USE WITH CARE
      */
     public void bayPassUnlockOnce() {

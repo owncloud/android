@@ -7,16 +7,16 @@
  * @author David González Verdugo
  * @author Christian Schabesberger
  * Copyright (C) 2019 ownCloud GmbH.
- *
+ * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
  * as published by the Free Software Foundation.
- *
+ * <p>
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -27,8 +27,6 @@ import android.accounts.Account;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import com.google.android.material.snackbar.Snackbar;
-import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,6 +39,8 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.fragment.app.Fragment;
+import com.google.android.material.snackbar.Snackbar;
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.OCFile;
@@ -134,7 +134,6 @@ public class ShareFileFragment extends Fragment
      * Capabilities of the server
      */
     private OCCapability mCapabilities;
-
 
     /**
      * Public factory method to create new ShareFileFragment instances.
@@ -391,7 +390,6 @@ public class ShareFileFragment extends Fragment
         mListener = null;
     }
 
-
     /**
      * Get known server capabilities from DB
      *
@@ -404,7 +402,6 @@ public class ShareFileFragment extends Fragment
                     getCapability(mAccount.name);
         }
     }
-
 
     /**
      * Get users and groups from the DB to fill in the "share with" list.
@@ -561,7 +558,6 @@ public class ShareFileFragment extends Fragment
         scrollView.scrollTo(0, 0);
     }
 
-
     /// BEWARE: next methods will failed with NullPointerException if called before onCreateView() finishes
 
     private LinearLayout getShareViaLinkSection() {
@@ -602,7 +598,6 @@ public class ShareFileFragment extends Fragment
         listView.setLayoutParams(params);
         listView.requestLayout();
     }
-
 
     /**
      * Hide share features sections that are not enabled

@@ -1,35 +1,26 @@
 /**
- *   ownCloud Android client application
+ * ownCloud Android client application
  *
- *   @author David A. Velasco
- *   @author Christian Schabesberger
- *   Copyright (C) 2019 ownCloud GmbH.
- *
- *   This program is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License version 2,
- *   as published by the Free Software Foundation.
- *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
- *
- *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * @author David A. Velasco
+ * @author Christian Schabesberger
+ * Copyright (C) 2019 ownCloud GmbH.
+ * <p>
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
+ * <p>
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package com.owncloud.android.ui.preview;
 
-import com.owncloud.android.R;
-import com.owncloud.android.datamodel.FileDataStorageManager;
-import com.owncloud.android.datamodel.OCFile;
-import com.owncloud.android.ui.controller.TransferProgressController;
-import com.owncloud.android.ui.fragment.FileFragment;
-
 import android.accounts.Account;
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentStatePagerAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -37,10 +28,16 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentStatePagerAdapter;
+import com.owncloud.android.R;
+import com.owncloud.android.datamodel.FileDataStorageManager;
+import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.lib.common.utils.Log_OC;
+import com.owncloud.android.ui.controller.TransferProgressController;
+import com.owncloud.android.ui.fragment.FileFragment;
 import com.owncloud.android.utils.DisplayUtils;
 import com.owncloud.android.utils.PreferenceUtils;
-
 
 /**
  * This Fragment is used to monitor the progress of a file downloading.
@@ -52,10 +49,10 @@ public class FileDownloadFragment extends FileFragment implements OnClickListene
     public static final String EXTRA_FILE = "FILE";
     public static final String EXTRA_ACCOUNT = "ACCOUNT";
     private static final String EXTRA_ERROR = "ERROR";
-    
+
     private static final String ARG_FILE = "FILE";
     private static final String ARG_IGNORE_FIRST = "IGNORE_FIRST";
-    private static final String ARG_ACCOUNT = "ACCOUNT" ;
+    private static final String ARG_ACCOUNT = "ACCOUNT";
 
     private Account mAccount;
 
@@ -64,7 +61,6 @@ public class FileDownloadFragment extends FileFragment implements OnClickListene
     private boolean mIgnoreFirstSavedState;
     private boolean mError;
     private ProgressBar mProgressBar;
-
 
     /**
      * Public factory method to create a new fragment that shows the progress of a file download.
@@ -91,10 +87,9 @@ public class FileDownloadFragment extends FileFragment implements OnClickListene
         return frag;
     }
 
-
     /**
      * Creates an empty details fragment.
-     * 
+     *
      * It's necessary to keep a public constructor without parameters; the system uses it when tries to
      * reinstantiate a fragment automatically.
      */
@@ -110,13 +105,12 @@ public class FileDownloadFragment extends FileFragment implements OnClickListene
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle args = getArguments();
-        setFile((OCFile)args.getParcelable(ARG_FILE));
-            // TODO better in super, but needs to check ALL the class extending FileFragment; not right now
+        setFile((OCFile) args.getParcelable(ARG_FILE));
+        // TODO better in super, but needs to check ALL the class extending FileFragment; not right now
 
         mIgnoreFirstSavedState = args.getBoolean(ARG_IGNORE_FIRST);
         mAccount = args.getParcelable(ARG_ACCOUNT);
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -160,7 +154,6 @@ public class FileDownloadFragment extends FileFragment implements OnClickListene
         mProgressController.setProgressBar(mProgressBar);
     }
 
-
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -194,7 +187,6 @@ public class FileDownloadFragment extends FileFragment implements OnClickListene
         }
     }
 
-
     /**
      * Enables buttons for a file being downloaded
      */
@@ -213,7 +205,6 @@ public class FileDownloadFragment extends FileFragment implements OnClickListene
             rootView.findViewById(R.id.error_image).setVisibility(View.GONE);
         }
     }
-
 
     /**
      * Enables or disables buttons for a file locally available
@@ -255,7 +246,6 @@ public class FileDownloadFragment extends FileFragment implements OnClickListene
         }
     }
 
-
     @Override
     public void onTransferServiceConnected() {
         listenForTransferProgress();
@@ -283,7 +273,6 @@ public class FileDownloadFragment extends FileFragment implements OnClickListene
         // view does not need any update, parent activity will replace this fragment
     }
 
-
     @Override
     public void updateViewForSyncInProgress() {
         setButtonsForTransferring(getView());
@@ -298,7 +287,6 @@ public class FileDownloadFragment extends FileFragment implements OnClickListene
         }
     }
 
-
     private void listenForTransferProgress() {
         if (mProgressController != null) {
             mProgressController.startListeningProgressFor(getFile(), mAccount);
@@ -306,13 +294,11 @@ public class FileDownloadFragment extends FileFragment implements OnClickListene
         }
     }
 
-
     private void leaveTransferProgress() {
         if (mProgressController != null) {
             mProgressController.stopListeningProgressFor(getFile(), mAccount);
         }
     }
-
 
     public void setError(boolean error) {
         mError = error;

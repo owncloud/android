@@ -16,9 +16,9 @@
 -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="58dip"
-                style="@style/RtlOverlay.Widget.AppCompat.Search.DropDown"
+    android:layout_width="match_parent"
+    android:layout_height="58dip"
+    style="@style/RtlOverlay.Widget.AppCompat.Search.DropDown"
     >
 
     <ImageView
@@ -55,27 +55,29 @@
         android:visibility="gone"
         style="@style/RtlOverlay.Widget.AppCompat.Search.DropDown.Icon2" />
 
-    <TextView android:id="@android:id/text2"
-              style="?android:attr/dropDownItemStyle"
-              android:textAppearance="?attr/textAppearanceSearchResultSubtitle"
-              android:maxLines="1"
-              android:layout_width="match_parent"
-              android:layout_height="29dip"
-              android:paddingBottom="4dip"
-              android:gravity="top"
-              android:layout_alignWithParentIfMissing="true"
-              android:layout_alignParentBottom="true"
-              android:visibility="gone" />
+    <TextView
+        android:id="@android:id/text2"
+        style="?android:attr/dropDownItemStyle"
+        android:textAppearance="?attr/textAppearanceSearchResultSubtitle"
+        android:maxLines="1"
+        android:layout_width="match_parent"
+        android:layout_height="29dip"
+        android:paddingBottom="4dip"
+        android:gravity="top"
+        android:layout_alignWithParentIfMissing="true"
+        android:layout_alignParentBottom="true"
+        android:visibility="gone" />
 
-    <TextView android:id="@android:id/text1"
-              style="?android:attr/dropDownItemStyle"
-              android:textAppearance="?attr/textAppearanceSearchResultTitle"
-              android:maxLines="1"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:layout_centerVertical="true"
-              android:layout_toRightOf="@android:id/icon1"
-              android:layout_toEndOf="@android:id/icon1"
+    <TextView
+        android:id="@android:id/text1"
+        style="?android:attr/dropDownItemStyle"
+        android:textAppearance="?attr/textAppearanceSearchResultTitle"
+        android:maxLines="1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@android:id/icon1"
+        android:layout_toEndOf="@android:id/icon1"
         />
 
 </RelativeLayout>

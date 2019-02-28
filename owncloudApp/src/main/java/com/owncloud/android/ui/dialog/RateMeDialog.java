@@ -1,32 +1,29 @@
 /**
- *   ownCloud Android client application
- *
- *   Copyright (C) 2019 ownCloud GmbH.
- *
- *   This program is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License version 2,
- *   as published by the Free Software Foundation.
- *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
- *
- *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * ownCloud Android client application
+ * <p>
+ * Copyright (C) 2019 ownCloud GmbH.
+ * <p>
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
+ * <p>
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package com.owncloud.android.ui.dialog;
 
 import android.app.Dialog;
 import android.content.ActivityNotFoundException;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
-import androidx.annotation.NonNull;
-import androidx.fragment.app.DialogFragment;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -36,6 +33,8 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.fragment.app.DialogFragment;
 import com.owncloud.android.AppRater;
 import com.owncloud.android.R;
 import com.owncloud.android.utils.PreferenceUtils;
@@ -62,7 +61,7 @@ public class RateMeDialog extends DialogFragment {
      *
      * @param packageName   The package name of the application
      * @param cancelable    If 'true', the dialog can be cancelled by the user input (BACK button, touch outside...)
-     * @return              New dialog instance, ready to show.
+     * @return New dialog instance, ready to show.
      */
     public static RateMeDialog newInstance(String packageName, boolean cancelable) {
         RateMeDialog fragment = new RateMeDialog();
@@ -101,12 +100,9 @@ public class RateMeDialog extends DialogFragment {
                 /// to taken back to our application, we need to add following flags to intent.
                 int flags = Intent.FLAG_ACTIVITY_NO_HISTORY |
                         Intent.FLAG_ACTIVITY_MULTIPLE_TASK;
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-                {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     flags |= Intent.FLAG_ACTIVITY_NEW_DOCUMENT;
-                }
-                else
-                {
+                } else {
                     flags |= Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET;
                 }
                 goToMarket.addFlags(flags);
@@ -174,8 +170,9 @@ public class RateMeDialog extends DialogFragment {
 
     @Override
     public void onDestroyView() {
-        if (getDialog() != null && getRetainInstance())
+        if (getDialog() != null && getRetainInstance()) {
             getDialog().setDismissMessage(null);
+        }
         super.onDestroyView();
     }
 }

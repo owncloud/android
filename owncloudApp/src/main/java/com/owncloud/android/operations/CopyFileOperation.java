@@ -26,7 +26,6 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCo
 import com.owncloud.android.lib.resources.files.CopyRemoteFileOperation;
 import com.owncloud.android.operations.common.SyncOperation;
 
-
 /**
  * Operation copying an {@link OCFile} to a different folder.
  *
@@ -40,7 +39,6 @@ public class CopyFileOperation extends SyncOperation {
     private String mTargetParentPath;
 
     private OCFile mFile;
-
 
     /**
      * Constructor
@@ -97,6 +95,5 @@ public class CopyFileOperation extends SyncOperation {
 
         return result;
     }
-
 
 }

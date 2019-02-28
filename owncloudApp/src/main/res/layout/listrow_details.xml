@@ -36,7 +36,7 @@
         android:drawablePadding="5dp"
         android:gravity="center_vertical"
         android:paddingLeft="@dimen/standard_padding"
-        android:textSize="16dp" >
+        android:textSize="16dp">
 
     </TextView>
 

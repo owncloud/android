@@ -1,21 +1,20 @@
 /**
- *   ownCloud Android client application
+ * ownCloud Android client application
  *
- *   @author David A. Velasco
- *   Copyright (C) 2016 ownCloud GmbH.
- *
- *   This program is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License version 2,
- *   as published by the Free Software Foundation.
- *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
- *
- *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * @author David A. Velasco
+ * Copyright (C) 2016 ownCloud GmbH.
+ * <p>
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
+ * <p>
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package com.owncloud.android.operations;
@@ -28,7 +27,6 @@ import com.owncloud.android.lib.resources.shares.OCShare;
 import com.owncloud.android.lib.resources.shares.ShareParserResult;
 import com.owncloud.android.lib.resources.shares.UpdateRemoteShareOperation;
 import com.owncloud.android.operations.common.SyncOperation;
-
 
 /**
  * Updates an existing private share for a given file
@@ -50,7 +48,6 @@ public class UpdateSharePermissionsOperation extends SyncOperation<ShareParserRe
         mPermissions = -1;
     }
 
-
     /**
      * Set permissions to update in private share.
      *
@@ -60,7 +57,6 @@ public class UpdateSharePermissionsOperation extends SyncOperation<ShareParserRe
     public void setPermissions(int permissions) {
         mPermissions = permissions;
     }
-
 
     @Override
     protected RemoteOperationResult<ShareParserResult> run(OwnCloudClient client) {
@@ -77,7 +73,7 @@ public class UpdateSharePermissionsOperation extends SyncOperation<ShareParserRe
 
         // Update remote share with password
         UpdateRemoteShareOperation updateOp = new UpdateRemoteShareOperation(
-            share.getRemoteId()
+                share.getRemoteId()
         );
         updateOp.setPermissions(mPermissions);
         RemoteOperationResult<ShareParserResult> result = updateOp.execute(client);

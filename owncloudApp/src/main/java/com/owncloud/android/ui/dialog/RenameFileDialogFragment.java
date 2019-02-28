@@ -1,54 +1,53 @@
 /**
- *   ownCloud Android client application
+ * ownCloud Android client application
  *
- *   @author David A. Velasco
- *   @author Christian Schabesberger
- *   @author David González Verdugo
- *   Copyright (C) 2019 ownCloud GmbH.
- *
- *   This program is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License version 2,
- *   as published by the Free Software Foundation.
- *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
- *
- *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * @author David A. Velasco
+ * @author Christian Schabesberger
+ * @author David González Verdugo
+ * Copyright (C) 2019 ownCloud GmbH.
+ * <p>
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
+ * <p>
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package com.owncloud.android.ui.dialog;
 
 /**
  *  Dialog to input a new name for an {@link OCFile} being renamed.  
- * 
+ *
  *  Triggers the rename operation. 
  */
-import com.google.android.material.snackbar.Snackbar;
-import androidx.appcompat.app.AlertDialog;
+
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import androidx.fragment.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager.LayoutParams;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.DialogFragment;
+import com.google.android.material.snackbar.Snackbar;
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.lib.resources.files.FileUtils;
 import com.owncloud.android.ui.activity.ComponentsGetter;
 import com.owncloud.android.utils.PreferenceUtils;
 
-
 /**
  *  Dialog to input a new name for a file or folder to rename.  
- * 
+ *
  *  Triggers the rename operation when name is confirmed.
  */
 public class RenameFileDialogFragment
@@ -58,9 +57,9 @@ public class RenameFileDialogFragment
 
     /**
      * Public factory method to create new RenameFileDialogFragment instances.
-     * 
+     *
      * @param file            File to rename.
-     * @return                Dialog ready to show.
+     * @return Dialog ready to show.
      */
     public static RenameFileDialogFragment newInstance(OCFile file) {
         RenameFileDialogFragment frag = new RenameFileDialogFragment();
@@ -68,11 +67,11 @@ public class RenameFileDialogFragment
         args.putParcelable(ARG_TARGET_FILE, file);
         frag.setArguments(args);
         return frag;
-        
+
     }
 
     private OCFile mTargetFile;
-    
+
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         mTargetFile = getArguments().getParcelable(ARG_TARGET_FILE);
@@ -85,7 +84,7 @@ public class RenameFileDialogFragment
         v.setFilterTouchesWhenObscured(
                 PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(getContext())
         );
-        
+
         // Setup layout 
         String currentName = mTargetFile.getFileName();
         EditText inputText = v.findViewById(R.id.user_input);
@@ -95,36 +94,35 @@ public class RenameFileDialogFragment
         int selectionEnd = (extensionStart >= 0) ? extensionStart : currentName.length();
         if (selectionStart >= 0 && selectionEnd >= 0) {
             inputText.setSelection(
-                    Math.min(selectionStart, selectionEnd), 
+                    Math.min(selectionStart, selectionEnd),
                     Math.max(selectionStart, selectionEnd));
         }
         inputText.requestFocus();
-        
+
         // Build the dialog  
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setView(v)
-               .setPositiveButton(android.R.string.ok, this)
-               .setNegativeButton(android.R.string.cancel, this)
-               .setTitle(R.string.rename_dialog_title);
+                .setPositiveButton(android.R.string.ok, this)
+                .setNegativeButton(android.R.string.cancel, this)
+                .setTitle(R.string.rename_dialog_title);
         Dialog d = builder.create();
         d.getWindow().setSoftInputMode(LayoutParams.SOFT_INPUT_STATE_VISIBLE);
         return d;
-    }    
+    }
 
-    
     @Override
     public void onClick(DialogInterface dialog, int which) {
         if (which == AlertDialog.BUTTON_POSITIVE) {
-            String newFileName = 
-                ((TextView)(getDialog().findViewById(R.id.user_input)))
-                    .getText().toString().trim();
-            
+            String newFileName =
+                    ((TextView) (getDialog().findViewById(R.id.user_input)))
+                            .getText().toString().trim();
+
             if (newFileName.length() <= 0) {
                 showSnackMessage(R.string.filename_empty);
                 return;
             }
 
-            boolean serverWithForbiddenChars = ((ComponentsGetter)getActivity()).
+            boolean serverWithForbiddenChars = ((ComponentsGetter) getActivity()).
                     getFileOperationsHelper().isVersionWithForbiddenCharacters();
 
             if (!FileUtils.isValidName(newFileName, serverWithForbiddenChars)) {
@@ -138,7 +136,7 @@ public class RenameFileDialogFragment
                 return;
             }
 
-            ((ComponentsGetter)getActivity()).getFileOperationsHelper().
+            ((ComponentsGetter) getActivity()).getFileOperationsHelper().
                     renameFile(mTargetFile, newFileName);
 
         }
@@ -151,9 +149,9 @@ public class RenameFileDialogFragment
      */
     private void showSnackMessage(int messageResource) {
         Snackbar snackbar = Snackbar.make(
-            getActivity().findViewById(android.R.id.content),
-            messageResource,
-            Snackbar.LENGTH_LONG
+                getActivity().findViewById(android.R.id.content),
+                messageResource,
+                Snackbar.LENGTH_LONG
         );
         snackbar.show();
     }

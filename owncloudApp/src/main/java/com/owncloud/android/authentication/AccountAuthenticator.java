@@ -1,31 +1,31 @@
 /**
- *   ownCloud Android client application
+ * ownCloud Android client application
  *
- *   @author David A. Velasco
- *   @author Christian Schabesberger
- *   Copyright (C) 2012  Bartek Przybylski
- *   Copyright (C) 2019 ownCloud GmbH.
- *
- *   This program is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License version 2,
- *   as published by the Free Software Foundation.
- *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
- *
- *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * @author David A. Velasco
+ * @author Christian Schabesberger
+ * Copyright (C) 2012  Bartek Przybylski
+ * Copyright (C) 2019 ownCloud GmbH.
+ * <p>
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
+ * <p>
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package com.owncloud.android.authentication;
 
-import com.owncloud.android.MainApp;
-import com.owncloud.android.R;
-
-import android.accounts.*;
+import android.accounts.AbstractAccountAuthenticator;
+import android.accounts.Account;
+import android.accounts.AccountAuthenticatorResponse;
+import android.accounts.AccountManager;
+import android.accounts.NetworkErrorException;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -33,31 +33,33 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.widget.Toast;
 
+import com.owncloud.android.MainApp;
+import com.owncloud.android.R;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.OwnCloudClientFactory;
-import com.owncloud.android.lib.common.accounts.*;
+import com.owncloud.android.lib.common.accounts.AccountTypeUtils;
 import com.owncloud.android.lib.common.accounts.AccountUtils;
 import com.owncloud.android.lib.common.authentication.oauth.OAuth2Constants;
-import com.owncloud.android.lib.common.authentication.oauth.OAuth2RefreshAccessTokenOperation;
 import com.owncloud.android.lib.common.authentication.oauth.OAuth2Provider;
 import com.owncloud.android.lib.common.authentication.oauth.OAuth2ProvidersRegistry;
+import com.owncloud.android.lib.common.authentication.oauth.OAuth2RefreshAccessTokenOperation;
 import com.owncloud.android.lib.common.authentication.oauth.OAuth2RequestBuilder;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
 
 import java.util.Map;
 
-
 /**
  *  Authenticator for ownCloud accounts.
- * 
- *  Controller class accessed from the system AccountManager, providing integration of ownCloud accounts with the Android system.
- * 
+ *
+ *  Controller class accessed from the system AccountManager, providing integration of ownCloud accounts with the
+ *  Android system.
+ *
  *  TODO - better separation in operations for OAuth-capable and regular ownCloud accounts.
  *  TODO - review completeness
  */
 public class AccountAuthenticator extends AbstractAccountAuthenticator {
-    
+
     /**
      * Is used by android system to assign accounts to authenticators. Should be
      * used by application and all extensions.
@@ -66,11 +68,11 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
     public static final String KEY_REQUIRED_FEATURES = "requiredFeatures";
     public static final String KEY_LOGIN_OPTIONS = "loginOptions";
     public static final String KEY_ACCOUNT = "account";
-    
+
     private static final String TAG = AccountAuthenticator.class.getSimpleName();
-    
+
     private Context mContext;
-    
+
     private Handler mHandler;
 
     public AccountAuthenticator(Context context) {
@@ -84,16 +86,16 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
      */
     @Override
     public Bundle addAccount(AccountAuthenticatorResponse response,
-            String accountType, String authTokenType,
-            String[] requiredFeatures, Bundle options) {
+                             String accountType, String authTokenType,
+                             String[] requiredFeatures, Bundle options) {
         Log_OC.i(TAG, "Adding account with type " + accountType
                 + " and auth token " + authTokenType);
-        
+
         final Bundle bundle = new Bundle();
-        
+
         AccountManager accountManager = AccountManager.get(mContext);
         Account[] accounts = accountManager.getAccountsByType(MainApp.getAccountType());
-        
+
         if (mContext.getResources().getBoolean(R.bool.multiaccount_support) || accounts.length < 1) {
             try {
                 validateAccountType(accountType);
@@ -103,7 +105,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
                 e.printStackTrace();
                 return e.getFailureBundle();
             }
-            
+
             final Intent intent = new Intent(mContext, AuthenticatorActivity.class);
             intent.putExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE, response);
             intent.putExtra(KEY_AUTH_TOKEN_TYPE, authTokenType);
@@ -112,16 +114,17 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
             intent.putExtra(AuthenticatorActivity.EXTRA_ACTION, AuthenticatorActivity.ACTION_CREATE);
 
             setIntentFlags(intent);
-            
+
             bundle.putParcelable(AccountManager.KEY_INTENT, intent);
-        
+
         } else {
 
             // Return an error
             bundle.putInt(AccountManager.KEY_ERROR_CODE, AccountManager.ERROR_CODE_UNSUPPORTED_OPERATION);
-            final String message = String.format(mContext.getString(R.string.auth_unsupported_multiaccount), mContext.getString(R.string.app_name)); 
+            final String message = String.format(mContext.getString(R.string.auth_unsupported_multiaccount),
+                    mContext.getString(R.string.app_name));
             bundle.putString(AccountManager.KEY_ERROR_MESSAGE, message);
-           
+
             mHandler.post(new Runnable() {
 
                 @Override
@@ -129,9 +132,9 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
                     Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                 }
             });
-            
+
         }
-        
+
         return bundle;
     }
 
@@ -140,7 +143,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
      */
     @Override
     public Bundle confirmCredentials(AccountAuthenticatorResponse response,
-            Account account, Bundle options) {
+                                     Account account, Bundle options) {
         try {
             validateAccountType(account.type);
         } catch (AuthenticatorException e) {
@@ -164,7 +167,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
 
     @Override
     public Bundle editProperties(AccountAuthenticatorResponse response,
-            String accountType) {
+                                 String accountType) {
         return null;
     }
 
@@ -173,7 +176,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
      */
     @Override
     public Bundle getAuthToken(AccountAuthenticatorResponse response,
-            Account account, String authTokenType, Bundle options) {
+                               Account account, String authTokenType, Bundle options) {
         /// validate parameters
         try {
             validateAccountType(account.type);
@@ -184,7 +187,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
             e.printStackTrace();
             return e.getFailureBundle();
         }
-        
+
         /// check if required token is stored
         final AccountManager am = AccountManager.get(mContext);
         String accessToken;
@@ -213,7 +216,6 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
         intent.putExtra(KEY_LOGIN_OPTIONS, options);
         intent.putExtra(AuthenticatorActivity.EXTRA_ACCOUNT, account);
         intent.putExtra(AuthenticatorActivity.EXTRA_ACTION, AuthenticatorActivity.ACTION_UPDATE_EXPIRED_TOKEN);
-        
 
         final Bundle bundle = new Bundle();
         bundle.putParcelable(AccountManager.KEY_INTENT, intent);
@@ -227,7 +229,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
 
     @Override
     public Bundle hasFeatures(AccountAuthenticatorResponse response,
-            Account account, String[] features) {
+                              Account account, String[] features) {
         final Bundle result = new Bundle();
         result.putBoolean(AccountManager.KEY_BOOLEAN_RESULT, true);
         return result;
@@ -235,7 +237,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
 
     @Override
     public Bundle updateCredentials(AccountAuthenticatorResponse response,
-            Account account, String authTokenType, Bundle options) {
+                                    Account account, String authTokenType, Bundle options) {
         final Intent intent = new Intent(mContext, AuthenticatorActivity.class);
         intent.putExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE,
                 response);
@@ -272,10 +274,10 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
     private void validateAuthTokenType(String authTokenType)
             throws UnsupportedAuthTokenTypeException {
         if (!authTokenType.equals(MainApp.getAuthTokenType()) &&
-            !authTokenType.equals(AccountTypeUtils.getAuthTokenTypePass(MainApp.getAccountType())) &&
-            !authTokenType.equals(AccountTypeUtils.getAuthTokenTypeAccessToken(MainApp.getAccountType())) &&
-            !authTokenType.equals(AccountTypeUtils.getAuthTokenTypeRefreshToken(MainApp.getAccountType())) &&
-            !authTokenType.equals(AccountTypeUtils.getAuthTokenTypeSamlSessionCookie(MainApp.getAccountType()))) {
+                !authTokenType.equals(AccountTypeUtils.getAuthTokenTypePass(MainApp.getAccountType())) &&
+                !authTokenType.equals(AccountTypeUtils.getAuthTokenTypeAccessToken(MainApp.getAccountType())) &&
+                !authTokenType.equals(AccountTypeUtils.getAuthTokenTypeRefreshToken(MainApp.getAccountType())) &&
+                !authTokenType.equals(AccountTypeUtils.getAuthTokenTypeSamlSessionCookie(MainApp.getAccountType()))) {
             throw new UnsupportedAuthTokenTypeException();
         }
     }
@@ -327,8 +329,8 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
         String accessToken;
         try {
             String refreshToken = accountManager.getUserData(
-                account,
-                AccountUtils.Constants.KEY_OAUTH2_REFRESH_TOKEN
+                    account,
+                    AccountUtils.Constants.KEY_OAUTH2_REFRESH_TOKEN
             );
 
             if (refreshToken == null || refreshToken.length() <= 0) {
@@ -346,9 +348,9 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
                     (OAuth2RefreshAccessTokenOperation) builder.buildOperation();
 
             OwnCloudClient client = OwnCloudClientFactory.createOwnCloudClient(
-                Uri.parse(accountManager.getUserData(account, AccountUtils.Constants.KEY_OC_BASE_URL)),
-                mContext,
-                true
+                    Uri.parse(accountManager.getUserData(account, AccountUtils.Constants.KEY_OC_BASE_URL)),
+                    mContext,
+                    true
             );
 
             RemoteOperationResult<Map<String, String>> result = oAuth2RefreshAccessTokenOperation.execute(client);
@@ -373,11 +375,10 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
             Log_OC.d(TAG, "Got OAuth2 refresh token: " + refreshToken);
 
             accountManager.setUserData(
-                account,
-                AccountUtils.Constants.KEY_OAUTH2_REFRESH_TOKEN,
-                refreshToken
+                    account,
+                    AccountUtils.Constants.KEY_OAUTH2_REFRESH_TOKEN,
+                    refreshToken
             );
-
 
         } catch (Exception e) {
             Log_OC.e(TAG, "Failed to store refreshed access token");

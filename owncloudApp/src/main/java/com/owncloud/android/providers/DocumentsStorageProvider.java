@@ -1,24 +1,23 @@
 /**
- *   ownCloud Android client application
+ * ownCloud Android client application
  *
- *   @author Bartosz Przybylski
- *   @author Christian Schabesberger
- *   @author David González Verdugo
- *   Copyright (C) 2015  Bartosz Przybylski
- *   Copyright (C) 2019 ownCloud GmbH.
- *
- *   This program is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License version 2,
- *   as published by the Free Software Foundation.
- *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
- *
- *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * @author Bartosz Przybylski
+ * @author Christian Schabesberger
+ * @author David González Verdugo
+ * Copyright (C) 2015  Bartosz Przybylski
+ * Copyright (C) 2019 ownCloud GmbH.
+ * <p>
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
+ * <p>
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package com.owncloud.android.providers;
@@ -75,8 +74,9 @@ public class DocumentsStorageProvider extends DocumentsProvider {
 
         final RootCursor result = new RootCursor(projection);
 
-        for (Account account : AccountUtils.getAccounts(getContext()))
+        for (Account account : AccountUtils.getAccounts(getContext())) {
             result.addRoot(account, getContext());
+        }
 
         return result;
     }
@@ -87,8 +87,9 @@ public class DocumentsStorageProvider extends DocumentsProvider {
         updateCurrentStorageManagerIfNeeded(docId);
 
         final FileCursor result = new FileCursor(projection);
-        if (result != null)
-          result.addFile(mCurrentStorageManager.getFileById(docId));
+        if (result != null) {
+            result.addFile(mCurrentStorageManager.getFileById(docId));
+        }
 
         return result;
     }
@@ -103,8 +104,9 @@ public class DocumentsStorageProvider extends DocumentsProvider {
         final OCFile browsedDir = mCurrentStorageManager.getFileById(folderId);
 
         // Create result cursor before syncing folder again, in order to enable faster loading
-        for (OCFile file : mCurrentStorageManager.getFolderContent(browsedDir))
+        for (OCFile file : mCurrentStorageManager.getFolderContent(browsedDir)) {
             resultCursor.addFile(file);
+        }
 
         /**
          * This will start syncing the current folder. User will only see this after updating his view with a
@@ -165,8 +167,9 @@ public class DocumentsStorageProvider extends DocumentsProvider {
             getContext().startService(i);
 
             do {
-                if (!waitOrGetCancelled(cancellationSignal))
+                if (!waitOrGetCancelled(cancellationSignal)) {
                     return null;
+                }
                 file = mCurrentStorageManager.getFileById(docId);
 
             } while (!file.isDown());
@@ -205,8 +208,9 @@ public class DocumentsStorageProvider extends DocumentsProvider {
         OCFile root = mCurrentStorageManager.getFileByPath("/");
         FileCursor result = new FileCursor(projection);
 
-        for (OCFile f : findFiles(root, query))
+        for (OCFile f : findFiles(root, query)) {
             result.addFile(f);
+        }
 
         return result;
     }
@@ -223,9 +227,11 @@ public class DocumentsStorageProvider extends DocumentsProvider {
     }
 
     private void updateCurrentStorageManagerIfNeeded(String rootId) {
-        for (FileDataStorageManager data : mRootIdToStorageManager.values())
-            if (data.getAccount().name.equals(rootId))
+        for (FileDataStorageManager data : mRootIdToStorageManager.values()) {
+            if (data.getAccount().name.equals(rootId)) {
                 mCurrentStorageManager = data;
+            }
+        }
     }
 
     private void initiateStorageMap() {
@@ -258,8 +264,9 @@ public class DocumentsStorageProvider extends DocumentsProvider {
             if (f.isFolder()) {
                 result.addAll(findFiles(f, query));
             } else {
-                if (f.getFileName().contains(query))
+                if (f.getFileName().contains(query)) {
                     result.add(f);
+                }
             }
         }
         return result;

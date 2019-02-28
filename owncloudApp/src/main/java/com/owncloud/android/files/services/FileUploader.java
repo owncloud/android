@@ -1,27 +1,27 @@
 /**
- *  ownCloud Android client application
+ * ownCloud Android client application
  *
- *  @author Bartek Przybylski
- *  @author masensio
- *  @author LukeOwnCloud
- *  @author David A. Velasco
- *  @author Christian Schabesberger
- *  @author David González Verdugo
- *
- *  Copyright (C) 2012 Bartek Przybylski
- *  Copyright (C) 2019 ownCloud GmbH.
- *
- *  This program is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License version 2,
- *  as published by the Free Software Foundation.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * @author Bartek Przybylski
+ * @author masensio
+ * @author LukeOwnCloud
+ * @author David A. Velasco
+ * @author Christian Schabesberger
+ * @author David González Verdugo
+ * <p>
+ * Copyright (C) 2012 Bartek Przybylski
+ * Copyright (C) 2019 ownCloud GmbH.
+ * <p>
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
+ * <p>
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package com.owncloud.android.files.services;
@@ -43,28 +43,28 @@ import android.os.Looper;
 import android.os.Message;
 import android.os.Parcelable;
 import android.os.Process;
-import androidx.core.app.NotificationCompat;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import android.util.Pair;
 
+import androidx.core.app.NotificationCompat;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.authentication.AuthenticatorActivity;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
+import com.owncloud.android.datamodel.OCUpload;
 import com.owncloud.android.datamodel.UploadsStorageManager;
 import com.owncloud.android.datamodel.UploadsStorageManager.UploadStatus;
-import com.owncloud.android.datamodel.OCUpload;
 import com.owncloud.android.db.UploadResult;
 import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.OwnCloudClientManagerFactory;
 import com.owncloud.android.lib.common.network.OnDatatransferProgressListener;
-import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
+import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.common.utils.Log_OC;
-import com.owncloud.android.lib.resources.files.chunks.ChunkedUploadRemoteFileOperation;
 import com.owncloud.android.lib.resources.files.FileUtils;
+import com.owncloud.android.lib.resources.files.chunks.ChunkedUploadRemoteFileOperation;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 import com.owncloud.android.operations.ChunkedUploadFileOperation;
 import com.owncloud.android.operations.RemoveChunksFolderOperation;
@@ -83,9 +83,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Vector;
-
-import static com.owncloud.android.operations.UploadFileOperation.CREATED_AS_CAMERA_UPLOAD_PICTURE;
-import static com.owncloud.android.operations.UploadFileOperation.CREATED_AS_CAMERA_UPLOAD_VIDEO;
 
 /**
  * Service for uploading files. Invoke using context.startService(...).
@@ -232,7 +229,7 @@ public class FileUploader extends Service
         mUploadsStorageManager = new UploadsStorageManager(getContentResolver());
 
         int failedCounter = mUploadsStorageManager.failInProgressUploads(
-            UploadResult.SERVICE_INTERRUPTED    // Add UploadResult.KILLED?
+                UploadResult.SERVICE_INTERRUPTED    // Add UploadResult.KILLED?
         );
         if (failedCounter > 0) {
             resurrection();
@@ -246,7 +243,6 @@ public class FileUploader extends Service
         mLocalBroadcastManager = LocalBroadcastManager.getInstance(this);
     }
 
-
     /**
      * Service clean-up when restarted after being killed
      */
@@ -254,7 +250,6 @@ public class FileUploader extends Service
         // remove stucked notification
         mNotificationManager.cancel(R.string.uploader_upload_in_progress_ticker);
     }
-
 
     /**
      * Service clean up
@@ -274,7 +269,6 @@ public class FileUploader extends Service
 
         super.onDestroy();
     }
-
 
     /**
      * Entry point to add one or several files to the queue of uploads.
@@ -348,7 +342,6 @@ public class FileUploader extends Service
                 mimeTypes = intent.getStringArrayExtra(KEY_MIME_TYPE);
             }
 
-
             boolean forceOverwrite = intent.getBooleanExtra(KEY_FORCE_OVERWRITE, false);
             int localAction = intent.getIntExtra(KEY_LOCAL_BEHAVIOUR, LOCAL_BEHAVIOUR_FORGET);
 
@@ -404,7 +397,7 @@ public class FileUploader extends Service
                     ocUpload.setWhileChargingOnly(isWhileChargingOnly);*/
                     ocUpload.setUploadStatus(UploadStatus.UPLOAD_IN_PROGRESS);
 
-                    if(chunked && new File(ocFile.getStoragePath()).length() >
+                    if (chunked && new File(ocFile.getStoragePath()).length() >
                             ChunkedUploadRemoteFileOperation.CHUNK_SIZE) {
                         ocUpload.setTransferId(
                                 SecurityUtils.stringToMD5Hash(ocFile.getRemotePath()) + System.currentTimeMillis());
@@ -474,7 +467,7 @@ public class FileUploader extends Service
 
             UploadFileOperation newUploadFileOperation;
 
-            if(chunked && upload.getFileSize() > ChunkedUploadRemoteFileOperation.CHUNK_SIZE) {
+            if (chunked && upload.getFileSize() > ChunkedUploadRemoteFileOperation.CHUNK_SIZE) {
                 upload.setTransferId(
                         SecurityUtils.stringToMD5Hash(upload.getRemotePath()) + System.currentTimeMillis());
                 newUploadFileOperation = new ChunkedUploadFileOperation(
@@ -505,7 +498,7 @@ public class FileUploader extends Service
                     account.name,
                     upload.getRemotePath(),
                     newUploadFileOperation
-                    );
+            );
             if (putResult != null) {
                 String uploadKey = putResult.first;
                 requestedUploads.add(uploadKey);
@@ -572,7 +565,6 @@ public class FileUploader extends Service
          */
         private Map<String, WeakReference<OnDatatransferProgressListener>> mBoundListeners =
                 new HashMap<String, WeakReference<OnDatatransferProgressListener>>();
-
 
         /**
          * Cancels a pending or current upload of a remote file.
@@ -658,22 +650,21 @@ public class FileUploader extends Service
          * @param file    A file that could be in the queue of pending uploads
          */
         public boolean isUploading(Account account, OCFile file) {
-            if (account == null || file == null)
+            if (account == null || file == null) {
                 return false;
+            }
             return (mPendingUploads.contains(account.name, file.getRemotePath()));
         }
 
-
         public boolean isUploadingNow(OCUpload upload) {
             return (
-                upload != null  &&
-                mCurrentAccount != null &&
-                mCurrentUpload != null &&
-                upload.getAccountName().equals(mCurrentAccount.name) &&
-                upload.getRemotePath().equals(mCurrentUpload.getRemotePath())
+                    upload != null &&
+                            mCurrentAccount != null &&
+                            mCurrentUpload != null &&
+                            upload.getAccountName().equals(mCurrentAccount.name) &&
+                            upload.getRemotePath().equals(mCurrentUpload.getRemotePath())
             );
         }
-
 
         /**
          * Adds a listener interested in the progress of the upload for a concrete file.
@@ -687,11 +678,12 @@ public class FileUploader extends Service
                 Account account,
                 OCFile file
         ) {
-            if (account == null || file == null || listener == null) return;
+            if (account == null || file == null || listener == null) {
+                return;
+            }
             String targetKey = buildRemoteName(account.name, file.getRemotePath());
             mBoundListeners.put(targetKey, new WeakReference<>(listener));
         }
-
 
         /**
          * Adds a listener interested in the progress of the upload for a concrete file.
@@ -703,11 +695,12 @@ public class FileUploader extends Service
                 OnDatatransferProgressListener listener,
                 OCUpload ocUpload
         ) {
-            if (ocUpload == null || listener == null) return;
+            if (ocUpload == null || listener == null) {
+                return;
+            }
             String targetKey = buildRemoteName(ocUpload.getAccountName(), ocUpload.getRemotePath());
             mBoundListeners.put(targetKey, new WeakReference<>(listener));
         }
-
 
         /**
          * Removes a listener interested in the progress of the upload for a concrete file.
@@ -721,13 +714,14 @@ public class FileUploader extends Service
                 Account account,
                 OCFile file
         ) {
-            if (account == null || file == null || listener == null) return;
+            if (account == null || file == null || listener == null) {
+                return;
+            }
             String targetKey = buildRemoteName(account.name, file.getRemotePath());
             if (mBoundListeners.get(targetKey) == listener) {
                 mBoundListeners.remove(targetKey);
             }
         }
-
 
         /**
          * Removes a listener interested in the progress of the upload for a concrete file.
@@ -739,7 +733,9 @@ public class FileUploader extends Service
                 OnDatatransferProgressListener listener,
                 OCUpload ocUpload
         ) {
-            if (ocUpload == null || listener == null) return;
+            if (ocUpload == null || listener == null) {
+                return;
+            }
             String targetKey = buildRemoteName(ocUpload.getAccountName(), ocUpload.getRemotePath());
             if (mBoundListeners.get(targetKey) == listener) {
                 mBoundListeners.remove(targetKey);
@@ -784,8 +780,9 @@ public class FileUploader extends Service
 
         public ServiceHandler(Looper looper, FileUploader service) {
             super(looper);
-            if (service == null)
+            if (service == null) {
                 throw new IllegalArgumentException("Received invalid NULL in parameter 'service'");
+            }
             mService = service;
         }
 
@@ -819,9 +816,9 @@ public class FileUploader extends Service
             /// Check account existence
             if (!AccountUtils.exists(mCurrentUpload.getAccount().name, this)) {
                 Log_OC.w(
-                    TAG,
-                    "Account " + mCurrentUpload.getAccount().name +
-                    " does not exist anymore -> cancelling all its uploads"
+                        TAG,
+                        "Account " + mCurrentUpload.getAccount().name +
+                                " does not exist anymore -> cancelling all its uploads"
                 );
                 cancelUploadsForAccount(mCurrentUpload.getAccount());
                 return;
@@ -885,35 +882,35 @@ public class FileUploader extends Service
                     TransferRequester requester = new TransferRequester();
                     if (requester.shouldScheduleRetry(this, uploadResult.getException())) {
                         int jobId = mPendingUploads.buildKey(
-                            mCurrentAccount.name,
-                            mCurrentUpload.getRemotePath()
+                                mCurrentAccount.name,
+                                mCurrentUpload.getRemotePath()
                         ).hashCode();
                         requester.scheduleUpload(
-                            this,
-                            jobId,
-                            mCurrentAccount.name,
-                            mCurrentUpload.getRemotePath()
+                                this,
+                                jobId,
+                                mCurrentAccount.name,
+                                mCurrentUpload.getRemotePath()
                         );
                         uploadResult = new RemoteOperationResult(
-                            ResultCode.NO_NETWORK_CONNECTION);
+                                ResultCode.NO_NETWORK_CONNECTION);
                     } else {
                         Log_OC.v(
-                            TAG,
-                            String.format(
-                                "Exception in upload, network is OK, no retry scheduled for %1s in %2s",
-                                mCurrentUpload.getRemotePath(),
-                                mCurrentAccount.name
-                            )
+                                TAG,
+                                String.format(
+                                        "Exception in upload, network is OK, no retry scheduled for %1s in %2s",
+                                        mCurrentUpload.getRemotePath(),
+                                        mCurrentAccount.name
+                                )
                         );
                     }
                 } else {
                     Log_OC.v(
-                        TAG,
-                        String.format(
-                            "Success OR fail without exception for %1s in %2s",
-                            mCurrentUpload.getRemotePath(),
-                            mCurrentAccount.name
-                        )
+                            TAG,
+                            String.format(
+                                    "Success OR fail without exception for %1s in %2s",
+                                    mCurrentUpload.getRemotePath(),
+                                    mCurrentAccount.name
+                            )
                     );
                 }
 
@@ -964,7 +961,7 @@ public class FileUploader extends Service
         showUploadListIntent.putExtra(FileActivity.EXTRA_ACCOUNT, upload.getAccount());
         showUploadListIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         mNotificationBuilder.setContentIntent(PendingIntent.getActivity(this, (int) System.currentTimeMillis(),
-            showUploadListIntent, 0));
+                showUploadListIntent, 0));
 
         if (!upload.isCameraUploadsPicture() && !upload.isCameraUploadsVideo()) {
             mNotificationManager.notify(R.string.uploader_upload_in_progress_ticker,
@@ -1008,7 +1005,7 @@ public class FileUploader extends Service
         }
 
         if (!uploadResult.isCancelled() &&
-            !uploadResult.getCode().equals(ResultCode.DELAYED_FOR_WIFI)) {
+                !uploadResult.getCode().equals(ResultCode.DELAYED_FOR_WIFI)) {
 
             // Show the result: success or fail notification
             int tickerId = (uploadResult.isSuccess()) ? R.string.uploader_upload_succeeded_ticker :
@@ -1057,7 +1054,7 @@ public class FileUploader extends Service
                 mNotificationBuilder.setContentText(content);
             }
 
-            if (!uploadResult.isSuccess() && !needsToUpdateCredentials ) {
+            if (!uploadResult.isSuccess() && !needsToUpdateCredentials) {
                 //in case of failure, do not show details file view (because there is no file!)
                 Intent showUploadListIntent = new Intent(this, UploadListActivity.class);
                 showUploadListIntent.putExtra(FileActivity.EXTRA_FILE, upload.getFile());
@@ -1095,7 +1092,6 @@ public class FileUploader extends Service
         // nothing else needed right now
         mLocalBroadcastManager.sendBroadcast(start);
     }
-
 
     /**
      * Sends a broadcast in order to the interested activities can update their

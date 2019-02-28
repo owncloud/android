@@ -24,28 +24,29 @@
         android:id="@+id/action_search"
         android:title="@string/actionbar_search"
         app:actionViewClass="androidx.appcompat.widget.SearchView"
-        app:showAsAction="always"/>
+        app:showAsAction="always" />
     <item
         android:id="@+id/action_select_all"
         android:title="@string/actionbar_select_all"
         android:orderInCategory="1"
-        android:visible="false"/>
+        android:visible="false" />
     <item
         android:id="@+id/action_create_dir"
         android:icon="@drawable/ic_action_create_dir"
         android:orderInCategory="1"
         app:showAsAction="never"
         android:title="@string/actionbar_mkdir"
-        android:contentDescription="@string/actionbar_mkdir"/>
+        android:contentDescription="@string/actionbar_mkdir" />
     <item
         android:id="@+id/action_sync_account"
         android:icon="@drawable/ic_action_refresh"
         android:orderInCategory="1"
         app:showAsAction="never"
         android:title="@string/actionbar_sync"
-        android:contentDescription="@string/actionbar_sync"/>
+        android:contentDescription="@string/actionbar_sync" />
 
-    <item android:id="@+id/action_sort"
+    <item
+        android:id="@+id/action_sort"
         android:orderInCategory="2"
         android:title="@string/actionbar_sort">
         <menu></menu>

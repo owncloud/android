@@ -18,17 +18,18 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-      xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
         android:id="@+id/file_action_select_all"
         android:title="@string/actionbar_select_all"
-        android:showAsAction="never"/>
+        android:showAsAction="never" />
 
-    <item android:id="@+id/action_select_inverse"
+    <item
+        android:id="@+id/action_select_inverse"
         android:title="@string/actionbar_select_inverse"
         android:visible="true"
-        android:showAsAction="never"/>
+        android:showAsAction="never" />
 
     <item
         android:id="@+id/action_share_file"

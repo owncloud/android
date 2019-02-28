@@ -34,14 +34,14 @@
         android:drawablePadding="16dp"
         android:textColor="@color/color_accent"
         android:textSize="20sp"
-        android:text="@string/rate_dialog_title"/>
+        android:text="@string/rate_dialog_title" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
-        android:background="@color/color_accent"/>
+        android:background="@color/color_accent" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -70,7 +70,7 @@
             android:background="@color/color_accent"
             android:textColor="@color/white"
             android:textSize="12sp"
-            android:text="@string/button_no_thanks_name"/>
+            android:text="@string/button_no_thanks_name" />
 
         <Button
             android:id="@+id/button_later"
@@ -82,7 +82,7 @@
             android:background="@color/color_accent"
             android:textColor="@color/white"
             android:textSize="12sp"
-            android:text="@string/button_later_name"/>
+            android:text="@string/button_later_name" />
 
         <Button
             android:id="@+id/button_rate_now"
@@ -92,6 +92,6 @@
             android:background="@color/color_accent"
             android:textColor="@color/white"
             android:textSize="12sp"
-            android:text="@string/button_rate_now_name"/>
+            android:text="@string/button_rate_now_name" />
     </LinearLayout>
 </LinearLayout>

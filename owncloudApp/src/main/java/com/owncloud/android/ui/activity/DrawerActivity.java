@@ -1,22 +1,22 @@
 /**
- *   ownCloud Android client application
+ * ownCloud Android client application
  *
- *   @author Andy Scherzinger
- *   @author Christian Schabesberger
- *   @author David González Verdugo
- *   Copyright (C) 2019 ownCloud GmbH.
- *
- *   This program is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License version 2,
- *   as published by the Free Software Foundation.
- *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
- *
- *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * @author Andy Scherzinger
+ * @author Christian Schabesberger
+ * @author David González Verdugo
+ * Copyright (C) 2019 ownCloud GmbH.
+ * <p>
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
+ * <p>
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package com.owncloud.android.ui.activity;
@@ -29,10 +29,6 @@ import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import com.google.android.material.navigation.NavigationView;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.appcompat.app.ActionBarDrawerToggle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -40,6 +36,10 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import com.google.android.material.navigation.NavigationView;
 import com.owncloud.android.BuildConfig;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
@@ -189,11 +189,11 @@ public abstract class DrawerActivity extends ToolbarActivity {
      */
     protected void setupDrawerContent(NavigationView navigationView) {
         // Disable help or feedback on customization
-        if(!getResources().getBoolean(R.bool.help_enabled)) {
+        if (!getResources().getBoolean(R.bool.help_enabled)) {
             navigationView.getMenu().removeItem(R.id.drawer_menu_help);
         }
 
-        if(!getResources().getBoolean(R.bool.feedback_enabled)) {
+        if (!getResources().getBoolean(R.bool.feedback_enabled)) {
             navigationView.getMenu().removeItem(R.id.drawer_menu_feedback);
         }
 
@@ -370,10 +370,10 @@ public abstract class DrawerActivity extends ToolbarActivity {
                 // activate second/end account avatar
                 if (mAccountsWithAvatars[1] != null) {
                     DisplayUtils.showAccountAvatar(
-                        mAccountsWithAvatars[1],
-                        (ImageView) findNavigationViewChildById(R.id.drawer_account_end),
-                        mOtherAccountAvatarRadiusDimension,
-                        false
+                            mAccountsWithAvatars[1],
+                            (ImageView) findNavigationViewChildById(R.id.drawer_account_end),
+                            mOtherAccountAvatarRadiusDimension,
+                            false
                     );
                     mAccountEndAccountAvatar.setVisibility(View.VISIBLE);
                 } else {
@@ -383,10 +383,10 @@ public abstract class DrawerActivity extends ToolbarActivity {
                 // activate third/middle account avatar
                 if (mAccountsWithAvatars[2] != null) {
                     DisplayUtils.showAccountAvatar(
-                        mAccountsWithAvatars[2],
-                        (ImageView) findNavigationViewChildById(R.id.drawer_account_middle),
-                        mOtherAccountAvatarRadiusDimension,
-                        false
+                            mAccountsWithAvatars[2],
+                            (ImageView) findNavigationViewChildById(R.id.drawer_account_middle),
+                            mOtherAccountAvatarRadiusDimension,
+                            false
                     );
                     mAccountMiddleAccountAvatar.setVisibility(View.VISIBLE);
                 } else {
@@ -419,12 +419,12 @@ public abstract class DrawerActivity extends ToolbarActivity {
                         accounts[i].name
                 );
                 ThumbnailsCacheManager.GetAvatarTask task =
-                    new ThumbnailsCacheManager.GetAvatarTask(
-                        accountMenuItem,
-                        accounts[i],
-                        mMenuAccountAvatarRadiusDimension,
-                        false
-                    );
+                        new ThumbnailsCacheManager.GetAvatarTask(
+                                accountMenuItem,
+                                accounts[i],
+                                mMenuAccountAvatarRadiusDimension,
+                                false
+                        );
                 task.execute();
             }
         }
@@ -447,17 +447,21 @@ public abstract class DrawerActivity extends ToolbarActivity {
     private void updateQuota() {
         Account account = AccountUtils.getCurrentOwnCloudAccount(this);
 
-        if (account == null) return;
+        if (account == null) {
+            return;
+        }
 
         UserProfile.UserQuota userQuota = UserProfilesRepository.getUserProfilesRepository().getQuota(account.name);
 
-        if (userQuota == null) return;
+        if (userQuota == null) {
+            return;
+        }
 
         ProgressBar accountQuotaBar = findViewById(R.id.account_quota_bar);
 
         TextView accountQuotaText = findViewById(R.id.account_quota_text);
 
-        if (accountQuotaBar!= null && accountQuotaText != null) {
+        if (accountQuotaBar != null && accountQuotaText != null) {
 
             if (userQuota.getFree() < 0) { // Pending, unknown or unlimited free storage
 
@@ -467,7 +471,7 @@ public abstract class DrawerActivity extends ToolbarActivity {
 
                 accountQuotaText.setText(
                         String.format(getString(R.string.drawer_unavailable_free_storage),
-                                DisplayUtils.bytesToHumanReadable(userQuota.getUsed(),this))
+                                DisplayUtils.bytesToHumanReadable(userQuota.getUsed(), this))
                 );
 
             } else if (userQuota.getFree() == 0) { // Quota 0, guest users
@@ -536,10 +540,10 @@ public abstract class DrawerActivity extends ToolbarActivity {
             }
 
             DisplayUtils.showAccountAvatar(
-                account,
-                (ImageView) findNavigationViewChildById(R.id.drawer_current_account),
-                mCurrentAccountAvatarRadiusDimension,
-                false
+                    account,
+                    (ImageView) findNavigationViewChildById(R.id.drawer_current_account),
+                    mCurrentAccountAvatarRadiusDimension,
+                    false
             );
 
             updateQuota();
@@ -567,14 +571,17 @@ public abstract class DrawerActivity extends ToolbarActivity {
                 mNavigationView.getMenu().setGroupVisible(R.id.drawer_menu_accounts, true);
                 mNavigationView.getMenu().setGroupVisible(R.id.drawer_menu_standard, false);
                 mNavigationView.getMenu().setGroupVisible(R.id.drawer_menu_settings_etc, false);
-                if(mDrawerLogo != null && accountCount > USER_ITEMS_ALLOWED_BEFORE_REMOVING_CLOUD)
+                if (mDrawerLogo != null && accountCount > USER_ITEMS_ALLOWED_BEFORE_REMOVING_CLOUD) {
                     mDrawerLogo.setVisibility(View.GONE);
+                }
             } else {
                 mAccountChooserToggle.setImageResource(R.drawable.ic_down);
                 mNavigationView.getMenu().setGroupVisible(R.id.drawer_menu_accounts, false);
                 mNavigationView.getMenu().setGroupVisible(R.id.drawer_menu_standard, true);
                 mNavigationView.getMenu().setGroupVisible(R.id.drawer_menu_settings_etc, true);
-                if(mDrawerLogo != null) mDrawerLogo.setVisibility(View.VISIBLE);
+                if (mDrawerLogo != null) {
+                    mDrawerLogo.setVisibility(View.VISIBLE);
+                }
             }
         }
     }

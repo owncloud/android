@@ -1,24 +1,23 @@
 /**
- *   ownCloud Android client application
+ * ownCloud Android client application
  *
- *   @author Tobias Kaminsky
- *   @author Christian Schabesberger
- *   @author Shashvat Kedia
- *   @author David González Verdugo
- *   Copyright (C) 2019 ownCloud GmbH.
- *
- *   This program is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License version 2,
- *   as published by the Free Software Foundation.
- *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
- *
- *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * @author Tobias Kaminsky
+ * @author Christian Schabesberger
+ * @author Shashvat Kedia
+ * @author David González Verdugo
+ * Copyright (C) 2019 ownCloud GmbH.
+ * <p>
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
+ * <p>
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package com.owncloud.android.ui.adapter;
@@ -123,12 +122,12 @@ public class ReceiveExternalFilesAdapter extends BaseAdapter implements ListAdap
         fileSizeV.setText(DisplayUtils.bytesToHumanReadable(file.getFileLength(), mContext));
 
         // get Thumbnail if file is image
-        if (file.isImage() && file.getRemoteId() != null){
-             // Thumbnail in Cache?
+        if (file.isImage() && file.getRemoteId() != null) {
+            // Thumbnail in Cache?
             Bitmap thumbnail = ThumbnailsCacheManager.getBitmapFromDiskCache(
                     String.valueOf(file.getRemoteId())
             );
-            if (thumbnail != null && !file.needsUpdateThumbnail()){
+            if (thumbnail != null && !file.needsUpdateThumbnail()) {
                 fileIcon.setImageBitmap(thumbnail);
             } else {
                 // generate new Thumbnail
@@ -157,13 +156,13 @@ public class ReceiveExternalFilesAdapter extends BaseAdapter implements ListAdap
     }
 
     public void setSortOrder(Integer order, boolean isAscending) {
-        PreferenceManager.setSortOrder(order, mContext,FileStorageUtils.FILE_DISPLAY_SORT);
-        PreferenceManager.setSortAscending(isAscending, mContext,FileStorageUtils.FILE_DISPLAY_SORT);
+        PreferenceManager.setSortOrder(order, mContext, FileStorageUtils.FILE_DISPLAY_SORT);
+        PreferenceManager.setSortAscending(isAscending, mContext, FileStorageUtils.FILE_DISPLAY_SORT);
         FileStorageUtils.mSortOrderFileDisp = order;
         FileStorageUtils.mSortAscendingFileDisp = isAscending;
-        if(mFiles != null && mFiles.size() > 0){
+        if (mFiles != null && mFiles.size() > 0) {
             FileStorageUtils.sortFolder((Vector<OCFile>) mFiles,
-                    FileStorageUtils.mSortOrderFileDisp,FileStorageUtils.mSortAscendingFileDisp);
+                    FileStorageUtils.mSortOrderFileDisp, FileStorageUtils.mSortAscendingFileDisp);
         }
         notifyDataSetChanged();
     }

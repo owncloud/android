@@ -20,12 +20,12 @@
   ~ Copyright (C) 2019 ownCloud GmbH.
   -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingBottom="8dp"
-                android:paddingEnd="24dp"
-                android:paddingStart="24dp"
-                android:paddingTop="@dimen/standard_margin">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="8dp"
+    android:paddingEnd="24dp"
+    android:paddingStart="24dp"
+    android:paddingTop="@dimen/standard_margin">
 
     <TextView
         android:id="@+id/fingerprintDescription"
@@ -35,7 +35,7 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:text="@string/fingerprint_confirm"
-        android:textColor="@color/black"/>
+        android:textColor="@color/black" />
 
     <LinearLayout
         android:id="@+id/fingerprintTouch"
@@ -54,7 +54,7 @@
             android:layout_below="@+id/fingerprintDescription"
             android:layout_marginBottom="@dimen/standard_half_margin"
             android:layout_marginTop="@dimen/standard_half_margin"
-            android:src="@drawable/ic_fp_40px"/>
+            android:src="@drawable/ic_fp_40px" />
 
         <TextView
             android:id="@+id/fingerprintStatus"
@@ -64,7 +64,7 @@
             android:layout_marginStart="@dimen/standard_margin"
             android:gravity="center_vertical"
             android:text="@string/fingerprint_hint"
-            android:textColor="@color/secondaryTextColor"/>
+            android:textColor="@color/secondaryTextColor" />
     </LinearLayout>
 
     <androidx.appcompat.widget.AppCompatButton
@@ -76,6 +76,6 @@
         android:layout_below="@+id/fingerprintTouch"
         android:layout_marginTop="@dimen/standard_half_margin"
         android:text="@android:string/cancel"
-        android:theme="@style/Button.Primary"/>
+        android:theme="@style/Button.Primary" />
 
 </RelativeLayout>

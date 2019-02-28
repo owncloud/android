@@ -1,30 +1,28 @@
 /**
- *   ownCloud Android client application
+ * ownCloud Android client application
  *
- *   @author David A. Velasco
- *   @author masensio
- *   @author David González Verdugo
- *   Copyright (C) 2019 ownCloud GmbH.
- *
- *   This program is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License version 2,
- *   as published by the Free Software Foundation.
- *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
- *
- *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * @author David A. Velasco
+ * @author masensio
+ * @author David González Verdugo
+ * Copyright (C) 2019 ownCloud GmbH.
+ * <p>
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
+ * <p>
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package com.owncloud.android.operations;
 
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.lib.common.OwnCloudClient;
-
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.files.CreateRemoteFolderOperation;
@@ -38,15 +36,15 @@ import java.io.File;
  * Save the new folder in Database
  */
 public class CreateFolderOperation extends SyncOperation {
-    
+
     private static final String TAG = CreateFolderOperation.class.getSimpleName();
-    
+
     protected String mRemotePath;
     protected boolean mCreateFullPath;
-    
+
     /**
      * Constructor
-     * 
+     *
      * @param createFullPath        'True' means that all the ancestor folders should be created
      *                              if don't exist yet.
      */
@@ -61,12 +59,12 @@ public class CreateFolderOperation extends SyncOperation {
                 mRemotePath,
                 mCreateFullPath
         );
-        RemoteOperationResult result =  createRemoteFolderOperation.execute(client);
-        
+        RemoteOperationResult result = createRemoteFolderOperation.execute(client);
+
         if (result.isSuccess()) {
             OCFile newDir = saveFolderInDB();
             String localPath = FileStorageUtils.getDefaultSavePathFor(
-                getStorageManager().getAccount().name, newDir
+                    getStorageManager().getAccount().name, newDir
             );
             File localFile = new File(localPath);
             boolean created = localFile.mkdirs();
@@ -76,21 +74,21 @@ public class CreateFolderOperation extends SyncOperation {
         } else {
             Log_OC.e(TAG, mRemotePath + " hasn't been created");
         }
-        
+
         return result;
     }
 
     /**
      * Save new directory in local database
      *
-     * @return      Instance of {@link OCFile} just created
+     * @return Instance of {@link OCFile} just created
      */
     private OCFile saveFolderInDB() {
         OCFile newDir = null;
         if (mCreateFullPath && getStorageManager().
-                getFileByPath(FileStorageUtils.getParentPath(mRemotePath)) == null){// When parent
-                                                                                    // of remote path
-                                                                                    // is not created 
+                getFileByPath(FileStorageUtils.getParentPath(mRemotePath)) == null) {// When parent
+            // of remote path
+            // is not created
             String[] subFolders = mRemotePath.split("/");
             String composedRemotePath = "/";
 

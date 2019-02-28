@@ -5,16 +5,16 @@
  * @author Christian Schabesberger
  * @author David González Verdugo
  * Copyright (C) 2019 ownCloud GmbH.
- *
+ * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
  * as published by the Free Software Foundation.
- *
+ * <p>
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -25,8 +25,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import com.google.android.material.snackbar.Snackbar;
-import androidx.appcompat.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -34,9 +32,11 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
 import com.andrognito.patternlockview.PatternLockView;
 import com.andrognito.patternlockview.listener.PatternLockViewListener;
 import com.andrognito.patternlockview.utils.PatternLockUtils;
+import com.google.android.material.snackbar.Snackbar;
 import com.owncloud.android.BuildConfig;
 import com.owncloud.android.R;
 import com.owncloud.android.lib.common.utils.Log_OC;
@@ -86,7 +86,8 @@ public class PatternLockActivity extends AppCompatActivity {
 
         String mPatternHeaderViewText = "";
         /**
-         * mPatternExpShouldVisible holds the boolean value that signifies weather the patternExpView should be visible or not.
+         * mPatternExpShouldVisible holds the boolean value that signifies weather the patternExpView should be
+         * visible or not.
          * it is set to true when the pattern is set and when the pattern is removed.
          */
         boolean mPatternExpShouldVisible = false;
@@ -160,7 +161,8 @@ public class PatternLockActivity extends AppCompatActivity {
                     /**
                      * This block gets executed when the pattern has to be set.
                      * count variable holds the number of time the pattern has been input.
-                     * if the value of count is two then the pattern input first (which is stored in patternValue variable)
+                     * if the value of count is two then the pattern input first (which is stored in patternValue
+                     * variable)
                      * is compared with the pattern value input the second time
                      * (which is stored in newPatternValue) if both the variables hold the same value
                      * then the pattern is set.
@@ -196,8 +198,7 @@ public class PatternLockActivity extends AppCompatActivity {
                 showErrorAndRestart(R.string.pattern_incorrect_pattern,
                         R.string.pattern_enter_pattern, View.INVISIBLE);
             }
-        }
-        else if (ACTION_CHECK_WITH_RESULT.equals(getIntent().getAction())) {
+        } else if (ACTION_CHECK_WITH_RESULT.equals(getIntent().getAction())) {
             //This block is executed when the user is removing the pattern lock (i.e disabling the pattern lock)
             if (checkPattern()) {
                 Intent result = new Intent();
@@ -209,7 +210,7 @@ public class PatternLockActivity extends AppCompatActivity {
                         R.string.pattern_enter_pattern, View.INVISIBLE);
             }
         } else if (ACTION_REQUEST_WITH_RESULT.equals(getIntent().getAction())) {
-              //This block is executed when the user is setting the pattern lock (i.e enabling the pattern lock)
+            //This block is executed when the user is setting the pattern lock (i.e enabling the pattern lock)
             if (!mPatternPresent) {
                 requestPatternConfirmation();
             } else if (confirmPattern()) {
@@ -240,7 +241,6 @@ public class PatternLockActivity extends AppCompatActivity {
         setResult(RESULT_OK, result);
         finish();
     }
-
 
     /**
      * Ask to the user to re-enter the pattern just entered before saving it as the current pattern.
@@ -310,8 +310,8 @@ public class PatternLockActivity extends AppCompatActivity {
      * @return              'True' when the key event was processed by this method.
      */
     @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event){
-        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount()== 0){
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
             if (ACTION_REQUEST_WITH_RESULT.equals(getIntent().getAction()) ||
                     ACTION_CHECK_WITH_RESULT.equals(getIntent().getAction())) {
                 finish();

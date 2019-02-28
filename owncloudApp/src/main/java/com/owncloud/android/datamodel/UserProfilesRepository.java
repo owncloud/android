@@ -11,23 +11,22 @@ import com.owncloud.android.lib.common.utils.Log_OC;
 import java.io.File;
 
 /**
- *   ownCloud Android client application
+ * ownCloud Android client application
  *
- *   @author David González Verdugo
- *   Copyright (C) 2019 ownCloud GmbH.
- *
- *   This program is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License version 2,
- *   as published by the Free Software Foundation.
- *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
- *
- *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * @author David González Verdugo
+ * Copyright (C) 2019 ownCloud GmbH.
+ * <p>
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
+ * <p>
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 /**
@@ -74,20 +73,20 @@ public class UserProfilesRepository {
             // map avatar properties to columns
             ContentValues avatarValues = new ContentValues();
             avatarValues.put(
-                ProviderMeta.ProviderTableMeta.USER_AVATARS__ACCOUNT_NAME,
-                userProfile.getAccountName()
+                    ProviderMeta.ProviderTableMeta.USER_AVATARS__ACCOUNT_NAME,
+                    userProfile.getAccountName()
             );
             avatarValues.put(
-                ProviderMeta.ProviderTableMeta.USER_AVATARS__CACHE_KEY,
-                userProfile.getAvatar().getCacheKey()
+                    ProviderMeta.ProviderTableMeta.USER_AVATARS__CACHE_KEY,
+                    userProfile.getAvatar().getCacheKey()
             );
             avatarValues.put(
-                ProviderMeta.ProviderTableMeta.USER_AVATARS__ETAG,
-                userProfile.getAvatar().getEtag()
+                    ProviderMeta.ProviderTableMeta.USER_AVATARS__ETAG,
+                    userProfile.getAvatar().getEtag()
             );
             avatarValues.put(
-                ProviderMeta.ProviderTableMeta.USER_AVATARS__MIME_TYPE,
-                userProfile.getAvatar().getMimeType()
+                    ProviderMeta.ProviderTableMeta.USER_AVATARS__MIME_TYPE,
+                    userProfile.getAvatar().getMimeType()
             );
 
             database.beginTransaction();
@@ -95,19 +94,19 @@ public class UserProfilesRepository {
                 if (avatarExists(userProfile)) {
                     // not new, UPDATE
                     database.update(
-                        ProviderMeta.ProviderTableMeta.USER_AVATARS__TABLE_NAME,
-                        avatarValues,
-                        ProviderMeta.ProviderTableMeta.USER_AVATARS__ACCOUNT_NAME + "=?",
-                        new String[]{String.valueOf(userProfile.getAccountName())}
+                            ProviderMeta.ProviderTableMeta.USER_AVATARS__TABLE_NAME,
+                            avatarValues,
+                            ProviderMeta.ProviderTableMeta.USER_AVATARS__ACCOUNT_NAME + "=?",
+                            new String[]{String.valueOf(userProfile.getAccountName())}
                     );
                     Log_OC.d(TAG, "Avatar updated");
 
                 } else {
                     // new, CREATE
                     database.insert(
-                        ProviderMeta.ProviderTableMeta.USER_AVATARS__TABLE_NAME,
-                        null,
-                        avatarValues
+                            ProviderMeta.ProviderTableMeta.USER_AVATARS__TABLE_NAME,
+                            null,
+                            avatarValues
                     );
                     Log_OC.d(TAG, "Avatar inserted");
                 }
@@ -178,7 +177,7 @@ public class UserProfilesRepository {
      * specially now that {@link UserProfile}s are not really stored. Naughty trick.
      *
      * @param   accountName         Name of an OC account.
-     * @return                      Information about a user avatar bound to an OC account, or NULL if
+     * @return Information about a user avatar bound to an OC account, or NULL if
      *                              there is no avatar for the given account.
      */
     public UserProfile.UserAvatar getAvatar(String accountName) {
@@ -186,24 +185,24 @@ public class UserProfilesRepository {
         Cursor c = null;
 
         try {
-             c = getSqLiteDatabase().query(
-                ProviderMeta.ProviderTableMeta.USER_AVATARS__TABLE_NAME,
-                null,
-                ProviderMeta.ProviderTableMeta.USER_AVATARS__ACCOUNT_NAME + "=?",
-                new String[]{accountName},
-                null, null, null
+            c = getSqLiteDatabase().query(
+                    ProviderMeta.ProviderTableMeta.USER_AVATARS__TABLE_NAME,
+                    null,
+                    ProviderMeta.ProviderTableMeta.USER_AVATARS__ACCOUNT_NAME + "=?",
+                    new String[]{accountName},
+                    null, null, null
             );
             if (c != null && c.moveToFirst()) {
                 avatar = new UserProfile.UserAvatar(
-                    c.getString(c.getColumnIndex(
-                        ProviderMeta.ProviderTableMeta.USER_AVATARS__CACHE_KEY
-                    )),
-                    c.getString(c.getColumnIndex(
-                        ProviderMeta.ProviderTableMeta.USER_AVATARS__MIME_TYPE
-                    )),
-                    c.getString(
-                        c.getColumnIndex(ProviderMeta.ProviderTableMeta.USER_AVATARS__ETAG
-                    ))
+                        c.getString(c.getColumnIndex(
+                                ProviderMeta.ProviderTableMeta.USER_AVATARS__CACHE_KEY
+                        )),
+                        c.getString(c.getColumnIndex(
+                                ProviderMeta.ProviderTableMeta.USER_AVATARS__MIME_TYPE
+                        )),
+                        c.getString(
+                                c.getColumnIndex(ProviderMeta.ProviderTableMeta.USER_AVATARS__ETAG
+                                ))
                 );
             }   // else, no avatar to return
         } catch (Exception e) {
@@ -257,9 +256,9 @@ public class UserProfilesRepository {
     public void deleteAvatar(String accountName) {
         try {
             getSqLiteDatabase().delete(
-                ProviderMeta.ProviderTableMeta.USER_AVATARS__TABLE_NAME,
-                ProviderMeta.ProviderTableMeta.USER_AVATARS__ACCOUNT_NAME + "=?",
-                new String[]{String.valueOf(accountName)}
+                    ProviderMeta.ProviderTableMeta.USER_AVATARS__TABLE_NAME,
+                    ProviderMeta.ProviderTableMeta.USER_AVATARS__ACCOUNT_NAME + "=?",
+                    new String[]{String.valueOf(accountName)}
             );
             Log_OC.d(TAG, "Avatar deleted");
 
@@ -273,11 +272,11 @@ public class UserProfilesRepository {
         Cursor c = null;
         try {
             c = getSqLiteDatabase().query(
-                ProviderMeta.ProviderTableMeta.USER_AVATARS__TABLE_NAME,
-                null,
-                ProviderMeta.ProviderTableMeta.USER_AVATARS__ACCOUNT_NAME + "=?",
-                new String[]{userProfile.getAccountName()},
-                null, null, null
+                    ProviderMeta.ProviderTableMeta.USER_AVATARS__TABLE_NAME,
+                    null,
+                    ProviderMeta.ProviderTableMeta.USER_AVATARS__ACCOUNT_NAME + "=?",
+                    new String[]{userProfile.getAccountName()},
+                    null, null, null
             );
             exists = (c != null && c.moveToFirst());
         } finally {

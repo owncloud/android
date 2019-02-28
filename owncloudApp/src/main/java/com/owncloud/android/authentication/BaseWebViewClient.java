@@ -1,35 +1,23 @@
 /**
- *   ownCloud Android client application
+ * ownCloud Android client application
  *
- *   @author David A. Velasco
- *   Copyright (C) 2017 ownCloud GmbH.
- *
- *   This program is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License version 2,
- *   as published by the Free Software Foundation.
- *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
- *
- *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * @author David A. Velasco
+ * Copyright (C) 2017 ownCloud GmbH.
+ * <p>
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
+ * <p>
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package com.owncloud.android.authentication;
-
-import java.io.ByteArrayInputStream;
-import java.security.cert.Certificate;
-import java.security.cert.CertificateException;
-import java.security.cert.CertificateFactory;
-import java.security.cert.X509Certificate;
-import java.util.ArrayList;
-import java.util.List;
-
-import com.owncloud.android.lib.common.network.NetworkUtils;
-import com.owncloud.android.lib.common.utils.Log_OC;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -39,7 +27,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import androidx.annotation.RequiresApi;
 import android.webkit.HttpAuthHandler;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebResourceError;
@@ -47,6 +34,17 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import androidx.annotation.RequiresApi;
+import com.owncloud.android.lib.common.network.NetworkUtils;
+import com.owncloud.android.lib.common.utils.Log_OC;
+
+import java.io.ByteArrayInputStream;
+import java.security.cert.Certificate;
+import java.security.cert.CertificateException;
+import java.security.cert.CertificateFactory;
+import java.security.cert.X509Certificate;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Custom {@link WebViewClient} client aimed to catch the end of an authentication
@@ -64,7 +62,7 @@ public abstract class BaseWebViewClient extends WebViewClient {
     private List<String> mTargetUrls;
     private String mLastReloadedUrlAtError;
 
-    BaseWebViewClient (Context context, Handler listenerHandler) {
+    BaseWebViewClient(Context context, Handler listenerHandler) {
         mContext = context;
         mListenerHandler = listenerHandler;
         mTargetUrls = new ArrayList<>();
@@ -76,32 +74,35 @@ public abstract class BaseWebViewClient extends WebViewClient {
     }
 
     @Override
-    public void onPageStarted (WebView view, String url, Bitmap favicon) {
+    public void onPageStarted(WebView view, String url, Bitmap favicon) {
         Log_OC.d(TAG, "onPageStarted : " + url);
         view.clearCache(true);
         super.onPageStarted(view, url, favicon);
     }
 
     @Override
-    public void onFormResubmission (WebView view, Message dontResend, Message resend) {
+    public void onFormResubmission(WebView view, Message dontResend, Message resend) {
         Log_OC.d(TAG, "onFormResubMission ");
 
         // necessary to grant reload of last page when device orientation is changed after sending a form
         resend.sendToTarget();
     }
 
-    @Override @SuppressWarnings("deprecation")
+    @Override
+    @SuppressWarnings("deprecation")
     public boolean shouldOverrideUrlLoading(WebView view, String url) {
         return false;
     }
 
-    @Override @RequiresApi(Build.VERSION_CODES.N)
+    @Override
+    @RequiresApi(Build.VERSION_CODES.N)
     public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
         return false;
     }
 
-    @Override @SuppressWarnings("deprecation")
-    public void onReceivedError (WebView view, int errorCode, String description, String failingUrl) {
+    @Override
+    @SuppressWarnings("deprecation")
+    public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
         Log_OC.e(TAG, "onReceivedError : " + failingUrl + ", code " + errorCode + ", description: " + description);
         if (!failingUrl.equals(mLastReloadedUrlAtError)) {
             view.reload();
@@ -112,10 +113,12 @@ public abstract class BaseWebViewClient extends WebViewClient {
         }
     }
 
-    @Override @RequiresApi(Build.VERSION_CODES.M)
-    public void onReceivedError (WebView view, WebResourceRequest request, WebResourceError error) {
+    @Override
+    @RequiresApi(Build.VERSION_CODES.M)
+    public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
         String failingUrl = request.getUrl().toString();
-        Log_OC.e(TAG, "onReceivedError : " + failingUrl + ", code " + error.getErrorCode() + ", description: " + error.getDescription());
+        Log_OC.e(TAG,
+                "onReceivedError : " + failingUrl + ", code " + error.getErrorCode() + ", description: " + error.getDescription());
         if (!failingUrl.equals(mLastReloadedUrlAtError)) {
             view.reload();
             mLastReloadedUrlAtError = failingUrl;
@@ -126,7 +129,7 @@ public abstract class BaseWebViewClient extends WebViewClient {
     }
 
     @Override
-    public void onReceivedSslError (final WebView view, final SslErrorHandler handler, SslError error) {
+    public void onReceivedSslError(final WebView view, final SslErrorHandler handler, SslError error) {
         Log_OC.e(TAG, "onReceivedSslError : " + error);
         // Test 1
         X509Certificate x509Certificate = getX509CertificateFromError(error);
@@ -143,16 +146,16 @@ public abstract class BaseWebViewClient extends WebViewClient {
         if (isKnownServer) {
             handler.proceed();
         } else {
-            ((AuthenticatorActivity)mContext).showUntrustedCertDialog(x509Certificate, error, handler);
+            ((AuthenticatorActivity) mContext).showUntrustedCertDialog(x509Certificate, error, handler);
         }
     }
 
     /**
      * Obtain the X509Certificate from SslError
      * @param   error     SslError
-     * @return  X509Certificate from error
+     * @return X509Certificate from error
      */
-    public X509Certificate getX509CertificateFromError (SslError error) {
+    public X509Certificate getX509CertificateFromError(SslError error) {
         Bundle bundle = SslCertificate.saveState(error.getCertificate());
         X509Certificate x509Certificate;
         byte[] bytes = bundle.getByteArray("x509-certificate");
@@ -171,18 +174,17 @@ public abstract class BaseWebViewClient extends WebViewClient {
     }
 
     @Override
-    public void onReceivedHttpAuthRequest (WebView view, HttpAuthHandler handler, String host, String realm) {
+    public void onReceivedHttpAuthRequest(WebView view, HttpAuthHandler handler, String host, String realm) {
         Log_OC.d(TAG, "onReceivedHttpAuthRequest : " + host);
 
-        ((AuthenticatorActivity)mContext).createAuthenticationDialog(view, handler);
+        ((AuthenticatorActivity) mContext).createAuthenticationDialog(view, handler);
     }
 
-
     @Override
-    public void onPageFinished (WebView view, String url) {
+    public void onPageFinished(WebView view, String url) {
         Log_OC.d(TAG, "onPageFinished : " + url);
         mLastReloadedUrlAtError = null;
-        for (String targetUrl: mTargetUrls) {
+        for (String targetUrl : mTargetUrls) {
             if (url.startsWith(targetUrl)) {
                 onTargetUrlFinished(view, targetUrl, url);
                 break;

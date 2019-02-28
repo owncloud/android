@@ -5,16 +5,16 @@
  * @author Juan Carlos González Cabrero
  * @author David González Verdugo
  * Copyright (C) 2019 ownCloud GmbH.
- *
+ * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
  * as published by the Free Software Foundation.
- *
+ * <p>
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -32,9 +32,9 @@ import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
 import android.provider.BaseColumns;
-import androidx.annotation.Nullable;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
@@ -44,7 +44,6 @@ import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.shares.GetRemoteShareesOperation;
 import com.owncloud.android.lib.resources.shares.ShareType;
 import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -103,7 +102,7 @@ public class UsersAndGroupsSearchProvider extends ContentProvider {
     public boolean onCreate() {
         try {
             sSuggestAuthority = getContext().getResources().
-                getString(R.string.search_suggest_authority);
+                    getString(R.string.search_suggest_authority);
 
             // init share types
             sShareTypes.put(sSuggestAuthority + DATA_USER_SUFFIX, ShareType.USER);
@@ -113,14 +112,14 @@ public class UsersAndGroupsSearchProvider extends ContentProvider {
             // init URI matcher
             mUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
             mUriMatcher.addURI(
-                sSuggestAuthority,
-                SearchManager.SUGGEST_URI_PATH_QUERY + "/*",
-                SEARCH
+                    sSuggestAuthority,
+                    SearchManager.SUGGEST_URI_PATH_QUERY + "/*",
+                    SEARCH
             );
 
             // init intent action
             sSuggestIntentAction = getContext().getResources().
-                getString(R.string.search_suggest_intent_action);
+                    getString(R.string.search_suggest_intent_action);
 
             return true;
 
@@ -142,7 +141,7 @@ public class UsersAndGroupsSearchProvider extends ContentProvider {
      * @param selection     Expected to be NULL.
      * @param selectionArgs Expected to be NULL.
      * @param sortOrder     Expected to be NULL.
-     * @return              Cursor with users and groups in the ownCloud server that match 'userQuery'.
+     * @return Cursor with users and groups in the ownCloud server that match 'userQuery'.
      */
     @Nullable
     @Override
@@ -162,7 +161,6 @@ public class UsersAndGroupsSearchProvider extends ContentProvider {
         MatrixCursor response = null;
 
         String userQuery = uri.getLastPathSegment().toLowerCase();
-
 
         /// need to trust on the AccountUtils to get the current account since the query in the client side is not
         /// directly started by our code, but from SearchView implementation
@@ -193,15 +191,15 @@ public class UsersAndGroupsSearchProvider extends ContentProvider {
             Uri dataUri = null;
             int count = 0;
 
-            MainApp app = (MainApp)getContext().getApplicationContext();
+            MainApp app = (MainApp) getContext().getApplicationContext();
             Uri userBaseUri = new Uri.Builder().scheme(CONTENT).authority(
-                sSuggestAuthority + DATA_USER_SUFFIX
+                    sSuggestAuthority + DATA_USER_SUFFIX
             ).build();
             Uri groupBaseUri = new Uri.Builder().scheme(CONTENT).authority(
-                sSuggestAuthority + DATA_GROUP_SUFFIX
+                    sSuggestAuthority + DATA_GROUP_SUFFIX
             ).build();
             Uri remoteBaseUri = new Uri.Builder().scheme(CONTENT).authority(
-                sSuggestAuthority + DATA_REMOTE_SUFFIX
+                    sSuggestAuthority + DATA_REMOTE_SUFFIX
             ).build();
 
             FileDataStorageManager manager = new FileDataStorageManager(
@@ -242,7 +240,7 @@ public class UsersAndGroupsSearchProvider extends ContentProvider {
                         } else {
                             String[] uriSplitted = shareWith.split("@");
                             displayName = getContext().getString(R.string.share_known_remote_clarification, userName,
-                                uriSplitted[uriSplitted.length - 1]);
+                                    uriSplitted[uriSplitted.length - 1]);
                         }
                         dataUri = Uri.withAppendedPath(remoteBaseUri, shareWith);
                     } else if (ShareType.USER.getValue() == type) {
@@ -253,10 +251,10 @@ public class UsersAndGroupsSearchProvider extends ContentProvider {
 
                     if (displayName != null && dataUri != null) {
                         response.newRow()
-                            .add(count++)             // BaseColumns._ID
-                            .add(displayName)         // SearchManager.SUGGEST_COLUMN_TEXT_1
-                            .add(icon)                // SearchManager.SUGGEST_COLUMN_ICON_1
-                            .add(dataUri);
+                                .add(count++)             // BaseColumns._ID
+                                .add(displayName)         // SearchManager.SUGGEST_COLUMN_TEXT_1
+                                .add(icon)                // SearchManager.SUGGEST_COLUMN_ICON_1
+                                .add(dataUri);
                     }
                 }
 

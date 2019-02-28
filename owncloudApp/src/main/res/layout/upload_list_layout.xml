@@ -31,19 +31,19 @@
         android:orientation="vertical">
 
         <include
-            layout="@layout/toolbar_standard"/>
+            layout="@layout/toolbar_standard" />
 
         <FrameLayout
             android:id="@+id/upload_list_fragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/background_color"/>
+            android:background="@color/background_color" />
     </LinearLayout>
 
     <include
         layout="@layout/drawer"
         android:layout_width="240dp"
         android:layout_height="match_parent"
-        android:layout_gravity="start"/>
+        android:layout_gravity="start" />
 
 </androidx.drawerlayout.widget.DrawerLayout>

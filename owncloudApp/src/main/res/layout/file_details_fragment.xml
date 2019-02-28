@@ -42,7 +42,7 @@
                 android:id="@+id/fdIcon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/file"/>
+                android:src="@drawable/file" />
 
             <TextView
                 android:id="@+id/fdFilename"
@@ -53,7 +53,7 @@
                 android:layout_marginStart="@dimen/standard_half_margin"
                 android:layout_toRightOf="@+id/fdIcon"
                 android:text="@string/placeholder_sentence"
-                android:textAppearance="?android:attr/textAppearanceLarge"/>
+                android:textAppearance="?android:attr/textAppearanceLarge" />
 
         </RelativeLayout>
 
@@ -78,7 +78,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/filedetails_type"
-                    android:textAppearance="?android:attr/textAppearanceMedium"/>
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
 
                 <TextView
                     android:id="@+id/fdSizeLabel"
@@ -87,7 +87,7 @@
                     android:layout_below="@+id/fdTypeLabel"
                     android:layout_marginTop="12dp"
                     android:text="@string/filedetails_size"
-                    android:textAppearance="?android:attr/textAppearanceMedium"/>
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
 
                 <TextView
                     android:id="@+id/fdCreatedLabel"
@@ -97,7 +97,7 @@
                     android:layout_marginTop="12dp"
                     android:text="@string/filedetails_created"
                     android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:visibility="gone"/>
+                    android:visibility="gone" />
 
                 <TextView
                     android:id="@+id/fdModifiedLabel"
@@ -106,7 +106,7 @@
                     android:layout_below="@+id/fdCreatedLabel"
                     android:layout_marginTop="12dp"
                     android:text="@string/filedetails_modified"
-                    android:textAppearance="?android:attr/textAppearanceMedium"/>
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -122,7 +122,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/placeholder_filetype"
-                    android:textAppearance="?android:attr/textAppearanceMedium"/>
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
 
                 <TextView
                     android:id="@+id/fdSize"
@@ -131,7 +131,7 @@
                     android:layout_below="@+id/fdType"
                     android:layout_marginTop="12dp"
                     android:text="@string/placeholder_filesize"
-                    android:textAppearance="?android:attr/textAppearanceMedium"/>
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
 
                 <TextView
                     android:id="@+id/fdCreated"
@@ -141,7 +141,7 @@
                     android:layout_marginTop="12dp"
                     android:text="@string/placeholder_timestamp"
                     android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:visibility="gone"/>
+                    android:visibility="gone" />
 
                 <TextView
                     android:id="@+id/fdModified"
@@ -150,7 +150,7 @@
                     android:layout_below="@+id/fdCreated"
                     android:layout_marginTop="12dp"
                     android:text="@string/placeholder_timestamp"
-                    android:textAppearance="?android:attr/textAppearanceMedium"/>
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
 
             </RelativeLayout>
 

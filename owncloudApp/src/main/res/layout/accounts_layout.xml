@@ -17,21 +17,21 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  -->
 <LinearLayout
-	android:id="@+id/accounts_layout"
-	xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="match_parent"
-	android:layout_height="match_parent"
-	android:orientation="vertical">
+    android:id="@+id/accounts_layout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-	<include
-		layout="@layout/toolbar_standard"/>
+    <include
+        layout="@layout/toolbar_standard" />
 
-	<ListView
-		android:id="@+id/account_list"
-		android:layout_width="match_parent"
-		android:layout_height="match_parent"
-		android:divider="@color/list_divider_background"
-		android:dividerHeight="1dip">
-	</ListView>
+    <ListView
+        android:id="@+id/account_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:divider="@color/list_divider_background"
+        android:dividerHeight="1dip">
+    </ListView>
 
 </LinearLayout>

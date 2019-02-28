@@ -1,37 +1,34 @@
 /**
- *   ownCloud Android client application
+ * ownCloud Android client application
  *
- *   @author David A. Velasco
- *   Copyright (C) 2017 ownCloud GmbH.
- *
- *   This program is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License version 2,
- *   as published by the Free Software Foundation.
- *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
- *
- *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * @author David A. Velasco
+ * Copyright (C) 2017 ownCloud GmbH.
+ * <p>
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
+ * <p>
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 
 package com.owncloud.android.datamodel;
 
 import android.os.Parcel;
-import androidx.test.filters.SmallTest;
-import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.filters.SmallTest;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-
 
 /**
  * Instrumented unit test, to be run in an Android emulator or device.
@@ -69,7 +66,6 @@ public class OCFileUnitTest {
         mFile = new OCFile(PATH);
     }
 
-
     @Test
     public void writeThenReadAsParcelable() {
 
@@ -94,7 +90,6 @@ public class OCFileUnitTest {
         mFile.setDownloading(true);
         mFile.setEtagInConflict(ETAG_IN_CONFLICT);
 
-
         // Write the file data in a Parcel
         Parcel parcel = Parcel.obtain();
         mFile.writeToParcel(parcel, mFile.describeContents());
@@ -113,14 +108,14 @@ public class OCFileUnitTest {
         assertThat(fileReadFromParcel.getCreationTimestamp(), is(CREATION_TIMESTAMP));
         assertThat(fileReadFromParcel.getModificationTimestamp(), is(MODIFICATION_TIMESTAMP));
         assertThat(
-            fileReadFromParcel.getModificationTimestampAtLastSyncForData(),
-            is(MODIFICATION_TIMESTAMP_AT_LAST_SYNC_FOR_DATA)
+                fileReadFromParcel.getModificationTimestampAtLastSyncForData(),
+                is(MODIFICATION_TIMESTAMP_AT_LAST_SYNC_FOR_DATA)
         );
         assertThat(fileReadFromParcel.getLastSyncDateForProperties(), is(LAST_SYNC_DATE_FOR_PROPERTIES));
         assertThat(fileReadFromParcel.getLastSyncDateForData(), is(LAST_SYNC_DATE_FOR_DATA));
         assertThat(
-            fileReadFromParcel.getAvailableOfflineStatus(),
-            is(OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE)
+                fileReadFromParcel.getAvailableOfflineStatus(),
+                is(OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE)
         );
         assertThat(fileReadFromParcel.getEtag(), is(ETAG));
         assertThat(fileReadFromParcel.isSharedViaLink(), is(true));

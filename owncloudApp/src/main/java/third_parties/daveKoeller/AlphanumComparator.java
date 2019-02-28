@@ -24,10 +24,10 @@
 
 package third_parties.daveKoeller;
 
+import com.owncloud.android.datamodel.OCFile;
+
 import java.text.Collator;
 import java.util.Comparator;
-
-import com.owncloud.android.datamodel.OCFile;
 
 /**
  * This is an updated version with enhancements made by Daniel Migowski,
@@ -58,16 +58,18 @@ public class AlphanumComparator implements Comparator<OCFile> {
         if (isDigit(c)) {
             while (marker < slength) {
                 c = s.charAt(marker);
-                if (!isDigit(c))
+                if (!isDigit(c)) {
                     break;
+                }
                 chunk.append(c);
                 marker++;
             }
         } else {
             while (marker < slength) {
                 c = s.charAt(marker);
-                if (isDigit(c))
+                if (isDigit(c)) {
                     break;
+                }
                 chunk.append(c);
                 marker++;
             }
@@ -112,8 +114,9 @@ public class AlphanumComparator implements Comparator<OCFile> {
                 result = collator.compare(thisChunk, thatChunk);
             }
 
-            if (result != 0)
+            if (result != 0) {
                 return result;
+            }
         }
 
         return s1Length - s2Length;

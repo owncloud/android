@@ -1,23 +1,23 @@
 /**
- *  ownCloud Android client application
+ * ownCloud Android client application
  *
- *  @author LukeOwncloud
- *  @author masensio
- *  @author Christian Schabesberger
- *  @author David González Verdugo
- *  Copyright (C) 2019 ownCloud GmbH.
- *
- *  This program is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License version 2,
- *  as published by the Free Software Foundation.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * @author LukeOwncloud
+ * @author masensio
+ * @author Christian Schabesberger
+ * @author David González Verdugo
+ * Copyright (C) 2019 ownCloud GmbH.
+ * <p>
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
+ * <p>
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package com.owncloud.android.ui.adapter;
 
@@ -25,7 +25,6 @@ import android.accounts.Account;
 import android.content.Context;
 import android.database.DataSetObserver;
 import android.graphics.Bitmap;
-import com.google.android.material.snackbar.Snackbar;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,13 +37,14 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.OCFile;
+import com.owncloud.android.datamodel.OCUpload;
 import com.owncloud.android.datamodel.ThumbnailsCacheManager;
 import com.owncloud.android.datamodel.UploadsStorageManager;
 import com.owncloud.android.datamodel.UploadsStorageManager.UploadStatus;
-import com.owncloud.android.datamodel.OCUpload;
 import com.owncloud.android.db.UploadResult;
 import com.owncloud.android.files.services.FileUploader;
 import com.owncloud.android.files.services.TransferRequester;
@@ -185,7 +185,6 @@ public class ExpandableUploadListAdapter extends BaseExpandableListAdapter imple
         loadUploadItemsFromDb();
     }
 
-
     @Override
     public void registerDataSetObserver(DataSetObserver observer) {
         super.registerDataSetObserver(observer);
@@ -240,10 +239,10 @@ public class ExpandableUploadListAdapter extends BaseExpandableListAdapter imple
             // file size
             TextView fileSizeTextView = view.findViewById(R.id.upload_file_size);
             fileSizeTextView.setText(
-                DisplayUtils.bytesToHumanReadable(
-                    upload.getFileSize(),
-                    mParentActivity
-                ) + ", "
+                    DisplayUtils.bytesToHumanReadable(
+                            upload.getFileSize(),
+                            mParentActivity
+                    ) + ", "
             );
 
             //* upload date
@@ -263,8 +262,9 @@ public class ExpandableUploadListAdapter extends BaseExpandableListAdapter imple
                 Account account = AccountUtils.getOwnCloudAccountByName(mParentActivity, upload.getAccountName());
                 OwnCloudAccount oca = new OwnCloudAccount(account, mParentActivity);
                 accountNameTextView.setText(
-                    oca.getDisplayName() + " @ " +
-                    DisplayUtils.convertIdn(account.name.substring(account.name.lastIndexOf("@") + 1), false)
+                        oca.getDisplayName() + " @ " +
+                                DisplayUtils.convertIdn(account.name.substring(account.name.lastIndexOf("@") + 1),
+                                        false)
                 );
             } catch (Exception e) {
                 Log_OC.w(TAG, "Couldn't get display name for account, using old style");
@@ -297,33 +297,33 @@ public class ExpandableUploadListAdapter extends BaseExpandableListAdapter imple
                             /// ... unbind the old progress bar, if any; ...
                             if (mProgressListener != null) {
                                 binder.removeDatatransferProgressListener(
-                                    mProgressListener,
-                                    mProgressListener.getUpload()   // the one that was added
+                                        mProgressListener,
+                                        mProgressListener.getUpload()   // the one that was added
                                 );
                             }
                             /// ... then, bind the current progress bar to listen for updates
                             mProgressListener = new ProgressListener(upload, progressBar);
                             binder.addDatatransferProgressListener(
-                                mProgressListener,
-                                upload
+                                    mProgressListener,
+                                    upload
                             );
 
                         } else {
                             /// not really uploading; stop listening progress if view is reused!
                             if (convertView != null &&
                                     mProgressListener != null &&
-                                    mProgressListener.isWrapping(progressBar))  {
+                                    mProgressListener.isWrapping(progressBar)) {
                                 binder.removeDatatransferProgressListener(
-                                    mProgressListener,
-                                    mProgressListener.getUpload()   // the one that was added
+                                        mProgressListener,
+                                        mProgressListener.getUpload()   // the one that was added
                                 );
                                 mProgressListener = null;
                             }
                         }
                     } else {
                         Log_OC.w(
-                            TAG,
-                            "FileUploaderBinder not ready yet for upload " + upload.getRemotePath()
+                                TAG,
+                                "FileUploaderBinder not ready yet for upload " + upload.getRemotePath()
                         );
                     }
                     uploadDateTextView.setVisibility(View.GONE);
@@ -381,7 +381,7 @@ public class ExpandableUploadListAdapter extends BaseExpandableListAdapter imple
                         @Override
                         public void onClick(View v) {
                             mParentActivity.getFileOperationsHelper().checkCurrentCredentials(
-                                upload.getAccount(mParentActivity)
+                                    upload.getAccount(mParentActivity)
                             );
                         }
                     });
@@ -398,12 +398,12 @@ public class ExpandableUploadListAdapter extends BaseExpandableListAdapter imple
                                 refreshView();
                             } else {
                                 final String message = String.format(
-                                    mParentActivity.getString(R.string.local_file_not_found_toast)
+                                        mParentActivity.getString(R.string.local_file_not_found_toast)
                                 );
                                 Snackbar snackbar = Snackbar.make(
-                                    v.getRootView().findViewById(android.R.id.content),
-                                    message,
-                                    Snackbar.LENGTH_LONG
+                                        v.getRootView().findViewById(android.R.id.content),
+                                        message,
+                                        Snackbar.LENGTH_LONG
                                 );
                                 snackbar.show();
                             }
@@ -466,7 +466,6 @@ public class ExpandableUploadListAdapter extends BaseExpandableListAdapter imple
                             .getColor(R.color.background_color));
                 }
 
-
             } else if (fakeFileToCheatThumbnailsCacheManagerInterface.isImage()) {
                 File file = new File(upload.getLocalPath());
                 // Thumbnail in Cache?
@@ -515,7 +514,7 @@ public class ExpandableUploadListAdapter extends BaseExpandableListAdapter imple
      * the given upload.
      *
      * @param upload        Upload to describe.
-     * @return              Text describing the status of the given upload.
+     * @return Text describing the status of the given upload.
      */
     private String getStatusText(OCUpload upload) {
 
@@ -539,47 +538,47 @@ public class ExpandableUploadListAdapter extends BaseExpandableListAdapter imple
                 switch (upload.getLastResult()) {
                     case CREDENTIAL_ERROR:
                         status = mParentActivity.getString(
-                            R.string.uploads_view_upload_status_failed_credentials_error
+                                R.string.uploads_view_upload_status_failed_credentials_error
                         );
                         break;
                     case FOLDER_ERROR:
                         status = mParentActivity.getString(
-                            R.string.uploads_view_upload_status_failed_folder_error
+                                R.string.uploads_view_upload_status_failed_folder_error
                         );
                         break;
                     case FILE_NOT_FOUND:
                         status = mParentActivity.getString(
-                            R.string.uploads_view_upload_status_failed_localfile_error
+                                R.string.uploads_view_upload_status_failed_localfile_error
                         );
                         break;
                     case FILE_ERROR:
                         status = mParentActivity.getString(
-                            R.string.uploads_view_upload_status_failed_file_error
+                                R.string.uploads_view_upload_status_failed_file_error
                         );
                         break;
                     case PRIVILEDGES_ERROR:
                         status = mParentActivity.getString(
-                            R.string.uploads_view_upload_status_failed_permission_error
+                                R.string.uploads_view_upload_status_failed_permission_error
                         );
                         break;
                     case NETWORK_CONNECTION:
                         status = mParentActivity.getString(
-                            R.string.uploads_view_upload_status_failed_connection_error
+                                R.string.uploads_view_upload_status_failed_connection_error
                         );
                         break;
                     case DELAYED_FOR_WIFI:
                         status = mParentActivity.getString(
-                            R.string.uploads_view_upload_status_waiting_for_wifi
+                                R.string.uploads_view_upload_status_waiting_for_wifi
                         );
                         break;
                     case CONFLICT_ERROR:
                         status = mParentActivity.getString(
-                            R.string.uploads_view_upload_status_conflict
+                                R.string.uploads_view_upload_status_conflict
                         );
                         break;
                     case SERVICE_INTERRUPTED:
-                        status =  mParentActivity.getString(
-                            R.string.uploads_view_upload_status_service_interrupted
+                        status = mParentActivity.getString(
+                                R.string.uploads_view_upload_status_service_interrupted
                         );
                         break;
                     case SERVICE_UNAVAILABLE:
@@ -590,24 +589,24 @@ public class ExpandableUploadListAdapter extends BaseExpandableListAdapter imple
                         break;
                     case SSL_RECOVERABLE_PEER_UNVERIFIED:
                         status =
-                            mParentActivity.getString(
-                                R.string.ssl_certificate_not_trusted
-                            );
+                                mParentActivity.getString(
+                                        R.string.ssl_certificate_not_trusted
+                                );
                         break;
                     case UNKNOWN:
                         status = mParentActivity.getString(
-                            R.string.uploads_view_upload_status_unknown_fail
+                                R.string.uploads_view_upload_status_unknown_fail
                         );
                         break;
                     case CANCELLED:
                         // should not get here ; cancelled uploads should be wiped out
                         status = mParentActivity.getString(
-                            R.string.uploads_view_upload_status_cancelled
+                                R.string.uploads_view_upload_status_cancelled
                         );
                         break;
                     case UPLOADED:
                         // should not get here ; status should be UPLOAD_SUCCESS
-                        status =  mParentActivity.getString(R.string.uploads_view_upload_status_succeeded);
+                        status = mParentActivity.getString(R.string.uploads_view_upload_status_succeeded);
                         break;
                     case SPECIFIC_FORBIDDEN:
                         // We don't know the specific forbidden error message because it is not being
@@ -636,12 +635,10 @@ public class ExpandableUploadListAdapter extends BaseExpandableListAdapter imple
         return status;
     }
 
-
     @Override
     public boolean hasStableIds() {
         return false;
     }
-
 
     /**
      * Load upload items from {@link UploadsStorageManager}.
@@ -661,7 +658,6 @@ public class ExpandableUploadListAdapter extends BaseExpandableListAdapter imple
         Log_OC.d(TAG, "update");
         loadUploadItemsFromDb();
     }
-
 
     public void refreshView() {
         Log_OC.d(TAG, "refreshView");
@@ -783,8 +779,8 @@ public class ExpandableUploadListAdapter extends BaseExpandableListAdapter imple
         public boolean isWrapping(ProgressBar progressBar) {
             ProgressBar wrappedProgressBar = mProgressBar.get();
             return (
-                wrappedProgressBar != null &&
-                wrappedProgressBar == progressBar   // on purpose; don't replace with equals
+                    wrappedProgressBar != null &&
+                            wrappedProgressBar == progressBar   // on purpose; don't replace with equals
             );
         }
 

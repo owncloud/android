@@ -1,33 +1,29 @@
 /**
- *   ownCloud Android client application
+ * ownCloud Android client application
  *
- *   @author David A. Velasco
- *   @author Christian Schabesberger
- *   @author David González Verdugo
- *   Copyright (C) 2019 ownCloud GmbH.
- *
- *   This program is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License version 2,
- *   as published by the Free Software Foundation.
- *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
- *
- *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * @author David A. Velasco
+ * @author Christian Schabesberger
+ * @author David González Verdugo
+ * Copyright (C) 2019 ownCloud GmbH.
+ * <p>
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
+ * <p>
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package com.owncloud.android.ui.activity;
 
-import java.util.ArrayList;
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
 import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,9 +33,11 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
 import com.owncloud.android.R;
 import com.owncloud.android.utils.PreferenceUtils;
 
+import java.util.ArrayList;
 
 /**
  * Activity showing a text message and, optionally, a couple list of single or paired text strings.
@@ -55,7 +53,6 @@ public class GenericExplanationActivity extends AppCompatActivity {
             ".EXTRA_LIST_2";
     public static final String MESSAGE = GenericExplanationActivity.class.getCanonicalName() +
             ".MESSAGE";
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,12 +87,12 @@ public class GenericExplanationActivity extends AppCompatActivity {
             listView.setVisibility(View.GONE);
         }
     }
-    
+
     public class ExplanationListAdapterView extends ArrayAdapter<String> {
-        
+
         ArrayList<String> mList;
         ArrayList<String> mList2;
-        
+
         ExplanationListAdapterView(Context context, ArrayList<String> list,
                                    ArrayList<String> list2) {
             super(context, android.R.layout.two_line_list_item, android.R.id.text1, list);
@@ -107,14 +104,14 @@ public class GenericExplanationActivity extends AppCompatActivity {
         public boolean isEnabled(int position) {
             return false;
         }
-        
+
         /**
          * {@inheritDoc}
          */
         @Override
-        public View getView (int position, View convertView, ViewGroup parent) {
+        public View getView(int position, View convertView, ViewGroup parent) {
             View view = super.getView(position, convertView, parent);
-            if (view != null)  {
+            if (view != null) {
                 if (mList2 != null && mList2.size() > 0 && position >= 0 &&
                         position < mList2.size()) {
                     TextView text2 = view.findViewById(android.R.id.text2);

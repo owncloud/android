@@ -41,3 +41,11 @@ build
 
 # android sdk captures folder
 captures
+
+!.idea/
+.idea/*
+!.idea/codeStyles/
+
+!Project.xml
+!codeStyleConfig.xml
+

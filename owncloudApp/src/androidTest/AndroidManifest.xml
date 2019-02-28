@@ -20,5 +20,6 @@
 <manifest
     package="${applicationId}.test"
     xmlns:tools="http://schemas.android.com/tools">
-    <uses-sdk tools:overrideLibrary="android_libs.ub_uiautomator"/>
+
+    <uses-sdk tools:overrideLibrary="android_libs.ub_uiautomator" />
 </manifest>

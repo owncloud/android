@@ -6,16 +6,16 @@
  * @author David González Verdugo
  * Copyright (C) 2012 Bartek Przybylski
  * Copyright (C) 2019 ownCloud GmbH.
- *
+ * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
  * as published by the Free Software Foundation.
- *
+ * <p>
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -69,18 +69,18 @@ public class ExpandableListFragment extends ExtendedListFragment implements OnCh
         mList.setDivider(getResources().getDrawable(R.drawable.uploader_list_separator));
         mList.setDividerHeight(1);
 
-//        if (savedInstanceState != null) {
-//            int referencePosition = savedInstanceState.getInt(KEY_SAVED_LIST_POSITION);
-//            setReferencePosition(referencePosition);
-//        }
-        
+        //        if (savedInstanceState != null) {
+        //            int referencePosition = savedInstanceState.getInt(KEY_SAVED_LIST_POSITION);
+        //            setReferencePosition(referencePosition);
+        //        }
+
         // Pull down refresh
         mRefreshListLayout = v.findViewById(R.id.swipe_refresh_files);
         mRefreshEmptyLayout = v.findViewById(R.id.swipe_refresh_files_emptyView);
-        
+
         onCreateSwipeToRefresh(mRefreshListLayout);
         onCreateSwipeToRefresh(mRefreshEmptyLayout);
-        
+
         mList.setEmptyView(mRefreshEmptyLayout);
 
         return v;

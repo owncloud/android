@@ -1,23 +1,22 @@
 /**
- *   ownCloud Android client application
+ * ownCloud Android client application
  *
- *   @author masensio
- *   @author David González Verdugo
- *   @author Christian Schabesberger
- *   Copyright (C) 2019 ownCloud GmbH.
- *
- *   This program is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License version 2,
- *   as published by the Free Software Foundation.
- *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
- *
- *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * @author masensio
+ * @author David González Verdugo
+ * @author Christian Schabesberger
+ * Copyright (C) 2019 ownCloud GmbH.
+ * <p>
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
+ * <p>
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package com.owncloud.android.operations;
@@ -33,16 +32,16 @@ import com.owncloud.android.operations.common.SyncOperation;
  * Provide a list shares for a specific file.
  */
 public class GetSharesForFileOperation extends SyncOperation<ShareParserResult> {
-    
+
     private static final String TAG = GetSharesForFileOperation.class.getSimpleName();
-    
+
     private String mPath;
     private boolean mReshares;
     private boolean mSubfiles;
 
     /**
      * Constructor
-     * 
+     *
      * @param path      Path to file or folder
      * @param reshares  If set to false (default), only shares from the current user are returned
      *                  If set to true, all shares from the given file are returned

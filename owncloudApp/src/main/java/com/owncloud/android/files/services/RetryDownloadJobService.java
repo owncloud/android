@@ -1,22 +1,21 @@
 /**
- *   ownCloud Android client application
+ * ownCloud Android client application
  *
- *   @author David A. Velasco
- *   @author David González Verdugo
- *   Copyright (C) 2019 ownCloud GmbH.
- *
- *   This program is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License version 2,
- *   as published by the Free Software Foundation.
- *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
- *
- *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * @author David A. Velasco
+ * @author David González Verdugo
+ * Copyright (C) 2019 ownCloud GmbH.
+ * <p>
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
+ * <p>
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package com.owncloud.android.files.services;
@@ -26,9 +25,9 @@ import android.app.job.JobParameters;
 import android.app.job.JobService;
 import android.content.Intent;
 import android.os.Build;
+
 import androidx.annotation.RequiresApi;
 import androidx.core.content.ContextCompat;
-
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
@@ -52,11 +51,11 @@ public class RetryDownloadJobService extends JobService {
         if (account != null) {
             FileDataStorageManager fileDataStorageManager = new FileDataStorageManager(
                     this, account,
-                getContentResolver()
+                    getContentResolver()
             );
 
             String fileRemotePath = jobParameters.getExtras().getString(
-                Extras.EXTRA_REMOTE_PATH
+                    Extras.EXTRA_REMOTE_PATH
             );
 
             Log_OC.d(TAG, String.format("Retrying download of %1s in %2s", fileRemotePath,
@@ -74,21 +73,21 @@ public class RetryDownloadJobService extends JobService {
                 ContextCompat.startForegroundService(this, intent);
             } else {
                 Log_OC.w(
-                    TAG,
-                    String.format(
-                        "File %1s in %2s not found in database",
-                        fileRemotePath, accountName
-                    )
+                        TAG,
+                        String.format(
+                                "File %1s in %2s not found in database",
+                                fileRemotePath, accountName
+                        )
                 );
             }
 
         } else {
             Log_OC.w(
-                TAG,
-                String.format(
-                    "Account %1s was deleted, no retry will be done",
-                    accountName
-                )
+                    TAG,
+                    String.format(
+                            "Account %1s was deleted, no retry will be done",
+                            accountName
+                    )
             );
         }
 

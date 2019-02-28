@@ -19,8 +19,6 @@ package com.owncloud.android.ui.preview;
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import android.util.Base64;
-
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSource;
 import com.google.android.exoplayer2.upstream.HttpDataSource.BaseFactory;
@@ -29,7 +27,9 @@ import com.google.android.exoplayer2.upstream.TransferListener;
 
 import java.util.Map;
 
-/** A {@link Factory} that produces {@link CustomHttpDataSourceFactory} instances. */
+/**
+ * A {@link Factory} that produces {@link CustomHttpDataSourceFactory} instances.
+ */
 public final class CustomHttpDataSourceFactory extends BaseFactory {
 
     private final String userAgent;
@@ -46,8 +46,8 @@ public final class CustomHttpDataSourceFactory extends BaseFactory {
      * cross-protocol redirects.
      *
      * @param userAgent The User-Agent string that should be used.
-     * @param listener An optional listener.
-     * @param params http authentication header
+     * @param listener  An optional listener.
+     * @param params    http authentication header
      * @see #CustomHttpDataSourceFactory(String, TransferListener, int, int, boolean,
      * Map<String, String>)
      */
@@ -59,14 +59,15 @@ public final class CustomHttpDataSourceFactory extends BaseFactory {
     }
 
     /**
-     * @param userAgent The User-Agent string that should be used.
-     * @param listener An optional listener.
-     * @param connectTimeoutMillis The connection timeout that should be used when requesting remote
-     *     data, in milliseconds. A timeout of zero is interpreted as an infinite timeout.
-     * @param readTimeoutMillis The read timeout that should be used when requesting remote data, in
-     *     milliseconds. A timeout of zero is interpreted as an infinite timeout.
+     * @param userAgent                   The User-Agent string that should be used.
+     * @param listener                    An optional listener.
+     * @param connectTimeoutMillis        The connection timeout that should be used when requesting remote
+     *                                    data, in milliseconds. A timeout of zero is interpreted as an infinite
+     *                                    timeout.
+     * @param readTimeoutMillis           The read timeout that should be used when requesting remote data, in
+     *                                    milliseconds. A timeout of zero is interpreted as an infinite timeout.
      * @param allowCrossProtocolRedirects Whether cross-protocol redirects (i.e. redirects from HTTP
-     *     to HTTPS and vice versa) are enabled.
+     *                                    to HTTPS and vice versa) are enabled.
      */
     public CustomHttpDataSourceFactory(String userAgent,
                                        TransferListener<? super DataSource> listener,

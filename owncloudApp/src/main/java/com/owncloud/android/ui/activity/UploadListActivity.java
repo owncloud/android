@@ -1,24 +1,23 @@
 /**
- *   ownCloud Android client application
+ * ownCloud Android client application
  *
- *   @author LukeOwncloud
- *   @author David A. Velasco
- *   @author masensio
- *   @author Christian Schabesberger
- *   Copyright (C) 2019 ownCloud GmbH.
- *
- *   This program is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License version 2,
- *   as published by the Free Software Foundation.
- *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
- *
- *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * @author LukeOwncloud
+ * @author David A. Velasco
+ * @author masensio
+ * @author Christian Schabesberger
+ * Copyright (C) 2019 ownCloud GmbH.
+ * <p>
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
+ * <p>
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package com.owncloud.android.ui.activity;
 
@@ -34,17 +33,17 @@ import android.content.ServiceConnection;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import androidx.fragment.app.FragmentTransaction;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.OCFile;
-import com.owncloud.android.datamodel.UploadsStorageManager;
 import com.owncloud.android.datamodel.OCUpload;
+import com.owncloud.android.datamodel.UploadsStorageManager;
 import com.owncloud.android.db.UploadResult;
 import com.owncloud.android.files.services.FileUploader;
 import com.owncloud.android.files.services.FileUploader.FileUploaderBinder;
@@ -92,7 +91,7 @@ public class UploadListActivity extends FileActivity implements UploadListFragme
         setupDrawer(R.id.nav_uploads);
 
         // Add fragment with a transaction for setting a tag
-        if(savedInstanceState == null) {
+        if (savedInstanceState == null) {
             createUploadListFragment();
         } // else, the Fragment Manager makes the job on configuration changes
 
@@ -101,13 +100,12 @@ public class UploadListActivity extends FileActivity implements UploadListFragme
         mLocalBroadcastManager = LocalBroadcastManager.getInstance(this);
     }
 
-    private void createUploadListFragment(){
+    private void createUploadListFragment() {
         UploadListFragment uploadList = new UploadListFragment();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.add(R.id.upload_list_fragment, uploadList, TAG_UPLOAD_LIST_FRAGMENT);
         transaction.commit();
     }
-
 
     @Override
     protected void onResume() {
@@ -144,9 +142,9 @@ public class UploadListActivity extends FileActivity implements UploadListFragme
     public boolean onUploadItemClick(OCUpload file) {
         /// TODO is this path still active?
         File f = new File(file.getLocalPath());
-        if(!f.exists()) {
+        if (!f.exists()) {
             showSnackMessage(
-                getString(R.string.local_file_not_found_toast)
+                    getString(R.string.local_file_not_found_toast)
             );
 
         } else {
@@ -170,13 +168,13 @@ public class UploadListActivity extends FileActivity implements UploadListFragme
             startActivity(myIntent);
         } catch (ActivityNotFoundException e) {
             showSnackMessage(
-                getString(R.string.file_list_no_app_for_file_type)
+                    getString(R.string.file_list_no_app_for_file_type)
             );
             Log_OC.i(TAG, "Could not find app for sending log history.");
 
-        }        
+        }
     }
-    
+
     /**
      * Same as openFileWithDefault() but user cannot save default app.
      * @param ocFile
@@ -241,14 +239,14 @@ public class UploadListActivity extends FileActivity implements UploadListFragme
         if (requestCode == FileActivity.REQUEST_CODE__UPDATE_CREDENTIALS && resultCode == RESULT_OK) {
             // Retry uploads of the updated account
             Account account = AccountUtils.getOwnCloudAccountByName(
-                this,
-                data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME)
+                    this,
+                    data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME)
             );
             TransferRequester requester = new TransferRequester();
             requester.retryFailedUploads(
-                this,
-                account,
-                UploadResult.CREDENTIAL_ERROR,
+                    this,
+                    account,
+                    UploadResult.CREDENTIAL_ERROR,
                     false
             );
         }
@@ -281,7 +279,6 @@ public class UploadListActivity extends FileActivity implements UploadListFragme
         }
     }
 
-
     @Override
     protected ServiceConnection newTransferenceServiceConnection() {
         return new UploadListServiceConnection();
@@ -293,8 +290,7 @@ public class UploadListActivity extends FileActivity implements UploadListFragme
         @Override
         public void onServiceConnected(ComponentName component, IBinder service) {
             if (service instanceof FileUploaderBinder) {
-                if(mUploaderBinder == null)
-                {
+                if (mUploaderBinder == null) {
                     mUploaderBinder = (FileUploaderBinder) service;
                     Log_OC.d(TAG, "UploadListActivity connected to Upload service. component: " +
                             component + " service: "
@@ -313,7 +309,7 @@ public class UploadListActivity extends FileActivity implements UploadListFragme
                 Log_OC.d(TAG, "UploadListActivity not connected to Upload service. component: " +
                         component + " service: " + service);
                 return;
-            }            
+            }
         }
 
         @Override
@@ -335,7 +331,7 @@ public class UploadListActivity extends FileActivity implements UploadListFragme
         @Override
         public void onReceive(Context context, Intent intent) {
             UploadListFragment uploadListFragment =
-                (UploadListFragment) getSupportFragmentManager().findFragmentByTag(TAG_UPLOAD_LIST_FRAGMENT);
+                    (UploadListFragment) getSupportFragmentManager().findFragmentByTag(TAG_UPLOAD_LIST_FRAGMENT);
 
             uploadListFragment.updateUploads();
         }
@@ -344,7 +340,6 @@ public class UploadListActivity extends FileActivity implements UploadListFragme
     protected String getDefaultTitle() {
         return getString(R.string.uploads_view_title);
     }
-
 
     /**
      * Called when the ownCloud {@link Account} associated to the Activity was just updated.

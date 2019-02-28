@@ -47,14 +47,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
-import androidx.browser.customtabs.CustomTabsClient;
-import androidx.browser.customtabs.CustomTabsIntent;
-import androidx.browser.customtabs.CustomTabsServiceConnection;
-import com.google.android.material.snackbar.Snackbar;
-import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
@@ -76,6 +68,14 @@ import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
 
+import androidx.browser.customtabs.CustomTabsClient;
+import androidx.browser.customtabs.CustomTabsIntent;
+import androidx.browser.customtabs.CustomTabsServiceConnection;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import com.google.android.material.snackbar.Snackbar;
 import com.owncloud.android.BuildConfig;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
@@ -169,7 +169,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
     private static final String KEY_PASSWORD = "PASSWORD";
     private static final String KEY_ASYNC_TASK_IN_PROGRESS = "AUTH_IN_PROGRESS";
 
-
     private static final String ACTION_CUSTOM_TABS_CONNECTION =
             "android.support.customtabs.action.CustomTabsService";
 
@@ -181,15 +180,13 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
     private Account mAccount;
     private String mAuthTokenType;
 
-
     /// activity-level references / state
     private final Handler mHandler = new Handler();
     private ServiceConnection mOperationsServiceConnection = null;
     private OperationsServiceBinder mOperationsServiceBinder = null;
     private AccountManager mAccountMgr;
 
-
-    /// Server PRE-Fragment elements 
+    /// Server PRE-Fragment elements
     private EditText mHostUrlInput;
     private View mRefreshButton;
     private TextView mServerStatusView;
@@ -206,7 +203,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
     private GetServerInfoOperation.ServerInfo mServerInfo =
             new GetServerInfoOperation.ServerInfo();
-
 
     /// Authentication PRE-Fragment elements
     private EditText mUsernameInput;
@@ -430,7 +426,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         }
     }
 
-
     /**
      * Configures elements in the user interface under direct control of the Activity.
      */
@@ -468,7 +463,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             instructionsView.setVisibility(View.GONE);
         }
     }
-
 
     /**
      * @param savedInstanceState Saved activity state, as in {{@link #onCreate(Bundle)}
@@ -601,7 +595,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
                 (mAction != ACTION_CREATE || checkHostUrl));
     }
 
-
     /**
      * @param savedInstanceState Saved activity state, as in {{@link #onCreate(Bundle)}
      */
@@ -667,7 +660,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
     }
 
-
     /**
      * Changes the visibility of input elements depending on
      * the current authorization method.
@@ -684,7 +676,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             mPasswordInput.setVisibility(View.GONE);
         }
     }
-
 
     /**
      * Saves relevant state before {@link #onPause()}
@@ -789,7 +780,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         }
     }
 
-
     @Override
     protected void onPause() {
         if (mOperationsServiceBinder != null) {
@@ -823,7 +813,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
         super.onDestroy();
     }
-
 
     /**
      * Parses the redirection with the response to the GET AUTHORIZATION request to the
@@ -880,7 +869,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         }
     }
 
-
     /**
      * Handles the change of focus on the text inputs for the server URL and the password
      */
@@ -896,7 +884,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             onPasswordFocusChanged(hasFocus);
         }
     }
-
 
     /**
      * Handles changes in focus on the text input for the server URL.
@@ -921,7 +908,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             showRefreshButton(!mServerIsValid);
         }
     }
-
 
     private void checkOcServer() {
         String uri = mHostUrlInput.getText().toString().trim();
@@ -965,7 +951,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         }
     }
 
-
     /**
      * Handles changes in focus on the text input for the password (basic authorization).
      * <p>
@@ -983,7 +968,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             hidePasswordButton();
         }
     }
-
 
     private void showViewPasswordButton() {
         int drawable = R.drawable.ic_view;
@@ -1055,7 +1039,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         }
     }
 
-
     /**
      * Tests the credentials entered by the user performing a check of existence on
      * the root folder of the ownCloud server.
@@ -1086,7 +1069,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         Object[] params = {mServerInfo.mBaseUrl, credentials};
         mAsyncTask.execute(params);
     }
-
 
     /**
      * Starts the OAuth 'grant type' flow to get an access token, with
@@ -1153,7 +1135,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
                 .create()
                 .show();
     }
-
 
     /**
      * Starts the Web Single Sign On flow to get access to the root folder
@@ -1224,8 +1205,9 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
                 success = updateAccount(username);
             }
 
-            if (success)
+            if (success) {
                 finish();
+            }
         } else {
             int failedStatusText = result.getCode() == ResultCode.SERVICE_UNAVAILABLE ?
                     R.string.service_unavailable : R.string.auth_fail_get_user_name;
@@ -1305,7 +1287,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         }
     }
 
-
     // TODO remove, if possible
     private String normalizeUrl(String url, boolean sslWhenUnprefixed) {
         if (url != null && url.length() > 0) {
@@ -1323,7 +1304,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         }
         return (url != null ? url : "");
     }
-
 
     private String normalizeUrlSuffix(String url) {
         if (url.endsWith("/")) {
@@ -1345,30 +1325,30 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         return url;
     }
 
-
     private String subdomainToLower(String url, EditText mHostUrlInput) {
         if (url.toLowerCase().startsWith("http://") ||
                 url.toLowerCase().startsWith("https://")) {
-            if (url.indexOf("/", 8) != -1)
+            if (url.indexOf("/", 8) != -1) {
                 url = url.substring(0, url.indexOf("/", 8)).toLowerCase()
                         + url.substring(url.indexOf("/", 8), url.length());
-            else
+            } else {
                 url = url.substring(0, url.length()).toLowerCase();
+            }
 
             mHostUrlInput.setText(url);
         } else {
-            if (url.contains("/"))
+            if (url.contains("/")) {
                 url = url.substring(0, url.indexOf("/")).toLowerCase()
                         + url.substring(url.indexOf("/"), url.length());
-            else
+            } else {
                 url = url.substring(0, url.length()).toLowerCase();
+            }
 
             mHostUrlInput.setText(url);
         }
 
         return url;
     }
-
 
     // TODO remove, if possible
     private String trimUrlWebdav(String url) {
@@ -1377,7 +1357,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         }
         return url;
     }
-
 
     /**
      * Chooses the right icon and text to show to the user for the received operation result.
@@ -1415,7 +1394,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         }
     }
 
-
     /**
      * Chooses the right icon and text to show to the user for the received operation result.
      *
@@ -1446,7 +1424,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
                 mAuthStatusText = ErrorMessageAdapter.getResultMessage(result, null, getResources());
         }
     }
-
 
     private void updateFailedAuthStatusIconAndText(int failedStatusText) {
         mAuthStatusIcon = R.drawable.common_error;
@@ -1493,7 +1470,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             Log_OC.d(TAG, "Access failed: " + result.getLogMessage());
         }
     }
-
 
     /**
      * Processes the result of the access check performed to try the user credentials.
@@ -1803,7 +1779,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         setResult(RESULT_OK, intent);
     }
 
-
     /**
      * Starts and activity to open the 'new account' page in the ownCloud web site
      *
@@ -1816,7 +1791,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         setResult(RESULT_CANCELED);
         startActivity(register);
     }
-
 
     /**
      * Updates the content and visibility state of the icon and text associated
@@ -1833,7 +1807,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         }
 
     }
-
 
     /**
      * Updates the content and visibility state of the icon and text associated
@@ -1875,7 +1848,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         }
         mPasswordInput.setSelection(selectionStart, selectionEnd);
     }
-
 
     /**
      * Called when the 'action' button in an IME is pressed ('enter' in software keyboard).
@@ -1935,7 +1907,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         public abstract boolean onDrawableTouch(final MotionEvent event);
     }
 
-
     private void getRemoteUserNameOperation(String sessionCookie) {
         Intent getUserNameIntent = new Intent();
         getUserNameIntent.setAction(OperationsService.ACTION_GET_USER_NAME);
@@ -1946,7 +1917,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             mWaitingForOpId = mOperationsServiceBinder.queueNewOperation(getUserNameIntent);
         }
     }
-
 
     @Override
     public void onSsoFinished(String sessionCookie) {
@@ -1978,7 +1948,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         return super.onTouchEvent(event);
     }
 
-
     /**
      * Show untrusted cert dialog
      */
@@ -1998,7 +1967,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         ft.addToBackStack(null);
         dialog.show(ft, UNTRUSTED_CERT_DIALOG_TAG);
     }
-
 
     /**
      * Show untrusted cert dialog
@@ -2034,7 +2002,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         dismissDialog(SAML_DIALOG_TAG);
     }
 
-
     private void doOnResumeAndBound() {
         //Log_OC.e(TAG, "registering to listen for operation callbacks" );
         mOperationsServiceBinder.addOperationListener(AuthenticatorActivity.this, mHandler);
@@ -2048,7 +2015,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         }
     }
 
-
     private void dismissDialog(String dialogTag) {
         Fragment frag = getSupportFragmentManager().findFragmentByTag(dialogTag);
         if (frag != null && frag instanceof DialogFragment) {
@@ -2056,7 +2022,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             dialog.dismiss();
         }
     }
-
 
     /**
      * Implements callback methods for service binding.
@@ -2118,7 +2083,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
     public void doNegativeAuthenticatioDialogClick() {
         mIsFirstAuthAttempt = true;
     }
-
 
     private void showSnackMessage(int messageResource) {
         Snackbar snackbar = Snackbar.make(

@@ -8,16 +8,16 @@
  * @author Christian Schabesberger
  * Copyright (C) 2011  Bartek Przybylski
  * Copyright (C) 2019 ownCloud GmbH.
- *
+ * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
  * as published by the Free Software Foundation.
- *
+ * <p>
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -42,10 +42,10 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.os.CancellationSignal;
 import android.os.ParcelFileDescriptor;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import android.text.TextUtils;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.OCFile;
@@ -137,7 +137,8 @@ public class FileContentProvider extends ContentProvider {
         mShareProjectionMap.put(ProviderTableMeta.OCSHARES_IS_DIRECTORY,
                 ProviderTableMeta.OCSHARES_IS_DIRECTORY);
         mShareProjectionMap.put(ProviderTableMeta.OCSHARES_USER_ID, ProviderTableMeta.OCSHARES_USER_ID);
-        mShareProjectionMap.put(ProviderTableMeta.OCSHARES_ID_REMOTE_SHARED, ProviderTableMeta.OCSHARES_ID_REMOTE_SHARED);
+        mShareProjectionMap.put(ProviderTableMeta.OCSHARES_ID_REMOTE_SHARED,
+                ProviderTableMeta.OCSHARES_ID_REMOTE_SHARED);
         mShareProjectionMap.put(ProviderTableMeta.OCSHARES_ACCOUNT_OWNER, ProviderTableMeta.OCSHARES_ACCOUNT_OWNER);
         mShareProjectionMap.put(ProviderTableMeta.OCSHARES_NAME, ProviderTableMeta.OCSHARES_NAME);
         mShareProjectionMap.put(ProviderTableMeta.OCSHARES_URL, ProviderTableMeta.OCSHARES_URL);
@@ -509,7 +510,6 @@ public class FileContentProvider extends ContentProvider {
         return true;
     }
 
-
     @Override
     public Cursor query(
             @NonNull Uri uri,
@@ -713,7 +713,6 @@ public class FileContentProvider extends ContentProvider {
         Log_OC.d("FileContentProvider", "applied batch in provider " + this);
         return results;
     }
-
 
     private class DataBaseHelper extends SQLiteOpenHelper {
 
@@ -1227,7 +1226,7 @@ public class FileContentProvider extends ContentProvider {
         );
     }
 
-    private void createUserQuotaTable (SQLiteDatabase db) {
+    private void createUserQuotaTable(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE " + ProviderTableMeta.USER_QUOTAS_TABLE_NAME + "("
                 + ProviderTableMeta._ID + " INTEGER PRIMARY KEY, "
                 + ProviderTableMeta.USER_QUOTAS__ACCOUNT_NAME + " TEXT, "
@@ -1301,7 +1300,6 @@ public class FileContentProvider extends ContentProvider {
         }
     }
 
-
     /**
      * Rename the local ownCloud folder of one account to match the a rename of the account itself. Updates the
      * table of files in database so that the paths to the local files keep being the same.
@@ -1365,7 +1363,6 @@ public class FileContentProvider extends ContentProvider {
             throws FileNotFoundException {
         return super.openFile(uri, mode, signal);
     }
-
 
     @Nullable
     @Override

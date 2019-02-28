@@ -1,35 +1,33 @@
 /**
- *   ownCloud Android client application
+ * ownCloud Android client application
  *
- *   @author Bartek Przybylski
- *   @author Christian Schabesberger
- *   Copyright (C) 2012 Bartek Przybylski
- *   Copyright (C) 2019 ownCloud GmbH.
- *
- *   This program is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License version 2,
- *   as published by the Free Software Foundation.
- *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
- *
- *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * @author Bartek Przybylski
+ * @author Christian Schabesberger
+ * Copyright (C) 2012 Bartek Przybylski
+ * Copyright (C) 2019 ownCloud GmbH.
+ * <p>
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
+ * <p>
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package com.owncloud.android.ui.dialog;
 
-import androidx.appcompat.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
-
 import com.owncloud.android.R;
-
 
 public class ConfirmationDialogFragment extends DialogFragment {
 
@@ -40,14 +38,14 @@ public class ConfirmationDialogFragment extends DialogFragment {
     public final static String ARG_POSITIVE_BTN_RES = "positive_btn_res";
     public final static String ARG_NEUTRAL_BTN_RES = "neutral_btn_res";
     public final static String ARG_NEGATIVE_BTN_RES = "negative_btn_res";
-    
+
     public static final String FTAG_CONFIRMATION = "CONFIRMATION_FRAGMENT";
 
     private ConfirmationDialogFragmentListener mListener;
-    
+
     /**
      * Public factory method to create new ConfirmationDialogFragment instances.
-     * 
+     *
      * @param messageResId      Resource id for a message to show in the dialog.
      * @param messageArguments  Arguments to complete the message, if it's a format string. May be null.
      * @param titleResId        Resource id for a text to show in the title.
@@ -55,15 +53,15 @@ public class ConfirmationDialogFragment extends DialogFragment {
      * @param posBtn            Resource id for the text of the positive button. -1 for no positive button.
      * @param neuBtn            Resource id for the text of the neutral button. -1 for no neutral button.
      * @param negBtn            Resource id for the text of the negative button. -1 for no negative button.
-     * @return                  Dialog ready to show.
+     * @return Dialog ready to show.
      */
     public static ConfirmationDialogFragment newInstance(
-        int messageResId,
-        String[] messageArguments,
-        int titleResId,
-        int posBtn,
-        int neuBtn,
-        int negBtn
+            int messageResId,
+            String[] messageArguments,
+            int titleResId,
+            int posBtn,
+            int neuBtn,
+            int negBtn
     ) {
 
         if (messageResId == -1) {
@@ -81,7 +79,7 @@ public class ConfirmationDialogFragment extends DialogFragment {
         frag.setArguments(args);
         return frag;
     }
-    
+
     public void setOnConfirmationListener(ConfirmationDialogFragmentListener listener) {
         mListener = listener;
     }
@@ -94,15 +92,15 @@ public class ConfirmationDialogFragment extends DialogFragment {
         int posBtn = getArguments().getInt(ARG_POSITIVE_BTN_RES, -1);
         int neuBtn = getArguments().getInt(ARG_NEUTRAL_BTN_RES, -1);
         int negBtn = getArguments().getInt(ARG_NEGATIVE_BTN_RES, -1);
-        
+
         if (messageArguments == null) {
             messageArguments = new String[]{};
         }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
-            .setIcon(R.drawable.ic_warning)
-            .setIconAttribute(android.R.attr.alertDialogIcon)
-            .setMessage(String.format(getString(messageId), messageArguments));
+                .setIcon(R.drawable.ic_warning)
+                .setIconAttribute(android.R.attr.alertDialogIcon)
+                .setMessage(String.format(getString(messageId), messageArguments));
 
         if (titleId == 0) {
             builder.setTitle(android.R.string.dialog_alert_title);
@@ -110,7 +108,7 @@ public class ConfirmationDialogFragment extends DialogFragment {
             builder.setTitle(titleId);
         }
 
-        if (posBtn != -1)
+        if (posBtn != -1) {
             builder.setPositiveButton(posBtn,
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int whichButton) {
@@ -120,7 +118,8 @@ public class ConfirmationDialogFragment extends DialogFragment {
                             dialog.dismiss();
                         }
                     });
-        if (neuBtn != -1)
+        }
+        if (neuBtn != -1) {
             builder.setNeutralButton(neuBtn,
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int whichButton) {
@@ -130,7 +129,8 @@ public class ConfirmationDialogFragment extends DialogFragment {
                             dialog.dismiss();
                         }
                     });
-        if (negBtn != -1)
+        }
+        if (negBtn != -1) {
             builder.setNegativeButton(negBtn,
                     new DialogInterface.OnClickListener() {
                         @Override
@@ -141,15 +141,17 @@ public class ConfirmationDialogFragment extends DialogFragment {
                             dialog.dismiss();
                         }
                     });
-      return builder.create();
+        }
+        return builder.create();
     }
-    
-    
+
     public interface ConfirmationDialogFragmentListener {
         void onConfirmation(String callerTag);
+
         void onNeutral(String callerTag);
+
         void onCancel(String callerTag);
     }
-    
+
 }
 

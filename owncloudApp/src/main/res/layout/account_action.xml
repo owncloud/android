@@ -30,7 +30,7 @@
         android:layout_gravity="center_vertical"
         android:layout_marginLeft="20dp"
         android:layout_marginStart="20dp"
-        android:src="@drawable/ic_account_plus"/>
+        android:src="@drawable/ic_account_plus" />
 
     <TextView
         android:id="@+id/name"
@@ -44,6 +44,6 @@
         android:paddingEnd="@dimen/standard_padding"
         android:text="@string/placeholder_filename"
         android:textColor="@color/primary"
-        android:textSize="@dimen/two_line_primary_text_size"/>
+        android:textSize="@dimen/two_line_primary_text_size" />
 
 </LinearLayout>         

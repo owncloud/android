@@ -1,23 +1,23 @@
 /**
- *  ownCloud Android client application
+ * ownCloud Android client application
  *
- *  @author David A. Velasco
- *  @author masensio
- *  @author David González Verdugo
- *  Copyright (C) 2012 Bartek Przybylski
- *  Copyright (C) 2019 ownCloud GmbH.
- *
- *  This program is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License version 2,
- *  as published by the Free Software Foundation.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * @author David A. Velasco
+ * @author masensio
+ * @author David González Verdugo
+ * Copyright (C) 2012 Bartek Przybylski
+ * Copyright (C) 2019 ownCloud GmbH.
+ * <p>
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
+ * <p>
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package com.owncloud.android.operations;
@@ -87,7 +87,6 @@ public class SynchronizeFileOperation extends SyncOperation {
         mRequestedFromAvOfflineJobService = false;
     }
 
-
     /**
      * Constructor allowing to reuse {@link OCFile} instances just queried from local cache or
      * from remote OC server.
@@ -137,7 +136,6 @@ public class SynchronizeFileOperation extends SyncOperation {
         mRequestedFromAvOfflineJobService = requestedFromAvOfflineJobService;
     }
 
-
     @Override
     protected RemoteOperationResult run(OwnCloudClient client) {
 
@@ -183,8 +181,8 @@ public class SynchronizeFileOperation extends SyncOperation {
 
                 /// decide if file changed in local device
                 boolean localChanged = (
-                    mLocalFile.getLocalModificationTimestamp() >
-                        mLocalFile.getLastSyncDateForData()
+                        mLocalFile.getLocalModificationTimestamp() >
+                                mLocalFile.getLastSyncDateForData()
                 );
 
                 /// decide action to perform depending upon changes
@@ -193,7 +191,7 @@ public class SynchronizeFileOperation extends SyncOperation {
                     getStorageManager().saveConflict(mLocalFile, mServerFile.getEtag());
 
                 } else if (localChanged) {
-                    if(mPushOnly) {
+                    if (mPushOnly) {
                         // prevent accidental override of unnoticed change in server;
                         // dirty trick, more refactoring is needed, but not today;
                         // works due to {@link UploadFileOperation#L364,L367}
@@ -205,10 +203,10 @@ public class SynchronizeFileOperation extends SyncOperation {
                 } else if (serverChanged) {
                     mLocalFile.setRemoteId(mServerFile.getRemoteId());
                     requestForDownload(mLocalFile);
-                        // mLocalFile, not mServerFile; we want to keep the value of
-                        // available-offline property
-                        // the update of local data will be done later by the FileUploader
-                        // service when the upload finishes
+                    // mLocalFile, not mServerFile; we want to keep the value of
+                    // available-offline property
+                    // the update of local data will be done later by the FileUploader
+                    // service when the upload finishes
                     result = new RemoteOperationResult<>(ResultCode.OK);
 
                 } else {
@@ -231,7 +229,6 @@ public class SynchronizeFileOperation extends SyncOperation {
         return result;
     }
 
-
     /**
      * Requests for an upload to the FileUploader service
      *
@@ -244,7 +241,6 @@ public class SynchronizeFileOperation extends SyncOperation {
 
         mTransferWasRequested = true;
     }
-
 
     /**
      * Requests for a download to the FileDownloader service
@@ -267,7 +263,6 @@ public class SynchronizeFileOperation extends SyncOperation {
 
         mTransferWasRequested = true;
     }
-
 
     public boolean transferWasRequested() {
         return mTransferWasRequested;

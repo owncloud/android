@@ -29,14 +29,14 @@ import android.content.Context;
 import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.os.Build;
-import com.google.android.material.snackbar.Snackbar;
-import androidx.core.content.ContextCompat;
 import android.text.format.DateUtils;
 import android.view.Display;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.SeekBar;
 
+import androidx.core.content.ContextCompat;
+import com.google.android.material.snackbar.Snackbar;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.OCFile;
@@ -123,8 +123,9 @@ public class DisplayUtils {
         if (mimeType2HumanReadable.containsKey(mimetype)) {
             return mimeType2HumanReadable.get(mimetype);
         }
-        if (mimetype.split("/").length >= 2)
+        if (mimetype.split("/").length >= 2) {
             return mimetype.split("/")[1].toUpperCase() + " file";
+        }
         return "Unknown type";
     }
 
@@ -239,7 +240,6 @@ public class DisplayUtils {
         }
         return path;
     }
-
 
     /**
      * Gets the screen size in pixels in a backwards compatible way

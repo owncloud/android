@@ -1,23 +1,22 @@
 /**
- *   ownCloud Android client application
+ * ownCloud Android client application
  *
- *   @author masensio
- *   @author David A. Velasco
- *   @author Christian Schabesberger
- *   Copyright (C) 2019 ownCloud GmbH.
- *
- *   This program is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License version 2,
- *   as published by the Free Software Foundation.
- *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
- *
- *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * @author masensio
+ * @author David A. Velasco
+ * @author Christian Schabesberger
+ * Copyright (C) 2019 ownCloud GmbH.
+ * <p>
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
+ * <p>
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package com.owncloud.android.ui.fragment;
@@ -27,8 +26,6 @@ import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
-import androidx.appcompat.widget.SearchView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +33,8 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ListView;
 
+import androidx.appcompat.widget.SearchView;
+import androidx.fragment.app.Fragment;
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.lib.common.utils.Log_OC;
@@ -73,7 +72,6 @@ public class SearchShareesFragment extends Fragment implements ShareUserListAdap
     private ArrayList<OCShare> mShares;
     private ShareUserListAdapter mUserGroupsAdapter = null;
     private ShareFragmentListener mListener;
-
 
     /**
      * Public factory method to create new SearchShareesFragment instances.
@@ -148,7 +146,6 @@ public class SearchShareesFragment extends Fragment implements ShareUserListAdap
         return view;
     }
 
-
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -159,14 +156,13 @@ public class SearchShareesFragment extends Fragment implements ShareUserListAdap
         refreshUsersOrGroupsListFromDB();
     }
 
-
     /**
      * Get users and groups from the DB to fill in the "share with" list
      *
      * Depends on the parent Activity provides a {@link com.owncloud.android.datamodel.FileDataStorageManager}
      * instance ready to use. If not ready, does nothing.
      */
-    public void refreshUsersOrGroupsListFromDB (){
+    public void refreshUsersOrGroupsListFromDB() {
         // Get Users and Groups
         if (((FileActivity) mListener).getStorageManager() != null) {
             mShares = ((FileActivity) mListener).getStorageManager().getPrivateSharesForAFile(
@@ -183,8 +179,8 @@ public class SearchShareesFragment extends Fragment implements ShareUserListAdap
 
         // Update list of users/groups
         mUserGroupsAdapter = new ShareUserListAdapter(
-            getActivity().getApplicationContext(),
-            R.layout.share_user_item, mShares, this
+                getActivity().getApplicationContext(),
+                R.layout.share_user_item, mShares, this
         );
 
         // Show data
@@ -240,7 +236,8 @@ public class SearchShareesFragment extends Fragment implements ShareUserListAdap
         if (getView() != null) {
             View searchView = getView().findViewById(R.id.searchView);
             if (searchView != null) {
-                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                InputMethodManager imm =
+                        (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                 if (imm != null) {
                     imm.hideSoftInputFromWindow(searchView.getWindowToken(), 0);
                 }

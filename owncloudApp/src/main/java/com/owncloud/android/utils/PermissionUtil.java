@@ -3,6 +3,7 @@ package com.owncloud.android.utils;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
+
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -17,7 +18,6 @@ public class PermissionUtil {
      * Determine whether <em>the app</em> has been granted a particular permission.
      *
      * @param permission The name of the permission being checked.
-     *
      * @return <code>true</code> if app has the permission, or <code>false</code> if not.
      */
     public static boolean checkSelfPermission(Context context, String permission) {
@@ -32,7 +32,7 @@ public class PermissionUtil {
      * which the permission is requested does not clearly communicate to the user
      * what would be the benefit from granting this permission.
      *
-     * @param activity The target activity.
+     * @param activity   The target activity.
      * @param permission A permission to be requested.
      * @return Whether to show permission rationale UI.
      */

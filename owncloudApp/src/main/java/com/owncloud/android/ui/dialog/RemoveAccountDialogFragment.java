@@ -1,28 +1,27 @@
 /**
- *   ownCloud Android client application
+ * ownCloud Android client application
  *
- *   @author David A. Velasco
- *   Copyright (C) 2016 ownCloud GmbH.
- *
- *   This program is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License version 2,
- *   as published by the Free Software Foundation.
- *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
- *
- *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * @author David A. Velasco
+ * Copyright (C) 2016 ownCloud GmbH.
+ * <p>
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
+ * <p>
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package com.owncloud.android.ui.dialog;
 
 /**
  *  Dialog requiring confirmation before removing an OC Account.
- * 
+ *
  *  Removes the account if the user confirms.
  *
  *  Container Activity needs to implement AccountManagerCallback<Boolean>.
@@ -35,13 +34,13 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.os.Handler;
-import androidx.annotation.NonNull;
 
+import androidx.annotation.NonNull;
 import com.owncloud.android.R;
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment.ConfirmationDialogFragmentListener;
 
 public class RemoveAccountDialogFragment extends ConfirmationDialogFragment
-    implements ConfirmationDialogFragmentListener {
+        implements ConfirmationDialogFragmentListener {
 
     private Account mTargetAccount;
 
@@ -49,12 +48,12 @@ public class RemoveAccountDialogFragment extends ConfirmationDialogFragment
 
     /**
      * Public factory method to create new RemoveAccountDialogFragment instances.
-     * 
+     *
      * @param account         Account to remove.
-     * @return                Dialog ready to show.
+     * @return Dialog ready to show.
      */
     public static RemoveAccountDialogFragment newInstance(Account account) {
-        if (account == null ) {
+        if (account == null) {
             throw new IllegalArgumentException("Cannot remove a NULL account");
         }
 
@@ -67,7 +66,7 @@ public class RemoveAccountDialogFragment extends ConfirmationDialogFragment
         args.putInt(ARG_NEGATIVE_BTN_RES, -1);
         args.putParcelable(ARG_TARGET_ACCOUNT, account);
         frag.setArguments(args);
-        
+
         return frag;
     }
 
@@ -76,23 +75,24 @@ public class RemoveAccountDialogFragment extends ConfirmationDialogFragment
         super.onActivityCreated(savedInstanceState);
         // checked here to fail soon in case of wrong usage
         try {
-            AccountManagerCallback<Boolean> a = (AccountManagerCallback<Boolean>)getActivity();
+            AccountManagerCallback<Boolean> a = (AccountManagerCallback<Boolean>) getActivity();
         } catch (ClassCastException c) {
             throw new IllegalStateException(
-                "Container Activity needs to implement (AccountManagerCallback<Boolean>)", c
+                    "Container Activity needs to implement (AccountManagerCallback<Boolean>)", c
             );
         }
     }
 
-    @Override @NonNull
+    @Override
+    @NonNull
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         Dialog dialog = super.onCreateDialog(savedInstanceState);
         mTargetAccount = getArguments().getParcelable(ARG_TARGET_ACCOUNT);
-        
+
         setOnConfirmationListener(this);
-        
+
         return dialog;
-    }    
+    }
 
     /**
      * Performs the removal of the target account.
@@ -101,10 +101,10 @@ public class RemoveAccountDialogFragment extends ConfirmationDialogFragment
     public void onConfirmation(String callerTag) {
         Activity parentActivity = getActivity();
         AccountManager am = AccountManager.get(parentActivity);
-        AccountManagerCallback<Boolean> callback = (AccountManagerCallback<Boolean>)parentActivity;
+        AccountManagerCallback<Boolean> callback = (AccountManagerCallback<Boolean>) parentActivity;
         am.removeAccount(mTargetAccount, callback, new Handler());
     }
-    
+
     @Override
     public void onCancel(String callerTag) {
         // nothing to do here

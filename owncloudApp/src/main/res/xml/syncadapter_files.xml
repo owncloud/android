@@ -28,4 +28,4 @@
     android:userVisible="true"
     android:allowParallelSyncs="true"
     android:isAlwaysSyncable="true"
-/>
+    />

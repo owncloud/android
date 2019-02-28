@@ -1,29 +1,28 @@
 /**
- *   ownCloud Android client application
- *
- *   Copyright (C) 2019 ownCloud GmbH.
- *
- *   This program is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License version 2,
- *   as published by the Free Software Foundation.
- *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
- *
- *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * ownCloud Android client application
+ * <p>
+ * Copyright (C) 2019 ownCloud GmbH.
+ * <p>
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
+ * <p>
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package com.owncloud.android;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-
 import com.owncloud.android.ui.dialog.RateMeDialog;
 
 public class AppRater {
@@ -74,13 +73,13 @@ public class AppRater {
         editor.apply();
     }
 
-    private static int daysToMilliseconds(int days){
-            return days * 24 * 60 * 60 * 1000;
+    private static int daysToMilliseconds(int days) {
+        return days * 24 * 60 * 60 * 1000;
     }
 
     private static void showRateDialog(Context mContext, String packageName, Boolean cancelable) {
         RateMeDialog rateMeDialog = RateMeDialog.newInstance(packageName, cancelable);
-        FragmentManager fm = ((FragmentActivity)mContext).getSupportFragmentManager();
+        FragmentManager fm = ((FragmentActivity) mContext).getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
         rateMeDialog.show(ft, DIALOG_RATE_ME_TAG);
     }

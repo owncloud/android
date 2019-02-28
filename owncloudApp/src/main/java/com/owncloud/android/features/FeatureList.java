@@ -1,24 +1,22 @@
-
 /**
- *   ownCloud Android client application
+ * ownCloud Android client application
  *
- *   @author Bartosz Przybylski
- *   @author Christian Schabesberger
- *   Copyright (C) 2019 Bartosz Przybylski
- *   Copyright (C) 2019 ownCloud GmbH.
- *
- *   This program is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License version 2,
- *   as published by the Free Software Foundation.
- *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
- *
- *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * @author Bartosz Przybylski
+ * @author Christian Schabesberger
+ * Copyright (C) 2019 Bartosz Przybylski
+ * Copyright (C) 2019 ownCloud GmbH.
+ * <p>
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
+ * <p>
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package com.owncloud.android.features;
@@ -51,7 +49,7 @@ public class FeatureList {
             new FeatureItem(R.drawable.whats_new_share, R.string.welcome_feature_2_title,
                     R.string.welcome_feature_2_text, "2.7.0", "0", SHOW_ON_FIRST_RUN),
             new FeatureItem(R.drawable.whats_new_accounts, R.string.welcome_feature_3_title,
-                    R.string.welcome_feature_3_text, "2.7.0", "0" ,SHOW_ON_FIRST_RUN),
+                    R.string.welcome_feature_3_text, "2.7.0", "0", SHOW_ON_FIRST_RUN),
             new FeatureItem(R.drawable.whats_new_camera_uploads, R.string.welcome_feature_4_title,
                     R.string.welcome_feature_4_text, "2.7.0", "0", SHOW_ON_FIRST_RUN),
             new FeatureItem(R.drawable.whats_new_video_streaming, R.string.welcome_feature_5_title,
@@ -65,7 +63,6 @@ public class FeatureList {
             new FeatureItem(R.drawable.whats_new_av_offline_jobs, R.string.welcome_feature_8_title,
                     R.string.welcome_feature_8_text, "2.9.3", "0", SHOW_ON_UPGRADE)
     };
-
 
     static public FeatureItem[] get() {
         return featuresList;
@@ -109,18 +106,41 @@ public class FeatureList {
             this.showOnInitialRun = showOnInitialRun;
         }
 
-        public boolean shouldShowImage() { return image != DO_NOT_SHOW; }
-        public int getImage() { return image; }
+        public boolean shouldShowImage() {
+            return image != DO_NOT_SHOW;
+        }
 
-        public boolean shouldShowTitleText() { return titleText != DO_NOT_SHOW; }
-        public int getTitleText() { return titleText; }
+        public int getImage() {
+            return image;
+        }
 
-        public boolean shouldShowContentText() { return contentText != DO_NOT_SHOW; }
-        public int getContentText() { return contentText; }
+        public boolean shouldShowTitleText() {
+            return titleText != DO_NOT_SHOW;
+        }
 
-        public int getVersionNumber() { return versionNumber; }
-        public int getBetaVersionNumber() { return betaVersion; }
-        public boolean shouldShowOnFirstRun() { return showOnInitialRun; }
+        public int getTitleText() {
+            return titleText;
+        }
+
+        public boolean shouldShowContentText() {
+            return contentText != DO_NOT_SHOW;
+        }
+
+        public int getContentText() {
+            return contentText;
+        }
+
+        public int getVersionNumber() {
+            return versionNumber;
+        }
+
+        public int getBetaVersionNumber() {
+            return betaVersion;
+        }
+
+        public boolean shouldShowOnFirstRun() {
+            return showOnInitialRun;
+        }
 
         @Override
         public int describeContents() {
@@ -145,6 +165,7 @@ public class FeatureList {
             betaVersion = p.readInt();
             showOnInitialRun = p.readByte() == 1;
         }
+
         public static final Parcelable.Creator CREATOR =
                 new Parcelable.Creator() {
 
@@ -166,9 +187,9 @@ public class FeatureList {
             Log_OC.d(TAG, "Version string is incorrect " + version);
             return 0;
         }
-        int result = Integer.parseInt(v[0])*(int)(10e6) +
-                Integer.parseInt(v[1])*(int)(10e4) +
-                Integer.parseInt(v[2])*100;
+        int result = Integer.parseInt(v[0]) * (int) (10e6) +
+                Integer.parseInt(v[1]) * (int) (10e4) +
+                Integer.parseInt(v[2]) * 100;
 
         return result;
     }

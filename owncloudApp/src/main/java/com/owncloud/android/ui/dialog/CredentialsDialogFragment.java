@@ -1,33 +1,26 @@
 /**
- *   ownCloud Android client application
- *
- *   Copyright (C) 2016 ownCloud GmbH.
- *
- *   This program is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License version 2,
- *   as published by the Free Software Foundation.
- *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
- *
- *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * ownCloud Android client application
+ * <p>
+ * Copyright (C) 2016 ownCloud GmbH.
+ * <p>
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
+ * <p>
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package com.owncloud.android.ui.dialog;
 
-import com.owncloud.android.R;
-import com.owncloud.android.authentication.AuthenticatorActivity;
-
-import androidx.appcompat.app.AlertDialog;
 import android.app.Dialog;
-import androidx.appcompat.app.AlertDialog.Builder;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import androidx.fragment.app.DialogFragment;
 import android.text.InputType;
 import android.view.WindowManager.LayoutParams;
 import android.webkit.HttpAuthHandler;
@@ -35,30 +28,33 @@ import android.webkit.WebView;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
-
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AlertDialog.Builder;
+import androidx.fragment.app.DialogFragment;
+import com.owncloud.android.R;
+import com.owncloud.android.authentication.AuthenticatorActivity;
 
 /**
  *  Dialog to input authentication credentials
- * 
+ *
  */
 public class CredentialsDialogFragment extends DialogFragment
-    implements DialogInterface.OnClickListener {
+        implements DialogInterface.OnClickListener {
 
     private WebView mWebView = null;
     private HttpAuthHandler mHandler = null;
 
     private EditText mUsernameET;
     private EditText mPasswordET;
-    
+
     private String mUsernameStr;
     private String mPasswordStr;
-
 
     /**
      * Public factory method to create new CredentialsDialogFragment instances.
      * @param webView       WebView that is being loaded
      * @param handler       HttpAuthHandler
-     * @return              Dialog ready to show
+     * @return Dialog ready to show
      */
     public static CredentialsDialogFragment newInstanceForCredentials(WebView webView,
                                                                       HttpAuthHandler handler) {
@@ -71,7 +67,6 @@ public class CredentialsDialogFragment extends DialogFragment
         frag.mWebView = webView;
         return frag;
     }
-
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -90,9 +85,9 @@ public class CredentialsDialogFragment extends DialogFragment
         ll.setOrientation(LinearLayout.VERTICAL);
         ll.addView(mUsernameET);
         ll.addView(mPasswordET);
-        
+
         ll.requestFocus();
-        
+
         setRetainInstance(true);
 
         Builder authDialog = new AlertDialog
@@ -108,7 +103,6 @@ public class CredentialsDialogFragment extends DialogFragment
         return d;
     }
 
-
     @Override
     public void onPause() {
         super.onPause();
@@ -118,7 +112,6 @@ public class CredentialsDialogFragment extends DialogFragment
         mPasswordStr = mPasswordET.getText().toString();
     }
 
-
     @Override
     public void onResume() {
         super.onResume();
@@ -126,10 +119,9 @@ public class CredentialsDialogFragment extends DialogFragment
         mPasswordET.setText(mPasswordStr);
     }
 
-
     @Override
     public void onClick(DialogInterface dialog, int which) {
-        if (which == AlertDialog.BUTTON_POSITIVE) { 
+        if (which == AlertDialog.BUTTON_POSITIVE) {
 
             String username = mUsernameET.getText().toString();
             String password = mPasswordET.getText().toString();
@@ -139,18 +131,18 @@ public class CredentialsDialogFragment extends DialogFragment
 
         } else if (which == AlertDialog.BUTTON_NEGATIVE) {
             mWebView.stopLoading();
-            ((AuthenticatorActivity)getActivity()).doNegativeAuthenticatioDialogClick();
+            ((AuthenticatorActivity) getActivity()).doNegativeAuthenticatioDialogClick();
         }
 
         dialog.dismiss();
     }
-    
-    
+
     @Override
     public void onDestroyView() {
-      if (getDialog() != null && getRetainInstance())
-        getDialog().setDismissMessage(null);
-      super.onDestroyView();
+        if (getDialog() != null && getRetainInstance()) {
+            getDialog().setDismissMessage(null);
+        }
+        super.onDestroyView();
     }
 
 }

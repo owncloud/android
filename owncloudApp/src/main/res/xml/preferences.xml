@@ -81,7 +81,7 @@
         <Preference
             android:key="syncCalendarContacts"
             android:title="@string/prefs_sync_calendar_contacts"
-            android:summary="@string/prefs_sync_calendar_contacts_summary"/>
+            android:summary="@string/prefs_sync_calendar_contacts_summary" />
         <Preference
             android:key="recommend"
             android:title="@string/prefs_recommend" />
@@ -102,6 +102,5 @@
             android:key="about_app"
             android:title="@string/about_title" />
     </PreferenceCategory>
-
 
 </PreferenceScreen>

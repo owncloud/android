@@ -43,18 +43,18 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.Parcelable;
-import com.google.android.material.snackbar.Snackbar;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.core.content.ContextCompat;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import com.google.android.material.snackbar.Snackbar;
 import com.owncloud.android.AppRater;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
@@ -152,7 +152,6 @@ public class FileDisplayActivity extends FileActivity
     private OCFile mWaitingToSend;
 
     private LocalBroadcastManager mLocalBroadcastManager;
-
 
     FilesUploadHelper mFilesUploadHelper;
 
@@ -311,8 +310,9 @@ public class FileDisplayActivity extends FileActivity
                     // cache until the upload is successful get parent from path
                     parentPath = file.getRemotePath().substring(0,
                             file.getRemotePath().lastIndexOf(file.getFileName()));
-                    if (getStorageManager().getFileByPath(parentPath) == null)
+                    if (getStorageManager().getFileByPath(parentPath) == null) {
                         file = null; // not able to know the directory where the file is uploading
+                    }
                 } else {
                     file = getStorageManager().getFileByPath(file.getRemotePath());
                     // currentDir = null if not in the current Account
@@ -399,7 +399,7 @@ public class FileDisplayActivity extends FileActivity
             if (file != null && !file.isFolder()) {
                 if ((PreviewAudioFragment.canBePreviewed(file) || PreviewVideoFragment.canBePreviewed(file)) &&
                         file.getLastSyncDateForProperties() > 0  // temporal fix
-                        ) {
+                ) {
                     int startPlaybackPosition =
                             getIntent().getIntExtra(PreviewVideoActivity.EXTRA_START_POSITION, 0);
                     boolean autoplay =
@@ -439,7 +439,6 @@ public class FileDisplayActivity extends FileActivity
         return secondFragment;
     }
 
-
     /**
      * Replaces the second fragment managed by the activity with the received as
      * a parameter.
@@ -453,7 +452,6 @@ public class FileDisplayActivity extends FileActivity
         transaction.replace(R.id.right_fragment_container, fragment, TAG_SECOND_FRAGMENT);
         transaction.commit();
     }
-
 
     private void updateFragmentsVisibility(boolean existsSecondFragment) {
         if (existsSecondFragment) {
@@ -473,7 +471,6 @@ public class FileDisplayActivity extends FileActivity
             }
         }
     }
-
 
     private OCFileListFragment getListOfFilesFragment() {
         Fragment listOfFiles = getSupportFragmentManager().findFragmentByTag(
@@ -554,7 +551,6 @@ public class FileDisplayActivity extends FileActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-
         switch (item.getItemId()) {
             case R.id.action_select_all: {
                 getListOfFilesFragment().selectAll();
@@ -631,7 +627,8 @@ public class FileDisplayActivity extends FileActivity
     private void recoverSortMenuFormPreferences(Menu menu) {
         // setup sort menu
         if (menu != null) {
-            mDescendingMenuItem.setChecked(!PreferenceManager.getSortAscending(this, FileStorageUtils.FILE_DISPLAY_SORT));
+            mDescendingMenuItem.setChecked(!PreferenceManager.getSortAscending(this,
+                    FileStorageUtils.FILE_DISPLAY_SORT));
 
             switch (getSortOrder(this, FileStorageUtils.FILE_DISPLAY_SORT)) {
                 case FileStorageUtils.SORT_NAME:
@@ -769,7 +766,6 @@ public class FileDisplayActivity extends FileActivity
                 remotePaths[j] = remotePathBase + (new File(filePaths[j])).getName();
             }
 
-
             TransferRequester requester = new TransferRequester();
             requester.uploadNewFiles(
                     this,
@@ -823,7 +819,6 @@ public class FileDisplayActivity extends FileActivity
 
         uploader.uploadUris();
     }
-
 
     /**
      * Request the operation for moving the file/folder from one path to another
@@ -940,11 +935,9 @@ public class FileDisplayActivity extends FileActivity
 
         recoverSortMenuFormPreferences(mMainMenu);
 
-
         Log_OC.v(TAG, "onResume() end");
 
     }
-
 
     @Override
     protected void onPause() {
@@ -1227,7 +1220,6 @@ public class FileDisplayActivity extends FileActivity
 
     }
 
-
     /**
      * Class waiting for broadcast events from the {@link FileDownloader} service.
      * <p/>
@@ -1337,7 +1329,6 @@ public class FileDisplayActivity extends FileActivity
         }
     }
 
-
     public void browseToRoot() {
         OCFileListFragment listOfFiles = getListOfFilesFragment();
         if (listOfFiles != null) {  // should never be null, indeed
@@ -1350,7 +1341,6 @@ public class FileDisplayActivity extends FileActivity
         }
         cleanSecondFragment();
     }
-
 
     /**
      * {@inheritDoc}
@@ -1404,7 +1394,7 @@ public class FileDisplayActivity extends FileActivity
                 Log_OC.d(TAG, "Download service connected");
                 mDownloaderBinder = (FileDownloaderBinder) service;
 
-                if (mFileWaitingToPreview != null)
+                if (mFileWaitingToPreview != null) {
                     if (getStorageManager() != null) {
                         // update the file
                         mFileWaitingToPreview =
@@ -1415,6 +1405,7 @@ public class FileDisplayActivity extends FileActivity
                             requestForDownload();
                         }
                     }
+                }
 
                 if (getFile() != null && mDownloaderBinder.isDownloading(getAccount(), getFile())) {
 
@@ -1505,7 +1496,7 @@ public class FileDisplayActivity extends FileActivity
     private void onRemoveFileOperationFinish(RemoveFileOperation operation,
                                              RemoteOperationResult result) {
 
-        if(getListOfFilesFragment().isSingleItemChecked() || result.isException()) {
+        if (getListOfFilesFragment().isSingleItemChecked() || result.isException()) {
             showSnackMessage(
                     ErrorMessageAdapter.getResultMessage(result, operation, getResources())
             );
@@ -1534,7 +1525,6 @@ public class FileDisplayActivity extends FileActivity
             }
         }
     }
-
 
     /**
      * Updates the view associated to the activity after the finish of an operation trying to move a
@@ -1615,7 +1605,6 @@ public class FileDisplayActivity extends FileActivity
             }
         }
     }
-
 
     private void onSynchronizeFileOperationFinish(SynchronizeFileOperation operation,
                                                   RemoteOperationResult result) {
@@ -1759,7 +1748,6 @@ public class FileDisplayActivity extends FileActivity
         mWaitingToSend = null;
     }
 
-
     /**
      * Requests the download of the received {@link OCFile} , updates the UI
      * to monitor the download progress and prepares the activity to send the file
@@ -1859,7 +1847,6 @@ public class FileDisplayActivity extends FileActivity
         updateActionBarTitleAndHomeButton(file);
         setFile(file);
     }
-
 
     /**
      * Request stopping the upload/download operation in progress over the given {@link OCFile} file.

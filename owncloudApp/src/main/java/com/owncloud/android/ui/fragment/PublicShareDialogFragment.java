@@ -5,16 +5,16 @@
  * @author David González Verdugo
  * @author Christian Schabesberger
  * Copyright (C) 2019 ownCloud GmbH.
- *
+ * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
  * as published by the Free Software Foundation.
- *
+ * <p>
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -41,6 +41,8 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import androidx.appcompat.widget.SwitchCompat;
+import androidx.fragment.app.DialogFragment;
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.lib.common.utils.Log_OC;
@@ -54,9 +56,6 @@ import com.owncloud.android.utils.DateUtils;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
-import androidx.appcompat.widget.SwitchCompat;
-import androidx.fragment.app.DialogFragment;
 
 public class PublicShareDialogFragment extends DialogFragment {
 
@@ -125,7 +124,6 @@ public class PublicShareDialogFragment extends DialogFragment {
     private RadioButton mReadWriteButton;
     private RadioButton mUploadOnlyButton;
 
-
     /**
      * Create a new instance of PublicShareDialogFragment, providing fileToShare and account
      * as an argument.
@@ -170,7 +168,6 @@ public class PublicShareDialogFragment extends DialogFragment {
         publicShareDialogFragment.setArguments(args);
         return publicShareDialogFragment;
     }
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -320,9 +317,9 @@ public class PublicShareDialogFragment extends DialogFragment {
 
         publicUploadPermission =
                 (mCapabilities.getVersionMayor() >= 10
-                    && (mCapabilities.getVersionMinor() > 1
+                        && (mCapabilities.getVersionMinor() > 1
                         || mCapabilities.getVersionMicro() > 3))
-                && publicUploadPermission;
+                        && publicUploadPermission;
 
         if (!updating()) { // Creating a new public share
             ((FileActivity) getActivity()).getFileOperationsHelper().
@@ -382,7 +379,7 @@ public class PublicShareDialogFragment extends DialogFragment {
         public boolean onTouch(View view, MotionEvent event) {
             Drawable rightDrawable = null;
             if (view instanceof TextView) {
-                Drawable[] drawables = ((TextView)view).getCompoundDrawables();
+                Drawable[] drawables = ((TextView) view).getCompoundDrawables();
                 if (drawables.length > 2) {
                     rightDrawable = drawables[2];
                 }
@@ -391,7 +388,7 @@ public class PublicShareDialogFragment extends DialogFragment {
                 final int x = (int) event.getX();
                 final int y = (int) event.getY();
                 final Rect bounds = rightDrawable.getBounds();
-                if (    x >= (view.getRight() - bounds.width() - fuzz) &&
+                if (x >= (view.getRight() - bounds.width() - fuzz) &&
                         x <= (view.getRight() - view.getPaddingRight() + fuzz) &&
                         y >= (view.getPaddingTop() - fuzz) &&
                         y <= (view.getHeight() - view.getPaddingBottom()) + fuzz) {
@@ -450,7 +447,7 @@ public class PublicShareDialogFragment extends DialogFragment {
     private boolean isPasswordVisible() {
         return (getView() != null) &&
                 ((mPasswordValueEdit.getInputType() & InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD)
-                    == InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                        == InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
     }
 
     private void hidePasswordButton() {
@@ -462,9 +459,9 @@ public class PublicShareDialogFragment extends DialogFragment {
     private void showPassword() {
         if (getView() != null) {
             mPasswordValueEdit.setInputType(
-                            InputType.TYPE_CLASS_TEXT |
-                                    InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD |
-                                    InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
+                    InputType.TYPE_CLASS_TEXT |
+                            InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD |
+                            InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
             showViewPasswordButton();
         }
     }
@@ -472,9 +469,9 @@ public class PublicShareDialogFragment extends DialogFragment {
     private void hidePassword() {
         if (getView() != null) {
             mPasswordValueEdit.setInputType(
-                            InputType.TYPE_CLASS_TEXT |
-                                    InputType.TYPE_TEXT_VARIATION_PASSWORD |
-                                    InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
+                    InputType.TYPE_CLASS_TEXT |
+                            InputType.TYPE_TEXT_VARIATION_PASSWORD |
+                            InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
             showViewPasswordButton();
         }
     }
@@ -576,7 +573,7 @@ public class PublicShareDialogFragment extends DialogFragment {
     private void initExpirationListener() {
         mOnExpirationDateInteractionListener = new OnExpirationDateInteractionListener();
         mExpirationDateSwitch.setOnCheckedChangeListener(mOnExpirationDateInteractionListener);
-        mExpirationDateLabel. setOnClickListener(mOnExpirationDateInteractionListener);
+        mExpirationDateLabel.setOnClickListener(mOnExpirationDateInteractionListener);
         mExpirationDateValueLabel.setOnClickListener(mOnExpirationDateInteractionListener);
     }
 

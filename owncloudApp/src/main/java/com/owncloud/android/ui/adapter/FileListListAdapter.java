@@ -10,21 +10,20 @@
  * @author Shashvat Kedia
  * Copyright (C) 2011  Bartek Przybylski
  * Copyright (C) 2019 ownCloud GmbH.
- *
+ * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
  * as published by the Free Software Foundation.
- *
+ * <p>
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package com.owncloud.android.ui.adapter;
-
 
 import android.accounts.Account;
 import android.content.Context;
@@ -61,7 +60,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
-
 /**
  * This Adapter populates a ListView with all files and folders in an ownCloud
  * instance.
@@ -92,8 +90,10 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
         mTransferServiceGetter = transferServiceGetter;
 
         // Read sorting order, default to sort by name ascending
-        FileStorageUtils.mSortOrderFileDisp = PreferenceManager.getSortOrder(mContext, FileStorageUtils.FILE_DISPLAY_SORT);
-        FileStorageUtils.mSortAscendingFileDisp = PreferenceManager.getSortAscending(mContext, FileStorageUtils.FILE_DISPLAY_SORT);
+        FileStorageUtils.mSortOrderFileDisp = PreferenceManager.getSortOrder(mContext,
+                FileStorageUtils.FILE_DISPLAY_SORT);
+        FileStorageUtils.mSortAscendingFileDisp = PreferenceManager.getSortAscending(mContext,
+                FileStorageUtils.FILE_DISPLAY_SORT);
 
         // initialise thumbnails cache on background thread
         new ThumbnailsCacheManager.InitDiskCacheTask().execute();
@@ -116,15 +116,17 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
 
     @Override
     public Object getItem(int position) {
-        if (mFiles == null || mFiles.size() <= position)
+        if (mFiles == null || mFiles.size() <= position) {
             return null;
+        }
         return mFiles.get(position);
     }
 
     @Override
     public long getItemId(int position) {
-        if (mFiles == null || mFiles.size() <= position)
+        if (mFiles == null || mFiles.size() <= position) {
             return 0;
+        }
         return mFiles.get(position).getFileId();
     }
 
@@ -201,10 +203,8 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
                     TextView fileSizeSeparatorV = view.findViewById(R.id.file_separator);
                     TextView lastModV = view.findViewById(R.id.last_mod);
 
-
                     lastModV.setVisibility(View.VISIBLE);
                     lastModV.setText(DisplayUtils.getRelativeTimestamp(mContext, file.getModificationTimestamp()));
-
 
                     fileSizeSeparatorV.setVisibility(View.VISIBLE);
                     fileSizeV.setVisibility(View.VISIBLE);
@@ -245,7 +245,7 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
             AbsListView parentList = (AbsListView) parent;
             if (parentList.getChoiceMode() != AbsListView.CHOICE_MODE_NONE &&
                     parentList.getCheckedItemCount() > 0
-                    ) {
+            ) {
                 if (parentList.isItemChecked(position)) {
                     view.setBackgroundColor(mContext.getResources().getColor(
                             R.color.selected_item_background));
@@ -299,12 +299,10 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
                                 .getColor(R.color.background_color));
                     }
 
-
                 } else {
                     fileIcon.setImageResource(MimetypeIconUtil.getFileTypeIconId(file.getMimetype(),
                             file.getFileName()));
                 }
-
 
             }
         }
@@ -395,7 +393,8 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
             mFiles = null;
         }
 
-        mFiles = FileStorageUtils.sortFolder(mFiles,FileStorageUtils.mSortOrderFileDisp,FileStorageUtils.mSortAscendingFileDisp);
+        mFiles = FileStorageUtils.sortFolder(mFiles, FileStorageUtils.mSortOrderFileDisp,
+                FileStorageUtils.mSortAscendingFileDisp);
         notifyDataSetChanged();
     }
 
@@ -417,7 +416,6 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
         return ret;
     }
 
-
     public void setSortOrder(Integer order, boolean ascending) {
 
         PreferenceManager.setSortOrder(order, mContext, FileStorageUtils.FILE_DISPLAY_SORT);
@@ -426,7 +424,8 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
         FileStorageUtils.mSortOrderFileDisp = order;
         FileStorageUtils.mSortAscendingFileDisp = ascending;
 
-        mFiles = FileStorageUtils.sortFolder(mFiles,FileStorageUtils.mSortOrderFileDisp,FileStorageUtils.mSortAscendingFileDisp);
+        mFiles = FileStorageUtils.sortFolder(mFiles, FileStorageUtils.mSortOrderFileDisp,
+                FileStorageUtils.mSortAscendingFileDisp);
         notifyDataSetChanged();
     }
 

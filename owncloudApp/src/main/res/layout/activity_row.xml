@@ -16,32 +16,32 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 
-<LinearLayout 	xmlns:android="http://schemas.android.com/apk/res/android"
-    			android:id="@+id/list_item"
-				android:layout_width="match_parent"
-				android:layout_height="48dp"
-				android:paddingStart="16dip"
-				android:paddingEnd="16dip"
-				android:paddingRight="16dip"
-				android:paddingLeft="16dip"
-				android:minWidth="196dip"
-				android:background="?android:attr/activatedBackgroundIndicator"
-				android:orientation="vertical"
-				android:filterTouchesWhenObscured="true">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/list_item"
+    android:layout_width="match_parent"
+    android:layout_height="48dp"
+    android:paddingStart="16dip"
+    android:paddingEnd="16dip"
+    android:paddingRight="16dip"
+    android:paddingLeft="16dip"
+    android:minWidth="196dip"
+    android:background="?android:attr/activatedBackgroundIndicator"
+    android:orientation="vertical"
+    android:filterTouchesWhenObscured="true">
 
-	<LinearLayout
-		android:layout_width="wrap_content"
-		android:layout_height="match_parent"
-		android:duplicateParentState="true" >
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:duplicateParentState="true">
 
-		<ImageView
-			android:id="@+id/icon"
-			android:layout_width="40dip"
-			android:layout_height="40dip"
-			android:layout_gravity="center_vertical"
-			android:layout_marginEnd="8dip"
-			android:layout_marginRight="8dip"
-			android:duplicateParentState="true" />
+        <ImageView
+            android:id="@+id/icon"
+            android:layout_width="40dip"
+            android:layout_height="40dip"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="8dip"
+            android:layout_marginRight="8dip"
+            android:duplicateParentState="true" />
 
         <TextView
             android:id="@+id/title"

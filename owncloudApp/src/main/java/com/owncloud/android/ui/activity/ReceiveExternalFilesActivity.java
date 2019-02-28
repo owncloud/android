@@ -41,13 +41,6 @@ import android.content.res.Resources.NotFoundException;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
-import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
-import androidx.fragment.app.FragmentManager;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AlertDialog.Builder;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Menu;
@@ -62,6 +55,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AlertDialog.Builder;
+import androidx.fragment.app.FragmentManager;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountAuthenticator;
@@ -94,7 +94,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Stack;
 import java.util.Vector;
-
 
 /**
  * This can be used to upload things to an ownCloud instance.
@@ -345,11 +344,14 @@ public class ReceiveExternalFilesActivity extends FileActivity
         Vector<OCFile> tmpfiles = getStorageManager().getFolderContent(mFile /*, false*/);
         tmpfiles = sortFileList(tmpfiles);
 
-        if (tmpfiles.size() <= 0) return;
+        if (tmpfiles.size() <= 0) {
+            return;
+        }
         // filter on dirtype
         Vector<OCFile> files = new Vector<>();
-        for (OCFile f : tmpfiles)
+        for (OCFile f : tmpfiles) {
             files.add(f);
+        }
         if (files.size() < position) {
             throw new IndexOutOfBoundsException("Incorrect item selected");
         }
@@ -476,17 +478,20 @@ public class ReceiveExternalFilesActivity extends FileActivity
     private Vector<OCFile> sortFileList(Vector<OCFile> files) {
         // Read sorting order, default to sort by name ascending
         FileStorageUtils.mSortOrderFileDisp = PreferenceManager.getSortOrder(this, FileStorageUtils.FILE_DISPLAY_SORT);
-        FileStorageUtils.mSortAscendingFileDisp = PreferenceManager.getSortAscending(this, FileStorageUtils.FILE_DISPLAY_SORT);
+        FileStorageUtils.mSortAscendingFileDisp = PreferenceManager.getSortAscending(this,
+                FileStorageUtils.FILE_DISPLAY_SORT);
 
-        files = FileStorageUtils.sortFolder(files, FileStorageUtils.mSortOrderFileDisp, FileStorageUtils.mSortAscendingFileDisp);
+        files = FileStorageUtils.sortFolder(files, FileStorageUtils.mSortOrderFileDisp,
+                FileStorageUtils.mSortAscendingFileDisp);
         return files;
     }
 
     private String generatePath(Stack<String> dirs) {
         String full_path = "";
 
-        for (String a : dirs)
+        for (String a : dirs) {
             full_path += a + "/";
+        }
         return full_path;
     }
 
@@ -566,7 +571,6 @@ public class ReceiveExternalFilesActivity extends FileActivity
     public void onRemoteOperationFinish(RemoteOperation operation, RemoteOperationResult result) {
         super.onRemoteOperationFinish(operation, result);
 
-
         if (operation instanceof CreateFolderOperation) {
             onCreateFolderOperationFinish((CreateFolderOperation) operation, result);
         }
@@ -596,7 +600,6 @@ public class ReceiveExternalFilesActivity extends FileActivity
         }
     }
 
-
     /**
      * Loads the target folder initialize shown to the user.
      * <p/>
@@ -615,8 +618,9 @@ public class ReceiveExternalFilesActivity extends FileActivity
         } else {
             String[] dir_names = lastPath.split("/");
             mParents.clear();
-            for (String dir : dir_names)
+            for (String dir : dir_names) {
                 mParents.add(dir);
+            }
         }
         //Make sure that path still exists, if it doesn't pop the stack and try the previous path
         while (!getStorageManager().fileExists(generatePath(mParents)) && mParents.size() > 1) {
@@ -968,8 +972,9 @@ public class ReceiveExternalFilesActivity extends FileActivity
         if (fileName == null) {
             // Show soft keyboard
             Window window = alertDialog.getWindow();
-            if (window != null)
+            if (window != null) {
                 window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+            }
         }
     }
 

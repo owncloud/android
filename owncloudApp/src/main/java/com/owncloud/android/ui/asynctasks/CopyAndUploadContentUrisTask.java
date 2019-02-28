@@ -1,24 +1,23 @@
 /**
- *   ownCloud Android client application
+ * ownCloud Android client application
  *
- *   @author masensio
- *   @author Juan Carlos González Cabrero
- *   @author David A. Velasco
- *   @author Christian Schabesberger
- *   Copyright (C) 2019 ownCloud GmbH.
- *
- *   This program is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License version 2,
- *   as published by the Free Software Foundation.
- *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
- *
- *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * @author masensio
+ * @author Juan Carlos González Cabrero
+ * @author David A. Velasco
+ * @author Christian Schabesberger
+ * Copyright (C) 2019 ownCloud GmbH.
+ * <p>
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
+ * <p>
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package com.owncloud.android.ui.asynctasks;
 
@@ -68,29 +67,30 @@ public class CopyAndUploadContentUrisTask extends AsyncTask<Object, Void, Result
      * But we really, really, really want that the files are copied to temporary files in the OC folder and then
      * uploaded, even if the user gets bored of waiting while the copy finishes. And we can't forward the job to
      * another {@link Context}, because if any of the content:// URIs is constrained by a TEMPORARY READ PERMISSION,
-     * trying to open it will fail with a {@link SecurityException} after the user leaves the ReceiveExternalFilesActivity Activity. We
+     * trying to open it will fail with a {@link SecurityException} after the user leaves the
+     *                                                     ReceiveExternalFilesActivity Activity. We
      * really tried it.
      *
      * So we are doomed to leak here for the best interest of the user. Please, don't do similar in other places.
      *
      * Any idea to prevent this while keeping the functionality will be welcome.
      *
-     * @return  Correct array of parameters to be passed to {@link #execute(Object[])}
+     * @return Correct array of parameters to be passed to {@link #execute(Object[])}
      */
     public static Object[] makeParamsToExecute(
-        Account account,
-        Uri[] sourceUris,
-        String[] remotePaths,
-        int behaviour,
-        ContentResolver contentResolver
+            Account account,
+            Uri[] sourceUris,
+            String[] remotePaths,
+            int behaviour,
+            ContentResolver contentResolver
     ) {
 
-        return new Object[] {
-            account,
-            sourceUris,
-            remotePaths,
-            new Integer(behaviour),
-            contentResolver
+        return new Object[]{
+                account,
+                sourceUris,
+                remotePaths,
+                new Integer(behaviour),
+                contentResolver
         };
     }
 
@@ -108,10 +108,9 @@ public class CopyAndUploadContentUrisTask extends AsyncTask<Object, Void, Result
      */
     private final Context mAppContext;
 
-
     public CopyAndUploadContentUrisTask(
-        OnCopyTmpFilesTaskListener listener,
-        Context context
+            OnCopyTmpFilesTaskListener listener,
+            Context context
     ) {
         mListener = new WeakReference<>(listener);
         mAppContext = context.getApplicationContext();
@@ -162,11 +161,11 @@ public class CopyAndUploadContentUrisTask extends AsyncTask<Object, Void, Result
                 }
 
                 requestUpload(
-                    account,
-                    fullTempPath,
-                    currentRemotePath,
-                    behaviour,
-                    leakedContentResolver.getType(currentUri)
+                        account,
+                        fullTempPath,
+                        currentRemotePath,
+                        behaviour,
+                        leakedContentResolver.getType(currentUri)
                 );
                 fullTempPath = null;
             }
@@ -189,7 +188,7 @@ public class CopyAndUploadContentUrisTask extends AsyncTask<Object, Void, Result
 
         } catch (Exception e) {
             Log_OC.e(TAG, "Exception while copying " + currentUri + " to temporary file", e);
-            result =  ResultCode.LOCAL_STORAGE_NOT_COPIED;
+            result = ResultCode.LOCAL_STORAGE_NOT_COPIED;
 
             // clean
             if (fullTempPath != null) {
@@ -225,21 +224,21 @@ public class CopyAndUploadContentUrisTask extends AsyncTask<Object, Void, Result
     private void requestUpload(Account account, String localPath, String remotePath, int behaviour, String mimeType) {
         TransferRequester requester = new TransferRequester();
         requester.uploadNewFile(
-            mAppContext,
-            account,
-            localPath,
-            remotePath,
-            behaviour,
-            mimeType,
-            false,      // do not create parent folder if not existent
-            UploadFileOperation.CREATED_BY_USER
+                mAppContext,
+                account,
+                localPath,
+                remotePath,
+                behaviour,
+                mimeType,
+                false,      // do not create parent folder if not existent
+                UploadFileOperation.CREATED_BY_USER
         );
     }
 
     @Override
     protected void onPostExecute(ResultCode result) {
         OnCopyTmpFilesTaskListener listener = mListener.get();
-        if (listener!= null) {
+        if (listener != null) {
             listener.onTmpFilesCopied(result);
 
         } else {
@@ -261,8 +260,8 @@ public class CopyAndUploadContentUrisTask extends AsyncTask<Object, Void, Result
                         messageId = R.string.common_error_unknown;
                 }
                 String message = String.format(
-                    mAppContext.getString(messageId),
-                    mAppContext.getString(R.string.app_name)
+                        mAppContext.getString(messageId),
+                        mAppContext.getString(R.string.app_name)
                 );
                 Toast.makeText(mAppContext, message, Toast.LENGTH_LONG).show();
             }

@@ -1,23 +1,22 @@
 /**
- *   ownCloud Android client application
+ * ownCloud Android client application
  *
- *   @author David A. Velasco
- *   @author David González Verdugo
- *   @author Christian Schabesberger
- *   Copyright (C) 2019 ownCloud GmbH.
- *
- *   This program is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License version 2,
- *   as published by the Free Software Foundation.
- *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
- *
- *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * @author David A. Velasco
+ * @author David González Verdugo
+ * @author Christian Schabesberger
+ * Copyright (C) 2019 ownCloud GmbH.
+ * <p>
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
+ * <p>
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package com.owncloud.android.ui.preview;
 
@@ -26,8 +25,6 @@ import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.FragmentStatePagerAdapter;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -37,6 +34,8 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+import androidx.fragment.app.FragmentStatePagerAdapter;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
@@ -56,7 +55,6 @@ import com.owncloud.android.utils.DisplayUtils;
 import com.owncloud.android.utils.PreferenceUtils;
 
 import java.io.File;
-
 
 /**
  * This fragment shows a preview of a downloaded image.
@@ -100,7 +98,7 @@ public class PreviewImageFragment extends FileFragment {
      * @param ignoreFirstSavedState     Flag to work around an unexpected behaviour of
      *                                  {@link FragmentStatePagerAdapter}
      *                                  ; TODO better solution
-     * @return                          Fragment ready to be used.
+     * @return Fragment ready to be used.
      */
     public static PreviewImageFragment newInstance(
             OCFile file,
@@ -115,8 +113,6 @@ public class PreviewImageFragment extends FileFragment {
         frag.setArguments(args);
         return frag;
     }
-
-
 
     /**
      *  Creates an empty fragment for image previews.
@@ -140,13 +136,12 @@ public class PreviewImageFragment extends FileFragment {
         super.onCreate(savedInstanceState);
         Bundle args = getArguments();
         setFile(args.getParcelable(ARG_FILE));
-            // TODO better in super, but needs to check ALL the class extending FileFragment;
-            // not right now
+        // TODO better in super, but needs to check ALL the class extending FileFragment;
+        // not right now
 
         mIgnoreFirstSavedState = args.getBoolean(ARG_IGNORE_FIRST);
         setHasOptionsMenu(true);
     }
-
 
     /**
      * {@inheritDoc}
@@ -165,7 +160,7 @@ public class PreviewImageFragment extends FileFragment {
         mImageView = view.findViewById(R.id.photo_view);
         mImageView.setVisibility(View.GONE);
         mImageView.setOnClickListener(v -> {
-            if(getActivity() != null) {
+            if (getActivity() != null) {
                 ((PreviewImageActivity) getActivity()).toggleFullScreen();
             }
         });
@@ -206,7 +201,6 @@ public class PreviewImageFragment extends FileFragment {
         }
     }
 
-
     /**
      * {@inheritDoc}
      */
@@ -215,7 +209,6 @@ public class PreviewImageFragment extends FileFragment {
         super.onSaveInstanceState(outState);
         outState.putParcelable(PreviewImageFragment.EXTRA_FILE, getFile());
     }
-
 
     @Override
     public void onStart() {
@@ -254,10 +247,10 @@ public class PreviewImageFragment extends FileFragment {
             setFile(mContainerActivity.getStorageManager().getFileById(getFile().getFileId()));
 
             FileMenuFilter mf = new FileMenuFilter(
-                getFile(),
-                mContainerActivity.getStorageManager().getAccount(),
-                mContainerActivity,
-                getActivity()
+                    getFile(),
+                    mContainerActivity.getStorageManager().getAccount(),
+                    mContainerActivity,
+                    getActivity()
             );
             mf.filter(menu, false, false);
         }
@@ -294,7 +287,6 @@ public class PreviewImageFragment extends FileFragment {
 
     }
 
-
     /**
      * {@inheritDoc}
      */
@@ -326,11 +318,11 @@ public class PreviewImageFragment extends FileFragment {
                 mContainerActivity.getFileOperationsHelper().syncFile(getFile());
                 return true;
             }
-            case R.id.action_set_available_offline:{
+            case R.id.action_set_available_offline: {
                 mContainerActivity.getFileOperationsHelper().toggleAvailableOffline(getFile(), true);
                 return true;
             }
-            case R.id.action_unset_available_offline:{
+            case R.id.action_unset_available_offline: {
                 mContainerActivity.getFileOperationsHelper().toggleAvailableOffline(getFile(), false);
                 return true;
             }
@@ -338,7 +330,6 @@ public class PreviewImageFragment extends FileFragment {
                 return super.onOptionsItemSelected(item);
         }
     }
-
 
     private void seeDetails() {
         mContainerActivity.showDetails(getFile());
@@ -349,13 +340,12 @@ public class PreviewImageFragment extends FileFragment {
         if (mBitmap != null) {
             mBitmap.recycle();
             System.gc();
-                // putting this in onStop() is just the same; the fragment is always destroyed by
-                // {@link FragmentStatePagerAdapter} when the fragment in swiped further than the
-                // valid offscreen distance, and onStop() is never called before than that
+            // putting this in onStop() is just the same; the fragment is always destroyed by
+            // {@link FragmentStatePagerAdapter} when the fragment in swiped further than the
+            // valid offscreen distance, and onStop() is never called before than that
         }
         super.onDestroy();
     }
-
 
     /**
      * Opens the previewed image with an external application.
@@ -364,7 +354,6 @@ public class PreviewImageFragment extends FileFragment {
         mContainerActivity.getFileOperationsHelper().openFile(getFile());
         finish();
     }
-
 
     @Override
     public void onTransferServiceConnected() {

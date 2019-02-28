@@ -8,10 +8,10 @@ import android.accounts.OperationCanceledException;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
+import androidx.appcompat.app.AppCompatActivity;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.FileDataStorageManager;
@@ -56,7 +56,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     private FileDataStorageManager mStorageManager = null;
 
     @Override
-    protected void onNewIntent (Intent intent) {
+    protected void onNewIntent(Intent intent) {
         Log_OC.v(TAG, "onNewIntent() start");
         Account current = AccountUtils.getCurrentOwnCloudAccount(this);
         if (current != null && mCurrentAccount != null && !mCurrentAccount.name.equals(current.name)) {
@@ -66,8 +66,8 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     /**
-     *  Since ownCloud {@link Account}s can be managed from the system setting menu, the existence of the {@link
-     *  Account} associated to the instance must be checked every time it is restarted.
+     * Since ownCloud {@link Account}s can be managed from the system setting menu, the existence of the {@link
+     * Account} associated to the instance must be checked every time it is restarted.
      */
     @Override
     protected void onRestart() {
@@ -133,8 +133,8 @@ public abstract class BaseActivity extends AppCompatActivity {
     /**
      * Launches the account creation activity.
      *
-     * @param mandatoryCreation     When 'true', if an account is not created by the user, the app will be closed.
-     *                              To use when no ownCloud account is available.
+     * @param mandatoryCreation When 'true', if an account is not created by the user, the app will be closed.
+     *                          To use when no ownCloud account is available.
      */
     protected void createAccount(boolean mandatoryCreation) {
         AccountManager am = AccountManager.get(getApplicationContext());
@@ -149,7 +149,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     /**
      * Called when the ownCloud {@link Account} associated to the Activity was just updated.
-     *
+     * <p>
      * Child classes must grant that state depending on the {@link Account} is updated.
      */
     protected void onAccountSet(boolean stateWasRecovered) {
@@ -226,7 +226,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         /**
          * Constuctor
          *
-         * @param mandatoryCreation     When 'true', if an account was not created, the app is closed.
+         * @param mandatoryCreation When 'true', if an account was not created, the app is closed.
          */
         public AccountCreationCallback(boolean mandatoryCreation) {
             mMandatoryCreation = mandatoryCreation;

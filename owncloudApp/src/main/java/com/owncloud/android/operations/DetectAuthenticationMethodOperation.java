@@ -4,16 +4,16 @@
  * @author David A. Velasco
  * @author David González Verdugo
  * Copyright (C) 2019 ownCloud GmbH.
- *
+ * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
  * as published by the Free Software Foundation.
- *
+ * <p>
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -81,7 +81,7 @@ public class DetectAuthenticationMethodOperation extends RemoteOperation<List<Au
         // Step 2: look for authentication methods
         if (resultFromExistenceCheck.getHttpCode() == HttpConstants.HTTP_UNAUTHORIZED) {
             ArrayList<String> authHeaders = resultFromExistenceCheck.getAuthenticateHeaders();
-            for (String authHeader: authHeaders) {
+            for (String authHeader : authHeaders) {
                 if (authHeader.startsWith("basic")) {
                     allAvailableAuthMethods.add(AuthenticationMethod.BASIC_HTTP_AUTH);
                 } else if (authHeader.startsWith("bearer")) {
@@ -95,17 +95,18 @@ public class DetectAuthenticationMethodOperation extends RemoteOperation<List<Au
         }
 
         // Step 3: prepare result with available authentication methods
-        RemoteOperationResult<List<AuthenticationMethod>> result = new RemoteOperationResult<>(resultFromExistenceCheck);
+        RemoteOperationResult<List<AuthenticationMethod>> result =
+                new RemoteOperationResult<>(resultFromExistenceCheck);
 
         if (allAvailableAuthMethods.isEmpty()) {
             Log_OC.d(TAG, "Authentication method not found: ");
         } else {
             Log_OC.d(TAG, "Authentication methods found:");
-            for (AuthenticationMethod authMetod: allAvailableAuthMethods) {
+            for (AuthenticationMethod authMetod : allAvailableAuthMethods) {
                 Log_OC.d(TAG, " " + authenticationMethodToString(authMetod));
             }
 
-            result = new RemoteOperationResult<>(result.getHttpCode(), result.getHttpPhrase(),null);
+            result = new RemoteOperationResult<>(result.getHttpCode(), result.getHttpPhrase(), null);
             result.setSuccess(true);
         }
 
