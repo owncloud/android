@@ -37,7 +37,10 @@
   <string name="prefs_passcode">Código de bloqueo</string>
   <string name="prefs_fingerprint">Bloqueo de huella digital</string>
   <string name="prefs_fingerprint_summary">Habilitar código de acceso o bloqueo de patrón para habilitar esta opción</string>
+  <string name="prefs_touches_with_other_visible_windows">Toques con otras ventanas visibles.</string>
+  <string name="prefs_touches_with_other_visible_windows_summary">Permite los toques  cuando la vista está oculta por otra ventana visible. Habilítelo para utilizar aplicaciones de filtrado de luz.</string>
   <string name="confirmation_touches_with_other_windows_title">¿Está seguro que desea habilitar esta función?</string>
+  <string name="confirmation_touches_with_other_windows_message">Utilice esta función bajo su propia responsabilidad, una aplicación malintencionada podría intentar engañarlo para que realice algunas acciones, sin darse cuenta, usando otras pantallas.</string>
   <string name="prefs_camera_picture_upload">Cargas de imágenes</string>
   <string name="prefs_camera_picture_upload_summary">Carga automáticamente las fotos tomadas por cámara</string>
   <string name="prefs_camera_video_upload">Cargas de videos</string>
