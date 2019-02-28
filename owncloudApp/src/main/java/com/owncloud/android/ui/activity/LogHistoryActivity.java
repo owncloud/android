@@ -33,6 +33,13 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
+import androidx.appcompat.widget.SearchView;
+import androidx.core.content.FileProvider;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.snackbar.Snackbar;
 import com.owncloud.android.R;
 import com.owncloud.android.lib.common.utils.Log_OC;
