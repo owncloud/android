@@ -32,7 +32,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:indeterminate="true"
-        android:indeterminateOnly="false"/>
+        android:indeterminateOnly="false" />
 
     <TextView
         android:id="@+id/loadingText"

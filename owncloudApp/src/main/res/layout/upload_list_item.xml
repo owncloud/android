@@ -22,7 +22,7 @@
             android:layout_height="@dimen/file_icon_size"
             android:layout_gravity="center"
             android:src="@drawable/ic_menu_archive" />
-  
+
     </FrameLayout>
 
     <LinearLayout
@@ -31,7 +31,7 @@
         android:layout_weight="1"
         android:gravity="center_vertical"
         android:layout_gravity="center_vertical"
-        android:orientation="vertical" >
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/upload_name"
@@ -44,10 +44,10 @@
             android:text="@string/placeholder_filename"
             android:textSize="16sp" />
 
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
             <TextView
                 android:id="@+id/upload_file_size"
                 android:layout_width="wrap_content"
@@ -57,7 +57,8 @@
                 android:ellipsize="middle"
                 android:singleLine="true"
                 android:text="@string/placeholder_filesize"
-                android:textSize="12sp"/>
+                android:textSize="12sp" />
+
             <TextView
                 android:id="@+id/upload_date"
                 android:layout_width="wrap_content"
@@ -66,14 +67,15 @@
                 android:layout_marginStart="4dp"
                 android:layout_marginEnd="4dp"
                 android:text="@string/placeholder_timestamp"
-                android:textSize="12sp"/>
+                android:textSize="12sp" />
+
             <TextView
                 android:id="@+id/upload_status"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/list_item_lastmod_and_filesize_text"
                 android:text="@string/uploads_view_upload_status_succeeded"
-                android:textSize="12sp"/>
+                android:textSize="12sp" />
 
         </LinearLayout>
 
@@ -82,7 +84,7 @@
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/upload_account"
@@ -91,7 +93,7 @@
             android:textColor="@color/list_item_lastmod_and_filesize_text"
             android:singleLine="true"
             android:text="@string/auth_username"
-            android:textSize="12dip"/>
+            android:textSize="12dip" />
 
         <TextView
             android:id="@+id/upload_remote_path"
@@ -101,11 +103,10 @@
             android:ellipsize="middle"
             android:singleLine="true"
             android:text="@string/camera_upload_path"
-            android:textSize="12dip"/>
+            android:textSize="12dip" />
 
     </LinearLayout>
 
-    
     <FrameLayout
         android:layout_width="56dp"
         android:layout_height="72dp"
@@ -113,7 +114,7 @@
         android:focusableInTouchMode="false"
         android:layout_gravity="center_vertical"
         android:paddingLeft="8dp"
-     >
+        >
 
         <ImageButton
             android:id="@+id/upload_right_button"
@@ -121,9 +122,8 @@
             android:layout_height="35dp"
             android:layout_gravity="center"
             android:background="@android:color/transparent"
-     />
+            />
 
-	</FrameLayout>
-    
-    
+    </FrameLayout>
+
 </LinearLayout>

@@ -1,22 +1,22 @@
 /**
- *   ownCloud Android client application
+ * ownCloud Android client application
+ * <p>
+ * Copyright (C) 2019 ownCloud GmbH.
  *
- *   Copyright (C) 2019 ownCloud GmbH.
- *   @author Jesús Recio (@jesmrec)
- *   @author Christian Schabesberger
- *
- *   This program is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License version 2,
- *   as published by the Free Software Foundation.
- *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
- *
- *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * @author Jesús Recio (@jesmrec)
+ * @author Christian Schabesberger
+ * <p>
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
+ * <p>
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package com.owncloud.android.authentication;
@@ -29,17 +29,16 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.os.SystemClock;
+
 import androidx.test.InstrumentationRegistry;
 import androidx.test.espresso.web.webdriver.Locator;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
 import androidx.test.rule.ActivityTestRule;
-import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.uiautomator.UiDevice;
-
 import com.owncloud.android.R;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.utils.AccountsManager;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
@@ -64,7 +63,6 @@ import static androidx.test.espresso.web.webdriver.DriverAtoms.webClick;
 import static androidx.test.espresso.web.webdriver.DriverAtoms.webKeys;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertTrue;
-
 
 @RunWith(AndroidJUnit4.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
@@ -104,7 +102,7 @@ public class SAMLAuthenticatorActivityTest {
 
         private final int status;
 
-        ServerType (int status) {
+        ServerType(int status) {
             this.status = status;
         }
 
@@ -173,7 +171,6 @@ public class SAMLAuthenticatorActivityTest {
         }
     }
 
-
     /**
      *  Login with SAML. Supported with non-secured servers under https
      */
@@ -217,9 +214,9 @@ public class SAMLAuthenticatorActivityTest {
 
         // Check that the Activity ends after clicking
         SystemClock.sleep(WAIT_LOGIN_MS);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
             assertTrue(ERROR_MESSAGE, mActivityRule.getActivity().isDestroyed());
-        else {
+        } else {
             Field f = Activity.class.getDeclaredField(RESULT_CODE);
             f.setAccessible(true);
             int mResultCode = f.getInt(mActivityRule.getActivity());
@@ -271,9 +268,9 @@ public class SAMLAuthenticatorActivityTest {
 
         // Check that the Activity ends after clicking
         SystemClock.sleep(WAIT_LOGIN_MS);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
             assertTrue(ERROR_MESSAGE, mActivityRule.getActivity().isDestroyed());
-        else {
+        } else {
             Field f = Activity.class.getDeclaredField(RESULT_CODE);
             f.setAccessible(true);
             int mResultCode = f.getInt(mActivityRule.getActivity());

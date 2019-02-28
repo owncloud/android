@@ -1,26 +1,23 @@
 /**
- *   ownCloud Android client application
+ * ownCloud Android client application
  *
- *   @author David A. Velasco
- *   Copyright (C) 2017 ownCloud GmbH.
- *
- *   This program is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License version 2,
- *   as published by the Free Software Foundation.
- *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
- *
- *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * @author David A. Velasco
+ * Copyright (C) 2017 ownCloud GmbH.
+ * <p>
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
+ * <p>
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package com.owncloud.android.authentication;
-
-import java.lang.ref.WeakReference;
 
 import android.content.Context;
 import android.os.Handler;
@@ -29,23 +26,23 @@ import android.webkit.CookieManager;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import java.lang.ref.WeakReference;
 
 /**
  * Custom {@link WebViewClient} client aimed to catch the end of a single-sign-on process 
  * running in the {@link WebView} that is attached to.
- * 
+ *
  * Assumes that the single-sign-on is kept thanks to a cookie set at the end of the
  * authentication process.
  */
 public class SAMLWebViewClient extends BaseWebViewClient {
-        
+
     public interface SsoWebViewClientListener {
         void onSsoFinished(String sessionCookie);
     }
-    
+
     private WeakReference<SsoWebViewClientListener> mListenerRef;
 
-    
     public SAMLWebViewClient(Context context, Handler listenerHandler, SsoWebViewClientListener listener) {
         super(context, listenerHandler);
         mListenerRef = new WeakReference<>(listener);

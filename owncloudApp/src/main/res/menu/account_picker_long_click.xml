@@ -17,7 +17,11 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
-<menu xmlns:android="http://schemas.android.com/apk/res/android" >
-    <item android:id="@+id/change_password" android:title="@string/change_password"></item>
-    <item android:id="@+id/delete_account" android:title="@string/delete_account"></item>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/change_password"
+        android:title="@string/change_password"></item>
+    <item
+        android:id="@+id/delete_account"
+        android:title="@string/delete_account"></item>
 </menu>

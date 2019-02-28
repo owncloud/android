@@ -88,8 +88,9 @@ public class LocalFileListAdapter extends BaseAdapter implements ListAdapter {
 
     @Override
     public Object getItem(int position) {
-        if (mFiles == null || mFiles.length <= position)
+        if (mFiles == null || mFiles.length <= position) {
             return null;
+        }
         return mFiles[position];
     }
 
@@ -216,8 +217,8 @@ public class LocalFileListAdapter extends BaseAdapter implements ListAdapter {
         checkedFiles.remove(file);
     }
 
-    public boolean isAlreadyChecked(File file){
-        if(checkedFiles.contains(file)){
+    public boolean isAlreadyChecked(File file) {
+        if (checkedFiles.contains(file)) {
             return true;
         }
         return false;
@@ -294,11 +295,11 @@ public class LocalFileListAdapter extends BaseAdapter implements ListAdapter {
                 }
 
             });
-            if(mFiles.length > 0) {
+            if (mFiles.length > 0) {
                 mFiles = transformVecOCFilesToFilesArr(
                         FileStorageUtils.sortFolder(transformFilesArrToVecOCFiles(mFiles),
-                        FileStorageUtils.mSortOrderUpload,
-                        FileStorageUtils.mSortAscendingUpload)
+                                FileStorageUtils.mSortOrderUpload,
+                                FileStorageUtils.mSortAscendingUpload)
                 );
             }
         }
@@ -314,8 +315,8 @@ public class LocalFileListAdapter extends BaseAdapter implements ListAdapter {
         if (mFiles != null && mFiles.length > 0) {
             mFiles = transformVecOCFilesToFilesArr(
                     FileStorageUtils.sortFolder(transformFilesArrToVecOCFiles(mFiles),
-                    FileStorageUtils.mSortOrderUpload,
-                    FileStorageUtils.mSortAscendingUpload)
+                            FileStorageUtils.mSortOrderUpload,
+                            FileStorageUtils.mSortAscendingUpload)
             );
             if (parentList != null) {
                 for (int i = 0; i < mFiles.length; i++) {
@@ -326,9 +327,9 @@ public class LocalFileListAdapter extends BaseAdapter implements ListAdapter {
         }
     }
 
-    public int getNoOfFilesInDir(){
+    public int getNoOfFilesInDir() {
         int count = 0;
-        if(mFiles != null) {
+        if (mFiles != null) {
             for (int i = 0; i < mFiles.length; i++) {
                 if (!mFiles[i].isDirectory()) {
                     count++;
@@ -338,10 +339,10 @@ public class LocalFileListAdapter extends BaseAdapter implements ListAdapter {
         return count;
     }
 
-    private Vector<OCFile> transformFilesArrToVecOCFiles(File[] files){
+    private Vector<OCFile> transformFilesArrToVecOCFiles(File[] files) {
         Vector<OCFile> transformedFiles = new Vector<OCFile>();
         OCFile transformedFile = null;
-        for(int i=0;i<files.length;i++){
+        for (int i = 0; i < files.length; i++) {
             transformedFile = new OCFile(files[i].getAbsolutePath());
             transformedFile.setModificationTimestamp(files[i].lastModified());
             transformedFile.setFileLength(files[i].length());
@@ -351,9 +352,9 @@ public class LocalFileListAdapter extends BaseAdapter implements ListAdapter {
         return transformedFiles;
     }
 
-    private File[] transformVecOCFilesToFilesArr(Vector<OCFile> files){
+    private File[] transformVecOCFilesToFilesArr(Vector<OCFile> files) {
         File[] transformedFiles = new File[files.size()];
-        for(int i=0;i<files.size();i++){
+        for (int i = 0; i < files.size(); i++) {
             transformedFiles[i] = new File(files.get(i).getRemotePath());
         }
         return transformedFiles;

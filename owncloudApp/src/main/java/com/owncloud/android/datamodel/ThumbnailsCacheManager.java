@@ -1,23 +1,22 @@
 /**
- *   ownCloud Android client application
+ * ownCloud Android client application
  *
- *   @author Tobias Kaminsky
- *   @author David A. Velasco
- *   @author Christian Schabesberger
- *   Copyright (C) 2019 ownCloud GmbH.
- *
- *   This program is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License version 2,
- *   as published by the Free Software Foundation.
- *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
- *
- *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * @author Tobias Kaminsky
+ * @author David A. Velasco
+ * @author Christian Schabesberger
+ * Copyright (C) 2019 ownCloud GmbH.
+ * <p>
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
+ * <p>
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package com.owncloud.android.datamodel;
@@ -33,10 +32,10 @@ import android.graphics.drawable.Drawable;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.AsyncTask;
-import androidx.core.content.ContextCompat;
 import android.view.MenuItem;
 import android.widget.ImageView;
 
+import androidx.core.content.ContextCompat;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
@@ -60,26 +59,25 @@ import java.net.URL;
  * Manager for concurrent access to thumbnails cache.
  */
 public class ThumbnailsCacheManager {
-    
+
     private static final String TAG = ThumbnailsCacheManager.class.getSimpleName();
-    
+
     private static final String CACHE_FOLDER = "thumbnailCache";
 
     private static final Object mThumbnailsDiskCacheLock = new Object();
     private static DiskLruImageCache mThumbnailCache = null;
     private static boolean mThumbnailCacheStarting = true;
-    
+
     private static final int DISK_CACHE_SIZE = 1024 * 1024 * 10; // 10MB
     private static final CompressFormat mCompressFormat = CompressFormat.JPEG;
     private static final int mCompressQuality = 70;
     private static OwnCloudClient mClient = null;
 
-    public static Bitmap mDefaultImg = 
+    public static Bitmap mDefaultImg =
             BitmapFactory.decodeResource(
                     MainApp.getAppContext().getResources(),
                     R.drawable.file_image
             );
-
 
     public static class InitDiskCacheTask extends AsyncTask<File, Void, Void> {
 
@@ -92,15 +90,15 @@ public class ThumbnailsCacheManager {
                     try {
                         // Check if media is mounted or storage is built-in, if so, 
                         // try and use external cache dir; otherwise use internal cache dir
-                        final String cachePath = 
+                        final String cachePath =
                                 MainApp.getAppContext().getExternalCacheDir().getPath() +
-                                File.separator + CACHE_FOLDER;
+                                        File.separator + CACHE_FOLDER;
                         Log_OC.d(TAG, "create dir: " + cachePath);
                         final File diskCacheDir = new File(cachePath);
                         mThumbnailCache = new DiskLruImageCache(
-                                diskCacheDir, 
-                                DISK_CACHE_SIZE, 
-                                mCompressFormat, 
+                                diskCacheDir,
+                                DISK_CACHE_SIZE,
+                                mCompressFormat,
                                 mCompressQuality
                         );
                     } catch (Exception e) {
@@ -114,8 +112,7 @@ public class ThumbnailsCacheManager {
             return null;
         }
     }
-    
-    
+
     public static void addBitmapToCache(String key, Bitmap bitmap) {
         synchronized (mThumbnailsDiskCacheLock) {
             if (mThumbnailCache != null) {
@@ -131,7 +128,6 @@ public class ThumbnailsCacheManager {
             }
         }
     }
-
 
     public static Bitmap getBitmapFromDiskCache(String key) {
         synchronized (mThumbnailsDiskCacheLock) {
@@ -156,13 +152,13 @@ public class ThumbnailsCacheManager {
         private Object mFile;
         private FileDataStorageManager mStorageManager;
 
-
         public ThumbnailGenerationTask(ImageView imageView, FileDataStorageManager storageManager,
                                        Account account) {
             // Use a WeakReference to ensure the ImageView can be garbage collected
             mImageViewReference = new WeakReference<>(imageView);
-            if (storageManager == null)
+            if (storageManager == null) {
                 throw new IllegalArgumentException("storageManager must not be NULL");
+            }
             mStorageManager = storageManager;
             mAccount = account;
         }
@@ -187,34 +183,34 @@ public class ThumbnailsCacheManager {
                 }
 
                 mFile = params[0];
-                
+
                 if (mFile instanceof OCFile) {
                     thumbnail = doOCFileInBackground();
-                }  else if (mFile instanceof File) {
+                } else if (mFile instanceof File) {
                     thumbnail = doFileInBackground();
-                //} else {  do nothing
+                    //} else {  do nothing
                 }
 
-                }catch(Throwable t){
-                    // the app should never break due to a problem with thumbnails
-                    Log_OC.e(TAG, "Generation of thumbnail for " + mFile + " failed", t);
-                    if (t instanceof OutOfMemoryError) {
-                        System.gc();
-                    }
+            } catch (Throwable t) {
+                // the app should never break due to a problem with thumbnails
+                Log_OC.e(TAG, "Generation of thumbnail for " + mFile + " failed", t);
+                if (t instanceof OutOfMemoryError) {
+                    System.gc();
                 }
+            }
 
             return thumbnail;
         }
 
-        protected void onPostExecute(Bitmap bitmap){
+        protected void onPostExecute(Bitmap bitmap) {
             if (bitmap != null) {
                 final ImageView imageView = mImageViewReference.get();
                 final ThumbnailGenerationTask bitmapWorkerTask = getBitmapWorkerTask(imageView);
                 if (this == bitmapWorkerTask) {
                     String tagId = "";
-                    if (mFile instanceof OCFile){
-                        tagId = String.valueOf(((OCFile)mFile).getFileId());
-                    } else if (mFile instanceof File){
+                    if (mFile instanceof OCFile) {
+                        tagId = String.valueOf(((OCFile) mFile).getFileId());
+                    } else if (mFile instanceof File) {
                         tagId = String.valueOf(mFile.hashCode());
                     }
                     if (String.valueOf(imageView.getTag()).equals(tagId)) {
@@ -232,12 +228,12 @@ public class ThumbnailsCacheManager {
          * @param px:       thumbnail dp
          * @return Bitmap
          */
-        private Bitmap addThumbnailToCache(String imageKey, Bitmap bitmap, String path, int px){
+        private Bitmap addThumbnailToCache(String imageKey, Bitmap bitmap, String path, int px) {
 
             Bitmap thumbnail = ThumbnailUtils.extractThumbnail(bitmap, px, px);
 
             // Rotate image, obeying exif tag
-            thumbnail = BitmapUtils.rotateImage(thumbnail,path);
+            thumbnail = BitmapUtils.rotateImage(thumbnail, path);
 
             // Add thumbnail to cache
             addBitmapToCache(imageKey, thumbnail);
@@ -249,14 +245,14 @@ public class ThumbnailsCacheManager {
          * Converts size of file icon from dp to pixel
          * @return int
          */
-        private int getThumbnailDimension(){
+        private int getThumbnailDimension() {
             // Converts dp to pixel
             Resources r = MainApp.getAppContext().getResources();
             return Math.round(r.getDimension(R.dimen.file_icon_size_grid));
         }
 
         private Bitmap doOCFileInBackground() {
-            OCFile file = (OCFile)mFile;
+            OCFile file = (OCFile) mFile;
 
             final String imageKey = String.valueOf(file.getRemoteId());
 
@@ -329,7 +325,7 @@ public class ThumbnailsCacheManager {
 
         }
 
-        private Bitmap handlePNG(Bitmap bitmap, int px){
+        private Bitmap handlePNG(Bitmap bitmap, int px) {
             Bitmap resultBitmap = Bitmap.createBitmap(px,
                     px,
                     Bitmap.Config.ARGB_8888);
@@ -342,7 +338,7 @@ public class ThumbnailsCacheManager {
         }
 
         private Bitmap doFileInBackground() {
-            File file = (File)mFile;
+            File file = (File) mFile;
 
             final String imageKey = String.valueOf(file.hashCode());
 
@@ -397,7 +393,7 @@ public class ThumbnailsCacheManager {
          *                          the server. When 'false', server is not accessed, the fallback avatar is
          *                          generated instead. USE WITH CARE, probably to be removed in the future.
          */
-        public GetAvatarTask(ImageView imageView, Account account, float displayRadius, boolean fetchFromServer){
+        public GetAvatarTask(ImageView imageView, Account account, float displayRadius, boolean fetchFromServer) {
             if (account == null) {
                 throw new IllegalArgumentException("Received NULL account");
             }
@@ -442,7 +438,7 @@ public class ThumbnailsCacheManager {
                 mUsername = mAccount.name;
                 thumbnail = doAvatarInBackground();
 
-            } catch(Throwable t){
+            } catch (Throwable t) {
                 // the app should never break due to a problem with avatars
                 Log_OC.e(TAG, "Generation of avatar for " + mUsername + " failed", t);
                 if (t instanceof OutOfMemoryError) {
@@ -463,7 +459,7 @@ public class ThumbnailsCacheManager {
                     } else {
                         // really needed?
                         imageView.setImageResource(
-                            R.drawable.ic_account_circle
+                                R.drawable.ic_account_circle
                         );
                     }
                 }
@@ -475,7 +471,7 @@ public class ThumbnailsCacheManager {
                     } else {
                         // really needed
                         menuItem.setIcon(
-                            R.drawable.ic_account_circle
+                                R.drawable.ic_account_circle
                         );
                     }
                 }
@@ -486,7 +482,7 @@ public class ThumbnailsCacheManager {
          * Converts size of file icon from dp to pixel
          * @return int
          */
-        private int getAvatarDimension(){
+        private int getAvatarDimension() {
             // Converts dp to pixel
             Resources r = MainApp.getAppContext().getResources();
             return Math.round(r.getDimension(R.dimen.file_avatar_size));
@@ -502,9 +498,9 @@ public class ThumbnailsCacheManager {
             Bitmap avatarBitmap = getBitmapFromDiskCache(imageKey);
 
             if (avatarBitmap != null) {
-                avatarDrawable =  BitmapUtils.bitmapToCircularBitmapDrawable(
-                    MainApp.getAppContext().getResources(),
-                    avatarBitmap
+                avatarDrawable = BitmapUtils.bitmapToCircularBitmapDrawable(
+                        MainApp.getAppContext().getResources(),
+                        avatarBitmap
                 );
 
             } else {
@@ -519,7 +515,7 @@ public class ThumbnailsCacheManager {
                             GetMethod get = null;
                             try {
                                 String uri = mClient.getBaseUri() + "" +
-                                    "/index.php/avatar/" + AccountUtils.getUsernameOfAccount(mUsername) + "/" + px;
+                                        "/index.php/avatar/" + AccountUtils.getUsernameOfAccount(mUsername) + "/" + px;
                                 Log_OC.d("Avatar", "URI: " + uri);
                                 get = new GetMethod(new URL(uri));
                                 int status = mClient.executeHttpMethod(get);
@@ -545,8 +541,8 @@ public class ThumbnailsCacheManager {
                 }
                 if (avatarBitmap != null) {
                     avatarDrawable = BitmapUtils.bitmapToCircularBitmapDrawable(
-                        MainApp.getAppContext().getResources(),
-                        avatarBitmap
+                            MainApp.getAppContext().getResources(),
+                            avatarBitmap
                     );
 
                 } else {

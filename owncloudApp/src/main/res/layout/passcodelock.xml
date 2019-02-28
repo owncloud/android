@@ -27,7 +27,6 @@
     android:filterTouchesWhenObscured="true"
     >
 
-
     <TextView
         android:id="@+id/header"
         android:layout_width="wrap_content"
@@ -36,7 +35,7 @@
         android:textColor="@android:color/black"
         android:gravity="center_horizontal"
         android:textSize="16sp"
-         />
+        />
 
     <TextView
         android:id="@+id/explanation"
@@ -46,12 +45,12 @@
         android:textAppearance="@android:style/TextAppearance.Small"
         android:gravity="center_horizontal"
         android:textSize="14sp"
-         />
-    
+        />
+
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal" >
+        android:gravity="center_horizontal">
 
         <EditText
             android:id="@+id/txt0"
@@ -59,7 +58,10 @@
             style="@style/PassCodeStyle"
             android:cursorVisible="true"
             android:imeOptions="flagNoExtractUi"
-            ><requestFocus/></EditText>
+            >
+
+            <requestFocus />
+        </EditText>
 
         <EditText
             android:id="@+id/txt1"

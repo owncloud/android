@@ -16,7 +16,6 @@
  */
 package third_parties.in.srain.cube;
 
-
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.database.DataSetObservable;
@@ -277,7 +276,8 @@ public class GridViewWithHeaderAndFooter extends GridView {
                 if (mNumColumns != -1) {
                     return mNumColumns;
                 }
-                throw new RuntimeException("Can not determine the mNumColumns for this API platform, please call setNumColumns to set it.");
+                throw new RuntimeException("Can not determine the mNumColumns for this API platform, please call " +
+                        "setNumColumns to set it.");
             }
         }
     }
@@ -360,7 +360,8 @@ public class GridViewWithHeaderAndFooter extends GridView {
     @Override
     public void setAdapter(ListAdapter adapter) {
         if (mHeaderViewInfos.size() > 0 || mFooterViewInfos.size() > 0) {
-            HeaderViewGridAdapter headerViewGridAdapter = new HeaderViewGridAdapter(mHeaderViewInfos, mFooterViewInfos, adapter);
+            HeaderViewGridAdapter headerViewGridAdapter = new HeaderViewGridAdapter(mHeaderViewInfos,
+                    mFooterViewInfos, adapter);
             int numColumns = getNumColumnsCompatible();
             if (numColumns > 1) {
                 headerViewGridAdapter.setNumColumns(numColumns);
@@ -438,7 +439,8 @@ public class GridViewWithHeaderAndFooter extends GridView {
         // From Recycle Bin or calling getView, this a question...
         private boolean mCacheFirstHeaderView = false;
 
-        public HeaderViewGridAdapter(ArrayList<FixedViewInfo> headerViewInfos, ArrayList<FixedViewInfo> footViewInfos, ListAdapter adapter) {
+        public HeaderViewGridAdapter(ArrayList<FixedViewInfo> headerViewInfos, ArrayList<FixedViewInfo> footViewInfos
+                , ListAdapter adapter) {
             mAdapter = adapter;
             mIsFilterable = adapter instanceof Filterable;
             if (headerViewInfos == null) {
@@ -732,7 +734,8 @@ public class GridViewWithHeaderAndFooter extends GridView {
                 }
             }
             if (DEBUG) {
-                Log.d(LOG_TAG, String.format("getItemViewType: pos: %s, result: %s", position, type, mCachePlaceHoldView, mCacheFirstHeaderView));
+                Log.d(LOG_TAG, String.format("getItemViewType: pos: %s, result: %s", position, type,
+                        mCachePlaceHoldView, mCacheFirstHeaderView));
             }
             return type;
         }
@@ -792,16 +795,15 @@ public class GridViewWithHeaderAndFooter extends GridView {
         }
     }
 
-
     /**
      * Sets the selected item and positions the selection y pixels from the top edge of the ListView.
      * (If in touch mode, the item will not be selected but it will still be positioned appropriately.)
      *
-     * @param position     Index (starting at 0) of the data item to be selected.
-     * @param y            The distance from the top edge of the ListView (plus padding)
-     *                     that the item will be positioned.
-     *
-     * @see <a href="http://grepcode.com/file/repository.grepcode.com/java/ext/com.google.android/android/4.4_r1/android/widget/ListView.java#ListView.setSelectionFromTop%28int%2Cint%29">Original code</a>
+     * @param position Index (starting at 0) of the data item to be selected.
+     * @param y        The distance from the top edge of the ListView (plus padding)
+     *                 that the item will be positioned.
+     * @see
+     * <a href="http://grepcode.com/file/repository.grepcode.com/java/ext/com.google.android/android/4.4_r1/android/widget/ListView.java#ListView.setSelectionFromTop%28int%2Cint%29">Original code</a>
      */
     public void setSelectionFromTop(int position, int y) {
         if (getAdapter() == null) {

@@ -6,16 +6,16 @@
  * @author masensio
  * @author David González Verdugo
  * Copyright (C) 2017 ownCloud GmbH.
- *
+ * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
  * as published by the Free Software Foundation.
- *
+ * <p>
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -226,7 +226,6 @@ public class UploadsStorageManager extends Observable {
         return returnValue;
     }
 
-
     /**
      * Should be called when some value of this DB was changed. All observers
      * are informed.
@@ -236,7 +235,6 @@ public class UploadsStorageManager extends Observable {
         setChanged();
         notifyObservers();
     }
-
 
     /**
      * Remove an upload from the uploads list, known its target account and remote path.
@@ -258,7 +256,6 @@ public class UploadsStorageManager extends Observable {
         return result;
     }
 
-
     /**
      * Remove an upload from the uploads list, known its target account and remote path.
      *
@@ -278,7 +275,6 @@ public class UploadsStorageManager extends Observable {
         }
         return result;
     }
-
 
     /**
      * Remove all the uploads of a given account from the uploads list.
@@ -339,7 +335,6 @@ public class UploadsStorageManager extends Observable {
 
         return list;
     }
-
 
     private OCUpload createOCUploadFromCursor(Cursor c) {
         OCUpload upload = null;
@@ -526,7 +521,6 @@ public class UploadsStorageManager extends Observable {
                 localPath
         );
     }
-
 
     /**
      * Changes the status of any in progress upload from UploadStatus.UPLOAD_IN_PROGRESS

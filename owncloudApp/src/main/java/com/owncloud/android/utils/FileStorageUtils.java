@@ -37,15 +37,13 @@ import com.owncloud.android.R;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.files.RemoteFile;
+import third_parties.daveKoeller.AlphanumComparator;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Vector;
-
-import third_parties.daveKoeller.AlphanumComparator;
-
 
 /**
  * Static methods to help in access to local file system.

@@ -66,7 +66,7 @@
                 android:layout_height="wrap_content"
                 android:text="Size MB"
                 android:textColor="@color/list_item_lastmod_and_filesize_text"
-                android:textSize="@dimen/two_line_secondary_text_size"/>
+                android:textSize="@dimen/two_line_secondary_text_size" />
 
             <TextView
                 android:id="@+id/file_separator"
@@ -75,7 +75,7 @@
                 android:gravity="right"
                 android:text=", "
                 android:textColor="@color/list_item_lastmod_and_filesize_text"
-                android:textSize="@dimen/two_line_secondary_text_size"/>
+                android:textSize="@dimen/two_line_secondary_text_size" />
 
             <TextView
                 android:id="@+id/last_mod"
@@ -84,7 +84,7 @@
                 android:gravity="right"
                 android:text="Mod Date"
                 android:textColor="@color/list_item_lastmod_and_filesize_text"
-                android:textSize="@dimen/two_line_secondary_text_size"/>
+                android:textSize="@dimen/two_line_secondary_text_size" />
 
         </LinearLayout>
 

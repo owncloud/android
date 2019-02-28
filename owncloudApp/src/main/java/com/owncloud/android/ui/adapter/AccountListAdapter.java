@@ -82,7 +82,6 @@ public class AccountListAdapter extends ArrayAdapter<AccountListItem> {
 
         AccountListItem accountListItem = mValues.get(position);
 
-
         if (accountListItem != null) {
             // create account item
             if (AccountListItem.TYPE_ACCOUNT == accountListItem.getType()) {
@@ -92,25 +91,25 @@ public class AccountListAdapter extends ArrayAdapter<AccountListItem> {
                     viewHolder.nameViewItem.setText(oca.getDisplayName());
                 } catch (Exception e) {
                     Log_OC.w(
-                        TAG,
-                        "Account not found right after being read :\\ ; using account name instead of display name"
+                            TAG,
+                            "Account not found right after being read :\\ ; using account name instead of display name"
                     );
                     viewHolder.nameViewItem.setText(
-                        AccountUtils.getUsernameOfAccount(account.name)
+                            AccountUtils.getUsernameOfAccount(account.name)
                     );
                 }
                 viewHolder.nameViewItem.setTag(account.name);
 
                 viewHolder.accountViewItem.setText(
-                    DisplayUtils.convertIdn(account.name, false)
+                        DisplayUtils.convertIdn(account.name, false)
                 );
 
                 try {
                     DisplayUtils.showAccountAvatar(
-                        account,
-                        viewHolder.imageViewItem,
-                        mAccountAvatarRadiusDimension,
-                        true
+                            account,
+                            viewHolder.imageViewItem,
+                            mAccountAvatarRadiusDimension,
+                            true
                     );
                 } catch (Exception e) {
                     Log_OC.e(TAG, "Error calculating RGB value for account list item.", e);

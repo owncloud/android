@@ -53,24 +53,25 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
+
                 <RadioButton
                     android:id="@+id/shareViaLinkEditPermissionReadOnly"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:checked="true"
-                    android:text="@string/share_via_link_edit_permission_read_only_label"/>
+                    android:text="@string/share_via_link_edit_permission_read_only_label" />
 
                 <RadioButton
                     android:id="@+id/shareViaLinkEditPermissionReadAndWrite"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/share_via_link_edit_permission_read_and_write_label"/>
+                    android:text="@string/share_via_link_edit_permission_read_and_write_label" />
 
                 <RadioButton
                     android:id="@+id/shareViaLinkEditPermissionUploadFiles"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/share_via_link_edit_permission_upload_only_label"/>
+                    android:text="@string/share_via_link_edit_permission_upload_only_label" />
 
             </RadioGroup>
 

@@ -14,7 +14,6 @@
      limitations under the License.
 -->
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/root"
     android:layout_width="match_parent"
@@ -22,12 +21,13 @@
     android:keepScreenOn="true"
     android:background="@color/black">
 
-    <com.google.android.exoplayer2.ui.SimpleExoPlayerView android:id="@+id/video_player"
+    <com.google.android.exoplayer2.ui.SimpleExoPlayerView
+        android:id="@+id/video_player"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:controller_layout_id="@layout/custom_playback_control"/>
+        app:controller_layout_id="@layout/custom_playback_control" />
 
     <!-- last to draw, will be top in Z axis -->
-    <include layout="@layout/top_progress_bar"/>
+    <include layout="@layout/top_progress_bar" />
 
 </FrameLayout>

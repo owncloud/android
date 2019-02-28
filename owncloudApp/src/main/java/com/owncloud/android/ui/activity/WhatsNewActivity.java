@@ -1,23 +1,22 @@
 /**
- *   ownCloud Android client application
+ * ownCloud Android client application
  *
- *   @author Brtosz Przybylski
- *   @author Christian Schabesberger
- *   Copyright (C) 2019 Bartosz Przybylski
- *   Copyright (C) 2019 ownCloud GmbH.
- *
- *   This program is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License version 2,
- *   as published by the Free Software Foundation.
- *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
- *
- *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * @author Brtosz Przybylski
+ * @author Christian Schabesberger
+ * Copyright (C) 2019 Bartosz Przybylski
+ * Copyright (C) 2019 ownCloud GmbH.
+ * <p>
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
+ * <p>
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package com.owncloud.android.ui.activity;
@@ -28,12 +27,6 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.viewpager.widget.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,6 +35,12 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountAuthenticatorActivity;
@@ -80,8 +79,8 @@ public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPa
         mForwardFinishButton = findViewById(R.id.forward);
         mForwardFinishButton.setOnClickListener(view -> {
             if (mProgress.hasNextStep()) {
-                mPager.setCurrentItem(mPager.getCurrentItem()+1, true);
-                mProgress.animateToStep(mPager.getCurrentItem()+1);
+                mPager.setCurrentItem(mPager.getCurrentItem() + 1, true);
+                mProgress.animateToStep(mPager.getCurrentItem() + 1);
             } else {
                 finish();
             }
@@ -103,7 +102,6 @@ public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPa
     public void onBackPressed() {
         super.onBackPressed();
     }
-
 
     private void updateNextButtonIfNeeded() {
         if (!mProgress.hasNextStep()) {
@@ -129,14 +127,16 @@ public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPa
     }
 
     static private boolean isFirstRun() {
-        if (getLastSeenVersionCode() != 0)
+        if (getLastSeenVersionCode() != 0) {
             return false;
+        }
         return AccountUtils.getCurrentOwnCloudAccount(MainApp.getAppContext()) == null;
     }
 
     static public void runIfNeeded(Context context) {
-        if (context instanceof WhatsNewActivity)
+        if (context instanceof WhatsNewActivity) {
             return;
+        }
 
         if (shouldShow(context)) {
             context.startActivity(new Intent(context, WhatsNewActivity.class));
@@ -148,11 +148,11 @@ public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPa
         boolean showWizard = context.getResources().getBoolean(R.bool.wizard_enabled);
         return showWizard &&
                 ((isFirstRun() && context instanceof AccountAuthenticatorActivity) ||
-                (
-                        !(isFirstRun() && (context instanceof FileDisplayActivity)) &&
-                        !(context instanceof PassCodeActivity) &&
-                        (FeatureList.getFiltered(getLastSeenVersionCode(), isFirstRun(), isBeta).length > 0)
-                ));
+                        (
+                                !(isFirstRun() && (context instanceof FileDisplayActivity)) &&
+                                        !(context instanceof PassCodeActivity) &&
+                                        (FeatureList.getFiltered(getLastSeenVersionCode(), isFirstRun(), isBeta).length > 0)
+                        ));
     }
 
     @Override
@@ -161,7 +161,7 @@ public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPa
 
     @Override
     public void onPageSelected(int position) {
-        mProgress.animateToStep(position+1);
+        mProgress.animateToStep(position + 1);
         updateNextButtonIfNeeded();
     }
 
@@ -174,7 +174,7 @@ public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPa
 
         FeatureItem[] mFeatures;
 
-        public FeaturesViewAdapter(FragmentManager fm, FeatureItem[]features) {
+        public FeaturesViewAdapter(FragmentManager fm, FeatureItem[] features) {
             super(fm);
             mFeatures = features;
         }
@@ -204,25 +204,29 @@ public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPa
         @Override
         public void onCreate(@Nullable Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-            mItem = getArguments() != null ? (FeatureItem)getArguments().getParcelable("feature") : null;
+            mItem = getArguments() != null ? (FeatureItem) getArguments().getParcelable("feature") : null;
         }
 
         @Nullable
         @Override
-        public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+                                 @Nullable Bundle savedInstanceState) {
             View v = inflater.inflate(R.layout.whats_new_element, container, false);
 
             ImageView iv = v.findViewById(R.id.whatsNewImage);
-            if (mItem.shouldShowImage())
+            if (mItem.shouldShowImage()) {
                 iv.setImageResource(mItem.getImage());
+            }
 
             TextView tv2 = v.findViewById(R.id.whatsNewTitle);
-            if (mItem.shouldShowTitleText())
+            if (mItem.shouldShowTitleText()) {
                 tv2.setText(mItem.getTitleText());
+            }
 
             tv2 = v.findViewById(R.id.whatsNewText);
-            if (mItem.shouldShowContentText())
+            if (mItem.shouldShowContentText()) {
                 tv2.setText(mItem.getContentText());
+            }
 
             return v;
         }

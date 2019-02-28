@@ -20,25 +20,25 @@
  */
 package com.owncloud.android.ui.preview;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
-import java.util.Vector;
-
 import android.accounts.Account;
+import android.view.ViewGroup;
+
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
-import android.view.ViewGroup;
-
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.files.services.FileDownloader;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.ui.fragment.FileFragment;
 import com.owncloud.android.utils.FileStorageUtils;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
+import java.util.Vector;
 
 /**
  * Adapter class that provides Fragment instances
@@ -85,7 +85,8 @@ public class PreviewImagePagerAdapter extends FragmentStatePagerAdapter {
         // TODO Enable when "On Device" is recovered ?
         mImageFiles = mStorageManager.getFolderImages(parentFolder/*, false*/);
 
-        mImageFiles = FileStorageUtils.sortFolder(mImageFiles, FileStorageUtils.mSortOrderFileDisp, FileStorageUtils.mSortAscendingFileDisp);
+        mImageFiles = FileStorageUtils.sortFolder(mImageFiles, FileStorageUtils.mSortOrderFileDisp,
+                FileStorageUtils.mSortAscendingFileDisp);
 
         mObsoleteFragments = new HashSet<>();
         mObsoletePositions = new HashSet<>();
@@ -102,7 +103,6 @@ public class PreviewImagePagerAdapter extends FragmentStatePagerAdapter {
     protected OCFile getFileAt(int position) {
         return mImageFiles.get(position);
     }
-
 
     public Fragment getItem(int i) {
         OCFile file = mImageFiles.get(i);
@@ -142,7 +142,6 @@ public class PreviewImagePagerAdapter extends FragmentStatePagerAdapter {
         return mImageFiles.get(position).getFileName();
     }
 
-
     private void updateFile(int position, OCFile file) {
         FileFragment fragmentToUpdate = mCachedFragments.get(position);
         if (fragmentToUpdate != null) {
@@ -151,7 +150,6 @@ public class PreviewImagePagerAdapter extends FragmentStatePagerAdapter {
         mObsoletePositions.add(position);
         mImageFiles.set(position, file);
     }
-
 
     private void updateWithDownloadError(int position) {
         FileFragment fragmentToUpdate = mCachedFragments.get(position);
@@ -177,7 +175,6 @@ public class PreviewImagePagerAdapter extends FragmentStatePagerAdapter {
         mDownloadErrors.remove(position);
     }
 
-
     @Override
     public int getItemPosition(Object object) {
         if (mObsoleteFragments.contains(object)) {
@@ -186,7 +183,6 @@ public class PreviewImagePagerAdapter extends FragmentStatePagerAdapter {
         }
         return super.getItemPosition(object);
     }
-
 
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
@@ -200,7 +196,6 @@ public class PreviewImagePagerAdapter extends FragmentStatePagerAdapter {
         mCachedFragments.remove(position);
         super.destroyItem(container, position, object);
     }
-
 
     public boolean pendingErrorAt(int position) {
         return mDownloadErrors.contains(position);

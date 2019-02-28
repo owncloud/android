@@ -1,49 +1,48 @@
 /**
- *   ownCloud Android client application
+ * ownCloud Android client application
  *
- *   @author masensio
- *   @author David A. Velasco
- *   @author Christian Schabesberger
- *   Copyright (C) 2019 ownCloud GmbH.
- *
- *   This program is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License version 2,
- *   as published by the Free Software Foundation.
- *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
- *
- *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * @author masensio
+ * @author David A. Velasco
+ * @author Christian Schabesberger
+ * Copyright (C) 2019 ownCloud GmbH.
+ * <p>
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
+ * <p>
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package com.owncloud.android.ui.adapter;
 
-import java.text.DateFormat;
-import java.util.Date;
-
-import com.owncloud.android.R;
-import com.owncloud.android.ui.dialog.SslUntrustedCertDialog;
 import android.net.http.SslCertificate;
 import android.view.View;
 import android.widget.TextView;
+
+import com.owncloud.android.R;
+import com.owncloud.android.ui.dialog.SslUntrustedCertDialog;
+
+import java.text.DateFormat;
+import java.util.Date;
 
 /**
  * TODO
  */
 public class SslCertificateViewAdapter implements SslUntrustedCertDialog.CertificateViewAdapter {
-    
+
     //private final static String TAG = SslCertificateViewAdapter.class.getSimpleName();
-    
+
     private SslCertificate mCertificate;
 
-    
     /**
      * Constructor
-     * 
-     * @param 
+     *
+     * @param
      */
     public SslCertificateViewAdapter(SslCertificate certificate) {
         mCertificate = certificate;
@@ -58,12 +57,12 @@ public class SslCertificateViewAdapter implements SslUntrustedCertDialog.Certifi
             showIssuer(mCertificate.getIssuedBy(), dialogView);
             showValidity(mCertificate.getValidNotBeforeDate(), mCertificate.getValidNotAfterDate(), dialogView);
             hideSignature(dialogView);
-            
+
         } else {
             nullCerView.setVisibility(View.VISIBLE);
         }
     }
-    
+
     private void showValidity(Date notBefore, Date notAfter, View dialogView) {
         TextView fromView = dialogView.findViewById(R.id.value_validity_from);
         TextView toView = dialogView.findViewById(R.id.value_validity_to);
@@ -72,16 +71,15 @@ public class SslCertificateViewAdapter implements SslUntrustedCertDialog.Certifi
         toView.setText(dateFormat.format(notAfter));
     }
 
-    
     private void showSubject(SslCertificate.DName subject, View dialogView) {
         TextView cnView = dialogView.findViewById(R.id.value_subject_CN);
         cnView.setText(subject.getCName());
         cnView.setVisibility(View.VISIBLE);
-        
+
         TextView oView = dialogView.findViewById(R.id.value_subject_O);
         oView.setText(subject.getOName());
         oView.setVisibility(View.VISIBLE);
-        
+
         TextView ouView = dialogView.findViewById(R.id.value_subject_OU);
         ouView.setText(subject.getUName());
         ouView.setVisibility(View.VISIBLE);
@@ -94,13 +92,12 @@ public class SslCertificateViewAdapter implements SslUntrustedCertDialog.Certifi
         dialogView.findViewById(R.id.label_subject_ST).setVisibility(View.GONE);
         dialogView.findViewById(R.id.label_subject_L).setVisibility(View.GONE);
     }
-    
-    
+
     private void showIssuer(SslCertificate.DName issuer, View dialogView) {
         TextView cnView = dialogView.findViewById(R.id.value_issuer_CN);
         cnView.setText(issuer.getCName());
         cnView.setVisibility(View.VISIBLE);
-        
+
         TextView oView = dialogView.findViewById(R.id.value_issuer_O);
         oView.setText(issuer.getOName());
         oView.setVisibility(View.VISIBLE);
@@ -108,7 +105,7 @@ public class SslCertificateViewAdapter implements SslUntrustedCertDialog.Certifi
         TextView ouView = dialogView.findViewById(R.id.value_issuer_OU);
         ouView.setText(issuer.getUName());
         ouView.setVisibility(View.VISIBLE);
-        
+
         // SslCertificates don't offer this information
         dialogView.findViewById(R.id.value_issuer_C).setVisibility(View.GONE);
         dialogView.findViewById(R.id.value_issuer_ST).setVisibility(View.GONE);
@@ -117,7 +114,7 @@ public class SslCertificateViewAdapter implements SslUntrustedCertDialog.Certifi
         dialogView.findViewById(R.id.label_issuer_ST).setVisibility(View.GONE);
         dialogView.findViewById(R.id.label_issuer_L).setVisibility(View.GONE);
     }
-    
+
     private void hideSignature(View dialogView) {
         dialogView.findViewById(R.id.label_signature).setVisibility(View.GONE);
         dialogView.findViewById(R.id.label_signature_algorithm).setVisibility(View.GONE);

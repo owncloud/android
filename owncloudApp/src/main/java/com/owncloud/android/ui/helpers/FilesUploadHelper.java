@@ -1,22 +1,21 @@
 /**
- *   ownCloud Android client application
+ * ownCloud Android client application
  *
- *   @author Christian Schabesberger
- *   @author Shashvat Kedia
- *   Copyright (C) 2019 ownCloud GmbH.
- *
- *   This program is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License version 2,
- *   as published by the Free Software Foundation.
- *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
- *
- *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * @author Christian Schabesberger
+ * @author Shashvat Kedia
+ * Copyright (C) 2019 ownCloud GmbH.
+ * <p>
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
+ * <p>
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package com.owncloud.android.ui.helpers;
@@ -29,8 +28,8 @@ import android.os.Environment;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.provider.MediaStore;
-import androidx.core.content.FileProvider;
 
+import androidx.core.content.FileProvider;
 import com.owncloud.android.R;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.utils.FileStorageUtils;
@@ -38,7 +37,6 @@ import com.owncloud.android.utils.FileStorageUtils;
 import java.io.File;
 import java.io.IOException;
 import java.util.Calendar;
-
 
 public class FilesUploadHelper implements Parcelable {
 
@@ -65,9 +63,9 @@ public class FilesUploadHelper implements Parcelable {
         this.accountName = accountName;
     }
 
-
     public interface OnCheckAvailableSpaceListener {
         void onCheckAvailableSpaceStart();
+
         void onCheckAvailableSpaceFinished(boolean hasEnoughSpace, String[] capturedFilePaths);
     }
 
@@ -96,7 +94,6 @@ public class FilesUploadHelper implements Parcelable {
         protected void onPreExecute() {
             callback.onCheckAvailableSpaceStart();
         }
-
 
         /**
          * Checks the available space
@@ -133,7 +130,7 @@ public class FilesUploadHelper implements Parcelable {
         new CheckAvailableSpaceTask(checkedFilePaths, listener).execute();
     }
 
-    public static String getCapturedImageName(){
+    public static String getCapturedImageName() {
         Calendar calendar = Calendar.getInstance();
         String year = "" + calendar.get(Calendar.YEAR);
         String month = ("0" + (calendar.get(Calendar.MONTH) + 1));
@@ -141,33 +138,32 @@ public class FilesUploadHelper implements Parcelable {
         String hour = ("0" + calendar.get(Calendar.HOUR_OF_DAY));
         String minute = ("0" + calendar.get(Calendar.MINUTE));
         String second = ("0" + calendar.get(Calendar.SECOND));
-        month = month.length() == 3 ? month.substring(1,month.length()) : month;
-        day = day.length() == 3 ? day.substring(1,day.length()) : day;
-        hour = hour.length() == 3 ? hour.substring(1,hour.length()) : hour;
-        minute = minute.length() == 3 ? minute.substring(1,minute.length()) : minute;
-        second = second.length() == 3 ? second.substring(1,second.length()) : second;
+        month = month.length() == 3 ? month.substring(1, month.length()) : month;
+        day = day.length() == 3 ? day.substring(1, day.length()) : day;
+        hour = hour.length() == 3 ? hour.substring(1, hour.length()) : hour;
+        minute = minute.length() == 3 ? minute.substring(1, minute.length()) : minute;
+        second = second.length() == 3 ? second.substring(1, second.length()) : second;
         String newImageName = "IMG_" + year + month + day + "_" + hour + minute + second;
         return newImageName;
     }
 
-
-    public File getCapturedImageFile(){
+    public File getCapturedImageFile() {
         File capturedImage = new File(capturedPhotoPath);
         File parent = capturedImage.getParentFile();
-        File newImage = new File(parent,getCapturedImageName() + ".jpg");
+        File newImage = new File(parent, getCapturedImageName() + ".jpg");
         capturedImage.renameTo(newImage);
         capturedImage.delete();
         capturedPhotoPath = newImage.getAbsolutePath();
         return newImage;
     }
 
-    private File createImageFile(){
+    private File createImageFile() {
         try {
             File storageDir = activity.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
             image = File.createTempFile(getCapturedImageName(), ".jpg", storageDir);
             capturedPhotoPath = image.getAbsolutePath();
-        } catch(IOException exception){
-            Log_OC.d(TAG,exception.toString());
+        } catch (IOException exception) {
+            Log_OC.d(TAG, exception.toString());
         }
         return image;
     }
@@ -175,13 +171,13 @@ public class FilesUploadHelper implements Parcelable {
     /**
      * Function to send an intent to the device's camera to capture a picture
      * */
-    public void uploadFromCamera(final int requestCode){
+    public void uploadFromCamera(final int requestCode) {
         Intent pictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         File photoFile = createImageFile();
-        if(photoFile != null){
+        if (photoFile != null) {
             Uri photoUri = FileProvider.getUriForFile(activity.getApplicationContext(),
-                    activity.getResources().getString(R.string.file_provider_authority),photoFile);
-            pictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,photoUri);
+                    activity.getResources().getString(R.string.file_provider_authority), photoFile);
+            pictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
         }
         if (pictureIntent.resolveActivity(activity.getPackageManager()) != null) {
             activity.startActivityForResult(pictureIntent, requestCode);
@@ -193,7 +189,7 @@ public class FilesUploadHelper implements Parcelable {
     }
 
     public void deleteImageFile() {
-        if(image != null) {
+        if (image != null) {
             image.delete();
             Log_OC.d(TAG, "File deleted");
         }

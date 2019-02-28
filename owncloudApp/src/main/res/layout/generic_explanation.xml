@@ -18,35 +18,35 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_color" 
+    android:background="@color/background_color"
     android:id="@+id/explanation"
     android:orientation="vertical"
     android:filterTouchesWhenObscured="true">
 
-	<TextView
-		android:id="@+id/message"
-		android:layout_width="match_parent"
-		android:layout_height="0dp"
-		android:layout_weight="2"
-	    android:padding="10dip"
-	    android:scrollbarAlwaysDrawVerticalTrack="true"
-		android:text="@string/placeholder_sentence" 
-		/>
-    
-	<ListView 
-	    android:id="@+id/list"
-	    android:layout_width="match_parent"
-	    android:layout_height="0dp"
-		android:layout_weight="3"
-	    android:padding="10dip"
-	    />
-	    
+    <TextView
+        android:id="@+id/message"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:padding="10dip"
+        android:scrollbarAlwaysDrawVerticalTrack="true"
+        android:text="@string/placeholder_sentence"
+        />
+
+    <ListView
+        android:id="@+id/list"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="3"
+        android:padding="10dip"
+        />
+
     <LinearLayout
         android:id="@+id/buttons"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:orientation="horizontal" >
+        android:orientation="horizontal">
 
         <!-- 'OK' / 'CANCEL' BUTTONS CHANGE THEIR ORDER FROM ANDROID 4.0 ; THANKS, GOOGLE -->
         <Button
@@ -56,13 +56,13 @@
             android:layout_weight="1"
             android:text="@android:string/cancel" />
 
-		<Button
-		    android:id="@+id/ok"
-		    android:layout_width="wrap_content"
-		    android:layout_height="wrap_content"
-		    android:layout_weight="1"
-		    android:text="@android:string/ok" />
-		
-	</LinearLayout>
-	
+        <Button
+            android:id="@+id/ok"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@android:string/ok" />
+
+    </LinearLayout>
+
 </LinearLayout>

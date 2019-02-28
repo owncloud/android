@@ -1,22 +1,22 @@
 /**
- *   ownCloud Android client application
+ * ownCloud Android client application
+ * <p>
+ * Copyright (C) 2019 ownCloud GmbH.
  *
- *   Copyright (C) 2019 ownCloud GmbH.
- *   @author Jesús Recio (@jesmrec)
- *   @author Christian Schabesberger
- *
- *   This program is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License version 2,
- *   as published by the Free Software Foundation.
- *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
- *
- *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * @author Jesús Recio (@jesmrec)
+ * @author Christian Schabesberger
+ * <p>
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
+ * <p>
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package com.owncloud.android.authentication;
@@ -29,17 +29,16 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.os.SystemClock;
+
 import androidx.test.InstrumentationRegistry;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
 import androidx.test.rule.ActivityTestRule;
-import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.uiautomator.UiDevice;
-
 import com.owncloud.android.R;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.utils.AccountsManager;
 import com.owncloud.android.utils.ServerType;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
@@ -60,7 +59,6 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertTrue;
-
 
 @RunWith(AndroidJUnit4.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
@@ -153,11 +151,10 @@ public class AuthenticatorActivityTest {
         onView(withId(R.id.account_username)).check(matches(not(isDisplayed())));
         onView(withId(R.id.account_password)).check(matches(not(isDisplayed())));
 
-
         Log_OC.i(LOG_TAG, "Test not accept not secure start");
 
         if (servertype == ServerType.HTTPS_NON_SECURE ||
-                servertype == ServerType.REDIRECTED_NON_SECURE ) {
+                servertype == ServerType.REDIRECTED_NON_SECURE) {
 
             // Check that login button is not displayed
             onView(withId(R.id.loginButton))
@@ -195,7 +192,6 @@ public class AuthenticatorActivityTest {
     //@SdkSuppress(minSdkVersion = Build.VERSION_CODES.M)
     public void test2_check_certif_not_secure()
             throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
-
 
         Log_OC.i(LOG_TAG, "Test accept not secure start");
         // Get values passed
@@ -242,9 +238,9 @@ public class AuthenticatorActivityTest {
 
             // Check that the Activity ends after clicking
             SystemClock.sleep(WAIT_LOGIN_MS);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
                 assertTrue(ERROR_MESSAGE, mActivityRule.getActivity().isDestroyed());
-            else {
+            } else {
                 Field f = Activity.class.getDeclaredField(RESULT_CODE);
                 f.setAccessible(true);
                 int mResultCode = f.getInt(mActivityRule.getActivity());
@@ -255,7 +251,6 @@ public class AuthenticatorActivityTest {
 
         }
     }
-
 
     /**
      *  Login with correct credentials
@@ -276,9 +271,9 @@ public class AuthenticatorActivityTest {
 
         // Check that the Activity ends after clicking
         SystemClock.sleep(WAIT_LOGIN_MS);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
             assertTrue(ERROR_MESSAGE, mActivityRule.getActivity().isDestroyed());
-        else {
+        } else {
 
             Field f = Activity.class.getDeclaredField(RESULT_CODE);
             f.setAccessible(true);
@@ -319,9 +314,9 @@ public class AuthenticatorActivityTest {
 
         // Check that the Activity ends after clicking
         SystemClock.sleep(WAIT_LOGIN_MS);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
             assertTrue(ERROR_MESSAGE, mActivityRule.getActivity().isDestroyed());
-        else {
+        } else {
             Field f = Activity.class.getDeclaredField(RESULT_CODE);
             f.setAccessible(true);
             int mResultCode = f.getInt(mActivityRule.getActivity());
@@ -347,9 +342,9 @@ public class AuthenticatorActivityTest {
 
         // Check that the Activity ends after clicking
         SystemClock.sleep(WAIT_LOGIN_MS);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
             assertTrue(ERROR_MESSAGE, mActivityRule.getActivity().isDestroyed());
-        else {
+        } else {
 
             Field f = Activity.class.getDeclaredField(RESULT_CODE);
             f.setAccessible(true);
@@ -379,7 +374,6 @@ public class AuthenticatorActivityTest {
         onView(withId(R.id.auth_status_text)).check(matches(withText(R.string.auth_unauthorized)));
 
         Log_OC.i(LOG_TAG, "Test Check Login Incorrect Passed");
-
 
     }
 
@@ -429,9 +423,9 @@ public class AuthenticatorActivityTest {
 
         // Check that the Activity ends after clicking
         SystemClock.sleep(WAIT_LOGIN_MS);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
             assertTrue(ERROR_MESSAGE, mActivityRule.getActivity().isDestroyed());
-        else {
+        } else {
             Field f = Activity.class.getDeclaredField(RESULT_CODE);
             f.setAccessible(true);
             int mResultCode = f.getInt(mActivityRule.getActivity());
@@ -460,9 +454,9 @@ public class AuthenticatorActivityTest {
 
         // Check that the Activity ends after clicking
         SystemClock.sleep(WAIT_LOGIN_MS);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
             assertTrue(ERROR_MESSAGE, mActivityRule.getActivity().isDestroyed());
-        else {
+        } else {
             Field f = Activity.class.getDeclaredField(RESULT_CODE);
             f.setAccessible(true);
             int mResultCode = f.getInt(mActivityRule.getActivity());
@@ -493,11 +487,10 @@ public class AuthenticatorActivityTest {
 
     }
 
-
     /*
      * Fill the fields in login view and check the status message depending on the kind of server
      */
-    private void setFields (String connectionString, String username, String password){
+    private void setFields(String connectionString, String username, String password) {
 
         // Type server url
         onView(withId(R.id.hostUrlInput))
@@ -517,18 +510,18 @@ public class AuthenticatorActivityTest {
         onView(withId(R.id.loginButton)).perform(click());
     }
 
-
     /*
      * Depending on the expected status message the assertion is checked
      */
-    private void checkStatusMessage(){
+    private void checkStatusMessage() {
 
-        switch (servertype){
+        switch (servertype) {
             case HTTP:
-                if (testServerURL.startsWith(HTTP_SCHEME))
+                if (testServerURL.startsWith(HTTP_SCHEME)) {
                     onView(withId(R.id.server_status_text)).check(matches(withText(R.string.auth_connection_established)));
-                else
+                } else {
                     onView(withId(R.id.server_status_text)).check(matches(withText(R.string.auth_nossl_plain_ok_title)));
+                }
                 break;
             case HTTPS_NON_SECURE:
                 onView(withId(R.id.server_status_text)).check(matches(withText(R.string.auth_secure_connection)));
@@ -539,7 +532,8 @@ public class AuthenticatorActivityTest {
             case REDIRECTED_NON_SECURE:
                 onView(withId(R.id.server_status_text)).check(matches(withText(R.string.auth_nossl_plain_ok_title)));
                 break;
-            default: break;
+            default:
+                break;
         }
     }
 

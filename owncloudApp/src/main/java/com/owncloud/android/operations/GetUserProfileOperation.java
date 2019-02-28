@@ -1,22 +1,21 @@
 /**
- *   ownCloud Android client application
+ * ownCloud Android client application
  *
- *   @author David A. Velasco
- *   @author David González Verdugo
- *   Copyright (C) 2019 ownCloud GmbH.
- *
- *   This program is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License version 2,
- *   as published by the Free Software Foundation.
- *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
- *
- *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * @author David A. Velasco
+ * @author David González Verdugo
+ * Copyright (C) 2019 ownCloud GmbH.
+ * <p>
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
+ * <p>
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package com.owncloud.android.operations;
 
@@ -56,7 +55,7 @@ public class GetUserProfileOperation extends SyncOperation {
      *
      * @param remotePath Remote path of the file.
      */
-    public GetUserProfileOperation (String remotePath) {
+    public GetUserProfileOperation(String remotePath) {
         mRemotePath = remotePath;
     }
 
@@ -67,7 +66,7 @@ public class GetUserProfileOperation extends SyncOperation {
      *
      * Stored account is implicit in {@link #getStorageManager()}.
      *
-     * @return      Result of the operation. If successful, includes an instance of
+     * @return Result of the operation. If successful, includes an instance of
      *              {@link String} with the display name retrieved from the server.
      *              Call {@link RemoteOperationResult#getData()}.get(0) to get it.
      */
@@ -88,9 +87,9 @@ public class GetUserProfileOperation extends SyncOperation {
                 UserInfo userInfo = userInfoOperationResult.getData();
                 Account storedAccount = getStorageManager().getAccount();
                 accountManager.setUserData(
-                    storedAccount,
-                    AccountUtils.Constants.KEY_DISPLAY_NAME,    // keep also there, for the moment
-                    userInfo.mDisplayName
+                        storedAccount,
+                        AccountUtils.Constants.KEY_DISPLAY_NAME,    // keep also there, for the moment
+                        userInfo.mDisplayName
                 );
                 accountManager.setUserData(
                         storedAccount,
@@ -100,16 +99,17 @@ public class GetUserProfileOperation extends SyncOperation {
 
                 // map user info into UserProfile instance
                 userProfile = new UserProfile(
-                    storedAccount.name,
-                    userInfo.mId,
-                    userInfo.mDisplayName,
-                    userInfo.mEmail
+                        storedAccount.name,
+                        userInfo.mId,
+                        userInfo.mDisplayName,
+                        userInfo.mEmail
                 );
 
                 /// get quota
                 GetRemoteUserQuotaOperation getRemoteUserQuotaOperation = new GetRemoteUserQuotaOperation(mRemotePath);
 
-                final RemoteOperationResult<RemoteQuota> quotaOperationResult = getRemoteUserQuotaOperation.execute(client);
+                final RemoteOperationResult<RemoteQuota> quotaOperationResult =
+                        getRemoteUserQuotaOperation.execute(client);
 
                 if (quotaOperationResult.isSuccess()) {
 
@@ -185,7 +185,7 @@ public class GetUserProfileOperation extends SyncOperation {
      * Converts size of file icon from dp to pixel
      * @return int
      */
-    private int getAvatarDimension(){
+    private int getAvatarDimension() {
         // Converts dp to pixel
         Resources r = MainApp.getAppContext().getResources();
         return Math.round(r.getDimension(R.dimen.file_avatar_size));

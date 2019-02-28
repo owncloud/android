@@ -1,31 +1,25 @@
 /**
- *   ownCloud Android client application
+ * ownCloud Android client application
  *
- *   @author Bartek Przybylski
- *   @author Christian Schabesberger
- *   Copyright (C) 2012 Bartek Przybylski
- *   Copyright (C) 2019 ownCloud GmbH.
- *
- *   This program is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License version 2,
- *   as published by the Free Software Foundation.
- *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
- *
- *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * @author Bartek Przybylski
+ * @author Christian Schabesberger
+ * Copyright (C) 2012 Bartek Przybylski
+ * Copyright (C) 2019 ownCloud GmbH.
+ * <p>
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
+ * <p>
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package com.owncloud.android.widgets;
-
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-
-import com.owncloud.android.R;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -33,9 +27,14 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import androidx.appcompat.widget.AppCompatEditText;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
+
+import androidx.appcompat.widget.AppCompatEditText;
+import com.owncloud.android.R;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 public class ActionEditText extends AppCompatEditText {
     private String s;
@@ -79,10 +78,11 @@ public class ActionEditText extends AppCompatEditText {
         mButtonRect.right = getWidth() - 10;
         btn_rect = mButtonRect;
 
-        if (s.equals(optionOneString))
+        if (s.equals(optionOneString)) {
             p.setColor(optionOneColor);
-        else
+        } else {
             p.setColor(optionTwoColor);
+        }
         canvas.drawRect(mButtonRect, p);
         p.setColor(Color.GRAY);
 
@@ -99,10 +99,11 @@ public class ActionEditText extends AppCompatEditText {
         boolean r = super.onTouchEvent(event);
         if (event.getAction() == MotionEvent.ACTION_UP) {
             if (btn_rect.contains(touchX, touchY)) {
-                if (s.equals(optionTwoString))
+                if (s.equals(optionTwoString)) {
                     s = optionOneString;
-                else
+                } else {
                     s = optionTwoString;
+                }
                 if (badgeClickCallback != null) {
                     @SuppressWarnings("rawtypes")
                     Class[] paramtypes = new Class[2];

@@ -28,12 +28,12 @@
             android:orderInCategory="2"
             android:id="@+id/drawer_menu_account_add"
             android:icon="@drawable/ic_plus_grey"
-            android:title="@string/prefs_add_account"/>
+            android:title="@string/prefs_add_account" />
         <item
             android:orderInCategory="2"
             android:id="@+id/drawer_menu_account_manage"
             android:icon="@drawable/ic_account_multiple_grey"
-            android:title="@string/drawer_manage_accounts"/>
+            android:title="@string/drawer_manage_accounts" />
 
         <item
             android:id="@+id/footer_spacer_3"
@@ -51,22 +51,23 @@
 
     </group>
 
-
     <!--
       standard menu
       all items in this group MUST have orderInCategory="0" set
     -->
-    <group android:id="@+id/drawer_menu_standard" android:checkableBehavior="single">
+    <group
+        android:id="@+id/drawer_menu_standard"
+        android:checkableBehavior="single">
         <item
             android:orderInCategory="0"
             android:id="@+id/nav_all_files"
             android:icon="@drawable/ic_folder_open"
-            android:title="@string/drawer_item_all_files"/>
+            android:title="@string/drawer_item_all_files" />
         <item
             android:orderInCategory="0"
             android:id="@+id/nav_uploads"
             android:icon="@drawable/ic_uploads"
-            android:title="@string/drawer_item_uploads_list"/>
+            android:title="@string/drawer_item_uploads_list" />
     </group>
 
     <group android:id="@+id/drawer_menu_settings_etc">
@@ -74,17 +75,17 @@
             android:orderInCategory="3"
             android:id="@+id/nav_settings"
             android:icon="@drawable/ic_settings"
-            android:title="@string/actionbar_settings"/>
+            android:title="@string/actionbar_settings" />
         <item
             android:orderInCategory="3"
             android:id="@+id/drawer_menu_feedback"
             android:icon="@drawable/ic_email_grey"
-            android:title="@string/drawer_feedback"/>
+            android:title="@string/drawer_feedback" />
         <item
             android:orderInCategory="3"
             android:id="@+id/drawer_menu_help"
             android:icon="@drawable/ic_help_circle_grey"
-            android:title="@string/drawer_help"/>
+            android:title="@string/drawer_help" />
 
         <item
             android:id="@+id/footer_spacer_1"

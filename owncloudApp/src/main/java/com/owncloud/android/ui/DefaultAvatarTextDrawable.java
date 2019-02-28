@@ -26,8 +26,8 @@ import android.graphics.ColorFilter;
 import android.graphics.Paint;
 import android.graphics.PixelFormat;
 import android.graphics.drawable.Drawable;
-import androidx.annotation.NonNull;
 
+import androidx.annotation.NonNull;
 import com.owncloud.android.utils.BitmapUtils;
 
 import java.io.UnsupportedEncodingException;
@@ -83,14 +83,16 @@ public class DefaultAvatarTextDrawable extends Drawable {
     }
 
     /**
-     * creates an avatar in form of  a DefaultAvatarTextDrawable with the first letter of the account name in a circle with the
+     * creates an avatar in form of  a DefaultAvatarTextDrawable with the first letter of the account name in a
+     * circle with the
      * given radius.
      *
      * @param accountName the account name
      * @param radiusInDp  the circle's radius
      * @return the avatar as a DefaultAvatarTextDrawable
      * @throws UnsupportedEncodingException if the charset is not supported when calculating the color values
-     * @throws NoSuchAlgorithmException if the specified algorithm is not available when calculating the color values
+     * @throws NoSuchAlgorithmException     if the specified algorithm is not available when calculating the color
+     * values
      */
     @NonNull
     public static DefaultAvatarTextDrawable createAvatar(String accountName, float radiusInDp) throws

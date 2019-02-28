@@ -43,10 +43,10 @@
             android:layout_marginLeft="@dimen/standard_margin"
             android:layout_marginRight="@dimen/standard_margin"
             android:layout_marginStart="@dimen/standard_margin"
-            android:visibility="gone"/>
+            android:visibility="gone" />
     </ScrollView>
 
     <!-- last to draw, will be top in Z axis -->
-    <include layout="@layout/top_progress_bar"/>
+    <include layout="@layout/top_progress_bar" />
 
 </RelativeLayout>

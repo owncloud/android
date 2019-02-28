@@ -1,37 +1,34 @@
 /**
- *   ownCloud Android client application
+ * ownCloud Android client application
  *
- *   @author David A. Velasco
- *   Copyright (C) 2016 ownCloud GmbH.
- *
- *   This program is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License version 2,
- *   as published by the Free Software Foundation.
- *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
- *
- *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * @author David A. Velasco
+ * Copyright (C) 2016 ownCloud GmbH.
+ * <p>
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
+ * <p>
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package com.owncloud.android.ui.controller;
 
 import android.accounts.Account;
-import androidx.annotation.UiThread;
-import androidx.annotation.WorkerThread;
 import android.view.View;
 import android.widget.ProgressBar;
 
+import androidx.annotation.UiThread;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.files.services.FileDownloader;
 import com.owncloud.android.files.services.FileUploader;
 import com.owncloud.android.lib.common.network.OnDatatransferProgressListener;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.ui.activity.ComponentsGetter;
-
 
 /**
  * Controller updating a progress bar with the progress of a file transfer
@@ -45,14 +42,12 @@ public class TransferProgressController implements OnDatatransferProgressListene
     private ComponentsGetter mComponentsGetter = null;
     private int mLastPercent = 0;
 
-
     public TransferProgressController(ComponentsGetter componentsGetter) {
         if (componentsGetter == null) {
             throw new IllegalArgumentException("Received NULL componentsGetter");
         }
         mComponentsGetter = componentsGetter;
     }
-
 
     /**
      * Sets the progress bar that will updated with file transfer progress
@@ -124,11 +119,11 @@ public class TransferProgressController implements OnDatatransferProgressListene
     public void stopListeningProgressFor(OCFile file, Account account) {
         if (mComponentsGetter.getFileDownloaderBinder() != null) {
             mComponentsGetter.getFileDownloaderBinder().
-                removeDatatransferProgressListener(this, account, file);
+                    removeDatatransferProgressListener(this, account, file);
         }
         if (mComponentsGetter.getFileUploaderBinder() != null) {
             mComponentsGetter.getFileUploaderBinder().
-                removeDatatransferProgressListener(this, account, file);
+                    removeDatatransferProgressListener(this, account, file);
         }
         if (mProgressBar != null) {
             mProgressBar.setIndeterminate(false);
@@ -146,24 +141,24 @@ public class TransferProgressController implements OnDatatransferProgressListene
      */
     @Override
     public void onTransferProgress(
-        long progressRate,
-        long totalTransferredSoFar,
-        long totalToTransfer,
-        String filename
+            long progressRate,
+            long totalTransferredSoFar,
+            long totalToTransfer,
+            String filename
     ) {
         if (mProgressBar != null) {
             final int percent = (int) (100.0 * ((double) totalTransferredSoFar) / ((double) totalToTransfer));
             if (percent != mLastPercent) {
                 mProgressBar.post(
-                    new Runnable() {
-                        @Override
-                        public void run() {
-                            mProgressBar.setVisibility(View.VISIBLE);
-                            mProgressBar.setIndeterminate(false);
-                            mProgressBar.setProgress(percent);
-                            mProgressBar.invalidate();
+                        new Runnable() {
+                            @Override
+                            public void run() {
+                                mProgressBar.setVisibility(View.VISIBLE);
+                                mProgressBar.setIndeterminate(false);
+                                mProgressBar.setProgress(percent);
+                                mProgressBar.invalidate();
+                            }
                         }
-                    }
                 );
             }
             mLastPercent = percent;

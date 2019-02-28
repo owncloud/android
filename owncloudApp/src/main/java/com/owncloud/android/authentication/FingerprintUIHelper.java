@@ -24,10 +24,10 @@ package com.owncloud.android.authentication;
 import android.hardware.fingerprint.FingerprintManager;
 import android.os.Build;
 import android.os.CancellationSignal;
-import androidx.annotation.RequiresApi;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.RequiresApi;
 import com.owncloud.android.R;
 
 /**

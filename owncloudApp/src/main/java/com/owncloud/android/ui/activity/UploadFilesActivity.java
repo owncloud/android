@@ -1,23 +1,23 @@
 /**
- *   ownCloud Android client application
+ * ownCloud Android client application
  *
- *   @author David A. Velasco
- *   @author Shashvat Kedia
- *   @author Christian Schabesberger
- *   @author David González Verdugo
- *   Copyright (C) 2019 ownCloud GmbH.
- *
- *   This program is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License version 2,
- *   as published by the Free Software Foundation.
- *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
- *
- *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * @author David A. Velasco
+ * @author Shashvat Kedia
+ * @author Christian Schabesberger
+ * @author David González Verdugo
+ * Copyright (C) 2019 ownCloud GmbH.
+ * <p>
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
+ * <p>
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package com.owncloud.android.ui.activity;
@@ -29,8 +29,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
-import androidx.fragment.app.DialogFragment;
-import androidx.appcompat.app.ActionBar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -42,6 +40,8 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
+import androidx.appcompat.app.ActionBar;
+import androidx.fragment.app.DialogFragment;
 import com.owncloud.android.R;
 import com.owncloud.android.files.services.FileUploader;
 import com.owncloud.android.lib.common.utils.Log_OC;
@@ -54,7 +54,6 @@ import com.owncloud.android.utils.FileStorageUtils;
 import com.owncloud.android.utils.PreferenceUtils;
 
 import java.io.File;
-
 
 /**
  * Displays local files and let the user choose what of them wants to upload
@@ -260,15 +259,18 @@ public class UploadFilesActivity extends FileActivity implements
                 break;
             case R.id.action_sort_by_name:
                 item.setChecked(true);
-                sortByName(com.owncloud.android.db.PreferenceManager.getSortAscending(this, FileStorageUtils.UPLOAD_SORT));
+                sortByName(com.owncloud.android.db.PreferenceManager.getSortAscending(this,
+                        FileStorageUtils.UPLOAD_SORT));
                 break;
             case R.id.action_sort_by_size:
                 item.setChecked(true);
-                sortBySize(com.owncloud.android.db.PreferenceManager.getSortAscending(this, FileStorageUtils.UPLOAD_SORT));
+                sortBySize(com.owncloud.android.db.PreferenceManager.getSortAscending(this,
+                        FileStorageUtils.UPLOAD_SORT));
                 break;
             case R.id.action_sort_by_date:
                 item.setChecked(true);
-                sortByDate(com.owncloud.android.db.PreferenceManager.getSortAscending(this, FileStorageUtils.UPLOAD_SORT));
+                sortByDate(com.owncloud.android.db.PreferenceManager.getSortAscending(this,
+                        FileStorageUtils.UPLOAD_SORT));
                 break;
             default:
                 retval = super.onOptionsItemSelected(item);
@@ -300,15 +302,18 @@ public class UploadFilesActivity extends FileActivity implements
             switch (com.owncloud.android.db.PreferenceManager.getSortOrder(this, FileStorageUtils.UPLOAD_SORT)) {
                 case FileStorageUtils.SORT_NAME:
                     menu.findItem(R.id.action_sort_by_name).setChecked(true);
-                    sortByName(com.owncloud.android.db.PreferenceManager.getSortAscending(this, FileStorageUtils.UPLOAD_SORT));
+                    sortByName(com.owncloud.android.db.PreferenceManager.getSortAscending(this,
+                            FileStorageUtils.UPLOAD_SORT));
                     break;
                 case FileStorageUtils.SORT_SIZE:
                     menu.findItem(R.id.action_sort_by_size).setChecked(true);
-                    sortBySize(com.owncloud.android.db.PreferenceManager.getSortAscending(this, FileStorageUtils.UPLOAD_SORT));
+                    sortBySize(com.owncloud.android.db.PreferenceManager.getSortAscending(this,
+                            FileStorageUtils.UPLOAD_SORT));
                     break;
                 case FileStorageUtils.SORT_DATE:
                     menu.findItem(R.id.action_sort_by_date).setChecked(true);
-                    sortByDate(com.owncloud.android.db.PreferenceManager.getSortAscending(this, FileStorageUtils.UPLOAD_SORT));
+                    sortByDate(com.owncloud.android.db.PreferenceManager.getSortAscending(this,
+                            FileStorageUtils.UPLOAD_SORT));
                     break;
             }
         }
@@ -323,11 +328,11 @@ public class UploadFilesActivity extends FileActivity implements
         // the next operation triggers a new call to this method, but it's necessary to 
         // ensure that the name exposed in the action bar is the current directory when the 
         // user selected it in the navigation list
-        if (itemPosition != 0)
+        if (itemPosition != 0) {
             getSupportActionBar().setSelectedNavigationItem(0);
+        }
         return true;
     }
-
 
     @Override
     public void onBackPressed() {
@@ -356,7 +361,6 @@ public class UploadFilesActivity extends FileActivity implements
         }
     }
 
-
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         // responsibility of restore is preferred in onCreate() before than in
@@ -366,7 +370,6 @@ public class UploadFilesActivity extends FileActivity implements
         outState.putString(UploadFilesActivity.KEY_DIRECTORY_PATH, mCurrentDir.getAbsolutePath());
         Log_OC.d(TAG, "onSaveInstanceState() end");
     }
-
 
     /**
      * Pushes a directory to the drop down list
@@ -393,7 +396,6 @@ public class UploadFilesActivity extends FileActivity implements
         mDirectories.remove(mDirectories.getItem(0));
         return !mDirectories.isEmpty();
     }
-
 
     // Custom array adapter to override text colors
     private class CustomArrayAdapter<T> extends ArrayAdapter<T> {
@@ -431,7 +433,6 @@ public class UploadFilesActivity extends FileActivity implements
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
     }
-
 
     /**
      * {@inheritDoc}
@@ -493,7 +494,6 @@ public class UploadFilesActivity extends FileActivity implements
             mFilesUploadHelper.checkIfAvailableSpace(mFileListFragment.getCheckedFilePaths(), this);
         }
     }
-
 
     @Override
     public void onCheckAvailableSpaceStart() {
@@ -559,19 +559,16 @@ public class UploadFilesActivity extends FileActivity implements
         }
     }
 
-
     @Override
     public void onNeutral(String callerTag) {
         Log_OC.d(TAG, "Phantom neutral button in dialog was clicked; dialog tag is " + callerTag);
     }
-
 
     @Override
     public void onCancel(String callerTag) {
         /// nothing to do; don't finish, let the user change the selection
         Log_OC.d(TAG, "Negative button in dialog was clicked; dialog tag is " + callerTag);
     }
-
 
     @Override
     protected void onAccountSet(boolean stateWasRecovered) {

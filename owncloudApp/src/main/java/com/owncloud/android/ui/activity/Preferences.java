@@ -37,16 +37,16 @@ import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceManager;
-import androidx.annotation.LayoutRes;
-import com.google.android.material.snackbar.Snackbar;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatDelegate;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.LayoutRes;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatDelegate;
+import com.google.android.material.snackbar.Snackbar;
 import com.owncloud.android.BuildConfig;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
@@ -57,14 +57,13 @@ import com.owncloud.android.files.services.CameraUploadsHandler;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.utils.DisplayUtils;
 import com.owncloud.android.utils.PreferenceUtils;
-
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 
 /**
  * An Activity that allows the user to change the application's settings.
- *
+ * <p>
  * It proxies the necessary calls via {@link androidx.appcompat.app.AppCompatDelegate} to be used
  * with AppCompat.
  */
@@ -979,7 +978,8 @@ public class Preferences extends PreferenceActivity {
         AlertDialog alertDialog = new AlertDialog.Builder(this).create();
         alertDialog.setTitle(R.string.common_important);
         alertDialog.setMessage(message);
-        alertDialog.setButton(DialogInterface.BUTTON_NEUTRAL, getString(android.R.string.ok), (dialog, which) -> dialog.dismiss());
+        alertDialog.setButton(DialogInterface.BUTTON_NEUTRAL, getString(android.R.string.ok),
+                (dialog, which) -> dialog.dismiss());
         alertDialog.show();
     }
 }

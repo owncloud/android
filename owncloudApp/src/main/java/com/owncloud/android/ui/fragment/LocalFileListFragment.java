@@ -31,6 +31,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
+
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import com.owncloud.android.R;
 import com.owncloud.android.lib.common.utils.Log_OC;
@@ -40,7 +41,6 @@ import com.owncloud.android.utils.PreferenceUtils;
 
 import java.io.File;
 import java.util.ArrayList;
-
 
 /**
  * A Fragment that lists all files and folders in a given LOCAL path.
@@ -83,7 +83,6 @@ public class LocalFileListFragment extends ExtendedListFragment {
         return frag;
     }
 
-
     /**
      * {@inheritDoc}
      */
@@ -97,7 +96,6 @@ public class LocalFileListFragment extends ExtendedListFragment {
                     LocalFileListFragment.ContainerActivity.class.getSimpleName());
         }
     }
-
 
     /**
      * {@inheritDoc}
@@ -255,7 +253,6 @@ public class LocalFileListFragment extends ExtendedListFragment {
         }
     }
 
-
     /**
      * Browse up to the parent folder of the current one.
      */
@@ -270,7 +267,6 @@ public class LocalFileListFragment extends ExtendedListFragment {
         restoreIndexAndTopPosition();
     }
 
-
     /**
      * Use this to query the {@link File} object for the directory
      * that is currently being displayed by this fragment
@@ -280,7 +276,6 @@ public class LocalFileListFragment extends ExtendedListFragment {
     public File getCurrentFolder() {
         return mDirectory;
     }
-
 
     /**
      * Calls {@link LocalFileListFragment#listFolder(File)} with a null parameter
@@ -306,10 +301,11 @@ public class LocalFileListFragment extends ExtendedListFragment {
             } else {
                 directory = Environment.getExternalStorageDirectory();
                 // TODO be careful with the state of the storage; could not be available
-                if (directory == null) return; // no files to show
+                if (directory == null) {
+                    return; // no files to show
+                }
             }
         }
-
 
         // if that's not a directory -> List its parent
         if (!directory.isDirectory()) {
@@ -325,7 +321,6 @@ public class LocalFileListFragment extends ExtendedListFragment {
         }
         mDirectory = directory;
     }
-
 
     /**
      * Returns the file paths to the files checked by the user
@@ -347,7 +342,6 @@ public class LocalFileListFragment extends ExtendedListFragment {
         }
         return result.toArray(new String[result.size()]);
     }
-
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
@@ -374,7 +368,6 @@ public class LocalFileListFragment extends ExtendedListFragment {
          * @param file File shown in the item clicked by the user
          */
         void onFileClicked(File file);
-
 
         /**
          * Callback method invoked when the parent activity

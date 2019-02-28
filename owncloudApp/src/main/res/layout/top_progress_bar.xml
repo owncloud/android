@@ -21,6 +21,6 @@
         android:background="@drawable/shadow_gradient"
         android:padding="0dp"
         android:layout_margin="0dp"
-        android:layout_gravity="top"/>
+        android:layout_gravity="top" />
 
 </merge>

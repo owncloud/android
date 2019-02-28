@@ -1,27 +1,24 @@
 /**
- *   ownCloud Android client application
+ * ownCloud Android client application
  *
- *   @author Jesús Recio @jesmrec
- *   @author Christian Schabesberger
- *   Copyright (C) 2019 ownCloud GmbH.
- *
- *   This program is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License version 2,
- *   as published by the Free Software Foundation.
- *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
- *
- *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * @author Jesús Recio @jesmrec
+ * @author Christian Schabesberger
+ * Copyright (C) 2019 ownCloud GmbH.
+ * <p>
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
+ * <p>
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 package com.owncloud.android.ui.activity;
-
 
 import android.Manifest;
 import android.content.ClipData;
@@ -34,18 +31,18 @@ import android.os.Bundle;
 import android.os.Looper;
 import android.os.RemoteException;
 import android.os.SystemClock;
+import android.view.View;
+
+import androidx.core.content.ContextCompat;
 import androidx.test.InstrumentationRegistry;
 import androidx.test.espresso.FailureHandler;
 import androidx.test.espresso.matcher.ViewMatchers;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
 import androidx.test.rule.ActivityTestRule;
-import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.uiautomator.UiDevice;
 import androidx.test.uiautomator.UiObjectNotFoundException;
 import androidx.test.uiautomator.UiSelector;
-import androidx.core.content.ContextCompat;
-import android.view.View;
-
 import com.owncloud.android.R;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.status.CapabilityBooleanType;
@@ -53,7 +50,6 @@ import com.owncloud.android.lib.resources.status.OCCapability;
 import com.owncloud.android.utils.AccountsManager;
 import com.owncloud.android.utils.FileManager;
 import com.owncloud.android.utils.ServerType;
-
 import org.hamcrest.Matcher;
 import org.junit.After;
 import org.junit.Before;
@@ -136,7 +132,6 @@ public class PublicShareActivityTest {
                 }
             };
 
-
     @Before
     public void init() {
 
@@ -146,8 +141,9 @@ public class PublicShareActivityTest {
             UiDevice uiDevice =
                     UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
             try {
-                if (!uiDevice.isScreenOn())
+                if (!uiDevice.isScreenOn()) {
                     uiDevice.wakeUp();
+                }
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
@@ -179,9 +175,8 @@ public class PublicShareActivityTest {
         mActivityRule.getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     }
 
-
     @BeforeClass
-    public static void before(){
+    public static void before() {
         //Needed to use clipboard
         Looper.prepare();
     }
@@ -240,7 +235,7 @@ public class PublicShareActivityTest {
         //Enable the option for Download/View permissions
         onView(withId(R.id.shareViaLinkEditPermissionReadOnly)).perform(click());
 
-        onView(withId(R.id.saveButton)).perform(scrollTo(),click());
+        onView(withId(R.id.saveButton)).perform(scrollTo(), click());
         SystemClock.sleep(WAIT_CONNECTION_MS);
 
         //Check that the sharing panel is displayed
@@ -298,14 +293,13 @@ public class PublicShareActivityTest {
         //Enable the option for Download/View/Upload permissions
         onView(withId(R.id.shareViaLinkEditPermissionReadAndWrite)).perform(click());
 
-        onView(withId(R.id.saveButton)).perform(scrollTo(),click());
+        onView(withId(R.id.saveButton)).perform(scrollTo(), click());
         SystemClock.sleep(WAIT_CONNECTION_MS);
 
         //Check that the sharing panel is displayed
         onView(withId(R.id.parentPanel)).check(matches(isDisplayed()));
         onView(withId(R.id.alertTitle)).check(matches(isDisplayed()));
         pressBack();
-
 
         //Check the name
         onView(withText(nameShare)).check(matches(isDisplayed()));
@@ -334,7 +328,6 @@ public class PublicShareActivityTest {
 
     }
 
-
     /**
      *  TEST CASE: Share publicly a folder with Upload only permission
      *  PASSED IF: Link created and visible in share view with Upload only option
@@ -358,7 +351,7 @@ public class PublicShareActivityTest {
         //Enable the option for Upload only permissions
         onView(withId(R.id.shareViaLinkEditPermissionUploadFiles)).perform(click());
 
-        onView(withId(R.id.saveButton)).perform(scrollTo(),click());
+        onView(withId(R.id.saveButton)).perform(scrollTo(), click());
         SystemClock.sleep(WAIT_CONNECTION_MS);
 
         //Check that the sharing panel is displayed
@@ -446,7 +439,7 @@ public class PublicShareActivityTest {
         onView(withId(R.id.shareViaLinkNameValue)).perform(replaceText(nameShareEdited));
 
         SystemClock.sleep(WAIT_CONNECTION_MS);
-        onView(withId(R.id.saveButton)).perform(scrollTo(),click());
+        onView(withId(R.id.saveButton)).perform(scrollTo(), click());
         SystemClock.sleep(WAIT_CONNECTION_MS);
 
         //Check that the sharing panel is displayed
@@ -459,7 +452,6 @@ public class PublicShareActivityTest {
 
         Log_OC.i(LOG_TAG, "Test Edit Link Name Passed");
     }
-
 
     /**
      *  TEST CASE: Edit the public folder by switching "Password" on
@@ -543,7 +535,7 @@ public class PublicShareActivityTest {
         onView(withId(R.id.shareViaLinkPasswordSwitch)).check(matches(not(isChecked())));
         onView(withId(R.id.shareViaLinkExpirationSwitch)).check(matches(isChecked()));
 
-        onView(withId(R.id.cancelButton)).perform(scrollTo(),click());
+        onView(withId(R.id.cancelButton)).perform(scrollTo(), click());
 
         Log_OC.i(LOG_TAG, "Test Enable Expiration Passed");
 
@@ -592,8 +584,8 @@ public class PublicShareActivityTest {
         selectShare(folder);
 
         onView(withId(R.id.addPublicLinkButton)).check(matches(isDisplayed()));
-        for (int i = 0; i < MULTIPLE_LINKS ; i++) {
-            publicShareCreationDefault(nameShareMultiple+i);
+        for (int i = 0; i < MULTIPLE_LINKS; i++) {
+            publicShareCreationDefault(nameShareMultiple + i);
         }
 
         Log_OC.i(LOG_TAG, "Test Unshare Public Passed");
@@ -614,8 +606,8 @@ public class PublicShareActivityTest {
         //Select share option
         selectShare(folder);
 
-        for (int i = 0; i < MULTIPLE_LINKS ; i++) {
-            deleteLink(nameShareMultiple+i);
+        for (int i = 0; i < MULTIPLE_LINKS; i++) {
+            deleteLink(nameShareMultiple + i);
         }
 
         Log_OC.i(LOG_TAG, "Test Remove Multiple Public Passed");
@@ -652,12 +644,11 @@ public class PublicShareActivityTest {
 
         SystemClock.sleep(WAIT_CLIPBOARD_MS);
 
-        assertTrue(ERROR_MESSAGE, text.startsWith(testServerURL+"/f"));
+        assertTrue(ERROR_MESSAGE, text.startsWith(testServerURL + "/f"));
 
         Log_OC.i(LOG_TAG, "Test Permalink Passed");
 
     }
-
 
     /**
      *  TEST CASE: Capability "Allow public links" disabled
@@ -674,7 +665,7 @@ public class PublicShareActivityTest {
 
         SystemClock.sleep(WAIT_CONNECTION_MS);
 
-        AccountsManager.saveCapabilities(targetContext ,capabilities, testServerURL, testUser);
+        AccountsManager.saveCapabilities(targetContext, capabilities, testServerURL, testUser);
 
         //Select share option
         selectShare(folder2);
@@ -832,9 +823,8 @@ public class PublicShareActivityTest {
 
     }
 
-
     //To create a new public link with defaults
-    private void publicShareCreationDefault (String name) {
+    private void publicShareCreationDefault(String name) {
 
         //Creation of the share link. Name only for servers >= 10
         onView(withId(R.id.addPublicLinkButton)).perform(click());
@@ -842,7 +832,7 @@ public class PublicShareActivityTest {
         onView(withId(R.id.shareViaLinkNameValue)).perform(replaceText(name));
 
         SystemClock.sleep(WAIT_CONNECTION_MS);
-        onView(withId(R.id.saveButton)).perform(scrollTo(),click());
+        onView(withId(R.id.saveButton)).perform(scrollTo(), click());
         SystemClock.sleep(WAIT_CONNECTION_MS);
 
         //Check that the sharing panel is displayed
@@ -854,16 +844,14 @@ public class PublicShareActivityTest {
 
     }
 
-
     //Returns the permission of writing in device storage
-    private int grantedPermission () {
+    private int grantedPermission() {
         return ContextCompat.checkSelfPermission(targetContext,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE);
     }
 
-
     //Get copied link from clipboard
-    private String getTextFromClipboard(){
+    private String getTextFromClipboard() {
         //Clipboard can not be handled in thread without Looper
         ClipboardManager clipboard = (ClipboardManager)
                 targetContext.getSystemService(Context.CLIPBOARD_SERVICE);
@@ -872,18 +860,18 @@ public class PublicShareActivityTest {
             // Gets the first item from the clipboard data
             ClipData.Item item = clip.getItemAt(0);
             return item.getText().toString();
-        } else
+        } else {
             return null;
+        }
     }
 
-
     //True if server supports File Listing option
-    private boolean isSupportedFileListing (){
-            return capabilities.getFilesSharingPublicSupportsUploadOnly() == CapabilityBooleanType.TRUE;
+    private boolean isSupportedFileListing() {
+        return capabilities.getFilesSharingPublicSupportsUploadOnly() == CapabilityBooleanType.TRUE;
     }
 
     //Delete a link. For non multiple servers.
-    private void deleteLink(){
+    private void deleteLink() {
         onView(withId(R.id.deletePublicLinkButton)).perform(click());
         SystemClock.sleep(WAIT_CONNECTION_MS);
         onView(withId(android.R.id.button1)).perform(click());
@@ -891,7 +879,7 @@ public class PublicShareActivityTest {
     }
 
     //Delete a link which name is parameter
-    private void deleteLink(String linkName){
+    private void deleteLink(String linkName) {
         onView(allOf(withId(R.id.deletePublicLinkButton), hasSibling(withText(linkName)))).perform(click());
         SystemClock.sleep(WAIT_CONNECTION_MS);
         onView(withId(android.R.id.button1)).perform(click());
@@ -899,7 +887,7 @@ public class PublicShareActivityTest {
     }
 
     //Select "Share" option on a item in file list. Repeats until long click works.
-    private void selectShare(String item){
+    private void selectShare(String item) {
         boolean longClicked = false;
         while (!longClicked) {
             onView(withText(item)).perform(longClick());
@@ -914,13 +902,11 @@ public class PublicShareActivityTest {
     }
 
     //Check if a view is displayed
-    public static boolean viewIsDisplayed(int viewId)  {
+    public static boolean viewIsDisplayed(int viewId) {
         final boolean[] isDisplayed = {true};
-        onView(withId(viewId)).withFailureHandler(new FailureHandler()
-        {
+        onView(withId(viewId)).withFailureHandler(new FailureHandler() {
             @Override
-            public void handle(Throwable error, Matcher<View> viewMatcher)
-            {
+            public void handle(Throwable error, Matcher<View> viewMatcher) {
                 isDisplayed[0] = false;
             }
         }).check(matches(isDisplayed()));

@@ -5,16 +5,16 @@
  * @author David González Verdugo
  * @author Christian Schabesberger
  * Copyright (C) 2019 ownCloud GmbH.
- *
+ * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
  * as published by the Free Software Foundation.
- *
+ * <p>
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -27,7 +27,6 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
-import androidx.appcompat.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -37,6 +36,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 
+import androidx.appcompat.app.AlertDialog;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayer;
@@ -64,7 +64,6 @@ import com.owncloud.android.ui.dialog.ConfirmationDialogFragment;
 import com.owncloud.android.ui.dialog.RemoveFilesDialogFragment;
 import com.owncloud.android.ui.fragment.FileFragment;
 import com.owncloud.android.utils.DisplayUtils;
-
 
 /**
  * This fragment shows a preview of a downloaded video file, or starts streaming if file is not
@@ -135,7 +134,6 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
         return frag;
     }
 
-
     /**
      * Creates an empty fragment to preview video files.
      *
@@ -150,7 +148,6 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
         mAccount = null;
         mAutoplay = true;
     }
-
 
     // Fragment and activity lifecicle
 
@@ -276,7 +273,7 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
 
         outState.putParcelable(PreviewVideoFragment.EXTRA_FILE, getFile());
         outState.putParcelable(PreviewVideoFragment.EXTRA_ACCOUNT, mAccount);
-        if (player!= null) {
+        if (player != null) {
             outState.putBoolean(PreviewVideoFragment.EXTRA_AUTOPLAY, mAutoplay);
             outState.putLong(PreviewVideoFragment.EXTRA_PLAY_POSITION, player.getCurrentPosition());
         }
@@ -363,7 +360,7 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
             item.setEnabled(false);
         }
 
-            item = menu.findItem(R.id.action_switch_view);
+        item = menu.findItem(R.id.action_switch_view);
         if (item != null) {
             item.setVisible(false);
             item.setEnabled(false);
@@ -431,7 +428,7 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
                 return true;
             }
             case R.id.action_cancel_sync: {
-                ((FileDisplayActivity)mContainerActivity).cancelTransference(getFile());
+                ((FileDisplayActivity) mContainerActivity).cancelTransference(getFile());
                 return true;
             }
             default:
@@ -519,7 +516,7 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
 
-                                if (previewVideoError.isFileSyncNeeded() && mContainerActivity!= null) {
+                                if (previewVideoError.isFileSyncNeeded() && mContainerActivity != null) {
                                     // Initialize the file download
                                     mContainerActivity.getFileOperationsHelper().syncFile(getFile());
                                 }
@@ -569,7 +566,6 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
         // Do nothing
     }
 
-
     // File extra methods
     @Override
     public void onFileMetadataChanged(OCFile updatedFile) {
@@ -600,12 +596,10 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
         }
     }
 
-
     private void seeDetails() {
         releasePlayer();
         mContainerActivity.showDetails(getFile());
     }
-
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {

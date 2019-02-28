@@ -4,12 +4,12 @@
     <item
         android:id="@+id/action_select_all"
         android:orderInCategory="1"
-        android:title="@string/actionbar_select_all"/>
+        android:title="@string/actionbar_select_all" />
 
     <item
         android:id="@+id/action_select_inverse"
         android:orderInCategory="1"
-        android:title="@string/actionbar_select_inverse"/>
+        android:title="@string/actionbar_select_inverse" />
 
     <item
         android:id="@+id/action_sort"

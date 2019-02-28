@@ -1,23 +1,22 @@
 /**
- *   ownCloud Android client application
+ * ownCloud Android client application
  *
- *   @author David A. Velasco
- *   @author Christian Schabesberger
- *   @author David González Verdugo
- *   Copyright (C) 2019 ownCloud GmbH.
- *
- *   This program is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License version 2,
- *   as published by the Free Software Foundation.
- *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
- *
- *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * @author David A. Velasco
+ * @author Christian Schabesberger
+ * @author David González Verdugo
+ * Copyright (C) 2019 ownCloud GmbH.
+ * <p>
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
+ * <p>
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package com.owncloud.android.ui.activity;
@@ -31,6 +30,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.fragment.app.Fragment;
@@ -60,7 +60,6 @@ public class LocalFolderPickerActivity extends ToolbarActivity implements LocalF
     protected Button mChooseBtn;
     protected ImageButton mHomeBtn;
 
-
     /**
      * Helper to launch a {@link LocalFolderPickerActivity} for which you would like a result when finished.
      * Your onActivityResult() method will be called with the given requestCode.
@@ -70,15 +69,14 @@ public class LocalFolderPickerActivity extends ToolbarActivity implements LocalF
      * @param requestCode   If >= 0, this code will be returned in onActivityResult().
      */
     public static void startLocalFolderPickerActivityForResult(
-        Activity activity,
-        String startPath,
-        int requestCode
+            Activity activity,
+            String startPath,
+            int requestCode
     ) {
         Intent action = new Intent(activity, LocalFolderPickerActivity.class);
         action.putExtra(LocalFolderPickerActivity.EXTRA_PATH, startPath);
         activity.startActivityForResult(action, requestCode);
     }
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -87,9 +85,8 @@ public class LocalFolderPickerActivity extends ToolbarActivity implements LocalF
 
         // set current folder
         String startPath = (savedInstanceState != null) ?
-            savedInstanceState.getString(LocalFolderPickerActivity.EXTRA_PATH) :
-            getIntent().getStringExtra(EXTRA_PATH)
-        ;
+                savedInstanceState.getString(LocalFolderPickerActivity.EXTRA_PATH) :
+                getIntent().getStringExtra(EXTRA_PATH);
         if (startPath != null) {
             mCurrentFolder = new File(startPath);
         }
@@ -110,7 +107,7 @@ public class LocalFolderPickerActivity extends ToolbarActivity implements LocalF
 
         if (savedInstanceState == null) {
             createFragments();
-       }
+        }
 
         // set input controllers
         mCancelBtn = findViewById(R.id.folder_picker_btn_cancel);
@@ -142,7 +139,6 @@ public class LocalFolderPickerActivity extends ToolbarActivity implements LocalF
                 updateActionBar();
             }
         });
-
 
         // init toolbar
         setupToolbar();
@@ -188,7 +184,7 @@ public class LocalFolderPickerActivity extends ToolbarActivity implements LocalF
         boolean retval = true;
         switch (item.getItemId()) {
             case android.R.id.home: {
-                if(mayBrowseUp()) {
+                if (mayBrowseUp()) {
                     onBackPressed();
                 }
                 break;
@@ -199,13 +195,12 @@ public class LocalFolderPickerActivity extends ToolbarActivity implements LocalF
         return retval;
     }
 
-
     /**
      * Handles presses on 'BACK' button.
      */
     @Override
     public void onBackPressed() {
-        if(!mayBrowseUp()) {
+        if (!mayBrowseUp()) {
             finish();
             return;
         }
@@ -219,14 +214,12 @@ public class LocalFolderPickerActivity extends ToolbarActivity implements LocalF
         }
     }
 
-
     /**
      * @return  'true' when browsing to the parent folder is possible, 'false' otherwise
      */
     private boolean mayBrowseUp() {
         return (mCurrentFolder != null && mCurrentFolder.getParentFile() != null);
     }
-
 
     /**
      * {@inheritDoc}
@@ -238,7 +231,6 @@ public class LocalFolderPickerActivity extends ToolbarActivity implements LocalF
         outState.putString(LocalFolderPickerActivity.EXTRA_PATH, mCurrentFolder.getAbsolutePath());
         Log_OC.d(TAG, "onSaveInstanceState() end");
     }
-
 
     /**
      * {@inheritDoc}
@@ -267,7 +259,7 @@ public class LocalFolderPickerActivity extends ToolbarActivity implements LocalF
     @Nullable
     protected LocalFileListFragment getListFragment() {
         Fragment listOfFiles = getSupportFragmentManager().findFragmentByTag(
-            FTAG_LIST_OF_FOLDERS
+                FTAG_LIST_OF_FOLDERS
         );
         if (listOfFiles != null) {
             return (LocalFileListFragment) listOfFiles;

@@ -1,24 +1,23 @@
 /**
- *   ownCloud Android client application
+ * ownCloud Android client application
  *
- *   @author David A. Velasco
- *   @author David González Verdugo
- *   @author Christian Schabesberger
- *   Copyright (C) 2011  Bartek Przybylski
- *   Copyright (C) 2019 ownCloud GmbH.
- *
- *   This program is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License version 2,
- *   as published by the Free Software Foundation.
- *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
- *
- *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * @author David A. Velasco
+ * @author David González Verdugo
+ * @author Christian Schabesberger
+ * Copyright (C) 2011  Bartek Przybylski
+ * Copyright (C) 2019 ownCloud GmbH.
+ * <p>
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
+ * <p>
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package com.owncloud.android.ui.activity;
@@ -32,13 +31,13 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
-import com.google.android.material.snackbar.Snackbar;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import com.google.android.material.snackbar.Snackbar;
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.authentication.AuthenticatorActivity;
@@ -68,7 +67,6 @@ import com.owncloud.android.ui.dialog.LoadingDialog;
 import com.owncloud.android.ui.dialog.SslUntrustedCertDialog;
 import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter;
 import com.owncloud.android.ui.helpers.FileOperationsHelper;
-
 
 /**
  * Activity with common behaviour for activities handling {@link OCFile}s in ownCloud {@link Account}s .
@@ -132,7 +130,7 @@ public class FileActivity extends DrawerActivity
         mHandler = new Handler();
         mFileOperationsHelper = new FileOperationsHelper(this);
         Account account = null;
-        if(savedInstanceState != null) {
+        if (savedInstanceState != null) {
             mFile = savedInstanceState.getParcelable(FileActivity.EXTRA_FILE);
             mFromNotification = savedInstanceState.getBoolean(FileActivity.EXTRA_FROM_NOTIFICATION);
             mFileOperationsHelper.setOpIdWaitingFor(
@@ -184,14 +182,13 @@ public class FileActivity extends DrawerActivity
     }
 
     @Override
-    protected void onPause()  {
+    protected void onPause() {
         if (mOperationsServiceBinder != null) {
             mOperationsServiceBinder.removeOperationListener(this);
         }
         mResumed = false;
         super.onPause();
     }
-
 
     @Override
     protected void onDestroy() {
@@ -220,23 +217,21 @@ public class FileActivity extends DrawerActivity
         outState.putParcelable(FileActivity.EXTRA_FILE, mFile);
         outState.putBoolean(FileActivity.EXTRA_FROM_NOTIFICATION, mFromNotification);
         outState.putLong(KEY_WAITING_FOR_OP_ID, mFileOperationsHelper.getOpIdWaitingFor());
-        if(getSupportActionBar() != null && getSupportActionBar().getTitle() != null) {
+        if (getSupportActionBar() != null && getSupportActionBar().getTitle() != null) {
             // Null check in case the actionbar is used in ActionBar.NAVIGATION_MODE_LIST
             // since it doesn't have a title then
             outState.putString(KEY_ACTION_BAR_TITLE, getSupportActionBar().getTitle().toString());
         }
     }
 
-
     /**
      * Getter for the main {@link OCFile} handled by the activity.
      *
-     * @return  Main {@link OCFile} handled by the activity.
+     * @return Main {@link OCFile} handled by the activity.
      */
     public OCFile getFile() {
         return mFile;
     }
-
 
     /**
      * Setter for the main {@link OCFile} handled by the activity.
@@ -265,7 +260,6 @@ public class FileActivity extends DrawerActivity
     public OnRemoteOperationListener getRemoteOperationListener() {
         return this;
     }
-
 
     public Handler getHandler() {
         return mHandler;
@@ -312,7 +306,7 @@ public class FileActivity extends DrawerActivity
                 operation instanceof SynchronizeFolderOperation ||
                 operation instanceof UpdateShareViaLinkOperation ||
                 operation instanceof UpdateSharePermissionsOperation
-                ) {
+        ) {
             if (result.isSuccess()) {
                 updateFileFromDB();
 
@@ -390,7 +384,7 @@ public class FileActivity extends DrawerActivity
         // Show a dialog with the certificate info
         FragmentManager fm = getSupportFragmentManager();
         SslUntrustedCertDialog dialog = (SslUntrustedCertDialog) fm.findFragmentByTag(DIALOG_UNTRUSTED_CERT);
-        if(dialog == null) {
+        if (dialog == null) {
             dialog = SslUntrustedCertDialog.newInstanceForFullSslError(
                     (CertificateCombinedException) result.getException());
             FragmentTransaction ft = fm.beginTransaction();
@@ -412,14 +406,13 @@ public class FileActivity extends DrawerActivity
         }
     }
 
-    protected void updateFileFromDB(){
+    protected void updateFileFromDB() {
         OCFile file = getFile();
         if (file != null) {
             file = getStorageManager().getFileByPath(file.getRemotePath());
             setFile(file);
         }
     }
-
 
     /**
      * Show loading dialog
@@ -439,7 +432,6 @@ public class FileActivity extends DrawerActivity
         }
     }
 
-
     /**
      * Dismiss loading dialog
      */
@@ -452,19 +444,17 @@ public class FileActivity extends DrawerActivity
         }
     }
 
-
     private void doOnResumeAndBound() {
         mOperationsServiceBinder.addOperationListener(FileActivity.this, mHandler);
         long waitingForOpId = mFileOperationsHelper.getOpIdWaitingFor();
         if (waitingForOpId <= Integer.MAX_VALUE) {
-            boolean wait = mOperationsServiceBinder.dispatchResultIfFinished((int)waitingForOpId,
+            boolean wait = mOperationsServiceBinder.dispatchResultIfFinished((int) waitingForOpId,
                     this);
-            if (!wait ) {
+            if (!wait) {
                 dismissLoadingDialog();
             }
         }
     }
-
 
     /**
      * Implements callback methods for service binding. Passed as a parameter to {
@@ -506,14 +496,14 @@ public class FileActivity extends DrawerActivity
     }
 
     @Override
-    public void restart(){
+    public void restart() {
         Intent i = new Intent(this, FileDisplayActivity.class);
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(i);
     }
 
     @Override
-    public void allFilesOption(){
+    public void allFilesOption() {
         restart();
     }
 
@@ -540,7 +530,7 @@ public class FileActivity extends DrawerActivity
     @Override
     public void onFailedSavingCertificate() {
         ConfirmationDialogFragment dialog = ConfirmationDialogFragment.newInstance(
-            R.string.ssl_validator_not_saved, new String[]{}, 0, android.R.string.ok, -1, -1
+                R.string.ssl_validator_not_saved, new String[]{}, 0, android.R.string.ok, -1, -1
         );
         dialog.show(getSupportFragmentManager(), DIALOG_CERT_NOT_SAVED);
     }
@@ -557,7 +547,7 @@ public class FileActivity extends DrawerActivity
      */
     public void showSnackMessage(String message) {
         final View rootView = findViewById(android.R.id.content);
-        if(rootView != null) {
+        if (rootView != null) {
             Snackbar.make(
                     rootView,
                     message,

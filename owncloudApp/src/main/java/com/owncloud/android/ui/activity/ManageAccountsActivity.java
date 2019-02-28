@@ -33,13 +33,13 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
-import androidx.core.content.ContextCompat;
-import androidx.core.graphics.drawable.DrawableCompat;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import androidx.core.content.ContextCompat;
+import androidx.core.graphics.drawable.DrawableCompat;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
@@ -63,7 +63,7 @@ import java.util.Set;
  * An Activity that allows the user to manage accounts.
  */
 public class ManageAccountsActivity extends FileActivity
-    implements
+        implements
         AccountListAdapter.AccountListAdapterListener,
         AccountManagerCallback<Boolean>,
         ComponentsGetter {
@@ -226,7 +226,7 @@ public class ManageAccountsActivity extends FileActivity
     public void removeAccount(Account account) {
         mAccountBeingRemoved = account.name;
         RemoveAccountDialogFragment dialog = RemoveAccountDialogFragment.newInstance(
-            account
+                account
         );
         dialog.show(getSupportFragmentManager(), RemoveAccountDialogFragment.FTAG_CONFIRMATION);
     }
@@ -257,9 +257,9 @@ public class ManageAccountsActivity extends FileActivity
                                 String name = result.getString(AccountManager.KEY_ACCOUNT_NAME);
                                 AccountUtils.setCurrentOwnCloudAccount(getApplicationContext(), name);
                                 mAccountListAdapter = new AccountListAdapter(
-                                    ManageAccountsActivity.this,
-                                    getAccountListItems(),
-                                    mTintedCheck
+                                        ManageAccountsActivity.this,
+                                        getAccountListItems(),
+                                        mTintedCheck
                                 );
                                 mListView.setAdapter(mAccountListAdapter);
                                 runOnUiThread(new Runnable() {
@@ -281,7 +281,7 @@ public class ManageAccountsActivity extends FileActivity
     /**
      * Callback executed after the {@link AccountManager} removed an account
      *
-     * @param future    Result of the removal; future.getResult() is true if account was removed correctly.
+     * @param future Result of the removal; future.getResult() is true if account was removed correctly.
      */
     @Override
     public void run(AccountManagerFuture<Boolean> future) {
@@ -304,10 +304,10 @@ public class ManageAccountsActivity extends FileActivity
             if (am.getAccountsByType(MainApp.getAccountType()).length == 0) {
                 // Show create account screen if there isn't any account
                 am.addAccount(
-                    MainApp.getAccountType(),
-                    null, null, null,
-                    this,
-                    null, null
+                        MainApp.getAccountType(),
+                        null, null, null,
+                        this,
+                        null, null
                 );
             } else {    // at least one account left
                 if (AccountUtils.getCurrentOwnCloudAccount(this) == null) {
@@ -326,7 +326,7 @@ public class ManageAccountsActivity extends FileActivity
     /**
      * Switch current account to that contained in the received position of the list adapter.
      *
-     * @param position  A position of the account adapter containing an account.
+     * @param position A position of the account adapter containing an account.
      */
     private void switchAccount(int position) {
         Account clickedAccount = mAccountListAdapter.getItem(position).getAccount();
@@ -336,12 +336,12 @@ public class ManageAccountsActivity extends FileActivity
         } else {
             // restart list of files with new account
             AccountUtils.setCurrentOwnCloudAccount(
-                ManageAccountsActivity.this,
-                clickedAccount.name
+                    ManageAccountsActivity.this,
+                    clickedAccount.name
             );
             Intent i = new Intent(
-                ManageAccountsActivity.this,
-                FileDisplayActivity.class
+                    ManageAccountsActivity.this,
+                    FileDisplayActivity.class
             );
             i.putExtra(FileActivity.EXTRA_ACCOUNT, clickedAccount);
             i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -349,7 +349,6 @@ public class ManageAccountsActivity extends FileActivity
         }
 
     }
-
 
     @Override
     protected void onDestroy() {

@@ -1,26 +1,25 @@
 /**
- *   ownCloud Android client application
+ * ownCloud Android client application
  *
- *   @author Bartek Przybylski
- *   @author masensio
- *   @author David A. Velasco
- *   @author Christian Schabesberger
- *   @author David González Verdugo
- *   Copyright (C) 2011 Bartek Przybylski
- *   Copyright (C) 2019 ownCloud GmbH.
- *
- *   This program is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License version 2,
- *   as published by the Free Software Foundation.
- *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
- *
- *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * @author Bartek Przybylski
+ * @author masensio
+ * @author David A. Velasco
+ * @author Christian Schabesberger
+ * @author David González Verdugo
+ * Copyright (C) 2011 Bartek Przybylski
+ * Copyright (C) 2019 ownCloud GmbH.
+ * <p>
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
+ * <p>
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package com.owncloud.android.ui.activity;
 
@@ -28,7 +27,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import com.google.android.material.snackbar.Snackbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
@@ -40,6 +38,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.owncloud.android.BuildConfig;
 import com.owncloud.android.R;
 import com.owncloud.android.lib.common.utils.Log_OC;
@@ -55,7 +54,7 @@ public class PassCodeActivity extends BaseActivity {
     public final static String ACTION_CHECK_WITH_RESULT = "ACTION_CHECK_WITH_RESULT";
     public final static String ACTION_CHECK = "ACTION_CHECK";
 
-    public final static String KEY_PASSCODE  = "KEY_PASSCODE";
+    public final static String KEY_PASSCODE = "KEY_PASSCODE";
     public final static String KEY_CHECK_RESULT = "KEY_CHECK_RESULT";
 
     // NOTE: PREFERENCE_SET_PASSCODE must have the same value as preferences.xml-->android:key for passcode preference
@@ -72,7 +71,7 @@ public class PassCodeActivity extends BaseActivity {
     private TextView mPassCodeHdrExplanation;
     private EditText[] mPassCodeEditTexts = new EditText[4];
 
-    private String [] mPassCodeDigits = {"","","",""};
+    private String[] mPassCodeDigits = {"", "", "", ""};
     private static String KEY_PASSCODE_DIGITS = "PASSCODE_DIGITS";
     private boolean mConfirmingPassCode = false;
     private static String KEY_CONFIRMING_PASSCODE = "CONFIRMING_PASSCODE";
@@ -128,10 +127,10 @@ public class PassCodeActivity extends BaseActivity {
                 mConfirmingPassCode = savedInstanceState.getBoolean(PassCodeActivity.KEY_CONFIRMING_PASSCODE);
                 mPassCodeDigits = savedInstanceState.getStringArray(PassCodeActivity.KEY_PASSCODE_DIGITS);
             }
-            if(mConfirmingPassCode){
+            if (mConfirmingPassCode) {
                 //the app was in the passcodeconfirmation
                 requestPassCodeConfirmation();
-            }else{
+            } else {
                 /// pass code preference has just been activated in Preferences;
                 // will receive and confirm pass code value
                 mPassCodeHdr.setText(R.string.pass_code_configure_your_pass_code);
@@ -156,15 +155,14 @@ public class PassCodeActivity extends BaseActivity {
         setTextListeners();
     }
 
-
     /**
      * Enables or disables the cancel button to allow the user interrupt the ACTION
      * requested to the activity.
      *
      * @param enabled       'True' makes the cancel button available, 'false' hides it.
      */
-    protected void setCancelButtonEnabled(boolean enabled){
-        if(enabled){
+    protected void setCancelButtonEnabled(boolean enabled) {
+        if (enabled) {
             mBCancel.setVisibility(View.VISIBLE);
             mBCancel.setOnClickListener(new OnClickListener() {
                 @Override
@@ -178,7 +176,6 @@ public class PassCodeActivity extends BaseActivity {
             mBCancel.setOnClickListener(null);
         }
     }
-
 
     /**
      * Binds the appropiate listeners to the input boxes receiving each digit of the pass code.
@@ -202,8 +199,9 @@ public class PassCodeActivity extends BaseActivity {
                     // used to control what's exactly happening with DEL, not any custom field...
                     mPassCodeEditTexts[0].setText("");
                     mPassCodeEditTexts[0].requestFocus();
-                    if (!mConfirmingPassCode)
+                    if (!mConfirmingPassCode) {
                         mPassCodeDigits[0] = "";
+                    }
                     mBChange = false;
 
                 } else if (!mBChange) {
@@ -238,8 +236,9 @@ public class PassCodeActivity extends BaseActivity {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (keyCode == KeyEvent.KEYCODE_DEL && mBChange) {
                     mPassCodeEditTexts[1].requestFocus();
-                    if (!mConfirmingPassCode)
+                    if (!mConfirmingPassCode) {
                         mPassCodeDigits[1] = "";
+                    }
                     mPassCodeEditTexts[1].setText("");
                     mBChange = false;
 
@@ -275,8 +274,9 @@ public class PassCodeActivity extends BaseActivity {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (keyCode == KeyEvent.KEYCODE_DEL && mBChange) {
                     mPassCodeEditTexts[2].requestFocus();
-                    if (!mConfirmingPassCode)
+                    if (!mConfirmingPassCode) {
                         mPassCodeDigits[2] = "";
+                    }
                     mPassCodeEditTexts[2].setText("");
                     mBChange = false;
 
@@ -305,7 +305,6 @@ public class PassCodeActivity extends BaseActivity {
 
     } // end setTextListener
 
-
     /**
      * Processes the pass code entered by the user just after the last digit was in.
      *
@@ -319,7 +318,7 @@ public class PassCodeActivity extends BaseActivity {
                 hideSoftKeyboard();
                 finish();
 
-            }  else {
+            } else {
                 showErrorAndRestart(R.string.pass_code_wrong, R.string.pass_code_enter_pass_code,
                         View.INVISIBLE);
             }
@@ -368,12 +367,11 @@ public class PassCodeActivity extends BaseActivity {
         clearBoxes();
     }
 
-
     /**
      * Ask to the user for retyping the pass code just entered before saving it as the current pass
      * code.
      */
-    protected void requestPassCodeConfirmation(){
+    protected void requestPassCodeConfirmation() {
         clearBoxes();
         mPassCodeHdr.setText(R.string.pass_code_reenter_your_pass_code);
         mPassCodeHdrExplanation.setVisibility(View.INVISIBLE);
@@ -385,7 +383,7 @@ public class PassCodeActivity extends BaseActivity {
      *
      * @return     'True' if entered pass code equals to the saved one.
      */
-    protected boolean checkPassCode(){
+    protected boolean checkPassCode() {
         SharedPreferences appPrefs = PreferenceManager
                 .getDefaultSharedPreferences(getApplicationContext());
 
@@ -409,7 +407,7 @@ public class PassCodeActivity extends BaseActivity {
      *
      * @return     'True' if retyped pass code equals to the entered before.
      */
-    protected boolean confirmPassCode(){
+    protected boolean confirmPassCode() {
         mConfirmingPassCode = false;
 
         boolean result = true;
@@ -422,8 +420,8 @@ public class PassCodeActivity extends BaseActivity {
     /**
      * Sets the input fields to empty strings and puts the focus on the first one.
      */
-    protected void clearBoxes(){
-        for (int i=0; i < mPassCodeEditTexts.length; i++) {
+    protected void clearBoxes() {
+        for (int i = 0; i < mPassCodeEditTexts.length; i++) {
             mPassCodeEditTexts[i].setText("");
         }
         mPassCodeEditTexts[0].requestFocus();
@@ -438,8 +436,8 @@ public class PassCodeActivity extends BaseActivity {
      * @return              'True' when the key event was processed by this method.
      */
     @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event){
-        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount()== 0){
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
             if (ACTION_REQUEST_WITH_RESULT.equals(getIntent().getAction()) ||
                     ACTION_CHECK_WITH_RESULT.equals(getIntent().getAction())) {
                 finish();
@@ -461,7 +459,6 @@ public class PassCodeActivity extends BaseActivity {
 
         finish();
     }
-
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -485,7 +482,7 @@ public class PassCodeActivity extends BaseActivity {
          */
         public PassCodeDigitTextWatcher(int index, boolean lastOne) {
             mIndex = index;
-            mLastOne  = lastOne;
+            mLastOne = lastOne;
             if (mIndex < 0) {
                 throw new IllegalArgumentException(
                         "Invalid index in " + PassCodeDigitTextWatcher.class.getSimpleName() +

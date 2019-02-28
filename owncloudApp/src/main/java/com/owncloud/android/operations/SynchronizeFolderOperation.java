@@ -1,22 +1,21 @@
 /**
- *   ownCloud Android client application
+ * ownCloud Android client application
  *
- *   @author David A. Velasco
- *   @author Christian Schabesberger
- *   Copyright (C) 2019 ownCloud GmbH.
- *
- *   This program is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License version 2,
- *   as published by the Free Software Foundation.
- *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
- *
- *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * @author David A. Velasco
+ * @author Christian Schabesberger
+ * Copyright (C) 2019 ownCloud GmbH.
+ * <p>
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
+ * <p>
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package com.owncloud.android.operations;
@@ -24,17 +23,17 @@ package com.owncloud.android.operations;
 import android.accounts.Account;
 import android.content.Context;
 import android.content.Intent;
+
 import androidx.annotation.NonNull;
 import androidx.core.util.Pair;
-
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
-import com.owncloud.android.datamodel.UploadsStorageManager;
 import com.owncloud.android.datamodel.OCUpload;
+import com.owncloud.android.datamodel.UploadsStorageManager;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.operations.OperationCancelledException;
-import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
+import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.files.ReadRemoteFolderOperation;
 import com.owncloud.android.lib.resources.files.RemoteFile;
@@ -50,14 +49,13 @@ import java.util.Map;
 import java.util.Vector;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-
 /**
  *  Operation performing the synchronization of the list of files contained
  *  in a folder identified with its remote path.
- *  
+ *
  *  Fetches the list and properties of the files contained in the given folder, including their 
  *  properties, and updates the local database with them.
- *  
+ *
  *  Does NOT enter in the child folders to synchronize their contents also, BUT requests for a new operation instance
  *  doing so.
  */
@@ -70,7 +68,7 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
 
     /** Remote path of the folder to synchronize */
     private String mRemotePath;
-    
+
     /** Account where the file to synchronize belongs */
     private Account mAccount;
 
@@ -130,13 +128,13 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
      *                                      will be synchronized.
      */
     public SynchronizeFolderOperation(
-        Context context,
-        String remotePath,
-        Account account,
-        long currentSyncTime,
-        boolean pushOnly,
-        boolean syncFullAccount,
-        boolean syncContentOfRegularFiles
+            Context context,
+            String remotePath,
+            Account account,
+            long currentSyncTime,
+            boolean pushOnly,
+            boolean syncFullAccount,
+            boolean syncContentOfRegularFiles
     ) {
         mRemotePath = remotePath;
         mCurrentSyncTime = currentSyncTime;
@@ -151,7 +149,6 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
         mSyncContentOfRegularFiles = syncContentOfRegularFiles;
     }
 
-
     public int getConflictsFound() {
         return mConflictsFound;
     }
@@ -164,13 +161,11 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
         return mForgottenLocalFiles;
     }
 
-
-
     /**
      * Returns the list of subfolders after the refresh, in a {@link Pair} with a boolean
      * indicating if was detected as changed in the server or not.
      *
-     * @return  List of pairs of subfolders and boolean flags set to 'true' if there are pending
+     * @return List of pairs of subfolders and boolean flags set to 'true' if there are pending
      *          changes in the server side.
      */
     public List<Pair<OCFile, Boolean>> getFoldersToVisit() {
@@ -217,7 +212,7 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
                         removeLocalFolder();
                     }
                     if (fetchFolderResult.isException()) {
-                        Log_OC.e(TAG, "Checked " + mAccount.name + mRemotePath  + " : " +
+                        Log_OC.e(TAG, "Checked " + mAccount.name + mRemotePath + " : " +
                                 fetchFolderResult.getLogMessage(), fetchFolderResult.getException());
                     } else {
                         Log_OC.e(TAG, "Checked " + mAccount.name + mRemotePath + " : " +
@@ -232,12 +227,11 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
         }
     }
 
-
     /**
      * Get list of files in folder from remote server.
      *
      * @param client      {@link OwnCloudClient} instance used to access the server.
-     * @return            Result of the fetch, including list of remote files in the sync'ed folder.
+     * @return Result of the fetch, including list of remote files in the sync'ed folder.
      * @throws OperationCancelledException
      */
     @NonNull
@@ -252,7 +246,6 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
         return readFolderOperation.execute(client);
     }
 
-
     /**
      * Compares stored ETag of folder being synchronized to determine if there were changes in the server
      * from the last sync.
@@ -264,7 +257,6 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
         return (!mLocalFolder.getTreeEtag().equals(remoteFolder.getEtag()));
     }
 
-
     private void removeLocalFolder() {
         FileDataStorageManager storageManager = getStorageManager();
         if (storageManager.fileExists(mLocalFolder.getFileId())) {
@@ -272,13 +264,12 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
             storageManager.removeFolder(
                     mLocalFolder,
                     true,
-                    (   mLocalFolder.isDown() &&
-                        mLocalFolder.getStoragePath().startsWith(currentSavePath)
+                    (mLocalFolder.isDown() &&
+                            mLocalFolder.getStoragePath().startsWith(currentSavePath)
                     )
             );
         }
     }
-
 
     /**
      *  Synchronizes the data retrieved from the server about the contents of the target folder
@@ -293,10 +284,10 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
         Log_OC.d(TAG, "Synchronizing " + mAccount.name + mRemotePath);
 
         FileDataStorageManager storageManager = getStorageManager();
-        
+
         // parse data from remote folder
         OCFile updatedFolder = FileStorageUtils.createOCFileFrom(
-            (RemoteFile) folderAndFiles.get(0)
+                (RemoteFile) folderAndFiles.get(0)
         );  // NOTE: updates ETag with remote value; that's INTENDED
         updatedFolder.copyLocalPropertiesFrom(mLocalFolder);
 
@@ -322,7 +313,7 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
         OCFile remoteFile, localFile, updatedLocalFile;
         RemoteFile r;
         int foldersToExpand = 0;
-        for (int i=1; i<folderAndFiles.size(); i++) {
+        for (int i = 1; i < folderAndFiles.size(); i++) {
             /// new OCFile instance with the data from the server
             r = folderAndFiles.get(i);
             remoteFile = FileStorageUtils.createOCFileFrom(r);
@@ -341,8 +332,8 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
                 // remote eTag will not be set unless file CONTENTS are synchronized
                 updatedLocalFile.setEtag(localFile.getEtag());
                 if (!updatedLocalFile.isFolder() &&
-                    remoteFile.isImage() &&
-                    remoteFile.getModificationTimestamp() != localFile.getModificationTimestamp()) {
+                        remoteFile.isImage() &&
+                        remoteFile.getModificationTimestamp() != localFile.getModificationTimestamp()) {
                     updatedLocalFile.setNeedsUpdateThumbnail(true);
                 }
 
@@ -353,7 +344,7 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
                 // new files need to check av-off status of parent folder!
                 if (updatedFolder.isAvailableOffline()) {
                     updatedLocalFile.setAvailableOfflineStatus(
-                        OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE_PARENT
+                            OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE_PARENT
                     );
                 }
             }
@@ -378,18 +369,16 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
         storageManager.saveFolder(updatedFolder, updatedFiles, localFilesMap.values());
     }
 
-
     private void preparePushOfLocalChanges() {
         List<OCFile> children = getStorageManager().getFolderContent(mLocalFolder);
         mFoldersToVisit = new Vector<>(children.size());
         for (OCFile child : children) {
             addToSyncContents(
-                child,
-                null
+                    child,
+                    null
             );
         }
     }
-
 
     /**
      * Generates the appropriate operations to later sync the contents of localFile with the server.
@@ -425,8 +414,8 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
                 intent.putExtra(OperationsService.EXTRA_REMOTE_PATH, localFile.getRemotePath());
                 intent.putExtra(OperationsService.EXTRA_PUSH_ONLY, serverUnchanged);
                 intent.putExtra(
-                    OperationsService.EXTRA_SYNC_REGULAR_FILES,
-                    mSyncContentOfRegularFiles
+                        OperationsService.EXTRA_SYNC_REGULAR_FILES,
+                        mSyncContentOfRegularFiles
                 );
                 mFoldersToSyncContents.add(intent);
             }
@@ -438,11 +427,11 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
             if (shouldSyncContents && !isBlockedForAutomatedSync(localFile)) {
                 /// synchronization for files
                 SynchronizeFileOperation operation = new SynchronizeFileOperation(
-                    localFile,
-                    remoteFile,
-                    mAccount,
-                    serverUnchanged,
-                    mContext,
+                        localFile,
+                        remoteFile,
+                        mAccount,
+                        serverUnchanged,
+                        mContext,
                         false
                 );
                 mFilesToSyncContents.add(operation);
@@ -463,7 +452,7 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
 
         Log_OC.v(TAG, "Starting content synchronization... ");
         RemoteOperationResult contentsResult;
-        for (SyncOperation op: mFilesToSyncContents) {
+        for (SyncOperation op : mFilesToSyncContents) {
             if (mCancellationRequested.get()) {
                 throw new OperationCancelledException();
             }
@@ -475,15 +464,15 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
                     mFailsInFileSyncsFound++;
                     if (contentsResult.getException() != null) {
                         Log_OC.e(TAG, "Error while synchronizing file : "   // Vs " av-off file"
-                            + contentsResult.getLogMessage(), contentsResult.getException());
+                                + contentsResult.getLogMessage(), contentsResult.getException());
                     } else {
                         Log_OC.e(TAG, "Error while synchronizing file : "
-                            + contentsResult.getLogMessage());
+                                + contentsResult.getLogMessage());
                     }
                 }
             }   // won't let these fails break the synchronization process
         }
-        for (Intent intent: mFoldersToSyncContents) {
+        for (Intent intent : mFoldersToSyncContents) {
             if (mCancellationRequested.get()) {
                 throw new OperationCancelledException();
             }
@@ -519,7 +508,6 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
         }
     }
 
-    
     /**
      * Cancel operation
      */

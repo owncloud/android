@@ -1,22 +1,21 @@
 /**
- *   ownCloud Android client application
+ * ownCloud Android client application
  *
- *   @author David González Verdugo
- *   @author Christian Schabesberger
- *   Copyright (C) 2019 ownCloud GmbH.
- *
- *   This program is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License version 2,
- *   as published by the Free Software Foundation.
- *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
- *
- *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * @author David González Verdugo
+ * @author Christian Schabesberger
+ * Copyright (C) 2019 ownCloud GmbH.
+ * <p>
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
+ * <p>
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package com.owncloud.android.authentication;
 
@@ -27,9 +26,9 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.PowerManager;
 import android.preference.PreferenceManager;
-import androidx.annotation.RequiresApi;
 import android.view.WindowManager;
 
+import androidx.annotation.RequiresApi;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.lib.BuildConfig;
 import com.owncloud.android.lib.common.utils.Log_OC;
@@ -56,7 +55,7 @@ public class FingerprintManager {
     }
 
     private static int FINGERPRINT_TIMEOUT = 1000;
-        // keeping a "low" positive value is the easiest way to prevent the fingerprint is requested on rotations
+    // keeping a "low" positive value is the easiest way to prevent the fingerprint is requested on rotations
 
     public static FingerprintManager mFingerprintManagerInstance = null;
 
@@ -72,7 +71,8 @@ public class FingerprintManager {
     private Long mTimestamp = 0l;
     private int mVisibleActivitiesCounter = 0;
 
-    protected FingerprintManager() {}
+    protected FingerprintManager() {
+    }
 
     public void onActivityCreated(Activity activity) {
         if (!BuildConfig.DEBUG) {
@@ -129,10 +129,10 @@ public class FingerprintManager {
         mTimestamp = System.currentTimeMillis();
     }
 
-    private boolean fingerprintShouldBeRequested(){
+    private boolean fingerprintShouldBeRequested() {
 
         if ((System.currentTimeMillis() - mTimestamp) > FINGERPRINT_TIMEOUT &&
-                mVisibleActivitiesCounter <= 0){
+                mVisibleActivitiesCounter <= 0) {
             return isFingerPrintEnabled();
         }
 
@@ -153,7 +153,8 @@ public class FingerprintManager {
             return mHwFingerPrintManager.hasEnrolledFingerprints();
         } catch (RuntimeException re) {
             Log_OC.e(FingerprintManager.class.toString(),
-                    "Could find out if finger prints are enroded due to lack of android.permission.INTERACT_ACROSS_USERS");
+                    "Could find out if finger prints are enroded due to lack of android.permission" +
+                            ".INTERACT_ACROSS_USERS");
             return false;
         }
     }

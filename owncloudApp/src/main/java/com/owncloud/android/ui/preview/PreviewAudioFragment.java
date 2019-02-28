@@ -1,23 +1,22 @@
 /**
- *   ownCloud Android client application
+ * ownCloud Android client application
  *
- *   @author David A. Velasco
- *   @author Christian Schabesberger
- *   @author David González Verdugo
- *   Copyright (C) 2019 ownCloud GmbH.
- *
- *   This program is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License version 2,
- *   as published by the Free Software Foundation.
- *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
- *
- *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * @author David A. Velasco
+ * @author Christian Schabesberger
+ * @author David González Verdugo
+ * Copyright (C) 2019 ownCloud GmbH.
+ * <p>
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
+ * <p>
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package com.owncloud.android.ui.preview;
 
@@ -55,13 +54,12 @@ import com.owncloud.android.ui.fragment.FileFragment;
 import com.owncloud.android.utils.DisplayUtils;
 import com.owncloud.android.utils.PreferenceUtils;
 
-
 /**
  * This fragment shows a preview of a downloaded audio.
  *
  * Trying to get an instance with NULL {@link OCFile} or ownCloud {@link Account} values will
  * produce an {@link IllegalStateException}.
- * 
+ *
  * If the {@link OCFile} passed is not downloaded, an {@link IllegalStateException} is
  * generated on instantiation too.
  */
@@ -86,7 +84,6 @@ public class PreviewAudioFragment extends FileFragment {
 
     private static final String TAG = PreviewAudioFragment.class.getSimpleName();
 
-
     /**
      * Public factory method to create new PreviewAudioFragment instances.
      *
@@ -95,13 +92,13 @@ public class PreviewAudioFragment extends FileFragment {
      * @param startPlaybackPosition     Time in milliseconds where the play should be started
      * @param autoplay                  If 'true', the file will be played automatically when
      *                                  the fragment is displayed.
-     * @return                          Fragment ready to be used.
+     * @return Fragment ready to be used.
      */
     public static PreviewAudioFragment newInstance(
-        OCFile file,
-        Account account,
-        int startPlaybackPosition,
-        boolean autoplay
+            OCFile file,
+            Account account,
+            int startPlaybackPosition,
+            boolean autoplay
     ) {
         PreviewAudioFragment frag = new PreviewAudioFragment();
         Bundle args = new Bundle();
@@ -113,13 +110,10 @@ public class PreviewAudioFragment extends FileFragment {
         return frag;
     }
 
-
     /**
      * Creates an empty fragment for preview audio files.
-
      * MUST BE KEPT: the system uses it when tries to reinstantiate a fragment automatically
      * (for instance, when the device is turned a aside).
-
      * DO NOT CALL IT: an {@link OCFile} and {@link Account} must be provided for a successful
      * construction
      */
@@ -131,7 +125,6 @@ public class PreviewAudioFragment extends FileFragment {
         mProgressController = null;
     }
 
-
     /**
      * {@inheritDoc}
      */
@@ -140,7 +133,6 @@ public class PreviewAudioFragment extends FileFragment {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
     }
-
 
     /**
      * {@inheritDoc}
@@ -164,7 +156,6 @@ public class PreviewAudioFragment extends FileFragment {
         return view;
     }
 
-
     /**
      * {@inheritDoc}
      */
@@ -187,12 +178,12 @@ public class PreviewAudioFragment extends FileFragment {
             setFile(file);
             mAccount = savedInstanceState.getParcelable(PreviewAudioFragment.EXTRA_ACCOUNT);
             mSavedPlaybackPosition = savedInstanceState.getInt(
-                PreviewAudioFragment.EXTRA_PLAY_POSITION,
-                args.getInt(PreviewAudioFragment.EXTRA_PLAY_POSITION)
+                    PreviewAudioFragment.EXTRA_PLAY_POSITION,
+                    args.getInt(PreviewAudioFragment.EXTRA_PLAY_POSITION)
             );
             mAutoplay = savedInstanceState.getBoolean(
-                PreviewAudioFragment.EXTRA_PLAYING,
-                args.getBoolean(PreviewAudioFragment.EXTRA_PLAYING)
+                    PreviewAudioFragment.EXTRA_PLAYING,
+                    args.getBoolean(PreviewAudioFragment.EXTRA_PLAYING)
             );
         }
 
@@ -236,7 +227,6 @@ public class PreviewAudioFragment extends FileFragment {
         }
     }
 
-
     /**
      * {@inheritDoc}
      */
@@ -253,7 +243,6 @@ public class PreviewAudioFragment extends FileFragment {
         }
     }
 
-
     @Override
     public void onStart() {
         super.onStart();
@@ -266,7 +255,6 @@ public class PreviewAudioFragment extends FileFragment {
 
         mProgressController.startListeningProgressFor(getFile(), mAccount);
     }
-
 
     @Override
     public void onTransferServiceConnected() {
@@ -307,7 +295,6 @@ public class PreviewAudioFragment extends FileFragment {
         mProgressController.hideProgressBar();
     }
 
-
     /**
      * {@inheritDoc}
      */
@@ -317,7 +304,6 @@ public class PreviewAudioFragment extends FileFragment {
         inflater.inflate(R.menu.file_actions_menu, menu);
     }
 
-
     /**
      * {@inheritDoc}
      */
@@ -326,10 +312,10 @@ public class PreviewAudioFragment extends FileFragment {
         super.onPrepareOptionsMenu(menu);
 
         FileMenuFilter mf = new FileMenuFilter(
-            getFile(),
-            mAccount,
-            mContainerActivity,
-            getActivity()
+                getFile(),
+                mAccount,
+                mContainerActivity,
+                getActivity()
         );
         mf.filter(menu, false, false);
 
@@ -355,7 +341,6 @@ public class PreviewAudioFragment extends FileFragment {
             item.setEnabled(false);
         }
     }
-
 
     /**
      * {@inheritDoc}
@@ -388,11 +373,11 @@ public class PreviewAudioFragment extends FileFragment {
                 mContainerActivity.getFileOperationsHelper().syncFile(getFile());
                 return true;
             }
-            case R.id.action_set_available_offline:{
+            case R.id.action_set_available_offline: {
                 mContainerActivity.getFileOperationsHelper().toggleAvailableOffline(getFile(), true);
                 return true;
             }
-            case R.id.action_unset_available_offline:{
+            case R.id.action_unset_available_offline: {
                 mContainerActivity.getFileOperationsHelper().toggleAvailableOffline(getFile(), false);
                 return true;
             }
@@ -400,7 +385,6 @@ public class PreviewAudioFragment extends FileFragment {
                 return super.onOptionsItemSelected(item);
         }
     }
-
 
     private void seeDetails() {
         mContainerActivity.showDetails(getFile());
@@ -445,19 +429,18 @@ public class PreviewAudioFragment extends FileFragment {
         }
     }
 
-
     private void bindMediaService() {
         Log_OC.d(TAG, "Binding to MediaService...");
         if (mMediaServiceConnection == null) {
             mMediaServiceConnection = new MediaServiceConnection();
-            getActivity().bindService(  new Intent(getActivity(),
-                    MediaService.class),
-                mMediaServiceConnection,
-                Context.BIND_AUTO_CREATE);
+            getActivity().bindService(new Intent(getActivity(),
+                            MediaService.class),
+                    mMediaServiceConnection,
+                    Context.BIND_AUTO_CREATE);
             // follow the flow in MediaServiceConnection#onServiceConnected(...)
         }
     }
-    
+
     /** Defines callbacks for service binding, passed to bindService() */
     private class MediaServiceConnection implements ServiceConnection {
 
@@ -495,8 +478,7 @@ public class PreviewAudioFragment extends FileFragment {
                 Log_OC.w(TAG, "Media service suddenly disconnected");
                 if (mMediaController != null) {
                     mMediaController.setMediaPlayer(null);
-                }
-                else {
+                } else {
                     Log_OC.w(TAG, "No media controller to release when disconnected from media service");
                 }
                 mMediaServiceBinder = null;
@@ -504,7 +486,6 @@ public class PreviewAudioFragment extends FileFragment {
             }
         }
     }
-
 
     /**
      * Opens the previewed file with an external application.
@@ -526,11 +507,9 @@ public class PreviewAudioFragment extends FileFragment {
         return (file != null && file.isDown() && file.isAudio());
     }
 
-
     public void stopPreview() {
         mMediaServiceBinder.pause();
     }
-
 
     /**
      * Finishes the preview
@@ -538,6 +517,5 @@ public class PreviewAudioFragment extends FileFragment {
     private void finish() {
         getActivity().onBackPressed();
     }
-
 
 }

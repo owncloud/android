@@ -1,24 +1,23 @@
 /**
- *   ownCloud Android client application
+ * ownCloud Android client application
  *
- *   @author Bartek Przybylski
- *   @author Christian Schabesberger
- *   @author David González Verdugo
- *   Copyright (C) 2012 Bartek Przybylski
- *   Copyright (C) 2019 ownCloud GmbH.
- *
- *   This program is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License version 2,
- *   as published by the Free Software Foundation.
- *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
- *
- *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * @author Bartek Przybylski
+ * @author Christian Schabesberger
+ * @author David González Verdugo
+ * Copyright (C) 2012 Bartek Przybylski
+ * Copyright (C) 2019 ownCloud GmbH.
+ * <p>
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
+ * <p>
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package com.owncloud.android.files.services;
@@ -39,10 +38,10 @@ import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
 import android.os.Process;
-import androidx.core.app.NotificationCompat;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import android.util.Pair;
 
+import androidx.core.app.NotificationCompat;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.authentication.AuthenticatorActivity;
@@ -52,8 +51,8 @@ import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.OwnCloudClientManagerFactory;
 import com.owncloud.android.lib.common.network.OnDatatransferProgressListener;
-import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
+import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.files.FileUtils;
 import com.owncloud.android.operations.DownloadFileOperation;
@@ -155,7 +154,6 @@ public class FileDownloader extends Service
         mLocalBroadcastManager = LocalBroadcastManager.getInstance(this);
     }
 
-
     /**
      * Service clean up
      */
@@ -174,7 +172,6 @@ public class FileDownloader extends Service
 
         super.onDestroy();
     }
-
 
     /**
      * Entry point to add one or several files to the queue of downloads.
@@ -201,7 +198,7 @@ public class FileDownloader extends Service
 
         if (!intent.hasExtra(KEY_ACCOUNT) ||
                 !intent.hasExtra(KEY_FILE)
-                ) {
+        ) {
             Log_OC.e(TAG, "Not enough information provided in intent");
             return START_NOT_STICKY;
         } else {
@@ -236,7 +233,6 @@ public class FileDownloader extends Service
         return START_NOT_STICKY;
     }
 
-
     /**
      * Provides a binder object that clients can use to perform operations on the queue of downloads,
      * excepting the addition of new files.
@@ -247,7 +243,6 @@ public class FileDownloader extends Service
     public IBinder onBind(Intent arg0) {
         return mBinder;
     }
-
 
     /**
      * Called when ALL the bound clients were onbound.
@@ -260,14 +255,13 @@ public class FileDownloader extends Service
 
     @Override
     public void onAccountsUpdated(Account[] accounts) {
-         //review the current download and cancel it if its account doesn't exist
+        //review the current download and cancel it if its account doesn't exist
         if (mCurrentDownload != null &&
                 !AccountUtils.exists(mCurrentDownload.getAccount().name, getApplicationContext())) {
             mCurrentDownload.cancel();
         }
         // The rest of downloads are cancelled when they try to start
     }
-
 
     /**
      * Binder to let client components to perform operations on the queue of downloads.
@@ -283,7 +277,6 @@ public class FileDownloader extends Service
          */
         private Map<Long, WeakReference<OnDatatransferProgressListener>> mBoundListeners =
                 new HashMap<>();
-
 
         /**
          * Cancels a pending or current download of a remote file.
@@ -328,7 +321,6 @@ public class FileDownloader extends Service
             mBoundListeners.clear();
         }
 
-
         /**
          * Returns True when the file described by 'file' in the ownCloud account 'account'
          * is downloading or waiting to download.
@@ -340,10 +332,11 @@ public class FileDownloader extends Service
          * @param file    A file that could be in the queue of downloads.
          */
         public boolean isDownloading(Account account, OCFile file) {
-            if (account == null || file == null) return false;
+            if (account == null || file == null) {
+                return false;
+            }
             return (mPendingDownloads.contains(account.name, file.getRemotePath()));
         }
-
 
         /**
          * Adds a listener interested in the progress of the download for a concrete file.
@@ -355,10 +348,11 @@ public class FileDownloader extends Service
         public void addDatatransferProgressListener(
                 OnDatatransferProgressListener listener, Account account, OCFile file
         ) {
-            if (account == null || file == null || listener == null) return;
+            if (account == null || file == null || listener == null) {
+                return;
+            }
             mBoundListeners.put(file.getFileId(), new WeakReference<>(listener));
         }
-
 
         /**
          * Removes a listener interested in the progress of the download for a concrete file.
@@ -370,7 +364,9 @@ public class FileDownloader extends Service
         public void removeDatatransferProgressListener(
                 OnDatatransferProgressListener listener, Account account, OCFile file
         ) {
-            if (account == null || file == null || listener == null) return;
+            if (account == null || file == null || listener == null) {
+                return;
+            }
             Long fileId = file.getFileId();
             if (mBoundListeners.get(fileId) == listener) {
                 mBoundListeners.remove(fileId);
@@ -384,10 +380,10 @@ public class FileDownloader extends Service
                     mBoundListeners.get(mCurrentDownload.getFile().getFileId());
             if (boundListenerRef != null && boundListenerRef.get() != null) {
                 boundListenerRef.get().onTransferProgress(
-                    progressRate,
-                    totalTransferredSoFar,
-                    totalToTransfer,
-                    fileName
+                        progressRate,
+                        totalTransferredSoFar,
+                        totalToTransfer,
+                        fileName
                 );
             }
         }
@@ -396,7 +392,6 @@ public class FileDownloader extends Service
 
     /**
      * Download worker. Performs the pending downloads in the order they were requested.
-
      * Created with the Looper of a new thread, started in {@link FileUploader#onCreate()}.
      */
     private static class ServiceHandler extends Handler {
@@ -406,8 +401,9 @@ public class FileDownloader extends Service
 
         public ServiceHandler(Looper looper, FileDownloader service) {
             super(looper);
-            if (service == null)
+            if (service == null) {
                 throw new IllegalArgumentException("Received invalid NULL in parameter 'service'");
+            }
             mService = service;
         }
 
@@ -428,7 +424,6 @@ public class FileDownloader extends Service
         }
     }
 
-
     /**
      * Core download method: requests a file to download and stores it.
      *
@@ -443,9 +438,9 @@ public class FileDownloader extends Service
             /// Check account existence
             if (!AccountUtils.exists(mCurrentDownload.getAccount().name, this)) {
                 Log_OC.w(
-                    TAG,
-                    "Account " + mCurrentDownload.getAccount().name +
-                    " does not exist anymore -> cancelling all its downloads"
+                        TAG,
+                        "Account " + mCurrentDownload.getAccount().name +
+                                " does not exist anymore -> cancelling all its downloads"
                 );
                 cancelDownloadsForAccount(mCurrentDownload.getAccount());
                 return;
@@ -486,10 +481,10 @@ public class FileDownloader extends Service
 
             } finally {
                 Pair<DownloadFileOperation, String> removeResult =
-                    mPendingDownloads.removePayload(
-                            mCurrentAccount.name,
-                            mCurrentDownload.getRemotePath()
-                    );
+                        mPendingDownloads.removePayload(
+                                mCurrentAccount.name,
+                                mCurrentDownload.getRemotePath()
+                        );
 
                 if (!downloadResult.isSuccess() && downloadResult.getException() != null) {
 
@@ -497,35 +492,35 @@ public class FileDownloader extends Service
                     TransferRequester requester = new TransferRequester();
                     if (requester.shouldScheduleRetry(this, downloadResult.getException())) {
                         int jobId = mPendingDownloads.buildKey(
-                            mCurrentAccount.name,
-                            mCurrentDownload.getRemotePath()
+                                mCurrentAccount.name,
+                                mCurrentDownload.getRemotePath()
                         ).hashCode();
                         requester.scheduleDownload(
-                            this,
-                            jobId,
-                            mCurrentAccount.name,
-                            mCurrentDownload.getRemotePath()
+                                this,
+                                jobId,
+                                mCurrentAccount.name,
+                                mCurrentDownload.getRemotePath()
                         );
                         downloadResult = new RemoteOperationResult(
-                            ResultCode.NO_NETWORK_CONNECTION);
+                                ResultCode.NO_NETWORK_CONNECTION);
                     } else {
                         Log_OC.v(
-                            TAG,
-                            String.format(
-                                "Exception in download, network is OK, no retry scheduled for %1s in %2s",
-                                mCurrentDownload.getRemotePath(),
-                                mCurrentAccount.name
-                            )
+                                TAG,
+                                String.format(
+                                        "Exception in download, network is OK, no retry scheduled for %1s in %2s",
+                                        mCurrentDownload.getRemotePath(),
+                                        mCurrentAccount.name
+                                )
                         );
                     }
                 } else {
                     Log_OC.v(
-                        TAG,
-                        String.format(
-                            "Success OR fail without exception for %1s in %2s",
-                            mCurrentDownload.getRemotePath(),
-                            mCurrentAccount.name
-                        )
+                            TAG,
+                            String.format(
+                                    "Success OR fail without exception for %1s in %2s",
+                                    mCurrentDownload.getRemotePath(),
+                                    mCurrentAccount.name
+                            )
                     );
                 }
 
@@ -601,7 +596,6 @@ public class FileDownloader extends Service
         mNotificationManager.notify(R.string.downloader_download_in_progress_ticker, mNotificationBuilder.build());
     }
 
-
     /**
      * Callback method to update the progress bar in the status notification.
      */
@@ -619,7 +613,6 @@ public class FileDownloader extends Service
         }
         mLastPercent = percent;
     }
-
 
     /**
      * Updates the status notification with the result of a download operation.
@@ -690,7 +683,6 @@ public class FileDownloader extends Service
         }
     }
 
-
     /**
      * Sends a broadcast when a download finishes in order to the interested activities can
      * update their view
@@ -714,7 +706,6 @@ public class FileDownloader extends Service
         }
         mLocalBroadcastManager.sendBroadcast(end);
     }
-
 
     /**
      * Sends a broadcast when a new download is added to the queue.

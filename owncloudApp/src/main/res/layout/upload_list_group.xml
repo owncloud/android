@@ -17,7 +17,7 @@
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:showDividers="none"
         android:textColor="@color/color_accent"
-        tools:text="Uploaded"/>
+        tools:text="Uploaded" />
 
     <TextView
         android:id="@+id/textViewFileCount"
@@ -26,6 +26,6 @@
         android:layout_height="wrap_content"
         android:paddingEnd="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
-        tools:text="5 Files"/>
+        tools:text="5 Files" />
 
 </LinearLayout>

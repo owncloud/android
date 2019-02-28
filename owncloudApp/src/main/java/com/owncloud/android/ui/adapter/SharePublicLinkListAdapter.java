@@ -6,20 +6,19 @@ package com.owncloud.android.ui.adapter;
  * @author David González Verdugo
  * @author Christian Schabesberger
  * Copyright (C) 2019 ownCloud GmbH.
- *
+ * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
  * as published by the Free Software Foundation.
- *
+ * <p>
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -38,16 +37,16 @@ import java.util.ArrayList;
 /**
  * Adapter to show a list of public links
  */
-public class SharePublicLinkListAdapter extends ArrayAdapter{
+public class SharePublicLinkListAdapter extends ArrayAdapter {
 
     private Context mContext;
     private ArrayList<OCShare> mPublicLinks;
     private SharePublicLinkListAdapter.SharePublicLinkAdapterListener mListener;
 
-    public SharePublicLinkListAdapter(Context context, int resource, ArrayList<OCShare>shares,
+    public SharePublicLinkListAdapter(Context context, int resource, ArrayList<OCShare> shares,
                                       SharePublicLinkListAdapter.SharePublicLinkAdapterListener listener) {
         super(context, resource);
-        mContext= context;
+        mContext = context;
         mPublicLinks = shares;
         mListener = listener;
     }
@@ -121,7 +120,9 @@ public class SharePublicLinkListAdapter extends ArrayAdapter{
 
     public interface SharePublicLinkAdapterListener {
         void copyOrSendPublicLink(OCShare share);
+
         void removePublicShare(OCShare share);
+
         void editPublicShare(OCShare share);
     }
 }

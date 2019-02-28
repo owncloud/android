@@ -1,26 +1,33 @@
 /**
- *   ownCloud Android client application
+ * ownCloud Android client application
  *
- *   @author masensio
- *   @author David A. Velasco
- *   @author Christian Schabesberger
- *   Copyright (C) 2019 ownCloud GmbH.
- *
- *   This program is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License version 2,
- *   as published by the Free Software Foundation.
- *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
- *
- *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * @author masensio
+ * @author David A. Velasco
+ * @author Christian Schabesberger
+ * Copyright (C) 2019 ownCloud GmbH.
+ * <p>
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
+ * <p>
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package com.owncloud.android.ui.adapter;
 
+import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
+
+import com.owncloud.android.R;
+import com.owncloud.android.ui.dialog.SslUntrustedCertDialog;
+
+import javax.security.auth.x500.X500Principal;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateEncodingException;
@@ -30,22 +37,13 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.security.auth.x500.X500Principal;
-
-import com.owncloud.android.R;
-import com.owncloud.android.ui.dialog.SslUntrustedCertDialog;
-
-import android.util.Log;
-import android.view.View;
-import android.widget.TextView;
-
 /**
  *
  */
 public class X509CertificateViewAdapter implements SslUntrustedCertDialog.CertificateViewAdapter {
-    
+
     //private final static String TAG = X509CertificateViewAdapter.class.getSimpleName();
-    
+
     private X509Certificate mCertificate = null;
 
     private static final String TAG = X509CertificateViewAdapter.class.getSimpleName();
@@ -53,18 +51,18 @@ public class X509CertificateViewAdapter implements SslUntrustedCertDialog.Certif
     public X509CertificateViewAdapter(X509Certificate certificate) {
         mCertificate = certificate;
     }
-    
+
     @Override
     public void updateCertificateView(View dialogView) {
         TextView nullCerView = dialogView.findViewById(R.id.null_cert);
-        
+
         if (mCertificate != null) {
             nullCerView.setVisibility(View.GONE);
             showSubject(mCertificate.getSubjectX500Principal(), dialogView);
             showIssuer(mCertificate.getIssuerX500Principal(), dialogView);
             showValidity(mCertificate.getNotBefore(), mCertificate.getNotAfter(), dialogView);
             showSignature(dialogView);
-            
+
         } else {
             nullCerView.setVisibility(View.VISIBLE);
         }
@@ -109,30 +107,30 @@ public class X509CertificateViewAdapter implements SslUntrustedCertDialog.Certif
             Log.e(TAG, "Problem while trying to decode the certificate.");
         }
 
-
     }
-    
-    private final String getDigestHexBytesWithColonsAndNewLines(View dialogView, final String digestType, final byte [] cert) {
+
+    private final String getDigestHexBytesWithColonsAndNewLines(View dialogView, final String digestType,
+                                                                final byte[] cert) {
         final byte[] rawDigest;
         final String newLine = System.getProperty("line.separator");
 
         rawDigest = getDigest(digestType, cert);
 
-        if ( rawDigest == null) {
+        if (rawDigest == null) {
             return digestType + ":" + newLine + dialogView.getContext().getString(R.string.digest_algorithm_not_available) + newLine + newLine;
         }
 
         final StringBuilder hex = new StringBuilder(3 * rawDigest.length);
 
         for (final byte b : rawDigest) {
-           final int hiVal = (b & 0xF0) >> 4;
-           final int loVal = b & 0x0F;
-           hex.append((char) ('0' + (hiVal + (hiVal / 10 * 7))));
-           hex.append((char) ('0' + (loVal + (loVal / 10 * 7))));
-           hex.append(":");
+            final int hiVal = (b & 0xF0) >> 4;
+            final int loVal = b & 0x0F;
+            hex.append((char) ('0' + (hiVal + (hiVal / 10 * 7))));
+            hex.append((char) ('0' + (loVal + (loVal / 10 * 7))));
+            hex.append(":");
         }
-        return digestType + ":" + newLine + hex.toString().replaceFirst("\\:$","") + newLine + newLine;
-     }    
+        return digestType + ":" + newLine + hex.toString().replaceFirst("\\:$", "") + newLine + newLine;
+    }
 
     private void showValidity(Date notBefore, Date notAfter, View dialogView) {
         TextView fromView = dialogView.findViewById(R.id.value_validity_from);
@@ -150,7 +148,7 @@ public class X509CertificateViewAdapter implements SslUntrustedCertDialog.Certif
         TextView cView = dialogView.findViewById(R.id.value_subject_C);
         TextView stView = dialogView.findViewById(R.id.value_subject_ST);
         TextView lView = dialogView.findViewById(R.id.value_subject_L);
-        
+
         if (s.get("CN") != null) {
             cnView.setText(s.get("CN"));
             cnView.setVisibility(View.VISIBLE);
@@ -188,7 +186,7 @@ public class X509CertificateViewAdapter implements SslUntrustedCertDialog.Certif
             lView.setVisibility(View.GONE);
         }
     }
-    
+
     private void showIssuer(X500Principal issuer, View dialogView) {
         Map<String, String> s = parsePrincipal(issuer);
         TextView cnView = dialogView.findViewById(R.id.value_issuer_CN);
@@ -197,7 +195,7 @@ public class X509CertificateViewAdapter implements SslUntrustedCertDialog.Certif
         TextView cView = dialogView.findViewById(R.id.value_issuer_C);
         TextView stView = dialogView.findViewById(R.id.value_issuer_ST);
         TextView lView = dialogView.findViewById(R.id.value_issuer_L);
-        
+
         if (s.get("CN") != null) {
             cnView.setText(s.get("CN"));
             cnView.setVisibility(View.VISIBLE);
@@ -235,17 +233,16 @@ public class X509CertificateViewAdapter implements SslUntrustedCertDialog.Certif
             lView.setVisibility(View.GONE);
         }
     }
-    
 
     private Map<String, String> parsePrincipal(X500Principal principal) {
         Map<String, String> result = new HashMap<String, String>();
         String toParse = principal.getName();
         String[] pieces = toParse.split(",");
-        String[] tokens = {"CN", "O", "OU", "C", "ST", "L"}; 
-        for (int i=0; i < pieces.length ; i++) {
-            for (int j=0; j<tokens.length; j++) {
+        String[] tokens = {"CN", "O", "OU", "C", "ST", "L"};
+        for (int i = 0; i < pieces.length; i++) {
+            for (int j = 0; j < tokens.length; j++) {
                 if (pieces[i].startsWith(tokens[j] + "=")) {
-                    result.put(tokens[j], pieces[i].substring(tokens[j].length()+1));
+                    result.put(tokens[j], pieces[i].substring(tokens[j].length() + 1));
                 }
             }
         }

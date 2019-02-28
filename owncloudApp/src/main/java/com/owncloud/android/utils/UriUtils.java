@@ -1,20 +1,19 @@
 /**
- *   ownCloud Android client application
- *
- *   Copyright (C) 2016 ownCloud GmbH.
- *
- *   This program is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License version 2,
- *   as published by the Free Software Foundation.
- *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
- *
- *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * ownCloud Android client application
+ * <p>
+ * Copyright (C) 2016 ownCloud GmbH.
+ * <p>
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
+ * <p>
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package com.owncloud.android.utils;
@@ -33,7 +32,6 @@ import android.webkit.MimeTypeMap;
 
 import com.owncloud.android.lib.common.utils.Log_OC;
 
-
 /**
  * A helper class for some Uri operations.
  */
@@ -42,12 +40,11 @@ public class UriUtils {
     public static final String TAG = UriUtils.class.getSimpleName();
 
     public static final String URI_CONTENT_SCHEME = "content://";
-    
-    
+
     /**
      * Get the value of the data column for this Uri. This is useful for
      * MediaStore Uris, and other file-based ContentProviders.
-     * 
+     *
      * @param context The context.
      * @param uri The Uri to query.
      * @param selection (Optional) Filter used in the query.
@@ -58,7 +55,7 @@ public class UriUtils {
 
         Cursor cursor = null;
         final String column = "_data";
-        final String[] projection = { column };
+        final String[] projection = {column};
 
         try {
             cursor = context.getContentResolver().query(uri, projection, selection, selectionArgs, null);
@@ -68,8 +65,9 @@ public class UriUtils {
                 return cursor.getString(column_index);
             }
         } finally {
-            if (cursor != null)
+            if (cursor != null) {
                 cursor.close();
+            }
         }
         return null;
     }
@@ -107,7 +105,7 @@ public class UriUtils {
     }
 
     /**
-     * 
+     *
      * @param uri The Uri to check.
      * @return Whether the Uri is from a content provider as kind "content://..."
      */
@@ -115,12 +113,11 @@ public class UriUtils {
         return uri.toString().startsWith(URI_CONTENT_SCHEME);
     }
 
-
     /**
      * Translates a content:// URI referred to a local file file to a path on the local filesystem
      *
      * @param uri       The URI to resolve
-     * @return          The path in the file system to the content or null if it could not be found (not a file)
+     * @return The path in the file system to the content or null if it could not be found (not a file)
      */
     @TargetApi(Build.VERSION_CODES.KITKAT)
     public static String getLocalPath(Uri uri, Context context) {
@@ -163,7 +160,7 @@ public class UriUtils {
                 }
 
                 final String selection = "_id=?";
-                final String[] selectionArgs = new String[] { split[1] };
+                final String[] selectionArgs = new String[]{split[1]};
 
                 return UriUtils.getDataColumn(context, contentUri, selection, selectionArgs);
             }
@@ -176,8 +173,9 @@ public class UriUtils {
         else if ("content".equalsIgnoreCase(uri.getScheme())) {
 
             // Return the remote address
-            if (UriUtils.isGooglePhotosUri(uri))
+            if (UriUtils.isGooglePhotosUri(uri)) {
                 return uri.getLastPathSegment();
+            }
 
             return UriUtils.getDataColumn(context, uri, null, null);
         }
@@ -187,8 +185,6 @@ public class UriUtils {
         }
         return null;
     }
-
-
 
     public static String getDisplayNameForUri(Uri uri, Context context) {
 
@@ -215,7 +211,7 @@ public class UriUtils {
                 // Add best possible extension
                 int index = displayName.lastIndexOf(".");
                 if (index == -1 || MimeTypeMap.getSingleton().
-                    getMimeTypeFromExtension(displayName.substring(index + 1)) == null) {
+                        getMimeTypeFromExtension(displayName.substring(index + 1)) == null) {
                     String mimeType = context.getContentResolver().getType(uri);
                     String extension = MimeTypeMap.getSingleton().getExtensionFromMimeType(mimeType);
                     if (extension != null) {
@@ -231,7 +227,6 @@ public class UriUtils {
         // Replace path separator characters to avoid inconsistent paths
         return displayName.replaceAll("/", "-");
     }
-
 
     private static String getDisplayNameFromContentResolver(Uri uri, Context context) {
         String displayName = null;
@@ -254,11 +249,11 @@ public class UriUtils {
             Cursor cursor = null;
             try {
                 cursor = context.getContentResolver().query(
-                    uri,
-                    new String[]{displayNameColumn},
-                    null,
-                    null,
-                    null
+                        uri,
+                        new String[]{displayNameColumn},
+                        null,
+                        null,
+                        null
                 );
                 if (cursor != null) {
                     cursor.moveToFirst();
@@ -277,6 +272,5 @@ public class UriUtils {
         }
         return displayName;
     }
-
 
 }

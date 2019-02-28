@@ -1,22 +1,21 @@
 /**
- *   ownCloud Android client application
+ * ownCloud Android client application
  *
- *   @author LukeOwncloud
- *   @author Christian Schabesberger
- *   Copyright (C) 2019 ownCloud GmbH.
- *
- *   This program is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License version 2,
- *   as published by the Free Software Foundation.
- *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
- *
- *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * @author LukeOwncloud
+ * @author Christian Schabesberger
+ * Copyright (C) 2019 ownCloud GmbH.
+ * <p>
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
+ * <p>
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package com.owncloud.android.ui.fragment;
 
@@ -36,7 +35,7 @@ import com.owncloud.android.ui.adapter.ExpandableUploadListAdapter;
 
 /**
  * A Fragment that lists all files and folders in a given LOCAL path.
- * 
+ *
  */
 public class UploadListFragment extends ExpandableListFragment {
     static private String TAG = UploadListFragment.class.getSimpleName();
@@ -55,10 +54,10 @@ public class UploadListFragment extends ExpandableListFragment {
     public void setBinderReady(boolean ready) {
         mBinderReady = ready;
     }
-    public boolean isBinderReady(){
+
+    public boolean isBinderReady() {
         return mBinderReady;
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -68,7 +67,7 @@ public class UploadListFragment extends ExpandableListFragment {
         setOnRefreshListener(this);
         return v;
     }
-    
+
     @Override
     public void onRefresh() {
         // remove the progress circle as soon as pull is triggered, like in the list of files
@@ -100,7 +99,7 @@ public class UploadListFragment extends ExpandableListFragment {
     public void onStart() {
         Log_OC.d(TAG, "onStart() start");
         super.onStart();
-        mAdapter = new ExpandableUploadListAdapter((FileActivity)getActivity());
+        mAdapter = new ExpandableUploadListAdapter((FileActivity) getActivity());
         setListAdapter(mAdapter);
     }
 
@@ -120,7 +119,7 @@ public class UploadListFragment extends ExpandableListFragment {
     /**
      * Interface to implement by any Activity that includes some instance of
      * UploadListFragment
-     * 
+     *
      * @author LukeOwncloud
      */
     public interface ContainerActivity {
@@ -128,7 +127,7 @@ public class UploadListFragment extends ExpandableListFragment {
         /**
          * Callback method invoked when an upload item is clicked by the user on
          * the upload list
-         * 
+         *
          * @param file
          * @return return true if click was handled.
          */
@@ -136,7 +135,7 @@ public class UploadListFragment extends ExpandableListFragment {
 
     }
 
-    public void binderReady(){
+    public void binderReady() {
         setBinderReady(true);
 
         if (mAdapter != null) {
@@ -144,7 +143,7 @@ public class UploadListFragment extends ExpandableListFragment {
         }
     }
 
-    public void updateUploads(){
+    public void updateUploads() {
         if (mAdapter != null) {
             mAdapter.refreshView();
         }

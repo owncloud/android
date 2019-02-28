@@ -43,7 +43,6 @@ public class PrepareVideoPlayerAsyncTask extends AsyncTask<Object, Void, MediaSo
 
     private static final DefaultBandwidthMeter BANDWIDTH_METER = new DefaultBandwidthMeter();
 
-
     public PrepareVideoPlayerAsyncTask(Context context, OnPrepareVideoPlayerTaskListener listener,
                                        OCFile file, Account account, Handler mainHandler) {
         mContext = context;
@@ -89,6 +88,7 @@ public class PrepareVideoPlayerAsyncTask extends AsyncTask<Object, Void, MediaSo
 
     /**
      * Build the media source neeeded to play the video
+     *
      * @param mediaDataSourceFactory
      * @param uri
      * @return media to be played
@@ -102,7 +102,7 @@ public class PrepareVideoPlayerAsyncTask extends AsyncTask<Object, Void, MediaSo
      * Returns a new HttpDataSource factory.
      *
      * @param bandwidthMeter Whether to set {@link #BANDWIDTH_METER} as a listener to the new
-     *     DataSource factory.
+     *                       DataSource factory.
      * @return A new HttpDataSource factory.
      */
     private HttpDataSource.Factory buildHttpDataSourceFactory(
@@ -156,9 +156,9 @@ public class PrepareVideoPlayerAsyncTask extends AsyncTask<Object, Void, MediaSo
     @Override
     protected void onPostExecute(MediaSource mediaSource) {
         super.onPostExecute(mediaSource);
-        if (mediaSource!= null)  {
+        if (mediaSource != null) {
             OnPrepareVideoPlayerTaskListener listener = mListener.get();
-            if (listener!= null) {
+            if (listener != null) {
                 listener.OnPrepareVideoPlayerTaskCallback(mediaSource);
             }
         }

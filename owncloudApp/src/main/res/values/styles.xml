@@ -19,7 +19,7 @@
 -->
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <style name="Animations"/>
+    <style name="Animations" />
 
     <!-- THEMES: styles for whole APP or individual ACTIVITIES -->
 
@@ -88,7 +88,6 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-
     <!-- APP BAR styles -->
 
     <!-- Regular style for the app bar (both for old actionbar and new toolbar);
@@ -103,7 +102,6 @@
     <style name="ownCloud.Appbar.Transparent" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
         <item name="colorPrimary">@color/owncloud_blue_transparent</item>
     </style>
-
 
     <!-- MORE styles -->
 
@@ -175,7 +173,7 @@
     </style>
 
     <!-- PopDownMenu -->
-    <style name="Animations.PopDownMenu"/>
+    <style name="Animations.PopDownMenu" />
 
     <style name="Animations.PopDownMenu.Center">
         <item name="android:windowEnterAnimation">@anim/grow_from_top</item>
@@ -198,7 +196,7 @@
     </style>
 
     <!-- PopUpMenu -->
-    <style name="Animations.PopUpMenu"/>
+    <style name="Animations.PopUpMenu" />
 
     <style name="Animations.PopUpMenu.Center">
         <item name="android:windowEnterAnimation">@anim/grow_from_bottom</item>
@@ -235,13 +233,13 @@
 
     <!-- Notifications -->
     <style name="Theme.ownCloud.NotificationText.Title"
-           parent="@android:style/TextAppearance.StatusBar.EventContent.Title">
+        parent="@android:style/TextAppearance.StatusBar.EventContent.Title">
         <item name="android:textSize">18sp</item>
         <item name="android:textStyle">bold</item>
     </style>
 
     <style name="Theme.ownCloud.NotificationText.Content"
-           parent="@android:style/TextAppearance.StatusBar.EventContent">
+        parent="@android:style/TextAppearance.StatusBar.EventContent">
         <item name="android:textSize">16sp</item>
     </style>
 

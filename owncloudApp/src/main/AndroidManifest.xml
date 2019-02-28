@@ -21,7 +21,7 @@
     package="com.owncloud.android">
 
     <uses-sdk
-        tools:overrideLibrary="android.support.customtabs"/>
+        tools:overrideLibrary="android.support.customtabs" />
 
     <!--
          GET_ACCOUNTS is needed for API < 23.
@@ -203,7 +203,9 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
-                <data android:scheme="oc" android:host="android.owncloud.com" />
+                <data
+                    android:scheme="oc"
+                    android:host="android.owncloud.com" />
             </intent-filter>
         </activity>
 
@@ -222,12 +224,15 @@
         <activity
             android:name=".ui.activity.ErrorsWhileCopyingHandlerActivity"
             android:theme="@style/Theme.ownCloud" />
-        <activity android:name=".ui.activity.LogHistoryActivity" android:configChanges="orientation|screenSize"/>
+        <activity
+            android:name=".ui.activity.LogHistoryActivity"
+            android:configChanges="orientation|screenSize" />
         <activity android:name=".ui.errorhandling.ErrorShowActivity" />
         <activity
             android:name=".ui.activity.UploadListActivity"
             android:theme="@style/Theme.ownCloud.Toolbar.Drawer" />
-        <activity android:name=".ui.activity.WhatsNewActivity"
+        <activity
+            android:name=".ui.activity.WhatsNewActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             />
 
@@ -273,6 +278,6 @@
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:theme="@style/Theme.ownCloud.Fullscreen" />
         <activity android:name=".ui.activity.PatternLockActivity" />
-        <activity android:name=".ui.activity.FingerprintActivity"/>
+        <activity android:name=".ui.activity.FingerprintActivity" />
     </application>
 </manifest>

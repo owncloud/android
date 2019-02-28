@@ -1,22 +1,21 @@
 /**
- *   ownCloud Android client application
+ * ownCloud Android client application
  *
- *   @author David A. Velasco
- *   @author Christian Schabesberger
- *   Copyright (C) 2019 ownCloud GmbH.
- *
- *   This program is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License version 2,
- *   as published by the Free Software Foundation.
- *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
- *
- *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * @author David A. Velasco
+ * @author Christian Schabesberger
+ * Copyright (C) 2019 ownCloud GmbH.
+ * <p>
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
+ * <p>
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package com.owncloud.android.authentication;
 
@@ -47,7 +46,7 @@ public class PassCodeManager {
     }
 
     private static int PASS_CODE_TIMEOUT = 1000;
-        // keeping a "low" positive value is the easiest way to prevent the pass code is requested on rotations
+    // keeping a "low" positive value is the easiest way to prevent the pass code is requested on rotations
 
     public static PassCodeManager mPassCodeManagerInstance = null;
 
@@ -61,7 +60,8 @@ public class PassCodeManager {
     private Long mTimestamp = 0l;
     private int mVisibleActivitiesCounter = 0;
 
-    protected PassCodeManager() {}
+    protected PassCodeManager() {
+    }
 
     public void onActivityCreated(Activity activity) {
         if (!BuildConfig.DEBUG) {
@@ -101,7 +101,7 @@ public class PassCodeManager {
         }
     }
 
-    public void onFingerprintCancelled(Activity activity){
+    public void onFingerprintCancelled(Activity activity) {
         // Ask user for passcode
         checkPasscode(activity);
     }
@@ -117,9 +117,9 @@ public class PassCodeManager {
         mTimestamp = System.currentTimeMillis();
     }
 
-    private boolean passCodeShouldBeRequested(){
+    private boolean passCodeShouldBeRequested() {
         if ((System.currentTimeMillis() - mTimestamp) > PASS_CODE_TIMEOUT &&
-                mVisibleActivitiesCounter <= 0){
+                mVisibleActivitiesCounter <= 0) {
             return isPassCodeEnabled();
         }
         return false;

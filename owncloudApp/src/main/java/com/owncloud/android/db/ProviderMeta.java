@@ -1,25 +1,24 @@
 /**
- *   ownCloud Android client application
+ * ownCloud Android client application
  *
- *   @author Bartek Przybylski
- *   @author David A. Velasco
- *   @author masensio
- *   @author David González Verdugo
- *   Copyright (C) 2011  Bartek Przybylski
- *   Copyright (C) 2019 ownCloud GmbH.
- *
- *   This program is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License version 2,
- *   as published by the Free Software Foundation.
- *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
- *
- *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * @author Bartek Przybylski
+ * @author David A. Velasco
+ * @author masensio
+ * @author David González Verdugo
+ * Copyright (C) 2011  Bartek Przybylski
+ * Copyright (C) 2019 ownCloud GmbH.
+ * <p>
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
+ * <p>
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package com.owncloud.android.db;
 
@@ -89,7 +88,7 @@ public class ProviderMeta {
         public static final String FILE_PERMISSIONS = "permissions";
         public static final String FILE_REMOTE_ID = "remote_id";
         public static final String FILE_UPDATE_THUMBNAIL = "update_thumbnail";
-        public static final String FILE_IS_DOWNLOADING= "is_downloading";
+        public static final String FILE_IS_DOWNLOADING = "is_downloading";
         public static final String FILE_ETAG_IN_CONFLICT = "etag_in_conflict";
         public static final String FILE_PRIVATE_LINK = "private_link";
 
@@ -175,7 +174,7 @@ public class ProviderMeta {
         public static final String UPLOADS_TRANSFER_ID = "transfer_id";
 
         public static final String UPLOADS_DEFAULT_SORT_ORDER =
-                ProviderTableMeta._ID  + " collate nocase desc";
+                ProviderTableMeta._ID + " collate nocase desc";
 
         // Columns of user_avatars table
         public static final String USER_AVATARS__ACCOUNT_NAME = "account_name";
@@ -187,7 +186,7 @@ public class ProviderMeta {
         public static final String PICTURES_LAST_SYNC_TIMESTAMP = "pictures_last_sync_date";
         public static final String VIDEOS_LAST_SYNC_TIMESTAMP = "videos_last_sync_date";
         public static final String CAMERA_UPLOADS_SYNC_DEFAULT_SORT_ORDER =
-                ProviderTableMeta._ID  + " collate nocase asc";
+                ProviderTableMeta._ID + " collate nocase asc";
 
         // Columns of user_quotas table
         public static final String USER_QUOTAS__ACCOUNT_NAME = "account_name";

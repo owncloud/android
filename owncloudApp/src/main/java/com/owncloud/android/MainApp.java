@@ -1,24 +1,23 @@
 /**
- *   ownCloud Android client application
+ * ownCloud Android client application
  *
- *   @author masensio
- *   @author David A. Velasco
- *   @author David González Verdugo
- *   @author Christian Schabesberger
- *   Copyright (C) 2019 ownCloud GmbH.
- *
- *   This program is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License version 2,
- *   as published by the Free Software Foundation.
- *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
- *
- *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * @author masensio
+ * @author David A. Velasco
+ * @author David González Verdugo
+ * @author Christian Schabesberger
+ * Copyright (C) 2019 ownCloud GmbH.
+ * <p>
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
+ * <p>
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package com.owncloud.android;
 
@@ -47,7 +46,6 @@ import com.owncloud.android.ui.activity.PassCodeActivity;
 import com.owncloud.android.ui.activity.PatternLockActivity;
 import com.owncloud.android.ui.activity.WhatsNewActivity;
 
-
 /**
  * Main Application of the project
  *
@@ -73,7 +71,7 @@ public class MainApp extends Application {
 
     public static String BETA_VERSION = "beta";
 
-    public void onCreate(){
+    public void onCreate() {
         super.onCreate();
         MainApp.mContext = getApplicationContext();
 
@@ -129,7 +127,7 @@ public class MainApp extends Application {
 
             @Override
             public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
-                Log_OC.d(activity.getClass().getSimpleName(),  "onCreate(Bundle) starting" );
+                Log_OC.d(activity.getClass().getSimpleName(), "onCreate(Bundle) starting");
                 PassCodeManager.getPassCodeManager().onActivityCreated(activity);
                 PatternManager.getPatternManager().onActivityCreated(activity);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -146,7 +144,7 @@ public class MainApp extends Application {
 
             @Override
             public void onActivityStarted(Activity activity) {
-                Log_OC.d(activity.getClass().getSimpleName(),  "onStart() starting" );
+                Log_OC.d(activity.getClass().getSimpleName(), "onStart() starting");
                 PassCodeManager.getPassCodeManager().onActivityStarted(activity);
                 PatternManager.getPatternManager().onActivityStarted(activity);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -156,7 +154,7 @@ public class MainApp extends Application {
 
             @Override
             public void onActivityResumed(Activity activity) {
-                Log_OC.d(activity.getClass().getSimpleName(), "onResume() starting" );
+                Log_OC.d(activity.getClass().getSimpleName(), "onResume() starting");
             }
 
             @Override
@@ -166,7 +164,7 @@ public class MainApp extends Application {
 
             @Override
             public void onActivityStopped(Activity activity) {
-                Log_OC.d(activity.getClass().getSimpleName(), "onStop() ending" );
+                Log_OC.d(activity.getClass().getSimpleName(), "onStop() ending");
                 PassCodeManager.getPassCodeManager().onActivityStopped(activity);
                 PatternManager.getPatternManager().onActivityStopped(activity);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -181,12 +179,12 @@ public class MainApp extends Application {
 
             @Override
             public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
-                Log_OC.d(activity.getClass().getSimpleName(), "onSaveInstanceState(Bundle) starting" );
+                Log_OC.d(activity.getClass().getSimpleName(), "onSaveInstanceState(Bundle) starting");
             }
 
             @Override
             public void onActivityDestroyed(Activity activity) {
-                Log_OC.d(activity.getClass().getSimpleName(), "onDestroy() ending" );
+                Log_OC.d(activity.getClass().getSimpleName(), "onDestroy() ending");
             }
         });
     }
@@ -203,7 +201,7 @@ public class MainApp extends Application {
     public static String getAccountType() {
         return getAppContext().getResources().getString(R.string.account_type);
     }
-    
+
     public static int getVersionCode() {
         try {
             String thisPackageName = getAppContext().getPackageName();
@@ -238,13 +236,13 @@ public class MainApp extends Application {
     }
 
     // TODO Enable when "On Device" is recovered ?
-//    public static void showOnlyFilesOnDevice(boolean state){
-//        mOnlyOnDevice = state;
-//    }
-//
-//    public static boolean getOnlyOnDevice(){
-//        return mOnlyOnDevice;
-//    }
+    //    public static void showOnlyFilesOnDevice(boolean state){
+    //        mOnlyOnDevice = state;
+    //    }
+    //
+    //    public static boolean getOnlyOnDevice(){
+    //        return mOnlyOnDevice;
+    //    }
 
     // user agent
     public static String getUserAgent() {
@@ -272,7 +270,7 @@ public class MainApp extends Application {
             String packageName = getAppContext().getPackageName();
             PackageInfo packageInfo = getAppContext().getPackageManager().getPackageInfo(packageName, 0);
             String versionName = packageInfo.versionName;
-            if (versionName.contains(BETA_VERSION)){
+            if (versionName.contains(BETA_VERSION)) {
                 isBeta = true;
             }
         } catch (PackageManager.NameNotFoundException e) {

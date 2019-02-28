@@ -3,18 +3,18 @@
  *
  * @author David A. Velasco
  * @author David González Verdugo
- *
+ * <p>
  * Copyright (C) 2019 ownCloud GmbH.
- *
+ * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
  * as published by the Free Software Foundation.
- *
+ * <p>
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -29,7 +29,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.PersistableBundle;
-import androidx.core.content.ContextCompat;
 
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.OCFile;
@@ -147,7 +146,6 @@ public class TransferRequester {
                 requestedFromAvOfflineJobService);
     }
 
-
     /**
      * Call to retry upload identified by remotePath
      */
@@ -164,7 +162,6 @@ public class TransferRequester {
         }
     }
 
-
     /**
      * Retry a subset of all the stored failed uploads.
      *
@@ -176,7 +173,7 @@ public class TransferRequester {
      * @param requestedFromWifiBackEvent  true if the retry was requested because wifi connection was back,
      *                                    false otherwise
      */
-    public void retryFailedUploads(Context context, Account account, UploadResult uploadResult, 
+    public void retryFailedUploads(Context context, Account account, UploadResult uploadResult,
                                    boolean requestedFromWifiBackEvent) {
         UploadsStorageManager uploadsStorageManager = new UploadsStorageManager(context.getContentResolver());
         OCUpload[] failedUploads = uploadsStorageManager.getFailedUploads();
@@ -236,7 +233,8 @@ public class TransferRequester {
         return (
                 !ConnectivityUtils.isNetworkActive(context) ||
                         PowerUtils.isDeviceIdle(context) ||
-                        exception instanceof SocketTimeoutException // TODO check if exception is the same in HTTP server
+                        exception instanceof SocketTimeoutException // TODO check if exception is the same in HTTP
+                // server
         );
     }
 
@@ -270,7 +268,6 @@ public class TransferRequester {
         }
     }
 
-
     /**
      * Schedule a future retry of a download, to be done when a connection via an unmetered network (free Wifi)
      * is available.
@@ -300,7 +297,6 @@ public class TransferRequester {
             );
         }
     }
-
 
     /**
      * Schedule a future transfer of an upload, to be done when a connection via an unmetered network (free Wifi)

@@ -5,16 +5,16 @@
  * @author masensio
  * @author Christian Schabesberger
  * Copyright (C) 2019 ownCloud GmbH.
- *
+ * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
  * as published by the Free Software Foundation.
- *
+ * <p>
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -25,9 +25,9 @@ import android.content.Context;
 
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.lib.common.OwnCloudClient;
-import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
+import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.status.GetRemoteStatusOperation;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
@@ -83,7 +83,8 @@ public class GetServerInfoOperation extends RemoteOperation<GetServerInfoOperati
             mResultData.mVersion = remoteStatusResult.getData();
             mResultData.mIsSslConn = (remoteStatusResult.getCode() == ResultCode.OK_SSL);
             mResultData.mBaseUrl = normalizeProtocolPrefix(mUrl, mResultData.mIsSslConn);
-            final RemoteOperationResult<List<AuthenticationMethod>> detectAuthResult = detectAuthorizationMethod(client);
+            final RemoteOperationResult<List<AuthenticationMethod>> detectAuthResult =
+                    detectAuthorizationMethod(client);
 
             // third: merge results
             if (detectAuthResult.isSuccess()) {
@@ -91,7 +92,7 @@ public class GetServerInfoOperation extends RemoteOperation<GetServerInfoOperati
                 result.setData(mResultData);
             } else {
                 result = new RemoteOperationResult<>(detectAuthResult);
-                mResultData.mAuthMethods =  detectAuthResult.getData();
+                mResultData.mAuthMethods = detectAuthResult.getData();
                 result.setData(mResultData);
             }
         }
@@ -120,7 +121,7 @@ public class GetServerInfoOperation extends RemoteOperation<GetServerInfoOperati
 
     private String normalizeProtocolPrefix(String url, boolean isSslConn) {
         if (!url.toLowerCase().startsWith("http://") &&
-            !url.toLowerCase().startsWith("https://")) {
+                !url.toLowerCase().startsWith("https://")) {
             if (isSslConn) {
                 return "https://" + url;
             } else {

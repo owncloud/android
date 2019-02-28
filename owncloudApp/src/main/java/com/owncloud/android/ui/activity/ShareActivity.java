@@ -7,17 +7,17 @@
  * @author David González Verdugo
  * @author Christian Schabesberger
  * Copyright (C) 2019 ownCloud GmbH.
- *
- *
+ * <p>
+ * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
  * as published by the Free Software Foundation.
- *
+ * <p>
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -28,12 +28,12 @@ import android.app.SearchManager;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
 
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
@@ -58,7 +58,6 @@ import com.owncloud.android.ui.fragment.ShareFileFragment;
 import com.owncloud.android.ui.fragment.ShareFragmentListener;
 import com.owncloud.android.utils.PreferenceUtils;
 
-
 /**
  * Activity for sharing files
  */
@@ -75,7 +74,6 @@ public class ShareActivity extends FileActivity
     public static final String TAG_REMOVE_SHARE_DIALOG_FRAGMENT = "REMOVE_SHARE_DIALOG_FRAGMENT";
 
     GetSharesForFileAsyncTask mGetSharesForFileAsyncTask;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,7 +113,6 @@ public class ShareActivity extends FileActivity
         // Request for a refresh of the data through the server (starts an Async Task)
         refreshSharesFromServer();
     }
-
 
     @Override
     protected void onNewIntent(Intent intent) {
@@ -254,9 +251,9 @@ public class ShareActivity extends FileActivity
 
         // Create and show the dialog
         DialogFragment newFragment = PublicShareDialogFragment.newInstanceToCreate(
-            getFile(),
-            getAccount(),
-            defaultLinkName
+                getFile(),
+                getAccount(),
+                defaultLinkName
         );
         newFragment.show(ft, TAG_PUBLIC_SHARE_DIALOG_FRAGMENT);
     }
@@ -296,7 +293,7 @@ public class ShareActivity extends FileActivity
                 (operation instanceof GetSharesForFileOperation &&
                         result.getCode() == RemoteOperationResult.ResultCode.SHARE_NOT_FOUND
                 )
-                ) {
+        ) {
             Log_OC.d(TAG, "Refreshing view on successful operation or finished refresh");
             refreshSharesFromStorageManager();
             if (operation instanceof GetSharesForFileOperation) {

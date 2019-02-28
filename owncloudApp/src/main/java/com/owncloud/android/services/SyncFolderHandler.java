@@ -1,20 +1,19 @@
 /**
- *   ownCloud Android client application
- *
- *   Copyright (C) 2019 ownCloud GmbH.
- *
- *   This program is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License version 2,
- *   as published by the Free Software Foundation.
- *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
- *
- *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * ownCloud Android client application
+ * <p>
+ * Copyright (C) 2019 ownCloud GmbH.
+ * <p>
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
+ * <p>
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package com.owncloud.android.services;
@@ -25,9 +24,9 @@ import android.content.Intent;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import android.util.Pair;
 
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.files.services.FileDownloader;
@@ -53,7 +52,6 @@ class SyncFolderHandler extends Handler {
 
     private static final String TAG = SyncFolderHandler.class.getSimpleName();
 
-
     OperationsService mService;
 
     private IndexedForest<SynchronizeFolderOperation> mPendingOperations =
@@ -64,7 +62,6 @@ class SyncFolderHandler extends Handler {
     private FileDataStorageManager mStorageManager;
     private SynchronizeFolderOperation mCurrentSyncOperation;
     private LocalBroadcastManager mLocalBroadcastManager;
-
 
     public SyncFolderHandler(Looper looper, OperationsService service) {
         super(looper);
@@ -77,7 +74,6 @@ class SyncFolderHandler extends Handler {
         mLocalBroadcastManager = LocalBroadcastManager.getInstance(mService);
     }
 
-
     /**
      * Returns True when the folder located in 'remotePath' in the ownCloud account 'account', or any of its
      * descendants, is being synchronized (or waiting for it).
@@ -86,10 +82,11 @@ class SyncFolderHandler extends Handler {
      * @param remotePath    The path to a folder that could be in the queue of synchronizations.
      */
     public boolean isSynchronizing(Account account, String remotePath) {
-        if (account == null || remotePath == null) return false;
+        if (account == null || remotePath == null) {
+            return false;
+        }
         return (mPendingOperations.contains(account.name, remotePath));
     }
-
 
     @Override
     public void handleMessage(Message msg) {
@@ -98,7 +95,6 @@ class SyncFolderHandler extends Handler {
         Log_OC.d(TAG, "Stopping after command with id " + msg.arg1);
         mService.stopSelf(msg.arg1);
     }
-
 
     /**
      * Performs the next operation in the queue
@@ -143,7 +139,7 @@ class SyncFolderHandler extends Handler {
     }
 
     public void add(Account account, String remotePath,
-                    SynchronizeFolderOperation syncFolderOperation){
+                    SynchronizeFolderOperation syncFolderOperation) {
         Pair<String, String> putResult =
                 mPendingOperations.putIfAbsent(account.name, remotePath, syncFolderOperation);
         if (putResult != null) {
@@ -151,14 +147,13 @@ class SyncFolderHandler extends Handler {
         }
     }
 
-
     /**
      * Cancels a pending or current sync' operation.
      *
      * @param account       ownCloud {@link Account} where the remote file is stored.
      * @param file          A file in the queue of pending synchronizations
      */
-    public void cancel(Account account, OCFile file){
+    public void cancel(Account account, OCFile file) {
         if (account == null || file == null) {
             Log_OC.e(TAG, "Cannot cancel with NULL parameters");
             return;

@@ -1,21 +1,20 @@
 /**
- *   ownCloud Android client application
+ * ownCloud Android client application
  *
- *   @author Christian Schabesberger
- *   Copyright (C) 2019 ownCloud GmbH.
- *
- *   This program is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License version 2,
- *   as published by the Free Software Foundation.
- *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
- *
- *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * @author Christian Schabesberger
+ * Copyright (C) 2019 ownCloud GmbH.
+ * <p>
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
+ * <p>
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package com.owncloud.android.ui.preview;
@@ -23,9 +22,6 @@ package com.owncloud.android.ui.preview;
 import android.accounts.Account;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -35,6 +31,9 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
@@ -68,17 +67,16 @@ public class PreviewTextFragment extends FileFragment {
     private TextView mTextPreview;
     private TextLoadAsyncTask mTextLoadTask;
 
-
     /**
      * Public factory method to create new PreviewTextFragment instances.
      *
      * @param file                      An {@link OCFile} to preview in the fragment
      * @param account                   ownCloud account containing file
-     * @return                          Fragment ready to be used.
+     * @return Fragment ready to be used.
      */
     public static PreviewTextFragment newInstance(
-        OCFile file,
-        Account account
+            OCFile file,
+            Account account
     ) {
         PreviewTextFragment frag = new PreviewTextFragment();
         Bundle args = new Bundle();
@@ -179,7 +177,6 @@ public class PreviewTextFragment extends FileFragment {
         mTextLoadTask.execute(getFile().getStoragePath());
     }
 
-
     /**
      * Reads the file to preview and shows its contents. Too critical to be anonymous.
      */
@@ -191,7 +188,6 @@ public class PreviewTextFragment extends FileFragment {
             mTextViewReference = textView;
         }
 
-
         @Override
         protected void onPreExecute() {
             showLoadingDialog();
@@ -200,7 +196,8 @@ public class PreviewTextFragment extends FileFragment {
         @Override
         protected StringWriter doInBackground(java.lang.Object... params) {
             if (params.length != 1) {
-                throw new IllegalArgumentException("The parameter to " + TextLoadAsyncTask.class.getName() + " must be (1) the file location");
+                throw new IllegalArgumentException("The parameter to " + TextLoadAsyncTask.class.getName() + " must " +
+                        "be (1) the file location");
             }
             final String location = (String) params[0];
 
@@ -213,11 +210,15 @@ public class PreviewTextFragment extends FileFragment {
                 sc = new Scanner(inputStream);
                 while (sc.hasNextLine()) {
                     bufferedWriter.append(sc.nextLine());
-                    if (sc.hasNextLine()) bufferedWriter.append("\n");
+                    if (sc.hasNextLine()) {
+                        bufferedWriter.append("\n");
+                    }
                 }
                 bufferedWriter.close();
                 IOException exc = sc.ioException();
-                if (exc != null) throw exc;
+                if (exc != null) {
+                    throw exc;
+                }
             } catch (IOException e) {
                 Log_OC.e(TAG, e.getMessage(), e);
             } finally {
@@ -345,7 +346,7 @@ public class PreviewTextFragment extends FileFragment {
         }
 
         item = menu.findItem(R.id.action_switch_view);
-        if (item != null){
+        if (item != null) {
             item.setVisible(false);
             item.setEnabled(false);
         }
@@ -394,11 +395,11 @@ public class PreviewTextFragment extends FileFragment {
                 mContainerActivity.getFileOperationsHelper().syncFile(getFile());
                 return true;
             }
-            case R.id.action_set_available_offline:{
+            case R.id.action_set_available_offline: {
                 mContainerActivity.getFileOperationsHelper().toggleAvailableOffline(getFile(), true);
                 return true;
             }
-            case R.id.action_unset_available_offline:{
+            case R.id.action_unset_available_offline: {
                 mContainerActivity.getFileOperationsHelper().toggleAvailableOffline(getFile(), false);
                 return true;
             }
@@ -460,7 +461,6 @@ public class PreviewTextFragment extends FileFragment {
     public void updateViewForSyncOff() {
         mProgressController.hideProgressBar();
     }
-
 
     /**
      * Opens the previewed file with an external application.

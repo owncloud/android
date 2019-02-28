@@ -1,30 +1,29 @@
 /**
- *   ownCloud Android client application
+ * ownCloud Android client application
  *
- *   @author David A. Velasco
- *   @author David González Verdugo
- *   Copyright (C) 2019 ownCloud GmbH.
- *
- *   This program is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License version 2,
- *   as published by the Free Software Foundation.
- *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
- *
- *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * @author David A. Velasco
+ * @author David González Verdugo
+ * Copyright (C) 2019 ownCloud GmbH.
+ * <p>
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
+ * <p>
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package com.owncloud.android.operations;
 
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.lib.common.OwnCloudClient;
-import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
+import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.files.ExistenceCheckRemoteOperation;
 import com.owncloud.android.lib.resources.shares.OCShare;
@@ -44,7 +43,6 @@ public class RemoveShareOperation extends SyncOperation {
 
     private long mLocalId;
 
-
     public RemoveShareOperation(long localId) {
         mLocalId = localId;
     }
@@ -52,7 +50,7 @@ public class RemoveShareOperation extends SyncOperation {
     @Override
     protected RemoteOperationResult<ShareParserResult> run(OwnCloudClient client) {
         RemoteOperationResult result;
-        
+
         // Get OCShare from local storage
         OCShare share = getStorageManager().getShareById(mLocalId);
 
@@ -80,12 +78,12 @@ public class RemoveShareOperation extends SyncOperation {
                     }
 
                 } else if (ShareType.USER.equals(shareType) || ShareType.GROUP.equals(shareType)
-                    || ShareType.FEDERATED.equals(shareType)){
+                        || ShareType.FEDERATED.equals(shareType)) {
 
                     // Check if it is the last private share
-                    ArrayList <OCShare> sharesWith = getStorageManager().
-                        getPrivateSharesForAFile(share.getPath(),
-                            getStorageManager().getAccount().name);
+                    ArrayList<OCShare> sharesWith = getStorageManager().
+                            getPrivateSharesForAFile(share.getPath(),
+                                    getStorageManager().getAccount().name);
 
                     if (sharesWith.size() == 1) {
                         file.setSharedWithSharee(false);
@@ -107,8 +105,8 @@ public class RemoveShareOperation extends SyncOperation {
 
         return result;
     }
-    
-    private boolean notExistFile(OwnCloudClient client, String remotePath){
+
+    private boolean notExistFile(OwnCloudClient client, String remotePath) {
         ExistenceCheckRemoteOperation existsOperation =
                 new ExistenceCheckRemoteOperation(remotePath, true, false);
         RemoteOperationResult result = existsOperation.execute(client);

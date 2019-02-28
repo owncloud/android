@@ -1,24 +1,23 @@
 /**
- *   ownCloud Android client application
+ * ownCloud Android client application
  *
- *   @author masensio
- *   @author David A. Velasco
- *   @author Juan Carlos González Cabrero
- *   @author David González Verdugo
- *   Copyright (C) 2019 ownCloud GmbH.
- *
- *   This program is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License version 2,
- *   as published by the Free Software Foundation.
- *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
- *
- *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * @author masensio
+ * @author David A. Velasco
+ * @author Juan Carlos González Cabrero
+ * @author David González Verdugo
+ * Copyright (C) 2019 ownCloud GmbH.
+ * <p>
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
+ * <p>
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package com.owncloud.android.ui.helpers;
@@ -28,9 +27,9 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import androidx.fragment.app.DialogFragment;
 import android.webkit.MimeTypeMap;
 
+import androidx.fragment.app.DialogFragment;
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.OCFile;
@@ -70,8 +69,8 @@ public class FileOperationsHelper {
 
             Intent intentForSavedMimeType = new Intent(Intent.ACTION_VIEW);
             intentForSavedMimeType.setDataAndType(
-                file.getExposedFileUri(mFileActivity),
-                file.getMimetype()
+                    file.getExposedFileUri(mFileActivity),
+                    file.getMimetype()
             );
 
             intentForSavedMimeType.setFlags(
@@ -86,8 +85,8 @@ public class FileOperationsHelper {
                 if (guessedMimeType != null && !guessedMimeType.equals(file.getMimetype())) {
                     intentForGuessedMimeType = new Intent(Intent.ACTION_VIEW);
                     intentForGuessedMimeType.setDataAndType(
-                        file.getExposedFileUri(mFileActivity),
-                        guessedMimeType
+                            file.getExposedFileUri(mFileActivity),
+                            guessedMimeType
                     );
                     intentForGuessedMimeType.setFlags(
                             Intent.FLAG_GRANT_READ_URI_PERMISSION |
@@ -106,7 +105,7 @@ public class FileOperationsHelper {
             List<ResolveInfo> launchables = mFileActivity.getPackageManager().
                     queryIntentActivities(openFileWithIntent, PackageManager.GET_INTENT_FILTERS);
 
-            if(launchables != null && launchables.size() > 0) {
+            if (launchables != null && launchables.size() > 0) {
                 try {
                     mFileActivity.startActivity(
                             Intent.createChooser(
@@ -115,14 +114,14 @@ public class FileOperationsHelper {
                     );
                 } catch (ActivityNotFoundException anfe) {
                     mFileActivity.showSnackMessage(
-                        mFileActivity.getString(
-                            R.string.file_list_no_app_for_file_type
-                        )
+                            mFileActivity.getString(
+                                    R.string.file_list_no_app_for_file_type
+                            )
                     );
                 }
             } else {
                 mFileActivity.showSnackMessage(
-                    mFileActivity.getString(R.string.file_list_no_app_for_file_type)
+                        mFileActivity.getString(R.string.file_list_no_app_for_file_type)
                 );
             }
 
@@ -165,8 +164,7 @@ public class FileOperationsHelper {
                                  String password,
                                  long expirationTimeInMillis,
                                  boolean uploadToFolderPermission,
-                                 int permissions)
-    {
+                                 int permissions) {
 
         if (isSharedSupported()) {
             if (file != null) {
@@ -223,7 +221,7 @@ public class FileOperationsHelper {
         } else {
             // Show a Message
             mFileActivity.showSnackMessage(
-                mFileActivity.getString(R.string.share_link_no_support_share_api)
+                    mFileActivity.getString(R.string.share_link_no_support_share_api)
             );
         }
     }
@@ -238,7 +236,7 @@ public class FileOperationsHelper {
         String link = share.getShareLink();
         if (link.length() <= 0) {
             mFileActivity.showSnackMessage(
-                mFileActivity.getString(R.string.share_no_link_in_this_share)
+                    mFileActivity.getString(R.string.share_no_link_in_this_share)
             );
             return;
         }
@@ -273,7 +271,6 @@ public class FileOperationsHelper {
         }
     }
 
-
     /**
      * @return 'True' if the server supports the Share API
      */
@@ -284,7 +281,6 @@ public class FileOperationsHelper {
         }
         return false;
     }
-
 
     /**
      * Helper method to remove an existing share, no matter if public or private.
@@ -302,7 +298,7 @@ public class FileOperationsHelper {
         queueShareIntent(unshareService);
     }
 
-    private void queueShareIntent(Intent shareIntent){
+    private void queueShareIntent(Intent shareIntent) {
         if (isSharedSupported()) {
             // Unshare the file
             mWaitingForOpId = mFileActivity.getOperationsServiceBinder().
@@ -313,7 +309,7 @@ public class FileOperationsHelper {
         } else {
             // Show a Message
             mFileActivity.showSnackMessage(
-                mFileActivity.getString(R.string.share_link_no_support_share_api)
+                    mFileActivity.getString(R.string.share_link_no_support_share_api)
             );
         }
     }
@@ -323,7 +319,7 @@ public class FileOperationsHelper {
      *
      * @param file  File to share or unshare.
      */
-    public void showShareFile(OCFile file){
+    public void showShareFile(OCFile file) {
         Intent intent = new Intent(mFileActivity, ShareActivity.class);
         intent.putExtra(FileActivity.EXTRA_FILE, file);
         intent.putExtra(FileActivity.EXTRA_ACCOUNT, mFileActivity.getAccount());
@@ -365,12 +361,12 @@ public class FileOperationsHelper {
      * @param permissions               Optional permissions to allow or not specific actions in the folder
      */
     public void updateShareViaLink(
-        OCShare share,
-        String name,
-        String password,
-        long expirationTimeInMillis,
-        boolean uploadToFolderPermission,
-        int permissions
+            OCShare share,
+            String name,
+            String password,
+            long expirationTimeInMillis,
+            boolean uploadToFolderPermission,
+            int permissions
     ) {
         // Set password updating share
         Intent updateShareIntent = new Intent(mFileActivity, OperationsService.class);
@@ -379,23 +375,23 @@ public class FileOperationsHelper {
         updateShareIntent.putExtra(OperationsService.EXTRA_SHARE_ID, share.getId());
 
         updateShareIntent.putExtra(
-            OperationsService.EXTRA_SHARE_NAME,
-            (name == null) ? "" : name
+                OperationsService.EXTRA_SHARE_NAME,
+                (name == null) ? "" : name
         );
 
         updateShareIntent.putExtra(
-            OperationsService.EXTRA_SHARE_PASSWORD,
+                OperationsService.EXTRA_SHARE_PASSWORD,
                 password
         );
 
         updateShareIntent.putExtra(
-            OperationsService.EXTRA_SHARE_EXPIRATION_DATE_IN_MILLIS,
-            expirationTimeInMillis
+                OperationsService.EXTRA_SHARE_EXPIRATION_DATE_IN_MILLIS,
+                expirationTimeInMillis
         );
 
         updateShareIntent.putExtra(
-            OperationsService.EXTRA_SHARE_PUBLIC_UPLOAD,
-            uploadToFolderPermission
+                OperationsService.EXTRA_SHARE_PUBLIC_UPLOAD,
+                uploadToFolderPermission
         );
 
         updateShareIntent.putExtra(
@@ -405,7 +401,6 @@ public class FileOperationsHelper {
 
         queueShareIntent(updateShareIntent);
     }
-
 
     /**
      * @return 'True' if the server supports the Search Users API
@@ -424,8 +419,8 @@ public class FileOperationsHelper {
             // set MimeType
             sendIntent.setType(file.getMimetype());
             sendIntent.putExtra(
-                Intent.EXTRA_STREAM,
-                file.getExposedFileUri(mFileActivity)
+                    Intent.EXTRA_STREAM,
+                    file.getExposedFileUri(mFileActivity)
             );
             sendIntent.putExtra(Intent.ACTION_SEND, true);      // Send Action
 
@@ -440,7 +435,7 @@ public class FileOperationsHelper {
     }
 
     public void syncFiles(Collection<OCFile> files) {
-        for (OCFile file: files) {
+        for (OCFile file : files) {
             syncFile(file);
         }
     }
@@ -451,7 +446,7 @@ public class FileOperationsHelper {
      * @param file          The file or folder to synchronize
      */
     public void syncFile(OCFile file) {
-        if (!file.isFolder()){
+        if (!file.isFolder()) {
             Intent intent = new Intent(mFileActivity, OperationsService.class);
             intent.setAction(OperationsService.ACTION_SYNC_FILE);
             intent.putExtra(OperationsService.EXTRA_ACCOUNT, mFileActivity.getAccount());
@@ -464,15 +459,15 @@ public class FileOperationsHelper {
             intent.putExtra(OperationsService.EXTRA_ACCOUNT, mFileActivity.getAccount());
             intent.putExtra(OperationsService.EXTRA_REMOTE_PATH, file.getRemotePath());
             intent.putExtra(
-                OperationsService.EXTRA_SYNC_REGULAR_FILES,
-                true
+                    OperationsService.EXTRA_SYNC_REGULAR_FILES,
+                    true
             );
             mFileActivity.startService(intent);
         }
     }
 
-    public void toggleAvailableOffline(Collection<OCFile> files, boolean isAvailableOffline){
-        for (OCFile file: files) {
+    public void toggleAvailableOffline(Collection<OCFile> files, boolean isAvailableOffline) {
+        for (OCFile file : files) {
             toggleAvailableOffline(file, isAvailableOffline);
         }
     }
@@ -481,14 +476,14 @@ public class FileOperationsHelper {
         if (OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE_PARENT == file.getAvailableOfflineStatus()) {
             /// files descending of an av-offline folder can't be toggled
             mFileActivity.showSnackMessage(
-                mFileActivity.getString(R.string.available_offline_inherited_msg)
+                    mFileActivity.getString(R.string.available_offline_inherited_msg)
             );
 
         } else {
             /// update local property, for file and all its descendents (if folder)
             OCFile.AvailableOfflineStatus targetAvailableOfflineStatus = isAvailableOffline ?
-                OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE :
-                OCFile.AvailableOfflineStatus.NOT_AVAILABLE_OFFLINE;
+                    OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE :
+                    OCFile.AvailableOfflineStatus.NOT_AVAILABLE_OFFLINE;
             file.setAvailableOfflineStatus(targetAvailableOfflineStatus);
             boolean success = mFileActivity.getStorageManager().saveLocalAvailableOfflineStatus(file);
 
@@ -509,7 +504,7 @@ public class FileOperationsHelper {
             } else {
                 /// unexpected error
                 mFileActivity.showSnackMessage(
-                    mFileActivity.getString(R.string.common_error_unknown)
+                        mFileActivity.getString(R.string.common_error_unknown)
                 );
             }
         }
@@ -526,7 +521,6 @@ public class FileOperationsHelper {
 
         mFileActivity.showLoadingDialog(R.string.wait_a_moment);
     }
-
 
     /**
      * Start operations to delete one or several files
@@ -549,7 +543,6 @@ public class FileOperationsHelper {
         mFileActivity.showLoadingDialog(R.string.wait_a_moment);
     }
 
-
     public void createFolder(String remotePath, boolean createFullPath) {
         // Create Folder
         Intent service = new Intent(mFileActivity, OperationsService.class);
@@ -557,7 +550,7 @@ public class FileOperationsHelper {
         service.putExtra(OperationsService.EXTRA_ACCOUNT, mFileActivity.getAccount());
         service.putExtra(OperationsService.EXTRA_REMOTE_PATH, remotePath);
         service.putExtra(OperationsService.EXTRA_CREATE_FULL_PATH, createFullPath);
-        mWaitingForOpId =  mFileActivity.getOperationsServiceBinder().queueNewOperation(service);
+        mWaitingForOpId = mFileActivity.getOperationsServiceBinder().queueNewOperation(service);
 
         mFileActivity.showLoadingDialog(R.string.wait_a_moment);
     }
@@ -626,7 +619,6 @@ public class FileOperationsHelper {
     public long getOpIdWaitingFor() {
         return mWaitingForOpId;
     }
-
 
     public void setOpIdWaitingFor(long waitingForOpId) {
         mWaitingForOpId = waitingForOpId;

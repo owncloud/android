@@ -18,7 +18,6 @@
 -->
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="80dp"
     >
@@ -47,8 +46,8 @@
         android:layout_marginTop="-8dp"
         android:src="@drawable/ic_current"
         />
-        <!-- drawable will be replaced by ic_current_white + tint in runtime;
-        ic_current here as a placeholder -->
+    <!-- drawable will be replaced by ic_current_white + tint in runtime;
+    ic_current here as a placeholder -->
 
     <TextView
         android:id="@+id/name"
@@ -70,7 +69,7 @@
         android:textSize="16sp"
         android:textStyle="bold"
         android:maxLines="1"
-        android:ellipsize="end"/>
+        android:ellipsize="end" />
 
     <TextView
         android:id="@+id/account"
@@ -92,7 +91,7 @@
         android:textColor="@color/textColor"
         android:textSize="14sp"
         android:maxLines="2"
-        android:ellipsize="end"/>
+        android:ellipsize="end" />
 
     <ImageView
         android:id="@id/passwordButton"
@@ -106,7 +105,7 @@
         android:paddingTop="@dimen/standard_padding"
         android:paddingBottom="@dimen/standard_padding"
         android:paddingRight="@dimen/standard_half_padding"
-        android:src="@drawable/ic_key"/>
+        android:src="@drawable/ic_key" />
 
     <ImageView
         android:id="@id/removeButton"
@@ -122,6 +121,6 @@
         android:paddingBottom="@dimen/standard_padding"
         android:paddingRight="@dimen/standard_padding"
         android:paddingEnd="@dimen/standard_padding"
-        android:src="@drawable/ic_action_delete_grey"/>
+        android:src="@drawable/ic_action_delete_grey" />
 
 </RelativeLayout>

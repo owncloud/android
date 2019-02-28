@@ -1,32 +1,29 @@
 /**
- *   ownCloud Android client application
+ * ownCloud Android client application
  *
- *   @author masensio
- *   @author David A. Velasco
- *   @author Christian Schabesberger
- *   @author David González Verdugo
- *   Copyright (C) 2019 ownCloud GmbH.
- *
- *   This program is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License version 2,
- *   as published by the Free Software Foundation.
- *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
- *
- *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * @author masensio
+ * @author David A. Velasco
+ * @author Christian Schabesberger
+ * @author David González Verdugo
+ * Copyright (C) 2019 ownCloud GmbH.
+ * <p>
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
+ * <p>
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package com.owncloud.android.ui.fragment;
 
 import android.accounts.Account;
 import android.os.Bundle;
-import androidx.fragment.app.DialogFragment;
-import androidx.appcompat.widget.SwitchCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +31,8 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 
+import androidx.appcompat.widget.SwitchCompat;
+import androidx.fragment.app.DialogFragment;
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.FileDataStorageManager;
@@ -78,7 +77,6 @@ public class EditShareFragment extends DialogFragment {
     /** Listener for changes on privilege checkboxes */
     private CompoundButton.OnCheckedChangeListener mOnPrivilegeChangeListener;
 
-
     /**
      * Public factory method to create new EditShareFragment instances.
      *
@@ -103,7 +101,6 @@ public class EditShareFragment extends DialogFragment {
     public EditShareFragment() {
     }
 
-
     /**
      * {@inheritDoc}
      */
@@ -119,20 +116,18 @@ public class EditShareFragment extends DialogFragment {
             } else {
                 mShare = savedInstanceState.getParcelable(ARG_SHARE);
             }
-            Log_OC.e(TAG, String.format(Locale.getDefault(), "Share has id %1$d remoteId %2$d", mShare.getId(), mShare.getRemoteId()));
+            Log_OC.e(TAG, String.format(Locale.getDefault(), "Share has id %1$d remoteId %2$d", mShare.getId(),
+                    mShare.getRemoteId()));
         }
 
         setStyle(DialogFragment.STYLE_NO_TITLE, 0);
     }
-
-
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         Log_OC.d(TAG, "onActivityCreated");
     }
-
 
     /**
      * {@inheritDoc}
@@ -159,13 +154,11 @@ public class EditShareFragment extends DialogFragment {
         return view;
     }
 
-
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelable(ARG_SHARE, mShare);
     }
-
 
     /**
      * Updates the UI with the current permissions in the edited {@link OCShare}
@@ -180,13 +173,13 @@ public class EditShareFragment extends DialogFragment {
             boolean isFederated = ShareType.FEDERATED.equals(mShare.getShareType());
             OwnCloudVersion serverVersion = AccountUtils.getServerVersion(mAccount);
             boolean isNotReshareableFederatedSupported = (
-                serverVersion != null &&
-                serverVersion.isNotReshareableFederatedSupported()
+                    serverVersion != null &&
+                            serverVersion.isNotReshareableFederatedSupported()
             );
             CompoundButton compound;
 
             compound = editShareView.findViewById(R.id.canShareSwitch);
-            if(isFederated && !isNotReshareableFederatedSupported) {
+            if (isFederated && !isNotReshareableFederatedSupported) {
                 compound.setVisibility(View.INVISIBLE);
             }
             compound.setChecked((sharePermissions & OCShare.SHARE_PERMISSION_FLAG) > 0);
@@ -221,7 +214,6 @@ public class EditShareFragment extends DialogFragment {
 
         }
     }
-
 
     /**
      * Binds or unbinds listener for user actions to enable or disable a permission on the edited share
@@ -279,7 +271,7 @@ public class EditShareFragment extends DialogFragment {
             /// else, getView() cannot be NULL
 
             CompoundButton subordinate;
-            switch(compound.getId()) {
+            switch (compound.getId()) {
                 case R.id.canShareSwitch:
                     Log_OC.v(TAG, "canShareCheckBox toggled to " + isChecked);
                     updatePermissionsToShare();
@@ -293,8 +285,8 @@ public class EditShareFragment extends DialogFragment {
                         if (isChecked) {
                             OwnCloudVersion serverVersion = AccountUtils.getServerVersion(mAccount);
                             boolean isNotReshareableFederatedSupported = (
-                                serverVersion != null &&
-                                    serverVersion.isNotReshareableFederatedSupported()
+                                    serverVersion != null &&
+                                            serverVersion.isNotReshareableFederatedSupported()
                             );
                             if (!isFederated || isNotReshareableFederatedSupported) {
                                 /// not federated shares -> enable all the subpermisions
@@ -305,7 +297,7 @@ public class EditShareFragment extends DialogFragment {
                                         subordinate.setVisibility(View.VISIBLE);
                                     }
                                     if (!subordinate.isChecked() &&
-                                        !mFile.isSharedWithMe()) {          // see (1)
+                                            !mFile.isSharedWithMe()) {          // see (1)
                                         toggleDisablingListener(subordinate);
                                     }
                                 }
@@ -330,8 +322,8 @@ public class EditShareFragment extends DialogFragment {
                         }
                     }
 
-                    if(!(mFile.isFolder() && isChecked && mFile.isSharedWithMe())       // see (1)
-                        || isFederated ) {
+                    if (!(mFile.isFolder() && isChecked && mFile.isSharedWithMe())       // see (1)
+                            || isFederated) {
                         updatePermissionsToShare();
                     }
 
@@ -382,7 +374,7 @@ public class EditShareFragment extends DialogFragment {
                 }
             } else {
                 boolean allDisabled = true;
-                for (int i=0; allDisabled && i<sSubordinateCheckBoxIds.length; i++) {
+                for (int i = 0; allDisabled && i < sSubordinateCheckBoxIds.length; i++) {
                     allDisabled &=
                             sSubordinateCheckBoxIds[i] == subordinateCheckBoxView.getId() ||
                                     !((CheckBox) getView().findViewById(sSubordinateCheckBoxIds[i])).isChecked()
@@ -390,13 +382,12 @@ public class EditShareFragment extends DialogFragment {
                 }
                 if (canEditCompound.isChecked() && allDisabled) {
                     toggleDisablingListener(canEditCompound);
-                    for (int i=0; i<sSubordinateCheckBoxIds.length; i++) {
+                    for (int i = 0; i < sSubordinateCheckBoxIds.length; i++) {
                         getView().findViewById(sSubordinateCheckBoxIds[i]).setVisibility(View.GONE);
                     }
                 }
             }
         }
-
 
         /**
          * Toggle value of received {@link CompoundButton} granting that its change listener is not called.
@@ -411,7 +402,6 @@ public class EditShareFragment extends DialogFragment {
         }
     }
 
-
     /**
      * Updates the UI after the result of an update operation on the edited {@link OCShare} permissions.
      *
@@ -425,7 +415,6 @@ public class EditShareFragment extends DialogFragment {
         }
     }
 
-
     /**
      * Get {@link OCShare} instance from DB and updates the UI.
      *
@@ -437,7 +426,6 @@ public class EditShareFragment extends DialogFragment {
             refreshUiFromDB(getView());
         }
     }
-
 
     /**
      * Get {@link OCShare} instance from DB and updates the UI.
@@ -458,7 +446,6 @@ public class EditShareFragment extends DialogFragment {
         }
     }
 
-
     /**
      * Updates the permissions of the {@link OCShare} according to the values set in the UI
      */
@@ -475,7 +462,7 @@ public class EditShareFragment extends DialogFragment {
         int permissions = spb.build();
 
         ((FileActivity) getActivity()).getFileOperationsHelper().
-            setPermissionsToShareWithSharee(
+                setPermissionsToShareWithSharee(
                         mShare,
                         permissions
                 )
