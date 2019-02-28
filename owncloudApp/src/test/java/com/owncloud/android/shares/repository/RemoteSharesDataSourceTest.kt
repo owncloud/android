@@ -20,12 +20,18 @@
 package com.owncloud.android.shares.repository
 
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
+import com.owncloud.android.lib.resources.shares.CreateRemoteShareOperation
 import com.owncloud.android.lib.resources.shares.GetRemoteSharesForFileOperation
 import com.owncloud.android.lib.resources.shares.ShareParserResult
+import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.shares.datasources.RemoteSharesDataSource
 
 class RemoteSharesDataSourceTest(private val remoteOperationResult: RemoteOperationResult<ShareParserResult>) :
     RemoteSharesDataSource {
+    override fun insertShareForFile(remoteFilePath: String, shareType: ShareType, shareWith: String, permissions: Int, name: String, password: String, expirationDate: Long, publicUpload: Boolean, createRemoteShareOperation: CreateRemoteShareOperation): RemoteOperationResult<ShareParserResult> {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
     override fun getSharesForFile(
         path: String,
         reshares: Boolean,

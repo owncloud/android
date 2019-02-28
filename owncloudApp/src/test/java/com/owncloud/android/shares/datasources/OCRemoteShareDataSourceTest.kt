@@ -66,8 +66,7 @@ class OCRemoteSharesDataSourceTest {
                         name = "Image 2 link",
                         shareLink = "http://server:port/s/3"
                     )
-                ),
-                "Succeed"
+                )
             )
         )
 

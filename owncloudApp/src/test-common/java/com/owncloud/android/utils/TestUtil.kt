@@ -20,6 +20,7 @@
 package com.owncloud.android.utils
 
 import android.accounts.Account
+import android.hardware.SensorAdditionalInfo
 import com.owncloud.android.lib.resources.shares.RemoteShare
 import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.shares.db.OCShare
