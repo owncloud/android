@@ -86,7 +86,7 @@ class NetworkBoundResourceTest {
                     val remoteOperationResult = mock<RemoteOperationResult<ShareParserResult>>()
 
                     `when`(remoteOperationResult.data).thenReturn(
-                        ShareParserResult(networkResult, "Succeed")
+                        ShareParserResult(networkResult)
                     )
 
                     `when`(remoteOperationResult.isSuccess).thenReturn(true)
@@ -127,7 +127,7 @@ class NetworkBoundResourceTest {
                     val remoteOperationResult = mock<RemoteOperationResult<ShareParserResult>>()
 
                     `when`(remoteOperationResult.data).thenReturn(
-                        ShareParserResult(networkResult, "Failed")
+                        ShareParserResult(networkResult)
                     )
 
                     `when`(remoteOperationResult.isSuccess).thenReturn(false)

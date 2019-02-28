@@ -247,7 +247,7 @@ class OCShareDaoTest {
                 TestUtil.createPublicShare(
                     path = "/Texts/text1.txt",
                     isFolder = false,
-                    name = "Text new link",
+                    name = "Text 1 link",
                     shareLink = "http://server:port/s/1"
                 )
             )
@@ -261,7 +261,7 @@ class OCShareDaoTest {
 
         assertThat(textShares, notNullValue())
         assertEquals(textShares.size, 1)
-        assertEquals(textShares.get(0).name, "Text new link")
+        assertEquals(textShares.get(0).name, "Text 1 link")
     }
 
     @Test
