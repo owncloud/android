@@ -85,7 +85,7 @@ class OCShareRepositoryTest {
         )
 
         `when`(remoteOperationResult.data).thenReturn(
-            ShareParserResult(remoteSharesForFile, "Succeed")
+            ShareParserResult(remoteSharesForFile)
         )
 
         `when`(remoteOperationResult.isSuccess).thenReturn(true)
@@ -150,7 +150,7 @@ class OCShareRepositoryTest {
         val remoteSharesForFile : ArrayList<RemoteShare> = arrayListOf()
 
         `when`(remoteOperationResult.data).thenReturn(
-            ShareParserResult(remoteSharesForFile, "Succeed")
+            ShareParserResult(remoteSharesForFile)
         )
 
         `when`(remoteOperationResult.isSuccess).thenReturn(true)
@@ -200,7 +200,7 @@ class OCShareRepositoryTest {
         val remoteSharesForFile : ArrayList<RemoteShare> = arrayListOf()
 
         `when`(remoteOperationResult.data).thenReturn(
-            ShareParserResult(remoteSharesForFile, "Failed")
+            ShareParserResult(remoteSharesForFile)
         )
 
         `when`(remoteOperationResult.isSuccess).thenReturn(false)
