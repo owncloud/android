@@ -400,11 +400,15 @@ public abstract class DrawerActivity extends ToolbarActivity {
         for (int i = 0; i < accounts.length; i++) {
             if (!getAccount().name.equals(accounts[i].name)) {
 
+                String accountName = accounts[i].name;
+                if (accountName.contains("/")) {//add an extra space at <username@serverip/>^<servername>
+                    accountName = accountName.replace("/", "/ ");
+                }
                 MenuItem accountMenuItem = mNavigationView.getMenu().add(
                         R.id.drawer_menu_accounts,
                         Menu.NONE,
                         MENU_ORDER_ACCOUNT,
-                        accounts[i].name
+                        accountName
                 );
                 ThumbnailsCacheManager.GetAvatarTask task =
                     new ThumbnailsCacheManager.GetAvatarTask(
