@@ -402,7 +402,7 @@ public abstract class DrawerActivity extends ToolbarActivity {
 
                 String accountName = accounts[i].name;
                 if (accountName.contains("/")) {//add an extra space at <username@serverip/>^<servername>
-                    accountName = accountName.replace("/", "/ ");
+                    accountName = accountName.replace("/", " /");
                 }
                 MenuItem accountMenuItem = mNavigationView.getMenu().add(
                         R.id.drawer_menu_accounts,
