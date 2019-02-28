@@ -22,7 +22,6 @@ package com.owncloud.android.shares.repository
 import androidx.lifecycle.LiveData
 import com.owncloud.android.AppExecutors
 import com.owncloud.android.NetworkBoundResource
-import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.lib.resources.shares.ShareParserResult
 import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.shares.datasources.LocalSharesDataSource
@@ -56,7 +55,6 @@ class OCShareRepository(
             subfiles: Boolean
     ): LiveData<Resource<List<OCShare>>> {
         return object : NetworkBoundResource<List<OCShare>, ShareParserResult>(appExecutors) {
-
             override fun saveCallResult(shareParserResult: ShareParserResult) {
                 val sharesForFileFromServer = shareParserResult.shares.map { remoteShare ->
                     OCShare.fromRemoteShare(remoteShare).also { it.accountOwner = accountName }
@@ -79,17 +77,21 @@ class OCShareRepository(
     }
 
     override fun insertPublicShareForFile(
-            file: OCFile,
+            filePath: String,
+            accountName: String,
+            permissions: Int,
             name: String,
             password: String,
             expirationTimeInMillis: Long,
-            uploadToFolderPermission: Boolean,
-            permissions: Int
+            uploadToFolderPermission: Boolean
     ): LiveData<Resource<Unit>> {
         return object : NetworkBoundResource<Unit, ShareParserResult>(appExecutors) {
-            override fun saveCallResult(item: ShareParserResult) {
-                println("EEEEHHHH")
-                TODO("Save share")
+            override fun saveCallResult(shareParserResult: ShareParserResult) {
+                val newShareForFileFromServer = shareParserResult.shares.map { remoteShare ->
+                    OCShare.fromRemoteShare(remoteShare).also { it.accountOwner = accountName }
+                }
+
+                localSharesDataSource.insert(newShareForFileFromServer)
             }
 
             override fun loadFromDb(): LiveData<Unit>? {
@@ -97,12 +99,14 @@ class OCShareRepository(
             }
 
             override fun createCall() = remoteSharesDataSource.insertShareForFile(
-                    file.remotePath,
+                    filePath,
                     ShareType.PUBLIC_LINK,
                     "",
-                    uploadToFolderPermission,
+                    permissions,
+                    name,
                     password,
-                    permissions
+                    expirationTimeInMillis,
+                    uploadToFolderPermission
             )
         }.asLiveData()
     }

@@ -43,11 +43,18 @@ class OCRemoteSharesDataSource(
             remoteFilePath: String,
             shareType: ShareType,
             shareWith: String,
-            publicUpload: Boolean,
-            password: String,
             permissions: Int,
+            name: String,
+            password: String,
+            expirationDate: Long,
+            publicUpload: Boolean,
             createRemoteShareOperation: CreateRemoteShareOperation
     ): RemoteOperationResult<ShareParserResult> {
+        createRemoteShareOperation.setName(name)
+        createRemoteShareOperation.setPassword(password)
+        createRemoteShareOperation.setExpirationDate(expirationDate)
+        createRemoteShareOperation.setPublicUpload(publicUpload)
+        createRemoteShareOperation.setGetShareDetails(true)
         return createRemoteShareOperation.execute(client)
     }
 }

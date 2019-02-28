@@ -38,10 +38,12 @@ interface RemoteSharesDataSource {
             remoteFilePath: String,
             shareType: ShareType,
             shareWith: String,
-            publicUpload: Boolean,
-            password: String,
             permissions: Int,
+            name: String,
+            password: String,
+            expirationDate: Long,
+            publicUpload: Boolean,
             createRemoteShareOperation: CreateRemoteShareOperation =
-                    CreateRemoteShareOperation(remoteFilePath, shareType, shareWith, publicUpload, password, permissions)
+                    CreateRemoteShareOperation(remoteFilePath, shareType, shareWith, permissions)
     ): RemoteOperationResult<ShareParserResult>
 }

@@ -6,16 +6,16 @@
  * @author David González Verdugo
  * @author Christian Schabesberger
  * Copyright (C) 2019 ownCloud GmbH.
- * <p>
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
  * as published by the Free Software Foundation.
- * <p>
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * <p>
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -102,7 +102,7 @@ public class CreateShareViaLinkOperation extends SyncOperation<ShareParserResult
      *
      * @param permissions permissions to set to the public link.
      */
-    public void setPermissions(int permissions) {
+    public void setPermissions (int permissions) {
         this.mPermissions = permissions;
     }
 
@@ -136,17 +136,14 @@ public class CreateShareViaLinkOperation extends SyncOperation<ShareParserResult
                 mPath,
                 ShareType.PUBLIC_LINK,
                 "",
-                mPublicUpload,
-                mPassword,
                 mPermissions
         );
 
-
-        createOp.setGetShareDetails(true);
         createOp.setName(mName);
+        createOp.setPassword(mPassword);
+        createOp.setExpirationDate(mExpirationDateInMillis);
         createOp.setPublicUpload(mPublicUpload);
-        createOp.setPermissions(mPermissions);
-        createOp.setExpirationDateInMillis(mExpirationDateInMillis);
+        createOp.setGetShareDetails(true);
         RemoteOperationResult<ShareParserResult> result = createOp.execute(client);
 
         if (result.isSuccess()) {
@@ -166,9 +163,9 @@ public class CreateShareViaLinkOperation extends SyncOperation<ShareParserResult
         // Update DB with the response
         share.setPath(mPath);
         if (mPath.endsWith(FileUtils.PATH_SEPARATOR)) {
-            share.setFolder(true);
+            share.setIsFolder(true);
         } else {
-            share.setFolder(false);
+            share.setIsFolder(false);
         }
 
         getStorageManager().saveShare(share);

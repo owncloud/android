@@ -35,11 +35,12 @@ interface ShareRepository {
     ): LiveData<Resource<List<OCShare>>>
 
     fun insertPublicShareForFile(
-            file: OCFile,
+            filePath: String,
+            accountName: String,
+            permissions: Int,
             name: String,
             password: String,
             expirationTimeInMillis: Long,
-            uploadToFolderPermission: Boolean,
-            permissions: Int
+            uploadToFolderPermission: Boolean
     ): LiveData<Resource<Unit>>
 }
