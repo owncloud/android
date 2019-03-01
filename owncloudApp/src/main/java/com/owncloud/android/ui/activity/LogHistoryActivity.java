@@ -132,7 +132,12 @@ public class LogHistoryActivity extends ToolbarActivity {
         if (searchItem != null) {
             mSearchView = (SearchView) searchItem.getActionView();
         }
-        mSearchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        if (mSearchView == null) {
+            return true;
+        }
+        if (searchManager != null) {
+            mSearchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        }
         SearchView.SearchAutoComplete searchAutoComplete = mSearchView.findViewById(R.id.search_src_text);
 
         if (mCurrentFilter != null && !mCurrentFilter.equals("")) {
@@ -177,7 +182,9 @@ public class LogHistoryActivity extends ToolbarActivity {
         }
 
         if (null != mSearchView) {
-            mSearchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+            if (searchManager != null) {
+                mSearchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+            }
             mSearchView.setIconifiedByDefault(true);
             mSearchView.setOnQueryTextListener(queryTextListener);
             if (mCurrentFilter != null && !mCurrentFilter.equals("")) {
