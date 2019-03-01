@@ -54,7 +54,7 @@ class ShareToRemoteOperationResultParser(shareXmlParser: ShareXMLParser) {
         mOneOrMoreSharesRequired = oneOrMoreSharesRequired
     }
 
-    fun setOwnCloudVersion(ownCloudVersion: OwnCloudVersion) {
+    fun setOwnCloudVersion(ownCloudVersion: OwnCloudVersion?) {
         mOwnCloudVersion = ownCloudVersion
     }
 
