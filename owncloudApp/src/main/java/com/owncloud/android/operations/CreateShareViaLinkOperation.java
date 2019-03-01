@@ -59,7 +59,7 @@ public class CreateShareViaLinkOperation extends SyncOperation<ShareParserResult
         mPassword = null;
         mExpirationDateInMillis = 0;
         mPublicUpload = null;
-        mPermissions = RemoteShare.DEFAULT_PERMISSION;
+        mPermissions = RemoteShare.Companion.getDEFAULT_PERMISSION();
     }
 
     /**
@@ -164,9 +164,9 @@ public class CreateShareViaLinkOperation extends SyncOperation<ShareParserResult
         // Update DB with the response
         share.setPath(mPath);
         if (mPath.endsWith(FileUtils.PATH_SEPARATOR)) {
-            share.setIsFolder(true);
+            share.setFolder(true);
         } else {
-            share.setIsFolder(false);
+            share.setFolder(false);
         }
 
         getStorageManager().saveShare(share);
