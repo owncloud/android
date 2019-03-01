@@ -27,7 +27,9 @@ package com.owncloud.android.lib.resources.status
 
 import android.os.Parcel
 import android.os.Parcelable
+import com.owncloud.android.lib.testing.OpenForTesting
 
+@OpenForTesting
 class OwnCloudVersion(version: String) : Comparable<OwnCloudVersion>, Parcelable {
 
     // format is in version
@@ -36,7 +38,7 @@ class OwnCloudVersion(version: String) : Comparable<OwnCloudVersion>, Parcelable
     // ie version 2.0.3 will be stored as 0x02000300
     private var mVersion: Int = 0
     var isVersionValid: Boolean = false
-        private set
+        set
 
     val version: String
         get() = if (isVersionValid) {
