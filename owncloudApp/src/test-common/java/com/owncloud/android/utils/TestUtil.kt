@@ -107,7 +107,7 @@ object TestUtil {
         remoteShare.expirationDate = expirationDate
         remoteShare.token = token
         remoteShare.sharedWithDisplayName = sharedWithDisplayName
-        remoteShare.setIsFolder(isFolder)
+        remoteShare.isFolder = isFolder
         remoteShare.userId = userId
         remoteShare.setIdRemoteShared(remoteId)
         remoteShare.name = name

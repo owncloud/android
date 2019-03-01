@@ -100,7 +100,7 @@ class ErrorMessageAdapter {
             result: RemoteOperationResult<*>,
             operation: RemoteOperation<*>?,
             resources: Resources
-        ): String? {
+        ): String {
             val f = Formatter(resources)
             if (result.isSuccess) {
                 if (operation is UploadFileOperation)
@@ -289,7 +289,7 @@ class ErrorMessageAdapter {
             operation: RemoteOperation<*>?,
             result: RemoteOperationResult<*>,
             res: Resources
-        ): String? {
+        ): String {
 
             val f = Formatter(res)
 
@@ -350,7 +350,7 @@ class ErrorMessageAdapter {
             operation: RemoteOperation<*>?,
             result: RemoteOperationResult<*>,
             res: Resources
-        ): String? {
+        ): String {
             val f = Formatter(res)
 
             if (operation is UploadFileOperation)

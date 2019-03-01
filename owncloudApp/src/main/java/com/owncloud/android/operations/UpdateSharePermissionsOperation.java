@@ -101,9 +101,9 @@ public class UpdateSharePermissionsOperation extends SyncOperation<ShareParserRe
         // Update DB with the response
         share.setPath(mPath);   // TODO - check if may be moved to UpdateRemoteShareOperation
         if (mPath.endsWith(FileUtils.PATH_SEPARATOR)) {
-            share.setIsFolder(true);
+            share.setFolder(true);
         } else {
-            share.setIsFolder(false);
+            share.setFolder(false);
         }
         getStorageManager().saveShare(share);
     }
