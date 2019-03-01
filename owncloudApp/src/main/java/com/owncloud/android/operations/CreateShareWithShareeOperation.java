@@ -96,7 +96,7 @@ public class CreateShareWithShareeOperation extends SyncOperation {
     private void updateData(RemoteShare share) {
         // Update DB with the response
         share.setPath(mPath);
-        share.setIsFolder(mPath.endsWith(FileUtils.PATH_SEPARATOR));
+        share.setFolder(mPath.endsWith(FileUtils.PATH_SEPARATOR));
 
         getStorageManager().saveShare(share);
 

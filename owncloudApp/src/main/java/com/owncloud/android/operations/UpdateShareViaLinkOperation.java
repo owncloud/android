@@ -57,7 +57,7 @@ public class UpdateShareViaLinkOperation extends SyncOperation<ShareParserResult
         mPassword = null;
         mExpirationDateInMillis = 0;
         mPublicUpload = null;
-        mPermissions = RemoteShare.DEFAULT_PERMISSION;
+        mPermissions = RemoteShare.Companion.getDEFAULT_PERMISSION();
     }
 
     /**
@@ -151,9 +151,9 @@ public class UpdateShareViaLinkOperation extends SyncOperation<ShareParserResult
         // undesired magic - TODO map remote OCShare class to proper local OCShare class
         newShare.setPath(oldShare.getPath());
         if (oldShare.getPath().endsWith(FileUtils.PATH_SEPARATOR)) {
-            newShare.setIsFolder(true);
+            newShare.setFolder(true);
         } else {
-            newShare.setIsFolder(false);
+            newShare.setFolder(false);
         }
 
         // Update DB with the response
