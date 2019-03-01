@@ -10,7 +10,6 @@ def gitRemote = 'GIT_REMOTE'
 dependencies {
     /// dependencies for app building
     implementation project(':owncloud-android-library:owncloudComLibrary')
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation "androidx.legacy:legacy-support-v4:$androidX"
     implementation "androidx.annotation:annotation:1.0.1"
     implementation 'com.google.android.material:material:1.0.0'
