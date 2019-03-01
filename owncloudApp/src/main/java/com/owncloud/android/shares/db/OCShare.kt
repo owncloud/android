@@ -105,7 +105,7 @@ data class OCShare(
             return OCShare(
                     remoteShare.fileSource,
                     remoteShare.itemSource,
-                    remoteShare.shareType.value,
+                    remoteShare.shareType?.value,
                     remoteShare.shareWith,
                     remoteShare.path,
                     remoteShare.permissions,
