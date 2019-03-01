@@ -200,16 +200,6 @@ public class RefreshFolderOperation extends SyncOperation<ArrayList<RemoteFile>>
     private RemoteOperationResult<ShareParserResult> refreshSharesForFolder(OwnCloudClient client) {
         RemoteOperationResult<ShareParserResult> result;
 
-        // remote request 
-        GetRemoteSharesForFileOperation operation =
-                new GetRemoteSharesForFileOperation(mLocalFolder.getRemotePath(), true, true);
-        result = operation.execute(client);
-
-        if (result.isSuccess()) {
-            // update local database
-            getStorageManager().saveSharesInFolder(result.getData().getShares(), mLocalFolder);
-        }
-
         // TODO New Android Components
 //        // remote request
 //        GetRemoteSharesForFileOperation operation =
