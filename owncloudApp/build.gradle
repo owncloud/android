@@ -60,11 +60,11 @@ android {
     compileSdkVersion 28
 
     defaultConfig {
-        minSdkVersion 15
+        minSdkVersion 19
         targetSdkVersion 28
 
-        versionCode = 20900400
-        versionName = "2.10.0-beta.1"
+        versionCode = 21000000
+        versionName = "2.10.0"
 
         buildConfigField "String", gitRemote, "\"" + getGitOriginRemote() + "\""
         buildConfigField "String", commitSHA1, "\"" + getLatestGitHash() + "\""

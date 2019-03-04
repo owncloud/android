@@ -81,11 +81,6 @@ public class OwnCloudListPreference extends ListPreference {
             String value = getEntryValues()[which].toString();
             if (callChangeListener(value)) {
                 setValue(value);
-
-                // Workaround for pre kitkat since they don't support change listener within setValue
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
-                    setSummary(getEntries()[which]);
-                }
             }
             dialog.dismiss();
         }
