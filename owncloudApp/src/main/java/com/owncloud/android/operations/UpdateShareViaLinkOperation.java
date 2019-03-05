@@ -57,7 +57,7 @@ public class UpdateShareViaLinkOperation extends SyncOperation<ShareParserResult
         mPassword = null;
         mExpirationDateInMillis = 0;
         mPublicUpload = null;
-        mPermissions = RemoteShare.Companion.getDEFAULT_PERMISSION();
+        mPermissions = RemoteShare.DEFAULT_PERMISSION;
     }
 
     /**
