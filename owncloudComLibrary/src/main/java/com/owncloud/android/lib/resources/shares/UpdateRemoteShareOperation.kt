@@ -57,35 +57,35 @@ class UpdateRemoteShareOperation
     /**
      * Identifier of the share to update
      */
-    private val mRemoteId: Long
+    private val remoteId: Long
 ) : RemoteOperation<ShareParserResult>() {
 
     /**
      * Password to set for the public link
      */
-    private var mPassword: String? = null
+    private var password: String? = null
 
     /**
      * Expiration date to set for the public link
      */
-    private var mExpirationDateInMillis: Long = 0
+    private var expirationDateInMillis: Long = 0
 
     /**
      * Access permissions for the file bound to the share
      */
-    private var mPermissions: Int = 0
+    private var permissions: Int = 0
 
     /**
      * Upload permissions for the public link (only folders)
      */
-    private var mPublicUpload: Boolean? = null
-    private var mName: String? = null
+    private var publicUpload: Boolean? = null
+    private var name: String? = null
 
     init {
-        mPassword = null               // no update
-        mExpirationDateInMillis = 0    // no update
-        mPublicUpload = null
-        mPermissions = RemoteShare.DEFAULT_PERMISSION
+        password = null               // no update
+        expirationDateInMillis = 0    // no update
+        publicUpload = null
+        permissions = RemoteShare.DEFAULT_PERMISSION
     }
 
     /**
@@ -96,7 +96,7 @@ class UpdateRemoteShareOperation
      * Null results in no update applied to the name.
      */
     fun setName(name: String) {
-        this.mName = name
+        this.name = name
     }
 
     /**
@@ -107,7 +107,7 @@ class UpdateRemoteShareOperation
      * Null results in no update applied to the password.
      */
     fun setPassword(password: String) {
-        mPassword = password
+        this.password = password
     }
 
     /**
@@ -119,7 +119,7 @@ class UpdateRemoteShareOperation
      * the expiration date.
      */
     fun setExpirationDate(expirationDateInMillis: Long) {
-        mExpirationDateInMillis = expirationDateInMillis
+        this.expirationDateInMillis = expirationDateInMillis
     }
 
     /**
@@ -129,7 +129,7 @@ class UpdateRemoteShareOperation
      * Values <= 0 result in no update applied to the permissions.
      */
     fun setPermissions(permissions: Int) {
-        mPermissions = permissions
+        this.permissions = permissions
     }
 
     /**
@@ -139,7 +139,7 @@ class UpdateRemoteShareOperation
      * Null results in no update applied to the upload permission.
      */
     fun setPublicUpload(publicUpload: Boolean?) {
-        mPublicUpload = publicUpload
+        this.publicUpload = publicUpload
     }
 
     override fun run(client: OwnCloudClient): RemoteOperationResult<ShareParserResult> {
@@ -149,38 +149,38 @@ class UpdateRemoteShareOperation
             val formBodyBuilder = FormBody.Builder()
 
             // Parameters to update
-            if (mName != null) {
-                formBodyBuilder.add(PARAM_NAME, mName!!)
+            if (name != null) {
+                formBodyBuilder.add(PARAM_NAME, name!!)
             }
 
-            if (mExpirationDateInMillis < 0) {
+            if (expirationDateInMillis < 0) {
                 // clear expiration date
                 formBodyBuilder.add(PARAM_EXPIRATION_DATE, "")
 
-            } else if (mExpirationDateInMillis > 0) {
+            } else if (expirationDateInMillis > 0) {
                 // set expiration date
-                val dateFormat = SimpleDateFormat(FORMAT_EXPIRATION_DATE, Locale.GERMAN)
+                val dateFormat = SimpleDateFormat(FORMAT_EXPIRATION_DATE, Locale.getDefault())
                 val expirationDate = Calendar.getInstance()
-                expirationDate.timeInMillis = mExpirationDateInMillis
+                expirationDate.timeInMillis = expirationDateInMillis
                 val formattedExpirationDate = dateFormat.format(expirationDate.time)
                 formBodyBuilder.add(PARAM_EXPIRATION_DATE, formattedExpirationDate)
             } // else, ignore - no update
 
-            if (mPublicUpload != null) {
-                formBodyBuilder.add(PARAM_PUBLIC_UPLOAD, java.lang.Boolean.toString(mPublicUpload!!))
+            if (publicUpload != null) {
+                formBodyBuilder.add(PARAM_PUBLIC_UPLOAD, publicUpload.toString())
             }
 
             // IMPORTANT: permissions parameter needs to be updated after mPublicUpload parameter,
             // otherwise they would be set always as 1 (READ) in the server when mPublicUpload was updated
-            if (mPermissions > 0) {
+            if (permissions > 0) {
                 // set permissions
-                formBodyBuilder.add(PARAM_PERMISSIONS, Integer.toString(mPermissions))
+                formBodyBuilder.add(PARAM_PERMISSIONS, permissions.toString())
             }
 
             val requestUri = client.baseUri
             val uriBuilder = requestUri.buildUpon()
             uriBuilder.appendEncodedPath(ShareUtils.SHARING_API_PATH)
-            uriBuilder.appendEncodedPath(java.lang.Long.toString(mRemoteId))
+            uriBuilder.appendEncodedPath(remoteId.toString())
 
             val putMethod = PutMethod(URL(uriBuilder.build().toString()))
 
@@ -196,8 +196,8 @@ class UpdateRemoteShareOperation
                 val parser = ShareToRemoteOperationResultParser(
                     ShareXMLParser()
                 )
-                parser.setOwnCloudVersion(client.ownCloudVersion)
-                parser.setServerBaseUri(client.baseUri)
+                parser.ownCloudVersion = client.ownCloudVersion
+                parser.serverBaseUri = client.baseUri
                 result = parser.parse(putMethod.responseBodyAsString)
 
             } else {

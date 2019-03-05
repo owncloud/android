@@ -38,64 +38,26 @@ import java.io.Serializable
  * @author David González Verdugo
  */
 class RemoteShare : Parcelable, Serializable {
-
-    /// Getters and Setters
+    var shareWith: String = ""
+    var path: String = ""
+    var token: String = ""
+    var sharedWithDisplayName: String = ""
+    var sharedWithAdditionalInfo: String = ""
+    var name: String = ""
+    var shareLink: String = ""
     var fileSource: Long = 0
     var itemSource: Long = 0
     var shareType: ShareType? = null
-    private var mShareWith: String? = null
-    private var mPath: String? = null
     var permissions: Int = 0
     var sharedDate: Long = 0
     var expirationDate: Long = 0
-    private var mToken: String? = null
-    private var mSharedWithDisplayName: String? = null
-    var sharedWithAdditionalInfo: String? = null
-    private var mName: String? = null
     var isFolder: Boolean = false
     var userId: Long = 0
     var remoteId: Long = 0
         private set
-    private var mShareLink: String? = null
-
-    var shareWith: String?
-        get() = mShareWith
-        set(shareWith) {
-            this.mShareWith = shareWith ?: ""
-        }
-
-    var path: String?
-        get() = mPath
-        set(path) {
-            this.mPath = path ?: ""
-        }
-
-    var token: String?
-        get() = mToken
-        set(token) {
-            this.mToken = token ?: ""
-        }
-
-    var sharedWithDisplayName: String?
-        get() = mSharedWithDisplayName
-        set(sharedWithDisplayName) {
-            this.mSharedWithDisplayName = sharedWithDisplayName ?: ""
-        }
-
-    var name: String?
-        get() = mName
-        set(name) {
-            mName = name ?: ""
-        }
-
-    var shareLink: String?
-        get() = this.mShareLink
-        set(shareLink) {
-            this.mShareLink = shareLink ?: ""
-        }
 
     val isPasswordProtected: Boolean
-        get() = ShareType.PUBLIC_LINK == shareType && mShareWith!!.length > 0
+        get() = ShareType.PUBLIC_LINK == shareType && shareWith.isNotEmpty()
 
     constructor() : super() {
         resetData()
@@ -103,33 +65,34 @@ class RemoteShare : Parcelable, Serializable {
 
     constructor(path: String?) {
         resetData()
-        if (path == null || path.length <= 0 || !path.startsWith(FileUtils.PATH_SEPARATOR)) {
+        if (path == null || path.isEmpty() || !path.startsWith(FileUtils.PATH_SEPARATOR)) {
             Log_OC.e(TAG, "Trying to create a RemoteShare with a non valid path")
             throw IllegalArgumentException("Trying to create a RemoteShare with a non valid path: " + path!!)
         }
-        mPath = path
+        this.path = path
     }
 
     /**
      * Used internally. Reset all file properties
      */
     private fun resetData() {
+        shareWith = ""
+        path = ""
+        token = ""
+        sharedWithDisplayName = ""
+        sharedWithAdditionalInfo = ""
+        name = ""
+        shareLink = ""
         fileSource = 0
         itemSource = 0
         shareType = ShareType.NO_SHARED
-        mShareWith = ""
-        mPath = ""
-        permissions = -1
+        permissions = DEFAULT_PERMISSION
         sharedDate = 0
         expirationDate = 0
-        mToken = ""
-        mSharedWithDisplayName = ""
         sharedWithAdditionalInfo = ""
         isFolder = false
         userId = -1
         remoteId = -1
-        mShareLink = ""
-        mName = ""
     }
 
     fun setIdRemoteShared(remoteId: Long) {
@@ -146,6 +109,13 @@ class RemoteShare : Parcelable, Serializable {
     }
 
     fun readFromParcel(source: Parcel) {
+        shareWith = source.readString()
+        path = source.readString()
+        token = source.readString()
+        sharedWithDisplayName = source.readString()
+        sharedWithAdditionalInfo = source.readString()
+        name = source.readString()
+        shareLink = source.readString()
         fileSource = source.readLong()
         itemSource = source.readLong()
         try {
@@ -153,20 +123,12 @@ class RemoteShare : Parcelable, Serializable {
         } catch (x: IllegalArgumentException) {
             shareType = ShareType.NO_SHARED
         }
-
-        mShareWith = source.readString()
-        mPath = source.readString()
         permissions = source.readInt()
         sharedDate = source.readLong()
         expirationDate = source.readLong()
-        mToken = source.readString()
-        mSharedWithDisplayName = source.readString()
-        sharedWithAdditionalInfo = source.readString()
         isFolder = source.readInt() == 0
         userId = source.readLong()
         remoteId = source.readLong()
-        mShareLink = source.readString()
-        mName = source.readString()
     }
 
     override fun describeContents(): Int {
@@ -174,22 +136,22 @@ class RemoteShare : Parcelable, Serializable {
     }
 
     override fun writeToParcel(dest: Parcel, flags: Int) {
+        dest.writeString(shareWith)
+        dest.writeString(path)
+        dest.writeString(token)
+        dest.writeString(sharedWithDisplayName)
+        dest.writeString(sharedWithAdditionalInfo)
+        dest.writeString(name)
+        dest.writeString(shareLink)
         dest.writeLong(fileSource)
         dest.writeLong(itemSource)
         dest.writeString(if (shareType == null) "" else shareType!!.name)
-        dest.writeString(mShareWith)
-        dest.writeString(mPath)
         dest.writeInt(permissions)
         dest.writeLong(sharedDate)
         dest.writeLong(expirationDate)
-        dest.writeString(mToken)
-        dest.writeString(mSharedWithDisplayName)
-        dest.writeString(sharedWithAdditionalInfo)
         dest.writeInt(if (isFolder) 1 else 0)
         dest.writeLong(userId)
         dest.writeLong(remoteId)
-        dest.writeString(mShareLink)
-        dest.writeString(mName)
     }
 
     companion object {

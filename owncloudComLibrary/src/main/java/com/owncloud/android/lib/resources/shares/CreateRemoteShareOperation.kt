@@ -68,90 +68,27 @@ class CreateRemoteShareOperation
  * For instance, for Re-Share, delete, read, update, add 16+8+2+1 = 27.
  */
     (
-    private val mRemoteFilePath: String,
-    private val mShareType: ShareType,
-    private val mShareWith: String,
-    /**
-     * Upload permissions for the public link (only folders)
-     */
-    private var mPublicUpload: Boolean?,
-    /**
-     * Password to set for the public link
-     */
-    private var mPassword: String?,
-    /**
-     * Access permissions for the file bound to the share
-     */
-    private var mPermissions: Int
+    private val remoteFilePath: String,
+    private val shareType: ShareType,
+    private val shareWith: String,
+    var publicUpload: Boolean?, // Upload permissions for the public link (only folders)
+    var password: String?, // Password to set for the public link
+    var permissions: Int // Access permissions for the file bound to the share
 ) : RemoteOperation<ShareParserResult>() {
-    private var mGetShareDetails: Boolean = false
+    var getShareDetails: Boolean = false
 
     /**
      * Name to set for the public link
      */
-    private var mName = ""
+    var name = ""
 
     /**
      * Expiration date to set for the public link
      */
-    private var mExpirationDateInMillis: Long = 0
+    var expirationDateInMillis: Long = INITIAL_EXPIRATION_DATE_IN_MILLIS
 
     init {
-        mGetShareDetails = false        // defaults to false for backwards compatibility
-    }
-
-    /**
-     * Set name to create in Share resource. Ignored by servers previous to version 10.0.0
-     *
-     * @param name Name to set to the target share.
-     * Null or empty string result in no value set for the name.
-     */
-    fun setName(name: String?) {
-        this.mName = name ?: ""
-    }
-
-    /**
-     * Set password to create in Share resource.
-     *
-     * @param password Password to set to the target share.
-     * Null or empty string result in no value set for the password.
-     */
-    fun setPassword(password: String) {
-        mPassword = password
-    }
-
-    /**
-     * Set expiration date to create in Share resource.
-     *
-     * @param expirationDateInMillis Expiration date to set to the target share.
-     * Zero or negative value results in no value sent for expiration date.
-     */
-    fun setExpirationDate(expirationDateInMillis: Long) {
-        mExpirationDateInMillis = expirationDateInMillis
-    }
-
-    /**
-     * Set permissions to create in Share resource.
-     *
-     * @param permissions Permissions to set to the target share.
-     * Values <= 0 result in value set  to the permissions.
-     */
-    fun setPermissions(permissions: Int) {
-        mPermissions = permissions
-    }
-
-    /**
-     * * Enable upload permissions to create in Share resource.
-     * *
-     * * @param publicUpload  Upload permission to set to the target share.
-     * *                      Null results in no update applied to the upload permission.
-     */
-    fun setPublicUpload(publicUpload: Boolean?) {
-        mPublicUpload = publicUpload
-    }
-
-    fun setGetShareDetails(set: Boolean) {
-        mGetShareDetails = set
+        getShareDetails = false        // defaults to false for backwards compatibility
     }
 
     override fun run(client: OwnCloudClient): RemoteOperationResult<ShareParserResult> {
@@ -159,30 +96,30 @@ class CreateRemoteShareOperation
 
         try {
             val formBodyBuilder = FormBody.Builder()
-                .add(PARAM_PATH, mRemoteFilePath)
-                .add(PARAM_SHARE_TYPE, Integer.toString(mShareType.value))
-                .add(PARAM_SHARE_WITH, mShareWith)
+                .add(PARAM_PATH, remoteFilePath)
+                .add(PARAM_SHARE_TYPE, Integer.toString(shareType.value))
+                .add(PARAM_SHARE_WITH, shareWith)
 
-            if (mName.length > 0) {
-                formBodyBuilder.add(PARAM_NAME, mName)
+            if (name.isNotEmpty()) {
+                formBodyBuilder.add(PARAM_NAME, name)
             }
 
-            if (mExpirationDateInMillis > 0) {
+            if (expirationDateInMillis > INITIAL_EXPIRATION_DATE_IN_MILLIS) {
                 val dateFormat = SimpleDateFormat(FORMAT_EXPIRATION_DATE, Locale.getDefault())
                 val expirationDate = Calendar.getInstance()
-                expirationDate.timeInMillis = mExpirationDateInMillis
+                expirationDate.timeInMillis = expirationDateInMillis
                 val formattedExpirationDate = dateFormat.format(expirationDate.time)
                 formBodyBuilder.add(PARAM_EXPIRATION_DATE, formattedExpirationDate)
             }
 
-            if (mPublicUpload!!) {
-                formBodyBuilder.add(PARAM_PUBLIC_UPLOAD, java.lang.Boolean.toString(true))
+            if (publicUpload == true) {
+                formBodyBuilder.add(PARAM_PUBLIC_UPLOAD, publicUpload.toString())
             }
-            if (mPassword != null && mPassword!!.length > 0) {
-                formBodyBuilder.add(PARAM_PASSWORD, mPassword!!)
+            if (!password.isNullOrEmpty()) {
+                formBodyBuilder.add(PARAM_PASSWORD, password!!)
             }
-            if (RemoteShare.DEFAULT_PERMISSION != mPermissions) {
-                formBodyBuilder.add(PARAM_PERMISSIONS, Integer.toString(mPermissions))
+            if (RemoteShare.DEFAULT_PERMISSION != permissions) {
+                formBodyBuilder.add(PARAM_PERMISSIONS, Integer.toString(permissions))
             }
 
             val requestUri = client.baseUri
@@ -203,12 +140,12 @@ class CreateRemoteShareOperation
             )
 
             if (isSuccess(status)) {
-                parser.setOneOrMoreSharesRequired(true)
-                parser.setOwnCloudVersion(client.ownCloudVersion)
-                parser.setServerBaseUri(client.baseUri)
+                parser.oneOrMoreSharesRequired = true
+                parser.ownCloudVersion = client.ownCloudVersion
+                parser.serverBaseUri = client.baseUri
                 result = parser.parse(postMethod.responseBodyAsString)
 
-                if (result.isSuccess && mGetShareDetails) {
+                if (result.isSuccess && getShareDetails) {
 
                     // TODO Use executeHttpMethod
                     // retrieve more info - POST only returns the index of the new share
@@ -248,5 +185,7 @@ class CreateRemoteShareOperation
         private val PARAM_SHARE_WITH = "shareWith"
         private val PARAM_PERMISSIONS = "permissions"
         private val FORMAT_EXPIRATION_DATE = "yyyy-MM-dd"
+
+        const val INITIAL_EXPIRATION_DATE_IN_MILLIS : Long = 0
     }
 }

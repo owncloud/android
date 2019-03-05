@@ -90,9 +90,7 @@ class RemoveRemoteShareOperation
         return result
     }
 
-    private fun isSuccess(status: Int): Boolean {
-        return status == HttpConstants.HTTP_OK
-    }
+    private fun isSuccess(status: Int): Boolean = status == HttpConstants.HTTP_OK
 
     companion object {
 

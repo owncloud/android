@@ -45,7 +45,6 @@ import java.util.ArrayList
  */
 
 class ShareXMLParser {
-
     // Getters and Setters
     var status: String? = null
     var statusCode: Int = 0
@@ -65,18 +64,18 @@ class ShareXMLParser {
 
     // Constructor
     init {
-        statusCode = -1
+        statusCode = INIT
     }
 
     /**
      * Parse is as response of Share API
-     * @param is
+     * @param inputStream
      * @return List of ShareRemoteFiles
      * @throws XmlPullParserException
      * @throws IOException
      */
     @Throws(XmlPullParserException::class, IOException::class)
-    fun parseXMLResponse(`is`: InputStream): ArrayList<RemoteShare> {
+    fun parseXMLResponse(inputStream: InputStream): ArrayList<RemoteShare> {
 
         try {
             // XMLPullParser
@@ -85,12 +84,12 @@ class ShareXMLParser {
 
             val parser = Xml.newPullParser()
             parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false)
-            parser.setInput(`is`, null)
+            parser.setInput(inputStream, null)
             parser.nextTag()
             return readOCS(parser)
 
         } finally {
-            `is`.close()
+            inputStream.close()
         }
     }
 
@@ -307,10 +306,10 @@ class ShareXMLParser {
     }
 
     private fun fixPathForFolder(share: RemoteShare) {
-        if (share.isFolder && share.path != null && share.path!!.length > 0 &&
-            !share.path!!.endsWith(FileUtils.PATH_SEPARATOR)
+        if (share.isFolder && share.path.isNotEmpty() &&
+            !share.path.endsWith(FileUtils.PATH_SEPARATOR)
         ) {
-            share.path = share.path!! + FileUtils.PATH_SEPARATOR
+            share.path = share.path + FileUtils.PATH_SEPARATOR
         }
     }
 
@@ -376,40 +375,41 @@ class ShareXMLParser {
         private val ns: String? = null
 
         // NODES for XML Parser
-        private val NODE_OCS = "ocs"
+        private const val NODE_OCS = "ocs"
 
-        private val NODE_META = "meta"
-        private val NODE_STATUS = "status"
-        private val NODE_STATUS_CODE = "statuscode"
-        private val NODE_MESSAGE = "message"
+        private const val NODE_META = "meta"
+        private const val NODE_STATUS = "status"
+        private const val NODE_STATUS_CODE = "statuscode"
+        private const val NODE_MESSAGE = "message"
 
-        private val NODE_DATA = "data"
-        private val NODE_ELEMENT = "element"
-        private val NODE_ID = "id"
-        private val NODE_ITEM_TYPE = "item_type"
-        private val NODE_ITEM_SOURCE = "item_source"
-        private val NODE_PARENT = "parent"
-        private val NODE_SHARE_TYPE = "share_type"
-        private val NODE_SHARE_WITH = "share_with"
-        private val NODE_FILE_SOURCE = "file_source"
-        private val NODE_PATH = "path"
-        private val NODE_PERMISSIONS = "permissions"
-        private val NODE_STIME = "stime"
-        private val NODE_EXPIRATION = "expiration"
-        private val NODE_TOKEN = "token"
-        private val NODE_STORAGE = "storage"
-        private val NODE_MAIL_SEND = "mail_send"
-        private val NODE_SHARE_WITH_DISPLAY_NAME = "share_with_displayname"
-        private val NODE_SHARE_WITH_ADDITIONAL_INFO = "share_with_additional_info"
-        private val NODE_NAME = "name"
+        private const val NODE_DATA = "data"
+        private const val NODE_ELEMENT = "element"
+        private const val NODE_ID = "id"
+        private const val NODE_ITEM_TYPE = "item_type"
+        private const val NODE_ITEM_SOURCE = "item_source"
+        private const val NODE_PARENT = "parent"
+        private const val NODE_SHARE_TYPE = "share_type"
+        private const val NODE_SHARE_WITH = "share_with"
+        private const val NODE_FILE_SOURCE = "file_source"
+        private const val NODE_PATH = "path"
+        private const val NODE_PERMISSIONS = "permissions"
+        private const val NODE_STIME = "stime"
+        private const val NODE_EXPIRATION = "expiration"
+        private const val NODE_TOKEN = "token"
+        private const val NODE_STORAGE = "storage"
+        private const val NODE_MAIL_SEND = "mail_send"
+        private const val NODE_SHARE_WITH_DISPLAY_NAME = "share_with_displayname"
+        private const val NODE_SHARE_WITH_ADDITIONAL_INFO = "share_with_additional_info"
+        private const val NODE_NAME = "name"
 
-        private val NODE_URL = "url"
+        private const val NODE_URL = "url"
 
-        private val TYPE_FOLDER = "folder"
+        private const val TYPE_FOLDER = "folder"
 
-        private val SUCCESS = 200
-        private val ERROR_WRONG_PARAMETER = 400
-        private val ERROR_FORBIDDEN = 403
-        private val ERROR_NOT_FOUND = 404
+        private const val SUCCESS = 200
+        private const val ERROR_WRONG_PARAMETER = 400
+        private const val ERROR_FORBIDDEN = 403
+        private const val ERROR_NOT_FOUND = 404
+        private const val INIT = -1
     }
 }

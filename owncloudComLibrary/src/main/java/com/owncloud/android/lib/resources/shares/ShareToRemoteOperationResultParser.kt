@@ -28,42 +28,21 @@
 package com.owncloud.android.lib.resources.shares
 
 import android.net.Uri
-
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.common.utils.Log_OC
 import com.owncloud.android.lib.resources.status.OwnCloudVersion
 import org.xmlpull.v1.XmlPullParserException
-
 import java.io.ByteArrayInputStream
 import java.io.IOException
-import java.io.InputStream
 import java.util.ArrayList
 
-class ShareToRemoteOperationResultParser(shareXmlParser: ShareXMLParser) {
-
-    private var mShareXmlParser: ShareXMLParser? = null
-    private var mOneOrMoreSharesRequired = false
-    private var mOwnCloudVersion: OwnCloudVersion? = null
-    private var mServerBaseUri: Uri? = null
-
-    init {
-        mShareXmlParser = shareXmlParser
-    }
-
-    fun setOneOrMoreSharesRequired(oneOrMoreSharesRequired: Boolean) {
-        mOneOrMoreSharesRequired = oneOrMoreSharesRequired
-    }
-
-    fun setOwnCloudVersion(ownCloudVersion: OwnCloudVersion?) {
-        mOwnCloudVersion = ownCloudVersion
-    }
-
-    fun setServerBaseUri(serverBaseURi: Uri) {
-        mServerBaseUri = serverBaseURi
-    }
+class ShareToRemoteOperationResultParser(private var shareXmlParser: ShareXMLParser?) {
+    var oneOrMoreSharesRequired = false
+    var ownCloudVersion: OwnCloudVersion? = null
+    var serverBaseUri: Uri? = null
 
     fun parse(serverResponse: String?): RemoteOperationResult<ShareParserResult> {
-        if (serverResponse == null || serverResponse.length == 0) {
+        if (serverResponse.isNullOrEmpty()) {
             return RemoteOperationResult(RemoteOperationResult.ResultCode.WRONG_SERVER_RESPONSE)
         }
 
@@ -72,15 +51,15 @@ class ShareToRemoteOperationResultParser(shareXmlParser: ShareXMLParser) {
 
         try {
             // Parse xml response and obtain the list of shares
-            val `is` = ByteArrayInputStream(serverResponse.toByteArray())
-            if (mShareXmlParser == null) {
+            val byteArrayServerResponse = ByteArrayInputStream(serverResponse.toByteArray())
+            if (shareXmlParser == null) {
                 Log_OC.w(TAG, "No ShareXmlParser provided, creating new instance ")
-                mShareXmlParser = ShareXMLParser()
+                shareXmlParser = ShareXMLParser()
             }
-            val shares = mShareXmlParser!!.parseXMLResponse(`is`)
+            val shares = shareXmlParser?.parseXMLResponse(byteArrayServerResponse)
 
-            if (mShareXmlParser!!.isSuccess) {
-                if (shares != null && shares.size > 0 || !mOneOrMoreSharesRequired) {
+            if (shareXmlParser?.isSuccess!!) {
+                if (!shares.isNullOrEmpty() || !oneOrMoreSharesRequired) {
                     result = RemoteOperationResult(RemoteOperationResult.ResultCode.OK)
                     if (shares != null) {
                         for (share in shares) {
@@ -88,12 +67,12 @@ class ShareToRemoteOperationResultParser(shareXmlParser: ShareXMLParser) {
                             // build the share link if not in the response
                             // (needed for OC servers < 9.0.0, see ShareXMLParser.java#line256)
                             if (share.shareType == ShareType.PUBLIC_LINK
-                                && (share.shareLink == null || share.shareLink!!.length <= 0)
-                                && share.token!!.length > 0
+                                && share.shareLink.isEmpty()
+                                && share.token.isNotEmpty()
                             ) {
-                                if (mServerBaseUri != null) {
-                                    val sharingLinkPath = ShareUtils.getSharingLinkPath(mOwnCloudVersion)
-                                    share.shareLink = mServerBaseUri.toString() + sharingLinkPath + share.token
+                                if (serverBaseUri != null) {
+                                    val sharingLinkPath = ShareUtils.getSharingLinkPath(ownCloudVersion)
+                                    share.shareLink = serverBaseUri.toString() + sharingLinkPath + share.token
                                 } else {
                                     Log_OC.e(TAG, "Couldn't build link for public share :(")
                                 }
@@ -107,18 +86,15 @@ class ShareToRemoteOperationResultParser(shareXmlParser: ShareXMLParser) {
                     Log_OC.e(TAG, "Successful status with no share in the response")
                 }
 
-            } else if (mShareXmlParser!!.isWrongParameter) {
+            } else if (shareXmlParser?.isWrongParameter!!) {
                 result = RemoteOperationResult(RemoteOperationResult.ResultCode.SHARE_WRONG_PARAMETER)
-                result.setData(ShareParserResult(null!!, mShareXmlParser!!.message!!))
-
-            } else if (mShareXmlParser!!.isNotFound) {
+                result.data = ShareParserResult(arrayListOf(), shareXmlParser?.message!!)
+            } else if (shareXmlParser?.isNotFound!!) {
                 result = RemoteOperationResult(RemoteOperationResult.ResultCode.SHARE_NOT_FOUND)
-                result.setData(ShareParserResult(null!!, mShareXmlParser!!.message!!))
-
-            } else if (mShareXmlParser!!.isForbidden) {
+                result.data = ShareParserResult(arrayListOf(), shareXmlParser?.message!!)
+            } else if (shareXmlParser?.isForbidden!!) {
                 result = RemoteOperationResult(RemoteOperationResult.ResultCode.SHARE_FORBIDDEN)
-                result.setData(ShareParserResult(null!!, mShareXmlParser!!.message!!))
-
+                result.data = ShareParserResult(arrayListOf(), shareXmlParser?.message!!)
             } else {
                 result = RemoteOperationResult(RemoteOperationResult.ResultCode.WRONG_SERVER_RESPONSE)
             }
@@ -136,7 +112,6 @@ class ShareToRemoteOperationResultParser(shareXmlParser: ShareXMLParser) {
     }
 
     companion object {
-
         private val TAG = ShareToRemoteOperationResultParser::class.java.simpleName
     }
 }
