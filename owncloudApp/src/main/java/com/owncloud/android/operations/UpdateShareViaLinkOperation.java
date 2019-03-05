@@ -129,7 +129,7 @@ public class UpdateShareViaLinkOperation extends SyncOperation<ShareParserResult
         );
         updateOp.setName(mName);
         updateOp.setPassword(mPassword);
-        updateOp.setExpirationDate(mExpirationDateInMillis);
+        updateOp.setExpirationDateInMillis(mExpirationDateInMillis);
         updateOp.setPublicUpload(mPublicUpload);
         updateOp.setPermissions(mPermissions);
         RemoteOperationResult<ShareParserResult> result = updateOp.execute(client);
@@ -166,6 +166,4 @@ public class UpdateShareViaLinkOperation extends SyncOperation<ShareParserResult
             getStorageManager().saveFile(file);
         }
     }
-
 }
-
