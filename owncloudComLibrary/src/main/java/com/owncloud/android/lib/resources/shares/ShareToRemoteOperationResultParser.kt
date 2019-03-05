@@ -47,7 +47,7 @@ class ShareToRemoteOperationResultParser(private var shareXmlParser: ShareXMLPar
         }
 
         var result: RemoteOperationResult<ShareParserResult>
-        val resultData = ArrayList<RemoteShare>()
+        var resultData: List<RemoteShare>?
 
         try {
             // Parse xml response and obtain the list of shares
@@ -61,25 +61,25 @@ class ShareToRemoteOperationResultParser(private var shareXmlParser: ShareXMLPar
             if (shareXmlParser?.isSuccess!!) {
                 if (!shares.isNullOrEmpty() || !oneOrMoreSharesRequired) {
                     result = RemoteOperationResult(RemoteOperationResult.ResultCode.OK)
-                    if (shares != null) {
-                        for (share in shares) {
-                            resultData.add(share)
-                            // build the share link if not in the response
-                            // (needed for OC servers < 9.0.0, see ShareXMLParser.java#line256)
-                            if (share.shareType == ShareType.PUBLIC_LINK
-                                && share.shareLink.isEmpty()
-                                && share.token.isNotEmpty()
-                            ) {
-                                if (serverBaseUri != null) {
-                                    val sharingLinkPath = ShareUtils.getSharingLinkPath(ownCloudVersion)
-                                    share.shareLink = serverBaseUri.toString() + sharingLinkPath + share.token
-                                } else {
-                                    Log_OC.e(TAG, "Couldn't build link for public share :(")
-                                }
-                            }
+
+                    resultData  = shares?.map { share ->
+                        if (share.shareType != ShareType.PUBLIC_LINK ||
+                            share.shareLink.isNotEmpty() ||
+                            share.token.isEmpty()) {
+                            return@map share
                         }
+
+                        if (serverBaseUri != null) {
+                            val sharingLinkPath = ShareUtils.getSharingLinkPath(ownCloudVersion)
+                            share.shareLink = serverBaseUri.toString() + sharingLinkPath + share.token
+                        }  else {
+                            Log_OC.e(TAG, "Couldn't build link for public share :(")
+                        }
+
+                        share
                     }
-                    result.setData(ShareParserResult(resultData, ""))
+
+                    result.setData(ShareParserResult(ArrayList(resultData), ""))
 
                 } else {
                     result = RemoteOperationResult(RemoteOperationResult.ResultCode.WRONG_SERVER_RESPONSE)

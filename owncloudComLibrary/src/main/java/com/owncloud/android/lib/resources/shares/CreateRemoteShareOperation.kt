@@ -33,6 +33,7 @@ import com.owncloud.android.lib.common.http.methods.nonwebdav.PostMethod
 import com.owncloud.android.lib.common.operations.RemoteOperation
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.common.utils.Log_OC
+import com.owncloud.android.lib.resources.shares.RemoteShare.Companion.INIT_EXPIRATION_DATE_IN_MILLIS
 import okhttp3.FormBody
 import java.net.URL
 import java.text.SimpleDateFormat
@@ -75,7 +76,7 @@ class CreateRemoteShareOperation
     var password: String?, // Password to set for the public link
     var permissions: Int // Access permissions for the file bound to the share
 ) : RemoteOperation<ShareParserResult>() {
-    var getShareDetails: Boolean = false
+    var getShareDetails: Boolean = false // To retrieve more info about the just created share
 
     /**
      * Name to set for the public link
@@ -85,7 +86,7 @@ class CreateRemoteShareOperation
     /**
      * Expiration date to set for the public link
      */
-    var expirationDateInMillis: Long = INITIAL_EXPIRATION_DATE_IN_MILLIS
+    var expirationDateInMillis: Long = INIT_EXPIRATION_DATE_IN_MILLIS
 
     init {
         getShareDetails = false        // defaults to false for backwards compatibility
@@ -104,7 +105,7 @@ class CreateRemoteShareOperation
                 formBodyBuilder.add(PARAM_NAME, name)
             }
 
-            if (expirationDateInMillis > INITIAL_EXPIRATION_DATE_IN_MILLIS) {
+            if (expirationDateInMillis > INIT_EXPIRATION_DATE_IN_MILLIS) {
                 val dateFormat = SimpleDateFormat(FORMAT_EXPIRATION_DATE, Locale.getDefault())
                 val expirationDate = Calendar.getInstance()
                 expirationDate.timeInMillis = expirationDateInMillis
@@ -116,7 +117,7 @@ class CreateRemoteShareOperation
                 formBodyBuilder.add(PARAM_PUBLIC_UPLOAD, publicUpload.toString())
             }
             if (!password.isNullOrEmpty()) {
-                formBodyBuilder.add(PARAM_PASSWORD, password!!)
+                formBodyBuilder.add(PARAM_PASSWORD, password)
             }
             if (RemoteShare.DEFAULT_PERMISSION != permissions) {
                 formBodyBuilder.add(PARAM_PERMISSIONS, Integer.toString(permissions))
@@ -168,24 +169,19 @@ class CreateRemoteShareOperation
         return result
     }
 
-    private fun isSuccess(status: Int): Boolean {
-        return status == HttpConstants.HTTP_OK
-    }
+    private fun isSuccess(status: Int): Boolean = status == HttpConstants.HTTP_OK
 
     companion object {
-
         private val TAG = CreateRemoteShareOperation::class.java.simpleName
 
-        private val PARAM_NAME = "name"
-        private val PARAM_PASSWORD = "password"
-        private val PARAM_EXPIRATION_DATE = "expireDate"
-        private val PARAM_PUBLIC_UPLOAD = "publicUpload"
-        private val PARAM_PATH = "path"
-        private val PARAM_SHARE_TYPE = "shareType"
-        private val PARAM_SHARE_WITH = "shareWith"
-        private val PARAM_PERMISSIONS = "permissions"
-        private val FORMAT_EXPIRATION_DATE = "yyyy-MM-dd"
-
-        const val INITIAL_EXPIRATION_DATE_IN_MILLIS : Long = 0
+        private const val PARAM_NAME = "name"
+        private const val PARAM_PASSWORD = "password"
+        private const val PARAM_EXPIRATION_DATE = "expireDate"
+        private const val PARAM_PUBLIC_UPLOAD = "publicUpload"
+        private const val PARAM_PATH = "path"
+        private const val PARAM_SHARE_TYPE = "shareType"
+        private const val PARAM_SHARE_WITH = "shareWith"
+        private const val PARAM_PERMISSIONS = "permissions"
+        private const val FORMAT_EXPIRATION_DATE = "yyyy-MM-dd"
     }
 }

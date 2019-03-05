@@ -31,6 +31,7 @@ import com.owncloud.android.lib.common.http.methods.nonwebdav.PutMethod
 import com.owncloud.android.lib.common.operations.RemoteOperation
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.common.utils.Log_OC
+import com.owncloud.android.lib.resources.shares.RemoteShare.Companion.INIT_PERMISSION
 import okhttp3.FormBody
 import java.net.URL
 import java.text.SimpleDateFormat
@@ -53,84 +54,34 @@ class UpdateRemoteShareOperation
  *
  * @param remoteId Identifier of the share to update.
  */
-    (
-    /**
-     * Identifier of the share to update
-     */
-    private val remoteId: Long
-) : RemoteOperation<ShareParserResult>() {
+    (private val remoteId: Long) : RemoteOperation<ShareParserResult>() {
 
     /**
-     * Password to set for the public link
-     */
-    private var password: String? = null
-
-    /**
-     * Expiration date to set for the public link
-     */
-    private var expirationDateInMillis: Long = 0
-
-    /**
-     * Access permissions for the file bound to the share
-     */
-    private var permissions: Int = 0
-
-    /**
-     * Upload permissions for the public link (only folders)
-     */
-    private var publicUpload: Boolean? = null
-    private var name: String? = null
-
-    init {
-        password = null               // no update
-        expirationDateInMillis = 0    // no update
-        publicUpload = null
-        permissions = RemoteShare.DEFAULT_PERMISSION
-    }
-
-    /**
-     * Set name to update in Share resource. Ignored by servers previous to version 10.0.0
-     *
-     * @param name Name to set to the target share.
-     * Empty string clears the current name.
-     * Null results in no update applied to the name.
-     */
-    fun setName(name: String) {
-        this.name = name
-    }
-
-    /**
-     * Set password to update in Share resource.
+     * Password to update in Share resource.
      *
      * @param password Password to set to the target share.
      * Empty string clears the current password.
      * Null results in no update applied to the password.
      */
-    fun setPassword(password: String) {
-        this.password = password
-    }
+    var password: String? = null
 
     /**
-     * Set expiration date to update in Share resource.
+     * Expiration date to update in Share resource.
      *
      * @param expirationDateInMillis Expiration date to set to the target share.
      * A negative value clears the current expiration date.
      * Zero value (start-of-epoch) results in no update done on
      * the expiration date.
      */
-    fun setExpirationDate(expirationDateInMillis: Long) {
-        this.expirationDateInMillis = expirationDateInMillis
-    }
+    var expirationDateInMillis: Long = INITIAL_EXPIRATION_DATE_IN_MILLIS
 
     /**
-     * Set permissions to update in Share resource.
+     * Permissions to update in Share resource.
      *
      * @param permissions Permissions to set to the target share.
      * Values <= 0 result in no update applied to the permissions.
      */
-    fun setPermissions(permissions: Int) {
-        this.permissions = permissions
-    }
+    var permissions: Int = INIT_PERMISSION
 
     /**
      * Enable upload permissions to update in Share resource.
@@ -138,8 +89,21 @@ class UpdateRemoteShareOperation
      * @param publicUpload Upload permission to set to the target share.
      * Null results in no update applied to the upload permission.
      */
-    fun setPublicUpload(publicUpload: Boolean?) {
-        this.publicUpload = publicUpload
+    var publicUpload: Boolean? = null
+    /**
+     * Name to update in Share resource. Ignored by servers previous to version 10.0.0
+     *
+     * @param name Name to set to the target share.
+     * Empty string clears the current name.
+     * Null results in no update applied to the name.
+     */
+    var name: String? = null
+
+    init {
+        password = null               // no update
+        expirationDateInMillis = INITIAL_EXPIRATION_DATE_IN_MILLIS    // no update
+        publicUpload = null
+        permissions = RemoteShare.DEFAULT_PERMISSION
     }
 
     override fun run(client: OwnCloudClient): RemoteOperationResult<ShareParserResult> {
@@ -153,11 +117,11 @@ class UpdateRemoteShareOperation
                 formBodyBuilder.add(PARAM_NAME, name!!)
             }
 
-            if (expirationDateInMillis < 0) {
+            if (expirationDateInMillis < INITIAL_EXPIRATION_DATE_IN_MILLIS) {
                 // clear expiration date
                 formBodyBuilder.add(PARAM_EXPIRATION_DATE, "")
 
-            } else if (expirationDateInMillis > 0) {
+            } else if (expirationDateInMillis > INITIAL_EXPIRATION_DATE_IN_MILLIS) {
                 // set expiration date
                 val dateFormat = SimpleDateFormat(FORMAT_EXPIRATION_DATE, Locale.getDefault())
                 val expirationDate = Calendar.getInstance()
@@ -172,7 +136,7 @@ class UpdateRemoteShareOperation
 
             // IMPORTANT: permissions parameter needs to be updated after mPublicUpload parameter,
             // otherwise they would be set always as 1 (READ) in the server when mPublicUpload was updated
-            if (permissions > 0) {
+            if (permissions > INIT_PERMISSION) {
                 // set permissions
                 formBodyBuilder.add(PARAM_PERMISSIONS, permissions.toString())
             }
@@ -212,21 +176,21 @@ class UpdateRemoteShareOperation
         return result
     }
 
-    private fun isSuccess(status: Int): Boolean {
-        return status == HttpConstants.HTTP_OK
-    }
+    private fun isSuccess(status: Int): Boolean = status == HttpConstants.HTTP_OK
 
     companion object {
 
         private val TAG = GetRemoteShareOperation::class.java.simpleName
 
-        private val PARAM_NAME = "name"
-        private val PARAM_PASSWORD = "password"
-        private val PARAM_EXPIRATION_DATE = "expireDate"
-        private val PARAM_PERMISSIONS = "permissions"
-        private val PARAM_PUBLIC_UPLOAD = "publicUpload"
-        private val FORMAT_EXPIRATION_DATE = "yyyy-MM-dd"
-        private val ENTITY_CONTENT_TYPE = "application/x-www-form-urlencoded"
-        private val ENTITY_CHARSET = "UTF-8"
+        private const val PARAM_NAME = "name"
+        private const val PARAM_PASSWORD = "password"
+        private const val PARAM_EXPIRATION_DATE = "expireDate"
+        private const val PARAM_PERMISSIONS = "permissions"
+        private const val PARAM_PUBLIC_UPLOAD = "publicUpload"
+        private const val FORMAT_EXPIRATION_DATE = "yyyy-MM-dd"
+        private const val ENTITY_CONTENT_TYPE = "application/x-www-form-urlencoded"
+        private const val ENTITY_CHARSET = "UTF-8"
+
+        private const val INITIAL_EXPIRATION_DATE_IN_MILLIS : Long = 0
     }
 }

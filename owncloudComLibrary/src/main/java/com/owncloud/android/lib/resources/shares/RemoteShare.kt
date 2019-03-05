@@ -48,13 +48,12 @@ class RemoteShare : Parcelable, Serializable {
     var fileSource: Long = 0
     var itemSource: Long = 0
     var shareType: ShareType? = null
-    var permissions: Int = 0
-    var sharedDate: Long = 0
-    var expirationDate: Long = 0
+    var permissions: Int = INIT_PERMISSION
+    var sharedDate: Long = INIT_SHARED_DATE
+    var expirationDate: Long = INIT_EXPIRATION_DATE_IN_MILLIS
     var isFolder: Boolean = false
     var userId: Long = 0
     var remoteId: Long = 0
-        private set
 
     val isPasswordProtected: Boolean
         get() = ShareType.PUBLIC_LINK == shareType && shareWith.isNotEmpty()
@@ -65,7 +64,7 @@ class RemoteShare : Parcelable, Serializable {
 
     constructor(path: String?) {
         resetData()
-        if (path == null || path.isEmpty() || !path.startsWith(FileUtils.PATH_SEPARATOR)) {
+        if (path.isNullOrEmpty() || !path.startsWith(FileUtils.PATH_SEPARATOR)) {
             Log_OC.e(TAG, "Trying to create a RemoteShare with a non valid path")
             throw IllegalArgumentException("Trying to create a RemoteShare with a non valid path: " + path!!)
         }
@@ -87,16 +86,12 @@ class RemoteShare : Parcelable, Serializable {
         itemSource = 0
         shareType = ShareType.NO_SHARED
         permissions = DEFAULT_PERMISSION
-        sharedDate = 0
-        expirationDate = 0
+        sharedDate = INIT_SHARED_DATE
+        expirationDate = INIT_EXPIRATION_DATE_IN_MILLIS
         sharedWithAdditionalInfo = ""
         isFolder = false
         userId = -1
         remoteId = -1
-    }
-
-    fun setIdRemoteShared(remoteId: Long) {
-        this.remoteId = remoteId
     }
 
     /**
@@ -131,9 +126,7 @@ class RemoteShare : Parcelable, Serializable {
         remoteId = source.readLong()
     }
 
-    override fun describeContents(): Int {
-        return this.hashCode()
-    }
+    override fun describeContents(): Int = this.hashCode()
 
     override fun writeToParcel(dest: Parcel, flags: Int) {
         dest.writeString(shareWith)
@@ -145,7 +138,7 @@ class RemoteShare : Parcelable, Serializable {
         dest.writeString(shareLink)
         dest.writeLong(fileSource)
         dest.writeLong(itemSource)
-        dest.writeString(if (shareType == null) "" else shareType!!.name)
+        dest.writeString(shareType?.name ?: "")
         dest.writeInt(permissions)
         dest.writeLong(sharedDate)
         dest.writeLong(expirationDate)
@@ -163,28 +156,33 @@ class RemoteShare : Parcelable, Serializable {
 
         private val TAG = RemoteShare::class.java.simpleName
 
-        val DEFAULT_PERMISSION = -1
-        val READ_PERMISSION_FLAG = 1
-        val UPDATE_PERMISSION_FLAG = 2
-        val CREATE_PERMISSION_FLAG = 4
-        val DELETE_PERMISSION_FLAG = 8
-        val SHARE_PERMISSION_FLAG = 16
-        val MAXIMUM_PERMISSIONS_FOR_FILE = READ_PERMISSION_FLAG +
+        const val INIT_PERMISSION = 0
+        const val DEFAULT_PERMISSION = -1
+        const val READ_PERMISSION_FLAG = 1
+        const val UPDATE_PERMISSION_FLAG = 2
+        const val CREATE_PERMISSION_FLAG = 4
+        const val DELETE_PERMISSION_FLAG = 8
+        const val SHARE_PERMISSION_FLAG = 16
+        const val MAXIMUM_PERMISSIONS_FOR_FILE = READ_PERMISSION_FLAG +
                 UPDATE_PERMISSION_FLAG +
                 SHARE_PERMISSION_FLAG
-        val MAXIMUM_PERMISSIONS_FOR_FOLDER = MAXIMUM_PERMISSIONS_FOR_FILE +
+        const val MAXIMUM_PERMISSIONS_FOR_FOLDER = MAXIMUM_PERMISSIONS_FOR_FILE +
                 CREATE_PERMISSION_FLAG +
                 DELETE_PERMISSION_FLAG
-        val FEDERATED_PERMISSIONS_FOR_FILE_UP_TO_OC9 = READ_PERMISSION_FLAG + UPDATE_PERMISSION_FLAG
-        val FEDERATED_PERMISSIONS_FOR_FILE_AFTER_OC9 = READ_PERMISSION_FLAG +
+        const val FEDERATED_PERMISSIONS_FOR_FILE_UP_TO_OC9 = READ_PERMISSION_FLAG + UPDATE_PERMISSION_FLAG
+        const val FEDERATED_PERMISSIONS_FOR_FILE_AFTER_OC9 = READ_PERMISSION_FLAG +
                 UPDATE_PERMISSION_FLAG +
                 SHARE_PERMISSION_FLAG
-        val FEDERATED_PERMISSIONS_FOR_FOLDER_UP_TO_OC9 = READ_PERMISSION_FLAG +
+        const val FEDERATED_PERMISSIONS_FOR_FOLDER_UP_TO_OC9 = READ_PERMISSION_FLAG +
                 UPDATE_PERMISSION_FLAG +
                 CREATE_PERMISSION_FLAG +
                 DELETE_PERMISSION_FLAG
-        val FEDERATED_PERMISSIONS_FOR_FOLDER_AFTER_OC9 =
+        const val FEDERATED_PERMISSIONS_FOR_FOLDER_AFTER_OC9 =
             FEDERATED_PERMISSIONS_FOR_FOLDER_UP_TO_OC9 + SHARE_PERMISSION_FLAG
+
+
+        const val INIT_EXPIRATION_DATE_IN_MILLIS : Long = 0
+        const val INIT_SHARED_DATE : Long = 0
 
         /**
          * Parcelable Methods

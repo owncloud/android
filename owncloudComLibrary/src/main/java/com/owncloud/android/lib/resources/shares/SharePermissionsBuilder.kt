@@ -32,7 +32,7 @@ package com.owncloud.android.lib.resources.shares
 class SharePermissionsBuilder {
 
     /** Set of permissions  */
-    private var mPermissions = RemoteShare.READ_PERMISSION_FLAG    // READ is minimum permission
+    private var permissions = RemoteShare.READ_PERMISSION_FLAG    // READ is minimum permission
 
     /**
      * Sets or clears permission to reshare a file or folder.
@@ -87,10 +87,10 @@ class SharePermissionsBuilder {
     private fun updatePermission(permissionsFlag: Int, enable: Boolean) {
         if (enable) {
             // add permission
-            mPermissions = mPermissions or permissionsFlag
+            permissions = permissions or permissionsFlag
         } else {
             // delete permission
-            mPermissions = mPermissions and permissionsFlag.inv()
+            permissions = permissions and permissionsFlag.inv()
         }
     }
 
@@ -99,7 +99,5 @@ class SharePermissionsBuilder {
      *
      * @return An int value representing the accumulated set of permissions.
      */
-    fun build(): Int {
-        return mPermissions
-    }
+    fun build(): Int = permissions
 }

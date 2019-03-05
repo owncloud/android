@@ -179,7 +179,7 @@ class ShareXMLParser {
             } else if (name.equals(NODE_ID, ignoreCase = true)) {// Parse Create XML Response
                 share = RemoteShare()
                 val value = readNode(parser, NODE_ID)
-                share.setIdRemoteShared(Integer.parseInt(value).toLong())
+                share.remoteId = Integer.parseInt(value).toLong()
 
             } else if (name.equals(NODE_URL, ignoreCase = true)) {
                 // NOTE: this field is received in all the public shares from OC 9.0.0
@@ -235,7 +235,7 @@ class ShareXMLParser {
                 readElement(parser, shares)
 
             } else if (name.equals(NODE_ID, ignoreCase = true)) {
-                share.setIdRemoteShared(Integer.parseInt(readNode(parser, NODE_ID)).toLong())
+                share.remoteId = Integer.parseInt(readNode(parser, NODE_ID)).toLong()
 
             } else if (name.equals(NODE_ITEM_TYPE, ignoreCase = true)) {
                 share.isFolder = readNode(parser, NODE_ITEM_TYPE).equals(TYPE_FOLDER, ignoreCase = true)
