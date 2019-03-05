@@ -109,7 +109,7 @@ object TestUtil {
         remoteShare.sharedWithDisplayName = sharedWithDisplayName
         remoteShare.isFolder = isFolder
         remoteShare.userId = userId
-        remoteShare.setIdRemoteShared(remoteId)
+        remoteShare.remoteId = remoteId
         remoteShare.name = name
         remoteShare.shareLink = shareLink
 
