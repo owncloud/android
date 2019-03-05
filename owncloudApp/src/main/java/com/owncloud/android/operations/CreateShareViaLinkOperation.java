@@ -140,11 +140,13 @@ public class CreateShareViaLinkOperation extends SyncOperation<ShareParserResult
                 mPassword,
                 mPermissions
         );
+
+
         createOp.setGetShareDetails(true);
         createOp.setName(mName);
         createOp.setPublicUpload(mPublicUpload);
         createOp.setPermissions(mPermissions);
-        createOp.setExpirationDate(mExpirationDateInMillis);
+        createOp.setExpirationDateInMillis(mExpirationDateInMillis);
         RemoteOperationResult<ShareParserResult> result = createOp.execute(client);
 
         if (result.isSuccess()) {
