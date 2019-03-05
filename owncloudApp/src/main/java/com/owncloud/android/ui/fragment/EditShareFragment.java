@@ -185,13 +185,13 @@ public class EditShareFragment extends DialogFragment {
             if (isFederated && !isNotReshareableFederatedSupported) {
                 compound.setVisibility(View.INVISIBLE);
             }
-            compound.setChecked((sharePermissions & RemoteShare.Companion.getSHARE_PERMISSION_FLAG()) > 0);
+            compound.setChecked((sharePermissions & RemoteShare.SHARE_PERMISSION_FLAG) > 0);
 
             compound = editShareView.findViewById(R.id.canEditSwitch);
             int anyUpdatePermission =
-                    RemoteShare.Companion.getCREATE_PERMISSION_FLAG() |
-                            RemoteShare.Companion.getUPDATE_PERMISSION_FLAG() |
-                            RemoteShare.Companion.getDELETE_PERMISSION_FLAG();
+                    RemoteShare.CREATE_PERMISSION_FLAG |
+                            RemoteShare.UPDATE_PERMISSION_FLAG |
+                            RemoteShare.DELETE_PERMISSION_FLAG;
             boolean canEdit = (sharePermissions & anyUpdatePermission) > 0;
             compound.setChecked(canEdit);
 
@@ -201,15 +201,15 @@ public class EditShareFragment extends DialogFragment {
                 /// TODO change areEditOptionsAvailable in order to delete !isFederated
                 // from checking when iOS is ready
                 compound = editShareView.findViewById(R.id.canEditCreateCheckBox);
-                compound.setChecked((sharePermissions & RemoteShare.Companion.getCREATE_PERMISSION_FLAG()) > 0);
+                compound.setChecked((sharePermissions & RemoteShare.CREATE_PERMISSION_FLAG) > 0);
                 compound.setVisibility((canEdit) ? View.VISIBLE : View.GONE);
 
                 compound = editShareView.findViewById(R.id.canEditChangeCheckBox);
-                compound.setChecked((sharePermissions & RemoteShare.Companion.getUPDATE_PERMISSION_FLAG()) > 0);
+                compound.setChecked((sharePermissions & RemoteShare.UPDATE_PERMISSION_FLAG) > 0);
                 compound.setVisibility((canEdit) ? View.VISIBLE : View.GONE);
 
                 compound = editShareView.findViewById(R.id.canEditDeleteCheckBox);
-                compound.setChecked((sharePermissions & RemoteShare.Companion.getDELETE_PERMISSION_FLAG()) > 0);
+                compound.setChecked((sharePermissions & RemoteShare.DELETE_PERMISSION_FLAG) > 0);
                 compound.setVisibility((canEdit) ? View.VISIBLE : View.GONE);
             }
 
