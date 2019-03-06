@@ -50,11 +50,11 @@ class OCRemoteSharesDataSource(
             publicUpload: Boolean,
             createRemoteShareOperation: CreateRemoteShareOperation
     ): RemoteOperationResult<ShareParserResult> {
-        createRemoteShareOperation.setName(name)
-        createRemoteShareOperation.setPassword(password)
-        createRemoteShareOperation.setExpirationDate(expirationDate)
-        createRemoteShareOperation.setPublicUpload(publicUpload)
-        createRemoteShareOperation.setGetShareDetails(true)
+        createRemoteShareOperation.name = name
+        createRemoteShareOperation.password = password
+        createRemoteShareOperation.expirationDateInMillis = expirationDate
+        createRemoteShareOperation.publicUpload = publicUpload
+        createRemoteShareOperation.getShareDetails = true
         return createRemoteShareOperation.execute(client)
     }
 }

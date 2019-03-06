@@ -141,7 +141,7 @@ public class CreateShareViaLinkOperation extends SyncOperation<ShareParserResult
 
         createOp.setName(mName);
         createOp.setPassword(mPassword);
-        createOp.setExpirationDate(mExpirationDateInMillis);
+        createOp.setExpirationDateInMillis(mExpirationDateInMillis);
         createOp.setPublicUpload(mPublicUpload);
         createOp.setGetShareDetails(true);
         RemoteOperationResult<ShareParserResult> result = createOp.execute(client);
@@ -163,9 +163,9 @@ public class CreateShareViaLinkOperation extends SyncOperation<ShareParserResult
         // Update DB with the response
         share.setPath(mPath);
         if (mPath.endsWith(FileUtils.PATH_SEPARATOR)) {
-            share.setIsFolder(true);
+            share.setFolder(true);
         } else {
-            share.setIsFolder(false);
+            share.setFolder(false);
         }
 
         getStorageManager().saveShare(share);
