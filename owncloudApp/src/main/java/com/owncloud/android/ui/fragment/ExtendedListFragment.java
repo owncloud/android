@@ -62,7 +62,8 @@ public class ExtendedListFragment extends Fragment
     private static final String KEY_IS_GRID_VISIBLE = "IS_GRID_VISIBLE";
 
     protected static final String ARG_JUST_FOLDERS = ExtendedListFragment.class.getCanonicalName() + ".JUST_FOLDERS";
-    protected static final String ARG_ONLY_AVAILABLE_OFFLINE = ExtendedListFragment.class.getCanonicalName() + ".ONLY_AVAILABLE_OFFLINE";
+    protected static final String ARG_ONLY_AVAILABLE_OFFLINE = ExtendedListFragment.class.getCanonicalName() +
+            ".ONLY_AVAILABLE_OFFLINE";
 
     private ProgressBar mProgressBar;
     private View mShadowView;

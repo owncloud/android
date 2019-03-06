@@ -396,7 +396,8 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
         }
 
         if (mStorageManager != null) {
-            if(mOnlyAvailableOffline && (folder.equals(updatedStorageManager.getFileByPath("/")) || !folder.isAvailableOffline())){
+            if(mOnlyAvailableOffline && (folder.equals(updatedStorageManager.getFileByPath("/")) ||
+                    !folder.isAvailableOffline())){
                 mImmutableFilesList=updatedStorageManager.getAvailableOfflineFilesFromCurrentAccount();
             }
             else{

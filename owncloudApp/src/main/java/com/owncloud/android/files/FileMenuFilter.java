@@ -90,7 +90,8 @@ public class FileMenuFilter {
      *
      * @param menu              Options or context menu to filter.
      */
-    public void filter(Menu menu, boolean displaySelectAll, boolean displaySelectInverse, boolean onlyAvailableOffline) {
+    public void filter(Menu menu, boolean displaySelectAll, boolean displaySelectInverse,
+                       boolean onlyAvailableOffline) {
         if (mFiles == null || mFiles.size() <= 0) {
             hideAll(menu);
 
@@ -137,7 +138,8 @@ public class FileMenuFilter {
      * @param toHide            List to save the options that must be shown in the menu.
      */
 
-    private void filter(List<Integer> toShow, List <Integer> toHide, boolean displaySelectAll, boolean displaySelectInverse, boolean onlyAvailableOffline) {
+    private void filter(List<Integer> toShow, List <Integer> toHide, boolean displaySelectAll,
+                        boolean displaySelectInverse, boolean onlyAvailableOffline) {
 
         boolean synchronizing = anyFileSynchronizing();
 
@@ -159,7 +161,8 @@ public class FileMenuFilter {
         }
 
         // DOWNLOAD
-        if (mFiles.isEmpty() || containsFolder() || anyFileDown() || synchronizing || videoPreviewing || onlyAvailableOffline) {
+        if (mFiles.isEmpty() || containsFolder() || anyFileDown() || synchronizing || videoPreviewing ||
+                onlyAvailableOffline) {
             toHide.add(R.id.action_download_file);
 
         } else {
