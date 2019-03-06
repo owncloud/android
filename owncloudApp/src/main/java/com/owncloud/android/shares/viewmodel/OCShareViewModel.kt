@@ -64,7 +64,7 @@ class OCShareViewModel(
             expirationTimeInMillis: Long,
             uploadToFolderPermission: Boolean,
             permissions: Int
-    ): LiveData<Resource<Unit>> {
+    ): LiveData<Resource<List<OCShare>>> {
         return shareRepository.insertPublicShareForFile(
                 filePath, account.name, permissions, name, password, expirationTimeInMillis, uploadToFolderPermission
         )

@@ -42,5 +42,5 @@ interface ShareRepository {
             password: String,
             expirationTimeInMillis: Long,
             uploadToFolderPermission: Boolean
-    ): LiveData<Resource<Unit>>
+    ): LiveData<Resource<List<OCShare>>>
 }

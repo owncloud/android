@@ -81,7 +81,7 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
      * @return A [PublicShareDialogFragment] instance, or null
      */
     private val publicShareFragment: PublicShareDialogFragment?
-        get() = supportFragmentManager.findFragmentByTag(TAG_PUBLIC_SHARE_DIALOG_FRAGMENT) as PublicShareDialogFragment
+        get() = supportFragmentManager.findFragmentByTag(TAG_PUBLIC_SHARE_DIALOG_FRAGMENT) as PublicShareDialogFragment?
 
     /**
      * Shortcut to get access to the [EditShareFragment] instance, if any
@@ -241,6 +241,10 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
         showDialogFragment(newFragment, TAG_PUBLIC_SHARE_DIALOG_FRAGMENT)
     }
 
+    override fun dismissAddPublicShare() {
+        publicShareFragment?.dismiss()
+    }
+
     override fun showEditPublicShare(share: OCShare) {
         // Create and show the dialog.
         val newFragment = PublicShareDialogFragment.newInstanceToUpdate(file, share, account)
@@ -292,32 +296,32 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
     }
 
     private fun onCreateShareViaLinkOperationFinish(
-            operation: CreateShareViaLinkOperation,
-            result: RemoteOperationResult<ShareParserResult>
+        operation: CreateShareViaLinkOperation,
+        result: RemoteOperationResult<ShareParserResult>
     ) {
         if (!result.isSuccess) {
-            publicShareFragment!!.showError(
-                    ErrorMessageAdapter.getResultMessage(result, operation, resources)!!
+            publicShareFragment?.showError(
+                ErrorMessageAdapter.getResultMessage(result, operation, resources)!!
             )
             return
         }
         updateFileFromDB()
-        publicShareFragment!!.dismiss()
+        publicShareFragment?.dismiss()
         fileOperationsHelper.copyOrSendPublicLink(OCShare.fromRemoteShare(result.data.shares[0]))
     }
 
     private fun onUpdateShareViaLinkOperationFinish(
-            operation: UpdateShareViaLinkOperation,
-            result: RemoteOperationResult<ShareParserResult>
+        operation: UpdateShareViaLinkOperation,
+        result: RemoteOperationResult<ShareParserResult>
     ) {
         if (!result.isSuccess) {
-            publicShareFragment!!.showError(
-                    ErrorMessageAdapter.getResultMessage(result, operation, resources)!!
+            publicShareFragment?.showError(
+                ErrorMessageAdapter.getResultMessage(result, operation, resources)!!
             )
             return
         }
         updateFileFromDB()
-        publicShareFragment!!.dismiss()
+        publicShareFragment?.dismiss()
         fileOperationsHelper.copyOrSendPublicLink(OCShare.fromRemoteShare(result.data.shares[0]))
     }
 
