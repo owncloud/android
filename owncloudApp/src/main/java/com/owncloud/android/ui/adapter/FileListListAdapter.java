@@ -30,6 +30,7 @@ import android.accounts.Account;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.text.TextUtils;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -206,15 +207,25 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
                     TextView fileSizeV = view.findViewById(R.id.file_size);
                     TextView fileSizeSeparatorV = view.findViewById(R.id.file_separator);
                     TextView lastModV = view.findViewById(R.id.last_mod);
+                    
+                    if(!mOnlyAvailableOffline){
+                        lastModV.setVisibility(View.VISIBLE);
+                        lastModV.setText(DisplayUtils.getRelativeTimestamp(mContext, file.getModificationTimestamp()));
 
-                    lastModV.setVisibility(View.VISIBLE);
-                    lastModV.setText(DisplayUtils.getRelativeTimestamp(mContext, file.getModificationTimestamp()));
+                        fileSizeSeparatorV.setVisibility(View.VISIBLE);
+                        fileSizeV.setVisibility(View.VISIBLE);
+                        fileSizeV.setText(DisplayUtils.bytesToHumanReadable(
+                                file.getFileLength(), mContext
+                        ));
+                    }else{
+                        lastModV.setVisibility(View.VISIBLE);
+                        lastModV.setText(file.getRemotePath());
+                        lastModV.setSingleLine(true);
+                        lastModV.setEllipsize(TextUtils.TruncateAt.END);
 
-                    fileSizeSeparatorV.setVisibility(View.VISIBLE);
-                    fileSizeV.setVisibility(View.VISIBLE);
-                    fileSizeV.setText(DisplayUtils.bytesToHumanReadable(
-                            file.getFileLength(), mContext
-                    ));
+                        fileSizeSeparatorV.setVisibility(View.GONE);
+                        fileSizeV.setVisibility(View.GONE);
+                    }
 
                 case GRID_ITEM:
                     // filename
