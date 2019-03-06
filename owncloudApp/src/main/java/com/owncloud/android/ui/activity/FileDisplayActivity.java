@@ -1482,7 +1482,7 @@ public class FileDisplayActivity extends FileActivity
     private void onRemoveFileOperationFinish(RemoveFileOperation operation,
                                              RemoteOperationResult result) {
 
-        if (getListOfFilesFragment().isSingleItemChecked() || result.isException()) {
+        if (getListOfFilesFragment().isSingleItemChecked() || result.isException() || !result.isSuccess()) {
             showSnackMessage(
                     ErrorMessageAdapter.getResultMessage(result, operation, getResources())
             );
