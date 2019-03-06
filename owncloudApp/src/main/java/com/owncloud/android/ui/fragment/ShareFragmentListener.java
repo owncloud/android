@@ -47,6 +47,8 @@ public interface ShareFragmentListener {
 
     void showAddPublicShare(String defaultLinkName);
 
+    void dismissAddPublicShare();
+
     void showEditPublicShare(OCShare share);
 
     void copyOrSendPublicLink(OCShare share);

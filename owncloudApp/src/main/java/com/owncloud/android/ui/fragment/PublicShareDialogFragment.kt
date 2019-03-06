@@ -330,24 +330,19 @@ class PublicShareDialogFragment : DialogFragment() {
                             dismiss()
                         }
                         Status.ERROR -> {
-                            val errorMessage: String;
-                            if (resource.msg != null) {
-                                errorMessage = resource.msg;
-                            } else {
-                                errorMessage = ErrorMessageAdapter.getResultMessage(
-                                    resource.code,
-                                    resource.exception,
-                                    OperationType.CREATE_PUBLIC_SHARE,
-                                    resources
-                                )
-                            }
+                            val errorMessage: String = resource.msg ?: ErrorMessageAdapter.getResultMessage(
+                                resource.code,
+                                resource.exception,
+                                OperationType.CREATE_PUBLIC_SHARE,
+                                resources
+                            );
                             showError(errorMessage)
                         }
                         Status.LOADING -> {
                             (activity as BaseActivity).showLoadingDialog(R.string.common_loading)
                         }
-                        Status.STOP_LOADING -> {
-                            (activity as BaseActivity).dismissLoadingDialog()
+                        else -> {
+                            Log.d(TAG, "Unknown status when creating share")
                         }
                     }
                 }

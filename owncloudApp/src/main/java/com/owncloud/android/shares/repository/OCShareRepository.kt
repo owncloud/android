@@ -84,8 +84,8 @@ class OCShareRepository(
             password: String,
             expirationTimeInMillis: Long,
             uploadToFolderPermission: Boolean
-    ): LiveData<Resource<Unit>> {
-        return object : NetworkBoundResource<Unit, ShareParserResult>(appExecutors) {
+    ): LiveData<Resource<List<OCShare>>> {
+        return object : NetworkBoundResource<List<OCShare>, ShareParserResult>(appExecutors) {
             override fun saveCallResult(shareParserResult: ShareParserResult) {
                 val newShareForFileFromServer = shareParserResult.shares.map { remoteShare ->
                     OCShare.fromRemoteShare(remoteShare).also { it.accountOwner = accountName }
@@ -94,8 +94,10 @@ class OCShareRepository(
                 localSharesDataSource.insert(newShareForFileFromServer)
             }
 
-            override fun loadFromDb(): LiveData<Unit>? {
-                return null // Insert operation, we do not need to get anything from database
+            override fun loadFromDb(): LiveData<List<OCShare>> {
+                return localSharesDataSource.getSharesForFileAsLiveData(
+                    filePath, accountName, listOf(ShareType.PUBLIC_LINK)
+                )
             }
 
             override fun createCall() = remoteSharesDataSource.insertShareForFile(
