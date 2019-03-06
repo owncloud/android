@@ -273,8 +273,7 @@ public abstract class DrawerActivity extends ToolbarActivity {
 
     private void openFeedback() {
         String feedbackMail = (String) getText(R.string.mail_feedback);
-        String feedback = getText(R.string.drawer_feedback) +
-                " - android v" + BuildConfig.VERSION_NAME;
+        String feedback = "Android v" + BuildConfig.VERSION_NAME + " - " + getText(R.string.drawer_feedback);
         Intent intent = new Intent(Intent.ACTION_SENDTO);
         intent.setType("text/plain");
         intent.putExtra(Intent.EXTRA_SUBJECT, feedback);
