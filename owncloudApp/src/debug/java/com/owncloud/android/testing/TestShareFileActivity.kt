@@ -45,6 +45,9 @@ class TestShareFileActivity : SingleFragmentActivity(), ShareFragmentListener {
     override fun showAddPublicShare(defaultLinkName: String?) {
     }
 
+    override fun dismissAddPublicShare() {
+    }
+
     override fun showEditPublicShare(share: OCShare?) {
     }
 

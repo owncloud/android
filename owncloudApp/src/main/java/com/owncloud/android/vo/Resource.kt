@@ -45,12 +45,8 @@ data class Resource<out T>(
             return Resource(ERROR, code, data, msg, exception)
         }
 
-        fun <T> loading(): Resource<T> {
-            return Resource(LOADING)
-        }
-
-        fun <T> stopLoading(): Resource<T> {
-            return Resource(STOP_LOADING)
+        fun <T> loading(data: T?): Resource<T> {
+            return Resource(LOADING, data = data)
         }
     }
 }

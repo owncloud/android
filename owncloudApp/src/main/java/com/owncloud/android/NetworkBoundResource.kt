@@ -39,12 +39,11 @@ import androidx.annotation.MainThread
 import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.MutableLiveData
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.vo.Resource
 
 abstract class NetworkBoundResource<ResultType, RequestType>(
-        private val appExecutors: AppExecutors
+    private val appExecutors: AppExecutors
 ) {
 
     /**
@@ -56,59 +55,68 @@ abstract class NetworkBoundResource<ResultType, RequestType>(
     private val result = MediatorLiveData<Resource<ResultType>>()
 
     init {
-        val dbSource = loadFromDb()
-
-        if (dbSource != null) {
-            result.addSource(dbSource) { data ->
-                result.value = Resource.success(data)
-            }
-        }
-
-        performNetworkOperation()
+        @Suppress("LeakingThis")
+        performNetworkOperation(loadFromDb())
     }
 
-    private fun performNetworkOperation() {
-        val errors = MutableLiveData<Resource<ResultType>>()
-        val loading = MutableLiveData<Resource<ResultType>>()
-
-        result.addSource(errors) { error ->
-            result.value = error
+    @MainThread
+    private fun setValue(newValue: Resource<ResultType>) {
+        if (result.value != newValue) {
+            result.value = newValue
         }
+    }
 
-        result.addSource(loading) {
-            result.value = it
+    private fun performNetworkOperation(dbSource: LiveData<ResultType>) {
+        // Let's dispatch dbSource value quickly while network operation is performed
+        result.addSource(dbSource) { newData ->
+            setValue(Resource.loading(newData))
         }
 
         try {
             appExecutors.networkIO().execute() {
-                loading.postValue(
-                        Resource.loading()
-                )
-
                 val remoteOperationResult = createCall()
+
+                appExecutors.mainThread().execute() {
+                    result.removeSource(dbSource)
+                }
 
                 if (remoteOperationResult.isSuccess) {
                     saveCallResult(remoteOperationResult.data)
+                    // we specially request a new live data,
+                    // otherwise we will get immediately last cached value,
+                    // which may not be updated with latest results received from network.
+                    appExecutors.mainThread().execute() {
+                        result.addSource(loadFromDb()) { newData ->
+                            setValue(Resource.success(newData))
+                        }
+                    }
                 } else {
-                    errors.postValue(
-                            Resource.error(
+                    appExecutors.mainThread().execute() {
+                        result.addSource(dbSource) { newData ->
+                            setValue(
+                                Resource.error(
                                     remoteOperationResult.code,
+                                    newData,
                                     msg = remoteOperationResult.httpPhrase,
                                     exception = remoteOperationResult.exception
+                                )
                             )
-                    )
+                        }
+                    }
                 }
-
-                loading.postValue(
-                        Resource.stopLoading()
-                )
             }
         } catch (ex: Exception) {
-            errors.postValue(
+            appExecutors.mainThread().execute() {
+                result.removeSource(dbSource)
+            }
+
+            result.addSource(dbSource) { newData ->
+                setValue(
                     Resource.error(
-                            msg = ex.localizedMessage
+                        msg = ex.localizedMessage
                     )
-            )
+                )
+            }
         }
     }
 
@@ -118,7 +126,7 @@ abstract class NetworkBoundResource<ResultType, RequestType>(
     protected abstract fun saveCallResult(item: RequestType)
 
     @MainThread
-    protected abstract fun loadFromDb(): LiveData<ResultType>?
+    protected abstract fun loadFromDb(): LiveData<ResultType>
 
     @MainThread
     protected abstract fun createCall(): RemoteOperationResult<RequestType>

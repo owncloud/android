@@ -26,6 +26,5 @@ package com.owncloud.android.vo
 enum class Status {
     SUCCESS,
     ERROR,
-    LOADING,
-    STOP_LOADING
+    LOADING
 }
