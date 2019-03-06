@@ -485,4 +485,10 @@ public class PreviewImageActivity extends FileActivity implements
         backToDisplayActivity();
         super.allFilesOption();
     }
+
+    @Override
+    public void onlyAvailableOfflineOption(){
+        backToDisplayActivity();
+        super.onlyAvailableOfflineOption();
+    }
 }

@@ -1,31 +1,5 @@
 /**
-<<<<<<< HEAD
  * ownCloud Android client application
-=======
- *   ownCloud Android client application
- *
- *   @author Bartek Przybylski
- *   @author masensio
- *   @author David A. Velasco
- *   @author Christian Schabesberger
- *   @author David González Verdugo
- *   @author Shashvat Kedia
- *   @author Abel García de Prada
- *   Copyright (C) 2011  Bartek Przybylski
- *   Copyright (C) 2019 ownCloud GmbH.
- *
- *   This program is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License version 2,
- *   as published by the Free Software Foundation.
- *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
- *
- *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
->>>>>>> Show only available offline files and folders
  *
  * @author Bartek Przybylski
  * @author masensio
@@ -33,6 +7,7 @@
  * @author Christian Schabesberger
  * @author David González Verdugo
  * @author Shashvat Kedia
+ * @author Abel García de Prada
  * Copyright (C) 2011  Bartek Przybylski
  * Copyright (C) 2019 ownCloud GmbH.
  * <p>
@@ -614,7 +589,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
                     mContainerActivity,
                     getActivity()
             );
-            mf.filter(menu, mEnableSelectAll, true);
+            mf.filter(menu, mEnableSelectAll, true, isShowingOnlyAvailableOffline());
             return true;
         }
 
@@ -706,6 +681,15 @@ public class OCFileListFragment extends ExtendedListFragment implements
 
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
+        if(isShowingOnlyAvailableOffline()){
+            super.onPrepareOptionsMenu(menu);
+
+            MenuItem item = menu.findItem(R.id.action_sync_account);
+            if (item != null) {
+                item.setVisible(false);
+                item.setEnabled(false);
+            }
+        }
         changeGridIcon(menu);   // this is enough if the option stays out of the action bar
     }
 

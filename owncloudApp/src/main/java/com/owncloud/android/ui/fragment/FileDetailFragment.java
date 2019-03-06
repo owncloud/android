@@ -5,6 +5,7 @@
  * @author David A. Velasco
  * @author Christian Schabesberger
  * @author David González Verdugo
+ * @author Abel García de Prada
  * Copyright (C) 2011  Bartek Przybylski
  * Copyright (C) 2019 ownCloud GmbH.
  * <p>
@@ -238,7 +239,7 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
                     mContainerActivity,
                     getActivity()
             );
-            mf.filter(menu, false, false);
+            mf.filter(menu, false, false, false);
         }
 
         // additional restriction for this fragment 
