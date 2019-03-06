@@ -47,7 +47,7 @@ import java.util.Locale
  * @author David A. Velasco
  * @author David González Verdugo
  */
-class CreateRemoteShareOperation
+
 /**
  * Constructor
  *
@@ -55,9 +55,6 @@ class CreateRemoteShareOperation
  * @param shareType      0 = user, 1 = group, 3 = Public link. Mandatory argument
  * @param shareWith      User/group ID with who the file should be shared.  This is mandatory for shareType
  * of 0 or 1
- * @param publicUpload   If false (default) public cannot upload to a public shared folder.
- * If true public can upload to a shared folder. Only available for public link shares
- * @param password       Password to protect a public link share. Only available for public link shares
  * @param permissions    1 - Read only Default for public shares
  * 2 - Update
  * 4 - Create
@@ -68,25 +65,22 @@ class CreateRemoteShareOperation
  * To obtain combinations, add the desired values together.
  * For instance, for Re-Share, delete, read, update, add 16+8+2+1 = 27.
  */
+class CreateRemoteShareOperation
     (
     private val remoteFilePath: String,
     private val shareType: ShareType,
     private val shareWith: String,
-    var publicUpload: Boolean?, // Upload permissions for the public link (only folders)
-    var password: String?, // Password to set for the public link
-    var permissions: Int // Access permissions for the file bound to the share
+    private val permissions: Int
 ) : RemoteOperation<ShareParserResult>() {
     var getShareDetails: Boolean = false // To retrieve more info about the just created share
 
-    /**
-     * Name to set for the public link
-     */
-    var name = ""
+    var name = "" // Name to set for the public link
 
-    /**
-     * Expiration date to set for the public link
-     */
-    var expirationDateInMillis: Long = INIT_EXPIRATION_DATE_IN_MILLIS
+    var password: String = "" // Password to set for the public link
+
+    var expirationDateInMillis: Long = INIT_EXPIRATION_DATE_IN_MILLIS // Expiration date to set for the public link
+
+    var publicUpload: Boolean = false // Upload permissions for the public link (only folders)
 
     init {
         getShareDetails = false        // defaults to false for backwards compatibility
