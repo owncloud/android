@@ -37,7 +37,10 @@
   <string name="prefs_passcode">Блокировка кодом</string>
   <string name="prefs_fingerprint">Блокировка по отпечатку пальца</string>
   <string name="prefs_fingerprint_summary">Чтобы использовать эту настройку, включите блокировку по коду или графическому ключу</string>
+  <string name="prefs_touches_with_other_visible_windows">Разрешить соприкосновения с другими видимыми окнами</string>
+  <string name="prefs_touches_with_other_visible_windows_summary">Разрешить соприкосновения, когда просмотр перекрывается другим видимым окном. Разрешите, чтобы использовать лёгкие фильтрующие приложения.</string>
   <string name="confirmation_touches_with_other_windows_title">Вы уверены, что хотите включить эту функцию?</string>
+  <string name="confirmation_touches_with_other_windows_message">Используйте на свой страх и риск: вредоносное приложение может попытаться вас обмануть, заставить незаметно выполнить некоторые действия, используя посторонние отображения.</string>
   <string name="prefs_camera_picture_upload">Загрузки изображений</string>
   <string name="prefs_camera_picture_upload_summary">Автоматически загружать изображения, сделанные камерой</string>
   <string name="prefs_camera_video_upload">Загрузки видео</string>
