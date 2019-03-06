@@ -6,6 +6,7 @@
  * @author David González Verdugo
  * @author Christian Schabesberger
  * @author Shashvat Kedia
+ * @author Abel García de Prada
  * Copyright (C) 2011  Bartek Przybylski
  * Copyright (C) 2019 ownCloud GmbH.
  * <p>
@@ -148,6 +149,7 @@ public class FileDisplayActivity extends FileActivity
     private OCFile mFileWaitingToPreview;
 
     private boolean mSyncInProgress = false;
+    private boolean mOnlyAvailableOffline = false;
 
     private OCFile mWaitingToSend;
 
@@ -185,6 +187,9 @@ public class FileDisplayActivity extends FileActivity
                     getAccount() == null ? "" : getAccount().name);
         }
 
+        // Check if only available offline option is set
+        mOnlyAvailableOffline = getIntent().getBooleanExtra(FileActivity.EXTRA_ONLY_AVAILABLE_OFFLINE, false);
+
         /// USER INTERFACE
 
         // Inflate and set the layout view
@@ -193,8 +198,13 @@ public class FileDisplayActivity extends FileActivity
         // setup toolbar
         setupToolbar();
 
+
         // setup drawer
-        setupDrawer(R.id.nav_all_files);
+        if(!mOnlyAvailableOffline) {
+            setupDrawer(R.id.nav_all_files);
+        } else {
+            setupDrawer(R.id.nav_only_available_offline);
+        }
 
         mLeftFragmentContainer = findViewById(R.id.left_fragment_container);
         mRightFragmentContainer = findViewById(R.id.right_fragment_container);
@@ -343,7 +353,7 @@ public class FileDisplayActivity extends FileActivity
     }
 
     private void createMinFragments() {
-        OCFileListFragment listOfFiles = OCFileListFragment.newInstance(false, false, true);
+        OCFileListFragment listOfFiles = OCFileListFragment.newInstance(false, mOnlyAvailableOffline,false, true);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.add(R.id.left_fragment_container, listOfFiles, TAG_LIST_OF_FILES);
         transaction.commit();
@@ -1096,7 +1106,11 @@ public class FileDisplayActivity extends FileActivity
             int message = R.string.file_list_loading;
             if (!mSyncInProgress) {
                 // In case file list is empty
-                message = R.string.file_list_empty;
+                if(mOnlyAvailableOffline){
+                    message = R.string.file_list_empty_available_offline ;
+                }else{
+                    message = R.string.file_list_empty;
+                }
                 ocFileListFragment.getProgressBar().setVisibility(View.GONE);
                 ocFileListFragment.getShadowView().setVisibility(View.VISIBLE);
             }
@@ -1363,6 +1377,10 @@ public class FileDisplayActivity extends FileActivity
             chosenFile = getFile();     // if no file is passed, current file decides
         }
         super.updateActionBarTitleAndHomeButton(chosenFile);
+        if(chosenFile.getRemotePath().equals("/") && mOnlyAvailableOffline) {
+            updateActionBarTitleAndHomeButtonByString(
+                    getResources().getString(R.string.drawer_item_only_available_offline));
+        }
     }
 
     @Override
@@ -1919,7 +1937,19 @@ public class FileDisplayActivity extends FileActivity
     }
 
     public void allFilesOption() {
-        browseToRoot();
+        if(mOnlyAvailableOffline){
+            super.allFilesOption();
+        }else{
+            browseToRoot();
+        }
+    }
+
+    public void onlyAvailableOfflineOption() {
+        if(!mOnlyAvailableOffline){
+            super.onlyAvailableOfflineOption();
+        }else{
+            browseToRoot();
+        }
     }
 
     public FilesUploadHelper getFilesUploadHelper() {

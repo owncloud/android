@@ -1,5 +1,31 @@
 /**
+<<<<<<< HEAD
  * ownCloud Android client application
+=======
+ *   ownCloud Android client application
+ *
+ *   @author Bartek Przybylski
+ *   @author masensio
+ *   @author David A. Velasco
+ *   @author Christian Schabesberger
+ *   @author David González Verdugo
+ *   @author Shashvat Kedia
+ *   @author Abel García de Prada
+ *   Copyright (C) 2011  Bartek Przybylski
+ *   Copyright (C) 2019 ownCloud GmbH.
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License version 2,
+ *   as published by the Free Software Foundation.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+>>>>>>> Show only available offline files and folders
  *
  * @author Bartek Przybylski
  * @author masensio
@@ -131,18 +157,22 @@ public class OCFileListFragment extends ExtendedListFragment implements
      * Public factory method to create new {@link OCFileListFragment} instances.
      *
      * @param justFolders               When 'true', only folders will be shown to the user, not files.
+     * @param onlyAvailableOffline      When 'true', only available offline files will be shown to the user.
      * @param hideFAB                   When 'true', floating action button is hidden.
      * @param allowContextualMode       When 'true', contextual action mode is enabled long-pressing an item.
      * @return New fragment with arguments set.
      */
     public static OCFileListFragment newInstance(
-            boolean justFolders,
-            boolean hideFAB,
-            boolean allowContextualMode
+        boolean justFolders,
+        boolean onlyAvailableOffline,
+        boolean hideFAB,
+        boolean allowContextualMode
     ) {
         OCFileListFragment frag = new OCFileListFragment();
         Bundle args = new Bundle();
         args.putBoolean(ARG_JUST_FOLDERS, justFolders);
+        args.putBoolean(ARG_ONLY_AVAILABLE_OFFLINE, onlyAvailableOffline);
+        if(onlyAvailableOffline) { hideFAB = true; }
         args.putBoolean(ARG_HIDE_FAB, hideFAB);
         args.putBoolean(ARG_ALLOW_CONTEXTUAL_MODE, allowContextualMode);
         frag.setArguments(args);
@@ -217,8 +247,11 @@ public class OCFileListFragment extends ExtendedListFragment implements
         boolean justFolders = isShowingJustFolders();
         setFooterEnabled(!justFolders);
 
+        boolean onlyAvailableOffline = isShowingOnlyAvailableOffline();
+
         mFileListAdapter = new FileListListAdapter(
                 justFolders,
+                onlyAvailableOffline,
                 getActivity(),
                 mContainerActivity
         );
@@ -708,6 +741,11 @@ public class OCFileListFragment extends ExtendedListFragment implements
                 parentDir = storageManager.getFileByPath(parentPath);
                 moveCount++;
             }   // exit is granted because storageManager.getFileByPath("/") never returns null
+
+            if (isShowingOnlyAvailableOffline() && !parentDir.isAvailableOffline()){
+                parentDir=storageManager.getFileByPath(OCFile.ROOT_PATH);
+            }
+
             mFile = parentDir;
 
             listDirectoryWidthAnimationUp(mFile);
@@ -936,6 +974,9 @@ public class OCFileListFragment extends ExtendedListFragment implements
                 mContainerActivity.getFileOperationsHelper().toggleAvailableOffline(checkedFiles, false);
                 getListView().invalidateViews();
                 invalidateActionMode();
+                if(isShowingOnlyAvailableOffline()){
+                    onRefresh();
+                }
                 return true;
             }
             case R.id.action_move: {
@@ -1002,6 +1043,11 @@ public class OCFileListFragment extends ExtendedListFragment implements
             if (!directory.isFolder()) {
                 Log_OC.w(TAG, "You see, that is not a directory -> " + directory.toString());
                 directory = storageManager.getFileById(directory.getParentId());
+            }
+
+            // If available offline option and folder is not available offline -> list root
+            if(!directory.isAvailableOffline() && isShowingOnlyAvailableOffline()){
+                directory = storageManager.getFileByPath("/");
             }
 
             // TODO Enable when "On Device" is recovered ?

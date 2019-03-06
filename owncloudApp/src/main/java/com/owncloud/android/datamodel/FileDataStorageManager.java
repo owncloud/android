@@ -4,6 +4,7 @@
  * @author Bartek Przybylski
  * @author Christian Schabesberger
  * @author David González Verdugo
+ * @author Abel García de Prada
  * <p>
  * Copyright (C) 2012  Bartek Przybylski
  * Copyright (C) 2019 ownCloud GmbH.
@@ -175,10 +176,10 @@ public class FileDataStorageManager {
         return fileExists(ProviderTableMeta.FILE_PATH, path);
     }
 
-    public Vector<OCFile> getFolderContent(OCFile f/*, boolean onlyOnDevice*/) {
+    public Vector<OCFile> getFolderContent(OCFile f, boolean onlyAvailableOffline/*, boolean onlyOnDevice*/) {
         if (f != null && f.isFolder() && f.getFileId() != -1) {
             // TODO Enable when "On Device" is recovered ?
-            return getFolderContent(f.getFileId()/*, onlyOnDevice*/);
+            return getFolderContent(f.getFileId(), onlyAvailableOffline/*, onlyOnDevice*/);
 
         } else {
             return new Vector<>();
@@ -190,7 +191,7 @@ public class FileDataStorageManager {
         if (folder != null) {
             // TODO better implementation, filtering in the access to database instead of here
             // TODO Enable when "On Device" is recovered ?
-            Vector<OCFile> tmp = getFolderContent(folder/*, onlyOnDevice*/);
+            Vector<OCFile> tmp = getFolderContent(folder,false/*, onlyOnDevice*/);
             OCFile current;
             for (int i = 0; i < tmp.size(); i++) {
                 current = tmp.get(i);
@@ -667,7 +668,7 @@ public class FileDataStorageManager {
         if (localFolder.exists()) {
             // stage 1: remove the local files already registered in the files database
             // TODO Enable when "On Device" is recovered ?
-            Vector<OCFile> files = getFolderContent(folder.getFileId()/*, false*/);
+            Vector<OCFile> files = getFolderContent(folder.getFileId(), false/*, false*/);
             if (files != null) {
                 for (OCFile file : files) {
                     if (file.isFolder()) {
@@ -928,8 +929,7 @@ public class FileDataStorageManager {
         return ret;
     }
 
-    private Vector<OCFile> getFolderContent(long parentId/*, boolean onlyOnDevice*/) {
-
+    private Vector<OCFile> getFolderContent(long parentId, boolean onlyAvailableOffline/*, boolean onlyOnDevice*/) {
         Vector<OCFile> ret = new Vector<OCFile>();
 
         Uri req_uri = Uri.withAppendedPath(
@@ -937,19 +937,30 @@ public class FileDataStorageManager {
                 String.valueOf(parentId));
         Cursor c = null;
 
+        String selection;
+        String [] selectionArgs;
+
+        if(!onlyAvailableOffline){
+            selection = ProviderTableMeta.FILE_PARENT + "=?";
+            selectionArgs = new String[] {String.valueOf(parentId)};
+        }
+        else{
+            selection = ProviderTableMeta.FILE_PARENT + "=? AND (" + ProviderTableMeta.FILE_KEEP_IN_SYNC +
+                    " = ? OR " + ProviderTableMeta.FILE_KEEP_IN_SYNC + "=? )";
+            selectionArgs = new String[]{String.valueOf(parentId),
+                    String.valueOf(OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE.getValue()),
+                    String.valueOf(OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE_PARENT.getValue())};
+        }
+
         if (getContentProviderClient() != null) {
             try {
-                c = getContentProviderClient().query(req_uri, null,
-                        ProviderTableMeta.FILE_PARENT + "=?",
-                        new String[]{String.valueOf(parentId)}, null);
+                c = getContentProviderClient().query(req_uri, null, selection, selectionArgs, null);
             } catch (RemoteException e) {
                 Log_OC.e(TAG, e.getMessage());
                 return ret;
             }
         } else {
-            c = getContentResolver().query(req_uri, null,
-                    ProviderTableMeta.FILE_PARENT + "=?",
-                    new String[]{String.valueOf(parentId)}, null);
+            c = getContentResolver().query(req_uri, null, selection, selectionArgs, null);
         }
 
         if (c != null) {
@@ -1592,7 +1603,7 @@ public class FileDataStorageManager {
             String[] whereArgs = new String[]{"", mAccount.name};
 
             // TODO Enable when "On Device" is recovered ?
-            Vector<OCFile> files = getFolderContent(folder /*, false*/);
+            Vector<OCFile> files = getFolderContent(folder, false /*, false*/);
 
             for (OCFile file : files) {
                 whereArgs[0] = file.getRemotePath();
@@ -2182,6 +2193,53 @@ public class FileDataStorageManager {
             }
         }
 
+        return result;
+    }
+
+    /**
+     * Get a collection with all the files set by the user as available offline, from current account
+     * putting away files whose parent is also available offline
+     *
+     * @return      List with all the files set by current user as available offline.
+     */
+    public Vector<OCFile> getAvailableOfflineFilesFromCurrentAccount() {
+        Vector<OCFile> result = new Vector<>();
+
+        Cursor cursorOnKeptInSync = null;
+        try {
+            // query for available offline files in current account and whose parent is not.
+            cursorOnKeptInSync = getContentResolver().query(
+                    ProviderTableMeta.CONTENT_URI,
+                    null,
+                    "(" + ProviderTableMeta.FILE_KEEP_IN_SYNC + " = ? AND NOT " +
+                            ProviderTableMeta.FILE_KEEP_IN_SYNC + " = ? ) AND " +
+                            ProviderTableMeta.FILE_ACCOUNT_OWNER + " = ? ",
+                    new String[]{
+                            String.valueOf(OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE.getValue()),
+                            String.valueOf(OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE_PARENT.getValue()),
+                            mAccount.name
+                    },
+                    null
+            );
+
+            if (cursorOnKeptInSync != null && cursorOnKeptInSync.moveToFirst()) {
+                OCFile file;
+                do {
+                    file = createFileInstance(cursorOnKeptInSync);
+                        result.add(file);
+                } while (cursorOnKeptInSync.moveToNext());
+            }
+
+        } catch (Exception e) {
+            Log_OC.e(TAG, "Exception retrieving all the available offline files", e);
+
+        } finally {
+            if (cursorOnKeptInSync != null) {
+                cursorOnKeptInSync.close();
+            }
+        }
+
+        Collections.sort(result);
         return result;
     }
 }

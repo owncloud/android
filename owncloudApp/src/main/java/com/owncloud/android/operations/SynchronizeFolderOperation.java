@@ -303,7 +303,7 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
         }
 
         // get current data about local contents of the folder to synchronize
-        List<OCFile> localFiles = storageManager.getFolderContent(mLocalFolder);
+        List<OCFile> localFiles = storageManager.getFolderContent(mLocalFolder,false);
         Map<String, OCFile> localFilesMap = new HashMap<>(localFiles.size());
         for (OCFile file : localFiles) {
             localFilesMap.put(file.getRemoteId(), file);
@@ -370,7 +370,7 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
     }
 
     private void preparePushOfLocalChanges() {
-        List<OCFile> children = getStorageManager().getFolderContent(mLocalFolder);
+        List<OCFile> children = getStorageManager().getFolderContent(mLocalFolder, false);
         mFoldersToVisit = new Vector<>(children.size());
         for (OCFile child : children) {
             addToSyncContents(

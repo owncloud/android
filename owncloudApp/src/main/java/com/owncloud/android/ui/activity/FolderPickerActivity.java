@@ -3,6 +3,7 @@
  *
  * @author Shashvat Kedia
  * @author David González Verdugo
+ * @author Abel García de Prada
  * Copyright (C) 2019 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
@@ -146,7 +147,7 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
     }
 
     private void createFragments() {
-        OCFileListFragment listOfFiles = OCFileListFragment.newInstance(true, true, false);
+        OCFileListFragment listOfFiles =  OCFileListFragment.newInstance(true, false, true, false);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.add(R.id.fragment_container, listOfFiles, TAG_LIST_OF_FOLDERS);
         transaction.commit();

@@ -8,6 +8,7 @@
  * @author Christian Schabesberger
  * @author David González Verdugo
  * @author Shashvat Kedia
+ * @author Abel García de Prada
  * Copyright (C) 2011  Bartek Przybylski
  * Copyright (C) 2019 ownCloud GmbH.
  * <p>
@@ -70,6 +71,7 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
     private Vector<OCFile> mImmutableFilesList = null; // List containing the database files, doesn't change with search
     private Vector<OCFile> mFiles = null; // List that can be changed when using search
     private boolean mJustFolders;
+    private boolean mOnlyAvailableOffline;
 
     private FileDataStorageManager mStorageManager;
     private Account mAccount;
@@ -79,11 +81,13 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
 
     public FileListListAdapter(
             boolean justFolders,
+            boolean onlyAvailableOffline,
             Context context,
             ComponentsGetter transferServiceGetter
     ) {
 
         mJustFolders = justFolders;
+        mOnlyAvailableOffline = onlyAvailableOffline;
         mContext = context;
         mAccount = AccountUtils.getCurrentOwnCloudAccount(mContext);
 
@@ -381,8 +385,13 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
         }
 
         if (mStorageManager != null) {
-            // TODO Enable when "On Device" is recovered ?
-            mImmutableFilesList = mStorageManager.getFolderContent(folder/*, onlyOnDevice*/);
+            if(mOnlyAvailableOffline && (folder.equals(updatedStorageManager.getFileByPath("/")) || !folder.isAvailableOffline())){
+                mImmutableFilesList=updatedStorageManager.getAvailableOfflineFilesFromCurrentAccount();
+            }
+            else{
+                // TODO Enable when "On Device" is recovered ?
+                mImmutableFilesList = mStorageManager.getFolderContent(folder, mOnlyAvailableOffline/*, onlyOnDevice*/);
+            }
 
             mFiles = mImmutableFilesList;
 
