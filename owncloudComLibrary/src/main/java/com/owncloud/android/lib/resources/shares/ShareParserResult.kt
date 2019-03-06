@@ -27,4 +27,4 @@ package com.owncloud.android.lib.resources.shares
 
 import java.util.ArrayList
 
-class ShareParserResult(val shares: ArrayList<RemoteShare>, val parserMessage: String)
+class ShareParserResult(val shares: ArrayList<RemoteShare>)

@@ -79,7 +79,7 @@ class ShareToRemoteOperationResultParser(private var shareXmlParser: ShareXMLPar
                         share
                     }
 
-                    result.setData(ShareParserResult(ArrayList(resultData), ""))
+                    result.setData(ShareParserResult(ArrayList(resultData)))
 
                 } else {
                     result = RemoteOperationResult(RemoteOperationResult.ResultCode.WRONG_SERVER_RESPONSE)
@@ -88,13 +88,13 @@ class ShareToRemoteOperationResultParser(private var shareXmlParser: ShareXMLPar
 
             } else if (shareXmlParser?.isWrongParameter!!) {
                 result = RemoteOperationResult(RemoteOperationResult.ResultCode.SHARE_WRONG_PARAMETER)
-                result.data = ShareParserResult(arrayListOf(), shareXmlParser?.message!!)
+                result.httpPhrase = shareXmlParser?.message
             } else if (shareXmlParser?.isNotFound!!) {
                 result = RemoteOperationResult(RemoteOperationResult.ResultCode.SHARE_NOT_FOUND)
-                result.data = ShareParserResult(arrayListOf(), shareXmlParser?.message!!)
+                result.httpPhrase = shareXmlParser?.message
             } else if (shareXmlParser?.isForbidden!!) {
                 result = RemoteOperationResult(RemoteOperationResult.ResultCode.SHARE_FORBIDDEN)
-                result.data = ShareParserResult(arrayListOf(), shareXmlParser?.message!!)
+                result.httpPhrase = shareXmlParser?.message
             } else {
                 result = RemoteOperationResult(RemoteOperationResult.ResultCode.WRONG_SERVER_RESPONSE)
             }
