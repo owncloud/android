@@ -41,6 +41,7 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
+import com.owncloud.android.BuildConfig;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountAuthenticatorActivity;
@@ -145,13 +146,12 @@ public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPa
 
     static private boolean shouldShow(Context context) {
         boolean isBeta = MainApp.isBeta();
-        boolean showWizard = context.getResources().getBoolean(R.bool.wizard_enabled);
+        boolean showWizard = context.getResources().getBoolean(R.bool.wizard_enabled) && !BuildConfig.DEBUG;
         return showWizard &&
                 ((isFirstRun() && context instanceof AccountAuthenticatorActivity) ||
-                        (
-                                !(isFirstRun() && (context instanceof FileDisplayActivity)) &&
-                                        !(context instanceof PassCodeActivity) &&
-                                        (FeatureList.getFiltered(getLastSeenVersionCode(), isFirstRun(), isBeta).length > 0)
+                        (!(isFirstRun() && (context instanceof FileDisplayActivity)) &&
+                                !(context instanceof PassCodeActivity) &&
+                                (FeatureList.getFiltered(getLastSeenVersionCode(), isFirstRun(), isBeta).length > 0)
                         ));
     }
 

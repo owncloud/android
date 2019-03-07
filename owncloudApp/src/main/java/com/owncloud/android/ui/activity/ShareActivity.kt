@@ -36,20 +36,28 @@ import com.owncloud.android.lib.common.utils.Log_OC
 import com.owncloud.android.lib.resources.shares.RemoteShare
 import com.owncloud.android.lib.resources.shares.ShareParserResult
 import com.owncloud.android.lib.resources.shares.ShareType
-import com.owncloud.android.operations.*
+import com.owncloud.android.operations.CreateShareViaLinkOperation
+import com.owncloud.android.operations.GetSharesForFileOperation
+import com.owncloud.android.operations.RemoveShareOperation
+import com.owncloud.android.operations.UpdateSharePermissionsOperation
+import com.owncloud.android.operations.UpdateShareViaLinkOperation
 import com.owncloud.android.providers.UsersAndGroupsSearchProvider
 import com.owncloud.android.shares.db.OCShare
 import com.owncloud.android.ui.asynctasks.GetSharesForFileAsyncTask
 import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter
-import com.owncloud.android.ui.fragment.*
-
+import com.owncloud.android.ui.fragment.EditShareFragment
+import com.owncloud.android.ui.fragment.PublicShareDialogFragment
+import com.owncloud.android.ui.fragment.SearchShareesFragment
+import com.owncloud.android.ui.fragment.ShareFileFragment
+import com.owncloud.android.ui.fragment.ShareFragmentListener
+import com.owncloud.android.ui.utils.showDialogFragment
 
 /**
  * Activity for sharing files
  */
 class ShareActivity : FileActivity(), ShareFragmentListener {
 
-    internal var mGetSharesForFileAsyncTask: GetSharesForFileAsyncTask? = null
+    private var getSharesForFileAsyncTask: GetSharesForFileAsyncTask? = null
 
     /**
      * Shortcut to get access to the [ShareFileFragment] instance, if any
@@ -83,11 +91,10 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
     private val editShareFragment: EditShareFragment?
         get() = supportFragmentManager.findFragmentByTag(TAG_EDIT_SHARE_FRAGMENT) as EditShareFragment
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        mGetSharesForFileAsyncTask = null
+        getSharesForFileAsyncTask = null
 
         setContentView(R.layout.share_activity)
 
@@ -98,51 +105,41 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
 
         if (savedInstanceState == null) {
             // Add Share fragment on first creation
-            val fragment = ShareFileFragment.newInstance(file, account)
+            val fragment = ShareFileFragment.newInstance(file, account!!)
             ft.replace(R.id.share_fragment_container, fragment, TAG_SHARE_FRAGMENT)
             ft.commit()
         }
-
     }
 
     override fun onAccountSet(stateWasRecovered: Boolean) {
         super.onAccountSet(stateWasRecovered)
         // Load data into the list
         Log_OC.d(TAG, "Refreshing lists on account set");
-
-        // TODO New Android Components
-//        refreshSharesFromStorageManager();
-
-        // Request for a refresh of the data through the server (starts an Async Task)
-//        refreshSharesFromServer();
     }
 
     override fun onNewIntent(intent: Intent) {
-        // Verify the action and get the query
-        if (Intent.ACTION_SEARCH == intent.action) {
-            val query = intent.getStringExtra(SearchManager.QUERY)
-            Log_OC.w(TAG, "Ignored Intent requesting to query for $query")
-
-        } else if (UsersAndGroupsSearchProvider.getSuggestIntentAction() == intent.action) {
-            val data = intent.data
-            val dataString = intent.dataString
-            val shareWith = dataString!!.substring(dataString.lastIndexOf('/') + 1)
-            doShareWith(
-                shareWith,
-                data!!.authority
-            )
-
-        } else {
-            Log_OC.e(TAG, "Unexpected intent " + intent.toString())
+        when (intent.action) {
+            Intent.ACTION_SEARCH -> {  // Verify the action and get the query
+                val query = intent.getStringExtra(SearchManager.QUERY)
+                Log_OC.w(TAG, "Ignored Intent requesting to query for $query")
+            }
+            UsersAndGroupsSearchProvider.getSuggestIntentAction() -> {
+                val data = intent.data
+                val dataString = intent.dataString
+                val shareWith = dataString!!.substring(dataString.lastIndexOf('/') + 1)
+                doShareWith(
+                    shareWith,
+                    data!!.authority
+                )
+            }
+            else -> Log_OC.e(TAG, "Unexpected intent $intent")
         }
     }
 
     public override fun onStop() {
         super.onStop()
-        if (mGetSharesForFileAsyncTask != null) {
-            mGetSharesForFileAsyncTask!!.cancel(true)
-            mGetSharesForFileAsyncTask = null
-        }
+        getSharesForFileAsyncTask?.cancel(true)
+        getSharesForFileAsyncTask = null
     }
 
     override fun copyOrSendPrivateLink(file: OCFile) {
@@ -224,45 +221,34 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
         // Show loading
         showLoadingDialog(R.string.common_loading)
         // Get Users and Groups
-        mGetSharesForFileAsyncTask = GetSharesForFileAsyncTask(this)
+        getSharesForFileAsyncTask = GetSharesForFileAsyncTask(this)
         val params = arrayOf(file, account, storageManager)
-        mGetSharesForFileAsyncTask!!.execute(*params)
+        getSharesForFileAsyncTask!!.execute(*params)
     }
 
     override fun showAddPublicShare(defaultLinkName: String) {
         // DialogFragment.show() will take care of adding the fragment
         // in a transaction.  We also want to remove any currently showing
         // dialog, so make our own transaction and take care of that here.
-        val ft = supportFragmentManager.beginTransaction()
-        val prev = supportFragmentManager.findFragmentByTag(TAG_PUBLIC_SHARE_DIALOG_FRAGMENT)
-        if (prev != null) {
-            ft.remove(prev)
-        }
-        ft.addToBackStack(null)
 
         // Create and show the dialog
         val newFragment = PublicShareDialogFragment.newInstanceToCreate(
             file,
-            account,
+            account!!,
             defaultLinkName
         )
-        newFragment.show(ft, TAG_PUBLIC_SHARE_DIALOG_FRAGMENT)
+
+        showDialogFragment(newFragment, TAG_PUBLIC_SHARE_DIALOG_FRAGMENT)
     }
 
     override fun showEditPublicShare(share: OCShare) {
-        val ft = supportFragmentManager.beginTransaction()
-        val prev = supportFragmentManager.findFragmentByTag(TAG_PUBLIC_SHARE_DIALOG_FRAGMENT)
-        if (prev != null) {
-            ft.remove(prev)
-        }
-        ft.addToBackStack(null)
-
         // Create and show the dialog.
         val newFragment = PublicShareDialogFragment.newInstanceToUpdate(
             file, share,
-            account
+            account!!
         )
-        newFragment.show(ft, TAG_PUBLIC_SHARE_DIALOG_FRAGMENT)
+
+        showDialogFragment(newFragment, TAG_PUBLIC_SHARE_DIALOG_FRAGMENT)
     }
 
     override fun copyOrSendPublicLink(share: OCShare) {
@@ -279,11 +265,13 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
     override fun onRemoteOperationFinish(operation: RemoteOperation<*>, result: RemoteOperationResult<*>) {
         super.onRemoteOperationFinish(operation, result)
 
-        if (result.isSuccess || operation is GetSharesForFileOperation && result.code == RemoteOperationResult.ResultCode.SHARE_NOT_FOUND) {
+        if (result.isSuccess || operation is GetSharesForFileOperation && result.code ==
+            RemoteOperationResult.ResultCode.SHARE_NOT_FOUND
+        ) {
             Log_OC.d(TAG, "Refreshing view on successful operation or finished refresh")
             refreshSharesFromStorageManager()
             if (operation is GetSharesForFileOperation) {
-                mGetSharesForFileAsyncTask = null
+                getSharesForFileAsyncTask = null
             }
         }
 
@@ -310,62 +298,55 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
         operation: CreateShareViaLinkOperation,
         result: RemoteOperationResult<ShareParserResult>
     ) {
-        if (result.isSuccess) {
-            updateFileFromDB()
-
-            publicShareFragment!!.dismiss()
-
-            fileOperationsHelper.copyOrSendPublicLink(OCShare.fromRemoteShare(result.data.shares[0]))
-
-        } else {
+        if (!result.isSuccess) {
             publicShareFragment!!.showError(
                 ErrorMessageAdapter.getResultMessage(result, operation, resources)
             )
+            return
         }
+        updateFileFromDB()
+        publicShareFragment!!.dismiss()
+        fileOperationsHelper.copyOrSendPublicLink(OCShare.fromRemoteShare(result.data.shares[0]))
     }
 
     private fun onUpdateShareViaLinkOperationFinish(
         operation: UpdateShareViaLinkOperation,
         result: RemoteOperationResult<ShareParserResult>
     ) {
-        if (result.isSuccess) {
-            updateFileFromDB()
-
-            publicShareFragment!!.dismiss()
-
-            fileOperationsHelper.copyOrSendPublicLink(OCShare.fromRemoteShare(result.data.shares[0]))
-
-        } else {
+        if (!result.isSuccess) {
             publicShareFragment!!.showError(
                 ErrorMessageAdapter.getResultMessage(result, operation, resources)
             )
+            return
         }
+        updateFileFromDB()
+        publicShareFragment!!.dismiss()
+        fileOperationsHelper.copyOrSendPublicLink(OCShare.fromRemoteShare(result.data.shares[0]))
     }
 
     /**
      * Updates the view, reading data from [com.owncloud.android.datamodel.FileDataStorageManager]
      */
     private fun refreshSharesFromStorageManager() {
-
         val shareFileFragment = shareFileFragment
-        if (shareFileFragment != null && shareFileFragment.isAdded) {   // only if added to the view hierarchy!!
+        if (shareFileFragment?.isAdded == true) {   // only if added to the view hierarchy!!
             shareFileFragment.refreshCapabilitiesFromDB()
             shareFileFragment.refreshUsersOrGroupsListFromDB()
             shareFileFragment.initPublicShares()
         }
 
         val searchShareesFragment = searchFragment
-        if (searchShareesFragment != null && searchShareesFragment.isAdded) {  // only if added to the view hierarchy!!
+        if (searchShareesFragment?.isAdded == true) {  // only if added to the view hierarchy!!
             searchShareesFragment.refreshUsersOrGroupsListFromDB()
         }
 
         val publicShareDialogFragment = publicShareFragment
-        if (publicShareDialogFragment != null && publicShareDialogFragment.isAdded) {  // only if added to the view hierarchy!!
+        if (publicShareDialogFragment?.isAdded == true) {  // only if added to the view hierarchy!!
             publicShareDialogFragment.refreshModelFromStorageManager()
         }
 
         val editShareFragment = editShareFragment
-        if (editShareFragment != null && editShareFragment.isAdded) {
+        if (editShareFragment?.isAdded == true) {
             editShareFragment.refreshUiFromDB()
         }
     }

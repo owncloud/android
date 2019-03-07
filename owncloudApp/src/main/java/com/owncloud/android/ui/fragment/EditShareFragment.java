@@ -89,8 +89,6 @@ public class EditShareFragment extends DialogFragment {
     public static EditShareFragment newInstance(OCShare shareToEdit, OCFile sharedFile, Account account) {
         EditShareFragment fragment = new EditShareFragment();
         Bundle args = new Bundle();
-        // TODO New Android Components
-//        args.putParcelable(ARG_SHARE, shareToEdit);
         args.putParcelable(ARG_FILE, sharedFile);
         args.putParcelable(ARG_ACCOUNT, account);
         fragment.setArguments(args);
@@ -159,8 +157,6 @@ public class EditShareFragment extends DialogFragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        // TODO New Android Components
-//        outState.putParcelable(ARG_SHARE, mShare);
     }
 
     /**

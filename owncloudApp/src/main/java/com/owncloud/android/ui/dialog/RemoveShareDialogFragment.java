@@ -66,8 +66,6 @@ public class RemoveShareDialogFragment extends ConfirmationDialogFragment
         args.putInt(ARG_POSITIVE_BTN_RES, R.string.common_yes);
         args.putInt(ARG_NEUTRAL_BTN_RES, R.string.common_no);
         args.putInt(ARG_NEGATIVE_BTN_RES, -1);
-        // TODO New Android Components
-//        args.putParcelable(ARG_TARGET_SHARE, share);
         frag.setArguments(args);
 
         return frag;
@@ -91,8 +89,6 @@ public class RemoveShareDialogFragment extends ConfirmationDialogFragment
     public void onConfirmation(String callerTag) {
         ShareFragmentListener listener = (ShareFragmentListener) getActivity();
         Log_OC.d(TAG, "Removing public share " + mTargetShare.getName());
-        // TODO New Android Components
-//        listener.removeShare(mTargetShare);
     }
 
     @Override
