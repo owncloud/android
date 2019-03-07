@@ -69,7 +69,7 @@ class ShareFileFragmentTest {
         ocShareViewModel = mock(OCShareViewModel::class.java)
         `when`(ocShareViewModel.sharesForFile).thenReturn(sharesLiveData)
 
-        shareFragment.mViewModelFactory = ViewModelUtil.createFor(ocShareViewModel)
+        shareFragment.viewModelFactory = ViewModelUtil.createFor(ocShareViewModel)
         activityRule.activity.setFragment(shareFragment)
     }
 

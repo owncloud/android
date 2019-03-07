@@ -28,14 +28,13 @@ import androidx.room.RoomDatabase
 import com.owncloud.android.shares.db.OCShare
 import com.owncloud.android.shares.db.OCShareDao
 
-@Database(entities = [OCShare::class], version = 1, exportSchema = false)
+@Database(entities = [OCShare::class], version = ProviderMeta.DB_VERSION, exportSchema = false)
 abstract class OwncloudDatabase : RoomDatabase() {
     abstract fun shareDao(): OCShareDao
 
     companion object {
         @Volatile
         private var INSTANCE: OwncloudDatabase? = null
-        const val DATABASE_NAME = ProviderMeta.NEW_DB_NAME
 
         fun getDatabase(
             context: Context
@@ -46,7 +45,7 @@ abstract class OwncloudDatabase : RoomDatabase() {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     OwncloudDatabase::class.java,
-                    DATABASE_NAME
+                    ProviderMeta.NEW_DB_NAME
                 ).build()
                 INSTANCE = instance
                 instance

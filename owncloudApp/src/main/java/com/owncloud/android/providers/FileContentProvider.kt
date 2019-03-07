@@ -60,14 +60,14 @@ import java.util.*
  */
 class FileContentProvider(val appExecutors: AppExecutors = AppExecutors()) : ContentProvider() {
 
-    private var mDbHelper: DataBaseHelper? = null
+    private lateinit var dbHelper: DataBaseHelper
 
-    private var mUriMatcher: UriMatcher? = null
+    private lateinit var uriMatcher: UriMatcher
 
     override fun delete(uri: Uri, where: String?, whereArgs: Array<String>?): Int {
         //Log_OC.d(TAG, "Deleting " + uri + " at provider " + this);
-        var count = 0
-        val db = mDbHelper!!.writableDatabase
+        val count: Int
+        val db = dbHelper.writableDatabase
         db.beginTransaction()
         try {
             count = delete(db, uri, where, whereArgs)
@@ -75,7 +75,7 @@ class FileContentProvider(val appExecutors: AppExecutors = AppExecutors()) : Con
         } finally {
             db.endTransaction()
         }
-        context!!.contentResolver.notifyChange(
+        context?.contentResolver?.notifyChange(
             uri,
             null
         )
@@ -84,13 +84,12 @@ class FileContentProvider(val appExecutors: AppExecutors = AppExecutors()) : Con
 
     private fun delete(db: SQLiteDatabase, uri: Uri, where: String?, whereArgs: Array<String>?): Int {
         var count = 0
-        when (mUriMatcher!!.match(uri)) {
+        when (uriMatcher.match(uri)) {
             SINGLE_FILE -> {
                 val c = query(uri, null, where, whereArgs, null)
                 var remoteId = ""
-                if (c != null && c.moveToFirst()) {
+                if (c.moveToFirst()) {
                     remoteId = c.getString(c.getColumnIndex(ProviderTableMeta.FILE_REMOTE_ID))
-                    //ThumbnailsCacheManager.removeFileFromCache(remoteId);
                     c.close()
                 }
                 Log_OC.d(TAG, "Removing FILE $remoteId")
@@ -109,9 +108,8 @@ class FileContentProvider(val appExecutors: AppExecutors = AppExecutors()) : Con
             }
             DIRECTORY -> {
                 // deletion of folder is recursive
-
                 val children = query(uri, null, null, null, null)
-                if (children != null && children.moveToFirst()) {
+                if (children.moveToFirst()) {
                     var childId: Long
                     var isDir: Boolean
                     while (!children.isAfterLast) {
@@ -119,13 +117,13 @@ class FileContentProvider(val appExecutors: AppExecutors = AppExecutors()) : Con
                         isDir = "DIR" == children.getString(
                             children.getColumnIndex(ProviderTableMeta.FILE_CONTENT_TYPE)
                         )
-                        if (isDir) {
-                            count += delete(
+                        count += if (isDir) {
+                            delete(
                                 db,
                                 ContentUris.withAppendedId(ProviderTableMeta.CONTENT_URI_DIR, childId), null, null
                             )
                         } else {
-                            count += delete(
+                            delete(
                                 db,
                                 ContentUris.withAppendedId(ProviderTableMeta.CONTENT_URI_FILE, childId), null, null
                             )
@@ -154,22 +152,22 @@ class FileContentProvider(val appExecutors: AppExecutors = AppExecutors()) : Con
             UPLOADS -> count = db.delete(ProviderTableMeta.UPLOADS_TABLE_NAME, where, whereArgs)
             CAMERA_UPLOADS_SYNC -> count = db.delete(ProviderTableMeta.CAMERA_UPLOADS_SYNC_TABLE_NAME, where, whereArgs)
             QUOTAS -> count = db.delete(ProviderTableMeta.USER_QUOTAS_TABLE_NAME, where, whereArgs)
-            else -> throw IllegalArgumentException("Unknown uri: " + uri.toString())
+            else -> throw IllegalArgumentException("Unknown uri: $uri")
         }
         return count
     }
 
     override fun getType(uri: Uri): String? {
-        when (mUriMatcher!!.match(uri)) {
-            ROOT_DIRECTORY -> return ProviderTableMeta.CONTENT_TYPE
-            SINGLE_FILE -> return ProviderTableMeta.CONTENT_TYPE_ITEM
-            else -> throw IllegalArgumentException("Unknown Uri id." + uri.toString())
+        return when (uriMatcher.match(uri)) {
+            ROOT_DIRECTORY -> ProviderTableMeta.CONTENT_TYPE
+            SINGLE_FILE -> ProviderTableMeta.CONTENT_TYPE_ITEM
+            else -> throw IllegalArgumentException("Unknown Uri id.$uri")
         }
     }
 
     override fun insert(uri: Uri, values: ContentValues): Uri? {
-        var newUri: Uri?
-        val db = mDbHelper!!.writableDatabase
+        val newUri: Uri?
+        val db = dbHelper.writableDatabase
         db.beginTransaction()
         try {
             newUri = insert(db, uri, values)
@@ -177,31 +175,27 @@ class FileContentProvider(val appExecutors: AppExecutors = AppExecutors()) : Con
         } finally {
             db.endTransaction()
         }
-        context!!.contentResolver.notifyChange(newUri!!, null)
+        context?.contentResolver?.notifyChange(newUri!!, null)
         return newUri
     }
 
     private fun insert(db: SQLiteDatabase, uri: Uri, values: ContentValues): Uri {
-        when (mUriMatcher!!.match(uri)) {
+        when (uriMatcher.match(uri)) {
             ROOT_DIRECTORY, SINGLE_FILE -> {
-                val remotePath = values!!.getAsString(ProviderTableMeta.FILE_PATH)
+                val remotePath = values.getAsString(ProviderTableMeta.FILE_PATH)
                 val accountName = values.getAsString(ProviderTableMeta.FILE_ACCOUNT_OWNER)
                 val projection =
                     arrayOf(ProviderTableMeta._ID, ProviderTableMeta.FILE_PATH, ProviderTableMeta.FILE_ACCOUNT_OWNER)
-                val where = ProviderTableMeta.FILE_PATH + "=? AND " +
-                        ProviderTableMeta.FILE_ACCOUNT_OWNER + "=?"
+                val where = "${ProviderTableMeta.FILE_PATH}=? AND ${ProviderTableMeta.FILE_ACCOUNT_OWNER}=?"
                 val whereArgs = arrayOf(remotePath, accountName)
                 val doubleCheck = query(uri, projection, where, whereArgs, null)
                 // ugly patch; serious refactorization is needed to reduce work in
                 // FileDataStorageManager and bring it to FileContentProvider
-                if (doubleCheck == null || !doubleCheck.moveToFirst()) {
-                    doubleCheck?.close()
-                    val rowId = db.insert(ProviderTableMeta.FILE_TABLE_NAME, null, values)
-                    return if (rowId > 0) {
-                        ContentUris.withAppendedId(ProviderTableMeta.CONTENT_URI_FILE, rowId)
-                    } else {
-                        throw SQLException("ERROR $uri")
-                    }
+                if (!doubleCheck.moveToFirst()) {
+                    doubleCheck.close()
+                    val fileId = db.insert(ProviderTableMeta.FILE_TABLE_NAME, null, values)
+                    if (fileId <= 0) throw SQLException("ERROR $uri")
+                    return ContentUris.withAppendedId(ProviderTableMeta.CONTENT_URI_FILE, fileId)
                 } else {
                     // file is already inserted; race condition, let's avoid a duplicated entry
                     val insertedFileUri = ContentUris.withAppendedId(
@@ -209,83 +203,51 @@ class FileContentProvider(val appExecutors: AppExecutors = AppExecutors()) : Con
                         doubleCheck.getLong(doubleCheck.getColumnIndex(ProviderTableMeta._ID))
                     )
                     doubleCheck.close()
-
                     return insertedFileUri
                 }
             }
 
             SHARES -> {
-                val rowId: Long = OwncloudDatabase.getDatabase(context).shareDao().insert(
+                val shareId: Long = OwncloudDatabase.getDatabase(context).shareDao().insert(
                     listOf(OCShare.fromContentValues(values))
-                ).get(0)
+                )[0]
 
-                val insertedShareUri: Uri
-
-                if (rowId > 0) {
-                    insertedShareUri = ContentUris.withAppendedId(ProviderTableMeta.CONTENT_URI_SHARE, rowId)
-                } else {
-                    throw SQLException("ERROR $uri")
-                }
-
-                return insertedShareUri
+                if (shareId <= 0) throw SQLException("ERROR $uri")
+                return ContentUris.withAppendedId(ProviderTableMeta.CONTENT_URI_SHARE, shareId)
             }
 
             CAPABILITIES -> {
-                val insertedCapUri: Uri
-                val id = db.insert(ProviderTableMeta.CAPABILITIES_TABLE_NAME, null, values)
-                if (id > 0) {
-                    insertedCapUri = ContentUris.withAppendedId(ProviderTableMeta.CONTENT_URI_CAPABILITIES, id)
-                } else {
-                    throw SQLException("ERROR $uri")
+                val capabilityId = db.insert(ProviderTableMeta.CAPABILITIES_TABLE_NAME, null, values)
 
-                }
-                return insertedCapUri
+                if (capabilityId <= 0) throw SQLException("ERROR $uri")
+                return  ContentUris.withAppendedId(ProviderTableMeta.CONTENT_URI_CAPABILITIES, capabilityId)
             }
 
             UPLOADS -> {
-                val insertedUploadUri: Uri
                 val uploadId = db.insert(ProviderTableMeta.UPLOADS_TABLE_NAME, null, values)
-                if (uploadId > 0) {
-                    insertedUploadUri = ContentUris.withAppendedId(ProviderTableMeta.CONTENT_URI_UPLOADS, uploadId)
-                    trimSuccessfulUploads(db)
-                } else {
-                    throw SQLException("ERROR $uri")
 
-                }
-                return insertedUploadUri
+                if (uploadId <= 0) throw SQLException("ERROR $uri")
+                trimSuccessfulUploads(db)
+                return ContentUris.withAppendedId(ProviderTableMeta.CONTENT_URI_UPLOADS, uploadId)
             }
 
             CAMERA_UPLOADS_SYNC -> {
-                val insertedCameraUploadUri: Uri
                 val cameraUploadId = db.insert(
                     ProviderTableMeta.CAMERA_UPLOADS_SYNC_TABLE_NAME, null,
                     values
                 )
-                if (cameraUploadId > 0) {
-                    insertedCameraUploadUri = ContentUris.withAppendedId(
-                        ProviderTableMeta.CONTENT_URI_CAMERA_UPLOADS_SYNC,
-                        cameraUploadId
-                    )
-                } else {
-                    throw SQLException("ERROR $uri")
-                }
-                return insertedCameraUploadUri
+                if (cameraUploadId <= 0) throw SQLException("ERROR $uri")
+
+                return ContentUris.withAppendedId(ProviderTableMeta.CONTENT_URI_CAMERA_UPLOADS_SYNC, cameraUploadId)
             }
             QUOTAS -> {
-                val insertedQuotaUri: Uri
                 val quotaId = db.insert(
                     ProviderTableMeta.USER_QUOTAS_TABLE_NAME, null,
                     values
                 )
-                if (quotaId > 0) {
-                    insertedQuotaUri = ContentUris.withAppendedId(
-                        ProviderTableMeta.CONTENT_URI_QUOTAS,
-                        quotaId
-                    )
-                } else {
-                    throw SQLException("ERROR $uri")
-                }
-                return insertedQuotaUri
+
+                if (quotaId <= 0) throw SQLException("ERROR $uri")
+                return ContentUris.withAppendedId(ProviderTableMeta.CONTENT_URI_QUOTAS, quotaId)
             }
             else -> throw IllegalArgumentException("Unknown uri id: $uri")
         }
@@ -298,16 +260,15 @@ class FileContentProvider(val appExecutors: AppExecutors = AppExecutors()) : Con
         val fileValues = ContentValues()
         val newShareType = newShare.getAsInteger(ProviderTableMeta.OCSHARES_SHARE_TYPE)!!
         if (newShareType == ShareType.PUBLIC_LINK.value) {
-            fileValues.put(ProviderTableMeta.FILE_SHARED_VIA_LINK, 1)
+            fileValues.put(ProviderTableMeta.FILE_SHARED_VIA_LINK, TRUE)
         } else if (newShareType == ShareType.USER.value ||
             newShareType == ShareType.GROUP.value ||
             newShareType == ShareType.FEDERATED.value
         ) {
-            fileValues.put(ProviderTableMeta.FILE_SHARED_WITH_SHAREE, 1)
+            fileValues.put(ProviderTableMeta.FILE_SHARED_WITH_SHAREE, TRUE)
         }
 
-        val where = ProviderTableMeta.FILE_PATH + "=? AND " +
-                ProviderTableMeta.FILE_ACCOUNT_OWNER + "=?"
+        val where = "${ProviderTableMeta.FILE_PATH}=? AND ${ProviderTableMeta.FILE_ACCOUNT_OWNER}=?"
         val whereArgs = arrayOf(
             newShare.getAsString(ProviderTableMeta.OCSHARES_PATH),
             newShare.getAsString(ProviderTableMeta.OCSHARES_ACCOUNT_OWNER)
@@ -316,25 +277,25 @@ class FileContentProvider(val appExecutors: AppExecutors = AppExecutors()) : Con
     }
 
     override fun onCreate(): Boolean {
-        mDbHelper = DataBaseHelper(context)
+        dbHelper = DataBaseHelper(context)
 
-        val authority = context!!.resources.getString(R.string.authority)
-        mUriMatcher = UriMatcher(UriMatcher.NO_MATCH)
-        mUriMatcher!!.addURI(authority, null, ROOT_DIRECTORY)
-        mUriMatcher!!.addURI(authority, "file/", SINGLE_FILE)
-        mUriMatcher!!.addURI(authority, "file/#", SINGLE_FILE)
-        mUriMatcher!!.addURI(authority, "dir/", DIRECTORY)
-        mUriMatcher!!.addURI(authority, "dir/#", DIRECTORY)
-        mUriMatcher!!.addURI(authority, "shares/", SHARES)
-        mUriMatcher!!.addURI(authority, "shares/#", SHARES)
-        mUriMatcher!!.addURI(authority, "capabilities/", CAPABILITIES)
-        mUriMatcher!!.addURI(authority, "capabilities/#", CAPABILITIES)
-        mUriMatcher!!.addURI(authority, "uploads/", UPLOADS)
-        mUriMatcher!!.addURI(authority, "uploads/#", UPLOADS)
-        mUriMatcher!!.addURI(authority, "cameraUploadsSync/", CAMERA_UPLOADS_SYNC)
-        mUriMatcher!!.addURI(authority, "cameraUploadsSync/#", CAMERA_UPLOADS_SYNC)
-        mUriMatcher!!.addURI(authority, "quotas/", QUOTAS)
-        mUriMatcher!!.addURI(authority, "quotas/#", QUOTAS)
+        val authority = context?.resources?.getString(R.string.authority)
+        uriMatcher = UriMatcher(UriMatcher.NO_MATCH)
+        uriMatcher.addURI(authority, null, ROOT_DIRECTORY)
+        uriMatcher.addURI(authority, "file/", SINGLE_FILE)
+        uriMatcher.addURI(authority, "file/#", SINGLE_FILE)
+        uriMatcher.addURI(authority, "dir/", DIRECTORY)
+        uriMatcher.addURI(authority, "dir/#", DIRECTORY)
+        uriMatcher.addURI(authority, "shares/", SHARES)
+        uriMatcher.addURI(authority, "shares/#", SHARES)
+        uriMatcher.addURI(authority, "capabilities/", CAPABILITIES)
+        uriMatcher.addURI(authority, "capabilities/#", CAPABILITIES)
+        uriMatcher.addURI(authority, "uploads/", UPLOADS)
+        uriMatcher.addURI(authority, "uploads/#", UPLOADS)
+        uriMatcher.addURI(authority, "cameraUploadsSync/", CAMERA_UPLOADS_SYNC)
+        uriMatcher.addURI(authority, "cameraUploadsSync/#", CAMERA_UPLOADS_SYNC)
+        uriMatcher.addURI(authority, "quotas/", QUOTAS)
+        uriMatcher.addURI(authority, "quotas/#", QUOTAS)
 
         return true
     }
@@ -351,7 +312,7 @@ class FileContentProvider(val appExecutors: AppExecutors = AppExecutors()) : Con
             throw IllegalArgumentException("Selection not allowed, use parameterized queries")
         }
 
-        val db: SQLiteDatabase = mDbHelper!!.writableDatabase
+        val db: SQLiteDatabase = dbHelper.writableDatabase
 
         val sqlQuery = SQLiteQueryBuilder()
 
@@ -360,15 +321,15 @@ class FileContentProvider(val appExecutors: AppExecutors = AppExecutors()) : Con
         // To use full SQL queries within Room
         val newDb: SupportSQLiteDatabase = OwncloudDatabase.getDatabase(context).openHelper.writableDatabase
 
-        when (mUriMatcher!!.match(uri)) {
-            ROOT_DIRECTORY -> sqlQuery.setProjectionMap(mFileProjectionMap)
+        when (uriMatcher.match(uri)) {
+            ROOT_DIRECTORY -> sqlQuery.setProjectionMap(fileProjectionMap)
             DIRECTORY -> {
                 val folderId = uri.pathSegments[1]
                 sqlQuery.appendWhere(
                     ProviderTableMeta.FILE_PARENT + "="
                             + folderId
                 )
-                sqlQuery.setProjectionMap(mFileProjectionMap)
+                sqlQuery.setProjectionMap(fileProjectionMap)
             }
             SINGLE_FILE -> {
                 if (uri.pathSegments.size > 1) {
@@ -377,12 +338,12 @@ class FileContentProvider(val appExecutors: AppExecutors = AppExecutors()) : Con
                                 + uri.pathSegments[1]
                     )
                 }
-                sqlQuery.setProjectionMap(mFileProjectionMap)
+                sqlQuery.setProjectionMap(fileProjectionMap)
             }
             SHARES -> {
                 newDb.execSQL("PRAGMA case_sensitive_like = true")
 
-                val sqlQuery = SupportSQLiteQueryBuilder
+                val supportSqlQuery = SupportSQLiteQueryBuilder
                     .builder(ProviderTableMeta.OCSHARES_TABLE_NAME)
                     .columns(projection)
                     .selection(selection, selectionArgs)
@@ -394,7 +355,7 @@ class FileContentProvider(val appExecutors: AppExecutors = AppExecutors()) : Con
                         }
                     ).create()
 
-                return newDb.query(sqlQuery)
+                return newDb.query(supportSqlQuery)
             }
             CAPABILITIES -> {
                 sqlQuery.tables = ProviderTableMeta.CAPABILITIES_TABLE_NAME
@@ -404,7 +365,7 @@ class FileContentProvider(val appExecutors: AppExecutors = AppExecutors()) : Con
                                 + uri.pathSegments[1]
                     )
                 }
-                sqlQuery.setProjectionMap(mCapabilityProjectionMap)
+                sqlQuery.setProjectionMap(capabilityProjectionMap)
             }
             UPLOADS -> {
                 sqlQuery.tables = ProviderTableMeta.UPLOADS_TABLE_NAME
@@ -414,7 +375,7 @@ class FileContentProvider(val appExecutors: AppExecutors = AppExecutors()) : Con
                                 + uri.pathSegments[1]
                     )
                 }
-                sqlQuery.setProjectionMap(mUploadProjectionMap)
+                sqlQuery.setProjectionMap(uploadProjectionMap)
             }
             CAMERA_UPLOADS_SYNC -> {
                 sqlQuery.tables = ProviderTableMeta.CAMERA_UPLOADS_SYNC_TABLE_NAME
@@ -437,30 +398,29 @@ class FileContentProvider(val appExecutors: AppExecutors = AppExecutors()) : Con
             else -> throw IllegalArgumentException("Unknown uri id: $uri")
         }
 
-        val order: String?
-        if (TextUtils.isEmpty(sortOrder)) {
-            when (mUriMatcher!!.match(uri)) {
-                SHARES -> order = ProviderTableMeta.OCSHARES_DEFAULT_SORT_ORDER
-                CAPABILITIES -> order = ProviderTableMeta.CAPABILITIES_DEFAULT_SORT_ORDER
-                UPLOADS -> order = ProviderTableMeta.UPLOADS_DEFAULT_SORT_ORDER
-                CAMERA_UPLOADS_SYNC -> order = ProviderTableMeta.CAMERA_UPLOADS_SYNC_DEFAULT_SORT_ORDER
+        val order: String? = if (TextUtils.isEmpty(sortOrder)) {
+            when (uriMatcher.match(uri)) {
+                SHARES -> ProviderTableMeta.OCSHARES_DEFAULT_SORT_ORDER
+                CAPABILITIES -> ProviderTableMeta.CAPABILITIES_DEFAULT_SORT_ORDER
+                UPLOADS -> ProviderTableMeta.UPLOADS_DEFAULT_SORT_ORDER
+                CAMERA_UPLOADS_SYNC -> ProviderTableMeta.CAMERA_UPLOADS_SYNC_DEFAULT_SORT_ORDER
                 else // Files
-                -> order = ProviderTableMeta.FILE_DEFAULT_SORT_ORDER
+                -> ProviderTableMeta.FILE_DEFAULT_SORT_ORDER
             }
         } else {
-            order = sortOrder
+            sortOrder
         }
 
         // DB case_sensitive
         db.execSQL("PRAGMA case_sensitive_like = true")
         val c = sqlQuery.query(db, projection, selection, selectionArgs, null, null, order)
-        c.setNotificationUri(context!!.contentResolver, uri)
+        c.setNotificationUri(context?.contentResolver, uri)
         return c
     }
 
     override fun update(uri: Uri, values: ContentValues?, selection: String?, selectionArgs: Array<String>?): Int {
-        var count = 0
-        val db = mDbHelper!!.writableDatabase
+        val count: Int
+        val db = dbHelper.writableDatabase
         db.beginTransaction()
         try {
             count = update(db, uri, values, selection, selectionArgs)
@@ -468,7 +428,7 @@ class FileContentProvider(val appExecutors: AppExecutors = AppExecutors()) : Con
         } finally {
             db.endTransaction()
         }
-        context!!.contentResolver.notifyChange(uri, null)
+        context?.contentResolver?.notifyChange(uri, null)
         return count
     }
 
@@ -479,7 +439,7 @@ class FileContentProvider(val appExecutors: AppExecutors = AppExecutors()) : Con
         selection: String?,
         selectionArgs: Array<String>?
     ): Int {
-        when (mUriMatcher!!.match(uri)) {
+        when (uriMatcher.match(uri)) {
             DIRECTORY -> return 0 //updateFolderSize(db, selectionArgs[0]);
             SHARES -> return db.update(
                 ProviderTableMeta.OCSHARES_TABLE_NAME, values, selection, selectionArgs
@@ -514,7 +474,7 @@ class FileContentProvider(val appExecutors: AppExecutors = AppExecutors()) : Con
         val results = arrayOfNulls<ContentProviderResult>(operations.size)
         var i = 0
 
-        val db = mDbHelper!!.writableDatabase
+        val db = dbHelper.writableDatabase
         db.beginTransaction()  // it's supposed that transactions can be nested
         try {
             for (operation in operations) {
@@ -525,10 +485,9 @@ class FileContentProvider(val appExecutors: AppExecutors = AppExecutors()) : Con
         } finally {
             db.endTransaction()
         }
-        Log_OC.d("FileContentProvider", "applied batch in provider " + this)
+        Log_OC.d("FileContentProvider", "applied batch in provider $this")
         return results
     }
-
 
     private inner class DataBaseHelper internal constructor(context: Context) :
         SQLiteOpenHelper(context, ProviderMeta.DB_NAME, null, ProviderMeta.DB_VERSION) {
@@ -923,32 +882,45 @@ class FileContentProvider(val appExecutors: AppExecutors = AppExecutors()) : Con
             }
 
             if (oldVersion < 25 && newVersion >= 25) {
-                Log_OC.i("SQL", "Entering in the #25 ADD in onUpgrade");
-                db.beginTransaction();
+                Log_OC.i("SQL", "Entering in the #25 ADD in onUpgrade")
+                db.beginTransaction()
                 try {
-                    db.execSQL("ALTER TABLE " + ProviderTableMeta.CAPABILITIES_TABLE_NAME +
-                            " ADD COLUMN " +
-                            ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_READ_ONLY +
-                            " INTEGER DEFAULT NULL");
+                    db.execSQL(
+                        "ALTER TABLE " + ProviderTableMeta.CAPABILITIES_TABLE_NAME +
+                                " ADD COLUMN " +
+                                ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_READ_ONLY +
+                                " INTEGER DEFAULT NULL"
+                    )
 
-                    db.execSQL("ALTER TABLE " + ProviderTableMeta.CAPABILITIES_TABLE_NAME +
-                            " ADD COLUMN " +
-                            ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_READ_WRITE +
-                            " INTEGER DEFAULT NULL");
+                    db.execSQL(
+                        "ALTER TABLE " + ProviderTableMeta.CAPABILITIES_TABLE_NAME +
+                                " ADD COLUMN " +
+                                ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_READ_WRITE +
+                                " INTEGER DEFAULT NULL"
+                    )
 
-                    db.execSQL("ALTER TABLE " + ProviderTableMeta.CAPABILITIES_TABLE_NAME +
-                            " ADD COLUMN " +
-                            ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_UPLOAD_ONLY +
-                            " INTEGER DEFAULT NULL");
-                    db.setTransactionSuccessful();
-                    upgraded = true;
+                    db.execSQL(
+                        "ALTER TABLE " + ProviderTableMeta.CAPABILITIES_TABLE_NAME +
+                                " ADD COLUMN " +
+                                ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_UPLOAD_ONLY +
+                                " INTEGER DEFAULT NULL"
+                    )
+
+                    db.execSQL(
+                        "ALTER TABLE " + ProviderTableMeta.OCSHARES_TABLE_NAME +
+                                " ADD COLUMN " + ProviderTableMeta.OCSHARES_SHARE_WITH_ADDITIONAL_INFO + " TEXT " +
+                                " DEFAULT NULL"
+                    )
+
+                    db.setTransactionSuccessful()
+                    upgraded = true
                 } finally {
-                    db.endTransaction();
+                    db.endTransaction()
                 }
             }
 
             if (oldVersion < 26 && newVersion >= 26) {
-                Log_OC.i("SQL", "Entering in #25 to migrate shares from SQLite to Room")
+                Log_OC.i("SQL", "Entering in #26 to migrate shares from SQLite to Room")
                 val cursor = db.query(
                     ProviderTableMeta.OCSHARES_TABLE_NAME,
                     null,
@@ -1044,35 +1016,37 @@ class FileContentProvider(val appExecutors: AppExecutors = AppExecutors()) : Con
 
     private fun createCapabilitiesTable(db: SQLiteDatabase) {
         // Create capabilities table
-        db.execSQL("CREATE TABLE " + ProviderTableMeta.CAPABILITIES_TABLE_NAME + "("
-                + ProviderTableMeta._ID + " INTEGER PRIMARY KEY, "
-                + ProviderTableMeta.CAPABILITIES_ACCOUNT_NAME + " TEXT, "
-                + ProviderTableMeta.CAPABILITIES_VERSION_MAYOR + " INTEGER, "
-                + ProviderTableMeta.CAPABILITIES_VERSION_MINOR + " INTEGER, "
-                + ProviderTableMeta.CAPABILITIES_VERSION_MICRO + " INTEGER, "
-                + ProviderTableMeta.CAPABILITIES_VERSION_STRING + " TEXT, "
-                + ProviderTableMeta.CAPABILITIES_VERSION_EDITION + " TEXT, "
-                + ProviderTableMeta.CAPABILITIES_CORE_POLLINTERVAL + " INTEGER, "
-                + ProviderTableMeta.CAPABILITIES_SHARING_API_ENABLED + " INTEGER, " // boolean
-                + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_ENABLED + " INTEGER, "  // boolean
-                + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED + " INTEGER, "    // boolean
-                + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_READ_ONLY + " INTEGER, "   // boolean
-                + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_READ_WRITE + " INTEGER, "  // boolean
-                + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_UPLOAD_ONLY + " INTEGER, " // boolean
-                + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_ENABLED + " INTEGER, "  // boolean
-                + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_DAYS + " INTEGER, "
-                + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_ENFORCED + " INTEGER, " // boolean
-                + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_SEND_MAIL + " INTEGER, "    // boolean
-                + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_UPLOAD + " INTEGER, "       // boolean
-                + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_MULTIPLE + " INTEGER, "     // boolean
-                + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_SUPPORTS_UPLOAD_ONLY + " INTEGER, "     // boolean
-                + ProviderTableMeta.CAPABILITIES_SHARING_USER_SEND_MAIL + " INTEGER, "      // boolean
-                + ProviderTableMeta.CAPABILITIES_SHARING_RESHARING + " INTEGER, "           // boolean
-                + ProviderTableMeta.CAPABILITIES_SHARING_FEDERATION_OUTGOING + " INTEGER, "     // boolean
-                + ProviderTableMeta.CAPABILITIES_SHARING_FEDERATION_INCOMING + " INTEGER, "     // boolean
-                + ProviderTableMeta.CAPABILITIES_FILES_BIGFILECHUNKING + " INTEGER, "   // boolean
-                + ProviderTableMeta.CAPABILITIES_FILES_UNDELETE + " INTEGER, "  // boolean
-                + ProviderTableMeta.CAPABILITIES_FILES_VERSIONING + " INTEGER );")   // boolean
+        db.execSQL(
+            "CREATE TABLE " + ProviderTableMeta.CAPABILITIES_TABLE_NAME + "("
+                    + ProviderTableMeta._ID + " INTEGER PRIMARY KEY, "
+                    + ProviderTableMeta.CAPABILITIES_ACCOUNT_NAME + " TEXT, "
+                    + ProviderTableMeta.CAPABILITIES_VERSION_MAYOR + " INTEGER, "
+                    + ProviderTableMeta.CAPABILITIES_VERSION_MINOR + " INTEGER, "
+                    + ProviderTableMeta.CAPABILITIES_VERSION_MICRO + " INTEGER, "
+                    + ProviderTableMeta.CAPABILITIES_VERSION_STRING + " TEXT, "
+                    + ProviderTableMeta.CAPABILITIES_VERSION_EDITION + " TEXT, "
+                    + ProviderTableMeta.CAPABILITIES_CORE_POLLINTERVAL + " INTEGER, "
+                    + ProviderTableMeta.CAPABILITIES_SHARING_API_ENABLED + " INTEGER, " // boolean
+                    + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_ENABLED + " INTEGER, "  // boolean
+                    + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED + " INTEGER, "    // boolean
+                    + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_READ_ONLY + " INTEGER, "   // boolean
+                    + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_READ_WRITE + " INTEGER, "  // boolean
+                    + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_UPLOAD_ONLY + " INTEGER, " // boolean
+                    + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_ENABLED + " INTEGER, "  // boolean
+                    + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_DAYS + " INTEGER, "
+                    + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_ENFORCED + " INTEGER, " // boolean
+                    + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_SEND_MAIL + " INTEGER, "    // boolean
+                    + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_UPLOAD + " INTEGER, "       // boolean
+                    + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_MULTIPLE + " INTEGER, "     // boolean
+                    + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_SUPPORTS_UPLOAD_ONLY + " INTEGER, "     // boolean
+                    + ProviderTableMeta.CAPABILITIES_SHARING_USER_SEND_MAIL + " INTEGER, "      // boolean
+                    + ProviderTableMeta.CAPABILITIES_SHARING_RESHARING + " INTEGER, "           // boolean
+                    + ProviderTableMeta.CAPABILITIES_SHARING_FEDERATION_OUTGOING + " INTEGER, "     // boolean
+                    + ProviderTableMeta.CAPABILITIES_SHARING_FEDERATION_INCOMING + " INTEGER, "     // boolean
+                    + ProviderTableMeta.CAPABILITIES_FILES_BIGFILECHUNKING + " INTEGER, "   // boolean
+                    + ProviderTableMeta.CAPABILITIES_FILES_UNDELETE + " INTEGER, "  // boolean
+                    + ProviderTableMeta.CAPABILITIES_FILES_VERSIONING + " INTEGER );"
+        )   // boolean
     }
 
     private fun createUploadsTable(db: SQLiteDatabase) {
@@ -1198,7 +1172,6 @@ class FileContentProvider(val appExecutors: AppExecutors = AppExecutors()) : Con
 
     }
 
-
     /**
      * Rename the local ownCloud folder of one account to match the a rename of the account itself. Updates the
      * table of files in database so that the paths to the local files keep being the same.
@@ -1221,8 +1194,8 @@ class FileContentProvider(val appExecutors: AppExecutors = AppExecutors()) : Con
             arrayOf(newAccountName), null, null, null
         )
 
-        try {
-            if (c.moveToFirst()) {
+        c.use {
+            if (it.moveToFirst()) {
                 // create storage path
                 val oldAccountPath = FileStorageUtils.getSavePath(oldAccountName)
                 val newAccountPath = FileStorageUtils.getSavePath(newAccountName)
@@ -1235,11 +1208,11 @@ class FileContentProvider(val appExecutors: AppExecutors = AppExecutors()) : Con
                 // update database
                 do {
                     // Update database
-                    val oldPath = c.getString(
-                        c.getColumnIndex(ProviderTableMeta.FILE_STORAGE_PATH)
+                    val oldPath = it.getString(
+                        it.getColumnIndex(ProviderTableMeta.FILE_STORAGE_PATH)
                     )
                     val file = OCFile(
-                        c.getString(c.getColumnIndex(ProviderTableMeta.FILE_PATH))
+                        it.getString(it.getColumnIndex(ProviderTableMeta.FILE_PATH))
                     )
                     val newPath = FileStorageUtils.getDefaultSavePathFor(newAccountName, file)
 
@@ -1257,10 +1230,8 @@ class FileContentProvider(val appExecutors: AppExecutors = AppExecutors()) : Con
                                 ", new file name == " + newPath
                     )
 
-                } while (c.moveToNext())
+                } while (it.moveToNext())
             }
-        } finally {
-            c.close()
         }
     }
 
@@ -1268,7 +1239,6 @@ class FileContentProvider(val appExecutors: AppExecutors = AppExecutors()) : Con
     override fun openFile(uri: Uri, mode: String, signal: CancellationSignal?): ParcelFileDescriptor? {
         return super.openFile(uri, mode, signal)
     }
-
 
     @Throws(FileNotFoundException::class)
     override fun openFile(uri: Uri, mode: String): ParcelFileDescriptor? {
@@ -1312,159 +1282,162 @@ class FileContentProvider(val appExecutors: AppExecutors = AppExecutors()) : Con
 
     companion object {
 
-        private val SINGLE_FILE = 1
-        private val DIRECTORY = 2
-        private val ROOT_DIRECTORY = 3
-        private val SHARES = 4
-        private val CAPABILITIES = 5
-        private val UPLOADS = 6
-        private val CAMERA_UPLOADS_SYNC = 7
-        private val QUOTAS = 8
+        private const val SINGLE_FILE = 1
+        private const val DIRECTORY = 2
+        private const val ROOT_DIRECTORY = 3
+        private const val SHARES = 4
+        private const val CAPABILITIES = 5
+        private const val UPLOADS = 6
+        private const val CAMERA_UPLOADS_SYNC = 7
+        private const val QUOTAS = 8
 
         private val TAG = FileContentProvider::class.java.simpleName
 
-        private val MAX_SUCCESSFUL_UPLOADS = "30"
+        private const val MAX_SUCCESSFUL_UPLOADS = "30"
 
-        private val mFileProjectionMap = HashMap<String, String>()
+        private val fileProjectionMap = HashMap<String, String>()
+
+        private const val TRUE = 1
+        private const val FALSE = 0
 
         init {
 
-            mFileProjectionMap[ProviderTableMeta._ID] = ProviderTableMeta._ID
-            mFileProjectionMap[ProviderTableMeta.FILE_PARENT] = ProviderTableMeta.FILE_PARENT
-            mFileProjectionMap[ProviderTableMeta.FILE_NAME] = ProviderTableMeta.FILE_NAME
-            mFileProjectionMap[ProviderTableMeta.FILE_CREATION] = ProviderTableMeta.FILE_CREATION
-            mFileProjectionMap[ProviderTableMeta.FILE_MODIFIED] = ProviderTableMeta.FILE_MODIFIED
-            mFileProjectionMap[ProviderTableMeta.FILE_MODIFIED_AT_LAST_SYNC_FOR_DATA] =
-                    ProviderTableMeta.FILE_MODIFIED_AT_LAST_SYNC_FOR_DATA
-            mFileProjectionMap[ProviderTableMeta.FILE_CONTENT_LENGTH] = ProviderTableMeta.FILE_CONTENT_LENGTH
-            mFileProjectionMap[ProviderTableMeta.FILE_CONTENT_TYPE] = ProviderTableMeta.FILE_CONTENT_TYPE
-            mFileProjectionMap[ProviderTableMeta.FILE_STORAGE_PATH] = ProviderTableMeta.FILE_STORAGE_PATH
-            mFileProjectionMap[ProviderTableMeta.FILE_PATH] = ProviderTableMeta.FILE_PATH
-            mFileProjectionMap[ProviderTableMeta.FILE_ACCOUNT_OWNER] = ProviderTableMeta.FILE_ACCOUNT_OWNER
-            mFileProjectionMap[ProviderTableMeta.FILE_LAST_SYNC_DATE] = ProviderTableMeta.FILE_LAST_SYNC_DATE
-            mFileProjectionMap[ProviderTableMeta.FILE_LAST_SYNC_DATE_FOR_DATA] =
-                    ProviderTableMeta.FILE_LAST_SYNC_DATE_FOR_DATA
-            mFileProjectionMap[ProviderTableMeta.FILE_KEEP_IN_SYNC] = ProviderTableMeta.FILE_KEEP_IN_SYNC
-            mFileProjectionMap[ProviderTableMeta.FILE_ETAG] = ProviderTableMeta.FILE_ETAG
-            mFileProjectionMap[ProviderTableMeta.FILE_TREE_ETAG] = ProviderTableMeta.FILE_TREE_ETAG
-            mFileProjectionMap[ProviderTableMeta.FILE_SHARED_VIA_LINK] = ProviderTableMeta.FILE_SHARED_VIA_LINK
-            mFileProjectionMap[ProviderTableMeta.FILE_SHARED_WITH_SHAREE] = ProviderTableMeta.FILE_SHARED_WITH_SHAREE
-            mFileProjectionMap[ProviderTableMeta.FILE_PERMISSIONS] = ProviderTableMeta.FILE_PERMISSIONS
-            mFileProjectionMap[ProviderTableMeta.FILE_REMOTE_ID] = ProviderTableMeta.FILE_REMOTE_ID
-            mFileProjectionMap[ProviderTableMeta.FILE_UPDATE_THUMBNAIL] = ProviderTableMeta.FILE_UPDATE_THUMBNAIL
-            mFileProjectionMap[ProviderTableMeta.FILE_IS_DOWNLOADING] = ProviderTableMeta.FILE_IS_DOWNLOADING
-            mFileProjectionMap[ProviderTableMeta.FILE_ETAG_IN_CONFLICT] = ProviderTableMeta.FILE_ETAG_IN_CONFLICT
-            mFileProjectionMap[ProviderTableMeta.FILE_PRIVATE_LINK] = ProviderTableMeta.FILE_PRIVATE_LINK
+            fileProjectionMap[ProviderTableMeta._ID] = ProviderTableMeta._ID
+            fileProjectionMap[ProviderTableMeta.FILE_PARENT] = ProviderTableMeta.FILE_PARENT
+            fileProjectionMap[ProviderTableMeta.FILE_NAME] = ProviderTableMeta.FILE_NAME
+            fileProjectionMap[ProviderTableMeta.FILE_CREATION] = ProviderTableMeta.FILE_CREATION
+            fileProjectionMap[ProviderTableMeta.FILE_MODIFIED] = ProviderTableMeta.FILE_MODIFIED
+            fileProjectionMap[ProviderTableMeta.FILE_MODIFIED_AT_LAST_SYNC_FOR_DATA] =
+                ProviderTableMeta.FILE_MODIFIED_AT_LAST_SYNC_FOR_DATA
+            fileProjectionMap[ProviderTableMeta.FILE_CONTENT_LENGTH] = ProviderTableMeta.FILE_CONTENT_LENGTH
+            fileProjectionMap[ProviderTableMeta.FILE_CONTENT_TYPE] = ProviderTableMeta.FILE_CONTENT_TYPE
+            fileProjectionMap[ProviderTableMeta.FILE_STORAGE_PATH] = ProviderTableMeta.FILE_STORAGE_PATH
+            fileProjectionMap[ProviderTableMeta.FILE_PATH] = ProviderTableMeta.FILE_PATH
+            fileProjectionMap[ProviderTableMeta.FILE_ACCOUNT_OWNER] = ProviderTableMeta.FILE_ACCOUNT_OWNER
+            fileProjectionMap[ProviderTableMeta.FILE_LAST_SYNC_DATE] = ProviderTableMeta.FILE_LAST_SYNC_DATE
+            fileProjectionMap[ProviderTableMeta.FILE_LAST_SYNC_DATE_FOR_DATA] =
+                ProviderTableMeta.FILE_LAST_SYNC_DATE_FOR_DATA
+            fileProjectionMap[ProviderTableMeta.FILE_KEEP_IN_SYNC] = ProviderTableMeta.FILE_KEEP_IN_SYNC
+            fileProjectionMap[ProviderTableMeta.FILE_ETAG] = ProviderTableMeta.FILE_ETAG
+            fileProjectionMap[ProviderTableMeta.FILE_TREE_ETAG] = ProviderTableMeta.FILE_TREE_ETAG
+            fileProjectionMap[ProviderTableMeta.FILE_SHARED_VIA_LINK] = ProviderTableMeta.FILE_SHARED_VIA_LINK
+            fileProjectionMap[ProviderTableMeta.FILE_SHARED_WITH_SHAREE] = ProviderTableMeta.FILE_SHARED_WITH_SHAREE
+            fileProjectionMap[ProviderTableMeta.FILE_PERMISSIONS] = ProviderTableMeta.FILE_PERMISSIONS
+            fileProjectionMap[ProviderTableMeta.FILE_REMOTE_ID] = ProviderTableMeta.FILE_REMOTE_ID
+            fileProjectionMap[ProviderTableMeta.FILE_UPDATE_THUMBNAIL] = ProviderTableMeta.FILE_UPDATE_THUMBNAIL
+            fileProjectionMap[ProviderTableMeta.FILE_IS_DOWNLOADING] = ProviderTableMeta.FILE_IS_DOWNLOADING
+            fileProjectionMap[ProviderTableMeta.FILE_ETAG_IN_CONFLICT] = ProviderTableMeta.FILE_ETAG_IN_CONFLICT
+            fileProjectionMap[ProviderTableMeta.FILE_PRIVATE_LINK] = ProviderTableMeta.FILE_PRIVATE_LINK
         }
 
-        private val mShareProjectionMap = HashMap<String, String>()
+        private val shareProjectionMap = HashMap<String, String>()
 
         init {
 
-            mShareProjectionMap[ProviderTableMeta._ID] = ProviderTableMeta._ID
-            mShareProjectionMap[ProviderTableMeta.OCSHARES_FILE_SOURCE] = ProviderTableMeta.OCSHARES_FILE_SOURCE
-            mShareProjectionMap[ProviderTableMeta.OCSHARES_ITEM_SOURCE] = ProviderTableMeta.OCSHARES_ITEM_SOURCE
-            mShareProjectionMap[ProviderTableMeta.OCSHARES_SHARE_TYPE] = ProviderTableMeta.OCSHARES_SHARE_TYPE
-            mShareProjectionMap[ProviderTableMeta.OCSHARES_SHARE_WITH] = ProviderTableMeta.OCSHARES_SHARE_WITH
-            mShareProjectionMap[ProviderTableMeta.OCSHARES_PATH] = ProviderTableMeta.OCSHARES_PATH
-            mShareProjectionMap[ProviderTableMeta.OCSHARES_PERMISSIONS] = ProviderTableMeta.OCSHARES_PERMISSIONS
-            mShareProjectionMap[ProviderTableMeta.OCSHARES_SHARED_DATE] = ProviderTableMeta.OCSHARES_SHARED_DATE
-            mShareProjectionMap[ProviderTableMeta.OCSHARES_EXPIRATION_DATE] = ProviderTableMeta.OCSHARES_EXPIRATION_DATE
-            mShareProjectionMap[ProviderTableMeta.OCSHARES_TOKEN] = ProviderTableMeta.OCSHARES_TOKEN
-            mShareProjectionMap[ProviderTableMeta.OCSHARES_SHARE_WITH_DISPLAY_NAME] =
-                    ProviderTableMeta.OCSHARES_SHARE_WITH_DISPLAY_NAME
-            mShareProjectionMap[ProviderTableMeta.OCSHARES_SHARE_WITH_ADDITIONAL_INFO] =
-                    ProviderTableMeta.OCSHARES_SHARE_WITH_ADDITIONAL_INFO
-            mShareProjectionMap[ProviderTableMeta.OCSHARES_IS_DIRECTORY] = ProviderTableMeta.OCSHARES_IS_DIRECTORY
-            mShareProjectionMap[ProviderTableMeta.OCSHARES_USER_ID] = ProviderTableMeta.OCSHARES_USER_ID
-            mShareProjectionMap[ProviderTableMeta.OCSHARES_ID_REMOTE_SHARED] =
-                    ProviderTableMeta.OCSHARES_ID_REMOTE_SHARED
-            mShareProjectionMap[ProviderTableMeta.OCSHARES_ACCOUNT_OWNER] = ProviderTableMeta.OCSHARES_ACCOUNT_OWNER
-            mShareProjectionMap[ProviderTableMeta.OCSHARES_NAME] = ProviderTableMeta.OCSHARES_NAME
-            mShareProjectionMap[ProviderTableMeta.OCSHARES_URL] = ProviderTableMeta.OCSHARES_URL
+            shareProjectionMap[ProviderTableMeta._ID] = ProviderTableMeta._ID
+            shareProjectionMap[ProviderTableMeta.OCSHARES_FILE_SOURCE] = ProviderTableMeta.OCSHARES_FILE_SOURCE
+            shareProjectionMap[ProviderTableMeta.OCSHARES_ITEM_SOURCE] = ProviderTableMeta.OCSHARES_ITEM_SOURCE
+            shareProjectionMap[ProviderTableMeta.OCSHARES_SHARE_TYPE] = ProviderTableMeta.OCSHARES_SHARE_TYPE
+            shareProjectionMap[ProviderTableMeta.OCSHARES_SHARE_WITH] = ProviderTableMeta.OCSHARES_SHARE_WITH
+            shareProjectionMap[ProviderTableMeta.OCSHARES_PATH] = ProviderTableMeta.OCSHARES_PATH
+            shareProjectionMap[ProviderTableMeta.OCSHARES_PERMISSIONS] = ProviderTableMeta.OCSHARES_PERMISSIONS
+            shareProjectionMap[ProviderTableMeta.OCSHARES_SHARED_DATE] = ProviderTableMeta.OCSHARES_SHARED_DATE
+            shareProjectionMap[ProviderTableMeta.OCSHARES_EXPIRATION_DATE] = ProviderTableMeta.OCSHARES_EXPIRATION_DATE
+            shareProjectionMap[ProviderTableMeta.OCSHARES_TOKEN] = ProviderTableMeta.OCSHARES_TOKEN
+            shareProjectionMap[ProviderTableMeta.OCSHARES_SHARE_WITH_DISPLAY_NAME] =
+                ProviderTableMeta.OCSHARES_SHARE_WITH_DISPLAY_NAME
+            shareProjectionMap[ProviderTableMeta.OCSHARES_SHARE_WITH_ADDITIONAL_INFO] =
+                ProviderTableMeta.OCSHARES_SHARE_WITH_ADDITIONAL_INFO
+            shareProjectionMap[ProviderTableMeta.OCSHARES_IS_DIRECTORY] = ProviderTableMeta.OCSHARES_IS_DIRECTORY
+            shareProjectionMap[ProviderTableMeta.OCSHARES_USER_ID] = ProviderTableMeta.OCSHARES_USER_ID
+            shareProjectionMap[ProviderTableMeta.OCSHARES_ID_REMOTE_SHARED] =
+                ProviderTableMeta.OCSHARES_ID_REMOTE_SHARED
+            shareProjectionMap[ProviderTableMeta.OCSHARES_ACCOUNT_OWNER] = ProviderTableMeta.OCSHARES_ACCOUNT_OWNER
+            shareProjectionMap[ProviderTableMeta.OCSHARES_NAME] = ProviderTableMeta.OCSHARES_NAME
+            shareProjectionMap[ProviderTableMeta.OCSHARES_URL] = ProviderTableMeta.OCSHARES_URL
         }
 
-        private val mCapabilityProjectionMap = HashMap<String, String>()
+        private val capabilityProjectionMap = HashMap<String, String>()
 
         init {
 
-            mCapabilityProjectionMap[ProviderTableMeta._ID] = ProviderTableMeta._ID
-            mCapabilityProjectionMap[ProviderTableMeta.CAPABILITIES_ACCOUNT_NAME] =
-                    ProviderTableMeta.CAPABILITIES_ACCOUNT_NAME
-            mCapabilityProjectionMap[ProviderTableMeta.CAPABILITIES_VERSION_MAYOR] =
-                    ProviderTableMeta.CAPABILITIES_VERSION_MAYOR
-            mCapabilityProjectionMap[ProviderTableMeta.CAPABILITIES_VERSION_MINOR] =
-                    ProviderTableMeta.CAPABILITIES_VERSION_MINOR
-            mCapabilityProjectionMap[ProviderTableMeta.CAPABILITIES_VERSION_MICRO] =
-                    ProviderTableMeta.CAPABILITIES_VERSION_MICRO
-            mCapabilityProjectionMap[ProviderTableMeta.CAPABILITIES_VERSION_STRING] =
-                    ProviderTableMeta.CAPABILITIES_VERSION_STRING
-            mCapabilityProjectionMap[ProviderTableMeta.CAPABILITIES_VERSION_EDITION] =
-                    ProviderTableMeta.CAPABILITIES_VERSION_EDITION
-            mCapabilityProjectionMap[ProviderTableMeta.CAPABILITIES_CORE_POLLINTERVAL] =
-                    ProviderTableMeta.CAPABILITIES_CORE_POLLINTERVAL
-            mCapabilityProjectionMap[ProviderTableMeta.CAPABILITIES_SHARING_API_ENABLED] =
-                    ProviderTableMeta.CAPABILITIES_SHARING_API_ENABLED
-            mCapabilityProjectionMap[ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_ENABLED] =
-                    ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_ENABLED
-            mCapabilityProjectionMap[ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED] =
-                    ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED
-            mCapabilityProjectionMap[ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_READ_ONLY] =
-                    ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_READ_ONLY
-            mCapabilityProjectionMap[ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_READ_WRITE] =
-                    ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_READ_WRITE
-            mCapabilityProjectionMap[ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_UPLOAD_ONLY] =
-                    ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_UPLOAD_ONLY
-            mCapabilityProjectionMap[ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_ENABLED] =
-                    ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_ENABLED
-            mCapabilityProjectionMap[ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_DAYS] =
-                    ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_DAYS
-            mCapabilityProjectionMap[ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_ENFORCED] =
-                    ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_ENFORCED
-            mCapabilityProjectionMap[ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_SEND_MAIL] =
-                    ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_SEND_MAIL
-            mCapabilityProjectionMap[ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_UPLOAD] =
-                    ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_UPLOAD
-            mCapabilityProjectionMap[ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_MULTIPLE] =
-                    ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_MULTIPLE
-            mCapabilityProjectionMap[ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_SUPPORTS_UPLOAD_ONLY] =
-                    ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_SUPPORTS_UPLOAD_ONLY
-            mCapabilityProjectionMap[ProviderTableMeta.CAPABILITIES_SHARING_USER_SEND_MAIL] =
-                    ProviderTableMeta.CAPABILITIES_SHARING_USER_SEND_MAIL
-            mCapabilityProjectionMap[ProviderTableMeta.CAPABILITIES_SHARING_RESHARING] =
-                    ProviderTableMeta.CAPABILITIES_SHARING_RESHARING
-            mCapabilityProjectionMap[ProviderTableMeta.CAPABILITIES_SHARING_FEDERATION_OUTGOING] =
-                    ProviderTableMeta.CAPABILITIES_SHARING_FEDERATION_OUTGOING
-            mCapabilityProjectionMap[ProviderTableMeta.CAPABILITIES_SHARING_FEDERATION_INCOMING] =
-                    ProviderTableMeta.CAPABILITIES_SHARING_FEDERATION_INCOMING
-            mCapabilityProjectionMap[ProviderTableMeta.CAPABILITIES_FILES_BIGFILECHUNKING] =
-                    ProviderTableMeta.CAPABILITIES_FILES_BIGFILECHUNKING
-            mCapabilityProjectionMap[ProviderTableMeta.CAPABILITIES_FILES_UNDELETE] =
-                    ProviderTableMeta.CAPABILITIES_FILES_UNDELETE
-            mCapabilityProjectionMap[ProviderTableMeta.CAPABILITIES_FILES_VERSIONING] =
-                    ProviderTableMeta.CAPABILITIES_FILES_VERSIONING
+            capabilityProjectionMap[ProviderTableMeta._ID] = ProviderTableMeta._ID
+            capabilityProjectionMap[ProviderTableMeta.CAPABILITIES_ACCOUNT_NAME] =
+                ProviderTableMeta.CAPABILITIES_ACCOUNT_NAME
+            capabilityProjectionMap[ProviderTableMeta.CAPABILITIES_VERSION_MAYOR] =
+                ProviderTableMeta.CAPABILITIES_VERSION_MAYOR
+            capabilityProjectionMap[ProviderTableMeta.CAPABILITIES_VERSION_MINOR] =
+                ProviderTableMeta.CAPABILITIES_VERSION_MINOR
+            capabilityProjectionMap[ProviderTableMeta.CAPABILITIES_VERSION_MICRO] =
+                ProviderTableMeta.CAPABILITIES_VERSION_MICRO
+            capabilityProjectionMap[ProviderTableMeta.CAPABILITIES_VERSION_STRING] =
+                ProviderTableMeta.CAPABILITIES_VERSION_STRING
+            capabilityProjectionMap[ProviderTableMeta.CAPABILITIES_VERSION_EDITION] =
+                ProviderTableMeta.CAPABILITIES_VERSION_EDITION
+            capabilityProjectionMap[ProviderTableMeta.CAPABILITIES_CORE_POLLINTERVAL] =
+                ProviderTableMeta.CAPABILITIES_CORE_POLLINTERVAL
+            capabilityProjectionMap[ProviderTableMeta.CAPABILITIES_SHARING_API_ENABLED] =
+                ProviderTableMeta.CAPABILITIES_SHARING_API_ENABLED
+            capabilityProjectionMap[ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_ENABLED] =
+                ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_ENABLED
+            capabilityProjectionMap[ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED] =
+                ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED
+            capabilityProjectionMap[ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_READ_ONLY] =
+                ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_READ_ONLY
+            capabilityProjectionMap[ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_READ_WRITE] =
+                ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_READ_WRITE
+            capabilityProjectionMap[ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_UPLOAD_ONLY] =
+                ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_UPLOAD_ONLY
+            capabilityProjectionMap[ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_ENABLED] =
+                ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_ENABLED
+            capabilityProjectionMap[ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_DAYS] =
+                ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_DAYS
+            capabilityProjectionMap[ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_ENFORCED] =
+                ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_ENFORCED
+            capabilityProjectionMap[ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_SEND_MAIL] =
+                ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_SEND_MAIL
+            capabilityProjectionMap[ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_UPLOAD] =
+                ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_UPLOAD
+            capabilityProjectionMap[ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_MULTIPLE] =
+                ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_MULTIPLE
+            capabilityProjectionMap[ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_SUPPORTS_UPLOAD_ONLY] =
+                ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_SUPPORTS_UPLOAD_ONLY
+            capabilityProjectionMap[ProviderTableMeta.CAPABILITIES_SHARING_USER_SEND_MAIL] =
+                ProviderTableMeta.CAPABILITIES_SHARING_USER_SEND_MAIL
+            capabilityProjectionMap[ProviderTableMeta.CAPABILITIES_SHARING_RESHARING] =
+                ProviderTableMeta.CAPABILITIES_SHARING_RESHARING
+            capabilityProjectionMap[ProviderTableMeta.CAPABILITIES_SHARING_FEDERATION_OUTGOING] =
+                ProviderTableMeta.CAPABILITIES_SHARING_FEDERATION_OUTGOING
+            capabilityProjectionMap[ProviderTableMeta.CAPABILITIES_SHARING_FEDERATION_INCOMING] =
+                ProviderTableMeta.CAPABILITIES_SHARING_FEDERATION_INCOMING
+            capabilityProjectionMap[ProviderTableMeta.CAPABILITIES_FILES_BIGFILECHUNKING] =
+                ProviderTableMeta.CAPABILITIES_FILES_BIGFILECHUNKING
+            capabilityProjectionMap[ProviderTableMeta.CAPABILITIES_FILES_UNDELETE] =
+                ProviderTableMeta.CAPABILITIES_FILES_UNDELETE
+            capabilityProjectionMap[ProviderTableMeta.CAPABILITIES_FILES_VERSIONING] =
+                ProviderTableMeta.CAPABILITIES_FILES_VERSIONING
         }
 
-        private val mUploadProjectionMap = HashMap<String, String>()
+        private val uploadProjectionMap = HashMap<String, String>()
 
         init {
 
-            mUploadProjectionMap[ProviderTableMeta._ID] = ProviderTableMeta._ID
-            mUploadProjectionMap[ProviderTableMeta.UPLOADS_LOCAL_PATH] = ProviderTableMeta.UPLOADS_LOCAL_PATH
-            mUploadProjectionMap[ProviderTableMeta.UPLOADS_REMOTE_PATH] = ProviderTableMeta.UPLOADS_REMOTE_PATH
-            mUploadProjectionMap[ProviderTableMeta.UPLOADS_ACCOUNT_NAME] = ProviderTableMeta.UPLOADS_ACCOUNT_NAME
-            mUploadProjectionMap[ProviderTableMeta.UPLOADS_FILE_SIZE] = ProviderTableMeta.UPLOADS_FILE_SIZE
-            mUploadProjectionMap[ProviderTableMeta.UPLOADS_STATUS] = ProviderTableMeta.UPLOADS_STATUS
-            mUploadProjectionMap[ProviderTableMeta.UPLOADS_LOCAL_BEHAVIOUR] = ProviderTableMeta.UPLOADS_LOCAL_BEHAVIOUR
-            mUploadProjectionMap[ProviderTableMeta.UPLOADS_UPLOAD_TIME] = ProviderTableMeta.UPLOADS_UPLOAD_TIME
-            mUploadProjectionMap[ProviderTableMeta.UPLOADS_FORCE_OVERWRITE] = ProviderTableMeta.UPLOADS_FORCE_OVERWRITE
-            mUploadProjectionMap[ProviderTableMeta.UPLOADS_IS_CREATE_REMOTE_FOLDER] =
-                    ProviderTableMeta.UPLOADS_IS_CREATE_REMOTE_FOLDER
-            mUploadProjectionMap[ProviderTableMeta.UPLOADS_UPLOAD_END_TIMESTAMP] =
-                    ProviderTableMeta.UPLOADS_UPLOAD_END_TIMESTAMP
-            mUploadProjectionMap[ProviderTableMeta.UPLOADS_LAST_RESULT] = ProviderTableMeta.UPLOADS_LAST_RESULT
-            mUploadProjectionMap[ProviderTableMeta.UPLOADS_CREATED_BY] = ProviderTableMeta.UPLOADS_CREATED_BY
-            mUploadProjectionMap[ProviderTableMeta.UPLOADS_TRANSFER_ID] = ProviderTableMeta.UPLOADS_TRANSFER_ID
+            uploadProjectionMap[ProviderTableMeta._ID] = ProviderTableMeta._ID
+            uploadProjectionMap[ProviderTableMeta.UPLOADS_LOCAL_PATH] = ProviderTableMeta.UPLOADS_LOCAL_PATH
+            uploadProjectionMap[ProviderTableMeta.UPLOADS_REMOTE_PATH] = ProviderTableMeta.UPLOADS_REMOTE_PATH
+            uploadProjectionMap[ProviderTableMeta.UPLOADS_ACCOUNT_NAME] = ProviderTableMeta.UPLOADS_ACCOUNT_NAME
+            uploadProjectionMap[ProviderTableMeta.UPLOADS_FILE_SIZE] = ProviderTableMeta.UPLOADS_FILE_SIZE
+            uploadProjectionMap[ProviderTableMeta.UPLOADS_STATUS] = ProviderTableMeta.UPLOADS_STATUS
+            uploadProjectionMap[ProviderTableMeta.UPLOADS_LOCAL_BEHAVIOUR] = ProviderTableMeta.UPLOADS_LOCAL_BEHAVIOUR
+            uploadProjectionMap[ProviderTableMeta.UPLOADS_UPLOAD_TIME] = ProviderTableMeta.UPLOADS_UPLOAD_TIME
+            uploadProjectionMap[ProviderTableMeta.UPLOADS_FORCE_OVERWRITE] = ProviderTableMeta.UPLOADS_FORCE_OVERWRITE
+            uploadProjectionMap[ProviderTableMeta.UPLOADS_IS_CREATE_REMOTE_FOLDER] =
+                ProviderTableMeta.UPLOADS_IS_CREATE_REMOTE_FOLDER
+            uploadProjectionMap[ProviderTableMeta.UPLOADS_UPLOAD_END_TIMESTAMP] =
+                ProviderTableMeta.UPLOADS_UPLOAD_END_TIMESTAMP
+            uploadProjectionMap[ProviderTableMeta.UPLOADS_LAST_RESULT] = ProviderTableMeta.UPLOADS_LAST_RESULT
+            uploadProjectionMap[ProviderTableMeta.UPLOADS_CREATED_BY] = ProviderTableMeta.UPLOADS_CREATED_BY
+            uploadProjectionMap[ProviderTableMeta.UPLOADS_TRANSFER_ID] = ProviderTableMeta.UPLOADS_TRANSFER_ID
         }
     }
 }
