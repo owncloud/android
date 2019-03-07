@@ -646,34 +646,20 @@ public class FileDisplayActivity extends FileActivity
 
     private void startSynchronization() {
         Log_OC.d(TAG, "Got to start sync");
-        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.KITKAT) {
-            Log_OC.d(TAG, "Canceling all syncs for " + MainApp.getAuthority());
-            ContentResolver.cancelSync(null, MainApp.getAuthority());
-            // cancel the current synchronizations of any ownCloud account
-            Bundle bundle = new Bundle();
-            bundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
-            bundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
-            Log_OC.d(TAG, "Requesting sync for " + getAccount().name + " at " +
-                    MainApp.getAuthority());
-            ContentResolver.requestSync(
-                    getAccount(),
-                    MainApp.getAuthority(), bundle);
-        } else {
-            Log_OC.d(TAG, "Requesting sync for " + getAccount().name + " at " +
-                    MainApp.getAuthority() + " with new API");
-            SyncRequest.Builder builder = new SyncRequest.Builder();
-            builder.setSyncAdapter(getAccount(), MainApp.getAuthority());
-            builder.setExpedited(true);
-            builder.setManual(true);
-            builder.syncOnce();
+        Log_OC.d(TAG, "Requesting sync for " + getAccount().name + " at " +
+                MainApp.getAuthority() + " with new API");
+        SyncRequest.Builder builder = new SyncRequest.Builder();
+        builder.setSyncAdapter(getAccount(), MainApp.getAuthority());
+        builder.setExpedited(true);
+        builder.setManual(true);
+        builder.syncOnce();
 
-            // Fix bug in Android Lollipop when you click on refresh the whole account
-            Bundle extras = new Bundle();
-            builder.setExtras(extras);
+        // Fix bug in Android Lollipop when you click on refresh the whole account
+        Bundle extras = new Bundle();
+        builder.setExtras(extras);
 
-            SyncRequest request = builder.build();
-            ContentResolver.requestSync(request);
-        }
+        SyncRequest request = builder.build();
+        ContentResolver.requestSync(request);
     }
 
     /**
@@ -1496,7 +1482,7 @@ public class FileDisplayActivity extends FileActivity
     private void onRemoveFileOperationFinish(RemoveFileOperation operation,
                                              RemoteOperationResult result) {
 
-        if (getListOfFilesFragment().isSingleItemChecked() || result.isException()) {
+        if (getListOfFilesFragment().isSingleItemChecked() || result.isException() || !result.isSuccess()) {
             showSnackMessage(
                     ErrorMessageAdapter.getResultMessage(result, operation, getResources())
             );

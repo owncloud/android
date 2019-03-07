@@ -192,12 +192,6 @@
             android:launchMode="singleTask"
             android:theme="@style/Theme.ownCloud.Authenticator">
             <intent-filter>
-                <action android:name="com.owncloud.android.workaround.accounts.CREATE" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-
-            <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.DEFAULT" />
