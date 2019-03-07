@@ -118,10 +118,11 @@ class PublicShareDialogFragment : DialogFragment() {
     private var mUploadOnlyButton: RadioButton? = null
 
     private val isSharedFolder: Boolean
-        get() = mFile != null && mFile!!.isFolder || mPublicShare != null && mPublicShare!!.isFolder
+        get() = mFile?.isFolder == true || mPublicShare?.isFolder == true
 
     private val isPasswordVisible: Boolean
-        get() = view != null && mPasswordValueEdit!!.inputType and InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD == InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+        get() = view != null && mPasswordValueEdit!!.inputType and
+                InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD == InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
 
     private// Parse expiration date and convert it to milliseconds
     // remember: format is defined by date picker
@@ -812,8 +813,6 @@ class PublicShareDialogFragment : DialogFragment() {
             val publicShareDialogFragment = PublicShareDialogFragment()
             val args = Bundle()
             args.putParcelable(ARG_FILE, fileToShare)
-            // TODO New Android Components
-            //        args.putParcelable(ARG_SHARE, publicShare);
             args.putParcelable(ARG_ACCOUNT, account)
             publicShareDialogFragment.arguments = args
             return publicShareDialogFragment

@@ -33,21 +33,21 @@ import com.owncloud.android.lib.resources.shares.RemoteShare
 @Entity(tableName = ProviderTableMeta.OCSHARES_TABLE_NAME)
 data class OCShare(
     @ColumnInfo(name = ProviderTableMeta.OCSHARES_FILE_SOURCE)
-    val fileSource: Long?,
+    val fileSource: Long,
     @ColumnInfo(name = ProviderTableMeta.OCSHARES_ITEM_SOURCE)
-    val itemSource: Long?,
+    val itemSource: Long,
     @ColumnInfo(name = ProviderTableMeta.OCSHARES_SHARE_TYPE)
-    val shareType: Int?,
+    val shareType: Int,
     @ColumnInfo(name = ProviderTableMeta.OCSHARES_SHARE_WITH)
     val shareWith: String?,
     @ColumnInfo(name = ProviderTableMeta.OCSHARES_PATH)
-    val path: String?,
+    val path: String,
     @ColumnInfo(name = ProviderTableMeta.OCSHARES_PERMISSIONS)
-    val permissions: Int?,
+    val permissions: Int,
     @ColumnInfo(name = ProviderTableMeta.OCSHARES_SHARED_DATE)
-    val sharedDate: Long?,
+    val sharedDate: Long,
     @ColumnInfo(name = ProviderTableMeta.OCSHARES_EXPIRATION_DATE)
-    val expirationDate: Long?,
+    val expirationDate: Long,
     @ColumnInfo(name = ProviderTableMeta.OCSHARES_TOKEN)
     val token: String?,
     @ColumnInfo(name = ProviderTableMeta.OCSHARES_SHARE_WITH_DISPLAY_NAME)
@@ -55,13 +55,13 @@ data class OCShare(
     @ColumnInfo(name = ProviderTableMeta.OCSHARES_SHARE_WITH_ADDITIONAL_INFO)
     val sharedWithAdditionalInfo: String?,
     @ColumnInfo(name = ProviderTableMeta.OCSHARES_IS_DIRECTORY)
-    val isFolder: Boolean?,
+    val isFolder: Boolean,
     @ColumnInfo(name = ProviderTableMeta.OCSHARES_USER_ID)
-    val userId: Long?,
+    val userId: Long,
     @ColumnInfo(name = ProviderTableMeta.OCSHARES_ID_REMOTE_SHARED)
-    val remoteId: Long?,
+    val remoteId: Long,
     @ColumnInfo(name = ProviderTableMeta.OCSHARES_ACCOUNT_OWNER)
-    var accountOwner: String?,
+    var accountOwner: String,
     @ColumnInfo(name = ProviderTableMeta.OCSHARES_NAME)
     val name: String?,
     @ColumnInfo(name = ProviderTableMeta.OCSHARES_URL)
@@ -105,7 +105,7 @@ data class OCShare(
             return OCShare(
                     remoteShare.fileSource,
                     remoteShare.itemSource,
-                    remoteShare.shareType?.value,
+                    remoteShare.shareType!!.value,
                     remoteShare.shareWith,
                     remoteShare.path,
                     remoteShare.permissions,

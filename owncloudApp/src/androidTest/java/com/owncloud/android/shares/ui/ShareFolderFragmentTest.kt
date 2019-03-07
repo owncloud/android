@@ -70,7 +70,7 @@ class ShareFolderFragmentTest {
         ocShareViewModel = Mockito.mock(OCShareViewModel::class.java)
         Mockito.`when`(ocShareViewModel.sharesForFile).thenReturn(sharesLiveData)
 
-        shareFragment.mViewModelFactory = ViewModelUtil.createFor(ocShareViewModel)
+        shareFragment.viewModelFactory = ViewModelUtil.createFor(ocShareViewModel)
         activityRule.activity.setFragment(shareFragment)
     }
 

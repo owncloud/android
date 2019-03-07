@@ -1,6 +1,10 @@
 package com.owncloud.android.ui.activity;
 
-import android.accounts.*;
+import android.accounts.Account;
+import android.accounts.AccountManager;
+import android.accounts.AccountManagerCallback;
+import android.accounts.AccountManagerFuture;
+import android.accounts.OperationCanceledException;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -302,29 +306,28 @@ public abstract class BaseActivity extends AppCompatActivity {
      */
     public void dismissLoadingDialog() {
         Fragment frag = getSupportFragmentManager().findFragmentByTag(DIALOG_WAIT_TAG);
-        if (frag != null) {
-            Log_OC.d(TAG, "dismiss loading dialog");
-            LoadingDialog loading = (LoadingDialog) frag;
-            loading.dismiss();
+        if (frag == null) {
+            return;
         }
+
+        Log_OC.d(TAG, "dismiss loading dialog");
+        LoadingDialog loading = (LoadingDialog) frag;
+        loading.dismiss();
     }
 
     /**
      * Show a temporary message in a Snackbar bound to the content view
      *
-     * @param message       Message to show.
+     * @param message Message to show.
      */
     public void showSnackMessage(String message) {
         final View rootView = findViewById(android.R.id.content);
-        if(rootView != null) {
-            Snackbar.make(
-                    rootView,
-                    message,
-                    Snackbar.LENGTH_LONG)
-                    .show();
-        } else {
+
+        if (rootView == null) {
             // If root view is not available don't let the app brake. show the notification anyway.
             Toast.makeText(this, message, Snackbar.LENGTH_LONG).show();
+            return;
         }
+        Snackbar.make(rootView, message, Snackbar.LENGTH_LONG).show();
     }
 }
