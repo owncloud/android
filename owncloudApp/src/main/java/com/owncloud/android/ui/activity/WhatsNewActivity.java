@@ -41,6 +41,7 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
+import com.owncloud.android.BuildConfig;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountAuthenticatorActivity;
@@ -151,6 +152,7 @@ public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPa
                                         !(context instanceof PassCodeActivity) &&
                                         (FeatureList.getFiltered(getLastSeenVersionCode(), isFirstRun(),
                                                 MainApp.isBeta()).length > 0)
+
                         ));
     }
 

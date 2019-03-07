@@ -81,49 +81,49 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
     /**
      * File to share, received as a parameter in construction time
      */
-    private var mFile: OCFile? = null
+    private var file: OCFile? = null
 
     /**
      * OC account holding the file to share, received as a parameter in construction time
      */
-    private var mAccount: Account? = null
+    private var account: Account? = null
 
     /**
      * Reference to parent listener
      */
-    private var mListener: ShareFragmentListener? = null
+    private var listener: ShareFragmentListener? = null
 
     /**
      * List of private shares bound to the file
      */
-    private var mPrivateShares: ArrayList<OCShare>? = null
+    private var privateShares: ArrayList<OCShare>? = null
 
     /**
      * Adapter to show private shares
      */
-    private var mUserGroupsAdapter: ShareUserListAdapter? = null
+    private var userGroupsAdapter: ShareUserListAdapter? = null
 
     /**
      * List of public links bound to the file
      */
-    private var mPublicLinks: ArrayList<OCShare>? = null
+    private var publicLinks: ArrayList<OCShare>? = null
 
     /**
      * Adapter to show public shares
      */
-    private var mPublicLinksAdapter: SharePublicLinkListAdapter? = null
+    private var publicLinksAdapter: SharePublicLinkListAdapter? = null
 
     /**
      * Capabilities of the server
      */
-    private var mCapabilities: OCCapability? = null
+    private var capabilities: OCCapability? = null
 
-    private var mServerVersion: OwnCloudVersion? = null
+    private var serverVersion: OwnCloudVersion? = null
 
-    var mViewModelFactory: ViewModelProvider.Factory = ViewModelFactory.build {
+    var viewModelFactory: ViewModelProvider.Factory = ViewModelFactory.build {
         OCShareViewModel(
-            mAccount!!,
-            mFile?.remotePath!!,
+            account!!,
+            file?.remotePath!!,
             listOf(ShareType.PUBLIC_LINK)
         )
     }
@@ -136,19 +136,19 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
     // no missing number in the list - take the next to the last one
     val availableDefaultPublicName: String
         get() {
-            if (mPublicLinks == null) {
+            if (publicLinks == null) {
                 return ""
             }
 
             val defaultName = getString(
                 R.string.share_via_link_default_name_template,
-                mFile!!.fileName
+                file!!.fileName
             )
             val defaultNameNumberedRegex = QUOTE_START + defaultName + QUOTE_END + DEFAULT_NAME_REGEX_SUFFIX
             val usedNumbers = ArrayList<Int>()
             var isDefaultNameSet = false
             var number: String
-            for (share in mPublicLinks as ArrayList<OCShare>) {
+            for (share in publicLinks as ArrayList<OCShare>) {
                 if (defaultName == share.name) {
                     isDefaultNameSet = true
                 } else if (share.name?.matches(defaultNameNumberedRegex.toRegex())!!) {
@@ -191,7 +191,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
      * @return 'True' when public share is disabled in the server
      */
     private val isPublicShareDisabled: Boolean
-        get() = mCapabilities != null && mCapabilities!!.filesSharingPublicEnabled.isFalse
+        get() = capabilities != null && capabilities!!.filesSharingPublicEnabled.isFalse
 
 
     /// BEWARE: next methods will failed with NullPointerException if called before onCreateView() finishes
@@ -211,9 +211,9 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
         super.onCreate(savedInstanceState)
         Log_OC.d(TAG, "onCreate")
         if (arguments != null) {
-            mFile = arguments!!.getParcelable(ARG_FILE)
-            mAccount = arguments!!.getParcelable(ARG_ACCOUNT)
-            mServerVersion = arguments!!.getParcelable(ARG_SERVER_VERSION)
+            file = arguments!!.getParcelable(ARG_FILE)
+            account = arguments!!.getParcelable(ARG_ACCOUNT)
+            serverVersion = arguments!!.getParcelable(ARG_SERVER_VERSION)
         }
     }
 
@@ -234,12 +234,12 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
         val icon = view.findViewById<ImageView>(R.id.shareFileIcon)
         icon.setImageResource(
             MimetypeIconUtil.getFileTypeIconId(
-                mFile!!.mimetype,
-                mFile!!.fileName
+                file!!.mimetype,
+                file!!.fileName
             )
         )
-        if (mFile!!.isImage) {
-            val remoteId = mFile!!.remoteId.toString()
+        if (file!!.isImage) {
+            val remoteId = file!!.remoteId.toString()
             val thumbnail = ThumbnailsCacheManager.getBitmapFromDiskCache(remoteId)
             if (thumbnail != null) {
                 icon.setImageBitmap(thumbnail)
@@ -247,24 +247,24 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
         }
         // Name
         val fileNameHeader = view.findViewById<TextView>(R.id.shareFileName)
-        fileNameHeader.text = mFile!!.fileName
+        fileNameHeader.text = file!!.fileName
         // Size
         val size = view.findViewById<TextView>(R.id.shareFileSize)
-        if (mFile!!.isFolder) {
+        if (file!!.isFolder) {
             size.visibility = View.GONE
         } else {
-            size.text = DisplayUtils.bytesToHumanReadable(mFile!!.fileLength, activity)
+            size.text = DisplayUtils.bytesToHumanReadable(file!!.fileLength, activity)
         }
 
         // Private link button
         val getPrivateLinkButton = view.findViewById<ImageView>(R.id.getPrivateLinkButton)
-        if (mFile!!.privateLink == null || mFile!!.privateLink.isEmpty()) {
+        if (file!!.privateLink == null || file!!.privateLink.isEmpty()) {
             getPrivateLinkButton.visibility = View.INVISIBLE
 
         } else {
             getPrivateLinkButton.visibility = View.VISIBLE
 
-            getPrivateLinkButton.setOnClickListener { mListener!!.copyOrSendPrivateLink(mFile) }
+            getPrivateLinkButton.setOnClickListener { listener!!.copyOrSendPrivateLink(file) }
 
             getPrivateLinkButton.setOnLongClickListener {
                 // Show a toast message explaining what a private link is
@@ -273,7 +273,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
             }
         }
 
-        val shareWithUsersEnable = mServerVersion != null && mServerVersion!!.isSearchUsersSupported
+        val shareWithUsersEnable = serverVersion != null && serverVersion!!.isSearchUsersSupported
 
         val shareNoUsers = view.findViewById<TextView>(R.id.shareNoUsers)
 
@@ -291,7 +291,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
         addUserGroupButton.setOnClickListener {
             if (shareWithUsersEnable) {
                 // Show Search Fragment
-                mListener!!.showSearchUsersAndGroups()
+                listener!!.showSearchUsersAndGroups()
             } else {
                 val message = getString(R.string.share_sharee_unavailable)
                 val snackbar = Snackbar.make(
@@ -308,7 +308,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
 
         addPublicLinkButton.setOnClickListener {
             // Show Add Public Link Fragment
-            mListener!!.showAddPublicShare(availableDefaultPublicName)
+            listener!!.showAddPublicShare(availableDefaultPublicName)
         }
 
         // Hide share features sections that are not enabled
@@ -318,13 +318,13 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        ocShareViewModel = ViewModelProviders.of(this, mViewModelFactory).
+        ocShareViewModel = ViewModelProviders.of(this, viewModelFactory).
             get(OCShareViewModel::class.java)
     }
 
     override fun copyOrSendPublicLink(share: OCShare) {
         //GetLink from the server and show ShareLinkToDialog
-        mListener!!.copyOrSendPublicLink(share)
+        listener!!.copyOrSendPublicLink(share)
     }
 
     override fun removePublicShare(share: OCShare) {
@@ -333,7 +333,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
     }
 
     override fun editPublicShare(share: OCShare) {
-        mListener!!.showEditPublicShare(share)
+        listener!!.showEditPublicShare(share)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -355,7 +355,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
     override fun onAttach(activity: Activity?) {
         super.onAttach(activity)
         try {
-            mListener = activity as ShareFragmentListener?
+            listener = activity as ShareFragmentListener?
         } catch (e: ClassCastException) {
             throw ClassCastException(activity!!.toString() + " must implement OnShareFragmentInteractionListener")
         }
@@ -364,7 +364,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
 
     override fun onDetach() {
         super.onDetach()
-        mListener = null
+        listener = null
     }
 
 
@@ -375,8 +375,8 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
      * instance ready to use. If not ready, does nothing.
      */
     fun refreshCapabilitiesFromDB() {
-        if ((mListener as BaseActivity).storageManager != null) {
-            mCapabilities = (mListener as BaseActivity).storageManager.getCapability(mAccount!!.name)
+        if ((listener as BaseActivity).storageManager != null) {
+            capabilities = (listener as BaseActivity).storageManager.getCapability(account!!.name)
         }
     }
 
@@ -388,11 +388,11 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
      * instance ready to use. If not ready, does nothing.
      */
     fun refreshUsersOrGroupsListFromDB() {
-        if ((mListener as BaseActivity).storageManager != null) {
+        if ((listener as BaseActivity).storageManager != null) {
             // Get Users and Groups
-            mPrivateShares = (mListener as BaseActivity).storageManager.getPrivateSharesForAFile(
-                mFile!!.remotePath,
-                mAccount!!.name
+            privateShares = (listener as BaseActivity).storageManager.getPrivateSharesForAFile(
+                file!!.remotePath,
+                account!!.name
             )
 
             // Update list of users/groups
@@ -403,10 +403,10 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
     private fun updateListOfUserGroups() {
         // Update list of users/groups
         // TODO Refactoring: create a new {@link ShareUserListAdapter} instance with every call should not be needed
-        mUserGroupsAdapter = ShareUserListAdapter(
+        userGroupsAdapter = ShareUserListAdapter(
             activity,
             R.layout.share_user_item,
-            mPrivateShares,
+            privateShares,
             this
         )
 
@@ -414,10 +414,10 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
         val noShares = view!!.findViewById<TextView>(R.id.shareNoUsers)
         val usersList = view!!.findViewById<ListView>(R.id.shareUsersList)
 
-        if (mPrivateShares!!.size > 0) {
+        if (privateShares!!.size > 0) {
             noShares.visibility = View.GONE
             usersList.visibility = View.VISIBLE
-            usersList.adapter = mUserGroupsAdapter
+            usersList.adapter = userGroupsAdapter
             setListViewHeightBasedOnChildren(usersList)
         } else {
             noShares.visibility = View.VISIBLE
@@ -432,13 +432,13 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
     override fun unshareButtonPressed(share: OCShare) {
         // Unshare
         Log_OC.d(TAG, "Removing private share with " + share.sharedWithDisplayName)
-        mListener!!.removeShare(share)
+        listener!!.removeShare(share)
     }
 
     override fun editShare(share: OCShare) {
         // move to fragment to edit share
         Log_OC.d(TAG, "Editing " + share.sharedWithDisplayName)
-        mListener!!.showEditPrivateShare(share)
+        listener!!.showEditPrivateShare(share)
     }
 
     fun initPublicShares() {
@@ -450,7 +450,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
                 Observer { resource ->
                     when (resource?.status) {
                         Status.SUCCESS -> {
-                            mPublicLinks = resource.data as ArrayList<OCShare>
+                            publicLinks = resource.data as ArrayList<OCShare>
                             updateListOfPublicLinks()
                         }
                         Status.ERROR -> {
@@ -478,13 +478,13 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
 
     /**
      * Updates in the UI the section about public share with the information in the current
-     * public share bound to mFile, if any
+     * public share bound to file, if any
      */
     private fun updateListOfPublicLinks() {
-        mPublicLinksAdapter = SharePublicLinkListAdapter(
+        publicLinksAdapter = SharePublicLinkListAdapter(
             activity,
             R.layout.share_public_link_item,
-            mPublicLinks,
+            publicLinks,
             this
         )
 
@@ -493,29 +493,15 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
         val publicLinksList = view!!.findViewById<ListView>(R.id.sharePublicLinksList)
 
         // Show or hide public links and no public links message
-        if (mPublicLinks!!.size > 0) {
+        if (publicLinks!!.size > 0) {
             noPublicLinks.visibility = View.GONE
             publicLinksList.visibility = View.VISIBLE
-            publicLinksList.adapter = mPublicLinksAdapter
+            publicLinksList.adapter = publicLinksAdapter
             setListViewHeightBasedOnChildren(publicLinksList)
         } else {
             noPublicLinks.visibility = View.VISIBLE
             publicLinksList.visibility = View.GONE
         }
-
-        // TODO New Android Components
-        // Show or hide button for adding a new public share depending on the capabilities and
-        // the server version
-//        if (!enableMultiplePublicSharing()) {
-//            if (mPublicLinks!!.size == 0) {
-//
-//                addPublicLinkButton.visibility = View.VISIBLE
-//
-//            } else if (mPublicLinks!!.size >= 1) {
-//
-//                addPublicLinkButton.visibility = View.INVISIBLE
-//            }
-//        }
 
         // Set Scroll to initial position
         val scrollView = view!!.findViewById<ScrollView>(R.id.shareScroll)
@@ -566,25 +552,15 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
      * @return true if should be enabled, false otherwise
      */
     private fun enableMultiplePublicSharing(): Boolean {
+        val serverVersion = OwnCloudVersion(capabilities!!.versionString)
 
-        var enableMultiplePublicShare = true
-
-        val serverVersion: OwnCloudVersion
-
-        serverVersion = OwnCloudVersion(mCapabilities!!.versionString)
-
-        // Server version <= 9.x, multiple public sharing not supported
-        if (!serverVersion.isMultiplePublicSharingSupported) {
-
-            enableMultiplePublicShare = false
-
-        } else if (mCapabilities!!.filesSharingPublicMultiple.isFalse) {
-
+        return when {
+            // Server version <= 9.x, multiple public sharing not supported
+            !serverVersion.isMultiplePublicSharingSupported -> false
             // Server version >= 10, multiple public sharing supported but disabled
-            enableMultiplePublicShare = false
+            capabilities!!.filesSharingPublicMultiple.isFalse -> false
+            else -> true
         }
-
-        return enableMultiplePublicShare
     }
 
     companion object {
