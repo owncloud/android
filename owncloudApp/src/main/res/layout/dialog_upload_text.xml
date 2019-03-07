@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.textfield.TextInputLayout
+    android:id="@+id/inputTextLayout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/standard_margin">
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/inputFileName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/uploader_upload_text_filename_hint" />
+
+</com.google.android.material.textfield.TextInputLayout>

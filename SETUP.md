@@ -18,8 +18,8 @@ The [Android SDK][3] is necessary to build the app. There are different options 
 Open a terminal and type 'android' to start the Android SDK Manager. To build the ownCloud for Android app you will need to install at least the next SDK packages:
 
 * Android SDK Tools and Android SDK Platform-tools (already installed); upgrade to their last versions is usually a good idea.
-* Android SDK Build-Tools 24.0.2.
-* Android 7.0 (API 24), SDK Platform; needed to build the owncloud app.
+* No longer need to specify a version for the build tools, Gradle plugin uses the minimum required version by default.
+* Android 8.0 (API 26), SDK Platform; needed to build the owncloud app.
 
 Install any other package you consider interesting, such as emulators.
 
@@ -34,11 +34,11 @@ Next steps will assume you have a Github account and that you will get the code 
 
 * In a web browser, go to https://github.com/owncloud/android, and click the 'Fork' button near the top right corner.
 * Open a terminal and go on with the next steps in it.
-* Clone your forked repository: ```git clone --recursive git@github.com:YOURGITHUBNAME/android.git```.
+* Clone your forked repository: ```git clone --recursive https://github.com/YOURGITHUBNAME/android.git```.
 * Move to the project folder with ```cd android```.
-* Pull any changes from your remote branch 'master': ```git pull origin master```
-* Make official ownCloud repo known as upstream: ```git remote add upstream git@github.com:owncloud/android.git```
-* Make sure to get the latest changes from official android/master branch: ```git pull upstream master```
+* Fetch and apply any changes from your remote branch 'master': ```git fetch``` + ```git rebase```
+* Make official ownCloud repo known as upstream: ```git remote add upstream https://github.com/owncloud/android.git```
+* Make sure to get and apply the latest changes from official android/master branch: ```git fetch upstream``` + ```git rebase upstream/master```
 
 At this point you can continue using different tools to build the project. Section 2 and 3 describe the existing alternatives.
 

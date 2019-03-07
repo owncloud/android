@@ -1,0 +1,24 @@
+site:
+  title: ownCloud Android App Documentation
+  url: https://localhost:8080
+
+content:
+  sources:
+  - url: ../
+    branches: HEAD
+    start_path: docs/
+
+ui:
+  output_dir: assets
+  bundle:
+    snapshot: true
+    url: https://minio.owncloud.com/documentation/ui-bundle.zip
+
+output:
+  clean: true
+  dir: public
+
+asciidoc:
+  attributes:
+    idprefix: ''
+    idseparator: '-'

@@ -1,7 +1,7 @@
 sudo: false
 language: android
 jdk:
-  - oraclejdk8
+- oraclejdk8
 
 # INSTRUMENTED TESTS ARE DISABLED - until Google or Travis fix the mess with emulation, only local tests are enabled
 #  - sys-img-armeabi-v7a-android-24
@@ -24,16 +24,16 @@ install:
 #  - ./wait_for_emulator.sh
 script:
 # force init of adb way before any Gradle task that uses ADB; prevents a timeout error that skips emulators of android-24
-  - adb devices
+- adb devices
 # build app and assemble APK, in debug mode
-  - ./gradlew assembleDebug
+- ./gradlew :owncloudApp:assembleDebug
 # run all the local unit tests of app module
-  - ./gradlew :testDebug
+- ./gradlew :owncloudApp:testDebug
 # run all the instrumented tests of app module - DISABLED until we get an stable setup for Espresso in Travis
-# - ./gradlew connectedDebugAndroidTest --info
+# - ./gradlew :owncloudApp:connectedDebugAndroidTest --info
 # install app, then assemble and install instrumented tests of app module
-#  - ./gradlew :installDebug
-#  - ./gradlew :installDebugAndroidTest
+#  - ./gradlew :owncloudApp:installDebug
+#  - ./gradlew :owncloudApp:installDebugAndroidTest
 # run sample instrumented unit test
 #  - adb shell am instrument -w -e debug false -e class com.owncloud.android.datamodel.OCFileUnitTest com.owncloud.android.test/android.support.test.runner.AndroidJUnitRunner
 env:
