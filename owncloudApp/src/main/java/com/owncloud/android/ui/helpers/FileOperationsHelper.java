@@ -5,6 +5,7 @@
  * @author David A. Velasco
  * @author Juan Carlos González Cabrero
  * @author David González Verdugo
+ * @author Shashvat Kedia
  * Copyright (C) 2019 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
@@ -530,13 +531,20 @@ public class FileOperationsHelper {
      *                          in the server.
      */
     public void removeFiles(Collection<OCFile> files, boolean onlyLocalCopy) {
+        int countOfFilesToRemove = 0;
+        boolean isLastFileToRemove = false;
         for (OCFile file : files) {
+            countOfFilesToRemove++;
             // RemoveFile
             Intent service = new Intent(mFileActivity, OperationsService.class);
             service.setAction(OperationsService.ACTION_REMOVE);
             service.putExtra(OperationsService.EXTRA_ACCOUNT, mFileActivity.getAccount());
             service.putExtra(OperationsService.EXTRA_REMOTE_PATH, file.getRemotePath());
             service.putExtra(OperationsService.EXTRA_REMOVE_ONLY_LOCAL, onlyLocalCopy);
+            if(countOfFilesToRemove == files.size()){
+                isLastFileToRemove = true;
+            }
+            service.putExtra(OperationsService.EXTRA_IS_LAST_FILE_TO_REMOVE,isLastFileToRemove);
             mWaitingForOpId = mFileActivity.getOperationsServiceBinder().queueNewOperation(service);
         }
 

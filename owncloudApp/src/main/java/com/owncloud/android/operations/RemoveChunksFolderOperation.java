@@ -31,7 +31,7 @@ public class RemoveChunksFolderOperation extends RemoveFileOperation {
      *                      folder to remove from the server
      */
     public RemoveChunksFolderOperation(String remotePath) {
-        super(remotePath, false);
+        super(remotePath, false,false);
     }
 
     @Override

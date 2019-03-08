@@ -4,6 +4,7 @@
  * @author David A. Velasco
  * @author masensio
  * @author Christian Schabesberger
+ * @author Shashvat Kedia
  * Copyright (C) 2019 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
@@ -36,6 +37,7 @@ public class RemoveFileOperation extends SyncOperation {
     OCFile mFileToRemove;
     String mRemotePath;
     boolean mOnlyLocalCopy;
+    boolean mIsLastFile;
 
     /**
      * Constructor
@@ -45,9 +47,10 @@ public class RemoveFileOperation extends SyncOperation {
      * @param onlyLocalCopy         When 'true', and a local copy of the file exists, only this is 
      *                              removed.
      */
-    public RemoveFileOperation(String remotePath, boolean onlyLocalCopy) {
+    public RemoveFileOperation(String remotePath, boolean onlyLocalCopy, boolean isLastFile) {
         mRemotePath = remotePath;
         mOnlyLocalCopy = onlyLocalCopy;
+        mIsLastFile = isLastFile;
     }
 
     /**
@@ -57,6 +60,10 @@ public class RemoveFileOperation extends SyncOperation {
      */
     public OCFile getFile() {
         return mFileToRemove;
+    }
+
+    public boolean isLastFileToRemove(){
+        return mIsLastFile;
     }
 
     /**
