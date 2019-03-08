@@ -190,15 +190,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
-                    android:drawableLeft="@drawable/common_error"
+                    android:drawableLeft="@drawable/common_error_black"
                     android:drawablePadding="5dp"
-                    android:drawableStart="@drawable/common_error"
+                    android:drawableStart="@drawable/common_error_black"
                     android:gravity="center_vertical"
                     android:paddingLeft="@dimen/standard_half_padding"
                     android:paddingRight="@dimen/standard_half_padding"
                     android:textColor="@color/secondaryTextColor"
                     android:textSize="13sp"
-                    android:visibility="gone" />
+                    android:visibility="visible" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
