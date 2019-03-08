@@ -91,8 +91,8 @@ public class HttpClient {
 
                 SSLSocketFactory sslSocketFactory;
 
-                if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
-                    // TLS v1.2 is disabled by default from API 16 to 19, use custom SSLSocketFactory to enable it
+                if (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT) {
+                    // TLS v1.2 is disabled by default in API 19, use custom SSLSocketFactory to enable it
                     sslSocketFactory = new TLSSocketFactory(sslContext.getSocketFactory());
                 } else {
                     sslSocketFactory = sslContext.getSocketFactory();
