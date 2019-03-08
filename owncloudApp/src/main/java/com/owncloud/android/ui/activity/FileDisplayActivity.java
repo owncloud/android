@@ -1293,12 +1293,14 @@ public class FileDisplayActivity extends FileActivity
                                 mFileWaitingToPreview = getStorageManager().getFileById(
                                         mFileWaitingToPreview.getFileId()
                                 );
-                                fragmentReplaced = true;
                                 if (PreviewAudioFragment.canBePreviewed(mFileWaitingToPreview)) {
+                                    fragmentReplaced = true;
                                     startAudioPreview(mFileWaitingToPreview, 0);
                                 } else if (PreviewVideoFragment.canBePreviewed(mFileWaitingToPreview)) {
+                                    fragmentReplaced = true;
                                     startVideoPreview(mFileWaitingToPreview, 0);
                                 } else if (PreviewTextFragment.canBePreviewed(mFileWaitingToPreview)) {
+                                    fragmentReplaced = true;
                                     startTextPreview(mFileWaitingToPreview);
                                 } else {
                                     getFileOperationsHelper().openFile(mFileWaitingToPreview);
