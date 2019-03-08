@@ -1029,13 +1029,15 @@ public class FileDataStorageManager {
         return file;
     }
 
-    public ArrayList<OCShare> getPublicSharesForAnAccount(String accountName){
-        ArrayList<OCShare> allShares = new ArrayList<>();
+    public ArrayList<OCFile> getSharedFiles(){
+        ArrayList<OCFile> allSharedFiles = new ArrayList<>();
         Vector<OCFile> files = getAllFiles(OCFile.ROOT_PATH);
         for(OCFile file : files){
-            allShares.addAll(getPublicSharesForAFile(file.getRemotePath(),accountName));
+            if(file.isSharedViaLink()) {
+                allSharedFiles.add(file);
+            }
         }
-        return allShares;
+        return allSharedFiles;
     }
 
     private Vector<OCFile> getAllFiles(String path){

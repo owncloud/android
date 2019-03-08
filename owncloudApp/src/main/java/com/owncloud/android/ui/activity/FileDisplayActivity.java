@@ -148,6 +148,7 @@ public class FileDisplayActivity extends FileActivity
     private OCFile mFileWaitingToPreview;
 
     private boolean mSyncInProgress = false;
+    private boolean mOnlySharedByLinkFiles = false;
 
     private OCFile mWaitingToSend;
 
@@ -184,6 +185,8 @@ public class FileDisplayActivity extends FileActivity
             mFilesUploadHelper = new FilesUploadHelper(this,
                     getAccount() == null ? "" : getAccount().name);
         }
+
+        mOnlySharedByLinkFiles = getIntent().getBooleanExtra(DrawerActivity.EXTRA_ONLY_SHARED_BY_LINK_FILE,false);
 
         /// USER INTERFACE
 
