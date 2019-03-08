@@ -150,6 +150,7 @@ public class FileDisplayActivity extends FileActivity
 
     private boolean mSyncInProgress = false;
     private boolean mOnlyAvailableOffline = false;
+    private int noOfFilesSelected = 0;
 
     private OCFile mWaitingToSend;
 
@@ -1480,9 +1481,12 @@ public class FileDisplayActivity extends FileActivity
                                              RemoteOperationResult result) {
 
         if (getListOfFilesFragment().isSingleItemChecked() || result.isException() || !result.isSuccess()) {
-            showSnackMessage(
-                    ErrorMessageAdapter.getResultMessage(result, operation, getResources())
-            );
+            if(result.getCode() != ResultCode.FORBIDDEN ||
+                    (result.getCode() == ResultCode.FORBIDDEN && operation.isLastFileToRemove())) {
+                showSnackMessage(
+                        ErrorMessageAdapter.getResultMessage(result, operation, getResources())
+                );
+            }
         }
 
         if (result.isSuccess()) {

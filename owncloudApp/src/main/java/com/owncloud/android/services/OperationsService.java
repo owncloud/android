@@ -4,6 +4,7 @@
  * @author David A. Velasco
  * @author David González Verdugo
  * @author Christian Schabesberger
+ * @author Shashvat Kedia
  * Copyright (C) 2019 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
@@ -105,6 +106,7 @@ public class OperationsService extends Service {
     public static final String EXTRA_SHARE_ID = "SHARE_ID";
     public static final String EXTRA_PUSH_ONLY = "PUSH_ONLY";
     public static final String EXTRA_SYNC_REGULAR_FILES = "SYNC_REGULAR_FILES";
+    public static final String EXTRA_IS_LAST_FILE_TO_REMOVE = "EXTRA_IS_LAST_FILE_TO_REMOVE";
 
     public static final String EXTRA_COOKIE = "COOKIE";
 
@@ -349,7 +351,10 @@ public class OperationsService extends Service {
             Pair<Target, RemoteOperation> itemToQueue = newOperation(operationIntent);
             if (itemToQueue != null) {
                 mServiceHandler.mPendingOperations.add(itemToQueue);
-                startService(new Intent(OperationsService.this, OperationsService.class));
+                Intent executeOperation = new Intent(OperationsService.this,OperationsService.class);
+                executeOperation.putExtra(EXTRA_IS_LAST_FILE_TO_REMOVE,
+                        operationIntent.getBooleanExtra(EXTRA_IS_LAST_FILE_TO_REMOVE,false));
+                startService(executeOperation);
                 return itemToQueue.second.hashCode();
             } else {
                 return Long.MAX_VALUE;
@@ -662,7 +667,8 @@ public class OperationsService extends Service {
                     String remotePath = operationIntent.getStringExtra(EXTRA_REMOTE_PATH);
                     boolean onlyLocalCopy = operationIntent.getBooleanExtra(EXTRA_REMOVE_ONLY_LOCAL,
                             false);
-                    operation = new RemoveFileOperation(remotePath, onlyLocalCopy);
+                    operation = new RemoveFileOperation(remotePath, onlyLocalCopy,
+                            operationIntent.getBooleanExtra(EXTRA_IS_LAST_FILE_TO_REMOVE,false));
 
                 } else if (action.equals(ACTION_CREATE_FOLDER)) {
                     // Create Folder
