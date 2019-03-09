@@ -151,6 +151,9 @@
   <string name="uploader_upload_text_dialog_filename_error_empty">Emri i kartelës s\’duhet të jetë i zbrazët</string>
   <string name="uploader_upload_text_dialog_filename_error_length_max">Emri i kartelës s\’duhet të jetë më shumë se %d shenja</string>
   <string name="uploader_upload_text_filename_hint">Emër kartele</string>
+  <string name="uploader_upload_camera_upload_files">Po ngarkohen kartela ngarkimi nga kamera</string>
+  <string name="uploader_upload_available_offline_files">Po ngarkohen kartela për punim jashtë linje</string>
+  <string name="uploader_upload_requested_from_wifi_files">Po ngarkohen të kërkuarat nga kartela wifi</string>
   <string name="ssl_certificate_not_trusted">Dëshmia e shërbyesit s\’është e besuar</string>
   <string name="uploads_view_title">Ngarkime</string>
   <string name="uploads_view_group_current_uploads">Të tanishëm</string>
