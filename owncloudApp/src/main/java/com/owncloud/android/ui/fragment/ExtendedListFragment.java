@@ -3,6 +3,7 @@
  *
  * @author Christian Schabesberger
  * @author Abel García de Prada
+ * @author Shashvat Kedia
  * Copyright (C) 2012 Bartek Przybylski
  * Copyright (C) 2019 ownCloud GmbH.
  * <p>
@@ -76,7 +77,6 @@ public class ExtendedListFragment extends Fragment
     private FloatingActionsMenu mFabMain;
     private FloatingActionButton mFabUpload;
     private FloatingActionButton mFabMkdir;
-    private FloatingActionButton mFabUploadFromApp;
 
     // Save the state of the scroll in browsing
     private ArrayList<Integer> mIndexes;
@@ -106,10 +106,6 @@ public class ExtendedListFragment extends Fragment
 
     public FloatingActionButton getFabUpload() {
         return mFabUpload;
-    }
-
-    public FloatingActionButton getFabUploadFromApp() {
-        return mFabUploadFromApp;
     }
 
     public FloatingActionButton getFabMkdir() {
@@ -188,7 +184,6 @@ public class ExtendedListFragment extends Fragment
         mFabMain = v.findViewById(R.id.fab_main);
         mFabUpload = v.findViewById(R.id.fab_upload);
         mFabMkdir = v.findViewById(R.id.fab_mkdir);
-        mFabUploadFromApp = v.findViewById(R.id.fab_upload_from_app);
 
         mCurrentListView = mListView;   // list by default
         if (savedInstanceState != null) {
