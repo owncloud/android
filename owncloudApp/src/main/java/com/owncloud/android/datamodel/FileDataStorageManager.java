@@ -1029,8 +1029,8 @@ public class FileDataStorageManager {
         return file;
     }
 
-    public ArrayList<OCFile> getSharedFiles(){
-        ArrayList<OCFile> allSharedFiles = new ArrayList<>();
+    public Vector<OCFile> getSharedFiles(){
+        Vector<OCFile> allSharedFiles = new Vector<>();
         Vector<OCFile> files = getAllFiles(OCFile.ROOT_PATH);
         for(OCFile file : files){
             if(file.isSharedViaLink()) {

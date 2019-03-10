@@ -37,6 +37,7 @@ import com.owncloud.android.lib.resources.shares.OCShare;
 import com.owncloud.android.lib.resources.shares.ShareParserResult;
 import com.owncloud.android.operations.RemoveShareOperation;
 import com.owncloud.android.operations.UpdateShareViaLinkOperation;
+import com.owncloud.android.ui.adapter.FileListListAdapter;
 import com.owncloud.android.ui.adapter.SharePublicLinkListAdapter;
 import com.owncloud.android.ui.dialog.RemoveShareDialogFragment;
 import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter;
@@ -45,16 +46,16 @@ import com.owncloud.android.ui.fragment.PublicShareDialogFragment;
 import com.owncloud.android.ui.fragment.ShareFragmentListener;
 
 import java.util.ArrayList;
+import java.util.Vector;
 
-public class SharedByLinkActivity extends FileActivity implements
-        SharePublicLinkListAdapter.SharePublicLinkAdapterListener, ShareFragmentListener {
+public class SharedByLinkActivity extends FileActivity {
     private final String TAG = SharedByLinkActivity.class.getSimpleName();
 
     private ListView allSharesList;
     private TextView noShares;
-    private  SharePublicLinkListAdapter adapter;
+    private FileListListAdapter adapter;
 
-    private ArrayList<OCShare> allShares;
+    private Vector<OCFile> allShares;
     private Account account;
 
     @Override
@@ -73,14 +74,16 @@ public class SharedByLinkActivity extends FileActivity implements
     @Override
     protected void onAccountSet(boolean stateWasRecovered){
         super.onAccountSet(stateWasRecovered);
-        allShares = getStorageManager().getPublicSharesForAnAccount(account.name);
-        setUpAllSharesList();
+        allShares = getStorageManager().getSharedFiles();
+        setUpAllSharedFilesList();
     }
 
-    private void setUpAllSharesList(){
+    private void setUpAllSharedFilesList(){
         if(allShares.size() > 0){
             allSharesList.setVisibility(View.VISIBLE);
-            adapter = new SharePublicLinkListAdapter(getApplicationContext(),R.layout.share_user_item,allShares,this);
+            Vector<OCFile> vectorOfSharedFiles = new Vector<>();
+            vectorOfSharedFiles.addAll(allShares);
+            adapter = new FileListListAdapter(getApplicationContext(),vectorOfSharedFiles, this);
             allSharesList.setAdapter(adapter);
             noShares.setVisibility(View.INVISIBLE);
         } else{
@@ -101,71 +104,6 @@ public class SharedByLinkActivity extends FileActivity implements
                 return true;
             default: return super.onOptionsItemSelected(item);
         }
-    }
-
-    @Override
-    public void copyOrSendPrivateLink(OCFile file) {
-    }
-
-    @Override
-    public void showSearchUsersAndGroups() {
-    }
-
-    @Override
-    public void showEditPrivateShare(OCShare share) {
-    }
-
-    @Override
-    public void refreshSharesFromServer() {
-    }
-
-    @Override
-    public void removeShare(OCShare share) {
-        getFileOperationsHelper().removeShare(share);
-    }
-
-    @Override
-    public void showAddPublicShare(String defaultLinkName) {
-    }
-
-    @Override
-    public void showEditPublicShare(OCShare share) {
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        Fragment prev = getSupportFragmentManager().findFragmentByTag(ShareActivity.TAG_PUBLIC_SHARE_DIALOG_FRAGMENT);
-        if (prev != null) {
-            ft.remove(prev);
-        }
-        ft.addToBackStack(null);
-
-        // Create and show the dialog.
-        DialogFragment newFragment = PublicShareDialogFragment.newInstanceToUpdate(getFile(), share,
-                getAccount());
-        newFragment.show(ft, ShareActivity.TAG_PUBLIC_SHARE_DIALOG_FRAGMENT);
-    }
-
-    @Override
-    public void copyOrSendPublicLink(OCShare share) {
-        setFile(new OCFile(share.getPath()));
-        getFileOperationsHelper().copyOrSendPublicLink(share);
-    }
-
-    @Override
-    public void removePublicShare(OCShare share) {
-        RemoveShareDialogFragment dialog = RemoveShareDialogFragment.newInstance(share);
-        dialog.show(getSupportFragmentManager(), ShareActivity.TAG_REMOVE_SHARE_DIALOG_FRAGMENT);
-    }
-
-    @Override
-    public void editPublicShare(OCShare share) {
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        Fragment prev = getSupportFragmentManager().findFragmentByTag(ShareActivity.TAG_PUBLIC_SHARE_DIALOG_FRAGMENT);
-        if (prev != null) {
-            ft.remove(prev);
-        }
-        ft.addToBackStack(null);
-        DialogFragment newFragment = PublicShareDialogFragment.newInstanceToUpdate(getFile(), share,
-                getAccount());
-        newFragment.show(ft, ShareActivity.TAG_PUBLIC_SHARE_DIALOG_FRAGMENT);
     }
 
     @Override
@@ -203,8 +141,7 @@ public class SharedByLinkActivity extends FileActivity implements
     }
 
     private void updateShares(){
-        allShares = getStorageManager().getPublicSharesForAnAccount(account.name);
-        setUpAllSharesList();
+        allShares = getStorageManager().getSharedFiles();
     }
 
     private PublicShareDialogFragment getPublicShareDialogFragment(){

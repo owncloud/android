@@ -102,6 +102,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
 
     protected final static String ARG_ALLOW_CONTEXTUAL_MODE = MY_PACKAGE + ".ALLOW_CONTEXTUAL";
     protected final static String ARG_HIDE_FAB = MY_PACKAGE + ".HIDE_FAB";
+    protected final static String ARG_ONLY_SHARED_BY_LINK_FILES = MY_PACKAGE + ".ONLY_SHARED_BY_LINK_FILES";
 
     private static final String KEY_FILE = MY_PACKAGE + ".extra.FILE";
     private static final String KEY_FAB_EVER_CLICKED = "FAB_EVER_CLICKED";
@@ -122,6 +123,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
 
     private boolean mHideFab = true;
     private boolean miniFabClicked = false;
+    private boolean mOnlySharedByLinkFiles = false;
     private ActionMode mActiveActionMode;
     private OCFileListFragment.MultiChoiceModeListener mMultiChoiceModeListener;
 
@@ -138,13 +140,15 @@ public class OCFileListFragment extends ExtendedListFragment implements
     public static OCFileListFragment newInstance(
             boolean justFolders,
             boolean hideFAB,
-            boolean allowContextualMode
+            boolean allowContextualMode,
+            boolean onlySharedByLinkFiles
     ) {
         OCFileListFragment frag = new OCFileListFragment();
         Bundle args = new Bundle();
         args.putBoolean(ARG_JUST_FOLDERS, justFolders);
         args.putBoolean(ARG_HIDE_FAB, hideFAB);
         args.putBoolean(ARG_ALLOW_CONTEXTUAL_MODE, allowContextualMode);
+        args.putBoolean(ARG_ONLY_SHARED_BY_LINK_FILES,onlySharedByLinkFiles);
         frag.setArguments(args);
         return frag;
     }
@@ -217,14 +221,25 @@ public class OCFileListFragment extends ExtendedListFragment implements
         boolean justFolders = isShowingJustFolders();
         setFooterEnabled(!justFolders);
 
-        mFileListAdapter = new FileListListAdapter(
-                justFolders,
-                getActivity(),
-                mContainerActivity
-        );
+        Bundle args = getArguments();
+        mOnlySharedByLinkFiles = (args != null) && args.getBoolean(ARG_ONLY_SHARED_BY_LINK_FILES,false);
+        if(mOnlySharedByLinkFiles){
+            mFileListAdapter = new FileListListAdapter(
+                    justFolders,
+                    getActivity(),
+                    mContainerActivity,
+                    mContainerActivity.getStorageManager().getSharedFiles()
+            );
+        } else {
+            mFileListAdapter = new FileListListAdapter(
+                    justFolders,
+                    getActivity(),
+                    mContainerActivity,
+                    null
+            );
+        }
         setListAdapter(mFileListAdapter);
 
-        Bundle args = getArguments();
         mHideFab = (args != null) && args.getBoolean(ARG_HIDE_FAB, false);
         if (mHideFab) {
             setFabEnabled(false);

@@ -80,7 +80,8 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
     public FileListListAdapter(
             boolean justFolders,
             Context context,
-            ComponentsGetter transferServiceGetter
+            ComponentsGetter transferServiceGetter,
+            Vector<OCFile> sharedFiles
     ) {
 
         mJustFolders = justFolders;
@@ -89,6 +90,10 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
 
         mTransferServiceGetter = transferServiceGetter;
 
+        if(sharedFiles != null){
+            mFiles = sharedFiles;
+        }
+
         // Read sorting order, default to sort by name ascending
         FileStorageUtils.mSortOrderFileDisp = PreferenceManager.getSortOrder(mContext,
                 FileStorageUtils.FILE_DISPLAY_SORT);
@@ -96,6 +101,19 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
                 FileStorageUtils.FILE_DISPLAY_SORT);
 
         // initialise thumbnails cache on background thread
+        new ThumbnailsCacheManager.InitDiskCacheTask().execute();
+    }
+
+    public FileListListAdapter(Context context, Vector<OCFile> files, ComponentsGetter mTransferServiceGetter){
+        this.mFiles = files;
+        this.mContext = context;
+        this.mTransferServiceGetter = mTransferServiceGetter;
+
+        FileStorageUtils.mSortOrderFileDisp = PreferenceManager.getSortOrder(mContext,
+                FileStorageUtils.FILE_DISPLAY_SORT);
+        FileStorageUtils.mSortAscendingFileDisp = PreferenceManager.getSortAscending(mContext,
+                FileStorageUtils.FILE_DISPLAY_SORT);
+
         new ThumbnailsCacheManager.InitDiskCacheTask().execute();
     }
 

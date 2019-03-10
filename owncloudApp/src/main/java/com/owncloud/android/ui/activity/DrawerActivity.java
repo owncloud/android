@@ -50,12 +50,8 @@ import com.owncloud.android.datamodel.UserProfile;
 import com.owncloud.android.datamodel.UserProfilesRepository;
 import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.lib.common.utils.Log_OC;
-import com.owncloud.android.lib.resources.shares.OCShare;
 import com.owncloud.android.utils.DisplayUtils;
 import com.owncloud.android.utils.PreferenceUtils;
-
-import java.util.ArrayList;
-import java.util.Vector;
 
 /**
  * Base class to handle setup of the drawer implementation including user switching and avatar fetching and fallback
@@ -229,7 +225,7 @@ public abstract class DrawerActivity extends ToolbarActivity {
                             case R.id.shared_by_link:
                                 Intent sharedByLinkIntent = new Intent(getApplicationContext(),
                                         FileDisplayActivity.class);
-                                sharedByLinkIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                sharedByLinkIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                 sharedByLinkIntent.putExtra(EXTRA_ONLY_SHARED_BY_LINK_FILE,true);
                                 startActivity(sharedByLinkIntent);
                                 break;

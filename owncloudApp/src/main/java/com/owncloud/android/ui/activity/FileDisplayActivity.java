@@ -346,7 +346,7 @@ public class FileDisplayActivity extends FileActivity
     }
 
     private void createMinFragments() {
-        OCFileListFragment listOfFiles = OCFileListFragment.newInstance(false, false, true);
+        OCFileListFragment listOfFiles = OCFileListFragment.newInstance(false, false, true,mOnlySharedByLinkFiles);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.add(R.id.left_fragment_container, listOfFiles, TAG_LIST_OF_FILES);
         transaction.commit();
