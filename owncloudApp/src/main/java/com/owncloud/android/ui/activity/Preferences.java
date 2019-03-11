@@ -513,11 +513,14 @@ public class Preferences extends PreferenceActivity {
             ));
             mAboutApp.setSummary(String.format(getString(R.string.about_version), appVersion));
             mAboutApp.setOnPreferenceClickListener(preference -> {
-                String commitUrl = BuildConfig.GIT_REMOTE + "/commit/" + BuildConfig.COMMIT_SHA1;
-                Uri uriUrl = Uri.parse(commitUrl);
-                Intent intent = new Intent(Intent.ACTION_VIEW, uriUrl);
-                startActivity(intent);
-                return true;
+                if (getResources().getBoolean(R.bool.forward_to_gh_commit)) {
+                    String commitUrl = BuildConfig.GIT_REMOTE + "/commit/" + BuildConfig.COMMIT_SHA1;
+                    Uri uriUrl = Uri.parse(commitUrl);
+                    Intent intent = new Intent(Intent.ACTION_VIEW, uriUrl);
+                    startActivity(intent);
+                    return true;
+                }
+                return false;
             });
         }
     }

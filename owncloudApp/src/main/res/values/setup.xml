@@ -103,4 +103,7 @@
     <!-- Header images -->
     <bool name="use_drawer_background_header">true</bool>
     <bool name="use_drawer_logo">true</bool>
+
+    <!-- Forward to GH commit from hash commit in Settings -->
+    <bool name="forward_to_gh_commit">true</bool>
 </resources>
