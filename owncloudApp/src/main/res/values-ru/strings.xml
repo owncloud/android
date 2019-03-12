@@ -152,6 +152,9 @@
   <string name="uploader_upload_text_dialog_filename_error_empty">Имя файла не должно быть пустым</string>
   <string name="uploader_upload_text_dialog_filename_error_length_max">Имя файла должно быть не длиннее %d символов</string>
   <string name="uploader_upload_text_filename_hint">Имя файла</string>
+  <string name="uploader_upload_camera_upload_files">Загрузка файлов загрузки из камеры</string>
+  <string name="uploader_upload_available_offline_files">Загрузка файлов, доступных автономно</string>
+  <string name="uploader_upload_requested_from_wifi_files">Загрузка файлов, запрошенных через WiFi</string>
   <string name="ssl_certificate_not_trusted">Нет доверия сертификату сервера</string>
   <string name="uploads_view_title">Загрузки</string>
   <string name="uploads_view_group_current_uploads">Текущие</string>
