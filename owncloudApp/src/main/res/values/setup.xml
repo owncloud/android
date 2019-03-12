@@ -71,7 +71,7 @@
     <string name="url_help" formatted="false">https://owncloud.com/mobile/help</string>
     <string name="url_imprint" formatted="false"></string>
     <string name="mail_recommend" formatted="false">"mailto:"</string>
-    <string name="mail_feedback" formatted="false">"mailto:apps@owncloud.com"</string>
+    <string name="mail_feedback" formatted="false">"mailto:android-app@owncloud.com"</string>
     <string name="url_app_download" formatted="false">"https://play.google.com/store/apps/details?id=com.owncloud.android"</string>
     <string name="url_sync_calendar_contacts">"https://play.google.com/store/apps/details?id=at.bitfire.davdroid"</string>
 

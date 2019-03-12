@@ -151,6 +151,9 @@
   <string name="uploader_upload_text_dialog_filename_error_empty">O nome do arquivo não pode estar em branco</string>
   <string name="uploader_upload_text_dialog_filename_error_length_max">O nome de arquivo deve ter mais de %d caracteres</string>
   <string name="uploader_upload_text_filename_hint">Nome do Arquivo</string>
+  <string name="uploader_upload_camera_upload_files">Enviando arquivos de envio da camera</string>
+  <string name="uploader_upload_available_offline_files">Fazendo envio de arquivos off-line disponíveis</string>
+  <string name="uploader_upload_requested_from_wifi_files">Enviando arquivos solicitados usando wifi</string>
   <string name="ssl_certificate_not_trusted">O certificado de servidor não é confiável</string>
   <string name="uploads_view_title">Envios</string>
   <string name="uploads_view_group_current_uploads">Atual</string>

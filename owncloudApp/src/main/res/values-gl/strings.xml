@@ -152,6 +152,9 @@ Descárgueo de aquí: %2$s</string>
   <string name="uploader_upload_text_dialog_filename_error_empty">O nome de ficheiro non pode estar baleiro</string>
   <string name="uploader_upload_text_dialog_filename_error_length_max">O nome do ficheiro non debe ter máis de %d caracteres</string>
   <string name="uploader_upload_text_filename_hint">Nome de ficheiro</string>
+  <string name="uploader_upload_camera_upload_files">Enviando ficheiros pendentes de envío da cámara</string>
+  <string name="uploader_upload_available_offline_files">Enviando ficheiros dispoñíbeis sen conexión</string>
+  <string name="uploader_upload_requested_from_wifi_files">Enviando ficheiros solicitados dende WiFi</string>
   <string name="ssl_certificate_not_trusted">O certificado do servidor non é de confianza</string>
   <string name="uploads_view_title">Envíos</string>
   <string name="uploads_view_group_current_uploads">Actual</string>

@@ -84,6 +84,9 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Vector;
 
+import static com.owncloud.android.operations.UploadFileOperation.CREATED_AS_CAMERA_UPLOAD_PICTURE;
+import static com.owncloud.android.operations.UploadFileOperation.CREATED_AS_CAMERA_UPLOAD_VIDEO;
+
 /**
  * Service for uploading files. Invoke using context.startService(...).
  *
@@ -282,13 +285,15 @@ public class FileUploader extends Service
         Log_OC.d(TAG, "Starting command with id " + startId);
 
         int createdBy = intent.getIntExtra(KEY_CREATED_BY, UploadFileOperation.CREATED_BY_USER);
-
+        boolean isCameraUploadFile =
+                createdBy == CREATED_AS_CAMERA_UPLOAD_PICTURE || createdBy == CREATED_AS_CAMERA_UPLOAD_VIDEO;
         boolean isAvailableOfflineFile = intent.getBooleanExtra(KEY_IS_AVAILABLE_OFFLINE_FILE, false);
         boolean isRequestedFromWifiBackEvent = intent.getBooleanExtra(
                 KEY_REQUESTED_FROM_WIFI_BACK_EVENT, false
         );
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if ((isCameraUploadFile || isAvailableOfflineFile || isRequestedFromWifiBackEvent) &&
+                Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             /*
              * After calling startForegroundService method from {@link TransferRequester} for camera uploads or
              * available offline, we have to call this within five seconds after the service is created to avoid
@@ -296,14 +301,17 @@ public class FileUploader extends Service
              */
             Log_OC.d(TAG, "Starting FileUploader service in foreground");
             mNotificationBuilder
-                    .setOngoing(true)
-                    .setSmallIcon(R.drawable.notification_icon)
-                    .setTicker(getString(R.string.uploader_upload_in_progress_ticker))
-                    .setContentTitle(getString(R.string.uploader_upload_in_progress_ticker))
-                    .setProgress(100, 0, false)
-                    .setContentText(String.format(getString(R.string.uploader_upload_in_progress_content), 0, ""))
                     .setChannelId(UPLOAD_NOTIFICATION_CHANNEL_ID)
-                    .setWhen(System.currentTimeMillis());
+                    .setSmallIcon(R.drawable.notification_icon);
+
+            if (isCameraUploadFile) {
+                mNotificationBuilder.setContentTitle(getString(R.string.uploader_upload_camera_upload_files));
+            } else if (isAvailableOfflineFile) {
+                mNotificationBuilder.setContentTitle(getString(R.string.uploader_upload_available_offline_files));
+            } else if (isRequestedFromWifiBackEvent) {
+                mNotificationBuilder.setContentTitle(getString(R.string.uploader_upload_requested_from_wifi_files));
+            }
+
             startForeground(141, mNotificationBuilder.build());
         }
 

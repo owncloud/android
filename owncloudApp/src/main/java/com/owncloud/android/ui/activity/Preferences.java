@@ -438,8 +438,7 @@ public class Preferences extends PreferenceActivity {
             if (feedbackEnabled) {
                 pFeedback.setOnPreferenceClickListener(preference -> {
                     String feedbackMail = (String) getText(R.string.mail_feedback);
-                    String feedback = getText(R.string.prefs_feedback) +
-                            " - android v" + appVersion;
+                    String feedback = "Android v" + BuildConfig.VERSION_NAME + " - " + getText(R.string.prefs_feedback);
                     Intent intent = new Intent(Intent.ACTION_SENDTO);
                     intent.putExtra(Intent.EXTRA_SUBJECT, feedback);
 
