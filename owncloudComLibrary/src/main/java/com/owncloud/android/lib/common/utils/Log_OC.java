@@ -2,6 +2,8 @@ package com.owncloud.android.lib.common.utils;
 
 import android.util.Log;
 
+import com.owncloud.android.lib.BuildConfig;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -13,7 +15,7 @@ import java.util.Locale;
 public class Log_OC {
     private static final String SIMPLE_DATE_FORMAT = "yyyy/MM/dd HH:mm:ss";
     private static final String LOG_FOLDER_NAME = "log";
-    private static final long MAX_FILE_SIZE = 1000000; // 1MB
+    private static final long MAX_FILE_SIZE = 2000000; // 2MB
 
     private static String mOwncloudDataFolderLog = "owncloud_log";
 
@@ -21,7 +23,10 @@ public class Log_OC {
     private static File mFolder;
     private static BufferedWriter mBuf;
 
-    private static String[] mLogFileNames = {"currentLog.txt", "olderLog.txt"};
+    private static String[] mLogFileNames = {
+            "currentLog" + BuildConfig.BUILD_TYPE + ".txt",
+            "olderLog" + BuildConfig.BUILD_TYPE + ".txt"
+    };
 
     private static boolean isMaxFileSizeReached = false;
     private static boolean isEnabled = false;
@@ -32,37 +37,37 @@ public class Log_OC {
 
     public static void i(String TAG, String message) {
         Log.i(TAG, message);
-        appendLog(TAG + " : " + message);
+        appendLog("I: " + TAG + " : " + message);
     }
 
     public static void d(String TAG, String message) {
         Log.d(TAG, message);
-        appendLog(TAG + " : " + message);
+        appendLog("D: " + TAG + " : " + message);
     }
 
     public static void d(String TAG, String message, Exception e) {
         Log.d(TAG, message, e);
-        appendLog(TAG + " : " + message + " Exception : " + e.getStackTrace());
+        appendLog("D: " + TAG + " : " + message + " Exception : " + e.getStackTrace());
     }
 
     public static void e(String TAG, String message) {
         Log.e(TAG, message);
-        appendLog(TAG + " : " + message);
+        appendLog("E: " + TAG + " : " + message);
     }
 
     public static void e(String TAG, String message, Throwable e) {
         Log.e(TAG, message, e);
-        appendLog(TAG + " : " + message + " Exception : " + e.getStackTrace());
+        appendLog("E: " + TAG + " : " + message + " Exception : " + e.getStackTrace());
     }
 
     public static void v(String TAG, String message) {
         Log.v(TAG, message);
-        appendLog(TAG + " : " + message);
+        appendLog("V: " + TAG + " : " + message);
     }
 
     public static void w(String TAG, String message) {
         Log.w(TAG, message);
-        appendLog(TAG + " : " + message);
+        appendLog("W: " + TAG + " : " + message);
     }
 
     /**
@@ -71,8 +76,7 @@ public class Log_OC {
      * @param storagePath : directory for keeping logs
      */
     synchronized public static void startLogging(String storagePath) {
-        String logPath = storagePath + File.separator +
-                mOwncloudDataFolderLog + File.separator + LOG_FOLDER_NAME;
+        String logPath = storagePath + File.separator + mOwncloudDataFolderLog + File.separator + LOG_FOLDER_NAME;
         mFolder = new File(logPath);
         mLogFile = new File(mFolder + File.separator + mLogFileNames[0]);
 
