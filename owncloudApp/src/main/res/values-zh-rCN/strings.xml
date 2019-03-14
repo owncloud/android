@@ -37,6 +37,7 @@
   <string name="prefs_passcode">密码锁</string>
   <string name="prefs_fingerprint">指纹锁</string>
   <string name="prefs_fingerprint_summary">使用密码或图案锁定以启用此选项</string>
+  <string name="confirmation_touches_with_other_windows_title">你确定要启用此功能吗？</string>
   <string name="prefs_camera_picture_upload">图片上传</string>
   <string name="prefs_camera_picture_upload_summary">自动上传相机拍摄的图片</string>
   <string name="prefs_camera_video_upload">视频上传</string>
