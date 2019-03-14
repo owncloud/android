@@ -20,15 +20,20 @@
 
 package com.owncloud.android.ui.activity;
 
+import android.app.SearchManager;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
+import androidx.appcompat.widget.SearchView;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -47,8 +52,10 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+
 
 public class LogHistoryActivity extends ToolbarActivity {
 
@@ -63,6 +70,8 @@ public class LogHistoryActivity extends ToolbarActivity {
 
     private RecyclerView mLogsRecycler;
     private LogListAdapter mLogListAdapter;
+    private SearchView mSearchView;
+    private String mCurrentFilter = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,7 +93,9 @@ public class LogHistoryActivity extends ToolbarActivity {
         mLogsRecycler.setLayoutManager(layoutManager);
 
         setTitle(getText(R.string.actionbar_logger));
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
         Button deleteHistoryButton = findViewById(R.id.deleteLogHistoryButton);
         Button sendHistoryButton = findViewById(R.id.sendLogHistoryButton);
 
@@ -105,16 +116,99 @@ public class LogHistoryActivity extends ToolbarActivity {
                 showLoadingDialog();
 
                 // Start a new thread that will load all the log data
-                LoadingLogTask task = new LoadingLogTask();
+                LoadingLogfileTask task = new LoadingLogfileTask();
                 task.execute();
             }
         }
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.log_menu, menu);
+        MenuItem searchItem = menu.findItem(R.id.menu_search);
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+
+        if (searchItem != null) {
+            mSearchView = (SearchView) searchItem.getActionView();
+        }
+        if (mSearchView == null) {
+            return true;
+        }
+        if (searchManager != null) {
+            mSearchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        }
+        SearchView.SearchAutoComplete searchAutoComplete = mSearchView.findViewById(R.id.search_src_text);
+
+        if (mCurrentFilter != null && !mCurrentFilter.equals("")) {
+            if (searchAutoComplete != null) {
+                searchAutoComplete.setText(mCurrentFilter);
+            }
+            mSearchView.setIconified(false);
+        } else {
+            if (searchAutoComplete != null) {
+                searchAutoComplete.setText("");
+            }
+            mSearchView.setIconified(true);
+        }
+
+        final SearchView.OnQueryTextListener queryTextListener = new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                setFilter2LogAdapter(newText);
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                setFilter2LogAdapter(query);
+                return true;
+            }
+        };
+        if (searchItem != null) {
+            searchItem.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
+                @Override
+                public boolean onMenuItemActionCollapse(MenuItem item) {
+                    setFilter2LogAdapter("");
+                    return true;  // Return true to collapse action view
+                }
+
+                @Override
+                public boolean onMenuItemActionExpand(MenuItem item) {
+                    // Do something when expanded
+                    return true;  // Return true to expand action view
+                }
+            });
+        }
+
+        if (null != mSearchView) {
+            if (searchManager != null) {
+                mSearchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+            }
+            mSearchView.setIconifiedByDefault(true);
+            mSearchView.setOnQueryTextListener(queryTextListener);
+            if (mCurrentFilter != null && !mCurrentFilter.equals("")) {
+                if (searchAutoComplete != null && searchItem != null) {
+                    searchItem.expandActionView();
+                    searchAutoComplete.setText(mCurrentFilter);
+                }
+            }
+        }
+        return true;
+    }
+
+    private void setFilter2LogAdapter(String filter) {
+        mLogListAdapter.setFilter(filter);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         boolean retval = true;
         switch (item.getItemId()) {
+            case R.id.menu_logcat:
+                LoadingLogcatTask task = new LoadingLogcatTask();
+                task.execute();
+                break;
             case android.R.id.home:
                 finish();
                 break;
@@ -180,7 +274,7 @@ public class LogHistoryActivity extends ToolbarActivity {
     /**
      * Class for loading the log data async
      */
-    private class LoadingLogTask extends AsyncTask<String, Void, ArrayList<String>> {
+    private class LoadingLogcatTask extends AsyncTask<String, Void, ArrayList<String>> {
 
         protected ArrayList<String> doInBackground(String... args) {
             return readLogFile();
@@ -188,7 +282,70 @@ public class LogHistoryActivity extends ToolbarActivity {
 
         protected void onPostExecute(ArrayList<String> result) {
             if (result != null) {
-                mLogListAdapter = new LogListAdapter(result);
+                mLogListAdapter = new LogListAdapter(result, mCurrentFilter, LogHistoryActivity.this);
+                mLogsRecycler.setAdapter(mLogListAdapter);
+                mLogsRecycler.scrollToPosition(result.size() - 1);
+                dismissLoadingDialog();
+            }
+        }
+
+        /**
+         * Read and show log file info
+         */
+        private ArrayList<String> readLogFile() {
+            ArrayList<String> logList = new ArrayList<>();
+            try {
+                Process process = Runtime.getRuntime().exec("logcat -dv time");
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+
+                String line;
+                while ((line = bufferedReader.readLine()) != null) {
+                    line = line.replace(" W/", " W: ")
+                            .replace(" E/", " E: ")
+                            .replace(" V/", " V: ")
+                            .replace(" I/", " I: ")
+                            .replace(" D/", " D: ");
+                    logList.add(line);
+                }
+            } catch (IOException e) {
+                Log_OC.e("LoadingLogcatTask", e.getMessage());
+            }
+
+            return logList;
+        }
+    }
+
+    /**
+     * Show loading dialog
+     */
+    public void showLoadingDialog() {
+        // Construct dialog
+        LoadingDialog loading = LoadingDialog.newInstance(R.string.log_progress_dialog_text, false);
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        loading.show(ft, DIALOG_WAIT_TAG);
+    }
+
+    /**
+     * Dismiss loading dialog
+     */
+    public void dismissLoadingDialog() {
+        Fragment frag = getSupportFragmentManager().findFragmentByTag(DIALOG_WAIT_TAG);
+        if (frag != null) {
+            LoadingDialog loading = (LoadingDialog) frag;
+            loading.dismiss();
+        }
+    }
+
+    private class LoadingLogfileTask extends AsyncTask<String, Void, ArrayList<String>> {
+
+        protected ArrayList<String> doInBackground(String... args) {
+            return readLogFile();
+        }
+
+        protected void onPostExecute(ArrayList<String> result) {
+            if (result != null) {
+                mLogListAdapter = new LogListAdapter(result, mCurrentFilter, LogHistoryActivity.this);
                 mLogsRecycler.setAdapter(mLogListAdapter);
                 dismissLoadingDialog();
             }
@@ -229,28 +386,6 @@ public class LogHistoryActivity extends ToolbarActivity {
                 }
             }
             return logList;
-        }
-    }
-
-    /**
-     * Show loading dialog
-     */
-    public void showLoadingDialog() {
-        // Construct dialog
-        LoadingDialog loading = LoadingDialog.newInstance(R.string.log_progress_dialog_text, false);
-        FragmentManager fm = getSupportFragmentManager();
-        FragmentTransaction ft = fm.beginTransaction();
-        loading.show(ft, DIALOG_WAIT_TAG);
-    }
-
-    /**
-     * Dismiss loading dialog
-     */
-    public void dismissLoadingDialog() {
-        Fragment frag = getSupportFragmentManager().findFragmentByTag(DIALOG_WAIT_TAG);
-        if (frag != null) {
-            LoadingDialog loading = (LoadingDialog) frag;
-            loading.dismiss();
         }
     }
 }
