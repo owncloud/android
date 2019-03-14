@@ -353,7 +353,7 @@ public class FileDisplayActivity extends FileActivity
     }
 
     private void createMinFragments() {
-        OCFileListFragment listOfFiles = OCFileListFragment.newInstance(false, mOnlyAvailableOffline,false, true);
+        OCFileListFragment listOfFiles = OCFileListFragment.newInstance(false, mOnlyAvailableOffline, false, true);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.add(R.id.left_fragment_container, listOfFiles, TAG_LIST_OF_FILES);
         transaction.commit();
@@ -365,8 +365,6 @@ public class FileDisplayActivity extends FileActivity
             OCFileListFragment listOfFiles = getListOfFilesFragment();
             if (listOfFiles != null) {
                 listOfFiles.listDirectory(getCurrentDir());
-                // TODO Enable when "On Device" is recovered
-                // listOfFiles.listDirectory(getCurrentDir(), MainApp.getOnlyOnDevice());
 
             } else {
                 Log_OC.e(TAG, "Still have a chance to lose the initializacion of list fragment >(");
@@ -516,8 +514,6 @@ public class FileDisplayActivity extends FileActivity
         OCFileListFragment fileListFragment = getListOfFilesFragment();
         if (fileListFragment != null) {
             fileListFragment.listDirectory(reloadData);
-            // TODO Enable when "On Device" is recovered ?
-            // fileListFragment.listDirectory(MainApp.getOnlyOnDevice());
         }
     }
 
@@ -1014,9 +1010,6 @@ public class FileDisplayActivity extends FileActivity
                             OCFileListFragment fileListFragment = getListOfFilesFragment();
                             if (fileListFragment != null) {
                                 fileListFragment.listDirectory(true);
-                                // TODO Enable when "On Device" is recovered ?
-                                // fileListFragment.listDirectory(currentDir,
-                                // MainApp.getOnlyOnDevice());
                             }
                         }
                         setFile(currentFile);
@@ -1106,11 +1099,7 @@ public class FileDisplayActivity extends FileActivity
             int message = R.string.file_list_loading;
             if (!mSyncInProgress) {
                 // In case file list is empty
-                if(mOnlyAvailableOffline){
-                    message = R.string.file_list_empty_available_offline ;
-                }else{
-                    message = R.string.file_list_empty;
-                }
+                message = mOnlyAvailableOffline ? R.string.file_list_empty_available_offline : R.string.file_list_empty;
                 ocFileListFragment.getProgressBar().setVisibility(View.GONE);
                 ocFileListFragment.getShadowView().setVisibility(View.VISIBLE);
             }
@@ -1336,8 +1325,6 @@ public class FileDisplayActivity extends FileActivity
         if (listOfFiles != null) {  // should never be null, indeed
             OCFile root = getStorageManager().getFileByPath(OCFile.ROOT_PATH);
             listOfFiles.listDirectory(root);
-            // TODO Enable when "On Device" is recovered ?
-            // listOfFiles.listDirectory(root, MainApp.getOnlyOnDevice());
             setFile(listOfFiles.getCurrentFile());
             startSyncFolderOperation(root, false);
         }
@@ -1377,7 +1364,7 @@ public class FileDisplayActivity extends FileActivity
             chosenFile = getFile();     // if no file is passed, current file decides
         }
         super.updateActionBarTitleAndHomeButton(chosenFile);
-        if(chosenFile.getRemotePath().equals("/") && mOnlyAvailableOffline) {
+        if(chosenFile.getRemotePath().equals(OCFile.ROOT_PATH) && mOnlyAvailableOffline) {
             updateActionBarTitleAndHomeButtonByString(
                     getResources().getString(R.string.drawer_item_only_available_offline));
         }
@@ -1437,8 +1424,6 @@ public class FileDisplayActivity extends FileActivity
             OCFileListFragment listOfFiles = getListOfFilesFragment();
             if (listOfFiles != null) {
                 listOfFiles.listDirectory(false);
-                // TODO Enable when "On Device" is recovered ?
-                // listOfFiles.listDirectory(MainApp.getOnlyOnDevice());
             }
             FileFragment secondFragment = getSecondFragment();
             if (secondFragment != null) {

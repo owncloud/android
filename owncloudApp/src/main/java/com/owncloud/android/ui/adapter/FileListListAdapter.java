@@ -207,9 +207,10 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
                     TextView fileSizeV = view.findViewById(R.id.file_size);
                     TextView fileSizeSeparatorV = view.findViewById(R.id.file_separator);
                     TextView lastModV = view.findViewById(R.id.last_mod);
-                    
-                    if(!mOnlyAvailableOffline){
-                        lastModV.setVisibility(View.VISIBLE);
+                    lastModV.setVisibility(View.VISIBLE);
+
+                    if (!mOnlyAvailableOffline) {
+
                         lastModV.setText(DisplayUtils.getRelativeTimestamp(mContext, file.getModificationTimestamp()));
 
                         fileSizeSeparatorV.setVisibility(View.VISIBLE);
@@ -217,8 +218,7 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
                         fileSizeV.setText(DisplayUtils.bytesToHumanReadable(
                                 file.getFileLength(), mContext
                         ));
-                    }else{
-                        lastModV.setVisibility(View.VISIBLE);
+                    } else {
                         lastModV.setText(file.getRemotePath());
                         lastModV.setSingleLine(true);
                         lastModV.setEllipsize(TextUtils.TruncateAt.END);
@@ -388,21 +388,18 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
      * @param updatedStorageManager Optional updated storage manager; used to replace
      *                              mStorageManager if is different (and not NULL)
      */
-    public void swapDirectory(OCFile folder, FileDataStorageManager updatedStorageManager
-            /*, boolean onlyOnDevice*/) {
+    public void swapDirectory(OCFile folder, FileDataStorageManager updatedStorageManager) {
         if (updatedStorageManager != null && updatedStorageManager != mStorageManager) {
             mStorageManager = updatedStorageManager;
             mAccount = AccountUtils.getCurrentOwnCloudAccount(mContext);
         }
 
         if (mStorageManager != null) {
-            if(mOnlyAvailableOffline && (folder.equals(updatedStorageManager.getFileByPath("/")) ||
-                    !folder.isAvailableOffline())){
-                mImmutableFilesList=updatedStorageManager.getAvailableOfflineFilesFromCurrentAccount();
-            }
-            else{
-                // TODO Enable when "On Device" is recovered ?
-                mImmutableFilesList = mStorageManager.getFolderContent(folder, mOnlyAvailableOffline/*, onlyOnDevice*/);
+            if (mOnlyAvailableOffline && (folder.equals(updatedStorageManager.getFileByPath(OCFile.ROOT_PATH)) ||
+                    !folder.isAvailableOffline())) {
+                mImmutableFilesList = updatedStorageManager.getAvailableOfflineFilesFromCurrentAccount();
+            } else {
+                mImmutableFilesList = mStorageManager.getFolderContent(folder, mOnlyAvailableOffline);
             }
 
             mFiles = mImmutableFilesList;

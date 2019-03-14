@@ -137,7 +137,7 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
 
             if (!stateWasRecovered) {
                 OCFileListFragment listOfFolders = getListOfFilesFragment();
-                listOfFolders.listDirectory(folder/*, false*/);
+                listOfFolders.listDirectory(folder);
 
                 startSyncFolderOperation(folder, false);
             }

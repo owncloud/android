@@ -133,13 +133,11 @@ public class PreviewImageActivity extends FileActivity implements
             parentFolder = getStorageManager().getFileByPath(OCFile.ROOT_PATH);
         }
 
-        // TODO Enable when "On Device" is recovered ?
         mPreviewImagePagerAdapter = new PreviewImagePagerAdapter(
                 getSupportFragmentManager(),
                 parentFolder,
                 getAccount(),
                 getStorageManager()
-                /*, MainApp.getOnlyOnDevice()*/
         );
 
         mViewPager = findViewById(R.id.fragmentPager);

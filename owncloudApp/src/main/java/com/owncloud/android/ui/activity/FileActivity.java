@@ -79,7 +79,7 @@ public class FileActivity extends DrawerActivity
     public static final String EXTRA_ACCOUNT = "com.owncloud.android.ui.activity.ACCOUNT";
     public static final String EXTRA_FROM_NOTIFICATION =
             "com.owncloud.android.ui.activity.FROM_NOTIFICATION";
-    public static final String EXTRA_ONLY_AVAILABLE_OFFLINE ="ONLY_AVAILABLE_OFFLINE";
+    static final String EXTRA_ONLY_AVAILABLE_OFFLINE ="ONLY_AVAILABLE_OFFLINE";
     public static final String TAG = FileActivity.class.getSimpleName();
 
     private static final String DIALOG_WAIT_TAG = "DIALOG_WAIT";
@@ -510,10 +510,10 @@ public class FileActivity extends DrawerActivity
 
     @Override
     public void onlyAvailableOfflineOption(){
-        Intent i = new Intent(this, FileDisplayActivity.class);
-        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        i.putExtra(EXTRA_ONLY_AVAILABLE_OFFLINE, true);
-        startActivity(i);
+        Intent intent = new Intent(this, FileDisplayActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra(EXTRA_ONLY_AVAILABLE_OFFLINE, true);
+        startActivity(intent);
      }
 
     protected OCFile getCurrentDir() {

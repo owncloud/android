@@ -176,22 +176,20 @@ public class FileDataStorageManager {
         return fileExists(ProviderTableMeta.FILE_PATH, path);
     }
 
-    public Vector<OCFile> getFolderContent(OCFile f, boolean onlyAvailableOffline/*, boolean onlyOnDevice*/) {
+    public Vector<OCFile> getFolderContent(OCFile f, boolean onlyAvailableOffline) {
         if (f != null && f.isFolder() && f.getFileId() != -1) {
-            // TODO Enable when "On Device" is recovered ?
-            return getFolderContent(f.getFileId(), onlyAvailableOffline/*, onlyOnDevice*/);
+            return getFolderContent(f.getFileId(), onlyAvailableOffline);
 
         } else {
             return new Vector<>();
         }
     }
 
-    public Vector<OCFile> getFolderImages(OCFile folder/*, boolean onlyOnDevice*/) {
+    public Vector<OCFile> getFolderImages(OCFile folder) {
         Vector<OCFile> ret = new Vector<OCFile>();
         if (folder != null) {
             // TODO better implementation, filtering in the access to database instead of here
-            // TODO Enable when "On Device" is recovered ?
-            Vector<OCFile> tmp = getFolderContent(folder,false/*, onlyOnDevice*/);
+            Vector<OCFile> tmp = getFolderContent(folder, false);
             OCFile current;
             for (int i = 0; i < tmp.size(); i++) {
                 current = tmp.get(i);
@@ -667,8 +665,7 @@ public class FileDataStorageManager {
         File localFolder = new File(localFolderPath);
         if (localFolder.exists()) {
             // stage 1: remove the local files already registered in the files database
-            // TODO Enable when "On Device" is recovered ?
-            Vector<OCFile> files = getFolderContent(folder.getFileId(), false/*, false*/);
+            Vector<OCFile> files = getFolderContent(folder.getFileId(), false);
             if (files != null) {
                 for (OCFile file : files) {
                     if (file.isFolder()) {
@@ -714,7 +711,7 @@ public class FileDataStorageManager {
 
     /**
      * Updates database and file system for a file or folder that was moved to a different location.
-     *
+     * <p>
      * TODO explore better (faster) implementations
      * TODO throw exceptions up !
      */
@@ -929,7 +926,7 @@ public class FileDataStorageManager {
         return ret;
     }
 
-    private Vector<OCFile> getFolderContent(long parentId, boolean onlyAvailableOffline/*, boolean onlyOnDevice*/) {
+    private Vector<OCFile> getFolderContent(long parentId, boolean onlyAvailableOffline) {
         Vector<OCFile> ret = new Vector<OCFile>();
 
         Uri req_uri = Uri.withAppendedPath(
@@ -938,13 +935,12 @@ public class FileDataStorageManager {
         Cursor c = null;
 
         String selection;
-        String [] selectionArgs;
+        String[] selectionArgs;
 
-        if(!onlyAvailableOffline){
+        if (!onlyAvailableOffline) {
             selection = ProviderTableMeta.FILE_PARENT + "=?";
             selectionArgs = new String[] {String.valueOf(parentId)};
-        }
-        else{
+        } else {
             selection = ProviderTableMeta.FILE_PARENT + "=? AND (" + ProviderTableMeta.FILE_KEEP_IN_SYNC +
                     " = ? OR " + ProviderTableMeta.FILE_KEEP_IN_SYNC + "=? )";
             selectionArgs = new String[]{String.valueOf(parentId),
@@ -967,10 +963,7 @@ public class FileDataStorageManager {
             if (c.moveToFirst()) {
                 do {
                     OCFile child = createFileInstance(c);
-                    // TODO Enable when "On Device" is recovered ?
-                    // if (child.isFolder() || !onlyOnDevice || onlyOnDevice && child.isDown()){
                     ret.add(child);
-                    // }
                 } while (c.moveToNext());
             }
             c.close();
@@ -1602,8 +1595,7 @@ public class FileDataStorageManager {
                     + ProviderTableMeta.OCSHARES_ACCOUNT_OWNER + "=?";
             String[] whereArgs = new String[]{"", mAccount.name};
 
-            // TODO Enable when "On Device" is recovered ?
-            Vector<OCFile> files = getFolderContent(folder, false /*, false*/);
+            Vector<OCFile> files = getFolderContent(folder, false);
 
             for (OCFile file : files) {
                 whereArgs[0] = file.getRemotePath();
@@ -2226,7 +2218,7 @@ public class FileDataStorageManager {
                 OCFile file;
                 do {
                     file = createFileInstance(cursorOnKeptInSync);
-                        result.add(file);
+                    result.add(file);
                 } while (cursorOnKeptInSync.moveToNext());
             }
 

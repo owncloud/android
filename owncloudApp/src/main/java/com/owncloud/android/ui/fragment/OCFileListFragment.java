@@ -1007,7 +1007,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
      *
      * @param directory File to be listed
      */
-    public void listDirectory(OCFile directory/*, boolean onlyOnDevice*/) {
+    public void listDirectory(OCFile directory) {
         FileDataStorageManager storageManager = mContainerActivity.getStorageManager();
         if (storageManager != null) {
 
@@ -1016,7 +1016,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
                 if (mFile != null) {
                     directory = mFile;
                 } else {
-                    directory = storageManager.getFileByPath("/");
+                    directory = storageManager.getFileByPath(OCFile.ROOT_PATH);
                     if (directory == null) {
                         return; // no files, wait for sync
                     }
@@ -1031,11 +1031,10 @@ public class OCFileListFragment extends ExtendedListFragment implements
 
             // If available offline option and folder is not available offline -> list root
             if(!directory.isAvailableOffline() && isShowingOnlyAvailableOffline()){
-                directory = storageManager.getFileByPath("/");
+                directory = storageManager.getFileByPath(OCFile.ROOT_PATH);
             }
 
-            // TODO Enable when "On Device" is recovered ?
-            mFileListAdapter.swapDirectory(directory, storageManager/*, onlyOnDevice*/);
+            mFileListAdapter.swapDirectory(directory, storageManager);
             if (mFile == null || !mFile.equals(directory)) {
                 mCurrentListView.setSelection(0);
             }

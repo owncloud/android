@@ -477,12 +477,12 @@ public class ExtendedListFragment extends Fragment
         mProgressBar.postInvalidate();
     }
 
-    protected boolean isShowingJustFolders() {
+    boolean isShowingJustFolders() {
         Bundle args = getArguments();
         return ((args != null) && args.getBoolean(ARG_JUST_FOLDERS, false));
     }
 
-    protected boolean isShowingOnlyAvailableOffline() {
+    boolean isShowingOnlyAvailableOffline() {
         Bundle args = getArguments();
         return ((args != null) && args.getBoolean(ARG_ONLY_AVAILABLE_OFFLINE, false));
     }

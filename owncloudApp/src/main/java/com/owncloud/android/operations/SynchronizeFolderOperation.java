@@ -53,7 +53,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  *  Operation performing the synchronization of the list of files contained
  *  in a folder identified with its remote path.
  *
- *  Fetches the list and properties of the files contained in the given folder, including their 
+q *  Fetches the list and properties of the files contained in the given folder, including their
  *  properties, and updates the local database with them.
  *
  *  Does NOT enter in the child folders to synchronize their contents also, BUT requests for a new operation instance
@@ -303,7 +303,7 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
         }
 
         // get current data about local contents of the folder to synchronize
-        List<OCFile> localFiles = storageManager.getFolderContent(mLocalFolder,false);
+        List<OCFile> localFiles = storageManager.getFolderContent(mLocalFolder, false);
         Map<String, OCFile> localFilesMap = new HashMap<>(localFiles.size());
         for (OCFile file : localFiles) {
             localFilesMap.put(file.getRemoteId(), file);
