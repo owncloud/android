@@ -49,7 +49,6 @@
   <string name="prefs_log_delete_history_button">删除历史</string>
   <string name="prefs_help">帮助</string>
   <string name="prefs_sync_calendar_contacts">同步联系人、日历和任务</string>
-  <string name="prefs_sync_calendar_contacts_summary">安装 DAVdroid</string>
   <string name="prefs_recommend">推荐给朋友</string>
   <string name="prefs_feedback">反馈</string>
   <string name="prefs_imprint">版本说明</string>

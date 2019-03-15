@@ -52,7 +52,6 @@
   <string name="prefs_log_delete_history_button">Fshije historikun</string>
   <string name="prefs_help">Ndihmë</string>
   <string name="prefs_sync_calendar_contacts">Njëkohësoni kontaktet, kalendarët dhe punët tuaja</string>
-  <string name="prefs_sync_calendar_contacts_summary">Instalo DAVdroid</string>
   <string name="prefs_recommend">Këshillojani një shoku</string>
   <string name="prefs_feedback">Përshtypje</string>
   <string name="prefs_imprint">Imprint</string>

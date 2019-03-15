@@ -47,7 +47,6 @@
   <string name="prefs_log_delete_history_button">Elimina cronologia</string>
   <string name="prefs_help">Aiuto</string>
   <string name="prefs_sync_calendar_contacts">Sincronizza i tuoi contatti, calendari e attività</string>
-  <string name="prefs_sync_calendar_contacts_summary">Installa DAVdroid</string>
   <string name="prefs_recommend">Consiglia a un amico</string>
   <string name="prefs_feedback">Segnalazioni</string>
   <string name="prefs_imprint">Imprint</string>

@@ -46,7 +46,6 @@
   <string name="prefs_log_delete_history_button">Geçmişi sil</string>
   <string name="prefs_help">Yardım</string>
   <string name="prefs_sync_calendar_contacts">Kişilerinizi, takviminizi ve görevlerinizi senkronize edin</string>
-  <string name="prefs_sync_calendar_contacts_summary">DAVdroid\'i yükle</string>
   <string name="prefs_recommend">Bir arkadaşa öner</string>
   <string name="prefs_feedback">Geribildirim</string>
   <string name="prefs_imprint">İzlenim</string>

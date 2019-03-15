@@ -52,7 +52,6 @@
   <string name="prefs_log_delete_history_button">ลบประวัติย้อนหลัง</string>
   <string name="prefs_help">ช่วยเหลือ</string>
   <string name="prefs_sync_calendar_contacts">ประสานข้อมูลรายชื่อผู้ติดต่อ ปฏิทิน และงานของคุณ</string>
-  <string name="prefs_sync_calendar_contacts_summary">ติดตั้ง DAVdroid</string>
   <string name="prefs_recommend">แนะนำให้เพื่อน</string>
   <string name="prefs_feedback">ข้อเสนอแนะ</string>
   <string name="prefs_imprint">ประทับ</string>
