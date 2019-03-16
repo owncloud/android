@@ -52,6 +52,7 @@
   <string name="prefs_log_delete_history_button">Apagar história</string>
   <string name="prefs_help">Ajuda</string>
   <string name="prefs_sync_calendar_contacts">Sincronize seus contatos, calendários e tarefas</string>
+  <string name="prefs_sync_calendar_contacts_summary">Instalar DAVx⁵</string>
   <string name="prefs_recommend">Recomendar a um amigo</string>
   <string name="prefs_feedback">Feedback</string>
   <string name="prefs_imprint">Imprint</string>

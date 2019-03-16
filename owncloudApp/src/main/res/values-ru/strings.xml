@@ -52,6 +52,7 @@
   <string name="prefs_log_delete_history_button">Удалить историю</string>
   <string name="prefs_help">Помощь</string>
   <string name="prefs_sync_calendar_contacts">Синхронизировать ваши контакты, календари и задачи</string>
+  <string name="prefs_sync_calendar_contacts_summary">Установить DAVx⁵</string>
   <string name="prefs_recommend">Рекомендовать другу</string>
   <string name="prefs_feedback">Обратная связь</string>
   <string name="prefs_imprint">Штамп</string>
