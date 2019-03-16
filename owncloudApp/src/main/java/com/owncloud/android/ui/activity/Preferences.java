@@ -5,6 +5,7 @@
  * @author David A. Velasco
  * @author David González Verdugo
  * @author Christian Schabesberger
+ * @author Shashvat Kedia
  * Copyright (C) 2011  Bartek Przybylski
  * Copyright (C) 2019 ownCloud GmbH.
  *
@@ -963,6 +964,7 @@ public class Preferences extends PreferenceActivity {
         AlertDialog alertDialog = new AlertDialog.Builder(this).create();
         alertDialog.setTitle(title);
         alertDialog.setMessage(message);
+        alertDialog.setCanceledOnTouchOutside(false);
         alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.common_no), listener);
         alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.common_yes), listener);
         alertDialog.show();
