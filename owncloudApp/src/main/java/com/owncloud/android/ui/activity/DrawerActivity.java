@@ -152,7 +152,7 @@ public abstract class DrawerActivity extends ToolbarActivity {
             mNavigationView.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
                 @Override
                 public void onViewAttachedToWindow(View v) {
-                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P) {
                         DisplayCutout displayCutout = v.getRootWindowInsets().getDisplayCutout();
 
                         if (displayCutout != null) {
