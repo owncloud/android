@@ -206,7 +206,6 @@ class FileContentProvider(val appExecutors: AppExecutors = AppExecutors()) : Con
                     return insertedFileUri
                 }
             }
-
             SHARES -> {
                 val shareId: Long = OwncloudDatabase.getDatabase(context).shareDao().insert(
                     listOf(OCShare.fromContentValues(values))
@@ -307,7 +306,6 @@ class FileContentProvider(val appExecutors: AppExecutors = AppExecutors()) : Con
         selectionArgs: Array<String>?,
         sortOrder: String?
     ): Cursor {
-
         if (selection != null && selectionArgs == null) {
             throw IllegalArgumentException("Selection not allowed, use parameterized queries")
         }

@@ -39,34 +39,34 @@ import com.owncloud.android.vo.Resource
  */
 @OpenForTesting
 class OCShareViewModel(
-        val account: Account,
-        val filePath: String,
-        shareTypes: List<ShareType>,
-        val shareRepository: ShareRepository = OCShareRepository.create(
-                localSharesDataSource = OCLocalSharesDataSource(),
-                remoteSharesDataSource = OCRemoteSharesDataSource(
-                        OwnCloudClientManagerFactory.getDefaultSingleton().getClientFor(
-                                OwnCloudAccount(account, MainApp.getAppContext()),
-                                MainApp.getAppContext()
-                        )
-                )
+    val account: Account,
+    val filePath: String,
+    shareTypes: List<ShareType>,
+    val shareRepository: ShareRepository = OCShareRepository.create(
+        localSharesDataSource = OCLocalSharesDataSource(),
+        remoteSharesDataSource = OCRemoteSharesDataSource(
+            OwnCloudClientManagerFactory.getDefaultSingleton().getClientFor(
+                OwnCloudAccount(account, MainApp.getAppContext()),
+                MainApp.getAppContext()
+            )
         )
+    )
 ) : ViewModel() {
 
     val sharesForFile: LiveData<Resource<List<OCShare>>> = shareRepository.loadSharesForFile(
-            filePath, account.name, shareTypes, true, false
+        filePath, account.name, shareTypes, true, false
     )
 
     fun insertPublicShareForFile(
-            filePath: String,
-            name: String,
-            password: String,
-            expirationTimeInMillis: Long,
-            uploadToFolderPermission: Boolean,
-            permissions: Int
+        filePath: String,
+        name: String,
+        password: String,
+        expirationTimeInMillis: Long,
+        uploadToFolderPermission: Boolean,
+        permissions: Int
     ): LiveData<Resource<List<OCShare>>> {
         return shareRepository.insertPublicShareForFile(
-                filePath, account.name, permissions, name, password, expirationTimeInMillis, uploadToFolderPermission
+            filePath, account.name, permissions, name, password, expirationTimeInMillis, uploadToFolderPermission
         )
     }
 }

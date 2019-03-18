@@ -39,7 +39,7 @@ class RemoteSharesDataSourceTest(private val remoteOperationResult: RemoteOperat
         publicUpload: Boolean,
         createRemoteShareOperation: CreateRemoteShareOperation
     ): RemoteOperationResult<ShareParserResult> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return remoteOperationResult
     }
 
     override fun getSharesForFile(
