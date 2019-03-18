@@ -210,9 +210,7 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
                     lastModV.setVisibility(View.VISIBLE);
 
                     if (!mOnlyAvailableOffline) {
-
                         lastModV.setText(DisplayUtils.getRelativeTimestamp(mContext, file.getModificationTimestamp()));
-
                         fileSizeSeparatorV.setVisibility(View.VISIBLE);
                         fileSizeV.setVisibility(View.VISIBLE);
                         fileSizeV.setText(DisplayUtils.bytesToHumanReadable(

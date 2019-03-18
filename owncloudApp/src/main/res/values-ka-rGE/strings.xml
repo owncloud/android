@@ -8,8 +8,6 @@
   <string name="actionbar_send_file">გაგზავნა</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
-  <!--TODO re-enable when "On Device" is available
-    <string name="drawer_item_on_device">On device</string>-->
   <string name="drawer_open">გახსნა</string>
   <string name="drawer_feedback">უკუკავშირი</string>
   <string name="drawer_help">დახმარება</string>

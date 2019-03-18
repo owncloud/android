@@ -3,8 +3,6 @@
   <string name="actionbar_upload_files">ဖိုင်များ</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
-  <!--TODO re-enable when "On Device" is available
-    <string name="drawer_item_on_device">On device</string>-->
   <string name="drawer_help">အကူအညီ</string>
   <string name="prefs_help">အကူအညီ</string>
   <string name="auth_username">သုံးစွဲသူအမည်</string>

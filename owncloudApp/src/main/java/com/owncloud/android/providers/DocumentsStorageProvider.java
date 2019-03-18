@@ -104,7 +104,7 @@ public class DocumentsStorageProvider extends DocumentsProvider {
         final OCFile browsedDir = mCurrentStorageManager.getFileById(folderId);
 
         // Create result cursor before syncing folder again, in order to enable faster loading
-        for (OCFile file : mCurrentStorageManager.getFolderContent(browsedDir,false)) {
+        for (OCFile file : mCurrentStorageManager.getFolderContent(browsedDir, false)) {
             resultCursor.addFile(file);
         }
 
@@ -260,7 +260,7 @@ public class DocumentsStorageProvider extends DocumentsProvider {
 
     Vector<OCFile> findFiles(OCFile root, String query) {
         Vector<OCFile> result = new Vector<OCFile>();
-        for (OCFile f : mCurrentStorageManager.getFolderContent(root,false)) {
+        for (OCFile f : mCurrentStorageManager.getFolderContent(root, false)) {
             if (f.isFolder()) {
                 result.addAll(findFiles(f, query));
             } else {

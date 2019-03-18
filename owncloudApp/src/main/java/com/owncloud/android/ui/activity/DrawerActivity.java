@@ -241,7 +241,6 @@ public abstract class DrawerActivity extends ToolbarActivity {
                             case R.id.nav_all_files:
                                 menuItem.setChecked(true);
                                 mCheckedMenuItem = menuItem.getItemId();
-
                                 allFilesOption();
                                 break;
                             case R.id.nav_uploads:
@@ -253,7 +252,6 @@ public abstract class DrawerActivity extends ToolbarActivity {
                             case R.id.nav_only_available_offline:
                                 menuItem.setChecked(true);
                                 mCheckedMenuItem = menuItem.getItemId();
-
                                 onlyAvailableOfflineOption();
                                 break;
                             case R.id.nav_settings:
