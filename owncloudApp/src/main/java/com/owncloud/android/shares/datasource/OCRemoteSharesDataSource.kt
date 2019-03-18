@@ -27,32 +27,32 @@ import com.owncloud.android.lib.resources.shares.ShareParserResult
 import com.owncloud.android.lib.resources.shares.ShareType
 
 class OCRemoteSharesDataSource(
-        private val client: OwnCloudClient
+    private val client: OwnCloudClient
 ) : RemoteSharesDataSource {
 
     override fun getSharesForFile(
-            path: String,
-            reshares: Boolean,
-            subfiles: Boolean,
-            getRemoteSharesForFileOperation: GetRemoteSharesForFileOperation
+        path: String,
+        reshares: Boolean,
+        subfiles: Boolean,
+        getRemoteSharesForFileOperation: GetRemoteSharesForFileOperation
     ): RemoteOperationResult<ShareParserResult> {
         return getRemoteSharesForFileOperation.execute(client)
     }
 
     override fun insertShareForFile(
-            remoteFilePath: String,
-            shareType: ShareType,
-            shareWith: String,
-            permissions: Int,
-            name: String,
-            password: String,
-            expirationDate: Long,
-            publicUpload: Boolean,
-            createRemoteShareOperation: CreateRemoteShareOperation
+        remoteFilePath: String,
+        shareType: ShareType,
+        shareWith: String,
+        permissions: Int,
+        name: String,
+        password: String,
+        expirationTimeInMillis: Long,
+        publicUpload: Boolean,
+        createRemoteShareOperation: CreateRemoteShareOperation
     ): RemoteOperationResult<ShareParserResult> {
         createRemoteShareOperation.name = name
         createRemoteShareOperation.password = password
-        createRemoteShareOperation.expirationDateInMillis = expirationDate
+        createRemoteShareOperation.expirationDateInMillis = expirationTimeInMillis
         createRemoteShareOperation.publicUpload = publicUpload
         createRemoteShareOperation.getShareDetails = true
         return createRemoteShareOperation.execute(client)
