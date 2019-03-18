@@ -31,9 +31,9 @@ import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.status.OwnCloudVersion
 import com.owncloud.android.shares.db.OCShare
+import com.owncloud.android.shares.ui.fragment.ShareFileFragment
 import com.owncloud.android.shares.viewmodel.OCShareViewModel
 import com.owncloud.android.testing.TestShareFileActivity
-import com.owncloud.android.ui.fragment.ShareFileFragment
 import com.owncloud.android.utils.TestUtil
 import com.owncloud.android.utils.ViewModelUtil
 import com.owncloud.android.vo.Resource
@@ -53,6 +53,27 @@ class ShareFileFragmentTest {
     private val sharesLiveData = MutableLiveData<Resource<List<OCShare>>>()
     private lateinit var shareFragment: ShareFileFragment
     private lateinit var ocShareViewModel: OCShareViewModel
+
+    private val publicShares = arrayListOf(
+        TestUtil.createPublicShare(
+            path = "/Photos/image.jpg",
+            isFolder = false,
+            name = "Image link",
+            shareLink = "http://server:port/s/1"
+        ),
+        TestUtil.createPublicShare(
+            path = "/Photos/image.jpg",
+            isFolder = false,
+            name = "Image link 2",
+            shareLink = "http://server:port/s/2"
+        ),
+        TestUtil.createPublicShare(
+            path = "/Photos/image.jpg",
+            isFolder = false,
+            name = "Image link 3",
+            shareLink = "http://server:port/s/3"
+        )
+    )
 
     @Before
     fun setUp() {
@@ -90,7 +111,7 @@ class ShareFileFragmentTest {
 
     @Test
     fun showLoadingDialog() {
-        sharesLiveData.postValue(Resource.loading())
+        sharesLiveData.postValue(Resource.loading(publicShares))
         onView(withId(R.id.loadingLayout)).check(matches(isDisplayed()))
     }
 
@@ -103,27 +124,6 @@ class ShareFileFragmentTest {
 
     @Test
     fun showPublicShares() {
-        val publicShares = arrayListOf(
-            TestUtil.createPublicShare(
-                path = "/Photos/image.jpg",
-                isFolder = false,
-                name = "Image link",
-                shareLink = "http://server:port/s/1"
-            ),
-            TestUtil.createPublicShare(
-                path = "/Photos/image.jpg",
-                isFolder = false,
-                name = "Image link 2",
-                shareLink = "http://server:port/s/2"
-            ),
-            TestUtil.createPublicShare(
-                path = "/Photos/image.jpg",
-                isFolder = false,
-                name = "Image link 3",
-                shareLink = "http://server:port/s/3"
-            )
-        )
-
         sharesLiveData.postValue(Resource.success(publicShares))
 
         onView(withText("Image link")).check(matches(isDisplayed()))
@@ -132,24 +132,19 @@ class ShareFileFragmentTest {
     }
 
     @Test
-    fun fileSizeVisible(){
-        val publicShares = arrayListOf(
-                TestUtil.createPublicShare(
-                        path = "/Photos/image.jpg",
-                        isFolder = false,
-                        name = "Image link 1",
-                        shareLink = "http://server:port/s/1"
-                )
-        )
+    fun fileSizeVisible() {
         sharesLiveData.postValue(Resource.success(publicShares))
         onView(withId(R.id.shareFileSize)).check(matches(isDisplayed()))
-
     }
-
 
     @Test
     fun showError() {
-        sharesLiveData.postValue(Resource.error(RemoteOperationResult.ResultCode.SERVICE_UNAVAILABLE))
+        sharesLiveData.postValue(
+            Resource.error(
+                RemoteOperationResult.ResultCode.SERVICE_UNAVAILABLE,
+                data = publicShares
+            )
+        )
         onView(withId(R.id.snackbar_text)).check(matches(withText(R.string.service_unavailable)))
     }
 

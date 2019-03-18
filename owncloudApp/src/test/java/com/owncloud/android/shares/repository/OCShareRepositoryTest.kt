@@ -26,7 +26,7 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.shares.RemoteShare
 import com.owncloud.android.lib.resources.shares.ShareParserResult
 import com.owncloud.android.lib.resources.shares.ShareType
-import com.owncloud.android.shares.datasources.LocalSharesDataSource
+import com.owncloud.android.shares.datasource.LocalSharesDataSource
 import com.owncloud.android.shares.db.OCShare
 import com.owncloud.android.util.InstantAppExecutors
 import com.owncloud.android.utils.TestUtil
@@ -99,8 +99,12 @@ class OCShareRepositoryTest {
             "/Photos/", "admin@server", listOf(ShareType.PUBLIC_LINK), true, false
         )
 
-        // Get public shares from database to observe them
-        verify(localSharesDataSource).getSharesForFileAsLiveData(
+        val observer = mock<Observer<Resource<List<OCShare>>>>()
+        data.observeForever(observer)
+
+        // Get public shares from database to observe them, is called twice (one showing current db shares while
+        // getting shares from server and another one with db shares already updated with server ones)
+        verify(localSharesDataSource, times(2)).getSharesForFileAsLiveData(
             "/Photos/", "admin@server", listOf(ShareType.PUBLIC_LINK)
         )
 
@@ -127,9 +131,6 @@ class OCShareRepositoryTest {
             newPublicShare
         )
 
-        val observer = mock<Observer<Resource<List<OCShare>>>>()
-        data.observeForever(observer)
-
         verify(observer).onChanged(Resource.success(newPublicShare))
     }
 
@@ -147,7 +148,7 @@ class OCShareRepositoryTest {
 
         val remoteOperationResult = mock<RemoteOperationResult<ShareParserResult>>()
 
-        val remoteSharesForFile : ArrayList<RemoteShare> = arrayListOf()
+        val remoteSharesForFile: ArrayList<RemoteShare> = arrayListOf()
 
         `when`(remoteOperationResult.data).thenReturn(
             ShareParserResult(remoteSharesForFile)
@@ -164,8 +165,9 @@ class OCShareRepositoryTest {
             "/Photos/", "admin@server", listOf(ShareType.PUBLIC_LINK), true, false
         )
 
-        // Get public shares from database to observe them
-        verify(localSharesDataSource).getSharesForFileAsLiveData(
+        // Get public shares from database to observe them, is called twice (one showing current db shares while
+        // getting shares from server and another one with db shares already updated with server ones)
+        verify(localSharesDataSource, times(2)).getSharesForFileAsLiveData(
             "/Photos/", "admin@server", listOf(ShareType.PUBLIC_LINK)
         )
 
@@ -187,6 +189,15 @@ class OCShareRepositoryTest {
     fun loadPublicSharesForFileFromNetworkWithError() {
         val dbData = MutableLiveData<List<OCShare>>()
 
+        dbData.value = listOf(
+            TestUtil.createPublicShare(
+                path = "/Images/image1",
+                isFolder = false,
+                name = "Image 1 link",
+                shareLink = "http://server:port/s/1"
+            )
+        )
+
         `when`(
             localSharesDataSource.getSharesForFileAsLiveData(
                 "/Photos/", "admin@server", listOf(ShareType.PUBLIC_LINK)
@@ -196,15 +207,13 @@ class OCShareRepositoryTest {
         )
 
         val remoteOperationResult = mock<RemoteOperationResult<ShareParserResult>>()
-
-        val remoteSharesForFile : ArrayList<RemoteShare> = arrayListOf()
+        val remoteSharesForFile: ArrayList<RemoteShare> = arrayListOf()
 
         `when`(remoteOperationResult.data).thenReturn(
             ShareParserResult(remoteSharesForFile)
         )
 
         `when`(remoteOperationResult.isSuccess).thenReturn(false)
-
         `when`(remoteOperationResult.code).thenReturn(RemoteOperationResult.ResultCode.FORBIDDEN)
 
         val exception = Exception("Error when retrieving shares")
@@ -231,6 +240,10 @@ class OCShareRepositoryTest {
         val observer = mock<Observer<Resource<List<OCShare>>>>()
         data.observeForever(observer)
 
-        verify(observer).onChanged(Resource.error(RemoteOperationResult.ResultCode.FORBIDDEN, exception = exception))
+        verify(observer).onChanged(
+            Resource.error(
+                RemoteOperationResult.ResultCode.FORBIDDEN, dbData.value, exception = exception
+            )
+        )
     }
 }
