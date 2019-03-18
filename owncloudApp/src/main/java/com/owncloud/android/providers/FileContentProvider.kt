@@ -48,7 +48,7 @@ import com.owncloud.android.db.ProviderMeta.ProviderTableMeta
 import com.owncloud.android.lib.common.accounts.AccountUtils
 import com.owncloud.android.lib.common.utils.Log_OC
 import com.owncloud.android.lib.resources.shares.ShareType
-import com.owncloud.android.shares.datasources.OCLocalSharesDataSource
+import com.owncloud.android.shares.datasource.OCLocalSharesDataSource
 import com.owncloud.android.shares.db.OCShare
 import com.owncloud.android.utils.FileStorageUtils
 import java.io.File

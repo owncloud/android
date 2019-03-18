@@ -21,7 +21,7 @@
  * along with this program.  If not, see <http:></http:>//www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.ui.fragment
+package com.owncloud.android.shares.ui.fragment
 
 import android.accounts.Account
 import android.app.Activity
@@ -47,13 +47,14 @@ import com.owncloud.android.lib.resources.status.OCCapability
 import com.owncloud.android.lib.resources.status.OwnCloudVersion
 import com.owncloud.android.operations.common.OperationType
 import com.owncloud.android.shares.db.OCShare
+import com.owncloud.android.shares.ui.ShareActivity
 import com.owncloud.android.shares.viewmodel.OCShareViewModel
 import com.owncloud.android.ui.activity.BaseActivity
-import com.owncloud.android.ui.activity.ShareActivity
 import com.owncloud.android.ui.adapter.SharePublicLinkListAdapter
 import com.owncloud.android.ui.adapter.ShareUserListAdapter
 import com.owncloud.android.ui.dialog.RemoveShareDialogFragment
 import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter
+import com.owncloud.android.ui.fragment.ShareFragmentListener
 import com.owncloud.android.utils.DisplayUtils
 import com.owncloud.android.utils.MimetypeIconUtil
 import com.owncloud.android.vo.Status
@@ -185,7 +186,10 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
                 }
             }
 
-            return defaultName + String.format(Locale.getDefault(), DEFAULT_NAME_SUFFIX, chosenNumber)
+            return defaultName + String.format(
+                Locale.getDefault(),
+                DEFAULT_NAME_SUFFIX, chosenNumber
+            )
         }
 
     /**
@@ -326,8 +330,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        ocShareViewModel = ViewModelProviders.of(this, viewModelFactory).
-            get(OCShareViewModel::class.java)
+        ocShareViewModel = ViewModelProviders.of(this, viewModelFactory).get(OCShareViewModel::class.java)
     }
 
     override fun copyOrSendPublicLink(share: OCShare) {
@@ -337,7 +340,10 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
 
     override fun removePublicShare(share: OCShare) {
         val dialog = RemoveShareDialogFragment.newInstance(share)
-        dialog.show(fragmentManager!!, ShareActivity.TAG_REMOVE_SHARE_DIALOG_FRAGMENT)
+        dialog.show(
+            fragmentManager!!,
+            ShareActivity.TAG_REMOVE_SHARE_DIALOG_FRAGMENT
+        )
     }
 
     override fun editPublicShare(share: OCShare) {
@@ -424,7 +430,9 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
             noShares.visibility = View.GONE
             usersList.visibility = View.VISIBLE
             usersList.adapter = userGroupsAdapter
-            setListViewHeightBasedOnChildren(usersList)
+            setListViewHeightBasedOnChildren(
+                usersList
+            )
         } else {
             noShares.visibility = View.VISIBLE
             usersList.visibility = View.GONE
@@ -507,7 +515,9 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
             noPublicLinks.visibility = View.GONE
             publicLinksList.visibility = View.VISIBLE
             publicLinksList.adapter = publicLinksAdapter
-            setListViewHeightBasedOnChildren(publicLinksList)
+            setListViewHeightBasedOnChildren(
+                publicLinksList
+            )
         } else {
             noPublicLinks.visibility = View.VISIBLE
             publicLinksList.visibility = View.GONE

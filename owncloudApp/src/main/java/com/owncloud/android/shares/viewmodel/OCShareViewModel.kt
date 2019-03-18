@@ -26,8 +26,8 @@ import com.owncloud.android.MainApp
 import com.owncloud.android.lib.common.OwnCloudAccount
 import com.owncloud.android.lib.common.OwnCloudClientManagerFactory
 import com.owncloud.android.lib.resources.shares.ShareType
-import com.owncloud.android.shares.datasources.OCLocalSharesDataSource
-import com.owncloud.android.shares.datasources.OCRemoteSharesDataSource
+import com.owncloud.android.shares.datasource.OCLocalSharesDataSource
+import com.owncloud.android.shares.datasource.OCRemoteSharesDataSource
 import com.owncloud.android.shares.db.OCShare
 import com.owncloud.android.shares.repository.OCShareRepository
 import com.owncloud.android.shares.repository.ShareRepository

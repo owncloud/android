@@ -45,7 +45,6 @@ import com.owncloud.android.vo.Resource
 abstract class NetworkBoundResource<ResultType, RequestType>(
     private val appExecutors: AppExecutors
 ) {
-
     /**
      * Result will observe three different livedata objects and react on change events from them
      * - Shares livedata from Room to detect changes in database

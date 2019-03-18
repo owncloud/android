@@ -89,8 +89,8 @@ class OCShareViewModelTest {
 
     @Test
     fun loadPublicShares() {
-        val resource : Resource<List<OCShare>>? = ocShareViewModel.sharesForFile.value
-        val shares : List<OCShare>? = resource?.data
+        val resource: Resource<List<OCShare>>? = ocShareViewModel.sharesForFile.value
+        val shares: List<OCShare>? = resource?.data
 
         assertEquals(shares?.size, 2)
 
