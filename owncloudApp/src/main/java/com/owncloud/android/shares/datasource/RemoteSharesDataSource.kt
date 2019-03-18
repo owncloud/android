@@ -17,29 +17,24 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.shares.datasources
+package com.owncloud.android.shares.datasource
 
-import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.shares.CreateRemoteShareOperation
 import com.owncloud.android.lib.resources.shares.GetRemoteSharesForFileOperation
 import com.owncloud.android.lib.resources.shares.ShareParserResult
 import com.owncloud.android.lib.resources.shares.ShareType
 
-class OCRemoteSharesDataSource(
-        private val client: OwnCloudClient
-) : RemoteSharesDataSource {
-
-    override fun getSharesForFile(
-            path: String,
+interface RemoteSharesDataSource {
+    fun getSharesForFile(
+            remoteFilePath: String,
             reshares: Boolean,
             subfiles: Boolean,
-            getRemoteSharesForFileOperation: GetRemoteSharesForFileOperation
-    ): RemoteOperationResult<ShareParserResult> {
-        return getRemoteSharesForFileOperation.execute(client)
-    }
+            getRemoteSharesForFileOperation: GetRemoteSharesForFileOperation =
+                    GetRemoteSharesForFileOperation(remoteFilePath, reshares, subfiles)
+    ): RemoteOperationResult<ShareParserResult>
 
-    override fun insertShareForFile(
+    fun insertShareForFile(
             remoteFilePath: String,
             shareType: ShareType,
             shareWith: String,
@@ -48,13 +43,7 @@ class OCRemoteSharesDataSource(
             password: String,
             expirationDate: Long,
             publicUpload: Boolean,
-            createRemoteShareOperation: CreateRemoteShareOperation
-    ): RemoteOperationResult<ShareParserResult> {
-        createRemoteShareOperation.name = name
-        createRemoteShareOperation.password = password
-        createRemoteShareOperation.expirationDateInMillis = expirationDate
-        createRemoteShareOperation.publicUpload = publicUpload
-        createRemoteShareOperation.getShareDetails = true
-        return createRemoteShareOperation.execute(client)
-    }
+            createRemoteShareOperation: CreateRemoteShareOperation =
+                    CreateRemoteShareOperation(remoteFilePath, shareType, shareWith, permissions)
+    ): RemoteOperationResult<ShareParserResult>
 }

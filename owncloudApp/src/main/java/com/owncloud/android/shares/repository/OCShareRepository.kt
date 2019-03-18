@@ -24,8 +24,8 @@ import com.owncloud.android.AppExecutors
 import com.owncloud.android.NetworkBoundResource
 import com.owncloud.android.lib.resources.shares.ShareParserResult
 import com.owncloud.android.lib.resources.shares.ShareType
-import com.owncloud.android.shares.datasources.LocalSharesDataSource
-import com.owncloud.android.shares.datasources.RemoteSharesDataSource
+import com.owncloud.android.shares.datasource.LocalSharesDataSource
+import com.owncloud.android.shares.datasource.RemoteSharesDataSource
 import com.owncloud.android.shares.db.OCShare
 import com.owncloud.android.vo.Resource
 

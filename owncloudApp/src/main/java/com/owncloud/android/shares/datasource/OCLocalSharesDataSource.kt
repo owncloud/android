@@ -17,7 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.shares.datasources
+package com.owncloud.android.shares.datasource
 
 import androidx.lifecycle.LiveData
 import com.owncloud.android.MainApp
