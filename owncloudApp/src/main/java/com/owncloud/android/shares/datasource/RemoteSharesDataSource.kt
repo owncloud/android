@@ -27,23 +27,23 @@ import com.owncloud.android.lib.resources.shares.ShareType
 
 interface RemoteSharesDataSource {
     fun getSharesForFile(
-            remoteFilePath: String,
-            reshares: Boolean,
-            subfiles: Boolean,
-            getRemoteSharesForFileOperation: GetRemoteSharesForFileOperation =
-                    GetRemoteSharesForFileOperation(remoteFilePath, reshares, subfiles)
+        remoteFilePath: String,
+        reshares: Boolean,
+        subfiles: Boolean,
+        getRemoteSharesForFileOperation: GetRemoteSharesForFileOperation =
+            GetRemoteSharesForFileOperation(remoteFilePath, reshares, subfiles)
     ): RemoteOperationResult<ShareParserResult>
 
     fun insertShareForFile(
-            remoteFilePath: String,
-            shareType: ShareType,
-            shareWith: String,
-            permissions: Int,
-            name: String,
-            password: String,
-            expirationDate: Long,
-            publicUpload: Boolean,
-            createRemoteShareOperation: CreateRemoteShareOperation =
-                    CreateRemoteShareOperation(remoteFilePath, shareType, shareWith, permissions)
+        remoteFilePath: String,
+        shareType: ShareType,
+        shareWith: String,
+        permissions: Int,
+        name: String,
+        password: String,
+        expirationDate: Long,
+        publicUpload: Boolean,
+        createRemoteShareOperation: CreateRemoteShareOperation =
+            CreateRemoteShareOperation(remoteFilePath, shareType, shareWith, permissions)
     ): RemoteOperationResult<ShareParserResult>
 }
