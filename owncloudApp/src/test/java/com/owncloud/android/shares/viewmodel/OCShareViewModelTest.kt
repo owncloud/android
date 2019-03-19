@@ -118,7 +118,7 @@ class OCShareViewModelTest {
                 "/Photos/image.jpg",
                 "admin@server",
                 1,
-                "Photos 3 link",
+                "Photos 2 link",
                 "1234",
                 -1,
                 false
@@ -136,11 +136,11 @@ class OCShareViewModelTest {
 
         val resource: Resource<List<OCShare>>? = ocShareViewModel.insertPublicShareForFile(
             "/Photos/image.jpg",
-            "admin@server",
+            1,
+            "Photos 2 link",
             "1234",
             -1,
-            false,
-            1
+            false
         ).value
 
         val shares: List<OCShare>? = resource?.data
@@ -156,10 +156,5 @@ class OCShareViewModelTest {
         assertEquals(shares?.get(1)?.isFolder, false)
         assertEquals(shares?.get(1)?.name, "Photos 2 link")
         assertEquals(shares?.get(1)?.shareLink, "http://server:port/s/2")
-
-        assertEquals(shares?.get(2)?.path, "/Photos/image.jpg")
-        assertEquals(shares?.get(2)?.isFolder, false)
-        assertEquals(shares?.get(2)?.name, "Photos 3 link")
-        assertEquals(shares?.get(2)?.shareLink, "http://server:port/s/3")
     }
 }
