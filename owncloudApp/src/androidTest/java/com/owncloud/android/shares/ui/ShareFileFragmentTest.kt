@@ -22,6 +22,7 @@ package com.owncloud.android.shares.ui
 import android.accounts.Account
 import androidx.lifecycle.MutableLiveData
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -33,7 +34,6 @@ import com.owncloud.android.lib.resources.status.OwnCloudVersion
 import com.owncloud.android.shares.db.OCShare
 import com.owncloud.android.shares.ui.fragment.ShareFileFragment
 import com.owncloud.android.shares.viewmodel.OCShareViewModel
-import com.owncloud.android.testing.TestShareFileActivity
 import com.owncloud.android.utils.TestUtil
 import com.owncloud.android.utils.ViewModelUtil
 import com.owncloud.android.vo.Resource
@@ -51,8 +51,6 @@ class ShareFileFragmentTest {
     val activityRule = ActivityTestRule(TestShareFileActivity::class.java, true, true)
 
     private val sharesLiveData = MutableLiveData<Resource<List<OCShare>>>()
-    private lateinit var shareFragment: ShareFileFragment
-    private lateinit var ocShareViewModel: OCShareViewModel
 
     private val publicShares = arrayListOf(
         TestUtil.createPublicShare(
@@ -81,13 +79,13 @@ class ShareFileFragmentTest {
         val ownCloudVersion = mock(OwnCloudVersion::class.java)
         `when`(ownCloudVersion.isSearchUsersSupported).thenReturn(true)
 
-        shareFragment = ShareFileFragment.newInstance(
+        val shareFragment = ShareFileFragment.newInstance(
             getOCFileForTesting("image.jpg"),
             account,
             ownCloudVersion
         )
 
-        ocShareViewModel = mock(OCShareViewModel::class.java)
+        val ocShareViewModel = mock(OCShareViewModel::class.java)
         `when`(ocShareViewModel.sharesForFile).thenReturn(sharesLiveData)
 
         shareFragment.viewModelFactory = ViewModelUtil.createFor(ocShareViewModel)
