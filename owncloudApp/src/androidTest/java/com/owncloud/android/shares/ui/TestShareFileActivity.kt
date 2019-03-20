@@ -18,15 +18,16 @@
  *
  */
 
-
-package com.owncloud.android.testing
+package com.owncloud.android.shares.ui
 
 import com.owncloud.android.datamodel.FileDataStorageManager
 import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.shares.db.OCShare
+import com.owncloud.android.testing.SingleFragmentActivity
 import com.owncloud.android.ui.fragment.ShareFragmentListener
 
 class TestShareFileActivity : SingleFragmentActivity(), ShareFragmentListener {
+
     override fun copyOrSendPrivateLink(file: OCFile?) {
     }
 
@@ -42,7 +43,7 @@ class TestShareFileActivity : SingleFragmentActivity(), ShareFragmentListener {
     override fun removeShare(share: OCShare?) {
     }
 
-    override fun showAddPublicShare(defaultLinkName: String?) {
+    override fun showAddPublicShare(defaultLinkName: String) {
     }
 
     override fun dismissAddPublicShare() {
