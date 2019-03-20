@@ -85,7 +85,7 @@ class PublicShareDialogFragment : DialogFragment() {
     /*
      * OC account holding the file to share, received as a parameter in construction time
      */
-    private var account: Account? = null
+    private lateinit var account: Account
 
     /**
      * Reference to parent listener
@@ -164,9 +164,9 @@ class PublicShareDialogFragment : DialogFragment() {
                 .time
         } else -1
 
-    var mViewModelFactory: ViewModelProvider.Factory = ViewModelFactory.build {
+    var viewModelFactory: ViewModelProvider.Factory = ViewModelFactory.build {
         OCShareViewModel(
-            account!!,
+            account,
             file?.remotePath!!,
             listOf(ShareType.PUBLIC_LINK)
         )
@@ -276,7 +276,7 @@ class PublicShareDialogFragment : DialogFragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        ocShareViewModel = ViewModelProviders.of(this, mViewModelFactory).get(OCShareViewModel::class.java)
+        ocShareViewModel = ViewModelProviders.of(this, viewModelFactory).get(OCShareViewModel::class.java)
     }
 
     private fun onSaveShareSetting() {
@@ -666,8 +666,8 @@ class PublicShareDialogFragment : DialogFragment() {
      * instance ready to use. If not ready, does nothing.
      */
     fun refreshModelFromStorageManager() {
-        if ((listener as FileActivity).storageManager != null) {
-            capabilities = (listener as FileActivity).storageManager.getCapability(account!!.name)
+        if ((listener as BaseActivity).storageManager != null) {
+            capabilities = (listener as BaseActivity).storageManager.getCapability(account.name)
 
             updateInputFormAccordingToServerCapabilities()
         }

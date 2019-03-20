@@ -122,14 +122,6 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
 
     private var serverVersion: OwnCloudVersion? = null
 
-    var viewModelFactory: ViewModelProvider.Factory = ViewModelFactory.build {
-        OCShareViewModel(
-            account!!,
-            file?.remotePath!!,
-            listOf(ShareType.PUBLIC_LINK)
-        )
-    }
-
     private// Array with numbers already set in public link names
     // Inspect public links for default names already used
     // better not suggesting a name than crashing
@@ -206,7 +198,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
     private val addPublicLinkButton: ImageButton
         get() = view!!.findViewById<View>(R.id.addPublicLinkButton) as ImageButton
 
-    var mViewModelFactory: ViewModelProvider.Factory = ViewModelFactory.build {
+    var viewModelFactory: ViewModelProvider.Factory = ViewModelFactory.build {
         OCShareViewModel(
             account!!,
             file?.remotePath!!,
