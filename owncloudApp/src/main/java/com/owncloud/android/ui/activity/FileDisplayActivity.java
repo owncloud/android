@@ -860,7 +860,11 @@ public class FileDisplayActivity extends FileActivity
             if (getSecondFragment() == null) {
                 OCFile currentDir = getCurrentDir();
                 if (currentDir == null || currentDir.getParentId() == FileDataStorageManager.ROOT_PARENT_ID) {
-                    finish();
+                    if(mOnlyAvailableOffline){
+                        allFilesOption();
+                    }else{
+                        finish();
+                    }
                     return;
                 }
                 if (listOfFiles != null) {  // should never be null, indeed
