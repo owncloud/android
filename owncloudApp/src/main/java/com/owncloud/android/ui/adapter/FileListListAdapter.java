@@ -219,8 +219,7 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
                     } else {
                         lastModV.setText(file.getRemotePath());
                         lastModV.setSingleLine(true);
-                        lastModV.setEllipsize(TextUtils.TruncateAt.END);
-
+                        lastModV.setEllipsize(TextUtils.TruncateAt.MIDDLE);
                         fileSizeSeparatorV.setVisibility(View.GONE);
                         fileSizeV.setVisibility(View.GONE);
                     }
