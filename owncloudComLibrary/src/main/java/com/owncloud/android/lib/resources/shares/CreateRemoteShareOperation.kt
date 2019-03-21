@@ -72,7 +72,7 @@ class CreateRemoteShareOperation
     private val shareWith: String,
     private val permissions: Int
 ) : RemoteOperation<ShareParserResult>() {
-    var getShareDetails: Boolean = false // To retrieve more info about the just created share
+    var getShareDetails = false // To retrieve more info about the just created share
 
     var name = "" // Name to set for the public link
 
