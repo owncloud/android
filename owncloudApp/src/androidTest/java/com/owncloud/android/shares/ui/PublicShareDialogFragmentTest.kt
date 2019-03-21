@@ -22,13 +22,14 @@ package com.owncloud.android.shares.ui
 import android.accounts.Account
 import android.text.InputType.TYPE_CLASS_TEXT
 import android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.typeText
 import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withInputType
 import androidx.test.espresso.matcher.ViewMatchers.withText
@@ -43,7 +44,6 @@ import com.owncloud.android.shares.viewmodel.OCShareViewModel
 import com.owncloud.android.utils.TestUtil
 import com.owncloud.android.utils.ViewModelUtil
 import com.owncloud.android.vo.Resource
-import org.hamcrest.CoreMatchers.not
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -132,6 +132,11 @@ class PublicShareDialogFragmentTest {
     }
 
     @Test
+    fun showDefaultLinkName() {
+        onView(withId(R.id.shareViaLinkNameValue)).check(matches(withText("DOC_12112018.jpg link")))
+    }
+
+    @Test
     fun enablePasswordSwitch() {
         onView(withId(R.id.shareViaLinkPasswordSwitch)).perform(click())
         onView(withId(R.id.shareViaLinkPasswordValue)).check(matches(isDisplayed()))
@@ -153,8 +158,19 @@ class PublicShareDialogFragmentTest {
 
     @Test
     fun enableExpirationSwitch() {
-//        onView(withId(R.id.shareViaLinkExpirationSwitch)).perform(click())
-        // TODO Check date picker
+        onView(withId(R.id.shareViaLinkExpirationSwitch)).perform(click())
+        onView(withId(android.R.id.button1)).perform(click());
+        onView(withId(R.id.shareViaLinkExpirationValue))
+            .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))
+        //TODO: check the date form the picker
+    }
+
+    @Test
+    fun cancelExpirationSwitch() {
+        onView(withId(R.id.shareViaLinkExpirationSwitch)).perform(click())
+        onView(withId(android.R.id.button2)).perform(click());
+        onView(withId(R.id.shareViaLinkExpirationValue))
+            .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.INVISIBLE)))
     }
 
     @Test
@@ -172,16 +188,4 @@ class PublicShareDialogFragmentTest {
         onView(withId(R.id.public_link_error_message)).check(matches(withText(R.string.share_link_file_no_exist)))
     }
 
-    @Test
-    fun dismissDialog() {
-        onView(withId(R.id.saveButton)).perform(click())
-
-        sharesLiveData.postValue(
-            Resource.success(publicShares)
-        )
-
-        Log.d("HEEY", activityRule.activity.supportFragmentManager.findFragmentByTag("TEST FRAGMENT")?.toString())
-
-        onView(withText("Create link share")).check(matches(not(isDisplayed())))
-    }
 }
