@@ -19,6 +19,7 @@
     <string name="actionbar_sort_by_date">Oldest - Newest</string>
     <string name="actionbar_sort_by_size">Smallest - Largest</string>
     <string name="drawer_item_all_files">All files</string>
+    <string name="drawer_item_only_available_offline">Available offline</string>
     <string name="drawer_item_settings">Settings</string>
     <string name="drawer_item_uploads_list">Uploads</string>
     <string name="drawer_close">Close</string>
@@ -100,6 +101,7 @@
     <string name="uploader_error_message_source_file_not_copied">An error occurred while copying the file to a temporary folder. Please try to send again.</string>
     <string name="file_list_seconds_ago">seconds ago</string>
     <string name="file_list_empty">Nothing in here. Upload something!</string>
+    <string name="file_list_empty_available_offline">There are no available offline files.</string>
     <string name="file_list_loading">Loading&#8230;</string>
     <string name="file_list_no_app_for_file_type">No app found for file type</string>
     <string name="local_file_list_empty">There are no files in this folder.</string>

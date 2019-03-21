@@ -18,8 +18,6 @@
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Sve datoteke</string>
-  <!--TODO re-enable when "On Device" is available
-    <string name="drawer_item_on_device">On device</string>-->
   <string name="drawer_item_settings">Postavke</string>
   <string name="drawer_item_uploads_list">Upload-i</string>
   <string name="drawer_close">Zatvori</string>

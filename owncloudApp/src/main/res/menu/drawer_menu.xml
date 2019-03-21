@@ -67,7 +67,12 @@
             android:orderInCategory="0"
             android:id="@+id/nav_uploads"
             android:icon="@drawable/ic_uploads"
-            android:title="@string/drawer_item_uploads_list" />
+            android:title="@string/drawer_item_uploads_list"/>
+        <item
+            android:orderInCategory="0"
+            android:id="@+id/nav_only_available_offline"
+            android:icon="@drawable/ic_available_offline"
+            android:title="@string/drawer_item_only_available_offline"/>
     </group>
 
     <group android:id="@+id/drawer_menu_settings_etc">

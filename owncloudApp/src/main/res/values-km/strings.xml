@@ -14,8 +14,6 @@
   <string name="actionbar_sort_title">តម្រៀបដោយ</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
-  <!--TODO re-enable when "On Device" is available
-    <string name="drawer_item_on_device">On device</string>-->
   <string name="drawer_open">បើក</string>
   <string name="drawer_feedback">មតិត្រឡប់</string>
   <string name="drawer_help">ជំនួយ</string>

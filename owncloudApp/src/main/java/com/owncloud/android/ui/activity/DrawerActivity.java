@@ -241,24 +241,18 @@ public abstract class DrawerActivity extends ToolbarActivity {
                             case R.id.nav_all_files:
                                 menuItem.setChecked(true);
                                 mCheckedMenuItem = menuItem.getItemId();
-
                                 allFilesOption();
-                                // TODO activate when On Device branch is merged
-                                // MainApp.showOnlyFilesOnDevice(false);
-                                // refreshDirectory();
                                 break;
-                            // TODO activate when On Device branch is merged
-                            // case R.id.nav_on_device:
-                            //     menuItem.setChecked(true);
-                            //     mCheckedMenuItem = menuItem.getItemId();
-                            //     MainApp.showOnlyFilesOnDevice(true);
-                            //     refreshDirectory();
-                            //     break;
                             case R.id.nav_uploads:
                                 Intent uploadListIntent = new Intent(getApplicationContext(),
                                         UploadListActivity.class);
                                 uploadListIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                 startActivity(uploadListIntent);
+                                break;
+                            case R.id.nav_only_available_offline:
+                                menuItem.setChecked(true);
+                                mCheckedMenuItem = menuItem.getItemId();
+                                onlyAvailableOfflineOption();
                                 break;
                             case R.id.nav_settings:
                                 Intent settingsIntent = new Intent(getApplicationContext(),
@@ -536,6 +530,11 @@ public abstract class DrawerActivity extends ToolbarActivity {
      * Method that gets called on drawer menu click for 'All Files'.
      */
     public abstract void allFilesOption();
+
+    /**
+     * Method that gets called on drawer menu click for 'Available Offline'.
+     */
+    public abstract void onlyAvailableOfflineOption();
 
     /**
      * Updates title bar and home buttons (state and icon).

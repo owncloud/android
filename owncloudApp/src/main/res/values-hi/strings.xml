@@ -14,8 +14,6 @@
   <string name="actionbar_sort">सॉर्ट करें</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
-  <!--TODO re-enable when "On Device" is available
-    <string name="drawer_item_on_device">On device</string>-->
   <string name="drawer_item_settings">सेटिंग्स</string>
   <string name="drawer_open">खोलें</string>
   <string name="drawer_help">सहायता </string>
