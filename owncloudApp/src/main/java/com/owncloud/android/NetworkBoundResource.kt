@@ -46,7 +46,7 @@ abstract class NetworkBoundResource<ResultType, RequestType>(
     private val appExecutors: AppExecutors
 ) {
     /**
-     * Result will observe three different livedata objects and react on change events from them
+     * A generic class that can provide a resource backed by both the sqlite database and the network.
      * - Shares livedata from Room to detect changes in database
      * - Errors livedata from remote operations
      * - Loading status

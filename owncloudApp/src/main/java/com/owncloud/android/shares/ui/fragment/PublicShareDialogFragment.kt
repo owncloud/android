@@ -354,14 +354,6 @@ class PublicShareDialogFragment : DialogFragment() {
                     }
                 }
             )
-//            (activity as FileActivity).fileOperationsHelper.shareFileViaLink(
-//                    file,
-//                    publicLinkName,
-//                    publicLinkPassword,
-//                    publicLinkExpirationDateInMillis,
-//                    false,
-//                    publicLinkPermissions)
-
         } else { // Updating an existing public share
             if (!passwordSwitch!!.isChecked) {
                 publicLinkPassword = ""
