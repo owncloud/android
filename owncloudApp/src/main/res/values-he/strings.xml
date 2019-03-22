@@ -14,6 +14,7 @@
   <string name="actionbar_sort_title">מיון על בסיס</string>
   <string name="actionbar_sort_by_name">א-ת</string>
   <string name="drawer_item_all_files">כל הקבצים</string>
+  <string name="drawer_item_only_available_offline">זמין במצב לא מקוון</string>
   <string name="drawer_item_settings">הגדרות</string>
   <string name="drawer_item_uploads_list">העלאות</string>
   <string name="drawer_close">סגירה</string>

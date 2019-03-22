@@ -17,6 +17,7 @@
   <string name="actionbar_sort_by_date">Antigo - Novo</string>
   <string name="actionbar_sort_by_size">Pequeno - Grande</string>
   <string name="drawer_item_all_files">Todos os ficheiros</string>
+  <string name="drawer_item_only_available_offline">Disponível off-line</string>
   <string name="drawer_item_settings">Definições</string>
   <string name="drawer_item_uploads_list">Envios</string>
   <string name="drawer_close">Fechar</string>

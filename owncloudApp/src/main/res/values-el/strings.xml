@@ -16,6 +16,7 @@
   <string name="actionbar_sort_title">Ταξινόμηση κατά</string>
   <string name="actionbar_sort_by_name">A-Ω</string>
   <string name="drawer_item_all_files">Όλα τα αρχεία</string>
+  <string name="drawer_item_only_available_offline">Διαθέσιμο εκτός σύνδεσης</string>
   <string name="drawer_item_settings">Ρυθμίσεις</string>
   <string name="drawer_item_uploads_list">Μεταφορτώσεις</string>
   <string name="drawer_close">Κλείσιμο</string>

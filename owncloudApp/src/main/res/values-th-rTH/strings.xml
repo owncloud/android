@@ -19,6 +19,7 @@
   <string name="actionbar_sort_by_date">จากเก่า-ใหม่</string>
   <string name="actionbar_sort_by_size">เล็กที่สุด - ใหญ่ที่สุด</string>
   <string name="drawer_item_all_files">ไฟล์ทั้งหมด</string>
+  <string name="drawer_item_only_available_offline">การทำงานแบบออฟไลน์พร้อมใช้งาน</string>
   <string name="drawer_item_settings">ตั้งค่า</string>
   <string name="drawer_item_uploads_list">อัพโหลด</string>
   <string name="drawer_close">ปิด</string>

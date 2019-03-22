@@ -15,6 +15,7 @@
   <string name="actionbar_sort_title">정렬 순서</string>
   <string name="actionbar_sort_by_name">A-Z</string>
   <string name="drawer_item_all_files">모든 파일</string>
+  <string name="drawer_item_only_available_offline">오프라인 사용 가능</string>
   <string name="drawer_item_settings">설정</string>
   <string name="drawer_item_uploads_list">업로드</string>
   <string name="drawer_close">닫기</string>

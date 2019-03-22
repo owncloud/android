@@ -19,6 +19,7 @@
   <string name="actionbar_sort_by_date">Më e vjetra - Më e reja</string>
   <string name="actionbar_sort_by_size">Më e vogla - Më e madhja</string>
   <string name="drawer_item_all_files">Krejt kartelat</string>
+  <string name="drawer_item_only_available_offline">I passhëm jo në linjë</string>
   <string name="drawer_item_settings">Rregullime</string>
   <string name="drawer_item_uploads_list">Ngarkime</string>
   <string name="drawer_close">Mbylle</string>

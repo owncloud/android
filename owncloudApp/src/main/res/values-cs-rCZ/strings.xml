@@ -15,6 +15,7 @@
   <string name="actionbar_sort_title">Seřadit podle</string>
   <string name="actionbar_sort_by_name">A-Z</string>
   <string name="drawer_item_all_files">Všechny soubory</string>
+  <string name="drawer_item_only_available_offline">Dostupné offline</string>
   <string name="drawer_item_settings">Nastavení</string>
   <string name="drawer_item_uploads_list">Nahrání</string>
   <string name="drawer_close">Zavřít</string>
