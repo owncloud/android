@@ -19,7 +19,7 @@
   <string name="actionbar_sort_by_date">Mais antigo - Mais novo</string>
   <string name="actionbar_sort_by_size">Menor - Maior</string>
   <string name="drawer_item_all_files">Todos os arquivos</string>
-  <string name="drawer_item_only_available_offline">Disponível offline</string>
+  <string name="drawer_item_only_available_offline">Disponível externamente</string>
   <string name="drawer_item_settings">Configurações</string>
   <string name="drawer_item_uploads_list">Envios</string>
   <string name="drawer_close">Fechar</string>
@@ -99,6 +99,7 @@
   <string name="uploader_error_message_source_file_not_copied">Ocorreu um erro ao copiar o arquivo para uma pasta temporária. Por favor, tente enviar novamente.</string>
   <string name="file_list_seconds_ago">segundos atrás</string>
   <string name="file_list_empty">Nada aqui. Envie alguma coisa!</string>
+  <string name="file_list_empty_available_offline">Não há arquivos externos disponíveis.</string>
   <string name="file_list_loading">Carregando...</string>
   <string name="file_list_no_app_for_file_type">Nenhum aplicativo encontrado para esse tipo de arquivo</string>
   <string name="local_file_list_empty">Não existe nenhum arquivo nesta pasta.</string>
