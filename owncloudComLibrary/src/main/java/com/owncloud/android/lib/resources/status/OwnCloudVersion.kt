@@ -87,6 +87,11 @@ class OwnCloudVersion(version: String) : Comparable<OwnCloudVersion>, Parcelable
     val isPublicSharingWriteOnlySupported: Boolean
         get() = mVersion >= MINIMUM_VERSION_WITH_WRITE_ONLY_PUBLIC_SHARING
 
+    val isPublicUploadPermissionNeeded: Boolean
+        get() = mVersion >= MINIMUN_MAJOR_VERSION_WITHOUT_PUBLIC_UPLOAD_PERMISSION &&
+                (mVersion > MINIMUN_MINOR_VERSION_WITHOUT_PUBLIC_UPLOAD_PERMISSION ||
+                        mVersion > MINIMUN_MICRO_VERSION_WITHOUT_PUBLIC_UPLOAD_PERMISSION)
+
     init {
         var version = version
         mVersion = 0
@@ -171,34 +176,39 @@ class OwnCloudVersion(version: String) : Comparable<OwnCloudVersion>, Parcelable
     }
 
     companion object {
+        private const val MINIMUN_MINOR_VERSION_WITHOUT_PUBLIC_UPLOAD_PERMISSION = 0x01000000 // 1.0.0
 
-        val MINIMUN_VERSION_FOR_CHUNKED_UPLOADS = 0x04050000 // 4.5
+        private const val MINIMUN_MICRO_VERSION_WITHOUT_PUBLIC_UPLOAD_PERMISSION = 0x03000000 // 3.0.0
 
-        val MINIMUM_VERSION_FOR_SHARING_API = 0x05001B00 // 5.0.27
+        const val MINIMUN_VERSION_FOR_CHUNKED_UPLOADS = 0x04050000 // 4.5
 
-        val MINIMUM_VERSION_WITH_FORBIDDEN_CHARS = 0x08010000 // 8.1
+        const val MINIMUM_VERSION_FOR_SHARING_API = 0x05001B00 // 5.0.27
 
-        val MINIMUM_SERVER_VERSION_FOR_REMOTE_THUMBNAILS = 0x07080000 // 7.8.0
+        const val MINIMUM_VERSION_WITH_FORBIDDEN_CHARS = 0x08010000 // 8.1
 
-        val MINIMUM_VERSION_FOR_SEARCHING_USERS = 0x08020000 //8.2
+        const val MINIMUM_SERVER_VERSION_FOR_REMOTE_THUMBNAILS = 0x07080000 // 7.8.0
 
-        val VERSION_8 = 0x08000000 // 8.0
+        const val MINIMUM_VERSION_FOR_SEARCHING_USERS = 0x08020000 //8.2
 
-        val MINIMUM_VERSION_CAPABILITIES_API = 0x08010000 // 8.1
+        const val VERSION_8 = 0x08000000 // 8.0
 
-        private val MINIMUM_VERSION_WITH_NOT_RESHAREABLE_FEDERATED = 0x09010000   // 9.1
+        const  val MINIMUM_VERSION_CAPABILITIES_API = 0x08010000 // 8.1
 
-        private val MINIMUM_VERSION_WITH_SESSION_MONITORING = 0x09010000   // 9.1
+        private const val MINIMUM_VERSION_WITH_NOT_RESHAREABLE_FEDERATED = 0x09010000   // 9.1
 
-        private val MINIMUM_VERSION_WITH_SESSION_MONITORING_WORKING_IN_PREEMPTIVE_MODE = 0x09010301
+        private const val MINIMUM_VERSION_WITH_SESSION_MONITORING = 0x09010000   // 9.1
+
+        private const val MINIMUM_VERSION_WITH_SESSION_MONITORING_WORKING_IN_PREEMPTIVE_MODE = 0x09010301
         // 9.1.3.1, final 9.1.3: https://github.com/owncloud/core/commit/f9a867b70c217463289a741d4d26079eb2a80dfd
 
-        private val MINIMUM_VERSION_WITH_MULTIPLE_PUBLIC_SHARING = 0xA000000 // 10.0.0
+        private const val MINIMUM_VERSION_WITH_MULTIPLE_PUBLIC_SHARING = 0xA000000 // 10.0.0
 
-        private val MINIMUM_VERSION_WITH_WRITE_ONLY_PUBLIC_SHARING = 0xA000100 // 10.0.1
+        private const val MINIMUN_MAJOR_VERSION_WITHOUT_PUBLIC_UPLOAD_PERMISSION = 0xA000000 // 10.0.0
 
-        private val INVALID_ZERO_VERSION = "0.0.0"
+        private const val MINIMUM_VERSION_WITH_WRITE_ONLY_PUBLIC_SHARING = 0xA000100 // 10.0.1
 
-        private val MAX_DOTS = 3
+        private const val INVALID_ZERO_VERSION = "0.0.0"
+
+        private const val MAX_DOTS = 3
     }
 }

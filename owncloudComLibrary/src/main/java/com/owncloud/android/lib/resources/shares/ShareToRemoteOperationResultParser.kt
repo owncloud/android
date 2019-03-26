@@ -58,47 +58,52 @@ class ShareToRemoteOperationResultParser(private var shareXmlParser: ShareXMLPar
             }
             val shares = shareXmlParser?.parseXMLResponse(byteArrayServerResponse)
 
-            if (shareXmlParser?.isSuccess!!) {
-                if (!shares.isNullOrEmpty() || !oneOrMoreSharesRequired) {
-                    result = RemoteOperationResult(RemoteOperationResult.ResultCode.OK)
+            when {
+                shareXmlParser?.isSuccess!! -> {
+                    if (!shares.isNullOrEmpty() || !oneOrMoreSharesRequired) {
+                        result = RemoteOperationResult(RemoteOperationResult.ResultCode.OK)
 
-                    resultData  = shares?.map { share ->
-                        if (share.shareType != ShareType.PUBLIC_LINK ||
-                            share.shareLink.isNotEmpty() ||
-                            share.token.isEmpty()) {
-                            return@map share
+                        resultData = shares?.map { share ->
+                            if (share.shareType != ShareType.PUBLIC_LINK ||
+                                share.shareLink.isNotEmpty() ||
+                                share.token.isEmpty()
+                            ) {
+                                return@map share
+                            }
+
+                            if (serverBaseUri != null) {
+                                val sharingLinkPath = ShareUtils.getSharingLinkPath(ownCloudVersion)
+                                share.shareLink = serverBaseUri.toString() + sharingLinkPath + share.token
+                            } else {
+                                Log_OC.e(TAG, "Couldn't build link for public share :(")
+                            }
+
+                            share
                         }
 
-                        if (serverBaseUri != null) {
-                            val sharingLinkPath = ShareUtils.getSharingLinkPath(ownCloudVersion)
-                            share.shareLink = serverBaseUri.toString() + sharingLinkPath + share.token
-                        }  else {
-                            Log_OC.e(TAG, "Couldn't build link for public share :(")
-                        }
+                        result.setData(ShareParserResult(ArrayList(resultData)))
 
-                        share
+                    } else {
+                        result = RemoteOperationResult(RemoteOperationResult.ResultCode.WRONG_SERVER_RESPONSE)
+                        Log_OC.e(TAG, "Successful status with no share in the response")
                     }
-
-                    result.setData(ShareParserResult(ArrayList(resultData)))
-
-                } else {
-                    result = RemoteOperationResult(RemoteOperationResult.ResultCode.WRONG_SERVER_RESPONSE)
-                    Log_OC.e(TAG, "Successful status with no share in the response")
                 }
-
-            } else if (shareXmlParser?.isWrongParameter!!) {
-                result = RemoteOperationResult(RemoteOperationResult.ResultCode.SHARE_WRONG_PARAMETER)
-                result.httpPhrase = shareXmlParser?.message
-            } else if (shareXmlParser?.isNotFound!!) {
-                result = RemoteOperationResult(RemoteOperationResult.ResultCode.SHARE_NOT_FOUND)
-                result.httpPhrase = shareXmlParser?.message
-            } else if (shareXmlParser?.isForbidden!!) {
-                result = RemoteOperationResult(RemoteOperationResult.ResultCode.SHARE_FORBIDDEN)
-                result.httpPhrase = shareXmlParser?.message
-            } else {
-                result = RemoteOperationResult(RemoteOperationResult.ResultCode.WRONG_SERVER_RESPONSE)
+                shareXmlParser?.isWrongParameter!! -> {
+                    result = RemoteOperationResult(RemoteOperationResult.ResultCode.SHARE_WRONG_PARAMETER)
+                    result.httpPhrase = shareXmlParser?.message
+                }
+                shareXmlParser?.isNotFound!! -> {
+                    result = RemoteOperationResult(RemoteOperationResult.ResultCode.SHARE_NOT_FOUND)
+                    result.httpPhrase = shareXmlParser?.message
+                }
+                shareXmlParser?.isForbidden!! -> {
+                    result = RemoteOperationResult(RemoteOperationResult.ResultCode.SHARE_FORBIDDEN)
+                    result.httpPhrase = shareXmlParser?.message
+                }
+                else -> {
+                    result = RemoteOperationResult(RemoteOperationResult.ResultCode.WRONG_SERVER_RESPONSE)
+                }
             }
-
         } catch (e: XmlPullParserException) {
             Log_OC.e(TAG, "Error parsing response from server ", e)
             result = RemoteOperationResult(RemoteOperationResult.ResultCode.WRONG_SERVER_RESPONSE)
