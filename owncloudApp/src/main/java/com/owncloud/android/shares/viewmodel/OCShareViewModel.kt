@@ -21,7 +21,6 @@ package com.owncloud.android.shares.viewmodel
 
 import android.accounts.Account
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.owncloud.android.MainApp
 import com.owncloud.android.lib.common.OwnCloudAccount
@@ -55,7 +54,7 @@ class OCShareViewModel(
 ) : ViewModel() {
 
     val sharesForFile: LiveData<Resource<List<OCShare>>> = shareRepository.loadSharesForFile(
-         filePath, account.name, shareTypes, true, false
+         filePath, account.name, shareTypes, reshares = true, subfiles = false
     )
 
     fun insertPublicShareForFile(

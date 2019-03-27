@@ -74,7 +74,7 @@ public class CreateShareWithShareeOperation extends SyncOperation {
                 mShareeName,
                 mPermissions
         );
-        operation.setGetShareDetails(true);
+        operation.setRetrieveShareDetails(true);
         RemoteOperationResult<ShareParserResult> result = operation.execute(client);
 
         if (result.isSuccess()) {
