@@ -1432,7 +1432,7 @@ public class FileDataStorageManager {
         }
     }
 
-    public void saveShares(ArrayList<RemoteShare> shares) {
+    public void saveShares(List<RemoteShare> shares) {
         ArrayList<ContentProviderOperation> operations = new ArrayList<ContentProviderOperation>();
 
         // Reset flags & Remove shares for this files
@@ -1532,7 +1532,7 @@ public class FileDataStorageManager {
      * @return
      */
     private ArrayList<ContentProviderOperation> prepareInsertShares(
-            ArrayList<RemoteShare> shares, ArrayList<ContentProviderOperation> operations) {
+            List<RemoteShare> shares, ArrayList<ContentProviderOperation> operations) {
 
         if (shares != null) {
             // prepare operations to insert or update files to save in the given folder

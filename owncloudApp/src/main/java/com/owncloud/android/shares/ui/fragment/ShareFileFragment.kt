@@ -30,7 +30,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.ListView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -58,8 +59,10 @@ import com.owncloud.android.ui.fragment.ShareFragmentListener
 import com.owncloud.android.utils.DisplayUtils
 import com.owncloud.android.utils.MimetypeIconUtil
 import com.owncloud.android.vo.Status
-import java.util.*
-import kotlin.collections.ArrayList
+import kotlinx.android.synthetic.main.share_file_layout.*
+import kotlinx.android.synthetic.main.share_file_layout.view.*
+import java.util.Collections
+import java.util.Locale
 
 /**
  * Fragment for Sharing a file with sharees (users or groups) or creating
@@ -190,14 +193,6 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
     private val isPublicShareDisabled: Boolean
         get() = capabilities != null && capabilities!!.filesSharingPublicEnabled.isFalse
 
-    /// BEWARE: next methods will failed with NullPointerException if called before onCreateView() finishes
-
-    private val shareViaLinkSection: LinearLayout
-        get() = view!!.findViewById<View>(R.id.shareViaLinkSection) as LinearLayout
-
-    private val addPublicLinkButton: ImageButton
-        get() = view!!.findViewById<View>(R.id.addPublicLinkButton) as ImageButton
-
     var viewModelFactory: ViewModelProvider.Factory = ViewModelFactory.build {
         OCShareViewModel(
             account!!,
@@ -235,8 +230,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
 
         // Setup layout
         // Image
-        val icon = view.findViewById<ImageView>(R.id.shareFileIcon)
-        icon.setImageResource(
+        view.shareFileIcon?.setImageResource(
             MimetypeIconUtil.getFileTypeIconId(
                 file?.mimetype,
                 file?.fileName
@@ -246,53 +240,56 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
             val remoteId = file?.remoteId.toString()
             val thumbnail = ThumbnailsCacheManager.getBitmapFromDiskCache(remoteId)
             if (thumbnail != null) {
-                icon.setImageBitmap(thumbnail)
+                view.shareFileIcon?.setImageBitmap(thumbnail)
             }
         }
         // Name
-        val fileNameHeader = view.findViewById<TextView>(R.id.shareFileName)
-        fileNameHeader.text = file?.fileName
+        view.shareFileName?.text = file?.fileName
+
         // Size
-        val size = view.findViewById<TextView>(R.id.shareFileSize)
         if (file!!.isFolder) {
-            size.visibility = View.GONE
+            view.shareFileSize?.visibility = View.GONE
         } else {
-            size.text = DisplayUtils.bytesToHumanReadable(file!!.fileLength, activity)
+            view.shareFileSize?.text = DisplayUtils.bytesToHumanReadable(file!!.fileLength, activity)
         }
 
         // Private link button
-        val getPrivateLinkButton = view.findViewById<ImageView>(R.id.getPrivateLinkButton)
         if (file?.privateLink.isNullOrEmpty()) {
-            getPrivateLinkButton.visibility = View.INVISIBLE
-
+            view.getPrivateLinkButton?.visibility = View.INVISIBLE
         } else {
-            getPrivateLinkButton.visibility = View.VISIBLE
-
-            getPrivateLinkButton.setOnClickListener { listener?.copyOrSendPrivateLink(file) }
-
-            getPrivateLinkButton.setOnLongClickListener {
-                // Show a toast message explaining what a private link is
-                Toast.makeText(activity, R.string.private_link_info, Toast.LENGTH_LONG).show()
-                true
-            }
+            view.getPrivateLinkButton?.visibility = View.VISIBLE
         }
 
         val shareWithUsersEnable = serverVersion != null && serverVersion!!.isSearchUsersSupported
 
-        val shareNoUsers = view.findViewById<TextView>(R.id.shareNoUsers)
-
-        //  Add User/Groups Button
-        val addUserGroupButton = view.findViewById<ImageButton>(R.id.addUserButton)
-
         // Change the sharing text depending on the server version (at least version 8.2 is needed
         // for sharing with other users)
         if (!shareWithUsersEnable) {
-            shareNoUsers.setText(R.string.share_incompatible_version)
-            shareNoUsers.gravity = View.TEXT_ALIGNMENT_CENTER
-            addUserGroupButton.visibility = View.GONE
+            view.shareNoUsers?.setText(R.string.share_incompatible_version)
+            view.shareNoUsers?.gravity = View.TEXT_ALIGNMENT_CENTER
+            view.addUserButton?.visibility = View.GONE
         }
 
-        addUserGroupButton.setOnClickListener {
+        // Hide share features sections that are not enabled
+        hideSectionsDisabledInBuildTime(view)
+
+        return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        ocShareViewModel = ViewModelProviders.of(this, viewModelFactory).get(OCShareViewModel::class.java)
+
+        getPrivateLinkButton?.setOnClickListener { listener?.copyOrSendPrivateLink(file) }
+
+        getPrivateLinkButton?.setOnLongClickListener {
+            // Show a toast message explaining what a private link is
+            Toast.makeText(activity, R.string.private_link_info, Toast.LENGTH_LONG).show()
+            true
+        }
+
+        val shareWithUsersEnable = serverVersion != null && serverVersion!!.isSearchUsersSupported
+
+        addUserButton?.setOnClickListener {
             if (shareWithUsersEnable) {
                 // Show Search Fragment
                 listener?.showSearchUsersAndGroups()
@@ -308,21 +305,10 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
         }
 
         //  Add Public Link Button
-        val addPublicLinkButton = view.findViewById<ImageButton>(R.id.addPublicLinkButton)
-
         addPublicLinkButton.setOnClickListener {
             // Show Add Public Link Fragment
             listener?.showAddPublicShare(availableDefaultPublicName)
         }
-
-        // Hide share features sections that are not enabled
-        hideSectionsDisabledInBuildTime(view)
-
-        return view
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        ocShareViewModel = ViewModelProviders.of(this, viewModelFactory).get(OCShareViewModel::class.java)
     }
 
     override fun copyOrSendPublicLink(share: OCShare) {
@@ -415,24 +401,18 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
         )
 
         // Show data
-        val noShares = view!!.findViewById<TextView>(R.id.shareNoUsers)
-        val usersList = view!!.findViewById<ListView>(R.id.shareUsersList)
-
         if (privateShares!!.size > 0) {
-            noShares.visibility = View.GONE
-            usersList.visibility = View.VISIBLE
-            usersList.adapter = userGroupsAdapter
-            setListViewHeightBasedOnChildren(
-                usersList
-            )
+            shareNoUsers?.visibility = View.GONE
+            shareUsersList?.visibility = View.VISIBLE
+            shareUsersList?.adapter = userGroupsAdapter
+            setListViewHeightBasedOnChildren(shareUsersList)
         } else {
-            noShares.visibility = View.VISIBLE
-            usersList.visibility = View.GONE
+            shareNoUsers?.visibility = View.VISIBLE
+            shareUsersList?.visibility = View.GONE
         }
 
         // Set Scroll to initial position
-        val scrollView = view!!.findViewById<ScrollView>(R.id.shareScroll)
-        scrollView.scrollTo(0, 0)
+        shareScroll?.scrollTo(0, 0)
     }
 
     override fun unshareButtonPressed(share: OCShare) {
@@ -498,26 +478,19 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
             this
         )
 
-        // Show data
-        val noPublicLinks = view!!.findViewById<TextView>(R.id.shareNoPublicLinks)
-        val publicLinksList = view!!.findViewById<ListView>(R.id.sharePublicLinksList)
-
         // Show or hide public links and no public links message
         if (publicLinks!!.size > 0) {
-            noPublicLinks.visibility = View.GONE
-            publicLinksList.visibility = View.VISIBLE
-            publicLinksList.adapter = publicLinksAdapter
-            setListViewHeightBasedOnChildren(
-                publicLinksList
-            )
+            shareNoPublicLinks?.visibility = View.GONE
+            sharePublicLinksList?.visibility = View.VISIBLE
+            sharePublicLinksList?.adapter = publicLinksAdapter
+            setListViewHeightBasedOnChildren(sharePublicLinksList)
         } else {
-            noPublicLinks.visibility = View.VISIBLE
-            publicLinksList.visibility = View.GONE
+            shareNoPublicLinks?.visibility = View.VISIBLE
+            sharePublicLinksList?.visibility = View.GONE
         }
 
         // Set Scroll to initial position
-        val scrollView = view!!.findViewById<ScrollView>(R.id.shareScroll)
-        scrollView.scrollTo(0, 0)
+        shareScroll?.scrollTo(0, 0)
     }
 
     /**
@@ -530,30 +503,25 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
     /**
      * Hide share features sections that are not enabled
      *
-     * @param view
      */
     private fun hideSectionsDisabledInBuildTime(view: View) {
-        val shareWithUsersSection = view.findViewById<View>(R.id.shareWithUsersSection)
-        val shareViaLinkSection = view.findViewById<View>(R.id.shareViaLinkSection)
-        val warningAboutPerilsOfSharingPublicStuff = view.findViewById<View>(R.id.shareWarning)
-
         val shareViaLinkAllowed = activity!!.resources.getBoolean(R.bool.share_via_link_feature)
         val shareWithUsersAllowed = activity!!.resources.getBoolean(R.bool.share_with_users_feature)
         val shareWarningAllowed = activity!!.resources.getBoolean(R.bool.warning_sharing_public_link)
 
         // Hide share via link section if it is not enabled
         if (!shareViaLinkAllowed) {
-            shareViaLinkSection.visibility = View.GONE
+            view.shareViaLinkSection.visibility = View.GONE
         }
 
         // Hide share with users section if it is not enabled
         if (!shareWithUsersAllowed) {
-            shareWithUsersSection.visibility = View.GONE
+            view.shareWithUsersSection?.visibility = View.GONE
         }
 
         // Hide warning about public links if not enabled
         if (!shareWarningAllowed) {
-            warningAboutPerilsOfSharingPublicStuff.visibility = View.GONE
+            view.shareWarning?.visibility = View.GONE
         }
     }
 
