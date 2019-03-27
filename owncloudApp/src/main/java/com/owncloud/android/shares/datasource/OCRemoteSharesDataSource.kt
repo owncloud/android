@@ -54,7 +54,7 @@ class OCRemoteSharesDataSource(
         createRemoteShareOperation.password = password
         createRemoteShareOperation.expirationDateInMillis = expirationTimeInMillis
         createRemoteShareOperation.publicUpload = publicUpload
-        createRemoteShareOperation.getShareDetails = true
+        createRemoteShareOperation.retrieveShareDetails = true
         return createRemoteShareOperation.execute(client)
     }
 }
