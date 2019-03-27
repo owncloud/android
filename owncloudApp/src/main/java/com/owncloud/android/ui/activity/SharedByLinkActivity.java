@@ -21,6 +21,10 @@ package com.owncloud.android.ui.activity;
 
 import android.accounts.Account;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import androidx.appcompat.app.ActionBar;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -33,6 +37,7 @@ import com.owncloud.android.R;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
+import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.shares.OCShare;
 import com.owncloud.android.lib.resources.shares.ShareParserResult;
 import com.owncloud.android.operations.RemoveShareOperation;
@@ -41,17 +46,17 @@ import com.owncloud.android.ui.adapter.FileListListAdapter;
 import com.owncloud.android.ui.adapter.SharePublicLinkListAdapter;
 import com.owncloud.android.ui.dialog.RemoveShareDialogFragment;
 import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter;
-import com.owncloud.android.ui.fragment.EditShareFragment;
-import com.owncloud.android.ui.fragment.PublicShareDialogFragment;
-import com.owncloud.android.ui.fragment.ShareFragmentListener;
+import com.owncloud.android.ui.fragment.*;
 
 import java.util.ArrayList;
 import java.util.Vector;
 
-public class SharedByLinkActivity extends FileActivity {
+public class SharedByLinkActivity extends FileActivity implements FileFragment.ContainerActivity,
+      OnEnforceableRefreshListener {
     private final String TAG = SharedByLinkActivity.class.getSimpleName();
 
-    private ListView allSharesList;
+    private static final String TAG_SHARED_BY_LINK_FILES = "SHARED_BY_LINK_FILES";
+
     private TextView noShares;
     private FileListListAdapter adapter;
 
@@ -64,32 +69,122 @@ public class SharedByLinkActivity extends FileActivity {
         setContentView(R.layout.activity_shared_by_link);
         setupToolbar();
         setupDrawer(R.id.shared_by_link);
-        getSupportActionBar().setTitle(getString(R.string.drawer_item_shared_by_link));
-        allSharesList = (ListView) findViewById(R.id.all_shares_list);
+        getSupportActionBar().setDisplayShowTitleEnabled(true);
+        if (savedInstanceState == null) {
+            createFragments();
+        }
         noShares = (TextView) findViewById(R.id.no_shares_text_view);
         account = getIntent().getExtras().getParcelable(DrawerActivity.KEY_ACCOUNT);
         setAccount(account,savedInstanceState != null);
     }
 
+    private void createFragments(){
+        OCFileListFragment listOfFiles = OCFileListFragment.newInstance(false, true, true);
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.add(R.id.fragment_container, listOfFiles, TAG_SHARED_BY_LINK_FILES);
+        transaction.commit();
+    }
+
+    protected OCFileListFragment getListOfFilesFragment() {
+        Fragment listOfFiles = getSupportFragmentManager().findFragmentByTag(TAG_SHARED_BY_LINK_FILES);
+        if (listOfFiles != null) {
+            return (OCFileListFragment) listOfFiles;
+        }
+        Log_OC.e(TAG, "Access to unexisting list of files fragment!!");
+        return null;
+    }
+
+    @Override
+    public void showDetails(OCFile file) {
+    }
+
+    @Override
+    public void onBrowsedDownTo(OCFile directory) {
+        Log.e(TAG,directory.toString());
+        setFile(directory);
+        updateNavigationElementsInActionBar();
+    }
+
+    protected void updateNavigationElementsInActionBar() {
+        ActionBar actionBar = getSupportActionBar();
+        OCFile currentDir = getCurrentFolder();
+        boolean atRoot = (currentDir == null || currentDir.getParentId() == 0);
+        actionBar.setDisplayHomeAsUpEnabled(!atRoot);
+        actionBar.setHomeButtonEnabled(!atRoot);
+        actionBar.setTitle(
+                atRoot
+                        ? getString(R.string.default_display_name_for_root_folder)
+                        : currentDir.getFileName()
+        );
+    }
+
+    protected OCFile getCurrentFolder() {
+        OCFile file = getFile();
+        if (file != null) {
+            if (file.isFolder()) {
+                return file;
+            } else if (getStorageManager() != null) {
+                String parentPath = file.getRemotePath().substring(0,
+                        file.getRemotePath().lastIndexOf(file.getFileName()));
+                return getStorageManager().getFileByPath(parentPath);
+            }
+        }
+        return null;
+    }
+
+    protected void refreshListOfFilesFragment() {
+        OCFileListFragment fileListFragment = getListOfFilesFragment();
+        if (fileListFragment != null) {
+            updateShares();
+            fileListFragment.setFilesInAdapter(allShares);
+            // TODO Enable when "On Device" is recovered ?
+            // fileListFragment.listDirectory(false);
+        }
+    }
+
+    @Override
+    public void onRefresh() {
+        refreshListOfFilesFragment();
+    }
+
+
     @Override
     protected void onAccountSet(boolean stateWasRecovered){
         super.onAccountSet(stateWasRecovered);
-        allShares = getStorageManager().getSharedFiles();
+        updateShares();
         setUpAllSharedFilesList();
+        updateNavigationElementsInActionBar();
+    }
+
+    @Override
+    public void onBackPressed() {
+        OCFileListFragment listOfFiles = getListOfFilesFragment();
+        if (listOfFiles != null) {  // should never be null, indeed
+            int levelsUp = listOfFiles.onBrowseUp();
+            if (levelsUp == 0) {
+                finish();
+                return;
+            }
+            setFile(listOfFiles.getCurrentFile());
+            updateNavigationElementsInActionBar();
+        }
     }
 
     private void setUpAllSharedFilesList(){
         if(allShares.size() > 0){
-            allSharesList.setVisibility(View.VISIBLE);
-            Vector<OCFile> vectorOfSharedFiles = new Vector<>();
-            vectorOfSharedFiles.addAll(allShares);
-            adapter = new FileListListAdapter(getApplicationContext(),vectorOfSharedFiles, this);
-            allSharesList.setAdapter(adapter);
+            OCFileListFragment listOfFolders = getListOfFilesFragment();
+            listOfFolders.setFilesInAdapter(allShares);
             noShares.setVisibility(View.INVISIBLE);
         } else{
             noShares.setVisibility(View.VISIBLE);
-            allSharesList.setVisibility(View.INVISIBLE);
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_menu, menu);
+        return true;
     }
 
     @Override
@@ -141,11 +236,15 @@ public class SharedByLinkActivity extends FileActivity {
     }
 
     private void updateShares(){
-        allShares = getStorageManager().getSharedFiles();
+        allShares = getStorageManager().getAllPublicShares(OCFile.ROOT_PATH);
     }
 
     private PublicShareDialogFragment getPublicShareDialogFragment(){
         return  (PublicShareDialogFragment) getSupportFragmentManager()
                 .findFragmentByTag(ShareActivity.TAG_PUBLIC_SHARE_DIALOG_FRAGMENT);
+    }
+
+    @Override
+    public void onRefresh(boolean enforced) {
     }
 }

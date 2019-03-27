@@ -148,7 +148,6 @@ public class FileDisplayActivity extends FileActivity
     private OCFile mFileWaitingToPreview;
 
     private boolean mSyncInProgress = false;
-    private boolean mOnlySharedByLinkFiles = false;
 
     private OCFile mWaitingToSend;
 
@@ -185,8 +184,6 @@ public class FileDisplayActivity extends FileActivity
             mFilesUploadHelper = new FilesUploadHelper(this,
                     getAccount() == null ? "" : getAccount().name);
         }
-
-        mOnlySharedByLinkFiles = getIntent().getBooleanExtra(DrawerActivity.EXTRA_ONLY_SHARED_BY_LINK_FILE,false);
 
         /// USER INTERFACE
 
@@ -346,7 +343,7 @@ public class FileDisplayActivity extends FileActivity
     }
 
     private void createMinFragments() {
-        OCFileListFragment listOfFiles = OCFileListFragment.newInstance(false, false, true,mOnlySharedByLinkFiles);
+        OCFileListFragment listOfFiles = OCFileListFragment.newInstance(false, false, true);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.add(R.id.left_fragment_container, listOfFiles, TAG_LIST_OF_FILES);
         transaction.commit();

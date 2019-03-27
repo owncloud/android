@@ -7,24 +7,21 @@
     android:fitsSystemWindows="true"
     android:id="@+id/drawer_layout">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+    android:orientation="vertical">
 
         <include layout="@layout/toolbar_standard"
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"/>
+            android:layout_height="wrap_content"/>
 
-        <ListView
-            android:id="@+id/all_shares_list"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="@dimen/standard_half_padding"
-            android:scrollbars="vertical"
-            android:visibility="gone"
-            android:layout_below="@id/toolbar" />
+        <FrameLayout
+                android:id="@+id/fragment_container"
+                android:layout_width="match_parent"
+                android:layout_height="0dip"
+                android:layout_weight="1"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -32,10 +29,9 @@
             android:id="@+id/no_shares_text_view"
             android:text="@string/no_public_shares"
             android:visibility="gone"
-            android:layout_centerInParent="true"
-            android:layout_centerHorizontal="true"/>
+            />
 
-    </RelativeLayout>
+    </LinearLayout>
 
     <include
         layout="@layout/drawer"

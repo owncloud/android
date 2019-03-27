@@ -63,7 +63,6 @@ public abstract class DrawerActivity extends ToolbarActivity {
     private static final String KEY_IS_ACCOUNT_CHOOSER_ACTIVE = "IS_ACCOUNT_CHOOSER_ACTIVE";
     private static final String KEY_CHECKED_MENU_ITEM = "CHECKED_MENU_ITEM";
     public static final String KEY_ACCOUNT = "ACCOUNT";
-    public static final String EXTRA_ONLY_SHARED_BY_LINK_FILE = "EXTRA_ONLY_SHARED_BY_LINK_FILES";
     private static final int ACTION_MANAGE_ACCOUNTS = 101;
     private static final int MENU_ORDER_ACCOUNT = 1;
     private static final int MENU_ORDER_ACCOUNT_FUNCTION = 2;
@@ -224,9 +223,8 @@ public abstract class DrawerActivity extends ToolbarActivity {
                             //     break;
                             case R.id.shared_by_link:
                                 Intent sharedByLinkIntent = new Intent(getApplicationContext(),
-                                        FileDisplayActivity.class);
-                                sharedByLinkIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                sharedByLinkIntent.putExtra(EXTRA_ONLY_SHARED_BY_LINK_FILE,true);
+                                        SharedByLinkActivity.class);
+                                sharedByLinkIntent.putExtra(KEY_ACCOUNT,getStorageManager().getAccount());
                                 startActivity(sharedByLinkIntent);
                                 break;
                             case R.id.nav_uploads:

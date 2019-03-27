@@ -29,6 +29,7 @@ import android.accounts.Account;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -80,8 +81,7 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
     public FileListListAdapter(
             boolean justFolders,
             Context context,
-            ComponentsGetter transferServiceGetter,
-            Vector<OCFile> sharedFiles
+            ComponentsGetter transferServiceGetter
     ) {
 
         mJustFolders = justFolders;
@@ -89,10 +89,6 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
         mAccount = AccountUtils.getCurrentOwnCloudAccount(mContext);
 
         mTransferServiceGetter = transferServiceGetter;
-
-        if(sharedFiles != null){
-            mFiles = sharedFiles;
-        }
 
         // Read sorting order, default to sort by name ascending
         FileStorageUtils.mSortOrderFileDisp = PreferenceManager.getSortOrder(mContext,
@@ -155,7 +151,6 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-
         View view = convertView;
         OCFile file = null;
         LayoutInflater inflator = (LayoutInflater) mContext
@@ -413,6 +408,7 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
 
         mFiles = FileStorageUtils.sortFolder(mFiles, FileStorageUtils.mSortOrderFileDisp,
                 FileStorageUtils.mSortAscendingFileDisp);
+        Log.e("AAAAAA",mFiles.toString());
         notifyDataSetChanged();
     }
 
@@ -432,6 +428,13 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
             }
         }
         return ret;
+    }
+
+    public void setFiles(Vector<OCFile> files){
+        mFiles = new Vector<OCFile>();
+        mFiles.addAll(files);
+        mImmutableFilesList = files;
+        notifyDataSetChanged();
     }
 
     public void setSortOrder(Integer order, boolean ascending) {

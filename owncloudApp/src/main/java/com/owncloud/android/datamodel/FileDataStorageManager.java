@@ -940,7 +940,7 @@ public class FileDataStorageManager {
             if (out != null) {
                 try {
                     out.close();
-                } catch (IOException e) {
+                } catch  (IOException e) {
                     e.printStackTrace(System.err);
                 }
             }
@@ -1029,28 +1029,19 @@ public class FileDataStorageManager {
         return file;
     }
 
-    public Vector<OCFile> getSharedFiles(){
-        Vector<OCFile> allSharedFiles = new Vector<>();
-        Vector<OCFile> files = getAllFiles(OCFile.ROOT_PATH);
-        for(OCFile file : files){
-            if(file.isSharedViaLink()) {
-                allSharedFiles.add(file);
-            }
-        }
-        return allSharedFiles;
-    }
-
-    private Vector<OCFile> getAllFiles(String path){
+    public Vector<OCFile> getAllPublicShares(String path){
         Vector<OCFile> files = getFolderContent(getFileByPath(path));
+        Vector<OCFile> sharedFiles = new Vector<OCFile>();
         Vector<OCFile> temp = new Vector<OCFile>();
         for(OCFile file : files){
-            if(file.isFolder()){
-                temp.addAll(getAllFiles(file.getRemotePath()));
-            //    files.addAll(getAllFiles(file.getRemotePath()));
+            if(!file.isSharedViaLink() && file.isFolder()){
+                temp.addAll(getAllPublicShares(file.getRemotePath()));
+            } else if(file.isSharedViaLink()){
+             sharedFiles.add(file);
             }
         }
-        files.addAll(temp);
-        return files;
+        sharedFiles.addAll(temp);
+        return sharedFiles;
     }
 
     private boolean fileExists(String cmp_key, String value) {

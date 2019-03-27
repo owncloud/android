@@ -33,6 +33,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.PowerManager;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
@@ -86,10 +87,11 @@ import com.owncloud.android.utils.PreferenceUtils;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 /**
  * A Fragment that lists all files and folders in a given path.
- *
+ * <p>
  * TODO refactor to get rid of direct dependency on FileDisplayActivity
  */
 public class OCFileListFragment extends ExtendedListFragment implements
@@ -123,7 +125,6 @@ public class OCFileListFragment extends ExtendedListFragment implements
 
     private boolean mHideFab = true;
     private boolean miniFabClicked = false;
-    private boolean mOnlySharedByLinkFiles = false;
     private ActionMode mActiveActionMode;
     private OCFileListFragment.MultiChoiceModeListener mMultiChoiceModeListener;
 
@@ -132,23 +133,21 @@ public class OCFileListFragment extends ExtendedListFragment implements
     /**
      * Public factory method to create new {@link OCFileListFragment} instances.
      *
-     * @param justFolders               When 'true', only folders will be shown to the user, not files.
-     * @param hideFAB                   When 'true', floating action button is hidden.
-     * @param allowContextualMode       When 'true', contextual action mode is enabled long-pressing an item.
+     * @param justFolders         When 'true', only folders will be shown to the user, not files.
+     * @param hideFAB             When 'true', floating action button is hidden.
+     * @param allowContextualMode When 'true', contextual action mode is enabled long-pressing an item.
      * @return New fragment with arguments set.
      */
     public static OCFileListFragment newInstance(
             boolean justFolders,
             boolean hideFAB,
-            boolean allowContextualMode,
-            boolean onlySharedByLinkFiles
+            boolean allowContextualMode
     ) {
         OCFileListFragment frag = new OCFileListFragment();
         Bundle args = new Bundle();
         args.putBoolean(ARG_JUST_FOLDERS, justFolders);
         args.putBoolean(ARG_HIDE_FAB, hideFAB);
         args.putBoolean(ARG_ALLOW_CONTEXTUAL_MODE, allowContextualMode);
-        args.putBoolean(ARG_ONLY_SHARED_BY_LINK_FILES,onlySharedByLinkFiles);
         frag.setArguments(args);
         return frag;
     }
@@ -206,6 +205,10 @@ public class OCFileListFragment extends ExtendedListFragment implements
         super.onDetach();
     }
 
+    public void setFilesInAdapter(Vector<OCFile> files){
+        mFileListAdapter.setFiles(files);
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -222,22 +225,11 @@ public class OCFileListFragment extends ExtendedListFragment implements
         setFooterEnabled(!justFolders);
 
         Bundle args = getArguments();
-        mOnlySharedByLinkFiles = (args != null) && args.getBoolean(ARG_ONLY_SHARED_BY_LINK_FILES,false);
-        if(mOnlySharedByLinkFiles){
-            mFileListAdapter = new FileListListAdapter(
-                    justFolders,
-                    getActivity(),
-                    mContainerActivity,
-                    mContainerActivity.getStorageManager().getSharedFiles()
-            );
-        } else {
-            mFileListAdapter = new FileListListAdapter(
-                    justFolders,
-                    getActivity(),
-                    mContainerActivity,
-                    null
-            );
-        }
+        mFileListAdapter = new FileListListAdapter(
+                justFolders,
+                getActivity(),
+                mContainerActivity
+        );
         setListAdapter(mFileListAdapter);
 
         mHideFab = (args != null) && args.getBoolean(ARG_HIDE_FAB, false);
@@ -415,8 +407,8 @@ public class OCFileListFragment extends ExtendedListFragment implements
     /**
      * records a click on a mini FAB and thus:
      * <ol>
-     *     <li>persists the click fact</li>
-     *     <li>removes the mini FAB labels</li>
+     * <li>persists the click fact</li>
+     * <li>removes the mini FAB labels</li>
      * </ol>
      */
     private void recordMiniFabClick() {
@@ -469,9 +461,9 @@ public class OCFileListFragment extends ExtendedListFragment implements
 
     /**
      * Handler for multiple selection mode.
-     *
+     * <p>
      * Manages input from the user when one or more files or folders are selected in the list.
-     *
+     * <p>
      * Also listens to changes in navigation drawer to hide and recover multiple selection when it's opened
      * and closed.
      */
@@ -505,7 +497,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
          * When the navigation drawer is closed, action mode is recovered in the same state as was
          * when the drawer was (started to be) opened.
          *
-         * @param drawerView        Navigation drawer just closed.
+         * @param drawerView Navigation drawer just closed.
          */
         @Override
         public void onDrawerClosed(View drawerView) {
@@ -526,7 +518,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
          * If the action mode is active when the navigation drawer starts to move, the action
          * mode is closed and the selection stored to be recovered when the drawer is closed.
          *
-         * @param newState     One of STATE_IDLE, STATE_DRAGGING or STATE_SETTLING.
+         * @param newState One of STATE_IDLE, STATE_DRAGGING or STATE_SETTLING.
          */
         @Override
         public void onDrawerStateChanged(int newState) {
@@ -693,7 +685,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
 
     /**
      * Call this, when the user presses the up button.
-     *
+     * <p>
      * Tries to move up the current folder one level. If the parent folder was removed from the
      * database, it continues browsing up until finding an existing folders.
      * <p/>
@@ -842,7 +834,6 @@ public class OCFileListFragment extends ExtendedListFragment implements
     }
 
     /**
-     *
      * @param file
      * @return 'true' if the file is being downloaded, 'false' otherwise.
      */
@@ -864,8 +855,8 @@ public class OCFileListFragment extends ExtendedListFragment implements
     /**
      * Start the appropriate action(s) on the currently selected files given menu selected by the user.
      *
-     * @param menuId        Identifier of the action menu selected by the user
-     * @return              'true' if the menu selection started any action, 'false' otherwise.
+     * @param menuId Identifier of the action menu selected by the user
+     * @return 'true' if the menu selection started any action, 'false' otherwise.
      */
     public boolean onFileActionChosen(int menuId) {
         final ArrayList<OCFile> checkedFiles = mFileListAdapter.getCheckedItems(getListView());
@@ -1124,8 +1115,9 @@ public class OCFileListFragment extends ExtendedListFragment implements
     /**
      * Determines if user set folder to grid or list view. If folder is not set itself,
      * it finds a parent that is set (at least root is set).
-     * @param file      Folder to check.
-     * @return          'true' is folder should be shown in grid mode, 'false' if list mode is preferred.
+     *
+     * @param file Folder to check.
+     * @return 'true' is folder should be shown in grid mode, 'false' if list mode is preferred.
      */
     public boolean isGridViewPreferred(OCFile file) {
         if (file != null) {
@@ -1209,7 +1201,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
     /**
      * Show a temporary message in a Snackbar bound to the content view of the parent Activity
      *
-     * @param messageResource       Message to show.
+     * @param messageResource Message to show.
      */
     private void showSnackMessage(int messageResource) {
         Snackbar snackbar = Snackbar.make(
