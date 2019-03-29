@@ -21,6 +21,7 @@
 package com.owncloud.android.providers.cursors
 
 import android.database.MatrixCursor
+import android.os.Build
 import android.os.Bundle
 import android.provider.DocumentsContract
 import android.provider.DocumentsContract.Document
@@ -43,10 +44,14 @@ class FileCursor(projection: Array<String>?) : MatrixCursor(projection ?: DEFAUL
         val iconRes = MimetypeIconUtil.getFileTypeIconId(file.mimetype, file.fileName)
         val mimeType = if (file.isFolder) Document.MIME_TYPE_DIR else file.mimetype
         val imagePath = if (file.isImage && file.isDown) file.storagePath else null
-        val flags = if (imagePath != null) Document.FLAG_SUPPORTS_THUMBNAIL else 0
+        var flags = if (imagePath != null) Document.FLAG_SUPPORTS_THUMBNAIL else 0
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            flags = flags or Document.FLAG_SUPPORTS_RENAME
+        }
 
         newRow()
-            .add(Document.COLUMN_DOCUMENT_ID, java.lang.Long.toString(file.fileId))
+            .add(Document.COLUMN_DOCUMENT_ID, file.fileId.toString())
             .add(Document.COLUMN_DISPLAY_NAME, file.fileName)
             .add(Document.COLUMN_LAST_MODIFIED, file.modificationTimestamp)
             .add(Document.COLUMN_SIZE, file.fileLength)

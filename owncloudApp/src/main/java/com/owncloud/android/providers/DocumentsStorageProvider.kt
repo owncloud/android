@@ -23,11 +23,12 @@
 
 package com.owncloud.android.providers
 
+import android.annotation.TargetApi
 import android.content.Intent
 import android.content.res.AssetFileDescriptor
 import android.database.Cursor
 import android.graphics.Point
-import android.os.Bundle
+import android.net.Uri
 import android.os.CancellationSignal
 import android.os.ParcelFileDescriptor
 import android.provider.DocumentsContract
@@ -39,21 +40,24 @@ import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.files.services.FileDownloader
 import com.owncloud.android.lib.common.utils.Log_OC
 import com.owncloud.android.operations.RefreshFolderOperation
+import com.owncloud.android.operations.RenameFileOperation
 import com.owncloud.android.providers.cursors.FileCursor
 import com.owncloud.android.providers.cursors.RootCursor
 import java.io.File
+import java.io.FileNotFoundException
 import java.util.HashMap
 import java.util.Vector
 
 class DocumentsStorageProvider : DocumentsProvider() {
+
     /**
      * If a directory requires to sync, it will write the id of the directory into this variable.
      * After the sync function gets triggered again over the same directory, it will see that a sync got already
      * triggered, and does not need to be triggered again. This way a endless loop is prevented.
      */
     private var requestedFolderIdForSync: Long = -1
-
     private var currentStorageManager: FileDataStorageManager? = null
+    private lateinit var documentsProviderAuthority: String
 
     override fun openDocument(documentId: String, mode: String?, signal: CancellationSignal?): ParcelFileDescriptor? {
         val docId = documentId.toLong()
@@ -63,9 +67,11 @@ class DocumentsStorageProvider : DocumentsProvider() {
 
         if (!file!!.isDown) {
 
-            val i = Intent(context, FileDownloader::class.java)
-            i.putExtra(FileDownloader.KEY_ACCOUNT, currentStorageManager!!.account)
-            i.putExtra(FileDownloader.KEY_FILE, file)
+            val i = Intent(context, FileDownloader::class.java).apply {
+                putExtra(FileDownloader.KEY_ACCOUNT, currentStorageManager!!.account)
+                putExtra(FileDownloader.KEY_FILE, file)
+            }
+
             context!!.startService(i)
 
             do {
@@ -77,9 +83,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
             } while (!file!!.isDown)
         }
 
-        return ParcelFileDescriptor.open(
-            File(file.storagePath), ParcelFileDescriptor.MODE_READ_ONLY
-        )
+        return ParcelFileDescriptor.open(File(file.storagePath), ParcelFileDescriptor.MODE_READ_ONLY)
     }
 
     override fun queryChildDocuments(
@@ -99,27 +103,28 @@ class DocumentsStorageProvider : DocumentsProvider() {
             resultCursor.addFile(file)
         }
 
+        val notifyUri: Uri = toNotifyUri(toUri(parentDocumentId))
+        resultCursor.setNotificationUri(context!!.contentResolver, notifyUri)
+
         /**
          * This will start syncing the current folder. User will only see this after updating his view with a
          * pull down, or by accessing the folder again.
          */
         if (requestedFolderIdForSync != folderId) {
             // register for sync
-            syncDirectoryWithServer(parentDocumentId, resultCursor)
+            syncDirectoryWithServer(parentDocumentId)
             requestedFolderIdForSync = folderId
-            val extrasBundle = Bundle()
-            extrasBundle.putBoolean(DocumentsContract.EXTRA_LOADING, true)
             resultCursor.setMoreToSync(true)
         } else {
             requestedFolderIdForSync = -1
         }
-
 
         return resultCursor
 
     }
 
     override fun queryDocument(documentId: String, projection: Array<String>?): Cursor {
+        Log_OC.d(TAG, "Query Document:$documentId")
         val docId = documentId.toLong()
         updateCurrentStorageManagerIfNeeded(docId)
 
@@ -130,6 +135,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
     }
 
     override fun onCreate(): Boolean {
+        documentsProviderAuthority = context!!.resources.getString(R.string.document_provider_authority)
         return true
     }
 
@@ -176,23 +182,45 @@ class DocumentsStorageProvider : DocumentsProvider() {
         return result
     }
 
+    @TargetApi(21)
+    override fun renameDocument(documentId: String, displayName: String): String? {
+
+        val docId = documentId.toLong()
+
+        updateCurrentStorageManagerIfNeeded(docId)
+
+        val file = currentStorageManager?.getFileById(docId) ?: throw FileNotFoundException("File $docId not found")
+        Log_OC.d(TAG, "Trying to rename ${file.fileName} to $displayName")
+        val renameFileOperation = RenameFileOperation(file.remotePath, displayName)
+        val result = renameFileOperation.execute(currentStorageManager, context)
+
+        if (!result.isSuccess) {
+            throw java.lang.UnsupportedOperationException("Rename failed")
+        } else {
+            context?.contentResolver?.notifyChange(toNotifyUri(toUri(file.parentId.toString())), null)
+        }
+
+
+        return null
+    }
+
     private fun updateCurrentStorageManagerIfNeeded(docId: Long) {
-        if (rootIdToStorageManager == null) {
+        if (rootIdToStorageManager.isEmpty()) {
             initiateStorageMap()
         }
-        if (currentStorageManager == null ||
-            rootIdToStorageManager!!.containsKey(docId) &&
-            currentStorageManager !== rootIdToStorageManager?.get(docId)
+        if (currentStorageManager == null || (
+                    rootIdToStorageManager.containsKey(docId) &&
+                            currentStorageManager !== rootIdToStorageManager[docId])
         ) {
-            currentStorageManager = rootIdToStorageManager?.get(docId)
+            currentStorageManager = rootIdToStorageManager[docId]
         }
     }
 
     private fun updateCurrentStorageManagerIfNeeded(rootId: String) {
-        if (rootIdToStorageManager == null) {
+        if (rootIdToStorageManager.isEmpty()) {
             return
         }
-        for (data in rootIdToStorageManager!!.values) {
+        for (data in rootIdToStorageManager.values) {
             if (data.account.name == rootId) {
                 currentStorageManager = data
             }
@@ -200,19 +228,17 @@ class DocumentsStorageProvider : DocumentsProvider() {
     }
 
     private fun initiateStorageMap() {
-        rootIdToStorageManager = HashMap()
-
         val contentResolver = context!!.contentResolver
 
         for (account in AccountUtils.getAccounts(context)) {
             val storageManager = FileDataStorageManager(context, account, contentResolver)
             val rootDir = storageManager.getFileByPath(OCFile.ROOT_PATH)
-            rootIdToStorageManager?.put(rootDir!!.fileId, storageManager)
+            rootIdToStorageManager[rootDir!!.fileId] = storageManager
         }
     }
 
-    private fun syncDirectoryWithServer(parentDocumentId: String, cursor: FileCursor) {
-        val folderId = java.lang.Long.parseLong(parentDocumentId)
+    private fun syncDirectoryWithServer(parentDocumentId: String) {
+        val folderId = parentDocumentId.toLong()
         val refreshFolderOperation = RefreshFolderOperation(
             currentStorageManager?.getFileById(folderId),
             false,
@@ -223,19 +249,10 @@ class DocumentsStorageProvider : DocumentsProvider() {
         refreshFolderOperation.syncVersionAndProfileEnabled(false)
 
         val contentResolver = context!!.contentResolver
-        Log_OC.e(TAG, parentDocumentId)
 
-        val browsedDirIdUri = DocumentsContract.buildChildDocumentsUri(
-            context!!.getString(R.string.document_provider_authority),
-            parentDocumentId
-        )
-        cursor.setNotificationUri(
-            contentResolver,
-            browsedDirIdUri
-        )
         val thread = Thread {
             refreshFolderOperation.execute(currentStorageManager, context)
-            contentResolver.notifyChange(browsedDirIdUri, null)
+            contentResolver.notifyChange(toNotifyUri(toUri(parentDocumentId)), null)
         }
         thread.start()
     }
@@ -264,8 +281,18 @@ class DocumentsStorageProvider : DocumentsProvider() {
         return result
     }
 
+    private fun toNotifyUri(uri: Uri): Uri {
+        return DocumentsContract.buildDocumentUri(
+            documentsProviderAuthority, uri.toString()
+        )
+    }
+
+    private fun toUri(documentId: String): Uri {
+        return Uri.parse(documentId)
+    }
+
     companion object {
         private val TAG = DocumentsStorageProvider::class.java.toString()
-        private var rootIdToStorageManager: MutableMap<Long, FileDataStorageManager>? = null
+        private var rootIdToStorageManager: MutableMap<Long, FileDataStorageManager> = HashMap()
     }
 }
