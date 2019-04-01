@@ -441,6 +441,7 @@ public class UploadFileOperation extends SyncOperation {
 
     /**
      * Move local temporal file or original file to its corresponding location in the ownCloud local folder
+     * Remove original file if LOCAL_BEHAVIOR_REMOVE
      *
      * @param temporalFile file copied locally before uploading the file
      * @param originalFile local file to upload
@@ -460,6 +461,9 @@ public class UploadFileOperation extends SyncOperation {
             }
             mFile.setStoragePath("");
 
+        } else if (mLocalBehaviour == FileUploader.LOCAL_BEHAVIOUR_REMOVE) {
+            getStorageManager().deleteFileInMediaScan(originalFile.getAbsolutePath());
+            getStorageManager().triggerMediaScan(expectedFile.getAbsolutePath());
         } else {
             mFile.setStoragePath(expectedPath);
 

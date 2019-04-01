@@ -472,10 +472,9 @@
     <string name="prefs_camera_upload_behaviour_title">Original file will be</string>
     <string name="upload_copy_files">Copy file</string>
     <string name="upload_move_files">Move file</string>
-
+    <string name="upload_remove_files">Remove file</string>
     <string name="pref_behaviour_entries_keep_file">kept in original folder</string>
     <string name="pref_behaviour_entries_move">moved to app folder</string>
-
     <string name="share_dialog_title">Share</string>
     <string name="share_file">Share %1$s</string>
     <string name="share_with_user_section_title">Users and Groups</string>

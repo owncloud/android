@@ -74,6 +74,13 @@
                 android:id="@+id/upload_radio_move"
                 android:paddingRight="8dp"
                 android:checked="false" />
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/upload_remove_files"
+                android:id="@+id/upload_radio_remove"
+                android:paddingRight="8dp"
+                android:checked="false" />
         </RadioGroup>
     </LinearLayout>
 

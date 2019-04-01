@@ -71,6 +71,11 @@ public class UploadFilesActivity extends FileActivity implements
     public static final String REQUEST_CODE_KEY = "requestCode";
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     public static final int RESULT_OK_AND_MOVE = RESULT_FIRST_USER;
+    /*
+    * Hardcode value for RESULT_OK_AND_REMOVE beacuse RESULT_OK and RESULT_OK_AND_MOVE use built in Android values that
+    * correspond to -1 and 1. 3 is used here to match the value with LOCAL_BEHAVIOUR_REMOVE defined in FileUploader.java.
+    */
+    public static final int RESULT_OK_AND_REMOVE = 3;
 
     private static final String KEY_DIRECTORY_PATH =
             UploadFilesActivity.class.getCanonicalName() + ".KEY_DIRECTORY_PATH";
@@ -92,6 +97,7 @@ public class UploadFilesActivity extends FileActivity implements
     private MenuItem mItemSelectInverse;
     private RadioButton mRadioBtnCopyFiles;
     private RadioButton mRadioBtnMoveFiles;
+    private RadioButton mRadioBtnRemoveFiles;
     private Menu mMainMenu;
     private int requestCode;
 
@@ -155,6 +161,11 @@ public class UploadFilesActivity extends FileActivity implements
         mRadioBtnMoveFiles = findViewById(R.id.upload_radio_move);
         if (localBehaviour == FileUploader.LOCAL_BEHAVIOUR_MOVE) {
             mRadioBtnMoveFiles.setChecked(true);
+        }
+
+        mRadioBtnRemoveFiles = findViewById(R.id.upload_radio_remove);
+        if (localBehaviour == FileUploader.LOCAL_BEHAVIOUR_REMOVE) {
+            mRadioBtnRemoveFiles.setChecked(true);
         }
 
         mRadioBtnCopyFiles = findViewById(R.id.upload_radio_copy);
@@ -525,6 +536,10 @@ public class UploadFilesActivity extends FileActivity implements
                     setResult(RESULT_OK_AND_MOVE, data);
                     appPreferencesEditor.putInt("prefs_uploader_behaviour",
                             FileUploader.LOCAL_BEHAVIOUR_MOVE);
+                } else if (mRadioBtnRemoveFiles.isChecked()) {
+                    setResult(RESULT_OK_AND_REMOVE, data);
+                    appPreferencesEditor.putInt("prefs_uploader_behaviour",
+                            FileUploader.LOCAL_BEHAVIOUR_REMOVE);
                 } else {
                     setResult(RESULT_OK, data);
                     appPreferencesEditor.putInt("prefs_uploader_behaviour",

@@ -683,17 +683,20 @@ public class FileDisplayActivity extends FileActivity
 
         // Hanndle calls form internal activities.
         if (requestCode == REQUEST_CODE__SELECT_CONTENT_FROM_APPS &&
-                (resultCode == RESULT_OK || resultCode == UploadFilesActivity.RESULT_OK_AND_MOVE)) {
+                (resultCode == RESULT_OK || resultCode == UploadFilesActivity.RESULT_OK_AND_MOVE ||
+                    resultCode == UploadFilesActivity.RESULT_OK_AND_REMOVE)) {
 
             requestUploadOfContentFromApps(data, resultCode);
 
         } else if (requestCode == REQUEST_CODE__SELECT_FILES_FROM_FILE_SYSTEM &&
-                (resultCode == RESULT_OK || resultCode == UploadFilesActivity.RESULT_OK_AND_MOVE)) {
+                (resultCode == RESULT_OK || resultCode == UploadFilesActivity.RESULT_OK_AND_MOVE ||
+                    resultCode == UploadFilesActivity.RESULT_OK_AND_REMOVE)) {
 
             requestUploadOfFilesFromFileSystem(data, resultCode);
 
         } else if (requestCode == REQUEST_CODE__UPLOAD_FROM_CAMERA) {
-            if (resultCode == RESULT_OK || resultCode == UploadFilesActivity.RESULT_OK_AND_MOVE) {
+            if (resultCode == RESULT_OK || resultCode == UploadFilesActivity.RESULT_OK_AND_MOVE ||
+                    resultCode == UploadFilesActivity.RESULT_OK_AND_REMOVE) {
                 mFilesUploadHelper.onActivityResult(new FilesUploadHelper.OnCheckAvailableSpaceListener() {
                     @Override
                     public void onCheckAvailableSpaceStart() {
@@ -745,8 +748,16 @@ public class FileDisplayActivity extends FileActivity
 
     private void requestUploadOfFilesFromFileSystem(Intent data, int resultCode) {
         String[] filePaths = data.getStringArrayExtra(UploadFilesActivity.EXTRA_CHOSEN_FILES);
-        int behaviour = (resultCode == UploadFilesActivity.RESULT_OK_AND_MOVE)
-                ? FileUploader.LOCAL_BEHAVIOUR_MOVE : FileUploader.LOCAL_BEHAVIOUR_COPY;
+        int behaviour;
+
+        if (resultCode == UploadFilesActivity.RESULT_OK_AND_MOVE){
+            behaviour = FileUploader.LOCAL_BEHAVIOUR_MOVE;
+        } else if (resultCode == UploadFilesActivity.RESULT_OK_AND_REMOVE){
+            behaviour = FileUploader.LOCAL_BEHAVIOUR_REMOVE;
+        } else {
+            behaviour = FileUploader.LOCAL_BEHAVIOUR_COPY;
+        }
+
         requestUploadOfFilesFromFileSystem(filePaths, behaviour);
     }
 
@@ -779,6 +790,7 @@ public class FileDisplayActivity extends FileActivity
     private void requestUploadOfContentFromApps(Intent contentIntent, int resultCode) {
 
         ArrayList<Parcelable> streamsToUpload = new ArrayList<>();
+        int behaviour;
 
         //getClipData is only supported on api level 16+, Jelly Bean
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN &&
@@ -793,8 +805,13 @@ public class FileDisplayActivity extends FileActivity
             streamsToUpload.add(contentIntent.getData());
         }
 
-        int behaviour = (resultCode == UploadFilesActivity.RESULT_OK_AND_MOVE) ? FileUploader.LOCAL_BEHAVIOUR_MOVE :
-                FileUploader.LOCAL_BEHAVIOUR_COPY;
+        if (resultCode == UploadFilesActivity.RESULT_OK_AND_MOVE){
+            behaviour = FileUploader.LOCAL_BEHAVIOUR_MOVE;
+        } else if (resultCode == UploadFilesActivity.RESULT_OK_AND_REMOVE){
+            behaviour = FileUploader.LOCAL_BEHAVIOUR_REMOVE;
+        } else {
+            behaviour = FileUploader.LOCAL_BEHAVIOUR_COPY;
+        }
 
         OCFile currentDir = getCurrentDir();
         String remotePath = (currentDir != null) ? currentDir.getRemotePath() : OCFile.ROOT_PATH;
