@@ -1,5 +1,8 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+  <string name="about_android">%1$s אנדרויד</string>
+  <string name="about_version">גרסה%1$s</string>
+  <string name="actionbar_search">חפש בתוך התיקיה</string>
   <string name="actionbar_sync">רענון חשבון</string>
   <string name="actionbar_upload">העלאה</string>
   <string name="actionbar_upload_from_apps">תוכן מיישומים אחרים</string>
@@ -57,6 +60,7 @@
   <string name="pattern_configure_your_pattern_explanation">תופיע בקשה לאימות תבנית עם כל הפעלה של היישומון</string>
   <string name="recommend_subject">לבדיקה %1$s בטלפון החכם שלך!</string>
   <string name="recommend_text">הנך מוזמן להשתמש ב- %1$s בטלפון החכם שלך!\nניתן להוריד מכאן: %2$s</string>
+  <string name="auth_failure_snackbar_action">החלף חשבון</string>
   <string name="auth_check_server">בדיקת שרת</string>
   <string name="auth_host_url">כתובת שרת https://…</string>
   <string name="auth_username">שם משתמש</string>
@@ -134,6 +138,8 @@
   <string name="uploads_view_group_current_uploads">נוכחי</string>
   <string name="uploads_view_group_failed_uploads">נכשל (יש להקיש לניסיון נוסף)</string>
   <string name="uploads_view_group_finished_uploads">הועלה</string>
+  <string name="uploads_view_group_file_count">%dקבצים</string>
+  <string name="uploads_view_group_file_count_single">%dקובץ</string>
   <string name="uploads_view_upload_status_succeeded">הושלם</string>
   <string name="uploads_view_upload_status_cancelled">בוטל</string>
   <string name="uploads_view_upload_status_paused">מושהה</string>
@@ -473,6 +479,7 @@
   <string name="media_service_notification_channel_description">הצגת נגן מוזיקה</string>
   <string name="file_sync_notification_channel_name">סנכרון קבצים</string>
   <string name="file_sync_notification_channel_description">הצגת תוצאות סנכרון קבצים</string>
+  <string name="button_no_thanks_name">לא, תודה</string>
   <plurals name="items_selected_count">
     <item quantity="one">נבחר %d</item>
     <item quantity="two">נבחרו %d</item>
