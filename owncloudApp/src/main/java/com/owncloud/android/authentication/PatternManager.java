@@ -29,7 +29,6 @@ import android.os.PowerManager;
 import android.preference.PreferenceManager;
 import android.view.WindowManager;
 
-import com.owncloud.android.BuildConfig;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.ui.activity.PatternLockActivity;
 

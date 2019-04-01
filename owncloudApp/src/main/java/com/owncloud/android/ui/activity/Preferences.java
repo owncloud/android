@@ -81,6 +81,26 @@ public class Preferences extends PreferenceActivity {
     private static final int ACTION_REQUEST_PATTERN = 7;
     private static final int ACTION_CONFIRM_PATTERN = 8;
 
+    private static final String PREFERENCE_CAMERA_PICTURE_UPLOADS = "camera_picture_uploads";
+    private static final String PREFERENCE_CAMERA_PICTURE_UPLOADS_PATH = "camera_picture_uploads_path";
+    private static final String PREFERENCE_CAMERA_UPLOADS_CATEGORY = "camera_uploads_category";
+    private static final String PREFERENCE_CAMERA_PICTURE_UPLOADS_ON_WIFI = "camera_picture_uploads_on_wifi";
+    private static final String PREFERENCE_CAMERA_VIDEO_UPLOADS = "camera_video_uploads";
+    private static final String PREFERENCE_CAMERA_VIDEO_UPLOADS_PATH = "camera_video_uploads_path";
+    private static final String PREFERENCE_CAMERA_VIDEO_UPLOADS_ON_WIFI = "camera_video_uploads_on_wifi";
+    private static final String PREFERENCE_CAMERA_UPLOADS_SOURCE_PATH = "camera_uploads_source_path";
+    private static final String PREFERENCE_CAMERA_UPLOADS_BEHAVIOUR = "camera_uploads_behaviour";
+    private static final String PREFERENCE_SECURITY_CATEGORY = "security_category";
+    private static final String PREFERENCE_MORE_CATEGORY = "more";
+    private static final String PREFERENCE_HELP = "help";
+    private static final String PREFERENCE_SYNC_CALENDAR_CONTACTS = "syncCalendarContacts";
+    private static final String PREFERENCE_RECOMMEND = "recommend";
+    private static final String PREFERENCE_FEEDBACK = "feedback";
+    private static final String PREFERENCE_PRIVACY_POLICY = "privacyPolicy";
+    private static final String PREFERENCE_LOGGER = "logger";
+    private static final String PREFERENCE_IMPRINT = "imprint";
+    private static final String PREFERENCE_ABOUT_APP = "about_app";
+
     public static final String PREFERENCE_TOUCHES_WITH_OTHER_VISIBLE_WINDOWS = "touches_with_other_visible_windows";
 
     private PreferenceCategory mPrefCameraUploadsCategory;
@@ -162,9 +182,9 @@ public class Preferences extends PreferenceActivity {
          */
 
         // Pictures
-        mPrefCameraPictureUploads = (CheckBoxPreference) findPreference("camera_picture_uploads");
+        mPrefCameraPictureUploads = (CheckBoxPreference) findPreference("PREFERENCE_CAMERA_PICTURE_UPLOADS");
 
-        mPrefCameraPictureUploadsPath = findPreference("camera_picture_uploads_path");
+        mPrefCameraPictureUploadsPath = findPreference("PREFERENCE_CAMERA_PICTURE_UPLOADS_PATH");
         if (mPrefCameraPictureUploadsPath != null) {
 
             mPrefCameraPictureUploadsPath.setOnPreferenceClickListener(preference -> {
@@ -178,9 +198,9 @@ public class Preferences extends PreferenceActivity {
             });
         }
 
-        mPrefCameraUploadsCategory = (PreferenceCategory) findPreference("camera_uploads_category");
+        mPrefCameraUploadsCategory = (PreferenceCategory) findPreference("PREFERENCE_CAMERA_UPLOADS_CATEGORY");
 
-        mPrefCameraPictureUploadsWiFi = findPreference("camera_picture_uploads_on_wifi");
+        mPrefCameraPictureUploadsWiFi = findPreference("PREFERENCE_CAMERA_PICTURE_UPLOADS_ON_WIFI");
 
         toggleCameraUploadsPictureOptions(true, mPrefCameraPictureUploads.isChecked());
 
@@ -195,9 +215,9 @@ public class Preferences extends PreferenceActivity {
         });
 
         // Videos
-        mPrefCameraVideoUploads = (CheckBoxPreference) findPreference("camera_video_uploads");
+        mPrefCameraVideoUploads = (CheckBoxPreference) findPreference("PREFERENCE_CAMERA_VIDEO_UPLOADS");
 
-        mPrefCameraVideoUploadsPath = findPreference("camera_video_uploads_path");
+        mPrefCameraVideoUploadsPath = findPreference("PREFERENCE_CAMERA_VIDEO_UPLOADS_PATH");
         if (mPrefCameraVideoUploadsPath != null) {
             mPrefCameraVideoUploadsPath.setOnPreferenceClickListener(preference -> {
                 if (!mUploadVideoPath.endsWith(OCFile.PATH_SEPARATOR)) {
@@ -210,7 +230,7 @@ public class Preferences extends PreferenceActivity {
             });
         }
 
-        mPrefCameraVideoUploadsWiFi = findPreference("camera_video_uploads_on_wifi");
+        mPrefCameraVideoUploadsWiFi = findPreference("PREFERENCE_CAMERA_VIDEO_UPLOADS_ON_WIFI");
         toggleCameraUploadsVideoOptions(true, mPrefCameraVideoUploads.isChecked());
 
         mPrefCameraVideoUploads.setOnPreferenceChangeListener((preference, newValue) -> {
@@ -221,7 +241,7 @@ public class Preferences extends PreferenceActivity {
             return true;
         });
 
-        mPrefCameraUploadsSourcePath = findPreference("camera_uploads_source_path");
+        mPrefCameraUploadsSourcePath = findPreference("PREFERENCE_CAMERA_UPLOADS_SOURCE_PATH");
         if (mPrefCameraUploadsSourcePath != null) {
             mPrefCameraUploadsSourcePath.setOnPreferenceClickListener(preference -> {
                 if (!mSourcePath.endsWith(File.separator)) {
@@ -235,10 +255,10 @@ public class Preferences extends PreferenceActivity {
                 return true;
             });
         } else {
-            Log_OC.e(TAG, "Lost preference camera_uploads_source_path");
+            Log_OC.e(TAG, "Lost preference PREFERENCE_CAMERA_UPLOADS_SOURCE_PATH");
         }
 
-        mPrefCameraUploadsBehaviour = findPreference("camera_uploads_behaviour");
+        mPrefCameraUploadsBehaviour = findPreference("PREFERENCE_CAMERA_UPLOADS_BEHAVIOUR");
         toggleCameraUploadsCommonOptions(
                 mPrefCameraVideoUploads.isChecked(),
                 mPrefCameraPictureUploads.isChecked()
@@ -257,7 +277,7 @@ public class Preferences extends PreferenceActivity {
          * Security
          */
 
-        mPrefSecurityCategory = (PreferenceCategory) findPreference("security_category");
+        mPrefSecurityCategory = (PreferenceCategory) findPreference("PREFERENCE_SECURITY_CATEGORY");
         mPasscode = (CheckBoxPreference) findPreference(PassCodeActivity.PREFERENCE_SET_PASSCODE);
         mPattern = (CheckBoxPreference) findPreference(PatternLockActivity.PREFERENCE_SET_PATTERN);
         mFingerprint = (CheckBoxPreference) findPreference(FingerprintActivity.PREFERENCE_SET_FINGERPRINT);
@@ -357,10 +377,10 @@ public class Preferences extends PreferenceActivity {
         /**
          * More
          */
-        PreferenceCategory pCategoryMore = (PreferenceCategory) findPreference("more");
+        PreferenceCategory pCategoryMore = (PreferenceCategory) findPreference("PREFERENCE_MORE_CATEGORY");
 
         boolean helpEnabled = getResources().getBoolean(R.bool.help_enabled);
-        Preference pHelp = findPreference("help");
+        Preference pHelp = findPreference("PREFERENCE_HELP");
         if (pHelp != null) {
             if (helpEnabled) {
                 pHelp.setOnPreferenceClickListener(preference -> {
@@ -377,7 +397,7 @@ public class Preferences extends PreferenceActivity {
             }
         }
 
-        Preference pSyncCalendarContacts = findPreference("syncCalendarContacts");
+        Preference pSyncCalendarContacts = findPreference("PREFERENCE_SYNC_CALENDAR_CONTACTS");
 
         boolean syncCalendarContactsEnabled = getResources().getBoolean(R.bool.sync_calendar_contacts_enabled);
         if (pSyncCalendarContacts != null) {
@@ -397,7 +417,7 @@ public class Preferences extends PreferenceActivity {
         }
 
         boolean recommendEnabled = getResources().getBoolean(R.bool.recommend_enabled);
-        Preference pRecommend = findPreference("recommend");
+        Preference pRecommend = findPreference("PREFERENCE_RECOMMEND");
         if (pRecommend != null) {
             if (recommendEnabled) {
                 pRecommend.setOnPreferenceClickListener(preference -> {
@@ -427,7 +447,7 @@ public class Preferences extends PreferenceActivity {
         }
 
         boolean feedbackEnabled = getResources().getBoolean(R.bool.feedback_enabled);
-        Preference pFeedback = findPreference("feedback");
+        Preference pFeedback = findPreference("PREFERENCE_FEEDBACK");
         if (pFeedback != null) {
             if (feedbackEnabled) {
                 pFeedback.setOnPreferenceClickListener(preference -> {
@@ -448,7 +468,7 @@ public class Preferences extends PreferenceActivity {
         }
 
         boolean privacyPolicyEnabled = getResources().getBoolean(R.bool.privacy_policy_enabled);
-        Preference pPrivacyPolicy = findPreference("privacyPolicy");
+        Preference pPrivacyPolicy = findPreference("PREFERENCE_PRIVACY_POLICY");
         if (pPrivacyPolicy != null) {
             if (privacyPolicyEnabled) {
                 pPrivacyPolicy.setOnPreferenceClickListener(preference -> {
@@ -463,7 +483,7 @@ public class Preferences extends PreferenceActivity {
         }
 
         // show item(s) only when you are developer
-        mLogger = findPreference("logger");
+        mLogger = findPreference("PREFERENCE_LOGGER");
         mLogger.setOnPreferenceClickListener(preference -> {
             Intent loggerIntent = new Intent(getApplicationContext(), LogHistoryActivity.class);
             startActivity(loggerIntent);
@@ -473,7 +493,7 @@ public class Preferences extends PreferenceActivity {
         showDeveloperItems(pCategoryMore);
 
         boolean imprintEnabled = getResources().getBoolean(R.bool.imprint_enabled);
-        Preference pImprint = findPreference("imprint");
+        Preference pImprint = findPreference("PREFERENCE_IMPRINT");
         if (pImprint != null) {
             if (imprintEnabled) {
                 pImprint.setOnPreferenceClickListener(preference -> {
@@ -493,7 +513,7 @@ public class Preferences extends PreferenceActivity {
         /*
          * About App
          */
-        mAboutApp = findPreference("about_app");
+        mAboutApp = findPreference("PREFERENCE_ABOUT_APP");
         if (mAboutApp != null) {
             mAboutApp.setTitle(String.format(
                     getString(R.string.about_android),
@@ -507,22 +527,24 @@ public class Preferences extends PreferenceActivity {
                     Uri uriUrl = Uri.parse(commitUrl);
                     Intent intent = new Intent(Intent.ACTION_VIEW, uriUrl);
                     startActivity(intent);
-                } else if (mAppPrefs.getInt(MainApp.CLICK_DEV_MENU, 0) == MainApp.CLICKS_NEEDED_TO_BE_DEVELOPER) {
+                } else if (mAppPrefs.getInt(MainApp.CLICK_DEV_MENU, 0) ==
+                        MainApp.CLICKS_NEEDED_TO_BE_DEVELOPER) {
                     showDeveloperItems(pCategoryMore);
                 } else if (clickCount > 0) {
                     Toast.makeText(this,
-                            getString(R.string.clicks_to_be_developer, MainApp.CLICKS_NEEDED_TO_BE_DEVELOPER - clickCount),
+                            getString(R.string.clicks_to_be_developer,
+                                    MainApp.CLICKS_NEEDED_TO_BE_DEVELOPER - clickCount),
                             Toast.LENGTH_SHORT).show();
                 }
                 mAppPrefs.edit().putInt(MainApp.CLICK_DEV_MENU, clickCount + 1).apply();
-                ((MainApp) getApplication()).readIsDeveloper(); // read value to global variable
+                ((MainApp) getApplication()).startLogIfDeveloper(); // read value to global variable
                 return true;
             });
         }
     }
 
     private void showDeveloperItems(PreferenceCategory preferenceCategory) {
-        Preference pLogger = findPreference("logger");
+        Preference pLogger = findPreference("PREFERENCE_LOGGER");
         if (mAppPrefs.getInt(MainApp.CLICK_DEV_MENU, 0) >= MainApp.CLICKS_NEEDED_TO_BE_DEVELOPER && pLogger == null) {
             preferenceCategory.addPreference(mLogger);
         } else if (!MainApp.isDeveloper() && pLogger != null) {
@@ -853,7 +875,8 @@ public class Preferences extends PreferenceActivity {
      * Load picture upload path set on preferences
      */
     private void loadCameraUploadsPicturePath() {
-        mUploadPath = mAppPrefs.getString("camera_picture_uploads_path", getString(R.string.camera_upload_path));
+        mUploadPath = mAppPrefs.getString("PREFERENCE_CAMERA_PICTURE_UPLOADS_PATH",
+                getString(R.string.camera_upload_path));
         mPrefCameraPictureUploadsPath.setSummary(
                 DisplayUtils.getPathWithoutLastSlash(mUploadPath)
         );
@@ -863,14 +886,15 @@ public class Preferences extends PreferenceActivity {
      * Save the "Picture upload path" on preferences
      */
     private void saveCameraUploadsPicturePathOnPreferences() {
-        mAppPrefs.edit().putString("camera_picture_uploads_path", mUploadPath).apply();
+        mAppPrefs.edit().putString("PREFERENCE_CAMERA_PICTURE_UPLOADS_PATH", mUploadPath).apply();
     }
 
     /**
      * Load video upload path set on preferences
      */
     private void loadCameraUploadsVideoPath() {
-        mUploadVideoPath = mAppPrefs.getString("camera_video_uploads_path", getString(R.string.camera_upload_path));
+        mUploadVideoPath = mAppPrefs.getString("PREFERENCE_CAMERA_VIDEO_UPLOADS_PATH",
+                getString(R.string.camera_upload_path));
         mPrefCameraVideoUploadsPath.setSummary(DisplayUtils.getPathWithoutLastSlash(mUploadVideoPath));
     }
 
@@ -878,7 +902,7 @@ public class Preferences extends PreferenceActivity {
      * Save the "Video upload path" on preferences
      */
     private void saveCameraUploadsVideoPathOnPreferences() {
-        mAppPrefs.edit().putString("camera_video_uploads_path", mUploadVideoPath).apply();
+        mAppPrefs.edit().putString("PREFERENCE_CAMERA_VIDEO_UPLOADS_PATH", mUploadVideoPath).apply();
     }
 
     /**
@@ -886,7 +910,7 @@ public class Preferences extends PreferenceActivity {
      */
     private void loadCameraUploadsSourcePath() {
         mSourcePath = mAppPrefs.getString(
-                "camera_uploads_source_path",
+                "PREFERENCE_CAMERA_UPLOADS_SOURCE_PATH",
                 CameraUploadsConfiguration.DEFAULT_SOURCE_PATH
         );
         if (mPrefCameraUploadsSourcePath != null) {
@@ -909,7 +933,7 @@ public class Preferences extends PreferenceActivity {
      * Save the "Camera folder" path on preferences
      */
     private void saveCameraUploadsSourcePathOnPreferences() {
-        mAppPrefs.edit().putString("camera_uploads_source_path", mSourcePath).apply();
+        mAppPrefs.edit().putString("PREFERENCE_CAMERA_UPLOADS_SOURCE_PATH", mSourcePath).apply();
     }
 
     private void enableFingerprint() {

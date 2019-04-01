@@ -27,7 +27,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 
-import com.owncloud.android.BuildConfig;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.files.services.FileDownloader;

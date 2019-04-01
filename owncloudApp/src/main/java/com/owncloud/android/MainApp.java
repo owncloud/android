@@ -65,7 +65,7 @@ public class MainApp extends Application {
     private static final String POLICY_SINGLE_SESSION_PER_ACCOUNT = "single session per account";
     @SuppressWarnings("unused")
     private static final String POLICY_ALWAYS_NEW_CLIENT = "always new client";
-    private static final int DEFAULT_0 = 0;
+    private static final int CLICKS_DEFAULT = 0;
 
     private static Context mContext;
 
@@ -75,7 +75,7 @@ public class MainApp extends Application {
         super.onCreate();
         MainApp.mContext = getApplicationContext();
 
-        readIsDeveloper();
+        startLogIfDeveloper();
 
         OwnCloudClient.setContext(mContext);
 
@@ -238,9 +238,9 @@ public class MainApp extends Application {
         return mDeveloper;
     }
 
-    public void readIsDeveloper() {
+    public void startLogIfDeveloper() {
         mDeveloper = BuildConfig.DEBUG || PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
-                .getInt(CLICK_DEV_MENU, DEFAULT_0) > CLICKS_NEEDED_TO_BE_DEVELOPER;
+                .getInt(CLICK_DEV_MENU, CLICKS_DEFAULT) > CLICKS_NEEDED_TO_BE_DEVELOPER;
 
 
         if (isDeveloper()) {
