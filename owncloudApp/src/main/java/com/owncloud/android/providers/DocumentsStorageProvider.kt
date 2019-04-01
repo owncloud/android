@@ -49,13 +49,13 @@ import java.util.HashMap
 import java.util.Vector
 
 class DocumentsStorageProvider : DocumentsProvider() {
-
     /**
      * If a directory requires to sync, it will write the id of the directory into this variable.
      * After the sync function gets triggered again over the same directory, it will see that a sync got already
      * triggered, and does not need to be triggered again. This way a endless loop is prevented.
      */
     private var requestedFolderIdForSync: Long = -1
+    private var syncRequired = true
     private var currentStorageManager: FileDataStorageManager? = null
     private lateinit var documentsProviderAuthority: String
 
@@ -110,7 +110,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
          * This will start syncing the current folder. User will only see this after updating his view with a
          * pull down, or by accessing the folder again.
          */
-        if (requestedFolderIdForSync != folderId) {
+        if (requestedFolderIdForSync != folderId && syncRequired) {
             // register for sync
             syncDirectoryWithServer(parentDocumentId)
             requestedFolderIdForSync = folderId
@@ -119,6 +119,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
             requestedFolderIdForSync = -1
         }
 
+        syncRequired = true
         return resultCursor
 
     }
@@ -184,22 +185,23 @@ class DocumentsStorageProvider : DocumentsProvider() {
 
     @TargetApi(21)
     override fun renameDocument(documentId: String, displayName: String): String? {
-
         val docId = documentId.toLong()
 
         updateCurrentStorageManagerIfNeeded(docId)
 
         val file = currentStorageManager?.getFileById(docId) ?: throw FileNotFoundException("File $docId not found")
         Log_OC.d(TAG, "Trying to rename ${file.fileName} to $displayName")
+
         val renameFileOperation = RenameFileOperation(file.remotePath, displayName)
         val result = renameFileOperation.execute(currentStorageManager, context)
 
         if (!result.isSuccess) {
+            context?.contentResolver?.notifyChange(toNotifyUri(toUri(file.parentId.toString())), null)
             throw java.lang.UnsupportedOperationException("Rename failed")
         } else {
+            syncRequired = false
             context?.contentResolver?.notifyChange(toNotifyUri(toUri(file.parentId.toString())), null)
         }
-
 
         return null
     }
