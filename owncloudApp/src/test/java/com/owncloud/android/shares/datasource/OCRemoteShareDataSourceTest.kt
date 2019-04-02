@@ -36,7 +36,7 @@ import org.junit.Test
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.mock
 
-class OCRemoteSharesDataSourceTest {
+class OCRemoteCapabilitiesDataSourceTest {
     private lateinit var ocRemoteSharesDataSource: OCRemoteSharesDataSource
     private val ownCloudClient = mock(OwnCloudClient::class.java)
 

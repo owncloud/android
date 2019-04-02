@@ -31,9 +31,8 @@ import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.files.RemoteFile;
-import com.owncloud.android.lib.resources.shares.GetRemoteSharesForFileOperation;
 import com.owncloud.android.lib.resources.shares.ShareParserResult;
-import com.owncloud.android.lib.resources.status.OCCapability;
+import com.owncloud.android.lib.resources.status.RemoteCapability;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 import com.owncloud.android.operations.common.SyncOperation;
 import com.owncloud.android.syncadapter.FileSyncAdapter;
@@ -169,9 +168,9 @@ public class RefreshFolderOperation extends SyncOperation<ArrayList<RemoteFile>>
     private OwnCloudVersion syncCapabilitiesAndGetServerVersion() {
         OwnCloudVersion serverVersion;
         SyncCapabilitiesOperation getCapabilities = new SyncCapabilitiesOperation();
-        RemoteOperationResult<OCCapability> result = getCapabilities.execute(getStorageManager(), mContext);
+        RemoteOperationResult<RemoteCapability> result = getCapabilities.execute(getStorageManager(), mContext);
         if (result.isSuccess()) {
-            OCCapability capability = result.getData();
+            RemoteCapability capability = result.getData();
             serverVersion = new OwnCloudVersion(capability.getVersionString());
         } else {
             // get whatever was stored before for the version
