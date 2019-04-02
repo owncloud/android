@@ -25,12 +25,14 @@ import androidx.annotation.VisibleForTesting
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.owncloud.android.capabilities.db.OCCapabilityDao
 import com.owncloud.android.shares.db.OCShare
 import com.owncloud.android.shares.db.OCShareDao
 
 @Database(entities = [OCShare::class], version = ProviderMeta.DB_VERSION, exportSchema = false)
 abstract class OwncloudDatabase : RoomDatabase() {
     abstract fun shareDao(): OCShareDao
+    abstract fun capabilityDao(): OCCapabilityDao
 
     companion object {
         @Volatile
