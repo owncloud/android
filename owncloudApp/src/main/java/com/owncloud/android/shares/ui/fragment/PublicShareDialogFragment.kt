@@ -47,7 +47,7 @@ import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.lib.common.utils.Log_OC
 import com.owncloud.android.lib.resources.shares.RemoteShare
 import com.owncloud.android.lib.resources.shares.ShareType
-import com.owncloud.android.lib.resources.status.OCCapability
+import com.owncloud.android.lib.resources.status.RemoteCapability
 import com.owncloud.android.lib.resources.status.OwnCloudVersion
 import com.owncloud.android.operations.common.OperationType
 import com.owncloud.android.shares.db.OCShare
@@ -90,7 +90,7 @@ class PublicShareDialogFragment : DialogFragment() {
     /**
      * Capabilities of the server
      */
-    private var capabilities: OCCapability? = null
+    private var capabilities: RemoteCapability? = null
 
     /**
      * Listener for changes in password switch

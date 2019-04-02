@@ -46,7 +46,7 @@ import androidx.test.uiautomator.UiSelector;
 import com.owncloud.android.R;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.status.CapabilityBooleanType;
-import com.owncloud.android.lib.resources.status.OCCapability;
+import com.owncloud.android.lib.resources.status.RemoteCapability;
 import com.owncloud.android.utils.AccountsManager;
 import com.owncloud.android.utils.FileManager;
 import com.owncloud.android.utils.ServerType;
@@ -108,7 +108,7 @@ public class PublicShareActivityTest {
     private String testPassword = null;
     private String testServerURL = null;
     private ServerType servertype;
-    private OCCapability capabilities;
+    private RemoteCapability capabilities;
 
     @Rule
     public ActivityTestRule<FileDisplayActivity> mActivityRule = new
