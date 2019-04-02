@@ -1,5 +1,6 @@
 /* ownCloud Android Library is available under MIT license
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   Copyright (C) 2019 ownCloud GmbH.
+ *   @author masensio
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -21,57 +22,44 @@
  *   THE SOFTWARE.
  *
  */
-
-package com.owncloud.android.lib.resources.shares;
+package com.owncloud.android.lib.resources.status
 
 /**
- * Enum for Share Type, with values:
- * -1 - No shared
- * 0 - Shared by user
- * 1 - Shared by group
- * 3 - Shared by public link
- * 4 - Shared by e-mail
- * 5 - Shared by contact
- *
- * @author masensio
+ * Enum for Boolean Type in RemoteCapability parameters, with values:
+ * -1 - Unknown
+ * 0 - False
+ * 1 - True
  */
+enum class CapabilityBooleanType private constructor(val value: Int) {
+    UNKNOWN(-1),
+    FALSE(0),
+    TRUE(1);
 
-public enum ShareType {
-    NO_SHARED(-1),
-    USER(0),
-    GROUP(1),
-    PUBLIC_LINK(3),
-    EMAIL(4),
-    CONTACT(5),
-    FEDERATED(6);
+    val isUnknown: Boolean
+        get() = value == -1
 
-    private int value;
+    val isFalse: Boolean
+        get() = value == 0
 
-    private ShareType(int value) {
-        this.value = value;
-    }
+    val isTrue: Boolean
+        get() = value == 1
 
-    public static ShareType fromValue(int value) {
-        switch (value) {
-            case -1:
-                return NO_SHARED;
-            case 0:
-                return USER;
-            case 1:
-                return GROUP;
-            case 3:
-                return PUBLIC_LINK;
-            case 4:
-                return EMAIL;
-            case 5:
-                return CONTACT;
-            case 6:
-                return FEDERATED;
+    companion object {
+        fun fromValue(value: Int): CapabilityBooleanType? {
+            when (value) {
+                -1 -> return UNKNOWN
+                0 -> return FALSE
+                1 -> return TRUE
+            }
+            return null
         }
-        return null;
-    }
 
-    public int getValue() {
-        return value;
+        fun fromBooleanValue(boolValue: Boolean): CapabilityBooleanType {
+            return if (boolValue) {
+                TRUE
+            } else {
+                FALSE
+            }
+        }
     }
-};
+}

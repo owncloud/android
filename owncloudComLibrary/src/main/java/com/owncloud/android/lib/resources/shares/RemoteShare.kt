@@ -180,9 +180,8 @@ class RemoteShare : Parcelable, Serializable {
         const val FEDERATED_PERMISSIONS_FOR_FOLDER_AFTER_OC9 =
             FEDERATED_PERMISSIONS_FOR_FOLDER_UP_TO_OC9 + SHARE_PERMISSION_FLAG
 
-
-        const val INIT_EXPIRATION_DATE_IN_MILLIS : Long = 0
-        const val INIT_SHARED_DATE : Long = 0
+        const val INIT_EXPIRATION_DATE_IN_MILLIS: Long = 0
+        const val INIT_SHARED_DATE: Long = 0
 
         /**
          * Parcelable Methods
