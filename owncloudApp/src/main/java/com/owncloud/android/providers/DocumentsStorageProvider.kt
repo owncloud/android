@@ -29,6 +29,7 @@ import android.content.res.AssetFileDescriptor
 import android.database.Cursor
 import android.graphics.Point
 import android.net.Uri
+import android.os.Build
 import android.os.CancellationSignal
 import android.os.ParcelFileDescriptor
 import android.provider.DocumentsContract
@@ -40,6 +41,7 @@ import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.files.services.FileDownloader
 import com.owncloud.android.lib.common.utils.Log_OC
 import com.owncloud.android.operations.RefreshFolderOperation
+import com.owncloud.android.operations.RemoveFileOperation
 import com.owncloud.android.operations.RenameFileOperation
 import com.owncloud.android.providers.cursors.FileCursor
 import com.owncloud.android.providers.cursors.RootCursor
@@ -202,6 +204,40 @@ class DocumentsStorageProvider : DocumentsProvider() {
         }
 
         return null
+    }
+
+    override fun deleteDocument(documentId: String) {
+        val docId = documentId.toLong()
+
+        updateCurrentStorageManagerIfNeeded(docId)
+
+        val file = currentStorageManager?.getFileById(docId) ?: throw FileNotFoundException("File $docId not found")
+        Log_OC.d(TAG, "Trying to delete ${file.fileName}")
+
+        val removeFileOperation = RemoveFileOperation(file.remotePath, false)
+        val result = removeFileOperation.execute(currentStorageManager, context)
+
+        if (!result.isSuccess) {
+            context?.contentResolver?.notifyChange(toNotifyUri(toUri(file.parentId.toString())), null)
+            throw FileNotFoundException("Delete failed")
+        } else {
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                revokeDocumentPermission(file.fileId.toString())
+            }
+
+            syncRequired = false
+            context?.contentResolver?.notifyChange(toNotifyUri(toUri(file.parentId.toString())), null)
+
+        }
+    }
+
+    @TargetApi(24)
+    override fun removeDocument(documentId: String, parentDocumentId: String) {
+
+        //Documents can only have one parent
+        deleteDocument(documentId)
+
     }
 
     private fun updateCurrentStorageManagerIfNeeded(docId: Long) {
