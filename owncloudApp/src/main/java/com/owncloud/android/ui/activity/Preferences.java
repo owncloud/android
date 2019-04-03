@@ -331,32 +331,23 @@ public class Preferences extends PreferenceActivity {
 
         if (mPrefTouchesWithOtherVisibleWindows != null) {
             mPrefTouchesWithOtherVisibleWindows.setOnPreferenceChangeListener((preference, newValue) -> {
-                        SharedPreferences.Editor appPrefs = PreferenceManager.
-                                getDefaultSharedPreferences(getApplicationContext()).edit();
+                    SharedPreferences.Editor appPrefs = PreferenceManager.
+                            getDefaultSharedPreferences(getApplicationContext()).edit();
 
-                        if ((Boolean) newValue) {
-                            showConfirmationDialog(
-                                    getString(R.string.confirmation_touches_with_other_windows_title),
-                                    getString(R.string.confirmation_touches_with_other_windows_message),
-                                    (dialog, which) -> {
-                                        if (which == DialogInterface.BUTTON_POSITIVE) {
-                                            appPrefs.putBoolean(
-                                                    PREFERENCE_TOUCHES_WITH_OTHER_VISIBLE_WINDOWS,
-                                                    true
-                                            );
-                                        } else if (which == DialogInterface.BUTTON_NEGATIVE) {
-                                            mPrefTouchesWithOtherVisibleWindows.setChecked(false);
-                                        }
-                                        dialog.dismiss();
-                                    });
-                        } else {
-                            appPrefs.putBoolean(PREFERENCE_TOUCHES_WITH_OTHER_VISIBLE_WINDOWS, false);
-                        }
-
-                        appPrefs.apply();
-
-                        return true;
+                    if ((Boolean) newValue) {
+                        new AlertDialog.Builder(this)
+                                .setTitle(getString(R.string.confirmation_touches_with_other_windows_title))
+                                .setMessage(getString(R.string.confirmation_touches_with_other_windows_message))
+                                .setNegativeButton(getString(R.string.common_no), null)
+                                .setPositiveButton(getString(R.string.common_yes), (dialog, which) -> {
+                                    appPrefs.putBoolean(PREFERENCE_TOUCHES_WITH_OTHER_VISIBLE_WINDOWS, true).apply();
+                                    mPrefTouchesWithOtherVisibleWindows.setChecked(true);
+                                })
+                                .show();
+                        return false;
                     }
+                    return true;
+                }
             );
         }
 
@@ -538,22 +529,26 @@ public class Preferences extends PreferenceActivity {
             }
         } else {
             if (!initializing) {
-                showConfirmationDialog(
-                        getString(R.string.confirmation_disable_camera_uploads_title),
-                        getString(R.string.confirmation_disable_pictures_upload_message),
-                        (dialog, which) -> {
-                            if (which == DialogInterface.BUTTON_NEGATIVE) {
-                                mPrefCameraPictureUploads.setChecked(true);
-                                mPrefCameraUploadsCategory.addPreference(mPrefCameraPictureUploadsWiFi);
-                                mPrefCameraUploadsCategory.addPreference(mPrefCameraPictureUploadsPath);
-
-                            } else if (which == DialogInterface.BUTTON_POSITIVE) {
-                                mPrefCameraUploadsCategory.removePreference(mPrefCameraPictureUploadsWiFi);
-                                mPrefCameraUploadsCategory.removePreference(mPrefCameraPictureUploadsPath);
-                                mCameraUploadsHandler.updatePicturesLastSync(getApplicationContext(), 0);
-                            }
-                            dialog.dismiss();
-                        });
+                new AlertDialog.Builder(this)
+                    .setTitle(getString(R.string.confirmation_disable_camera_uploads_title))
+                    .setMessage(getString(R.string.confirmation_disable_pictures_upload_message))
+                    .setNegativeButton(getString(R.string.common_no), (dialog, which) -> {
+                        mPrefCameraPictureUploads.setChecked(true);
+                        mPrefCameraUploadsCategory.addPreference(mPrefCameraPictureUploadsWiFi);
+                        mPrefCameraUploadsCategory.addPreference(mPrefCameraPictureUploadsPath);
+                    })
+                    .setOnCancelListener(dialog -> {
+                        mPrefCameraPictureUploads.setChecked(true);
+                        mPrefCameraUploadsCategory.addPreference(mPrefCameraPictureUploadsWiFi);
+                        mPrefCameraUploadsCategory.addPreference(mPrefCameraPictureUploadsPath);
+                    })
+                    .setPositiveButton(getString(R.string.common_yes), (dialog, which) -> {
+                        mPrefCameraPictureUploads.setChecked(false);
+                        mPrefCameraUploadsCategory.removePreference(mPrefCameraPictureUploadsWiFi);
+                        mPrefCameraUploadsCategory.removePreference(mPrefCameraPictureUploadsPath);
+                        mCameraUploadsHandler.updatePicturesLastSync(getApplicationContext(), 0);
+                    })
+                    .show();
             } else {
                 mPrefCameraUploadsCategory.removePreference(mPrefCameraPictureUploadsWiFi);
                 mPrefCameraUploadsCategory.removePreference(mPrefCameraPictureUploadsPath);
@@ -577,21 +572,26 @@ public class Preferences extends PreferenceActivity {
             }
         } else {
             if (!initializing) {
-                showConfirmationDialog(
-                        getString(R.string.confirmation_disable_camera_uploads_title),
-                        getString(R.string.confirmation_disable_videos_upload_message),
-                        (dialog, which) -> {
-                            if (which == DialogInterface.BUTTON_NEGATIVE) {
-                                mPrefCameraVideoUploads.setChecked(true);
-                                mPrefCameraUploadsCategory.addPreference(mPrefCameraVideoUploadsWiFi);
-                                mPrefCameraUploadsCategory.addPreference(mPrefCameraVideoUploadsPath);
-                            } else if (which == DialogInterface.BUTTON_POSITIVE) {
-                                mPrefCameraUploadsCategory.removePreference(mPrefCameraVideoUploadsWiFi);
-                                mPrefCameraUploadsCategory.removePreference(mPrefCameraVideoUploadsPath);
-                                mCameraUploadsHandler.updateVideosLastSync(getApplicationContext(), 0);
-                            }
-                            dialog.dismiss();
-                        });
+                new AlertDialog.Builder(this)
+                    .setTitle(getString(R.string.confirmation_disable_camera_uploads_title))
+                    .setMessage(getString(R.string.confirmation_disable_videos_upload_message))
+                    .setNegativeButton(getString(R.string.common_no), (dialog, which) -> {
+                        mPrefCameraVideoUploads.setChecked(true);
+                        mPrefCameraUploadsCategory.addPreference(mPrefCameraVideoUploadsWiFi);
+                        mPrefCameraUploadsCategory.addPreference(mPrefCameraVideoUploadsPath);
+                    })
+                    .setOnCancelListener(dialog -> {
+                        mPrefCameraVideoUploads.setChecked(true);
+                        mPrefCameraUploadsCategory.addPreference(mPrefCameraVideoUploadsWiFi);
+                        mPrefCameraUploadsCategory.addPreference(mPrefCameraVideoUploadsPath);
+                    })
+                    .setPositiveButton(getString(R.string.common_yes), (dialog, which) -> {
+                        mPrefCameraVideoUploads.setChecked(false);
+                        mPrefCameraUploadsCategory.removePreference(mPrefCameraVideoUploadsWiFi);
+                        mPrefCameraUploadsCategory.removePreference(mPrefCameraVideoUploadsPath);
+                        mCameraUploadsHandler.updateVideosLastSync(getApplicationContext(), 0);
+                    })
+                    .show();
 
             } else {
                 mPrefCameraUploadsCategory.removePreference(mPrefCameraVideoUploadsWiFi);
@@ -954,31 +954,15 @@ public class Preferences extends PreferenceActivity {
     }
 
     /**
-     * Show a confirmation dialog to disable camera uploads
-     *
-     * @param message  message to show in the dialog
-     * @param listener to handle button clicks
-     */
-    private void showConfirmationDialog(String title, String message, DialogInterface.OnClickListener listener) {
-        AlertDialog alertDialog = new AlertDialog.Builder(this).create();
-        alertDialog.setTitle(title);
-        alertDialog.setMessage(message);
-        alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.common_no), listener);
-        alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.common_yes), listener);
-        alertDialog.show();
-    }
-
-    /**
      * Show a simple dialog with a message
      *
      * @param message message to show in the dialog
      */
     private void showSimpleDialog(String message) {
-        AlertDialog alertDialog = new AlertDialog.Builder(this).create();
-        alertDialog.setTitle(R.string.common_important);
-        alertDialog.setMessage(message);
-        alertDialog.setButton(DialogInterface.BUTTON_NEUTRAL, getString(android.R.string.ok),
-                (dialog, which) -> dialog.dismiss());
-        alertDialog.show();
+        new AlertDialog.Builder(this)
+            .setTitle(R.string.common_important)
+            .setMessage(message)
+            .setPositiveButton(getString(android.R.string.ok), null)
+            .show();
     }
 }
