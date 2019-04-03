@@ -43,7 +43,7 @@ class FileCursor(projection: Array<String>?) : MatrixCursor(projection ?: DEFAUL
         val imagePath = if (file.isImage && file.isDown) file.storagePath else null
         var flags = if (imagePath != null) Document.FLAG_SUPPORTS_THUMBNAIL else 0
 
-        flags = flags or Document.FLAG_SUPPORTS_DELETE
+        flags = flags or Document.FLAG_SUPPORTS_DELETE or Document.FLAG_DIR_SUPPORTS_CREATE
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             flags = flags or Document.FLAG_SUPPORTS_RENAME

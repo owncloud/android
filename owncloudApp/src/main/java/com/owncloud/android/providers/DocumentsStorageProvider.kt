@@ -41,6 +41,7 @@ import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.files.services.FileDownloader
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.common.utils.Log_OC
+import com.owncloud.android.operations.CreateFolderOperation
 import com.owncloud.android.operations.RefreshFolderOperation
 import com.owncloud.android.operations.RemoveFileOperation
 import com.owncloud.android.operations.RenameFileOperation
@@ -184,6 +185,22 @@ class DocumentsStorageProvider : DocumentsProvider() {
         return result
     }
 
+    override fun createDocument(parentDocumentId: String, mimeType: String, displayName: String): String {
+        Log_OC.d(TAG, "Create Document ParentID $parentDocumentId Type $mimeType DisplayName $displayName")
+        val parentDocId = parentDocumentId.toLong()
+        updateCurrentStorageManagerIfNeeded(parentDocId)
+
+        val parentDocument = currentStorageManager?.getFileById(parentDocId)
+            ?: throw FileNotFoundException("Folder $parentDocId not found")
+
+        return if (mimeType == DocumentsContract.Document.MIME_TYPE_DIR) {
+            createFolder(parentDocument, displayName)
+        } else {
+            Log_OC.d(TAG, "Not Supported yet")
+            super.createDocument(parentDocumentId, mimeType, displayName)
+        }
+    }
+
     @TargetApi(21)
     override fun renameDocument(documentId: String, displayName: String): String? {
         val docId = documentId.toLong()
@@ -223,6 +240,27 @@ class DocumentsStorageProvider : DocumentsProvider() {
             }
             syncRequired = false
             notifyChangeInFolder(file.parentId.toString())
+        }
+    }
+
+    private fun createFolder(parentDocument: OCFile, displayName: String): String {
+        val newPath = parentDocument.remotePath + displayName + OCFile.PATH_SEPARATOR
+
+        Log_OC.d(TAG, "Trying to create folder with path $newPath")
+
+        val createFolderOperation = CreateFolderOperation(newPath, false)
+        val result = createFolderOperation.execute(currentStorageManager, context)
+
+        if (!result.isSuccess) {
+            throw java.lang.UnsupportedOperationException("Failed to create new folder")
+        } else {
+            val newFolder = currentStorageManager?.getFileByPath(newPath)
+                ?: throw FileNotFoundException("Folder $newPath not found")
+
+            syncRequired = false
+            context?.contentResolver?.notifyChange(toNotifyUri(toUri(parentDocument.fileId.toString())), null)
+
+            return newFolder.fileId.toString()
         }
     }
 
