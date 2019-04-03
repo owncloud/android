@@ -166,7 +166,6 @@
         <provider
             android:name=".providers.DocumentsStorageProvider"
             android:authorities="@string/document_provider_authority"
-            android:enabled="@bool/atLeastKitKat"
             android:exported="true"
             android:grantUriPermissions="true"
             android:permission="android.permission.MANAGE_DOCUMENTS">
