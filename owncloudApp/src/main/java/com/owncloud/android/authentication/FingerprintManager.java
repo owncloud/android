@@ -75,7 +75,7 @@ public class FingerprintManager {
     }
 
     public void onActivityCreated(Activity activity) {
-        if (!BuildConfig.DEBUG) {
+        if (!MainApp.isDeveloper()) {
             if (isFingerPrintEnabled()) {
                 activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
             } else {

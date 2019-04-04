@@ -34,7 +34,6 @@ import android.os.Build;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 import androidx.core.util.Pair;
-import com.owncloud.android.BuildConfig;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
@@ -118,8 +117,7 @@ public class AvailableOfflineSyncJobService extends JobService {
 
                 File localFile = new File(localPath);
 
-                if (localFile.lastModified() <= fileForAccount.first.getLastSyncDateForData() &&
-                        (BuildConfig.DEBUG || MainApp.isBeta())) {
+                if (localFile.lastModified() <= fileForAccount.first.getLastSyncDateForData() && MainApp.isDeveloper()) {
                     Log_OC.i(TAG, "File " + fileForAccount.first.getRemotePath() + " already synchronized " +
                             "in account " + fileForAccount.second + ", ignoring");
                     continue;
@@ -136,7 +134,7 @@ public class AvailableOfflineSyncJobService extends JobService {
          * @param accountName account to synchronize the available offline file with
          */
         private void startSyncOperation(OCFile availableOfflineFile, String accountName) {
-            if (BuildConfig.DEBUG || MainApp.isBeta()) {
+            if (MainApp.isDeveloper()) {
                 Log_OC.i(
                         TAG,
                         String.format(

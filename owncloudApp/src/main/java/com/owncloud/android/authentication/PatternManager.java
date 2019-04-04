@@ -29,7 +29,6 @@ import android.os.PowerManager;
 import android.preference.PreferenceManager;
 import android.view.WindowManager;
 
-import com.owncloud.android.BuildConfig;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.ui.activity.PatternLockActivity;
 
@@ -61,7 +60,7 @@ public class PatternManager {
     }
 
     public void onActivityCreated(Activity activity) {
-        if (!BuildConfig.DEBUG) {
+        if (!MainApp.isDeveloper()) {
             if (isPatternEnabled()) {
                 activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
             } else {
