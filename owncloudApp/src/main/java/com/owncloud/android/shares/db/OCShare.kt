@@ -103,67 +103,67 @@ data class OCShare(
 
         fun fromRemoteShare(remoteShare: RemoteShare): OCShare {
             return OCShare(
-                    remoteShare.fileSource,
-                    remoteShare.itemSource,
-                    remoteShare.shareType!!.value,
-                    remoteShare.shareWith,
-                    remoteShare.path,
-                    remoteShare.permissions,
-                    remoteShare.sharedDate,
-                    remoteShare.expirationDate,
-                    remoteShare.token,
-                    remoteShare.sharedWithDisplayName,
-                    remoteShare.sharedWithAdditionalInfo,
-                    remoteShare.isFolder,
-                    remoteShare.userId,
-                    remoteShare.remoteId,
-                    "",
-                    remoteShare.name,
-                    remoteShare.shareLink
+                remoteShare.fileSource,
+                remoteShare.itemSource,
+                remoteShare.shareType!!.value,
+                remoteShare.shareWith,
+                remoteShare.path,
+                remoteShare.permissions,
+                remoteShare.sharedDate,
+                remoteShare.expirationDate,
+                remoteShare.token,
+                remoteShare.sharedWithDisplayName,
+                remoteShare.sharedWithAdditionalInfo,
+                remoteShare.isFolder,
+                remoteShare.userId,
+                remoteShare.remoteId,
+                "",
+                remoteShare.name,
+                remoteShare.shareLink
             )
         }
 
         fun fromCursor(cursor: Cursor): OCShare {
             return OCShare(
-                    cursor.getLong(cursor.getColumnIndex(ProviderTableMeta.OCSHARES_FILE_SOURCE)),
-                    cursor.getLong(cursor.getColumnIndex(ProviderTableMeta.OCSHARES_ITEM_SOURCE)),
-                    cursor.getInt(cursor.getColumnIndex(ProviderTableMeta.OCSHARES_SHARE_TYPE)),
-                    cursor.getString(cursor.getColumnIndex(ProviderTableMeta.OCSHARES_SHARE_WITH)),
-                    cursor.getString(cursor.getColumnIndex(ProviderTableMeta.OCSHARES_PATH)),
-                    cursor.getInt(cursor.getColumnIndex(ProviderTableMeta.OCSHARES_PERMISSIONS)),
-                    cursor.getLong(cursor.getColumnIndex(ProviderTableMeta.OCSHARES_SHARED_DATE)),
-                    cursor.getLong(cursor.getColumnIndex(ProviderTableMeta.OCSHARES_EXPIRATION_DATE)),
-                    cursor.getString(cursor.getColumnIndex(ProviderTableMeta.OCSHARES_TOKEN)),
-                    cursor.getString(cursor.getColumnIndex(ProviderTableMeta.OCSHARES_SHARE_WITH_DISPLAY_NAME)),
-                    cursor.getString(cursor.getColumnIndex(ProviderTableMeta.OCSHARES_SHARE_WITH_ADDITIONAL_INFO)),
-                    cursor.getInt(cursor.getColumnIndex(ProviderTableMeta.OCSHARES_IS_DIRECTORY)) == 1,
-                    cursor.getLong(cursor.getColumnIndex(ProviderTableMeta.OCSHARES_USER_ID)),
-                    cursor.getLong(cursor.getColumnIndex(ProviderTableMeta.OCSHARES_ID_REMOTE_SHARED)),
-                    cursor.getString(cursor.getColumnIndex(ProviderTableMeta.OCSHARES_ACCOUNT_OWNER)),
-                    cursor.getString(cursor.getColumnIndex(ProviderTableMeta.OCSHARES_NAME)),
-                    cursor.getString(cursor.getColumnIndex(ProviderTableMeta.OCSHARES_URL))
+                cursor.getLong(cursor.getColumnIndex(ProviderTableMeta.OCSHARES_FILE_SOURCE)),
+                cursor.getLong(cursor.getColumnIndex(ProviderTableMeta.OCSHARES_ITEM_SOURCE)),
+                cursor.getInt(cursor.getColumnIndex(ProviderTableMeta.OCSHARES_SHARE_TYPE)),
+                cursor.getString(cursor.getColumnIndex(ProviderTableMeta.OCSHARES_SHARE_WITH)),
+                cursor.getString(cursor.getColumnIndex(ProviderTableMeta.OCSHARES_PATH)),
+                cursor.getInt(cursor.getColumnIndex(ProviderTableMeta.OCSHARES_PERMISSIONS)),
+                cursor.getLong(cursor.getColumnIndex(ProviderTableMeta.OCSHARES_SHARED_DATE)),
+                cursor.getLong(cursor.getColumnIndex(ProviderTableMeta.OCSHARES_EXPIRATION_DATE)),
+                cursor.getString(cursor.getColumnIndex(ProviderTableMeta.OCSHARES_TOKEN)),
+                cursor.getString(cursor.getColumnIndex(ProviderTableMeta.OCSHARES_SHARE_WITH_DISPLAY_NAME)),
+                cursor.getString(cursor.getColumnIndex(ProviderTableMeta.OCSHARES_SHARE_WITH_ADDITIONAL_INFO)),
+                cursor.getInt(cursor.getColumnIndex(ProviderTableMeta.OCSHARES_IS_DIRECTORY)) == 1,
+                cursor.getLong(cursor.getColumnIndex(ProviderTableMeta.OCSHARES_USER_ID)),
+                cursor.getLong(cursor.getColumnIndex(ProviderTableMeta.OCSHARES_ID_REMOTE_SHARED)),
+                cursor.getString(cursor.getColumnIndex(ProviderTableMeta.OCSHARES_ACCOUNT_OWNER)),
+                cursor.getString(cursor.getColumnIndex(ProviderTableMeta.OCSHARES_NAME)),
+                cursor.getString(cursor.getColumnIndex(ProviderTableMeta.OCSHARES_URL))
             )
         }
 
         fun fromContentValues(values: ContentValues): OCShare {
             return OCShare(
-                    values.getAsLong(ProviderTableMeta.OCSHARES_FILE_SOURCE),
-                    values.getAsLong(ProviderTableMeta.OCSHARES_ITEM_SOURCE),
-                    values.getAsInteger(ProviderTableMeta.OCSHARES_SHARE_TYPE),
-                    values.getAsString(ProviderTableMeta.OCSHARES_SHARE_WITH),
-                    values.getAsString(ProviderTableMeta.OCSHARES_PATH),
-                    values.getAsInteger(ProviderTableMeta.OCSHARES_PERMISSIONS),
-                    values.getAsLong(ProviderTableMeta.OCSHARES_SHARED_DATE),
-                    values.getAsLong(ProviderTableMeta.OCSHARES_EXPIRATION_DATE),
-                    values.getAsString(ProviderTableMeta.OCSHARES_TOKEN),
-                    values.getAsString(ProviderTableMeta.OCSHARES_SHARE_WITH_DISPLAY_NAME),
-                    values.getAsString(ProviderTableMeta.OCSHARES_SHARE_WITH_ADDITIONAL_INFO),
-                    values.getAsBoolean(ProviderTableMeta.OCSHARES_IS_DIRECTORY),
-                    values.getAsLong(ProviderTableMeta.OCSHARES_USER_ID),
-                    values.getAsLong(ProviderTableMeta.OCSHARES_ID_REMOTE_SHARED),
-                    values.getAsString(ProviderTableMeta.OCSHARES_ACCOUNT_OWNER),
-                    values.getAsString(ProviderTableMeta.OCSHARES_NAME),
-                    values.getAsString(ProviderTableMeta.OCSHARES_URL)
+                values.getAsLong(ProviderTableMeta.OCSHARES_FILE_SOURCE),
+                values.getAsLong(ProviderTableMeta.OCSHARES_ITEM_SOURCE),
+                values.getAsInteger(ProviderTableMeta.OCSHARES_SHARE_TYPE),
+                values.getAsString(ProviderTableMeta.OCSHARES_SHARE_WITH),
+                values.getAsString(ProviderTableMeta.OCSHARES_PATH),
+                values.getAsInteger(ProviderTableMeta.OCSHARES_PERMISSIONS),
+                values.getAsLong(ProviderTableMeta.OCSHARES_SHARED_DATE),
+                values.getAsLong(ProviderTableMeta.OCSHARES_EXPIRATION_DATE),
+                values.getAsString(ProviderTableMeta.OCSHARES_TOKEN),
+                values.getAsString(ProviderTableMeta.OCSHARES_SHARE_WITH_DISPLAY_NAME),
+                values.getAsString(ProviderTableMeta.OCSHARES_SHARE_WITH_ADDITIONAL_INFO),
+                values.getAsBoolean(ProviderTableMeta.OCSHARES_IS_DIRECTORY),
+                values.getAsLong(ProviderTableMeta.OCSHARES_USER_ID),
+                values.getAsLong(ProviderTableMeta.OCSHARES_ID_REMOTE_SHARED),
+                values.getAsString(ProviderTableMeta.OCSHARES_ACCOUNT_OWNER),
+                values.getAsString(ProviderTableMeta.OCSHARES_NAME),
+                values.getAsString(ProviderTableMeta.OCSHARES_URL)
             )
         }
     }

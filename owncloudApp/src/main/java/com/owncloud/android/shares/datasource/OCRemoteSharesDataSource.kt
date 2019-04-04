@@ -17,30 +17,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.shares.repository
+package com.owncloud.android.shares.datasource
 
+import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.shares.CreateRemoteShareOperation
 import com.owncloud.android.lib.resources.shares.GetRemoteSharesForFileOperation
 import com.owncloud.android.lib.resources.shares.ShareParserResult
 import com.owncloud.android.lib.resources.shares.ShareType
-import com.owncloud.android.shares.datasource.RemoteSharesDataSource
 
-class RemoteSharesDataSourceTest(private val remoteOperationResult: RemoteOperationResult<ShareParserResult>) :
-    RemoteSharesDataSource {
-    override fun insertShareForFile(
-        remoteFilePath: String,
-        shareType: ShareType,
-        shareWith: String,
-        permissions: Int,
-        name: String,
-        password: String,
-        expirationDate: Long,
-        publicUpload: Boolean,
-        createRemoteShareOperation: CreateRemoteShareOperation
-    ): RemoteOperationResult<ShareParserResult> {
-        return remoteOperationResult
-    }
+class OCRemoteSharesDataSource(
+    private val client: OwnCloudClient
+) : RemoteSharesDataSource {
 
     override fun getSharesForFile(
         path: String,
@@ -48,6 +36,25 @@ class RemoteSharesDataSourceTest(private val remoteOperationResult: RemoteOperat
         subfiles: Boolean,
         getRemoteSharesForFileOperation: GetRemoteSharesForFileOperation
     ): RemoteOperationResult<ShareParserResult> {
-        return remoteOperationResult
+        return getRemoteSharesForFileOperation.execute(client)
+    }
+
+    override fun insertShareForFile(
+        remoteFilePath: String,
+        shareType: ShareType,
+        shareWith: String,
+        permissions: Int,
+        name: String,
+        password: String,
+        expirationTimeInMillis: Long,
+        publicUpload: Boolean,
+        createRemoteShareOperation: CreateRemoteShareOperation
+    ): RemoteOperationResult<ShareParserResult> {
+        createRemoteShareOperation.name = name
+        createRemoteShareOperation.password = password
+        createRemoteShareOperation.expirationDateInMillis = expirationTimeInMillis
+        createRemoteShareOperation.publicUpload = publicUpload
+        createRemoteShareOperation.retrieveShareDetails = true
+        return createRemoteShareOperation.execute(client)
     }
 }

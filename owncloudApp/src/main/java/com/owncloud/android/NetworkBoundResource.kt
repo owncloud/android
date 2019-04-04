@@ -39,16 +39,14 @@ import androidx.annotation.MainThread
 import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.MutableLiveData
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.vo.Resource
 
 abstract class NetworkBoundResource<ResultType, RequestType>(
     private val appExecutors: AppExecutors
 ) {
-
     /**
-     * Result will observe three different livedata objects and react on change events from them
+     * A generic class that can provide a resource backed by both the sqlite database and the network.
      * - Shares livedata from Room to detect changes in database
      * - Errors livedata from remote operations
      * - Loading status
@@ -56,64 +54,72 @@ abstract class NetworkBoundResource<ResultType, RequestType>(
     private val result = MediatorLiveData<Resource<ResultType>>()
 
     init {
-        val dbSource = loadFromDb()
-
-        result.addSource(dbSource) { data ->
-            result.value = Resource.success(data)
-        }
-
-        fetchFromNetwork()
+        @Suppress("LeakingThis")
+        performNetworkOperation(loadFromDb())
     }
 
-    private fun fetchFromNetwork() {
-        val errors = MutableLiveData<Resource<ResultType>>()
-        val loading = MutableLiveData<Resource<ResultType>>()
-
-        result.addSource(errors) { error ->
-            result.value = error
+    @MainThread
+    private fun setValue(newValue: Resource<ResultType>) {
+        if (result.value != newValue) {
+            result.value = newValue
         }
+    }
 
-        result.addSource(loading) {
-            result.value = it
+    private fun performNetworkOperation(dbSource: LiveData<ResultType>) {
+        // Let's dispatch dbSource value quickly while network operation is performed
+        result.addSource(dbSource) { newData ->
+            setValue(Resource.loading(newData))
         }
 
         try {
             appExecutors.networkIO().execute() {
-                loading.postValue(
-                    Resource.loading()
-                )
-
                 val remoteOperationResult = createCall()
 
-                if (remoteOperationResult.isSuccess) {
-                    saveCallResult(processResponse(remoteOperationResult))
-                } else {
-                    errors.postValue(
-                        Resource.error(
-                            remoteOperationResult.code,
-                            exception = remoteOperationResult.exception
-                        )
-                    )
+                appExecutors.mainThread().execute() {
+                    result.removeSource(dbSource)
                 }
 
-                loading.postValue(
-                    Resource.stopLoading()
-                )
+                if (remoteOperationResult.isSuccess) {
+                    saveCallResult(remoteOperationResult.data)
+                    // we specially request a new live data,
+                    // otherwise we will get immediately last cached value,
+                    // which may not be updated with latest results received from network.
+                    appExecutors.mainThread().execute() {
+                        result.addSource(loadFromDb()) { newData ->
+                            setValue(Resource.success(newData))
+                        }
+                    }
+                } else {
+                    appExecutors.mainThread().execute() {
+                        result.addSource(dbSource) { newData ->
+                            setValue(
+                                Resource.error(
+                                    remoteOperationResult.code,
+                                    newData,
+                                    msg = remoteOperationResult.httpPhrase,
+                                    exception = remoteOperationResult.exception
+                                )
+                            )
+                        }
+                    }
+                }
             }
         } catch (ex: Exception) {
-            errors.postValue(
-                Resource.error(
-                    msg = ex.localizedMessage
+            appExecutors.mainThread().execute() {
+                result.removeSource(dbSource)
+            }
+
+            result.addSource(dbSource) { newData ->
+                setValue(
+                    Resource.error(
+                        msg = ex.localizedMessage
+                    )
                 )
-            )
+            }
         }
     }
 
     fun asLiveData() = result as LiveData<Resource<ResultType>>
-
-    @WorkerThread
-    protected open fun processResponse(remoteOperationResult: RemoteOperationResult<RequestType>) =
-        remoteOperationResult.data
 
     @WorkerThread
     protected abstract fun saveCallResult(item: RequestType)

@@ -22,7 +22,7 @@
  * along with this program.  If not, see <http:></http:>//www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.ui.activity
+package com.owncloud.android.shares.ui
 
 import android.app.SearchManager
 import android.content.Intent
@@ -43,12 +43,13 @@ import com.owncloud.android.operations.UpdateSharePermissionsOperation
 import com.owncloud.android.operations.UpdateShareViaLinkOperation
 import com.owncloud.android.providers.UsersAndGroupsSearchProvider
 import com.owncloud.android.shares.db.OCShare
+import com.owncloud.android.shares.ui.fragment.PublicShareDialogFragment
+import com.owncloud.android.shares.ui.fragment.ShareFileFragment
+import com.owncloud.android.ui.activity.FileActivity
 import com.owncloud.android.ui.asynctasks.GetSharesForFileAsyncTask
 import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter
 import com.owncloud.android.ui.fragment.EditShareFragment
-import com.owncloud.android.ui.fragment.PublicShareDialogFragment
 import com.owncloud.android.ui.fragment.SearchShareesFragment
-import com.owncloud.android.ui.fragment.ShareFileFragment
 import com.owncloud.android.ui.fragment.ShareFragmentListener
 import com.owncloud.android.ui.utils.showDialogFragment
 
@@ -81,7 +82,7 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
      * @return A [PublicShareDialogFragment] instance, or null
      */
     private val publicShareFragment: PublicShareDialogFragment?
-        get() = supportFragmentManager.findFragmentByTag(TAG_PUBLIC_SHARE_DIALOG_FRAGMENT) as PublicShareDialogFragment
+        get() = supportFragmentManager.findFragmentByTag(TAG_PUBLIC_SHARE_DIALOG_FRAGMENT) as PublicShareDialogFragment?
 
     /**
      * Shortcut to get access to the [EditShareFragment] instance, if any
@@ -106,7 +107,10 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
         if (savedInstanceState == null) {
             // Add Share fragment on first creation
             val fragment = ShareFileFragment.newInstance(file, account!!)
-            ft.replace(R.id.share_fragment_container, fragment, TAG_SHARE_FRAGMENT)
+            ft.replace(
+                R.id.share_fragment_container, fragment,
+                TAG_SHARE_FRAGMENT
+            )
             ft.commit()
         }
     }
@@ -190,7 +194,10 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
     override fun showSearchUsersAndGroups() {
         val searchFragment = SearchShareesFragment.newInstance(file, account)
         val ft = supportFragmentManager.beginTransaction()
-        ft.replace(R.id.share_fragment_container, searchFragment, TAG_SEARCH_FRAGMENT)
+        ft.replace(
+            R.id.share_fragment_container, searchFragment,
+            TAG_SEARCH_FRAGMENT
+        )
         ft.addToBackStack(null)    // BACK button will recover the ShareFragment
         ft.commit()
     }
@@ -234,21 +241,28 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
         // Create and show the dialog
         val newFragment = PublicShareDialogFragment.newInstanceToCreate(
             file,
-            account!!,
+            account,
             defaultLinkName
         )
 
-        showDialogFragment(newFragment, TAG_PUBLIC_SHARE_DIALOG_FRAGMENT)
+        showDialogFragment(
+            newFragment,
+            TAG_PUBLIC_SHARE_DIALOG_FRAGMENT
+        )
+    }
+
+    override fun dismissAddPublicShare() {
+        publicShareFragment?.dismiss()
     }
 
     override fun showEditPublicShare(share: OCShare) {
         // Create and show the dialog.
-        val newFragment = PublicShareDialogFragment.newInstanceToUpdate(
-            file, share,
-            account!!
-        )
+        val newFragment = PublicShareDialogFragment.newInstanceToUpdate(file, share, account)
 
-        showDialogFragment(newFragment, TAG_PUBLIC_SHARE_DIALOG_FRAGMENT)
+        showDialogFragment(
+            newFragment,
+            TAG_PUBLIC_SHARE_DIALOG_FRAGMENT
+        )
     }
 
     override fun copyOrSendPublicLink(share: OCShare) {
@@ -299,13 +313,13 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
         result: RemoteOperationResult<ShareParserResult>
     ) {
         if (!result.isSuccess) {
-            publicShareFragment!!.showError(
-                ErrorMessageAdapter.getResultMessage(result, operation, resources)
+            publicShareFragment?.showError(
+                ErrorMessageAdapter.getResultMessage(result, operation, resources)!!
             )
             return
         }
         updateFileFromDB()
-        publicShareFragment!!.dismiss()
+        publicShareFragment?.dismiss()
         fileOperationsHelper.copyOrSendPublicLink(OCShare.fromRemoteShare(result.data.shares[0]))
     }
 
@@ -314,13 +328,13 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
         result: RemoteOperationResult<ShareParserResult>
     ) {
         if (!result.isSuccess) {
-            publicShareFragment!!.showError(
-                ErrorMessageAdapter.getResultMessage(result, operation, resources)
+            publicShareFragment?.showError(
+                ErrorMessageAdapter.getResultMessage(result, operation, resources)!!
             )
             return
         }
         updateFileFromDB()
-        publicShareFragment!!.dismiss()
+        publicShareFragment?.dismiss()
         fileOperationsHelper.copyOrSendPublicLink(OCShare.fromRemoteShare(result.data.shares[0]))
     }
 

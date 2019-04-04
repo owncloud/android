@@ -86,7 +86,7 @@ class NetworkBoundResourceTest {
                     val remoteOperationResult = mock<RemoteOperationResult<ShareParserResult>>()
 
                     `when`(remoteOperationResult.data).thenReturn(
-                        ShareParserResult(networkResult, "Succeed")
+                        ShareParserResult(networkResult)
                     )
 
                     `when`(remoteOperationResult.isSuccess).thenReturn(true)
@@ -103,13 +103,20 @@ class NetworkBoundResourceTest {
         }))
 
         verify(observer).onChanged(Resource.success(fetchedDbValue))
-
-        verify(observer).onChanged(Resource.stopLoading())
     }
 
     @Test
     fun failureFromNetwork() {
         val saved = AtomicBoolean(false)
+
+        val fetchedDbValue = listOf(
+            TestUtil.createPublicShare(
+                path = "/Photos/image.jpg",
+                isFolder = true,
+                name = "Photos 1 link",
+                shareLink = "http://server:port/s/1"
+            )
+        )
 
         val networkResult: ArrayList<RemoteShare> = arrayListOf()
 
@@ -120,6 +127,7 @@ class NetworkBoundResourceTest {
                 }
 
                 override fun loadFromDb(): LiveData<List<OCShare>> {
+                    dbData.value = fetchedDbValue
                     return dbData
                 }
 
@@ -127,7 +135,7 @@ class NetworkBoundResourceTest {
                     val remoteOperationResult = mock<RemoteOperationResult<ShareParserResult>>()
 
                     `when`(remoteOperationResult.data).thenReturn(
-                        ShareParserResult(networkResult, "Failed")
+                        ShareParserResult(networkResult)
                     )
 
                     `when`(remoteOperationResult.isSuccess).thenReturn(false)
@@ -145,7 +153,8 @@ class NetworkBoundResourceTest {
 
         verify(observer).onChanged(
             Resource.error(
-                RemoteOperationResult.ResultCode.UNAUTHORIZED
+                RemoteOperationResult.ResultCode.UNAUTHORIZED,
+                data = dbData.value
             )
         )
     }
@@ -182,6 +191,10 @@ class NetworkBoundResourceTest {
         )
 
         dbData.value = dbPublicShares
-        verify(observer).onChanged(Resource.success(dbPublicShares))
+        verify(observer).onChanged(
+            Resource.error(
+                data = dbPublicShares
+            )
+        )
     }
 }

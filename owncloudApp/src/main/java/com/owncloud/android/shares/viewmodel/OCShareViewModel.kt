@@ -26,8 +26,8 @@ import com.owncloud.android.MainApp
 import com.owncloud.android.lib.common.OwnCloudAccount
 import com.owncloud.android.lib.common.OwnCloudClientManagerFactory
 import com.owncloud.android.lib.resources.shares.ShareType
-import com.owncloud.android.shares.datasources.OCLocalSharesDataSource
-import com.owncloud.android.shares.datasources.OCRemoteSharesDataSource
+import com.owncloud.android.shares.datasource.OCLocalSharesDataSource
+import com.owncloud.android.shares.datasource.OCRemoteSharesDataSource
 import com.owncloud.android.shares.db.OCShare
 import com.owncloud.android.shares.repository.OCShareRepository
 import com.owncloud.android.shares.repository.ShareRepository
@@ -39,10 +39,10 @@ import com.owncloud.android.vo.Resource
  */
 @OpenForTesting
 class OCShareViewModel(
-    account: Account,
-    filePath: String,
+    val account: Account,
+    val filePath: String,
     shareTypes: List<ShareType>,
-    shareRepository: ShareRepository = OCShareRepository.create(
+    val shareRepository: ShareRepository = OCShareRepository.create(
         localSharesDataSource = OCLocalSharesDataSource(),
         remoteSharesDataSource = OCRemoteSharesDataSource(
             OwnCloudClientManagerFactory.getDefaultSingleton().getClientFor(
@@ -54,6 +54,19 @@ class OCShareViewModel(
 ) : ViewModel() {
 
     val sharesForFile: LiveData<Resource<List<OCShare>>> = shareRepository.loadSharesForFile(
-        filePath, account.name, shareTypes, true, false
+         filePath, account.name, shareTypes, reshares = true, subfiles = false
     )
+
+    fun insertPublicShareForFile(
+        filePath: String,
+        permissions: Int,
+        name: String,
+        password: String,
+        expirationTimeInMillis: Long,
+        uploadToFolderPermission: Boolean
+    ): LiveData<Resource<List<OCShare>>> {
+        return shareRepository.insertPublicShareForFile(
+            filePath, account.name, permissions, name, password, expirationTimeInMillis, uploadToFolderPermission
+        )
+    }
 }

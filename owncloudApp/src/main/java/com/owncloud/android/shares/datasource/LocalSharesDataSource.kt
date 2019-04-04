@@ -17,18 +17,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.shares.datasources
+package com.owncloud.android.shares.datasource
 
-import com.owncloud.android.lib.common.operations.RemoteOperationResult
-import com.owncloud.android.lib.resources.shares.GetRemoteSharesForFileOperation
-import com.owncloud.android.lib.resources.shares.ShareParserResult
+import androidx.lifecycle.LiveData
+import com.owncloud.android.lib.resources.shares.ShareType
+import com.owncloud.android.shares.db.OCShare
 
-interface RemoteSharesDataSource {
-    fun getSharesForFile(
-        path: String,
-        reshares: Boolean,
-        subfiles: Boolean,
-        getRemoteSharesForFileOperation: GetRemoteSharesForFileOperation =
-            GetRemoteSharesForFileOperation(path, reshares, subfiles)
-    ): RemoteOperationResult<ShareParserResult>
+interface LocalSharesDataSource {
+    fun getSharesForFileAsLiveData(
+        filePath: String,
+        accountName: String,
+        shareTypes: List<ShareType>
+    ): LiveData<List<OCShare>>
+
+    fun insert(ocShares: List<OCShare>)
+
+    fun delete(filePath: String, accountName: String)
 }

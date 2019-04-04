@@ -85,7 +85,6 @@ public class GetSharesForFileAsyncTask extends AsyncTask<Object, Void, Pair<Remo
 
     @Override
     protected void onPostExecute(Pair<RemoteOperation, RemoteOperationResult> result) {
-
         // a cancelled task shouldn't call the listener, even if the reference exists;
         // the Activity responsible could be stopped, and its abilities to do things constrained
         if (result != null && !isCancelled()) {
