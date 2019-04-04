@@ -219,6 +219,14 @@ To do so, similar to uploading a file or creating a new folder, when viewing all
 From there, under _"Upload to ownCloud"_, click _"Picture from camera"_.
 The camera app will then start, and the picture that you take can be directly uploaded to your ownCloud server.
 
+==== Select All and Inverse in Uploads View
+
+You can select the entire list of files in any folder of your device to be uploaded to ownCloud. 
+The option btn:["Select all"] will allow you to do it. 
+The option btn:["Select inverse"] will select automatically all the unselected items, and vice versa.
+
+image:creating-new-content/select-all-and-inverse-in-uploads-view-small.png[image]
+
 === Working With Multiple Files
 
 The Android application can perform some operations on multiple files simultaneously, such as refreshing and deleting.
@@ -293,6 +301,13 @@ This will display the menu option: _New folder_.
 Tap it and enter the name of the new folder in the _Folder name_ dialog.
 Then, tap the newly created folder and tap _Choose_ in the bottom right-hand corner.
 You'll see that the path has been updated.
+
+=== Allow Light Filtering Apps
+
+By enabling the option (which you can see in the screenshot below), the ownCloud app will not be obscured by any light filtering apps, which gives the choice of using them together. 
+When it is enabled, security warning is enabled. 
+
+image:settings/allow-light-filtering-apps.png[Allow light filtering apps]
 
 == Security
 
