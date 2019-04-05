@@ -31,13 +31,10 @@ import com.owncloud.android.utils.MimetypeIconUtil
 class FileCursor(projection: Array<String>?) : MatrixCursor(projection ?: DEFAULT_DOCUMENT_PROJECTION) {
     private var cursorExtras = Bundle.EMPTY
 
-    override fun getExtras(): Bundle {
-        return cursorExtras
-    }
+    override fun getExtras(): Bundle = cursorExtras
 
     fun setMoreToSync(hasMoreToSync: Boolean) {
-        cursorExtras = Bundle()
-        cursorExtras.putBoolean(DocumentsContract.EXTRA_LOADING, hasMoreToSync)
+        cursorExtras = Bundle().apply { putBoolean(DocumentsContract.EXTRA_LOADING, hasMoreToSync) }
     }
 
     fun addFile(file: OCFile) {

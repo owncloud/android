@@ -97,6 +97,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
 
         val resultCursor = FileCursor(projection)
 
+        // Create result cursor before syncing folder again, in order to enable faster loading
         currentStorageManager?.getFolderContent(currentStorageManager?.getFileById(folderId), false)
             ?.forEach { file -> resultCursor.addFile(file) }
 
