@@ -50,6 +50,7 @@ class OCCapabilityRepository(
         return object : NetworkBoundResource<OCCapability, RemoteCapability>(appExecutors) {
 
             override fun saveCallResult(item: RemoteCapability) {
+                item.accountName = accountName
                 localCapabilitiesDataSource.insert(OCCapability.fromRemoteCapability(item))
             }
 
