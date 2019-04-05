@@ -119,5 +119,8 @@ data class OCCapability(
                 remoteCapability.filesVersioning?.value
             )
         }
+
+        const val ENABLED = 1
+        const val DISABLED = 0
     }
 }
