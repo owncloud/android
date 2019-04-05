@@ -25,6 +25,9 @@ import androidx.room.PrimaryKey
 import com.owncloud.android.db.ProviderMeta.ProviderTableMeta
 import com.owncloud.android.lib.resources.status.RemoteCapability
 
+/**
+ * Represents one record of the Capabilities table.
+ */
 @Entity(tableName = ProviderTableMeta.CAPABILITIES_TABLE_NAME)
 data class OCCapability(
     @ColumnInfo(name = ProviderTableMeta.CAPABILITIES_ACCOUNT_NAME)
