@@ -55,8 +55,8 @@ class OCShareRepository(
         subfiles: Boolean
     ): LiveData<Resource<List<OCShare>>> {
         return object : NetworkBoundResource<List<OCShare>, ShareParserResult>(appExecutors) {
-            override fun saveCallResult(shareParserResult: ShareParserResult) {
-                val sharesForFileFromServer = shareParserResult.shares.map { remoteShare ->
+            override fun saveCallResult(item: ShareParserResult) {
+                val sharesForFileFromServer = item.shares.map { remoteShare ->
                     OCShare.fromRemoteShare(remoteShare).also { it.accountOwner = accountName }
                 }
 
