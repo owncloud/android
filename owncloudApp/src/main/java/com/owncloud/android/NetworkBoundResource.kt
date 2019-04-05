@@ -109,7 +109,7 @@ abstract class NetworkBoundResource<ResultType, RequestType>(
                 result.removeSource(dbSource)
             }
 
-            result.addSource(dbSource) { newData ->
+            result.addSource(dbSource) {
                 setValue(
                     Resource.error(
                         msg = ex.localizedMessage

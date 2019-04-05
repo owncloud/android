@@ -19,4 +19,39 @@
 
 package com.owncloud.android.capabilities.viewmodel
 
-class OCCapabilityViewModel
+import android.accounts.Account
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.ViewModel
+import com.owncloud.android.MainApp
+import com.owncloud.android.capabilities.datasource.OCLocalCapabilitiesDataSource
+import com.owncloud.android.capabilities.datasource.OCRemoteCapabilitiesDataSource
+import com.owncloud.android.capabilities.db.OCCapability
+import com.owncloud.android.capabilities.repository.CapabilityRepository
+import com.owncloud.android.capabilities.repository.OCCapabilityRepository
+import com.owncloud.android.lib.common.OwnCloudAccount
+import com.owncloud.android.lib.common.OwnCloudClientManagerFactory
+import com.owncloud.android.testing.OpenForTesting
+import com.owncloud.android.vo.Resource
+
+/**
+ * View Model to keep a reference to the capability repository and an up-to-date capability
+ */
+
+@OpenForTesting
+class OCCapabilityViewModel(
+    val account: Account,
+    val capabilityRepository: CapabilityRepository = OCCapabilityRepository.create(
+        localCapabilitiesDataSource = OCLocalCapabilitiesDataSource(),
+        remoteCapabilitiesDataSource = OCRemoteCapabilitiesDataSource(
+            OwnCloudClientManagerFactory.getDefaultSingleton().getClientFor(
+                OwnCloudAccount(account, MainApp.getAppContext()),
+                MainApp.getAppContext()
+            )
+        )
+    )
+) : ViewModel() {
+
+    val capabilityForAccount: LiveData<Resource<OCCapability>> = capabilityRepository.loadCapabilityForAccount(
+        account.name
+    )
+}
