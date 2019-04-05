@@ -1992,7 +1992,6 @@ public class FileDataStorageManager {
             if (result_uri != null) {
                 long new_id = Long.parseLong(result_uri.getPathSegments()
                         .get(1));
-                capability.setId(new_id);
                 capability.setAccountName(mAccount.name);
             }
         }
@@ -2052,7 +2051,6 @@ public class FileDataStorageManager {
         RemoteCapability capability = null;
         if (c != null) {
             capability = new RemoteCapability();
-            capability.setId(c.getLong(c.getColumnIndex(ProviderTableMeta._ID)));
             capability.setAccountName(c.getString(c
                     .getColumnIndex(ProviderTableMeta.CAPABILITIES_ACCOUNT_NAME)));
             capability.setVersionMayor(c.getInt(c

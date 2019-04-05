@@ -191,7 +191,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
      * @return 'True' when public share is disabled in the server
      */
     private val isPublicShareDisabled: Boolean
-        get() = capabilities != null && capabilities!!.filesSharingPublicEnabled.isFalse
+        get() = capabilities != null && capabilities?.filesSharingPublicEnabled?.isFalse!!
 
     var viewModelFactory: ViewModelProvider.Factory = ViewModelFactory.build {
         OCShareViewModel(
@@ -532,13 +532,13 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
      * @return true if should be enabled, false otherwise
      */
     private fun enableMultiplePublicSharing(): Boolean {
-        val serverVersion = OwnCloudVersion(capabilities!!.versionString)
+        val serverVersion = OwnCloudVersion(capabilities?.versionString!!)
 
         return when {
             // Server version <= 9.x, multiple public sharing not supported
             !serverVersion.isMultiplePublicSharingSupported -> false
             // Server version >= 10, multiple public sharing supported but disabled
-            capabilities!!.filesSharingPublicMultiple.isFalse -> false
+            capabilities?.filesSharingPublicMultiple?.isFalse!! -> false
             else -> true
         }
     }
