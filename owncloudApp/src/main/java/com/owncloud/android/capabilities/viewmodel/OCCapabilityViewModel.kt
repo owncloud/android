@@ -19,4 +19,29 @@
 
 package com.owncloud.android.capabilities.viewmodel
 
-class OCCapabilityViewModel
+import android.accounts.Account
+import androidx.lifecycle.ViewModel
+import com.owncloud.android.capabilities.datasource.OCLocalCapabilitiesDataSource
+import com.owncloud.android.capabilities.repository.CapabilityRepository
+import com.owncloud.android.capabilities.repository.OCCapabilityRepository
+import com.owncloud.android.testing.OpenForTesting
+
+/**
+ * View Model to keep a reference to the capability repository and an up-to-date capability
+ */
+
+@OpenForTesting
+class OCCapabilityViewModel(
+    val account: Account,
+    val capabilityRepository: CapabilityRepository = OCCapabilityRepository.create(
+        localCapabilitiesDataSource = OCLocalCapabilitiesDataSource(),
+        remoteCapabilit = OCRemoteSharesDataSource(
+            OwnCloudClientManagerFactory.getDefaultSingleton().getClientFor(
+                OwnCloudAccount(account, MainApp.getAppContext()),
+                MainApp.getAppContext()
+            )
+        )
+    )
+) : ViewModel() {
+
+}
