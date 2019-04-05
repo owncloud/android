@@ -57,30 +57,31 @@ class DocumentsStorageProvider : DocumentsProvider() {
     private var requestedFolderIdForSync: Long = -1
     private var syncRequired = true
     private var currentStorageManager: FileDataStorageManager? = null
-    private lateinit var documentsProviderAuthority: String
 
     override fun openDocument(documentId: String, mode: String?, signal: CancellationSignal?): ParcelFileDescriptor? {
         val docId = documentId.toLong()
         updateCurrentStorageManagerIfNeeded(docId)
 
-        var file = currentStorageManager!!.getFileById(docId)
+        var file = currentStorageManager?.getFileById(docId)
+            ?: throw FileNotFoundException("Failed to open document with id $documentId and mode $mode")
 
-        if (!file!!.isDown) {
+        if (!file.isDown) {
 
             val i = Intent(context, FileDownloader::class.java).apply {
                 putExtra(FileDownloader.KEY_ACCOUNT, currentStorageManager!!.account)
                 putExtra(FileDownloader.KEY_FILE, file)
             }
 
-            context!!.startService(i)
+            context?.startService(i)
 
             do {
                 if (!waitOrGetCancelled(signal)) {
                     return null
                 }
-                file = currentStorageManager!!.getFileById(docId)
+                file = currentStorageManager?.getFileById(docId)
+                    ?: throw FileNotFoundException("Failed to open document with id $documentId and mode $mode")
 
-            } while (!file!!.isDown)
+            } while (!file.isDown)
         }
 
         return ParcelFileDescriptor.open(File(file.storagePath), ParcelFileDescriptor.MODE_READ_ONLY)
@@ -96,15 +97,12 @@ class DocumentsStorageProvider : DocumentsProvider() {
 
         val resultCursor = FileCursor(projection)
 
-        val browsedDir = currentStorageManager!!.getFileById(folderId)
+        currentStorageManager?.getFolderContent(currentStorageManager?.getFileById(folderId), false)
+            ?.forEach { file -> resultCursor.addFile(file) }
 
-        // Create result cursor before syncing folder again, in order to enable faster loading
-        for (file in currentStorageManager!!.getFolderContent(browsedDir,false)) {
-            resultCursor.addFile(file)
-        }
-
+        //Create notification listener
         val notifyUri: Uri = toNotifyUri(toUri(parentDocumentId))
-        resultCursor.setNotificationUri(context!!.contentResolver, notifyUri)
+        resultCursor.setNotificationUri(context?.contentResolver, notifyUri)
 
         /**
          * This will start syncing the current folder. User will only see this after updating his view with a
@@ -125,27 +123,25 @@ class DocumentsStorageProvider : DocumentsProvider() {
     }
 
     override fun queryDocument(documentId: String, projection: Array<String>?): Cursor {
-        Log_OC.d(TAG, "Query Document:$documentId")
+        Log_OC.d(TAG, "Query Document: $documentId")
         val docId = documentId.toLong()
         updateCurrentStorageManagerIfNeeded(docId)
 
-        val result = FileCursor(projection)
-        result.addFile(currentStorageManager!!.getFileById(docId))
-
-        return result
+        return FileCursor(projection).apply {
+            val ocFile: OCFile? = currentStorageManager?.getFileById(docId)
+            if (ocFile != null) addFile(ocFile)
+        }
     }
 
-    override fun onCreate(): Boolean {
-        documentsProviderAuthority = context!!.resources.getString(R.string.document_provider_authority)
-        return true
-    }
+    override fun onCreate(): Boolean = true
 
     override fun queryRoots(projection: Array<String>?): Cursor {
         initiateStorageMap()
         val result = RootCursor(projection)
+        val contextApp = context ?: return result
 
-        for (account in AccountUtils.getAccounts(context)) {
-            result.addRoot(account, context!!)
+        for (account in AccountUtils.getAccounts(contextApp)) {
+            result.addRoot(account, contextApp)
         }
         return result
     }
@@ -159,9 +155,9 @@ class DocumentsStorageProvider : DocumentsProvider() {
         val docId = documentId.toLong()
         updateCurrentStorageManagerIfNeeded(docId)
 
-        val file = currentStorageManager!!.getFileById(docId)
+        val file = currentStorageManager?.getFileById(docId)
 
-        val realFile = File(file!!.storagePath)
+        val realFile = File(file?.storagePath)
 
         return AssetFileDescriptor(
             ParcelFileDescriptor.open(realFile, ParcelFileDescriptor.MODE_READ_ONLY),
@@ -170,11 +166,12 @@ class DocumentsStorageProvider : DocumentsProvider() {
         )
     }
 
-    override fun querySearchDocuments(rootId: String, query: String, projection: Array<String>): Cursor {
+    override fun querySearchDocuments(rootId: String, query: String, projection: Array<String>?): Cursor {
         updateCurrentStorageManagerIfNeeded(rootId)
 
-        val root = currentStorageManager!!.getFileByPath(OCFile.ROOT_PATH)
         val result = FileCursor(projection)
+
+        val root = currentStorageManager?.getFileByPath(OCFile.ROOT_PATH) ?: return result
 
         for (f in findFiles(root, query)) {
             result.addFile(f)
@@ -230,12 +227,11 @@ class DocumentsStorageProvider : DocumentsProvider() {
     }
 
     private fun initiateStorageMap() {
-        val contentResolver = context!!.contentResolver
 
         for (account in AccountUtils.getAccounts(context)) {
-            val storageManager = FileDataStorageManager(context, account, contentResolver)
+            val storageManager = FileDataStorageManager(context, account, context?.contentResolver)
             val rootDir = storageManager.getFileByPath(OCFile.ROOT_PATH)
-            rootIdToStorageManager[rootDir!!.fileId] = storageManager
+            rootIdToStorageManager[rootDir.fileId] = storageManager
         }
     }
 
@@ -247,14 +243,11 @@ class DocumentsStorageProvider : DocumentsProvider() {
             false,
             currentStorageManager?.account,
             context
-        )
-        refreshFolderOperation.syncVersionAndProfileEnabled(false)
-
-        val contentResolver = context!!.contentResolver
+        ).apply { syncVersionAndProfileEnabled(false) }
 
         val thread = Thread {
             refreshFolderOperation.execute(currentStorageManager, context)
-            contentResolver.notifyChange(toNotifyUri(toUri(parentDocumentId)), null)
+            context?.contentResolver?.notifyChange(toNotifyUri(toUri(parentDocumentId)), null)
         }
         thread.start()
     }
@@ -271,27 +264,24 @@ class DocumentsStorageProvider : DocumentsProvider() {
 
     private fun findFiles(root: OCFile, query: String): Vector<OCFile> {
         val result = Vector<OCFile>()
-        for (f in currentStorageManager!!.getFolderContent(root,false)) {
-            if (f.isFolder) {
-                result.addAll(findFiles(f, query))
-            } else {
-                if (f.fileName.contains(query)) {
-                    result.add(f)
-                }
+
+        val folderContent = currentStorageManager?.getFolderContent(root, false) ?: return result
+
+        for (f in folderContent) {
+            if (f.fileName.contains(query)) {
+                result.add(f)
+                if (f.isFolder) result.addAll(findFiles(f, query))
             }
         }
         return result
     }
 
-    private fun toNotifyUri(uri: Uri): Uri {
-        return DocumentsContract.buildDocumentUri(
-            documentsProviderAuthority, uri.toString()
-        )
-    }
+    private fun toNotifyUri(uri: Uri): Uri = DocumentsContract.buildDocumentUri(
+        context?.resources?.getString(R.string.document_provider_authority),
+        uri.toString()
+    )
 
-    private fun toUri(documentId: String): Uri {
-        return Uri.parse(documentId)
-    }
+    private fun toUri(documentId: String): Uri = Uri.parse(documentId)
 
     companion object {
         private val TAG = DocumentsStorageProvider::class.java.toString()
