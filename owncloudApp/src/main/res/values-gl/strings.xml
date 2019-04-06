@@ -522,6 +522,7 @@ Descárgueo de aquí: %2$s</string>
   <string name="media_service_notification_channel_description">Ver o reproductor de música </string>
   <string name="file_sync_notification_channel_name">Sincronización de ficheiros</string>
   <string name="file_sync_notification_channel_description">Ver o resultado da sincronización de ficheiros</string>
+  <string name="clicks_to_be_developer">Ten %1$d clics para activar os menús de desenvolvemento</string>
   <string name="rate_dialog_title">Avalíe o aplicativo %1$s!</string>
   <string name="rate_dialog_description">Se lle gusta usar este aplicativo, pode adicarlle un intre a valoralo? Os seus comentarios son moi importantes para nós.</string>
   <string name="button_no_thanks_name">NON, GRAZAS</string>

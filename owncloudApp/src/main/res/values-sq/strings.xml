@@ -121,7 +121,7 @@
   <string name="filedetails_sync_file">Njëkohëso</string>
   <string name="filedetails_renamed_in_upload_msg">Kartela u riemërtua si %1$s gjatë ngarkimit</string>
   <string name="list_layout">Skemë liste</string>
-  <string name="action_share">Ndaje</string>
+  <string name="action_share">Ndaje me të tjerë</string>
   <string name="common_yes">Po</string>
   <string name="common_no">Jo</string>
   <string name="common_remove_upload">Hiqe ngarkimin</string>
@@ -438,7 +438,7 @@
   <string name="upload_move_files">Lëvize kartelën</string>
   <string name="pref_behaviour_entries_keep_file">mbajtur në dosjen origjinale</string>
   <string name="pref_behaviour_entries_move">u kalua te dosja e aplikacionit</string>
-  <string name="share_dialog_title">Ndaje</string>
+  <string name="share_dialog_title">Ndaje me të tjerë</string>
   <string name="share_file">Ndajeni %1$s</string>
   <string name="share_with_user_section_title">Përdorues dhe Grupe</string>
   <string name="share_no_users">Ende pa të dhëna të ndara me përdorues</string>
@@ -466,7 +466,7 @@
   <string name="share_known_remote_clarification">%1$s ( te %2$s )</string>
   <string name="share_sharee_unavailable">Na ndjeni, versioni juaj i shërbyesit nuk lejon ndarje me përdorues brenda klientësh.
         \nJu lutemi, lidhuni me përgjegjësin tuaj</string>
-  <string name="share_privilege_can_share">mund të ndajë</string>
+  <string name="share_privilege_can_share">mund të ndajë me të tjerë</string>
   <string name="share_privilege_can_edit">mund të përpunojnë</string>
   <string name="share_privilege_can_edit_create">krijoje</string>
   <string name="share_privilege_can_edit_change">ndrysho</string>
@@ -519,6 +519,7 @@
   <string name="media_service_notification_channel_description">Shihni lojtësin e muzikës</string>
   <string name="file_sync_notification_channel_name">Njëkohësim kartelash</string>
   <string name="file_sync_notification_channel_description">Shihni përfundim njëkohësimi kartelash</string>
+  <string name="clicks_to_be_developer">Jeni %1$d klikime larg nga aktivizimi i menuve të zhvilluesit</string>
   <string name="rate_dialog_title">Vlerësojeni aplikacionin %1$s!</string>
   <string name="rate_dialog_description">Nëse ju pëlqen ta përdorni këtë aplikacion, do të harxhonit një çast për ta vlerësuar atë? Përshtypjet tuaja janë shumë të rëndësishme për ne. </string>
   <string name="button_no_thanks_name">JO, FALEMINDERIT</string>
