@@ -521,6 +521,7 @@
   <string name="media_service_notification_channel_description">Ver reprodutor de músicas</string>
   <string name="file_sync_notification_channel_name">Sincronizar arquivo</string>
   <string name="file_sync_notification_channel_description">Ver o resultado da sincronização</string>
+  <string name="clicks_to_be_developer">Você clica %1$d para ativar os menus do desenvolvedor</string>
   <string name="rate_dialog_title">Avalie o aplicativo %1$s !</string>
   <string name="rate_dialog_description">Se você gosta de usar este aplicativo, você poderia ter um tempo para avaliá-lo? Seu feedback é muito importante para nós.</string>
   <string name="button_no_thanks_name">NÃO, OBRIGADO</string>
