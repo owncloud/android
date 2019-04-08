@@ -268,10 +268,10 @@ class DocumentsStorageProvider : DocumentsProvider() {
 
         val folderContent = currentStorageManager?.getFolderContent(root, false) ?: return result
 
-        for (f in folderContent) {
-            if (f.fileName.contains(query)) {
-                result.add(f)
-                if (f.isFolder) result.addAll(findFiles(f, query))
+        folderContent.forEach {
+            if (it.fileName.contains(query)) {
+                result.add(it)
+                if (it.isFolder) result.addAll(findFiles(it, query))
             }
         }
         return result
