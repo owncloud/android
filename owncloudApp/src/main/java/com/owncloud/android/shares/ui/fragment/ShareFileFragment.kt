@@ -193,6 +193,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
      */
     private val isPublicShareDisabled: Boolean
         get() = capabilities != null && capabilities?.filesSharingPublicEnabled == OCCapability.DISABLED
+
     var ocShareViewModelFactory: ViewModelProvider.Factory = ViewModelFactory.build {
         OCShareViewModel(
             account!!,
@@ -208,7 +209,6 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
     }
 
     private lateinit var ocShareViewModel: OCShareViewModel
-
     private lateinit var ocCapabilityViewModel: OCCapabilityViewModel
 
     /**
@@ -285,7 +285,8 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        ocShareViewModel = ViewModelProviders.of(this, ocShareViewModelFactory).get(OCShareViewModel::class.java)
+        ocShareViewModel = ViewModelProviders.of(this, ocShareViewModelFactory)
+            .get(OCShareViewModel::class.java)
 
         ocCapabilityViewModel =
             ViewModelProviders.of(this, ocCapabilityViewModelFactory).get(OCCapabilityViewModel::class.java)
