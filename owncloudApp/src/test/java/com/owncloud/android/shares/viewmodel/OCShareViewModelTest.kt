@@ -90,7 +90,7 @@ class OCShareViewModelTest {
             ocShareRepository
         )
 
-        val resource: Resource<List<OCShare>>? = ocShareViewModel.sharesForFile.value
+        val resource: Resource<List<OCShare>>? = ocShareViewModel.getSharesForFile().value
         val shares: List<OCShare>? = resource?.data
 
         assertEquals(shares?.size, 2)
