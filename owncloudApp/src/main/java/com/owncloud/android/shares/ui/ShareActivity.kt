@@ -353,11 +353,6 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
             searchShareesFragment.refreshUsersOrGroupsListFromDB()
         }
 
-        val publicShareDialogFragment = publicShareFragment
-        if (publicShareDialogFragment?.isAdded == true) {  // only if added to the view hierarchy!!
-            publicShareDialogFragment.refreshModelFromStorageManager()
-        }
-
         val editShareFragment = editShareFragment
         if (editShareFragment?.isAdded == true) {
             editShareFragment.refreshUiFromDB()
