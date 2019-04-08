@@ -41,7 +41,7 @@ import com.owncloud.android.vo.Resource
 class OCShareViewModel(
     val account: Account,
     val filePath: String,
-    shareTypes: List<ShareType>,
+    val shareTypes: List<ShareType>,
     val shareRepository: ShareRepository = OCShareRepository.create(
         localSharesDataSource = OCLocalSharesDataSource(),
         remoteSharesDataSource = OCRemoteSharesDataSource(
@@ -53,9 +53,9 @@ class OCShareViewModel(
     )
 ) : ViewModel() {
 
-    val sharesForFile: LiveData<Resource<List<OCShare>>> = shareRepository.loadSharesForFile(
-         filePath, account.name, shareTypes, reshares = true, subfiles = false
-    )
+    fun getSharesForFile() : LiveData<Resource<List<OCShare>>> {
+        return shareRepository.loadSharesForFile(filePath, account.name, shareTypes, reshares = true, subfiles = false)
+    }
 
     fun insertPublicShareForFile(
         filePath: String,

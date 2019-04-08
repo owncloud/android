@@ -193,7 +193,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
      */
     private val isPublicShareDisabled: Boolean
         get() = capabilities != null && capabilities?.filesSharingPublicEnabled == OCCapability.DISABLED
-    val ocShareViewModelFactory: ViewModelProvider.Factory = ViewModelFactory.build {
+    var ocShareViewModelFactory: ViewModelProvider.Factory = ViewModelFactory.build {
         OCShareViewModel(
             account!!,
             file?.remotePath!!,
@@ -201,7 +201,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
         )
     }
 
-    val ocCapabilityViewModelFactory: ViewModelProvider.Factory = ViewModelFactory.build {
+    var ocCapabilityViewModelFactory: ViewModelProvider.Factory = ViewModelFactory.build {
         OCCapabilityViewModel(
             account!!
         )
@@ -345,16 +345,11 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
 
         activity!!.setTitle(R.string.share_dialog_title)
 
-        // Load known capabilities of the server from DB
-        //refreshCapabilitiesFromDB()
+        // Load data into the list of public shares
+        refreshPublicShares()
 
         // Load data into the list of private shares
         refreshUsersOrGroupsListFromDB()
-
-        loadCapabilities()
-
-        // Load data of public share, if exists
-        loadPublicShares()
     }
 
     override fun onAttach(activity: Activity?) {
@@ -370,18 +365,6 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
     override fun onDetach() {
         super.onDetach()
         listener = null
-    }
-
-    /**
-     * Get known server capabilities from DB
-     *
-     * Depends on the parent Activity provides a [com.owncloud.android.datamodel.FileDataStorageManager]
-     * instance ready to use. If not ready, does nothing.
-     */
-    fun refreshCapabilitiesFromDB() {
-//        if ((listener as BaseActivity).storageManager != null) {
-//            capabilities = (listener as BaseActivity).storageManager.getCapability(account!!.name)
-//        }
     }
 
     /**
@@ -440,14 +423,16 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
         listener?.showEditPrivateShare(share)
     }
 
-    fun loadCapabilities() {
-        ocCapabilityViewModel.capabilityForAccount.observe(
+    private fun refreshPublicShares() {
+        // Get capabilities first
+        ocCapabilityViewModel.getCapabilityForAccount().observe(
             this,
             Observer { resource ->
                 when (resource?.status) {
                     Status.SUCCESS -> {
                         capabilities = resource.data
-                        if (!isPublicShareDisabled) hidePublicShare()
+                        loadPublicShares()
+                        (activity as BaseActivity).dismissLoadingDialog()
                     }
                     Status.ERROR -> {
                         val errorMessage = ErrorMessageAdapter.getResultMessage(
@@ -457,9 +442,15 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
                             resources
                         )
                         view?.let { Snackbar.make(it, errorMessage, Snackbar.LENGTH_SHORT).show() }
+                        capabilities = resource.data
+                        (activity as BaseActivity).dismissLoadingDialog()
                     }
                     Status.LOADING -> {
-                        val b = ""
+                        (activity as BaseActivity).showLoadingDialog(R.string.common_loading)
+                        capabilities = resource.data
+                        if(isPublicShareDisabled) {
+                            hidePublicShare()
+                        }
                     }
                     else -> {
                         Log.d(TAG, "Unknown status when loading capabilities")
@@ -469,11 +460,11 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
         )
     }
 
-    fun loadPublicShares() {
+    private fun loadPublicShares() {
         if (isPublicShareDisabled) {
             hidePublicShare()
         } else {
-            ocShareViewModel.sharesForFile.observe(
+            ocShareViewModel.getSharesForFile().observe(
                 this,
                 Observer { resource ->
                     when (resource?.status) {
