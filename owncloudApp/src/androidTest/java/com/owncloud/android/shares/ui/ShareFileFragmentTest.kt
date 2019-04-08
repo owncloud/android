@@ -27,6 +27,8 @@ import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.ActivityTestRule
 import com.owncloud.android.R
+import com.owncloud.android.capabilities.db.OCCapability
+import com.owncloud.android.capabilities.viewmodel.OCCapabilityViewModel
 import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.status.OwnCloudVersion
@@ -50,6 +52,7 @@ class ShareFileFragmentTest {
     val activityRule = ActivityTestRule(TestShareFileActivity::class.java, true, true)
 
     private val sharesLiveData = MutableLiveData<Resource<List<OCShare>>>()
+    private val capabilityLiveData = MutableLiveData<Resource<OCCapability>>()
 
     private val publicShares = arrayListOf(
         TestUtil.createPublicShare(
@@ -85,9 +88,13 @@ class ShareFileFragmentTest {
         )
 
         val ocShareViewModel = mock(OCShareViewModel::class.java)
-        `when`(ocShareViewModel.sharesForFile).thenReturn(sharesLiveData)
-
+        `when`(ocShareViewModel.getSharesForFile()).thenReturn(sharesLiveData)
         shareFragment.ocShareViewModelFactory = ViewModelUtil.createFor(ocShareViewModel)
+
+        val ocCapabilityViewModel = mock(OCCapabilityViewModel::class.java)
+        `when`(ocCapabilityViewModel.getCapabilityForAccount()).thenReturn(capabilityLiveData)
+        shareFragment.ocCapabilityViewModelFactory = ViewModelUtil.createFor(ocCapabilityViewModel)
+
         activityRule.activity.setFragment(shareFragment)
     }
 
@@ -145,8 +152,8 @@ class ShareFileFragmentTest {
         onView(withId(R.id.snackbar_text)).check(matches(withText(R.string.service_unavailable)))
     }
 
-    fun getOCFileForTesting(name: String = "default"): OCFile {
-        var file = OCFile("/Photos")
+    private fun getOCFileForTesting(name: String = "default"): OCFile {
+        val file = OCFile("/Photos")
         file.availableOfflineStatus = OCFile.AvailableOfflineStatus.NOT_AVAILABLE_OFFLINE
         file.fileName = name
         file.fileId = 9456985479
