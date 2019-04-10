@@ -7,6 +7,7 @@
  * @author David A. Velasco
  * @author Christian Schabesberger
  * @author Shashvat Kedia
+ * @author Abel García de Prada
  * Copyright (C) 2012  Bartek Przybylski
  * Copyright (C) 2019 ownCloud GmbH.
  * <p>
@@ -340,8 +341,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         // click on folder in the list
         Log_OC.d(TAG, "on item click");
-        // TODO Enable when "On Device" is recovered ?
-        Vector<OCFile> tmpfiles = getStorageManager().getFolderContent(mFile /*, false*/);
+        Vector<OCFile> tmpfiles = getStorageManager().getFolderContent(mFile, false);
         tmpfiles = sortFileList(tmpfiles);
 
         if (tmpfiles.size() <= 0) {
@@ -437,8 +437,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
 
         mFile = getStorageManager().getFileByPath(full_path);
         if (mFile != null) {
-            // TODO Enable when "On Device" is recovered ?
-            Vector<OCFile> files = getStorageManager().getFolderContent(mFile/*, false*/);
+            Vector<OCFile> files = getStorageManager().getFolderContent(mFile, false);
             files = sortFileList(files);
 
             mAdapter = new ReceiveExternalFilesAdapter(

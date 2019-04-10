@@ -19,6 +19,7 @@
   <string name="actionbar_sort_by_date">จากเก่า-ใหม่</string>
   <string name="actionbar_sort_by_size">เล็กที่สุด - ใหญ่ที่สุด</string>
   <string name="drawer_item_all_files">ไฟล์ทั้งหมด</string>
+  <string name="drawer_item_only_available_offline">การทำงานแบบออฟไลน์พร้อมใช้งาน</string>
   <string name="drawer_item_settings">ตั้งค่า</string>
   <string name="drawer_item_uploads_list">อัพโหลด</string>
   <string name="drawer_close">ปิด</string>
@@ -52,6 +53,7 @@
   <string name="prefs_log_delete_history_button">ลบประวัติย้อนหลัง</string>
   <string name="prefs_help">ช่วยเหลือ</string>
   <string name="prefs_sync_calendar_contacts">ประสานข้อมูลรายชื่อผู้ติดต่อ ปฏิทิน และงานของคุณ</string>
+  <string name="prefs_sync_calendar_contacts_summary">ติดตั้ง DAVx⁵</string>
   <string name="prefs_recommend">แนะนำให้เพื่อน</string>
   <string name="prefs_feedback">ข้อเสนอแนะ</string>
   <string name="prefs_imprint">ประทับ</string>
@@ -150,6 +152,9 @@
   <string name="uploader_upload_text_dialog_filename_error_empty">ชื่อไฟล์ต้องไม่ว่างเปล่า</string>
   <string name="uploader_upload_text_dialog_filename_error_length_max">ชื่อไฟล์ต้องมีอักขระไม่เกิน %d ตัว</string>
   <string name="uploader_upload_text_filename_hint">ชื่อไฟล์</string>
+  <string name="uploader_upload_camera_upload_files">กำลังอัปโหลดไฟล์รูปภาพ</string>
+  <string name="uploader_upload_available_offline_files">กำลังอัปโหลดไฟล์ออฟไลน์ที่มีอยู่</string>
+  <string name="uploader_upload_requested_from_wifi_files">กำลังร้องขอการอัปโหลดไฟล์จาก wifi</string>
   <string name="ssl_certificate_not_trusted">ใบรับรองของเซิร์ฟเวอร์ไม่น่าเชื่อถือ</string>
   <string name="uploads_view_title">อัพโหลด</string>
   <string name="uploads_view_group_current_uploads">ปัจจุบัน</string>

@@ -19,6 +19,7 @@
   <string name="actionbar_sort_by_date">Elsta - Nýjasta</string>
   <string name="actionbar_sort_by_size">Minnst - Stærst</string>
   <string name="drawer_item_all_files">Allar skrár</string>
+  <string name="drawer_item_only_available_offline">Tiltækt án nettengingar</string>
   <string name="drawer_item_settings">Stillingar</string>
   <string name="drawer_item_uploads_list">Uploads</string>
   <string name="drawer_close">Loka</string>

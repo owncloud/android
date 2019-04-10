@@ -7,8 +7,6 @@
   <string name="actionbar_see_details">விவரங்கள்</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
-  <!--TODO re-enable when "On Device" is available
-    <string name="drawer_item_on_device">On device</string>-->
   <string name="drawer_open">திறக்க</string>
   <string name="drawer_help">உதவி</string>
   <string name="prefs_category_general">பொதுவான</string>

@@ -19,6 +19,7 @@
   <string name="actionbar_sort_by_date">Älteste - Neueste</string>
   <string name="actionbar_sort_by_size">Kleinste - Größte</string>
   <string name="drawer_item_all_files">Alle Dateien</string>
+  <string name="drawer_item_only_available_offline">Offline verfügbar</string>
   <string name="drawer_item_settings">Einstellungen</string>
   <string name="drawer_item_uploads_list">Uploads</string>
   <string name="drawer_close">Schließen</string>

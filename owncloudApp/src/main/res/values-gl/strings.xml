@@ -19,6 +19,7 @@
   <string name="actionbar_sort_by_date">Os máis antigos primeiro</string>
   <string name="actionbar_sort_by_size">Os máis pequenos primeiro</string>
   <string name="drawer_item_all_files">Todos os ficheiros</string>
+  <string name="drawer_item_only_available_offline">Dispoñíbel sen conexión</string>
   <string name="drawer_item_settings">Axustes</string>
   <string name="drawer_item_uploads_list">Envíos</string>
   <string name="drawer_close">Pechar</string>
@@ -52,6 +53,7 @@
   <string name="prefs_log_delete_history_button">Eliminar historial</string>
   <string name="prefs_help">Axuda</string>
   <string name="prefs_sync_calendar_contacts">Sincronice os seus contactos, calendarios e tarefas</string>
+  <string name="prefs_sync_calendar_contacts_summary">Instalar DAVx⁵</string>
   <string name="prefs_recommend">Recomendar a un amigo</string>
   <string name="prefs_feedback">Comentarios</string>
   <string name="prefs_imprint">Impresión</string>
@@ -98,6 +100,7 @@ Descárgueo de aquí: %2$s</string>
   <string name="uploader_error_message_source_file_not_copied">Produciuse un erro ao copiar o ficheiro a un cartafol temporal. Proba a envialo de novo.</string>
   <string name="file_list_seconds_ago">segundos atrás</string>
   <string name="file_list_empty">Aquí non hai nada. Envíe algo!</string>
+  <string name="file_list_empty_available_offline">Non hai ficheiros dispoñíbeis sen conexión.</string>
   <string name="file_list_loading">Cargando...</string>
   <string name="file_list_no_app_for_file_type">Non se atopou un aplicativo para este tipo de ficheiro</string>
   <string name="local_file_list_empty">Non hai ficheiros neste cartafol.</string>
@@ -492,7 +495,7 @@ Descárgueo de aquí: %2$s</string>
   <string name="actionbar_privacy_policy">Política de privacidade</string>
   <string name="prefs_privacy_policy">Política de privacidade</string>
   <string name="privacy_policy_error">Produciuse un erro:</string>
-  <string name="service_unavailable">O servidor non está accesíbel</string>
+  <string name="service_unavailable">O servidor non é accesíbel</string>
   <string name="streaming_certificate_error">Non é posíbel iniciar o fluxo porque o certificado do servidor non é de confianza. A descarga do ficheiro comezará automaticamente</string>
   <string name="streaming_unrecognized_input">Este formato de vídeo non está admitido</string>
   <string name="streaming_file_not_found_error">Este ficheiro de vídeo xa non está dispoñíbel no servidor</string>
@@ -519,6 +522,7 @@ Descárgueo de aquí: %2$s</string>
   <string name="media_service_notification_channel_description">Ver o reproductor de música </string>
   <string name="file_sync_notification_channel_name">Sincronización de ficheiros</string>
   <string name="file_sync_notification_channel_description">Ver o resultado da sincronización de ficheiros</string>
+  <string name="clicks_to_be_developer">Ten %1$d clics para activar os menús de desenvolvemento</string>
   <string name="rate_dialog_title">Avalíe o aplicativo %1$s!</string>
   <string name="rate_dialog_description">Se lle gusta usar este aplicativo, pode adicarlle un intre a valoralo? Os seus comentarios son moi importantes para nós.</string>
   <string name="button_no_thanks_name">NON, GRAZAS</string>

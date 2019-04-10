@@ -8,6 +8,7 @@
  * @author Christian Schabesberger
  * @author David González Verdugo
  * @author Shashvat Kedia
+ * @author Abel García de Prada
  * Copyright (C) 2011  Bartek Przybylski
  * Copyright (C) 2019 ownCloud GmbH.
  * <p>
@@ -29,6 +30,7 @@ import android.accounts.Account;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.text.TextUtils;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -70,6 +72,7 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
     private Vector<OCFile> mImmutableFilesList = null; // List containing the database files, doesn't change with search
     private Vector<OCFile> mFiles = null; // List that can be changed when using search
     private boolean mJustFolders;
+    private boolean mOnlyAvailableOffline;
 
     private FileDataStorageManager mStorageManager;
     private Account mAccount;
@@ -79,11 +82,13 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
 
     public FileListListAdapter(
             boolean justFolders,
+            boolean onlyAvailableOffline,
             Context context,
             ComponentsGetter transferServiceGetter
     ) {
 
         mJustFolders = justFolders;
+        mOnlyAvailableOffline = onlyAvailableOffline;
         mContext = context;
         mAccount = AccountUtils.getCurrentOwnCloudAccount(mContext);
 
@@ -202,15 +207,22 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
                     TextView fileSizeV = view.findViewById(R.id.file_size);
                     TextView fileSizeSeparatorV = view.findViewById(R.id.file_separator);
                     TextView lastModV = view.findViewById(R.id.last_mod);
-
                     lastModV.setVisibility(View.VISIBLE);
-                    lastModV.setText(DisplayUtils.getRelativeTimestamp(mContext, file.getModificationTimestamp()));
 
-                    fileSizeSeparatorV.setVisibility(View.VISIBLE);
-                    fileSizeV.setVisibility(View.VISIBLE);
-                    fileSizeV.setText(DisplayUtils.bytesToHumanReadable(
-                            file.getFileLength(), mContext
-                    ));
+                    if (!mOnlyAvailableOffline) {
+                        lastModV.setText(DisplayUtils.getRelativeTimestamp(mContext, file.getModificationTimestamp()));
+                        fileSizeSeparatorV.setVisibility(View.VISIBLE);
+                        fileSizeV.setVisibility(View.VISIBLE);
+                        fileSizeV.setText(DisplayUtils.bytesToHumanReadable(
+                                file.getFileLength(), mContext
+                        ));
+                    } else {
+                        lastModV.setText(file.getRemotePath());
+                        lastModV.setSingleLine(true);
+                        lastModV.setEllipsize(TextUtils.TruncateAt.MIDDLE);
+                        fileSizeSeparatorV.setVisibility(View.GONE);
+                        fileSizeV.setVisibility(View.GONE);
+                    }
 
                 case GRID_ITEM:
                     // filename
@@ -373,16 +385,19 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
      * @param updatedStorageManager Optional updated storage manager; used to replace
      *                              mStorageManager if is different (and not NULL)
      */
-    public void swapDirectory(OCFile folder, FileDataStorageManager updatedStorageManager
-            /*, boolean onlyOnDevice*/) {
+    public void swapDirectory(OCFile folder, FileDataStorageManager updatedStorageManager) {
         if (updatedStorageManager != null && updatedStorageManager != mStorageManager) {
             mStorageManager = updatedStorageManager;
             mAccount = AccountUtils.getCurrentOwnCloudAccount(mContext);
         }
 
         if (mStorageManager != null) {
-            // TODO Enable when "On Device" is recovered ?
-            mImmutableFilesList = mStorageManager.getFolderContent(folder/*, onlyOnDevice*/);
+            if (mOnlyAvailableOffline && (folder.equals(updatedStorageManager.getFileByPath(OCFile.ROOT_PATH)) ||
+                    !folder.isAvailableOffline())) {
+                mImmutableFilesList = updatedStorageManager.getAvailableOfflineFilesFromCurrentAccount();
+            } else {
+                mImmutableFilesList = mStorageManager.getFolderContent(folder, mOnlyAvailableOffline);
+            }
 
             mFiles = mImmutableFilesList;
 

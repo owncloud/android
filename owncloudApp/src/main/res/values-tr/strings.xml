@@ -19,6 +19,7 @@
   <string name="actionbar_sort_by_date">Eskiden yeniye</string>
   <string name="actionbar_sort_by_size">Küçükten büyüğe</string>
   <string name="drawer_item_all_files">Tüm dosyalar</string>
+  <string name="drawer_item_only_available_offline">Çevrimdışı kullanılabilir</string>
   <string name="drawer_item_settings">Ayarlar</string>
   <string name="drawer_item_uploads_list">Yüklemeler</string>
   <string name="drawer_close">Kapat</string>

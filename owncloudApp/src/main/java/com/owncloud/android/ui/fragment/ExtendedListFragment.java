@@ -2,6 +2,7 @@
  * ownCloud Android client application
  *
  * @author Christian Schabesberger
+ * @author Abel García de Prada
  * Copyright (C) 2012 Bartek Przybylski
  * Copyright (C) 2019 ownCloud GmbH.
  * <p>
@@ -61,6 +62,8 @@ public class ExtendedListFragment extends Fragment
     private static final String KEY_IS_GRID_VISIBLE = "IS_GRID_VISIBLE";
 
     protected static final String ARG_JUST_FOLDERS = ExtendedListFragment.class.getCanonicalName() + ".JUST_FOLDERS";
+    protected static final String ARG_ONLY_AVAILABLE_OFFLINE = ExtendedListFragment.class.getCanonicalName() +
+            ".ONLY_AVAILABLE_OFFLINE";
 
     private ProgressBar mProgressBar;
     private View mShadowView;
@@ -474,8 +477,13 @@ public class ExtendedListFragment extends Fragment
         mProgressBar.postInvalidate();
     }
 
-    protected boolean isShowingJustFolders() {
+    boolean isShowingJustFolders() {
         Bundle args = getArguments();
         return ((args != null) && args.getBoolean(ARG_JUST_FOLDERS, false));
+    }
+
+    boolean isShowingOnlyAvailableOffline() {
+        Bundle args = getArguments();
+        return ((args != null) && args.getBoolean(ARG_ONLY_AVAILABLE_OFFLINE, false));
     }
 }

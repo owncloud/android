@@ -19,6 +19,7 @@
   <string name="actionbar_sort_by_date">Más antiguo - Más nuevo</string>
   <string name="actionbar_sort_by_size">Más pequeño - Más grande</string>
   <string name="drawer_item_all_files">Todos los archivos</string>
+  <string name="drawer_item_only_available_offline">Disponible offline</string>
   <string name="drawer_item_settings">Ajustes</string>
   <string name="drawer_item_uploads_list">Subidas</string>
   <string name="drawer_close">Cerrar</string>
@@ -52,6 +53,7 @@
   <string name="prefs_log_delete_history_button">Eliminar Historial</string>
   <string name="prefs_help">Ayuda</string>
   <string name="prefs_sync_calendar_contacts">Sincronice sus contactos, calendarios y tareas</string>
+  <string name="prefs_sync_calendar_contacts_summary">Instalar DAVx⁵</string>
   <string name="prefs_recommend">Recomendar a un amigo</string>
   <string name="prefs_feedback">Mensajes de retroalimentación</string>
   <string name="prefs_imprint">Imprimir</string>
@@ -97,6 +99,7 @@
   <string name="uploader_error_message_source_file_not_copied">Ha ocurrido un error al copiar a la carpeta temporal. Por favor intentelo de nuevo.</string>
   <string name="file_list_seconds_ago">hace segundos</string>
   <string name="file_list_empty">No hay nada aquí. ¡Suba algo!</string>
+  <string name="file_list_empty_available_offline">No hay archivos sin conexión disponibles.</string>
   <string name="file_list_loading">Cargando...</string>
   <string name="file_list_no_app_for_file_type">No se han encontrado apps para ese tipo de archivos</string>
   <string name="local_file_list_empty">No hay archivos en esta carpeta.</string>
@@ -517,6 +520,7 @@
   <string name="media_service_notification_channel_description">Ver reproductor de música</string>
   <string name="file_sync_notification_channel_name">Sincronizado de archivo</string>
   <string name="file_sync_notification_channel_description">Ver el resultado de sincronizado de archivo</string>
+  <string name="clicks_to_be_developer">Está %1$d clics de distancia de habilitar los menús de desarrollador</string>
   <string name="rate_dialog_title">Puntúa %1$s la aplicación!</string>
   <string name="rate_dialog_description">Si disfrutas usando esta aplicación, ¿puedes dedicar un momento a valorarla?. Tus comentarios son muy importantes para nosotros.</string>
   <string name="button_no_thanks_name">No, Gracias</string>

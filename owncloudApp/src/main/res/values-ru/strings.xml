@@ -19,6 +19,7 @@
   <string name="actionbar_sort_by_date">От старых к новым</string>
   <string name="actionbar_sort_by_size">От маленьких к большим</string>
   <string name="drawer_item_all_files">Все файлы</string>
+  <string name="drawer_item_only_available_offline">Доступно автономно</string>
   <string name="drawer_item_settings">Настройки</string>
   <string name="drawer_item_uploads_list">Загрузки</string>
   <string name="drawer_close">Закрыть</string>
@@ -52,6 +53,7 @@
   <string name="prefs_log_delete_history_button">Удалить историю</string>
   <string name="prefs_help">Помощь</string>
   <string name="prefs_sync_calendar_contacts">Синхронизировать ваши контакты, календари и задачи</string>
+  <string name="prefs_sync_calendar_contacts_summary">Установить DAVx⁵</string>
   <string name="prefs_recommend">Рекомендовать другу</string>
   <string name="prefs_feedback">Обратная связь</string>
   <string name="prefs_imprint">Штамп</string>
@@ -98,6 +100,7 @@
   <string name="uploader_error_message_source_file_not_copied">Произошла ошибка во время копирования этого файла во временную папку. Пожалуйста попробуйте послать заново.</string>
   <string name="file_list_seconds_ago">несколько секунд назад</string>
   <string name="file_list_empty">Здесь ничего нет. Загрузите что-нибудь!</string>
+  <string name="file_list_empty_available_offline">Нет доступных автономных файлов.</string>
   <string name="file_list_loading">Загрузка...</string>
   <string name="file_list_no_app_for_file_type">Не найдено приложение для типа файла</string>
   <string name="local_file_list_empty">В этом каталоге нет файлов.</string>
