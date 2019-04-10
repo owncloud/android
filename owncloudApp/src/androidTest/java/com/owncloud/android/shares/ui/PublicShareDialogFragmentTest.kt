@@ -103,7 +103,7 @@ class PublicShareDialogFragmentTest {
             )
         ).thenReturn(sharesLiveData)
 
-        publicShareDialogFragment.viewModelFactory = ViewModelUtil.createFor(ocShareViewModel)
+        publicShareDialogFragment.ocShareViewModelFactory = ViewModelUtil.createFor(ocShareViewModel)
         activityRule.activity.setFragment(publicShareDialogFragment)
     }
 
