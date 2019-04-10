@@ -23,13 +23,13 @@
     <item
         android:id="@+id/file_action_select_all"
         android:title="@string/actionbar_select_all"
-        app:showAsAction="never" />
+        android:showAsAction="never" />
 
     <item
         android:id="@+id/action_select_inverse"
         android:title="@string/actionbar_select_inverse"
         android:visible="true"
-        app:showAsAction="never" />
+        android:showAsAction="never" />
 
     <item
         android:id="@+id/action_share_file"
