@@ -67,6 +67,10 @@ class OCShareRepository(
                 localSharesDataSource.insert(sharesForFileFromServer)
             }
 
+            override fun shouldFetch(data: List<OCShare>?): Boolean {
+                return true
+            }
+
             override fun loadFromDb(): LiveData<List<OCShare>> {
                 return localSharesDataSource.getSharesForFileAsLiveData(filePath, accountName, shareTypes)
             }
@@ -92,6 +96,10 @@ class OCShareRepository(
                 }
 
                 localSharesDataSource.insert(newShareForFileFromServer)
+            }
+
+            override fun shouldFetch(data: List<OCShare>?): Boolean {
+                return true
             }
 
             override fun loadFromDb(): LiveData<List<OCShare>> {

@@ -48,10 +48,13 @@ class OCCapabilityRepository(
 
     override fun loadCapabilityForAccount(accountName: String): LiveData<Resource<OCCapability>> {
         return object : NetworkBoundResource<OCCapability, RemoteCapability>(appExecutors) {
-
             override fun saveCallResult(item: RemoteCapability) {
                 item.accountName = accountName
                 localCapabilitiesDataSource.insert(OCCapability.fromRemoteCapability(item))
+            }
+
+            override fun shouldFetch(data: OCCapability?): Boolean {
+                return data == null;
             }
 
             override fun loadFromDb(): LiveData<OCCapability> {
