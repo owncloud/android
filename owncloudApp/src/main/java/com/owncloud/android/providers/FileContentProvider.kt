@@ -40,6 +40,8 @@ import androidx.sqlite.db.SupportSQLiteQueryBuilder
 import com.owncloud.android.AppExecutors
 import com.owncloud.android.MainApp
 import com.owncloud.android.R
+import com.owncloud.android.capabilities.datasource.OCLocalCapabilitiesDataSource
+import com.owncloud.android.capabilities.db.OCCapability
 import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.datamodel.UploadsStorageManager
 import com.owncloud.android.db.OwncloudDatabase
@@ -207,7 +209,7 @@ class FileContentProvider(val appExecutors: AppExecutors = AppExecutors()) : Con
                 }
             }
             SHARES -> {
-                val shareId: Long = OwncloudDatabase.getDatabase(context).shareDao().insert(
+                val shareId = OwncloudDatabase.getDatabase(context).shareDao().insert(
                     listOf(OCShare.fromContentValues(values))
                 )[0]
 
@@ -216,7 +218,9 @@ class FileContentProvider(val appExecutors: AppExecutors = AppExecutors()) : Con
             }
 
             CAPABILITIES -> {
-                val capabilityId = db.insert(ProviderTableMeta.CAPABILITIES_TABLE_NAME, null, values)
+                val capabilityId = OwncloudDatabase.getDatabase(context).capabilityDao().insert(
+                    OCCapability.fromContentValues(values)
+                )
 
                 if (capabilityId <= 0) throw SQLException("ERROR $uri")
                 return  ContentUris.withAppendedId(ProviderTableMeta.CONTENT_URI_CAPABILITIES, capabilityId)
@@ -339,8 +343,6 @@ class FileContentProvider(val appExecutors: AppExecutors = AppExecutors()) : Con
                 sqlQuery.setProjectionMap(fileProjectionMap)
             }
             SHARES -> {
-                newDb.execSQL("PRAGMA case_sensitive_like = true")
-
                 val supportSqlQuery = SupportSQLiteQueryBuilder
                     .builder(ProviderTableMeta.OCSHARES_TABLE_NAME)
                     .columns(projection)
@@ -356,14 +358,19 @@ class FileContentProvider(val appExecutors: AppExecutors = AppExecutors()) : Con
                 return newDb.query(supportSqlQuery)
             }
             CAPABILITIES -> {
-                sqlQuery.tables = ProviderTableMeta.CAPABILITIES_TABLE_NAME
-                if (uri.pathSegments.size > 1) {
-                    sqlQuery.appendWhereEscapeString(
-                        ProviderTableMeta._ID + "="
-                                + uri.pathSegments[1]
-                    )
-                }
-                sqlQuery.setProjectionMap(capabilityProjectionMap)
+                val supportSqlQuery = SupportSQLiteQueryBuilder
+                    .builder(ProviderTableMeta.CAPABILITIES_TABLE_NAME)
+                    .columns(projection)
+                    .selection(selection, selectionArgs)
+                    .orderBy(
+                        if (TextUtils.isEmpty(sortOrder)) {
+                            sortOrder
+                        } else {
+                            ProviderTableMeta.CAPABILITIES_DEFAULT_SORT_ORDER
+                        }
+                    ).create()
+
+                return newDb.query(supportSqlQuery)
             }
             UPLOADS -> {
                 sqlQuery.tables = ProviderTableMeta.UPLOADS_TABLE_NAME
@@ -943,6 +950,26 @@ class FileContentProvider(val appExecutors: AppExecutors = AppExecutors()) : Con
 
                     // Drop old shares table from old database
                     db.execSQL("DROP TABLE IF EXISTS " + ProviderTableMeta.OCSHARES_TABLE_NAME + ";")
+                }
+            }
+
+            if (oldVersion < 27 && newVersion >= 27) {
+                Log_OC.i("SQL", "Entering in #27 to migrate capabilities from SQLite to Room")
+                val cursor = db.query(
+                    ProviderTableMeta.CAPABILITIES_TABLE_NAME,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null
+                )
+
+                if (cursor.moveToFirst()) {
+                    // Insert capability to the new capabilities table in new database
+                    appExecutors.diskIO().execute {
+                        OCLocalCapabilitiesDataSource().insert(OCCapability.fromCursor(cursor))
+                    }
                 }
             }
 

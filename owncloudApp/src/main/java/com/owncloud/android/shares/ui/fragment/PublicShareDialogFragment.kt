@@ -49,6 +49,7 @@ import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.lib.common.utils.Log_OC
 import com.owncloud.android.lib.resources.shares.RemoteShare
 import com.owncloud.android.lib.resources.shares.ShareType
+import com.owncloud.android.lib.resources.status.CapabilityBooleanType
 import com.owncloud.android.lib.resources.status.OwnCloudVersion
 import com.owncloud.android.operations.common.OperationType
 import com.owncloud.android.shares.db.OCShare
@@ -132,7 +133,7 @@ class PublicShareDialogFragment : DialogFragment() {
      * Get expiration date imposed by the server, if any
      */
     private val imposedExpirationDate: Long
-        get() = if (capabilities?.filesSharingPublicExpireDateEnforced == OCCapability.ENABLED) {
+        get() = if (capabilities?.filesSharingPublicExpireDateEnforced == CapabilityBooleanType.TRUE.value) {
             DateUtils.addDaysToDate(
                 Date(),
                 capabilities?.filesSharingPublicExpireDateDays!!
@@ -230,8 +231,7 @@ class PublicShareDialogFragment : DialogFragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        ocShareViewModel = ViewModelProviders.of(this, ocShareViewModelFactory).
-            get(OCShareViewModel::class.java)
+        ocShareViewModel = ViewModelProviders.of(this, ocShareViewModelFactory).get(OCShareViewModel::class.java)
 
         ocCapabilityViewModel =
             ViewModelProviders.of(this, ocCapabilityViewModelFactory).get(OCCapabilityViewModel::class.java)
@@ -672,7 +672,7 @@ class PublicShareDialogFragment : DialogFragment() {
             )
         }
 
-        if (capabilities?.filesSharingPublicUpload == OCCapability.ENABLED && isSharedFolder) {
+        if (capabilities?.filesSharingPublicUpload == CapabilityBooleanType.TRUE.value && isSharedFolder) {
             shareViaLinkEditPermissionGroup?.visibility = View.VISIBLE
         }
 
@@ -683,8 +683,8 @@ class PublicShareDialogFragment : DialogFragment() {
         //  - Allow editing capability is set
         if (!(isSharedFolder &&
                     serverVersion.isPublicSharingWriteOnlySupported &&
-                    capabilities?.filesSharingPublicSupportsUploadOnly == OCCapability.ENABLED &&
-                    capabilities?.filesSharingPublicUpload == OCCapability.ENABLED)
+                    capabilities?.filesSharingPublicSupportsUploadOnly == CapabilityBooleanType.TRUE.value &&
+                    capabilities?.filesSharingPublicUpload == CapabilityBooleanType.TRUE.value)
         ) {
             shareViaLinkEditPermissionGroup?.visibility = View.GONE
         }
@@ -706,7 +706,7 @@ class PublicShareDialogFragment : DialogFragment() {
         }
 
         // Hide expiration date switch if date is enforced to prevent it is removed
-        if (capabilities?.filesSharingPublicExpireDateEnforced == OCCapability.ENABLED) {
+        if (capabilities?.filesSharingPublicExpireDateEnforced == CapabilityBooleanType.TRUE.value) {
             shareViaLinkExpirationLabel?.text = getString(R.string.share_via_link_expiration_date_enforced_label)
             shareViaLinkExpirationSwitch?.visibility = View.GONE
             shareViaLinkExpirationExplanationLabel?.visibility = View.VISIBLE
@@ -718,11 +718,11 @@ class PublicShareDialogFragment : DialogFragment() {
 
         // Set password label when opening the dialog
         if (shareViaLinkEditPermissionReadOnly.isChecked &&
-            capabilities?.filesSharingPublicPasswordEnforcedReadOnly == OCCapability.ENABLED ||
+            capabilities?.filesSharingPublicPasswordEnforcedReadOnly == CapabilityBooleanType.TRUE.value ||
             shareViaLinkEditPermissionReadAndWrite.isChecked &&
-            capabilities?.filesSharingPublicPasswordEnforcedReadWrite == OCCapability.ENABLED ||
+            capabilities?.filesSharingPublicPasswordEnforcedReadWrite == CapabilityBooleanType.TRUE.value ||
             shareViaLinkEditPermissionUploadFiles.isChecked &&
-            capabilities?.filesSharingPublicPasswordEnforcedUploadOnly == OCCapability.ENABLED
+            capabilities?.filesSharingPublicPasswordEnforcedUploadOnly == CapabilityBooleanType.TRUE.value
         ) {
             setPasswordEnforced()
         }
@@ -730,19 +730,19 @@ class PublicShareDialogFragment : DialogFragment() {
         // Set password label depending on the checked permission option
         shareViaLinkEditPermissionGroup?.setOnCheckedChangeListener { group, checkedId ->
             if (checkedId == shareViaLinkEditPermissionReadOnly.id) {
-                if (capabilities?.filesSharingPublicPasswordEnforcedReadOnly == OCCapability.ENABLED) {
+                if (capabilities?.filesSharingPublicPasswordEnforcedReadOnly == CapabilityBooleanType.TRUE.value) {
                     setPasswordEnforced()
                 } else {
                     setPasswordNotEnforced()
                 }
             } else if (checkedId == shareViaLinkEditPermissionReadAndWrite.id) {
-                if (capabilities?.filesSharingPublicPasswordEnforcedReadWrite == OCCapability.ENABLED) {
+                if (capabilities?.filesSharingPublicPasswordEnforcedReadWrite == CapabilityBooleanType.TRUE.value) {
                     setPasswordEnforced()
                 } else {
                     setPasswordNotEnforced()
                 }
             } else if (checkedId == shareViaLinkEditPermissionUploadFiles.id) {
-                if (capabilities?.filesSharingPublicPasswordEnforcedUploadOnly == OCCapability.ENABLED) {
+                if (capabilities?.filesSharingPublicPasswordEnforcedUploadOnly == CapabilityBooleanType.TRUE.value) {
                     setPasswordEnforced()
                 } else {
                     setPasswordNotEnforced()
@@ -751,12 +751,15 @@ class PublicShareDialogFragment : DialogFragment() {
         }
 
         // When there's no password enforced for capability
-        val hasPasswordEnforcedFor = capabilities?.filesSharingPublicPasswordEnforcedReadOnly == OCCapability.ENABLED ||
-                capabilities?.filesSharingPublicPasswordEnforcedReadWrite == OCCapability.ENABLED ||
-                capabilities?.filesSharingPublicPasswordEnforcedUploadOnly == OCCapability.ENABLED
+        val hasPasswordEnforcedFor = capabilities?.filesSharingPublicPasswordEnforcedReadOnly ==
+                CapabilityBooleanType.TRUE.value ||
+                capabilities?.filesSharingPublicPasswordEnforcedReadWrite == CapabilityBooleanType.TRUE.value ||
+                capabilities?.filesSharingPublicPasswordEnforcedUploadOnly == CapabilityBooleanType.TRUE.value
 
         // hide password switch if password is enforced to prevent it is removed
-        if (!hasPasswordEnforcedFor && capabilities?.filesSharingPublicPasswordEnforced == OCCapability.ENABLED) {
+        if (!hasPasswordEnforcedFor && capabilities?.filesSharingPublicPasswordEnforced ==
+            CapabilityBooleanType.TRUE.value
+        ) {
             setPasswordEnforced()
         }
     }

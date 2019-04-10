@@ -46,6 +46,7 @@ import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.datamodel.ThumbnailsCacheManager
 import com.owncloud.android.lib.common.utils.Log_OC
 import com.owncloud.android.lib.resources.shares.ShareType
+import com.owncloud.android.lib.resources.status.CapabilityBooleanType
 import com.owncloud.android.lib.resources.status.OwnCloudVersion
 import com.owncloud.android.operations.common.OperationType
 import com.owncloud.android.shares.db.OCShare
@@ -192,7 +193,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
      * @return 'True' when public share is disabled in the server
      */
     private val isPublicShareDisabled: Boolean
-        get() = capabilities != null && capabilities?.filesSharingPublicEnabled == OCCapability.DISABLED
+        get() = capabilities != null && capabilities?.filesSharingPublicEnabled == CapabilityBooleanType.FALSE.value
 
     var ocShareViewModelFactory: ViewModelProvider.Factory = ViewModelFactory.build {
         OCShareViewModel(
@@ -582,7 +583,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
             // Server version <= 9.x, multiple public sharing not supported
             !serverVersion.isMultiplePublicSharingSupported -> false
             // Server version >= 10, multiple public sharing supported but disabled
-            capabilities?.filesSharingPublicMultiple == OCCapability.DISABLED -> false
+            capabilities?.filesSharingPublicMultiple == CapabilityBooleanType.FALSE.value-> false
             else -> true
         }
     }
