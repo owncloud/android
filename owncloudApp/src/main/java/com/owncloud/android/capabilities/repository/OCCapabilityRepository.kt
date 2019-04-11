@@ -58,7 +58,7 @@ class OCCapabilityRepository(
             }
 
             override fun loadFromDb(): LiveData<OCCapability> {
-                return localCapabilitiesDataSource.getCapabilityForAccount(accountName)
+                return localCapabilitiesDataSource.getCapabilityForAccountAsLiveData(accountName)
             }
 
             override fun createCall() = remoteCapabilitiesDataSource.getCapabilities()
