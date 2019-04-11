@@ -69,13 +69,17 @@ class NetworkBoundResourceTest {
             )
         )
 
-        var networkBoundResource =
+        val networkBoundResource =
             object : NetworkBoundResource<List<OCShare>, ShareParserResult>(InstantAppExecutors()) {
-                override fun saveCallResult(shareParserResult: ShareParserResult) {
-                    saved.set(shareParserResult.shares.map { remoteShare ->
+                override fun saveCallResult(item: ShareParserResult) {
+                    saved.set(item.shares.map { remoteShare ->
                         OCShare.fromRemoteShare(remoteShare).also { it.accountOwner = "admin@server" }
                     })
                     dbData.value = fetchedDbValue
+                }
+
+                override fun shouldFetch(data: List<OCShare>?): Boolean {
+                    return true;
                 }
 
                 override fun loadFromDb(): LiveData<List<OCShare>> {
@@ -97,6 +101,8 @@ class NetworkBoundResourceTest {
 
         val observer = mock<Observer<Resource<List<OCShare>>>>()
         networkBoundResource.asLiveData().observeForever(observer)
+
+        dbData.postValue(null)
 
         assertThat(saved.get(), `is`(networkResult.map { remoteShare ->
             OCShare.fromRemoteShare(remoteShare).also { it.accountOwner = "admin@server" }
@@ -120,10 +126,14 @@ class NetworkBoundResourceTest {
 
         val networkResult: ArrayList<RemoteShare> = arrayListOf()
 
-        var networkBoundResource =
+        val networkBoundResource =
             object : NetworkBoundResource<List<OCShare>, ShareParserResult>(InstantAppExecutors()) {
-                override fun saveCallResult(shareParserResult: ShareParserResult) {
+                override fun saveCallResult(item: ShareParserResult) {
                     saved.set(true)
+                }
+
+                override fun shouldFetch(data: List<OCShare>?): Boolean {
+                    return true;
                 }
 
                 override fun loadFromDb(): LiveData<List<OCShare>> {
@@ -163,10 +173,14 @@ class NetworkBoundResourceTest {
     fun dbSuccessWithoutNetwork() {
         val saved = AtomicBoolean(false)
 
-        var networkBoundResource =
+        val networkBoundResource =
             object : NetworkBoundResource<List<OCShare>, ShareParserResult>(InstantAppExecutors()) {
-                override fun saveCallResult(shareParserResult: ShareParserResult) {
+                override fun saveCallResult(item: ShareParserResult) {
                     saved.set(true)
+                }
+
+                override fun shouldFetch(data: List<OCShare>?): Boolean {
+                    return true;
                 }
 
                 override fun loadFromDb(): LiveData<List<OCShare>> {
