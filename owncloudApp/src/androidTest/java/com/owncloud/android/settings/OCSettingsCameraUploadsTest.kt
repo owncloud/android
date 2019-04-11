@@ -153,6 +153,32 @@ class OCSettingsCameraUploadsTest {
         assertTrue(mPrefCameraVideoUploads.isChecked)
     }
 
+    @Test
+    fun testOptionsPictureUploadsEnabled() {
+        var mPrefCameraPictureUploads =
+            activityRule.activity.findPreference("camera_picture_uploads") as CheckBoxPreference
+        setCheckBoxPreference(mPrefCameraPictureUploads, false)
+
+        onView(withText(R.string.prefs_camera_picture_upload)).perform(click());
+        onView(withText(android.R.string.ok)).perform(click())
+
+        onView(withText(R.string.prefs_camera_picture_upload_path_title)).check(matches(isDisplayed()))
+        onView(withText(R.string.camera_picture_upload_on_wifi)).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun testOptionsVideoUploadsEnabled() {
+        var mPrefCameraPictureUploads =
+            activityRule.activity.findPreference("camera_video_uploads") as CheckBoxPreference
+        setCheckBoxPreference(mPrefCameraPictureUploads, false)
+
+        onView(withText(R.string.prefs_camera_video_upload)).perform(click());
+        onView(withText(android.R.string.ok)).perform(click())
+
+        onView(withText(R.string.prefs_camera_video_upload_path_title)).check(matches(isDisplayed()))
+        onView(withText(R.string.camera_video_upload_on_wifi)).check(matches(isDisplayed()))
+    }
+
     //Set UI before tests, must be done in UI thread
     fun setCheckBoxPreference(preference: CheckBoxPreference, value: Boolean) {
         activityRule.activity.runOnUiThread(Runnable {
