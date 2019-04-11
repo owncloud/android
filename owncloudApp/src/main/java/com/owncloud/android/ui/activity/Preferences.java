@@ -81,6 +81,7 @@ public class Preferences extends PreferenceActivity {
     private static final int ACTION_REQUEST_PATTERN = 7;
     private static final int ACTION_CONFIRM_PATTERN = 8;
 
+    private static final String PREFERENCE_MANUAL_UPLOADS_ON_WIFI = "manual_uploads_on_wifi";
     private static final String PREFERENCE_CAMERA_PICTURE_UPLOADS = "camera_picture_uploads";
     private static final String PREFERENCE_CAMERA_PICTURE_UPLOADS_PATH = "camera_picture_uploads_path";
     private static final String PREFERENCE_CAMERA_UPLOADS_CATEGORY = "camera_uploads_category";
@@ -107,6 +108,7 @@ public class Preferences extends PreferenceActivity {
     private CheckBoxPreference mPrefCameraPictureUploads;
     private Preference mPrefCameraPictureUploadsPath;
     private Preference mPrefCameraPictureUploadsWiFi;
+    private CheckBoxPreference mPrefManualUploadsWifi;
     private CheckBoxPreference mPrefCameraVideoUploads;
     private Preference mPrefCameraVideoUploadsPath;
     private Preference mPrefCameraVideoUploadsWiFi;
@@ -176,6 +178,18 @@ public class Preferences extends PreferenceActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             mFingerprintManager = FingerprintManager.getFingerprintManager(this);
         }
+
+        /*
+         * Manual uploads
+         */
+        mPrefManualUploadsWifi = (CheckBoxPreference) findPreference(PREFERENCE_MANUAL_UPLOADS_ON_WIFI);
+        mPrefManualUploadsWifi.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                com.owncloud.android.db.PreferenceManager.setManualUploadViaWifiOnly(getApplicationContext(),(Boolean) newValue);
+                return true;
+            }
+        });
 
         /*
          * Camera uploads

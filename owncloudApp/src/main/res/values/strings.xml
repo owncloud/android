@@ -349,6 +349,8 @@
     <string name="placeholder_timestamp">2012/05/18 12:23 PM</string>
     <string name="placeholder_media_time">12:23:45</string>
 
+    <string name="manual_uploads_on_wifi">Upload via wifi only</string>
+    <string name="prefs_manual_upload_summary">Manual uploads only thorugh wifi</string>
     <string name="camera_picture_upload_on_wifi">Upload pictures via wifi only</string>
     <string name="camera_video_upload_on_wifi">Upload videos via wifi only</string>
     <string name="camera_upload_path">/CameraUpload</string>
