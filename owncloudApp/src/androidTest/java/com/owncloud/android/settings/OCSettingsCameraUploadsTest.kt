@@ -109,6 +109,50 @@ class OCSettingsCameraUploadsTest {
         assertTrue(mPrefCameraPictureUploads.isChecked)
     }
 
+    @Test
+    fun testEnableVideoUploadsShowsWarning() {
+        var mPrefCameraVideoUploads =
+            activityRule.activity.findPreference("camera_video_uploads") as CheckBoxPreference
+        setCheckBoxPreference(mPrefCameraVideoUploads, false)
+
+        onView(withText(R.string.prefs_camera_video_upload)).perform(click());
+        onView(withText(R.string.common_important)).check(matches(isDisplayed()));
+        onView(withText(R.string.proper_videos_folder_warning_camera_upload)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    fun testEnableVideoUploads() {
+        var mPrefCameraVideoUploads =
+            activityRule.activity.findPreference("camera_video_uploads") as CheckBoxPreference
+        setCheckBoxPreference(mPrefCameraVideoUploads, false)
+
+        onView(withText(R.string.prefs_camera_video_upload)).perform(click());
+        onView(withText(android.R.string.ok)).perform(click())
+        assertTrue(mPrefCameraVideoUploads.isChecked)
+    }
+
+    @Test
+    fun testDisableVideoUploadsAccept() {
+        var mPrefCameraVideoUploads =
+            activityRule.activity.findPreference("camera_video_uploads") as CheckBoxPreference
+        setCheckBoxPreference(mPrefCameraVideoUploads, true)
+
+        onView(withText(R.string.prefs_camera_video_upload)).perform(click());
+        onView(withText(R.string.common_yes)).perform(click());
+        assertFalse(mPrefCameraVideoUploads.isChecked)
+    }
+
+    @Test
+    fun testDisableVideoUploadsRefuse() {
+        var mPrefCameraVideoUploads =
+            activityRule.activity.findPreference("camera_video_uploads") as CheckBoxPreference
+        setCheckBoxPreference(mPrefCameraVideoUploads, true)
+
+        onView(withText(R.string.prefs_camera_video_upload)).perform(click());
+        onView(withText(R.string.common_no)).perform(click());
+        assertTrue(mPrefCameraVideoUploads.isChecked)
+    }
+
     //Set UI before tests, must be done in UI thread
     fun setCheckBoxPreference(preference: CheckBoxPreference, value: Boolean) {
         activityRule.activity.runOnUiThread(Runnable {
