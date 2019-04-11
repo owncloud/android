@@ -20,6 +20,7 @@
 package com.owncloud.android.utils
 
 import android.accounts.Account
+import com.owncloud.android.capabilities.db.OCCapability
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.shares.RemoteShare
 import com.owncloud.android.lib.resources.shares.ShareType
@@ -28,6 +29,9 @@ import org.mockito.Mockito.`when`
 import java.lang.Exception
 
 object TestUtil {
+    /**
+     * Shares
+     */
     private fun createShare(
         fileSource: Long = 7,
         itemSource: Long = 7,
@@ -118,6 +122,68 @@ object TestUtil {
 
         return remoteShare
     }
+
+    /**
+     * Capability
+     */
+    fun createCapability(
+        accountName: String = "user@server",
+        versionMayor: Int = 0,
+        versionMinor: Int = 0,
+        versionMicro: Int = 0,
+        versionString: String = "1.0.0",
+        versionEdition: String = "1.0.0",
+        corePollinterval: Int = 0,
+        sharingApiEnabled: Int = 0,
+        sharingPublicEnabled: Int = 0,
+        sharingPublicPasswordEnforced: Int = 0,
+        sharingPublicPasswordEnforcedReadOnly: Int = 0,
+        sharingPublicPasswordEnforcedReadWrite: Int = 0,
+        sharingPublicPasswordEnforcedUploadOnly: Int = 0,
+        sharingPublicExpireDateEnabled: Int = 0,
+        sharingPublicExpireDateDays: Int = 0,
+        sharingPublicExpireDateEnforced: Int = 0,
+        sharingPublicSendMail: Int = 0,
+        sharingPublicUpload: Int = 0,
+        sharingPublicMultiple: Int = 0,
+        sharingPublicSupportsUploadOnly: Int = 0,
+        sharingUserSendMail: Int = 0,
+        sharingResharing: Int = 0,
+        sharingFederationOutgoing: Int = 0,
+        sharingFederationIncoming: Int = 0,
+        filesBigFileChunking: Int = 0,
+        filesUndelete: Int = 0,
+        filesVersioning: Int = 0
+    ) = OCCapability(
+        accountName,
+        versionMayor,
+        versionMinor,
+        versionMicro,
+        versionString,
+        versionEdition,
+        corePollinterval,
+        sharingApiEnabled,
+        sharingPublicEnabled,
+        sharingPublicPasswordEnforced,
+        sharingPublicPasswordEnforcedReadOnly,
+        sharingPublicPasswordEnforcedReadWrite,
+        sharingPublicPasswordEnforcedUploadOnly,
+        sharingPublicExpireDateEnabled,
+        sharingPublicExpireDateDays,
+        sharingPublicExpireDateEnforced,
+        sharingPublicSendMail,
+        sharingPublicUpload,
+        sharingPublicMultiple,
+        sharingPublicSupportsUploadOnly,
+        sharingUserSendMail,
+        sharingResharing,
+        sharingFederationOutgoing,
+        sharingFederationIncoming,
+        filesBigFileChunking,
+        filesUndelete,
+        filesVersioning
+    )
+
 
     fun createAccount(name: String, type: String): Account {
         val account = Account("MyAccount", "SomeType")
