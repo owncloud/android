@@ -17,15 +17,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.capabilities.datasource
+package com.owncloud.android.capabilities.repository
 
-import androidx.lifecycle.LiveData
-import com.owncloud.android.capabilities.db.OCCapability
+import com.owncloud.android.capabilities.datasource.RemoteCapabilitiesDataSource
+import com.owncloud.android.lib.common.operations.RemoteOperationResult
+import com.owncloud.android.lib.resources.status.GetRemoteCapabilitiesOperation
+import com.owncloud.android.lib.resources.status.RemoteCapability
 
-interface LocalCapabilitiesDataSource {
-    fun getCapabilityForAccountAsLiveData(
-        accountName: String
-    ): LiveData<OCCapability>
+class RemoteCapabilitiesDataSourceTest(private val remoteOperationResult: RemoteOperationResult<RemoteCapability>) :
+    RemoteCapabilitiesDataSource {
 
-    fun insert(ocCapability: OCCapability)
+    override fun getCapabilities(getRemoteCapabilitiesOperation: GetRemoteCapabilitiesOperation):
+            RemoteOperationResult<RemoteCapability> {
+        return remoteOperationResult
+    }
 }

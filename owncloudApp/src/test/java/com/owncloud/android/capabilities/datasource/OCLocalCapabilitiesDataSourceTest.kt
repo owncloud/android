@@ -79,7 +79,7 @@ class OCLocalCapabilitiesDataSourceTest {
     @Test
     fun readLocalCapability() {
         val capability = getValue(
-            ocLocalCapabilitiesDataSource.getCapabilityForAccount(
+            ocLocalCapabilitiesDataSource.getCapabilityForAccountAsLiveData(
                 "user@server1"
             )
         )
@@ -99,7 +99,7 @@ class OCLocalCapabilitiesDataSourceTest {
         )
 
         val capability = getValue(
-            ocLocalCapabilitiesDataSource.getCapabilityForAccount(
+            ocLocalCapabilitiesDataSource.getCapabilityForAccountAsLiveData(
                 "user@server2"
             )
         )
