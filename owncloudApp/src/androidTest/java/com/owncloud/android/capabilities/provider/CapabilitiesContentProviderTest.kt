@@ -63,9 +63,9 @@ class CapabilitiesContentProviderTest {
         val itemUri = mContentResolver!!.bulkInsert(
             ProviderTableMeta.CONTENT_URI_CAPABILITIES,
             arrayOf(
-                capabilityWithAccountNameAndVersion("user1", 1),
-                capabilityWithAccountNameAndVersion("user2", 2),
-                capabilityWithAccountNameAndVersion("user3", 3)
+                capabilityWithAccountNameAndVersion("user1@server", 1),
+                capabilityWithAccountNameAndVersion("user2@server", 2),
+                capabilityWithAccountNameAndVersion("user3@server", 3)
             )
         )
         assertThat(itemUri, notNullValue())
@@ -76,9 +76,9 @@ class CapabilitiesContentProviderTest {
         val itemUri = mContentResolver!!.bulkInsert(
             ProviderTableMeta.CONTENT_URI_CAPABILITIES,
             arrayOf(
-                capabilityWithAccountNameAndVersion("user10", 10),
-                capabilityWithAccountNameAndVersion("user20", 20),
-                capabilityWithAccountNameAndVersion("user30", 30)
+                capabilityWithAccountNameAndVersion("user10@server", 10),
+                capabilityWithAccountNameAndVersion("user20@server", 20),
+                capabilityWithAccountNameAndVersion("user30@server", 30)
             )
         )
         assertThat(itemUri, notNullValue())
@@ -101,7 +101,7 @@ class CapabilitiesContentProviderTest {
             cursor.getString(
                 cursor.getColumnIndexOrThrow(ProviderTableMeta.CAPABILITIES_ACCOUNT_NAME)
             ),
-            Matchers.`is`("user10")
+            Matchers.`is`("user10@server")
         )
 
         assertThat(
@@ -117,7 +117,7 @@ class CapabilitiesContentProviderTest {
             cursor.getString(
                 cursor.getColumnIndexOrThrow(ProviderTableMeta.CAPABILITIES_ACCOUNT_NAME)
             ),
-            Matchers.`is`("user30")
+            Matchers.`is`("user30@server")
         )
 
         assertThat(
@@ -135,9 +135,9 @@ class CapabilitiesContentProviderTest {
         val itemUri = mContentResolver!!.bulkInsert(
             ProviderTableMeta.CONTENT_URI_CAPABILITIES,
             arrayOf(
-                capabilityWithAccountNameAndVersion("user100", 4),
-                capabilityWithAccountNameAndVersion("user200", 5),
-                capabilityWithAccountNameAndVersion("user300", 6)
+                capabilityWithAccountNameAndVersion("user100@server", 4),
+                capabilityWithAccountNameAndVersion("user200@server", 5),
+                capabilityWithAccountNameAndVersion("user300@server", 6)
             )
         )
         assertThat(itemUri, notNullValue())
@@ -161,7 +161,7 @@ class CapabilitiesContentProviderTest {
             cursor.getString(
                 cursor.getColumnIndexOrThrow(ProviderTableMeta.CAPABILITIES_ACCOUNT_NAME)
             ),
-            Matchers.`is`("user100")
+            Matchers.`is`("user100@server")
         )
 
         // "sharing_public_enabled" column not requested within projection
@@ -173,10 +173,10 @@ class CapabilitiesContentProviderTest {
         val itemUri = mContentResolver!!.bulkInsert(
             ProviderTableMeta.CONTENT_URI_CAPABILITIES,
             arrayOf(
-                capabilityWithAccountNameAndVersion("user1", 7),
-                capabilityWithAccountNameAndVersion("user2", 8),
-                capabilityWithAccountNameAndVersion("user3", 9),
-                capabilityWithAccountNameAndVersion("user4", 10)
+                capabilityWithAccountNameAndVersion("user1@server", 7),
+                capabilityWithAccountNameAndVersion("user2@server", 8),
+                capabilityWithAccountNameAndVersion("user3@server", 9),
+                capabilityWithAccountNameAndVersion("user4@server", 10)
             )
         )
         assertThat(itemUri, notNullValue())
@@ -186,7 +186,7 @@ class CapabilitiesContentProviderTest {
             ProviderTableMeta.CONTENT_URI_CAPABILITIES,
             null,
             ProviderTableMeta.CAPABILITIES_ACCOUNT_NAME + " = ?",
-            arrayOf("user3"),
+            arrayOf("user3@server"),
             null
         )
 
@@ -199,7 +199,7 @@ class CapabilitiesContentProviderTest {
             cursor.getString(
                 cursor.getColumnIndexOrThrow(ProviderTableMeta.CAPABILITIES_ACCOUNT_NAME)
             ),
-            Matchers.`is`("user3")
+            Matchers.`is`("user3@server")
         )
 
         assertThat(
@@ -215,11 +215,11 @@ class CapabilitiesContentProviderTest {
         val itemUri = mContentResolver!!.bulkInsert(
             ProviderTableMeta.CONTENT_URI_CAPABILITIES,
             arrayOf(
-                capabilityWithAccountNameAndVersion("student1", 1),
-                capabilityWithAccountNameAndVersion("student2", 2),
-                capabilityWithAccountNameAndVersion("student21", 3),
-                capabilityWithAccountNameAndVersion("student4", 4),
-                capabilityWithAccountNameAndVersion("student5", 5)
+                capabilityWithAccountNameAndVersion("student1@server", 1),
+                capabilityWithAccountNameAndVersion("student2@server", 2),
+                capabilityWithAccountNameAndVersion("student21@server", 3),
+                capabilityWithAccountNameAndVersion("student4@server", 4),
+                capabilityWithAccountNameAndVersion("student5@server", 5)
             )
         )
         assertThat(itemUri, notNullValue())
