@@ -51,8 +51,10 @@ class ShareFileFragmentTest {
     @JvmField
     val activityRule = ActivityTestRule(TestShareFileActivity::class.java, true, true)
 
+    private val capabilitiesLiveData = MutableLiveData<Resource<OCCapability>>()
     private val sharesLiveData = MutableLiveData<Resource<List<OCShare>>>()
-    private val capabilityLiveData = MutableLiveData<Resource<OCCapability>>()
+
+    private val capability = TestUtil.createCapability("admin@server")
 
     private val publicShares = arrayListOf(
         TestUtil.createPublicShare(
@@ -92,7 +94,7 @@ class ShareFileFragmentTest {
         shareFragment.ocShareViewModelFactory = ViewModelUtil.createFor(ocShareViewModel)
 
         val ocCapabilityViewModel = mock(OCCapabilityViewModel::class.java)
-        `when`(ocCapabilityViewModel.getCapabilityForAccount()).thenReturn(capabilityLiveData)
+        `when`(ocCapabilityViewModel.getCapabilityForAccount()).thenReturn(capabilitiesLiveData)
         shareFragment.ocCapabilityViewModelFactory = ViewModelUtil.createFor(ocCapabilityViewModel)
 
         activityRule.activity.setFragment(shareFragment)
@@ -114,7 +116,20 @@ class ShareFileFragmentTest {
     }
 
     @Test
-    fun showLoadingDialog() {
+    fun showLoadingCapabilitiesDialog() {
+        capabilitiesLiveData.postValue(Resource.loading(capability))
+        onView(withId(R.id.loadingLayout)).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun showLoadingSharesDialog() {
+        // Load some capabilities needed to work with shares
+        capabilitiesLiveData.postValue(
+            Resource.success(
+                capability
+            )
+        )
+
         sharesLiveData.postValue(Resource.loading(publicShares))
         onView(withId(R.id.loadingLayout)).check(matches(isDisplayed()))
     }
@@ -128,6 +143,13 @@ class ShareFileFragmentTest {
 
     @Test
     fun showPublicShares() {
+        // Load some capabilities needed to work with shares
+        capabilitiesLiveData.postValue(
+            Resource.success(
+                capability
+            )
+        )
+
         sharesLiveData.postValue(Resource.success(publicShares))
 
         onView(withText("Image link")).check(matches(isDisplayed()))
@@ -142,7 +164,24 @@ class ShareFileFragmentTest {
     }
 
     @Test
-    fun showError() {
+    fun showErrorWhenLoadingCapabilities() {
+        capabilitiesLiveData.postValue(
+            Resource.error(
+                RemoteOperationResult.ResultCode.SERVICE_UNAVAILABLE
+            )
+        )
+
+        onView(withId(R.id.snackbar_text)).check(matches(withText(R.string.service_unavailable)))
+    }
+
+    @Test
+    fun showErrorWhenLoadingShares() {
+        capabilitiesLiveData.postValue(
+            Resource.success(
+                capability
+            )
+        )
+
         sharesLiveData.postValue(
             Resource.error(
                 RemoteOperationResult.ResultCode.SERVICE_UNAVAILABLE,
