@@ -39,6 +39,7 @@ import com.owncloud.android.authentication.AccountUtils
 import com.owncloud.android.datamodel.FileDataStorageManager
 import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.files.services.FileDownloader
+import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.common.utils.Log_OC
 import com.owncloud.android.operations.RefreshFolderOperation
 import com.owncloud.android.operations.RemoveFileOperation
@@ -192,15 +193,8 @@ class DocumentsStorageProvider : DocumentsProvider() {
         val file = currentStorageManager?.getFileById(docId) ?: throw FileNotFoundException("File $docId not found")
         Log_OC.d(TAG, "Trying to rename ${file.fileName} to $displayName")
 
-        val renameFileOperation = RenameFileOperation(file.remotePath, displayName)
-        val result = renameFileOperation.execute(currentStorageManager, context)
-
-        if (!result.isSuccess) {
-            context?.contentResolver?.notifyChange(toNotifyUri(toUri(file.parentId.toString())), null)
-            throw java.lang.UnsupportedOperationException("Rename failed")
-        } else {
-            syncRequired = false
-            context?.contentResolver?.notifyChange(toNotifyUri(toUri(file.parentId.toString())), null)
+        RenameFileOperation(file.remotePath, displayName).apply {
+            execute(currentStorageManager, context).also { checkOperationResult(it, file) }
         }
 
         return null
@@ -212,23 +206,10 @@ class DocumentsStorageProvider : DocumentsProvider() {
         updateCurrentStorageManagerIfNeeded(docId)
 
         val file = currentStorageManager?.getFileById(docId) ?: throw FileNotFoundException("File $docId not found")
-        Log_OC.d(TAG, "Trying to delete ${file.fileName}")
+        Log_OC.d(TAG, "Trying to delete ${file.fileName} with id ${file.fileId}")
 
-        val removeFileOperation = RemoveFileOperation(file.remotePath, false)
-        val result = removeFileOperation.execute(currentStorageManager, context)
-
-        if (!result.isSuccess) {
-            context?.contentResolver?.notifyChange(toNotifyUri(toUri(file.parentId.toString())), null)
-            throw FileNotFoundException("Delete failed")
-        } else {
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                revokeDocumentPermission(file.fileId.toString())
-            }
-
-            syncRequired = false
-            context?.contentResolver?.notifyChange(toNotifyUri(toUri(file.parentId.toString())), null)
-
+        RemoveFileOperation(file.remotePath, false).apply {
+            execute(currentStorageManager, context).also { checkOperationResult(it, file) }
         }
     }
 
@@ -238,6 +219,24 @@ class DocumentsStorageProvider : DocumentsProvider() {
         //Documents can only have one parent
         deleteDocument(documentId)
 
+    }
+
+    private fun checkOperationResult(result: RemoteOperationResult<Any>, file: OCFile) {
+
+        if (!result.isSuccess) {
+
+            context?.contentResolver?.notifyChange(toNotifyUri(toUri(file.parentId.toString())), null)
+            throw FileNotFoundException("Remote Operation failed due to ${result.exception.message}")
+
+        } else {
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                revokeDocumentPermission(file.fileId.toString())
+            }
+            syncRequired = false
+            context?.contentResolver?.notifyChange(toNotifyUri(toUri(file.parentId.toString())), null)
+
+        }
     }
 
     private fun updateCurrentStorageManagerIfNeeded(docId: Long) {
