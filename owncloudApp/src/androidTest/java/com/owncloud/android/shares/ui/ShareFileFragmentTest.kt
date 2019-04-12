@@ -23,7 +23,11 @@ import android.accounts.Account
 import androidx.lifecycle.MutableLiveData
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.*
+import androidx.test.espresso.matcher.ViewMatchers
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility
+import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.ActivityTestRule
 import com.owncloud.android.R
@@ -31,6 +35,7 @@ import com.owncloud.android.capabilities.db.OCCapability
 import com.owncloud.android.capabilities.viewmodel.OCCapabilityViewModel
 import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
+import com.owncloud.android.lib.resources.status.CapabilityBooleanType
 import com.owncloud.android.lib.resources.status.OwnCloudVersion
 import com.owncloud.android.shares.db.OCShare
 import com.owncloud.android.shares.ui.fragment.ShareFileFragment
@@ -53,8 +58,6 @@ class ShareFileFragmentTest {
 
     private val capabilitiesLiveData = MutableLiveData<Resource<OCCapability>>()
     private val sharesLiveData = MutableLiveData<Resource<List<OCShare>>>()
-
-    private val capability = TestUtil.createCapability("admin@server")
 
     private val publicShares = arrayListOf(
         TestUtil.createPublicShare(
@@ -117,19 +120,13 @@ class ShareFileFragmentTest {
 
     @Test
     fun showLoadingCapabilitiesDialog() {
-        capabilitiesLiveData.postValue(Resource.loading(capability))
+        capabilitiesLiveData.postValue(Resource.loading(TestUtil.createCapability()))
         onView(withId(R.id.loadingLayout)).check(matches(isDisplayed()))
     }
 
     @Test
     fun showLoadingSharesDialog() {
-        // Load some capabilities needed to work with shares
-        capabilitiesLiveData.postValue(
-            Resource.success(
-                capability
-            )
-        )
-
+        loadCapabilitiesSuccessfully()
         sharesLiveData.postValue(Resource.loading(publicShares))
         onView(withId(R.id.loadingLayout)).check(matches(isDisplayed()))
     }
@@ -137,20 +134,14 @@ class ShareFileFragmentTest {
     @Test
     fun showNoPublicShares() {
         val publicShares = arrayListOf<OCShare>()
-        sharesLiveData.postValue(Resource.success(publicShares))
+        loadSharesSuccessfully(publicShares)
         onView(withId(R.id.shareNoPublicLinks)).check(matches(withText(R.string.share_no_public_links)))
     }
 
     @Test
     fun showPublicShares() {
-        // Load some capabilities needed to work with shares
-        capabilitiesLiveData.postValue(
-            Resource.success(
-                capability
-            )
-        )
-
-        sharesLiveData.postValue(Resource.success(publicShares))
+        loadCapabilitiesSuccessfully()
+        loadSharesSuccessfully()
 
         onView(withText("Image link")).check(matches(isDisplayed()))
         onView(withText("Image link 2")).check(matches(isDisplayed()))
@@ -159,7 +150,7 @@ class ShareFileFragmentTest {
 
     @Test
     fun fileSizeVisible() {
-        sharesLiveData.postValue(Resource.success(publicShares))
+        loadSharesSuccessfully()
         onView(withId(R.id.shareFileSize)).check(matches(isDisplayed()))
     }
 
@@ -176,11 +167,7 @@ class ShareFileFragmentTest {
 
     @Test
     fun showErrorWhenLoadingShares() {
-        capabilitiesLiveData.postValue(
-            Resource.success(
-                capability
-            )
-        )
+        loadCapabilitiesSuccessfully()
 
         sharesLiveData.postValue(
             Resource.error(
@@ -191,6 +178,73 @@ class ShareFileFragmentTest {
         onView(withId(R.id.snackbar_text)).check(matches(withText(R.string.service_unavailable)))
     }
 
+    @Test
+    fun showPublicSharesSharingEnabled() {
+        loadCapabilitiesSuccessfully(
+            TestUtil.createCapability(sharingPublicEnabled = CapabilityBooleanType.TRUE.value)
+        )
+        loadSharesSuccessfully()
+
+        onView(withText("Image link")).check(matches(isDisplayed()))
+        onView(withText("Image link 2")).check(matches(isDisplayed()))
+        onView(withText("Image link 3")).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun hidePublicSharesSharingDisabled() {
+        loadCapabilitiesSuccessfully(
+            TestUtil.createCapability(sharingPublicEnabled = CapabilityBooleanType.FALSE.value)
+        )
+        loadSharesSuccessfully()
+
+        onView(withId(R.id.shareViaLinkSection))
+            .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)))
+    }
+
+    @Test
+    fun createPublicShareMultipleCapability() {
+        loadCapabilitiesSuccessfully(
+            TestUtil.createCapability(
+                versionString = "10.0.0",
+                sharingPublicMultiple = CapabilityBooleanType.TRUE.value
+            )
+        )
+
+        loadSharesSuccessfully(arrayListOf(publicShares.get(0)))
+
+        onView(withId(R.id.addPublicLinkButton))
+            .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))
+    }
+
+    @Test
+    fun cannotCreatePublicShareMultipleCapability() {
+        loadCapabilitiesSuccessfully(
+            TestUtil.createCapability(
+                versionString = "10.0.0",
+                sharingPublicMultiple = CapabilityBooleanType.FALSE.value
+            )
+        )
+
+        loadSharesSuccessfully(arrayListOf(publicShares.get(0)))
+
+        onView(withId(R.id.addPublicLinkButton))
+            .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.INVISIBLE)))
+    }
+
+    @Test
+    fun cannotCreatePublicShareServerCapability() {
+        loadCapabilitiesSuccessfully(
+            TestUtil.createCapability(
+                versionString = "9.3.1"
+            )
+        )
+
+        loadSharesSuccessfully(arrayListOf(publicShares.get(0)))
+
+        onView(withId(R.id.addPublicLinkButton))
+            .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.INVISIBLE)))
+    }
+
     private fun getOCFileForTesting(name: String = "default"): OCFile {
         val file = OCFile("/Photos")
         file.availableOfflineStatus = OCFile.AvailableOfflineStatus.NOT_AVAILABLE_OFFLINE
@@ -199,5 +253,17 @@ class ShareFileFragmentTest {
         file.remoteId = "1"
         file.privateLink = "private link"
         return file
+    }
+
+    private fun loadCapabilitiesSuccessfully(capability: OCCapability = TestUtil.createCapability()) {
+        capabilitiesLiveData.postValue(
+            Resource.success(
+                capability
+            )
+        )
+    }
+
+    private fun loadSharesSuccessfully(shares: ArrayList<OCShare> = publicShares) {
+        sharesLiveData.postValue(Resource.success(shares))
     }
 }
