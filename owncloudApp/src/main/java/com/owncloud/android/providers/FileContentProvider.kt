@@ -218,12 +218,10 @@ class FileContentProvider(val appExecutors: AppExecutors = AppExecutors()) : Con
             }
 
             CAPABILITIES -> {
-                val capabilityId = OwncloudDatabase.getDatabase(context).capabilityDao().insert(
-                    OCCapability.fromContentValues(values)
-                )
+                val capabilityId = db.insert(ProviderTableMeta.CAPABILITIES_TABLE_NAME, null, values)
 
                 if (capabilityId <= 0) throw SQLException("ERROR $uri")
-                return  ContentUris.withAppendedId(ProviderTableMeta.CONTENT_URI_CAPABILITIES, capabilityId)
+                return ContentUris.withAppendedId(ProviderTableMeta.CONTENT_URI_CAPABILITIES, capabilityId)
             }
 
             UPLOADS -> {
@@ -358,19 +356,14 @@ class FileContentProvider(val appExecutors: AppExecutors = AppExecutors()) : Con
                 return newDb.query(supportSqlQuery)
             }
             CAPABILITIES -> {
-                val supportSqlQuery = SupportSQLiteQueryBuilder
-                    .builder(ProviderTableMeta.CAPABILITIES_TABLE_NAME)
-                    .columns(projection)
-                    .selection(selection, selectionArgs)
-                    .orderBy(
-                        if (TextUtils.isEmpty(sortOrder)) {
-                            sortOrder
-                        } else {
-                            ProviderTableMeta.CAPABILITIES_DEFAULT_SORT_ORDER
-                        }
-                    ).create()
-
-                return newDb.query(supportSqlQuery)
+                sqlQuery.tables = ProviderTableMeta.CAPABILITIES_TABLE_NAME
+                if (uri.pathSegments.size > 1) {
+                    sqlQuery.appendWhereEscapeString(
+                        ProviderTableMeta._ID + "="
+                                + uri.pathSegments[1]
+                    )
+                }
+                sqlQuery.setProjectionMap(capabilityProjectionMap)
             }
             UPLOADS -> {
                 sqlQuery.tables = ProviderTableMeta.UPLOADS_TABLE_NAME
@@ -968,7 +961,9 @@ class FileContentProvider(val appExecutors: AppExecutors = AppExecutors()) : Con
                 if (cursor.moveToFirst()) {
                     // Insert capability to the new capabilities table in new database
                     appExecutors.diskIO().execute {
-                        OCLocalCapabilitiesDataSource().insert(OCCapability.fromCursor(cursor))
+                        OCLocalCapabilitiesDataSource().insert(
+                            listOf(OCCapability.fromCursor(cursor))
+                        )
                     }
                 }
             }
