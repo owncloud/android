@@ -450,7 +450,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
                     Status.LOADING -> {
                         (activity as BaseActivity).showLoadingDialog(R.string.common_loading)
                         capabilities = resource.data
-                        if(isPublicShareDisabled) {
+                        if (isPublicShareDisabled) {
                             hidePublicShare()
                         }
                     }
@@ -583,7 +583,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
             // Server version <= 9.x, multiple public sharing not supported
             !serverVersion.isMultiplePublicSharingSupported -> false
             // Server version >= 10, multiple public sharing supported but disabled
-            capabilities?.filesSharingPublicMultiple == CapabilityBooleanType.FALSE.value-> false
+            capabilities?.filesSharingPublicMultiple == CapabilityBooleanType.FALSE.value -> false
             else -> true
         }
     }

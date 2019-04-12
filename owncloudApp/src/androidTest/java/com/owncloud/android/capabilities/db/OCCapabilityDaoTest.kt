@@ -25,6 +25,7 @@ import androidx.test.filters.SmallTest
 import androidx.test.platform.app.InstrumentationRegistry
 import com.owncloud.android.db.OwncloudDatabase
 import com.owncloud.android.lib.resources.shares.ShareType
+import com.owncloud.android.lib.resources.status.CapabilityBooleanType
 import com.owncloud.android.utils.LiveDataTestUtil.getValue
 import com.owncloud.android.utils.TestUtil
 import junit.framework.Assert.assertEquals
@@ -103,7 +104,7 @@ class OCCapabilityDaoTest {
                     2,
                     1,
                     "3.7.5",
-                    sharingPublicPasswordEnforced = 0
+                    sharingPublicPasswordEnforced = CapabilityBooleanType.FALSE.value
                 )
             )
         )
@@ -116,7 +117,7 @@ class OCCapabilityDaoTest {
                     2,
                     1,
                     "3.7.5",
-                    sharingPublicPasswordEnforced = 1
+                    sharingPublicPasswordEnforced = CapabilityBooleanType.TRUE.value
                 )
             )
         )
@@ -146,7 +147,7 @@ class OCCapabilityDaoTest {
                     8,
                     6,
                     "10.0.2",
-                    sharingPublicPasswordEnforcedReadOnly = 0
+                    sharingPublicPasswordEnforcedReadOnly = CapabilityBooleanType.FALSE.value
                 )
             )
         )
@@ -159,7 +160,7 @@ class OCCapabilityDaoTest {
                     13,
                     12,
                     "14.3.8",
-                    sharingPublicPasswordEnforcedReadOnly = 1
+                    sharingPublicPasswordEnforcedReadOnly = CapabilityBooleanType.TRUE.value
                 )
             )
         )
@@ -176,9 +177,9 @@ class OCCapabilityDaoTest {
         assertEquals(capability1.versionMinor, 8)
         assertEquals(capability1.versionMicro, 6)
         assertEquals(capability1.versionString, "10.0.2")
-        assertEquals(capability1.filesSharingPublicPasswordEnforcedReadOnly, 0)
+        assertEquals(capability1.filesSharingPublicPasswordEnforcedReadOnly, CapabilityBooleanType.FALSE.value)
 
-        // capability2 link didn't exist before, it should not replace the old one but be created
+        // capability2 didn't exist before, it should not replace the old one but got created
         val capability2 = getValue(
             ocCapabilityDao.getCapabilityForAccount(
                 "seo@server"
@@ -191,6 +192,6 @@ class OCCapabilityDaoTest {
         assertEquals(capability2.versionMinor, 13)
         assertEquals(capability2.versionMicro, 12)
         assertEquals(capability2.versionString, "14.3.8")
-        assertEquals(capability2.filesSharingPublicPasswordEnforcedReadOnly, 1)
+        assertEquals(capability2.filesSharingPublicPasswordEnforcedReadOnly, CapabilityBooleanType.TRUE.value)
     }
 }

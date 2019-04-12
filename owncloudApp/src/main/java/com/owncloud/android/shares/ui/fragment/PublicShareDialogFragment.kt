@@ -141,6 +141,12 @@ class PublicShareDialogFragment : DialogFragment() {
                 .time
         } else -1
 
+    var ocCapabilityViewModelFactory: ViewModelProvider.Factory = ViewModelFactory.build {
+        OCCapabilityViewModel(
+            account!!
+        )
+    }
+
     var ocShareViewModelFactory: ViewModelProvider.Factory = ViewModelFactory.build {
         OCShareViewModel(
             account!!,
@@ -149,14 +155,8 @@ class PublicShareDialogFragment : DialogFragment() {
         )
     }
 
-    var ocCapabilityViewModelFactory: ViewModelProvider.Factory = ViewModelFactory.build {
-        OCCapabilityViewModel(
-            account!!
-        )
-    }
-
-    private lateinit var ocShareViewModel: OCShareViewModel
     private lateinit var ocCapabilityViewModel: OCCapabilityViewModel
+    private lateinit var ocShareViewModel: OCShareViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

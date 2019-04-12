@@ -22,6 +22,7 @@ package com.owncloud.android.shares.ui
 import android.accounts.Account
 import android.text.InputType.TYPE_CLASS_TEXT
 import android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD
+import android.view.View
 import androidx.lifecycle.MutableLiveData
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
@@ -36,8 +37,11 @@ import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.ActivityTestRule
 import com.owncloud.android.R
+import com.owncloud.android.capabilities.db.OCCapability
+import com.owncloud.android.capabilities.viewmodel.OCCapabilityViewModel
 import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
+import com.owncloud.android.lib.resources.status.CapabilityBooleanType
 import com.owncloud.android.shares.db.OCShare
 import com.owncloud.android.shares.ui.fragment.PublicShareDialogFragment
 import com.owncloud.android.shares.viewmodel.OCShareViewModel
@@ -57,6 +61,7 @@ class PublicShareDialogFragmentTest {
     @JvmField
     val activityRule = ActivityTestRule(TestShareFileActivity::class.java, true, true)
 
+    private val capabilitiesLiveData = MutableLiveData<Resource<OCCapability>>()
     private val sharesLiveData = MutableLiveData<Resource<List<OCShare>>>()
     private val file = mock(OCFile::class.java)
 
@@ -91,6 +96,11 @@ class PublicShareDialogFragmentTest {
         file.mimetype = ".txt"
         `when`(file.remotePath).thenReturn(filePath)
 
+        val ocCapabilityViewModel = mock(OCCapabilityViewModel::class.java)
+        `when`(
+            ocCapabilityViewModel.getCapabilityForAccount()
+        ).thenReturn(capabilitiesLiveData)
+
         val ocShareViewModel = mock(OCShareViewModel::class.java)
         `when`(
             ocShareViewModel.insertPublicShareForFile(
@@ -103,6 +113,7 @@ class PublicShareDialogFragmentTest {
             )
         ).thenReturn(sharesLiveData)
 
+        publicShareDialogFragment.ocCapabilityViewModelFactory = ViewModelUtil.createFor(ocCapabilityViewModel)
         publicShareDialogFragment.ocShareViewModelFactory = ViewModelUtil.createFor(ocShareViewModel)
         activityRule.activity.setFragment(publicShareDialogFragment)
     }
@@ -157,6 +168,22 @@ class PublicShareDialogFragmentTest {
     }
 
     @Test
+    fun checkPasswordEnforced() {
+        capabilitiesLiveData.postValue(
+            Resource.success(
+                TestUtil.createCapability(sharingPublicPasswordEnforced = CapabilityBooleanType.TRUE.value)
+            )
+        )
+
+        onView(withId(R.id.shareViaLinkPasswordLabel)).
+            check(matches(withText(R.string.share_via_link_password_enforced_label)))
+        onView(withId(R.id.shareViaLinkPasswordSwitch))
+            .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)))
+        onView(withId(R.id.shareViaLinkPasswordValue))
+            .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))
+    }
+
+    @Test
     fun enableExpirationSwitch() {
         onView(withId(R.id.shareViaLinkExpirationSwitch)).perform(click())
         onView(withId(android.R.id.button1)).perform(click());
@@ -187,5 +214,4 @@ class PublicShareDialogFragmentTest {
         onView(withId(R.id.public_link_error_message)).check(matches(isDisplayed()))
         onView(withId(R.id.public_link_error_message)).check(matches(withText(R.string.share_link_file_no_exist)))
     }
-
 }
