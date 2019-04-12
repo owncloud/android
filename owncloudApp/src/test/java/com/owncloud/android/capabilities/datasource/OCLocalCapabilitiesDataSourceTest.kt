@@ -93,8 +93,13 @@ class OCLocalCapabilitiesDataSourceTest {
     @Test
     fun insertCapabilityAndRead() {
         ocLocalCapabilitiesDataSource.insert(
-            TestUtil.createCapability(
-                "user@server2", 2, 1, 0
+            listOf(
+                TestUtil.createCapability(
+                    "user@server1", 7, 6, 5
+                ),
+                TestUtil.createCapability(
+                    "user@server2", 2, 1, 0
+                )
             )
         )
 

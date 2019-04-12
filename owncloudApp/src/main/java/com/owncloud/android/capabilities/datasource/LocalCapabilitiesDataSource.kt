@@ -27,5 +27,5 @@ interface LocalCapabilitiesDataSource {
         accountName: String
     ): LiveData<OCCapability>
 
-    fun insert(ocCapability: OCCapability)
+    fun insert(ocCapabilities: List<OCCapability>)
 }
