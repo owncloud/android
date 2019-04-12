@@ -29,7 +29,6 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.ActivityTestRule
 import com.owncloud.android.R
 import com.owncloud.android.ui.activity.Preferences
-import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
@@ -37,7 +36,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
-class OCSettingsCameraUploadsTest {
+class OCSettingsCameraUploadsDisabledTest {
 
     @Rule
     @JvmField
@@ -45,31 +44,22 @@ class OCSettingsCameraUploadsTest {
 
     @Before
     fun setUp() {
-
-    }
-
-    @Test
-    fun checkTitle() {
-        onView(withText(R.string.actionbar_settings)).check(matches(isDisplayed()))
-    }
-
-    @Test
-    fun testPictureUploadsView() {
-        onView(withText(R.string.prefs_camera_picture_upload)).check(matches(isDisplayed()))
-        onView(withText(R.string.prefs_camera_picture_upload_summary)).check(matches(isDisplayed()))
-    }
-
-    @Test
-    fun testVideoUploadsView() {
-        onView(withText(R.string.prefs_camera_video_upload)).check(matches(isDisplayed()))
-        onView(withText(R.string.prefs_camera_video_upload_summary)).check(matches(isDisplayed()))
+        var mPrefCameraPictureUploads =
+            activityRule.activity.findPreference("camera_picture_uploads") as CheckBoxPreference
+        activityRule.activity.runOnUiThread(Runnable {
+            mPrefCameraPictureUploads.setChecked(false)
+        })
+        var mPrefCameraVideoUploads =
+            activityRule.activity.findPreference("camera_video_uploads") as CheckBoxPreference
+        activityRule.activity.runOnUiThread(Runnable {
+            mPrefCameraVideoUploads.setChecked(false)
+        })
     }
 
     @Test
     fun testEnablePictureUploadsShowsWarning() {
         var mPrefCameraPictureUploads =
             activityRule.activity.findPreference("camera_picture_uploads") as CheckBoxPreference
-        setCheckBoxPreference(mPrefCameraPictureUploads, false)
 
         onView(withText(R.string.prefs_camera_picture_upload)).perform(click());
         onView(withText(R.string.common_important)).check(matches(isDisplayed()));
@@ -80,40 +70,18 @@ class OCSettingsCameraUploadsTest {
     fun testEnablePictureUploads() {
         var mPrefCameraPictureUploads =
             activityRule.activity.findPreference("camera_picture_uploads") as CheckBoxPreference
-        setCheckBoxPreference(mPrefCameraPictureUploads, false)
 
         onView(withText(R.string.prefs_camera_picture_upload)).perform(click());
         onView(withText(android.R.string.ok)).perform(click())
         assertTrue(mPrefCameraPictureUploads.isChecked)
     }
 
-    @Test
-    fun testDisablePictureUploadsAccept() {
-        var mPrefCameraPictureUploads =
-            activityRule.activity.findPreference("camera_picture_uploads") as CheckBoxPreference
-        setCheckBoxPreference(mPrefCameraPictureUploads, true)
 
-        onView(withText(R.string.prefs_camera_picture_upload)).perform(click());
-        onView(withText(R.string.common_yes)).perform(click());
-        assertFalse(mPrefCameraPictureUploads.isChecked)
-    }
-
-    @Test
-    fun testDisablePictureUploadsRefuse() {
-        var mPrefCameraPictureUploads =
-            activityRule.activity.findPreference("camera_picture_uploads") as CheckBoxPreference
-        setCheckBoxPreference(mPrefCameraPictureUploads, true)
-
-        onView(withText(R.string.prefs_camera_picture_upload)).perform(click());
-        onView(withText(R.string.common_no)).perform(click());
-        assertTrue(mPrefCameraPictureUploads.isChecked)
-    }
 
     @Test
     fun testEnableVideoUploadsShowsWarning() {
         var mPrefCameraVideoUploads =
             activityRule.activity.findPreference("camera_video_uploads") as CheckBoxPreference
-        setCheckBoxPreference(mPrefCameraVideoUploads, false)
 
         onView(withText(R.string.prefs_camera_video_upload)).perform(click());
         onView(withText(R.string.common_important)).check(matches(isDisplayed()));
@@ -124,40 +92,17 @@ class OCSettingsCameraUploadsTest {
     fun testEnableVideoUploads() {
         var mPrefCameraVideoUploads =
             activityRule.activity.findPreference("camera_video_uploads") as CheckBoxPreference
-        setCheckBoxPreference(mPrefCameraVideoUploads, false)
 
         onView(withText(R.string.prefs_camera_video_upload)).perform(click());
         onView(withText(android.R.string.ok)).perform(click())
         assertTrue(mPrefCameraVideoUploads.isChecked)
     }
 
-    @Test
-    fun testDisableVideoUploadsAccept() {
-        var mPrefCameraVideoUploads =
-            activityRule.activity.findPreference("camera_video_uploads") as CheckBoxPreference
-        setCheckBoxPreference(mPrefCameraVideoUploads, true)
-
-        onView(withText(R.string.prefs_camera_video_upload)).perform(click());
-        onView(withText(R.string.common_yes)).perform(click());
-        assertFalse(mPrefCameraVideoUploads.isChecked)
-    }
-
-    @Test
-    fun testDisableVideoUploadsRefuse() {
-        var mPrefCameraVideoUploads =
-            activityRule.activity.findPreference("camera_video_uploads") as CheckBoxPreference
-        setCheckBoxPreference(mPrefCameraVideoUploads, true)
-
-        onView(withText(R.string.prefs_camera_video_upload)).perform(click());
-        onView(withText(R.string.common_no)).perform(click());
-        assertTrue(mPrefCameraVideoUploads.isChecked)
-    }
 
     @Test
     fun testOptionsPictureUploadsEnabled() {
         var mPrefCameraPictureUploads =
             activityRule.activity.findPreference("camera_picture_uploads") as CheckBoxPreference
-        setCheckBoxPreference(mPrefCameraPictureUploads, false)
 
         onView(withText(R.string.prefs_camera_picture_upload)).perform(click());
         onView(withText(android.R.string.ok)).perform(click())
@@ -170,20 +115,12 @@ class OCSettingsCameraUploadsTest {
     fun testOptionsVideoUploadsEnabled() {
         var mPrefCameraPictureUploads =
             activityRule.activity.findPreference("camera_video_uploads") as CheckBoxPreference
-        setCheckBoxPreference(mPrefCameraPictureUploads, false)
 
         onView(withText(R.string.prefs_camera_video_upload)).perform(click());
         onView(withText(android.R.string.ok)).perform(click())
 
         onView(withText(R.string.prefs_camera_video_upload_path_title)).check(matches(isDisplayed()))
         onView(withText(R.string.camera_video_upload_on_wifi)).check(matches(isDisplayed()))
-    }
-
-    //Set UI before tests, must be done in UI thread
-    fun setCheckBoxPreference(preference: CheckBoxPreference, value: Boolean) {
-        activityRule.activity.runOnUiThread(Runnable {
-            preference.setChecked(value)
-        })
     }
 
 }
