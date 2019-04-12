@@ -24,6 +24,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Transaction
 import com.owncloud.android.db.ProviderMeta.ProviderTableMeta
 
 @Dao
@@ -37,5 +38,21 @@ abstract class OCCapabilityDao {
     ): LiveData<OCCapability>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    abstract fun insert(ocCapability: OCCapability): Long
+    abstract fun insert(ocCapabilities: List<OCCapability>): List<Long>
+
+    @Query(
+        "DELETE from " + ProviderTableMeta.CAPABILITIES_TABLE_NAME + " WHERE " +
+                ProviderTableMeta.CAPABILITIES_ACCOUNT_NAME + " = :accountName"
+    )
+    abstract fun delete(accountName: String)
+
+    @Transaction
+    open fun replace(ocCapabilities: List<OCCapability>) {
+        for (ocCapability in ocCapabilities) {
+            if (ocCapability.accountName != null) {
+                delete(ocCapability.accountName)
+            }
+        }
+        insert(ocCapabilities)
+    }
 }

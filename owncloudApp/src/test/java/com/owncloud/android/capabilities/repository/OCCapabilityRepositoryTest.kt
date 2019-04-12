@@ -85,7 +85,7 @@ class OCCapabilityRepositoryTest {
 
         // Capabilities are always retrieved from server and inserted in database if not empty list
         verify(localCapabilitiesDataSource).insert(
-            OCCapability.fromRemoteCapability(remoteCapability.apply { accountName = "admin@server" })
+            listOf(OCCapability.fromRemoteCapability(remoteCapability.apply { accountName = "admin@server" }))
         )
 
         // Observe changes in database livedata when there's a new capability
