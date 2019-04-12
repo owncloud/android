@@ -22,7 +22,6 @@ package com.owncloud.android.shares.ui
 import android.accounts.Account
 import android.text.InputType.TYPE_CLASS_TEXT
 import android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD
-import android.view.View
 import androidx.lifecycle.MutableLiveData
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
@@ -67,16 +66,22 @@ class PublicShareDialogFragmentTest {
 
     private val publicShares = arrayListOf(
         TestUtil.createPublicShare(
+            path = "/Documents/",
+            isFolder = true,
+            name = "Document link",
+            shareLink = "http://server:port/s/1"
+        ),
+        TestUtil.createPublicShare(
             path = "/Documents/doc1",
             isFolder = false,
             name = "Document link",
-            shareLink = "http://server:port/s/1"
+            shareLink = "http://server:port/s/2"
         ),
         TestUtil.createPublicShare(
             path = "/Documents/doc2",
             isFolder = false,
             name = "Document link 2",
-            shareLink = "http://server:port/s/2"
+            shareLink = "http://server:port/s/3"
         )
     )
 
@@ -203,14 +208,12 @@ class PublicShareDialogFragmentTest {
     @Test
     fun showError() {
         onView(withId(R.id.saveButton)).perform(click())
-
         sharesLiveData.postValue(
             Resource.error(
                 RemoteOperationResult.ResultCode.SHARE_NOT_FOUND,
                 data = publicShares
             )
         )
-
         onView(withId(R.id.public_link_error_message)).check(matches(isDisplayed()))
         onView(withId(R.id.public_link_error_message)).check(matches(withText(R.string.share_link_file_no_exist)))
     }
