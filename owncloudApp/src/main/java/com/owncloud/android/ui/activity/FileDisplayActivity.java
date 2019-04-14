@@ -150,6 +150,7 @@ public class FileDisplayActivity extends FileActivity
 
     private boolean mSyncInProgress = false;
     private boolean mOnlyAvailableOffline = false;
+    private boolean mSharedByLinkFiles = false;
 
     private OCFile mWaitingToSend;
 
@@ -189,6 +190,7 @@ public class FileDisplayActivity extends FileActivity
 
         // Check if only available offline option is set
         mOnlyAvailableOffline = getIntent().getBooleanExtra(FileActivity.EXTRA_ONLY_AVAILABLE_OFFLINE, false);
+        mSharedByLinkFiles = getIntent().getBooleanExtra(FileActivity.EXTRA_SHARED_BY_LINK_FILES,false);
 
         /// USER INTERFACE
 
@@ -199,10 +201,12 @@ public class FileDisplayActivity extends FileActivity
         setupToolbar();
 
         // setup drawer
-        if (!mOnlyAvailableOffline) {
+        if(!mOnlyAvailableOffline && !mSharedByLinkFiles) {
             setupDrawer(R.id.nav_all_files);
-        } else {
+        } else if(!mSharedByLinkFiles) {
             setupDrawer(R.id.nav_only_available_offline);
+        } else {
+            setupDrawer(R.id.nav_shared_by_link_files);
         }
 
         mLeftFragmentContainer = findViewById(R.id.left_fragment_container);
@@ -352,7 +356,8 @@ public class FileDisplayActivity extends FileActivity
     }
 
     private void createMinFragments() {
-        OCFileListFragment listOfFiles = OCFileListFragment.newInstance(false, mOnlyAvailableOffline, false, true);
+        OCFileListFragment listOfFiles = OCFileListFragment.newInstance(false, mOnlyAvailableOffline,
+                mSharedByLinkFiles, false, true);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.add(R.id.left_fragment_container, listOfFiles, TAG_LIST_OF_FILES);
         transaction.commit();
@@ -847,7 +852,7 @@ public class FileDisplayActivity extends FileActivity
             if (getSecondFragment() == null) {
                 OCFile currentDir = getCurrentDir();
                 if (currentDir == null || currentDir.getParentId() == FileDataStorageManager.ROOT_PARENT_ID) {
-                    if (mOnlyAvailableOffline) {
+                    if(mOnlyAvailableOffline || mSharedByLinkFiles){
                         allFilesOption();
                     } else {
                         finish();
@@ -1090,7 +1095,13 @@ public class FileDisplayActivity extends FileActivity
             int message = R.string.file_list_loading;
             if (!mSyncInProgress) {
                 // In case file list is empty
-                message = mOnlyAvailableOffline ? R.string.file_list_empty_available_offline : R.string.file_list_empty;
+                if(mOnlyAvailableOffline){
+                    message = R.string.file_list_empty_available_offline;
+                } else if(mSharedByLinkFiles){
+                    message = R.string.file_list_empty_shared_by_links;
+                } else{
+                    message = R.string.file_list_empty;
+                }
                 ocFileListFragment.getProgressBar().setVisibility(View.GONE);
                 ocFileListFragment.getShadowView().setVisibility(View.VISIBLE);
             }
@@ -1355,9 +1366,14 @@ public class FileDisplayActivity extends FileActivity
             chosenFile = getFile();     // if no file is passed, current file decides
         }
         super.updateActionBarTitleAndHomeButton(chosenFile);
-        if (chosenFile.getRemotePath().equals(OCFile.ROOT_PATH) && mOnlyAvailableOffline) {
-            updateActionBarTitleAndHomeButtonByString(
-                    getResources().getString(R.string.drawer_item_only_available_offline));
+        if(chosenFile.getRemotePath().equals(OCFile.ROOT_PATH)) {
+            if(mOnlyAvailableOffline){
+                updateActionBarTitleAndHomeButtonByString(
+                        getResources().getString(R.string.drawer_item_only_available_offline));
+            } else if(mSharedByLinkFiles){
+                updateActionBarTitleAndHomeButtonByString(
+                        getResources().getString(R.string.drawer_item_shared_by_link_files));
+            }
         }
     }
 
@@ -1916,7 +1932,7 @@ public class FileDisplayActivity extends FileActivity
     }
 
     public void allFilesOption() {
-        if (mOnlyAvailableOffline) {
+        if(mOnlyAvailableOffline || mSharedByLinkFiles){
             super.allFilesOption();
         } else {
             browseToRoot();
@@ -1926,7 +1942,15 @@ public class FileDisplayActivity extends FileActivity
     public void onlyAvailableOfflineOption() {
         if (!mOnlyAvailableOffline) {
             super.onlyAvailableOfflineOption();
-        } else {
+        } else{
+            browseToRoot();
+        }
+    }
+
+    public void sharedByLinkFiles(){
+        if(!mSharedByLinkFiles){
+            super.sharedByLinkFilesOption();
+        } else{
             browseToRoot();
         }
     }

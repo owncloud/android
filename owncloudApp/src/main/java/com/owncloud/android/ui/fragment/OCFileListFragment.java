@@ -141,6 +141,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
     public static OCFileListFragment newInstance(
         boolean justFolders,
         boolean onlyAvailableOffline,
+        boolean sharedByLinkFiles,
         boolean hideFAB,
         boolean allowContextualMode
     ) {
@@ -148,7 +149,8 @@ public class OCFileListFragment extends ExtendedListFragment implements
         Bundle args = new Bundle();
         args.putBoolean(ARG_JUST_FOLDERS, justFolders);
         args.putBoolean(ARG_ONLY_AVAILABLE_OFFLINE, onlyAvailableOffline);
-        if(onlyAvailableOffline) { hideFAB = true; }
+        args.putBoolean(ARG_SHARED_BY_LINK_FILES,sharedByLinkFiles);
+        if(onlyAvailableOffline || sharedByLinkFiles) { hideFAB = true; }
         args.putBoolean(ARG_HIDE_FAB, hideFAB);
         args.putBoolean(ARG_ALLOW_CONTEXTUAL_MODE, allowContextualMode);
         frag.setArguments(args);
@@ -224,10 +226,12 @@ public class OCFileListFragment extends ExtendedListFragment implements
         setFooterEnabled(!justFolders);
 
         boolean onlyAvailableOffline = isShowingOnlyAvailableOffline();
+        boolean sharedByLinkFiles = isShowingSharedByLinkFiles();
 
         mFileListAdapter = new FileListListAdapter(
                 justFolders,
                 onlyAvailableOffline,
+                sharedByLinkFiles,
                 getActivity(),
                 mContainerActivity
         );
@@ -558,7 +562,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
                     mContainerActivity,
                     getActivity()
             );
-            mf.filter(menu, mEnableSelectAll, true, isShowingOnlyAvailableOffline());
+            mf.filter(menu, mEnableSelectAll, true, isShowingOnlyAvailableOffline(),isShowingSharedByLinkFiles());
             return true;
         }
 
@@ -650,7 +654,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
 
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
-        if(isShowingOnlyAvailableOffline()){
+        if(isShowingOnlyAvailableOffline() || isShowingSharedByLinkFiles()){
             super.onPrepareOptionsMenu(menu);
 
             MenuItem item = menu.findItem(R.id.action_sync_account);
@@ -696,7 +700,11 @@ public class OCFileListFragment extends ExtendedListFragment implements
             }   // exit is granted because storageManager.getFileByPath("/") never returns null
 
             if (isShowingOnlyAvailableOffline() && !parentDir.isAvailableOffline()){
-                parentDir=storageManager.getFileByPath(OCFile.ROOT_PATH);
+                parentDir = storageManager.getFileByPath(OCFile.ROOT_PATH);
+            }
+
+            if(isShowingSharedByLinkFiles() && !parentDir.isSharedViaLink()){
+                parentDir = storageManager.getFileByPath(OCFile.ROOT_PATH);
             }
 
             mFile = parentDir;
@@ -1000,6 +1008,10 @@ public class OCFileListFragment extends ExtendedListFragment implements
 
             // If available offline option and folder is not available offline -> list root
             if(!directory.isAvailableOffline() && isShowingOnlyAvailableOffline()){
+                directory = storageManager.getFileByPath(OCFile.ROOT_PATH);
+            }
+
+            if(!directory.isSharedViaLink() || isShowingSharedByLinkFiles()){
                 directory = storageManager.getFileByPath(OCFile.ROOT_PATH);
             }
 
