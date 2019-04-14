@@ -73,6 +73,7 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
     private Vector<OCFile> mFiles = null; // List that can be changed when using search
     private boolean mJustFolders;
     private boolean mOnlyAvailableOffline;
+    private boolean mSharedByLinkFiles;
 
     private FileDataStorageManager mStorageManager;
     private Account mAccount;
@@ -83,12 +84,14 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
     public FileListListAdapter(
             boolean justFolders,
             boolean onlyAvailableOffline,
+            boolean sharedByLinkFiles,
             Context context,
             ComponentsGetter transferServiceGetter
     ) {
 
         mJustFolders = justFolders;
         mOnlyAvailableOffline = onlyAvailableOffline;
+        mSharedByLinkFiles = sharedByLinkFiles;
         mContext = context;
         mAccount = AccountUtils.getCurrentOwnCloudAccount(mContext);
 
@@ -392,8 +395,12 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
             if (mOnlyAvailableOffline && (folder.equals(updatedStorageManager.getFileByPath(OCFile.ROOT_PATH)) ||
                     !folder.isAvailableOffline())) {
                 mImmutableFilesList = updatedStorageManager.getAvailableOfflineFilesFromCurrentAccount();
-            } else {
-                mImmutableFilesList = mStorageManager.getFolderContent(folder, mOnlyAvailableOffline);
+            } else if(mSharedByLinkFiles && (folder.equals(updatedStorageManager.getFileByPath(OCFile.ROOT_PATH))) ||
+                    !folder.isSharedViaLink()){
+                mImmutableFilesList = updatedStorageManager.getSharedByLinkFiles();
+            }
+            else {
+                mImmutableFilesList = mStorageManager.getFolderContent(folder, mOnlyAvailableOffline,mSharedByLinkFiles);
             }
 
             mFiles = mImmutableFilesList;

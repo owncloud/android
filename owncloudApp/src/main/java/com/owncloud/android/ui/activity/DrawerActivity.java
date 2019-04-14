@@ -254,6 +254,10 @@ public abstract class DrawerActivity extends ToolbarActivity {
                                 mCheckedMenuItem = menuItem.getItemId();
                                 onlyAvailableOfflineOption();
                                 break;
+                            case R.id.nav_shared_by_link_files:
+                                menuItem.setChecked(true);
+                                mCheckedMenuItem = menuItem.getItemId();
+                                sharedByLinkFilesOption();
                             case R.id.nav_settings:
                                 Intent settingsIntent = new Intent(getApplicationContext(),
                                         Preferences.class);
@@ -535,6 +539,8 @@ public abstract class DrawerActivity extends ToolbarActivity {
      * Method that gets called on drawer menu click for 'Available Offline'.
      */
     public abstract void onlyAvailableOfflineOption();
+
+    public abstract void sharedByLinkFilesOption();
 
     /**
      * Updates title bar and home buttons (state and icon).

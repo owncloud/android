@@ -65,6 +65,8 @@ public class ExtendedListFragment extends Fragment
     protected static final String ARG_JUST_FOLDERS = ExtendedListFragment.class.getCanonicalName() + ".JUST_FOLDERS";
     protected static final String ARG_ONLY_AVAILABLE_OFFLINE = ExtendedListFragment.class.getCanonicalName() +
             ".ONLY_AVAILABLE_OFFLINE";
+    protected static final String ARG_SHARED_BY_LINK_FILES = ExtendedListFragment.class.getCanonicalName() +
+            ".SHARED_BY_LINK_FILES";
 
     private ProgressBar mProgressBar;
     private View mShadowView;
@@ -480,5 +482,10 @@ public class ExtendedListFragment extends Fragment
     boolean isShowingOnlyAvailableOffline() {
         Bundle args = getArguments();
         return ((args != null) && args.getBoolean(ARG_ONLY_AVAILABLE_OFFLINE, false));
+    }
+
+    boolean isShowingSharedByLinkFiles(){
+        Bundle args = getArguments();
+        return ((args != null) && args.getBoolean(ARG_SHARED_BY_LINK_FILES,false));
     }
 }

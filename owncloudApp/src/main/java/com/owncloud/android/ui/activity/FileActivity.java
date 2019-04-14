@@ -71,7 +71,8 @@ public class FileActivity extends DrawerActivity
     public static final String EXTRA_ACCOUNT = "com.owncloud.android.ui.activity.ACCOUNT";
     public static final String EXTRA_FROM_NOTIFICATION =
             "com.owncloud.android.ui.activity.FROM_NOTIFICATION";
-    static final String EXTRA_ONLY_AVAILABLE_OFFLINE = "ONLY_AVAILABLE_OFFLINE";
+    public static final String EXTRA_ONLY_AVAILABLE_OFFLINE = "ONLY_AVAILABLE_OFFLINE";
+    public static final String EXTRA_SHARED_BY_LINK_FILES = "SHARED_BY_LINK_FILES";
     public static final String TAG = FileActivity.class.getSimpleName();
 
     private static final String KEY_WAITING_FOR_OP_ID = "WAITING_FOR_OP_ID";
@@ -472,6 +473,14 @@ public class FileActivity extends DrawerActivity
         intent.putExtra(EXTRA_ONLY_AVAILABLE_OFFLINE, true);
         startActivity(intent);
     }
+
+     @Override
+     public void sharedByLinkFilesOption(){
+        Intent intent = new Intent(this,FileDisplayActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra(EXTRA_SHARED_BY_LINK_FILES,true);
+        startActivity(intent);
+     }
 
     protected OCFile getCurrentDir() {
         OCFile file = getFile();
