@@ -47,6 +47,7 @@ import com.owncloud.android.shares.viewmodel.OCShareViewModel
 import com.owncloud.android.utils.TestUtil
 import com.owncloud.android.utils.ViewModelUtil
 import com.owncloud.android.vo.Resource
+import org.hamcrest.CoreMatchers.not
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -180,12 +181,47 @@ class PublicShareDialogFragmentTest {
             )
         )
 
-        onView(withId(R.id.shareViaLinkPasswordLabel)).
-            check(matches(withText(R.string.share_via_link_password_enforced_label)))
+        onView(withId(R.id.shareViaLinkPasswordLabel)).check(matches(withText(R.string.share_via_link_password_enforced_label)))
         onView(withId(R.id.shareViaLinkPasswordSwitch))
             .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)))
         onView(withId(R.id.shareViaLinkPasswordValue))
             .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))
+    }
+
+    @Test
+    fun checkExpireDateEnforced() {
+        capabilitiesLiveData.postValue(
+            Resource.success(
+                TestUtil.createCapability(
+                    sharingPublicExpireDateEnforced = CapabilityBooleanType.TRUE.value
+                )
+            )
+        )
+
+        onView(withId(R.id.shareViaLinkExpirationLabel))
+            .check(matches(withText(R.string.share_via_link_expiration_date_enforced_label)))
+        onView(withId(R.id.shareViaLinkExpirationSwitch))
+            .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)))
+        onView(withId(R.id.shareViaLinkExpirationExplanationLabel))
+            .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))
+    }
+
+    @Test
+    fun checkExpireDateNotEnforced() {
+        capabilitiesLiveData.postValue(
+            Resource.success(
+                TestUtil.createCapability(
+                    sharingPublicExpireDateEnforced = CapabilityBooleanType.FALSE.value
+                )
+            )
+        )
+
+        onView(withId(R.id.shareViaLinkExpirationLabel))
+            .check(matches(withText(R.string.share_via_link_expiration_date_label)))
+        onView(withId(R.id.shareViaLinkExpirationSwitch))
+            .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))
+        onView(withId(R.id.shareViaLinkExpirationExplanationLabel))
+            .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)))
     }
 
     @Test
@@ -216,5 +252,37 @@ class PublicShareDialogFragmentTest {
         )
         onView(withId(R.id.public_link_error_message)).check(matches(isDisplayed()))
         onView(withId(R.id.public_link_error_message)).check(matches(withText(R.string.share_link_file_no_exist)))
+    }
+
+    @Test
+    fun uploadPermissionsWithFolderDisplayed() {
+        capabilitiesLiveData.postValue(
+            Resource.success(
+                TestUtil.createCapability(
+                    versionString = "10.1.1",
+                    sharingPublicSupportsUploadOnly = CapabilityBooleanType.TRUE.value,
+                    sharingPublicUpload = CapabilityBooleanType.TRUE.value
+                )
+            )
+        )
+
+        `when`(file.isFolder).thenReturn(true)
+        onView(withId(R.id.shareViaLinkEditPermissionGroup)).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun uploadPermissionsWithFolderNotDisplayed() {
+        capabilitiesLiveData.postValue(
+            Resource.success(
+                TestUtil.createCapability(
+                    versionString = "10.1.1",
+                    sharingPublicSupportsUploadOnly = CapabilityBooleanType.TRUE.value,
+                    sharingPublicUpload = CapabilityBooleanType.FALSE.value
+                )
+            )
+        )
+
+        `when`(file.isFolder).thenReturn(true)
+        onView(withId(R.id.shareViaLinkEditPermissionGroup)).check(matches(not(isDisplayed())))
     }
 }
