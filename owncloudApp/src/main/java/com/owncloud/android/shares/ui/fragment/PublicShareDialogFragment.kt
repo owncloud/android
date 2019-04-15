@@ -666,8 +666,8 @@ class PublicShareDialogFragment : DialogFragment() {
         // Server version <= 9.x, multiple public sharing not supported
         if (!serverVersion.isMultiplePublicSharingSupported) {
             publicShareDialogTitle?.visibility = View.GONE
-        } else {
-            dialog.window!!.setSoftInputMode(
+        } else { // Show keyboard to fill the public share name
+            dialog?.window?.setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE or WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE
             )
         }

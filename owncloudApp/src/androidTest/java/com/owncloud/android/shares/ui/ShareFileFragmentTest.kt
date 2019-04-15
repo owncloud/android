@@ -205,7 +205,7 @@ class ShareFileFragmentTest {
     fun createPublicShareMultipleCapability() {
         loadCapabilitiesSuccessfully(
             TestUtil.createCapability(
-                versionString = "10.0.0",
+                versionString = "10.1.1",
                 sharingPublicMultiple = CapabilityBooleanType.TRUE.value
             )
         )
@@ -220,7 +220,7 @@ class ShareFileFragmentTest {
     fun cannotCreatePublicShareMultipleCapability() {
         loadCapabilitiesSuccessfully(
             TestUtil.createCapability(
-                versionString = "10.0.0",
+                versionString = "10.1.1",
                 sharingPublicMultiple = CapabilityBooleanType.FALSE.value
             )
         )
