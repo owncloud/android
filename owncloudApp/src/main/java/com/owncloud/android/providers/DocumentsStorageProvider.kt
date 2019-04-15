@@ -213,29 +213,16 @@ class DocumentsStorageProvider : DocumentsProvider() {
         }
     }
 
-    @TargetApi(24)
-    override fun removeDocument(documentId: String, parentDocumentId: String) {
-
-        //Documents can only have one parent
-        deleteDocument(documentId)
-
-    }
-
     private fun checkOperationResult(result: RemoteOperationResult<Any>, file: OCFile) {
-
         if (!result.isSuccess) {
-
-            context?.contentResolver?.notifyChange(toNotifyUri(toUri(file.parentId.toString())), null)
+            notifyChangeInFolder(file.parentId.toString())
             throw FileNotFoundException("Remote Operation failed due to ${result.exception.message}")
-
         } else {
-
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 revokeDocumentPermission(file.fileId.toString())
             }
             syncRequired = false
-            context?.contentResolver?.notifyChange(toNotifyUri(toUri(file.parentId.toString())), null)
-
+            notifyChangeInFolder(file.parentId.toString())
         }
     }
 
@@ -283,7 +270,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
 
         val thread = Thread {
             refreshFolderOperation.execute(currentStorageManager, context)
-            context?.contentResolver?.notifyChange(toNotifyUri(toUri(parentDocumentId)), null)
+            notifyChangeInFolder(parentDocumentId)
         }
         thread.start()
     }
@@ -310,6 +297,10 @@ class DocumentsStorageProvider : DocumentsProvider() {
             }
         }
         return result
+    }
+
+    private fun notifyChangeInFolder(folderToNotify: String) {
+        context?.contentResolver?.notifyChange(toNotifyUri(toUri(folderToNotify)), null)
     }
 
     private fun toNotifyUri(uri: Uri): Uri = DocumentsContract.buildDocumentUri(
