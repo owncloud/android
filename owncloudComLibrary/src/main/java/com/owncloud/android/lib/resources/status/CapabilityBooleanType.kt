@@ -46,12 +46,12 @@ enum class CapabilityBooleanType private constructor(val value: Int) {
 
     companion object {
         fun fromValue(value: Int): CapabilityBooleanType? {
-            when (value) {
-                -1 -> return UNKNOWN
-                0 -> return FALSE
-                1 -> return TRUE
+            return when (value) {
+                -1 -> UNKNOWN
+                0 -> FALSE
+                1 -> TRUE
+                else -> null
             }
-            return null
         }
 
         fun fromBooleanValue(boolValue: Boolean): CapabilityBooleanType {

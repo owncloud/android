@@ -32,11 +32,12 @@ package com.owncloud.android.lib.resources.shares
  * 3 - Shared by public link
  * 4 - Shared by e-mail
  * 5 - Shared by contact
+ * 6 - Federated
  *
  * @author masensio
  */
 
-enum class ShareType private constructor(val value: Int) {
+enum class ShareType constructor(val value: Int) {
     NO_SHARED(-1),
     USER(0),
     GROUP(1),
@@ -48,16 +49,16 @@ enum class ShareType private constructor(val value: Int) {
     companion object {
 
         fun fromValue(value: Int): ShareType? {
-            when (value) {
-                -1 -> return NO_SHARED
-                0 -> return USER
-                1 -> return GROUP
-                3 -> return PUBLIC_LINK
-                4 -> return EMAIL
-                5 -> return CONTACT
-                6 -> return FEDERATED
+            return when (value) {
+                -1 -> NO_SHARED
+                0 -> USER
+                1 -> GROUP
+                3 -> PUBLIC_LINK
+                4 -> EMAIL
+                5 -> CONTACT
+                6 -> FEDERATED
+                else -> null
             }
-            return null
         }
     }
 }

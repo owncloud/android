@@ -29,45 +29,41 @@ package com.owncloud.android.lib.resources.status
  * Contains data of the Capabilities for an account, from the Capabilities API
  */
 class RemoteCapability {
-    var accountName: String? = null
+    var accountName: String
 
     // Server version
-    var versionMayor: Int = 0
-    var versionMinor: Int = 0
-    var versionMicro: Int = 0
-    var versionString: String? = null
-    var versionEdition: String? = null
+    var versionMayor: Int
+    var versionMinor: Int
+    var versionMicro: Int
+    var versionString: String
+    var versionEdition: String
 
     // Core PollInterval
-    var corePollinterval: Int = 0
+    var corePollinterval: Int
 
     // Files Sharing
-    var filesSharingApiEnabled: CapabilityBooleanType? = null
-
-    var filesSharingPublicEnabled: CapabilityBooleanType? = null
-    var filesSharingPublicPasswordEnforced: CapabilityBooleanType? = null
-    var filesSharingPublicPasswordEnforcedReadOnly: CapabilityBooleanType? = null
-    var filesSharingPublicPasswordEnforcedReadWrite: CapabilityBooleanType? = null
-    var filesSharingPublicPasswordEnforcedUploadOnly: CapabilityBooleanType? = null
-    var filesSharingPublicExpireDateEnabled: CapabilityBooleanType? = null
-    var filesSharingPublicExpireDateDays: Int = 0
-    var filesSharingPublicExpireDateEnforced: CapabilityBooleanType? = null
-    var filesSharingPublicSendMail: CapabilityBooleanType? = null
-    var filesSharingPublicUpload: CapabilityBooleanType? = null
-    var filesSharingPublicMultiple: CapabilityBooleanType? = null
-    var filesSharingPublicSupportsUploadOnly: CapabilityBooleanType? = null
-
-    var filesSharingUserSendMail: CapabilityBooleanType? = null
-
-    var filesSharingResharing: CapabilityBooleanType? = null
-
-    var filesSharingFederationOutgoing: CapabilityBooleanType? = null
-    var filesSharingFederationIncoming: CapabilityBooleanType? = null
+    var filesSharingApiEnabled: CapabilityBooleanType
+    var filesSharingPublicEnabled: CapabilityBooleanType
+    var filesSharingPublicPasswordEnforced: CapabilityBooleanType
+    var filesSharingPublicPasswordEnforcedReadOnly: CapabilityBooleanType
+    var filesSharingPublicPasswordEnforcedReadWrite: CapabilityBooleanType
+    var filesSharingPublicPasswordEnforcedUploadOnly: CapabilityBooleanType
+    var filesSharingPublicExpireDateEnabled: CapabilityBooleanType
+    var filesSharingPublicExpireDateDays: Int
+    var filesSharingPublicExpireDateEnforced: CapabilityBooleanType
+    var filesSharingPublicSendMail: CapabilityBooleanType
+    var filesSharingPublicUpload: CapabilityBooleanType
+    var filesSharingPublicMultiple: CapabilityBooleanType
+    var filesSharingPublicSupportsUploadOnly: CapabilityBooleanType
+    var filesSharingUserSendMail: CapabilityBooleanType
+    var filesSharingResharing: CapabilityBooleanType
+    var filesSharingFederationOutgoing: CapabilityBooleanType
+    var filesSharingFederationIncoming: CapabilityBooleanType
 
     // Files
-    var filesBigFileChuncking: CapabilityBooleanType? = null
-    var filesUndelete: CapabilityBooleanType? = null
-    var filesVersioning: CapabilityBooleanType? = null
+    var filesBigFileChuncking: CapabilityBooleanType
+    var filesUndelete: CapabilityBooleanType
+    var filesVersioning: CapabilityBooleanType
 
     init {
         accountName = ""
@@ -76,7 +72,7 @@ class RemoteCapability {
         versionMinor = 0
         versionMicro = 0
         versionString = ""
-        versionString = ""
+        versionEdition = ""
 
         corePollinterval = 0
 
