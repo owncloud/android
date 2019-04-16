@@ -30,6 +30,7 @@ import android.database.Cursor
 import android.graphics.Point
 import android.net.Uri
 import android.os.CancellationSignal
+import android.os.Handler
 import android.os.ParcelFileDescriptor
 import android.provider.DocumentsContract
 import android.provider.DocumentsProvider
@@ -45,10 +46,12 @@ import com.owncloud.android.operations.CreateFolderOperation
 import com.owncloud.android.operations.RefreshFolderOperation
 import com.owncloud.android.operations.RemoveFileOperation
 import com.owncloud.android.operations.RenameFileOperation
+import com.owncloud.android.operations.SynchronizeFileOperation
 import com.owncloud.android.providers.cursors.FileCursor
 import com.owncloud.android.providers.cursors.RootCursor
 import java.io.File
 import java.io.FileNotFoundException
+import java.io.IOException
 import java.util.HashMap
 import java.util.Vector
 
@@ -62,7 +65,8 @@ class DocumentsStorageProvider : DocumentsProvider() {
     private var syncRequired = true
     private var currentStorageManager: FileDataStorageManager? = null
 
-    override fun openDocument(documentId: String, mode: String?, signal: CancellationSignal?): ParcelFileDescriptor? {
+    override fun openDocument(documentId: String, mode: String, signal: CancellationSignal?): ParcelFileDescriptor? {
+        Log_OC.d(TAG, "Trying to open $documentId in mode $mode")
         val docId = documentId.toLong()
         updateCurrentStorageManagerIfNeeded(docId)
 
@@ -88,7 +92,38 @@ class DocumentsStorageProvider : DocumentsProvider() {
             } while (!file.isDown)
         }
 
-        return ParcelFileDescriptor.open(File(file.storagePath), ParcelFileDescriptor.MODE_READ_ONLY)
+        val accessMode: Int = ParcelFileDescriptor.parseMode(mode)
+
+        val isWrite: Boolean = mode.contains("w")
+        return if (isWrite) {
+            val handler = Handler(context?.mainLooper)
+            // Attach a close listener if the document is opened in write mode.
+            try {
+                ParcelFileDescriptor.open(File(file.storagePath), accessMode, handler) {
+                    // Update the file with the cloud server. The client is done writing.
+                    Log_OC.d(TAG, "A file with id $documentId has been closed! Time to update the server.")
+                    Thread {
+                        SynchronizeFileOperation(
+                            file,
+                            null,
+                            currentStorageManager?.account,
+                            false,
+                            context,
+                            false
+                        ).apply {
+                            val result = execute(currentStorageManager, context)
+                            Log_OC.d(TAG, "Result ${result.code}")
+                        }
+                    }.apply { start() }
+                }
+            } catch (e: IOException) {
+                throw FileNotFoundException(
+                    "Failed to open document with id $documentId and mode $mode"
+                )
+            }
+        } else {
+            ParcelFileDescriptor.open(File(file.storagePath), accessMode)
+        }
     }
 
     override fun queryChildDocuments(
