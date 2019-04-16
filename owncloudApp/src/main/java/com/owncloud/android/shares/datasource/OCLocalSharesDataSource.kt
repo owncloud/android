@@ -39,5 +39,9 @@ class OCLocalSharesDataSource(
 
     override fun insert(ocShares: List<OCShare>) = ocShareDao.replace(ocShares)
 
+    override fun update(ocShare: OCShare) {
+        ocShareDao.update(ocShare)
+    }
+
     override fun delete(filePath: String, accountName: String) = ocShareDao.delete(filePath, accountName)
 }

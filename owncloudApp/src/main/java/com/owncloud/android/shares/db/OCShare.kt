@@ -67,6 +67,7 @@ data class OCShare(
     @ColumnInfo(name = ProviderTableMeta.OCSHARES_URL)
     val shareLink: String?
 ) {
+
     @PrimaryKey(autoGenerate = true) var id: Int = 0
 
     companion object {
@@ -116,7 +117,7 @@ data class OCShare(
                 sharedWithAdditionalInfo = remoteShare.sharedWithAdditionalInfo,
                 isFolder = remoteShare.isFolder,
                 userId = remoteShare.userId,
-                remoteId = remoteShare.remoteId,
+                remoteId = remoteShare.id,
                 name = remoteShare.name,
                 shareLink = remoteShare.shareLink
             )

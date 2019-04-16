@@ -38,6 +38,9 @@ abstract class OCShareDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract fun insert(ocShares: List<OCShare>): List<Long>
 
+    @Update
+    abstract fun update(ocShare: OCShare): Int
+
     @Query(
         "DELETE from " + ProviderTableMeta.OCSHARES_TABLE_NAME + " WHERE " +
                 ProviderTableMeta.OCSHARES_NAME + " = :name AND " +
