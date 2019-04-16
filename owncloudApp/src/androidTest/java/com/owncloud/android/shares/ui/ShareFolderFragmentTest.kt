@@ -29,6 +29,8 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.ActivityTestRule
 import com.owncloud.android.R
+import com.owncloud.android.capabilities.db.OCCapability
+import com.owncloud.android.capabilities.viewmodel.OCCapabilityViewModel
 import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.lib.resources.status.OwnCloudVersion
 import com.owncloud.android.shares.db.OCShare
@@ -51,6 +53,7 @@ class ShareFolderFragmentTest {
     val activityRule = ActivityTestRule(TestShareFileActivity::class.java, true, true)
 
     private val sharesLiveData = MutableLiveData<Resource<List<OCShare>>>()
+    private val capabilitiesLiveData = MutableLiveData<Resource<OCCapability>>()
     private lateinit var shareFragment: ShareFileFragment
     private lateinit var ocShareViewModel: OCShareViewModel
 
@@ -66,10 +69,16 @@ class ShareFolderFragmentTest {
                 ownCloudVersion
         )
 
+        val ocCapabilityViewModel = Mockito.mock(OCCapabilityViewModel::class.java)
+        Mockito.`when`(
+            ocCapabilityViewModel.getCapabilityForAccount()
+        ).thenReturn(capabilitiesLiveData)
+
         ocShareViewModel = Mockito.mock(OCShareViewModel::class.java)
         Mockito.`when`(ocShareViewModel.getSharesForFile()).thenReturn(sharesLiveData)
 
         shareFragment.ocShareViewModelFactory = ViewModelUtil.createFor(ocShareViewModel)
+        shareFragment.ocCapabilityViewModelFactory = ViewModelUtil.createFor(ocCapabilityViewModel)
         activityRule.activity.setFragment(shareFragment)
     }
 
