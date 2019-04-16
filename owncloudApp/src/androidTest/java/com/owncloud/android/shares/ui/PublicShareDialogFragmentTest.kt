@@ -29,6 +29,7 @@ import androidx.test.espresso.action.ViewActions.typeText
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import androidx.test.espresso.matcher.ViewMatchers.isEnabled
 import androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withInputType
@@ -44,6 +45,7 @@ import com.owncloud.android.lib.resources.status.CapabilityBooleanType
 import com.owncloud.android.shares.db.OCShare
 import com.owncloud.android.shares.ui.fragment.PublicShareDialogFragment
 import com.owncloud.android.shares.viewmodel.OCShareViewModel
+import com.owncloud.android.utils.DateUtils
 import com.owncloud.android.utils.TestUtil
 import com.owncloud.android.utils.ViewModelUtil
 import com.owncloud.android.vo.Resource
@@ -54,6 +56,8 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.mock
+import java.text.SimpleDateFormat
+import java.util.Date
 
 @RunWith(AndroidJUnit4::class)
 class PublicShareDialogFragmentTest {
@@ -101,7 +105,6 @@ class PublicShareDialogFragmentTest {
 
         file.mimetype = ".txt"
         `when`(file.remotePath).thenReturn(filePath)
-
         val ocCapabilityViewModel = mock(OCCapabilityViewModel::class.java)
         `when`(
             ocCapabilityViewModel.getCapabilityForAccount()
@@ -285,4 +288,183 @@ class PublicShareDialogFragmentTest {
         `when`(file.isFolder).thenReturn(true)
         onView(withId(R.id.shareViaLinkEditPermissionGroup)).check(matches(not(isDisplayed())))
     }
+
+    @Test
+    fun expirationDateDays() {
+        val daysToTest = 15
+        capabilitiesLiveData.postValue(
+            Resource.success(
+                TestUtil.createCapability(
+                    versionString = "10.1.1",
+                    sharingPublicExpireDateDays = daysToTest
+                )
+            )
+        )
+        val formattedDate = SimpleDateFormat.getDateInstance().format(
+            DateUtils.addDaysToDate(
+                Date(),
+                daysToTest
+            )
+        )
+        onView(withId(R.id.shareViaLinkExpirationSwitch))
+            .check(matches(isEnabled()))
+        onView(withId(R.id.shareViaLinkExpirationValue))
+            .check(matches(withText(formattedDate)))
+    }
+
+    @Test
+    fun passwordNotEnforced() {
+        capabilitiesLiveData.postValue(
+            Resource.success(
+                TestUtil.createCapability(
+                    versionString = "10.1.1",
+                    sharingPublicPasswordEnforced = CapabilityBooleanType.FALSE.value
+                )
+            )
+        )
+        onView(withId(R.id.shareViaLinkPasswordLabel))
+            .check(matches(withText(R.string.share_via_link_password_label)))
+    }
+
+    @Test
+    fun passwordEnforced() {
+        capabilitiesLiveData.postValue(
+            Resource.success(
+                TestUtil.createCapability(
+                    versionString = "10.1.1",
+                    sharingPublicPasswordEnforced = CapabilityBooleanType.TRUE.value
+                )
+            )
+        )
+        onView(withId(R.id.shareViaLinkPasswordLabel))
+            .check(matches(withText(R.string.share_via_link_password_enforced_label)))
+    }
+
+    @Test
+    fun passwordEnforcedReadOnlyFolders() {
+        capabilitiesLiveData.postValue(
+            Resource.success(
+                TestUtil.createCapability(
+                    versionString = "10.1.1",
+                    sharingPublicSupportsUploadOnly = CapabilityBooleanType.TRUE.value,
+                    sharingPublicUpload = CapabilityBooleanType.TRUE.value,
+                    sharingPublicPasswordEnforcedReadOnly = CapabilityBooleanType.TRUE.value,
+                    sharingPublicPasswordEnforced = CapabilityBooleanType.TRUE.value
+                )
+            )
+        )
+
+        `when`(file.isFolder).thenReturn(true)
+        onView(withId(R.id.shareViaLinkEditPermissionReadOnly)).check(matches(isDisplayed()))
+        onView(withId(R.id.shareViaLinkEditPermissionReadOnly)).perform(click())
+        onView(withId(R.id.shareViaLinkPasswordLabel))
+            .check(matches(withText(R.string.share_via_link_password_enforced_label)))
+    }
+
+    @Test
+    fun passwordNotEnforcedReadOnlyFolders() {
+        capabilitiesLiveData.postValue(
+            Resource.success(
+                TestUtil.createCapability(
+                    versionString = "10.1.1",
+                    sharingPublicSupportsUploadOnly = CapabilityBooleanType.TRUE.value,
+                    sharingPublicUpload = CapabilityBooleanType.TRUE.value,
+                    sharingPublicPasswordEnforcedReadOnly = CapabilityBooleanType.FALSE.value,
+                    sharingPublicPasswordEnforced = CapabilityBooleanType.FALSE.value
+                )
+            )
+        )
+
+        `when`(file.isFolder).thenReturn(true)
+        onView(withId(R.id.shareViaLinkEditPermissionReadOnly)).check(matches(isDisplayed()))
+        onView(withId(R.id.shareViaLinkEditPermissionReadOnly)).perform(click())
+        onView(withId(R.id.shareViaLinkPasswordLabel))
+            .check(matches(withText(R.string.share_via_link_password_label)))
+    }
+
+    @Test
+    fun passwordEnforcedReadWriteFolders() {
+        capabilitiesLiveData.postValue(
+            Resource.success(
+                TestUtil.createCapability(
+                    versionString = "10.1.1",
+                    sharingPublicSupportsUploadOnly = CapabilityBooleanType.TRUE.value,
+                    sharingPublicUpload = CapabilityBooleanType.TRUE.value,
+                    sharingPublicPasswordEnforcedReadWrite = CapabilityBooleanType.TRUE.value,
+                    sharingPublicPasswordEnforced = CapabilityBooleanType.TRUE.value
+                )
+            )
+        )
+
+        `when`(file.isFolder).thenReturn(true)
+        onView(withId(R.id.shareViaLinkEditPermissionReadAndWrite)).check(matches(isDisplayed()))
+        onView(withId(R.id.shareViaLinkEditPermissionReadAndWrite)).perform(click())
+        onView(withId(R.id.shareViaLinkPasswordLabel))
+            .check(matches(withText(R.string.share_via_link_password_enforced_label)))
+    }
+
+    @Test
+    fun passwordNotEnforcedReadWriteFolders() {
+        capabilitiesLiveData.postValue(
+            Resource.success(
+                TestUtil.createCapability(
+                    versionString = "10.1.1",
+                    sharingPublicSupportsUploadOnly = CapabilityBooleanType.TRUE.value,
+                    sharingPublicUpload = CapabilityBooleanType.TRUE.value,
+                    sharingPublicPasswordEnforcedReadWrite = CapabilityBooleanType.FALSE.value,
+                    sharingPublicPasswordEnforced = CapabilityBooleanType.FALSE.value
+                )
+            )
+        )
+
+        `when`(file.isFolder).thenReturn(true)
+        onView(withId(R.id.shareViaLinkEditPermissionReadAndWrite)).check(matches(isDisplayed()))
+        onView(withId(R.id.shareViaLinkEditPermissionReadAndWrite)).perform(click())
+        onView(withId(R.id.shareViaLinkPasswordLabel))
+            .check(matches(withText(R.string.share_via_link_password_label)))
+    }
+
+    @Test
+    fun passwordEnforcedUploadOnlyFolders() {
+        capabilitiesLiveData.postValue(
+            Resource.success(
+                TestUtil.createCapability(
+                    versionString = "10.1.1",
+                    sharingPublicSupportsUploadOnly = CapabilityBooleanType.TRUE.value,
+                    sharingPublicUpload = CapabilityBooleanType.TRUE.value,
+                    sharingPublicPasswordEnforcedUploadOnly = CapabilityBooleanType.TRUE.value,
+                    sharingPublicPasswordEnforced = CapabilityBooleanType.FALSE.value
+                )
+            )
+        )
+
+        `when`(file.isFolder).thenReturn(true)
+        onView(withId(R.id.shareViaLinkEditPermissionUploadFiles)).check(matches(isDisplayed()))
+        onView(withId(R.id.shareViaLinkEditPermissionUploadFiles)).perform(click())
+        onView(withId(R.id.shareViaLinkPasswordLabel))
+            .check(matches(withText(R.string.share_via_link_password_enforced_label)))
+    }
+
+    @Test
+    fun passwordNotEnforcedUploadOnlyFolders() {
+        capabilitiesLiveData.postValue(
+            Resource.success(
+                TestUtil.createCapability(
+                    versionString = "10.1.1",
+                    sharingPublicSupportsUploadOnly = CapabilityBooleanType.TRUE.value,
+                    sharingPublicUpload = CapabilityBooleanType.TRUE.value,
+                    sharingPublicPasswordEnforcedUploadOnly = CapabilityBooleanType.FALSE.value,
+                    sharingPublicPasswordEnforced = CapabilityBooleanType.FALSE.value
+                )
+            )
+        )
+
+        `when`(file.isFolder).thenReturn(true)
+        onView(withId(R.id.shareViaLinkEditPermissionUploadFiles)).check(matches(isDisplayed()))
+        onView(withId(R.id.shareViaLinkEditPermissionUploadFiles)).perform(click())
+        onView(withId(R.id.shareViaLinkPasswordLabel))
+            .check(matches(withText(R.string.share_via_link_password_label)))
+    }
+
+
 }
