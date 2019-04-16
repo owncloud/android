@@ -146,7 +146,7 @@ class CreateRemoteShareOperation
                     // retrieve more info - POST only returns the index of the new share
                     val emptyShare = result.data.shares[0]
                     val getInfo = GetRemoteShareOperation(
-                        emptyShare.remoteId
+                        emptyShare.id
                     )
                     result = getInfo.execute(client)
                 }

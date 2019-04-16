@@ -179,7 +179,7 @@ class ShareXMLParser {
             } else if (name.equals(NODE_ID, ignoreCase = true)) {// Parse Create XML Response
                 share = RemoteShare()
                 val value = readNode(parser, NODE_ID)
-                share.remoteId = Integer.parseInt(value).toLong()
+                share.id = Integer.parseInt(value).toLong()
 
             } else if (name.equals(NODE_URL, ignoreCase = true)) {
                 // NOTE: this field is received in all the public shares from OC 9.0.0
@@ -218,7 +218,7 @@ class ShareXMLParser {
     private fun readElement(parser: XmlPullParser, shares: ArrayList<RemoteShare>) {
         parser.require(XmlPullParser.START_TAG, ns, NODE_ELEMENT)
 
-        val share = RemoteShare()
+        val remoteShare = RemoteShare()
 
         //Log_OC.d(TAG, "---- NODE ELEMENT ---");
         while (parser.next() != XmlPullParser.END_TAG) {
@@ -235,46 +235,46 @@ class ShareXMLParser {
                 readElement(parser, shares)
 
             } else if (name.equals(NODE_ID, ignoreCase = true)) {
-                share.remoteId = Integer.parseInt(readNode(parser, NODE_ID)).toLong()
+                remoteShare.id = Integer.parseInt(readNode(parser, NODE_ID)).toLong()
 
             } else if (name.equals(NODE_ITEM_TYPE, ignoreCase = true)) {
-                share.isFolder = readNode(parser, NODE_ITEM_TYPE).equals(TYPE_FOLDER, ignoreCase = true)
-                fixPathForFolder(share)
+                remoteShare.isFolder = readNode(parser, NODE_ITEM_TYPE).equals(TYPE_FOLDER, ignoreCase = true)
+                fixPathForFolder(remoteShare)
 
             } else if (name.equals(NODE_ITEM_SOURCE, ignoreCase = true)) {
-                share.itemSource = java.lang.Long.parseLong(readNode(parser, NODE_ITEM_SOURCE))
+                remoteShare.itemSource = java.lang.Long.parseLong(readNode(parser, NODE_ITEM_SOURCE))
 
             } else if (name.equals(NODE_PARENT, ignoreCase = true)) {
                 readNode(parser, NODE_PARENT)
 
             } else if (name.equals(NODE_SHARE_TYPE, ignoreCase = true)) {
                 val value = Integer.parseInt(readNode(parser, NODE_SHARE_TYPE))
-                share.shareType = ShareType.fromValue(value)
+                remoteShare.shareType = ShareType.fromValue(value)
 
             } else if (name.equals(NODE_SHARE_WITH, ignoreCase = true)) {
-                share.shareWith = readNode(parser, NODE_SHARE_WITH)
+                remoteShare.shareWith = readNode(parser, NODE_SHARE_WITH)
 
             } else if (name.equals(NODE_FILE_SOURCE, ignoreCase = true)) {
-                share.fileSource = java.lang.Long.parseLong(readNode(parser, NODE_FILE_SOURCE))
+                remoteShare.fileSource = java.lang.Long.parseLong(readNode(parser, NODE_FILE_SOURCE))
 
             } else if (name.equals(NODE_PATH, ignoreCase = true)) {
-                share.path = readNode(parser, NODE_PATH)
-                fixPathForFolder(share)
+                remoteShare.path = readNode(parser, NODE_PATH)
+                fixPathForFolder(remoteShare)
 
             } else if (name.equals(NODE_PERMISSIONS, ignoreCase = true)) {
-                share.permissions = Integer.parseInt(readNode(parser, NODE_PERMISSIONS))
+                remoteShare.permissions = Integer.parseInt(readNode(parser, NODE_PERMISSIONS))
 
             } else if (name.equals(NODE_STIME, ignoreCase = true)) {
-                share.sharedDate = java.lang.Long.parseLong(readNode(parser, NODE_STIME))
+                remoteShare.sharedDate = java.lang.Long.parseLong(readNode(parser, NODE_STIME))
 
             } else if (name.equals(NODE_EXPIRATION, ignoreCase = true)) {
                 val value = readNode(parser, NODE_EXPIRATION)
                 if (value.length != 0) {
-                    share.expirationDate = WebdavUtils.parseResponseDate(value)!!.time
+                    remoteShare.expirationDate = WebdavUtils.parseResponseDate(value)!!.time
                 }
 
             } else if (name.equals(NODE_TOKEN, ignoreCase = true)) {
-                share.token = readNode(parser, NODE_TOKEN)
+                remoteShare.token = readNode(parser, NODE_TOKEN)
 
             } else if (name.equals(NODE_STORAGE, ignoreCase = true)) {
                 readNode(parser, NODE_STORAGE)
@@ -282,27 +282,27 @@ class ShareXMLParser {
                 readNode(parser, NODE_MAIL_SEND)
 
             } else if (name.equals(NODE_SHARE_WITH_DISPLAY_NAME, ignoreCase = true)) {
-                share.sharedWithDisplayName = readNode(parser, NODE_SHARE_WITH_DISPLAY_NAME)
+                remoteShare.sharedWithDisplayName = readNode(parser, NODE_SHARE_WITH_DISPLAY_NAME)
 
             } else if (name.equals(NODE_URL, ignoreCase = true)) {
                 val value = readNode(parser, NODE_URL)
-                share.shareLink = value
+                remoteShare.shareLink = value
 
             } else if (name.equals(NODE_NAME, ignoreCase = true)) {
-                share.name = readNode(parser, NODE_NAME)
+                remoteShare.name = readNode(parser, NODE_NAME)
 
             } else {
                 skip(parser)
             }
         }
 
-        if (isValidShare(share)) {
-            shares.add(share)
+        if (isValidShare(remoteShare)) {
+            shares.add(remoteShare)
         }
     }
 
     private fun isValidShare(share: RemoteShare): Boolean {
-        return share.remoteId > -1
+        return share.id > -1
     }
 
     private fun fixPathForFolder(share: RemoteShare) {
