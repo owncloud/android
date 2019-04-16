@@ -32,5 +32,7 @@ interface LocalSharesDataSource {
 
     fun insert(ocShares: List<OCShare>)
 
+    fun update(ocShare: OCShare)
+
     fun delete(filePath: String, accountName: String)
 }
