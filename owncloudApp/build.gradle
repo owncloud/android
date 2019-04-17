@@ -36,6 +36,8 @@ dependencies {
     androidTestImplementation 'androidx.test:runner:1.1.1'
     // Espresso core
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
+    // Espresso intents
+    androidTestImplementation 'androidx.test.espresso:espresso-intents:3.1.1'
     // Espresso web
     androidTestImplementation 'androidx.test.espresso:espresso-web:3.1.1'
     // UIAutomator - for cross-app UI tests, and to grant screen is turned on in Espresso tests

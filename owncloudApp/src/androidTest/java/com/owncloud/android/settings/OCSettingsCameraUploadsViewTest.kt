@@ -19,7 +19,12 @@
 
 package com.owncloud.android.settings
 
+import android.preference.CheckBoxPreference
+import android.preference.PreferenceManager
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.assertion.ViewAssertions
+import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withText
@@ -45,19 +50,37 @@ class OCSettingsCameraUploadsViewTest {
 
     @Test
     fun checkTitle() {
+        //Asserts
         onView(withText(R.string.actionbar_settings)).check(matches(isDisplayed()))
     }
 
     @Test
-    fun testPictureUploadsView() {
+    fun pictureUploadsView() {
+        //Asserts
         onView(withText(R.string.prefs_camera_picture_upload)).check(matches(isDisplayed()))
         onView(withText(R.string.prefs_camera_picture_upload_summary)).check(matches(isDisplayed()))
+        onView(withText(R.string.prefs_camera_picture_upload_path_title)).check(doesNotExist())
+        onView(withText(R.string.camera_picture_upload_on_wifi)).check(doesNotExist())
     }
 
     @Test
-    fun testVideoUploadsView() {
+    fun videoUploadsView() {
+        //Asserts
         onView(withText(R.string.prefs_camera_video_upload)).check(matches(isDisplayed()))
         onView(withText(R.string.prefs_camera_video_upload_summary)).check(matches(isDisplayed()))
+        onView(withText(R.string.prefs_camera_video_upload_path_title)).check(doesNotExist())
+        onView(withText(R.string.camera_video_upload_on_wifi)).check(doesNotExist())
+    }
+
+    @Test
+    fun optionsCameraFolderBehaviour() {
+        //Asserts
+        onView(withText(String.format(
+            activityRule.activity.getString(R.string.prefs_camera_upload_source_path_title),
+            activityRule.activity.getString(R.string.prefs_camera_upload_source_path_title_required))))
+            .check(doesNotExist())
+        onView(withText(R.string.prefs_camera_upload_behaviour_title)).check(doesNotExist())
+        onView(withText(R.string.pref_behaviour_entries_keep_file)).check(doesNotExist())
     }
 
 }
