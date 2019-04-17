@@ -169,7 +169,7 @@ class OCShareRepositoryTest {
         // Retrieving public shares from server...
 
         // When there's no shares in server for a specific file, delete them locally
-        verify(localSharesDataSource).delete("/Photos/", "admin@server")
+        verify(localSharesDataSource).deleteSharesForFile("/Photos/", "admin@server")
 
         // Observe changes in database livedata when the list of shares is empty
         dbData.postValue(listOf())
