@@ -24,6 +24,7 @@ import com.owncloud.android.lib.resources.shares.CreateRemoteShareOperation
 import com.owncloud.android.lib.resources.shares.GetRemoteSharesForFileOperation
 import com.owncloud.android.lib.resources.shares.ShareParserResult
 import com.owncloud.android.lib.resources.shares.ShareType
+import com.owncloud.android.lib.resources.shares.UpdateRemoteShareOperation
 
 interface RemoteSharesDataSource {
     fun getSharesForFile(
@@ -45,5 +46,18 @@ interface RemoteSharesDataSource {
         publicUpload: Boolean,
         createRemoteShareOperation: CreateRemoteShareOperation =
             CreateRemoteShareOperation(remoteFilePath, shareType, shareWith, permissions)
+    ): RemoteOperationResult<ShareParserResult>
+
+    fun updateShareForFile(
+        remoteId: Long,
+        password: String,
+        expirationDateInMillis: Long,
+        permissions: Int,
+        publicUpload: Boolean,
+        name: String,
+        updateRemoteShareOperation: UpdateRemoteShareOperation =
+            UpdateRemoteShareOperation(
+                remoteId
+            )
     ): RemoteOperationResult<ShareParserResult>
 }
