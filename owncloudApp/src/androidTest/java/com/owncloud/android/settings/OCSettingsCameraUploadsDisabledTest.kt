@@ -57,14 +57,14 @@ class OCSettingsCameraUploadsDisabledTest {
     }
 
     @Test
-    fun testEnablePictureUploadsShowsWarning() {
+    fun enablePictureUploadsShowsWarning() {
         onView(withText(R.string.prefs_camera_picture_upload)).perform(click())
         onView(withText(R.string.common_important)).check(matches(isDisplayed()))
         onView(withText(R.string.proper_pics_folder_warning_camera_upload)).check(matches(isDisplayed()))
     }
 
     @Test
-    fun testEnablePictureUploads() {
+    fun enablePictureUploads() {
         var mPrefCameraPictureUploads =
             activityRule.activity.findPreference("camera_picture_uploads") as CheckBoxPreference
 
@@ -76,7 +76,7 @@ class OCSettingsCameraUploadsDisabledTest {
 
 
     @Test
-    fun testEnableVideoUploadsShowsWarning() {
+    fun enableVideoUploadsShowsWarning() {
         var mPrefCameraVideoUploads =
             activityRule.activity.findPreference("camera_video_uploads") as CheckBoxPreference
 
@@ -86,7 +86,7 @@ class OCSettingsCameraUploadsDisabledTest {
     }
 
     @Test
-    fun testEnableVideoUploads() {
+    fun enableVideoUploads() {
         var mPrefCameraVideoUploads =
             activityRule.activity.findPreference("camera_video_uploads") as CheckBoxPreference
 
@@ -97,7 +97,7 @@ class OCSettingsCameraUploadsDisabledTest {
 
 
     @Test
-    fun testOptionsPictureUploadsEnabled() {
+    fun optionsPictureUploadsEnabled() {
         var mPrefCameraPictureUploads =
             activityRule.activity.findPreference("camera_picture_uploads") as CheckBoxPreference
 
@@ -109,7 +109,7 @@ class OCSettingsCameraUploadsDisabledTest {
     }
 
     @Test
-    fun testOptionsVideoUploadsEnabled() {
+    fun optionsVideoUploadsEnabled() {
         var mPrefCameraPictureUploads =
             activityRule.activity.findPreference("camera_video_uploads") as CheckBoxPreference
 

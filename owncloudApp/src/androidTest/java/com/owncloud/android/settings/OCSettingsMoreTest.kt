@@ -94,7 +94,7 @@ class OCSettingsMoreTest {
     }
 
     @Test
-    fun dav5xView(){
+    fun davx5View(){
         onView(withText(R.string.prefs_sync_calendar_contacts)).check(matches(isDisplayed()))
         onView(withText(R.string.prefs_sync_calendar_contacts_summary)).check(matches(isDisplayed()))
     }
@@ -113,7 +113,7 @@ class OCSettingsMoreTest {
     }
 
     @Test
-    fun recommendOpenSender(){
+    fun recommendOpensSender(){
         val intentResult = ActivityResult(Activity.RESULT_OK, Intent())
         intending(hasAction(Intent.ACTION_SENDTO)).respondWith(intentResult);
         onView(withText(R.string.prefs_recommend)).perform(click())
@@ -138,7 +138,7 @@ class OCSettingsMoreTest {
     }
 
     @Test
-    fun feedbackOpenSender(){
+    fun feedbackOpensSender(){
         val intentResult = ActivityResult(Activity.RESULT_OK, Intent())
         intending(hasAction(Intent.ACTION_SENDTO)).respondWith(intentResult);
         onView(withText(R.string.drawer_feedback)).perform(click())
@@ -204,6 +204,4 @@ class OCSettingsMoreTest {
             .perform(click())
         intended(hasData(ghUrl))
     }
-
-
 }
