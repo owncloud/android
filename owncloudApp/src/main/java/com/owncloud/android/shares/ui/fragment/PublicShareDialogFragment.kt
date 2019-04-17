@@ -287,7 +287,6 @@ class PublicShareDialogFragment : DialogFragment() {
 
         if (!updating()) { // Creating a new public share
             ocShareViewModel.insertPublicShareForFile(
-                file?.remotePath!!,
                 publicLinkPermissions,
                 publicLinkName,
                 publicLinkPassword!!,

@@ -113,7 +113,6 @@ class PublicShareDialogFragmentTest {
         val ocShareViewModel = mock(OCShareViewModel::class.java)
         `when`(
             ocShareViewModel.insertPublicShareForFile(
-                filePath,
                 1,
                 defaultLinkName,
                 "",
