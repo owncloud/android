@@ -58,12 +58,9 @@ class OCSettingsCameraUploadsDisabledTest {
 
     @Test
     fun testEnablePictureUploadsShowsWarning() {
-        var mPrefCameraPictureUploads =
-            activityRule.activity.findPreference("camera_picture_uploads") as CheckBoxPreference
-
-        onView(withText(R.string.prefs_camera_picture_upload)).perform(click());
-        onView(withText(R.string.common_important)).check(matches(isDisplayed()));
-        onView(withText(R.string.proper_pics_folder_warning_camera_upload)).check(matches(isDisplayed()));
+        onView(withText(R.string.prefs_camera_picture_upload)).perform(click())
+        onView(withText(R.string.common_important)).check(matches(isDisplayed()))
+        onView(withText(R.string.proper_pics_folder_warning_camera_upload)).check(matches(isDisplayed()))
     }
 
     @Test
