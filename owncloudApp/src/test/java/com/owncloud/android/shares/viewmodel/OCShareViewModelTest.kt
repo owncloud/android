@@ -135,7 +135,6 @@ class OCShareViewModelTest {
         )
 
         val resource: Resource<List<OCShare>>? = ocShareViewModel.insertPublicShareForFile(
-            "/Photos/image.jpg",
             1,
             "Photos 2 link",
             "1234",
