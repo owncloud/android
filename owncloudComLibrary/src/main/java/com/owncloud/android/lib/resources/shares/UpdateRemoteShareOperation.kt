@@ -31,7 +31,7 @@ import com.owncloud.android.lib.common.http.methods.nonwebdav.PutMethod
 import com.owncloud.android.lib.common.operations.RemoteOperation
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.common.utils.Log_OC
-import com.owncloud.android.lib.resources.shares.RemoteShare.Companion.INIT_PERMISSION
+import com.owncloud.android.lib.resources.shares.RemoteShare.Companion.DEFAULT_PERMISSION
 import okhttp3.FormBody
 import java.net.URL
 import java.text.SimpleDateFormat
@@ -51,11 +51,14 @@ import java.util.Locale
 class UpdateRemoteShareOperation
 /**
  * Constructor. No update is initialized by default, need to be applied with setters below.
- *
- * @param remoteId Identifier of the share to update.
  */
-    (private val remoteId: Long) : RemoteOperation<ShareParserResult>() {
+    (
+    /**
+     * @param remoteId Identifier of the share to update.
+     */
+    private val remoteId: Long
 
+) : RemoteOperation<ShareParserResult>() {
     /**
      * Password to update in Share resource.
      *
@@ -81,7 +84,7 @@ class UpdateRemoteShareOperation
      * @param permissions Permissions to set to the target share.
      * Values <= 0 result in no update applied to the permissions.
      */
-    var permissions: Int = INIT_PERMISSION
+    var permissions: Int = DEFAULT_PERMISSION
 
     /**
      * Enable upload permissions to update in Share resource.
@@ -90,6 +93,7 @@ class UpdateRemoteShareOperation
      * Null results in no update applied to the upload permission.
      */
     var publicUpload: Boolean? = null
+
     /**
      * Name to update in Share resource. Ignored by servers previous to version 10.0.0
      *
@@ -99,13 +103,6 @@ class UpdateRemoteShareOperation
      */
     var name: String? = null
 
-    init {
-        password = null               // no update
-        expirationDateInMillis = INITIAL_EXPIRATION_DATE_IN_MILLIS    // no update
-        publicUpload = null
-        permissions = RemoteShare.DEFAULT_PERMISSION
-    }
-
     override fun run(client: OwnCloudClient): RemoteOperationResult<ShareParserResult> {
         var result: RemoteOperationResult<ShareParserResult>
 
@@ -114,7 +111,7 @@ class UpdateRemoteShareOperation
 
             // Parameters to update
             if (name != null) {
-                formBodyBuilder.add(PARAM_NAME, name!!)
+                formBodyBuilder.add(PARAM_NAME, name)
             }
 
             if (expirationDateInMillis < INITIAL_EXPIRATION_DATE_IN_MILLIS) {
@@ -136,7 +133,7 @@ class UpdateRemoteShareOperation
 
             // IMPORTANT: permissions parameter needs to be updated after mPublicUpload parameter,
             // otherwise they would be set always as 1 (READ) in the server when mPublicUpload was updated
-            if (permissions > INIT_PERMISSION) {
+            if (permissions > DEFAULT_PERMISSION) {
                 // set permissions
                 formBodyBuilder.add(PARAM_PERMISSIONS, permissions.toString())
             }
@@ -179,7 +176,6 @@ class UpdateRemoteShareOperation
     private fun isSuccess(status: Int): Boolean = status == HttpConstants.HTTP_OK
 
     companion object {
-
         private val TAG = GetRemoteShareOperation::class.java.simpleName
 
         private const val PARAM_NAME = "name"
@@ -191,6 +187,6 @@ class UpdateRemoteShareOperation
         private const val ENTITY_CONTENT_TYPE = "application/x-www-form-urlencoded"
         private const val ENTITY_CHARSET = "UTF-8"
 
-        private const val INITIAL_EXPIRATION_DATE_IN_MILLIS : Long = 0
+        private const val INITIAL_EXPIRATION_DATE_IN_MILLIS: Long = 0
     }
 }

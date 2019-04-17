@@ -49,7 +49,7 @@ class RemoteShare : Parcelable, Serializable {
     var fileSource: Long = 0
     var itemSource: Long = 0
     var shareType: ShareType? = null
-    var permissions: Int = INIT_PERMISSION
+    var permissions: Int = DEFAULT_PERMISSION
     var sharedDate: Long = INIT_SHARED_DATE
     var expirationDate: Long = INIT_EXPIRATION_DATE_IN_MILLIS
     var isFolder: Boolean = false
@@ -156,7 +156,6 @@ class RemoteShare : Parcelable, Serializable {
 
         private val TAG = RemoteShare::class.java.simpleName
 
-        const val INIT_PERMISSION = 0
         const val DEFAULT_PERMISSION = -1
         const val READ_PERMISSION_FLAG = 1
         const val UPDATE_PERMISSION_FLAG = 2
