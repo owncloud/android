@@ -209,13 +209,13 @@ class PublicShareDialogFragment : DialogFragment() {
             }
 
             if (publicShare?.isPasswordProtected!!) {
-                setPasswordSwitchChecked(true)
+                setPasswordSwitchChecked(view, true)
                 view.shareViaLinkPasswordValue?.visibility = View.VISIBLE
                 view.shareViaLinkPasswordValue?.hint = getString(R.string.share_via_link_default_password)
             }
 
             if (publicShare?.expirationDate != 0L) {
-                setExpirationDateSwitchChecked(true)
+                setExpirationDateSwitchChecked(view, true)
                 val formattedDate = ExpirationDatePickerDialogFragment.getDateFormat().format(
                     Date(publicShare?.expirationDate!!)
                 )
@@ -718,7 +718,7 @@ class PublicShareDialogFragment : DialogFragment() {
         // Show default date enforced by the server, if any
         if (!updating() && capabilities?.filesSharingPublicExpireDateDays!! > 0) {
 
-            setExpirationDateSwitchChecked(true)
+            setExpirationDateSwitchChecked(checked = true)
 
             val formattedDate = SimpleDateFormat.getDateInstance().format(
                 DateUtils.addDaysToDate(
@@ -811,16 +811,22 @@ class PublicShareDialogFragment : DialogFragment() {
         public_link_error_message?.text = errorMessage
     }
 
-    private fun setPasswordSwitchChecked(checked: Boolean) {
-        shareViaLinkPasswordSwitch?.setOnCheckedChangeListener(null)
-        shareViaLinkPasswordSwitch?.isChecked = checked
-        shareViaLinkPasswordSwitch?.setOnCheckedChangeListener(onPasswordInteractionListener)
+    private fun setPasswordSwitchChecked(view: View, checked: Boolean) {
+        view.shareViaLinkPasswordSwitch?.setOnCheckedChangeListener(null)
+        view.shareViaLinkPasswordSwitch?.isChecked = checked
+        view.shareViaLinkPasswordSwitch?.setOnCheckedChangeListener(onPasswordInteractionListener)
     }
 
-    private fun setExpirationDateSwitchChecked(checked: Boolean) {
-        shareViaLinkExpirationSwitch?.setOnCheckedChangeListener(null)
-        shareViaLinkExpirationSwitch?.isChecked = checked
-        shareViaLinkExpirationSwitch?.setOnCheckedChangeListener(onExpirationDateInteractionListener)
+    private fun setExpirationDateSwitchChecked(view: View? = null, checked: Boolean) {
+        if (view != null) {
+            view.shareViaLinkExpirationSwitch?.setOnCheckedChangeListener(null)
+            view.shareViaLinkExpirationSwitch?.isChecked = checked
+            view.shareViaLinkExpirationSwitch?.setOnCheckedChangeListener(onExpirationDateInteractionListener)
+        } else {
+            shareViaLinkExpirationSwitch?.setOnCheckedChangeListener(null)
+            shareViaLinkExpirationSwitch?.isChecked = checked
+            shareViaLinkExpirationSwitch?.setOnCheckedChangeListener(onExpirationDateInteractionListener)
+        }
     }
 
     companion object {
