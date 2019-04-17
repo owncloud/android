@@ -21,11 +21,14 @@ package com.owncloud.android.shares.db
 
 import android.content.ContentValues
 import android.database.Cursor
+import android.os.Parcel
+import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.owncloud.android.db.ProviderMeta.ProviderTableMeta
 import com.owncloud.android.lib.resources.shares.RemoteShare
+import com.owncloud.android.lib.resources.shares.ShareType
 
 /**
  * Represents one record of the Shares table.
@@ -66,9 +69,33 @@ data class OCShare(
     val name: String?,
     @ColumnInfo(name = ProviderTableMeta.OCSHARES_URL)
     val shareLink: String?
-) {
-
+) : Parcelable {
     @PrimaryKey(autoGenerate = true) var id: Int = 0
+
+    val isPasswordProtected: Boolean
+        get() = shareType == ShareType.PUBLIC_LINK.value  && shareWith?.isNotEmpty()!!
+
+    constructor(parcel: Parcel) : this(
+        parcel.readLong(),
+        parcel.readLong(),
+        parcel.readInt(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readInt(),
+        parcel.readLong(),
+        parcel.readLong(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readByte() != 0.toByte(),
+        parcel.readLong(),
+        parcel.readLong(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString()
+    ) {
+        id = parcel.readInt()
+    }
 
     companion object {
 
@@ -166,5 +193,40 @@ data class OCShare(
                 values.getAsString(ProviderTableMeta.OCSHARES_URL)
             )
         }
+
+        /**
+         * Parcelable Methods
+         */
+        @JvmField
+        val CREATOR: Parcelable.Creator<OCShare> = object : Parcelable.Creator<OCShare> {
+            override fun createFromParcel(source: Parcel): OCShare {
+                return OCShare(source)
+            }
+
+            override fun newArray(size: Int): Array<OCShare?> {
+                return arrayOfNulls(size)
+            }
+        }
+    }
+
+    override fun describeContents(): Int = this.hashCode()
+
+    override fun writeToParcel(dest: Parcel?, flags: Int) {
+        dest?.writeInt(id)
+        dest?.writeString(shareWith)
+        dest?.writeString(path)
+        dest?.writeString(token)
+        dest?.writeString(sharedWithDisplayName)
+        dest?.writeString(sharedWithAdditionalInfo)
+        dest?.writeString(name)
+        dest?.writeString(shareLink)
+        dest?.writeLong(fileSource)
+        dest?.writeLong(itemSource)
+        dest?.writeInt(shareType)
+        dest?.writeInt(permissions)
+        dest?.writeLong(sharedDate)
+        dest?.writeLong(expirationDate)
+        dest?.writeInt(if (isFolder) 1 else 0)
+        dest?.writeLong(userId)
     }
 }

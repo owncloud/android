@@ -60,18 +60,19 @@ class OCRemoteSharesDataSource(
 
     override fun updateShareForFile(
         remoteId: Long,
+        name: String,
         password: String,
         expirationDateInMillis: Long,
         permissions: Int,
         publicUpload: Boolean,
-        name: String,
         updateRemoteShareOperation: UpdateRemoteShareOperation
     ): RemoteOperationResult<ShareParserResult> {
+        updateRemoteShareOperation.name = name
         updateRemoteShareOperation.password = password
         updateRemoteShareOperation.expirationDateInMillis = expirationDateInMillis
         updateRemoteShareOperation.permissions = permissions
         updateRemoteShareOperation.publicUpload = publicUpload
-        updateRemoteShareOperation.name = name
+        updateRemoteShareOperation.retrieveShareDetails = true
         return updateRemoteShareOperation.execute(client)
     }
 }
