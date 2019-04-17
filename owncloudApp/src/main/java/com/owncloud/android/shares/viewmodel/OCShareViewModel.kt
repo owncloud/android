@@ -70,14 +70,14 @@ class OCShareViewModel(
 
     fun updatePublicShareForFile(
         remoteId: Long,
+        name: String,
         password: String,
         expirationDateInMillis: Long,
         permissions: Int,
-        publicUpload: Boolean,
-        name: String
+        publicUpload: Boolean
     ): LiveData<Resource<List<OCShare>>> {
         return shareRepository.updatePublicShareForFile(
-            filePath, account.name, remoteId, password, expirationDateInMillis, permissions, publicUpload, name
+            filePath, account.name, remoteId, name, password, expirationDateInMillis, permissions, publicUpload
         )
     }
 }

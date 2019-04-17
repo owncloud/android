@@ -50,11 +50,11 @@ interface RemoteSharesDataSource {
 
     fun updateShareForFile(
         remoteId: Long,
+        name: String,
         password: String,
         expirationDateInMillis: Long,
         permissions: Int,
         publicUpload: Boolean,
-        name: String,
         updateRemoteShareOperation: UpdateRemoteShareOperation =
             UpdateRemoteShareOperation(
                 remoteId

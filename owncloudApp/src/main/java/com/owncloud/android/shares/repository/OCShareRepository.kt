@@ -61,10 +61,10 @@ class OCShareRepository(
                 }
 
                 if (sharesForFileFromServer.isEmpty()) {
-                    localSharesDataSource.delete(filePath, accountName)
+                    localSharesDataSource.deleteSharesForFile(filePath, accountName)
                 }
 
-                localSharesDataSource.insert(sharesForFileFromServer)
+                localSharesDataSource.replaceSharesForFile(sharesForFileFromServer)
             }
 
             override fun shouldFetch(data: List<OCShare>?) = true
@@ -120,11 +120,11 @@ class OCShareRepository(
         filePath: String,
         accountName: String,
         remoteId: Long,
+        name: String,
         password: String,
         expirationDateInMillis: Long,
         permissions: Int,
-        publicUpload: Boolean,
-        name: String
+        publicUpload: Boolean
     ): LiveData<Resource<List<OCShare>>> {
         return object : NetworkBoundResource<List<OCShare>, ShareParserResult>(appExecutors) {
             override fun saveCallResult(item: ShareParserResult) {
@@ -132,7 +132,7 @@ class OCShareRepository(
                     OCShare.fromRemoteShare(remoteShare).also { it.accountOwner = accountName }
                 }
 
-                localSharesDataSource.update(updatedShareForFileFromServer)
+                localSharesDataSource.update(updatedShareForFileFromServer.first())
             }
 
             override fun shouldFetch(data: List<OCShare>?): Boolean {
@@ -147,11 +147,11 @@ class OCShareRepository(
 
             override fun createCall() = remoteSharesDataSource.updateShareForFile(
                 remoteId,
+                name,
                 password,
                 expirationDateInMillis,
                 permissions,
-                publicUpload,
-                name
+                publicUpload
             )
         }.asLiveData()
     }
