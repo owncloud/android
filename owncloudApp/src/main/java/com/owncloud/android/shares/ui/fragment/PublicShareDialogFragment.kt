@@ -55,7 +55,6 @@ import com.owncloud.android.operations.common.OperationType
 import com.owncloud.android.shares.db.OCShare
 import com.owncloud.android.shares.viewmodel.OCShareViewModel
 import com.owncloud.android.ui.activity.BaseActivity
-import com.owncloud.android.ui.activity.FileActivity
 import com.owncloud.android.ui.dialog.ExpirationDatePickerDialogFragment
 import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter
 import com.owncloud.android.ui.fragment.ShareFragmentListener
@@ -77,7 +76,7 @@ class PublicShareDialogFragment : DialogFragment() {
     /**
      * Existing share to update. If NULL, the dialog will create a new share for file.
      */
-    private var publicShare: RemoteShare? = null
+    private var publicShare: OCShare? = null
 
     /*
      * OC account holding the file to share, received as a parameter in construction time
@@ -298,6 +297,7 @@ class PublicShareDialogFragment : DialogFragment() {
                     when (resource?.status) {
                         Status.SUCCESS -> {
                             dismiss()
+                            (activity as BaseActivity).dismissLoadingDialog()
                         }
                         Status.ERROR -> {
                             val errorMessage: String = resource.msg ?: ErrorMessageAdapter.getResultMessage(
@@ -326,13 +326,39 @@ class PublicShareDialogFragment : DialogFragment() {
                 publicLinkPassword = null
             }
 
-            (activity as FileActivity).fileOperationsHelper.updateShareViaLink(
-                publicShare,
+            ocShareViewModel.updatePublicShareForFile(
+                publicShare?.remoteId!!,
                 publicLinkName,
-                publicLinkPassword,
+                publicLinkPassword!!,
                 publicLinkExpirationDateInMillis,
-                publicUploadPermission,
-                publicLinkPermissions
+                publicLinkPermissions,
+                publicUploadPermission
+            ).observe(
+                this,
+                Observer { resource ->
+                    when (resource?.status) {
+                        Status.SUCCESS -> {
+                            dismiss()
+                            (activity as BaseActivity).dismissLoadingDialog()
+                        }
+                        Status.ERROR -> {
+                            val errorMessage: String = resource.msg ?: ErrorMessageAdapter.getResultMessage(
+                                resource.code,
+                                resource.exception,
+                                OperationType.CREATE_PUBLIC_SHARE,
+                                resources
+                            );
+                            showError(errorMessage)
+                            (activity as BaseActivity).dismissLoadingDialog()
+                        }
+                        Status.LOADING -> {
+                            (activity as BaseActivity).showLoadingDialog(R.string.common_loading)
+                        }
+                        else -> {
+                            Log.d(TAG, "Unknown status when creating share")
+                        }
+                    }
+                }
             )
         }
     }
@@ -851,6 +877,7 @@ class PublicShareDialogFragment : DialogFragment() {
             val args = Bundle()
             args.putParcelable(ARG_FILE, fileToShare)
             args.putParcelable(ARG_ACCOUNT, account)
+            args.putParcelable(ARG_SHARE, publicShare)
             publicShareDialogFragment.arguments = args
             return publicShareDialogFragment
         }

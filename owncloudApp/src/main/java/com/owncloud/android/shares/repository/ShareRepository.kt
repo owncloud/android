@@ -48,10 +48,10 @@ interface ShareRepository {
         filePath: String,
         accountName: String,
         remoteId: Long,
+        name: String,
         password: String,
         expirationDateInMillis: Long,
         permissions: Int,
-        publicUpload: Boolean,
-        name: String
+        publicUpload: Boolean
     ): LiveData<Resource<List<OCShare>>>
 }
