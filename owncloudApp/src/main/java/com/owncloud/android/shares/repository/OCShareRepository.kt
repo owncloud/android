@@ -115,4 +115,44 @@ class OCShareRepository(
             )
         }.asLiveData()
     }
+
+    override fun updatePublicShareForFile(
+        filePath: String,
+        accountName: String,
+        remoteId: Long,
+        password: String,
+        expirationDateInMillis: Long,
+        permissions: Int,
+        publicUpload: Boolean,
+        name: String
+    ): LiveData<Resource<List<OCShare>>> {
+        return object : NetworkBoundResource<List<OCShare>, ShareParserResult>(appExecutors) {
+            override fun saveCallResult(item: ShareParserResult) {
+                val updatedShareForFileFromServer = item.shares.map { remoteShare ->
+                    OCShare.fromRemoteShare(remoteShare).also { it.accountOwner = accountName }
+                }
+
+                localSharesDataSource.update(updatedShareForFileFromServer)
+            }
+
+            override fun shouldFetch(data: List<OCShare>?): Boolean {
+                return true
+            }
+
+            override fun loadFromDb(): LiveData<List<OCShare>> {
+                return localSharesDataSource.getSharesForFileAsLiveData(
+                    filePath, accountName, listOf(ShareType.PUBLIC_LINK)
+                )
+            }
+
+            override fun createCall() = remoteSharesDataSource.updateShareForFile(
+                remoteId,
+                password,
+                expirationDateInMillis,
+                permissions,
+                publicUpload,
+                name
+            )
+        }.asLiveData()
+    }
 }
