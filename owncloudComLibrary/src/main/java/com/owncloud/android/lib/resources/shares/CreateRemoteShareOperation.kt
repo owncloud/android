@@ -81,10 +81,6 @@ class CreateRemoteShareOperation(
 
     var publicUpload: Boolean = false // Upload permissions for the public link (only folders)
 
-    init {
-        retrieveShareDetails = false        // defaults to false for backwards compatibility
-    }
-
     override fun run(client: OwnCloudClient): RemoteOperationResult<ShareParserResult> {
         var result: RemoteOperationResult<ShareParserResult>
 
@@ -140,7 +136,6 @@ class CreateRemoteShareOperation(
                 result = parser.parse(postMethod.responseBodyAsString)
 
                 if (result.isSuccess && retrieveShareDetails) {
-                    // TODO Use executeHttpMethod
                     // retrieve more info - POST only returns the index of the new share
                     val emptyShare = result.data.shares[0]
                     val getInfo = GetRemoteShareOperation(

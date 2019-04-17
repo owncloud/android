@@ -60,6 +60,15 @@ class UpdateRemoteShareOperation
 
 ) : RemoteOperation<ShareParserResult>() {
     /**
+     * Name to update in Share resource. Ignored by servers previous to version 10.0.0
+     *
+     * @param name Name to set to the target share.
+     * Empty string clears the current name.
+     * Null results in no update applied to the name.
+     */
+    var name: String? = null
+
+    /**
      * Password to update in Share resource.
      *
      * @param password Password to set to the target share.
@@ -94,14 +103,7 @@ class UpdateRemoteShareOperation
      */
     var publicUpload: Boolean? = null
 
-    /**
-     * Name to update in Share resource. Ignored by servers previous to version 10.0.0
-     *
-     * @param name Name to set to the target share.
-     * Empty string clears the current name.
-     * Null results in no update applied to the name.
-     */
-    var name: String? = null
+    var retrieveShareDetails = false // To retrieve more info about the just updated share
 
     override fun run(client: OwnCloudClient): RemoteOperationResult<ShareParserResult> {
         var result: RemoteOperationResult<ShareParserResult>
@@ -111,7 +113,7 @@ class UpdateRemoteShareOperation
 
             // Parameters to update
             if (name != null) {
-                formBodyBuilder.add(PARAM_NAME, name)
+                formBodyBuilder.add(PARAM_NAME, name!!)
             }
 
             if (expirationDateInMillis < INITIAL_EXPIRATION_DATE_IN_MILLIS) {
@@ -148,21 +150,29 @@ class UpdateRemoteShareOperation
             putMethod.setRequestBody(formBodyBuilder.build())
 
             putMethod.setRequestHeader(HttpConstants.CONTENT_TYPE_HEADER, HttpConstants.CONTENT_TYPE_URLENCODED_UTF8)
-            putMethod.addRequestHeader(RemoteOperation.OCS_API_HEADER, RemoteOperation.OCS_API_HEADER_VALUE)
+            putMethod.addRequestHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE)
 
             val status = client.executeHttpMethod(putMethod)
 
-            if (isSuccess(status)) {
-                // Parse xml response
-                val parser = ShareToRemoteOperationResultParser(
-                    ShareXMLParser()
-                )
-                parser.ownCloudVersion = client.ownCloudVersion
-                parser.serverBaseUri = client.baseUri
-                result = parser.parse(putMethod.responseBodyAsString)
+            if(!isSuccess(status)){
+                return RemoteOperationResult(putMethod)
+            }
 
-            } else {
-                result = RemoteOperationResult(putMethod)
+            // Parse xml response
+            val parser = ShareToRemoteOperationResultParser(
+                ShareXMLParser()
+            )
+            parser.ownCloudVersion = client.ownCloudVersion
+            parser.serverBaseUri = client.baseUri
+            result = parser.parse(putMethod.responseBodyAsString)
+
+            if (result.isSuccess && retrieveShareDetails) {
+                // retrieve more info - PUT only returns the index of the new share
+                val emptyShare = result.data.shares[0]
+                val getInfo = GetRemoteShareOperation(
+                    emptyShare.id
+                )
+                result = getInfo.execute(client)
             }
 
         } catch (e: Exception) {
