@@ -39,7 +39,7 @@ abstract class OCShareDao {
     abstract fun insert(ocShares: List<OCShare>): List<Long>
 
     @Update
-    abstract fun update(ocShare: OCShare): Int
+    abstract fun update(ocShares: List<OCShare>): Int
 
     @Query(
         "DELETE from " + ProviderTableMeta.OCSHARES_TABLE_NAME + " WHERE " +
