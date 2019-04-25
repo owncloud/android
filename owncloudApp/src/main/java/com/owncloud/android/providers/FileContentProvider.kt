@@ -416,7 +416,7 @@ class FileContentProvider(val appExecutors: AppExecutors = AppExecutors()) : Con
         return c
     }
 
-    override fun update(uri: Uri, values: ContentValues?, selection: String?, selectionArgs: Array<String>?): Int {
+    override fun update(uri: Uri, values: ContentValues, selection: String?, selectionArgs: Array<String>?): Int {
         val count: Int
         val db = dbHelper.writableDatabase
         db.beginTransaction()
@@ -433,15 +433,16 @@ class FileContentProvider(val appExecutors: AppExecutors = AppExecutors()) : Con
     private fun update(
         db: SQLiteDatabase,
         uri: Uri,
-        values: ContentValues?,
+        values: ContentValues,
         selection: String?,
         selectionArgs: Array<String>?
     ): Int {
         when (uriMatcher.match(uri)) {
             DIRECTORY -> return 0 //updateFolderSize(db, selectionArgs[0]);
-            SHARES -> return db.update(
-                ProviderTableMeta.OCSHARES_TABLE_NAME, values, selection, selectionArgs
-            )
+            SHARES -> {
+                return OwncloudDatabase.getDatabase(context!!).shareDao().update(OCShare.fromContentValues(values))
+                    .toInt()
+            }
             CAPABILITIES -> return db.update(
                 ProviderTableMeta.CAPABILITIES_TABLE_NAME, values, selection, selectionArgs
             )
@@ -487,7 +488,7 @@ class FileContentProvider(val appExecutors: AppExecutors = AppExecutors()) : Con
         return results
     }
 
-    private inner class DataBaseHelper internal constructor(context: Context) :
+    private inner class DataBaseHelper internal constructor(context: Context?) :
         SQLiteOpenHelper(context, ProviderMeta.DB_NAME, null, ProviderMeta.DB_VERSION) {
 
         override fun onCreate(db: SQLiteDatabase) {

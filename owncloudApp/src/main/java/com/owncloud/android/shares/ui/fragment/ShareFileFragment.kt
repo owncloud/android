@@ -25,6 +25,7 @@ package com.owncloud.android.shares.ui.fragment
 
 import android.accounts.Account
 import android.app.Activity
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -354,14 +355,13 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
         refreshUsersOrGroupsListFromDB()
     }
 
-    override fun onAttach(activity: Activity?) {
-        super.onAttach(activity)
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
         try {
-            listener = activity as ShareFragmentListener?
+            listener = context as ShareFragmentListener?
         } catch (e: ClassCastException) {
             throw ClassCastException(activity!!.toString() + " must implement OnShareFragmentInteractionListener")
         }
-
     }
 
     override fun onDetach() {

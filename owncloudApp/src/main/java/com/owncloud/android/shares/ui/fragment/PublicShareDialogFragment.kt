@@ -319,19 +319,17 @@ class PublicShareDialogFragment : DialogFragment() {
                 }
             )
         } else { // Updating an existing public share
-
             if (!shareViaLinkPasswordSwitch.isChecked) {
                 publicLinkPassword = ""
             } else if (shareViaLinkPasswordValue.text.isEmpty()) {
                 // User has not added a new password, so do not update it
-                showError(getString(R.string.share_via_link_empty_password))
-                return;
+                publicLinkPassword = null
             }
 
             ocShareViewModel.updatePublicShareForFile(
                 publicShare?.remoteId!!,
                 publicLinkName,
-                publicLinkPassword!!,
+                publicLinkPassword,
                 publicLinkExpirationDateInMillis,
                 publicLinkPermissions,
                 publicUploadPermission
