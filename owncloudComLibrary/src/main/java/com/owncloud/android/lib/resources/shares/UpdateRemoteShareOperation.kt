@@ -116,6 +116,10 @@ class UpdateRemoteShareOperation
                 formBodyBuilder.add(PARAM_NAME, name!!)
             }
 
+            if (password != null) {
+                formBodyBuilder.add(PARAM_PASSWORD, password!!)
+            }
+
             if (expirationDateInMillis < INITIAL_EXPIRATION_DATE_IN_MILLIS) {
                 // clear expiration date
                 formBodyBuilder.add(PARAM_EXPIRATION_DATE, "")
