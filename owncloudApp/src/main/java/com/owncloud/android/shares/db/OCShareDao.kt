@@ -43,9 +43,9 @@ abstract class OCShareDao {
     abstract fun insert(ocShares: List<OCShare>): List<Long>
 
     @Transaction
-    open fun update(ocShare: OCShare) {
+    open fun update(ocShare: OCShare): Long {
         deleteShare(ocShare.remoteId)
-        insert(listOf(ocShare))
+        return insert(listOf(ocShare))[0]
     }
 
     @Transaction

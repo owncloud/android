@@ -71,7 +71,7 @@ class OCShareViewModel(
     fun updatePublicShareForFile(
         remoteId: Long,
         name: String,
-        password: String,
+        password: String?,
         expirationDateInMillis: Long,
         permissions: Int,
         publicUpload: Boolean
