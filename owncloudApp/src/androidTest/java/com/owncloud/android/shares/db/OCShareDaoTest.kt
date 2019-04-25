@@ -242,7 +242,7 @@ class OCShareDaoTest {
             )
         )
 
-        ocShareDao.replace(
+        ocShareDao.replaceSharesForFile(
             listOf( // Update link name
                 TestUtil.createPublicShare(
                     path = "/Texts/text1.txt",
@@ -260,7 +260,7 @@ class OCShareDaoTest {
         )
 
         assertThat(textShares, notNullValue())
-        assertEquals(textShares.size, 2)
+        assertEquals(textShares.size, 1)
         assertEquals(textShares.get(0).name, "Text 1 link")
     }
 
@@ -277,7 +277,7 @@ class OCShareDaoTest {
             )
         )
 
-        ocShareDao.replace(
+        ocShareDao.replaceSharesForFile(
             listOf( // New link
                 TestUtil.createPublicShare(
                     path = "/Texts/text2.txt",

@@ -32,7 +32,7 @@ interface LocalSharesDataSource {
 
     fun insert(ocShares: List<OCShare>): List<Long>
 
-    fun update(ocShare: OCShare)
+    fun update(ocShare: OCShare): Long
 
     fun replaceSharesForFile(ocShares: List<OCShare>)
 

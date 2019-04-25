@@ -49,7 +49,7 @@ interface ShareRepository {
         accountName: String,
         remoteId: Long,
         name: String,
-        password: String,
+        password: String?,
         expirationDateInMillis: Long,
         permissions: Int,
         publicUpload: Boolean
