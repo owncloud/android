@@ -29,7 +29,6 @@ import android.content.res.AssetFileDescriptor
 import android.database.Cursor
 import android.graphics.Point
 import android.net.Uri
-import android.os.Build
 import android.os.CancellationSignal
 import android.os.ParcelFileDescriptor
 import android.provider.DocumentsContract
@@ -211,7 +210,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
         Log_OC.d(TAG, "Trying to rename ${file.fileName} to $displayName")
 
         RenameFileOperation(file.remotePath, displayName).apply {
-            execute(currentStorageManager, context).also { checkOperationResult(it, file) }
+            execute(currentStorageManager, context).also { checkOperationResult(it, file.parentId.toString()) }
         }
 
         return null
@@ -226,20 +225,17 @@ class DocumentsStorageProvider : DocumentsProvider() {
         Log_OC.d(TAG, "Trying to delete ${file.fileName} with id ${file.fileId}")
 
         RemoveFileOperation(file.remotePath, false).apply {
-            execute(currentStorageManager, context).also { checkOperationResult(it, file) }
+            execute(currentStorageManager, context).also { checkOperationResult(it, file.parentId.toString()) }
         }
     }
 
-    private fun checkOperationResult(result: RemoteOperationResult<Any>, file: OCFile) {
+    private fun checkOperationResult(result: RemoteOperationResult<Any>, folderToNotify: String) {
         if (!result.isSuccess) {
-            notifyChangeInFolder(file.parentId.toString())
+            if (result.code != RemoteOperationResult.ResultCode.WRONG_CONNECTION) notifyChangeInFolder(folderToNotify)
             throw FileNotFoundException("Remote Operation failed due to ${result.exception.message}")
         } else {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                revokeDocumentPermission(file.fileId.toString())
-            }
             syncRequired = false
-            notifyChangeInFolder(file.parentId.toString())
+            notifyChangeInFolder(folderToNotify)
         }
     }
 
@@ -248,19 +244,13 @@ class DocumentsStorageProvider : DocumentsProvider() {
 
         Log_OC.d(TAG, "Trying to create folder with path $newPath")
 
-        val createFolderOperation = CreateFolderOperation(newPath, false)
-        val result = createFolderOperation.execute(currentStorageManager, context)
-
-        if (!result.isSuccess) {
-            throw java.lang.UnsupportedOperationException("Failed to create new folder")
-        } else {
-            val newFolder = currentStorageManager?.getFileByPath(newPath)
-                ?: throw FileNotFoundException("Folder $newPath not found")
-
-            syncRequired = false
-            context?.contentResolver?.notifyChange(toNotifyUri(toUri(parentDocument.fileId.toString())), null)
-
-            return newFolder.fileId.toString()
+        CreateFolderOperation(newPath, false).apply {
+            execute(currentStorageManager, context).also { result ->
+                checkOperationResult(result, parentDocument.fileId.toString())
+                val newFolder = currentStorageManager?.getFileByPath(newPath)
+                    ?: throw FileNotFoundException("Folder $newPath not found")
+                return newFolder.fileId.toString()
+            }
         }
     }
 
