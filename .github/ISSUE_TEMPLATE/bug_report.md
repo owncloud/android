@@ -1,3 +1,12 @@
+---
+name: Bug report
+about: Create a bug report to help us improve
+title: "[BUG]"
+labels: ''
+assignees: ''
+
+---
+
 ### Actual behaviour
 -Tell us what happens
 

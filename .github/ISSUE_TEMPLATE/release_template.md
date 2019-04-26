@@ -1,8 +1,13 @@
-<!--
-This is the template for new release issues.
--->
+---
+name: Release
+about: Create a bug report to help us improve
+title: "[RELEASE]"
+labels: Release
+assignees: ''
 
-AC:
+---
+
+### TASKS:
 
  - [ ] [GIT] Create branch release_Y.Y.Y in owncloud/android-library from master  (almost feature-frozen)
  - [ ] [GIT] Create branch release_X.X.X in owncloud/android from master (almost feature-frozen)
@@ -19,8 +24,6 @@ AC:
  - [ ] [mail] inform john@owncloud.com and emil@owncloud.com about new release.
  - [ ] [DIS] Upload & publish release APK and changelog in Play Store
  - [ ] [DIS] Update screenshots and store listing, if needed, in Play Store
- - [ ] [DIS] Upload & publish release BAR and changelog in Blackberry World
- - [ ] [DIS] Update screenshots and store listing, if needed, in Blackberry World
  - [ ] [GIT] merge master branch into stable, in owncloud/android-library
  - [ ] [GIT] merge master branch into stable, in owncloud/android
  - [ ] [DOC] Update owncloud.org/download version numbers (notify rocketchat #marketing)
@@ -28,4 +31,4 @@ AC:
 
 _____
 
-BUGS & IMPROVEMENTS
+### BUGS & IMPROVEMENTS
