@@ -84,7 +84,7 @@ class OCShareRepository(
         name: String,
         password: String,
         expirationTimeInMillis: Long,
-        uploadToFolderPermission: Boolean
+        publicUpload: Boolean
     ): LiveData<Resource<List<OCShare>>> {
         return object : NetworkBoundResource<List<OCShare>, ShareParserResult>(appExecutors) {
             override fun saveCallResult(item: ShareParserResult) {
@@ -111,7 +111,7 @@ class OCShareRepository(
                 name,
                 password,
                 expirationTimeInMillis,
-                uploadToFolderPermission
+                publicUpload
             )
         }.asLiveData()
     }
