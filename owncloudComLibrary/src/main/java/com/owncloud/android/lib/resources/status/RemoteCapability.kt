@@ -61,7 +61,7 @@ class RemoteCapability {
     var filesSharingFederationIncoming: CapabilityBooleanType
 
     // Files
-    var filesBigFileChuncking: CapabilityBooleanType
+    var filesBigFileChunking: CapabilityBooleanType
     var filesUndelete: CapabilityBooleanType
     var filesVersioning: CapabilityBooleanType
 
@@ -94,7 +94,7 @@ class RemoteCapability {
         filesSharingFederationOutgoing = CapabilityBooleanType.UNKNOWN
         filesSharingFederationIncoming = CapabilityBooleanType.UNKNOWN
 
-        filesBigFileChuncking = CapabilityBooleanType.UNKNOWN
+        filesBigFileChunking = CapabilityBooleanType.UNKNOWN
         filesUndelete = CapabilityBooleanType.UNKNOWN
         filesVersioning = CapabilityBooleanType.UNKNOWN
     }

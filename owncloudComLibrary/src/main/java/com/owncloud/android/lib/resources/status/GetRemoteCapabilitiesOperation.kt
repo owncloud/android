@@ -219,7 +219,7 @@ class GetRemoteCapabilitiesOperation : RemoteOperation<RemoteCapability>() {
                     if (respCapabilities.has(NODE_FILES)) {
                         val respFiles = respCapabilities.getJSONObject(NODE_FILES)
                         // Add files
-                        capability.filesBigFileChuncking = CapabilityBooleanType.fromBooleanValue(
+                        capability.filesBigFileChunking = CapabilityBooleanType.fromBooleanValue(
                             respFiles.getBoolean(PROPERTY_BIGFILECHUNKING)
                         )
                         if (respFiles.has(PROPERTY_UNDELETE)) {
