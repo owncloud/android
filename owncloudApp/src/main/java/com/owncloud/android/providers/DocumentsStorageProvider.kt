@@ -233,10 +233,9 @@ class DocumentsStorageProvider : DocumentsProvider() {
         if (!result.isSuccess) {
             if (result.code != RemoteOperationResult.ResultCode.WRONG_CONNECTION) notifyChangeInFolder(folderToNotify)
             throw FileNotFoundException("Remote Operation failed due to ${result.exception.message}")
-        } else {
-            syncRequired = false
-            notifyChangeInFolder(folderToNotify)
         }
+        syncRequired = false
+        notifyChangeInFolder(folderToNotify)
     }
 
     private fun createFolder(parentDocument: OCFile, displayName: String): String {
