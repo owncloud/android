@@ -48,9 +48,9 @@ abstract class OCCapabilityDao {
 
     @Transaction
     open fun replace(ocCapabilities: List<OCCapability>) {
-        for (ocCapability in ocCapabilities) {
-            if (ocCapability.accountName != null) {
-                delete(ocCapability.accountName)
+        ocCapabilities.forEach { ocCapability ->
+            ocCapability.accountName?.run {
+                delete(this)
             }
         }
         insert(ocCapabilities)

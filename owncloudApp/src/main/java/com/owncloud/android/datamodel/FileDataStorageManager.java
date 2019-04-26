@@ -1954,7 +1954,7 @@ public class FileDataStorageManager {
                 capability.getFilesSharingFederationOutgoing().getValue());
         cv.put(ProviderTableMeta.CAPABILITIES_SHARING_FEDERATION_INCOMING,
                 capability.getFilesSharingFederationIncoming().getValue());
-        cv.put(ProviderTableMeta.CAPABILITIES_FILES_BIGFILECHUNKING, capability.getFilesBigFileChuncking().getValue());
+        cv.put(ProviderTableMeta.CAPABILITIES_FILES_BIGFILECHUNKING, capability.getFilesBigFileChunking().getValue());
         cv.put(ProviderTableMeta.CAPABILITIES_FILES_UNDELETE, capability.getFilesUndelete().getValue());
         cv.put(ProviderTableMeta.CAPABILITIES_FILES_VERSIONING, capability.getFilesVersioning().getValue());
 
@@ -2100,7 +2100,7 @@ public class FileDataStorageManager {
                     .getColumnIndex(ProviderTableMeta.CAPABILITIES_SHARING_FEDERATION_OUTGOING))));
             capability.setFilesSharingFederationIncoming(CapabilityBooleanType.Companion.fromValue(c.getInt(c
                     .getColumnIndex(ProviderTableMeta.CAPABILITIES_SHARING_FEDERATION_INCOMING))));
-            capability.setFilesBigFileChuncking(CapabilityBooleanType.Companion.fromValue(c.getInt(c
+            capability.setFilesBigFileChunking(CapabilityBooleanType.Companion.fromValue(c.getInt(c
                     .getColumnIndex(ProviderTableMeta.CAPABILITIES_FILES_BIGFILECHUNKING))));
             capability.setFilesUndelete(CapabilityBooleanType.Companion.fromValue(c.getInt(c
                     .getColumnIndex(ProviderTableMeta.CAPABILITIES_FILES_UNDELETE))));

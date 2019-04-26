@@ -67,13 +67,10 @@ class OCShareRepository(
                 localSharesDataSource.insert(sharesForFileFromServer)
             }
 
-            override fun shouldFetch(data: List<OCShare>?): Boolean {
-                return true
-            }
+            override fun shouldFetch(data: List<OCShare>?) = true
 
-            override fun loadFromDb(): LiveData<List<OCShare>> {
-                return localSharesDataSource.getSharesForFileAsLiveData(filePath, accountName, shareTypes)
-            }
+            override fun loadFromDb(): LiveData<List<OCShare>> =
+                localSharesDataSource.getSharesForFileAsLiveData(filePath, accountName, shareTypes)
 
             override fun createCall() = remoteSharesDataSource.getSharesForFile(filePath, reshares, subfiles)
 
@@ -98,9 +95,7 @@ class OCShareRepository(
                 localSharesDataSource.insert(newShareForFileFromServer)
             }
 
-            override fun shouldFetch(data: List<OCShare>?): Boolean {
-                return true
-            }
+            override fun shouldFetch(data: List<OCShare>?) = true
 
             override fun loadFromDb(): LiveData<List<OCShare>> {
                 return localSharesDataSource.getSharesForFileAsLiveData(

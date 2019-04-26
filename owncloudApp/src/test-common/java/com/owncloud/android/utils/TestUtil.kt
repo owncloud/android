@@ -213,55 +213,37 @@ object TestUtil {
         filesBigFileChunking: Int = 0,
         filesUndelete: Int = 0,
         filesVersioning: Int = 0
-    ): RemoteCapability {
-        val remoteCapability = RemoteCapability()
-
-        remoteCapability.accountName = accountName
-        remoteCapability.versionMayor = versionMayor
-        remoteCapability.versionMinor = versionMinor
-        remoteCapability.versionMicro = versionMicro
-        remoteCapability.versionString = versionString
-        remoteCapability.versionEdition = versionEdition
-        remoteCapability.corePollinterval = corePollinterval
-        remoteCapability.filesSharingApiEnabled = CapabilityBooleanType.fromValue(sharingApiEnabled)
-        remoteCapability.filesSharingPublicEnabled = CapabilityBooleanType.fromValue(sharingPublicEnabled)
-        remoteCapability.filesSharingPublicPasswordEnforced =
-            CapabilityBooleanType.fromValue(sharingPublicPasswordEnforced)
-        remoteCapability.filesSharingPublicPasswordEnforcedReadOnly =
-            CapabilityBooleanType.fromValue(sharingPublicPasswordEnforcedReadOnly)
-        remoteCapability.filesSharingPublicPasswordEnforcedReadWrite =
-            CapabilityBooleanType.fromValue(sharingPublicPasswordEnforcedReadWrite)
-        remoteCapability.filesSharingPublicPasswordEnforcedUploadOnly =
-            CapabilityBooleanType.fromValue(sharingPublicPasswordEnforcedUploadOnly)
-        remoteCapability.filesSharingPublicExpireDateEnabled =
-            CapabilityBooleanType.fromValue(sharingPublicExpireDateEnabled)
-        remoteCapability.filesSharingPublicExpireDateDays = sharingPublicExpireDateDays
-        remoteCapability.filesSharingPublicExpireDateEnforced =
-            CapabilityBooleanType.fromValue(sharingPublicExpireDateEnforced)
-        remoteCapability.filesSharingPublicSendMail =
-            CapabilityBooleanType.fromValue(sharingPublicSendMail)
-        remoteCapability.filesSharingPublicUpload =
-            CapabilityBooleanType.fromValue(sharingPublicUpload)
-        remoteCapability.filesSharingPublicMultiple =
-            CapabilityBooleanType.fromValue(sharingPublicMultiple)
-        remoteCapability.filesSharingPublicSupportsUploadOnly =
-            CapabilityBooleanType.fromValue(sharingPublicSupportsUploadOnly)
-        remoteCapability.filesSharingUserSendMail =
-            CapabilityBooleanType.fromValue(sharingUserSendMail)
-        remoteCapability.filesSharingResharing =
-            CapabilityBooleanType.fromValue(sharingResharing)
-        remoteCapability.filesSharingFederationOutgoing =
-            CapabilityBooleanType.fromValue(sharingFederationOutgoing)
-        remoteCapability.filesSharingFederationIncoming =
-            CapabilityBooleanType.fromValue(sharingFederationIncoming)
-        remoteCapability.filesBigFileChuncking =
-            CapabilityBooleanType.fromValue(filesBigFileChunking)
-        remoteCapability.filesUndelete =
-            CapabilityBooleanType.fromValue(filesUndelete)
-        remoteCapability.filesVersioning =
-            CapabilityBooleanType.fromValue(filesVersioning)
-
-        return remoteCapability
+    ): RemoteCapability = RemoteCapability().apply {
+        this.accountName = accountName
+        this.versionMayor = versionMayor
+        this.versionMinor = versionMinor
+        this.versionMicro = versionMicro
+        this.versionString = versionString
+        this.versionEdition = versionEdition
+        this.corePollinterval = corePollinterval
+        filesSharingApiEnabled = CapabilityBooleanType.fromValue(sharingApiEnabled)!!
+        filesSharingPublicEnabled = CapabilityBooleanType.fromValue(sharingPublicEnabled)!!
+        filesSharingPublicPasswordEnforced = CapabilityBooleanType.fromValue(sharingPublicPasswordEnforced)!!
+        filesSharingPublicPasswordEnforcedReadOnly =
+            CapabilityBooleanType.fromValue(sharingPublicPasswordEnforcedReadOnly)!!
+        filesSharingPublicPasswordEnforcedReadWrite =
+            CapabilityBooleanType.fromValue(sharingPublicPasswordEnforcedReadWrite)!!
+        filesSharingPublicPasswordEnforcedUploadOnly =
+            CapabilityBooleanType.fromValue(sharingPublicPasswordEnforcedUploadOnly)!!
+        filesSharingPublicExpireDateEnabled = CapabilityBooleanType.fromValue(sharingPublicExpireDateEnabled)!!
+        filesSharingPublicExpireDateDays = sharingPublicExpireDateDays
+        filesSharingPublicExpireDateEnforced = CapabilityBooleanType.fromValue(sharingPublicExpireDateEnforced)!!
+        filesSharingPublicSendMail = CapabilityBooleanType.fromValue(sharingPublicSendMail)!!
+        filesSharingPublicUpload = CapabilityBooleanType.fromValue(sharingPublicUpload)!!
+        filesSharingPublicMultiple = CapabilityBooleanType.fromValue(sharingPublicMultiple)!!
+        filesSharingPublicSupportsUploadOnly = CapabilityBooleanType.fromValue(sharingPublicSupportsUploadOnly)!!
+        filesSharingUserSendMail = CapabilityBooleanType.fromValue(sharingUserSendMail)!!
+        filesSharingResharing = CapabilityBooleanType.fromValue(sharingResharing)!!
+        filesSharingFederationOutgoing = CapabilityBooleanType.fromValue(sharingFederationOutgoing)!!
+        filesSharingFederationIncoming = CapabilityBooleanType.fromValue(sharingFederationIncoming)!!
+        this.filesBigFileChunking = CapabilityBooleanType.fromValue(filesBigFileChunking)!!
+        this.filesUndelete = CapabilityBooleanType.fromValue(filesUndelete)!!
+        this.filesVersioning = CapabilityBooleanType.fromValue(filesVersioning)!!
     }
 
     fun createAccount(name: String, type: String): Account {

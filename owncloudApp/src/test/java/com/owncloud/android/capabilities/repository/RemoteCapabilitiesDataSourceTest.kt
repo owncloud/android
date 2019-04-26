@@ -28,7 +28,5 @@ class RemoteCapabilitiesDataSourceTest(private val remoteOperationResult: Remote
     RemoteCapabilitiesDataSource {
 
     override fun getCapabilities(getRemoteCapabilitiesOperation: GetRemoteCapabilitiesOperation):
-            RemoteOperationResult<RemoteCapability> {
-        return remoteOperationResult
-    }
+            RemoteOperationResult<RemoteCapability> = remoteOperationResult
 }
