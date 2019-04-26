@@ -61,7 +61,6 @@ import com.owncloud.android.lib.resources.users.GetRemoteUserInfoOperation;
 import com.owncloud.android.operations.CheckCurrentCredentialsOperation;
 import com.owncloud.android.operations.CopyFileOperation;
 import com.owncloud.android.operations.CreateFolderOperation;
-import com.owncloud.android.operations.CreateShareViaLinkOperation;
 import com.owncloud.android.operations.CreateShareWithShareeOperation;
 import com.owncloud.android.operations.GetServerInfoOperation;
 import com.owncloud.android.operations.MoveFileOperation;
@@ -71,9 +70,7 @@ import com.owncloud.android.operations.RenameFileOperation;
 import com.owncloud.android.operations.SynchronizeFileOperation;
 import com.owncloud.android.operations.SynchronizeFolderOperation;
 import com.owncloud.android.operations.UpdateSharePermissionsOperation;
-import com.owncloud.android.operations.UpdateShareViaLinkOperation;
 import com.owncloud.android.operations.common.SyncOperation;
-import com.owncloud.android.shares.db.OCShare;
 
 import java.io.IOException;
 import java.util.Iterator;
@@ -541,71 +538,7 @@ public class OperationsService extends Service {
                 );
 
                 String action = operationIntent.getAction();
-                if (action.equals(ACTION_CREATE_SHARE_VIA_LINK)) {  // Create public share via link
-
-                    String remotePath = operationIntent.getStringExtra(EXTRA_REMOTE_PATH);
-
-                    if (remotePath != null && remotePath.length() > 0) {
-
-                        operation = new CreateShareViaLinkOperation(remotePath);
-
-                        String name = operationIntent.getStringExtra(EXTRA_SHARE_NAME);
-                        ((CreateShareViaLinkOperation) operation).setName(name);
-
-                        String password = operationIntent.getStringExtra(EXTRA_SHARE_PASSWORD);
-                        ((CreateShareViaLinkOperation) operation).setPassword(password);
-
-                        long expirationDateMillis = operationIntent.
-                                getLongExtra(EXTRA_SHARE_EXPIRATION_DATE_IN_MILLIS, 0);
-
-                        ((CreateShareViaLinkOperation) operation).
-                                setExpirationDateInMillis(expirationDateMillis);
-
-                        Boolean uploadToFolderPermission = operationIntent.
-                                getBooleanExtra(EXTRA_SHARE_PUBLIC_UPLOAD, false);
-
-                        ((CreateShareViaLinkOperation) operation).
-                                setPublicUpload(uploadToFolderPermission);
-
-                        int permissions = operationIntent.
-                                getIntExtra(EXTRA_SHARE_PERMISSIONS, OCShare.DEFAULT_PERMISSION);
-
-                        ((CreateShareViaLinkOperation) operation).
-                                setPermissions(permissions);
-                    }
-
-                } else if (ACTION_UPDATE_SHARE_VIA_LINK.equals(action)) {
-                    long shareId = operationIntent.getLongExtra(EXTRA_SHARE_ID, -1);
-                    operation = new UpdateShareViaLinkOperation(shareId);
-
-                    String name = operationIntent.getStringExtra(EXTRA_SHARE_NAME);
-                    ((UpdateShareViaLinkOperation) operation).setName(name);
-
-                    String password = operationIntent.getStringExtra(EXTRA_SHARE_PASSWORD);
-                    ((UpdateShareViaLinkOperation) operation).setPassword(password);
-
-                    long expirationDate = operationIntent.getLongExtra(
-                            EXTRA_SHARE_EXPIRATION_DATE_IN_MILLIS,
-                            0
-                    );
-                    ((UpdateShareViaLinkOperation) operation).setExpirationDate(
-                            expirationDate
-                    );
-
-                    if (operationIntent.hasExtra(EXTRA_SHARE_PUBLIC_UPLOAD)) {
-                        ((UpdateShareViaLinkOperation) operation).setPublicUpload(
-                                operationIntent.getBooleanExtra(EXTRA_SHARE_PUBLIC_UPLOAD, false)
-                        );
-                    }
-
-                    if (operationIntent.hasExtra(EXTRA_SHARE_PERMISSIONS)) {
-                        ((UpdateShareViaLinkOperation) operation).setPermissions(
-                                operationIntent.getIntExtra(EXTRA_SHARE_PERMISSIONS,
-                                        OCShare.DEFAULT_PERMISSION)
-                        );
-                    }
-
-                } else if (ACTION_UPDATE_SHARE_WITH_SHAREE.equals(action)) {
+                if (ACTION_UPDATE_SHARE_WITH_SHAREE.equals(action)) {
                     // Update private share, only permissions
                     long shareId = operationIntent.getLongExtra(EXTRA_SHARE_ID, -1);
                     operation = new UpdateSharePermissionsOperation(shareId);

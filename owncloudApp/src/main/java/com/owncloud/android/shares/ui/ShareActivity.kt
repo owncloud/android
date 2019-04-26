@@ -36,18 +36,15 @@ import com.owncloud.android.lib.common.utils.Log_OC
 import com.owncloud.android.lib.resources.shares.RemoteShare
 import com.owncloud.android.lib.resources.shares.ShareParserResult
 import com.owncloud.android.lib.resources.shares.ShareType
-import com.owncloud.android.operations.CreateShareViaLinkOperation
 import com.owncloud.android.operations.GetSharesForFileOperation
 import com.owncloud.android.operations.RemoveShareOperation
 import com.owncloud.android.operations.UpdateSharePermissionsOperation
-import com.owncloud.android.operations.UpdateShareViaLinkOperation
 import com.owncloud.android.providers.UsersAndGroupsSearchProvider
 import com.owncloud.android.shares.db.OCShare
 import com.owncloud.android.shares.ui.fragment.PublicShareDialogFragment
 import com.owncloud.android.shares.ui.fragment.ShareFileFragment
 import com.owncloud.android.ui.activity.FileActivity
 import com.owncloud.android.ui.asynctasks.GetSharesForFileAsyncTask
-import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter
 import com.owncloud.android.ui.fragment.EditShareFragment
 import com.owncloud.android.ui.fragment.SearchShareesFragment
 import com.owncloud.android.ui.fragment.ShareFragmentListener
@@ -290,14 +287,6 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
             }
         }
 
-        if (operation is CreateShareViaLinkOperation) {
-            onCreateShareViaLinkOperationFinish(operation, result as RemoteOperationResult<ShareParserResult>)
-        }
-
-        if (operation is UpdateShareViaLinkOperation) {
-            onUpdateShareViaLinkOperationFinish(operation, result as RemoteOperationResult<ShareParserResult>)
-        }
-
         if (operation is RemoveShareOperation && result.isSuccess && editShareFragment != null) {
             supportFragmentManager.popBackStack()
         }
@@ -307,36 +296,6 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
         ) {
             editShareFragment!!.onUpdateSharePermissionsFinished(result as RemoteOperationResult<ShareParserResult>?)
         }
-    }
-
-    private fun onCreateShareViaLinkOperationFinish(
-        operation: CreateShareViaLinkOperation,
-        result: RemoteOperationResult<ShareParserResult>
-    ) {
-        if (!result.isSuccess) {
-            publicShareFragment?.showError(
-                ErrorMessageAdapter.getResultMessage(result, operation, resources)!!
-            )
-            return
-        }
-        updateFileFromDB()
-        publicShareFragment?.dismiss()
-        fileOperationsHelper.copyOrSendPublicLink(OCShare.fromRemoteShare(result.data.shares[0]))
-    }
-
-    private fun onUpdateShareViaLinkOperationFinish(
-        operation: UpdateShareViaLinkOperation,
-        result: RemoteOperationResult<ShareParserResult>
-    ) {
-        if (!result.isSuccess) {
-            publicShareFragment?.showError(
-                ErrorMessageAdapter.getResultMessage(result, operation, resources)!!
-            )
-            return
-        }
-        updateFileFromDB()
-        publicShareFragment?.dismiss()
-        fileOperationsHelper.copyOrSendPublicLink(OCShare.fromRemoteShare(result.data.shares[0]))
     }
 
     /**
