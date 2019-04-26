@@ -109,7 +109,7 @@ class OCShareRepositoryTest {
         // Retrieving public shares from server...
 
         // Public shares are always retrieved from server and inserted in database if not empty list
-        verify(localSharesDataSource).insert(
+        verify(localSharesDataSource).replaceSharesForFile(
             remoteSharesForFile.map { remoteShare ->
                 OCShare.fromRemoteShare(remoteShare).also { it.accountOwner = "admin@server" }
             }
@@ -362,6 +362,75 @@ class OCShareRepositoryTest {
             Resource.error(
                 RemoteOperationResult.ResultCode.SHARE_NOT_FOUND, dbData.value, exception = exception
             )
+        )
+    }
+
+    @Test
+    fun updatePublicShareForFileOnNetwork() {
+        val dbData = MutableLiveData<List<OCShare>>()
+
+        dbData.value = listOf(
+            TestUtil.createPublicShare(
+                path = "/Documents/doc1.docx",
+                expirationDate = 1000,
+                isFolder = false,
+                name = "Doc 1 link",
+                shareLink = "http://server:port/s/1"
+            )
+        )
+
+        `when`(
+            localSharesDataSource.getSharesForFileAsLiveData(
+                "/Documents/doc1.docx", "admin@server", listOf(ShareType.PUBLIC_LINK)
+            )
+        ).thenReturn(
+            dbData
+        )
+
+        val justUpdatedRemoteShare = arrayListOf(
+            TestUtil.createRemoteShare(
+                path = "/Documents/doc1.docx",
+                expirationDate = 2000,
+                isFolder = false,
+                name = "Doc 1 link updated",
+                shareLink = "http://server:port/s/11"
+            )
+        )
+
+        val remoteOperationResult = TestUtil.createRemoteOperationResultMock(
+            ShareParserResult(justUpdatedRemoteShare), true
+        )
+
+        val remoteSharesDataSource = RemoteSharesDataSourceTest(remoteOperationResult)
+
+        ocShareRepository =
+            OCShareRepository.create(InstantAppExecutors(), localSharesDataSource, remoteSharesDataSource)
+
+        val data = ocShareRepository.updatePublicShareForFile(
+            "/Documents/doc1.docx",
+            "admin@server",
+            1,
+            "Doc 1 link updated",
+            "1234",
+            2000,
+            1,
+            false
+        )
+
+        val observer = mock<Observer<Resource<List<OCShare>>>>()
+        data.observeForever(observer)
+
+        // Get public shares from database to observe them, is called twice (one showing current db shares while
+        // updating share on server and another one with db shares already updated with just updated share)
+        verify(localSharesDataSource, times(2)).getSharesForFileAsLiveData(
+            "/Documents/doc1.docx", "admin@server", listOf(ShareType.PUBLIC_LINK)
+        )
+
+        // Retrieving public shares from server...
+
+        // Public shares are always retrieved from server and updated in database
+        verify(localSharesDataSource).update(
+            OCShare.fromRemoteShare(justUpdatedRemoteShare.get(0)).also { it.accountOwner = "admin@server" }
         )
     }
 }
