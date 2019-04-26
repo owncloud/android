@@ -245,14 +245,12 @@ class ShareFileFragmentTest {
             .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.INVISIBLE)))
     }
 
-    private fun getOCFileForTesting(name: String = "default"): OCFile {
-        val file = OCFile("/Photos")
-        file.availableOfflineStatus = OCFile.AvailableOfflineStatus.NOT_AVAILABLE_OFFLINE
-        file.fileName = name
-        file.fileId = 9456985479
-        file.remoteId = "1"
-        file.privateLink = "private link"
-        return file
+    private fun getOCFileForTesting(name: String = "default") = OCFile("/Photos").apply {
+        availableOfflineStatus = OCFile.AvailableOfflineStatus.NOT_AVAILABLE_OFFLINE
+        fileName = name
+        fileId = 9456985479
+        remoteId = "1"
+        privateLink = "private link"
     }
 
     private fun loadCapabilitiesSuccessfully(capability: OCCapability = TestUtil.createCapability()) {

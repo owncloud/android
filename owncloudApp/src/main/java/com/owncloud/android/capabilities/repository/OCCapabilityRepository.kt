@@ -46,23 +46,19 @@ class OCCapabilityRepository(
         )
     }
 
-    override fun loadCapabilityForAccount(accountName: String): LiveData<Resource<OCCapability>> {
-        return object : NetworkBoundResource<OCCapability, RemoteCapability>(appExecutors) {
+    override fun loadCapabilityForAccount(accountName: String): LiveData<Resource<OCCapability>> =
+        object : NetworkBoundResource<OCCapability, RemoteCapability>(appExecutors) {
             override fun saveCallResult(item: RemoteCapability) {
                 item.accountName = accountName
                 localCapabilitiesDataSource.insert(listOf(OCCapability.fromRemoteCapability(item)))
             }
 
-            override fun shouldFetch(data: OCCapability?): Boolean {
-                return data == null;
-            }
+            override fun shouldFetch(data: OCCapability?): Boolean = data == null
 
-            override fun loadFromDb(): LiveData<OCCapability> {
-                return localCapabilitiesDataSource.getCapabilityForAccountAsLiveData(accountName)
-            }
+            override fun loadFromDb(): LiveData<OCCapability> =
+                localCapabilitiesDataSource.getCapabilityForAccountAsLiveData(accountName)
 
             override fun createCall() = remoteCapabilitiesDataSource.getCapabilities()
 
         }.asLiveData()
-    }
 }

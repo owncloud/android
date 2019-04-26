@@ -78,13 +78,9 @@ class NetworkBoundResourceTest {
                     dbData.value = fetchedDbValue
                 }
 
-                override fun shouldFetch(data: List<OCShare>?): Boolean {
-                    return true;
-                }
+                override fun shouldFetch(data: List<OCShare>?) = true
 
-                override fun loadFromDb(): LiveData<List<OCShare>> {
-                    return dbData
-                }
+                override fun loadFromDb(): LiveData<List<OCShare>> = dbData
 
                 override fun createCall(): RemoteOperationResult<ShareParserResult> {
                     val remoteOperationResult = mock<RemoteOperationResult<ShareParserResult>>()
@@ -132,14 +128,9 @@ class NetworkBoundResourceTest {
                     saved.set(true)
                 }
 
-                override fun shouldFetch(data: List<OCShare>?): Boolean {
-                    return true;
-                }
+                override fun shouldFetch(data: List<OCShare>?) = true
 
-                override fun loadFromDb(): LiveData<List<OCShare>> {
-                    dbData.value = fetchedDbValue
-                    return dbData
-                }
+                override fun loadFromDb(): LiveData<List<OCShare>> = dbData.apply { value = fetchedDbValue }
 
                 override fun createCall(): RemoteOperationResult<ShareParserResult> {
                     val remoteOperationResult = mock<RemoteOperationResult<ShareParserResult>>()
@@ -179,17 +170,11 @@ class NetworkBoundResourceTest {
                     saved.set(true)
                 }
 
-                override fun shouldFetch(data: List<OCShare>?): Boolean {
-                    return true;
-                }
+                override fun shouldFetch(data: List<OCShare>?) = true
 
-                override fun loadFromDb(): LiveData<List<OCShare>> {
-                    return dbData
-                }
+                override fun loadFromDb(): LiveData<List<OCShare>> = dbData
 
-                override fun createCall(): RemoteOperationResult<ShareParserResult> {
-                    return mock()
-                }
+                override fun createCall(): RemoteOperationResult<ShareParserResult> = mock()
             }
 
         val observer = mock<Observer<Resource<List<OCShare>>>>()
