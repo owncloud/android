@@ -51,7 +51,6 @@ class OCCapabilityViewModel(
     )
 ) : ViewModel() {
 
-    fun getCapabilityForAccount() : LiveData<Resource<OCCapability>> {
-        return capabilityRepository.loadCapabilityForAccount(account.name)
-    }
+    fun getCapabilityForAccount(): LiveData<Resource<OCCapability>> =
+        capabilityRepository.loadCapabilityForAccount(account.name)
 }

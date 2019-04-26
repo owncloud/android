@@ -81,7 +81,7 @@ data class OCCapability(
     @ColumnInfo(name = ProviderTableMeta.CAPABILITIES_SHARING_FEDERATION_INCOMING)
     val filesSharingFederationIncoming: Int?,
     @ColumnInfo(name = ProviderTableMeta.CAPABILITIES_FILES_BIGFILECHUNKING)
-    val filesBigFileChuncking: Int?,
+    val filesBigFileChunking: Int?,
     @ColumnInfo(name = ProviderTableMeta.CAPABILITIES_FILES_UNDELETE)
     val filesUndelete: Int?,
     @ColumnInfo(name = ProviderTableMeta.CAPABILITIES_FILES_VERSIONING)
@@ -90,106 +90,106 @@ data class OCCapability(
     @PrimaryKey(autoGenerate = true) var id: Int = 0
 
     companion object {
-        fun fromRemoteCapability(remoteCapability: RemoteCapability): OCCapability {
-            return OCCapability(
-                remoteCapability.accountName,
-                remoteCapability.versionMayor,
-                remoteCapability.versionMinor,
-                remoteCapability.versionMicro,
-                remoteCapability.versionString,
-                remoteCapability.versionEdition,
-                remoteCapability.corePollinterval,
-                remoteCapability.filesSharingApiEnabled?.value,
-                remoteCapability.filesSharingPublicEnabled?.value,
-                remoteCapability.filesSharingPublicPasswordEnforced?.value,
-                remoteCapability.filesSharingPublicPasswordEnforcedReadOnly?.value,
-                remoteCapability.filesSharingPublicPasswordEnforcedReadWrite?.value,
-                remoteCapability.filesSharingPublicPasswordEnforcedUploadOnly?.value,
-                remoteCapability.filesSharingPublicExpireDateEnabled?.value,
-                remoteCapability.filesSharingPublicExpireDateDays,
-                remoteCapability.filesSharingPublicExpireDateEnforced?.value,
-                remoteCapability.filesSharingPublicSendMail?.value,
-                remoteCapability.filesSharingPublicUpload?.value,
-                remoteCapability.filesSharingPublicMultiple?.value,
-                remoteCapability.filesSharingPublicSupportsUploadOnly?.value,
-                remoteCapability.filesSharingUserSendMail?.value,
-                remoteCapability.filesSharingResharing?.value,
-                remoteCapability.filesSharingFederationOutgoing?.value,
-                remoteCapability.filesSharingFederationIncoming?.value,
-                remoteCapability.filesBigFileChuncking?.value,
-                remoteCapability.filesUndelete?.value,
-                remoteCapability.filesVersioning?.value
-            )
-        }
+        fun fromRemoteCapability(remoteCapability: RemoteCapability) = OCCapability(
+            remoteCapability.accountName,
+            remoteCapability.versionMayor,
+            remoteCapability.versionMinor,
+            remoteCapability.versionMicro,
+            remoteCapability.versionString,
+            remoteCapability.versionEdition,
+            remoteCapability.corePollinterval,
+            remoteCapability.filesSharingApiEnabled?.value,
+            remoteCapability.filesSharingPublicEnabled?.value,
+            remoteCapability.filesSharingPublicPasswordEnforced?.value,
+            remoteCapability.filesSharingPublicPasswordEnforcedReadOnly?.value,
+            remoteCapability.filesSharingPublicPasswordEnforcedReadWrite?.value,
+            remoteCapability.filesSharingPublicPasswordEnforcedUploadOnly?.value,
+            remoteCapability.filesSharingPublicExpireDateEnabled?.value,
+            remoteCapability.filesSharingPublicExpireDateDays,
+            remoteCapability.filesSharingPublicExpireDateEnforced?.value,
+            remoteCapability.filesSharingPublicSendMail?.value,
+            remoteCapability.filesSharingPublicUpload?.value,
+            remoteCapability.filesSharingPublicMultiple?.value,
+            remoteCapability.filesSharingPublicSupportsUploadOnly?.value,
+            remoteCapability.filesSharingUserSendMail?.value,
+            remoteCapability.filesSharingResharing?.value,
+            remoteCapability.filesSharingFederationOutgoing?.value,
+            remoteCapability.filesSharingFederationIncoming?.value,
+            remoteCapability.filesBigFileChunking?.value,
+            remoteCapability.filesUndelete?.value,
+            remoteCapability.filesVersioning?.value
+        )
 
-        fun fromCursor(cursor: Cursor): OCCapability {
-            return OCCapability(
-                cursor.getString(cursor.getColumnIndex(ProviderTableMeta.CAPABILITIES_ACCOUNT_NAME)),
-                cursor.getInt(cursor.getColumnIndex(ProviderTableMeta.CAPABILITIES_VERSION_MAYOR)),
-                cursor.getInt(cursor.getColumnIndex(ProviderTableMeta.CAPABILITIES_VERSION_MINOR)),
-                cursor.getInt(cursor.getColumnIndex(ProviderTableMeta.CAPABILITIES_VERSION_MICRO)),
-                cursor.getString(cursor.getColumnIndex(ProviderTableMeta.CAPABILITIES_VERSION_STRING)),
-                cursor.getString(cursor.getColumnIndex(ProviderTableMeta.CAPABILITIES_VERSION_EDITION)),
-                cursor.getInt(cursor.getColumnIndex(ProviderTableMeta.CAPABILITIES_CORE_POLLINTERVAL)),
-                cursor.getInt(cursor.getColumnIndex(ProviderTableMeta.CAPABILITIES_SHARING_API_ENABLED)),
-                cursor.getInt(cursor.getColumnIndex(ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_ENABLED)),
-                cursor.getInt(cursor.getColumnIndex(ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED)),
-                cursor.getInt(cursor.getColumnIndex(
-                    ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_READ_ONLY)
-                ),
-                cursor.getInt(cursor.getColumnIndex(
-                    ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_READ_WRITE)
-                ),
-                cursor.getInt(cursor.getColumnIndex(
-                    ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_UPLOAD_ONLY)
-                ),
-                cursor.getInt(cursor.getColumnIndex(ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_ENABLED)),
-                cursor.getInt(cursor.getColumnIndex(ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_DAYS)),
-                cursor.getInt(cursor.getColumnIndex(ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_ENFORCED)),
-                cursor.getInt(cursor.getColumnIndex(ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_SEND_MAIL)),
-                cursor.getInt(cursor.getColumnIndex(ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_UPLOAD)),
-                cursor.getInt(cursor.getColumnIndex(ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_MULTIPLE)),
-                cursor.getInt(cursor.getColumnIndex(ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_SUPPORTS_UPLOAD_ONLY)),
-                cursor.getInt(cursor.getColumnIndex(ProviderTableMeta.CAPABILITIES_SHARING_USER_SEND_MAIL)),
-                cursor.getInt(cursor.getColumnIndex(ProviderTableMeta.CAPABILITIES_SHARING_RESHARING)),
-                cursor.getInt(cursor.getColumnIndex(ProviderTableMeta.CAPABILITIES_SHARING_FEDERATION_OUTGOING)),
-                cursor.getInt(cursor.getColumnIndex(ProviderTableMeta.CAPABILITIES_SHARING_FEDERATION_INCOMING)),
-                cursor.getInt(cursor.getColumnIndex(ProviderTableMeta.CAPABILITIES_FILES_BIGFILECHUNKING)),
-                cursor.getInt(cursor.getColumnIndex(ProviderTableMeta.CAPABILITIES_FILES_UNDELETE)),
-                cursor.getInt(cursor.getColumnIndex(ProviderTableMeta.CAPABILITIES_FILES_VERSIONING))
-            )
-        }
+        fun fromCursor(cursor: Cursor) = OCCapability(
+            cursor.getString(cursor.getColumnIndex(ProviderTableMeta.CAPABILITIES_ACCOUNT_NAME)),
+            cursor.getInt(cursor.getColumnIndex(ProviderTableMeta.CAPABILITIES_VERSION_MAYOR)),
+            cursor.getInt(cursor.getColumnIndex(ProviderTableMeta.CAPABILITIES_VERSION_MINOR)),
+            cursor.getInt(cursor.getColumnIndex(ProviderTableMeta.CAPABILITIES_VERSION_MICRO)),
+            cursor.getString(cursor.getColumnIndex(ProviderTableMeta.CAPABILITIES_VERSION_STRING)),
+            cursor.getString(cursor.getColumnIndex(ProviderTableMeta.CAPABILITIES_VERSION_EDITION)),
+            cursor.getInt(cursor.getColumnIndex(ProviderTableMeta.CAPABILITIES_CORE_POLLINTERVAL)),
+            cursor.getInt(cursor.getColumnIndex(ProviderTableMeta.CAPABILITIES_SHARING_API_ENABLED)),
+            cursor.getInt(cursor.getColumnIndex(ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_ENABLED)),
+            cursor.getInt(cursor.getColumnIndex(ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED)),
+            cursor.getInt(
+                cursor.getColumnIndex(
+                    ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_READ_ONLY
+                )
+            ),
+            cursor.getInt(
+                cursor.getColumnIndex(
+                    ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_READ_WRITE
+                )
+            ),
+            cursor.getInt(
+                cursor.getColumnIndex(
+                    ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_UPLOAD_ONLY
+                )
+            ),
+            cursor.getInt(cursor.getColumnIndex(ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_ENABLED)),
+            cursor.getInt(cursor.getColumnIndex(ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_DAYS)),
+            cursor.getInt(cursor.getColumnIndex(ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_ENFORCED)),
+            cursor.getInt(cursor.getColumnIndex(ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_SEND_MAIL)),
+            cursor.getInt(cursor.getColumnIndex(ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_UPLOAD)),
+            cursor.getInt(cursor.getColumnIndex(ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_MULTIPLE)),
+            cursor.getInt(cursor.getColumnIndex(ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_SUPPORTS_UPLOAD_ONLY)),
+            cursor.getInt(cursor.getColumnIndex(ProviderTableMeta.CAPABILITIES_SHARING_USER_SEND_MAIL)),
+            cursor.getInt(cursor.getColumnIndex(ProviderTableMeta.CAPABILITIES_SHARING_RESHARING)),
+            cursor.getInt(cursor.getColumnIndex(ProviderTableMeta.CAPABILITIES_SHARING_FEDERATION_OUTGOING)),
+            cursor.getInt(cursor.getColumnIndex(ProviderTableMeta.CAPABILITIES_SHARING_FEDERATION_INCOMING)),
+            cursor.getInt(cursor.getColumnIndex(ProviderTableMeta.CAPABILITIES_FILES_BIGFILECHUNKING)),
+            cursor.getInt(cursor.getColumnIndex(ProviderTableMeta.CAPABILITIES_FILES_UNDELETE)),
+            cursor.getInt(cursor.getColumnIndex(ProviderTableMeta.CAPABILITIES_FILES_VERSIONING))
+        )
 
-        fun fromContentValues(values: ContentValues): OCCapability {
-            return OCCapability(
-                values.getAsString(ProviderTableMeta.CAPABILITIES_ACCOUNT_NAME),
-                values.getAsInteger(ProviderTableMeta.CAPABILITIES_VERSION_MAYOR),
-                values.getAsInteger(ProviderTableMeta.CAPABILITIES_VERSION_MINOR),
-                values.getAsInteger(ProviderTableMeta.CAPABILITIES_VERSION_MICRO),
-                values.getAsString(ProviderTableMeta.CAPABILITIES_VERSION_STRING),
-                values.getAsString(ProviderTableMeta.CAPABILITIES_VERSION_EDITION),
-                values.getAsInteger(ProviderTableMeta.CAPABILITIES_CORE_POLLINTERVAL),
-                values.getAsInteger(ProviderTableMeta.CAPABILITIES_SHARING_API_ENABLED),
-                values.getAsInteger(ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_ENABLED),
-                values.getAsInteger(ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED),
-                values.getAsInteger(ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_READ_ONLY),
-                values.getAsInteger(ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_READ_WRITE),
-                values.getAsInteger(ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_UPLOAD_ONLY),
-                values.getAsInteger(ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_ENABLED),
-                values.getAsInteger(ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_DAYS),
-                values.getAsInteger(ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_ENFORCED),
-                values.getAsInteger(ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_SEND_MAIL),
-                values.getAsInteger(ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_UPLOAD),
-                values.getAsInteger(ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_MULTIPLE),
-                values.getAsInteger(ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_SUPPORTS_UPLOAD_ONLY),
-                values.getAsInteger(ProviderTableMeta.CAPABILITIES_SHARING_USER_SEND_MAIL),
-                values.getAsInteger(ProviderTableMeta.CAPABILITIES_SHARING_RESHARING),
-                values.getAsInteger(ProviderTableMeta.CAPABILITIES_SHARING_FEDERATION_OUTGOING),
-                values.getAsInteger(ProviderTableMeta.CAPABILITIES_SHARING_FEDERATION_INCOMING),
-                values.getAsInteger(ProviderTableMeta.CAPABILITIES_FILES_BIGFILECHUNKING),
-                values.getAsInteger(ProviderTableMeta.CAPABILITIES_FILES_UNDELETE),
-                values.getAsInteger(ProviderTableMeta.CAPABILITIES_FILES_VERSIONING)
-            )
-        }
+        fun fromContentValues(values: ContentValues) = OCCapability(
+            values.getAsString(ProviderTableMeta.CAPABILITIES_ACCOUNT_NAME),
+            values.getAsInteger(ProviderTableMeta.CAPABILITIES_VERSION_MAYOR),
+            values.getAsInteger(ProviderTableMeta.CAPABILITIES_VERSION_MINOR),
+            values.getAsInteger(ProviderTableMeta.CAPABILITIES_VERSION_MICRO),
+            values.getAsString(ProviderTableMeta.CAPABILITIES_VERSION_STRING),
+            values.getAsString(ProviderTableMeta.CAPABILITIES_VERSION_EDITION),
+            values.getAsInteger(ProviderTableMeta.CAPABILITIES_CORE_POLLINTERVAL),
+            values.getAsInteger(ProviderTableMeta.CAPABILITIES_SHARING_API_ENABLED),
+            values.getAsInteger(ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_ENABLED),
+            values.getAsInteger(ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED),
+            values.getAsInteger(ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_READ_ONLY),
+            values.getAsInteger(ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_READ_WRITE),
+            values.getAsInteger(ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_UPLOAD_ONLY),
+            values.getAsInteger(ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_ENABLED),
+            values.getAsInteger(ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_DAYS),
+            values.getAsInteger(ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_ENFORCED),
+            values.getAsInteger(ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_SEND_MAIL),
+            values.getAsInteger(ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_UPLOAD),
+            values.getAsInteger(ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_MULTIPLE),
+            values.getAsInteger(ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_SUPPORTS_UPLOAD_ONLY),
+            values.getAsInteger(ProviderTableMeta.CAPABILITIES_SHARING_USER_SEND_MAIL),
+            values.getAsInteger(ProviderTableMeta.CAPABILITIES_SHARING_RESHARING),
+            values.getAsInteger(ProviderTableMeta.CAPABILITIES_SHARING_FEDERATION_OUTGOING),
+            values.getAsInteger(ProviderTableMeta.CAPABILITIES_SHARING_FEDERATION_INCOMING),
+            values.getAsInteger(ProviderTableMeta.CAPABILITIES_FILES_BIGFILECHUNKING),
+            values.getAsInteger(ProviderTableMeta.CAPABILITIES_FILES_UNDELETE),
+            values.getAsInteger(ProviderTableMeta.CAPABILITIES_FILES_VERSIONING)
+        )
     }
 }
