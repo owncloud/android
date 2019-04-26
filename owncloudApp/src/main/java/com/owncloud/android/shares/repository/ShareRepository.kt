@@ -41,7 +41,7 @@ interface ShareRepository {
         name: String,
         password: String,
         expirationTimeInMillis: Long,
-        uploadToFolderPermission: Boolean
+        publicUpload: Boolean
     ): LiveData<Resource<List<OCShare>>>
 
     fun updatePublicShareForFile(
