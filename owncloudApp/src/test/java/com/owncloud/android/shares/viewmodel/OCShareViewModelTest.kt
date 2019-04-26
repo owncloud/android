@@ -39,8 +39,7 @@ import org.mockito.Mockito.mock
 @RunWith(JUnit4::class)
 class OCShareViewModelTest {
     private var testAccount: Account = TestUtil.createAccount("admin@server", "test")
-
-    private lateinit var publicShares: MutableList<OCShare>
+    private val publicShareResourcesAsLiveData: MutableLiveData<Resource<List<OCShare>>> = MutableLiveData()
 
     @Rule
     @JvmField
@@ -48,7 +47,7 @@ class OCShareViewModelTest {
 
     @Before
     fun init() {
-        publicShares = mutableListOf(
+        val publicShares = mutableListOf(
             TestUtil.createPublicShare(
                 path = "/Photos/image.jpg",
                 isFolder = true,
@@ -62,14 +61,13 @@ class OCShareViewModelTest {
                 shareLink = "http://server:port/s/2"
             )
         )
+
+        publicShareResourcesAsLiveData.value = Resource.success(publicShares)
     }
 
     @Test
     fun loadPublicShares() {
         val ocShareRepository = mock(OCShareRepository::class.java)
-
-        val publicShareResourcesAsLiveData: MutableLiveData<Resource<List<OCShare>>> = MutableLiveData()
-        publicShareResourcesAsLiveData.value = Resource.success(publicShares)
 
         `when`(
             ocShareRepository.loadSharesForFile(
@@ -83,35 +81,16 @@ class OCShareViewModelTest {
             publicShareResourcesAsLiveData
         )
 
-        val ocShareViewModel = OCShareViewModel(
-            testAccount,
-            "/Photos/image.jpg",
-            listOf(ShareType.PUBLIC_LINK),
-            ocShareRepository
-        )
+        // Viewmodel that will ask ocShareRepository for shares
+        val ocShareViewModel = createOCShareViewModel(ocShareRepository)
 
         val resource: Resource<List<OCShare>>? = ocShareViewModel.getSharesForFile().value
-        val shares: List<OCShare>? = resource?.data
-
-        assertEquals(shares?.size, 2)
-
-        assertEquals(shares?.get(0)?.path, "/Photos/image.jpg")
-        assertEquals(shares?.get(0)?.isFolder, true)
-        assertEquals(shares?.get(0)?.name, "Photos 1 link")
-        assertEquals(shares?.get(0)?.shareLink, "http://server:port/s/1")
-
-        assertEquals(shares?.get(1)?.path, "/Photos/image.jpg")
-        assertEquals(shares?.get(1)?.isFolder, false)
-        assertEquals(shares?.get(1)?.name, "Photos 2 link")
-        assertEquals(shares?.get(1)?.shareLink, "http://server:port/s/2")
+        assertShareParameters(resource?.data)
     }
 
     @Test
     fun insertPublicShare() {
         val ocShareRepository = mock(OCShareRepository::class.java)
-
-        val publicShareResourcesAsLiveData: MutableLiveData<Resource<List<OCShare>>> = MutableLiveData()
-        publicShareResourcesAsLiveData.value = Resource.success(publicShares)
 
         `when`(
             ocShareRepository.insertPublicShareForFile(
@@ -127,12 +106,8 @@ class OCShareViewModelTest {
             publicShareResourcesAsLiveData
         )
 
-        val ocShareViewModel = OCShareViewModel(
-            testAccount,
-            "/Photos/image.jpg",
-            listOf(ShareType.PUBLIC_LINK),
-            ocShareRepository
-        )
+        // Viewmodel that will ask ocShareRepository for shares
+        val ocShareViewModel = createOCShareViewModel(ocShareRepository)
 
         val resource: Resource<List<OCShare>>? = ocShareViewModel.insertPublicShareForFile(
             1,
@@ -142,8 +117,52 @@ class OCShareViewModelTest {
             false
         ).value
 
-        val shares: List<OCShare>? = resource?.data
+        assertShareParameters(resource?.data)
+    }
 
+    @Test
+    fun updatePublicShare() {
+        val ocShareRepository = mock(OCShareRepository::class.java)
+
+        `when`(
+            ocShareRepository.updatePublicShareForFile(
+                "/Photos/image.jpg",
+                "admin@server",
+                1,
+                "Photos 2 link",
+                "1234",
+                1000,
+                1,
+                false
+            )
+        ).thenReturn(
+            publicShareResourcesAsLiveData
+        )
+
+        // Viewmodel that will ask ocShareRepository for shares
+        val ocShareViewModel = createOCShareViewModel(ocShareRepository)
+
+        val resource: Resource<List<OCShare>>? = ocShareViewModel.updatePublicShareForFile(
+            1,
+            "Photos 2 link",
+            "1234",
+            1000,
+            1,
+            false
+        ).value
+
+        assertShareParameters(resource?.data)
+    }
+
+    private fun createOCShareViewModel(ocShareRepository: OCShareRepository): OCShareViewModel =
+        OCShareViewModel(
+            testAccount,
+            "/Photos/image.jpg",
+            listOf(ShareType.PUBLIC_LINK),
+            ocShareRepository
+        )
+
+    private fun assertShareParameters(shares: List<OCShare>?) {
         assertEquals(shares?.size, 2)
 
         assertEquals(shares?.get(0)?.path, "/Photos/image.jpg")
