@@ -37,11 +37,11 @@ class OCLocalSharesDataSource(
     ): LiveData<List<OCShare>> =
         ocShareDao.getSharesForFileAsLiveData(filePath, accountName, shareTypes.map { it.value })
 
-    override fun insert(ocShares: List<OCShare>) = ocShareDao.insert(ocShares)
+    override fun insert(ocShares: List<OCShare>): List<Long> = ocShareDao.insert(ocShares)
 
-    override fun update(ocShare: OCShare) = ocShareDao.update(ocShare)
+    override fun update(ocShare: OCShare): Long = ocShareDao.update(ocShare)
 
-    override fun replaceSharesForFile(ocShares: List<OCShare>) = ocShareDao.replaceSharesForFile(ocShares)
+    override fun replaceSharesForFile(ocShares: List<OCShare>): List<Long> = ocShareDao.replaceSharesForFile(ocShares)
 
     override fun deleteSharesForFile(filePath: String, accountName: String) =
         ocShareDao.deleteSharesForFile(filePath, accountName)
