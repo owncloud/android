@@ -49,11 +49,11 @@ abstract class OCShareDao {
     }
 
     @Transaction
-    open fun replaceSharesForFile(ocShares: List<OCShare>) {
+    open fun replaceSharesForFile(ocShares: List<OCShare>): List<Long> {
         for (ocShare in ocShares) {
             deleteSharesForFile(ocShare.path, ocShare.accountOwner)
         }
-        insert(ocShares)
+        return insert(ocShares)
     }
 
     @Query(
