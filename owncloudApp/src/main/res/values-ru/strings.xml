@@ -521,6 +521,7 @@
   <string name="media_service_notification_channel_description">Просмотр проигрывателя музыки</string>
   <string name="file_sync_notification_channel_name">Синхронизация файлов</string>
   <string name="file_sync_notification_channel_description">Просмотр результатов синхронизации файлов</string>
+  <string name="clicks_to_be_developer">Вам ещё остается %1$d кликов, чтобы включить меню разработчика</string>
   <string name="rate_dialog_title">Оцените приложение %1$s!</string>
   <string name="rate_dialog_description">Если вам нравится пользоваться этим приложением, не уделите ли вы минутку, чтобы оценить его? Ваш отзыв очень важен для нас.</string>
   <string name="button_no_thanks_name">НЕТ, СПАСИБО</string>
