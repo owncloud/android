@@ -72,6 +72,7 @@ object TestUtil {
     )
 
     fun createPublicShare(
+        shareWith: String = "",
         path: String,
         expirationDate: Long = 1000,
         isFolder: Boolean,
@@ -80,6 +81,7 @@ object TestUtil {
         name: String,
         shareLink: String
     ) = createShare(
+        shareWith = shareWith,
         shareType = 3,
         path = path,
         expirationDate = expirationDate,
