@@ -28,8 +28,7 @@ class OCRemoteCapabilitiesDataSource(
     private val client: OwnCloudClient
 ) : RemoteCapabilitiesDataSource {
 
-    override fun getCapabilities(getRemoteCapabilitiesOperation: GetRemoteCapabilitiesOperation)
-            : RemoteOperationResult<RemoteCapability> {
-        return getRemoteCapabilitiesOperation.execute(client)
-    }
+    override fun getCapabilities(getRemoteCapabilitiesOperation: GetRemoteCapabilitiesOperation):
+            RemoteOperationResult<RemoteCapability> =
+        getRemoteCapabilitiesOperation.execute(client)
 }

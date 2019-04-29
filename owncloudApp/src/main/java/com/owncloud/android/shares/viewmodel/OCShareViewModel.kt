@@ -53,9 +53,8 @@ class OCShareViewModel(
     )
 ) : ViewModel() {
 
-    fun getSharesForFile() : LiveData<Resource<List<OCShare>>> {
-        return shareRepository.loadSharesForFile(filePath, account.name, shareTypes, reshares = true, subfiles = false)
-    }
+    fun getSharesForFile(): LiveData<Resource<List<OCShare>>> =
+        shareRepository.loadSharesForFile(filePath, account.name, shareTypes, reshares = true, subfiles = false)
 
     fun insertPublicShareForFile(
         filePath: String,
