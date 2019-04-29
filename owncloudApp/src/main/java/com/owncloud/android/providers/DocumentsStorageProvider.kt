@@ -49,6 +49,7 @@ import com.owncloud.android.operations.RenameFileOperation
 import com.owncloud.android.operations.SynchronizeFileOperation
 import com.owncloud.android.providers.cursors.FileCursor
 import com.owncloud.android.providers.cursors.RootCursor
+import com.owncloud.android.ui.notifications.NotificationUtils
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.IOException
@@ -112,7 +113,9 @@ class DocumentsStorageProvider : DocumentsProvider() {
                             false
                         ).apply {
                             val result = execute(currentStorageManager, context)
-                            Log_OC.d(TAG, "Result ${result.code}")
+                            if (result.code == RemoteOperationResult.ResultCode.SYNC_CONFLICT) {
+                                NotificationUtils.notifyConflict(file, currentStorageManager?.account, context)
+                            }
                         }
                     }.apply { start() }
                 }
@@ -148,7 +151,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
          * This will start syncing the current folder. User will only see this after updating his view with a
          * pull down, or by accessing the folder again.
          */
-        if (requestedFolderIdForSync != folderId && syncRequired) {
+        if (requestedFolderIdForSync != folderId && syncRequired && currentStorageManager != null) {
             // register for sync
             syncDirectoryWithServer(parentDocumentId)
             requestedFolderIdForSync = folderId

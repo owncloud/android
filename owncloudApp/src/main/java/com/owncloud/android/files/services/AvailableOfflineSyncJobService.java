@@ -20,35 +20,29 @@
 package com.owncloud.android.files.services;
 
 import android.accounts.Account;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.app.job.JobParameters;
 import android.app.job.JobScheduler;
 import android.app.job.JobService;
 import android.content.Context;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 
 import androidx.annotation.RequiresApi;
-import androidx.core.app.NotificationCompat;
 import androidx.core.util.Pair;
 import com.owncloud.android.MainApp;
-import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.operations.SynchronizeFileOperation;
-import com.owncloud.android.ui.activity.ConflictsResolveActivity;
-import com.owncloud.android.ui.notifications.NotificationUtils;
 import com.owncloud.android.utils.Extras;
 import com.owncloud.android.utils.FileStorageUtils;
 
 import java.io.File;
 import java.util.List;
+
+import static com.owncloud.android.ui.notifications.NotificationUtils.notifyConflict;
 
 /**
  * Job to watch for local changes in available offline files (formerly known as kept-in-sync files) and try to
@@ -59,7 +53,6 @@ import java.util.List;
 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 public class AvailableOfflineSyncJobService extends JobService {
     private static final String TAG = "AvOfflineSyncJobService";
-    private static final String FILE_SYNC_CONFLICT_CHANNEL_ID = "FILE_SYNC_CONFLICT_CHANNEL_ID";
 
     @Override
     public boolean onStartJob(JobParameters jobParameters) {
@@ -130,8 +123,9 @@ public class AvailableOfflineSyncJobService extends JobService {
         /**
          * Triggers an operation to synchronize the contents of a recently modified available offline file with
          * its remote counterpart in the associated ownCloud account.
+         *
          * @param availableOfflineFile file to synchronize
-         * @param accountName account to synchronize the available offline file with
+         * @param accountName          account to synchronize the available offline file with
          */
         private void startSyncOperation(OCFile availableOfflineFile, String accountName) {
             if (MainApp.isDeveloper()) {
@@ -160,70 +154,13 @@ public class AvailableOfflineSyncJobService extends JobService {
                     execute(storageManager, mAvailableOfflineJobService);
 
             if (result.getCode() == RemoteOperationResult.ResultCode.SYNC_CONFLICT) {
-                notifyConflict(availableOfflineFile, account);
+                notifyConflict(availableOfflineFile, account, mAvailableOfflineJobService);
             }
-        }
-
-        /**
-         * Show a notification with file conflict information, that will open a dialog to solve it when tapping it
-         * @param availableOfflineFile file in conflict
-         * @param account account which the file in conflict belongs to
-         */
-        private void notifyConflict(OCFile availableOfflineFile, Account account) {
-            NotificationManager notificationManager = (NotificationManager) mAvailableOfflineJobService.
-                    getSystemService(NOTIFICATION_SERVICE);
-            NotificationCompat.Builder notificationBuilder = NotificationUtils.
-                    newNotificationBuilder(mAvailableOfflineJobService);
-
-            // Configure notification channel
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                NotificationChannel notificationChannel;
-                CharSequence name = mAvailableOfflineJobService.
-                        getString(R.string.file_sync_notification_channel_name);
-                String description = mAvailableOfflineJobService.
-                        getString(R.string.file_sync_notification_channel_description);
-                int importance = NotificationManager.IMPORTANCE_LOW;
-                notificationChannel = new NotificationChannel(FILE_SYNC_CONFLICT_CHANNEL_ID,
-                        name, importance);
-                notificationChannel.setDescription(description);
-                notificationManager.createNotificationChannel(notificationChannel);
-            }
-
-            notificationBuilder
-                    .setChannelId(FILE_SYNC_CONFLICT_CHANNEL_ID)
-                    .setSmallIcon(R.drawable.notification_icon)
-                    .setTicker(mAvailableOfflineJobService.getString(R.string.conflict_title))
-                    .setContentTitle(mAvailableOfflineJobService.getString(R.string.conflict_title))
-                    .setContentText(String.format(
-                            mAvailableOfflineJobService.getString(R.string.conflict_description),
-                            availableOfflineFile.getRemotePath())
-                    )
-                    .setAutoCancel(true);
-
-            Intent showConflictActivityIntent = new Intent(mAvailableOfflineJobService, ConflictsResolveActivity.class);
-            showConflictActivityIntent.setFlags(showConflictActivityIntent.getFlags() | Intent.FLAG_ACTIVITY_NEW_TASK |
-                    Intent.FLAG_FROM_BACKGROUND);
-            showConflictActivityIntent.putExtra(ConflictsResolveActivity.EXTRA_FILE, availableOfflineFile);
-            showConflictActivityIntent.putExtra(ConflictsResolveActivity.EXTRA_ACCOUNT, account);
-
-            notificationBuilder.setContentIntent(
-                    PendingIntent.getActivity(mAvailableOfflineJobService, (int) System.currentTimeMillis(),
-                            showConflictActivityIntent, 0)
-            );
-
-            int notificationId = 0;
-
-            // We need a notification id for each file in conflict, let's use the file id but in a safe way
-            if ((int) availableOfflineFile.getFileId() >= Integer.MIN_VALUE && (int) availableOfflineFile.getFileId() <=
-                    Integer.MAX_VALUE) {
-                notificationId = (int) availableOfflineFile.getFileId();
-            }
-
-            notificationManager.notify(notificationId, notificationBuilder.build());
         }
 
         /**
          * Cancel the periodic job
+         *
          * @param jobId id of the job to cancel
          */
         private void cancelPeriodicJob(int jobId) {
