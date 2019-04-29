@@ -53,7 +53,7 @@ class OCCapabilityRepository(
                 localCapabilitiesDataSource.insert(listOf(OCCapability.fromRemoteCapability(item)))
             }
 
-            override fun shouldFetch(data: OCCapability?): Boolean = data == null
+            override fun shouldFetch(data: OCCapability?) = data == null
 
             override fun loadFromDb(): LiveData<OCCapability> =
                 localCapabilitiesDataSource.getCapabilityForAccountAsLiveData(accountName)
