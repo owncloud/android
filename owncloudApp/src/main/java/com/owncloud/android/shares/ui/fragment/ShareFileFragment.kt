@@ -152,7 +152,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
                 if (defaultName == share.name) {
                     isDefaultNameSet = true
                 } else if (share.name?.matches(defaultNameNumberedRegex.toRegex())!!) {
-                    number = share.name.replaceFirst(defaultNameNumberedRegex.toRegex(), "$1")
+                    number = share.name!!.replaceFirst(defaultNameNumberedRegex.toRegex(), "$1")
                     try {
                         usedNumbers.add(Integer.parseInt(number))
                     } catch (e: Exception) {
