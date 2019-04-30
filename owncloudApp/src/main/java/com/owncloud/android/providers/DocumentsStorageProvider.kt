@@ -96,37 +96,36 @@ class DocumentsStorageProvider : DocumentsProvider() {
         val accessMode: Int = ParcelFileDescriptor.parseMode(mode)
 
         val isWrite: Boolean = mode.contains("w")
-        return if (isWrite) {
-            val handler = Handler(context?.mainLooper)
-            // Attach a close listener if the document is opened in write mode.
-            try {
-                ParcelFileDescriptor.open(File(file.storagePath), accessMode, handler) {
-                    // Update the file with the cloud server. The client is done writing.
-                    Log_OC.d(TAG, "A file with id $documentId has been closed! Time to update the server.")
-                    Thread {
-                        SynchronizeFileOperation(
-                            file,
-                            null,
-                            currentStorageManager?.account,
-                            false,
-                            context,
-                            false
-                        ).apply {
-                            val result = execute(currentStorageManager, context)
-                            if (result.code == RemoteOperationResult.ResultCode.SYNC_CONFLICT) {
-                                NotificationUtils.notifyConflict(file, currentStorageManager?.account, context)
-                            }
+        if (!isWrite) return ParcelFileDescriptor.open(File(file.storagePath), accessMode)
+
+        val handler = Handler(context?.mainLooper)
+        // Attach a close listener if the document is opened in write mode.
+        try {
+            return ParcelFileDescriptor.open(File(file.storagePath), accessMode, handler) {
+                // Update the file with the cloud server. The client is done writing.
+                Log_OC.d(TAG, "A file with id $documentId has been closed! Time to synchronize it with server.")
+                Thread {
+                    SynchronizeFileOperation(
+                        file,
+                        null,
+                        currentStorageManager?.account,
+                        false,
+                        context,
+                        false
+                    ).apply {
+                        val result = execute(currentStorageManager, context)
+                        if (result.code == RemoteOperationResult.ResultCode.SYNC_CONFLICT) {
+                            NotificationUtils.notifyConflict(file, currentStorageManager?.account, context)
                         }
-                    }.apply { start() }
-                }
-            } catch (e: IOException) {
-                throw FileNotFoundException(
-                    "Failed to open document with id $documentId and mode $mode"
-                )
+                    }
+                }.apply { start() }
             }
-        } else {
-            ParcelFileDescriptor.open(File(file.storagePath), accessMode)
+        } catch (e: IOException) {
+            throw FileNotFoundException(
+                "Failed to open document with id $documentId and mode $mode"
+            )
         }
+
     }
 
     override fun queryChildDocuments(
