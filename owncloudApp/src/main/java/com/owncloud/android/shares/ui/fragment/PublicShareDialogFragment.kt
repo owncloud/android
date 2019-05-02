@@ -143,7 +143,8 @@ class PublicShareDialogFragment : DialogFragment() {
 
     var ocCapabilityViewModelFactory: ViewModelProvider.Factory = ViewModelFactory.build {
         OCCapabilityViewModel(
-            account!!
+            account = account!!,
+            shouldFetchFromNetwork = false
         )
     }
 

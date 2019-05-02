@@ -31,18 +31,21 @@ import com.owncloud.android.vo.Resource
 class OCCapabilityRepository(
     private val appExecutors: AppExecutors,
     private val localCapabilitiesDataSource: LocalCapabilitiesDataSource,
-    private val remoteCapabilitiesDataSource: RemoteCapabilitiesDataSource
+    private val remoteCapabilitiesDataSource: RemoteCapabilitiesDataSource,
+    private val shouldFetchFromNetwork: Boolean
 ) : CapabilityRepository {
 
     companion object Factory {
         fun create(
             appExecutors: AppExecutors = AppExecutors(),
             localCapabilitiesDataSource: LocalCapabilitiesDataSource,
-            remoteCapabilitiesDataSource: RemoteCapabilitiesDataSource
+            remoteCapabilitiesDataSource: RemoteCapabilitiesDataSource,
+            shouldFetchFromNetwork: Boolean = true
         ): OCCapabilityRepository = OCCapabilityRepository(
             appExecutors,
             localCapabilitiesDataSource,
-            remoteCapabilitiesDataSource
+            remoteCapabilitiesDataSource,
+            shouldFetchFromNetwork
         )
     }
 
@@ -53,7 +56,7 @@ class OCCapabilityRepository(
                 localCapabilitiesDataSource.insert(listOf(OCCapability.fromRemoteCapability(item)))
             }
 
-            override fun shouldFetch(data: OCCapability?) = data == null
+            override fun shouldFetch(data: OCCapability?) = shouldFetchFromNetwork
 
             override fun loadFromDb(): LiveData<OCCapability> =
                 localCapabilitiesDataSource.getCapabilityForAccountAsLiveData(accountName)
