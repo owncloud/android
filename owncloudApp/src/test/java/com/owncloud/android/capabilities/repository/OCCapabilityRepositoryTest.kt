@@ -66,7 +66,9 @@ class OCCapabilityRepositoryTest {
         val remoteCapabilitiesDataSource = RemoteCapabilitiesDataSourceTest(remoteOperationResult)
 
         ocCapabilityRepository =
-            OCCapabilityRepository(InstantAppExecutors(), localCapabilitiesDataSource, remoteCapabilitiesDataSource)
+            OCCapabilityRepository.create(
+                InstantAppExecutors(), localCapabilitiesDataSource, remoteCapabilitiesDataSource
+            )
 
         val data = ocCapabilityRepository.loadCapabilityForAccount("admin@server")
 
