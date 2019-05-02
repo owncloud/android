@@ -205,7 +205,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
 
     var ocCapabilityViewModelFactory: ViewModelProvider.Factory = ViewModelFactory.build {
         OCCapabilityViewModel(
-            account!!
+            account = account!!
         )
     }
 

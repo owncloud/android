@@ -66,8 +66,8 @@ class OCCapabilityViewModelTest {
         )
 
         val ocCapabilityViewModel = OCCapabilityViewModel(
-            testAccount,
-            ocCapabilityRepository
+            account = testAccount,
+            capabilityRepository = ocCapabilityRepository
         )
 
         val resource: Resource<OCCapability>? = ocCapabilityViewModel.getCapabilityForAccount().value
