@@ -450,9 +450,6 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
                     Status.LOADING -> {
                         (activity as BaseActivity).showLoadingDialog(R.string.common_loading)
                         capabilities = resource.data
-                        if (isPublicShareDisabled) {
-                            hidePublicShare()
-                        }
                     }
                     else -> {
                         Log.d(TAG, "Unknown status when loading capabilities")
