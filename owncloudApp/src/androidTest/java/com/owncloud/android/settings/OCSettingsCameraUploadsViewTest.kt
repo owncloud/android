@@ -48,7 +48,7 @@ class OCSettingsCameraUploadsViewTest {
     fun setUp() {
     }
 
-    @Test
+    /*@Test
     fun checkTitle() {
         //Asserts
         onView(withText(R.string.actionbar_settings)).check(matches(isDisplayed()))
@@ -82,5 +82,6 @@ class OCSettingsCameraUploadsViewTest {
         onView(withText(R.string.prefs_camera_upload_behaviour_title)).check(doesNotExist())
         onView(withText(R.string.pref_behaviour_entries_keep_file)).check(doesNotExist())
     }
+    */
 
 }

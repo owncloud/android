@@ -68,7 +68,7 @@ class OCSettingsLocalFolderPickerTest {
     }
 
     @Test
-    fun homeButtontoHome(){
+    fun homeButtonBrowsesToHome(){
         onView(withId(R.id.folder_picker_btn_home)).perform(click())
         val path = Environment.getExternalStoragePublicDirectory(
             Environment.DIRECTORY_DCIM
