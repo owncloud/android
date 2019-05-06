@@ -167,7 +167,6 @@ class OCSettingsCameraUploadsTest {
 
     @Test
     fun disablePictureUploadsAccept() {
-        //First, enable
         enablePictureSubOptions()
         onView(withText(R.string.prefs_camera_picture_upload)).perform(click());
         onView(withText(R.string.common_yes)).perform(click());
@@ -175,7 +174,6 @@ class OCSettingsCameraUploadsTest {
         Assert.assertFalse(mPrefCameraPictureUploads.isChecked)
         onView(withText(R.string.prefs_camera_picture_upload_path_title)).check(doesNotExist())
         onView(withText(R.string.camera_picture_upload_on_wifi)).check(doesNotExist())
-        //Reset suboptions
     }
 
     @Test
@@ -185,8 +183,8 @@ class OCSettingsCameraUploadsTest {
         onView(withText(R.string.common_no)).perform(click());
         //Asserts
         assertTrue(mPrefCameraPictureUploads.isChecked)
+        //Reset
         removePictureSubOptions()
-
     }
 
     @Test
@@ -207,6 +205,7 @@ class OCSettingsCameraUploadsTest {
         onView(withText(R.string.common_no)).perform(click());
         //Asserts
         assertTrue(mPrefCameraVideoUploads.isChecked)
+        //Reset
         removeVideoSubOptions()
     }
 
@@ -218,6 +217,7 @@ class OCSettingsCameraUploadsTest {
             activityRule.activity.getString(R.string.prefs_camera_upload_source_path_title),
             activityRule.activity.getString(R.string.prefs_camera_upload_source_path_title_required))))
             .check(matches(isDisplayed()))
+        //Reset
         removePictureSubOptions()
     }
 
@@ -243,21 +243,9 @@ class OCSettingsCameraUploadsTest {
         )
         Intents.release()
         onView(withText(android.R.string.cancel)).perform(click())
+        //Reset
         removePictureSubOptions()
     }
-
-    /*@Test
-    fun originalFileWillBeView() {
-        enablePictureSubOptions()
-        onView(withText(R.string.prefs_camera_upload_behaviour_title)).check(matches(isDisplayed()))
-        onView(withText(R.string.pref_behaviour_entries_keep_file)).check(matches(isDisplayed()))
-        /*onView(withText(R.string.prefs_camera_upload_behaviour_title)).perform(click())
-        //Asserts
-        onView(withText(R.string.prefs_camera_upload_behaviour_title)).check(matches(isDisplayed()))
-        onView(withText(R.string.pref_behaviour_entries_keep_file)).check(matches(isDisplayed()))
-        onView(withText(R.string.pref_behaviour_entries_move)).check(matches(isDisplayed()))*/
-        removePictureSubOptions()
-    }*/
 
     @Test
     fun originalFileWillBeOptions() {
@@ -267,7 +255,7 @@ class OCSettingsCameraUploadsTest {
         onView(withText(R.string.prefs_camera_upload_behaviour_title)).check(matches(isDisplayed()))
         onView(withText(R.string.pref_behaviour_entries_keep_file)).check(matches(isDisplayed()))
         onView(withText(R.string.pref_behaviour_entries_move)).check(matches(isDisplayed()))
-
+        //Reset
         onView(withText(R.string.pref_behaviour_entries_keep_file)).perform(click())
         removePictureSubOptions()
     }
@@ -279,7 +267,7 @@ class OCSettingsCameraUploadsTest {
         onView(withText(R.string.pref_behaviour_entries_move)).perform(click())
         //Asserts
         onView(withText(R.string.pref_behaviour_entries_move)).check(matches(isDisplayed()))
-
+        //Reset
         onView(withText(R.string.prefs_camera_upload_behaviour_title)).perform(click())
         onView(withText(R.string.pref_behaviour_entries_keep_file)).perform(click())
         removePictureSubOptions()
