@@ -40,6 +40,7 @@ import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.files.services.FileDownloader
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.common.utils.Log_OC
+import com.owncloud.android.lib.resources.files.FileUtils
 import com.owncloud.android.operations.CreateFolderOperation
 import com.owncloud.android.operations.RefreshFolderOperation
 import com.owncloud.android.operations.RemoveFileOperation
@@ -232,7 +233,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
     private fun checkOperationResult(result: RemoteOperationResult<Any>, folderToNotify: String) {
         if (!result.isSuccess) {
             if (result.code != RemoteOperationResult.ResultCode.WRONG_CONNECTION) notifyChangeInFolder(folderToNotify)
-            throw FileNotFoundException("Remote Operation failed due to ${result.exception.message}")
+            throw FileNotFoundException("Remote Operation failed")
         }
         syncRequired = false
         notifyChangeInFolder(folderToNotify)
@@ -240,7 +241,10 @@ class DocumentsStorageProvider : DocumentsProvider() {
 
     private fun createFolder(parentDocument: OCFile, displayName: String): String {
         val newPath = parentDocument.remotePath + displayName + OCFile.PATH_SEPARATOR
-
+        val serverWithForbiddenChars = isVersionWithForbiddenCharacters()
+        if (!FileUtils.isValidName(displayName, serverWithForbiddenChars)) {
+            throw UnsupportedOperationException("Folder $displayName contains at least one invalid character")
+        }
         Log_OC.d(TAG, "Trying to create folder with path $newPath")
 
         CreateFolderOperation(newPath, false).apply {
@@ -324,6 +328,17 @@ class DocumentsStorageProvider : DocumentsProvider() {
             }
         }
         return result
+    }
+
+    /**
+     * @return 'True' if the server doesn't need to check forbidden characters
+     */
+    private fun isVersionWithForbiddenCharacters(): Boolean {
+        currentStorageManager?.account?.let {
+            val serverVersion = AccountUtils.getServerVersion(currentStorageManager?.account)
+            return serverVersion != null && serverVersion.isVersionWithForbiddenCharacters
+        }
+        return false
     }
 
     private fun notifyChangeInFolder(folderToNotify: String) {
