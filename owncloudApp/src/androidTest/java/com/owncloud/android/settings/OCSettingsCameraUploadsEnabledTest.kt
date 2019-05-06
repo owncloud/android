@@ -116,6 +116,7 @@ class OCSettingsCameraUploadsEnabledTest {
 
     }
 
+
     @Test
     fun disablePictureUploadsAccept() {
         onView(withText(R.string.prefs_camera_picture_upload)).perform(click());
@@ -125,7 +126,7 @@ class OCSettingsCameraUploadsEnabledTest {
         onView(withText(R.string.prefs_camera_picture_upload_path_title)).check(doesNotExist())
         onView(withText(R.string.camera_picture_upload_on_wifi)).check(doesNotExist())
         //Reset suboptions
-        //enablePictureSubOptions()
+        enablePictureSubOptions()
     }
 
     @Test
@@ -145,8 +146,9 @@ class OCSettingsCameraUploadsEnabledTest {
         onView(withText(R.string.prefs_camera_video_upload_path_title)).check(doesNotExist())
         onView(withText(R.string.camera_video_upload_on_wifi)).check(doesNotExist())
         //Reset suboptions
-        //enableVideoSubOptions()
+        enableVideoSubOptions()
     }
+
 
     @Test
     fun disableVideoUploadsRefuse() {
@@ -210,7 +212,7 @@ class OCSettingsCameraUploadsEnabledTest {
         onView(withText(R.string.pref_behaviour_entries_move)).check(matches(isDisplayed()))
     }
 
-    /*fun enablePictureSubOptions(){
+    fun enablePictureSubOptions(){
         onView(withText(R.string.prefs_camera_picture_upload)).perform(click());
         onView(withText(android.R.string.ok)).perform(click())
     }
@@ -218,6 +220,6 @@ class OCSettingsCameraUploadsEnabledTest {
     fun enableVideoSubOptions(){
         onView(withText(R.string.prefs_camera_video_upload)).perform(click());
         onView(withText(android.R.string.ok)).perform(click())
-    }*/
+    }
 
 }
