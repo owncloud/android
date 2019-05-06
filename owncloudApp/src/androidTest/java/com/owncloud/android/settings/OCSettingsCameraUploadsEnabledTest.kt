@@ -29,10 +29,6 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.intent.Intents
-import androidx.test.espresso.intent.Intents.intended
-import androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent
-import androidx.test.espresso.intent.matcher.IntentMatchers.hasExtra
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -41,12 +37,19 @@ import androidx.test.rule.ActivityTestRule
 import com.owncloud.android.R
 import com.owncloud.android.ui.activity.LocalFolderPickerActivity
 import com.owncloud.android.ui.activity.Preferences
+import org.junit.After
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import androidx.test.espresso.intent.Intents
+import androidx.test.espresso.intent.Intents.intended
+import androidx.test.espresso.intent.Intents.intending
+import androidx.test.espresso.intent.matcher.IntentMatchers.hasAction
+import androidx.test.espresso.intent.matcher.IntentMatchers.hasExtra
+import androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent
 
 @RunWith(AndroidJUnit4::class)
 class OCSettingsCameraUploadsEnabledTest {
@@ -60,23 +63,26 @@ class OCSettingsCameraUploadsEnabledTest {
 
     private lateinit var mPrefCameraPictureUploads: CheckBoxPreference
     private lateinit var mPrefCameraVideoUploads: CheckBoxPreference
-    private lateinit var mPrefCameraPictureUploadsWiFi: CheckBoxPreference
+    private lateinit var mPrefCameraPictureUploadsWifi: CheckBoxPreference
     private lateinit var mPrefCameraPictureUploadsPath: Preference
-    private lateinit var mPrefCameraVideoUploadsWiFi: CheckBoxPreference
+    private lateinit var mPrefCameraVideoUploadsWifi: CheckBoxPreference
     private lateinit var mPrefCameraVideoUploadsPath: Preference
     private lateinit var mPrefCameraUploadsBehaviour: ListPreference
     private lateinit var mPrefCameraUploadsCategory: PreferenceCategory
     private lateinit var mPrefCameraUploadsSourcePath: Preference
 
     private val CAMERA_PICTURE_UPLOADS = "camera_picture_uploads"
-    private val CAMERA_VIDEO_UPLOADS = "camera_video_uploads"
     private val CAMERA_PICTURE_UPLOADS_WIFI = "camera_picture_uploads_on_wifi"
-    private val CAMERA_VIDEO_UPLOADS_WIFI = "camera_video_uploads_on_wifi"
-    private val CAMERA_UPLOADS_BEHAVIOUR = "camera_uploads_behaviour"
-    private val CAMERA_UPLOADS_CATEGORY = "camera_uploads_category"
     private val CAMERA_PICTURE_PATH = "camera_picture_uploads_path"
+
+    private val CAMERA_VIDEO_UPLOADS = "camera_video_uploads"
+    private val CAMERA_VIDEO_UPLOADS_WIFI = "camera_video_uploads_on_wifi"
     private val CAMERA_VIDEO_PATH = "camera_video_uploads_path"
+
+    private val CAMERA_UPLOADS_BEHAVIOUR = "camera_uploads_behaviour"
     private val CAMERA_SOURCE_PATH = "camera_uploads_source_path"
+
+    private val CAMERA_UPLOADS_CATEGORY = "camera_uploads_category"
 
     @Before
     fun setUp() {
@@ -89,14 +95,21 @@ class OCSettingsCameraUploadsEnabledTest {
         preferencesEditor.commit();
 
         //To set the initial UI status
+        mPrefCameraUploadsCategory = activityRule.activity.findPreference(CAMERA_UPLOADS_CATEGORY) as PreferenceCategory
         mPrefCameraPictureUploads = activityRule.activity.findPreference(CAMERA_PICTURE_UPLOADS) as CheckBoxPreference
         mPrefCameraVideoUploads = activityRule.activity.findPreference(CAMERA_VIDEO_UPLOADS) as CheckBoxPreference
-        mPrefCameraUploadsSourcePath = activityRule.activity.findPreference(CAMERA_SOURCE_PATH) as Preference
-        mPrefCameraUploadsBehaviour = activityRule.activity.findPreference(CAMERA_UPLOADS_BEHAVIOUR) as ListPreference
 
         activityRule.activity.runOnUiThread(Runnable {
             mPrefCameraPictureUploads.setChecked(true)
             mPrefCameraVideoUploads.setChecked(true)
+        })
+
+        mPrefCameraUploadsSourcePath = activityRule.activity.findPreference(CAMERA_SOURCE_PATH) as Preference
+        mPrefCameraUploadsBehaviour = activityRule.activity.findPreference(CAMERA_UPLOADS_BEHAVIOUR) as ListPreference
+        mPrefCameraUploadsCategory.addPreference(mPrefCameraUploadsSourcePath)
+        mPrefCameraUploadsCategory.addPreference(mPrefCameraUploadsBehaviour)
+
+        activityRule.activity.runOnUiThread(Runnable {
             mPrefCameraUploadsSourcePath.isEnabled = true
             mPrefCameraUploadsBehaviour.setValue("NOTHING")
         })
@@ -111,6 +124,8 @@ class OCSettingsCameraUploadsEnabledTest {
         assertFalse(mPrefCameraPictureUploads.isChecked)
         onView(withText(R.string.prefs_camera_picture_upload_path_title)).check(doesNotExist())
         onView(withText(R.string.camera_picture_upload_on_wifi)).check(doesNotExist())
+        //Reset suboptions
+        //enablePictureSubOptions()
     }
 
     @Test
@@ -129,6 +144,8 @@ class OCSettingsCameraUploadsEnabledTest {
         assertFalse(mPrefCameraVideoUploads.isChecked)
         onView(withText(R.string.prefs_camera_video_upload_path_title)).check(doesNotExist())
         onView(withText(R.string.camera_video_upload_on_wifi)).check(doesNotExist())
+        //Reset suboptions
+        //enableVideoSubOptions()
     }
 
     @Test
@@ -192,5 +209,15 @@ class OCSettingsCameraUploadsEnabledTest {
         //Asserts
         onView(withText(R.string.pref_behaviour_entries_move)).check(matches(isDisplayed()))
     }
+
+    /*fun enablePictureSubOptions(){
+        onView(withText(R.string.prefs_camera_picture_upload)).perform(click());
+        onView(withText(android.R.string.ok)).perform(click())
+    }
+
+    fun enableVideoSubOptions(){
+        onView(withText(R.string.prefs_camera_video_upload)).perform(click());
+        onView(withText(android.R.string.ok)).perform(click())
+    }*/
 
 }
