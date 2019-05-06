@@ -29,7 +29,6 @@ import android.content.res.AssetFileDescriptor
 import android.database.Cursor
 import android.graphics.Point
 import android.net.Uri
-import android.os.Build
 import android.os.CancellationSignal
 import android.os.ParcelFileDescriptor
 import android.provider.DocumentsContract
@@ -41,6 +40,8 @@ import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.files.services.FileDownloader
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.common.utils.Log_OC
+import com.owncloud.android.lib.resources.files.FileUtils
+import com.owncloud.android.operations.CreateFolderOperation
 import com.owncloud.android.operations.RefreshFolderOperation
 import com.owncloud.android.operations.RemoveFileOperation
 import com.owncloud.android.operations.RenameFileOperation
@@ -184,6 +185,22 @@ class DocumentsStorageProvider : DocumentsProvider() {
         return result
     }
 
+    override fun createDocument(parentDocumentId: String, mimeType: String, displayName: String): String {
+        Log_OC.d(TAG, "Create Document ParentID $parentDocumentId Type $mimeType DisplayName $displayName")
+        val parentDocId = parentDocumentId.toLong()
+        updateCurrentStorageManagerIfNeeded(parentDocId)
+
+        val parentDocument = currentStorageManager?.getFileById(parentDocId)
+            ?: throw FileNotFoundException("Folder $parentDocId not found")
+
+        return if (mimeType == DocumentsContract.Document.MIME_TYPE_DIR) {
+            createFolder(parentDocument, displayName)
+        } else {
+            Log_OC.d(TAG, "Not Supported yet")
+            super.createDocument(parentDocumentId, mimeType, displayName)
+        }
+    }
+
     @TargetApi(21)
     override fun renameDocument(documentId: String, displayName: String): String? {
         val docId = documentId.toLong()
@@ -194,7 +211,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
         Log_OC.d(TAG, "Trying to rename ${file.fileName} to $displayName")
 
         RenameFileOperation(file.remotePath, displayName).apply {
-            execute(currentStorageManager, context).also { checkOperationResult(it, file) }
+            execute(currentStorageManager, context).also { checkOperationResult(it, file.parentId.toString()) }
         }
 
         return null
@@ -209,20 +226,34 @@ class DocumentsStorageProvider : DocumentsProvider() {
         Log_OC.d(TAG, "Trying to delete ${file.fileName} with id ${file.fileId}")
 
         RemoveFileOperation(file.remotePath, false).apply {
-            execute(currentStorageManager, context).also { checkOperationResult(it, file) }
+            execute(currentStorageManager, context).also { checkOperationResult(it, file.parentId.toString()) }
         }
     }
 
-    private fun checkOperationResult(result: RemoteOperationResult<Any>, file: OCFile) {
+    private fun checkOperationResult(result: RemoteOperationResult<Any>, folderToNotify: String) {
         if (!result.isSuccess) {
-            notifyChangeInFolder(file.parentId.toString())
-            throw FileNotFoundException("Remote Operation failed due to ${result.exception.message}")
-        } else {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                revokeDocumentPermission(file.fileId.toString())
+            if (result.code != RemoteOperationResult.ResultCode.WRONG_CONNECTION) notifyChangeInFolder(folderToNotify)
+            throw FileNotFoundException("Remote Operation failed")
+        }
+        syncRequired = false
+        notifyChangeInFolder(folderToNotify)
+    }
+
+    private fun createFolder(parentDocument: OCFile, displayName: String): String {
+        val newPath = parentDocument.remotePath + displayName + OCFile.PATH_SEPARATOR
+        val serverWithForbiddenChars = isVersionWithForbiddenCharacters()
+        if (!FileUtils.isValidName(displayName, serverWithForbiddenChars)) {
+            throw UnsupportedOperationException("Folder $displayName contains at least one invalid character")
+        }
+        Log_OC.d(TAG, "Trying to create folder with path $newPath")
+
+        CreateFolderOperation(newPath, false).apply {
+            execute(currentStorageManager, context).also { result ->
+                checkOperationResult(result, parentDocument.fileId.toString())
+                val newFolder = currentStorageManager?.getFileByPath(newPath)
+                    ?: throw FileNotFoundException("Folder $newPath not found")
+                return newFolder.fileId.toString()
             }
-            syncRequired = false
-            notifyChangeInFolder(file.parentId.toString())
         }
     }
 
@@ -297,6 +328,17 @@ class DocumentsStorageProvider : DocumentsProvider() {
             }
         }
         return result
+    }
+
+    /**
+     * @return 'True' if the server doesn't need to check forbidden characters
+     */
+    private fun isVersionWithForbiddenCharacters(): Boolean {
+        currentStorageManager?.account?.let {
+            val serverVersion = AccountUtils.getServerVersion(currentStorageManager?.account)
+            return serverVersion != null && serverVersion.isVersionWithForbiddenCharacters
+        }
+        return false
     }
 
     private fun notifyChangeInFolder(folderToNotify: String) {

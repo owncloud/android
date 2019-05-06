@@ -45,6 +45,10 @@ class FileCursor(projection: Array<String>?) : MatrixCursor(projection ?: DEFAUL
 
         flags = flags or Document.FLAG_SUPPORTS_DELETE
 
+        if (mimeType == Document.MIME_TYPE_DIR) {
+            flags = flags or Document.FLAG_DIR_SUPPORTS_CREATE
+        }
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             flags = flags or Document.FLAG_SUPPORTS_RENAME
         }
