@@ -74,7 +74,7 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
      * @return A [SearchShareesFragment] instance, or null
      */
     private val searchFragment: SearchShareesFragment?
-        get() = supportFragmentManager.findFragmentByTag(TAG_SEARCH_FRAGMENT) as SearchShareesFragment
+        get() = supportFragmentManager.findFragmentByTag(TAG_SEARCH_FRAGMENT) as SearchShareesFragment?
 
     /**
      * Shortcut to get access to the [PublicShareDialogFragment] instance, if any
@@ -90,7 +90,7 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
      * @return A [EditShareFragment] instance, or null
      */
     private val editShareFragment: EditShareFragment?
-        get() = supportFragmentManager.findFragmentByTag(TAG_EDIT_SHARE_FRAGMENT) as EditShareFragment
+        get() = supportFragmentManager.findFragmentByTag(TAG_EDIT_SHARE_FRAGMENT) as EditShareFragment?
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -119,6 +119,7 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
         super.onAccountSet(stateWasRecovered)
         // Load data into the list
         Log_OC.d(TAG, "Refreshing lists on account set");
+        refreshSharesFromStorageManager()
     }
 
     override fun onNewIntent(intent: Intent) {
@@ -344,19 +345,12 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
     private fun refreshSharesFromStorageManager() {
         val shareFileFragment = shareFileFragment
         if (shareFileFragment?.isAdded == true) {   // only if added to the view hierarchy!!
-            shareFileFragment.refreshCapabilitiesFromDB()
             shareFileFragment.refreshUsersOrGroupsListFromDB()
-            shareFileFragment.initPublicShares()
         }
 
         val searchShareesFragment = searchFragment
         if (searchShareesFragment?.isAdded == true) {  // only if added to the view hierarchy!!
             searchShareesFragment.refreshUsersOrGroupsListFromDB()
-        }
-
-        val publicShareDialogFragment = publicShareFragment
-        if (publicShareDialogFragment?.isAdded == true) {  // only if added to the view hierarchy!!
-            publicShareDialogFragment.refreshModelFromStorageManager()
         }
 
         val editShareFragment = editShareFragment

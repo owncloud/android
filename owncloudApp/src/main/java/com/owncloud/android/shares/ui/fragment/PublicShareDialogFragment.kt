@@ -43,11 +43,13 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.owncloud.android.R
 import com.owncloud.android.ViewModelFactory
+import com.owncloud.android.capabilities.db.OCCapability
+import com.owncloud.android.capabilities.viewmodel.OCCapabilityViewModel
 import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.lib.common.utils.Log_OC
 import com.owncloud.android.lib.resources.shares.RemoteShare
 import com.owncloud.android.lib.resources.shares.ShareType
-import com.owncloud.android.lib.resources.status.OCCapability
+import com.owncloud.android.lib.resources.status.CapabilityBooleanType
 import com.owncloud.android.lib.resources.status.OwnCloudVersion
 import com.owncloud.android.operations.common.OperationType
 import com.owncloud.android.shares.db.OCShare
@@ -131,8 +133,7 @@ class PublicShareDialogFragment : DialogFragment() {
      * Get expiration date imposed by the server, if any
      */
     private val imposedExpirationDate: Long
-        get() = if (capabilities?.filesSharingPublicExpireDateEnforced?.isTrue == true) {
-
+        get() = if (capabilities?.filesSharingPublicExpireDateEnforced == CapabilityBooleanType.TRUE.value) {
             DateUtils.addDaysToDate(
                 Date(),
                 capabilities?.filesSharingPublicExpireDateDays!!
@@ -140,7 +141,14 @@ class PublicShareDialogFragment : DialogFragment() {
                 .time
         } else -1
 
-    var viewModelFactory: ViewModelProvider.Factory = ViewModelFactory.build {
+    var ocCapabilityViewModelFactory: ViewModelProvider.Factory = ViewModelFactory.build {
+        OCCapabilityViewModel(
+            account = account!!,
+            shouldFetchFromNetwork = false
+        )
+    }
+
+    var ocShareViewModelFactory: ViewModelProvider.Factory = ViewModelFactory.build {
         OCShareViewModel(
             account!!,
             file?.remotePath!!,
@@ -148,6 +156,7 @@ class PublicShareDialogFragment : DialogFragment() {
         )
     }
 
+    private lateinit var ocCapabilityViewModel: OCCapabilityViewModel
     private lateinit var ocShareViewModel: OCShareViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -223,7 +232,10 @@ class PublicShareDialogFragment : DialogFragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        ocShareViewModel = ViewModelProviders.of(this, viewModelFactory).get(OCShareViewModel::class.java)
+        ocShareViewModel = ViewModelProviders.of(this, ocShareViewModelFactory).get(OCShareViewModel::class.java)
+
+        ocCapabilityViewModel =
+            ViewModelProviders.of(this, ocCapabilityViewModelFactory).get(OCCapabilityViewModel::class.java)
 
         initPasswordListener()
         initExpirationListener()
@@ -452,8 +464,7 @@ class PublicShareDialogFragment : DialogFragment() {
         super.onActivityCreated(savedInstanceState)
         Log_OC.d(TAG, "onActivityCreated")
 
-        // Load known capabilities of the server from DB
-        refreshModelFromStorageManager()
+        refreshCapabilities()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -604,18 +615,38 @@ class PublicShareDialogFragment : DialogFragment() {
         }
     }
 
-    /**
-     * Get known server capabilities from DB
-     *
-     * Depends on the parent Activity provides a [com.owncloud.android.datamodel.FileDataStorageManager]
-     * instance ready to use. If not ready, does nothing.
-     */
-    fun refreshModelFromStorageManager() {
-        if ((listener as BaseActivity).storageManager != null) {
-            capabilities = (listener as BaseActivity).storageManager.getCapability(account?.name)
-
-            updateInputFormAccordingToServerCapabilities()
-        }
+    private fun refreshCapabilities() {
+        ocCapabilityViewModel.getCapabilityForAccount().observe(
+            this,
+            Observer { resource ->
+                when (resource?.status) {
+                    Status.SUCCESS -> {
+                        capabilities = resource.data
+                        updateInputFormAccordingToServerCapabilities()
+                        (activity as BaseActivity).dismissLoadingDialog()
+                    }
+                    Status.ERROR -> {
+                        val errorMessage = ErrorMessageAdapter.getResultMessage(
+                            resource.code,
+                            resource.exception,
+                            OperationType.GET_SHARES,
+                            resources
+                        )
+                        showError(errorMessage)
+                        capabilities = resource.data
+                        (activity as BaseActivity).dismissLoadingDialog()
+                    }
+                    Status.LOADING -> {
+                        (activity as BaseActivity).showLoadingDialog(R.string.common_loading)
+                        capabilities = resource.data
+                        updateInputFormAccordingToServerCapabilities()
+                    }
+                    else -> {
+                        Log.d(TAG, "Unknown status when loading capabilities")
+                    }
+                }
+            }
+        )
     }
 
     /**
@@ -636,13 +667,13 @@ class PublicShareDialogFragment : DialogFragment() {
         // Server version <= 9.x, multiple public sharing not supported
         if (!serverVersion.isMultiplePublicSharingSupported) {
             publicShareDialogTitle?.visibility = View.GONE
-        } else {
-            dialog.window!!.setSoftInputMode(
+        } else { // Show keyboard to fill the public share name
+            dialog?.window?.setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE or WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE
             )
         }
 
-        if (capabilities?.filesSharingPublicUpload?.isTrue == true && isSharedFolder) {
+        if (capabilities?.filesSharingPublicUpload == CapabilityBooleanType.TRUE.value && isSharedFolder) {
             shareViaLinkEditPermissionGroup?.visibility = View.VISIBLE
         }
 
@@ -653,8 +684,8 @@ class PublicShareDialogFragment : DialogFragment() {
         //  - Allow editing capability is set
         if (!(isSharedFolder &&
                     serverVersion.isPublicSharingWriteOnlySupported &&
-                    capabilities?.filesSharingPublicSupportsUploadOnly?.isTrue == true &&
-                    capabilities?.filesSharingPublicUpload?.isTrue == true)
+                    capabilities?.filesSharingPublicSupportsUploadOnly == CapabilityBooleanType.TRUE.value &&
+                    capabilities?.filesSharingPublicUpload == CapabilityBooleanType.TRUE.value)
         ) {
             shareViaLinkEditPermissionGroup?.visibility = View.GONE
         }
@@ -676,7 +707,7 @@ class PublicShareDialogFragment : DialogFragment() {
         }
 
         // Hide expiration date switch if date is enforced to prevent it is removed
-        if (capabilities?.filesSharingPublicExpireDateEnforced?.isTrue == true) {
+        if (capabilities?.filesSharingPublicExpireDateEnforced == CapabilityBooleanType.TRUE.value) {
             shareViaLinkExpirationLabel?.text = getString(R.string.share_via_link_expiration_date_enforced_label)
             shareViaLinkExpirationSwitch?.visibility = View.GONE
             shareViaLinkExpirationExplanationLabel?.visibility = View.VISIBLE
@@ -687,9 +718,12 @@ class PublicShareDialogFragment : DialogFragment() {
         }
 
         // Set password label when opening the dialog
-        if (shareViaLinkEditPermissionReadOnly.isChecked && capabilities?.filesSharingPublicPasswordEnforcedReadOnly?.isTrue == true ||
-            shareViaLinkEditPermissionReadAndWrite.isChecked && capabilities?.filesSharingPublicPasswordEnforcedReadWrite?.isTrue == true ||
-            shareViaLinkEditPermissionUploadFiles.isChecked && capabilities?.filesSharingPublicPasswordEnforcedUploadOnly?.isTrue == true
+        if (shareViaLinkEditPermissionReadOnly.isChecked &&
+            capabilities?.filesSharingPublicPasswordEnforcedReadOnly == CapabilityBooleanType.TRUE.value ||
+            shareViaLinkEditPermissionReadAndWrite.isChecked &&
+            capabilities?.filesSharingPublicPasswordEnforcedReadWrite == CapabilityBooleanType.TRUE.value ||
+            shareViaLinkEditPermissionUploadFiles.isChecked &&
+            capabilities?.filesSharingPublicPasswordEnforcedUploadOnly == CapabilityBooleanType.TRUE.value
         ) {
             setPasswordEnforced()
         }
@@ -697,19 +731,19 @@ class PublicShareDialogFragment : DialogFragment() {
         // Set password label depending on the checked permission option
         shareViaLinkEditPermissionGroup?.setOnCheckedChangeListener { group, checkedId ->
             if (checkedId == shareViaLinkEditPermissionReadOnly.id) {
-                if (capabilities?.filesSharingPublicPasswordEnforcedReadOnly?.isTrue == true) {
+                if (capabilities?.filesSharingPublicPasswordEnforcedReadOnly == CapabilityBooleanType.TRUE.value) {
                     setPasswordEnforced()
                 } else {
                     setPasswordNotEnforced()
                 }
             } else if (checkedId == shareViaLinkEditPermissionReadAndWrite.id) {
-                if (capabilities?.filesSharingPublicPasswordEnforcedReadWrite?.isTrue == true) {
+                if (capabilities?.filesSharingPublicPasswordEnforcedReadWrite == CapabilityBooleanType.TRUE.value) {
                     setPasswordEnforced()
                 } else {
                     setPasswordNotEnforced()
                 }
             } else if (checkedId == shareViaLinkEditPermissionUploadFiles.id) {
-                if (capabilities?.filesSharingPublicPasswordEnforcedUploadOnly?.isTrue == true) {
+                if (capabilities?.filesSharingPublicPasswordEnforcedUploadOnly == CapabilityBooleanType.TRUE.value) {
                     setPasswordEnforced()
                 } else {
                     setPasswordNotEnforced()
@@ -718,12 +752,15 @@ class PublicShareDialogFragment : DialogFragment() {
         }
 
         // When there's no password enforced for capability
-        val hasPasswordEnforcedFor = capabilities?.filesSharingPublicPasswordEnforcedReadOnly?.isTrue == true ||
-                capabilities?.filesSharingPublicPasswordEnforcedReadWrite?.isTrue == true ||
-                capabilities?.filesSharingPublicPasswordEnforcedUploadOnly?.isTrue == true
+        val hasPasswordEnforcedFor = capabilities?.filesSharingPublicPasswordEnforcedReadOnly ==
+                CapabilityBooleanType.TRUE.value ||
+                capabilities?.filesSharingPublicPasswordEnforcedReadWrite == CapabilityBooleanType.TRUE.value ||
+                capabilities?.filesSharingPublicPasswordEnforcedUploadOnly == CapabilityBooleanType.TRUE.value
 
         // hide password switch if password is enforced to prevent it is removed
-        if (!hasPasswordEnforcedFor && capabilities?.filesSharingPublicPasswordEnforced?.isTrue == true) {
+        if (!hasPasswordEnforcedFor && capabilities?.filesSharingPublicPasswordEnforced ==
+            CapabilityBooleanType.TRUE.value
+        ) {
             setPasswordEnforced()
         }
     }

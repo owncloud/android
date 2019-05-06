@@ -40,6 +40,8 @@ import androidx.sqlite.db.SupportSQLiteQueryBuilder
 import com.owncloud.android.AppExecutors
 import com.owncloud.android.MainApp
 import com.owncloud.android.R
+import com.owncloud.android.capabilities.datasource.OCLocalCapabilitiesDataSource
+import com.owncloud.android.capabilities.db.OCCapability
 import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.datamodel.UploadsStorageManager
 import com.owncloud.android.db.OwncloudDatabase
@@ -207,7 +209,7 @@ class FileContentProvider(val appExecutors: AppExecutors = AppExecutors()) : Con
                 }
             }
             SHARES -> {
-                val shareId: Long = OwncloudDatabase.getDatabase(context).shareDao().insert(
+                val shareId = OwncloudDatabase.getDatabase(context).shareDao().insert(
                     listOf(OCShare.fromContentValues(values))
                 )[0]
 
@@ -219,7 +221,7 @@ class FileContentProvider(val appExecutors: AppExecutors = AppExecutors()) : Con
                 val capabilityId = db.insert(ProviderTableMeta.CAPABILITIES_TABLE_NAME, null, values)
 
                 if (capabilityId <= 0) throw SQLException("ERROR $uri")
-                return  ContentUris.withAppendedId(ProviderTableMeta.CONTENT_URI_CAPABILITIES, capabilityId)
+                return ContentUris.withAppendedId(ProviderTableMeta.CONTENT_URI_CAPABILITIES, capabilityId)
             }
 
             UPLOADS -> {
@@ -339,8 +341,6 @@ class FileContentProvider(val appExecutors: AppExecutors = AppExecutors()) : Con
                 sqlQuery.setProjectionMap(fileProjectionMap)
             }
             SHARES -> {
-                newDb.execSQL("PRAGMA case_sensitive_like = true")
-
                 val supportSqlQuery = SupportSQLiteQueryBuilder
                     .builder(ProviderTableMeta.OCSHARES_TABLE_NAME)
                     .columns(projection)
@@ -943,6 +943,28 @@ class FileContentProvider(val appExecutors: AppExecutors = AppExecutors()) : Con
 
                     // Drop old shares table from old database
                     db.execSQL("DROP TABLE IF EXISTS " + ProviderTableMeta.OCSHARES_TABLE_NAME + ";")
+                }
+            }
+
+            if (oldVersion < 27 && newVersion >= 27) {
+                Log_OC.i("SQL", "Entering in #27 to migrate capabilities from SQLite to Room")
+                val cursor = db.query(
+                    ProviderTableMeta.CAPABILITIES_TABLE_NAME,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null
+                )
+
+                if (cursor.moveToFirst()) {
+                    // Insert capability to the new capabilities table in new database
+                    appExecutors.diskIO().execute {
+                        OCLocalCapabilitiesDataSource().insert(
+                            listOf(OCCapability.fromCursor(cursor))
+                        )
+                    }
                 }
             }
 

@@ -32,7 +32,7 @@ import com.owncloud.android.R;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder;
 import com.owncloud.android.files.services.FileUploader.FileUploaderBinder;
-import com.owncloud.android.lib.resources.status.OCCapability;
+import com.owncloud.android.lib.resources.status.RemoteCapability;
 import com.owncloud.android.services.OperationsService.OperationsServiceBinder;
 import com.owncloud.android.ui.activity.ComponentsGetter;
 import com.owncloud.android.ui.preview.PreviewVideoFragment;
@@ -225,7 +225,7 @@ public class FileMenuFilter {
         boolean shareWithUsersAllowed = (mContext != null &&
                 mContext.getResources().getBoolean(R.bool.share_with_users_feature));
 
-        OCCapability capability = mComponentsGetter.getStorageManager().getCapability(mAccount.name);
+        RemoteCapability capability = mComponentsGetter.getStorageManager().getCapability(mAccount.name);
         boolean shareApiEnabled = capability != null &&
                 (capability.getFilesSharingApiEnabled().isTrue() ||
                         capability.getFilesSharingApiEnabled().isUnknown()

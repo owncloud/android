@@ -55,7 +55,17 @@ abstract class NetworkBoundResource<ResultType, RequestType>(
 
     init {
         @Suppress("LeakingThis")
-        performNetworkOperation(loadFromDb())
+        val dbSource = loadFromDb()
+        result.addSource(dbSource) { data ->
+            result.removeSource(dbSource)
+            if (shouldFetch(data)) {
+                performNetworkOperation(dbSource)
+            } else {
+                result.addSource(dbSource) { newData ->
+                    setValue(Resource.success(newData))
+                }
+            }
+        }
     }
 
     @MainThread
@@ -109,7 +119,7 @@ abstract class NetworkBoundResource<ResultType, RequestType>(
                 result.removeSource(dbSource)
             }
 
-            result.addSource(dbSource) { newData ->
+            result.addSource(dbSource) {
                 setValue(
                     Resource.error(
                         msg = ex.localizedMessage
@@ -123,6 +133,9 @@ abstract class NetworkBoundResource<ResultType, RequestType>(
 
     @WorkerThread
     protected abstract fun saveCallResult(item: RequestType)
+
+    @MainThread
+    protected abstract fun shouldFetch(data: ResultType?): Boolean
 
     @MainThread
     protected abstract fun loadFromDb(): LiveData<ResultType>

@@ -28,7 +28,7 @@ import android.os.SystemClock;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.lib.common.accounts.AccountUtils;
-import com.owncloud.android.lib.resources.status.OCCapability;
+import com.owncloud.android.lib.resources.status.RemoteCapability;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 
 public class AccountsManager {
@@ -106,14 +106,14 @@ public class AccountsManager {
     }
 
     //Get server capabilities
-    public static OCCapability getCapabilities(String server, String user, String pass) {
+    public static RemoteCapability getCapabilities(String server, String user, String pass) {
         //REDO -> need mocks or integration with new networking stuff
-        return new OCCapability();
+        return new RemoteCapability();
 
     }
 
     //Save capabilities (in device DB)
-    public static void saveCapabilities(Context context, OCCapability capabilities, String server, String user) {
+    public static void saveCapabilities(Context context, RemoteCapability capabilities, String server, String user) {
         FileDataStorageManager fm = new FileDataStorageManager(context, new Account(buildAccountName(user, server),
                 accountType),
                 MainApp.getAppContext().getContentResolver());

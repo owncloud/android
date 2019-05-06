@@ -32,7 +32,7 @@ import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.lib.common.accounts.AccountTypeUtils;
 import com.owncloud.android.lib.common.accounts.AccountUtils.Constants;
 import com.owncloud.android.lib.common.utils.Log_OC;
-import com.owncloud.android.lib.resources.status.OCCapability;
+import com.owncloud.android.lib.resources.status.RemoteCapability;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 
 import java.util.Locale;
@@ -316,7 +316,7 @@ public class AccountUtils {
                     account,
                     MainApp.getAppContext().getContentResolver()
             );
-            OCCapability capability = fileDataStorageManager.getCapability(account.name);
+            RemoteCapability capability = fileDataStorageManager.getCapability(account.name);
             if (capability != null) {
                 serverVersion = new OwnCloudVersion(capability.getVersionString());
 

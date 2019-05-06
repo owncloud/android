@@ -98,6 +98,8 @@ class OCShareRepositoryTest {
         val observer = mock<Observer<Resource<List<OCShare>>>>()
         data.observeForever(observer)
 
+        dbData.postValue(null)
+
         // Get public shares from database to observe them, is called twice (one showing current db shares while
         // getting shares from server and another one with db shares already updated with server ones)
         verify(localSharesDataSource, times(2)).getSharesForFileAsLiveData(
@@ -153,6 +155,11 @@ class OCShareRepositoryTest {
             "/Photos/", "admin@server", listOf(ShareType.PUBLIC_LINK), true, false
         )
 
+        val observer = mock<Observer<Resource<List<OCShare>>>>()
+        data.observeForever(observer)
+
+        dbData.postValue(null)
+
         // Get public shares from database to observe them, is called twice (one showing current db shares while
         // getting shares from server and another one with db shares already updated with server ones)
         verify(localSharesDataSource, times(2)).getSharesForFileAsLiveData(
@@ -166,9 +173,6 @@ class OCShareRepositoryTest {
 
         // Observe changes in database livedata when the list of shares is empty
         dbData.postValue(listOf())
-
-        val observer = mock<Observer<Resource<List<OCShare>>>>()
-        data.observeForever(observer)
 
         verify(observer).onChanged(Resource.success(listOf()))
     }

@@ -61,7 +61,7 @@ data class OCShare(
     @ColumnInfo(name = ProviderTableMeta.OCSHARES_ID_REMOTE_SHARED)
     val remoteId: Long,
     @ColumnInfo(name = ProviderTableMeta.OCSHARES_ACCOUNT_OWNER)
-    var accountOwner: String,
+    var accountOwner: String = "",
     @ColumnInfo(name = ProviderTableMeta.OCSHARES_NAME)
     val name: String?,
     @ColumnInfo(name = ProviderTableMeta.OCSHARES_URL)
@@ -103,23 +103,22 @@ data class OCShare(
 
         fun fromRemoteShare(remoteShare: RemoteShare): OCShare {
             return OCShare(
-                remoteShare.fileSource,
-                remoteShare.itemSource,
-                remoteShare.shareType!!.value,
-                remoteShare.shareWith,
-                remoteShare.path,
-                remoteShare.permissions,
-                remoteShare.sharedDate,
-                remoteShare.expirationDate,
-                remoteShare.token,
-                remoteShare.sharedWithDisplayName,
-                remoteShare.sharedWithAdditionalInfo,
-                remoteShare.isFolder,
-                remoteShare.userId,
-                remoteShare.remoteId,
-                "",
-                remoteShare.name,
-                remoteShare.shareLink
+                fileSource = remoteShare.fileSource,
+                itemSource = remoteShare.itemSource,
+                shareType = remoteShare.shareType!!.value,
+                shareWith = remoteShare.shareWith,
+                path = remoteShare.path,
+                permissions = remoteShare.permissions,
+                sharedDate = remoteShare.sharedDate,
+                expirationDate = remoteShare.expirationDate,
+                token = remoteShare.token,
+                sharedWithDisplayName = remoteShare.sharedWithDisplayName,
+                sharedWithAdditionalInfo = remoteShare.sharedWithAdditionalInfo,
+                isFolder = remoteShare.isFolder,
+                userId = remoteShare.userId,
+                remoteId = remoteShare.remoteId,
+                name = remoteShare.name,
+                shareLink = remoteShare.shareLink
             )
         }
 

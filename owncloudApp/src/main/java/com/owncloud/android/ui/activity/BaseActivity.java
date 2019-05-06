@@ -22,7 +22,7 @@ import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.lib.common.utils.Log_OC;
-import com.owncloud.android.lib.resources.status.OCCapability;
+import com.owncloud.android.lib.resources.status.RemoteCapability;
 import com.owncloud.android.ui.dialog.LoadingDialog;
 
 /**
@@ -39,7 +39,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     /**
      * Capabilites of the server where {@link #mCurrentAccount} lives.
      */
-    private OCCapability mCapabilities;
+    private RemoteCapability mCapabilities;
 
     /**
      * Flag to signal that the activity is finishing to enforce the creation of an ownCloud {@link Account}.
@@ -179,7 +179,7 @@ public abstract class BaseActivity extends AppCompatActivity {
      * @return Capabilities of the server where the current OC account lives. Null if the account is not
      * set yet.
      */
-    public OCCapability getCapabilities() {
+    public RemoteCapability getCapabilities() {
         return mCapabilities;
     }
 
