@@ -56,6 +56,8 @@ class OCSettingsCameraUploadsDisabledTest {
     private lateinit var mPrefCameraUploadBehaviour: ListPreference
     private lateinit var mPrefCameraUploadSourcePath: Preference
     private lateinit var mPrefCameraUploadsCategory: PreferenceCategory
+    private lateinit var mPrefCameraUploadsSourcePath: Preference
+    private lateinit var mPrefCameraUploadsBehaviour: ListPreference
 
     private lateinit var mPrefCameraPictureUploadsPath: Preference
     private lateinit var mPrefCameraPictureUploadsWifi: CheckBoxPreference
@@ -132,6 +134,7 @@ class OCSettingsCameraUploadsDisabledTest {
             .check(doesNotExist())
         onView(withText(R.string.prefs_camera_upload_behaviour_title)).check(doesNotExist())
         onView(withText(R.string.pref_behaviour_entries_keep_file)).check(doesNotExist())
+
     }
 
     @Test
@@ -154,6 +157,19 @@ class OCSettingsCameraUploadsDisabledTest {
         removePictureSubOptions()
 
     }
+
+    /*@Test
+    fun enableDisablePictureUploads() {
+        onView(withText(R.string.prefs_camera_picture_upload)).perform(click());
+        onView(withText(android.R.string.ok)).perform(click())
+        //Asserts1
+        assertTrue(mPrefCameraPictureUploads.isChecked)
+        onView(withText(R.string.prefs_camera_picture_upload)).perform(click());
+        //Asserts2
+        assertFalse(mPrefCameraPictureUploads.isChecked)
+        onView(withText(R.string.prefs_camera_picture_upload_path_title)).check(doesNotExist())
+        onView(withText(R.string.camera_picture_upload_on_wifi)).check(doesNotExist())
+    }*/
 
     @Test
     fun enableVideoUploadsShowsWarning() {
