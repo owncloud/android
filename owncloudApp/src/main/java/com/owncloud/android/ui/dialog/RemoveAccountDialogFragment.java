@@ -41,8 +41,6 @@ import androidx.annotation.NonNull;
 import com.owncloud.android.R;
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment.ConfirmationDialogFragmentListener;
 
-import java.util.Objects;
-
 public class RemoveAccountDialogFragment extends ConfirmationDialogFragment
         implements ConfirmationDialogFragmentListener {
 
@@ -111,7 +109,9 @@ public class RemoveAccountDialogFragment extends ConfirmationDialogFragment
         // Notify removal to Document Provider
         String authority = getResources().getString(R.string.document_provider_authority);
         Uri rootsUri = DocumentsContract.buildRootsUri(authority);
-        Objects.requireNonNull(getContext()).getContentResolver().notifyChange(rootsUri, null);
+        if (getContext() != null) {
+            getContext().getContentResolver().notifyChange(rootsUri, null);
+        }
     }
 
     @Override
