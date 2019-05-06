@@ -26,6 +26,7 @@ import android.preference.PreferenceCategory
 import android.preference.PreferenceManager
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withText
@@ -35,8 +36,10 @@ import androidx.test.rule.ActivityTestRule
 import com.owncloud.android.R
 import com.owncloud.android.ui.activity.Preferences
 import org.junit.Assert.assertTrue
+import org.junit.Assert.assertFalse
 import org.junit.Before
 import org.junit.Rule
+import org.junit.AfterClass;
 import org.junit.Test
 import org.junit.runner.RunWith
 
@@ -54,37 +57,81 @@ class OCSettingsCameraUploadsDisabledTest {
     private lateinit var mPrefCameraUploadSourcePath: Preference
     private lateinit var mPrefCameraUploadsCategory: PreferenceCategory
 
-    private val CAMERA_PICTURE_UPLOADS = "camera_picture_uploads"
-    private val CAMERA_VIDEO_UPLOADS = "camera_video_uploads"
-    private val CAMERA_VIDEO_UPLOADS_WIFI= "camera_video_uploads_on_wifi"
-    private val CAMERA_PICTURE_UPLOADS_WIFI= "camera_picture_uploads_on_wifi"
-    private val CAMERA_UPLOADS_BEHAVIOUR = "camera_uploads_behaviour"
-    private val CAMERA_PICTURE_PATH = "camera_picture_uploads_path"
-    private val CAMERA_UPLOADS_CATEGORIES = "camera_uploads_category"
-    private val CAMERA_UPLOADS_PATH = "camera_uploads_source_path"
+    private lateinit var mPrefCameraPictureUploadsPath: Preference
+    private lateinit var mPrefCameraPictureUploadsWifi: CheckBoxPreference
 
+    private lateinit var mPrefCameraVideoUploadsPath: Preference
+    private lateinit var mPrefCameraVideoUploadsWifi: CheckBoxPreference
+
+
+
+    private val CAMERA_PICTURE_UPLOADS = "camera_picture_uploads"
+    private val CAMERA_PICTURE_UPLOADS_WIFI = "camera_picture_uploads_on_wifi"
+    private val CAMERA_PICTURE_PATH = "camera_picture_uploads_path"
+
+    private val CAMERA_VIDEO_UPLOADS = "camera_video_uploads"
+    private val CAMERA_VIDEO_UPLOADS_WIFI = "camera_video_uploads_on_wifi"
+    private val CAMERA_VIDEO_PATH = "camera_video_uploads_path"
+
+    private val CAMERA_UPLOADS_BEHAVIOUR = "camera_uploads_behaviour"
+    private val CAMERA_SOURCE_PATH = "camera_uploads_source_path"
+
+    private val CAMERA_UPLOADS_CATEGORY = "camera_uploads_category"
     @Before
     fun setUp() {
-        //Set preferences as disabled
-        mPrefCameraPictureUploads =
-            activityRule.activity.findPreference(CAMERA_PICTURE_UPLOADS) as CheckBoxPreference
-        activityRule.activity.runOnUiThread(Runnable {
-            mPrefCameraPictureUploads.setChecked(false)
-        })
-        mPrefCameraVideoUploads =
-            activityRule.activity.findPreference(CAMERA_VIDEO_UPLOADS) as CheckBoxPreference
-        activityRule.activity.runOnUiThread(Runnable {
-            mPrefCameraVideoUploads.setChecked(false)
-        })
 
+        //Set preferences as disabled with defaults
         var preferencesEditor = PreferenceManager.getDefaultSharedPreferences(context).edit();
         preferencesEditor.putBoolean(CAMERA_PICTURE_UPLOADS, false);
         preferencesEditor.putBoolean(CAMERA_VIDEO_UPLOADS, false);
         preferencesEditor.putBoolean(CAMERA_PICTURE_UPLOADS_WIFI, false);
         preferencesEditor.putBoolean(CAMERA_VIDEO_UPLOADS_WIFI, false);
-        preferencesEditor.remove(CAMERA_UPLOADS_BEHAVIOUR)
-        preferencesEditor.remove(CAMERA_UPLOADS_PATH)
         preferencesEditor.commit();
+
+        //To set the initial UI status
+        mPrefCameraPictureUploads = activityRule.activity.findPreference(CAMERA_PICTURE_UPLOADS) as CheckBoxPreference
+        mPrefCameraVideoUploads = activityRule.activity.findPreference(CAMERA_VIDEO_UPLOADS) as CheckBoxPreference
+
+        activityRule.activity.runOnUiThread(Runnable {
+            mPrefCameraPictureUploads.setChecked(false)
+            mPrefCameraVideoUploads.setChecked(false)
+        })
+
+    }
+
+    @Test
+    fun checkTitle() {
+        //Asserts
+        onView(withText(R.string.actionbar_settings)).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun pictureUploadsView() {
+        //Asserts
+        onView(withText(R.string.prefs_camera_picture_upload)).check(matches(isDisplayed()))
+        onView(withText(R.string.prefs_camera_picture_upload_summary)).check(matches(isDisplayed()))
+        onView(withText(R.string.prefs_camera_picture_upload_path_title)).check(doesNotExist())
+        onView(withText(R.string.camera_picture_upload_on_wifi)).check(doesNotExist())
+    }
+
+    @Test
+    fun videoUploadsView() {
+        //Asserts
+        onView(withText(R.string.prefs_camera_video_upload)).check(matches(isDisplayed()))
+        onView(withText(R.string.prefs_camera_video_upload_summary)).check(matches(isDisplayed()))
+        onView(withText(R.string.prefs_camera_video_upload_path_title)).check(doesNotExist())
+        onView(withText(R.string.camera_video_upload_on_wifi)).check(doesNotExist())
+    }
+
+    @Test
+    fun optionsCameraFolderBehaviour() {
+        //Asserts
+        onView(withText(String.format(
+            activityRule.activity.getString(R.string.prefs_camera_upload_source_path_title),
+            activityRule.activity.getString(R.string.prefs_camera_upload_source_path_title_required))))
+            .check(doesNotExist())
+        onView(withText(R.string.prefs_camera_upload_behaviour_title)).check(doesNotExist())
+        onView(withText(R.string.pref_behaviour_entries_keep_file)).check(doesNotExist())
     }
 
     @Test
@@ -103,6 +150,9 @@ class OCSettingsCameraUploadsDisabledTest {
         assertTrue(mPrefCameraPictureUploads.isChecked)
         onView(withText(R.string.prefs_camera_picture_upload_path_title)).check(matches(isDisplayed()))
         onView(withText(R.string.camera_picture_upload_on_wifi)).check(matches(isDisplayed()))
+        //Reset suboptions
+        removePictureSubOptions()
+
     }
 
     @Test
@@ -121,7 +171,49 @@ class OCSettingsCameraUploadsDisabledTest {
         assertTrue(mPrefCameraVideoUploads.isChecked)
         onView(withText(R.string.prefs_camera_video_upload_path_title)).check(matches(isDisplayed()))
         onView(withText(R.string.camera_video_upload_on_wifi)).check(matches(isDisplayed()))
+        removeVideoSubOptions()
     }
 
+    fun removePictureSubOptions(){
+        onView(withText(R.string.prefs_camera_picture_upload)).perform(click());
+        onView(withText(R.string.common_yes)).perform(click());
+        /*mPrefCameraPictureUploadsPath = activityRule.activity.findPreference(CAMERA_PICTURE_PATH) as Preference
+        mPrefCameraPictureUploadsWifi = activityRule.activity.findPreference(CAMERA_PICTURE_UPLOADS_WIFI) as CheckBoxPreference
+        mPrefCameraUploadBehaviour = activityRule.activity.findPreference(CAMERA_UPLOADS_BEHAVIOUR) as ListPreference
+        mPrefCameraUploadSourcePath = activityRule.activity.findPreference(CAMERA_SOURCE_PATH) as Preference
+
+        mPrefCameraUploadsCategory.removePreference(mPrefCameraPictureUploadsPath)
+        mPrefCameraUploadsCategory.removePreference(mPrefCameraPictureUploadsWifi)
+        mPrefCameraUploadsCategory.removePreference(mPrefCameraUploadBehaviour)
+        mPrefCameraUploadsCategory.removePreference(mPrefCameraUploadSourcePath)
+
+        activityRule.activity.runOnUiThread(Runnable {
+            mPrefCameraPictureUploadsPath.isEnabled = false
+            mPrefCameraPictureUploadsWifi.isEnabled = false
+            mPrefCameraUploadBehaviour.isEnabled = false
+            mPrefCameraUploadSourcePath.isEnabled = false
+        })*/
+    }
+
+    fun removeVideoSubOptions(){
+        onView(withText(R.string.prefs_camera_video_upload)).perform(click());
+        onView(withText(R.string.common_yes)).perform(click());
+        /*mPrefCameraVideoUploadsPath = activityRule.activity.findPreference(CAMERA_VIDEO_PATH) as Preference
+        mPrefCameraVideoUploadsWifi = activityRule.activity.findPreference(CAMERA_VIDEO_UPLOADS_WIFI) as CheckBoxPreference
+        mPrefCameraUploadBehaviour = activityRule.activity.findPreference(CAMERA_UPLOADS_BEHAVIOUR) as ListPreference
+        mPrefCameraUploadSourcePath = activityRule.activity.findPreference(CAMERA_SOURCE_PATH) as Preference
+
+        mPrefCameraUploadsCategory.removePreference(mPrefCameraVideoUploadsPath)
+        mPrefCameraUploadsCategory.removePreference(mPrefCameraVideoUploadsWifi)
+        mPrefCameraUploadsCategory.removePreference(mPrefCameraUploadBehaviour)
+        mPrefCameraUploadsCategory.removePreference(mPrefCameraUploadSourcePath)
+
+        activityRule.activity.runOnUiThread(Runnable {
+            mPrefCameraVideoUploadsPath.isEnabled = false
+            mPrefCameraVideoUploadsWifi.isEnabled = false
+            mPrefCameraUploadBehaviour.isEnabled = false
+            mPrefCameraUploadSourcePath.isEnabled = false
+        })*/
+    }
 
 }
