@@ -18,28 +18,23 @@
  */
 
 
-package com.owncloud.android.settings
+package com.owncloud.android.settings.camerauploads
 
 import android.os.Environment
-import android.preference.PreferenceManager
-import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.platform.app.InstrumentationRegistry
-import androidx.test.rule.ActivityTestRule
-import com.owncloud.android.ui.activity.LocalFolderPickerActivity
-import com.owncloud.android.ui.activity.Preferences
-import org.junit.Rule
-import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.matcher.ViewMatchers.withText
+import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.withText
+import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.rule.ActivityTestRule
+import com.owncloud.android.R
+import com.owncloud.android.ui.activity.LocalFolderPickerActivity
+import org.junit.Assert.assertTrue
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
-import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
-import org.junit.Assert.assertTrue
-import com.owncloud.android.R
 
 @RunWith(AndroidJUnit4::class)
 class OCSettingsLocalFolderPickerTest {
@@ -48,8 +43,10 @@ class OCSettingsLocalFolderPickerTest {
     @JvmField
     val activityRule = ActivityTestRule(LocalFolderPickerActivity::class.java, true, true)
 
+    val errorMessage = "Activity not finished"
+
     @Test
-    fun LocalFolderPickerView(){
+    fun localFolderPickerView(){
         onView(withId(R.id.folder_picker_btn_cancel)).check(matches(isDisplayed()))
         onView(withId(R.id.folder_picker_btn_choose)).check(matches(isDisplayed()))
         onView(withId(R.id.folder_picker_btn_home)).check(matches(isDisplayed()))
@@ -58,13 +55,13 @@ class OCSettingsLocalFolderPickerTest {
     @Test
     fun cancelButtonDismiss(){
         onView(withId(R.id.folder_picker_btn_cancel)).perform(click())
-        assertTrue("Activity not finished", activityRule.activity.isFinishing)
+        assertTrue(errorMessage, activityRule.activity.isFinishing)
     }
 
     @Test
     fun chooseButtonDismiss(){
         onView(withId(R.id.folder_picker_btn_choose)).perform(click())
-        assertTrue("Activity not finished", activityRule.activity.isFinishing)
+        assertTrue(errorMessage, activityRule.activity.isFinishing)
     }
 
     @Test
@@ -75,5 +72,4 @@ class OCSettingsLocalFolderPickerTest {
         ).parent.split("/").last()
         onView(withText(path)).check(matches(isDisplayed()))
     }
-
 }
