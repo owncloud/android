@@ -21,7 +21,6 @@ package com.owncloud.android.settings.camerauploads
 
 import android.os.Environment
 import android.preference.CheckBoxPreference
-import android.preference.Preference
 import android.preference.PreferenceManager
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
@@ -39,6 +38,7 @@ import com.owncloud.android.ui.activity.LocalFolderPickerActivity
 import com.owncloud.android.ui.activity.Preferences
 import org.junit.Assert
 import org.junit.Assert.assertTrue
+import org.junit.Assert.assertFalse
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -57,7 +57,6 @@ class OCSettingsCameraUploadsTest {
     private val CAMERA_PICTURE_UPLOADS_WIFI = "camera_picture_uploads_on_wifi"
     private val CAMERA_VIDEO_UPLOADS = "camera_video_uploads"
     private val CAMERA_VIDEO_UPLOADS_WIFI = "camera_video_uploads_on_wifi"
-    private val CAMERA_SOURCE_PATH = "camera_uploads_source_path"
 
     private lateinit var mPrefCameraPictureUploads: CheckBoxPreference
     private lateinit var mPrefCameraVideoUploads: CheckBoxPreference
@@ -127,7 +126,7 @@ class OCSettingsCameraUploadsTest {
         onView(withText(R.string.prefs_camera_picture_upload_path_title)).check(matches(isDisplayed()))
         onView(withText(R.string.camera_picture_upload_on_wifi)).check(matches(isDisplayed()))
         //Reset suboptions
-        removePictureSubOptions()
+        disablePictureSubOptions()
     }
 
     @Test
@@ -139,7 +138,7 @@ class OCSettingsCameraUploadsTest {
         onView(withText(R.string.prefs_camera_video_upload_path_title)).check(matches(isDisplayed()))
         onView(withText(R.string.camera_video_upload_on_wifi)).check(matches(isDisplayed()))
         //Reset suboptions
-        removeVideoSubOptions()
+        disableVideoSubOptions()
     }
 
     @Test
@@ -161,7 +160,7 @@ class OCSettingsCameraUploadsTest {
         //Asserts
         assertTrue(mPrefCameraPictureUploads.isChecked)
         //Reset
-        removePictureSubOptions()
+        disablePictureSubOptions()
     }
 
     @Test
@@ -170,7 +169,7 @@ class OCSettingsCameraUploadsTest {
         onView(withText(R.string.prefs_camera_video_upload)).perform(click());
         onView(withText(R.string.common_yes)).perform(click());
         //Asserts
-        Assert.assertFalse(mPrefCameraVideoUploads.isChecked)
+        assertFalse(mPrefCameraVideoUploads.isChecked)
         onView(withText(R.string.prefs_camera_video_upload_path_title)).check(doesNotExist())
         onView(withText(R.string.camera_video_upload_on_wifi)).check(doesNotExist())
     }
@@ -183,7 +182,7 @@ class OCSettingsCameraUploadsTest {
         //Asserts
         assertTrue(mPrefCameraVideoUploads.isChecked)
         //Reset
-        removeVideoSubOptions()
+        disableVideoSubOptions()
     }
 
     @Test
@@ -195,7 +194,7 @@ class OCSettingsCameraUploadsTest {
             activityRule.activity.getString(R.string.prefs_camera_upload_source_path_title_required))))
             .check(matches(isDisplayed()))
         //Reset
-        removePictureSubOptions()
+        disablePictureSubOptions()
     }
 
     @Test
@@ -215,7 +214,7 @@ class OCSettingsCameraUploadsTest {
         Intents.release()
         onView(withText(android.R.string.cancel)).perform(click())
         //Reset
-        removePictureSubOptions()
+        disablePictureSubOptions()
     }
 
     @Test
@@ -228,16 +227,15 @@ class OCSettingsCameraUploadsTest {
         //Reset
         onView(withText(R.string.prefs_camera_upload_behaviour_title)).perform(click())
         onView(withText(R.string.pref_behaviour_entries_keep_file)).perform(click())
-        removePictureSubOptions()
-
+        disablePictureSubOptions()
     }
 
-    fun removePictureSubOptions(){
+    fun disablePictureSubOptions(){
         onView(withText(R.string.prefs_camera_picture_upload)).perform(click());
         onView(withText(R.string.common_yes)).perform(click());
     }
 
-    fun removeVideoSubOptions(){
+    fun disableVideoSubOptions(){
         onView(withText(R.string.prefs_camera_video_upload)).perform(click());
         onView(withText(R.string.common_yes)).perform(click());
     }
@@ -251,5 +249,4 @@ class OCSettingsCameraUploadsTest {
         onView(withText(R.string.prefs_camera_video_upload)).perform(click());
         onView(withText(android.R.string.ok)).perform(click())
     }
-
 }
