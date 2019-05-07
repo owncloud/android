@@ -61,7 +61,6 @@ class OCSettingsCameraUploadsTest {
 
     private lateinit var mPrefCameraPictureUploads: CheckBoxPreference
     private lateinit var mPrefCameraVideoUploads: CheckBoxPreference
-    private lateinit var mPrefCameraUploadsSourcePath: Preference
 
     @Before
     fun setUp() {
@@ -120,17 +119,6 @@ class OCSettingsCameraUploadsTest {
     }
 
     @Test
-    fun enablePictureUploadsShowsWarning() {
-        onView(withText(R.string.prefs_camera_picture_upload)).perform(click())
-        //Asserts
-        onView(withText(R.string.common_important)).check(matches(isDisplayed()))
-        onView(withText(R.string.proper_pics_folder_warning_camera_upload)).check(matches(isDisplayed()))
-        //Reset suboptions
-        onView(withText(android.R.string.ok)).perform(click())
-        removePictureSubOptions()
-    }
-
-    @Test
     fun enablePictureUploads() {
         onView(withText(R.string.prefs_camera_picture_upload)).perform(click());
         onView(withText(android.R.string.ok)).perform(click())
@@ -140,17 +128,6 @@ class OCSettingsCameraUploadsTest {
         onView(withText(R.string.camera_picture_upload_on_wifi)).check(matches(isDisplayed()))
         //Reset suboptions
         removePictureSubOptions()
-    }
-
-    @Test
-    fun enableVideoUploadsShowsWarning() {
-        onView(withText(R.string.prefs_camera_video_upload)).perform(click());
-        //Asserts
-        onView(withText(R.string.common_important)).check(matches(isDisplayed()));
-        onView(withText(R.string.proper_videos_folder_warning_camera_upload)).check(matches(isDisplayed()));
-        //Reset suboptions
-        onView(withText(android.R.string.ok)).perform(click())
-        removeVideoSubOptions()
     }
 
     @Test
@@ -228,35 +205,16 @@ class OCSettingsCameraUploadsTest {
             Environment.DIRECTORY_DCIM
         ).absolutePath + "/Camera";
         Intents.init()
-        mPrefCameraUploadsSourcePath = activityRule.activity.findPreference(CAMERA_SOURCE_PATH) as Preference
-        activityRule.activity.runOnUiThread(Runnable {
-            mPrefCameraUploadsSourcePath.isEnabled = true
-        })
         //Asserts
         onView(withText(String.format(
             activityRule.activity.getString(R.string.prefs_camera_upload_source_path_title),
             activityRule.activity.getString(R.string.prefs_camera_upload_source_path_title_required))))
             .perform(click())
         Intents.intended(IntentMatchers.hasComponent(LocalFolderPickerActivity::class.java.name))
-        IntentMatchers.hasExtra(
-            LocalFolderPickerActivity.EXTRA_PATH, cameraFolder
-        )
+        IntentMatchers.hasExtra(LocalFolderPickerActivity.EXTRA_PATH, cameraFolder)
         Intents.release()
         onView(withText(android.R.string.cancel)).perform(click())
         //Reset
-        removePictureSubOptions()
-    }
-
-    @Test
-    fun originalFileWillBeOptions() {
-        enablePictureSubOptions()
-        onView(withText(R.string.prefs_camera_upload_behaviour_title)).perform(click())
-        //Asserts
-        onView(withText(R.string.prefs_camera_upload_behaviour_title)).check(matches(isDisplayed()))
-        onView(withText(R.string.pref_behaviour_entries_keep_file)).check(matches(isDisplayed()))
-        onView(withText(R.string.pref_behaviour_entries_move)).check(matches(isDisplayed()))
-        //Reset
-        onView(withText(R.string.pref_behaviour_entries_keep_file)).perform(click())
         removePictureSubOptions()
     }
 
