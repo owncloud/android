@@ -53,6 +53,10 @@ class FileCursor(projection: Array<String>?) : MatrixCursor(projection ?: DEFAUL
             flags = flags or Document.FLAG_SUPPORTS_RENAME
         }
 
+        if (Build.VERSION.SDK_INT>= Build.VERSION_CODES.N){
+            flags = flags or Document.FLAG_SUPPORTS_COPY
+        }
+
         newRow()
             .add(Document.COLUMN_DOCUMENT_ID, file.fileId.toString())
             .add(Document.COLUMN_DISPLAY_NAME, file.fileName)
