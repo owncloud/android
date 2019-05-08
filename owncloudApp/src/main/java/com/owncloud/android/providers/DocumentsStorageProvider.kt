@@ -42,6 +42,7 @@ import com.owncloud.android.files.services.FileDownloader
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.common.utils.Log_OC
 import com.owncloud.android.lib.resources.files.FileUtils
+import com.owncloud.android.operations.CopyFileOperation
 import com.owncloud.android.operations.CreateFolderOperation
 import com.owncloud.android.operations.RefreshFolderOperation
 import com.owncloud.android.operations.RemoveFileOperation
@@ -264,6 +265,39 @@ class DocumentsStorageProvider : DocumentsProvider() {
 
         RemoveFileOperation(file.remotePath, false).apply {
             execute(currentStorageManager, context).also { checkOperationResult(it, file.parentId.toString()) }
+        }
+    }
+
+    override fun copyDocument(sourceDocumentId: String, targetParentDocumentId: String): String {
+        Log_OC.d(TAG, "Trying to copy $sourceDocumentId to $targetParentDocumentId")
+
+        val sourceDocId = sourceDocumentId.toLong()
+        updateCurrentStorageManagerIfNeeded(sourceDocId)
+
+        val sourceFile = currentStorageManager?.getFileById(sourceDocId)
+            ?: throw FileNotFoundException("File $sourceDocId not found")
+
+        val targetParentDocId = targetParentDocumentId.toLong()
+        val targetParentFile = currentStorageManager?.getFileById(targetParentDocId)
+            ?: throw FileNotFoundException("File $targetParentDocId not found")
+
+        CopyFileOperation(
+            sourceFile.remotePath,
+            targetParentFile.remotePath,
+            currentStorageManager?.account
+        ).apply {
+            execute(currentStorageManager, context).also { result ->
+                syncRequired = false
+                checkOperationResult(result, targetParentFile.fileId.toString())
+                //Returns the document id of the copied document at the target destination
+                var newPath = targetParentFile.remotePath + sourceFile.fileName
+                if (sourceFile.isFolder) {
+                    newPath += OCFile.PATH_SEPARATOR
+                }
+                val newFile = currentStorageManager?.getFileByPath(newPath)
+                    ?: throw FileNotFoundException("File $newPath not found")
+                return newFile.fileId.toString()
+            }
         }
     }
 
