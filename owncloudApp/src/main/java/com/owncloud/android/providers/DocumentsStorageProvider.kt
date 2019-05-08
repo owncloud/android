@@ -29,8 +29,8 @@ import android.content.res.AssetFileDescriptor
 import android.database.Cursor
 import android.graphics.Point
 import android.net.Uri
-import android.os.Build
 import android.os.CancellationSignal
+import android.os.Handler
 import android.os.ParcelFileDescriptor
 import android.provider.DocumentsContract
 import android.provider.DocumentsProvider
@@ -41,13 +41,18 @@ import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.files.services.FileDownloader
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.common.utils.Log_OC
+import com.owncloud.android.lib.resources.files.FileUtils
+import com.owncloud.android.operations.CreateFolderOperation
 import com.owncloud.android.operations.RefreshFolderOperation
 import com.owncloud.android.operations.RemoveFileOperation
 import com.owncloud.android.operations.RenameFileOperation
+import com.owncloud.android.operations.SynchronizeFileOperation
 import com.owncloud.android.providers.cursors.FileCursor
 import com.owncloud.android.providers.cursors.RootCursor
+import com.owncloud.android.ui.notifications.NotificationUtils
 import java.io.File
 import java.io.FileNotFoundException
+import java.io.IOException
 import java.util.HashMap
 import java.util.Vector
 
@@ -61,7 +66,8 @@ class DocumentsStorageProvider : DocumentsProvider() {
     private var syncRequired = true
     private var currentStorageManager: FileDataStorageManager? = null
 
-    override fun openDocument(documentId: String, mode: String?, signal: CancellationSignal?): ParcelFileDescriptor? {
+    override fun openDocument(documentId: String, mode: String, signal: CancellationSignal?): ParcelFileDescriptor? {
+        Log_OC.d(TAG, "Trying to open $documentId in mode $mode")
         val docId = documentId.toLong()
         updateCurrentStorageManagerIfNeeded(docId)
 
@@ -87,7 +93,39 @@ class DocumentsStorageProvider : DocumentsProvider() {
             } while (!file.isDown)
         }
 
-        return ParcelFileDescriptor.open(File(file.storagePath), ParcelFileDescriptor.MODE_READ_ONLY)
+        val accessMode: Int = ParcelFileDescriptor.parseMode(mode)
+
+        val isWrite: Boolean = mode.contains("w")
+        if (!isWrite) return ParcelFileDescriptor.open(File(file.storagePath), accessMode)
+
+        val handler = Handler(context?.mainLooper)
+        // Attach a close listener if the document is opened in write mode.
+        try {
+            return ParcelFileDescriptor.open(File(file.storagePath), accessMode, handler) {
+                // Update the file with the cloud server. The client is done writing.
+                Log_OC.d(TAG, "A file with id $documentId has been closed! Time to synchronize it with server.")
+                Thread {
+                    SynchronizeFileOperation(
+                        file,
+                        null,
+                        currentStorageManager?.account,
+                        false,
+                        context,
+                        false
+                    ).apply {
+                        val result = execute(currentStorageManager, context)
+                        if (result.code == RemoteOperationResult.ResultCode.SYNC_CONFLICT) {
+                            NotificationUtils.notifyConflict(file, currentStorageManager?.account, context)
+                        }
+                    }
+                }.apply { start() }
+            }
+        } catch (e: IOException) {
+            throw FileNotFoundException(
+                "Failed to open document with id $documentId and mode $mode"
+            )
+        }
+
     }
 
     override fun queryChildDocuments(
@@ -112,7 +150,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
          * This will start syncing the current folder. User will only see this after updating his view with a
          * pull down, or by accessing the folder again.
          */
-        if (requestedFolderIdForSync != folderId && syncRequired) {
+        if (requestedFolderIdForSync != folderId && syncRequired && currentStorageManager != null) {
             // register for sync
             syncDirectoryWithServer(parentDocumentId)
             requestedFolderIdForSync = folderId
@@ -184,6 +222,22 @@ class DocumentsStorageProvider : DocumentsProvider() {
         return result
     }
 
+    override fun createDocument(parentDocumentId: String, mimeType: String, displayName: String): String {
+        Log_OC.d(TAG, "Create Document ParentID $parentDocumentId Type $mimeType DisplayName $displayName")
+        val parentDocId = parentDocumentId.toLong()
+        updateCurrentStorageManagerIfNeeded(parentDocId)
+
+        val parentDocument = currentStorageManager?.getFileById(parentDocId)
+            ?: throw FileNotFoundException("Folder $parentDocId not found")
+
+        return if (mimeType == DocumentsContract.Document.MIME_TYPE_DIR) {
+            createFolder(parentDocument, displayName)
+        } else {
+            Log_OC.d(TAG, "Not Supported yet")
+            super.createDocument(parentDocumentId, mimeType, displayName)
+        }
+    }
+
     @TargetApi(21)
     override fun renameDocument(documentId: String, displayName: String): String? {
         val docId = documentId.toLong()
@@ -194,7 +248,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
         Log_OC.d(TAG, "Trying to rename ${file.fileName} to $displayName")
 
         RenameFileOperation(file.remotePath, displayName).apply {
-            execute(currentStorageManager, context).also { checkOperationResult(it, file) }
+            execute(currentStorageManager, context).also { checkOperationResult(it, file.parentId.toString()) }
         }
 
         return null
@@ -209,20 +263,34 @@ class DocumentsStorageProvider : DocumentsProvider() {
         Log_OC.d(TAG, "Trying to delete ${file.fileName} with id ${file.fileId}")
 
         RemoveFileOperation(file.remotePath, false).apply {
-            execute(currentStorageManager, context).also { checkOperationResult(it, file) }
+            execute(currentStorageManager, context).also { checkOperationResult(it, file.parentId.toString()) }
         }
     }
 
-    private fun checkOperationResult(result: RemoteOperationResult<Any>, file: OCFile) {
+    private fun checkOperationResult(result: RemoteOperationResult<Any>, folderToNotify: String) {
         if (!result.isSuccess) {
-            notifyChangeInFolder(file.parentId.toString())
-            throw FileNotFoundException("Remote Operation failed due to ${result.exception.message}")
-        } else {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                revokeDocumentPermission(file.fileId.toString())
+            if (result.code != RemoteOperationResult.ResultCode.WRONG_CONNECTION) notifyChangeInFolder(folderToNotify)
+            throw FileNotFoundException("Remote Operation failed")
+        }
+        syncRequired = false
+        notifyChangeInFolder(folderToNotify)
+    }
+
+    private fun createFolder(parentDocument: OCFile, displayName: String): String {
+        val newPath = parentDocument.remotePath + displayName + OCFile.PATH_SEPARATOR
+        val serverWithForbiddenChars = isVersionWithForbiddenCharacters()
+        if (!FileUtils.isValidName(displayName, serverWithForbiddenChars)) {
+            throw UnsupportedOperationException("Folder $displayName contains at least one invalid character")
+        }
+        Log_OC.d(TAG, "Trying to create folder with path $newPath")
+
+        CreateFolderOperation(newPath, false).apply {
+            execute(currentStorageManager, context).also { result ->
+                checkOperationResult(result, parentDocument.fileId.toString())
+                val newFolder = currentStorageManager?.getFileByPath(newPath)
+                    ?: throw FileNotFoundException("Folder $newPath not found")
+                return newFolder.fileId.toString()
             }
-            syncRequired = false
-            notifyChangeInFolder(file.parentId.toString())
         }
     }
 
@@ -297,6 +365,17 @@ class DocumentsStorageProvider : DocumentsProvider() {
             }
         }
         return result
+    }
+
+    /**
+     * @return 'True' if the server doesn't need to check forbidden characters
+     */
+    private fun isVersionWithForbiddenCharacters(): Boolean {
+        currentStorageManager?.account?.let {
+            val serverVersion = AccountUtils.getServerVersion(currentStorageManager?.account)
+            return serverVersion != null && serverVersion.isVersionWithForbiddenCharacters
+        }
+        return false
     }
 
     private fun notifyChangeInFolder(folderToNotify: String) {
