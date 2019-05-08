@@ -39,6 +39,8 @@ import com.owncloud.android.authentication.AccountUtils
 import com.owncloud.android.datamodel.FileDataStorageManager
 import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.files.services.FileDownloader
+import com.owncloud.android.files.services.FileUploader
+import com.owncloud.android.files.services.TransferRequester
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.common.utils.Log_OC
 import com.owncloud.android.lib.resources.files.FileUtils
@@ -47,9 +49,11 @@ import com.owncloud.android.operations.RefreshFolderOperation
 import com.owncloud.android.operations.RemoveFileOperation
 import com.owncloud.android.operations.RenameFileOperation
 import com.owncloud.android.operations.SynchronizeFileOperation
+import com.owncloud.android.operations.UploadFileOperation
 import com.owncloud.android.providers.cursors.FileCursor
 import com.owncloud.android.providers.cursors.RootCursor
 import com.owncloud.android.ui.notifications.NotificationUtils
+import com.owncloud.android.utils.FileStorageUtils
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.IOException
@@ -232,8 +236,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
         return if (mimeType == DocumentsContract.Document.MIME_TYPE_DIR) {
             createFolder(parentDocument, displayName)
         } else {
-            Log_OC.d(TAG, "Not Supported yet")
-            super.createDocument(parentDocumentId, mimeType, displayName)
+            createFile(parentDocument, mimeType, displayName)
         }
     }
 
@@ -290,6 +293,38 @@ class DocumentsStorageProvider : DocumentsProvider() {
                     ?: throw FileNotFoundException("Folder $newPath not found")
                 return newFolder.fileId.toString()
             }
+        }
+    }
+
+    private fun createFile(parentDocument: OCFile, mimeType: String, displayName: String): String {
+        Log_OC.d(TAG, "Trying to create file $displayName with mimetype $mimeType in ${parentDocument.remotePath}")
+
+        try {
+            val tempDir = File(FileStorageUtils.getTemporalPath(currentStorageManager?.account?.name))
+            val newFile = File(tempDir, displayName)
+            newFile.createNewFile()
+
+            TransferRequester().apply {
+                uploadNewFile(
+                    context,
+                    currentStorageManager?.account,
+                    newFile.path,
+                    parentDocument.remotePath + displayName,
+                    FileUploader.LOCAL_BEHAVIOUR_FORGET,
+                    null,
+                    true, // create parent folder if not existent
+                    UploadFileOperation.CREATED_BY_USER
+                )
+            }
+            Thread.sleep(2000)
+
+            context?.contentResolver?.notifyChange(toNotifyUri(toUri(parentDocument.fileId.toString())), null)
+            val id = currentStorageManager?.getFileByPath(parentDocument.remotePath + displayName)?.fileId.toString()
+            Log_OC.d(TAG, "New File $id")
+            return id
+
+        } catch (e: IOException) {
+            throw FileNotFoundException("Error creating new file $displayName")
         }
     }
 
