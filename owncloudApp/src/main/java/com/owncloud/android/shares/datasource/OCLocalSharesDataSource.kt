@@ -43,6 +43,8 @@ class OCLocalSharesDataSource(
 
     override fun replaceSharesForFile(ocShares: List<OCShare>): List<Long> = ocShareDao.replaceSharesForFile(ocShares)
 
+    override fun deleteShare(remoteId: Long) = ocShareDao.deleteShare(remoteId)
+
     override fun deleteSharesForFile(filePath: String, accountName: String) =
         ocShareDao.deleteSharesForFile(filePath, accountName)
 }
