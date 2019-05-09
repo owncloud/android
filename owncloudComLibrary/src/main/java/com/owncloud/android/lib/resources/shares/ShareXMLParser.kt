@@ -117,7 +117,6 @@ class ShareXMLParser {
             } else {
                 skip(parser)
             }
-
         }
         return shares
     }
@@ -150,7 +149,6 @@ class ShareXMLParser {
             } else {
                 skip(parser)
             }
-
         }
     }
 
@@ -194,7 +192,6 @@ class ShareXMLParser {
 
             } else {
                 skip(parser)
-
             }
         }
 
@@ -269,7 +266,7 @@ class ShareXMLParser {
 
             } else if (name.equals(NODE_EXPIRATION, ignoreCase = true)) {
                 val value = readNode(parser, NODE_EXPIRATION)
-                if (value.length != 0) {
+                if (value.isNotEmpty()) {
                     remoteShare.expirationDate = WebdavUtils.parseResponseDate(value)!!.time
                 }
 
@@ -296,13 +293,9 @@ class ShareXMLParser {
             }
         }
 
-        if (isValidShare(remoteShare)) {
+        if (remoteShare.isValid) {
             shares.add(remoteShare)
         }
-    }
-
-    private fun isValidShare(share: RemoteShare): Boolean {
-        return share.id > -1
     }
 
     private fun fixPathForFolder(share: RemoteShare) {

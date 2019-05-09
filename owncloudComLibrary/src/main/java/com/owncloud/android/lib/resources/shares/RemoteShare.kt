@@ -55,8 +55,7 @@ class RemoteShare : Parcelable, Serializable {
     var isFolder: Boolean = false
     var userId: Long = 0
 
-    val isPasswordProtected: Boolean
-        get() = ShareType.PUBLIC_LINK == shareType && shareWith.isNotEmpty()
+    val isValid: Boolean = id > -1
 
     constructor() : super() {
         resetData()
