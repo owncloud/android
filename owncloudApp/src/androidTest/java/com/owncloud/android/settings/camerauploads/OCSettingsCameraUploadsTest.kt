@@ -126,7 +126,7 @@ class OCSettingsCameraUploadsTest {
         onView(withText(R.string.prefs_camera_picture_upload_path_title)).check(matches(isDisplayed()))
         onView(withText(R.string.camera_picture_upload_on_wifi)).check(matches(isDisplayed()))
         //Reset suboptions
-        disablePictureSubOptions()
+        disableCameraPictureUploads()
     }
 
     @Test
@@ -138,12 +138,12 @@ class OCSettingsCameraUploadsTest {
         onView(withText(R.string.prefs_camera_video_upload_path_title)).check(matches(isDisplayed()))
         onView(withText(R.string.camera_video_upload_on_wifi)).check(matches(isDisplayed()))
         //Reset suboptions
-        disableVideoSubOptions()
+        disableCameraVideoUploads()
     }
 
     @Test
     fun disablePictureUploadsAccept() {
-        enablePictureSubOptions()
+        enableCameraPictureUploads()
         onView(withText(R.string.prefs_camera_picture_upload)).perform(click());
         onView(withText(R.string.common_yes)).perform(click());
         //Asserts
@@ -154,18 +154,18 @@ class OCSettingsCameraUploadsTest {
 
     @Test
     fun disablePictureUploadsRefuse() {
-        enablePictureSubOptions()
+        enableCameraPictureUploads()
         onView(withText(R.string.prefs_camera_picture_upload)).perform(click());
         onView(withText(R.string.common_no)).perform(click());
         //Asserts
         assertTrue(mPrefCameraPictureUploads.isChecked)
         //Reset
-        disablePictureSubOptions()
+        disableCameraPictureUploads()
     }
 
     @Test
     fun disableVideoUploadsAccept() {
-        enableVideoSubOptions()
+        enableCameraVideoUploads()
         onView(withText(R.string.prefs_camera_video_upload)).perform(click());
         onView(withText(R.string.common_yes)).perform(click());
         //Asserts
@@ -176,30 +176,30 @@ class OCSettingsCameraUploadsTest {
 
     @Test
     fun disableVideoUploadsRefuse() {
-        enableVideoSubOptions()
+        enableCameraVideoUploads()
         onView(withText(R.string.prefs_camera_video_upload)).perform(click());
         onView(withText(R.string.common_no)).perform(click());
         //Asserts
         assertTrue(mPrefCameraVideoUploads.isChecked)
         //Reset
-        disableVideoSubOptions()
+        disableCameraVideoUploads()
     }
 
     @Test
     fun cameraFolderView() {
-        enablePictureSubOptions()
+        enableCameraPictureUploads()
         //Asserts
         onView(withText(String.format(
             activityRule.activity.getString(R.string.prefs_camera_upload_source_path_title),
             activityRule.activity.getString(R.string.prefs_camera_upload_source_path_title_required))))
             .check(matches(isDisplayed()))
         //Reset
-        disablePictureSubOptions()
+        disableCameraPictureUploads()
     }
 
     @Test
     fun cameraOpenPicker() {
-        enablePictureSubOptions()
+        enableCameraPictureUploads()
         val cameraFolder = Environment.getExternalStoragePublicDirectory(
             Environment.DIRECTORY_DCIM
         ).absolutePath + "/Camera";
@@ -214,12 +214,12 @@ class OCSettingsCameraUploadsTest {
         Intents.release()
         onView(withText(android.R.string.cancel)).perform(click())
         //Reset
-        disablePictureSubOptions()
+        disableCameraPictureUploads()
     }
 
     @Test
     fun switchOriginalFileWillBe() {
-        enablePictureSubOptions()
+        enableCameraPictureUploads()
         onView(withText(R.string.prefs_camera_upload_behaviour_title)).perform(click())
         onView(withText(R.string.pref_behaviour_entries_move)).perform(click())
         //Asserts
@@ -227,25 +227,25 @@ class OCSettingsCameraUploadsTest {
         //Reset
         onView(withText(R.string.prefs_camera_upload_behaviour_title)).perform(click())
         onView(withText(R.string.pref_behaviour_entries_keep_file)).perform(click())
-        disablePictureSubOptions()
+        disableCameraPictureUploads()
     }
 
-    fun disablePictureSubOptions(){
+    fun disableCameraPictureUploads(){
         onView(withText(R.string.prefs_camera_picture_upload)).perform(click());
         onView(withText(R.string.common_yes)).perform(click());
     }
 
-    fun disableVideoSubOptions(){
+    fun disableCameraVideoUploads(){
         onView(withText(R.string.prefs_camera_video_upload)).perform(click());
         onView(withText(R.string.common_yes)).perform(click());
     }
 
-    fun enablePictureSubOptions(){
+    fun enableCameraPictureUploads(){
         onView(withText(R.string.prefs_camera_picture_upload)).perform(click());
         onView(withText(android.R.string.ok)).perform(click())
     }
 
-    fun enableVideoSubOptions(){
+    fun enableCameraVideoUploads(){
         onView(withText(R.string.prefs_camera_video_upload)).perform(click());
         onView(withText(android.R.string.ok)).perform(click())
     }
