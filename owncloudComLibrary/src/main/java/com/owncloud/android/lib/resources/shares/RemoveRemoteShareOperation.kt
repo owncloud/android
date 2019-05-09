@@ -63,7 +63,7 @@ class RemoveRemoteShareOperation(private val remoteShareId: Long) : RemoteOperat
                 URL(uriBuilder.build().toString())
             )
 
-            deleteMethod.addRequestHeader(RemoteOperation.OCS_API_HEADER, RemoteOperation.OCS_API_HEADER_VALUE)
+            deleteMethod.addRequestHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE)
 
             val status = client.executeHttpMethod(deleteMethod)
 
