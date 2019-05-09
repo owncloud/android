@@ -23,6 +23,7 @@ import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.shares.CreateRemoteShareOperation
 import com.owncloud.android.lib.resources.shares.GetRemoteSharesForFileOperation
+import com.owncloud.android.lib.resources.shares.RemoveRemoteShareOperation
 import com.owncloud.android.lib.resources.shares.ShareParserResult
 import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.lib.resources.shares.UpdateRemoteShareOperation
@@ -74,5 +75,12 @@ class OCRemoteSharesDataSource(
         updateRemoteShareOperation.publicUpload = publicUpload
         updateRemoteShareOperation.retrieveShareDetails = true
         return updateRemoteShareOperation.execute(client)
+    }
+
+    override fun deleteShare(
+        remoteId: Long,
+        removeRemoteShareOperation: RemoveRemoteShareOperation
+    ): RemoteOperationResult<ShareParserResult> {
+        return RemoveRemoteShareOperation(remoteId).execute(client)
     }
 }

@@ -155,4 +155,28 @@ class OCShareRepository(
             )
         }.asLiveData()
     }
+
+    override fun deletePublicShare(
+        filePath: String,
+        accountName: String,
+        remoteId: Long
+    ): LiveData<Resource<List<OCShare>>> {
+        return object : NetworkBoundResource<List<OCShare>, ShareParserResult>(appExecutors) {
+            override fun saveCallResult(item: ShareParserResult) {
+                // TODO
+            }
+
+            override fun shouldFetch(data: List<OCShare>?): Boolean {
+                return true
+            }
+
+            override fun loadFromDb(): LiveData<List<OCShare>> {
+                return localSharesDataSource.getSharesForFileAsLiveData(
+                    filePath, accountName, listOf(ShareType.PUBLIC_LINK)
+                )
+            }
+
+            override fun createCall() = remoteSharesDataSource.deleteShare(remoteId)
+        }.asLiveData()
+    }
 }
