@@ -77,4 +77,7 @@ class OCShareViewModel(
         filePath, account.name, remoteId, name, password, expirationDateInMillis, permissions, publicUpload
     )
 
+    fun deletePublicShare(
+        remoteId: Long
+    ): LiveData<Resource<List<OCShare>>> = shareRepository.deletePublicShare(filePath, account.name, remoteId)
 }

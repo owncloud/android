@@ -24,7 +24,6 @@
 package com.owncloud.android.shares.ui.fragment
 
 import android.accounts.Account
-import android.app.Activity
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
@@ -452,7 +451,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
                         capabilities = resource.data
                     }
                     else -> {
-                        Log.d(TAG, "Unknown status when loading capabilities")
+                        Log.d(TAG, "Unknown status when loading capabilities in account ${account?.name}")
                     }
                 }
             }
@@ -490,7 +489,10 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
                             updateListOfPublicLinks()
                         }
                         else -> {
-                            Log.d(TAG, "Unknown status when loading shares")
+                            Log.d(
+                                TAG, "Unknown status when loading shares for file ${file?.fileName} in account" +
+                                        "${account?.name}"
+                            )
                         }
                     }
                 }
