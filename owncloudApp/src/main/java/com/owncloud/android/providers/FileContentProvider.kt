@@ -439,10 +439,8 @@ class FileContentProvider(val appExecutors: AppExecutors = AppExecutors()) : Con
     ): Int {
         when (uriMatcher.match(uri)) {
             DIRECTORY -> return 0 //updateFolderSize(db, selectionArgs[0]);
-            SHARES -> {
-                return OwncloudDatabase.getDatabase(context!!).shareDao().update(OCShare.fromContentValues(values))
-                    .toInt()
-            }
+            SHARES -> return OwncloudDatabase.getDatabase(context!!).shareDao()
+                .update(OCShare.fromContentValues(values)).toInt()
             CAPABILITIES -> return db.update(
                 ProviderTableMeta.CAPABILITIES_TABLE_NAME, values, selection, selectionArgs
             )
