@@ -150,6 +150,6 @@ class PublicShareEditionDialogFragmentTest {
         onView(withId(R.id.shareViaLinkExpirationValue))
             .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))
         onView(withId(R.id.shareViaLinkExpirationValue))
-            .check(matches(withText("Apr 30, 2019")))
+            .check(matches(withText("Apr 29, 2019")))
     }
 }
