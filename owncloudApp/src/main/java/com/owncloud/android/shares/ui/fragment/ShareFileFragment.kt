@@ -330,11 +330,8 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
     }
 
     override fun removePublicShare(share: OCShare) {
-        val dialog = RemoveShareDialogFragment.newInstance(share)
-        dialog.show(
-            fragmentManager!!,
-            ShareActivity.TAG_REMOVE_SHARE_DIALOG_FRAGMENT
-        )
+        // Remove public link from server
+        listener?.showRemovePublicShare(share)
     }
 
     override fun editPublicShare(share: OCShare) {
@@ -506,7 +503,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
      */
     private fun updateListOfPublicLinks() {
         publicLinksAdapter = SharePublicLinkListAdapter(
-            activity,
+            context!!,
             R.layout.share_public_link_item,
             publicLinks,
             this
