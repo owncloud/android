@@ -32,14 +32,12 @@ import android.app.Dialog
 import android.os.Bundle
 import com.owncloud.android.R
 import com.owncloud.android.lib.common.utils.Log_OC
-import com.owncloud.android.lib.resources.shares.RemoteShare
 import com.owncloud.android.shares.db.OCShare
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment.ConfirmationDialogFragmentListener
 import com.owncloud.android.ui.fragment.ShareFragmentListener
 
 class RemoveShareDialogFragment : ConfirmationDialogFragment(), ConfirmationDialogFragmentListener {
-
-    private var targetShare: RemoteShare? = null
+    private var targetShare: OCShare? = null
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = super.onCreateDialog(savedInstanceState)
@@ -56,7 +54,7 @@ class RemoveShareDialogFragment : ConfirmationDialogFragment(), ConfirmationDial
     override fun onConfirmation(callerTag: String) {
         val listener = activity as ShareFragmentListener?
         Log_OC.d(TAG, "Removing public share " + targetShare!!.name)
-
+        listener?.removeShare(targetShare)
     }
 
     override fun onCancel(callerTag: String) {

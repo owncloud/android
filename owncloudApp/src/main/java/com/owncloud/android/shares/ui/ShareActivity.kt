@@ -45,6 +45,7 @@ import com.owncloud.android.shares.ui.fragment.PublicShareDialogFragment
 import com.owncloud.android.shares.ui.fragment.ShareFileFragment
 import com.owncloud.android.ui.activity.FileActivity
 import com.owncloud.android.ui.asynctasks.GetSharesForFileAsyncTask
+import com.owncloud.android.ui.dialog.RemoveShareDialogFragment
 import com.owncloud.android.ui.fragment.EditShareFragment
 import com.owncloud.android.ui.fragment.SearchShareesFragment
 import com.owncloud.android.ui.fragment.ShareFragmentListener
@@ -237,29 +238,32 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
         // dialog, so make our own transaction and take care of that here.
 
         // Create and show the dialog
-        val newFragment = PublicShareDialogFragment.newInstanceToCreate(
+        val createPublicShareFragment = PublicShareDialogFragment.newInstanceToCreate(
             file,
             account,
             defaultLinkName
         )
 
         showDialogFragment(
-            newFragment,
+            createPublicShareFragment,
             TAG_PUBLIC_SHARE_DIALOG_FRAGMENT
         )
     }
 
-    override fun dismissAddPublicShare() {
-        publicShareFragment?.dismiss()
-    }
-
     override fun showEditPublicShare(share: OCShare) {
         // Create and show the dialog.
-        val newFragment = PublicShareDialogFragment.newInstanceToUpdate(file, share, account)
-
+        val editPublicShareFragment = PublicShareDialogFragment.newInstanceToUpdate(file, share, account)
         showDialogFragment(
-            newFragment,
+            editPublicShareFragment,
             TAG_PUBLIC_SHARE_DIALOG_FRAGMENT
+        )
+    }
+
+    override fun showRemovePublicShare(share: OCShare) {
+        val removePublicShareFragment = RemoveShareDialogFragment.newInstance(share)
+        showDialogFragment(
+            removePublicShareFragment,
+            TAG_REMOVE_SHARE_DIALOG_FRAGMENT
         )
     }
 

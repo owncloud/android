@@ -27,8 +27,7 @@ import com.owncloud.android.testing.SingleFragmentActivity
 import com.owncloud.android.ui.fragment.ShareFragmentListener
 
 class TestShareFileActivity : SingleFragmentActivity(), ShareFragmentListener {
-
-    override fun copyOrSendPrivateLink(file: OCFile?) {
+        override fun copyOrSendPrivateLink(file: OCFile?) {
     }
 
     override fun showSearchUsersAndGroups() {
@@ -44,6 +43,11 @@ class TestShareFileActivity : SingleFragmentActivity(), ShareFragmentListener {
     }
 
     override fun showAddPublicShare(defaultLinkName: String) {
+
+    }
+
+    override fun showRemovePublicShare(share: OCShare?) {
+
     }
 
     override fun dismissAddPublicShare() {
