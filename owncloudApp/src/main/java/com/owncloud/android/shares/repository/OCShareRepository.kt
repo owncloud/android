@@ -163,7 +163,7 @@ class OCShareRepository(
     ): LiveData<Resource<List<OCShare>>> {
         return object : NetworkBoundResource<List<OCShare>, ShareParserResult>(appExecutors) {
             override fun saveCallResult(item: ShareParserResult) {
-                // TODO
+                localSharesDataSource.deleteShare(remoteId)
             }
 
             override fun shouldFetch(data: List<OCShare>?): Boolean {
