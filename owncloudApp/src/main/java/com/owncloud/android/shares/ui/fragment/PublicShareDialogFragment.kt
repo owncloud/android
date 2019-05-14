@@ -345,7 +345,7 @@ class PublicShareDialogFragment : DialogFragment() {
                             val errorMessage: String = resource.msg ?: ErrorMessageAdapter.getResultMessage(
                                 resource.code,
                                 resource.exception,
-                                OperationType.CREATE_PUBLIC_SHARE,
+                                OperationType.UPDATE_PUBLIC_SHARE,
                                 resources
                             );
                             showError(errorMessage)

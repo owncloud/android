@@ -78,7 +78,9 @@ abstract class NetworkBoundResource<ResultType, RequestType>(
     private fun performNetworkOperation(dbSource: LiveData<ResultType>) {
         // Let's dispatch dbSource value quickly while network operation is performed
         result.addSource(dbSource) { newData ->
-            setValue(Resource.loading(newData))
+            if (newData != null) {
+                setValue(Resource.loading(newData))
+            }
         }
 
         try {
