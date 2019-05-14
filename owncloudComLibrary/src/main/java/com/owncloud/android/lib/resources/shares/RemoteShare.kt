@@ -52,7 +52,7 @@ class RemoteShare : Parcelable, Serializable {
     var permissions: Int = DEFAULT_PERMISSION
     var sharedDate: Long = INIT_SHARED_DATE
     var expirationDate: Long = INIT_EXPIRATION_DATE_IN_MILLIS
-    var isFolder: Boolean = false
+    var isFolder: Boolean = path.endsWith(FileUtils.PATH_SEPARATOR)
     var userId: Long = 0
 
     val isValid: Boolean = id > -1
