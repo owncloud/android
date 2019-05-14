@@ -50,12 +50,10 @@ import com.owncloud.android.lib.resources.status.CapabilityBooleanType
 import com.owncloud.android.lib.resources.status.OwnCloudVersion
 import com.owncloud.android.operations.common.OperationType
 import com.owncloud.android.shares.db.OCShare
-import com.owncloud.android.shares.ui.ShareActivity
 import com.owncloud.android.shares.viewmodel.OCShareViewModel
 import com.owncloud.android.ui.activity.BaseActivity
 import com.owncloud.android.ui.adapter.SharePublicLinkListAdapter
 import com.owncloud.android.ui.adapter.ShareUserListAdapter
-import com.owncloud.android.ui.dialog.RemoveShareDialogFragment
 import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter
 import com.owncloud.android.ui.fragment.ShareFragmentListener
 import com.owncloud.android.utils.DisplayUtils
@@ -495,6 +493,11 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
                 }
             )
         }
+    }
+
+    fun refreshPublicSharesNew(publicShares: ArrayList<OCShare>) {
+        publicLinks = publicShares
+        updateListOfPublicLinks()
     }
 
     /**
