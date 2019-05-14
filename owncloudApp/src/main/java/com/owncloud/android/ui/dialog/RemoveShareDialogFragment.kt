@@ -69,7 +69,7 @@ class RemoveShareDialogFragment : ConfirmationDialogFragment(), ConfirmationDial
 
         private val TAG = RemoveShareDialogFragment::class.java.name
 
-        private val ARG_TARGET_SHARE = "TARGET_SHARE"
+        private const val ARG_TARGET_SHARE = "TARGET_SHARE"
 
         /**
          * Public factory method to create new RemoveFilesDialogFragment instances.
@@ -93,6 +93,7 @@ class RemoveShareDialogFragment : ConfirmationDialogFragment(), ConfirmationDial
             args.putInt(ARG_POSITIVE_BTN_RES, R.string.common_yes)
             args.putInt(ARG_NEUTRAL_BTN_RES, R.string.common_no)
             args.putInt(ARG_NEGATIVE_BTN_RES, -1)
+            args.putParcelable(ARG_TARGET_SHARE, share)
             frag.arguments = args
 
             return frag

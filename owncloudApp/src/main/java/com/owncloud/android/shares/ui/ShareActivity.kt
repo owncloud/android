@@ -27,8 +27,15 @@ package com.owncloud.android.shares.ui
 import android.app.SearchManager
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
+import com.google.android.material.snackbar.Snackbar
 import com.owncloud.android.R
+import com.owncloud.android.ViewModelFactory
+import com.owncloud.android.capabilities.viewmodel.OCCapabilityViewModel
 import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.lib.common.operations.RemoteOperation
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
@@ -39,17 +46,21 @@ import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.operations.GetSharesForFileOperation
 import com.owncloud.android.operations.RemoveShareOperation
 import com.owncloud.android.operations.UpdateSharePermissionsOperation
+import com.owncloud.android.operations.common.OperationType
 import com.owncloud.android.providers.UsersAndGroupsSearchProvider
 import com.owncloud.android.shares.db.OCShare
 import com.owncloud.android.shares.ui.fragment.PublicShareDialogFragment
 import com.owncloud.android.shares.ui.fragment.ShareFileFragment
+import com.owncloud.android.shares.viewmodel.OCShareViewModel
 import com.owncloud.android.ui.activity.FileActivity
 import com.owncloud.android.ui.asynctasks.GetSharesForFileAsyncTask
 import com.owncloud.android.ui.dialog.RemoveShareDialogFragment
+import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter
 import com.owncloud.android.ui.fragment.EditShareFragment
 import com.owncloud.android.ui.fragment.SearchShareesFragment
 import com.owncloud.android.ui.fragment.ShareFragmentListener
 import com.owncloud.android.ui.utils.showDialogFragment
+import com.owncloud.android.vo.Status
 
 /**
  * Activity for sharing files
@@ -90,6 +101,23 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
     private val editShareFragment: EditShareFragment?
         get() = supportFragmentManager.findFragmentByTag(TAG_EDIT_SHARE_FRAGMENT) as EditShareFragment?
 
+    var ocShareViewModelFactory: ViewModelProvider.Factory = ViewModelFactory.build {
+        OCShareViewModel(
+            account!!,
+            file?.remotePath!!,
+            listOf(ShareType.PUBLIC_LINK)
+        )
+    }
+
+    var ocCapabilityViewModelFactory: ViewModelProvider.Factory = ViewModelFactory.build {
+        OCCapabilityViewModel(
+            account = account!!
+        )
+    }
+
+    private lateinit var ocShareViewModel: OCShareViewModel
+    private lateinit var ocCapabilityViewModel: OCCapabilityViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -111,6 +139,12 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
             )
             ft.commit()
         }
+
+        ocShareViewModel = ViewModelProviders.of(this, ocShareViewModelFactory)
+            .get(OCShareViewModel::class.java)
+
+        ocCapabilityViewModel =
+            ViewModelProviders.of(this, ocCapabilityViewModelFactory).get(OCCapabilityViewModel::class.java)
     }
 
     override fun onAccountSet(stateWasRecovered: Boolean) {
@@ -212,12 +246,6 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
         // Create and show the dialog.
         val newFragment = EditShareFragment.newInstance(share, file, account)
         newFragment.show(ft, TAG_EDIT_SHARE_FRAGMENT)
-
-    }
-
-    override// Call to Remove share operation
-    fun removeShare(share: OCShare) {
-        fileOperationsHelper.removeShare(share)
     }
 
     /**
@@ -264,6 +292,39 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
         showDialogFragment(
             removePublicShareFragment,
             TAG_REMOVE_SHARE_DIALOG_FRAGMENT
+        )
+    }
+
+    override fun removeShare(share: OCShare) {
+        ocShareViewModel.deletePublicShare(share.remoteId).observe(
+            this,
+            Observer { resource ->
+                when (resource?.status) {
+                    Status.SUCCESS -> {
+                        dismissLoadingDialog()
+                        shareFileFragment?.refreshPublicSharesNew(resource.data as ArrayList<OCShare>)
+                    }
+                    Status.ERROR -> {
+                        val errorMessage = ErrorMessageAdapter.getResultMessage(
+                            resource.code,
+                            resource.exception,
+                            OperationType.GET_SHARES,
+                            resources
+                        )
+                        Snackbar.make(findViewById(android.R.id.content), errorMessage, Snackbar.LENGTH_SHORT).show()
+                        dismissLoadingDialog()
+                    }
+                    Status.LOADING -> {
+                        showLoadingDialog(R.string.common_loading)
+                    }
+                    else -> {
+                        Log.d(
+                            TAG, "Unknown status when removing share ${share.name} " +
+                                    "from account ${account?.name}"
+                        )
+                    }
+                }
+            }
         )
     }
 
@@ -337,10 +398,10 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
 
         private val TAG = ShareActivity::class.java.simpleName
 
-        private val TAG_SHARE_FRAGMENT = "SHARE_FRAGMENT"
-        private val TAG_SEARCH_FRAGMENT = "SEARCH_USER_AND_GROUPS_FRAGMENT"
-        private val TAG_EDIT_SHARE_FRAGMENT = "EDIT_SHARE_FRAGMENT"
-        private val TAG_PUBLIC_SHARE_DIALOG_FRAGMENT = "PUBLIC_SHARE_DIALOG_FRAGMENT"
-        val TAG_REMOVE_SHARE_DIALOG_FRAGMENT = "REMOVE_SHARE_DIALOG_FRAGMENT"
+        private const val TAG_SHARE_FRAGMENT = "SHARE_FRAGMENT"
+        private const val TAG_SEARCH_FRAGMENT = "SEARCH_USER_AND_GROUPS_FRAGMENT"
+        private const val TAG_EDIT_SHARE_FRAGMENT = "EDIT_SHARE_FRAGMENT"
+        private const val TAG_PUBLIC_SHARE_DIALOG_FRAGMENT = "PUBLIC_SHARE_DIALOG_FRAGMENT"
+        private const val TAG_REMOVE_SHARE_DIALOG_FRAGMENT = "REMOVE_SHARE_DIALOG_FRAGMENT"
     }
 }
