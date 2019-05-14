@@ -25,7 +25,6 @@ package com.owncloud.android.operations
 
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
-import com.owncloud.android.lib.resources.files.FileUtils
 import com.owncloud.android.lib.resources.shares.GetRemoteShareOperation
 import com.owncloud.android.lib.resources.shares.RemoteShare
 import com.owncloud.android.lib.resources.shares.ShareParserResult
@@ -41,7 +40,6 @@ import com.owncloud.android.operations.common.SyncOperation
  */
 class UpdateSharePermissionsOperation(private val shareId: Long) : SyncOperation<ShareParserResult>() {
     private var permissions: Int = -1
-    lateinit var path: String
 
     /**
      * Set permissions to update in private share.
@@ -59,30 +57,27 @@ class UpdateSharePermissionsOperation(private val shareId: Long) : SyncOperation
             RemoteOperationResult.ResultCode.SHARE_NOT_FOUND
         ) // ShareType.USER | ShareType.GROUP
 
-        path = share.path
-
         // Update remote share with password
         val updateOp = UpdateRemoteShareOperation(share.remoteId)
         updateOp.permissions = permissions
-        var result = updateOp.execute(client)
 
-        if (result.isSuccess) {
-            val getShareOp = GetRemoteShareOperation(share.remoteId)
-            result = getShareOp.execute(client)
-            if (result.isSuccess) {
-                val remoteShare = result.data.shares[0]
-                // TODO check permissions are being saved
-                updateData(remoteShare)
-            }
+        val updateOpResult = updateOp.execute(client)
+        if (!updateOpResult.isSuccess) {
+            return updateOpResult
         }
 
-        return result
-    }
+        val getShareOp = GetRemoteShareOperation(share.remoteId)
+        val getShareOpResult = getShareOp.execute(client)
+        if (!getShareOpResult.isSuccess) {
+            return getShareOpResult
+        }
 
-    private fun updateData(share: RemoteShare) {
-        // Update DB with the response
-        share.path = path   // TODO - check if may be moved to UpdateRemoteShareOperation
-        share.isFolder = path.endsWith(FileUtils.PATH_SEPARATOR)
-        storageManager.saveShare(share)
+        val remoteShare = getShareOpResult.data.shares[0]
+        // TODO check permissions are being saved
+
+        remoteShare.path = share.path
+        storageManager.saveShare(remoteShare)
+
+        return getShareOpResult
     }
 }
