@@ -486,7 +486,7 @@ class FileContentProvider(val appExecutors: AppExecutors = AppExecutors()) : Con
         return results
     }
 
-    private inner class DataBaseHelper internal constructor(context: Context?) :
+    private inner class DataBaseHelper internal constructor(context: Context) :
         SQLiteOpenHelper(context, ProviderMeta.DB_NAME, null, ProviderMeta.DB_VERSION) {
 
         override fun onCreate(db: SQLiteDatabase) {
