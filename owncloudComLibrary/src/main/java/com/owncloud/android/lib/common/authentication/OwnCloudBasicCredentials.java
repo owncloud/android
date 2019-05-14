@@ -27,6 +27,7 @@ import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.http.HttpClient;
 import com.owncloud.android.lib.common.http.HttpConstants;
 import okhttp3.Credentials;
+import okhttp3.internal.Util;
 
 public class OwnCloudBasicCredentials implements OwnCloudCredentials {
 
@@ -52,7 +53,7 @@ public class OwnCloudBasicCredentials implements OwnCloudCredentials {
         HttpClient.deleteHeaderForAllRequests(HttpConstants.COOKIE_HEADER);
 
         HttpClient.addHeaderForAllRequests(HttpConstants.AUTHORIZATION_HEADER,
-                Credentials.basic(mUsername, mPassword));
+                Credentials.basic(mUsername, mPassword, Util.UTF_8));
     }
 
     @Override
