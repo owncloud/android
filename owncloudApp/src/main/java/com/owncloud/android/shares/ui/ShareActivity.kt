@@ -383,7 +383,6 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
         // Create and show the dialog
         val createPublicShareFragment = PublicShareDialogFragment.newInstanceToCreate(
             file,
-            account,
             defaultLinkName
         )
 
@@ -436,7 +435,7 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
 
     override fun showEditPublicShare(share: OCShare) {
         // Create and show the dialog.
-        val editPublicShareFragment = PublicShareDialogFragment.newInstanceToUpdate(file, share, account)
+        val editPublicShareFragment = PublicShareDialogFragment.newInstanceToUpdate(file, share)
         showDialogFragment(
             editPublicShareFragment,
             TAG_PUBLIC_SHARE_DIALOG_FRAGMENT
