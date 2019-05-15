@@ -52,6 +52,6 @@ class OCCapabilityViewModel(
     )
 ) : ViewModel() {
 
-    fun getCapabilityForAccount(shouldFetchFromNetwork: Boolean): LiveData<Resource<OCCapability>> =
+    fun getCapabilityForAccount(shouldFetchFromNetwork: Boolean = true): LiveData<Resource<OCCapability>> =
         capabilityRepository.loadCapabilityForAccount(account.name, shouldFetchFromNetwork)
 }
