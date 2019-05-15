@@ -61,6 +61,7 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -937,13 +938,12 @@ public class FileDataStorageManager {
         String selection;
         String[] selectionArgs;
 
-        if (!onlyAvailableOffline) {
+        if (!onlyAvailableOffline && !sharedByLinkFiles) {
             selection = ProviderTableMeta.FILE_PARENT + "=?";
             selectionArgs = new String[] {String.valueOf(parentId)};
         } else if(!sharedByLinkFiles){
             selection = ProviderTableMeta.FILE_PARENT + "=? AND (" + ProviderTableMeta.FILE_SHARED_VIA_LINK + " = ? )";
-            selectionArgs = new String[]{String.valueOf(parentId),
-            String.valueOf()}
+            selectionArgs = new String[]{String.valueOf(parentId), String.valueOf(1)};
         } else {
             selection = ProviderTableMeta.FILE_PARENT + "=? AND (" + ProviderTableMeta.FILE_KEEP_IN_SYNC +
                     " = ? OR " + ProviderTableMeta.FILE_KEEP_IN_SYNC + "=? )";
@@ -2235,6 +2235,49 @@ public class FileDataStorageManager {
             }
         }
 
+        Collections.sort(result);
+        return result;
+    }
+
+    public Vector<OCFile> getSharedByLinkFilesFromCurrentAccount(){
+        Vector<OCFile> allSharedFiles = new Vector<OCFile>();
+        Vector<OCFile> result = new Vector<OCFile>();
+        Cursor cursorOnShared = null;
+        try{
+            cursorOnShared = getContentResolver().query(ProviderTableMeta.CONTENT_URI,
+                    null,
+                    "(" + ProviderTableMeta.FILE_SHARED_VIA_LINK + " = ? AND " +
+                    ProviderTableMeta.FILE_ACCOUNT_OWNER + " = ? ",
+                    new String[]{String.valueOf(1),
+                            mAccount.name},
+                    null);
+            if(cursorOnShared != null && cursorOnShared.moveToFirst()){
+                OCFile file;
+                do{
+                    file = createFileInstance(cursorOnShared);
+                    allSharedFiles.add(file);
+                } while(cursorOnShared.moveToNext());
+            }
+        } catch(Exception exception){
+            Log_OC.e(TAG,"Exception retrieving all the shared by link files",exception);
+        } finally {
+            if(cursorOnShared != null){
+                cursorOnShared.close();
+            }
+        }
+        if(allSharedFiles.size() > 0){
+            Vector<Long> allSharedDirs = new Vector<Long>();
+            for(OCFile file : allSharedFiles){
+                if(file.isFolder()){
+                    allSharedDirs.add(file.getFileId());
+                }
+            }
+            for(OCFile file : allSharedFiles){
+                if(file.isFolder() || (!file.isFolder() && !allSharedDirs.contains(file.getParentId()))){
+                    result.add(file);
+                }
+            }
+        }
         Collections.sort(result);
         return result;
     }
