@@ -5,19 +5,19 @@
  * @author Christian Schabesberger
  * @author David González Verdugo
  * @author Abel García de Prada
- *
+ * <p>
  * Copyright (C) 2012  Bartek Przybylski
  * Copyright (C) 2019 ownCloud GmbH.
- *
+ * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
  * as published by the Free Software Foundation.
- *
+ * <p>
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -64,6 +64,7 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -191,7 +192,7 @@ public class FileDataStorageManager {
         Vector<OCFile> ret = new Vector<OCFile>();
         if (folder != null) {
             // TODO better implementation, filtering in the access to database instead of here
-            Vector<OCFile> tmp = getFolderContent(folder, false,false);
+            Vector<OCFile> tmp = getFolderContent(folder, false, false);
             OCFile current;
             for (int i = 0; i < tmp.size(); i++) {
                 current = tmp.get(i);
@@ -663,7 +664,7 @@ public class FileDataStorageManager {
         File localFolder = new File(localFolderPath);
         if (localFolder.exists()) {
             // stage 1: remove the local files already registered in the files database
-            Vector<OCFile> files = getFolderContent(folder.getFileId(), false,false);
+            Vector<OCFile> files = getFolderContent(folder.getFileId(), false, false);
             if (files != null) {
                 for (OCFile file : files) {
                     if (file.isFolder()) {
@@ -709,7 +710,7 @@ public class FileDataStorageManager {
 
     /**
      * Updates database and file system for a file or folder that was moved to a different location.
-     * 
+     *
      * TODO explore better (faster) implementations
      * TODO throw exceptions up !
      */
@@ -945,11 +946,11 @@ public class FileDataStorageManager {
         String selection;
         String[] selectionArgs;
 
-         if(sharedByLinkFiles){
+        if (sharedByLinkFiles) {
             selection = ProviderTableMeta.FILE_PARENT + "=? AND (" + ProviderTableMeta.FILE_SHARED_VIA_LINK + " = ? )";
             selectionArgs = new String[]{String.valueOf(parentId),
-            String.valueOf(1)};
-        } else if (onlyAvailableOffline){
+                    String.valueOf(1)};
+        } else if (onlyAvailableOffline) {
             selection = ProviderTableMeta.FILE_PARENT + "=? AND (" + ProviderTableMeta.FILE_KEEP_IN_SYNC +
                     " = ? OR " + ProviderTableMeta.FILE_KEEP_IN_SYNC + "=? )";
             selectionArgs = new String[]{String.valueOf(parentId),
@@ -957,7 +958,7 @@ public class FileDataStorageManager {
                     String.valueOf(OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE_PARENT.getValue())};
         } else {
             selection = ProviderTableMeta.FILE_PARENT + "=?";
-            selectionArgs = new String[] {String.valueOf(parentId)};
+            selectionArgs = new String[]{String.valueOf(parentId)};
         }
 
         if (getContentProviderClient() != null) {
@@ -1415,7 +1416,7 @@ public class FileDataStorageManager {
                     + ProviderTableMeta.OCSHARES_ACCOUNT_OWNER + "=?";
             String[] whereArgs = new String[]{"", mAccount.name};
 
-            Vector<OCFile> files = getFolderContent(folder, false,false);
+            Vector<OCFile> files = getFolderContent(folder, false, false);
 
             for (OCFile file : files) {
                 whereArgs[0] = file.getRemotePath();
@@ -2057,6 +2058,49 @@ public class FileDataStorageManager {
             }
         }
 
+        Collections.sort(result);
+        return result;
+    }
+
+    public Vector<OCFile> getSharedByLinkFilesFromCurrentAccount() {
+        Vector<OCFile> allSharedFiles = new Vector<OCFile>();
+        Vector<OCFile> result = new Vector<OCFile>();
+        Cursor cursorOnShared = null;
+        try {
+            cursorOnShared = getContentResolver().query(ProviderTableMeta.CONTENT_URI,
+                    null,
+                    "(" + ProviderTableMeta.FILE_SHARED_VIA_LINK + " = ? AND " +
+                            ProviderTableMeta.FILE_ACCOUNT_OWNER + " = ? ",
+                    new String[]{String.valueOf(1),
+                            mAccount.name},
+                    null);
+            if (cursorOnShared != null && cursorOnShared.moveToFirst()) {
+                OCFile file;
+                do {
+                    file = createFileInstance(cursorOnShared);
+                    allSharedFiles.add(file);
+                } while (cursorOnShared.moveToNext());
+            }
+        } catch (Exception exception) {
+            Log_OC.e(TAG, "Exception retrieving all the shared by link files", exception);
+        } finally {
+            if (cursorOnShared != null) {
+                cursorOnShared.close();
+            }
+        }
+        if (allSharedFiles.size() > 0) {
+            Vector<Long> allSharedDirs = new Vector<Long>();
+            for (OCFile file : allSharedFiles) {
+                if (file.isFolder()) {
+                    allSharedDirs.add(file.getFileId());
+                }
+            }
+            for (OCFile file : allSharedFiles) {
+                if (file.isFolder() || (!file.isFolder() && !allSharedDirs.contains(file.getParentId()))) {
+                    result.add(file);
+                }
+            }
+        }
         Collections.sort(result);
         return result;
     }
