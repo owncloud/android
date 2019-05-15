@@ -21,7 +21,6 @@
 
 package com.owncloud.android.shares.ui.fragment
 
-import android.accounts.Account
 import android.app.Activity
 import android.content.Context
 import android.graphics.drawable.Drawable
@@ -64,11 +63,6 @@ class PublicShareDialogFragment : DialogFragment() {
      * Existing share to update. If NULL, the dialog will create a new share for file.
      */
     private var publicShare: OCShare? = null
-
-    /*
-     * OC account holding the file to share, received as a parameter in construction time
-     */
-    private var account: Account? = null
 
     /**
      * Reference to parent listener
@@ -132,7 +126,6 @@ class PublicShareDialogFragment : DialogFragment() {
 
         if (arguments != null) {
             file = arguments!!.getParcelable(ARG_FILE)
-            account = arguments!!.getParcelable(ARG_ACCOUNT)
             publicShare = arguments!!.getParcelable(ARG_SHARE)
         }
 
@@ -140,7 +133,7 @@ class PublicShareDialogFragment : DialogFragment() {
             throw IllegalStateException("Both ARG_FILE and ARG_SHARE cannot be NULL")
         }
 
-        setStyle(DialogFragment.STYLE_NO_TITLE, 0)
+        setStyle(STYLE_NO_TITLE, 0)
     }
 
     private fun updating(): Boolean = publicShare != null
@@ -714,45 +707,37 @@ class PublicShareDialogFragment : DialogFragment() {
     }
 
     companion object {
-
         private val TAG = PublicShareDialogFragment::class.java.simpleName
 
         /**
          * The fragment initialization parameters
          */
-        private val ARG_FILE = "FILE"
-        private val ARG_SHARE = "SHARE"
-        private val ARG_ACCOUNT = "ACCOUNT"
-        private val ARG_DEFAULT_LINK_NAME = "DEFAULT_LINK_NAME"
-        private val KEY_EXPIRATION_DATE = "EXPIRATION_DATE"
+        private const val ARG_FILE = "FILE"
+        private const val ARG_SHARE = "SHARE"
+        private const val ARG_DEFAULT_LINK_NAME = "DEFAULT_LINK_NAME"
+        private const val KEY_EXPIRATION_DATE = "EXPIRATION_DATE"
 
         /**
-         * Create a new instance of PublicShareDialogFragment, providing fileToShare and account
-         * as an argument.
+         * Create a new instance of PublicShareDialogFragment, providing fileToShare as an argument.
          *
          * Dialog shown this way is intended to CREATE a new public share.
          *
          * @param   fileToShare     File to share with a new public share.
-         * @param   account         Account to get capabilities
          */
         fun newInstanceToCreate(
             fileToShare: OCFile,
-            account: Account,
             defaultLinkName: String
         ): PublicShareDialogFragment {
             val publicShareDialogFragment = PublicShareDialogFragment()
             val args = Bundle()
             args.putParcelable(ARG_FILE, fileToShare)
-            args.putParcelable(ARG_ACCOUNT, account)
             args.putString(ARG_DEFAULT_LINK_NAME, defaultLinkName)
-
             publicShareDialogFragment.arguments = args
             return publicShareDialogFragment
         }
 
         /**
-         * Update an instance of PublicShareDialogFragment, providing fileToShare, publicShare and
-         * account as arguments.
+         * Update an instance of PublicShareDialogFragment, providing fileToShare, publicShare as arguments.
          *
          * Dialog shown this way is intended to UPDATE an existing public share.
          *
@@ -760,13 +745,11 @@ class PublicShareDialogFragment : DialogFragment() {
          */
         fun newInstanceToUpdate(
             fileToShare: OCFile,
-            publicShare: OCShare,
-            account: Account
+            publicShare: OCShare
         ): PublicShareDialogFragment {
             val publicShareDialogFragment = PublicShareDialogFragment()
             val args = Bundle()
             args.putParcelable(ARG_FILE, fileToShare)
-            args.putParcelable(ARG_ACCOUNT, account)
             args.putParcelable(ARG_SHARE, publicShare)
             publicShareDialogFragment.arguments = args
             return publicShareDialogFragment
