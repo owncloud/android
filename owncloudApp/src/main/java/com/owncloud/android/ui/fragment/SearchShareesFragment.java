@@ -38,8 +38,8 @@ import androidx.fragment.app.Fragment;
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.lib.common.utils.Log_OC;
-import com.owncloud.android.lib.resources.shares.RemoteShare;
 import com.owncloud.android.shares.db.OCShare;
+import com.owncloud.android.shares.ui.fragment.ShareFragmentListener;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.adapter.ShareUserListAdapter;
 import com.owncloud.android.utils.PreferenceUtils;
@@ -249,7 +249,7 @@ public class SearchShareesFragment extends Fragment implements ShareUserListAdap
     @Override
     public void unshareButtonPressed(OCShare share) {
         Log_OC.d(TAG, "Removed private share with " + share.getSharedWithDisplayName());
-        mListener.removeShare(share);
+        mListener.removePublicShare(share);
     }
 
     @Override
