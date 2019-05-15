@@ -5,6 +5,7 @@
  * @author Christian Schabesberger
  * @author David González Verdugo
  * @author Abel García de Prada
+ * @author Shashvat Kedia
  * Copyright (C) 2015  Bartosz Przybylski
  * Copyright (C) 2019 ownCloud GmbH.
  * <p>
@@ -184,7 +185,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
         val resultCursor = FileCursor(projection)
 
         // Create result cursor before syncing folder again, in order to enable faster loading
-        currentStorageManager?.getFolderContent(getFileById(folderId), false)
+        currentStorageManager?.getFolderContent(currentStorageManager?.getFileById(folderId), false, false)
             ?.forEach { file -> resultCursor.addFile(file) }
 
         //Create notification listener
@@ -510,8 +511,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
     private fun findFiles(root: OCFile, query: String): Vector<OCFile> {
         val result = Vector<OCFile>()
 
-        val folderContent = currentStorageManager?.getFolderContent(root, false) ?: return result
-
+        val folderContent = currentStorageManager?.getFolderContent(root, false,false) ?: return result
         folderContent.forEach {
             if (it.fileName.contains(query)) {
                 result.add(it)

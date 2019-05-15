@@ -3,6 +3,7 @@
  *
  * @author David A. Velasco
  * @author Christian Schabesberger
+ * @author Shashvat Kedia
  * Copyright (C) 2019 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -323,7 +324,7 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
         }
 
         // get current data about local contents of the folder to synchronize
-        List<OCFile> localFiles = storageManager.getFolderContent(mLocalFolder, false);
+        List<OCFile> localFiles = storageManager.getFolderContent(mLocalFolder, false,false);
         Map<String, OCFile> localFilesMap = new HashMap<>(localFiles.size());
         for (OCFile file : localFiles) {
             String key = file.getRemoteId() != null ? file.getRemoteId() : file.getRemotePath();
@@ -395,7 +396,7 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
     }
 
     private void preparePushOfLocalChanges() {
-        List<OCFile> children = getStorageManager().getFolderContent(mLocalFolder, false);
+        List<OCFile> children = getStorageManager().getFolderContent(mLocalFolder, false,false);
         mFoldersToVisit = new Vector<>(children.size());
         for (OCFile child : children) {
             addToSyncContents(

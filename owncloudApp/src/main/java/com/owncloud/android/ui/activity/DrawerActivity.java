@@ -4,6 +4,7 @@
  * @author Andy Scherzinger
  * @author Christian Schabesberger
  * @author David González Verdugo
+ * @author Shashvat Kedia
  * Copyright (C) 2019 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
@@ -258,6 +259,7 @@ public abstract class DrawerActivity extends ToolbarActivity {
                                 menuItem.setChecked(true);
                                 mCheckedMenuItem = menuItem.getItemId();
                                 sharedByLinkFilesOption();
+                                break;
                             case R.id.nav_settings:
                                 Intent settingsIntent = new Intent(getApplicationContext(),
                                         Preferences.class);

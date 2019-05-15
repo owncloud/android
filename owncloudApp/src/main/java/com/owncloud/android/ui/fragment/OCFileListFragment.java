@@ -1011,7 +1011,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
                 directory = storageManager.getFileByPath(OCFile.ROOT_PATH);
             }
 
-            if(!directory.isSharedViaLink() || isShowingSharedByLinkFiles()){
+            if(!directory.isSharedViaLink() && isShowingSharedByLinkFiles()){
                 directory = storageManager.getFileByPath(OCFile.ROOT_PATH);
             }
 
