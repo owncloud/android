@@ -1947,7 +1947,7 @@ public class FileDisplayActivity extends FileActivity
         }
     }
 
-    public void sharedByLinkFiles(){
+    public void sharedByLinkFilesOption(){
         if(!mSharedByLinkFiles){
             super.sharedByLinkFilesOption();
         } else{

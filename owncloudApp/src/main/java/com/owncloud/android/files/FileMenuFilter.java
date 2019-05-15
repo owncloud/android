@@ -4,6 +4,7 @@
  * @author David A. Velasco
  * @author Christian Schabesberger
  * @author Abel García de Prada
+ * @author Shashvat Kedia
  * Copyright (C) 2019 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify

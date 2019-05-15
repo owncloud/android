@@ -341,7 +341,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         // click on folder in the list
         Log_OC.d(TAG, "on item click");
-        Vector<OCFile> tmpfiles = getStorageManager().getFolderContent(mFile, false);
+        Vector<OCFile> tmpfiles = getStorageManager().getFolderContent(mFile, false, false);
         tmpfiles = sortFileList(tmpfiles);
 
         if (tmpfiles.size() <= 0) {
@@ -437,7 +437,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
 
         mFile = getStorageManager().getFileByPath(full_path);
         if (mFile != null) {
-            Vector<OCFile> files = getStorageManager().getFolderContent(mFile, false);
+            Vector<OCFile> files = getStorageManager().getFolderContent(mFile, false,false);
             files = sortFileList(files);
 
             mAdapter = new ReceiveExternalFilesAdapter(

@@ -5,6 +5,7 @@
  * @author Christian Schabesberger
  * @author David González Verdugo
  * @author Abel García de Prada
+ * @author Shashvat Kedia
  * <p>
  * Copyright (C) 2012  Bartek Przybylski
  * Copyright (C) 2019 ownCloud GmbH.
@@ -61,7 +62,6 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -974,7 +974,6 @@ public class FileDataStorageManager {
         }
 
         Collections.sort(ret);
-
         return ret;
     }
 
@@ -2246,7 +2245,7 @@ public class FileDataStorageManager {
         try{
             cursorOnShared = getContentResolver().query(ProviderTableMeta.CONTENT_URI,
                     null,
-                    "(" + ProviderTableMeta.FILE_SHARED_VIA_LINK + " = ? AND " +
+                     ProviderTableMeta.FILE_SHARED_VIA_LINK + " = ? AND " +
                     ProviderTableMeta.FILE_ACCOUNT_OWNER + " = ? ",
                     new String[]{String.valueOf(1),
                             mAccount.name},

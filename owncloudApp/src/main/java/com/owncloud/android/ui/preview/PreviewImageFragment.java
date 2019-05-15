@@ -5,6 +5,7 @@
  * @author David González Verdugo
  * @author Christian Schabesberger
  * @author Abel García de Prada
+ * @author Shashvat Kedia
  * Copyright (C) 2019 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
@@ -253,7 +254,7 @@ public class PreviewImageFragment extends FileFragment {
                     mContainerActivity,
                     getActivity()
             );
-            mf.filter(menu, false, false, false);
+            mf.filter(menu, false, false, false,false);
         }
 
         // additional restriction for this fragment 
