@@ -20,11 +20,11 @@
 package com.owncloud.android.ui.dialog;
 
 /**
- *  Dialog requiring confirmation before removing an OC Account.
- *
- *  Removes the account if the user confirms.
- *
- *  Container Activity needs to implement AccountManagerCallback<Boolean>.
+ * Dialog requiring confirmation before removing an OC Account.
+ * <p>
+ * Removes the account if the user confirms.
+ * <p>
+ * Container Activity needs to implement AccountManagerCallback<Boolean>.
  */
 
 import android.accounts.Account;
@@ -32,8 +32,10 @@ import android.accounts.AccountManager;
 import android.accounts.AccountManagerCallback;
 import android.app.Activity;
 import android.app.Dialog;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.DocumentsContract;
 
 import androidx.annotation.NonNull;
 import com.owncloud.android.R;
@@ -49,7 +51,7 @@ public class RemoveAccountDialogFragment extends ConfirmationDialogFragment
     /**
      * Public factory method to create new RemoveAccountDialogFragment instances.
      *
-     * @param account         Account to remove.
+     * @param account Account to remove.
      * @return Dialog ready to show.
      */
     public static RemoveAccountDialogFragment newInstance(Account account) {
@@ -103,6 +105,13 @@ public class RemoveAccountDialogFragment extends ConfirmationDialogFragment
         AccountManager am = AccountManager.get(parentActivity);
         AccountManagerCallback<Boolean> callback = (AccountManagerCallback<Boolean>) parentActivity;
         am.removeAccount(mTargetAccount, callback, new Handler());
+
+        // Notify removal to Document Provider
+        String authority = getResources().getString(R.string.document_provider_authority);
+        Uri rootsUri = DocumentsContract.buildRootsUri(authority);
+        if (getContext() != null) {
+            getContext().getContentResolver().notifyChange(rootsUri, null);
+        }
     }
 
     @Override

@@ -75,7 +75,6 @@ class DocumentsStorageProvider : DocumentsProvider() {
             ?: throw FileNotFoundException("Failed to open document with id $documentId and mode $mode")
 
         if (!file.isDown) {
-
             val i = Intent(context, FileDownloader::class.java).apply {
                 putExtra(FileDownloader.KEY_ACCOUNT, currentStorageManager!!.account)
                 putExtra(FileDownloader.KEY_FILE, file)
@@ -328,6 +327,11 @@ class DocumentsStorageProvider : DocumentsProvider() {
 
     private fun syncDirectoryWithServer(parentDocumentId: String) {
         val folderId = parentDocumentId.toLong()
+
+        if (currentStorageManager?.getFileById(folderId) == null) {
+            throw FileNotFoundException("Folder with id $parentDocumentId doesn't exist on database yet")
+        }
+
         val refreshFolderOperation = RefreshFolderOperation(
             currentStorageManager?.getFileById(folderId),
             false,
