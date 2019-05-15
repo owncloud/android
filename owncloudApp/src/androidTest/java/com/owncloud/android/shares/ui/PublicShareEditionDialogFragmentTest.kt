@@ -82,8 +82,7 @@ class PublicShareEditionDialogFragmentTest {
 
         val publicShareDialogFragment = PublicShareDialogFragment.newInstanceToUpdate(
             file,
-            publicShare,
-            account
+            publicShare
         )
 
         val filePath = "/Documents/doc3"
@@ -107,8 +106,8 @@ class PublicShareEditionDialogFragmentTest {
             )
         ).thenReturn(sharesLiveData)
 
-        publicShareDialogFragment.ocCapabilityViewModelFactory = ViewModelUtil.createFor(ocCapabilityViewModel)
-        publicShareDialogFragment.ocShareViewModelFactory = ViewModelUtil.createFor(ocShareViewModel)
+//        publicShareDialogFragment.ocCapabilityViewModelFactory = ViewModelUtil.createFor(ocCapabilityViewModel)
+//        publicShareDialogFragment.ocShareViewModelFactory = ViewModelUtil.createFor(ocShareViewModel)
 
         activityRule.activity.setFragment(publicShareDialogFragment)
     }
