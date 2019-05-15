@@ -31,25 +31,25 @@ import com.owncloud.android.vo.Resource
 class OCCapabilityRepository(
     private val appExecutors: AppExecutors,
     private val localCapabilitiesDataSource: LocalCapabilitiesDataSource,
-    private val remoteCapabilitiesDataSource: RemoteCapabilitiesDataSource,
-    private val shouldFetchFromNetwork: Boolean
+    private val remoteCapabilitiesDataSource: RemoteCapabilitiesDataSource
 ) : CapabilityRepository {
 
     companion object Factory {
         fun create(
             appExecutors: AppExecutors = AppExecutors(),
             localCapabilitiesDataSource: LocalCapabilitiesDataSource,
-            remoteCapabilitiesDataSource: RemoteCapabilitiesDataSource,
-            shouldFetchFromNetwork: Boolean = true
+            remoteCapabilitiesDataSource: RemoteCapabilitiesDataSource
         ): OCCapabilityRepository = OCCapabilityRepository(
             appExecutors,
             localCapabilitiesDataSource,
-            remoteCapabilitiesDataSource,
-            shouldFetchFromNetwork
+            remoteCapabilitiesDataSource
         )
     }
 
-    override fun loadCapabilityForAccount(accountName: String): LiveData<Resource<OCCapability>> =
+    override fun loadCapabilityForAccount(
+        accountName: String,
+        shouldFetchFromNetwork: Boolean
+    ): LiveData<Resource<OCCapability>> =
         object : NetworkBoundResource<OCCapability, RemoteCapability>(appExecutors) {
             override fun saveCallResult(item: RemoteCapability) {
                 item.accountName = accountName

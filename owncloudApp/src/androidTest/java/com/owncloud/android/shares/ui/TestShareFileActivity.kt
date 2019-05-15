@@ -24,7 +24,7 @@ import com.owncloud.android.datamodel.FileDataStorageManager
 import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.shares.db.OCShare
 import com.owncloud.android.testing.SingleFragmentActivity
-import com.owncloud.android.ui.fragment.ShareFragmentListener
+import com.owncloud.android.shares.ui.fragment.ShareFragmentListener
 
 class TestShareFileActivity : SingleFragmentActivity(), ShareFragmentListener {
         override fun copyOrSendPrivateLink(file: OCFile?) {
