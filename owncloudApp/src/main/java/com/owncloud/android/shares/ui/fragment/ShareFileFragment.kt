@@ -29,6 +29,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.ListView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -208,7 +209,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
 
         // Setup layout
         // Image
-        view.shareFileIcon?.setImageResource(
+        shareFileIcon?.setImageResource(
             MimetypeIconUtil.getFileTypeIconId(
                 file?.mimetype,
                 file?.fileName
@@ -388,14 +389,20 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
 
         // Update view depending on updated capabilities
         if (isPublicShareDisabled) {
-            shareViaLinkSection.visibility = View.GONE
+            view?.findViewById<LinearLayout>(R.id.shareViaLinkSection)?.visibility = View.GONE
+//            shareViaLinkSection.visibility = View.GONE
         } else {
-            shareViaLinkSection.visibility = View.VISIBLE
+            view?.findViewById<LinearLayout>(R.id.shareViaLinkSection)?.visibility = View.VISIBLE
+//            shareViaLinkSection.visibility = View.VISIBLE
         }
 
         // Show or hide button for adding a new public share depending on the capabilities and
         // the server version
         if (!enableMultiplePublicSharing()) {
+            if (publicLinks == null) {
+                return
+            }
+
             if (publicLinks?.size!! >= 1) {
                 addPublicLinkButton.visibility = View.INVISIBLE
                 return

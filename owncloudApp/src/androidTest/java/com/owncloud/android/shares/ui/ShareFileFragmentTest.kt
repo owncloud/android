@@ -32,16 +32,13 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.ActivityTestRule
 import com.owncloud.android.R
 import com.owncloud.android.capabilities.db.OCCapability
-import com.owncloud.android.capabilities.viewmodel.OCCapabilityViewModel
 import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.status.CapabilityBooleanType
 import com.owncloud.android.lib.resources.status.OwnCloudVersion
 import com.owncloud.android.shares.db.OCShare
 import com.owncloud.android.shares.ui.fragment.ShareFileFragment
-import com.owncloud.android.shares.viewmodel.OCShareViewModel
 import com.owncloud.android.utils.TestUtil
-import com.owncloud.android.utils.ViewModelUtil
 import com.owncloud.android.vo.Resource
 import org.junit.Before
 import org.junit.Rule
@@ -55,6 +52,7 @@ class ShareFileFragmentTest {
     @Rule
     @JvmField
     val activityRule = ActivityTestRule(TestShareFileActivity::class.java, true, true)
+    lateinit var shareFragment: ShareFileFragment
 
     private val capabilitiesLiveData = MutableLiveData<Resource<OCCapability>>()
     private val sharesLiveData = MutableLiveData<Resource<List<OCShare>>>()
@@ -86,21 +84,16 @@ class ShareFileFragmentTest {
         val ownCloudVersion = mock(OwnCloudVersion::class.java)
         `when`(ownCloudVersion.isSearchUsersSupported).thenReturn(true)
 
-        val shareFragment = ShareFileFragment.newInstance(
+        shareFragment = ShareFileFragment.newInstance(
             getOCFileForTesting("image.jpg"),
             account,
             ownCloudVersion
         )
 
-        val ocShareViewModel = mock(OCShareViewModel::class.java)
-        `when`(ocShareViewModel.getSharesForFile()).thenReturn(sharesLiveData)
-        shareFragment.ocShareViewModelFactory = ViewModelUtil.createFor(ocShareViewModel)
-
-        val ocCapabilityViewModel = mock(OCCapabilityViewModel::class.java)
-        `when`(ocCapabilityViewModel.getCapabilityForAccount()).thenReturn(capabilitiesLiveData)
-        shareFragment.ocCapabilityViewModelFactory = ViewModelUtil.createFor(ocCapabilityViewModel)
-
         activityRule.activity.setFragment(shareFragment)
+
+        shareFragment.updateCapabilities(TestUtil.createCapability())
+        shareFragment.updatePublicShares(publicShares)
     }
 
     @Test
@@ -120,7 +113,6 @@ class ShareFileFragmentTest {
 
     @Test
     fun showLoadingCapabilitiesDialog() {
-        capabilitiesLiveData.postValue(Resource.loading(TestUtil.createCapability()))
         onView(withId(R.id.loadingLayout)).check(matches(isDisplayed()))
     }
 
@@ -140,8 +132,7 @@ class ShareFileFragmentTest {
 
     @Test
     fun showPublicShares() {
-        loadCapabilitiesSuccessfully()
-        loadSharesSuccessfully()
+//        Thread.sleep(3000)
 
         onView(withText("Image link")).check(matches(isDisplayed()))
         onView(withText("Image link 2")).check(matches(isDisplayed()))

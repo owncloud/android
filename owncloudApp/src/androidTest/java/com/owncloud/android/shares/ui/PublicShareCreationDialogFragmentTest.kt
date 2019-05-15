@@ -98,7 +98,6 @@ class PublicShareCreationDialogFragmentTest {
 
         val publicShareDialogFragment = PublicShareDialogFragment.newInstanceToCreate(
             file,
-            account,
             defaultLinkName
         )
 
@@ -122,8 +121,8 @@ class PublicShareCreationDialogFragmentTest {
             )
         ).thenReturn(sharesLiveData)
 
-        publicShareDialogFragment.ocCapabilityViewModelFactory = ViewModelUtil.createFor(ocCapabilityViewModel)
-        publicShareDialogFragment.ocShareViewModelFactory = ViewModelUtil.createFor(ocShareViewModel)
+//        publicShareDialogFragment.ocCapabilityViewModelFactory = ViewModelUtil.createFor(ocCapabilityViewModel)
+//        publicShareDialogFragment.ocShareViewModelFactory = ViewModelUtil.createFor(ocShareViewModel)
 
         activityRule.activity.setFragment(publicShareDialogFragment)
     }
