@@ -20,7 +20,11 @@
 package com.owncloud.android.shares.db
 
 import androidx.lifecycle.LiveData
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
+import androidx.room.Transaction
 import com.owncloud.android.db.ProviderMeta.ProviderTableMeta
 
 @Dao
@@ -38,20 +42,30 @@ abstract class OCShareDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract fun insert(ocShares: List<OCShare>): List<Long>
 
-    @Query(
-        "DELETE from " + ProviderTableMeta.OCSHARES_TABLE_NAME + " WHERE " +
-                ProviderTableMeta.OCSHARES_NAME + " = :name AND " +
-                ProviderTableMeta.OCSHARES_ACCOUNT_OWNER + " = :accountOwner"
-    )
-    abstract fun delete(name: String, accountOwner: String)
+    @Transaction
+    open fun update(ocShare: OCShare): Long {
+        deleteShare(ocShare.remoteId)
+        return insert(listOf(ocShare))[0]
+    }
 
     @Transaction
-    open fun replace(ocShares: List<OCShare>) {
+    open fun replaceSharesForFile(ocShares: List<OCShare>): List<Long> {
         for (ocShare in ocShares) {
-            if (ocShare.name != null) {
-                delete(ocShare.name, ocShare.accountOwner)
-            }
+            deleteSharesForFile(ocShare.path, ocShare.accountOwner)
         }
-        insert(ocShares)
+        return insert(ocShares)
     }
+
+    @Query(
+        "DELETE from " + ProviderTableMeta.OCSHARES_TABLE_NAME + " WHERE " +
+                ProviderTableMeta.OCSHARES_ID_REMOTE_SHARED + " = :remoteId"
+    )
+    abstract fun deleteShare(remoteId: Long)
+
+    @Query(
+        "DELETE from " + ProviderTableMeta.OCSHARES_TABLE_NAME + " WHERE " +
+                ProviderTableMeta.OCSHARES_PATH + " = :filePath AND " +
+                ProviderTableMeta.OCSHARES_ACCOUNT_OWNER + " = :accountOwner"
+    )
+    abstract fun deleteSharesForFile(filePath: String, accountOwner: String)
 }

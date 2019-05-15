@@ -26,9 +26,9 @@ import com.owncloud.android.lib.resources.shares.CreateRemoteShareOperation
 import com.owncloud.android.lib.resources.shares.GetRemoteSharesForFileOperation
 import com.owncloud.android.lib.resources.shares.ShareParserResult
 import com.owncloud.android.lib.resources.shares.ShareType
+import com.owncloud.android.lib.resources.shares.UpdateRemoteShareOperation
 import com.owncloud.android.utils.TestUtil
 import junit.framework.Assert.assertEquals
-import junit.framework.Assert.assertNull
 import org.hamcrest.CoreMatchers.notNullValue
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Before
@@ -36,7 +36,7 @@ import org.junit.Test
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.mock
 
-class OCRemoteCapabilitiesDataSourceTest {
+class OCRemoteShareDataSourceTest {
     private lateinit var ocRemoteSharesDataSource: OCRemoteSharesDataSource
     private val ownCloudClient = mock(OwnCloudClient::class.java)
 
@@ -162,7 +162,7 @@ class OCRemoteCapabilitiesDataSourceTest {
 
     @Test
     fun insertPublicShareNoFile() {
-        val createSharesForFileOperation = mock(CreateRemoteShareOperation::class.java)
+        val createRemoteShareOperation = mock(CreateRemoteShareOperation::class.java)
 
         val httpPhrase = "Wrong path, file/folder doesn't exist"
         val createRemoteSharesOperationResult = TestUtil.createRemoteOperationResultMock(
@@ -172,7 +172,7 @@ class OCRemoteCapabilitiesDataSourceTest {
             RemoteOperationResult.ResultCode.SHARE_NOT_FOUND
         )
 
-        `when`(createSharesForFileOperation.execute(ownCloudClient)).thenReturn(
+        `when`(createRemoteShareOperation.execute(ownCloudClient)).thenReturn(
             createRemoteSharesOperationResult
         )
 
@@ -185,7 +185,7 @@ class OCRemoteCapabilitiesDataSourceTest {
             "5678",
             -1,
             false,
-            createSharesForFileOperation
+            createRemoteShareOperation
         )
 
         val publicSharesAdded = remoteOperationResult.data
@@ -193,5 +193,53 @@ class OCRemoteCapabilitiesDataSourceTest {
         assertEquals(publicSharesAdded.shares.size, 0)
         assertEquals(remoteOperationResult.code, RemoteOperationResult.ResultCode.SHARE_NOT_FOUND)
         assertEquals(remoteOperationResult.httpPhrase, httpPhrase)
+    }
+
+    @Test
+    fun updatePublicShare() {
+        val updateRemoteShareOperation = mock(UpdateRemoteShareOperation::class.java)
+
+        val updateRemoteShareOperationResult = TestUtil.createRemoteOperationResultMock(
+            ShareParserResult(
+                arrayListOf(
+                    TestUtil.createRemoteShare(
+                        path = "Videos/video1.mp4",
+                        expirationDate = 2000,
+                        isFolder = false,
+                        remoteId = 3,
+                        name = "video1 link updated",
+                        shareLink = "http://server:port/s/1275farv"
+                    )
+                )
+            ),
+            true
+        )
+
+        `when`(updateRemoteShareOperation.execute(ownCloudClient)).thenReturn(
+            updateRemoteShareOperationResult
+        )
+
+        // Update share on remote datasource
+        val remoteOperationResult = ocRemoteSharesDataSource.updateShareForFile(
+            3,
+            "Videos/video1.mp4",
+            "1234",
+            2000,
+            1,
+            false,
+            updateRemoteShareOperation
+        )
+
+        assertThat(remoteOperationResult, notNullValue())
+        assertEquals(remoteOperationResult.data.shares.size, 1)
+
+        val publicShareUpdated = remoteOperationResult.data.shares[0]
+
+        assertEquals(publicShareUpdated.name, "video1 link updated")
+        assertEquals(publicShareUpdated.path, "Videos/video1.mp4")
+        assertEquals(publicShareUpdated.isFolder, false)
+        assertEquals(publicShareUpdated.expirationDate, 2000)
+        assertEquals(publicShareUpdated.permissions, 1)
+        assertEquals(publicShareUpdated.shareLink, "http://server:port/s/1275farv")
     }
 }

@@ -242,7 +242,7 @@ class OCShareDaoTest {
             )
         )
 
-        ocShareDao.replace(
+        ocShareDao.replaceSharesForFile(
             listOf( // Update link name
                 TestUtil.createPublicShare(
                     path = "/Texts/text1.txt",
@@ -260,8 +260,8 @@ class OCShareDaoTest {
         )
 
         assertThat(textShares, notNullValue())
-        assertEquals(textShares.size, 2)
-        assertEquals(textShares.get(0).name, "Text 1 link")
+        assertEquals(textShares.size, 1)
+        assertEquals(textShares.get(0).name, "Text 2 link")
     }
 
     @Test
@@ -277,7 +277,7 @@ class OCShareDaoTest {
             )
         )
 
-        ocShareDao.replace(
+        ocShareDao.replaceSharesForFile(
             listOf( // New link
                 TestUtil.createPublicShare(
                     path = "/Texts/text2.txt",
@@ -308,5 +308,42 @@ class OCShareDaoTest {
         assertThat(text2Shares, notNullValue())
         assertEquals(text2Shares.size, 1)
         assertEquals(text2Shares.get(0).name, "Text 2 link")
+    }
+
+    @Test
+    fun updatePublicShare() {
+        ocShareDao.insert(
+            listOf(
+                TestUtil.createPublicShare(
+                    path = "/Images/image.png",
+                    expirationDate = 1000,
+                    isFolder = false,
+                    name = "Image link",
+                    shareLink = "http://server:port/s/1"
+                )
+            )
+        )
+
+        ocShareDao.update(
+            // Updated link
+            TestUtil.createPublicShare(
+                path = "/Images/image.png",
+                expirationDate = 2000,
+                isFolder = false,
+                name = "Image link updated",
+                shareLink = "http://server:port/s/1"
+            )
+        )
+
+        val imageShares = getValue(
+            ocShareDao.getSharesForFileAsLiveData(
+                "/Images/image.png", "admin@server", listOf(ShareType.PUBLIC_LINK.value)
+            )
+        )
+
+        assertThat(imageShares, notNullValue())
+        assertEquals(imageShares.size, 1)
+        assertEquals(imageShares.get(0).name, "Image link updated")
+        assertEquals(imageShares.get(0).expirationDate, 2000)
     }
 }

@@ -60,7 +60,6 @@ import com.owncloud.android.operations.RenameFileOperation;
 import com.owncloud.android.operations.SynchronizeFileOperation;
 import com.owncloud.android.operations.SynchronizeFolderOperation;
 import com.owncloud.android.operations.UpdateSharePermissionsOperation;
-import com.owncloud.android.operations.UpdateShareViaLinkOperation;
 import com.owncloud.android.services.OperationsService;
 import com.owncloud.android.services.OperationsService.OperationsServiceBinder;
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment;
@@ -303,7 +302,6 @@ public class FileActivity extends DrawerActivity
                 operation instanceof CreateShareWithShareeOperation ||
                 operation instanceof RemoveShareOperation ||
                 operation instanceof SynchronizeFolderOperation ||
-                operation instanceof UpdateShareViaLinkOperation ||
                 operation instanceof UpdateSharePermissionsOperation
         ) {
             if (result.isSuccess()) {

@@ -55,7 +55,6 @@ import com.owncloud.android.operations.common.OperationType
 import com.owncloud.android.shares.db.OCShare
 import com.owncloud.android.shares.viewmodel.OCShareViewModel
 import com.owncloud.android.ui.activity.BaseActivity
-import com.owncloud.android.ui.activity.FileActivity
 import com.owncloud.android.ui.dialog.ExpirationDatePickerDialogFragment
 import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter
 import com.owncloud.android.ui.fragment.ShareFragmentListener
@@ -77,7 +76,7 @@ class PublicShareDialogFragment : DialogFragment() {
     /**
      * Existing share to update. If NULL, the dialog will create a new share for file.
      */
-    private var publicShare: RemoteShare? = null
+    private var publicShare: OCShare? = null
 
     /*
      * OC account holding the file to share, received as a parameter in construction time
@@ -210,13 +209,13 @@ class PublicShareDialogFragment : DialogFragment() {
             }
 
             if (publicShare?.isPasswordProtected!!) {
-                setPasswordSwitchChecked(true)
+                setPasswordSwitchChecked(view, true)
                 view.shareViaLinkPasswordValue?.visibility = View.VISIBLE
                 view.shareViaLinkPasswordValue?.hint = getString(R.string.share_via_link_default_password)
             }
 
             if (publicShare?.expirationDate != 0L) {
-                setExpirationDateSwitchChecked(true)
+                setExpirationDateSwitchChecked(view, true)
                 val formattedDate = ExpirationDatePickerDialogFragment.getDateFormat().format(
                     Date(publicShare?.expirationDate!!)
                 )
@@ -287,7 +286,6 @@ class PublicShareDialogFragment : DialogFragment() {
 
         if (!updating()) { // Creating a new public share
             ocShareViewModel.insertPublicShareForFile(
-                file?.remotePath!!,
                 publicLinkPermissions,
                 publicLinkName,
                 publicLinkPassword!!,
@@ -299,6 +297,7 @@ class PublicShareDialogFragment : DialogFragment() {
                     when (resource?.status) {
                         Status.SUCCESS -> {
                             dismiss()
+                            (activity as BaseActivity).dismissLoadingDialog()
                         }
                         Status.ERROR -> {
                             val errorMessage: String = resource.msg ?: ErrorMessageAdapter.getResultMessage(
@@ -327,13 +326,39 @@ class PublicShareDialogFragment : DialogFragment() {
                 publicLinkPassword = null
             }
 
-            (activity as FileActivity).fileOperationsHelper.updateShareViaLink(
-                publicShare,
+            ocShareViewModel.updatePublicShareForFile(
+                publicShare?.remoteId!!,
                 publicLinkName,
                 publicLinkPassword,
                 publicLinkExpirationDateInMillis,
-                publicUploadPermission,
-                publicLinkPermissions
+                publicLinkPermissions,
+                publicUploadPermission
+            ).observe(
+                this,
+                Observer { resource ->
+                    when (resource?.status) {
+                        Status.SUCCESS -> {
+                            dismiss()
+                            (activity as BaseActivity).dismissLoadingDialog()
+                        }
+                        Status.ERROR -> {
+                            val errorMessage: String = resource.msg ?: ErrorMessageAdapter.getResultMessage(
+                                resource.code,
+                                resource.exception,
+                                OperationType.CREATE_PUBLIC_SHARE,
+                                resources
+                            );
+                            showError(errorMessage)
+                            (activity as BaseActivity).dismissLoadingDialog()
+                        }
+                        Status.LOADING -> {
+                            (activity as BaseActivity).showLoadingDialog(R.string.common_loading)
+                        }
+                        else -> {
+                            Log.d(TAG, "Unknown status when creating share")
+                        }
+                    }
+                }
             )
         }
     }
@@ -693,7 +718,7 @@ class PublicShareDialogFragment : DialogFragment() {
         // Show default date enforced by the server, if any
         if (!updating() && capabilities?.filesSharingPublicExpireDateDays!! > 0) {
 
-            setExpirationDateSwitchChecked(true)
+            setExpirationDateSwitchChecked(checked = true)
 
             val formattedDate = SimpleDateFormat.getDateInstance().format(
                 DateUtils.addDaysToDate(
@@ -786,16 +811,22 @@ class PublicShareDialogFragment : DialogFragment() {
         public_link_error_message?.text = errorMessage
     }
 
-    private fun setPasswordSwitchChecked(checked: Boolean) {
-        shareViaLinkPasswordSwitch?.setOnCheckedChangeListener(null)
-        shareViaLinkPasswordSwitch?.isChecked = checked
-        shareViaLinkPasswordSwitch?.setOnCheckedChangeListener(onPasswordInteractionListener)
+    private fun setPasswordSwitchChecked(view: View, checked: Boolean) {
+        view.shareViaLinkPasswordSwitch?.setOnCheckedChangeListener(null)
+        view.shareViaLinkPasswordSwitch?.isChecked = checked
+        view.shareViaLinkPasswordSwitch?.setOnCheckedChangeListener(onPasswordInteractionListener)
     }
 
-    private fun setExpirationDateSwitchChecked(checked: Boolean) {
-        shareViaLinkExpirationSwitch?.setOnCheckedChangeListener(null)
-        shareViaLinkExpirationSwitch?.isChecked = checked
-        shareViaLinkExpirationSwitch?.setOnCheckedChangeListener(onExpirationDateInteractionListener)
+    private fun setExpirationDateSwitchChecked(view: View? = null, checked: Boolean) {
+        if (view != null) {
+            view.shareViaLinkExpirationSwitch?.setOnCheckedChangeListener(null)
+            view.shareViaLinkExpirationSwitch?.isChecked = checked
+            view.shareViaLinkExpirationSwitch?.setOnCheckedChangeListener(onExpirationDateInteractionListener)
+        } else {
+            shareViaLinkExpirationSwitch?.setOnCheckedChangeListener(null)
+            shareViaLinkExpirationSwitch?.isChecked = checked
+            shareViaLinkExpirationSwitch?.setOnCheckedChangeListener(onExpirationDateInteractionListener)
+        }
     }
 
     companion object {
@@ -852,6 +883,7 @@ class PublicShareDialogFragment : DialogFragment() {
             val args = Bundle()
             args.putParcelable(ARG_FILE, fileToShare)
             args.putParcelable(ARG_ACCOUNT, account)
+            args.putParcelable(ARG_SHARE, publicShare)
             publicShareDialogFragment.arguments = args
             return publicShareDialogFragment
         }

@@ -72,15 +72,21 @@ object TestUtil {
     )
 
     fun createPublicShare(
+        shareWith: String = "",
         path: String,
+        expirationDate: Long = 1000,
         isFolder: Boolean,
+        remoteId: Long = 1,
         accountOwner: String = "admin@server",
         name: String,
         shareLink: String
     ) = createShare(
+        shareWith = shareWith,
         shareType = 3,
         path = path,
+        expirationDate = expirationDate,
         isFolder = isFolder,
+        remoteId = remoteId,
         accountOwner = accountOwner,
         name = name,
         shareLink = shareLink
@@ -117,7 +123,7 @@ object TestUtil {
         remoteShare.sharedWithDisplayName = sharedWithDisplayName
         remoteShare.isFolder = isFolder
         remoteShare.userId = userId
-        remoteShare.remoteId = remoteId
+        remoteShare.id = remoteId
         remoteShare.name = name
         remoteShare.shareLink = shareLink
 

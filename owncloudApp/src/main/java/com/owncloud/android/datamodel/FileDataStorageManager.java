@@ -1133,44 +1133,44 @@ public class FileDataStorageManager {
     }
 
     // Methods for Shares
-    public boolean saveShare(RemoteShare share) {
+    public boolean saveShare(RemoteShare remoteShare) {
         boolean overriden = false;
         ContentValues cv = new ContentValues();
-        cv.put(ProviderTableMeta.OCSHARES_FILE_SOURCE, share.getFileSource());
-        cv.put(ProviderTableMeta.OCSHARES_ITEM_SOURCE, share.getItemSource());
-        cv.put(ProviderTableMeta.OCSHARES_SHARE_TYPE, share.getShareType().getValue());
-        cv.put(ProviderTableMeta.OCSHARES_SHARE_WITH, share.getShareWith());
-        cv.put(ProviderTableMeta.OCSHARES_PATH, share.getPath());
-        cv.put(ProviderTableMeta.OCSHARES_PERMISSIONS, share.getPermissions());
-        cv.put(ProviderTableMeta.OCSHARES_SHARED_DATE, share.getSharedDate());
-        cv.put(ProviderTableMeta.OCSHARES_EXPIRATION_DATE, share.getExpirationDate());
-        cv.put(ProviderTableMeta.OCSHARES_TOKEN, share.getToken());
+        cv.put(ProviderTableMeta.OCSHARES_FILE_SOURCE, remoteShare.getFileSource());
+        cv.put(ProviderTableMeta.OCSHARES_ITEM_SOURCE, remoteShare.getItemSource());
+        cv.put(ProviderTableMeta.OCSHARES_SHARE_TYPE, remoteShare.getShareType().getValue());
+        cv.put(ProviderTableMeta.OCSHARES_SHARE_WITH, remoteShare.getShareWith());
+        cv.put(ProviderTableMeta.OCSHARES_PATH, remoteShare.getPath());
+        cv.put(ProviderTableMeta.OCSHARES_PERMISSIONS, remoteShare.getPermissions());
+        cv.put(ProviderTableMeta.OCSHARES_SHARED_DATE, remoteShare.getSharedDate());
+        cv.put(ProviderTableMeta.OCSHARES_EXPIRATION_DATE, remoteShare.getExpirationDate());
+        cv.put(ProviderTableMeta.OCSHARES_TOKEN, remoteShare.getToken());
         cv.put(
                 ProviderTableMeta.OCSHARES_SHARE_WITH_DISPLAY_NAME,
-                share.getSharedWithDisplayName()
+                remoteShare.getSharedWithDisplayName()
         );
         cv.put(
                 ProviderTableMeta.OCSHARES_SHARE_WITH_ADDITIONAL_INFO,
-                share.getSharedWithAdditionalInfo()
+                remoteShare.getSharedWithAdditionalInfo()
         );
-        cv.put(ProviderTableMeta.OCSHARES_IS_DIRECTORY, share.isFolder() ? 1 : 0);
-        cv.put(ProviderTableMeta.OCSHARES_USER_ID, share.getUserId());
-        cv.put(ProviderTableMeta.OCSHARES_ID_REMOTE_SHARED, share.getRemoteId());
-        cv.put(ProviderTableMeta.OCSHARES_NAME, share.getName());
-        cv.put(ProviderTableMeta.OCSHARES_URL, share.getShareLink());
+        cv.put(ProviderTableMeta.OCSHARES_IS_DIRECTORY, remoteShare.isFolder() ? 1 : 0);
+        cv.put(ProviderTableMeta.OCSHARES_USER_ID, remoteShare.getUserId());
+        cv.put(ProviderTableMeta.OCSHARES_ID_REMOTE_SHARED, remoteShare.getId());
+        cv.put(ProviderTableMeta.OCSHARES_NAME, remoteShare.getName());
+        cv.put(ProviderTableMeta.OCSHARES_URL, remoteShare.getShareLink());
         cv.put(ProviderTableMeta.OCSHARES_ACCOUNT_OWNER, mAccount.name);
 
-        if (shareExistsForRemoteId(share.getRemoteId())) {// for renamed files; no more delete and create
+        if (shareExistsForRemoteId(remoteShare.getId())) {// for renamed files; no more delete and create
             overriden = true;
             if (getContentResolver() != null) {
                 getContentResolver().update(ProviderTableMeta.CONTENT_URI_SHARE, cv,
                         ProviderTableMeta.OCSHARES_ID_REMOTE_SHARED + "=?",
-                        new String[]{String.valueOf(share.getRemoteId())});
+                        new String[]{String.valueOf(remoteShare.getId())});
             } else {
                 try {
                     getContentProviderClient().update(ProviderTableMeta.CONTENT_URI_SHARE,
                             cv, ProviderTableMeta.OCSHARES_ID_REMOTE_SHARED + "=?",
-                            new String[]{String.valueOf(share.getRemoteId())});
+                            new String[]{String.valueOf(remoteShare.getId())});
                 } catch (RemoteException e) {
                     Log_OC.e(TAG,
                             "Fail to insert insert file to database "
@@ -1534,31 +1534,31 @@ public class FileDataStorageManager {
 
         if (shares != null) {
             // prepare operations to insert or update files to save in the given folder
-            for (RemoteShare share : shares) {
+            for (RemoteShare remoteShare : shares) {
                 ContentValues cv = new ContentValues();
-                cv.put(ProviderTableMeta.OCSHARES_FILE_SOURCE, share.getFileSource());
-                cv.put(ProviderTableMeta.OCSHARES_ITEM_SOURCE, share.getItemSource());
-                cv.put(ProviderTableMeta.OCSHARES_SHARE_TYPE, share.getShareType().getValue());
-                cv.put(ProviderTableMeta.OCSHARES_SHARE_WITH, share.getShareWith());
-                cv.put(ProviderTableMeta.OCSHARES_PATH, share.getPath());
-                cv.put(ProviderTableMeta.OCSHARES_PERMISSIONS, share.getPermissions());
-                cv.put(ProviderTableMeta.OCSHARES_SHARED_DATE, share.getSharedDate());
-                cv.put(ProviderTableMeta.OCSHARES_EXPIRATION_DATE, share.getExpirationDate());
-                cv.put(ProviderTableMeta.OCSHARES_TOKEN, share.getToken());
+                cv.put(ProviderTableMeta.OCSHARES_FILE_SOURCE, remoteShare.getFileSource());
+                cv.put(ProviderTableMeta.OCSHARES_ITEM_SOURCE, remoteShare.getItemSource());
+                cv.put(ProviderTableMeta.OCSHARES_SHARE_TYPE, remoteShare.getShareType().getValue());
+                cv.put(ProviderTableMeta.OCSHARES_SHARE_WITH, remoteShare.getShareWith());
+                cv.put(ProviderTableMeta.OCSHARES_PATH, remoteShare.getPath());
+                cv.put(ProviderTableMeta.OCSHARES_PERMISSIONS, remoteShare.getPermissions());
+                cv.put(ProviderTableMeta.OCSHARES_SHARED_DATE, remoteShare.getSharedDate());
+                cv.put(ProviderTableMeta.OCSHARES_EXPIRATION_DATE, remoteShare.getExpirationDate());
+                cv.put(ProviderTableMeta.OCSHARES_TOKEN, remoteShare.getToken());
                 cv.put(
                         ProviderTableMeta.OCSHARES_SHARE_WITH_DISPLAY_NAME,
-                        share.getSharedWithDisplayName()
+                        remoteShare.getSharedWithDisplayName()
                 );
                 cv.put(
                         ProviderTableMeta.OCSHARES_SHARE_WITH_ADDITIONAL_INFO,
-                        share.getSharedWithAdditionalInfo()
+                        remoteShare.getSharedWithAdditionalInfo()
                 );
-                cv.put(ProviderTableMeta.OCSHARES_IS_DIRECTORY, share.isFolder() ? 1 : 0);
-                cv.put(ProviderTableMeta.OCSHARES_USER_ID, share.getUserId());
-                cv.put(ProviderTableMeta.OCSHARES_ID_REMOTE_SHARED, share.getRemoteId());
+                cv.put(ProviderTableMeta.OCSHARES_IS_DIRECTORY, remoteShare.isFolder() ? 1 : 0);
+                cv.put(ProviderTableMeta.OCSHARES_USER_ID, remoteShare.getUserId());
+                cv.put(ProviderTableMeta.OCSHARES_ID_REMOTE_SHARED, remoteShare.getId());
                 cv.put(ProviderTableMeta.OCSHARES_ACCOUNT_OWNER, mAccount.name);
-                cv.put(ProviderTableMeta.OCSHARES_NAME, share.getName());
-                cv.put(ProviderTableMeta.OCSHARES_URL, share.getShareLink());
+                cv.put(ProviderTableMeta.OCSHARES_NAME, remoteShare.getName());
+                cv.put(ProviderTableMeta.OCSHARES_URL, remoteShare.getShareLink());
 
                 // adding a new share resource
                 operations.add(

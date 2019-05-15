@@ -76,6 +76,7 @@ class OCLocalDataSourceTest {
         newShareAsLiveData.value = listOf(
             TestUtil.createPublicShare(
                 path = "/Photos/",
+                expirationDate = 20,
                 isFolder = true,
                 name = "Photos 2 link",
                 shareLink = "http://server:port/s/3"
@@ -88,6 +89,22 @@ class OCLocalDataSourceTest {
             )
         ).thenReturn(
             newShareAsLiveData
+        )
+
+        `when`(
+            ocSharesDao.insert(
+                listOf(sharesAsLiveData.value!![0])
+            )
+        ).thenReturn(
+            listOf(7)
+        )
+
+        `when`(
+            ocSharesDao.update(
+                sharesAsLiveData.value!![1]
+            )
+        ).thenReturn(
+            8
         )
 
         ocLocalSharesDataSource = OCLocalSharesDataSource(ocSharesDao)
@@ -115,28 +132,33 @@ class OCLocalDataSourceTest {
     }
 
     @Test
-    fun insertPublicSharesAndRead() {
-        ocLocalSharesDataSource.insert(
+    fun insertPublicShares() {
+        val insertedShareId = ocLocalSharesDataSource.insert(
             listOf(
                 TestUtil.createPublicShare(
                     path = "/Photos/",
                     isFolder = true,
-                    name = "Photos 2 link",
-                    shareLink = "http://server:port/s/3"
+                    name = "Photos link",
+                    shareLink = "http://server:port/s/1"
                 )
             )
         )
 
-        val shares = getValue(
-            ocLocalSharesDataSource.getSharesForFileAsLiveData(
-                "/Photos/", "admin@server", listOf(ShareType.PUBLIC_LINK)
+        assertEquals(insertedShareId.size, 1)
+        assertEquals(insertedShareId[0], 7)
+    }
+
+    @Test
+    fun updatePublicShares() {
+        val updatedShareId = ocLocalSharesDataSource.update(
+            TestUtil.createPublicShare(
+                path = "/Photos/image.jpg",
+                isFolder = false,
+                name = "Image link",
+                shareLink = "http://server:port/s/2"
             )
         )
 
-        assertEquals(shares.size, 1)
-        assertEquals(shares.get(0).path, "/Photos/")
-        assertEquals(shares.get(0).isFolder, true)
-        assertEquals(shares.get(0).name, "Photos 2 link")
-        assertEquals(shares.get(0).shareLink, "http://server:port/s/3")
+        assertEquals(updatedShareId, 8)
     }
 }
