@@ -45,7 +45,6 @@ import com.owncloud.android.shares.db.OCShare
 import com.owncloud.android.ui.activity.BaseActivity
 import com.owncloud.android.ui.adapter.SharePublicLinkListAdapter
 import com.owncloud.android.ui.adapter.ShareUserListAdapter
-import com.owncloud.android.ui.fragment.ShareFragmentListener
 import com.owncloud.android.utils.DisplayUtils
 import com.owncloud.android.utils.MimetypeIconUtil
 import kotlinx.android.synthetic.main.share_file_layout.*
@@ -256,7 +255,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        getPrivateLinkButton?.setOnClickListener { listener?.copyOrSendPrivateLink(file) }
+        getPrivateLinkButton?.setOnClickListener { listener?.copyOrSendPrivateLink(file!!) }
 
         getPrivateLinkButton?.setOnLongClickListener {
             // Show a toast message explaining what a private link is
@@ -375,7 +374,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
     override fun unshareButtonPressed(share: OCShare) {
         // Unshare
         Log_OC.d(TAG, "Removing private share with " + share.sharedWithDisplayName)
-        listener?.removeShare(share)
+        listener?.removePublicShare(share)
     }
 
     override fun editShare(share: OCShare) {

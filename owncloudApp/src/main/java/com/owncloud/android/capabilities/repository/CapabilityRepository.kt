@@ -6,6 +6,7 @@ import com.owncloud.android.vo.Resource
 
 interface CapabilityRepository {
     fun loadCapabilityForAccount(
-        accountName: String
+        accountName: String,
+        shouldFetchFromNetwork: Boolean = true
     ): LiveData<Resource<OCCapability>>
 }

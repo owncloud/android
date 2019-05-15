@@ -27,7 +27,6 @@ import android.content.Context
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.text.InputType
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -38,28 +37,16 @@ import android.widget.CompoundButton
 import android.widget.TextView
 import androidx.appcompat.widget.SwitchCompat
 import androidx.fragment.app.DialogFragment
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import com.owncloud.android.R
-import com.owncloud.android.ViewModelFactory
 import com.owncloud.android.capabilities.db.OCCapability
-import com.owncloud.android.capabilities.viewmodel.OCCapabilityViewModel
 import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.lib.common.utils.Log_OC
 import com.owncloud.android.lib.resources.shares.RemoteShare
-import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.lib.resources.status.CapabilityBooleanType
 import com.owncloud.android.lib.resources.status.OwnCloudVersion
-import com.owncloud.android.operations.common.OperationType
 import com.owncloud.android.shares.db.OCShare
-import com.owncloud.android.shares.viewmodel.OCShareViewModel
-import com.owncloud.android.ui.activity.BaseActivity
 import com.owncloud.android.ui.dialog.ExpirationDatePickerDialogFragment
-import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter
-import com.owncloud.android.ui.fragment.ShareFragmentListener
 import com.owncloud.android.utils.DateUtils
-import com.owncloud.android.vo.Status
 import kotlinx.android.synthetic.main.share_public_dialog.*
 import kotlinx.android.synthetic.main.share_public_dialog.view.*
 import java.text.ParseException
@@ -140,24 +127,6 @@ class PublicShareDialogFragment : DialogFragment() {
                 .time
         } else -1
 
-    var ocCapabilityViewModelFactory: ViewModelProvider.Factory = ViewModelFactory.build {
-        OCCapabilityViewModel(
-            account = account!!,
-            shouldFetchFromNetwork = false
-        )
-    }
-
-    var ocShareViewModelFactory: ViewModelProvider.Factory = ViewModelFactory.build {
-        OCShareViewModel(
-            account!!,
-            file?.remotePath!!,
-            listOf(ShareType.PUBLIC_LINK)
-        )
-    }
-
-    private lateinit var ocCapabilityViewModel: OCCapabilityViewModel
-    private lateinit var ocShareViewModel: OCShareViewModel
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -231,11 +200,6 @@ class PublicShareDialogFragment : DialogFragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        ocShareViewModel = ViewModelProviders.of(this, ocShareViewModelFactory).get(OCShareViewModel::class.java)
-
-        ocCapabilityViewModel =
-            ViewModelProviders.of(this, ocCapabilityViewModelFactory).get(OCCapabilityViewModel::class.java)
-
         initPasswordListener()
         initExpirationListener()
         initPasswordFocusChangeListener()
@@ -285,38 +249,13 @@ class PublicShareDialogFragment : DialogFragment() {
         }
 
         if (!updating()) { // Creating a new public share
-            ocShareViewModel.insertPublicShareForFile(
+            dismiss()
+            listener?.createPublicShare(
                 publicLinkPermissions,
                 publicLinkName,
                 publicLinkPassword!!,
                 publicLinkExpirationDateInMillis,
                 false
-            ).observe(
-                this,
-                Observer { resource ->
-                    when (resource?.status) {
-                        Status.SUCCESS -> {
-                            dismiss()
-                            (activity as BaseActivity).dismissLoadingDialog()
-                        }
-                        Status.ERROR -> {
-                            val errorMessage: String = resource.msg ?: ErrorMessageAdapter.getResultMessage(
-                                resource.code,
-                                resource.exception,
-                                OperationType.CREATE_PUBLIC_SHARE,
-                                resources
-                            );
-                            showError(errorMessage)
-                            (activity as BaseActivity).dismissLoadingDialog()
-                        }
-                        Status.LOADING -> {
-                            (activity as BaseActivity).showLoadingDialog(R.string.common_loading)
-                        }
-                        else -> {
-                            Log.d(TAG, "Unknown status when creating share")
-                        }
-                    }
-                }
             )
         } else { // Updating an existing public share
             if (!shareViaLinkPasswordSwitch.isChecked) {
@@ -326,39 +265,13 @@ class PublicShareDialogFragment : DialogFragment() {
                 publicLinkPassword = null
             }
 
-            ocShareViewModel.updatePublicShareForFile(
+            listener?.updatePublicShare(
                 publicShare?.remoteId!!,
                 publicLinkName,
                 publicLinkPassword,
                 publicLinkExpirationDateInMillis,
                 publicLinkPermissions,
                 publicUploadPermission
-            ).observe(
-                this,
-                Observer { resource ->
-                    when (resource?.status) {
-                        Status.SUCCESS -> {
-                            dismiss()
-                            (activity as BaseActivity).dismissLoadingDialog()
-                        }
-                        Status.ERROR -> {
-                            val errorMessage: String = resource.msg ?: ErrorMessageAdapter.getResultMessage(
-                                resource.code,
-                                resource.exception,
-                                OperationType.UPDATE_PUBLIC_SHARE,
-                                resources
-                            );
-                            showError(errorMessage)
-                            (activity as BaseActivity).dismissLoadingDialog()
-                        }
-                        Status.LOADING -> {
-                            (activity as BaseActivity).showLoadingDialog(R.string.common_loading)
-                        }
-                        else -> {
-                            Log.d(TAG, "Unknown status when creating share")
-                        }
-                    }
-                }
             )
         }
     }
@@ -489,7 +402,7 @@ class PublicShareDialogFragment : DialogFragment() {
         super.onActivityCreated(savedInstanceState)
         Log_OC.d(TAG, "onActivityCreated")
 
-        refreshCapabilities()
+        listener?.refreshCapabilities(false)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -640,38 +553,9 @@ class PublicShareDialogFragment : DialogFragment() {
         }
     }
 
-    private fun refreshCapabilities() {
-        ocCapabilityViewModel.getCapabilityForAccount().observe(
-            this,
-            Observer { resource ->
-                when (resource?.status) {
-                    Status.SUCCESS -> {
-                        capabilities = resource.data
-                        updateInputFormAccordingToServerCapabilities()
-                        (activity as BaseActivity).dismissLoadingDialog()
-                    }
-                    Status.ERROR -> {
-                        val errorMessage = ErrorMessageAdapter.getResultMessage(
-                            resource.code,
-                            resource.exception,
-                            OperationType.GET_SHARES,
-                            resources
-                        )
-                        showError(errorMessage)
-                        capabilities = resource.data
-                        (activity as BaseActivity).dismissLoadingDialog()
-                    }
-                    Status.LOADING -> {
-                        (activity as BaseActivity).showLoadingDialog(R.string.common_loading)
-                        capabilities = resource.data
-                        updateInputFormAccordingToServerCapabilities()
-                    }
-                    else -> {
-                        Log.d(TAG, "Unknown status when loading capabilities")
-                    }
-                }
-            }
-        )
+    fun updateCapabilities(capabilities: OCCapability?) {
+        this.capabilities = capabilities
+        updateInputFormAccordingToServerCapabilities()
     }
 
     /**
