@@ -20,46 +20,62 @@
 
 package com.owncloud.android.shares.ui
 
-import com.owncloud.android.datamodel.FileDataStorageManager
 import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.shares.db.OCShare
-import com.owncloud.android.testing.SingleFragmentActivity
 import com.owncloud.android.shares.ui.fragment.ShareFragmentListener
+import com.owncloud.android.testing.SingleFragmentActivity
 
 class TestShareFileActivity : SingleFragmentActivity(), ShareFragmentListener {
-        override fun copyOrSendPrivateLink(file: OCFile?) {
+    override fun refreshShares() {
+        fragment
+    }
+
+    override fun createPublicShare(
+        permissions: Int,
+        name: String,
+        password: String,
+        expirationTimeInMillis: Long,
+        publicUpload: Boolean
+    ) {
+    }
+
+    override fun updatePublicShare(
+        remoteId: Long,
+        name: String,
+        password: String?,
+        expirationDateInMillis: Long,
+        permissions: Int,
+        publicUpload: Boolean
+    ) {
+    }
+
+    override fun removePublicShare(share: OCShare) {
+    }
+
+    override fun refreshCapabilities(shouldFetchFromNetwork: Boolean) {
+    }
+
+    override fun copyOrSendPrivateLink(file: OCFile) {
     }
 
     override fun showSearchUsersAndGroups() {
     }
 
-    override fun showEditPrivateShare(share: OCShare?) {
+    override fun showEditPrivateShare(share: OCShare) {
     }
 
     override fun refreshSharesFromServer() {
     }
 
-    override fun removeShare(share: OCShare?) {
-    }
-
     override fun showAddPublicShare(defaultLinkName: String) {
-
     }
 
-    override fun showRemovePublicShare(share: OCShare?) {
-
+    override fun showEditPublicShare(share: OCShare) {
     }
 
-    override fun dismissAddPublicShare() {
+    override fun showRemovePublicShare(share: OCShare) {
     }
 
-    override fun showEditPublicShare(share: OCShare?) {
-    }
-
-    override fun copyOrSendPublicLink(share: OCShare?) {
-    }
-
-    override fun getStorageManager(): FileDataStorageManager? {
-        return null;
+    override fun copyOrSendPublicLink(share: OCShare) {
     }
 }
