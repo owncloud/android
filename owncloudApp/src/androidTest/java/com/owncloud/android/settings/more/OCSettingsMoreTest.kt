@@ -63,8 +63,10 @@ class OCSettingsMoreTest {
         //Only interested in "More" section, so we can get rid of the other categories. SmoothScroll is not
         //working fine to reach the bottom of the screen, so this approach was taken to display the section
         val preferenceScreen = activityRule.activity.getPreferenceScreen() as PreferenceScreen
-        val cameraUploadsCategory = activityRule.activity.findPreference("camera_uploads_category") as PreferenceCategory
-        val securityCategory = activityRule.activity.findPreference("security_category") as PreferenceCategory
+        val cameraUploadsCategory =
+            activityRule.activity.findPreference("camera_uploads_category") as PreferenceCategory
+        val securityCategory =
+            activityRule.activity.findPreference("security_category") as PreferenceCategory
         preferenceScreen.removePreference(cameraUploadsCategory)
         preferenceScreen.removePreference(securityCategory)
     }
@@ -86,7 +88,7 @@ class OCSettingsMoreTest {
     }
 
     @Test
-    fun dav5xView(){
+    fun davx5View(){
         onView(withText(R.string.prefs_sync_calendar_contacts)).check(matches(isDisplayed()))
         onView(withText(R.string.prefs_sync_calendar_contacts_summary)).check(matches(isDisplayed()))
     }
@@ -173,5 +175,4 @@ class OCSettingsMoreTest {
         intended(hasComponent(PrivacyPolicyActivity::class.java.name))
         Intents.release()
     }
-
 }
