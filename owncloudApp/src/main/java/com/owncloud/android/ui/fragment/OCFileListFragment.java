@@ -110,6 +110,8 @@ public class OCFileListFragment extends ExtendedListFragment implements
 
     private static String DIALOG_CREATE_FOLDER = "DIALOG_CREATE_FOLDER";
 
+    private final String ALL_FILES_SAF_REGEX = "*/*";
+
     private FileFragment.ContainerActivity mContainerActivity;
 
     private OCFile mFile = null;
@@ -306,7 +308,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
                     @Override
                     public boolean onTouch(View v, MotionEvent event) {
                         Intent action = new Intent(Intent.ACTION_GET_CONTENT);
-                        action = action.setType("*/*").addCategory(Intent.CATEGORY_OPENABLE);
+                        action = action.setType(ALL_FILES_SAF_REGEX).addCategory(Intent.CATEGORY_OPENABLE);
                         action.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
                         getActivity().startActivityForResult(
                                 Intent.createChooser(action, getString(R.string.upload_chooser_title)),
