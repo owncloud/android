@@ -386,6 +386,8 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
     fun updateCapabilities(capabilities: OCCapability?) {
         this.capabilities = capabilities
 
+        updatePublicLinkButton()
+
         // Update view depending on updated capabilities
         if (isPublicShareDisabled) {
             shareViaLinkSection.visibility = View.GONE
@@ -396,7 +398,26 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
 
     fun updatePublicShares(publicShares: ArrayList<OCShare>) {
         publicLinks = publicShares
+        updatePublicLinkButton()
         updateListOfPublicLinks()
+    }
+
+    /**
+     * Show or hide button for adding a new public share depending on the capabilities and the server version
+     */
+    private fun updatePublicLinkButton() {
+        // Since capabilities and publicLinks are loaded asynchronously, let's check whether they both exist
+        if (capabilities == null || publicLinks == null) {
+            return
+        }
+
+        if (!enableMultiplePublicSharing()) {
+            if (publicLinks?.size == 0) {
+                addPublicLinkButton.visibility = View.VISIBLE
+            } else if (publicLinks?.size!! >= 1) {
+                addPublicLinkButton.visibility = View.INVISIBLE
+            }
+        }
     }
 
     /**
@@ -420,16 +441,6 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
         } else {
             shareNoPublicLinks?.visibility = View.VISIBLE
             sharePublicLinksList?.visibility = View.GONE
-        }
-
-        // Show or hide button for adding a new public share depending on the capabilities and
-        // the server version
-        if (!enableMultiplePublicSharing()) {
-            if (publicLinks?.size == 0) {
-                addPublicLinkButton.visibility = View.VISIBLE
-            } else if (publicLinks?.size!! >= 1) {
-                addPublicLinkButton.visibility = View.INVISIBLE
-            }
         }
 
         // Set Scroll to initial position
@@ -468,6 +479,8 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
      * @return true if should be enabled, false otherwise
      */
     private fun enableMultiplePublicSharing(): Boolean {
+        if (capabilities == null) return true
+
         val serverVersion = OwnCloudVersion(capabilities?.versionString!!)
 
         return when {
