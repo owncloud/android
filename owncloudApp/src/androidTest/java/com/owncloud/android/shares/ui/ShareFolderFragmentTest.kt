@@ -37,7 +37,6 @@ import com.owncloud.android.shares.db.OCShare
 import com.owncloud.android.shares.ui.fragment.ShareFileFragment
 import com.owncloud.android.shares.viewmodel.OCShareViewModel
 import com.owncloud.android.utils.TestUtil
-import com.owncloud.android.utils.ViewModelUtil
 import com.owncloud.android.vo.Resource
 import org.hamcrest.Matchers.not
 import org.junit.Before
