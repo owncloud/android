@@ -29,7 +29,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import android.widget.ListView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -389,25 +388,9 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
 
         // Update view depending on updated capabilities
         if (isPublicShareDisabled) {
-            view?.findViewById<LinearLayout>(R.id.shareViaLinkSection)?.visibility = View.GONE
-//            shareViaLinkSection.visibility = View.GONE
+            shareViaLinkSection.visibility = View.GONE
         } else {
-            view?.findViewById<LinearLayout>(R.id.shareViaLinkSection)?.visibility = View.VISIBLE
-//            shareViaLinkSection.visibility = View.VISIBLE
-        }
-
-        // Show or hide button for adding a new public share depending on the capabilities and
-        // the server version
-        if (!enableMultiplePublicSharing()) {
-            if (publicLinks == null) {
-                return
-            }
-
-            if (publicLinks?.size!! >= 1) {
-                addPublicLinkButton.visibility = View.INVISIBLE
-                return
-            }
-            addPublicLinkButton.visibility = View.VISIBLE
+            shareViaLinkSection.visibility = View.VISIBLE
         }
     }
 
@@ -437,6 +420,16 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
         } else {
             shareNoPublicLinks?.visibility = View.VISIBLE
             sharePublicLinksList?.visibility = View.GONE
+        }
+
+        // Show or hide button for adding a new public share depending on the capabilities and
+        // the server version
+        if (!enableMultiplePublicSharing()) {
+            if (publicLinks?.size == 0) {
+                addPublicLinkButton.visibility = View.VISIBLE
+            } else if (publicLinks?.size!! >= 1) {
+                addPublicLinkButton.visibility = View.INVISIBLE
+            }
         }
 
         // Set Scroll to initial position

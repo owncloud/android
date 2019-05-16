@@ -66,7 +66,6 @@ import com.owncloud.android.vo.Status
  * Activity for sharing files
  */
 class ShareActivity : FileActivity(), ShareFragmentListener {
-
     private var getSharesForFileAsyncTask: GetSharesForFileAsyncTask? = null
 
     /**

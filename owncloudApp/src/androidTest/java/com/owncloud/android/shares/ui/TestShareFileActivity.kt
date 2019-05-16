@@ -20,14 +20,21 @@
 
 package com.owncloud.android.shares.ui
 
+import com.owncloud.android.capabilities.db.OCCapability
 import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.shares.db.OCShare
+import com.owncloud.android.shares.ui.fragment.ShareFileFragment
 import com.owncloud.android.shares.ui.fragment.ShareFragmentListener
 import com.owncloud.android.testing.SingleFragmentActivity
 
 class TestShareFileActivity : SingleFragmentActivity(), ShareFragmentListener {
+    lateinit var capabilities: OCCapability
+    lateinit var publicShares: ArrayList<OCShare>
+
     override fun refreshShares() {
-        fragment
+        val shareFileFragment: ShareFileFragment = supportFragmentManager.fragments.get(0) as ShareFileFragment
+        shareFileFragment.updateCapabilities(capabilities)
+        shareFileFragment.updatePublicShares(publicShares)
     }
 
     override fun createPublicShare(
