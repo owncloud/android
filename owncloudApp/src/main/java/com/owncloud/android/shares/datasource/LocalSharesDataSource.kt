@@ -36,7 +36,7 @@ interface LocalSharesDataSource {
 
     fun replaceSharesForFile(ocShares: List<OCShare>): List<Long>
 
-    fun deleteShare(remoteId: Long)
+    fun deleteShare(remoteId: Long): Int
 
     fun deleteSharesForFile(filePath: String, accountName: String)
 }

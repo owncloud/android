@@ -81,6 +81,6 @@ class OCRemoteSharesDataSource(
         remoteId: Long,
         removeRemoteShareOperation: RemoveRemoteShareOperation
     ): RemoteOperationResult<ShareParserResult> {
-        return RemoveRemoteShareOperation(remoteId).execute(client)
+        return removeRemoteShareOperation.execute(client)
     }
 }

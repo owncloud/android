@@ -107,6 +107,14 @@ class OCLocalDataSourceTest {
             8
         )
 
+        `when`(
+            ocSharesDao.deleteShare(
+                5
+            )
+        ).thenReturn(
+            1
+        )
+
         ocLocalSharesDataSource = OCLocalSharesDataSource(ocSharesDao)
     }
 
@@ -143,7 +151,6 @@ class OCLocalDataSourceTest {
                 )
             )
         )
-
         assertEquals(insertedShareId.size, 1)
         assertEquals(insertedShareId[0], 7)
     }
@@ -158,7 +165,14 @@ class OCLocalDataSourceTest {
                 shareLink = "http://server:port/s/2"
             )
         )
-
         assertEquals(updatedShareId, 8)
+    }
+
+    @Test
+    fun deletePublicShare() {
+        val deletedRows = ocLocalSharesDataSource.deleteShare(
+            5
+        )
+        assertEquals(deletedRows, 1)
     }
 }

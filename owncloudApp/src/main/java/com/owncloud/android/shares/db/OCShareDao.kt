@@ -60,7 +60,7 @@ abstract class OCShareDao {
         "DELETE from " + ProviderTableMeta.OCSHARES_TABLE_NAME + " WHERE " +
                 ProviderTableMeta.OCSHARES_ID_REMOTE_SHARED + " = :remoteId"
     )
-    abstract fun deleteShare(remoteId: Long)
+    abstract fun deleteShare(remoteId: Long): Int
 
     @Query(
         "DELETE from " + ProviderTableMeta.OCSHARES_TABLE_NAME + " WHERE " +
