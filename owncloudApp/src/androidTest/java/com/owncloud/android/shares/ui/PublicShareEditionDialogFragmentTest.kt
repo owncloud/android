@@ -19,8 +19,6 @@
 
 package com.owncloud.android.shares.ui
 
-import android.accounts.Account
-import androidx.lifecycle.MutableLiveData
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers
@@ -32,21 +30,21 @@ import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.ActivityTestRule
 import com.owncloud.android.R
-import com.owncloud.android.capabilities.db.OCCapability
-import com.owncloud.android.capabilities.viewmodel.OCCapabilityViewModel
 import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.lib.resources.shares.RemoteShare
 import com.owncloud.android.shares.db.OCShare
 import com.owncloud.android.shares.ui.fragment.PublicShareDialogFragment
-import com.owncloud.android.shares.viewmodel.OCShareViewModel
-import com.owncloud.android.utils.ViewModelUtil
-import com.owncloud.android.vo.Resource
+import com.owncloud.android.utils.TestUtil
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.mock
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+import java.util.GregorianCalendar
+import java.util.TimeZone
 
 @RunWith(AndroidJUnit4::class)
 class PublicShareEditionDialogFragmentTest {
@@ -54,11 +52,9 @@ class PublicShareEditionDialogFragmentTest {
     @JvmField
     val activityRule = ActivityTestRule(TestShareFileActivity::class.java, true, true)
 
-    private val account = mock(Account::class.java)
-    private val capabilitiesLiveData = MutableLiveData<Resource<OCCapability>>()
-    private val sharesLiveData = MutableLiveData<Resource<List<OCShare>>>()
     private val file = mock(OCFile::class.java)
     private val publicShare = mock(OCShare::class.java)
+    private val expirationDate = 1556575200000
 
     @Before
     fun setUp() {
@@ -76,8 +72,10 @@ class PublicShareEditionDialogFragmentTest {
             true
         )
 
+        TimeZone.getDefault()
+
         `when`(publicShare.expirationDate).thenReturn(
-            1556575200000
+            expirationDate
         )
 
         val publicShareDialogFragment = PublicShareDialogFragment.newInstanceToUpdate(
@@ -90,25 +88,7 @@ class PublicShareEditionDialogFragmentTest {
         file.mimetype = ".txt"
         `when`(file.remotePath).thenReturn(filePath)
 
-        val ocCapabilityViewModel = mock(OCCapabilityViewModel::class.java)
-        `when`(
-            ocCapabilityViewModel.getCapabilityForAccount()
-        ).thenReturn(capabilitiesLiveData)
-
-        val ocShareViewModel = mock(OCShareViewModel::class.java)
-        `when`(
-            ocShareViewModel.insertPublicShareForFile(
-                1,
-                linkName,
-                "",
-                -1,
-                false
-            )
-        ).thenReturn(sharesLiveData)
-
-//        publicShareDialogFragment.ocCapabilityViewModelFactory = ViewModelUtil.createFor(ocCapabilityViewModel)
-//        publicShareDialogFragment.ocShareViewModelFactory = ViewModelUtil.createFor(ocShareViewModel)
-
+        activityRule.activity.capabilities = TestUtil.createCapability()
         activityRule.activity.setFragment(publicShareDialogFragment)
     }
 
@@ -141,6 +121,14 @@ class PublicShareEditionDialogFragmentTest {
 
     @Test
     fun checkExpirationDateSet() {
+        val calendar = GregorianCalendar()
+        calendar.timeInMillis = expirationDate
+
+        val formatter: DateFormat = SimpleDateFormat("MMM dd, yyyy");
+        formatter.timeZone = TimeZone.getDefault();
+
+        val time = formatter.format(calendar.time);
+
         onView(withId(R.id.shareViaLinkExpirationLabel)).check(
             matches(withText(R.string.share_via_link_expiration_date_label))
         )
@@ -149,6 +137,6 @@ class PublicShareEditionDialogFragmentTest {
         onView(withId(R.id.shareViaLinkExpirationValue))
             .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))
         onView(withId(R.id.shareViaLinkExpirationValue))
-            .check(matches(withText("Apr 29, 2019")))
+            .check(matches(withText(time)))
     }
 }
