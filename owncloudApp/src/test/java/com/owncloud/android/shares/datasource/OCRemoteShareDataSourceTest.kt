@@ -24,6 +24,7 @@ import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.shares.CreateRemoteShareOperation
 import com.owncloud.android.lib.resources.shares.GetRemoteSharesForFileOperation
+import com.owncloud.android.lib.resources.shares.RemoveRemoteShareOperation
 import com.owncloud.android.lib.resources.shares.ShareParserResult
 import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.lib.resources.shares.UpdateRemoteShareOperation
@@ -241,5 +242,24 @@ class OCRemoteShareDataSourceTest {
         assertEquals(publicShareUpdated.expirationDate, 2000)
         assertEquals(publicShareUpdated.permissions, 1)
         assertEquals(publicShareUpdated.shareLink, "http://server:port/s/1275farv")
+    }
+
+    @Test
+    fun deletePublicShare() {
+        val removeRemoteShareOperation = mock(RemoveRemoteShareOperation::class.java)
+
+        val removeRemoteShareOperationResult = TestUtil.createRemoteOperationResultMock(
+            ShareParserResult(arrayListOf()),
+            isSuccess = true
+        )
+
+        `when`(removeRemoteShareOperation.execute(ownCloudClient)).thenReturn(
+            removeRemoteShareOperationResult
+        )
+
+        val remoteOperationResult = ocRemoteSharesDataSource.deleteShare(1, removeRemoteShareOperation)
+
+        assertThat(remoteOperationResult, notNullValue())
+        assertEquals(remoteOperationResult.isSuccess, true)
     }
 }
