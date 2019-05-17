@@ -1,1 +1,1 @@
-File synchronization client
+Client zum Synchronisieren von Daten
