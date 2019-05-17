@@ -592,7 +592,6 @@ class PublicShareDialogFragment : DialogFragment() {
 
         // Show default date enforced by the server, if any
         if (!updating() && capabilities?.filesSharingPublicExpireDateDays!! > 0) {
-
             setExpirationDateSwitchChecked(checked = true)
 
             val formattedDate = SimpleDateFormat.getDateInstance().format(
