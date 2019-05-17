@@ -242,7 +242,6 @@ class PublicShareDialogFragment : DialogFragment() {
         }
 
         if (!updating()) { // Creating a new public share
-            dismiss()
             listener?.createPublicShare(
                 publicLinkPermissions,
                 publicLinkName,
@@ -432,7 +431,6 @@ class PublicShareDialogFragment : DialogFragment() {
      * Listener for user actions that start any update on a password for the public link.
      */
     private inner class OnPasswordInteractionListener : CompoundButton.OnCheckedChangeListener {
-
         /**
          * Called by R.id.shareViaLinkPasswordSwitch to set or clear the password.
          *
