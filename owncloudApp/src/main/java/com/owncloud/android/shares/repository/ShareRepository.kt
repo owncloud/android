@@ -26,16 +26,12 @@ import com.owncloud.android.vo.Resource
 
 interface ShareRepository {
     fun loadSharesForFile(
-        filePath: String,
-        accountName: String,
         shareTypes: List<ShareType>,
         reshares: Boolean,
         subfiles: Boolean
     ): LiveData<Resource<List<OCShare>>>
 
     fun insertPublicShareForFile(
-        filePath: String,
-        accountName: String,
         permissions: Int,
         name: String,
         password: String,
@@ -44,8 +40,6 @@ interface ShareRepository {
     ): LiveData<Resource<List<OCShare>>>
 
     fun updatePublicShareForFile(
-        filePath: String,
-        accountName: String,
         remoteId: Long,
         name: String,
         password: String?,
@@ -55,8 +49,6 @@ interface ShareRepository {
     ): LiveData<Resource<List<OCShare>>>
 
     fun deletePublicShare(
-        filePath: String,
-        accountName: String,
         remoteId: Long
     ): LiveData<Resource<List<OCShare>>>
 }

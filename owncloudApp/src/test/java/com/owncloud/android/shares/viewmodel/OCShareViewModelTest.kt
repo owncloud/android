@@ -38,12 +38,13 @@ import org.mockito.Mockito.mock
 
 @RunWith(JUnit4::class)
 class OCShareViewModelTest {
-    private var testAccount: Account = TestUtil.createAccount("admin@server", "test")
-    private val publicShareResourcesAsLiveData: MutableLiveData<Resource<List<OCShare>>> = MutableLiveData()
-
     @Rule
     @JvmField
     val instantExecutorRule = InstantTaskExecutorRule()
+
+    private var testAccount: Account = TestUtil.createAccount("admin@server", "test")
+    private val publicShareResourcesAsLiveData: MutableLiveData<Resource<List<OCShare>>> = MutableLiveData()
+    private var ocShareRepository: OCShareRepository = mock(OCShareRepository::class.java)
 
     @Before
     fun init() {
@@ -67,15 +68,11 @@ class OCShareViewModelTest {
 
     @Test
     fun loadPublicShares() {
-        val ocShareRepository = mock(OCShareRepository::class.java)
-
         `when`(
             ocShareRepository.loadSharesForFile(
-                "/Photos/image.jpg",
-                "admin@server",
                 listOf(ShareType.PUBLIC_LINK),
-                true,
-                false
+                reshares = true,
+                subfiles = false
             )
         ).thenReturn(
             publicShareResourcesAsLiveData
@@ -94,8 +91,6 @@ class OCShareViewModelTest {
 
         `when`(
             ocShareRepository.insertPublicShareForFile(
-                "/Photos/image.jpg",
-                "admin@server",
                 1,
                 "Photos 2 link",
                 "1234",
@@ -126,8 +121,6 @@ class OCShareViewModelTest {
 
         `when`(
             ocShareRepository.updatePublicShareForFile(
-                "/Photos/image.jpg",
-                "admin@server",
                 1,
                 "Photos 2 link",
                 "1234",
@@ -156,8 +149,8 @@ class OCShareViewModelTest {
 
     private fun createOCShareViewModel(ocShareRepository: OCShareRepository): OCShareViewModel =
         OCShareViewModel(
-            testAccount,
             "/Photos/image.jpg",
+            testAccount,
             listOf(ShareType.PUBLIC_LINK),
             ocShareRepository
         )
