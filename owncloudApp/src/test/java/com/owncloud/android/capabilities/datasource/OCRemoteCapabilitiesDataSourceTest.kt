@@ -67,9 +67,9 @@ class OCRemoteCapabilitiesDataSourceTest {
 
         val capability = remoteOperationResult.data
 
-        assertEquals(capability.accountName, "ceo@server")
-        assertEquals(capability.versionMayor, 15)
-        assertEquals(capability.versionMinor, 14)
-        assertEquals(capability.versionMicro, 13)
+        assertEquals("ceo@server", capability.accountName)
+        assertEquals(15, capability.versionMayor)
+        assertEquals(14, capability.versionMinor)
+        assertEquals(13, capability.versionMicro)
     }
 }

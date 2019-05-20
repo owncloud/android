@@ -83,11 +83,10 @@ class OCLocalCapabilitiesDataSourceTest {
                 "user@server1"
             )
         )
-
-        assertEquals(capability.accountName, "user@server1")
-        assertEquals(capability.versionMayor, 5)
-        assertEquals(capability.versionMinor, 4)
-        assertEquals(capability.versionMicro, 3)
+        assertEquals("user@server1", capability.accountName)
+        assertEquals(5, capability.versionMayor)
+        assertEquals(4, capability.versionMinor)
+        assertEquals(3, capability.versionMicro)
     }
 
     @Test
@@ -108,10 +107,9 @@ class OCLocalCapabilitiesDataSourceTest {
                 "user@server2"
             )
         )
-
-        assertEquals(capability.accountName, "user@server2")
-        assertEquals(capability.versionMayor, 2)
-        assertEquals(capability.versionMinor, 1)
-        assertEquals(capability.versionMicro, 0)
+        assertEquals("user@server2", capability.accountName)
+        assertEquals(2, capability.versionMayor)
+        assertEquals(1, capability.versionMinor)
+        assertEquals(0, capability.versionMicro)
     }
 }
