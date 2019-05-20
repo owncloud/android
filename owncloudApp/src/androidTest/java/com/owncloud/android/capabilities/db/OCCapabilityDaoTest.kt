@@ -24,7 +24,6 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SmallTest
 import androidx.test.platform.app.InstrumentationRegistry
 import com.owncloud.android.db.OwncloudDatabase
-import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.lib.resources.status.CapabilityBooleanType
 import com.owncloud.android.utils.LiveDataTestUtil.getValue
 import com.owncloud.android.utils.TestUtil
@@ -68,13 +67,12 @@ class OCCapabilityDaoTest {
                 "user2@server"
             )
         )
-
         assertThat(capability, notNullValue())
-        assertEquals(capability.accountName, "user2@server")
-        assertEquals(capability.versionMayor, 6)
-        assertEquals(capability.versionMinor, 5)
-        assertEquals(capability.versionMicro, 4)
-        assertEquals(capability.versionString, "6.0")
+        assertEquals("user2@server", capability.accountName)
+        assertEquals(6, capability.versionMayor)
+        assertEquals(5, capability.versionMinor)
+        assertEquals(4, capability.versionMicro)
+        assertEquals("6.0", capability.versionString)
     }
 
     @Test
@@ -90,7 +88,6 @@ class OCCapabilityDaoTest {
                 "user@server2"
             )
         )
-
         assertThat(capability, nullValue())
     }
 
@@ -127,14 +124,13 @@ class OCCapabilityDaoTest {
                 "admin@server"
             )
         )
-
         assertThat(capability, notNullValue())
-        assertEquals(capability.accountName, "admin@server")
-        assertEquals(capability.versionMayor, 3)
-        assertEquals(capability.versionMinor, 2)
-        assertEquals(capability.versionMicro, 1)
-        assertEquals(capability.versionString, "3.7.5")
-        assertEquals(capability.filesSharingPublicPasswordEnforced, 1)
+        assertEquals("admin@server", capability.accountName)
+        assertEquals(3, capability.versionMayor)
+        assertEquals(2, capability.versionMinor)
+        assertEquals(1, capability.versionMicro)
+        assertEquals("3.7.5", capability.versionString)
+        assertEquals(1, capability.filesSharingPublicPasswordEnforced)
     }
 
     @Test
@@ -170,14 +166,13 @@ class OCCapabilityDaoTest {
                 "cto@server"
             )
         )
-
         assertThat(capability1, notNullValue())
-        assertEquals(capability1.accountName, "cto@server")
-        assertEquals(capability1.versionMayor, 10)
-        assertEquals(capability1.versionMinor, 8)
-        assertEquals(capability1.versionMicro, 6)
-        assertEquals(capability1.versionString, "10.0.2")
-        assertEquals(capability1.filesSharingPublicPasswordEnforcedReadOnly, CapabilityBooleanType.FALSE.value)
+        assertEquals("cto@server", capability1.accountName)
+        assertEquals(10, capability1.versionMayor)
+        assertEquals(8, capability1.versionMinor)
+        assertEquals(6, capability1.versionMicro)
+        assertEquals("10.0.2", capability1.versionString)
+        assertEquals(CapabilityBooleanType.FALSE.value, capability1.filesSharingPublicPasswordEnforcedReadOnly)
 
         // capability2 didn't exist before, it should not replace the old one but got created
         val capability2 = getValue(
@@ -185,13 +180,12 @@ class OCCapabilityDaoTest {
                 "seo@server"
             )
         )
-
         assertThat(capability2, notNullValue())
-        assertEquals(capability2.accountName, "seo@server")
-        assertEquals(capability2.versionMayor, 14)
-        assertEquals(capability2.versionMinor, 13)
-        assertEquals(capability2.versionMicro, 12)
-        assertEquals(capability2.versionString, "14.3.8")
-        assertEquals(capability2.filesSharingPublicPasswordEnforcedReadOnly, CapabilityBooleanType.TRUE.value)
+        assertEquals("seo@server", capability2.accountName)
+        assertEquals(14, capability2.versionMayor)
+        assertEquals(13, capability2.versionMinor)
+        assertEquals(12, capability2.versionMicro)
+        assertEquals("14.3.8", capability2.versionString)
+        assertEquals(CapabilityBooleanType.TRUE.value, capability2.filesSharingPublicPasswordEnforcedReadOnly)
     }
 }

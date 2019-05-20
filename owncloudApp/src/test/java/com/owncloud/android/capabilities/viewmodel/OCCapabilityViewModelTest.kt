@@ -73,9 +73,9 @@ class OCCapabilityViewModelTest {
         val resource: Resource<OCCapability>? = ocCapabilityViewModel.getCapabilityForAccount().value
         val capability: OCCapability? = resource?.data
 
-        assertEquals(capability?.accountName, "admin@server")
-        assertEquals(capability?.versionMayor, 2)
-        assertEquals(capability?.versionMinor, 1)
-        assertEquals(capability?.versionMicro, 0)
+        assertEquals("admin@server", capability?.accountName)
+        assertEquals(2, capability?.versionMayor)
+        assertEquals(1, capability?.versionMinor)
+        assertEquals(0, capability?.versionMicro)
     }
 }
