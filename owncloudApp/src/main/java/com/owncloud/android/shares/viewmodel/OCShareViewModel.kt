@@ -39,8 +39,8 @@ import com.owncloud.android.vo.Resource
  */
 @OpenForTesting
 class OCShareViewModel(
-    val account: Account,
     val filePath: String,
+    val account: Account,
     val shareTypes: List<ShareType>,
     val shareRepository: ShareRepository = OCShareRepository.create(
         localSharesDataSource = OCLocalSharesDataSource(),
@@ -49,12 +49,14 @@ class OCShareViewModel(
                 OwnCloudAccount(account, MainApp.getAppContext()),
                 MainApp.getAppContext()
             )
-        )
+        ),
+        filePathToShare = filePath,
+        accountName = account.name
     )
 ) : ViewModel() {
 
     fun getSharesForFile(): LiveData<Resource<List<OCShare>>> =
-        shareRepository.loadSharesForFile(filePath, account.name, shareTypes, reshares = true, subfiles = false)
+        shareRepository.loadSharesForFile(shareTypes, reshares = true, subfiles = false)
 
     fun insertPublicShareForFile(
         permissions: Int,
@@ -63,7 +65,7 @@ class OCShareViewModel(
         expirationTimeInMillis: Long,
         publicUpload: Boolean
     ): LiveData<Resource<List<OCShare>>> = shareRepository.insertPublicShareForFile(
-        filePath, account.name, permissions, name, password, expirationTimeInMillis, publicUpload
+        permissions, name, password, expirationTimeInMillis, publicUpload
     )
 
     fun updatePublicShareForFile(
@@ -74,10 +76,10 @@ class OCShareViewModel(
         permissions: Int,
         publicUpload: Boolean
     ): LiveData<Resource<List<OCShare>>> = shareRepository.updatePublicShareForFile(
-        filePath, account.name, remoteId, name, password, expirationDateInMillis, permissions, publicUpload
+        remoteId, name, password, expirationDateInMillis, permissions, publicUpload
     )
 
     fun deletePublicShare(
         remoteId: Long
-    ): LiveData<Resource<List<OCShare>>> = shareRepository.deletePublicShare(filePath, account.name, remoteId)
+    ): LiveData<Resource<List<OCShare>>> = shareRepository.deletePublicShare(remoteId)
 }

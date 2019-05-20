@@ -39,7 +39,6 @@ import com.owncloud.android.vo.Resource
 
 @OpenForTesting
 class OCCapabilityViewModel(
-    var shouldFetchFromNetwork: Boolean = true,
     val account: Account,
     val capabilityRepository: CapabilityRepository = OCCapabilityRepository.create(
         localCapabilitiesDataSource = OCLocalCapabilitiesDataSource(),

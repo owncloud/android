@@ -310,7 +310,13 @@ class OCShareRepositoryTest {
 
         val remoteSharesDataSource = RemoteSharesDataSourceTest(remoteOperationResult)
 
-        return OCShareRepository.create(InstantAppExecutors(), localSharesDataSource, remoteSharesDataSource)
+        return OCShareRepository.create(
+            InstantAppExecutors(),
+            localSharesDataSource,
+            remoteSharesDataSource,
+            "/Photos/",
+            "admin@server"
+        )
     }
 
     private fun loadShares(
@@ -320,7 +326,7 @@ class OCShareRepositoryTest {
         val ocShareRepository = createRepositoryWithData(localData, remoteOperationResult)
 
         return ocShareRepository.loadSharesForFile(
-            "/Photos/", "admin@server", listOf(ShareType.PUBLIC_LINK), reshares = true, subfiles = false
+            listOf(ShareType.PUBLIC_LINK), reshares = true, subfiles = false
         )
     }
 
@@ -331,8 +337,6 @@ class OCShareRepositoryTest {
         val ocShareRepository = createRepositoryWithData(localData, remoteOperationResult)
 
         return ocShareRepository.insertPublicShareForFile(
-            "/Photos/",
-            "admin@server",
             1,
             "Photos folder link 3",
             "1234",
@@ -348,8 +352,6 @@ class OCShareRepositoryTest {
         val ocShareRepository = createRepositoryWithData(localData, remoteOperationResult)
 
         return ocShareRepository.updatePublicShareForFile(
-            "/Photos/",
-            "admin@server",
             1,
             "Photos folder link updated",
             "123456",
@@ -366,8 +368,6 @@ class OCShareRepositoryTest {
         val ocShareRepository = createRepositoryWithData(localData, remoteOperationResult)
 
         return ocShareRepository.deletePublicShare(
-            "/Photos/",
-            "admin@server",
             1
         )
     }
