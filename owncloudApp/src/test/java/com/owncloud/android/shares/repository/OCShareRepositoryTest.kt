@@ -47,7 +47,6 @@ class OCShareRepositoryTest {
     @JvmField
     val instantExecutorRule = InstantTaskExecutorRule()
 
-    private lateinit var ocShareRepository: OCShareRepository
     private val localSharesDataSource = mock(LocalSharesDataSource::class.java)
 
     private val publicShare = listOf(
@@ -101,7 +100,7 @@ class OCShareRepositoryTest {
 
         // Retrieving public shares from server...
 
-        // Public shares are always retrieved from server and inserted in database if not empty list
+        // Public shares are retrieved from server and inserted in database if not empty list
         verify(localSharesDataSource).replaceSharesForFile(
             remoteShares.map { remoteShare ->
                 OCShare.fromRemoteShare(remoteShare).also { it.accountOwner = "admin@server" }
@@ -201,7 +200,7 @@ class OCShareRepositoryTest {
 
         // Retrieving public shares from server...
 
-        // Public shares are always retrieved from server and inserted in database if not empty list
+        // Public shares are retrieved from server and inserted in database if not empty list
         verify(localSharesDataSource).insert(
             arrayListOf(remoteShares[1]).map { remoteShare ->
                 OCShare.fromRemoteShare(remoteShare).also { it.accountOwner = "admin@server" }
@@ -265,7 +264,7 @@ class OCShareRepositoryTest {
 
         // Retrieving public shares from server...
 
-        // Public shares are always retrieved from server and updated in database
+        // Public shares are retrieved from server and updated in database
         verify(localSharesDataSource).update(
             OCShare.fromRemoteShare(remoteShares[2]).also { it.accountOwner = "admin@server" }
         )
@@ -277,25 +276,23 @@ class OCShareRepositoryTest {
         localData.value = publicShare
 
         val remoteOperationResult = TestUtil.createRemoteOperationResultMock(
-            ShareParserResult(arrayListOf(remoteShares[2])), true
+            ShareParserResult(arrayListOf()), true
         )
 
-        val data = updateShare(localData, remoteOperationResult)
+        val data = deleteShare(localData, remoteOperationResult)
 
         val observer = mock<Observer<Resource<List<OCShare>>>>()
         data.observeForever(observer)
 
         // Get public shares from database to observe them, is called twice (one showing current db shares while
-        // updating share on server and another one with db shares already updated with just updated share)
+        // deleting share on server and another one with db shares already updated with just deleted share)
         verify(localSharesDataSource, times(2)).getSharesForFileAsLiveData(
             "/Photos/", "admin@server", listOf(ShareType.PUBLIC_LINK)
         )
 
         // Retrieving public shares from server...
-
-        // Public shares are always retrieved from server and updated in database
-        verify(localSharesDataSource).update(
-            OCShare.fromRemoteShare(remoteShares[2]).also { it.accountOwner = "admin@server" }
+        verify(localSharesDataSource).deleteShare(
+            1
         )
     }
 
@@ -359,6 +356,19 @@ class OCShareRepositoryTest {
             2000,
             1,
             false
+        )
+    }
+
+    private fun deleteShare(
+        localData: MutableLiveData<List<OCShare>>,
+        remoteOperationResult: RemoteOperationResult<ShareParserResult>
+    ): LiveData<Resource<List<OCShare>>> {
+        val ocShareRepository = createRepositoryWithData(localData, remoteOperationResult)
+
+        return ocShareRepository.deletePublicShare(
+            "/Photos/",
+            "admin@server",
+            1
         )
     }
 }
