@@ -147,6 +147,28 @@ class OCShareViewModelTest {
         assertShareParameters(resource?.data)
     }
 
+    @Test
+    fun deletePublicShare() {
+        val ocShareRepository = mock(OCShareRepository::class.java)
+
+        `when`(
+            ocShareRepository.deletePublicShare(
+                3
+            )
+        ).thenReturn(
+            publicShareResourcesAsLiveData
+        )
+
+        // Viewmodel that will ask ocShareRepository for shares
+        val ocShareViewModel = createOCShareViewModel(ocShareRepository)
+
+        val resource: Resource<List<OCShare>>? = ocShareViewModel.deletePublicShare(
+            3
+        ).value
+
+        assertShareParameters(resource?.data)
+    }
+
     private fun createOCShareViewModel(ocShareRepository: OCShareRepository): OCShareViewModel =
         OCShareViewModel(
             "/Photos/image.jpg",
