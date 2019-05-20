@@ -100,15 +100,15 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
     private val editShareFragment: EditShareFragment?
         get() = supportFragmentManager.findFragmentByTag(TAG_EDIT_SHARE_FRAGMENT) as EditShareFragment?
 
-    var ocShareViewModelFactory: ViewModelProvider.Factory = ViewModelFactory.build {
+    private var ocShareViewModelFactory: ViewModelProvider.Factory = ViewModelFactory.build {
         OCShareViewModel(
-            account!!,
             file?.remotePath!!,
+            account!!,
             listOf(ShareType.PUBLIC_LINK)
         )
     }
 
-    var ocCapabilityViewModelFactory: ViewModelProvider.Factory = ViewModelFactory.build {
+    private var ocCapabilityViewModelFactory: ViewModelProvider.Factory = ViewModelFactory.build {
         OCCapabilityViewModel(
             account = account!!
         )
