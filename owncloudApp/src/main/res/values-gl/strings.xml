@@ -313,7 +313,7 @@ Descárgueo de aquí: %2$s</string>
   <string name="ssl_validator_question">Aínda así, quere fiar neste certificado igualmente?</string>
   <string name="ssl_validator_not_saved">Non foi posíbel gardar o certificado</string>
   <string name="ssl_validator_btn_details_see">Detalles</string>
-  <string name="ssl_validator_btn_details_hide">Agachar</string>
+  <string name="ssl_validator_btn_details_hide">Agochar</string>
   <string name="ssl_validator_label_subject">Emitido para:</string>
   <string name="ssl_validator_label_issuer">Emitido por:</string>
   <string name="ssl_validator_label_CN">Nome común:</string>
