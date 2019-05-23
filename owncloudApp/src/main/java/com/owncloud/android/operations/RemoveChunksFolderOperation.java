@@ -27,11 +27,11 @@ public class RemoveChunksFolderOperation extends RemoveFileOperation {
     /**
      * Constructor
      *
-     * @param remotePath    RemotePath of the OCFile instance describing the remote file or
-     *                      folder to remove from the server
+     * @param remotePath RemotePath of the OCFile instance describing the remote file or
+     *                   folder to remove from the server
      */
     public RemoveChunksFolderOperation(String remotePath) {
-        super(remotePath, false,false);
+        super(remotePath, false, false);
     }
 
     @Override

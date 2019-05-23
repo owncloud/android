@@ -182,7 +182,7 @@ public class OperationsService extends Service {
 
     /**
      * Entry point to add a new operation to the queue of operations.
-     *
+     * <p>
      * New operations are added calling to startService(), resulting in a call to this method.
      * This ensures the service will keep on working although the caller activity goes away.
      */
@@ -291,8 +291,8 @@ public class OperationsService extends Service {
         /**
          * Cancels a pending or current synchronization.
          *
-         * @param account       ownCloud account where the remote folder is stored.
-         * @param file          A folder in the queue of pending synchronizations
+         * @param account ownCloud account where the remote folder is stored.
+         * @param file    A folder in the queue of pending synchronizations
          */
         public void cancel(Account account, OCFile file) {
             mSyncFolderHandler.cancel(account, file);
@@ -306,9 +306,9 @@ public class OperationsService extends Service {
         /**
          * Adds a listener interested in being reported about the end of operations.
          *
-         * @param listener          Object to notify about the end of operations.
-         * @param callbackHandler   {@link Handler} to access the listener without
-         *                                         breaking Android threading protection.
+         * @param listener        Object to notify about the end of operations.
+         * @param callbackHandler {@link Handler} to access the listener without
+         *                        breaking Android threading protection.
          */
         public void addOperationListener(OnRemoteOperationListener listener,
                                          Handler callbackHandler) {
@@ -321,7 +321,7 @@ public class OperationsService extends Service {
          * Removes a listener from the list of objects interested in the being reported about
          * the end of operations.
          *
-         * @param listener      Object to notify about progress of transfer.    
+         * @param listener Object to notify about progress of transfer.
          */
         public void removeOperationListener(OnRemoteOperationListener listener) {
             synchronized (mBoundListeners) {
@@ -332,8 +332,8 @@ public class OperationsService extends Service {
         /**
          * TODO - IMPORTANT: update implementation when more operations are moved into the service
          *
-         * @return  'True' when an operation that enforces the user to wait for completion is
-         *          in process.
+         * @return 'True' when an operation that enforces the user to wait for completion is
+         * in process.
          */
         public boolean isPerformingBlockingOperation() {
             return (!mServiceHandler.mPendingOperations.isEmpty());
@@ -341,19 +341,19 @@ public class OperationsService extends Service {
 
         /**
          * Creates and adds to the queue a new operation, as described by operationIntent.
-         *
+         * <p>
          * Calls startService to make the operation is processed by the ServiceHandler.
          *
-         * @param operationIntent       Intent describing a new operation to queue and execute.
+         * @param operationIntent Intent describing a new operation to queue and execute.
          * @return Identifier of the operation created, or null if failed.
          */
         public long queueNewOperation(Intent operationIntent) {
             Pair<Target, RemoteOperation> itemToQueue = newOperation(operationIntent);
             if (itemToQueue != null) {
                 mServiceHandler.mPendingOperations.add(itemToQueue);
-                Intent executeOperation = new Intent(OperationsService.this,OperationsService.class);
+                Intent executeOperation = new Intent(OperationsService.this, OperationsService.class);
                 executeOperation.putExtra(EXTRA_IS_LAST_FILE_TO_REMOVE,
-                        operationIntent.getBooleanExtra(EXTRA_IS_LAST_FILE_TO_REMOVE,false));
+                        operationIntent.getBooleanExtra(EXTRA_IS_LAST_FILE_TO_REMOVE, false));
                 startService(executeOperation);
                 return itemToQueue.second.hashCode();
             } else {
@@ -377,13 +377,13 @@ public class OperationsService extends Service {
         /**
          * Returns True when the file described by 'file' in the ownCloud account 'account' is
          * downloading or waiting to download.
-         *
+         * <p>
          * If 'file' is a directory, returns 'true' if some of its descendant files is downloading
          * or waiting to download.
          *
-         * @param account       ownCloud account where the remote file is stored.
-         * @param file          File to check if something is synchronizing
-         *                      / downloading / uploading inside.
+         * @param account ownCloud account where the remote file is stored.
+         * @param file    File to check if something is synchronizing
+         *                / downloading / uploading inside.
          */
         public boolean isSynchronizing(Account account, OCFile file) {
             return mSyncFolderHandler.isSynchronizing(account, file.getRemotePath());
@@ -393,8 +393,8 @@ public class OperationsService extends Service {
 
     /**
      * Operations worker. Performs the pending operations in the order they were requested.
-     *
-     * Created with the Looper of a new thread, started in {@link OperationsService#onCreate()}. 
+     * <p>
+     * Created with the Looper of a new thread, started in {@link OperationsService#onCreate()}.
      */
     private static class ServiceHandler extends Handler {
         // don't make it a final class, and don't remove the static ; lint will warn about a p
@@ -520,12 +520,12 @@ public class OperationsService extends Service {
 
     /**
      * Creates a new operation, as described by operationIntent.
-     *
+     * <p>
      * TODO - move to ServiceHandler (probably)
      *
-     * @param operationIntent       Intent describing a new operation to queue and execute.
+     * @param operationIntent Intent describing a new operation to queue and execute.
      * @return Pair with the new operation object and the information about its
-     *                              target server.
+     * target server.
      */
     private Pair<Target, RemoteOperation> newOperation(Intent operationIntent) {
         RemoteOperation operation = null;
@@ -668,7 +668,7 @@ public class OperationsService extends Service {
                     boolean onlyLocalCopy = operationIntent.getBooleanExtra(EXTRA_REMOVE_ONLY_LOCAL,
                             false);
                     operation = new RemoveFileOperation(remotePath, onlyLocalCopy,
-                            operationIntent.getBooleanExtra(EXTRA_IS_LAST_FILE_TO_REMOVE,false));
+                            operationIntent.getBooleanExtra(EXTRA_IS_LAST_FILE_TO_REMOVE, false));
 
                 } else if (action.equals(ACTION_CREATE_FOLDER)) {
                     // Create Folder
@@ -733,12 +733,12 @@ public class OperationsService extends Service {
 
     /**
      * Sends a broadcast when a new operation is added to the queue.
-     *
+     * <p>
      * Local broadcasts are only delivered to activities in the same process, but can't be
      * done sticky :\
      *
-     * @param target            Account or URL pointing to an OC server.
-     * @param operation         Added operation.
+     * @param target    Account or URL pointing to an OC server.
+     * @param operation Added operation.
      */
     private void sendBroadcastNewOperation(Target target, RemoteOperation operation) {
         Intent intent = new Intent(ACTION_OPERATION_ADDED);
@@ -755,7 +755,7 @@ public class OperationsService extends Service {
     /**
      * Sends a LOCAL broadcast when an operations finishes in order to the interested activities c
      * an update their view
-     *
+     * <p>
      * Local broadcasts are only delivered to activities in the same process.
      *
      * @param target    Account or URL pointing to an OC server.
@@ -777,8 +777,8 @@ public class OperationsService extends Service {
     /**
      * Notifies the currently subscribed listeners about the end of an operation.
      *
-     * @param operation         Finished operation.
-     * @param result            Result of the operation.
+     * @param operation Finished operation.
+     * @param result    Result of the operation.
      */
     protected void dispatchResultToOperationListeners(
             final RemoteOperation operation, final RemoteOperationResult result
