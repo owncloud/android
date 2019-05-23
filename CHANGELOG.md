@@ -1,4 +1,7 @@
-## 2.10.0 (March 2018)
+## 2.10.1 (April 2019)
+- Content provider improvements
+
+## 2.10.0 (March 2019)
 - Android 9 (P) support (contribution)
 - Allow light filtering apps (optional)
 - Show additional info (user ID, email) when sharing with users with same display name
@@ -15,7 +18,7 @@
   + Fix eye icon not visible to show/hide password in public shares (contribution)
   + Fix welcome wizard rotation (contribution)
 
-## 2.10.0 beta v1 (February 2018)
+## 2.10.0 beta v1 (February 2019)
 - Android 9 (P) support (contribution)
 - Select all and inverse when uploading files (contribution)
 - Sorting options in sharing view (contribution)
