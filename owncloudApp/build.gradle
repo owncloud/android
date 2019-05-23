@@ -43,7 +43,6 @@ dependencies {
 
     //Zooming Android ImageView.
     implementation 'com.github.chrisbanes:PhotoView:2.1.4'
-
     // Convert Java Objects into JSON and back
     implementation 'com.google.code.gson:gson:2.8.5'
 }
