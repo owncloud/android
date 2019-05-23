@@ -4,6 +4,7 @@
  * @author David A. Velasco
  * @author Christian Schabesberger
  * @author David González Verdugo
+ * @author Shashvat Kedia
  * Copyright (C) 2019 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
@@ -241,14 +242,6 @@ public class LocalFolderPickerActivity extends ToolbarActivity implements LocalF
             mCurrentFolder = folder;
         }
         updateActionBar();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void onFileClicked(File file) {
-        // nothing to do
     }
 
     @Override

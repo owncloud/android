@@ -33,22 +33,17 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.owncloud.android.R;
-import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.datamodel.ThumbnailsCacheManager;
-import com.owncloud.android.db.PreferenceManager;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.utils.BitmapUtils;
 import com.owncloud.android.utils.DisplayUtils;
-import com.owncloud.android.utils.FileStorageUtils;
 import com.owncloud.android.utils.MimetypeIconUtil;
 import com.owncloud.android.utils.PreferenceUtils;
 
 import java.io.File;
 import java.io.FileFilter;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.Vector;
 
 /**
  * This Adapter populates a ListView with all files and directories contained
@@ -63,7 +58,6 @@ public class LocalFileListAdapter extends BaseAdapter implements ListAdapter {
     private File[] mFiles = null;
     private boolean mJustFolders;
     private ListView parentList;
-    private ArrayList<File> checkedFiles = new ArrayList<File>();
 
     public LocalFileListAdapter(File directory, boolean justFolders, Context context) {
         mContext = context;
@@ -155,12 +149,6 @@ public class LocalFileListAdapter extends BaseAdapter implements ListAdapter {
                 if (parentList.getChoiceMode() == ListView.CHOICE_MODE_NONE) {
                     checkBoxV.setVisibility(View.GONE);
                 } else {
-                    if (checkedFiles.contains(mFiles[position])) {
-                        parentList.setItemChecked(position, true);
-                        checkBoxV.setImageResource(R.drawable.ic_checkbox_marked);
-                    } else {
-                        checkBoxV.setImageResource(R.drawable.ic_checkbox_blank_outline);
-                    }
                     checkBoxV.setVisibility(View.VISIBLE);
                 }
 
@@ -207,43 +195,6 @@ public class LocalFileListAdapter extends BaseAdapter implements ListAdapter {
             view.findViewById(R.id.sharedIcon).setVisibility(View.GONE);
         }
         return view;
-    }
-
-    public void checkFile(File file) {
-        checkedFiles.add(file);
-    }
-
-    public void uncheckFile(File file) {
-        checkedFiles.remove(file);
-    }
-
-    public boolean isAlreadyChecked(File file) {
-        if (checkedFiles.contains(file)) {
-            return true;
-        }
-        return false;
-    }
-
-    public ArrayList<String> getCheckedFiles() {
-        ArrayList<String> representation = new ArrayList<String>();
-        for (int i = 0; i < mFiles.length; i++) {
-            if (checkedFiles.contains(mFiles[i])) {
-                representation.add(mFiles[i].getName());
-            }
-        }
-        return representation;
-    }
-
-    public void setCheckedFiles(ArrayList<String> files) {
-        if (files != null && files.size() > 0) {
-            checkedFiles.clear();
-            for (int i = 0; i < mFiles.length; i++) {
-                if (files.contains(mFiles[i].getName())) {
-                    checkedFiles.add(mFiles[i]);
-                    files.remove(mFiles[i].getName());
-                }
-            }
-        }
     }
 
     @Override
@@ -295,68 +246,8 @@ public class LocalFileListAdapter extends BaseAdapter implements ListAdapter {
                 }
 
             });
-            if (mFiles.length > 0) {
-                mFiles = transformVecOCFilesToFilesArr(
-                        FileStorageUtils.sortFolder(transformFilesArrToVecOCFiles(mFiles),
-                                FileStorageUtils.mSortOrderUpload,
-                                FileStorageUtils.mSortAscendingUpload)
-                );
-            }
         }
 
         notifyDataSetChanged();
-    }
-
-    public void setSortOrder(Integer order, boolean isAscending) {
-        PreferenceManager.setSortOrder(order, mContext, FileStorageUtils.UPLOAD_SORT);
-        PreferenceManager.setSortAscending(isAscending, mContext, FileStorageUtils.UPLOAD_SORT);
-        FileStorageUtils.mSortOrderUpload = order;
-        FileStorageUtils.mSortAscendingUpload = isAscending;
-        if (mFiles != null && mFiles.length > 0) {
-            mFiles = transformVecOCFilesToFilesArr(
-                    FileStorageUtils.sortFolder(transformFilesArrToVecOCFiles(mFiles),
-                            FileStorageUtils.mSortOrderUpload,
-                            FileStorageUtils.mSortAscendingUpload)
-            );
-            if (parentList != null) {
-                for (int i = 0; i < mFiles.length; i++) {
-                    parentList.setItemChecked(i, false);
-                }
-            }
-            notifyDataSetChanged();
-        }
-    }
-
-    public int getNoOfFilesInDir() {
-        int count = 0;
-        if (mFiles != null) {
-            for (int i = 0; i < mFiles.length; i++) {
-                if (!mFiles[i].isDirectory()) {
-                    count++;
-                }
-            }
-        }
-        return count;
-    }
-
-    private Vector<OCFile> transformFilesArrToVecOCFiles(File[] files) {
-        Vector<OCFile> transformedFiles = new Vector<OCFile>();
-        OCFile transformedFile = null;
-        for (int i = 0; i < files.length; i++) {
-            transformedFile = new OCFile(files[i].getAbsolutePath());
-            transformedFile.setModificationTimestamp(files[i].lastModified());
-            transformedFile.setFileLength(files[i].length());
-            transformedFile.setMimetype(files[i].isDirectory() ? "DIR" : transformedFile.getMimetype());
-            transformedFiles.add(transformedFile);
-        }
-        return transformedFiles;
-    }
-
-    private File[] transformVecOCFilesToFilesArr(Vector<OCFile> files) {
-        File[] transformedFiles = new File[files.size()];
-        for (int i = 0; i < files.size(); i++) {
-            transformedFiles[i] = new File(files.get(i).getRemotePath());
-        }
-        return transformedFiles;
     }
 }

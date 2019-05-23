@@ -136,10 +136,10 @@ public class FileDisplayActivity extends FileActivity
     public static final String ACTION_DETAILS = "com.owncloud.android.ui.activity.action.DETAILS";
 
     public static final int REQUEST_CODE__SELECT_CONTENT_FROM_APPS = REQUEST_CODE__LAST_SHARED + 1;
-    public static final int REQUEST_CODE__SELECT_FILES_FROM_FILE_SYSTEM = REQUEST_CODE__LAST_SHARED + 2;
-    public static final int REQUEST_CODE__MOVE_FILES = REQUEST_CODE__LAST_SHARED + 3;
-    public static final int REQUEST_CODE__COPY_FILES = REQUEST_CODE__LAST_SHARED + 4;
-    public static final int REQUEST_CODE__UPLOAD_FROM_CAMERA = REQUEST_CODE__LAST_SHARED + 5;
+    public static final int REQUEST_CODE__MOVE_FILES = REQUEST_CODE__LAST_SHARED + 2;
+    public static final int REQUEST_CODE__COPY_FILES = REQUEST_CODE__LAST_SHARED + 3;
+    public static final int REQUEST_CODE__UPLOAD_FROM_CAMERA = REQUEST_CODE__LAST_SHARED + 4;
+    public static final int RESULT_OK_AND_MOVE = RESULT_FIRST_USER;
 
     private static final String TAG = FileDisplayActivity.class.getSimpleName();
 
@@ -683,17 +683,12 @@ public class FileDisplayActivity extends FileActivity
 
         // Hanndle calls form internal activities.
         if (requestCode == REQUEST_CODE__SELECT_CONTENT_FROM_APPS &&
-                (resultCode == RESULT_OK || resultCode == UploadFilesActivity.RESULT_OK_AND_MOVE)) {
+                (resultCode == RESULT_OK || resultCode == RESULT_OK_AND_MOVE)) {
 
             requestUploadOfContentFromApps(data, resultCode);
 
-        } else if (requestCode == REQUEST_CODE__SELECT_FILES_FROM_FILE_SYSTEM &&
-                (resultCode == RESULT_OK || resultCode == UploadFilesActivity.RESULT_OK_AND_MOVE)) {
-
-            requestUploadOfFilesFromFileSystem(data, resultCode);
-
         } else if (requestCode == REQUEST_CODE__UPLOAD_FROM_CAMERA) {
-            if (resultCode == RESULT_OK || resultCode == UploadFilesActivity.RESULT_OK_AND_MOVE) {
+            if (resultCode == RESULT_OK || resultCode == RESULT_OK_AND_MOVE) {
                 mFilesUploadHelper.onActivityResult(new FilesUploadHelper.OnCheckAvailableSpaceListener() {
                     @Override
                     public void onCheckAvailableSpaceStart() {
@@ -743,13 +738,6 @@ public class FileDisplayActivity extends FileActivity
         }
     }
 
-    private void requestUploadOfFilesFromFileSystem(Intent data, int resultCode) {
-        String[] filePaths = data.getStringArrayExtra(UploadFilesActivity.EXTRA_CHOSEN_FILES);
-        int behaviour = (resultCode == UploadFilesActivity.RESULT_OK_AND_MOVE)
-                ? FileUploader.LOCAL_BEHAVIOUR_MOVE : FileUploader.LOCAL_BEHAVIOUR_COPY;
-        requestUploadOfFilesFromFileSystem(filePaths, behaviour);
-    }
-
     private void requestUploadOfFilesFromFileSystem(String[] filePaths, int behaviour) {
         if (filePaths != null) {
             String[] remotePaths = new String[filePaths.length];
@@ -793,7 +781,7 @@ public class FileDisplayActivity extends FileActivity
             streamsToUpload.add(contentIntent.getData());
         }
 
-        int behaviour = (resultCode == UploadFilesActivity.RESULT_OK_AND_MOVE) ? FileUploader.LOCAL_BEHAVIOUR_MOVE :
+        int behaviour = (resultCode == RESULT_OK_AND_MOVE) ? FileUploader.LOCAL_BEHAVIOUR_MOVE :
                 FileUploader.LOCAL_BEHAVIOUR_COPY;
 
         OCFile currentDir = getCurrentDir();
