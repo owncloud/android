@@ -199,9 +199,8 @@ public class FileDisplayActivity extends FileActivity
         // setup toolbar
         setupToolbar();
 
-
         // setup drawer
-        if(!mOnlyAvailableOffline) {
+        if (!mOnlyAvailableOffline) {
             setupDrawer(R.id.nav_all_files);
         } else {
             setupDrawer(R.id.nav_only_available_offline);
@@ -849,9 +848,9 @@ public class FileDisplayActivity extends FileActivity
             if (getSecondFragment() == null) {
                 OCFile currentDir = getCurrentDir();
                 if (currentDir == null || currentDir.getParentId() == FileDataStorageManager.ROOT_PARENT_ID) {
-                    if(mOnlyAvailableOffline){
+                    if (mOnlyAvailableOffline) {
                         allFilesOption();
-                    }else{
+                    } else {
                         finish();
                     }
                     return;
@@ -1357,7 +1356,7 @@ public class FileDisplayActivity extends FileActivity
             chosenFile = getFile();     // if no file is passed, current file decides
         }
         super.updateActionBarTitleAndHomeButton(chosenFile);
-        if(chosenFile.getRemotePath().equals(OCFile.ROOT_PATH) && mOnlyAvailableOffline) {
+        if (chosenFile.getRemotePath().equals(OCFile.ROOT_PATH) && mOnlyAvailableOffline) {
             updateActionBarTitleAndHomeButtonByString(
                     getResources().getString(R.string.drawer_item_only_available_offline));
         }
@@ -1481,7 +1480,7 @@ public class FileDisplayActivity extends FileActivity
                                              RemoteOperationResult result) {
 
         if (getListOfFilesFragment().isSingleItemChecked() || result.isException() || !result.isSuccess()) {
-            if(result.getCode() != ResultCode.FORBIDDEN ||
+            if (result.getCode() != ResultCode.FORBIDDEN ||
                     (result.getCode() == ResultCode.FORBIDDEN && operation.isLastFileToRemove())) {
                 showSnackMessage(
                         ErrorMessageAdapter.getResultMessage(result, operation, getResources())
@@ -1918,17 +1917,17 @@ public class FileDisplayActivity extends FileActivity
     }
 
     public void allFilesOption() {
-        if(mOnlyAvailableOffline){
+        if (mOnlyAvailableOffline) {
             super.allFilesOption();
-        }else{
+        } else {
             browseToRoot();
         }
     }
 
     public void onlyAvailableOfflineOption() {
-        if(!mOnlyAvailableOffline){
+        if (!mOnlyAvailableOffline) {
             super.onlyAvailableOfflineOption();
-        }else{
+        } else {
             browseToRoot();
         }
     }
