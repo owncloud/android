@@ -1,3 +1,21 @@
+## 2.11.0 beta v1 (May 2019)
+- Send logs to support, enable it via new developer menu (contribution)
+- Logs search (contribution)
+- Shortcut to available offline files from side menu
+- Document provider: files and folders rename, edition and deletion.
+- Document provider: folder creation
+- Document provider: multiaccount support
+- UI improvements, including:
+  + Notch support
+- Bug fixes, including:
+  + Fix download progress bar still visible after successful download
+  + Fix UI glitch in warning icon when sharing a file publicly (contribution)
+  + Fix crash when sharing files with ownCloud and creating new folder (contribution)
+  + Fix canceling dialog in settings turns on setting (contribution)
+  + Bring back select all and select inverse icons to the app bar (contribution)
+  + Fix folder with brackets [ ] does not show the content
+  + Fix login fails with "§" in password
+
 ## 2.10.1 (April 2019)
 - Content provider improvements
 

@@ -43,7 +43,6 @@ dependencies {
 
     //Zooming Android ImageView.
     implementation 'com.github.chrisbanes:PhotoView:2.1.4'
-
     // Convert Java Objects into JSON and back
     implementation 'com.google.code.gson:gson:2.8.5'
 }
@@ -62,8 +61,8 @@ android {
         minSdkVersion 19
         targetSdkVersion 28
 
-        versionCode = 21001000
-        versionName = "2.10.1"
+        versionCode = 21002000
+        versionName = "2.11.0-beta.1"
 
         buildConfigField "String", gitRemote, "\"" + getGitOriginRemote() + "\""
         buildConfigField "String", commitSHA1, "\"" + getLatestGitHash() + "\""
