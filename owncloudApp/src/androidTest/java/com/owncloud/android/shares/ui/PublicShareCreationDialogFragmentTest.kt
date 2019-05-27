@@ -58,28 +58,6 @@ class PublicShareCreationDialogFragmentTest {
 
     private val file = mock(OCFile::class.java)
 
-    private val publicShareList = arrayListOf(
-        TestUtil.createPublicShare(
-            path = "/Documents/",
-            isFolder = true,
-            name = "Document link",
-            shareLink = "http://server:port/s/1"
-        ),
-        TestUtil.createPublicShare(
-            path = "/Documents/doc1",
-            isFolder = false,
-            name = "Document link",
-            shareLink = "http://server:port/s/2"
-        ),
-        TestUtil.createPublicShare(
-            shareWith = "1fa2P4QAq3412",
-            path = "/Documents/doc2",
-            isFolder = false,
-            name = "Document link 2",
-            shareLink = "http://server:port/s/3"
-        )
-    )
-
     @Test
     fun showDialogTitle() {
         loadPublicShareDialogFragment()
