@@ -470,7 +470,7 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
                         }
                         final ThumbnailsCacheManager.AsyncThumbnailDrawable asyncDrawable =
                                 new ThumbnailsCacheManager.AsyncThumbnailDrawable(
-                                        MainApp.getAppContext().getResources(),
+                                        MainApp.Companion.getAppContext().getResources(),
                                         thumbnail,
                                         task
                                 );

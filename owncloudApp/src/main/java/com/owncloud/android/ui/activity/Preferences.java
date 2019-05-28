@@ -23,12 +23,10 @@
 package com.owncloud.android.ui.activity;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
-import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -37,16 +35,13 @@ import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceManager;
-import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.owncloud.android.BuildConfig;
-import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.FingerprintManager;
 import com.owncloud.android.datamodel.OCFile;
@@ -482,12 +477,14 @@ public class Preferences extends PreferenceActivity {
             }
         }
 
-        // show item(s) only when you are developer
-        mLogger = findPreference(PREFERENCE_LOGGER);
-        mLogger.setOnPreferenceClickListener(preference -> {
-            Intent loggerIntent = new Intent(getApplicationContext(), LogHistoryActivity.class);
-            startActivity(loggerIntent);
-
+        boolean loggerEnabled = getResources().getBoolean(R.bool.logger_enabled) ||
+                BuildConfig.DEBUG || MainApp.Companion.isBeta();
+        Preference pLogger = findPreference(PREFERENCE_LOGGER);
+        if (pLogger != null) {
+            if (loggerEnabled) {
+                pLogger.setOnPreferenceClickListener(preference -> {
+                    Intent loggerIntent = new Intent(getApplicationContext(), LogHistoryActivity.class);
+                    startActivity(loggerIntent);
             return true;
         });
         showDeveloperItems(pCategoryMore);

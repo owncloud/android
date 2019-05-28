@@ -186,7 +186,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
     protected void setAccount(Account account, boolean savedAccount) {
         if (somethingToUpload()) {
             mAccountManager = (AccountManager) getSystemService(Context.ACCOUNT_SERVICE);
-            Account[] accounts = mAccountManager.getAccountsByType(MainApp.getAccountType());
+            Account[] accounts = mAccountManager.getAccountsByType(MainApp.Companion.getAccountType());
             if (accounts.length == 0) {
                 Log_OC.i(TAG, "No ownCloud account is available");
                 showDialog(DIALOG_NO_ACCOUNT);
@@ -260,7 +260,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
                             // Settings.ADD_ACCOUNT_SETTINGS
                             // and Settings.EXTRA_AUTHORITIES
                             Intent intent = new Intent(android.provider.Settings.ACTION_ADD_ACCOUNT);
-                            intent.putExtra("authorities", new String[]{MainApp.getAuthTokenType()});
+                            intent.putExtra("authorities", new String[]{MainApp.Companion.getAuthTokenType()});
                             startActivityForResult(intent, REQUEST_CODE__SETUP_ACCOUNT);
                         } else {
                             // since in API7 there is no direct call for
@@ -281,7 +281,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
                 });
                 return builder.create();
             case DIALOG_MULTIPLE_ACCOUNT:
-                Account accounts[] = mAccountManager.getAccountsByType(MainApp.getAccountType());
+                Account accounts[] = mAccountManager.getAccountsByType(MainApp.Companion.getAccountType());
                 CharSequence dialogItems[] = new CharSequence[accounts.length];
                 OwnCloudAccount oca;
                 for (int i = 0; i < dialogItems.length; ++i) {
@@ -303,7 +303,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
                 builder.setItems(dialogItems, new OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        setAccount(mAccountManager.getAccountsByType(MainApp.getAccountType())[which]);
+                        setAccount(mAccountManager.getAccountsByType(MainApp.Companion.getAccountType())[which]);
                         onAccountSet(mAccountWasRestored);
                         dialog.dismiss();
                         mAccountSelected = true;
@@ -399,7 +399,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
             if (resultCode == RESULT_CANCELED) {
                 finish();
             }
-            Account[] accounts = mAccountManager.getAccountsByType(MainApp.getAuthTokenType());
+            Account[] accounts = mAccountManager.getAccountsByType(MainApp.Companion.getAuthTokenType());
             if (accounts.length == 0) {
                 showDialog(DIALOG_NO_ACCOUNT);
             } else {

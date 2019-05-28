@@ -165,12 +165,10 @@ public class FileDisplayActivity extends FileActivity
 
         mLocalBroadcastManager = LocalBroadcastManager.getInstance(this);
 
-        if (savedInstanceState != null) {
-            Log.d(TAG, savedInstanceState.toString());
-        }
-
         /// Load of saved instance state
         if (savedInstanceState != null) {
+            Log.d(TAG, savedInstanceState.toString());
+
             mFileWaitingToPreview = savedInstanceState.getParcelable(FileDisplayActivity.KEY_WAITING_TO_PREVIEW);
             mSyncInProgress = savedInstanceState.getBoolean(KEY_SYNC_IN_PROGRESS);
             mWaitingToSend = savedInstanceState.getParcelable(FileDisplayActivity.KEY_WAITING_TO_SEND);
@@ -652,9 +650,9 @@ public class FileDisplayActivity extends FileActivity
     private void startSynchronization() {
         Log_OC.d(TAG, "Got to start sync");
         Log_OC.d(TAG, "Requesting sync for " + getAccount().name + " at " +
-                MainApp.getAuthority() + " with new API");
+                MainApp.Companion.getAuthority() + " with new API");
         SyncRequest.Builder builder = new SyncRequest.Builder();
-        builder.setSyncAdapter(getAccount(), MainApp.getAuthority());
+        builder.setSyncAdapter(getAccount(), MainApp.Companion.getAuthority());
         builder.setExpedited(true);
         builder.setManual(true);
         builder.syncOnce();
@@ -1698,7 +1696,7 @@ public class FileDisplayActivity extends FileActivity
                             );
                             synchFolderOp.execute(
                                     getStorageManager(),
-                                    MainApp.getAppContext(),
+                                    MainApp.Companion.getAppContext(),
                                     null,   // unneeded, handling via SyncBroadcastReceiver
                                     null
                             );

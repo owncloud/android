@@ -50,21 +50,21 @@ public class ProviderMeta {
         public static final String USER_QUOTAS_TABLE_NAME = "user_quotas";
 
         public static final Uri CONTENT_URI = Uri.parse("content://"
-                + MainApp.getAuthority() + "/");
+                + MainApp.Companion.getAuthority() + "/");
         public static final Uri CONTENT_URI_FILE = Uri.parse("content://"
-                + MainApp.getAuthority() + "/file");
+                + MainApp.Companion.getAuthority() + "/file");
         public static final Uri CONTENT_URI_DIR = Uri.parse("content://"
-                + MainApp.getAuthority() + "/dir");
+                + MainApp.Companion.getAuthority() + "/dir");
         public static final Uri CONTENT_URI_SHARE = Uri.parse("content://"
-                + MainApp.getAuthority() + "/shares");
+                + MainApp.Companion.getAuthority() + "/shares");
         public static final Uri CONTENT_URI_CAPABILITIES = Uri.parse("content://"
-                + MainApp.getAuthority() + "/capabilities");
+                + MainApp.Companion.getAuthority() + "/capabilities");
         public static final Uri CONTENT_URI_UPLOADS = Uri.parse("content://"
-                + MainApp.getAuthority() + "/uploads");
+                + MainApp.Companion.getAuthority() + "/uploads");
         public static final Uri CONTENT_URI_CAMERA_UPLOADS_SYNC = Uri.parse("content://"
-                + MainApp.getAuthority() + "/cameraUploadsSync");
+                + MainApp.Companion.getAuthority() + "/cameraUploadsSync");
         public static final Uri CONTENT_URI_QUOTAS = Uri.parse("content://"
-                + MainApp.getAuthority() + "/quotas");
+                + MainApp.Companion.getAuthority() + "/quotas");
 
         public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.owncloud.file";
         public static final String CONTENT_TYPE_ITEM = "vnd.android.cursor.item/vnd.owncloud.file";

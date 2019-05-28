@@ -387,7 +387,7 @@ public abstract class DrawerActivity extends ToolbarActivity {
      * updates the account list in the drawer.
      */
     private void updateAccountList() {
-        Account[] accounts = AccountManager.get(this).getAccountsByType(MainApp.getAccountType());
+        Account[] accounts = AccountManager.get(this).getAccountsByType(MainApp.Companion.getAccountType());
         if (mNavigationView != null && mDrawerLayout != null) {
             if (accounts.length > 0) {
                 repopulateAccountList(accounts);
@@ -596,7 +596,7 @@ public abstract class DrawerActivity extends ToolbarActivity {
     private void showMenu() {
         if (mNavigationView != null) {
             final int accountCount = AccountManager.get(this)
-                    .getAccountsByType(MainApp.getAccountType()).length;
+                    .getAccountsByType(MainApp.Companion.getAccountType()).length;
 
             if (mIsAccountChooserActive) {
                 mAccountChooserToggle.setImageResource(R.drawable.ic_up);
@@ -763,7 +763,7 @@ public abstract class DrawerActivity extends ToolbarActivity {
     private void populateDrawerOwnCloudAccounts() {
         mAccountsWithAvatars = new Account[3];
         Account[] accountsAll = AccountManager.get(this).getAccountsByType
-                (MainApp.getAccountType());
+                (MainApp.Companion.getAccountType());
         Account currentAccount = AccountUtils.getCurrentOwnCloudAccount(this);
 
         mAccountsWithAvatars[0] = currentAccount;
