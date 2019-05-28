@@ -76,6 +76,8 @@ dependencies {
     // Room
     implementation "androidx.room:room-runtime:$roomVersion"
     kapt "androidx.room:room-compiler:$roomVersion"
+
+    implementation 'org.koin:koin-androidx-viewmodel:2.0.0'
 }
 
 tasks.withType(Test) {

@@ -173,7 +173,7 @@ public class ConnectivityActionReceiver extends BroadcastReceiver {
                         //by using jobs in versions 5 or higher
                         if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.LOLLIPOP) {
                             requester.retryFailedUploads(
-                                    MainApp.getAppContext(),
+                                    MainApp.Companion.getAppContext(),
                                     null,
                                     // for the interrupted when Wifi fell, if any
                                     // (side effect: any upload failed due to network error will be
@@ -184,7 +184,7 @@ public class ConnectivityActionReceiver extends BroadcastReceiver {
                         }
 
                         requester.retryFailedUploads(
-                                MainApp.getAppContext(),
+                                MainApp.Companion.getAppContext(),
                                 null,
                                 UploadResult.DELAYED_FOR_WIFI,       // for the rest of enqueued when Wifi fell
                                 true

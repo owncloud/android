@@ -79,7 +79,7 @@ public class FeatureList {
             if (isFirstRun && item.shouldShowOnFirstRun()) {
                 features.add(item);
             } else if (!isFirstRun && !item.shouldShowOnFirstRun() &&
-                    MainApp.getVersionCode() >= itemVersionCode &&
+                    MainApp.Companion.getVersionCode() >= itemVersionCode &&
                     lastSeenVersionCode < itemVersionCode) {
                 features.add(item);
             }

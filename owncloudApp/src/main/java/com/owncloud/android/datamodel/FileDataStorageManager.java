@@ -429,7 +429,7 @@ public class FileDataStorageManager {
         Log_OC.d(TAG, "Sending " + operations.size() + " operations to FileContentProvider");
         try {
             if (getContentResolver() != null) {
-                results = getContentResolver().applyBatch(MainApp.getAuthority(), operations);
+                results = getContentResolver().applyBatch(MainApp.Companion.getAuthority(), operations);
 
             } else {
                 results = getContentProviderClient().applyBatch(operations);
@@ -830,7 +830,7 @@ public class FileDataStorageManager {
                 /// 3. apply updates in batch
                 try {
                     if (getContentResolver() != null) {
-                        getContentResolver().applyBatch(MainApp.getAuthority(), operations);
+                        getContentResolver().applyBatch(MainApp.Companion.getAuthority(), operations);
 
                     } else {
                         getContentProviderClient().applyBatch(operations);
@@ -1451,7 +1451,7 @@ public class FileDataStorageManager {
             Log_OC.d(TAG, "Sending " + operations.size() + " operations to FileContentProvider");
             try {
                 if (getContentResolver() != null) {
-                    getContentResolver().applyBatch(MainApp.getAuthority(), operations);
+                    getContentResolver().applyBatch(MainApp.Companion.getAuthority(), operations);
 
                 } else {
                     getContentProviderClient().applyBatch(operations);
@@ -1476,7 +1476,7 @@ public class FileDataStorageManager {
             Log_OC.d(TAG, "Sending " + operations.size() + " operations to FileContentProvider");
             try {
                 if (getContentResolver() != null) {
-                    getContentResolver().applyBatch(MainApp.getAuthority(), operations);
+                    getContentResolver().applyBatch(MainApp.Companion.getAuthority(), operations);
 
                 } else {
                     getContentProviderClient().applyBatch(operations);
@@ -1506,7 +1506,7 @@ public class FileDataStorageManager {
             Log_OC.d(TAG, "Sending " + operations.size() + " operations to FileContentProvider");
             try {
                 if (getContentResolver() != null) {
-                    getContentResolver().applyBatch(MainApp.getAuthority(), operations);
+                    getContentResolver().applyBatch(MainApp.Companion.getAuthority(), operations);
 
                 } else {
 
@@ -1707,7 +1707,7 @@ public class FileDataStorageManager {
             } catch (IllegalArgumentException illegalArgumentException) {
                 intent.setData(Uri.fromFile(new File(path)));
             }
-            MainApp.getAppContext().sendBroadcast(intent);
+            MainApp.Companion.getAppContext().sendBroadcast(intent);
         }
     }
 

@@ -314,7 +314,7 @@ public class UserProfilesRepository {
      */
     private SQLiteDatabase getSqLiteDatabase() {
 
-        File dbFile = MainApp.getAppContext().getDatabasePath(ProviderMeta.DB_NAME);
+        File dbFile = MainApp.Companion.getAppContext().getDatabasePath(ProviderMeta.DB_NAME);
 
         if (database == null) {
 

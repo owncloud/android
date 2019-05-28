@@ -46,15 +46,14 @@ class OCShareViewModel(
         localSharesDataSource = OCLocalSharesDataSource(),
         remoteSharesDataSource = OCRemoteSharesDataSource(
             OwnCloudClientManagerFactory.getDefaultSingleton().getClientFor(
-                OwnCloudAccount(account, MainApp.getAppContext()),
-                MainApp.getAppContext()
+                OwnCloudAccount(account, MainApp.appContext),
+                MainApp.appContext
             )
         ),
         filePathToShare = filePath,
         accountName = account.name
     )
 ) : ViewModel() {
-
     fun getSharesForFile(): LiveData<Resource<List<OCShare>>> =
         shareRepository.loadSharesForFile(shareTypes, reshares = true, subfiles = false)
 

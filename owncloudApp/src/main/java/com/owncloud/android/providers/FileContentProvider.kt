@@ -1152,7 +1152,7 @@ class FileContentProvider(val appExecutors: AppExecutors = AppExecutors()) : Con
             // we know the update was previously done in {link @FileActivity#onCreate} because the changes through
             // AccountManager are not synchronous
             val accounts = AccountManager.get(context).getAccountsByType(
-                MainApp.getAccountType()
+                MainApp.accountType
             )
             var serverUrl: String
             var username: String?

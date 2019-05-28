@@ -105,7 +105,7 @@ public class PatternManager {
     }
 
     private void checkPattern(Activity activity) {
-        Intent i = new Intent(MainApp.getAppContext(), PatternLockActivity.class);
+        Intent i = new Intent(MainApp.Companion.getAppContext(), PatternLockActivity.class);
         i.setAction(PatternLockActivity.ACTION_CHECK);
         activity.startActivity(i);
     }
@@ -120,7 +120,7 @@ public class PatternManager {
     }
 
     public boolean isPatternEnabled() {
-        SharedPreferences appPrefs = PreferenceManager.getDefaultSharedPreferences(MainApp.getAppContext());
+        SharedPreferences appPrefs = PreferenceManager.getDefaultSharedPreferences(MainApp.Companion.getAppContext());
         return appPrefs.getBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN, false);
     }
 

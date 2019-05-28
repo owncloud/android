@@ -44,8 +44,8 @@ class OCCapabilityViewModel(
         localCapabilitiesDataSource = OCLocalCapabilitiesDataSource(),
         remoteCapabilitiesDataSource = OCRemoteCapabilitiesDataSource(
             OwnCloudClientManagerFactory.getDefaultSingleton().getClientFor(
-                OwnCloudAccount(account, MainApp.getAppContext()),
-                MainApp.getAppContext()
+                OwnCloudAccount(account, MainApp.appContext),
+                MainApp.appContext
             )
         )
     )
