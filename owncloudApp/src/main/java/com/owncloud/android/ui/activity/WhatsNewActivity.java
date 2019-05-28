@@ -69,8 +69,10 @@ public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPa
         mProgress = findViewById(R.id.progressIndicator);
         mPager = findViewById(R.id.contentPanel);
 
+        boolean isBeta = MainApp.Companion.isBeta();
+
         FeaturesViewAdapter adapter = new FeaturesViewAdapter(getSupportFragmentManager(),
-                FeatureList.getFiltered(getLastSeenVersionCode(), isFirstRun(), MainApp.isBeta()));
+                FeatureList.getFiltered(getLastSeenVersionCode(), isFirstRun(), isBeta));
 
         mProgress.setNumberOfSteps(adapter.getCount());
         mPager.setAdapter(adapter);
@@ -94,7 +96,7 @@ public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPa
         // Wizard already shown
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor editor = pref.edit();
-        editor.putInt(KEY_LAST_SEEN_VERSION_CODE, MainApp.getVersionCode());
+        editor.putInt(KEY_LAST_SEEN_VERSION_CODE, MainApp.Companion.getVersionCode());
         editor.apply();
     }
 
@@ -122,7 +124,7 @@ public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPa
     }
 
     static private int getLastSeenVersionCode() {
-        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(MainApp.getAppContext());
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(MainApp.Companion.getAppContext());
         return pref.getInt(KEY_LAST_SEEN_VERSION_CODE, 0);
     }
 
@@ -130,7 +132,7 @@ public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPa
         if (getLastSeenVersionCode() != 0) {
             return false;
         }
-        return AccountUtils.getCurrentOwnCloudAccount(MainApp.getAppContext()) == null;
+        return AccountUtils.getCurrentOwnCloudAccount(MainApp.Companion.getAppContext()) == null;
     }
 
     static public void runIfNeeded(Context context) {
@@ -144,14 +146,15 @@ public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPa
     }
 
     static private boolean shouldShow(Context context) {
-        boolean showWizard = context.getResources().getBoolean(R.bool.wizard_enabled);
+        boolean isBeta = MainApp.Companion.isBeta();
+        boolean showWizard = context.getResources().getBoolean(R.bool.wizard_enabled) && !BuildConfig.DEBUG;
         return showWizard &&
                 ((isFirstRun() && context instanceof AccountAuthenticatorActivity) ||
                         (
                                 !(isFirstRun() && (context instanceof FileDisplayActivity)) &&
                                         !(context instanceof PassCodeActivity) &&
                                         (FeatureList.getFiltered(getLastSeenVersionCode(), isFirstRun(),
-                                                MainApp.isBeta()).length > 0)
+                                                isBeta).length > 0)
 
                         ));
     }

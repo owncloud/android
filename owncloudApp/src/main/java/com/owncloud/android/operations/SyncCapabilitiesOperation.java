@@ -57,7 +57,7 @@ public class SyncCapabilitiesOperation extends SyncOperation<RemoteCapability> {
 
             // server version is important; this fallback will try to get it from status.php
             // if capabilities API is not available
-            GetRemoteStatusOperation getStatus = new GetRemoteStatusOperation(MainApp.getAppContext());
+            GetRemoteStatusOperation getStatus = new GetRemoteStatusOperation(MainApp.Companion.getAppContext());
             RemoteOperationResult<OwnCloudVersion> statusResult = getStatus.execute(client);
             if (statusResult.isSuccess()) {
                 serverVersion = statusResult.getData();
@@ -74,7 +74,7 @@ public class SyncCapabilitiesOperation extends SyncOperation<RemoteCapability> {
         // library: com.owncloud.android.lib.common.accounts.AccountUtils#getCredentialsForAccount(...)
         // and com.owncloud.android.lib.common.accounts.AccountUtils#getServerVersionForAccount(...)
         if (serverVersion != null) {
-            AccountManager accountMngr = AccountManager.get(MainApp.getAppContext());
+            AccountManager accountMngr = AccountManager.get(MainApp.Companion.getAppContext());
             accountMngr.setUserData(
                     getStorageManager().getAccount(),
                     com.owncloud.android.lib.common.accounts.AccountUtils.Constants.KEY_OC_VERSION,

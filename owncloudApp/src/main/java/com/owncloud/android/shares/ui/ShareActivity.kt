@@ -30,11 +30,8 @@ import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.snackbar.Snackbar
 import com.owncloud.android.R
-import com.owncloud.android.ViewModelFactory
 import com.owncloud.android.capabilities.viewmodel.OCCapabilityViewModel
 import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.lib.common.operations.RemoteOperation
@@ -53,6 +50,7 @@ import com.owncloud.android.shares.ui.fragment.PublicShareDialogFragment
 import com.owncloud.android.shares.ui.fragment.ShareFileFragment
 import com.owncloud.android.shares.ui.fragment.ShareFragmentListener
 import com.owncloud.android.shares.viewmodel.OCShareViewModel
+import com.owncloud.android.testing.OpenForTesting
 import com.owncloud.android.ui.activity.FileActivity
 import com.owncloud.android.ui.asynctasks.GetSharesForFileAsyncTask
 import com.owncloud.android.ui.dialog.RemoveShareDialogFragment
@@ -61,10 +59,13 @@ import com.owncloud.android.ui.fragment.EditShareFragment
 import com.owncloud.android.ui.fragment.SearchShareesFragment
 import com.owncloud.android.ui.utils.showDialogFragment
 import com.owncloud.android.vo.Status
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
 /**
  * Activity for sharing files
  */
+@OpenForTesting
 class ShareActivity : FileActivity(), ShareFragmentListener {
     private var getSharesForFileAsyncTask: GetSharesForFileAsyncTask? = null
 
@@ -100,22 +101,19 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
     private val editShareFragment: EditShareFragment?
         get() = supportFragmentManager.findFragmentByTag(TAG_EDIT_SHARE_FRAGMENT) as EditShareFragment?
 
-    private var ocShareViewModelFactory: ViewModelProvider.Factory = ViewModelFactory.build {
-        OCShareViewModel(
+    private val ocShareViewModel: OCShareViewModel by viewModel {
+        parametersOf(
             file?.remotePath!!,
             account!!,
             listOf(ShareType.PUBLIC_LINK)
         )
     }
 
-    private var ocCapabilityViewModelFactory: ViewModelProvider.Factory = ViewModelFactory.build {
-        OCCapabilityViewModel(
-            account = account!!
+    private val ocCapabilityViewModel: OCCapabilityViewModel by viewModel {
+        parametersOf(
+            account!!
         )
     }
-
-    private lateinit var ocShareViewModel: OCShareViewModel
-    private lateinit var ocCapabilityViewModel: OCCapabilityViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -129,7 +127,7 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
 
         val ft = supportFragmentManager.beginTransaction()
 
-        if (savedInstanceState == null) {
+        if (savedInstanceState == null && file != null && account != null) {
             // Add Share fragment on first creation
             val fragment = ShareFileFragment.newInstance(file, account!!)
             ft.replace(
@@ -138,12 +136,6 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
             )
             ft.commit()
         }
-
-        ocShareViewModel = ViewModelProviders.of(this, ocShareViewModelFactory)
-            .get(OCShareViewModel::class.java)
-
-        ocCapabilityViewModel =
-            ViewModelProviders.of(this, ocCapabilityViewModelFactory).get(OCCapabilityViewModel::class.java)
     }
 
     override fun onAccountSet(stateWasRecovered: Boolean) {
@@ -573,10 +565,13 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
     companion object {
         private val TAG = ShareActivity::class.java.simpleName
 
-        private const val TAG_SHARE_FRAGMENT = "SHARE_FRAGMENT"
-        private const val TAG_SEARCH_FRAGMENT = "SEARCH_USER_AND_GROUPS_FRAGMENT"
-        private const val TAG_EDIT_SHARE_FRAGMENT = "EDIT_SHARE_FRAGMENT"
-        private const val TAG_PUBLIC_SHARE_DIALOG_FRAGMENT = "PUBLIC_SHARE_DIALOG_FRAGMENT"
-        private const val TAG_REMOVE_SHARE_DIALOG_FRAGMENT = "REMOVE_SHARE_DIALOG_FRAGMENT"
+        const val TAG_SHARE_FRAGMENT = "SHARE_FRAGMENT"
+        const val TAG_SEARCH_FRAGMENT = "SEARCH_USER_AND_GROUPS_FRAGMENT"
+        const val TAG_EDIT_SHARE_FRAGMENT = "EDIT_SHARE_FRAGMENT"
+        const val TAG_PUBLIC_SHARE_DIALOG_FRAGMENT = "PUBLIC_SHARE_DIALOG_FRAGMENT"
+        const val TAG_REMOVE_SHARE_DIALOG_FRAGMENT = "REMOVE_SHARE_DIALOG_FRAGMENT"
+
+        const val EXTRA_SHARE_VIEW_MODEL_FACTORY = "SHARE_VIEW_MODEL_FACTORY"
+        const val EXTRA_CAPABILITY_VIEW_MODEL_FACTORY = "CAPABILITY_VIEW_MODEL_FACTORY"
     }
 }

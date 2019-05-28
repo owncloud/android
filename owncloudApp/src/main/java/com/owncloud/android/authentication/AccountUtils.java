@@ -85,7 +85,7 @@ public class AccountUtils {
 
     public static Account[] getAccounts(Context context) {
         AccountManager accountManager = AccountManager.get(context);
-        return accountManager.getAccountsByType(MainApp.getAccountType());
+        return accountManager.getAccountsByType(MainApp.Companion.getAccountType());
     }
 
     public static boolean exists(String accountName, Context context) {
@@ -133,7 +133,7 @@ public class AccountUtils {
      */
     public static Account getOwnCloudAccountByName(Context context, String accountName) {
         Account[] ocAccounts = AccountManager.get(context).getAccountsByType(
-                MainApp.getAccountType());
+                MainApp.Companion.getAccountType());
         for (Account account : ocAccounts) {
             if (account.name.equals(accountName)) {
                 return account;
@@ -174,10 +174,10 @@ public class AccountUtils {
      */
     public static String getWebdavPath(OwnCloudVersion version, String authTokenType) {
         if (version != null) {
-            if (AccountTypeUtils.getAuthTokenTypeAccessToken(MainApp.getAccountType()).equals(authTokenType)) {
+            if (AccountTypeUtils.getAuthTokenTypeAccessToken(MainApp.Companion.getAccountType()).equals(authTokenType)) {
                 return ODAV_PATH;
             }
-            if (AccountTypeUtils.getAuthTokenTypeSamlSessionCookie(MainApp.getAccountType()).equals(authTokenType)) {
+            if (AccountTypeUtils.getAuthTokenTypeSamlSessionCookie(MainApp.Companion.getAccountType()).equals(authTokenType)) {
                 return SAML_SSO_PATH;
             }
             return WEBDAV_PATH_4_0_AND_LATER;
@@ -202,7 +202,7 @@ public class AccountUtils {
 
             if (currentAccountVersion == null) {
                 Log_OC.i(TAG, "Upgrading accounts to account version #" + ACCOUNT_VERSION);
-                Account[] ocAccounts = accountMgr.getAccountsByType(MainApp.getAccountType());
+                Account[] ocAccounts = accountMgr.getAccountsByType(MainApp.Companion.getAccountType());
                 String serverUrl, username, newAccountName, password;
                 Account newAccount;
                 for (Account account : ocAccounts) {
@@ -218,7 +218,7 @@ public class AccountUtils {
                         Log_OC.d(TAG, "Upgrading " + account.name + " to " + newAccountName);
 
                         // create the new account
-                        newAccount = new Account(newAccountName, MainApp.getAccountType());
+                        newAccount = new Account(newAccountName, MainApp.Companion.getAccountType());
                         password = accountMgr.getPassword(account);
                         accountMgr.addAccountExplicitly(newAccount, (password != null) ? password : "", null);
 
@@ -312,9 +312,9 @@ public class AccountUtils {
         if (account != null) {
             // capabilities are now the preferred source for version info
             FileDataStorageManager fileDataStorageManager = new FileDataStorageManager(
-                    MainApp.getAppContext(),
+                    MainApp.Companion.getAppContext(),
                     account,
-                    MainApp.getAppContext().getContentResolver()
+                    MainApp.Companion.getAppContext().getContentResolver()
             );
             RemoteCapability capability = fileDataStorageManager.getCapability(account.name);
             if (capability != null) {
@@ -322,7 +322,7 @@ public class AccountUtils {
 
             } else {
                 // legacy: AccountManager as source of version info
-                AccountManager accountMgr = AccountManager.get(MainApp.getAppContext());
+                AccountManager accountMgr = AccountManager.get(MainApp.Companion.getAppContext());
                 String serverVersionStr = accountMgr.getUserData(account, Constants.KEY_OC_VERSION);
                 if (serverVersionStr != null) {
                     serverVersion = new OwnCloudVersion(serverVersionStr);
