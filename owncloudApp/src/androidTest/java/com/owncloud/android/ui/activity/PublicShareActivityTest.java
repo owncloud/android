@@ -134,7 +134,6 @@ public class PublicShareActivityTest {
 
     @Before
     public void init() {
-
         // UiDevice available from API level 17
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
