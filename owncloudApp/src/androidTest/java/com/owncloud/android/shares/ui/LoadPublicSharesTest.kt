@@ -8,9 +8,6 @@ import android.os.Parcelable
 import androidx.lifecycle.MutableLiveData
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions
-import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
@@ -23,7 +20,7 @@ import com.owncloud.android.capabilities.db.OCCapability
 import com.owncloud.android.capabilities.viewmodel.OCCapabilityViewModel
 import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.lib.common.accounts.AccountUtils
-import com.owncloud.android.lib.resources.status.CapabilityBooleanType
+import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.status.OwnCloudVersion
 import com.owncloud.android.shares.db.OCShare
 import com.owncloud.android.shares.viewmodel.OCShareViewModel
@@ -45,7 +42,7 @@ import org.mockito.Mockito.`when`
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.spy
 
-class CreatePublicShareTest {
+class LoadPublicSharesTest {
     @Rule
     @JvmField
     val activityRule = ActivityTestRule(
@@ -54,25 +51,23 @@ class CreatePublicShareTest {
         false
     )
 
-    private lateinit var file: OCFile
-
     private val publicShares = arrayListOf(
         TestUtil.createPublicShare(
             path = "/Photos/image.jpg",
             isFolder = false,
-            name = "image.jpg link",
+            name = "Image link",
             shareLink = "http://server:port/s/1"
         ),
         TestUtil.createPublicShare(
             path = "/Photos/image.jpg",
             isFolder = false,
-            name = "image.jpg link (2)",
+            name = "Image link 2",
             shareLink = "http://server:port/s/2"
         ),
         TestUtil.createPublicShare(
             path = "/Photos/image.jpg",
             isFolder = false,
-            name = "image.jpg link (3)",
+            name = "Image link 3",
             shareLink = "http://server:port/s/3"
         )
     )
@@ -141,13 +136,12 @@ class CreatePublicShareTest {
     fun setUp() {
         val intent = spy(Intent::class.java)
 
-        file = getOCFileForTesting("image.jpg")
+        val file = getOCFileForTesting("image.jpg")
 
         `when`(intent.getParcelableExtra(FileActivity.EXTRA_FILE) as? Parcelable).thenReturn(file)
         intent.putExtra(FileActivity.EXTRA_FILE, file)
 
-        `when`(ocCapabilityViewModel.getCapabilityForAccount(false)).thenReturn(capabilitiesLiveData)
-        `when`(ocCapabilityViewModel.getCapabilityForAccount(true)).thenReturn(capabilitiesLiveData)
+        `when`(ocCapabilityViewModel.getCapabilityForAccount()).thenReturn(capabilitiesLiveData)
         `when`(ocShareViewModel.getSharesForFile()).thenReturn(sharesLiveData)
 
         stopKoin()
@@ -170,88 +164,40 @@ class CreatePublicShareTest {
     }
 
     @Test
-    fun createPublicShareWithNoPublicSharesYet() {
-        val newPublicShare = publicShares[0]
-
-        loadCapabilitiesSuccessfully(
-            TestUtil.createCapability(
-                versionString = "10.1.1",
-                sharingPublicMultiple = CapabilityBooleanType.TRUE.value
-            )
-        )
-
-        `when`(
-            ocShareViewModel.insertPublicShareForFile(
-                1,
-                newPublicShare.name!!,
-                "",
-                -1,
-                false
-            )
-        ).thenReturn(sharesLiveData)
-
-        // 1. Open dialog to create new public share
-        onView(withId(R.id.addPublicLinkButton)).perform(click())
-
-        // 2. Fill fields
-        onView(withId(R.id.shareViaLinkNameValue)).perform(ViewActions.typeText(newPublicShare.name))
-
-        // 3. Save share
-        onView(withId(R.id.saveButton)).perform(click())
-
-        // 4. New share properly created
-        sharesLiveData.postValue(
-            Resource.success(
-                arrayListOf(newPublicShare)
-            )
-        )
-
-        // Check whether the dialog to create the public share has been properly closed
-        onView(withText(R.string.share_via_link_create_title)).check(doesNotExist())
-
-        onView(withText(newPublicShare.name)).check(matches(isDisplayed()))
+    fun showLoadingCapabilitiesDialog() {
+        capabilitiesLiveData.postValue(Resource.loading(TestUtil.createCapability()))
+        onView(withId(R.id.loadingLayout)).check(matches(isDisplayed()))
     }
 
     @Test
-    fun createPublicShareWithAlreadyExistingShares() {
-        loadCapabilitiesSuccessfully(
-            TestUtil.createCapability(
-                versionString = "10.1.1",
-                sharingPublicMultiple = CapabilityBooleanType.TRUE.value
+    fun showLoadingSharesDialog() {
+        loadCapabilitiesSuccessfully()
+        sharesLiveData.postValue(Resource.loading(publicShares))
+        onView(withId(R.id.loadingLayout)).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun showErrorWhenLoadingCapabilities() {
+        capabilitiesLiveData.postValue(
+            Resource.error(
+                RemoteOperationResult.ResultCode.SERVICE_UNAVAILABLE
             )
         )
 
-        val existingPublicShares = publicShares.take(2) as ArrayList<OCShare>
+        onView(withId(R.id.snackbar_text)).check(matches(withText(R.string.service_unavailable)))
+    }
 
-        loadSharesSuccessfully(
-            existingPublicShares
-        )
-
-        val newPublicShare = publicShares[2]
-
-        `when`(
-            ocShareViewModel.insertPublicShareForFile(
-                1,
-                newPublicShare.name!!,
-                "",
-                -1,
-                false
-            )
-        ).thenReturn(sharesLiveData)
-
-        onView(withId(R.id.addPublicLinkButton)).perform(click())
-        onView(withId(R.id.saveButton)).perform(click())
+    @Test
+    fun showErrorWhenLoadingShares() {
+        loadCapabilitiesSuccessfully()
 
         sharesLiveData.postValue(
-            Resource.success(
-                publicShares
+            Resource.error(
+                RemoteOperationResult.ResultCode.SERVICE_UNAVAILABLE,
+                data = publicShares
             )
         )
-
-        // Check whether the dialog to create the public share has been properly closed
-        onView(withText(R.string.share_via_link_create_title)).check(doesNotExist())
-
-        onView(withText(newPublicShare.name)).check(matches(isDisplayed()))
+        onView(withId(R.id.snackbar_text)).check(matches(withText(R.string.service_unavailable)))
     }
 
     private fun getOCFileForTesting(name: String = "default") = OCFile("/Photos").apply {
@@ -268,9 +214,5 @@ class CreatePublicShareTest {
                 capability
             )
         )
-    }
-
-    private fun loadSharesSuccessfully(shares: ArrayList<OCShare> = publicShares) {
-        sharesLiveData.postValue(Resource.success(shares))
     }
 }

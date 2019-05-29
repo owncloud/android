@@ -23,6 +23,7 @@ import android.accounts.Account
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers
+import androidx.test.espresso.matcher.ViewMatchers.hasSibling
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility
 import androidx.test.espresso.matcher.ViewMatchers.withId
@@ -102,6 +103,12 @@ class ShareFileFragmentTest {
     fun showPublicShares() {
         loadShareFileFragment()
         onView(withText("Image link")).check(matches(isDisplayed()))
+        onView(withText("Image link")).check(matches(hasSibling(withId(R.id.getPublicLinkButton))))
+            .check(matches(isDisplayed()))
+        onView(withText("Image link")).check(matches(hasSibling(withId(R.id.deletePublicLinkButton))))
+            .check(matches(isDisplayed()))
+        onView(withText("Image link")).check(matches(hasSibling(withId(R.id.editPublicLinkButton))))
+            .check(matches(isDisplayed()))
         onView(withText("Image link 2")).check(matches(isDisplayed()))
         onView(withText("Image link 3")).check(matches(isDisplayed()))
     }
