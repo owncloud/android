@@ -2,12 +2,18 @@ package com.owncloud.android.shares.ui
 
 import android.accounts.Account
 import android.accounts.AccountManager
+import android.content.Context
 import android.content.Intent
 import android.os.Parcelable
 import androidx.lifecycle.MutableLiveData
+import androidx.test.core.app.ApplicationProvider
+import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
-import com.owncloud.android.MainApp.Companion.accountType
+import com.owncloud.android.R
 import com.owncloud.android.authentication.AccountAuthenticator.KEY_AUTH_TOKEN_TYPE
 import com.owncloud.android.capabilities.db.OCCapability
 import com.owncloud.android.capabilities.viewmodel.OCCapabilityViewModel
@@ -20,18 +26,19 @@ import com.owncloud.android.ui.activity.FileActivity
 import com.owncloud.android.utils.AccountsManager
 import com.owncloud.android.utils.TestUtil
 import com.owncloud.android.vo.Resource
-import org.junit.After
+import org.junit.AfterClass
 import org.junit.Before
+import org.junit.BeforeClass
 import org.junit.Rule
 import org.junit.Test
+import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
-import org.koin.core.context.loadKoinModules
+import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.module
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.spy
-import org.mockito.Spy
 
 class CreatePublicShareTest {
     @Rule
@@ -42,28 +49,92 @@ class CreatePublicShareTest {
         false
     )
 
-    private val targetContext = InstrumentationRegistry.getInstrumentation().targetContext
+    private val publicShares = arrayListOf(
+        TestUtil.createPublicShare(
+            path = "/Photos/image.jpg",
+            isFolder = false,
+            name = "Image link",
+            shareLink = "http://server:port/s/1"
+        ),
+        TestUtil.createPublicShare(
+            path = "/Photos/image.jpg",
+            isFolder = false,
+            name = "Image link 2",
+            shareLink = "http://server:port/s/2"
+        ),
+        TestUtil.createPublicShare(
+            path = "/Photos/image.jpg",
+            isFolder = false,
+            name = "Image link 3",
+            shareLink = "http://server:port/s/3"
+        )
+    )
 
     private val capabilitiesLiveData = MutableLiveData<Resource<OCCapability>>()
     private val sharesLiveData = MutableLiveData<Resource<List<OCShare>>>()
 
-    var ocCapabilityViewModel = mock(OCCapabilityViewModel::class.java)
-    var ocShareViewModel = mock(OCShareViewModel::class.java)
+    private val ocCapabilityViewModel = mock(OCCapabilityViewModel::class.java)
+    private val ocShareViewModel = mock(OCShareViewModel::class.java)
 
-    @Spy
-    val account = Account("admin", "owncloud")
+    companion object {
+        private val targetContext = InstrumentationRegistry.getInstrumentation().targetContext
+        private val account = Account("admin", "owncloud")
 
-    @Spy
-    val file = OCFile("/test")
+        @BeforeClass
+        @JvmStatic
+        fun init() {
+            addAccount()
+        }
+
+        @AfterClass
+        @JvmStatic
+        fun cleanUp() {
+            AccountsManager.deleteAllAccounts(targetContext)
+        }
+
+        private fun addAccount() {
+            // obtaining an AccountManager instance
+            val accountManager = AccountManager.get(targetContext)
+
+            Thread(Runnable {
+                accountManager.addAccountExplicitly(account, "a", null)
+
+                // include account version, user, server version and token with the new account
+                accountManager.setUserData(
+                    account,
+                    AccountUtils.Constants.KEY_OC_VERSION,
+                    OwnCloudVersion("10.2").toString()
+                )
+                accountManager.setUserData(
+                    account,
+                    AccountUtils.Constants.KEY_OC_BASE_URL,
+                    "serverUrl:port"
+                )
+                accountManager.setUserData(
+                    account,
+                    AccountUtils.Constants.KEY_DISPLAY_NAME,
+                    "admin"
+                )
+                accountManager.setUserData(
+                    account,
+                    AccountUtils.Constants.KEY_OC_ACCOUNT_VERSION,
+                    "1"
+                )
+
+                accountManager.setAuthToken(
+                    account,
+                    KEY_AUTH_TOKEN_TYPE,
+                    "AUTH_TOKEN"
+                )
+            }).start()
+        }
+    }
 
     @Before
     fun setUp() {
-        addAccount()
-
         val intent = spy(Intent::class.java)
 
-        `when`(intent.getParcelableExtra(FileActivity.EXTRA_ACCOUNT) as? Parcelable).thenReturn(account)
-        intent.putExtra(FileActivity.EXTRA_ACCOUNT, account)
+        val file = getOCFileForTesting("image.jpg")
 
         `when`(intent.getParcelableExtra(FileActivity.EXTRA_FILE) as? Parcelable).thenReturn(file)
         intent.putExtra(FileActivity.EXTRA_FILE, file)
@@ -71,64 +142,55 @@ class CreatePublicShareTest {
         `when`(ocCapabilityViewModel.getCapabilityForAccount()).thenReturn(capabilitiesLiveData)
         `when`(ocShareViewModel.getSharesForFile()).thenReturn(sharesLiveData)
 
-        loadKoinModules(module(override = true) {
-            viewModel {
-                ocCapabilityViewModel
-            }
-            viewModel {
-                ocShareViewModel
-            }
-        })
+        stopKoin()
+
+        startKoin {
+            androidContext(ApplicationProvider.getApplicationContext<Context>())
+            modules(
+                module(override = true) {
+                    viewModel {
+                        ocCapabilityViewModel
+                    }
+                    viewModel {
+                        ocShareViewModel
+                    }
+                }
+            )
+        }
 
         activityRule.launchActivity(intent)
     }
 
     @Test
-    fun letsSee() {
-        Thread.sleep(10000)
+    fun showLoadingCapabilitiesDialog() {
+        capabilitiesLiveData.postValue(Resource.loading(TestUtil.createCapability()))
+        onView(withId(R.id.loadingLayout)).check(matches(isDisplayed()))
     }
 
-    @After
-    fun cleanUp() {
-        stopKoin()
-        AccountsManager.deleteAllAccounts(targetContext)
+    @Test
+    fun showLoadingSharesDialog() {
+        loadCapabilitiesSuccessfully()
+        sharesLiveData.postValue(Resource.loading(publicShares))
+        onView(withId(R.id.loadingLayout)).check(matches(isDisplayed()))
     }
 
-    private val KEY_AUTH_TOKEN_TYPE = "AUTH_TOKEN_TYPE"
-    private val KEY_AUTH_TOKEN = "AUTH_TOKEN"
-    private val version = "10.2"
+    private fun getOCFileForTesting(name: String = "default") = OCFile("/Photos").apply {
+        availableOfflineStatus = OCFile.AvailableOfflineStatus.NOT_AVAILABLE_OFFLINE
+        fileName = name
+        fileId = 9456985479
+        remoteId = "1"
+        privateLink = "private link"
+    }
 
-    private fun addAccount(): Account {
-        // obtaining an AccountManager instance
-        val accountManager = AccountManager.get(targetContext)
-
-        Thread(Runnable {
-            accountManager.addAccountExplicitly(account, "a", null)
-
-            // include account version, user, server version and token with the new account
-            accountManager.setUserData(
-                account,
-                AccountUtils.Constants.KEY_OC_VERSION,
-                OwnCloudVersion(version).toString()
+    private fun loadCapabilitiesSuccessfully(capability: OCCapability = TestUtil.createCapability()) {
+        capabilitiesLiveData.postValue(
+            Resource.success(
+                capability
             )
-            accountManager.setUserData(
-                account,
-                AccountUtils.Constants.KEY_OC_BASE_URL,
-                "10.40.40.198:29000"
-            )
-            accountManager.setUserData(
-                account,
-                AccountUtils.Constants.KEY_DISPLAY_NAME,
-                "user1"
-            )
+        )
+    }
 
-            accountManager.setAuthToken(
-                account,
-                KEY_AUTH_TOKEN_TYPE,
-                KEY_AUTH_TOKEN
-            )
-        }).start()
-
-        return account
+    private fun loadSharesSuccessfully(shares: ArrayList<OCShare> = publicShares) {
+        sharesLiveData.postValue(Resource.success(shares))
     }
 }
