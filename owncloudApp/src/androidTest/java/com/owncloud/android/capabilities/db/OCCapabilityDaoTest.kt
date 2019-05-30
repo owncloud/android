@@ -78,9 +78,7 @@ class OCCapabilityDaoTest {
     @Test
     fun getNonExistingCapabilities() {
         ocCapabilityDao.insert(
-            listOf(
-                TestUtil.createCapability("user@server", 10, 9, 8, "10.1.4")
-            )
+            TestUtil.createCapability("user@server", 10, 9, 8, "10.1.4")
         )
 
         val capability = getValue(
@@ -94,15 +92,13 @@ class OCCapabilityDaoTest {
     @Test
     fun replaceCapabilityIfAlreadyExists_exists() {
         ocCapabilityDao.insert(
-            listOf(
-                TestUtil.createCapability(
-                    "admin@server",
-                    3,
-                    2,
-                    1,
-                    "3.7.5",
-                    sharingPublicPasswordEnforced = CapabilityBooleanType.FALSE.value
-                )
+            TestUtil.createCapability(
+                "admin@server",
+                3,
+                2,
+                1,
+                "3.7.5",
+                sharingPublicPasswordEnforced = CapabilityBooleanType.FALSE.value
             )
         )
 
@@ -136,15 +132,13 @@ class OCCapabilityDaoTest {
     @Test
     fun replacePublicShareIfAlreadyExists_doesNotExist() {
         ocCapabilityDao.insert(
-            listOf(
-                TestUtil.createCapability(
-                    "cto@server",
-                    10,
-                    8,
-                    6,
-                    "10.0.2",
-                    sharingPublicPasswordEnforcedReadOnly = CapabilityBooleanType.FALSE.value
-                )
+            TestUtil.createCapability(
+                "cto@server",
+                10,
+                8,
+                6,
+                "10.0.2",
+                sharingPublicPasswordEnforcedReadOnly = CapabilityBooleanType.FALSE.value
             )
         )
 

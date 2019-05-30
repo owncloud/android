@@ -38,6 +38,9 @@ abstract class OCCapabilityDao {
     ): LiveData<OCCapability>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
+    abstract fun insert(ocCapability: OCCapability): Long
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract fun insert(ocCapabilities: List<OCCapability>): List<Long>
 
     @Query(
