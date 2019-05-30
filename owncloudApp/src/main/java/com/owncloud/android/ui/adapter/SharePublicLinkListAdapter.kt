@@ -61,7 +61,7 @@ class SharePublicLinkListAdapter(
             val share = mPublicLinks[position]
 
             // If there's no name, set the token as name
-            view.publicLinkName.text = if (share.name?.isEmpty() == true) share.token else share.name
+            view.publicLinkName.text = if (share.name.isNullOrEmpty()) share.token else share.name
 
             // bind listener to get link
             view.getPublicLinkButton.setOnClickListener { mListener.copyOrSendPublicLink(mPublicLinks[position]) }
