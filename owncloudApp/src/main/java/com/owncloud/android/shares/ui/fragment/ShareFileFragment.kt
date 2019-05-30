@@ -412,11 +412,11 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
         }
 
         if (!enableMultiplePublicSharing()) {
-            if (publicLinks?.size == 0) {
+            if (publicLinks?.isNullOrEmpty() == true) {
                 addPublicLinkButton.visibility = View.VISIBLE
-            } else if (publicLinks?.size!! >= 1) {
-                addPublicLinkButton.visibility = View.INVISIBLE
+                return
             }
+            addPublicLinkButton.visibility = View.INVISIBLE
         }
     }
 

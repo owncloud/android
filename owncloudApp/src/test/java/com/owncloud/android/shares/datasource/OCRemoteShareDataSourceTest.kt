@@ -89,28 +89,28 @@ class OCRemoteShareDataSourceTest {
         )
 
         assertThat(remoteOperationResult, notNullValue())
-        assertEquals(remoteOperationResult.data.shares.size, 3)
+        assertEquals(3, remoteOperationResult.data.shares.size)
 
         val publicShare1 = remoteOperationResult.data.shares.get(0)
 
-        assertEquals(publicShare1.path, "/Photos/")
-        assertEquals(publicShare1.isFolder, true)
-        assertEquals(publicShare1.name, "Photos folder link")
-        assertEquals(publicShare1.shareLink, "http://server:port/s/1")
+        assertEquals("/Photos/", publicShare1.path)
+        assertEquals(true, publicShare1.isFolder)
+        assertEquals("Photos folder link", publicShare1.name)
+        assertEquals("http://server:port/s/1", publicShare1.shareLink)
 
         val publicShare2 = remoteOperationResult.data.shares.get(1)
 
-        assertEquals(publicShare2.path, "/Photos/image1.jpg")
-        assertEquals(publicShare2.isFolder, false)
-        assertEquals(publicShare2.name, "Image 1 link")
-        assertEquals(publicShare2.shareLink, "http://server:port/s/2")
+        assertEquals("/Photos/image1.jpg", publicShare2.path)
+        assertEquals(false, publicShare2.isFolder)
+        assertEquals("Image 1 link", publicShare2.name)
+        assertEquals("http://server:port/s/2", publicShare2.shareLink)
 
         val publicShare3 = remoteOperationResult.data.shares.get(2)
 
-        assertEquals(publicShare3.path, "/Photos/image2.jpg")
-        assertEquals(publicShare3.isFolder, false)
-        assertEquals(publicShare3.name, "Image 2 link")
-        assertEquals(publicShare3.shareLink, "http://server:port/s/3")
+        assertEquals("/Photos/image2.jpg", publicShare3.path)
+        assertEquals(false, publicShare3.isFolder)
+        assertEquals("Image 2 link", publicShare3.name)
+        assertEquals("http://server:port/s/3", publicShare3.shareLink)
     }
 
     @Test
@@ -149,16 +149,16 @@ class OCRemoteShareDataSourceTest {
         )
 
         assertThat(remoteOperationResult, notNullValue())
-        assertEquals(remoteOperationResult.data.shares.size, 1)
+        assertEquals(1, remoteOperationResult.data.shares.size)
 
         val publicShareAdded = remoteOperationResult.data.shares.get(0)
 
-        assertEquals(publicShareAdded.shareWith, "")
-        assertEquals(publicShareAdded.permissions, 1)
-        assertEquals(publicShareAdded.name, "img1 link")
-        assertEquals(publicShareAdded.path, "Photos/img1.png")
-        assertEquals(publicShareAdded.isFolder, false)
-        assertEquals(publicShareAdded.shareLink, "http://server:port/s/112ejbhdasyd1")
+        assertEquals("", publicShareAdded.shareWith)
+        assertEquals(1, publicShareAdded.permissions)
+        assertEquals("img1 link", publicShareAdded.name)
+        assertEquals("Photos/img1.png", publicShareAdded.path)
+        assertEquals(false, publicShareAdded.isFolder)
+        assertEquals("http://server:port/s/112ejbhdasyd1", publicShareAdded.shareLink)
     }
 
     @Test
@@ -191,9 +191,9 @@ class OCRemoteShareDataSourceTest {
 
         val publicSharesAdded = remoteOperationResult.data
 
-        assertEquals(publicSharesAdded.shares.size, 0)
-        assertEquals(remoteOperationResult.code, RemoteOperationResult.ResultCode.SHARE_NOT_FOUND)
-        assertEquals(remoteOperationResult.httpPhrase, httpPhrase)
+        assertEquals(0, publicSharesAdded.shares.size)
+        assertEquals(RemoteOperationResult.ResultCode.SHARE_NOT_FOUND, remoteOperationResult.code)
+        assertEquals(httpPhrase, remoteOperationResult.httpPhrase)
     }
 
     @Test
@@ -232,16 +232,16 @@ class OCRemoteShareDataSourceTest {
         )
 
         assertThat(remoteOperationResult, notNullValue())
-        assertEquals(remoteOperationResult.data.shares.size, 1)
+        assertEquals(1, remoteOperationResult.data.shares.size)
 
         val publicShareUpdated = remoteOperationResult.data.shares[0]
 
-        assertEquals(publicShareUpdated.name, "video1 link updated")
-        assertEquals(publicShareUpdated.path, "Videos/video1.mp4")
-        assertEquals(publicShareUpdated.isFolder, false)
-        assertEquals(publicShareUpdated.expirationDate, 2000)
-        assertEquals(publicShareUpdated.permissions, 1)
-        assertEquals(publicShareUpdated.shareLink, "http://server:port/s/1275farv")
+        assertEquals("video1 link updated", publicShareUpdated.name)
+        assertEquals("Videos/video1.mp4", publicShareUpdated.path)
+        assertEquals(false, publicShareUpdated.isFolder)
+        assertEquals(2000, publicShareUpdated.expirationDate)
+        assertEquals(1, publicShareUpdated.permissions)
+        assertEquals("http://server:port/s/1275farv", publicShareUpdated.shareLink)
     }
 
     @Test
@@ -260,6 +260,6 @@ class OCRemoteShareDataSourceTest {
         val remoteOperationResult = ocRemoteSharesDataSource.deleteShare(1, removeRemoteShareOperation)
 
         assertThat(remoteOperationResult, notNullValue())
-        assertEquals(remoteOperationResult.isSuccess, true)
+        assertEquals(true, remoteOperationResult.isSuccess)
     }
 }

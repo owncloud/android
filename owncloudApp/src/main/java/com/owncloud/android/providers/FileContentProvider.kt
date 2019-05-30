@@ -25,7 +25,14 @@
 package com.owncloud.android.providers
 
 import android.accounts.AccountManager
-import android.content.*
+import android.content.ContentProvider
+import android.content.ContentProviderOperation
+import android.content.ContentProviderResult
+import android.content.ContentUris
+import android.content.ContentValues
+import android.content.Context
+import android.content.OperationApplicationException
+import android.content.UriMatcher
 import android.database.Cursor
 import android.database.SQLException
 import android.database.sqlite.SQLiteDatabase
@@ -211,8 +218,8 @@ class FileContentProvider(val appExecutors: AppExecutors = AppExecutors()) : Con
             }
             SHARES -> {
                 val shareId = OwncloudDatabase.getDatabase(context).shareDao().insert(
-                    listOf(OCShare.fromContentValues(values))
-                )[0]
+                    OCShare.fromContentValues(values)
+                )
 
                 if (shareId <= 0) throw SQLException("ERROR $uri")
                 return ContentUris.withAppendedId(ProviderTableMeta.CONTENT_URI_SHARE, shareId)

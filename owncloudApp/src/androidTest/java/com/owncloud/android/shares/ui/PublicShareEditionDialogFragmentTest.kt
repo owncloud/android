@@ -54,7 +54,7 @@ class PublicShareEditionDialogFragmentTest {
 
     private val file = mock(OCFile::class.java)
     private val publicShare = mock(OCShare::class.java)
-    private val expirationDate = 1556575200000
+    private val expirationDate = 1556575200000 // GMT: Monday, April 29, 2019 10:00:00 PM
 
     @Before
     fun setUp() {

@@ -40,12 +40,15 @@ abstract class OCShareDao {
     ): LiveData<List<OCShare>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
+    abstract fun insert(ocShare: OCShare): Long
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract fun insert(ocShares: List<OCShare>): List<Long>
 
     @Transaction
     open fun update(ocShare: OCShare): Long {
         deleteShare(ocShare.remoteId)
-        return insert(listOf(ocShare))[0]
+        return insert(ocShare)
     }
 
     @Transaction

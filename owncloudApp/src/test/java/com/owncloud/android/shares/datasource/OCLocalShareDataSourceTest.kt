@@ -93,10 +93,10 @@ class OCLocalDataSourceTest {
 
         `when`(
             ocSharesDao.insert(
-                listOf(sharesAsLiveData.value!![0])
+                sharesAsLiveData.value!![0]
             )
         ).thenReturn(
-            listOf(7)
+            7
         )
 
         `when`(
@@ -126,33 +126,30 @@ class OCLocalDataSourceTest {
             )
         )
 
-        assertEquals(shares.size, 2)
+        assertEquals(2, shares.size)
 
-        assertEquals(shares.get(0).path, "/Photos/")
-        assertEquals(shares.get(0).isFolder, true)
-        assertEquals(shares.get(0).name, "Photos link")
-        assertEquals(shares.get(0).shareLink, "http://server:port/s/1")
+        assertEquals("/Photos/", shares.get(0).path)
+        assertEquals(true, shares.get(0).isFolder)
+        assertEquals("Photos link", shares.get(0).name)
+        assertEquals("http://server:port/s/1", shares.get(0).shareLink)
 
-        assertEquals(shares.get(1).path, "/Photos/image.jpg")
-        assertEquals(shares.get(1).isFolder, false)
-        assertEquals(shares.get(1).name, "Image link")
-        assertEquals(shares.get(1).shareLink, "http://server:port/s/2")
+        assertEquals("/Photos/image.jpg", shares.get(1).path)
+        assertEquals(false, shares.get(1).isFolder)
+        assertEquals("Image link", shares.get(1).name)
+        assertEquals("http://server:port/s/2", shares.get(1).shareLink)
     }
 
     @Test
     fun insertPublicShares() {
         val insertedShareId = ocLocalSharesDataSource.insert(
-            listOf(
-                TestUtil.createPublicShare(
-                    path = "/Photos/",
-                    isFolder = true,
-                    name = "Photos link",
-                    shareLink = "http://server:port/s/1"
-                )
+            TestUtil.createPublicShare(
+                path = "/Photos/",
+                isFolder = true,
+                name = "Photos link",
+                shareLink = "http://server:port/s/1"
             )
         )
-        assertEquals(insertedShareId.size, 1)
-        assertEquals(insertedShareId[0], 7)
+        assertEquals(7, insertedShareId)
     }
 
     @Test
@@ -165,7 +162,7 @@ class OCLocalDataSourceTest {
                 shareLink = "http://server:port/s/2"
             )
         )
-        assertEquals(updatedShareId, 8)
+        assertEquals(8, updatedShareId)
     }
 
     @Test
@@ -173,6 +170,6 @@ class OCLocalDataSourceTest {
         val deletedRows = ocLocalSharesDataSource.deleteShare(
             5
         )
-        assertEquals(deletedRows, 1)
+        assertEquals(1, deletedRows)
     }
 }
