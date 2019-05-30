@@ -38,13 +38,13 @@ import java.util.ArrayList
  * Adapter to show a list of public links
  */
 class SharePublicLinkListAdapter(
-    private val mContext: Context, resource: Int, private val mPublicLinks: ArrayList<OCShare>?,
+    private val mContext: Context,
+    resource: Int,
+    private val mPublicLinks: ArrayList<OCShare>?,
     private val mListener: SharePublicLinkAdapterListener
 ) : ArrayAdapter<OCShare>(mContext, resource) {
 
-    override fun getCount(): Int {
-        return mPublicLinks!!.size
-    }
+    override fun getCount(): Int = mPublicLinks?.size ?: 0
 
     override fun getItem(position: Int): OCShare? = mPublicLinks!![position]
 
@@ -61,7 +61,7 @@ class SharePublicLinkListAdapter(
             val share = mPublicLinks[position]
 
             // If there's no name, set the token as name
-            view.publicLinkName.text = if (share.name?.isEmpty()!!) share.token else share.name
+            view.publicLinkName.text = if (share.name?.isEmpty() == true) share.token else share.name
 
             // bind listener to get link
             view.getPublicLinkButton.setOnClickListener { mListener.copyOrSendPublicLink(mPublicLinks[position]) }

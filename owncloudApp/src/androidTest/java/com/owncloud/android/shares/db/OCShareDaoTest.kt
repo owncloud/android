@@ -200,7 +200,7 @@ class OCShareDaoTest {
 
     @Test
     fun getNonExistingPublicShare() {
-        ocShareDao.insert(listOf(newPublicShare()))
+        ocShareDao.insert(newPublicShare())
 
         val nonExistingShare = getValue(
             ocShareDao.getSharesForFileAsLiveData(
@@ -213,7 +213,7 @@ class OCShareDaoTest {
 
     @Test
     fun replacePublicShareIfAlreadyExists_exists() {
-        ocShareDao.insert(listOf(newPublicShare()))
+        ocShareDao.insert(newPublicShare())
 
         ocShareDao.replaceSharesForFile(
             listOf(newPublicShare(name = "Text 2 link"))
@@ -231,7 +231,7 @@ class OCShareDaoTest {
 
     @Test
     fun replacePublicShareIfAlreadyExists_doesNotExist() {
-        ocShareDao.insert(listOf(newPublicShare()))
+        ocShareDao.insert(newPublicShare())
 
         ocShareDao.replaceSharesForFile(
             listOf(newPublicShare(path = "/Texts/text2.txt", name = "Text 2 link"))
@@ -259,7 +259,7 @@ class OCShareDaoTest {
 
     @Test
     fun updatePublicShare() {
-        ocShareDao.insert(listOf(newPublicShare()))
+        ocShareDao.insert(newPublicShare())
 
         ocShareDao.update(
             newPublicShare(name = "Text 1 link updated", expirationDate = 2000)
@@ -278,7 +278,7 @@ class OCShareDaoTest {
 
     @Test
     fun deletePublicShare() {
-        ocShareDao.insert(listOf(newPublicShare()))
+        ocShareDao.insert(newPublicShare())
 
         ocShareDao.deleteShare(1)
 
