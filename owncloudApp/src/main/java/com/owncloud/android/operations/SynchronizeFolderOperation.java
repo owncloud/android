@@ -50,38 +50,52 @@ import java.util.Vector;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
- *  Operation performing the synchronization of the list of files contained
- *  in a folder identified with its remote path.
- *
-q *  Fetches the list and properties of the files contained in the given folder, including their
- *  properties, and updates the local database with them.
- *
- *  Does NOT enter in the child folders to synchronize their contents also, BUT requests for a new operation instance
- *  doing so.
+ * Operation performing the synchronization of the list of files contained
+ * in a folder identified with its remote path.
+ * <p>
+ * q *  Fetches the list and properties of the files contained in the given folder, including their
+ * properties, and updates the local database with them.
+ * <p>
+ * Does NOT enter in the child folders to synchronize their contents also, BUT requests for a new operation instance
+ * doing so.
  */
 public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFile>> {
 
     private static final String TAG = SynchronizeFolderOperation.class.getSimpleName();
 
-    /** Time stamp for the synchronization process in progress */
+    /**
+     * Time stamp for the synchronization process in progress
+     */
     private long mCurrentSyncTime;
 
-    /** Remote path of the folder to synchronize */
+    /**
+     * Remote path of the folder to synchronize
+     */
     private String mRemotePath;
 
-    /** Account where the file to synchronize belongs */
+    /**
+     * Account where the file to synchronize belongs
+     */
     private Account mAccount;
 
-    /** Android context; necessary to send requests to the download service */
+    /**
+     * Android context; necessary to send requests to the download service
+     */
     private Context mContext;
 
-    /** Locally cached information about folder to synchronize */
+    /**
+     * Locally cached information about folder to synchronize
+     */
     private OCFile mLocalFolder;
 
-    /** Counter of conflicts found between local and remote files */
+    /**
+     * Counter of conflicts found between local and remote files
+     */
     private int mConflictsFound;
 
-    /** Counter of failed operations in synchronization of kept-in-sync files */
+    /**
+     * Counter of failed operations in synchronization of kept-in-sync files
+     */
     private int mFailsInFileSyncsFound;
 
     /**
@@ -96,7 +110,9 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
 
     private final AtomicBoolean mCancellationRequested;
 
-    /** Files and folders contained in the synchronized folder after a successful operation */
+    /**
+     * Files and folders contained in the synchronized folder after a successful operation
+     */
     private List<Pair<OCFile, Boolean>> mFoldersToVisit;
 
     /**
@@ -105,27 +121,31 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
      */
     private boolean mPushOnly;
 
-    /** 'True' means that this operation is part of a full account synchronization */
+    /**
+     * 'True' means that this operation is part of a full account synchronization
+     */
     private boolean mSyncFullAccount;
 
-    /** 'True' means that the contents of all the files in the folder will be synchronized;
-     * otherwise, only contents of available offline files will be synchronized. */
+    /**
+     * 'True' means that the contents of all the files in the folder will be synchronized;
+     * otherwise, only contents of available offline files will be synchronized.
+     */
     private final boolean mSyncContentOfRegularFiles;
 
     /**
      * Creates a new instance of {@link SynchronizeFolderOperation}.
      *
-     * @param   context                     Application context.
-     * @param   remotePath                  Path to synchronize.
-     * @param   account                     ownCloud account where the folder is located.
-     * @param   currentSyncTime             Time stamp for the synchronization process in progress.
-     * @param   pushOnly                    When 'true', will assume that folder did not change in the server and
-     *                                      will focus only in push any local change to the server (carefully).
-     * @param   syncFullAccount             'True' means that this operation is part of a full account
-     *                                      synchronization.
-     * @param   syncContentOfRegularFiles   When 'true', the contents of all the files in the folder will
-     *                                      be synchronized; otherwise, only contents of available offline files
-     *                                      will be synchronized.
+     * @param context                   Application context.
+     * @param remotePath                Path to synchronize.
+     * @param account                   ownCloud account where the folder is located.
+     * @param currentSyncTime           Time stamp for the synchronization process in progress.
+     * @param pushOnly                  When 'true', will assume that folder did not change in the server and
+     *                                  will focus only in push any local change to the server (carefully).
+     * @param syncFullAccount           'True' means that this operation is part of a full account
+     *                                  synchronization.
+     * @param syncContentOfRegularFiles When 'true', the contents of all the files in the folder will
+     *                                  be synchronized; otherwise, only contents of available offline files
+     *                                  will be synchronized.
      */
     public SynchronizeFolderOperation(
             Context context,
@@ -166,7 +186,7 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
      * indicating if was detected as changed in the server or not.
      *
      * @return List of pairs of subfolders and boolean flags set to 'true' if there are pending
-     *          changes in the server side.
+     * changes in the server side.
      */
     public List<Pair<OCFile, Boolean>> getFoldersToVisit() {
         return mFoldersToVisit;
@@ -174,7 +194,7 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
 
     /**
      * Performs the synchronization.
-     *
+     * <p>
      * {@inheritDoc}
      */
     @Override
@@ -230,7 +250,7 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
     /**
      * Get list of files in folder from remote server.
      *
-     * @param client      {@link OwnCloudClient} instance used to access the server.
+     * @param client {@link OwnCloudClient} instance used to access the server.
      * @return Result of the fetch, including list of remote files in the sync'ed folder.
      * @throws OperationCancelledException
      */
@@ -250,8 +270,8 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
      * Compares stored ETag of folder being synchronized to determine if there were changes in the server
      * from the last sync.
      *
-     * @param remoteFolder      Properties of the remote copy of the folder
-     * @return                  'true' if ETag of local and remote folder do not match.
+     * @param remoteFolder Properties of the remote copy of the folder
+     * @return 'true' if ETag of local and remote folder do not match.
      */
     private boolean folderChanged(RemoteFile remoteFolder) {
         return (!mLocalFolder.getTreeEtag().equals(remoteFolder.getEtag()));
@@ -272,12 +292,12 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
     }
 
     /**
-     *  Synchronizes the data retrieved from the server about the contents of the target folder
-     *  with the current data in the local database.
+     * Synchronizes the data retrieved from the server about the contents of the target folder
+     * with the current data in the local database.
+     * <p>
+     * Grants that mFoldersToVisit is updated with fresh data after execution.
      *
-     *  Grants that mFoldersToVisit is updated with fresh data after execution.
-     *
-     *  @param folderAndFiles   Remote folder and children files in folder
+     * @param folderAndFiles Remote folder and children files in folder
      */
     private void mergeRemoteFolder(ArrayList<RemoteFile> folderAndFiles)
             throws OperationCancelledException {
@@ -286,8 +306,8 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
         FileDataStorageManager storageManager = getStorageManager();
 
         // parse data from remote folder
-        OCFile updatedFolder = FileStorageUtils.createOCFileFrom(
-                (RemoteFile) folderAndFiles.get(0)
+        OCFile updatedFolder = FileStorageUtils.createOCFileFromRemoteFile(
+                folderAndFiles.get(0)
         );  // NOTE: updates ETag with remote value; that's INTENDED
         updatedFolder.copyLocalPropertiesFrom(mLocalFolder);
 
@@ -306,7 +326,10 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
         List<OCFile> localFiles = storageManager.getFolderContent(mLocalFolder, false);
         Map<String, OCFile> localFilesMap = new HashMap<>(localFiles.size());
         for (OCFile file : localFiles) {
-            localFilesMap.put(file.getRemoteId(), file);
+            String key = file.getRemoteId() != null ? file.getRemoteId() : file.getRemotePath();
+            if (key != null) {
+                localFilesMap.put(key, file);
+            }
         }
 
         // loop to synchronize every child
@@ -316,13 +339,17 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
         for (int i = 1; i < folderAndFiles.size(); i++) {
             /// new OCFile instance with the data from the server
             r = folderAndFiles.get(i);
-            remoteFile = FileStorageUtils.createOCFileFrom(r);
-
-            /// new OCFile instance to merge fresh data from server with local state
-            updatedLocalFile = FileStorageUtils.createOCFileFrom(r);
-
+            remoteFile = FileStorageUtils.createOCFileFromRemoteFile(r);
             /// retrieve local data for the read file
             localFile = localFilesMap.remove(remoteFile.getRemoteId());
+
+            // Let's try with remote path if the file does not have remote id yet
+            if (localFile == null) {
+                localFile = localFilesMap.remove(remoteFile.getRemotePath());
+            }
+
+            /// new OCFile instance to merge fresh data from server with local state
+            updatedLocalFile = FileStorageUtils.createOCFileFromRemoteFile(r);
 
             /// add to updatedFile data about LOCAL STATE (not existing in server)
             updatedLocalFile.setLastSyncDateForProperties(mCurrentSyncTime);
@@ -336,7 +363,6 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
                         remoteFile.getModificationTimestamp() != localFile.getModificationTimestamp()) {
                     updatedLocalFile.setNeedsUpdateThumbnail(true);
                 }
-
             } else {
                 updatedLocalFile.setParentId(mLocalFolder.getFileId());
                 // remote eTag will not be set unless file CONTENTS are synchronized
@@ -382,13 +408,13 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
 
     /**
      * Generates the appropriate operations to later sync the contents of localFile with the server.
-     *
+     * <p>
      * Stores the operations in mFoldersToSyncContents and mFilesToSyncContents.
      *
-     * @param localFile         Local information about the file which contents might be sync'ed.
-     * @param remoteFile        Server information of the file.
-     * @return                  'True' when the received file was not changed in the server side from the
-     *                          last synchronization.
+     * @param localFile  Local information about the file which contents might be sync'ed.
+     * @param remoteFile Server information of the file.
+     * @return 'True' when the received file was not changed in the server side from the
+     * last synchronization.
      */
     private boolean addToSyncContents(OCFile localFile, OCFile remoteFile) {
 
@@ -444,7 +470,7 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
     /**
      * Performs a list of synchronization operations, determining if a download or upload is needed
      * or if exists conflict due to changes both in local and remote contents of the each file.
-     *
+     * <p>
      * If download or upload is needed, request the operation to the corresponding service and goes
      * on.
      */
@@ -481,22 +507,22 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
     }
 
     /**
-     /**
+     * /**
      * Scans the default location for saving local copies of files searching for
      * a 'lost' file with the same full name as the {@link OCFile} received as
      * parameter.
-     *
+     * <p>
      * This method helps to keep linked local copies of the files when the app is uninstalled, and then
      * reinstalled in the device. OR after the cache of the app was deleted in system settings.
-     *
+     * <p>
      * The method is assuming that all the local changes in the file where synchronized in the past. This is dangerous,
      * but assuming the contrary could lead to massive unnecessary synchronizations of downloaded file after deleting
      * the app cache.
-     *
+     * <p>
      * This should be changed in the near future to avoid any chance of data loss, but we need to add some options
      * to limit hard automatic synchronizations to wifi, unless the user wants otherwise.
      *
-     * @param file      File to associate a possible 'lost' local file.
+     * @param file File to associate a possible 'lost' local file.
      */
     private void searchForLocalFileInDefaultPath(OCFile file) {
         if (file.getStoragePath() == null && !file.isFolder()) {
@@ -527,9 +553,9 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
      * Checks the last upload of a file and determines if automated synchronization needs to wait for
      * user action or not.
      *
-     * @param file      ownCloud file to check.
-     * @return          'True' if the received file should not be automatically sync'ed due to a previous
-     *                  upload error that requires an user action.
+     * @param file ownCloud file to check.
+     * @return 'True' if the received file should not be automatically sync'ed due to a previous
+     * upload error that requires an user action.
      */
     private boolean isBlockedForAutomatedSync(OCFile file) {
         UploadsStorageManager uploadsStorageManager = new UploadsStorageManager(mContext.getContentResolver());
