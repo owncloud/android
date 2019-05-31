@@ -4,16 +4,16 @@
  * @author David A. Velasco
  * @author Christian Schabesberger
  * Copyright (C) 2019 ownCloud GmbH.
- * <p>
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
  * as published by the Free Software Foundation.
- * <p>
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * <p>
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -52,10 +52,10 @@ import java.util.concurrent.atomic.AtomicBoolean;
 /**
  * Operation performing the synchronization of the list of files contained
  * in a folder identified with its remote path.
- * <p>
- * q *  Fetches the list and properties of the files contained in the given folder, including their
+ *
+ * Fetches the list and properties of the files contained in the given folder, including their
  * properties, and updates the local database with them.
- * <p>
+ *
  * Does NOT enter in the child folders to synchronize their contents also, BUT requests for a new operation instance
  * doing so.
  */
@@ -194,7 +194,7 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
 
     /**
      * Performs the synchronization.
-     * <p>
+     *
      * {@inheritDoc}
      */
     @Override
@@ -294,12 +294,12 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
     /**
      * Synchronizes the data retrieved from the server about the contents of the target folder
      * with the current data in the local database.
-     * <p>
+     *
      * Grants that mFoldersToVisit is updated with fresh data after execution.
      *
-     * @param folderAndFiles Remote folder and children files in folder
+     * @param remoteFolderAndFiles Remote folder and children files in folder
      */
-    private void mergeRemoteFolder(ArrayList<RemoteFile> folderAndFiles)
+    private void mergeRemoteFolder(ArrayList<RemoteFile> remoteFolderAndFiles)
             throws OperationCancelledException {
         Log_OC.d(TAG, "Synchronizing " + mAccount.name + mRemotePath);
 
@@ -307,15 +307,15 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
 
         // parse data from remote folder
         OCFile updatedFolder = FileStorageUtils.createOCFileFromRemoteFile(
-                folderAndFiles.get(0)
+                remoteFolderAndFiles.get(0)
         );  // NOTE: updates ETag with remote value; that's INTENDED
         updatedFolder.copyLocalPropertiesFrom(mLocalFolder);
 
         Log_OC.d(TAG, "Remote folder " + mLocalFolder.getRemotePath()
                 + " changed - starting update of local data ");
 
-        List<OCFile> updatedFiles = new Vector<>(folderAndFiles.size() - 1);
-        mFoldersToVisit = new Vector<>(folderAndFiles.size() - 1);
+        List<OCFile> updatedFiles = new Vector<>(remoteFolderAndFiles.size() - 1);
+        mFoldersToVisit = new Vector<>(remoteFolderAndFiles.size() - 1);
         mFilesToSyncContents.clear();
 
         if (mCancellationRequested.get()) {
@@ -336,10 +336,9 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
         OCFile remoteFile, localFile, updatedLocalFile;
         RemoteFile r;
         int foldersToExpand = 0;
-        for (int i = 1; i < folderAndFiles.size(); i++) {
+        for (int i = 1; i < remoteFolderAndFiles.size(); i++) {
             /// new OCFile instance with the data from the server
-            r = folderAndFiles.get(i);
-            remoteFile = FileStorageUtils.createOCFileFromRemoteFile(r);
+            remoteFile = FileStorageUtils.createOCFileFromRemoteFile(remoteFolderAndFiles.get(i));
             /// retrieve local data for the read file
             localFile = localFilesMap.remove(remoteFile.getRemoteId());
 
@@ -349,7 +348,7 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
             }
 
             /// new OCFile instance to merge fresh data from server with local state
-            updatedLocalFile = FileStorageUtils.createOCFileFromRemoteFile(r);
+            updatedLocalFile = FileStorageUtils.createOCFileFromRemoteFile(remoteFolderAndFiles.get(i));
 
             /// add to updatedFile data about LOCAL STATE (not existing in server)
             updatedLocalFile.setLastSyncDateForProperties(mCurrentSyncTime);
@@ -408,7 +407,7 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
 
     /**
      * Generates the appropriate operations to later sync the contents of localFile with the server.
-     * <p>
+     *
      * Stores the operations in mFoldersToSyncContents and mFilesToSyncContents.
      *
      * @param localFile  Local information about the file which contents might be sync'ed.
@@ -470,7 +469,7 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
     /**
      * Performs a list of synchronization operations, determining if a download or upload is needed
      * or if exists conflict due to changes both in local and remote contents of the each file.
-     * <p>
+     *
      * If download or upload is needed, request the operation to the corresponding service and goes
      * on.
      */
@@ -511,14 +510,14 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
      * Scans the default location for saving local copies of files searching for
      * a 'lost' file with the same full name as the {@link OCFile} received as
      * parameter.
-     * <p>
+     *
      * This method helps to keep linked local copies of the files when the app is uninstalled, and then
      * reinstalled in the device. OR after the cache of the app was deleted in system settings.
-     * <p>
+     *
      * The method is assuming that all the local changes in the file where synchronized in the past. This is dangerous,
      * but assuming the contrary could lead to massive unnecessary synchronizations of downloaded file after deleting
      * the app cache.
-     * <p>
+     *
      * This should be changed in the near future to avoid any chance of data loss, but we need to add some options
      * to limit hard automatic synchronizations to wifi, unless the user wants otherwise.
      *
