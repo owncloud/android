@@ -27,6 +27,7 @@ import android.os.Parcelable
 import androidx.lifecycle.MutableLiveData
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
@@ -258,6 +259,39 @@ class CreatePublicShareTest {
         // Check whether the dialog to create the public share has been properly closed
         onView(withText(R.string.share_via_link_create_title)).check(doesNotExist())
         onView(withText(newPublicShare3.name)).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun loadingCreateShares(){
+
+        loadCapabilitiesSuccessfully()
+        loadSharesSuccessfully(arrayListOf())
+
+        val newPublicShare = publicShares[0]
+
+        `when`(
+            ocShareViewModel.insertPublicShareForFile(
+                1,
+                newPublicShare.name!!,
+                "",
+                -1,
+                false
+            )
+        ).thenReturn(sharesLiveData)
+
+        // 1. Open dialog to create new public share
+        onView(withId(R.id.addPublicLinkButton)).perform(click())
+
+        // 2. Save share
+        onView(withId(R.id.saveButton)).perform(click())
+
+        sharesLiveData.postValue(
+            Resource.loading(
+                arrayListOf(newPublicShare)
+            )
+        )
+
+        onView(withText(R.string.common_loading)).check(matches(isDisplayed()))
     }
 
     private fun getOCFileForTesting(name: String = "default") = OCFile("/Photos").apply {
