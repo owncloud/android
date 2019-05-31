@@ -42,6 +42,7 @@ import com.owncloud.android.capabilities.db.OCCapability
 import com.owncloud.android.capabilities.viewmodel.OCCapabilityViewModel
 import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.lib.common.accounts.AccountUtils
+import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.status.CapabilityBooleanType
 import com.owncloud.android.lib.resources.status.OwnCloudVersion
 import com.owncloud.android.shares.db.OCShare
@@ -235,6 +236,24 @@ class DeletePublicShareTest {
         onView(withText(existingPublicShare.name)).check(matches(not(isDisplayed())))
         onView(withText(R.string.share_no_public_links)).check(matches(isDisplayed()))
 
+    }
+
+    @Test
+    fun loadingDeleteShares(){
+        loadCapabilitiesSuccessfully()
+
+        val existingPublicShare = publicShares[0]
+        loadSharesSuccessfully(arrayListOf(existingPublicShare))
+
+        onView(withId(R.id.deletePublicLinkButton)).perform(click())
+
+        sharesLiveData.postValue(
+            Resource.loading(
+                publicShares
+            )
+        )
+
+        onView(withText(R.string.common_loading)).check(matches(isDisplayed()))
     }
 
     private fun getOCFileForTesting(name: String = "default"): OCFile {
