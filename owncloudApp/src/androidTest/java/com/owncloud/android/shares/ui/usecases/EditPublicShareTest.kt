@@ -427,6 +427,40 @@ class EditPublicShareTest {
         onView(withId(R.id.shareViaLinkExpirationSwitch)).check(matches(isNotChecked()))
     }
 
+    @Test
+    fun loadingEditShares(){
+        loadCapabilitiesSuccessfully()
+
+        val existingPublicShare = publicShares[0]
+        loadSharesSuccessfully(arrayListOf(existingPublicShare))
+
+        val updatedPublicShare = publicShares[1]
+
+        `when`(
+        ocShareViewModel.updatePublicShareForFile(
+            1,
+            updatedPublicShare.name!!,
+            "",
+            -1,
+            1,
+            false
+        )
+        ).thenReturn(sharesLiveData)
+
+        //Edit name is performed
+        onView(withId(R.id.editPublicLinkButton)).perform(click())
+        onView(withId(R.id.shareViaLinkNameValue)).perform(replaceText(updatedPublicShare.name))
+        onView(withId(R.id.saveButton)).perform(click())
+
+        sharesLiveData.postValue(
+            Resource.loading(
+                arrayListOf(updatedPublicShare)
+            )
+        )
+
+        onView(withText(R.string.common_loading)).check(matches(isDisplayed()))
+    }
+
     private fun getOCFileForTesting(name: String = "default") = OCFile("/Photos").apply {
         availableOfflineStatus = OCFile.AvailableOfflineStatus.NOT_AVAILABLE_OFFLINE
         fileName = name
