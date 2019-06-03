@@ -150,7 +150,6 @@ public class FileDisplayActivity extends FileActivity
 
     private boolean mSyncInProgress = false;
     private boolean mOnlyAvailableOffline = false;
-    private int noOfFilesSelected = 0;
 
     private OCFile mWaitingToSend;
 
