@@ -416,6 +416,8 @@
   <string name="share_via_link_expiration_date_label">תפוגה</string>
   <string name="share_via_link_password_label">סיסמא</string>
   <string name="share_via_link_password_title">מאובטח</string>
+  <string name="share_via_link_edit_permission_read_only_label">הורדה/הצגה</string>
+  <string name="share_via_link_edit_permission_read_and_write_label">הורדה / הצגה / העלאה</string>
   <string name="share_get_public_link_button">קבלת קישור</string>
   <string name="share_with_title">שיתוף עם</string>
   <string name="share_with_edit_title">שיתף עם %1$s</string>
