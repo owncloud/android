@@ -30,11 +30,15 @@ interface LocalSharesDataSource {
         shareTypes: List<ShareType>
     ): LiveData<List<OCShare>>
 
+    fun insert(ocShare: OCShare): Long
+
     fun insert(ocShares: List<OCShare>): List<Long>
 
     fun update(ocShare: OCShare): Long
 
     fun replaceSharesForFile(ocShares: List<OCShare>): List<Long>
+
+    fun deleteShare(remoteId: Long): Int
 
     fun deleteSharesForFile(filePath: String, accountName: String)
 }

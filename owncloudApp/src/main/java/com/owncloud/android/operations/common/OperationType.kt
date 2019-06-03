@@ -14,5 +14,6 @@ enum class OperationType {
     CREATE_FOLDER,
     MOVE_FILE,
     COPY_FILE,
-    SYNCHRONIZE_FOLDER
+    SYNCHRONIZE_FOLDER,
+    GET_CAPABILITIES
 }

@@ -32,24 +32,28 @@ import com.owncloud.android.vo.Resource
 class OCShareRepository(
     private val appExecutors: AppExecutors,
     private val localSharesDataSource: LocalSharesDataSource,
-    private val remoteSharesDataSource: RemoteSharesDataSource
+    private val remoteSharesDataSource: RemoteSharesDataSource,
+    val filePath: String,
+    val accountName: String
 ) : ShareRepository {
 
     companion object Factory {
         fun create(
             appExecutors: AppExecutors = AppExecutors(),
             localSharesDataSource: LocalSharesDataSource,
-            remoteSharesDataSource: RemoteSharesDataSource
+            remoteSharesDataSource: RemoteSharesDataSource,
+            filePathToShare: String,
+            accountName: String
         ): OCShareRepository = OCShareRepository(
             appExecutors,
             localSharesDataSource,
-            remoteSharesDataSource
+            remoteSharesDataSource,
+            filePathToShare,
+            accountName
         )
     }
 
     override fun loadSharesForFile(
-        filePath: String,
-        accountName: String,
         shareTypes: List<ShareType>,
         reshares: Boolean,
         subfiles: Boolean
@@ -72,14 +76,13 @@ class OCShareRepository(
             override fun loadFromDb(): LiveData<List<OCShare>> =
                 localSharesDataSource.getSharesForFileAsLiveData(filePath, accountName, shareTypes)
 
-            override fun createCall() = remoteSharesDataSource.getSharesForFile(filePath, reshares, subfiles)
+            override fun createCall() =
+                remoteSharesDataSource.getSharesForFile(filePath, reshares, subfiles)
 
         }.asLiveData()
     }
 
     override fun insertPublicShareForFile(
-        filePath: String,
-        accountName: String,
         permissions: Int,
         name: String,
         password: String,
@@ -117,8 +120,6 @@ class OCShareRepository(
     }
 
     override fun updatePublicShareForFile(
-        filePath: String,
-        accountName: String,
         remoteId: Long,
         name: String,
         password: String?,
@@ -153,6 +154,28 @@ class OCShareRepository(
                 permissions,
                 publicUpload
             )
+        }.asLiveData()
+    }
+
+    override fun deletePublicShare(
+        remoteId: Long
+    ): LiveData<Resource<List<OCShare>>> {
+        return object : NetworkBoundResource<List<OCShare>, ShareParserResult>(appExecutors) {
+            override fun saveCallResult(item: ShareParserResult) {
+                localSharesDataSource.deleteShare(remoteId)
+            }
+
+            override fun shouldFetch(data: List<OCShare>?): Boolean {
+                return true
+            }
+
+            override fun loadFromDb(): LiveData<List<OCShare>> {
+                return localSharesDataSource.getSharesForFileAsLiveData(
+                    filePath, accountName, listOf(ShareType.PUBLIC_LINK)
+                )
+            }
+
+            override fun createCall() = remoteSharesDataSource.deleteShare(remoteId)
         }.asLiveData()
     }
 }

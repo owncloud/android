@@ -21,13 +21,11 @@
 
 package com.owncloud.android.shares.ui.fragment
 
-import android.accounts.Account
 import android.app.Activity
 import android.content.Context
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.text.InputType
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -38,28 +36,16 @@ import android.widget.CompoundButton
 import android.widget.TextView
 import androidx.appcompat.widget.SwitchCompat
 import androidx.fragment.app.DialogFragment
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import com.owncloud.android.R
-import com.owncloud.android.ViewModelFactory
 import com.owncloud.android.capabilities.db.OCCapability
-import com.owncloud.android.capabilities.viewmodel.OCCapabilityViewModel
 import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.lib.common.utils.Log_OC
 import com.owncloud.android.lib.resources.shares.RemoteShare
-import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.lib.resources.status.CapabilityBooleanType
 import com.owncloud.android.lib.resources.status.OwnCloudVersion
-import com.owncloud.android.operations.common.OperationType
 import com.owncloud.android.shares.db.OCShare
-import com.owncloud.android.shares.viewmodel.OCShareViewModel
-import com.owncloud.android.ui.activity.BaseActivity
 import com.owncloud.android.ui.dialog.ExpirationDatePickerDialogFragment
-import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter
-import com.owncloud.android.ui.fragment.ShareFragmentListener
 import com.owncloud.android.utils.DateUtils
-import com.owncloud.android.vo.Status
 import kotlinx.android.synthetic.main.share_public_dialog.*
 import kotlinx.android.synthetic.main.share_public_dialog.view.*
 import java.text.ParseException
@@ -77,11 +63,6 @@ class PublicShareDialogFragment : DialogFragment() {
      * Existing share to update. If NULL, the dialog will create a new share for file.
      */
     private var publicShare: OCShare? = null
-
-    /*
-     * OC account holding the file to share, received as a parameter in construction time
-     */
-    private var account: Account? = null
 
     /**
      * Reference to parent listener
@@ -140,30 +121,11 @@ class PublicShareDialogFragment : DialogFragment() {
                 .time
         } else -1
 
-    var ocCapabilityViewModelFactory: ViewModelProvider.Factory = ViewModelFactory.build {
-        OCCapabilityViewModel(
-            account = account!!,
-            shouldFetchFromNetwork = false
-        )
-    }
-
-    var ocShareViewModelFactory: ViewModelProvider.Factory = ViewModelFactory.build {
-        OCShareViewModel(
-            account!!,
-            file?.remotePath!!,
-            listOf(ShareType.PUBLIC_LINK)
-        )
-    }
-
-    private lateinit var ocCapabilityViewModel: OCCapabilityViewModel
-    private lateinit var ocShareViewModel: OCShareViewModel
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         if (arguments != null) {
             file = arguments!!.getParcelable(ARG_FILE)
-            account = arguments!!.getParcelable(ARG_ACCOUNT)
             publicShare = arguments!!.getParcelable(ARG_SHARE)
         }
 
@@ -171,7 +133,7 @@ class PublicShareDialogFragment : DialogFragment() {
             throw IllegalStateException("Both ARG_FILE and ARG_SHARE cannot be NULL")
         }
 
-        setStyle(DialogFragment.STYLE_NO_TITLE, 0)
+        setStyle(STYLE_NO_TITLE, 0)
     }
 
     private fun updating(): Boolean = publicShare != null
@@ -231,11 +193,6 @@ class PublicShareDialogFragment : DialogFragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        ocShareViewModel = ViewModelProviders.of(this, ocShareViewModelFactory).get(OCShareViewModel::class.java)
-
-        ocCapabilityViewModel =
-            ViewModelProviders.of(this, ocCapabilityViewModelFactory).get(OCCapabilityViewModel::class.java)
-
         initPasswordListener()
         initExpirationListener()
         initPasswordFocusChangeListener()
@@ -285,38 +242,12 @@ class PublicShareDialogFragment : DialogFragment() {
         }
 
         if (!updating()) { // Creating a new public share
-            ocShareViewModel.insertPublicShareForFile(
+            listener?.createPublicShare(
                 publicLinkPermissions,
                 publicLinkName,
                 publicLinkPassword!!,
                 publicLinkExpirationDateInMillis,
                 false
-            ).observe(
-                this,
-                Observer { resource ->
-                    when (resource?.status) {
-                        Status.SUCCESS -> {
-                            dismiss()
-                            (activity as BaseActivity).dismissLoadingDialog()
-                        }
-                        Status.ERROR -> {
-                            val errorMessage: String = resource.msg ?: ErrorMessageAdapter.getResultMessage(
-                                resource.code,
-                                resource.exception,
-                                OperationType.CREATE_PUBLIC_SHARE,
-                                resources
-                            );
-                            showError(errorMessage)
-                            (activity as BaseActivity).dismissLoadingDialog()
-                        }
-                        Status.LOADING -> {
-                            (activity as BaseActivity).showLoadingDialog(R.string.common_loading)
-                        }
-                        else -> {
-                            Log.d(TAG, "Unknown status when creating share")
-                        }
-                    }
-                }
             )
         } else { // Updating an existing public share
             if (!shareViaLinkPasswordSwitch.isChecked) {
@@ -326,39 +257,13 @@ class PublicShareDialogFragment : DialogFragment() {
                 publicLinkPassword = null
             }
 
-            ocShareViewModel.updatePublicShareForFile(
+            listener?.updatePublicShare(
                 publicShare?.remoteId!!,
                 publicLinkName,
                 publicLinkPassword,
                 publicLinkExpirationDateInMillis,
                 publicLinkPermissions,
                 publicUploadPermission
-            ).observe(
-                this,
-                Observer { resource ->
-                    when (resource?.status) {
-                        Status.SUCCESS -> {
-                            dismiss()
-                            (activity as BaseActivity).dismissLoadingDialog()
-                        }
-                        Status.ERROR -> {
-                            val errorMessage: String = resource.msg ?: ErrorMessageAdapter.getResultMessage(
-                                resource.code,
-                                resource.exception,
-                                OperationType.CREATE_PUBLIC_SHARE,
-                                resources
-                            );
-                            showError(errorMessage)
-                            (activity as BaseActivity).dismissLoadingDialog()
-                        }
-                        Status.LOADING -> {
-                            (activity as BaseActivity).showLoadingDialog(R.string.common_loading)
-                        }
-                        else -> {
-                            Log.d(TAG, "Unknown status when creating share")
-                        }
-                    }
-                }
             )
         }
     }
@@ -489,7 +394,7 @@ class PublicShareDialogFragment : DialogFragment() {
         super.onActivityCreated(savedInstanceState)
         Log_OC.d(TAG, "onActivityCreated")
 
-        refreshCapabilities()
+        listener?.refreshCapabilities(false)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -526,7 +431,6 @@ class PublicShareDialogFragment : DialogFragment() {
      * Listener for user actions that start any update on a password for the public link.
      */
     private inner class OnPasswordInteractionListener : CompoundButton.OnCheckedChangeListener {
-
         /**
          * Called by R.id.shareViaLinkPasswordSwitch to set or clear the password.
          *
@@ -640,38 +544,9 @@ class PublicShareDialogFragment : DialogFragment() {
         }
     }
 
-    private fun refreshCapabilities() {
-        ocCapabilityViewModel.getCapabilityForAccount().observe(
-            this,
-            Observer { resource ->
-                when (resource?.status) {
-                    Status.SUCCESS -> {
-                        capabilities = resource.data
-                        updateInputFormAccordingToServerCapabilities()
-                        (activity as BaseActivity).dismissLoadingDialog()
-                    }
-                    Status.ERROR -> {
-                        val errorMessage = ErrorMessageAdapter.getResultMessage(
-                            resource.code,
-                            resource.exception,
-                            OperationType.GET_SHARES,
-                            resources
-                        )
-                        showError(errorMessage)
-                        capabilities = resource.data
-                        (activity as BaseActivity).dismissLoadingDialog()
-                    }
-                    Status.LOADING -> {
-                        (activity as BaseActivity).showLoadingDialog(R.string.common_loading)
-                        capabilities = resource.data
-                        updateInputFormAccordingToServerCapabilities()
-                    }
-                    else -> {
-                        Log.d(TAG, "Unknown status when loading capabilities")
-                    }
-                }
-            }
-        )
+    fun updateCapabilities(capabilities: OCCapability?) {
+        this.capabilities = capabilities
+        updateInputFormAccordingToServerCapabilities()
     }
 
     /**
@@ -717,7 +592,6 @@ class PublicShareDialogFragment : DialogFragment() {
 
         // Show default date enforced by the server, if any
         if (!updating() && capabilities?.filesSharingPublicExpireDateDays!! > 0) {
-
             setExpirationDateSwitchChecked(checked = true)
 
             val formattedDate = SimpleDateFormat.getDateInstance().format(
@@ -830,45 +704,37 @@ class PublicShareDialogFragment : DialogFragment() {
     }
 
     companion object {
-
         private val TAG = PublicShareDialogFragment::class.java.simpleName
 
         /**
          * The fragment initialization parameters
          */
-        private val ARG_FILE = "FILE"
-        private val ARG_SHARE = "SHARE"
-        private val ARG_ACCOUNT = "ACCOUNT"
-        private val ARG_DEFAULT_LINK_NAME = "DEFAULT_LINK_NAME"
-        private val KEY_EXPIRATION_DATE = "EXPIRATION_DATE"
+        private const val ARG_FILE = "FILE"
+        private const val ARG_SHARE = "SHARE"
+        private const val ARG_DEFAULT_LINK_NAME = "DEFAULT_LINK_NAME"
+        private const val KEY_EXPIRATION_DATE = "EXPIRATION_DATE"
 
         /**
-         * Create a new instance of PublicShareDialogFragment, providing fileToShare and account
-         * as an argument.
+         * Create a new instance of PublicShareDialogFragment, providing fileToShare as an argument.
          *
          * Dialog shown this way is intended to CREATE a new public share.
          *
          * @param   fileToShare     File to share with a new public share.
-         * @param   account         Account to get capabilities
          */
         fun newInstanceToCreate(
             fileToShare: OCFile,
-            account: Account,
             defaultLinkName: String
         ): PublicShareDialogFragment {
             val publicShareDialogFragment = PublicShareDialogFragment()
             val args = Bundle()
             args.putParcelable(ARG_FILE, fileToShare)
-            args.putParcelable(ARG_ACCOUNT, account)
             args.putString(ARG_DEFAULT_LINK_NAME, defaultLinkName)
-
             publicShareDialogFragment.arguments = args
             return publicShareDialogFragment
         }
 
         /**
-         * Update an instance of PublicShareDialogFragment, providing fileToShare, publicShare and
-         * account as arguments.
+         * Update an instance of PublicShareDialogFragment, providing fileToShare, publicShare as arguments.
          *
          * Dialog shown this way is intended to UPDATE an existing public share.
          *
@@ -876,13 +742,11 @@ class PublicShareDialogFragment : DialogFragment() {
          */
         fun newInstanceToUpdate(
             fileToShare: OCFile,
-            publicShare: OCShare,
-            account: Account
+            publicShare: OCShare
         ): PublicShareDialogFragment {
             val publicShareDialogFragment = PublicShareDialogFragment()
             val args = Bundle()
             args.putParcelable(ARG_FILE, fileToShare)
-            args.putParcelable(ARG_ACCOUNT, account)
             args.putParcelable(ARG_SHARE, publicShare)
             publicShareDialogFragment.arguments = args
             return publicShareDialogFragment

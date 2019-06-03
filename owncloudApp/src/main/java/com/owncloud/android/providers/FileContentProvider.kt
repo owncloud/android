@@ -25,7 +25,14 @@
 package com.owncloud.android.providers
 
 import android.accounts.AccountManager
-import android.content.*
+import android.content.ContentProvider
+import android.content.ContentProviderOperation
+import android.content.ContentProviderResult
+import android.content.ContentUris
+import android.content.ContentValues
+import android.content.Context
+import android.content.OperationApplicationException
+import android.content.UriMatcher
 import android.database.Cursor
 import android.database.SQLException
 import android.database.sqlite.SQLiteDatabase
@@ -55,7 +62,8 @@ import com.owncloud.android.shares.db.OCShare
 import com.owncloud.android.utils.FileStorageUtils
 import java.io.File
 import java.io.FileNotFoundException
-import java.util.*
+import java.util.ArrayList
+import java.util.HashMap
 
 /**
  * The ContentProvider for the ownCloud App.
@@ -149,7 +157,7 @@ class FileContentProvider(val appExecutors: AppExecutors = AppExecutors()) : Con
             ROOT_DIRECTORY ->
                 //Log_OC.d(TAG, "Removing ROOT!");
                 count = db.delete(ProviderTableMeta.FILE_TABLE_NAME, where, whereArgs)
-            SHARES -> count = db.delete(ProviderTableMeta.OCSHARES_TABLE_NAME, where, whereArgs)
+            SHARES -> count = OwncloudDatabase.getDatabase(context).shareDao().deleteShare(uri.pathSegments[1].toLong())
             CAPABILITIES -> count = db.delete(ProviderTableMeta.CAPABILITIES_TABLE_NAME, where, whereArgs)
             UPLOADS -> count = db.delete(ProviderTableMeta.UPLOADS_TABLE_NAME, where, whereArgs)
             CAMERA_UPLOADS_SYNC -> count = db.delete(ProviderTableMeta.CAMERA_UPLOADS_SYNC_TABLE_NAME, where, whereArgs)
@@ -210,8 +218,8 @@ class FileContentProvider(val appExecutors: AppExecutors = AppExecutors()) : Con
             }
             SHARES -> {
                 val shareId = OwncloudDatabase.getDatabase(context).shareDao().insert(
-                    listOf(OCShare.fromContentValues(values))
-                )[0]
+                    OCShare.fromContentValues(values)
+                )
 
                 if (shareId <= 0) throw SQLException("ERROR $uri")
                 return ContentUris.withAppendedId(ProviderTableMeta.CONTENT_URI_SHARE, shareId)

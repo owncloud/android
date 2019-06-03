@@ -27,8 +27,15 @@ package com.owncloud.android.shares.ui
 import android.app.SearchManager
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
+import com.google.android.material.snackbar.Snackbar
 import com.owncloud.android.R
+import com.owncloud.android.ViewModelFactory
+import com.owncloud.android.capabilities.viewmodel.OCCapabilityViewModel
 import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.lib.common.operations.RemoteOperation
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
@@ -39,22 +46,26 @@ import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.operations.GetSharesForFileOperation
 import com.owncloud.android.operations.RemoveShareOperation
 import com.owncloud.android.operations.UpdateSharePermissionsOperation
+import com.owncloud.android.operations.common.OperationType
 import com.owncloud.android.providers.UsersAndGroupsSearchProvider
 import com.owncloud.android.shares.db.OCShare
 import com.owncloud.android.shares.ui.fragment.PublicShareDialogFragment
 import com.owncloud.android.shares.ui.fragment.ShareFileFragment
+import com.owncloud.android.shares.ui.fragment.ShareFragmentListener
+import com.owncloud.android.shares.viewmodel.OCShareViewModel
 import com.owncloud.android.ui.activity.FileActivity
 import com.owncloud.android.ui.asynctasks.GetSharesForFileAsyncTask
+import com.owncloud.android.ui.dialog.RemoveShareDialogFragment
+import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter
 import com.owncloud.android.ui.fragment.EditShareFragment
 import com.owncloud.android.ui.fragment.SearchShareesFragment
-import com.owncloud.android.ui.fragment.ShareFragmentListener
 import com.owncloud.android.ui.utils.showDialogFragment
+import com.owncloud.android.vo.Status
 
 /**
  * Activity for sharing files
  */
 class ShareActivity : FileActivity(), ShareFragmentListener {
-
     private var getSharesForFileAsyncTask: GetSharesForFileAsyncTask? = null
 
     /**
@@ -89,6 +100,23 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
     private val editShareFragment: EditShareFragment?
         get() = supportFragmentManager.findFragmentByTag(TAG_EDIT_SHARE_FRAGMENT) as EditShareFragment?
 
+    private var ocShareViewModelFactory: ViewModelProvider.Factory = ViewModelFactory.build {
+        OCShareViewModel(
+            file?.remotePath!!,
+            account!!,
+            listOf(ShareType.PUBLIC_LINK)
+        )
+    }
+
+    private var ocCapabilityViewModelFactory: ViewModelProvider.Factory = ViewModelFactory.build {
+        OCCapabilityViewModel(
+            account = account!!
+        )
+    }
+
+    private lateinit var ocShareViewModel: OCShareViewModel
+    private lateinit var ocCapabilityViewModel: OCCapabilityViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -110,6 +138,12 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
             )
             ft.commit()
         }
+
+        ocShareViewModel = ViewModelProviders.of(this, ocShareViewModelFactory)
+            .get(OCShareViewModel::class.java)
+
+        ocCapabilityViewModel =
+            ViewModelProviders.of(this, ocCapabilityViewModelFactory).get(OCCapabilityViewModel::class.java)
     }
 
     override fun onAccountSet(stateWasRecovered: Boolean) {
@@ -144,6 +178,119 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
         getSharesForFileAsyncTask = null
     }
 
+    /**
+     * Updates the view, reading data from [com.owncloud.android.shares.viewmodel.OCShareViewModel]
+     */
+    private fun refreshSharesFromStorageManager() {
+        val shareFileFragment = shareFileFragment
+        if (shareFileFragment?.isAdded == true) {   // only if added to the view hierarchy!!
+            shareFileFragment.refreshUsersOrGroupsListFromDB()
+        }
+
+        val searchShareesFragment = searchFragment
+        if (searchShareesFragment?.isAdded == true) {  // only if added to the view hierarchy!!
+            searchShareesFragment.refreshUsersOrGroupsListFromDB()
+        }
+
+        val editShareFragment = editShareFragment
+        if (editShareFragment?.isAdded == true) {
+            editShareFragment.refreshUiFromDB()
+        }
+    }
+
+    override fun refreshShares() {
+        refreshCapabilities()
+        loadShares()
+    }
+
+    override fun refreshCapabilities(shouldFetchFromNetwork: Boolean) {
+        ocCapabilityViewModel.getCapabilityForAccount(shouldFetchFromNetwork).observe(
+            this,
+            Observer { resource ->
+                when (resource?.status) {
+                    Status.SUCCESS -> {
+                        if (publicShareFragment != null) {
+                            publicShareFragment?.updateCapabilities(resource.data)
+                        } else {
+                            shareFileFragment?.updateCapabilities(resource.data)
+                        }
+
+                        dismissLoadingDialog()
+                    }
+                    Status.ERROR -> {
+                        val errorMessage = ErrorMessageAdapter.getResultMessage(
+                            resource.code,
+                            resource.exception,
+                            OperationType.GET_CAPABILITIES,
+                            resources
+                        )
+                        if (publicShareFragment != null) {
+                            publicShareFragment?.showError(errorMessage)
+                        } else {
+                            Snackbar.make(findViewById(android.R.id.content), errorMessage, Snackbar.LENGTH_SHORT)
+                                .show()
+                            shareFileFragment?.updateCapabilities(resource.data)
+                        }
+                        dismissLoadingDialog()
+                    }
+                    Status.LOADING -> {
+                        showLoadingDialog(R.string.common_loading)
+                        if (publicShareFragment != null) {
+                            publicShareFragment?.updateCapabilities(resource.data)
+                        } else {
+                            shareFileFragment?.updateCapabilities(resource.data)
+                        }
+                    }
+                    else -> {
+                        Log.d(TAG, "Unknown status when loading capabilities in account ${account?.name}")
+                    }
+                }
+            }
+        )
+    }
+
+    private fun loadShares() {
+        ocShareViewModel.getSharesForFile().observe(
+            this,
+            Observer { resource ->
+                when (resource?.status) {
+                    Status.SUCCESS -> {
+                        shareFileFragment?.updatePublicShares(resource.data as ArrayList<OCShare>)
+                        dismissLoadingDialog()
+                    }
+                    Status.ERROR -> {
+                        val errorMessage = ErrorMessageAdapter.getResultMessage(
+                            resource.code,
+                            resource.exception,
+                            OperationType.GET_SHARES,
+                            resources
+                        )
+                        Snackbar.make(
+                            findViewById(android.R.id.content),
+                            errorMessage, Snackbar.LENGTH_SHORT
+                        ).show()
+                        shareFileFragment?.updatePublicShares(resource.data as ArrayList<OCShare>)
+                        dismissLoadingDialog()
+                    }
+                    Status.LOADING -> {
+                        showLoadingDialog(R.string.common_loading)
+                        shareFileFragment?.updatePublicShares(resource.data as ArrayList<OCShare>)
+                    }
+                    else -> {
+                        Log.d(
+                            TAG, "Unknown status when loading shares for file ${file?.fileName} in account" +
+                                    "${account?.name}"
+                        )
+                    }
+                }
+            }
+        )
+    }
+
+    /**
+     * PRIVATE SHARES
+     */
+
     override fun copyOrSendPrivateLink(file: OCFile) {
         fileOperationsHelper.copyOrSendPrivateLink(file)
     }
@@ -161,7 +308,6 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
     }
 
     private fun getAppropiatePermissions(shareType: ShareType): Int {
-
         // check if the Share is FERERATED
         val isFederated = ShareType.FEDERATED == shareType
 
@@ -211,12 +357,6 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
         // Create and show the dialog.
         val newFragment = EditShareFragment.newInstance(share, file, account)
         newFragment.show(ft, TAG_EDIT_SHARE_FRAGMENT)
-
-    }
-
-    override// Call to Remove share operation
-    fun removeShare(share: OCShare) {
-        fileOperationsHelper.removeShare(share)
     }
 
     /**
@@ -231,35 +371,157 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
         getSharesForFileAsyncTask!!.execute(*params)
     }
 
+    /**
+     * PUBLIC SHARES
+     */
     override fun showAddPublicShare(defaultLinkName: String) {
         // DialogFragment.show() will take care of adding the fragment
         // in a transaction.  We also want to remove any currently showing
         // dialog, so make our own transaction and take care of that here.
 
         // Create and show the dialog
-        val newFragment = PublicShareDialogFragment.newInstanceToCreate(
+        val createPublicShareFragment = PublicShareDialogFragment.newInstanceToCreate(
             file,
-            account,
             defaultLinkName
         )
 
         showDialogFragment(
-            newFragment,
+            createPublicShareFragment,
             TAG_PUBLIC_SHARE_DIALOG_FRAGMENT
         )
     }
 
-    override fun dismissAddPublicShare() {
-        publicShareFragment?.dismiss()
+    override fun createPublicShare(
+        permissions: Int,
+        name: String,
+        password: String,
+        expirationTimeInMillis: Long,
+        publicUpload: Boolean
+    ) {
+        ocShareViewModel.insertPublicShareForFile(
+            permissions,
+            name,
+            password,
+            expirationTimeInMillis,
+            publicUpload
+        ).observe(
+            this,
+            Observer { resource ->
+                when (resource?.status) {
+                    Status.SUCCESS -> {
+                        publicShareFragment?.dismiss()
+                    }
+                    Status.ERROR -> {
+                        val errorMessage: String = resource.msg ?: ErrorMessageAdapter.getResultMessage(
+                            resource.code,
+                            resource.exception,
+                            OperationType.CREATE_PUBLIC_SHARE,
+                            resources
+                        );
+                        publicShareFragment?.showError(errorMessage)
+                        dismissLoadingDialog()
+                    }
+                    Status.LOADING -> {
+                        showLoadingDialog(R.string.common_loading)
+                    }
+                    else -> {
+                        Log.d(TAG, "Unknown status when creating public share")
+                    }
+                }
+            }
+        )
     }
 
     override fun showEditPublicShare(share: OCShare) {
         // Create and show the dialog.
-        val newFragment = PublicShareDialogFragment.newInstanceToUpdate(file, share, account)
-
+        val editPublicShareFragment = PublicShareDialogFragment.newInstanceToUpdate(file, share)
         showDialogFragment(
-            newFragment,
+            editPublicShareFragment,
             TAG_PUBLIC_SHARE_DIALOG_FRAGMENT
+        )
+    }
+
+    override fun updatePublicShare(
+        remoteId: Long,
+        name: String,
+        password: String?,
+        expirationDateInMillis: Long,
+        permissions: Int,
+        publicUpload: Boolean
+    ) {
+        ocShareViewModel.updatePublicShareForFile(
+            remoteId,
+            name,
+            password,
+            expirationDateInMillis,
+            permissions,
+            publicUpload
+        ).observe(
+            this,
+            Observer { resource ->
+                when (resource?.status) {
+                    Status.SUCCESS -> {
+                        publicShareFragment?.dismiss()
+                    }
+                    Status.ERROR -> {
+                        val errorMessage: String = resource.msg ?: ErrorMessageAdapter.getResultMessage(
+                            resource.code,
+                            resource.exception,
+                            OperationType.UPDATE_PUBLIC_SHARE,
+                            resources
+                        );
+                        publicShareFragment?.showError(errorMessage)
+                        dismissLoadingDialog()
+                    }
+                    Status.LOADING -> {
+                        showLoadingDialog(R.string.common_loading)
+                    }
+                    else -> {
+                        Log.d(TAG, "Unknown status when updating public share")
+                    }
+                }
+            }
+        )
+    }
+
+    override fun showRemovePublicShare(share: OCShare) {
+        val removePublicShareFragment = RemoveShareDialogFragment.newInstance(share)
+        showDialogFragment(
+            removePublicShareFragment,
+            TAG_REMOVE_SHARE_DIALOG_FRAGMENT
+        )
+    }
+
+    override fun removePublicShare(share: OCShare) {
+        ocShareViewModel.deletePublicShare(share.remoteId).observe(
+            this,
+            Observer { resource ->
+                when (resource?.status) {
+                    Status.SUCCESS -> {
+                        shareFileFragment?.updatePublicShares(resource.data as ArrayList<OCShare>)
+                        dismissLoadingDialog()
+                    }
+                    Status.ERROR -> {
+                        val errorMessage = ErrorMessageAdapter.getResultMessage(
+                            resource.code,
+                            resource.exception,
+                            OperationType.REMOVE_SHARE,
+                            resources
+                        )
+                        Snackbar.make(findViewById(android.R.id.content), errorMessage, Snackbar.LENGTH_SHORT).show()
+                        dismissLoadingDialog()
+                    }
+                    Status.LOADING -> {
+                        showLoadingDialog(R.string.common_loading)
+                    }
+                    else -> {
+                        Log.d(
+                            TAG, "Unknown status when removing share ${share.name} " +
+                                    "from account ${account?.name}"
+                        )
+                    }
+                }
+            }
         )
     }
 
@@ -281,7 +543,6 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
             RemoteOperationResult.ResultCode.SHARE_NOT_FOUND
         ) {
             Log_OC.d(TAG, "Refreshing view on successful operation or finished refresh")
-            refreshSharesFromStorageManager()
             if (operation is GetSharesForFileOperation) {
                 getSharesForFileAsyncTask = null
             }
@@ -298,26 +559,6 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
         }
     }
 
-    /**
-     * Updates the view, reading data from [com.owncloud.android.datamodel.FileDataStorageManager]
-     */
-    private fun refreshSharesFromStorageManager() {
-        val shareFileFragment = shareFileFragment
-        if (shareFileFragment?.isAdded == true) {   // only if added to the view hierarchy!!
-            shareFileFragment.refreshUsersOrGroupsListFromDB()
-        }
-
-        val searchShareesFragment = searchFragment
-        if (searchShareesFragment?.isAdded == true) {  // only if added to the view hierarchy!!
-            searchShareesFragment.refreshUsersOrGroupsListFromDB()
-        }
-
-        val editShareFragment = editShareFragment
-        if (editShareFragment?.isAdded == true) {
-            editShareFragment.refreshUiFromDB()
-        }
-    }
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         var retval = true
         when (item.itemId) {
@@ -330,13 +571,12 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
     }
 
     companion object {
-
         private val TAG = ShareActivity::class.java.simpleName
 
-        private val TAG_SHARE_FRAGMENT = "SHARE_FRAGMENT"
-        private val TAG_SEARCH_FRAGMENT = "SEARCH_USER_AND_GROUPS_FRAGMENT"
-        private val TAG_EDIT_SHARE_FRAGMENT = "EDIT_SHARE_FRAGMENT"
-        private val TAG_PUBLIC_SHARE_DIALOG_FRAGMENT = "PUBLIC_SHARE_DIALOG_FRAGMENT"
-        val TAG_REMOVE_SHARE_DIALOG_FRAGMENT = "REMOVE_SHARE_DIALOG_FRAGMENT"
+        private const val TAG_SHARE_FRAGMENT = "SHARE_FRAGMENT"
+        private const val TAG_SEARCH_FRAGMENT = "SEARCH_USER_AND_GROUPS_FRAGMENT"
+        private const val TAG_EDIT_SHARE_FRAGMENT = "EDIT_SHARE_FRAGMENT"
+        private const val TAG_PUBLIC_SHARE_DIALOG_FRAGMENT = "PUBLIC_SHARE_DIALOG_FRAGMENT"
+        private const val TAG_REMOVE_SHARE_DIALOG_FRAGMENT = "REMOVE_SHARE_DIALOG_FRAGMENT"
     }
 }

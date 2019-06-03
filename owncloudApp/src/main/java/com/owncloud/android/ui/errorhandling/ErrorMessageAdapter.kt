@@ -468,6 +468,7 @@ class ErrorMessageAdapter {
                     f.format(R.string.update_link_file_error)
                 OperationType.MOVE_FILE -> f.format(R.string.move_file_error)
                 OperationType.COPY_FILE -> f.format(R.string.copy_file_error)
+                OperationType.GET_CAPABILITIES -> f.format(R.string.get_capabilities_error)
                 else -> {
                     if (resultCode == RemoteOperationResult.ResultCode.OK) {
                         f.format(android.R.string.ok)
