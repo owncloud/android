@@ -261,39 +261,6 @@ class CreatePublicShareTest {
         onView(withText(newPublicShare3.name)).check(matches(isDisplayed()))
     }
 
-    @Test
-    fun loadingCreateShares(){
-
-        loadCapabilitiesSuccessfully()
-        loadSharesSuccessfully(arrayListOf())
-
-        val newPublicShare = publicShares[0]
-
-        `when`(
-            ocShareViewModel.insertPublicShareForFile(
-                1,
-                newPublicShare.name!!,
-                "",
-                -1,
-                false
-            )
-        ).thenReturn(sharesLiveData)
-
-        // 1. Open dialog to create new public share
-        onView(withId(R.id.addPublicLinkButton)).perform(click())
-
-        // 2. Save share
-        onView(withId(R.id.saveButton)).perform(click())
-
-        sharesLiveData.postValue(
-            Resource.loading(
-                arrayListOf(newPublicShare)
-            )
-        )
-
-        onView(withText(R.string.common_loading)).check(matches(isDisplayed()))
-    }
-
     private fun getOCFileForTesting(name: String = "default") = OCFile("/Photos").apply {
         availableOfflineStatus = OCFile.AvailableOfflineStatus.NOT_AVAILABLE_OFFLINE
         fileName = name
