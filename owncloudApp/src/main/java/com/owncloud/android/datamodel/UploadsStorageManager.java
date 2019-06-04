@@ -442,7 +442,8 @@ public class UploadsStorageManager extends Observable {
     public long clearSuccessfulUploads() {
         long result = getDB().delete(
                 ProviderTableMeta.CONTENT_URI_UPLOADS,
-                ProviderTableMeta.UPLOADS_STATUS + "==" + UploadStatus.UPLOAD_SUCCEEDED.value, null
+                ProviderTableMeta.UPLOADS_STATUS + "=?",
+                new String[]{String.valueOf(UploadStatus.UPLOAD_SUCCEEDED.value)}
         );
         Log_OC.d(TAG, "delete all successful uploads");
         if (result > 0) {
