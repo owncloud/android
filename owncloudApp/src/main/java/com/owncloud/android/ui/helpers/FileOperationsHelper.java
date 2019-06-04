@@ -5,6 +5,7 @@
  * @author David A. Velasco
  * @author Juan Carlos González Cabrero
  * @author David González Verdugo
+ * @author Shashvat Kedia
  * Copyright (C) 2019 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
@@ -134,7 +135,7 @@ public class FileOperationsHelper {
      * Show dialog to allow the user to choose an app to send the private link of an {@link OCFile},
      * or copy it to clipboard.
      *
-     * @param file    @param file {@link OCFile} which will be shared with internal users
+     * @param file @param file {@link OCFile} which will be shared with internal users
      */
     public void copyOrSendPrivateLink(OCFile file) {
 
@@ -152,12 +153,12 @@ public class FileOperationsHelper {
     }
 
     /**
-     * @param file The file to share.
-     * @param name Optional public share name
-     * @param password Optional password to protect the public share
-     * @param expirationTimeInMillis Optional expiration time
+     * @param file                     The file to share.
+     * @param name                     Optional public share name
+     * @param password                 Optional password to protect the public share
+     * @param expirationTimeInMillis   Optional expiration time
      * @param uploadToFolderPermission Optional permissions to upload files to the folder
-     * @param permissions Optional permissions to allow or not specific actions in the folder
+     * @param permissions              Optional permissions to allow or not specific actions in the folder
      */
     public void shareFileViaLink(OCFile file,
                                  String name,
@@ -230,7 +231,7 @@ public class FileOperationsHelper {
      * Show dialog to allow the user to choose an app to send the link of an {@link OCShare},
      * or copy it to clipboard.
      *
-     * @param share     {@link OCShare} which link will be sent to the app chosen by the user.
+     * @param share {@link OCShare} which link will be sent to the app chosen by the user.
      */
     public void copyOrSendPublicLink(OCShare share) {
         String link = share.getShareLink();
@@ -247,10 +248,10 @@ public class FileOperationsHelper {
     /**
      * Helper method to share a file with a known sharee. Starts a request to do it in {@link OperationsService}
      *
-     * @param file          The file to share.
-     * @param shareeName    Name (user name or group name) of the target sharee.
-     * @param shareType     The share type determines the sharee type.
-     * @param permissions   Permissions to grant to sharee on the shared file.
+     * @param file        The file to share.
+     * @param shareeName  Name (user name or group name) of the target sharee.
+     * @param shareType   The share type determines the sharee type.
+     * @param permissions Permissions to grant to sharee on the shared file.
      */
     public void shareFileWithSharee(OCFile file, String shareeName, ShareType shareType, int permissions) {
         if (file != null) {
@@ -286,7 +287,7 @@ public class FileOperationsHelper {
      * Helper method to remove an existing share, no matter if public or private.
      * Starts a request to do it in {@link OperationsService}
      *
-     * @param share      The {@link OCShare} to remove (unshare).
+     * @param share The {@link OCShare} to remove (unshare).
      */
     public void removeShare(OCShare share) {
 
@@ -317,7 +318,7 @@ public class FileOperationsHelper {
     /**
      * Show an instance of {@link ShareType} for sharing or unsharing the {@link OCFile} received as parameter.
      *
-     * @param file  File to share or unshare.
+     * @param file File to share or unshare.
      */
     public void showShareFile(OCFile file) {
         Intent intent = new Intent(mFileActivity, ShareActivity.class);
@@ -331,8 +332,8 @@ public class FileOperationsHelper {
      * Updates a share on a file to set its access permissions.
      * Starts a request to do it in {@link OperationsService}
      *
-     * @param share                     {@link OCShare} instance which permissions will be updated.
-     * @param permissions               New permissions to set. A value <= 0 makes no update.
+     * @param share       {@link OCShare} instance which permissions will be updated.
+     * @param permissions New permissions to set. A value <= 0 makes no update.
      */
     public void setPermissionsToShareWithSharee(OCShare share, int permissions) {
         Intent updateShareIntent = new Intent(mFileActivity, OperationsService.class);
@@ -350,15 +351,15 @@ public class FileOperationsHelper {
      * Updates at once all the properties of a public share on a file.
      * Starts a request to do it in {@link OperationsService}
      *
-     * @param share                     Public share to updated.
-     * @param name                      Name to set for the link (ignored in servers < 10.0.0).
-     * @param password                  Password to set for the public link; null or empty string to clear
-     *                                  the current password. - TODO select value to leave unchanged?
-     * @param expirationTimeInMillis    Expiration date to set. A negative value clears the current expiration
-     *                                  date, leaving the link unrestricted. Zero makes no change.
-     * @param uploadToFolderPermission  New state of the permission for editing the folder shared via link.
-     *                                  Ignored if the file is not a folder. - TODO select value to leave unchanged?
-     * @param permissions               Optional permissions to allow or not specific actions in the folder
+     * @param share                    Public share to updated.
+     * @param name                     Name to set for the link (ignored in servers < 10.0.0).
+     * @param password                 Password to set for the public link; null or empty string to clear
+     *                                 the current password. - TODO select value to leave unchanged?
+     * @param expirationTimeInMillis   Expiration date to set. A negative value clears the current expiration
+     *                                 date, leaving the link unrestricted. Zero makes no change.
+     * @param uploadToFolderPermission New state of the permission for editing the folder shared via link.
+     *                                 Ignored if the file is not a folder. - TODO select value to leave unchanged?
+     * @param permissions              Optional permissions to allow or not specific actions in the folder
      */
     public void updateShareViaLink(
             OCShare share,
@@ -443,7 +444,7 @@ public class FileOperationsHelper {
     /**
      * Request the synchronization of a file or folder with the OC server, including its contents.
      *
-     * @param file          The file or folder to synchronize
+     * @param file The file or folder to synchronize
      */
     public void syncFile(OCFile file) {
         if (!file.isFolder()) {
@@ -525,18 +526,25 @@ public class FileOperationsHelper {
     /**
      * Start operations to delete one or several files
      *
-     * @param files             Files to delete
-     * @param onlyLocalCopy     When 'true' only local copy of the files is removed; otherwise files are also deleted
-     *                          in the server.
+     * @param files         Files to delete
+     * @param onlyLocalCopy When 'true' only local copy of the files is removed; otherwise files are also deleted
+     *                      in the server.
      */
     public void removeFiles(Collection<OCFile> files, boolean onlyLocalCopy) {
+        int countOfFilesToRemove = 0;
+        boolean isLastFileToRemove = false;
         for (OCFile file : files) {
+            countOfFilesToRemove++;
             // RemoveFile
             Intent service = new Intent(mFileActivity, OperationsService.class);
             service.setAction(OperationsService.ACTION_REMOVE);
             service.putExtra(OperationsService.EXTRA_ACCOUNT, mFileActivity.getAccount());
             service.putExtra(OperationsService.EXTRA_REMOTE_PATH, file.getRemotePath());
             service.putExtra(OperationsService.EXTRA_REMOVE_ONLY_LOCAL, onlyLocalCopy);
+            if (countOfFilesToRemove == files.size()) {
+                isLastFileToRemove = true;
+            }
+            service.putExtra(OperationsService.EXTRA_IS_LAST_FILE_TO_REMOVE, isLastFileToRemove);
             mWaitingForOpId = mFileActivity.getOperationsServiceBinder().queueNewOperation(service);
         }
 
@@ -557,6 +565,7 @@ public class FileOperationsHelper {
 
     /**
      * Cancel the transference in downloads (files/folders) and file uploads
+     *
      * @param file OCFile
      */
     public void cancelTransference(OCFile file) {
@@ -583,8 +592,8 @@ public class FileOperationsHelper {
     /**
      * Start operations to move one or several files
      *
-     * @param files            Files to move
-     * @param targetFolder     Folder where the files while be moved into
+     * @param files        Files to move
+     * @param targetFolder Folder where the files while be moved into
      */
     public void moveFiles(Collection<OCFile> files, OCFile targetFolder) {
         for (OCFile file : files) {
@@ -601,8 +610,8 @@ public class FileOperationsHelper {
     /**
      * Start operations to copy one or several files
      *
-     * @param files            Files to copy
-     * @param targetFolder     Folder where the files while be copied into
+     * @param files        Files to copy
+     * @param targetFolder Folder where the files while be copied into
      */
     public void copyFiles(Collection<OCFile> files, OCFile targetFolder) {
         for (OCFile file : files) {
@@ -625,7 +634,7 @@ public class FileOperationsHelper {
     }
 
     /**
-     *  @return 'True' if the server doesn't need to check forbidden characters
+     * @return 'True' if the server doesn't need to check forbidden characters
      */
     public boolean isVersionWithForbiddenCharacters() {
         if (mFileActivity.getAccount() != null) {
@@ -639,7 +648,7 @@ public class FileOperationsHelper {
     /**
      * Starts a check of the currenlty stored credentials for the given account.
      *
-     * @param account       OC account which credentials will be checked.
+     * @param account OC account which credentials will be checked.
      */
     public void checkCurrentCredentials(Account account) {
         Intent service = new Intent(mFileActivity, OperationsService.class);

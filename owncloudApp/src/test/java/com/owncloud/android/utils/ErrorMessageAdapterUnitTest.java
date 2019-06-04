@@ -36,12 +36,12 @@ import static org.mockito.Mockito.when;
 
 /**
  * Local unit test, to be run out of Android emulator or device.
- *
+ * <p>
  * At the moment, it's a sample to validate the automatic test environment, in the scope of local unit tests with
  * mock Android dependencies.
- *
+ * <p>
  * Don't take it as an example of completeness.
- *
+ * <p>
  * See http://developer.android.com/intl/es/training/testing/unit-testing/local-unit-tests.html .
  */
 @RunWith(MockitoJUnitRunner.class)
@@ -66,7 +66,7 @@ public class ErrorMessageAdapterUnitTest {
         // ... when method under test is called ...
         String errorMessage = ErrorMessageAdapter.getResultMessage(
                 new RemoteOperationResult(RemoteOperationResult.ResultCode.FORBIDDEN),
-                new RemoveFileOperation(PATH_TO_DELETE, false),
+                new RemoveFileOperation(PATH_TO_DELETE, false, true),
                 mMockResources
         );
 

@@ -261,7 +261,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
         val file = currentStorageManager?.getFileById(docId) ?: throw FileNotFoundException("File $docId not found")
         Log_OC.d(TAG, "Trying to delete ${file.fileName} with id ${file.fileId}")
 
-        RemoveFileOperation(file.remotePath, false).apply {
+        RemoveFileOperation(file.remotePath, false, true).apply {
             execute(currentStorageManager, context).also { checkOperationResult(it, file.parentId.toString()) }
         }
     }
