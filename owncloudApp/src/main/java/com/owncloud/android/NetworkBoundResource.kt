@@ -39,6 +39,7 @@ import androidx.annotation.MainThread
 import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.MutableLiveData
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.vo.Resource
 
@@ -58,8 +59,8 @@ abstract class NetworkBoundResource<ResultType, RequestType>(
         val dbSource = loadFromDb()
         result.addSource(dbSource) { data ->
             result.removeSource(dbSource)
-            if (shouldFetch(data)) {
-                performNetworkOperation(dbSource)
+            if (shouldFetchFromNetwork(data)) {
+                fetchFromNetwork(dbSource)
             } else {
                 result.addSource(dbSource) { newData ->
                     setValue(Resource.success(newData))
@@ -75,7 +76,7 @@ abstract class NetworkBoundResource<ResultType, RequestType>(
         }
     }
 
-    private fun performNetworkOperation(dbSource: LiveData<ResultType>) {
+    private fun fetchFromNetwork(dbSource: LiveData<ResultType>) {
         // Let's dispatch dbSource value quickly while network operation is performed
         result.addSource(dbSource) { newData ->
             if (newData != null) {
@@ -132,12 +133,13 @@ abstract class NetworkBoundResource<ResultType, RequestType>(
     }
 
     fun asLiveData() = result as LiveData<Resource<ResultType>>
+    fun asMutableLiveData() = result as MutableLiveData<Resource<ResultType>>
 
     @WorkerThread
     protected abstract fun saveCallResult(item: RequestType)
 
     @MainThread
-    protected abstract fun shouldFetch(data: ResultType?): Boolean
+    protected abstract fun shouldFetchFromNetwork(data: ResultType?): Boolean
 
     @MainThread
     protected abstract fun loadFromDb(): LiveData<ResultType>
