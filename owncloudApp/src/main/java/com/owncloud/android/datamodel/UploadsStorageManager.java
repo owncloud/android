@@ -428,9 +428,10 @@ public class UploadsStorageManager extends Observable {
     public long clearFailedButNotDelayedForWifiUploads() {
         long result = getDB().delete(
                 ProviderTableMeta.CONTENT_URI_UPLOADS,
-                ProviderTableMeta.UPLOADS_STATUS + "==" + UploadStatus.UPLOAD_FAILED.value + " AND " +
-                        ProviderTableMeta.UPLOADS_LAST_RESULT + "<>" + UploadResult.DELAYED_FOR_WIFI.getValue(),
-                null
+                ProviderTableMeta.UPLOADS_STATUS + "= ? AND " +
+                        ProviderTableMeta.UPLOADS_LAST_RESULT + "!= ?" ,
+                new String[]{String.valueOf(UploadStatus.UPLOAD_FAILED.value),
+                        String.valueOf(UploadResult.DELAYED_FOR_WIFI.getValue())}
         );
         Log_OC.d(TAG, "delete all failed uploads but those delayed for Wifi");
         if (result > 0) {
