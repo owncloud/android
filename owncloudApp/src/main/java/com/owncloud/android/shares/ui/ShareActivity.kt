@@ -29,6 +29,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
+import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import com.google.android.material.snackbar.Snackbar
 import com.owncloud.android.R
@@ -249,6 +250,10 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
                     Status.SUCCESS -> {
                         shareFileFragment?.updatePublicShares(resource.data as ArrayList<OCShare>)
                         dismissLoadingDialog()
+
+                        if (publicShareFragment?.isVisible == true) {
+                            publicShareFragment?.dismiss()
+                        }
                     }
                     Status.ERROR -> {
                         val errorMessage = ErrorMessageAdapter.getResultMessage(
@@ -396,31 +401,6 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
             password,
             expirationTimeInMillis,
             publicUpload
-        ).observe(
-            this,
-            Observer { resource ->
-                when (resource?.status) {
-                    Status.SUCCESS -> {
-                        publicShareFragment?.dismiss()
-                    }
-                    Status.ERROR -> {
-                        val errorMessage: String = resource.msg ?: ErrorMessageAdapter.getResultMessage(
-                            resource.code,
-                            resource.exception,
-                            OperationType.CREATE_PUBLIC_SHARE,
-                            resources
-                        );
-                        publicShareFragment?.showError(errorMessage)
-                        dismissLoadingDialog()
-                    }
-                    Status.LOADING -> {
-                        showLoadingDialog(R.string.common_loading)
-                    }
-                    else -> {
-                        Log.d(TAG, "Unknown status when creating public share")
-                    }
-                }
-            }
         )
     }
 
