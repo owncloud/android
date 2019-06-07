@@ -32,7 +32,7 @@ interface ShareRepository {
         password: String,
         expirationTimeInMillis: Long,
         publicUpload: Boolean
-    )
+    ): LiveData<Resource<Void>>
 
     fun updatePublicShareForFile(
         remoteId: Long,
@@ -41,9 +41,9 @@ interface ShareRepository {
         expirationDateInMillis: Long,
         permissions: Int,
         publicUpload: Boolean
-    ): LiveData<Resource<List<OCShare>>>
+    ): LiveData<Resource<Void>>
 
     fun deletePublicShare(
         remoteId: Long
-    ): LiveData<Resource<List<OCShare>>>
+    ): LiveData<Resource<Void>>
 }

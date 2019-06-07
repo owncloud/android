@@ -67,7 +67,7 @@ class OCShareViewModel(
         password: String,
         expirationTimeInMillis: Long,
         publicUpload: Boolean
-    ) = shareRepository.insertPublicShareForFile(
+    ): LiveData<Resource<Void>> = shareRepository.insertPublicShareForFile(
         permissions, name, password, expirationTimeInMillis, publicUpload
     )
 
@@ -78,11 +78,11 @@ class OCShareViewModel(
         expirationDateInMillis: Long,
         permissions: Int,
         publicUpload: Boolean
-    ): LiveData<Resource<List<OCShare>>> = shareRepository.updatePublicShareForFile(
+    ): LiveData<Resource<Void>> = shareRepository.updatePublicShareForFile(
         remoteId, name, password, expirationDateInMillis, permissions, publicUpload
     )
 
     fun deletePublicShare(
         remoteId: Long
-    ): LiveData<Resource<List<OCShare>>> = shareRepository.deletePublicShare(remoteId)
+    ): LiveData<Resource<Void>> = shareRepository.deletePublicShare(remoteId)
 }
