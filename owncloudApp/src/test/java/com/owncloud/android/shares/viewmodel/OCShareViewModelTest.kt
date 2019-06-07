@@ -27,8 +27,8 @@ import com.owncloud.android.shares.db.OCShare
 import com.owncloud.android.shares.repository.OCShareRepository
 import com.owncloud.android.utils.TestUtil
 import com.owncloud.android.vo.Resource
+import com.owncloud.android.vo.Status
 import junit.framework.Assert.assertEquals
-import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -43,11 +43,10 @@ class OCShareViewModelTest {
     val instantExecutorRule = InstantTaskExecutorRule()
 
     private var testAccount: Account = TestUtil.createAccount("admin@server", "test")
-    private val publicShareResourcesAsLiveData: MutableLiveData<Resource<List<OCShare>>> = MutableLiveData()
     private var ocShareRepository: OCShareRepository = mock(OCShareRepository::class.java)
 
-    @Before
-    fun init() {
+    @Test
+    fun loadPublicShares() {
         val publicShares = mutableListOf(
             TestUtil.createPublicShare(
                 path = "/Photos/image.jpg",
@@ -63,19 +62,12 @@ class OCShareViewModelTest {
             )
         )
 
-        publicShareResourcesAsLiveData.value = Resource.success(publicShares)
-    }
-
-    @Test
-    fun loadPublicShares() {
         `when`(
-            ocShareRepository.loadSharesForFile(
-                listOf(ShareType.PUBLIC_LINK),
-                reshares = true,
-                subfiles = false
-            )
+            ocShareRepository.getSharesForFile()
         ).thenReturn(
-            publicShareResourcesAsLiveData
+            MutableLiveData<Resource<List<OCShare>>>().apply {
+                value = Resource.success(publicShares)
+            }
         )
 
         // Viewmodel that will ask ocShareRepository for shares
@@ -98,13 +90,15 @@ class OCShareViewModelTest {
                 false
             )
         ).thenReturn(
-            publicShareResourcesAsLiveData
+            MutableLiveData<Resource<Void>>().apply {
+                value = Resource.success()
+            }
         )
 
         // Viewmodel that will ask ocShareRepository for shares
         val ocShareViewModel = createOCShareViewModel(ocShareRepository)
 
-        val resource: Resource<List<OCShare>>? = ocShareViewModel.insertPublicShareForFile(
+        val resource: Resource<Void>? = ocShareViewModel.insertPublicShareForFile(
             1,
             "Photos 2 link",
             "1234",
@@ -112,7 +106,7 @@ class OCShareViewModelTest {
             false
         ).value
 
-        assertShareParameters(resource?.data)
+        assertEquals(Status.SUCCESS, resource?.status)
     }
 
     @Test
@@ -122,29 +116,31 @@ class OCShareViewModelTest {
         `when`(
             ocShareRepository.updatePublicShareForFile(
                 1,
-                "Photos 2 link",
-                "1234",
+                "Photos 1 link",
+                "123456",
                 1000,
                 1,
                 false
             )
         ).thenReturn(
-            publicShareResourcesAsLiveData
+            MutableLiveData<Resource<Void>>().apply {
+                value = Resource.success()
+            }
         )
 
         // Viewmodel that will ask ocShareRepository for shares
         val ocShareViewModel = createOCShareViewModel(ocShareRepository)
 
-        val resource: Resource<List<OCShare>>? = ocShareViewModel.updatePublicShareForFile(
+        val resource: Resource<Void>? = ocShareViewModel.updatePublicShareForFile(
             1,
-            "Photos 2 link",
-            "1234",
+            "Photos 1 link",
+            "123456",
             1000,
             1,
             false
         ).value
 
-        assertShareParameters(resource?.data)
+        assertEquals(Status.SUCCESS, resource?.status)
     }
 
     @Test
@@ -156,17 +152,19 @@ class OCShareViewModelTest {
                 3
             )
         ).thenReturn(
-            publicShareResourcesAsLiveData
+            MutableLiveData<Resource<Void>>().apply {
+                value = Resource.success()
+            }
         )
 
         // Viewmodel that will ask ocShareRepository for shares
         val ocShareViewModel = createOCShareViewModel(ocShareRepository)
 
-        val resource: Resource<List<OCShare>>? = ocShareViewModel.deletePublicShare(
+        val resource: Resource<Void>? = ocShareViewModel.deletePublicShare(
             3
         ).value
 
-        assertShareParameters(resource?.data)
+        assertEquals(Status.SUCCESS, resource?.status)
     }
 
     private fun createOCShareViewModel(ocShareRepository: OCShareRepository): OCShareViewModel =
