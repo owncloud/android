@@ -230,7 +230,11 @@ class EditPublicShareFolderTest {
                 1,
                 false
             )
-        ).thenReturn(sharesLiveData)
+        ).thenReturn(
+            MutableLiveData<Resource<Void>>().apply {
+                postValue(Resource.success())
+            }
+        )
 
         // 1. Open dialog to edit an existing public share
         onView(withId(R.id.editPublicLinkButton)).perform(click())
@@ -270,7 +274,11 @@ class EditPublicShareFolderTest {
                 15,
                 true
             )
-        ).thenReturn(sharesLiveData)
+        ).thenReturn(
+            MutableLiveData<Resource<Void>>().apply {
+                postValue(Resource.success())
+            }
+        )
 
         // 1. Open dialog to edit an existing public share
         onView(withId(R.id.editPublicLinkButton)).perform(click())
@@ -311,7 +319,11 @@ class EditPublicShareFolderTest {
                 4,
                 true
             )
-        ).thenReturn(sharesLiveData)
+        ).thenReturn(
+            MutableLiveData<Resource<Void>>().apply {
+                value = Resource.success()
+            }
+        )
 
         // 1. Open dialog to edit an existing public share
         onView(withId(R.id.editPublicLinkButton)).perform(click())
@@ -352,7 +364,11 @@ class EditPublicShareFolderTest {
                 1,
                 false
             )
-        ).thenReturn(sharesLiveData)
+        ).thenReturn(
+            MutableLiveData<Resource<Void>>().apply {
+                value = Resource.success()
+            }
+        )
 
         // 1. Open dialog to edit an existing public share
         onView(withId(R.id.editPublicLinkButton)).perform(click())
@@ -375,7 +391,6 @@ class EditPublicShareFolderTest {
         onView(withId(R.id.shareViaLinkEditPermissionReadOnly)).check(matches(isChecked()))
 
     }
-
 
     private fun getOCFileForTesting(name: String = "default"): OCFile {
         val file = OCFile("/Photos")
