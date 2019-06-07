@@ -294,7 +294,11 @@ class CreatePublicShareTest {
                 -1,
                 false
             )
-        ).thenReturn(sharesLiveData)
+        ).thenReturn(
+            MutableLiveData<Resource<Void>>().apply {
+                postValue(Resource.success())
+            }
+        )
 
         // 1. Open dialog to create new public share
         onView(withId(R.id.addPublicLinkButton)).perform(click())

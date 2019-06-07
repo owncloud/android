@@ -230,7 +230,11 @@ class EditPublicShareTest {
                 1,
                 false
             )
-        ).thenReturn(sharesLiveData)
+        ).thenReturn(
+            MutableLiveData<Resource<Void>>().apply {
+                value = Resource.success()
+            }
+        )
 
         // 1. Open dialog to edit an existing public share
         onView(withId(R.id.editPublicLinkButton)).perform(click())
@@ -271,7 +275,11 @@ class EditPublicShareTest {
                 1,
                 false
             )
-        ).thenReturn(sharesLiveData)
+        ).thenReturn(
+            MutableLiveData<Resource<Void>>().apply {
+                postValue(Resource.success())
+            }
+        )
 
         // 1. Open dialog to edit an existing public share
         onView(withId(R.id.editPublicLinkButton)).perform(click())
@@ -315,7 +323,11 @@ class EditPublicShareTest {
                 1,
                 false
             )
-        ).thenReturn(sharesLiveData)
+        ).thenReturn(
+            MutableLiveData<Resource<Void>>().apply {
+                postValue(Resource.success())
+            }
+        )
 
         // 1. Open dialog to edit an existing public share
         onView(withId(R.id.editPublicLinkButton)).perform(click())
@@ -358,7 +370,11 @@ class EditPublicShareTest {
                 1,
                 false
             )
-        ).thenReturn(sharesLiveData)
+        ).thenReturn(
+            MutableLiveData<Resource<Void>>().apply {
+                postValue(Resource.success())
+            }
+        )
 
         // 1. Open dialog to edit an existing public share
         onView(withId(R.id.editPublicLinkButton)).perform(click())
@@ -402,7 +418,11 @@ class EditPublicShareTest {
                 1,
                 false
             )
-        ).thenReturn(sharesLiveData)
+        ).thenReturn(
+            MutableLiveData<Resource<Void>>().apply {
+                value = Resource.success()
+            }
+        )
 
         // 1. Open dialog to edit an existing public share
         onView(withId(R.id.editPublicLinkButton)).perform(click())
