@@ -403,6 +403,7 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
                 when (resource?.status) {
                     Status.SUCCESS -> {
                         publicShareFragment?.dismiss()
+                        Log_OC.d("TESTS", "Closing share creation dialog")
                     }
                     Status.ERROR -> {
                         val errorMessage: String = resource.msg ?: ErrorMessageAdapter.getResultMessage(
