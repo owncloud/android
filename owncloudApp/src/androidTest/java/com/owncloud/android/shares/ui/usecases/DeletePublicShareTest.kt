@@ -28,7 +28,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.ViewMatchers.hasSibling
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
@@ -49,6 +51,7 @@ import com.owncloud.android.ui.activity.FileActivity
 import com.owncloud.android.utils.AccountsManager
 import com.owncloud.android.utils.TestUtil
 import com.owncloud.android.vo.Resource
+import org.hamcrest.Matchers.allOf
 import org.hamcrest.Matchers.not
 import org.junit.AfterClass
 import org.junit.Before
@@ -184,31 +187,31 @@ class DeletePublicShareTest {
 
     @Test
     fun deletePublicLink() {
-//        loadCapabilitiesSuccessfully()
-//
-//        val existingPublicShare = publicShares.take(2) as ArrayList<OCShare>
-//        loadSharesSuccessfully(existingPublicShare)
-//
-//        `when`(
-//            ocShareViewModel.deletePublicShare(ArgumentMatchers.anyLong())
-//        ).thenReturn(
-//            MutableLiveData<Resource<Void>>().apply {
-//                postValue(Resource.success())
-//            }
-//        )
-//
-//        onView(allOf(withId(R.id.deletePublicLinkButton), hasSibling(withText(existingPublicShare[0].name))))
-//            .perform(click())
-//        onView(withId(android.R.id.button1)).perform(click())
-//
-//        sharesLiveData.postValue(
-//            Resource.success(
-//                arrayListOf(existingPublicShare[1])
-//            )
-//        )
-//
-//        onView(withText(existingPublicShare[0].name)).check(doesNotExist())
-//        onView(withText(existingPublicShare[1].name)).check(matches(isDisplayed()))
+        loadCapabilitiesSuccessfully()
+
+        val existingPublicShare = publicShares.take(2) as ArrayList<OCShare>
+        loadSharesSuccessfully(existingPublicShare)
+
+        `when`(
+            ocShareViewModel.deletePublicShare(ArgumentMatchers.anyLong())
+        ).thenReturn(
+            MutableLiveData<Resource<Void>>().apply {
+                postValue(Resource.success())
+            }
+        )
+
+        onView(allOf(withId(R.id.deletePublicLinkButton), hasSibling(withText(existingPublicShare[0].name))))
+            .perform(click())
+        onView(withId(android.R.id.button1)).perform(click())
+
+        sharesLiveData.postValue(
+            Resource.success(
+                arrayListOf(existingPublicShare[1])
+            )
+        )
+
+        onView(withText(existingPublicShare[0].name)).check(doesNotExist())
+        onView(withText(existingPublicShare[1].name)).check(matches(isDisplayed()))
     }
 
     @Test
