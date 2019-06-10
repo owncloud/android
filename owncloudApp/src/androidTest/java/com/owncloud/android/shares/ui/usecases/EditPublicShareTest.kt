@@ -177,6 +177,8 @@ class EditPublicShareTest {
                     "AUTH_TOKEN"
                 )
             }).start()
+
+            Thread.sleep(2000)
         }
     }
 
@@ -232,7 +234,7 @@ class EditPublicShareTest {
             )
         ).thenReturn(
             MutableLiveData<Resource<Void>>().apply {
-                value = Resource.success()
+                postValue(Resource.success())
             }
         )
 
@@ -420,7 +422,7 @@ class EditPublicShareTest {
             )
         ).thenReturn(
             MutableLiveData<Resource<Void>>().apply {
-                value = Resource.success()
+                postValue(Resource.success())
             }
         )
 
