@@ -30,6 +30,7 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.replaceText
+import androidx.test.espresso.action.ViewActions.scrollTo
 import androidx.test.espresso.action.ViewActions.typeText
 import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
@@ -146,39 +147,35 @@ class EditPublicShareTest {
             // obtaining an AccountManager instance
             val accountManager = AccountManager.get(targetContext)
 
-            Thread(Runnable {
-                accountManager.addAccountExplicitly(account, "a", null)
+            accountManager.addAccountExplicitly(account, "a", null)
 
-                // include account version, user, server version and token with the new account
-                accountManager.setUserData(
-                    account,
-                    AccountUtils.Constants.KEY_OC_VERSION,
-                    OwnCloudVersion("10.2").toString()
-                )
-                accountManager.setUserData(
-                    account,
-                    AccountUtils.Constants.KEY_OC_BASE_URL,
-                    "serverUrl:port"
-                )
-                accountManager.setUserData(
-                    account,
-                    AccountUtils.Constants.KEY_DISPLAY_NAME,
-                    "admin"
-                )
-                accountManager.setUserData(
-                    account,
-                    AccountUtils.Constants.KEY_OC_ACCOUNT_VERSION,
-                    "1"
-                )
+            // include account version, user, server version and token with the new account
+            accountManager.setUserData(
+                account,
+                AccountUtils.Constants.KEY_OC_VERSION,
+                OwnCloudVersion("10.2").toString()
+            )
+            accountManager.setUserData(
+                account,
+                AccountUtils.Constants.KEY_OC_BASE_URL,
+                "serverUrl:port"
+            )
+            accountManager.setUserData(
+                account,
+                AccountUtils.Constants.KEY_DISPLAY_NAME,
+                "admin"
+            )
+            accountManager.setUserData(
+                account,
+                AccountUtils.Constants.KEY_OC_ACCOUNT_VERSION,
+                "1"
+            )
 
-                accountManager.setAuthToken(
-                    account,
-                    KEY_AUTH_TOKEN_TYPE,
-                    "AUTH_TOKEN"
-                )
-            }).start()
-
-            Thread.sleep(2000)
+            accountManager.setAuthToken(
+                account,
+                KEY_AUTH_TOKEN_TYPE,
+                "AUTH_TOKEN"
+            )
         }
     }
 
@@ -383,12 +380,17 @@ class EditPublicShareTest {
 
         // 2. Enable expiration date and set it
         onView(withId(R.id.shareViaLinkExpirationSwitch)).perform(click())
-        onView(withClassName(Matchers.equalTo(DatePicker::class.java.name))).
-            perform(PickerActions.setDate(2020, 3, 12));
+        onView(withClassName(Matchers.equalTo(DatePicker::class.java.name))).perform(
+            PickerActions.setDate(
+                2020,
+                3,
+                12
+            )
+        );
         onView(withId(android.R.id.button1)).perform(click())
 
         // 3. Save updated share
-        onView(withId(R.id.saveButton)).perform(click())
+        onView(withId(R.id.saveButton)).perform(scrollTo(), click())
 
         // 4. Share properly updated
         val updatedPublicShare = publicShares[4]
