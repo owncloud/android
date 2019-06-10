@@ -149,6 +149,8 @@ class LoadPublicSharesTest {
                     "AUTH_TOKEN"
                 )
             }).start()
+
+            Thread.sleep(2000)
         }
     }
 

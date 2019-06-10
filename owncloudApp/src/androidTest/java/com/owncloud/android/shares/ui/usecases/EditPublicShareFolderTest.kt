@@ -177,6 +177,8 @@ class EditPublicShareFolderTest {
                     "AUTH_TOKEN"
                 )
             }).start()
+
+            Thread.sleep(2000)
         }
     }
 
@@ -321,7 +323,7 @@ class EditPublicShareFolderTest {
             )
         ).thenReturn(
             MutableLiveData<Resource<Void>>().apply {
-                value = Resource.success()
+                postValue(Resource.success())
             }
         )
 
@@ -366,7 +368,7 @@ class EditPublicShareFolderTest {
             )
         ).thenReturn(
             MutableLiveData<Resource<Void>>().apply {
-                value = Resource.success()
+                postValue(Resource.success())
             }
         )
 
