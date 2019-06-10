@@ -159,6 +159,8 @@ class CreatePublicShareTest {
                     "AUTH_TOKEN"
                 )
             }).start()
+
+            Thread.sleep(2000)
         }
     }
 
