@@ -2,6 +2,7 @@
  * ownCloud Android client application
  *
  * @author Jesús Recio (@jesmrec)
+ * @author David González (@davigonz)
  * Copyright (C) 2019 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
