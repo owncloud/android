@@ -43,6 +43,7 @@ import com.owncloud.android.capabilities.db.OCCapability
 import com.owncloud.android.capabilities.viewmodel.OCCapabilityViewModel
 import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.lib.common.accounts.AccountUtils
+import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.status.CapabilityBooleanType
 import com.owncloud.android.lib.resources.status.OwnCloudVersion
 import com.owncloud.android.shares.db.OCShare
@@ -321,6 +322,44 @@ class CreatePublicShareTest {
         unregisterCreateShareFragmentAsIdlingResource(create3rdShareFragmentIdlingResource)
     }
 
+    @Test
+    fun createShareLoading() {
+        loadCapabilitiesSuccessfully()
+        loadSharesSuccessfully(arrayListOf())
+
+        onView(withId(R.id.addPublicLinkButton)).perform(click())
+
+        val createShareFragmentIdlingResource = registerCreateShareFragmentAsIdlingResource()
+
+        savePublicShare(publicShares[0], Resource.loading())
+
+        onView(withText(R.string.common_loading)).check(matches(isDisplayed()))
+
+        unregisterCreateShareFragmentAsIdlingResource(createShareFragmentIdlingResource)
+    }
+
+    @Test
+    fun createShareError() {
+        loadCapabilitiesSuccessfully()
+        loadSharesSuccessfully(arrayListOf())
+
+        onView(withId(R.id.addPublicLinkButton)).perform(click())
+
+        val createShareFragmentIdlingResource = registerCreateShareFragmentAsIdlingResource()
+
+        savePublicShare(
+            publicShares[0],
+            Resource.error(
+                RemoteOperationResult.ResultCode.FORBIDDEN,
+                exception = Exception("Error when retrieving shares")
+            )
+        )
+
+        onView(withText(R.string.share_link_file_error)).check(matches(isDisplayed()))
+
+        unregisterCreateShareFragmentAsIdlingResource(createShareFragmentIdlingResource)
+    }
+
     private fun getOCFileForTesting(name: String = "default") = OCFile("/Photos").apply {
         availableOfflineStatus = OCFile.AvailableOfflineStatus.NOT_AVAILABLE_OFFLINE
         fileName = name
@@ -346,7 +385,7 @@ class CreatePublicShareTest {
         sharesLiveData.postValue(Resource.success(shares))
     }
 
-    private fun savePublicShare(newShare: OCShare) {
+    private fun savePublicShare(newShare: OCShare, resource: Resource<Unit> = Resource.success()) {
         `when`(
             ocShareViewModel.insertPublicShareForFile(
                 1,
@@ -357,7 +396,7 @@ class CreatePublicShareTest {
             )
         ).thenReturn(
             MutableLiveData<Resource<Unit>>().apply {
-                postValue(Resource.success())
+                postValue(resource)
             }
         )
 

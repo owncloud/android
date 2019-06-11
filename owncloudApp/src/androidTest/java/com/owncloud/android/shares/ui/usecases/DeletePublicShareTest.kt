@@ -2,6 +2,7 @@
  * ownCloud Android client application
  *
  * @author Jesus Recio (@jesmrec)
+ * @author David González (@davigonz)
  * Copyright (C) 2019 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -42,6 +43,7 @@ import com.owncloud.android.capabilities.db.OCCapability
 import com.owncloud.android.capabilities.viewmodel.OCCapabilityViewModel
 import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.lib.common.accounts.AccountUtils
+import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.status.CapabilityBooleanType
 import com.owncloud.android.lib.resources.status.OwnCloudVersion
 import com.owncloud.android.shares.db.OCShare
@@ -244,7 +246,7 @@ class DeletePublicShareTest {
     }
 
     @Test
-    fun loadingDeleteShares() {
+    fun deleteShareLoading() {
         loadCapabilitiesSuccessfully()
 
         val existingPublicShare = publicShares[0]
@@ -259,6 +261,32 @@ class DeletePublicShareTest {
         )
 
         onView(withText(R.string.common_loading)).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun deleteShareError() {
+        loadCapabilitiesSuccessfully()
+
+        val existingPublicShare = publicShares[0]
+        loadSharesSuccessfully(arrayListOf(existingPublicShare))
+
+        `when`(
+            ocShareViewModel.deletePublicShare(ArgumentMatchers.anyLong())
+        ).thenReturn(
+            MutableLiveData<Resource<Unit>>().apply {
+                postValue(
+                    Resource.error(
+                        RemoteOperationResult.ResultCode.FORBIDDEN,
+                        exception = Exception("Error when retrieving shares")
+                    )
+                )
+            }
+        )
+
+        onView(withId(R.id.deletePublicLinkButton)).perform(click())
+        onView(withId(android.R.id.button1)).perform(click())
+
+        onView(withText(R.string.unshare_link_file_error)).check(matches(isDisplayed()))
     }
 
     private fun getOCFileForTesting(name: String = "default"): OCFile {
