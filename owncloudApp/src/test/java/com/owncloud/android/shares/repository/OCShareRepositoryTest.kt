@@ -189,7 +189,7 @@ class OCShareRepositoryTest {
         )
 
         val data = insertShare(localData, remoteOperationResult)
-        val observer = mock<Observer<Resource<Void>>>()
+        val observer = mock<Observer<Resource<Unit>>>()
         data.observeForever(observer)
 
         // Get public shares from database is called once, when creating the repository
@@ -231,7 +231,7 @@ class OCShareRepositoryTest {
         // Retrieving public shares from server...
 
         // Observe changes in database livedata when there's an error from server
-        val observer = mock<Observer<Resource<Void>>>()
+        val observer = mock<Observer<Resource<Unit>>>()
         data.observeForever(observer)
 
         verify(observer).onChanged(
@@ -252,7 +252,7 @@ class OCShareRepositoryTest {
 
         val data = updateShare(localData, remoteOperationResult)
 
-        val observer = mock<Observer<Resource<Void>>>()
+        val observer = mock<Observer<Resource<Unit>>>()
         data.observeForever(observer)
 
         // Get public shares from database is called once, when creating the repository
@@ -279,7 +279,7 @@ class OCShareRepositoryTest {
 
         val data = deleteShare(localData, remoteOperationResult)
 
-        val observer = mock<Observer<Resource<Void>>>()
+        val observer = mock<Observer<Resource<Unit>>>()
         data.observeForever(observer)
 
         // Get public shares from database is called once, when creating the repository
@@ -329,7 +329,7 @@ class OCShareRepositoryTest {
     private fun insertShare(
         localData: MutableLiveData<List<OCShare>>,
         remoteOperationResult: RemoteOperationResult<ShareParserResult>
-    ): LiveData<Resource<Void>> {
+    ): LiveData<Resource<Unit>> {
         val ocShareRepository = createRepositoryWithData(localData, remoteOperationResult)
 
         return ocShareRepository.insertPublicShareForFile(
@@ -344,7 +344,7 @@ class OCShareRepositoryTest {
     private fun updateShare(
         localData: MutableLiveData<List<OCShare>>,
         remoteOperationResult: RemoteOperationResult<ShareParserResult>
-    ): LiveData<Resource<Void>> {
+    ): LiveData<Resource<Unit>> {
         val ocShareRepository = createRepositoryWithData(localData, remoteOperationResult)
 
         return ocShareRepository.updatePublicShareForFile(
@@ -360,7 +360,7 @@ class OCShareRepositoryTest {
     private fun deleteShare(
         localData: MutableLiveData<List<OCShare>>,
         remoteOperationResult: RemoteOperationResult<ShareParserResult>
-    ): LiveData<Resource<Void>> {
+    ): LiveData<Resource<Unit>> {
         val ocShareRepository = createRepositoryWithData(localData, remoteOperationResult)
         return ocShareRepository.deletePublicShare(
             1
