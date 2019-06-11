@@ -90,7 +90,7 @@ class OCShareViewModelTest {
                 false
             )
         ).thenReturn(
-            MutableLiveData<Resource<Void>>().apply {
+            MutableLiveData<Resource<Unit>>().apply {
                 value = Resource.success()
             }
         )
@@ -98,7 +98,7 @@ class OCShareViewModelTest {
         // Viewmodel that will ask ocShareRepository for shares
         val ocShareViewModel = createOCShareViewModel(ocShareRepository)
 
-        val resource: Resource<Void>? = ocShareViewModel.insertPublicShareForFile(
+        val resource: Resource<Unit>? = ocShareViewModel.insertPublicShareForFile(
             1,
             "Photos 2 link",
             "1234",
@@ -123,7 +123,7 @@ class OCShareViewModelTest {
                 false
             )
         ).thenReturn(
-            MutableLiveData<Resource<Void>>().apply {
+            MutableLiveData<Resource<Unit>>().apply {
                 value = Resource.success()
             }
         )
@@ -131,7 +131,7 @@ class OCShareViewModelTest {
         // Viewmodel that will ask ocShareRepository for shares
         val ocShareViewModel = createOCShareViewModel(ocShareRepository)
 
-        val resource: Resource<Void>? = ocShareViewModel.updatePublicShareForFile(
+        val resource: Resource<Unit>? = ocShareViewModel.updatePublicShareForFile(
             1,
             "Photos 1 link",
             "123456",
@@ -152,7 +152,7 @@ class OCShareViewModelTest {
                 3
             )
         ).thenReturn(
-            MutableLiveData<Resource<Void>>().apply {
+            MutableLiveData<Resource<Unit>>().apply {
                 value = Resource.success()
             }
         )
@@ -160,7 +160,7 @@ class OCShareViewModelTest {
         // Viewmodel that will ask ocShareRepository for shares
         val ocShareViewModel = createOCShareViewModel(ocShareRepository)
 
-        val resource: Resource<Void>? = ocShareViewModel.deletePublicShare(
+        val resource: Resource<Unit>? = ocShareViewModel.deletePublicShare(
             3
         ).value
 
