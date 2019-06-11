@@ -523,10 +523,7 @@ public class Preferences extends PreferenceActivity {
             mAboutApp.setOnPreferenceClickListener(preference -> {
                 int clickCount = mAppPrefs.getInt(MainApp.CLICK_DEV_MENU, 0);
                 if (mAppPrefs.getInt(MainApp.CLICK_DEV_MENU, 0) > MainApp.CLICKS_NEEDED_TO_BE_DEVELOPER) {
-                    String commitUrl = BuildConfig.GIT_REMOTE + "/commit/" + BuildConfig.COMMIT_SHA1;
-                    Uri uriUrl = Uri.parse(commitUrl);
-                    Intent intent = new Intent(Intent.ACTION_VIEW, uriUrl);
-                    startActivity(intent);
+                    return true;
                 } else if (mAppPrefs.getInt(MainApp.CLICK_DEV_MENU, 0) ==
                         MainApp.CLICKS_NEEDED_TO_BE_DEVELOPER) {
                     showDeveloperItems(pCategoryMore);
@@ -538,13 +535,6 @@ public class Preferences extends PreferenceActivity {
                 }
                 mAppPrefs.edit().putInt(MainApp.CLICK_DEV_MENU, clickCount + 1).apply();
                 ((MainApp) getApplication()).startLogIfDeveloper(); // read value to global variable
-
-                if (getResources().getBoolean(R.bool.forward_to_gh_commit)) {
-                    String commitUrl = BuildConfig.GIT_REMOTE + "/commit/" + BuildConfig.COMMIT_SHA1;
-                    Uri uriUrl = Uri.parse(commitUrl);
-                    Intent intent = new Intent(Intent.ACTION_VIEW, uriUrl);
-                    startActivity(intent);
-                }
 
                 return true;
             });
