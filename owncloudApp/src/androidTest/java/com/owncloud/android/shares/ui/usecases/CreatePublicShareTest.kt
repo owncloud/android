@@ -28,7 +28,6 @@ import android.view.View
 import androidx.lifecycle.MutableLiveData
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.IdlingPolicies
 import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
@@ -67,7 +66,6 @@ import org.koin.dsl.module
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.spy
-import java.util.concurrent.TimeUnit
 
 class CreatePublicShareTest {
     @Rule
@@ -358,7 +356,7 @@ class CreatePublicShareTest {
                 false
             )
         ).thenReturn(
-            MutableLiveData<Resource<Void>>().apply {
+            MutableLiveData<Resource<Unit>>().apply {
                 postValue(Resource.success())
             }
         )
@@ -371,9 +369,7 @@ class CreatePublicShareTest {
             activityRule.activity.supportFragmentManager.findFragmentByTag(ShareActivity.TAG_PUBLIC_SHARE_DIALOG_FRAGMENT),
             View.VISIBLE
         )
-        IdlingPolicies.setIdlingResourceTimeout(1, TimeUnit.HOURS);
         IdlingRegistry.getInstance().register(idlingResource)
-
         return idlingResource
     }
 

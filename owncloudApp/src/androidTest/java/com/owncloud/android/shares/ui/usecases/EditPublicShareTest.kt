@@ -231,7 +231,7 @@ class EditPublicShareTest {
                 false
             )
         ).thenReturn(
-            MutableLiveData<Resource<Void>>().apply {
+            MutableLiveData<Resource<Unit>>().apply {
                 postValue(Resource.success())
             }
         )
@@ -276,7 +276,7 @@ class EditPublicShareTest {
                 false
             )
         ).thenReturn(
-            MutableLiveData<Resource<Void>>().apply {
+            MutableLiveData<Resource<Unit>>().apply {
                 postValue(Resource.success())
             }
         )
@@ -324,7 +324,7 @@ class EditPublicShareTest {
                 false
             )
         ).thenReturn(
-            MutableLiveData<Resource<Void>>().apply {
+            MutableLiveData<Resource<Unit>>().apply {
                 postValue(Resource.success())
             }
         )
@@ -374,7 +374,7 @@ class EditPublicShareTest {
                 false
             )
         ).thenReturn(
-            MutableLiveData<Resource<Void>>().apply {
+            MutableLiveData<Resource<Unit>>().apply {
                 postValue(Resource.success())
             }
         )
@@ -427,7 +427,7 @@ class EditPublicShareTest {
                 false
             )
         ).thenReturn(
-            MutableLiveData<Resource<Void>>().apply {
+            MutableLiveData<Resource<Unit>>().apply {
                 postValue(Resource.success())
             }
         )

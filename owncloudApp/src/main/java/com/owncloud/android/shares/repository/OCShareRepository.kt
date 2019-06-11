@@ -71,8 +71,8 @@ class OCShareRepository(
         password: String,
         expirationTimeInMillis: Long,
         publicUpload: Boolean
-    ): LiveData<Resource<Void>> {
-        val result = MutableLiveData<Resource<Void>>()
+    ): LiveData<Resource<Unit>> {
+        val result = MutableLiveData<Resource<Unit>>()
         result.postValue(Resource.loading())
 
         appExecutors.networkIO().execute() {
@@ -114,8 +114,8 @@ class OCShareRepository(
         expirationDateInMillis: Long,
         permissions: Int,
         publicUpload: Boolean
-    ): LiveData<Resource<Void>> {
-        val result = MutableLiveData<Resource<Void>>()
+    ): LiveData<Resource<Unit>> {
+        val result = MutableLiveData<Resource<Unit>>()
         result.postValue(Resource.loading())
 
         appExecutors.networkIO().execute() {
@@ -150,8 +150,8 @@ class OCShareRepository(
 
     override fun deletePublicShare(
         remoteId: Long
-    ): LiveData<Resource<Void>> {
-        val result = MutableLiveData<Resource<Void>>()
+    ): LiveData<Resource<Unit>> {
+        val result = MutableLiveData<Resource<Unit>>()
 
         result.postValue(Resource.loading())
 

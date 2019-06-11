@@ -229,7 +229,7 @@ class EditPublicShareFolderTest {
                 false
             )
         ).thenReturn(
-            MutableLiveData<Resource<Void>>().apply {
+            MutableLiveData<Resource<Unit>>().apply {
                 postValue(Resource.success())
             }
         )
@@ -273,7 +273,7 @@ class EditPublicShareFolderTest {
                 true
             )
         ).thenReturn(
-            MutableLiveData<Resource<Void>>().apply {
+            MutableLiveData<Resource<Unit>>().apply {
                 postValue(Resource.success())
             }
         )
@@ -318,7 +318,7 @@ class EditPublicShareFolderTest {
                 true
             )
         ).thenReturn(
-            MutableLiveData<Resource<Void>>().apply {
+            MutableLiveData<Resource<Unit>>().apply {
                 postValue(Resource.success())
             }
         )
@@ -363,7 +363,7 @@ class EditPublicShareFolderTest {
                 false
             )
         ).thenReturn(
-            MutableLiveData<Resource<Void>>().apply {
+            MutableLiveData<Resource<Unit>>().apply {
                 postValue(Resource.success())
             }
         )
