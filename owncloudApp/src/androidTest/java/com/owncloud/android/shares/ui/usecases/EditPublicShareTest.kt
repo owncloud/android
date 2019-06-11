@@ -30,7 +30,6 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.replaceText
-import androidx.test.espresso.action.ViewActions.scrollTo
 import androidx.test.espresso.action.ViewActions.typeText
 import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
@@ -72,6 +71,8 @@ import org.koin.dsl.module
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.spy
+import java.util.Calendar
+import java.util.GregorianCalendar
 
 class EditPublicShareTest {
     @Rule
@@ -360,6 +361,9 @@ class EditPublicShareTest {
 
         val expirationDate = 1583967600000
 
+        val calendar = GregorianCalendar()
+        calendar.timeInMillis = expirationDate
+
         `when`(
             ocShareViewModel.updatePublicShareForFile(
                 1,
@@ -382,15 +386,15 @@ class EditPublicShareTest {
         onView(withId(R.id.shareViaLinkExpirationSwitch)).perform(click())
         onView(withClassName(Matchers.equalTo(DatePicker::class.java.name))).perform(
             PickerActions.setDate(
-                2020,
-                3,
-                12
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH) + 1, // January code is 0, so let's add 1
+                calendar.get(Calendar.DATE)
             )
         );
         onView(withId(android.R.id.button1)).perform(click())
 
         // 3. Save updated share
-        onView(withId(R.id.saveButton)).perform(scrollTo(), click())
+        onView(withId(R.id.saveButton)).perform(click())
 
         // 4. Share properly updated
         val updatedPublicShare = publicShares[4]
