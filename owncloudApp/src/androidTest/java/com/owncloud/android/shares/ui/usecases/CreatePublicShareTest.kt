@@ -24,11 +24,9 @@ import android.accounts.AccountManager
 import android.content.Context
 import android.content.Intent
 import android.os.Parcelable
-import android.view.View
 import androidx.lifecycle.MutableLiveData
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
@@ -47,7 +45,6 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.status.CapabilityBooleanType
 import com.owncloud.android.lib.resources.status.OwnCloudVersion
 import com.owncloud.android.shares.db.OCShare
-import com.owncloud.android.shares.ui.FragmentVisibilityIdlingResource
 import com.owncloud.android.shares.ui.ShareActivity
 import com.owncloud.android.shares.viewmodel.OCShareViewModel
 import com.owncloud.android.ui.activity.FileActivity
@@ -198,9 +195,6 @@ class CreatePublicShareTest {
         // Create share
         onView(withId(R.id.addPublicLinkButton)).perform(click())
 
-        // Force Espresso to wait until dialog fragment is visible
-        val createShareFragmentIdlingResource = registerCreateShareFragmentAsIdlingResource()
-
         val newPublicShare = publicShares[0]
         savePublicShare(newPublicShare)
 
@@ -214,8 +208,6 @@ class CreatePublicShareTest {
         // Check whether the dialog to create the public share has been properly closed
         onView(withText(R.string.share_via_link_create_title)).check(doesNotExist())
         onView(withText(newPublicShare.name)).check(matches(isDisplayed()))
-
-        unregisterCreateShareFragmentAsIdlingResource(createShareFragmentIdlingResource)
     }
 
     @Test
@@ -227,8 +219,6 @@ class CreatePublicShareTest {
         )
 
         onView(withId(R.id.addPublicLinkButton)).perform(click())
-
-        val createShareFragmentIdlingResource = registerCreateShareFragmentAsIdlingResource()
 
         val newPublicShare = publicShares[2]
         savePublicShare(newPublicShare)
@@ -243,8 +233,6 @@ class CreatePublicShareTest {
         // Check whether the dialog to create the public share has been properly closed
         onView(withText(R.string.share_via_link_create_title)).check(doesNotExist())
         onView(withText(newPublicShare.name)).check(matches(isDisplayed()))
-
-        unregisterCreateShareFragmentAsIdlingResource(createShareFragmentIdlingResource)
     }
 
     @Test
@@ -256,8 +244,6 @@ class CreatePublicShareTest {
          * 1st public share
          */
         onView(withId(R.id.addPublicLinkButton)).perform(click())
-
-        val createShareFragmentIdlingResource = registerCreateShareFragmentAsIdlingResource()
 
         val newPublicShare1 = publicShares[0]
         savePublicShare(newPublicShare1)
@@ -273,14 +259,10 @@ class CreatePublicShareTest {
         onView(withText(R.string.share_via_link_create_title)).check(doesNotExist())
         onView(withText(newPublicShare1.name)).check(matches(isDisplayed()))
 
-        unregisterCreateShareFragmentAsIdlingResource(createShareFragmentIdlingResource)
-
         /**
          * 2nd public share
          */
         onView(withId(R.id.addPublicLinkButton)).perform(click())
-
-        val create2ndShareFragmentIdlingResource = registerCreateShareFragmentAsIdlingResource()
 
         val newPublicShare2 = publicShares[1]
         savePublicShare(newPublicShare2)
@@ -296,14 +278,10 @@ class CreatePublicShareTest {
         onView(withText(R.string.share_via_link_create_title)).check(doesNotExist())
         onView(withText(newPublicShare2.name)).check(matches(isDisplayed()))
 
-        unregisterCreateShareFragmentAsIdlingResource(create2ndShareFragmentIdlingResource)
-
         /**
          * 3rd public share
          */
         onView(withId(R.id.addPublicLinkButton)).perform(click())
-
-        val create3rdShareFragmentIdlingResource = registerCreateShareFragmentAsIdlingResource()
 
         val newPublicShare3 = publicShares[2]
         savePublicShare(newPublicShare3)
@@ -318,8 +296,6 @@ class CreatePublicShareTest {
         // Check whether the dialog to create the public share has been properly closed
         onView(withText(R.string.share_via_link_create_title)).check(doesNotExist())
         onView(withText(newPublicShare3.name)).check(matches(isDisplayed()))
-
-        unregisterCreateShareFragmentAsIdlingResource(create3rdShareFragmentIdlingResource)
     }
 
     @Test
@@ -329,13 +305,9 @@ class CreatePublicShareTest {
 
         onView(withId(R.id.addPublicLinkButton)).perform(click())
 
-        val createShareFragmentIdlingResource = registerCreateShareFragmentAsIdlingResource()
-
         savePublicShare(publicShares[0], Resource.loading())
 
         onView(withText(R.string.common_loading)).check(matches(isDisplayed()))
-
-        unregisterCreateShareFragmentAsIdlingResource(createShareFragmentIdlingResource)
     }
 
     @Test
@@ -344,8 +316,6 @@ class CreatePublicShareTest {
         loadSharesSuccessfully(arrayListOf())
 
         onView(withId(R.id.addPublicLinkButton)).perform(click())
-
-        val createShareFragmentIdlingResource = registerCreateShareFragmentAsIdlingResource()
 
         savePublicShare(
             publicShares[0],
@@ -356,8 +326,6 @@ class CreatePublicShareTest {
         )
 
         onView(withText(R.string.share_link_file_error)).check(matches(isDisplayed()))
-
-        unregisterCreateShareFragmentAsIdlingResource(createShareFragmentIdlingResource)
     }
 
     private fun getOCFileForTesting(name: String = "default") = OCFile("/Photos").apply {
@@ -401,20 +369,5 @@ class CreatePublicShareTest {
         )
 
         onView(withId(R.id.saveButton)).perform(click())
-    }
-
-    private fun registerCreateShareFragmentAsIdlingResource(): FragmentVisibilityIdlingResource {
-        val idlingResource = FragmentVisibilityIdlingResource(
-            activityRule.activity.supportFragmentManager.findFragmentByTag(ShareActivity.TAG_PUBLIC_SHARE_DIALOG_FRAGMENT),
-            View.VISIBLE
-        )
-        IdlingRegistry.getInstance().register(idlingResource)
-        return idlingResource
-    }
-
-    private fun unregisterCreateShareFragmentAsIdlingResource(
-        fragmentVisibilityIdlingResource: FragmentVisibilityIdlingResource
-    ) {
-        IdlingRegistry.getInstance().unregister(fragmentVisibilityIdlingResource)
     }
 }
