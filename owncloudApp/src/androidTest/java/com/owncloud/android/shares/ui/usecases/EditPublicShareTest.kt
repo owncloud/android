@@ -71,8 +71,9 @@ import org.koin.dsl.module
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.spy
+import java.text.DateFormat
+import java.text.SimpleDateFormat
 import java.util.Calendar
-import java.util.GregorianCalendar
 
 class EditPublicShareTest {
     @Rule
@@ -359,17 +360,18 @@ class EditPublicShareTest {
         val existingPublicShare = publicShares[0]
         loadSharesSuccessfully(arrayListOf(existingPublicShare))
 
-        val expirationDate = 1583967600000
-
-        val calendar = GregorianCalendar()
-        calendar.timeInMillis = expirationDate
+        val calendar = Calendar.getInstance()
+        calendar.add(Calendar.DAY_OF_YEAR, 1)
+        val formatter: DateFormat = SimpleDateFormat("MMM dd, yyyy");
+        val expirationDate = formatter.format(calendar.time);
+        val publicLinkExpirationDateInMillis = SimpleDateFormat.getDateInstance().parse(expirationDate).time
 
         `when`(
             ocShareViewModel.updatePublicShareForFile(
                 1,
                 existingPublicShare.name!!,
                 "",
-                expirationDate,
+                publicLinkExpirationDateInMillis,
                 1,
                 false
             )
