@@ -71,6 +71,8 @@ import org.koin.dsl.module
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.spy
+import java.util.Calendar
+import java.util.GregorianCalendar
 
 class EditPublicShareTest {
     @Rule
@@ -146,37 +148,35 @@ class EditPublicShareTest {
             // obtaining an AccountManager instance
             val accountManager = AccountManager.get(targetContext)
 
-            Thread(Runnable {
-                accountManager.addAccountExplicitly(account, "a", null)
+            accountManager.addAccountExplicitly(account, "a", null)
 
-                // include account version, user, server version and token with the new account
-                accountManager.setUserData(
-                    account,
-                    AccountUtils.Constants.KEY_OC_VERSION,
-                    OwnCloudVersion("10.2").toString()
-                )
-                accountManager.setUserData(
-                    account,
-                    AccountUtils.Constants.KEY_OC_BASE_URL,
-                    "serverUrl:port"
-                )
-                accountManager.setUserData(
-                    account,
-                    AccountUtils.Constants.KEY_DISPLAY_NAME,
-                    "admin"
-                )
-                accountManager.setUserData(
-                    account,
-                    AccountUtils.Constants.KEY_OC_ACCOUNT_VERSION,
-                    "1"
-                )
+            // include account version, user, server version and token with the new account
+            accountManager.setUserData(
+                account,
+                AccountUtils.Constants.KEY_OC_VERSION,
+                OwnCloudVersion("10.2").toString()
+            )
+            accountManager.setUserData(
+                account,
+                AccountUtils.Constants.KEY_OC_BASE_URL,
+                "serverUrl:port"
+            )
+            accountManager.setUserData(
+                account,
+                AccountUtils.Constants.KEY_DISPLAY_NAME,
+                "admin"
+            )
+            accountManager.setUserData(
+                account,
+                AccountUtils.Constants.KEY_OC_ACCOUNT_VERSION,
+                "1"
+            )
 
-                accountManager.setAuthToken(
-                    account,
-                    KEY_AUTH_TOKEN_TYPE,
-                    "AUTH_TOKEN"
-                )
-            }).start()
+            accountManager.setAuthToken(
+                account,
+                KEY_AUTH_TOKEN_TYPE,
+                "AUTH_TOKEN"
+            )
         }
     }
 
@@ -230,7 +230,11 @@ class EditPublicShareTest {
                 1,
                 false
             )
-        ).thenReturn(sharesLiveData)
+        ).thenReturn(
+            MutableLiveData<Resource<Unit>>().apply {
+                postValue(Resource.success())
+            }
+        )
 
         // 1. Open dialog to edit an existing public share
         onView(withId(R.id.editPublicLinkButton)).perform(click())
@@ -271,7 +275,11 @@ class EditPublicShareTest {
                 1,
                 false
             )
-        ).thenReturn(sharesLiveData)
+        ).thenReturn(
+            MutableLiveData<Resource<Unit>>().apply {
+                postValue(Resource.success())
+            }
+        )
 
         // 1. Open dialog to edit an existing public share
         onView(withId(R.id.editPublicLinkButton)).perform(click())
@@ -315,7 +323,11 @@ class EditPublicShareTest {
                 1,
                 false
             )
-        ).thenReturn(sharesLiveData)
+        ).thenReturn(
+            MutableLiveData<Resource<Unit>>().apply {
+                postValue(Resource.success())
+            }
+        )
 
         // 1. Open dialog to edit an existing public share
         onView(withId(R.id.editPublicLinkButton)).perform(click())
@@ -349,6 +361,9 @@ class EditPublicShareTest {
 
         val expirationDate = 1583967600000
 
+        val calendar = GregorianCalendar()
+        calendar.timeInMillis = expirationDate
+
         `when`(
             ocShareViewModel.updatePublicShareForFile(
                 1,
@@ -358,15 +373,24 @@ class EditPublicShareTest {
                 1,
                 false
             )
-        ).thenReturn(sharesLiveData)
+        ).thenReturn(
+            MutableLiveData<Resource<Unit>>().apply {
+                postValue(Resource.success())
+            }
+        )
 
         // 1. Open dialog to edit an existing public share
         onView(withId(R.id.editPublicLinkButton)).perform(click())
 
         // 2. Enable expiration date and set it
         onView(withId(R.id.shareViaLinkExpirationSwitch)).perform(click())
-        onView(withClassName(Matchers.equalTo(DatePicker::class.java.name))).
-            perform(PickerActions.setDate(2020, 3, 12));
+        onView(withClassName(Matchers.equalTo(DatePicker::class.java.name))).perform(
+            PickerActions.setDate(
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH) + 1, // January code is 0, so let's add 1
+                calendar.get(Calendar.DATE)
+            )
+        );
         onView(withId(android.R.id.button1)).perform(click())
 
         // 3. Save updated share
@@ -402,7 +426,11 @@ class EditPublicShareTest {
                 1,
                 false
             )
-        ).thenReturn(sharesLiveData)
+        ).thenReturn(
+            MutableLiveData<Resource<Unit>>().apply {
+                postValue(Resource.success())
+            }
+        )
 
         // 1. Open dialog to edit an existing public share
         onView(withId(R.id.editPublicLinkButton)).perform(click())

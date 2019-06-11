@@ -16,9 +16,10 @@
 
 package com.owncloud.android.vo
 
-import com.owncloud.android.vo.Status.*
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode
-import java.lang.Exception
+import com.owncloud.android.vo.Status.ERROR
+import com.owncloud.android.vo.Status.LOADING
+import com.owncloud.android.vo.Status.SUCCESS
 
 /**
  * A generic class that holds a value with its loading status.
@@ -32,7 +33,7 @@ data class Resource<out T>(
     val exception: Exception? = null
 ) {
     companion object {
-        fun <T> success(data: T?): Resource<T> {
+        fun <T> success(data: T? = null): Resource<T> {
             return Resource(SUCCESS, ResultCode.OK, data)
         }
 
@@ -45,7 +46,7 @@ data class Resource<out T>(
             return Resource(ERROR, code, data, msg, exception)
         }
 
-        fun <T> loading(data: T?): Resource<T> {
+        fun <T> loading(data: T? = null): Resource<T> {
             return Resource(LOADING, data = data)
         }
     }

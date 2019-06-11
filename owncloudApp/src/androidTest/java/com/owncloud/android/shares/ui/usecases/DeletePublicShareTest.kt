@@ -42,7 +42,6 @@ import com.owncloud.android.capabilities.db.OCCapability
 import com.owncloud.android.capabilities.viewmodel.OCCapabilityViewModel
 import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.lib.common.accounts.AccountUtils
-import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.status.CapabilityBooleanType
 import com.owncloud.android.lib.resources.status.OwnCloudVersion
 import com.owncloud.android.shares.db.OCShare
@@ -122,37 +121,35 @@ class DeletePublicShareTest {
             // obtaining an AccountManager instance
             val accountManager = AccountManager.get(targetContext)
 
-            Thread(Runnable {
-                accountManager.addAccountExplicitly(account, "a", null)
+            accountManager.addAccountExplicitly(account, "a", null)
 
-                // include account version, user, server version and token with the new account
-                accountManager.setUserData(
-                    account,
-                    AccountUtils.Constants.KEY_OC_VERSION,
-                    OwnCloudVersion("10.2").toString()
-                )
-                accountManager.setUserData(
-                    account,
-                    AccountUtils.Constants.KEY_OC_BASE_URL,
-                    "serverUrl:port"
-                )
-                accountManager.setUserData(
-                    account,
-                    AccountUtils.Constants.KEY_DISPLAY_NAME,
-                    "admin"
-                )
-                accountManager.setUserData(
-                    account,
-                    AccountUtils.Constants.KEY_OC_ACCOUNT_VERSION,
-                    "1"
-                )
+            // include account version, user, server version and token with the new account
+            accountManager.setUserData(
+                account,
+                AccountUtils.Constants.KEY_OC_VERSION,
+                OwnCloudVersion("10.2").toString()
+            )
+            accountManager.setUserData(
+                account,
+                AccountUtils.Constants.KEY_OC_BASE_URL,
+                "serverUrl:port"
+            )
+            accountManager.setUserData(
+                account,
+                AccountUtils.Constants.KEY_DISPLAY_NAME,
+                "admin"
+            )
+            accountManager.setUserData(
+                account,
+                AccountUtils.Constants.KEY_OC_ACCOUNT_VERSION,
+                "1"
+            )
 
-                accountManager.setAuthToken(
-                    account,
-                    KEY_AUTH_TOKEN_TYPE,
-                    "AUTH_TOKEN"
-                )
-            }).start()
+            accountManager.setAuthToken(
+                account,
+                KEY_AUTH_TOKEN_TYPE,
+                "AUTH_TOKEN"
+            )
         }
     }
 
@@ -197,7 +194,11 @@ class DeletePublicShareTest {
 
         `when`(
             ocShareViewModel.deletePublicShare(ArgumentMatchers.anyLong())
-        ).thenReturn(sharesLiveData)
+        ).thenReturn(
+            MutableLiveData<Resource<Unit>>().apply {
+                postValue(Resource.success())
+            }
+        )
 
         onView(allOf(withId(R.id.deletePublicLinkButton), hasSibling(withText(existingPublicShare[0].name))))
             .perform(click())
@@ -222,7 +223,11 @@ class DeletePublicShareTest {
 
         `when`(
             ocShareViewModel.deletePublicShare(ArgumentMatchers.anyLong())
-        ).thenReturn(sharesLiveData)
+        ).thenReturn(
+            MutableLiveData<Resource<Unit>>().apply {
+                postValue(Resource.success())
+            }
+        )
 
         onView(withId(R.id.deletePublicLinkButton)).perform(click())
         onView(withId(android.R.id.button1)).perform(click())
@@ -239,7 +244,7 @@ class DeletePublicShareTest {
     }
 
     @Test
-    fun loadingDeleteShares(){
+    fun loadingDeleteShares() {
         loadCapabilitiesSuccessfully()
 
         val existingPublicShare = publicShares[0]

@@ -118,37 +118,35 @@ class LoadPublicSharesTest {
             // obtaining an AccountManager instance
             val accountManager = AccountManager.get(targetContext)
 
-            Thread(Runnable {
-                accountManager.addAccountExplicitly(account, "a", null)
+            accountManager.addAccountExplicitly(account, "a", null)
 
-                // include account version, user, server version and token with the new account
-                accountManager.setUserData(
-                    account,
-                    AccountUtils.Constants.KEY_OC_VERSION,
-                    OwnCloudVersion("10.2").toString()
-                )
-                accountManager.setUserData(
-                    account,
-                    AccountUtils.Constants.KEY_OC_BASE_URL,
-                    "serverUrl:port"
-                )
-                accountManager.setUserData(
-                    account,
-                    AccountUtils.Constants.KEY_DISPLAY_NAME,
-                    "admin"
-                )
-                accountManager.setUserData(
-                    account,
-                    AccountUtils.Constants.KEY_OC_ACCOUNT_VERSION,
-                    "1"
-                )
+            // include account version, user, server version and token with the new account
+            accountManager.setUserData(
+                account,
+                AccountUtils.Constants.KEY_OC_VERSION,
+                OwnCloudVersion("10.2").toString()
+            )
+            accountManager.setUserData(
+                account,
+                AccountUtils.Constants.KEY_OC_BASE_URL,
+                "serverUrl:port"
+            )
+            accountManager.setUserData(
+                account,
+                AccountUtils.Constants.KEY_DISPLAY_NAME,
+                "admin"
+            )
+            accountManager.setUserData(
+                account,
+                AccountUtils.Constants.KEY_OC_ACCOUNT_VERSION,
+                "1"
+            )
 
-                accountManager.setAuthToken(
-                    account,
-                    KEY_AUTH_TOKEN_TYPE,
-                    "AUTH_TOKEN"
-                )
-            }).start()
+            accountManager.setAuthToken(
+                account,
+                KEY_AUTH_TOKEN_TYPE,
+                "AUTH_TOKEN"
+            )
         }
     }
 

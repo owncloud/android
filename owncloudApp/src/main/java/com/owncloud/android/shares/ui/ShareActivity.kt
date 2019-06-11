@@ -259,7 +259,8 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
                         )
                         Snackbar.make(
                             findViewById(android.R.id.content),
-                            errorMessage, Snackbar.LENGTH_SHORT
+                            errorMessage,
+                            Snackbar.LENGTH_SHORT
                         ).show()
                         shareFileFragment?.updatePublicShares(resource.data as ArrayList<OCShare>)
                         dismissLoadingDialog()
@@ -402,6 +403,7 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
                 when (resource?.status) {
                     Status.SUCCESS -> {
                         publicShareFragment?.dismiss()
+                        Log_OC.d("TESTS", "Closing share creation dialog")
                     }
                     Status.ERROR -> {
                         val errorMessage: String = resource.msg ?: ErrorMessageAdapter.getResultMessage(
@@ -417,7 +419,10 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
                         showLoadingDialog(R.string.common_loading)
                     }
                     else -> {
-                        Log.d(TAG, "Unknown status when creating public share")
+                        Log.d(
+                            TAG, "Unknown status when creating public share with name ${name} \" +" +
+                                    "from account ${account?.name}"
+                        )
                     }
                 }
             }
@@ -469,7 +474,10 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
                         showLoadingDialog(R.string.common_loading)
                     }
                     else -> {
-                        Log.d(TAG, "Unknown status when updating public share")
+                        Log.d(
+                            TAG, "Unknown status when updating public share with name ${name} " +
+                                    "from account ${account?.name}"
+                        )
                     }
                 }
             }
@@ -490,7 +498,6 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
             Observer { resource ->
                 when (resource?.status) {
                     Status.SUCCESS -> {
-                        shareFileFragment?.updatePublicShares(resource.data as ArrayList<OCShare>)
                         dismissLoadingDialog()
                     }
                     Status.ERROR -> {
@@ -508,7 +515,7 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
                     }
                     else -> {
                         Log.d(
-                            TAG, "Unknown status when removing share ${share.name} " +
+                            TAG, "Unknown status when removing public share with name ${share.name} " +
                                     "from account ${account?.name}"
                         )
                     }
@@ -570,8 +577,5 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
         const val TAG_EDIT_SHARE_FRAGMENT = "EDIT_SHARE_FRAGMENT"
         const val TAG_PUBLIC_SHARE_DIALOG_FRAGMENT = "PUBLIC_SHARE_DIALOG_FRAGMENT"
         const val TAG_REMOVE_SHARE_DIALOG_FRAGMENT = "REMOVE_SHARE_DIALOG_FRAGMENT"
-
-        const val EXTRA_SHARE_VIEW_MODEL_FACTORY = "SHARE_VIEW_MODEL_FACTORY"
-        const val EXTRA_CAPABILITY_VIEW_MODEL_FACTORY = "CAPABILITY_VIEW_MODEL_FACTORY"
     }
 }

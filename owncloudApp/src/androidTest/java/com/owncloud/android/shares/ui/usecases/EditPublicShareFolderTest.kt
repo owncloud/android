@@ -27,13 +27,10 @@ import android.os.Parcelable
 import androidx.lifecycle.MutableLiveData
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.replaceText
-import androidx.test.espresso.action.ViewActions.scrollTo
 import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.isChecked
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
@@ -60,14 +57,14 @@ import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Rule
 import org.junit.Test
-import org.mockito.Mockito.`when`
-import org.mockito.Mockito.mock
-import org.mockito.Mockito.spy
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.module
+import org.mockito.Mockito.`when`
+import org.mockito.Mockito.mock
+import org.mockito.Mockito.spy
 
 class EditPublicShareFolderTest {
     @Rule
@@ -149,37 +146,35 @@ class EditPublicShareFolderTest {
             // obtaining an AccountManager instance
             val accountManager = AccountManager.get(targetContext)
 
-            Thread(Runnable {
-                accountManager.addAccountExplicitly(account, "a", null)
+            accountManager.addAccountExplicitly(account, "a", null)
 
-                // include account version, user, server version and token with the new account
-                accountManager.setUserData(
-                    account,
-                    AccountUtils.Constants.KEY_OC_VERSION,
-                    OwnCloudVersion("10.2").toString()
-                )
-                accountManager.setUserData(
-                    account,
-                    AccountUtils.Constants.KEY_OC_BASE_URL,
-                    "serverUrl:port"
-                )
-                accountManager.setUserData(
-                    account,
-                    AccountUtils.Constants.KEY_DISPLAY_NAME,
-                    "admin"
-                )
-                accountManager.setUserData(
-                    account,
-                    AccountUtils.Constants.KEY_OC_ACCOUNT_VERSION,
-                    "1"
-                )
+            // include account version, user, server version and token with the new account
+            accountManager.setUserData(
+                account,
+                AccountUtils.Constants.KEY_OC_VERSION,
+                OwnCloudVersion("10.2").toString()
+            )
+            accountManager.setUserData(
+                account,
+                AccountUtils.Constants.KEY_OC_BASE_URL,
+                "serverUrl:port"
+            )
+            accountManager.setUserData(
+                account,
+                AccountUtils.Constants.KEY_DISPLAY_NAME,
+                "admin"
+            )
+            accountManager.setUserData(
+                account,
+                AccountUtils.Constants.KEY_OC_ACCOUNT_VERSION,
+                "1"
+            )
 
-                accountManager.setAuthToken(
-                    account,
-                    KEY_AUTH_TOKEN_TYPE,
-                    "AUTH_TOKEN"
-                )
-            }).start()
+            accountManager.setAuthToken(
+                account,
+                KEY_AUTH_TOKEN_TYPE,
+                "AUTH_TOKEN"
+            )
         }
     }
 
@@ -233,7 +228,11 @@ class EditPublicShareFolderTest {
                 1,
                 false
             )
-        ).thenReturn(sharesLiveData)
+        ).thenReturn(
+            MutableLiveData<Resource<Unit>>().apply {
+                postValue(Resource.success())
+            }
+        )
 
         // 1. Open dialog to edit an existing public share
         onView(withId(R.id.editPublicLinkButton)).perform(click())
@@ -273,7 +272,11 @@ class EditPublicShareFolderTest {
                 15,
                 true
             )
-        ).thenReturn(sharesLiveData)
+        ).thenReturn(
+            MutableLiveData<Resource<Unit>>().apply {
+                postValue(Resource.success())
+            }
+        )
 
         // 1. Open dialog to edit an existing public share
         onView(withId(R.id.editPublicLinkButton)).perform(click())
@@ -314,7 +317,11 @@ class EditPublicShareFolderTest {
                 4,
                 true
             )
-        ).thenReturn(sharesLiveData)
+        ).thenReturn(
+            MutableLiveData<Resource<Unit>>().apply {
+                postValue(Resource.success())
+            }
+        )
 
         // 1. Open dialog to edit an existing public share
         onView(withId(R.id.editPublicLinkButton)).perform(click())
@@ -355,7 +362,11 @@ class EditPublicShareFolderTest {
                 1,
                 false
             )
-        ).thenReturn(sharesLiveData)
+        ).thenReturn(
+            MutableLiveData<Resource<Unit>>().apply {
+                postValue(Resource.success())
+            }
+        )
 
         // 1. Open dialog to edit an existing public share
         onView(withId(R.id.editPublicLinkButton)).perform(click())
@@ -378,7 +389,6 @@ class EditPublicShareFolderTest {
         onView(withId(R.id.shareViaLinkEditPermissionReadOnly)).check(matches(isChecked()))
 
     }
-
 
     private fun getOCFileForTesting(name: String = "default"): OCFile {
         val file = OCFile("/Photos")

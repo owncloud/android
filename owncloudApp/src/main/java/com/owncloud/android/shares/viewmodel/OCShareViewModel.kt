@@ -42,7 +42,7 @@ class OCShareViewModel(
     val filePath: String,
     val account: Account,
     val shareTypes: List<ShareType>,
-    val shareRepository: ShareRepository = OCShareRepository.create(
+    private val shareRepository: ShareRepository = OCShareRepository(
         localSharesDataSource = OCLocalSharesDataSource(),
         remoteSharesDataSource = OCRemoteSharesDataSource(
             OwnCloudClientManagerFactory.getDefaultSingleton().getClientFor(
@@ -50,12 +50,16 @@ class OCShareViewModel(
                 MainApp.appContext
             )
         ),
-        filePathToShare = filePath,
-        accountName = account.name
+        filePath = filePath,
+        accountName = account.name,
+        shareTypes = shareTypes
     )
 ) : ViewModel() {
-    fun getSharesForFile(): LiveData<Resource<List<OCShare>>> =
-        shareRepository.loadSharesForFile(shareTypes, reshares = true, subfiles = false)
+    private val sharesForFile: LiveData<Resource<List<OCShare>>> = shareRepository.getSharesForFile()
+
+    fun getSharesForFile(): LiveData<Resource<List<OCShare>>> {
+        return sharesForFile
+    }
 
     fun insertPublicShareForFile(
         permissions: Int,
@@ -63,7 +67,7 @@ class OCShareViewModel(
         password: String,
         expirationTimeInMillis: Long,
         publicUpload: Boolean
-    ): LiveData<Resource<List<OCShare>>> = shareRepository.insertPublicShareForFile(
+    ): LiveData<Resource<Unit>> = shareRepository.insertPublicShareForFile(
         permissions, name, password, expirationTimeInMillis, publicUpload
     )
 
@@ -74,11 +78,11 @@ class OCShareViewModel(
         expirationDateInMillis: Long,
         permissions: Int,
         publicUpload: Boolean
-    ): LiveData<Resource<List<OCShare>>> = shareRepository.updatePublicShareForFile(
+    ): LiveData<Resource<Unit>> = shareRepository.updatePublicShareForFile(
         remoteId, name, password, expirationDateInMillis, permissions, publicUpload
     )
 
     fun deletePublicShare(
         remoteId: Long
-    ): LiveData<Resource<List<OCShare>>> = shareRepository.deletePublicShare(remoteId)
+    ): LiveData<Resource<Unit>> = shareRepository.deletePublicShare(remoteId)
 }
