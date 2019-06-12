@@ -68,8 +68,9 @@ public class MainApp extends Application {
     private static final int CLICKS_DEFAULT = 0;
 
     private static Context mContext;
-
     private static boolean mDeveloper;
+
+    public static String BETA_VERSION = "beta";
 
     public void onCreate() {
         super.onCreate();
@@ -234,6 +235,21 @@ public class MainApp extends Application {
         return String.format(appString, version);
     }
 
+    public static boolean isBeta() {
+        boolean isBeta = false;
+        try {
+            String packageName = getAppContext().getPackageName();
+            PackageInfo packageInfo = getAppContext().getPackageManager().getPackageInfo(packageName, 0);
+            String versionName = packageInfo.versionName;
+            if (versionName.contains(BETA_VERSION)) {
+                isBeta = true;
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return isBeta;
+    }
+
     public static boolean isDeveloper() {
         return mDeveloper;
     }
@@ -242,9 +258,7 @@ public class MainApp extends Application {
         mDeveloper = BuildConfig.DEBUG || PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
                 .getInt(CLICK_DEV_MENU, CLICKS_DEFAULT) > CLICKS_NEEDED_TO_BE_DEVELOPER;
 
-
         if (isDeveloper()) {
-
             String dataFolder = getDataFolder();
 
             // Set folder for store logs
@@ -255,5 +269,4 @@ public class MainApp extends Application {
                     BuildConfig.COMMIT_SHA1);
         }
     }
-
 }

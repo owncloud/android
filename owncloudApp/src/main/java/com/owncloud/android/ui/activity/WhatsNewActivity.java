@@ -69,7 +69,7 @@ public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPa
         mPager = findViewById(R.id.contentPanel);
 
         FeaturesViewAdapter adapter = new FeaturesViewAdapter(getSupportFragmentManager(),
-                FeatureList.getFiltered(getLastSeenVersionCode(), isFirstRun(), MainApp.isDeveloper()));
+                FeatureList.getFiltered(getLastSeenVersionCode(), isFirstRun(), MainApp.isBeta()));
 
         mProgress.setNumberOfSteps(adapter.getCount());
         mPager.setAdapter(adapter);
@@ -146,11 +146,12 @@ public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPa
         boolean showWizard = context.getResources().getBoolean(R.bool.wizard_enabled);
         return showWizard &&
                 ((isFirstRun() && context instanceof AccountAuthenticatorActivity) ||
-                (
-                        !(isFirstRun() && (context instanceof FileDisplayActivity)) &&
-                        !(context instanceof PassCodeActivity) &&
-                        (FeatureList.getFiltered(getLastSeenVersionCode(), isFirstRun(), MainApp.isDeveloper()).length > 0)
-                ));
+                        (
+                                !(isFirstRun() && (context instanceof FileDisplayActivity)) &&
+                                        !(context instanceof PassCodeActivity) &&
+                                        (FeatureList.getFiltered(getLastSeenVersionCode(), isFirstRun(),
+                                                MainApp.isBeta()).length > 0)
+                        ));
     }
 
     @Override

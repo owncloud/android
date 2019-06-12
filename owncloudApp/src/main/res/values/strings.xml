@@ -597,5 +597,9 @@
     <string name="welcome_feature_7_text">Select all files at once</string>
     <string name="welcome_feature_8_title">Available offline</string>
     <string name="welcome_feature_8_text">Your files automatically synchronized</string>
+    <string name="welcome_feature_9_title">Document provider</string>
+    <string name="welcome_feature_9_text">Access and edit your ownCloud files from other apps</string>
+    <string name="welcome_feature_10_title">Logs with search for everyone</string>
+    <string name="welcome_feature_10_text">Send us your logs to make the app work better</string>
     <string name="no_borwser_installed_alert">No browser installed. Please install a Browser in order to allow a secure login.</string>
 </resources>
