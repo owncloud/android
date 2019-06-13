@@ -1,5 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+  <string name="about_android">%1$s pro Android</string>
+  <string name="about_version">Verze %1$s</string>
   <string name="actionbar_search">Hledat v tomto adresáři</string>
   <string name="actionbar_sync">Obnovit účet</string>
   <string name="actionbar_upload">Nahrát</string>
@@ -14,12 +16,18 @@
   <string name="actionbar_descending">Klesající</string>
   <string name="actionbar_sort_title">Seřadit podle</string>
   <string name="actionbar_sort_by_name">A-Z</string>
+  <string name="actionbar_sort_by_date">Nejstarší - Nejnovější</string>
+  <string name="actionbar_sort_by_size">Nejmenší - Největší</string>
   <string name="drawer_item_all_files">Všechny soubory</string>
   <string name="drawer_item_only_available_offline">Dostupné offline</string>
   <string name="drawer_item_settings">Nastavení</string>
   <string name="drawer_item_uploads_list">Nahrání</string>
   <string name="drawer_close">Zavřít</string>
   <string name="drawer_open">Otevřít</string>
+  <string name="drawer_loading_quota">Načítám kvóty</string>
+  <string name="drawer_quota">%1$s z %2$s využito (%3$s %%)</string>
+  <string name="drawer_unavailable_free_storage">Využito %1$s</string>
+  <string name="drawer_unavailable_used_storage">Informace o využívání úložiště nejsou dostupné</string>
   <string name="drawer_feedback">Odezva</string>
   <string name="drawer_help">Nápověda</string>
   <string name="prefs_category_general">Obecné</string>
@@ -28,6 +36,8 @@
   <string name="prefs_accounts">Účty</string>
   <string name="prefs_manage_accounts">Spravovat účty</string>
   <string name="prefs_passcode">Zámek bezpečnostního kódu</string>
+  <string name="prefs_fingerprint">Zámek otisku prstů</string>
+  <string name="confirmation_touches_with_other_windows_title">Jste si jisti, že chcete povolit tuto funkci?</string>
   <string name="prefs_camera_picture_upload">Nahrání obrázku</string>
   <string name="prefs_camera_picture_upload_summary">Automaticky nahrát obrázky snímané kamerou</string>
   <string name="prefs_camera_video_upload">Nahrání videa</string>
@@ -40,6 +50,8 @@ Automaticky nahrát video snímané kamerou
   <string name="prefs_log_summary_history">Zobrazuje zaznamenané logy</string>
   <string name="prefs_log_delete_history_button">Smazat historii</string>
   <string name="prefs_help">Nápověda</string>
+  <string name="prefs_sync_calendar_contacts">Synchronizovat kontakty, kalendáře a úkoly</string>
+  <string name="prefs_sync_calendar_contacts_summary">Nainstalovat DAVx⁵</string>
   <string name="prefs_recommend">Doporučit přátelům</string>
   <string name="prefs_feedback">Odezva</string>
   <string name="prefs_imprint">Imprint</string>
@@ -47,6 +59,8 @@ Automaticky nahrát video snímané kamerou
   <string name="prefs_remember_last_upload_location_summary">Zapamatovat poslední umístění pro nahrání sdílených souborů</string>
   <string name="recommend_subject">Zkuste %1$s na svém chytrém telefonu!</string>
   <string name="recommend_text">Chtěl bych vás pozvat k používání %1$s na vašem chytrém telefonu!\nKe stažení zde: %2$s</string>
+  <string name="auth_failure_snackbar">Ověření selhalo</string>
+  <string name="auth_failure_snackbar_action">Změna účtu</string>
   <string name="auth_check_server">Ověřit server</string>
   <string name="auth_host_url">Adresa serveru https://...</string>
   <string name="auth_username">Uživatelské jméno</string>
@@ -69,10 +83,12 @@ Automaticky nahrát video snímané kamerou
   <string name="uploader_error_message_source_file_not_copied">Došlo k chybě při kopírování souboru do dočasného adresáře. Zkuste prosím zopakovat odeslání.</string>
   <string name="file_list_seconds_ago">před pár sekundami</string>
   <string name="file_list_empty">Žádný obsah. Nahrajte něco!</string>
+  <string name="file_list_empty_available_offline">Nejsou dostupné žádné offline soubory.</string>
   <string name="file_list_loading">Načítání...</string>
   <string name="file_list_no_app_for_file_type">Pro typ souboru nebyla nalezena aplikace</string>
   <string name="local_file_list_empty">V tomto adresáři nejsou žádné soubory.</string>
   <string name="local_file_list_empty_just_folders">V tomto adresáři nejsou žádné podadresáře.</string>
+  <string name="local_file_list_search_with_no_matches">Nebyly nalezeny žádné výsledky odpovídající zadání</string>
   <string name="upload_list_empty">Nahraná data nejsou dostupná.</string>
   <string name="file_list_folder">adresář</string>
   <string name="file_list_folders">adresářů</string>
@@ -107,7 +123,9 @@ Automaticky nahrát video snímané kamerou
   <string name="change_password">Změnit heslo</string>
   <string name="delete_account">Odebrat účet</string>
   <string name="create_account">Vytvořit účet</string>
+  <string name="upload_chooser_title">Nahrát z</string>
   <string name="uploader_info_dirname">Název adresáře</string>
+  <string name="uploader_upload_in_progress_ticker">Nahrávám...</string>
   <string name="uploader_upload_in_progress_content">%1$d%% Odesílám %2$s</string>
   <string name="uploader_upload_succeeded_ticker">Odesílání úspěšné</string>
   <string name="uploader_upload_succeeded_content_single">%1$s nahráno</string>
@@ -119,11 +137,16 @@ Automaticky nahrát video snímané kamerou
   <string name="uploader_upload_text_dialog_filename_error_empty">Název souboru nesmí být prázdný</string>
   <string name="uploader_upload_text_dialog_filename_error_length_max">Název souboru nesmí být delší než %d znaků</string>
   <string name="uploader_upload_text_filename_hint">Jméno souboru</string>
+  <string name="uploader_upload_camera_upload_files">Nahrávám soubory z fotoparátu</string>
+  <string name="uploader_upload_available_offline_files">Nahrávání dostupných offline souborů</string>
+  <string name="uploader_upload_requested_from_wifi_files">Nahrávání vyžádáno wifi soubory</string>
   <string name="ssl_certificate_not_trusted">Certifikát serveru není důvěryhodný</string>
   <string name="uploads_view_title">Nahrání</string>
   <string name="uploads_view_group_current_uploads">Aktuální</string>
   <string name="uploads_view_group_failed_uploads">Selhalo (dotykem opakovat)</string>
   <string name="uploads_view_group_finished_uploads">Odesláno</string>
+  <string name="uploads_view_group_file_count">%d souborů</string>
+  <string name="uploads_view_group_file_count_single">%d souboru</string>
   <string name="uploads_view_upload_status_succeeded">Dokončeno</string>
   <string name="uploads_view_upload_status_cancelled">Zrušeno</string>
   <string name="uploads_view_upload_status_paused">Pozastaveno</string>
@@ -141,6 +164,7 @@ Automaticky nahrát video snímané kamerou
   <string name="uploads_view_upload_status_waiting_for_wifi">Čekání na wifi připojení</string>
   <string name="uploads_view_later_waiting_to_upload">Čekání na nahrávání</string>
   <string name="uploads_view_unsupported_media_type">Nepodporovaný typ média</string>
+  <string name="downloader_download_in_progress_ticker">Stahuji...</string>
   <string name="downloader_download_in_progress_content">%1$d%% Stahuji %2$s</string>
   <string name="downloader_download_succeeded_ticker">Stažení úspěšné</string>
   <string name="downloader_download_succeeded_content">%1$s staženo</string>
@@ -177,6 +201,13 @@ Automaticky nahrát video snímané kamerou
   <string name="pass_code_wrong">Nesprávný bezpečnostní kód</string>
   <string name="pass_code_removed">Bezpečnostní kód odstraněn</string>
   <string name="pass_code_stored">Bezpečnostní kód uložen</string>
+  <string name="fingerprint_confirm">Ověřte otisk prstu a pokračujte</string>
+  <string name="fingerprint_hint">Dotekový senzor</string>
+  <string name="fingerprint_not_recognized">Otisk prstu nerozeznán, zkuste prosím znovu</string>
+  <string name="fingerprint_success">Otisk prstu rozeznán</string>
+  <string name="fingerprint_not_hardware_detected">Toto zařízení nepodporuje autentizaci pomocí otisku prstů</string>
+  <string name="fingerprint_not_enrolled_fingerprints">Chcete-li tuto funkci použít, zaregistrujte si alespoň jeden otisk prstu</string>
+  <string name="fingerprint_not_granted_permissions">Nemáte oprávnění k otistu prstu</string>
   <string name="media_notif_ticker">Hudební přehrávač %1$s</string>
   <string name="media_state_playing">%1$s (přehrává)</string>
   <string name="media_state_loading">%1$s (načítá)</string>
@@ -198,6 +229,7 @@ Automaticky nahrát video snímané kamerou
   <string name="media_forward_description">Tlačítko Rychle vpřed</string>
   <string name="upload_from_camera_title">Obrázek z kamery</string>
   <string name="auth_getting_authorization">Kontroluji pověření...</string>
+  <string name="auth_trying_to_login">Přihlašuji...</string>
   <string name="auth_no_net_conn_title">Žádné síťové spojení</string>
   <string name="auth_nossl_plain_ok_title">Zabezpečené spojení není k dispozici</string>
   <string name="auth_connection_established">Spojení navázáno</string>
@@ -251,6 +283,7 @@ Automaticky nahrát video snímané kamerou
   <string name="wait_checking_credentials">Ověřování uložených přihlašovacích údajů</string>
   <string name="filedisplay_unexpected_bad_get_content">Neočekávaný problém - zkuste zvolit soubor jinou aplikací</string>
   <string name="filedisplay_no_file_selected">Žádný soubor nebyl vybrán</string>
+  <string name="activity_chooser_title">Odeslat odkaz</string>
   <string name="wait_for_tmp_copy_from_private_storage">Kopírování souboru z privátního úložiště</string>
   <string name="oauth_check_onoff">Přihlásit se s oAuth2</string>
   <string name="oauth_login_connection">Připojování k OAuth2 server</string>
@@ -289,10 +322,14 @@ Automaticky nahrát video snímané kamerou
   <string name="placeholder_media_time">12:23:45</string>
   <string name="camera_picture_upload_on_wifi">Nahrávat obrázky pouze přes wifi</string>
   <string name="camera_video_upload_on_wifi">Odesílat videa pouze přes wifi</string>
+  <string name="camera_upload_path">/CameraUpload</string>
   <string name="confirmation_disable_camera_uploads_title">Potvrzení</string>
   <string name="confirmation_disable_pictures_upload_message">Opravdu chcete tuto funkci deaktivovat? Nevyřízené obrázky nebudou nahrány</string>
   <string name="confirmation_disable_videos_upload_message">Opravdu chcete tuto funkci deaktivovat? Nevyřízená videa nebudou nahrána</string>
+  <string name="proper_pics_folder_warning_camera_upload">Prosím ujistěte se, že vybraná složka obsahuje fotografie pořízené fotoaparátem. Jinak aplikace nebude schopna rozpoznat vaše fotografie. Mějte na paměti, že budou nahrány nejdříve 15 minut po jejich pořízení.</string>
+  <string name="proper_videos_folder_warning_camera_upload">Prosím ujistěte se, že vybraná složka obsahuje videa pořízená fotoaparátem. Jinak aplikace nebude schopna rozpoznat vaše videa. Mějte na paměti, že budou nahrána nejdříve 15 minut po jejich pořízení.</string>
   <string name="conflict_title">Konflikt souboru</string>
+  <string name="conflict_description">Soubor %1$s obsahuje konflikt, kliknutím na tlačítko jej vyřešíte</string>
   <string name="conflict_message">Které soubory chcete ponechat? Pokud zvolíte obě verze, zkopírovaný soubor bude mít název doplněný o číslo.</string>
   <string name="conflict_keep_both">Ponechat oba</string>
   <string name="conflict_use_local_version">místní verze</string>
@@ -379,6 +416,8 @@ správce systému.</string>
   <string name="prefs_camera_upload_source_path_title">Adresář fotoaparátu (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">vyžadován</string>
   <string name="prefs_camera_upload_source_path_title_optional">nepovinný</string>
+  <string name="prefs_camera_upload_behaviour_dialogTitle">Původní soubor bude</string>
+  <string name="prefs_camera_upload_behaviour_title">Původní soubor bude</string>
   <string name="upload_copy_files">Zkopírovat soubor</string>
   <string name="upload_move_files">Přesunout soubor</string>
   <string name="pref_behaviour_entries_keep_file">ponechán ve výchozím adresáři</string>
@@ -463,6 +502,11 @@ správce systému.</string>
   <string name="media_service_notification_channel_description">Přehrát přehrávač hudby</string>
   <string name="file_sync_notification_channel_name">Synchronizace souborů</string>
   <string name="file_sync_notification_channel_description">Zobrazit výsledek synchronizace souborů</string>
+  <string name="rate_dialog_title">Ohodnoťte %1$s aplikaci!</string>
+  <string name="rate_dialog_description">Pokud se Vám aplikace líbí, mohli byste si najít chvilku a ohodnotit ji? Váš názor je pro nás důležitý.</string>
+  <string name="button_no_thanks_name">NE, DĚKUJI</string>
+  <string name="button_later_name">POZDĚJI</string>
+  <string name="button_rate_now_name">OHODNOŤTE TEĎ</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d vybrán</item>
     <item quantity="few">%d vybrány</item>
@@ -471,7 +515,21 @@ správce systému.</string>
   </plurals>
   <!--Welcome to oC intro features-->
   <string name="welcome_feature_skip_button">Přeskočit</string>
+  <string name="welcome_feature_1_title">Spravovat všechny nasdílené soubory</string>
+  <string name="welcome_feature_1_text">Můžete kopírovat, přesouvat, mazat</string>
+  <string name="welcome_feature_2_title">Sdílet soubory a složky</string>
+  <string name="welcome_feature_2_text">Můžete sdílet soukromě i veřejně</string>
+  <string name="welcome_feature_3_title">Multi-účet</string>
+  <string name="welcome_feature_3_text">Připojit ke všem mým serverům ownCloud</string>
   <string name="welcome_feature_4_title">Nahrávání fotoaparátu</string>
+  <string name="welcome_feature_4_text">Obrázky/videa se automaticky nahrály</string>
+  <string name="welcome_feature_5_title">Přehrávání videa</string>
+  <string name="welcome_feature_5_text">Přehrávejte videa bez nutnosti stažení na disk</string>
+  <string name="welcome_feature_6_title">Hledat v tomto adresáři</string>
+  <string name="welcome_feature_6_text">Filtrovat soubory podle jména</string>
   <string name="welcome_feature_7_title">Vybrat vše</string>
+  <string name="welcome_feature_7_text">Vybrat všechny soubory najednou</string>
   <string name="welcome_feature_8_title">Dostupné offline</string>
+  <string name="welcome_feature_8_text">Soubory se automaticky aktualizovaly</string>
+  <string name="no_borwser_installed_alert">Není nainstalován žádný prohlížeč. Nainstalujte si prosím prohlížeč pro bezpečné přihlášení.</string>
 </resources>
