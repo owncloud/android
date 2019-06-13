@@ -1,4 +1,26 @@
-## 2.11.0 beta v1 (May 2019)
+## 2.11 (June 2019)
+- Replace ownCloud file picker with the Android native one when uploading files (contribution)
+- Send logs to support, enable it via new developer menu (contribution)
+- Logs search (contribution)
+- Shortcut to available offline files from side menu
+- Document provider: files and folders rename, edition and deletion.
+- Document provider: folder creation
+- Document provider: multiaccount support
+- UI improvements, including:
+  + Notch support
+  + Batched permission errors when deleting multiple files (contribution)
+- Bug fixes, including:
+  + Fix just created folder disappears when synchronizing parent folder
+  + Fix crash when clearing successful/failed uploads (contribution)
+  + Fix download progress bar still visible after successful download
+  + Fix UI glitch in warning icon when sharing a file publicly (contribution)
+  + Fix crash when sharing files with ownCloud and creating new folder (contribution)
+  + Fix canceling dialog in settings turns on setting (contribution)
+  + Bring back select all and select inverse icons to the app bar (contribution)
+  + Fix folder with brackets [ ] does not show the content
+  + Fix login fails with "§" in password
+
+## 2.11 beta v1 (May 2019)
 - Send logs to support, enable it via new developer menu (contribution)
 - Logs search (contribution)
 - Shortcut to available offline files from side menu
