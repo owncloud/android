@@ -26,8 +26,10 @@ import com.owncloud.android.capabilities.datasource.LocalCapabilitiesDataSource
 import com.owncloud.android.capabilities.datasource.RemoteCapabilitiesDataSource
 import com.owncloud.android.capabilities.db.OCCapability
 import com.owncloud.android.lib.resources.status.RemoteCapability
+import com.owncloud.android.testing.OpenForTesting
 import com.owncloud.android.vo.Resource
 
+@OpenForTesting
 class OCCapabilityRepository(
     private val appExecutors: AppExecutors,
     private val localCapabilitiesDataSource: LocalCapabilitiesDataSource,

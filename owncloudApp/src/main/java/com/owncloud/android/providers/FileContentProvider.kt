@@ -945,7 +945,7 @@ class FileContentProvider(val appExecutors: AppExecutors = AppExecutors()) : Con
 
                     // Insert share list to the new shares table in new database
                     appExecutors.diskIO().execute {
-                        OCLocalSharesDataSource().insert(shares)
+                        OCLocalSharesDataSource(context).insert(shares)
                     }
 
                     // Drop old shares table from old database
@@ -968,7 +968,7 @@ class FileContentProvider(val appExecutors: AppExecutors = AppExecutors()) : Con
                 if (cursor.moveToFirst()) {
                     // Insert capability to the new capabilities table in new database
                     appExecutors.diskIO().execute {
-                        OCLocalCapabilitiesDataSource().insert(
+                        OCLocalCapabilitiesDataSource(context).insert(
                             listOf(OCCapability.fromCursor(cursor))
                         )
                     }

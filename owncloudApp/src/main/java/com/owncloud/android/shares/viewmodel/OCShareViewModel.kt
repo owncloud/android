@@ -20,9 +20,9 @@
 package com.owncloud.android.shares.viewmodel
 
 import android.accounts.Account
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import com.owncloud.android.MainApp
 import com.owncloud.android.lib.common.OwnCloudAccount
 import com.owncloud.android.lib.common.OwnCloudClientManagerFactory
 import com.owncloud.android.lib.resources.shares.ShareType
@@ -39,15 +39,16 @@ import com.owncloud.android.vo.Resource
  */
 @OpenForTesting
 class OCShareViewModel(
-    val filePath: String,
-    val account: Account,
-    val shareTypes: List<ShareType>,
-    private val shareRepository: ShareRepository = OCShareRepository(
-        localSharesDataSource = OCLocalSharesDataSource(),
+    context: Context,
+    filePath: String,
+    account: Account,
+    shareTypes: List<ShareType>,
+    val shareRepository: ShareRepository = OCShareRepository(
+        localSharesDataSource = OCLocalSharesDataSource(context),
         remoteSharesDataSource = OCRemoteSharesDataSource(
             OwnCloudClientManagerFactory.getDefaultSingleton().getClientFor(
-                OwnCloudAccount(account, MainApp.appContext),
-                MainApp.appContext
+                OwnCloudAccount(account, context),
+                context
             )
         ),
         filePath = filePath,
