@@ -22,6 +22,7 @@ package com.owncloud.android.shares.viewmodel
 import android.accounts.Account
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
+import androidx.test.platform.app.InstrumentationRegistry
 import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.shares.db.OCShare
 import com.owncloud.android.shares.repository.OCShareRepository
@@ -167,13 +168,17 @@ class OCShareViewModelTest {
         assertEquals(Status.SUCCESS, resource?.status)
     }
 
-    private fun createOCShareViewModel(ocShareRepository: OCShareRepository): OCShareViewModel =
-        OCShareViewModel(
+    private fun createOCShareViewModel(ocShareRepository: OCShareRepository): OCShareViewModel {
+        val context = InstrumentationRegistry.getInstrumentation().targetContext
+
+        return OCShareViewModel(
+            context,
             "/Photos/image.jpg",
             testAccount,
             listOf(ShareType.PUBLIC_LINK),
             ocShareRepository
         )
+    }
 
     private fun assertShareParameters(shares: List<OCShare>?) {
         assertEquals(2, shares?.size)

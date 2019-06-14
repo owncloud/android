@@ -75,7 +75,7 @@ dependencies {
     kapt "androidx.room:room-compiler:$roomVersion"
 
     // Kotlin dependency injector
-    implementation 'org.koin:koin-androidx-viewmodel:2.0.0'
+    implementation 'org.koin:koin-androidx-viewmodel:2.0.1'
 }
 
 tasks.withType(Test) {

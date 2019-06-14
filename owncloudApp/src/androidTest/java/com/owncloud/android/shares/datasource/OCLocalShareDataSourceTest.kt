@@ -21,6 +21,7 @@ package com.owncloud.android.shares.datasource
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
+import androidx.test.platform.app.InstrumentationRegistry
 import com.owncloud.android.db.OwncloudDatabase
 import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.shares.db.OCShare
@@ -115,7 +116,9 @@ class OCLocalDataSourceTest {
             1
         )
 
-        ocLocalSharesDataSource = OCLocalSharesDataSource(ocSharesDao)
+        val context = InstrumentationRegistry.getInstrumentation().targetContext
+
+        ocLocalSharesDataSource = OCLocalSharesDataSource(context, ocSharesDao)
     }
 
     @Test

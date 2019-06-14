@@ -21,6 +21,7 @@ package com.owncloud.android.capabilities.datasource
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
+import androidx.test.platform.app.InstrumentationRegistry
 import com.owncloud.android.capabilities.db.OCCapability
 import com.owncloud.android.capabilities.db.OCCapabilityDao
 import com.owncloud.android.db.OwncloudDatabase
@@ -73,7 +74,9 @@ class OCLocalCapabilitiesDataSourceTest {
             newCapabilityAsLiveData
         )
 
-        ocLocalCapabilitiesDataSource = OCLocalCapabilitiesDataSource(ocCapabilityDao)
+        val context = InstrumentationRegistry.getInstrumentation().targetContext
+
+        ocLocalCapabilitiesDataSource = OCLocalCapabilitiesDataSource(context, ocCapabilityDao)
     }
 
     @Test
