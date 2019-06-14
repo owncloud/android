@@ -52,6 +52,7 @@ import com.owncloud.android.ui.activity.FingerprintActivity
 import com.owncloud.android.ui.activity.PassCodeActivity
 import com.owncloud.android.ui.activity.PatternLockActivity
 import com.owncloud.android.ui.activity.WhatsNewActivity
+import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
@@ -74,13 +75,13 @@ class MainApp : Application() {
         val isSamlAuth = AUTH_ON == getString(R.string.auth_method_saml_web_sso)
 
         OwnCloudClientManagerFactory.setUserAgent(userAgent)
-        if (isSamlAuth) {
-            OwnCloudClientManagerFactory.setDefaultPolicy(Policy.SINGLE_SESSION_PER_ACCOUNT)
-        } else {
-            OwnCloudClientManagerFactory.setDefaultPolicy(
+        OwnCloudClientManagerFactory.setDefaultPolicy(
+            if (isSamlAuth) {
+                Policy.SINGLE_SESSION_PER_ACCOUNT
+            } else {
                 Policy.SINGLE_SESSION_PER_ACCOUNT_IF_SERVER_SUPPORTS_SERVER_MONITORING
-            )
-        }
+            }
+        )
 
         val oauth2Provider = OwnCloudOAuth2Provider()
         oauth2Provider.authorizationCodeEndpointPath = getString(R.string.oauth2_url_endpoint_auth)
@@ -172,27 +173,24 @@ class MainApp : Application() {
 
         val newArchModule = module {
             viewModel { (filePath: String, account: Account, shareTypes: List<ShareType>) ->
-                OCShareViewModel(filePath, account, shareTypes)
+                OCShareViewModel(androidContext(), filePath, account, shareTypes)
             }
 
             viewModel { (account: Account) ->
-                OCCapabilityViewModel(account)
+                OCCapabilityViewModel(androidContext(), account)
             }
         }
 
         startKoin {
+            androidContext(applicationContext)
             modules(newArchModule)
         }
     }
 
     companion object {
-
         private val TAG = MainApp::class.java.simpleName
 
         private val AUTH_ON = "on"
-
-        private val POLICY_SINGLE_SESSION_PER_ACCOUNT = "single session per account"
-        private val POLICY_ALWAYS_NEW_CLIENT = "always new client"
 
         var appContext: Context? = null
             private set

@@ -22,6 +22,7 @@ package com.owncloud.android.capabilities.viewmodel
 import android.accounts.Account
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
+import androidx.test.platform.app.InstrumentationRegistry
 import com.owncloud.android.capabilities.db.OCCapability
 import com.owncloud.android.capabilities.repository.OCCapabilityRepository
 import com.owncloud.android.utils.TestUtil
@@ -38,7 +39,6 @@ import org.mockito.Mockito.mock
 @RunWith(JUnit4::class)
 class OCCapabilityViewModelTest {
     private var testAccount: Account = TestUtil.createAccount("admin@server", "test")
-
     private lateinit var capability: OCCapability
 
     @Rule
@@ -54,18 +54,20 @@ class OCCapabilityViewModelTest {
     fun loadCapability() {
         val ocCapabilityRepository = mock(OCCapabilityRepository::class.java)
 
-        val capabilityResourceAsLiveData: MutableLiveData<Resource<OCCapability>> = MutableLiveData()
-        capabilityResourceAsLiveData.value = Resource.success(capability)
-
         `when`(
             ocCapabilityRepository.loadCapabilityForAccount(
                 "admin@server"
             )
         ).thenReturn(
-            capabilityResourceAsLiveData
+            MutableLiveData<Resource<OCCapability>>().apply {
+                value = Resource.success(capability)
+            }
         )
 
+        val context = InstrumentationRegistry.getInstrumentation().targetContext
+
         val ocCapabilityViewModel = OCCapabilityViewModel(
+            context,
             account = testAccount,
             capabilityRepository = ocCapabilityRepository
         )

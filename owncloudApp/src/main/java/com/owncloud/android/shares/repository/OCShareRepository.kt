@@ -28,8 +28,10 @@ import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.shares.datasource.LocalSharesDataSource
 import com.owncloud.android.shares.datasource.RemoteSharesDataSource
 import com.owncloud.android.shares.db.OCShare
+import com.owncloud.android.testing.OpenForTesting
 import com.owncloud.android.vo.Resource
 
+@OpenForTesting
 class OCShareRepository(
     private val appExecutors: AppExecutors = AppExecutors(),
     private val localSharesDataSource: LocalSharesDataSource,

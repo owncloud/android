@@ -31,6 +31,7 @@ import android.util.Log
 import android.view.MenuItem
 import androidx.lifecycle.Observer
 import com.google.android.material.snackbar.Snackbar
+import com.owncloud.android.MainApp
 import com.owncloud.android.R
 import com.owncloud.android.capabilities.viewmodel.OCCapabilityViewModel
 import com.owncloud.android.datamodel.OCFile
