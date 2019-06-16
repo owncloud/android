@@ -72,6 +72,7 @@
   <string name="passcode_already_set">Pola dan kunci kode sandi tidak dapat diaktifkan secara bersamaan, harap nonaktifkan kode sandi terlebih dahulu</string>
   <string name="pattern_no_longer_required">Pola tidak akan ditanyakan lagi</string>
   <string name="pattern_configure_your_pattern_explanation">Pola akan diminta setiap kali aplikasi dimulai</string>
+  <string name="illegal_argument_exception_message">AKSI yang sah dibutuhkan dalam maksud melewati ke </string>
   <string name="recommend_subject">Cobalah %1$s pada ponsel cerdas Anda!</string>
   <string name="recommend_text">Saya mengajak Anda untuk menggunakan %1$s di ponsel cerdas Anda!\nUnduh gratis disini: %2$s</string>
   <string name="auth_failure_snackbar">Otentikasi gagal</string>
@@ -547,5 +548,9 @@
   <string name="welcome_feature_7_text">Pilih semua file sekaligus</string>
   <string name="welcome_feature_8_title">Tersedia offline</string>
   <string name="welcome_feature_8_text">File Anda secara otomatis disinkronkan</string>
+  <string name="welcome_feature_9_title">Penyedia dokumen</string>
+  <string name="welcome_feature_9_text">Akses dan sunting data ownCloud Anda dari aplikasi lainnya</string>
+  <string name="welcome_feature_10_title">log dengan pencarian untuk semua orang</string>
+  <string name="welcome_feature_10_text">Kirimkan kami log Anda agar aplikasi dapat bekerja dengan lebih baik</string>
   <string name="no_borwser_installed_alert">Tidak ada browser yang diinstal. Silakan instal Browser untuk memperbolehkan login yang aman.</string>
 </resources>

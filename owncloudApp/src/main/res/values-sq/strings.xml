@@ -547,5 +547,9 @@
   <string name="welcome_feature_7_text">Përzgjidhini krejt kartelat njëherësh</string>
   <string name="welcome_feature_8_title">I passhëm jo në linjë</string>
   <string name="welcome_feature_8_text">Kartelat tuaja u njëkohësuan vetvetiu</string>
+  <string name="welcome_feature_9_title">Furnizues dokumentesh</string>
+  <string name="welcome_feature_9_text">Hyni në to dhe përpunoni kartela tuajat ownCloud që nga aplikacione të tjera</string>
+  <string name="welcome_feature_10_title">Regjistra me mundësi kërkimi për këdo</string>
+  <string name="welcome_feature_10_text">Dërgonani regjistrat tuaj për ta bërë aplikacionin të punojë më mirë</string>
   <string name="no_borwser_installed_alert">S\’ka shfletues të instaluar. Ju lutemi, instaloni një Shfletues, që të mund të lejohet hyrje e sigurt.</string>
 </resources>
