@@ -38,7 +38,10 @@
   <string name="prefs_passcode">PIN gesperrt</string>
   <string name="prefs_fingerprint">Fingerabdrucksperre</string>
   <string name="prefs_fingerprint_summary">Passwort oder Wisch-Muster eingeben um diese Option zu aktivieren</string>
+  <string name="prefs_touches_with_other_visible_windows">Berührungen mit anderen sichtbaren Fenstern</string>
+  <string name="prefs_touches_with_other_visible_windows_summary">Berührungen zulassen, wenn die Ansicht von einem anderen sichtbaren Fenster verdeckt wird. Aktivieren Sie es, um Lichtfilter-Apps zu verwenden.</string>
   <string name="confirmation_touches_with_other_windows_title">Wollen Sie diese Funktion wirklich einschalten?</string>
+  <string name="confirmation_touches_with_other_windows_message">Verwenden Sie diese Funktion unter Ihrer eigenen Verantwortung. Eine bösartige Anwendung könnte versuchen, Sie zu täuschen und Sie Aktionen ausführen lassen, die Sie nicht kennen, indem diese andere Ansichten verwenden.</string>
   <string name="prefs_camera_picture_upload">Bild-Upload</string>
   <string name="prefs_camera_picture_upload_summary">Automatisch von der Kamera aufgenommene Bilder hochladen</string>
   <string name="prefs_camera_video_upload">Video-Upload</string>
@@ -50,6 +53,7 @@
   <string name="prefs_log_delete_history_button">Verlauf löschen</string>
   <string name="prefs_help">Hilfe</string>
   <string name="prefs_sync_calendar_contacts">Synchronisiere deine Kontakte, deinen Kalender und deine Aufgaben</string>
+  <string name="prefs_sync_calendar_contacts_summary">DAVx⁵ installieren</string>
   <string name="prefs_recommend">Dies einem Freund empfehlen</string>
   <string name="prefs_feedback">Rückmeldungen</string>
   <string name="prefs_imprint">Impressum</string>
@@ -151,6 +155,7 @@
   <string name="uploader_upload_text_filename_hint">Dateiname</string>
   <string name="uploader_upload_camera_upload_files">Fotos werden übertragen</string>
   <string name="uploader_upload_available_offline_files">Offline Dateien werden übertragen</string>
+  <string name="uploader_upload_requested_from_wifi_files">Hochladen von angeforderten WLAN-Dateien</string>
   <string name="ssl_certificate_not_trusted">Zertifikat des Servers ist nicht vertrauenswürdig</string>
   <string name="uploads_view_title">Uploads</string>
   <string name="uploads_view_group_current_uploads">Aktuell</string>
@@ -341,6 +346,7 @@
   <string name="proper_pics_folder_warning_camera_upload">Bitte stellen Sie sicher, dass der Ordner ausgewählt ist, in dem die Kamera die Bilder speichert. Anderenfalls wird die Funktion Ihre Bilder nicht erkennen können. Bitte beachten Sie, dass Bilder frühestens 15 Minuten, nachdem sie aufgenommen wurden, hochgeladen werden.</string>
   <string name="proper_videos_folder_warning_camera_upload">Bitte stellen Sie sicher, dass der Ordner ausgewählt ist, in dem die Kamera die Videos speichert. Anderenfalls wird die Funktion Ihre Videos nicht erkennen können. Bitte beachten Sie, dass Videos frühestens 15 Minuten, nachdem sie aufgenommen wurden, hochgeladen werden.</string>
   <string name="conflict_title">Dateikonflikt</string>
+  <string name="conflict_description">Ein Konflikt ist in der Datei %1$s aufgetreten, hier tippen um dies zu lösen</string>
   <string name="conflict_message">Welche Datei möchten Sie behalten? Wenn Sie beide Versionen auswählen, wird der lokalen Datei eine Zahl ans Ende ihres Dateinamens angehängt.</string>
   <string name="conflict_keep_both">Beide behalten</string>
   <string name="conflict_use_local_version">lokale Version</string>
@@ -515,6 +521,7 @@
   <string name="media_service_notification_channel_description">Musik-Player anzeigen</string>
   <string name="file_sync_notification_channel_name">Datei - Synchronisation</string>
   <string name="file_sync_notification_channel_description">Ergebnis der Datei - Synchronisation anzeigen</string>
+  <string name="clicks_to_be_developer">Sie sind %1$d Klicks entfernt, um die Entwicklermenüs zu aktivieren</string>
   <string name="rate_dialog_title">Bitte %1$s bewerten</string>
   <string name="rate_dialog_description">Wenn Ihnen diese App gefällt, nehmen Sie sich bitte etwas Zeit, um diese zu bewerten. Ihr Feedback ist für uns wichtig.</string>
   <string name="button_no_thanks_name">Nein, Danke</string>
@@ -541,5 +548,10 @@
   <string name="welcome_feature_7_title">Alle auswählen</string>
   <string name="welcome_feature_7_text">Alle Dateien auf einmal auswählen</string>
   <string name="welcome_feature_8_title">Offline verfügbar</string>
+  <string name="welcome_feature_8_text">Ihre Dateien werden automatisch synchronisiert</string>
+  <string name="welcome_feature_9_title">Dokumentenanbieter</string>
+  <string name="welcome_feature_9_text">Zugriff und Bearbeiten deiner ownCloud-Dateien durch andere Apps</string>
+  <string name="welcome_feature_10_title">Protokolle mit Suchfunktion für jeden</string>
+  <string name="welcome_feature_10_text">Senden Sie uns Ihre Protokolle, damit die App besser funktioniert</string>
   <string name="no_borwser_installed_alert">Es ist kein Browser installiert. Bitte installieren Sie zur sicheren Anmeldung einen Browser.</string>
 </resources>
