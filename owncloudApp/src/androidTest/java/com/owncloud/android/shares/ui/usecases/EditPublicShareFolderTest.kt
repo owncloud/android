@@ -30,6 +30,7 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.replaceText
+import androidx.test.espresso.action.ViewActions.scrollTo
 import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isChecked
@@ -242,7 +243,7 @@ class EditPublicShareFolderTest {
         onView(withId(R.id.shareViaLinkNameValue)).perform(replaceText(updatedPublicShare.name))
 
         // 3. Save updated share
-        onView(withId(R.id.saveButton)).perform(click())
+        onView(withId(R.id.saveButton)).perform(scrollTo(), click())
 
         // 4. Share properly updated
         sharesLiveData.postValue(
@@ -286,7 +287,7 @@ class EditPublicShareFolderTest {
         onView(withId(R.id.shareViaLinkEditPermissionReadAndWrite)).perform(click())
 
         // 3. Save updated share
-        onView(withId(R.id.saveButton)).perform(click())
+        onView(withId(R.id.saveButton)).perform(scrollTo(), click())
 
         // 4. Share properly updated
         sharesLiveData.postValue(
@@ -331,7 +332,7 @@ class EditPublicShareFolderTest {
         onView(withId(R.id.shareViaLinkEditPermissionUploadFiles)).perform(click())
 
         // 3. Save updated share
-        onView(withId(R.id.saveButton)).perform(click())
+        onView(withId(R.id.saveButton)).perform(scrollTo(), click())
 
         // 4. Share properly updated
         sharesLiveData.postValue(
@@ -376,7 +377,7 @@ class EditPublicShareFolderTest {
         onView(withId(R.id.shareViaLinkEditPermissionReadOnly)).perform(click())
 
         // 3. Save updated share
-        onView(withId(R.id.saveButton)).perform(click())
+        onView(withId(R.id.saveButton)).perform(scrollTo(), click())
 
         // 4. Share properly updated
         sharesLiveData.postValue(
