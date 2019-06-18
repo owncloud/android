@@ -194,5 +194,7 @@ public class ProviderMeta {
         public static final String USER_QUOTAS__RELATIVE = "relative";
         public static final String USER_QUOTAS__TOTAL = "total";
         public static final String USER_QUOTAS__USED = "used";
+        public static final String USER_QUOTAS_DEFAULT_SORT_ORDER =
+                ProviderTableMeta._ID + " collate nocase asc";
     }
 }

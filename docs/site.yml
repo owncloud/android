@@ -22,3 +22,4 @@ asciidoc:
   attributes:
     idprefix: ''
     idseparator: '-'
+    experimental: ''

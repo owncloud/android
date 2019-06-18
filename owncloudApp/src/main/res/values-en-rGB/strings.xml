@@ -19,6 +19,7 @@
   <string name="actionbar_sort_by_date">Oldest - Newest</string>
   <string name="actionbar_sort_by_size">Smallest - Largest</string>
   <string name="drawer_item_all_files">All files</string>
+  <string name="drawer_item_only_available_offline">Available offline</string>
   <string name="drawer_item_settings">Settings</string>
   <string name="drawer_item_uploads_list">Uploads</string>
   <string name="drawer_close">Close</string>
@@ -48,7 +49,6 @@
   <string name="prefs_log_delete_history_button">Delete history</string>
   <string name="prefs_help">Help</string>
   <string name="prefs_sync_calendar_contacts">Sync your contacts, calendars and tasks</string>
-  <string name="prefs_sync_calendar_contacts_summary">Install DAVdroid</string>
   <string name="prefs_recommend">Recommend to a friend</string>
   <string name="prefs_feedback">Feedback</string>
   <string name="prefs_imprint">Imprint</string>

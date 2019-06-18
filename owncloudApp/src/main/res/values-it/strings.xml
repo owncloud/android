@@ -19,10 +19,12 @@
   <string name="actionbar_sort_by_date">Più vecchio - Più Recente</string>
   <string name="actionbar_sort_by_size">Più piccolo - Più grande</string>
   <string name="drawer_item_all_files">Tutti i file</string>
+  <string name="drawer_item_only_available_offline">Disponibile non in linea</string>
   <string name="drawer_item_settings">Impostazioni</string>
   <string name="drawer_item_uploads_list">Caricamenti</string>
   <string name="drawer_close">Chiudi</string>
   <string name="drawer_open">Apri</string>
+  <string name="drawer_loading_quota">Dimensioni di caricamento</string>
   <string name="drawer_quota">%1$s di %2$s usato (%3$s %%)</string>
   <string name="drawer_unavailable_free_storage">%1$s in uso</string>
   <string name="drawer_unavailable_used_storage">Nessuna informazione sullo spazio disponibile</string>
@@ -36,6 +38,10 @@
   <string name="prefs_passcode">Blocco con codice di sicurezza</string>
   <string name="prefs_fingerprint">Blocco con impronta digitale</string>
   <string name="prefs_fingerprint_summary">Abilita il blocco con pasword o la sequenza di blocco per attivare questa opzione.</string>
+  <string name="prefs_touches_with_other_visible_windows">Tocca con altre finestre visibili</string>
+  <string name="prefs_touches_with_other_visible_windows_summary">Consenti tocchi quando la vista è oscurata da un\'altra finestra visibile. Abilitalo per utilizzare app di filtraggio della luce.</string>
+  <string name="confirmation_touches_with_other_windows_title">Sei sicuro di voler abilitare queste funzione?</string>
+  <string name="confirmation_touches_with_other_windows_message">Utilizzare questa funzione con responsabilità, un\'applicazione dannosa potrebbe tentare di derubare l\'utente nell\'eseguire alcune azioni, inconsapevoli, utilizzando altre visualizzazioni.</string>
   <string name="prefs_camera_picture_upload">Caricamento immagini</string>
   <string name="prefs_camera_picture_upload_summary">Carica automaticamente le immagini scattate dalla fotocamera</string>
   <string name="prefs_camera_video_upload">Caricamento video</string>
@@ -47,7 +53,7 @@
   <string name="prefs_log_delete_history_button">Elimina cronologia</string>
   <string name="prefs_help">Aiuto</string>
   <string name="prefs_sync_calendar_contacts">Sincronizza i tuoi contatti, calendari e attività</string>
-  <string name="prefs_sync_calendar_contacts_summary">Installa DAVdroid</string>
+  <string name="prefs_sync_calendar_contacts_summary">Installa DAVx⁵</string>
   <string name="prefs_recommend">Consiglia a un amico</string>
   <string name="prefs_feedback">Segnalazioni</string>
   <string name="prefs_imprint">Imprint</string>
@@ -93,6 +99,7 @@
   <string name="uploader_error_message_source_file_not_copied">Si è verificato un errore durante il tentativo di copiare il file in una cartella temporanea. Prova a inviarlo ancora.</string>
   <string name="file_list_seconds_ago">secondi fa</string>
   <string name="file_list_empty">Non c\'è niente qui. Carica qualcosa!</string>
+  <string name="file_list_empty_available_offline">Non ci sono file offline disponibili.</string>
   <string name="file_list_loading">Caricamento in corso...</string>
   <string name="file_list_no_app_for_file_type">Nessuna applicazione trovata per questo tipo di file</string>
   <string name="local_file_list_empty">Non ci sono file in questa cartella.</string>
@@ -146,6 +153,9 @@
   <string name="uploader_upload_text_dialog_filename_error_empty">Il nome del file non può essere vuoto</string>
   <string name="uploader_upload_text_dialog_filename_error_length_max">Il nome del file non può contenere piu\' di %d caratteri</string>
   <string name="uploader_upload_text_filename_hint">Nome del file</string>
+  <string name="uploader_upload_camera_upload_files">Caricamento dei file della fotocamera</string>
+  <string name="uploader_upload_available_offline_files">Caricamento di file offline disponibili</string>
+  <string name="uploader_upload_requested_from_wifi_files">Caricamento richiesto da file wifi</string>
   <string name="ssl_certificate_not_trusted">Il certificato del server non è affidabile</string>
   <string name="uploads_view_title">Caricamenti</string>
   <string name="uploads_view_group_current_uploads">Attuale</string>

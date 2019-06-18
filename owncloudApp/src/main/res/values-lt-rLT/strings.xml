@@ -17,6 +17,7 @@
   <string name="actionbar_sort_by_date">Seniausi - Naujausi</string>
   <string name="actionbar_sort_by_size">Mažiausi - Didžiausi</string>
   <string name="drawer_item_all_files">Visi failai</string>
+  <string name="drawer_item_only_available_offline">Pasiekiamas neprisijungus</string>
   <string name="drawer_item_settings">Parinktys</string>
   <string name="drawer_item_uploads_list">Įkėlimai</string>
   <string name="drawer_close">Užverti</string>

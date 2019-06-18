@@ -1,0 +1,13 @@
+Willkommen bei der ownCloud Android App – Zusammen mit einem ownCloud Server haben Sie in wenigen Minuten Ihre private Filesync und –share Cloud.
+
+Sie suchen eine private Filesync und –share Software? Gute Neuigkeiten, die ownCloud Android App erlaubt es Ihnen Android Geräte mit einem privaten ownCloud Server in Ihrem Datenzentrum zu verbinden. ownCloud ist eine Open Source Filesync und –share Software für jedermann, von Privatpersonen mit kostenfreiem ownCloud Server bis hin zu Großunternehmen und Service Providern mit der ownCloud Enterprise Edition. ownCloud bietet eine sichere und flexible Filesync und –share Lösung – auf Servern die Sie kontrollieren.
+
+Mit der ownCloud Android App können Sie alle in ownCloud synchronisierten Dateien durchsuchen, neue Dateien erstellen und bearbeiten, diese Dateien und Ordner mit Kollegen teilen und die Inhalte dieser Ordner über alle Ihre Geräte hinweg synchron halten. Kopieren Sie einfach eine Datei in ein Verzeichnis auf Ihrem Server, ownCloud übernimmt für Sie den Rest.
+
+ownCloud bietet die Möglichkeit die richtigen Dateien zur richtigen Zeit in die richtigen Hände zu geben, gleich ob Sie ein Mobilgerät, den Desktop oder Web Client verwenden. Auf jedem Gerät und in einer leicht bedienbaren, sicheren, privaten und kontrollierten Lösung.
+
+Falls Sie Probleme haben sich mit dem ownCloud Server zu verbinden oder mit diesem zu synchronisieren kontaktieren Sie uns bitte auf https://github.com/owncloud/android/issues (englisch). Oftmals ist auch bereits eine Lösung in unserem Forum zu finden: https://central.owncloud.org (deutsch & englisch)
+
+Besuchen Sie uns unter www.ownCloud.com für weitere Informationen zu ownCloud und den ownCloud Subscriptions. Für mehr Informationen zur freien Open Source Software ownCloud Server besuchen Sie bitte www.owncloud.org .
+
+***Falls es zu Log-In Problemen nach einem Update kommt und Sie die ownCloud Workaround App auf Ihrem Gerät installiert haben versuchen Sie bitte die Workaround App zu deinstallieren und anschließend neu zu installieren***

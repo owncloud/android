@@ -19,6 +19,7 @@
   <string name="actionbar_sort_by_date">Eskiden yeniye</string>
   <string name="actionbar_sort_by_size">Küçükten büyüğe</string>
   <string name="drawer_item_all_files">Tüm dosyalar</string>
+  <string name="drawer_item_only_available_offline">Çevrimdışı kullanılabilir</string>
   <string name="drawer_item_settings">Ayarlar</string>
   <string name="drawer_item_uploads_list">Yüklemeler</string>
   <string name="drawer_close">Kapat</string>
@@ -46,7 +47,6 @@
   <string name="prefs_log_delete_history_button">Geçmişi sil</string>
   <string name="prefs_help">Yardım</string>
   <string name="prefs_sync_calendar_contacts">Kişilerinizi, takviminizi ve görevlerinizi senkronize edin</string>
-  <string name="prefs_sync_calendar_contacts_summary">DAVdroid\'i yükle</string>
   <string name="prefs_recommend">Bir arkadaşa öner</string>
   <string name="prefs_feedback">Geribildirim</string>
   <string name="prefs_imprint">İzlenim</string>

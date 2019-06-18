@@ -64,7 +64,6 @@
     <bool name="imprint_enabled">false</bool>
     <bool name="recommend_enabled">true</bool>
     <bool name="feedback_enabled">true</bool>
-    <bool name="logger_enabled">false</bool>
     <bool name="privacy_policy_enabled">true</bool>
     <bool name="wizard_enabled">true</bool>
     <string name="url_privacy_policy" formatted="false">https://owncloud.com/privacy-legal/</string>

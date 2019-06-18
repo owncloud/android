@@ -16,6 +16,7 @@
   <string name="actionbar_sort_title">Ταξινόμηση κατά</string>
   <string name="actionbar_sort_by_name">A-Ω</string>
   <string name="drawer_item_all_files">Όλα τα αρχεία</string>
+  <string name="drawer_item_only_available_offline">Διαθέσιμο εκτός σύνδεσης</string>
   <string name="drawer_item_settings">Ρυθμίσεις</string>
   <string name="drawer_item_uploads_list">Μεταφορτώσεις</string>
   <string name="drawer_close">Κλείσιμο</string>
@@ -35,7 +36,6 @@
   <string name="prefs_log_summary_history">Εδώ μπορείτε να δείτε το καταγεγραμμένο ιστορικό</string>
   <string name="prefs_log_delete_history_button">Διαγραφή ιστορικού</string>
   <string name="prefs_help">Βοήθεια</string>
-  <string name="prefs_sync_calendar_contacts_summary">Εγκατάσταση DAVdroid</string>
   <string name="prefs_recommend">Προτείνετε σε φίλο</string>
   <string name="prefs_feedback">Σχόλια </string>
   <string name="prefs_imprint">Αποτύπωμα</string>

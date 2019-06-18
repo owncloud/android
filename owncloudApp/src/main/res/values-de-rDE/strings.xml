@@ -19,6 +19,7 @@
   <string name="actionbar_sort_by_date">Älteste - Neueste</string>
   <string name="actionbar_sort_by_size">Kleinste - Größte</string>
   <string name="drawer_item_all_files">Alle Dateien</string>
+  <string name="drawer_item_only_available_offline">Offline verfügbar</string>
   <string name="drawer_item_settings">Einstellungen</string>
   <string name="drawer_item_uploads_list">Uploads</string>
   <string name="drawer_close">Schließen</string>
@@ -49,7 +50,6 @@
   <string name="prefs_log_delete_history_button">Verlauf löschen</string>
   <string name="prefs_help">Hilfe</string>
   <string name="prefs_sync_calendar_contacts">Synchronisiere deine Kontakte, deinen Kalender und deine Aufgaben</string>
-  <string name="prefs_sync_calendar_contacts_summary">Installiere DAVdroid</string>
   <string name="prefs_recommend">Dies einem Freund empfehlen</string>
   <string name="prefs_feedback">Rückmeldungen</string>
   <string name="prefs_imprint">Impressum</string>
@@ -335,6 +335,8 @@
   <string name="confirmation_disable_camera_uploads_title">Bestätigen</string>
   <string name="confirmation_disable_pictures_upload_message">Sind Sie sicher dass sie diese Funktion deaktivieren wollen? Die ausstehenden Bilder werden nicht hochgeladen.</string>
   <string name="confirmation_disable_videos_upload_message">Sind Sie sicher dass sie diese Funktion deaktivieren wollen? Die ausstehenden Videos werden nicht hochgeladen.</string>
+  <string name="proper_pics_folder_warning_camera_upload">Bitte stellen Sie sicher, dass der Ordner ausgewählt ist, in dem die Kamera die Bilder speichert. Anderenfalls wird die Funktion Ihre Bilder nicht erkennen können. Bitte beachten Sie, dass Bilder frühestens 15 Minuten, nachdem sie aufgenommen wurden, hochgeladen werden.</string>
+  <string name="proper_videos_folder_warning_camera_upload">Bitte stellen Sie sicher, dass der Ordner ausgewählt ist, in dem die Kamera die Videos speichert. Anderenfalls wird die Funktion Ihre Videos nicht erkennen können. Bitte beachten Sie, dass Videos frühestens 15 Minuten, nachdem sie aufgenommen wurden, hochgeladen werden.</string>
   <string name="conflict_title">Dateikonflikt</string>
   <string name="conflict_message">Welche Datei möchten Sie behalten? Wenn Sie beide Versionen auswählen, wird der lokalen Datei eine Zahl ans Ende ihres Dateinamens angehängt.</string>
   <string name="conflict_keep_both">Beide behalten</string>

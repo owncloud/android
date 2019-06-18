@@ -47,6 +47,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
+import android.provider.DocumentsContract;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
@@ -76,7 +77,6 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import com.google.android.material.snackbar.Snackbar;
-import com.owncloud.android.BuildConfig;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.SAMLWebViewClient.SsoWebViewClientListener;
@@ -257,7 +257,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         super.onCreate(savedInstanceState);
 
         /// protection against screen recording
-        if (!BuildConfig.DEBUG) {
+        if (!MainApp.isDeveloper()) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
         } // else, let it go, or taking screenshots & testing will not be possible
 
@@ -1655,6 +1655,11 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
             setAccountAuthenticatorResult(intent.getExtras());
             setResult(RESULT_OK, intent);
+
+            // Notify login to Document Provider
+            String authority = getResources().getString(R.string.document_provider_authority);
+            Uri rootsUri = DocumentsContract.buildRootsUri(authority);
+            getContentResolver().notifyChange(rootsUri, null);
 
             return true;
         }

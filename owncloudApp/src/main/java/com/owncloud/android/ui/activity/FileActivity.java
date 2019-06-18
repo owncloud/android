@@ -4,6 +4,7 @@
  * @author David A. Velasco
  * @author David González Verdugo
  * @author Christian Schabesberger
+ * @author Abel García de Prada
  * Copyright (C) 2011  Bartek Przybylski
  * Copyright (C) 2019 ownCloud GmbH.
  * <p>
@@ -78,7 +79,7 @@ public class FileActivity extends DrawerActivity
     public static final String EXTRA_ACCOUNT = "com.owncloud.android.ui.activity.ACCOUNT";
     public static final String EXTRA_FROM_NOTIFICATION =
             "com.owncloud.android.ui.activity.FROM_NOTIFICATION";
-
+    static final String EXTRA_ONLY_AVAILABLE_OFFLINE ="ONLY_AVAILABLE_OFFLINE";
     public static final String TAG = FileActivity.class.getSimpleName();
 
     private static final String DIALOG_WAIT_TAG = "DIALOG_WAIT";
@@ -506,6 +507,14 @@ public class FileActivity extends DrawerActivity
     public void allFilesOption() {
         restart();
     }
+
+    @Override
+    public void onlyAvailableOfflineOption(){
+        Intent intent = new Intent(this, FileDisplayActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra(EXTRA_ONLY_AVAILABLE_OFFLINE, true);
+        startActivity(intent);
+     }
 
     protected OCFile getCurrentDir() {
         OCFile file = getFile();

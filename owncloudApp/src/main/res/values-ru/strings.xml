@@ -19,6 +19,7 @@
   <string name="actionbar_sort_by_date">От старых к новым</string>
   <string name="actionbar_sort_by_size">От маленьких к большим</string>
   <string name="drawer_item_all_files">Все файлы</string>
+  <string name="drawer_item_only_available_offline">Доступно автономно</string>
   <string name="drawer_item_settings">Настройки</string>
   <string name="drawer_item_uploads_list">Загрузки</string>
   <string name="drawer_close">Закрыть</string>
@@ -52,7 +53,7 @@
   <string name="prefs_log_delete_history_button">Удалить историю</string>
   <string name="prefs_help">Помощь</string>
   <string name="prefs_sync_calendar_contacts">Синхронизировать ваши контакты, календари и задачи</string>
-  <string name="prefs_sync_calendar_contacts_summary">Установить DAVdroid</string>
+  <string name="prefs_sync_calendar_contacts_summary">Установить DAVx⁵</string>
   <string name="prefs_recommend">Рекомендовать другу</string>
   <string name="prefs_feedback">Обратная связь</string>
   <string name="prefs_imprint">Штамп</string>
@@ -99,6 +100,7 @@
   <string name="uploader_error_message_source_file_not_copied">Произошла ошибка во время копирования этого файла во временную папку. Пожалуйста попробуйте послать заново.</string>
   <string name="file_list_seconds_ago">несколько секунд назад</string>
   <string name="file_list_empty">Здесь ничего нет. Загрузите что-нибудь!</string>
+  <string name="file_list_empty_available_offline">Нет доступных автономных файлов.</string>
   <string name="file_list_loading">Загрузка...</string>
   <string name="file_list_no_app_for_file_type">Не найдено приложение для типа файла</string>
   <string name="local_file_list_empty">В этом каталоге нет файлов.</string>
@@ -152,6 +154,9 @@
   <string name="uploader_upload_text_dialog_filename_error_empty">Имя файла не должно быть пустым</string>
   <string name="uploader_upload_text_dialog_filename_error_length_max">Имя файла должно быть не длиннее %d символов</string>
   <string name="uploader_upload_text_filename_hint">Имя файла</string>
+  <string name="uploader_upload_camera_upload_files">Загрузка файлов загрузки из камеры</string>
+  <string name="uploader_upload_available_offline_files">Загрузка файлов, доступных автономно</string>
+  <string name="uploader_upload_requested_from_wifi_files">Загрузка файлов, запрошенных через WiFi</string>
   <string name="ssl_certificate_not_trusted">Нет доверия сертификату сервера</string>
   <string name="uploads_view_title">Загрузки</string>
   <string name="uploads_view_group_current_uploads">Текущие</string>
@@ -516,6 +521,7 @@
   <string name="media_service_notification_channel_description">Просмотр проигрывателя музыки</string>
   <string name="file_sync_notification_channel_name">Синхронизация файлов</string>
   <string name="file_sync_notification_channel_description">Просмотр результатов синхронизации файлов</string>
+  <string name="clicks_to_be_developer">Вам ещё остается %1$d кликов, чтобы включить меню разработчика</string>
   <string name="rate_dialog_title">Оцените приложение %1$s!</string>
   <string name="rate_dialog_description">Если вам нравится пользоваться этим приложением, не уделите ли вы минутку, чтобы оценить его? Ваш отзыв очень важен для нас.</string>
   <string name="button_no_thanks_name">НЕТ, СПАСИБО</string>

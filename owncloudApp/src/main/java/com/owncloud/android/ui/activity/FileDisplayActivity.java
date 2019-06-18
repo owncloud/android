@@ -6,6 +6,7 @@
  * @author David González Verdugo
  * @author Christian Schabesberger
  * @author Shashvat Kedia
+ * @author Abel García de Prada
  * Copyright (C) 2011  Bartek Przybylski
  * Copyright (C) 2019 ownCloud GmbH.
  * <p>
@@ -106,7 +107,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.owncloud.android.MainApp.isBeta;
+import static com.owncloud.android.MainApp.isDeveloper;
 import static com.owncloud.android.db.PreferenceManager.getSortOrder;
 
 /**
@@ -135,10 +136,10 @@ public class FileDisplayActivity extends FileActivity
     public static final String ACTION_DETAILS = "com.owncloud.android.ui.activity.action.DETAILS";
 
     public static final int REQUEST_CODE__SELECT_CONTENT_FROM_APPS = REQUEST_CODE__LAST_SHARED + 1;
-    public static final int REQUEST_CODE__SELECT_FILES_FROM_FILE_SYSTEM = REQUEST_CODE__LAST_SHARED + 2;
-    public static final int REQUEST_CODE__MOVE_FILES = REQUEST_CODE__LAST_SHARED + 3;
-    public static final int REQUEST_CODE__COPY_FILES = REQUEST_CODE__LAST_SHARED + 4;
-    public static final int REQUEST_CODE__UPLOAD_FROM_CAMERA = REQUEST_CODE__LAST_SHARED + 5;
+    public static final int REQUEST_CODE__MOVE_FILES = REQUEST_CODE__LAST_SHARED + 2;
+    public static final int REQUEST_CODE__COPY_FILES = REQUEST_CODE__LAST_SHARED + 3;
+    public static final int REQUEST_CODE__UPLOAD_FROM_CAMERA = REQUEST_CODE__LAST_SHARED + 4;
+    public static final int RESULT_OK_AND_MOVE = RESULT_FIRST_USER;
 
     private static final String TAG = FileDisplayActivity.class.getSimpleName();
 
@@ -148,6 +149,7 @@ public class FileDisplayActivity extends FileActivity
     private OCFile mFileWaitingToPreview;
 
     private boolean mSyncInProgress = false;
+    private boolean mOnlyAvailableOffline = false;
 
     private OCFile mWaitingToSend;
 
@@ -185,6 +187,9 @@ public class FileDisplayActivity extends FileActivity
                     getAccount() == null ? "" : getAccount().name);
         }
 
+        // Check if only available offline option is set
+        mOnlyAvailableOffline = getIntent().getBooleanExtra(FileActivity.EXTRA_ONLY_AVAILABLE_OFFLINE, false);
+
         /// USER INTERFACE
 
         // Inflate and set the layout view
@@ -194,7 +199,11 @@ public class FileDisplayActivity extends FileActivity
         setupToolbar();
 
         // setup drawer
-        setupDrawer(R.id.nav_all_files);
+        if (!mOnlyAvailableOffline) {
+            setupDrawer(R.id.nav_all_files);
+        } else {
+            setupDrawer(R.id.nav_only_available_offline);
+        }
 
         mLeftFragmentContainer = findViewById(R.id.left_fragment_container);
         mRightFragmentContainer = findViewById(R.id.right_fragment_container);
@@ -214,7 +223,7 @@ public class FileDisplayActivity extends FileActivity
 
         Log_OC.v(TAG, "onCreate() end");
 
-        if (getResources().getBoolean(R.bool.enable_rate_me_feature) && !isBeta()) {
+        if (getResources().getBoolean(R.bool.enable_rate_me_feature) && !isDeveloper()) {
             AppRater.appLaunched(this, getPackageName());
         }
     }
@@ -343,7 +352,7 @@ public class FileDisplayActivity extends FileActivity
     }
 
     private void createMinFragments() {
-        OCFileListFragment listOfFiles = OCFileListFragment.newInstance(false, false, true);
+        OCFileListFragment listOfFiles = OCFileListFragment.newInstance(false, mOnlyAvailableOffline, false, true);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.add(R.id.left_fragment_container, listOfFiles, TAG_LIST_OF_FILES);
         transaction.commit();
@@ -355,8 +364,6 @@ public class FileDisplayActivity extends FileActivity
             OCFileListFragment listOfFiles = getListOfFilesFragment();
             if (listOfFiles != null) {
                 listOfFiles.listDirectory(getCurrentDir());
-                // TODO Enable when "On Device" is recovered
-                // listOfFiles.listDirectory(getCurrentDir(), MainApp.getOnlyOnDevice());
 
             } else {
                 Log_OC.e(TAG, "Still have a chance to lose the initializacion of list fragment >(");
@@ -506,8 +513,6 @@ public class FileDisplayActivity extends FileActivity
         OCFileListFragment fileListFragment = getListOfFilesFragment();
         if (fileListFragment != null) {
             fileListFragment.listDirectory(reloadData);
-            // TODO Enable when "On Device" is recovered ?
-            // fileListFragment.listDirectory(MainApp.getOnlyOnDevice());
         }
     }
 
@@ -677,17 +682,12 @@ public class FileDisplayActivity extends FileActivity
 
         // Hanndle calls form internal activities.
         if (requestCode == REQUEST_CODE__SELECT_CONTENT_FROM_APPS &&
-                (resultCode == RESULT_OK || resultCode == UploadFilesActivity.RESULT_OK_AND_MOVE)) {
+                (resultCode == RESULT_OK || resultCode == RESULT_OK_AND_MOVE)) {
 
             requestUploadOfContentFromApps(data, resultCode);
 
-        } else if (requestCode == REQUEST_CODE__SELECT_FILES_FROM_FILE_SYSTEM &&
-                (resultCode == RESULT_OK || resultCode == UploadFilesActivity.RESULT_OK_AND_MOVE)) {
-
-            requestUploadOfFilesFromFileSystem(data, resultCode);
-
         } else if (requestCode == REQUEST_CODE__UPLOAD_FROM_CAMERA) {
-            if (resultCode == RESULT_OK || resultCode == UploadFilesActivity.RESULT_OK_AND_MOVE) {
+            if (resultCode == RESULT_OK || resultCode == RESULT_OK_AND_MOVE) {
                 mFilesUploadHelper.onActivityResult(new FilesUploadHelper.OnCheckAvailableSpaceListener() {
                     @Override
                     public void onCheckAvailableSpaceStart() {
@@ -737,13 +737,6 @@ public class FileDisplayActivity extends FileActivity
         }
     }
 
-    private void requestUploadOfFilesFromFileSystem(Intent data, int resultCode) {
-        String[] filePaths = data.getStringArrayExtra(UploadFilesActivity.EXTRA_CHOSEN_FILES);
-        int behaviour = (resultCode == UploadFilesActivity.RESULT_OK_AND_MOVE)
-                ? FileUploader.LOCAL_BEHAVIOUR_MOVE : FileUploader.LOCAL_BEHAVIOUR_COPY;
-        requestUploadOfFilesFromFileSystem(filePaths, behaviour);
-    }
-
     private void requestUploadOfFilesFromFileSystem(String[] filePaths, int behaviour) {
         if (filePaths != null) {
             String[] remotePaths = new String[filePaths.length];
@@ -787,7 +780,7 @@ public class FileDisplayActivity extends FileActivity
             streamsToUpload.add(contentIntent.getData());
         }
 
-        int behaviour = (resultCode == UploadFilesActivity.RESULT_OK_AND_MOVE) ? FileUploader.LOCAL_BEHAVIOUR_MOVE :
+        int behaviour = (resultCode == RESULT_OK_AND_MOVE) ? FileUploader.LOCAL_BEHAVIOUR_MOVE :
                 FileUploader.LOCAL_BEHAVIOUR_COPY;
 
         OCFile currentDir = getCurrentDir();
@@ -854,7 +847,11 @@ public class FileDisplayActivity extends FileActivity
             if (getSecondFragment() == null) {
                 OCFile currentDir = getCurrentDir();
                 if (currentDir == null || currentDir.getParentId() == FileDataStorageManager.ROOT_PARENT_ID) {
-                    finish();
+                    if (mOnlyAvailableOffline) {
+                        allFilesOption();
+                    } else {
+                        finish();
+                    }
                     return;
                 }
                 if (listOfFiles != null) {  // should never be null, indeed
@@ -1004,9 +1001,6 @@ public class FileDisplayActivity extends FileActivity
                             OCFileListFragment fileListFragment = getListOfFilesFragment();
                             if (fileListFragment != null) {
                                 fileListFragment.listDirectory(true);
-                                // TODO Enable when "On Device" is recovered ?
-                                // fileListFragment.listDirectory(currentDir,
-                                // MainApp.getOnlyOnDevice());
                             }
                         }
                         setFile(currentFile);
@@ -1096,7 +1090,7 @@ public class FileDisplayActivity extends FileActivity
             int message = R.string.file_list_loading;
             if (!mSyncInProgress) {
                 // In case file list is empty
-                message = R.string.file_list_empty;
+                message = mOnlyAvailableOffline ? R.string.file_list_empty_available_offline : R.string.file_list_empty;
                 ocFileListFragment.getProgressBar().setVisibility(View.GONE);
                 ocFileListFragment.getShadowView().setVisibility(View.VISIBLE);
             }
@@ -1293,12 +1287,14 @@ public class FileDisplayActivity extends FileActivity
                                 mFileWaitingToPreview = getStorageManager().getFileById(
                                         mFileWaitingToPreview.getFileId()
                                 );
-                                fragmentReplaced = true;
                                 if (PreviewAudioFragment.canBePreviewed(mFileWaitingToPreview)) {
+                                    fragmentReplaced = true;
                                     startAudioPreview(mFileWaitingToPreview, 0);
                                 } else if (PreviewVideoFragment.canBePreviewed(mFileWaitingToPreview)) {
+                                    fragmentReplaced = true;
                                     startVideoPreview(mFileWaitingToPreview, 0);
                                 } else if (PreviewTextFragment.canBePreviewed(mFileWaitingToPreview)) {
+                                    fragmentReplaced = true;
                                     startTextPreview(mFileWaitingToPreview);
                                 } else {
                                     getFileOperationsHelper().openFile(mFileWaitingToPreview);
@@ -1320,8 +1316,6 @@ public class FileDisplayActivity extends FileActivity
         if (listOfFiles != null) {  // should never be null, indeed
             OCFile root = getStorageManager().getFileByPath(OCFile.ROOT_PATH);
             listOfFiles.listDirectory(root);
-            // TODO Enable when "On Device" is recovered ?
-            // listOfFiles.listDirectory(root, MainApp.getOnlyOnDevice());
             setFile(listOfFiles.getCurrentFile());
             startSyncFolderOperation(root, false);
         }
@@ -1361,6 +1355,10 @@ public class FileDisplayActivity extends FileActivity
             chosenFile = getFile();     // if no file is passed, current file decides
         }
         super.updateActionBarTitleAndHomeButton(chosenFile);
+        if (chosenFile.getRemotePath().equals(OCFile.ROOT_PATH) && mOnlyAvailableOffline) {
+            updateActionBarTitleAndHomeButtonByString(
+                    getResources().getString(R.string.drawer_item_only_available_offline));
+        }
     }
 
     @Override
@@ -1417,8 +1415,6 @@ public class FileDisplayActivity extends FileActivity
             OCFileListFragment listOfFiles = getListOfFilesFragment();
             if (listOfFiles != null) {
                 listOfFiles.listDirectory(false);
-                // TODO Enable when "On Device" is recovered ?
-                // listOfFiles.listDirectory(MainApp.getOnlyOnDevice());
             }
             FileFragment secondFragment = getSecondFragment();
             if (secondFragment != null) {
@@ -1483,9 +1479,12 @@ public class FileDisplayActivity extends FileActivity
                                              RemoteOperationResult result) {
 
         if (getListOfFilesFragment().isSingleItemChecked() || result.isException() || !result.isSuccess()) {
-            showSnackMessage(
-                    ErrorMessageAdapter.getResultMessage(result, operation, getResources())
-            );
+            if (result.getCode() != ResultCode.FORBIDDEN ||
+                    (result.getCode() == ResultCode.FORBIDDEN && operation.isLastFileToRemove())) {
+                showSnackMessage(
+                        ErrorMessageAdapter.getResultMessage(result, operation, getResources())
+                );
+            }
         }
 
         if (result.isSuccess()) {
@@ -1917,7 +1916,19 @@ public class FileDisplayActivity extends FileActivity
     }
 
     public void allFilesOption() {
-        browseToRoot();
+        if (mOnlyAvailableOffline) {
+            super.allFilesOption();
+        } else {
+            browseToRoot();
+        }
+    }
+
+    public void onlyAvailableOfflineOption() {
+        if (!mOnlyAvailableOffline) {
+            super.onlyAvailableOfflineOption();
+        } else {
+            browseToRoot();
+        }
     }
 
     public FilesUploadHelper getFilesUploadHelper() {

@@ -19,6 +19,7 @@
   <string name="actionbar_sort_by_date">Starejše - Novejše</string>
   <string name="actionbar_sort_by_size">Manjše - Večje</string>
   <string name="drawer_item_all_files">Vse datoteke</string>
+  <string name="drawer_item_only_available_offline">Na voljo za rabo brez povezave</string>
   <string name="drawer_item_settings">Nastavitve</string>
   <string name="drawer_item_uploads_list">Poslano</string>
   <string name="drawer_close">Zapri</string>

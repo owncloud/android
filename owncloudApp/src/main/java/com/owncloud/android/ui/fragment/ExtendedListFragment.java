@@ -2,6 +2,8 @@
  * ownCloud Android client application
  *
  * @author Christian Schabesberger
+ * @author Abel García de Prada
+ * @author Shashvat Kedia
  * Copyright (C) 2012 Bartek Przybylski
  * Copyright (C) 2019 ownCloud GmbH.
  * <p>
@@ -61,6 +63,8 @@ public class ExtendedListFragment extends Fragment
     private static final String KEY_IS_GRID_VISIBLE = "IS_GRID_VISIBLE";
 
     protected static final String ARG_JUST_FOLDERS = ExtendedListFragment.class.getCanonicalName() + ".JUST_FOLDERS";
+    protected static final String ARG_ONLY_AVAILABLE_OFFLINE = ExtendedListFragment.class.getCanonicalName() +
+            ".ONLY_AVAILABLE_OFFLINE";
 
     private ProgressBar mProgressBar;
     private View mShadowView;
@@ -73,7 +77,6 @@ public class ExtendedListFragment extends Fragment
     private FloatingActionsMenu mFabMain;
     private FloatingActionButton mFabUpload;
     private FloatingActionButton mFabMkdir;
-    private FloatingActionButton mFabUploadFromApp;
 
     // Save the state of the scroll in browsing
     private ArrayList<Integer> mIndexes;
@@ -103,10 +106,6 @@ public class ExtendedListFragment extends Fragment
 
     public FloatingActionButton getFabUpload() {
         return mFabUpload;
-    }
-
-    public FloatingActionButton getFabUploadFromApp() {
-        return mFabUploadFromApp;
     }
 
     public FloatingActionButton getFabMkdir() {
@@ -185,7 +184,6 @@ public class ExtendedListFragment extends Fragment
         mFabMain = v.findViewById(R.id.fab_main);
         mFabUpload = v.findViewById(R.id.fab_upload);
         mFabMkdir = v.findViewById(R.id.fab_mkdir);
-        mFabUploadFromApp = v.findViewById(R.id.fab_upload_from_app);
 
         mCurrentListView = mListView;   // list by default
         if (savedInstanceState != null) {
@@ -474,8 +472,13 @@ public class ExtendedListFragment extends Fragment
         mProgressBar.postInvalidate();
     }
 
-    protected boolean isShowingJustFolders() {
+    boolean isShowingJustFolders() {
         Bundle args = getArguments();
         return ((args != null) && args.getBoolean(ARG_JUST_FOLDERS, false));
+    }
+
+    boolean isShowingOnlyAvailableOffline() {
+        Bundle args = getArguments();
+        return ((args != null) && args.getBoolean(ARG_ONLY_AVAILABLE_OFFLINE, false));
     }
 }

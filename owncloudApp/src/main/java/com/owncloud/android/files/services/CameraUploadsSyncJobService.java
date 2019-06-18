@@ -40,7 +40,12 @@ import com.owncloud.android.utils.Extras;
 import com.owncloud.android.utils.MimetypeIconUtil;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
+import java.util.Locale;
+
+import androidx.annotation.RequiresApi;
 
 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 public class CameraUploadsSyncJobService extends JobService {
@@ -183,10 +188,20 @@ public class CameraUploadsSyncJobService extends JobService {
                 return;
             }
 
-            // Check file timestamp
-            if (isImage && localFile.lastModified() <= mOCCameraUploadSync.getPicturesLastSync() ||
-                    isVideo && localFile.lastModified() <= mOCCameraUploadSync.getVideosLastSync()) {
-                Log_OC.i(TAG, "File " + localPath + " created before period to check, ignoring");
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.getDefault());
+            if (isImage && localFile.lastModified() <= mOCCameraUploadSync.getPicturesLastSync()) {
+                Log_OC.i(TAG, "Image " + localPath + " created before period to check, ignoring " +
+                        simpleDateFormat.format(new Date(localFile.lastModified())) + " <= " +
+                        simpleDateFormat.format(new Date(mOCCameraUploadSync.getPicturesLastSync()))
+                );
+                return;
+            }
+
+            if (isVideo && localFile.lastModified() <= mOCCameraUploadSync.getVideosLastSync()) {
+                Log_OC.i(TAG, "Video " + localPath + " created before period to check, ignoring " +
+                        simpleDateFormat.format(new Date(localFile.lastModified())) + " <= " +
+                        simpleDateFormat.format(new Date(mOCCameraUploadSync.getVideosLastSync()))
+                );
                 return;
             }
 
@@ -219,6 +234,7 @@ public class CameraUploadsSyncJobService extends JobService {
         /**
          * Update pictures and videos timestamps to upload only the pictures and videos taken later
          * than those timestamps
+         *
          * @param isImage true if file is an image, false otherwise
          * @param isVideo true if file is a video, false otherwise
          */
@@ -251,6 +267,7 @@ public class CameraUploadsSyncJobService extends JobService {
 
         /**
          * Cancel the periodic job
+         *
          * @param jobId id of the job to cancel
          */
         private void cancelPeriodicJob(int jobId) {

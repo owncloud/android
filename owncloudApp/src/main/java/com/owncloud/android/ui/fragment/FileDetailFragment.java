@@ -1,10 +1,11 @@
-/**
+/*
  * ownCloud Android client application
  *
  * @author Bartek Przybylski
  * @author David A. Velasco
  * @author Christian Schabesberger
  * @author David González Verdugo
+ * @author Abel García de Prada
  * Copyright (C) 2011  Bartek Przybylski
  * Copyright (C) 2019 ownCloud GmbH.
  * <p>
@@ -57,6 +58,9 @@ import com.owncloud.android.utils.DisplayUtils;
 import com.owncloud.android.utils.MimetypeIconUtil;
 import com.owncloud.android.utils.PreferenceUtils;
 
+import org.jetbrains.annotations.NotNull;
+
+
 /**
  * This Fragment is used to display the details about a file.
  */
@@ -76,7 +80,7 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
 
     /**
      * Public factory method to create new FileDetailFragment instances.
-     *
+     * <p>
      * When 'fileToDetail' or 'ocAccount' are null, creates a dummy layout (to use when a file wasn't tapped before).
      *
      * @param fileToDetail      An {@link OCFile} to show in the fragment
@@ -94,7 +98,7 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
 
     /**
      * Creates an empty details fragment.
-     *
+     * <p>
      * It's necessary to keep a public constructor without parameters; the system uses it when tries
      * to reinstantiate a fragment automatically.
      */
@@ -106,7 +110,7 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+        super.onActivityCreated(savedInstanceState);
         setHasOptionsMenu(true);
         mProgressController = new TransferProgressController((ComponentsGetter) getActivity());
         ProgressBar progressBar = mView.findViewById(R.id.fdProgressBar);
@@ -128,8 +132,7 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         setFile(getArguments().getParcelable(ARG_FILE));
         mAccount = getArguments().getParcelable(ARG_ACCOUNT);
@@ -154,7 +157,7 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
+    public void onSaveInstanceState(@NotNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelable(FileActivity.EXTRA_FILE, getFile());
         outState.putParcelable(FileActivity.EXTRA_ACCOUNT, mAccount);
@@ -236,7 +239,7 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
                     mContainerActivity,
                     getActivity()
             );
-            mf.filter(menu, false, false);
+            mf.filter(menu, false, false, false);
         }
 
         // additional restriction for this fragment 
@@ -367,9 +370,9 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
      * Updates the view with all relevant details about that file.
      *
      * @param forcedTransferring Flag signaling if the file should be considered as downloading or uploading,
-     *                     although {@link FileDownloaderBinder#isDownloading(Account, OCFile)}  and
-     *                     {@link FileUploaderBinder#isUploading(Account, OCFile)} return false.
-     * @param refresh      If 'true', try to refresh the whole file from the database
+     *                           although {@link FileDownloaderBinder#isDownloading(Account, OCFile)}  and
+     *                           {@link FileUploaderBinder#isUploading(Account, OCFile)} return false.
+     * @param refresh            If 'true', try to refresh the whole file from the database
      */
     private void updateFileDetails(boolean forcedTransferring, boolean refresh) {
         if (readyToShow()) {
@@ -431,6 +434,7 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
 
     /**
      * Updates the MIME type in view
+     *
      * @param file : An {@link OCFile}
      */
     private void setFiletype(OCFile file) {

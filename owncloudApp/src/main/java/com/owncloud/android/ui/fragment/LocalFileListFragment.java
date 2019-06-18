@@ -24,23 +24,19 @@ package com.owncloud.android.ui.fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Environment;
-import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ImageView;
 import android.widget.ListView;
 
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import com.owncloud.android.R;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.ui.adapter.LocalFileListAdapter;
-import com.owncloud.android.utils.FileStorageUtils;
 import com.owncloud.android.utils.PreferenceUtils;
 
 import java.io.File;
-import java.util.ArrayList;
 
 /**
  * A Fragment that lists all files and folders in a given LOCAL path.
@@ -48,9 +44,6 @@ import java.util.ArrayList;
 public class LocalFileListFragment extends ExtendedListFragment {
 
     private static final String TAG = LocalFileListFragment.class.getName();
-
-    private final String OUT_STATE_CHECKED_FILES = "out_state_checked_files";
-    private static final String OUT_STATE_NO_OF_FILES_SELECTED = "NO_OF_FILES_SELECTED";
 
     /**
      * Reference to the Activity which this fragment is attached to. For callbacks
@@ -66,8 +59,6 @@ public class LocalFileListFragment extends ExtendedListFragment {
      * Adapter to connect the data from the directory with the View object
      */
     private LocalFileListAdapter mAdapter = null;
-
-    private ArrayList<Integer> mNoOfFilesSelected;
 
     /**
      * Public factory method to create new {@link LocalFileListFragment} instances.
@@ -120,60 +111,6 @@ public class LocalFileListFragment extends ExtendedListFragment {
         return mAdapter == null ? 0 : mAdapter.getCount();
     }
 
-    public void sortByName(boolean isAscending) {
-        mAdapter.setSortOrder(FileStorageUtils.SORT_NAME, isAscending);
-    }
-
-    public void sortBySize(boolean isAscending) {
-        mAdapter.setSortOrder(FileStorageUtils.SORT_SIZE, isAscending);
-    }
-
-    public void sortByDate(boolean isAscending) {
-        mAdapter.setSortOrder(FileStorageUtils.SORT_DATE, isAscending);
-    }
-
-    public void selectAll() {
-        for (int i = 0; i < mAdapter.getCount(); i++) {
-            File file = (File) mAdapter.getItem(i);
-            if (!file.isDirectory() && !mAdapter.isAlreadyChecked(file)) {
-                ((ImageView) getView().findViewById(R.id.custom_checkbox)).setImageResource(R.drawable.ic_checkbox_marked);
-                mCurrentListView.setItemChecked(i, true);
-                mAdapter.checkFile(file);
-            }
-        }
-        mAdapter.notifyDataSetChanged();
-    }
-
-    public void selectInverse() {
-        for (int i = 0; i < mAdapter.getCount(); i++) {
-            File file = (File) mAdapter.getItem(i);
-            if (!file.isDirectory()) {
-                ImageView checkBox = (ImageView) getView().findViewById(R.id.custom_checkbox);
-                if (mCurrentListView.isItemChecked(i)) {
-                    checkBox.setImageResource(R.drawable.ic_checkbox_blank_outline);
-                    mCurrentListView.setItemChecked(i, false);
-                    mAdapter.uncheckFile(file);
-                } else {
-                    checkBox.setImageResource(R.drawable.ic_checkbox_marked);
-                    mCurrentListView.setItemChecked(i, true);
-                    mAdapter.checkFile(file);
-                }
-            }
-        }
-        mAdapter.notifyDataSetChanged();
-    }
-
-    public void storeNoOfFilesSelected() {
-        mNoOfFilesSelected.add(getCheckedFilePaths().length - 1);
-    }
-
-    public int restoreNoOfFilesSelected() {
-        if (mNoOfFilesSelected.size() > 0) {
-            return mNoOfFilesSelected.remove(mNoOfFilesSelected.size() - 1);
-        }
-        return 0;
-    }
-
     /**
      * {@inheritDoc}
      */
@@ -185,13 +122,6 @@ public class LocalFileListFragment extends ExtendedListFragment {
         mDirectory = mContainerActivity.getCurrentFolder();
         mAdapter = new LocalFileListAdapter(mDirectory, isShowingJustFolders(), getActivity());
         setListAdapter(mAdapter);
-        if (savedInstanceState != null) {
-            mAdapter.setCheckedFiles(savedInstanceState.getStringArrayList(OUT_STATE_CHECKED_FILES));
-            mNoOfFilesSelected = savedInstanceState.getIntegerArrayList(OUT_STATE_NO_OF_FILES_SELECTED);
-        } else {
-            mNoOfFilesSelected = new ArrayList<>();
-        }
-
         // Allow or disallow touches with other visible windows
         CoordinatorLayout coordinatorLayout = getActivity().findViewById(R.id.coordinator_layout);
         if (coordinatorLayout != null) {
@@ -199,7 +129,6 @@ public class LocalFileListFragment extends ExtendedListFragment {
                     PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(getContext())
             );
         }
-
         Log_OC.i(TAG, "onActivityCreated() stop");
     }
 
@@ -225,7 +154,6 @@ public class LocalFileListFragment extends ExtendedListFragment {
         if (file != null) {
             /// Click on a directory
             if (file.isDirectory()) {
-                storeNoOfFilesSelected();
                 // just local updates
                 listFolder(file);
                 // notify the click to container Activity
@@ -233,21 +161,7 @@ public class LocalFileListFragment extends ExtendedListFragment {
                 // save index and top position
                 saveIndexAndTopPosition(position);
 
-            } else {    /// Click on a file
-                ImageView checkBoxV = v.findViewById(R.id.custom_checkbox);
-                if (checkBoxV != null) {
-                    if (getListView().isItemChecked(position)) {
-                        checkBoxV.setImageResource(R.drawable.ic_checkbox_marked);
-                        mAdapter.checkFile((File) mAdapter.getItem(position));
-                    } else {
-                        checkBoxV.setImageResource(R.drawable.ic_checkbox_blank_outline);
-                        mAdapter.uncheckFile((File) mAdapter.getItem(position));
-                    }
-                }
-                // notify the change to the container Activity
-                mContainerActivity.onFileClicked(file);
             }
-
         } else {
             Log_OC.w(TAG, "Null object in ListAdapter!!");
         }
@@ -323,33 +237,6 @@ public class LocalFileListFragment extends ExtendedListFragment {
     }
 
     /**
-     * Returns the file paths to the files checked by the user
-     *
-     * @return File paths to the files checked by the user.
-     */
-    public String[] getCheckedFilePaths() {
-        ArrayList<String> result = new ArrayList<>();
-        SparseBooleanArray positions = mCurrentListView.getCheckedItemPositions();
-        if (positions.size() > 0) {
-            for (int i = 0; i < positions.size(); i++) {
-                if (positions.get(positions.keyAt(i))) {
-                    result.add(((File) mCurrentListView.getItemAtPosition(
-                            positions.keyAt(i))).getAbsolutePath());
-                }
-            }
-
-            Log_OC.d(TAG, "Returning " + result.size() + " selected files");
-        }
-        return result.toArray(new String[result.size()]);
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle savedInstanceState) {
-        savedInstanceState.putStringArrayList(OUT_STATE_CHECKED_FILES, mAdapter.getCheckedFiles());
-        savedInstanceState.putIntegerArrayList(OUT_STATE_NO_OF_FILES_SELECTED, mNoOfFilesSelected);
-    }
-
-    /**
      * Interface to implement by any Activity that includes some instance of LocalFileListFragment
      */
     public interface ContainerActivity {
@@ -360,14 +247,6 @@ public class LocalFileListFragment extends ExtendedListFragment {
          * @param folder Folder shown in the item clicked by the user
          */
         void onFolderClicked(File folder);
-
-        /**
-         * Callback method invoked when a file (non directory)
-         * is clicked by the user on the files list
-         *
-         * @param file File shown in the item clicked by the user
-         */
-        void onFileClicked(File file);
 
         /**
          * Callback method invoked when the parent activity

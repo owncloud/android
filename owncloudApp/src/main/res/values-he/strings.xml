@@ -1,5 +1,8 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+  <string name="about_android">%1$s אנדרויד</string>
+  <string name="about_version">גרסה%1$s</string>
+  <string name="actionbar_search">חפש בתוך התיקיה</string>
   <string name="actionbar_sync">רענון חשבון</string>
   <string name="actionbar_upload">העלאה</string>
   <string name="actionbar_upload_from_apps">תוכן מיישומים אחרים</string>
@@ -13,11 +16,18 @@
   <string name="actionbar_descending">יורד</string>
   <string name="actionbar_sort_title">מיון על בסיס</string>
   <string name="actionbar_sort_by_name">א-ת</string>
+  <string name="actionbar_sort_by_date">ישן - חדש</string>
+  <string name="actionbar_sort_by_size">קטן - גדול</string>
   <string name="drawer_item_all_files">כל הקבצים</string>
+  <string name="drawer_item_only_available_offline">זמין במצב לא מקוון</string>
   <string name="drawer_item_settings">הגדרות</string>
   <string name="drawer_item_uploads_list">העלאות</string>
   <string name="drawer_close">סגירה</string>
   <string name="drawer_open">פתיחה</string>
+  <string name="drawer_loading_quota">טוען מכסה</string>
+  <string name="drawer_quota">%1$s מתוך %2$s בשימוש (%3$s %%)</string>
+  <string name="drawer_unavailable_free_storage">%1$s בשימוש</string>
+  <string name="drawer_unavailable_used_storage">אין מידע זמין לשימוש בזכרון</string>
   <string name="drawer_feedback">משוב</string>
   <string name="drawer_help">עזרה</string>
   <string name="prefs_category_general">כללי</string>
@@ -26,6 +36,12 @@
   <string name="prefs_accounts">חשבונות</string>
   <string name="prefs_manage_accounts">ניהול חשבונות</string>
   <string name="prefs_passcode">נעילת סיסמא</string>
+  <string name="prefs_fingerprint">נעילת טביעת אצבע</string>
+  <string name="prefs_fingerprint_summary">הפעלת קוד סיסמא או נעילת דפוס במטרה לאפשר אפשרות זו</string>
+  <string name="prefs_touches_with_other_visible_windows">נוגע בחלונות גלויים אחרים</string>
+  <string name="prefs_touches_with_other_visible_windows_summary">מאפשר מגע כאשר התצוגה מוסתרת על ידי חלון גלוי אחר. יש לאפשר זאת לשימוש ביישומי סינון קלים.</string>
+  <string name="confirmation_touches_with_other_windows_title">האם באמת לאפשר תכונה זו?</string>
+  <string name="confirmation_touches_with_other_windows_message">יש לשתמש בתכונה זו באחריותך הבלבדית, יישום זדוני יכול לנסות לגרום לך לבצע כמה פעולות, לא רצוניות, באמצעות תצוגות אחרות.</string>
   <string name="prefs_camera_picture_upload">העלאת תמונות</string>
   <string name="prefs_camera_picture_upload_summary">העלאת תמונות שצולמו במצלמה באופן אוטומטי</string>
   <string name="prefs_camera_video_upload">העלאת סרטונים</string>
@@ -36,6 +52,8 @@
   <string name="prefs_log_summary_history">מראה את יומני התעוד</string>
   <string name="prefs_log_delete_history_button">מחיקת הסטוריה</string>
   <string name="prefs_help">עזרה</string>
+  <string name="prefs_sync_calendar_contacts">סינכרון של אנשי הקשר, היומנים והמשימות שלך</string>
+  <string name="prefs_sync_calendar_contacts_summary">התקנת DAVx⁵</string>
   <string name="prefs_recommend">המלצה לחבר</string>
   <string name="prefs_feedback">משוב</string>
   <string name="prefs_imprint">חותמת</string>
@@ -54,8 +72,11 @@
   <string name="passcode_already_set">לא ניתן להפעיל נעילת קוד ותבנית בו זמנית, נא להשבית את הקוד תחילה</string>
   <string name="pattern_no_longer_required">לא תופיע עוד בקשה עם תבנית</string>
   <string name="pattern_configure_your_pattern_explanation">תופיע בקשה לאימות תבנית עם כל הפעלה של היישומון</string>
+  <string name="illegal_argument_exception_message">פעולה חוקית נדרשת להעברה</string>
   <string name="recommend_subject">לבדיקה %1$s בטלפון החכם שלך!</string>
   <string name="recommend_text">הנך מוזמן להשתמש ב- %1$s בטלפון החכם שלך!\nניתן להוריד מכאן: %2$s</string>
+  <string name="auth_failure_snackbar">האימות נכשל</string>
+  <string name="auth_failure_snackbar_action">החלף חשבון</string>
   <string name="auth_check_server">בדיקת שרת</string>
   <string name="auth_host_url">כתובת שרת https://…</string>
   <string name="auth_username">שם משתמש</string>
@@ -78,10 +99,12 @@
   <string name="uploader_error_message_source_file_not_copied">שגיאה אירעה בזמן העתקת הקובץ לתיקייה הזמנית. יש לנסות לשלוח שוב.</string>
   <string name="file_list_seconds_ago">שניות</string>
   <string name="file_list_empty">אין כאן שום דבר. אולי ברצונך להעלות משהו?</string>
+  <string name="file_list_empty_available_offline">אין קבצים לא מקוונים זמינים.</string>
   <string name="file_list_loading">בטעינה …</string>
   <string name="file_list_no_app_for_file_type">לא נמצא יישום לסוג קובץ</string>
   <string name="local_file_list_empty">אין קבצים בתיקייה זו:</string>
   <string name="local_file_list_empty_just_folders">אין תיקיות משנה בתיקייה זו.</string>
+  <string name="local_file_list_search_with_no_matches">אין התאמות לחיפוש זה</string>
   <string name="upload_list_empty">אין העלאות זמינות.</string>
   <string name="file_list_folder">תקיה</string>
   <string name="file_list_folders">תקיות</string>
@@ -116,7 +139,9 @@
   <string name="change_password">שינוי ססמה</string>
   <string name="delete_account">הסרת חשבון</string>
   <string name="create_account">יצירת חשבון</string>
+  <string name="upload_chooser_title">העלאה מ-</string>
   <string name="uploader_info_dirname">שם התיקייה</string>
+  <string name="uploader_upload_in_progress_ticker">מעלה...</string>
   <string name="uploader_upload_in_progress_content">%1$d%% בהעלאה %2$s</string>
   <string name="uploader_upload_succeeded_ticker">ההעלאה הצליחה</string>
   <string name="uploader_upload_succeeded_content_single">%1$s הועלו</string>
@@ -128,11 +153,16 @@
   <string name="uploader_upload_text_dialog_filename_error_empty">שדה שם קובץ אינו יכול להיות ריק</string>
   <string name="uploader_upload_text_dialog_filename_error_length_max">שדה שם קובץ אינו יכול להכיל יותר מ- %d תווים</string>
   <string name="uploader_upload_text_filename_hint">שם קובץ</string>
+  <string name="uploader_upload_camera_upload_files">מעלה קובצי מצלמה</string>
+  <string name="uploader_upload_available_offline_files">מעלה קבצים לא מקוונים זמינים</string>
+  <string name="uploader_upload_requested_from_wifi_files">העלאה נדרשה מקובצי wifi</string>
   <string name="ssl_certificate_not_trusted">תעודת השרת אינה מהימנה</string>
   <string name="uploads_view_title">העלאות</string>
   <string name="uploads_view_group_current_uploads">נוכחי</string>
   <string name="uploads_view_group_failed_uploads">נכשל (יש להקיש לניסיון נוסף)</string>
   <string name="uploads_view_group_finished_uploads">הועלה</string>
+  <string name="uploads_view_group_file_count">%dקבצים</string>
+  <string name="uploads_view_group_file_count_single">%dקובץ</string>
   <string name="uploads_view_upload_status_succeeded">הושלם</string>
   <string name="uploads_view_upload_status_cancelled">בוטל</string>
   <string name="uploads_view_upload_status_paused">מושהה</string>
@@ -150,6 +180,7 @@
   <string name="uploads_view_upload_status_waiting_for_wifi">מחכה לחיבור WiFi</string>
   <string name="uploads_view_later_waiting_to_upload">ממתין להעלאה</string>
   <string name="uploads_view_unsupported_media_type">סוג מדיה לא נתמך</string>
+  <string name="downloader_download_in_progress_ticker">מוריד...</string>
   <string name="downloader_download_in_progress_content">%1$d%% בהורדה %2$s</string>
   <string name="downloader_download_succeeded_ticker">ההורדה הצליחה</string>
   <string name="downloader_download_succeeded_content">%1$s הורדו</string>
@@ -186,6 +217,13 @@
   <string name="pass_code_wrong">קוד שגוי</string>
   <string name="pass_code_removed">הקוד הוסר</string>
   <string name="pass_code_stored">הקוד נשמר</string>
+  <string name="fingerprint_confirm">יש לאשר את טביעת האצבע להמשך</string>
+  <string name="fingerprint_hint">גלאי מגע</string>
+  <string name="fingerprint_not_recognized">טביעת האצבע לא אומתה, יש לנסות שוב</string>
+  <string name="fingerprint_success">טביעת האצבע אומתה</string>
+  <string name="fingerprint_not_hardware_detected">התקן זה אינו תומך באימות על בסיס טביעת אצבע</string>
+  <string name="fingerprint_not_enrolled_fingerprints">יש לרשום לפחות טביעת אצבע אחת לשימוש בתכונה זו</string>
+  <string name="fingerprint_not_granted_permissions">הרשאות טביעת אצבע לא ניתנו</string>
   <string name="media_notif_ticker">נגנן המוזיקה %1$s</string>
   <string name="media_state_playing">%1$s (מתנגן)</string>
   <string name="media_state_loading">%1$s (בטעינה)</string>
@@ -207,6 +245,7 @@
   <string name="media_forward_description">לחצן הרצה קדימה</string>
   <string name="upload_from_camera_title">תמונה ממצלמה</string>
   <string name="auth_getting_authorization">מקבל אישורים...</string>
+  <string name="auth_trying_to_login">מנסה להתחבר...</string>
   <string name="auth_no_net_conn_title">אין חיבור לאינטרנט</string>
   <string name="auth_nossl_plain_ok_title">אין חיבור מוצפן זמין.</string>
   <string name="auth_connection_established">החיבור נוצר</string>
@@ -261,6 +300,7 @@
   <string name="wait_checking_credentials">בודק אישורים שמורים</string>
   <string name="filedisplay_unexpected_bad_get_content">תקלה בלתי צפויה ; נא לבחור בקובץ מיישום אחר</string>
   <string name="filedisplay_no_file_selected">לא נבחרו קבצים</string>
+  <string name="activity_chooser_title">שליחת קישור ל-</string>
   <string name="wait_for_tmp_copy_from_private_storage">מעתיק קובץ מאחסון פרטי</string>
   <string name="oauth_check_onoff">התחברות באמצעות oAuth2</string>
   <string name="oauth_login_connection">מתחבר לשרת OAuth2...</string>
@@ -303,7 +343,10 @@
   <string name="confirmation_disable_camera_uploads_title">אישור</string>
   <string name="confirmation_disable_pictures_upload_message">להשבית את התכונה הזאת? התמונות שממתינות לא יועלו</string>
   <string name="confirmation_disable_videos_upload_message">להשבית את התכונה הזאת? הסרטונים שממתינים לא יועלו</string>
+  <string name="proper_pics_folder_warning_camera_upload">יש לוודא שהתיקייה שנבחרה הנה המקום שבו המצלמה שבה נעשה שימוש שומרת את התמונות שצולמו. אחרת, התכונה לא תוכל לזהות את התמונות שלך. יש לזכור שהתמונות יועלו בתוך 15 דקות לפחות לאחר נטילתן.</string>
+  <string name="proper_videos_folder_warning_camera_upload">יש לוודא שהתיקייה שנבחרה הנה המקום שבו המצלמה שבה נעשה שימוש שומרת את הסרטונים שצולמו. אחרת, התכונה לא תוכל לזהות את הסרטונים שלך. יש לזכור שהסרטונים יועלו בתוך 15 דקות לפחות לאחר הקלטתם.</string>
   <string name="conflict_title">התנגשות בין קבצים</string>
+  <string name="conflict_description">ישנה התנגשות בקובץ %1$s, יש להקיש לפתרון</string>
   <string name="conflict_message">איזה קבצים לשמור? אם יבחרו שתי הגרסאות, הקובץ המקומי יקבל מספר שיצורף לשמו.</string>
   <string name="conflict_keep_both">להשאיר את שניהם</string>
   <string name="conflict_use_local_version">גרסה מקומית</string>
@@ -353,6 +396,7 @@
   <string name="log_send_mail_subject">%1$s לוגים של יישום אנדרואיד</string>
   <string name="log_progress_dialog_text">טעינת מידע...</string>
   <string name="actionbar_select_all">לבחור הכול</string>
+  <string name="actionbar_select_inverse">בחירה הפוכה</string>
   <string name="saml_authentication_required_text">נדרש אימות</string>
   <string name="saml_authentication_wrong_pass">סיסמא שגוייה</string>
   <string name="actionbar_move">העברה</string>
@@ -390,6 +434,8 @@
   <string name="prefs_camera_upload_source_path_title">תיקיית מצלמה (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">נדרש</string>
   <string name="prefs_camera_upload_source_path_title_optional">אופציונלי</string>
+  <string name="prefs_camera_upload_behaviour_dialogTitle">קובץ מקורי יהיה</string>
+  <string name="prefs_camera_upload_behaviour_title">קובץ מקורי יהיה</string>
   <string name="upload_copy_files">העתקת קובץ</string>
   <string name="upload_move_files">העברת קובץ</string>
   <string name="pref_behaviour_entries_keep_file">נשמר בתיקייה מקורית</string>
@@ -409,6 +455,9 @@
   <string name="share_via_link_expiration_date_label">תפוגה</string>
   <string name="share_via_link_password_label">סיסמא</string>
   <string name="share_via_link_password_title">מאובטח</string>
+  <string name="share_via_link_edit_permission_read_only_label">הורדה/הצגה</string>
+  <string name="share_via_link_edit_permission_read_and_write_label">הורדה / הצגה / העלאה</string>
+  <string name="share_via_link_edit_permission_upload_only_label">העלאה בלבד (גרירת קובץ)</string>
   <string name="share_get_public_link_button">קבלת קישור</string>
   <string name="share_with_title">שיתוף עם</string>
   <string name="share_with_edit_title">שיתף עם %1$s</string>
@@ -472,6 +521,12 @@
   <string name="media_service_notification_channel_description">הצגת נגן מוזיקה</string>
   <string name="file_sync_notification_channel_name">סנכרון קבצים</string>
   <string name="file_sync_notification_channel_description">הצגת תוצאות סנכרון קבצים</string>
+  <string name="clicks_to_be_developer">הנך במרחק %1$d לחיצות מהפעלת תפריטי מפתח</string>
+  <string name="rate_dialog_title">דרוג יישום %1$s!</string>
+  <string name="rate_dialog_description">אם השימוש ביישום זה גורם לך הנאה, נשמח אם ניתן יהיה לדרג אותו? המשוב שלך חשוב לנו מאוד.</string>
+  <string name="button_no_thanks_name">לא, תודה</string>
+  <string name="button_later_name">מאוחר יותר</string>
+  <string name="button_rate_now_name">דרוג כרגע</string>
   <plurals name="items_selected_count">
     <item quantity="one">נבחר %d</item>
     <item quantity="two">נבחרו %d</item>
@@ -480,7 +535,21 @@
   </plurals>
   <!--Welcome to oC intro features-->
   <string name="welcome_feature_skip_button">דלוג</string>
+  <string name="welcome_feature_1_title">ניהול של כל הקבצים המסונכרנים שלך</string>
+  <string name="welcome_feature_1_text">ניתן להעתיק, להעביר, למחוק</string>
+  <string name="welcome_feature_2_title">שיתוף קבצים ותיקיות</string>
+  <string name="welcome_feature_2_text">ניתן לשתף באופן אישי או ציבורי</string>
+  <string name="welcome_feature_3_title">חשבון מרובה</string>
+  <string name="welcome_feature_3_text">מתחבר לכל שרתי ה- ownCloud שלך</string>
   <string name="welcome_feature_4_title">העלאות מהמצלמה</string>
+  <string name="welcome_feature_4_text">התמונות/הסרטונים שלך יועלו אוטומטית</string>
+  <string name="welcome_feature_5_title">הזרמת סרטונים</string>
+  <string name="welcome_feature_5_text">ניגון הסרטונים שלך ללא הורדה שלהם</string>
+  <string name="welcome_feature_6_title">חיפוש בתיקייה נוכחית</string>
+  <string name="welcome_feature_6_text">סינון של הקבצים על פי שם</string>
   <string name="welcome_feature_7_title">לבחור הכול</string>
+  <string name="welcome_feature_7_text">בחירת כל הקבצים בפעם אחת</string>
   <string name="welcome_feature_8_title">זמין במצב לא מקוון</string>
+  <string name="welcome_feature_8_text">הקבצים שלך סונכרנו אוטומטית</string>
+  <string name="no_borwser_installed_alert">לא הותקן דפדפן. יש להתקין דפדפן בכדי לאפשר חיבור מאובטח.</string>
 </resources>

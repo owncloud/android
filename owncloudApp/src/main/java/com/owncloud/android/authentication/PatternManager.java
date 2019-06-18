@@ -29,7 +29,6 @@ import android.os.PowerManager;
 import android.preference.PreferenceManager;
 import android.view.WindowManager;
 
-import com.owncloud.android.BuildConfig;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.ui.activity.PatternLockActivity;
 
@@ -39,8 +38,7 @@ import java.util.Set;
 public class PatternManager {
 
     private static final Set<Class> sExemptOfPatternActivites;
-    private static int PATTERN_TIMEOUT = 1000;
-    private Long timeStamp = 0l;
+    private Long timeStamp = 0L;
     private int mVisibleActivitiesCounter = 0;
 
     static {
@@ -48,7 +46,7 @@ public class PatternManager {
         sExemptOfPatternActivites.add(PatternLockActivity.class);
     }
 
-    public static PatternManager mPatternManagerInstance = null;
+    private static PatternManager mPatternManagerInstance = null;
 
     public static PatternManager getPatternManager() {
         if (mPatternManagerInstance == null) {
@@ -57,11 +55,11 @@ public class PatternManager {
         return mPatternManagerInstance;
     }
 
-    protected PatternManager() {
+    private PatternManager() {
     }
 
     public void onActivityCreated(Activity activity) {
-        if (!BuildConfig.DEBUG) {
+        if (!MainApp.isDeveloper()) {
             if (isPatternEnabled()) {
                 activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
             } else {
@@ -111,6 +109,7 @@ public class PatternManager {
     }
 
     private boolean patternShouldBeRequested() {
+        int PATTERN_TIMEOUT = 1000;
         if ((System.currentTimeMillis() - timeStamp) > PATTERN_TIMEOUT &&
                 mVisibleActivitiesCounter <= 0
         ) {

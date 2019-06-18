@@ -19,6 +19,7 @@
   <string name="actionbar_sort_by_date">Älteste - Neueste</string>
   <string name="actionbar_sort_by_size">Kleinste - Größte</string>
   <string name="drawer_item_all_files">Alle Dateien</string>
+  <string name="drawer_item_only_available_offline">Offline verfügbar</string>
   <string name="drawer_item_settings">Einstellungen</string>
   <string name="drawer_item_uploads_list">Uploads</string>
   <string name="drawer_close">Schließen</string>
@@ -37,7 +38,10 @@
   <string name="prefs_passcode">PIN gesperrt</string>
   <string name="prefs_fingerprint">Fingerabdrucksperre</string>
   <string name="prefs_fingerprint_summary">Passwort oder Wisch-Muster eingeben um diese Option zu  aktivieren</string>
+  <string name="prefs_touches_with_other_visible_windows">Berührungen mit anderen sichtbaren Fenstern</string>
+  <string name="prefs_touches_with_other_visible_windows_summary">Berührungen zulassen, wenn die Ansicht von einem anderen sichtbaren Fenster verdeckt wird. Aktivieren Sie es, um Lichtfilter-Apps zu verwenden.</string>
   <string name="confirmation_touches_with_other_windows_title">Willst Du diese Funktion wirklich einschalten?</string>
+  <string name="confirmation_touches_with_other_windows_message">Verwenden Sie diese Funktion unter Ihrer eigenen Verantwortung. Eine bösartige Anwendung könnte versuchen, Sie zu täuschen und Sie Aktionen ausführen lassen, die Sie nicht kennen, indem sie andere Ansichten verwendet.</string>
   <string name="prefs_camera_picture_upload">Bilder</string>
   <string name="prefs_camera_picture_upload_summary">Lade Fotos von der Kamera automatisch hoch</string>
   <string name="prefs_camera_video_upload">Videos</string>
@@ -49,7 +53,7 @@
   <string name="prefs_log_delete_history_button">Verlauf löschen</string>
   <string name="prefs_help">Hilfe</string>
   <string name="prefs_sync_calendar_contacts">Synchronisiere deine Kontakte, Kalendar und Aufgaben</string>
-  <string name="prefs_sync_calendar_contacts_summary">Installiere DAVdroid</string>
+  <string name="prefs_sync_calendar_contacts_summary">Installiere DAVx⁵</string>
   <string name="prefs_recommend">Empfehle dies einem Freund</string>
   <string name="prefs_feedback">Rückmeldungen</string>
   <string name="prefs_imprint">Impressum</string>
@@ -95,6 +99,7 @@
   <string name="uploader_error_message_source_file_not_copied">Es ist ein Fehler beim Kopieren dieser Datei in einen temporären Ordner aufgetreten. Bitte nochmals versuchen, die Datei zu senden.</string>
   <string name="file_list_seconds_ago">Gerade eben</string>
   <string name="file_list_empty">Alles leer. Lade etwas hoch!</string>
+  <string name="file_list_empty_available_offline">Es sind keine Offline-Dateien verfügbar.</string>
   <string name="file_list_loading">Lade…</string>
   <string name="file_list_no_app_for_file_type">Keine Applikationen für diesen Dateityp gefunden</string>
   <string name="local_file_list_empty">Es befinden sich keine Dateien in diesem Ordner.</string>
@@ -148,6 +153,9 @@
   <string name="uploader_upload_text_dialog_filename_error_empty">Der Dateiname muss angegeben werden</string>
   <string name="uploader_upload_text_dialog_filename_error_length_max">Der Dateiname darf nicht mehr als %d Zeichen haben</string>
   <string name="uploader_upload_text_filename_hint">Dateiname</string>
+  <string name="uploader_upload_camera_upload_files">Hochladen von Hochladedateien der Kamera</string>
+  <string name="uploader_upload_available_offline_files">Hochladen von verfügbaren Offline-Dateien</string>
+  <string name="uploader_upload_requested_from_wifi_files">Hochladen von angeforderten Wifi-Dateien</string>
   <string name="ssl_certificate_not_trusted">Zertifikat des Servers ist nicht vertrauenswürdig</string>
   <string name="uploads_view_title">Uploads</string>
   <string name="uploads_view_group_current_uploads">Wird hochgeladen</string>
@@ -335,6 +343,8 @@
   <string name="confirmation_disable_camera_uploads_title">Bestätigen</string>
   <string name="confirmation_disable_pictures_upload_message">Sind Sie sicher, dass Sie dieses Feature deaktivieren möchten? Alle eingereihten Bilder werden nicht hochgeladen</string>
   <string name="confirmation_disable_videos_upload_message">Sind Sie sicher, dass Sie dieses Feature deaktivieren möchten? Alle eingereihten Videos werden nicht hochgeladen</string>
+  <string name="proper_pics_folder_warning_camera_upload">Bitte stellen Sie sicher, dass sich der ausgewählte Ordner an der Stelle befindet, an der die von Ihnen verwendete Kamera die aufgenommenen Bilder speichert. Andernfalls kann die Funktion Ihre Bilder nicht erkennen. Beachten Sie, dass die Bilder innerhalb von mindestens 15 Minuten nach der Aufnahme hochgeladen werden.</string>
+  <string name="proper_videos_folder_warning_camera_upload">Bitte stellen Sie sicher, dass sich der ausgewählte Ordner an der Stelle befindet, an der die von Ihnen verwendete Kamera die aufgenommenen Videos speichert. Andernfalls kann die Funktion Ihre Videos nicht erkennen. Beachten Sie, dass Videos innerhalb von mindestens 15 Minuten nach der Aufnahme hochgeladen werden.</string>
   <string name="conflict_title">Dateikonfilikt</string>
   <string name="conflict_description">Ein Konflikt ist in der Datei %1$s aufgetreten, hier tippen um dies zu lösen</string>
   <string name="conflict_message">Welche Datei möchtest du behalten? Wenn du beide Versionen auswählst, wird der lokalen Datei eine Zahl am Ende Ihres Dateiname angehangen.</string>
@@ -511,6 +521,7 @@
   <string name="media_service_notification_channel_description">Musik-Player anzeigen</string>
   <string name="file_sync_notification_channel_name">Datei - Synchronisation</string>
   <string name="file_sync_notification_channel_description">Ergebnis der Datei - Synchronisation anzeigen</string>
+  <string name="clicks_to_be_developer">Sie sind %1$d Klicks entfernt, um die Entwicklermenüs zu aktivieren</string>
   <string name="rate_dialog_title">Bitte %1$s bewerten!</string>
   <string name="rate_dialog_description">Wenn dir diese App gefällt, nimm dir bitte etwas Zeit, um diese zu bewerten. Dein Feedback ist für uns wichtig.</string>
   <string name="button_no_thanks_name">Nein, Danke</string>

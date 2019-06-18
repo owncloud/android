@@ -3,6 +3,7 @@
  *
  * @author Shashvat Kedia
  * @author David González Verdugo
+ * @author Abel García de Prada
  * Copyright (C) 2019 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
@@ -136,7 +137,7 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
 
             if (!stateWasRecovered) {
                 OCFileListFragment listOfFolders = getListOfFilesFragment();
-                listOfFolders.listDirectory(folder/*, false*/);
+                listOfFolders.listDirectory(folder);
 
                 startSyncFolderOperation(folder, false);
             }
@@ -146,7 +147,7 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
     }
 
     private void createFragments() {
-        OCFileListFragment listOfFiles = OCFileListFragment.newInstance(true, true, false);
+        OCFileListFragment listOfFiles =  OCFileListFragment.newInstance(true, false, true, false);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.add(R.id.fragment_container, listOfFiles, TAG_LIST_OF_FOLDERS);
         transaction.commit();
@@ -307,8 +308,6 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
         OCFileListFragment fileListFragment = getListOfFilesFragment();
         if (fileListFragment != null) {
             fileListFragment.listDirectory(true);
-            // TODO Enable when "On Device" is recovered ?
-            // fileListFragment.listDirectory(false);
         }
     }
 
@@ -317,8 +316,6 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
         if (listOfFiles != null) {  // should never be null, indeed
             OCFile root = getStorageManager().getFileByPath(OCFile.ROOT_PATH);
             listOfFiles.listDirectory(root);
-            // TODO Enable when "On Device" is recovered ?
-            // listOfFiles.listDirectory(root, false);
             setFile(listOfFiles.getCurrentFile());
             updateNavigationElementsInActionBar();
             startSyncFolderOperation(root, false);
@@ -462,9 +459,7 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
                             OCFileListFragment fileListFragment = getListOfFilesFragment();
                             if (fileListFragment != null) {
                                 fileListFragment.listDirectory(currentDir);
-                                // TODO Enable when "On Device" is recovered ?
-                                // fileListFragment.listDirectory(currentDir, false);
-                            }
+                           }
                         }
                         setFile(currentFile);
                     }

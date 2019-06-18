@@ -55,7 +55,7 @@ public class GridViewWithHeaderAndFooter extends GridView {
          * The view to add to the grid
          */
         public View view;
-        public ViewGroup viewContainer;
+        ViewGroup viewContainer;
         /**
          * The data backing the view. This is returned from {@link android.widget.ListAdapter#getItem(int)}.
          */
@@ -63,16 +63,15 @@ public class GridViewWithHeaderAndFooter extends GridView {
         /**
          * <code>true</code> if the fixed view should be selectable in the grid
          */
-        public boolean isSelectable;
+        boolean isSelectable;
     }
 
-    private int mNumColumns = AUTO_FIT;
     private View mViewForMeasureRowHeight = null;
     private int mRowHeight = -1;
-    private static final String LOG_TAG = "grid-view-with-header-and-footer";
+    private static final String LOG_TAG = "grid-view-header-footer";
 
-    private ArrayList<FixedViewInfo> mHeaderViewInfos = new ArrayList<FixedViewInfo>();
-    private ArrayList<FixedViewInfo> mFooterViewInfos = new ArrayList<FixedViewInfo>();
+    private ArrayList<FixedViewInfo> mHeaderViewInfos = new ArrayList<>();
+    private ArrayList<FixedViewInfo> mFooterViewInfos = new ArrayList<>();
 
     private void initHeaderGridView() {
     }
@@ -96,7 +95,7 @@ public class GridViewWithHeaderAndFooter extends GridView {
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         ListAdapter adapter = getAdapter();
-        if (adapter != null && adapter instanceof HeaderViewGridAdapter) {
+        if (adapter instanceof HeaderViewGridAdapter) {
             ((HeaderViewGridAdapter) adapter).setNumColumns(getNumColumnsCompatible());
             invalidateRowHeight();
             ((HeaderViewGridAdapter) adapter).setRowHeight(getRowHeight());
@@ -106,15 +105,6 @@ public class GridViewWithHeaderAndFooter extends GridView {
     @Override
     public void setClipChildren(boolean clipChildren) {
         // Ignore, since the header rows depend on not being clipped
-    }
-
-    /**
-     * Do not call this method unless you know how it works.
-     *
-     * @param clipChildren
-     */
-    public void setClipChildrenSupper(boolean clipChildren) {
-        super.setClipChildren(false);
     }
 
     /**
@@ -263,23 +253,8 @@ public class GridViewWithHeaderAndFooter extends GridView {
         }
     }
 
-    @TargetApi(11)
     private int getNumColumnsCompatible() {
-        if (Build.VERSION.SDK_INT >= 11) {
-            return super.getNumColumns();
-        } else {
-            try {
-                Field numColumns = getClass().getSuperclass().getDeclaredField("mNumColumns");
-                numColumns.setAccessible(true);
-                return numColumns.getInt(this);
-            } catch (Exception e) {
-                if (mNumColumns != -1) {
-                    return mNumColumns;
-                }
-                throw new RuntimeException("Can not determine the mNumColumns for this API platform, please call " +
-                        "setNumColumns to set it.");
-            }
-        }
+       return super.getNumColumns();
     }
 
     @TargetApi(16)
@@ -337,24 +312,14 @@ public class GridViewWithHeaderAndFooter extends GridView {
         return mRowHeight;
     }
 
-    @TargetApi(11)
     public void tryToScrollToBottomSmoothly() {
         int lastPos = getAdapter().getCount() - 1;
-        if (Build.VERSION.SDK_INT >= 11) {
-            smoothScrollToPositionFromTop(lastPos, 0);
-        } else {
-            setSelection(lastPos);
-        }
+        smoothScrollToPositionFromTop(lastPos, 0);
     }
 
-    @TargetApi(11)
     public void tryToScrollToBottomSmoothly(int duration) {
         int lastPos = getAdapter().getCount() - 1;
-        if (Build.VERSION.SDK_INT >= 11) {
-            smoothScrollToPositionFromTop(lastPos, 0, duration);
-        } else {
-            setSelection(lastPos);
-        }
+        smoothScrollToPositionFromTop(lastPos, 0, duration);
     }
 
     @Override
@@ -406,9 +371,8 @@ public class GridViewWithHeaderAndFooter extends GridView {
     @Override
     public void setNumColumns(int numColumns) {
         super.setNumColumns(numColumns);
-        mNumColumns = numColumns;
         ListAdapter adapter = getAdapter();
-        if (adapter != null && adapter instanceof HeaderViewGridAdapter) {
+        if (adapter instanceof HeaderViewGridAdapter) {
             ((HeaderViewGridAdapter) adapter).setNumColumns(numColumns);
         }
     }
@@ -426,7 +390,7 @@ public class GridViewWithHeaderAndFooter extends GridView {
         private final DataSetObservable mDataSetObservable = new DataSetObservable();
         private final ListAdapter mAdapter;
         static final ArrayList<FixedViewInfo> EMPTY_INFO_LIST =
-                new ArrayList<FixedViewInfo>();
+                new ArrayList<>();
 
         // This ArrayList is assumed to NOT be null.
         ArrayList<FixedViewInfo> mHeaderViewInfos;
@@ -458,7 +422,7 @@ public class GridViewWithHeaderAndFooter extends GridView {
                     && areAllListInfosSelectable(mFooterViewInfos);
         }
 
-        public void setNumColumns(int numColumns) {
+        void setNumColumns(int numColumns) {
             if (numColumns < 1) {
                 return;
             }
@@ -468,7 +432,7 @@ public class GridViewWithHeaderAndFooter extends GridView {
             }
         }
 
-        public void setRowHeight(int height) {
+        void setRowHeight(int height) {
             mRowHeight = height;
         }
 
@@ -476,7 +440,7 @@ public class GridViewWithHeaderAndFooter extends GridView {
             return mHeaderViewInfos.size();
         }
 
-        public int getFootersCount() {
+        int getFootersCount() {
             return mFooterViewInfos.size();
         }
 
@@ -496,7 +460,7 @@ public class GridViewWithHeaderAndFooter extends GridView {
             return true;
         }
 
-        public boolean removeHeader(View v) {
+        boolean removeHeader(View v) {
             for (int i = 0; i < mHeaderViewInfos.size(); i++) {
                 FixedViewInfo info = mHeaderViewInfos.get(i);
                 if (info.view == v) {
@@ -510,7 +474,7 @@ public class GridViewWithHeaderAndFooter extends GridView {
             return false;
         }
 
-        public boolean removeFooter(View v) {
+        boolean removeFooter(View v) {
             for (int i = 0; i < mFooterViewInfos.size(); i++) {
                 FixedViewInfo info = mFooterViewInfos.get(i);
                 if (info.view == v) {
@@ -543,8 +507,7 @@ public class GridViewWithHeaderAndFooter extends GridView {
         }
 
         private int getAdapterAndPlaceHolderCount() {
-            final int adapterCount = (int) (Math.ceil(1f * mAdapter.getCount() / mNumColumns) * mNumColumns);
-            return adapterCount;
+            return (int) (Math.ceil(1f * mAdapter.getCount() / mNumColumns) * mNumColumns);
         }
 
         @Override
@@ -657,8 +620,7 @@ public class GridViewWithHeaderAndFooter extends GridView {
                 adapterCount = getAdapterAndPlaceHolderCount();
                 if (adjPosition < adapterCount) {
                     if (adjPosition < mAdapter.getCount()) {
-                        View view = mAdapter.getView(adjPosition, convertView, parent);
-                        return view;
+                        return mAdapter.getView(adjPosition, convertView, parent);
                     } else {
                         if (convertView == null) {
                             convertView = new View(parent.getContext());

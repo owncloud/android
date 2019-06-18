@@ -19,6 +19,7 @@
     <string name="actionbar_sort_by_date">Oldest - Newest</string>
     <string name="actionbar_sort_by_size">Smallest - Largest</string>
     <string name="drawer_item_all_files">All files</string>
+    <string name="drawer_item_only_available_offline">Available offline</string>
     <string name="drawer_item_settings">Settings</string>
     <string name="drawer_item_uploads_list">Uploads</string>
     <string name="drawer_close">Close</string>
@@ -52,7 +53,7 @@
     <string name="prefs_log_delete_history_button">Delete history</string>
     <string name="prefs_help">Help</string>
     <string name="prefs_sync_calendar_contacts">Sync your contacts, calendars and tasks</string>
-    <string name="prefs_sync_calendar_contacts_summary">Install DAVdroid</string>
+    <string name="prefs_sync_calendar_contacts_summary">Install DAVx⁵</string>
     <string name="prefs_recommend">Recommend to a friend</string>
     <string name="prefs_feedback">Feedback</string>
     <string name="prefs_imprint">Imprint</string>
@@ -100,6 +101,7 @@
     <string name="uploader_error_message_source_file_not_copied">An error occurred while copying the file to a temporary folder. Please try to send again.</string>
     <string name="file_list_seconds_ago">seconds ago</string>
     <string name="file_list_empty">Nothing in here. Upload something!</string>
+    <string name="file_list_empty_available_offline">There are no available offline files.</string>
     <string name="file_list_loading">Loading&#8230;</string>
     <string name="file_list_no_app_for_file_type">No app found for file type</string>
     <string name="local_file_list_empty">There are no files in this folder.</string>
@@ -565,6 +567,7 @@
     <string name="media_service_notification_channel_description">See music player</string>
     <string name="file_sync_notification_channel_name">File sync</string>
     <string name="file_sync_notification_channel_description">See file sync result</string>
+    <string name="clicks_to_be_developer">You %1$d clicks away to enable developer menus</string>
 
     <string name="rate_dialog_title">Rate %1$s app!</string>
     <string name="rate_dialog_description">If you enjoy using this app, could you take a moment to rate it? Your feedback is very important for us. </string>
@@ -594,5 +597,9 @@
     <string name="welcome_feature_7_text">Select all files at once</string>
     <string name="welcome_feature_8_title">Available offline</string>
     <string name="welcome_feature_8_text">Your files automatically synchronized</string>
+    <string name="welcome_feature_9_title">Document provider</string>
+    <string name="welcome_feature_9_text">Access and edit your ownCloud files from other apps</string>
+    <string name="welcome_feature_10_title">Logs with search for everyone</string>
+    <string name="welcome_feature_10_text">Send us your logs to make the app work better</string>
     <string name="no_borwser_installed_alert">No browser installed. Please install a Browser in order to allow a secure login.</string>
 </resources>

@@ -45,7 +45,6 @@
   <string name="prefs_log_summary_history">Тут показані записи журналу</string>
   <string name="prefs_log_delete_history_button">Видалити історію</string>
   <string name="prefs_help">Допомога</string>
-  <string name="prefs_sync_calendar_contacts_summary">Встановити DAVdroid</string>
   <string name="prefs_recommend">Порадити товаришу</string>
   <string name="prefs_feedback">Зворотній зв\'язок</string>
   <string name="prefs_imprint">Відбиток</string>

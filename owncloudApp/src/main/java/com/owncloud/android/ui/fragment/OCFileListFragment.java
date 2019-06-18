@@ -7,6 +7,7 @@
  * @author Christian Schabesberger
  * @author David González Verdugo
  * @author Shashvat Kedia
+ * @author Abel García de Prada
  * Copyright (C) 2011  Bartek Przybylski
  * Copyright (C) 2019 ownCloud GmbH.
  * <p>
@@ -69,7 +70,6 @@ import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.activity.FileDisplayActivity;
 import com.owncloud.android.ui.activity.FolderPickerActivity;
 import com.owncloud.android.ui.activity.OnEnforceableRefreshListener;
-import com.owncloud.android.ui.activity.UploadFilesActivity;
 import com.owncloud.android.ui.adapter.FileListListAdapter;
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment;
 import com.owncloud.android.ui.dialog.CreateFolderDialogFragment;
@@ -110,6 +110,8 @@ public class OCFileListFragment extends ExtendedListFragment implements
 
     private static String DIALOG_CREATE_FOLDER = "DIALOG_CREATE_FOLDER";
 
+    private final String ALL_FILES_SAF_REGEX = "*/*";
+
     private FileFragment.ContainerActivity mContainerActivity;
 
     private OCFile mFile = null;
@@ -131,18 +133,22 @@ public class OCFileListFragment extends ExtendedListFragment implements
      * Public factory method to create new {@link OCFileListFragment} instances.
      *
      * @param justFolders               When 'true', only folders will be shown to the user, not files.
+     * @param onlyAvailableOffline      When 'true', only available offline files will be shown to the user.
      * @param hideFAB                   When 'true', floating action button is hidden.
      * @param allowContextualMode       When 'true', contextual action mode is enabled long-pressing an item.
      * @return New fragment with arguments set.
      */
     public static OCFileListFragment newInstance(
-            boolean justFolders,
-            boolean hideFAB,
-            boolean allowContextualMode
+        boolean justFolders,
+        boolean onlyAvailableOffline,
+        boolean hideFAB,
+        boolean allowContextualMode
     ) {
         OCFileListFragment frag = new OCFileListFragment();
         Bundle args = new Bundle();
         args.putBoolean(ARG_JUST_FOLDERS, justFolders);
+        args.putBoolean(ARG_ONLY_AVAILABLE_OFFLINE, onlyAvailableOffline);
+        if(onlyAvailableOffline) { hideFAB = true; }
         args.putBoolean(ARG_HIDE_FAB, hideFAB);
         args.putBoolean(ARG_ALLOW_CONTEXTUAL_MODE, allowContextualMode);
         frag.setArguments(args);
@@ -162,7 +168,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        Log_OC.e(TAG, "onAttach");
+        Log_OC.v(TAG, "onAttach");
         try {
             mContainerActivity = (FileFragment.ContainerActivity) context;
 
@@ -208,7 +214,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Log_OC.e(TAG, "onActivityCreated() start");
+        Log_OC.d(TAG, "onActivityCreated() start");
 
         if (savedInstanceState != null) {
             mFile = savedInstanceState.getParcelable(KEY_FILE);
@@ -217,8 +223,11 @@ public class OCFileListFragment extends ExtendedListFragment implements
         boolean justFolders = isShowingJustFolders();
         setFooterEnabled(!justFolders);
 
+        boolean onlyAvailableOffline = isShowingOnlyAvailableOffline();
+
         mFileListAdapter = new FileListListAdapter(
                 justFolders,
+                onlyAvailableOffline,
                 getActivity(),
                 mContainerActivity
         );
@@ -269,7 +278,6 @@ public class OCFileListFragment extends ExtendedListFragment implements
     private void setFabLabels() {
         getFabUpload().setTitle(getResources().getString(R.string.actionbar_upload));
         getFabMkdir().setTitle(getResources().getString(R.string.actionbar_mkdir));
-        getFabUploadFromApp().setTitle(getResources().getString(R.string.actionbar_upload_from_apps));
     }
 
     /**
@@ -278,7 +286,6 @@ public class OCFileListFragment extends ExtendedListFragment implements
     private void registerFabListeners() {
         registerFabUploadListeners();
         registerFabMkDirListeners();
-        registerFabUploadFromAppListeners();
     }
 
     /**
@@ -289,8 +296,8 @@ public class OCFileListFragment extends ExtendedListFragment implements
         getFabUpload().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log_OC.e(TAG, "Clicked" + getContext().toString());
-                final View uploadBottomSheet = getLayoutInflater().inflate(R.layout.upload_bottom_sheet_fragment, null);
+                Log_OC.i(TAG,"Clicked" + getContext().toString());
+                final View uploadBottomSheet = getLayoutInflater().inflate(R.layout.upload_bottom_sheet_fragment,null);
                 final BottomSheetDialog dialog = new BottomSheetDialog(getContext());
                 dialog.setContentView(uploadBottomSheet);
                 final LinearLayout uploadFilesLinearLayout = uploadBottomSheet.findViewById(R.id.files_linear_layout);
@@ -300,8 +307,13 @@ public class OCFileListFragment extends ExtendedListFragment implements
                 uploadFilesLinearLayout.setOnTouchListener(new View.OnTouchListener() {
                     @Override
                     public boolean onTouch(View v, MotionEvent event) {
-                        UploadFilesActivity.startUploadActivityForResult(getActivity(), ((FileActivity) getActivity())
-                                .getAccount(), FileDisplayActivity.REQUEST_CODE__SELECT_FILES_FROM_FILE_SYSTEM);
+                        Intent action = new Intent(Intent.ACTION_GET_CONTENT);
+                        action = action.setType(ALL_FILES_SAF_REGEX).addCategory(Intent.CATEGORY_OPENABLE);
+                        action.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+                        getActivity().startActivityForResult(
+                                Intent.createChooser(action, getString(R.string.upload_chooser_title)),
+                                FileDisplayActivity.REQUEST_CODE__SELECT_CONTENT_FROM_APPS
+                        );
                         dialog.hide();
                         return false;
                     }
@@ -366,38 +378,6 @@ public class OCFileListFragment extends ExtendedListFragment implements
     }
 
     /**
-     * registers {@link android.view.View.OnClickListener} and {@link android.view.View.OnLongClickListener}
-     * on the Upload from App mini FAB for the linked action and {@link Snackbar} showing the underlying action.
-     */
-    private void registerFabUploadFromAppListeners() {
-        getFabUploadFromApp().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent action = new Intent(Intent.ACTION_GET_CONTENT);
-                action = action.setType("*/*").addCategory(Intent.CATEGORY_OPENABLE);
-                //Intent.EXTRA_ALLOW_MULTIPLE is only supported on api level 18+, Jelly Bean
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-                    action.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-                }
-                getActivity().startActivityForResult(
-                        Intent.createChooser(action, getString(R.string.upload_chooser_title)),
-                        FileDisplayActivity.REQUEST_CODE__SELECT_CONTENT_FROM_APPS
-                );
-                getFabMain().collapse();
-                recordMiniFabClick();
-            }
-        });
-
-        getFabUploadFromApp().setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                showSnackMessage(R.string.actionbar_upload_from_apps);
-                return true;
-            }
-        });
-    }
-
-    /**
      * records a click on a mini FAB and thus:
      * <ol>
      *     <li>persists the click fact</li>
@@ -419,12 +399,9 @@ public class OCFileListFragment extends ExtendedListFragment implements
     private void removeFabLabels() {
         getFabUpload().setTitle(null);
         getFabMkdir().setTitle(null);
-        getFabUploadFromApp().setTitle(null);
         ((TextView) getFabUpload().getTag(
                 com.getbase.floatingactionbutton.R.id.fab_label)).setVisibility(View.GONE);
         ((TextView) getFabMkdir().getTag(
-                com.getbase.floatingactionbutton.R.id.fab_label)).setVisibility(View.GONE);
-        ((TextView) getFabUploadFromApp().getTag(
                 com.getbase.floatingactionbutton.R.id.fab_label)).setVisibility(View.GONE);
     }
 
@@ -581,7 +558,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
                     mContainerActivity,
                     getActivity()
             );
-            mf.filter(menu, mEnableSelectAll, true);
+            mf.filter(menu, mEnableSelectAll, true, isShowingOnlyAvailableOffline());
             return true;
         }
 
@@ -673,6 +650,15 @@ public class OCFileListFragment extends ExtendedListFragment implements
 
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
+        if(isShowingOnlyAvailableOffline()){
+            super.onPrepareOptionsMenu(menu);
+
+            MenuItem item = menu.findItem(R.id.action_sync_account);
+            if (item != null) {
+                item.setVisible(false);
+                item.setEnabled(false);
+            }
+        }
         changeGridIcon(menu);   // this is enough if the option stays out of the action bar
     }
 
@@ -708,6 +694,11 @@ public class OCFileListFragment extends ExtendedListFragment implements
                 parentDir = storageManager.getFileByPath(parentPath);
                 moveCount++;
             }   // exit is granted because storageManager.getFileByPath("/") never returns null
+
+            if (isShowingOnlyAvailableOffline() && !parentDir.isAvailableOffline()){
+                parentDir=storageManager.getFileByPath(OCFile.ROOT_PATH);
+            }
+
             mFile = parentDir;
 
             listDirectoryWidthAnimationUp(mFile);
@@ -936,6 +927,9 @@ public class OCFileListFragment extends ExtendedListFragment implements
                 mContainerActivity.getFileOperationsHelper().toggleAvailableOffline(checkedFiles, false);
                 getListView().invalidateViews();
                 invalidateActionMode();
+                if(isShowingOnlyAvailableOffline()){
+                    onRefresh();
+                }
                 return true;
             }
             case R.id.action_move: {
@@ -982,7 +976,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
      *
      * @param directory File to be listed
      */
-    public void listDirectory(OCFile directory/*, boolean onlyOnDevice*/) {
+    public void listDirectory(OCFile directory) {
         FileDataStorageManager storageManager = mContainerActivity.getStorageManager();
         if (storageManager != null) {
 
@@ -991,7 +985,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
                 if (mFile != null) {
                     directory = mFile;
                 } else {
-                    directory = storageManager.getFileByPath("/");
+                    directory = storageManager.getFileByPath(OCFile.ROOT_PATH);
                     if (directory == null) {
                         return; // no files, wait for sync
                     }
@@ -1004,8 +998,12 @@ public class OCFileListFragment extends ExtendedListFragment implements
                 directory = storageManager.getFileById(directory.getParentId());
             }
 
-            // TODO Enable when "On Device" is recovered ?
-            mFileListAdapter.swapDirectory(directory, storageManager/*, onlyOnDevice*/);
+            // If available offline option and folder is not available offline -> list root
+            if(!directory.isAvailableOffline() && isShowingOnlyAvailableOffline()){
+                directory = storageManager.getFileByPath(OCFile.ROOT_PATH);
+            }
+
+            mFileListAdapter.swapDirectory(directory, storageManager);
             if (mFile == null || !mFile.equals(directory)) {
                 mCurrentListView.setSelection(0);
             }

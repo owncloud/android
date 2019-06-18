@@ -87,7 +87,6 @@ public class FileContentProvider extends ContentProvider {
     private static HashMap<String, String> mFileProjectionMap = new HashMap<>();
 
     static {
-
         mFileProjectionMap.put(ProviderTableMeta._ID, ProviderTableMeta._ID);
         mFileProjectionMap.put(ProviderTableMeta.FILE_PARENT, ProviderTableMeta.FILE_PARENT);
         mFileProjectionMap.put(ProviderTableMeta.FILE_NAME, ProviderTableMeta.FILE_NAME);
@@ -119,7 +118,6 @@ public class FileContentProvider extends ContentProvider {
     private static HashMap<String, String> mShareProjectionMap = new HashMap<>();
 
     static {
-
         mShareProjectionMap.put(ProviderTableMeta._ID, ProviderTableMeta._ID);
         mShareProjectionMap.put(ProviderTableMeta.OCSHARES_FILE_SOURCE, ProviderTableMeta.OCSHARES_FILE_SOURCE);
         mShareProjectionMap.put(ProviderTableMeta.OCSHARES_ITEM_SOURCE, ProviderTableMeta.OCSHARES_ITEM_SOURCE);
@@ -147,7 +145,6 @@ public class FileContentProvider extends ContentProvider {
     private static HashMap<String, String> mCapabilityProjectionMap = new HashMap<>();
 
     static {
-
         mCapabilityProjectionMap.put(ProviderTableMeta._ID, ProviderTableMeta._ID);
         mCapabilityProjectionMap.put(ProviderTableMeta.CAPABILITIES_ACCOUNT_NAME,
                 ProviderTableMeta.CAPABILITIES_ACCOUNT_NAME);
@@ -208,7 +205,6 @@ public class FileContentProvider extends ContentProvider {
     private static HashMap<String, String> mUploadProjectionMap = new HashMap<>();
 
     static {
-
         mUploadProjectionMap.put(ProviderTableMeta._ID, ProviderTableMeta._ID);
         mUploadProjectionMap.put(ProviderTableMeta.UPLOADS_LOCAL_PATH, ProviderTableMeta.UPLOADS_LOCAL_PATH);
         mUploadProjectionMap.put(ProviderTableMeta.UPLOADS_REMOTE_PATH, ProviderTableMeta.UPLOADS_REMOTE_PATH);
@@ -229,6 +225,32 @@ public class FileContentProvider extends ContentProvider {
                 ProviderTableMeta.UPLOADS_TRANSFER_ID);
     }
 
+    private static HashMap<String, String> mCameraUploadSyncProjectionMap = new HashMap<>();
+
+    static {
+        mCameraUploadSyncProjectionMap.put(ProviderTableMeta._ID, ProviderTableMeta._ID);
+        mCameraUploadSyncProjectionMap.put(ProviderTableMeta.PICTURES_LAST_SYNC_TIMESTAMP,
+                ProviderTableMeta.PICTURES_LAST_SYNC_TIMESTAMP);
+        mCameraUploadSyncProjectionMap.put(ProviderTableMeta.VIDEOS_LAST_SYNC_TIMESTAMP,
+                ProviderTableMeta.VIDEOS_LAST_SYNC_TIMESTAMP);
+    }
+
+    private static HashMap<String, String> mQuotaProjectionMap = new HashMap<>();
+
+    static {
+        mQuotaProjectionMap.put(ProviderTableMeta._ID, ProviderTableMeta._ID);
+        mQuotaProjectionMap.put(ProviderTableMeta.USER_QUOTAS__ACCOUNT_NAME,
+                ProviderTableMeta.USER_QUOTAS__ACCOUNT_NAME);
+        mQuotaProjectionMap.put(ProviderTableMeta.USER_QUOTAS__FREE,
+                ProviderTableMeta.USER_QUOTAS__FREE);
+        mQuotaProjectionMap.put(ProviderTableMeta.USER_QUOTAS__RELATIVE,
+                ProviderTableMeta.USER_QUOTAS__RELATIVE);
+        mQuotaProjectionMap.put(ProviderTableMeta.USER_QUOTAS__TOTAL,
+                ProviderTableMeta.USER_QUOTAS__TOTAL);
+        mQuotaProjectionMap.put(ProviderTableMeta.USER_QUOTAS__USED,
+                ProviderTableMeta.USER_QUOTAS__USED);
+    }
+
     @Override
     public int delete(@NonNull Uri uri, String where, String[] whereArgs) {
         //Log_OC.d(TAG, "Deleting " + uri + " at provider " + this);
@@ -246,6 +268,10 @@ public class FileContentProvider extends ContentProvider {
     }
 
     private int delete(SQLiteDatabase db, Uri uri, String where, String[] whereArgs) {
+        if (where != null && whereArgs == null) {
+            throw new IllegalArgumentException("Selection not allowed, use parameterized queries");
+        }
+
         int count = 0;
         switch (mUriMatcher.match(uri)) {
             case SINGLE_FILE:
@@ -539,13 +565,12 @@ public class FileContentProvider extends ContentProvider {
             String[] selectionArgs,
             String sortOrder
     ) {
-
         if (selection != null && selectionArgs == null) {
             throw new IllegalArgumentException("Selection not allowed, use parameterized queries");
         }
 
         SQLiteQueryBuilder sqlQuery = new SQLiteQueryBuilder();
-
+        sqlQuery.setStrict(true);
         sqlQuery.setTables(ProviderTableMeta.FILE_TABLE_NAME);
 
         switch (mUriMatcher.match(uri)) {
@@ -595,6 +620,7 @@ public class FileContentProvider extends ContentProvider {
                     sqlQuery.appendWhere(ProviderTableMeta._ID + "="
                             + uri.getPathSegments().get(1));
                 }
+                sqlQuery.setProjectionMap(mCameraUploadSyncProjectionMap);
                 break;
             case QUOTAS:
                 sqlQuery.setTables(ProviderTableMeta.USER_QUOTAS_TABLE_NAME);
@@ -602,6 +628,7 @@ public class FileContentProvider extends ContentProvider {
                     sqlQuery.appendWhere(ProviderTableMeta._ID + "="
                             + uri.getPathSegments().get(1));
                 }
+                sqlQuery.setProjectionMap(mQuotaProjectionMap);
                 break;
             default:
                 throw new IllegalArgumentException("Unknown uri id: " + uri);
@@ -622,6 +649,9 @@ public class FileContentProvider extends ContentProvider {
                 case CAMERA_UPLOADS_SYNC:
                     order = ProviderTableMeta.CAMERA_UPLOADS_SYNC_DEFAULT_SORT_ORDER;
                     break;
+                case QUOTAS:
+                    order = ProviderTableMeta.USER_QUOTAS_DEFAULT_SORT_ORDER;
+                    break;
                 default: // Files
                     order = ProviderTableMeta.FILE_DEFAULT_SORT_ORDER;
                     break;
@@ -639,7 +669,6 @@ public class FileContentProvider extends ContentProvider {
 
     @Override
     public int update(@NonNull Uri uri, ContentValues values, String selection, String[] selectionArgs) {
-
         int count = 0;
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
         db.beginTransaction();
@@ -660,6 +689,10 @@ public class FileContentProvider extends ContentProvider {
             String selection,
             String[] selectionArgs
     ) {
+        if (selection != null && selectionArgs == null) {
+            throw new IllegalArgumentException("Selection not allowed, use parameterized queries");
+        }
+
         switch (mUriMatcher.match(uri)) {
             case DIRECTORY:
                 return 0; //updateFolderSize(db, selectionArgs[0]);
@@ -1249,7 +1282,7 @@ public class FileContentProvider extends ContentProvider {
      * Version 10 of database does not modify its scheme. It coincides with the upgrade of the ownCloud account names
      * structure to include in it the path to the server instance. Updating the account names and path to local files
      * in the files table is a must to keep the existing account working and the database clean.
-     *
+     * <p>
      * See {@link com.owncloud.android.authentication.AccountUtils#updateAccountVersion(android.content.Context)}
      *
      * @param db Database where table of files is included.
@@ -1372,7 +1405,7 @@ public class FileContentProvider extends ContentProvider {
 
     /**
      * Grants that total count of successful uploads stored is not greater than MAX_SUCCESSFUL_UPLOADS.
-     *
+     * <p>
      * Removes older uploads if needed.
      */
     private void trimSuccessfulUploads(SQLiteDatabase db) {
