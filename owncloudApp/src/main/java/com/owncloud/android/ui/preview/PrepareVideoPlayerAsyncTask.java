@@ -112,14 +112,14 @@ public class PrepareVideoPlayerAsyncTask extends AsyncTask<Object, Void, MediaSo
 
         if (file.isDown()) {
 
-            return new DefaultHttpDataSourceFactory(MainApp.getUserAgent(), bandwidthMeter);
+            return new DefaultHttpDataSourceFactory(MainApp.Companion.getUserAgent(), bandwidthMeter);
 
         } else {
 
             try {
 
                 OwnCloudCredentials credentials = AccountUtils.
-                        getCredentialsForAccount(MainApp.getAppContext(), account);
+                        getCredentialsForAccount(MainApp.Companion.getAppContext(), account);
 
                 String login = credentials.getUsername();
                 String password = credentials.getAuthToken();
@@ -138,7 +138,7 @@ public class PrepareVideoPlayerAsyncTask extends AsyncTask<Object, Void, MediaSo
                     params.put("Authorization", auth);
                 }
 
-                return new CustomHttpDataSourceFactory(MainApp.getUserAgent(),
+                return new CustomHttpDataSourceFactory(MainApp.Companion.getUserAgent(),
                         bandwidthMeter, params);
 
             } catch (AuthenticatorException e) {

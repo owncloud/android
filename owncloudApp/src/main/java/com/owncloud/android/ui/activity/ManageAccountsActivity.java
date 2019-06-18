@@ -102,7 +102,7 @@ public class ManageAccountsActivity extends FileActivity
         setupToolbar();
         updateActionBarTitleAndHomeButtonByString(getResources().getString(R.string.prefs_manage_accounts));
 
-        Account[] accountList = AccountManager.get(this).getAccountsByType(MainApp.getAccountType());
+        Account[] accountList = AccountManager.get(this).getAccountsByType(MainApp.Companion.getAccountType());
         mOriginalAccounts = toAccountNameSet(accountList);
         mOriginalCurrentAccount = AccountUtils.getCurrentOwnCloudAccount(this).name;
 
@@ -158,7 +158,7 @@ public class ManageAccountsActivity extends FileActivity
      * @return <code>true</code> if aacount list has changed, <code>false</code> if not
      */
     private boolean hasAccountListChanged() {
-        Account[] accountList = AccountManager.get(this).getAccountsByType(MainApp.getAccountType());
+        Account[] accountList = AccountManager.get(this).getAccountsByType(MainApp.Companion.getAccountType());
         Set<String> actualAccounts = toAccountNameSet(accountList);
         return !mOriginalAccounts.equals(actualAccounts);
     }
@@ -195,7 +195,7 @@ public class ManageAccountsActivity extends FileActivity
      * @return list of account list items
      */
     private ArrayList<AccountListItem> getAccountListItems() {
-        Account[] accountList = AccountManager.get(this).getAccountsByType(MainApp.getAccountType());
+        Account[] accountList = AccountManager.get(this).getAccountsByType(MainApp.Companion.getAccountType());
         ArrayList<AccountListItem> adapterAccountList = new ArrayList<AccountListItem>(accountList.length);
         for (Account account : accountList) {
             adapterAccountList.add(new AccountListItem(account));
@@ -243,7 +243,7 @@ public class ManageAccountsActivity extends FileActivity
     @Override
     public void createAccount() {
         AccountManager am = AccountManager.get(getApplicationContext());
-        am.addAccount(MainApp.getAccountType(),
+        am.addAccount(MainApp.Companion.getAccountType(),
                 null,
                 null,
                 null,
@@ -286,8 +286,8 @@ public class ManageAccountsActivity extends FileActivity
     @Override
     public void run(AccountManagerFuture<Boolean> future) {
         if (future != null && future.isDone()) {
-            Account account = new Account(mAccountBeingRemoved, MainApp.getAccountType());
-            if (!AccountUtils.exists(account.name, MainApp.getAppContext())) {
+            Account account = new Account(mAccountBeingRemoved, MainApp.Companion.getAccountType());
+            if (!AccountUtils.exists(account.name, MainApp.Companion.getAppContext())) {
                 // Cancel transfers of the removed account
                 if (mUploaderBinder != null) {
                     mUploaderBinder.cancel(account);
@@ -301,10 +301,10 @@ public class ManageAccountsActivity extends FileActivity
             mListView.setAdapter(mAccountListAdapter);
 
             AccountManager am = AccountManager.get(this);
-            if (am.getAccountsByType(MainApp.getAccountType()).length == 0) {
+            if (am.getAccountsByType(MainApp.Companion.getAccountType()).length == 0) {
                 // Show create account screen if there isn't any account
                 am.addAccount(
-                        MainApp.getAccountType(),
+                        MainApp.Companion.getAccountType(),
                         null, null, null,
                         this,
                         null, null
@@ -313,7 +313,7 @@ public class ManageAccountsActivity extends FileActivity
                 if (AccountUtils.getCurrentOwnCloudAccount(this) == null) {
                     // current account was removed - set another as current
                     String accountName = "";
-                    Account[] accounts = AccountManager.get(this).getAccountsByType(MainApp.getAccountType());
+                    Account[] accounts = AccountManager.get(this).getAccountsByType(MainApp.Companion.getAccountType());
                     if (accounts.length != 0) {
                         accountName = accounts[0].name;
                     }

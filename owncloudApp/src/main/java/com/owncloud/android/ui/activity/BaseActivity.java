@@ -146,7 +146,7 @@ public abstract class BaseActivity extends AppCompatActivity {
      */
     protected void createAccount(boolean mandatoryCreation) {
         AccountManager am = AccountManager.get(getApplicationContext());
-        am.addAccount(MainApp.getAccountType(),
+        am.addAccount(MainApp.Companion.getAccountType(),
                 null,
                 null,
                 null,
@@ -169,7 +169,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
     }
 
-    protected void setAccount(Account account) {
+    public void setAccount(Account account) {
         mCurrentAccount = account;
     }
 

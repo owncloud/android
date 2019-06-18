@@ -4,6 +4,7 @@ buildscript {
         kotlinVersion = '1.3.21'
         archLifecycleVersion = '2.0.0'
         roomVersion = '2.0.0'
+        koinVersion = '2.0.1'
 
         // Testing
         junitVersion = "4.12"

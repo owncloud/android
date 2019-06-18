@@ -223,7 +223,7 @@ public class OperationsService extends Service {
         // Saving cookies
         try {
             OwnCloudClientManagerFactory.getDefaultSingleton().
-                    saveAllClients(this, MainApp.getAccountType());
+                    saveAllClients(this, MainApp.Companion.getAccountType());
 
             // TODO - get rid of these exceptions
         } catch (

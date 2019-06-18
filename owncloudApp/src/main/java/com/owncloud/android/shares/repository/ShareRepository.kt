@@ -20,16 +20,11 @@
 package com.owncloud.android.shares.repository
 
 import androidx.lifecycle.LiveData
-import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.shares.db.OCShare
 import com.owncloud.android.vo.Resource
 
 interface ShareRepository {
-    fun loadSharesForFile(
-        shareTypes: List<ShareType>,
-        reshares: Boolean,
-        subfiles: Boolean
-    ): LiveData<Resource<List<OCShare>>>
+    fun getSharesForFile(): LiveData<Resource<List<OCShare>>>
 
     fun insertPublicShareForFile(
         permissions: Int,
@@ -37,7 +32,7 @@ interface ShareRepository {
         password: String,
         expirationTimeInMillis: Long,
         publicUpload: Boolean
-    ): LiveData<Resource<List<OCShare>>>
+    ): LiveData<Resource<Unit>>
 
     fun updatePublicShareForFile(
         remoteId: Long,
@@ -46,9 +41,9 @@ interface ShareRepository {
         expirationDateInMillis: Long,
         permissions: Int,
         publicUpload: Boolean
-    ): LiveData<Resource<List<OCShare>>>
+    ): LiveData<Resource<Unit>>
 
     fun deletePublicShare(
         remoteId: Long
-    ): LiveData<Resource<List<OCShare>>>
+    ): LiveData<Resource<Unit>>
 }

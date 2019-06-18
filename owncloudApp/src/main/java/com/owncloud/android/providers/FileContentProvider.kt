@@ -945,7 +945,7 @@ class FileContentProvider(val appExecutors: AppExecutors = AppExecutors()) : Con
 
                     // Insert share list to the new shares table in new database
                     appExecutors.diskIO().execute {
-                        OCLocalSharesDataSource().insert(shares)
+                        OCLocalSharesDataSource(context).insert(shares)
                     }
 
                     // Drop old shares table from old database
@@ -968,7 +968,7 @@ class FileContentProvider(val appExecutors: AppExecutors = AppExecutors()) : Con
                 if (cursor.moveToFirst()) {
                     // Insert capability to the new capabilities table in new database
                     appExecutors.diskIO().execute {
-                        OCLocalCapabilitiesDataSource().insert(
+                        OCLocalCapabilitiesDataSource(context).insert(
                             listOf(OCCapability.fromCursor(cursor))
                         )
                     }
@@ -1152,7 +1152,7 @@ class FileContentProvider(val appExecutors: AppExecutors = AppExecutors()) : Con
             // we know the update was previously done in {link @FileActivity#onCreate} because the changes through
             // AccountManager are not synchronous
             val accounts = AccountManager.get(context).getAccountsByType(
-                MainApp.getAccountType()
+                MainApp.accountType
             )
             var serverUrl: String
             var username: String?

@@ -20,9 +20,9 @@
 package com.owncloud.android.capabilities.viewmodel
 
 import android.accounts.Account
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import com.owncloud.android.MainApp
 import com.owncloud.android.capabilities.datasource.OCLocalCapabilitiesDataSource
 import com.owncloud.android.capabilities.datasource.OCRemoteCapabilitiesDataSource
 import com.owncloud.android.capabilities.db.OCCapability
@@ -39,18 +39,18 @@ import com.owncloud.android.vo.Resource
 
 @OpenForTesting
 class OCCapabilityViewModel(
+    context: Context,
     val account: Account,
     val capabilityRepository: CapabilityRepository = OCCapabilityRepository.create(
-        localCapabilitiesDataSource = OCLocalCapabilitiesDataSource(),
+        localCapabilitiesDataSource = OCLocalCapabilitiesDataSource(context),
         remoteCapabilitiesDataSource = OCRemoteCapabilitiesDataSource(
             OwnCloudClientManagerFactory.getDefaultSingleton().getClientFor(
-                OwnCloudAccount(account, MainApp.getAppContext()),
-                MainApp.getAppContext()
+                OwnCloudAccount(account, context),
+                context
             )
         )
     )
 ) : ViewModel() {
-
     fun getCapabilityForAccount(shouldFetchFromNetwork: Boolean = true): LiveData<Resource<OCCapability>> =
         capabilityRepository.loadCapabilityForAccount(account.name, shouldFetchFromNetwork)
 }

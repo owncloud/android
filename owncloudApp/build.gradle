@@ -36,12 +36,12 @@ dependencies {
     androidTestImplementation 'androidx.test:runner:1.1.1'
     // Espresso core
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
+    // Espresso contrib
+    androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.1.1'
     // Espresso intents
     androidTestImplementation 'androidx.test.espresso:espresso-intents:3.1.1'
     // Espresso web
     androidTestImplementation 'androidx.test.espresso:espresso-web:3.1.1'
-    // Espresso intents
-    androidTestImplementation 'androidx.test.espresso:espresso-intents:3.1.0'
     // UIAutomator - for cross-app UI tests, and to grant screen is turned on in Espresso tests
     androidTestImplementation 'androidx.test.uiautomator:uiautomator:2.2.0'
     // fix conflict in dependencies; see http://g.co/androidstudio/app-test-app-conflict for details
@@ -76,6 +76,9 @@ dependencies {
     // Room
     implementation "androidx.room:room-runtime:$roomVersion"
     kapt "androidx.room:room-compiler:$roomVersion"
+
+    // Koin dependency injector
+    implementation "org.koin:koin-androidx-viewmodel:$koinVersion"
 }
 
 tasks.withType(Test) {
@@ -172,7 +175,7 @@ android {
 
     testOptions {
         unitTests.returnDefaultValues = true
-        animationsDisabled = false
+        animationsDisabled = true
     }
 }
 

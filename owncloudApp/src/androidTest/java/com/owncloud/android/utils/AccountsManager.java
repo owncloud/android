@@ -116,7 +116,7 @@ public class AccountsManager {
     public static void saveCapabilities(Context context, RemoteCapability capabilities, String server, String user) {
         FileDataStorageManager fm = new FileDataStorageManager(context, new Account(buildAccountName(user, server),
                 accountType),
-                MainApp.getAppContext().getContentResolver());
+                MainApp.Companion.getAppContext().getContentResolver());
         fm.saveCapabilities(capabilities);
     }
 

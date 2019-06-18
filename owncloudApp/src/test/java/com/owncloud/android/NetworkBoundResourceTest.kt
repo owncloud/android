@@ -78,7 +78,7 @@ class NetworkBoundResourceTest {
                     dbData.value = fetchedDbValue
                 }
 
-                override fun shouldFetch(data: List<OCShare>?) = true
+                override fun shouldFetchFromNetwork(data: List<OCShare>?) = true
 
                 override fun loadFromDb(): LiveData<List<OCShare>> = dbData
 
@@ -128,7 +128,7 @@ class NetworkBoundResourceTest {
                     saved.set(true)
                 }
 
-                override fun shouldFetch(data: List<OCShare>?) = true
+                override fun shouldFetchFromNetwork(data: List<OCShare>?) = true
 
                 override fun loadFromDb(): LiveData<List<OCShare>> = dbData.apply { value = fetchedDbValue }
 
@@ -170,7 +170,7 @@ class NetworkBoundResourceTest {
                     saved.set(true)
                 }
 
-                override fun shouldFetch(data: List<OCShare>?) = true
+                override fun shouldFetchFromNetwork(data: List<OCShare>?) = true
 
                 override fun loadFromDb(): LiveData<List<OCShare>> = dbData
 
