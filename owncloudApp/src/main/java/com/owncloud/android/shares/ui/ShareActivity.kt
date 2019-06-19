@@ -31,7 +31,6 @@ import android.util.Log
 import android.view.MenuItem
 import androidx.lifecycle.Observer
 import com.google.android.material.snackbar.Snackbar
-import com.owncloud.android.MainApp
 import com.owncloud.android.R
 import com.owncloud.android.capabilities.viewmodel.OCCapabilityViewModel
 import com.owncloud.android.datamodel.OCFile
@@ -41,7 +40,6 @@ import com.owncloud.android.lib.common.utils.Log_OC
 import com.owncloud.android.lib.resources.shares.RemoteShare
 import com.owncloud.android.lib.resources.shares.ShareParserResult
 import com.owncloud.android.lib.resources.shares.ShareType
-import com.owncloud.android.operations.GetSharesForFileOperation
 import com.owncloud.android.operations.RemoveShareOperation
 import com.owncloud.android.operations.UpdateSharePermissionsOperation
 import com.owncloud.android.operations.common.OperationType
@@ -53,7 +51,6 @@ import com.owncloud.android.shares.ui.fragment.ShareFragmentListener
 import com.owncloud.android.shares.viewmodel.OCShareViewModel
 import com.owncloud.android.testing.OpenForTesting
 import com.owncloud.android.ui.activity.FileActivity
-import com.owncloud.android.ui.asynctasks.GetSharesForFileAsyncTask
 import com.owncloud.android.ui.dialog.RemoveShareDialogFragment
 import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter
 import com.owncloud.android.ui.fragment.EditShareFragment
@@ -68,8 +65,6 @@ import org.koin.core.parameter.parametersOf
  */
 @OpenForTesting
 class ShareActivity : FileActivity(), ShareFragmentListener {
-    private var getSharesForFileAsyncTask: GetSharesForFileAsyncTask? = null
-
     /**
      * Shortcut to get access to the [ShareFileFragment] instance, if any
      *
@@ -106,7 +101,7 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
         parametersOf(
             file?.remotePath!!,
             account!!,
-            listOf(ShareType.PUBLIC_LINK)
+            listOf(ShareType.PUBLIC_LINK, ShareType.USER, ShareType.GROUP, ShareType.FEDERATED)
         )
     }
 
@@ -118,8 +113,6 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        getSharesForFileAsyncTask = null
 
         setContentView(R.layout.share_activity)
 
@@ -167,19 +160,12 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
 
     public override fun onStop() {
         super.onStop()
-        getSharesForFileAsyncTask?.cancel(true)
-        getSharesForFileAsyncTask = null
     }
 
     /**
      * Updates the view, reading data from [com.owncloud.android.shares.viewmodel.OCShareViewModel]
      */
     private fun refreshSharesFromStorageManager() {
-        val shareFileFragment = shareFileFragment
-        if (shareFileFragment?.isAdded == true) {   // only if added to the view hierarchy!!
-            shareFileFragment.refreshUsersOrGroupsListFromDB()
-        }
-
         val searchShareesFragment = searchFragment
         if (searchShareesFragment?.isAdded == true) {  // only if added to the view hierarchy!!
             searchShareesFragment.refreshUsersOrGroupsListFromDB()
@@ -192,11 +178,11 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
     }
 
     override fun refreshShares() {
-        refreshCapabilities()
+        loadCapabilities()
         loadShares()
     }
 
-    override fun refreshCapabilities(shouldFetchFromNetwork: Boolean) {
+    override fun loadCapabilities(shouldFetchFromNetwork: Boolean) {
         ocCapabilityViewModel.getCapabilityForAccount(shouldFetchFromNetwork).observe(
             this,
             Observer { resource ->
@@ -248,7 +234,7 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
             Observer { resource ->
                 when (resource?.status) {
                     Status.SUCCESS -> {
-                        shareFileFragment?.updatePublicShares(resource.data as ArrayList<OCShare>)
+                        shareFileFragment?.updateShares(resource.data as ArrayList<OCShare>)
                         dismissLoadingDialog()
                     }
                     Status.ERROR -> {
@@ -263,12 +249,12 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
                             errorMessage,
                             Snackbar.LENGTH_SHORT
                         ).show()
-                        shareFileFragment?.updatePublicShares(resource.data as ArrayList<OCShare>)
+                        shareFileFragment?.updateShares(resource.data as ArrayList<OCShare>)
                         dismissLoadingDialog()
                     }
                     Status.LOADING -> {
                         showLoadingDialog(R.string.common_loading)
-                        shareFileFragment?.updatePublicShares(resource.data as ArrayList<OCShare>)
+                        shareFileFragment?.updateShares(resource.data as ArrayList<OCShare>)
                     }
                     else -> {
                         Log.d(
@@ -281,9 +267,9 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
         )
     }
 
-    /**
-     * PRIVATE SHARES
-     */
+    /**************************************************************************************************************
+     *********************************************** PRIVATE SHARES ***********************************************
+     **************************************************************************************************************/
 
     override fun copyOrSendPrivateLink(file: OCFile) {
         fileOperationsHelper.copyOrSendPrivateLink(file)
@@ -353,21 +339,10 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
         newFragment.show(ft, TAG_EDIT_SHARE_FRAGMENT)
     }
 
-    /**
-     * Get users and groups from the server to fill in the "share with" list
-     */
-    override fun refreshSharesFromServer() {
-        // Show loading
-        showLoadingDialog(R.string.common_loading)
-        // Get Users and Groups
-        getSharesForFileAsyncTask = GetSharesForFileAsyncTask(this)
-        val params = arrayOf(file, account, storageManager)
-        getSharesForFileAsyncTask!!.execute(*params)
-    }
+    /**************************************************************************************************************
+     *********************************************** PUBLIC SHARES ************************************************
+     **************************************************************************************************************/
 
-    /**
-     * PUBLIC SHARES
-     */
     override fun showAddPublicShare(defaultLinkName: String) {
         // DialogFragment.show() will take care of adding the fragment
         // in a transaction.  We also want to remove any currently showing
@@ -538,15 +513,6 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
      */
     override fun onRemoteOperationFinish(operation: RemoteOperation<*>, result: RemoteOperationResult<*>) {
         super.onRemoteOperationFinish(operation, result)
-
-        if (result.isSuccess || operation is GetSharesForFileOperation && result.code ==
-            RemoteOperationResult.ResultCode.SHARE_NOT_FOUND
-        ) {
-            Log_OC.d(TAG, "Refreshing view on successful operation or finished refresh")
-            if (operation is GetSharesForFileOperation) {
-                getSharesForFileAsyncTask = null
-            }
-        }
 
         if (operation is RemoveShareOperation && result.isSuccess && editShareFragment != null) {
             supportFragmentManager.popBackStack()

@@ -461,6 +461,7 @@ class ErrorMessageAdapter {
                 OperationType.REMOVE_FILE -> f.format(R.string.remove_fail_msg)
                 OperationType.RENAME_FILE -> f.format(R.string.rename_server_fail_msg)
                 OperationType.CREATE_FOLDER -> f.format(R.string.create_dir_fail_msg)
+                OperationType.GET_SHARES -> f.format(R.string.get_shares_error)
                 OperationType.CREATE_PUBLIC_SHARE, OperationType.CREATE_SHARE_WITH_SHAREES ->
                     f.format(R.string.share_link_file_error)
                 OperationType.REMOVE_SHARE -> f.format(R.string.unshare_link_file_error)

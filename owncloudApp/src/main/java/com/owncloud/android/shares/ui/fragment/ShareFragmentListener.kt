@@ -58,15 +58,13 @@ interface ShareFragmentListener {
 
     fun removePublicShare(share: OCShare)
 
-    fun refreshCapabilities(shouldFetchFromNetwork: Boolean = true)
+    fun loadCapabilities(shouldFetchFromNetwork: Boolean = true)
 
     fun copyOrSendPrivateLink(file: OCFile)
 
     fun showSearchUsersAndGroups()
 
     fun showEditPrivateShare(share: OCShare)
-
-    fun refreshSharesFromServer()
 
     fun showAddPublicShare(defaultLinkName: String)
 
