@@ -81,16 +81,13 @@ public class PassCodeActivity extends BaseActivity {
     /**
      * Initializes the activity.
      *
-     * An intent with a valid ACTION is expected; if none is found, an
-     * {@link IllegalArgumentException} will be thrown.
-     *
      * @param savedInstanceState    Previously saved state - irrelevant in this case
      */
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         /// protection against screen recording
-        if (!MainApp.isDeveloper()) {
+        if (!MainApp.Companion.isDeveloper()) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
         } // else, let it go, or taking screenshots & testing will not be possible
 

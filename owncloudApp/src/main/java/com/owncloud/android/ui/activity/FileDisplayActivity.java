@@ -107,7 +107,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.owncloud.android.MainApp.isDeveloper;
 import static com.owncloud.android.db.PreferenceManager.getSortOrder;
 
 /**
@@ -221,7 +220,7 @@ public class FileDisplayActivity extends FileActivity
 
         Log_OC.v(TAG, "onCreate() end");
 
-        if (getResources().getBoolean(R.bool.enable_rate_me_feature) && !isDeveloper()) {
+        if (getResources().getBoolean(R.bool.enable_rate_me_feature) && !MainApp.Companion.isDeveloper()) {
             AppRater.appLaunched(this, getPackageName());
         }
     }
@@ -1480,7 +1479,7 @@ public class FileDisplayActivity extends FileActivity
             if (result.getCode() != ResultCode.FORBIDDEN ||
                     (result.getCode() == ResultCode.FORBIDDEN && operation.isLastFileToRemove())) {
                 showSnackMessage(
-                        ErrorMessageAdapter.getResultMessage(result, operation, getResources())
+                        ErrorMessageAdapter.Companion.getResultMessage(result, operation, getResources())
                 );
             }
         }

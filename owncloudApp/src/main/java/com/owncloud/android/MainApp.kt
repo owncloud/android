@@ -1,4 +1,4 @@
-/**
+/*
  * ownCloud Android client application
  *
  * @author masensio
@@ -7,20 +7,17 @@
  * @author Christian Schabesberger
  * Copyright (C) 2019 ownCloud GmbH.
  *
- *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
  * as published by the Free Software Foundation.
- *
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
- *
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http:></http:>//www.gnu.org/licenses/>.
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package com.owncloud.android
 
@@ -33,6 +30,7 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
+import android.preference.PreferenceManager
 
 import com.owncloud.android.authentication.FingerprintManager
 import com.owncloud.android.authentication.PassCodeManager
@@ -60,6 +58,7 @@ import org.koin.dsl.module
 /**
  * Main Application of the project
  *
+ *
  * Contains methods to build the "static" strings. These strings were before constants in different
  * classes
  */
@@ -70,18 +69,20 @@ class MainApp : Application() {
 
         appContext = applicationContext
 
+        startLogIfDeveloper()
+
         OwnCloudClient.setContext(appContext)
 
         val isSamlAuth = AUTH_ON == getString(R.string.auth_method_saml_web_sso)
 
         OwnCloudClientManagerFactory.setUserAgent(userAgent)
-        OwnCloudClientManagerFactory.setDefaultPolicy(
-            if (isSamlAuth) {
-                Policy.SINGLE_SESSION_PER_ACCOUNT
-            } else {
+        if (isSamlAuth) {
+            OwnCloudClientManagerFactory.setDefaultPolicy(Policy.SINGLE_SESSION_PER_ACCOUNT)
+        } else {
+            OwnCloudClientManagerFactory.setDefaultPolicy(
                 Policy.SINGLE_SESSION_PER_ACCOUNT_IF_SERVER_SUPPORTS_SERVER_MONITORING
-            }
-        )
+            )
+        }
 
         val oauth2Provider = OwnCloudOAuth2Provider()
         oauth2Provider.authorizationCodeEndpointPath = getString(R.string.oauth2_url_endpoint_auth)
@@ -99,17 +100,6 @@ class MainApp : Application() {
 
         // initialise thumbnails cache on background thread
         ThumbnailsCacheManager.InitDiskCacheTask().execute()
-
-        if (BuildConfig.DEBUG || isBeta) {
-
-            val dataFolder = dataFolder
-
-            // Set folder for store logs
-            Log_OC.setLogDataFolder(dataFolder)
-
-            Log_OC.startLogging(Environment.getExternalStorageDirectory().absolutePath)
-            Log_OC.d(BuildConfig.BUILD_TYPE, "start logging " + BuildConfig.VERSION_NAME)
-        }
 
         // register global protection with pass code, pattern lock and fingerprint lock
         registerActivityLifecycleCallbacks(object : ActivityLifecycleCallbacks {
@@ -131,7 +121,7 @@ class MainApp : Application() {
             }
 
             override fun onActivityStarted(activity: Activity) {
-                Log_OC.d(activity.javaClass.simpleName, "onStart() starting")
+                Log_OC.v(activity.javaClass.simpleName, "onStart() starting")
                 PassCodeManager.getPassCodeManager().onActivityStarted(activity)
                 PatternManager.getPatternManager().onActivityStarted(activity)
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -140,15 +130,15 @@ class MainApp : Application() {
             }
 
             override fun onActivityResumed(activity: Activity) {
-                Log_OC.d(activity.javaClass.simpleName, "onResume() starting")
+                Log_OC.v(activity.javaClass.simpleName, "onResume() starting")
             }
 
             override fun onActivityPaused(activity: Activity) {
-                Log_OC.d(activity.javaClass.simpleName, "onPause() ending")
+                Log_OC.v(activity.javaClass.simpleName, "onPause() ending")
             }
 
             override fun onActivityStopped(activity: Activity) {
-                Log_OC.d(activity.javaClass.simpleName, "onStop() ending")
+                Log_OC.v(activity.javaClass.simpleName, "onStop() ending")
                 PassCodeManager.getPassCodeManager().onActivityStopped(activity)
                 PatternManager.getPatternManager().onActivityStopped(activity)
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -163,11 +153,11 @@ class MainApp : Application() {
             }
 
             override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) {
-                Log_OC.d(activity.javaClass.simpleName, "onSaveInstanceState(Bundle) starting")
+                Log_OC.v(activity.javaClass.simpleName, "onSaveInstanceState(Bundle) starting")
             }
 
             override fun onActivityDestroyed(activity: Activity) {
-                Log_OC.d(activity.javaClass.simpleName, "onDestroy() ending")
+                Log_OC.v(activity.javaClass.simpleName, "onDestroy() ending")
             }
         })
 
@@ -175,7 +165,6 @@ class MainApp : Application() {
             viewModel { (filePath: String, account: Account, shareTypes: List<ShareType>) ->
                 OCShareViewModel(androidContext(), filePath, account, shareTypes)
             }
-
             viewModel { (account: Account) ->
                 OCCapabilityViewModel(androidContext(), account)
             }
@@ -187,12 +176,39 @@ class MainApp : Application() {
         }
     }
 
+    fun startLogIfDeveloper() {
+        isDeveloper = BuildConfig.DEBUG || PreferenceManager.getDefaultSharedPreferences(applicationContext)
+            .getInt(CLICK_DEV_MENU, CLICKS_DEFAULT) > CLICKS_NEEDED_TO_BE_DEVELOPER
+
+        if (isDeveloper) {
+            val dataFolder = dataFolder
+
+            // Set folder for store logs
+            Log_OC.setLogDataFolder(dataFolder)
+
+            Log_OC.startLogging(Environment.getExternalStorageDirectory().absolutePath)
+            Log_OC.d(
+                BuildConfig.BUILD_TYPE, "start logging " + BuildConfig.VERSION_NAME + " " +
+                        BuildConfig.COMMIT_SHA1
+            )
+        }
+    }
+
     companion object {
+
         private val TAG = MainApp::class.java.simpleName
+        const val CLICK_DEV_MENU = "clickDeveloperMenu"
+        const val CLICKS_NEEDED_TO_BE_DEVELOPER = 5
 
         private val AUTH_ON = "on"
 
+        private val POLICY_SINGLE_SESSION_PER_ACCOUNT = "single session per account"
+        private val POLICY_ALWAYS_NEW_CLIENT = "always new client"
+        private val CLICKS_DEFAULT = 0
+
         var appContext: Context? = null
+            private set
+        var isDeveloper: Boolean = false
             private set
 
         var BETA_VERSION = "beta"
@@ -222,17 +238,8 @@ class MainApp : Application() {
         val authTokenType: String
             get() = appContext!!.resources.getString(R.string.authority)
 
-        val dbFile: String
-            get() = appContext!!.resources.getString(R.string.db_file)
-
-        val dbName: String
-            get() = appContext!!.resources.getString(R.string.db_name)
-
         val dataFolder: String
             get() = appContext!!.resources.getString(R.string.data_folder)
-
-        val logName: String
-            get() = appContext!!.resources.getString(R.string.log_name)
 
         // user agent
         // Mozilla/5.0 (Android) ownCloud-android/1.7.0

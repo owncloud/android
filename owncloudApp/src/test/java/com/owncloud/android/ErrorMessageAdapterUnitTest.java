@@ -68,7 +68,7 @@ public class ErrorMessageAdapterUnitTest {
         // ... when method under test is called ...
         String errorMessage = ErrorMessageAdapter.Companion.getResultMessage(
             new RemoteOperationResult(RemoteOperationResult.ResultCode.FORBIDDEN),
-            new RemoveFileOperation(PATH_TO_DELETE, false),
+            new RemoveFileOperation(PATH_TO_DELETE, false, false),
             mMockResources
         );
 
