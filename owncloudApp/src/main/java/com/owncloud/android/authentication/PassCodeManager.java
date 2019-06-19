@@ -63,7 +63,7 @@ public class PassCodeManager {
     }
 
     public void onActivityCreated(Activity activity) {
-        if (!MainApp.isDeveloper()) {
+        if (!MainApp.Companion.isDeveloper()) {
             if (isPassCodeEnabled()) {
                 activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
             } else {

@@ -83,17 +83,17 @@ public class DiskLruImageCache {
             if (writeBitmapToFile(data, editor)) {
                 mDiskCache.flush();
                 editor.commit();
-                if (MainApp.isDeveloper()) {
+                if (MainApp.Companion.isDeveloper()) {
                    Log_OC.d( "cache_test_DISK_", "image put on disk cache " + validKey );
                 }
             } else {
                 editor.abort();
-                if (MainApp.isDeveloper()) {
+                if (MainApp.Companion.isDeveloper()) {
                     Log_OC.d( "cache_test_DISK_", "ERROR on: image put on disk cache " + validKey );
                 }
             }
         } catch (IOException e) {
-            if (MainApp.isDeveloper()) {
+            if (MainApp.Companion.isDeveloper()) {
                 Log_OC.d( "cache_test_DISK_", "ERROR on: image put on disk cache " + validKey );
             }
             try {
@@ -131,7 +131,7 @@ public class DiskLruImageCache {
             }
         }
 
-        if (MainApp.isDeveloper()) {
+        if (MainApp.Companion.isDeveloper()) {
             Log_OC.d("cache_test_DISK_", bitmap == null ? 
                     "not found" : "image read from disk " + validKey);
         }

@@ -59,7 +59,7 @@ public class PatternManager {
     }
 
     public void onActivityCreated(Activity activity) {
-        if (!MainApp.isDeveloper()) {
+        if (!MainApp.Companion.isDeveloper()) {
             if (isPatternEnabled()) {
                 activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
             } else {
