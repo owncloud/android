@@ -54,7 +54,6 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.operations.CreateShareWithShareeOperation;
-import com.owncloud.android.operations.GetSharesForFileOperation;
 import com.owncloud.android.operations.RemoveShareOperation;
 import com.owncloud.android.operations.RenameFileOperation;
 import com.owncloud.android.operations.SynchronizeFileOperation;
@@ -316,16 +315,17 @@ public class FileActivity extends DrawerActivity
         } else if (operation instanceof SynchronizeFileOperation) {
             onSynchronizeFileOperationFinish((SynchronizeFileOperation) operation, result);
 
-        } else if (operation instanceof GetSharesForFileOperation) {
-            if (result.isSuccess() || result.getCode() == ResultCode.SHARE_NOT_FOUND) {
-                updateFileFromDB();
-
-            } else {
-                showSnackMessage(
-                        ErrorMessageAdapter.Companion.getResultMessage(result, operation, getResources())
-                );
-            }
-
+            // TODO NEW ARCH
+//        } else if (operation instanceof GetSharesForFileOperation) {
+//            if (result.isSuccess() || result.getCode() == ResultCode.SHARE_NOT_FOUND) {
+//                updateFileFromDB();
+//
+//            } else {
+//                showSnackMessage(
+//                        ErrorMessageAdapter.Companion.getResultMessage(result, operation, getResources())
+//                );
+//            }
+//
         } else if (operation instanceof RenameFileOperation && result.isSuccess()) {
 
             result.getData();

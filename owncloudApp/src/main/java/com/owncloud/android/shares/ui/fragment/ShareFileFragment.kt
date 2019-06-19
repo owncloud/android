@@ -39,6 +39,7 @@ import com.owncloud.android.capabilities.db.OCCapability
 import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.datamodel.ThumbnailsCacheManager
 import com.owncloud.android.lib.common.utils.Log_OC
+import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.lib.resources.status.CapabilityBooleanType
 import com.owncloud.android.lib.resources.status.OwnCloudVersion
 import com.owncloud.android.shares.db.OCShare
@@ -287,20 +288,6 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
         }
     }
 
-    override fun copyOrSendPublicLink(share: OCShare) {
-        //GetLink from the server and show ShareLinkToDialog
-        listener?.copyOrSendPublicLink(share)
-    }
-
-    override fun removePublicShare(share: OCShare) {
-        // Remove public link from server
-        listener?.showRemovePublicShare(share)
-    }
-
-    override fun editPublicShare(share: OCShare) {
-        listener?.showEditPublicShare(share)
-    }
-
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         Log_OC.d(TAG, "onActivityCreated")
@@ -308,9 +295,6 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
         activity!!.setTitle(R.string.share_dialog_title)
 
         listener?.refreshShares()
-
-        // Load data into the list of private shares
-        refreshUsersOrGroupsListFromDB()
     }
 
     override fun onAttach(context: Context?) {
@@ -327,19 +311,53 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
         listener = null
     }
 
+    fun updateShares(shares: ArrayList<OCShare>) {
+        updatePublicShares(
+            ArrayList(shares.filter {
+                it.shareType == ShareType.PUBLIC_LINK.value
+            })
+        )
+
+        updatePrivateShares(
+            ArrayList(shares.filter {
+                it.shareType == ShareType.USER.value ||
+                it.shareType == ShareType.GROUP.value ||
+                it.shareType == ShareType.FEDERATED.value
+            })
+        )
+    }
+
+    /**************************************************************************************************************
+     ************************************************ CAPABILITIES ************************************************
+     **************************************************************************************************************/
+
+    fun updateCapabilities(capabilities: OCCapability?) {
+        this.capabilities = capabilities
+
+        updatePublicLinkButton()
+
+        // Update view depending on updated capabilities
+        if (isPublicShareDisabled) {
+            shareViaLinkSection.visibility = View.GONE
+        } else {
+            shareViaLinkSection.visibility = View.VISIBLE
+        }
+    }
+
+    /**************************************************************************************************************
+     *********************************************** PRIVATE SHARES ***********************************************
+     **************************************************************************************************************/
+
     /**
      * Get users and groups from the DB to fill in the "share with" list.
      *
      * Depends on the parent Activity provides a [com.owncloud.android.datamodel.FileDataStorageManager]
      * instance ready to use. If not ready, does nothing.
      */
-    fun refreshUsersOrGroupsListFromDB() {
+    fun updatePrivateShares(privateShares: ArrayList<OCShare>) {
         if ((listener as BaseActivity).storageManager != null) {
             // Get Users and Groups
-            privateShares = (listener as BaseActivity).storageManager.getPrivateSharesForAFile(
-                file?.remotePath,
-                account!!.name
-            )
+            this.privateShares = privateShares
 
             // Update list of users/groups
             updateListOfUserGroups()
@@ -383,18 +401,9 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
         listener?.showEditPrivateShare(share)
     }
 
-    fun updateCapabilities(capabilities: OCCapability?) {
-        this.capabilities = capabilities
-
-        updatePublicLinkButton()
-
-        // Update view depending on updated capabilities
-        if (isPublicShareDisabled) {
-            shareViaLinkSection.visibility = View.GONE
-        } else {
-            shareViaLinkSection.visibility = View.VISIBLE
-        }
-    }
+    /**************************************************************************************************************
+     *********************************************** PUBLIC SHARES ************************************************
+     **************************************************************************************************************/
 
     fun updatePublicShares(publicShares: ArrayList<OCShare>) {
         publicLinks = publicShares
@@ -445,6 +454,20 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
 
         // Set Scroll to initial position
         shareScroll?.scrollTo(0, 0)
+    }
+
+    override fun copyOrSendPublicLink(share: OCShare) {
+        //GetLink from the server and show ShareLinkToDialog
+        listener?.copyOrSendPublicLink(share)
+    }
+
+    override fun removePublicShare(share: OCShare) {
+        // Remove public link from server
+        listener?.showRemovePublicShare(share)
+    }
+
+    override fun editPublicShare(share: OCShare) {
+        listener?.showEditPublicShare(share)
     }
 
     /**
