@@ -25,7 +25,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.owncloud.android.lib.common.OwnCloudAccount
 import com.owncloud.android.lib.common.OwnCloudClientManagerFactory
-import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.shares.datasource.OCLocalSharesDataSource
 import com.owncloud.android.shares.datasource.OCRemoteSharesDataSource
 import com.owncloud.android.shares.db.OCShare
@@ -42,7 +41,6 @@ class OCShareViewModel(
     context: Context,
     filePath: String,
     account: Account,
-    shareTypes: List<ShareType>,
     val shareRepository: ShareRepository = OCShareRepository(
         localSharesDataSource = OCLocalSharesDataSource(context),
         remoteSharesDataSource = OCRemoteSharesDataSource(
@@ -52,14 +50,17 @@ class OCShareViewModel(
             )
         ),
         filePath = filePath,
-        accountName = account.name,
-        shareTypes = shareTypes
+        accountName = account.name
     )
 ) : ViewModel() {
-    private val sharesForFile: LiveData<Resource<List<OCShare>>> = shareRepository.getSharesForFile()
+    private val allSharesForFile: LiveData<Resource<List<OCShare>>> = shareRepository.getAllSharesForFile()
 
-    fun getSharesForFile(): LiveData<Resource<List<OCShare>>> {
-        return sharesForFile
+    fun getAllSharesForFile(): LiveData<Resource<List<OCShare>>> {
+        return allSharesForFile
+    }
+
+    fun getPrivateSharesForFile(): LiveData<Resource<List<OCShare>>> {
+        return shareRepository.getPrivateSharesForFile()
     }
 
     fun insertPublicShareForFile(

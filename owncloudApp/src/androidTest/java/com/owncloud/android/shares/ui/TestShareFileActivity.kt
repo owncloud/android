@@ -33,7 +33,7 @@ class TestShareFileActivity : SingleFragmentActivity(), ShareFragmentListener {
     lateinit var publicShares: ArrayList<OCShare>
     lateinit var errorMessage: String
 
-    override fun refreshShares() {
+    override fun refreshAllShares() {
         val shareFileFragment: ShareFileFragment =
             supportFragmentManager.findFragmentByTag("TEST FRAGMENT") as ShareFileFragment
         shareFileFragment.updateCapabilities(capabilities)

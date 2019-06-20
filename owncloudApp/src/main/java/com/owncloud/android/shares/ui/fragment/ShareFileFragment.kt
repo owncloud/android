@@ -294,7 +294,8 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
 
         activity!!.setTitle(R.string.share_dialog_title)
 
-        listener?.refreshShares()
+        // Load all shares in the list
+        listener?.refreshAllShares()
     }
 
     override fun onAttach(context: Context?) {
@@ -348,12 +349,6 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
      *********************************************** PRIVATE SHARES ***********************************************
      **************************************************************************************************************/
 
-    /**
-     * Get users and groups from the DB to fill in the "share with" list.
-     *
-     * Depends on the parent Activity provides a [com.owncloud.android.datamodel.FileDataStorageManager]
-     * instance ready to use. If not ready, does nothing.
-     */
     fun updatePrivateShares(privateShares: ArrayList<OCShare>) {
         if ((listener as BaseActivity).storageManager != null) {
             // Get Users and Groups

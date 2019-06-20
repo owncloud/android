@@ -323,7 +323,7 @@ class OCShareRepositoryTest {
     ): LiveData<Resource<List<OCShare>>> {
         val ocShareRepository = createRepositoryWithData(localData, remoteOperationResult)
 
-        return ocShareRepository.getSharesForFile()
+        return ocShareRepository.getAllSharesForFile()
     }
 
     private fun insertShare(
