@@ -394,7 +394,7 @@ class PublicShareDialogFragment : DialogFragment() {
         super.onActivityCreated(savedInstanceState)
         Log_OC.d(TAG, "onActivityCreated")
 
-        listener?.loadCapabilities(false)
+        listener?.refreshCapabilities(false)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

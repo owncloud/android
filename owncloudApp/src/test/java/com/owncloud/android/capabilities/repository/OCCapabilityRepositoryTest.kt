@@ -70,7 +70,7 @@ class OCCapabilityRepositoryTest {
                 InstantAppExecutors(), localCapabilitiesDataSource, remoteCapabilitiesDataSource
             )
 
-        val data = ocCapabilityRepository.loadCapabilityForAccount("admin@server")
+        val data = ocCapabilityRepository.getCapabilityForAccount("admin@server")
 
         val observer = mock<Observer<Resource<OCCapability>>>()
         data.observeForever(observer)
@@ -123,7 +123,7 @@ class OCCapabilityRepositoryTest {
                 remoteCapabilitiesDataSource
             )
 
-        val data = ocCapabilityRepository.loadCapabilityForAccount(
+        val data = ocCapabilityRepository.getCapabilityForAccount(
             "user@server"
         )
 
@@ -176,7 +176,7 @@ class OCCapabilityRepositoryTest {
                 remoteCapabilitiesDataSourceTest
             )
 
-        val data = ocCapabilityRepository.loadCapabilityForAccount(
+        val data = ocCapabilityRepository.getCapabilityForAccount(
             "cfo@server"
         )
 

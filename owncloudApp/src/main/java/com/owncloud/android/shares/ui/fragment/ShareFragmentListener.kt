@@ -58,7 +58,7 @@ interface ShareFragmentListener {
 
     fun removePublicShare(share: OCShare)
 
-    fun loadCapabilities(shouldFetchFromNetwork: Boolean = true)
+    fun refreshCapabilities(shouldFetchFromNetwork: Boolean = true)
 
     fun copyOrSendPrivateLink(file: OCFile)
 
@@ -73,5 +73,6 @@ interface ShareFragmentListener {
     fun showRemovePublicShare(share: OCShare)
 
     fun copyOrSendPublicLink(share: OCShare)
+
     fun refreshPrivateShares()
 }

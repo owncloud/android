@@ -39,8 +39,26 @@ class OCShareRepository(
     val filePath: String,
     val accountName: String
 ) : ShareRepository {
-    private val allSharesForFile: MutableLiveData<Resource<List<OCShare>>> =
-        object : NetworkBoundResource<List<OCShare>, ShareParserResult>(appExecutors) {
+    override fun getPublicSharesForFile(): LiveData<Resource<List<OCShare>>> {
+        return getSharesForFile(
+            listOf(ShareType.PUBLIC_LINK)
+        )
+    }
+
+    override fun getPrivateSharesForFile(): LiveData<Resource<List<OCShare>>> {
+        return getSharesForFile(
+            listOf(
+                ShareType.USER,
+                ShareType.GROUP,
+                ShareType.FEDERATED
+            )
+        )
+    }
+
+    private fun getSharesForFile(
+        shareTypes: List<ShareType>
+    ): MutableLiveData<Resource<List<OCShare>>> {
+        return object : NetworkBoundResource<List<OCShare>, ShareParserResult>(appExecutors) {
             override fun saveCallResult(item: ShareParserResult) {
                 val sharesForFileFromServer = item.shares.map { remoteShare ->
                     OCShare.fromRemoteShare(remoteShare).also { it.accountOwner = accountName }
@@ -57,38 +75,12 @@ class OCShareRepository(
 
             override fun loadFromDb(): LiveData<List<OCShare>> =
                 localSharesDataSource.getSharesForFileAsLiveData(
-                    filePath, accountName, listOf(
-                        ShareType.PUBLIC_LINK,
-                        ShareType.USER,
-                        ShareType.GROUP,
-                        ShareType.FEDERATED
-                    )
+                    filePath, accountName, shareTypes
                 )
 
             override fun createCall() =
                 remoteSharesDataSource.getSharesForFile(filePath, reshares = true, subfiles = false)
         }.asMutableLiveData()
-
-    override fun getAllSharesForFile(): LiveData<Resource<List<OCShare>>> {
-        return allSharesForFile
-    }
-
-    override fun getPublicSharesForFile(): LiveData<Resource<List<OCShare>>> {
-        return allSharesForFile.apply {
-            this.value?.data?.filter {
-                it.shareType == ShareType.PUBLIC_LINK.value
-            }
-        }
-    }
-
-    override fun getPrivateSharesForFile(): LiveData<Resource<List<OCShare>>> {
-        return allSharesForFile.apply {
-            this.value?.data?.filter {
-                it.shareType == ShareType.USER.value ||
-                it.shareType == ShareType.GROUP.value ||
-                it.shareType == ShareType.FEDERATED.value
-            }
-        }
     }
 
     override fun insertPublicShareForFile(

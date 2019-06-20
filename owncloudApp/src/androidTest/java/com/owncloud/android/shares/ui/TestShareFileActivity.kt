@@ -65,7 +65,7 @@ class TestShareFileActivity : SingleFragmentActivity(), ShareFragmentListener {
     override fun removePublicShare(share: OCShare) {
     }
 
-    override fun loadCapabilities(shouldFetchFromNetwork: Boolean) {
+    override fun refreshCapabilities(shouldFetchFromNetwork: Boolean) {
         val publicShareDialogFragment: PublicShareDialogFragment =
             supportFragmentManager.findFragmentByTag("TEST FRAGMENT") as PublicShareDialogFragment
         publicShareDialogFragment.updateCapabilities(capabilities)
