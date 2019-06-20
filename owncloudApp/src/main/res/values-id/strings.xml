@@ -25,6 +25,8 @@
   <string name="drawer_close">Tutup</string>
   <string name="drawer_open">Buka</string>
   <string name="drawer_loading_quota">Memuat kuota</string>
+  <string name="drawer_quota">%1$s dari %2$s digunakan (%3$s%%)</string>
+  <string name="drawer_unavailable_free_storage">%1$s sedang menggunakan</string>
   <string name="drawer_unavailable_used_storage">Tidak ada informasi penggunaan penyimpanan yang tersedia</string>
   <string name="drawer_feedback">Umpan balik</string>
   <string name="drawer_help">Bantuan</string>
@@ -36,7 +38,10 @@
   <string name="prefs_passcode">Kunci kode sandi</string>
   <string name="prefs_fingerprint">Kunci sidik jari</string>
   <string name="prefs_fingerprint_summary">Aktifkan kode sandi atau kunci pola untuk mengaktifkan opsi ini</string>
+  <string name="prefs_touches_with_other_visible_windows">Bersentuhan dengan jendela lainnya</string>
+  <string name="prefs_touches_with_other_visible_windows_summary">Perbolehkan sentuhan ketika penglihatan dikaburkan oleh jendela lain yang terlihat. Aktifkanlah untuk menggunakan aplikasi penyaring cahaya.</string>
   <string name="confirmation_touches_with_other_windows_title">Anda yakin ingin mengaktifkan fitur ini?</string>
+  <string name="confirmation_touches_with_other_windows_message">Gunakan feature ini dibawah tanggungjawab anda sendiri, aplikasi yang mencurigakan dapat mencoba untuk mengganggu anda untuk melakukan tindakan, tanpa disadari, menggunakan pandangan lain.</string>
   <string name="prefs_camera_picture_upload">Unggah gambar</string>
   <string name="prefs_camera_picture_upload_summary">Otomatis unggah gambar yang diambil kamera</string>
   <string name="prefs_camera_video_upload">Unggahan video</string>
@@ -67,6 +72,7 @@
   <string name="passcode_already_set">Pola dan kunci kode sandi tidak dapat diaktifkan secara bersamaan, harap nonaktifkan kode sandi terlebih dahulu</string>
   <string name="pattern_no_longer_required">Pola tidak akan ditanyakan lagi</string>
   <string name="pattern_configure_your_pattern_explanation">Pola akan diminta setiap kali aplikasi dimulai</string>
+  <string name="illegal_argument_exception_message">AKSI yang sah dibutuhkan dalam maksud melewati ke </string>
   <string name="recommend_subject">Cobalah %1$s pada ponsel cerdas Anda!</string>
   <string name="recommend_text">Saya mengajak Anda untuk menggunakan %1$s di ponsel cerdas Anda!\nUnduh gratis disini: %2$s</string>
   <string name="auth_failure_snackbar">Otentikasi gagal</string>
@@ -147,7 +153,9 @@
   <string name="uploader_upload_text_dialog_filename_error_empty">Nama berkas tidak boleh kosong</string>
   <string name="uploader_upload_text_dialog_filename_error_length_max">Nama berkas tidak lebih dari %d karakter</string>
   <string name="uploader_upload_text_filename_hint">Nama berkas</string>
+  <string name="uploader_upload_camera_upload_files">Mengunggah data unggah kamera</string>
   <string name="uploader_upload_available_offline_files">Mengunggah file offline yang tersedia</string>
+  <string name="uploader_upload_requested_from_wifi_files">Mengunggah data dari wifi yang diinginkan</string>
   <string name="ssl_certificate_not_trusted">Sertifikat server tidak terpercaya</string>
   <string name="uploads_view_title">Unggah</string>
   <string name="uploads_view_group_current_uploads">Saat ini</string>
@@ -235,7 +243,9 @@
   <string name="media_rewind_description">Tombol mundur</string>
   <string name="media_play_pause_description">Tombol main dan jeda</string>
   <string name="media_forward_description">Tombol maju</string>
+  <string name="upload_from_camera_title">Gambar dari kamera</string>
   <string name="auth_getting_authorization">Mendapatkan otorisasi...</string>
+  <string name="auth_trying_to_login">Mencoba masuk...</string>
   <string name="auth_no_net_conn_title">Tidak ada koneksi internet</string>
   <string name="auth_nossl_plain_ok_title">Sambungan aman tidak tersedia</string>
   <string name="auth_connection_established">Sambungan dibuat</string>
@@ -287,11 +297,13 @@
   <string name="filename_forbidden_charaters_from_server">Nama berkas berisi setidaknya satu karakter yang tidak sah</string>
   <string name="filename_empty">Nama berkas tidak boleh kosong</string>
   <string name="wait_a_moment">Tunggu sebentar</string>
+  <string name="wait_checking_credentials">Mengecek kredensial yang disimpan</string>
   <string name="filedisplay_unexpected_bad_get_content">Masalah tidak terduga, silahkan pilih berkas dari apl yang berbeda</string>
   <string name="filedisplay_no_file_selected">Tidak ada berkas yang terpilih</string>
   <string name="activity_chooser_title">Kirim tautan ke</string>
   <string name="wait_for_tmp_copy_from_private_storage">Menyalin berkas dari penyimpanan pribadi</string>
   <string name="oauth_check_onoff">Masuk dengan oAuth2</string>
+  <string name="oauth_login_connection">Menyambungkan ke server OAuth2...</string>
   <string name="ssl_validator_header">Identitas server tidak dapat diverifikasi</string>
   <string name="ssl_validator_reason_cert_not_trusted">- Sertifikat server tidak terpercaya</string>
   <string name="ssl_validator_reason_cert_expired">- Sertifikat server kadaluarsa</string>
@@ -327,9 +339,14 @@
   <string name="placeholder_media_time">12:23:45</string>
   <string name="camera_picture_upload_on_wifi">Unggah gambar hanya melalui WiFi</string>
   <string name="camera_video_upload_on_wifi">Unggah video hanya melalui WiFi</string>
+  <string name="camera_upload_path">/UnggahKamera</string>
   <string name="confirmation_disable_camera_uploads_title">Memastikan</string>
   <string name="confirmation_disable_pictures_upload_message">Anda yakin ingin menonaktifkan fitur ini? Gambar yang tertunda tidak akan diunggah</string>
+  <string name="confirmation_disable_videos_upload_message">Anda yakin ingin menonaktifkan feature ini? Video yang tertunda tidak akan diunggah</string>
+  <string name="proper_pics_folder_warning_camera_upload">Mohon pastikan folder yang dipilih adalah tempat dimana kamera Anda menyimpan gambar-gambar yang diambil. Jika tidak, feature ini tidak akan bisa mendeteksi gambar-gambar anda. Ingat bahwa gambar akan diunggah setidaknya 15 menit setelah diambil.</string>
+  <string name="proper_videos_folder_warning_camera_upload">Mohon pastikan folder yang dipilih adalah tempat kamera anda menyimpan video yang direkam. Jika tidak, feature ini tidak akan dapat mendeteksi video anda. Mohon diingat bahwa video akan diunggah setidaknya 15 menit setelah merekam.</string>
   <string name="conflict_title">Berkas konflik</string>
+  <string name="conflict_description">Terdapat konflik dalam data %1$s, ketuk untuk menyelesaikan</string>
   <string name="conflict_message">Berkas mana yang ingin Anda simpan? Jika Anda memilih kedua versi, berkas lokal akan memiliki angka yang ditambahkan pada namanya.</string>
   <string name="conflict_keep_both">Biarkan keduannya</string>
   <string name="conflict_use_local_version">versi lokal</string>
@@ -364,6 +381,7 @@
   <string name="forbidden_permissions_delete">untuk menghapus berkas ini</string>
   <string name="share_link_forbidden_permissions">untuk membagikan berkas ini</string>
   <string name="unshare_link_forbidden_permissions">untuk batal membagikan berkas ini</string>
+  <string name="update_link_forbidden_permissions">Perbaharuan pembagian ini</string>
   <string name="forbidden_permissions_create">untuk membuat berkas</string>
   <string name="uploader_upload_forbidden_permissions">untuk mengunggah kedalam folder ini</string>
   <string name="uploader_upload_forbidden">Unggah tidak di izinkan</string>
@@ -396,6 +414,7 @@
   <string name="forbidden_permissions_copy">untuk menyalin berkas ini</string>
   <string name="prefs_category_camera_upload">Unggahan kamera</string>
   <string name="prefs_camera_video_upload_path_title">Jalur unggah video</string>
+  <string name="sync_folder_failed_content">Sinkronisasi dari folder %1$s tidak dapat diselesaikan</string>
   <string name="shared_subject_header">dibagikan</string>
   <string name="with_you_subject_header">kepada Anda</string>
   <string name="subject_user_shared_with_you">%1$s dibagikan \"%2$s\" kepada Anda</string>
@@ -502,6 +521,7 @@
   <string name="media_service_notification_channel_description">Lihat pemutar musik</string>
   <string name="file_sync_notification_channel_name">Sinkronisasi file</string>
   <string name="file_sync_notification_channel_description">Lihat hasil sinkronisasi file</string>
+  <string name="clicks_to_be_developer">%1$d Anda di klik untuk mengaktifkan menu pengembang</string>
   <string name="rate_dialog_title">Nilai aplikasi %1$s</string>
   <string name="rate_dialog_description">Jika Anda menikmati menggunakan aplikasi ini, dapatkah Anda meluangkan waktu untuk menilainya? Umpan balik Anda sangat penting bagi kami.</string>
   <string name="button_no_thanks_name">TIDAK, TERIMA KASIH</string>
@@ -528,5 +548,9 @@
   <string name="welcome_feature_7_text">Pilih semua file sekaligus</string>
   <string name="welcome_feature_8_title">Tersedia offline</string>
   <string name="welcome_feature_8_text">File Anda secara otomatis disinkronkan</string>
+  <string name="welcome_feature_9_title">Penyedia dokumen</string>
+  <string name="welcome_feature_9_text">Akses dan sunting data ownCloud Anda dari aplikasi lainnya</string>
+  <string name="welcome_feature_10_title">log dengan pencarian untuk semua orang</string>
+  <string name="welcome_feature_10_text">Kirimkan kami log Anda agar aplikasi dapat bekerja dengan lebih baik</string>
   <string name="no_borwser_installed_alert">Tidak ada browser yang diinstal. Silakan instal Browser untuk memperbolehkan login yang aman.</string>
 </resources>

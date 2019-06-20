@@ -546,5 +546,9 @@
   <string name="welcome_feature_7_text">เลือกไฟล์ทั้งหมด</string>
   <string name="welcome_feature_8_title">การทำงานแบบออฟไลน์พร้อมใช้งาน</string>
   <string name="welcome_feature_8_text">ประสานข้อมูลไฟล์ของคุณโดยอัตโนมัติ</string>
+  <string name="welcome_feature_9_title">ผู้ให้บริการเอกสาร</string>
+  <string name="welcome_feature_9_text">เข้าถึงและแก้ไขไฟล์ ownCloud ของคุณจากแอพอื่น</string>
+  <string name="welcome_feature_10_title">log พร้อมค้นหาทุกคน</string>
+  <string name="welcome_feature_10_text">ส่ง log ของคุณมาให้เราเพื่อให้แอปทำงานได้ดีขึ้น</string>
   <string name="no_borwser_installed_alert">โปรดติดตั้งเบราเซอร์ก่อนเพื่อให้สามารถล็อกอินได้อย่างปลอดภัย</string>
 </resources>

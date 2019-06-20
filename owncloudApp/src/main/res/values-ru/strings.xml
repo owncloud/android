@@ -551,5 +551,9 @@
   <string name="welcome_feature_7_text">Выбор всех файлов за один раз</string>
   <string name="welcome_feature_8_title">Доступно автономно</string>
   <string name="welcome_feature_8_text">Ваши файлы синхронизируются автоматически</string>
+  <string name="welcome_feature_9_title">Провайдер документов</string>
+  <string name="welcome_feature_9_text">Открывайте и правьте ваши файлы ownCloud из других приложений</string>
+  <string name="welcome_feature_10_title">Журналы с поиском для всех</string>
+  <string name="welcome_feature_10_text">Отправьте нам ваши журналы и сделайте приложение ещё лучше</string>
   <string name="no_borwser_installed_alert">Не установлен никакой браузер. Пожалуйста, установите браузер для поддержки безопасного входа.</string>
 </resources>

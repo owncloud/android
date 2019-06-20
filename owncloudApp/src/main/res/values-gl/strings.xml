@@ -458,7 +458,7 @@ Descárgueo de aquí: %2$s</string>
   <string name="share_via_link_password_title">Asegurado</string>
   <string name="share_via_link_edit_permission_read_only_label">Descargar / Ver</string>
   <string name="share_via_link_edit_permission_read_and_write_label">Descaragr / Ver / Enviar </string>
-  <string name="share_via_link_edit_permission_upload_only_label">Só para enviar (File Drop)</string>
+  <string name="share_via_link_edit_permission_upload_only_label">Só para enviar (soltar ficheiro)</string>
   <string name="share_get_public_link_button">Obter a ligazón</string>
   <string name="share_with_title">Compartir con</string>
   <string name="share_with_edit_title">Compartir con %1$s</string>
@@ -550,5 +550,9 @@ Descárgueo de aquí: %2$s</string>
   <string name="welcome_feature_7_text">Seleccionar todos os ficheiros de vez</string>
   <string name="welcome_feature_8_title">Dispoñíbel sen conexión</string>
   <string name="welcome_feature_8_text">Os seus ficheiros sincronizados automaticamente </string>
+  <string name="welcome_feature_9_title">Fornecedor de documentos</string>
+  <string name="welcome_feature_9_text">Acceda e edite os seus ficheiros ownCloud dnde doutros aplicativos</string>
+  <string name="welcome_feature_10_title">Rexistros con busca para todos</string>
+  <string name="welcome_feature_10_text">Envíenos os seus rexistros para que o aplicativo funcione mellor</string>
   <string name="no_borwser_installed_alert">Non hai un navegador instalado, Instale un para poder facer un acceso seguro.</string>
 </resources>

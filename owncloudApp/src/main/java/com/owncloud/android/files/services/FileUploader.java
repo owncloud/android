@@ -89,13 +89,13 @@ import static com.owncloud.android.operations.UploadFileOperation.CREATED_AS_CAM
 
 /**
  * Service for uploading files. Invoke using context.startService(...).
- *
+ * <p>
  * Files to be uploaded are stored persistently using {@link UploadsStorageManager}.
- *
+ * <p>
  * On next invocation of {@link FileUploader} uploaded files which
  * previously failed will be uploaded again until either upload succeeded or a
  * fatal error occured.
- *
+ * <p>
  * Every file passed to this service is uploaded. No filtering is performed.
  * However, Intent keys (e.g., KEY_WIFI_ONLY) are obeyed.
  */
@@ -202,8 +202,6 @@ public class FileUploader extends Service
         super.onCreate();
         Log_OC.d(TAG, "Creating service");
 
-        mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-
         mNotificationBuilder = NotificationUtils.newNotificationBuilder(this);
 
         // Configure notification channel
@@ -219,7 +217,7 @@ public class FileUploader extends Service
                     name, importance);
             // Configure the notification channel.
             notificationChannel.setDescription(description);
-            mNotificationManager.createNotificationChannel(notificationChannel);
+            getNotificationManager().createNotificationChannel(notificationChannel);
         }
 
         HandlerThread thread = new HandlerThread("FileUploaderThread",
@@ -251,7 +249,7 @@ public class FileUploader extends Service
      */
     private void resurrection() {
         // remove stucked notification
-        mNotificationManager.cancel(R.string.uploader_upload_in_progress_ticker);
+        getNotificationManager().cancel(R.string.uploader_upload_in_progress_ticker);
     }
 
     /**
@@ -275,7 +273,7 @@ public class FileUploader extends Service
 
     /**
      * Entry point to add one or several files to the queue of uploads.
-     *
+     * <p>
      * New uploads are added calling to startService(), resulting in a call to
      * this method. This ensures the service will keep on working although the
      * caller activity goes away.
@@ -294,11 +292,7 @@ public class FileUploader extends Service
 
         if ((isCameraUploadFile || isAvailableOfflineFile || isRequestedFromWifiBackEvent) &&
                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            /*
-             * After calling startForegroundService method from {@link TransferRequester} for camera uploads or
-             * available offline, we have to call this within five seconds after the service is created to avoid
-             * an error
-             */
+
             Log_OC.d(TAG, "Starting FileUploader service in foreground");
             mNotificationBuilder
                     .setChannelId(UPLOAD_NOTIFICATION_CHANNEL_ID)
@@ -312,6 +306,11 @@ public class FileUploader extends Service
                 mNotificationBuilder.setContentTitle(getString(R.string.uploader_upload_requested_from_wifi_files));
             }
 
+            /*
+             * After calling startForegroundService method from {@link TransferRequester} for camera uploads or
+             * available offline, we have to call this within five seconds after the service is created to avoid
+             * an error
+             */
             startForeground(141, mNotificationBuilder.build());
         }
 
@@ -531,7 +530,7 @@ public class FileUploader extends Service
     /**
      * Provides a binder object that clients can use to perform operations on
      * the queue of uploads, excepting the addition of new files.
-     *
+     * <p>
      * Implemented to perform cancellation, pause and resume of existing
      * uploads.
      */
@@ -646,10 +645,10 @@ public class FileUploader extends Service
         /**
          * Returns True when the file described by 'file' is being uploaded to
          * the ownCloud account 'account' or waiting for it
-         *
+         * <p>
          * If 'file' is a directory, returns 'true' if some of its descendant files
          * is uploading or waiting to upload.
-         *
+         * <p>
          * Warning: If remote file exists and !forceOverwrite the original file
          * is being returned here. That is, it seems as if the original file is
          * being updated when actually a new file is being uploaded.
@@ -777,7 +776,7 @@ public class FileUploader extends Service
     /**
      * Upload worker. Performs the pending uploads in the order they were
      * requested.
-     *
+     * <p>
      * Created with the Looper of a new thread, started in
      * {@link FileUploader#onCreate()}.
      */
@@ -972,7 +971,7 @@ public class FileUploader extends Service
                 showUploadListIntent, 0));
 
         if (!upload.isCameraUploadsPicture() && !upload.isCameraUploadsVideo()) {
-            mNotificationManager.notify(R.string.uploader_upload_in_progress_ticker,
+            getNotificationManager().notify(R.string.uploader_upload_in_progress_ticker,
                     mNotificationBuilder.build());
         }// else wait until the upload really start (onTransferProgress is called), so that if it's discarded
         // due to lack of Wifi, no notification is shown
@@ -991,7 +990,7 @@ public class FileUploader extends Service
             String text = String.format(getString(R.string.uploader_upload_in_progress_content), percent, fileName);
             mNotificationBuilder.setContentText(text);
             mNotificationBuilder.setChannelId(UPLOAD_NOTIFICATION_CHANNEL_ID);
-            mNotificationManager.notify(R.string.uploader_upload_in_progress_ticker, mNotificationBuilder.build());
+            getNotificationManager().notify(R.string.uploader_upload_in_progress_ticker, mNotificationBuilder.build());
         }
         mLastPercent = percent;
     }
@@ -1006,7 +1005,7 @@ public class FileUploader extends Service
                                     RemoteOperationResult uploadResult) {
         Log_OC.d(TAG, "NotifyUploadResult with resultCode: " + uploadResult.getCode());
         // / cancelled operation or success -> silent removal of progress notification
-        mNotificationManager.cancel(R.string.uploader_upload_in_progress_ticker);
+        getNotificationManager().cancel(R.string.uploader_upload_in_progress_ticker);
 
         if (uploadResult.isCancelled() && upload instanceof ChunkedUploadFileOperation) {
             removeChunksFolder(upload.getOCUploadId());
@@ -1075,7 +1074,7 @@ public class FileUploader extends Service
             mNotificationBuilder.setContentText(content);
             mNotificationBuilder.setChannelId(UPLOAD_NOTIFICATION_CHANNEL_ID);
 
-            mNotificationManager.notify(tickerId, mNotificationBuilder.build());
+            getNotificationManager().notify(tickerId, mNotificationBuilder.build());
 
             if (uploadResult.isSuccess()) {
                 mPendingUploads.remove(upload.getAccount().name, upload.getFile().getRemotePath());
@@ -1092,7 +1091,7 @@ public class FileUploader extends Service
     /**
      * Sends a broadcast in order to the interested activities can update their
      * view
-     *
+     * <p>
      * TODO - no more broadcasts, replace with a callback to subscribed listeners
      */
     private void sendBroadcastUploadsAdded() {
@@ -1104,7 +1103,7 @@ public class FileUploader extends Service
     /**
      * Sends a broadcast in order to the interested activities can update their
      * view
-     *
+     * <p>
      * TODO - no more broadcasts, replace with a callback to subscribed listeners
      *
      * @param upload Finished upload operation
@@ -1123,7 +1122,7 @@ public class FileUploader extends Service
     /**
      * Sends a broadcast in order to the interested activities can update their
      * view
-     *
+     * <p>
      * TODO - no more broadcasts, replace with a callback to subscribed listeners
      *
      * @param upload                 Finished upload operation
@@ -1157,10 +1156,17 @@ public class FileUploader extends Service
     /**
      * Remove and 'forgets' pending uploads of an account.
      *
-     * @param account   Account which uploads will be cancelled
+     * @param account Account which uploads will be cancelled
      */
     private void cancelUploadsForAccount(Account account) {
         mPendingUploads.remove(account.name);
         mUploadsStorageManager.removeUploads(account.name);
+    }
+
+    private NotificationManager getNotificationManager() {
+        if (mNotificationManager == null) {
+            mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        }
+        return mNotificationManager;
     }
 }

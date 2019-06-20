@@ -137,7 +137,7 @@
   <string name="upload_chooser_title">上传自</string>
   <string name="uploader_info_dirname">文件夹名称</string>
   <string name="uploader_upload_in_progress_ticker">上传中……</string>
-  <string name="uploader_upload_in_progress_content">%1$d%% 上传 %2$s</string>
+  <string name="uploader_upload_in_progress_content"> 上传 %2$s %1$d%%</string>
   <string name="uploader_upload_succeeded_ticker">上传成功</string>
   <string name="uploader_upload_succeeded_content_single">%1$s 上传成功</string>
   <string name="uploader_upload_failed_ticker">上传失败</string>

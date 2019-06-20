@@ -549,5 +549,9 @@
   <string name="welcome_feature_7_text">Selecione todos os arquivos de uma só vez</string>
   <string name="welcome_feature_8_title">Disponível offline</string>
   <string name="welcome_feature_8_text">Seus arquivos sincronizados automaticamente</string>
+  <string name="welcome_feature_9_title">Provedor de documentos</string>
+  <string name="welcome_feature_9_text">Acesse e edite seus arquivos ownCloud de outros aplicativos</string>
+  <string name="welcome_feature_10_title">Logs com pesquisa para todos</string>
+  <string name="welcome_feature_10_text">Envie-nos seus registros para que o aplicativo funcione melhor</string>
   <string name="no_borwser_installed_alert">Nenhum navegador instalado. Por favor, instale um navegador para permitir um login seguro.</string>
 </resources>
