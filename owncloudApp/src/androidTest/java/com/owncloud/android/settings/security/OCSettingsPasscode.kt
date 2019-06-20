@@ -19,6 +19,7 @@
 
 package com.owncloud.android.settings.security
 
+import android.app.Activity
 import android.content.Intent
 import android.preference.PreferenceManager
 import androidx.test.espresso.Espresso.onView
@@ -27,6 +28,9 @@ import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.replaceText
 import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.contrib.ActivityResultMatchers.hasResultCode
+import androidx.test.espresso.contrib.ActivityResultMatchers.hasResultData
+import androidx.test.espresso.intent.matcher.IntentMatchers.hasExtra
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
@@ -36,6 +40,7 @@ import androidx.test.rule.ActivityTestRule
 import com.owncloud.android.R
 import com.owncloud.android.ui.activity.PassCodeActivity
 import org.junit.After
+import org.junit.Assert.assertThat
 import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
@@ -50,6 +55,7 @@ class OCSettingsPasscode {
 
     val intent = Intent()
     val errorMessage = "PassCode Activity error"
+    private val KEY_PASSCODE = "KEY_PASSCODE"
     private val context = InstrumentationRegistry.getInstrumentation().targetContext
 
     @After
@@ -100,8 +106,11 @@ class OCSettingsPasscode {
         //Second typing
         typePasscode(arrayOf('1','1','1','1'))
 
-        assertTrue(errorMessage, activityRule.activity.isFinishing)
+        //Checking that the setResult returns the typed passcode
+        assertThat(activityRule.getActivityResult(), hasResultCode(Activity.RESULT_OK))
+        assertThat(activityRule.getActivityResult(), hasResultData(hasExtra(KEY_PASSCODE, "1111")))
 
+        assertTrue(errorMessage, activityRule.activity.isFinishing)
     }
 
     @Test
@@ -121,7 +130,6 @@ class OCSettingsPasscode {
         onView(withText(R.string.pass_code_configure_your_pass_code)).check(matches(isDisplayed()))
         onView(withText(R.string.pass_code_configure_your_pass_code_explanation)).check(matches(isDisplayed()))
         onView(withText(R.string.pass_code_mismatch)).check(matches(isDisplayed()))
-
     }
 
     @Test
@@ -196,7 +204,7 @@ class OCSettingsPasscode {
         onView(withText(R.string.pass_code_enter_pass_code)).check(matches(isDisplayed()))
     }
 
-    fun typePasscode(digits: Array<Char>){
+    fun typePasscode (digits: Array<Char>){
         onView(withId(R.id.txt0)).perform(replaceText(digits[0].toString()))
         onView(withId(R.id.txt1)).perform(replaceText(digits[1].toString()))
         onView(withId(R.id.txt2)).perform(replaceText(digits[2].toString()))
