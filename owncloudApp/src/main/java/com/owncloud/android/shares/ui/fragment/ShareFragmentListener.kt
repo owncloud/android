@@ -37,7 +37,7 @@ import com.owncloud.android.shares.db.OCShare
  * See the Android Training lesson [Communicating with Other Fragments](http://developer.android.com/training/basics/fragments/communicating.html) for more information.
  */
 interface ShareFragmentListener {
-    fun refreshShares()
+    fun refreshAllShares()
 
     fun createPublicShare(
         permissions: Int,
@@ -73,4 +73,5 @@ interface ShareFragmentListener {
     fun showRemovePublicShare(share: OCShare)
 
     fun copyOrSendPublicLink(share: OCShare)
+    fun refreshPrivateShares()
 }

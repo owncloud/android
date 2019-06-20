@@ -37,10 +37,9 @@ class OCShareRepository(
     private val localSharesDataSource: LocalSharesDataSource,
     private val remoteSharesDataSource: RemoteSharesDataSource,
     val filePath: String,
-    val accountName: String,
-    val shareTypes: List<ShareType>
+    val accountName: String
 ) : ShareRepository {
-    private val sharesForFile: MutableLiveData<Resource<List<OCShare>>> =
+    private val allSharesForFile: MutableLiveData<Resource<List<OCShare>>> =
         object : NetworkBoundResource<List<OCShare>, ShareParserResult>(appExecutors) {
             override fun saveCallResult(item: ShareParserResult) {
                 val sharesForFileFromServer = item.shares.map { remoteShare ->
@@ -57,14 +56,39 @@ class OCShareRepository(
             override fun shouldFetchFromNetwork(data: List<OCShare>?) = true
 
             override fun loadFromDb(): LiveData<List<OCShare>> =
-                localSharesDataSource.getSharesForFileAsLiveData(filePath, accountName, shareTypes)
+                localSharesDataSource.getSharesForFileAsLiveData(
+                    filePath, accountName, listOf(
+                        ShareType.PUBLIC_LINK,
+                        ShareType.USER,
+                        ShareType.GROUP,
+                        ShareType.FEDERATED
+                    )
+                )
 
             override fun createCall() =
                 remoteSharesDataSource.getSharesForFile(filePath, reshares = true, subfiles = false)
         }.asMutableLiveData()
 
-    override fun getSharesForFile(): LiveData<Resource<List<OCShare>>> {
-        return sharesForFile
+    override fun getAllSharesForFile(): LiveData<Resource<List<OCShare>>> {
+        return allSharesForFile
+    }
+
+    override fun getPublicSharesForFile(): LiveData<Resource<List<OCShare>>> {
+        return allSharesForFile.apply {
+            this.value?.data?.filter {
+                it.shareType == ShareType.PUBLIC_LINK.value
+            }
+        }
+    }
+
+    override fun getPrivateSharesForFile(): LiveData<Resource<List<OCShare>>> {
+        return allSharesForFile.apply {
+            this.value?.data?.filter {
+                it.shareType == ShareType.USER.value ||
+                it.shareType == ShareType.GROUP.value ||
+                it.shareType == ShareType.FEDERATED.value
+            }
+        }
     }
 
     override fun insertPublicShareForFile(

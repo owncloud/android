@@ -162,8 +162,8 @@ class MainApp : Application() {
         })
 
         val newArchModule = module {
-            viewModel { (filePath: String, account: Account, shareTypes: List<ShareType>) ->
-                OCShareViewModel(androidContext(), filePath, account, shareTypes)
+            viewModel { (filePath: String, account: Account) ->
+                OCShareViewModel(androidContext(), filePath, account)
             }
             viewModel { (account: Account) ->
                 OCCapabilityViewModel(androidContext(), account)

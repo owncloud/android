@@ -24,7 +24,9 @@ import com.owncloud.android.shares.db.OCShare
 import com.owncloud.android.vo.Resource
 
 interface ShareRepository {
-    fun getSharesForFile(): LiveData<Resource<List<OCShare>>>
+    fun getAllSharesForFile(): LiveData<Resource<List<OCShare>>>
+    fun getPublicSharesForFile(): LiveData<Resource<List<OCShare>>>
+    fun getPrivateSharesForFile(): LiveData<Resource<List<OCShare>>>
 
     fun insertPublicShareForFile(
         permissions: Int,

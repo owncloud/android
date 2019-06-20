@@ -64,7 +64,7 @@ class OCShareViewModelTest {
         )
 
         `when`(
-            ocShareRepository.getSharesForFile()
+            ocShareRepository.getAllSharesForFile()
         ).thenReturn(
             MutableLiveData<Resource<List<OCShare>>>().apply {
                 value = Resource.success(publicShares)
@@ -74,7 +74,7 @@ class OCShareViewModelTest {
         // Viewmodel that will ask ocShareRepository for shares
         val ocShareViewModel = createOCShareViewModel(ocShareRepository)
 
-        val resource: Resource<List<OCShare>>? = ocShareViewModel.getSharesForFile().value
+        val resource: Resource<List<OCShare>>? = ocShareViewModel.getAllSharesForFile().value
         assertShareParameters(resource?.data)
     }
 
