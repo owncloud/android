@@ -437,7 +437,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
         )
 
         // Show or hide public links and no public links message
-        if (publicLinks?.size!! > 0) {
+        if (!publicLinks.isNullOrEmpty()) {
             shareNoPublicLinks?.visibility = View.GONE
             sharePublicLinksList?.visibility = View.VISIBLE
             sharePublicLinksList?.adapter = publicLinksAdapter

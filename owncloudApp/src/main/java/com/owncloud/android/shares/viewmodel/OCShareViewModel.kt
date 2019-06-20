@@ -53,14 +53,12 @@ class OCShareViewModel(
         accountName = account.name
     )
 ) : ViewModel() {
-    private val allSharesForFile: LiveData<Resource<List<OCShare>>> = shareRepository.getAllSharesForFile()
-
-    fun getAllSharesForFile(): LiveData<Resource<List<OCShare>>> {
-        return allSharesForFile
-    }
-
     fun getPrivateSharesForFile(): LiveData<Resource<List<OCShare>>> {
         return shareRepository.getPrivateSharesForFile()
+    }
+
+    fun getPublicSharesForFile(): LiveData<Resource<List<OCShare>>> {
+        return shareRepository.getPublicSharesForFile()
     }
 
     fun insertPublicShareForFile(

@@ -55,7 +55,7 @@ class OCCapabilityViewModelTest {
         val ocCapabilityRepository = mock(OCCapabilityRepository::class.java)
 
         `when`(
-            ocCapabilityRepository.loadCapabilityForAccount(
+            ocCapabilityRepository.getCapabilityForAccount(
                 "admin@server"
             )
         ).thenReturn(

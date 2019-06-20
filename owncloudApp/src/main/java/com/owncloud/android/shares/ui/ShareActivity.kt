@@ -78,7 +78,7 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
      *
      * @return A [SearchShareesFragment] instance, or null
      */
-    private val searchFragment: SearchShareesFragment?
+    private val searchShareesFragment: SearchShareesFragment?
         get() = supportFragmentManager.findFragmentByTag(TAG_SEARCH_FRAGMENT) as SearchShareesFragment?
 
     /**
@@ -172,11 +172,12 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
     }
 
     override fun refreshAllShares() {
-        loadCapabilities()
-        loadAllShares()
+        refreshCapabilities()
+        refreshPrivateShares()
+        refreshPublicShares()
     }
 
-    override fun loadCapabilities(shouldFetchFromNetwork: Boolean) {
+    override fun refreshCapabilities(shouldFetchFromNetwork: Boolean) {
         ocCapabilityViewModel.getCapabilityForAccount(shouldFetchFromNetwork).observe(
             this,
             Observer { resource ->
@@ -221,45 +222,6 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
         )
     }
 
-    private fun loadAllShares() {
-        ocShareViewModel.getAllSharesForFile().observe(
-            this,
-            Observer { resource ->
-                when (resource?.status) {
-                    Status.SUCCESS -> {
-                        shareFileFragment?.updateShares(resource.data as ArrayList<OCShare>)
-                        dismissLoadingDialog()
-                    }
-                    Status.ERROR -> {
-                        val errorMessage = ErrorMessageAdapter.getResultMessage(
-                            resource.code,
-                            resource.exception,
-                            OperationType.GET_SHARES,
-                            resources
-                        )
-                        Snackbar.make(
-                            findViewById(android.R.id.content),
-                            errorMessage,
-                            Snackbar.LENGTH_SHORT
-                        ).show()
-                        shareFileFragment?.updateShares(resource.data as ArrayList<OCShare>)
-                        dismissLoadingDialog()
-                    }
-                    Status.LOADING -> {
-                        showLoadingDialog(R.string.common_loading)
-                        shareFileFragment?.updateShares(resource.data as ArrayList<OCShare>)
-                    }
-                    else -> {
-                        Log.d(
-                            TAG, "Unknown status when loading shares for file ${file?.fileName} in account" +
-                                    "${account?.name}"
-                        )
-                    }
-                }
-            }
-        )
-    }
-
     /**************************************************************************************************************
      *********************************************** PRIVATE SHARES ***********************************************
      **************************************************************************************************************/
@@ -270,7 +232,13 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
             Observer { resource ->
                 when (resource?.status) {
                     Status.SUCCESS -> {
-                        searchFragment?.updatePrivateShares(resource.data as ArrayList<OCShare>)
+                        if (shareFileFragment != null && shareFileFragment!!.isAdded) {
+                            shareFileFragment?.updatePrivateShares(resource.data as ArrayList<OCShare>)
+                        }
+                        if (searchShareesFragment != null && searchShareesFragment!!.isAdded) {
+                            searchShareesFragment?.updatePrivateShares(resource.data as ArrayList<OCShare>)
+                        }
+                        dismissLoadingDialog()
                     }
                     Status.ERROR -> {
                         val errorMessage = ErrorMessageAdapter.getResultMessage(
@@ -284,24 +252,33 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
                             errorMessage,
                             Snackbar.LENGTH_SHORT
                         ).show()
-                        searchFragment?.updatePrivateShares(resource.data as ArrayList<OCShare>)
+                        if (shareFileFragment != null && shareFileFragment!!.isAdded) {
+                            shareFileFragment?.updatePrivateShares(resource.data as ArrayList<OCShare>)
+                        }
+                        if (searchShareesFragment != null && searchShareesFragment!!.isAdded) {
+                            searchShareesFragment?.updatePrivateShares(resource.data as ArrayList<OCShare>)
+                        }
                         dismissLoadingDialog()
                     }
                     Status.LOADING -> {
                         showLoadingDialog(R.string.common_loading)
-                        searchFragment?.updatePrivateShares(resource.data as ArrayList<OCShare>)
+                        if (shareFileFragment != null && shareFileFragment!!.isAdded) {
+                            shareFileFragment?.updatePrivateShares(resource.data as ArrayList<OCShare>)
+                        }
+                        if (searchShareesFragment != null && searchShareesFragment!!.isAdded) {
+                            searchShareesFragment?.updatePrivateShares(resource.data as ArrayList<OCShare>)
+                        }
                     }
                     else -> {
                         Log.d(
-                            TAG, "Unknown status when loading shares for file ${file?.fileName} in account" +
-                                    "${account?.name}"
+                            TAG, "Unknown status when loading private shares for file ${file?.fileName} in " +
+                                    "account ${account?.name}"
                         )
                     }
                 }
             }
         )
     }
-
 
     override fun copyOrSendPrivateLink(file: OCFile) {
         fileOperationsHelper.copyOrSendPrivateLink(file)
@@ -374,6 +351,45 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
     /**************************************************************************************************************
      *********************************************** PUBLIC SHARES ************************************************
      **************************************************************************************************************/
+
+    private fun refreshPublicShares() {
+        ocShareViewModel.getPublicSharesForFile().observe(
+            this,
+            Observer { resource ->
+                when (resource?.status) {
+                    Status.SUCCESS -> {
+                        shareFileFragment?.updatePublicShares(resource.data as ArrayList<OCShare>)
+                        dismissLoadingDialog()
+                    }
+                    Status.ERROR -> {
+                        val errorMessage = ErrorMessageAdapter.getResultMessage(
+                            resource.code,
+                            resource.exception,
+                            OperationType.GET_SHARES,
+                            resources
+                        )
+                        Snackbar.make(
+                            findViewById(android.R.id.content),
+                            errorMessage,
+                            Snackbar.LENGTH_SHORT
+                        ).show()
+                        shareFileFragment?.updatePublicShares(resource.data as ArrayList<OCShare>)
+                        dismissLoadingDialog()
+                    }
+                    Status.LOADING -> {
+                        showLoadingDialog(R.string.common_loading)
+                        shareFileFragment?.updatePublicShares(resource.data as ArrayList<OCShare>)
+                    }
+                    else -> {
+                        Log.d(
+                            TAG, "Unknown status when loading shares for file ${file?.fileName} in account" +
+                                    "${account?.name}"
+                        )
+                    }
+                }
+            }
+        )
+    }
 
     override fun showAddPublicShare(defaultLinkName: String) {
         // DialogFragment.show() will take care of adding the fragment
