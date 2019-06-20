@@ -1,3 +1,6 @@
+## 2.11.1 (June 2019)
+- Fix crash triggered when notifying upload results
+
 ## 2.11 (June 2019)
 - Replace ownCloud file picker with the Android native one when uploading files (contribution)
 - Send logs to support, enable it via new developer menu (contribution)
