@@ -93,7 +93,7 @@ class OCShareRepository(
         val result = MutableLiveData<Resource<Unit>>()
         result.postValue(Resource.loading())
 
-        appExecutors.networkIO().execute() {
+        appExecutors.networkIO().execute {
             // Perform network operation
             val remoteOperationResult = remoteSharesDataSource.insertShareForFile(
                 filePath,
@@ -136,7 +136,7 @@ class OCShareRepository(
         val result = MutableLiveData<Resource<Unit>>()
         result.postValue(Resource.loading())
 
-        appExecutors.networkIO().execute() {
+        appExecutors.networkIO().execute {
             // Perform network operation
             val remoteOperationResult = remoteSharesDataSource.updateShareForFile(
                 remoteId,
@@ -174,7 +174,7 @@ class OCShareRepository(
         result.postValue(Resource.loading())
 
         // Perform network operation
-        appExecutors.networkIO().execute() {
+        appExecutors.networkIO().execute {
             // Perform network operation
             val remoteOperationResult = remoteSharesDataSource.deleteShare(remoteId)
 

@@ -47,27 +47,37 @@ class OCRemoteShareDataSourceTest {
     }
 
     @Test
-    fun readRemotePublicShares() {
+    fun readRemoteShares() {
         val getRemoteSharesForFileOperation = mock(GetRemoteSharesForFileOperation::class.java)
 
         val remoteShares = arrayListOf(
             TestUtil.createRemoteShare(
-                path = "/Photos/",
-                isFolder = true,
-                name = "Photos folder link",
+                shareType = ShareType.PUBLIC_LINK.value,
+                path = "/Documents/doc",
+                isFolder = false,
+                name = "Doc link",
                 shareLink = "http://server:port/s/1"
             ),
             TestUtil.createRemoteShare(
-                path = "/Photos/image1.jpg",
+                shareType = ShareType.PUBLIC_LINK.value,
+                path = "/Documents/doc",
                 isFolder = false,
-                name = "Image 1 link",
+                name = "Doc link 2",
                 shareLink = "http://server:port/s/2"
             ),
             TestUtil.createRemoteShare(
-                path = "/Photos/image2.jpg",
+                shareType = ShareType.USER.value,
+                path = "/Documents/doc",
                 isFolder = false,
-                name = "Image 2 link",
-                shareLink = "http://server:port/s/3"
+                shareWith = "steve",
+                sharedWithDisplayName = "Steve"
+            ),
+            TestUtil.createRemoteShare(
+                shareType = ShareType.GROUP.value,
+                path = "/Documents/doc",
+                isFolder = false,
+                shareWith = "family",
+                sharedWithDisplayName = "My family"
             )
         )
 
@@ -82,35 +92,42 @@ class OCRemoteShareDataSourceTest {
 
         // Get shares from remote datasource
         val remoteOperationResult = ocRemoteSharesDataSource.getSharesForFile(
-            "/test",
+            "/Documents/doc",
             true,
             true,
             getRemoteSharesForFileOperation
         )
 
         assertThat(remoteOperationResult, notNullValue())
-        assertEquals(3, remoteOperationResult.data.shares.size)
+        assertEquals(4, remoteOperationResult.data.shares.size)
 
         val publicShare1 = remoteOperationResult.data.shares.get(0)
-
-        assertEquals("/Photos/", publicShare1.path)
-        assertEquals(true, publicShare1.isFolder)
-        assertEquals("Photos folder link", publicShare1.name)
+        assertEquals(ShareType.PUBLIC_LINK, publicShare1.shareType)
+        assertEquals("/Documents/doc", publicShare1.path)
+        assertEquals(false, publicShare1.isFolder)
+        assertEquals("Doc link", publicShare1.name)
         assertEquals("http://server:port/s/1", publicShare1.shareLink)
 
         val publicShare2 = remoteOperationResult.data.shares.get(1)
-
-        assertEquals("/Photos/image1.jpg", publicShare2.path)
+        assertEquals(ShareType.PUBLIC_LINK, publicShare2.shareType)
+        assertEquals("/Documents/doc", publicShare2.path)
         assertEquals(false, publicShare2.isFolder)
-        assertEquals("Image 1 link", publicShare2.name)
+        assertEquals("Doc link 2", publicShare2.name)
         assertEquals("http://server:port/s/2", publicShare2.shareLink)
 
-        val publicShare3 = remoteOperationResult.data.shares.get(2)
+        val userShare = remoteOperationResult.data.shares.get(2)
+        assertEquals(ShareType.USER, userShare.shareType)
+        assertEquals("/Documents/doc", userShare.path)
+        assertEquals(false, userShare.isFolder)
+        assertEquals("steve", userShare.shareWith)
+        assertEquals("Steve", userShare.sharedWithDisplayName)
 
-        assertEquals("/Photos/image2.jpg", publicShare3.path)
-        assertEquals(false, publicShare3.isFolder)
-        assertEquals("Image 2 link", publicShare3.name)
-        assertEquals("http://server:port/s/3", publicShare3.shareLink)
+        val groupShare = remoteOperationResult.data.shares.get(3)
+        assertEquals(ShareType.GROUP, groupShare.shareType)
+        assertEquals("/Documents/doc", groupShare.path)
+        assertEquals(false, groupShare.isFolder)
+        assertEquals("family", groupShare.shareWith)
+        assertEquals("My family", groupShare.sharedWithDisplayName)
     }
 
     @Test
@@ -121,6 +138,7 @@ class OCRemoteShareDataSourceTest {
             ShareParserResult(
                 arrayListOf(
                     TestUtil.createRemoteShare(
+                        shareType = ShareType.PUBLIC_LINK.value,
                         path = "Photos/img1.png",
                         isFolder = false,
                         name = "img1 link",
@@ -204,6 +222,7 @@ class OCRemoteShareDataSourceTest {
             ShareParserResult(
                 arrayListOf(
                     TestUtil.createRemoteShare(
+                        shareType = ShareType.PUBLIC_LINK.value,
                         path = "Videos/video1.mp4",
                         expirationDate = 2000,
                         isFolder = false,
