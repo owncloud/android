@@ -49,8 +49,8 @@ object TestUtil {
         userId: Long = -1,
         remoteId: Long = 1,
         accountOwner: String = "admin@server",
-        name: String,
-        shareLink: String
+        name: String = "",
+        shareLink: String = ""
     ) = OCShare(
         fileSource,
         itemSource,
@@ -69,6 +69,19 @@ object TestUtil {
         accountOwner,
         name,
         shareLink
+    )
+
+    fun createPrivateShare(
+        shareWith: String,
+        path: String,
+        isFolder: Boolean,
+        sharedWithDisplayName: String
+    ) = createShare(
+        shareWith = shareWith,
+        shareType = 0,
+        path = path,
+        isFolder = isFolder,
+        sharedWithDisplayName = sharedWithDisplayName
     )
 
     fun createPublicShare(
@@ -97,7 +110,7 @@ object TestUtil {
     fun createRemoteShare(
         fileSource: Long = 7,
         itemSource: Long = 7,
-        shareType: Int = 3, // Public share by default
+        shareType: Int, // Public share by default
         shareWith: String = "",
         path: String,
         permissions: Int = 1,
@@ -108,8 +121,8 @@ object TestUtil {
         isFolder: Boolean,
         userId: Long = -1,
         remoteId: Long = 1,
-        name: String,
-        shareLink: String
+        name: String = "",
+        shareLink: String = ""
     ): RemoteShare {
         val remoteShare = RemoteShare();
 
