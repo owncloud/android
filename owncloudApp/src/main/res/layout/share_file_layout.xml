@@ -84,7 +84,7 @@
             android:id="@+id/share_header_divider"
             android:layout_width="match_parent"
             android:layout_height="2dp"
-            android:background="@color/owncloud_blue" />
+            android:background="@color/actionbar_start_color" />
 
         <LinearLayout
             android:id="@+id/shareWithUsersSection"
@@ -95,7 +95,7 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/color_accent"
+                android:background="@color/actionbar_start_color"
                 android:paddingBottom="@dimen/standard_quarter_padding"
                 android:paddingTop="@dimen/standard_quarter_padding">
 
@@ -152,7 +152,7 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/color_accent"
+                android:background="@color/actionbar_start_color"
                 android:paddingBottom="@dimen/standard_quarter_padding"
                 android:paddingTop="@dimen/standard_quarter_padding">
 
