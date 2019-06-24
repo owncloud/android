@@ -40,6 +40,7 @@ import org.junit.Assert
 import org.junit.Assert.assertTrue
 import org.junit.Assert.assertFalse
 import org.junit.Before
+import org.junit.After
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -54,32 +55,22 @@ class OCSettingsCameraUploadsTest {
     private val context = InstrumentationRegistry.getInstrumentation().targetContext
 
     private val CAMERA_PICTURE_UPLOADS = "camera_picture_uploads"
-    private val CAMERA_PICTURE_UPLOADS_WIFI = "camera_picture_uploads_on_wifi"
     private val CAMERA_VIDEO_UPLOADS = "camera_video_uploads"
-    private val CAMERA_VIDEO_UPLOADS_WIFI = "camera_video_uploads_on_wifi"
 
     private lateinit var mPrefCameraPictureUploads: CheckBoxPreference
     private lateinit var mPrefCameraVideoUploads: CheckBoxPreference
 
     @Before
     fun setUp() {
-        //Set preferences as disabled with defaults
-        var preferencesEditor = PreferenceManager.getDefaultSharedPreferences(context).edit();
-        preferencesEditor.putBoolean(CAMERA_PICTURE_UPLOADS, false);
-        preferencesEditor.putBoolean(CAMERA_VIDEO_UPLOADS, false);
-        preferencesEditor.putBoolean(CAMERA_PICTURE_UPLOADS_WIFI, false);
-        preferencesEditor.putBoolean(CAMERA_VIDEO_UPLOADS_WIFI, false);
-        preferencesEditor.commit();
 
-        //To set the initial UI status
         mPrefCameraPictureUploads = activityRule.activity.findPreference(CAMERA_PICTURE_UPLOADS) as CheckBoxPreference
         mPrefCameraVideoUploads = activityRule.activity.findPreference(CAMERA_VIDEO_UPLOADS) as CheckBoxPreference
+    }
 
-        activityRule.activity.runOnUiThread(Runnable {
-            mPrefCameraPictureUploads.setChecked(false)
-            mPrefCameraVideoUploads.setChecked(false)
-        })
-
+    @After
+    fun tearDown(){
+        //Clean preferences
+        PreferenceManager.getDefaultSharedPreferences(context).edit().clear().commit()
     }
 
     @Test
@@ -125,8 +116,6 @@ class OCSettingsCameraUploadsTest {
         assertTrue(mPrefCameraPictureUploads.isChecked)
         onView(withText(R.string.prefs_camera_picture_upload_path_title)).check(matches(isDisplayed()))
         onView(withText(R.string.camera_picture_upload_on_wifi)).check(matches(isDisplayed()))
-        //Reset suboptions
-        disableCameraPictureUploads()
     }
 
     @Test
@@ -137,8 +126,6 @@ class OCSettingsCameraUploadsTest {
         assertTrue(mPrefCameraVideoUploads.isChecked)
         onView(withText(R.string.prefs_camera_video_upload_path_title)).check(matches(isDisplayed()))
         onView(withText(R.string.camera_video_upload_on_wifi)).check(matches(isDisplayed()))
-        //Reset suboptions
-        disableCameraVideoUploads()
     }
 
     @Test
@@ -147,7 +134,7 @@ class OCSettingsCameraUploadsTest {
         onView(withText(R.string.prefs_camera_picture_upload)).perform(click());
         onView(withText(R.string.common_yes)).perform(click());
         //Asserts
-        Assert.assertFalse(mPrefCameraPictureUploads.isChecked)
+        assertFalse(mPrefCameraPictureUploads.isChecked)
         onView(withText(R.string.prefs_camera_picture_upload_path_title)).check(doesNotExist())
         onView(withText(R.string.camera_picture_upload_on_wifi)).check(doesNotExist())
     }
@@ -159,8 +146,8 @@ class OCSettingsCameraUploadsTest {
         onView(withText(R.string.common_no)).perform(click());
         //Asserts
         assertTrue(mPrefCameraPictureUploads.isChecked)
-        //Reset
-        disableCameraPictureUploads()
+        onView(withText(R.string.prefs_camera_picture_upload_path_title)).check(matches(isDisplayed()))
+        onView(withText(R.string.camera_picture_upload_on_wifi)).check(matches(isDisplayed()))
     }
 
     @Test
@@ -181,8 +168,8 @@ class OCSettingsCameraUploadsTest {
         onView(withText(R.string.common_no)).perform(click());
         //Asserts
         assertTrue(mPrefCameraVideoUploads.isChecked)
-        //Reset
-        disableCameraVideoUploads()
+        onView(withText(R.string.prefs_camera_video_upload_path_title)).check(matches(isDisplayed()))
+        onView(withText(R.string.camera_video_upload_on_wifi)).check(matches(isDisplayed()))
     }
 
     @Test
@@ -193,8 +180,6 @@ class OCSettingsCameraUploadsTest {
             activityRule.activity.getString(R.string.prefs_camera_upload_source_path_title),
             activityRule.activity.getString(R.string.prefs_camera_upload_source_path_title_required))))
             .check(matches(isDisplayed()))
-        //Reset
-        disableCameraPictureUploads()
     }
 
     @Test
@@ -213,8 +198,6 @@ class OCSettingsCameraUploadsTest {
         IntentMatchers.hasExtra(LocalFolderPickerActivity.EXTRA_PATH, cameraFolder)
         Intents.release()
         onView(withText(android.R.string.cancel)).perform(click())
-        //Reset
-        disableCameraPictureUploads()
     }
 
     @Test
@@ -224,20 +207,6 @@ class OCSettingsCameraUploadsTest {
         onView(withText(R.string.pref_behaviour_entries_move)).perform(click())
         //Asserts
         onView(withText(R.string.pref_behaviour_entries_move)).check(matches(isDisplayed()))
-        //Reset
-        onView(withText(R.string.prefs_camera_upload_behaviour_title)).perform(click())
-        onView(withText(R.string.pref_behaviour_entries_keep_file)).perform(click())
-        disableCameraPictureUploads()
-    }
-
-    fun disableCameraPictureUploads(){
-        onView(withText(R.string.prefs_camera_picture_upload)).perform(click());
-        onView(withText(R.string.common_yes)).perform(click());
-    }
-
-    fun disableCameraVideoUploads(){
-        onView(withText(R.string.prefs_camera_video_upload)).perform(click());
-        onView(withText(R.string.common_yes)).perform(click());
     }
 
     fun enableCameraPictureUploads(){
