@@ -62,7 +62,7 @@ import org.mockito.Mockito.`when`
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.spy
 
-class LoadPublicSharesTest {
+class LoadSharesTest {
     @Rule
     @JvmField
     val activityRule = ActivityTestRule(
@@ -71,31 +71,6 @@ class LoadPublicSharesTest {
         false
     )
 
-    private val publicShares = arrayListOf(
-        TestUtil.createPublicShare(
-            path = "/Photos/image.jpg",
-            isFolder = false,
-            name = "Image link",
-            shareLink = "http://server:port/s/1"
-        ),
-        TestUtil.createPublicShare(
-            path = "/Photos/image.jpg",
-            isFolder = false,
-            name = "Image link 2",
-            shareLink = "http://server:port/s/2"
-        ),
-        TestUtil.createPublicShare(
-            path = "/Photos/image.jpg",
-            isFolder = false,
-            name = "Image link 3",
-            shareLink = "http://server:port/s/3"
-        )
-    )
-
-    private val capabilitiesLiveData = MutableLiveData<Resource<OCCapability>>()
-    private val sharesLiveData = MutableLiveData<Resource<List<OCShare>>>()
-
-    private val ocCapabilityViewModel = mock(OCCapabilityViewModel::class.java)
     private val ocShareViewModel = mock(OCShareViewModel::class.java)
 
     companion object {
@@ -160,7 +135,8 @@ class LoadPublicSharesTest {
         intent.putExtra(FileActivity.EXTRA_FILE, file)
 
         `when`(ocCapabilityViewModel.getCapabilityForAccount()).thenReturn(capabilitiesLiveData)
-        `when`(ocShareViewModel.getPublicSharesForFile()).thenReturn(sharesLiveData)
+        `when`(ocShareViewModel.getPublicSharesForFile()).thenReturn(publicSharesLiveData)
+        `when`(ocShareViewModel.getPrivateSharesForFile()).thenReturn(privateSharesLiveData)
 
         stopKoin()
 
@@ -181,16 +157,16 @@ class LoadPublicSharesTest {
         activityRule.launchActivity(intent)
     }
 
+    /******************************************************************************************************
+     ******************************************** CAPABILITIES ********************************************
+     ******************************************************************************************************/
+
+    private val ocCapabilityViewModel = mock(OCCapabilityViewModel::class.java)
+    private val capabilitiesLiveData = MutableLiveData<Resource<OCCapability>>()
+
     @Test
     fun showLoadingCapabilitiesDialog() {
         capabilitiesLiveData.postValue(Resource.loading(TestUtil.createCapability()))
-        onView(withId(R.id.loadingLayout)).check(matches(isDisplayed()))
-    }
-
-    @Test
-    fun showLoadingSharesDialog() {
-        loadCapabilitiesSuccessfully()
-        sharesLiveData.postValue(Resource.loading(publicShares))
         onView(withId(R.id.loadingLayout)).check(matches(isDisplayed()))
     }
 
@@ -205,11 +181,78 @@ class LoadPublicSharesTest {
         onView(withId(R.id.snackbar_text)).check(matches(withText(R.string.service_unavailable)))
     }
 
+    /******************************************************************************************************
+     ******************************************* PRIVATE SHARES *******************************************
+     ******************************************************************************************************/
+
+    private val privateSharesLiveData = MutableLiveData<Resource<List<OCShare>>>()
+    private val privateShares = arrayListOf(
+        TestUtil.createPrivateShare(
+            path = "/Photos/image.jpg",
+            isFolder = false,
+            shareWith = "work",
+            sharedWithDisplayName = "Work"
+        ),
+        TestUtil.createPrivateShare(
+            path = "/Photos/image.jpg",
+            isFolder = false,
+            shareWith = "family",
+            sharedWithDisplayName = "Family"
+        )
+    )
+
     @Test
-    fun showErrorWhenLoadingShares() {
+    fun showLoadingPrivateSharesDialog() {
+        loadCapabilitiesSuccessfully()
+        privateSharesLiveData.postValue(Resource.loading(privateShares))
+        onView(withId(R.id.loadingLayout)).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun showErrorWhenLoadingPrivateShares() {
         loadCapabilitiesSuccessfully()
 
-        sharesLiveData.postValue(
+        privateSharesLiveData.postValue(
+            Resource.error(
+                RemoteOperationResult.ResultCode.FORBIDDEN,
+                data = privateShares
+            )
+        )
+        onView(withId(R.id.snackbar_text)).check(matches(withText(R.string.get_shares_error)))
+    }
+
+    /******************************************************************************************************
+     ******************************************* PUBLIC SHARES ********************************************
+     ******************************************************************************************************/
+
+    private val publicSharesLiveData = MutableLiveData<Resource<List<OCShare>>>()
+    private val publicShares = arrayListOf(
+        TestUtil.createPublicShare(
+            path = "/Photos/image.jpg",
+            isFolder = false,
+            name = "Image link",
+            shareLink = "http://server:port/s/1"
+        ),
+        TestUtil.createPublicShare(
+            path = "/Photos/image.jpg",
+            isFolder = false,
+            name = "Image link 2",
+            shareLink = "http://server:port/s/2"
+        )
+    )
+
+    @Test
+    fun showLoadingPublicSharesDialog() {
+        loadCapabilitiesSuccessfully()
+        publicSharesLiveData.postValue(Resource.loading(publicShares))
+        onView(withId(R.id.loadingLayout)).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun showErrorWhenLoadingPublicShares() {
+        loadCapabilitiesSuccessfully()
+
+        publicSharesLiveData.postValue(
             Resource.error(
                 RemoteOperationResult.ResultCode.SERVICE_UNAVAILABLE,
                 data = publicShares
@@ -217,6 +260,10 @@ class LoadPublicSharesTest {
         )
         onView(withId(R.id.snackbar_text)).check(matches(withText(R.string.service_unavailable)))
     }
+
+    /******************************************************************************************************
+     *********************************************** COMMON ***********************************************
+     ******************************************************************************************************/
 
     private fun getOCFileForTesting(name: String = "default") = OCFile("/Photos").apply {
         availableOfflineStatus = OCFile.AvailableOfflineStatus.NOT_AVAILABLE_OFFLINE

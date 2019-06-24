@@ -45,37 +45,9 @@ class OCShareViewModelTest {
     private var testAccount: Account = TestUtil.createAccount("admin@server", "test")
     private var ocShareRepository: OCShareRepository = mock(OCShareRepository::class.java)
 
-    @Test
-    fun loadPublicShares() {
-        val publicShares = mutableListOf(
-            TestUtil.createPublicShare(
-                path = "/Photos/image.jpg",
-                isFolder = false,
-                name = "Photos 1 link",
-                shareLink = "http://server:port/s/1"
-            ),
-            TestUtil.createPublicShare(
-                path = "/Photos/image.jpg",
-                isFolder = false,
-                name = "Photos 2 link",
-                shareLink = "http://server:port/s/2"
-            )
-        )
-
-        `when`(
-            ocShareRepository.getPublicSharesForFile()
-        ).thenReturn(
-            MutableLiveData<Resource<List<OCShare>>>().apply {
-                value = Resource.success(publicShares)
-            }
-        )
-
-        // Viewmodel that will ask ocShareRepository for shares
-        val ocShareViewModel = createOCShareViewModel(ocShareRepository)
-
-        val resource: Resource<List<OCShare>>? = ocShareViewModel.getPublicSharesForFile().value
-        assertPublicShareParameters(resource?.data)
-    }
+    /******************************************************************************************************
+     ******************************************* PRIVATE SHARES *******************************************
+     ******************************************************************************************************/
 
     @Test
     fun loadPrivateShares() {
@@ -107,6 +79,52 @@ class OCShareViewModelTest {
 
         val resource: Resource<List<OCShare>>? = ocShareViewModel.getPrivateSharesForFile().value
         assertPrivateShareParameters(resource?.data)
+    }
+
+    private fun assertPrivateShareParameters(shares: List<OCShare>?) {
+        assertCommonShareParameters(shares)
+
+        assertEquals("username1", shares?.get(0)?.shareWith)
+        assertEquals("Tim", shares?.get(0)?.sharedWithDisplayName)
+
+        assertEquals("username2", shares?.get(1)?.shareWith)
+        assertEquals("Tom", shares?.get(1)?.sharedWithDisplayName)
+    }
+
+    /******************************************************************************************************
+     ******************************************* PUBLIC SHARES ********************************************
+     ******************************************************************************************************/
+
+    @Test
+    fun loadPublicShares() {
+        val publicShares = mutableListOf(
+            TestUtil.createPublicShare(
+                path = "/Photos/image.jpg",
+                isFolder = false,
+                name = "Photos 1 link",
+                shareLink = "http://server:port/s/1"
+            ),
+            TestUtil.createPublicShare(
+                path = "/Photos/image.jpg",
+                isFolder = false,
+                name = "Photos 2 link",
+                shareLink = "http://server:port/s/2"
+            )
+        )
+
+        `when`(
+            ocShareRepository.getPublicSharesForFile()
+        ).thenReturn(
+            MutableLiveData<Resource<List<OCShare>>>().apply {
+                value = Resource.success(publicShares)
+            }
+        )
+
+        // Viewmodel that will ask ocShareRepository for shares
+        val ocShareViewModel = createOCShareViewModel(ocShareRepository)
+
+        val resource: Resource<List<OCShare>>? = ocShareViewModel.getPublicSharesForFile().value
+        assertPublicShareParameters(resource?.data)
     }
 
     @Test
@@ -199,17 +217,6 @@ class OCShareViewModelTest {
         assertEquals(Status.SUCCESS, resource?.status)
     }
 
-    private fun createOCShareViewModel(ocShareRepository: OCShareRepository): OCShareViewModel {
-        val context = InstrumentationRegistry.getInstrumentation().targetContext
-
-        return OCShareViewModel(
-            context,
-            "/Photos/image.jpg",
-            testAccount,
-            ocShareRepository
-        )
-    }
-
     private fun assertPublicShareParameters(shares: List<OCShare>?) {
         assertCommonShareParameters(shares)
 
@@ -220,14 +227,19 @@ class OCShareViewModelTest {
         assertEquals("http://server:port/s/2", shares?.get(1)?.shareLink)
     }
 
-    private fun assertPrivateShareParameters(shares: List<OCShare>?) {
-        assertCommonShareParameters(shares)
+    /******************************************************************************************************
+     *********************************************** COMMON ***********************************************
+     ******************************************************************************************************/
 
-        assertEquals("username1", shares?.get(0)?.shareWith)
-        assertEquals("Tim", shares?.get(0)?.sharedWithDisplayName)
+    private fun createOCShareViewModel(ocShareRepository: OCShareRepository): OCShareViewModel {
+        val context = InstrumentationRegistry.getInstrumentation().targetContext
 
-        assertEquals("username2", shares?.get(1)?.shareWith)
-        assertEquals("Tom", shares?.get(1)?.sharedWithDisplayName)
+        return OCShareViewModel(
+            context,
+            "/Photos/image.jpg",
+            testAccount,
+            ocShareRepository
+        )
     }
 
     private fun assertCommonShareParameters(shares: List<OCShare>?) {

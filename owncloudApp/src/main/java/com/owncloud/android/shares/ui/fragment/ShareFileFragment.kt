@@ -43,7 +43,6 @@ import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.lib.resources.status.CapabilityBooleanType
 import com.owncloud.android.lib.resources.status.OwnCloudVersion
 import com.owncloud.android.shares.db.OCShare
-import com.owncloud.android.ui.activity.BaseActivity
 import com.owncloud.android.ui.adapter.SharePublicLinkListAdapter
 import com.owncloud.android.ui.adapter.ShareUserListAdapter
 import com.owncloud.android.utils.DisplayUtils
@@ -322,8 +321,8 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
         updatePrivateShares(
             ArrayList(shares.filter {
                 it.shareType == ShareType.USER.value ||
-                it.shareType == ShareType.GROUP.value ||
-                it.shareType == ShareType.FEDERATED.value
+                        it.shareType == ShareType.GROUP.value ||
+                        it.shareType == ShareType.FEDERATED.value
             })
         )
     }
@@ -350,13 +349,11 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
      **************************************************************************************************************/
 
     fun updatePrivateShares(privateShares: ArrayList<OCShare>) {
-        if ((listener as BaseActivity).storageManager != null) {
-            // Get Users and Groups
-            this.privateShares = privateShares
+        // Get Users and Groups
+        this.privateShares = privateShares
 
-            // Update list of users/groups
-            updateListOfUserGroups()
-        }
+        // Update list of users/groups
+        updateListOfUserGroups()
     }
 
     private fun updateListOfUserGroups() {

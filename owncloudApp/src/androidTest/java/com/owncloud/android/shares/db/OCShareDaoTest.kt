@@ -56,6 +56,10 @@ class OCShareDaoTest {
         ocShareDao = db.shareDao()
     }
 
+    /******************************************************************************************************
+     *********************************************** COMMON ***********************************************
+     ******************************************************************************************************/
+
     @Test
     fun insertEmptySharesList() {
         ocShareDao.insert(listOf())
@@ -206,6 +210,38 @@ class OCShareDaoTest {
         assertEquals("Patrick", document1PrivateSharesForUser3[0].sharedWithDisplayName)
     }
 
+    /******************************************************************************************************
+     ******************************************* PRIVATE SHARES *******************************************
+     ******************************************************************************************************/
+
+    @Test
+    fun getNonExistingPrivateShare() {
+        ocShareDao.insert(createDefaultPrivateShare())
+
+        val nonExistingPrivateShare = getValue(
+            ocShareDao.getSharesForFileAsLiveData(
+                "/Texts/text2.txt", "user@server", privateShareTypeValues
+            )
+        )
+        assertThat(nonExistingPrivateShare, notNullValue())
+        assertEquals(0, nonExistingPrivateShare.size)
+    }
+
+    private fun createDefaultPrivateShare(
+        path: String = "/Texts/text1.txt",
+        shareWith: String = "username",
+        shareWithDisplayName: String = "Steve"
+    ) = TestUtil.createPrivateShare(
+        path = path,
+        isFolder = false,
+        shareWith = shareWith,
+        sharedWithDisplayName = shareWithDisplayName
+    )
+
+    /******************************************************************************************************
+     ******************************************* PUBLIC SHARES ********************************************
+     ******************************************************************************************************/
+
     @Test
     fun getNonExistingPublicShare() {
         ocShareDao.insert(createDefaultPublicShare())
@@ -217,19 +253,6 @@ class OCShareDaoTest {
         )
         assertThat(nonExistingPublicShare, notNullValue())
         assertEquals(0, nonExistingPublicShare.size)
-    }
-
-    @Test
-    fun getNonExistingPrivateShare() {
-        ocShareDao.insert(createDefaultNewPrivateShare())
-
-        val nonExistingPrivateShare = getValue(
-            ocShareDao.getSharesForFileAsLiveData(
-                "/Texts/text2.txt", "user@server", privateShareTypeValues
-            )
-        )
-        assertThat(nonExistingPrivateShare, notNullValue())
-        assertEquals(0, nonExistingPrivateShare.size)
     }
 
     @Test
@@ -322,16 +345,5 @@ class OCShareDaoTest {
         isFolder = false,
         name = name,
         shareLink = "http://server:port/s/1"
-    )
-
-    private fun createDefaultNewPrivateShare(
-        path: String = "/Texts/text1.txt",
-        shareWith: String = "username",
-        shareWithDisplayName: String = "Steve"
-    ) = TestUtil.createPrivateShare(
-        path = path,
-        isFolder = false,
-        shareWith = shareWith,
-        sharedWithDisplayName = shareWithDisplayName
     )
 }
