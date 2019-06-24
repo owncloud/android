@@ -191,7 +191,7 @@ class EditPublicShareFolderTest {
 
         `when`(ocCapabilityViewModel.getCapabilityForAccount(false)).thenReturn(capabilitiesLiveData)
         `when`(ocCapabilityViewModel.getCapabilityForAccount(true)).thenReturn(capabilitiesLiveData)
-        `when`(ocShareViewModel.getAllSharesForFile()).thenReturn(sharesLiveData)
+        `when`(ocShareViewModel.getPublicSharesForFile()).thenReturn(sharesLiveData)
 
         stopKoin()
 

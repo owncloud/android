@@ -23,7 +23,6 @@ import android.accounts.Account
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
 import androidx.test.platform.app.InstrumentationRegistry
-import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.shares.db.OCShare
 import com.owncloud.android.shares.repository.OCShareRepository
 import com.owncloud.android.utils.TestUtil
@@ -51,7 +50,7 @@ class OCShareViewModelTest {
         val publicShares = mutableListOf(
             TestUtil.createPublicShare(
                 path = "/Photos/image.jpg",
-                isFolder = true,
+                isFolder = false,
                 name = "Photos 1 link",
                 shareLink = "http://server:port/s/1"
             ),
@@ -64,7 +63,7 @@ class OCShareViewModelTest {
         )
 
         `when`(
-            ocShareRepository.getAllSharesForFile()
+            ocShareRepository.getPublicSharesForFile()
         ).thenReturn(
             MutableLiveData<Resource<List<OCShare>>>().apply {
                 value = Resource.success(publicShares)
@@ -74,8 +73,40 @@ class OCShareViewModelTest {
         // Viewmodel that will ask ocShareRepository for shares
         val ocShareViewModel = createOCShareViewModel(ocShareRepository)
 
-        val resource: Resource<List<OCShare>>? = ocShareViewModel.getAllSharesForFile().value
-        assertShareParameters(resource?.data)
+        val resource: Resource<List<OCShare>>? = ocShareViewModel.getPublicSharesForFile().value
+        assertPublicShareParameters(resource?.data)
+    }
+
+    @Test
+    fun loadPrivateShares() {
+        val privateShares = mutableListOf(
+            TestUtil.createPrivateShare(
+                path = "/Photos/image.jpg",
+                isFolder = false,
+                shareWith = "username1",
+                sharedWithDisplayName = "Tim"
+            ),
+            TestUtil.createPrivateShare(
+                path = "/Photos/image.jpg",
+                isFolder = false,
+                shareWith = "username2",
+                sharedWithDisplayName = "Tom"
+            )
+        )
+
+        `when`(
+            ocShareRepository.getPrivateSharesForFile()
+        ).thenReturn(
+            MutableLiveData<Resource<List<OCShare>>>().apply {
+                value = Resource.success(privateShares)
+            }
+        )
+
+        // Viewmodel that will ask ocShareRepository for shares
+        val ocShareViewModel = createOCShareViewModel(ocShareRepository)
+
+        val resource: Resource<List<OCShare>>? = ocShareViewModel.getPrivateSharesForFile().value
+        assertPrivateShareParameters(resource?.data)
     }
 
     @Test
@@ -175,22 +206,37 @@ class OCShareViewModelTest {
             context,
             "/Photos/image.jpg",
             testAccount,
-            listOf(ShareType.PUBLIC_LINK),
             ocShareRepository
         )
     }
 
-    private fun assertShareParameters(shares: List<OCShare>?) {
-        assertEquals(2, shares?.size)
+    private fun assertPublicShareParameters(shares: List<OCShare>?) {
+        assertCommonShareParameters(shares)
 
-        assertEquals("/Photos/image.jpg", shares?.get(0)?.path)
-        assertEquals(true, shares?.get(0)?.isFolder)
         assertEquals("Photos 1 link", shares?.get(0)?.name)
         assertEquals("http://server:port/s/1", shares?.get(0)?.shareLink)
 
-        assertEquals("/Photos/image.jpg", shares?.get(1)?.path)
-        assertEquals(false, shares?.get(1)?.isFolder)
         assertEquals("Photos 2 link", shares?.get(1)?.name)
         assertEquals("http://server:port/s/2", shares?.get(1)?.shareLink)
+    }
+
+    private fun assertPrivateShareParameters(shares: List<OCShare>?) {
+        assertCommonShareParameters(shares)
+
+        assertEquals("username1", shares?.get(0)?.shareWith)
+        assertEquals("Tim", shares?.get(0)?.sharedWithDisplayName)
+
+        assertEquals("username2", shares?.get(1)?.shareWith)
+        assertEquals("Tom", shares?.get(1)?.sharedWithDisplayName)
+    }
+
+    private fun assertCommonShareParameters(shares: List<OCShare>?) {
+        assertEquals(2, shares?.size)
+
+        assertEquals("/Photos/image.jpg", shares?.get(0)?.path)
+        assertEquals(false, shares?.get(0)?.isFolder)
+
+        assertEquals("/Photos/image.jpg", shares?.get(1)?.path)
+        assertEquals(false, shares?.get(1)?.isFolder)
     }
 }

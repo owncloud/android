@@ -44,106 +44,138 @@ class OCLocalDataSourceTest {
     @JvmField
     var rule: TestRule = InstantTaskExecutorRule()
 
+    val publicShares = listOf(
+        TestUtil.createPublicShare(
+            path = "/Photos/",
+            isFolder = true,
+            name = "Photos link",
+            shareLink = "http://server:port/s/1"
+        ),
+        TestUtil.createPublicShare(
+            path = "/Photos/",
+            isFolder = true,
+            name = "Photos link 2",
+            shareLink = "http://server:port/s/2"
+        )
+    )
+
+    private val privateShares = listOf(
+        TestUtil.createPrivateShare(
+            path = "/Docs/doc1.doc",
+            isFolder = false,
+            shareWith = "username",
+            sharedWithDisplayName = "Sophie"
+        ),
+        TestUtil.createPrivateShare(
+            path = "/Docs/doc1.doc",
+            isFolder = false,
+            shareWith = "user.name",
+            sharedWithDisplayName = "Nicole"
+        )
+    )
+
+    private val privateShareTypes = listOf(
+        ShareType.USER, ShareType.GROUP, ShareType.FEDERATED
+    )
+
     @Before
     fun init() {
         val db = mock(OwncloudDatabase::class.java)
         `when`(db.shareDao()).thenReturn(ocSharesDao)
 
-        val sharesAsLiveData: MutableLiveData<List<OCShare>> = MutableLiveData()
-        sharesAsLiveData.value = listOf(
-            TestUtil.createPublicShare(
-                path = "/Photos/",
-                isFolder = true,
-                name = "Photos link",
-                shareLink = "http://server:port/s/1"
-            ),
-            TestUtil.createPublicShare(
-                path = "/Photos/image.jpg",
-                isFolder = false,
-                name = "Image link",
-                shareLink = "http://server:port/s/2"
-            )
-        )
+        val context = InstrumentationRegistry.getInstrumentation().targetContext
+        ocLocalSharesDataSource = OCLocalSharesDataSource(context, ocSharesDao)
+    }
+
+
+    /******************************************************************************************************
+     ******************************************* PRIVATE SHARES *******************************************
+     ******************************************************************************************************/
+
+    @Test
+    fun readLocalPrivateShares() {
+        val privateSharesAsLiveData: MutableLiveData<List<OCShare>> = MutableLiveData()
+        privateSharesAsLiveData.value = privateShares
 
         `when`(
             ocSharesDao.getSharesForFileAsLiveData(
-                "/Photos/image1.jpg", "admin@server", listOf(ShareType.PUBLIC_LINK.value)
+                "/Docs/doc1.doc", "admin@server", privateShareTypes.map {
+                    it.value
+                }
             )
         ).thenReturn(
-            sharesAsLiveData
+            privateSharesAsLiveData
         )
 
-        val newShareAsLiveData: MutableLiveData<List<OCShare>> = MutableLiveData()
-        newShareAsLiveData.value = listOf(
-            TestUtil.createPublicShare(
-                path = "/Photos/",
-                expirationDate = 20,
-                isFolder = true,
-                name = "Photos 2 link",
-                shareLink = "http://server:port/s/3"
+        val shares = getValue(
+            ocLocalSharesDataSource.getSharesForFileAsLiveData(
+                "/Docs/doc1.doc", "admin@server", privateShareTypes
             )
         )
+
+        assertEquals(2, shares.size)
+
+        assertEquals("/Docs/doc1.doc", shares[0].path)
+        assertEquals(false, shares[0].isFolder)
+        assertEquals("username", shares[0].shareWith)
+        assertEquals("Sophie", shares[0].sharedWithDisplayName)
+
+        assertEquals("/Docs/doc1.doc", shares[1].path)
+        assertEquals(false, shares[1].isFolder)
+        assertEquals("user.name", shares[1].shareWith)
+        assertEquals("Nicole", shares[1].sharedWithDisplayName)
+    }
+
+
+    /******************************************************************************************************
+     ******************************************* PUBLIC SHARES ********************************************
+     ******************************************************************************************************/
+
+    @Test
+    fun readLocalPublicShares() {
+        val publicSharesAsLiveData: MutableLiveData<List<OCShare>> = MutableLiveData()
+        publicSharesAsLiveData.value = publicShares
 
         `when`(
             ocSharesDao.getSharesForFileAsLiveData(
                 "/Photos/", "admin@server", listOf(ShareType.PUBLIC_LINK.value)
             )
         ).thenReturn(
-            newShareAsLiveData
+            publicSharesAsLiveData
         )
 
-        `when`(
-            ocSharesDao.insert(
-                sharesAsLiveData.value!![0]
-            )
-        ).thenReturn(
-            7
-        )
-
-        `when`(
-            ocSharesDao.update(
-                sharesAsLiveData.value!![1]
-            )
-        ).thenReturn(
-            8
-        )
-
-        `when`(
-            ocSharesDao.deleteShare(
-                5
-            )
-        ).thenReturn(
-            1
-        )
-
-        val context = InstrumentationRegistry.getInstrumentation().targetContext
-
-        ocLocalSharesDataSource = OCLocalSharesDataSource(context, ocSharesDao)
-    }
-
-    @Test
-    fun readLocalPublicShares() {
         val shares = getValue(
             ocLocalSharesDataSource.getSharesForFileAsLiveData(
-                "/Photos/image1.jpg", "admin@server", listOf(ShareType.PUBLIC_LINK)
+                "/Photos/", "admin@server", listOf(ShareType.PUBLIC_LINK)
             )
         )
 
         assertEquals(2, shares.size)
 
-        assertEquals("/Photos/", shares.get(0).path)
-        assertEquals(true, shares.get(0).isFolder)
-        assertEquals("Photos link", shares.get(0).name)
-        assertEquals("http://server:port/s/1", shares.get(0).shareLink)
+        assertEquals("/Photos/", shares[0].path)
+        assertEquals(true, shares[0].isFolder)
+        assertEquals("Photos link", shares[0].name)
+        assertEquals("http://server:port/s/1", shares[0].shareLink)
 
-        assertEquals("/Photos/image.jpg", shares.get(1).path)
-        assertEquals(false, shares.get(1).isFolder)
-        assertEquals("Image link", shares.get(1).name)
-        assertEquals("http://server:port/s/2", shares.get(1).shareLink)
+        assertEquals("/Photos/", shares[1].path)
+        assertEquals(true, shares[1].isFolder)
+        assertEquals("Photos link 2", shares[1].name)
+        assertEquals("http://server:port/s/2", shares[1].shareLink)
     }
 
     @Test
     fun insertPublicShares() {
+        val publicSharesAsLiveData: MutableLiveData<List<OCShare>> = MutableLiveData()
+        publicSharesAsLiveData.value = publicShares
+
+        `when`(
+            ocSharesDao.insert(
+                publicSharesAsLiveData.value!![0]
+            )
+        ).thenReturn(
+            7
+        )
+
         val insertedShareId = ocLocalSharesDataSource.insert(
             TestUtil.createPublicShare(
                 path = "/Photos/",
@@ -157,11 +189,22 @@ class OCLocalDataSourceTest {
 
     @Test
     fun updatePublicShares() {
+        val publicSharesAsLiveData: MutableLiveData<List<OCShare>> = MutableLiveData()
+        publicSharesAsLiveData.value = publicShares
+
+        `when`(
+            ocSharesDao.update(
+                publicSharesAsLiveData.value!![1]
+            )
+        ).thenReturn(
+            8
+        )
+
         val updatedShareId = ocLocalSharesDataSource.update(
             TestUtil.createPublicShare(
-                path = "/Photos/image.jpg",
-                isFolder = false,
-                name = "Image link",
+                path = "/Photos/",
+                isFolder = true,
+                name = "Photos link 2",
                 shareLink = "http://server:port/s/2"
             )
         )
@@ -170,6 +213,14 @@ class OCLocalDataSourceTest {
 
     @Test
     fun deletePublicShare() {
+        `when`(
+            ocSharesDao.deleteShare(
+                5
+            )
+        ).thenReturn(
+            1
+        )
+
         val deletedRows = ocLocalSharesDataSource.deleteShare(
             5
         )

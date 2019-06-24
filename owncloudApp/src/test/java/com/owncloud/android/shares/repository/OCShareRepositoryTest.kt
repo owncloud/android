@@ -88,6 +88,140 @@ class OCShareRepositoryTest {
     )
 
     /******************************************************************************************************
+     ******************************************* PRIVATE SHARES *******************************************
+     ******************************************************************************************************/
+
+    private val privateShare = listOf(
+        TestUtil.createPrivateShare(
+            path = "/Photos",
+            isFolder = true,
+            shareWith = "username2",
+            sharedWithDisplayName = "Sophie"
+        )
+    )
+
+    private val privateShareTypes = listOf(
+        ShareType.USER, ShareType.GROUP, ShareType.FEDERATED
+    )
+
+    @Test
+    fun loadPrivateSharesForFileFromNetwork() {
+        val localData = MutableLiveData<List<OCShare>>() // Local shares
+
+        val remoteOperationResult =
+            TestUtil.createRemoteOperationResultMock(ShareParserResult(remoteShares), true) // Remote shares
+
+        val privateSharesAsLiveData = loadPrivateSharesAsLiveData(localData, remoteOperationResult)
+
+        val observer = mock<Observer<Resource<List<OCShare>>>>()
+        privateSharesAsLiveData.observeForever(observer)
+
+        localData.postValue(null)
+
+        // Get private shares from database to observe them, is called twice (one showing current db shares while
+        // getting shares from server and another one with db shares already updated with server ones)
+        verify(localSharesDataSource, times(2)).getSharesForFileAsLiveData(
+            "/Photos/", "admin@server", privateShareTypes
+        )
+
+        // Retrieving shares from server...
+
+        // Public shares are retrieved from server and inserted in database if not empty list
+        verify(localSharesDataSource).replaceSharesForFile(
+            remoteShares.map { remoteShare ->
+                OCShare.fromRemoteShare(remoteShare).also { it.accountOwner = "admin@server" }
+            }
+        )
+
+        // Observe changes in database livedata when there's a new public share
+        localData.postValue(
+            privateShare
+        )
+
+        verify(observer).onChanged(Resource.success(privateShare))
+    }
+
+    @Test
+    fun loadEmptyPrivateSharesForFileFromNetwork() {
+        val localData = MutableLiveData<List<OCShare>>()
+
+        val remoteOperationResult =
+            TestUtil.createRemoteOperationResultMock(ShareParserResult(arrayListOf()), true)
+
+        val data = loadPrivateSharesAsLiveData(localData, remoteOperationResult)
+        val observer = mock<Observer<Resource<List<OCShare>>>>()
+        data.observeForever(observer)
+
+        localData.postValue(null)
+
+        // Get public shares from database to observe them, is called twice (one showing current db shares while
+        // getting shares from server and another one with db shares already updated with server ones)
+        verify(localSharesDataSource, times(2)).getSharesForFileAsLiveData(
+            "/Photos/", "admin@server", privateShareTypes
+        )
+
+        // Retrieving public shares from server...
+
+        // When there's no shares in server for a specific file, delete them locally
+        verify(localSharesDataSource).deleteSharesForFile("/Photos/", "admin@server")
+
+        // Observe changes in database livedata when the list of shares is empty
+        localData.postValue(listOf())
+
+        verify(observer).onChanged(Resource.success(listOf()))
+    }
+
+    @Test
+    fun loadPrivateSharesForFileFromNetworkWithError() {
+        val localData = MutableLiveData<List<OCShare>>()
+        localData.value = privateShare
+
+        val exception = Exception("Error when retrieving shares")
+
+        val remoteOperationResult = TestUtil.createRemoteOperationResultMock(
+            ShareParserResult(arrayListOf()),
+            false,
+            resultCode = RemoteOperationResult.ResultCode.FORBIDDEN,
+            exception = exception
+        )
+
+        val data = loadPrivateSharesAsLiveData(localData, remoteOperationResult)
+
+        // Get public shares from database to observe them
+        verify(localSharesDataSource).getSharesForFileAsLiveData(
+            "/Photos/", "admin@server", privateShareTypes
+        )
+
+        // Retrieving public shares from server...
+
+        // Observe changes in database livedata when there's an error from server
+        val observer = mock<Observer<Resource<List<OCShare>>>>()
+        data.observeForever(observer)
+
+        verify(observer).onChanged(
+            Resource.error(
+                RemoteOperationResult.ResultCode.FORBIDDEN, localData.value, exception = exception
+            )
+        )
+    }
+
+    private fun loadPrivateSharesAsLiveData(
+        localData: MutableLiveData<List<OCShare>>,
+        remoteOperationResult: RemoteOperationResult<ShareParserResult>
+    ): LiveData<Resource<List<OCShare>>> {
+        val ocShareRepository = createRepositoryWithPrivateData(localData, remoteOperationResult)
+        return ocShareRepository.getPrivateSharesForFile()
+    }
+
+    private fun createRepositoryWithPrivateData(
+        localData: MutableLiveData<List<OCShare>>,
+        remoteOperationResult: RemoteOperationResult<ShareParserResult>
+    ): OCShareRepository =
+        createRepositoryWithDataSources(
+            localData, remoteOperationResult, privateShareTypes
+        )
+
+    /******************************************************************************************************
      ******************************************* PUBLIC SHARES ********************************************
      ******************************************************************************************************/
 
@@ -342,140 +476,6 @@ class OCShareRepositoryTest {
         remoteOperationResult: RemoteOperationResult<ShareParserResult>
     ): OCShareRepository =
         createRepositoryWithDataSources(localData, remoteOperationResult, listOf(ShareType.PUBLIC_LINK))
-
-    /******************************************************************************************************
-     ******************************************* PRIVATE SHARES *******************************************
-     ******************************************************************************************************/
-
-    private val privateShare = listOf(
-        TestUtil.createPrivateShare(
-            path = "/Photos",
-            isFolder = true,
-            shareWith = "username2",
-            sharedWithDisplayName = "Sophie"
-        )
-    )
-
-    private val privateShareTypes = listOf(
-        ShareType.USER, ShareType.GROUP, ShareType.FEDERATED
-    )
-
-    @Test
-    fun loadPrivateSharesForFileFromNetwork() {
-        val localData = MutableLiveData<List<OCShare>>() // Local shares
-
-        val remoteOperationResult =
-            TestUtil.createRemoteOperationResultMock(ShareParserResult(remoteShares), true) // Remote shares
-
-        val privateSharesAsLiveData = loadPrivateSharesAsLiveData(localData, remoteOperationResult)
-
-        val observer = mock<Observer<Resource<List<OCShare>>>>()
-        privateSharesAsLiveData.observeForever(observer)
-
-        localData.postValue(null)
-
-        // Get private shares from database to observe them, is called twice (one showing current db shares while
-        // getting shares from server and another one with db shares already updated with server ones)
-        verify(localSharesDataSource, times(2)).getSharesForFileAsLiveData(
-            "/Photos/", "admin@server", privateShareTypes
-        )
-
-        // Retrieving shares from server...
-
-        // Public shares are retrieved from server and inserted in database if not empty list
-        verify(localSharesDataSource).replaceSharesForFile(
-            remoteShares.map { remoteShare ->
-                OCShare.fromRemoteShare(remoteShare).also { it.accountOwner = "admin@server" }
-            }
-        )
-
-        // Observe changes in database livedata when there's a new public share
-        localData.postValue(
-            privateShare
-        )
-
-        verify(observer).onChanged(Resource.success(privateShare))
-    }
-
-    @Test
-    fun loadEmptyPrivateSharesForFileFromNetwork() {
-        val localData = MutableLiveData<List<OCShare>>()
-
-        val remoteOperationResult =
-            TestUtil.createRemoteOperationResultMock(ShareParserResult(arrayListOf()), true)
-
-        val data = loadPrivateSharesAsLiveData(localData, remoteOperationResult)
-        val observer = mock<Observer<Resource<List<OCShare>>>>()
-        data.observeForever(observer)
-
-        localData.postValue(null)
-
-        // Get public shares from database to observe them, is called twice (one showing current db shares while
-        // getting shares from server and another one with db shares already updated with server ones)
-        verify(localSharesDataSource, times(2)).getSharesForFileAsLiveData(
-            "/Photos/", "admin@server", privateShareTypes
-        )
-
-        // Retrieving public shares from server...
-
-        // When there's no shares in server for a specific file, delete them locally
-        verify(localSharesDataSource).deleteSharesForFile("/Photos/", "admin@server")
-
-        // Observe changes in database livedata when the list of shares is empty
-        localData.postValue(listOf())
-
-        verify(observer).onChanged(Resource.success(listOf()))
-    }
-
-    @Test
-    fun loadPrivateSharesForFileFromNetworkWithError() {
-        val localData = MutableLiveData<List<OCShare>>()
-        localData.value = privateShare
-
-        val exception = Exception("Error when retrieving shares")
-
-        val remoteOperationResult = TestUtil.createRemoteOperationResultMock(
-            ShareParserResult(arrayListOf()),
-            false,
-            resultCode = RemoteOperationResult.ResultCode.FORBIDDEN,
-            exception = exception
-        )
-
-        val data = loadPrivateSharesAsLiveData(localData, remoteOperationResult)
-
-        // Get public shares from database to observe them
-        verify(localSharesDataSource).getSharesForFileAsLiveData(
-            "/Photos/", "admin@server", privateShareTypes
-        )
-
-        // Retrieving public shares from server...
-
-        // Observe changes in database livedata when there's an error from server
-        val observer = mock<Observer<Resource<List<OCShare>>>>()
-        data.observeForever(observer)
-
-        verify(observer).onChanged(
-            Resource.error(
-                RemoteOperationResult.ResultCode.FORBIDDEN, localData.value, exception = exception
-            )
-        )
-    }
-
-    private fun loadPrivateSharesAsLiveData(
-        localData: MutableLiveData<List<OCShare>>,
-        remoteOperationResult: RemoteOperationResult<ShareParserResult>
-    ): LiveData<Resource<List<OCShare>>> {
-        val ocShareRepository = createRepositoryWithPrivateData(localData, remoteOperationResult)
-        return ocShareRepository.getPrivateSharesForFile()
-    }
-
-    private fun createRepositoryWithPrivateData(
-        localData: MutableLiveData<List<OCShare>>,
-        remoteOperationResult: RemoteOperationResult<ShareParserResult>
-    ): OCShareRepository =
-        createRepositoryWithDataSources(
-            localData, remoteOperationResult, privateShareTypes
-        )
 
     /******************************************************************************************************
      *********************************************** COMMON ***********************************************
