@@ -75,13 +75,15 @@ object TestUtil {
         shareWith: String,
         path: String,
         isFolder: Boolean,
-        sharedWithDisplayName: String
+        sharedWithDisplayName: String,
+        accountOwner: String = "admin@server"
     ) = createShare(
         shareWith = shareWith,
         shareType = 0,
         path = path,
         isFolder = isFolder,
-        sharedWithDisplayName = sharedWithDisplayName
+        sharedWithDisplayName = sharedWithDisplayName,
+        accountOwner = accountOwner
     )
 
     fun createPublicShare(

@@ -21,20 +21,17 @@ package com.owncloud.android.shares.provider
 
 import android.content.ContentResolver
 import android.content.ContentValues
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SmallTest
 import androidx.test.platform.app.InstrumentationRegistry
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.owncloud.android.db.OwncloudDatabase
 import com.owncloud.android.db.ProviderMeta.ProviderTableMeta
 import org.hamcrest.Matchers
+import org.hamcrest.Matchers.notNullValue
+import org.junit.Assert.assertThat
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.junit.Assert.assertThat
-import org.hamcrest.Matchers.notNullValue
-import org.junit.Rule
-import java.lang.IllegalArgumentException
 
 @RunWith(AndroidJUnit4::class)
 @SmallTest
@@ -64,9 +61,9 @@ class SharesContentProviderTest {
         val itemUri = mContentResolver!!.bulkInsert(
             ProviderTableMeta.CONTENT_URI_SHARE,
             arrayOf(
-                shareWithNameAndLink("Picture link", "http://server:port/s/1"),
-                shareWithNameAndLink("Picture link 2", "http://server:port/s/2"),
-                shareWithNameAndLink("Picture link 3", "http://server:port/s/3")
+                createDefaultPublicShare("Picture link", "http://server:port/s/1"),
+                createDefaultPublicShare("Picture link 2", "http://server:port/s/2"),
+                createDefaultPublicShare("Picture link 3", "http://server:port/s/3")
             )
         )
         assertThat(itemUri, notNullValue())
@@ -77,9 +74,9 @@ class SharesContentProviderTest {
         val itemUri = mContentResolver!!.bulkInsert(
             ProviderTableMeta.CONTENT_URI_SHARE,
             arrayOf(
-                shareWithNameAndLink("IMG_1213 link", "http://server:port/s/10"),
-                shareWithNameAndLink("IMG_1213 link 2", "http://server:port/s/20"),
-                shareWithNameAndLink("IMG_1213 link 3", "http://server:port/s/30")
+                createDefaultPublicShare("IMG_1213 link", "http://server:port/s/10"),
+                createDefaultPublicShare("IMG_1213 link 2", "http://server:port/s/20"),
+                createDefaultPrivateShare("company", "My company")
             )
         )
         assertThat(itemUri, notNullValue())
@@ -116,16 +113,16 @@ class SharesContentProviderTest {
         assertThat(cursor.moveToLast(), Matchers.`is`(true))
         assertThat(
             cursor.getString(
-                cursor.getColumnIndexOrThrow(ProviderTableMeta.OCSHARES_NAME)
+                cursor.getColumnIndexOrThrow(ProviderTableMeta.OCSHARES_SHARE_WITH)
             ),
-            Matchers.`is`("IMG_1213 link 3")
+            Matchers.`is`("company")
         )
 
         assertThat(
             cursor.getString(
-                cursor.getColumnIndexOrThrow(ProviderTableMeta.OCSHARES_URL)
+                cursor.getColumnIndexOrThrow(ProviderTableMeta.OCSHARES_SHARE_WITH_DISPLAY_NAME)
             ),
-            Matchers.`is`("http://server:port/s/30")
+            Matchers.`is`("My company")
         )
 
         cursor.close()
@@ -136,9 +133,9 @@ class SharesContentProviderTest {
         val itemUri = mContentResolver!!.bulkInsert(
             ProviderTableMeta.CONTENT_URI_SHARE,
             arrayOf(
-                shareWithNameAndLink("Video link", "http://server:port/s/100"),
-                shareWithNameAndLink("Video 2 link", "http://server:port/s/200"),
-                shareWithNameAndLink("Video 3 link", "http://server:port/s/300")
+                createDefaultPublicShare("Video link", "http://server:port/s/100"),
+                createDefaultPublicShare("Video 2 link", "http://server:port/s/200"),
+                createDefaultPrivateShare("userName", "Jesus")
             )
         )
         assertThat(itemUri, notNullValue())
@@ -174,20 +171,20 @@ class SharesContentProviderTest {
         val itemUri = mContentResolver!!.bulkInsert(
             ProviderTableMeta.CONTENT_URI_SHARE,
             arrayOf(
-                shareWithNameAndLink("Document link", "http://server:port/s/1000"),
-                shareWithNameAndLink("Document 2 link", "http://server:port/s/2000"),
-                shareWithNameAndLink("Document 3 link", "http://server:port/s/3000"),
-                shareWithNameAndLink("Document 4 link", "http://server:port/s/4000")
+                createDefaultPublicShare("Document link", "http://server:port/s/1000"),
+                createDefaultPublicShare("Document 2 link", "http://server:port/s/2000"),
+                createDefaultPrivateShare("username1", "Carol"),
+                createDefaultPrivateShare("username2", "Leticia")
             )
         )
         assertThat(itemUri, notNullValue())
 
-        // Get shares with name "Document 3 link"
+        // Get shareWith with content "username1"
         val cursor = mContentResolver!!.query(
             ProviderTableMeta.CONTENT_URI_SHARE,
             null,
-            ProviderTableMeta.OCSHARES_NAME + " = ?",
-            arrayOf("Document 3 link"),
+            ProviderTableMeta.OCSHARES_SHARE_WITH + " = ?",
+            arrayOf("username1"),
             null
         )
 
@@ -198,16 +195,16 @@ class SharesContentProviderTest {
         assertThat(cursor.moveToFirst(), Matchers.`is`(true))
         assertThat(
             cursor.getString(
-                cursor.getColumnIndexOrThrow(ProviderTableMeta.OCSHARES_NAME)
+                cursor.getColumnIndexOrThrow(ProviderTableMeta.OCSHARES_SHARE_WITH)
             ),
-            Matchers.`is`("Document 3 link")
+            Matchers.`is`("username1")
         )
 
         assertThat(
             cursor.getString(
-                cursor.getColumnIndexOrThrow(ProviderTableMeta.OCSHARES_URL)
+                cursor.getColumnIndexOrThrow(ProviderTableMeta.OCSHARES_SHARE_WITH_DISPLAY_NAME)
             ),
-            Matchers.`is`("http://server:port/s/3000")
+            Matchers.`is`("Carol")
         )
     }
 
@@ -216,11 +213,11 @@ class SharesContentProviderTest {
         val itemUri = mContentResolver!!.bulkInsert(
             ProviderTableMeta.CONTENT_URI_SHARE,
             arrayOf(
-                shareWithNameAndLink("Pdf link", "http://server:port/s/1000"),
-                shareWithNameAndLink("Pdf friends link", "http://server:port/s/2000"),
-                shareWithNameAndLink("Pdf friends link 2", "http://server:port/s/3000"),
-                shareWithNameAndLink("Pdf 4 link", "http://server:port/s/4000"),
-                shareWithNameAndLink("Pdf 5 link", "http://server:port/s/5000")
+                createDefaultPublicShare("Pdf link", "http://server:port/s/1000"),
+                createDefaultPublicShare("Pdf friends link", "http://server:port/s/2000"),
+                createDefaultPublicShare("Pdf friends link 2", "http://server:port/s/3000"),
+                createDefaultPrivateShare("username3", "Tina"),
+                createDefaultPrivateShare("username4", "Homer")
             )
         )
         assertThat(itemUri, notNullValue())
@@ -261,9 +258,9 @@ class SharesContentProviderTest {
         val itemUri = mContentResolver!!.bulkInsert(
             ProviderTableMeta.CONTENT_URI_SHARE,
             arrayOf(
-                shareWithNameAndLink("IMG_1213 link", "http://server:port/s/1", remoteId = 1),
-                shareWithNameAndLink("IMG_1213 link 2", "http://server:port/s/2", remoteId = 2),
-                shareWithNameAndLink("IMG_1213 link 3", "http://server:port/s/3", remoteId = 3)
+                createDefaultPublicShare("IMG_1213 link", "http://server:port/s/1", remoteId = 1),
+                createDefaultPublicShare("IMG_1213 link 2", "http://server:port/s/2", remoteId = 2),
+                createDefaultPublicShare("IMG_1213 link 3", "http://server:port/s/3", remoteId = 3)
             )
         )
         assertThat(itemUri, notNullValue())
@@ -271,7 +268,7 @@ class SharesContentProviderTest {
         // Update one of them
         mContentResolver!!.update(
             ProviderTableMeta.CONTENT_URI_SHARE,
-            shareWithNameAndLink(
+            createDefaultPublicShare(
                 "IMG_1213 link 3 updated",
                 "http://server:port/s/3",
                 expirationDate = 2000,
@@ -335,7 +332,7 @@ class SharesContentProviderTest {
         cursor.close()
     }
 
-    private fun shareWithNameAndLink(
+    private fun createDefaultPublicShare(
         name: String,
         url: String,
         expirationDate: Int = 0,
@@ -358,6 +355,31 @@ class SharesContentProviderTest {
         values.put(ProviderTableMeta.OCSHARES_ACCOUNT_OWNER, "admin@server")
         values.put(ProviderTableMeta.OCSHARES_NAME, name)
         values.put(ProviderTableMeta.OCSHARES_URL, url)
+        return values
+    }
+
+    private fun createDefaultPrivateShare(
+        shareWith: String,
+        shareWithDisplayName: String,
+        remoteId: Int? = 1
+    ): ContentValues {
+        val values = ContentValues()
+        values.put(ProviderTableMeta.OCSHARES_FILE_SOURCE, 7)
+        values.put(ProviderTableMeta.OCSHARES_ITEM_SOURCE, 7)
+        values.put(ProviderTableMeta.OCSHARES_SHARE_TYPE, 3)
+        values.put(ProviderTableMeta.OCSHARES_SHARE_WITH, shareWith)
+        values.put(ProviderTableMeta.OCSHARES_PATH, "/Photos/")
+        values.put(ProviderTableMeta.OCSHARES_PERMISSIONS, 1)
+        values.put(ProviderTableMeta.OCSHARES_SHARED_DATE, 1542628397)
+        values.put(ProviderTableMeta.OCSHARES_EXPIRATION_DATE, -1)
+        values.put(ProviderTableMeta.OCSHARES_TOKEN, "pwdasd12dasdWZ")
+        values.put(ProviderTableMeta.OCSHARES_SHARE_WITH_DISPLAY_NAME, shareWithDisplayName)
+        values.put(ProviderTableMeta.OCSHARES_IS_DIRECTORY, 1)
+        values.put(ProviderTableMeta.OCSHARES_USER_ID, -1)
+        values.put(ProviderTableMeta.OCSHARES_ID_REMOTE_SHARED, remoteId)
+        values.put(ProviderTableMeta.OCSHARES_ACCOUNT_OWNER, "admin@server")
+        values.put(ProviderTableMeta.OCSHARES_NAME, "")
+        values.put(ProviderTableMeta.OCSHARES_URL, "")
         return values
     }
 }

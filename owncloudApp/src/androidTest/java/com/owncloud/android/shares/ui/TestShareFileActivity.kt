@@ -80,9 +80,6 @@ class TestShareFileActivity : SingleFragmentActivity(), ShareFragmentListener {
     override fun showEditPrivateShare(share: OCShare) {
     }
 
-    override fun refreshSharesFromServer() {
-    }
-
     override fun showAddPublicShare(defaultLinkName: String) {
     }
 
@@ -93,5 +90,8 @@ class TestShareFileActivity : SingleFragmentActivity(), ShareFragmentListener {
     }
 
     override fun copyOrSendPublicLink(share: OCShare) {
+    }
+
+    override fun refreshPrivateShares() {
     }
 }
