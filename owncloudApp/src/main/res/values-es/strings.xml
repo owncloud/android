@@ -549,6 +549,8 @@
   <string name="welcome_feature_8_title">Disponible offline</string>
   <string name="welcome_feature_8_text">Sus archivos sincronizados automáticamente</string>
   <string name="welcome_feature_9_title">Proveedor del documento</string>
+  <string name="welcome_feature_9_text">Accede y gestiona tus archivos ownCloud desde otras aplicaciones</string>
   <string name="welcome_feature_10_title">Registros con búsqueda para todos</string>
+  <string name="welcome_feature_10_text">Envíanos tus archivos de registro para mejorar la aplicación</string>
   <string name="no_borwser_installed_alert">No hay un navegador instalado, Por favor, instale uno para poder realizar un login seguro</string>
 </resources>
