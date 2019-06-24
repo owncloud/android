@@ -54,6 +54,70 @@ class ShareFileFragmentTest {
         true
     )
 
+    @Test
+    fun showHeader() {
+        loadShareFileFragment()
+        onView(withId(R.id.shareFileName)).check(matches(withText("image.jpg")))
+    }
+
+    @Test
+    fun fileSizeVisible() {
+        loadShareFileFragment()
+        onView(withId(R.id.shareFileSize)).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun showPrivateLink() {
+        loadShareFileFragment()
+        onView(withId(R.id.getPrivateLinkButton)).check(matches(isDisplayed()))
+    }
+
+    /******************************************************************************************************
+     ******************************************* PRIVATE SHARES *******************************************
+     ******************************************************************************************************/
+
+    private var privateShareList = arrayListOf(
+        TestUtil.createPrivateShare(
+            path = "/Photos/image.jpg",
+            isFolder = false,
+            shareWith = "batman",
+            sharedWithDisplayName = "Batman"
+        ),
+        TestUtil.createPrivateShare(
+            path = "/Photos/image.jpg",
+            isFolder = false,
+            shareWith = "suicideSquad",
+            sharedWithDisplayName = "Suicide Squad"
+        )
+    )
+
+    @Test
+    fun showUsersAndGroupsSectionTitle() {
+        loadShareFileFragment()
+        onView(withText(R.string.share_with_user_section_title)).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun showNoPrivateShares() {
+        loadShareFileFragment(privateShares = arrayListOf())
+        onView(withText(R.string.share_no_users)).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun showPrivateShares() {
+        loadShareFileFragment()
+        onView(withText("Batman")).check(matches(isDisplayed()))
+        onView(withText("Batman")).check(matches(hasSibling(withId(R.id.unshareButton))))
+            .check(matches(isDisplayed()))
+        onView(withText("Batman")).check(matches(hasSibling(withId(R.id.editShareButton))))
+            .check(matches(isDisplayed()))
+        onView(withText("Suicide Squad")).check(matches(isDisplayed()))
+    }
+
+    /******************************************************************************************************
+     ******************************************* PUBLIC SHARES ********************************************
+     ******************************************************************************************************/
+
     private var publicShareList = arrayListOf(
         TestUtil.createPublicShare(
             path = "/Photos/image.jpg",
@@ -76,24 +140,6 @@ class ShareFileFragmentTest {
     )
 
     @Test
-    fun showHeader() {
-        loadShareFileFragment()
-        onView(withId(R.id.shareFileName)).check(matches(withText("image.jpg")))
-    }
-
-    @Test
-    fun showPrivateLink() {
-        loadShareFileFragment()
-        onView(withId(R.id.getPrivateLinkButton)).check(matches(isDisplayed()))
-    }
-
-    @Test
-    fun showUsersAndGroupsSectionTitle() {
-        loadShareFileFragment()
-        onView(withText(R.string.share_with_user_section_title)).check(matches(isDisplayed()))
-    }
-
-    @Test
     fun showNoPublicShares() {
         loadShareFileFragment(publicShares = arrayListOf())
         onView(withText(R.string.share_no_public_links)).check(matches(isDisplayed()))
@@ -111,12 +157,6 @@ class ShareFileFragmentTest {
             .check(matches(isDisplayed()))
         onView(withText("Image link 2")).check(matches(isDisplayed()))
         onView(withText("Image link 3")).check(matches(isDisplayed()))
-    }
-
-    @Test
-    fun fileSizeVisible() {
-        loadShareFileFragment()
-        onView(withId(R.id.shareFileSize)).check(matches(isDisplayed()))
     }
 
     @Test
@@ -181,6 +221,10 @@ class ShareFileFragmentTest {
             .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.INVISIBLE)))
     }
 
+    /******************************************************************************************************
+     *********************************************** COMMON ***********************************************
+     ******************************************************************************************************/
+
     private fun getOCFileForTesting(name: String = "default") = OCFile("/Photos").apply {
         availableOfflineStatus = OCFile.AvailableOfflineStatus.NOT_AVAILABLE_OFFLINE
         fileName = name
@@ -191,6 +235,7 @@ class ShareFileFragmentTest {
 
     private fun loadShareFileFragment(
         capabilities: OCCapability = TestUtil.createCapability(),
+        privateShares: ArrayList<OCShare> = privateShareList,
         publicShares: ArrayList<OCShare> = publicShareList
     ) {
         val account = mock(Account::class.java)
@@ -204,6 +249,7 @@ class ShareFileFragmentTest {
         )
 
         activityRule.activity.capabilities = capabilities
+        activityRule.activity.privateShares = privateShares
         activityRule.activity.publicShares = publicShares
         activityRule.activity.setFragment(shareFileFragment)
     }

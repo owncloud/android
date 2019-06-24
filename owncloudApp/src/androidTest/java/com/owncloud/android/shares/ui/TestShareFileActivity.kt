@@ -30,6 +30,7 @@ import com.owncloud.android.testing.SingleFragmentActivity
 
 class TestShareFileActivity : SingleFragmentActivity(), ShareFragmentListener {
     lateinit var capabilities: OCCapability
+    lateinit var privateShares: ArrayList<OCShare>
     lateinit var publicShares: ArrayList<OCShare>
     lateinit var errorMessage: String
 
@@ -37,6 +38,7 @@ class TestShareFileActivity : SingleFragmentActivity(), ShareFragmentListener {
         val shareFileFragment: ShareFileFragment =
             supportFragmentManager.findFragmentByTag("TEST FRAGMENT") as ShareFileFragment
         shareFileFragment.updateCapabilities(capabilities)
+        shareFileFragment.updatePrivateShares(privateShares)
         shareFileFragment.updatePublicShares(publicShares)
     }
 

@@ -45,6 +45,10 @@ class SharesContentProviderTest {
         mContentResolver = context.contentResolver
     }
 
+    /******************************************************************************************************
+     *********************************************** COMMON ***********************************************
+     ******************************************************************************************************/
+
     @Test
     fun initiallyEmptySharesQuery() {
         val cursor = mContentResolver!!.query(
@@ -54,19 +58,6 @@ class SharesContentProviderTest {
         assertThat(cursor, notNullValue())
         assertThat(cursor!!.count, Matchers.`is`(0))
         cursor.close()
-    }
-
-    @Test
-    fun insertPublicShares() {
-        val itemUri = mContentResolver!!.bulkInsert(
-            ProviderTableMeta.CONTENT_URI_SHARE,
-            arrayOf(
-                createDefaultPublicShare("Picture link", "http://server:port/s/1"),
-                createDefaultPublicShare("Picture link 2", "http://server:port/s/2"),
-                createDefaultPublicShare("Picture link 3", "http://server:port/s/3")
-            )
-        )
-        assertThat(itemUri, notNullValue())
     }
 
     @Test
@@ -252,6 +243,52 @@ class SharesContentProviderTest {
         )
     }
 
+    /******************************************************************************************************
+     ******************************************* PRIVATE SHARES *******************************************
+     ******************************************************************************************************/
+
+    private fun createDefaultPrivateShare(
+        shareWith: String,
+        shareWithDisplayName: String,
+        remoteId: Int? = 1
+    ): ContentValues {
+        val values = ContentValues()
+        values.put(ProviderTableMeta.OCSHARES_FILE_SOURCE, 7)
+        values.put(ProviderTableMeta.OCSHARES_ITEM_SOURCE, 7)
+        values.put(ProviderTableMeta.OCSHARES_SHARE_TYPE, 3)
+        values.put(ProviderTableMeta.OCSHARES_SHARE_WITH, shareWith)
+        values.put(ProviderTableMeta.OCSHARES_PATH, "/Photos/")
+        values.put(ProviderTableMeta.OCSHARES_PERMISSIONS, 1)
+        values.put(ProviderTableMeta.OCSHARES_SHARED_DATE, 1542628397)
+        values.put(ProviderTableMeta.OCSHARES_EXPIRATION_DATE, -1)
+        values.put(ProviderTableMeta.OCSHARES_TOKEN, "pwdasd12dasdWZ")
+        values.put(ProviderTableMeta.OCSHARES_SHARE_WITH_DISPLAY_NAME, shareWithDisplayName)
+        values.put(ProviderTableMeta.OCSHARES_IS_DIRECTORY, 1)
+        values.put(ProviderTableMeta.OCSHARES_USER_ID, -1)
+        values.put(ProviderTableMeta.OCSHARES_ID_REMOTE_SHARED, remoteId)
+        values.put(ProviderTableMeta.OCSHARES_ACCOUNT_OWNER, "admin@server")
+        values.put(ProviderTableMeta.OCSHARES_NAME, "")
+        values.put(ProviderTableMeta.OCSHARES_URL, "")
+        return values
+    }
+
+    /******************************************************************************************************
+     ******************************************* PUBLIC SHARES ********************************************
+     ******************************************************************************************************/
+
+    @Test
+    fun insertPublicShares() {
+        val itemUri = mContentResolver!!.bulkInsert(
+            ProviderTableMeta.CONTENT_URI_SHARE,
+            arrayOf(
+                createDefaultPublicShare("Picture link", "http://server:port/s/1"),
+                createDefaultPublicShare("Picture link 2", "http://server:port/s/2"),
+                createDefaultPublicShare("Picture link 3", "http://server:port/s/3")
+            )
+        )
+        assertThat(itemUri, notNullValue())
+    }
+
     @Test
     fun updatePublicShares() {
         // Insert shares
@@ -355,31 +392,6 @@ class SharesContentProviderTest {
         values.put(ProviderTableMeta.OCSHARES_ACCOUNT_OWNER, "admin@server")
         values.put(ProviderTableMeta.OCSHARES_NAME, name)
         values.put(ProviderTableMeta.OCSHARES_URL, url)
-        return values
-    }
-
-    private fun createDefaultPrivateShare(
-        shareWith: String,
-        shareWithDisplayName: String,
-        remoteId: Int? = 1
-    ): ContentValues {
-        val values = ContentValues()
-        values.put(ProviderTableMeta.OCSHARES_FILE_SOURCE, 7)
-        values.put(ProviderTableMeta.OCSHARES_ITEM_SOURCE, 7)
-        values.put(ProviderTableMeta.OCSHARES_SHARE_TYPE, 3)
-        values.put(ProviderTableMeta.OCSHARES_SHARE_WITH, shareWith)
-        values.put(ProviderTableMeta.OCSHARES_PATH, "/Photos/")
-        values.put(ProviderTableMeta.OCSHARES_PERMISSIONS, 1)
-        values.put(ProviderTableMeta.OCSHARES_SHARED_DATE, 1542628397)
-        values.put(ProviderTableMeta.OCSHARES_EXPIRATION_DATE, -1)
-        values.put(ProviderTableMeta.OCSHARES_TOKEN, "pwdasd12dasdWZ")
-        values.put(ProviderTableMeta.OCSHARES_SHARE_WITH_DISPLAY_NAME, shareWithDisplayName)
-        values.put(ProviderTableMeta.OCSHARES_IS_DIRECTORY, 1)
-        values.put(ProviderTableMeta.OCSHARES_USER_ID, -1)
-        values.put(ProviderTableMeta.OCSHARES_ID_REMOTE_SHARED, remoteId)
-        values.put(ProviderTableMeta.OCSHARES_ACCOUNT_OWNER, "admin@server")
-        values.put(ProviderTableMeta.OCSHARES_NAME, "")
-        values.put(ProviderTableMeta.OCSHARES_URL, "")
         return values
     }
 }
