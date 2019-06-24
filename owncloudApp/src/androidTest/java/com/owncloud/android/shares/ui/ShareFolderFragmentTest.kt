@@ -68,6 +68,14 @@ class ShareFolderFragmentTest {
                 shareLink = "http://server:port/s/1"
             )
         )
+        activityRule.activity.privateShares = arrayListOf(
+            TestUtil.createPrivateShare(
+                path = "/Photos",
+                isFolder = true,
+                shareWith = "username",
+                sharedWithDisplayName = "Bob"
+            )
+        )
         activityRule.activity.setFragment(shareFragment)
     }
 
