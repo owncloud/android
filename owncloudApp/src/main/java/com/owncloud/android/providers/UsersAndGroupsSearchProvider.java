@@ -307,5 +307,4 @@ public class UsersAndGroupsSearchProvider extends ContentProvider {
                         Toast.LENGTH_SHORT
                 ).show());
     }
-
 }
