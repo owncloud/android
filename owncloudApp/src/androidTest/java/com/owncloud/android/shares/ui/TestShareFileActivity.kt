@@ -24,6 +24,7 @@ import com.owncloud.android.capabilities.db.OCCapability
 import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.shares.db.OCShare
 import com.owncloud.android.shares.ui.fragment.PublicShareDialogFragment
+import com.owncloud.android.shares.ui.fragment.SearchShareesFragment
 import com.owncloud.android.shares.ui.fragment.ShareFileFragment
 import com.owncloud.android.shares.ui.fragment.ShareFragmentListener
 import com.owncloud.android.testing.SingleFragmentActivity
@@ -40,6 +41,12 @@ class TestShareFileActivity : SingleFragmentActivity(), ShareFragmentListener {
         shareFileFragment.updateCapabilities(capabilities)
         shareFileFragment.updatePrivateShares(privateShares)
         shareFileFragment.updatePublicShares(publicShares)
+    }
+
+    override fun refreshPrivateShares() {
+        val searchShareesFragment: SearchShareesFragment =
+            supportFragmentManager.findFragmentByTag("TEST FRAGMENT") as SearchShareesFragment
+        searchShareesFragment.updatePrivateShares(privateShares)
     }
 
     override fun createPublicShare(
@@ -92,8 +99,5 @@ class TestShareFileActivity : SingleFragmentActivity(), ShareFragmentListener {
     }
 
     override fun copyOrSendPublicLink(share: OCShare) {
-    }
-
-    override fun refreshPrivateShares() {
     }
 }
