@@ -26,7 +26,7 @@ import com.owncloud.android.lib.resources.shares.RemoveRemoteShareOperation
 import com.owncloud.android.lib.resources.shares.ShareParserResult
 import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.lib.resources.shares.UpdateRemoteShareOperation
-import com.owncloud.android.shares.datasource.RemoteSharesDataSource
+import com.owncloud.android.shares.data.datasources.RemoteSharesDataSource
 
 class RemoteSharesDataSourceTest(private val remoteOperationResult: RemoteOperationResult<ShareParserResult>) :
     RemoteSharesDataSource {

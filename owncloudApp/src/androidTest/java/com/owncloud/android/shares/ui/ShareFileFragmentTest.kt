@@ -35,8 +35,8 @@ import com.owncloud.android.capabilities.db.OCCapability
 import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.lib.resources.status.CapabilityBooleanType
 import com.owncloud.android.lib.resources.status.OwnCloudVersion
-import com.owncloud.android.shares.db.OCShare
-import com.owncloud.android.shares.ui.fragment.ShareFileFragment
+import com.owncloud.android.shares.domain.OCShare
+import com.owncloud.android.shares.presentation.fragment.ShareFileFragment
 import com.owncloud.android.utils.TestUtil
 import org.junit.Rule
 import org.junit.Test

@@ -44,7 +44,7 @@ import com.owncloud.android.lib.resources.shares.ShareParserResult;
 import com.owncloud.android.lib.resources.shares.SharePermissionsBuilder;
 import com.owncloud.android.lib.resources.shares.ShareType;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
-import com.owncloud.android.shares.db.OCShare;
+import com.owncloud.android.shares.domain.OCShare;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.utils.PreferenceUtils;
 

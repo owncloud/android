@@ -22,11 +22,11 @@ package com.owncloud.android.shares.ui
 
 import com.owncloud.android.capabilities.db.OCCapability
 import com.owncloud.android.datamodel.OCFile
-import com.owncloud.android.shares.db.OCShare
-import com.owncloud.android.shares.ui.fragment.PublicShareDialogFragment
-import com.owncloud.android.shares.ui.fragment.SearchShareesFragment
-import com.owncloud.android.shares.ui.fragment.ShareFileFragment
-import com.owncloud.android.shares.ui.fragment.ShareFragmentListener
+import com.owncloud.android.shares.domain.OCShare
+import com.owncloud.android.shares.presentation.fragment.PublicShareDialogFragment
+import com.owncloud.android.sharees.presentation.SearchShareesFragment
+import com.owncloud.android.shares.presentation.fragment.ShareFileFragment
+import com.owncloud.android.shares.presentation.fragment.ShareFragmentListener
 import com.owncloud.android.testing.SingleFragmentActivity
 
 class TestShareFileActivity : SingleFragmentActivity(), ShareFragmentListener {

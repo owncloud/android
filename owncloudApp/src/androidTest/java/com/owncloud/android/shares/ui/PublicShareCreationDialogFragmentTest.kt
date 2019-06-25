@@ -38,7 +38,7 @@ import com.owncloud.android.R
 import com.owncloud.android.capabilities.db.OCCapability
 import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.lib.resources.status.CapabilityBooleanType
-import com.owncloud.android.shares.ui.fragment.PublicShareDialogFragment
+import com.owncloud.android.shares.presentation.fragment.PublicShareDialogFragment
 import com.owncloud.android.utils.DateUtils
 import com.owncloud.android.utils.TestUtil
 import org.hamcrest.CoreMatchers.not

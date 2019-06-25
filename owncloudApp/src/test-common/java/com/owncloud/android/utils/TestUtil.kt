@@ -26,7 +26,7 @@ import com.owncloud.android.lib.resources.shares.RemoteShare
 import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.lib.resources.status.CapabilityBooleanType
 import com.owncloud.android.lib.resources.status.RemoteCapability
-import com.owncloud.android.shares.db.OCShare
+import com.owncloud.android.shares.domain.OCShare
 import org.mockito.Mockito.`when`
 
 object TestUtil {
