@@ -32,8 +32,8 @@ import androidx.test.rule.ActivityTestRule
 import com.owncloud.android.R
 import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.lib.resources.shares.RemoteShare
-import com.owncloud.android.shares.db.OCShare
-import com.owncloud.android.shares.ui.fragment.PublicShareDialogFragment
+import com.owncloud.android.shares.domain.OCShare
+import com.owncloud.android.shares.presentation.fragment.PublicShareDialogFragment
 import com.owncloud.android.utils.TestUtil
 import org.junit.Before
 import org.junit.Rule

@@ -3,7 +3,6 @@ package com.owncloud.android.shares.ui
 import android.accounts.Account
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.hasSibling
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
@@ -14,8 +13,8 @@ import com.owncloud.android.R
 import com.owncloud.android.capabilities.db.OCCapability
 import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.lib.resources.status.OwnCloudVersion
-import com.owncloud.android.shares.db.OCShare
-import com.owncloud.android.shares.ui.fragment.SearchShareesFragment
+import com.owncloud.android.shares.domain.OCShare
+import com.owncloud.android.sharees.presentation.SearchShareesFragment
 import com.owncloud.android.utils.TestUtil
 import org.junit.Rule
 import org.junit.Test

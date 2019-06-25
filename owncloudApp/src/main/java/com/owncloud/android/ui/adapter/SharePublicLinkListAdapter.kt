@@ -29,7 +29,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import com.owncloud.android.R
-import com.owncloud.android.shares.db.OCShare
+import com.owncloud.android.shares.domain.OCShare
 import com.owncloud.android.utils.PreferenceUtils
 import kotlinx.android.synthetic.main.share_public_link_item.view.*
 import java.util.ArrayList

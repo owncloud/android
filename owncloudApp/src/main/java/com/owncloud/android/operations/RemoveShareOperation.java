@@ -30,7 +30,7 @@ import com.owncloud.android.lib.resources.shares.RemoveRemoteShareOperation;
 import com.owncloud.android.lib.resources.shares.ShareParserResult;
 import com.owncloud.android.lib.resources.shares.ShareType;
 import com.owncloud.android.operations.common.SyncOperation;
-import com.owncloud.android.shares.db.OCShare;
+import com.owncloud.android.shares.domain.OCShare;
 
 import java.util.ArrayList;
 

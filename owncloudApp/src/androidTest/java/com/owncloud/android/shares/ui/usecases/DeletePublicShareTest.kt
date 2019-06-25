@@ -46,9 +46,9 @@ import com.owncloud.android.lib.common.accounts.AccountUtils
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.status.CapabilityBooleanType
 import com.owncloud.android.lib.resources.status.OwnCloudVersion
-import com.owncloud.android.shares.db.OCShare
-import com.owncloud.android.shares.ui.ShareActivity
-import com.owncloud.android.shares.viewmodel.OCShareViewModel
+import com.owncloud.android.shares.domain.OCShare
+import com.owncloud.android.shares.presentation.ShareActivity
+import com.owncloud.android.shares.presentation.OCShareViewModel
 import com.owncloud.android.ui.activity.FileActivity
 import com.owncloud.android.utils.AccountsManager
 import com.owncloud.android.utils.TestUtil

@@ -30,7 +30,7 @@ import androidx.test.rule.ActivityTestRule
 import com.owncloud.android.R
 import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.lib.resources.status.OwnCloudVersion
-import com.owncloud.android.shares.ui.fragment.ShareFileFragment
+import com.owncloud.android.shares.presentation.fragment.ShareFileFragment
 import com.owncloud.android.utils.TestUtil
 import org.hamcrest.Matchers.not
 import org.junit.Before
