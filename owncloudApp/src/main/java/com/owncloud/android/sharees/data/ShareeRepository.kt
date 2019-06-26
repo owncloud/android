@@ -19,7 +19,6 @@
 
 package com.owncloud.android.sharees.data
 
-import androidx.lifecycle.LiveData
 import com.owncloud.android.vo.Resource
 import org.json.JSONObject
 
@@ -28,5 +27,5 @@ interface ShareeRepository {
         searchString: String,
         page: Int,
         perPage: Int
-    ): LiveData<Resource<ArrayList<JSONObject>>>
+    ): Resource<ArrayList<JSONObject>>
 }

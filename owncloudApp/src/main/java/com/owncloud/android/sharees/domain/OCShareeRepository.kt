@@ -19,15 +19,12 @@
 
 package com.owncloud.android.sharees.domain
 
-import androidx.lifecycle.MutableLiveData
-import com.owncloud.android.AppExecutors
-import com.owncloud.android.sharees.data.datasources.RemoteShareesDataSource
 import com.owncloud.android.sharees.data.ShareeRepository
+import com.owncloud.android.sharees.data.datasources.RemoteShareesDataSource
 import com.owncloud.android.vo.Resource
 import org.json.JSONObject
 
 class OCShareeRepository(
-    private val appExecutors: AppExecutors = AppExecutors(),
     private val remoteSharesDataSource: RemoteShareesDataSource
 ) : ShareeRepository {
 
@@ -35,30 +32,17 @@ class OCShareeRepository(
         searchString: String,
         page: Int,
         perPage: Int
-    ): MutableLiveData<Resource<ArrayList<JSONObject>>> {
-        val result = MutableLiveData<Resource<ArrayList<JSONObject>>>()
-        result.postValue(Resource.loading())
+    ): Resource<ArrayList<JSONObject>> {
+        val remoteOperationResult = remoteSharesDataSource.getSharees(
+            searchString, page, perPage
+        )
 
-        appExecutors.networkIO().execute {
-            // Perform network operation
-            val remoteOperationResult = remoteSharesDataSource.getSharees(
-                searchString, page, perPage
+        return if (remoteOperationResult.isSuccess)
+            Resource.success(remoteOperationResult.data) else
+            Resource.error(
+                remoteOperationResult.code,
+                msg = remoteOperationResult.httpPhrase,
+                exception = remoteOperationResult.exception
             )
-
-            if (remoteOperationResult.isSuccess) {
-                val newShareesFromServer = remoteOperationResult.data
-                result.postValue(Resource.success(newShareesFromServer))
-            } else {
-                result.postValue(
-                    Resource.error(
-                        remoteOperationResult.code,
-                        msg = remoteOperationResult.httpPhrase,
-                        exception = remoteOperationResult.exception
-                    )
-                )
-            }
-        }
-
-        return result
     }
 }

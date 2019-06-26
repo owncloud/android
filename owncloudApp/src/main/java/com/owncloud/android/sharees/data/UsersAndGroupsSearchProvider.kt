@@ -38,11 +38,17 @@ import android.widget.Toast
 import com.owncloud.android.R
 import com.owncloud.android.authentication.AccountUtils
 import com.owncloud.android.datamodel.FileDataStorageManager
-import com.owncloud.android.lib.common.operations.RemoteOperationResult
+import com.owncloud.android.lib.common.OwnCloudAccount
+import com.owncloud.android.lib.common.OwnCloudClientManagerFactory
 import com.owncloud.android.lib.common.utils.Log_OC
 import com.owncloud.android.lib.resources.shares.GetRemoteShareesOperation
 import com.owncloud.android.lib.resources.shares.ShareType
+import com.owncloud.android.operations.common.OperationType
+import com.owncloud.android.sharees.data.datasources.OCRemoteShareesDataSource
+import com.owncloud.android.sharees.domain.OCShareeRepository
+import com.owncloud.android.sharees.presentation.OCShareeViewModel
 import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter
+import com.owncloud.android.vo.Resource
 import org.json.JSONException
 import org.json.JSONObject
 import java.util.ArrayList
@@ -126,25 +132,32 @@ class UsersAndGroupsSearchProvider : ContentProvider() {
         /// directly started by our code, but from SearchView implementation
         val account = AccountUtils.getCurrentOwnCloudAccount(context)
 
-        /// request to the OC server about users and groups matching userQuery
-        val searchRequest = GetRemoteShareesOperation(
-            userQuery,
-            REQUESTED_PAGE,
-            RESULTS_PER_PAGE
+        val ocShareeViewModel = OCShareeViewModel(
+            context,
+            account,
+            OCShareeRepository(
+                OCRemoteShareesDataSource(
+                    OwnCloudClientManagerFactory.getDefaultSingleton().getClientFor(
+                        OwnCloudAccount(account, context),
+                        context
+                    )
+                )
+            )
         )
-        val result = searchRequest.execute(account, context)
+
+        val resource = ocShareeViewModel.getSharees(userQuery, REQUESTED_PAGE, RESULTS_PER_PAGE)
         val names = ArrayList<JSONObject>()
 
-        if (result.isSuccess) {
-            for (o in result.data) {
+        if (resource.isSuccess()) {
+            for (o in resource.data!!) {
                 // Get JSonObjects from response
                 names.add(o)
             }
         } else {
-            showErrorMessage(result)
+            showErrorMessage(resource)
         }
 
-        /// convert the responses from the OC server to the expected format
+        // convert the responses from the OC server to the expected format
         if (names.size > 0) {
             response = MatrixCursor(COLUMNS)
             val namesIt = names.iterator()
@@ -252,7 +265,7 @@ class UsersAndGroupsSearchProvider : ContentProvider() {
      *
      * @param result Result with the failure information.
      */
-    private fun showErrorMessage(result: RemoteOperationResult<*>) {
+    private fun showErrorMessage(resource: Resource<ArrayList<JSONObject>>) {
         val handler = Handler(Looper.getMainLooper())
 
         // The Toast must be shown in the main thread to grant that will be hidden correctly; otherwise
@@ -262,7 +275,9 @@ class UsersAndGroupsSearchProvider : ContentProvider() {
             Toast.makeText(
                 context!!.applicationContext,
                 ErrorMessageAdapter.getResultMessage(
-                    result, null,
+                    resource.code,
+                    resource.exception,
+                    OperationType.GET_SHAREES,
                     context!!.resources
                 ),
                 Toast.LENGTH_SHORT

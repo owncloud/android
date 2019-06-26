@@ -39,7 +39,6 @@ import com.owncloud.android.vo.Resource
 @OpenForTesting
 class OCShareViewModel(
     context: Context,
-    val filePath: String,
     account: Account,
     val shareRepository: ShareRepository = OCShareRepository(
         localSharesDataSource = OCLocalSharesDataSource(context),
@@ -52,15 +51,16 @@ class OCShareViewModel(
         accountName = account.name
     )
 ) : ViewModel() {
-    fun getPrivateSharesForFile(): LiveData<Resource<List<OCShare>>> {
+    fun getPrivateSharesForFile(filePath: String): LiveData<Resource<List<OCShare>>> {
         return shareRepository.getPrivateSharesForFile(filePath)
     }
 
-    fun getPublicSharesForFile(): LiveData<Resource<List<OCShare>>> {
+    fun getPublicSharesForFile(filePath: String): LiveData<Resource<List<OCShare>>> {
         return shareRepository.getPublicSharesForFile(filePath)
     }
 
     fun insertPublicShareForFile(
+        filePath: String,
         permissions: Int,
         name: String,
         password: String,

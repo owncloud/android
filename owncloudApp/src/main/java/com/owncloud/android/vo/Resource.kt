@@ -50,4 +50,6 @@ data class Resource<out T>(
             return Resource(LOADING, data = data)
         }
     }
+
+    fun isSuccess(): Boolean = code?.equals(ResultCode.OK) ?: false
 }

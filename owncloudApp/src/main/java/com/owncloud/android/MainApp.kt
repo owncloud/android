@@ -44,6 +44,7 @@ import com.owncloud.android.lib.common.authentication.oauth.OAuth2ClientConfigur
 import com.owncloud.android.lib.common.authentication.oauth.OAuth2ProvidersRegistry
 import com.owncloud.android.lib.common.authentication.oauth.OwnCloudOAuth2Provider
 import com.owncloud.android.lib.common.utils.Log_OC
+import com.owncloud.android.sharees.presentation.OCShareeViewModel
 import com.owncloud.android.shares.presentation.OCShareViewModel
 import com.owncloud.android.ui.activity.FingerprintActivity
 import com.owncloud.android.ui.activity.PassCodeActivity
@@ -161,8 +162,11 @@ class MainApp : Application() {
         })
 
         val newArchModule = module {
-            viewModel { (filePath: String, account: Account) ->
-                OCShareViewModel(androidContext(), filePath, account)
+            viewModel { (account: Account) ->
+                OCShareViewModel(androidContext(), account)
+            }
+            viewModel { (account: Account) ->
+                OCShareeViewModel(androidContext(), account)
             }
             viewModel { (account: Account) ->
                 OCCapabilityViewModel(androidContext(), account)
