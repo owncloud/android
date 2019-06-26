@@ -22,7 +22,7 @@
  * along with this program.  If not, see <http:></http:>//www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.sharees.data
+package com.owncloud.android.sharees.presentation
 
 import android.app.SearchManager
 import android.content.ContentProvider
@@ -46,7 +46,6 @@ import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.operations.common.OperationType
 import com.owncloud.android.sharees.data.datasources.OCRemoteShareesDataSource
 import com.owncloud.android.sharees.domain.OCShareeRepository
-import com.owncloud.android.sharees.presentation.OCShareeViewModel
 import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter
 import com.owncloud.android.vo.Resource
 import org.json.JSONException
@@ -145,7 +144,10 @@ class UsersAndGroupsSearchProvider : ContentProvider() {
             )
         )
 
-        val resource = ocShareeViewModel.getSharees(userQuery, REQUESTED_PAGE, RESULTS_PER_PAGE)
+        val resource = ocShareeViewModel.getSharees(userQuery,
+            REQUESTED_PAGE,
+            RESULTS_PER_PAGE
+        )
         val names = ArrayList<JSONObject>()
 
         if (resource.isSuccess()) {

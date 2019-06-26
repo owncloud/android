@@ -17,20 +17,27 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.shares.ui.usecases
+package com.owncloud.android.shares.domain
 
 import android.accounts.Account
 import android.accounts.AccountManager
 import android.content.Context
 import android.content.Intent
 import android.os.Parcelable
+import android.widget.DatePicker
 import androidx.lifecycle.MutableLiveData
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.action.ViewActions.replaceText
+import androidx.test.espresso.action.ViewActions.typeText
 import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.contrib.PickerActions
+import androidx.test.espresso.matcher.ViewMatchers.isChecked
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import androidx.test.espresso.matcher.ViewMatchers.isNotChecked
+import androidx.test.espresso.matcher.ViewMatchers.withClassName
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.platform.app.InstrumentationRegistry
@@ -44,13 +51,13 @@ import com.owncloud.android.lib.common.accounts.AccountUtils
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.status.CapabilityBooleanType
 import com.owncloud.android.lib.resources.status.OwnCloudVersion
-import com.owncloud.android.shares.domain.OCShare
 import com.owncloud.android.shares.presentation.ShareActivity
 import com.owncloud.android.shares.presentation.OCShareViewModel
 import com.owncloud.android.ui.activity.FileActivity
 import com.owncloud.android.utils.AccountsManager
 import com.owncloud.android.utils.TestUtil
 import com.owncloud.android.vo.Resource
+import org.hamcrest.Matchers
 import org.junit.AfterClass
 import org.junit.Before
 import org.junit.BeforeClass
@@ -64,8 +71,11 @@ import org.koin.dsl.module
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.spy
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+import java.util.Calendar
 
-class CreatePublicShareTest {
+class EditPublicShareTest {
     @Rule
     @JvmField
     val activityRule = ActivityTestRule(
@@ -77,8 +87,9 @@ class CreatePublicShareTest {
     private lateinit var file: OCFile
 
     private val publicShares = arrayListOf(
-        TestUtil.createPublicShare(
+        TestUtil.createPublicShare( // With no expiration date
             path = "/Photos/image.jpg",
+            expirationDate = 0L,
             isFolder = false,
             name = "image.jpg link",
             shareLink = "http://server:port/s/1"
@@ -86,14 +97,29 @@ class CreatePublicShareTest {
         TestUtil.createPublicShare(
             path = "/Photos/image.jpg",
             isFolder = false,
-            name = "image.jpg link (2)",
+            name = "image.jpg updated link",
             shareLink = "http://server:port/s/2"
         ),
         TestUtil.createPublicShare(
             path = "/Photos/image.jpg",
             isFolder = false,
-            name = "image.jpg link (3)",
+            name = "image.jpg changed again link",
             shareLink = "http://server:port/s/3"
+        ),
+        TestUtil.createPublicShare( // With password but not expiration date
+            path = "/Photos/image.jpg",
+            expirationDate = 0L,
+            isFolder = false,
+            name = "image.jpg link",
+            shareLink = "http://server:port/s/1",
+            shareWith = "1"
+        ),
+        TestUtil.createPublicShare( // With expiration date but not password
+            path = "/Photos/image.jpg",
+            expirationDate = 2587896257,
+            isFolder = false,
+            name = "image.jpg link",
+            shareLink = "http://server:port/s/1"
         )
     )
 
@@ -189,144 +215,205 @@ class CreatePublicShareTest {
     }
 
     @Test
-    fun createPublicShareWithNoPublicSharesYet() {
+    fun editName() {
         loadCapabilitiesSuccessfully()
-        loadSharesSuccessfully(arrayListOf())
 
-        // Create share
-        onView(withId(R.id.addPublicLinkButton)).perform(click())
+        val existingPublicShare = publicShares[0]
+        loadSharesSuccessfully(arrayListOf(existingPublicShare))
 
-        val newPublicShare = publicShares[0]
-        savePublicShare(newPublicShare)
+        val updatedPublicShare = publicShares[1]
 
-        // New share properly created
+        // 1. Open dialog to edit an existing public share
+        onView(withId(R.id.editPublicLinkButton)).perform(click())
+
+        // 2. Update fields
+        onView(withId(R.id.shareViaLinkNameValue)).perform(replaceText(updatedPublicShare.name))
+
+        // 3. Edit public share with success
+        editPublicShare(updatedPublicShare, "", resource = Resource.success())
+
+        // 4. Share properly updated
         sharesLiveData.postValue(
             Resource.success(
-                arrayListOf(newPublicShare)
+                arrayListOf(updatedPublicShare)
             )
         )
 
-        // Check whether the dialog to create the public share has been properly closed
-        onView(withText(R.string.share_via_link_create_title)).check(doesNotExist())
-        onView(withText(newPublicShare.name)).check(matches(isDisplayed()))
+        // 5. Check whether the dialog to create the public share has been properly closed
+        onView(withText(R.string.share_via_link_edit_title)).check(doesNotExist())
+        onView(withText(updatedPublicShare.name)).check(matches(isDisplayed()))
     }
 
     @Test
-    fun createPublicShareWithAlreadyExistingShares() {
+    fun addPassword() {
         loadCapabilitiesSuccessfully()
-        val existingPublicShares = publicShares.take(2) as ArrayList<OCShare>
-        loadSharesSuccessfully(
-            existingPublicShares
-        )
 
-        onView(withId(R.id.addPublicLinkButton)).perform(click())
+        val existingPublicShare = publicShares[0]
+        loadSharesSuccessfully(arrayListOf(existingPublicShare))
 
-        val newPublicShare = publicShares[2]
-        savePublicShare(newPublicShare)
+        val password = "1234"
 
-        // New share properly created
+        // 1. Open dialog to edit an existing public share
+        onView(withId(R.id.editPublicLinkButton)).perform(click())
+
+        // 2. Enable password and type it
+        onView(withId(R.id.shareViaLinkPasswordSwitch)).perform(click())
+        onView(withId(R.id.shareViaLinkPasswordValue)).perform(typeText(password))
+
+        // 3. Edit public share with success
+        editPublicShare(existingPublicShare, "1234", resource = Resource.success())
+
+        // 4. Share properly updated
+        val updatedPublicShare = publicShares[3]
+
         sharesLiveData.postValue(
             Resource.success(
-                publicShares
+                arrayListOf(updatedPublicShare)
             )
         )
 
-        // Check whether the dialog to create the public share has been properly closed
-        onView(withText(R.string.share_via_link_create_title)).check(doesNotExist())
-        onView(withText(newPublicShare.name)).check(matches(isDisplayed()))
+        // 5. Open dialog to check whether the password has been properly set
+        onView(withId(R.id.editPublicLinkButton)).perform(click())
+        onView(withId(R.id.shareViaLinkPasswordSwitch)).check(matches(isChecked()))
     }
 
     @Test
-    fun createMultiplePublicShares() {
+    fun removePassword() {
         loadCapabilitiesSuccessfully()
-        loadSharesSuccessfully(arrayListOf())
 
-        /**
-         * 1st public share
-         */
-        onView(withId(R.id.addPublicLinkButton)).perform(click())
+        val existingPublicShare = publicShares[3]
+        loadSharesSuccessfully(arrayListOf(existingPublicShare))
 
-        val newPublicShare1 = publicShares[0]
-        savePublicShare(newPublicShare1)
+        // 1. Open dialog to edit an existing public share
+        onView(withId(R.id.editPublicLinkButton)).perform(click())
 
-        // New share properly created
+        // 2. Disable password
+        onView(withId(R.id.shareViaLinkPasswordSwitch)).perform(click())
+
+        // 3. Edit public share with success
+        editPublicShare(existingPublicShare, "", resource = Resource.success())
+
+        // 4. Share properly updated
+        val updatedPublicShare = publicShares[0]
+
         sharesLiveData.postValue(
             Resource.success(
-                arrayListOf(newPublicShare1)
+                arrayListOf(updatedPublicShare)
             )
         )
 
-        // Check whether the dialog to create the public share has been properly closed
-        onView(withText(R.string.share_via_link_create_title)).check(doesNotExist())
-        onView(withText(newPublicShare1.name)).check(matches(isDisplayed()))
-
-        /**
-         * 2nd public share
-         */
-        onView(withId(R.id.addPublicLinkButton)).perform(click())
-
-        val newPublicShare2 = publicShares[1]
-        savePublicShare(newPublicShare2)
-
-        // New share properly created
-        sharesLiveData.postValue(
-            Resource.success(
-                publicShares.take(2)
-            )
-        )
-
-        // Check whether the dialog to create the public share has been properly closed
-        onView(withText(R.string.share_via_link_create_title)).check(doesNotExist())
-        onView(withText(newPublicShare2.name)).check(matches(isDisplayed()))
-
-        /**
-         * 3rd public share
-         */
-        onView(withId(R.id.addPublicLinkButton)).perform(click())
-
-        val newPublicShare3 = publicShares[2]
-        savePublicShare(newPublicShare3)
-
-        // New share properly created
-        sharesLiveData.postValue(
-            Resource.success(
-                publicShares
-            )
-        )
-
-        // Check whether the dialog to create the public share has been properly closed
-        onView(withText(R.string.share_via_link_create_title)).check(doesNotExist())
-        onView(withText(newPublicShare3.name)).check(matches(isDisplayed()))
+        // 5. Open dialog to check whether the password has been properly disabled
+        onView(withId(R.id.editPublicLinkButton)).perform(click())
+        onView(withId(R.id.shareViaLinkPasswordSwitch)).check(matches(isNotChecked()))
     }
 
     @Test
-    fun createShareLoading() {
+    fun addExpirationDate() {
         loadCapabilitiesSuccessfully()
-        loadSharesSuccessfully(arrayListOf())
 
-        onView(withId(R.id.addPublicLinkButton)).perform(click())
+        val existingPublicShare = publicShares[0]
+        loadSharesSuccessfully(arrayListOf(existingPublicShare))
 
-        savePublicShare(publicShares[0], Resource.loading())
+        val calendar = Calendar.getInstance()
+        calendar.add(Calendar.DAY_OF_YEAR, 1)
+        val formatter: DateFormat = SimpleDateFormat("MMM dd, yyyy");
+        val expirationDate = formatter.format(calendar.time);
+        val publicLinkExpirationDateInMillis = SimpleDateFormat.getDateInstance().parse(expirationDate).time
+
+        // 1. Open dialog to edit an existing public share
+        onView(withId(R.id.editPublicLinkButton)).perform(click())
+
+        // 2. Enable expiration date and set it
+        onView(withId(R.id.shareViaLinkExpirationSwitch)).perform(click())
+        onView(withClassName(Matchers.equalTo(DatePicker::class.java.name))).perform(
+            PickerActions.setDate(
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH) + 1, // January code is 0, so let's add 1
+                calendar.get(Calendar.DATE)
+            )
+        );
+        onView(withId(android.R.id.button1)).perform(click())
+
+        // 3. Edit public share with success
+        editPublicShare(existingPublicShare, "", publicLinkExpirationDateInMillis, Resource.success())
+
+        // 4. Share properly updated
+        val updatedPublicShare = publicShares[4]
+
+        sharesLiveData.postValue(
+            Resource.success(
+                arrayListOf(updatedPublicShare)
+            )
+        )
+
+        // 5. Open dialog to check whether the expiration date is enabled
+        onView(withId(R.id.editPublicLinkButton)).perform(click())
+        onView(withId(R.id.shareViaLinkExpirationSwitch)).check(matches(isChecked()))
+    }
+
+    @Test
+    fun removeExpirationDate() {
+        loadCapabilitiesSuccessfully()
+
+        val existingPublicShare = publicShares[4]
+        loadSharesSuccessfully(arrayListOf(existingPublicShare))
+
+        // 1. Open dialog to edit an existing public share
+        onView(withId(R.id.editPublicLinkButton)).perform(click())
+
+        // 2. Disable expiration date
+        onView(withId(R.id.shareViaLinkExpirationSwitch)).perform(click())
+
+        // 3. Edit public share with success
+        editPublicShare(existingPublicShare, "", resource = Resource.success())
+
+        // 4. Share properly updated
+        val updatedPublicShare = publicShares[0]
+
+        sharesLiveData.postValue(
+            Resource.success(
+                arrayListOf(updatedPublicShare)
+            )
+        )
+
+        // 5. Open dialog to check whether the expiration date is disabled
+        onView(withId(R.id.editPublicLinkButton)).perform(click())
+        onView(withId(R.id.shareViaLinkExpirationSwitch)).check(matches(isNotChecked()))
+    }
+
+    @Test
+    fun editShareLoading() {
+        loadCapabilitiesSuccessfully()
+
+        val existingPublicShare = publicShares[3]
+        loadSharesSuccessfully(arrayListOf(existingPublicShare))
+
+        onView(withId(R.id.editPublicLinkButton)).perform(click())
+
+        editPublicShare(existingPublicShare, resource = Resource.loading())
 
         onView(withText(R.string.common_loading)).check(matches(isDisplayed()))
     }
 
     @Test
-    fun createShareError() {
+    fun editShareError() {
         loadCapabilitiesSuccessfully()
-        loadSharesSuccessfully(arrayListOf())
 
-        onView(withId(R.id.addPublicLinkButton)).perform(click())
+        val existingPublicShare = publicShares[0]
+        loadSharesSuccessfully(arrayListOf(existingPublicShare))
 
-        savePublicShare(
-            publicShares[0],
-            Resource.error(
+        onView(withId(R.id.editPublicLinkButton)).perform(click())
+
+        editPublicShare(
+            existingPublicShare,
+            password = "",
+            resource = Resource.error(
                 RemoteOperationResult.ResultCode.FORBIDDEN,
                 exception = Exception("Error when retrieving shares")
             )
         )
 
-        onView(withText(R.string.share_link_file_error)).check(matches(isDisplayed()))
+        onView(withText(R.string.update_link_file_error)).check(matches(isDisplayed()))
     }
 
     private fun getOCFileForTesting(name: String = "default") = OCFile("/Photos").apply {
@@ -354,14 +441,19 @@ class CreatePublicShareTest {
         sharesLiveData.postValue(Resource.success(shares))
     }
 
-    private fun savePublicShare(newShare: OCShare, resource: Resource<Unit> = Resource.success()) {
+    private fun editPublicShare(
+        share: OCShare,
+        password: String? = null,
+        publicLinkExpirationDateInMillis: Long = -1,
+        resource: Resource<Unit> = Resource.success() // Expected result when editing the share
+    ) {
         `when`(
-            ocShareViewModel.insertPublicShareForFile(
-                file.remotePath,
+            ocShareViewModel.updatePublicShareForFile(
                 1,
-                newShare.name!!,
-                "",
-                -1,
+                share.name!!,
+                password,
+                publicLinkExpirationDateInMillis,
+                1,
                 false
             )
         ).thenReturn(

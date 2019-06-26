@@ -1,4 +1,4 @@
-package com.owncloud.android.shares.ui
+package com.owncloud.android.shares.presentation.ui
 
 import android.accounts.Account
 import androidx.test.espresso.Espresso.onView

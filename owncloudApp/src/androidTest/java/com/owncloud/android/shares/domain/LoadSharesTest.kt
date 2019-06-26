@@ -17,7 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.shares.ui.usecases
+package com.owncloud.android.shares.domain
 
 import android.accounts.Account
 import android.accounts.AccountManager
@@ -41,7 +41,6 @@ import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.lib.common.accounts.AccountUtils
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.status.OwnCloudVersion
-import com.owncloud.android.shares.domain.OCShare
 import com.owncloud.android.shares.presentation.ShareActivity
 import com.owncloud.android.shares.presentation.OCShareViewModel
 import com.owncloud.android.ui.activity.FileActivity
