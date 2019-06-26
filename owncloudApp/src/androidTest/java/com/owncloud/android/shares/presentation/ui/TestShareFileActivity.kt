@@ -18,7 +18,7 @@
  *
  */
 
-package com.owncloud.android.shares.ui
+package com.owncloud.android.shares.presentation.ui
 
 import com.owncloud.android.capabilities.db.OCCapability
 import com.owncloud.android.datamodel.OCFile

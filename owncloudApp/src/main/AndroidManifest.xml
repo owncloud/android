@@ -157,7 +157,7 @@
             android:syncable="true"
             />
         <provider
-            android:name="com.owncloud.android.sharees.data.UsersAndGroupsSearchProvider"
+            android:name="com.owncloud.android.sharees.presentation.UsersAndGroupsSearchProvider"
             android:authorities="@string/search_suggest_authority"
             android:enabled="true"
             android:exported="false"

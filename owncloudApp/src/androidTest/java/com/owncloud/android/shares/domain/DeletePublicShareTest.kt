@@ -1,7 +1,7 @@
 /**
  * ownCloud Android client application
  *
- * @author Jesús Recio (@jesmrec)
+ * @author Jesus Recio (@jesmrec)
  * @author David González (@davigonz)
  * Copyright (C) 2019 ownCloud GmbH.
  *
@@ -18,7 +18,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.shares.ui.usecases
+package com.owncloud.android.shares.domain
 
 import android.accounts.Account
 import android.accounts.AccountManager
@@ -29,11 +29,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.action.ViewActions.replaceText
-import androidx.test.espresso.action.ViewActions.scrollTo
 import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.isChecked
+import androidx.test.espresso.matcher.ViewMatchers.hasSibling
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
@@ -45,15 +43,17 @@ import com.owncloud.android.capabilities.db.OCCapability
 import com.owncloud.android.capabilities.viewmodel.OCCapabilityViewModel
 import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.lib.common.accounts.AccountUtils
+import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.status.CapabilityBooleanType
 import com.owncloud.android.lib.resources.status.OwnCloudVersion
-import com.owncloud.android.shares.domain.OCShare
-import com.owncloud.android.shares.presentation.ShareActivity
 import com.owncloud.android.shares.presentation.OCShareViewModel
+import com.owncloud.android.shares.presentation.ShareActivity
 import com.owncloud.android.ui.activity.FileActivity
 import com.owncloud.android.utils.AccountsManager
 import com.owncloud.android.utils.TestUtil
 import com.owncloud.android.vo.Resource
+import org.hamcrest.Matchers.allOf
+import org.hamcrest.Matchers.not
 import org.junit.AfterClass
 import org.junit.Before
 import org.junit.BeforeClass
@@ -64,11 +64,12 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.module
+import org.mockito.ArgumentMatchers
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.spy
 
-class EditPublicShareFolderTest {
+class DeletePublicShareTest {
     @Rule
     @JvmField
     val activityRule = ActivityTestRule(
@@ -80,45 +81,18 @@ class EditPublicShareFolderTest {
     private lateinit var file: OCFile
 
     private val publicShares = arrayListOf(
+        TestUtil.createPublicShare( // With no expiration date
+            path = "/Photos/image.jpg",
+            expirationDate = 0L,
+            isFolder = false,
+            name = "image.jpg link",
+            shareLink = "http://server:port/s/1"
+        ),
         TestUtil.createPublicShare(
-            path = "/Photos/",
-            expirationDate = 0L,
-            permissions = 1,
-            isFolder = true,
-            name = "Photos link",
-            shareLink = "http://server:port/s/1"
-        ),
-        TestUtil.createPublicShare(  // With name updated
-            path = "/Photos/",
-            expirationDate = 0L,
-            permissions = 1,
-            isFolder = true,
-            name = "Photos updated link",
-            shareLink = "http://server:port/s/1"
-        ),
-        TestUtil.createPublicShare( // With permission Download/View/Upload
-            path = "/Photos/",
-            expirationDate = 0L,
-            permissions = 15,
-            isFolder = true,
-            name = "Photos link",
-            shareLink = "http://server:port/s/1"
-        ),
-        TestUtil.createPublicShare( // With permission Upload only
-            path = "/Photos/",
-            expirationDate = 0L,
-            permissions = 4,
-            isFolder = true,
-            name = "Photos link",
-            shareLink = "http://server:port/s/1"
-        ),
-        TestUtil.createPublicShare( // With password
-            path = "/Photos/",
-            expirationDate = 0L,
-            isFolder = true,
-            name = "Photos link",
-            shareLink = "http://server:port/s/1",
-            shareWith = "1"
+            path = "/Photos/image.jpg",
+            isFolder = false,
+            name = "image.jpg updated link",
+            shareLink = "http://server:port/s/2"
         )
     )
 
@@ -184,7 +158,7 @@ class EditPublicShareFolderTest {
     fun setUp() {
         val intent = spy(Intent::class.java)
 
-        file = getOCFileForTesting("Photos")
+        file = getOCFileForTesting("image.jpg")
 
         `when`(intent.getParcelableExtra(FileActivity.EXTRA_FILE) as? Parcelable).thenReturn(file)
         intent.putExtra(FileActivity.EXTRA_FILE, file)
@@ -214,202 +188,121 @@ class EditPublicShareFolderTest {
     }
 
     @Test
-    fun editNameFolder() {
+    fun deletePublicLink() {
+        loadCapabilitiesSuccessfully()
+
+        val existingPublicShare = publicShares.take(2) as ArrayList<OCShare>
+        loadSharesSuccessfully(existingPublicShare)
+
+        `when`(
+            ocShareViewModel.deletePublicShare(ArgumentMatchers.anyLong())
+        ).thenReturn(
+            MutableLiveData<Resource<Unit>>().apply {
+                postValue(Resource.success())
+            }
+        )
+
+        onView(allOf(withId(R.id.deletePublicLinkButton), hasSibling(withText(existingPublicShare[0].name))))
+            .perform(click())
+        onView(withId(android.R.id.button1)).perform(click())
+
+        sharesLiveData.postValue(
+            Resource.success(
+                arrayListOf(existingPublicShare[1])
+            )
+        )
+
+        onView(withText(existingPublicShare[0].name)).check(doesNotExist())
+        onView(withText(existingPublicShare[1].name)).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun deleteLastPublicLink() {
         loadCapabilitiesSuccessfully()
 
         val existingPublicShare = publicShares[0]
         loadSharesSuccessfully(arrayListOf(existingPublicShare))
 
-        val updatedPublicShare = publicShares[1]
-
         `when`(
-            ocShareViewModel.updatePublicShareForFile(
-                1,
-                updatedPublicShare.name!!,
-                "",
-                -1,
-                1,
-                false
-            )
+            ocShareViewModel.deletePublicShare(ArgumentMatchers.anyLong())
         ).thenReturn(
             MutableLiveData<Resource<Unit>>().apply {
                 postValue(Resource.success())
             }
         )
 
-        // 1. Open dialog to edit an existing public share
-        onView(withId(R.id.editPublicLinkButton)).perform(click())
+        onView(withId(R.id.deletePublicLinkButton)).perform(click())
+        onView(withId(android.R.id.button1)).perform(click())
 
-        // 2. Update fields
-        onView(withId(R.id.shareViaLinkNameValue)).perform(replaceText(updatedPublicShare.name))
-
-        // 3. Save updated share
-        onView(withId(R.id.saveButton)).perform(scrollTo(), click())
-
-        // 4. Share properly updated
         sharesLiveData.postValue(
             Resource.success(
-                arrayListOf(updatedPublicShare)
+                arrayListOf()
             )
         )
 
-        // Check whether the dialog to create the public share has been properly closed
-        onView(withText(R.string.share_via_link_edit_title)).check(doesNotExist())
-        onView(withText(updatedPublicShare.name)).check(matches(isDisplayed()))
+        onView(withText(existingPublicShare.name)).check(matches(not(isDisplayed())))
+        onView(withText(R.string.share_no_public_links)).check(matches(isDisplayed()))
+
     }
 
     @Test
-    fun editPermissionToDownloadViewUpload() {
+    fun deleteShareLoading() {
         loadCapabilitiesSuccessfully()
 
         val existingPublicShare = publicShares[0]
         loadSharesSuccessfully(arrayListOf(existingPublicShare))
 
-        val updatedPublicShare = publicShares[2]
-        `when`(
-            ocShareViewModel.updatePublicShareForFile(
-                1,
-                updatedPublicShare.name!!,
-                "",
-                -1,
-                15,
-                true
-            )
-        ).thenReturn(
-            MutableLiveData<Resource<Unit>>().apply {
-                postValue(Resource.success())
-            }
-        )
+        onView(withId(R.id.deletePublicLinkButton)).perform(click())
 
-        // 1. Open dialog to edit an existing public share
-        onView(withId(R.id.editPublicLinkButton)).perform(click())
-
-        // 2. Update fields
-        onView(withId(R.id.shareViaLinkEditPermissionReadAndWrite)).perform(click())
-
-        // 3. Save updated share
-        onView(withId(R.id.saveButton)).perform(scrollTo(), click())
-
-        // 4. Share properly updated
         sharesLiveData.postValue(
-            Resource.success(
-                arrayListOf(updatedPublicShare)
+            Resource.loading(
+                publicShares
             )
         )
 
-        // Open Dialog to check correct permission change
-        onView(withId(R.id.editPublicLinkButton)).perform(click())
-        onView(withId(R.id.shareViaLinkEditPermissionReadAndWrite)).check(matches(isChecked()))
-
+        onView(withText(R.string.common_loading)).check(matches(isDisplayed()))
     }
 
     @Test
-    fun editPermissionToUploadOnly() {
+    fun deleteShareError() {
         loadCapabilitiesSuccessfully()
 
         val existingPublicShare = publicShares[0]
         loadSharesSuccessfully(arrayListOf(existingPublicShare))
 
-        val updatedPublicShare = publicShares[3]
         `when`(
-            ocShareViewModel.updatePublicShareForFile(
-                1,
-                updatedPublicShare.name!!,
-                "",
-                -1,
-                4,
-                true
-            )
+            ocShareViewModel.deletePublicShare(ArgumentMatchers.anyLong())
         ).thenReturn(
             MutableLiveData<Resource<Unit>>().apply {
-                postValue(Resource.success())
+                postValue(
+                    Resource.error(
+                        RemoteOperationResult.ResultCode.FORBIDDEN,
+                        exception = Exception("Error when retrieving shares")
+                    )
+                )
             }
         )
 
-        // 1. Open dialog to edit an existing public share
-        onView(withId(R.id.editPublicLinkButton)).perform(click())
+        onView(withId(R.id.deletePublicLinkButton)).perform(click())
+        onView(withId(android.R.id.button1)).perform(click())
 
-        // 2. Update fields
-        onView(withId(R.id.shareViaLinkEditPermissionUploadFiles)).perform(click())
-
-        // 3. Save updated share
-        onView(withId(R.id.saveButton)).perform(scrollTo(), click())
-
-        // 4. Share properly updated
-        sharesLiveData.postValue(
-            Resource.success(
-                arrayListOf(updatedPublicShare)
-            )
-        )
-
-        // Open Dialog to check correct permission change
-        onView(withId(R.id.editPublicLinkButton)).perform(click())
-        onView(withId(R.id.shareViaLinkEditPermissionUploadFiles)).check(matches(isChecked()))
-
-    }
-
-    @Test
-    fun editPermissionToDownloadView() {
-        loadCapabilitiesSuccessfully()
-
-        val existingPublicShare = publicShares[2]
-        loadSharesSuccessfully(arrayListOf(existingPublicShare))
-
-        val updatedPublicShare = publicShares[0]
-        `when`(
-            ocShareViewModel.updatePublicShareForFile(
-                1,
-                updatedPublicShare.name!!,
-                "",
-                -1,
-                1,
-                false
-            )
-        ).thenReturn(
-            MutableLiveData<Resource<Unit>>().apply {
-                postValue(Resource.success())
-            }
-        )
-
-        // 1. Open dialog to edit an existing public share
-        onView(withId(R.id.editPublicLinkButton)).perform(click())
-
-        // 2. Update fields
-        onView(withId(R.id.shareViaLinkEditPermissionReadOnly)).perform(click())
-
-        // 3. Save updated share
-        onView(withId(R.id.saveButton)).perform(scrollTo(), click())
-
-        // 4. Share properly updated
-        sharesLiveData.postValue(
-            Resource.success(
-                arrayListOf(updatedPublicShare)
-            )
-        )
-
-        // Open Dialog to check correct permission change
-        onView(withId(R.id.editPublicLinkButton)).perform(click())
-        onView(withId(R.id.shareViaLinkEditPermissionReadOnly)).check(matches(isChecked()))
-
+        onView(withText(R.string.unshare_link_file_error)).check(matches(isDisplayed()))
     }
 
     private fun getOCFileForTesting(name: String = "default"): OCFile {
-        val file = OCFile("/Photos")
+        val file = OCFile("/Photos/image.jpg")
         file.availableOfflineStatus = OCFile.AvailableOfflineStatus.NOT_AVAILABLE_OFFLINE
         file.fileName = name
         file.fileId = 9456985479
         file.remoteId = "1"
-        file.mimetype = "DIR"
-        file.privateLink = "private link"
+        file.privateLink = "image link"
         return file
     }
 
     private fun loadCapabilitiesSuccessfully(
         capability: OCCapability = TestUtil.createCapability(
             versionString = "10.1.1",
-            sharingPublicMultiple = CapabilityBooleanType.TRUE.value,
-            sharingPublicSupportsUploadOnly = CapabilityBooleanType.TRUE.value,
-            sharingPublicUpload = CapabilityBooleanType.TRUE.value
+            sharingPublicMultiple = CapabilityBooleanType.TRUE.value
         )
     ) {
         capabilitiesLiveData.postValue(

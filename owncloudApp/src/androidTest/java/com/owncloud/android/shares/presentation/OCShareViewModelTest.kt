@@ -17,7 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.shares.presentation.viewmodel
+package com.owncloud.android.shares.presentation
 
 import android.accounts.Account
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
@@ -25,7 +25,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.test.platform.app.InstrumentationRegistry
 import com.owncloud.android.shares.domain.OCShare
 import com.owncloud.android.shares.domain.OCShareRepository
-import com.owncloud.android.shares.presentation.OCShareViewModel
 import com.owncloud.android.utils.TestUtil
 import com.owncloud.android.vo.Resource
 import com.owncloud.android.vo.Status

@@ -43,7 +43,7 @@ import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.operations.RemoveShareOperation
 import com.owncloud.android.operations.UpdateSharePermissionsOperation
 import com.owncloud.android.operations.common.OperationType
-import com.owncloud.android.sharees.data.UsersAndGroupsSearchProvider
+import com.owncloud.android.sharees.presentation.UsersAndGroupsSearchProvider
 import com.owncloud.android.shares.domain.OCShare
 import com.owncloud.android.shares.presentation.fragment.PublicShareDialogFragment
 import com.owncloud.android.shares.presentation.fragment.ShareFileFragment
