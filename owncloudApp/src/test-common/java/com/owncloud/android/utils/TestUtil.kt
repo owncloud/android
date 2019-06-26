@@ -291,7 +291,9 @@ object TestUtil {
     ): RemoteOperationResult<T> {
         val remoteOperationResult = mock<RemoteOperationResult<T>>()
 
-        `when`(remoteOperationResult.data).thenReturn(data)
+        `when`(remoteOperationResult.data).thenReturn(
+            data
+        )
         `when`(remoteOperationResult.isSuccess).thenReturn(isSuccess)
 
         if (httpPhrase != null) {

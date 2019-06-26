@@ -148,19 +148,15 @@ class UsersAndGroupsSearchProvider : ContentProvider() {
             REQUESTED_PAGE,
             RESULTS_PER_PAGE
         )
-        val names = ArrayList<JSONObject>()
 
-        if (resource.isSuccess()) {
-            for (o in resource.data!!) {
-                // Get JSonObjects from response
-                names.add(o)
-            }
-        } else {
+        if (!resource.isSuccess()) {
             showErrorMessage(resource)
         }
 
+        val names = resource.data
+
         // convert the responses from the OC server to the expected format
-        if (names.size > 0) {
+        if (names?.size!! > 0) {
             response = MatrixCursor(COLUMNS)
             val namesIt = names.iterator()
             var item: JSONObject

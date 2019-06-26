@@ -18,7 +18,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.shares.data.datasources
+package com.owncloud.android.shares.data
 
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
@@ -28,6 +28,7 @@ import com.owncloud.android.lib.resources.shares.RemoveRemoteShareOperation
 import com.owncloud.android.lib.resources.shares.ShareParserResult
 import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.lib.resources.shares.UpdateRemoteShareOperation
+import com.owncloud.android.shares.data.datasources.OCRemoteSharesDataSource
 import com.owncloud.android.utils.TestUtil
 import junit.framework.Assert.assertEquals
 import org.hamcrest.CoreMatchers.notNullValue
@@ -101,28 +102,28 @@ class OCRemoteShareDataSourceTest {
         assertThat(remoteOperationResult, notNullValue())
         assertEquals(4, remoteOperationResult.data.shares.size)
 
-        val publicShare1 = remoteOperationResult.data.shares.get(0)
+        val publicShare1 = remoteOperationResult.data.shares[0]
         assertEquals(ShareType.PUBLIC_LINK, publicShare1.shareType)
         assertEquals("/Documents/doc", publicShare1.path)
         assertEquals(false, publicShare1.isFolder)
         assertEquals("Doc link", publicShare1.name)
         assertEquals("http://server:port/s/1", publicShare1.shareLink)
 
-        val publicShare2 = remoteOperationResult.data.shares.get(1)
+        val publicShare2 = remoteOperationResult.data.shares[1]
         assertEquals(ShareType.PUBLIC_LINK, publicShare2.shareType)
         assertEquals("/Documents/doc", publicShare2.path)
         assertEquals(false, publicShare2.isFolder)
         assertEquals("Doc link 2", publicShare2.name)
         assertEquals("http://server:port/s/2", publicShare2.shareLink)
 
-        val userShare = remoteOperationResult.data.shares.get(2)
+        val userShare = remoteOperationResult.data.shares[2]
         assertEquals(ShareType.USER, userShare.shareType)
         assertEquals("/Documents/doc", userShare.path)
         assertEquals(false, userShare.isFolder)
         assertEquals("steve", userShare.shareWith)
         assertEquals("Steve", userShare.sharedWithDisplayName)
 
-        val groupShare = remoteOperationResult.data.shares.get(3)
+        val groupShare = remoteOperationResult.data.shares[3]
         assertEquals(ShareType.GROUP, groupShare.shareType)
         assertEquals("/Documents/doc", groupShare.path)
         assertEquals(false, groupShare.isFolder)
@@ -169,7 +170,7 @@ class OCRemoteShareDataSourceTest {
         assertThat(remoteOperationResult, notNullValue())
         assertEquals(1, remoteOperationResult.data.shares.size)
 
-        val publicShareAdded = remoteOperationResult.data.shares.get(0)
+        val publicShareAdded = remoteOperationResult.data.shares[0]
 
         assertEquals("", publicShareAdded.shareWith)
         assertEquals(1, publicShareAdded.permissions)
