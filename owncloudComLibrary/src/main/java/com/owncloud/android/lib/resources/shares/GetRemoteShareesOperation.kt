@@ -41,6 +41,7 @@ import java.net.URL
 import java.util.ArrayList
 
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode.OK
+import com.owncloud.android.lib.testing.OpenForTesting
 
 /**
  * Created by masensio on 08/10/2015.
@@ -72,6 +73,7 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCo
  * @author David A. Velasco
  * @author David González Verdugo
  */
+@OpenForTesting
 class GetRemoteShareesOperation
 /**
  * Constructor
