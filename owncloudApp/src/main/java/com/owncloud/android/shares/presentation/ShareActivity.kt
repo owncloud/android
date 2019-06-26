@@ -98,7 +98,6 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
 
     private val ocShareViewModel: OCShareViewModel by viewModel {
         parametersOf(
-            file?.remotePath!!,
             account!!
         )
     }
@@ -226,7 +225,7 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
      **************************************************************************************************************/
 
     override fun refreshPrivateShares() {
-        ocShareViewModel.getPrivateSharesForFile().observe(
+        ocShareViewModel.getPrivateSharesForFile(file?.remotePath!!).observe(
             this,
             Observer { resource ->
                 when (resource?.status) {
@@ -350,7 +349,7 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
      **************************************************************************************************************/
 
     private fun refreshPublicShares() {
-        ocShareViewModel.getPublicSharesForFile().observe(
+        ocShareViewModel.getPublicSharesForFile(file?.remotePath!!).observe(
             this,
             Observer { resource ->
                 when (resource?.status) {
@@ -413,6 +412,7 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
         publicUpload: Boolean
     ) {
         ocShareViewModel.insertPublicShareForFile(
+            file?.remotePath!!,
             permissions,
             name,
             password,

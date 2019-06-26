@@ -80,7 +80,7 @@ class OCShareViewModelTest {
         // Viewmodel that will ask ocShareRepository for shares
         val ocShareViewModel = createOCShareViewModel(ocShareRepository)
 
-        val resource: Resource<List<OCShare>>? = ocShareViewModel.getPrivateSharesForFile().value
+        val resource: Resource<List<OCShare>>? = ocShareViewModel.getPrivateSharesForFile(filePath).value
         assertPrivateShareParameters(resource?.data)
     }
 
@@ -126,7 +126,7 @@ class OCShareViewModelTest {
         // Viewmodel that will ask ocShareRepository for shares
         val ocShareViewModel = createOCShareViewModel(ocShareRepository)
 
-        val resource: Resource<List<OCShare>>? = ocShareViewModel.getPublicSharesForFile().value
+        val resource: Resource<List<OCShare>>? = ocShareViewModel.getPublicSharesForFile(filePath).value
         assertPublicShareParameters(resource?.data)
     }
 
@@ -153,6 +153,7 @@ class OCShareViewModelTest {
         val ocShareViewModel = createOCShareViewModel(ocShareRepository)
 
         val resource: Resource<Unit>? = ocShareViewModel.insertPublicShareForFile(
+            filePath,
             1,
             "Photos 2 link",
             "1234",
@@ -240,7 +241,6 @@ class OCShareViewModelTest {
 
         return OCShareViewModel(
             context,
-            filePath,
             testAccount,
             ocShareRepository
         )
