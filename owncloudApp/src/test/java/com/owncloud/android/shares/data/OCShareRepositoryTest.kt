@@ -27,8 +27,8 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.shares.ShareParserResult
 import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.shares.data.datasources.LocalSharesDataSource
-import com.owncloud.android.shares.domain.OCShareRepository
 import com.owncloud.android.shares.domain.OCShare
+import com.owncloud.android.shares.domain.OCShareRepository
 import com.owncloud.android.util.InstantAppExecutors
 import com.owncloud.android.utils.TestUtil
 import com.owncloud.android.utils.mock
@@ -220,7 +220,7 @@ class OCShareRepositoryTest {
         localData: MutableLiveData<List<OCShare>>,
         remoteOperationResult: RemoteOperationResult<ShareParserResult>
     ): OCShareRepository =
-        createRepositoryWithDataSources(
+        createShareRepositoryWithDataSources(
             localData, remoteOperationResult, privateShareTypes
         )
 
@@ -238,7 +238,7 @@ class OCShareRepositoryTest {
     )
 
     @Test
-    fun loadPublicSharesForFileFromNetwork() {
+    fun loadPublicSharesForFileFromNetworkSuccessfully() {
         val localData = MutableLiveData<List<OCShare>>()
 
         val remoteOperationResult =
@@ -429,7 +429,7 @@ class OCShareRepositoryTest {
         localData: MutableLiveData<List<OCShare>>,
         remoteOperationResult: RemoteOperationResult<ShareParserResult>
     ): LiveData<Resource<List<OCShare>>> {
-        val ocShareRepository = createRepositoryWithPublicData(localData, remoteOperationResult)
+        val ocShareRepository = createShareRepositoryWithPublicData(localData, remoteOperationResult)
         return ocShareRepository.getPublicSharesForFile(filePath)
     }
 
@@ -437,7 +437,7 @@ class OCShareRepositoryTest {
         localData: MutableLiveData<List<OCShare>>,
         remoteOperationResult: RemoteOperationResult<ShareParserResult>
     ): LiveData<Resource<Unit>> {
-        val ocShareRepository = createRepositoryWithPublicData(localData, remoteOperationResult)
+        val ocShareRepository = createShareRepositoryWithPublicData(localData, remoteOperationResult)
 
         return ocShareRepository.insertPublicShareForFile(
             filePath,
@@ -453,7 +453,7 @@ class OCShareRepositoryTest {
         localData: MutableLiveData<List<OCShare>>,
         remoteOperationResult: RemoteOperationResult<ShareParserResult>
     ): LiveData<Resource<Unit>> {
-        val ocShareRepository = createRepositoryWithPublicData(localData, remoteOperationResult)
+        val ocShareRepository = createShareRepositoryWithPublicData(localData, remoteOperationResult)
 
         return ocShareRepository.updatePublicShareForFile(
             1,
@@ -469,23 +469,23 @@ class OCShareRepositoryTest {
         localData: MutableLiveData<List<OCShare>>,
         remoteOperationResult: RemoteOperationResult<ShareParserResult>
     ): LiveData<Resource<Unit>> {
-        val ocShareRepository = createRepositoryWithPublicData(localData, remoteOperationResult)
+        val ocShareRepository = createShareRepositoryWithPublicData(localData, remoteOperationResult)
         return ocShareRepository.deletePublicShare(
             1
         )
     }
 
-    private fun createRepositoryWithPublicData(
+    private fun createShareRepositoryWithPublicData(
         localData: MutableLiveData<List<OCShare>>,
         remoteOperationResult: RemoteOperationResult<ShareParserResult>
     ): OCShareRepository =
-        createRepositoryWithDataSources(localData, remoteOperationResult, listOf(ShareType.PUBLIC_LINK))
+        createShareRepositoryWithDataSources(localData, remoteOperationResult, listOf(ShareType.PUBLIC_LINK))
 
     /******************************************************************************************************
      *********************************************** COMMON ***********************************************
      ******************************************************************************************************/
 
-    private fun createRepositoryWithDataSources(
+    private fun createShareRepositoryWithDataSources(
         localData: MutableLiveData<List<OCShare>>,
         remoteOperationResult: RemoteOperationResult<ShareParserResult>,
         shareTypes: List<ShareType>

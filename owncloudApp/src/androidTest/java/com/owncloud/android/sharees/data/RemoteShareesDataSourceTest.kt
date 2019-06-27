@@ -1,4 +1,4 @@
-package com.owncloud.android.sharees
+package com.owncloud.android.sharees.data
 
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.shares.GetRemoteShareesOperation

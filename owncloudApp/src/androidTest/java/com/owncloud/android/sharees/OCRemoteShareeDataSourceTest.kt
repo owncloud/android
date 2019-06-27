@@ -46,9 +46,9 @@ class OCRemoteShareeDataSourceTest {
         val getRemoteShareesForFileOperation = mock(GetRemoteShareesOperation::class.java)
 
         val remoteSharees: ArrayList<JSONObject> = arrayListOf(
-            createRemoteSharee("User 1", "0", "user1", "user1@mail.com"),
-            createRemoteSharee("User 2", "0", "user2", "user2@mail.com"),
-            createRemoteSharee("User 3", "0", "user3", "user3@mail.com")
+            TestUtil.createSharee("User 1", "0", "user1", "user1@mail.com"),
+            TestUtil.createSharee("User 2", "0", "user2", "user2@mail.com"),
+            TestUtil.createSharee("User 3", "0", "user3", "user3@mail.com")
         )
 
         val getRemoteShareesOperationResult = TestUtil.createRemoteOperationResultMock(
@@ -91,25 +91,5 @@ class OCRemoteShareeDataSourceTest {
         assertEquals(value3.getString(GetRemoteShareesOperation.PROPERTY_SHARE_TYPE), "0")
         assertEquals(value3.getString(GetRemoteShareesOperation.PROPERTY_SHARE_WITH), "user3")
         assertEquals(value3.getString(GetRemoteShareesOperation.PROPERTY_SHARE_WITH_ADDITIONAL_INFO), "user3@mail.com")
-    }
-
-    private fun createRemoteSharee(
-        label: String,
-        shareType: String,
-        shareWith: String,
-        shareWithAdditionalInfo: String
-    ): JSONObject {
-        val jsonObject = JSONObject()
-
-        jsonObject.put(GetRemoteShareesOperation.PROPERTY_LABEL, label)
-
-        val value = JSONObject()
-        value.put(GetRemoteShareesOperation.PROPERTY_SHARE_TYPE, shareType)
-        value.put(GetRemoteShareesOperation.PROPERTY_SHARE_WITH, shareWith)
-        value.put(GetRemoteShareesOperation.PROPERTY_SHARE_WITH_ADDITIONAL_INFO, shareWithAdditionalInfo)
-
-        jsonObject.put(GetRemoteShareesOperation.NODE_VALUE, value)
-
-        return jsonObject
     }
 }

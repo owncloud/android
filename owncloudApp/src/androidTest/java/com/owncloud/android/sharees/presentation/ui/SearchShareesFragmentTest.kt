@@ -1,7 +1,8 @@
-package com.owncloud.android.shares.presentation.ui
+package com.owncloud.android.sharees.presentation.ui
 
 import android.accounts.Account
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.hasSibling
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
@@ -15,6 +16,7 @@ import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.lib.resources.status.OwnCloudVersion
 import com.owncloud.android.shares.domain.OCShare
 import com.owncloud.android.sharees.presentation.SearchShareesFragment
+import com.owncloud.android.shares.presentation.ui.TestShareFileActivity
 import com.owncloud.android.utils.TestUtil
 import org.junit.Rule
 import org.junit.Test
