@@ -21,9 +21,11 @@ package com.owncloud.android.sharees.domain
 
 import com.owncloud.android.sharees.data.ShareeRepository
 import com.owncloud.android.sharees.data.datasources.RemoteShareesDataSource
+import com.owncloud.android.testing.OpenForTesting
 import com.owncloud.android.vo.Resource
 import org.json.JSONObject
 
+@OpenForTesting
 class OCShareeRepository(
     private val remoteSharesDataSource: RemoteShareesDataSource
 ) : ShareeRepository {

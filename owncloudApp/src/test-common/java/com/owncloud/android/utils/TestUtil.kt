@@ -22,11 +22,13 @@ package com.owncloud.android.utils
 import android.accounts.Account
 import com.owncloud.android.capabilities.db.OCCapability
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
+import com.owncloud.android.lib.resources.shares.GetRemoteShareesOperation
 import com.owncloud.android.lib.resources.shares.RemoteShare
 import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.lib.resources.status.CapabilityBooleanType
 import com.owncloud.android.lib.resources.status.RemoteCapability
 import com.owncloud.android.shares.domain.OCShare
+import org.json.JSONObject
 import org.mockito.Mockito.`when`
 
 object TestUtil {
@@ -145,6 +147,29 @@ object TestUtil {
         remoteShare.shareLink = shareLink
 
         return remoteShare
+    }
+
+    /**
+     * Sharees
+     */
+    fun createSharee(
+        label: String,
+        shareType: String,
+        shareWith: String,
+        shareWithAdditionalInfo: String
+    ): JSONObject {
+        val jsonObject = JSONObject()
+
+        jsonObject.put(GetRemoteShareesOperation.PROPERTY_LABEL, label)
+
+        val value = JSONObject()
+        value.put(GetRemoteShareesOperation.PROPERTY_SHARE_TYPE, shareType)
+        value.put(GetRemoteShareesOperation.PROPERTY_SHARE_WITH, shareWith)
+        value.put(GetRemoteShareesOperation.PROPERTY_SHARE_WITH_ADDITIONAL_INFO, shareWithAdditionalInfo)
+
+        jsonObject.put(GetRemoteShareesOperation.NODE_VALUE, value)
+
+        return jsonObject
     }
 
     /**
