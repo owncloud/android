@@ -27,17 +27,20 @@ import androidx.test.espresso.matcher.ViewMatchers.hasSibling
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility
 import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.withTagValue
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.ActivityTestRule
 import com.owncloud.android.R
 import com.owncloud.android.capabilities.db.OCCapability
 import com.owncloud.android.datamodel.OCFile
+import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.lib.resources.status.CapabilityBooleanType
 import com.owncloud.android.lib.resources.status.OwnCloudVersion
 import com.owncloud.android.shares.domain.OCShare
 import com.owncloud.android.shares.presentation.fragment.ShareFileFragment
 import com.owncloud.android.utils.TestUtil
+import org.hamcrest.CoreMatchers
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -76,42 +79,70 @@ class ShareFileFragmentTest {
      ******************************************* PRIVATE SHARES *******************************************
      ******************************************************************************************************/
 
-    private var privateShareList = arrayListOf(
+    private var userSharesList = arrayListOf(
         TestUtil.createPrivateShare(
+            shareType = ShareType.USER.value,
             path = "/Photos/image.jpg",
             isFolder = false,
             shareWith = "batman",
             sharedWithDisplayName = "Batman"
         ),
         TestUtil.createPrivateShare(
+            shareType = ShareType.USER.value,
+            path = "/Photos/image.jpg",
+            isFolder = false,
+            shareWith = "jocker",
+            sharedWithDisplayName = "Jocker"
+        )
+    )
+
+    private var groupSharesList = arrayListOf(
+        TestUtil.createPrivateShare(
+            shareType = ShareType.GROUP.value,
             path = "/Photos/image.jpg",
             isFolder = false,
             shareWith = "suicideSquad",
             sharedWithDisplayName = "Suicide Squad"
+        ),
+        TestUtil.createPrivateShare(
+            shareType = ShareType.GROUP.value,
+            path = "/Photos/image.jpg",
+            isFolder = false,
+            shareWith = "avengers",
+            sharedWithDisplayName = "Avengers"
         )
     )
 
     @Test
     fun showUsersAndGroupsSectionTitle() {
-        loadShareFileFragment()
+        loadShareFileFragment(privateShares = userSharesList)
         onView(withText(R.string.share_with_user_section_title)).check(matches(isDisplayed()))
     }
 
     @Test
     fun showNoPrivateShares() {
-        loadShareFileFragment(privateShares = arrayListOf())
+        loadShareFileFragment()
         onView(withText(R.string.share_no_users)).check(matches(isDisplayed()))
     }
 
     @Test
-    fun showPrivateShares() {
-        loadShareFileFragment()
+    fun showUserShares() {
+        loadShareFileFragment(privateShares = userSharesList)
         onView(withText("Batman")).check(matches(isDisplayed()))
         onView(withText("Batman")).check(matches(hasSibling(withId(R.id.unshareButton))))
             .check(matches(isDisplayed()))
         onView(withText("Batman")).check(matches(hasSibling(withId(R.id.editShareButton))))
             .check(matches(isDisplayed()))
-        onView(withText("Suicide Squad")).check(matches(isDisplayed()))
+        onView(withText("Jocker")).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun showGroupShares() {
+        loadShareFileFragment(privateShares = arrayListOf(groupSharesList[0]))
+        onView(withText("Suicide Squad (group)")).check(matches(isDisplayed()))
+        onView(withText("Suicide Squad (group)")).check(matches(hasSibling(withId(R.id.icon))))
+            .check(matches(isDisplayed()))
+        onView(withTagValue(CoreMatchers.equalTo(R.drawable.ic_group))).check(matches(isDisplayed()))
     }
 
     /******************************************************************************************************
@@ -235,7 +266,7 @@ class ShareFileFragmentTest {
 
     private fun loadShareFileFragment(
         capabilities: OCCapability = TestUtil.createCapability(),
-        privateShares: ArrayList<OCShare> = privateShareList,
+        privateShares: ArrayList<OCShare> = arrayListOf(),
         publicShares: ArrayList<OCShare> = publicShareList
     ) {
         val account = mock(Account::class.java)

@@ -74,14 +74,15 @@ object TestUtil {
     )
 
     fun createPrivateShare(
+        shareType: Int = 0,
         shareWith: String,
         path: String,
         isFolder: Boolean,
         sharedWithDisplayName: String,
         accountOwner: String = "admin@server"
     ) = createShare(
+        shareType = shareType,
         shareWith = shareWith,
-        shareType = 0,
         path = path,
         isFolder = isFolder,
         sharedWithDisplayName = sharedWithDisplayName,

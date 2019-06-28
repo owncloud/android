@@ -44,7 +44,7 @@ import com.owncloud.android.lib.resources.status.CapabilityBooleanType
 import com.owncloud.android.lib.resources.status.OwnCloudVersion
 import com.owncloud.android.shares.domain.OCShare
 import com.owncloud.android.ui.adapter.SharePublicLinkListAdapter
-import com.owncloud.android.ui.adapter.ShareUserListAdapter
+import com.owncloud.android.sharees.presentation.ShareUserListAdapter
 import com.owncloud.android.utils.DisplayUtils
 import com.owncloud.android.utils.MimetypeIconUtil
 import kotlinx.android.synthetic.main.share_file_layout.*
@@ -360,7 +360,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
         // Update list of users/groups
         // TODO Refactoring: create a new {@link ShareUserListAdapter} instance with every call should not be needed
         userGroupsAdapter = ShareUserListAdapter(
-            activity,
+            context!!,
             R.layout.share_user_item,
             privateShares,
             this
