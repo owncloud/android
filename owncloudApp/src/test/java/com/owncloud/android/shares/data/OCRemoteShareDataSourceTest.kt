@@ -92,7 +92,7 @@ class OCRemoteShareDataSourceTest {
         )
 
         // Get shares from remote datasource
-        val remoteOperationResult = ocRemoteSharesDataSource.getSharesForFile(
+        val remoteOperationResult = ocRemoteSharesDataSource.getShares(
             "/Documents/doc",
             true,
             true,
@@ -155,7 +155,7 @@ class OCRemoteShareDataSourceTest {
         )
 
         // Insert share on remote datasource
-        val remoteOperationResult = ocRemoteSharesDataSource.insertShareForFile(
+        val remoteOperationResult = ocRemoteSharesDataSource.insertShare(
             "Photos/img1.png",
             ShareType.PUBLIC_LINK,
             "",
@@ -196,7 +196,7 @@ class OCRemoteShareDataSourceTest {
             createRemoteSharesOperationResult
         )
 
-        val remoteOperationResult = ocRemoteSharesDataSource.insertShareForFile(
+        val remoteOperationResult = ocRemoteSharesDataSource.insertShare(
             "Photos/img2.png",
             ShareType.PUBLIC_LINK,
             "",
@@ -241,7 +241,7 @@ class OCRemoteShareDataSourceTest {
         )
 
         // Update share on remote datasource
-        val remoteOperationResult = ocRemoteSharesDataSource.updateShareForFile(
+        val remoteOperationResult = ocRemoteSharesDataSource.updateShare(
             3,
             "Videos/video1.mp4",
             "1234",

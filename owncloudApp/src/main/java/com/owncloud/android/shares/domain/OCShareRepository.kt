@@ -23,11 +23,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.owncloud.android.AppExecutors
 import com.owncloud.android.NetworkBoundResource
+import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.shares.ShareParserResult
 import com.owncloud.android.lib.resources.shares.ShareType
+import com.owncloud.android.shares.data.ShareRepository
 import com.owncloud.android.shares.data.datasources.LocalSharesDataSource
 import com.owncloud.android.shares.data.datasources.RemoteSharesDataSource
-import com.owncloud.android.shares.data.ShareRepository
 import com.owncloud.android.testing.OpenForTesting
 import com.owncloud.android.vo.Resource
 
@@ -38,15 +39,13 @@ class OCShareRepository(
     private val remoteSharesDataSource: RemoteSharesDataSource,
     val accountName: String
 ) : ShareRepository {
-    override fun getPublicSharesForFile(filePath: String): LiveData<Resource<List<OCShare>>> {
-        return getSharesForFile(
-            filePath,
-            listOf(ShareType.PUBLIC_LINK)
-        )
-    }
 
-    override fun getPrivateSharesForFile(filePath: String): LiveData<Resource<List<OCShare>>> {
-        return getSharesForFile(
+    /******************************************************************************************************
+     ******************************************* PRIVATE SHARES *******************************************
+     ******************************************************************************************************/
+
+    override fun getPrivateShares(filePath: String): LiveData<Resource<List<OCShare>>> {
+        return getShares(
             filePath,
             listOf(
                 ShareType.USER,
@@ -56,36 +55,53 @@ class OCShareRepository(
         )
     }
 
-    private fun getSharesForFile(
+    override fun insertPrivateShare(
         filePath: String,
-        shareTypes: List<ShareType>
-    ): MutableLiveData<Resource<List<OCShare>>> {
-        return object : NetworkBoundResource<List<OCShare>, ShareParserResult>(appExecutors) {
-            override fun saveCallResult(item: ShareParserResult) {
-                val sharesForFileFromServer = item.shares.map { remoteShare ->
+        shareType: ShareType?,
+        shareeName: String,     // User or group name of the target sharee.
+        permissions: Int        // See https://doc.owncloud.com/server/developer_manual/core/apis/ocs-share-api.html
+    ): LiveData<Resource<Unit>> {
+        if (shareType != ShareType.USER && shareType != ShareType.GROUP && shareType != ShareType.FEDERATED) {
+            throw IllegalArgumentException("Illegal share type $shareType");
+        }
+
+        val result = MutableLiveData<Resource<Unit>>()
+        result.postValue(Resource.loading())
+
+        appExecutors.networkIO().execute {
+            // Perform network operation
+            val remoteOperationResult = remoteSharesDataSource.insertShare(
+                filePath,
+                shareType,
+                shareeName,
+                permissions
+            )
+
+            if (remoteOperationResult.isSuccess) {
+                val newPrivateShareFromServer = remoteOperationResult.data.shares.map { remoteShare ->
                     OCShare.fromRemoteShare(remoteShare).also { it.accountOwner = accountName }
                 }
-
-                if (sharesForFileFromServer.isEmpty()) {
-                    localSharesDataSource.deleteSharesForFile(filePath, accountName)
-                }
-
-                localSharesDataSource.replaceSharesForFile(sharesForFileFromServer)
+                localSharesDataSource.insert(newPrivateShareFromServer)
+            } else {
+                notifyError(result, remoteOperationResult)
             }
+        }
 
-            override fun shouldFetchFromNetwork(data: List<OCShare>?) = true
-
-            override fun loadFromDb(): LiveData<List<OCShare>> =
-                localSharesDataSource.getSharesForFileAsLiveData(
-                    filePath, accountName, shareTypes
-                )
-
-            override fun createCall() =
-                remoteSharesDataSource.getSharesForFile(filePath, reshares = true, subfiles = false)
-        }.asMutableLiveData()
+        return result
     }
 
-    override fun insertPublicShareForFile(
+    /******************************************************************************************************
+     ******************************************* PUBLIC SHARES ********************************************
+     ******************************************************************************************************/
+
+    override fun getPublicShares(filePath: String): LiveData<Resource<List<OCShare>>> {
+        return getShares(
+            filePath,
+            listOf(ShareType.PUBLIC_LINK)
+        )
+    }
+
+    override fun insertPublicShare(
         filePath: String,
         permissions: Int,
         name: String,
@@ -98,7 +114,7 @@ class OCShareRepository(
 
         appExecutors.networkIO().execute {
             // Perform network operation
-            val remoteOperationResult = remoteSharesDataSource.insertShareForFile(
+            val remoteOperationResult = remoteSharesDataSource.insertShare(
                 filePath,
                 ShareType.PUBLIC_LINK,
                 "",
@@ -110,25 +126,19 @@ class OCShareRepository(
             )
 
             if (remoteOperationResult.isSuccess) {
-                val newShareForFileFromServer = remoteOperationResult.data.shares.map { remoteShare ->
+                val newPublicShareFromServer = remoteOperationResult.data.shares.map { remoteShare ->
                     OCShare.fromRemoteShare(remoteShare).also { it.accountOwner = accountName }
                 }
-                localSharesDataSource.insert(newShareForFileFromServer)
+                localSharesDataSource.insert(newPublicShareFromServer)
                 result.postValue(Resource.success()) // Used to close the share creation dialog
             } else {
-                result.postValue(
-                    Resource.error(
-                        remoteOperationResult.code,
-                        msg = remoteOperationResult.httpPhrase,
-                        exception = remoteOperationResult.exception
-                    )
-                )
+                notifyError(result, remoteOperationResult)
             }
         }
         return result
     }
 
-    override fun updatePublicShareForFile(
+    override fun updatePublicShare(
         remoteId: Long,
         name: String,
         password: String?,
@@ -141,7 +151,7 @@ class OCShareRepository(
 
         appExecutors.networkIO().execute {
             // Perform network operation
-            val remoteOperationResult = remoteSharesDataSource.updateShareForFile(
+            val remoteOperationResult = remoteSharesDataSource.updateShare(
                 remoteId,
                 name,
                 password,
@@ -157,13 +167,7 @@ class OCShareRepository(
                 localSharesDataSource.update(updatedShareForFileFromServer.first())
                 result.postValue(Resource.success()) // Used to close the share edition dialog
             } else {
-                result.postValue(
-                    Resource.error(
-                        remoteOperationResult.code,
-                        msg = remoteOperationResult.httpPhrase,
-                        exception = remoteOperationResult.exception
-                    )
-                )
+                notifyError(result, remoteOperationResult)
             }
         }
         return result
@@ -195,5 +199,57 @@ class OCShareRepository(
             }
         }
         return result
+    }
+
+    /******************************************************************************************************
+     *********************************************** COMMON ***********************************************
+     ******************************************************************************************************/
+
+    private fun getShares(
+        filePath: String,
+        shareTypes: List<ShareType>
+    ): MutableLiveData<Resource<List<OCShare>>> {
+        return object : NetworkBoundResource<List<OCShare>, ShareParserResult>(appExecutors) {
+            override fun saveCallResult(item: ShareParserResult) {
+                val sharesForFileFromServer = item.shares.map { remoteShare ->
+                    OCShare.fromRemoteShare(remoteShare).also { it.accountOwner = accountName }
+                }
+
+                if (sharesForFileFromServer.isEmpty()) {
+                    localSharesDataSource.deleteSharesForFile(filePath, accountName)
+                }
+
+                localSharesDataSource.replaceSharesForFile(sharesForFileFromServer)
+            }
+
+            override fun shouldFetchFromNetwork(data: List<OCShare>?) = true
+
+            override fun loadFromDb(): LiveData<List<OCShare>> =
+                localSharesDataSource.getSharesForFileAsLiveData(
+                    filePath, accountName, shareTypes
+                )
+
+            override fun createCall() =
+                remoteSharesDataSource.getShares(filePath, reshares = true, subfiles = false)
+        }.asMutableLiveData()
+    }
+
+    /**
+     * Notify error in the given LiveData
+     *
+     * @param result liveData in which notify the error
+     * @param remoteOperationResult contains the information of the error
+     */
+    private fun notifyError(
+        result: MutableLiveData<Resource<Unit>>,
+        remoteOperationResult: RemoteOperationResult<ShareParserResult>
+    ) {
+        result.postValue(
+            Resource.error(
+                remoteOperationResult.code,
+                msg = remoteOperationResult.httpPhrase,
+                exception = remoteOperationResult.exception
+            )
+        )
     }
 }

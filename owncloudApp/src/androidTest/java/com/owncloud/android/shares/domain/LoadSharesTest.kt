@@ -134,8 +134,8 @@ class LoadSharesTest {
         intent.putExtra(FileActivity.EXTRA_FILE, file)
 
         `when`(ocCapabilityViewModel.getCapabilityForAccount()).thenReturn(capabilitiesLiveData)
-        `when`(ocShareViewModel.getPublicSharesForFile(file.remotePath)).thenReturn(publicSharesLiveData)
-        `when`(ocShareViewModel.getPrivateSharesForFile(file.remotePath)).thenReturn(privateSharesLiveData)
+        `when`(ocShareViewModel.getPublicShares(file.remotePath)).thenReturn(publicSharesLiveData)
+        `when`(ocShareViewModel.getPrivateShares(file.remotePath)).thenReturn(privateSharesLiveData)
 
         stopKoin()
 

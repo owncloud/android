@@ -192,8 +192,8 @@ class EditPublicShareTest {
 
         `when`(ocCapabilityViewModel.getCapabilityForAccount(false)).thenReturn(capabilitiesLiveData)
         `when`(ocCapabilityViewModel.getCapabilityForAccount(true)).thenReturn(capabilitiesLiveData)
-        `when`(ocShareViewModel.getPublicSharesForFile(file.remotePath)).thenReturn(sharesLiveData)
-        `when`(ocShareViewModel.getPrivateSharesForFile(file.remotePath)).thenReturn(MutableLiveData())
+        `when`(ocShareViewModel.getPublicShares(file.remotePath)).thenReturn(sharesLiveData)
+        `when`(ocShareViewModel.getPrivateShares(file.remotePath)).thenReturn(MutableLiveData())
 
         stopKoin()
 

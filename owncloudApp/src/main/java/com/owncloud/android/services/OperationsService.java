@@ -56,13 +56,11 @@ import com.owncloud.android.lib.common.operations.OnRemoteOperationListener;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
-import com.owncloud.android.lib.resources.shares.ShareType;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 import com.owncloud.android.lib.resources.users.GetRemoteUserInfoOperation;
 import com.owncloud.android.operations.CheckCurrentCredentialsOperation;
 import com.owncloud.android.operations.CopyFileOperation;
 import com.owncloud.android.operations.CreateFolderOperation;
-import com.owncloud.android.operations.CreateShareWithShareeOperation;
 import com.owncloud.android.operations.GetServerInfoOperation;
 import com.owncloud.android.operations.MoveFileOperation;
 import com.owncloud.android.operations.RemoveFileOperation;
@@ -107,7 +105,6 @@ public class OperationsService extends Service {
 
     public static final String EXTRA_COOKIE = "COOKIE";
 
-    public static final String ACTION_CREATE_SHARE_VIA_LINK = "CREATE_SHARE_VIA_LINK";
     public static final String ACTION_UPDATE_SHARE_VIA_LINK = "UPDATE_SHARE_VIA_LINK";
     public static final String ACTION_CREATE_SHARE_WITH_SHAREE = "CREATE_SHARE_WITH_SHAREE";
     public static final String ACTION_UPDATE_SHARE_WITH_SHAREE = "UPDATE_SHARE_WITH_SHAREE";
@@ -115,7 +112,6 @@ public class OperationsService extends Service {
     public static final String ACTION_GET_SERVER_INFO = "GET_SERVER_INFO";
     public static final String ACTION_OAUTH2_GET_ACCESS_TOKEN = "OAUTH2_GET_ACCESS_TOKEN";
     public static final String ACTION_GET_USER_NAME = "GET_USER_NAME";
-    public static final String ACTION_GET_USER_AVATAR = "GET_USER_AVATAR";
     public static final String ACTION_RENAME = "RENAME";
     public static final String ACTION_REMOVE = "REMOVE";
     public static final String ACTION_CREATE_FOLDER = "CREATE_FOLDER";
@@ -549,21 +545,6 @@ public class OperationsService extends Service {
                     operation = new UpdateSharePermissionsOperation(shareId);
                     int permissions = operationIntent.getIntExtra(EXTRA_SHARE_PERMISSIONS, 1);
                     ((UpdateSharePermissionsOperation) operation).setPermissions(permissions);
-
-                } else if (action.equals(ACTION_CREATE_SHARE_WITH_SHAREE)) {
-                    // Create private share with user or group
-                    String remotePath = operationIntent.getStringExtra(EXTRA_REMOTE_PATH);
-                    String shareeName = operationIntent.getStringExtra(EXTRA_SHARE_WITH);
-                    ShareType shareType = (ShareType) operationIntent.getSerializableExtra(EXTRA_SHARE_TYPE);
-                    int permissions = operationIntent.getIntExtra(EXTRA_SHARE_PERMISSIONS, -1);
-                    if (remotePath.length() > 0) {
-                        operation = new CreateShareWithShareeOperation(
-                                remotePath,
-                                shareeName,
-                                shareType,
-                                permissions
-                        );
-                    }
 
                 } else if (action.equals(ACTION_UNSHARE)) {  // Unshare file
                     long shareId = operationIntent.getLongExtra(EXTRA_SHARE_ID, -1);

@@ -271,8 +271,6 @@ class ErrorMessageAdapter {
             if (operation is RemoveFileOperation) return f.format(R.string.remove_fail_msg)
             if (operation is RenameFileOperation) return f.format(R.string.rename_server_fail_msg)
             if (operation is CreateFolderOperation) return f.format(R.string.create_dir_fail_msg)
-            if (operation is CreateShareWithShareeOperation)
-                return f.format(R.string.share_link_file_error)
             if (operation is RemoveShareOperation) return f.format(R.string.unshare_link_file_error)
             if (operation is UpdateSharePermissionsOperation)
                 return f.format(R.string.update_link_file_error)
