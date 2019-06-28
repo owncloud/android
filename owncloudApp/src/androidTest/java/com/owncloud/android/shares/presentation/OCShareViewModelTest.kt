@@ -69,7 +69,7 @@ class OCShareViewModelTest {
         )
 
         `when`(
-            ocShareRepository.getPrivateSharesForFile(filePath)
+            ocShareRepository.getPrivateShares(filePath)
         ).thenReturn(
             MutableLiveData<Resource<List<OCShare>>>().apply {
                 value = Resource.success(privateShares)
@@ -79,7 +79,7 @@ class OCShareViewModelTest {
         // Viewmodel that will ask ocShareRepository for shares
         val ocShareViewModel = createOCShareViewModel(ocShareRepository)
 
-        val resource: Resource<List<OCShare>>? = ocShareViewModel.getPrivateSharesForFile(filePath).value
+        val resource: Resource<List<OCShare>>? = ocShareViewModel.getPrivateShares(filePath).value
         assertPrivateShareParameters(resource?.data)
     }
 
@@ -115,7 +115,7 @@ class OCShareViewModelTest {
         )
 
         `when`(
-            ocShareRepository.getPublicSharesForFile(filePath)
+            ocShareRepository.getPublicShares(filePath)
         ).thenReturn(
             MutableLiveData<Resource<List<OCShare>>>().apply {
                 value = Resource.success(publicShares)
@@ -125,7 +125,7 @@ class OCShareViewModelTest {
         // Viewmodel that will ask ocShareRepository for shares
         val ocShareViewModel = createOCShareViewModel(ocShareRepository)
 
-        val resource: Resource<List<OCShare>>? = ocShareViewModel.getPublicSharesForFile(filePath).value
+        val resource: Resource<List<OCShare>>? = ocShareViewModel.getPublicShares(filePath).value
         assertPublicShareParameters(resource?.data)
     }
 
@@ -134,7 +134,7 @@ class OCShareViewModelTest {
         val ocShareRepository = mock(OCShareRepository::class.java)
 
         `when`(
-            ocShareRepository.insertPublicShareForFile(
+            ocShareRepository.insertPublicShare(
                 filePath,
                 1,
                 "Photos 2 link",
@@ -151,7 +151,7 @@ class OCShareViewModelTest {
         // Viewmodel that will ask ocShareRepository for shares
         val ocShareViewModel = createOCShareViewModel(ocShareRepository)
 
-        val resource: Resource<Unit>? = ocShareViewModel.insertPublicShareForFile(
+        val resource: Resource<Unit>? = ocShareViewModel.insertPublicShare(
             filePath,
             1,
             "Photos 2 link",
@@ -168,7 +168,7 @@ class OCShareViewModelTest {
         val ocShareRepository = mock(OCShareRepository::class.java)
 
         `when`(
-            ocShareRepository.updatePublicShareForFile(
+            ocShareRepository.updatePublicShare(
                 1,
                 "Photos 1 link",
                 "123456",

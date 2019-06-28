@@ -43,6 +43,7 @@ import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.operations.RemoveShareOperation
 import com.owncloud.android.operations.UpdateSharePermissionsOperation
 import com.owncloud.android.operations.common.OperationType
+import com.owncloud.android.sharees.presentation.SearchShareesFragment
 import com.owncloud.android.sharees.presentation.UsersAndGroupsSearchProvider
 import com.owncloud.android.shares.domain.OCShare
 import com.owncloud.android.shares.presentation.fragment.PublicShareDialogFragment
@@ -53,7 +54,6 @@ import com.owncloud.android.ui.activity.FileActivity
 import com.owncloud.android.ui.dialog.RemoveShareDialogFragment
 import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter
 import com.owncloud.android.ui.fragment.EditShareFragment
-import com.owncloud.android.sharees.presentation.SearchShareesFragment
 import com.owncloud.android.ui.utils.showDialogFragment
 import com.owncloud.android.vo.Status
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -225,7 +225,7 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
      **************************************************************************************************************/
 
     override fun refreshPrivateShares() {
-        ocShareViewModel.getPrivateSharesForFile(file?.remotePath!!).observe(
+        ocShareViewModel.getPrivateShares(file?.remotePath!!).observe(
             this,
             Observer { resource ->
                 when (resource?.status) {
@@ -284,11 +284,34 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
 
     private fun doShareWith(shareeName: String, dataAuthority: String?) {
         val shareType = UsersAndGroupsSearchProvider.getShareType(dataAuthority)
-        fileOperationsHelper.shareFileWithSharee(
-            file,
-            shareeName,
+
+        ocShareViewModel.insertPrivateShare(
+            file.remotePath,
             shareType,
+            shareeName,
             getAppropiatePermissions(shareType)
+        ).observe(
+            this,
+            Observer { resource ->
+                when (resource?.status) {
+                    Status.ERROR -> {
+                        val errorMessage = ErrorMessageAdapter.getResultMessage(
+                            resource.code,
+                            resource.exception,
+                            OperationType.CREATE_SHARE_WITH_SHAREES,
+                            resources
+                        )
+                        Snackbar.make(
+                            findViewById(android.R.id.content),
+                            errorMessage,
+                            Snackbar.LENGTH_SHORT
+                        ).show()
+                    }
+                    Status.LOADING -> {
+                        showLoadingDialog(R.string.common_loading)
+                    }
+                }
+            }
         )
     }
 
@@ -349,7 +372,7 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
      **************************************************************************************************************/
 
     private fun refreshPublicShares() {
-        ocShareViewModel.getPublicSharesForFile(file?.remotePath!!).observe(
+        ocShareViewModel.getPublicShares(file?.remotePath!!).observe(
             this,
             Observer { resource ->
                 when (resource?.status) {
@@ -411,8 +434,8 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
         expirationTimeInMillis: Long,
         publicUpload: Boolean
     ) {
-        ocShareViewModel.insertPublicShareForFile(
-            file?.remotePath!!,
+        ocShareViewModel.insertPublicShare(
+            file.remotePath,
             permissions,
             name,
             password,

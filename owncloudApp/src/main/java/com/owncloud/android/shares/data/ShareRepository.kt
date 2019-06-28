@@ -20,14 +20,32 @@
 package com.owncloud.android.shares.data
 
 import androidx.lifecycle.LiveData
+import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.shares.domain.OCShare
 import com.owncloud.android.vo.Resource
 
 interface ShareRepository {
-    fun getPublicSharesForFile(filePath: String): LiveData<Resource<List<OCShare>>>
-    fun getPrivateSharesForFile(filePath: String): LiveData<Resource<List<OCShare>>>
 
-    fun insertPublicShareForFile(
+    /******************************************************************************************************
+     ******************************************* PRIVATE SHARES *******************************************
+     ******************************************************************************************************/
+
+    fun getPrivateShares(filePath: String): LiveData<Resource<List<OCShare>>>
+
+    fun insertPrivateShare(
+        filePath: String,
+        shareType: ShareType?,
+        shareeName: String,
+        permissions: Int
+    ): LiveData<Resource<Unit>>
+
+    /******************************************************************************************************
+     ******************************************* PUBLIC SHARES ********************************************
+     ******************************************************************************************************/
+
+    fun getPublicShares(filePath: String): LiveData<Resource<List<OCShare>>>
+
+    fun insertPublicShare(
         filePath: String,
         permissions: Int,
         name: String,
@@ -36,7 +54,7 @@ interface ShareRepository {
         publicUpload: Boolean
     ): LiveData<Resource<Unit>>
 
-    fun updatePublicShareForFile(
+    fun updatePublicShare(
         remoteId: Long,
         name: String,
         password: String?,

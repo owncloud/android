@@ -31,7 +31,8 @@ import com.owncloud.android.lib.resources.shares.UpdateRemoteShareOperation
 class OCRemoteSharesDataSource(
     private val client: OwnCloudClient
 ) : RemoteSharesDataSource {
-    override fun getSharesForFile(
+
+    override fun getShares(
         remoteFilePath: String,
         reshares: Boolean,
         subfiles: Boolean,
@@ -40,7 +41,7 @@ class OCRemoteSharesDataSource(
         return getRemoteSharesForFileOperation.execute(client)
     }
 
-    override fun insertShareForFile(
+    override fun insertShare(
         remoteFilePath: String,
         shareType: ShareType,
         shareWith: String,
@@ -59,7 +60,7 @@ class OCRemoteSharesDataSource(
         return createRemoteShareOperation.execute(client)
     }
 
-    override fun updateShareForFile(
+    override fun updateShare(
         remoteId: Long,
         name: String,
         password: String?,

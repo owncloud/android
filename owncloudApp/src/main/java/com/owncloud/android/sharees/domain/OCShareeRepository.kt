@@ -38,7 +38,6 @@ class OCShareeRepository(
         val remoteOperationResult = remoteSharesDataSource.getSharees(
             searchString, page, perPage
         )
-
         return if (remoteOperationResult.isSuccess)
             Resource.success(remoteOperationResult.data) else
             Resource.error(

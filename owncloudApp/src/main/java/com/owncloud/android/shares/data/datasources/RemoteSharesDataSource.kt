@@ -22,13 +22,14 @@ package com.owncloud.android.shares.data.datasources
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.shares.CreateRemoteShareOperation
 import com.owncloud.android.lib.resources.shares.GetRemoteSharesForFileOperation
+import com.owncloud.android.lib.resources.shares.RemoteShare.Companion.INIT_EXPIRATION_DATE_IN_MILLIS
 import com.owncloud.android.lib.resources.shares.RemoveRemoteShareOperation
 import com.owncloud.android.lib.resources.shares.ShareParserResult
 import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.lib.resources.shares.UpdateRemoteShareOperation
 
 interface RemoteSharesDataSource {
-    fun getSharesForFile(
+    fun getShares(
         remoteFilePath: String,
         reshares: Boolean,
         subfiles: Boolean,
@@ -36,20 +37,20 @@ interface RemoteSharesDataSource {
             GetRemoteSharesForFileOperation(remoteFilePath, reshares, subfiles)
     ): RemoteOperationResult<ShareParserResult>
 
-    fun insertShareForFile(
+    fun insertShare(
         remoteFilePath: String,
         shareType: ShareType,
         shareWith: String,
         permissions: Int,
-        name: String,
-        password: String,
-        expirationDate: Long,
-        publicUpload: Boolean,
+        name: String = "",
+        password: String = "",
+        expirationDate: Long = INIT_EXPIRATION_DATE_IN_MILLIS,
+        publicUpload: Boolean = false,
         createRemoteShareOperation: CreateRemoteShareOperation =
             CreateRemoteShareOperation(remoteFilePath, shareType, shareWith, permissions)
     ): RemoteOperationResult<ShareParserResult>
 
-    fun updateShareForFile(
+    fun updateShare(
         remoteId: Long,
         name: String,
         password: String?,

@@ -90,7 +90,6 @@ class UsersAndGroupsSearchProvider : ContentProvider() {
             Log_OC.e("TAG", "Fail creating provider", t)
             return false
         }
-
     }
 
     /**

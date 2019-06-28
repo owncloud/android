@@ -213,7 +213,7 @@ class OCShareRepositoryTest {
         remoteOperationResult: RemoteOperationResult<ShareParserResult>
     ): LiveData<Resource<List<OCShare>>> {
         val ocShareRepository = createRepositoryWithPrivateData(localData, remoteOperationResult)
-        return ocShareRepository.getPrivateSharesForFile(filePath)
+        return ocShareRepository.getPrivateShares(filePath)
     }
 
     private fun createRepositoryWithPrivateData(
@@ -430,7 +430,7 @@ class OCShareRepositoryTest {
         remoteOperationResult: RemoteOperationResult<ShareParserResult>
     ): LiveData<Resource<List<OCShare>>> {
         val ocShareRepository = createShareRepositoryWithPublicData(localData, remoteOperationResult)
-        return ocShareRepository.getPublicSharesForFile(filePath)
+        return ocShareRepository.getPublicShares(filePath)
     }
 
     private fun insertPublicShare(
@@ -439,7 +439,7 @@ class OCShareRepositoryTest {
     ): LiveData<Resource<Unit>> {
         val ocShareRepository = createShareRepositoryWithPublicData(localData, remoteOperationResult)
 
-        return ocShareRepository.insertPublicShareForFile(
+        return ocShareRepository.insertPublicShare(
             filePath,
             1,
             "Photos folder link 3",
@@ -455,7 +455,7 @@ class OCShareRepositoryTest {
     ): LiveData<Resource<Unit>> {
         val ocShareRepository = createShareRepositoryWithPublicData(localData, remoteOperationResult)
 
-        return ocShareRepository.updatePublicShareForFile(
+        return ocShareRepository.updatePublicShare(
             1,
             "Photos folder link updated",
             "123456",

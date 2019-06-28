@@ -25,11 +25,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.owncloud.android.lib.common.OwnCloudAccount
 import com.owncloud.android.lib.common.OwnCloudClientManagerFactory
+import com.owncloud.android.lib.resources.shares.ShareType
+import com.owncloud.android.shares.data.ShareRepository
 import com.owncloud.android.shares.data.datasources.OCLocalSharesDataSource
 import com.owncloud.android.shares.data.datasources.OCRemoteSharesDataSource
 import com.owncloud.android.shares.domain.OCShare
 import com.owncloud.android.shares.domain.OCShareRepository
-import com.owncloud.android.shares.data.ShareRepository
 import com.owncloud.android.testing.OpenForTesting
 import com.owncloud.android.vo.Resource
 
@@ -51,22 +52,40 @@ class OCShareViewModel(
         accountName = account.name
     )
 ) : ViewModel() {
-    fun getPrivateSharesForFile(filePath: String): LiveData<Resource<List<OCShare>>> {
-        return shareRepository.getPrivateSharesForFile(filePath)
+
+    /******************************************************************************************************
+     ******************************************* PRIVATE SHARES *******************************************
+     ******************************************************************************************************/
+
+    fun getPrivateShares(filePath: String): LiveData<Resource<List<OCShare>>> {
+        return shareRepository.getPrivateShares(filePath)
     }
 
-    fun getPublicSharesForFile(filePath: String): LiveData<Resource<List<OCShare>>> {
-        return shareRepository.getPublicSharesForFile(filePath)
+    fun insertPrivateShare(
+        filePath: String,
+        shareType: ShareType?,
+        shareeName: String, // User or group name of the target sharee.
+        permissions: Int
+    ): LiveData<Resource<Unit>> = shareRepository.insertPrivateShare(
+        filePath, shareType, shareeName, permissions
+    )
+
+    /******************************************************************************************************
+     ******************************************* PUBLIC SHARES ********************************************
+     ******************************************************************************************************/
+
+    fun getPublicShares(filePath: String): LiveData<Resource<List<OCShare>>> {
+        return shareRepository.getPublicShares(filePath)
     }
 
-    fun insertPublicShareForFile(
+    fun insertPublicShare(
         filePath: String,
         permissions: Int,
         name: String,
         password: String,
         expirationTimeInMillis: Long,
         publicUpload: Boolean
-    ): LiveData<Resource<Unit>> = shareRepository.insertPublicShareForFile(
+    ): LiveData<Resource<Unit>> = shareRepository.insertPublicShare(
         filePath, permissions, name, password, expirationTimeInMillis, publicUpload
     )
 
@@ -77,7 +96,7 @@ class OCShareViewModel(
         expirationDateInMillis: Long,
         permissions: Int,
         publicUpload: Boolean
-    ): LiveData<Resource<Unit>> = shareRepository.updatePublicShareForFile(
+    ): LiveData<Resource<Unit>> = shareRepository.updatePublicShare(
         remoteId, name, password, expirationDateInMillis, permissions, publicUpload
     )
 

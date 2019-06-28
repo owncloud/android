@@ -30,7 +30,7 @@ import com.owncloud.android.shares.data.datasources.RemoteSharesDataSource
 
 class RemoteSharesDataSourceTest(private val remoteOperationResult: RemoteOperationResult<ShareParserResult>) :
     RemoteSharesDataSource {
-    override fun getSharesForFile(
+    override fun getShares(
         remoteFilePath: String,
         reshares: Boolean,
         subfiles: Boolean,
@@ -39,7 +39,7 @@ class RemoteSharesDataSourceTest(private val remoteOperationResult: RemoteOperat
         return remoteOperationResult
     }
 
-    override fun insertShareForFile(
+    override fun insertShare(
         remoteFilePath: String,
         shareType: ShareType,
         shareWith: String,
@@ -53,7 +53,7 @@ class RemoteSharesDataSourceTest(private val remoteOperationResult: RemoteOperat
         return remoteOperationResult
     }
 
-    override fun updateShareForFile(
+    override fun updateShare(
         remoteId: Long,
         name: String,
         password: String?,
