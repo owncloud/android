@@ -71,8 +71,6 @@ class CreateRemoteShareOperation(
     private val shareWith: String,
     private val permissions: Int
 ) : RemoteOperation<ShareParserResult>() {
-    var retrieveShareDetails = false // To retrieve more info about the just created share
-
     var name = "" // Name to set for the public link
 
     var password: String = "" // Password to set for the public link
@@ -81,13 +79,15 @@ class CreateRemoteShareOperation(
 
     var publicUpload: Boolean = false // Upload permissions for the public link (only folders)
 
+    var retrieveShareDetails = false // To retrieve more info about the just created share
+
     override fun run(client: OwnCloudClient): RemoteOperationResult<ShareParserResult> {
         var result: RemoteOperationResult<ShareParserResult>
 
         try {
             val formBodyBuilder = FormBody.Builder()
                 .add(PARAM_PATH, remoteFilePath)
-                .add(PARAM_SHARE_TYPE, Integer.toString(shareType.value))
+                .add(PARAM_SHARE_TYPE, shareType.value.toString())
                 .add(PARAM_SHARE_WITH, shareWith)
 
             if (name.isNotEmpty()) {
@@ -109,7 +109,7 @@ class CreateRemoteShareOperation(
                 formBodyBuilder.add(PARAM_PASSWORD, password)
             }
             if (RemoteShare.DEFAULT_PERMISSION != permissions) {
-                formBodyBuilder.add(PARAM_PERMISSIONS, Integer.toString(permissions))
+                formBodyBuilder.add(PARAM_PERMISSIONS, permissions.toString())
             }
 
             val requestUri = client.baseUri
