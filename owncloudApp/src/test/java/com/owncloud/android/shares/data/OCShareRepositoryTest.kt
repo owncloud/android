@@ -108,7 +108,7 @@ class OCShareRepositoryTest {
     )
 
     @Test
-    fun loadPrivateSharesForFileFromNetwork() {
+    fun loadPrivateSharesFromNetwork() {
         val localData = MutableLiveData<List<OCShare>>() // Local shares
 
         val remoteOperationResult =
@@ -123,14 +123,14 @@ class OCShareRepositoryTest {
 
         // Get private shares from database to observe them, is called twice (one showing current db shares while
         // getting shares from server and another one with db shares already updated with server ones)
-        verify(localSharesDataSource, times(2)).getSharesForFileAsLiveData(
+        verify(localSharesDataSource, times(2)).getSharesAsLiveData(
             filePath, "admin@server", privateShareTypes
         )
 
         // Retrieving shares from server...
 
         // Public shares are retrieved from server and inserted in database if not empty list
-        verify(localSharesDataSource).replaceSharesForFile(
+        verify(localSharesDataSource).replaceShares(
             remoteShares.map { remoteShare ->
                 OCShare.fromRemoteShare(remoteShare).also { it.accountOwner = "admin@server" }
             }
@@ -145,7 +145,7 @@ class OCShareRepositoryTest {
     }
 
     @Test
-    fun loadEmptyPrivateSharesForFileFromNetwork() {
+    fun loadEmptyPrivateSharesFromNetwork() {
         val localData = MutableLiveData<List<OCShare>>()
 
         val remoteOperationResult =
@@ -159,7 +159,7 @@ class OCShareRepositoryTest {
 
         // Get public shares from database to observe them, is called twice (one showing current db shares while
         // getting shares from server and another one with db shares already updated with server ones)
-        verify(localSharesDataSource, times(2)).getSharesForFileAsLiveData(
+        verify(localSharesDataSource, times(2)).getSharesAsLiveData(
             filePath, "admin@server", privateShareTypes
         )
 
@@ -175,7 +175,7 @@ class OCShareRepositoryTest {
     }
 
     @Test
-    fun loadPrivateSharesForFileFromNetworkWithError() {
+    fun loadPrivateSharesFromNetworkWithError() {
         val localData = MutableLiveData<List<OCShare>>()
         localData.value = privateShare
 
@@ -191,7 +191,7 @@ class OCShareRepositoryTest {
         val data = loadPrivateSharesAsLiveData(localData, remoteOperationResult)
 
         // Get public shares from database to observe them
-        verify(localSharesDataSource).getSharesForFileAsLiveData(
+        verify(localSharesDataSource).getSharesAsLiveData(
             filePath, "admin@server", privateShareTypes
         )
 
@@ -204,6 +204,54 @@ class OCShareRepositoryTest {
         verify(observer).onChanged(
             Resource.error(
                 RemoteOperationResult.ResultCode.FORBIDDEN, localData.value, exception = exception
+            )
+        )
+    }
+
+    @Test
+    fun insertPrivateShareOnNetwork() {
+        val localData = MutableLiveData<List<OCShare>>()
+        localData.value = privateShare
+
+        val remoteOperationResult = TestUtil.createRemoteOperationResultMock(
+            ShareParserResult(arrayListOf(remoteShares[3])), true
+        )
+
+        val data = insertPrivateShare(localData, remoteOperationResult)
+        val observer = mock<Observer<Resource<Unit>>>()
+        data.observeForever(observer)
+
+        // Public shares are retrieved from server and inserted in database if not empty list
+        verify(localSharesDataSource).insert(
+            arrayListOf(remoteShares[3]).map { remoteShare ->
+                OCShare.fromRemoteShare(remoteShare).also { it.accountOwner = "admin@server" }
+            }
+        )
+    }
+
+    @Test
+    fun insertPrivateShareOnNetworkWithError() {
+        val localData = MutableLiveData<List<OCShare>>()
+        localData.value = privateShare
+
+        val exception = Exception("Error when retrieving shares")
+
+        val remoteOperationResult = TestUtil.createRemoteOperationResultMock(
+            ShareParserResult(arrayListOf()),
+            false,
+            resultCode = RemoteOperationResult.ResultCode.HOST_NOT_AVAILABLE,
+            exception = exception
+        )
+
+        val data = insertPrivateShare(localData, remoteOperationResult)
+
+        // Observe changes in database livedata when there's an error from server
+        val observer = mock<Observer<Resource<Unit>>>()
+        data.observeForever(observer)
+
+        verify(observer).onChanged(
+            Resource.error(
+                RemoteOperationResult.ResultCode.HOST_NOT_AVAILABLE, exception = exception
             )
         )
     }
@@ -224,6 +272,20 @@ class OCShareRepositoryTest {
             localData, remoteOperationResult, privateShareTypes
         )
 
+    private fun insertPrivateShare(
+        localData: MutableLiveData<List<OCShare>>,
+        remoteOperationResult: RemoteOperationResult<ShareParserResult>
+    ): LiveData<Resource<Unit>> {
+        val ocShareRepository = createShareRepositoryWithPublicData(localData, remoteOperationResult)
+
+        return ocShareRepository.insertPrivateShare(
+            filePath,
+            ShareType.GROUP,
+            "user",
+            1
+        )
+    }
+
     /******************************************************************************************************
      ******************************************* PUBLIC SHARES ********************************************
      ******************************************************************************************************/
@@ -238,7 +300,7 @@ class OCShareRepositoryTest {
     )
 
     @Test
-    fun loadPublicSharesForFileFromNetworkSuccessfully() {
+    fun loadPublicSharesFromNetworkSuccessfully() {
         val localData = MutableLiveData<List<OCShare>>()
 
         val remoteOperationResult =
@@ -252,14 +314,14 @@ class OCShareRepositoryTest {
 
         // Get public shares from database to observe them, is called twice (one showing current db shares while
         // getting shares from server and another one with db shares already updated with server ones)
-        verify(localSharesDataSource, times(2)).getSharesForFileAsLiveData(
+        verify(localSharesDataSource, times(2)).getSharesAsLiveData(
             filePath, "admin@server", listOf(ShareType.PUBLIC_LINK)
         )
 
         // Retrieving shares from server...
 
         // Public shares are retrieved from server and inserted in database if not empty list
-        verify(localSharesDataSource).replaceSharesForFile(
+        verify(localSharesDataSource).replaceShares(
             remoteShares.map { remoteShare ->
                 OCShare.fromRemoteShare(remoteShare).also { it.accountOwner = "admin@server" }
             }
@@ -274,7 +336,7 @@ class OCShareRepositoryTest {
     }
 
     @Test
-    fun loadEmptyPublicSharesForFileFromNetwork() {
+    fun loadEmptyPublicSharesFromNetwork() {
         val localData = MutableLiveData<List<OCShare>>()
 
         val remoteOperationResult =
@@ -288,7 +350,7 @@ class OCShareRepositoryTest {
 
         // Get public shares from database to observe them, is called twice (one showing current db shares while
         // getting shares from server and another one with db shares already updated with server ones)
-        verify(localSharesDataSource, times(2)).getSharesForFileAsLiveData(
+        verify(localSharesDataSource, times(2)).getSharesAsLiveData(
             filePath, "admin@server", listOf(ShareType.PUBLIC_LINK)
         )
 
@@ -304,7 +366,7 @@ class OCShareRepositoryTest {
     }
 
     @Test
-    fun loadPublicSharesForFileFromNetworkWithError() {
+    fun loadPublicSharesFromNetworkWithError() {
         val localData = MutableLiveData<List<OCShare>>()
         localData.value = publicShare
 
@@ -320,7 +382,7 @@ class OCShareRepositoryTest {
         val data = loadPublicSharesAsLiveData(localData, remoteOperationResult)
 
         // Get public shares from database to observe them
-        verify(localSharesDataSource).getSharesForFileAsLiveData(
+        verify(localSharesDataSource).getSharesAsLiveData(
             filePath, "admin@server", listOf(ShareType.PUBLIC_LINK)
         )
 
@@ -338,7 +400,7 @@ class OCShareRepositoryTest {
     }
 
     @Test
-    fun insertPublicShareForFileOnNetwork() {
+    fun insertPublicShareOnNetwork() {
         val localData = MutableLiveData<List<OCShare>>()
         localData.value = publicShare
 
@@ -359,7 +421,7 @@ class OCShareRepositoryTest {
     }
 
     @Test
-    fun insertPublicShareForFileOnNetworkWithError() {
+    fun insertPublicShareOnNetworkWithError() {
         val localData = MutableLiveData<List<OCShare>>()
         localData.value = publicShare
 
@@ -386,7 +448,7 @@ class OCShareRepositoryTest {
     }
 
     @Test
-    fun updatePublicShareForFileOnNetwork() {
+    fun updatePublicShareOnNetwork() {
         val localData = MutableLiveData<List<OCShare>>()
         localData.value = publicShare
 
@@ -406,7 +468,7 @@ class OCShareRepositoryTest {
     }
 
     @Test
-    fun deletePublicShareForFileOnNetwork() {
+    fun deletePublicShareOnNetwork() {
         val localData = MutableLiveData<List<OCShare>>()
         localData.value = publicShare
 
@@ -491,7 +553,7 @@ class OCShareRepositoryTest {
         shareTypes: List<ShareType>
     ): OCShareRepository {
         `when`(
-            localSharesDataSource.getSharesForFileAsLiveData(
+            localSharesDataSource.getSharesAsLiveData(
                 filePath, "admin@server", shareTypes
             )
         ).thenReturn(

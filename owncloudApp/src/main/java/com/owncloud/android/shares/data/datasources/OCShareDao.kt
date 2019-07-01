@@ -36,7 +36,7 @@ abstract class OCShareDao {
                 ProviderTableMeta.OCSHARES_ACCOUNT_OWNER + " = :accountOwner AND " +
                 ProviderTableMeta.OCSHARES_SHARE_TYPE + " IN (:shareTypes)"
     )
-    abstract fun getSharesForFileAsLiveData(
+    abstract fun getSharesAsLiveData(
         filePath: String, accountOwner: String, shareTypes: List<Int>
     ): LiveData<List<OCShare>>
 
@@ -53,7 +53,7 @@ abstract class OCShareDao {
     }
 
     @Transaction
-    open fun replaceSharesForFile(ocShares: List<OCShare>): List<Long> {
+    open fun replaceShares(ocShares: List<OCShare>): List<Long> {
         for (ocShare in ocShares) {
             deleteSharesForFile(ocShare.path, ocShare.accountOwner)
         }

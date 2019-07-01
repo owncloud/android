@@ -100,7 +100,7 @@ class OCLocalDataSourceTest {
         privateSharesAsLiveData.value = privateShares
 
         `when`(
-            ocSharesDao.getSharesForFileAsLiveData(
+            ocSharesDao.getSharesAsLiveData(
                 "/Docs/doc1.doc", "admin@server", privateShareTypes.map {
                     it.value
                 }
@@ -110,7 +110,7 @@ class OCLocalDataSourceTest {
         )
 
         val shares = getValue(
-            ocLocalSharesDataSource.getSharesForFileAsLiveData(
+            ocLocalSharesDataSource.getSharesAsLiveData(
                 "/Docs/doc1.doc", "admin@server", privateShareTypes
             )
         )
@@ -128,6 +128,31 @@ class OCLocalDataSourceTest {
         assertEquals("Nicole", shares[1].sharedWithDisplayName)
     }
 
+    @Test
+    fun insertPrivateShares() {
+        val privateSharesAsLiveData: MutableLiveData<List<OCShare>> = MutableLiveData()
+        privateSharesAsLiveData.value = privateShares
+
+        `when`(
+            ocSharesDao.insert(
+                privateSharesAsLiveData.value!![0]
+            )
+        ).thenReturn(
+            10
+        )
+
+        val insertedShareId = ocLocalSharesDataSource.insert(
+            TestUtil.createPrivateShare(
+                shareType = ShareType.USER.value,
+                path = "/Docs/doc1.doc",
+                isFolder = false,
+                shareWith = "username",
+                sharedWithDisplayName = "Sophie"
+            )
+        )
+        assertEquals(10, insertedShareId)
+    }
+
 
     /******************************************************************************************************
      ******************************************* PUBLIC SHARES ********************************************
@@ -139,7 +164,7 @@ class OCLocalDataSourceTest {
         publicSharesAsLiveData.value = publicShares
 
         `when`(
-            ocSharesDao.getSharesForFileAsLiveData(
+            ocSharesDao.getSharesAsLiveData(
                 "/Photos/", "admin@server", listOf(ShareType.PUBLIC_LINK.value)
             )
         ).thenReturn(
@@ -147,7 +172,7 @@ class OCLocalDataSourceTest {
         )
 
         val shares = getValue(
-            ocLocalSharesDataSource.getSharesForFileAsLiveData(
+            ocLocalSharesDataSource.getSharesAsLiveData(
                 "/Photos/", "admin@server", listOf(ShareType.PUBLIC_LINK)
             )
         )

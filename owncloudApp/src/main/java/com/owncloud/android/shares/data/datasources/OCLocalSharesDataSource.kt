@@ -30,12 +30,12 @@ class OCLocalSharesDataSource(
     private val ocShareDao: OCShareDao = OwncloudDatabase.getDatabase(context).shareDao()
 ) : LocalSharesDataSource {
 
-    override fun getSharesForFileAsLiveData(
+    override fun getSharesAsLiveData(
         filePath: String,
         accountName: String,
         shareTypes: List<ShareType>
     ): LiveData<List<OCShare>> =
-        ocShareDao.getSharesForFileAsLiveData(filePath, accountName, shareTypes.map { it.value })
+        ocShareDao.getSharesAsLiveData(filePath, accountName, shareTypes.map { it.value })
 
     override fun insert(ocShare: OCShare): Long = ocShareDao.insert(ocShare)
 
@@ -43,7 +43,7 @@ class OCLocalSharesDataSource(
 
     override fun update(ocShare: OCShare): Long = ocShareDao.update(ocShare)
 
-    override fun replaceSharesForFile(ocShares: List<OCShare>): List<Long> = ocShareDao.replaceSharesForFile(ocShares)
+    override fun replaceShares(ocShares: List<OCShare>): List<Long> = ocShareDao.replaceShares(ocShares)
 
     override fun deleteShare(remoteId: Long): Int = ocShareDao.deleteShare(remoteId)
 

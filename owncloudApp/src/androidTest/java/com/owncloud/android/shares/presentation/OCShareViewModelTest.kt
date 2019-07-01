@@ -23,6 +23,7 @@ import android.accounts.Account
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
 import androidx.test.platform.app.InstrumentationRegistry
+import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.shares.domain.OCShare
 import com.owncloud.android.shares.domain.OCShareRepository
 import com.owncloud.android.utils.TestUtil
@@ -83,6 +84,36 @@ class OCShareViewModelTest {
         assertPrivateShareParameters(resource?.data)
     }
 
+    @Test
+    fun insertPrivateShare() {
+        val ocShareRepository = mock(OCShareRepository::class.java)
+
+        `when`(
+            ocShareRepository.insertPrivateShare(
+                filePath,
+                ShareType.GROUP,
+                "user",
+                -1
+            )
+        ).thenReturn(
+            MutableLiveData<Resource<Unit>>().apply {
+                value = Resource.success()
+            }
+        )
+
+        // Viewmodel that will ask ocShareRepository for shares
+        val ocShareViewModel = createOCShareViewModel(ocShareRepository)
+
+        val resource: Resource<Unit>? = ocShareViewModel.insertPrivateShare(
+            filePath,
+            ShareType.GROUP,
+            "user",
+            -1
+        ).value
+
+        assertEquals(Status.SUCCESS, resource?.status)
+    }
+
     private fun assertPrivateShareParameters(shares: List<OCShare>?) {
         assertCommonShareParameters(shares)
 
@@ -131,8 +162,6 @@ class OCShareViewModelTest {
 
     @Test
     fun insertPublicShare() {
-        val ocShareRepository = mock(OCShareRepository::class.java)
-
         `when`(
             ocShareRepository.insertPublicShare(
                 filePath,
@@ -165,8 +194,6 @@ class OCShareViewModelTest {
 
     @Test
     fun updatePublicShare() {
-        val ocShareRepository = mock(OCShareRepository::class.java)
-
         `when`(
             ocShareRepository.updatePublicShare(
                 1,
@@ -199,8 +226,6 @@ class OCShareViewModelTest {
 
     @Test
     fun deletePublicShare() {
-        val ocShareRepository = mock(OCShareRepository::class.java)
-
         `when`(
             ocShareRepository.deletePublicShare(
                 3
