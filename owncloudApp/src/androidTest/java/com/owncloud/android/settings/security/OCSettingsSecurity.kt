@@ -71,6 +71,9 @@ class OCSettingsSecurity {
     private val KEY_PATTERN = "KEY_PATTERN"
     private val KEY_CHECK_PATTERN_RESULT = "KEY_CHECK_PATTERN_RESULT"
 
+    private val PASSCODE_VALUE = "1111"
+    private val PATTERN_VALUE = "1234"
+
     @Before
     fun setUp() {
         //Only interested in "More" section, so we can get rid of the other categories. SmoothScroll is not
@@ -124,7 +127,7 @@ class OCSettingsSecurity {
     @Test
     fun passcodeLockEnabled(){
         val result = Intent()
-        result.putExtra(KEY_PASSCODE, "1111")
+        result.putExtra(KEY_PASSCODE, PASSCODE_VALUE)
         val intentResult = Instrumentation.ActivityResult(Activity.RESULT_OK, result)
         intending(hasAction(PassCodeActivity.ACTION_REQUEST_WITH_RESULT)).respondWith(intentResult);
         onView(withText(R.string.prefs_passcode)).perform(click())
@@ -135,7 +138,7 @@ class OCSettingsSecurity {
     @Test
     fun patternLockEnabled(){
         val result = Intent()
-        result.putExtra(KEY_PATTERN, "patternLockToTest")
+        result.putExtra(KEY_PATTERN, PATTERN_VALUE)
         val intentResult = Instrumentation.ActivityResult(Activity.RESULT_OK, result)
         intending(hasAction(PatternLockActivity.ACTION_REQUEST_WITH_RESULT)).respondWith(intentResult)
         onView(withText(R.string.prefs_pattern)).perform(click())
@@ -226,17 +229,17 @@ class OCSettingsSecurity {
         assertFalse(mPrefTouches.isChecked)
     }
 
-    fun firstEnablePasscode(){
+    private fun firstEnablePasscode(){
         val result = Intent()
-        result.putExtra(KEY_PASSCODE, "1111")
+        result.putExtra(KEY_PASSCODE, PASSCODE_VALUE)
         val intentResult = Instrumentation.ActivityResult(Activity.RESULT_OK, result)
         intending(hasAction(PassCodeActivity.ACTION_REQUEST_WITH_RESULT)).respondWith(intentResult);
         onView(withText(R.string.prefs_passcode)).perform(click())
     }
 
-    fun firstEnablePattern(){
+    private fun firstEnablePattern(){
         val result = Intent()
-        result.putExtra(KEY_PATTERN, "patternLockToTest")
+        result.putExtra(KEY_PATTERN, PATTERN_VALUE)
         val intentResult = Instrumentation.ActivityResult(Activity.RESULT_OK, result)
         intending(hasAction(PatternLockActivity.ACTION_REQUEST_WITH_RESULT)).respondWith(intentResult)
         onView(withText(R.string.prefs_pattern)).perform(click())
