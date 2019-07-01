@@ -219,13 +219,13 @@ class OCShareRepository(
                     localSharesDataSource.deleteSharesForFile(filePath, accountName)
                 }
 
-                localSharesDataSource.replaceSharesForFile(sharesForFileFromServer)
+                localSharesDataSource.replaceShares(sharesForFileFromServer)
             }
 
             override fun shouldFetchFromNetwork(data: List<OCShare>?) = true
 
             override fun loadFromDb(): LiveData<List<OCShare>> =
-                localSharesDataSource.getSharesForFileAsLiveData(
+                localSharesDataSource.getSharesAsLiveData(
                     filePath, accountName, shareTypes
                 )
 

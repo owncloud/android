@@ -24,7 +24,7 @@ import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.shares.domain.OCShare
 
 interface LocalSharesDataSource {
-    fun getSharesForFileAsLiveData(
+    fun getSharesAsLiveData(
         filePath: String,
         accountName: String,
         shareTypes: List<ShareType>
@@ -36,7 +36,7 @@ interface LocalSharesDataSource {
 
     fun update(ocShare: OCShare): Long
 
-    fun replaceSharesForFile(ocShares: List<OCShare>): List<Long>
+    fun replaceShares(ocShares: List<OCShare>): List<Long>
 
     fun deleteShare(remoteId: Long): Int
 
