@@ -58,9 +58,9 @@ class OCSettingsPasscode {
     private val KEY_PASSCODE = "KEY_PASSCODE"
     private val context = InstrumentationRegistry.getInstrumentation().targetContext
 
-    private val defaultPassCode = arrayOf('1','1','1','1')
-    private val wrongPassCode = arrayOf('1','1','1','2')
-    private val passcodeToSave = "1111"
+    private val DEFAULT_PASSCODE = arrayOf('1','1','1','1')
+    private val WRONG_PASSCODE = arrayOf('1','1','1','2')
+    private val PASSCODE_TOSAVE = "1111"
 
     @After
     fun tearDown() {
@@ -91,7 +91,7 @@ class OCSettingsPasscode {
         openPasscodeActivity(PassCodeActivity.ACTION_REQUEST_WITH_RESULT)
 
         //First typing
-        typePasscode(defaultPassCode)
+        typePasscode(DEFAULT_PASSCODE)
 
         onView(withText(R.string.pass_code_reenter_your_pass_code)).check(matches(isDisplayed()))
         onView(withText(R.string.pass_code_configure_your_pass_code)).check(doesNotExist())
@@ -103,13 +103,13 @@ class OCSettingsPasscode {
         openPasscodeActivity(PassCodeActivity.ACTION_REQUEST_WITH_RESULT)
 
         //First typing
-        typePasscode(defaultPassCode)
+        typePasscode(DEFAULT_PASSCODE)
         //Second typing
-        typePasscode(defaultPassCode)
+        typePasscode(DEFAULT_PASSCODE)
 
         //Checking that the setResult returns the typed passcode
         assertThat(activityRule.activityResult, hasResultCode(Activity.RESULT_OK))
-        assertThat(activityRule.activityResult, hasResultData(hasExtra(KEY_PASSCODE, "1111")))
+        assertThat(activityRule.activityResult, hasResultData(hasExtra(KEY_PASSCODE, PASSCODE_TOSAVE)))
 
         assertTrue(errorMessage, activityRule.activity.isFinishing)
     }
@@ -120,9 +120,9 @@ class OCSettingsPasscode {
         openPasscodeActivity(PassCodeActivity.ACTION_REQUEST_WITH_RESULT)
 
         //First typing )
-        typePasscode(defaultPassCode)
+        typePasscode(DEFAULT_PASSCODE)
         //Second typing
-        typePasscode(wrongPassCode)
+        typePasscode(WRONG_PASSCODE)
 
         pressBack()
 
@@ -151,7 +151,7 @@ class OCSettingsPasscode {
         openPasscodeActivity(PassCodeActivity.ACTION_REQUEST_WITH_RESULT)
 
         //First typing
-        typePasscode(defaultPassCode)
+        typePasscode(DEFAULT_PASSCODE)
 
         onView(withId(R.id.txt0)).perform(replaceText("1"))
         onView(withId(R.id.txt1)).perform(replaceText("1"))
@@ -174,13 +174,13 @@ class OCSettingsPasscode {
     @Test
     fun deletePasscodeCorrect() {
         //Save a passcode in Preferences
-        storePasscode(passcodeToSave)
+        storePasscode(PASSCODE_TOSAVE)
 
         //Open Activity in passcode deletion mode
         openPasscodeActivity(PassCodeActivity.ACTION_CHECK_WITH_RESULT)
 
         //Type correct passcode
-        typePasscode(defaultPassCode)
+        typePasscode(DEFAULT_PASSCODE)
 
         assertTrue(errorMessage, activityRule.activity.isFinishing)
     }
@@ -188,13 +188,13 @@ class OCSettingsPasscode {
     @Test
     fun deletePasscodeIncorrect() {
         //Save a passcode in Preferences
-        storePasscode(passcodeToSave)
+        storePasscode(PASSCODE_TOSAVE)
 
         //Open Activity in passcode deletion mode
         openPasscodeActivity(PassCodeActivity.ACTION_CHECK_WITH_RESULT)
 
         //Type incorrect passcode
-        typePasscode(wrongPassCode)
+        typePasscode(WRONG_PASSCODE)
 
         onView(withText(R.string.pass_code_enter_pass_code)).check(matches(isDisplayed()))
     }
@@ -211,7 +211,7 @@ class OCSettingsPasscode {
         onView(withId(R.id.txt3)).perform(replaceText(digits[3].toString()))
     }
 
-    private fun storePasscode (passcode: String = passcodeToSave){
+    private fun storePasscode (passcode: String = PASSCODE_TOSAVE){
         var appPrefs = PreferenceManager.getDefaultSharedPreferences(context).edit();
         for (i in 1..4) {
             appPrefs.putString(
