@@ -40,7 +40,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
-class OCSettingsPatternLock {
+class OCSettingsPatternLockTest {
 
     @Rule
     @JvmField
@@ -48,6 +48,8 @@ class OCSettingsPatternLock {
     val errorMessage = "PatternLock Activity error"
     val intent = Intent()
     private val context = InstrumentationRegistry.getInstrumentation().targetContext
+
+    private val PATTERN_TOSAVE = "1234"
 
     @After
     fun tearDown() {
@@ -88,14 +90,14 @@ class OCSettingsPatternLock {
     }
 
     private fun storePattern(){
-        var appPrefs = PreferenceManager.getDefaultSharedPreferences(context).edit();
-        appPrefs.putString(PatternLockActivity.KEY_PATTERN, "AAAAAAA")
+        val appPrefs = PreferenceManager.getDefaultSharedPreferences(context).edit();
+        appPrefs.putString(PatternLockActivity.KEY_PATTERN, PATTERN_TOSAVE)
         appPrefs.putBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN, true)
         appPrefs.apply()
     }
 
     private fun openPatternActivity (mode: String) {
-        intent.setAction(mode)
+        intent.action = mode
         activityRule.launchActivity(intent)
     }
 

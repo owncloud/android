@@ -47,7 +47,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
-class OCSettingsPasscode {
+class OCSettingsPasscodeTest {
 
     @Rule
     @JvmField
@@ -212,7 +212,7 @@ class OCSettingsPasscode {
     }
 
     private fun storePasscode (passcode: String = PASSCODE_TOSAVE){
-        var appPrefs = PreferenceManager.getDefaultSharedPreferences(context).edit();
+        val appPrefs = PreferenceManager.getDefaultSharedPreferences(context).edit();
         for (i in 1..4) {
             appPrefs.putString(
                 PassCodeActivity.PREFERENCE_PASSCODE_D + i,
