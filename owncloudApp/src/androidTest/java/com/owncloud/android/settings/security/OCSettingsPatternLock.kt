@@ -58,8 +58,7 @@ class OCSettingsPatternLock {
     @Test
     fun patternLockView(){
         //Open Activity in pattern creation mode
-        intent.setAction(PatternLockActivity.ACTION_REQUEST_WITH_RESULT)
-        activityRule.launchActivity(intent)
+        openPatternActivity(PatternLockActivity.ACTION_REQUEST_WITH_RESULT)
 
         onView(withText(R.string.pattern_configure_pattern)).check(matches(isDisplayed()))
         onView(withText(R.string.pattern_configure_your_pattern_explanation)).check(matches(isDisplayed()))
@@ -70,8 +69,7 @@ class OCSettingsPatternLock {
     @Test
     fun cancelPatternLock(){
         //Open Activity in pattern creation mode
-        intent.setAction(PatternLockActivity.ACTION_REQUEST_WITH_RESULT)
-        activityRule.launchActivity(intent)
+        openPatternActivity(PatternLockActivity.ACTION_REQUEST_WITH_RESULT)
 
         onView(withId(R.id.cancel_pattern)).perform(click())
         assertTrue(errorMessage, activityRule.activity.isFinishing)
@@ -83,18 +81,22 @@ class OCSettingsPatternLock {
         storePattern()
 
         //Open Activity in pattern deletion mode
-        intent.setAction(PassCodeActivity.ACTION_CHECK_WITH_RESULT)
-        activityRule.launchActivity(intent)
+        openPatternActivity(PatternLockActivity.ACTION_CHECK_WITH_RESULT)
 
         onView(withText(R.string.pattern_remove_pattern)).check(matches(isDisplayed()))
         onView(withText(R.string.pattern_no_longer_required)).check(matches(isDisplayed()))
     }
 
-    fun storePattern(){
+    private fun storePattern(){
         var appPrefs = PreferenceManager.getDefaultSharedPreferences(context).edit();
         appPrefs.putString(PatternLockActivity.KEY_PATTERN, "AAAAAAA")
         appPrefs.putBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN, true)
         appPrefs.apply()
+    }
+
+    private fun openPatternActivity (mode: String) {
+        intent.setAction(mode)
+        activityRule.launchActivity(intent)
     }
 
 }

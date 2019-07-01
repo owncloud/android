@@ -58,6 +58,10 @@ class OCSettingsPasscode {
     private val KEY_PASSCODE = "KEY_PASSCODE"
     private val context = InstrumentationRegistry.getInstrumentation().targetContext
 
+    private val defaultPassCode = arrayOf('1','1','1','1')
+    private val wrongPassCode = arrayOf('1','1','1','2')
+    private val passcodeToSave = "1111"
+
     @After
     fun tearDown() {
         //Clean preferences
@@ -68,8 +72,7 @@ class OCSettingsPasscode {
     @Test
     fun passcodeView(){
         //Open Activity in passcode creation mode
-        intent.setAction(PassCodeActivity.ACTION_REQUEST_WITH_RESULT)
-        activityRule.launchActivity(intent)
+        openPasscodeActivity(PassCodeActivity.ACTION_REQUEST_WITH_RESULT)
 
         onView(withId(R.id.header)).check(matches(isDisplayed()))
         onView(withId(R.id.explanation)).check(matches(isDisplayed()))
@@ -85,11 +88,10 @@ class OCSettingsPasscode {
     @Test
     fun firstTry(){
         //Open Activity in passcode creation mode
-        intent.setAction(PassCodeActivity.ACTION_REQUEST_WITH_RESULT)
-        activityRule.launchActivity(intent)
+        openPasscodeActivity(PassCodeActivity.ACTION_REQUEST_WITH_RESULT)
 
         //First typing
-        typePasscode(arrayOf('1','1','1','1'))
+        typePasscode(defaultPassCode)
 
         onView(withText(R.string.pass_code_reenter_your_pass_code)).check(matches(isDisplayed()))
         onView(withText(R.string.pass_code_configure_your_pass_code)).check(doesNotExist())
@@ -98,17 +100,16 @@ class OCSettingsPasscode {
     @Test
     fun secondTryCorrect(){
         //Open Activity in passcode creation mode
-        intent.setAction(PassCodeActivity.ACTION_REQUEST_WITH_RESULT)
-        activityRule.launchActivity(intent)
+        openPasscodeActivity(PassCodeActivity.ACTION_REQUEST_WITH_RESULT)
 
         //First typing
-        typePasscode(arrayOf('1','1','1','1'))
+        typePasscode(defaultPassCode)
         //Second typing
-        typePasscode(arrayOf('1','1','1','1'))
+        typePasscode(defaultPassCode)
 
         //Checking that the setResult returns the typed passcode
-        assertThat(activityRule.getActivityResult(), hasResultCode(Activity.RESULT_OK))
-        assertThat(activityRule.getActivityResult(), hasResultData(hasExtra(KEY_PASSCODE, "1111")))
+        assertThat(activityRule.activityResult, hasResultCode(Activity.RESULT_OK))
+        assertThat(activityRule.activityResult, hasResultData(hasExtra(KEY_PASSCODE, "1111")))
 
         assertTrue(errorMessage, activityRule.activity.isFinishing)
     }
@@ -116,13 +117,12 @@ class OCSettingsPasscode {
     @Test
     fun secondTryIncorrect(){
         //Open Activity in passcode creation mode
-        intent.setAction(PassCodeActivity.ACTION_REQUEST_WITH_RESULT)
-        activityRule.launchActivity(intent)
+        openPasscodeActivity(PassCodeActivity.ACTION_REQUEST_WITH_RESULT)
 
-        //First typing
-        typePasscode(arrayOf('1','1','1','1'))
+        //First typing )
+        typePasscode(defaultPassCode)
         //Second typing
-        typePasscode(arrayOf('1','1','1','2'))
+        typePasscode(wrongPassCode)
 
         pressBack()
 
@@ -135,8 +135,7 @@ class OCSettingsPasscode {
     @Test
     fun cancelFirstTry() {
         //Open Activity in passcode creation mode
-        intent.setAction(PassCodeActivity.ACTION_REQUEST_WITH_RESULT)
-        activityRule.launchActivity(intent)
+        openPasscodeActivity(PassCodeActivity.ACTION_REQUEST_WITH_RESULT)
 
         onView(withId(R.id.txt0)).perform(replaceText("1"))
         onView(withId(R.id.txt1)).perform(replaceText("1"))
@@ -149,11 +148,10 @@ class OCSettingsPasscode {
     @Test
     fun cancelSecondTry() {
         //Open Activity in passcode creation mode
-        intent.setAction(PassCodeActivity.ACTION_REQUEST_WITH_RESULT)
-        activityRule.launchActivity(intent)
+        openPasscodeActivity(PassCodeActivity.ACTION_REQUEST_WITH_RESULT)
 
         //First typing
-        typePasscode(arrayOf('1','1','1','1'))
+        typePasscode(defaultPassCode)
 
         onView(withId(R.id.txt0)).perform(replaceText("1"))
         onView(withId(R.id.txt1)).perform(replaceText("1"))
@@ -168,8 +166,7 @@ class OCSettingsPasscode {
         storePasscode()
 
         //Open Activity in passcode deletion mode
-        intent.setAction(PassCodeActivity.ACTION_CHECK_WITH_RESULT)
-        activityRule.launchActivity(intent)
+        openPasscodeActivity(PassCodeActivity.ACTION_CHECK_WITH_RESULT)
 
         onView(withText(R.string.pass_code_remove_your_pass_code)).check(matches(isDisplayed()))
     }
@@ -177,14 +174,13 @@ class OCSettingsPasscode {
     @Test
     fun deletePasscodeCorrect() {
         //Save a passcode in Preferences
-        storePasscode("1111")
+        storePasscode(passcodeToSave)
 
         //Open Activity in passcode deletion mode
-        intent.setAction(PassCodeActivity.ACTION_CHECK_WITH_RESULT)
-        activityRule.launchActivity(intent)
+        openPasscodeActivity(PassCodeActivity.ACTION_CHECK_WITH_RESULT)
 
         //Type correct passcode
-        typePasscode(arrayOf('1','1','1','1'))
+        typePasscode(defaultPassCode)
 
         assertTrue(errorMessage, activityRule.activity.isFinishing)
     }
@@ -192,26 +188,30 @@ class OCSettingsPasscode {
     @Test
     fun deletePasscodeIncorrect() {
         //Save a passcode in Preferences
-        storePasscode("1111")
+        storePasscode(passcodeToSave)
 
         //Open Activity in passcode deletion mode
-        intent.setAction(PassCodeActivity.ACTION_CHECK_WITH_RESULT)
-        activityRule.launchActivity(intent)
+        openPasscodeActivity(PassCodeActivity.ACTION_CHECK_WITH_RESULT)
 
         //Type incorrect passcode
-        typePasscode(arrayOf('1','1','1','2'))
+        typePasscode(wrongPassCode)
 
         onView(withText(R.string.pass_code_enter_pass_code)).check(matches(isDisplayed()))
     }
 
-    fun typePasscode (digits: Array<Char>){
+    private fun openPasscodeActivity (mode: String) {
+        intent.action = mode
+        activityRule.launchActivity(intent)
+    }
+
+    private fun typePasscode (digits: Array<Char>){
         onView(withId(R.id.txt0)).perform(replaceText(digits[0].toString()))
         onView(withId(R.id.txt1)).perform(replaceText(digits[1].toString()))
         onView(withId(R.id.txt2)).perform(replaceText(digits[2].toString()))
         onView(withId(R.id.txt3)).perform(replaceText(digits[3].toString()))
     }
 
-    fun storePasscode (passcode: String = "1111"){
+    private fun storePasscode (passcode: String = passcodeToSave){
         var appPrefs = PreferenceManager.getDefaultSharedPreferences(context).edit();
         for (i in 1..4) {
             appPrefs.putString(
