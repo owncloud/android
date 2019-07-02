@@ -281,6 +281,9 @@ class ShareXMLParser {
             } else if (name.equals(NODE_SHARE_WITH_DISPLAY_NAME, ignoreCase = true)) {
                 remoteShare.sharedWithDisplayName = readNode(parser, NODE_SHARE_WITH_DISPLAY_NAME)
 
+            } else if (name.equals(NODE_SHARE_WITH_ADDITIONAL_INFO)) {
+                remoteShare.sharedWithAdditionalInfo = readNode(parser, NODE_SHARE_WITH_ADDITIONAL_INFO)
+
             } else if (name.equals(NODE_URL, ignoreCase = true)) {
                 val value = readNode(parser, NODE_URL)
                 remoteShare.shareLink = value
