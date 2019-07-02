@@ -46,6 +46,7 @@
   <string name="prefs_log_summary_history">Þetta sýnir skráningar í annála</string>
   <string name="prefs_log_delete_history_button">Eyða ferli</string>
   <string name="prefs_help">Hjálp</string>
+  <string name="prefs_sync_calendar_contacts_summary">Setja upp DAVx⁵</string>
   <string name="prefs_recommend">Mæla með við vin</string>
   <string name="prefs_feedback">Umsögn</string>
   <string name="prefs_imprint">Prenta</string>
@@ -201,6 +202,8 @@
   <string name="pass_code_removed">Fjarlægði lykilkóða</string>
   <string name="pass_code_stored">Geymdi lykilkóða</string>
   <string name="fingerprint_hint">Snertiskynjari</string>
+  <string name="fingerprint_not_recognized">Fingrafar þekktist ekki, prófaðu aftur</string>
+  <string name="fingerprint_success">Fingrafar þekktist</string>
   <string name="media_notif_ticker">%1$s tónlistarspilari</string>
   <string name="media_state_playing">%1$s (afspilun)</string>
   <string name="media_state_loading">%1$s (hleð)</string>
