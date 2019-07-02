@@ -46,6 +46,7 @@ import com.owncloud.android.operations.common.OperationType
 import com.owncloud.android.sharees.presentation.SearchShareesFragment
 import com.owncloud.android.sharees.presentation.UsersAndGroupsSearchProvider
 import com.owncloud.android.shares.domain.OCShare
+import com.owncloud.android.shares.presentation.fragment.EditShareFragment
 import com.owncloud.android.shares.presentation.fragment.PublicShareDialogFragment
 import com.owncloud.android.shares.presentation.fragment.ShareFileFragment
 import com.owncloud.android.shares.presentation.fragment.ShareFragmentListener
@@ -53,7 +54,6 @@ import com.owncloud.android.testing.OpenForTesting
 import com.owncloud.android.ui.activity.FileActivity
 import com.owncloud.android.ui.dialog.RemoveShareDialogFragment
 import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter
-import com.owncloud.android.ui.fragment.EditShareFragment
 import com.owncloud.android.ui.utils.showDialogFragment
 import com.owncloud.android.vo.Status
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -114,7 +114,7 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
         setContentView(R.layout.share_activity)
 
         // Set back button
-        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         val ft = supportFragmentManager.beginTransaction()
 
@@ -148,7 +148,7 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
                 val shareWith = dataString!!.substring(dataString.lastIndexOf('/') + 1)
                 doShareWith(
                     shareWith,
-                    data!!.authority
+                    data?.authority
                 )
             }
             else -> Log_OC.e(TAG, "Unexpected intent $intent")
@@ -309,6 +309,12 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
                     }
                     Status.LOADING -> {
                         showLoadingDialog(R.string.common_loading)
+                    }
+                    else -> {
+                        Log.d(
+                            TAG, "Unknown status when creating private share for file ${file?.fileName} in " +
+                                    "account ${account?.name}"
+                        )
                     }
                 }
             }
@@ -589,7 +595,7 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
         if (operation is UpdateSharePermissionsOperation
             && editShareFragment != null && editShareFragment!!.isAdded
         ) {
-            editShareFragment!!.onUpdateSharePermissionsFinished(result as RemoteOperationResult<ShareParserResult>?)
+            editShareFragment?.onUpdateSharePermissionsFinished(result as RemoteOperationResult<ShareParserResult>?)
         }
     }
 
