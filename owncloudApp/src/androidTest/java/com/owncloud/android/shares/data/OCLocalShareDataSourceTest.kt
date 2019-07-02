@@ -45,20 +45,19 @@ class OCLocalDataSourceTest {
     @JvmField
     var rule: TestRule = InstantTaskExecutorRule()
 
-    val publicShares = listOf(
-        TestUtil.createPublicShare(
-            path = "/Photos/",
-            isFolder = true,
-            name = "Photos link",
-            shareLink = "http://server:port/s/1"
-        ),
-        TestUtil.createPublicShare(
-            path = "/Photos/",
-            isFolder = true,
-            name = "Photos link 2",
-            shareLink = "http://server:port/s/2"
-        )
-    )
+    @Before
+    fun init() {
+        val db = mock(OwncloudDatabase::class.java)
+        `when`(db.shareDao()).thenReturn(ocSharesDao)
+
+        val context = InstrumentationRegistry.getInstrumentation().targetContext
+        ocLocalSharesDataSource =
+            OCLocalSharesDataSource(context, ocSharesDao)
+    }
+
+    /******************************************************************************************************
+     ******************************************* PRIVATE SHARES *******************************************
+     ******************************************************************************************************/
 
     private val privateShares = listOf(
         TestUtil.createPrivateShare(
@@ -78,21 +77,6 @@ class OCLocalDataSourceTest {
     private val privateShareTypes = listOf(
         ShareType.USER, ShareType.GROUP, ShareType.FEDERATED
     )
-
-    @Before
-    fun init() {
-        val db = mock(OwncloudDatabase::class.java)
-        `when`(db.shareDao()).thenReturn(ocSharesDao)
-
-        val context = InstrumentationRegistry.getInstrumentation().targetContext
-        ocLocalSharesDataSource =
-            OCLocalSharesDataSource(context, ocSharesDao)
-    }
-
-
-    /******************************************************************************************************
-     ******************************************* PRIVATE SHARES *******************************************
-     ******************************************************************************************************/
 
     @Test
     fun readLocalPrivateShares() {
@@ -153,10 +137,24 @@ class OCLocalDataSourceTest {
         assertEquals(10, insertedShareId)
     }
 
-
     /******************************************************************************************************
      ******************************************* PUBLIC SHARES ********************************************
      ******************************************************************************************************/
+
+    val publicShares = listOf(
+        TestUtil.createPublicShare(
+            path = "/Photos/",
+            isFolder = true,
+            name = "Photos link",
+            shareLink = "http://server:port/s/1"
+        ),
+        TestUtil.createPublicShare(
+            path = "/Photos/",
+            isFolder = true,
+            name = "Photos link 2",
+            shareLink = "http://server:port/s/2"
+        )
+    )
 
     @Test
     fun readLocalPublicShares() {
