@@ -21,9 +21,9 @@ package com.owncloud.android.domain.sharing.shares
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.owncloud.android.data.AppExecutors
-import com.owncloud.android.data.common.NetworkBoundResource
-import com.owncloud.android.data.common.Resource
+import com.owncloud.android.data.Executors
+import com.owncloud.android.data.NetworkBoundResource
+import com.owncloud.android.data.Resource
 import com.owncloud.android.data.sharing.shares.ShareRepository
 import com.owncloud.android.data.sharing.shares.db.OCShareEntity
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
@@ -182,7 +182,7 @@ class OCShareRepository(
         val result = MutableLiveData<Resource<Unit>>()
         result.postValue(Resource.loading())
 
-        appExecutors.networkIO().execute {
+        executors.networkIO().execute {
             // Perform network operation
             val remoteOperationResult = remoteShareDataSource.insertShare(
                 filePath,
@@ -219,7 +219,7 @@ class OCShareRepository(
         val result = MutableLiveData<Resource<Unit>>()
         result.postValue(Resource.loading())
 
-        appExecutors.networkIO().execute {
+        executors.networkIO().execute {
             // Perform network operation
             val remoteOperationResult = remoteShareDataSource.updateShare(
                 remoteId,
@@ -252,7 +252,7 @@ class OCShareRepository(
         result.postValue(Resource.loading())
 
         // Perform network operation
-        appExecutors.networkIO().execute {
+        executors.networkIO().execute {
             // Perform network operation
             val remoteOperationResult = remoteShareDataSource.deleteShare(remoteId)
 
@@ -281,7 +281,7 @@ class OCShareRepository(
         shareTypes: List<ShareType>
     ): MutableLiveData<Resource<List<OCShareEntity>>> {
         return object :
-            NetworkBoundResource<List<OCShareEntity>, ShareParserResult>(appExecutors) {
+            NetworkBoundResource<List<OCShareEntity>, ShareParserResult>(executors) {
             override fun saveCallResult(item: ShareParserResult) {
                 val sharesForFileFromServer = item.shares.map { remoteShare ->
                     OCShareEntity.fromRemoteShare(remoteShare)
