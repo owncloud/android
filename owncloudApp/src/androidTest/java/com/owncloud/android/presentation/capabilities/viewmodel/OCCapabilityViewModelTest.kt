@@ -28,14 +28,14 @@ import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
 import com.owncloud.android.domain.capabilities.OCCapabilityRepository
 import com.owncloud.android.presentation.capabilities.OCCapabilityViewModel
 import com.owncloud.android.utils.AppTestUtil
+import io.mockk.every
+import io.mockk.mockkClass
 import junit.framework.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
-import org.mockito.Mockito.`when`
-import org.mockito.Mockito.mock
 
 @RunWith(JUnit4::class)
 class OCCapabilityViewModelTest {
@@ -53,17 +53,15 @@ class OCCapabilityViewModelTest {
 
     @Test
     fun loadCapability() {
-        val ocCapabilityRepository = mock(OCCapabilityRepository::class.java)
+        val ocCapabilityRepository = mockkClass(OCCapabilityRepository::class)
 
-        `when`(
+        every {
             ocCapabilityRepository.getCapabilityForAccount(
                 "admin@server"
             )
-        ).thenReturn(
-            MutableLiveData<Resource<OCCapabilityEntity>>().apply {
-                value = Resource.success(capability)
-            }
-        )
+        } returns MutableLiveData<Resource<OCCapabilityEntity>>().apply {
+            value = Resource.success(capability)
+        }
 
         val context = InstrumentationRegistry.getInstrumentation().targetContext
 

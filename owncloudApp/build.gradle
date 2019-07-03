@@ -80,6 +80,12 @@ dependencies {
 
     // Kotlin extensions
     implementation "androidx.core:core-ktx:$ktxVersion"
+
+    // Kotlin library to mock
+    testImplementation "io.mockk:mockk:$mockkVersion"
+    androidTestImplementation ("io.mockk:mockk-android:$mockkVersion") {
+        exclude module: 'objenesis'
+    }
 }
 
 tasks.withType(Test) {
