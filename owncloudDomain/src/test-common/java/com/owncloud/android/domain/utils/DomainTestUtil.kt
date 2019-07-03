@@ -24,6 +24,8 @@ import com.owncloud.android.data.sharing.shares.db.OCShareEntity
 import com.owncloud.android.domain.sharing.shares.OCShareRepository
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.shares.GetRemoteShareesOperation
+import com.owncloud.android.lib.resources.shares.RemoteShare
+import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.lib.resources.status.CapabilityBooleanType
 import com.owncloud.android.lib.resources.status.RemoteCapability
 import org.json.JSONObject
@@ -72,6 +74,22 @@ object DomainTestUtil {
         shareLink
     )
 
+    fun createPrivateShare(
+        shareType: Int = 0,
+        shareWith: String,
+        path: String,
+        isFolder: Boolean,
+        sharedWithDisplayName: String,
+        accountOwner: String = "admin@server"
+    ) = createShare(
+        shareType = shareType,
+        shareWith = shareWith,
+        path = path,
+        isFolder = isFolder,
+        sharedWithDisplayName = sharedWithDisplayName,
+        accountOwner = accountOwner
+    )
+
     fun createPublicShare(
         shareWith: String = "",
         path: String,
@@ -94,6 +112,44 @@ object DomainTestUtil {
         name = name,
         shareLink = shareLink
     )
+
+    fun createRemoteShare(
+        fileSource: Long = 7,
+        itemSource: Long = 7,
+        shareType: Int, // Public share by default
+        shareWith: String = "",
+        path: String,
+        permissions: Int = 1,
+        sharedDate: Long = 1542628397,
+        expirationDate: Long = 0,
+        token: String = "pwdasd12dasdWZ",
+        sharedWithDisplayName: String = "",
+        isFolder: Boolean,
+        userId: Long = -1,
+        remoteId: Long = 1,
+        name: String = "",
+        shareLink: String = ""
+    ): RemoteShare {
+        val remoteShare = RemoteShare();
+
+        remoteShare.fileSource = fileSource
+        remoteShare.itemSource = itemSource
+        remoteShare.shareType = ShareType.fromValue(shareType)
+        remoteShare.shareWith = shareWith
+        remoteShare.path = path
+        remoteShare.permissions = permissions
+        remoteShare.sharedDate = sharedDate
+        remoteShare.expirationDate = expirationDate
+        remoteShare.token = token
+        remoteShare.sharedWithDisplayName = sharedWithDisplayName
+        remoteShare.isFolder = isFolder
+        remoteShare.userId = userId
+        remoteShare.id = remoteId
+        remoteShare.name = name
+        remoteShare.shareLink = shareLink
+
+        return remoteShare
+    }
 
     /**
      * Sharees
