@@ -37,7 +37,7 @@ import android.provider.BaseColumns
 import android.widget.Toast
 import com.owncloud.android.R
 import com.owncloud.android.authentication.AccountUtils
-import com.owncloud.android.data.common.Resource
+import com.owncloud.android.data.Resource
 import com.owncloud.android.datamodel.FileDataStorageManager
 import com.owncloud.android.lib.common.utils.Log_OC
 import com.owncloud.android.lib.resources.shares.GetRemoteShareesOperation
