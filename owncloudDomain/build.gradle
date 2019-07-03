@@ -58,6 +58,7 @@ dependencies {
     testImplementation "org.mockito:mockito-core:$mockitoVersion"
 
     // Dependencies for instrumented tests
+    androidTestImplementation "androidx.arch.core:core-testing:$archLifecycleVersion"
     androidTestImplementation "org.mockito:mockito-android:$mockitoVersion"
 }
 

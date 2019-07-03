@@ -38,12 +38,12 @@ import com.owncloud.android.lib.resources.status.OwnCloudVersion
 import com.owncloud.android.presentation.sharing.sharees.SearchShareesFragment
 import com.owncloud.android.presentation.sharing.shares.views.TestShareFileActivity
 import com.owncloud.android.utils.AppTestUtil
+import io.mockk.every
+import io.mockk.mockkClass
 import org.hamcrest.CoreMatchers
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.Mockito.`when`
-import org.mockito.Mockito.mock
 
 @RunWith(AndroidJUnit4::class)
 class SearchShareesFragmentTest {
@@ -113,9 +113,9 @@ class SearchShareesFragmentTest {
         capabilities: OCCapabilityEntity = AppTestUtil.createCapability(),
         privateShares: ArrayList<OCShareEntity> = arrayListOf()
     ) {
-        val account = mock(Account::class.java)
-        val ownCloudVersion = mock(OwnCloudVersion::class.java)
-        `when`(ownCloudVersion.isSearchUsersSupported).thenReturn(true)
+        val account = mockkClass(Account::class)
+        val ownCloudVersion = mockkClass(OwnCloudVersion::class)
+        every { ownCloudVersion.isSearchUsersSupported } returns true
 
         val searchShareesFragment =
             SearchShareesFragment.newInstance(
