@@ -50,7 +50,6 @@ import com.owncloud.android.files.services.FileUploader.FileUploaderBinder;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.ui.activity.ComponentsGetter;
 import com.owncloud.android.ui.activity.FileActivity;
-import com.owncloud.android.ui.activity.FileDisplayActivity;
 import com.owncloud.android.ui.controller.TransferProgressController;
 import com.owncloud.android.ui.dialog.RemoveFilesDialogFragment;
 import com.owncloud.android.ui.dialog.RenameFileDialogFragment;

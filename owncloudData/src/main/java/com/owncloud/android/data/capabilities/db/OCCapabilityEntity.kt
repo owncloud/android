@@ -25,7 +25,7 @@ import android.database.Cursor
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.owncloud.android.data.common.ProviderMeta.ProviderTableMeta
+import com.owncloud.android.data.ProviderMeta.ProviderTableMeta
 import com.owncloud.android.lib.resources.status.RemoteCapability
 
 /**

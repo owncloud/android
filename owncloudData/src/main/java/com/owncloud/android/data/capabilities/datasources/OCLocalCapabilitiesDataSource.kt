@@ -23,7 +23,7 @@ import android.content.Context
 import androidx.lifecycle.LiveData
 import com.owncloud.android.data.capabilities.db.OCCapabilityDao
 import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
-import com.owncloud.android.data.common.OwncloudDatabase
+import com.owncloud.android.data.OwncloudDatabase
 
 class OCLocalCapabilitiesDataSource(
     context: Context,

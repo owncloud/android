@@ -22,7 +22,7 @@ package com.owncloud.android.presentation.sharing.sharees
 import android.accounts.Account
 import android.content.Context
 import androidx.lifecycle.ViewModel
-import com.owncloud.android.data.common.Resource
+import com.owncloud.android.data.Resource
 import com.owncloud.android.data.sharing.sharees.ShareeRepository
 import com.owncloud.android.data.sharing.sharees.datasources.OCRemoteShareesDataSource
 import com.owncloud.android.domain.sharing.sharees.OCShareeRepository
