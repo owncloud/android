@@ -24,14 +24,15 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.owncloud.android.data.Resource
+import com.owncloud.android.data.sharing.shares.datasources.LocalSharesDataSource
 import com.owncloud.android.data.sharing.shares.db.OCShareEntity
-import com.owncloud.android.data.utils.DataTestUtil
+import com.owncloud.android.domain.utils.DomainTestUtil
 import com.owncloud.android.domain.sharing.shares.OCShareRepository
+import com.owncloud.android.domain.utils.InstantExecutors
 import com.owncloud.android.domain.utils.mock
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.shares.ShareParserResult
 import com.owncloud.android.lib.resources.shares.ShareType
-import com.owncloud.android.utils.InstantExecutors
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -49,32 +50,31 @@ class OCShareRepositoryTest {
 
     private val filePath = "/Photos/"
 
-    private val localSharesDataSource =
-        mock(com.owncloud.android.data.sharing.shares.datasources.LocalSharesDataSource::class.java)
+    private val localSharesDataSource = mock(LocalSharesDataSource::class.java)
 
     private val remoteShares = arrayListOf(
-        DataTestUtil.createRemoteShare(
+        DomainTestUtil.createRemoteShare(
             shareType = ShareType.PUBLIC_LINK.value, // Public share
             path = filePath,
             isFolder = true,
             name = "Photos folder link",
             shareLink = "http://server:port/s/1"
         ),
-        DataTestUtil.createRemoteShare(
+        DomainTestUtil.createRemoteShare(
             shareType = ShareType.PUBLIC_LINK.value, // Public share
             path = "${filePath}img",
             isFolder = true,
             name = "Photos folder link 1",
             shareLink = "http://server:port/s/2"
         ),
-        DataTestUtil.createRemoteShare(
+        DomainTestUtil.createRemoteShare(
             shareType = ShareType.PUBLIC_LINK.value, // Public share
             path = filePath,
             isFolder = true,
             name = "Photos folder link 2",
             shareLink = "http://server:port/s/3"
         ),
-        DataTestUtil.createRemoteShare(
+        DomainTestUtil.createRemoteShare(
             shareType = ShareType.USER.value, // Private share
             path = filePath,
             permissions = 1,
@@ -82,7 +82,7 @@ class OCShareRepositoryTest {
             shareWith = "username",
             sharedWithDisplayName = "John"
         ),
-        DataTestUtil.createRemoteShare(
+        DomainTestUtil.createRemoteShare(
             shareType = ShareType.GROUP.value, // Private share
             path = filePath,
             permissions = 3,
@@ -97,7 +97,7 @@ class OCShareRepositoryTest {
      ******************************************************************************************************/
 
     private val privateShare = listOf(
-        DataTestUtil.createPrivateShare(
+        DomainTestUtil.createPrivateShare(
             path = filePath,
             isFolder = true,
             shareWith = "username2",
@@ -114,7 +114,7 @@ class OCShareRepositoryTest {
         val localData = MutableLiveData<List<OCShareEntity>>() // Local shares
 
         val remoteOperationResult =
-            DataTestUtil.createRemoteOperationResultMock(ShareParserResult(remoteShares), true) // Remote shares
+            DomainTestUtil.createRemoteOperationResultMock(ShareParserResult(remoteShares), true) // Remote shares
 
         val privateSharesAsLiveData = loadPrivateSharesAsLiveData(localData, remoteOperationResult)
 
@@ -151,7 +151,7 @@ class OCShareRepositoryTest {
         val localData = MutableLiveData<List<OCShareEntity>>()
 
         val remoteOperationResult =
-            DataTestUtil.createRemoteOperationResultMock(ShareParserResult(arrayListOf()), true)
+            DomainTestUtil.createRemoteOperationResultMock(ShareParserResult(arrayListOf()), true)
 
         val data = loadPrivateSharesAsLiveData(localData, remoteOperationResult)
         val observer = mock<Observer<Resource<List<OCShareEntity>>>>()
@@ -183,7 +183,7 @@ class OCShareRepositoryTest {
 
         val exception = Exception("Error when retrieving shares")
 
-        val remoteOperationResult = DataTestUtil.createRemoteOperationResultMock(
+        val remoteOperationResult = DomainTestUtil.createRemoteOperationResultMock(
             ShareParserResult(arrayListOf()),
             false,
             resultCode = RemoteOperationResult.ResultCode.FORBIDDEN,
@@ -215,7 +215,7 @@ class OCShareRepositoryTest {
         val localData = MutableLiveData<List<OCShareEntity>>()
         localData.value = privateShare
 
-        val remoteOperationResult = DataTestUtil.createRemoteOperationResultMock(
+        val remoteOperationResult = DomainTestUtil.createRemoteOperationResultMock(
             ShareParserResult(arrayListOf(remoteShares[3])), true
         )
 
@@ -238,7 +238,7 @@ class OCShareRepositoryTest {
 
         val exception = Exception("Error when retrieving shares")
 
-        val remoteOperationResult = DataTestUtil.createRemoteOperationResultMock(
+        val remoteOperationResult = DomainTestUtil.createRemoteOperationResultMock(
             ShareParserResult(arrayListOf()),
             false,
             resultCode = RemoteOperationResult.ResultCode.HOST_NOT_AVAILABLE,
@@ -345,7 +345,7 @@ class OCShareRepositoryTest {
      ******************************************************************************************************/
 
     private val publicShare = listOf(
-        DataTestUtil.createPublicShare(
+        DomainTestUtil.createPublicShare(
             path = filePath,
             isFolder = true,
             name = "Photos folder link",
@@ -358,7 +358,7 @@ class OCShareRepositoryTest {
         val localData = MutableLiveData<List<OCShareEntity>>()
 
         val remoteOperationResult =
-            DataTestUtil.createRemoteOperationResultMock(ShareParserResult(remoteShares), true)
+            DomainTestUtil.createRemoteOperationResultMock(ShareParserResult(remoteShares), true)
 
         val data = loadPublicSharesAsLiveData(localData, remoteOperationResult)
         val observer = mock<Observer<Resource<List<OCShareEntity>>>>()
@@ -394,7 +394,7 @@ class OCShareRepositoryTest {
         val localData = MutableLiveData<List<OCShareEntity>>()
 
         val remoteOperationResult =
-            DataTestUtil.createRemoteOperationResultMock(ShareParserResult(arrayListOf()), true)
+            DomainTestUtil.createRemoteOperationResultMock(ShareParserResult(arrayListOf()), true)
 
         val data = loadPublicSharesAsLiveData(localData, remoteOperationResult)
         val observer = mock<Observer<Resource<List<OCShareEntity>>>>()
@@ -426,7 +426,7 @@ class OCShareRepositoryTest {
 
         val exception = Exception("Error when retrieving shares")
 
-        val remoteOperationResult = DataTestUtil.createRemoteOperationResultMock(
+        val remoteOperationResult = DomainTestUtil.createRemoteOperationResultMock(
             ShareParserResult(arrayListOf()),
             false,
             resultCode = RemoteOperationResult.ResultCode.FORBIDDEN,
@@ -458,7 +458,7 @@ class OCShareRepositoryTest {
         val localData = MutableLiveData<List<OCShareEntity>>()
         localData.value = publicShare
 
-        val remoteOperationResult = DataTestUtil.createRemoteOperationResultMock(
+        val remoteOperationResult = DomainTestUtil.createRemoteOperationResultMock(
             ShareParserResult(arrayListOf(remoteShares[1])), true
         )
 
@@ -481,7 +481,7 @@ class OCShareRepositoryTest {
 
         val exception = Exception("Error when retrieving shares")
 
-        val remoteOperationResult = DataTestUtil.createRemoteOperationResultMock(
+        val remoteOperationResult = DomainTestUtil.createRemoteOperationResultMock(
             ShareParserResult(arrayListOf()),
             false,
             resultCode = RemoteOperationResult.ResultCode.SHARE_NOT_FOUND,
@@ -506,7 +506,7 @@ class OCShareRepositoryTest {
         val localData = MutableLiveData<List<OCShareEntity>>()
         localData.value = publicShare
 
-        val remoteOperationResult = DataTestUtil.createRemoteOperationResultMock(
+        val remoteOperationResult = DomainTestUtil.createRemoteOperationResultMock(
             ShareParserResult(arrayListOf(remoteShares[2])), true
         )
 
@@ -526,7 +526,7 @@ class OCShareRepositoryTest {
         val localData = MutableLiveData<List<OCShareEntity>>()
         localData.value = publicShare
 
-        val remoteOperationResult = DataTestUtil.createRemoteOperationResultMock(
+        val remoteOperationResult = DomainTestUtil.createRemoteOperationResultMock(
             ShareParserResult(arrayListOf()), true
         )
 

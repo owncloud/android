@@ -32,12 +32,13 @@ import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.lib.resources.status.OwnCloudVersion
 import com.owncloud.android.presentation.sharing.shares.fragment.ShareFileFragment
 import com.owncloud.android.utils.AppTestUtil
+import io.mockk.every
+import io.mockk.mockkClass
 import org.hamcrest.Matchers.not
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.Mockito
 
 @RunWith(AndroidJUnit4::class)
 class ShareFolderFragmentTest {
@@ -49,9 +50,9 @@ class ShareFolderFragmentTest {
 
     @Before
     fun setUp() {
-        val account = Mockito.mock(Account::class.java)
-        val ownCloudVersion = Mockito.mock(OwnCloudVersion::class.java)
-        Mockito.`when`(ownCloudVersion.isSearchUsersSupported).thenReturn(true)
+        val account = mockkClass(Account::class)
+        val ownCloudVersion = mockkClass(OwnCloudVersion::class)
+        every { ownCloudVersion.isSearchUsersSupported } returns true
 
         shareFragment = ShareFileFragment.newInstance(
             getOCFolderForTesting("Photos"),

@@ -28,14 +28,14 @@ import com.owncloud.android.lib.resources.shares.GetRemoteShareesOperation
 import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.presentation.sharing.sharees.OCShareeViewModel
 import com.owncloud.android.utils.AppTestUtil
+import io.mockk.every
+import io.mockk.mockkClass
 import junit.framework.Assert.assertEquals
 import org.json.JSONObject
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
-import org.mockito.Mockito.`when`
-import org.mockito.Mockito.mock
 
 @RunWith(JUnit4::class)
 class OCShareeViewmodelTest {
@@ -44,7 +44,7 @@ class OCShareeViewmodelTest {
     val instantExecutorRule = InstantTaskExecutorRule()
 
     private var testAccount: Account = AppTestUtil.createAccount("admin@server", "test")
-    private var ocShareeRepository: OCShareeRepository = mock(OCShareeRepository::class.java)
+    private var ocShareeRepository: OCShareeRepository = mockkClass(OCShareeRepository::class)
 
     @Test
     fun loadSharees() {
@@ -53,11 +53,11 @@ class OCShareeViewmodelTest {
             AppTestUtil.createSharee("Group", ShareType.GROUP.value.toString(), "user2", "user2@mail.com")
         )
 
-        `when`(
+        every {
             ocShareeRepository.getSharees(
                 "User", 1, 10
             )
-        ).thenReturn(Resource.success(sharees))
+        } returns Resource.success(sharees)
 
         val ocShareeViewModel = createOCShareeViewModel(ocShareeRepository)
 

@@ -40,7 +40,6 @@ import com.owncloud.android.authentication.AccountAuthenticator.KEY_AUTH_TOKEN_T
 import com.owncloud.android.data.Resource
 import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
 import com.owncloud.android.data.sharing.shares.db.OCShareEntity
-import com.owncloud.android.utils.AccountsManager
 import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.lib.common.accounts.AccountUtils
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
@@ -50,7 +49,11 @@ import com.owncloud.android.presentation.capabilities.OCCapabilityViewModel
 import com.owncloud.android.presentation.sharing.shares.OCShareViewModel
 import com.owncloud.android.presentation.sharing.shares.ShareActivity
 import com.owncloud.android.ui.activity.FileActivity
+import com.owncloud.android.utils.AccountsManager
 import com.owncloud.android.utils.AppTestUtil
+import io.mockk.every
+import io.mockk.mockkClass
+import io.mockk.spyk
 import org.junit.AfterClass
 import org.junit.Before
 import org.junit.BeforeClass
@@ -61,9 +64,6 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.module
-import org.mockito.Mockito.`when`
-import org.mockito.Mockito.mock
-import org.mockito.Mockito.spy
 
 class CreatePublicShareTest {
     @Rule
@@ -100,8 +100,8 @@ class CreatePublicShareTest {
     private val capabilitiesLiveData = MutableLiveData<Resource<OCCapabilityEntity>>()
     private val sharesLiveData = MutableLiveData<Resource<List<OCShareEntity>>>()
 
-    private val ocCapabilityViewModel = mock(OCCapabilityViewModel::class.java)
-    private val ocShareViewModel = mock(OCShareViewModel::class.java)
+    private val ocCapabilityViewModel = mockkClass(OCCapabilityViewModel::class)
+    private val ocShareViewModel = mockkClass(OCShareViewModel::class)
 
     companion object {
         private val targetContext = InstrumentationRegistry.getInstrumentation().targetContext
@@ -157,17 +157,17 @@ class CreatePublicShareTest {
 
     @Before
     fun setUp() {
-        val intent = spy(Intent::class.java)
+        val intent = spyk<Intent>()
 
         file = getOCFileForTesting("image.jpg")
 
-        `when`(intent.getParcelableExtra(FileActivity.EXTRA_FILE) as? Parcelable).thenReturn(file)
+        every { intent.getParcelableExtra(FileActivity.EXTRA_FILE) as? Parcelable } returns file
         intent.putExtra(FileActivity.EXTRA_FILE, file)
 
-        `when`(ocCapabilityViewModel.getCapabilityForAccount(false)).thenReturn(capabilitiesLiveData)
-        `when`(ocCapabilityViewModel.getCapabilityForAccount(true)).thenReturn(capabilitiesLiveData)
-        `when`(ocShareViewModel.getPublicShares(file.remotePath)).thenReturn(sharesLiveData)
-        `when`(ocShareViewModel.getPrivateShares(file.remotePath)).thenReturn(MutableLiveData())
+        every { ocCapabilityViewModel.getCapabilityForAccount(false) } returns capabilitiesLiveData
+        every { ocCapabilityViewModel.getCapabilityForAccount(true) } returns capabilitiesLiveData
+        every { ocShareViewModel.getPublicShares(file.remotePath) } returns sharesLiveData
+        every { ocShareViewModel.getPublicShares(file.remotePath) } returns MutableLiveData()
 
         stopKoin()
 
@@ -355,7 +355,8 @@ class CreatePublicShareTest {
     }
 
     private fun savePublicShare(newShare: OCShareEntity, resource: Resource<Unit> = Resource.success()) {
-        `when`(
+
+        every {
             ocShareViewModel.insertPublicShare(
                 file.remotePath,
                 1,
@@ -364,11 +365,9 @@ class CreatePublicShareTest {
                 -1,
                 false
             )
-        ).thenReturn(
-            MutableLiveData<Resource<Unit>>().apply {
-                postValue(resource)
-            }
-        )
+        } returns MutableLiveData<Resource<Unit>>().apply {
+            postValue(resource)
+        }
 
         onView(withId(R.id.saveButton)).perform(click())
     }

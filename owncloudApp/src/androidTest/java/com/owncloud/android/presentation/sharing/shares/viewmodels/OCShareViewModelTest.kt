@@ -27,17 +27,16 @@ import com.owncloud.android.data.Resource
 import com.owncloud.android.data.Status
 import com.owncloud.android.data.sharing.shares.db.OCShareEntity
 import com.owncloud.android.domain.sharing.shares.OCShareRepository
-import com.owncloud.android.domain.utils.DomainTestUtil
 import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.presentation.sharing.shares.OCShareViewModel
 import com.owncloud.android.utils.AppTestUtil
-import junit.framework.Assert.assertEquals
+import io.mockk.every
+import io.mockk.mockkClass
+import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
-import org.mockito.Mockito.`when`
-import org.mockito.Mockito.mock
 
 @RunWith(JUnit4::class)
 class OCShareViewModelTest {
@@ -48,7 +47,7 @@ class OCShareViewModelTest {
     private val filePath = "/Photos/image.jpg"
 
     private var testAccount: Account = AppTestUtil.createAccount("admin@server", "test")
-    private var ocShareRepository: OCShareRepository = DomainTestUtil.createOCShareRepositoryMock()
+    private var ocShareRepository: OCShareRepository = mockkClass(OCShareRepository::class)
 
     /******************************************************************************************************
      ******************************************* PRIVATE SHARES *******************************************
@@ -71,13 +70,10 @@ class OCShareViewModelTest {
             )
         )
 
-        `when`(
-            ocShareRepository.getPrivateShares(filePath)
-        ).thenReturn(
-            MutableLiveData<Resource<List<OCShareEntity>>>().apply {
-                value = Resource.success(privateShares)
-            }
-        )
+        every { ocShareRepository.getPrivateShares(filePath) } returns
+                MutableLiveData<Resource<List<OCShareEntity>>>().apply {
+                    value = Resource.success(privateShares)
+                }
 
         // Viewmodel that will ask ocShareRepository for shares
         val ocShareViewModel = createOCShareViewModel(ocShareRepository)
@@ -88,20 +84,16 @@ class OCShareViewModelTest {
 
     @Test
     fun insertPrivateShare() {
-        val ocShareRepository = mock(OCShareRepository::class.java)
-
-        `when`(
+        every {
             ocShareRepository.insertPrivateShare(
                 filePath,
                 ShareType.GROUP,
                 "user",
                 -1
             )
-        ).thenReturn(
-            MutableLiveData<Resource<Unit>>().apply {
-                value = Resource.success()
-            }
-        )
+        } returns MutableLiveData<Resource<Unit>>().apply {
+            value = Resource.success()
+        }
 
         // Viewmodel that will ask ocShareRepository for shares
         val ocShareViewModel = createOCShareViewModel(ocShareRepository)
@@ -171,13 +163,10 @@ class OCShareViewModelTest {
             )
         )
 
-        `when`(
-            ocShareRepository.getPublicShares(filePath)
-        ).thenReturn(
-            MutableLiveData<Resource<List<OCShareEntity>>>().apply {
-                value = Resource.success(publicShares)
-            }
-        )
+        every { ocShareRepository.getPublicShares(filePath) } returns
+                MutableLiveData<Resource<List<OCShareEntity>>>().apply {
+                    value = Resource.success(publicShares)
+                }
 
         // Viewmodel that will ask ocShareRepository for shares
         val ocShareViewModel = createOCShareViewModel(ocShareRepository)
@@ -188,7 +177,7 @@ class OCShareViewModelTest {
 
     @Test
     fun insertPublicShare() {
-        `when`(
+        every {
             ocShareRepository.insertPublicShare(
                 filePath,
                 1,
@@ -197,11 +186,9 @@ class OCShareViewModelTest {
                 -1,
                 false
             )
-        ).thenReturn(
-            MutableLiveData<Resource<Unit>>().apply {
-                value = Resource.success()
-            }
-        )
+        } returns MutableLiveData<Resource<Unit>>().apply {
+            value = Resource.success()
+        }
 
         // Viewmodel that will ask ocShareRepository for shares
         val ocShareViewModel = createOCShareViewModel(ocShareRepository)
@@ -220,7 +207,7 @@ class OCShareViewModelTest {
 
     @Test
     fun updatePublicShare() {
-        `when`(
+        every {
             ocShareRepository.updatePublicShare(
                 1,
                 "Photos 1 link",
@@ -229,11 +216,9 @@ class OCShareViewModelTest {
                 1,
                 false
             )
-        ).thenReturn(
-            MutableLiveData<Resource<Unit>>().apply {
-                value = Resource.success()
-            }
-        )
+        } returns MutableLiveData<Resource<Unit>>().apply {
+            value = Resource.success()
+        }
 
         // Viewmodel that will ask ocShareRepository for shares
         val ocShareViewModel = createOCShareViewModel(ocShareRepository)
@@ -265,16 +250,14 @@ class OCShareViewModelTest {
      ******************************************************************************************************/
 
     @Test
-    fun deleteShare() {
-        `when`(
-            ocShareRepository.deleteShare(
+    fun deletePublicShare() {
+        every {
+            ocShareRepository.deletePublicShare(
                 3
             )
-        ).thenReturn(
-            MutableLiveData<Resource<Unit>>().apply {
-                value = Resource.success()
-            }
-        )
+        } returns MutableLiveData<Resource<Unit>>().apply {
+            value = Resource.success()
+        }
 
         // Viewmodel that will ask ocShareRepository for shares
         val ocShareViewModel = createOCShareViewModel(ocShareRepository)
