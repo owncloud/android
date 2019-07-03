@@ -23,10 +23,11 @@ import android.accounts.Account
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
 import androidx.test.platform.app.InstrumentationRegistry
-import com.owncloud.android.capabilities.db.OCCapability
-import com.owncloud.android.capabilities.repository.OCCapabilityRepository
+import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
+import com.owncloud.android.domain.capabilities.OCCapabilityRepository
 import com.owncloud.android.utils.TestUtil
-import com.owncloud.android.vo.Resource
+import com.owncloud.android.data.common.Resource
+import com.owncloud.android.presentation.capabilities.OCCapabilityViewModel
 import junit.framework.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
@@ -39,7 +40,7 @@ import org.mockito.Mockito.mock
 @RunWith(JUnit4::class)
 class OCCapabilityViewModelTest {
     private var testAccount: Account = TestUtil.createAccount("admin@server", "test")
-    private lateinit var capability: OCCapability
+    private lateinit var capability: OCCapabilityEntity
 
     @Rule
     @JvmField
@@ -59,7 +60,7 @@ class OCCapabilityViewModelTest {
                 "admin@server"
             )
         ).thenReturn(
-            MutableLiveData<Resource<OCCapability>>().apply {
+            MutableLiveData<Resource<OCCapabilityEntity>>().apply {
                 value = Resource.success(capability)
             }
         )
@@ -72,8 +73,8 @@ class OCCapabilityViewModelTest {
             capabilityRepository = ocCapabilityRepository
         )
 
-        val resource: Resource<OCCapability>? = ocCapabilityViewModel.getCapabilityForAccountAsLiveData().value
-        val capability: OCCapability? = resource?.data
+        val resource: Resource<OCCapabilityEntity>? = ocCapabilityViewModel.getCapabilityForAccount().value
+        val capability: OCCapabilityEntity? = resource?.data
 
         assertEquals("admin@server", capability?.accountName)
         assertEquals(2, capability?.versionMayor)

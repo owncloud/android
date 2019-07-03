@@ -157,7 +157,7 @@
             android:syncable="true"
             />
         <provider
-            android:name="com.owncloud.android.sharees.presentation.UsersAndGroupsSearchProvider"
+            android:name="com.owncloud.android.presentation.sharing.sharees.UsersAndGroupsSearchProvider"
             android:authorities="@string/search_suggest_authority"
             android:enabled="true"
             android:exported="false"
@@ -247,7 +247,7 @@
         <activity android:name=".ui.activity.LocalFolderPickerActivity" />
         <activity android:name=".ui.activity.UploadPathActivity" />
         <activity
-            android:name=".shares.presentation.ShareActivity"
+            android:name="com.owncloud.android.presentation.sharing.shares.ShareActivity"
             android:label="@string/share_dialog_title"
             android:launchMode="singleTop"
             android:theme="@style/Theme.ownCloud"
