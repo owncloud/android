@@ -22,14 +22,15 @@ package com.owncloud.android.capabilities.repository
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
-import com.owncloud.android.capabilities.datasource.LocalCapabilitiesDataSource
-import com.owncloud.android.capabilities.db.OCCapability
+import com.owncloud.android.data.capabilities.datasources.LocalCapabilitiesDataSource
+import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.status.RemoteCapability
 import com.owncloud.android.util.InstantAppExecutors
 import com.owncloud.android.utils.TestUtil
 import com.owncloud.android.utils.mock
-import com.owncloud.android.vo.Resource
+import com.owncloud.android.data.common.Resource
+import com.owncloud.android.domain.capabilities.OCCapabilityRepository
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -51,7 +52,7 @@ class OCCapabilityRepositoryTest {
 
     @Test
     fun loadCapabilityFromNetwork() {
-        val dbData = MutableLiveData<OCCapability>()
+        val dbData = MutableLiveData<OCCapabilityEntity>()
 
         `when`(
             localCapabilitiesDataSource.getCapabilityForAccountAsLiveData(
@@ -72,7 +73,7 @@ class OCCapabilityRepositoryTest {
 
         val data = ocCapabilityRepository.getCapabilityForAccountAsLiveData("admin@server")
 
-        val observer = mock<Observer<Resource<OCCapability>>>()
+        val observer = mock<Observer<Resource<OCCapabilityEntity>>>()
         data.observeForever(observer)
 
         dbData.postValue(null)
@@ -87,7 +88,7 @@ class OCCapabilityRepositoryTest {
 
         // Capabilities are always retrieved from server and inserted in database if not empty list
         verify(localCapabilitiesDataSource).insert(
-            listOf(OCCapability.fromRemoteCapability(remoteCapability.apply { accountName = "admin@server" }))
+            listOf(OCCapabilityEntity.fromRemoteCapability(remoteCapability.apply { accountName = "admin@server" }))
         )
 
         // Observe changes in database livedata when there's a new capability
@@ -102,7 +103,7 @@ class OCCapabilityRepositoryTest {
 
     @Test
     fun loadEmptyCapabilityForAccountFromNetwork() {
-        val dbData = MutableLiveData<OCCapability>()
+        val dbData = MutableLiveData<OCCapabilityEntity>()
 
         `when`(
             localCapabilitiesDataSource.getCapabilityForAccountAsLiveData(
@@ -127,7 +128,7 @@ class OCCapabilityRepositoryTest {
             "user@server"
         )
 
-        val observer = mock<Observer<Resource<OCCapability>>>()
+        val observer = mock<Observer<Resource<OCCapabilityEntity>>>()
         data.observeForever(observer)
 
         dbData.postValue(null)
@@ -148,7 +149,7 @@ class OCCapabilityRepositoryTest {
 
     @Test
     fun loadCapabilitiesForAccountFromNetworkWithError() {
-        val dbData = MutableLiveData<OCCapability>()
+        val dbData = MutableLiveData<OCCapabilityEntity>()
 
         dbData.value = null // DB does not include capabilities yet
 
@@ -188,7 +189,7 @@ class OCCapabilityRepositoryTest {
         // Retrieving capabilities from server...
 
         // Observe changes in database livedata when there's an error from server
-        val observer = mock<Observer<Resource<OCCapability>>>()
+        val observer = mock<Observer<Resource<OCCapabilityEntity>>>()
         data.observeForever(observer)
 
         verify(observer).onChanged(

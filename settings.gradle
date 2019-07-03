@@ -1,2 +1,2 @@
-include ':owncloudApp'
+include ':owncloudApp', ':owncloudData', ':owncloudDomain'
 include ':owncloud-android-library:owncloudComLibrary'
