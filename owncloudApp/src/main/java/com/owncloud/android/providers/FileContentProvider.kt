@@ -45,20 +45,20 @@ import android.provider.BaseColumns
 import android.text.TextUtils
 import androidx.sqlite.db.SupportSQLiteDatabase
 import androidx.sqlite.db.SupportSQLiteQueryBuilder
-import com.owncloud.android.AppExecutors
 import com.owncloud.android.MainApp
 import com.owncloud.android.R
-import com.owncloud.android.capabilities.datasource.OCLocalCapabilitiesDataSource
-import com.owncloud.android.capabilities.db.OCCapability
+import com.owncloud.android.data.AppExecutors
+import com.owncloud.android.data.capabilities.datasources.OCLocalCapabilitiesDataSource
+import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
+import com.owncloud.android.data.common.OwncloudDatabase
+import com.owncloud.android.data.sharing.shares.datasources.OCLocalSharesDataSource
+import com.owncloud.android.data.sharing.shares.db.OCShareEntity
 import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.datamodel.UploadsStorageManager
-import com.owncloud.android.db.OwncloudDatabase
-import com.owncloud.android.db.ProviderMeta
 import com.owncloud.android.db.ProviderMeta.ProviderTableMeta
 import com.owncloud.android.lib.common.accounts.AccountUtils
 import com.owncloud.android.lib.common.utils.Log_OC
-import com.owncloud.android.shares.data.datasources.OCLocalShareDataSource
-import com.owncloud.android.shares.domain.OCShare
+import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.utils.FileStorageUtils
 import java.io.File
 import java.io.FileNotFoundException
@@ -221,7 +221,7 @@ class FileContentProvider(val appExecutors: AppExecutors = AppExecutors()) : Con
             }
             SHARES -> {
                 val shareId = OwncloudDatabase.getDatabase(context).shareDao().insert(
-                    OCShare.fromContentValues(values)
+                    OCShareEntity.fromContentValues(values)
                 )
 
                 if (shareId <= 0) throw SQLException("ERROR $uri")
@@ -473,7 +473,7 @@ class FileContentProvider(val appExecutors: AppExecutors = AppExecutors()) : Con
         when (uriMatcher.match(uri)) {
             DIRECTORY -> return 0 //updateFolderSize(db, selectionArgs[0]);
             SHARES -> return OwncloudDatabase.getDatabase(context!!).shareDao()
-                .update(OCShare.fromContentValues(values)).toInt()
+                .update(OCShareEntity.fromContentValues(values)).toInt()
             CAPABILITIES -> return db.update(
                 ProviderTableMeta.CAPABILITIES_TABLE_NAME, values, selection, selectionArgs
             )
@@ -520,7 +520,12 @@ class FileContentProvider(val appExecutors: AppExecutors = AppExecutors()) : Con
     }
 
     private inner class DataBaseHelper internal constructor(context: Context) :
-        SQLiteOpenHelper(context, ProviderMeta.DB_NAME, null, ProviderMeta.DB_VERSION) {
+        SQLiteOpenHelper(
+            context,
+            com.owncloud.android.data.common.ProviderMeta.DB_NAME,
+            null,
+            com.owncloud.android.data.common.ProviderMeta.DB_VERSION
+        ) {
 
         override fun onCreate(db: SQLiteDatabase) {
             // files table
@@ -962,10 +967,10 @@ class FileContentProvider(val appExecutors: AppExecutors = AppExecutors()) : Con
                 )
 
                 if (cursor.moveToFirst()) {
-                    val shares = mutableListOf<OCShare>()
+                    val shares = mutableListOf<OCShareEntity>()
 
                     do {
-                        shares.add(OCShare.fromCursor(cursor))
+                        shares.add(OCShareEntity.fromCursor(cursor))
                     } while (cursor.moveToNext())
 
                     // Insert share list to the new shares table in new database
@@ -994,7 +999,7 @@ class FileContentProvider(val appExecutors: AppExecutors = AppExecutors()) : Con
                     // Insert capability to the new capabilities table in new database
                     appExecutors.diskIO().execute {
                         OCLocalCapabilitiesDataSource(context).insert(
-                            listOf(OCCapability.fromCursor(cursor))
+                            listOf(OCCapabilityEntity.fromCursor(cursor))
                         )
                     }
                 }

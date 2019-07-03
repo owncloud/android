@@ -33,6 +33,7 @@ import android.webkit.MimeTypeMap;
 import androidx.fragment.app.DialogFragment;
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
+import com.owncloud.android.data.sharing.shares.db.OCShareEntity;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.files.services.AvailableOfflineHandler;
 import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder;
@@ -41,9 +42,8 @@ import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.shares.RemoteShare;
 import com.owncloud.android.lib.resources.shares.ShareType;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
+import com.owncloud.android.presentation.sharing.shares.ShareActivity;
 import com.owncloud.android.services.OperationsService;
-import com.owncloud.android.shares.domain.OCShare;
-import com.owncloud.android.shares.presentation.ShareActivity;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.dialog.ShareLinkToDialog;
 
@@ -154,12 +154,12 @@ public class FileOperationsHelper {
     }
 
     /**
-     * Show dialog to allow the user to choose an app to send the link of an {@link OCShare},
+     * Show dialog to allow the user to choose an app to send the link of an {@link OCShareEntity},
      * or copy it to clipboard.
      *
-     * @param share {@link OCShare} which link will be sent to the app chosen by the user.
+     * @param share {@link OCShareEntity} which link will be sent to the app chosen by the user.
      */
-    public void copyOrSendPublicLink(OCShare share) {
+    public void copyOrSendPublicLink(OCShareEntity share) {
         String link = share.getShareLink();
         if (link.length() <= 0) {
             mFileActivity.showSnackMessage(
@@ -186,9 +186,9 @@ public class FileOperationsHelper {
      * Helper method to remove an existing share, no matter if public or private.
      * Starts a request to do it in {@link OperationsService}
      *
-     * @param share The {@link OCShare} to remove (unshare).
+     * @param share The {@link OCShareEntity} to remove (unshare).
      */
-    public void removeShare(OCShare share) {
+    public void removeShare(OCShareEntity share) {
 
         Intent unshareService = new Intent(mFileActivity, OperationsService.class);
         unshareService.setAction(OperationsService.ACTION_UNSHARE);
@@ -228,6 +228,82 @@ public class FileOperationsHelper {
     }
 
     /**
+     * Updates a share on a file to set its access permissions.
+     * Starts a request to do it in {@link OperationsService}
+     *
+     * @param share       {@link OCShareEntity} instance which permissions will be updated.
+     * @param permissions New permissions to set. A value <= 0 makes no update.
+     */
+    public void setPermissionsToShareWithSharee(OCShareEntity share, int permissions) {
+        Intent updateShareIntent = new Intent(mFileActivity, OperationsService.class);
+        updateShareIntent.setAction(OperationsService.ACTION_UPDATE_SHARE_WITH_SHAREE);
+        updateShareIntent.putExtra(OperationsService.EXTRA_ACCOUNT, mFileActivity.getAccount());
+        updateShareIntent.putExtra(OperationsService.EXTRA_SHARE_ID, share.getId());
+        updateShareIntent.putExtra(
+                OperationsService.EXTRA_SHARE_PERMISSIONS,
+                permissions
+        );
+        queueShareIntent(updateShareIntent);
+    }
+
+    /**
+     * Updates at once all the properties of a public share on a file.
+     * Starts a request to do it in {@link OperationsService}
+     *
+     * @param share                    Public share to updated.
+     * @param name                     Name to set for the link (ignored in servers < 10.0.0).
+     * @param password                 Password to set for the public link; null or empty string to clear
+     *                                 the current password. - TODO select value to leave unchanged?
+     * @param expirationTimeInMillis   Expiration date to set. A negative value clears the current expiration
+     *                                 date, leaving the link unrestricted. Zero makes no change.
+     * @param uploadToFolderPermission New state of the permission for editing the folder shared via link.
+     *                                 Ignored if the file is not a folder. - TODO select value to leave unchanged?
+     * @param permissions              Optional permissions to allow or not specific actions in the folder
+     */
+    public void updateShareViaLink(
+            RemoteShare share,
+            String name,
+            String password,
+            long expirationTimeInMillis,
+            boolean uploadToFolderPermission,
+            int permissions
+    ) {
+        // Set password updating share
+        Intent updateShareIntent = new Intent(mFileActivity, OperationsService.class);
+        updateShareIntent.setAction(OperationsService.ACTION_UPDATE_SHARE_VIA_LINK);
+        updateShareIntent.putExtra(OperationsService.EXTRA_ACCOUNT, mFileActivity.getAccount());
+        //        updateShareIntent.putExtra(OperationsService.EXTRA_SHARE_ID, share.getId());
+
+        updateShareIntent.putExtra(
+                OperationsService.EXTRA_SHARE_NAME,
+                (name == null) ? "" : name
+        );
+
+        updateShareIntent.putExtra(
+                OperationsService.EXTRA_SHARE_PASSWORD,
+                password
+        );
+
+        updateShareIntent.putExtra(
+                OperationsService.EXTRA_SHARE_EXPIRATION_DATE_IN_MILLIS,
+                expirationTimeInMillis
+        );
+
+        updateShareIntent.putExtra(
+                OperationsService.EXTRA_SHARE_PUBLIC_UPLOAD,
+                uploadToFolderPermission
+        );
+
+        updateShareIntent.putExtra(
+                OperationsService.EXTRA_SHARE_PERMISSIONS,
+                permissions
+        );
+
+        queueShareIntent(updateShareIntent);
+    }
+
+    /**
+>>>>>>> Split up code into different modules following a layers approach
      * @return 'True' if the server supports the Search Users API
      */
     public boolean isSearchUserSupported() {

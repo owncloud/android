@@ -20,6 +20,7 @@
 
 package com.owncloud.android.capabilities.datasource
 
+import com.owncloud.android.data.capabilities.datasources.OCRemoteCapabilitiesDataSource
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.resources.status.GetRemoteCapabilitiesOperation
 import com.owncloud.android.utils.TestUtil
@@ -37,7 +38,8 @@ class OCRemoteCapabilitiesDataSourceTest {
 
     @Before
     fun init() {
-        ocRemoteCapabilitiesDataSource = OCRemoteCapabilitiesDataSource(ownCloudClient)
+        ocRemoteCapabilitiesDataSource =
+            OCRemoteCapabilitiesDataSource(ownCloudClient)
     }
 
     @Test

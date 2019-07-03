@@ -20,15 +20,14 @@
 package com.owncloud.android.utils
 
 import android.accounts.Account
-import com.owncloud.android.capabilities.db.OCCapability
-import com.owncloud.android.datamodel.OCFile
+import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
+import com.owncloud.android.data.sharing.shares.db.OCShareEntity
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.shares.GetRemoteShareesOperation
 import com.owncloud.android.lib.resources.shares.RemoteShare
 import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.lib.resources.status.CapabilityBooleanType
 import com.owncloud.android.lib.resources.status.RemoteCapability
-import com.owncloud.android.shares.domain.OCShare
 import org.json.JSONObject
 import org.mockito.Mockito.`when`
 
@@ -54,7 +53,7 @@ object TestUtil {
         accountOwner: String = "admin@server",
         name: String = "",
         shareLink: String = ""
-    ) = OCShare(
+    ) = OCShareEntity(
         fileSource,
         itemSource,
         shareType,
@@ -209,7 +208,7 @@ object TestUtil {
         filesBigFileChunking: Int = 0,
         filesUndelete: Int = 0,
         filesVersioning: Int = 0
-    ) = OCCapability(
+    ) = OCCapabilityEntity(
         accountName,
         versionMayor,
         versionMinor,
