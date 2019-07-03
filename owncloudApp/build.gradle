@@ -52,7 +52,6 @@ dependencies {
     androidTestImplementation "androidx.room:room-testing:$roomVersion"
     androidTestImplementation "androidx.arch.core:core-testing:$archLifecycleVersion"
     androidTestImplementation "org.mockito:mockito-android:$mockitoVersion"
-    androidTestImplementation "org.mockito:mockito-core:$mockitoVersion"
 
     // Image loading
     implementation('com.github.bumptech.glide:glide:4.6.1') {

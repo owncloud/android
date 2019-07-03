@@ -25,7 +25,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
-import com.owncloud.android.data.common.ProviderMeta.ProviderTableMeta
+import com.owncloud.android.data.ProviderMeta.ProviderTableMeta
 
 @Dao
 abstract class OCShareDao {

@@ -2,7 +2,11 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-allopen'
-apply plugin: 'kotlin-android-extensions'
+
+allOpen {
+    // allows mocking for classes w/o directly opening them for release builds
+    annotation 'com.owncloud.android.testing.OpenClass'
+}
 
 android {
     compileSdkVersion 28
@@ -25,9 +29,21 @@ android {
         }
     }
 
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    sourceSets {
+        androidTest.java.srcDirs += "src/test-common/java"
+        test.java.srcDirs += "src/test-common/java"
+    }
 }
 
 dependencies {
+    // Owncloud Android Library
+    api project(':owncloud-android-library:owncloudComLibrary')
+
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     implementation 'androidx.appcompat:appcompat:1.0.2'
@@ -38,10 +54,17 @@ dependencies {
     // Kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
 
-    // Owncloud Android Library
-    api project(':owncloud-android-library:owncloudComLibrary')
-
     // Room
     implementation "androidx.room:room-runtime:$roomVersion"
     kapt "androidx.room:room-compiler:$roomVersion"
+
+    // Dependencies for unit tests
+    testImplementation "junit:junit:$junitVersion"
+    testImplementation "androidx.arch.core:core-testing:$archLifecycleVersion"
+    testImplementation "org.mockito:mockito-core:$mockitoVersion"
+
+    // Dependencies for instrumented tests
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    androidTestImplementation "androidx.arch.core:core-testing:$archLifecycleVersion"
+    androidTestImplementation "org.mockito:mockito-android:$mockitoVersion"
 }

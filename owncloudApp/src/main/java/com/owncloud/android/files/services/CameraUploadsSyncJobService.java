@@ -45,8 +45,6 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.Locale;
 
-import androidx.annotation.RequiresApi;
-
 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 public class CameraUploadsSyncJobService extends JobService {
 
