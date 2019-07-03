@@ -33,6 +33,7 @@ import com.owncloud.android.lib.common.http.methods.nonwebdav.DeleteMethod
 import com.owncloud.android.lib.common.operations.RemoteOperation
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.common.utils.Log_OC
+import com.owncloud.android.lib.testing.OpenForTesting
 import java.net.URL
 
 /**
@@ -48,6 +49,7 @@ import java.net.URL
  *
  * @param remoteShareId Share ID
  */
+@OpenForTesting
 class RemoveRemoteShareOperation(private val remoteShareId: Long) : RemoteOperation<ShareParserResult>() {
 
     override fun run(client: OwnCloudClient): RemoteOperationResult<ShareParserResult> {

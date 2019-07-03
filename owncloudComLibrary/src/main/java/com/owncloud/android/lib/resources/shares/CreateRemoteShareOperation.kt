@@ -34,6 +34,7 @@ import com.owncloud.android.lib.common.operations.RemoteOperation
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.common.utils.Log_OC
 import com.owncloud.android.lib.resources.shares.RemoteShare.Companion.INIT_EXPIRATION_DATE_IN_MILLIS
+import com.owncloud.android.lib.testing.OpenForTesting
 import okhttp3.FormBody
 import java.net.URL
 import java.text.SimpleDateFormat
@@ -65,6 +66,7 @@ import java.util.Locale
  * To obtain combinations, add the desired values together.
  * For instance, for Re-Share, delete, read, update, add 16+8+2+1 = 27.
  */
+@OpenForTesting
 class CreateRemoteShareOperation(
     private val remoteFilePath: String,
     private val shareType: ShareType,
