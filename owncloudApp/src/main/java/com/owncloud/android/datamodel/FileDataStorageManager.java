@@ -47,13 +47,13 @@ import androidx.core.util.Pair;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
+import com.owncloud.android.data.sharing.shares.db.OCShareEntity;
 import com.owncloud.android.db.ProviderMeta.ProviderTableMeta;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.shares.RemoteShare;
 import com.owncloud.android.lib.resources.shares.ShareType;
 import com.owncloud.android.lib.resources.status.CapabilityBooleanType;
 import com.owncloud.android.lib.resources.status.RemoteCapability;
-import com.owncloud.android.shares.domain.OCShare;
 import com.owncloud.android.utils.FileStorageUtils;
 
 import java.io.File;
@@ -1197,13 +1197,13 @@ public class FileDataStorageManager {
     }
 
     /**
-     * Retrieves an stored {@link OCShare} given its id.
+     * Retrieves an stored {@link OCShareEntity} given its id.
      *
      * @param id Identifier.
-     * @return Stored {@link OCShare} given its id.
+     * @return Stored {@link OCShareEntity} given its id.
      */
-    public OCShare getShareById(long id) {
-        OCShare share = null;
+    public OCShareEntity getShareById(long id) {
+        OCShareEntity share = null;
         Cursor c = getShareCursorForValue(
                 ProviderTableMeta._ID,
                 String.valueOf(id)
@@ -1218,13 +1218,13 @@ public class FileDataStorageManager {
     }
 
     /**
-     * Retrieves an stored {@link OCShare} given its id.
+     * Retrieves an stored {@link OCShareEntity} given its id.
      *
      * @param id Identifier of the share in OC server.
-     * @return Stored {@link OCShare} given its remote id.
+     * @return Stored {@link OCShareEntity} given its remote id.
      */
-    public OCShare getShareByRemoteId(long id) {
-        OCShare share = null;
+    public OCShareEntity getShareByRemoteId(long id) {
+        OCShareEntity share = null;
         Cursor c = getShareCursorForValue(
                 ProviderTableMeta.OCSHARES_ID_REMOTE_SHARED,
                 String.valueOf(id)
@@ -1305,10 +1305,10 @@ public class FileDataStorageManager {
         return c;
     }
 
-    private OCShare createShareInstance(Cursor c) {
-        OCShare share = null;
+    private OCShareEntity createShareInstance(Cursor c) {
+        OCShareEntity share = null;
         if (c != null) {
-            share = new OCShare(
+            share = new OCShareEntity(
                     c.getLong(c.getColumnIndex(ProviderTableMeta.OCSHARES_FILE_SOURCE)),
                     c.getLong(c.getColumnIndex(ProviderTableMeta.OCSHARES_ITEM_SOURCE)),
                     c.getInt(c.getColumnIndex(ProviderTableMeta.OCSHARES_SHARE_TYPE)),
@@ -1331,7 +1331,89 @@ public class FileDataStorageManager {
         return share;
     }
 
-    public void removeShare(OCShare share) {
+    private void resetShareFlagsInAllFiles() {
+        ContentValues cv = new ContentValues();
+        cv.put(ProviderTableMeta.FILE_SHARED_VIA_LINK, false);
+        cv.put(ProviderTableMeta.FILE_SHARED_WITH_SHAREE, false);
+        cv.put(ProviderTableMeta.FILE_PUBLIC_LINK, "");
+        String where = ProviderTableMeta.FILE_ACCOUNT_OWNER + "=?";
+        String[] whereArgs = new String[]{mAccount.name};
+
+        if (getContentResolver() != null) {
+            getContentResolver().update(ProviderTableMeta.CONTENT_URI, cv, where, whereArgs);
+
+        } else {
+            try {
+                getContentProviderClient().update(ProviderTableMeta.CONTENT_URI, cv, where,
+                        whereArgs);
+            } catch (RemoteException e) {
+                Log_OC.e(TAG, "Exception in resetShareFlagsInAllFiles" + e.getMessage());
+            }
+        }
+    }
+
+    private void resetShareFlagsInFolder(OCFile folder) {
+        ContentValues cv = new ContentValues();
+        cv.put(ProviderTableMeta.FILE_SHARED_VIA_LINK, false);
+        cv.put(ProviderTableMeta.FILE_SHARED_WITH_SHAREE, false);
+        cv.put(ProviderTableMeta.FILE_PUBLIC_LINK, "");
+        String where = ProviderTableMeta.FILE_ACCOUNT_OWNER + "=? AND " +
+                ProviderTableMeta.FILE_PARENT + "=?";
+        String[] whereArgs = new String[]{mAccount.name, String.valueOf(folder.getFileId())};
+
+        if (getContentResolver() != null) {
+            getContentResolver().update(ProviderTableMeta.CONTENT_URI, cv, where, whereArgs);
+
+        } else {
+            try {
+                getContentProviderClient().update(ProviderTableMeta.CONTENT_URI, cv, where,
+                        whereArgs);
+            } catch (RemoteException e) {
+                Log_OC.e(TAG, "Exception in resetShareFlagsInFolder " + e.getMessage());
+            }
+        }
+    }
+
+    private void resetShareFlagInAFile(String filePath) {
+        ContentValues cv = new ContentValues();
+        cv.put(ProviderTableMeta.FILE_SHARED_VIA_LINK, false);
+        cv.put(ProviderTableMeta.FILE_SHARED_WITH_SHAREE, false);
+        cv.put(ProviderTableMeta.FILE_PUBLIC_LINK, "");
+        String where = ProviderTableMeta.FILE_ACCOUNT_OWNER + "=? AND " +
+                ProviderTableMeta.FILE_PATH + "=?";
+        String[] whereArgs = new String[]{mAccount.name, filePath};
+
+        if (getContentResolver() != null) {
+            getContentResolver().update(ProviderTableMeta.CONTENT_URI, cv, where, whereArgs);
+
+        } else {
+            try {
+                getContentProviderClient().update(ProviderTableMeta.CONTENT_URI, cv, where,
+                        whereArgs);
+            } catch (RemoteException e) {
+                Log_OC.e(TAG, "Exception in resetShareFlagsInFolder " + e.getMessage());
+            }
+        }
+    }
+
+    private void cleanShares() {
+        String where = ProviderTableMeta.OCSHARES_ACCOUNT_OWNER + "=?";
+        String[] whereArgs = new String[]{mAccount.name};
+
+        if (getContentResolver() != null) {
+            getContentResolver().delete(ProviderTableMeta.CONTENT_URI_SHARE, where, whereArgs);
+
+        } else {
+            try {
+                getContentProviderClient().delete(ProviderTableMeta.CONTENT_URI_SHARE, where,
+                        whereArgs);
+            } catch (RemoteException e) {
+                Log_OC.e(TAG, "Exception in cleanShares" + e.getMessage());
+            }
+        }
+    }
+
+    public void removeShare(OCShareEntity share) {
         Uri share_uri = ProviderTableMeta.CONTENT_URI_SHARE;
         String where = ProviderTableMeta.OCSHARES_ACCOUNT_OWNER + "=?" + " AND " +
                 ProviderTableMeta._ID + "=?";
@@ -1424,8 +1506,8 @@ public class FileDataStorageManager {
                 c = null;
             }
         }
-        ArrayList<OCShare> privateShares = new ArrayList<>();
-        OCShare privateShare;
+        ArrayList<OCShareEntity> privateShares = new ArrayList<>();
+        OCShareEntity privateShare;
         if (c != null) {
             if (c.moveToFirst()) {
                 do {
@@ -1439,7 +1521,7 @@ public class FileDataStorageManager {
         return privateShares;
     }
 
-    public ArrayList<OCShare> getPublicSharesForAFile(String filePath, String accountName) {
+    public ArrayList<OCShareEntity> getPublicSharesForAFile(String filePath, String accountName) {
         // Condition
         String where = ProviderTableMeta.OCSHARES_PATH + "=?" + " AND "
                 + ProviderTableMeta.OCSHARES_ACCOUNT_OWNER + "=?" + "AND "
@@ -1463,8 +1545,8 @@ public class FileDataStorageManager {
                 c = null;
             }
         }
-        ArrayList<OCShare> publicShares = new ArrayList<>();
-        OCShare publicShare;
+        ArrayList<OCShareEntity> publicShares = new ArrayList<>();
+        OCShareEntity publicShare;
         if (c != null) {
             if (c.moveToFirst()) {
                 do {

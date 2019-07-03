@@ -23,15 +23,16 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
+import com.owncloud.android.data.common.NetworkBoundResource
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.shares.RemoteShare
 import com.owncloud.android.lib.resources.shares.ShareParserResult
 import com.owncloud.android.lib.resources.shares.ShareType
-import com.owncloud.android.shares.domain.OCShare
+import com.owncloud.android.data.sharing.shares.db.OCShareEntity
 import com.owncloud.android.util.InstantAppExecutors
 import com.owncloud.android.utils.TestUtil
 import com.owncloud.android.utils.mock
-import com.owncloud.android.vo.Resource
+import com.owncloud.android.data.common.Resource
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Rule
@@ -42,7 +43,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicReference
 
 class NetworkBoundResourceTest {
-    private val dbData = MutableLiveData<List<OCShare>>()
+    private val dbData = MutableLiveData<List<OCShareEntity>>()
 
     @Rule
     @JvmField
@@ -50,7 +51,7 @@ class NetworkBoundResourceTest {
 
     @Test
     fun basicFromNetwork() {
-        val saved = AtomicReference<List<OCShare>>()
+        val saved = AtomicReference<List<OCShareEntity>>()
 
         val fetchedDbValue = listOf(
             TestUtil.createPublicShare(
@@ -72,17 +73,17 @@ class NetworkBoundResourceTest {
         )
 
         val networkBoundResource =
-            object : NetworkBoundResource<List<OCShare>, ShareParserResult>(InstantAppExecutors()) {
+            object : NetworkBoundResource<List<OCShareEntity>, ShareParserResult>(InstantAppExecutors()) {
                 override fun saveCallResult(item: ShareParserResult) {
                     saved.set(item.shares.map { remoteShare ->
-                        OCShare.fromRemoteShare(remoteShare).also { it.accountOwner = "admin@server" }
+                        OCShareEntity.fromRemoteShare(remoteShare).also { it.accountOwner = "admin@server" }
                     })
                     dbData.value = fetchedDbValue
                 }
 
-                override fun shouldFetchFromNetwork(data: List<OCShare>?) = true
+                override fun shouldFetchFromNetwork(data: List<OCShareEntity>?) = true
 
-                override fun loadFromDb(): LiveData<List<OCShare>> = dbData
+                override fun loadFromDb(): LiveData<List<OCShareEntity>> = dbData
 
                 override fun createCall(): RemoteOperationResult<ShareParserResult> {
                     val remoteOperationResult = mock<RemoteOperationResult<ShareParserResult>>()
@@ -97,13 +98,13 @@ class NetworkBoundResourceTest {
                 }
             }
 
-        val observer = mock<Observer<Resource<List<OCShare>>>>()
+        val observer = mock<Observer<Resource<List<OCShareEntity>>>>()
         networkBoundResource.asLiveData().observeForever(observer)
 
         dbData.postValue(null)
 
         assertThat(saved.get(), `is`(networkResult.map { remoteShare ->
-            OCShare.fromRemoteShare(remoteShare).also { it.accountOwner = "admin@server" }
+            OCShareEntity.fromRemoteShare(remoteShare).also { it.accountOwner = "admin@server" }
         }))
 
         verify(observer).onChanged(Resource.success(fetchedDbValue))
@@ -125,14 +126,14 @@ class NetworkBoundResourceTest {
         val networkResult: ArrayList<RemoteShare> = arrayListOf()
 
         val networkBoundResource =
-            object : NetworkBoundResource<List<OCShare>, ShareParserResult>(InstantAppExecutors()) {
+            object : NetworkBoundResource<List<OCShareEntity>, ShareParserResult>(InstantAppExecutors()) {
                 override fun saveCallResult(item: ShareParserResult) {
                     saved.set(true)
                 }
 
-                override fun shouldFetchFromNetwork(data: List<OCShare>?) = true
+                override fun shouldFetchFromNetwork(data: List<OCShareEntity>?) = true
 
-                override fun loadFromDb(): LiveData<List<OCShare>> = dbData.apply { value = fetchedDbValue }
+                override fun loadFromDb(): LiveData<List<OCShareEntity>> = dbData.apply { value = fetchedDbValue }
 
                 override fun createCall(): RemoteOperationResult<ShareParserResult> {
                     val remoteOperationResult = mock<RemoteOperationResult<ShareParserResult>>()
@@ -149,7 +150,7 @@ class NetworkBoundResourceTest {
                 }
             }
 
-        val observer = mock<Observer<Resource<List<OCShare>>>>()
+        val observer = mock<Observer<Resource<List<OCShareEntity>>>>()
         networkBoundResource.asLiveData().observeForever(observer)
 
         assertThat(saved.get(), `is`(false))
@@ -167,19 +168,19 @@ class NetworkBoundResourceTest {
         val saved = AtomicBoolean(false)
 
         val networkBoundResource =
-            object : NetworkBoundResource<List<OCShare>, ShareParserResult>(InstantAppExecutors()) {
+            object : NetworkBoundResource<List<OCShareEntity>, ShareParserResult>(InstantAppExecutors()) {
                 override fun saveCallResult(item: ShareParserResult) {
                     saved.set(true)
                 }
 
-                override fun shouldFetchFromNetwork(data: List<OCShare>?) = true
+                override fun shouldFetchFromNetwork(data: List<OCShareEntity>?) = true
 
-                override fun loadFromDb(): LiveData<List<OCShare>> = dbData
+                override fun loadFromDb(): LiveData<List<OCShareEntity>> = dbData
 
                 override fun createCall(): RemoteOperationResult<ShareParserResult> = mock()
             }
 
-        val observer = mock<Observer<Resource<List<OCShare>>>>()
+        val observer = mock<Observer<Resource<List<OCShareEntity>>>>()
         networkBoundResource.asLiveData().observeForever(observer)
 
         val dbPublicShares = listOf(

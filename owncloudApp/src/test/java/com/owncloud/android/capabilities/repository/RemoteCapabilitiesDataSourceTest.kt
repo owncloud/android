@@ -19,7 +19,7 @@
 
 package com.owncloud.android.capabilities.repository
 
-import com.owncloud.android.capabilities.datasource.RemoteCapabilitiesDataSource
+import com.owncloud.android.data.capabilities.datasources.RemoteCapabilitiesDataSource
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.status.GetRemoteCapabilitiesOperation
 import com.owncloud.android.lib.resources.status.RemoteCapability

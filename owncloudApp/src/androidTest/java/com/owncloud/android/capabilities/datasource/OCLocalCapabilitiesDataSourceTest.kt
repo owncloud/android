@@ -22,9 +22,10 @@ package com.owncloud.android.capabilities.datasource
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
 import androidx.test.platform.app.InstrumentationRegistry
-import com.owncloud.android.capabilities.db.OCCapability
-import com.owncloud.android.capabilities.db.OCCapabilityDao
-import com.owncloud.android.db.OwncloudDatabase
+import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
+import com.owncloud.android.data.capabilities.db.OCCapabilityDao
+import com.owncloud.android.data.capabilities.datasources.OCLocalCapabilitiesDataSource
+import com.owncloud.android.data.common.OwncloudDatabase
 import com.owncloud.android.utils.LiveDataTestUtil.getValue
 import com.owncloud.android.utils.TestUtil
 import org.junit.Assert.assertEquals
@@ -48,7 +49,7 @@ class OCLocalCapabilitiesDataSourceTest {
         val db = mock(OwncloudDatabase::class.java)
         `when`(db.capabilityDao()).thenReturn(ocCapabilityDao)
 
-        val capabilityAsLiveData: MutableLiveData<OCCapability> = MutableLiveData()
+        val capabilityAsLiveData: MutableLiveData<OCCapabilityEntity> = MutableLiveData()
         capabilityAsLiveData.value = TestUtil.createCapability(
             "user@server1", 5, 4, 3
         )
@@ -61,7 +62,7 @@ class OCLocalCapabilitiesDataSourceTest {
             capabilityAsLiveData
         )
 
-        val newCapabilityAsLiveData: MutableLiveData<OCCapability> = MutableLiveData()
+        val newCapabilityAsLiveData: MutableLiveData<OCCapabilityEntity> = MutableLiveData()
         newCapabilityAsLiveData.value = TestUtil.createCapability(
             "user@server2", 2, 1, 0
         )
@@ -88,7 +89,8 @@ class OCLocalCapabilitiesDataSourceTest {
 
         val context = InstrumentationRegistry.getInstrumentation().targetContext
 
-        ocLocalCapabilitiesDataSource = OCLocalCapabilitiesDataSource(context, ocCapabilityDao)
+        ocLocalCapabilitiesDataSource =
+            OCLocalCapabilitiesDataSource(context, ocCapabilityDao)
     }
 
     @Test

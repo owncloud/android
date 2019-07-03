@@ -31,13 +31,13 @@ package com.owncloud.android.ui.dialog
 import android.app.Dialog
 import android.os.Bundle
 import com.owncloud.android.R
+import com.owncloud.android.data.sharing.shares.db.OCShareEntity
 import com.owncloud.android.lib.common.utils.Log_OC
-import com.owncloud.android.shares.domain.OCShare
+import com.owncloud.android.presentation.sharing.shares.fragment.ShareFragmentListener
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment.ConfirmationDialogFragmentListener
-import com.owncloud.android.shares.presentation.fragment.ShareFragmentListener
 
 class RemoveShareDialogFragment : ConfirmationDialogFragment(), ConfirmationDialogFragmentListener {
-    private var targetShare: OCShare? = null
+    private var targetShare: OCShareEntity? = null
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = super.onCreateDialog(savedInstanceState)
@@ -74,10 +74,10 @@ class RemoveShareDialogFragment : ConfirmationDialogFragment(), ConfirmationDial
         /**
          * Public factory method to create new RemoveFilesDialogFragment instances.
          *
-         * @param share           [OCShare] to remove.
+         * @param share           [OCShareEntity] to remove.
          * @return                Dialog ready to show.
          */
-        fun newInstance(share: OCShare): RemoveShareDialogFragment {
+        fun newInstance(share: OCShareEntity): RemoveShareDialogFragment {
             val frag = RemoveShareDialogFragment()
             val args = Bundle()
 
