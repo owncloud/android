@@ -23,7 +23,8 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SmallTest
 import androidx.test.platform.app.InstrumentationRegistry
-import com.owncloud.android.db.OwncloudDatabase
+import com.owncloud.android.data.capabilities.db.OCCapabilityDao
+import com.owncloud.android.data.common.OwncloudDatabase
 import com.owncloud.android.lib.resources.status.CapabilityBooleanType
 import com.owncloud.android.utils.LiveDataTestUtil.getValue
 import com.owncloud.android.utils.TestUtil
