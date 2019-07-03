@@ -19,7 +19,7 @@
 
 package com.owncloud.android.data.sharing.sharees
 
-import com.owncloud.android.data.common.Resource
+import com.owncloud.android.data.Resource
 import org.json.JSONObject
 
 interface ShareeRepository {
