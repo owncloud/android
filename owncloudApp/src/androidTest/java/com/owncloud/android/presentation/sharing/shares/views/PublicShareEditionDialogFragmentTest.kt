@@ -34,13 +34,13 @@ import com.owncloud.android.data.sharing.shares.db.OCShareEntity
 import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.lib.resources.shares.RemoteShare
 import com.owncloud.android.presentation.sharing.shares.fragment.PublicShareDialogFragment
-import com.owncloud.android.utils.DataTestUtil
+import com.owncloud.android.utils.AppTestUtil
+import io.mockk.every
+import io.mockk.mockkClass
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.Mockito.`when`
-import org.mockito.Mockito.mock
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.GregorianCalendar
@@ -52,43 +52,28 @@ class PublicShareEditionDialogFragmentTest {
     @JvmField
     val activityRule = ActivityTestRule(TestShareFileActivity::class.java, true, true)
 
-    private val file = mock(OCFile::class.java)
-    private val publicShare = mock(OCShareEntity::class.java)
+    private val file = mockkClass(OCFile::class)
+    private val publicShare = mockkClass(OCShareEntity::class)
     private val expirationDate = 1556575200000 // GMT: Monday, April 29, 2019 10:00:00 PM
 
     @Before
     fun setUp() {
-        val linkName = "Docs link"
+        every { file.mimetype } returns ".txt"
+        every { file.remotePath } returns "/Documents/doc3"
+        every { file.isFolder } returns false
 
-        `when`(publicShare.name).thenReturn(
-            linkName
-        )
-
-        `when`(publicShare.permissions).thenReturn(
-            RemoteShare.CREATE_PERMISSION_FLAG
-        )
-
-        `when`(publicShare.isPasswordProtected).thenReturn(
-            true
-        )
-
-        TimeZone.getDefault()
-
-        `when`(publicShare.expirationDate).thenReturn(
-            expirationDate
-        )
+        every { publicShare.name } returns "Docs link"
+        every { publicShare.permissions } returns RemoteShare.CREATE_PERMISSION_FLAG
+        every { publicShare.isPasswordProtected } returns true
+        every { publicShare.expirationDate } returns expirationDate
+        every { publicShare.isFolder } returns false
 
         val publicShareDialogFragment = PublicShareDialogFragment.newInstanceToUpdate(
             file,
             publicShare
         )
 
-        val filePath = "/Documents/doc3"
-
-        file.mimetype = ".txt"
-        `when`(file.remotePath).thenReturn(filePath)
-
-        activityRule.activity.capabilities = DataTestUtil.createCapability()
+        activityRule.activity.capabilities = AppTestUtil.createCapability()
         activityRule.activity.setFragment(publicShareDialogFragment)
     }
 
