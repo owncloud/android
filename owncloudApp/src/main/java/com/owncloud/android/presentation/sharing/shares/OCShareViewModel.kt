@@ -23,7 +23,7 @@ import android.accounts.Account
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import com.owncloud.android.data.common.Resource
+import com.owncloud.android.data.Resource
 import com.owncloud.android.data.sharing.shares.datasources.OCLocalSharesDataSource
 import com.owncloud.android.data.sharing.shares.datasources.OCRemoteSharesDataSource
 import com.owncloud.android.data.sharing.shares.db.OCShareEntity
