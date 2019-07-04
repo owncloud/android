@@ -24,7 +24,6 @@ import android.accounts.Account
 import android.accounts.AccountManager
 import android.content.Context
 import android.content.Intent
-import android.os.Parcelable
 import androidx.lifecycle.MutableLiveData
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
@@ -54,6 +53,8 @@ import com.owncloud.android.presentation.sharing.shares.ShareActivity
 import com.owncloud.android.ui.activity.FileActivity
 import com.owncloud.android.utils.AccountsManager
 import com.owncloud.android.utils.AppTestUtil
+import io.mockk.every
+import io.mockk.mockk
 import org.junit.AfterClass
 import org.junit.Before
 import org.junit.BeforeClass
@@ -64,9 +65,6 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.module
-import org.mockito.Mockito.`when`
-import org.mockito.Mockito.mock
-import org.mockito.Mockito.spy
 
 class EditPublicShareFolderTest {
     @Rule
@@ -125,8 +123,8 @@ class EditPublicShareFolderTest {
     private val capabilitiesLiveData = MutableLiveData<Resource<OCCapabilityEntity>>()
     private val sharesLiveData = MutableLiveData<Resource<List<OCShareEntity>>>()
 
-    private val ocCapabilityViewModel = mock(OCCapabilityViewModel::class.java)
-    private val ocShareViewModel = mock(OCShareViewModel::class.java)
+    private val ocCapabilityViewModel = mockk<OCCapabilityViewModel>(relaxed = true)
+    private val ocShareViewModel = mockk<OCShareViewModel>(relaxed = true)
 
     companion object {
         private val targetContext = InstrumentationRegistry.getInstrumentation().targetContext
@@ -182,17 +180,15 @@ class EditPublicShareFolderTest {
 
     @Before
     fun setUp() {
-        val intent = spy(Intent::class.java)
+        val intent = Intent()
 
         file = getOCFileForTesting("Photos")
-
-        `when`(intent.getParcelableExtra(FileActivity.EXTRA_FILE) as? Parcelable).thenReturn(file)
         intent.putExtra(FileActivity.EXTRA_FILE, file)
 
-        `when`(ocCapabilityViewModel.getCapabilityForAccount(false)).thenReturn(capabilitiesLiveData)
-        `when`(ocCapabilityViewModel.getCapabilityForAccount(true)).thenReturn(capabilitiesLiveData)
-        `when`(ocShareViewModel.getPublicShares(file.remotePath)).thenReturn(sharesLiveData)
-        `when`(ocShareViewModel.getPrivateShares(file.remotePath)).thenReturn(MutableLiveData())
+        every { ocCapabilityViewModel.getCapabilityForAccount(false) } returns capabilitiesLiveData
+        every { ocCapabilityViewModel.getCapabilityForAccount(true) } returns capabilitiesLiveData
+        every { ocShareViewModel.getPublicShares(file.remotePath) } returns sharesLiveData
+        every { ocShareViewModel.getPrivateShares(file.remotePath) } returns MutableLiveData()
 
         stopKoin()
 
@@ -222,7 +218,7 @@ class EditPublicShareFolderTest {
 
         val updatedPublicShare = publicShares[1]
 
-        `when`(
+        every {
             ocShareViewModel.updatePublicShareForFile(
                 1,
                 updatedPublicShare.name!!,
@@ -231,11 +227,9 @@ class EditPublicShareFolderTest {
                 1,
                 false
             )
-        ).thenReturn(
-            MutableLiveData<Resource<Unit>>().apply {
-                postValue(Resource.success())
-            }
-        )
+        } returns MutableLiveData<Resource<Unit>>().apply {
+            postValue(Resource.success())
+        }
 
         // 1. Open dialog to edit an existing public share
         onView(withId(R.id.editPublicLinkButton)).perform(click())
@@ -266,7 +260,8 @@ class EditPublicShareFolderTest {
         loadSharesSuccessfully(arrayListOf(existingPublicShare))
 
         val updatedPublicShare = publicShares[2]
-        `when`(
+
+        every {
             ocShareViewModel.updatePublicShareForFile(
                 1,
                 updatedPublicShare.name!!,
@@ -275,11 +270,9 @@ class EditPublicShareFolderTest {
                 15,
                 true
             )
-        ).thenReturn(
-            MutableLiveData<Resource<Unit>>().apply {
-                postValue(Resource.success())
-            }
-        )
+        } returns MutableLiveData<Resource<Unit>>().apply {
+            postValue(Resource.success())
+        }
 
         // 1. Open dialog to edit an existing public share
         onView(withId(R.id.editPublicLinkButton)).perform(click())
@@ -311,7 +304,8 @@ class EditPublicShareFolderTest {
         loadSharesSuccessfully(arrayListOf(existingPublicShare))
 
         val updatedPublicShare = publicShares[3]
-        `when`(
+
+        every {
             ocShareViewModel.updatePublicShareForFile(
                 1,
                 updatedPublicShare.name!!,
@@ -320,11 +314,9 @@ class EditPublicShareFolderTest {
                 4,
                 true
             )
-        ).thenReturn(
-            MutableLiveData<Resource<Unit>>().apply {
-                postValue(Resource.success())
-            }
-        )
+        } returns MutableLiveData<Resource<Unit>>().apply {
+            postValue(Resource.success())
+        }
 
         // 1. Open dialog to edit an existing public share
         onView(withId(R.id.editPublicLinkButton)).perform(click())
@@ -356,7 +348,8 @@ class EditPublicShareFolderTest {
         loadSharesSuccessfully(arrayListOf(existingPublicShare))
 
         val updatedPublicShare = publicShares[0]
-        `when`(
+
+        every {
             ocShareViewModel.updatePublicShareForFile(
                 1,
                 updatedPublicShare.name!!,
@@ -365,11 +358,9 @@ class EditPublicShareFolderTest {
                 1,
                 false
             )
-        ).thenReturn(
-            MutableLiveData<Resource<Unit>>().apply {
-                postValue(Resource.success())
-            }
-        )
+        } returns MutableLiveData<Resource<Unit>>().apply {
+            postValue(Resource.success())
+        }
 
         // 1. Open dialog to edit an existing public share
         onView(withId(R.id.editPublicLinkButton)).perform(click())

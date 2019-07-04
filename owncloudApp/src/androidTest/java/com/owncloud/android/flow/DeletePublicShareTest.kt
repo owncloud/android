@@ -24,7 +24,6 @@ import android.accounts.Account
 import android.accounts.AccountManager
 import android.content.Context
 import android.content.Intent
-import android.os.Parcelable
 import androidx.lifecycle.MutableLiveData
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
@@ -53,6 +52,8 @@ import com.owncloud.android.presentation.sharing.shares.ShareActivity
 import com.owncloud.android.ui.activity.FileActivity
 import com.owncloud.android.utils.AccountsManager
 import com.owncloud.android.utils.AppTestUtil
+import io.mockk.every
+import io.mockk.mockk
 import org.hamcrest.Matchers.allOf
 import org.hamcrest.Matchers.not
 import org.junit.AfterClass
@@ -65,10 +66,6 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.module
-import org.mockito.ArgumentMatchers
-import org.mockito.Mockito.`when`
-import org.mockito.Mockito.mock
-import org.mockito.Mockito.spy
 
 class DeletePublicShareTest {
     @Rule
@@ -100,8 +97,8 @@ class DeletePublicShareTest {
     private val capabilitiesLiveData = MutableLiveData<Resource<OCCapabilityEntity>>()
     private val sharesLiveData = MutableLiveData<Resource<List<OCShareEntity>>>()
 
-    private val ocCapabilityViewModel = mock(OCCapabilityViewModel::class.java)
-    private val ocShareViewModel = mock(OCShareViewModel::class.java)
+    private val ocCapabilityViewModel = mockk<OCCapabilityViewModel>(relaxed = true)
+    private val ocShareViewModel = mockk<OCShareViewModel>(relaxed = true)
 
     companion object {
         private val targetContext = InstrumentationRegistry.getInstrumentation().targetContext
@@ -157,17 +154,15 @@ class DeletePublicShareTest {
 
     @Before
     fun setUp() {
-        val intent = spy(Intent::class.java)
+        val intent = Intent()
 
         file = getOCFileForTesting("image.jpg")
-
-        `when`(intent.getParcelableExtra(FileActivity.EXTRA_FILE) as? Parcelable).thenReturn(file)
         intent.putExtra(FileActivity.EXTRA_FILE, file)
 
-        `when`(ocCapabilityViewModel.getCapabilityForAccount(false)).thenReturn(capabilitiesLiveData)
-        `when`(ocCapabilityViewModel.getCapabilityForAccount(true)).thenReturn(capabilitiesLiveData)
-        `when`(ocShareViewModel.getPublicShares(file.remotePath)).thenReturn(sharesLiveData)
-        `when`(ocShareViewModel.getPrivateShares(file.remotePath)).thenReturn(MutableLiveData())
+        every { ocCapabilityViewModel.getCapabilityForAccount(false) } returns capabilitiesLiveData
+        every { ocCapabilityViewModel.getCapabilityForAccount(true) } returns capabilitiesLiveData
+        every { ocShareViewModel.getPublicShares(file.remotePath) } returns sharesLiveData
+        every { ocShareViewModel.getPrivateShares(file.remotePath) } returns MutableLiveData()
 
         stopKoin()
 
@@ -195,13 +190,12 @@ class DeletePublicShareTest {
         val existingPublicShare = publicShares.take(2) as ArrayList<OCShareEntity>
         loadSharesSuccessfully(existingPublicShare)
 
-        `when`(
-            ocShareViewModel.deletePublicShare(ArgumentMatchers.anyLong())
-        ).thenReturn(
-            MutableLiveData<Resource<Unit>>().apply {
-                postValue(Resource.success())
-            }
-        )
+        every {
+            ocShareViewModel.deletePublicShare(any())
+        } returns MutableLiveData<Resource<Unit>>().apply {
+            postValue(Resource.success())
+
+        }
 
         onView(allOf(withId(R.id.deletePublicLinkButton), hasSibling(withText(existingPublicShare[0].name))))
             .perform(click())
@@ -224,13 +218,11 @@ class DeletePublicShareTest {
         val existingPublicShare = publicShares[0]
         loadSharesSuccessfully(arrayListOf(existingPublicShare))
 
-        `when`(
-            ocShareViewModel.deletePublicShare(ArgumentMatchers.anyLong())
-        ).thenReturn(
-            MutableLiveData<Resource<Unit>>().apply {
-                postValue(Resource.success())
-            }
-        )
+        every {
+            ocShareViewModel.deletePublicShare(any())
+        } returns MutableLiveData<Resource<Unit>>().apply {
+            postValue(Resource.success())
+        }
 
         onView(withId(R.id.deletePublicLinkButton)).perform(click())
         onView(withId(android.R.id.button1)).perform(click())
@@ -271,18 +263,16 @@ class DeletePublicShareTest {
         val existingPublicShare = publicShares[0]
         loadSharesSuccessfully(arrayListOf(existingPublicShare))
 
-        `when`(
-            ocShareViewModel.deletePublicShare(ArgumentMatchers.anyLong())
-        ).thenReturn(
-            MutableLiveData<Resource<Unit>>().apply {
-                postValue(
-                    Resource.error(
-                        RemoteOperationResult.ResultCode.FORBIDDEN,
-                        exception = Exception("Error when retrieving shares")
-                    )
+        every {
+            ocShareViewModel.deletePublicShare(any())
+        } returns MutableLiveData<Resource<Unit>>().apply {
+            postValue(
+                Resource.error(
+                    RemoteOperationResult.ResultCode.FORBIDDEN,
+                    exception = Exception("Error when retrieving shares")
                 )
-            }
-        )
+            )
+        }
 
         onView(withId(R.id.deletePublicLinkButton)).perform(click())
         onView(withId(android.R.id.button1)).perform(click())

@@ -22,28 +22,26 @@ package com.owncloud.android.domain.capabilities
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
+import com.owncloud.android.data.Resource
 import com.owncloud.android.data.capabilities.datasources.LocalCapabilitiesDataSource
 import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
-import com.owncloud.android.data.Resource
+import com.owncloud.android.domain.utils.DomainTestUtil
+import com.owncloud.android.domain.utils.InstantExecutors
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.status.RemoteCapability
-import com.owncloud.android.domain.utils.InstantExecutors
-import com.owncloud.android.domain.utils.DomainTestUtil
-import com.owncloud.android.domain.utils.mock
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.verify
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
-import org.mockito.Mockito.`when`
-import org.mockito.Mockito.mock
-import org.mockito.Mockito.times
-import org.mockito.Mockito.verify
 
 @RunWith(JUnit4::class)
 class OCCapabilityRepositoryTest {
     private lateinit var ocCapabilityRepository: OCCapabilityRepository
 
-    private val localCapabilitiesDataSource = mock(LocalCapabilitiesDataSource::class.java)
+    private val localCapabilitiesDataSource = mockk<LocalCapabilitiesDataSource>(relaxed = true)
 
     @Rule
     @JvmField
@@ -52,16 +50,15 @@ class OCCapabilityRepositoryTest {
     @Test
     fun loadCapabilityFromNetwork() {
         val dbData = MutableLiveData<OCCapabilityEntity>()
+        val defaultAccountName = "admin@server"
 
-        `when`(
+        every {
             localCapabilitiesDataSource.getCapabilityForAccountAsLiveData(
-                "admin@server"
+                defaultAccountName
             )
-        ).thenReturn(
-            dbData
-        )
+        } returns dbData
 
-        val remoteCapability = DomainTestUtil.createRemoteCapability("admin@server")
+        val remoteCapability = DomainTestUtil.createRemoteCapability(defaultAccountName)
         val remoteOperationResult = DomainTestUtil.createRemoteOperationResultMock(remoteCapability, true)
         val remoteCapabilitiesDataSource =
             RemoteCapabilitiesDataSourceTest(remoteOperationResult)
@@ -71,25 +68,29 @@ class OCCapabilityRepositoryTest {
                 InstantExecutors(), localCapabilitiesDataSource, remoteCapabilitiesDataSource
             )
 
-        val data = ocCapabilityRepository.getCapabilityForAccountAsLiveData("admin@server")
+        val data = ocCapabilityRepository.getCapabilityForAccount(defaultAccountName)
 
-        val observer = mock<Observer<Resource<OCCapabilityEntity>>>()
+        val observer = mockk<Observer<Resource<OCCapabilityEntity>>>(relaxed = true)
         data.observeForever(observer)
 
         dbData.postValue(null)
 
         // Get capabilities from database to observe them, is called twice (one showing current db capabilities while
         // getting capabilities from server and another one with db capabilities already updated with server ones)
-        verify(localCapabilitiesDataSource, times(2)).getCapabilityForAccountAsLiveData(
-            "admin@server"
-        )
+        verify(exactly = 2) {
+            localCapabilitiesDataSource.getCapabilityForAccountAsLiveData(defaultAccountName)
+        }
 
         // Retrieving capabilities from server...
 
         // Capabilities are always retrieved from server and inserted in database if not empty list
-        verify(localCapabilitiesDataSource).insert(
-            listOf(OCCapabilityEntity.fromRemoteCapability(remoteCapability.apply { accountName = "admin@server" }))
-        )
+        verify {
+            localCapabilitiesDataSource.insert(
+                listOf(OCCapabilityEntity.fromRemoteCapability(remoteCapability.apply {
+                    accountName = defaultAccountName
+                }))
+            )
+        }
 
         // Observe changes in database livedata when there's a new capability
         val newCapability = DomainTestUtil.createCapability("user@server")
@@ -98,20 +99,19 @@ class OCCapabilityRepositoryTest {
             newCapability
         )
 
-        verify(observer).onChanged(Resource.success(newCapability))
+        verify { observer.onChanged(Resource.success(newCapability)) }
     }
 
     @Test
     fun loadEmptyCapabilityForAccountFromNetwork() {
         val dbData = MutableLiveData<OCCapabilityEntity>()
+        val defaultAccountName = "user@server"
 
-        `when`(
+        every {
             localCapabilitiesDataSource.getCapabilityForAccountAsLiveData(
-                "user@server"
+                defaultAccountName
             )
-        ).thenReturn(
-            dbData
-        )
+        } returns dbData
 
         val remoteOperationResult = DomainTestUtil.createRemoteOperationResultMock(RemoteCapability(), true)
 
@@ -125,40 +125,40 @@ class OCCapabilityRepositoryTest {
                 remoteCapabilitiesDataSource
             )
 
-        val data = ocCapabilityRepository.getCapabilityForAccountAsLiveData(
-            "user@server"
+
+        val data = ocCapabilityRepository.getCapabilityForAccount(
+            defaultAccountName
         )
 
-        val observer = mock<Observer<Resource<OCCapabilityEntity>>>()
+        val observer = mockk<Observer<Resource<OCCapabilityEntity>>>(relaxed = true)
         data.observeForever(observer)
 
         dbData.postValue(null)
 
         // Get capabilities from database to observe them, is called twice (one showing current db capabilities while
         // getting capabilities from server and another one with db capabilities already updated with server ones)
-        verify(localCapabilitiesDataSource, times(2)).getCapabilityForAccountAsLiveData(
-            "user@server"
-        )
+        verify(exactly = 2) {
+            localCapabilitiesDataSource.getCapabilityForAccountAsLiveData(defaultAccountName)
+        }
 
         // Retrieving capabilities from server...
 
         // Observe changes in database livedata when the list of capabilities is empty
         dbData.postValue(null)
 
-        verify(observer).onChanged(Resource.success(null))
+        verify { observer.onChanged(Resource.success(null)) }
     }
 
     @Test
     fun loadCapabilitiesForAccountFromNetworkWithError() {
         val dbData = MutableLiveData<OCCapabilityEntity>()
+        val defaultAccountName = "cfo@server"
 
         dbData.value = null // DB does not include capabilities yet
 
-        `when`(
-            localCapabilitiesDataSource.getCapabilityForAccountAsLiveData("cfo@server")
-        ).thenReturn(
-            dbData
-        )
+        every {
+            localCapabilitiesDataSource.getCapabilityForAccountAsLiveData(defaultAccountName)
+        } returns dbData
 
         val exception = Exception("Error when retrieving capabilities")
 
@@ -179,25 +179,29 @@ class OCCapabilityRepositoryTest {
                 remoteCapabilitiesDataSourceTest
             )
 
-        val data = ocCapabilityRepository.getCapabilityForAccountAsLiveData(
-            "cfo@server"
+        val data = ocCapabilityRepository.getCapabilityForAccount(
+            defaultAccountName
         )
 
         // Get capabilities from database to observe them
-        verify(localCapabilitiesDataSource).getCapabilityForAccountAsLiveData(
-            "cfo@server"
-        )
+        verify {
+            localCapabilitiesDataSource.getCapabilityForAccountAsLiveData(
+                defaultAccountName
+            )
+        }
 
         // Retrieving capabilities from server...
 
         // Observe changes in database livedata when there's an error from server
-        val observer = mock<Observer<Resource<OCCapabilityEntity>>>()
+        val observer = mockk<Observer<Resource<OCCapabilityEntity>>>(relaxed = true)
         data.observeForever(observer)
 
-        verify(observer).onChanged(
-            Resource.error(
-                RemoteOperationResult.ResultCode.FORBIDDEN, dbData.value, exception = exception
+        verify {
+            observer.onChanged(
+                Resource.error(
+                    RemoteOperationResult.ResultCode.FORBIDDEN, dbData.value, exception = exception
+                )
             )
-        )
+        }
     }
 }
