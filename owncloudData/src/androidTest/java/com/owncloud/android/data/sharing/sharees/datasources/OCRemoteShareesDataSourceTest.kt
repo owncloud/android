@@ -22,18 +22,18 @@ package com.owncloud.android.data.sharing.sharees.datasources
 import com.owncloud.android.data.utils.DataTestUtil
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.resources.shares.GetRemoteShareesOperation
+import io.mockk.every
+import io.mockk.mockkClass
 import junit.framework.Assert.assertEquals
 import org.hamcrest.CoreMatchers.notNullValue
 import org.hamcrest.MatcherAssert.assertThat
 import org.json.JSONObject
 import org.junit.Before
 import org.junit.Test
-import org.mockito.Mockito.`when`
-import org.mockito.Mockito.mock
 
 class OCRemoteShareesDataSourceTest {
     private lateinit var ocRemoteShareesDataSource: OCRemoteShareesDataSource
-    private val ownCloudClient = mock(OwnCloudClient::class.java)
+    private val ownCloudClient = mockkClass(OwnCloudClient::class)
 
     @Before
     fun init() {
@@ -43,7 +43,7 @@ class OCRemoteShareesDataSourceTest {
 
     @Test
     fun readRemoteSharees() {
-        val getRemoteShareesForFileOperation = mock(GetRemoteShareesOperation::class.java)
+        val getRemoteShareesForFileOperation = mockkClass(GetRemoteShareesOperation::class)
 
         val remoteSharees: ArrayList<JSONObject> = arrayListOf(
             DataTestUtil.createSharee("User 1", "0", "user1", "user1@mail.com"),
@@ -56,9 +56,9 @@ class OCRemoteShareesDataSourceTest {
             true
         )
 
-        `when`(getRemoteShareesForFileOperation.execute(ownCloudClient)).thenReturn(
-            getRemoteShareesOperationResult
-        )
+        every {
+            getRemoteShareesForFileOperation.execute(ownCloudClient)
+        } returns getRemoteShareesOperationResult
 
         // Get sharees from remote datasource
         val remoteOperationResult = ocRemoteShareesDataSource.getSharees(

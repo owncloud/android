@@ -23,17 +23,17 @@ package com.owncloud.android.data.capabilities.datasources
 import com.owncloud.android.data.utils.DataTestUtil
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.resources.status.GetRemoteCapabilitiesOperation
+import io.mockk.every
+import io.mockk.mockkClass
 import junit.framework.Assert.assertEquals
 import org.hamcrest.CoreMatchers.notNullValue
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Before
 import org.junit.Test
-import org.mockito.Mockito.`when`
-import org.mockito.Mockito.mock
 
 class OCRemoteCapabilitiesDataSourceTest {
     private lateinit var ocRemoteCapabilitiesDataSource: OCRemoteCapabilitiesDataSource
-    private val ownCloudClient = mock(OwnCloudClient::class.java)
+    private val ownCloudClient = mockkClass(OwnCloudClient::class)
 
     @Before
     fun init() {
@@ -43,7 +43,7 @@ class OCRemoteCapabilitiesDataSourceTest {
 
     @Test
     fun readRemoteCapabilities() {
-        val getRemoteCapabilitiesOperation = mock(GetRemoteCapabilitiesOperation::class.java)
+        val getRemoteCapabilitiesOperation = mockkClass(GetRemoteCapabilitiesOperation::class)
 
         val remoteCapability = DataTestUtil.createRemoteCapability(
             "ceo@server", 15, 14, 13
@@ -54,9 +54,9 @@ class OCRemoteCapabilitiesDataSourceTest {
             true
         )
 
-        `when`(getRemoteCapabilitiesOperation.execute(ownCloudClient)).thenReturn(
-            getRemoteCapabilitiesOperationResult
-        )
+        every {
+            getRemoteCapabilitiesOperation.execute(ownCloudClient)
+        } returns getRemoteCapabilitiesOperationResult
 
         // Get capability from remote datasource
         val remoteOperationResult = ocRemoteCapabilitiesDataSource.getCapabilities(

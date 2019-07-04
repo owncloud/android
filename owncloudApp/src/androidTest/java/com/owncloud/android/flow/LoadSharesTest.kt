@@ -23,7 +23,6 @@ import android.accounts.Account
 import android.accounts.AccountManager
 import android.content.Context
 import android.content.Intent
-import android.os.Parcelable
 import androidx.lifecycle.MutableLiveData
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
@@ -48,6 +47,8 @@ import com.owncloud.android.presentation.sharing.shares.ShareActivity
 import com.owncloud.android.ui.activity.FileActivity
 import com.owncloud.android.utils.AccountsManager
 import com.owncloud.android.utils.AppTestUtil
+import io.mockk.every
+import io.mockk.mockk
 import org.junit.AfterClass
 import org.junit.Before
 import org.junit.BeforeClass
@@ -58,9 +59,6 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.module
-import org.mockito.Mockito.`when`
-import org.mockito.Mockito.mock
-import org.mockito.Mockito.spy
 
 class LoadSharesTest {
     @Rule
@@ -71,7 +69,7 @@ class LoadSharesTest {
         false
     )
 
-    private val ocShareViewModel = mock(OCShareViewModel::class.java)
+    private val ocShareViewModel = mockk<OCShareViewModel>(relaxed = true)
 
     companion object {
         private val targetContext = InstrumentationRegistry.getInstrumentation().targetContext
@@ -127,16 +125,14 @@ class LoadSharesTest {
 
     @Before
     fun setUp() {
-        val intent = spy(Intent::class.java)
+        val intent = Intent()
 
         val file = getOCFileForTesting("image.jpg")
-
-        `when`(intent.getParcelableExtra(FileActivity.EXTRA_FILE) as? Parcelable).thenReturn(file)
         intent.putExtra(FileActivity.EXTRA_FILE, file)
 
-        `when`(ocCapabilityViewModel.getCapabilityForAccount()).thenReturn(capabilitiesLiveData)
-        `when`(ocShareViewModel.getPublicShares(file.remotePath)).thenReturn(publicSharesLiveData)
-        `when`(ocShareViewModel.getPrivateShares(file.remotePath)).thenReturn(privateSharesLiveData)
+        every { ocCapabilityViewModel.getCapabilityForAccount() } returns capabilitiesLiveData
+        every { ocShareViewModel.getPublicShares(file.remotePath) } returns publicSharesLiveData
+        every { ocShareViewModel.getPrivateShares(file.remotePath) } returns privateSharesLiveData
 
         stopKoin()
 
@@ -161,7 +157,7 @@ class LoadSharesTest {
      ******************************************** CAPABILITIES ********************************************
      ******************************************************************************************************/
 
-    private val ocCapabilityViewModel = mock(OCCapabilityViewModel::class.java)
+    private val ocCapabilityViewModel = mockk<OCCapabilityViewModel>(relaxed = true)
     private val capabilitiesLiveData = MutableLiveData<Resource<OCCapabilityEntity>>()
 
     @Test

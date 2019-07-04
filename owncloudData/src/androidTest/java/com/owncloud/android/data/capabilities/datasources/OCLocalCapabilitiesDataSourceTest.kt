@@ -27,17 +27,18 @@ import com.owncloud.android.data.capabilities.db.OCCapabilityDao
 import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
 import com.owncloud.android.data.utils.DataTestUtil
 import com.owncloud.android.data.utils.LiveDataTestUtil.getValue
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.mockkClass
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
-import org.mockito.Mockito.`when`
-import org.mockito.Mockito.mock
 
 class OCLocalCapabilitiesDataSourceTest {
     private lateinit var ocLocalCapabilitiesDataSource: OCLocalCapabilitiesDataSource
-    private val ocCapabilityDao = mock(OCCapabilityDao::class.java)
+    private val ocCapabilityDao = mockk<OCCapabilityDao>(relaxed = true)
 
     @Rule
     @JvmField
@@ -45,34 +46,33 @@ class OCLocalCapabilitiesDataSourceTest {
 
     @Before
     fun init() {
-        val db = mock(OwncloudDatabase::class.java)
-        `when`(db.capabilityDao()).thenReturn(ocCapabilityDao)
+        val db = mockkClass(OwncloudDatabase::class)
+
+        every {
+            db.capabilityDao()
+        } returns ocCapabilityDao
 
         val capabilityAsLiveData: MutableLiveData<OCCapabilityEntity> = MutableLiveData()
         capabilityAsLiveData.value = DataTestUtil.createCapability(
             "user@server1", 5, 4, 3
         )
 
-        `when`(
+        every {
             ocCapabilityDao.getCapabilityForAccount(
                 "user@server1"
             )
-        ).thenReturn(
-            capabilityAsLiveData
-        )
+        } returns capabilityAsLiveData
 
         val newCapabilityAsLiveData: MutableLiveData<OCCapabilityEntity> = MutableLiveData()
         newCapabilityAsLiveData.value = DataTestUtil.createCapability(
             "user@server2", 2, 1, 0
         )
 
-        `when`(
+        every {
             ocCapabilityDao.getCapabilityForAccount(
                 "user@server2"
             )
-        ).thenReturn(
-            newCapabilityAsLiveData
-        )
+        } returns newCapabilityAsLiveData
 
         val context = InstrumentationRegistry.getInstrumentation().targetContext
 

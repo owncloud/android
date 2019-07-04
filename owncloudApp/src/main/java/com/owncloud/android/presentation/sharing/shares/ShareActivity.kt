@@ -49,7 +49,6 @@ import com.owncloud.android.presentation.sharing.shares.fragment.EditShareFragme
 import com.owncloud.android.presentation.sharing.shares.fragment.PublicShareDialogFragment
 import com.owncloud.android.presentation.sharing.shares.fragment.ShareFileFragment
 import com.owncloud.android.presentation.sharing.shares.fragment.ShareFragmentListener
-import com.owncloud.android.testing.OpenForTesting
 import com.owncloud.android.ui.activity.FileActivity
 import com.owncloud.android.ui.dialog.RemoveShareDialogFragment
 import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter
@@ -60,7 +59,6 @@ import org.koin.core.parameter.parametersOf
 /**
  * Activity for sharing files
  */
-@OpenForTesting
 class ShareActivity : FileActivity(), ShareFragmentListener {
     /**
      * Shortcut to get access to the [ShareFileFragment] instance, if any
@@ -148,6 +146,16 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
 
     public override fun onStop() {
         super.onStop()
+    }
+
+    /**
+     * Updates the view, reading data from [com.owncloud.android.data.viewmodel.OCShareViewModel]
+     */
+    private fun refreshSharesFromStorageManager() {
+        val editShareFragment = editShareFragment
+        if (editShareFragment?.isAdded == true) {
+            editShareFragment.refreshUiFromDB()
+        }
     }
 
     override fun refreshAllShares() {
@@ -595,8 +603,16 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
         )
     }
 
-    override fun removePublicShare(share: OCShareEntity) {
-        ocShareViewModel.deletePublicShare(share.remoteId).observe(
+    override fun copyOrSendPublicLink(share: OCShare) {
+        fileOperationsHelper.copyOrSendPublicLink(share)
+    }
+
+    /**************************************************************************************************************
+     *************************************************** COMMON ***************************************************
+     **************************************************************************************************************/
+
+    override fun removeShare(shareRemoteId: Long) {
+        ocShareViewModel.deleteShare(shareRemoteId).observe(
             this,
             Observer { resource ->
                 when (resource?.status) {
