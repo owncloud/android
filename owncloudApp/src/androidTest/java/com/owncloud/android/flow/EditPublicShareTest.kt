@@ -23,7 +23,6 @@ import android.accounts.Account
 import android.accounts.AccountManager
 import android.content.Context
 import android.content.Intent
-import android.os.Parcelable
 import android.widget.DatePicker
 import androidx.lifecycle.MutableLiveData
 import androidx.test.core.app.ApplicationProvider
@@ -58,6 +57,8 @@ import com.owncloud.android.presentation.sharing.shares.ShareActivity
 import com.owncloud.android.ui.activity.FileActivity
 import com.owncloud.android.utils.AccountsManager
 import com.owncloud.android.utils.AppTestUtil
+import io.mockk.every
+import io.mockk.mockk
 import org.hamcrest.Matchers
 import org.junit.AfterClass
 import org.junit.Before
@@ -69,9 +70,6 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.module
-import org.mockito.Mockito.`when`
-import org.mockito.Mockito.mock
-import org.mockito.Mockito.spy
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -127,8 +125,8 @@ class EditPublicShareTest {
     private val capabilitiesLiveData = MutableLiveData<Resource<OCCapabilityEntity>>()
     private val sharesLiveData = MutableLiveData<Resource<List<OCShareEntity>>>()
 
-    private val ocCapabilityViewModel = mock(OCCapabilityViewModel::class.java)
-    private val ocShareViewModel = mock(OCShareViewModel::class.java)
+    private val ocCapabilityViewModel = mockk<OCCapabilityViewModel>(relaxed = true)
+    private val ocShareViewModel = mockk<OCShareViewModel>(relaxed = true)
 
     companion object {
         private val targetContext = InstrumentationRegistry.getInstrumentation().targetContext
@@ -184,17 +182,15 @@ class EditPublicShareTest {
 
     @Before
     fun setUp() {
-        val intent = spy(Intent::class.java)
+        val intent = Intent()
 
         file = getOCFileForTesting("image.jpg")
-
-        `when`(intent.getParcelableExtra(FileActivity.EXTRA_FILE) as? Parcelable).thenReturn(file)
         intent.putExtra(FileActivity.EXTRA_FILE, file)
 
-        `when`(ocCapabilityViewModel.getCapabilityForAccount(false)).thenReturn(capabilitiesLiveData)
-        `when`(ocCapabilityViewModel.getCapabilityForAccount(true)).thenReturn(capabilitiesLiveData)
-        `when`(ocShareViewModel.getPublicShares(file.remotePath)).thenReturn(sharesLiveData)
-        `when`(ocShareViewModel.getPrivateShares(file.remotePath)).thenReturn(MutableLiveData())
+        every { ocCapabilityViewModel.getCapabilityForAccount(false) } returns capabilitiesLiveData
+        every { ocCapabilityViewModel.getCapabilityForAccount(true) } returns capabilitiesLiveData
+        every { ocShareViewModel.getPublicShares(file.remotePath) } returns sharesLiveData
+        every { ocShareViewModel.getPrivateShares(file.remotePath) } returns MutableLiveData()
 
         stopKoin()
 
@@ -448,7 +444,7 @@ class EditPublicShareTest {
         publicLinkExpirationDateInMillis: Long = -1,
         resource: Resource<Unit> = Resource.success() // Expected result when editing the share
     ) {
-        `when`(
+        every {
             ocShareViewModel.updatePublicShareForFile(
                 1,
                 share.name!!,
@@ -457,11 +453,9 @@ class EditPublicShareTest {
                 1,
                 false
             )
-        ).thenReturn(
-            MutableLiveData<Resource<Unit>>().apply {
-                postValue(resource)
-            }
-        )
+        } returns MutableLiveData<Resource<Unit>>().apply {
+            postValue(resource)
+        }
 
         onView(withId(R.id.saveButton)).perform(click())
     }

@@ -28,16 +28,16 @@ import com.owncloud.android.data.sharing.shares.db.OCShareEntity
 import com.owncloud.android.data.utils.DataTestUtil
 import com.owncloud.android.data.utils.LiveDataTestUtil.getValue
 import com.owncloud.android.lib.resources.shares.ShareType
+import io.mockk.every
+import io.mockk.mockkClass
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.mockito.Mockito.`when`
-import org.mockito.Mockito.mock
 
 class OCLocalDataSourceTest {
     private lateinit var ocLocalSharesDataSource: OCLocalSharesDataSource
-    private val ocSharesDao = mock(OCShareDao::class.java)
+    private val ocSharesDao = mockkClass(OCShareDao::class)
 
     @Rule
     @JvmField
@@ -45,8 +45,11 @@ class OCLocalDataSourceTest {
 
     @Before
     fun init() {
-        val db = mock(OwncloudDatabase::class.java)
-        `when`(db.shareDao()).thenReturn(ocSharesDao)
+        val db = mockkClass(OwncloudDatabase::class)
+
+        every {
+            db.shareDao()
+        } returns ocSharesDao
 
         val context = InstrumentationRegistry.getInstrumentation().targetContext
 
@@ -81,15 +84,13 @@ class OCLocalDataSourceTest {
         val privateSharesAsLiveData: MutableLiveData<List<OCShareEntity>> = MutableLiveData()
         privateSharesAsLiveData.value = privateShares
 
-        `when`(
+        every {
             ocSharesDao.getSharesAsLiveData(
                 "/Docs/doc1.doc", "admin@server", privateShareTypes.map {
                     it.value
                 }
             )
-        ).thenReturn(
-            privateSharesAsLiveData
-        )
+        } returns privateSharesAsLiveData
 
         val shares = getValue(
             ocLocalSharesDataSource.getSharesAsLiveData(
@@ -115,13 +116,11 @@ class OCLocalDataSourceTest {
         val privateSharesAsLiveData: MutableLiveData<List<OCShareEntity>> = MutableLiveData()
         privateSharesAsLiveData.value = privateShares
 
-        `when`(
+        every {
             ocSharesDao.insert(
                 privateSharesAsLiveData.value!![0]
             )
-        ).thenReturn(
-            10
-        )
+        } returns 10
 
         val insertedShareId = ocLocalSharesDataSource.insert(
             DataTestUtil.createPrivateShare(
@@ -184,13 +183,11 @@ class OCLocalDataSourceTest {
         val publicSharesAsLiveData: MutableLiveData<List<OCShareEntity>> = MutableLiveData()
         publicSharesAsLiveData.value = publicShares
 
-        `when`(
+        every {
             ocSharesDao.getSharesAsLiveData(
                 "/Photos/", "admin@server", listOf(ShareType.PUBLIC_LINK.value)
             )
-        ).thenReturn(
-            publicSharesAsLiveData
-        )
+        } returns publicSharesAsLiveData
 
         val shares = getValue(
             ocLocalSharesDataSource.getSharesAsLiveData(
@@ -216,13 +213,11 @@ class OCLocalDataSourceTest {
         val publicSharesAsLiveData: MutableLiveData<List<OCShareEntity>> = MutableLiveData()
         publicSharesAsLiveData.value = publicShares
 
-        `when`(
+        every {
             ocSharesDao.insert(
                 publicSharesAsLiveData.value!![0]
             )
-        ).thenReturn(
-            7
-        )
+        } returns 7
 
         val insertedShareId = ocLocalSharesDataSource.insert(
             DataTestUtil.createPublicShare(
@@ -240,13 +235,11 @@ class OCLocalDataSourceTest {
         val publicSharesAsLiveData: MutableLiveData<List<OCShareEntity>> = MutableLiveData()
         publicSharesAsLiveData.value = publicShares
 
-        `when`(
+        every {
             ocSharesDao.update(
                 publicSharesAsLiveData.value!![1]
             )
-        ).thenReturn(
-            8
-        )
+        } returns 8
 
         val updatedShareId = ocLocalSharesDataSource.update(
             DataTestUtil.createPublicShare(
@@ -264,14 +257,12 @@ class OCLocalDataSourceTest {
      **************************************************************************************************************/
 
     @Test
-    fun deleteShare() {
-        `when`(
+    fun deletePublicShare() {
+        every {
             ocSharesDao.deleteShare(
                 5
             )
-        ).thenReturn(
-            1
-        )
+        } returns 1
 
         val deletedRows = ocLocalSharesDataSource.deleteShare(
             5

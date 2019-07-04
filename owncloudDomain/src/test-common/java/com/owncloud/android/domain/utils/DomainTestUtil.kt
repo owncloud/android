@@ -21,16 +21,15 @@ package com.owncloud.android.domain.utils
 
 import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
 import com.owncloud.android.data.sharing.shares.db.OCShareEntity
-import com.owncloud.android.domain.sharing.shares.OCShareRepository
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.shares.GetRemoteShareesOperation
 import com.owncloud.android.lib.resources.shares.RemoteShare
 import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.lib.resources.status.CapabilityBooleanType
 import com.owncloud.android.lib.resources.status.RemoteCapability
+import io.mockk.every
+import io.mockk.mockk
 import org.json.JSONObject
-import org.mockito.Mockito.`when`
-import org.mockito.Mockito.mock
 
 object DomainTestUtil {
     /**
@@ -303,29 +302,32 @@ object DomainTestUtil {
         resultCode: RemoteOperationResult.ResultCode? = null,
         exception: Exception? = null
     ): RemoteOperationResult<T> {
-        val remoteOperationResult = mock<RemoteOperationResult<T>>()
+        val remoteOperationResult = mockk<RemoteOperationResult<T>>(relaxed = true)
 
-        `when`(remoteOperationResult.data).thenReturn(
-            data
-        )
-        `when`(remoteOperationResult.isSuccess).thenReturn(isSuccess)
+        every {
+            remoteOperationResult.data
+        } returns data
 
-        if (httpPhrase != null) {
-            `when`(remoteOperationResult.httpPhrase).thenReturn(httpPhrase)
-        }
+        every {
+            remoteOperationResult.isSuccess
+        } returns isSuccess
+
+        every {
+            remoteOperationResult.httpPhrase
+        } returns httpPhrase
 
         if (resultCode != null) {
-            `when`(remoteOperationResult.code).thenReturn(resultCode)
+            every {
+                remoteOperationResult.code
+            } returns resultCode
         }
 
         if (exception != null) {
-            `when`(remoteOperationResult.exception).thenReturn(exception)
+            every {
+                remoteOperationResult.exception
+            } returns exception
         }
 
         return remoteOperationResult
-    }
-
-    fun createOCShareRepositoryMock(): OCShareRepository {
-        return mock(OCShareRepository::class.java)
     }
 }

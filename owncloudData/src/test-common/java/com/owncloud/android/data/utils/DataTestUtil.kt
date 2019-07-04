@@ -27,8 +27,9 @@ import com.owncloud.android.lib.resources.shares.RemoteShare
 import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.lib.resources.status.CapabilityBooleanType
 import com.owncloud.android.lib.resources.status.RemoteCapability
+import io.mockk.every
+import io.mockk.mockk
 import org.json.JSONObject
-import org.mockito.Mockito.`when`
 
 object DataTestUtil {
     /**
@@ -303,23 +304,32 @@ object DataTestUtil {
         resultCode: RemoteOperationResult.ResultCode? = null,
         exception: Exception? = null
     ): RemoteOperationResult<T> {
-        val remoteOperationResult = mock<RemoteOperationResult<T>>()
+        val remoteOperationResult = mockk<RemoteOperationResult<T>>(relaxed = true)
 
-        `when`(remoteOperationResult.data).thenReturn(
-            data
-        )
-        `when`(remoteOperationResult.isSuccess).thenReturn(isSuccess)
+        every {
+            remoteOperationResult.data
+        } returns data
+
+        every {
+            remoteOperationResult.isSuccess
+        } returns isSuccess
 
         if (httpPhrase != null) {
-            `when`(remoteOperationResult.httpPhrase).thenReturn(httpPhrase)
+            every {
+                remoteOperationResult.httpPhrase
+            } returns httpPhrase
         }
 
         if (resultCode != null) {
-            `when`(remoteOperationResult.code).thenReturn(resultCode)
+            every {
+                remoteOperationResult.code
+            } returns resultCode
         }
 
         if (exception != null) {
-            `when`(remoteOperationResult.exception).thenReturn(exception)
+            every {
+                remoteOperationResult.exception
+            } returns exception
         }
 
         return remoteOperationResult
