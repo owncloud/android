@@ -57,7 +57,7 @@ import java.util.HashMap
  * Content provider for search suggestions, to search for users and groups existing in an ownCloud server.
  */
 class UsersAndGroupsSearchProvider : ContentProvider() {
-    private var uriMatcher: UriMatcher? = null
+    private lateinit var uriMatcher: UriMatcher
 
     override fun getType(uri: Uri): String? {
         // TODO implement
@@ -75,7 +75,7 @@ class UsersAndGroupsSearchProvider : ContentProvider() {
 
             // init URI matcher
             uriMatcher = UriMatcher(UriMatcher.NO_MATCH)
-            uriMatcher!!.addURI(
+            uriMatcher.addURI(
                 suggestAuthority,
                 SearchManager.SUGGEST_URI_PATH_QUERY + "/*",
                 SEARCH
@@ -115,7 +115,7 @@ class UsersAndGroupsSearchProvider : ContentProvider() {
         sortOrder: String?
     ): Cursor? {
         Log_OC.d(TAG, "query received in thread " + Thread.currentThread().name)
-        when (uriMatcher!!.match(uri)) {
+        when (uriMatcher.match(uri)) {
             SEARCH -> return searchForUsersOrGroups(uri)
             else -> return null
         }
@@ -132,15 +132,7 @@ class UsersAndGroupsSearchProvider : ContentProvider() {
 
         val ocShareeViewModel = OCShareeViewModel(
             context,
-            account,
-            OCShareeRepository(
-                OCRemoteShareesDataSource(
-                    OwnCloudClientManagerFactory.getDefaultSingleton().getClientFor(
-                        OwnCloudAccount(account, context),
-                        context
-                    )
-                )
-            )
+            account
         )
 
         val resource = ocShareeViewModel.getSharees(userQuery,

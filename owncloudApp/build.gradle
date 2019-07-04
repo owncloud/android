@@ -76,6 +76,9 @@ dependencies {
 
     // Koin dependency injector
     implementation "org.koin:koin-androidx-viewmodel:$koinVersion"
+
+    // Kotlin extensions
+    implementation "androidx.core:core-ktx:$ktxVersion"
 }
 
 tasks.withType(Test) {
