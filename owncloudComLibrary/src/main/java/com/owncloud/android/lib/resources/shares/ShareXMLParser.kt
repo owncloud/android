@@ -281,7 +281,7 @@ class ShareXMLParser {
             } else if (name.equals(NODE_SHARE_WITH_DISPLAY_NAME, ignoreCase = true)) {
                 remoteShare.sharedWithDisplayName = readNode(parser, NODE_SHARE_WITH_DISPLAY_NAME)
 
-            } else if (name.equals(NODE_SHARE_WITH_ADDITIONAL_INFO)) {
+            } else if (name.equals(NODE_SHARE_WITH_ADDITIONAL_INFO, ignoreCase = true)) {
                 remoteShare.sharedWithAdditionalInfo = readNode(parser, NODE_SHARE_WITH_ADDITIONAL_INFO)
 
             } else if (name.equals(NODE_URL, ignoreCase = true)) {
