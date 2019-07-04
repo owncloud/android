@@ -21,16 +21,14 @@ package com.owncloud.android.domain.capabilities
 
 import androidx.lifecycle.LiveData
 import com.owncloud.android.data.Executors
+import com.owncloud.android.data.NetworkBoundResource
+import com.owncloud.android.data.Resource
 import com.owncloud.android.data.capabilities.CapabilityRepository
 import com.owncloud.android.data.capabilities.datasources.LocalCapabilitiesDataSource
 import com.owncloud.android.data.capabilities.datasources.RemoteCapabilitiesDataSource
 import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
-import com.owncloud.android.data.NetworkBoundResource
-import com.owncloud.android.data.Resource
 import com.owncloud.android.lib.resources.status.RemoteCapability
-import com.owncloud.android.lib.testing.OpenForTesting
 
-@OpenForTesting
 class OCCapabilityRepository(
     private val executors: Executors,
     private val localCapabilitiesDataSource: LocalCapabilitiesDataSource,

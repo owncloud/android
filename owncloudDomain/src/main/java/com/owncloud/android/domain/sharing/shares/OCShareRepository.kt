@@ -30,11 +30,6 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.shares.RemoteShare
 import com.owncloud.android.lib.resources.shares.ShareParserResult
 import com.owncloud.android.lib.resources.shares.ShareType
-import com.owncloud.android.shares.data.ShareRepository
-import com.owncloud.android.shares.data.datasources.LocalShareDataSource
-import com.owncloud.android.shares.data.datasources.RemoteShareDataSource
-import com.owncloud.android.testing.OpenForTesting
-import com.owncloud.android.vo.Resource
 
 class OCShareRepository(
     private val localSharesDataSource: com.owncloud.android.data.sharing.shares.datasources.LocalSharesDataSource,

@@ -29,12 +29,10 @@ import androidx.room.PrimaryKey
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta
 import com.owncloud.android.lib.resources.shares.RemoteShare
 import com.owncloud.android.lib.resources.shares.ShareType
-import com.owncloud.android.lib.testing.OpenForTesting
 
 /**
  * Represents one record of the Shares table.
  */
-@OpenForTesting
 @Entity(tableName = ProviderTableMeta.OCSHARES_TABLE_NAME)
 data class OCShareEntity(
     @ColumnInfo(name = ProviderTableMeta.OCSHARES_FILE_SOURCE)

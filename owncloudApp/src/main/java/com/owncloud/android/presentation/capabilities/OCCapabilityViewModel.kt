@@ -30,14 +30,11 @@ import com.owncloud.android.data.capabilities.CapabilityRepository
 import com.owncloud.android.domain.capabilities.OCCapabilityRepository
 import com.owncloud.android.lib.common.OwnCloudAccount
 import com.owncloud.android.lib.common.OwnCloudClientManagerFactory
-import com.owncloud.android.testing.OpenForTesting
 import com.owncloud.android.data.Resource
 
 /**
  * View Model to keep a reference to the capability repository and an up-to-date capability
  */
-
-@OpenForTesting
 class OCCapabilityViewModel(
     context: Context,
     val account: Account,
