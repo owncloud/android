@@ -309,21 +309,8 @@ public class FileActivity extends DrawerActivity
         } else if (operation instanceof SynchronizeFileOperation) {
             onSynchronizeFileOperationFinish((SynchronizeFileOperation) operation, result);
 
-            // TODO NEW ARCH
-//        } else if (operation instanceof GetSharesForFileOperation) {
-//            if (result.isSuccess() || result.getCode() == ResultCode.SHARE_NOT_FOUND) {
-//                updateFileFromDB();
-//
-//            } else {
-//                showSnackMessage(
-//                        ErrorMessageAdapter.Companion.getResultMessage(result, operation, getResources())
-//                );
-//            }
-//
         } else if (operation instanceof RenameFileOperation && result.isSuccess()) {
-
             result.getData();
-
         }
     }
 

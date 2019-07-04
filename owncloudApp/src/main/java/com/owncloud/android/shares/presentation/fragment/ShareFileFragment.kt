@@ -31,6 +31,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ListView
 import android.widget.Toast
+import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
 import com.owncloud.android.R
@@ -342,6 +343,8 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
         } else {
             shareViaLinkSection.visibility = View.VISIBLE
         }
+
+        shareViaLinkSection.isGone = isPublicShareDisabled
     }
 
     /**************************************************************************************************************

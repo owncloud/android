@@ -37,6 +37,7 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.ListView
 import androidx.appcompat.widget.SearchView
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import com.owncloud.android.R
 import com.owncloud.android.datamodel.OCFile
@@ -44,6 +45,7 @@ import com.owncloud.android.lib.common.utils.Log_OC
 import com.owncloud.android.shares.domain.OCShare
 import com.owncloud.android.shares.presentation.fragment.ShareFragmentListener
 import com.owncloud.android.utils.PreferenceUtils
+import kotlinx.android.synthetic.main.search_users_groups_layout.*
 import java.util.ArrayList
 
 /**
@@ -73,9 +75,9 @@ class SearchShareesFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterL
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (arguments != null) {
-            file = arguments!!.getParcelable(ARG_FILE)
-            account = arguments!!.getParcelable(ARG_ACCOUNT)
+        arguments?.let {
+            file = it.getParcelable(ARG_FILE)
+            account = it.getParcelable(ARG_ACCOUNT)
         }
     }
 
@@ -94,10 +96,10 @@ class SearchShareesFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterL
 
         // Get the SearchView and set the searchable configuration
         val searchView = view.findViewById<SearchView>(R.id.searchView)
-        val searchManager = activity!!.getSystemService(Context.SEARCH_SERVICE) as SearchManager
+        val searchManager = requireActivity().getSystemService(Context.SEARCH_SERVICE) as SearchManager
         searchView.setSearchableInfo(
             searchManager.getSearchableInfo(
-                activity!!.componentName
+                requireActivity().componentName
             )   // assumes parent activity is the searchable activity
         )
         searchView.setIconifiedByDefault(false)    // do not iconify the widget; expand it by default
@@ -122,7 +124,7 @@ class SearchShareesFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterL
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        activity!!.setTitle(R.string.share_with_title)
+        requireActivity().setTitle(R.string.share_with_title)
 
         // Load private shares in the list
         listener?.refreshPrivateShares()
@@ -131,7 +133,7 @@ class SearchShareesFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterL
     fun updatePrivateShares(privateShares: ArrayList<OCShare>) {
         // Update list of users/groups
         userGroupsAdapter = ShareUserListAdapter(
-            activity!!.applicationContext,
+            requireActivity().applicationContext,
             R.layout.share_user_item, privateShares, this
         )
 
@@ -152,7 +154,7 @@ class SearchShareesFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterL
         try {
             listener = activity as ShareFragmentListener?
         } catch (e: ClassCastException) {
-            throw ClassCastException(activity!!.toString() + " must implement OnFragmentInteractionListener")
+            throw ClassCastException(requireActivity().toString() + " must implement OnFragmentInteractionListener")
         }
 
     }
@@ -162,8 +164,8 @@ class SearchShareesFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterL
         // focus the search view and request the software keyboard be shown
         val searchView = view!!.findViewById<View>(R.id.searchView)
         if (searchView.requestFocus()) {
-            val imm = activity!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            imm?.showSoftInput(searchView.findFocus(), InputMethodManager.SHOW_IMPLICIT)
+            val imm = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.showSoftInput(searchView.findFocus(), InputMethodManager.SHOW_IMPLICIT)
         }
     }
 
@@ -178,24 +180,23 @@ class SearchShareesFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterL
     }
 
     private fun hideSoftKeyboard() {
-        if (view != null) {
-            val searchView = view!!.findViewById<View>(R.id.searchView)
-            if (searchView != null) {
-                val imm = activity!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                imm?.hideSoftInputFromWindow(searchView.windowToken, 0)
+        view?.let {
+            view?.findViewById<View>(R.id.searchView)?.let {
+                val imm = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.hideSoftInputFromWindow(searchView.windowToken, 0)
             }
         }
     }
 
     override fun unshareButtonPressed(share: OCShare) {
         Log_OC.d(TAG, "Removed private share with " + share.sharedWithDisplayName!!)
-        listener!!.removePublicShare(share)
+        listener?.removePublicShare(share)
     }
 
     override fun editShare(share: OCShare) {
         // move to fragment to edit share
         Log_OC.d(TAG, "Editing " + share.sharedWithDisplayName!!)
-        listener!!.showEditPrivateShare(share)
+        listener?.showEditPrivateShare(share)
     }
 
     companion object {
@@ -212,13 +213,11 @@ class SearchShareesFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterL
          * @param account       The ownCloud account containing fileToShare
          * @return A new instance of fragment SearchShareesFragment.
          */
-        fun newInstance(fileToShare: OCFile, account: Account): SearchShareesFragment {
-            val fragment = SearchShareesFragment()
-            val args = Bundle()
-            args.putParcelable(ARG_FILE, fileToShare)
-            args.putParcelable(ARG_ACCOUNT, account)
-            fragment.arguments = args
-            return fragment
+        fun newInstance(fileToShare: OCFile, account: Account) = SearchShareesFragment().apply {
+            arguments = bundleOf(
+                ARG_FILE to fileToShare,
+                ARG_ACCOUNT to account
+            )
         }
     }
 }
