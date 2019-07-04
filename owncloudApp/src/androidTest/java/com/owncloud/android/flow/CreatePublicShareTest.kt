@@ -23,7 +23,6 @@ import android.accounts.Account
 import android.accounts.AccountManager
 import android.content.Context
 import android.content.Intent
-import android.os.Parcelable
 import androidx.lifecycle.MutableLiveData
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
@@ -52,8 +51,7 @@ import com.owncloud.android.ui.activity.FileActivity
 import com.owncloud.android.utils.AccountsManager
 import com.owncloud.android.utils.AppTestUtil
 import io.mockk.every
-import io.mockk.mockkClass
-import io.mockk.spyk
+import io.mockk.mockk
 import org.junit.AfterClass
 import org.junit.Before
 import org.junit.BeforeClass
@@ -100,8 +98,8 @@ class CreatePublicShareTest {
     private val capabilitiesLiveData = MutableLiveData<Resource<OCCapabilityEntity>>()
     private val sharesLiveData = MutableLiveData<Resource<List<OCShareEntity>>>()
 
-    private val ocCapabilityViewModel = mockkClass(OCCapabilityViewModel::class)
-    private val ocShareViewModel = mockkClass(OCShareViewModel::class)
+    private val ocCapabilityViewModel = mockk<OCCapabilityViewModel>(relaxed = true)
+    private val ocShareViewModel = mockk<OCShareViewModel>(relaxed = true)
 
     companion object {
         private val targetContext = InstrumentationRegistry.getInstrumentation().targetContext
@@ -157,17 +155,15 @@ class CreatePublicShareTest {
 
     @Before
     fun setUp() {
-        val intent = spyk<Intent>()
+        val intent = Intent()
 
         file = getOCFileForTesting("image.jpg")
-
-        every { intent.getParcelableExtra(FileActivity.EXTRA_FILE) as? Parcelable } returns file
         intent.putExtra(FileActivity.EXTRA_FILE, file)
 
         every { ocCapabilityViewModel.getCapabilityForAccount(false) } returns capabilitiesLiveData
         every { ocCapabilityViewModel.getCapabilityForAccount(true) } returns capabilitiesLiveData
         every { ocShareViewModel.getPublicShares(file.remotePath) } returns sharesLiveData
-        every { ocShareViewModel.getPublicShares(file.remotePath) } returns MutableLiveData()
+        every { ocShareViewModel.getPrivateShares(file.remotePath) } returns MutableLiveData()
 
         stopKoin()
 
