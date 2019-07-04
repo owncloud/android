@@ -225,74 +225,96 @@ class ShareXMLParser {
 
             val name = parser.name
 
-            if (name.equals(NODE_ELEMENT, ignoreCase = true)) {
-                // patch to work around servers responding with extra <element> surrounding all
-                // the shares on the same file before
-                // https://github.com/owncloud/core/issues/6992 was fixed
-                readElement(parser, shares)
-
-            } else if (name.equals(NODE_ID, ignoreCase = true)) {
-                remoteShare.id = Integer.parseInt(readNode(parser, NODE_ID)).toLong()
-
-            } else if (name.equals(NODE_ITEM_TYPE, ignoreCase = true)) {
-                remoteShare.isFolder = readNode(parser, NODE_ITEM_TYPE).equals(TYPE_FOLDER, ignoreCase = true)
-                fixPathForFolder(remoteShare)
-
-            } else if (name.equals(NODE_ITEM_SOURCE, ignoreCase = true)) {
-                remoteShare.itemSource = java.lang.Long.parseLong(readNode(parser, NODE_ITEM_SOURCE))
-
-            } else if (name.equals(NODE_PARENT, ignoreCase = true)) {
-                readNode(parser, NODE_PARENT)
-
-            } else if (name.equals(NODE_SHARE_TYPE, ignoreCase = true)) {
-                val value = Integer.parseInt(readNode(parser, NODE_SHARE_TYPE))
-                remoteShare.shareType = ShareType.fromValue(value)
-
-            } else if (name.equals(NODE_SHARE_WITH, ignoreCase = true)) {
-                remoteShare.shareWith = readNode(parser, NODE_SHARE_WITH)
-
-            } else if (name.equals(NODE_FILE_SOURCE, ignoreCase = true)) {
-                remoteShare.fileSource = java.lang.Long.parseLong(readNode(parser, NODE_FILE_SOURCE))
-
-            } else if (name.equals(NODE_PATH, ignoreCase = true)) {
-                remoteShare.path = readNode(parser, NODE_PATH)
-                fixPathForFolder(remoteShare)
-
-            } else if (name.equals(NODE_PERMISSIONS, ignoreCase = true)) {
-                remoteShare.permissions = Integer.parseInt(readNode(parser, NODE_PERMISSIONS))
-
-            } else if (name.equals(NODE_STIME, ignoreCase = true)) {
-                remoteShare.sharedDate = java.lang.Long.parseLong(readNode(parser, NODE_STIME))
-
-            } else if (name.equals(NODE_EXPIRATION, ignoreCase = true)) {
-                val value = readNode(parser, NODE_EXPIRATION)
-                if (value.isNotEmpty()) {
-                    remoteShare.expirationDate = WebdavUtils.parseResponseDate(value)!!.time
+            when {
+                name.equals(NODE_ELEMENT, ignoreCase = true) -> {
+                    // patch to work around servers responding with extra <element> surrounding all
+                    // the shares on the same file before
+                    // https://github.com/owncloud/core/issues/6992 was fixed
+                    readElement(parser, shares)
                 }
 
-            } else if (name.equals(NODE_TOKEN, ignoreCase = true)) {
-                remoteShare.token = readNode(parser, NODE_TOKEN)
+                name.equals(NODE_ID, ignoreCase = true) -> {
+                    remoteShare.id = Integer.parseInt(readNode(parser, NODE_ID)).toLong()
+                }
 
-            } else if (name.equals(NODE_STORAGE, ignoreCase = true)) {
-                readNode(parser, NODE_STORAGE)
-            } else if (name.equals(NODE_MAIL_SEND, ignoreCase = true)) {
-                readNode(parser, NODE_MAIL_SEND)
+                name.equals(NODE_ITEM_TYPE, ignoreCase = true) -> {
+                    remoteShare.isFolder = readNode(parser, NODE_ITEM_TYPE).equals(TYPE_FOLDER, ignoreCase = true)
+                    fixPathForFolder(remoteShare)
+                }
 
-            } else if (name.equals(NODE_SHARE_WITH_DISPLAY_NAME, ignoreCase = true)) {
-                remoteShare.sharedWithDisplayName = readNode(parser, NODE_SHARE_WITH_DISPLAY_NAME)
+                name.equals(NODE_ITEM_SOURCE, ignoreCase = true) -> {
+                    remoteShare.itemSource = java.lang.Long.parseLong(readNode(parser, NODE_ITEM_SOURCE))
+                }
 
-            } else if (name.equals(NODE_SHARE_WITH_ADDITIONAL_INFO, ignoreCase = true)) {
-                remoteShare.sharedWithAdditionalInfo = readNode(parser, NODE_SHARE_WITH_ADDITIONAL_INFO)
+                name.equals(NODE_PARENT, ignoreCase = true) -> {
+                    readNode(parser, NODE_PARENT)
+                }
 
-            } else if (name.equals(NODE_URL, ignoreCase = true)) {
-                val value = readNode(parser, NODE_URL)
-                remoteShare.shareLink = value
+                name.equals(NODE_SHARE_TYPE, ignoreCase = true) -> {
+                    val value = Integer.parseInt(readNode(parser, NODE_SHARE_TYPE))
+                    remoteShare.shareType = ShareType.fromValue(value)
+                }
 
-            } else if (name.equals(NODE_NAME, ignoreCase = true)) {
-                remoteShare.name = readNode(parser, NODE_NAME)
+                name.equals(NODE_SHARE_WITH, ignoreCase = true) -> {
+                    remoteShare.shareWith = readNode(parser, NODE_SHARE_WITH)
+                }
 
-            } else {
-                skip(parser)
+                name.equals(NODE_FILE_SOURCE, ignoreCase = true) -> {
+                    remoteShare.fileSource = java.lang.Long.parseLong(readNode(parser, NODE_FILE_SOURCE))
+                }
+
+                name.equals(NODE_PATH, ignoreCase = true) -> {
+                    remoteShare.path = readNode(parser, NODE_PATH)
+                    fixPathForFolder(remoteShare)
+                }
+
+                name.equals(NODE_PERMISSIONS, ignoreCase = true) -> {
+                    remoteShare.permissions = Integer.parseInt(readNode(parser, NODE_PERMISSIONS))
+                }
+
+                name.equals(NODE_STIME, ignoreCase = true) -> {
+                    remoteShare.sharedDate = java.lang.Long.parseLong(readNode(parser, NODE_STIME))
+                }
+
+                name.equals(NODE_EXPIRATION, ignoreCase = true) -> {
+                    val value = readNode(parser, NODE_EXPIRATION)
+                    if (value.isNotEmpty()) {
+                        remoteShare.expirationDate = WebdavUtils.parseResponseDate(value)!!.time
+                    }
+                }
+
+                name.equals(NODE_TOKEN, ignoreCase = true) -> {
+                    remoteShare.token = readNode(parser, NODE_TOKEN)
+                }
+
+                name.equals(NODE_STORAGE, ignoreCase = true) -> {
+                    readNode(parser, NODE_STORAGE)
+                }
+
+                name.equals(NODE_MAIL_SEND, ignoreCase = true) -> {
+                    readNode(parser, NODE_MAIL_SEND)
+                }
+
+                name.equals(NODE_SHARE_WITH_DISPLAY_NAME, ignoreCase = true) -> {
+                    remoteShare.sharedWithDisplayName = readNode(parser, NODE_SHARE_WITH_DISPLAY_NAME)
+                }
+
+                name.equals(NODE_SHARE_WITH_ADDITIONAL_INFO, ignoreCase = true) -> {
+                    remoteShare.sharedWithAdditionalInfo = readNode(parser, NODE_SHARE_WITH_ADDITIONAL_INFO)
+                }
+
+                name.equals(NODE_URL, ignoreCase = true) -> {
+                    val value = readNode(parser, NODE_URL)
+                    remoteShare.shareLink = value
+                }
+
+                name.equals(NODE_NAME, ignoreCase = true) -> {
+                    remoteShare.name = readNode(parser, NODE_NAME)
+                }
+
+                else -> {
+                    skip(parser)
+                }
             }
         }
 
