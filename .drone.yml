@@ -45,7 +45,7 @@ pipeline:
     pull: true
     commands:
     - cd docs/
-    - make pdf
+    - bin/cli -m
 
   docs-artifacts:
     image: owncloud/ubuntu:latest
