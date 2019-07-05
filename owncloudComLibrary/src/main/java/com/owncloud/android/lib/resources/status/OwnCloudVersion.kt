@@ -27,9 +27,7 @@ package com.owncloud.android.lib.resources.status
 
 import android.os.Parcel
 import android.os.Parcelable
-import com.owncloud.android.lib.testing.OpenForTesting
 
-@OpenForTesting
 class OwnCloudVersion(version: String) : Comparable<OwnCloudVersion>, Parcelable {
 
     // format is in version

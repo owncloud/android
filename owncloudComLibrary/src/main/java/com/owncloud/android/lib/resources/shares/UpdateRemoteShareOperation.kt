@@ -32,7 +32,6 @@ import com.owncloud.android.lib.common.operations.RemoteOperation
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.common.utils.Log_OC
 import com.owncloud.android.lib.resources.shares.RemoteShare.Companion.DEFAULT_PERMISSION
-import com.owncloud.android.lib.testing.OpenForTesting
 import okhttp3.FormBody
 import java.net.URL
 import java.text.SimpleDateFormat
@@ -48,7 +47,6 @@ import java.util.Locale
  * @author David A. Velasco
  * @author David González Verdugo
  */
-@OpenForTesting
 class UpdateRemoteShareOperation
 /**
  * Constructor. No update is initialized by default, need to be applied with setters below.

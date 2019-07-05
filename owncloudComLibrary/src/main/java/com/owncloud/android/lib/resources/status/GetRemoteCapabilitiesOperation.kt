@@ -34,7 +34,6 @@ import com.owncloud.android.lib.common.operations.RemoteOperation
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode.OK
 import com.owncloud.android.lib.common.utils.Log_OC
-import com.owncloud.android.lib.testing.OpenForTesting
 import org.json.JSONObject
 import java.net.URL
 
@@ -48,7 +47,6 @@ import java.net.URL
 /**
  * Constructor
  */
-@OpenForTesting
 class GetRemoteCapabilitiesOperation : RemoteOperation<RemoteCapability>() {
 
     override fun run(client: OwnCloudClient): RemoteOperationResult<RemoteCapability> {

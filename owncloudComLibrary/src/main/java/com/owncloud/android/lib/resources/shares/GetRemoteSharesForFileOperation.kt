@@ -33,7 +33,6 @@ import com.owncloud.android.lib.common.http.methods.nonwebdav.GetMethod
 import com.owncloud.android.lib.common.operations.RemoteOperation
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.common.utils.Log_OC
-import com.owncloud.android.lib.testing.OpenForTesting
 import java.net.URL
 
 /**
@@ -56,7 +55,6 @@ import java.net.URL
  * @param subfiles       If set to false (default), lists only the folder being shared
  * If set to true, all shared files within the folder are returned.
  */
-@OpenForTesting
 class GetRemoteSharesForFileOperation(
     private val remoteFilePath: String,
     private val reshares: Boolean,
