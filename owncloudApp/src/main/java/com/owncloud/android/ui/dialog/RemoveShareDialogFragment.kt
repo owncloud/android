@@ -32,9 +32,9 @@ import android.app.Dialog
 import android.os.Bundle
 import com.owncloud.android.R
 import com.owncloud.android.lib.common.utils.Log_OC
-import com.owncloud.android.shares.db.OCShare
+import com.owncloud.android.shares.domain.OCShare
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment.ConfirmationDialogFragmentListener
-import com.owncloud.android.shares.ui.fragment.ShareFragmentListener
+import com.owncloud.android.shares.presentation.fragment.ShareFragmentListener
 
 class RemoveShareDialogFragment : ConfirmationDialogFragment(), ConfirmationDialogFragmentListener {
     private var targetShare: OCShare? = null

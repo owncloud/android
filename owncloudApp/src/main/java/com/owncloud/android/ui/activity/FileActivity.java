@@ -32,10 +32,7 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
-import android.view.View;
-import android.widget.Toast;
 
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import com.google.android.material.snackbar.Snackbar;
@@ -53,8 +50,6 @@ import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.common.utils.Log_OC;
-import com.owncloud.android.operations.CreateShareWithShareeOperation;
-import com.owncloud.android.operations.GetSharesForFileOperation;
 import com.owncloud.android.operations.RemoveShareOperation;
 import com.owncloud.android.operations.RenameFileOperation;
 import com.owncloud.android.operations.SynchronizeFileOperation;
@@ -63,7 +58,6 @@ import com.owncloud.android.operations.UpdateSharePermissionsOperation;
 import com.owncloud.android.services.OperationsService;
 import com.owncloud.android.services.OperationsService.OperationsServiceBinder;
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment;
-import com.owncloud.android.ui.dialog.LoadingDialog;
 import com.owncloud.android.ui.dialog.SslUntrustedCertDialog;
 import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter;
 import com.owncloud.android.ui.helpers.FileOperationsHelper;
@@ -299,7 +293,6 @@ public class FileActivity extends DrawerActivity
             showUntrustedCertDialog(result);
 
         } else if (operation == null ||
-                operation instanceof CreateShareWithShareeOperation ||
                 operation instanceof RemoveShareOperation ||
                 operation instanceof SynchronizeFolderOperation ||
                 operation instanceof UpdateSharePermissionsOperation
@@ -316,20 +309,8 @@ public class FileActivity extends DrawerActivity
         } else if (operation instanceof SynchronizeFileOperation) {
             onSynchronizeFileOperationFinish((SynchronizeFileOperation) operation, result);
 
-        } else if (operation instanceof GetSharesForFileOperation) {
-            if (result.isSuccess() || result.getCode() == ResultCode.SHARE_NOT_FOUND) {
-                updateFileFromDB();
-
-            } else {
-                showSnackMessage(
-                        ErrorMessageAdapter.Companion.getResultMessage(result, operation, getResources())
-                );
-            }
-
         } else if (operation instanceof RenameFileOperation && result.isSuccess()) {
-
             result.getData();
-
         }
     }
 

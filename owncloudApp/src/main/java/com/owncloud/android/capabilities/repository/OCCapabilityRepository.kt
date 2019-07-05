@@ -48,7 +48,7 @@ class OCCapabilityRepository(
         )
     }
 
-    override fun loadCapabilityForAccount(
+    override fun getCapabilityForAccount(
         accountName: String,
         shouldFetchFromNetwork: Boolean
     ): LiveData<Resource<OCCapability>> =

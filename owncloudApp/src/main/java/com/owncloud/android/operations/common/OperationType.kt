@@ -1,12 +1,17 @@
 package com.owncloud.android.operations.common
 
 enum class OperationType {
-    CREATE_PUBLIC_SHARE,
+    // SHARES
+    GET_SHARES,
+    GET_SHAREES,
+    GET_CAPABILITIES,
     CREATE_SHARE_WITH_SHAREES,
+    CREATE_PUBLIC_SHARE,
     UPDATE_PUBLIC_SHARE,
     REMOVE_SHARE,
     UPDATE_SHARE_PERMISSIONS,
-    GET_SHARES,
+
+    // FILES
     UPLOAD_FILE,
     DOWNLOAD_FILE,
     REMOVE_FILE,
@@ -14,6 +19,5 @@ enum class OperationType {
     CREATE_FOLDER,
     MOVE_FILE,
     COPY_FILE,
-    SYNCHRONIZE_FOLDER,
-    GET_CAPABILITIES
+    SYNCHRONIZE_FOLDER
 }

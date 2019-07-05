@@ -22,11 +22,13 @@ package com.owncloud.android.utils
 import android.accounts.Account
 import com.owncloud.android.capabilities.db.OCCapability
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
+import com.owncloud.android.lib.resources.shares.GetRemoteShareesOperation
 import com.owncloud.android.lib.resources.shares.RemoteShare
 import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.lib.resources.status.CapabilityBooleanType
 import com.owncloud.android.lib.resources.status.RemoteCapability
-import com.owncloud.android.shares.db.OCShare
+import com.owncloud.android.shares.domain.OCShare
+import org.json.JSONObject
 import org.mockito.Mockito.`when`
 
 object TestUtil {
@@ -49,8 +51,8 @@ object TestUtil {
         userId: Long = -1,
         remoteId: Long = 1,
         accountOwner: String = "admin@server",
-        name: String,
-        shareLink: String
+        name: String = "",
+        shareLink: String = ""
     ) = OCShare(
         fileSource,
         itemSource,
@@ -69,6 +71,22 @@ object TestUtil {
         accountOwner,
         name,
         shareLink
+    )
+
+    fun createPrivateShare(
+        shareType: Int = 0,
+        shareWith: String,
+        path: String,
+        isFolder: Boolean,
+        sharedWithDisplayName: String,
+        accountOwner: String = "admin@server"
+    ) = createShare(
+        shareType = shareType,
+        shareWith = shareWith,
+        path = path,
+        isFolder = isFolder,
+        sharedWithDisplayName = sharedWithDisplayName,
+        accountOwner = accountOwner
     )
 
     fun createPublicShare(
@@ -97,7 +115,7 @@ object TestUtil {
     fun createRemoteShare(
         fileSource: Long = 7,
         itemSource: Long = 7,
-        shareType: Int = 3, // Public share by default
+        shareType: Int, // Public share by default
         shareWith: String = "",
         path: String,
         permissions: Int = 1,
@@ -108,8 +126,8 @@ object TestUtil {
         isFolder: Boolean,
         userId: Long = -1,
         remoteId: Long = 1,
-        name: String,
-        shareLink: String
+        name: String = "",
+        shareLink: String = ""
     ): RemoteShare {
         val remoteShare = RemoteShare();
 
@@ -130,6 +148,29 @@ object TestUtil {
         remoteShare.shareLink = shareLink
 
         return remoteShare
+    }
+
+    /**
+     * Sharees
+     */
+    fun createSharee(
+        label: String,
+        shareType: String,
+        shareWith: String,
+        shareWithAdditionalInfo: String
+    ): JSONObject {
+        val jsonObject = JSONObject()
+
+        jsonObject.put(GetRemoteShareesOperation.PROPERTY_LABEL, label)
+
+        val value = JSONObject()
+        value.put(GetRemoteShareesOperation.PROPERTY_SHARE_TYPE, shareType)
+        value.put(GetRemoteShareesOperation.PROPERTY_SHARE_WITH, shareWith)
+        value.put(GetRemoteShareesOperation.PROPERTY_SHARE_WITH_ADDITIONAL_INFO, shareWithAdditionalInfo)
+
+        jsonObject.put(GetRemoteShareesOperation.NODE_VALUE, value)
+
+        return jsonObject
     }
 
     /**
@@ -276,7 +317,9 @@ object TestUtil {
     ): RemoteOperationResult<T> {
         val remoteOperationResult = mock<RemoteOperationResult<T>>()
 
-        `when`(remoteOperationResult.data).thenReturn(data)
+        `when`(remoteOperationResult.data).thenReturn(
+            data
+        )
         `when`(remoteOperationResult.isSuccess).thenReturn(isSuccess)
 
         if (httpPhrase != null) {

@@ -26,7 +26,8 @@ import androidx.lifecycle.Observer
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.shares.RemoteShare
 import com.owncloud.android.lib.resources.shares.ShareParserResult
-import com.owncloud.android.shares.db.OCShare
+import com.owncloud.android.lib.resources.shares.ShareType
+import com.owncloud.android.shares.domain.OCShare
 import com.owncloud.android.util.InstantAppExecutors
 import com.owncloud.android.utils.TestUtil
 import com.owncloud.android.utils.mock
@@ -62,6 +63,7 @@ class NetworkBoundResourceTest {
 
         val networkResult = arrayListOf(
             TestUtil.createRemoteShare(
+                shareType = ShareType.PUBLIC_LINK.value,
                 path = "/Photos/image.jpg",
                 isFolder = true,
                 name = "Photos 1 link",
