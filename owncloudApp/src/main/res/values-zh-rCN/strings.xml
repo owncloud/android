@@ -148,6 +148,7 @@
   <string name="uploader_upload_text_dialog_filename_error_empty">文件名不能为空</string>
   <string name="uploader_upload_text_dialog_filename_error_length_max">文件名不能超过 %d 个字符</string>
   <string name="uploader_upload_text_filename_hint">文件名</string>
+  <string name="uploader_upload_requested_from_wifi_files">正在上传来自 WIFI 设备上传的文件</string>
   <string name="ssl_certificate_not_trusted">服务器证书不被信任</string>
   <string name="uploads_view_title">上传</string>
   <string name="uploads_view_group_current_uploads">当前</string>
@@ -538,5 +539,6 @@
   <string name="welcome_feature_7_text">一下子选中全部文件</string>
   <string name="welcome_feature_8_title">离线可用</string>
   <string name="welcome_feature_8_text">文件自动同步</string>
+  <string name="welcome_feature_10_text">发送您的日志让owncloud变得更好</string>
   <string name="no_borwser_installed_alert">未安装浏览器。请安装浏览器以使用安全登陆。</string>
 </resources>
