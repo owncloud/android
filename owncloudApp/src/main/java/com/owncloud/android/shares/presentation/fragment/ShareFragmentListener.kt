@@ -38,6 +38,32 @@ import com.owncloud.android.shares.domain.OCShare
  */
 interface ShareFragmentListener {
     fun refreshAllShares()
+    fun refreshCapabilities(shouldFetchFromNetwork: Boolean = true)
+
+    /**************************************************************************************************************
+     *********************************************** PRIVATE SHARES ***********************************************
+     **************************************************************************************************************/
+
+    fun refreshPrivateShares()
+
+    fun refreshPrivateShare(remoteId: Long)
+
+    fun copyOrSendPrivateLink(file: OCFile)
+
+    fun showSearchUsersAndGroups()
+
+    fun showEditPrivateShare(share: OCShare)
+
+    fun updatePrivateShare(
+        remoteId: Long,
+        permissions: Int
+    )
+
+    /**************************************************************************************************************
+     *********************************************** PUBLIC SHARES ************************************************
+     **************************************************************************************************************/
+
+    fun showAddPublicShare(defaultLinkName: String)
 
     fun createPublicShare(
         permissions: Int,
@@ -46,6 +72,8 @@ interface ShareFragmentListener {
         expirationTimeInMillis: Long,
         publicUpload: Boolean
     )
+
+    fun showEditPublicShare(share: OCShare)
 
     fun updatePublicShare(
         remoteId: Long,
@@ -56,23 +84,9 @@ interface ShareFragmentListener {
         publicUpload: Boolean
     )
 
-    fun removePublicShare(share: OCShare)
-
-    fun refreshCapabilities(shouldFetchFromNetwork: Boolean = true)
-
-    fun copyOrSendPrivateLink(file: OCFile)
-
-    fun showSearchUsersAndGroups()
-
-    fun showEditPrivateShare(share: OCShare)
-
-    fun showAddPublicShare(defaultLinkName: String)
-
-    fun showEditPublicShare(share: OCShare)
-
     fun showRemovePublicShare(share: OCShare)
 
-    fun copyOrSendPublicLink(share: OCShare)
+    fun removePublicShare(share: OCShare)
 
-    fun refreshPrivateShares()
+    fun copyOrSendPublicLink(share: OCShare)
 }

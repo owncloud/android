@@ -61,6 +61,10 @@ class OCShareViewModel(
         return shareRepository.getPrivateShares(filePath)
     }
 
+    fun getPrivateShare(remoteId: Long): LiveData<OCShare> {
+        return shareRepository.getShare(remoteId)
+    }
+
     fun insertPrivateShare(
         filePath: String,
         shareType: ShareType?,
@@ -68,6 +72,13 @@ class OCShareViewModel(
         permissions: Int
     ): LiveData<Resource<Unit>> = shareRepository.insertPrivateShare(
         filePath, shareType, shareeName, permissions
+    )
+
+    fun updatePrivateShare(
+        remoteId: Long,
+        permissions: Int
+    ): LiveData<Resource<Unit>> = shareRepository.updatePrivateShare(
+        remoteId, permissions
     )
 
     /******************************************************************************************************
@@ -89,7 +100,7 @@ class OCShareViewModel(
         filePath, permissions, name, password, expirationTimeInMillis, publicUpload
     )
 
-    fun updatePublicShareForFile(
+    fun updatePublicShare(
         remoteId: Long,
         name: String,
         password: String?,
