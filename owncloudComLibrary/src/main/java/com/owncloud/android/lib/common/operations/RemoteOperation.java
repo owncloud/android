@@ -16,7 +16,7 @@ import okhttp3.OkHttpClient;
 
 import java.io.IOException;
 
-public abstract class RemoteOperation<T extends Object> implements Runnable {
+public abstract class RemoteOperation<T> implements Runnable {
 
     /**
      * OCS API header name
