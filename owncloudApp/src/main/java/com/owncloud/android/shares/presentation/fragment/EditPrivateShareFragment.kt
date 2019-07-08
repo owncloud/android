@@ -23,6 +23,7 @@
 package com.owncloud.android.shares.presentation.fragment
 
 import android.accounts.Account
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -30,28 +31,23 @@ import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.CompoundButton
 import android.widget.TextView
-
 import androidx.appcompat.widget.SwitchCompat
 import androidx.fragment.app.DialogFragment
 import com.owncloud.android.R
 import com.owncloud.android.authentication.AccountUtils
 import com.owncloud.android.datamodel.OCFile
-import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.common.utils.Log_OC
 import com.owncloud.android.lib.resources.shares.RemoteShare
-import com.owncloud.android.lib.resources.shares.ShareParserResult
 import com.owncloud.android.lib.resources.shares.SharePermissionsBuilder
 import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.shares.domain.OCShare
-import com.owncloud.android.ui.activity.FileActivity
 import com.owncloud.android.utils.PreferenceUtils
-
 import java.util.Locale
 
 /**
  * Required empty public constructor
  */
-class EditShareFragment : DialogFragment() {
+class EditPrivateShareFragment : DialogFragment() {
 
     /** Share to show & edit, received as a parameter in construction time  */
     private var share: OCShare? = null
@@ -61,6 +57,11 @@ class EditShareFragment : DialogFragment() {
 
     /** OC account holding the shared file, received as a parameter in construction time  */
     private var account: Account? = null
+
+    /**
+     * Reference to parent listener
+     */
+    private var listener: ShareFragmentListener? = null
 
     /** Listener for changes on privilege checkboxes  */
     private var onPrivilegeChangeListener: CompoundButton.OnCheckedChangeListener? = null
@@ -138,6 +139,8 @@ class EditShareFragment : DialogFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         Log_OC.d(TAG, "onActivityCreated")
+
+        listener?.refreshPrivateShare(share?.remoteId!!)
     }
 
     /**
@@ -162,6 +165,22 @@ class EditShareFragment : DialogFragment() {
         refreshUiFromState(view)
 
         return view
+    }
+
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+
+        try {
+            listener = activity as ShareFragmentListener?
+        } catch (e: IllegalStateException) {
+            throw IllegalStateException(activity!!.toString() + " must implement OnShareFragmentInteractionListener")
+        }
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+
+        listener = null
     }
 
     /**
@@ -404,43 +423,9 @@ class EditShareFragment : DialogFragment() {
      *
      * @param result        Result of an update on the edited [RemoteShare] permissions.
      */
-    fun onUpdateSharePermissionsFinished(result: RemoteOperationResult<ShareParserResult>?) {
-        if (result?.isSuccess == true) {
-            refreshUiFromDB(view)
-        } else {
-            refreshUiFromState(view)
-        }
-    }
-
-    /**
-     * Get [RemoteShare] instance from DB and updates the UI.
-     *
-     * Depends on the parent Activity provides a [com.owncloud.android.datamodel.FileDataStorageManager]
-     * instance ready to use. If not ready, does nothing.
-     */
-    fun refreshUiFromDB() {
-        if (view != null) {
-            refreshUiFromDB(view)
-        }
-    }
-
-    /**
-     * Get [RemoteShare] instance from DB and updates the UI.
-     *
-     * Depends on the parent Activity provides a [com.owncloud.android.datamodel.FileDataStorageManager]
-     * instance ready to use. If not ready, does nothing.
-     *
-     * @param editShareView     Root view in the fragment.
-     */
-    private fun refreshUiFromDB(editShareView: View?) {
-        val storageManager = (activity as FileActivity).storageManager
-        if (storageManager != null) {
-            // Get edited share
-            share = storageManager.getShareByRemoteId(share!!.remoteId)
-
-            // Updates UI with new state
-            refreshUiFromState(editShareView)
-        }
+    fun updateShare(updatedShare: OCShare) {
+        share = updatedShare
+        refreshUiFromState(view)
     }
 
     /**
@@ -458,14 +443,14 @@ class EditShareFragment : DialogFragment() {
         }
         val permissions = spb.build()
 
-        (activity as FileActivity).fileOperationsHelper.setPermissionsToShareWithSharee(
-            share,
+        listener?.updatePrivateShare(
+            share?.remoteId!!,
             permissions
         )
     }
 
     companion object {
-        private val TAG = EditShareFragment::class.java.simpleName
+        private val TAG = EditPrivateShareFragment::class.java.simpleName
 
         /** The fragment initialization parameters  */
         private const val ARG_SHARE = "SHARE"
@@ -477,16 +462,17 @@ class EditShareFragment : DialogFragment() {
             intArrayOf(R.id.canEditCreateCheckBox, R.id.canEditChangeCheckBox, R.id.canEditDeleteCheckBox)
 
         /**
-         * Public factory method to create new EditShareFragment instances.
+         * Public factory method to create new EditPrivateShareFragment instances.
          *
          * @param shareToEdit   An [OCShare] to show and edit in the fragment
          * @param sharedFile    The [OCFile] bound to 'shareToEdit'
          * @param account       The ownCloud account holding 'sharedFile'
-         * @return A new instance of fragment EditShareFragment.
+         * @return A new instance of fragment EditPrivateShareFragment.
          */
-        fun newInstance(shareToEdit: OCShare, sharedFile: OCFile, account: Account): EditShareFragment {
-            val fragment = EditShareFragment()
+        fun newInstance(shareToEdit: OCShare, sharedFile: OCFile, account: Account): EditPrivateShareFragment {
+            val fragment = EditPrivateShareFragment()
             val args = Bundle()
+            args.putParcelable(ARG_SHARE, shareToEdit)
             args.putParcelable(ARG_FILE, sharedFile)
             args.putParcelable(ARG_ACCOUNT, account)
             fragment.arguments = args

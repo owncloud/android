@@ -91,13 +91,7 @@ public class OperationsService extends Service {
     public static final String EXTRA_RESULT = "RESULT";
     public static final String EXTRA_NEW_PARENT_PATH = "NEW_PARENT_PATH";
     public static final String EXTRA_FILE = "FILE";
-    public static final String EXTRA_SHARE_PASSWORD = "SHARE_PASSWORD";
-    public static final String EXTRA_SHARE_TYPE = "SHARE_TYPE";
-    public static final String EXTRA_SHARE_WITH = "SHARE_WITH";
-    public static final String EXTRA_SHARE_EXPIRATION_DATE_IN_MILLIS = "SHARE_EXPIRATION_YEAR";
     public static final String EXTRA_SHARE_PERMISSIONS = "SHARE_PERMISSIONS";
-    public static final String EXTRA_SHARE_PUBLIC_UPLOAD = "SHARE_PUBLIC_UPLOAD";
-    public static final String EXTRA_SHARE_NAME = "SHARE_NAME";
     public static final String EXTRA_SHARE_ID = "SHARE_ID";
     public static final String EXTRA_PUSH_ONLY = "PUSH_ONLY";
     public static final String EXTRA_SYNC_REGULAR_FILES = "SYNC_REGULAR_FILES";
@@ -105,9 +99,6 @@ public class OperationsService extends Service {
 
     public static final String EXTRA_COOKIE = "COOKIE";
 
-    public static final String ACTION_UPDATE_SHARE_VIA_LINK = "UPDATE_SHARE_VIA_LINK";
-    public static final String ACTION_CREATE_SHARE_WITH_SHAREE = "CREATE_SHARE_WITH_SHAREE";
-    public static final String ACTION_UPDATE_SHARE_WITH_SHAREE = "UPDATE_SHARE_WITH_SHAREE";
     public static final String ACTION_UNSHARE = "UNSHARE";
     public static final String ACTION_GET_SERVER_INFO = "GET_SERVER_INFO";
     public static final String ACTION_OAUTH2_GET_ACCESS_TOKEN = "OAUTH2_GET_ACCESS_TOKEN";
@@ -539,14 +530,7 @@ public class OperationsService extends Service {
                 );
 
                 String action = operationIntent.getAction();
-                if (ACTION_UPDATE_SHARE_WITH_SHAREE.equals(action)) {
-                    // Update private share, only permissions
-                    long shareId = operationIntent.getLongExtra(EXTRA_SHARE_ID, -1);
-                    operation = new UpdateSharePermissionsOperation(shareId);
-                    int permissions = operationIntent.getIntExtra(EXTRA_SHARE_PERMISSIONS, 1);
-                    ((UpdateSharePermissionsOperation) operation).setPermissions(permissions);
-
-                } else if (action.equals(ACTION_UNSHARE)) {  // Unshare file
+                if (action.equals(ACTION_UNSHARE)) {  // Unshare file
                     long shareId = operationIntent.getLongExtra(EXTRA_SHARE_ID, -1);
                     operation = new RemoveShareOperation(shareId);
 

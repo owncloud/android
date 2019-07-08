@@ -212,7 +212,7 @@ class OCShareViewModelTest {
         // Viewmodel that will ask ocShareRepository for shares
         val ocShareViewModel = createOCShareViewModel(ocShareRepository)
 
-        val resource: Resource<Unit>? = ocShareViewModel.updatePublicShareForFile(
+        val resource: Resource<Unit>? = ocShareViewModel.updatePublicShare(
             1,
             "Photos 1 link",
             "123456",

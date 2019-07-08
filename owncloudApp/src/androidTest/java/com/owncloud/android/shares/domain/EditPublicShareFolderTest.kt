@@ -222,7 +222,7 @@ class EditPublicShareFolderTest {
         val updatedPublicShare = publicShares[1]
 
         `when`(
-            ocShareViewModel.updatePublicShareForFile(
+            ocShareViewModel.updatePublicShare(
                 1,
                 updatedPublicShare.name!!,
                 "",
@@ -266,7 +266,7 @@ class EditPublicShareFolderTest {
 
         val updatedPublicShare = publicShares[2]
         `when`(
-            ocShareViewModel.updatePublicShareForFile(
+            ocShareViewModel.updatePublicShare(
                 1,
                 updatedPublicShare.name!!,
                 "",
@@ -311,7 +311,7 @@ class EditPublicShareFolderTest {
 
         val updatedPublicShare = publicShares[3]
         `when`(
-            ocShareViewModel.updatePublicShareForFile(
+            ocShareViewModel.updatePublicShare(
                 1,
                 updatedPublicShare.name!!,
                 "",
@@ -356,7 +356,7 @@ class EditPublicShareFolderTest {
 
         val updatedPublicShare = publicShares[0]
         `when`(
-            ocShareViewModel.updatePublicShareForFile(
+            ocShareViewModel.updatePublicShare(
                 1,
                 updatedPublicShare.name!!,
                 "",

@@ -52,7 +52,6 @@ class UpdateSharePermissionsOperation(private val shareId: Long) : SyncOperation
     }
 
     override fun run(client: OwnCloudClient): RemoteOperationResult<ShareParserResult> {
-
         val share = storageManager.getShareById(shareId) ?: return RemoteOperationResult(
             RemoteOperationResult.ResultCode.SHARE_NOT_FOUND
         ) // ShareType.USER | ShareType.GROUP

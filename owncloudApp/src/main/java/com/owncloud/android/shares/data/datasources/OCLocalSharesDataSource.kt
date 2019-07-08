@@ -29,6 +29,7 @@ class OCLocalSharesDataSource(
     context: Context,
     private val ocShareDao: OCShareDao = OwncloudDatabase.getDatabase(context).shareDao()
 ) : LocalSharesDataSource {
+    override fun getShareAsLiveData(remoteId: Long): LiveData<OCShare> = ocShareDao.getShareAsLiveData(remoteId)
 
     override fun getSharesAsLiveData(
         filePath: String,

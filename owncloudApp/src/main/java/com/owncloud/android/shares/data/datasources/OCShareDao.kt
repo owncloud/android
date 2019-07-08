@@ -32,6 +32,14 @@ import com.owncloud.android.shares.domain.OCShare
 abstract class OCShareDao {
     @Query(
         "SELECT * from " + ProviderTableMeta.OCSHARES_TABLE_NAME + " WHERE " +
+                ProviderTableMeta.OCSHARES_ID_REMOTE_SHARED + " = :remoteId"
+    )
+    abstract fun getShareAsLiveData(
+        remoteId: Long
+    ): LiveData<OCShare>
+
+    @Query(
+        "SELECT * from " + ProviderTableMeta.OCSHARES_TABLE_NAME + " WHERE " +
                 ProviderTableMeta.OCSHARES_PATH + " = :filePath AND " +
                 ProviderTableMeta.OCSHARES_ACCOUNT_OWNER + " = :accountOwner AND " +
                 ProviderTableMeta.OCSHARES_SHARE_TYPE + " IN (:shareTypes)"

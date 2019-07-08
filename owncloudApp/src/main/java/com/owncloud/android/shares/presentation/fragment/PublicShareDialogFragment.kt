@@ -409,7 +409,6 @@ class PublicShareDialogFragment : DialogFragment() {
         } catch (e: IllegalStateException) {
             throw IllegalStateException(activity!!.toString() + " must implement OnShareFragmentInteractionListener")
         }
-
     }
 
     override fun onDetach() {
