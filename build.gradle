@@ -17,6 +17,10 @@ buildscript {
 
         // Extensions
         ktxVersion = "1.0.2"
+
+        // KTX extensions
+        ktxCoreVersion = "1.0.2"
+        ktxViewModelVersion = "2.0.0"
     }
 
     repositories {
