@@ -72,8 +72,9 @@ dependencies {
     // Koin dependency injector
     implementation "org.koin:koin-androidx-viewmodel:$koinVersion"
 
-    // Kotlin extensions
-    implementation "androidx.core:core-ktx:$ktxVersion"
+    // KTX extensions, see https://developer.android.com/kotlin/ktx.html
+    implementation "androidx.core:core-ktx:$ktxCoreVersion"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$ktxViewModelVersion"
 
     // Kotlin library to mock
     testImplementation "io.mockk:mockk:$mockkVersion"
