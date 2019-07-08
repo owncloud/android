@@ -31,11 +31,9 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.preference.PreferenceManager
-
 import com.owncloud.android.authentication.FingerprintManager
 import com.owncloud.android.authentication.PassCodeManager
 import com.owncloud.android.authentication.PatternManager
-import com.owncloud.android.presentation.capabilities.OCCapabilityViewModel
 import com.owncloud.android.datamodel.ThumbnailsCacheManager
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.OwnCloudClientManagerFactory
@@ -44,6 +42,7 @@ import com.owncloud.android.lib.common.authentication.oauth.OAuth2ClientConfigur
 import com.owncloud.android.lib.common.authentication.oauth.OAuth2ProvidersRegistry
 import com.owncloud.android.lib.common.authentication.oauth.OwnCloudOAuth2Provider
 import com.owncloud.android.lib.common.utils.Log_OC
+import com.owncloud.android.presentation.capabilities.OCCapabilityViewModel
 import com.owncloud.android.presentation.sharing.sharees.OCShareeViewModel
 import com.owncloud.android.presentation.sharing.shares.OCShareViewModel
 import com.owncloud.android.ui.activity.FingerprintActivity
@@ -161,10 +160,8 @@ class MainApp : Application() {
             }
         })
 
-        val newArchModule = module {
-            viewModel { (account: Account) ->
-                OCShareViewModel(androidContext(), account)
-            }
+        val viewModelsModule = module {
+            viewModel { OCShareViewModel(get()) }
             viewModel { (account: Account) ->
                 OCShareeViewModel(androidContext(), account)
             }
@@ -173,9 +170,19 @@ class MainApp : Application() {
             }
         }
 
+        val useCasesModule = module {
+            factory {
+
+            }
+        }
+
         startKoin {
             androidContext(applicationContext)
-            modules(newArchModule)
+            modules(
+                listOf(
+                    viewModelsModule
+                )
+            )
         }
     }
 

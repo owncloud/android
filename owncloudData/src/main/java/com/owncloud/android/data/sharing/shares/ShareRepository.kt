@@ -30,7 +30,7 @@ interface ShareRepository {
      ******************************************* PRIVATE SHARES *******************************************
      ******************************************************************************************************/
 
-    fun getPrivateShares(filePath: String): LiveData<Resource<List<OCShareEntity>>>
+    fun getPrivateShares(filePath: String): Resource<LiveData<List<OCShareEntity>>>
 
     fun insertPrivateShare(
         filePath: String,
@@ -48,7 +48,7 @@ interface ShareRepository {
      ******************************************* PUBLIC SHARES ********************************************
      ******************************************************************************************************/
 
-    fun getPublicShares(filePath: String): LiveData<Resource<List<OCShareEntity>>>
+    fun getPublicShares(filePath: String): Resource<LiveData<List<OCShareEntity>>>
 
     fun insertPublicShare(
         filePath: String,

@@ -16,7 +16,11 @@ buildscript {
         mockitoVersion = "2.24.0"
 
         // Extensions
-        ktxVersion = "1.1.0"
+        ktxVersion = "1.0.2"
+
+        // KTX extensions
+        ktxCoreVersion = "1.0.2"
+        ktxViewModelVersion = "2.0.0"
     }
 
     repositories {
