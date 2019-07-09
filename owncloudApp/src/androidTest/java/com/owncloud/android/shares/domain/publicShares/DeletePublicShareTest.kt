@@ -1,7 +1,8 @@
 /**
  * ownCloud Android client application
  *
- * @author David González Verdugo
+ * @author Jesus Recio (@jesmrec)
+ * @author David González (@davigonz)
  * Copyright (C) 2019 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,7 +18,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.shares.domain
+package com.owncloud.android.shares.domain.publicShares
 
 import android.accounts.Account
 import android.accounts.AccountManager
@@ -30,6 +31,7 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.ViewMatchers.hasSibling
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
@@ -44,12 +46,15 @@ import com.owncloud.android.lib.common.accounts.AccountUtils
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.status.CapabilityBooleanType
 import com.owncloud.android.lib.resources.status.OwnCloudVersion
-import com.owncloud.android.shares.presentation.ShareActivity
+import com.owncloud.android.shares.domain.OCShare
 import com.owncloud.android.shares.presentation.OCShareViewModel
+import com.owncloud.android.shares.presentation.ShareActivity
 import com.owncloud.android.ui.activity.FileActivity
 import com.owncloud.android.utils.AccountsManager
 import com.owncloud.android.utils.TestUtil
 import com.owncloud.android.vo.Resource
+import org.hamcrest.Matchers.allOf
+import org.hamcrest.Matchers.not
 import org.junit.AfterClass
 import org.junit.Before
 import org.junit.BeforeClass
@@ -60,11 +65,12 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.module
+import org.mockito.ArgumentMatchers
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.spy
 
-class CreatePublicShareTest {
+class DeletePublicShareTest {
     @Rule
     @JvmField
     val activityRule = ActivityTestRule(
@@ -76,8 +82,9 @@ class CreatePublicShareTest {
     private lateinit var file: OCFile
 
     private val publicShares = arrayListOf(
-        TestUtil.createPublicShare(
+        TestUtil.createPublicShare( // With no expiration date
             path = "/Photos/image.jpg",
+            expirationDate = 0L,
             isFolder = false,
             name = "image.jpg link",
             shareLink = "http://server:port/s/1"
@@ -85,14 +92,8 @@ class CreatePublicShareTest {
         TestUtil.createPublicShare(
             path = "/Photos/image.jpg",
             isFolder = false,
-            name = "image.jpg link (2)",
+            name = "image.jpg updated link",
             shareLink = "http://server:port/s/2"
-        ),
-        TestUtil.createPublicShare(
-            path = "/Photos/image.jpg",
-            isFolder = false,
-            name = "image.jpg link (3)",
-            shareLink = "http://server:port/s/3"
         )
     )
 
@@ -188,152 +189,115 @@ class CreatePublicShareTest {
     }
 
     @Test
-    fun createPublicShareWithNoPublicSharesYet() {
+    fun deletePublicLink() {
         loadCapabilitiesSuccessfully()
-        loadSharesSuccessfully(arrayListOf())
 
-        // Create share
-        onView(withId(R.id.addPublicLinkButton)).perform(click())
+        val existingPublicShare = publicShares.take(2) as ArrayList<OCShare>
+        loadSharesSuccessfully(existingPublicShare)
 
-        val newPublicShare = publicShares[0]
-        savePublicShare(newPublicShare)
+        `when`(
+            ocShareViewModel.deleteShare(ArgumentMatchers.anyLong())
+        ).thenReturn(
+            MutableLiveData<Resource<Unit>>().apply {
+                postValue(Resource.success())
+            }
+        )
 
-        // New share properly created
+        onView(allOf(withId(R.id.deletePublicLinkButton), hasSibling(withText(existingPublicShare[0].name))))
+            .perform(click())
+        onView(withId(android.R.id.button1)).perform(click())
+
         sharesLiveData.postValue(
             Resource.success(
-                arrayListOf(newPublicShare)
+                arrayListOf(existingPublicShare[1])
             )
         )
 
-        // Check whether the dialog to create the public share has been properly closed
-        onView(withText(R.string.share_via_link_create_title)).check(doesNotExist())
-        onView(withText(newPublicShare.name)).check(matches(isDisplayed()))
+        onView(withText(existingPublicShare[0].name)).check(doesNotExist())
+        onView(withText(existingPublicShare[1].name)).check(matches(isDisplayed()))
     }
 
     @Test
-    fun createPublicShareWithAlreadyExistingShares() {
+    fun deleteLastPublicLink() {
         loadCapabilitiesSuccessfully()
-        val existingPublicShares = publicShares.take(2) as ArrayList<OCShare>
-        loadSharesSuccessfully(
-            existingPublicShares
+
+        val existingPublicShare = publicShares[0]
+        loadSharesSuccessfully(arrayListOf(existingPublicShare))
+
+        `when`(
+            ocShareViewModel.deleteShare(ArgumentMatchers.anyLong())
+        ).thenReturn(
+            MutableLiveData<Resource<Unit>>().apply {
+                postValue(Resource.success())
+            }
         )
 
-        onView(withId(R.id.addPublicLinkButton)).perform(click())
+        onView(withId(R.id.deletePublicLinkButton)).perform(click())
+        onView(withId(android.R.id.button1)).perform(click())
 
-        val newPublicShare = publicShares[2]
-        savePublicShare(newPublicShare)
-
-        // New share properly created
         sharesLiveData.postValue(
             Resource.success(
+                arrayListOf()
+            )
+        )
+
+        onView(withText(existingPublicShare.name)).check(matches(not(isDisplayed())))
+        onView(withText(R.string.share_no_public_links)).check(matches(isDisplayed()))
+
+    }
+
+    @Test
+    fun deleteShareLoading() {
+        loadCapabilitiesSuccessfully()
+
+        val existingPublicShare = publicShares[0]
+        loadSharesSuccessfully(arrayListOf(existingPublicShare))
+
+        onView(withId(R.id.deletePublicLinkButton)).perform(click())
+
+        sharesLiveData.postValue(
+            Resource.loading(
                 publicShares
             )
         )
-
-        // Check whether the dialog to create the public share has been properly closed
-        onView(withText(R.string.share_via_link_create_title)).check(doesNotExist())
-        onView(withText(newPublicShare.name)).check(matches(isDisplayed()))
-    }
-
-    @Test
-    fun createMultiplePublicShares() {
-        loadCapabilitiesSuccessfully()
-        loadSharesSuccessfully(arrayListOf())
-
-        /**
-         * 1st public share
-         */
-        onView(withId(R.id.addPublicLinkButton)).perform(click())
-
-        val newPublicShare1 = publicShares[0]
-        savePublicShare(newPublicShare1)
-
-        // New share properly created
-        sharesLiveData.postValue(
-            Resource.success(
-                arrayListOf(newPublicShare1)
-            )
-        )
-
-        // Check whether the dialog to create the public share has been properly closed
-        onView(withText(R.string.share_via_link_create_title)).check(doesNotExist())
-        onView(withText(newPublicShare1.name)).check(matches(isDisplayed()))
-
-        /**
-         * 2nd public share
-         */
-        onView(withId(R.id.addPublicLinkButton)).perform(click())
-
-        val newPublicShare2 = publicShares[1]
-        savePublicShare(newPublicShare2)
-
-        // New share properly created
-        sharesLiveData.postValue(
-            Resource.success(
-                publicShares.take(2)
-            )
-        )
-
-        // Check whether the dialog to create the public share has been properly closed
-        onView(withText(R.string.share_via_link_create_title)).check(doesNotExist())
-        onView(withText(newPublicShare2.name)).check(matches(isDisplayed()))
-
-        /**
-         * 3rd public share
-         */
-        onView(withId(R.id.addPublicLinkButton)).perform(click())
-
-        val newPublicShare3 = publicShares[2]
-        savePublicShare(newPublicShare3)
-
-        // New share properly created
-        sharesLiveData.postValue(
-            Resource.success(
-                publicShares
-            )
-        )
-
-        // Check whether the dialog to create the public share has been properly closed
-        onView(withText(R.string.share_via_link_create_title)).check(doesNotExist())
-        onView(withText(newPublicShare3.name)).check(matches(isDisplayed()))
-    }
-
-    @Test
-    fun createShareLoading() {
-        loadCapabilitiesSuccessfully()
-        loadSharesSuccessfully(arrayListOf())
-
-        onView(withId(R.id.addPublicLinkButton)).perform(click())
-
-        savePublicShare(publicShares[0], Resource.loading())
 
         onView(withText(R.string.common_loading)).check(matches(isDisplayed()))
     }
 
     @Test
-    fun createShareError() {
+    fun deleteShareError() {
         loadCapabilitiesSuccessfully()
-        loadSharesSuccessfully(arrayListOf())
 
-        onView(withId(R.id.addPublicLinkButton)).perform(click())
+        val existingPublicShare = publicShares[0]
+        loadSharesSuccessfully(arrayListOf(existingPublicShare))
 
-        savePublicShare(
-            publicShares[0],
-            Resource.error(
-                RemoteOperationResult.ResultCode.FORBIDDEN,
-                exception = Exception("Error when retrieving shares")
-            )
+        `when`(
+            ocShareViewModel.deleteShare(ArgumentMatchers.anyLong())
+        ).thenReturn(
+            MutableLiveData<Resource<Unit>>().apply {
+                postValue(
+                    Resource.error(
+                        RemoteOperationResult.ResultCode.FORBIDDEN,
+                        exception = Exception("Error when retrieving shares")
+                    )
+                )
+            }
         )
 
-        onView(withText(R.string.share_link_file_error)).check(matches(isDisplayed()))
+        onView(withId(R.id.deletePublicLinkButton)).perform(click())
+        onView(withId(android.R.id.button1)).perform(click())
+
+        onView(withText(R.string.unshare_link_file_error)).check(matches(isDisplayed()))
     }
 
-    private fun getOCFileForTesting(name: String = "default") = OCFile("/Photos").apply {
-        availableOfflineStatus = OCFile.AvailableOfflineStatus.NOT_AVAILABLE_OFFLINE
-        fileName = name
-        fileId = 9456985479
-        remoteId = "1"
-        privateLink = "private link"
+    private fun getOCFileForTesting(name: String = "default"): OCFile {
+        val file = OCFile("/Photos/image.jpg")
+        file.availableOfflineStatus = OCFile.AvailableOfflineStatus.NOT_AVAILABLE_OFFLINE
+        file.fileName = name
+        file.fileId = 9456985479
+        file.remoteId = "1"
+        file.privateLink = "image link"
+        return file
     }
 
     private fun loadCapabilitiesSuccessfully(
@@ -351,24 +315,5 @@ class CreatePublicShareTest {
 
     private fun loadSharesSuccessfully(shares: ArrayList<OCShare> = publicShares) {
         sharesLiveData.postValue(Resource.success(shares))
-    }
-
-    private fun savePublicShare(newShare: OCShare, resource: Resource<Unit> = Resource.success()) {
-        `when`(
-            ocShareViewModel.insertPublicShare(
-                file.remotePath,
-                1,
-                newShare.name!!,
-                "",
-                -1,
-                false
-            )
-        ).thenReturn(
-            MutableLiveData<Resource<Unit>>().apply {
-                postValue(resource)
-            }
-        )
-
-        onView(withId(R.id.saveButton)).perform(click())
     }
 }

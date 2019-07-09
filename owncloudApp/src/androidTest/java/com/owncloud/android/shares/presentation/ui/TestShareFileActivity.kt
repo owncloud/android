@@ -25,6 +25,7 @@ import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.shares.domain.OCShare
 import com.owncloud.android.shares.presentation.fragment.PublicShareDialogFragment
 import com.owncloud.android.sharees.presentation.SearchShareesFragment
+import com.owncloud.android.shares.presentation.fragment.EditPrivateShareFragment
 import com.owncloud.android.shares.presentation.fragment.ShareFileFragment
 import com.owncloud.android.shares.presentation.fragment.ShareFragmentListener
 import com.owncloud.android.testing.SingleFragmentActivity
@@ -62,11 +63,13 @@ class TestShareFileActivity : SingleFragmentActivity(), ShareFragmentListener {
     }
 
     override fun refreshPrivateShare(remoteId: Long) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        val editPrivateShareFragment: EditPrivateShareFragment =
+            supportFragmentManager.findFragmentByTag("TEST FRAGMENT") as EditPrivateShareFragment
+        editPrivateShareFragment.updateShare(privateShares[0])
     }
 
     override fun updatePrivateShare(remoteId: Long, permissions: Int) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return
     }
 
     /******************************************************************************************************
