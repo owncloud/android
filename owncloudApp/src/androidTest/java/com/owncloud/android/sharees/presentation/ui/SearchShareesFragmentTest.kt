@@ -42,8 +42,8 @@ import org.hamcrest.CoreMatchers
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.Mockito
 import org.mockito.Mockito.`when`
+import org.mockito.Mockito.mock
 
 @RunWith(AndroidJUnit4::class)
 class SearchShareesFragmentTest {
@@ -113,8 +113,8 @@ class SearchShareesFragmentTest {
         capabilities: OCCapability = TestUtil.createCapability(),
         privateShares: ArrayList<OCShare> = arrayListOf()
     ) {
-        val account = Mockito.mock(Account::class.java)
-        val ownCloudVersion = Mockito.mock(OwnCloudVersion::class.java)
+        val account = mock(Account::class.java)
+        val ownCloudVersion = mock(OwnCloudVersion::class.java)
         `when`(ownCloudVersion.isSearchUsersSupported).thenReturn(true)
 
         val searchShareesFragment = SearchShareesFragment.newInstance(

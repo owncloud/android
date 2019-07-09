@@ -32,7 +32,6 @@ import androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withInputType
 import androidx.test.espresso.matcher.ViewMatchers.withText
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.ActivityTestRule
 import com.owncloud.android.R
 import com.owncloud.android.capabilities.db.OCCapability
@@ -44,13 +43,11 @@ import com.owncloud.android.utils.TestUtil
 import org.hamcrest.CoreMatchers.not
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.mock
 import java.text.SimpleDateFormat
 import java.util.Date
 
-@RunWith(AndroidJUnit4::class)
 class PublicShareCreationDialogFragmentTest {
     @Rule
     @JvmField
