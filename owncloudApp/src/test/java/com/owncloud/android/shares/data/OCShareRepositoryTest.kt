@@ -26,7 +26,7 @@ import androidx.lifecycle.Observer
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.shares.ShareParserResult
 import com.owncloud.android.lib.resources.shares.ShareType
-import com.owncloud.android.shares.data.datasources.LocalSharesDataSource
+import com.owncloud.android.shares.data.datasources.LocalShareDataSource
 import com.owncloud.android.shares.domain.OCShare
 import com.owncloud.android.shares.domain.OCShareRepository
 import com.owncloud.android.util.InstantAppExecutors
@@ -50,7 +50,7 @@ class OCShareRepositoryTest {
 
     private val filePath = "/Photos/"
 
-    private val localSharesDataSource = mock(LocalSharesDataSource::class.java)
+    private val localSharesDataSource = mock(LocalShareDataSource::class.java)
 
     private val remoteShares = arrayListOf(
         TestUtil.createRemoteShare(
@@ -560,7 +560,7 @@ class OCShareRepositoryTest {
             localData
         )
 
-        val remoteSharesDataSource = RemoteSharesDataSourceTest(remoteOperationResult)
+        val remoteSharesDataSource = RemoteShareDataSourceTest(remoteOperationResult)
 
         return OCShareRepository(
             InstantAppExecutors(),

@@ -43,6 +43,7 @@ import com.owncloud.android.R
 import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.lib.common.utils.Log_OC
 import com.owncloud.android.shares.domain.OCShare
+import com.owncloud.android.shares.presentation.ShareUserListAdapter
 import com.owncloud.android.shares.presentation.fragment.ShareFragmentListener
 import com.owncloud.android.utils.PreferenceUtils
 import kotlinx.android.synthetic.main.search_users_groups_layout.*
