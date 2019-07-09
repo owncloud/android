@@ -30,7 +30,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.CompoundButton
-import android.widget.TextView
 import androidx.appcompat.widget.SwitchCompat
 import androidx.fragment.app.DialogFragment
 import com.owncloud.android.R
@@ -42,6 +41,8 @@ import com.owncloud.android.lib.resources.shares.SharePermissionsBuilder
 import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.shares.domain.OCShare
 import com.owncloud.android.utils.PreferenceUtils
+import kotlinx.android.synthetic.main.edit_share_layout.*
+import kotlinx.android.synthetic.main.edit_share_layout.view.*
 import java.util.Locale
 
 /**
@@ -65,51 +66,6 @@ class EditPrivateShareFragment : DialogFragment() {
 
     /** Listener for changes on privilege checkboxes  */
     private var onPrivilegeChangeListener: CompoundButton.OnCheckedChangeListener? = null
-
-    /**
-     * Shortcut to access [SwitchCompat] R.id.canShareSwitch
-     *
-     * @return  [SwitchCompat] R.id.canShareCheckBox or null if called before
-     * [.onCreateView] finished.
-     */
-    private val canShareSwitch: SwitchCompat
-        get() = view?.findViewById<View>(R.id.canShareSwitch) as SwitchCompat
-
-    /**
-     * Shortcut to access [SwitchCompat] R.id.canEditSwitch
-     *
-     * @return  [SwitchCompat] R.id.canEditSwitch or null if called before
-     * [.onCreateView] finished.
-     */
-    private val canEditSwitch: SwitchCompat
-        get() = view?.findViewById<View>(R.id.canEditSwitch) as SwitchCompat
-
-    /**
-     * Shortcut to access [CheckBox] R.id.canEditCreateCheckBox
-     *
-     * @return  [CheckBox] R.id.canEditCreateCheckBox or null if called before
-     * [.onCreateView] finished.
-     */
-    private val canEditCreateCheckBox: CheckBox
-        get() = view?.findViewById<View>(R.id.canEditCreateCheckBox) as CheckBox
-
-    /**
-     * Shortcut to access [CheckBox] R.id.canEditChangeCheckBox
-     *
-     * @return  [CheckBox] R.id.canEditChangeCheckBox or null if called before
-     * [.onCreateView] finished.
-     */
-    private val canEditChangeCheckBox: CheckBox
-        get() = view?.findViewById<View>(R.id.canEditChangeCheckBox) as CheckBox
-
-    /**
-     * Shortcut to access [CheckBox] R.id.canEditDeleteCheckBox
-     *
-     * @return  [CheckBox] R.id.canEditDeleteCheckBox or null if called before
-     * [.onCreateView] finished.
-     */
-    private val canEditDeleteCheckBox: CheckBox
-        get() = view?.findViewById<View>(R.id.canEditDeleteCheckBox) as CheckBox
 
     /**
      * {@inheritDoc}
@@ -158,11 +114,10 @@ class EditPrivateShareFragment : DialogFragment() {
         // Allow or disallow touches with other visible windows
         view.filterTouchesWhenObscured = PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(context)
 
-        (view.findViewById<View>(R.id.editShareTitle) as TextView).text =
-            resources.getString(R.string.share_with_edit_title, share?.sharedWithDisplayName)
+        view.editShareTitle.text = resources.getString(R.string.share_with_edit_title, share?.sharedWithDisplayName)
 
         // Setup layout
-        refreshUiFromState(view)
+        refreshUiFromState()
 
         return view
     }
@@ -188,7 +143,8 @@ class EditPrivateShareFragment : DialogFragment() {
      *
      * @param editShareView     Root view in the fragment.
      */
-    private fun refreshUiFromState(editShareView: View?) {
+    fun refreshUiFromState() {
+        val editShareView = view
         if (editShareView != null) {
             setPermissionsListening(editShareView, false)
 
@@ -199,13 +155,13 @@ class EditPrivateShareFragment : DialogFragment() {
                 serverVersion != null && serverVersion.isNotReshareableFederatedSupported
             var compound: CompoundButton
 
-            compound = editShareView.findViewById(R.id.canShareSwitch)
+            compound = canShareSwitch
             if (isFederated && !isNotReshareableFederatedSupported) {
                 compound.visibility = View.INVISIBLE
             }
             compound.isChecked = sharePermissions and RemoteShare.SHARE_PERMISSION_FLAG > 0
 
-            compound = editShareView.findViewById(R.id.canEditSwitch)
+            compound = canEditSwitch
             val anyUpdatePermission = RemoteShare.CREATE_PERMISSION_FLAG or
                     RemoteShare.UPDATE_PERMISSION_FLAG or
                     RemoteShare.DELETE_PERMISSION_FLAG
@@ -217,15 +173,15 @@ class EditPrivateShareFragment : DialogFragment() {
             if (file!!.isFolder && areEditOptionsAvailable) {
                 /// TODO change areEditOptionsAvailable in order to delete !isFederated
                 // from checking when iOS is ready
-                compound = editShareView.findViewById(R.id.canEditCreateCheckBox)
+                compound = canEditCreateCheckBox
                 compound.isChecked = sharePermissions and RemoteShare.CREATE_PERMISSION_FLAG > 0
                 compound.visibility = if (canEdit) View.VISIBLE else View.GONE
 
-                compound = editShareView.findViewById(R.id.canEditChangeCheckBox)
+                compound = canEditChangeCheckBox
                 compound.isChecked = sharePermissions and RemoteShare.UPDATE_PERMISSION_FLAG > 0
                 compound.visibility = if (canEdit) View.VISIBLE else View.GONE
 
-                compound = editShareView.findViewById(R.id.canEditDeleteCheckBox)
+                compound = canEditDeleteCheckBox
                 compound.isChecked = sharePermissions and RemoteShare.DELETE_PERMISSION_FLAG > 0
                 compound.visibility = if (canEdit) View.VISIBLE else View.GONE
             }
@@ -248,20 +204,20 @@ class EditPrivateShareFragment : DialogFragment() {
         val changeListener = if (enable) onPrivilegeChangeListener else null
         var compound: CompoundButton
 
-        compound = editShareView.findViewById(R.id.canShareSwitch)
+        compound = canShareSwitch
         compound.setOnCheckedChangeListener(changeListener)
 
-        compound = editShareView.findViewById(R.id.canEditSwitch)
+        compound = canEditSwitch
         compound.setOnCheckedChangeListener(changeListener)
 
         if (file?.isFolder == true) {
-            compound = editShareView.findViewById(R.id.canEditCreateCheckBox)
+            compound = canEditCreateCheckBox
             compound.setOnCheckedChangeListener(changeListener)
 
-            compound = editShareView.findViewById(R.id.canEditChangeCheckBox)
+            compound = canEditChangeCheckBox
             compound.setOnCheckedChangeListener(changeListener)
 
-            compound = editShareView.findViewById(R.id.canEditDeleteCheckBox)
+            compound = canEditDeleteCheckBox
             compound.setOnCheckedChangeListener(changeListener)
         }
     }
@@ -317,7 +273,7 @@ class EditPrivateShareFragment : DialogFragment() {
                             } else {
                                 /// federated share -> enable delete subpermission, as server side; TODO why?
                                 //noinspection ConstantConditions, prevented in the method beginning
-                                subordinate = view!!.findViewById(R.id.canEditDeleteCheckBox)
+                                subordinate = canEditDeleteCheckBox
                                 if (!subordinate.isChecked) {
                                     toggleDisablingListener(subordinate)
                                 }
@@ -365,7 +321,6 @@ class EditPrivateShareFragment : DialogFragment() {
             // behaviour was applied than for owned folder, and the user did not have full
             // permissions to update the folder, an error would be reported by the server
             // and the children checkboxes would be automatically hidden again
-
         }
 
         /**
@@ -379,7 +334,7 @@ class EditPrivateShareFragment : DialogFragment() {
          * @param isChecked                 'true' iif subordinateCheckBoxView was checked.
          */
         private fun syncCanEditSwitch(subordinateCheckBoxView: View, isChecked: Boolean) {
-            val canEditCompound = view!!.findViewById<CompoundButton>(R.id.canEditSwitch)
+            val canEditCompound = canEditSwitch
             if (isChecked) {
                 if (!canEditCompound.isChecked) {
                     toggleDisablingListener(canEditCompound)
@@ -421,11 +376,10 @@ class EditPrivateShareFragment : DialogFragment() {
     /**
      * Updates the UI after the result of an update operation on the edited [RemoteShare] permissions.
      *
-     * @param result        Result of an update on the edited [RemoteShare] permissions.
      */
     fun updateShare(updatedShare: OCShare) {
         share = updatedShare
-        refreshUiFromState(view)
+        refreshUiFromState()
     }
 
     /**
@@ -447,6 +401,15 @@ class EditPrivateShareFragment : DialogFragment() {
             share?.remoteId!!,
             permissions
         )
+    }
+
+    /**
+     * Show error when updating the private share, if any
+     * @param errorMessage
+     */
+    fun showError(errorMessage: String) {
+        private_share_error_message?.visibility = View.VISIBLE
+        private_share_error_message?.text = errorMessage
     }
 
     companion object {

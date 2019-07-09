@@ -21,6 +21,7 @@ package com.owncloud.android.utils
 
 import android.accounts.Account
 import com.owncloud.android.capabilities.db.OCCapability
+import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.shares.GetRemoteShareesOperation
 import com.owncloud.android.lib.resources.shares.RemoteShare
@@ -337,5 +338,13 @@ object TestUtil {
         }
 
         return remoteOperationResult
+    }
+
+    fun createFile(name: String = "default") = OCFile("/Photos").apply {
+        availableOfflineStatus = OCFile.AvailableOfflineStatus.NOT_AVAILABLE_OFFLINE
+        fileName = name
+        fileId = 9456985479
+        remoteId = "1"
+        privateLink = "private link"
     }
 }
