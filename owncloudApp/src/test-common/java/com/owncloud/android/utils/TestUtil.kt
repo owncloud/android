@@ -77,6 +77,7 @@ object TestUtil {
         shareType: Int = 0,
         shareWith: String,
         path: String,
+        permissions: Int = -1,
         isFolder: Boolean,
         sharedWithDisplayName: String,
         accountOwner: String = "admin@server"
@@ -84,6 +85,7 @@ object TestUtil {
         shareType = shareType,
         shareWith = shareWith,
         path = path,
+        permissions = permissions,
         isFolder = isFolder,
         sharedWithDisplayName = sharedWithDisplayName,
         accountOwner = accountOwner
