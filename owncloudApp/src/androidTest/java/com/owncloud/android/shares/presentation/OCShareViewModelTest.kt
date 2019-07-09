@@ -227,7 +227,7 @@ class OCShareViewModelTest {
     @Test
     fun deletePublicShare() {
         `when`(
-            ocShareRepository.deletePublicShare(
+            ocShareRepository.deleteShare(
                 3
             )
         ).thenReturn(

@@ -86,7 +86,11 @@ interface ShareFragmentListener {
 
     fun showRemovePublicShare(share: OCShare)
 
-    fun removePublicShare(share: OCShare)
-
     fun copyOrSendPublicLink(share: OCShare)
+
+    /**************************************************************************************************************
+     *************************************************** COMMON ***************************************************
+     **************************************************************************************************************/
+
+    fun removeShare(shareRemoteId: Long)
 }

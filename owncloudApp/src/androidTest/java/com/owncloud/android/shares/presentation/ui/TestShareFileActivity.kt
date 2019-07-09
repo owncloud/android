@@ -71,7 +71,7 @@ class TestShareFileActivity : SingleFragmentActivity(), ShareFragmentListener {
     ) {
     }
 
-    override fun removePublicShare(share: OCShare) {
+    override fun removeShare(share: OCShare) {
     }
 
     override fun refreshCapabilities(shouldFetchFromNetwork: Boolean) {

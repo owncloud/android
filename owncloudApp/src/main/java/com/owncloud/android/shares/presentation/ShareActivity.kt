@@ -560,8 +560,16 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
         )
     }
 
-    override fun removePublicShare(share: OCShare) {
-        ocShareViewModel.deletePublicShare(share.remoteId).observe(
+    override fun copyOrSendPublicLink(share: OCShare) {
+        fileOperationsHelper.copyOrSendPublicLink(share)
+    }
+
+    /**************************************************************************************************************
+     *************************************************** COMMON ***************************************************
+     **************************************************************************************************************/
+
+    override fun removeShare(shareRemoteId: Long) {
+        ocShareViewModel.deleteShare(shareRemoteId).observe(
             this,
             Observer { resource ->
                 when (resource?.status) {
@@ -583,17 +591,13 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
                     }
                     else -> {
                         Log.d(
-                            TAG, "Unknown status when removing public share with name ${share.name} " +
+                            TAG, "Unknown status when removing share with id $shareRemoteId " +
                                     "from account ${account?.name}"
                         )
                     }
                 }
             }
         )
-    }
-
-    override fun copyOrSendPublicLink(share: OCShare) {
-        fileOperationsHelper.copyOrSendPublicLink(share)
     }
 
     /**

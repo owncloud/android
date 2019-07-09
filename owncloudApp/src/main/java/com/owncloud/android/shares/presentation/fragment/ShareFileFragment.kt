@@ -372,12 +372,6 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
         shareScroll?.scrollTo(0, 0)
     }
 
-    override fun unshareButtonPressed(share: OCShare) {
-        // Unshare
-        Log_OC.d(TAG, "Removing private share with " + share.sharedWithDisplayName)
-        listener?.removePublicShare(share)
-    }
-
     override fun editShare(share: OCShare) {
         // move to fragment to edit share
         Log_OC.d(TAG, "Editing " + share.sharedWithDisplayName)
@@ -444,14 +438,38 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
         listener?.copyOrSendPublicLink(share)
     }
 
+    override fun editPublicShare(share: OCShare) {
+        listener?.showEditPublicShare(share)
+    }
+
     override fun removePublicShare(share: OCShare) {
         // Remove public link from server
         listener?.showRemovePublicShare(share)
     }
 
-    override fun editPublicShare(share: OCShare) {
-        listener?.showEditPublicShare(share)
+    /**
+     * Check if the multiple public sharing support should be enabled or not depending on the
+     * capabilities and server version
+     *
+     * @return true if should be enabled, false otherwise
+     */
+    private fun enableMultiplePublicSharing(): Boolean {
+        if (capabilities == null) return true
+
+        val serverVersion = OwnCloudVersion(capabilities?.versionString!!)
+
+        return when {
+            // Server version <= 9.x, multiple public sharing not supported
+            !serverVersion.isMultiplePublicSharingSupported -> false
+            // Server version >= 10, multiple public sharing supported but disabled
+            capabilities?.filesSharingPublicMultiple == CapabilityBooleanType.FALSE.value -> false
+            else -> true
+        }
     }
+
+    /**************************************************************************************************************
+     *************************************************** COMMON ***************************************************
+     **************************************************************************************************************/
 
     /**
      * Hide share features sections that are not enabled
@@ -478,24 +496,9 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
         }
     }
 
-    /**
-     * Check if the multiple public sharing support should be enabled or not depending on the
-     * capabilities and server version
-     *
-     * @return true if should be enabled, false otherwise
-     */
-    private fun enableMultiplePublicSharing(): Boolean {
-        if (capabilities == null) return true
-
-        val serverVersion = OwnCloudVersion(capabilities?.versionString!!)
-
-        return when {
-            // Server version <= 9.x, multiple public sharing not supported
-            !serverVersion.isMultiplePublicSharingSupported -> false
-            // Server version >= 10, multiple public sharing supported but disabled
-            capabilities?.filesSharingPublicMultiple == CapabilityBooleanType.FALSE.value -> false
-            else -> true
-        }
+    override fun unshareButtonPressed(share: OCShare) {
+        Log_OC.d(TAG, "Removing private share with " + share.sharedWithDisplayName)
+        listener?.removeShare(share.remoteId)
     }
 
     companion object {

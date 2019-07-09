@@ -113,5 +113,4 @@ public class RemoveShareOperation extends SyncOperation {
         RemoteOperationResult result = existsOperation.execute(client);
         return result.isSuccess();
     }
-
 }

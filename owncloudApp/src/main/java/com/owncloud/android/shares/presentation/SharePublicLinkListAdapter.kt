@@ -83,8 +83,8 @@ class SharePublicLinkListAdapter(
     interface SharePublicLinkAdapterListener {
         fun copyOrSendPublicLink(share: OCShare)
 
-        fun removePublicShare(share: OCShare)
-
         fun editPublicShare(share: OCShare)
+
+        fun removePublicShare(share: OCShare)
     }
 }

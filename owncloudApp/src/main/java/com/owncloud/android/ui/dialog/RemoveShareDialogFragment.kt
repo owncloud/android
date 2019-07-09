@@ -54,7 +54,7 @@ class RemoveShareDialogFragment : ConfirmationDialogFragment(), ConfirmationDial
     override fun onConfirmation(callerTag: String) {
         val listener = activity as ShareFragmentListener?
         Log_OC.d(TAG, "Removing public share " + targetShare!!.name)
-        listener?.removePublicShare(targetShare!!)
+        listener?.removeShare(targetShare?.remoteId!!)
     }
 
     override fun onCancel(callerTag: String) {
