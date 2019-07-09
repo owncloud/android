@@ -28,7 +28,7 @@ import com.owncloud.android.lib.resources.shares.RemoveRemoteShareOperation
 import com.owncloud.android.lib.resources.shares.ShareParserResult
 import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.lib.resources.shares.UpdateRemoteShareOperation
-import com.owncloud.android.shares.data.datasources.OCRemoteSharesDataSource
+import com.owncloud.android.shares.data.datasources.OCRemoteShareDataSource
 import com.owncloud.android.utils.TestUtil
 import junit.framework.Assert.assertEquals
 import org.hamcrest.CoreMatchers.notNullValue
@@ -39,12 +39,12 @@ import org.mockito.Mockito.`when`
 import org.mockito.Mockito.mock
 
 class OCRemoteShareDataSourceTest {
-    private lateinit var ocRemoteSharesDataSource: OCRemoteSharesDataSource
+    private lateinit var ocRemoteSharesDataSource: OCRemoteShareDataSource
     private val ownCloudClient = mock(OwnCloudClient::class.java)
 
     @Before
     fun init() {
-        ocRemoteSharesDataSource = OCRemoteSharesDataSource(ownCloudClient)
+        ocRemoteSharesDataSource = OCRemoteShareDataSource(ownCloudClient)
     }
 
     /******************************************************************************************************
@@ -76,10 +76,10 @@ class OCRemoteShareDataSourceTest {
 
         // Insert share on remote datasource
         val remoteOperationResult = ocRemoteSharesDataSource.insertShare(
-            "Photos/",
-            ShareType.USER,
-            "user",
-            1,
+            remoteFilePath = "Photos/",
+            shareType = ShareType.USER,
+            shareWith = "user",
+            permissions = 1,
             createRemoteShareOperation = createShareOperation
         )
 

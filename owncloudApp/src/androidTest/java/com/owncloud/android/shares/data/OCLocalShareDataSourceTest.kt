@@ -24,7 +24,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.test.platform.app.InstrumentationRegistry
 import com.owncloud.android.db.OwncloudDatabase
 import com.owncloud.android.lib.resources.shares.ShareType
-import com.owncloud.android.shares.data.datasources.OCLocalSharesDataSource
+import com.owncloud.android.shares.data.datasources.OCLocalShareDataSource
 import com.owncloud.android.shares.data.datasources.OCShareDao
 import com.owncloud.android.shares.domain.OCShare
 import com.owncloud.android.utils.LiveDataTestUtil.getValue
@@ -38,7 +38,7 @@ import org.mockito.Mockito.`when`
 import org.mockito.Mockito.mock
 
 class OCLocalDataSourceTest {
-    private lateinit var ocLocalSharesDataSource: OCLocalSharesDataSource
+    private lateinit var ocLocalSharesDataSource: OCLocalShareDataSource
     private val ocSharesDao = mock(OCShareDao::class.java)
 
     @Rule
@@ -52,7 +52,7 @@ class OCLocalDataSourceTest {
 
         val context = InstrumentationRegistry.getInstrumentation().targetContext
         ocLocalSharesDataSource =
-            OCLocalSharesDataSource(context, ocSharesDao)
+            OCLocalShareDataSource(context, ocSharesDao)
     }
 
     /******************************************************************************************************

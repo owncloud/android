@@ -28,16 +28,16 @@ import com.owncloud.android.lib.resources.shares.RemoteShare
 import com.owncloud.android.lib.resources.shares.ShareParserResult
 import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.shares.data.ShareRepository
-import com.owncloud.android.shares.data.datasources.LocalSharesDataSource
-import com.owncloud.android.shares.data.datasources.RemoteSharesDataSource
+import com.owncloud.android.shares.data.datasources.LocalShareDataSource
+import com.owncloud.android.shares.data.datasources.RemoteShareDataSource
 import com.owncloud.android.testing.OpenForTesting
 import com.owncloud.android.vo.Resource
 
 @OpenForTesting
 class OCShareRepository(
     private val appExecutors: AppExecutors = AppExecutors(),
-    private val localSharesDataSource: LocalSharesDataSource,
-    private val remoteSharesDataSource: RemoteSharesDataSource,
+    private val localShareDataSource: LocalShareDataSource,
+    private val remoteShareDataSource: RemoteShareDataSource,
     val accountName: String
 ) : ShareRepository {
 
@@ -120,31 +120,14 @@ class OCShareRepository(
         permissions: Int,
         publicUpload: Boolean
     ): LiveData<Resource<Unit>> {
-        val result = MutableLiveData<Resource<Unit>>()
-        result.postValue(Resource.loading())
-
-        appExecutors.networkIO().execute {
-            // Perform network operation
-            val remoteOperationResult = remoteSharesDataSource.updateShare(
-                remoteId,
-                name,
-                password,
-                expirationDateInMillis,
-                permissions,
-                publicUpload
-            )
-
-            if (remoteOperationResult.isSuccess) {
-                val updatedShareForFileFromServer = remoteOperationResult.data.shares.map { remoteShare ->
-                    OCShare.fromRemoteShare(remoteShare).also { it.accountOwner = accountName }
-                }
-                localSharesDataSource.update(updatedShareForFileFromServer.first())
-                result.postValue(Resource.success()) // Used to close the share edition dialog
-            } else {
-                notifyError(result, remoteOperationResult)
-            }
-        }
-        return result
+        return updateShare(
+            remoteId,
+            permissions,
+            name,
+            password,
+            expirationDateInMillis,
+            publicUpload
+        )
     }
 
     override fun deletePublicShare(
@@ -157,10 +140,10 @@ class OCShareRepository(
         // Perform network operation
         appExecutors.networkIO().execute {
             // Perform network operation
-            val remoteOperationResult = remoteSharesDataSource.deleteShare(remoteId)
+            val remoteOperationResult = remoteShareDataSource.deleteShare(remoteId)
 
             if (remoteOperationResult.isSuccess) {
-                localSharesDataSource.deleteShare(remoteId)
+                localShareDataSource.deleteShare(remoteId)
                 result.postValue(Resource.success()) // Used to close the share edition dialog
             } else {
                 result.postValue(
@@ -190,26 +173,26 @@ class OCShareRepository(
                 }
 
                 if (sharesFromServer.isEmpty()) {
-                    localSharesDataSource.deleteSharesForFile(filePath, accountName)
+                    localShareDataSource.deleteSharesForFile(filePath, accountName)
                 }
 
-                localSharesDataSource.replaceShares(sharesFromServer)
+                localShareDataSource.replaceShares(sharesFromServer)
             }
 
             override fun shouldFetchFromNetwork(data: List<OCShare>?) = true
 
             override fun loadFromDb(): LiveData<List<OCShare>> =
-                localSharesDataSource.getSharesAsLiveData(
+                localShareDataSource.getSharesAsLiveData(
                     filePath, accountName, shareTypes
                 )
 
             override fun createCall() =
-                remoteSharesDataSource.getShares(filePath, reshares = true, subfiles = false)
+                remoteShareDataSource.getShares(filePath, reshares = true, subfiles = false)
         }.asMutableLiveData()
     }
 
     override fun getShare(remoteId: Long): LiveData<OCShare> {
-        return localSharesDataSource.getShareAsLiveData(remoteId)
+        return localShareDataSource.getShareAsLiveData(remoteId)
     }
 
     private fun insertShare(
@@ -227,7 +210,7 @@ class OCShareRepository(
 
         appExecutors.networkIO().execute {
             // Perform network operation
-            val remoteOperationResult = remoteSharesDataSource.insertShare(
+            val remoteOperationResult = remoteShareDataSource.insertShare(
                 filePath,
                 shareType,
                 shareWith,
@@ -242,7 +225,7 @@ class OCShareRepository(
                 val newShareFromServer = remoteOperationResult.data.shares.map { remoteShare ->
                     OCShare.fromRemoteShare(remoteShare).also { it.accountOwner = accountName }
                 }
-                localSharesDataSource.insert(newShareFromServer)
+                localShareDataSource.insert(newShareFromServer)
                 result.postValue(Resource.success())
             } else {
                 notifyError(result, remoteOperationResult)
@@ -264,7 +247,7 @@ class OCShareRepository(
 
         appExecutors.networkIO().execute {
             // Perform network operation
-            val remoteOperationResult = remoteSharesDataSource.updateShare(
+            val remoteOperationResult = remoteShareDataSource.updateShare(
                 remoteId,
                 name,
                 password,
@@ -277,7 +260,7 @@ class OCShareRepository(
                 val updatedShareForFileFromServer = remoteOperationResult.data.shares.map { remoteShare ->
                     OCShare.fromRemoteShare(remoteShare).also { it.accountOwner = accountName }
                 }
-                localSharesDataSource.update(updatedShareForFileFromServer.first())
+                localShareDataSource.update(updatedShareForFileFromServer.first())
                 result.postValue(Resource.success())
             } else {
                 notifyError(result, remoteOperationResult)

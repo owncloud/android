@@ -43,9 +43,9 @@ import com.owncloud.android.lib.common.utils.Log_OC
 import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.lib.resources.status.CapabilityBooleanType
 import com.owncloud.android.lib.resources.status.OwnCloudVersion
+import com.owncloud.android.shares.presentation.ShareUserListAdapter
 import com.owncloud.android.shares.domain.OCShare
-import com.owncloud.android.ui.adapter.SharePublicLinkListAdapter
-import com.owncloud.android.sharees.presentation.ShareUserListAdapter
+import com.owncloud.android.shares.presentation.SharePublicLinkListAdapter
 import com.owncloud.android.utils.DisplayUtils
 import com.owncloud.android.utils.MimetypeIconUtil
 import kotlinx.android.synthetic.main.share_file_layout.*
@@ -312,22 +312,6 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
         listener = null
     }
 
-    fun updateShares(shares: ArrayList<OCShare>) {
-        updatePublicShares(
-            ArrayList(shares.filter {
-                it.shareType == ShareType.PUBLIC_LINK.value
-            })
-        )
-
-        updatePrivateShares(
-            ArrayList(shares.filter {
-                it.shareType == ShareType.USER.value ||
-                        it.shareType == ShareType.GROUP.value ||
-                        it.shareType == ShareType.FEDERATED.value
-            })
-        )
-    }
-
     /**************************************************************************************************************
      ************************************************ CAPABILITIES ************************************************
      **************************************************************************************************************/
@@ -353,7 +337,11 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
 
     fun updatePrivateShares(privateShares: ArrayList<OCShare>) {
         // Get Users and Groups
-        this.privateShares = privateShares
+        this.privateShares = ArrayList(privateShares.filter {
+            it.shareType == ShareType.USER.value ||
+                    it.shareType == ShareType.GROUP.value ||
+                    it.shareType == ShareType.FEDERATED.value
+        })
 
         // Update list of users/groups
         updateListOfUserGroups()

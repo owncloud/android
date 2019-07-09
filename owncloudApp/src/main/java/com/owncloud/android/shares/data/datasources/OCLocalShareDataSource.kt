@@ -25,10 +25,10 @@ import com.owncloud.android.db.OwncloudDatabase
 import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.shares.domain.OCShare
 
-class OCLocalSharesDataSource(
+class OCLocalShareDataSource(
     context: Context,
     private val ocShareDao: OCShareDao = OwncloudDatabase.getDatabase(context).shareDao()
-) : LocalSharesDataSource {
+) : LocalShareDataSource {
     override fun getShareAsLiveData(remoteId: Long): LiveData<OCShare> = ocShareDao.getShareAsLiveData(remoteId)
 
     override fun getSharesAsLiveData(

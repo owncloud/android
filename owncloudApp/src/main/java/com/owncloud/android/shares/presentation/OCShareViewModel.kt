@@ -27,8 +27,8 @@ import com.owncloud.android.lib.common.OwnCloudAccount
 import com.owncloud.android.lib.common.OwnCloudClientManagerFactory
 import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.shares.data.ShareRepository
-import com.owncloud.android.shares.data.datasources.OCLocalSharesDataSource
-import com.owncloud.android.shares.data.datasources.OCRemoteSharesDataSource
+import com.owncloud.android.shares.data.datasources.OCLocalShareDataSource
+import com.owncloud.android.shares.data.datasources.OCRemoteShareDataSource
 import com.owncloud.android.shares.domain.OCShare
 import com.owncloud.android.shares.domain.OCShareRepository
 import com.owncloud.android.testing.OpenForTesting
@@ -42,8 +42,8 @@ class OCShareViewModel(
     context: Context,
     account: Account,
     val shareRepository: ShareRepository = OCShareRepository(
-        localSharesDataSource = OCLocalSharesDataSource(context),
-        remoteSharesDataSource = OCRemoteSharesDataSource(
+        localShareDataSource = OCLocalShareDataSource(context),
+        remoteShareDataSource = OCRemoteShareDataSource(
             OwnCloudClientManagerFactory.getDefaultSingleton().getClientFor(
                 OwnCloudAccount(account, context),
                 context
