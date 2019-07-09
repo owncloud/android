@@ -284,15 +284,51 @@ class OCShareDaoTest {
         assertEquals("userName", text2Shares[0].shareWith)
     }
 
+    @Test
+    fun updatePrivateShare() {
+        ocShareDao.insert(createDefaultPrivateShare())
+
+        ocShareDao.update(
+            createDefaultPrivateShare(permissions = 17)
+        )
+
+        val textShares = getValue(
+            ocShareDao.getSharesAsLiveData(
+                "/Texts/text1.txt", "admin@server", listOf(ShareType.USER.value)
+            )
+        )
+
+        assertThat(textShares, notNullValue())
+        assertEquals(1, textShares.size)
+        assertEquals(17, textShares[0].permissions)
+    }
+
+    @Test
+    fun deletePrivateShare() {
+        ocShareDao.insert(createDefaultPrivateShare())
+
+        ocShareDao.deleteShare(1)
+
+        val textShares = getValue(
+            ocShareDao.getSharesAsLiveData(
+                "/Texts/text1.txt", "admin@server", listOf(ShareType.USER.value)
+            )
+        )
+        assertThat(textShares, notNullValue())
+        assertEquals(0, textShares.size) // List of textShares empty after deleting the existing share
+    }
+
     private fun createDefaultPrivateShare(
         shareType: Int = 0,
         shareWith: String = "username",
         path: String = "/Texts/text1.txt",
+        permissions: Int = -1,
         shareWithDisplayName: String = "Steve"
     ) = TestUtil.createPrivateShare(
         shareType = shareType,
         shareWith = shareWith,
         path = path,
+        permissions = permissions,
         isFolder = false,
         sharedWithDisplayName = shareWithDisplayName
     )

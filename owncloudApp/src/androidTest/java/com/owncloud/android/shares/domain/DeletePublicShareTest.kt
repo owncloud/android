@@ -195,7 +195,7 @@ class DeletePublicShareTest {
         loadSharesSuccessfully(existingPublicShare)
 
         `when`(
-            ocShareViewModel.deletePublicShare(ArgumentMatchers.anyLong())
+            ocShareViewModel.deleteShare(ArgumentMatchers.anyLong())
         ).thenReturn(
             MutableLiveData<Resource<Unit>>().apply {
                 postValue(Resource.success())
@@ -224,7 +224,7 @@ class DeletePublicShareTest {
         loadSharesSuccessfully(arrayListOf(existingPublicShare))
 
         `when`(
-            ocShareViewModel.deletePublicShare(ArgumentMatchers.anyLong())
+            ocShareViewModel.deleteShare(ArgumentMatchers.anyLong())
         ).thenReturn(
             MutableLiveData<Resource<Unit>>().apply {
                 postValue(Resource.success())
@@ -271,7 +271,7 @@ class DeletePublicShareTest {
         loadSharesSuccessfully(arrayListOf(existingPublicShare))
 
         `when`(
-            ocShareViewModel.deletePublicShare(ArgumentMatchers.anyLong())
+            ocShareViewModel.deleteShare(ArgumentMatchers.anyLong())
         ).thenReturn(
             MutableLiveData<Resource<Unit>>().apply {
                 postValue(
