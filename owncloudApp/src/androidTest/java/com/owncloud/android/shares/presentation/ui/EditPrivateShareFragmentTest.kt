@@ -40,6 +40,7 @@ import com.owncloud.android.lib.resources.status.OwnCloudVersion
 import com.owncloud.android.shares.domain.OCShare
 import com.owncloud.android.shares.presentation.fragment.EditPrivateShareFragment
 import com.owncloud.android.utils.AccountsManager
+import com.owncloud.android.utils.Permissions
 import com.owncloud.android.utils.TestUtil
 import org.hamcrest.CoreMatchers.not
 import org.junit.AfterClass
@@ -61,21 +62,6 @@ class EditPrivateShareFragmentTest {
     )
 
     private val defaultSharedWithDisplayName = "user"
-
-    enum class Permissions(val value: Int) {
-        READ_PERMISSIONS(1),
-        EDIT_PERMISSIONS(3),
-        SHARE_PERMISSIONS(17),
-        ALL_PERMISSIONS(19),
-        // FOLDERS
-        EDIT_CREATE_PERMISSIONS(5),
-        EDIT_CREATE_CHANGE_PERMISSIONS(7),
-        EDIT_CREATE_DELETE_PERMISSIONS(13),
-        EDIT_CREATE_CHANGE_DELETE_PERMISSIONS(15),
-        EDIT_CHANGE_PERMISSIONS(3),
-        EDIT_CHANGE_DELETE_PERMISSIONS(11),
-        EDIT_DELETE_PERMISSIONS(9),
-    }
 
     companion object {
         private val targetContext = InstrumentationRegistry.getInstrumentation().targetContext

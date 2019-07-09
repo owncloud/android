@@ -361,7 +361,8 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
 
     override fun updatePrivateShare(remoteId: Long, permissions: Int) {
         ocShareViewModel.updatePrivateShare(
-            remoteId, permissions
+            remoteId,
+            permissions
         ).observe(
             this,
             Observer { resource ->
@@ -372,8 +373,9 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
                             resource.exception,
                             OperationType.UPDATE_SHARE,
                             resources
-                        );
-                        publicShareFragment?.showError(errorMessage)
+                        )
+                        editPrivateShareFragment?.refreshUiFromState()
+                        editPrivateShareFragment?.showError(errorMessage)
                         dismissLoadingDialog()
                     }
                     Status.LOADING -> {

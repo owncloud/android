@@ -159,7 +159,7 @@ class CreatePublicShareTest {
     fun setUp() {
         val intent = spy(Intent::class.java)
 
-        file = getOCFileForTesting("image.jpg")
+        file = TestUtil.createFile("image.jpg")
 
         `when`(intent.getParcelableExtra(FileActivity.EXTRA_FILE) as? Parcelable).thenReturn(file)
         intent.putExtra(FileActivity.EXTRA_FILE, file)
@@ -327,14 +327,6 @@ class CreatePublicShareTest {
         )
 
         onView(withText(R.string.share_link_file_error)).check(matches(isDisplayed()))
-    }
-
-    private fun getOCFileForTesting(name: String = "default") = OCFile("/Photos").apply {
-        availableOfflineStatus = OCFile.AvailableOfflineStatus.NOT_AVAILABLE_OFFLINE
-        fileName = name
-        fileId = 9456985479
-        remoteId = "1"
-        privateLink = "private link"
     }
 
     private fun loadCapabilitiesSuccessfully(

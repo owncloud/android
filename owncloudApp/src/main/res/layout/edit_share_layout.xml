@@ -18,28 +18,28 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <ScrollView
+    android:id="@+id/shareScroll"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.owncloud.android.shares.presentation.fragment.EditPrivateShareFragment"
-    android:id="@+id/shareScroll"
     >
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/editShareTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/share_with_edit_title"
-            android:textAppearance="@style/TextAppearance.AppCompat.Title"
+            android:ellipsize="middle"
             android:padding="@dimen/standard_padding"
             android:singleLine="true"
-            android:ellipsize="middle"
+            android:text="@string/share_with_edit_title"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title"
             />
 
         <!-- for some reason the divider below is determining the width for the fragment;
@@ -52,60 +52,76 @@
             />
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/standard_margin"
             android:layout_marginLeft="@dimen/standard_margin"
             android:layout_marginRight="@dimen/standard_margin"
-            android:layout_marginBottom="@dimen/standard_margin">
+            android:orientation="vertical">
 
             <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/canEditSwitch"
+                style="?android:attr/listSeparatorTextViewStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/share_privilege_can_edit"
-                android:id="@+id/canEditSwitch"
                 android:layout_gravity="start"
                 android:layout_marginTop="@dimen/standard_half_margin"
+                android:paddingEnd="0dp"
+                android:paddingStart="0dp"
+                android:text="@string/share_privilege_can_edit"
                 android:textColor="@color/color_accent"
-                android:paddingLeft="0dp"
-                style="?android:attr/listSeparatorTextViewStyle"
                 />
 
             <CheckBox
+                android:id="@+id/canEditCreateCheckBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/canEditCreateCheckBox"
                 android:text="@string/share_privilege_can_edit_create"
                 android:visibility="gone"
                 />
 
             <CheckBox
+                android:id="@+id/canEditChangeCheckBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/canEditChangeCheckBox"
                 android:text="@string/share_privilege_can_edit_change"
                 android:visibility="gone"
                 />
 
             <CheckBox
+                android:id="@+id/canEditDeleteCheckBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/canEditDeleteCheckBox"
                 android:text="@string/share_privilege_can_edit_delete"
                 android:visibility="gone"
                 />
 
             <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/canShareSwitch"
+                style="?android:attr/listSeparatorTextViewStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/share_privilege_can_share"
-                android:id="@+id/canShareSwitch"
                 android:layout_gravity="start"
                 android:layout_marginTop="@dimen/standard_half_margin"
-                android:textColor="@color/color_accent"
                 android:paddingLeft="0dp"
-                style="?android:attr/listSeparatorTextViewStyle"
+                android:text="@string/share_privilege_can_share"
+                android:textColor="@color/color_accent"
                 />
+
+            <TextView
+                android:id="@+id/private_share_error_message"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/standard_half_margin"
+                android:layout_marginTop="@dimen/standard_margin"
+                android:drawablePadding="@dimen/standard_half_padding"
+                android:drawableStart="@drawable/common_error_grey"
+                android:gravity="center_vertical"
+                android:paddingEnd="0dp"
+                android:paddingStart="0dp"
+                android:textColor="@color/secondaryTextColor"
+                android:textSize="13sp"
+                android:visibility="gone" />
         </LinearLayout>
     </LinearLayout>
 
