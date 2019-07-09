@@ -532,7 +532,7 @@ class OCShareRepositoryTest {
         remoteOperationResult: RemoteOperationResult<ShareParserResult>
     ): LiveData<Resource<Unit>> {
         val ocShareRepository = createShareRepositoryWithPublicData(localData, remoteOperationResult)
-        return ocShareRepository.deletePublicShare(
+        return ocShareRepository.deleteShare(
             1
         )
     }

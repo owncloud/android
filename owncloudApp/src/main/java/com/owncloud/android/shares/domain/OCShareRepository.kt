@@ -130,34 +130,6 @@ class OCShareRepository(
         )
     }
 
-    override fun deletePublicShare(
-        remoteId: Long
-    ): LiveData<Resource<Unit>> {
-        val result = MutableLiveData<Resource<Unit>>()
-
-        result.postValue(Resource.loading())
-
-        // Perform network operation
-        appExecutors.networkIO().execute {
-            // Perform network operation
-            val remoteOperationResult = remoteShareDataSource.deleteShare(remoteId)
-
-            if (remoteOperationResult.isSuccess) {
-                localShareDataSource.deleteShare(remoteId)
-                result.postValue(Resource.success()) // Used to close the share edition dialog
-            } else {
-                result.postValue(
-                    Resource.error(
-                        remoteOperationResult.code,
-                        msg = remoteOperationResult.httpPhrase,
-                        exception = remoteOperationResult.exception
-                    )
-                )
-            }
-        }
-        return result
-    }
-
     /******************************************************************************************************
      *********************************************** COMMON ***********************************************
      ******************************************************************************************************/
@@ -264,6 +236,34 @@ class OCShareRepository(
                 result.postValue(Resource.success())
             } else {
                 notifyError(result, remoteOperationResult)
+            }
+        }
+        return result
+    }
+
+    override fun deleteShare(
+        remoteId: Long
+    ): LiveData<Resource<Unit>> {
+        val result = MutableLiveData<Resource<Unit>>()
+
+        result.postValue(Resource.loading())
+
+        // Perform network operation
+        appExecutors.networkIO().execute {
+            // Perform network operation
+            val remoteOperationResult = remoteShareDataSource.deleteShare(remoteId)
+
+            if (remoteOperationResult.isSuccess) {
+                localShareDataSource.deleteShare(remoteId)
+                result.postValue(Resource.success()) // Used to close the share edition dialog
+            } else {
+                result.postValue(
+                    Resource.error(
+                        remoteOperationResult.code,
+                        msg = remoteOperationResult.httpPhrase,
+                        exception = remoteOperationResult.exception
+                    )
+                )
             }
         }
         return result

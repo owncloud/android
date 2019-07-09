@@ -111,7 +111,11 @@ class OCShareViewModel(
         remoteId, name, password, expirationDateInMillis, permissions, publicUpload
     )
 
-    fun deletePublicShare(
+    /******************************************************************************************************
+     *********************************************** COMMON ***********************************************
+     ******************************************************************************************************/
+
+    fun deleteShare(
         remoteId: Long
-    ): LiveData<Resource<Unit>> = shareRepository.deletePublicShare(remoteId)
+    ): LiveData<Resource<Unit>> = shareRepository.deleteShare(remoteId)
 }
