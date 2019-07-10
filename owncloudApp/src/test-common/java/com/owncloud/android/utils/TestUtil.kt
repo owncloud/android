@@ -75,6 +75,7 @@ object TestUtil {
     )
 
     fun createPrivateShare(
+        remoteId: Long = 1,
         shareType: Int = 0,
         shareWith: String,
         path: String,
@@ -83,6 +84,7 @@ object TestUtil {
         sharedWithDisplayName: String,
         accountOwner: String = "admin@server"
     ) = createShare(
+        remoteId = remoteId,
         shareType = shareType,
         shareWith = shareWith,
         path = path,

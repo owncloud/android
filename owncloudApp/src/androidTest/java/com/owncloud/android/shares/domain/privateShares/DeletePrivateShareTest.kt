@@ -1,8 +1,7 @@
 /**
  * ownCloud Android client application
  *
- * @author Jesus Recio (@jesmrec)
- * @author David González (@davigonz)
+ * @author David González Verdugo
  * Copyright (C) 2019 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -18,7 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.shares.domain.publicShares
+package com.owncloud.android.shares.domain.privateShares
 
 import android.accounts.Account
 import android.accounts.AccountManager
@@ -38,12 +37,13 @@ import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
 import com.owncloud.android.R
-import com.owncloud.android.authentication.AccountAuthenticator.KEY_AUTH_TOKEN_TYPE
+import com.owncloud.android.authentication.AccountAuthenticator
 import com.owncloud.android.capabilities.db.OCCapability
 import com.owncloud.android.capabilities.viewmodel.OCCapabilityViewModel
 import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.lib.common.accounts.AccountUtils
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
+import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.lib.resources.status.CapabilityBooleanType
 import com.owncloud.android.lib.resources.status.OwnCloudVersion
 import com.owncloud.android.shares.domain.OCShare
@@ -51,10 +51,10 @@ import com.owncloud.android.shares.presentation.OCShareViewModel
 import com.owncloud.android.shares.presentation.ShareActivity
 import com.owncloud.android.ui.activity.FileActivity
 import com.owncloud.android.utils.AccountsManager
+import com.owncloud.android.utils.Permissions
 import com.owncloud.android.utils.TestUtil
 import com.owncloud.android.vo.Resource
-import org.hamcrest.Matchers.allOf
-import org.hamcrest.Matchers.not
+import org.hamcrest.CoreMatchers.allOf
 import org.junit.AfterClass
 import org.junit.Before
 import org.junit.BeforeClass
@@ -65,12 +65,11 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.module
-import org.mockito.ArgumentMatchers
+import org.mockito.Mockito
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.mock
-import org.mockito.Mockito.spy
 
-class DeletePublicShareTest {
+class DeletePrivateShareTest {
     @Rule
     @JvmField
     val activityRule = ActivityTestRule(
@@ -81,24 +80,29 @@ class DeletePublicShareTest {
 
     private lateinit var file: OCFile
 
-    private val publicShares = arrayListOf(
-        TestUtil.createPublicShare( // With no expiration date
-            path = "/Photos/image.jpg",
-            expirationDate = 0L,
+    private val privateShareList = arrayListOf(
+        TestUtil.createPrivateShare(
+            remoteId = 10,
+            shareType = ShareType.USER.value,
+            shareWith = "paco",
+            path = "/Documents/doc1",
+            permissions = Permissions.READ_PERMISSIONS.value,
             isFolder = false,
-            name = "image.jpg link",
-            shareLink = "http://server:port/s/1"
+            sharedWithDisplayName = "Paco"
         ),
-        TestUtil.createPublicShare(
-            path = "/Photos/image.jpg",
-            isFolder = false,
-            name = "image.jpg updated link",
-            shareLink = "http://server:port/s/2"
+        TestUtil.createPrivateShare(
+            remoteId = 20,
+            shareType = ShareType.GROUP.value,
+            shareWith = "family",
+            path = "/Documents",
+            permissions = Permissions.READ_PERMISSIONS.value,
+            isFolder = true,
+            sharedWithDisplayName = "Family"
         )
     )
 
     private val capabilitiesLiveData = MutableLiveData<Resource<OCCapability>>()
-    private val sharesLiveData = MutableLiveData<Resource<List<OCShare>>>()
+    private val privateSharesLiveData = MutableLiveData<Resource<List<OCShare>>>()
 
     private val ocCapabilityViewModel = mock(OCCapabilityViewModel::class.java)
     private val ocShareViewModel = mock(OCShareViewModel::class.java)
@@ -149,7 +153,7 @@ class DeletePublicShareTest {
 
             accountManager.setAuthToken(
                 account,
-                KEY_AUTH_TOKEN_TYPE,
+                AccountAuthenticator.KEY_AUTH_TOKEN_TYPE,
                 "AUTH_TOKEN"
             )
         }
@@ -157,17 +161,17 @@ class DeletePublicShareTest {
 
     @Before
     fun setUp() {
-        val intent = spy(Intent::class.java)
+        val intent = Mockito.spy(Intent::class.java)
 
-        file = getOCFileForTesting("image.jpg")
+        file = TestUtil.createFile("image.jpg")
 
         `when`(intent.getParcelableExtra(FileActivity.EXTRA_FILE) as? Parcelable).thenReturn(file)
         intent.putExtra(FileActivity.EXTRA_FILE, file)
 
         `when`(ocCapabilityViewModel.getCapabilityForAccount(false)).thenReturn(capabilitiesLiveData)
         `when`(ocCapabilityViewModel.getCapabilityForAccount(true)).thenReturn(capabilitiesLiveData)
-        `when`(ocShareViewModel.getPublicShares(file.remotePath)).thenReturn(sharesLiveData)
-        `when`(ocShareViewModel.getPrivateShares(file.remotePath)).thenReturn(MutableLiveData())
+        `when`(ocShareViewModel.getPrivateShares(file.remotePath)).thenReturn(privateSharesLiveData)
+        `when`(ocShareViewModel.getPublicShares(file.remotePath)).thenReturn(MutableLiveData())
 
         stopKoin()
 
@@ -189,90 +193,65 @@ class DeletePublicShareTest {
     }
 
     @Test
-    fun deletePublicLink() {
+    fun deletePrivateShare() {
         loadCapabilitiesSuccessfully()
-
-        val existingPublicShare = publicShares.take(2) as ArrayList<OCShare>
-        loadSharesSuccessfully(existingPublicShare)
+        loadPrivateSharesSuccessfully()
 
         `when`(
-            ocShareViewModel.deleteShare(ArgumentMatchers.anyLong())
+            ocShareViewModel.deleteShare(10)
         ).thenReturn(
             MutableLiveData<Resource<Unit>>().apply {
                 postValue(Resource.success())
             }
         )
 
-        onView(allOf(withId(R.id.deletePublicLinkButton), hasSibling(withText(existingPublicShare[0].name))))
-            .perform(click())
-        onView(withId(android.R.id.button1)).perform(click())
+        onView(
+            allOf(
+                withId(R.id.unshareButton),
+                hasSibling(withText(privateShareList[0].sharedWithDisplayName))
+            )
+        ).perform(click())
 
-        sharesLiveData.postValue(
+        privateSharesLiveData.postValue(
             Resource.success(
-                arrayListOf(existingPublicShare[1])
+                arrayListOf(privateShareList[1])
             )
         )
 
-        onView(withText(existingPublicShare[0].name)).check(doesNotExist())
-        onView(withText(existingPublicShare[1].name)).check(matches(isDisplayed()))
+        onView(withText(privateShareList[0].sharedWithDisplayName)).check(doesNotExist())
+        onView(withText(privateShareList[1].sharedWithDisplayName + " (group)")).check(matches(isDisplayed()))
     }
 
     @Test
-    fun deleteLastPublicLink() {
+    fun deletePrivateShareLoading() {
         loadCapabilitiesSuccessfully()
-
-        val existingPublicShare = publicShares[0]
-        loadSharesSuccessfully(arrayListOf(existingPublicShare))
+        loadPrivateSharesSuccessfully()
 
         `when`(
-            ocShareViewModel.deleteShare(ArgumentMatchers.anyLong())
+            ocShareViewModel.deleteShare(10)
         ).thenReturn(
             MutableLiveData<Resource<Unit>>().apply {
-                postValue(Resource.success())
+                postValue(Resource.loading())
             }
         )
 
-        onView(withId(R.id.deletePublicLinkButton)).perform(click())
-        onView(withId(android.R.id.button1)).perform(click())
-
-        sharesLiveData.postValue(
-            Resource.success(
-                arrayListOf()
+        onView(
+            allOf(
+                withId(R.id.unshareButton),
+                hasSibling(withText(privateShareList[0].sharedWithDisplayName))
             )
-        )
-
-        onView(withText(existingPublicShare.name)).check(matches(not(isDisplayed())))
-        onView(withText(R.string.share_no_public_links)).check(matches(isDisplayed()))
-
-    }
-
-    @Test
-    fun deletePublicLinkLoading() {
-        loadCapabilitiesSuccessfully()
-
-        val existingPublicShare = publicShares[0]
-        loadSharesSuccessfully(arrayListOf(existingPublicShare))
-
-        onView(withId(R.id.deletePublicLinkButton)).perform(click())
-
-        sharesLiveData.postValue(
-            Resource.loading(
-                publicShares
-            )
-        )
+        ).perform(click())
 
         onView(withText(R.string.common_loading)).check(matches(isDisplayed()))
     }
 
     @Test
-    fun deletePublicLinkError() {
+    fun deletePrivateShareError() {
         loadCapabilitiesSuccessfully()
-
-        val existingPublicShare = publicShares[0]
-        loadSharesSuccessfully(arrayListOf(existingPublicShare))
+        loadPrivateSharesSuccessfully()
 
         `when`(
-            ocShareViewModel.deleteShare(ArgumentMatchers.anyLong())
+            ocShareViewModel.deleteShare(10)
         ).thenReturn(
             MutableLiveData<Resource<Unit>>().apply {
                 postValue(
@@ -284,20 +263,14 @@ class DeletePublicShareTest {
             }
         )
 
-        onView(withId(R.id.deletePublicLinkButton)).perform(click())
-        onView(withId(android.R.id.button1)).perform(click())
+        onView(
+            allOf(
+                withId(R.id.unshareButton),
+                hasSibling(withText(privateShareList[0].sharedWithDisplayName))
+            )
+        ).perform(click())
 
         onView(withText(R.string.unshare_link_file_error)).check(matches(isDisplayed()))
-    }
-
-    private fun getOCFileForTesting(name: String = "default"): OCFile {
-        val file = OCFile("/Photos/image.jpg")
-        file.availableOfflineStatus = OCFile.AvailableOfflineStatus.NOT_AVAILABLE_OFFLINE
-        file.fileName = name
-        file.fileId = 9456985479
-        file.remoteId = "1"
-        file.privateLink = "image link"
-        return file
     }
 
     private fun loadCapabilitiesSuccessfully(
@@ -313,7 +286,7 @@ class DeletePublicShareTest {
         )
     }
 
-    private fun loadSharesSuccessfully(shares: ArrayList<OCShare> = publicShares) {
-        sharesLiveData.postValue(Resource.success(shares))
+    private fun loadPrivateSharesSuccessfully(privateShares: ArrayList<OCShare> = privateShareList) {
+        privateSharesLiveData.postValue(Resource.success(privateShares))
     }
 }
