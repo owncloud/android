@@ -214,57 +214,50 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
      **************************************************************************************************************/
 
     override fun refreshPrivateShares() {
-//        ocShareViewModel.getPrivateShares(file?.remotePath!!).observe(
-//            this,
-//            Observer { resource ->
-//                when (resource?.status) {
-//                    SUCCESS -> {
-//                        if (shareFileFragment != null && shareFileFragment!!.isAdded) {
-//                            shareFileFragment?.updatePrivateShares(resource.data as ArrayList<OCShareEntity>)
-//                        }
-//                        if (searchShareesFragment != null && searchShareesFragment!!.isAdded) {
-//                            searchShareesFragment?.updatePrivateShares(resource.data as ArrayList<OCShareEntity>)
-//                        }
-//                        dismissLoadingDialog()
-//                    }
-//                    ERROR -> {
-//                        val errorMessage = ErrorMessageAdapter.getResultMessage(
-//                            resource.code,
-//                            resource.exception,
-//                            OperationType.GET_SHARES,
-//                            resources
-//                        )
-//                        Snackbar.make(
-//                            findViewById(android.R.id.content),
-//                            errorMessage,
-//                            Snackbar.LENGTH_SHORT
-//                        ).show()
-//                        if (shareFileFragment != null && shareFileFragment!!.isAdded) {
-//                            shareFileFragment?.updatePrivateShares(resource.data as ArrayList<OCShareEntity>)
-//                        }
-//                        if (searchShareesFragment != null && searchShareesFragment!!.isAdded) {
-//                            searchShareesFragment?.updatePrivateShares(resource.data as ArrayList<OCShareEntity>)
-//                        }
-//                        dismissLoadingDialog()
-//                    }
-//                    LOADING -> {
-//                        showLoadingDialog(R.string.common_loading)
-//                        if (shareFileFragment != null && shareFileFragment!!.isAdded) {
-//                            shareFileFragment?.updatePrivateShares(resource.data as ArrayList<OCShareEntity>)
-//                        }
-//                        if (searchShareesFragment != null && searchShareesFragment!!.isAdded) {
-//                            searchShareesFragment?.updatePrivateShares(resource.data as ArrayList<OCShareEntity>)
-//                        }
-//                    }
-//                    else -> {
-//                        Log.d(
-//                            TAG, "Unknown status when loading private shares for file ${file?.fileName} in " +
-//                                    "account ${account?.name}"
-//                        )
-//                    }
-//                }
-//            }
-//        )
+        ocShareViewModel.privateShares.observe(
+            this,
+            Observer { uiResult ->
+                when (uiResult?.status) {
+                    Status.SUCCESS -> {
+                        updatePrivateSharesInFileFragment(uiResult.data)
+                        updatePrivateSharesInSearchShareesFragment(uiResult.data)
+                        dismissLoadingDialog()
+                    }
+                    Status.ERROR -> {
+                        Snackbar.make(
+                            findViewById(android.R.id.content),
+                            uiResult.errorMessage!!,
+                            Snackbar.LENGTH_SHORT
+                        ).show()
+                        updatePrivateSharesInFileFragment(uiResult.data)
+                        updatePrivateSharesInSearchShareesFragment(uiResult.data)
+                        dismissLoadingDialog()
+                    }
+                    Status.LOADING -> {
+                        showLoadingDialog(R.string.common_loading)
+                        shareFileFragment?.updatePrivateShares(uiResult.data as ArrayList<OCShareEntity>)
+                    }
+                    else -> {
+                        Log.d(
+                            TAG, "Unknown status when loading private shares for file ${file?.fileName} in account" +
+                                    "${account?.name}"
+                        )
+                    }
+                }
+            }
+        )
+    }
+
+    private fun updatePrivateSharesInFileFragment(privateShares: List<OCShareEntity>?) {
+        if (shareFileFragment != null && shareFileFragment!!.isAdded) {
+            shareFileFragment?.updatePrivateShares(privateShares as ArrayList<OCShareEntity>)
+        }
+    }
+
+    private fun updatePrivateSharesInSearchShareesFragment(privateShares: List<OCShareEntity>?) {
+        if (searchShareesFragment != null && searchShareesFragment!!.isAdded) {
+            searchShareesFragment?.updatePrivateShares(privateShares as ArrayList<OCShareEntity>)
+        }
     }
 
     override fun refreshPrivateShare(remoteId: Long) {
@@ -442,10 +435,11 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
                     }
                     Status.LOADING -> {
                         showLoadingDialog(R.string.common_loading)
+                        shareFileFragment?.updatePublicShares(uiResult.data as ArrayList<OCShareEntity>)
                     }
                     else -> {
                         Log.d(
-                            TAG, "Unknown status when loading shares for file ${file?.fileName} in account" +
+                            TAG, "Unknown status when loading public shares for file ${file?.fileName} in account" +
                                     "${account?.name}"
                         )
                     }
