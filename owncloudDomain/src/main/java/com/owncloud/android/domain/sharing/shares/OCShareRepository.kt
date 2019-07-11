@@ -40,8 +40,18 @@ class OCShareRepository(
      ******************************************* PRIVATE SHARES *******************************************
      ******************************************************************************************************/
 
-    override fun getPrivateShares(filePath: String, accountName: String): Resource<LiveData<List<OCShareEntity>>> {
-        return getShares(
+    override fun getPrivateSharesAsLiveData(filePath: String, accountName: String): LiveData<List<OCShareEntity>> {
+        return localSharesDataSource.getSharesAsLiveData(
+            filePath, accountName, listOf(
+                ShareType.USER,
+                ShareType.GROUP,
+                ShareType.FEDERATED
+            )
+        )
+    }
+
+    override fun refreshPrivateShares(filePath: String, accountName: String): Resource<Unit> {
+        return refreshShares(
             filePath,
             accountName,
             listOf(
@@ -98,8 +108,12 @@ class OCShareRepository(
      ******************************************* PUBLIC SHARES ********************************************
      ******************************************************************************************************/
 
-    override fun getPublicShares(filePath: String, accountName: String): Resource<LiveData<List<OCShareEntity>>> {
-        return getShares(
+    override fun getPublicSharesAsLiveData(filePath: String, accountName: String): LiveData<List<OCShareEntity>> {
+        return localSharesDataSource.getSharesAsLiveData(filePath, accountName, listOf(ShareType.PUBLIC_LINK))
+    }
+
+    override fun refreshPublicShares(filePath: String, accountName: String): Resource<Unit> {
+        return refreshShares(
             filePath,
             accountName,
             listOf(ShareType.PUBLIC_LINK)
@@ -290,43 +304,13 @@ class OCShareRepository(
      *********************************************** COMMON ***********************************************
      ******************************************************************************************************/
 
-//    private fun getShares(
-//        filePath: String,
-//        shareTypes: List<ShareType>
-//    ): MutableLiveData<Resource<List<OCShareEntity>>> {
-//        return object :
-//            NetworkBoundResource<List<OCShareEntity>, ShareParserResult>(executors) {
-//            override fun saveCallResult(item: ShareParserResult) {
-//                val sharesForFileFromServer = item.shares.map { remoteShare ->
-//                    OCShareEntity.fromRemoteShare(remoteShare)
-//                        .also { it.accountOwner = accountName }
-//                }
-//
-//                if (sharesForFileFromServer.isEmpty()) {
-//                    localSharesDataSource.deleteSharesForFile(filePath, accountName)
-//                }
-//
-//                localSharesDataSource.replaceShares(sharesForFileFromServer)
-//            }
-//
-//            override fun shouldFetchFromNetwork(data: List<OCShareEntity>?) = true
-//
-//            override fun loadFromDb(): LiveData<List<OCShareEntity>> =
-//                localSharesDataSource.getSharesAsLiveData(
-//                    filePath, accountName, shareTypes
-//                )
-//
-//            override fun createCall() =
-//                remoteSharesDataSource.getShares(filePath, reshares = true, subfiles = false)
-//        }.asMutableLiveData()
-//    }
-
-    private fun getShares(
+    private fun refreshShares(
         filePath: String,
         accountName: String,
         shareTypes: List<ShareType>
-    ): Resource<LiveData<List<OCShareEntity>>> {
+    ): Resource<Unit> {
         val remoteOperationResult = remoteSharesDataSource.getShares(filePath, reshares = true, subfiles = false)
+
         val dbLiveData = localSharesDataSource.getSharesAsLiveData(
             filePath, accountName, shareTypes
         )
@@ -334,10 +318,9 @@ class OCShareRepository(
         // Error
         if (!remoteOperationResult.isSuccess) {
             return Resource.error(
-                remoteOperationResult.code,
-                dbLiveData,
-                remoteOperationResult.httpPhrase,
-                remoteOperationResult.exception
+                code = remoteOperationResult.code,
+                msg = remoteOperationResult.httpPhrase,
+                exception = remoteOperationResult.exception
             )
         }
 
@@ -354,7 +337,7 @@ class OCShareRepository(
         // Save shares
         localSharesDataSource.replaceShares(sharesForFileFromServer)
 
-        return Resource.success(dbLiveData)
+        return Resource.success()
     }
 
     /**
