@@ -19,18 +19,34 @@
 
 package com.owncloud.android.domain.sharing.shares.usecases
 
+import android.accounts.Account
+import android.content.Context
 import androidx.lifecycle.LiveData
+import com.owncloud.android.data.sharing.shares.ShareRepository
+import com.owncloud.android.data.sharing.shares.datasources.OCLocalShareDataSource
+import com.owncloud.android.data.sharing.shares.datasources.OCRemoteShareDataSource
 import com.owncloud.android.data.sharing.shares.db.OCShareEntity
 import com.owncloud.android.domain.UseCaseResult
 import com.owncloud.android.domain.sharing.shares.OCShareRepository
+import com.owncloud.android.lib.common.OwnCloudAccount
+import com.owncloud.android.lib.common.OwnCloudClientManagerFactory
 
 class GetPublicSharesUsecase(
-    private val filePath: String,
-    private val shareRepository: OCShareRepository
-) : BaseUseCase<LiveData<List<OCShareEntity>>>() {
+    context: Context,
+    account: Account,
+    private val shareRepository: ShareRepository = OCShareRepository(
+        localSharesDataSource = OCLocalShareDataSource(context),
+        remoteSharesDataSource = OCRemoteShareDataSource(
+            OwnCloudClientManagerFactory.getDefaultSingleton().getClientFor(
+                OwnCloudAccount(account, context),
+                context
+            )
+        )
+    )
+) : BaseUseCase<LiveData<List<OCShareEntity>>, GetPublicSharesUsecase.Params>() {
 
-    override fun run(): UseCaseResult<LiveData<List<OCShareEntity>>> {
-        val dataResult = shareRepository.getPublicShares(filePath)
+    override fun run(params: Params): UseCaseResult<LiveData<List<OCShareEntity>>> {
+        val dataResult = shareRepository.getPublicShares(params.filePath, params.accountName)
 
         if (!dataResult.isSuccess()) {
             return UseCaseResult.error(
@@ -43,4 +59,9 @@ class GetPublicSharesUsecase(
 
         return UseCaseResult.success(dataResult.data)
     }
+
+    data class Params(
+        val filePath: String,
+        val accountName: String
+    )
 }

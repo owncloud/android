@@ -160,27 +160,26 @@ class MainApp : Application() {
             }
         })
 
-        val viewModelsModule = module {
-            viewModel { OCShareViewModel(get()) }
+        val viewModelModule = module {
+            viewModel { (filePath: String, account: Account) ->
+                OCShareViewModel(filePath, androidContext(), account)
+            }
+
             viewModel { (account: Account) ->
                 OCShareeViewModel(androidContext(), account)
             }
+
             viewModel { (account: Account) ->
                 OCCapabilityViewModel(androidContext(), account)
             }
         }
 
-        val useCasesModule = module {
-            factory {
-
-            }
-        }
 
         startKoin {
             androidContext(applicationContext)
             modules(
                 listOf(
-                    viewModelsModule
+                    viewModelModule
                 )
             )
         }

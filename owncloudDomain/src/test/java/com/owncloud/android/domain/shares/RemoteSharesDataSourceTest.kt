@@ -28,7 +28,7 @@ import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.lib.resources.shares.UpdateRemoteShareOperation
 
 class RemoteSharesDataSourceTest(private val remoteOperationResult: RemoteOperationResult<ShareParserResult>) :
-    com.owncloud.android.data.sharing.shares.datasources.RemoteSharesDataSource {
+    com.owncloud.android.data.sharing.shares.datasources.RemoteShareDataSource {
     override fun getShares(
         remoteFilePath: String,
         reshares: Boolean,

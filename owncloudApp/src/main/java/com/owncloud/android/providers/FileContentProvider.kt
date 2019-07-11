@@ -52,7 +52,7 @@ import com.owncloud.android.data.capabilities.datasources.OCLocalCapabilitiesDat
 import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
 import com.owncloud.android.data.OwncloudDatabase
 import com.owncloud.android.data.ProviderMeta
-import com.owncloud.android.data.sharing.shares.datasources.OCLocalSharesDataSource
+import com.owncloud.android.data.sharing.shares.datasources.OCLocalShareDataSource
 import com.owncloud.android.data.sharing.shares.db.OCShareEntity
 import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.datamodel.UploadsStorageManager
@@ -975,9 +975,10 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
                     } while (cursor.moveToNext())
 
                     // Insert share list to the new shares table in new database
-                    executors.diskIO().execute {
-                        OCLocalSharesDataSource(context).insert(shares)
-                    }
+                    // TODO New arch
+//                    executors.diskIO().execute {
+//                        OCLocalShareDataSource(context).insert(shares)
+//                    }
 
                     // Drop old shares table from old database
                     db.execSQL("DROP TABLE IF EXISTS " + ProviderTableMeta.OCSHARES_TABLE_NAME + ";")
