@@ -22,13 +22,15 @@ package com.owncloud.android.presentation.sharing.shares
 import android.accounts.Account
 import android.content.Context
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.owncloud.android.data.Resource
 import com.owncloud.android.data.sharing.shares.db.OCShareEntity
-import com.owncloud.android.domain.sharing.shares.usecases.GetPublicSharesUsecase
+import com.owncloud.android.domain.sharing.shares.usecases.PrivateSharesLiveDataUseCase
+import com.owncloud.android.domain.sharing.shares.usecases.PublicSharesLiveDataUseCase
+import com.owncloud.android.domain.sharing.shares.usecases.RefreshPrivateSharesUseCase
+import com.owncloud.android.domain.sharing.shares.usecases.RefreshPublicSharesUseCase
 import com.owncloud.android.operations.common.OperationType
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter
@@ -43,22 +45,57 @@ class OCShareViewModel(
     private val filePath: String,
     val context: Context,
     val account: Account,
-    private val getPublicSharesUseCase: GetPublicSharesUsecase = GetPublicSharesUsecase(context, account)
+    privateSharesLiveDataUseCase: PrivateSharesLiveDataUseCase = PrivateSharesLiveDataUseCase(context, account),
+    publicSharesLiveDataUseCase: PublicSharesLiveDataUseCase = PublicSharesLiveDataUseCase(context, account),
+    private val refreshPrivateSharesUseCase: RefreshPrivateSharesUseCase = RefreshPrivateSharesUseCase(
+        context, account
+    ),
+    private val refreshPublicSharesUseCase: RefreshPublicSharesUseCase = RefreshPublicSharesUseCase(context, account)
 ) : ViewModel() {
 
-    private val _publicShares = MediatorLiveData<UIResult<List<OCShareEntity>>>()
-    val publicShares: MediatorLiveData<UIResult<List<OCShareEntity>>> = _publicShares
+    private val _privateShares = MutableLiveData<UIResult<List<OCShareEntity>>>()
+    val privateShares: LiveData<UIResult<List<OCShareEntity>>> = _privateShares
 
-    private lateinit var publicSharesDbLiveData: LiveData<List<OCShareEntity>>
+    private var privateSharesLiveData: LiveData<List<OCShareEntity>>? = privateSharesLiveDataUseCase.execute(
+        PrivateSharesLiveDataUseCase.Params(
+            filePath = filePath,
+            accountName = account.name
+        )
+    ).data
 
-    private val _privateShares = MediatorLiveData<UIResult<List<OCShareEntity>>>()
-    val privateShares: MediatorLiveData<UIResult<List<OCShareEntity>>> = _privateShares
+    // To detect changes in private shares
+    private val privateSharesObserver: Observer<List<OCShareEntity>> = Observer {
+        _privateShares.postValue(UIResult.success(it))
+    }
+
+    private val _publicShares = MutableLiveData<UIResult<List<OCShareEntity>>>()
+    val publicShares: LiveData<UIResult<List<OCShareEntity>>> = _publicShares
+
+    private var publicSharesLiveData: LiveData<List<OCShareEntity>>? = publicSharesLiveDataUseCase.execute(
+        PublicSharesLiveDataUseCase.Params(
+            filePath = filePath,
+            accountName = account.name
+        )
+    ).data
+
+    // To detect changes in public shares
+    private val publicSharesObserver: Observer<List<OCShareEntity>> = Observer {
+        _publicShares.postValue(UIResult.success(it))
+    }
 
     init {
+        privateSharesLiveData?.apply {
+            observeForever(privateSharesObserver)
+        }
+
+        publicSharesLiveData?.apply {
+            observeForever(publicSharesObserver)
+        }
+
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                refreshPublicShares()
                 refreshPrivateShares()
+                refreshPublicShares()
             }
         }
     }
@@ -66,7 +103,31 @@ class OCShareViewModel(
     /******************************************************************************************************
      ******************************************* PRIVATE SHARES *******************************************
      ******************************************************************************************************/
-    fun refreshPrivateShares() {
+    private fun refreshPrivateShares() {
+        _privateShares.postValue(
+            UIResult.loading(privateSharesLiveData?.value)
+        )
+
+        refreshPrivateSharesUseCase.execute(
+            RefreshPrivateSharesUseCase.Params(
+                filePath = filePath,
+                accountName = account.name
+            )
+        ).also { useCaseResult ->
+            if (!useCaseResult.isSuccess()) {
+                _privateShares.postValue(
+                    UIResult.error(
+                        privateSharesLiveData?.value,
+                        errorMessage = ErrorMessageAdapter.getResultMessage(
+                            useCaseResult.code,
+                            useCaseResult.exception,
+                            OperationType.GET_SHARES,
+                            context.resources
+                        )
+                    )
+                )
+            }
+        }
     }
 
 //    fun insertPrivateShare(
@@ -89,51 +150,35 @@ class OCShareViewModel(
      ******************************************* PUBLIC SHARES ********************************************
      ******************************************************************************************************/
     private fun refreshPublicShares() {
-        viewModelScope.launch {
-            withContext(Dispatchers.Main) {
-                publicShares.value = UIResult.loading()
-            }
-        }
+        _publicShares.postValue(
+            UIResult.loading(publicSharesLiveData?.value)
+        )
 
-        val getPublicSharesUseCaseResult = getPublicSharesUseCase.execute(
-            GetPublicSharesUsecase.Params(
+        refreshPublicSharesUseCase.execute(
+            RefreshPublicSharesUseCase.Params(
                 filePath = filePath,
                 accountName = account.name
             )
-        )
-
-        publicSharesDbLiveData = getPublicSharesUseCaseResult.data as LiveData<List<OCShareEntity>>
-
-        viewModelScope.launch {
-            withContext(Dispatchers.Main) {
-                if (getPublicSharesUseCaseResult.isSuccess()) {
-                    publicShares.addSource(
-                        publicSharesDbLiveData
-                    ) { shares ->
-                        publicShares.value = UIResult.success(shares)
-                    }
-                } else { // Show db shares and the error
-                    publicShares.addSource(
-                        publicSharesDbLiveData
-                    ) { shares ->
-                        publicShares.value = UIResult.error(
-                            shares,
-                            errorMessage = ErrorMessageAdapter.getResultMessage(
-                                getPublicSharesUseCaseResult.code,
-                                getPublicSharesUseCaseResult.exception,
-                                OperationType.GET_SHARES,
-                                context.resources
-                            )
+        ).also { useCaseResult ->
+            if (!useCaseResult.isSuccess()) {
+                _publicShares.postValue(
+                    UIResult.error(
+                        publicSharesLiveData?.value,
+                        errorMessage = ErrorMessageAdapter.getResultMessage(
+                            useCaseResult.code,
+                            useCaseResult.exception,
+                            OperationType.GET_SHARES,
+                            context.resources
                         )
-                    }
-                }
+                    )
+                )
             }
         }
     }
 
     override fun onCleared() {
         super.onCleared()
-        publicShares.removeSource(publicSharesDbLiveData)
+        publicSharesLiveData?.removeObserver(publicSharesObserver)
     }
 
 //    fun insertPublicShare(

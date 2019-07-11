@@ -36,8 +36,8 @@ data class UIResult<out T>(
             return UIResult(Status.ERROR, data, errorMessage)
         }
 
-        fun <T> loading(): UIResult<T> {
-            return UIResult(Status.LOADING)
+        fun <T> loading(data: T? = null): UIResult<T> {
+            return UIResult(Status.LOADING, data = data)
         }
     }
 
