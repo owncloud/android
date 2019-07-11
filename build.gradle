@@ -20,7 +20,7 @@ buildscript {
 
         // KTX extensions
         ktxCoreVersion = "1.0.2"
-        ktxViewModelVersion = "2.0.0"
+        ktxViewModelVersion = "2.2.0-alpha01"
     }
 
     repositories {

@@ -17,13 +17,33 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.domain.sharing.shares.usecases
+package com.owncloud.android.presentation
 
-import com.owncloud.android.domain.UseCaseResult
+data class UIResult<out T>(
+    val status: Status,
+    val data: T? = null,
+    val errorMessage: String? = null
+) {
+    companion object {
+        fun <T> success(data: T? = null): UIResult<T> {
+            return UIResult(Status.SUCCESS, data)
+        }
 
-abstract class BaseUseCase<out Type, in Params> {
+        fun <T> error(
+            data: T? = null,
+            errorMessage: String? = null
+        ): UIResult<T> {
+            return UIResult(Status.ERROR, data, errorMessage)
+        }
 
-    protected abstract fun run(params: Params): UseCaseResult<Type>
+        fun <T> loading(): UIResult<T> {
+            return UIResult(Status.LOADING)
+        }
+    }
 
-    fun execute(params: Params): UseCaseResult<Type> = run(params)
+    enum class Status {
+        SUCCESS,
+        LOADING,
+        ERROR
+    }
 }

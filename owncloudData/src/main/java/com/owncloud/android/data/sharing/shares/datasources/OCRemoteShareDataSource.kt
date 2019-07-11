@@ -28,9 +28,9 @@ import com.owncloud.android.lib.resources.shares.ShareParserResult
 import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.lib.resources.shares.UpdateRemoteShareOperation
 
-class OCRemoteSharesDataSource(
+class OCRemoteShareDataSource(
     private val client: OwnCloudClient
-) : RemoteSharesDataSource {
+) : RemoteShareDataSource {
 
     override fun getShares(
         remoteFilePath: String,

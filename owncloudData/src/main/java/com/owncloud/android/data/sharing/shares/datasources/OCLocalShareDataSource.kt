@@ -22,14 +22,14 @@ package com.owncloud.android.data.sharing.shares.datasources
 import android.content.Context
 import androidx.lifecycle.LiveData
 import com.owncloud.android.data.OwncloudDatabase
-import com.owncloud.android.data.sharing.shares.db.OCShareEntity
 import com.owncloud.android.data.sharing.shares.db.OCShareDao
+import com.owncloud.android.data.sharing.shares.db.OCShareEntity
 import com.owncloud.android.lib.resources.shares.ShareType
 
-class OCLocalSharesDataSource(
+class OCLocalShareDataSource(
     context: Context,
     private val ocShareDao: OCShareDao = OwncloudDatabase.getDatabase(context).shareDao()
-) : LocalSharesDataSource {
+) : LocalShareDataSource {
 
     override fun getSharesAsLiveData(
         filePath: String,

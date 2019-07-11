@@ -28,7 +28,7 @@ import com.owncloud.android.lib.resources.shares.ShareParserResult
 import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.lib.resources.shares.UpdateRemoteShareOperation
 
-interface RemoteSharesDataSource {
+interface RemoteShareDataSource {
     fun getShares(
         remoteFilePath: String,
         reshares: Boolean,

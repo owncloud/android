@@ -20,7 +20,7 @@
 
 package com.owncloud.android.data.shares.datasources
 
-import com.owncloud.android.data.sharing.shares.datasources.OCRemoteSharesDataSource
+import com.owncloud.android.data.sharing.shares.datasources.OCRemoteShareDataSource
 import com.owncloud.android.data.utils.DataTestUtil
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
@@ -40,13 +40,13 @@ import org.junit.Before
 import org.junit.Test
 
 class OCRemoteSharesDataSourceTest {
-    private lateinit var ocRemoteSharesDataSource: OCRemoteSharesDataSource
+    private lateinit var ocRemoteSharesDataSource: OCRemoteShareDataSource
     private val ownCloudClient = mockkClass(OwnCloudClient::class)
 
     @Before
     fun init() {
         ocRemoteSharesDataSource =
-            com.owncloud.android.data.sharing.shares.datasources.OCRemoteSharesDataSource(ownCloudClient)
+            com.owncloud.android.data.sharing.shares.datasources.OCRemoteShareDataSource(ownCloudClient)
     }
 
     /******************************************************************************************************
