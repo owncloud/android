@@ -23,8 +23,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.owncloud.android.data.Resource
 import com.owncloud.android.data.sharing.shares.ShareRepository
-import com.owncloud.android.data.sharing.shares.datasources.LocalSharesDataSource
-import com.owncloud.android.data.sharing.shares.datasources.RemoteSharesDataSource
+import com.owncloud.android.data.sharing.shares.datasources.LocalShareDataSource
+import com.owncloud.android.data.sharing.shares.datasources.RemoteShareDataSource
 import com.owncloud.android.data.sharing.shares.db.OCShareEntity
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.shares.RemoteShare
@@ -40,9 +40,10 @@ class OCShareRepository(
      ******************************************* PRIVATE SHARES *******************************************
      ******************************************************************************************************/
 
-    override fun getPrivateShares(filePath: String): Resource<LiveData<List<OCShareEntity>>> {
+    override fun getPrivateShares(filePath: String, accountName: String): Resource<LiveData<List<OCShareEntity>>> {
         return getShares(
             filePath,
+            accountName,
             listOf(
                 ShareType.USER,
                 ShareType.GROUP,
@@ -97,9 +98,10 @@ class OCShareRepository(
      ******************************************* PUBLIC SHARES ********************************************
      ******************************************************************************************************/
 
-    override fun getPublicShares(filePath: String): Resource<LiveData<List<OCShareEntity>>> {
+    override fun getPublicShares(filePath: String, accountName: String): Resource<LiveData<List<OCShareEntity>>> {
         return getShares(
             filePath,
+            accountName,
             listOf(ShareType.PUBLIC_LINK)
         )
     }
@@ -319,12 +321,17 @@ class OCShareRepository(
 //        }.asMutableLiveData()
 //    }
 
-    private fun getShares(filePath: String, shareTypes: List<ShareType>): Resource<LiveData<List<OCShareEntity>>> {
+    private fun getShares(
+        filePath: String,
+        accountName: String,
+        shareTypes: List<ShareType>
+    ): Resource<LiveData<List<OCShareEntity>>> {
         val remoteOperationResult = remoteSharesDataSource.getShares(filePath, reshares = true, subfiles = false)
         val dbLiveData = localSharesDataSource.getSharesAsLiveData(
             filePath, accountName, shareTypes
         )
 
+        // Error
         if (!remoteOperationResult.isSuccess) {
             return Resource.error(
                 remoteOperationResult.code,
@@ -335,7 +342,6 @@ class OCShareRepository(
         }
 
         // Success
-
         val sharesForFileFromServer = remoteOperationResult.data.shares.map { remoteShare ->
             OCShareEntity.fromRemoteShare(remoteShare)
                 .also { it.accountOwner = accountName }

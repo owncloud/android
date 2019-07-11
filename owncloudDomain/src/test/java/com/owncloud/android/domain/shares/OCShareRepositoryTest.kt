@@ -24,7 +24,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.owncloud.android.data.Resource
-import com.owncloud.android.data.sharing.shares.datasources.LocalSharesDataSource
+import com.owncloud.android.data.sharing.shares.datasources.LocalShareDataSource
 import com.owncloud.android.data.sharing.shares.db.OCShareEntity
 import com.owncloud.android.domain.sharing.shares.OCShareRepository
 import com.owncloud.android.domain.utils.DomainTestUtil
@@ -48,7 +48,7 @@ class OCShareRepositoryTest {
 
     private val defaultAccountName = "admin@server"
     private val filePath = "/Photos/"
-    private val localSharesDataSource = mockk<LocalSharesDataSource>(relaxed = true)
+    private val localSharesDataSource = mockk<LocalShareDataSource>(relaxed = true)
 
     private val remoteShares = arrayListOf(
         DomainTestUtil.createRemoteShare(
