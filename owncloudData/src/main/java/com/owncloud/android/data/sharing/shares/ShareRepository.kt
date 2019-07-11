@@ -29,8 +29,9 @@ interface ShareRepository {
     /******************************************************************************************************
      ******************************************* PRIVATE SHARES *******************************************
      ******************************************************************************************************/
+    fun getPrivateSharesAsLiveData(filePath: String, accountName: String): LiveData<List<OCShareEntity>>
 
-    fun getPrivateShares(filePath: String, accountName: String): Resource<LiveData<List<OCShareEntity>>>
+    fun refreshPrivateShares(filePath: String, accountName: String): Resource<Unit>
 
     fun insertPrivateShare(
         filePath: String,
@@ -48,7 +49,9 @@ interface ShareRepository {
      ******************************************* PUBLIC SHARES ********************************************
      ******************************************************************************************************/
 
-    fun getPublicShares(filePath: String, accountName: String): Resource<LiveData<List<OCShareEntity>>>
+    fun getPublicSharesAsLiveData(filePath: String, accountName: String): LiveData<List<OCShareEntity>>
+
+    fun refreshPublicShares(filePath: String, accountName: String): Resource<Unit>
 
     fun insertPublicShare(
         filePath: String,

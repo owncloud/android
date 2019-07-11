@@ -70,7 +70,7 @@ class OCShareViewModelTest {
             )
         )
 
-        every { ocShareRepository.getPrivateShares(filePath) } returns
+        every { ocShareRepository.refreshPrivateShares(filePath) } returns
                 MutableLiveData<Resource<List<OCShareEntity>>>().apply {
                     value = Resource.success(privateShares)
                 }
@@ -163,7 +163,7 @@ class OCShareViewModelTest {
             )
         )
 
-        every { ocShareRepository.getPublicShares(filePath) } returns
+        every { ocShareRepository.refreshPublicShares(filePath) } returns
                 MutableLiveData<Resource<List<OCShareEntity>>>().apply {
                     value = Resource.success(publicShares)
                 }
