@@ -36,7 +36,7 @@ import org.junit.Rule
 import org.junit.Test
 
 class OCLocalDataSourceTest {
-    private lateinit var ocLocalSharesDataSource: OCLocalSharesDataSource
+    private lateinit var ocLocalSharesDataSource: OCLocalShareDataSource
     private val ocSharesDao = mockkClass(OCShareDao::class)
 
     @Rule
@@ -52,8 +52,7 @@ class OCLocalDataSourceTest {
         } returns ocSharesDao
 
         val context = InstrumentationRegistry.getInstrumentation().targetContext
-
-        ocLocalSharesDataSource = OCLocalSharesDataSource(context, ocSharesDao)
+        ocLocalSharesDataSource = OCLocalShareDataSource(context, ocSharesDao)
     }
 
     /******************************************************************************************************

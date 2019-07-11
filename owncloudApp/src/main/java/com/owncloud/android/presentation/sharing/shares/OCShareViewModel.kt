@@ -22,33 +22,51 @@ package com.owncloud.android.presentation.sharing.shares
 import android.accounts.Account
 import android.content.Context
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.owncloud.android.data.Executors
+import androidx.lifecycle.viewModelScope
 import com.owncloud.android.data.Resource
-import com.owncloud.android.data.sharing.shares.datasources.OCLocalSharesDataSource
-import com.owncloud.android.data.sharing.shares.datasources.OCRemoteSharesDataSource
 import com.owncloud.android.data.sharing.shares.db.OCShareEntity
-import com.owncloud.android.domain.sharing.shares.OCShareRepository
 import com.owncloud.android.domain.sharing.shares.usecases.GetPublicSharesUsecase
-import com.owncloud.android.lib.common.OwnCloudAccount
-import com.owncloud.android.lib.common.OwnCloudClientManagerFactory
-import com.owncloud.android.lib.resources.shares.ShareType
+import com.owncloud.android.operations.common.OperationType
+import com.owncloud.android.presentation.UIResult
+import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 /**
  * View Model to keep a reference to the share repository and an up-to-date list of a shares
  */
 class OCShareViewModel(
-    private val getPublicSharesUseCase: GetPublicSharesUsecase,
-    private val executors: Executors = Executors()
+    private val filePath: String,
+    val context: Context,
+    val account: Account,
+    private val getPublicSharesUseCase: GetPublicSharesUsecase = GetPublicSharesUsecase(context, account)
 ) : ViewModel() {
+
+    private val _publicShares = MediatorLiveData<UIResult<List<OCShareEntity>>>()
+    val publicShares: MediatorLiveData<UIResult<List<OCShareEntity>>> = _publicShares
+
+    private lateinit var publicSharesDbLiveData: LiveData<List<OCShareEntity>>
+
+    private val _privateShares = MediatorLiveData<UIResult<List<OCShareEntity>>>()
+    val privateShares: MediatorLiveData<UIResult<List<OCShareEntity>>> = _privateShares
+
+    init {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                refreshPublicShares()
+                refreshPrivateShares()
+            }
+        }
+    }
 
     /******************************************************************************************************
      ******************************************* PRIVATE SHARES *******************************************
      ******************************************************************************************************/
-    fun getPrivateShares(filePath: String): LiveData<Resource<List<OCShareEntity>>> {
-//        return shareRepository.getPrivateShares(filePath)
-        return MutableLiveData()
+    fun refreshPrivateShares() {
     }
 
 //    fun insertPrivateShare(
@@ -70,12 +88,52 @@ class OCShareViewModel(
     /******************************************************************************************************
      ******************************************* PUBLIC SHARES ********************************************
      ******************************************************************************************************/
-    fun getPublicShares(filePath: String): LiveData<Resource<List<OCShareEntity>>> {
-        val result = executors.diskIO().execute {
-            getPublicSharesUseCase.execute()
+    private fun refreshPublicShares() {
+        viewModelScope.launch {
+            withContext(Dispatchers.Main) {
+                publicShares.value = UIResult.loading()
+            }
         }
-//        return shareRepository.getPublicShares(filePath)
-        return MutableLiveData()
+
+        val getPublicSharesUseCaseResult = getPublicSharesUseCase.execute(
+            GetPublicSharesUsecase.Params(
+                filePath = filePath,
+                accountName = account.name
+            )
+        )
+
+        publicSharesDbLiveData = getPublicSharesUseCaseResult.data as LiveData<List<OCShareEntity>>
+
+        viewModelScope.launch {
+            withContext(Dispatchers.Main) {
+                if (getPublicSharesUseCaseResult.isSuccess()) {
+                    publicShares.addSource(
+                        publicSharesDbLiveData
+                    ) { shares ->
+                        publicShares.value = UIResult.success(shares)
+                    }
+                } else { // Show db shares and the error
+                    publicShares.addSource(
+                        publicSharesDbLiveData
+                    ) { shares ->
+                        publicShares.value = UIResult.error(
+                            shares,
+                            errorMessage = ErrorMessageAdapter.getResultMessage(
+                                getPublicSharesUseCaseResult.code,
+                                getPublicSharesUseCaseResult.exception,
+                                OperationType.GET_SHARES,
+                                context.resources
+                            )
+                        )
+                    }
+                }
+            }
+        }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        publicShares.removeSource(publicSharesDbLiveData)
     }
 
 //    fun insertPublicShare(

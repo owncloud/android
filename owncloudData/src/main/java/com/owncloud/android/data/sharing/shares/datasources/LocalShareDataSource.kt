@@ -23,7 +23,7 @@ import androidx.lifecycle.LiveData
 import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.data.sharing.shares.db.OCShareEntity
 
-interface LocalSharesDataSource {
+interface LocalShareDataSource {
     fun getSharesAsLiveData(
         filePath: String,
         accountName: String,
