@@ -16,9 +16,6 @@
 
 package com.owncloud.android.data
 
-import com.owncloud.android.data.Status.ERROR
-import com.owncloud.android.data.Status.LOADING
-import com.owncloud.android.data.Status.SUCCESS
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode
 
 /**
@@ -34,7 +31,7 @@ data class Resource<out T>(
 ) {
     companion object {
         fun <T> success(data: T? = null): Resource<T> {
-            return Resource(SUCCESS, ResultCode.OK, data)
+            return Resource(Status.SUCCESS, ResultCode.OK, data)
         }
 
         fun <T> error(
@@ -43,12 +40,18 @@ data class Resource<out T>(
             msg: String? = null,
             exception: Exception? = null
         ): Resource<T> {
-            return Resource(ERROR, code, data, msg, exception)
+            return Resource(Status.ERROR, code, data, msg, exception)
         }
 
         fun <T> loading(data: T? = null): Resource<T> {
-            return Resource(LOADING, data = data)
+            return Resource(Status.LOADING, data = data)
         }
+    }
+
+    enum class Status {
+        SUCCESS,
+        ERROR,
+        LOADING
     }
 
     fun isSuccess(): Boolean = code?.equals(ResultCode.OK) ?: false
