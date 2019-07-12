@@ -217,11 +217,13 @@ class OCShareDaoTest {
 
     @Test
     fun getNonExistingPrivateShare() {
-        ocShareDao.insert(createDefaultPrivateShare())
+        val privateShare = createDefaultPrivateShare()
+
+        ocShareDao.insert(privateShare)
 
         val nonExistingPrivateShare = getValue(
             ocShareDao.getSharesAsLiveData(
-                "/Texts/text2.txt", "user@server", privateShareTypeValues
+                privateShare.path, "user@server", privateShareTypeValues
             )
         )
         assertThat(nonExistingPrivateShare, notNullValue())
@@ -230,63 +232,69 @@ class OCShareDaoTest {
 
     @Test
     fun replacePrivateShareIfAlreadyExists_exists() {
+        val privateShare = createDefaultPrivateShare()
+
         ocShareDao.insert(createDefaultPrivateShare())
 
+        val privateShareToReplace = createDefaultPrivateShare(shareWith = "userName")
+
         ocShareDao.replaceShares(
-            listOf(createDefaultPrivateShare(shareWith = "userName"))
+            listOf(privateShareToReplace)
         )
 
         val textShares = getValue(
             ocShareDao.getSharesAsLiveData(
-                "/Texts/text1.txt", "admin@server", listOf(ShareType.USER.value)
+                privateShare.path, privateShare.accountOwner, listOf(ShareType.USER.value)
             )
         )
         assertThat(textShares, notNullValue())
         assertEquals(1, textShares.size)
-        assertEquals("userName", textShares[0].shareWith)
+        assertEquals(privateShareToReplace.shareWith, textShares[0].shareWith)
     }
 
     @Test
     fun replacePrivateShareIfAlreadyExists_doesNotExist() {
-        ocShareDao.insert(
-            createDefaultPrivateShare(
-                shareType = ShareType.GROUP.value
-            )
+        val privateShare = createDefaultPrivateShare(
+            shareType = ShareType.GROUP.value
+        )
+
+        ocShareDao.insert(privateShare)
+
+        val privateShareToReplace = createDefaultPrivateShare(
+            shareType = ShareType.GROUP.value,
+            shareWith = "userName",
+            path = "/Texts/text2.txt"
         )
 
         ocShareDao.replaceShares(
-            listOf(
-                createDefaultPrivateShare(
-                    shareType = ShareType.GROUP.value,
-                    shareWith = "userName",
-                    path = "/Texts/text2.txt"
-                )
-            )
+            listOf(privateShareToReplace)
         )
 
         val text1Shares = getValue(
             ocShareDao.getSharesAsLiveData(
-                "/Texts/text1.txt", "admin@server", listOf(ShareType.GROUP.value)
+                privateShare.path, privateShare.accountOwner, listOf(ShareType.GROUP.value)
             )
         )
         assertThat(text1Shares, notNullValue())
         assertEquals(1, text1Shares.size)
-        assertEquals("username", text1Shares[0].shareWith)
+        assertEquals(privateShare.shareWith, text1Shares[0].shareWith)
 
         // text2 link didn't exist before, it should not replace the old one but be created
         val text2Shares = getValue(
             ocShareDao.getSharesAsLiveData(
-                "/Texts/text2.txt", "admin@server", listOf(ShareType.GROUP.value)
+                privateShareToReplace.path, privateShareToReplace.accountOwner, listOf(ShareType.GROUP.value)
             )
         )
         assertThat(text2Shares, notNullValue())
         assertEquals(1, text2Shares.size)
-        assertEquals("userName", text2Shares[0].shareWith)
+        assertEquals(privateShareToReplace.shareWith, text2Shares[0].shareWith)
     }
 
     @Test
     fun updatePrivateShare() {
-        ocShareDao.insert(createDefaultPrivateShare())
+        val privateShare = createDefaultPrivateShare()
+
+        ocShareDao.insert(privateShare)
 
         ocShareDao.update(
             createDefaultPrivateShare(permissions = 17)
@@ -294,7 +302,7 @@ class OCShareDaoTest {
 
         val textShares = getValue(
             ocShareDao.getSharesAsLiveData(
-                "/Texts/text1.txt", "admin@server", listOf(ShareType.USER.value)
+                privateShare.path, privateShare.accountOwner, listOf(ShareType.USER.value)
             )
         )
 
@@ -305,13 +313,15 @@ class OCShareDaoTest {
 
     @Test
     fun deletePrivateShare() {
+        val privateShare = createDefaultPrivateShare()
+
         ocShareDao.insert(createDefaultPrivateShare())
 
-        ocShareDao.deleteShare(1)
+        ocShareDao.deleteShare(privateShare.remoteId)
 
         val textShares = getValue(
             ocShareDao.getSharesAsLiveData(
-                "/Texts/text1.txt", "admin@server", listOf(ShareType.USER.value)
+                privateShare.path, privateShare.accountOwner, listOf(ShareType.USER.value)
             )
         )
         assertThat(textShares, notNullValue())
@@ -339,11 +349,13 @@ class OCShareDaoTest {
 
     @Test
     fun getNonExistingPublicShare() {
-        ocShareDao.insert(createDefaultPublicShare())
+        val publicShare = createDefaultPublicShare()
+
+        ocShareDao.insert(publicShare)
 
         val nonExistingPublicShare = getValue(
             ocShareDao.getSharesAsLiveData(
-                "/Texts/text2.txt", "user@server", listOf(ShareType.PUBLIC_LINK.value)
+                publicShare.path, "user@server", listOf(ShareType.PUBLIC_LINK.value)
             )
         )
         assertThat(nonExistingPublicShare, notNullValue())
@@ -352,78 +364,90 @@ class OCShareDaoTest {
 
     @Test
     fun replacePublicShareIfAlreadyExists_exists() {
-        ocShareDao.insert(createDefaultPublicShare())
+        val publicShare = createDefaultPublicShare()
+
+        ocShareDao.insert(publicShare)
+
+        val publicShareToReplace = createDefaultPublicShare(name = "Text 2 link")
 
         ocShareDao.replaceShares(
-            listOf(createDefaultPublicShare(name = "Text 2 link"))
+            listOf(publicShareToReplace)
         )
 
         val textShares = getValue(
             ocShareDao.getSharesAsLiveData(
-                "/Texts/text1.txt", "admin@server", listOf(ShareType.PUBLIC_LINK.value)
+                publicShare.path, publicShare.accountOwner, listOf(ShareType.PUBLIC_LINK.value)
             )
         )
         assertThat(textShares, notNullValue())
         assertEquals(1, textShares.size)
-        assertEquals("Text 2 link", textShares[0].name)
+        assertEquals(publicShareToReplace.name, textShares[0].name)
     }
 
     @Test
     fun replacePublicShareIfAlreadyExists_doesNotExist() {
-        ocShareDao.insert(createDefaultPublicShare())
+        val publicShare = createDefaultPublicShare()
+
+        ocShareDao.insert(publicShare)
+
+        val publicShareToReplace = createDefaultPublicShare(path = "/Texts/text2.txt", name = "Text 2 link")
 
         ocShareDao.replaceShares(
-            listOf(createDefaultPublicShare(path = "/Texts/text2.txt", name = "Text 2 link"))
+            listOf(publicShareToReplace)
         )
 
         val text1Shares = getValue(
             ocShareDao.getSharesAsLiveData(
-                "/Texts/text1.txt", "admin@server", listOf(ShareType.PUBLIC_LINK.value)
+                publicShare.path, publicShare.accountOwner, listOf(ShareType.PUBLIC_LINK.value)
             )
         )
         assertThat(text1Shares, notNullValue())
         assertEquals(1, text1Shares.size)
-        assertEquals("Text 1 link", text1Shares[0].name)
+        assertEquals(publicShare.name, text1Shares[0].name)
 
         // text2 link didn't exist before, it should not replace the old one but be created
         val text2Shares = getValue(
             ocShareDao.getSharesAsLiveData(
-                "/Texts/text2.txt", "admin@server", listOf(ShareType.PUBLIC_LINK.value)
+                publicShareToReplace.path, publicShareToReplace.accountOwner, listOf(ShareType.PUBLIC_LINK.value)
             )
         )
         assertThat(text2Shares, notNullValue())
         assertEquals(1, text2Shares.size)
-        assertEquals("Text 2 link", text2Shares[0].name)
+        assertEquals(publicShareToReplace.name, text2Shares[0].name)
     }
 
     @Test
     fun updatePublicShare() {
-        ocShareDao.insert(createDefaultPublicShare())
+        val publicShare = createDefaultPublicShare()
 
-        ocShareDao.update(
-            createDefaultPublicShare(name = "Text 1 link updated", expirationDate = 2000)
-        )
+        ocShareDao.insert(publicShare)
+
+        val publicShareToUpdate = createDefaultPublicShare(name = "Text 1 link updated", expirationDate = 2000)
+
+        ocShareDao.update(publicShareToUpdate)
 
         val textShares = getValue(
             ocShareDao.getSharesAsLiveData(
-                "/Texts/text1.txt", "admin@server", listOf(ShareType.PUBLIC_LINK.value)
+                publicShareToUpdate.path, publicShareToUpdate.accountOwner, listOf(ShareType.PUBLIC_LINK.value)
             )
         )
         assertThat(textShares, notNullValue())
         assertEquals(1, textShares.size)
-        assertEquals("Text 1 link updated", textShares[0].name)
-        assertEquals(2000, textShares[0].expirationDate)
+        assertEquals(publicShareToUpdate.name, textShares[0].name)
+        assertEquals(publicShareToUpdate.expirationDate, textShares[0].expirationDate)
     }
 
     @Test
     fun deletePublicShare() {
-        ocShareDao.insert(createDefaultPublicShare())
+        val publicShare = createDefaultPublicShare()
 
-        ocShareDao.deleteShare(1)
+        ocShareDao.insert(publicShare)
+
+        ocShareDao.deleteShare(publicShare.remoteId)
 
         val textShares = getValue(
             ocShareDao.getSharesAsLiveData(
-                "/Texts/text1.txt", "admin@server", listOf(ShareType.PUBLIC_LINK.value)
+                publicShare.path, publicShare.accountOwner, listOf(ShareType.PUBLIC_LINK.value)
             )
         )
         assertThat(textShares, notNullValue())
