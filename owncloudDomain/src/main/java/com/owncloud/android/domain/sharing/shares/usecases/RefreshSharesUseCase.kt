@@ -45,17 +45,20 @@ class RefreshSharesUseCase(
     )
 ) : BaseUseCase<LiveData<List<OCShareEntity>>, RefreshSharesUseCase.Params>() {
     override fun run(params: Params): UseCaseResult<LiveData<List<OCShareEntity>>> {
-        val dataResult = shareRepository.refreshShares(params.filePath, params.accountName)
+        shareRepository.refreshShares(
+            params.filePath,
+            params.accountName
+        ).also { dataResult ->
+            if (!dataResult.isSuccess()) {
+                return UseCaseResult.error(
+                    code = dataResult.code,
+                    msg = dataResult.msg,
+                    exception = dataResult.exception
+                )
+            }
 
-        if (!dataResult.isSuccess()) {
-            return UseCaseResult.error(
-                code = dataResult.code,
-                msg = dataResult.msg,
-                exception = dataResult.exception
-            )
+            return UseCaseResult.success()
         }
-
-        return UseCaseResult.success()
     }
 
     data class Params(
