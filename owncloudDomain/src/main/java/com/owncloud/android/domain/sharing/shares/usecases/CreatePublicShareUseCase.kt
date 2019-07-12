@@ -33,7 +33,7 @@ import com.owncloud.android.lib.common.OwnCloudClientManagerFactory
 
 class CreatePublicShareUseCase(
     context: Context,
-    account: Account,
+    val account: Account,
     private val shareRepository: ShareRepository = OCShareRepository(
         localSharesDataSource = OCLocalShareDataSource(context),
         remoteSharesDataSource = OCRemoteShareDataSource(
@@ -46,25 +46,24 @@ class CreatePublicShareUseCase(
 ) : BaseUseCase<LiveData<List<OCShareEntity>>, CreatePublicShareUseCase.Params>() {
 
     override fun run(params: Params): UseCaseResult<LiveData<List<OCShareEntity>>> {
-        val dataResult = shareRepository.insertPublicShare(
+        shareRepository.insertPublicShare(
             params.filePath,
             params.permissions,
             params.name,
             params.password,
             params.expirationTimeInMillis,
             params.publicUpload,
-            params.accountName
-        )
-
-        if (!dataResult.isSuccess()) {
-            return UseCaseResult.error(
-                code = dataResult.code,
-                msg = dataResult.msg,
-                exception = dataResult.exception
-            )
+            accountName = account.name
+        ).also { dataResult ->
+            if (!dataResult.isSuccess()) {
+                return UseCaseResult.error(
+                    code = dataResult.code,
+                    msg = dataResult.msg,
+                    exception = dataResult.exception
+                )
+            }
+            return UseCaseResult.success()
         }
-
-        return UseCaseResult.success()
     }
 
     data class Params(
@@ -73,7 +72,6 @@ class CreatePublicShareUseCase(
         val name: String,
         val password: String,
         val expirationTimeInMillis: Long,
-        val publicUpload: Boolean,
-        val accountName: String
+        val publicUpload: Boolean
     )
 }
