@@ -51,7 +51,7 @@ public class LoadingDialog extends DialogFragment {
     /**
      * Public factory method to get dialog instances.
      *
-     * @param messageId     Resource id for a message to show in the dialog.
+     * @param messageId     DataResult id for a message to show in the dialog.
      * @param cancelable    If 'true', the dialog can be cancelled by the user input (BACK button, touch outside...)
      * @return New dialog instance, ready to show.
      */

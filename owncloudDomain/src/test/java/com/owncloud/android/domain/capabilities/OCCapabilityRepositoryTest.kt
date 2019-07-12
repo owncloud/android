@@ -22,7 +22,7 @@ package com.owncloud.android.domain.capabilities
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
-import com.owncloud.android.data.Resource
+import com.owncloud.android.data.DataResult
 import com.owncloud.android.data.capabilities.datasources.LocalCapabilitiesDataSource
 import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
 import com.owncloud.android.domain.utils.DomainTestUtil
@@ -70,7 +70,7 @@ class OCCapabilityRepositoryTest {
 
         val data = ocCapabilityRepository.getCapabilityForAccount(defaultAccountName)
 
-        val observer = mockk<Observer<Resource<OCCapabilityEntity>>>(relaxed = true)
+        val observer = mockk<Observer<DataResult<OCCapabilityEntity>>>(relaxed = true)
         data.observeForever(observer)
 
         dbData.postValue(null)
@@ -99,7 +99,7 @@ class OCCapabilityRepositoryTest {
             newCapability
         )
 
-        verify { observer.onChanged(Resource.success(newCapability)) }
+        verify { observer.onChanged(DataResult.success(newCapability)) }
     }
 
     @Test
@@ -130,7 +130,7 @@ class OCCapabilityRepositoryTest {
             defaultAccountName
         )
 
-        val observer = mockk<Observer<Resource<OCCapabilityEntity>>>(relaxed = true)
+        val observer = mockk<Observer<DataResult<OCCapabilityEntity>>>(relaxed = true)
         data.observeForever(observer)
 
         dbData.postValue(null)
@@ -146,7 +146,7 @@ class OCCapabilityRepositoryTest {
         // Observe changes in database livedata when the list of capabilities is empty
         dbData.postValue(null)
 
-        verify { observer.onChanged(Resource.success(null)) }
+        verify { observer.onChanged(DataResult.success(null)) }
     }
 
     @Test
@@ -193,12 +193,12 @@ class OCCapabilityRepositoryTest {
         // Retrieving capabilities from server...
 
         // Observe changes in database livedata when there's an error from server
-        val observer = mockk<Observer<Resource<OCCapabilityEntity>>>(relaxed = true)
+        val observer = mockk<Observer<DataResult<OCCapabilityEntity>>>(relaxed = true)
         data.observeForever(observer)
 
         verify {
             observer.onChanged(
-                Resource.error(
+                DataResult.error(
                     RemoteOperationResult.ResultCode.FORBIDDEN, dbData.value, exception = exception
                 )
             )

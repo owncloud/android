@@ -20,7 +20,7 @@
 package com.owncloud.android.data.sharing.shares
 
 import androidx.lifecycle.LiveData
-import com.owncloud.android.data.Resource
+import com.owncloud.android.data.DataResult
 import com.owncloud.android.data.sharing.shares.db.OCShareEntity
 import com.owncloud.android.lib.resources.shares.ShareType
 
@@ -29,16 +29,13 @@ interface ShareRepository {
     /******************************************************************************************************
      ******************************************* PRIVATE SHARES *******************************************
      ******************************************************************************************************/
-    fun getPrivateSharesAsLiveData(filePath: String, accountName: String): LiveData<List<OCShareEntity>>
-
-    fun refreshPrivateShares(filePath: String, accountName: String): Resource<Unit>
 
     fun insertPrivateShare(
         filePath: String,
         shareType: ShareType?,
         shareeName: String,
         permissions: Int
-    ): LiveData<Resource<Unit>>
+    ): LiveData<DataResult<Unit>>
 
     fun updatePrivateShare(
         remoteId: Long,
@@ -49,18 +46,15 @@ interface ShareRepository {
      ******************************************* PUBLIC SHARES ********************************************
      ******************************************************************************************************/
 
-    fun getPublicSharesAsLiveData(filePath: String, accountName: String): LiveData<List<OCShareEntity>>
-
-    fun refreshPublicShares(filePath: String, accountName: String): Resource<Unit>
-
     fun insertPublicShare(
         filePath: String,
         permissions: Int,
         name: String,
         password: String,
         expirationTimeInMillis: Long,
-        publicUpload: Boolean
-    ): LiveData<Resource<Unit>>
+        publicUpload: Boolean,
+        accountName: String
+    ): DataResult<Unit>
 
     fun updatePublicShare(
         remoteId: Long,
@@ -69,7 +63,7 @@ interface ShareRepository {
         expirationDateInMillis: Long,
         permissions: Int,
         publicUpload: Boolean
-    ): LiveData<Resource<Unit>>
+    ): LiveData<DataResult<Unit>>
 
     /******************************************************************************************************
      *********************************************** COMMON ***********************************************
@@ -77,7 +71,13 @@ interface ShareRepository {
 
     fun deleteShare(
         remoteId: Long
-    ): LiveData<Resource<Unit>>
+    ): LiveData<DataResult<Unit>>
 
-    fun getShare(remoteId: Long): LiveData<OCShare>
+    /******************************************************************************************************
+     *********************************************** COMMON ***********************************************
+     ******************************************************************************************************/
+
+    fun getSharesAsLiveData(filePath: String, accountName: String): LiveData<List<OCShareEntity>>
+
+    fun refreshShares(filePath: String, accountName: String): DataResult<Unit>
 }

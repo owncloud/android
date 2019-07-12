@@ -31,7 +31,7 @@ import com.owncloud.android.domain.sharing.shares.OCShareRepository
 import com.owncloud.android.lib.common.OwnCloudAccount
 import com.owncloud.android.lib.common.OwnCloudClientManagerFactory
 
-class RefreshPrivateSharesUseCase(
+class CreatePublicShareUseCase(
     context: Context,
     account: Account,
     private val shareRepository: ShareRepository = OCShareRepository(
@@ -43,9 +43,18 @@ class RefreshPrivateSharesUseCase(
             )
         )
     )
-) : BaseUseCase<LiveData<List<OCShareEntity>>, RefreshPrivateSharesUseCase.Params>() {
+) : BaseUseCase<LiveData<List<OCShareEntity>>, CreatePublicShareUseCase.Params>() {
+
     override fun run(params: Params): UseCaseResult<LiveData<List<OCShareEntity>>> {
-        val dataResult = shareRepository.refreshPrivateShares(params.filePath, params.accountName)
+        val dataResult = shareRepository.insertPublicShare(
+            params.filePath,
+            params.permissions,
+            params.name,
+            params.password,
+            params.expirationTimeInMillis,
+            params.publicUpload,
+            params.accountName
+        )
 
         if (!dataResult.isSuccess()) {
             return UseCaseResult.error(
@@ -60,6 +69,11 @@ class RefreshPrivateSharesUseCase(
 
     data class Params(
         val filePath: String,
+        val permissions: Int,
+        val name: String,
+        val password: String,
+        val expirationTimeInMillis: Long,
+        val publicUpload: Boolean,
         val accountName: String
     )
 }

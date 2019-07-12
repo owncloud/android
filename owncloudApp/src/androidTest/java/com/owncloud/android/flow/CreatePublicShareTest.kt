@@ -36,7 +36,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
 import com.owncloud.android.R
 import com.owncloud.android.authentication.AccountAuthenticator.KEY_AUTH_TOKEN_TYPE
-import com.owncloud.android.data.Resource
+import com.owncloud.android.data.DataResult
 import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
 import com.owncloud.android.data.sharing.shares.db.OCShareEntity
 import com.owncloud.android.datamodel.OCFile
@@ -95,8 +95,8 @@ class CreatePublicShareTest {
         )
     )
 
-    private val capabilitiesLiveData = MutableLiveData<Resource<OCCapabilityEntity>>()
-    private val sharesLiveData = MutableLiveData<Resource<List<OCShareEntity>>>()
+    private val capabilitiesLiveData = MutableLiveData<DataResult<OCCapabilityEntity>>()
+    private val sharesLiveData = MutableLiveData<DataResult<List<OCShareEntity>>>()
 
     private val ocCapabilityViewModel = mockk<OCCapabilityViewModel>(relaxed = true)
     private val ocShareViewModel = mockk<OCShareViewModel>(relaxed = true)
@@ -197,7 +197,7 @@ class CreatePublicShareTest {
 
         // New share properly created
         sharesLiveData.postValue(
-            Resource.success(
+            DataResult.success(
                 arrayListOf(newPublicShare)
             )
         )
@@ -222,7 +222,7 @@ class CreatePublicShareTest {
 
         // New share properly created
         sharesLiveData.postValue(
-            Resource.success(
+            DataResult.success(
                 publicShares
             )
         )
@@ -247,7 +247,7 @@ class CreatePublicShareTest {
 
         // New share properly created
         sharesLiveData.postValue(
-            Resource.success(
+            DataResult.success(
                 arrayListOf(newPublicShare1)
             )
         )
@@ -266,7 +266,7 @@ class CreatePublicShareTest {
 
         // New share properly created
         sharesLiveData.postValue(
-            Resource.success(
+            DataResult.success(
                 publicShares.take(2)
             )
         )
@@ -285,7 +285,7 @@ class CreatePublicShareTest {
 
         // New share properly created
         sharesLiveData.postValue(
-            Resource.success(
+            DataResult.success(
                 publicShares
             )
         )
@@ -302,7 +302,7 @@ class CreatePublicShareTest {
 
         onView(withId(R.id.addPublicLinkButton)).perform(click())
 
-        savePublicShare(publicShares[0], Resource.loading())
+        savePublicShare(publicShares[0], DataResult.loading())
 
         onView(withText(R.string.common_loading)).check(matches(isDisplayed()))
     }
@@ -316,7 +316,7 @@ class CreatePublicShareTest {
 
         savePublicShare(
             publicShares[0],
-            Resource.error(
+            DataResult.error(
                 RemoteOperationResult.ResultCode.FORBIDDEN,
                 exception = Exception("Error when retrieving shares")
             )
@@ -340,17 +340,17 @@ class CreatePublicShareTest {
         )
     ) {
         capabilitiesLiveData.postValue(
-            Resource.success(
+            DataResult.success(
                 capability
             )
         )
     }
 
     private fun loadSharesSuccessfully(shares: ArrayList<OCShareEntity> = publicShares) {
-        sharesLiveData.postValue(Resource.success(shares))
+        sharesLiveData.postValue(DataResult.success(shares))
     }
 
-    private fun savePublicShare(newShare: OCShareEntity, resource: Resource<Unit> = Resource.success()) {
+    private fun savePublicShare(newShare: OCShareEntity, resource: DataResult<Unit> = DataResult.success()) {
 
         every {
             ocShareViewModel.insertPublicShare(
@@ -361,7 +361,7 @@ class CreatePublicShareTest {
                 -1,
                 false
             )
-        } returns MutableLiveData<Resource<Unit>>().apply {
+        } returns MutableLiveData<DataResult<Unit>>().apply {
             postValue(resource)
         }
 

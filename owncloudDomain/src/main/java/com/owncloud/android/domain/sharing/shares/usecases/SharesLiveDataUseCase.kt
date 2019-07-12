@@ -31,7 +31,7 @@ import com.owncloud.android.domain.sharing.shares.OCShareRepository
 import com.owncloud.android.lib.common.OwnCloudAccount
 import com.owncloud.android.lib.common.OwnCloudClientManagerFactory
 
-class PrivateSharesLiveDataUseCase(
+class SharesLiveDataUseCase(
     context: Context,
     account: Account,
     private val shareRepository: ShareRepository = OCShareRepository(
@@ -43,13 +43,13 @@ class PrivateSharesLiveDataUseCase(
             )
         )
     )
-) : BaseUseCase<LiveData<List<OCShareEntity>>, PrivateSharesLiveDataUseCase.Params>() {
+) : BaseUseCase<LiveData<List<OCShareEntity>>, SharesLiveDataUseCase.Params>() {
     override fun run(params: Params): UseCaseResult<LiveData<List<OCShareEntity>>> {
-        val privateSharesAsLiveData = shareRepository.getPrivateSharesAsLiveData(
+        val sharesAsLiveData = shareRepository.getSharesAsLiveData(
             params.filePath, params.accountName
         )
 
-        return UseCaseResult.success(privateSharesAsLiveData)  // Always successful here, data comes from database
+        return UseCaseResult.success(sharesAsLiveData)  // Always successful here, data comes from database
     }
 
     data class Params(
