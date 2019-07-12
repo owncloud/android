@@ -160,8 +160,7 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
 
     override fun refreshAllShares() {
         refreshCapabilities()
-        refreshPrivateShares()
-        observePublicShares()
+        observeShares()
     }
 
     override fun refreshCapabilities(shouldFetchFromNetwork: Boolean) {
@@ -209,18 +208,13 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
 //        )
     }
 
-    /**************************************************************************************************************
-     *********************************************** PRIVATE SHARES ***********************************************
-     **************************************************************************************************************/
-
-    override fun refreshPrivateShares() {
-        ocShareViewModel.privateShares.observe(
+    private fun observeShares() {
+        ocShareViewModel.shares.observe(
             this,
             Observer { uiResult ->
                 when (uiResult?.status) {
                     Status.SUCCESS -> {
-                        updatePrivateSharesInFileFragment(uiResult.data)
-                        updatePrivateSharesInSearchShareesFragment(uiResult.data)
+                        updateSharesInFragments(uiResult.data)
                         dismissLoadingDialog()
                     }
                     Status.ERROR -> {
@@ -229,17 +223,16 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
                             uiResult.errorMessage!!,
                             Snackbar.LENGTH_SHORT
                         ).show()
-                        updatePrivateSharesInFileFragment(uiResult.data)
-                        updatePrivateSharesInSearchShareesFragment(uiResult.data)
+                        updateSharesInFragments(uiResult.data)
                         dismissLoadingDialog()
                     }
                     Status.LOADING -> {
                         showLoadingDialog(R.string.common_loading)
-                        shareFileFragment?.updatePrivateShares(uiResult.data as ArrayList<OCShareEntity>)
+                        updateSharesInFragments(uiResult.data)
                     }
                     else -> {
                         Log.d(
-                            TAG, "Unknown status when loading private shares for file ${file?.fileName} in account" +
+                            TAG, "Unknown status when loading public shares for file ${file?.fileName} in account" +
                                     "${account?.name}"
                         )
                     }
@@ -247,6 +240,31 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
             }
         )
     }
+
+    private fun updateSharesInFragments(shares: List<OCShareEntity>?) {
+        shares?.filter { share ->
+            share.shareType == ShareType.USER.value ||
+                    share.shareType == ShareType.GROUP.value ||
+                    share.shareType == ShareType.FEDERATED.value
+        }.also { privateShares ->
+            if (privateShares?.isNotEmpty()!!) {
+                updatePrivateSharesInFileFragment(privateShares)
+                updatePrivateSharesInSearchShareesFragment(privateShares)
+            }
+        }
+
+        shares?.filter { share ->
+            share.shareType == ShareType.PUBLIC_LINK.value
+        }.also { publicShares ->
+            if (publicShares?.isNotEmpty()!!) {
+                shareFileFragment?.updatePublicShares(publicShares as ArrayList<OCShareEntity>)
+            }
+        }
+    }
+
+    /**************************************************************************************************************
+     *********************************************** PRIVATE SHARES ***********************************************
+     **************************************************************************************************************/
 
     private fun updatePrivateSharesInFileFragment(privateShares: List<OCShareEntity>?) {
         if (shareFileFragment != null && shareFileFragment!!.isAdded) {
@@ -412,42 +430,6 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
     /**************************************************************************************************************
      *********************************************** PUBLIC SHARES ************************************************
      **************************************************************************************************************/
-
-    private fun observePublicShares() {
-        ocShareViewModel.publicShares.observe(
-            this,
-            Observer { uiResult ->
-                when (uiResult?.status) {
-                    Status.SUCCESS -> {
-                        shareFileFragment?.updatePublicShares(uiResult.data as ArrayList<OCShareEntity>)
-                        if (resource.data.isNullOrEmpty()) {
-                            updatePublicShareFile(false)
-                        }
-                        dismissLoadingDialog()
-                    }
-                    Status.ERROR -> {
-                        Snackbar.make(
-                            findViewById(android.R.id.content),
-                            uiResult.errorMessage!!,
-                            Snackbar.LENGTH_SHORT
-                        ).show()
-                        shareFileFragment?.updatePublicShares(uiResult.data as ArrayList<OCShareEntity>)
-                        dismissLoadingDialog()
-                    }
-                    Status.LOADING -> {
-                        showLoadingDialog(R.string.common_loading)
-                        shareFileFragment?.updatePublicShares(uiResult.data as ArrayList<OCShareEntity>)
-                    }
-                    else -> {
-                        Log.d(
-                            TAG, "Unknown status when loading public shares for file ${file?.fileName} in account" +
-                                    "${account?.name}"
-                        )
-                    }
-                }
-            }
-        )
-    }
 
     override fun showAddPublicShare(defaultLinkName: String) {
         // DialogFragment.show() will take care of adding the fragment

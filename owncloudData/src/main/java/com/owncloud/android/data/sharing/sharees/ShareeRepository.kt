@@ -19,7 +19,7 @@
 
 package com.owncloud.android.data.sharing.sharees
 
-import com.owncloud.android.data.Resource
+import com.owncloud.android.data.DataResult
 import org.json.JSONObject
 
 interface ShareeRepository {
@@ -27,5 +27,5 @@ interface ShareeRepository {
         searchString: String,
         page: Int,
         perPage: Int
-    ): Resource<ArrayList<JSONObject>>
+    ): DataResult<ArrayList<JSONObject>>
 }

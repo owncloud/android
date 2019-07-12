@@ -51,7 +51,7 @@ abstract class NetworkBoundResource<ResultType, RequestType>(
      * - Errors livedata from remote operations
      * - Loading status
      */
-    private val result = MediatorLiveData<Resource<ResultType>>()
+    private val result = MediatorLiveData<DataResult<ResultType>>()
 
     init {
         @Suppress("LeakingThis")
@@ -62,14 +62,14 @@ abstract class NetworkBoundResource<ResultType, RequestType>(
                 fetchFromNetwork(dbSource)
             } else {
                 result.addSource(dbSource) { newData ->
-                    setValue(Resource.success(newData))
+                    setValue(DataResult.success(newData))
                 }
             }
         }
     }
 
     @MainThread
-    private fun setValue(newValue: Resource<ResultType>) {
+    private fun setValue(newValue: DataResult<ResultType>) {
         if (result.value != newValue) {
             result.value = newValue
         }
@@ -79,7 +79,7 @@ abstract class NetworkBoundResource<ResultType, RequestType>(
         // Let's dispatch dbSource value quickly while network operation is performed
         result.addSource(dbSource) { newData ->
             if (newData != null) {
-                setValue(Resource.loading(newData))
+                setValue(DataResult.loading(newData))
             }
         }
 
@@ -98,14 +98,14 @@ abstract class NetworkBoundResource<ResultType, RequestType>(
                     // which may not be updated with latest results received from network.
                     executors.mainThread().execute() {
                         result.addSource(loadFromDb()) { newData ->
-                            setValue(Resource.success(newData))
+                            setValue(DataResult.success(newData))
                         }
                     }
                 } else {
                     executors.mainThread().execute() {
                         result.addSource(dbSource) { newData ->
                             setValue(
-                                Resource.error(
+                                DataResult.error(
                                     remoteOperationResult.code,
                                     newData,
                                     msg = remoteOperationResult.httpPhrase,
@@ -123,7 +123,7 @@ abstract class NetworkBoundResource<ResultType, RequestType>(
 
             result.addSource(dbSource) {
                 setValue(
-                    Resource.error(
+                    DataResult.error(
                         msg = ex.localizedMessage
                     )
                 )
@@ -131,8 +131,8 @@ abstract class NetworkBoundResource<ResultType, RequestType>(
         }
     }
 
-    fun asLiveData() = result as LiveData<Resource<ResultType>>
-    fun asMutableLiveData() = result as MutableLiveData<Resource<ResultType>>
+    fun asLiveData() = result as LiveData<DataResult<ResultType>>
+    fun asMutableLiveData() = result as MutableLiveData<DataResult<ResultType>>
 
     @WorkerThread
     protected abstract fun saveCallResult(item: RequestType)
