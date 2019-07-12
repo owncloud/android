@@ -55,6 +55,7 @@ import com.owncloud.android.utils.TestUtil
 import com.owncloud.android.vo.Resource
 import org.hamcrest.Matchers.allOf
 import org.hamcrest.Matchers.not
+import org.junit.After
 import org.junit.AfterClass
 import org.junit.Before
 import org.junit.BeforeClass
@@ -186,6 +187,11 @@ class DeletePublicShareTest {
         }
 
         activityRule.launchActivity(intent)
+    }
+
+    @After
+    fun clean() {
+        stopKoin()
     }
 
     @Test

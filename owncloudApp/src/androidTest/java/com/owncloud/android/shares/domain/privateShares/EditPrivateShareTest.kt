@@ -52,6 +52,7 @@ import com.owncloud.android.utils.AccountsManager
 import com.owncloud.android.utils.Permissions
 import com.owncloud.android.utils.TestUtil
 import com.owncloud.android.vo.Resource
+import org.junit.After
 import org.junit.AfterClass
 import org.junit.Before
 import org.junit.BeforeClass
@@ -179,6 +180,11 @@ class EditPrivateShareTest {
         }
 
         activityRule.launchActivity(intent)
+    }
+
+    @After
+    fun clean() {
+        stopKoin()
     }
 
     @Test

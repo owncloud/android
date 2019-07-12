@@ -45,12 +45,13 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.status.CapabilityBooleanType
 import com.owncloud.android.lib.resources.status.OwnCloudVersion
 import com.owncloud.android.shares.domain.OCShare
-import com.owncloud.android.shares.presentation.ShareActivity
 import com.owncloud.android.shares.presentation.OCShareViewModel
+import com.owncloud.android.shares.presentation.ShareActivity
 import com.owncloud.android.ui.activity.FileActivity
 import com.owncloud.android.utils.AccountsManager
 import com.owncloud.android.utils.TestUtil
 import com.owncloud.android.vo.Resource
+import org.junit.After
 import org.junit.AfterClass
 import org.junit.Before
 import org.junit.BeforeClass
@@ -186,6 +187,11 @@ class CreatePublicShareTest {
         }
 
         activityRule.launchActivity(intent)
+    }
+
+    @After
+    fun clean() {
+        stopKoin()
     }
 
     @Test
