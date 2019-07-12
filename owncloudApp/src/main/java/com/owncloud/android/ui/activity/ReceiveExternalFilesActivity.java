@@ -835,8 +835,8 @@ public class ReceiveExternalFilesActivity extends FileActivity
     /**
      * Show an error dialog, forcing the user to click a single button to exit the activity
      *
-     * @param messageResId    Resource id of the message to show in the dialog.
-     * @param messageResTitle Resource id of the title to show in the dialog. 0 to show default alert message.
+     * @param messageResId    DataResult id of the message to show in the dialog.
+     * @param messageResTitle DataResult id of the title to show in the dialog. 0 to show default alert message.
      *                        -1 to show no title.
      */
     private void showErrorDialog(int messageResId, int messageResTitle) {

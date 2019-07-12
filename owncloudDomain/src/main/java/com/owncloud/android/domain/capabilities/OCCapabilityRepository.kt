@@ -22,7 +22,7 @@ package com.owncloud.android.domain.capabilities
 import androidx.lifecycle.LiveData
 import com.owncloud.android.data.Executors
 import com.owncloud.android.data.NetworkBoundResource
-import com.owncloud.android.data.Resource
+import com.owncloud.android.data.DataResult
 import com.owncloud.android.data.capabilities.CapabilityRepository
 import com.owncloud.android.data.capabilities.datasources.LocalCapabilitiesDataSource
 import com.owncloud.android.data.capabilities.datasources.RemoteCapabilitiesDataSource
@@ -51,7 +51,7 @@ class OCCapabilityRepository(
     override fun getCapabilityForAccount(
         accountName: String,
         shouldFetchFromNetwork: Boolean
-    ): LiveData<Resource<OCCapabilityEntity>> =
+    ): LiveData<DataResult<OCCapabilityEntity>> =
         object : NetworkBoundResource<OCCapabilityEntity, RemoteCapability>(executors) {
             override fun saveCallResult(item: RemoteCapability) {
                 item.accountName = accountName

@@ -23,7 +23,7 @@ import android.accounts.Account
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
 import androidx.test.platform.app.InstrumentationRegistry
-import com.owncloud.android.data.Resource
+import com.owncloud.android.data.DataResult
 import com.owncloud.android.data.Status
 import com.owncloud.android.data.sharing.shares.db.OCShareEntity
 import com.owncloud.android.domain.sharing.shares.OCShareRepository
@@ -70,15 +70,15 @@ class OCShareViewModelTest {
             )
         )
 
-        every { ocShareRepository.refreshPrivateShares(filePath) } returns
-                MutableLiveData<Resource<List<OCShareEntity>>>().apply {
-                    value = Resource.success(privateShares)
+        every { ocShareRepository.refreshShares(filePath) } returns
+                MutableLiveData<DataResult<List<OCShareEntity>>>().apply {
+                    value = DataResult.success(privateShares)
                 }
 
         // Viewmodel that will ask ocShareRepository for shares
         val ocShareViewModel = createOCShareViewModel(ocShareRepository)
 
-        val resource: Resource<List<OCShareEntity>>? = ocShareViewModel.getPrivateShares(filePath).value
+        val resource: DataResult<List<OCShareEntity>>? = ocShareViewModel.getPrivateShares(filePath).value
         assertPrivateShareParameters(resource?.data)
     }
 
@@ -91,14 +91,14 @@ class OCShareViewModelTest {
                 "user",
                 -1
             )
-        } returns MutableLiveData<Resource<Unit>>().apply {
-            value = Resource.success()
+        } returns MutableLiveData<DataResult<Unit>>().apply {
+            value = DataResult.success()
         }
 
         // Viewmodel that will ask ocShareRepository for shares
         val ocShareViewModel = createOCShareViewModel(ocShareRepository)
 
-        val resource: Resource<Unit>? = ocShareViewModel.insertPrivateShare(
+        val resource: DataResult<Unit>? = ocShareViewModel.insertPrivateShare(
             filePath,
             ShareType.GROUP,
             "user",
@@ -164,14 +164,14 @@ class OCShareViewModelTest {
         )
 
         every { ocShareRepository.refreshPublicShares(filePath) } returns
-                MutableLiveData<Resource<List<OCShareEntity>>>().apply {
-                    value = Resource.success(publicShares)
+                MutableLiveData<DataResult<List<OCShareEntity>>>().apply {
+                    value = DataResult.success(publicShares)
                 }
 
         // Viewmodel that will ask ocShareRepository for shares
         val ocShareViewModel = createOCShareViewModel(ocShareRepository)
 
-        val resource: Resource<List<OCShareEntity>>? = ocShareViewModel.getPublicShares(filePath).value
+        val resource: DataResult<List<OCShareEntity>>? = ocShareViewModel.getPublicShares(filePath).value
         assertPublicShareParameters(resource?.data)
     }
 
@@ -186,14 +186,14 @@ class OCShareViewModelTest {
                 -1,
                 false
             )
-        } returns MutableLiveData<Resource<Unit>>().apply {
-            value = Resource.success()
+        } returns MutableLiveData<DataResult<Unit>>().apply {
+            value = DataResult.success()
         }
 
         // Viewmodel that will ask ocShareRepository for shares
         val ocShareViewModel = createOCShareViewModel(ocShareRepository)
 
-        val resource: Resource<Unit>? = ocShareViewModel.insertPublicShare(
+        val resource: DataResult<Unit>? = ocShareViewModel.insertPublicShare(
             filePath,
             1,
             "Photos 2 link",
@@ -216,14 +216,14 @@ class OCShareViewModelTest {
                 1,
                 false
             )
-        } returns MutableLiveData<Resource<Unit>>().apply {
-            value = Resource.success()
+        } returns MutableLiveData<DataResult<Unit>>().apply {
+            value = DataResult.success()
         }
 
         // Viewmodel that will ask ocShareRepository for shares
         val ocShareViewModel = createOCShareViewModel(ocShareRepository)
 
-        val resource: Resource<Unit>? = ocShareViewModel.updatePublicShare(
+        val resource: DataResult<Unit>? = ocShareViewModel.updatePublicShareForFile(
             1,
             "Photos 1 link",
             "123456",
@@ -255,14 +255,14 @@ class OCShareViewModelTest {
             ocShareRepository.deletePublicShare(
                 3
             )
-        } returns MutableLiveData<Resource<Unit>>().apply {
-            value = Resource.success()
+        } returns MutableLiveData<DataResult<Unit>>().apply {
+            value = DataResult.success()
         }
 
         // Viewmodel that will ask ocShareRepository for shares
         val ocShareViewModel = createOCShareViewModel(ocShareRepository)
 
-        val resource: Resource<Unit>? = ocShareViewModel.deleteShare(
+        val resource: DataResult<Unit>? = ocShareViewModel.deletePublicShare(
             3
         ).value
 

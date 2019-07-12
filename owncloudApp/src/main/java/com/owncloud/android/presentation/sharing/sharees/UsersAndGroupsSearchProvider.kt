@@ -37,7 +37,7 @@ import android.provider.BaseColumns
 import android.widget.Toast
 import com.owncloud.android.R
 import com.owncloud.android.authentication.AccountUtils
-import com.owncloud.android.data.Resource
+import com.owncloud.android.data.DataResult
 import com.owncloud.android.datamodel.FileDataStorageManager
 import com.owncloud.android.lib.common.utils.Log_OC
 import com.owncloud.android.lib.resources.shares.GetRemoteShareesOperation
@@ -250,7 +250,7 @@ class UsersAndGroupsSearchProvider : ContentProvider() {
      *
      * @param result Result with the failure information.
      */
-    private fun showErrorMessage(resource: Resource<ArrayList<JSONObject>>) {
+    private fun showErrorMessage(resource: DataResult<ArrayList<JSONObject>>) {
         val handler = Handler(Looper.getMainLooper())
 
         // The Toast must be shown in the main thread to grant that will be hidden correctly; otherwise

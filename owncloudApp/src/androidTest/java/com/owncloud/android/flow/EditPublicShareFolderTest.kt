@@ -40,7 +40,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
 import com.owncloud.android.R
 import com.owncloud.android.authentication.AccountAuthenticator.KEY_AUTH_TOKEN_TYPE
-import com.owncloud.android.data.Resource
+import com.owncloud.android.data.DataResult
 import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
 import com.owncloud.android.data.sharing.shares.db.OCShareEntity
 import com.owncloud.android.datamodel.OCFile
@@ -120,8 +120,8 @@ class EditPublicShareFolderTest {
         )
     )
 
-    private val capabilitiesLiveData = MutableLiveData<Resource<OCCapabilityEntity>>()
-    private val sharesLiveData = MutableLiveData<Resource<List<OCShareEntity>>>()
+    private val capabilitiesLiveData = MutableLiveData<DataResult<OCCapabilityEntity>>()
+    private val sharesLiveData = MutableLiveData<DataResult<List<OCShareEntity>>>()
 
     private val ocCapabilityViewModel = mockk<OCCapabilityViewModel>(relaxed = true)
     private val ocShareViewModel = mockk<OCShareViewModel>(relaxed = true)
@@ -227,8 +227,8 @@ class EditPublicShareFolderTest {
                 1,
                 false
             )
-        } returns MutableLiveData<Resource<Unit>>().apply {
-            postValue(Resource.success())
+        } returns MutableLiveData<DataResult<Unit>>().apply {
+            postValue(DataResult.success())
         }
 
         // 1. Open dialog to edit an existing public share
@@ -242,7 +242,7 @@ class EditPublicShareFolderTest {
 
         // 4. Share properly updated
         sharesLiveData.postValue(
-            Resource.success(
+            DataResult.success(
                 arrayListOf(updatedPublicShare)
             )
         )
@@ -270,8 +270,8 @@ class EditPublicShareFolderTest {
                 15,
                 true
             )
-        } returns MutableLiveData<Resource<Unit>>().apply {
-            postValue(Resource.success())
+        } returns MutableLiveData<DataResult<Unit>>().apply {
+            postValue(DataResult.success())
         }
 
         // 1. Open dialog to edit an existing public share
@@ -285,7 +285,7 @@ class EditPublicShareFolderTest {
 
         // 4. Share properly updated
         sharesLiveData.postValue(
-            Resource.success(
+            DataResult.success(
                 arrayListOf(updatedPublicShare)
             )
         )
@@ -314,8 +314,8 @@ class EditPublicShareFolderTest {
                 4,
                 true
             )
-        } returns MutableLiveData<Resource<Unit>>().apply {
-            postValue(Resource.success())
+        } returns MutableLiveData<DataResult<Unit>>().apply {
+            postValue(DataResult.success())
         }
 
         // 1. Open dialog to edit an existing public share
@@ -329,7 +329,7 @@ class EditPublicShareFolderTest {
 
         // 4. Share properly updated
         sharesLiveData.postValue(
-            Resource.success(
+            DataResult.success(
                 arrayListOf(updatedPublicShare)
             )
         )
@@ -358,8 +358,8 @@ class EditPublicShareFolderTest {
                 1,
                 false
             )
-        } returns MutableLiveData<Resource<Unit>>().apply {
-            postValue(Resource.success())
+        } returns MutableLiveData<DataResult<Unit>>().apply {
+            postValue(DataResult.success())
         }
 
         // 1. Open dialog to edit an existing public share
@@ -373,7 +373,7 @@ class EditPublicShareFolderTest {
 
         // 4. Share properly updated
         sharesLiveData.postValue(
-            Resource.success(
+            DataResult.success(
                 arrayListOf(updatedPublicShare)
             )
         )
@@ -404,13 +404,13 @@ class EditPublicShareFolderTest {
         )
     ) {
         capabilitiesLiveData.postValue(
-            Resource.success(
+            DataResult.success(
                 capability
             )
         )
     }
 
     private fun loadSharesSuccessfully(shares: ArrayList<OCShareEntity> = publicShares) {
-        sharesLiveData.postValue(Resource.success(shares))
+        sharesLiveData.postValue(DataResult.success(shares))
     }
 }

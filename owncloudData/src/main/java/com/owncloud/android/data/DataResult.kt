@@ -22,7 +22,7 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCo
  * A generic class that holds a value with its loading status.
  * @param <T>
 </T> */
-data class Resource<out T>(
+data class DataResult<out T>(
     val status: Status,
     val code: ResultCode? = null,
     val data: T? = null,
@@ -30,8 +30,8 @@ data class Resource<out T>(
     val exception: Exception? = null
 ) {
     companion object {
-        fun <T> success(data: T? = null): Resource<T> {
-            return Resource(Status.SUCCESS, ResultCode.OK, data)
+        fun <T> success(data: T? = null): DataResult<T> {
+            return DataResult(Status.SUCCESS, ResultCode.OK, data)
         }
 
         fun <T> error(
@@ -39,12 +39,12 @@ data class Resource<out T>(
             data: T? = null,
             msg: String? = null,
             exception: Exception? = null
-        ): Resource<T> {
-            return Resource(Status.ERROR, code, data, msg, exception)
+        ): DataResult<T> {
+            return DataResult(Status.ERROR, code, data, msg, exception)
         }
 
-        fun <T> loading(data: T? = null): Resource<T> {
-            return Resource(Status.LOADING, data = data)
+        fun <T> loading(data: T? = null): DataResult<T> {
+            return DataResult(Status.LOADING, data = data)
         }
     }
 
