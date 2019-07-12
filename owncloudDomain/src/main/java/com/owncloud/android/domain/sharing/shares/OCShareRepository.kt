@@ -199,7 +199,6 @@ class OCShareRepository(
         filePath: String,
         accountName: String
     ): DataResult<Unit> {
-
         remoteSharesDataSource.getShares(
             filePath,
             reshares = true,

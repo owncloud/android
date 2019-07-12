@@ -27,9 +27,9 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.owncloud.android.data.sharing.shares.db.OCShareEntity
-import com.owncloud.android.domain.sharing.shares.usecases.SharesLiveDataUseCase
+import com.owncloud.android.domain.sharing.shares.usecases.CreatePublicShareUseCase
 import com.owncloud.android.domain.sharing.shares.usecases.RefreshSharesUseCase
-import com.owncloud.android.lib.resources.shares.ShareType
+import com.owncloud.android.domain.sharing.shares.usecases.SharesLiveDataUseCase
 import com.owncloud.android.operations.common.OperationType
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter
@@ -46,6 +46,9 @@ class OCShareViewModel(
     val account: Account,
     sharesLiveDataUseCase: SharesLiveDataUseCase = SharesLiveDataUseCase(context, account),
     private val refreshSharesUseCase: RefreshSharesUseCase = RefreshSharesUseCase(
+        context, account
+    ),
+    private val createPublicShareUseCase: CreatePublicShareUseCase = CreatePublicShareUseCase(
         context, account
     )
 ) : ViewModel() {
@@ -77,59 +80,6 @@ class OCShareViewModel(
         }
     }
 
-    /******************************************************************************************************
-     ******************************************* PRIVATE SHARES *******************************************
-     ******************************************************************************************************/
-//    fun insertPrivateShare(
-//        filePath: String,
-//        shareType: ShareType?,
-//        shareeName: String, // User or group name of the target sharee.
-//        permissions: Int
-//    ): LiveData<DataResult<Unit>> = shareRepository.insertPrivateShare(
-//        filePath, shareType, shareeName, permissions
-//    )
-
-    fun updatePrivateShare(
-        remoteId: Long,
-        permissions: Int
-    ): LiveData<Resource<Unit>> = shareRepository.updatePrivateShare(
-        remoteId, permissions
-    )
-
-    /******************************************************************************************************
-     ******************************************* PUBLIC SHARES ********************************************
-     ******************************************************************************************************/
-
-//    fun insertPublicShare(
-//        filePath: String,
-//        permissions: Int,
-//        name: String,
-//        password: String,
-//        expirationTimeInMillis: Long,
-//        publicUpload: Boolean
-//    ): LiveData<DataResult<Unit>> = shareRepository.insertPublicShare(
-//        filePath, permissions, name, password, expirationTimeInMillis, publicUpload
-//    )
-//
-//    fun updatePublicShareForFile(
-//        remoteId: Long,
-//        name: String,
-//        password: String?,
-//        expirationDateInMillis: Long,
-//        permissions: Int,
-//        publicUpload: Boolean
-//    ): LiveData<DataResult<Unit>> = shareRepository.updatePublicShare(
-//        remoteId, name, password, expirationDateInMillis, permissions, publicUpload
-//    )
-//
-//    fun deletePublicShare(
-//        remoteId: Long
-//    ): LiveData<DataResult<Unit>> = shareRepository.deletePublicShare(remoteId)
-
-    /******************************************************************************************************
-     *********************************************** COMMON ***********************************************
-     ******************************************************************************************************/
-
     private fun refreshShares() {
         _shares.postValue(
             UIResult.loading(sharesLiveData?.value)
@@ -156,6 +106,93 @@ class OCShareViewModel(
             }
         }
     }
+
+    /******************************************************************************************************
+     ******************************************* PRIVATE SHARES *******************************************
+     ******************************************************************************************************/
+//    fun insertPrivateShare(
+//        filePath: String,
+//        shareType: ShareType?,
+//        shareeName: String, // User or group name of the target sharee.
+//        permissions: Int
+//    ): LiveData<DataResult<Unit>> = shareRepository.insertPrivateShare(
+//        filePath, shareType, shareeName, permissions
+//    )
+
+    fun updatePrivateShare(
+        remoteId: Long,
+        permissions: Int
+    ): LiveData<Resource<Unit>> = shareRepository.updatePrivateShare(
+        remoteId, permissions
+    )
+
+    /******************************************************************************************************
+     ******************************************* PUBLIC SHARES ********************************************
+     ******************************************************************************************************/
+
+    private val _publicShareCreationStatus = MutableLiveData<UIResult<Unit>>()
+    val publicShareCreationStatus: LiveData<UIResult<Unit>> = _publicShareCreationStatus
+
+    fun insertPublicShare(
+        filePath: String,
+        permissions: Int,
+        name: String,
+        password: String,
+        expirationTimeInMillis: Long,
+        publicUpload: Boolean
+    ) {
+        _publicShareCreationStatus.postValue(
+            UIResult.loading()
+        )
+
+        viewModelScope.launch {
+            val useCaseResult = withContext(Dispatchers.IO) {
+                createPublicShareUseCase.execute(
+                    CreatePublicShareUseCase.Params(
+                        filePath = filePath,
+                        permissions = permissions,
+                        name = name,
+                        password = password,
+                        expirationTimeInMillis = expirationTimeInMillis,
+                        publicUpload = publicUpload
+                    )
+                )
+            }
+
+            withContext(Dispatchers.Main) {
+                if (!useCaseResult.isSuccess()) {
+                    _publicShareCreationStatus.postValue(
+                        UIResult.error(
+                            errorMessage = ErrorMessageAdapter.getResultMessage(
+                                useCaseResult.code,
+                                useCaseResult.exception,
+                                OperationType.CREATE_PUBLIC_SHARE,
+                                context.resources
+                            )
+                        )
+                    )
+                } else {
+                    _publicShareCreationStatus.postValue(UIResult.success())
+                }
+            }
+        }
+    }
+
+
+//    fun updatePublicShareForFile(
+//        remoteId: Long,
+//        name: String,
+//        password: String?,
+//        expirationDateInMillis: Long,
+//        permissions: Int,
+//        publicUpload: Boolean
+//    ): LiveData<DataResult<Unit>> = shareRepository.updatePublicShare(
+//        remoteId, name, password, expirationDateInMillis, permissions, publicUpload
+//    )
+//
+//    fun deletePublicShare(
+//        remoteId: Long
+//    ): LiveData<DataResult<Unit>> = shareRepository.deletePublicShare(remoteId)
 
     override fun onCleared() {
         super.onCleared()
