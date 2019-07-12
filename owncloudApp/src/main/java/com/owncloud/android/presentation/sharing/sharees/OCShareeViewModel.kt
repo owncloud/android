@@ -22,7 +22,7 @@ package com.owncloud.android.presentation.sharing.sharees
 import android.accounts.Account
 import android.content.Context
 import androidx.lifecycle.ViewModel
-import com.owncloud.android.data.Resource
+import com.owncloud.android.data.DataResult
 import com.owncloud.android.data.sharing.sharees.ShareeRepository
 import com.owncloud.android.data.sharing.sharees.datasources.OCRemoteShareesDataSource
 import com.owncloud.android.domain.sharing.sharees.OCShareeRepository
@@ -42,7 +42,7 @@ class OCShareeViewModel(
         )
     )
 ) : ViewModel() {
-    fun getSharees(searchString: String, page: Int, perPage: Int): Resource<ArrayList<JSONObject>> {
+    fun getSharees(searchString: String, page: Int, perPage: Int): DataResult<ArrayList<JSONObject>> {
         return shareeRepository.getSharees(searchString, page, perPage)
     }
 }

@@ -22,7 +22,7 @@ package com.owncloud.android.presentation.sharing.sharees.viewmodels
 import android.accounts.Account
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.platform.app.InstrumentationRegistry
-import com.owncloud.android.data.Resource
+import com.owncloud.android.data.DataResult
 import com.owncloud.android.domain.sharing.sharees.OCShareeRepository
 import com.owncloud.android.lib.resources.shares.GetRemoteShareesOperation
 import com.owncloud.android.lib.resources.shares.ShareType
@@ -57,7 +57,7 @@ class OCShareeViewmodelTest {
             ocShareeRepository.getSharees(
                 "User", 1, 10
             )
-        } returns Resource.success(sharees)
+        } returns DataResult.success(sharees)
 
         val ocShareeViewModel = createOCShareeViewModel(ocShareeRepository)
 
