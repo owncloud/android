@@ -45,11 +45,12 @@ class SharesLiveDataUseCase(
     )
 ) : BaseUseCase<LiveData<List<OCShareEntity>>, SharesLiveDataUseCase.Params>() {
     override fun run(params: Params): UseCaseResult<LiveData<List<OCShareEntity>>> {
-        val sharesAsLiveData = shareRepository.getSharesAsLiveData(
-            params.filePath, params.accountName
-        )
-
-        return UseCaseResult.success(sharesAsLiveData)  // Always successful here, data comes from database
+        shareRepository.getSharesAsLiveData(
+            params.filePath,
+            params.accountName
+        ).also { sharesAsLiveData ->
+            return UseCaseResult.success(sharesAsLiveData) // Always successful here, data comes from database
+        }
     }
 
     data class Params(

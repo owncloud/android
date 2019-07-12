@@ -161,6 +161,7 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
     override fun refreshAllShares() {
         refreshCapabilities()
         observeShares()
+        observePublicShareCreation()
     }
 
     override fun refreshCapabilities(shouldFetchFromNetwork: Boolean) {
@@ -431,6 +432,31 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
      *********************************************** PUBLIC SHARES ************************************************
      **************************************************************************************************************/
 
+    private fun observePublicShareCreation() {
+        ocShareViewModel.publicShareCreationStatus.observe(
+            this,
+            Observer { uiResult ->
+                when (uiResult?.status) {
+                    Status.SUCCESS -> {
+                        publicShareFragment?.dismiss()
+                    }
+                    Status.ERROR -> {
+                        publicShareFragment?.showError(uiResult.errorMessage!!)
+                        dismissLoadingDialog()
+                    }
+                    Status.LOADING -> {
+                        showLoadingDialog(R.string.common_loading)
+                    }
+                    else -> {
+                        Log.d(
+                            TAG, "Unknown status when creating public share"
+                        )
+                    }
+                }
+            }
+        )
+    }
+
     override fun showAddPublicShare(defaultLinkName: String) {
         // DialogFragment.show() will take care of adding the fragment
         // in a transaction.  We also want to remove any currently showing
@@ -455,43 +481,14 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
         expirationTimeInMillis: Long,
         publicUpload: Boolean
     ) {
-//        ocShareViewModel.insertPublicShare(
-//            file.remotePath,
-//            permissions,
-//            name,
-//            password,
-//            expirationTimeInMillis,
-//            publicUpload
-//        ).observe(
-//            this,
-//            Observer { resource ->
-//                when (resource?.status) {
-//                    Status.SUCCESS -> {
-//                        publicShareFragment?.dismiss()
-//                        Log_OC.d("TESTS", "Closing share creation dialog")
-//                    }
-//                    Status.ERROR -> {
-//                        val errorMessage: String = resource.msg ?: ErrorMessageAdapter.getResultMessage(
-//                            resource.code,
-//                            resource.exception,
-//                            OperationType.CREATE_PUBLIC_SHARE,
-//                            resources
-//                        );
-//                        publicShareFragment?.showError(errorMessage)
-//                        dismissLoadingDialog()
-//                    }
-//                    Status.LOADING -> {
-//                        showLoadingDialog(R.string.common_loading)
-//                    }
-//                    else -> {
-//                        Log.d(
-//                            TAG, "Unknown status when creating public share with name ${name} \" +" +
-//                                    "from account ${account?.name}"
-//                        )
-//                    }
-//                }
-//            }
-//        )
+        ocShareViewModel.insertPublicShare(
+            file.remotePath,
+            permissions,
+            name,
+            password,
+            expirationTimeInMillis,
+            publicUpload
+        )
     }
 
     override fun showEditPublicShare(share: OCShareEntity) {
