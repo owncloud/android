@@ -34,7 +34,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
 import com.owncloud.android.R
 import com.owncloud.android.authentication.AccountAuthenticator.KEY_AUTH_TOKEN_TYPE
-import com.owncloud.android.data.Resource
+import com.owncloud.android.data.DataResult
 import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
 import com.owncloud.android.data.sharing.shares.db.OCShareEntity
 import com.owncloud.android.datamodel.OCFile
@@ -158,18 +158,18 @@ class LoadSharesTest {
      ******************************************************************************************************/
 
     private val ocCapabilityViewModel = mockk<OCCapabilityViewModel>(relaxed = true)
-    private val capabilitiesLiveData = MutableLiveData<Resource<OCCapabilityEntity>>()
+    private val capabilitiesLiveData = MutableLiveData<DataResult<OCCapabilityEntity>>()
 
     @Test
     fun showLoadingCapabilitiesDialog() {
-        capabilitiesLiveData.postValue(Resource.loading(AppTestUtil.createCapability()))
+        capabilitiesLiveData.postValue(DataResult.loading(AppTestUtil.createCapability()))
         onView(withId(R.id.loadingLayout)).check(matches(isDisplayed()))
     }
 
     @Test
     fun showErrorWhenLoadingCapabilities() {
         capabilitiesLiveData.postValue(
-            Resource.error(
+            DataResult.error(
                 RemoteOperationResult.ResultCode.SERVICE_UNAVAILABLE
             )
         )
@@ -181,7 +181,7 @@ class LoadSharesTest {
      ******************************************* PRIVATE SHARES *******************************************
      ******************************************************************************************************/
 
-    private val privateSharesLiveData = MutableLiveData<Resource<List<OCShareEntity>>>()
+    private val privateSharesLiveData = MutableLiveData<DataResult<List<OCShareEntity>>>()
     private val privateShares = arrayListOf(
         AppTestUtil.createPrivateShare(
             path = "/Photos/image.jpg",
@@ -200,7 +200,7 @@ class LoadSharesTest {
     @Test
     fun showLoadingPrivateSharesDialog() {
         loadCapabilitiesSuccessfully()
-        privateSharesLiveData.postValue(Resource.loading(privateShares))
+        privateSharesLiveData.postValue(DataResult.loading(privateShares))
         onView(withId(R.id.loadingLayout)).check(matches(isDisplayed()))
     }
 
@@ -209,7 +209,7 @@ class LoadSharesTest {
         loadCapabilitiesSuccessfully()
 
         privateSharesLiveData.postValue(
-            Resource.error(
+            DataResult.error(
                 RemoteOperationResult.ResultCode.FORBIDDEN,
                 data = privateShares
             )
@@ -221,7 +221,7 @@ class LoadSharesTest {
      ******************************************* PUBLIC SHARES ********************************************
      ******************************************************************************************************/
 
-    private val publicSharesLiveData = MutableLiveData<Resource<List<OCShareEntity>>>()
+    private val publicSharesLiveData = MutableLiveData<DataResult<List<OCShareEntity>>>()
     private val publicShares = arrayListOf(
         AppTestUtil.createPublicShare(
             path = "/Photos/image.jpg",
@@ -240,7 +240,7 @@ class LoadSharesTest {
     @Test
     fun showLoadingPublicSharesDialog() {
         loadCapabilitiesSuccessfully()
-        publicSharesLiveData.postValue(Resource.loading(publicShares))
+        publicSharesLiveData.postValue(DataResult.loading(publicShares))
         onView(withId(R.id.loadingLayout)).check(matches(isDisplayed()))
     }
 
@@ -249,7 +249,7 @@ class LoadSharesTest {
         loadCapabilitiesSuccessfully()
 
         publicSharesLiveData.postValue(
-            Resource.error(
+            DataResult.error(
                 RemoteOperationResult.ResultCode.SERVICE_UNAVAILABLE,
                 data = publicShares
             )
@@ -271,7 +271,7 @@ class LoadSharesTest {
 
     private fun loadCapabilitiesSuccessfully(capability: OCCapabilityEntity = AppTestUtil.createCapability()) {
         capabilitiesLiveData.postValue(
-            Resource.success(
+            DataResult.success(
                 capability
             )
         )

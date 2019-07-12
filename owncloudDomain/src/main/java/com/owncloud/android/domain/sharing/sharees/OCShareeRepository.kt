@@ -19,7 +19,7 @@
 
 package com.owncloud.android.domain.sharing.sharees
 
-import com.owncloud.android.data.Resource
+import com.owncloud.android.data.DataResult
 import com.owncloud.android.data.sharing.sharees.ShareeRepository
 import com.owncloud.android.data.sharing.sharees.datasources.RemoteShareesDataSource
 import org.json.JSONObject
@@ -32,13 +32,13 @@ class OCShareeRepository(
         searchString: String,
         page: Int,
         perPage: Int
-    ): Resource<ArrayList<JSONObject>> {
+    ): DataResult<ArrayList<JSONObject>> {
         val remoteOperationResult = remoteSharesDataSource.getSharees(
             searchString, page, perPage
         )
         return if (remoteOperationResult.isSuccess)
-            Resource.success(remoteOperationResult.data) else
-            Resource.error(
+            DataResult.success(remoteOperationResult.data) else
+            DataResult.error(
                 remoteOperationResult.code,
                 msg = remoteOperationResult.httpPhrase,
                 exception = remoteOperationResult.exception

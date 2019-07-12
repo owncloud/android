@@ -23,7 +23,7 @@ import android.accounts.Account
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
 import androidx.test.platform.app.InstrumentationRegistry
-import com.owncloud.android.data.Resource
+import com.owncloud.android.data.DataResult
 import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
 import com.owncloud.android.domain.capabilities.OCCapabilityRepository
 import com.owncloud.android.presentation.capabilities.OCCapabilityViewModel
@@ -59,8 +59,8 @@ class OCCapabilityViewModelTest {
             ocCapabilityRepository.getCapabilityForAccount(
                 "admin@server"
             )
-        } returns MutableLiveData<Resource<OCCapabilityEntity>>().apply {
-            value = Resource.success(capability)
+        } returns MutableLiveData<DataResult<OCCapabilityEntity>>().apply {
+            value = DataResult.success(capability)
         }
 
         val context = InstrumentationRegistry.getInstrumentation().targetContext
@@ -71,7 +71,7 @@ class OCCapabilityViewModelTest {
             capabilityRepository = ocCapabilityRepository
         )
 
-        val resource: Resource<OCCapabilityEntity>? = ocCapabilityViewModel.getCapabilityForAccount().value
+        val resource: DataResult<OCCapabilityEntity>? = ocCapabilityViewModel.getCapabilityForAccount().value
         val capability: OCCapabilityEntity? = resource?.data
 
         assertEquals("admin@server", capability?.accountName)

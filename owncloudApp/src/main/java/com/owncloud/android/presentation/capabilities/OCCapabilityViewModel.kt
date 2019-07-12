@@ -31,7 +31,7 @@ import com.owncloud.android.data.capabilities.CapabilityRepository
 import com.owncloud.android.domain.capabilities.OCCapabilityRepository
 import com.owncloud.android.lib.common.OwnCloudAccount
 import com.owncloud.android.lib.common.OwnCloudClientManagerFactory
-import com.owncloud.android.data.Resource
+import com.owncloud.android.data.DataResult
 
 /**
  * View Model to keep a reference to the capability repository and an up-to-date capability
@@ -51,8 +51,8 @@ class OCCapabilityViewModel(
         )
     )
 ) : ViewModel() {
-    fun getCapabilityForAccountAsLiveData(shouldFetchFromNetwork: Boolean = true): LiveData<Resource<OCCapabilityEntity>> =
-        capabilityRepository.getCapabilityForAccountAsLiveData(account.name, shouldFetchFromNetwork)
+    fun getCapabilityForAccount(shouldFetchFromNetwork: Boolean = true): LiveData<DataResult<OCCapabilityEntity>> =
+        capabilityRepository.getCapabilityForAccount(account.name, shouldFetchFromNetwork)
 
     fun getStoredCapabilityForAccount(): OCCapabilityEntity =
         capabilityRepository.getStoredCapabilityForAccount(account.name)
