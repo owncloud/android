@@ -47,7 +47,6 @@ enum class ShareType constructor(val value: Int) {
     FEDERATED(6);
 
     companion object {
-
         fun fromValue(value: Int): ShareType? {
             return when (value) {
                 -1 -> NO_SHARED
