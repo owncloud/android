@@ -2,7 +2,7 @@
 <resources>
   <string name="about_android">%1$s para Android</string>
   <string name="about_version">Versión %1$s</string>
-  <string name="actionbar_search">Buscar en esta carpeta</string>
+  <string name="actionbar_search">Buscar esta carpeta</string>
   <string name="actionbar_sync">Actualizar cuenta</string>
   <string name="actionbar_upload">Subir</string>
   <string name="actionbar_upload_from_apps">Contenido de otras aplicaciones</string>
