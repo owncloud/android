@@ -23,7 +23,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
-import com.owncloud.android.data.Resource
+import com.owncloud.android.data.DataResult
 import com.owncloud.android.data.sharing.shares.datasources.LocalShareDataSource
 import com.owncloud.android.data.sharing.shares.db.OCShareEntity
 import com.owncloud.android.domain.sharing.shares.OCShareRepository
@@ -116,7 +116,7 @@ class OCShareRepositoryTest {
 
         val privateSharesAsLiveData = loadPrivateSharesAsLiveData(localData, remoteOperationResult)
 
-        val observer = mockk<Observer<Resource<List<OCShareEntity>>>>(relaxed = true)
+        val observer = mockk<Observer<DataResult<List<OCShareEntity>>>>(relaxed = true)
         privateSharesAsLiveData.observeForever(observer)
 
         localData.postValue(null)
@@ -144,7 +144,7 @@ class OCShareRepositoryTest {
         )
 
         verify {
-            observer.onChanged(Resource.success(privateShare))
+            observer.onChanged(DataResult.success(privateShare))
         }
     }
 
@@ -156,7 +156,7 @@ class OCShareRepositoryTest {
             DomainTestUtil.createRemoteOperationResultMock(ShareParserResult(arrayListOf()), true)
 
         val data = loadPrivateSharesAsLiveData(localData, remoteOperationResult)
-        val observer = mockk<Observer<Resource<List<OCShareEntity>>>>(relaxed = true)
+        val observer = mockk<Observer<DataResult<List<OCShareEntity>>>>(relaxed = true)
         data.observeForever(observer)
 
         localData.postValue(null)
@@ -178,7 +178,7 @@ class OCShareRepositoryTest {
         localData.postValue(listOf())
 
         verify {
-            observer.onChanged(Resource.success(listOf()))
+            observer.onChanged(DataResult.success(listOf()))
         }
     }
 
@@ -206,12 +206,12 @@ class OCShareRepositoryTest {
         // Retrieving public shares from server...
 
         // Observe changes in database livedata when there's an error from server
-        val observer = mockk<Observer<Resource<List<OCShareEntity>>>>(relaxed = true)
+        val observer = mockk<Observer<DataResult<List<OCShareEntity>>>>(relaxed = true)
         data.observeForever(observer)
 
         verify {
             observer.onChanged(
-                Resource.error(
+                DataResult.error(
                     RemoteOperationResult.ResultCode.FORBIDDEN, localData.value, exception = exception
                 )
             )
@@ -228,7 +228,7 @@ class OCShareRepositoryTest {
         )
 
         val data = insertPrivateShare(localData, remoteOperationResult)
-        val observer = mockk<Observer<Resource<Unit>>>(relaxed = true)
+        val observer = mockk<Observer<DataResult<Unit>>>(relaxed = true)
         data.observeForever(observer)
 
         // Public shares are retrieved from server and inserted in database if not empty list
@@ -258,12 +258,12 @@ class OCShareRepositoryTest {
         val data = insertPrivateShare(localData, remoteOperationResult)
 
         // Observe changes in database livedata when there's an error from server
-        val observer = mockk<Observer<Resource<Unit>>>(relaxed = true)
+        val observer = mockk<Observer<DataResult<Unit>>>(relaxed = true)
         data.observeForever(observer)
 
         verify {
             observer.onChanged(
-                Resource.error(
+                DataResult.error(
                     RemoteOperationResult.ResultCode.HOST_NOT_AVAILABLE, exception = exception
                 )
             )
@@ -313,9 +313,9 @@ class OCShareRepositoryTest {
     private fun loadPrivateSharesAsLiveData(
         localData: MutableLiveData<List<OCShareEntity>>,
         remoteOperationResult: RemoteOperationResult<ShareParserResult>
-    ): LiveData<Resource<List<OCShareEntity>>> {
+    ): LiveData<DataResult<List<OCShareEntity>>> {
         val ocShareRepository = createRepositoryWithPrivateData(localData, remoteOperationResult)
-        return ocShareRepository.refreshPrivateShares(filePath)
+        return ocShareRepository.refreshShares(filePath)
     }
 
     private fun createShareRepositoryWithPrivateData(
@@ -329,7 +329,7 @@ class OCShareRepositoryTest {
     private fun insertPrivateShare(
         localData: MutableLiveData<List<OCShareEntity>>,
         remoteOperationResult: RemoteOperationResult<ShareParserResult>
-    ): LiveData<Resource<Unit>> {
+    ): LiveData<DataResult<Unit>> {
         val ocShareRepository = createShareRepositoryWithPublicData(localData, remoteOperationResult)
 
         return ocShareRepository.insertPrivateShare(
@@ -373,7 +373,7 @@ class OCShareRepositoryTest {
             DomainTestUtil.createRemoteOperationResultMock(ShareParserResult(remoteShares), true)
 
         val data = loadPublicSharesAsLiveData(localData, remoteOperationResult)
-        val observer = mockk<Observer<Resource<List<OCShareEntity>>>>(relaxed = true)
+        val observer = mockk<Observer<DataResult<List<OCShareEntity>>>>(relaxed = true)
         data.observeForever(observer)
 
         localData.postValue(null)
@@ -401,7 +401,7 @@ class OCShareRepositoryTest {
             publicShare
         )
 
-        verify { observer.onChanged(Resource.success(publicShare)) }
+        verify { observer.onChanged(DataResult.success(publicShare)) }
     }
 
     @Test
@@ -412,7 +412,7 @@ class OCShareRepositoryTest {
             DomainTestUtil.createRemoteOperationResultMock(ShareParserResult(arrayListOf()), true)
 
         val data = loadPublicSharesAsLiveData(localData, remoteOperationResult)
-        val observer = mockk<Observer<Resource<List<OCShareEntity>>>>(relaxed = true)
+        val observer = mockk<Observer<DataResult<List<OCShareEntity>>>>(relaxed = true)
         data.observeForever(observer)
 
         localData.postValue(null)
@@ -436,7 +436,7 @@ class OCShareRepositoryTest {
         localData.postValue(listOf())
 
         verify {
-            observer.onChanged(Resource.success(listOf()))
+            observer.onChanged(DataResult.success(listOf()))
         }
     }
 
@@ -466,12 +466,12 @@ class OCShareRepositoryTest {
         // Retrieving public shares from server...
 
         // Observe changes in database livedata when there's an error from server
-        val observer = mockk<Observer<Resource<List<OCShareEntity>>>>(relaxed = true)
+        val observer = mockk<Observer<DataResult<List<OCShareEntity>>>>(relaxed = true)
         data.observeForever(observer)
 
         verify {
             observer.onChanged(
-                Resource.error(
+                DataResult.error(
                     RemoteOperationResult.ResultCode.FORBIDDEN, localData.value, exception = exception
                 )
             )
@@ -488,7 +488,7 @@ class OCShareRepositoryTest {
         )
 
         val data = insertPublicShare(localData, remoteOperationResult)
-        val observer = mockk<Observer<Resource<Unit>>>(relaxed = true)
+        val observer = mockk<Observer<DataResult<Unit>>>(relaxed = true)
         data.observeForever(observer)
 
         // Public shares are retrieved from server and inserted in database if not empty list
@@ -517,12 +517,12 @@ class OCShareRepositoryTest {
         val data = insertPublicShare(localData, remoteOperationResult)
 
         // Observe changes in database livedata when there's an error from server
-        val observer = mockk<Observer<Resource<Unit>>>(relaxed = true)
+        val observer = mockk<Observer<DataResult<Unit>>>(relaxed = true)
         data.observeForever(observer)
 
         verify {
             observer.onChanged(
-                Resource.error(
+                DataResult.error(
                     RemoteOperationResult.ResultCode.SHARE_NOT_FOUND, exception = exception
                 )
             )
@@ -540,7 +540,7 @@ class OCShareRepositoryTest {
 
         val data = updatePublicShare(localData, remoteOperationResult)
 
-        val observer = mockk<Observer<Resource<Unit>>>(relaxed = true)
+        val observer = mockk<Observer<DataResult<Unit>>>(relaxed = true)
         data.observeForever(observer)
 
         // Public shares are retrieved from server and updated in database
@@ -562,7 +562,7 @@ class OCShareRepositoryTest {
 
         val data = deleteShare(localData, remoteOperationResult)
 
-        val observer = mockk<Observer<Resource<Unit>>>(relaxed = true)
+        val observer = mockk<Observer<DataResult<Unit>>>(relaxed = true)
         data.observeForever(observer)
 
         // Retrieving public shares from server...
@@ -574,7 +574,7 @@ class OCShareRepositoryTest {
     private fun loadPublicSharesAsLiveData(
         localData: MutableLiveData<List<OCShareEntity>>,
         remoteOperationResult: RemoteOperationResult<ShareParserResult>
-    ): LiveData<Resource<List<OCShareEntity>>> {
+    ): LiveData<DataResult<List<OCShareEntity>>> {
         val ocShareRepository = createShareRepositoryWithPublicData(localData, remoteOperationResult)
         return ocShareRepository.refreshPublicShares(filePath)
     }
@@ -582,7 +582,7 @@ class OCShareRepositoryTest {
     private fun insertPublicShare(
         localData: MutableLiveData<List<OCShareEntity>>,
         remoteOperationResult: RemoteOperationResult<ShareParserResult>
-    ): LiveData<Resource<Unit>> {
+    ): LiveData<DataResult<Unit>> {
         val ocShareRepository = createShareRepositoryWithPublicData(localData, remoteOperationResult)
 
         return ocShareRepository.insertPublicShare(
@@ -598,7 +598,7 @@ class OCShareRepositoryTest {
     private fun updatePublicShare(
         localData: MutableLiveData<List<OCShareEntity>>,
         remoteOperationResult: RemoteOperationResult<ShareParserResult>
-    ): LiveData<Resource<Unit>> {
+    ): LiveData<DataResult<Unit>> {
         val ocShareRepository = createShareRepositoryWithPublicData(localData, remoteOperationResult)
 
         return ocShareRepository.updatePublicShare(
@@ -614,7 +614,7 @@ class OCShareRepositoryTest {
     private fun deletePublicShare(
         localData: MutableLiveData<List<OCShareEntity>>,
         remoteOperationResult: RemoteOperationResult<ShareParserResult>
-    ): LiveData<Resource<Unit>> {
+    ): LiveData<DataResult<Unit>> {
         val ocShareRepository = createShareRepositoryWithPublicData(localData, remoteOperationResult)
         return ocShareRepository.deletePublicShare(
             1

@@ -127,7 +127,7 @@ class SearchShareesFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterL
         requireActivity().setTitle(R.string.share_with_title)
 
         // Load private shares in the list
-        listener?.refreshPrivateShares()
+//        listener?.refreshPrivateShares()
     }
 
     fun updatePrivateShares(privateShares: ArrayList<OCShareEntity>) {

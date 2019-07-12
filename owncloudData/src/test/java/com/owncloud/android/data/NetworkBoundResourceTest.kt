@@ -91,7 +91,7 @@ class NetworkBoundResourceTest {
                 }
             }
 
-        val observer = mockk<Observer<Resource<List<OCShareEntity>>>>(relaxed = true)
+        val observer = mockk<Observer<DataResult<List<OCShareEntity>>>>(relaxed = true)
         networkBoundResource.asLiveData().observeForever(observer)
 
         dbData.postValue(null)
@@ -100,7 +100,7 @@ class NetworkBoundResourceTest {
             OCShareEntity.fromRemoteShare(remoteShare).also { it.accountOwner = "admin@server" }
         }))
 
-        verify { observer.onChanged(Resource.success(fetchedDbValue)) }
+        verify { observer.onChanged(DataResult.success(fetchedDbValue)) }
     }
 
     @Test
@@ -155,14 +155,14 @@ class NetworkBoundResourceTest {
                 }
             }
 
-        val observer = mockk<Observer<Resource<List<OCShareEntity>>>>(relaxed = true)
+        val observer = mockk<Observer<DataResult<List<OCShareEntity>>>>(relaxed = true)
         networkBoundResource.asLiveData().observeForever(observer)
 
         assertThat(saved.get(), `is`(false))
 
         verify {
             observer.onChanged(
-                Resource.error(
+                DataResult.error(
                     RemoteOperationResult.ResultCode.UNAUTHORIZED,
                     data = dbData.value
                 )
