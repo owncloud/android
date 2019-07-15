@@ -60,7 +60,7 @@ class OCCapabilityDaoTest {
         )
 
         val capability = getValue(
-            ocCapabilityDao.getCapabilityForAccount(
+            ocCapabilityDao.getCapabilitiesForAccountAsLiveData(
                 "user2@server"
             )
         )
@@ -79,7 +79,7 @@ class OCCapabilityDaoTest {
         )
 
         val capability = getValue(
-            ocCapabilityDao.getCapabilityForAccount(
+            ocCapabilityDao.getCapabilitiesForAccountAsLiveData(
                 "user@server2"
             )
         )
@@ -113,7 +113,7 @@ class OCCapabilityDaoTest {
         )
 
         val capability = getValue(
-            ocCapabilityDao.getCapabilityForAccount(
+            ocCapabilityDao.getCapabilitiesForAccountAsLiveData(
                 "admin@server"
             )
         )
@@ -153,7 +153,7 @@ class OCCapabilityDaoTest {
         )
 
         val capability1 = getValue(
-            ocCapabilityDao.getCapabilityForAccount(
+            ocCapabilityDao.getCapabilitiesForAccountAsLiveData(
                 "cto@server"
             )
         )
@@ -167,7 +167,7 @@ class OCCapabilityDaoTest {
 
         // capability2 didn't exist before, it should not replace the old one but got created
         val capability2 = getValue(
-            ocCapabilityDao.getCapabilityForAccount(
+            ocCapabilityDao.getCapabilitiesForAccountAsLiveData(
                 "seo@server"
             )
         )

@@ -58,7 +58,7 @@ class OCLocalCapabilitiesDataSourceTest {
         )
 
         every {
-            ocCapabilityDao.getCapabilityForAccount(
+            ocCapabilityDao.getCapabilitiesForAccountAsLiveData(
                 "user@server1"
             )
         } returns capabilityAsLiveData
@@ -69,7 +69,7 @@ class OCLocalCapabilitiesDataSourceTest {
         )
 
         every {
-            ocCapabilityDao.getCapabilityForAccount(
+            ocCapabilityDao.getCapabilitiesForAccountAsLiveData(
                 "user@server2"
             )
         } returns newCapabilityAsLiveData
@@ -83,7 +83,7 @@ class OCLocalCapabilitiesDataSourceTest {
     @Test
     fun readLocalCapability() {
         val capability = getValue(
-            ocLocalCapabilitiesDataSource.getCapabilityForAccountAsLiveData(
+            ocLocalCapabilitiesDataSource.getCapabilitiesForAccountAsLiveData(
                 "user@server1"
             )
         )
@@ -107,7 +107,7 @@ class OCLocalCapabilitiesDataSourceTest {
         )
 
         val capability = getValue(
-            ocLocalCapabilitiesDataSource.getCapabilityForAccountAsLiveData(
+            ocLocalCapabilitiesDataSource.getCapabilitiesForAccountAsLiveData(
                 "user@server2"
             )
         )

@@ -22,34 +22,84 @@ package com.owncloud.android.presentation.capabilities
 import android.accounts.Account
 import android.content.Context
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
-import com.owncloud.android.data.capabilities.datasources.OCLocalCapabilitiesDataSource
-import com.owncloud.android.data.capabilities.datasources.OCRemoteCapabilitiesDataSource
+import androidx.lifecycle.viewModelScope
 import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
-import com.owncloud.android.data.capabilities.CapabilityRepository
-import com.owncloud.android.domain.capabilities.OCCapabilityRepository
-import com.owncloud.android.lib.common.OwnCloudAccount
-import com.owncloud.android.lib.common.OwnCloudClientManagerFactory
-import com.owncloud.android.data.DataResult
+import com.owncloud.android.domain.capabilities.usecases.CapabilitiesLiveDataUseCase
+import com.owncloud.android.domain.capabilities.usecases.RefreshCapabilitiesUseCase
+import com.owncloud.android.operations.common.OperationType
+import com.owncloud.android.presentation.UIResult
+import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 /**
  * View Model to keep a reference to the capability repository and an up-to-date capability
  */
 class OCCapabilityViewModel(
-    context: Context,
+    val context: Context,
     val account: Account,
-    val capabilityRepository: CapabilityRepository = OCCapabilityRepository.create(
-        localCapabilitiesDataSource = OCLocalCapabilitiesDataSource(
-            context
-        ),
-        remoteCapabilitiesDataSource = OCRemoteCapabilitiesDataSource(
-            OwnCloudClientManagerFactory.getDefaultSingleton().getClientFor(
-                OwnCloudAccount(account, context),
-                context
-            )
-        )
-    )
+    capabilitiesLiveDataUseCase: CapabilitiesLiveDataUseCase = CapabilitiesLiveDataUseCase(context, account),
+    private val refreshCapabilitiesUseCase: RefreshCapabilitiesUseCase = RefreshCapabilitiesUseCase(context, account)
 ) : ViewModel() {
-    fun getCapabilityForAccount(shouldFetchFromNetwork: Boolean = true): LiveData<DataResult<OCCapabilityEntity>> =
-        capabilityRepository.getCapabilityForAccount(account.name, shouldFetchFromNetwork)
+
+    private val _capabilities = MutableLiveData<UIResult<OCCapabilityEntity>>()
+    val capabilities: LiveData<UIResult<OCCapabilityEntity>> = _capabilities
+
+    private var capabilitiesLiveData: LiveData<OCCapabilityEntity>? = capabilitiesLiveDataUseCase.execute(
+        CapabilitiesLiveDataUseCase.Params(
+            accountName = account.name
+        )
+    ).data
+
+    // to detect changes in capabilities
+    private val capabilitiesObserver: Observer<OCCapabilityEntity> = Observer { capabilities ->
+        if (capabilities != null) {
+            _capabilities.postValue(UIResult.success(capabilities))
+        }
+    }
+
+    init {
+        capabilitiesLiveData?.observeForever(capabilitiesObserver)
+
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                refreshCapabilities()
+            }
+        }
+    }
+
+    private fun refreshCapabilities() {
+        _capabilities.postValue(
+            UIResult.loading(capabilitiesLiveData?.value)
+        )
+
+        refreshCapabilitiesUseCase.execute(
+            RefreshCapabilitiesUseCase.Params(
+                accountName = account.name
+            )
+        ).also { useCaseResult ->
+            if (!useCaseResult.isSuccess()) {
+                _capabilities.postValue(
+                    UIResult.error(
+                        capabilitiesLiveData?.value,
+                        errorMessage = useCaseResult.msg ?: ErrorMessageAdapter.getResultMessage(
+                            useCaseResult.code,
+                            useCaseResult.exception,
+                            OperationType.GET_CAPABILITIES,
+                            context.resources
+                        )
+                    )
+                )
+            }
+        }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        capabilitiesLiveData?.removeObserver(capabilitiesObserver)
+    }
 }

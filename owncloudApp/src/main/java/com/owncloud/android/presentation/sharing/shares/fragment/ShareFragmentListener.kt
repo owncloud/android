@@ -60,7 +60,7 @@ interface ShareFragmentListener {
 
     fun removePublicShare(remoteId: Long)
 
-    fun refreshCapabilities(shouldFetchFromNetwork: Boolean = true)
+    fun observeCapabilities(shouldFetchFromNetwork: Boolean = true)
 
     fun copyOrSendPrivateLink(file: OCFile)
 

@@ -53,7 +53,7 @@ class OCCapabilityRepositoryTest {
         val defaultAccountName = "admin@server"
 
         every {
-            localCapabilitiesDataSource.getCapabilityForAccountAsLiveData(
+            localCapabilitiesDataSource.getCapabilitiesForAccountAsLiveData(
                 defaultAccountName
             )
         } returns dbData
@@ -68,7 +68,7 @@ class OCCapabilityRepositoryTest {
                 InstantExecutors(), localCapabilitiesDataSource, remoteCapabilitiesDataSource
             )
 
-        val data = ocCapabilityRepository.getCapabilityForAccount(defaultAccountName)
+        val data = ocCapabilityRepository.refreshCapabilitiesForAccount(defaultAccountName)
 
         val observer = mockk<Observer<DataResult<OCCapabilityEntity>>>(relaxed = true)
         data.observeForever(observer)
@@ -78,7 +78,7 @@ class OCCapabilityRepositoryTest {
         // Get capabilities from database to observe them, is called twice (one showing current db capabilities while
         // getting capabilities from server and another one with db capabilities already updated with server ones)
         verify(exactly = 2) {
-            localCapabilitiesDataSource.getCapabilityForAccountAsLiveData(defaultAccountName)
+            localCapabilitiesDataSource.getCapabilitiesForAccountAsLiveData(defaultAccountName)
         }
 
         // Retrieving capabilities from server...
@@ -108,7 +108,7 @@ class OCCapabilityRepositoryTest {
         val defaultAccountName = "user@server"
 
         every {
-            localCapabilitiesDataSource.getCapabilityForAccountAsLiveData(
+            localCapabilitiesDataSource.getCapabilitiesForAccountAsLiveData(
                 defaultAccountName
             )
         } returns dbData
@@ -125,7 +125,7 @@ class OCCapabilityRepositoryTest {
                 remoteCapabilitiesDataSource
             )
 
-        val data = ocCapabilityRepository.getCapabilityForAccount(
+        val data = ocCapabilityRepository.refreshCapabilitiesForAccount(
             defaultAccountName
         )
 
@@ -137,7 +137,7 @@ class OCCapabilityRepositoryTest {
         // Get capabilities from database to observe them, is called twice (one showing current db capabilities while
         // getting capabilities from server and another one with db capabilities already updated with server ones)
         verify(exactly = 2) {
-            localCapabilitiesDataSource.getCapabilityForAccountAsLiveData(defaultAccountName)
+            localCapabilitiesDataSource.getCapabilitiesForAccountAsLiveData(defaultAccountName)
         }
 
         // Retrieving capabilities from server...
@@ -156,7 +156,7 @@ class OCCapabilityRepositoryTest {
         dbData.value = null // DB does not include capabilities yet
 
         every {
-            localCapabilitiesDataSource.getCapabilityForAccountAsLiveData(defaultAccountName)
+            localCapabilitiesDataSource.getCapabilitiesForAccountAsLiveData(defaultAccountName)
         } returns dbData
 
         val exception = Exception("Error when retrieving capabilities")
@@ -178,13 +178,13 @@ class OCCapabilityRepositoryTest {
                 remoteCapabilitiesDataSourceTest
             )
 
-        val data = ocCapabilityRepository.getCapabilityForAccount(
+        val data = ocCapabilityRepository.refreshCapabilitiesForAccount(
             defaultAccountName
         )
 
         // Get capabilities from database to observe them
         verify {
-            localCapabilitiesDataSource.getCapabilityForAccountAsLiveData(
+            localCapabilitiesDataSource.getCapabilitiesForAccountAsLiveData(
                 defaultAccountName
             )
         }
