@@ -220,7 +220,7 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
                         dismissLoadingDialog()
                     }
                     Status.ERROR -> {
-                        val errorMessage = ErrorMessageAdapter.getResultMessage(
+                        val errorMessage = resource.msg ?: ErrorMessageAdapter.getResultMessage(
                             resource.code,
                             resource.exception,
                             OperationType.GET_SHARES,
@@ -292,7 +292,7 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
             Observer { resource ->
                 when (resource?.status) {
                     Status.ERROR -> {
-                        val errorMessage = ErrorMessageAdapter.getResultMessage(
+                        val errorMessage = resource.msg ?: ErrorMessageAdapter.getResultMessage(
                             resource.code,
                             resource.exception,
                             OperationType.CREATE_SHARE_WITH_SHAREES,
@@ -303,6 +303,7 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
                             errorMessage,
                             Snackbar.LENGTH_SHORT
                         ).show()
+                        dismissLoadingDialog()
                     }
                     Status.LOADING -> {
                         showLoadingDialog(R.string.common_loading)
@@ -407,7 +408,7 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
                         dismissLoadingDialog()
                     }
                     Status.ERROR -> {
-                        val errorMessage = ErrorMessageAdapter.getResultMessage(
+                        val errorMessage = resource.msg ?: ErrorMessageAdapter.getResultMessage(
                             resource.code,
                             resource.exception,
                             OperationType.GET_SHARES,
@@ -579,7 +580,7 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
                         dismissLoadingDialog()
                     }
                     Status.ERROR -> {
-                        val errorMessage = ErrorMessageAdapter.getResultMessage(
+                        val errorMessage = resource.msg ?: ErrorMessageAdapter.getResultMessage(
                             resource.code,
                             resource.exception,
                             OperationType.REMOVE_SHARE,

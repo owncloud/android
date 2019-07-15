@@ -38,14 +38,11 @@ import android.widget.Toast
 import com.owncloud.android.R
 import com.owncloud.android.authentication.AccountUtils
 import com.owncloud.android.datamodel.FileDataStorageManager
-import com.owncloud.android.lib.common.OwnCloudAccount
-import com.owncloud.android.lib.common.OwnCloudClientManagerFactory
 import com.owncloud.android.lib.common.utils.Log_OC
 import com.owncloud.android.lib.resources.shares.GetRemoteShareesOperation
 import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.operations.common.OperationType
-import com.owncloud.android.sharees.data.datasources.OCRemoteShareesDataSource
-import com.owncloud.android.sharees.domain.OCShareeRepository
+import com.owncloud.android.shares.presentation.OCShareViewModel
 import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter
 import com.owncloud.android.vo.Resource
 import org.json.JSONException
@@ -135,16 +132,16 @@ class UsersAndGroupsSearchProvider : ContentProvider() {
             account
         )
 
-        val resource = ocShareeViewModel.getSharees(userQuery,
+        val shareesResource = ocShareeViewModel.getSharees(userQuery,
             REQUESTED_PAGE,
             RESULTS_PER_PAGE
         )
 
-        if (!resource.isSuccess()) {
-            showErrorMessage(resource)
+        if (!shareesResource.isSuccess()) {
+            showErrorMessage(shareesResource)
         }
 
-        val names = resource.data
+        val names = shareesResource.data
 
         // convert the responses from the OC server to the expected format
         if (names?.size!! > 0) {
