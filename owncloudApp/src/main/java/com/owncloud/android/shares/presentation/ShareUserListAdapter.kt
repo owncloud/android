@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.sharees.presentation
+package com.owncloud.android.shares.presentation
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -38,13 +38,19 @@ import java.util.ArrayList
  * Adapter to show a user/group in Share With List
  */
 class ShareUserListAdapter(
-    private val mContext: Context, resource: Int, private val mShares: ArrayList<OCShare>?,
-    private val mListener: ShareUserAdapterListener
+    private val mContext: Context,
+    resource: Int,
+    private var shares: ArrayList<OCShare>?,
+    private val listener: ShareUserAdapterListener
 ) : ArrayAdapter<OCShare>(mContext, resource) {
 
-    override fun getCount(): Int = mShares!!.size
+    init {
+        shares = ArrayList(shares?.sortedWith(compareBy {it.sharedWithDisplayName}))
+    }
 
-    override fun getItem(position: Int): OCShare? = mShares!![position]
+    override fun getCount(): Int = shares!!.size
+
+    override fun getItem(position: Int): OCShare? = shares!![position]
 
     override fun getItemId(position: Int): Long = 0
 
@@ -56,8 +62,8 @@ class ShareUserListAdapter(
         // Allow or disallow touches with other visible windows
         view.filterTouchesWhenObscured = PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(mContext)
 
-        if (mShares != null && mShares.size > position) {
-            val share = mShares[position]
+        if (shares != null && shares?.size!! > position) {
+            val share = shares!![position]
 
             val userName = view.findViewById<TextView>(R.id.userOrGroupName)
             val iconView = view.findViewById<ImageView>(R.id.icon)
@@ -78,11 +84,11 @@ class ShareUserListAdapter(
 
             /// bind listener to edit privileges
             val editShareButton = view.findViewById<ImageView>(R.id.editShareButton)
-            editShareButton.setOnClickListener { mListener.editShare(mShares[position]) }
+            editShareButton.setOnClickListener { listener.editShare(shares!![position]) }
 
             /// bind listener to unshare
             val unshareButton = view.findViewById<ImageView>(R.id.unshareButton)
-            unshareButton.setOnClickListener { mListener.unshareButtonPressed(mShares[position]) }
+            unshareButton.setOnClickListener { listener.unshareButtonPressed(shares!![position]) }
 
         }
         return view

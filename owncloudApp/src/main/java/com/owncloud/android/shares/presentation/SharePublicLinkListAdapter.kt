@@ -1,4 +1,4 @@
-package com.owncloud.android.ui.adapter
+package com.owncloud.android.shares.presentation
 
 /**
  * ownCloud Android client application
@@ -40,13 +40,17 @@ import java.util.ArrayList
 class SharePublicLinkListAdapter(
     private val mContext: Context,
     resource: Int,
-    private val mPublicLinks: ArrayList<OCShare>?,
-    private val mListener: SharePublicLinkAdapterListener
+    private var publicLinks: ArrayList<OCShare>?,
+    private val listener: SharePublicLinkAdapterListener
 ) : ArrayAdapter<OCShare>(mContext, resource) {
 
-    override fun getCount(): Int = mPublicLinks?.size ?: 0
+    init {
+        publicLinks = ArrayList(publicLinks?.sortedWith(compareBy { it.name }))
+    }
 
-    override fun getItem(position: Int): OCShare? = mPublicLinks!![position]
+    override fun getCount(): Int = publicLinks?.size ?: 0
+
+    override fun getItem(position: Int): OCShare? = publicLinks!![position]
 
     override fun getItemId(position: Int): Long = 0
 
@@ -57,20 +61,20 @@ class SharePublicLinkListAdapter(
         // Allow or disallow touches with other visible windows
         view.filterTouchesWhenObscured = PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(mContext)
 
-        if (mPublicLinks != null && mPublicLinks.size > position) {
-            val share = mPublicLinks[position]
+        if (publicLinks != null && publicLinks?.size!! > position) {
+            val share = publicLinks!![position]
 
             // If there's no name, set the token as name
             view.publicLinkName.text = if (share.name.isNullOrEmpty()) share.token else share.name
 
             // bind listener to get link
-            view.getPublicLinkButton.setOnClickListener { mListener.copyOrSendPublicLink(mPublicLinks[position]) }
+            view.getPublicLinkButton.setOnClickListener { listener.copyOrSendPublicLink(publicLinks!![position]) }
 
             // bind listener to delete
-            view.deletePublicLinkButton.setOnClickListener { mListener.removePublicShare(mPublicLinks[position]) }
+            view.deletePublicLinkButton.setOnClickListener { listener.removePublicShare(publicLinks!![position]) }
 
             // bind listener to edit
-            view.editPublicLinkButton.setOnClickListener { mListener.editPublicShare(mPublicLinks[position]) }
+            view.editPublicLinkButton.setOnClickListener { listener.editPublicShare(publicLinks!![position]) }
         }
 
         return view
@@ -79,8 +83,8 @@ class SharePublicLinkListAdapter(
     interface SharePublicLinkAdapterListener {
         fun copyOrSendPublicLink(share: OCShare)
 
-        fun removePublicShare(share: OCShare)
-
         fun editPublicShare(share: OCShare)
+
+        fun removePublicShare(share: OCShare)
     }
 }

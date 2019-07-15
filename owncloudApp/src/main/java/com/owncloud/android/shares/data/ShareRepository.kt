@@ -20,6 +20,7 @@
 package com.owncloud.android.shares.data
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.shares.domain.OCShare
 import com.owncloud.android.vo.Resource
@@ -36,6 +37,11 @@ interface ShareRepository {
         filePath: String,
         shareType: ShareType?,
         shareeName: String,
+        permissions: Int
+    ): LiveData<Resource<Unit>>
+
+    fun updatePrivateShare(
+        remoteId: Long,
         permissions: Int
     ): LiveData<Resource<Unit>>
 
@@ -63,7 +69,13 @@ interface ShareRepository {
         publicUpload: Boolean
     ): LiveData<Resource<Unit>>
 
-    fun deletePublicShare(
+    /******************************************************************************************************
+     *********************************************** COMMON ***********************************************
+     ******************************************************************************************************/
+
+    fun deleteShare(
         remoteId: Long
     ): LiveData<Resource<Unit>>
+
+    fun getShare(remoteId: Long): LiveData<OCShare>
 }

@@ -27,11 +27,19 @@ import android.content.res.Resources
 import com.owncloud.android.R
 import com.owncloud.android.lib.common.operations.RemoteOperation
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
-import com.owncloud.android.lib.resources.shares.ShareParserResult
-import com.owncloud.android.operations.*
+import com.owncloud.android.operations.CopyFileOperation
+import com.owncloud.android.operations.CreateFolderOperation
+import com.owncloud.android.operations.DownloadFileOperation
+import com.owncloud.android.operations.MoveFileOperation
+import com.owncloud.android.operations.RemoveFileOperation
+import com.owncloud.android.operations.RemoveShareOperation
+import com.owncloud.android.operations.RenameFileOperation
+import com.owncloud.android.operations.SynchronizeFileOperation
+import com.owncloud.android.operations.SynchronizeFolderOperation
+import com.owncloud.android.operations.UpdateSharePermissionsOperation
+import com.owncloud.android.operations.UploadFileOperation
 import com.owncloud.android.operations.common.OperationType
 import java.io.File
-import java.lang.Exception
 import java.net.SocketTimeoutException
 
 /**
@@ -345,22 +353,20 @@ class ErrorMessageAdapter {
                 RemoteOperationResult.ResultCode.SHARE_NOT_FOUND -> {
                     return when (operationType) {
                         OperationType.CREATE_PUBLIC_SHARE -> f.format(R.string.share_link_file_no_exist)
+                        OperationType.UPDATE_SHARE -> f.format(R.string.update_link_file_no_exist)
                         OperationType.REMOVE_SHARE -> f.format(R.string.unshare_link_file_no_exist)
-                        OperationType.UPDATE_SHARE_PERMISSIONS, OperationType.UPDATE_PUBLIC_SHARE ->
-                            f.format(R.string.update_link_file_no_exist)
                         else -> getCommonMessageForResult(operationType, resultCode, resultException, resources)
                     }
                 }
                 RemoteOperationResult.ResultCode.SHARE_FORBIDDEN -> {
                     if (operationType == OperationType.CREATE_PUBLIC_SHARE)
                         return f.forbidden(R.string.share_link_forbidden_permissions)
-                    if (operationType == OperationType.REMOVE_SHARE)
-                        return f.forbidden(R.string.unshare_link_forbidden_permissions)
+                    if (operationType == OperationType.UPDATE_SHARE)
+                        return f.forbidden(R.string.update_link_forbidden_permissions)
                     return if (
-                        operationType == OperationType.UPDATE_SHARE_PERMISSIONS ||
-                        operationType == OperationType.UPDATE_PUBLIC_SHARE
+                        operationType == OperationType.REMOVE_SHARE
                     ) f.forbidden(
-                        R.string.update_link_forbidden_permissions
+                        R.string.unshare_link_forbidden_permissions
                     ) else f.format(R.string.move_file_invalid_into_descendent)
                 }
                 RemoteOperationResult.ResultCode.INVALID_MOVE_INTO_DESCENDANT ->
@@ -464,7 +470,7 @@ class ErrorMessageAdapter {
                 OperationType.CREATE_PUBLIC_SHARE, OperationType.CREATE_SHARE_WITH_SHAREES ->
                     f.format(R.string.share_link_file_error)
                 OperationType.REMOVE_SHARE -> f.format(R.string.unshare_link_file_error)
-                OperationType.UPDATE_PUBLIC_SHARE, OperationType.UPDATE_SHARE_PERMISSIONS ->
+                OperationType.UPDATE_SHARE ->
                     f.format(R.string.update_link_file_error)
                 OperationType.MOVE_FILE -> f.format(R.string.move_file_error)
                 OperationType.COPY_FILE -> f.format(R.string.copy_file_error)

@@ -24,7 +24,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.test.platform.app.InstrumentationRegistry
 import com.owncloud.android.db.OwncloudDatabase
 import com.owncloud.android.lib.resources.shares.ShareType
-import com.owncloud.android.shares.data.datasources.OCLocalSharesDataSource
+import com.owncloud.android.shares.data.datasources.OCLocalShareDataSource
 import com.owncloud.android.shares.data.datasources.OCShareDao
 import com.owncloud.android.shares.domain.OCShare
 import com.owncloud.android.utils.LiveDataTestUtil.getValue
@@ -38,7 +38,7 @@ import org.mockito.Mockito.`when`
 import org.mockito.Mockito.mock
 
 class OCLocalDataSourceTest {
-    private lateinit var ocLocalSharesDataSource: OCLocalSharesDataSource
+    private lateinit var ocLocalSharesDataSource: OCLocalShareDataSource
     private val ocSharesDao = mock(OCShareDao::class.java)
 
     @Rule
@@ -52,7 +52,7 @@ class OCLocalDataSourceTest {
 
         val context = InstrumentationRegistry.getInstrumentation().targetContext
         ocLocalSharesDataSource =
-            OCLocalSharesDataSource(context, ocSharesDao)
+            OCLocalShareDataSource(context, ocSharesDao)
     }
 
     /******************************************************************************************************
@@ -113,7 +113,7 @@ class OCLocalDataSourceTest {
     }
 
     @Test
-    fun insertPrivateShares() {
+    fun insertPrivateShare() {
         val privateSharesAsLiveData: MutableLiveData<List<OCShare>> = MutableLiveData()
         privateSharesAsLiveData.value = privateShares
 
@@ -135,6 +135,31 @@ class OCLocalDataSourceTest {
             )
         )
         assertEquals(10, insertedShareId)
+    }
+
+    @Test
+    fun updatePrivateShare() {
+        val privateSharesAsLiveData: MutableLiveData<List<OCShare>> = MutableLiveData()
+        privateSharesAsLiveData.value = privateShares
+
+        `when`(
+            ocSharesDao.update(
+                privateSharesAsLiveData.value!![1]
+            )
+        ).thenReturn(
+            3
+        )
+
+        val updatedShareId = ocLocalSharesDataSource.update(
+            TestUtil.createPrivateShare(
+                shareType = ShareType.USER.value,
+                path = "/Docs/doc1.doc",
+                isFolder = false,
+                shareWith = "user.name",
+                sharedWithDisplayName = "Nicole"
+            )
+        )
+        assertEquals(3, updatedShareId)
     }
 
     /******************************************************************************************************
@@ -189,7 +214,7 @@ class OCLocalDataSourceTest {
     }
 
     @Test
-    fun insertPublicShares() {
+    fun insertPublicShare() {
         val publicSharesAsLiveData: MutableLiveData<List<OCShare>> = MutableLiveData()
         publicSharesAsLiveData.value = publicShares
 
@@ -213,7 +238,7 @@ class OCLocalDataSourceTest {
     }
 
     @Test
-    fun updatePublicShares() {
+    fun updatePublicShare() {
         val publicSharesAsLiveData: MutableLiveData<List<OCShare>> = MutableLiveData()
         publicSharesAsLiveData.value = publicShares
 
@@ -236,8 +261,12 @@ class OCLocalDataSourceTest {
         assertEquals(8, updatedShareId)
     }
 
+    /**************************************************************************************************************
+     *************************************************** COMMON ***************************************************
+     **************************************************************************************************************/
+
     @Test
-    fun deletePublicShare() {
+    fun deleteShare() {
         `when`(
             ocSharesDao.deleteShare(
                 5

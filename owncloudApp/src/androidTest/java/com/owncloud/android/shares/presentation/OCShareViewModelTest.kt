@@ -114,6 +114,30 @@ class OCShareViewModelTest {
         assertEquals(Status.SUCCESS, resource?.status)
     }
 
+    @Test
+    fun updatePrivateShare() {
+        `when`(
+            ocShareRepository.updatePrivateShare(
+                1,
+                17
+            )
+        ).thenReturn(
+            MutableLiveData<Resource<Unit>>().apply {
+                value = Resource.success()
+            }
+        )
+
+        // Viewmodel that will ask ocShareRepository for shares
+        val ocShareViewModel = createOCShareViewModel(ocShareRepository)
+
+        val resource: Resource<Unit>? = ocShareViewModel.updatePrivateShare(
+            1,
+            17
+        ).value
+
+        assertEquals(Status.SUCCESS, resource?.status)
+    }
+
     private fun assertPrivateShareParameters(shares: List<OCShare>?) {
         assertCommonShareParameters(shares)
 
@@ -212,35 +236,13 @@ class OCShareViewModelTest {
         // Viewmodel that will ask ocShareRepository for shares
         val ocShareViewModel = createOCShareViewModel(ocShareRepository)
 
-        val resource: Resource<Unit>? = ocShareViewModel.updatePublicShareForFile(
+        val resource: Resource<Unit>? = ocShareViewModel.updatePublicShare(
             1,
             "Photos 1 link",
             "123456",
             1000,
             1,
             false
-        ).value
-
-        assertEquals(Status.SUCCESS, resource?.status)
-    }
-
-    @Test
-    fun deletePublicShare() {
-        `when`(
-            ocShareRepository.deletePublicShare(
-                3
-            )
-        ).thenReturn(
-            MutableLiveData<Resource<Unit>>().apply {
-                value = Resource.success()
-            }
-        )
-
-        // Viewmodel that will ask ocShareRepository for shares
-        val ocShareViewModel = createOCShareViewModel(ocShareRepository)
-
-        val resource: Resource<Unit>? = ocShareViewModel.deletePublicShare(
-            3
         ).value
 
         assertEquals(Status.SUCCESS, resource?.status)
@@ -259,6 +261,28 @@ class OCShareViewModelTest {
     /******************************************************************************************************
      *********************************************** COMMON ***********************************************
      ******************************************************************************************************/
+
+    @Test
+    fun deleteShare() {
+        `when`(
+            ocShareRepository.deleteShare(
+                3
+            )
+        ).thenReturn(
+            MutableLiveData<Resource<Unit>>().apply {
+                value = Resource.success()
+            }
+        )
+
+        // Viewmodel that will ask ocShareRepository for shares
+        val ocShareViewModel = createOCShareViewModel(ocShareRepository)
+
+        val resource: Resource<Unit>? = ocShareViewModel.deleteShare(
+            3
+        ).value
+
+        assertEquals(Status.SUCCESS, resource?.status)
+    }
 
     private fun createOCShareViewModel(ocShareRepository: OCShareRepository): OCShareViewModel {
         val context = InstrumentationRegistry.getInstrumentation().targetContext

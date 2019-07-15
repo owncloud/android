@@ -17,9 +17,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.shares.data.datasources
+package com.owncloud.android.shares.data
 
-import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.shares.CreateRemoteShareOperation
 import com.owncloud.android.lib.resources.shares.GetRemoteSharesForFileOperation
@@ -27,18 +26,17 @@ import com.owncloud.android.lib.resources.shares.RemoveRemoteShareOperation
 import com.owncloud.android.lib.resources.shares.ShareParserResult
 import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.lib.resources.shares.UpdateRemoteShareOperation
+import com.owncloud.android.shares.data.datasources.RemoteShareDataSource
 
-class OCRemoteSharesDataSource(
-    private val client: OwnCloudClient
-) : RemoteSharesDataSource {
-
+class RemoteShareDataSourceTest(private val remoteOperationResult: RemoteOperationResult<ShareParserResult>) :
+    RemoteShareDataSource {
     override fun getShares(
         remoteFilePath: String,
         reshares: Boolean,
         subfiles: Boolean,
         getRemoteSharesForFileOperation: GetRemoteSharesForFileOperation
     ): RemoteOperationResult<ShareParserResult> {
-        return getRemoteSharesForFileOperation.execute(client)
+        return remoteOperationResult
     }
 
     override fun insertShare(
@@ -52,12 +50,7 @@ class OCRemoteSharesDataSource(
         publicUpload: Boolean,
         createRemoteShareOperation: CreateRemoteShareOperation
     ): RemoteOperationResult<ShareParserResult> {
-        createRemoteShareOperation.name = name
-        createRemoteShareOperation.password = password
-        createRemoteShareOperation.expirationDateInMillis = expirationDate
-        createRemoteShareOperation.publicUpload = publicUpload
-        createRemoteShareOperation.retrieveShareDetails = true
-        return createRemoteShareOperation.execute(client)
+        return remoteOperationResult
     }
 
     override fun updateShare(
@@ -69,19 +62,13 @@ class OCRemoteSharesDataSource(
         publicUpload: Boolean,
         updateRemoteShareOperation: UpdateRemoteShareOperation
     ): RemoteOperationResult<ShareParserResult> {
-        updateRemoteShareOperation.name = name
-        updateRemoteShareOperation.password = password
-        updateRemoteShareOperation.expirationDateInMillis = expirationDateInMillis
-        updateRemoteShareOperation.permissions = permissions
-        updateRemoteShareOperation.publicUpload = publicUpload
-        updateRemoteShareOperation.retrieveShareDetails = true
-        return updateRemoteShareOperation.execute(client)
+        return remoteOperationResult
     }
 
     override fun deleteShare(
         remoteId: Long,
         removeRemoteShareOperation: RemoveRemoteShareOperation
     ): RemoteOperationResult<ShareParserResult> {
-        return removeRemoteShareOperation.execute(client)
+        return remoteOperationResult
     }
 }

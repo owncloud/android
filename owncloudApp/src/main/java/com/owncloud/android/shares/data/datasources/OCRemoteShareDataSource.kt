@@ -17,8 +17,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.shares.data
+package com.owncloud.android.shares.data.datasources
 
+import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.shares.CreateRemoteShareOperation
 import com.owncloud.android.lib.resources.shares.GetRemoteSharesForFileOperation
@@ -26,17 +27,18 @@ import com.owncloud.android.lib.resources.shares.RemoveRemoteShareOperation
 import com.owncloud.android.lib.resources.shares.ShareParserResult
 import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.lib.resources.shares.UpdateRemoteShareOperation
-import com.owncloud.android.shares.data.datasources.RemoteSharesDataSource
 
-class RemoteSharesDataSourceTest(private val remoteOperationResult: RemoteOperationResult<ShareParserResult>) :
-    RemoteSharesDataSource {
+class OCRemoteShareDataSource(
+    private val client: OwnCloudClient
+) : RemoteShareDataSource {
+
     override fun getShares(
         remoteFilePath: String,
         reshares: Boolean,
         subfiles: Boolean,
         getRemoteSharesForFileOperation: GetRemoteSharesForFileOperation
     ): RemoteOperationResult<ShareParserResult> {
-        return remoteOperationResult
+        return getRemoteSharesForFileOperation.execute(client)
     }
 
     override fun insertShare(
@@ -50,7 +52,12 @@ class RemoteSharesDataSourceTest(private val remoteOperationResult: RemoteOperat
         publicUpload: Boolean,
         createRemoteShareOperation: CreateRemoteShareOperation
     ): RemoteOperationResult<ShareParserResult> {
-        return remoteOperationResult
+        createRemoteShareOperation.name = name
+        createRemoteShareOperation.password = password
+        createRemoteShareOperation.expirationDateInMillis = expirationDate
+        createRemoteShareOperation.publicUpload = publicUpload
+        createRemoteShareOperation.retrieveShareDetails = true
+        return createRemoteShareOperation.execute(client)
     }
 
     override fun updateShare(
@@ -62,13 +69,19 @@ class RemoteSharesDataSourceTest(private val remoteOperationResult: RemoteOperat
         publicUpload: Boolean,
         updateRemoteShareOperation: UpdateRemoteShareOperation
     ): RemoteOperationResult<ShareParserResult> {
-        return remoteOperationResult
+        updateRemoteShareOperation.name = name
+        updateRemoteShareOperation.password = password
+        updateRemoteShareOperation.expirationDateInMillis = expirationDateInMillis
+        updateRemoteShareOperation.permissions = permissions
+        updateRemoteShareOperation.publicUpload = publicUpload
+        updateRemoteShareOperation.retrieveShareDetails = true
+        return updateRemoteShareOperation.execute(client)
     }
 
     override fun deleteShare(
         remoteId: Long,
         removeRemoteShareOperation: RemoveRemoteShareOperation
     ): RemoteOperationResult<ShareParserResult> {
-        return remoteOperationResult
+        return removeRemoteShareOperation.execute(client)
     }
 }

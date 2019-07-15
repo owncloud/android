@@ -23,12 +23,16 @@ import androidx.lifecycle.LiveData
 import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.shares.domain.OCShare
 
-interface LocalSharesDataSource {
+interface LocalShareDataSource {
     fun getSharesAsLiveData(
         filePath: String,
         accountName: String,
         shareTypes: List<ShareType>
     ): LiveData<List<OCShare>>
+
+    fun getShareAsLiveData(
+        remoteId: Long
+    ): LiveData<OCShare>
 
     fun insert(ocShare: OCShare): Long
 

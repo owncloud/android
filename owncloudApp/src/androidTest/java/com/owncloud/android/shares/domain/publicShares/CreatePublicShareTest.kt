@@ -17,7 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.shares.domain
+package com.owncloud.android.shares.domain.publicShares
 
 import android.accounts.Account
 import android.accounts.AccountManager
@@ -44,12 +44,14 @@ import com.owncloud.android.lib.common.accounts.AccountUtils
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.status.CapabilityBooleanType
 import com.owncloud.android.lib.resources.status.OwnCloudVersion
-import com.owncloud.android.shares.presentation.ShareActivity
+import com.owncloud.android.shares.domain.OCShare
 import com.owncloud.android.shares.presentation.OCShareViewModel
+import com.owncloud.android.shares.presentation.ShareActivity
 import com.owncloud.android.ui.activity.FileActivity
 import com.owncloud.android.utils.AccountsManager
 import com.owncloud.android.utils.TestUtil
 import com.owncloud.android.vo.Resource
+import org.junit.After
 import org.junit.AfterClass
 import org.junit.Before
 import org.junit.BeforeClass
@@ -158,7 +160,7 @@ class CreatePublicShareTest {
     fun setUp() {
         val intent = spy(Intent::class.java)
 
-        file = getOCFileForTesting("image.jpg")
+        file = TestUtil.createFile("image.jpg")
 
         `when`(intent.getParcelableExtra(FileActivity.EXTRA_FILE) as? Parcelable).thenReturn(file)
         intent.putExtra(FileActivity.EXTRA_FILE, file)
@@ -185,6 +187,11 @@ class CreatePublicShareTest {
         }
 
         activityRule.launchActivity(intent)
+    }
+
+    @After
+    fun clean() {
+        stopKoin()
     }
 
     @Test
@@ -326,14 +333,6 @@ class CreatePublicShareTest {
         )
 
         onView(withText(R.string.share_link_file_error)).check(matches(isDisplayed()))
-    }
-
-    private fun getOCFileForTesting(name: String = "default") = OCFile("/Photos").apply {
-        availableOfflineStatus = OCFile.AvailableOfflineStatus.NOT_AVAILABLE_OFFLINE
-        fileName = name
-        fileId = 9456985479
-        remoteId = "1"
-        privateLink = "private link"
     }
 
     private fun loadCapabilitiesSuccessfully(

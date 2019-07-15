@@ -22,13 +22,13 @@ package com.owncloud.android.shares.data.datasources
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.shares.CreateRemoteShareOperation
 import com.owncloud.android.lib.resources.shares.GetRemoteSharesForFileOperation
-import com.owncloud.android.lib.resources.shares.RemoteShare.Companion.INIT_EXPIRATION_DATE_IN_MILLIS
+import com.owncloud.android.lib.resources.shares.RemoteShare
 import com.owncloud.android.lib.resources.shares.RemoveRemoteShareOperation
 import com.owncloud.android.lib.resources.shares.ShareParserResult
 import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.lib.resources.shares.UpdateRemoteShareOperation
 
-interface RemoteSharesDataSource {
+interface RemoteShareDataSource {
     fun getShares(
         remoteFilePath: String,
         reshares: Boolean,
@@ -44,7 +44,7 @@ interface RemoteSharesDataSource {
         permissions: Int,
         name: String = "",
         password: String = "",
-        expirationDate: Long = INIT_EXPIRATION_DATE_IN_MILLIS,
+        expirationDate: Long = RemoteShare.INIT_EXPIRATION_DATE_IN_MILLIS,
         publicUpload: Boolean = false,
         createRemoteShareOperation: CreateRemoteShareOperation =
             CreateRemoteShareOperation(remoteFilePath, shareType, shareWith, permissions)
@@ -52,11 +52,11 @@ interface RemoteSharesDataSource {
 
     fun updateShare(
         remoteId: Long,
-        name: String,
-        password: String?,
-        expirationDateInMillis: Long,
+        name: String = "",
+        password: String? = "",
+        expirationDateInMillis: Long = RemoteShare.INIT_EXPIRATION_DATE_IN_MILLIS,
         permissions: Int,
-        publicUpload: Boolean,
+        publicUpload: Boolean = false,
         updateRemoteShareOperation: UpdateRemoteShareOperation =
             UpdateRemoteShareOperation(
                 remoteId

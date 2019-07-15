@@ -57,7 +57,7 @@ import com.owncloud.android.db.ProviderMeta.ProviderTableMeta
 import com.owncloud.android.lib.common.accounts.AccountUtils
 import com.owncloud.android.lib.common.utils.Log_OC
 import com.owncloud.android.lib.resources.shares.ShareType
-import com.owncloud.android.shares.data.datasources.OCLocalSharesDataSource
+import com.owncloud.android.shares.data.datasources.OCLocalShareDataSource
 import com.owncloud.android.shares.domain.OCShare
 import com.owncloud.android.utils.FileStorageUtils
 import java.io.File
@@ -945,7 +945,7 @@ class FileContentProvider(val appExecutors: AppExecutors = AppExecutors()) : Con
 
                     // Insert share list to the new shares table in new database
                     appExecutors.diskIO().execute {
-                        OCLocalSharesDataSource(context).insert(shares)
+                        OCLocalShareDataSource(context).insert(shares)
                     }
 
                     // Drop old shares table from old database
