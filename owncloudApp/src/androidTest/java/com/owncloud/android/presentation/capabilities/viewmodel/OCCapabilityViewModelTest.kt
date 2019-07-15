@@ -56,7 +56,7 @@ class OCCapabilityViewModelTest {
         val ocCapabilityRepository = mockkClass(OCCapabilityRepository::class)
 
         every {
-            ocCapabilityRepository.getCapabilityForAccount(
+            ocCapabilityRepository.refreshCapabilitiesForAccount(
                 "admin@server"
             )
         } returns MutableLiveData<DataResult<OCCapabilityEntity>>().apply {

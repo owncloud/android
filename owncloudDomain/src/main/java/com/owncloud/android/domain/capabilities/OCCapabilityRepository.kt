@@ -20,8 +20,7 @@
 package com.owncloud.android.domain.capabilities
 
 import androidx.lifecycle.LiveData
-import com.owncloud.android.data.Executors
-import com.owncloud.android.data.NetworkBoundResource
+import androidx.lifecycle.MutableLiveData
 import com.owncloud.android.data.DataResult
 import com.owncloud.android.data.capabilities.CapabilityRepository
 import com.owncloud.android.data.capabilities.datasources.LocalCapabilitiesDataSource
@@ -30,40 +29,42 @@ import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
 import com.owncloud.android.lib.resources.status.RemoteCapability
 
 class OCCapabilityRepository(
-    private val executors: Executors,
     private val localCapabilitiesDataSource: LocalCapabilitiesDataSource,
     private val remoteCapabilitiesDataSource: RemoteCapabilitiesDataSource
 ) : CapabilityRepository {
 
-    companion object Factory {
-        fun create(
-            executors: Executors = Executors(),
-            localCapabilitiesDataSource: LocalCapabilitiesDataSource,
-            remoteCapabilitiesDataSource: RemoteCapabilitiesDataSource
-        ): OCCapabilityRepository =
-            OCCapabilityRepository(
-                executors,
-                localCapabilitiesDataSource,
-                remoteCapabilitiesDataSource
-            )
+    override fun getCapabilitiesAsLiveData(accountName: String): LiveData<OCCapabilityEntity> {
+        return localCapabilitiesDataSource.getCapabilitiesForAccountAsLiveData(accountName)
     }
 
-    override fun getCapabilityForAccount(
+    override fun refreshCapabilitiesForAccount(
         accountName: String,
         shouldFetchFromNetwork: Boolean
-    ): LiveData<DataResult<OCCapabilityEntity>> =
-        object : NetworkBoundResource<OCCapabilityEntity, RemoteCapability>(executors) {
-            override fun saveCallResult(item: RemoteCapability) {
-                item.accountName = accountName
-                localCapabilitiesDataSource.insert(listOf(OCCapabilityEntity.fromRemoteCapability(item)))
+    ): DataResult<Unit> {
+        remoteCapabilitiesDataSource.getCapabilities().also { remoteOperationResult ->
+            //Error
+            if (!remoteOperationResult.isSuccess) {
+                return DataResult.error(
+                    code = remoteOperationResult.code,
+                    msg = remoteOperationResult.httpPhrase,
+                    exception = remoteOperationResult.exception
+                )
             }
 
-            override fun shouldFetchFromNetwork(data: OCCapabilityEntity?) = shouldFetchFromNetwork
+            // Success
+            val capabilitiesForAccountFromServer = remoteOperationResult.data.apply {
+                this.accountName = accountName
+            }
 
-            override fun loadFromDb(): LiveData<OCCapabilityEntity> =
-                localCapabilitiesDataSource.getCapabilityForAccountAsLiveData(accountName)
+            localCapabilitiesDataSource.insert(
+                listOf(
+                    OCCapabilityEntity.fromRemoteCapability(
+                        capabilitiesForAccountFromServer
+                    )
+                )
+            )
 
-            override fun createCall() = remoteCapabilitiesDataSource.getCapabilities()
-
-        }.asLiveData()
+            return DataResult.success()
+        }
+    }
 }
