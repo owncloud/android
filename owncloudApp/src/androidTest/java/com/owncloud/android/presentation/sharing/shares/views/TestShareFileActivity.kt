@@ -35,6 +35,7 @@ class TestShareFileActivity : SingleFragmentActivity(), ShareFragmentListener {
     lateinit var publicShares: ArrayList<OCShareEntity>
     lateinit var errorMessage: String
 
+<<<<<<< HEAD
     /******************************************************************************************************
      ******************************************** CAPABILITIES ********************************************
      ******************************************************************************************************/
@@ -53,6 +54,14 @@ class TestShareFileActivity : SingleFragmentActivity(), ShareFragmentListener {
     }
 
     override fun showEditPrivateShare(share: OCShare) {
+=======
+    override fun startShareObservers() {
+        val shareFileFragment: ShareFileFragment =
+            supportFragmentManager.findFragmentByTag("TEST FRAGMENT") as ShareFileFragment
+        shareFileFragment.updateCapabilities(capabilities)
+        shareFileFragment.updatePrivateShares(privateShares)
+        shareFileFragment.updatePublicShares(publicShares)
+>>>>>>> Public share edition and removal using layers and usecases
     }
 
     override fun refreshPrivateShares() {
