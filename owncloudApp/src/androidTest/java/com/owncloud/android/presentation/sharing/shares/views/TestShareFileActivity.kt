@@ -35,33 +35,12 @@ class TestShareFileActivity : SingleFragmentActivity(), ShareFragmentListener {
     lateinit var publicShares: ArrayList<OCShareEntity>
     lateinit var errorMessage: String
 
-<<<<<<< HEAD
-    /******************************************************************************************************
-     ******************************************** CAPABILITIES ********************************************
-     ******************************************************************************************************/
-
-    override fun refreshCapabilities(shouldFetchFromNetwork: Boolean) {
-        val publicShareDialogFragment: PublicShareDialogFragment =
-            supportFragmentManager.findFragmentByTag("TEST FRAGMENT") as PublicShareDialogFragment
-        publicShareDialogFragment.updateCapabilities(capabilities)
-    }
-
-    /******************************************************************************************************
-     ******************************************* PRIVATE SHARES *******************************************
-     ******************************************************************************************************/
-
-    override fun showSearchUsersAndGroups() {
-    }
-
-    override fun showEditPrivateShare(share: OCShare) {
-=======
     override fun startShareObservers() {
         val shareFileFragment: ShareFileFragment =
             supportFragmentManager.findFragmentByTag("TEST FRAGMENT") as ShareFileFragment
         shareFileFragment.updateCapabilities(capabilities)
         shareFileFragment.updatePrivateShares(privateShares)
         shareFileFragment.updatePublicShares(publicShares)
->>>>>>> Public share edition and removal using layers and usecases
     }
 
     override fun refreshPrivateShares() {
@@ -118,9 +97,23 @@ class TestShareFileActivity : SingleFragmentActivity(), ShareFragmentListener {
     ) {
     }
 
-    /******************************************************************************************************
-     *********************************************** COMMON ***********************************************
-     ******************************************************************************************************/
+    override fun removePublicShare(share: OCShareEntity) {
+    }
+
+    override fun observeCapabilities(shouldFetchFromNetwork: Boolean) {
+        val publicShareDialogFragment: PublicShareDialogFragment =
+            supportFragmentManager.findFragmentByTag("TEST FRAGMENT") as PublicShareDialogFragment
+        publicShareDialogFragment.updateCapabilities(capabilities)
+    }
+
+    override fun copyOrSendPrivateLink(file: OCFile) {
+    }
+
+    override fun showSearchUsersAndGroups() {
+    }
+
+    override fun showEditPrivateShare(share: OCShareEntity) {
+    }
 
     override fun refreshAllShares() {
         val shareFileFragment: ShareFileFragment =

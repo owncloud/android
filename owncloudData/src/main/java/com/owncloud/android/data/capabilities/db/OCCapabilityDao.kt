@@ -33,7 +33,8 @@ abstract class OCCapabilityDao {
         "SELECT * from " + ProviderTableMeta.CAPABILITIES_TABLE_NAME + " WHERE " +
                 ProviderTableMeta.CAPABILITIES_ACCOUNT_NAME + " = :accountName"
     )
-    abstract fun getCapabilityForAccountAsLiveData(
+
+    abstract fun getCapabilitiesForAccountAsLiveData(
         accountName: String
     ): LiveData<OCCapabilityEntity>
 

@@ -159,55 +159,53 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
     }
 
     override fun startShareObservers() {
-        refreshCapabilities()
+        observeCapabilities()
         observeShares()
         observePublicShareCreation()
         observePublicShareEdition()
+        observePublicShareDeletion()
     }
 
-    override fun refreshCapabilities(shouldFetchFromNetwork: Boolean) {
-//        ocCapabilityViewModel.getCapabilityForAccount(shouldFetchFromNetwork).observe(
-//            this,
-//            Observer { resource ->
-//                when (resource?.status) {
-//                    SUCCESS -> {
-//                        if (publicShareFragment != null) {
-//                            publicShareFragment?.updateCapabilities(resource.data)
-//                        } else {
-//                            shareFileFragment?.updateCapabilities(resource.data)
-//                        }
-//                        dismissLoadingDialog()
-//                    }
-//                    ERROR -> {
-//                        val errorMessage = ErrorMessageAdapter.getResultMessage(
-//                            resource.code,
-//                            resource.exception,
-//                            OperationType.GET_CAPABILITIES,
-//                            resources
-//                        )
-//                        if (publicShareFragment != null) {
-//                            publicShareFragment?.showError(errorMessage)
-//                        } else {
-//                            Snackbar.make(findViewById(android.R.id.content), errorMessage, Snackbar.LENGTH_SHORT)
-//                                .show()
-//                            shareFileFragment?.updateCapabilities(resource.data)
-//                        }
-//                        dismissLoadingDialog()
-//                    }
-//                    LOADING -> {
-//                        showLoadingDialog(R.string.common_loading)
-//                        if (publicShareFragment != null) {
-//                            publicShareFragment?.updateCapabilities(resource.data)
-//                        } else {
-//                            shareFileFragment?.updateCapabilities(resource.data)
-//                        }
-//                    }
-//                    else -> {
-//                        Log.d(TAG, "Unknown status when loading capabilities in account ${account?.name}")
-//                    }
-//                }
-//            }
-//        )
+    override fun observeCapabilities(shouldFetchFromNetwork: Boolean) {
+        ocCapabilityViewModel.capabilities.observe(
+            this,
+            Observer { uiResult ->
+                when (uiResult?.status) {
+                    Status.SUCCESS -> {
+                        if (publicShareFragment != null) {
+                            publicShareFragment?.updateCapabilities(uiResult.data)
+                        } else {
+                            shareFileFragment?.updateCapabilities(uiResult.data)
+                        }
+                        dismissLoadingDialog()
+                    }
+                    Status.ERROR -> {
+                        if (publicShareFragment != null) {
+                            publicShareFragment?.showError(uiResult.errorMessage!!)
+                        } else {
+                            Snackbar.make(
+                                findViewById(android.R.id.content),
+                                uiResult.errorMessage!!,
+                                Snackbar.LENGTH_SHORT
+                            ).show()
+                            shareFileFragment?.updateCapabilities(uiResult.data)
+                        }
+                        dismissLoadingDialog()
+                    }
+                    Status.LOADING -> {
+                        showLoadingDialog(R.string.common_loading)
+                        if (publicShareFragment != null) {
+                            publicShareFragment?.updateCapabilities(uiResult.data)
+                        } else {
+                            shareFileFragment?.updateCapabilities(uiResult.data)
+                        }
+                    }
+                    else -> {
+                        Log.d(TAG, "Unknown status when loading capabilities in account ${account?.name}")
+                    }
+                }
+            }
+        )
     }
 
     private fun observeShares() {
@@ -249,18 +247,14 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
                     share.shareType == ShareType.GROUP.value ||
                     share.shareType == ShareType.FEDERATED.value
         }.also { privateShares ->
-            if (privateShares?.isNotEmpty()!!) {
-                updatePrivateSharesInFileFragment(privateShares)
-                updatePrivateSharesInSearchShareesFragment(privateShares)
-            }
+            updatePrivateSharesInFileFragment(privateShares)
+            updatePrivateSharesInSearchShareesFragment(privateShares)
         }
 
         shares?.filter { share ->
             share.shareType == ShareType.PUBLIC_LINK.value
         }.also { publicShares ->
-            if (publicShares?.isNotEmpty()!!) {
-                shareFileFragment?.updatePublicShares(publicShares as ArrayList<OCShareEntity>)
-            }
+            shareFileFragment?.updatePublicShares(publicShares as ArrayList<OCShareEntity>)
         }
     }
 
@@ -432,6 +426,7 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
      *********************************************** PUBLIC SHARES ************************************************
      **************************************************************************************************************/
 
+    // Share creation
     private fun observePublicShareCreation() {
         ocShareViewModel.publicShareCreationStatus.observe(
             this,
@@ -491,6 +486,7 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
         )
     }
 
+    // Share edition
     private fun observePublicShareEdition() {
         ocShareViewModel.publicShareEditionStatus.observe(
             this,
@@ -540,6 +536,32 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
             expirationDateInMillis,
             permissions,
             publicUpload
+        )
+    }
+
+    // Share deletion
+    private fun observePublicShareDeletion() {
+        ocShareViewModel.publicShareDeletionStatus.observe(
+            this,
+            Observer { uiResult ->
+                when (uiResult?.status) {
+                    Status.SUCCESS -> {
+                        publicShareFragment?.dismiss()
+                    }
+                    Status.ERROR -> {
+                        publicShareFragment?.showError(uiResult.errorMessage!!)
+                        dismissLoadingDialog()
+                    }
+                    Status.LOADING -> {
+                        showLoadingDialog(R.string.common_loading)
+                    }
+                    else -> {
+                        Log.d(
+                            TAG, "Unknown status when removing public share"
+                        )
+                    }
+                }
+            }
         )
     }
 

@@ -24,7 +24,7 @@ import androidx.lifecycle.LiveData
 import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
 
 interface LocalCapabilitiesDataSource {
-    fun getCapabilityForAccountAsLiveData(
+    fun getCapabilitiesForAccountAsLiveData(
         accountName: String
     ): LiveData<OCCapabilityEntity>
 
