@@ -37,33 +37,7 @@ import com.owncloud.android.data.sharing.shares.db.OCShareEntity
  * See the Android Training lesson [Communicating with Other Fragments](http://developer.android.com/training/basics/fragments/communicating.html) for more information.
  */
 interface ShareFragmentListener {
-    fun refreshAllShares()
-    fun refreshCapabilities(shouldFetchFromNetwork: Boolean = true)
-
-    /**************************************************************************************************************
-     *********************************************** PRIVATE SHARES ***********************************************
-     **************************************************************************************************************/
-
-    fun refreshPrivateShares()
-
-    fun refreshPrivateShare(remoteId: Long)
-
-    fun copyOrSendPrivateLink(file: OCFile)
-
-    fun showSearchUsersAndGroups()
-
-    fun showEditPrivateShare(share: OCShare)
-
-    fun updatePrivateShare(
-        remoteId: Long,
-        permissions: Int
-    )
-
-    /**************************************************************************************************************
-     *********************************************** PUBLIC SHARES ************************************************
-     **************************************************************************************************************/
-
-    fun showAddPublicShare(defaultLinkName: String)
+    fun startShareObservers()
 
     fun createPublicShare(
         permissions: Int,
@@ -84,7 +58,7 @@ interface ShareFragmentListener {
         publicUpload: Boolean
     )
 
-    fun removePublicShare(share: OCShareEntity)
+    fun removePublicShare(remoteId: Long)
 
     fun refreshCapabilities(shouldFetchFromNetwork: Boolean = true)
 

@@ -29,7 +29,7 @@ import com.owncloud.android.domain.sharing.shares.OCShareRepository
 import com.owncloud.android.lib.common.OwnCloudAccount
 import com.owncloud.android.lib.common.OwnCloudClientManagerFactory
 
-class CreatePublicShareUseCase(
+class DeletePublicShareUseCase(
     context: Context,
     val account: Account,
     private val shareRepository: ShareRepository = OCShareRepository(
@@ -41,17 +41,10 @@ class CreatePublicShareUseCase(
             )
         )
     )
-) : BaseUseCase<Unit, CreatePublicShareUseCase.Params>() {
-
+) : BaseUseCase<Unit, DeletePublicShareUseCase.Params>() {
     override fun run(params: Params): UseCaseResult<Unit> {
-        shareRepository.insertPublicShare(
-            params.filePath,
-            params.permissions,
-            params.name,
-            params.password,
-            params.expirationTimeInMillis,
-            params.publicUpload,
-            accountName = account.name
+        shareRepository.deletePublicShare(
+            params.remoteId
         ).also { dataResult ->
             if (!dataResult.isSuccess()) {
                 return UseCaseResult.error(
@@ -65,11 +58,6 @@ class CreatePublicShareUseCase(
     }
 
     data class Params(
-        val filePath: String,
-        val permissions: Int,
-        val name: String,
-        val password: String,
-        val expirationTimeInMillis: Long,
-        val publicUpload: Boolean
+        val remoteId: Long
     )
 }
