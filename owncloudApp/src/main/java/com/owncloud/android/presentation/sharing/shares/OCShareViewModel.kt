@@ -28,6 +28,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.owncloud.android.data.sharing.shares.db.OCShareEntity
 import com.owncloud.android.domain.sharing.shares.usecases.CreatePublicShareUseCase
+import com.owncloud.android.domain.sharing.shares.usecases.DeletePublicShareUseCase
+import com.owncloud.android.domain.sharing.shares.usecases.EditPublicShareUseCase
 import com.owncloud.android.domain.sharing.shares.usecases.RefreshSharesUseCase
 import com.owncloud.android.domain.sharing.shares.usecases.SharesLiveDataUseCase
 import com.owncloud.android.operations.common.OperationType
@@ -49,6 +51,12 @@ class OCShareViewModel(
         context, account
     ),
     private val createPublicShareUseCase: CreatePublicShareUseCase = CreatePublicShareUseCase(
+        context, account
+    ),
+    private val editPublicShareUseCase: EditPublicShareUseCase = EditPublicShareUseCase(
+        context, account
+    ),
+    private val deletePublicShareUseCase: DeletePublicShareUseCase = DeletePublicShareUseCase(
         context, account
     )
 ) : ViewModel() {
@@ -95,7 +103,7 @@ class OCShareViewModel(
                 _shares.postValue(
                     UIResult.error(
                         sharesLiveData?.value,
-                        errorMessage = ErrorMessageAdapter.getResultMessage(
+                        errorMessage = useCaseResult.msg ?: ErrorMessageAdapter.getResultMessage(
                             useCaseResult.code,
                             useCaseResult.exception,
                             OperationType.GET_SHARES,
@@ -133,6 +141,12 @@ class OCShareViewModel(
     private val _publicShareCreationStatus = MutableLiveData<UIResult<Unit>>()
     val publicShareCreationStatus: LiveData<UIResult<Unit>> = _publicShareCreationStatus
 
+    private val _publicShareEditionStatus = MutableLiveData<UIResult<Unit>>()
+    val publicShareEditionStatus: LiveData<UIResult<Unit>> = _publicShareEditionStatus
+
+    private val _publicShareDeletionStatus = MutableLiveData<UIResult<Unit>>()
+    val publicShareDeletionStatus: LiveData<UIResult<Unit>> = _publicShareDeletionStatus
+
     fun insertPublicShare(
         filePath: String,
         permissions: Int,
@@ -149,12 +163,12 @@ class OCShareViewModel(
             val useCaseResult = withContext(Dispatchers.IO) {
                 createPublicShareUseCase.execute(
                     CreatePublicShareUseCase.Params(
-                        filePath = filePath,
-                        permissions = permissions,
-                        name = name,
-                        password = password,
-                        expirationTimeInMillis = expirationTimeInMillis,
-                        publicUpload = publicUpload
+                        filePath,
+                        permissions,
+                        name,
+                        password,
+                        expirationTimeInMillis,
+                        publicUpload
                     )
                 )
             }
@@ -163,7 +177,7 @@ class OCShareViewModel(
                 if (!useCaseResult.isSuccess()) {
                     _publicShareCreationStatus.postValue(
                         UIResult.error(
-                            errorMessage = ErrorMessageAdapter.getResultMessage(
+                            errorMessage = useCaseResult.msg ?: ErrorMessageAdapter.getResultMessage(
                                 useCaseResult.code,
                                 useCaseResult.exception,
                                 OperationType.CREATE_PUBLIC_SHARE,
@@ -178,21 +192,85 @@ class OCShareViewModel(
         }
     }
 
+    fun updatePublicShareForFile(
+        remoteId: Long,
+        name: String,
+        password: String?,
+        expirationDateInMillis: Long,
+        permissions: Int,
+        publicUpload: Boolean
+    ) {
+        _publicShareEditionStatus.postValue(
+            UIResult.loading()
+        )
 
-//    fun updatePublicShareForFile(
-//        remoteId: Long,
-//        name: String,
-//        password: String?,
-//        expirationDateInMillis: Long,
-//        permissions: Int,
-//        publicUpload: Boolean
-//    ): LiveData<DataResult<Unit>> = shareRepository.updatePublicShare(
-//        remoteId, name, password, expirationDateInMillis, permissions, publicUpload
-//    )
-//
-//    fun deletePublicShare(
-//        remoteId: Long
-//    ): LiveData<DataResult<Unit>> = shareRepository.deletePublicShare(remoteId)
+        viewModelScope.launch {
+            val useCaseResult = withContext(Dispatchers.IO) {
+                editPublicShareUseCase.execute(
+                    EditPublicShareUseCase.Params(
+                        remoteId,
+                        name,
+                        password,
+                        expirationDateInMillis,
+                        permissions,
+                        publicUpload
+                    )
+                )
+            }
+
+            withContext(Dispatchers.Main) {
+                if (!useCaseResult.isSuccess()) {
+                    _publicShareEditionStatus.postValue(
+                        UIResult.error(
+                            errorMessage = useCaseResult.msg ?: ErrorMessageAdapter.getResultMessage(
+                                useCaseResult.code,
+                                useCaseResult.exception,
+                                OperationType.UPDATE_PUBLIC_SHARE,
+                                context.resources
+                            )
+                        )
+                    )
+                } else {
+                    _publicShareEditionStatus.postValue(UIResult.success())
+                }
+            }
+        }
+    }
+
+    fun deletePublicShare(
+        remoteId: Long
+    ) {
+        _publicShareDeletionStatus.postValue(
+            UIResult.loading()
+        )
+
+        viewModelScope.launch {
+            val useCaseResult = withContext(Dispatchers.IO) {
+                deletePublicShareUseCase.execute(
+                    DeletePublicShareUseCase.Params(
+                        remoteId
+                    )
+                )
+            }
+
+            withContext(Dispatchers.Main) {
+                if (!useCaseResult.isSuccess()) {
+                    _publicShareDeletionStatus.postValue(
+                        UIResult.error(
+                            errorMessage = useCaseResult.msg ?: ErrorMessageAdapter.getResultMessage(
+                                useCaseResult.code,
+                                useCaseResult.exception,
+                                OperationType.REMOVE_SHARE,
+                                context.resources
+                            )
+                        )
+                    )
+                } else {
+                    _publicShareDeletionStatus.postValue(UIResult.success())
+                }
+            }
+        }
+    }
 
     override fun onCleared() {
         super.onCleared()

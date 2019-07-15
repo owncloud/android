@@ -158,10 +158,11 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
         }
     }
 
-    override fun refreshAllShares() {
+    override fun startShareObservers() {
         refreshCapabilities()
         observeShares()
         observePublicShareCreation()
+        observePublicShareEdition()
     }
 
     override fun refreshCapabilities(shouldFetchFromNetwork: Boolean) {
@@ -490,6 +491,31 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
         )
     }
 
+    private fun observePublicShareEdition() {
+        ocShareViewModel.publicShareEditionStatus.observe(
+            this,
+            Observer { uiResult ->
+                when (uiResult?.status) {
+                    Status.SUCCESS -> {
+                        publicShareFragment?.dismiss()
+                    }
+                    Status.ERROR -> {
+                        publicShareFragment?.showError(uiResult.errorMessage!!)
+                        dismissLoadingDialog()
+                    }
+                    Status.LOADING -> {
+                        showLoadingDialog(R.string.common_loading)
+                    }
+                    else -> {
+                        Log.d(
+                            TAG, "Unknown status when creating public share"
+                        )
+                    }
+                }
+            }
+        )
+    }
+
     override fun showEditPublicShare(share: OCShareEntity) {
         // Create and show the dialog.
         val editPublicShareFragment = PublicShareDialogFragment.newInstanceToUpdate(file, share)
@@ -507,42 +533,14 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
         permissions: Int,
         publicUpload: Boolean
     ) {
-//        ocShareViewModel.updatePublicShareForFile(
-//            remoteId,
-//            name,
-//            password,
-//            expirationDateInMillis,
-//            permissions,
-//            publicUpload
-//        ).observe(
-//            this,
-//            Observer { resource ->
-//                when (resource?.status) {
-//                    Status.SUCCESS -> {
-//                        publicShareFragment?.dismiss()
-//                    }
-//                    Status.ERROR -> {
-//                        val errorMessage: String = resource.msg ?: ErrorMessageAdapter.getResultMessage(
-//                            resource.code,
-//                            resource.exception,
-//                            OperationType.UPDATE_PUBLIC_SHARE,
-//                            resources
-//                        );
-//                        publicShareFragment?.showError(errorMessage)
-//                        dismissLoadingDialog()
-//                    }
-//                    Status.LOADING -> {
-//                        showLoadingDialog(R.string.common_loading)
-//                    }
-//                    else -> {
-//                        Log.d(
-//                            TAG, "Unknown status when updating public share with name ${name} " +
-//                                    "from account ${account?.name}"
-//                        )
-//                    }
-//                }
-//            }
-//        )
+        ocShareViewModel.updatePublicShareForFile(
+            remoteId,
+            name,
+            password,
+            expirationDateInMillis,
+            permissions,
+            publicUpload
+        )
     }
 
     override fun showRemovePublicShare(share: OCShareEntity) {
@@ -553,36 +551,10 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
         )
     }
 
-    override fun removePublicShare(share: OCShareEntity) {
-//        ocShareViewModel.deletePublicShare(share.remoteId).observe(
-//            this,
-//            Observer { resource ->
-//                when (resource?.status) {
-//                    Status.SUCCESS -> {
-//                        dismissLoadingDialog()
-//                    }
-//                    Status.ERROR -> {
-//                        val errorMessage = ErrorMessageAdapter.getResultMessage(
-//                            resource.code,
-//                            resource.exception,
-//                            OperationType.REMOVE_SHARE,
-//                            resources
-//                        )
-//                        Snackbar.make(findViewById(android.R.id.content), errorMessage, Snackbar.LENGTH_SHORT).show()
-//                        dismissLoadingDialog()
-//                    }
-//                    Status.LOADING -> {
-//                        showLoadingDialog(R.string.common_loading)
-//                    }
-//                    else -> {
-//                        Log.d(
-//                            TAG, "Unknown status when removing public share with name ${share.name} " +
-//                                    "from account ${account?.name}"
-//                        )
-//                    }
-//                }
-//            }
-//        )
+    override fun removePublicShare(remoteId: Long) {
+        ocShareViewModel.deletePublicShare(
+            remoteId
+        )
     }
 
     override fun copyOrSendPublicLink(share: OCShareEntity) {
