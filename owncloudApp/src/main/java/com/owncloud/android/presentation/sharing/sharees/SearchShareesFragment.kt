@@ -190,7 +190,7 @@ class SearchShareesFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterL
 
     override fun unshareButtonPressed(share: OCShareEntity) {
         Log_OC.d(TAG, "Removed private share with " + share.sharedWithDisplayName!!)
-        listener?.removeShare(share.remoteId)
+        listener?.removePublicShare(share.remoteId)
     }
 
     override fun editShare(share: OCShareEntity) {

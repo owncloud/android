@@ -122,62 +122,57 @@ class OCShareRepository(
     private fun updateShare(
         remoteId: Long,
         permissions: Int,
-        publicUpload: Boolean
-    ): LiveData<DataResult<Unit>> {
-        val result = MutableLiveData<DataResult<Unit>>()
-        result.postValue(DataResult.loading())
+        publicUpload: Boolean,
+        accountName: String
+    ): DataResult<Unit> {
+        remoteSharesDataSource.updateShare(
+            remoteId,
+            name,
+            password,
+            expirationDateInMillis,
+            permissions,
+            publicUpload
+        ).also { remoteOperationResult ->
+            // Error
+            if (!remoteOperationResult.isSuccess) {
+                return DataResult.error(
+                    code = remoteOperationResult.code,
+                    msg = remoteOperationResult.httpPhrase,
+                    exception = remoteOperationResult.exception
+                )
+            }
 
-//        executors.networkIO().execute {
-//            // Perform network operation
-//            val remoteOperationResult = remoteSharesDataSource.updateShare(
-//                remoteId,
-//                name,
-//                password,
-//                expirationDateInMillis,
-//                permissions,
-//                publicUpload
-//            )
-//
-//            if (remoteOperationResult.isSuccess) {
-//                val updatedShareForFileFromServer = remoteOperationResult.data.shares.map { remoteShare ->
-//                    OCShareEntity.fromRemoteShare(remoteShare)
-//                        .also { it.accountOwner = accountName }
-//                }
-//                localSharesDataSource.update(updatedShareForFileFromServer.first())
-//                result.postValue(DataResult.success()) // Used to close the share edition dialog
-//            } else {
-//                notifyError(result, remoteOperationResult)
-//            }
-//        }
-        return result
+            // Success
+            val updatedShareForFileFromServer = remoteOperationResult.data.shares.map { remoteShare ->
+                OCShareEntity.fromRemoteShare(remoteShare)
+                    .also { it.accountOwner = accountName }
+            }
+            localSharesDataSource.update(updatedShareForFileFromServer.first())
+
+            return DataResult.success()
+        }
     }
 
     override fun deleteShare(
         remoteId: Long
-    ): LiveData<DataResult<Unit>> {
-        val result = MutableLiveData<DataResult<Unit>>()
+    ): DataResult<Unit> {
+        remoteSharesDataSource.deleteShare(
+            remoteId
+        ).also { remoteOperationResult ->
+            // Error
+            if (!remoteOperationResult.isSuccess) {
+                return DataResult.error(
+                    code = remoteOperationResult.code,
+                    msg = remoteOperationResult.httpPhrase,
+                    exception = remoteOperationResult.exception
+                )
+            }
 
-        result.postValue(DataResult.loading())
+            // Success
+            localSharesDataSource.deleteShare(remoteId)
 
-        // Perform network operation
-//        executors.networkIO().execute {
-//            // Perform network operation
-//            val remoteOperationResult = remoteSharesDataSource.deleteShare(remoteId)
-//
-//            if (remoteOperationResult.isSuccess) {
-//                localSharesDataSource.deleteShare(remoteId)
-//                result.postValue(DataResult.success()) // Used to close the share edition dialog
-//            } else {
-//                result.postValue(
-//                    DataResult.error(
-//                        remoteOperationResult.code,
-//                        msg = remoteOperationResult.httpPhrase,
-//                        exception = remoteOperationResult.exception
-//                    )
-//                )
-//            }
-//        }
-        return result
+            return DataResult.success()
+        }
     }
 
     /******************************************************************************************************
