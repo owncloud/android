@@ -30,8 +30,8 @@ class OCLocalCapabilitiesDataSource(
     private val ocCapabilityDao: OCCapabilityDao = OwncloudDatabase.getDatabase(context).capabilityDao()
 ) : LocalCapabilitiesDataSource {
 
-    override fun getCapabilityForAccountAsLiveData(accountName: String): LiveData<OCCapabilityEntity> =
-        ocCapabilityDao.getCapabilityForAccount(accountName)
+    override fun getCapabilitiesForAccountAsLiveData(accountName: String): LiveData<OCCapabilityEntity> =
+        ocCapabilityDao.getCapabilitiesForAccountAsLiveData(accountName)
 
     override fun insert(ocCapabilities: List<OCCapabilityEntity>) {
         ocCapabilityDao.replace(ocCapabilities)

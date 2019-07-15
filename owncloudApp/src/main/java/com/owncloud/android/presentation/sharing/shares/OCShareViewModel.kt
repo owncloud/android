@@ -47,18 +47,10 @@ class OCShareViewModel(
     val context: Context,
     val account: Account,
     sharesLiveDataUseCase: SharesLiveDataUseCase = SharesLiveDataUseCase(context, account),
-    private val refreshSharesUseCase: RefreshSharesUseCase = RefreshSharesUseCase(
-        context, account
-    ),
-    private val createPublicShareUseCase: CreatePublicShareUseCase = CreatePublicShareUseCase(
-        context, account
-    ),
-    private val editPublicShareUseCase: EditPublicShareUseCase = EditPublicShareUseCase(
-        context, account
-    ),
-    private val deletePublicShareUseCase: DeletePublicShareUseCase = DeletePublicShareUseCase(
-        context, account
-    )
+    private val refreshSharesUseCase: RefreshSharesUseCase = RefreshSharesUseCase(context, account),
+    private val createPublicShareUseCase: CreatePublicShareUseCase = CreatePublicShareUseCase(context, account),
+    private val editPublicShareUseCase: EditPublicShareUseCase = EditPublicShareUseCase(context, account),
+    private val deletePublicShareUseCase: DeletePublicShareUseCase = DeletePublicShareUseCase(context, account)
 ) : ViewModel() {
 
     private val _shares = MutableLiveData<UIResult<List<OCShareEntity>>>()
@@ -73,9 +65,7 @@ class OCShareViewModel(
 
     // To detect changes in shares
     private val sharesObserver: Observer<List<OCShareEntity>> = Observer { shares ->
-        if (shares.isNotEmpty()) {
-            _shares.postValue(UIResult.success(shares))
-        }
+        _shares.postValue(UIResult.success(shares))
     }
 
     init {
