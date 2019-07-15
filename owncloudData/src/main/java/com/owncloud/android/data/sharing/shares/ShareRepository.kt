@@ -62,8 +62,9 @@ interface ShareRepository {
         password: String?,
         expirationDateInMillis: Long,
         permissions: Int,
-        publicUpload: Boolean
-    ): LiveData<DataResult<Unit>>
+        publicUpload: Boolean,
+        accountName: String
+    ): DataResult<Unit>
 
     /******************************************************************************************************
      *********************************************** COMMON ***********************************************
@@ -71,7 +72,7 @@ interface ShareRepository {
 
     fun deleteShare(
         remoteId: Long
-    ): LiveData<DataResult<Unit>>
+    ): DataResult<Unit>
 
     /******************************************************************************************************
      *********************************************** COMMON ***********************************************

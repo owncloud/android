@@ -301,7 +301,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
         activity!!.setTitle(R.string.share_dialog_title)
 
         // Load all shares in the list
-        listener?.refreshAllShares()
+        listener?.startShareObservers()
     }
 
     override fun onAttach(context: Context) {
@@ -318,7 +318,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
         listener = null
     }
 
-     /**************************************************************************************************************
+    /**************************************************************************************************************
      ************************************************ CAPABILITIES ************************************************
      **************************************************************************************************************/
 
@@ -377,7 +377,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
     override fun unshareButtonPressed(share: OCShareEntity) {
         // Unshare
         Log_OC.d(TAG, "Removing private share with " + share.sharedWithDisplayName)
-        listener?.removePublicShare(share)
+        listener?.removePublicShare(share.remoteId)
     }
 
     override fun editShare(share: OCShareEntity) {
