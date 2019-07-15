@@ -29,6 +29,7 @@
   <string name="prefs_accounts">Λογαριασμοί</string>
   <string name="prefs_manage_accounts">Διαχείριση λογαριασμών</string>
   <string name="prefs_passcode">Κλείδωμα κωδικού πρόσβασης</string>
+  <string name="prefs_camera_picture_upload">Μεταφορτώσεις φωτογραφιών</string>
   <string name="prefs_camera_video_upload">Μεταφόρτωση βίντεο</string>
   <string name="prefs_log_title">Σύνδεση εφικτή</string>
   <string name="prefs_log_summary">Χρησιμοποιείται για την καταγραφή προβλημάτων</string>
@@ -83,6 +84,7 @@
   <string name="file_list_file">αρχείο</string>
   <string name="file_list_files">αρχεία</string>
   <string name="filedetails_select_file">Αγγίξτε κάποιο αρχείο για να προβάλετε περισσότερες πληροφορίες.</string>
+  <string name="upload_to">Μεταφόρτωση σε %1$s</string>
   <string name="upload_files_title">Αρχεία</string>
   <string name="filedetails_size">Μέγεθος:</string>
   <string name="filedetails_type">Τύπος:</string>
@@ -204,6 +206,7 @@
   <string name="media_rewind_description">Κουμπί επαναφοράς</string>
   <string name="media_play_pause_description">Κουμπί αναπαραγωγής ή παύσης</string>
   <string name="media_forward_description">Κουμπί προώθησης</string>
+  <string name="upload_from_camera_title">Φωτογραφία από την κάμερα</string>
   <string name="auth_getting_authorization">Λήψη πιστοποίησης...</string>
   <string name="auth_no_net_conn_title">Δεν υπάρχει σύνδεση στο δίκτυο</string>
   <string name="auth_nossl_plain_ok_title">Μη διαθέσιμη ασφαλής σύνδεση.</string>
@@ -298,6 +301,7 @@
   <string name="placeholder_media_time">12:23:45</string>
   <string name="camera_picture_upload_on_wifi">Μεταφόρτωση φωτογραφιών μόνο μέσω wifi</string>
   <string name="camera_video_upload_on_wifi">Μεταφόρτωση βίντεο μόνο μέσω wifi</string>
+  <string name="confirmation_disable_camera_uploads_title">Επιβεβαίωση</string>
   <string name="conflict_title">Διένεξη αρχείου</string>
   <string name="conflict_message">Ποια αρχεία θέλετε να διατηρήσετε; Αν επιλέξετε και τις δύο εκδόσεις, το τοπικό αρχείο θα έχει έναν αριθμό που έχει προστεθεί στο όνομά του.</string>
   <string name="conflict_keep_both">Διατήρηση και των δύο</string>
@@ -363,6 +367,7 @@
   <string name="copy_file_error">Ένα σφάλμα προέκυψε κατά την προσπάθεια αντιγραφής αυτού του αρχείου ή φακέλου</string>
   <string name="forbidden_permissions_copy">για αντιγραφή αυτού του αρχείου</string>
   <string name="prefs_category_camera_upload">Μεταφορτώσεις κάμερας</string>
+  <string name="prefs_camera_video_upload_path_title">Διαδρομή μεταφορτώσεων βίντεο</string>
   <string name="sync_folder_failed_content">Ο συγχρονισμός του φακέλου %1$s δεν μπορεί να ολοκληρωθεί</string>
   <string name="shared_subject_header">διαμοιρασμένα</string>
   <string name="with_you_subject_header">με εσάς</string>
@@ -457,6 +462,7 @@
   <string name="share_via_link_expiration_date_explanation_label">Ο δημόσιος σύνδεσμος θα απενεργοποιηθεί το πολύ %1$d ημέρες μετά την δημιουργία του</string>
   <string name="share_via_link_default_name_template">%1$s σύνδεσμος</string>
   <string name="private_link_info">Αυτός είναι ένας ιδιωτικός σύνδεσμος, μόνο τα άτομα που έχουν πρόσβαση στο αρχείο / φάκελο μπορούν να το χρησιμοποιήσουν. Χρησιμοποιήστε το ως μόνιμο σύνδεσμο για τον εαυτό σας ή για να τοποθετήσετε τους άλλους σε αρχεία μέσα στα κοινόχρηστα.</string>
+  <string name="file_private_link_error">Ο ιδιωτικός σύνδεσμος δεν είναι διαθέσιμος γι\' αυτό το αρχείο</string>
   <string name="download_notification_channel_name">Λήψεις</string>
   <string name="upload_notification_channel_name">Μεταφορτώσεις</string>
   <string name="media_service_notification_channel_name">Αναπαραγωγή μουσικής</string>
