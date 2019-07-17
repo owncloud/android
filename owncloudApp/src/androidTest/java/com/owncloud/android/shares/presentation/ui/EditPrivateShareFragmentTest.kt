@@ -38,7 +38,7 @@ import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.lib.common.accounts.AccountUtils
 import com.owncloud.android.lib.resources.status.OwnCloudVersion
 import com.owncloud.android.shares.domain.OCShare
-import com.owncloud.android.shares.presentation.fragment.EditPrivateShareFragment
+import com.owncloud.android.presentation.ui.sharing.fragments.EditPrivateShareFragment
 import com.owncloud.android.utils.AccountsManager
 import com.owncloud.android.utils.Permissions
 import com.owncloud.android.utils.TestUtil

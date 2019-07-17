@@ -22,7 +22,7 @@
  * along with this program.  If not, see <http:></http:>//www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.presentation.sharing.shares
+package com.owncloud.android.presentation.ui.sharing
 
 import android.app.SearchManager
 import android.content.Intent
@@ -40,15 +40,16 @@ import com.owncloud.android.lib.common.utils.Log_OC
 import com.owncloud.android.lib.resources.shares.RemoteShare
 import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.operations.RemoveShareOperation
-import com.owncloud.android.operations.UpdateSharePermissionsOperation
 import com.owncloud.android.presentation.UIResult.Status
-import com.owncloud.android.presentation.capabilities.OCCapabilityViewModel
-import com.owncloud.android.presentation.sharing.sharees.SearchShareesFragment
-import com.owncloud.android.presentation.sharing.sharees.UsersAndGroupsSearchProvider
-import com.owncloud.android.presentation.sharing.shares.fragment.EditShareFragment
-import com.owncloud.android.presentation.sharing.shares.fragment.PublicShareDialogFragment
-import com.owncloud.android.presentation.sharing.shares.fragment.ShareFileFragment
-import com.owncloud.android.presentation.sharing.shares.fragment.ShareFragmentListener
+import com.owncloud.android.presentation.viewmodels.capabilities.OCCapabilityViewModel
+import com.owncloud.android.presentation.ui.sharing.fragments.SearchShareesFragment
+import com.owncloud.android.presentation.providers.sharing.UsersAndGroupsSearchProvider
+import com.owncloud.android.presentation.viewmodels.sharing.OCShareViewModel
+import com.owncloud.android.presentation.ui.sharing.fragments.ShareFragmentListener
+import com.owncloud.android.presentation.ui.sharing.fragments.EditShareFragment
+import com.owncloud.android.presentation.ui.sharing.fragments.PublicShareDialogFragment
+import com.owncloud.android.presentation.ui.sharing.fragments.ShareFileFragment
+import com.owncloud.android.presentation.ui.sharing.fragments.EditPrivateShareFragment
 import com.owncloud.android.ui.activity.FileActivity
 import com.owncloud.android.ui.dialog.RemoveShareDialogFragment
 import com.owncloud.android.ui.utils.showDialogFragment
@@ -146,16 +147,6 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
 
     public override fun onStop() {
         super.onStop()
-    }
-
-    /**
-     * Updates the view, reading data from [com.owncloud.android.data.viewmodel.OCShareViewModel]
-     */
-    private fun refreshSharesFromStorageManager() {
-        val editShareFragment = editShareFragment
-        if (editShareFragment?.isAdded == true) {
-            editShareFragment.refreshUiFromDB()
-        }
     }
 
     override fun startShareObservers() {
@@ -274,14 +265,14 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
         }
     }
 
-    override fun refreshPrivateShare(remoteId: Long) {
-        ocShareViewModel.getPrivateShare(remoteId).observe(
-            this,
-            Observer { updatedShare ->
-                editPrivateShareFragment?.updateShare(updatedShare)
-            }
-        )
-    }
+//    override fun refreshPrivateShare(remoteId: Long) {
+//        ocShareViewModel.getPrivateShare(remoteId).observe(
+//            this,
+//            Observer { updatedShare ->
+//                editShareFragment?.updateShare(updatedShare)
+//            }
+//        )
+//    }
 
     override fun showSearchUsersAndGroups() {
         val searchFragment = SearchShareesFragment.newInstance(file, account)
@@ -354,17 +345,6 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
         }
     }
 
-    override fun showSearchUsersAndGroups() {
-        val searchFragment = SearchShareesFragment.newInstance(file, account)
-        val ft = supportFragmentManager.beginTransaction()
-        ft.replace(
-            R.id.share_fragment_container, searchFragment,
-            TAG_SEARCH_FRAGMENT
-        )
-        ft.addToBackStack(null)    // BACK button will recover the ShareFragment
-        ft.commit()
-    }
-
     override fun showEditPrivateShare(share: OCShareEntity) {
         val ft = supportFragmentManager.beginTransaction()
         val prev = supportFragmentManager.findFragmentByTag(TAG_EDIT_SHARE_FRAGMENT)
@@ -378,38 +358,35 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
         newFragment.show(ft, TAG_EDIT_SHARE_FRAGMENT)
     }
 
-    override fun updatePrivateShare(remoteId: Long, permissions: Int) {
-        ocShareViewModel.updatePrivateShare(
-            remoteId,
-            permissions
-        ).observe(
-            this,
-            Observer { resource ->
-                when (resource?.status) {
-                    Status.SUCCESS -> {
-                        updateFileSharedWithSharee(true)
-                    }
-                    Status.ERROR -> {
-                        val errorMessage: String = resource.msg ?: ErrorMessageAdapter.getResultMessage(
-                            resource.code,
-                            resource.exception,
-                            OperationType.UPDATE_SHARE,
-                            resources
-                        )
-                        editPrivateShareFragment?.refreshUiFromState()
-                        editPrivateShareFragment?.showError(errorMessage)
-                        dismissLoadingDialog()
-                    }
-                    Status.LOADING -> {
-                        showLoadingDialog(R.string.common_loading)
-                    }
-                    else -> {
-                        Log.d(TAG, "Unknown status when updating private share with remote id $remoteId")
-                    }
-                }
-            }
-        )
-    }
+//    override fun updatePrivateShare(remoteId: Long, permissions: Int) {
+//        ocShareViewModel.updatePrivateShare(
+//            remoteId,
+//            permissions
+//        ).observe(
+//            this,
+//            Observer { resource ->
+//                when (resource?.status) {
+//                    Status.ERROR -> {
+//                        val errorMessage: String = resource.msg ?: ErrorMessageAdapter.getResultMessage(
+//                            resource.code,
+//                            resource.exception,
+//                            OperationType.UPDATE_SHARE,
+//                            resources
+//                        )
+//                        editShareFragment?.refreshUiFromState()
+//                        editShareFragment?.showError(errorMessage)
+//                        dismissLoadingDialog()
+//                    }
+//                    Status.LOADING -> {
+//                        showLoadingDialog(R.string.common_loading)
+//                    }
+//                    else -> {
+//                        Log.d(TAG, "Unknown status when updating private share with remote id $remoteId")
+//                    }
+//                }
+//            }
+//        )
+//    }
 
     override fun copyOrSendPrivateLink(file: OCFile) {
         fileOperationsHelper.copyOrSendPrivateLink(file)

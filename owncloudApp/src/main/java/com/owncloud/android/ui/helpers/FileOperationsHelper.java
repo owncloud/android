@@ -42,7 +42,7 @@ import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.shares.RemoteShare;
 import com.owncloud.android.lib.resources.shares.ShareType;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
-import com.owncloud.android.presentation.sharing.shares.ShareActivity;
+import com.owncloud.android.presentation.ui.sharing.ShareActivity;
 import com.owncloud.android.services.OperationsService;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.dialog.ShareLinkToDialog;
@@ -228,82 +228,6 @@ public class FileOperationsHelper {
     }
 
     /**
-     * Updates a share on a file to set its access permissions.
-     * Starts a request to do it in {@link OperationsService}
-     *
-     * @param share       {@link OCShareEntity} instance which permissions will be updated.
-     * @param permissions New permissions to set. A value <= 0 makes no update.
-     */
-    public void setPermissionsToShareWithSharee(OCShareEntity share, int permissions) {
-        Intent updateShareIntent = new Intent(mFileActivity, OperationsService.class);
-        updateShareIntent.setAction(OperationsService.ACTION_UPDATE_SHARE_WITH_SHAREE);
-        updateShareIntent.putExtra(OperationsService.EXTRA_ACCOUNT, mFileActivity.getAccount());
-        updateShareIntent.putExtra(OperationsService.EXTRA_SHARE_ID, share.getId());
-        updateShareIntent.putExtra(
-                OperationsService.EXTRA_SHARE_PERMISSIONS,
-                permissions
-        );
-        queueShareIntent(updateShareIntent);
-    }
-
-    /**
-     * Updates at once all the properties of a public share on a file.
-     * Starts a request to do it in {@link OperationsService}
-     *
-     * @param share                    Public share to updated.
-     * @param name                     Name to set for the link (ignored in servers < 10.0.0).
-     * @param password                 Password to set for the public link; null or empty string to clear
-     *                                 the current password. - TODO select value to leave unchanged?
-     * @param expirationTimeInMillis   Expiration date to set. A negative value clears the current expiration
-     *                                 date, leaving the link unrestricted. Zero makes no change.
-     * @param uploadToFolderPermission New state of the permission for editing the folder shared via link.
-     *                                 Ignored if the file is not a folder. - TODO select value to leave unchanged?
-     * @param permissions              Optional permissions to allow or not specific actions in the folder
-     */
-    public void updateShareViaLink(
-            RemoteShare share,
-            String name,
-            String password,
-            long expirationTimeInMillis,
-            boolean uploadToFolderPermission,
-            int permissions
-    ) {
-        // Set password updating share
-        Intent updateShareIntent = new Intent(mFileActivity, OperationsService.class);
-        updateShareIntent.setAction(OperationsService.ACTION_UPDATE_SHARE_VIA_LINK);
-        updateShareIntent.putExtra(OperationsService.EXTRA_ACCOUNT, mFileActivity.getAccount());
-        //        updateShareIntent.putExtra(OperationsService.EXTRA_SHARE_ID, share.getId());
-
-        updateShareIntent.putExtra(
-                OperationsService.EXTRA_SHARE_NAME,
-                (name == null) ? "" : name
-        );
-
-        updateShareIntent.putExtra(
-                OperationsService.EXTRA_SHARE_PASSWORD,
-                password
-        );
-
-        updateShareIntent.putExtra(
-                OperationsService.EXTRA_SHARE_EXPIRATION_DATE_IN_MILLIS,
-                expirationTimeInMillis
-        );
-
-        updateShareIntent.putExtra(
-                OperationsService.EXTRA_SHARE_PUBLIC_UPLOAD,
-                uploadToFolderPermission
-        );
-
-        updateShareIntent.putExtra(
-                OperationsService.EXTRA_SHARE_PERMISSIONS,
-                permissions
-        );
-
-        queueShareIntent(updateShareIntent);
-    }
-
-    /**
->>>>>>> Split up code into different modules following a layers approach
      * @return 'True' if the server supports the Search Users API
      */
     public boolean isSearchUserSupported() {
