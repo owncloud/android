@@ -147,11 +147,10 @@ class OCShareRepository(
         )
     }
 
-    override fun getShareAsLiveData(remoteId: Long): LiveData<OCShareEntity> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override fun getShareAsLiveData(remoteId: Long): LiveData<OCShareEntity> =
+        localShareDataSource.getShareAsLiveData(remoteId)
 
-    override fun refreshShares(
+    override fun refreshSharesFromNetwork(
         filePath: String,
         accountName: String
     ): DataResult<Unit> {

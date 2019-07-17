@@ -80,5 +80,5 @@ interface ShareRepository {
 
     fun getShareAsLiveData(remoteId: Long): LiveData<OCShareEntity>
 
-    fun refreshShares(filePath: String, accountName: String): DataResult<Unit>
+    fun refreshSharesFromNetwork(filePath: String, accountName: String): DataResult<Unit>
 }

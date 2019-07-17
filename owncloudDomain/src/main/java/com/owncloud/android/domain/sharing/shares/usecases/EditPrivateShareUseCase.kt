@@ -21,19 +21,17 @@ package com.owncloud.android.domain.sharing.shares.usecases
 
 import android.accounts.Account
 import android.content.Context
-import androidx.lifecycle.LiveData
 import com.owncloud.android.data.sharing.shares.ShareRepository
 import com.owncloud.android.data.sharing.shares.datasources.OCLocalShareDataSource
 import com.owncloud.android.data.sharing.shares.datasources.OCRemoteShareDataSource
-import com.owncloud.android.data.sharing.shares.db.OCShareEntity
 import com.owncloud.android.domain.UseCaseResult
 import com.owncloud.android.domain.sharing.shares.OCShareRepository
 import com.owncloud.android.lib.common.OwnCloudAccount
 import com.owncloud.android.lib.common.OwnCloudClientManagerFactory
 
-class SharesLiveDataUseCase(
+class EditPrivateShareUseCase(
     context: Context,
-    account: Account,
+    val account: Account,
     private val shareRepository: ShareRepository = OCShareRepository(
         localShareDataSource = OCLocalShareDataSource(context),
         remoteShareDataSource = OCRemoteShareDataSource(
@@ -43,18 +41,27 @@ class SharesLiveDataUseCase(
             )
         )
     )
-) : BaseUseCase<LiveData<List<OCShareEntity>>, SharesLiveDataUseCase.Params>() {
-    override fun run(params: Params): UseCaseResult<LiveData<List<OCShareEntity>>> {
-        shareRepository.getSharesAsLiveData(
-            params.filePath,
-            params.accountName
-        ).also { sharesAsLiveData ->
-            return UseCaseResult.success(sharesAsLiveData) // Always successful here, data comes from database
+) : BaseUseCase<Unit, EditPrivateShareUseCase.Params>() {
+
+    override fun run(params: Params): UseCaseResult<Unit> {
+        shareRepository.updatePrivateShare(
+            params.remoteId,
+            params.permissions,
+            account.name
+        ).also { dataResult ->
+            if (!dataResult.isSuccess()) {
+                return UseCaseResult.error(
+                    code = dataResult.code,
+                    msg = dataResult.msg,
+                    exception = dataResult.exception
+                )
+            }
+            return UseCaseResult.success()
         }
     }
 
     data class Params(
-        val filePath: String,
-        val accountName: String
+        val remoteId: Long,
+        val permissions: Int
     )
 }

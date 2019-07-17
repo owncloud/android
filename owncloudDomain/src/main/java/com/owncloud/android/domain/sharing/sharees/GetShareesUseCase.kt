@@ -1,11 +1,11 @@
-package com.owncloud.android.domain.sharing.shares.usecases
+package com.owncloud.android.domain.sharing.sharees
 
 import android.accounts.Account
 import android.content.Context
 import com.owncloud.android.data.sharing.sharees.ShareeRepository
 import com.owncloud.android.data.sharing.sharees.datasources.OCRemoteShareeDataSource
 import com.owncloud.android.domain.UseCaseResult
-import com.owncloud.android.domain.sharing.sharees.OCShareeRepository
+import com.owncloud.android.domain.sharing.shares.usecases.BaseUseCase
 import com.owncloud.android.lib.common.OwnCloudAccount
 import com.owncloud.android.lib.common.OwnCloudClientManagerFactory
 import org.json.JSONObject

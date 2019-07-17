@@ -97,7 +97,7 @@ class EditPrivateShareFragment : DialogFragment() {
         super.onActivityCreated(savedInstanceState)
         Log_OC.d(TAG, "onActivityCreated")
 
-//        listener?.refreshPrivateShare(share?.remoteId!!)
+        listener?.refreshPrivateShare(share?.remoteId!!)
     }
 
     /**
@@ -378,7 +378,7 @@ class EditPrivateShareFragment : DialogFragment() {
      * Updates the UI after the result of an update operation on the edited [RemoteShare] permissions.
      *
      */
-    fun updateShare(updatedShare: OCShareEntity) {
+    fun updateShare(updatedShare: OCShareEntity?) {
         share = updatedShare
         refreshUiFromState()
     }
@@ -400,10 +400,10 @@ class EditPrivateShareFragment : DialogFragment() {
         }
         val permissions = spb.build()
 
-//        listener?.updatePrivateShare(
-//            share?.remoteId!!,
-//            permissions
-//        )
+        listener?.updatePrivateShare(
+            share?.remoteId!!,
+            permissions
+        )
     }
 
     /**
