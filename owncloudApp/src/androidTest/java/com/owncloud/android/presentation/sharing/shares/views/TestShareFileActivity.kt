@@ -23,13 +23,14 @@ package com.owncloud.android.presentation.sharing.shares.views
 import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
 import com.owncloud.android.data.sharing.shares.db.OCShareEntity
 import com.owncloud.android.datamodel.OCFile
-import com.owncloud.android.presentation.sharing.sharees.SearchShareesFragment
-import com.owncloud.android.presentation.sharing.shares.fragment.PublicShareDialogFragment
-import com.owncloud.android.presentation.sharing.shares.fragment.ShareFileFragment
-import com.owncloud.android.presentation.sharing.shares.fragment.ShareFragmentListener
+import com.owncloud.android.presentation.ui.sharing.fragments.SearchShareesFragment
+import com.owncloud.android.presentation.ui.sharing.fragments.PublicShareDialogFragment
+import com.owncloud.android.presentation.ui.sharing.fragments.ShareFileFragment
+import com.owncloud.android.presentation.ui.sharing.fragments.ShareFragmentListener
 import com.owncloud.android.testing.SingleFragmentActivity
 
-class TestShareFileActivity : SingleFragmentActivity(), ShareFragmentListener {
+class TestShareFileActivity : SingleFragmentActivity(),
+    ShareFragmentListener {
     lateinit var capabilities: OCCapabilityEntity
     lateinit var privateShares: ArrayList<OCShareEntity>
     lateinit var publicShares: ArrayList<OCShareEntity>

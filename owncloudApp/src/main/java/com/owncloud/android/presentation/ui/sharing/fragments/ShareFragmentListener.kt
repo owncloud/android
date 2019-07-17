@@ -22,7 +22,7 @@
  * along with this program.  If not, see <http:></http:>//www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.presentation.sharing.shares.fragment
+package com.owncloud.android.presentation.ui.sharing.fragments
 
 import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.data.sharing.shares.db.OCShareEntity
@@ -46,8 +46,6 @@ interface ShareFragmentListener {
         expirationTimeInMillis: Long,
         publicUpload: Boolean
     )
-
-    fun showEditPublicShare(share: OCShare)
 
     fun updatePublicShare(
         remoteId: Long,
@@ -80,5 +78,5 @@ interface ShareFragmentListener {
      *************************************************** COMMON ***************************************************
      **************************************************************************************************************/
 
-    fun removeShare(shareRemoteId: Long)
+//    fun removeShare(shareRemoteId: Long)
 }

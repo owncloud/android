@@ -46,4 +46,7 @@ data class UIResult<out T>(
         LOADING,
         ERROR
     }
+
+    fun isLoading(): Boolean = (status == Status.LOADING)
+    fun isSuccess(): Boolean = (status == Status.SUCCESS)
 }
