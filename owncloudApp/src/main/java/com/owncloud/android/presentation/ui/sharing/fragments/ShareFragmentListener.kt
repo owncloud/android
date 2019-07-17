@@ -24,8 +24,8 @@
 
 package com.owncloud.android.presentation.ui.sharing.fragments
 
-import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.data.sharing.shares.db.OCShareEntity
+import com.owncloud.android.datamodel.OCFile
 
 /**
  * This interface must be implemented by activities that contain this
@@ -37,7 +37,16 @@ import com.owncloud.android.data.sharing.shares.db.OCShareEntity
  * See the Android Training lesson [Communicating with Other Fragments](http://developer.android.com/training/basics/fragments/communicating.html) for more information.
  */
 interface ShareFragmentListener {
-    fun startShareObservers()
+
+    fun observeCapabilities(shouldFetchFromNetwork: Boolean = true)
+
+    fun copyOrSendPrivateLink(file: OCFile)
+
+    /**************************************************************************************************************
+     *********************************************** PUBLIC SHARES ************************************************
+     **************************************************************************************************************/
+
+    fun showAddPublicShare(defaultLinkName: String)
 
     fun createPublicShare(
         permissions: Int,
@@ -46,6 +55,8 @@ interface ShareFragmentListener {
         expirationTimeInMillis: Long,
         publicUpload: Boolean
     )
+
+    fun showEditPublicShare(share: OCShareEntity)
 
     fun updatePublicShare(
         remoteId: Long,
@@ -56,27 +67,31 @@ interface ShareFragmentListener {
         publicUpload: Boolean
     )
 
+    fun showRemovePublicShare(share: OCShareEntity)
+
     fun removePublicShare(remoteId: Long)
 
-    fun observeCapabilities(shouldFetchFromNetwork: Boolean = true)
+    fun copyOrSendPublicLink(share: OCShareEntity)
 
-    fun copyOrSendPrivateLink(file: OCFile)
+    /**************************************************************************************************************
+     *********************************************** PRIVATE SHARES ***********************************************
+     **************************************************************************************************************/
 
     fun showSearchUsersAndGroups()
 
     fun showEditPrivateShare(share: OCShareEntity)
 
-    fun showAddPublicShare(defaultLinkName: String)
+    fun refreshPrivateShare(remoteId: Long)
 
-    fun showEditPublicShare(share: OCShareEntity)
-
-    fun showRemovePublicShare(share: OCShareEntity)
-
-    fun copyOrSendPublicLink(share: OCShareEntity)
+    fun updatePrivateShare(remoteId: Long, permissions: Int)
 
     /**************************************************************************************************************
      *************************************************** COMMON ***************************************************
      **************************************************************************************************************/
+
+    fun startObserving()
+
+    fun observeShares()
 
 //    fun removeShare(shareRemoteId: Long)
 }
