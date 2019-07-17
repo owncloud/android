@@ -32,13 +32,13 @@ import org.junit.Before
 import org.junit.Test
 
 class OCRemoteShareesDataSourceTest {
-    private lateinit var ocRemoteShareesDataSource: OCRemoteShareesDataSource
+    private lateinit var ocRemoteShareesDataSource: OCRemoteShareeDataSource
     private val ownCloudClient = mockkClass(OwnCloudClient::class)
 
     @Before
     fun init() {
         ocRemoteShareesDataSource =
-            OCRemoteShareesDataSource(ownCloudClient)
+            OCRemoteShareeDataSource(ownCloudClient)
     }
 
     @Test

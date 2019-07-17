@@ -23,7 +23,7 @@
  * along with this program.  If not, see <http:></http:>//www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.presentation.sharing.sharees
+package com.owncloud.android.presentation.ui.sharing.fragments
 
 import android.accounts.Account
 import android.app.Activity
@@ -43,7 +43,7 @@ import com.owncloud.android.R
 import com.owncloud.android.data.sharing.shares.db.OCShareEntity
 import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.lib.common.utils.Log_OC
-import com.owncloud.android.presentation.sharing.shares.fragment.ShareFragmentListener
+import com.owncloud.android.presentation.adapters.sharing.ShareUserListAdapter
 import com.owncloud.android.utils.PreferenceUtils
 import kotlinx.android.synthetic.main.search_users_groups_layout.*
 import java.util.ArrayList
@@ -60,7 +60,8 @@ import java.util.ArrayList
  * Use the [SearchShareesFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class SearchShareesFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListener {
+class SearchShareesFragment : Fragment(),
+    ShareUserListAdapter.ShareUserAdapterListener {
 
     // Parameters
     private var file: OCFile? = null

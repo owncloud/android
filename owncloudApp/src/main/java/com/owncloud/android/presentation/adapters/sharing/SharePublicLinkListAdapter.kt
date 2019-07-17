@@ -1,4 +1,4 @@
-package com.owncloud.android.shares.presentation
+package com.owncloud.android.presentation.adapters.sharing
 
 /**
  * ownCloud Android client application
@@ -40,16 +40,16 @@ import java.util.ArrayList
 class SharePublicLinkListAdapter(
     private val mContext: Context,
     resource: Int,
-    private var publicLinks: ArrayList<OCShare>?,
+    private var publicLinks: ArrayList<OCShareEntity>?,
     private val listener: SharePublicLinkAdapterListener
-) : ArrayAdapter<OCShare>(mContext, resource) {
+) : ArrayAdapter<OCShareEntity>(mContext, resource) {
     init {
         publicLinks = ArrayList(publicLinks?.sortedWith(compareBy { it.name }))
     }
 
     override fun getCount(): Int = publicLinks?.size ?: 0
 
-    override fun getItem(position: Int): OCShare? = publicLinks!![position]
+    override fun getItem(position: Int): OCShareEntity? = publicLinks!![position]
 
     override fun getItemId(position: Int): Long = 0
 

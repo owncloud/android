@@ -33,7 +33,7 @@ import com.owncloud.android.R
 import com.owncloud.android.data.sharing.shares.db.OCShareEntity
 import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.lib.resources.shares.RemoteShare
-import com.owncloud.android.presentation.sharing.shares.fragment.PublicShareDialogFragment
+import com.owncloud.android.presentation.ui.sharing.fragments.PublicShareDialogFragment
 import com.owncloud.android.utils.AppTestUtil
 import io.mockk.every
 import io.mockk.mockkClass

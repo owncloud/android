@@ -26,7 +26,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import com.owncloud.android.data.DataResult
 import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
 import com.owncloud.android.domain.capabilities.OCCapabilityRepository
-import com.owncloud.android.presentation.capabilities.OCCapabilityViewModel
+import com.owncloud.android.presentation.viewmodels.capabilities.OCCapabilityViewModel
 import com.owncloud.android.utils.AppTestUtil
 import io.mockk.every
 import io.mockk.mockkClass
