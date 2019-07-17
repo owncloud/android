@@ -38,6 +38,8 @@ class OCLocalShareDataSource(
     ): LiveData<List<OCShareEntity>> =
         ocShareDao.getSharesAsLiveData(filePath, accountName, shareTypes.map { it.value })
 
+    override fun getShareAsLiveData(remoteId: Long): LiveData<OCShareEntity> = ocShareDao.getShareAsLiveData(remoteId)
+
     override fun insert(ocShare: OCShareEntity): Long = ocShareDao.insert(ocShare)
 
     override fun insert(ocShares: List<OCShareEntity>): List<Long> = ocShareDao.insert(ocShares)

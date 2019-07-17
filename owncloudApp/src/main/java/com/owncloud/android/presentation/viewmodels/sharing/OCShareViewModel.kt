@@ -26,14 +26,16 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.owncloud.android.data.DataResult
 import com.owncloud.android.data.sharing.shares.db.OCShareEntity
 import com.owncloud.android.domain.sharing.shares.usecases.CreatePrivateShareUseCase
 import com.owncloud.android.domain.sharing.shares.usecases.CreatePublicShareUseCase
 import com.owncloud.android.domain.sharing.shares.usecases.DeletePublicShareUseCase
+import com.owncloud.android.domain.sharing.shares.usecases.EditPrivateShareUseCase
 import com.owncloud.android.domain.sharing.shares.usecases.EditPublicShareUseCase
-import com.owncloud.android.domain.sharing.shares.usecases.RefreshSharesUseCase
-import com.owncloud.android.domain.sharing.shares.usecases.SharesLiveDataUseCase
+import com.owncloud.android.domain.sharing.shares.usecases.GetShareAsLiveDataUseCase
+import com.owncloud.android.domain.sharing.shares.usecases.GetSharesAsLiveDataUseCase
+import com.owncloud.android.domain.sharing.shares.usecases.RefreshSharesFromNetworkUseCase
+import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.operations.common.OperationType
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter
@@ -48,9 +50,12 @@ class OCShareViewModel(
     private val filePath: String,
     val context: Context,
     val account: Account,
-    sharesLiveDataUseCase: SharesLiveDataUseCase = SharesLiveDataUseCase(context, account),
-    private val refreshSharesUseCase: RefreshSharesUseCase = RefreshSharesUseCase(context, account),
+    getSharesAsLiveDataUseCase: GetSharesAsLiveDataUseCase = GetSharesAsLiveDataUseCase(context, account),
+    private val getShareAsLiveDataUseCase: GetShareAsLiveDataUseCase = GetShareAsLiveDataUseCase(context, account),
+    private val refreshSharesFromNetworkUseCase: RefreshSharesFromNetworkUseCase =
+        RefreshSharesFromNetworkUseCase(context, account),
     private val createPrivateShareUseCase: CreatePrivateShareUseCase = CreatePrivateShareUseCase(context, account),
+    private val editPrivateShareUseCase: EditPrivateShareUseCase = EditPrivateShareUseCase(context, account),
     private val createPublicShareUseCase: CreatePublicShareUseCase = CreatePublicShareUseCase(context, account),
     private val editPublicShareUseCase: EditPublicShareUseCase = EditPublicShareUseCase(context, account),
     private val deletePublicShareUseCase: DeletePublicShareUseCase = DeletePublicShareUseCase(context, account)
@@ -59,8 +64,8 @@ class OCShareViewModel(
     private val _shares = MutableLiveData<UIResult<List<OCShareEntity>>>()
     val shares: LiveData<UIResult<List<OCShareEntity>>> = _shares
 
-    private var sharesLiveData: LiveData<List<OCShareEntity>>? = sharesLiveDataUseCase.execute(
-        SharesLiveDataUseCase.Params(
+    private var sharesLiveData: LiveData<List<OCShareEntity>>? = getSharesAsLiveDataUseCase.execute(
+        GetSharesAsLiveDataUseCase.Params(
             filePath = filePath,
             accountName = account.name
         )
@@ -76,18 +81,18 @@ class OCShareViewModel(
 
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                refreshShares()
+                refreshSharesFromNetwork()
             }
         }
     }
 
-    private fun refreshShares() {
+    private fun refreshSharesFromNetwork() {
         _shares.postValue(
             UIResult.loading(sharesLiveData?.value)
         )
 
-        refreshSharesUseCase.execute(
-            RefreshSharesUseCase.Params(
+        refreshSharesFromNetworkUseCase.execute(
+            RefreshSharesFromNetworkUseCase.Params(
                 filePath = filePath,
                 accountName = account.name
             )
@@ -114,19 +119,108 @@ class OCShareViewModel(
     private val _privateShareCreationStatus = MutableLiveData<UIResult<Unit>>()
     val privateShareCreationStatus: LiveData<UIResult<Unit>> = _privateShareCreationStatus
 
-//    fun insertPrivateShare(
-//        filePath: String,
-//        shareType: ShareType?,
-//        shareeName: String, // User or group name of the target sharee.
-//        permissions: Int
-//    ): LiveData<DataResult<Unit>> = shareRepository.insertPrivateShare(
-//        filePath, shareType, shareeName, permissions
-//    )
+    private val _privateShare = MutableLiveData<UIResult<OCShareEntity>>()
+    val privateShare: LiveData<UIResult<OCShareEntity>> = _privateShare
+
+    private var privateShareLiveData: LiveData<OCShareEntity>? = null
+    private lateinit var privateShareObserver: Observer<OCShareEntity>
+
+    private val _privateShareEditionStatus = MutableLiveData<UIResult<Unit>>()
+    val privateShareEditionStatus: LiveData<UIResult<Unit>> = _privateShareEditionStatus
+
+    private val _privateShareDeletionStatus = MutableLiveData<UIResult<Unit>>()
+    val privateShareDeletionStatus: LiveData<UIResult<Unit>> = _privateShareDeletionStatus
+
+    fun insertPrivateShare(
+        filePath: String,
+        shareType: ShareType?,
+        shareeName: String, // User or group name of the target sharee.
+        permissions: Int
+    ) {
+        _privateShareCreationStatus.postValue(
+            UIResult.loading()
+        )
+
+        viewModelScope.launch {
+            val useCaseResult = withContext(Dispatchers.IO) {
+                createPrivateShareUseCase.execute(
+                    CreatePrivateShareUseCase.Params(
+                        filePath,
+                        shareType,
+                        shareeName,
+                        permissions
+                    )
+                )
+            }
+
+            withContext(Dispatchers.Main) {
+                if (!useCaseResult.isSuccess()) {
+                    _privateShareCreationStatus.postValue(
+                        UIResult.error(
+                            errorMessage = useCaseResult.msg ?: ErrorMessageAdapter.getResultMessage(
+                                useCaseResult.code,
+                                useCaseResult.exception,
+                                OperationType.CREATE_SHARE_WITH_SHAREES,
+                                context.resources
+                            )
+                        )
+                    )
+                }
+            }
+        }
+    }
+
+    // Used to get a private share after updating
+    fun refreshPrivateShare(
+        remoteId: Long
+    ) {
+        privateShareLiveData = getShareAsLiveDataUseCase.execute(
+            GetShareAsLiveDataUseCase.Params(remoteId)
+        ).data!!
+
+        privateShareObserver = Observer { privateShare ->
+            _privateShare.postValue(UIResult.success(privateShare))
+        }
+
+        privateShareLiveData?.observeForever(privateShareObserver)
+    }
 
     fun updatePrivateShare(
         remoteId: Long,
         permissions: Int
-    ): LiveData<DataResult<Unit>> = MutableLiveData()
+    ) {
+        _privateShareEditionStatus.postValue(
+            UIResult.loading()
+        )
+
+        viewModelScope.launch {
+            val useCaseResult = withContext(Dispatchers.IO) {
+                editPrivateShareUseCase.execute(
+                    EditPrivateShareUseCase.Params(
+                        remoteId,
+                        permissions
+                    )
+                )
+            }
+
+            withContext(Dispatchers.Main) {
+                if (!useCaseResult.isSuccess()) {
+                    _privateShareEditionStatus.postValue(
+                        UIResult.error(
+                            errorMessage = useCaseResult.msg ?: ErrorMessageAdapter.getResultMessage(
+                                useCaseResult.code,
+                                useCaseResult.exception,
+                                OperationType.UPDATE_SHARE,
+                                context.resources
+                            )
+                        )
+                    )
+                } else {
+                    _privateShareEditionStatus.postValue(UIResult.success())
+                }
+            }
+        }
+    }
 
     /******************************************************************************************************
      ******************************************* PUBLIC SHARES ********************************************
@@ -186,7 +280,7 @@ class OCShareViewModel(
         }
     }
 
-    fun updatePublicShareForFile(
+    fun updatePublicShare(
         remoteId: Long,
         name: String,
         password: String?,
@@ -219,7 +313,7 @@ class OCShareViewModel(
                             errorMessage = useCaseResult.msg ?: ErrorMessageAdapter.getResultMessage(
                                 useCaseResult.code,
                                 useCaseResult.exception,
-                                OperationType.UPDATE_PUBLIC_SHARE,
+                                OperationType.UPDATE_SHARE,
                                 context.resources
                             )
                         )
@@ -269,5 +363,6 @@ class OCShareViewModel(
     override fun onCleared() {
         super.onCleared()
         sharesLiveData?.removeObserver(sharesObserver)
+        privateShareLiveData?.removeObserver(privateShareObserver)
     }
 }

@@ -70,7 +70,7 @@ class OCShareViewModelTest {
             )
         )
 
-        every { ocShareRepository.refreshShares(filePath) } returns
+        every { ocShareRepository.refreshSharesFromNetwork(filePath) } returns
                 MutableLiveData<DataResult<List<OCShareEntity>>>().apply {
                     value = DataResult.success(privateShares)
                 }
@@ -223,7 +223,7 @@ class OCShareViewModelTest {
         // Viewmodel that will ask ocShareRepository for shares
         val ocShareViewModel = createOCShareViewModel(ocShareRepository)
 
-        val resource: DataResult<Unit>? = ocShareViewModel.updatePublicShareForFile(
+        val resource: DataResult<Unit>? = ocShareViewModel.updatePublicShare(
             1,
             "Photos 1 link",
             "123456",

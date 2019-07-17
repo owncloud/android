@@ -445,7 +445,7 @@ class EditPublicShareTest {
         resource: DataResult<Unit> = DataResult.success() // Expected result when editing the share
     ) {
         every {
-            ocShareViewModel.updatePublicShareForFile(
+            ocShareViewModel.updatePublicShare(
                 1,
                 share.name!!,
                 password,
