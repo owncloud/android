@@ -25,9 +25,9 @@ import com.owncloud.android.lib.resources.shares.GetRemoteShareesOperation
 import org.json.JSONObject
 import java.util.ArrayList
 
-class OCRemoteShareesDataSource(
+class OCRemoteShareeDataSource(
     private val client: OwnCloudClient
-) : RemoteShareesDataSource {
+) : RemoteShareeDataSource {
 
     override fun getSharees(
         searchString: String,

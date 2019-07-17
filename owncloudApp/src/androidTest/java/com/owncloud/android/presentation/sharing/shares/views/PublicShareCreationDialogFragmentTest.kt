@@ -38,7 +38,7 @@ import com.owncloud.android.R
 import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
 import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.lib.resources.status.CapabilityBooleanType
-import com.owncloud.android.presentation.sharing.shares.fragment.PublicShareDialogFragment
+import com.owncloud.android.presentation.ui.sharing.fragments.PublicShareDialogFragment
 import com.owncloud.android.utils.AppTestUtil
 import com.owncloud.android.utils.DateUtils
 import io.mockk.every
@@ -46,7 +46,6 @@ import io.mockk.mockkClass
 import org.hamcrest.CoreMatchers.not
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
 import java.text.SimpleDateFormat
 import java.util.Date
 

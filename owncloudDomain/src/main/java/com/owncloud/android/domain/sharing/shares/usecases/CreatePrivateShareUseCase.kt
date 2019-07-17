@@ -34,8 +34,8 @@ class CreatePrivateShareUseCase(
     context: Context,
     val account: Account,
     private val shareRepository: ShareRepository = OCShareRepository(
-        localSharesDataSource = OCLocalShareDataSource(context),
-        remoteSharesDataSource = OCRemoteShareDataSource(
+        localShareDataSource = OCLocalShareDataSource(context),
+        remoteShareDataSource = OCRemoteShareDataSource(
             OwnCloudClientManagerFactory.getDefaultSingleton().getClientFor(
                 OwnCloudAccount(account, context),
                 context

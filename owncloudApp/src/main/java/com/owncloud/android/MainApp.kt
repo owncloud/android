@@ -44,9 +44,9 @@ import com.owncloud.android.lib.common.authentication.oauth.OAuth2ClientConfigur
 import com.owncloud.android.lib.common.authentication.oauth.OAuth2ProvidersRegistry
 import com.owncloud.android.lib.common.authentication.oauth.OwnCloudOAuth2Provider
 import com.owncloud.android.lib.common.utils.Log_OC
-import com.owncloud.android.presentation.capabilities.OCCapabilityViewModel
-import com.owncloud.android.presentation.sharing.sharees.OCShareeViewModel
-import com.owncloud.android.presentation.sharing.shares.OCShareViewModel
+import com.owncloud.android.presentation.viewmodels.capabilities.OCCapabilityViewModel
+import com.owncloud.android.presentation.viewmodels.sharing.OCShareeViewModel
+import com.owncloud.android.presentation.viewmodels.sharing.OCShareViewModel
 import com.owncloud.android.ui.activity.FingerprintActivity
 import com.owncloud.android.ui.activity.PassCodeActivity
 import com.owncloud.android.ui.activity.PatternLockActivity
@@ -171,7 +171,11 @@ class MainApp : MultiDexApplication() {
 
         val viewModelModule = module {
             viewModel { (filePath: String, account: Account) ->
-                OCShareViewModel(filePath, androidContext(), account)
+                OCShareViewModel(
+                    filePath,
+                    androidContext(),
+                    account
+                )
             }
 
             viewModel { (account: Account) ->
@@ -179,7 +183,10 @@ class MainApp : MultiDexApplication() {
             }
 
             viewModel { (account: Account) ->
-                OCCapabilityViewModel(androidContext(), account)
+                OCCapabilityViewModel(
+                    androidContext(),
+                    account
+                )
             }
         }
 

@@ -33,7 +33,7 @@ import android.os.Bundle
 import com.owncloud.android.R
 import com.owncloud.android.data.sharing.shares.db.OCShareEntity
 import com.owncloud.android.lib.common.utils.Log_OC
-import com.owncloud.android.presentation.sharing.shares.fragment.ShareFragmentListener
+import com.owncloud.android.presentation.ui.sharing.fragments.ShareFragmentListener
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment.ConfirmationDialogFragmentListener
 
 class RemoveShareDialogFragment : ConfirmationDialogFragment(), ConfirmationDialogFragmentListener {

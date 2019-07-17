@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http:></http:>//www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.presentation.sharing.shares.fragment
+package com.owncloud.android.presentation.ui.sharing.fragments
 
 import android.app.Activity
 import android.content.Context

@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.presentation.sharing.sharees
+package com.owncloud.android.presentation.adapters.sharing
 
 import android.content.Context
 import android.view.LayoutInflater
