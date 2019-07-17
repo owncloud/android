@@ -8,6 +8,7 @@ enum class OperationType {
     CREATE_SHARE_WITH_SHAREES,
     CREATE_PUBLIC_SHARE,
     UPDATE_SHARE,
+    UPDATE_PUBLIC_SHARE,
     REMOVE_SHARE,
 
     // FILES

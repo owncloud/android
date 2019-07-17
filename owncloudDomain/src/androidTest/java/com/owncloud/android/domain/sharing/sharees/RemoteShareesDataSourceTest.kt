@@ -18,14 +18,14 @@
  */
 package com.owncloud.android.domain.sharing.sharees
 
-import com.owncloud.android.data.sharing.sharees.datasources.RemoteShareesDataSource
+import com.owncloud.android.data.sharing.sharees.datasources.RemoteShareeDataSource
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.shares.GetRemoteShareesOperation
 import org.json.JSONObject
 
 class RemoteShareesDataSourceTest(
     private val remoteOperationResult: RemoteOperationResult<ArrayList<JSONObject>>
-) : RemoteShareesDataSource {
+) : RemoteShareeDataSource {
     override fun getSharees(
         searchString: String,
         page: Int,

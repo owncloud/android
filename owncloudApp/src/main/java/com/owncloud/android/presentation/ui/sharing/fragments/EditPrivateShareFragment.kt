@@ -20,7 +20,7 @@
  * along with this program.  If not, see <http:></http:>//www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.shares.presentation.fragment
+package com.owncloud.android.presentation.ui.sharing.fragments
 
 import android.accounts.Account
 import android.content.Context
@@ -35,12 +35,12 @@ import androidx.core.view.isGone
 import androidx.fragment.app.DialogFragment
 import com.owncloud.android.R
 import com.owncloud.android.authentication.AccountUtils
+import com.owncloud.android.data.sharing.shares.db.OCShareEntity
 import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.lib.common.utils.Log_OC
 import com.owncloud.android.lib.resources.shares.RemoteShare
 import com.owncloud.android.lib.resources.shares.SharePermissionsBuilder
 import com.owncloud.android.lib.resources.shares.ShareType
-import com.owncloud.android.shares.domain.OCShare
 import com.owncloud.android.utils.PreferenceUtils
 import kotlinx.android.synthetic.main.edit_share_layout.*
 import kotlinx.android.synthetic.main.edit_share_layout.view.*
@@ -52,7 +52,7 @@ import java.util.Locale
 class EditPrivateShareFragment : DialogFragment() {
 
     /** Share to show & edit, received as a parameter in construction time  */
-    private var share: OCShare? = null
+    private var share: OCShareEntity? = null
 
     /** File bound to share, received as a parameter in construction time  */
     private var file: OCFile? = null
@@ -97,7 +97,7 @@ class EditPrivateShareFragment : DialogFragment() {
         super.onActivityCreated(savedInstanceState)
         Log_OC.d(TAG, "onActivityCreated")
 
-        listener?.refreshPrivateShare(share?.remoteId!!)
+//        listener?.refreshPrivateShare(share?.remoteId!!)
     }
 
     /**
@@ -254,7 +254,7 @@ class EditPrivateShareFragment : DialogFragment() {
                     Log_OC.v(TAG, "canEditCheckBox toggled to $isChecked")
                     /// sync subordinate CheckBoxes
                     val isFederated = ShareType.FEDERATED.value == share!!.shareType
-                    if (file?.isFolder  == true) {
+                    if (file?.isFolder == true) {
                         if (isChecked) {
                             val serverVersion = AccountUtils.getServerVersion(account)
                             val isNotReshareableFederatedSupported =
@@ -378,7 +378,7 @@ class EditPrivateShareFragment : DialogFragment() {
      * Updates the UI after the result of an update operation on the edited [RemoteShare] permissions.
      *
      */
-    fun updateShare(updatedShare: OCShare) {
+    fun updateShare(updatedShare: OCShareEntity) {
         share = updatedShare
         refreshUiFromState()
     }
@@ -400,10 +400,10 @@ class EditPrivateShareFragment : DialogFragment() {
         }
         val permissions = spb.build()
 
-        listener?.updatePrivateShare(
-            share?.remoteId!!,
-            permissions
-        )
+//        listener?.updatePrivateShare(
+//            share?.remoteId!!,
+//            permissions
+//        )
     }
 
     /**
@@ -435,7 +435,7 @@ class EditPrivateShareFragment : DialogFragment() {
          * @param account       The ownCloud account holding 'sharedFile'
          * @return A new instance of fragment EditPrivateShareFragment.
          */
-        fun newInstance(shareToEdit: OCShare, sharedFile: OCFile, account: Account): EditPrivateShareFragment {
+        fun newInstance(shareToEdit: OCShareEntity, sharedFile: OCFile, account: Account): EditPrivateShareFragment {
             val fragment = EditPrivateShareFragment()
             val args = Bundle()
             args.putParcelable(ARG_SHARE, shareToEdit)

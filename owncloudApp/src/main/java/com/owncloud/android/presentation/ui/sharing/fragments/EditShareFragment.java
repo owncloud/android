@@ -20,7 +20,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.presentation.sharing.shares.fragment;
+package com.owncloud.android.presentation.ui.sharing.fragments;
 
 import android.accounts.Account;
 import android.os.Bundle;
@@ -273,7 +273,7 @@ public class EditShareFragment extends DialogFragment {
             switch (compound.getId()) {
                 case R.id.canShareSwitch:
                     Log_OC.v(TAG, "canShareCheckBox toggled to " + isChecked);
-                    updatePermissionsToShare();
+//                    updatePermissionsToShare();
                     break;
 
                 case R.id.canEditSwitch:
@@ -323,7 +323,7 @@ public class EditShareFragment extends DialogFragment {
 
                     if (!(mFile.isFolder() && isChecked && mFile.isSharedWithMe())       // see (1)
                             || isFederated) {
-                        updatePermissionsToShare();
+//                        updatePermissionsToShare();
                     }
 
                     // updatePermissionsToShare()   // see (1)
@@ -337,19 +337,19 @@ public class EditShareFragment extends DialogFragment {
                 case R.id.canEditCreateCheckBox:
                     Log_OC.v(TAG, "canEditCreateCheckBox toggled to " + isChecked);
                     syncCanEditSwitch(compound, isChecked);
-                    updatePermissionsToShare();
+//                    updatePermissionsToShare();
                     break;
 
                 case R.id.canEditChangeCheckBox:
                     Log_OC.v(TAG, "canEditChangeCheckBox toggled to " + isChecked);
                     syncCanEditSwitch(compound, isChecked);
-                    updatePermissionsToShare();
+//                    updatePermissionsToShare();
                     break;
 
                 case R.id.canEditDeleteCheckBox:
                     Log_OC.v(TAG, "canEditDeleteCheckBox toggled to " + isChecked);
                     syncCanEditSwitch(compound, isChecked);
-                    updatePermissionsToShare();
+//                    updatePermissionsToShare();
                     break;
             }
 
@@ -443,29 +443,6 @@ public class EditShareFragment extends DialogFragment {
             // Updates UI with new state
             refreshUiFromState(editShareView);
         }
-    }
-
-    /**
-     * Updates the permissions of the {@link RemoteShare} according to the values set in the UI
-     */
-    private void updatePermissionsToShare() {
-        SharePermissionsBuilder spb = new SharePermissionsBuilder();
-        spb.setSharePermission(getCanShareSwitch().isChecked());
-        if (mFile.isFolder()) {
-            spb.setUpdatePermission(getCanEditChangeCheckBox().isChecked())
-                    .setCreatePermission(getCanEditCreateCheckBox().isChecked())
-                    .setDeletePermission(getCanEditDeleteCheckBox().isChecked());
-        } else {
-            spb.setUpdatePermission(getCanEditSwitch().isChecked());
-        }
-        int permissions = spb.build();
-
-        ((FileActivity) getActivity()).getFileOperationsHelper().
-                setPermissionsToShareWithSharee(
-                        mShare,
-                        permissions
-                )
-        ;
     }
 
     /**

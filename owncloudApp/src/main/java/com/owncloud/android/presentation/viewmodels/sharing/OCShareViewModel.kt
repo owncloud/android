@@ -17,7 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.presentation.sharing.shares
+package com.owncloud.android.presentation.viewmodels.sharing
 
 import android.accounts.Account
 import android.content.Context
@@ -26,7 +26,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.owncloud.android.data.DataResult
 import com.owncloud.android.data.sharing.shares.db.OCShareEntity
+import com.owncloud.android.domain.sharing.shares.usecases.CreatePrivateShareUseCase
 import com.owncloud.android.domain.sharing.shares.usecases.CreatePublicShareUseCase
 import com.owncloud.android.domain.sharing.shares.usecases.DeletePublicShareUseCase
 import com.owncloud.android.domain.sharing.shares.usecases.EditPublicShareUseCase
@@ -48,6 +50,7 @@ class OCShareViewModel(
     val account: Account,
     sharesLiveDataUseCase: SharesLiveDataUseCase = SharesLiveDataUseCase(context, account),
     private val refreshSharesUseCase: RefreshSharesUseCase = RefreshSharesUseCase(context, account),
+    private val createPrivateShareUseCase: CreatePrivateShareUseCase = CreatePrivateShareUseCase(context, account),
     private val createPublicShareUseCase: CreatePublicShareUseCase = CreatePublicShareUseCase(context, account),
     private val editPublicShareUseCase: EditPublicShareUseCase = EditPublicShareUseCase(context, account),
     private val deletePublicShareUseCase: DeletePublicShareUseCase = DeletePublicShareUseCase(context, account)
@@ -108,6 +111,9 @@ class OCShareViewModel(
     /******************************************************************************************************
      ******************************************* PRIVATE SHARES *******************************************
      ******************************************************************************************************/
+    private val _privateShareCreationStatus = MutableLiveData<UIResult<Unit>>()
+    val privateShareCreationStatus: LiveData<UIResult<Unit>> = _privateShareCreationStatus
+
 //    fun insertPrivateShare(
 //        filePath: String,
 //        shareType: ShareType?,
@@ -120,9 +126,7 @@ class OCShareViewModel(
     fun updatePrivateShare(
         remoteId: Long,
         permissions: Int
-    ): LiveData<Resource<Unit>> = shareRepository.updatePrivateShare(
-        remoteId, permissions
-    )
+    ): LiveData<DataResult<Unit>> = MutableLiveData()
 
     /******************************************************************************************************
      ******************************************* PUBLIC SHARES ********************************************
