@@ -35,7 +35,7 @@ abstract class OCShareDao {
     )
     abstract fun getShareAsLiveData(
         remoteId: Long
-    ): LiveData<OCShare>
+    ): LiveData<OCShareEntity>
 
     @Query(
         "SELECT * from " + ProviderTableMeta.OCSHARES_TABLE_NAME + " WHERE " +

@@ -18,7 +18,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.presentation.capabilities
+package com.owncloud.android.presentation.viewmodels.capabilities
 
 import android.accounts.Account
 import android.content.Context

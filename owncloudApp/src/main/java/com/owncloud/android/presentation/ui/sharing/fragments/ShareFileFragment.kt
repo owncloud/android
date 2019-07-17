@@ -21,7 +21,7 @@
  * along with this program.  If not, see <http:></http:>//www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.presentation.sharing.shares.fragment
+package com.owncloud.android.presentation.ui.sharing.fragments
 
 import android.accounts.Account
 import android.content.Context
@@ -45,8 +45,8 @@ import com.owncloud.android.lib.common.utils.Log_OC
 import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.lib.resources.status.CapabilityBooleanType
 import com.owncloud.android.lib.resources.status.OwnCloudVersion
-import com.owncloud.android.presentation.sharing.sharees.ShareUserListAdapter
-import com.owncloud.android.ui.adapter.SharePublicLinkListAdapter
+import com.owncloud.android.presentation.adapters.sharing.SharePublicLinkListAdapter
+import com.owncloud.android.presentation.adapters.sharing.ShareUserListAdapter
 import com.owncloud.android.utils.DisplayUtils
 import com.owncloud.android.utils.MimetypeIconUtil
 import kotlinx.android.synthetic.main.share_file_layout.*
@@ -431,7 +431,9 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
             shareNoPublicLinks?.visibility = View.GONE
             sharePublicLinksList?.visibility = View.VISIBLE
             sharePublicLinksList?.adapter = publicLinksAdapter
-            setListViewHeightBasedOnChildren(sharePublicLinksList)
+            sharePublicLinksList?.let {
+                setListViewHeightBasedOnChildren(it)
+            }
         } else {
             shareNoPublicLinks?.visibility = View.VISIBLE
             sharePublicLinksList?.visibility = View.GONE
@@ -445,7 +447,6 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
         //GetLink from the server and show ShareLinkToDialog
         listener?.copyOrSendPublicLink(share)
     }
-
 
     override fun removePublicShare(share: OCShareEntity) {
         // Remove public link from server
@@ -473,12 +474,8 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
     }
 
     override fun editPublicShare(share: OCShareEntity) {
-        listener?.showEditPublicShare(share)
+//        listener?.showEditPublicShare(share)
     }
-
-    /**************************************************************************************************************
-     *************************************************** COMMON ***************************************************
-     **************************************************************************************************************/
 
     /**
      * Hide share features sections that are not enabled
@@ -503,11 +500,6 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
         if (!shareWarningAllowed) {
             view.shareWarning?.visibility = View.GONE
         }
-    }
-
-    override fun unshareButtonPressed(share: OCShare) {
-        Log_OC.d(TAG, "Removing private share with " + share.sharedWithDisplayName)
-        listener?.removeShare(share.remoteId)
     }
 
     companion object {

@@ -34,13 +34,15 @@ interface ShareRepository {
         filePath: String,
         shareType: ShareType?,
         shareeName: String,
-        permissions: Int
-    ): LiveData<DataResult<Unit>>
+        permissions: Int,
+        accountName: String
+    ): DataResult<Unit>
 
     fun updatePrivateShare(
         remoteId: Long,
-        permissions: Int
-    ): LiveData<Resource<Unit>>
+        permissions: Int,
+        accountName: String
+    ): DataResult<Unit>
 
     /******************************************************************************************************
      ******************************************* PUBLIC SHARES ********************************************
@@ -66,11 +68,7 @@ interface ShareRepository {
         accountName: String
     ): DataResult<Unit>
 
-    /******************************************************************************************************
-     *********************************************** COMMON ***********************************************
-     ******************************************************************************************************/
-
-    fun deleteShare(
+    fun deletePublicShare(
         remoteId: Long
     ): DataResult<Unit>
 
@@ -79,6 +77,8 @@ interface ShareRepository {
      ******************************************************************************************************/
 
     fun getSharesAsLiveData(filePath: String, accountName: String): LiveData<List<OCShareEntity>>
+
+    fun getShareAsLiveData(remoteId: Long): LiveData<OCShareEntity>
 
     fun refreshShares(filePath: String, accountName: String): DataResult<Unit>
 }

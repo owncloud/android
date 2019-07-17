@@ -28,7 +28,7 @@ import com.owncloud.android.data.Status
 import com.owncloud.android.data.sharing.shares.db.OCShareEntity
 import com.owncloud.android.domain.sharing.shares.OCShareRepository
 import com.owncloud.android.lib.resources.shares.ShareType
-import com.owncloud.android.presentation.sharing.shares.OCShareViewModel
+import com.owncloud.android.presentation.viewmodels.sharing.OCShareViewModel
 import com.owncloud.android.utils.AppTestUtil
 import io.mockk.every
 import io.mockk.mockkClass
