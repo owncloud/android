@@ -68,10 +68,6 @@ interface ShareRepository {
         accountName: String
     ): DataResult<Unit>
 
-    fun deletePublicShare(
-        remoteId: Long
-    ): DataResult<Unit>
-
     /******************************************************************************************************
      *********************************************** COMMON ***********************************************
      ******************************************************************************************************/
@@ -81,4 +77,8 @@ interface ShareRepository {
     fun getShareAsLiveData(remoteId: Long): LiveData<OCShareEntity>
 
     fun refreshSharesFromNetwork(filePath: String, accountName: String): DataResult<Unit>
+
+    fun deleteShare(
+        remoteId: Long
+    ): DataResult<Unit>
 }
