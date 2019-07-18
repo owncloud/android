@@ -285,7 +285,7 @@
   <string name="confirmation_remove_local">Lokal saja</string>
   <string name="confirmation_remove_account_alert">Apakah anda serius ingin menghapus akun %1$s ?</string>
   <string name="confirmation_remove_public_share_title">Hapus tautan</string>
-  <string name="confirmation_remove_public_share_message">Apakah Anda yakin ingin menghapus %1$s?</string>
+  <string name="confirmation_remove_share_message">Apakah Anda yakin ingin menghapus %1$s?</string>
   <string name="remove_success_msg">Penghapusan berhasil</string>
   <string name="remove_fail_msg">Penghapusan gagal</string>
   <string name="rename_dialog_title">Masukkan nama baru</string>

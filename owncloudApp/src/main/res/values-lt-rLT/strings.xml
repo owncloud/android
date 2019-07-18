@@ -266,7 +266,7 @@
   <string name="confirmation_remove_local">Tik vietiniai</string>
   <string name="confirmation_remove_account_alert">Ar tikrai norite pašalinti paskyrą%1$s?</string>
   <string name="confirmation_remove_public_share_title">Pašalinti nuorodą</string>
-  <string name="confirmation_remove_public_share_message">Ar tikrai norite pašalinti %1$s?</string>
+  <string name="confirmation_remove_share_message">Ar tikrai norite pašalinti %1$s?</string>
   <string name="remove_success_msg">Pašalinta sėkmingai</string>
   <string name="remove_fail_msg">Pašalinti nepavyko</string>
   <string name="rename_dialog_title">Įveskite naują pavadinimą</string>

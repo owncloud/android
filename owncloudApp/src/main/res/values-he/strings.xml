@@ -289,7 +289,7 @@
   <string name="confirmation_remove_local">מקומי בלבד</string>
   <string name="confirmation_remove_account_alert">האם באמת להסיר את החשבון %1$s?</string>
   <string name="confirmation_remove_public_share_title">הסרת קישור</string>
-  <string name="confirmation_remove_public_share_message">האם באמת להסיר %1$s?</string>
+  <string name="confirmation_remove_share_message">האם באמת להסיר %1$s?</string>
   <string name="remove_success_msg">ההסרה הצליחה</string>
   <string name="remove_fail_msg">ההסרה נכשלה</string>
   <string name="rename_dialog_title">נא להזין שם חדש</string>

@@ -237,7 +237,7 @@
   <string name="confirmation_remove_local">فقط محلی</string>
   <string name="confirmation_remove_account_alert">واقعاً می‌خواهید حساب %1$s را بردارید؟</string>
   <string name="confirmation_remove_public_share_title">حذف لینک</string>
-  <string name="confirmation_remove_public_share_message">آیا واقعا می‌خواهید %1$s حذف شود ؟</string>
+  <string name="confirmation_remove_share_message">آیا واقعا می‌خواهید %1$s حذف شود ؟</string>
   <string name="remove_success_msg">حذف با موفقیت انجام شد</string>
   <string name="remove_fail_msg">حذف نا موفق بود</string>
   <string name="rename_dialog_title">نام جدید وارد کنید</string>

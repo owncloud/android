@@ -287,8 +287,8 @@
   <string name="confirmation_remove_local">Μόνο τοπικά</string>
   <string name="confirmation_remove_account_alert">Θέλετε πραγματικά να αφαιρέσετε τον λογαριασμό %1$s;</string>
   <string name="confirmation_remove_public_share_title">Αφαίρεση συνδέσμου</string>
-  <string name="confirmation_remove_public_share_message">Θέλετε πραγματικά να αφαιρέσετε τον %1$s;</string>
-  <string name="remove_success_msg">Επιτυχής αφαίρεση</string>
+  <string name="confirmation_remove_share_message">Θέλετε στα αλήθεια να αφαιρέσετε το %1$s;</string>
+  <string name="remove_success_msg">Αφαίρεση επιτυχής</string>
   <string name="remove_fail_msg">Η αφαίρεση απέτυχε</string>
   <string name="rename_dialog_title">Εισάγετε νέο όνομα</string>
   <string name="available_offline_inherited_msg">Ο φάκελος που περιέχει αυτό το αρχείο είναι διαθέσιμος εκτός σύνδεσης</string>

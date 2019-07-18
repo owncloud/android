@@ -30,6 +30,7 @@ import android.accounts.Account
 import android.app.SearchManager
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -39,13 +40,21 @@ import android.widget.ListView
 import androidx.appcompat.widget.SearchView
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import com.google.android.material.snackbar.Snackbar
 import com.owncloud.android.R
 import com.owncloud.android.data.sharing.shares.db.OCShareEntity
 import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.lib.common.utils.Log_OC
+import com.owncloud.android.lib.resources.shares.ShareType
+import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.adapters.sharing.ShareUserListAdapter
+import com.owncloud.android.presentation.viewmodels.sharing.OCShareViewModel
+import com.owncloud.android.ui.activity.BaseActivity
 import com.owncloud.android.utils.PreferenceUtils
-import kotlinx.android.synthetic.main.search_users_groups_layout.searchView
+import kotlinx.android.synthetic.main.search_users_groups_layout.*
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 import java.util.ArrayList
 
 /**
@@ -70,6 +79,13 @@ class SearchShareesFragment : Fragment(),
     // other members
     private var userGroupsAdapter: ShareUserListAdapter? = null
     private var listener: ShareFragmentListener? = null
+
+    private val ocShareViewModel: OCShareViewModel by viewModel {
+        parametersOf(
+            file?.remotePath,
+            account
+        )
+    }
 
     /**
      * {@inheritDoc}
@@ -128,11 +144,48 @@ class SearchShareesFragment : Fragment(),
         requireActivity().setTitle(R.string.share_with_title)
 
         // Load private shares in the list
-        listener?.observeShares()
-        listener?.observePrivateShareCreation()
+        observePrivateShares()
     }
 
-    fun updatePrivateShares(privateShares: ArrayList<OCShareEntity>) {
+    private fun observePrivateShares() {
+        ocShareViewModel.shares.observe(
+            this,
+            Observer { uiResult ->
+                val privateShares = uiResult.data?.filter { share ->
+                    share.shareType == ShareType.USER.value ||
+                            share.shareType == ShareType.GROUP.value ||
+                            share.shareType == ShareType.FEDERATED.value
+                } as ArrayList<OCShareEntity>
+                when (uiResult?.status) {
+                    UIResult.Status.SUCCESS -> {
+                        updatePrivateShares(privateShares)
+                        (activity as BaseActivity).dismissLoadingDialog() // TODO Use listener
+                    }
+                    UIResult.Status.ERROR -> {
+                        Snackbar.make(
+                            activity?.findViewById(android.R.id.content)!!,
+                            uiResult.errorMessage!!,
+                            Snackbar.LENGTH_SHORT
+                        ).show()
+                        updatePrivateShares(privateShares)
+                        (activity as BaseActivity).dismissLoadingDialog() // TODO Use listener
+                    }
+                    UIResult.Status.LOADING -> {
+                        (activity as BaseActivity).showLoadingDialog(R.string.common_loading)
+                        updatePrivateShares(privateShares)
+                    }
+                    else -> {
+                        Log.d(
+                            TAG, "Unknown status when loading private shares for file ${file?.fileName} in account" +
+                                    "${account?.name}"
+                        )
+                    }
+                }
+            }
+        )
+    }
+
+    private fun updatePrivateShares(privateShares: ArrayList<OCShareEntity>) {
         // Update list of users/groups
         userGroupsAdapter = ShareUserListAdapter(
             requireActivity().applicationContext,
@@ -192,7 +245,7 @@ class SearchShareesFragment : Fragment(),
 
     override fun unshareButtonPressed(share: OCShareEntity) {
         Log_OC.d(TAG, "Removed private share with " + share.sharedWithDisplayName!!)
-        listener?.removeShare(share.remoteId)
+        listener?.showRemoveShare(share)
     }
 
     override fun editShare(share: OCShareEntity) {

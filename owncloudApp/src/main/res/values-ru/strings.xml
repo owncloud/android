@@ -290,7 +290,7 @@
   <string name="confirmation_remove_local">Только локально</string>
   <string name="confirmation_remove_account_alert">Вы действительно хотите удалить аккаунт %1$s?</string>
   <string name="confirmation_remove_public_share_title">Удалить ссылку</string>
-  <string name="confirmation_remove_public_share_message">Вы действительно хотите удалить %1$s?</string>
+  <string name="confirmation_remove_share_message">Вы действительно хотите удалить %1$s?</string>
   <string name="remove_success_msg">Удаление завершено</string>
   <string name="remove_fail_msg">Ошибка удаления</string>
   <string name="rename_dialog_title">Введите новое имя</string>

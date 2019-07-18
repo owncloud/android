@@ -288,7 +288,7 @@
   <string name="confirmation_remove_local">เฉพาะในเครื่องเท่านั้น</string>
   <string name="confirmation_remove_account_alert">คุณต้องการลบบัญชี %1$s?</string>
   <string name="confirmation_remove_public_share_title">ลบลิงก์</string>
-  <string name="confirmation_remove_public_share_message">คุณต้องการลบ %1$s?</string>
+  <string name="confirmation_remove_share_message">คุณต้องการลบ %1$s?</string>
   <string name="remove_success_msg">ลบเรียบร้อยแล้ว</string>
   <string name="remove_fail_msg">ไม่สามารถลบได้</string>
   <string name="rename_dialog_title">กรอกชื่อใหม่</string>

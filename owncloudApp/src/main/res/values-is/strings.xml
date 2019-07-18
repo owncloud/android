@@ -265,7 +265,7 @@
   <string name="confirmation_remove_local">Einungis staðvært</string>
   <string name="confirmation_remove_account_alert">Ertu viss um að þú viljir fjarlægja %1$s aðganginn?</string>
   <string name="confirmation_remove_public_share_title">Fjarlægja tengil</string>
-  <string name="confirmation_remove_public_share_message">Ertu viss um að þú viljir fjarlægja %1$s?</string>
+  <string name="confirmation_remove_share_message">Ertu viss um að þú viljir fjarlægja %1$s?</string>
   <string name="remove_success_msg">Fjarlæging tókst</string>
   <string name="remove_fail_msg">Fjarlæging mistókst</string>
   <string name="rename_dialog_title">Settu inn nýtt nafn</string>

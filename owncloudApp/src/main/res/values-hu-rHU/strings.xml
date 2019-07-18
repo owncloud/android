@@ -281,7 +281,7 @@
   <string name="confirmation_remove_local">Csak a helyi példányt</string>
   <string name="confirmation_remove_account_alert">Biztos eltávolítja a fiókot: %1$s ?</string>
   <string name="confirmation_remove_public_share_title">Hivatkozás eltávolítása</string>
-  <string name="confirmation_remove_public_share_message">Biztos eltávolítja: %1$s?</string>
+  <string name="confirmation_remove_share_message">Biztos eltávolítja: %1$s?</string>
   <string name="remove_success_msg">Eltávolítás sikeres</string>
   <string name="remove_fail_msg">Az eltávolítás meghiúsult</string>
   <string name="rename_dialog_title">Adjon meg egy új nevet</string>

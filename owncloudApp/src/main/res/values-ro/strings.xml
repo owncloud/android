@@ -257,7 +257,7 @@
   <string name="confirmation_remove_local">Doar local</string>
   <string name="confirmation_remove_account_alert">Ești sigur că dorești să ștergi contul %1$s?</string>
   <string name="confirmation_remove_public_share_title">Șterge legătura</string>
-  <string name="confirmation_remove_public_share_message">Doriti sigur sa stergeti %1$s?</string>
+  <string name="confirmation_remove_share_message">Doriti sigur sa stergeti %1$s?</string>
   <string name="remove_success_msg">Eliminat cu succes</string>
   <string name="remove_fail_msg">Eliminarea nu a reușit</string>
   <string name="rename_dialog_title">Introduceţi un nou nume</string>

@@ -133,7 +133,7 @@
   <string name="confirmation_remove_file_alert">আপনি কি সত্যিই %1$s অপসারণ করতে চান?</string>
   <string name="confirmation_remove_folder_alert">আপনি কি সত্যিই %1$s এবং এর কনটেন্ট অপসারণ করতে চান?</string>
   <string name="confirmation_remove_local">শুধুমাত্র লোকাল</string>
-  <string name="confirmation_remove_public_share_message">আপনি কি সত্যিই %1$s অপসারণ করতে চান?</string>
+  <string name="confirmation_remove_share_message">আপনি কি সত্যিই %1$s অপসারণ করতে চান?</string>
   <string name="remove_success_msg">অপসারণ সফল</string>
   <string name="remove_fail_msg">অপসারণ ব্যার্থ</string>
   <string name="rename_dialog_title">একটি নতুন নাম লিখুন</string>

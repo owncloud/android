@@ -281,7 +281,7 @@
   <string name="confirmation_remove_local">仅本地</string>
   <string name="confirmation_remove_account_alert">你确定要删除账户 %1$s 吗？</string>
   <string name="confirmation_remove_public_share_title">移除链接</string>
-  <string name="confirmation_remove_public_share_message">你确定要删除 %1$s 吗？</string>
+  <string name="confirmation_remove_share_message">你确定要删除 %1$s 吗？</string>
   <string name="remove_success_msg">成功删除</string>
   <string name="remove_fail_msg">无法完成删除</string>
   <string name="rename_dialog_title">请输出新的名字</string>

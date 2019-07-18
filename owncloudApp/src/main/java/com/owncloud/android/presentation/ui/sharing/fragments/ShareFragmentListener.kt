@@ -38,8 +38,6 @@ import com.owncloud.android.datamodel.OCFile
  */
 interface ShareFragmentListener {
 
-    fun observeCapabilities(shouldFetchFromNetwork: Boolean = true)
-
     fun copyOrSendPrivateLink(file: OCFile)
 
     /**************************************************************************************************************
@@ -48,26 +46,9 @@ interface ShareFragmentListener {
 
     fun showAddPublicShare(defaultLinkName: String)
 
-    fun createPublicShare(
-        permissions: Int,
-        name: String,
-        password: String,
-        expirationTimeInMillis: Long,
-        publicUpload: Boolean
-    )
-
     fun showEditPublicShare(share: OCShareEntity)
 
-    fun updatePublicShare(
-        remoteId: Long,
-        name: String,
-        password: String?,
-        expirationDateInMillis: Long,
-        permissions: Int,
-        publicUpload: Boolean
-    )
-
-    fun showRemovePublicShare(share: OCShareEntity)
+    fun showRemoveShare(share: OCShareEntity)
 
     fun copyOrSendPublicLink(share: OCShareEntity)
 
@@ -92,8 +73,4 @@ interface ShareFragmentListener {
      **************************************************************************************************************/
 
     fun startObserving()
-
-    fun observeShares()
-
-    fun removeShare(shareRemoteId: Long)
 }
