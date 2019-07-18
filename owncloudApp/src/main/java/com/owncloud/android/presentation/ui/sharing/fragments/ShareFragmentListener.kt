@@ -69,15 +69,17 @@ interface ShareFragmentListener {
 
     fun showRemovePublicShare(share: OCShareEntity)
 
-    fun removePublicShare(remoteId: Long)
-
     fun copyOrSendPublicLink(share: OCShareEntity)
 
     /**************************************************************************************************************
      *********************************************** PRIVATE SHARES ***********************************************
      **************************************************************************************************************/
 
+    fun observePrivateShareCreation()
+
     fun showSearchUsersAndGroups()
+
+    fun observePrivateShareToEdit()
 
     fun showEditPrivateShare(share: OCShareEntity)
 
@@ -93,5 +95,5 @@ interface ShareFragmentListener {
 
     fun observeShares()
 
-//    fun removeShare(shareRemoteId: Long)
+    fun removeShare(shareRemoteId: Long)
 }

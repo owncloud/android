@@ -129,6 +129,7 @@ class SearchShareesFragment : Fragment(),
 
         // Load private shares in the list
         listener?.observeShares()
+        listener?.observePrivateShareCreation()
     }
 
     fun updatePrivateShares(privateShares: ArrayList<OCShareEntity>) {
@@ -191,7 +192,7 @@ class SearchShareesFragment : Fragment(),
 
     override fun unshareButtonPressed(share: OCShareEntity) {
         Log_OC.d(TAG, "Removed private share with " + share.sharedWithDisplayName!!)
-        listener?.removePublicShare(share.remoteId)
+        listener?.removeShare(share.remoteId)
     }
 
     override fun editShare(share: OCShareEntity) {
