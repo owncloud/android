@@ -252,7 +252,7 @@ class OCShareViewModelTest {
     @Test
     fun deletePublicShare() {
         every {
-            ocShareRepository.deletePublicShare(
+            ocShareRepository.deleteShare(
                 3
             )
         } returns MutableLiveData<DataResult<Unit>>().apply {
@@ -262,7 +262,7 @@ class OCShareViewModelTest {
         // Viewmodel that will ask ocShareRepository for shares
         val ocShareViewModel = createOCShareViewModel(ocShareRepository)
 
-        val resource: DataResult<Unit>? = ocShareViewModel.deletePublicShare(
+        val resource: DataResult<Unit>? = ocShareViewModel.deleteShare(
             3
         ).value
 
