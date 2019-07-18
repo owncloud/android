@@ -242,7 +242,7 @@
   <string name="confirmation_remove_local">Le krajevno</string>
   <string name="confirmation_remove_account_alert">Ali zares želite odstraniti račun %1$s?</string>
   <string name="confirmation_remove_public_share_title">Odstrani povezavo</string>
-  <string name="confirmation_remove_public_share_message">Ali res želite odstraniti %1$s?</string>
+  <string name="confirmation_remove_share_message">Ali res želite odstraniti %1$s?</string>
   <string name="remove_success_msg">Odstranitev je uspešno končana</string>
   <string name="remove_fail_msg">Odstranjevanje je spodletelo</string>
   <string name="rename_dialog_title">Vnesite novo ime</string>

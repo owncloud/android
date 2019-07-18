@@ -37,6 +37,16 @@ class OCShareRepository(
      ******************************************* PRIVATE SHARES *******************************************
      ******************************************************************************************************/
 
+    override fun getPrivateSharesAsLiveData(filePath: String, accountName: String): LiveData<List<OCShareEntity>> {
+        return localShareDataSource.getSharesAsLiveData(
+            filePath, accountName, listOf(
+                ShareType.USER,
+                ShareType.GROUP,
+                ShareType.FEDERATED
+            )
+        )
+    }
+
     override fun insertPrivateShare(
         filePath: String,
         shareType: ShareType?,
