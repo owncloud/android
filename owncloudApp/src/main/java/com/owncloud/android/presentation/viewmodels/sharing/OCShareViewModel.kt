@@ -29,7 +29,7 @@ import androidx.lifecycle.viewModelScope
 import com.owncloud.android.data.sharing.shares.db.OCShareEntity
 import com.owncloud.android.domain.sharing.shares.usecases.CreatePrivateShareUseCase
 import com.owncloud.android.domain.sharing.shares.usecases.CreatePublicShareUseCase
-import com.owncloud.android.domain.sharing.shares.usecases.DeletePublicShareUseCase
+import com.owncloud.android.domain.sharing.shares.usecases.DeleteShareUseCase
 import com.owncloud.android.domain.sharing.shares.usecases.EditPrivateShareUseCase
 import com.owncloud.android.domain.sharing.shares.usecases.EditPublicShareUseCase
 import com.owncloud.android.domain.sharing.shares.usecases.GetShareAsLiveDataUseCase
@@ -58,7 +58,7 @@ class OCShareViewModel(
     private val editPrivateShareUseCase: EditPrivateShareUseCase = EditPrivateShareUseCase(context, account),
     private val createPublicShareUseCase: CreatePublicShareUseCase = CreatePublicShareUseCase(context, account),
     private val editPublicShareUseCase: EditPublicShareUseCase = EditPublicShareUseCase(context, account),
-    private val deletePublicShareUseCase: DeletePublicShareUseCase = DeletePublicShareUseCase(context, account)
+    private val deletePublicShareUseCase: DeleteShareUseCase = DeleteShareUseCase(context, account)
 ) : ViewModel() {
 
     private val _shares = MutableLiveData<UIResult<List<OCShareEntity>>>()
@@ -113,6 +113,44 @@ class OCShareViewModel(
         }
     }
 
+    private val _shareDeletionStatus = MutableLiveData<UIResult<Unit>>()
+    val shareDeletionStatus: LiveData<UIResult<Unit>> = _shareDeletionStatus
+
+    fun deleteShare(
+        remoteId: Long
+    ) {
+        _shareDeletionStatus.postValue(
+            UIResult.loading()
+        )
+
+        viewModelScope.launch {
+            val useCaseResult = withContext(Dispatchers.IO) {
+                deletePublicShareUseCase.execute(
+                    DeleteShareUseCase.Params(
+                        remoteId
+                    )
+                )
+            }
+
+            withContext(Dispatchers.Main) {
+                if (!useCaseResult.isSuccess()) {
+                    _shareDeletionStatus.postValue(
+                        UIResult.error(
+                            errorMessage = useCaseResult.msg ?: ErrorMessageAdapter.getResultMessage(
+                                useCaseResult.code,
+                                useCaseResult.exception,
+                                OperationType.REMOVE_SHARE,
+                                context.resources
+                            )
+                        )
+                    )
+                } else {
+                    _shareDeletionStatus.postValue(UIResult.success())
+                }
+            }
+        }
+    }
+
     /******************************************************************************************************
      ******************************************* PRIVATE SHARES *******************************************
      ******************************************************************************************************/
@@ -127,9 +165,6 @@ class OCShareViewModel(
 
     private val _privateShareEditionStatus = MutableLiveData<UIResult<Unit>>()
     val privateShareEditionStatus: LiveData<UIResult<Unit>> = _privateShareEditionStatus
-
-    private val _privateShareDeletionStatus = MutableLiveData<UIResult<Unit>>()
-    val privateShareDeletionStatus: LiveData<UIResult<Unit>> = _privateShareDeletionStatus
 
     fun insertPrivateShare(
         filePath: String,
@@ -232,9 +267,6 @@ class OCShareViewModel(
     private val _publicShareEditionStatus = MutableLiveData<UIResult<Unit>>()
     val publicShareEditionStatus: LiveData<UIResult<Unit>> = _publicShareEditionStatus
 
-    private val _publicShareDeletionStatus = MutableLiveData<UIResult<Unit>>()
-    val publicShareDeletionStatus: LiveData<UIResult<Unit>> = _publicShareDeletionStatus
-
     fun insertPublicShare(
         filePath: String,
         permissions: Int,
@@ -320,41 +352,6 @@ class OCShareViewModel(
                     )
                 } else {
                     _publicShareEditionStatus.postValue(UIResult.success())
-                }
-            }
-        }
-    }
-
-    fun deletePublicShare(
-        remoteId: Long
-    ) {
-        _publicShareDeletionStatus.postValue(
-            UIResult.loading()
-        )
-
-        viewModelScope.launch {
-            val useCaseResult = withContext(Dispatchers.IO) {
-                deletePublicShareUseCase.execute(
-                    DeletePublicShareUseCase.Params(
-                        remoteId
-                    )
-                )
-            }
-
-            withContext(Dispatchers.Main) {
-                if (!useCaseResult.isSuccess()) {
-                    _publicShareDeletionStatus.postValue(
-                        UIResult.error(
-                            errorMessage = useCaseResult.msg ?: ErrorMessageAdapter.getResultMessage(
-                                useCaseResult.code,
-                                useCaseResult.exception,
-                                OperationType.REMOVE_SHARE,
-                                context.resources
-                            )
-                        )
-                    )
-                } else {
-                    _publicShareDeletionStatus.postValue(UIResult.success())
                 }
             }
         }
