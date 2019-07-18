@@ -194,7 +194,7 @@ Allpool on loend kohalikest failidest ning serveris asuvatest failidest %5$s, mi
   <string name="confirmation_remove_folder_alert">Kas sa tõesti soovid eemaldada %1$s ja selle sisu?</string>
   <string name="confirmation_remove_local">Ainult kohalik</string>
   <string name="confirmation_remove_public_share_title">Eemalda link</string>
-  <string name="confirmation_remove_public_share_message">Oled sa kindel, et soovid %1$s eemaldada?</string>
+  <string name="confirmation_remove_share_message">Oled sa kindel, et soovid %1$s eemaldada?</string>
   <string name="remove_success_msg">Eemaldamine oli edukas</string>
   <string name="remove_fail_msg">Eemaldamine ebaõnnestus</string>
   <string name="rename_dialog_title">Sisesta uus nimi</string>

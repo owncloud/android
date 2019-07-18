@@ -284,7 +284,7 @@ Descárgueo de aquí: %2$s</string>
   <string name="confirmation_remove_local">Só local</string>
   <string name="confirmation_remove_account_alert">Confirma que quere eliminar a conta %1$s?</string>
   <string name="confirmation_remove_public_share_title">Retirar a ligazón</string>
-  <string name="confirmation_remove_public_share_message">Confirma que quere retirar %1$s?</string>
+  <string name="confirmation_remove_share_message">Confirma que quere retirar %1$s?</string>
   <string name="remove_success_msg">Retirado correctamente</string>
   <string name="remove_fail_msg">Non foi posíbel retiralo</string>
   <string name="rename_dialog_title">Introducir un novo nome</string>

@@ -251,7 +251,7 @@
   <string name="confirmation_remove_folder_alert">Gerçekten %1$s ve içeriğini kaldırmak istediğinizden emin misiniz?</string>
   <string name="confirmation_remove_local">Sadece yerel</string>
   <string name="confirmation_remove_public_share_title">Bağlantıyı sil</string>
-  <string name="confirmation_remove_public_share_message">Gerçekten %1$s dosyasını kaldırmak istiyor musunuz?</string>
+  <string name="confirmation_remove_share_message">Gerçekten %1$s dosyasını kaldırmak istiyor musunuz?</string>
   <string name="remove_success_msg">Kaldırma başarılı</string>
   <string name="remove_fail_msg">Kaldırma başarısız</string>
   <string name="rename_dialog_title">Yeni bir isim girin</string>

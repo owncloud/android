@@ -252,7 +252,7 @@ Mesedez, baimendu berriz</string>
   <string name="confirmation_remove_local">Bertakoa bakarrik</string>
   <string name="confirmation_remove_account_alert">Ziur zaude %1$s kontua ezabatu nahi duzula?</string>
   <string name="confirmation_remove_public_share_title">Esteka ezabatu</string>
-  <string name="confirmation_remove_public_share_message">Ziur zaude %1$s ezabatu nahi duzula?</string>
+  <string name="confirmation_remove_share_message">Ziur zaude %1$s ezabatu nahi duzula?</string>
   <string name="remove_success_msg">Ongi ezabatu da</string>
   <string name="remove_fail_msg">Ezin izan da ezabaketa burutu</string>
   <string name="rename_dialog_title">Idatzi izen berri bat</string>

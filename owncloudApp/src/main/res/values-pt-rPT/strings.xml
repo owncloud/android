@@ -236,7 +236,7 @@
   <string name="confirmation_remove_local">Apenas localmente</string>
   <string name="confirmation_remove_account_alert">Tem mesmo a certeza que pretende remover a conta %1$s?</string>
   <string name="confirmation_remove_public_share_title">Remover hiperligação</string>
-  <string name="confirmation_remove_public_share_message">Tem a certeza que deseja remover %1$s ?</string>
+  <string name="confirmation_remove_share_message">Tem a certeza que deseja remover %1$s ?</string>
   <string name="remove_success_msg">Remoção bem sucedida</string>
   <string name="remove_fail_msg">Remoção falhou</string>
   <string name="rename_dialog_title">Introduza um novo nome</string>

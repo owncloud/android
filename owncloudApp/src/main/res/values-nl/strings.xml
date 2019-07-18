@@ -256,7 +256,7 @@ Hieronder staan de lokale bestanden en de externe bestanden in %5$s waar ze naar
   <string name="confirmation_remove_local">Alleen lokaal</string>
   <string name="confirmation_remove_account_alert">Wilt u werkelijk account %1$s verwijderen?</string>
   <string name="confirmation_remove_public_share_title">Verwijderen link</string>
-  <string name="confirmation_remove_public_share_message">Wilt u %1$s werkelijk verwijderen?</string>
+  <string name="confirmation_remove_share_message">Wilt u %1$s werkelijk verwijderen?</string>
   <string name="remove_success_msg">Succesvol verwijderd</string>
   <string name="remove_fail_msg">Verwijdering kon niet voltooid worden</string>
   <string name="rename_dialog_title">Voer een nieuwe naam in</string>

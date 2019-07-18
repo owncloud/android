@@ -47,7 +47,6 @@ import com.owncloud.android.presentation.ui.sharing.fragments.PublicShareDialogF
 import com.owncloud.android.presentation.ui.sharing.fragments.SearchShareesFragment
 import com.owncloud.android.presentation.ui.sharing.fragments.ShareFileFragment
 import com.owncloud.android.presentation.ui.sharing.fragments.ShareFragmentListener
-import com.owncloud.android.presentation.viewmodels.capabilities.OCCapabilityViewModel
 import com.owncloud.android.presentation.viewmodels.sharing.OCShareViewModel
 import com.owncloud.android.ui.activity.FileActivity
 import com.owncloud.android.ui.dialog.RemoveShareDialogFragment
@@ -60,30 +59,6 @@ import org.koin.core.parameter.parametersOf
  */
 class ShareActivity : FileActivity(), ShareFragmentListener {
     /**
-     * Shortcut to get access to the [ShareFileFragment] instance, if any
-     *
-     * @return A [ShareFileFragment] instance, or null
-     */
-    private val shareFileFragment: ShareFileFragment?
-        get() = supportFragmentManager.findFragmentByTag(TAG_SHARE_FRAGMENT) as ShareFileFragment
-
-    /**
-     * Shortcut to get access to the [SearchShareesFragment] instance, if any
-     *
-     * @return A [SearchShareesFragment] instance, or null
-     */
-    private val searchShareesFragment: SearchShareesFragment?
-        get() = supportFragmentManager.findFragmentByTag(TAG_SEARCH_FRAGMENT) as SearchShareesFragment?
-
-    /**
-     * Shortcut to get access to the [PublicShareDialogFragment] instance, if any
-     *
-     * @return A [PublicShareDialogFragment] instance, or null
-     */
-    private val publicShareFragment: PublicShareDialogFragment?
-        get() = supportFragmentManager.findFragmentByTag(TAG_PUBLIC_SHARE_DIALOG_FRAGMENT) as PublicShareDialogFragment?
-
-    /**
      * Shortcut to get access to the [EditPrivateShareFragment] instance, if any
      *
      * @return A [EditPrivateShareFragment] instance, or null
@@ -94,12 +69,6 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
     private val ocShareViewModel: OCShareViewModel by viewModel {
         parametersOf(
             file.remotePath,
-            account
-        )
-    }
-
-    private val ocCapabilityViewModel: OCCapabilityViewModel by viewModel {
-        parametersOf(
             account
         )
     }
@@ -125,6 +94,19 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
         }
     }
 
+    public override fun onStop() {
+        super.onStop()
+    }
+
+    override fun startObserving() {
+        observePrivateShareToEdit()
+        observePrivateShareEdition()
+    }
+
+    /**************************************************************************************************************
+     *********************************************** PRIVATE SHARES ***********************************************
+     **************************************************************************************************************/
+
     override fun onNewIntent(intent: Intent) {
         when (intent.action) {
             Intent.ACTION_SEARCH -> {  // Verify the action and get the query
@@ -142,187 +124,6 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
             }
             else -> Log_OC.e(TAG, "Unexpected intent $intent")
         }
-    }
-
-    public override fun onStop() {
-        super.onStop()
-    }
-
-    override fun startObserving() {
-        observeCapabilities()
-        observeShares()
-        observePrivateShareToEdit()
-        observePrivateShareEdition()
-        observePublicShareCreation()
-        observePublicShareEdition()
-        observeShareDeletion()
-    }
-
-    override fun observeCapabilities(shouldFetchFromNetwork: Boolean) {
-        ocCapabilityViewModel.capabilities.observe(
-            this,
-            Observer { uiResult ->
-                when (uiResult?.status) {
-                    Status.SUCCESS -> {
-                        if (publicShareFragment != null) {
-                            publicShareFragment?.updateCapabilities(uiResult.data)
-                        } else {
-                            shareFileFragment?.updateCapabilities(uiResult.data)
-                        }
-                        dismissLoadingDialog()
-                    }
-                    Status.ERROR -> {
-                        if (publicShareFragment != null) {
-                            publicShareFragment?.showError(uiResult.errorMessage!!)
-                        } else {
-                            Snackbar.make(
-                                findViewById(android.R.id.content),
-                                uiResult.errorMessage!!,
-                                Snackbar.LENGTH_SHORT
-                            ).show()
-                            shareFileFragment?.updateCapabilities(uiResult.data)
-                        }
-                        dismissLoadingDialog()
-                    }
-                    Status.LOADING -> {
-                        showLoadingDialog(R.string.common_loading)
-                        if (publicShareFragment != null) {
-                            publicShareFragment?.updateCapabilities(uiResult.data)
-                        } else {
-                            shareFileFragment?.updateCapabilities(uiResult.data)
-                        }
-                    }
-                    else -> {
-                        Log.d(TAG, "Unknown status when loading capabilities in account ${account?.name}")
-                    }
-                }
-            }
-        )
-    }
-
-    override fun observeShares() {
-        ocShareViewModel.shares.observe(
-            this,
-            Observer { uiResult ->
-                when (uiResult?.status) {
-                    Status.SUCCESS -> {
-                        updateSharesInFragments(uiResult.data)
-                        dismissLoadingDialog()
-                    }
-                    Status.ERROR -> {
-                        Snackbar.make(
-                            findViewById(android.R.id.content),
-                            uiResult.errorMessage!!,
-                            Snackbar.LENGTH_SHORT
-                        ).show()
-                        updateSharesInFragments(uiResult.data)
-                        dismissLoadingDialog()
-                    }
-                    Status.LOADING -> {
-                        showLoadingDialog(R.string.common_loading)
-                        updateSharesInFragments(uiResult.data)
-                    }
-                    else -> {
-                        Log.d(
-                            TAG, "Unknown status when loading public shares for file ${file?.fileName} in account" +
-                                    "${account?.name}"
-                        )
-                    }
-                }
-            }
-        )
-    }
-
-    private fun updateSharesInFragments(shares: List<OCShareEntity>?) {
-        shares?.filter { share ->
-            share.shareType == ShareType.USER.value ||
-                    share.shareType == ShareType.GROUP.value ||
-                    share.shareType == ShareType.FEDERATED.value
-        }.also { privateShares ->
-            if (shareFileFragment != null && shareFileFragment!!.isAdded) {
-                shareFileFragment?.updatePrivateShares(privateShares as ArrayList<OCShareEntity>)
-            }
-            if (searchShareesFragment != null && searchShareesFragment!!.isAdded) {
-                searchShareesFragment?.updatePrivateShares(privateShares as ArrayList<OCShareEntity>)
-            }
-        }
-
-        shares?.filter { share ->
-            share.shareType == ShareType.PUBLIC_LINK.value
-        }.also { publicShares ->
-            shareFileFragment?.updatePublicShares(publicShares as ArrayList<OCShareEntity>)
-        }
-    }
-
-    private fun observeShareDeletion() {
-        ocShareViewModel.shareDeletionStatus.observe(
-            this,
-            Observer { uiResult ->
-                when (uiResult?.status) {
-                    Status.SUCCESS -> {
-                        publicShareFragment?.dismiss()
-                    }
-                    Status.ERROR -> {
-                        publicShareFragment?.showError(uiResult.errorMessage!!)
-                        dismissLoadingDialog()
-                    }
-                    Status.LOADING -> {
-                        showLoadingDialog(R.string.common_loading)
-                    }
-                    else -> {
-                        Log.d(
-                            TAG, "Unknown status when removing public share"
-                        )
-                    }
-                }
-            }
-        )
-    }
-
-    override fun removeShare(shareRemoteId: Long) {
-        ocShareViewModel.deleteShare(
-            shareRemoteId
-        )
-    }
-
-    /**************************************************************************************************************
-     *********************************************** PRIVATE SHARES ***********************************************
-     **************************************************************************************************************/
-
-    override fun observePrivateShareCreation() {
-        ocShareViewModel.privateShareCreationStatus.observe(
-            this,
-            Observer { uiResult ->
-                when (uiResult?.status) {
-                    Status.ERROR -> {
-                        Snackbar.make(
-                            findViewById(android.R.id.content),
-                            uiResult.errorMessage!!,
-                            Snackbar.LENGTH_SHORT
-                        ).show()
-                    }
-                    Status.LOADING -> {
-                        showLoadingDialog(R.string.common_loading)
-                    }
-                    else -> {
-                        Log.d(
-                            TAG, "Unknown status when creating private share"
-                        )
-                    }
-                }
-            }
-        )
-    }
-
-    override fun showSearchUsersAndGroups() {
-        val searchFragment = SearchShareesFragment.newInstance(file, account)
-        val ft = supportFragmentManager.beginTransaction()
-        ft.replace(
-            R.id.share_fragment_container, searchFragment,
-            TAG_SEARCH_FRAGMENT
-        )
-        ft.addToBackStack(null)    // BACK button will recover the ShareFragment
-        ft.commit()
     }
 
     private fun createPrivateShare(shareeName: String, dataAuthority: String?) {
@@ -362,6 +163,42 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
             else
                 RemoteShare.MAXIMUM_PERMISSIONS_FOR_FILE
         }
+    }
+
+    override fun observePrivateShareCreation() {
+        ocShareViewModel.privateShareCreationStatus.observe(
+            this,
+            Observer { uiResult ->
+                when (uiResult?.status) {
+                    Status.ERROR -> {
+                        Snackbar.make(
+                            findViewById(android.R.id.content),
+                            uiResult.errorMessage!!,
+                            Snackbar.LENGTH_SHORT
+                        ).show()
+                    }
+                    Status.LOADING -> {
+                        showLoadingDialog(R.string.common_loading)
+                    }
+                    else -> {
+                        Log.d(
+                            TAG, "Unknown status when creating private share"
+                        )
+                    }
+                }
+            }
+        )
+    }
+
+    override fun showSearchUsersAndGroups() {
+        val searchFragment = SearchShareesFragment.newInstance(file, account)
+        val ft = supportFragmentManager.beginTransaction()
+        ft.replace(
+            R.id.share_fragment_container, searchFragment,
+            TAG_SEARCH_FRAGMENT
+        )
+        ft.addToBackStack(null)    // BACK button will recover the ShareFragment
+        ft.commit()
     }
 
     private fun observePrivateShareEdition() {
@@ -442,7 +279,6 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
      *********************************************** PUBLIC SHARES ************************************************
      **************************************************************************************************************/
 
-    // Share creation
     override fun showAddPublicShare(defaultLinkName: String) {
         // DialogFragment.show() will take care of adding the fragment
         // in a transaction.  We also want to remove any currently showing
@@ -451,6 +287,7 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
         // Create and show the dialog
         val createPublicShareFragment = PublicShareDialogFragment.newInstanceToCreate(
             file,
+            account,
             defaultLinkName
         )
 
@@ -460,103 +297,17 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
         )
     }
 
-    private fun observePublicShareCreation() {
-        ocShareViewModel.publicShareCreationStatus.observe(
-            this,
-            Observer { uiResult ->
-                when (uiResult?.status) {
-                    Status.SUCCESS -> {
-                        publicShareFragment?.dismiss()
-                    }
-                    Status.ERROR -> {
-                        publicShareFragment?.showError(uiResult.errorMessage!!)
-                        dismissLoadingDialog()
-                    }
-                    Status.LOADING -> {
-                        showLoadingDialog(R.string.common_loading)
-                    }
-                    else -> {
-                        Log.d(
-                            TAG, "Unknown status when creating public share"
-                        )
-                    }
-                }
-            }
-        )
-    }
-
-    override fun createPublicShare(
-        permissions: Int,
-        name: String,
-        password: String,
-        expirationTimeInMillis: Long,
-        publicUpload: Boolean
-    ) {
-        ocShareViewModel.insertPublicShare(
-            file.remotePath,
-            permissions,
-            name,
-            password,
-            expirationTimeInMillis,
-            publicUpload
-        )
-    }
-
-    // Share edition
-    private fun observePublicShareEdition() {
-        ocShareViewModel.publicShareEditionStatus.observe(
-            this,
-            Observer { uiResult ->
-                when (uiResult?.status) {
-                    Status.SUCCESS -> {
-                        publicShareFragment?.dismiss()
-                    }
-                    Status.ERROR -> {
-                        publicShareFragment?.showError(uiResult.errorMessage!!)
-                        dismissLoadingDialog()
-                    }
-                    Status.LOADING -> {
-                        showLoadingDialog(R.string.common_loading)
-                    }
-                    else -> {
-                        Log.d(
-                            TAG, "Unknown status when creating public share"
-                        )
-                    }
-                }
-            }
-        )
-    }
-
     override fun showEditPublicShare(share: OCShareEntity) {
         // Create and show the dialog.
-        val editPublicShareFragment = PublicShareDialogFragment.newInstanceToUpdate(file, share)
+        val editPublicShareFragment = PublicShareDialogFragment.newInstanceToUpdate(file, account, share)
         showDialogFragment(
             editPublicShareFragment,
             TAG_PUBLIC_SHARE_DIALOG_FRAGMENT
         )
     }
 
-    override fun updatePublicShare(
-        remoteId: Long,
-        name: String,
-        password: String?,
-        expirationDateInMillis: Long,
-        permissions: Int,
-        publicUpload: Boolean
-    ) {
-        ocShareViewModel.updatePublicShare(
-            remoteId,
-            name,
-            password,
-            expirationDateInMillis,
-            permissions,
-            publicUpload
-        )
-    }
-
-    override fun showRemovePublicShare(share: OCShareEntity) {
-        val removePublicShareFragment = RemoveShareDialogFragment.newInstance(share)
+    override fun showRemoveShare(share: OCShareEntity) {
+        val removePublicShareFragment = RemoveShareDialogFragment.newInstance(share, account)
         showDialogFragment(
             removePublicShareFragment,
             TAG_REMOVE_SHARE_DIALOG_FRAGMENT

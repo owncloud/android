@@ -28,20 +28,37 @@ package com.owncloud.android.ui.dialog
  * Triggers the removal according to the user response.
  */
 
+import android.accounts.Account
 import android.app.Dialog
 import android.os.Bundle
+import android.util.Log
+import androidx.lifecycle.Observer
 import com.owncloud.android.R
 import com.owncloud.android.data.sharing.shares.db.OCShareEntity
 import com.owncloud.android.lib.common.utils.Log_OC
-import com.owncloud.android.presentation.ui.sharing.fragments.ShareFragmentListener
+import com.owncloud.android.lib.resources.shares.ShareType
+import com.owncloud.android.presentation.UIResult.Status
+import com.owncloud.android.presentation.viewmodels.sharing.OCShareViewModel
+import com.owncloud.android.ui.activity.BaseActivity
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment.ConfirmationDialogFragmentListener
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
 class RemoveShareDialogFragment : ConfirmationDialogFragment(), ConfirmationDialogFragmentListener {
     private var targetShare: OCShareEntity? = null
+    private var account: Account? = null
+
+    private val ocShareViewModel: OCShareViewModel by viewModel {
+        parametersOf(
+            targetShare?.path,
+            account
+        )
+    }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = super.onCreateDialog(savedInstanceState)
         targetShare = arguments!!.getParcelable(ARG_TARGET_SHARE)
+        account = arguments!!.getParcelable(ARG_ACCOUNT)
 
         setOnConfirmationListener(this)
 
@@ -52,9 +69,8 @@ class RemoveShareDialogFragment : ConfirmationDialogFragment(), ConfirmationDial
      * Performs the removal of the target share, both locally and in the server.
      */
     override fun onConfirmation(callerTag: String) {
-        val listener = activity as ShareFragmentListener?
-        Log_OC.d(TAG, "Removing public share " + targetShare!!.name)
-        listener?.removeShare(targetShare?.remoteId!!)
+        Log_OC.d(TAG, "Removing share " + targetShare!!.name)
+        ocShareViewModel.deleteShare(targetShare?.remoteId!!)
     }
 
     override fun onCancel(callerTag: String) {
@@ -65,35 +81,76 @@ class RemoveShareDialogFragment : ConfirmationDialogFragment(), ConfirmationDial
         // nothing to do here
     }
 
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        observeShareDeletion()
+    }
+
+    private fun observeShareDeletion() {
+        ocShareViewModel.shareDeletionStatus.observe(
+            this,
+            Observer { uiResult ->
+                when (uiResult?.status) {
+                    Status.SUCCESS -> {
+                        dismiss()
+                    }
+                    Status.LOADING -> {
+                        (activity as BaseActivity).showLoadingDialog(R.string.common_loading)
+                    }
+                    else -> {
+                        Log.d(
+                            TAG, "Unknown status when removing share"
+                        )
+                    }
+                }
+            }
+        )
+    }
+
     companion object {
 
         private val TAG = RemoveShareDialogFragment::class.java.name
 
         private const val ARG_TARGET_SHARE = "TARGET_SHARE"
+        private const val ARG_ACCOUNT = "ACCOUNT"
 
         /**
          * Public factory method to create new RemoveFilesDialogFragment instances.
          *
          * @param share           [OCShareEntity] to remove.
+         * @param account         [Account] which the share belongs to
          * @return                Dialog ready to show.
          */
-        fun newInstance(share: OCShareEntity): RemoveShareDialogFragment {
+        fun newInstance(share: OCShareEntity, account: Account): RemoveShareDialogFragment {
             val frag = RemoveShareDialogFragment()
             val args = Bundle()
 
             args.putInt(
                 ARG_MESSAGE_RESOURCE_ID,
-                R.string.confirmation_remove_public_share_message
+                R.string.confirmation_remove_share_message
             )
+
+            val privateShareName = if (share.sharedWithAdditionalInfo!!.isEmpty()) {
+                share.sharedWithDisplayName
+            } else {
+                share.sharedWithDisplayName + " (" + share.sharedWithAdditionalInfo + ")"
+            }
+
             args.putStringArray(
                 ARG_MESSAGE_ARGUMENTS,
-                arrayOf(if (share.name!!.isNotEmpty()) share.name!! else share.token!!)
+                arrayOf(if (share.name!!.isNotEmpty()) share.name!! else privateShareName)
             )
-            args.putInt(ARG_TITLE_ID, R.string.confirmation_remove_public_share_title)
+            args.putInt(
+                ARG_TITLE_ID,
+                if (share.shareType == ShareType.PUBLIC_LINK.value)
+                    R.string.confirmation_remove_public_share_title else
+                    R.string.confirmation_remove_private_share_title
+            )
             args.putInt(ARG_POSITIVE_BTN_RES, R.string.common_yes)
             args.putInt(ARG_NEUTRAL_BTN_RES, R.string.common_no)
             args.putInt(ARG_NEGATIVE_BTN_RES, -1)
             args.putParcelable(ARG_TARGET_SHARE, share)
+            args.putParcelable(ARG_ACCOUNT, account)
             frag.arguments = args
 
             return frag

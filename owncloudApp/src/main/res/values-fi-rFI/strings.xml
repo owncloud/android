@@ -250,7 +250,7 @@
   <string name="confirmation_remove_local">Vain paikallinen</string>
   <string name="confirmation_remove_account_alert">Haluatko varmasti poistaa tilin %1$s?</string>
   <string name="confirmation_remove_public_share_title">Poista linkki</string>
-  <string name="confirmation_remove_public_share_message">Haluatko varmasti poistaa kohteen %1$s?</string>
+  <string name="confirmation_remove_share_message">Haluatko varmasti poistaa kohteen %1$s?</string>
   <string name="remove_success_msg">Poistettu onnistuneesti</string>
   <string name="remove_fail_msg">Poistamista ei voitu suorittaa loppuun asti</string>
   <string name="rename_dialog_title">Anna uusi nimi</string>

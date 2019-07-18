@@ -188,7 +188,7 @@
   <string name="confirmation_remove_file_alert">هل تريد حقاً حذف %1$s ؟</string>
   <string name="confirmation_remove_folder_alert">هل ترغب في حذف %1$s و جهات الإتصال التابعة له؟ </string>
   <string name="confirmation_remove_local">محليا فقط</string>
-  <string name="confirmation_remove_public_share_message">هل تريد حقاً حذف %1$s ؟</string>
+  <string name="confirmation_remove_share_message">هل تريد حقاً حذف %1$s ؟</string>
   <string name="remove_success_msg">تم الحذف بنجاح</string>
   <string name="remove_fail_msg">فشل الحذف</string>
   <string name="rename_dialog_title">أدخل اسما جديدا</string>

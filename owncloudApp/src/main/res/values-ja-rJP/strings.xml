@@ -260,7 +260,7 @@
   <string name="confirmation_remove_local">ローカルのみ</string>
   <string name="confirmation_remove_account_alert">本当にアカウント %1$s を削除しますか？</string>
   <string name="confirmation_remove_public_share_title">リンクを削除</string>
-  <string name="confirmation_remove_public_share_message">本当に %1$s を削除しますか？</string>
+  <string name="confirmation_remove_share_message">本当に %1$s を削除しますか？</string>
   <string name="remove_success_msg">削除に成功しました</string>
   <string name="remove_fail_msg">削除を完了できませんでした</string>
   <string name="rename_dialog_title">新しい名前を入力</string>
