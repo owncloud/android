@@ -219,7 +219,7 @@
   <string name="confirmation_remove_file_alert">¿De xuru quies desaniciar %1$s?</string>
   <string name="confirmation_remove_folder_alert">¿De xuru quies desaniciar %1$s y los sos conteníos?</string>
   <string name="confirmation_remove_local">Namái llocal</string>
-  <string name="confirmation_remove_public_share_message">¿De xuru quies desaniciar %1$s?</string>
+  <string name="confirmation_remove_share_message">¿De xuru quies desaniciar %1$s?</string>
   <string name="remove_success_msg">Desaniciu correutu</string>
   <string name="remove_fail_msg">Fallu nel desaniciu </string>
   <string name="rename_dialog_title">Introduz un nome nuevu</string>

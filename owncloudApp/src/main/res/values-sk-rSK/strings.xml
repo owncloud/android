@@ -186,7 +186,7 @@
   <string name="confirmation_remove_file_alert">Naozaj chcete odstrániť %1$s?</string>
   <string name="confirmation_remove_folder_alert">Naozaj chcete odstrániť %1$s a jeho obsah?</string>
   <string name="confirmation_remove_local">Iba lokálne</string>
-  <string name="confirmation_remove_public_share_message">Naozaj chcete odstrániť %1$s?</string>
+  <string name="confirmation_remove_share_message">Naozaj chcete odstrániť %1$s?</string>
   <string name="remove_success_msg">Úspešne odstránené</string>
   <string name="remove_fail_msg">Odstránenie zlyhalo</string>
   <string name="rename_dialog_title">Zadajte nové meno</string>

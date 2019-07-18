@@ -251,7 +251,7 @@
   <string name="confirmation_remove_local">Лише локально</string>
   <string name="confirmation_remove_account_alert">Ви дійсно бажаєте вилучити рахунок %1$s?</string>
   <string name="confirmation_remove_public_share_title">Видалити посилання</string>
-  <string name="confirmation_remove_public_share_message">Ви дійсно бажаєте видалити %1$s?</string>
+  <string name="confirmation_remove_share_message">Ви дійсно бажаєте видалити %1$s?</string>
   <string name="remove_success_msg">Успішно видалено</string>
   <string name="remove_fail_msg">Видалення не вдалось</string>
   <string name="rename_dialog_title">Введіть нове ім\'я</string>

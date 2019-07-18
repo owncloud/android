@@ -282,7 +282,7 @@
   <string name="confirmation_remove_local">Vetëm vendorja</string>
   <string name="confirmation_remove_account_alert">Doni vërtet të hiqet llogaria %1$s?</string>
   <string name="confirmation_remove_public_share_title">Hiqe lidhjen</string>
-  <string name="confirmation_remove_public_share_message">Doni vërtet të hiqet %1$s?</string>
+  <string name="confirmation_remove_share_message">Doni vërtet të hiqet %1$s?</string>
   <string name="remove_success_msg">Heqja doli me sukses</string>
   <string name="remove_fail_msg">Heqja dështoi</string>
   <string name="rename_dialog_title">Jepni një emër të ri</string>

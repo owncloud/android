@@ -203,7 +203,7 @@
   <string name="confirmation_remove_file_alert">Желите да уклоните %1$s?</string>
   <string name="confirmation_remove_folder_alert">Желите да уклоните %1$s и њен садржај?</string>
   <string name="confirmation_remove_local">Само локално</string>
-  <string name="confirmation_remove_public_share_message">Желите да уклоните %1$s?</string>
+  <string name="confirmation_remove_share_message">Желите да уклоните %1$s?</string>
   <string name="remove_success_msg">Уклањање успешно</string>
   <string name="remove_fail_msg">Уклањање неуспешно</string>
   <string name="rename_dialog_title">Унесите нов назив</string>
