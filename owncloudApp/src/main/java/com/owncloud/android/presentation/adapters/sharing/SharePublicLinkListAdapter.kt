@@ -70,7 +70,7 @@ class SharePublicLinkListAdapter(
             view.getPublicLinkButton.setOnClickListener { listener.copyOrSendPublicLink(publicLinks!![position]) }
 
             // bind listener to delete
-            view.deletePublicLinkButton.setOnClickListener { listener.removePublicShare(publicLinks!![position]) }
+            view.deletePublicLinkButton.setOnClickListener { listener.removeShare(publicLinks!![position]) }
 
             // bind listener to edit
             view.editPublicLinkButton.setOnClickListener { listener.editPublicShare(publicLinks!![position]) }
@@ -82,7 +82,7 @@ class SharePublicLinkListAdapter(
     interface SharePublicLinkAdapterListener {
         fun copyOrSendPublicLink(share: OCShareEntity)
 
-        fun removePublicShare(share: OCShareEntity)
+        fun removeShare(share: OCShareEntity)
 
         fun editPublicShare(share: OCShareEntity)
     }

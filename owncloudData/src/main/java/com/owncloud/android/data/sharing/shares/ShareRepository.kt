@@ -30,6 +30,8 @@ interface ShareRepository {
      ******************************************* PRIVATE SHARES *******************************************
      ******************************************************************************************************/
 
+    fun getPrivateSharesAsLiveData(filePath: String, accountName: String): LiveData<List<OCShareEntity>>
+
     fun insertPrivateShare(
         filePath: String,
         shareType: ShareType?,

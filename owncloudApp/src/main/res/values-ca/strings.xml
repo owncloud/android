@@ -263,7 +263,7 @@
   <string name="confirmation_remove_local">Només local</string>
   <string name="confirmation_remove_account_alert">Segur que vols borrar el compte %1$s?</string>
   <string name="confirmation_remove_public_share_title">Borrar l\'enllaç</string>
-  <string name="confirmation_remove_public_share_message">Esteu segur que voleu eliminar %1$s?</string>
+  <string name="confirmation_remove_share_message">Esteu segur que voleu eliminar %1$s?</string>
   <string name="remove_success_msg">L\'eliminació ha tingut èxit</string>
   <string name="remove_fail_msg">No s\'ha pogut completar l\'eliminació</string>
   <string name="rename_dialog_title">Introdueix un nom nou</string>

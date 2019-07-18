@@ -284,7 +284,7 @@
   <string name="confirmation_remove_local">Nur lokal</string>
   <string name="confirmation_remove_account_alert">Möchtest du das Konto von %1$s wirklich löschen?</string>
   <string name="confirmation_remove_public_share_title">Link entfernen</string>
-  <string name="confirmation_remove_public_share_message">Möchtest Du %1$s wirklich löschen?</string>
+  <string name="confirmation_remove_share_message">Möchtest Du %1$s wirklich löschen?</string>
   <string name="remove_success_msg">Erfolgreich gelöscht</string>
   <string name="remove_fail_msg">Der Löschvorgang konnte nicht beendet werden</string>
   <string name="rename_dialog_title">Gib einen neuen Namen ein</string>
