@@ -110,7 +110,7 @@ class OCShareRepository(
         )
     }
 
-    override fun deletePublicShare(
+    override fun deleteShare(
         remoteId: Long
     ): DataResult<Unit> {
         remoteShareDataSource.deleteShare(

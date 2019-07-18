@@ -29,7 +29,7 @@ import com.owncloud.android.domain.sharing.shares.OCShareRepository
 import com.owncloud.android.lib.common.OwnCloudAccount
 import com.owncloud.android.lib.common.OwnCloudClientManagerFactory
 
-class DeletePublicShareUseCase(
+class DeleteShareUseCase(
     context: Context,
     val account: Account,
     private val shareRepository: ShareRepository = OCShareRepository(
@@ -41,9 +41,9 @@ class DeletePublicShareUseCase(
             )
         )
     )
-) : BaseUseCase<Unit, DeletePublicShareUseCase.Params>() {
+) : BaseUseCase<Unit, DeleteShareUseCase.Params>() {
     override fun run(params: Params): UseCaseResult<Unit> {
-        shareRepository.deletePublicShare(
+        shareRepository.deleteShare(
             params.remoteId
         ).also { dataResult ->
             if (!dataResult.isSuccess()) {

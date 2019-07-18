@@ -191,7 +191,7 @@ class DeletePublicShareTest {
         loadSharesSuccessfully(existingPublicShare)
 
         every {
-            ocShareViewModel.deletePublicShare(any())
+            ocShareViewModel.deleteShare(any())
         } returns MutableLiveData<DataResult<Unit>>().apply {
             postValue(DataResult.success())
 
@@ -219,7 +219,7 @@ class DeletePublicShareTest {
         loadSharesSuccessfully(arrayListOf(existingPublicShare))
 
         every {
-            ocShareViewModel.deletePublicShare(any())
+            ocShareViewModel.deleteShare(any())
         } returns MutableLiveData<DataResult<Unit>>().apply {
             postValue(DataResult.success())
         }
@@ -264,7 +264,7 @@ class DeletePublicShareTest {
         loadSharesSuccessfully(arrayListOf(existingPublicShare))
 
         every {
-            ocShareViewModel.deletePublicShare(any())
+            ocShareViewModel.deleteShare(any())
         } returns MutableLiveData<DataResult<Unit>>().apply {
             postValue(
                 DataResult.error(
