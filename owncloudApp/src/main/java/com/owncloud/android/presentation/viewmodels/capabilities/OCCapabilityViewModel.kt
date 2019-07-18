@@ -66,35 +66,35 @@ class OCCapabilityViewModel(
     init {
         capabilitiesLiveData?.observeForever(capabilitiesObserver)
 
-        viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                refreshCapabilities()
-            }
-        }
+        refreshCapabilitiesFromNetwork()
     }
 
-    private fun refreshCapabilities() {
-        _capabilities.postValue(
-            UIResult.loading(capabilitiesLiveData?.value)
-        )
-
-        refreshCapabilitiesUseCase.execute(
-            RefreshCapabilitiesUseCase.Params(
-                accountName = account.name
-            )
-        ).also { useCaseResult ->
-            if (!useCaseResult.isSuccess()) {
+    private fun refreshCapabilitiesFromNetwork() {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
                 _capabilities.postValue(
-                    UIResult.error(
-                        capabilitiesLiveData?.value,
-                        errorMessage = useCaseResult.msg ?: ErrorMessageAdapter.getResultMessage(
-                            useCaseResult.code,
-                            useCaseResult.exception,
-                            OperationType.GET_CAPABILITIES,
-                            context.resources
-                        )
-                    )
+                    UIResult.loading(capabilitiesLiveData?.value)
                 )
+
+                refreshCapabilitiesUseCase.execute(
+                    RefreshCapabilitiesUseCase.Params(
+                        accountName = account.name
+                    )
+                ).also { useCaseResult ->
+                    if (!useCaseResult.isSuccess()) {
+                        _capabilities.postValue(
+                            UIResult.error(
+                                capabilitiesLiveData?.value,
+                                errorMessage = useCaseResult.msg ?: ErrorMessageAdapter.getResultMessage(
+                                    useCaseResult.code,
+                                    useCaseResult.exception,
+                                    OperationType.GET_CAPABILITIES,
+                                    context.resources
+                                )
+                            )
+                        )
+                    }
+                }
             }
         }
     }
