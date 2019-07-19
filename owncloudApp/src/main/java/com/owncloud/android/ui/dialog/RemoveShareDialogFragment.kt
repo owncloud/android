@@ -30,6 +30,7 @@ package com.owncloud.android.ui.dialog
 
 import android.accounts.Account
 import android.app.Dialog
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.Observer
@@ -38,8 +39,8 @@ import com.owncloud.android.data.sharing.shares.db.OCShareEntity
 import com.owncloud.android.lib.common.utils.Log_OC
 import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.presentation.UIResult.Status
+import com.owncloud.android.presentation.ui.sharing.fragments.ShareFragmentListener
 import com.owncloud.android.presentation.viewmodels.sharing.OCShareViewModel
-import com.owncloud.android.ui.activity.BaseActivity
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment.ConfirmationDialogFragmentListener
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -47,6 +48,11 @@ import org.koin.core.parameter.parametersOf
 class RemoveShareDialogFragment : ConfirmationDialogFragment(), ConfirmationDialogFragmentListener {
     private var targetShare: OCShareEntity? = null
     private var account: Account? = null
+
+    /**
+     * Reference to parent listener
+     */
+    private var listener: ShareFragmentListener? = null
 
     private val ocShareViewModel: OCShareViewModel by viewModel {
         parametersOf(
@@ -86,6 +92,16 @@ class RemoveShareDialogFragment : ConfirmationDialogFragment(), ConfirmationDial
         observeShareDeletion()
     }
 
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+
+        try {
+            listener = activity as ShareFragmentListener?
+        } catch (e: IllegalStateException) {
+            throw IllegalStateException(activity!!.toString() + " must implement OnShareFragmentInteractionListener")
+        }
+    }
+
     private fun observeShareDeletion() {
         ocShareViewModel.shareDeletionStatus.observe(
             this,
@@ -95,7 +111,7 @@ class RemoveShareDialogFragment : ConfirmationDialogFragment(), ConfirmationDial
                         dismiss()
                     }
                     Status.LOADING -> {
-                        (activity as BaseActivity).showLoadingDialog(R.string.common_loading)
+                        listener?.showLoading()
                     }
                     else -> {
                         Log.d(

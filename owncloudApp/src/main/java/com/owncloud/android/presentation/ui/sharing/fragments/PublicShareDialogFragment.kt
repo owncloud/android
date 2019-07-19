@@ -50,7 +50,6 @@ import com.owncloud.android.lib.resources.status.CapabilityBooleanType
 import com.owncloud.android.lib.resources.status.OwnCloudVersion
 import com.owncloud.android.presentation.UIResult.Status
 import com.owncloud.android.presentation.viewmodels.sharing.OCShareViewModel
-import com.owncloud.android.ui.activity.BaseActivity
 import com.owncloud.android.ui.dialog.ExpirationDatePickerDialogFragment
 import com.owncloud.android.utils.DateUtils
 import kotlinx.android.synthetic.main.share_public_dialog.*
@@ -449,10 +448,10 @@ class PublicShareDialogFragment : DialogFragment() {
                     }
                     Status.ERROR -> {
                         showError(uiResult.errorMessage!!)
-                        (activity as BaseActivity).dismissLoadingDialog()
+                        listener?.dismissLoading()
                     }
                     Status.LOADING -> {
-                        (activity as BaseActivity).showLoadingDialog(R.string.common_loading)
+                        listener?.showLoading()
                     }
                     else -> {
                         Log.d(
@@ -474,10 +473,10 @@ class PublicShareDialogFragment : DialogFragment() {
                     }
                     Status.ERROR -> {
                         showError(uiResult.errorMessage!!)
-                        (activity as BaseActivity).dismissLoadingDialog()
+                        listener?.dismissLoading()
                     }
                     Status.LOADING -> {
-                        (activity as BaseActivity).showLoadingDialog(R.string.common_loading)
+                        listener?.showLoading()
                     }
                     else -> {
                         Log.d(
