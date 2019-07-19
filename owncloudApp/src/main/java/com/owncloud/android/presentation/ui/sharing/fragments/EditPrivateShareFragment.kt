@@ -25,6 +25,7 @@ package com.owncloud.android.presentation.ui.sharing.fragments
 import android.accounts.Account
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -33,6 +34,7 @@ import android.widget.CompoundButton
 import androidx.appcompat.widget.SwitchCompat
 import androidx.core.view.isGone
 import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.Observer
 import com.owncloud.android.R
 import com.owncloud.android.authentication.AccountUtils
 import com.owncloud.android.data.sharing.shares.db.OCShareEntity
@@ -41,9 +43,13 @@ import com.owncloud.android.lib.common.utils.Log_OC
 import com.owncloud.android.lib.resources.shares.RemoteShare
 import com.owncloud.android.lib.resources.shares.SharePermissionsBuilder
 import com.owncloud.android.lib.resources.shares.ShareType
+import com.owncloud.android.presentation.UIResult.Status
+import com.owncloud.android.presentation.viewmodels.sharing.OCShareViewModel
 import com.owncloud.android.utils.PreferenceUtils
 import kotlinx.android.synthetic.main.edit_share_layout.*
 import kotlinx.android.synthetic.main.edit_share_layout.view.*
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 import java.util.Locale
 
 /**
@@ -67,6 +73,13 @@ class EditPrivateShareFragment : DialogFragment() {
 
     /** Listener for changes on privilege checkboxes  */
     private var onPrivilegeChangeListener: CompoundButton.OnCheckedChangeListener? = null
+
+    private val ocShareViewModel: OCShareViewModel by viewModel {
+        parametersOf(
+            file?.remotePath,
+            account
+        )
+    }
 
     /**
      * {@inheritDoc}
@@ -97,7 +110,11 @@ class EditPrivateShareFragment : DialogFragment() {
         super.onActivityCreated(savedInstanceState)
         Log_OC.d(TAG, "onActivityCreated")
 
-        listener?.refreshPrivateShare(share?.remoteId!!)
+        // To observe the changes in a just updated share
+        refreshPrivateShare(share?.remoteId!!)
+        observePrivateShareToEdit()
+
+        observePrivateShareEdition()
     }
 
     /**
@@ -374,13 +391,44 @@ class EditPrivateShareFragment : DialogFragment() {
         }
     }
 
-    /**
-     * Updates the UI after the result of an update operation on the edited [RemoteShare] permissions.
-     *
-     */
-    fun updateShare(updatedShare: OCShareEntity?) {
-        share = updatedShare
-        refreshUiFromState()
+    private fun observePrivateShareToEdit() {
+        ocShareViewModel.privateShare.observe(
+            this,
+            Observer { uiResult ->
+                when (uiResult?.status) {
+                    Status.SUCCESS -> {
+                        updateShare(uiResult.data)
+                    }
+                    else -> {
+                        Log.d(
+                            TAG, "Unknown status when getting updated private share"
+                        )
+                    }
+                }
+            }
+        )
+    }
+
+    private fun observePrivateShareEdition() {
+        ocShareViewModel.privateShareEditionStatus.observe(
+            this,
+            Observer { uiResult ->
+                when (uiResult?.status) {
+                    Status.ERROR -> {
+                        showError(uiResult.errorMessage!!)
+                        listener?.dismissLoading()
+                    }
+                    Status.LOADING -> {
+                        listener?.showLoading()
+                    }
+                    else -> {
+                        Log.d(
+                            TAG, "Unknown status when editing private share"
+                        )
+                    }
+                }
+            }
+        )
     }
 
     /**
@@ -400,10 +448,20 @@ class EditPrivateShareFragment : DialogFragment() {
         }
         val permissions = spb.build()
 
-        listener?.updatePrivateShare(
-            share?.remoteId!!,
-            permissions
-        )
+        ocShareViewModel.updatePrivateShare(share?.remoteId!!, permissions)
+    }
+
+    private fun refreshPrivateShare(remoteId: Long) {
+        ocShareViewModel.refreshPrivateShare(remoteId)
+    }
+
+    /**
+     * Updates the UI after the result of an update operation on the edited [RemoteShare] permissions.
+     *
+     */
+    fun updateShare(updatedShare: OCShareEntity?) {
+        share = updatedShare
+        refreshUiFromState()
     }
 
     /**

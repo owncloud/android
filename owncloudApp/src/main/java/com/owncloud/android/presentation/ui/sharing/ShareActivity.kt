@@ -34,12 +34,9 @@ import com.google.android.material.snackbar.Snackbar
 import com.owncloud.android.R
 import com.owncloud.android.data.sharing.shares.db.OCShareEntity
 import com.owncloud.android.datamodel.OCFile
-import com.owncloud.android.lib.common.operations.RemoteOperation
-import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.common.utils.Log_OC
 import com.owncloud.android.lib.resources.shares.RemoteShare
 import com.owncloud.android.lib.resources.shares.ShareType
-import com.owncloud.android.operations.RemoveShareOperation
 import com.owncloud.android.presentation.UIResult.Status
 import com.owncloud.android.presentation.providers.sharing.UsersAndGroupsSearchProvider
 import com.owncloud.android.presentation.ui.sharing.fragments.EditPrivateShareFragment
@@ -116,15 +113,12 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
             )
             ft.commit()
         }
+
+        observePrivateShareCreation()
     }
 
     public override fun onStop() {
         super.onStop()
-    }
-
-    override fun startObserving() {
-        observePrivateShareToEdit()
-        observePrivateShareEdition()
     }
 
     override fun observeCapabilities() {
@@ -173,6 +167,18 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
      *********************************************** PRIVATE SHARES ***********************************************
      **************************************************************************************************************/
 
+    override fun showSearchUsersAndGroups() {
+        val searchFragment = SearchShareesFragment.newInstance(file, account)
+        val ft = supportFragmentManager.beginTransaction()
+        ft.replace(
+            R.id.share_fragment_container, searchFragment,
+            TAG_SEARCH_FRAGMENT
+        )
+        ft.addToBackStack(null)    // BACK button will recover the ShareFragment
+        ft.commit()
+    }
+
+    // Private share creation needs to be handled from here since is is carried out through intents
     override fun onNewIntent(intent: Intent) {
         when (intent.action) {
             Intent.ACTION_SEARCH -> {  // Verify the action and get the query
@@ -203,17 +209,18 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
         )
     }
 
-    override fun observePrivateShareCreation() {
+    private fun observePrivateShareCreation() {
         ocShareViewModel.privateShareCreationStatus.observe(
             this,
             Observer { uiResult ->
                 when (uiResult?.status) {
                     Status.ERROR -> {
                         Snackbar.make(
-                            findViewById(android.R.id.content),
+                            findViewById(android.R.id.content)!!,
                             uiResult.errorMessage!!,
                             Snackbar.LENGTH_SHORT
                         ).show()
+                        dismissLoadingDialog()
                     }
                     Status.LOADING -> {
                         showLoadingDialog(R.string.common_loading)
@@ -226,17 +233,6 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
                 }
             }
         )
-    }
-
-    override fun showSearchUsersAndGroups() {
-        val searchFragment = SearchShareesFragment.newInstance(file, account)
-        val ft = supportFragmentManager.beginTransaction()
-        ft.replace(
-            R.id.share_fragment_container, searchFragment,
-            TAG_SEARCH_FRAGMENT
-        )
-        ft.addToBackStack(null)    // BACK button will recover the ShareFragment
-        ft.commit()
     }
 
     private fun getAppropiatePermissions(shareType: ShareType?): Int {
@@ -307,35 +303,6 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
         )
     }
 
-    override fun updatePrivateShare(remoteId: Long, permissions: Int) {
-        ocShareViewModel.updatePrivateShare(
-            remoteId,
-            permissions
-        )
-    }
-
-    override fun observePrivateShareToEdit() {
-        ocShareViewModel.privateShare.observe(
-            this,
-            Observer { uiResult ->
-                when (uiResult?.status) {
-                    Status.SUCCESS -> {
-                        editPrivateShareFragment?.updateShare(uiResult.data)
-                    }
-                    else -> {
-                        Log.d(
-                            TAG, "Unknown status when getting updated private share"
-                        )
-                    }
-                }
-            }
-        )
-    }
-
-    override fun refreshPrivateShare(remoteId: Long) {
-        ocShareViewModel.refreshPrivateShare(remoteId)
-    }
-
     override fun copyOrSendPrivateLink(file: OCFile) {
         fileOperationsHelper.copyOrSendPrivateLink(file)
     }
@@ -371,6 +338,10 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
         )
     }
 
+    /**************************************************************************************************************
+     ************************************************** COMMON ****************************************************
+     **************************************************************************************************************/
+
     override fun showRemoveShare(share: OCShareEntity) {
         val removePublicShareFragment = RemoveShareDialogFragment.newInstance(share, account)
         showDialogFragment(
@@ -383,21 +354,6 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
         fileOperationsHelper.copyOrSendPublicLink(share)
     }
 
-    /**
-     * Updates the view associated to the activity after the finish of some operation over files
-     * in the current account.
-     *
-     * @param operation Removal operation performed.
-     * @param result    Result of the removal.
-     */
-    override fun onRemoteOperationFinish(operation: RemoteOperation<*>, result: RemoteOperationResult<*>) {
-        super.onRemoteOperationFinish(operation, result)
-
-        if (operation is RemoveShareOperation && result.isSuccess && editPrivateShareFragment != null) {
-            supportFragmentManager.popBackStack()
-        }
-    }
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         var retval = true
         when (item.itemId) {
@@ -407,6 +363,14 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
             else -> retval = super.onOptionsItemSelected(item)
         }
         return retval
+    }
+
+    override fun showLoading() {
+        showLoadingDialog(R.string.common_loading)
+    }
+
+    override fun dismissLoading() {
+        dismissLoadingDialog()
     }
 
     companion object {
