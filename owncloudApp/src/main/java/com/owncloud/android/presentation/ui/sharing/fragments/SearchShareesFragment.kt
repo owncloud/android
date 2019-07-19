@@ -47,10 +47,9 @@ import com.owncloud.android.data.sharing.shares.db.OCShareEntity
 import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.lib.common.utils.Log_OC
 import com.owncloud.android.lib.resources.shares.ShareType
-import com.owncloud.android.presentation.UIResult
+import com.owncloud.android.presentation.UIResult.Status
 import com.owncloud.android.presentation.adapters.sharing.ShareUserListAdapter
 import com.owncloud.android.presentation.viewmodels.sharing.OCShareViewModel
-import com.owncloud.android.ui.activity.BaseActivity
 import com.owncloud.android.utils.PreferenceUtils
 import kotlinx.android.synthetic.main.search_users_groups_layout.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -157,21 +156,21 @@ class SearchShareesFragment : Fragment(),
                             share.shareType == ShareType.FEDERATED.value
                 } as ArrayList<OCShareEntity>
                 when (uiResult?.status) {
-                    UIResult.Status.SUCCESS -> {
+                    Status.SUCCESS -> {
                         updatePrivateShares(privateShares)
-                        (activity as BaseActivity).dismissLoadingDialog() // TODO Use listener
+                        listener?.dismissLoading()
                     }
-                    UIResult.Status.ERROR -> {
+                    Status.ERROR -> {
                         Snackbar.make(
                             activity?.findViewById(android.R.id.content)!!,
                             uiResult.errorMessage!!,
                             Snackbar.LENGTH_SHORT
                         ).show()
                         updatePrivateShares(privateShares)
-                        (activity as BaseActivity).dismissLoadingDialog() // TODO Use listener
+                        listener?.dismissLoading()
                     }
-                    UIResult.Status.LOADING -> {
-                        (activity as BaseActivity).showLoadingDialog(R.string.common_loading)
+                    Status.LOADING -> {
+                        listener?.showLoading()
                         updatePrivateShares(privateShares)
                     }
                     else -> {

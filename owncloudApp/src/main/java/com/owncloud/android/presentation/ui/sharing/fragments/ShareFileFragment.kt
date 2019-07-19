@@ -51,7 +51,6 @@ import com.owncloud.android.presentation.UIResult.Status
 import com.owncloud.android.presentation.adapters.sharing.SharePublicLinkListAdapter
 import com.owncloud.android.presentation.adapters.sharing.ShareUserListAdapter
 import com.owncloud.android.presentation.viewmodels.sharing.OCShareViewModel
-import com.owncloud.android.ui.activity.BaseActivity
 import com.owncloud.android.utils.DisplayUtils
 import com.owncloud.android.utils.MimetypeIconUtil
 import kotlinx.android.synthetic.main.share_file_layout.*
@@ -339,7 +338,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
                 when (uiResult?.status) {
                     Status.SUCCESS -> {
                         updateShares(uiResult.data as ArrayList<OCShareEntity>)
-                        (activity as BaseActivity).dismissLoadingDialog() // TODO Use listener
+                        listener?.dismissLoading()
                     }
                     Status.ERROR -> {
                         Snackbar.make(
@@ -348,10 +347,10 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
                             Snackbar.LENGTH_SHORT
                         ).show()
                         updateShares(uiResult.data)
-                        (activity as BaseActivity).dismissLoadingDialog() // TODO Use listener
+                        listener?.dismissLoading()
                     }
                     Status.LOADING -> {
-                        (activity as BaseActivity).showLoadingDialog(R.string.common_loading) // TODO Use listener
+                        listener?.showLoading() // TODO Use listener
                         updateShares(uiResult.data)
                     }
                     else -> {
@@ -449,11 +448,6 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
         listener?.showEditPrivateShare(share)
     }
 
-    override fun removeShare(share: OCShareEntity) {
-        // Remove public link from server
-        listener?.showRemoveShare(share)
-    }
-
     /**************************************************************************************************************
      *********************************************** PUBLIC SHARES ************************************************
      **************************************************************************************************************/
@@ -538,6 +532,11 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
 
     override fun editPublicShare(share: OCShareEntity) {
         listener?.showEditPublicShare(share)
+    }
+
+    override fun removeShare(share: OCShareEntity) {
+        // Remove public link from server
+        listener?.showRemoveShare(share)
     }
 
     /**
