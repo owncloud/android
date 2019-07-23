@@ -22,6 +22,7 @@
   <string name="drawer_item_uploads_list">Μεταφορτώσεις</string>
   <string name="drawer_close">Κλείσιμο</string>
   <string name="drawer_open">Άνοιγμα</string>
+  <string name="drawer_unavailable_free_storage">%1$s σε χρήση</string>
   <string name="drawer_feedback">Σχόλια </string>
   <string name="drawer_help">Βοήθεια</string>
   <string name="prefs_category_general">Γενικά</string>
@@ -38,6 +39,7 @@
   <string name="prefs_log_summary_history">Εδώ μπορείτε να δείτε το καταγεγραμμένο ιστορικό</string>
   <string name="prefs_log_delete_history_button">Διαγραφή ιστορικού</string>
   <string name="prefs_help">Βοήθεια</string>
+  <string name="prefs_sync_calendar_contacts_summary">Εγκατάσταση DAVx⁵</string>
   <string name="prefs_recommend">Προτείνετε σε φίλο</string>
   <string name="prefs_feedback">Σχόλια </string>
   <string name="prefs_imprint">Αποτύπωμα</string>
@@ -52,6 +54,7 @@
   <string name="pattern_removed">Αφαιρέθηκε το μοτίβο</string>
   <string name="recommend_subject">Δοκιμάστε %1$s στο κινητό σας!</string>
   <string name="recommend_text">Θα ήθελα να σε προσκαλέσω να χρησιμοποιήσεις το %1$s στο κινητό σου!\nΛήψη εδώ: %2$s</string>
+  <string name="auth_failure_snackbar">Αποτυχία πιστοποίησης</string>
   <string name="auth_failure_snackbar_action">Αλλαγή λογριασμού</string>
   <string name="auth_check_server">Έλεγχος διακομιστή</string>
   <string name="auth_host_url">Διεύθυνση διακομιστή https://…</string>
@@ -472,6 +475,8 @@
   <string name="media_service_notification_channel_description">Δείτε το πρόγραμμα αναπαραγωγής μουσικής</string>
   <string name="file_sync_notification_channel_name">Συγχρονισμός αρχείου</string>
   <string name="file_sync_notification_channel_description">Δείτε το αποτέλεσμα συγχρονισμού αρχείου</string>
+  <string name="button_no_thanks_name">ΟΧΙ, ΕΥΧΑΡΙΣΤΩ</string>
+  <string name="button_later_name">ΑΡΓΟΤΕΡΑ</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d επιλέχτηκε</item>
     <item quantity="other">%d επιλέχτηκαν</item>
