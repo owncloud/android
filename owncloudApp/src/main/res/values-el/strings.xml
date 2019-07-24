@@ -16,13 +16,18 @@
   <string name="actionbar_descending">Φθίνουσα</string>
   <string name="actionbar_sort_title">Ταξινόμηση κατά</string>
   <string name="actionbar_sort_by_name">A-Ω</string>
+  <string name="actionbar_sort_by_date">Παλαιότερο - Νεότερο</string>
+  <string name="actionbar_sort_by_size">Μικρότερο - Μεγαλύτερο</string>
   <string name="drawer_item_all_files">Όλα τα αρχεία</string>
   <string name="drawer_item_only_available_offline">Διαθέσιμο εκτός σύνδεσης</string>
   <string name="drawer_item_settings">Ρυθμίσεις</string>
   <string name="drawer_item_uploads_list">Μεταφορτώσεις</string>
   <string name="drawer_close">Κλείσιμο</string>
   <string name="drawer_open">Άνοιγμα</string>
+  <string name="drawer_loading_quota">Γίνεται φόρτωση ορίου</string>
+  <string name="drawer_quota">%1$s από %2$s σε χρήση (%3$s %%)</string>
   <string name="drawer_unavailable_free_storage">%1$s σε χρήση</string>
+  <string name="drawer_unavailable_used_storage">Καμία διαθέσιμη πληροφορία για χρήση αποθηκευτικού χώρου</string>
   <string name="drawer_feedback">Σχόλια </string>
   <string name="drawer_help">Βοήθεια</string>
   <string name="prefs_category_general">Γενικά</string>
@@ -31,6 +36,7 @@
   <string name="prefs_accounts">Λογαριασμοί</string>
   <string name="prefs_manage_accounts">Διαχείριση λογαριασμών</string>
   <string name="prefs_passcode">Κλείδωμα κωδικού πρόσβασης</string>
+  <string name="prefs_fingerprint">Κλείδωμα με δακτυλικό αποτύπωμα</string>
   <string name="prefs_camera_picture_upload">Μεταφορτώσεις φωτογραφιών</string>
   <string name="prefs_camera_video_upload">Μεταφόρτωση βίντεο</string>
   <string name="prefs_log_title">Σύνδεση εφικτή</string>
@@ -82,6 +88,7 @@
   <string name="file_list_no_app_for_file_type">Δεν βρέθηκε καμία εφαρμογή για τύπο αρχείου</string>
   <string name="local_file_list_empty">Δεν υπάρχουν αρχεία σε αυτό τον φάκελο.</string>
   <string name="local_file_list_empty_just_folders">Δεν υπάρχουν άλλοι φάκελοι μέσα σε αυτόν τον φάκελο.</string>
+  <string name="local_file_list_search_with_no_matches">Δεν υπάρχουν αποτελέσματα για αυτήν την αναζήτηση</string>
   <string name="upload_list_empty">Δεν υπάρχουν διαθέσιμες αναφορτώσεις.</string>
   <string name="file_list_folder">φάκελος</string>
   <string name="file_list_folders">φάκελοι</string>
@@ -130,6 +137,7 @@
   <string name="uploader_upload_text_dialog_filename_error_empty">Το όνομα φακέλου δεν πρέπει να είναι κενό</string>
   <string name="uploader_upload_text_dialog_filename_error_length_max">Το όνομα φακέλου δεν θα πρέπει να έχει περισσότερους από  %d χαρακτήρες</string>
   <string name="uploader_upload_text_filename_hint">Όνομα αρχείου</string>
+  <string name="uploader_upload_camera_upload_files">Γίνεται μεταφόρτωση αρχείων από την κάμερα</string>
   <string name="ssl_certificate_not_trusted">Το πιστοποιητικό του διακομιστή δεν είναι έμπιστο</string>
   <string name="uploads_view_title">Μεταφορτώσεις</string>
   <string name="uploads_view_group_current_uploads">Τρέχων</string>
@@ -305,6 +313,7 @@
   <string name="placeholder_media_time">12:23:45</string>
   <string name="camera_picture_upload_on_wifi">Μεταφόρτωση φωτογραφιών μόνο μέσω wifi</string>
   <string name="camera_video_upload_on_wifi">Μεταφόρτωση βίντεο μόνο μέσω wifi</string>
+  <string name="camera_upload_path">/CameraUpload</string>
   <string name="confirmation_disable_camera_uploads_title">Επιβεβαίωση</string>
   <string name="conflict_title">Διένεξη αρχείου</string>
   <string name="conflict_message">Ποια αρχεία θέλετε να διατηρήσετε; Αν επιλέξετε και τις δύο εκδόσεις, το τοπικό αρχείο θα έχει έναν αριθμό που έχει προστεθεί στο όνομά του.</string>
@@ -413,6 +422,7 @@
   <string name="share_via_link_password_title">Ασφαλίστηκε</string>
   <string name="share_via_link_edit_permission_read_only_label">Λήψη / Προβολή</string>
   <string name="share_via_link_edit_permission_read_and_write_label">Λήψη / Προβολή / Μεταφόρτωση</string>
+  <string name="share_via_link_edit_permission_upload_only_label">Μόνο μεταφόρτωση (File Drop)</string>
   <string name="share_get_public_link_button">Λήψη συνδέσμου</string>
   <string name="share_with_title">Διαμοιρασμός με</string>
   <string name="share_with_edit_title">Διαμοιρασμός με %1$s</string>
@@ -477,13 +487,23 @@
   <string name="file_sync_notification_channel_description">Δείτε το αποτέλεσμα συγχρονισμού αρχείου</string>
   <string name="button_no_thanks_name">ΟΧΙ, ΕΥΧΑΡΙΣΤΩ</string>
   <string name="button_later_name">ΑΡΓΟΤΕΡΑ</string>
+  <string name="button_rate_now_name">ΒΑΘΜΟΛΟΓΗΣΗ ΤΩΡΑ</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d επιλέχτηκε</item>
     <item quantity="other">%d επιλέχτηκαν</item>
   </plurals>
   <!--Welcome to oC intro features-->
   <string name="welcome_feature_skip_button">Παράβλεψη</string>
+  <string name="welcome_feature_2_title">Διαμοιρασμός αρχείων και φακέλων</string>
+  <string name="welcome_feature_2_text">Μπορείτε να διαμοιραστείτε ιδιωτικά ή δημόσια</string>
+  <string name="welcome_feature_3_title">Πολλαπλός λογαριασμός</string>
   <string name="welcome_feature_4_title">Μεταφορτώσεις κάμερας</string>
+  <string name="welcome_feature_6_title">Αναζήτηση στον τρέχοντα φάκελο</string>
+  <string name="welcome_feature_6_text">Φιλτράρισμα των αρχείων σας ανά όνομα</string>
   <string name="welcome_feature_7_title">Επιλογή όλων</string>
+  <string name="welcome_feature_7_text">Επιλογή όλων των αρχείων ταυτόχρονα</string>
   <string name="welcome_feature_8_title">Διαθέσιμο εκτός σύνδεσης</string>
+  <string name="welcome_feature_8_text">Τα αρχεία σας θα συγχρονιστούν αυτόματα</string>
+  <string name="welcome_feature_9_title">Πάροχος εγγράφων</string>
+  <string name="no_borwser_installed_alert">Δεν είναι εγκατεστημένος περιηγητής. Παρακαλούμε εγκαταστήστε ένα περιηγητή έτσι ώστε να επιτρέπεται η ασφαλής σύνδεση.</string>
 </resources>
