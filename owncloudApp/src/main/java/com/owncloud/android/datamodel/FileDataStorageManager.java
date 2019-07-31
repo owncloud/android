@@ -1713,18 +1713,23 @@ public class FileDataStorageManager {
     public void triggerMediaScan(String path) {
         if (path != null) {
             Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-            try {
-                intent.setData(
-                        FileProvider.getUriForFile(
-                                mContext.getApplicationContext(),
-                                mContext.getResources().getString(R.string.file_provider_authority),
-                                new File(path)
-                        )
-                );
-            } catch (IllegalArgumentException illegalArgumentException) {
-                intent.setData(Uri.fromFile(new File(path)));
-            }
+            intent.setData(Uri.fromFile(new File(path)));
             MainApp.getAppContext().sendBroadcast(intent);
+
+            // For making uploads and downloads work in wrapped apps
+            Intent wrappedAppintent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+            try {
+                Uri uri = FileProvider.getUriForFile(
+                        mContext.getApplicationContext(),
+                        mContext.getResources().getString(R.string.file_provider_authority),
+                        new File(path)
+                );
+                wrappedAppintent.setData(uri);
+            } catch (IllegalArgumentException illegalArgumentException) {
+                wrappedAppintent.setData(Uri.fromFile(new File(path)));
+            }
+
+            MainApp.getAppContext().sendBroadcast(wrappedAppintent);
         }
     }
 
