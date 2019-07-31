@@ -405,6 +405,9 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
                 when (resource?.status) {
                     Status.SUCCESS -> {
                         shareFileFragment?.updatePublicShares(resource.data as ArrayList<OCShare>)
+                        if (resource.data?.isEmpty()!!) {
+                            updatePublicShareFile(false)
+                        }
                         dismissLoadingDialog()
                     }
                     Status.ERROR -> {
@@ -474,6 +477,7 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
                 when (resource?.status) {
                     Status.SUCCESS -> {
                         publicShareFragment?.dismiss()
+                        updatePublicShareFile(true)
                         Log_OC.d("TESTS", "Closing share creation dialog")
                     }
                     Status.ERROR -> {
@@ -529,6 +533,7 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
             Observer { resource ->
                 when (resource?.status) {
                     Status.SUCCESS -> {
+                        updatePublicShareFile(true)
                         publicShareFragment?.dismiss()
                     }
                     Status.ERROR -> {
@@ -565,6 +570,14 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
 
     override fun copyOrSendPublicLink(share: OCShare) {
         fileOperationsHelper.copyOrSendPublicLink(share)
+    }
+
+    private fun updatePublicShareFile(isSharedViaLink: Boolean) {
+        val file = storageManager.getFileByPath(file.remotePath)
+        if (file != null) {
+            file.isSharedViaLink = isSharedViaLink
+            storageManager.saveFile(file)
+        }
     }
 
     /**************************************************************************************************************
