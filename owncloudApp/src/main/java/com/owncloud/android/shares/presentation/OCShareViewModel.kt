@@ -57,13 +57,10 @@ class OCShareViewModel(
      ******************************************* PRIVATE SHARES *******************************************
      ******************************************************************************************************/
 
-    fun getPrivateShares(filePath: String): LiveData<Resource<List<OCShare>>> {
-        return shareRepository.getPrivateShares(filePath)
-    }
+    fun getPrivateShares(filePath: String): LiveData<Resource<List<OCShare>>> =
+        shareRepository.getPrivateShares(filePath)
 
-    fun getPrivateShare(remoteId: Long): LiveData<OCShare> {
-        return shareRepository.getShare(remoteId)
-    }
+    fun getPrivateShare(remoteId: Long): LiveData<OCShare> = shareRepository.getShare(remoteId)
 
     fun insertPrivateShare(
         filePath: String,
@@ -85,9 +82,7 @@ class OCShareViewModel(
      ******************************************* PUBLIC SHARES ********************************************
      ******************************************************************************************************/
 
-    fun getPublicShares(filePath: String): LiveData<Resource<List<OCShare>>> {
-        return shareRepository.getPublicShares(filePath)
-    }
+    fun getPublicShares(filePath: String): LiveData<Resource<List<OCShare>>> = shareRepository.getPublicShares(filePath)
 
     fun insertPublicShare(
         filePath: String,
