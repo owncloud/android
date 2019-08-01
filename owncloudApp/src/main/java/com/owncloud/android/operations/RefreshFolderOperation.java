@@ -4,16 +4,16 @@
  * @author David A. Velasco
  * @author David González Verdugo
  * Copyright (C) 2019 ownCloud GmbH.
- * <p>
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
  * as published by the Free Software Foundation.
- * <p>
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * <p>
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -45,14 +45,14 @@ import java.util.ArrayList;
 /**
  * Operation performing a REFRESH on a folder, conceived to be triggered by an action started
  * FROM THE USER INTERFACE.
- * <p>
+ *
  * Fetches the LIST and properties of the files contained in the given folder (including the
  * properties of the folder itself), and updates the local database with them.
- * <p>
+ *
  * Synchronizes the CONTENTS of any file or folder set locally as AVAILABLE OFFLINE.
- * <p>
+ *
  * If the folder is ROOT, it also retrieves the VERSION of the server, and the USER PROFILE info.
- * <p>
+ *
  * Does NOT travel subfolders to refresh their contents also, UNLESS they are
  * set as AVAILABLE OFFLINE FOLDERS.
  */
@@ -122,7 +122,7 @@ public class RefreshFolderOperation extends SyncOperation<ArrayList<RemoteFile>>
 
     /**
      * Performs the synchronization.
-     * <p>
+     *
      * {@inheritDoc}
      */
     @Override
@@ -154,9 +154,8 @@ public class RefreshFolderOperation extends SyncOperation<ArrayList<RemoteFile>>
         sendLocalBroadcast(
                 EVENT_SINGLE_FOLDER_CONTENTS_SYNCED, mLocalFolder.getRemotePath(), result);
 
-        // sync list of shares
         if (result.isSuccess() && mIsShareSupported) {
-            updateFilesAccordingToShares(client); // share result is ignored
+            updateShareIconsInFiles(client); // share result is ignored
         }
 
         sendLocalBroadcast(
@@ -200,14 +199,7 @@ public class RefreshFolderOperation extends SyncOperation<ArrayList<RemoteFile>>
         this.syncVersionAndProfileEnabled = syncVersionAndProfileEnabled;
     }
 
-    /**
-     * Syncs the Share resources for the files contained in the folder refreshed (children, not deeper descendants).
-     *
-     * @param client Handler of a session with an OC server.
-     * @return The result of the remote operation retrieving the Share resources in the folder refreshed by
-     * the operation.
-     */
-    private RemoteOperationResult<ShareParserResult> updateFilesAccordingToShares(OwnCloudClient client) {
+    private void updateShareIconsInFiles(OwnCloudClient client) {
         RemoteOperationResult<ShareParserResult> result;
 
         // remote request
@@ -231,8 +223,6 @@ public class RefreshFolderOperation extends SyncOperation<ArrayList<RemoteFile>>
                 }
             }
         }
-
-        return result;
     }
 
     /**
