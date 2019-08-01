@@ -81,7 +81,7 @@
         </RelativeLayout>
 
         <View
-            android:id="@+id/share_header_divider"
+            android:id="@+id/shareHeaderDivider"
             android:layout_width="match_parent"
             android:layout_height="2dp"
             android:background="@color/actionbar_start_color" />

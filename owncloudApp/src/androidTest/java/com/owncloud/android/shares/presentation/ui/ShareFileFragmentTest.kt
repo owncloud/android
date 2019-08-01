@@ -256,6 +256,18 @@ class ShareFileFragmentTest {
      *********************************************** COMMON ***********************************************
      ******************************************************************************************************/
 
+    @Test
+    fun hideSharesSharingApiDisabled() {
+        loadShareFileFragment(
+            capabilities = TestUtil.createCapability(sharingApiEnabled = CapabilityBooleanType.FALSE.value)
+        )
+        onView(withId(R.id.shareWithUsersSection))
+            .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)))
+
+        onView(withId(R.id.shareViaLinkSection))
+            .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)))
+    }
+
     private fun getOCFileForTesting(name: String = "default") = OCFile("/Photos").apply {
         availableOfflineStatus = OCFile.AvailableOfflineStatus.NOT_AVAILABLE_OFFLINE
         fileName = name
