@@ -189,7 +189,7 @@ object TestUtil {
         versionString: String = "1.0.0",
         versionEdition: String = "1.0.0",
         corePollinterval: Int = 0,
-        sharingApiEnabled: Int = 0,
+        sharingApiEnabled: Int = 1,
         sharingPublicEnabled: Int = 1,
         sharingPublicPasswordEnforced: Int = 0,
         sharingPublicPasswordEnforcedReadOnly: Int = 0,

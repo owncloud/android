@@ -176,6 +176,10 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
             )
         }
 
+    private val isShareApiEnabled: Boolean
+        get() = capabilities != null && capabilities?.filesSharingApiEnabled == CapabilityBooleanType.TRUE.value ||
+                capabilities?.filesSharingApiEnabled == CapabilityBooleanType.UNKNOWN.value
+
     /**
      * @return 'True' when public share is disabled in the server
      */
@@ -322,6 +326,17 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
         updatePublicLinkButton()
 
         // Update view depending on updated capabilities
+        if (!isShareApiEnabled) {
+            shareHeaderDivider.visibility = View.GONE
+            shareWithUsersSection.visibility = View.GONE
+            shareViaLinkSection.visibility = View.GONE
+            return
+        } else {
+            shareHeaderDivider.visibility = View.VISIBLE
+            shareWithUsersSection.visibility = View.VISIBLE
+            shareViaLinkSection.visibility = View.VISIBLE
+        }
+
         if (isPublicShareDisabled) {
             shareViaLinkSection.visibility = View.GONE
         } else {

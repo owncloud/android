@@ -43,7 +43,7 @@ import java.util.List;
 
 /**
  * Filters out the file actions available in a given {@link Menu} for a given {@link OCFile}
- * according to the current state of the latest. 
+ * according to the current state of the latest.
  */
 public class FileMenuFilter {
 
@@ -58,10 +58,10 @@ public class FileMenuFilter {
     /**
      * Constructor
      *
-     * @param targetFiles       List of {@link OCFile} file targets of the action to filter in the {@link Menu}.
-     * @param account           ownCloud {@link Account} holding targetFile.
-     * @param cg                Accessor to app components, needed to access synchronization services
-     * @param context           Android {@link Context}, needed to access build setup resources.
+     * @param targetFiles List of {@link OCFile} file targets of the action to filter in the {@link Menu}.
+     * @param account     ownCloud {@link Account} holding targetFile.
+     * @param cg          Accessor to app components, needed to access synchronization services
+     * @param context     Android {@link Context}, needed to access build setup resources.
      */
     public FileMenuFilter(List<OCFile> targetFiles, Account account, ComponentsGetter cg,
                           Context context) {
@@ -74,10 +74,10 @@ public class FileMenuFilter {
     /**
      * Constructor
      *
-     * @param targetFile        {@link OCFile} target of the action to filter in the {@link Menu}.
-     * @param account           ownCloud {@link Account} holding targetFile.
-     * @param cg                Accessor to app components, needed to access synchronization services
-     * @param context           Android {@link Context}, needed to access build setup resources.
+     * @param targetFile {@link OCFile} target of the action to filter in the {@link Menu}.
+     * @param account    ownCloud {@link Account} holding targetFile.
+     * @param cg         Accessor to app components, needed to access synchronization services
+     * @param context    Android {@link Context}, needed to access build setup resources.
      */
     public FileMenuFilter(OCFile targetFile, Account account, ComponentsGetter cg,
                           Context context) {
@@ -88,7 +88,7 @@ public class FileMenuFilter {
      * Filters out the file actions available in the passed {@link Menu} taken into account
      * the state of the {@link OCFile} held by the filter.
      *
-     * @param menu              Options or context menu to filter.
+     * @param menu Options or context menu to filter.
      */
     public void filter(Menu menu, boolean displaySelectAll, boolean displaySelectInverse,
                        boolean onlyAvailableOffline) {
@@ -131,14 +131,14 @@ public class FileMenuFilter {
 
     /**
      * Performs the real filtering, to be applied in the {@link Menu} by the caller methods.
-     *
+     * <p>
      * Decides what actions must be shown and hidden.
      *
-     * @param toShow            List to save the options that must be shown in the menu.
-     * @param toHide            List to save the options that must be shown in the menu.
+     * @param toShow List to save the options that must be shown in the menu.
+     * @param toHide List to save the options that must be shown in the menu.
      */
 
-    private void filter(List<Integer> toShow, List <Integer> toHide, boolean displaySelectAll,
+    private void filter(List<Integer> toShow, List<Integer> toHide, boolean displaySelectAll,
                         boolean displaySelectInverse, boolean onlyAvailableOffline) {
 
         boolean synchronizing = anyFileSynchronizing();
@@ -226,16 +226,12 @@ public class FileMenuFilter {
                 mContext.getResources().getBoolean(R.bool.share_with_users_feature));
 
         RemoteCapability capability = mComponentsGetter.getStorageManager().getCapability(mAccount.name);
-        boolean shareApiEnabled = capability != null &&
-                (capability.getFilesSharingApiEnabled().isTrue() ||
-                        capability.getFilesSharingApiEnabled().isUnknown()
-                );
 
         boolean notAllowResharing = anyFileSharedWithMe() &&
                 capability != null && capability.getFilesSharingResharing().isFalse();
 
         if ((!shareViaLinkAllowed && !shareWithUsersAllowed) || !isSingleSelection() ||
-                !shareApiEnabled || notAllowResharing || onlyAvailableOffline) {
+                notAllowResharing || onlyAvailableOffline) {
             toHide.add(R.id.action_share_file);
         } else {
             toShow.add(R.id.action_share_file);
