@@ -54,7 +54,6 @@ import android.view.MenuItem
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.material.snackbar.Snackbar
 import com.owncloud.android.AppRater
@@ -84,7 +83,6 @@ import com.owncloud.android.operations.RemoveFileOperation
 import com.owncloud.android.operations.RenameFileOperation
 import com.owncloud.android.operations.SynchronizeFileOperation
 import com.owncloud.android.operations.UploadFileOperation
-import com.owncloud.android.shares.presentation.OCShareViewModel
 import com.owncloud.android.syncadapter.FileSyncAdapter
 import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter
 import com.owncloud.android.ui.fragment.FileDetailFragment
@@ -104,9 +102,6 @@ import com.owncloud.android.utils.Extras
 import com.owncloud.android.utils.FileStorageUtils
 import com.owncloud.android.utils.PermissionUtil
 import com.owncloud.android.utils.PreferenceUtils
-import com.owncloud.android.vo.Status
-import org.koin.androidx.viewmodel.ext.android.viewModel
-import org.koin.core.parameter.parametersOf
 import java.io.File
 import java.util.ArrayList
 
@@ -125,8 +120,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
     private var rightFragmentContainer: View? = null
     private var descendingMenuItem: MenuItem? = null
     private var selectAllMenuItem: MenuItem? = null
-    var mainMenu: Menu? = null
-        private set
+    private var mainMenu: Menu? = null
 
     private var fileWaitingToPreview: OCFile? = null
 
@@ -155,7 +149,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
     val secondFragment: FileFragment?
         get() {
             val second = supportFragmentManager.findFragmentByTag(
-                FileDisplayActivity.TAG_SECOND_FRAGMENT
+                TAG_SECOND_FRAGMENT
             )
             return if (second != null) {
                 second as FileFragment?
@@ -170,12 +164,6 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
     private val isGridView: Boolean
         get() = listOfFilesFragment!!.isGridEnabled
 
-    private val ocShareViewModel: OCShareViewModel by viewModel {
-        parametersOf(
-            account!!
-        )
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         Log_OC.v(TAG, "onCreate() start")
 
@@ -187,9 +175,9 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         if (savedInstanceState != null) {
             Log.d(TAG, savedInstanceState.toString())
 
-            fileWaitingToPreview = savedInstanceState.getParcelable(FileDisplayActivity.KEY_WAITING_TO_PREVIEW)
+            fileWaitingToPreview = savedInstanceState.getParcelable(KEY_WAITING_TO_PREVIEW)
             syncInProgress = savedInstanceState.getBoolean(KEY_SYNC_IN_PROGRESS)
-            waitingToSend = savedInstanceState.getParcelable(FileDisplayActivity.KEY_WAITING_TO_SEND)
+            waitingToSend = savedInstanceState.getParcelable(KEY_WAITING_TO_SEND)
             filesUploadHelper = savedInstanceState.getParcelable(KEY_UPLOAD_HELPER)
             if (account != null) {
                 filesUploadHelper!!.init(this, account.name)
@@ -206,7 +194,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         }
 
         // Check if only available offline option is set
-        onlyAvailableOffline = intent.getBooleanExtra(FileActivity.EXTRA_ONLY_AVAILABLE_OFFLINE, false)
+        onlyAvailableOffline = intent.getBooleanExtra(EXTRA_ONLY_AVAILABLE_OFFLINE, false)
 
         /// USER INTERFACE
 
@@ -286,7 +274,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         when (requestCode) {
             PermissionUtil.PERMISSIONS_WRITE_EXTERNAL_STORAGE -> {
                 // If request is cancelled, result arrays are empty.
-                if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     // permission was granted
                     startSyncFolderOperation(file, false)
                 } else {
@@ -325,7 +313,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
             // current Account
             var file: OCFile? = file
             // get parent from path
-            var parentPath = ""
+            val parentPath: String
             if (file != null) {
                 if (file.isDown && file.lastSyncDateForProperties == 0L) {
                     // upload in progress - right now, files are not inserted in the local
@@ -492,7 +480,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         }
     }
 
-    protected fun cleanSecondFragment() {
+    private fun cleanSecondFragment() {
         val second = secondFragment
         if (second != null) {
             val tr = supportFragmentManager.beginTransaction()
@@ -691,17 +679,14 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         } else if (requestCode == REQUEST_CODE__MOVE_FILES && resultCode == Activity.RESULT_OK) {
             handler.postDelayed(
                 { requestMoveOperation(data!!) },
-                FileActivity.DELAY_TO_REQUEST_OPERATIONS_LATER
+                DELAY_TO_REQUEST_OPERATIONS_LATER
             )
 
         } else if (requestCode == REQUEST_CODE__COPY_FILES && resultCode == Activity.RESULT_OK) {
-
-            val fResultCode = resultCode
             handler.postDelayed(
                 { requestCopyOperation(data!!) },
-                FileActivity.DELAY_TO_REQUEST_OPERATIONS_LATER
+                DELAY_TO_REQUEST_OPERATIONS_LATER
             )
-
         } else {
             super.onActivityResult(requestCode, resultCode, data)
         }
@@ -737,15 +722,10 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         val streamsToUpload = ArrayList<Parcelable>()
 
         //getClipData is only supported on api level 16+, Jelly Bean
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN &&
-            contentIntent!!.clipData != null &&
-            contentIntent.clipData!!.itemCount > 0
-        ) {
-
+        if (contentIntent!!.clipData != null && contentIntent.clipData!!.itemCount > 0) {
             for (i in 0 until contentIntent.clipData!!.itemCount) {
                 streamsToUpload.add(contentIntent.clipData!!.getItemAt(i).uri)
             }
-
         } else {
             streamsToUpload.add(contentIntent!!.data)
         }
@@ -839,11 +819,11 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         // onRestoreInstanceState when there are Fragments involved
         Log_OC.v(TAG, "onSaveInstanceState() start")
         super.onSaveInstanceState(outState)
-        outState.putParcelable(FileDisplayActivity.KEY_WAITING_TO_PREVIEW, fileWaitingToPreview)
-        outState.putBoolean(FileDisplayActivity.KEY_SYNC_IN_PROGRESS, syncInProgress)
-        //outState.putBoolean(FileDisplayActivity.KEY_REFRESH_SHARES_IN_PROGRESS,
+        outState.putParcelable(KEY_WAITING_TO_PREVIEW, fileWaitingToPreview)
+        outState.putBoolean(KEY_SYNC_IN_PROGRESS, syncInProgress)
+        //outState.putBoolean(KEY_REFRESH_SHARES_IN_PROGRESS,
         // mRefreshSharesInProgress);
-        outState.putParcelable(FileDisplayActivity.KEY_WAITING_TO_SEND, waitingToSend)
+        outState.putParcelable(KEY_WAITING_TO_SEND, waitingToSend)
         outState.putParcelable(KEY_UPLOAD_HELPER, filesUploadHelper)
 
         Log_OC.v(TAG, "onSaveInstanceState() end")
@@ -965,9 +945,8 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
 
                     if (RefreshFolderOperation.EVENT_SINGLE_FOLDER_CONTENTS_SYNCED == event) {
 
-                        if (synchResult != null && !synchResult.isSuccess) {
+                        if (!synchResult.isSuccess) {
                             /// TODO refactor and make common
-
                             if (ResultCode.UNAUTHORIZED == synchResult.code || synchResult.isException && synchResult.exception is AuthenticatorException) {
 
                                 // If we have saml enabled we consider the user to only have
@@ -979,11 +958,9 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
                                     showRequestAccountChangeNotice()
                                 }
 
-                            } else if (RemoteOperationResult.ResultCode.SSL_RECOVERABLE_PEER_UNVERIFIED == synchResult.code) {
-
+                            } else if (ResultCode.SSL_RECOVERABLE_PEER_UNVERIFIED == synchResult.code) {
                                 showUntrustedCertDialog(synchResult)
                             }
-
                         }
 
                         if (synchFolderRemotePath == OCFile.ROOT_PATH) {
@@ -1000,19 +977,17 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
                 setBackgroundText()
             }
 
-            if (synchResult != null) {
-                if (synchResult.code == RemoteOperationResult.ResultCode.SSL_RECOVERABLE_PEER_UNVERIFIED) {
-                    lastSslUntrustedServerResult = synchResult
-                } else if (synchResult.code == RemoteOperationResult.ResultCode.SPECIFIC_SERVICE_UNAVAILABLE) {
-                    if (synchResult.httpCode == 503) {
-                        if (synchResult.httpPhrase == "Error: Call to a member function getUID() on null") {
-                            showRequestAccountChangeNotice()
-                        } else {
-                            showSnackMessage(synchResult.httpPhrase)
-                        }
-                    } else {
+            if (synchResult.code == ResultCode.SSL_RECOVERABLE_PEER_UNVERIFIED) {
+                lastSslUntrustedServerResult = synchResult
+            } else if (synchResult.code == ResultCode.SPECIFIC_SERVICE_UNAVAILABLE) {
+                if (synchResult.httpCode == 503) {
+                    if (synchResult.httpPhrase == "Error: Call to a member function getUID() on null") {
                         showRequestAccountChangeNotice()
+                    } else {
+                        showSnackMessage(synchResult.httpPhrase)
                     }
+                } else {
+                    showRequestAccountChangeNotice()
                 }
             }
         }
@@ -1109,16 +1084,12 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
                     if (success && secondFragment is FileDetailFragment) {
                         // start preview if previewable
                         fragmentReplaced = true
-                        if (PreviewImageFragment.canBePreviewed(file)) {
-                            startImagePreview(file)
-                        } else if (PreviewAudioFragment.canBePreviewed(file)) {
-                            startAudioPreview(file, 0)
-                        } else if (PreviewVideoFragment.canBePreviewed(file)) {
-                            startVideoPreview(file, 0)
-                        } else if (PreviewTextFragment.canBePreviewed(file)) {
-                            startTextPreview(file)
-                        } else {
-                            fragmentReplaced = false
+                        when {
+                            PreviewImageFragment.canBePreviewed(file) -> startImagePreview(file)
+                            PreviewAudioFragment.canBePreviewed(file) -> startAudioPreview(file, 0)
+                            PreviewVideoFragment.canBePreviewed(file) -> startVideoPreview(file, 0)
+                            PreviewTextFragment.canBePreviewed(file) -> startTextPreview(file)
+                            else -> fragmentReplaced = false
                         }
                     }
                     if (!fragmentReplaced) {
@@ -1188,7 +1159,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
                     accountName == account.name
         }
 
-        protected fun refreshSecondFragment(
+        private fun refreshSecondFragment(
             downloadEvent: String?, downloadedRemotePath: String,
             success: Boolean
         ) {
@@ -1213,17 +1184,20 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
                                 fileWaitingToPreview = storageManager.getFileById(
                                     fileWaitingToPreview!!.fileId
                                 )
-                                if (PreviewAudioFragment.canBePreviewed(fileWaitingToPreview)) {
-                                    fragmentReplaced = true
-                                    startAudioPreview(fileWaitingToPreview!!, 0)
-                                } else if (PreviewVideoFragment.canBePreviewed(fileWaitingToPreview)) {
-                                    fragmentReplaced = true
-                                    startVideoPreview(fileWaitingToPreview!!, 0)
-                                } else if (PreviewTextFragment.canBePreviewed(fileWaitingToPreview)) {
-                                    fragmentReplaced = true
-                                    startTextPreview(fileWaitingToPreview)
-                                } else {
-                                    fileOperationsHelper.openFile(fileWaitingToPreview)
+                                when {
+                                    PreviewAudioFragment.canBePreviewed(fileWaitingToPreview) -> {
+                                        fragmentReplaced = true
+                                        startAudioPreview(fileWaitingToPreview!!, 0)
+                                    }
+                                    PreviewVideoFragment.canBePreviewed(fileWaitingToPreview) -> {
+                                        fragmentReplaced = true
+                                        startVideoPreview(fileWaitingToPreview!!, 0)
+                                    }
+                                    PreviewTextFragment.canBePreviewed(fileWaitingToPreview) -> {
+                                        fragmentReplaced = true
+                                        startTextPreview(fileWaitingToPreview)
+                                    }
+                                    else -> fileOperationsHelper.openFile(fileWaitingToPreview)
                                 }
                             }
                             fileWaitingToPreview = null
@@ -1374,25 +1348,14 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
     override fun onRemoteOperationFinish(operation: RemoteOperation<*>, result: RemoteOperationResult<*>) {
         super.onRemoteOperationFinish(operation, result)
 
-        if (operation is RemoveFileOperation) {
-            onRemoveFileOperationFinish(operation, result)
-
-        } else if (operation is RenameFileOperation) {
-            onRenameFileOperationFinish(operation, result)
-
-        } else if (operation is SynchronizeFileOperation) {
-            onSynchronizeFileOperationFinish(operation, result)
-
-        } else if (operation is CreateFolderOperation) {
-            onCreateFolderOperationFinish(operation, result)
-
-        } else if (operation is MoveFileOperation) {
-            onMoveFileOperationFinish(operation, result)
-
-        } else if (operation is CopyFileOperation) {
-            onCopyFileOperationFinish(operation, result)
+        when (operation) {
+            is RemoveFileOperation -> onRemoveFileOperationFinish(operation, result)
+            is RenameFileOperation -> onRenameFileOperationFinish(operation, result)
+            is SynchronizeFileOperation -> onSynchronizeFileOperationFinish(operation, result)
+            is CreateFolderOperation -> onCreateFolderOperationFinish(operation, result)
+            is MoveFileOperation -> onMoveFileOperationFinish(operation, result)
+            is CopyFileOperation -> onCopyFileOperationFinish(operation, result)
         }
-
     }
 
     /**
@@ -1644,7 +1607,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
                 }   // else: NOTHING ; lets' not refresh when the user rotates the device but there is
                 // another window floating over
             },
-            FileActivity.DELAY_TO_REQUEST_OPERATIONS_LATER + 350
+            DELAY_TO_REQUEST_OPERATIONS_LATER + 350
         )
     }
 
@@ -1684,8 +1647,8 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
      */
     fun startImagePreview(file: OCFile) {
         val showDetailsIntent = Intent(this, PreviewImageActivity::class.java)
-        showDetailsIntent.putExtra(FileActivity.EXTRA_FILE, file)
-        showDetailsIntent.putExtra(FileActivity.EXTRA_ACCOUNT, account)
+        showDetailsIntent.putExtra(EXTRA_FILE, file)
+        showDetailsIntent.putExtra(EXTRA_ACCOUNT, account)
         startActivity(showDetailsIntent)
 
     }
@@ -1854,22 +1817,22 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
 
     companion object {
 
-        private val KEY_WAITING_TO_PREVIEW = "WAITING_TO_PREVIEW"
-        private val KEY_SYNC_IN_PROGRESS = "SYNC_IN_PROGRESS"
-        private val KEY_WAITING_TO_SEND = "WAITING_TO_SEND"
-        private val KEY_UPLOAD_HELPER = "FILE_UPLOAD_HELPER"
+        private const val KEY_WAITING_TO_PREVIEW = "WAITING_TO_PREVIEW"
+        private const val KEY_SYNC_IN_PROGRESS = "SYNC_IN_PROGRESS"
+        private const val KEY_WAITING_TO_SEND = "WAITING_TO_SEND"
+        private const val KEY_UPLOAD_HELPER = "FILE_UPLOAD_HELPER"
 
-        val ACTION_DETAILS = "com.owncloud.android.ui.activity.action.DETAILS"
+        const val ACTION_DETAILS = "com.owncloud.android.ui.activity.action.DETAILS"
 
-        val REQUEST_CODE__SELECT_CONTENT_FROM_APPS = FileActivity.REQUEST_CODE__LAST_SHARED + 1
-        val REQUEST_CODE__MOVE_FILES = FileActivity.REQUEST_CODE__LAST_SHARED + 2
-        val REQUEST_CODE__COPY_FILES = FileActivity.REQUEST_CODE__LAST_SHARED + 3
-        val REQUEST_CODE__UPLOAD_FROM_CAMERA = FileActivity.REQUEST_CODE__LAST_SHARED + 4
+        val REQUEST_CODE__SELECT_CONTENT_FROM_APPS = REQUEST_CODE__LAST_SHARED + 1
+        val REQUEST_CODE__MOVE_FILES = REQUEST_CODE__LAST_SHARED + 2
+        val REQUEST_CODE__COPY_FILES = REQUEST_CODE__LAST_SHARED + 3
+        val REQUEST_CODE__UPLOAD_FROM_CAMERA = REQUEST_CODE__LAST_SHARED + 4
         val RESULT_OK_AND_MOVE = Activity.RESULT_FIRST_USER
 
         private val TAG = FileDisplayActivity::class.java.simpleName
 
-        private val TAG_LIST_OF_FILES = "LIST_OF_FILES"
-        private val TAG_SECOND_FRAGMENT = "SECOND_FRAGMENT"
+        private const val TAG_LIST_OF_FILES = "LIST_OF_FILES"
+        private const val TAG_SECOND_FRAGMENT = "SECOND_FRAGMENT"
     }
 }
