@@ -311,7 +311,7 @@ public class PreviewImageActivity extends FileActivity implements
     @Override
     public void showDetails(OCFile file) {
         Intent showDetailsIntent = new Intent(this, FileDisplayActivity.class);
-        showDetailsIntent.setAction(FileDisplayActivity.ACTION_DETAILS);
+        showDetailsIntent.setAction(FileDisplayActivity.Companion.getACTION_DETAILS());
         showDetailsIntent.putExtra(FileActivity.EXTRA_FILE, file);
         showDetailsIntent.putExtra(FileActivity.EXTRA_ACCOUNT,
                 AccountUtils.getCurrentOwnCloudAccount(this));

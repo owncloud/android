@@ -20,7 +20,6 @@
 package com.owncloud.android.shares.data
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.shares.domain.OCShare
 import com.owncloud.android.vo.Resource

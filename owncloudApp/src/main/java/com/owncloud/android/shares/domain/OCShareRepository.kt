@@ -136,7 +136,9 @@ class OCShareRepository(
 
     private fun getShares(
         filePath: String,
-        shareTypes: List<ShareType>
+        shareTypes: List<ShareType>,
+        reshares: Boolean = true,
+        subfiles: Boolean = false
     ): MutableLiveData<Resource<List<OCShare>>> {
         return object : NetworkBoundResource<List<OCShare>, ShareParserResult>(appExecutors) {
             override fun saveCallResult(item: ShareParserResult) {
@@ -159,7 +161,7 @@ class OCShareRepository(
                 )
 
             override fun createCall() =
-                remoteShareDataSource.getShares(filePath, reshares = true, subfiles = false)
+                remoteShareDataSource.getShares(filePath, reshares, subfiles)
         }.asMutableLiveData()
     }
 
