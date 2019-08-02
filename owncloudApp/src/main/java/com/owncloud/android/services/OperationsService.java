@@ -68,7 +68,6 @@ import com.owncloud.android.operations.RemoveShareOperation;
 import com.owncloud.android.operations.RenameFileOperation;
 import com.owncloud.android.operations.SynchronizeFileOperation;
 import com.owncloud.android.operations.SynchronizeFolderOperation;
-import com.owncloud.android.operations.UpdateSharePermissionsOperation;
 import com.owncloud.android.operations.common.SyncOperation;
 
 import java.io.IOException;

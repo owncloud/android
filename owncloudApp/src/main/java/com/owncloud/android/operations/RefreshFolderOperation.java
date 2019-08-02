@@ -41,6 +41,7 @@ import com.owncloud.android.operations.common.SyncOperation;
 import com.owncloud.android.syncadapter.FileSyncAdapter;
 
 import java.util.ArrayList;
+import java.util.Vector;
 
 /**
  * Operation performing a REFRESH on a folder, conceived to be triggered by an action started
@@ -208,6 +209,7 @@ public class RefreshFolderOperation extends SyncOperation<ArrayList<RemoteFile>>
         result = operation.execute(client);
 
         if (result.isSuccess()) {
+            resetShareFlagsInFolderChilds();
             for (RemoteShare ocShare : result.getData().getShares()) {
                 OCFile file = getStorageManager().getFileByPath(ocShare.getPath());
                 if (file != null) {
@@ -222,6 +224,15 @@ public class RefreshFolderOperation extends SyncOperation<ArrayList<RemoteFile>>
                     getStorageManager().saveFile(file);
                 }
             }
+        }
+    }
+
+    private void resetShareFlagsInFolderChilds() {
+        Vector<OCFile> files = getStorageManager().getFolderContent(mLocalFolder, false);
+        for (OCFile file: files) {
+            file.setSharedViaLink(false);
+            file.setSharedWithSharee(false);
+            getStorageManager().saveFile(file);
         }
     }
 

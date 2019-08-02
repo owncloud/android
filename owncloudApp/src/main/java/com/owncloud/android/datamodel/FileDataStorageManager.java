@@ -182,7 +182,6 @@ public class FileDataStorageManager {
     public Vector<OCFile> getFolderContent(OCFile f, boolean onlyAvailableOffline) {
         if (f != null && f.isFolder() && f.getFileId() != -1) {
             return getFolderContent(f.getFileId(), onlyAvailableOffline);
-
         } else {
             return new Vector<>();
         }
@@ -499,8 +498,6 @@ public class FileDataStorageManager {
      *
      * @param   file                        File which available-offline status will be updated.
      * @return                              'true' if value was updated, 'false' otherwise.
-     * @throws IllegalArgumentException     If file is set to
-     *                                      OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE_PARENT.
      */
     public boolean saveLocalAvailableOfflineStatus(OCFile file) {
         if (!fileExists(file.getFileId())) {
@@ -1334,88 +1331,6 @@ public class FileDataStorageManager {
         return share;
     }
 
-    private void resetShareFlagsInAllFiles() {
-        ContentValues cv = new ContentValues();
-        cv.put(ProviderTableMeta.FILE_SHARED_VIA_LINK, false);
-        cv.put(ProviderTableMeta.FILE_SHARED_WITH_SHAREE, false);
-        cv.put(ProviderTableMeta.FILE_PUBLIC_LINK, "");
-        String where = ProviderTableMeta.FILE_ACCOUNT_OWNER + "=?";
-        String[] whereArgs = new String[]{mAccount.name};
-
-        if (getContentResolver() != null) {
-            getContentResolver().update(ProviderTableMeta.CONTENT_URI, cv, where, whereArgs);
-
-        } else {
-            try {
-                getContentProviderClient().update(ProviderTableMeta.CONTENT_URI, cv, where,
-                        whereArgs);
-            } catch (RemoteException e) {
-                Log_OC.e(TAG, "Exception in resetShareFlagsInAllFiles" + e.getMessage());
-            }
-        }
-    }
-
-    private void resetShareFlagsInFolder(OCFile folder) {
-        ContentValues cv = new ContentValues();
-        cv.put(ProviderTableMeta.FILE_SHARED_VIA_LINK, false);
-        cv.put(ProviderTableMeta.FILE_SHARED_WITH_SHAREE, false);
-        cv.put(ProviderTableMeta.FILE_PUBLIC_LINK, "");
-        String where = ProviderTableMeta.FILE_ACCOUNT_OWNER + "=? AND " +
-                ProviderTableMeta.FILE_PARENT + "=?";
-        String[] whereArgs = new String[]{mAccount.name, String.valueOf(folder.getFileId())};
-
-        if (getContentResolver() != null) {
-            getContentResolver().update(ProviderTableMeta.CONTENT_URI, cv, where, whereArgs);
-
-        } else {
-            try {
-                getContentProviderClient().update(ProviderTableMeta.CONTENT_URI, cv, where,
-                        whereArgs);
-            } catch (RemoteException e) {
-                Log_OC.e(TAG, "Exception in resetShareFlagsInFolder " + e.getMessage());
-            }
-        }
-    }
-
-    private void resetShareFlagInAFile(String filePath) {
-        ContentValues cv = new ContentValues();
-        cv.put(ProviderTableMeta.FILE_SHARED_VIA_LINK, false);
-        cv.put(ProviderTableMeta.FILE_SHARED_WITH_SHAREE, false);
-        cv.put(ProviderTableMeta.FILE_PUBLIC_LINK, "");
-        String where = ProviderTableMeta.FILE_ACCOUNT_OWNER + "=? AND " +
-                ProviderTableMeta.FILE_PATH + "=?";
-        String[] whereArgs = new String[]{mAccount.name, filePath};
-
-        if (getContentResolver() != null) {
-            getContentResolver().update(ProviderTableMeta.CONTENT_URI, cv, where, whereArgs);
-
-        } else {
-            try {
-                getContentProviderClient().update(ProviderTableMeta.CONTENT_URI, cv, where,
-                        whereArgs);
-            } catch (RemoteException e) {
-                Log_OC.e(TAG, "Exception in resetShareFlagsInFolder " + e.getMessage());
-            }
-        }
-    }
-
-    private void cleanShares() {
-        String where = ProviderTableMeta.OCSHARES_ACCOUNT_OWNER + "=?";
-        String[] whereArgs = new String[]{mAccount.name};
-
-        if (getContentResolver() != null) {
-            getContentResolver().delete(ProviderTableMeta.CONTENT_URI_SHARE, where, whereArgs);
-
-        } else {
-            try {
-                getContentProviderClient().delete(ProviderTableMeta.CONTENT_URI_SHARE, where,
-                        whereArgs);
-            } catch (RemoteException e) {
-                Log_OC.e(TAG, "Exception in cleanShares" + e.getMessage());
-            }
-        }
-    }
-
     public void removeShare(OCShare share) {
         Uri share_uri = ProviderTableMeta.CONTENT_URI_SHARE;
         String where = ProviderTableMeta.OCSHARES_ACCOUNT_OWNER + "=?" + " AND " +
@@ -1430,99 +1345,6 @@ public class FileDataStorageManager {
         } else {
             getContentResolver().delete(share_uri, where, whereArgs);
         }
-    }
-
-    public void saveShares(List<RemoteShare> shares) {
-        ArrayList<ContentProviderOperation> operations = new ArrayList<ContentProviderOperation>();
-
-        // Reset flags & Remove shares for this files
-        String filePath = "";
-        for (RemoteShare share: shares) {
-            if (!filePath.equals(share.getPath())){
-                filePath = share.getPath();
-                resetShareFlagInAFile(filePath);
-                operations = prepareRemoveSharesInFile(filePath, operations);
-            }
-        }
-
-        // Add operations to insert shares
-        operations = prepareInsertShares(shares, operations);
-
-        // apply operations in batch
-        if (operations.size() > 0) {
-            Log_OC.d(TAG, "Sending " + operations.size() + " operations to FileContentProvider");
-            try {
-                if (getContentResolver() != null) {
-                    getContentResolver().applyBatch(MainApp.Companion.getAuthority(), operations);
-
-                } else {
-                    getContentProviderClient().applyBatch(operations);
-                }
-
-            } catch (OperationApplicationException e) {
-                Log_OC.e(TAG, "Exception in batch of operations " + e.getMessage());
-
-            } catch (RemoteException e) {
-                Log_OC.e(TAG, "Exception in batch of operations  " + e.getMessage());
-            }
-        }
-
-    }
-
-    public void removeSharesForFile(String remotePath) {
-        resetShareFlagInAFile(remotePath);
-        ArrayList<ContentProviderOperation> operations = new ArrayList<ContentProviderOperation>();
-        operations = prepareRemoveSharesInFile(remotePath, operations);
-        // apply operations in batch
-        if (operations.size() > 0) {
-            Log_OC.d(TAG, "Sending " + operations.size() + " operations to FileContentProvider");
-            try {
-                if (getContentResolver() != null) {
-                    getContentResolver().applyBatch(MainApp.Companion.getAuthority(), operations);
-
-                } else {
-                    getContentProviderClient().applyBatch(operations);
-                }
-
-            } catch (OperationApplicationException e) {
-                Log_OC.e(TAG, "Exception in batch of operations " + e.getMessage());
-
-            } catch (RemoteException e) {
-                Log_OC.e(TAG, "Exception in batch of operations  " + e.getMessage());
-            }
-        }
-    }
-
-    public void saveSharesInFolder(ArrayList<RemoteShare> shares, OCFile folder) {
-        resetShareFlagsInFolder(folder);
-        ArrayList<ContentProviderOperation> operations = new ArrayList<ContentProviderOperation>();
-        operations = prepareRemoveSharesInFolder(folder, operations);
-
-        if (shares != null) {
-            // prepare operations to insert or update files to save in the given folder
-            operations = prepareInsertShares(shares, operations);
-        }
-
-        // apply operations in batch
-        if (operations.size() > 0) {
-            Log_OC.d(TAG, "Sending " + operations.size() + " operations to FileContentProvider");
-            try {
-                if (getContentResolver() != null) {
-                    getContentResolver().applyBatch(MainApp.Companion.getAuthority(), operations);
-
-                } else {
-
-                    getContentProviderClient().applyBatch(operations);
-                }
-
-            } catch (OperationApplicationException e) {
-                Log_OC.e(TAG, "Exception in batch of operations " + e.getMessage());
-
-            } catch (RemoteException e) {
-
-            }
-        }
-
     }
 
     /**
