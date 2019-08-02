@@ -36,7 +36,6 @@ import com.owncloud.android.operations.RemoveShareOperation
 import com.owncloud.android.operations.RenameFileOperation
 import com.owncloud.android.operations.SynchronizeFileOperation
 import com.owncloud.android.operations.SynchronizeFolderOperation
-import com.owncloud.android.operations.UpdateSharePermissionsOperation
 import com.owncloud.android.operations.UploadFileOperation
 import com.owncloud.android.operations.common.OperationType
 import java.io.File
@@ -158,24 +157,13 @@ class ErrorMessageAdapter {
                 RemoteOperationResult.ResultCode.INVALID_CHARACTER_IN_NAME ->
                     return f.format(R.string.filename_forbidden_characters)
                 RemoteOperationResult.ResultCode.SHARE_NOT_FOUND -> {
-                    if (operation is RemoveShareOperation)
-                        return f.format(R.string.unshare_link_file_no_exist)
-                    if (operation is UpdateSharePermissionsOperation)
-                        return f.format(R.string.update_link_file_no_exist)
-                    if (operation is RemoveShareOperation)
-                        return f.forbidden(R.string.unshare_link_forbidden_permissions)
-                    return if (operation is UpdateSharePermissionsOperation)
-                        f.forbidden(R.string.update_link_forbidden_permissions)
+                    if (operation is RemoveShareOperation) return f.format(R.string.unshare_link_file_no_exist)
+                    return if (operation is RemoveShareOperation) f.forbidden(R.string.unshare_link_forbidden_permissions)
                     else f.format(R.string.move_file_invalid_into_descendent)
                 }
                 RemoteOperationResult.ResultCode.SHARE_FORBIDDEN -> {
-                    if (operation is RemoveShareOperation)
-                        return f.forbidden(R.string.unshare_link_forbidden_permissions)
-                    return if (
-                        operation is UpdateSharePermissionsOperation
-                    ) f.forbidden(
-                        R.string.update_link_forbidden_permissions
-                    ) else f.format(R.string.move_file_invalid_into_descendent)
+                    return if (operation is RemoveShareOperation) f.forbidden(R.string.unshare_link_forbidden_permissions)
+                    else f.format(R.string.move_file_invalid_into_descendent)
                 }
                 RemoteOperationResult.ResultCode.INVALID_MOVE_INTO_DESCENDANT -> return f.format(R.string.move_file_invalid_into_descendent)
                 RemoteOperationResult.ResultCode.INVALID_OVERWRITE -> {
@@ -280,8 +268,6 @@ class ErrorMessageAdapter {
             if (operation is RenameFileOperation) return f.format(R.string.rename_server_fail_msg)
             if (operation is CreateFolderOperation) return f.format(R.string.create_dir_fail_msg)
             if (operation is RemoveShareOperation) return f.format(R.string.unshare_link_file_error)
-            if (operation is UpdateSharePermissionsOperation)
-                return f.format(R.string.update_link_file_error)
             if (operation is MoveFileOperation) return f.format(R.string.move_file_error)
             if (operation is SynchronizeFolderOperation)
                 return f.format(
