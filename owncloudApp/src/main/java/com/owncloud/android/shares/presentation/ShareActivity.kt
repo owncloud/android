@@ -218,7 +218,7 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
                             searchShareesFragment?.updatePrivateShares(resource.data as ArrayList<OCShare>)
                         }
                         dismissLoadingDialog()
-                        if (resource.data?.isEmpty()!!) {
+                        if (resource.data.isNullOrEmpty()) {
                             updateSharedWithSharee(false)
                         }
                     }
@@ -404,8 +404,7 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
     }
 
     private fun updateSharedWithSharee(isSharedWithSharee: Boolean) {
-        val file = storageManager.getFileByPath(file.remotePath)
-        if (file != null) {
+        storageManager.getFileByPath(file.remotePath)?.let { file ->
             file.isSharedWithSharee = isSharedWithSharee
             storageManager.saveFile(file)
         }
@@ -422,7 +421,7 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
                 when (resource?.status) {
                     Status.SUCCESS -> {
                         shareFileFragment?.updatePublicShares(resource.data as ArrayList<OCShare>)
-                        if (resource.data?.isEmpty()!!) {
+                        if (resource.data.isNullOrEmpty()) {
                             updatePublicShareFile(false)
                         }
                         dismissLoadingDialog()
@@ -590,8 +589,7 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
     }
 
     private fun updatePublicShareFile(isSharedViaLink: Boolean) {
-        val file = storageManager.getFileByPath(file.remotePath)
-        if (file != null) {
+        storageManager.getFileByPath(file.remotePath)?.let { file ->
             file.isSharedViaLink = isSharedViaLink
             storageManager.saveFile(file)
         }
