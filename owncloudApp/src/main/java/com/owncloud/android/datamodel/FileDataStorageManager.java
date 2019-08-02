@@ -36,6 +36,8 @@ import android.content.Intent;
 import android.content.OperationApplicationException;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
+import android.os.FileUriExposedException;
 import android.os.RemoteException;
 import android.provider.MediaStore;
 
@@ -1713,18 +1715,24 @@ public class FileDataStorageManager {
     public void triggerMediaScan(String path) {
         if (path != null) {
             Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-            try {
-                intent.setData(
-                        FileProvider.getUriForFile(
-                                mContext.getApplicationContext(),
-                                mContext.getResources().getString(R.string.file_provider_authority),
-                                new File(path)
-                        )
-                );
-            } catch (IllegalArgumentException illegalArgumentException) {
-                intent.setData(Uri.fromFile(new File(path)));
+            intent.setData(Uri.fromFile(new File(path)));
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                try {
+                    MainApp.getAppContext().sendBroadcast(intent);
+                } catch (FileUriExposedException fileUriExposedException) {
+                    Intent newIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+                    newIntent.setData(FileProvider.getUriForFile(
+                            mContext.getApplicationContext(),
+                            mContext.getResources().getString(R.string.file_provider_authority),
+                            new File(path)
+                            )
+                    );
+                    MainApp.getAppContext().sendBroadcast(newIntent);
+                }
+            } else {
+                MainApp.getAppContext().sendBroadcast(intent);
             }
-            MainApp.getAppContext().sendBroadcast(intent);
         }
     }
 
