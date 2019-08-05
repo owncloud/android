@@ -218,6 +218,9 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
                             searchShareesFragment?.updatePrivateShares(resource.data as ArrayList<OCShare>)
                         }
                         dismissLoadingDialog()
+                        if (resource.data.isNullOrEmpty()) {
+                            updateSharedWithSharee(false)
+                        }
                     }
                     Status.ERROR -> {
                         val errorMessage = resource.msg ?: ErrorMessageAdapter.getResultMessage(
@@ -291,6 +294,9 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
             this,
             Observer { resource ->
                 when (resource?.status) {
+                    Status.SUCCESS -> {
+                        updateSharedWithSharee(true)
+                    }
                     Status.ERROR -> {
                         val errorMessage = resource.msg ?: ErrorMessageAdapter.getResultMessage(
                             resource.code,
@@ -368,6 +374,9 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
             this,
             Observer { resource ->
                 when (resource?.status) {
+                    Status.SUCCESS -> {
+                        updateSharedWithSharee(true)
+                    }
                     Status.ERROR -> {
                         val errorMessage: String = resource.msg ?: ErrorMessageAdapter.getResultMessage(
                             resource.code,
@@ -394,6 +403,13 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
         fileOperationsHelper.copyOrSendPrivateLink(file)
     }
 
+    private fun updateSharedWithSharee(isSharedWithSharee: Boolean) {
+        storageManager.getFileByPath(file.remotePath)?.let { file ->
+            file.isSharedWithSharee = isSharedWithSharee
+            storageManager.saveFile(file)
+        }
+    }
+
     /**************************************************************************************************************
      *********************************************** PUBLIC SHARES ************************************************
      **************************************************************************************************************/
@@ -405,6 +421,9 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
                 when (resource?.status) {
                     Status.SUCCESS -> {
                         shareFileFragment?.updatePublicShares(resource.data as ArrayList<OCShare>)
+                        if (resource.data.isNullOrEmpty()) {
+                            updatePublicShareFile(false)
+                        }
                         dismissLoadingDialog()
                     }
                     Status.ERROR -> {
@@ -474,6 +493,7 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
                 when (resource?.status) {
                     Status.SUCCESS -> {
                         publicShareFragment?.dismiss()
+                        updatePublicShareFile(true)
                         Log_OC.d("TESTS", "Closing share creation dialog")
                     }
                     Status.ERROR -> {
@@ -529,6 +549,7 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
             Observer { resource ->
                 when (resource?.status) {
                     Status.SUCCESS -> {
+                        updatePublicShareFile(true)
                         publicShareFragment?.dismiss()
                     }
                     Status.ERROR -> {
@@ -565,6 +586,13 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
 
     override fun copyOrSendPublicLink(share: OCShare) {
         fileOperationsHelper.copyOrSendPublicLink(share)
+    }
+
+    private fun updatePublicShareFile(isSharedViaLink: Boolean) {
+        storageManager.getFileByPath(file.remotePath)?.let { file ->
+            file.isSharedViaLink = isSharedViaLink
+            storageManager.saveFile(file)
+        }
     }
 
     /**************************************************************************************************************

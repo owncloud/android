@@ -4,16 +4,16 @@
  * @author David A. Velasco
  * @author David González Verdugo
  * Copyright (C) 2019 ownCloud GmbH.
- * <p>
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
  * as published by the Free Software Foundation.
- * <p>
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * <p>
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -31,27 +31,31 @@ import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.files.RemoteFile;
+import com.owncloud.android.lib.resources.shares.GetRemoteSharesForFileOperation;
+import com.owncloud.android.lib.resources.shares.RemoteShare;
 import com.owncloud.android.lib.resources.shares.ShareParserResult;
-import com.owncloud.android.lib.resources.status.RemoteCapability;
+import com.owncloud.android.lib.resources.shares.ShareType;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
+import com.owncloud.android.lib.resources.status.RemoteCapability;
 import com.owncloud.android.operations.common.SyncOperation;
 import com.owncloud.android.syncadapter.FileSyncAdapter;
 
 import java.util.ArrayList;
+import java.util.Vector;
 
 /**
- *  Operation performing a REFRESH on a folder, conceived to be triggered by an action started
- *  FROM THE USER INTERFACE.
+ * Operation performing a REFRESH on a folder, conceived to be triggered by an action started
+ * FROM THE USER INTERFACE.
  *
- *  Fetches the LIST and properties of the files contained in the given folder (including the
- *  properties of the folder itself), and updates the local database with them.
+ * Fetches the LIST and properties of the files contained in the given folder (including the
+ * properties of the folder itself), and updates the local database with them.
  *
- *  Synchronizes the CONTENTS of any file or folder set locally as AVAILABLE OFFLINE.
+ * Synchronizes the CONTENTS of any file or folder set locally as AVAILABLE OFFLINE.
  *
- *  If the folder is ROOT, it also retrieves the VERSION of the server, and the USER PROFILE info.
+ * If the folder is ROOT, it also retrieves the VERSION of the server, and the USER PROFILE info.
  *
- *  Does NOT travel subfolders to refresh their contents also, UNLESS they are
- *  set as AVAILABLE OFFLINE FOLDERS.
+ * Does NOT travel subfolders to refresh their contents also, UNLESS they are
+ * set as AVAILABLE OFFLINE FOLDERS.
  */
 public class RefreshFolderOperation extends SyncOperation<ArrayList<RemoteFile>> {
 
@@ -62,21 +66,29 @@ public class RefreshFolderOperation extends SyncOperation<ArrayList<RemoteFile>>
     public static final String EVENT_SINGLE_FOLDER_SHARES_SYNCED =
             RefreshFolderOperation.class.getName() + ".EVENT_SINGLE_FOLDER_SHARES_SYNCED";
 
-    /** Locally cached information about folder to synchronize */
+    /**
+     * Locally cached information about folder to synchronize
+     */
     private OCFile mLocalFolder;
 
-    /** Account where the file to synchronize belongs */
+    /**
+     * Account where the file to synchronize belongs
+     */
     private Account mAccount;
 
-    /** Android context; necessary to send requests to the download service */
+    /**
+     * Android context; necessary to send requests to the download service
+     */
     private Context mContext;
 
-    /** 'True' means that Share resources bound to the files into should be refreshed also */
+    /**
+     * 'True' means that Share resources bound to the files into should be refreshed also
+     */
     private boolean mIsShareSupported;
 
     /**
      * 'True' means that the list of files in the remote folder should
-     *  be fetched and merged locally even though the 'eTag' did not change.
+     * be fetched and merged locally even though the 'eTag' did not change.
      */
     private boolean mIgnoreETag;    // TODO - use it prefetching ETag of folder; two PROPFINDS, but better
     // TODO -   performance with (big) unchanged folders
@@ -88,13 +100,13 @@ public class RefreshFolderOperation extends SyncOperation<ArrayList<RemoteFile>>
     /**
      * Creates a new instance of {@link RefreshFolderOperation}.
      *
-     * @param   folder                  Folder to synchronize.
-     * @param   isShareSupported        'True' means that the server supports the sharing API.
-     * @param   ignoreETag              'True' means that the content of the remote folder should
-     *                                  be fetched and updated even though the 'eTag' did not 
-     *                                  change.  
-     * @param   account                 ownCloud account where the folder is located.
-     * @param   context                 Application context.
+     * @param folder           Folder to synchronize.
+     * @param isShareSupported 'True' means that the server supports the sharing API.
+     * @param ignoreETag       'True' means that the content of the remote folder should
+     *                         be fetched and updated even though the 'eTag' did not
+     *                         change.
+     * @param account          ownCloud account where the folder is located.
+     * @param context          Application context.
      */
     public RefreshFolderOperation(OCFile folder,
                                   boolean isShareSupported,
@@ -143,9 +155,8 @@ public class RefreshFolderOperation extends SyncOperation<ArrayList<RemoteFile>>
         sendLocalBroadcast(
                 EVENT_SINGLE_FOLDER_CONTENTS_SYNCED, mLocalFolder.getRemotePath(), result);
 
-        // sync list of shares
         if (result.isSuccess() && mIsShareSupported) {
-            refreshSharesForFolder(client); // share result is ignored 
+            updateShareIconsInFiles(client); // share result is ignored
         }
 
         sendLocalBroadcast(
@@ -189,25 +200,49 @@ public class RefreshFolderOperation extends SyncOperation<ArrayList<RemoteFile>>
         this.syncVersionAndProfileEnabled = syncVersionAndProfileEnabled;
     }
 
-    /**
-     * Syncs the Share resources for the files contained in the folder refreshed (children, not deeper descendants).
-     *
-     * @param client    Handler of a session with an OC server.
-     * @return The result of the remote operation retrieving the Share resources in the folder refreshed by
-     *                  the operation.
-     */
-    private RemoteOperationResult<ShareParserResult> refreshSharesForFolder(OwnCloudClient client) {
+    private void updateShareIconsInFiles(OwnCloudClient client) {
         RemoteOperationResult<ShareParserResult> result;
-        return null;
+
+        // remote request
+        GetRemoteSharesForFileOperation operation =
+                new GetRemoteSharesForFileOperation(mLocalFolder.getRemotePath(), true, true);
+        result = operation.execute(client);
+
+        if (result.isSuccess()) {
+            resetShareFlagsInFolderChilds();
+            for (RemoteShare ocShare : result.getData().getShares()) {
+                OCFile file = getStorageManager().getFileByPath(ocShare.getPath());
+                if (file != null) {
+                    ShareType shareType = ocShare.getShareType();
+                    if (shareType.equals(ShareType.PUBLIC_LINK)) {
+                        file.setSharedViaLink(true);
+                    } else if (shareType.equals(ShareType.USER) ||
+                            shareType.equals(ShareType.FEDERATED) ||
+                            shareType.equals(ShareType.GROUP)) {
+                        file.setSharedWithSharee(true);
+                    }
+                    getStorageManager().saveFile(file);
+                }
+            }
+        }
+    }
+
+    private void resetShareFlagsInFolderChilds() {
+        Vector<OCFile> files = getStorageManager().getFolderContent(mLocalFolder, false);
+        for (OCFile file: files) {
+            file.setSharedViaLink(false);
+            file.setSharedWithSharee(false);
+            getStorageManager().saveFile(file);
+        }
     }
 
     /**
-     * Sends a message to any application component interested in the progress 
+     * Sends a message to any application component interested in the progress
      * of the synchronization.
      *
-     * @param event             Action type to broadcast
-     * @param dirRemotePath     Remote path of a folder that was just synchronized 
-     *                          (with or without success)
+     * @param event         Action type to broadcast
+     * @param dirRemotePath Remote path of a folder that was just synchronized
+     *                      (with or without success)
      */
     private void sendLocalBroadcast(
             String event, String dirRemotePath, RemoteOperationResult result

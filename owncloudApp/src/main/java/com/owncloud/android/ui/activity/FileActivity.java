@@ -54,7 +54,6 @@ import com.owncloud.android.operations.RemoveShareOperation;
 import com.owncloud.android.operations.RenameFileOperation;
 import com.owncloud.android.operations.SynchronizeFileOperation;
 import com.owncloud.android.operations.SynchronizeFolderOperation;
-import com.owncloud.android.operations.UpdateSharePermissionsOperation;
 import com.owncloud.android.services.OperationsService;
 import com.owncloud.android.services.OperationsService.OperationsServiceBinder;
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment;
@@ -294,8 +293,7 @@ public class FileActivity extends DrawerActivity
 
         } else if (operation == null ||
                 operation instanceof RemoveShareOperation ||
-                operation instanceof SynchronizeFolderOperation ||
-                operation instanceof UpdateSharePermissionsOperation
+                operation instanceof SynchronizeFolderOperation
         ) {
             if (result.isSuccess()) {
                 updateFileFromDB();
