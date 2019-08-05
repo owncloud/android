@@ -184,8 +184,9 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
     /**
      * @return 'True' when public share is disabled in the server
      */
-    private val isPublicShareDisabled: Boolean
-        get() = capabilities?.filesSharingPublicEnabled == CapabilityBooleanType.FALSE.value
+    private val isPublicShareEnabled: Boolean
+        get() = capabilities?.filesSharingPublicEnabled == CapabilityBooleanType.TRUE.value ||
+                capabilities?.filesSharingPublicEnabled == CapabilityBooleanType.UNKNOWN.value
 
     /**
      * {@inheritDoc}
@@ -329,9 +330,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
         // Update view depending on updated capabilities
         shareHeaderDivider.isVisible = isShareApiEnabled
         shareWithUsersSection.isVisible = isShareApiEnabled
-        shareViaLinkSection.isVisible = isShareApiEnabled
-
-        shareViaLinkSection.isGone = isPublicShareDisabled
+        shareViaLinkSection.isVisible = isShareApiEnabled && isPublicShareEnabled
     }
 
     /**************************************************************************************************************
