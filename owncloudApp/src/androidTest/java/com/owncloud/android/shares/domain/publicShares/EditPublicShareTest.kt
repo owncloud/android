@@ -325,7 +325,7 @@ class EditPublicShareTest {
         calendar.add(Calendar.DAY_OF_YEAR, 1)
         val formatter: DateFormat = SimpleDateFormat("MMM dd, yyyy");
         val expirationDate = formatter.format(calendar.time);
-        val publicLinkExpirationDateInMillis = SimpleDateFormat.getDateInstance().parse(expirationDate).time
+        val publicLinkExpirationDateInMillis = formatter.parse(expirationDate).time
 
         // 1. Open dialog to edit an existing public share
         onView(withId(R.id.editPublicLinkButton)).perform(click())
