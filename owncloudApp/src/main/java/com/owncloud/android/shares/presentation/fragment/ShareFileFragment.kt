@@ -32,6 +32,7 @@ import android.view.ViewGroup
 import android.widget.ListView
 import android.widget.Toast
 import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
 import com.owncloud.android.R
@@ -43,9 +44,9 @@ import com.owncloud.android.lib.common.utils.Log_OC
 import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.lib.resources.status.CapabilityBooleanType
 import com.owncloud.android.lib.resources.status.OwnCloudVersion
-import com.owncloud.android.shares.presentation.ShareUserListAdapter
 import com.owncloud.android.shares.domain.OCShare
 import com.owncloud.android.shares.presentation.SharePublicLinkListAdapter
+import com.owncloud.android.shares.presentation.ShareUserListAdapter
 import com.owncloud.android.utils.DisplayUtils
 import com.owncloud.android.utils.MimetypeIconUtil
 import kotlinx.android.synthetic.main.share_file_layout.*
@@ -177,14 +178,14 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
         }
 
     private val isShareApiEnabled: Boolean
-        get() = capabilities != null && capabilities?.filesSharingApiEnabled == CapabilityBooleanType.TRUE.value ||
+        get() = capabilities?.filesSharingApiEnabled == CapabilityBooleanType.TRUE.value ||
                 capabilities?.filesSharingApiEnabled == CapabilityBooleanType.UNKNOWN.value
 
     /**
      * @return 'True' when public share is disabled in the server
      */
     private val isPublicShareDisabled: Boolean
-        get() = capabilities != null && capabilities?.filesSharingPublicEnabled == CapabilityBooleanType.FALSE.value
+        get() = capabilities?.filesSharingPublicEnabled == CapabilityBooleanType.FALSE.value
 
     /**
      * {@inheritDoc}
@@ -326,22 +327,9 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
         updatePublicLinkButton()
 
         // Update view depending on updated capabilities
-        if (!isShareApiEnabled) {
-            shareHeaderDivider.visibility = View.GONE
-            shareWithUsersSection.visibility = View.GONE
-            shareViaLinkSection.visibility = View.GONE
-            return
-        } else {
-            shareHeaderDivider.visibility = View.VISIBLE
-            shareWithUsersSection.visibility = View.VISIBLE
-            shareViaLinkSection.visibility = View.VISIBLE
-        }
-
-        if (isPublicShareDisabled) {
-            shareViaLinkSection.visibility = View.GONE
-        } else {
-            shareViaLinkSection.visibility = View.VISIBLE
-        }
+        shareHeaderDivider.isVisible = isShareApiEnabled
+        shareWithUsersSection.isVisible = isShareApiEnabled
+        shareViaLinkSection.isVisible = isShareApiEnabled
 
         shareViaLinkSection.isGone = isPublicShareDisabled
     }
