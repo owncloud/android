@@ -1524,7 +1524,7 @@ public class FileDataStorageManager {
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 try {
-                    MainApp.getAppContext().sendBroadcast(intent);
+                    MainApp.Companion.getAppContext().sendBroadcast(intent);
                 } catch (FileUriExposedException fileUriExposedException) {
                     Intent newIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
                     newIntent.setData(FileProvider.getUriForFile(
@@ -1533,10 +1533,10 @@ public class FileDataStorageManager {
                             new File(path)
                             )
                     );
-                    MainApp.getAppContext().sendBroadcast(newIntent);
+                    MainApp.Companion.getAppContext().sendBroadcast(newIntent);
                 }
             } else {
-                MainApp.getAppContext().sendBroadcast(intent);
+                MainApp.Companion.getAppContext().sendBroadcast(intent);
             }
 
             MainApp.Companion.getAppContext().sendBroadcast(intent);
