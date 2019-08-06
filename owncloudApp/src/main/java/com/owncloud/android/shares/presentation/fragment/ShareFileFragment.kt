@@ -215,7 +215,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
 
         // Setup layout
         // Image
-        shareFileIcon?.setImageResource(
+        view.shareFileIcon?.setImageResource(
             MimetypeIconUtil.getFileTypeIconId(
                 file?.mimetype,
                 file?.fileName
