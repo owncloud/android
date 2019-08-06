@@ -158,14 +158,15 @@ class UpdateRemoteShareOperation
 
             val status = client.executeHttpMethod(putMethod)
 
-            if(!isSuccess(status)){
-                return RemoteOperationResult(putMethod)
-            }
-
             // Parse xml response
             val parser = ShareToRemoteOperationResultParser(
                 ShareXMLParser()
             )
+
+            if (!isSuccess(status)) {
+                return parser.parse(putMethod.responseBodyAsString)
+            }
+
             parser.ownCloudVersion = client.ownCloudVersion
             parser.serverBaseUri = client.baseUri
             result = parser.parse(putMethod.responseBodyAsString)
