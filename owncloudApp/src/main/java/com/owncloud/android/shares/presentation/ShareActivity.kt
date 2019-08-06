@@ -219,7 +219,7 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
                         }
                         dismissLoadingDialog()
                         if (resource.data.isNullOrEmpty()) {
-                            updateSharedWithSharee(false)
+                            updateFileSharedWithSharee(false)
                         }
                     }
                     Status.ERROR -> {
@@ -295,7 +295,7 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
             Observer { resource ->
                 when (resource?.status) {
                     Status.SUCCESS -> {
-                        updateSharedWithSharee(true)
+                        updateFileSharedWithSharee(true)
                     }
                     Status.ERROR -> {
                         val errorMessage = resource.msg ?: ErrorMessageAdapter.getResultMessage(
@@ -375,7 +375,7 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
             Observer { resource ->
                 when (resource?.status) {
                     Status.SUCCESS -> {
-                        updateSharedWithSharee(true)
+                        updateFileSharedWithSharee(true)
                     }
                     Status.ERROR -> {
                         val errorMessage: String = resource.msg ?: ErrorMessageAdapter.getResultMessage(
@@ -403,7 +403,7 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
         fileOperationsHelper.copyOrSendPrivateLink(file)
     }
 
-    private fun updateSharedWithSharee(isSharedWithSharee: Boolean) {
+    private fun updateFileSharedWithSharee(isSharedWithSharee: Boolean) {
         storageManager.getFileByPath(file.remotePath)?.let { file ->
             file.isSharedWithSharee = isSharedWithSharee
             storageManager.saveFile(file)

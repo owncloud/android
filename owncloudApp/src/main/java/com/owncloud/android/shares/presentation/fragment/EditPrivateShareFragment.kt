@@ -31,6 +31,7 @@ import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.CompoundButton
 import androidx.appcompat.widget.SwitchCompat
+import androidx.core.view.isGone
 import androidx.fragment.app.DialogFragment
 import com.owncloud.android.R
 import com.owncloud.android.authentication.AccountUtils
@@ -386,6 +387,8 @@ class EditPrivateShareFragment : DialogFragment() {
      * Updates the permissions of the [RemoteShare] according to the values set in the UI
      */
     private fun updatePermissionsToShare() {
+        private_share_error_message?.isGone = true
+
         val spb = SharePermissionsBuilder()
         spb.setSharePermission(canShareSwitch.isChecked)
         if (file?.isFolder == true) {
