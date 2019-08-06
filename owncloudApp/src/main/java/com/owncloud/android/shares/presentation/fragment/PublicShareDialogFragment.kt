@@ -673,6 +673,7 @@ class PublicShareDialogFragment : DialogFragment() {
 
     private fun setPasswordEnforced() {
         shareViaLinkPasswordLabel?.text = getString(R.string.share_via_link_password_enforced_label)
+        shareViaLinkPasswordSwitch?.isChecked = true
         shareViaLinkPasswordSwitch?.visibility = View.GONE
         shareViaLinkPasswordValue?.visibility = View.VISIBLE
     }
