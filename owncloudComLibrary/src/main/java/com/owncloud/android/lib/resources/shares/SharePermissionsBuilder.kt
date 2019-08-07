@@ -1,6 +1,6 @@
 /* ownCloud Android Library is available under MIT license
  *   @author David A. Velasco
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   Copyright (C) 2019 ownCloud GmbH.
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -23,18 +23,16 @@
  *
  */
 
-package com.owncloud.android.lib.resources.shares;
+package com.owncloud.android.lib.resources.shares
 
 /**
  * Provides method to define a set of share permissions and calculate the appropiate
  * int value representing it.
  */
-public class SharePermissionsBuilder {
+class SharePermissionsBuilder {
 
-    /**
-     * Set of permissions
-     */
-    private int mPermissions = OCShare.READ_PERMISSION_FLAG;    // READ is minimum permission
+    /** Set of permissions  */
+    private var permissions = RemoteShare.READ_PERMISSION_FLAG    // READ is minimum permission
 
     /**
      * Sets or clears permission to reshare a file or folder.
@@ -42,9 +40,9 @@ public class SharePermissionsBuilder {
      * @param enabled 'True' to set, 'false' to clear.
      * @return Instance to builder itself, to allow consecutive calls to setters
      */
-    public SharePermissionsBuilder setSharePermission(boolean enabled) {
-        updatePermission(OCShare.SHARE_PERMISSION_FLAG, enabled);
-        return this;
+    fun setSharePermission(enabled: Boolean): SharePermissionsBuilder {
+        updatePermission(RemoteShare.SHARE_PERMISSION_FLAG, enabled)
+        return this
     }
 
     /**
@@ -53,9 +51,9 @@ public class SharePermissionsBuilder {
      * @param enabled 'True' to set, 'false' to clear.
      * @return Instance to builder itself, to allow consecutive calls to setters
      */
-    public SharePermissionsBuilder setUpdatePermission(boolean enabled) {
-        updatePermission(OCShare.UPDATE_PERMISSION_FLAG, enabled);
-        return this;
+    fun setUpdatePermission(enabled: Boolean): SharePermissionsBuilder {
+        updatePermission(RemoteShare.UPDATE_PERMISSION_FLAG, enabled)
+        return this
     }
 
     /**
@@ -64,9 +62,9 @@ public class SharePermissionsBuilder {
      * @param enabled 'True' to set, 'false' to clear.
      * @return Instance to builder itself, to allow consecutive calls to setters
      */
-    public SharePermissionsBuilder setCreatePermission(boolean enabled) {
-        updatePermission(OCShare.CREATE_PERMISSION_FLAG, enabled);
-        return this;
+    fun setCreatePermission(enabled: Boolean): SharePermissionsBuilder {
+        updatePermission(RemoteShare.CREATE_PERMISSION_FLAG, enabled)
+        return this
     }
 
     /**
@@ -75,9 +73,9 @@ public class SharePermissionsBuilder {
      * @param enabled 'True' to set, 'false' to clear.
      * @return Instance to builder itself, to allow consecutive calls to setters
      */
-    public SharePermissionsBuilder setDeletePermission(boolean enabled) {
-        updatePermission(OCShare.DELETE_PERMISSION_FLAG, enabled);
-        return this;
+    fun setDeletePermission(enabled: Boolean): SharePermissionsBuilder {
+        updatePermission(RemoteShare.DELETE_PERMISSION_FLAG, enabled)
+        return this
     }
 
     /**
@@ -86,13 +84,13 @@ public class SharePermissionsBuilder {
      * @param permissionsFlag Flag for the permission to update.
      * @param enable          'True' to set, 'false' to clear.
      */
-    private void updatePermission(int permissionsFlag, boolean enable) {
+    private fun updatePermission(permissionsFlag: Int, enable: Boolean) {
         if (enable) {
             // add permission
-            mPermissions |= permissionsFlag;
+            permissions = permissions or permissionsFlag
         } else {
             // delete permission
-            mPermissions &= ~permissionsFlag;
+            permissions = permissions and permissionsFlag.inv()
         }
     }
 
@@ -101,7 +99,5 @@ public class SharePermissionsBuilder {
      *
      * @return An int value representing the accumulated set of permissions.
      */
-    public int build() {
-        return mPermissions;
-    }
+    fun build(): Int = permissions
 }

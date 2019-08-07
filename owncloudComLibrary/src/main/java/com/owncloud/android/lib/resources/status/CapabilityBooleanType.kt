@@ -1,6 +1,6 @@
 /* ownCloud Android Library is available under MIT license
- *   @author Christian Schabesberger
  *   Copyright (C) 2019 ownCloud GmbH.
+ *   @author masensio
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -22,25 +22,44 @@
  *   THE SOFTWARE.
  *
  */
+package com.owncloud.android.lib.resources.status
 
-package com.owncloud.android.lib.resources.shares;
+/**
+ * Enum for Boolean Type in RemoteCapability parameters, with values:
+ * -1 - Unknown
+ * 0 - False
+ * 1 - True
+ */
+enum class CapabilityBooleanType private constructor(val value: Int) {
+    UNKNOWN(-1),
+    FALSE(0),
+    TRUE(1);
 
-import java.util.ArrayList;
+    val isUnknown: Boolean
+        get() = value == -1
 
-public class ShareParserResult {
-    private ArrayList<OCShare> shares;
-    private String parserMessage;
+    val isFalse: Boolean
+        get() = value == 0
 
-    public ShareParserResult(ArrayList<OCShare> shares, String parserMessage) {
-        this.shares = shares;
-        this.parserMessage = parserMessage;
-    }
+    val isTrue: Boolean
+        get() = value == 1
 
-    public ArrayList<OCShare> getShares() {
-        return shares;
-    }
+    companion object {
+        fun fromValue(value: Int): CapabilityBooleanType? {
+            return when (value) {
+                -1 -> UNKNOWN
+                0 -> FALSE
+                1 -> TRUE
+                else -> null
+            }
+        }
 
-    public String getParserMessage() {
-        return parserMessage;
+        fun fromBooleanValue(boolValue: Boolean): CapabilityBooleanType {
+            return if (boolValue) {
+                TRUE
+            } else {
+                FALSE
+            }
+        }
     }
 }

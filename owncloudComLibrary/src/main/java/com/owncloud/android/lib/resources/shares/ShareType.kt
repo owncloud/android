@@ -1,6 +1,5 @@
 /* ownCloud Android Library is available under MIT license
- *   Copyright (C) 2016 ownCloud GmbH.
- *   @author masensio
+ *   Copyright (C) 2019 ownCloud GmbH.
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -22,59 +21,44 @@
  *   THE SOFTWARE.
  *
  */
-package com.owncloud.android.lib.resources.status;
+
+package com.owncloud.android.lib.resources.shares
 
 /**
- * Enum for Boolean Type in OCCapability parameters, with values:
- * -1 - Unknown
- * 0 - False
- * 1 - True
+ * Enum for Share Type, with values:
+ * -1 - No shared
+ * 0 - Shared by user
+ * 1 - Shared by group
+ * 3 - Shared by public link
+ * 4 - Shared by e-mail
+ * 5 - Shared by contact
+ * 6 - Federated
+ *
+ * @author masensio
  */
-public enum CapabilityBooleanType {
-    UNKNOWN(-1),
-    FALSE(0),
-    TRUE(1);
 
-    private int value;
+enum class ShareType constructor(val value: Int) {
+    NO_SHARED(-1),
+    USER(0),
+    GROUP(1),
+    PUBLIC_LINK(3),
+    EMAIL(4),
+    CONTACT(5),
+    FEDERATED(6);
 
-    CapabilityBooleanType(int value) {
-        this.value = value;
-    }
+    companion object {
 
-    public static CapabilityBooleanType fromValue(int value) {
-        switch (value) {
-            case -1:
-                return UNKNOWN;
-            case 0:
-                return FALSE;
-            case 1:
-                return TRUE;
-        }
-        return null;
-    }
-
-    public static CapabilityBooleanType fromBooleanValue(boolean boolValue) {
-        if (boolValue) {
-            return TRUE;
-        } else {
-            return FALSE;
+        fun fromValue(value: Int): ShareType? {
+            return when (value) {
+                -1 -> NO_SHARED
+                0 -> USER
+                1 -> GROUP
+                3 -> PUBLIC_LINK
+                4 -> EMAIL
+                5 -> CONTACT
+                6 -> FEDERATED
+                else -> null
+            }
         }
     }
-
-    public int getValue() {
-        return value;
-    }
-
-    public boolean isUnknown() {
-        return getValue() == -1;
-    }
-
-    public boolean isFalse() {
-        return getValue() == 0;
-    }
-
-    public boolean isTrue() {
-        return getValue() == 1;
-    }
-
-};
+}

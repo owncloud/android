@@ -1,9 +1,18 @@
 apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+
+apply plugin: 'kotlin-allopen'
 
 dependencies {
     api 'com.squareup.okhttp3:okhttp:3.12.0'
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.3.11"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
     api 'com.gitlab.ownclouders:dav4android:oc_support_1.0.1'
+}
+
+allOpen {
+    // allows mocking for classes w/o directly opening them for release builds
+    annotation 'com.owncloud.android.lib.testing.OpenClass'
 }
 
 android {

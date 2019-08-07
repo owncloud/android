@@ -30,7 +30,7 @@ import okhttp3.Response;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.ListIterator;
 
 /**
  * Http interceptor to use multiple interceptors in the same {@link okhttp3.OkHttpClient} instance
@@ -86,7 +86,7 @@ public class HttpInterceptor implements Interceptor {
     }
 
     public void deleteRequestHeaderInterceptor(String headerName) {
-        Iterator<RequestInterceptor> requestInterceptorIterator = mRequestInterceptors.iterator();
+        ListIterator<RequestInterceptor> requestInterceptorIterator = mRequestInterceptors.listIterator();
         while (requestInterceptorIterator.hasNext()) {
             RequestInterceptor currentRequestInterceptor = requestInterceptorIterator.next();
             if (currentRequestInterceptor instanceof RequestHeaderInterceptor &&

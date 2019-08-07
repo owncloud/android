@@ -526,6 +526,10 @@ public class RemoteOperationResult<T extends Object>
         mData = data;
     }
 
+    public void setHttpPhrase(String httpPhrase) {
+        mHttpPhrase = httpPhrase;
+    }
+
     public enum ResultCode {
         OK,
         OK_SSL,

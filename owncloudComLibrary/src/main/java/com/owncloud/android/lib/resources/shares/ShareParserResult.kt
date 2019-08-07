@@ -1,5 +1,6 @@
 /* ownCloud Android Library is available under MIT license
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   @author Christian Schabesberger
+ *   Copyright (C) 2019 ownCloud GmbH.
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -22,56 +23,6 @@
  *
  */
 
-package com.owncloud.android.lib.resources.shares;
+package com.owncloud.android.lib.resources.shares
 
-/**
- * Enum for Share Type, with values:
- * -1 - No shared
- * 0 - Shared by user
- * 1 - Shared by group
- * 3 - Shared by public link
- * 4 - Shared by e-mail
- * 5 - Shared by contact
- *
- * @author masensio
- */
-
-public enum ShareType {
-    NO_SHARED(-1),
-    USER(0),
-    GROUP(1),
-    PUBLIC_LINK(3),
-    EMAIL(4),
-    CONTACT(5),
-    FEDERATED(6);
-
-    private int value;
-
-    private ShareType(int value) {
-        this.value = value;
-    }
-
-    public static ShareType fromValue(int value) {
-        switch (value) {
-            case -1:
-                return NO_SHARED;
-            case 0:
-                return USER;
-            case 1:
-                return GROUP;
-            case 3:
-                return PUBLIC_LINK;
-            case 4:
-                return EMAIL;
-            case 5:
-                return CONTACT;
-            case 6:
-                return FEDERATED;
-        }
-        return null;
-    }
-
-    public int getValue() {
-        return value;
-    }
-};
+class ShareParserResult(val shares: List<RemoteShare>)
