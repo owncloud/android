@@ -35,6 +35,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.CompoundButton
 import android.widget.TextView
 import androidx.appcompat.widget.SwitchCompat
+import androidx.core.view.isGone
 import androidx.fragment.app.DialogFragment
 import com.owncloud.android.R
 import com.owncloud.android.capabilities.db.OCCapability
@@ -142,7 +143,6 @@ class PublicShareDialogFragment : DialogFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         val view = inflater.inflate(R.layout.share_public_dialog, container, false)
 
         Log_OC.d(TAG, "onCreateView")
@@ -628,6 +628,8 @@ class PublicShareDialogFragment : DialogFragment() {
 
         // Set password label depending on the checked permission option
         shareViaLinkEditPermissionGroup?.setOnCheckedChangeListener { group, checkedId ->
+            public_link_error_message?.isGone = true
+
             if (checkedId == shareViaLinkEditPermissionReadOnly.id) {
                 if (capabilities?.filesSharingPublicPasswordEnforcedReadOnly == CapabilityBooleanType.TRUE.value) {
                     setPasswordEnforced()
