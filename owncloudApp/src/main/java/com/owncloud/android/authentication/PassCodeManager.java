@@ -63,7 +63,7 @@ public class PassCodeManager {
     }
 
     public void onActivityCreated(Activity activity) {
-        if (!MainApp.isDeveloper()) {
+        if (!MainApp.Companion.isDeveloper()) {
             if (isPassCodeEnabled()) {
                 activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
             } else {
@@ -106,7 +106,7 @@ public class PassCodeManager {
     }
 
     private void checkPasscode(Activity activity) {
-        Intent i = new Intent(MainApp.getAppContext(), PassCodeActivity.class);
+        Intent i = new Intent(MainApp.Companion.getAppContext(), PassCodeActivity.class);
         i.setAction(PassCodeActivity.ACTION_CHECK);
         i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         activity.startActivity(i);
@@ -125,7 +125,7 @@ public class PassCodeManager {
     }
 
     public boolean isPassCodeEnabled() {
-        SharedPreferences appPrefs = PreferenceManager.getDefaultSharedPreferences(MainApp.getAppContext());
+        SharedPreferences appPrefs = PreferenceManager.getDefaultSharedPreferences(MainApp.Companion.getAppContext());
         return (appPrefs.getBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false));
     }
 

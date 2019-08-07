@@ -30,7 +30,6 @@ import android.view.WindowManager;
 
 import androidx.annotation.RequiresApi;
 import com.owncloud.android.MainApp;
-import com.owncloud.android.lib.BuildConfig;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.ui.activity.FingerprintActivity;
 
@@ -75,7 +74,7 @@ public class FingerprintManager {
     }
 
     public void onActivityCreated(Activity activity) {
-        if (!MainApp.isDeveloper()) {
+        if (!MainApp.Companion.isDeveloper()) {
             if (isFingerPrintEnabled()) {
                 activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
             } else {
@@ -106,7 +105,7 @@ public class FingerprintManager {
                     return;
                 }
 
-                Intent i = new Intent(MainApp.getAppContext(), FingerprintActivity.class);
+                Intent i = new Intent(MainApp.Companion.getAppContext(), FingerprintActivity.class);
                 activity.startActivity(i);
             }
         }
@@ -140,7 +139,7 @@ public class FingerprintManager {
     }
 
     public boolean isFingerPrintEnabled() {
-        SharedPreferences appPrefs = PreferenceManager.getDefaultSharedPreferences(MainApp.getAppContext());
+        SharedPreferences appPrefs = PreferenceManager.getDefaultSharedPreferences(MainApp.Companion.getAppContext());
         return (appPrefs.getBoolean(FingerprintActivity.PREFERENCE_SET_FINGERPRINT, false));
     }
 
