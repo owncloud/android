@@ -41,6 +41,7 @@ import android.database.sqlite.SQLiteQueryBuilder
 import android.net.Uri
 import android.os.CancellationSignal
 import android.os.ParcelFileDescriptor
+import android.provider.BaseColumns
 import android.text.TextUtils
 import androidx.sqlite.db.SupportSQLiteDatabase
 import androidx.sqlite.db.SupportSQLiteQueryBuilder
@@ -56,7 +57,6 @@ import com.owncloud.android.db.ProviderMeta
 import com.owncloud.android.db.ProviderMeta.ProviderTableMeta
 import com.owncloud.android.lib.common.accounts.AccountUtils
 import com.owncloud.android.lib.common.utils.Log_OC
-import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.shares.data.datasources.OCLocalShareDataSource
 import com.owncloud.android.shares.domain.OCShare
 import com.owncloud.android.utils.FileStorageUtils
@@ -93,6 +93,9 @@ class FileContentProvider(val appExecutors: AppExecutors = AppExecutors()) : Con
     }
 
     private fun delete(db: SQLiteDatabase, uri: Uri, where: String?, whereArgs: Array<String>?): Int {
+        if (where != null && whereArgs == null) {
+            throw IllegalArgumentException("Selection not allowed, use parameterized queries")
+        }
         var count = 0
         when (uriMatcher.match(uri)) {
             SINGLE_FILE -> {
@@ -263,28 +266,6 @@ class FileContentProvider(val appExecutors: AppExecutors = AppExecutors()) : Con
 
     }
 
-    private fun updateFilesTableAccordingToShareInsertion(
-        db: SQLiteDatabase, newShare: ContentValues
-    ) {
-        val fileValues = ContentValues()
-        val newShareType = newShare.getAsInteger(ProviderTableMeta.OCSHARES_SHARE_TYPE)!!
-        if (newShareType == ShareType.PUBLIC_LINK.value) {
-            fileValues.put(ProviderTableMeta.FILE_SHARED_VIA_LINK, TRUE)
-        } else if (newShareType == ShareType.USER.value ||
-            newShareType == ShareType.GROUP.value ||
-            newShareType == ShareType.FEDERATED.value
-        ) {
-            fileValues.put(ProviderTableMeta.FILE_SHARED_WITH_SHAREE, TRUE)
-        }
-
-        val where = "${ProviderTableMeta.FILE_PATH}=? AND ${ProviderTableMeta.FILE_ACCOUNT_OWNER}=?"
-        val whereArgs = arrayOf(
-            newShare.getAsString(ProviderTableMeta.OCSHARES_PATH),
-            newShare.getAsString(ProviderTableMeta.OCSHARES_ACCOUNT_OWNER)
-        )
-        db.update(ProviderTableMeta.FILE_TABLE_NAME, fileValues, where, whereArgs)
-    }
-
     override fun onCreate(): Boolean {
         dbHelper = DataBaseHelper(context)
 
@@ -324,6 +305,7 @@ class FileContentProvider(val appExecutors: AppExecutors = AppExecutors()) : Con
 
         val sqlQuery = SQLiteQueryBuilder()
 
+        sqlQuery.setStrict(true)
         sqlQuery.tables = ProviderTableMeta.FILE_TABLE_NAME
 
         // To use full SQL queries within Room
@@ -351,7 +333,7 @@ class FileContentProvider(val appExecutors: AppExecutors = AppExecutors()) : Con
             SHARES -> {
                 val supportSqlQuery = SupportSQLiteQueryBuilder
                     .builder(ProviderTableMeta.OCSHARES_TABLE_NAME)
-                    .columns(projection)
+                    .columns(computeProjection(projection))
                     .selection(selection, selectionArgs)
                     .orderBy(
                         if (TextUtils.isEmpty(sortOrder)) {
@@ -391,6 +373,7 @@ class FileContentProvider(val appExecutors: AppExecutors = AppExecutors()) : Con
                                 + uri.pathSegments[1]
                     )
                 }
+                sqlQuery.setProjectionMap(cameraUploadSyncProjectionMap)
             }
             QUOTAS -> {
                 sqlQuery.tables = ProviderTableMeta.USER_QUOTAS_TABLE_NAME
@@ -400,6 +383,7 @@ class FileContentProvider(val appExecutors: AppExecutors = AppExecutors()) : Con
                                 + uri.pathSegments[1]
                     )
                 }
+                sqlQuery.setProjectionMap(quotaProjectionMap)
             }
             else -> throw IllegalArgumentException("Unknown uri id: $uri")
         }
@@ -410,6 +394,7 @@ class FileContentProvider(val appExecutors: AppExecutors = AppExecutors()) : Con
                 CAPABILITIES -> ProviderTableMeta.CAPABILITIES_DEFAULT_SORT_ORDER
                 UPLOADS -> ProviderTableMeta.UPLOADS_DEFAULT_SORT_ORDER
                 CAMERA_UPLOADS_SYNC -> ProviderTableMeta.CAMERA_UPLOADS_SYNC_DEFAULT_SORT_ORDER
+                QUOTAS -> ProviderTableMeta.USER_QUOTAS_DEFAULT_SORT_ORDER
                 else // Files
                 -> ProviderTableMeta.FILE_DEFAULT_SORT_ORDER
             }
@@ -422,6 +407,43 @@ class FileContentProvider(val appExecutors: AppExecutors = AppExecutors()) : Con
         val c = sqlQuery.query(db, projection, selection, selectionArgs, null, null, order)
         c.setNotificationUri(context?.contentResolver, uri)
         return c
+    }
+
+    private fun computeProjection(projectionIn: Array<String>?): Array<String?> {
+        if (!projectionIn.isNullOrEmpty()) {
+            val projection = arrayOfNulls<String>(projectionIn.size)
+            val length = projectionIn.size
+
+            for (i in 0 until length) {
+                val userColumn = projectionIn[i]
+                val column = shareProjectionMap[userColumn]
+
+                if (column != null) {
+                    projection[i] = column
+                    continue
+                }
+
+                throw IllegalArgumentException("Invalid column " + projectionIn[i])
+            }
+            return projection
+        } else {
+            // Return all columns in projection map.
+            val entrySet = shareProjectionMap.entries
+            val projection = arrayOfNulls<String>(entrySet.size)
+            val entryIter = entrySet.iterator()
+            var i = 0
+
+            while (entryIter.hasNext()) {
+                val entry = entryIter.next()
+
+                // Don't include the _count column when people ask for no projectionIn.
+                if (entry.key == BaseColumns._COUNT) {
+                    continue
+                }
+                projection[i++] = entry.value
+            }
+            return projection
+        }
     }
 
     override fun update(uri: Uri, values: ContentValues, selection: String?, selectionArgs: Array<String>?): Int {
@@ -445,6 +467,9 @@ class FileContentProvider(val appExecutors: AppExecutors = AppExecutors()) : Con
         selection: String?,
         selectionArgs: Array<String>?
     ): Int {
+        if (selection != null && selectionArgs == null) {
+            throw IllegalArgumentException("Selection not allowed, use parameterized queries")
+        }
         when (uriMatcher.match(uri)) {
             DIRECTORY -> return 0 //updateFolderSize(db, selectionArgs[0]);
             SHARES -> return OwncloudDatabase.getDatabase(context!!).shareDao()
@@ -1324,9 +1349,6 @@ class FileContentProvider(val appExecutors: AppExecutors = AppExecutors()) : Con
 
         private val fileProjectionMap = HashMap<String, String>()
 
-        private const val TRUE = 1
-        private const val FALSE = 0
-
         init {
 
             fileProjectionMap[ProviderTableMeta._ID] = ProviderTableMeta._ID
@@ -1465,6 +1487,28 @@ class FileContentProvider(val appExecutors: AppExecutors = AppExecutors()) : Con
             uploadProjectionMap[ProviderTableMeta.UPLOADS_LAST_RESULT] = ProviderTableMeta.UPLOADS_LAST_RESULT
             uploadProjectionMap[ProviderTableMeta.UPLOADS_CREATED_BY] = ProviderTableMeta.UPLOADS_CREATED_BY
             uploadProjectionMap[ProviderTableMeta.UPLOADS_TRANSFER_ID] = ProviderTableMeta.UPLOADS_TRANSFER_ID
+        }
+
+        private val cameraUploadSyncProjectionMap = HashMap<String, String>()
+
+        init {
+            cameraUploadSyncProjectionMap[ProviderTableMeta._ID] = ProviderTableMeta._ID
+            cameraUploadSyncProjectionMap[ProviderTableMeta.PICTURES_LAST_SYNC_TIMESTAMP] =
+                ProviderTableMeta.PICTURES_LAST_SYNC_TIMESTAMP
+            cameraUploadSyncProjectionMap[ProviderTableMeta.VIDEOS_LAST_SYNC_TIMESTAMP] =
+                ProviderTableMeta.VIDEOS_LAST_SYNC_TIMESTAMP
+        }
+
+        private val quotaProjectionMap = HashMap<String, String>()
+
+        init {
+            quotaProjectionMap[ProviderTableMeta._ID] = ProviderTableMeta._ID
+            quotaProjectionMap[ProviderTableMeta.USER_QUOTAS__ACCOUNT_NAME] =
+                ProviderTableMeta.USER_QUOTAS__ACCOUNT_NAME
+            quotaProjectionMap[ProviderTableMeta.USER_QUOTAS__FREE] = ProviderTableMeta.USER_QUOTAS__FREE
+            quotaProjectionMap[ProviderTableMeta.USER_QUOTAS__RELATIVE] = ProviderTableMeta.USER_QUOTAS__RELATIVE
+            quotaProjectionMap[ProviderTableMeta.USER_QUOTAS__TOTAL] = ProviderTableMeta.USER_QUOTAS__TOTAL
+            quotaProjectionMap[ProviderTableMeta.USER_QUOTAS__USED] = ProviderTableMeta.USER_QUOTAS__USED
         }
     }
 }
