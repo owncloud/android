@@ -4,7 +4,6 @@
   + Private link accessible when share API is disabled
 - Bug fixes, including:
   + Fix images not detected in Android 9 gallery after being downloaded
-  + Fix crash when notifying upload result
 
 ## 2.11.1 (June 2019)
 - Fix crash triggered when notifying upload results
