@@ -69,40 +69,48 @@ class DocumentsStorageProvider : DocumentsProvider() {
     private var requestedFolderIdForSync: Long = -1
     private var syncRequired = true
     private var currentStorageManager: FileDataStorageManager? = null
+    private lateinit var filetoUpload: OCFile
+    private val UNEXISTING_DOCUMENT_ID = "-1"
 
     override fun openDocument(documentId: String, mode: String, signal: CancellationSignal?): ParcelFileDescriptor? {
         Log_OC.d(TAG, "Trying to open $documentId in mode $mode")
-        val docId = documentId.toLong()
-        updateCurrentStorageManagerIfNeeded(docId)
 
-        var ocFile: OCFile = currentStorageManager?.getFileById(docId)
-            ?: throw FileNotFoundException("Failed to open document with id $documentId and mode $mode")
-
-        val uploadOnly: Boolean = ocFile.fileLength == 0L
+        var ocFile: OCFile
+        val uploadOnly: Boolean = documentId.equals(UNEXISTING_DOCUMENT_ID)
         Log_OC.d(TAG, "Only Upload: $uploadOnly")
 
-        if (!ocFile.isDown && !uploadOnly) {
-            val intent = Intent(context, FileDownloader::class.java).apply {
-                putExtra(FileDownloader.KEY_ACCOUNT, currentStorageManager!!.account)
-                putExtra(FileDownloader.KEY_FILE, ocFile)
-            }
+        if (!uploadOnly) {
+            val docId = documentId.toLong()
+            updateCurrentStorageManagerIfNeeded(docId)
 
-            context?.startService(intent)
+            ocFile = currentStorageManager?.getFileById(docId)
+                ?: throw FileNotFoundException("Failed to open document with id $documentId and mode $mode")
 
-            do {
-                if (!waitOrGetCancelled(signal)) {
-                    return null
+            if (!ocFile.isDown) {
+                val intent = Intent(context, FileDownloader::class.java).apply {
+                    putExtra(FileDownloader.KEY_ACCOUNT, currentStorageManager!!.account)
+                    putExtra(FileDownloader.KEY_FILE, ocFile)
                 }
-                ocFile = currentStorageManager?.getFileById(docId)
-                    ?: throw FileNotFoundException("Failed to open document with id $documentId and mode $mode")
 
-            } while (!ocFile.isDown)
+                context?.startService(intent)
+
+                do {
+                    if (!waitOrGetCancelled(signal)) {
+                        return null
+                    }
+                    ocFile = currentStorageManager?.getFileById(docId)
+                        ?: throw FileNotFoundException("Failed to open document with id $documentId and mode $mode")
+
+                } while (!ocFile.isDown)
+            }
+        } else {
+            ocFile = filetoUpload
         }
 
         val accessMode: Int = ParcelFileDescriptor.parseMode(mode)
 
         val isWrite: Boolean = mode.contains("w")
-        val fileToOpen = File(ocFile.storagePath)
+        val fileToOpen = File(filetoUpload.storagePath)
         if (!isWrite) return ParcelFileDescriptor.open(fileToOpen, accessMode)
 
         val handler = Handler(context?.mainLooper)
@@ -192,6 +200,10 @@ class DocumentsStorageProvider : DocumentsProvider() {
     }
 
     override fun queryDocument(documentId: String, projection: Array<String>?): Cursor {
+        if (documentId.equals(UNEXISTING_DOCUMENT_ID)) return FileCursor(projection).apply {
+            addFile(filetoUpload)
+        }
+
         Log_OC.d(TAG, "Query Document: $documentId")
         val docId = documentId.toLong()
         updateCurrentStorageManagerIfNeeded(docId)
@@ -321,30 +333,16 @@ class DocumentsStorageProvider : DocumentsProvider() {
     }
 
     private fun createFile(parentDocument: OCFile, mimeType: String, displayName: String): String {
-        Log_OC.d(TAG, "Trying to create file $displayName with mimetype $mimeType in ${parentDocument.remotePath}")
+        val dir = FileStorageUtils.getTemporalPath(currentStorageManager?.account?.name)
+        val newPath = parentDocument.remotePath + displayName
 
-        try {
-            val newPath = parentDocument.remotePath + displayName
-
-            val dir = FileStorageUtils.getSavePath(currentStorageManager?.account?.name)
-            val newFile = File(dir, newPath)
-            newFile.createNewFile()
-
-            Log_OC.d(TAG, "CreateFile : ${newFile.absolutePath}")
-
-            val newOCFile = OCFile(newPath).apply {
-                mimetype = mimeType
-                parentId = parentDocument.fileId
-                storagePath = newFile.absolutePath
-            }
-
-            currentStorageManager?.saveFile(newOCFile)
-
-            return newOCFile.fileId.toString()
-
-        } catch (e: IOException) {
-            throw FileNotFoundException("Error creating new file $displayName")
+        filetoUpload = OCFile(newPath).apply {
+            mimetype = mimeType
+            parentId = parentDocument.fileId
+            storagePath = dir + newPath
         }
+
+        return UNEXISTING_DOCUMENT_ID
     }
 
     private fun updateCurrentStorageManagerIfNeeded(docId: Long) {
