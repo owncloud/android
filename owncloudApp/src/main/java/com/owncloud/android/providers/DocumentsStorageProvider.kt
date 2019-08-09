@@ -75,60 +75,84 @@ class DocumentsStorageProvider : DocumentsProvider() {
         val docId = documentId.toLong()
         updateCurrentStorageManagerIfNeeded(docId)
 
-        var file = currentStorageManager?.getFileById(docId)
+        var ocFile: OCFile = currentStorageManager?.getFileById(docId)
             ?: throw FileNotFoundException("Failed to open document with id $documentId and mode $mode")
 
-        if (!file.isDown) {
-            val i = Intent(context, FileDownloader::class.java).apply {
+        val uploadOnly: Boolean = ocFile.fileLength == 0L
+        Log_OC.d(TAG, "Only Upload: $uploadOnly")
+
+        if (!ocFile.isDown && !uploadOnly) {
+            val intent = Intent(context, FileDownloader::class.java).apply {
                 putExtra(FileDownloader.KEY_ACCOUNT, currentStorageManager!!.account)
-                putExtra(FileDownloader.KEY_FILE, file)
+                putExtra(FileDownloader.KEY_FILE, ocFile)
             }
 
-            context?.startService(i)
+            context?.startService(intent)
 
             do {
                 if (!waitOrGetCancelled(signal)) {
                     return null
                 }
-                file = currentStorageManager?.getFileById(docId)
+                ocFile = currentStorageManager?.getFileById(docId)
                     ?: throw FileNotFoundException("Failed to open document with id $documentId and mode $mode")
 
-            } while (!file.isDown)
+            } while (!ocFile.isDown)
         }
 
         val accessMode: Int = ParcelFileDescriptor.parseMode(mode)
 
         val isWrite: Boolean = mode.contains("w")
-        if (!isWrite) return ParcelFileDescriptor.open(File(file.storagePath), accessMode)
+        val fileToOpen = File(ocFile.storagePath)
+        if (!isWrite) return ParcelFileDescriptor.open(fileToOpen, accessMode)
 
         val handler = Handler(context?.mainLooper)
         // Attach a close listener if the document is opened in write mode.
         try {
-            return ParcelFileDescriptor.open(File(file.storagePath), accessMode, handler) {
+            return ParcelFileDescriptor.open(fileToOpen, accessMode, handler) {
                 // Update the file with the cloud server. The client is done writing.
                 Log_OC.d(TAG, "A file with id $documentId has been closed! Time to synchronize it with server.")
-                Thread {
-                    SynchronizeFileOperation(
-                        file,
-                        null,
-                        currentStorageManager?.account,
-                        false,
-                        context,
-                        false
-                    ).apply {
-                        val result = execute(currentStorageManager, context)
-                        if (result.code == RemoteOperationResult.ResultCode.SYNC_CONFLICT) {
-                            NotificationUtils.notifyConflict(file, currentStorageManager?.account, context)
+                // If only needs to upload that file
+                if (uploadOnly) {
+                    ocFile.fileLength = fileToOpen.length()
+                    Thread {
+                        TransferRequester().run {
+                            uploadNewFile(
+                                context,
+                                currentStorageManager?.account,
+                                ocFile.storagePath,
+                                ocFile.remotePath,
+                                FileUploader.LOCAL_BEHAVIOUR_COPY,
+                                ocFile.mimetype,
+                                false,
+                                UploadFileOperation.CREATED_BY_USER
+                            )
                         }
-                    }
-                }.apply { start() }
+                    }.run { start() }
+                    // If needs to synchronize
+                } else {
+                    Log_OC.d(TAG, "Needs to Sync")
+                    Thread {
+                        SynchronizeFileOperation(
+                            ocFile,
+                            null,
+                            currentStorageManager?.account,
+                            false,
+                            context,
+                            false
+                        ).apply {
+                            val result = execute(currentStorageManager, context)
+                            if (result.code == RemoteOperationResult.ResultCode.SYNC_CONFLICT) {
+                                NotificationUtils.notifyConflict(ocFile, currentStorageManager?.account, context)
+                            }
+                        }
+                    }.run { start() }
+                }
             }
         } catch (e: IOException) {
             throw FileNotFoundException(
                 "Failed to open document with id $documentId and mode $mode"
             )
         }
-
     }
 
     override fun queryChildDocuments(
@@ -300,28 +324,23 @@ class DocumentsStorageProvider : DocumentsProvider() {
         Log_OC.d(TAG, "Trying to create file $displayName with mimetype $mimeType in ${parentDocument.remotePath}")
 
         try {
-            val tempDir = File(FileStorageUtils.getTemporalPath(currentStorageManager?.account?.name))
-            val newFile = File(tempDir, displayName)
+            val newPath = parentDocument.remotePath + displayName
+
+            val dir = FileStorageUtils.getSavePath(currentStorageManager?.account?.name)
+            val newFile = File(dir, newPath)
             newFile.createNewFile()
 
-            TransferRequester().apply {
-                uploadNewFile(
-                    context,
-                    currentStorageManager?.account,
-                    newFile.path,
-                    parentDocument.remotePath + displayName,
-                    FileUploader.LOCAL_BEHAVIOUR_FORGET,
-                    null,
-                    true, // create parent folder if not existent
-                    UploadFileOperation.CREATED_BY_USER
-                )
-            }
-            Thread.sleep(2000)
+            Log_OC.d(TAG, "CreateFile : ${newFile.absolutePath}")
 
-            context?.contentResolver?.notifyChange(toNotifyUri(toUri(parentDocument.fileId.toString())), null)
-            val id = currentStorageManager?.getFileByPath(parentDocument.remotePath + displayName)?.fileId.toString()
-            Log_OC.d(TAG, "New File $id")
-            return id
+            val newOCFile = OCFile(newPath).apply {
+                mimetype = mimeType
+                parentId = parentDocument.fileId
+                storagePath = newFile.absolutePath
+            }
+
+            currentStorageManager?.saveFile(newOCFile)
+
+            return newOCFile.fileId.toString()
 
         } catch (e: IOException) {
             throw FileNotFoundException("Error creating new file $displayName")
