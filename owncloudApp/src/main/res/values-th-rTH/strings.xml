@@ -354,6 +354,9 @@
   <string name="preview_image_error_unknown_format">ไม่สามารถแสดงรูปภาพนี้ได้</string>
   <string name="error__upload__local_file_not_copied">%1$s ไม่สามารถคัดลอกไปยังโฟลเดอร์ %2$s ในเครื่อง</string>
   <string name="prefs_camera_picture_upload_path_title">เส้นทางการอัปโหลดรูปภาพ</string>
+  <string name="get_shares_error">เกิดข้อผิดพลาดขณะพยายามเรียกคืนการแชร์</string>
+  <string name="get_sharees_error">เกิดข้อผิดพลาดขณะพยายามดึงผู้ใช้และกลุ่ม</string>
+  <string name="get_capabilities_error">เกิดข้อผิดพลาดขณะพยายามเร่งขีดความสามารถ</string>
   <string name="share_link_no_support_share_api">ขออภัยการแชร์ไม่ได้เปิดใช้งานบนเซิร์ฟเวอร์ของคุณ กรุณาติดต่อผู้ดูแลระบบ</string>
   <string name="share_link_file_no_exist">ไม่สามารถแชร์ กรุณาตรวจสอบว่ายังมีไฟล์นั้นอยู่</string>
   <string name="share_link_file_error">เกิดข้อผิดพลาดในขณะที่พยายามจะแชร์ไฟล์หรือโฟลเดอร์นี้</string>
@@ -509,6 +512,7 @@
   <string name="share_via_link_expiration_date_enforced_label">หมดอายุ *</string>
   <string name="share_via_link_expiration_date_explanation_label">ลิงก์สาธารณะจะหมดอายุไม่เกิน %1$d วันหลังจากถูกสร้างขึ้น</string>
   <string name="share_via_link_default_name_template">%1$s ลิงก์</string>
+  <string name="share_via_link_empty_password">กรุณากรอกรหัสผ่าน</string>
   <string name="private_link_info">นี่เป็นลิงก์ส่วนตัวเฉพาะคุณเท่านั้นที่สามารถเข้าถึงไฟล์หรือโฟลเดอร์ได้ ใช้เป็นลิงก์ถาวรสำหรับตัวคุณเอง</string>
   <string name="file_private_link_error">ลิงก์ส่วนตัวใช้ไม่ได้กับไฟล์นี้</string>
   <string name="download_notification_channel_name">ดาวน์โหลด</string>
