@@ -54,6 +54,7 @@ import com.owncloud.android.ui.activity.FileActivity
 import com.owncloud.android.utils.AccountsManager
 import com.owncloud.android.utils.TestUtil
 import com.owncloud.android.vo.Resource
+import org.hamcrest.Matchers.not
 import org.junit.After
 import org.junit.AfterClass
 import org.junit.Before
@@ -396,6 +397,44 @@ class EditPublicShareFolderTest {
         // Open Dialog to check correct permission change
         onView(withId(R.id.editPublicLinkButton)).perform(click())
         onView(withId(R.id.shareViaLinkEditPermissionReadOnly)).check(matches(isChecked()))
+
+    }
+
+    @Test
+    fun editPrivateShareSettingSharingPermissionLevelWithPasswordEnforced() {
+        loadCapabilitiesSuccessfully(
+            TestUtil.createCapability(
+                versionString = "10.1.1",
+                sharingPublicMultiple = CapabilityBooleanType.TRUE.value,
+                sharingPublicSupportsUploadOnly = CapabilityBooleanType.TRUE.value,
+                sharingPublicUpload = CapabilityBooleanType.TRUE.value,
+                sharingPublicPasswordEnforcedReadOnly = CapabilityBooleanType.FALSE.value,
+                sharingPublicPasswordEnforcedReadWrite = CapabilityBooleanType.FALSE.value,
+                sharingPublicPasswordEnforcedUploadOnly = CapabilityBooleanType.TRUE.value,
+                sharingPublicExpireDateEnabled = 1,
+                sharingPublicExpireDateDays = 10,
+                sharingPublicExpireDateEnforced = 1
+            )
+        )
+
+        val existingPublicShare = publicShares[0]
+        loadSharesSuccessfully(arrayListOf(existingPublicShare))
+
+        onView(withId(R.id.editPublicLinkButton)).perform(click())
+
+        //Password not enforced with the set permission
+        onView(withId(R.id.shareViaLinkPasswordSwitch)).check(matches(not(isChecked())))
+
+        onView(withId(R.id.shareViaLinkPasswordLabel))
+            .check(matches(withText(R.string.share_via_link_password_label)))
+
+        //Changing permission makes the password to be enforced
+        onView(withId(R.id.shareViaLinkEditPermissionUploadFiles)).perform(click())
+
+        onView(withId(R.id.shareViaLinkPasswordLabel))
+            .check(matches(withText(R.string.share_via_link_password_enforced_label)))
+
+        onView(withId(R.id.shareViaLinkPasswordSwitch)).check(matches(isChecked()))
 
     }
 
