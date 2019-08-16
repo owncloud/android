@@ -4,6 +4,7 @@
  * @author David A. Velasco
  * @author masensio
  * @author David González Verdugo
+ * @author Abel García de Prada
  * Copyright (C) 2012 Bartek Przybylski
  * Copyright (C) 2019 ownCloud GmbH.
  * <p>
@@ -54,6 +55,7 @@ public class SynchronizeFileOperation extends SyncOperation {
     private OCFile mServerFile;
     private Account mAccount;
     private boolean mPushOnly;
+    private boolean mUploadOnly;
     private Context mContext;
 
     private boolean mTransferWasRequested = false;
@@ -104,6 +106,7 @@ public class SynchronizeFileOperation extends SyncOperation {
      * @param pushOnly         When 'true', if 'severFile' is NULL, will not fetch remote properties before
      *                         trying to upload local changes; upload operation will take care of not overwriting
      *                         remote content if there are unnoticed changes on the server.
+     * @param uploadOnly       When 'true', localFile does not exists on the server yet;
      * @param context          Android context; needed to start transfers.
      * @param requestedFromAvOfflineJobService When 'true' will perform some specific operations
      */
@@ -112,6 +115,7 @@ public class SynchronizeFileOperation extends SyncOperation {
             OCFile serverFile,
             Account account,
             boolean pushOnly,
+            boolean uploadOnly,
             Context context,
             boolean requestedFromAvOfflineJobService
     ) {
@@ -131,6 +135,7 @@ public class SynchronizeFileOperation extends SyncOperation {
         }
         mAccount = account;
         mPushOnly = pushOnly;
+        mUploadOnly = uploadOnly;
         mContext = context;
         mRequestedFromAvOfflineJobService = requestedFromAvOfflineJobService;
     }
@@ -163,11 +168,11 @@ public class SynchronizeFileOperation extends SyncOperation {
                 }
             }
 
-            if (mPushOnly || mServerFile != null) { // at this point, conditions should be exclusive
+            if (mPushOnly || mServerFile != null || mUploadOnly) { // at this point, conditions should be exclusive
 
                 /// decide if file changed in the server
                 boolean serverChanged;
-                if (mPushOnly) {
+                if (mPushOnly || mUploadOnly) {
                     serverChanged = false;
                 } else if (mLocalFile.getEtag() == null || mLocalFile.getEtag().length() == 0) {
                     // file uploaded (null) or downloaded ("")
@@ -235,9 +240,21 @@ public class SynchronizeFileOperation extends SyncOperation {
      */
     private void requestForUpload(OCFile file) {
         TransferRequester requester = new TransferRequester();
-        requester.uploadUpdate(mContext, mAccount, file, FileUploader.LOCAL_BEHAVIOUR_MOVE, true,
-                mRequestedFromAvOfflineJobService);
-
+        if (mUploadOnly) {
+            requester.uploadNewFile(
+                    mContext,
+                    mAccount,
+                    file.getStoragePath(),
+                    file.getRemotePath(),
+                    FileUploader.LOCAL_BEHAVIOUR_MOVE,
+                    file.getMimetype(),
+                    true,
+                    UploadFileOperation.CREATED_BY_USER
+            );
+        } else {
+            requester.uploadUpdate(mContext, mAccount, file, FileUploader.LOCAL_BEHAVIOUR_MOVE, true,
+                    mRequestedFromAvOfflineJobService);
+        }
         mTransferWasRequested = true;
     }
 
