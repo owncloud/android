@@ -148,7 +148,7 @@ public class AvailableOfflineSyncJobService extends JobService {
                     );
 
             SynchronizeFileOperation synchronizeFileOperation =
-                    new SynchronizeFileOperation(availableOfflineFile, null, account, false,
+                    new SynchronizeFileOperation(availableOfflineFile, null, account, false, false,
                             mAvailableOfflineJobService, true);
 
             RemoteOperationResult result = synchronizeFileOperation.
