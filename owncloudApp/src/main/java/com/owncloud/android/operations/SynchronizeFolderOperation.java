@@ -456,7 +456,6 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
                         remoteFile,
                         mAccount,
                         serverUnchanged,
-                        false,
                         mContext,
                         false
                 );
