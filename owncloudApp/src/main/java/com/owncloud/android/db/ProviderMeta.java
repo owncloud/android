@@ -69,6 +69,8 @@ public class ProviderMeta {
         public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.owncloud.file";
         public static final String CONTENT_TYPE_ITEM = "vnd.android.cursor.item/vnd.owncloud.file";
 
+        public static final String ID = "id";
+
         // Columns of filelist table
         public static final String FILE_PARENT = "parent";
         public static final String FILE_NAME = "filename";

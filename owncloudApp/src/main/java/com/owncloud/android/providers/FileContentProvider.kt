@@ -1382,8 +1382,7 @@ class FileContentProvider(val appExecutors: AppExecutors = AppExecutors()) : Con
         private val shareProjectionMap = HashMap<String, String>()
 
         init {
-
-            shareProjectionMap[ProviderTableMeta._ID] = ProviderTableMeta._ID
+            shareProjectionMap[ProviderTableMeta.ID] = ProviderTableMeta.ID
             shareProjectionMap[ProviderTableMeta.OCSHARES_FILE_SOURCE] = ProviderTableMeta.OCSHARES_FILE_SOURCE
             shareProjectionMap[ProviderTableMeta.OCSHARES_ITEM_SOURCE] = ProviderTableMeta.OCSHARES_ITEM_SOURCE
             shareProjectionMap[ProviderTableMeta.OCSHARES_SHARE_TYPE] = ProviderTableMeta.OCSHARES_SHARE_TYPE
