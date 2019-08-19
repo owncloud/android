@@ -23,6 +23,7 @@ import android.text.InputType.TYPE_CLASS_TEXT
 import android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.action.ViewActions.scrollTo
 import androidx.test.espresso.action.ViewActions.typeText
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers
@@ -368,6 +369,28 @@ class PublicShareCreationDialogFragmentTest {
         onView(withId(R.id.shareViaLinkEditPermissionUploadFiles)).perform(click())
         onView(withId(R.id.shareViaLinkPasswordLabel))
             .check(matches(withText(R.string.share_via_link_password_label)))
+    }
+
+    @Test
+    fun passwordEnforcedClearErrorMessageIfSwitchsToNotEnforced() {
+        //One permission with password enforced. Error is cleaned after switching permission
+        //to a non-forced one
+        loadPublicShareDialogFragment(
+            capabilities = TestUtil.createCapability(
+                versionString = "10.1.1",
+                sharingPublicSupportsUploadOnly = CapabilityBooleanType.TRUE.value,
+                sharingPublicUpload = CapabilityBooleanType.TRUE.value,
+                sharingPublicPasswordEnforcedUploadOnly = CapabilityBooleanType.FALSE.value,
+                sharingPublicPasswordEnforcedReadOnly = CapabilityBooleanType.FALSE.value,
+                sharingPublicPasswordEnforced = CapabilityBooleanType.TRUE.value
+            )
+        )
+        `when`(file.isFolder).thenReturn(true)
+
+        onView(withId(R.id.saveButton)).perform(scrollTo(),click())
+        onView(withText("Common error")).check(matches(isDisplayed()))
+        onView(withId(R.id.shareViaLinkEditPermissionUploadFiles)).perform(click())
+        onView(withText("Common error")).check(matches(not(isDisplayed())))
     }
 
     private fun loadPublicShareDialogFragment(

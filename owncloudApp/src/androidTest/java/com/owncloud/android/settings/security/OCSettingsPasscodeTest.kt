@@ -124,8 +124,6 @@ class OCSettingsPasscodeTest {
         //Second typing
         typePasscode(WRONG_PASSCODE)
 
-        pressBack()
-
         onView(withText(R.string.pass_code_reenter_your_pass_code)).check(doesNotExist())
         onView(withText(R.string.pass_code_configure_your_pass_code)).check(matches(isDisplayed()))
         onView(withText(R.string.pass_code_configure_your_pass_code_explanation)).check(matches(isDisplayed()))
