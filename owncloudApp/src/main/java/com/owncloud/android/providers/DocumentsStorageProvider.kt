@@ -39,6 +39,8 @@ import com.owncloud.android.authentication.AccountUtils
 import com.owncloud.android.datamodel.FileDataStorageManager
 import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.files.services.FileDownloader
+import com.owncloud.android.files.services.FileUploader
+import com.owncloud.android.files.services.TransferRequester
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.common.utils.Log_OC
 import com.owncloud.android.lib.resources.files.FileUtils
@@ -47,6 +49,7 @@ import com.owncloud.android.operations.RefreshFolderOperation
 import com.owncloud.android.operations.RemoveFileOperation
 import com.owncloud.android.operations.RenameFileOperation
 import com.owncloud.android.operations.SynchronizeFileOperation
+import com.owncloud.android.operations.UploadFileOperation
 import com.owncloud.android.providers.cursors.FileCursor
 import com.owncloud.android.providers.cursors.RootCursor
 import com.owncloud.android.ui.notifications.NotificationUtils
@@ -120,14 +123,24 @@ class DocumentsStorageProvider : DocumentsProvider() {
                 // If only needs to upload that file
                 if (uploadOnly) {
                     ocFile.fileLength = fileToOpen.length()
-                }
-                Thread {
+                    TransferRequester().run {
+                        uploadNewFile(
+                            context,
+                            currentStorageManager?.account,
+                            ocFile.storagePath,
+                            ocFile.remotePath,
+                            FileUploader.LOCAL_BEHAVIOUR_COPY,
+                            ocFile.mimetype,
+                            false,
+                            UploadFileOperation.CREATED_BY_USER
+                        )
+                    }
+                } else {
                     SynchronizeFileOperation(
                         ocFile,
                         null,
                         currentStorageManager?.account,
                         false,
-                        uploadOnly,
                         context,
                         false
                     ).apply {
@@ -136,7 +149,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
                             NotificationUtils.notifyConflict(ocFile, currentStorageManager?.account, context)
                         }
                     }
-                }.run { start() }
+                }
 
             }
         } catch (e: IOException) {
