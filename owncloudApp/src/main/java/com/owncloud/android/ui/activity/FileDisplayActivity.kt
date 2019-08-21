@@ -896,7 +896,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
             val synchFolderRemotePath = intent.getStringExtra(FileSyncAdapter.EXTRA_FOLDER_PATH)
             val synchResult = intent.getSerializableExtra(
                 FileSyncAdapter.EXTRA_RESULT
-            ) as RemoteOperationResult<*>
+            ) as? RemoteOperationResult<*>
             val sameAccount = account != null &&
                     accountName == account.name && storageManager != null
 
@@ -945,9 +945,10 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
 
                     if (RefreshFolderOperation.EVENT_SINGLE_FOLDER_CONTENTS_SYNCED == event) {
 
-                        if (!synchResult.isSuccess) {
+                        if (!synchResult?.isSuccess!!) {
                             /// TODO refactor and make common
-                            if (ResultCode.UNAUTHORIZED == synchResult.code || synchResult.isException && synchResult.exception is AuthenticatorException) {
+                            if (ResultCode.UNAUTHORIZED == synchResult.code ||
+                                synchResult.isException && synchResult.exception is AuthenticatorException) {
 
                                 // If we have saml enabled we consider the user to only have
                                 // one account with which he is logged into the app. This is because
@@ -977,9 +978,9 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
                 setBackgroundText()
             }
 
-            if (synchResult.code == ResultCode.SSL_RECOVERABLE_PEER_UNVERIFIED) {
+            if (synchResult?.code == ResultCode.SSL_RECOVERABLE_PEER_UNVERIFIED) {
                 lastSslUntrustedServerResult = synchResult
-            } else if (synchResult.code == ResultCode.SPECIFIC_SERVICE_UNAVAILABLE) {
+            } else if (synchResult?.code == ResultCode.SPECIFIC_SERVICE_UNAVAILABLE) {
                 if (synchResult.httpCode == 503) {
                     if (synchResult.httpPhrase == "Error: Call to a member function getUID() on null") {
                         showRequestAccountChangeNotice()
