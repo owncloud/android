@@ -355,6 +355,9 @@
   <string name="preview_image_error_unknown_format">תמונה זו לא ניתנת לצפייה</string>
   <string name="error__upload__local_file_not_copied">%1$s לא ניתן להעתקה לתיקייה מקומית %2$s</string>
   <string name="prefs_camera_picture_upload_path_title">נתיב העלאת תמונות</string>
+  <string name="get_shares_error">שגיאה אירעה בניסיון לאחזר שיתופים</string>
+  <string name="get_sharees_error">שגיאה אירעה בניסיון לאחזר משתמשים וקבוצות</string>
+  <string name="get_capabilities_error">שגיאה אירעה בניסיון לאחזר יכולות</string>
   <string name="share_link_no_support_share_api">מצטערים, שיתוף אינו מורשה על השרת שלך. יש ליצור קשר עם
 ⇥⇥מנהל.</string>
   <string name="share_link_file_no_exist">לא ניתן לשתף. יש לבדוק אם הקובץ קיים</string>
@@ -511,6 +514,7 @@
   <string name="share_via_link_expiration_date_enforced_label">תפוגה *</string>
   <string name="share_via_link_expiration_date_explanation_label">הקישור הציבורי יפוג לא יותר מ- %1$d ימים לאחר שנוצר</string>
   <string name="share_via_link_default_name_template">קישור %1$s</string>
+  <string name="share_via_link_empty_password">הסיסמא ריקה</string>
   <string name="private_link_info">זה קישור פרטי, רק אנשים שיש להם גישה לקובץ/תיקייה יכולים להשתמש בו. ניתן להשתמש בו כקישור קבוע לעצמך או לצורך הפניית אחרים לקבצים מתוך שיתופים.</string>
   <string name="file_private_link_error">אין קישור פרטי זמין לקובץ זה</string>
   <string name="download_notification_channel_name">הורדות</string>

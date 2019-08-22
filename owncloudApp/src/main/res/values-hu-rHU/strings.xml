@@ -445,10 +445,10 @@
   <string name="share_privilege_can_edit_delete">törlés</string>
   <string name="edit_share_unshare">Megosztás leállítása</string>
   <string name="edit_share_done">kész</string>
-  <string name="action_retry_uploads">Újrapróbálás sikertelen</string>
-  <string name="action_clear_failed_uploads">A törlés sikertelen volt</string>
-  <string name="action_clear_successful_uploads">Törlés sikeres</string>
-  <string name="action_clear_finished_uploads">Törölje az összeset</string>
+  <string name="action_retry_uploads">Sikertelenek újrapróbálása</string>
+  <string name="action_clear_failed_uploads">Sikertelenek törlése</string>
+  <string name="action_clear_successful_uploads">Sikeresek törlése</string>
+  <string name="action_clear_finished_uploads">Befejezettek törlése</string>
   <string name="action_switch_grid_view">Rács nézet</string>
   <string name="action_switch_list_view">Lista nézet</string>
   <string name="manage_space_title">Helykezelés</string>

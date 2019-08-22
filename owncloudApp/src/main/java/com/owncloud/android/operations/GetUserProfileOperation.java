@@ -83,7 +83,7 @@ public class GetUserProfileOperation extends SyncOperation {
 
             if (userInfoOperationResult.isSuccess()) {
                 // store display name with account data
-                AccountManager accountManager = AccountManager.get(MainApp.getAppContext());
+                AccountManager accountManager = AccountManager.get(MainApp.Companion.getAppContext());
                 UserInfo userInfo = userInfoOperationResult.getData();
                 Account storedAccount = getStorageManager().getAccount();
                 accountManager.setUserData(
@@ -187,7 +187,7 @@ public class GetUserProfileOperation extends SyncOperation {
      */
     private int getAvatarDimension() {
         // Converts dp to pixel
-        Resources r = MainApp.getAppContext().getResources();
+        Resources r = MainApp.Companion.getAppContext().getResources();
         return Math.round(r.getDimension(R.dimen.file_avatar_size));
     }
 }

@@ -14,6 +14,7 @@
   <string name="actionbar_descending">내림차순</string>
   <string name="actionbar_sort_title">정렬 순서</string>
   <string name="actionbar_sort_by_name">A-Z</string>
+  <string name="actionbar_sort_by_date">오래된순 - 최신순</string>
   <string name="drawer_item_all_files">모든 파일</string>
   <string name="drawer_item_only_available_offline">오프라인 사용 가능</string>
   <string name="drawer_item_settings">설정</string>
@@ -58,6 +59,7 @@
   <string name="passcode_already_set">패턴과 비밀번호 잠금은 동시에 활성화 될 수 없으니, 비밀번호를 비활성화하시오</string>
   <string name="recommend_subject">%1$s을(를) 스마트폰에서 사용해 보세요!</string>
   <string name="recommend_text">%1$s을(를) 스마트폰에서 사용해 보는 것을 추천합니다!\n다운로드 링크: %2$s</string>
+  <string name="auth_failure_snackbar">인증 실패</string>
   <string name="auth_check_server">서버 확인</string>
   <string name="auth_host_url">서버 주소 https://…</string>
   <string name="auth_username">사용자 이름</string>
@@ -151,6 +153,7 @@
   <string name="uploads_view_upload_status_waiting_for_wifi">Wi-Fi 연결을 기다리는 중</string>
   <string name="uploads_view_later_waiting_to_upload">업로드 대기 중</string>
   <string name="uploads_view_unsupported_media_type">지원하지 않는 미디어 형식</string>
+  <string name="downloader_download_in_progress_ticker">다운로드중...</string>
   <string name="downloader_download_in_progress_content">%1$d%% %2$s 다운로드 중</string>
   <string name="downloader_download_succeeded_ticker">다운로드됨</string>
   <string name="downloader_download_succeeded_content">%1$s 다운로드됨</string>
@@ -212,6 +215,7 @@
   <string name="media_play_pause_description">재생 혹은 일시 정지 단추</string>
   <string name="media_forward_description">빨리감기 단추</string>
   <string name="auth_getting_authorization">인증 정보 가져오는 중...</string>
+  <string name="auth_trying_to_login">로그인 시도중...</string>
   <string name="auth_no_net_conn_title">네트워크에 연결할 수 없음</string>
   <string name="auth_nossl_plain_ok_title">암호화된 연결을 사용할 수 없습니다.</string>
   <string name="auth_connection_established">연결됨</string>

@@ -177,7 +177,7 @@ public class LoginWebViewDialog extends DialogFragment {
             WebSettings webSettings = mWebView.getSettings();
             webSettings.setJavaScriptEnabled(true);
             webSettings.setSavePassword(false);
-            webSettings.setUserAgentString(MainApp.getUserAgent());
+            webSettings.setUserAgentString(MainApp.Companion.getUserAgent());
             webSettings.setSaveFormData(false);
             // next two settings grant that non-responsive webs are zoomed out when loaded
             webSettings.setUseWideViewPort(true);

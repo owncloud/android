@@ -110,36 +110,29 @@ public class ConfirmationDialogFragment extends DialogFragment {
 
         if (posBtn != -1) {
             builder.setPositiveButton(posBtn,
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int whichButton) {
-                            if (mListener != null) {
-                                mListener.onConfirmation(getTag());
-                            }
-                            dialog.dismiss();
+                    (dialog, whichButton) -> {
+                        if (mListener != null) {
+                            mListener.onConfirmation(getTag());
                         }
+                        dialog.dismiss();
                     });
         }
         if (neuBtn != -1) {
             builder.setNeutralButton(neuBtn,
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int whichButton) {
-                            if (mListener != null) {
-                                mListener.onNeutral(getTag());
-                            }
-                            dialog.dismiss();
+                    (dialog, whichButton) -> {
+                        if (mListener != null) {
+                            mListener.onNeutral(getTag());
                         }
+                        dialog.dismiss();
                     });
         }
         if (negBtn != -1) {
             builder.setNegativeButton(negBtn,
-                    new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            if (mListener != null) {
-                                mListener.onCancel(getTag());
-                            }
-                            dialog.dismiss();
+                    (dialog, which) -> {
+                        if (mListener != null) {
+                            mListener.onCancel(getTag());
                         }
+                        dialog.dismiss();
                     });
         }
         return builder.create();

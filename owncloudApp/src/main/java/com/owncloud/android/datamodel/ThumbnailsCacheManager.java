@@ -75,7 +75,7 @@ public class ThumbnailsCacheManager {
 
     public static Bitmap mDefaultImg =
             BitmapFactory.decodeResource(
-                    MainApp.getAppContext().getResources(),
+                    MainApp.Companion.getAppContext().getResources(),
                     R.drawable.file_image
             );
 
@@ -91,7 +91,7 @@ public class ThumbnailsCacheManager {
                         // Check if media is mounted or storage is built-in, if so, 
                         // try and use external cache dir; otherwise use internal cache dir
                         final String cachePath =
-                                MainApp.getAppContext().getExternalCacheDir().getPath() +
+                                MainApp.Companion.getAppContext().getExternalCacheDir().getPath() +
                                         File.separator + CACHE_FOLDER;
                         Log_OC.d(TAG, "create dir: " + cachePath);
                         final File diskCacheDir = new File(cachePath);
@@ -176,10 +176,10 @@ public class ThumbnailsCacheManager {
                 if (mAccount != null) {
                     OwnCloudAccount ocAccount = new OwnCloudAccount(
                             mAccount,
-                            MainApp.getAppContext()
+                            MainApp.Companion.getAppContext()
                     );
                     mClient = OwnCloudClientManagerFactory.getDefaultSingleton().
-                            getClientFor(ocAccount, MainApp.getAppContext());
+                            getClientFor(ocAccount, MainApp.Companion.getAppContext());
                 }
 
                 mFile = params[0];
@@ -247,7 +247,7 @@ public class ThumbnailsCacheManager {
          */
         private int getThumbnailDimension() {
             // Converts dp to pixel
-            Resources r = MainApp.getAppContext().getResources();
+            Resources r = MainApp.Companion.getAppContext().getResources();
             return Math.round(r.getDimension(R.dimen.file_icon_size_grid));
         }
 
@@ -331,7 +331,7 @@ public class ThumbnailsCacheManager {
                     Bitmap.Config.ARGB_8888);
             Canvas c = new Canvas(resultBitmap);
 
-            c.drawColor(ContextCompat.getColor(MainApp.getAppContext(), R.color.background_color));
+            c.drawColor(ContextCompat.getColor(MainApp.Companion.getAppContext(), R.color.background_color));
             c.drawBitmap(bitmap, 0, 0, null);
 
             return resultBitmap;
@@ -431,9 +431,9 @@ public class ThumbnailsCacheManager {
 
             try {
                 OwnCloudAccount ocAccount = new OwnCloudAccount(mAccount,
-                        MainApp.getAppContext());
+                        MainApp.Companion.getAppContext());
                 mClient = OwnCloudClientManagerFactory.getDefaultSingleton().
-                        getClientFor(ocAccount, MainApp.getAppContext());
+                        getClientFor(ocAccount, MainApp.Companion.getAppContext());
 
                 mUsername = mAccount.name;
                 thumbnail = doAvatarInBackground();
@@ -484,7 +484,7 @@ public class ThumbnailsCacheManager {
          */
         private int getAvatarDimension() {
             // Converts dp to pixel
-            Resources r = MainApp.getAppContext().getResources();
+            Resources r = MainApp.Companion.getAppContext().getResources();
             return Math.round(r.getDimension(R.dimen.file_avatar_size));
         }
 
@@ -499,7 +499,7 @@ public class ThumbnailsCacheManager {
 
             if (avatarBitmap != null) {
                 avatarDrawable = BitmapUtils.bitmapToCircularBitmapDrawable(
-                        MainApp.getAppContext().getResources(),
+                        MainApp.Companion.getAppContext().getResources(),
                         avatarBitmap
                 );
 
@@ -541,7 +541,7 @@ public class ThumbnailsCacheManager {
                 }
                 if (avatarBitmap != null) {
                     avatarDrawable = BitmapUtils.bitmapToCircularBitmapDrawable(
-                            MainApp.getAppContext().getResources(),
+                            MainApp.Companion.getAppContext().getResources(),
                             avatarBitmap
                     );
 
