@@ -136,21 +136,22 @@ class DocumentsStorageProvider : DocumentsProvider() {
                         )
                     }
                 } else {
-                    SynchronizeFileOperation(
-                        ocFile,
-                        null,
-                        currentStorageManager?.account,
-                        false,
-                        context,
-                        false
-                    ).apply {
-                        val result = execute(currentStorageManager, context)
-                        if (result.code == RemoteOperationResult.ResultCode.SYNC_CONFLICT) {
-                            NotificationUtils.notifyConflict(ocFile, currentStorageManager?.account, context)
+                    Thread {
+                        SynchronizeFileOperation(
+                            ocFile,
+                            null,
+                            currentStorageManager?.account,
+                            false,
+                            context,
+                            false
+                        ).apply {
+                            val result = execute(currentStorageManager, context)
+                            if (result.code == RemoteOperationResult.ResultCode.SYNC_CONFLICT) {
+                                NotificationUtils.notifyConflict(ocFile, currentStorageManager?.account, context)
+                            }
                         }
-                    }
+                    }.start()
                 }
-
             }
         } catch (e: IOException) {
             throw FileNotFoundException(
