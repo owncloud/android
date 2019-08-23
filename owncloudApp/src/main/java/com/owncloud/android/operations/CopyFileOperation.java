@@ -86,14 +86,14 @@ public class CopyFileOperation extends SyncOperation {
                 false
         );
         result = operation.execute(client);
+        String targetFileRemoteId = (String) result.getData();
 
         /// 3. local copy
         if (result.isSuccess()) {
-            getStorageManager().copyLocalFile(mFile, targetPath);
+            getStorageManager().copyLocalFile(mFile, targetPath, targetFileRemoteId);
         }
         // TODO handle ResultCode.PARTIAL_COPY_DONE in client Activity, for the moment
 
         return result;
     }
-
 }

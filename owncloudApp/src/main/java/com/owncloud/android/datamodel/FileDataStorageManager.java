@@ -265,7 +265,6 @@ public class FileDataStorageManager {
 
         } else {
             // new file
-
             setInitialAvailableOfflineStatus(file, cv);
 
             Uri result_uri = null;
@@ -868,13 +867,11 @@ public class FileDataStorageManager {
                 }
             }
         }
-
     }
 
-    public void copyLocalFile(OCFile file, String targetPath) {
-
-        if (file != null && file.fileExists() && !OCFile.ROOT_PATH.equals(file.getFileName())) {
-            String localPath = FileStorageUtils.getDefaultSavePathFor(mAccount.name, file);
+    public void copyLocalFile(OCFile originalFile, String targetPath, String targetFileRemoteId) {
+        if (originalFile != null && originalFile.fileExists() && !OCFile.ROOT_PATH.equals(originalFile.getFileName())) {
+            String localPath = FileStorageUtils.getDefaultSavePathFor(mAccount.name, originalFile);
             File localFile = new File(localPath);
             boolean copied = false;
             String defaultSavePath = FileStorageUtils.getSavePath(mAccount.name);
@@ -884,6 +881,18 @@ public class FileDataStorageManager {
                 if (!targetFolder.exists()) {
                     targetFolder.mkdirs();
                 }
+
+                // 1. Copy in database
+                OCFile ocTargetFile = new OCFile(targetPath);
+                long parentId = getFileByPath(FileStorageUtils.getParentPath(targetPath)).getFileId();
+                ocTargetFile.setParentId(parentId);
+                ocTargetFile.setRemoteId(targetFileRemoteId);
+                ocTargetFile.setFileLength(originalFile.getFileLength());
+                ocTargetFile.setMimetype(originalFile.getMimetype());
+                ocTargetFile.setModificationTimestamp(System.currentTimeMillis());
+                saveFile(ocTargetFile);
+
+                // 2. Copy in local file system
                 copied = copyFile(localFile, targetFile);
             }
             Log_OC.d(TAG, "Local file COPIED : " + copied);
