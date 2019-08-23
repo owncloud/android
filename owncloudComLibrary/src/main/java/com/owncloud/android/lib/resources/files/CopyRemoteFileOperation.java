@@ -47,7 +47,7 @@ import java.util.concurrent.TimeUnit;
  * @author David A. Velasco
  * @author Christian Schabesberger
  */
-public class CopyRemoteFileOperation extends RemoteOperation {
+public class CopyRemoteFileOperation extends RemoteOperation<String> {
 
     private static final String TAG = CopyRemoteFileOperation.class.getSimpleName();
 
@@ -80,8 +80,7 @@ public class CopyRemoteFileOperation extends RemoteOperation {
      * @param client Client object to communicate with the remote ownCloud server.
      */
     @Override
-    protected RemoteOperationResult run(OwnCloudClient client) {
-
+    protected RemoteOperationResult<String> run(OwnCloudClient client) {
         OwnCloudVersion version = client.getOwnCloudVersion();
         boolean versionWithForbiddenChars =
                 (version != null && version.isVersionWithForbiddenCharacters());
@@ -101,9 +100,10 @@ public class CopyRemoteFileOperation extends RemoteOperation {
         }
 
         /// perform remote operation
-        RemoteOperationResult result = null;
+        RemoteOperationResult<String> result;
         try {
-            CopyMethod copyMethod = new CopyMethod(new URL(client.getUserFilesWebDavUri() + WebdavUtils.encodePath(mSrcRemotePath)),
+            CopyMethod copyMethod =
+                    new CopyMethod(new URL(client.getUserFilesWebDavUri() + WebdavUtils.encodePath(mSrcRemotePath)),
                     client.getUserFilesWebDavUri() + WebdavUtils.encodePath(mTargetRemotePath),
                     mOverwrite);
 
@@ -113,16 +113,17 @@ public class CopyRemoteFileOperation extends RemoteOperation {
             final int status = client.executeHttpMethod(copyMethod);
 
             if (status == HttpConstants.HTTP_CREATED || status == HttpConstants.HTTP_NO_CONTENT) {
+                String fileRemoteId = copyMethod.getResponseHeader(HttpConstants.OC_FILE_REMOTE_ID);
                 result = new RemoteOperationResult<>(ResultCode.OK);
+                result.setData(fileRemoteId);
             } else if (status == HttpConstants.HTTP_PRECONDITION_FAILED && !mOverwrite) {
-
                 result = new RemoteOperationResult<>(ResultCode.INVALID_OVERWRITE);
                 client.exhaustResponse(copyMethod.getResponseBodyAsStream());
 
                 /// for other errors that could be explicitly handled, check first:
                 /// http://www.webdav.org/specs/rfc4918.html#rfc.section.9.9.4
-
             } else {
+
                 result = new RemoteOperationResult<>(copyMethod);
                 client.exhaustResponse(copyMethod.getResponseBodyAsStream());
             }
