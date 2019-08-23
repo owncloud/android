@@ -48,6 +48,7 @@ import com.owncloud.android.lib.common.utils.Log_OC
 import com.owncloud.android.lib.resources.files.FileUtils
 import com.owncloud.android.operations.CopyFileOperation
 import com.owncloud.android.operations.CreateFolderOperation
+import com.owncloud.android.operations.MoveFileOperation
 import com.owncloud.android.operations.RefreshFolderOperation
 import com.owncloud.android.operations.RemoveFileOperation
 import com.owncloud.android.operations.RenameFileOperation
@@ -354,13 +355,46 @@ class DocumentsStorageProvider : DocumentsProvider() {
 
         CopyFileOperation(
             sourceFile.remotePath,
-            targetParentFile.remotePath,
-            currentStorageManager?.account
+            targetParentFile.remotePath
         ).apply {
             execute(currentStorageManager, context).also { result ->
                 syncRequired = false
                 checkOperationResult(result, targetParentFile.fileId.toString())
-                //Returns the document id of the copied document at the target destination
+                //Returns the document id of the document copied at the target destination
+                var newPath = targetParentFile.remotePath + sourceFile.fileName
+                if (sourceFile.isFolder) {
+                    newPath += OCFile.PATH_SEPARATOR
+                }
+                val newFile = currentStorageManager?.getFileByPath(newPath)
+                    ?: throw FileNotFoundException("File $newPath not found")
+                return newFile.fileId.toString()
+            }
+        }
+    }
+
+    override fun moveDocument(
+        sourceDocumentId: String, sourceParentDocumentId: String, targetParentDocumentId: String
+    ): String {
+        Log_OC.d(TAG, "Trying to move $sourceDocumentId to $targetParentDocumentId")
+
+        val sourceDocId = sourceDocumentId.toLong()
+        updateCurrentStorageManagerIfNeeded(sourceDocId)
+
+        val sourceFile = currentStorageManager?.getFileById(sourceDocId)
+            ?: throw FileNotFoundException("File $sourceDocId not found")
+
+        val targetParentDocId = targetParentDocumentId.toLong()
+        val targetParentFile = currentStorageManager?.getFileById(targetParentDocId)
+            ?: throw FileNotFoundException("File $targetParentDocId not found")
+
+        MoveFileOperation(
+            sourceFile.remotePath,
+            targetParentFile.remotePath
+        ).apply {
+            execute(currentStorageManager, context).also { result ->
+                syncRequired = false
+                checkOperationResult(result, targetParentFile.fileId.toString())
+                //Returns the document id of the document moved to the target destination
                 var newPath = targetParentFile.remotePath + sourceFile.fileName
                 if (sourceFile.isFolder) newPath += OCFile.PATH_SEPARATOR
                 val newFile = getFileByPathOrException(newPath)
