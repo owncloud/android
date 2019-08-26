@@ -46,6 +46,17 @@ class RootCursor(projection: Array<String>?) : MatrixCursor(projection ?: DEFAUL
             .add(Root.COLUMN_FLAGS, flags)
     }
 
+    fun addProtectedRoot(context: Context, passcodeState: Boolean) {
+        newRow()
+            .add(
+                Root.COLUMN_SUMMARY,
+                if (passcodeState) context.getString(R.string.pass_code_locked)
+                else context.getString(R.string.pattern_locked)
+            )
+            .add(Root.COLUMN_TITLE, context.getString(R.string.app_name))
+            .add(Root.COLUMN_ICON, R.mipmap.icon)
+    }
+
     companion object {
         private val DEFAULT_ROOT_PROJECTION = arrayOf(
             Root.COLUMN_ROOT_ID,

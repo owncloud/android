@@ -32,6 +32,7 @@ import android.net.Uri
 import android.os.CancellationSignal
 import android.os.Handler
 import android.os.ParcelFileDescriptor
+import android.preference.PreferenceManager
 import android.provider.DocumentsContract
 import android.provider.DocumentsProvider
 import com.owncloud.android.R
@@ -53,6 +54,8 @@ import com.owncloud.android.operations.SynchronizeFileOperation
 import com.owncloud.android.operations.UploadFileOperation
 import com.owncloud.android.providers.cursors.FileCursor
 import com.owncloud.android.providers.cursors.RootCursor
+import com.owncloud.android.ui.activity.PassCodeActivity
+import com.owncloud.android.ui.activity.PatternLockActivity
 import com.owncloud.android.ui.notifications.NotificationUtils
 import com.owncloud.android.utils.FileStorageUtils
 import java.io.File
@@ -210,9 +213,17 @@ class DocumentsStorageProvider : DocumentsProvider() {
     override fun onCreate(): Boolean = true
 
     override fun queryRoots(projection: Array<String>?): Cursor {
-        initiateStorageMap()
         val result = RootCursor(projection)
         val contextApp = context ?: return result
+        // If OwnCloud is protected with passcode or pattern, return empty cursor.
+        val preferences = PreferenceManager.getDefaultSharedPreferences(context).apply { }
+        val passCodeState = preferences.getBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false)
+        val patternState = preferences.getBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN, false)
+        if (passCodeState || patternState) {
+            return result.apply { addProtectedRoot(contextApp, passCodeState) }
+        }
+
+        initiateStorageMap()
 
         for (account in AccountUtils.getAccounts(contextApp)) {
             result.addRoot(account, contextApp)
