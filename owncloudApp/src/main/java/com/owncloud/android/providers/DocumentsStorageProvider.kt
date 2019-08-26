@@ -86,8 +86,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
             val docId = documentId.toLong()
             updateCurrentStorageManagerIfNeeded(docId)
 
-            ocFile = currentStorageManager?.getFileById(docId)
-                ?: throw FileNotFoundException("Failed to open document with id $documentId and mode $mode")
+            ocFile = getFileByIdOrException(docId)
 
             if (!ocFile.isDown) {
                 val intent = Intent(context, FileDownloader::class.java).apply {
@@ -101,8 +100,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
                     if (!waitOrGetCancelled(signal)) {
                         return null
                     }
-                    ocFile = currentStorageManager?.getFileById(docId)
-                        ?: throw FileNotFoundException("Failed to open document with id $documentId and mode $mode")
+                    ocFile = getFileByIdOrException(docId)
 
                 } while (!ocFile.isDown)
             }
@@ -155,9 +153,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
                 }
             }
         } catch (e: IOException) {
-            throw FileNotFoundException(
-                "Failed to open document with id $documentId and mode $mode"
-            )
+            throw FileNotFoundException("Failed to open document with id $documentId and mode $mode")
         }
     }
 
@@ -207,8 +203,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
         updateCurrentStorageManagerIfNeeded(docId)
 
         return FileCursor(projection).apply {
-            val ocFile: OCFile? = currentStorageManager?.getFileById(docId)
-            if (ocFile != null) addFile(ocFile)
+            getFileById(docId)?.let { addFile(it) }
         }
     }
 
@@ -234,7 +229,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
         val docId = documentId.toLong()
         updateCurrentStorageManagerIfNeeded(docId)
 
-        val file = currentStorageManager?.getFileById(docId)
+        val file = getFileById(docId)
 
         val realFile = File(file?.storagePath)
 
@@ -250,7 +245,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
 
         val result = FileCursor(projection)
 
-        val root = currentStorageManager?.getFileByPath(OCFile.ROOT_PATH) ?: return result
+        val root = getFileByPath(OCFile.ROOT_PATH) ?: return result
 
         for (f in findFiles(root, query)) {
             result.addFile(f)
@@ -264,8 +259,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
         val parentDocId = parentDocumentId.toLong()
         updateCurrentStorageManagerIfNeeded(parentDocId)
 
-        val parentDocument = currentStorageManager?.getFileById(parentDocId)
-            ?: throw FileNotFoundException("Folder $parentDocId not found")
+        val parentDocument = getFileByIdOrException(parentDocId)
 
         return if (mimeType == DocumentsContract.Document.MIME_TYPE_DIR) {
             createFolder(parentDocument, displayName)
@@ -276,12 +270,12 @@ class DocumentsStorageProvider : DocumentsProvider() {
 
     @TargetApi(21)
     override fun renameDocument(documentId: String, displayName: String): String? {
+        Log_OC.d(TAG, "Trying to rename $documentId to $displayName")
         val docId = documentId.toLong()
 
         updateCurrentStorageManagerIfNeeded(docId)
 
-        val file = currentStorageManager?.getFileById(docId) ?: throw FileNotFoundException("File $docId not found")
-        Log_OC.d(TAG, "Trying to rename ${file.fileName} to $displayName")
+        val file = getFileByIdOrException(docId)
 
         RenameFileOperation(file.remotePath, displayName).apply {
             execute(currentStorageManager, context).also { checkOperationResult(it, file.parentId.toString()) }
@@ -291,12 +285,12 @@ class DocumentsStorageProvider : DocumentsProvider() {
     }
 
     override fun deleteDocument(documentId: String) {
+        Log_OC.d(TAG, "Trying to delete $documentId")
         val docId = documentId.toLong()
 
         updateCurrentStorageManagerIfNeeded(docId)
 
-        val file = currentStorageManager?.getFileById(docId) ?: throw FileNotFoundException("File $docId not found")
-        Log_OC.d(TAG, "Trying to delete ${file.fileName} with id ${file.fileId}")
+        val file = getFileByIdOrException(docId)
 
         RemoveFileOperation(file.remotePath, false, true).apply {
             execute(currentStorageManager, context).also { checkOperationResult(it, file.parentId.toString()) }
@@ -309,12 +303,10 @@ class DocumentsStorageProvider : DocumentsProvider() {
         val sourceDocId = sourceDocumentId.toLong()
         updateCurrentStorageManagerIfNeeded(sourceDocId)
 
-        val sourceFile = currentStorageManager?.getFileById(sourceDocId)
-            ?: throw FileNotFoundException("File $sourceDocId not found")
+        val sourceFile = getFileByIdOrException(sourceDocId)
 
         val targetParentDocId = targetParentDocumentId.toLong()
-        val targetParentFile = currentStorageManager?.getFileById(targetParentDocId)
-            ?: throw FileNotFoundException("File $targetParentDocId not found")
+        val targetParentFile = getFileByIdOrException(targetParentDocId)
 
         CopyFileOperation(
             sourceFile.remotePath,
@@ -329,8 +321,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
                 if (sourceFile.isFolder) {
                     newPath += OCFile.PATH_SEPARATOR
                 }
-                val newFile = currentStorageManager?.getFileByPath(newPath)
-                    ?: throw FileNotFoundException("File $newPath not found")
+                val newFile = getFileByPathOrException(newPath)
                 return newFile.fileId.toString()
             }
         }
@@ -356,8 +347,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
         CreateFolderOperation(newPath, false).apply {
             execute(currentStorageManager, context).also { result ->
                 checkOperationResult(result, parentDocument.fileId.toString())
-                val newFolder = currentStorageManager?.getFileByPath(newPath)
-                    ?: throw FileNotFoundException("Folder $newPath not found")
+                val newFolder = getFileByPathOrException(newPath)
                 return newFolder.fileId.toString()
             }
         }
@@ -411,11 +401,10 @@ class DocumentsStorageProvider : DocumentsProvider() {
     }
 
     private fun syncDirectoryWithServer(parentDocumentId: String) {
+        Log_OC.d(TAG, "Trying to sync $parentDocumentId with server")
         val folderId = parentDocumentId.toLong()
 
-        if (currentStorageManager?.getFileById(folderId) == null) {
-            throw FileNotFoundException("Folder with id $parentDocumentId doesn't exist on database yet")
-        }
+        getFileByIdOrException(folderId)
 
         val refreshFolderOperation = RefreshFolderOperation(
             currentStorageManager?.getFileById(folderId),
@@ -477,6 +466,16 @@ class DocumentsStorageProvider : DocumentsProvider() {
     )
 
     private fun toUri(documentId: String): Uri = Uri.parse(documentId)
+
+    private fun getFileByIdOrException(id: Long): OCFile =
+        getFileById(id) ?: throw FileNotFoundException("File $id not found")
+
+    private fun getFileById(id: Long): OCFile? = currentStorageManager?.getFileById(id)
+
+    private fun getFileByPathOrException(path: String): OCFile =
+        getFileByPath(path) ?: throw FileNotFoundException("File $path not found")
+
+    private fun getFileByPath(path: String): OCFile? = currentStorageManager?.getFileByPath(path)
 
     companion object {
         private val TAG = DocumentsStorageProvider::class.java.toString()
