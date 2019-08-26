@@ -91,6 +91,7 @@ tasks.withType(Test) {
 allOpen {
     // allows mocking for classes w/o directly opening them for release builds
     annotation 'com.owncloud.android.testing.OpenClass'
+    
 }
 
 android {
