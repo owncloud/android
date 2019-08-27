@@ -218,6 +218,7 @@ Ci-dessous la liste des fichiers locaux, et les fichiers distants dans %5$s auxq
   <string name="media_forward_description">Bouton d\'avance rapide</string>
   <string name="upload_from_camera_title">Image de la caméra</string>
   <string name="auth_getting_authorization">Demande d\'autorisation…</string>
+  <string name="auth_trying_to_login">Tentative de connexion ...</string>
   <string name="auth_no_net_conn_title">Pas de connexion réseau</string>
   <string name="auth_nossl_plain_ok_title">Connexion sécurisée non disponible</string>
   <string name="auth_connection_established">Connexion établie</string>
