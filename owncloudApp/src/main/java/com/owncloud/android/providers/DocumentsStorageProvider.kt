@@ -216,7 +216,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
         val result = RootCursor(projection)
         val contextApp = context ?: return result
         // If OwnCloud is protected with passcode or pattern, return empty cursor.
-        val preferences = PreferenceManager.getDefaultSharedPreferences(context).apply { }
+        val preferences = PreferenceManager.getDefaultSharedPreferences(context)
         val passCodeState = preferences.getBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false)
         val patternState = preferences.getBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN, false)
         if (passCodeState || patternState) {
