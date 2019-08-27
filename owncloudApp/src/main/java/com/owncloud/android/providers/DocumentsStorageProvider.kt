@@ -39,6 +39,8 @@ import com.owncloud.android.authentication.AccountUtils
 import com.owncloud.android.datamodel.FileDataStorageManager
 import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.files.services.FileDownloader
+import com.owncloud.android.files.services.FileUploader
+import com.owncloud.android.files.services.TransferRequester
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.common.utils.Log_OC
 import com.owncloud.android.lib.resources.files.FileUtils
@@ -47,9 +49,11 @@ import com.owncloud.android.operations.RefreshFolderOperation
 import com.owncloud.android.operations.RemoveFileOperation
 import com.owncloud.android.operations.RenameFileOperation
 import com.owncloud.android.operations.SynchronizeFileOperation
+import com.owncloud.android.operations.UploadFileOperation
 import com.owncloud.android.providers.cursors.FileCursor
 import com.owncloud.android.providers.cursors.RootCursor
 import com.owncloud.android.ui.notifications.NotificationUtils
+import com.owncloud.android.utils.FileStorageUtils
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.IOException
@@ -65,66 +69,95 @@ class DocumentsStorageProvider : DocumentsProvider() {
     private var requestedFolderIdForSync: Long = -1
     private var syncRequired = true
     private var currentStorageManager: FileDataStorageManager? = null
+    private lateinit var fileToUpload: OCFile
 
     override fun openDocument(documentId: String, mode: String, signal: CancellationSignal?): ParcelFileDescriptor? {
         Log_OC.d(TAG, "Trying to open $documentId in mode $mode")
-        val docId = documentId.toLong()
-        updateCurrentStorageManagerIfNeeded(docId)
 
-        var file = currentStorageManager?.getFileById(docId)
-            ?: throw FileNotFoundException("Failed to open document with id $documentId and mode $mode")
+        // If documentId == NONEXISTENT_DOCUMENT_ID only Upload is needed because file does not exist in our database yet.
+        var ocFile: OCFile
+        val uploadOnly: Boolean = documentId == NONEXISTENT_DOCUMENT_ID
 
-        if (!file.isDown) {
-            val i = Intent(context, FileDownloader::class.java).apply {
-                putExtra(FileDownloader.KEY_ACCOUNT, currentStorageManager!!.account)
-                putExtra(FileDownloader.KEY_FILE, file)
-            }
+        var accessMode: Int = ParcelFileDescriptor.parseMode(mode)
+        val isWrite: Boolean = mode.contains("w")
 
-            context?.startService(i)
+        if (!uploadOnly) {
+            val docId = documentId.toLong()
+            updateCurrentStorageManagerIfNeeded(docId)
 
-            do {
-                if (!waitOrGetCancelled(signal)) {
-                    return null
+            ocFile = currentStorageManager?.getFileById(docId)
+                ?: throw FileNotFoundException("Failed to open document with id $documentId and mode $mode")
+
+            if (!ocFile.isDown) {
+                val intent = Intent(context, FileDownloader::class.java).apply {
+                    putExtra(FileDownloader.KEY_ACCOUNT, currentStorageManager!!.account)
+                    putExtra(FileDownloader.KEY_FILE, ocFile)
                 }
-                file = currentStorageManager?.getFileById(docId)
-                    ?: throw FileNotFoundException("Failed to open document with id $documentId and mode $mode")
 
-            } while (!file.isDown)
+                context?.startService(intent)
+
+                do {
+                    if (!waitOrGetCancelled(signal)) {
+                        return null
+                    }
+                    ocFile = currentStorageManager?.getFileById(docId)
+                        ?: throw FileNotFoundException("Failed to open document with id $documentId and mode $mode")
+
+                } while (!ocFile.isDown)
+            }
+        } else {
+            ocFile = fileToUpload
+            accessMode = accessMode or ParcelFileDescriptor.MODE_CREATE
         }
 
-        val accessMode: Int = ParcelFileDescriptor.parseMode(mode)
+        val fileToOpen = File(ocFile.storagePath)
 
-        val isWrite: Boolean = mode.contains("w")
-        if (!isWrite) return ParcelFileDescriptor.open(File(file.storagePath), accessMode)
+        if (!isWrite) return ParcelFileDescriptor.open(fileToOpen, accessMode)
 
         val handler = Handler(context?.mainLooper)
         // Attach a close listener if the document is opened in write mode.
         try {
-            return ParcelFileDescriptor.open(File(file.storagePath), accessMode, handler) {
+            return ParcelFileDescriptor.open(fileToOpen, accessMode, handler) {
                 // Update the file with the cloud server. The client is done writing.
                 Log_OC.d(TAG, "A file with id $documentId has been closed! Time to synchronize it with server.")
-                Thread {
-                    SynchronizeFileOperation(
-                        file,
-                        null,
-                        currentStorageManager?.account,
-                        false,
-                        context,
-                        false
-                    ).apply {
-                        val result = execute(currentStorageManager, context)
-                        if (result.code == RemoteOperationResult.ResultCode.SYNC_CONFLICT) {
-                            NotificationUtils.notifyConflict(file, currentStorageManager?.account, context)
-                        }
+                // If only needs to upload that file
+                if (uploadOnly) {
+                    ocFile.fileLength = fileToOpen.length()
+                    TransferRequester().run {
+                        uploadNewFile(
+                            context,
+                            currentStorageManager?.account,
+                            ocFile.storagePath,
+                            ocFile.remotePath,
+                            FileUploader.LOCAL_BEHAVIOUR_COPY,
+                            ocFile.mimetype,
+                            false,
+                            UploadFileOperation.CREATED_BY_USER
+                        )
                     }
-                }.apply { start() }
+                } else {
+                    Thread {
+                        SynchronizeFileOperation(
+                            ocFile,
+                            null,
+                            currentStorageManager?.account,
+                            false,
+                            context,
+                            false
+                        ).apply {
+                            val result = execute(currentStorageManager, context)
+                            if (result.code == RemoteOperationResult.ResultCode.SYNC_CONFLICT) {
+                                NotificationUtils.notifyConflict(ocFile, currentStorageManager?.account, context)
+                            }
+                        }
+                    }.start()
+                }
             }
         } catch (e: IOException) {
             throw FileNotFoundException(
                 "Failed to open document with id $documentId and mode $mode"
             )
         }
-
     }
 
     override fun queryChildDocuments(
@@ -165,6 +198,10 @@ class DocumentsStorageProvider : DocumentsProvider() {
 
     override fun queryDocument(documentId: String, projection: Array<String>?): Cursor {
         Log_OC.d(TAG, "Query Document: $documentId")
+        if (documentId == NONEXISTENT_DOCUMENT_ID) return FileCursor(projection).apply {
+            addFile(fileToUpload)
+        }
+
         val docId = documentId.toLong()
         updateCurrentStorageManagerIfNeeded(docId)
 
@@ -232,8 +269,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
         return if (mimeType == DocumentsContract.Document.MIME_TYPE_DIR) {
             createFolder(parentDocument, displayName)
         } else {
-            Log_OC.d(TAG, "Not Supported yet")
-            super.createDocument(parentDocumentId, mimeType, displayName)
+            createFile(parentDocument, mimeType, displayName)
         }
     }
 
@@ -291,6 +327,21 @@ class DocumentsStorageProvider : DocumentsProvider() {
                 return newFolder.fileId.toString()
             }
         }
+    }
+
+    private fun createFile(parentDocument: OCFile, mimeType: String, displayName: String): String {
+        // We just need to return a Document ID, so we'll return an empty one. File does not exist in our db yet.
+        // File will be created at [openDocument] method.
+        val tempDir = File(FileStorageUtils.getTemporalPath(currentStorageManager?.account?.name))
+        val newFile = File(tempDir, displayName)
+
+        fileToUpload = OCFile(parentDocument.remotePath + displayName).apply {
+            mimetype = mimeType
+            parentId = parentDocument.fileId
+            storagePath = newFile.path
+        }
+
+        return NONEXISTENT_DOCUMENT_ID
     }
 
     private fun updateCurrentStorageManagerIfNeeded(docId: Long) {
@@ -396,5 +447,6 @@ class DocumentsStorageProvider : DocumentsProvider() {
     companion object {
         private val TAG = DocumentsStorageProvider::class.java.toString()
         private var rootIdToStorageManager: MutableMap<Long, FileDataStorageManager> = HashMap()
+        const val NONEXISTENT_DOCUMENT_ID = "-1"
     }
 }
