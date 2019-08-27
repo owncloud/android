@@ -70,6 +70,8 @@ public class RetryDownloadJobService extends JobService {
                 intent.putExtra(FileDownloader.KEY_ACCOUNT, account);
                 intent.putExtra(FileDownloader.KEY_FILE, ocFile);
                 intent.putExtra(FileDownloader.KEY_RETRY_DOWNLOAD, true);
+                Log_OC.d(TAG, "Retry download from foreground/background, " +
+                        "startForeground() will be called soon");
                 ContextCompat.startForegroundService(this, intent);
             } else {
                 Log_OC.w(
