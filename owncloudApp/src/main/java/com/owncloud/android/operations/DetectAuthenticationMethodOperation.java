@@ -4,16 +4,16 @@
  * @author David A. Velasco
  * @author David González Verdugo
  * Copyright (C) 2019 ownCloud GmbH.
- * <p>
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
  * as published by the Free Software Foundation.
- * <p>
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * <p>
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -68,11 +68,10 @@ public class DetectAuthenticationMethodOperation extends RemoteOperation<List<Au
 
         client.setFollowRedirects(false);
 
-        // Step 1: check whether the root folder exists, following redirections but not SAML SSO redirections
+        // Step 1: check whether the root folder exists, following redirections
         RemoteOperationResult resultFromExistenceCheck = operation.execute(client);
         String redirectedLocation = resultFromExistenceCheck.getRedirectedLocation();
-        while (redirectedLocation != null && redirectedLocation.length() > 0 &&
-                !resultFromExistenceCheck.isIdPRedirection()) {
+        while (redirectedLocation != null && redirectedLocation.length() > 0) {
             client.setBaseUri(Uri.parse(resultFromExistenceCheck.getRedirectedLocation()));
             resultFromExistenceCheck = operation.execute(client);
             redirectedLocation = resultFromExistenceCheck.getRedirectedLocation();
@@ -90,8 +89,6 @@ public class DetectAuthenticationMethodOperation extends RemoteOperation<List<Au
             }
         } else if (resultFromExistenceCheck.isSuccess()) {
             allAvailableAuthMethods.add(AuthenticationMethod.NONE);
-        } else if (resultFromExistenceCheck.isIdPRedirection()) {
-            allAvailableAuthMethods.add(AuthenticationMethod.SAML_WEB_SSO);
         }
 
         // Step 3: prepare result with available authentication methods
@@ -124,8 +121,6 @@ public class DetectAuthenticationMethodOperation extends RemoteOperation<List<Au
                 return "BASIC_HTTP_AUTH";
             case BEARER_TOKEN:
                 return "BEARER_TOKEN";
-            case SAML_WEB_SSO:
-                return "SAML_WEB_SSO";
             default:
                 return "UNKNOWN";
         }
