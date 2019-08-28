@@ -154,17 +154,9 @@ class OCShareViewModel(
     /******************************************************************************************************
      ******************************************* PRIVATE SHARES *******************************************
      ******************************************************************************************************/
+
     private val _privateShareCreationStatus = MutableLiveData<UIResult<Unit>>()
     val privateShareCreationStatus: LiveData<UIResult<Unit>> = _privateShareCreationStatus
-
-    private val _privateShare = MutableLiveData<UIResult<OCShareEntity>>()
-    val privateShare: LiveData<UIResult<OCShareEntity>> = _privateShare
-
-    private var privateShareLiveData: LiveData<OCShareEntity>? = null
-    private lateinit var privateShareObserver: Observer<OCShareEntity>
-
-    private val _privateShareEditionStatus = MutableLiveData<UIResult<Unit>>()
-    val privateShareEditionStatus: LiveData<UIResult<Unit>> = _privateShareEditionStatus
 
     fun insertPrivateShare(
         filePath: String,
@@ -205,7 +197,13 @@ class OCShareViewModel(
         }
     }
 
-    // Used to get a private share after updating
+    private val _privateShare = MutableLiveData<UIResult<OCShareEntity>>()
+    val privateShare: LiveData<UIResult<OCShareEntity>> = _privateShare
+
+    private var privateShareLiveData: LiveData<OCShareEntity>? = null
+    private lateinit var privateShareObserver: Observer<OCShareEntity>
+
+    // Used to get a specific private share after updating it
     fun refreshPrivateShare(
         remoteId: Long
     ) {
@@ -219,6 +217,9 @@ class OCShareViewModel(
 
         privateShareLiveData?.observeForever(privateShareObserver)
     }
+
+    private val _privateShareEditionStatus = MutableLiveData<UIResult<Unit>>()
+    val privateShareEditionStatus: LiveData<UIResult<Unit>> = _privateShareEditionStatus
 
     fun updatePrivateShare(
         remoteId: Long,
@@ -264,9 +265,6 @@ class OCShareViewModel(
     private val _publicShareCreationStatus = MutableLiveData<UIResult<Unit>>()
     val publicShareCreationStatus: LiveData<UIResult<Unit>> = _publicShareCreationStatus
 
-    private val _publicShareEditionStatus = MutableLiveData<UIResult<Unit>>()
-    val publicShareEditionStatus: LiveData<UIResult<Unit>> = _publicShareEditionStatus
-
     fun insertPublicShare(
         filePath: String,
         permissions: Int,
@@ -311,6 +309,9 @@ class OCShareViewModel(
             }
         }
     }
+
+    private val _publicShareEditionStatus = MutableLiveData<UIResult<Unit>>()
+    val publicShareEditionStatus: LiveData<UIResult<Unit>> = _publicShareEditionStatus
 
     fun updatePublicShare(
         remoteId: Long,
