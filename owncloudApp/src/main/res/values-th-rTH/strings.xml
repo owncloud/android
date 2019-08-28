@@ -272,7 +272,6 @@
   <string name="auth_wtf_reenter_URL">สถานะที่ไม่สามารถคาดเดาได้; กรุณากรอกที่อยู่เซิร์ฟเวอร์ใหม่อีกครั้ง</string>
   <string name="auth_expired_oauth_token_toast">สิทธิ์การเข้าถึงของคุณหมดอายุแล้ว กรุณาขอสิทธิ์ใหม่</string>
   <string name="auth_expired_basic_auth_toast">กรุณากรอกรหัสผ่านปัจจุบัน</string>
-  <string name="auth_expired_saml_sso_token_toast">เซสชันของคุณหมดอายุ โปรดเชื่อมต่ออีกครั้ง</string>
   <string name="auth_connecting_auth_server">กำลังเชื่อมต่อกับเซิร์ฟเวอร์ที่ตรวจสอบสิทธิ์เข้าใช้งาน</string>
   <string name="auth_unsupported_auth_method">เซิร์ฟเวอร์ไม่สนับสนุนการยืนยันตัวตนนี้</string>
   <string name="auth_unsupported_multiaccount">%1$s ไม่สนับสนุนให้มีหลายบัญชี</string>
@@ -403,8 +402,6 @@
   <string name="log_progress_dialog_text">กำลังโหลดข้อมูล ...</string>
   <string name="actionbar_select_all">เลือกทั้งหมด</string>
   <string name="actionbar_select_inverse">เลือกตรงกันข้าม</string>
-  <string name="saml_authentication_required_text">จำเป็นต้องยืนยันตัวตน</string>
-  <string name="saml_authentication_wrong_pass">รหัสผ่านไม่ถูกต้อง</string>
   <string name="actionbar_move">ย้าย</string>
   <string name="file_list_empty_moving">ไม่มีสิ่งใดในที่นี่ คุณสามารถสร้างโฟลเดอร์!</string>
   <string name="folder_picker_choose_button_text">เลือก</string>

@@ -215,8 +215,7 @@
   <string name="auth_wtf_reenter_URL">未知狀態; 請重新輸入伺服器的位址</string>
   <string name="auth_expired_oauth_token_toast">你的登入授權已過期. 請再次登入</string>
   <string name="auth_expired_basic_auth_toast">請輸入目前的密碼</string>
-  <string name="auth_expired_saml_sso_token_toast">您的連接已逾期. 請重新連線.</string>
-  <string name="auth_connecting_auth_server">連接驗證伺服器中...</string>
+    <string name="auth_connecting_auth_server">連接驗證伺服器中...</string>
   <string name="auth_unsupported_auth_method">伺服器不支援這種認證方式</string>
   <string name="auth_unsupported_multiaccount">%1$s 不支援複數賬戶</string>
   <string name="auth_fail_get_user_name">你的伺服器並沒有傳回正確的使用者 ID, 請聯絡伺服器的管理員
@@ -335,9 +334,7 @@
   <string name="log_send_mail_subject">%1$s Android 應用程式記錄</string>
   <string name="log_progress_dialog_text">資料載入中...</string>
   <string name="actionbar_select_all">全選</string>
-  <string name="saml_authentication_required_text">必須驗證</string>
-  <string name="saml_authentication_wrong_pass">密碼錯誤</string>
-  <string name="actionbar_move">移動</string>
+    <string name="actionbar_move">移動</string>
   <string name="file_list_empty_moving">這裡什麼也沒有，您可以增加目錄！</string>
   <string name="folder_picker_choose_button_text">選擇</string>
   <string name="move_file_not_found">無法移動。請檢查檔案是否存在</string>

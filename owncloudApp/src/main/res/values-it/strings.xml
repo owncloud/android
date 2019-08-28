@@ -268,8 +268,7 @@
   <string name="auth_wtf_reenter_URL">Stato inatteso; digita nuovamente l\'indirizzo del server</string>
   <string name="auth_expired_oauth_token_toast">Autorizzazione scaduta. Richiedi l\'autorizzazione</string>
   <string name="auth_expired_basic_auth_toast">Digita la password attuale</string>
-  <string name="auth_expired_saml_sso_token_toast">Sessione scaduta. Riconnettiti</string>
-  <string name="auth_connecting_auth_server">Connessione al server di autenticazione in corso...</string>
+    <string name="auth_connecting_auth_server">Connessione al server di autenticazione in corso...</string>
   <string name="auth_unsupported_auth_method">Il server non supporta questo metodo di autenticazione</string>
   <string name="auth_unsupported_multiaccount">%1$s non supporta account multipli</string>
   <string name="auth_fail_get_user_name">Il tuo server non ha restituito un id utente corretto, contatta un amministratore
@@ -399,9 +398,7 @@
   <string name="log_progress_dialog_text">Caricamento dati in corso...</string>
   <string name="actionbar_select_all">Seleziona tutto</string>
   <string name="actionbar_select_inverse">Seleziona inverso</string>
-  <string name="saml_authentication_required_text">Autenticazione richiesta</string>
-  <string name="saml_authentication_wrong_pass">Password errata</string>
-  <string name="actionbar_move">Sposta</string>
+    <string name="actionbar_move">Sposta</string>
   <string name="file_list_empty_moving">Qui non c\'è niente. Puoi aggiungere una cartella.</string>
   <string name="folder_picker_choose_button_text">Scegli</string>
   <string name="move_file_not_found">Impossibile spostare. Assicurati che il file esista</string>

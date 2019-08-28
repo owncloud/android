@@ -270,8 +270,7 @@ Hieronder staan de lokale bestanden en de externe bestanden in %5$s waar ze naar
   <string name="auth_wtf_reenter_URL">Onverwachte toestand; voer a.u.b. nogmaals de server-URL in</string>
   <string name="auth_expired_oauth_token_toast">Uw autorisatie is verstreken. Autoriseer opnieuw.</string>
   <string name="auth_expired_basic_auth_toast">Voer uw huidige wachtwoord in</string>
-  <string name="auth_expired_saml_sso_token_toast">Uw sessie is verstreken. Verbind opnieuw</string>
-  <string name="auth_connecting_auth_server">Verbinden met authenticatieserver...</string>
+    <string name="auth_connecting_auth_server">Verbinden met authenticatieserver...</string>
   <string name="auth_unsupported_auth_method">De server ondersteunt deze authenticatiemethode niet</string>
   <string name="auth_unsupported_multiaccount">%1$s ondersteunt het gebruik van meerdere accounts niet</string>
   <string name="auth_fail_get_user_name">Uw server geeft geen goede userid terug, neem contact op met uw beheerder
@@ -402,8 +401,6 @@ Hieronder staan de lokale bestanden en de externe bestanden in %5$s waar ze naar
   <string name="log_progress_dialog_text">Laden data...</string>
   <string name="actionbar_select_all">Alles selecteren</string>
   <string name="actionbar_select_inverse">Selecteer omgekeerd</string>
-  <string name="saml_authentication_required_text">Authenticatie vereist</string>
-  <string name="saml_authentication_wrong_pass">Onjuist wachtwoord</string>
   <string name="actionbar_move">Verplaatsen</string>
   <string name="file_list_empty_moving">Niets hier. U kunt een map toevoegen!</string>
   <string name="folder_picker_choose_button_text">Kies</string>

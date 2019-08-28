@@ -186,7 +186,6 @@
   <string name="auth_oauth_error">Xác nhận không thành công</string>
   <string name="auth_oauth_error_access_denied">Từ chối truy cập vì xác nhận từ phía máy chủ</string>
   <string name="auth_expired_oauth_token_toast">Hạn xác nhận của bạn đã hết. Vui lòng, xác nhận lại</string>
-  <string name="auth_expired_saml_sso_token_toast">Phiên làm việc của bạn đã kết thúc. Vui lòng kết nối lại</string>
   <string name="auth_unsupported_auth_method">Máy chủ không hổ trợ phương thức xác thực này</string>
   <string name="auth_unsupported_multiaccount">%1$s  không hỗ trợ nhiều tài khoản</string>
   <string name="common_rename">Sửa tên</string>
@@ -242,7 +241,6 @@
   <string name="network_error_socket_timeout_exception">Máy chủ đã quá dài để đáp ứng</string>
   <string name="prefs_category_accounts">Tài khoản</string>
   <string name="drawer_manage_accounts">Quản lý tài khoản</string>
-  <string name="saml_authentication_wrong_pass">Sai mật khẩu</string>
   <string name="folder_picker_choose_button_text">Chọn</string>
   <string name="auth_host_address">Địa chỉ máy chủ</string>
   <string name="share_dialog_title">Chia sẻ</string>

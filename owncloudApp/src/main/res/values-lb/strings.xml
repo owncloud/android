@@ -192,8 +192,7 @@
   <string name="auth_wtf_reenter_URL">Onerwaarten Zoustand; w.e.g. gëff d\'Server Adresse nach emol an</string>
   <string name="auth_expired_oauth_token_toast">Deng Autorisatioun ass ofgelaf. W.e.g. autoriséier dech nach emol</string>
   <string name="auth_expired_basic_auth_toast">W.e.g dat aktuellt Passwuert aginn</string>
-  <string name="auth_expired_saml_sso_token_toast">Deng Sessioun ass ofgelaf. Connectéier dech nei w.e.g.</string>
-  <string name="auth_connecting_auth_server">Verbanne mam Authentifizéier-Server</string>
+    <string name="auth_connecting_auth_server">Verbanne mam Authentifizéier-Server</string>
   <string name="auth_unsupported_auth_method">De Server ënnerstëtzt dës Authentifizéierungsmethod net</string>
   <string name="auth_unsupported_multiaccount">%1$s ënnerstëtzt keng multipel Konten</string>
   <string name="auth_fail_get_user_name">Däi Server schéckt keng korrekt Benotzer ID zeréck, w.e.g. kontaktéier däin Administrateur</string>
@@ -299,9 +298,7 @@
   <string name="log_send_history_button">Historique schécken</string>
   <string name="log_send_mail_subject">Protokoller vun der %1$s-Android-App</string>
   <string name="log_progress_dialog_text">Donnée gi gelueden ...</string>
-  <string name="saml_authentication_required_text">Authentifizéierung néideg</string>
-  <string name="saml_authentication_wrong_pass">Falscht Passwuert</string>
-  <string name="actionbar_move">Réckelen</string>
+    <string name="actionbar_move">Réckelen</string>
   <string name="file_list_empty_moving">Hei ass näischt. Setz en Dossier dobäi!</string>
   <string name="folder_picker_choose_button_text">Auswielen</string>
   <string name="move_file_not_found">Konnt net réckelen. Kontrolléier w.e.g. ob de Fichier existéiert</string>

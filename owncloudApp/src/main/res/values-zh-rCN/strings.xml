@@ -264,8 +264,7 @@
   <string name="auth_wtf_reenter_URL">未知状态，请重新输入服务器地址</string>
   <string name="auth_expired_oauth_token_toast">你的授权已经过期。请重新授权。</string>
   <string name="auth_expired_basic_auth_toast">请输入当前的密码</string>
-  <string name="auth_expired_saml_sso_token_toast">您的会话超时了，请重新连接</string>
-  <string name="auth_connecting_auth_server">连接认证服务器...</string>
+    <string name="auth_connecting_auth_server">连接认证服务器...</string>
   <string name="auth_unsupported_auth_method">服务器不支持这种验证方式</string>
   <string name="auth_unsupported_multiaccount">%1$s不支持多个账户</string>
   <string name="auth_fail_get_user_name">您的服务器没有返回一个正确的用户 id，请联系管理员
@@ -395,9 +394,7 @@
   <string name="log_progress_dialog_text">载入数据...</string>
   <string name="actionbar_select_all">全部选择</string>
   <string name="actionbar_select_inverse">反向选择</string>
-  <string name="saml_authentication_required_text">需要认证</string>
-  <string name="saml_authentication_wrong_pass">错误密码</string>
-  <string name="actionbar_move">移动</string>
+    <string name="actionbar_move">移动</string>
   <string name="file_list_empty_moving">这里还什么都没有。上传些东西吧！</string>
   <string name="folder_picker_choose_button_text">选择</string>
   <string name="move_file_not_found">无法移动。请检查文件是否存在</string>

@@ -272,7 +272,6 @@
   <string name="auth_wtf_reenter_URL">מצב בלתי צפוי ; יש להכניס את כתובת השרת שנית</string>
   <string name="auth_expired_oauth_token_toast">האישור שלך פג. נא לבצע אישור מחדש</string>
   <string name="auth_expired_basic_auth_toast">יש להכניס את הסיסמא הנוכחית</string>
-  <string name="auth_expired_saml_sso_token_toast">זמן ההתקשרות שלך הסתיים. יש להתחבר מחדש</string>
   <string name="auth_connecting_auth_server">מתחבר לשרת אימות...</string>
   <string name="auth_unsupported_auth_method">השרת אינו תומך בשיטת אימות זו</string>
   <string name="auth_unsupported_multiaccount">%1$s אינו תומך בריבוי חשבונות</string>
@@ -405,8 +404,6 @@
   <string name="log_progress_dialog_text">טעינת מידע...</string>
   <string name="actionbar_select_all">לבחור הכול</string>
   <string name="actionbar_select_inverse">בחירה הפוכה</string>
-  <string name="saml_authentication_required_text">נדרש אימות</string>
-  <string name="saml_authentication_wrong_pass">סיסמא שגוייה</string>
   <string name="actionbar_move">העברה</string>
   <string name="file_list_empty_moving">אין כאן כלום. ניתן להוסיף תיקייה!</string>
   <string name="folder_picker_choose_button_text">בחירה</string>

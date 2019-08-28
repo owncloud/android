@@ -270,7 +270,6 @@
   <string name="auth_wtf_reenter_URL">Estado inesperado; por favor ingrese nuevamente la dirección del servidor</string>
   <string name="auth_expired_oauth_token_toast">Tu autorización ha expirado. Por favor, obtenga una nueva autorización</string>
   <string name="auth_expired_basic_auth_toast">Por favor ingrese su contraseña actual</string>
-  <string name="auth_expired_saml_sso_token_toast">Su sesión ha expirado. Por favor, conéctese de nuevo</string>
   <string name="auth_connecting_auth_server">Conectando al servidor de autenticación ...</string>
   <string name="auth_unsupported_auth_method">El servidor no soporta este método de autenticación</string>
   <string name="auth_unsupported_multiaccount">%1$s no soporta múltiples cuentas</string>
@@ -400,8 +399,6 @@
   <string name="log_progress_dialog_text">Cargando datos...</string>
   <string name="actionbar_select_all">Seleccionar todos</string>
   <string name="actionbar_select_inverse">Invertir selección</string>
-  <string name="saml_authentication_required_text">Autentificación requerida</string>
-  <string name="saml_authentication_wrong_pass">Clave incorrecta</string>
   <string name="actionbar_move">Mover</string>
   <string name="file_list_empty_moving">Nada aquí. Puedes agregar una carpeta!</string>
   <string name="folder_picker_choose_button_text">Elegir</string>
