@@ -1,5 +1,5 @@
 /* ownCloud Android Library is available under MIT license
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   Copyright (C) 2019 ownCloud GmbH.
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -41,9 +41,4 @@ public class AccountTypeUtils {
     public static String getAuthTokenTypeRefreshToken(String accountType) {
         return accountType + ".oauth2.refresh_token";
     }
-
-    public static String getAuthTokenTypeSamlSessionCookie(String accountType) {
-        return accountType + ".saml.web_sso.session_cookie";
-    }
-
 }
