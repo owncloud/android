@@ -254,10 +254,6 @@ public class RemoteOperationResult<T>
                 }
             }
         }
-        if (isIdPRedirection()) {
-            // overrides default ResultCode.UNKNOWN
-            mCode = ResultCode.UNAUTHORIZED;
-        }
     }
 
     /**
@@ -490,12 +486,6 @@ public class RemoteOperationResult<T>
 
     public String getRedirectedLocation() {
         return mRedirectedLocation;
-    }
-
-    public boolean isIdPRedirection() {
-        return (mRedirectedLocation != null &&
-                (mRedirectedLocation.toUpperCase().contains("SAML") ||
-                        mRedirectedLocation.toLowerCase().contains("wayf")));
     }
 
     /**

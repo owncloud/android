@@ -11,7 +11,7 @@ import java.io.IOException;
 
 /**
  * Dynamic implementation of {@link OwnCloudClientManager}.
- * <p>
+ *
  * Wraps instances of {@link SingleSessionManager} and {@link SimpleFactoryManager} and delegates on one
  * or the other depending on the known version of the server corresponding to the {@link OwnCloudAccount}
  *

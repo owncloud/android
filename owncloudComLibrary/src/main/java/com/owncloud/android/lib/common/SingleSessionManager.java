@@ -33,7 +33,6 @@ import android.net.Uri;
 import android.util.Log;
 
 import com.owncloud.android.lib.common.accounts.AccountUtils;
-import com.owncloud.android.lib.common.authentication.OwnCloudSamlSsoCredentials;
 import com.owncloud.android.lib.common.http.HttpClient;
 import com.owncloud.android.lib.common.utils.Log_OC;
 
@@ -115,10 +114,6 @@ public class SingleSessionManager implements OwnCloudClientManager {
 
             account.loadCredentials(context);
             client.setCredentials(account.getCredentials());
-
-            if (client.getCredentials() instanceof OwnCloudSamlSsoCredentials) {
-                client.disableAutomaticCookiesHandling();
-            }
 
             if (accountName != null) {
                 mClientsWithKnownUsername.put(accountName, client);
