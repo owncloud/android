@@ -5,16 +5,16 @@
  * @author Christian Schabesberger
  * Copyright (C) 2012  Bartek Przybylski
  * Copyright (C) 2019 ownCloud GmbH.
- * <p>
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
  * as published by the Free Software Foundation.
- * <p>
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * <p>
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -50,13 +50,13 @@ import com.owncloud.android.lib.common.utils.Log_OC;
 import java.util.Map;
 
 /**
- *  Authenticator for ownCloud accounts.
- *
- *  Controller class accessed from the system AccountManager, providing integration of ownCloud accounts with the
- *  Android system.
- *
- *  TODO - better separation in operations for OAuth-capable and regular ownCloud accounts.
- *  TODO - review completeness
+ * Authenticator for ownCloud accounts.
+ * 
+ * Controller class accessed from the system AccountManager, providing integration of ownCloud accounts with the
+ * Android system.
+ * 
+ * TODO - better separation in operations for OAuth-capable and regular ownCloud accounts.
+ * TODO - review completeness
  */
 public class AccountAuthenticator extends AbstractAccountAuthenticator {
 
@@ -276,8 +276,8 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
         if (!authTokenType.equals(MainApp.Companion.getAuthTokenType()) &&
                 !authTokenType.equals(AccountTypeUtils.getAuthTokenTypePass(MainApp.Companion.getAccountType())) &&
                 !authTokenType.equals(AccountTypeUtils.getAuthTokenTypeAccessToken(MainApp.Companion.getAccountType())) &&
-                !authTokenType.equals(AccountTypeUtils.getAuthTokenTypeRefreshToken(MainApp.Companion.getAccountType())) &&
-                !authTokenType.equals(AccountTypeUtils.getAuthTokenTypeSamlSessionCookie(MainApp.Companion.getAccountType()))) {
+                !authTokenType.equals(AccountTypeUtils.getAuthTokenTypeRefreshToken(MainApp.Companion.getAccountType()))
+        ) {
             throw new UnsupportedAuthTokenTypeException();
         }
     }

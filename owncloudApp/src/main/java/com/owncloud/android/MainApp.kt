@@ -218,11 +218,8 @@ class MainApp : MultiDexApplication() {
     }
 
     companion object {
-
         const val CLICK_DEV_MENU = "clickDeveloperMenu"
         const val CLICKS_NEEDED_TO_BE_DEVELOPER = 5
-
-        private const val AUTH_ON = "on"
         private const val BETA_VERSION = "beta"
         private const val CLICKS_DEFAULT = 0
 
