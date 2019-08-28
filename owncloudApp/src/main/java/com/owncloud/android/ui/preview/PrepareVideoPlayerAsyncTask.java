@@ -23,7 +23,6 @@ import com.owncloud.android.lib.common.accounts.AccountUtils;
 import com.owncloud.android.lib.common.authentication.OwnCloudBasicCredentials;
 import com.owncloud.android.lib.common.authentication.OwnCloudBearerCredentials;
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentials;
-import com.owncloud.android.lib.common.authentication.OwnCloudSamlSsoCredentials;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
@@ -130,8 +129,6 @@ public class PrepareVideoPlayerAsyncTask extends AsyncTask<Object, Void, MediaSo
                     String cred = login + ":" + password;
                     String auth = "Basic " + Base64.encodeToString(cred.getBytes(), Base64.URL_SAFE);
                     params.put("Authorization", auth);
-                } else if (credentials instanceof OwnCloudSamlSsoCredentials) { // SAML SSO auth
-                    params.put("Cookie", password);
                 } else if (credentials instanceof OwnCloudBearerCredentials) { // OAuth
                     String bearerToken = credentials.getAuthToken();
                     String auth = "Bearer " + bearerToken;
