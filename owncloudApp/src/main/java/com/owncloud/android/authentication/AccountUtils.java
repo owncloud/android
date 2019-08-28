@@ -43,7 +43,6 @@ public class AccountUtils {
 
     public static final String WEBDAV_PATH_4_0_AND_LATER = "/remote.php/dav";
     private static final String ODAV_PATH = "/remote.php/odav";
-    private static final String SAML_SSO_PATH = "/remote.php/webdav";
 
     public static final int ACCOUNT_VERSION = 1;
 
