@@ -74,16 +74,11 @@ class MainApp : Application() {
 
         OwnCloudClient.setContext(appContext)
 
-        val isSamlAuth = AUTH_ON == getString(R.string.auth_method_saml_web_sso)
-
         OwnCloudClientManagerFactory.setUserAgent(userAgent)
-        if (isSamlAuth) {
-            OwnCloudClientManagerFactory.setDefaultPolicy(Policy.SINGLE_SESSION_PER_ACCOUNT)
-        } else {
-            OwnCloudClientManagerFactory.setDefaultPolicy(
-                Policy.SINGLE_SESSION_PER_ACCOUNT_IF_SERVER_SUPPORTS_SERVER_MONITORING
-            )
-        }
+
+        OwnCloudClientManagerFactory.setDefaultPolicy(
+            Policy.SINGLE_SESSION_PER_ACCOUNT_IF_SERVER_SUPPORTS_SERVER_MONITORING
+        )
 
         val oauth2Provider = OwnCloudOAuth2Provider()
         oauth2Provider.authorizationCodeEndpointPath = getString(R.string.oauth2_url_endpoint_auth)
@@ -202,8 +197,9 @@ class MainApp : Application() {
     }
 
     fun startLogIfDeveloper() {
-        isDeveloper = BuildConfig.DEBUG || PreferenceManager.getDefaultSharedPreferences(applicationContext)
-            .getInt(CLICK_DEV_MENU, CLICKS_DEFAULT) > CLICKS_NEEDED_TO_BE_DEVELOPER
+        isDeveloper =
+            BuildConfig.DEBUG || PreferenceManager.getDefaultSharedPreferences(applicationContext)
+                .getInt(CLICK_DEV_MENU, CLICKS_DEFAULT) > CLICKS_NEEDED_TO_BE_DEVELOPER
 
         if (isDeveloper) {
             val dataFolder = dataFolder
@@ -250,7 +246,8 @@ class MainApp : Application() {
             get() {
                 try {
                     val thisPackageName = appContext!!.packageName
-                    return appContext!!.packageManager.getPackageInfo(thisPackageName, 0).versionCode
+                    return appContext!!.packageManager.getPackageInfo(thisPackageName, 0)
+                        .versionCode
                 } catch (e: PackageManager.NameNotFoundException) {
                     return 0
                 }

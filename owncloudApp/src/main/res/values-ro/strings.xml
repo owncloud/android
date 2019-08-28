@@ -207,8 +207,7 @@
   <string name="auth_wtf_reenter_URL">Stare neașteptată; te rog introdu adresa serverului din nou</string>
   <string name="auth_expired_oauth_token_toast">Autorizarea dvs. a expirat. Vă rugăm să autorizați din nou.</string>
   <string name="auth_expired_basic_auth_toast">Introdu te rog parola curenta</string>
-  <string name="auth_expired_saml_sso_token_toast">Sesiunea a expirat .Va rugam conectati-va din nou </string>
-  <string name="auth_connecting_auth_server">Conectare la serverul de autentificare...</string>
+    <string name="auth_connecting_auth_server">Conectare la serverul de autentificare...</string>
   <string name="auth_unsupported_auth_method">Serverul nu soporta aceasta metoda de autentificare </string>
   <string name="auth_unsupported_multiaccount">%1$s nu suporta conturi multiple</string>
   <string name="auth_fail_get_user_name">Server-ul dvs. nu  întoarce un ID de utilizator corect, vă rugăm să contactați un administrator </string>
@@ -326,9 +325,7 @@
   <string name="log_send_mail_subject">%1$s înregistrările app-ului Android</string>
   <string name="log_progress_dialog_text">Datele se încarcă...</string>
   <string name="actionbar_select_all">Selectează tot</string>
-  <string name="saml_authentication_required_text">Autentificare necesară</string>
-  <string name="saml_authentication_wrong_pass">Parolă greșită</string>
-  <string name="actionbar_move">Mută</string>
+    <string name="actionbar_move">Mută</string>
   <string name="file_list_empty_moving">Nu este nimic aici. Poți adăuga un dosar!</string>
   <string name="folder_picker_choose_button_text">Alege</string>
   <string name="move_file_not_found">Incapabil de trasfer. Verifică existența fișierului</string>

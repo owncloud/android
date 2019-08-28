@@ -236,7 +236,6 @@
   <string name="auth_expired_oauth_token_toast">Zure baimena iraungitu da.
 Mesedez, baimendu berriz</string>
   <string name="auth_expired_basic_auth_toast">Mesedez, sartu oraingo pasahitza</string>
-  <string name="auth_expired_saml_sso_token_toast">Zure saioa iraungitu da. Mesdez konektatu berriro</string>
   <string name="auth_connecting_auth_server">Konektatzen autentikazio zerbitzarira...</string>
   <string name="auth_unsupported_auth_method">Zerbitzariak ez du autentikazio metodo hau onartzen</string>
   <string name="auth_unsupported_multiaccount">%1$s ez du kontu anitzak onartzen</string>
@@ -342,8 +341,6 @@ Mesedez, baimendu berriz</string>
   <string name="actionbar_logger">Egunkariak</string>
   <string name="log_send_mail_subject">%1$s Android aplikazioaren egunerokoak</string>
   <string name="log_progress_dialog_text">Datuak kargatzen...</string>
-  <string name="saml_authentication_required_text">Autentikazioa beharrezkoa</string>
-  <string name="saml_authentication_wrong_pass">Pasahitz okerra</string>
   <string name="actionbar_move">Mugitu</string>
   <string name="file_list_empty_moving">Hemen ez dago ezer. Karpeta bat gehi dezakezu!</string>
   <string name="folder_picker_choose_button_text">Aukeratu</string>

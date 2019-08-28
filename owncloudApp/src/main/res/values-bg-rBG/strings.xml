@@ -199,7 +199,6 @@
   <string name="auth_wtf_reenter_URL">Неочакван състояние; Моля, въведете адреса на сървъра отново</string>
   <string name="auth_expired_oauth_token_toast">Оторизацията изтече. Моля, оторизирайте се отново.</string>
   <string name="auth_expired_basic_auth_toast">Моля въведете текущата парола</string>
-  <string name="auth_expired_saml_sso_token_toast">Сесията изтече. Моля, свържете се повторно.</string>
   <string name="auth_connecting_auth_server">Свързване към сървър за аутентикация</string>
   <string name="auth_unsupported_auth_method">Сървърът не поддържа този метод за оторизиране</string>
   <string name="auth_unsupported_multiaccount">%1$s не поддържа множество профили</string>
@@ -315,8 +314,6 @@
   <string name="log_send_mail_subject">%1$s Android журнали на приложенията</string>
   <string name="log_progress_dialog_text">Зареждане на данни...</string>
   <string name="actionbar_select_all">Избери всички</string>
-  <string name="saml_authentication_required_text">Нужна е идентификация</string>
-  <string name="saml_authentication_wrong_pass">Грешна парола</string>
   <string name="actionbar_move">Премести</string>
   <string name="file_list_empty_moving">Тук няма нищо. Можеш да добавиш папка!</string>
   <string name="folder_picker_choose_button_text">Избери</string>

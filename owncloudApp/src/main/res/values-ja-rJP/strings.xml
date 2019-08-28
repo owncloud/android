@@ -244,8 +244,7 @@
   <string name="auth_wtf_reenter_URL">予期せぬ状態；別のサーバーアドレスを入力してみてください</string>
   <string name="auth_expired_oauth_token_toast">認証情報は有効期限切れです。再度認証を行ってください。</string>
   <string name="auth_expired_basic_auth_toast">現在のパスワードを入力してください</string>
-  <string name="auth_expired_saml_sso_token_toast">セッションの有効期限切れです。再度接続してください。</string>
-  <string name="auth_connecting_auth_server">認証サーバーに接続中...</string>
+    <string name="auth_connecting_auth_server">認証サーバーに接続中...</string>
   <string name="auth_unsupported_auth_method">サーバーはこの認証方式をサポートしていません</string>
   <string name="auth_unsupported_multiaccount">%1$s は複数アカウントをサポートしていません</string>
   <string name="auth_fail_get_user_name">サーバーが正しいユーザーIDを返しませんでした。管理者に問い合わせてください。
@@ -370,9 +369,7 @@
   <string name="log_send_mail_subject">%1$s アンドロイドアプリログ</string>
   <string name="log_progress_dialog_text">読込中 ...</string>
   <string name="actionbar_select_all">すべて選択</string>
-  <string name="saml_authentication_required_text">認証を必要とする</string>
-  <string name="saml_authentication_wrong_pass">パスワードが間違っています</string>
-  <string name="actionbar_move">移動</string>
+    <string name="actionbar_move">移動</string>
   <string name="file_list_empty_moving">何もありません。フォルダーを追加してください。</string>
   <string name="folder_picker_choose_button_text">選択</string>
   <string name="move_file_not_found">移動できません。ファイルがあるか確認してください。</string>

@@ -212,7 +212,6 @@
   <string name="auth_wtf_reenter_URL">Oväntat tillstånd; var god ange serverns adress igen</string>
   <string name="auth_expired_oauth_token_toast">Din inloggning har gått ut. Var god logga in igen</string>
   <string name="auth_expired_basic_auth_toast">Var god ange ditt nuvarande lösenord</string>
-  <string name="auth_expired_saml_sso_token_toast">Din session har upphört att gälla. Vänligen anslut igen</string>
   <string name="auth_connecting_auth_server">Ansluter till autentiseringsserver ...</string>
   <string name="auth_unsupported_auth_method">Servern har inte stöd för denna autentiseringsmetod</string>
   <string name="auth_unsupported_multiaccount">%1$s har inte stöd för multipla konton</string>
@@ -333,8 +332,6 @@
   <string name="log_send_mail_subject">%1$s Android app logs</string>
   <string name="log_progress_dialog_text">Laddar data...</string>
   <string name="actionbar_select_all">Välj allt</string>
-  <string name="saml_authentication_required_text">Autentisering krävs</string>
-  <string name="saml_authentication_wrong_pass">Fel lösenord</string>
   <string name="actionbar_move">Flytta</string>
   <string name="file_list_empty_moving">Ingenting här. Du kan skapa en mapp!</string>
   <string name="folder_picker_choose_button_text">Välj</string>

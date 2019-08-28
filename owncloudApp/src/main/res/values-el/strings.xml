@@ -267,8 +267,7 @@
   <string name="auth_wtf_reenter_URL">Απροσδόκητη κατάσταση, παρακαλούμε εισάγετε ξανά τη διεύθυνση του διακομιστή</string>
   <string name="auth_expired_oauth_token_toast">Η πιστοποίησή σας έληξε. Παρακαλούμε πιστοποιήστε ξανά</string>
   <string name="auth_expired_basic_auth_toast">Παρακαλούμε εισάγετε το τρέχον συνθηματικό</string>
-  <string name="auth_expired_saml_sso_token_toast">Η συνεδρία σας έληξε. Παρακαλούμε συνδεθείτε ξανά</string>
-  <string name="auth_connecting_auth_server">Συνδεθείτε στον εξουσιοδοτημένο διακομιστή …</string>
+    <string name="auth_connecting_auth_server">Συνδεθείτε στον εξουσιοδοτημένο διακομιστή …</string>
   <string name="auth_unsupported_auth_method">Ο διακομιστής δεν υποστηρίζει αυτή τη μέθοδο πιστοποίησης</string>
   <string name="auth_unsupported_multiaccount">Ο %1$s  δεν υποστηρίζει πολλαπλούς λογαριασμούς</string>
   <string name="auth_fail_get_user_name">Ο διακομιστής σας δεν επιστρέφει το σωστό αναγνωριστικό χρήστη, παρακαλούμε επικοινωνήστε με τον διαχειριστή
@@ -401,8 +400,6 @@
   <string name="log_progress_dialog_text">Φόρτωση δεδομένων....</string>
   <string name="actionbar_select_all">Επιλογή όλων</string>
   <string name="actionbar_select_inverse">Επιλέξτε αντίστροφα</string>
-  <string name="saml_authentication_required_text">Απαιτείται πιστοποίηση</string>
-  <string name="saml_authentication_wrong_pass">Εσφαλμένος συνθηματικό</string>
   <string name="actionbar_move">Μετακίνηση</string>
   <string name="file_list_empty_moving">Δεν υπάρχει τίποτα εδώ. Μπορείτε να προσθέσετε ένα φάκελο!</string>
   <string name="folder_picker_choose_button_text">Επιλέξτε</string>
