@@ -247,7 +247,6 @@
   <string name="auth_wtf_reenter_URL">Estat inesperat; torna a escriure l\'adreça del servidor</string>
   <string name="auth_expired_oauth_token_toast">La vostra autorització ha vençut. Acrediteu-vos de nou</string>
   <string name="auth_expired_basic_auth_toast">Escriviu la contrasenya actual</string>
-  <string name="auth_expired_saml_sso_token_toast">La sessió ha vençut. Connecteu-vos de nou</string>
   <string name="auth_connecting_auth_server">Connectant amb el servidor d\'autentificació...</string>
   <string name="auth_unsupported_auth_method">El serivdor no permet aquest mètode d\'autenticació</string>
   <string name="auth_unsupported_multiaccount">%1$s no permet comptes múltiples</string>
@@ -371,8 +370,6 @@
   <string name="log_send_mail_subject">%1$s app de registres Android</string>
   <string name="log_progress_dialog_text">Carregant dades...</string>
   <string name="actionbar_select_all">Seleccionar tot</string>
-  <string name="saml_authentication_required_text">Es requereix autenticació</string>
-  <string name="saml_authentication_wrong_pass">Contrasenya incorrecta</string>
   <string name="actionbar_move">Moure</string>
   <string name="file_list_empty_moving">Res per aquí. Pots afegir una carpeta!</string>
   <string name="folder_picker_choose_button_text">Escull</string>

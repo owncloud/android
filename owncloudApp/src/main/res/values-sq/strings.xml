@@ -270,7 +270,6 @@
   <string name="auth_wtf_reenter_URL">Gjendje e papritur; ju lutemi, rijepni adresën e shërbyesit</string>
   <string name="auth_expired_oauth_token_toast">Autorizimi juaj skadoi. Ju lutemi, autorizohuni sërish</string>
   <string name="auth_expired_basic_auth_toast">Ju lutem, jepni fjalëkalimin e tanishëm</string>
-  <string name="auth_expired_saml_sso_token_toast">Sesioni juaj skadoi. Ju lutemi, rilidhuni</string>
   <string name="auth_connecting_auth_server">Po lidhet te shërbyesi i mirëfilltësimeve …</string>
   <string name="auth_unsupported_auth_method">Shërbyesi s\’e mbulon këtë metodë mirëfilltësimesh</string>
   <string name="auth_unsupported_multiaccount">%1$s s\’mbulon llogari të shumëfishta</string>
@@ -402,8 +401,6 @@
   <string name="log_progress_dialog_text">Po ngarkohen të dhëna…</string>
   <string name="actionbar_select_all">Përzgjidhi krejt</string>
   <string name="actionbar_select_inverse">Përzgjidhe së prapthi</string>
-  <string name="saml_authentication_required_text">Lypset mirëfilltësim</string>
-  <string name="saml_authentication_wrong_pass">Fjalëkalim i gabuar</string>
   <string name="actionbar_move">Zhvendose</string>
   <string name="file_list_empty_moving">S\’ka gjë këtu. Mund të shtoni një dosje!</string>
   <string name="folder_picker_choose_button_text">Zgjidhni</string>
