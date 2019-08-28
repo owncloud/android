@@ -224,7 +224,6 @@
   <string name="auth_wtf_reenter_URL">Nepričakovano stanje. Znova vpišite podatke strežnika.</string>
   <string name="auth_expired_oauth_token_toast">Overitev računa je potekla. Pred nadaljevanjem je treba prijavo ponovno overiti.</string>
   <string name="auth_expired_basic_auth_toast">Vpišite trenutno geslo</string>
-  <string name="auth_expired_saml_sso_token_toast">Seja je potekla. Ponovno je treba vzpostaviti povezavo.</string>
   <string name="auth_connecting_auth_server">Povezovanje s overitvenim strežnikom</string>
   <string name="auth_unsupported_auth_method">Strežnik ne podpira tega načina overitve</string>
   <string name="auth_unsupported_multiaccount">%1$s ne omogoča podpore več računom</string>
@@ -350,8 +349,6 @@
   <string name="log_send_mail_subject">%1$s dnevniki programa</string>
   <string name="log_progress_dialog_text">Poteka nalaganje podatkov ...</string>
   <string name="actionbar_select_all">izberi vse</string>
-  <string name="saml_authentication_required_text">Zahtevana je overitev</string>
-  <string name="saml_authentication_wrong_pass">Napačno geslo</string>
   <string name="actionbar_move">Premakni</string>
   <string name="file_list_empty_moving">Ni vsebine in datotek. Lahko ustvarite na primer mapo.</string>
   <string name="folder_picker_choose_button_text">Izbor</string>

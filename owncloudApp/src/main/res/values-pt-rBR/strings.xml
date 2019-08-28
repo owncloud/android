@@ -266,8 +266,7 @@
   <string name="auth_wtf_reenter_URL">Estado inesperado; por favor insira o endereço do servidor novamente</string>
   <string name="auth_expired_oauth_token_toast">Sua autorização expirou. Por favor, solicite autorizar novamente</string>
   <string name="auth_expired_basic_auth_toast">Por favor, digite a senha atual</string>
-  <string name="auth_expired_saml_sso_token_toast">Sua sessão expirou. Por favor, conecte-se novamente</string>
-  <string name="auth_connecting_auth_server">Conectando ao servidor de autenticação ...</string>
+    <string name="auth_connecting_auth_server">Conectando ao servidor de autenticação ...</string>
   <string name="auth_unsupported_auth_method">O servidor não suporta este método de autenticação</string>
   <string name="auth_unsupported_multiaccount">%1$s não suporta múltiplas contas</string>
   <string name="auth_fail_get_user_name">Seu servidor não está retornando um ID de usuário correto, por favor, entre em contato com um administrador
@@ -400,9 +399,7 @@
   <string name="log_progress_dialog_text">Carregando dados...</string>
   <string name="actionbar_select_all">Selecionar tudo</string>
   <string name="actionbar_select_inverse">Selecione inverso</string>
-  <string name="saml_authentication_required_text">Autenticação é requerida</string>
-  <string name="saml_authentication_wrong_pass">Senha incorreta</string>
-  <string name="actionbar_move">Mover</string>
+    <string name="actionbar_move">Mover</string>
   <string name="file_list_empty_moving">Nada aqui. Você pode adicionar uma pasta!</string>
   <string name="folder_picker_choose_button_text">Escolher</string>
   <string name="move_file_not_found">Não é possível mover. Por favor verifique se o arquivo existe</string>
