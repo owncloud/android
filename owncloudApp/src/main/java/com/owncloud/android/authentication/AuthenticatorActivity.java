@@ -32,7 +32,6 @@ import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
@@ -41,8 +40,6 @@ import android.content.pm.ResolveInfo;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.net.http.SslError;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -58,7 +55,6 @@ import android.view.View.OnFocusChangeListener;
 import android.view.View.OnTouchListener;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
-import android.webkit.SslErrorHandler;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -73,7 +69,6 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import com.google.android.material.snackbar.Snackbar;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 import com.owncloud.android.lib.common.OwnCloudAccount;
@@ -109,7 +104,6 @@ import com.owncloud.android.utils.DisplayUtils;
 import com.owncloud.android.utils.DocumentProviderUtils;
 import com.owncloud.android.utils.PreferenceUtils;
 
-import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -144,16 +138,12 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
     private static final String KEY_WAITING_FOR_OP_ID = "WAITING_FOR_OP_ID";
     private static final String KEY_AUTH_TOKEN = "AUTH_TOKEN";
 
-    private static final String AUTH_ON = "on";
-
     public static final byte ACTION_CREATE = 0;
     public static final byte ACTION_UPDATE_TOKEN = 1;               // requested by the user
     public static final byte ACTION_UPDATE_EXPIRED_TOKEN = 2;       // detected by the app
 
     private static final String UNTRUSTED_CERT_DIALOG_TAG = "UNTRUSTED_CERT_DIALOG";
-    private static final String OAUTH_DIALOG_TAG = "OAUTH_DIALOG";
     private static final String WAIT_DIALOG_TAG = "WAIT_DIALOG";
-    private static final String CREDENTIALS_DIALOG_TAG = "CREDENTIALS_DIALOG";
     private static final String KEY_AUTH_IS_FIRST_ATTEMPT_TAG = "KEY_AUTH_IS_FIRST_ATTEMPT";
 
     private static final String KEY_USERNAME = "USERNAME";
@@ -303,7 +293,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             loginLayout.setBackgroundColor(
                     getResources().getColor(R.color.login_background_color)
             );
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+        } else {
             findViewById(R.id.login_background_image).setVisibility(View.VISIBLE);
         }
 
@@ -312,9 +302,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
         mCheckServerButton = findViewById(R.id.embeddedCheckServerButton);
 
-        mCheckServerButton.setOnClickListener(view -> {
-            checkOcServer();
-        });
+        mCheckServerButton.setOnClickListener(view -> checkOcServer());
 
         findViewById(R.id.centeredRefreshButton).setOnClickListener(view -> checkOcServer());
         findViewById(R.id.embeddedRefreshButton).setOnClickListener(view -> checkOcServer());
@@ -1083,12 +1071,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
     private void onNoBrowserInstalled() {
         new AlertDialog.Builder(this)
                 .setMessage(R.string.no_borwser_installed_alert)
-                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                })
+                .setPositiveButton(android.R.string.ok, (dialog, which) -> dialog.dismiss())
                 .create()
                 .show();
     }
@@ -1214,18 +1197,18 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
                 url.toLowerCase().startsWith("https://")) {
             if (url.indexOf("/", 8) != -1) {
                 url = url.substring(0, url.indexOf("/", 8)).toLowerCase()
-                        + url.substring(url.indexOf("/", 8), url.length());
+                        + url.substring(url.indexOf("/", 8));
             } else {
-                url = url.substring(0, url.length()).toLowerCase();
+                url = url.toLowerCase();
             }
 
             mHostUrlInput.setText(url);
         } else {
             if (url.contains("/")) {
                 url = url.substring(0, url.indexOf("/")).toLowerCase()
-                        + url.substring(url.indexOf("/"), url.length());
+                        + url.substring(url.indexOf("/"));
             } else {
-                url = url.substring(0, url.length()).toLowerCase();
+                url = url.toLowerCase();
             }
 
             mHostUrlInput.setText(url);
@@ -1309,16 +1292,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         }
     }
 
-    private void updateFailedAuthStatusIconAndText(int failedStatusText) {
-        mAuthStatusIcon = R.drawable.common_error;
-        mAuthStatusText = getResources().getString(failedStatusText);
-    }
-
-    private void updateServerStatusIconNoRegularAuth() {
-        mServerStatusIcon = R.drawable.common_error;
-        mServerStatusText = getResources().getString(R.string.auth_can_not_auth_against_server);
-    }
-
     /**
      * Processes the result of the request for an access token sent to an OAuth authorization server
      *
@@ -1326,7 +1299,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
      */
     private void onGetOAuthAccessTokenFinish(RemoteOperationResult<Map<String, String>> result) {
         mWaitingForOpId = Long.MAX_VALUE;
-        dismissDialog(WAIT_DIALOG_TAG);
+        dismissDialog();
 
         if (result.isSuccess()) {
             /// be gentle with the user
@@ -1334,7 +1307,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             dialog.show(getSupportFragmentManager(), WAIT_DIALOG_TAG);
 
             /// time to test the retrieved access token on the ownCloud server
-            @SuppressWarnings("unchecked")
             Map<String, String> tokens = result.getData();
             mAuthToken = tokens.get(OAuth2Constants.KEY_ACCESS_TOKEN);
 
@@ -1365,7 +1337,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
     @Override
     public void onAuthenticatorTaskCallback(RemoteOperationResult result) {
         mWaitingForOpId = Long.MAX_VALUE;
-        dismissDialog(WAIT_DIALOG_TAG);
+        dismissDialog();
         mAsyncTask = null;
 
         if (result.isSuccess()) {
@@ -1494,7 +1466,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
                 SharedPreferences.Editor editor = PreferenceManager
                         .getDefaultSharedPreferences(this).edit();
                 editor.putString("select_oc_account", accountName);
-                editor.commit();
+                editor.apply();
             }
 
             /// prepare result to return to the Authenticator
@@ -1723,8 +1695,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
     private abstract static class RightDrawableOnTouchListener implements OnTouchListener {
 
-        private int fuzz = 75;
-
         /**
          * {@inheritDoc}
          */
@@ -1741,6 +1711,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
                 final int x = (int) event.getX();
                 final int y = (int) event.getY();
                 final Rect bounds = rightDrawable.getBounds();
+                int fuzz = 75;
                 if (x >= (view.getRight() - bounds.width() - fuzz) &&
                         x <= (view.getRight() - view.getPaddingRight() + fuzz) &&
                         y >= (view.getPaddingTop() - fuzz) &&
@@ -1753,37 +1724,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         }
 
         public abstract boolean onDrawableTouch(final MotionEvent event);
-    }
-
-    private void getRemoteUserNameOperation(String sessionCookie) {
-        Intent getUserNameIntent = new Intent();
-        getUserNameIntent.setAction(OperationsService.ACTION_GET_USER_NAME);
-        getUserNameIntent.putExtra(OperationsService.EXTRA_SERVER_URL, mServerInfo.mBaseUrl);
-        getUserNameIntent.putExtra(OperationsService.EXTRA_COOKIE, sessionCookie);
-
-        if (mOperationsServiceBinder != null) {
-            mWaitingForOpId = mOperationsServiceBinder.queueNewOperation(getUserNameIntent);
-        }
-    }
-
-    /**
-     * Show untrusted cert dialog
-     */
-    public void showUntrustedCertDialog(
-            X509Certificate x509Certificate, SslError error, SslErrorHandler handler
-    ) {
-        // Show a dialog with the certificate info
-        SslUntrustedCertDialog dialog;
-        if (x509Certificate == null) {
-            dialog = SslUntrustedCertDialog.newInstanceForEmptySslError(error, handler);
-        } else {
-            dialog = SslUntrustedCertDialog.
-                    newInstanceForFullSslError(x509Certificate, error, handler);
-        }
-        FragmentManager fm = getSupportFragmentManager();
-        FragmentTransaction ft = fm.beginTransaction();
-        ft.addToBackStack(null);
-        dialog.show(ft, UNTRUSTED_CERT_DIALOG_TAG);
     }
 
     /**
@@ -1813,9 +1753,9 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         }
     }
 
-    private void dismissDialog(String dialogTag) {
-        Fragment frag = getSupportFragmentManager().findFragmentByTag(dialogTag);
-        if (frag != null && frag instanceof DialogFragment) {
+    private void dismissDialog() {
+        Fragment frag = getSupportFragmentManager().findFragmentByTag(AuthenticatorActivity.WAIT_DIALOG_TAG);
+        if (frag instanceof DialogFragment) {
             DialogFragment dialog = (DialogFragment) frag;
             dialog.dismiss();
         }
@@ -1832,11 +1772,8 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
                     new ComponentName(AuthenticatorActivity.this, OperationsService.class)
             )) {
                 mOperationsServiceBinder = (OperationsServiceBinder) service;
-
                 doOnResumeAndBound();
-
             }
-
         }
 
         @Override
@@ -1848,21 +1785,5 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
                 mOperationsServiceBinder = null;
             }
         }
-    }
-
-    /**
-     * For retrieving the clicking on authentication cancel button
-     */
-    public void doNegativeAuthenticatioDialogClick() {
-        mIsFirstAuthAttempt = true;
-    }
-
-    private void showSnackMessage(int messageResource) {
-        Snackbar snackbar = Snackbar.make(
-                findViewById(android.R.id.content),
-                messageResource,
-                Snackbar.LENGTH_LONG
-        );
-        snackbar.show();
     }
 }
