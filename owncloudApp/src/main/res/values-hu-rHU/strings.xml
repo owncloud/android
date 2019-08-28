@@ -263,8 +263,7 @@
   <string name="auth_wtf_reenter_URL">Váratlan állapot; adja meg újra a kiszolgálócímet</string>
   <string name="auth_expired_oauth_token_toast">A jogosultsága lejárt. Jelentkezzen be újra</string>
   <string name="auth_expired_basic_auth_toast">Adja meg az aktuális jelszót</string>
-  <string name="auth_expired_saml_sso_token_toast">A munkamenete lejárt. Jelentkezzen be újra</string>
-  <string name="auth_connecting_auth_server">Csatlakozás a hitelesítési kiszolgálóhoz…</string>
+    <string name="auth_connecting_auth_server">Csatlakozás a hitelesítési kiszolgálóhoz…</string>
   <string name="auth_unsupported_auth_method">A kiszolgáló nem támogatja ezt a hitelesítési módszert</string>
   <string name="auth_unsupported_multiaccount">A(z) %1$s nem támogat egyszerre több fiókot</string>
   <string name="auth_fail_get_user_name">A kiszolgáló nem ad vissza helyes felhasználói azonosítót, lépjen kapcsolatba egy rendszergazdával
@@ -390,9 +389,7 @@
   <string name="log_send_mail_subject">%1$s Android-alkalmazások naplói</string>
   <string name="log_progress_dialog_text">Adatok betöltése...</string>
   <string name="actionbar_select_all">Összes kijelölése</string>
-  <string name="saml_authentication_required_text">Felhasználóazonosítás szükséges</string>
-  <string name="saml_authentication_wrong_pass">Hibás jelszó</string>
-  <string name="actionbar_move">Mozgatás</string>
+    <string name="actionbar_move">Mozgatás</string>
   <string name="file_list_empty_moving">Itt nincs semmi! Adj hozzá egy mappát!</string>
   <string name="folder_picker_choose_button_text">Választ</string>
   <string name="move_file_not_found">Nem lehet áttenni. Ellenőrizze, hogy létezik-e a fájl</string>

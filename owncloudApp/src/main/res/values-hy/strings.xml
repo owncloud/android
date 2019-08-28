@@ -159,7 +159,6 @@
   <string name="prefs_add_account">Հաշիվ ավելացնել</string>
   <string name="actionbar_logger">Լոգեր</string>
   <string name="log_send_history_button">Ուղարկել պատմությունը</string>
-  <string name="saml_authentication_wrong_pass">Սխալ գաղտնաբառ</string>
   <string name="actionbar_move">Տեղափոխել</string>
   <string name="file_list_empty_moving">Ոչինչ չկա: Կարող ես պանակ ավելացնել:</string>
   <string name="folder_picker_choose_button_text">Ընտրել</string>

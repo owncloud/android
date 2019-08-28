@@ -271,7 +271,6 @@ Descárgueo de aquí: %2$s</string>
   <string name="auth_wtf_reenter_URL">Estado inesperado, introduza de novo o enderezo do servidor</string>
   <string name="auth_expired_oauth_token_toast">A súa autorización caducou. Autorícese de novo</string>
   <string name="auth_expired_basic_auth_toast">Introduza o contrasinal actual</string>
-  <string name="auth_expired_saml_sso_token_toast">A súa sesión caducou. Acceda de novo</string>
   <string name="auth_connecting_auth_server">Conectando co servidor de autenticación…</string>
   <string name="auth_unsupported_auth_method">O servidor non admite este método de autenticación</string>
   <string name="auth_unsupported_multiaccount">%1$s non admite contas múltipes</string>
@@ -405,8 +404,6 @@ Descárgueo de aquí: %2$s</string>
   <string name="log_progress_dialog_text">Cargando os datos...</string>
   <string name="actionbar_select_all">Seleccionar todo</string>
   <string name="actionbar_select_inverse">Seleccionar á inversa</string>
-  <string name="saml_authentication_required_text">Requírese autenticación</string>
-  <string name="saml_authentication_wrong_pass">Contrasinal incorrecto</string>
   <string name="actionbar_move">Mover</string>
   <string name="file_list_empty_moving">Aquí non hai nada. Pode engadir un cartafol!</string>
   <string name="folder_picker_choose_button_text">Escoller</string>

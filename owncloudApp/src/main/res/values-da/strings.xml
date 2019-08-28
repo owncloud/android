@@ -211,7 +211,6 @@
   <string name="auth_wtf_reenter_URL">Uventet tilstand; vær venlig at indtaste serverens adresse igen</string>
   <string name="auth_expired_oauth_token_toast">Din godkendelse udløb. Gentag godkendelse</string>
   <string name="auth_expired_basic_auth_toast">Indtast venligst den nuværende adgangskode</string>
-  <string name="auth_expired_saml_sso_token_toast">Din session udløb. Forbind venligst igen</string>
   <string name="auth_connecting_auth_server">Tilslutter til adgangsgivende server …</string>
   <string name="auth_unsupported_auth_method">Serveren understøtter ikke denne godkendelsesmetode</string>
   <string name="auth_unsupported_multiaccount">%1$s understøtter ikke flere konti</string>
@@ -331,8 +330,6 @@
   <string name="log_send_mail_subject">%1$s Android-app - logge</string>
   <string name="log_progress_dialog_text">Indlæser data ...</string>
   <string name="actionbar_select_all">Vælg alle</string>
-  <string name="saml_authentication_required_text">Godkendelse påkrævet</string>
-  <string name="saml_authentication_wrong_pass">Forkert kodeord</string>
   <string name="actionbar_move">Flyt</string>
   <string name="file_list_empty_moving">Der er intet her. Du kan tilføje en mappe!</string>
   <string name="folder_picker_choose_button_text">Vælg</string>
