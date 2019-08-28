@@ -3,16 +3,16 @@
  *
  * @author masensio on 09/02/2015.
  * Copyright (C) 2019 ownCloud GmbH.
- * <p>
+ * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
  * as published by the Free Software Foundation.
- * <p>
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * <p>
+ * 
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -38,13 +38,10 @@ import java.lang.ref.WeakReference;
  */
 public class AuthenticatorAsyncTask extends AsyncTask<Object, Void, RemoteOperationResult> {
 
-    private static String REMOTE_PATH = "/";
-    private static boolean SUCCESS_IF_ABSENT = false;
-
     private Context mContext;
     private final WeakReference<OnAuthenticatorTaskListener> mListener;
 
-    public AuthenticatorAsyncTask(Activity activity) {
+    AuthenticatorAsyncTask(Activity activity) {
         mContext = activity.getApplicationContext();
         mListener = new WeakReference<>((OnAuthenticatorTaskListener) activity);
     }
@@ -63,6 +60,8 @@ public class AuthenticatorAsyncTask extends AsyncTask<Object, Void, RemoteOperat
             client.setCredentials(credentials);
 
             // Operation - try credentials
+            String REMOTE_PATH = "/";
+            boolean SUCCESS_IF_ABSENT = false;
             ExistenceCheckRemoteOperation existenceCheckRemoteOperation = new ExistenceCheckRemoteOperation(
                     REMOTE_PATH,
                     SUCCESS_IF_ABSENT,
