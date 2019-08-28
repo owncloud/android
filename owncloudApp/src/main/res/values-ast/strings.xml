@@ -204,7 +204,6 @@
   <string name="auth_wtf_reenter_URL">Estáu non esperáu; por favor, inxerta la direición del sirvidor otra vegada</string>
   <string name="auth_expired_oauth_token_toast">La to autorización finó. Por favor, autorízala otra vegada</string>
   <string name="auth_expired_basic_auth_toast">Por favor, introduzca la contraseña actual</string>
-  <string name="auth_expired_saml_sso_token_toast">La so sesión finó. Por favor conéutate otra vegada</string>
   <string name="auth_connecting_auth_server">Coneutando al sirvidor d\'autentificación…</string>
   <string name="auth_unsupported_auth_method">El sirvidor nun sofita esti métodu/triba d\'autentificación</string>
   <string name="auth_unsupported_multiaccount">%1$s nun permite cuentes múltiples</string>
@@ -317,8 +316,6 @@
   <string name="log_send_mail_subject">Aplicación de rexistros d\'Android %1$s</string>
   <string name="log_progress_dialog_text">Cargando datos ...</string>
   <string name="actionbar_select_all">Esbillar too</string>
-  <string name="saml_authentication_required_text">Necesítase autenticación</string>
-  <string name="saml_authentication_wrong_pass">Contraseña incorreuta</string>
   <string name="actionbar_move">Mover</string>
   <string name="file_list_empty_moving">Ensín nada dientro. ¡Pues amestar una carpeta!</string>
   <string name="folder_picker_choose_button_text">Esbillar</string>

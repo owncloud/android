@@ -146,8 +146,7 @@
   <string name="forbidden_permissions_create">lai izveidotu datni</string>
   <string name="prefs_category_accounts">Konti</string>
   <string name="prefs_add_account">Pievienot kontu</string>
-  <string name="saml_authentication_wrong_pass">Nepareiza parole</string>
-  <string name="actionbar_move">Pārvietot</string>
+    <string name="actionbar_move">Pārvietot</string>
   <string name="file_list_empty_moving">Šeit nekā nav. Jūs varat pievienot mapi!</string>
   <string name="folder_picker_choose_button_text">Izvēlieties</string>
   <string name="forbidden_permissions_move">lai pārvietotu šo datni</string>

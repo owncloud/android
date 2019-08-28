@@ -246,7 +246,6 @@
   <string name="auth_wtf_reenter_URL">Óvænt staða, settu aftur inn vistfang þjónsins</string>
   <string name="auth_expired_oauth_token_toast">Heimild þín er útrunnin. Skráðu þig aftur inn.</string>
   <string name="auth_expired_basic_auth_toast">Settu inn núgildandi lykilorð</string>
-  <string name="auth_expired_saml_sso_token_toast">Setan þín er útrunnin. Skráðu þig aftur inn.</string>
   <string name="auth_connecting_auth_server">Tengist við auðkenningarþjón …</string>
   <string name="auth_unsupported_auth_method">Þjónninn styður ekki þessa auðkenningaraðferð</string>
   <string name="auth_unsupported_multiaccount">%1$s styður ekki fjölaðganga</string>
@@ -371,8 +370,6 @@
   <string name="log_progress_dialog_text">Hleð inn gögnum …</string>
   <string name="actionbar_select_all">Velja allt</string>
   <string name="actionbar_select_inverse">Snúa við vali</string>
-  <string name="saml_authentication_required_text">Auðkenningar krafist</string>
-  <string name="saml_authentication_wrong_pass">Rangt lykilorð</string>
   <string name="actionbar_move">Færa</string>
   <string name="file_list_empty_moving">Ekkert hér. Þú getur bætt við möppu!</string>
   <string name="folder_picker_choose_button_text">Veldu</string>

@@ -948,17 +948,9 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
                         if (!synchResult?.isSuccess!!) {
                             /// TODO refactor and make common
                             if (ResultCode.UNAUTHORIZED == synchResult.code ||
-                                synchResult.isException && synchResult.exception is AuthenticatorException) {
-
-                                // If we have saml enabled we consider the user to only have
-                                // one account with which he is logged into the app. This is because
-                                // only branded versions of the app have saml support.
-                                if (getString(R.string.auth_method_saml_web_sso) == "on") {
-                                    requestCredentialsUpdate()
-                                } else {
-                                    showRequestAccountChangeNotice()
-                                }
-
+                                synchResult.isException && synchResult.exception is AuthenticatorException
+                            ) {
+                                showRequestAccountChangeNotice()
                             } else if (ResultCode.SSL_RECOVERABLE_PEER_UNVERIFIED == synchResult.code) {
                                 showUntrustedCertDialog(synchResult)
                             }
