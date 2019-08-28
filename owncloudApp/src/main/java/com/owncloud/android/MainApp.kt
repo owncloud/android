@@ -211,11 +211,6 @@ class MainApp : Application() {
         private val TAG = MainApp::class.java.simpleName
         const val CLICK_DEV_MENU = "clickDeveloperMenu"
         const val CLICKS_NEEDED_TO_BE_DEVELOPER = 5
-
-        private val AUTH_ON = "on"
-
-        private val POLICY_SINGLE_SESSION_PER_ACCOUNT = "single session per account"
-        private val POLICY_ALWAYS_NEW_CLIENT = "always new client"
         private val CLICKS_DEFAULT = 0
 
         var appContext: Context? = null
