@@ -152,7 +152,7 @@ public class AccountUtils {
                             .getDefaultSharedPreferences(context).edit();
                     appPrefs.putString("select_oc_account", accountName);
 
-                    appPrefs.commit();
+                    appPrefs.apply();
                     result = true;
                     break;
                 }
@@ -267,7 +267,7 @@ public class AccountUtils {
         }
     }
 
-    public static String trimWebdavSuffix(String url) {
+    static String trimWebdavSuffix(String url) {
         while (url.endsWith("/")) {
             url = url.substring(0, url.length() - 1);
         }
