@@ -52,7 +52,6 @@ class ShareFolderFragmentTest {
     fun setUp() {
         val account = mockkClass(Account::class)
         val ownCloudVersion = mockkClass(OwnCloudVersion::class)
-        every { ownCloudVersion.isSearchUsersSupported } returns true
 
         shareFragment = ShareFileFragment.newInstance(
             getOCFolderForTesting("Photos"),

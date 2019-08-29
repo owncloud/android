@@ -169,14 +169,9 @@ class EditPrivateShareFragment : DialogFragment() {
             val sharePermissions = share!!.permissions
             val isFederated = ShareType.FEDERATED.value == share!!.shareType
             val serverVersion = AccountUtils.getServerVersion(account)
-            val isNotReshareableFederatedSupported =
-                serverVersion != null && serverVersion.isNotReshareableFederatedSupported
             var compound: CompoundButton
 
             compound = canShareSwitch
-            if (isFederated && !isNotReshareableFederatedSupported) {
-                compound.visibility = View.INVISIBLE
-            }
             compound.isChecked = sharePermissions and RemoteShare.SHARE_PERMISSION_FLAG > 0
 
             compound = canEditSwitch
@@ -186,9 +181,7 @@ class EditPrivateShareFragment : DialogFragment() {
             val canEdit = sharePermissions and anyUpdatePermission > 0
             compound.isChecked = canEdit
 
-            val areEditOptionsAvailable = !isFederated || isNotReshareableFederatedSupported
-
-            if (file!!.isFolder && areEditOptionsAvailable) {
+            if (file!!.isFolder) {
                 /// TODO change areEditOptionsAvailable in order to delete !isFederated
                 // from checking when iOS is ready
                 compound = canEditCreateCheckBox
@@ -274,9 +267,7 @@ class EditPrivateShareFragment : DialogFragment() {
                     if (file?.isFolder == true) {
                         if (isChecked) {
                             val serverVersion = AccountUtils.getServerVersion(account)
-                            val isNotReshareableFederatedSupported =
-                                serverVersion != null && serverVersion.isNotReshareableFederatedSupported
-                            if (!isFederated || isNotReshareableFederatedSupported) {
+                            if (!isFederated) {
                                 /// not federated shares -> enable all the subpermisions
                                 for (i in sSubordinateCheckBoxIds.indices) {
                                     //noinspection ConstantConditions, prevented in the method beginning

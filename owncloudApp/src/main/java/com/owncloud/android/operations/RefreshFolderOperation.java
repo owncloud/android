@@ -82,11 +82,6 @@ public class RefreshFolderOperation extends SyncOperation<ArrayList<RemoteFile>>
     private Context mContext;
 
     /**
-     * 'True' means that Share resources bound to the files into should be refreshed also
-     */
-    private boolean mIsShareSupported;
-
-    /**
      * 'True' means that the list of files in the remote folder should
      * be fetched and merged locally even though the 'eTag' did not change.
      */
@@ -101,7 +96,6 @@ public class RefreshFolderOperation extends SyncOperation<ArrayList<RemoteFile>>
      * Creates a new instance of {@link RefreshFolderOperation}.
      *
      * @param folder           Folder to synchronize.
-     * @param isShareSupported 'True' means that the server supports the sharing API.
      * @param ignoreETag       'True' means that the content of the remote folder should
      *                         be fetched and updated even though the 'eTag' did not
      *                         change.
@@ -109,12 +103,10 @@ public class RefreshFolderOperation extends SyncOperation<ArrayList<RemoteFile>>
      * @param context          Application context.
      */
     public RefreshFolderOperation(OCFile folder,
-                                  boolean isShareSupported,
                                   boolean ignoreETag,
                                   Account account,
                                   Context context) {
         mLocalFolder = folder;
-        mIsShareSupported = isShareSupported;
         mAccount = account;
         mContext = context;
         mIgnoreETag = ignoreETag;
@@ -136,7 +128,6 @@ public class RefreshFolderOperation extends SyncOperation<ArrayList<RemoteFile>>
         // only in root folder: sync server version and user profile
         if (OCFile.ROOT_PATH.equals(mLocalFolder.getRemotePath()) && syncVersionAndProfileEnabled) {
             OwnCloudVersion serverVersion = syncCapabilitiesAndGetServerVersion();
-            mIsShareSupported = serverVersion.isSharedSupported();
             syncUserProfile();
         }
 
@@ -155,7 +146,7 @@ public class RefreshFolderOperation extends SyncOperation<ArrayList<RemoteFile>>
         sendLocalBroadcast(
                 EVENT_SINGLE_FOLDER_CONTENTS_SYNCED, mLocalFolder.getRemotePath(), result);
 
-        if (result.isSuccess() && mIsShareSupported) {
+        if (result.isSuccess()) {
             updateShareIconsInFiles(client); // share result is ignored
         }
 

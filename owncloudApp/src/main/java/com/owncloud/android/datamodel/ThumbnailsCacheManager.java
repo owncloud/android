@@ -113,7 +113,7 @@ public class ThumbnailsCacheManager {
         }
     }
 
-    public static void addBitmapToCache(String key, Bitmap bitmap) {
+    private static void addBitmapToCache(String key, Bitmap bitmap) {
         synchronized (mThumbnailsDiskCacheLock) {
             if (mThumbnailCache != null) {
                 mThumbnailCache.put(key, bitmap);
@@ -121,7 +121,7 @@ public class ThumbnailsCacheManager {
         }
     }
 
-    public static void removeBitmapFromCache(String key) {
+    private static void removeBitmapFromCache(String key) {
         synchronized (mThumbnailsDiskCacheLock) {
             if (mThumbnailCache != null) {
                 mThumbnailCache.removeKey(key);
@@ -222,6 +222,7 @@ public class ThumbnailsCacheManager {
 
         /**
          * Add thumbnail to cache
+         *
          * @param imageKey: thumb key
          * @param bitmap:   image for extracting thumbnail
          * @param path:     image path
@@ -243,6 +244,7 @@ public class ThumbnailsCacheManager {
 
         /**
          * Converts size of file icon from dp to pixel
+         *
          * @return int
          */
         private int getThumbnailDimension() {
@@ -285,37 +287,33 @@ public class ThumbnailsCacheManager {
                     // Download thumbnail from server
                     OwnCloudVersion serverOCVersion = AccountUtils.getServerVersion(mAccount);
                     if (mClient != null && serverOCVersion != null) {
-                        if (serverOCVersion.supportsRemoteThumbnails()) {
-                            GetMethod get = null;
-                            try {
-                                String uri = mClient.getBaseUri() + "" +
-                                        "/index.php/apps/files/api/v1/thumbnail/" +
-                                        px + "/" + px + Uri.encode(file.getRemotePath(), "/");
-                                Log_OC.d("Thumbnail", "URI: " + uri);
-                                get = new GetMethod(new URL(uri));
-                                int status = mClient.executeHttpMethod(get);
-                                if (status == HttpConstants.HTTP_OK) {
-                                    InputStream inputStream = get.getResponseBodyAsStream();
-                                    Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-                                    thumbnail = ThumbnailUtils.extractThumbnail(bitmap, px, px);
+                        GetMethod get;
+                        try {
+                            String uri = mClient.getBaseUri() + "" +
+                                    "/index.php/apps/files/api/v1/thumbnail/" +
+                                    px + "/" + px + Uri.encode(file.getRemotePath(), "/");
+                            Log_OC.d("Thumbnail", "URI: " + uri);
+                            get = new GetMethod(new URL(uri));
+                            int status = mClient.executeHttpMethod(get);
+                            if (status == HttpConstants.HTTP_OK) {
+                                InputStream inputStream = get.getResponseBodyAsStream();
+                                Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+                                thumbnail = ThumbnailUtils.extractThumbnail(bitmap, px, px);
 
-                                    // Handle PNG
-                                    if (file.getMimetype().equalsIgnoreCase("image/png")) {
-                                        thumbnail = handlePNG(thumbnail, px);
-                                    }
-
-                                    // Add thumbnail to cache
-                                    if (thumbnail != null) {
-                                        addBitmapToCache(imageKey, thumbnail);
-                                    }
-                                } else {
-                                    mClient.exhaustResponse(get.getResponseBodyAsStream());
+                                // Handle PNG
+                                if (file.getMimetype().equalsIgnoreCase("image/png")) {
+                                    thumbnail = handlePNG(thumbnail, px);
                                 }
-                            } catch (Exception e) {
-                                e.printStackTrace();
+
+                                // Add thumbnail to cache
+                                if (thumbnail != null) {
+                                    addBitmapToCache(imageKey, thumbnail);
+                                }
+                            } else {
+                                mClient.exhaustResponse(get.getResponseBodyAsStream());
                             }
-                        } else {
-                            Log_OC.d(TAG, "Server too old");
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
                     }
                 }
@@ -364,13 +362,13 @@ public class ThumbnailsCacheManager {
 
     /**
      * Show the avatar corresponding to the received account in an {@link ImageView} ir {@link MenuItem}.
-     *
+     * <p>
      * The avatar is loaded if available in the cache and bound to the received UI element. The avatar is not
      * fetched from the server if not available, unless the parameter 'fetchFromServer' is set to 'true'.
-     *
+     * <p>
      * If there is no avatar stored and cannot be fetched, a colored icon is generated with the first
      * letter of the account username.
-     *
+     * <p>
      * If this is not possible either, a predefined user icon is bound instead.
      */
     public static class GetAvatarTask extends AsyncTask<Object, Void, Drawable> {
@@ -386,12 +384,12 @@ public class ThumbnailsCacheManager {
         /**
          * Builds an instance to show the avatar corresponding to the received account in an {@link ImageView}.
          *
-         * @param imageView         The {@link ImageView} to bind the avatar to.
-         * @param account           OC account which avatar will be shown.
-         * @param displayRadius     The radius of the circle where the avatar will be clipped into.
-         * @param fetchFromServer   When 'true', if there is no avatar stored in the cache, it's fetched from
-         *                          the server. When 'false', server is not accessed, the fallback avatar is
-         *                          generated instead. USE WITH CARE, probably to be removed in the future.
+         * @param imageView       The {@link ImageView} to bind the avatar to.
+         * @param account         OC account which avatar will be shown.
+         * @param displayRadius   The radius of the circle where the avatar will be clipped into.
+         * @param fetchFromServer When 'true', if there is no avatar stored in the cache, it's fetched from
+         *                        the server. When 'false', server is not accessed, the fallback avatar is
+         *                        generated instead. USE WITH CARE, probably to be removed in the future.
          */
         public GetAvatarTask(ImageView imageView, Account account, float displayRadius, boolean fetchFromServer) {
             if (account == null) {
@@ -407,12 +405,12 @@ public class ThumbnailsCacheManager {
         /**
          * Builds an instance to show the avatar corresponding to the received account in an {@link MenuItem}.
          *
-         * @param menuItem         The {@ImageView} to bind the avatar to.
-         * @param account           OC account which avatar will be shown.
-         * @param displayRadius     The radius of the circle where the avatar will be clipped into.
-         * @param fetchFromServer   When 'true', if there is no avatar stored in the cache, it's fetched from
-         *                          the server. When 'false', server is not accessed, the fallback avatar is
-         *                          generated instead. USE WITH CARE, probably to be removed in the future.
+         * @param menuItem        The {@ImageView} to bind the avatar to.
+         * @param account         OC account which avatar will be shown.
+         * @param displayRadius   The radius of the circle where the avatar will be clipped into.
+         * @param fetchFromServer When 'true', if there is no avatar stored in the cache, it's fetched from
+         *                        the server. When 'false', server is not accessed, the fallback avatar is
+         *                        generated instead. USE WITH CARE, probably to be removed in the future.
          */
         public GetAvatarTask(MenuItem menuItem, Account account, float displayRadius, boolean fetchFromServer) {
             if (account == null) {
@@ -480,6 +478,7 @@ public class ThumbnailsCacheManager {
 
         /**
          * Converts size of file icon from dp to pixel
+         *
          * @return int
          */
         private int getAvatarDimension() {
@@ -511,31 +510,27 @@ public class ThumbnailsCacheManager {
                     // Download avatar from server
                     OwnCloudVersion serverOCVersion = AccountUtils.getServerVersion(mAccount);
                     if (mClient != null && serverOCVersion != null) {
-                        if (serverOCVersion.supportsRemoteThumbnails()) {
-                            GetMethod get = null;
-                            try {
-                                String uri = mClient.getBaseUri() + "" +
-                                        "/index.php/avatar/" + AccountUtils.getUsernameOfAccount(mUsername) + "/" + px;
-                                Log_OC.d("Avatar", "URI: " + uri);
-                                get = new GetMethod(new URL(uri));
-                                int status = mClient.executeHttpMethod(get);
-                                if (status == HttpConstants.HTTP_OK) {
-                                    InputStream inputStream = get.getResponseBodyAsStream();
-                                    Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-                                    avatarBitmap = ThumbnailUtils.extractThumbnail(bitmap, px, px);
+                        GetMethod get ;
+                        try {
+                            String uri = mClient.getBaseUri() + "" +
+                                    "/index.php/avatar/" + AccountUtils.getUsernameOfAccount(mUsername) + "/" + px;
+                            Log_OC.d("Avatar", "URI: " + uri);
+                            get = new GetMethod(new URL(uri));
+                            int status = mClient.executeHttpMethod(get);
+                            if (status == HttpConstants.HTTP_OK) {
+                                InputStream inputStream = get.getResponseBodyAsStream();
+                                Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+                                avatarBitmap = ThumbnailUtils.extractThumbnail(bitmap, px, px);
 
-                                    // Add avatar to cache
-                                    if (avatarBitmap != null) {
-                                        addBitmapToCache(imageKey, avatarBitmap);
-                                    }
-                                } else {
-                                    mClient.exhaustResponse(get.getResponseBodyAsStream());
+                                // Add avatar to cache
+                                if (avatarBitmap != null) {
+                                    addBitmapToCache(imageKey, avatarBitmap);
                                 }
-                            } catch (Exception e) {
-                                Log_OC.e(TAG, "Error downloading avatar", e);
+                            } else {
+                                mClient.exhaustResponse(get.getResponseBodyAsStream());
                             }
-                        } else {
-                            Log_OC.d(TAG, "Server too old");
+                        } catch (Exception e) {
+                            Log_OC.e(TAG, "Error downloading avatar", e);
                         }
                     }
                 }
@@ -605,8 +600,7 @@ public class ThumbnailsCacheManager {
         return cancelPotentialAvatarWork(file, getAvatarWorkerTask(menuItem));
     }
 
-    public static boolean cancelPotentialAvatarWork(Object file, final GetAvatarTask avatarWorkerTask) {
-
+    private static boolean cancelPotentialAvatarWork(Object file, final GetAvatarTask avatarWorkerTask) {
         if (avatarWorkerTask != null) {
             final Object usernameData = avatarWorkerTask.mUsername;
             // If usernameData is not yet set or it differs from the new data
@@ -665,10 +659,10 @@ public class ThumbnailsCacheManager {
 
             super(res, bitmap);
             bitmapWorkerTaskReference =
-                    new WeakReference<ThumbnailGenerationTask>(bitmapWorkerTask);
+                    new WeakReference<>(bitmapWorkerTask);
         }
 
-        public ThumbnailGenerationTask getBitmapWorkerTask() {
+        ThumbnailGenerationTask getBitmapWorkerTask() {
             return bitmapWorkerTaskReference.get();
         }
     }
@@ -682,10 +676,10 @@ public class ThumbnailsCacheManager {
 
             super(res, bitmap);
             avatarWorkerTaskReference =
-                    new WeakReference<GetAvatarTask>(avatarWorkerTask);
+                    new WeakReference<>(avatarWorkerTask);
         }
 
-        public GetAvatarTask getAvatarWorkerTask() {
+        GetAvatarTask getAvatarWorkerTask() {
             return avatarWorkerTaskReference.get();
         }
     }
