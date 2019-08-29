@@ -466,7 +466,6 @@ public class ReceiveExternalFilesActivity extends FileActivity
         // perform folder synchronization
         SyncOperation synchFolderOp = new RefreshFolderOperation(
                 folder,
-                getFileOperationsHelper().isSharedSupported(),
                 false,
                 getAccount(),
                 getApplicationContext()

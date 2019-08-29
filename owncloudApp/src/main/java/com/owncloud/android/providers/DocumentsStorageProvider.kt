@@ -313,10 +313,6 @@ class DocumentsStorageProvider : DocumentsProvider() {
 
     private fun createFolder(parentDocument: OCFile, displayName: String): String {
         val newPath = parentDocument.remotePath + displayName + OCFile.PATH_SEPARATOR
-        val serverWithForbiddenChars = isVersionWithForbiddenCharacters()
-        if (!FileUtils.isValidName(displayName, serverWithForbiddenChars)) {
-            throw UnsupportedOperationException("Folder $displayName contains at least one invalid character")
-        }
         Log_OC.d(TAG, "Trying to create folder with path $newPath")
 
         CreateFolderOperation(newPath, false).apply {
@@ -386,7 +382,6 @@ class DocumentsStorageProvider : DocumentsProvider() {
         val refreshFolderOperation = RefreshFolderOperation(
             currentStorageManager?.getFileById(folderId),
             false,
-            false,
             currentStorageManager?.account,
             context
         ).apply { syncVersionAndProfileEnabled(false) }
@@ -420,17 +415,6 @@ class DocumentsStorageProvider : DocumentsProvider() {
             }
         }
         return result
-    }
-
-    /**
-     * @return 'True' if the server doesn't need to check forbidden characters
-     */
-    private fun isVersionWithForbiddenCharacters(): Boolean {
-        currentStorageManager?.account?.let {
-            val serverVersion = AccountUtils.getServerVersion(currentStorageManager?.account)
-            return serverVersion != null && serverVersion.isVersionWithForbiddenCharacters
-        }
-        return false
     }
 
     private fun notifyChangeInFolder(folderToNotify: String) {

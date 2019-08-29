@@ -40,7 +40,6 @@ import com.owncloud.android.lib.resources.status.CapabilityBooleanType
 import com.owncloud.android.lib.resources.status.OwnCloudVersion
 import com.owncloud.android.presentation.ui.sharing.fragments.ShareFileFragment
 import com.owncloud.android.utils.AppTestUtil
-import io.mockk.every
 import io.mockk.mockkClass
 import org.hamcrest.CoreMatchers
 import org.junit.Rule
@@ -283,8 +282,6 @@ class ShareFileFragmentTest {
     ) {
         val account = mockkClass(Account::class)
         val ownCloudVersion = mockkClass(OwnCloudVersion::class)
-
-        every { ownCloudVersion.isSearchUsersSupported } returns true
 
         val shareFileFragment = ShareFileFragment.newInstance(
             getOCFileForTesting("image.jpg"),

@@ -217,18 +217,10 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
             return RemoteShare.READ_PERMISSION_FLAG    // minimum permissions
 
         } else if (isFederated) {
-            val serverVersion = com.owncloud.android.authentication.AccountUtils.getServerVersion(account)
-            return if (serverVersion != null && serverVersion.isNotReshareableFederatedSupported) {
-                if (file.isFolder)
-                    RemoteShare.FEDERATED_PERMISSIONS_FOR_FOLDER_AFTER_OC9
-                else
-                    RemoteShare.FEDERATED_PERMISSIONS_FOR_FILE_AFTER_OC9
-            } else {
-                if (file.isFolder)
-                    RemoteShare.FEDERATED_PERMISSIONS_FOR_FOLDER_UP_TO_OC9
-                else
-                    RemoteShare.FEDERATED_PERMISSIONS_FOR_FILE_UP_TO_OC9
-            }
+            return if (file.isFolder)
+                RemoteShare.FEDERATED_PERMISSIONS_FOR_FOLDER
+            else
+                RemoteShare.FEDERATED_PERMISSIONS_FOR_FILE
         } else {
             return if (file.isFolder)
                 RemoteShare.MAXIMUM_PERMISSIONS_FOR_FOLDER
