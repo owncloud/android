@@ -172,49 +172,6 @@ public class FileOperationsHelper {
     }
 
     /**
-     * @return 'True' if the server supports the Share API
-     */
-    public boolean isSharedSupported() {
-        if (mFileActivity.getAccount() != null) {
-            OwnCloudVersion serverVersion = AccountUtils.getServerVersion(mFileActivity.getAccount());
-            return (serverVersion != null && serverVersion.isSharedSupported());
-        }
-        return false;
-    }
-
-    /**
-     * Helper method to remove an existing share, no matter if public or private.
-     * Starts a request to do it in {@link OperationsService}
-     *
-     * @param share The {@link OCShareEntity} to remove (unshare).
-     */
-    public void removeShare(OCShareEntity share) {
-
-        Intent unshareService = new Intent(mFileActivity, OperationsService.class);
-        unshareService.setAction(OperationsService.ACTION_UNSHARE);
-        unshareService.putExtra(OperationsService.EXTRA_SHARE_ID, share.getId());
-        unshareService.putExtra(OperationsService.EXTRA_ACCOUNT, mFileActivity.getAccount());
-
-        queueShareIntent(unshareService);
-    }
-
-    private void queueShareIntent(Intent shareIntent) {
-        if (isSharedSupported()) {
-            // Unshare the file
-            mWaitingForOpId = mFileActivity.getOperationsServiceBinder().
-                    queueNewOperation(shareIntent);
-
-            mFileActivity.showLoadingDialog(R.string.wait_a_moment);
-
-        } else {
-            // Show a Message
-            mFileActivity.showSnackMessage(
-                    mFileActivity.getString(R.string.share_link_no_support_share_api)
-            );
-        }
-    }
-
-    /**
      * Show an instance of {@link ShareType} for sharing or unsharing the {@link OCFile} received as parameter.
      *
      * @param file File to share or unshare.
@@ -225,17 +182,6 @@ public class FileOperationsHelper {
         intent.putExtra(FileActivity.EXTRA_ACCOUNT, mFileActivity.getAccount());
         mFileActivity.startActivity(intent);
 
-    }
-
-    /**
-     * @return 'True' if the server supports the Search Users API
-     */
-    public boolean isSearchUserSupported() {
-        if (mFileActivity.getAccount() != null) {
-            OwnCloudVersion serverVersion = AccountUtils.getServerVersion(mFileActivity.getAccount());
-            return (serverVersion != null && serverVersion.isSearchUsersSupported());
-        }
-        return false;
     }
 
     public void sendDownloadedFile(OCFile file) {
@@ -455,18 +401,6 @@ public class FileOperationsHelper {
 
     public void setOpIdWaitingFor(long waitingForOpId) {
         mWaitingForOpId = waitingForOpId;
-    }
-
-    /**
-     * @return 'True' if the server doesn't need to check forbidden characters
-     */
-    public boolean isVersionWithForbiddenCharacters() {
-        if (mFileActivity.getAccount() != null) {
-            OwnCloudVersion serverVersion =
-                    AccountUtils.getServerVersion(mFileActivity.getAccount());
-            return (serverVersion != null && serverVersion.isVersionWithForbiddenCharacters());
-        }
-        return false;
     }
 
     /**

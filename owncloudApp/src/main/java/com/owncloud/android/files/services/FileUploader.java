@@ -328,7 +328,6 @@ public class FileUploader extends Service
             return Service.START_NOT_STICKY;
         }
         OwnCloudVersion ocv = AccountUtils.getServerVersion(account);
-        boolean chunked = ocv.isChunkedUploadSupported();
 
         if (!retry) {
             if (!(intent.hasExtra(KEY_LOCAL_FILE) || intent.hasExtra(KEY_FILE))) {
@@ -405,7 +404,7 @@ public class FileUploader extends Service
                     ocUpload.setWhileChargingOnly(isWhileChargingOnly);*/
                     ocUpload.setUploadStatus(UploadStatus.UPLOAD_IN_PROGRESS);
 
-                    if (chunked && new File(ocFile.getStoragePath()).length() >
+                    if (new File(ocFile.getStoragePath()).length() >
                             ChunkedUploadRemoteFileOperation.CHUNK_SIZE) {
                         ocUpload.setTransferId(
                                 SecurityUtils.stringToMD5Hash(ocFile.getRemotePath()) + System.currentTimeMillis());
@@ -475,7 +474,7 @@ public class FileUploader extends Service
 
             UploadFileOperation newUploadFileOperation;
 
-            if (chunked && upload.getFileSize() > ChunkedUploadRemoteFileOperation.CHUNK_SIZE) {
+            if (upload.getFileSize() > ChunkedUploadRemoteFileOperation.CHUNK_SIZE) {
                 upload.setTransferId(
                         SecurityUtils.stringToMD5Hash(upload.getRemotePath()) + System.currentTimeMillis());
                 newUploadFileOperation = new ChunkedUploadFileOperation(
