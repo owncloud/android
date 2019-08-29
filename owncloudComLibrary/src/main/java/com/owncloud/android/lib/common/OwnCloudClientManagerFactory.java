@@ -29,17 +29,17 @@ public class OwnCloudClientManagerFactory {
     private static OwnCloudClientManager sDefaultSingleton;
     private static String sUserAgent;
 
-    public static OwnCloudClientManager newDefaultOwnCloudClientManager() {
+    private static OwnCloudClientManager newDefaultOwnCloudClientManager() {
         return newOwnCloudClientManager(sDefaultPolicy);
     }
 
-    public static OwnCloudClientManager newOwnCloudClientManager(Policy policy) {
+    private static OwnCloudClientManager newOwnCloudClientManager(Policy policy) {
         switch (policy) {
             case ALWAYS_NEW_CLIENT:
                 return new SimpleFactoryManager();
 
-            case SINGLE_SESSION_PER_ACCOUNT_IF_SERVER_SUPPORTS_SERVER_MONITORING:
-                return new DynamicSessionManager();
+            case SINGLE_SESSION_PER_ACCOUNT:
+                return new SingleSessionManager();
 
             default:
                 throw new IllegalArgumentException("Unknown policy");
@@ -51,10 +51,6 @@ public class OwnCloudClientManagerFactory {
             sDefaultSingleton = newDefaultOwnCloudClientManager();
         }
         return sDefaultSingleton;
-    }
-
-    public static Policy getDefaultPolicy() {
-        return sDefaultPolicy;
     }
 
     public static void setDefaultPolicy(Policy policy) {
@@ -84,6 +80,6 @@ public class OwnCloudClientManagerFactory {
 
     public enum Policy {
         ALWAYS_NEW_CLIENT,
-        SINGLE_SESSION_PER_ACCOUNT_IF_SERVER_SUPPORTS_SERVER_MONITORING
+        SINGLE_SESSION_PER_ACCOUNT
     }
 }

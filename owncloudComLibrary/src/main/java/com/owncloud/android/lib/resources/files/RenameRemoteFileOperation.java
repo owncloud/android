@@ -1,5 +1,5 @@
 /* ownCloud Android Library is available under MIT license
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   Copyright (C) 2019 ownCloud GmbH.
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -31,7 +31,6 @@ import com.owncloud.android.lib.common.network.WebdavUtils;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
-import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 import timber.log.Timber;
 
 import java.io.File;
@@ -84,15 +83,6 @@ public class RenameRemoteFileOperation extends RemoteOperation {
      */
     @Override
     protected RemoteOperationResult run(OwnCloudClient client) {
-
-        final OwnCloudVersion version = client.getOwnCloudVersion();
-        final boolean versionWithForbiddenChars =
-                (version != null && version.isVersionWithForbiddenCharacters());
-
-        if (!FileUtils.isValidPath(mNewRemotePath, versionWithForbiddenChars)) {
-            return new RemoteOperationResult<>(ResultCode.INVALID_CHARACTER_IN_NAME);
-        }
-
         try {
             if (mNewName.equals(mOldName)) {
                 return new RemoteOperationResult<>(ResultCode.OK);

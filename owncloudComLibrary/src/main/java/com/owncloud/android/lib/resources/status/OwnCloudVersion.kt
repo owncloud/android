@@ -45,45 +45,8 @@ class OwnCloudVersion(version: String) : Comparable<OwnCloudVersion>, Parcelable
             INVALID_ZERO_VERSION
         }
 
-    val isChunkedUploadSupported: Boolean
-        get() = mVersion >= MINIMUN_VERSION_FOR_CHUNKED_UPLOADS
-
-    val isSharedSupported: Boolean
-        get() = mVersion >= MINIMUM_VERSION_FOR_SHARING_API
-
-    val isVersionWithForbiddenCharacters: Boolean
-        get() = mVersion >= MINIMUM_VERSION_WITH_FORBIDDEN_CHARS
-
-    val isAfter8Version: Boolean
-        get() = mVersion >= VERSION_8
-
-    val isSearchUsersSupported: Boolean
-        get() = mVersion >= MINIMUM_VERSION_FOR_SEARCHING_USERS
-
-    val isVersionWithCapabilitiesAPI: Boolean
-        get() = mVersion >= MINIMUM_VERSION_CAPABILITIES_API
-
-    val isNotReshareableFederatedSupported: Boolean
-        get() = mVersion >= MINIMUM_VERSION_WITH_NOT_RESHAREABLE_FEDERATED
-
-    val isSessionMonitoringSupported: Boolean
-        get() = mVersion >= MINIMUM_VERSION_WITH_SESSION_MONITORING
-
-    /**
-     * From OC 9.1 session tracking is a feature, but to get it working in the OC app we need the preemptive
-     * mode of basic authentication is disabled. This changes in OC 9.1.3, where preemptive mode is compatible
-     * with session tracking again.
-     *
-     * @return True for every version before 9.1 and from 9.1.3, false otherwise
-     */
-    val isPreemptiveAuthenticationPreferred: Boolean
-        get() = mVersion < MINIMUM_VERSION_WITH_SESSION_MONITORING || mVersion >= MINIMUM_VERSION_WITH_SESSION_MONITORING_WORKING_IN_PREEMPTIVE_MODE
-
     val isVersionLowerThan10: Boolean
         get() = mVersion < VERSION_10
-
-    val isMultiplePublicSharingSupported: Boolean
-        get() = mVersion >= MINIMUM_VERSION_WITH_MULTIPLE_PUBLIC_SHARING
 
     val isPublicSharingWriteOnlySupported: Boolean
         get() = mVersion >= MINIMUM_VERSION_WITH_WRITE_ONLY_PUBLIC_SHARING
@@ -94,17 +57,17 @@ class OwnCloudVersion(version: String) : Comparable<OwnCloudVersion>, Parcelable
                         mVersion > MINIMUN_MICRO_VERSION_WITHOUT_PUBLIC_UPLOAD_PERMISSION)
 
     init {
-        var version = version
+        var versionToParse = version
         mVersion = 0
         isVersionValid = false
-        val countDots = version.length - version.replace(".", "").length
+        val countDots = versionToParse.length - versionToParse.replace(".", "").length
 
         // Complete the version. Version must have 3 dots
         for (i in countDots until MAX_DOTS) {
-            version = "$version.0"
+            versionToParse = "$versionToParse.0"
         }
 
-        parseVersion(version)
+        parseVersion(versionToParse)
 
     }
 
@@ -122,10 +85,10 @@ class OwnCloudVersion(version: String) : Comparable<OwnCloudVersion>, Parcelable
         return versionToString
     }
 
-    override fun compareTo(another: OwnCloudVersion): Int {
-        return if (another.mVersion == mVersion)
+    override fun compareTo(other: OwnCloudVersion): Int {
+        return if (other.mVersion == mVersion)
             0
-        else if (another.mVersion < mVersion) 1 else -1
+        else if (other.mVersion < mVersion) 1 else -1
     }
 
     private fun parseVersion(version: String) {
@@ -137,20 +100,18 @@ class OwnCloudVersion(version: String) : Comparable<OwnCloudVersion>, Parcelable
             isVersionValid = false
             // if invalid, the instance will respond as if server is 8.1, minimum with capabilities API,
             // and "dead" : https://github.com/owncloud/core/wiki/Maintenance-and-Release-Schedule
-            mVersion = MINIMUM_VERSION_CAPABILITIES_API
         }
-
     }
 
     @Throws(NumberFormatException::class)
     private fun getParsedVersion(version: String): Int {
-        var version = version
+        var versionToParse = version
         var versionValue = 0
 
         // get only numeric part
-        version = version.replace("[^\\d.]".toRegex(), "")
+        versionToParse = versionToParse.replace("[^\\d.]".toRegex(), "")
 
-        val nums = version.split("\\.".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+        val nums = versionToParse.split("\\.".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
         var i = 0
         while (i < nums.size && i <= MAX_DOTS) {
             versionValue += Integer.parseInt(nums[i])
@@ -161,10 +122,6 @@ class OwnCloudVersion(version: String) : Comparable<OwnCloudVersion>, Parcelable
         }
 
         return versionValue
-    }
-
-    fun supportsRemoteThumbnails(): Boolean {
-        return mVersion >= MINIMUM_SERVER_VERSION_FOR_REMOTE_THUMBNAILS
     }
 
     override fun describeContents(): Int {
@@ -181,30 +138,7 @@ class OwnCloudVersion(version: String) : Comparable<OwnCloudVersion>, Parcelable
 
         private const val MINIMUN_MICRO_VERSION_WITHOUT_PUBLIC_UPLOAD_PERMISSION = 0x03000000 // 3.0.0
 
-        const val MINIMUN_VERSION_FOR_CHUNKED_UPLOADS = 0x04050000 // 4.5
-
-        const val MINIMUM_VERSION_FOR_SHARING_API = 0x05001B00 // 5.0.27
-
-        const val MINIMUM_VERSION_WITH_FORBIDDEN_CHARS = 0x08010000 // 8.1
-
-        const val MINIMUM_SERVER_VERSION_FOR_REMOTE_THUMBNAILS = 0x07080000 // 7.8.0
-
-        const val MINIMUM_VERSION_FOR_SEARCHING_USERS = 0x08020000 //8.2
-
-        const val VERSION_8 = 0x08000000 // 8.0
-
-        const  val MINIMUM_VERSION_CAPABILITIES_API = 0x08010000 // 8.1
-
-        private const val MINIMUM_VERSION_WITH_NOT_RESHAREABLE_FEDERATED = 0x09010000   // 9.1
-
-        private const val MINIMUM_VERSION_WITH_SESSION_MONITORING = 0x09010000   // 9.1
-
-        private const val MINIMUM_VERSION_WITH_SESSION_MONITORING_WORKING_IN_PREEMPTIVE_MODE = 0x09010301
-        // 9.1.3.1, final 9.1.3: https://github.com/owncloud/core/commit/f9a867b70c217463289a741d4d26079eb2a80dfd
-
         private const val VERSION_10 = 0xA000000 // 10.0.0
-
-        private const val MINIMUM_VERSION_WITH_MULTIPLE_PUBLIC_SHARING = 0xA000000 // 10.0.0
 
         private const val MINIMUN_MAJOR_VERSION_WITHOUT_PUBLIC_UPLOAD_PERMISSION = 0xA000000 // 10.0.0
 
