@@ -5,16 +5,16 @@
  * @author Christian Schabesberger
  * @author David González Verdugo
  * Copyright (C) 2019 ownCloud GmbH.
- * <p>
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
  * as published by the Free Software Foundation.
- * <p>
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * <p>
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -36,7 +36,6 @@ import androidx.fragment.app.DialogFragment;
 import com.google.android.material.snackbar.Snackbar;
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.OCFile;
-import com.owncloud.android.lib.resources.files.FileUtils;
 import com.owncloud.android.ui.activity.ComponentsGetter;
 import com.owncloud.android.utils.PreferenceUtils;
 
@@ -112,19 +111,6 @@ public class CreateFolderDialogFragment
 
             if (newFolderName.length() <= 0) {
                 showSnackMessage(R.string.filename_empty);
-                return;
-            }
-            boolean serverWithForbiddenChars = ((ComponentsGetter) getActivity()).
-                    getFileOperationsHelper().isVersionWithForbiddenCharacters();
-
-            if (!FileUtils.isValidName(newFolderName, serverWithForbiddenChars)) {
-                int messageId = 0;
-                if (serverWithForbiddenChars) {
-                    messageId = R.string.filename_forbidden_charaters_from_server;
-                } else {
-                    messageId = R.string.filename_forbidden_characters;
-                }
-                showSnackMessage(messageId);
                 return;
             }
 

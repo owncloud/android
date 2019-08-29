@@ -306,8 +306,6 @@ class ShareFileFragmentTest {
     ) {
         val ownCloudVersion = mockkClass(OwnCloudVersion::class)
 
-        every { ownCloudVersion.isSearchUsersSupported } returns true
-
         val shareFileFragment = ShareFileFragment.newInstance(
             OC_FILE,
             OC_ACCOUNT,

@@ -1604,7 +1604,6 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
                     // perform folder synchronization
                     val synchFolderOp = RefreshFolderOperation(
                         folder,
-                        fileOperationsHelper.isSharedSupported,
                         ignoreETag,
                         account,
                         applicationContext

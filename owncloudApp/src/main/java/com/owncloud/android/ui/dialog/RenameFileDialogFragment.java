@@ -41,7 +41,6 @@ import androidx.fragment.app.DialogFragment;
 import com.google.android.material.snackbar.Snackbar;
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.OCFile;
-import com.owncloud.android.lib.resources.files.FileUtils;
 import com.owncloud.android.ui.activity.ComponentsGetter;
 import com.owncloud.android.utils.PreferenceUtils;
 
@@ -122,23 +121,8 @@ public class RenameFileDialogFragment
                 return;
             }
 
-            boolean serverWithForbiddenChars = ((ComponentsGetter) getActivity()).
-                    getFileOperationsHelper().isVersionWithForbiddenCharacters();
-
-            if (!FileUtils.isValidName(newFileName, serverWithForbiddenChars)) {
-                int messageId = 0;
-                if (serverWithForbiddenChars) {
-                    messageId = R.string.filename_forbidden_charaters_from_server;
-                } else {
-                    messageId = R.string.filename_forbidden_characters;
-                }
-                showSnackMessage(messageId);
-                return;
-            }
-
             ((ComponentsGetter) getActivity()).getFileOperationsHelper().
                     renameFile(mTargetFile, newFileName);
-
         }
     }
 

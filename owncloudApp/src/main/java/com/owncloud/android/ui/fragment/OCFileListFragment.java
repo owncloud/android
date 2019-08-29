@@ -1024,7 +1024,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
 
             // decide grid vs list view
             OwnCloudVersion version = AccountUtils.getServerVersion(((FileActivity) mContainerActivity).getAccount());
-            if (version != null && version.supportsRemoteThumbnails() && isGridViewPreferred(mFile)) {
+            if (version != null && isGridViewPreferred(mFile)) {
                 switchToGridView();
             } else {
                 switchToListView();

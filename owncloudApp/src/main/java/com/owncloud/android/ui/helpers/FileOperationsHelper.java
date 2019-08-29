@@ -168,17 +168,6 @@ public class FileOperationsHelper {
     }
 
     /**
-     * @return 'True' if the server supports the Share API
-     */
-    public boolean isSharedSupported() {
-        if (mFileActivity.getAccount() != null) {
-            OwnCloudVersion serverVersion = AccountUtils.getServerVersion(mFileActivity.getAccount());
-            return (serverVersion != null && serverVersion.isSharedSupported());
-        }
-        return false;
-    }
-
-    /**
      * Show an instance of {@link com.owncloud.android.domain.sharing.shares.model.ShareType} for sharing or unsharing
      * the {@link OCFile} received as parameter.
      *
@@ -190,17 +179,6 @@ public class FileOperationsHelper {
         intent.putExtra(FileActivity.EXTRA_ACCOUNT, mFileActivity.getAccount());
         mFileActivity.startActivity(intent);
 
-    }
-
-    /**
-     * @return 'True' if the server supports the Search Users API
-     */
-    public boolean isSearchUserSupported() {
-        if (mFileActivity.getAccount() != null) {
-            OwnCloudVersion serverVersion = AccountUtils.getServerVersion(mFileActivity.getAccount());
-            return (serverVersion != null && serverVersion.isSearchUsersSupported());
-        }
-        return false;
     }
 
     public void sendDownloadedFile(OCFile file) {
@@ -418,18 +396,6 @@ public class FileOperationsHelper {
 
     public void setOpIdWaitingFor(long waitingForOpId) {
         mWaitingForOpId = waitingForOpId;
-    }
-
-    /**
-     * @return 'True' if the server doesn't need to check forbidden characters
-     */
-    public boolean isVersionWithForbiddenCharacters() {
-        if (mFileActivity.getAccount() != null) {
-            OwnCloudVersion serverVersion =
-                    AccountUtils.getServerVersion(mFileActivity.getAccount());
-            return (serverVersion != null && serverVersion.isVersionWithForbiddenCharacters());
-        }
-        return false;
     }
 
     /**

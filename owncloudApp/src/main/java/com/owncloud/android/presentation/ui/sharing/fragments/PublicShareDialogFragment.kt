@@ -647,14 +647,10 @@ class PublicShareDialogFragment : DialogFragment() {
     private fun updateInputFormAccordingToServerCapabilities() {
         val serverVersion = OwnCloudVersion(capabilities?.versionString!!)
 
-        // Server version <= 9.x, multiple public sharing not supported
-        if (!serverVersion.isMultiplePublicSharingSupported) {
-            publicShareDialogTitle?.visibility = View.GONE
-        } else { // Show keyboard to fill the public share name
-            dialog?.window?.setSoftInputMode(
-                WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE or WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE
-            )
-        }
+        // Show keyboard to fill the public share name
+        dialog?.window?.setSoftInputMode(
+            WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE or WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE
+        )
 
         if (capabilities?.filesSharingPublicUpload == CapabilityBooleanType.TRUE && isSharedFolder) {
             shareViaLinkEditPermissionGroup?.visibility = View.VISIBLE

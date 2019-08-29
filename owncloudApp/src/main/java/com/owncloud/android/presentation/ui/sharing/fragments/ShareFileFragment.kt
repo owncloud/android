@@ -251,16 +251,6 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
             view.getPrivateLinkButton?.visibility = View.VISIBLE
         }
 
-        val shareWithUsersEnable = serverVersion != null && serverVersion!!.isSearchUsersSupported
-
-        // Change the sharing text depending on the server version (at least version 8.2 is needed
-        // for sharing with other users)
-        if (!shareWithUsersEnable) {
-            view.shareNoUsers?.setText(R.string.share_incompatible_version)
-            view.shareNoUsers?.gravity = View.TEXT_ALIGNMENT_CENTER
-            view.addUserButton?.visibility = View.GONE
-        }
-
         // Hide share features sections that are not enabled
         hideSectionsDisabledInBuildTime(view)
 
@@ -276,21 +266,9 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
             true
         }
 
-        val shareWithUsersEnable = serverVersion != null && serverVersion!!.isSearchUsersSupported
-
         addUserButton?.setOnClickListener {
-            if (shareWithUsersEnable) {
-                // Show Search Fragment
-                listener?.showSearchUsersAndGroups()
-            } else {
-                val message = getString(R.string.share_sharee_unavailable)
-                val snackbar = Snackbar.make(
-                    activity!!.findViewById(android.R.id.content),
-                    message,
-                    Snackbar.LENGTH_LONG
-                )
-                snackbar.show()
-            }
+            // Show Search Fragment
+            listener?.showSearchUsersAndGroups()
         }
 
         //  Add Public Link Button
@@ -542,19 +520,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
      *
      * @return true if should be enabled, false otherwise
      */
-    private fun enableMultiplePublicSharing(): Boolean {
-        if (capabilities == null) return true
-
-        val serverVersion = OwnCloudVersion(capabilities?.versionString!!)
-
-        return when {
-            // Server version <= 9.x, multiple public sharing not supported
-            !serverVersion.isMultiplePublicSharingSupported -> false
-            // Server version >= 10, multiple public sharing supported but disabled
-            capabilities?.filesSharingPublicMultiple == CapabilityBooleanType.FALSE -> false
-            else -> true
-        }
-    }
+    private fun enableMultiplePublicSharing() = capabilities?.filesSharingPublicMultiple?.isTrue ?: false
 
     override fun editPublicShare(share: OCShare) {
         listener?.showEditPublicShare(share)
