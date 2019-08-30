@@ -32,6 +32,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.text.TextUtils;
 import android.util.SparseBooleanArray;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -208,20 +209,24 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
                     TextView fileSizeSeparatorV = view.findViewById(R.id.file_separator);
                     TextView lastModV = view.findViewById(R.id.last_mod);
                     lastModV.setVisibility(View.VISIBLE);
-
-                    if (!mOnlyAvailableOffline) {
-                        lastModV.setText(DisplayUtils.getRelativeTimestamp(mContext, file.getModificationTimestamp()));
-                        fileSizeSeparatorV.setVisibility(View.VISIBLE);
-                        fileSizeV.setVisibility(View.VISIBLE);
-                        fileSizeV.setText(DisplayUtils.bytesToHumanReadable(
-                                file.getFileLength(), mContext
-                        ));
-                    } else {
-                        lastModV.setText(file.getRemotePath());
-                        lastModV.setSingleLine(true);
-                        lastModV.setEllipsize(TextUtils.TruncateAt.MIDDLE);
-                        fileSizeSeparatorV.setVisibility(View.GONE);
-                        fileSizeV.setVisibility(View.GONE);
+                    lastModV.setText(DisplayUtils.getRelativeTimestamp(mContext, file.getModificationTimestamp()));
+                    fileSizeSeparatorV.setVisibility(View.VISIBLE);
+                    fileSizeV.setVisibility(View.VISIBLE);
+                    fileSizeV.setText(DisplayUtils.bytesToHumanReadable(
+                            file.getFileLength(), mContext
+                    ));
+                    if (mOnlyAvailableOffline) {
+                        ViewGroup.LayoutParams params = linearLayout.getLayoutParams();
+                        float px = TypedValue.applyDimension(
+                                TypedValue.COMPLEX_UNIT_DIP,
+                                92,
+                                mContext.getResources().getDisplayMetrics()
+                        );
+                        params.height = (int) px;
+                        linearLayout.setLayoutParams(params);
+                        TextView filePath = view.findViewById(R.id.list_item_filepath);
+                        filePath.setVisibility(View.VISIBLE);
+                        filePath.setText(file.getRemotePath());
                     }
 
                 case GRID_ITEM:
