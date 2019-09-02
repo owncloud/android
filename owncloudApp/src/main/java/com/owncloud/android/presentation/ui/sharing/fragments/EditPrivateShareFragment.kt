@@ -34,7 +34,6 @@ import androidx.appcompat.widget.SwitchCompat
 import androidx.core.view.isGone
 import androidx.fragment.app.DialogFragment
 import com.owncloud.android.R
-import com.owncloud.android.authentication.AccountUtils
 import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.domain.sharing.shares.model.OCShare
 import com.owncloud.android.domain.sharing.shares.model.ShareType
@@ -156,8 +155,6 @@ class EditPrivateShareFragment : DialogFragment() {
             setPermissionsListening(false)
 
             val sharePermissions = share!!.permissions
-            val isFederated = ShareType.FEDERATED == share!!.shareType
-            val serverVersion = AccountUtils.getServerVersion(account)
             var compound: CompoundButton
 
             compound = canShareSwitch
@@ -254,7 +251,6 @@ class EditPrivateShareFragment : DialogFragment() {
                     val isFederated = share?.shareType == ShareType.FEDERATED
                     if (file?.isFolder == true) {
                         if (isChecked) {
-                            val serverVersion = AccountUtils.getServerVersion(account)
                             if (!isFederated) {
                                 /// not federated shares -> enable all the subpermisions
                                 for (i in sSubordinateCheckBoxIds.indices) {
@@ -274,7 +270,6 @@ class EditPrivateShareFragment : DialogFragment() {
                                 if (!subordinate.isChecked) {
                                     toggleDisablingListener(subordinate)
                                 }
-
                             }
                         } else {
                             for (i in sSubordinateCheckBoxIds.indices) {

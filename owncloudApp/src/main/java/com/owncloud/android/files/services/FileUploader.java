@@ -323,7 +323,6 @@ public class FileUploader extends Service
         if (!AccountUtils.exists(account.name, getApplicationContext())) {
             return Service.START_NOT_STICKY;
         }
-        OwnCloudVersion ocv = AccountUtils.getServerVersion(account);
 
         if (!retry) {
             if (!(intent.hasExtra(KEY_LOCAL_FILE) || intent.hasExtra(KEY_FILE))) {

@@ -38,7 +38,6 @@ import com.owncloud.android.domain.capabilities.model.OCCapability
 import com.owncloud.android.domain.sharing.shares.model.OCShare
 import com.owncloud.android.domain.sharing.shares.model.ShareType
 import com.owncloud.android.domain.utils.Event
-import com.owncloud.android.lib.resources.status.OwnCloudVersion
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.ui.sharing.fragments.ShareFileFragment
 import com.owncloud.android.presentation.viewmodels.capabilities.OCCapabilityViewModel
@@ -49,7 +48,6 @@ import com.owncloud.android.testutil.OC_SHARE
 import com.owncloud.android.utils.AppTestUtil.OC_FILE
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.mockkClass
 import org.hamcrest.CoreMatchers
 import org.junit.Before
 import org.junit.Test
@@ -304,12 +302,9 @@ class ShareFileFragmentTest {
         shares: List<OCShare> = listOf(OC_SHARE),
         sharesUIResult: UIResult<List<OCShare>> = UIResult.Success(shares)
     ) {
-        val ownCloudVersion = mockkClass(OwnCloudVersion::class)
-
         val shareFileFragment = ShareFileFragment.newInstance(
             OC_FILE,
-            OC_ACCOUNT,
-            ownCloudVersion
+            OC_ACCOUNT
         )
 
         ActivityScenario.launch(TestShareFileActivity::class.java).onActivity {

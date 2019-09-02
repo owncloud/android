@@ -156,20 +156,20 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
         // check if the Share is FERERATED
         val isFederated = ShareType.FEDERATED == shareType
 
-
-        if (file.isSharedWithMe) {
-            return RemoteShare.READ_PERMISSION_FLAG    // minimum permissions
-
-        } else if (isFederated) {
-            return if (file.isFolder)
-                RemoteShare.FEDERATED_PERMISSIONS_FOR_FOLDER
-            else
-                RemoteShare.FEDERATED_PERMISSIONS_FOR_FILE
-        } else {
-            return if (file.isFolder)
-                RemoteShare.MAXIMUM_PERMISSIONS_FOR_FOLDER
-            else
-                RemoteShare.MAXIMUM_PERMISSIONS_FOR_FILE
+        return when {
+            file.isSharedWithMe -> RemoteShare.READ_PERMISSION_FLAG    // minimum permissions
+            isFederated ->
+                if (file.isFolder) {
+                    RemoteShare.FEDERATED_PERMISSIONS_FOR_FOLDER
+                } else {
+                    RemoteShare.FEDERATED_PERMISSIONS_FOR_FILE
+                }
+            else ->
+                if (file.isFolder) {
+                    RemoteShare.MAXIMUM_PERMISSIONS_FOR_FOLDER
+                } else {
+                    RemoteShare.MAXIMUM_PERMISSIONS_FOR_FILE
+                }
         }
     }
 
