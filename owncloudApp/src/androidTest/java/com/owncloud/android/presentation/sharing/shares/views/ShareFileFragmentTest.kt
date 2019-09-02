@@ -37,7 +37,6 @@ import com.owncloud.android.data.sharing.shares.db.OCShareEntity
 import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.lib.resources.status.CapabilityBooleanType
-import com.owncloud.android.lib.resources.status.OwnCloudVersion
 import com.owncloud.android.presentation.ui.sharing.fragments.ShareFileFragment
 import com.owncloud.android.utils.AppTestUtil
 import io.mockk.mockkClass
@@ -281,12 +280,10 @@ class ShareFileFragmentTest {
         publicShares: ArrayList<OCShareEntity> = publicShareList
     ) {
         val account = mockkClass(Account::class)
-        val ownCloudVersion = mockkClass(OwnCloudVersion::class)
 
         val shareFileFragment = ShareFileFragment.newInstance(
             getOCFileForTesting("image.jpg"),
-            account,
-            ownCloudVersion
+            account
         )
 
         activityRule.activity.capabilities = capabilities

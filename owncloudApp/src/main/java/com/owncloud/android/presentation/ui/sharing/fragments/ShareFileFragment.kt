@@ -37,7 +37,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.google.android.material.snackbar.Snackbar
 import com.owncloud.android.R
-import com.owncloud.android.authentication.AccountUtils
 import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
 import com.owncloud.android.data.sharing.shares.db.OCShareEntity
 import com.owncloud.android.datamodel.OCFile
@@ -117,8 +116,6 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
      * Capabilities of the server
      */
     private var capabilities: OCCapabilityEntity? = null
-
-    private var serverVersion: OwnCloudVersion? = null
 
     private// Array with numbers already set in public link names
     // Inspect public links for default names already used
@@ -209,7 +206,6 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
         if (arguments != null) {
             file = arguments!!.getParcelable(ARG_FILE)
             account = arguments!!.getParcelable(ARG_ACCOUNT)
-            serverVersion = arguments!!.getParcelable(ARG_SERVER_VERSION)
         }
     }
 
@@ -553,7 +549,6 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
          */
         private val ARG_FILE = "FILE"
         private val ARG_ACCOUNT = "ACCOUNT"
-        private val ARG_SERVER_VERSION = "SERVER_VERSION"
 
         /**
          * Public factory method to create new ShareFileFragment instances.
@@ -564,14 +559,12 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
          */
         fun newInstance(
             fileToShare: OCFile,
-            account: Account,
-            serverVersion: OwnCloudVersion? = AccountUtils.getServerVersion(account)
+            account: Account
         ): ShareFileFragment {
             val fragment = ShareFileFragment()
             val args = Bundle()
             args.putParcelable(ARG_FILE, fileToShare)
             args.putParcelable(ARG_ACCOUNT, account)
-            args.putParcelable(ARG_SERVER_VERSION, serverVersion)
             fragment.arguments = args
             return fragment
         }

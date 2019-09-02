@@ -127,7 +127,6 @@ public class RefreshFolderOperation extends SyncOperation<ArrayList<RemoteFile>>
 
         // only in root folder: sync server version and user profile
         if (OCFile.ROOT_PATH.equals(mLocalFolder.getRemotePath()) && syncVersionAndProfileEnabled) {
-            OwnCloudVersion serverVersion = syncCapabilitiesAndGetServerVersion();
             syncUserProfile();
         }
 
