@@ -26,18 +26,9 @@ package com.owncloud.android.lib.resources.files;
 
 import timber.log.Timber;
 
-import java.io.File;
-
 public class FileUtils {
-
     public static final String PATH_SEPARATOR = "/";
     public static final String FINAL_CHUNKS_FILE = ".file";
-
-    public static String getParentPath(String remotePath) {
-        String parentPath = new File(remotePath).getParent();
-        parentPath = parentPath.endsWith(PATH_SEPARATOR) ? parentPath : parentPath + PATH_SEPARATOR;
-        return parentPath;
-    }
 
     /**
      * Validate the fileName to detect if contains any forbidden character: / , \ , < , > ,
