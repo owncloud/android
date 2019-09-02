@@ -29,10 +29,8 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.ActivityTestRule
 import com.owncloud.android.R
 import com.owncloud.android.datamodel.OCFile
-import com.owncloud.android.lib.resources.status.OwnCloudVersion
 import com.owncloud.android.presentation.ui.sharing.fragments.ShareFileFragment
 import com.owncloud.android.utils.AppTestUtil
-import io.mockk.every
 import io.mockk.mockkClass
 import org.hamcrest.Matchers.not
 import org.junit.Before
@@ -51,12 +49,10 @@ class ShareFolderFragmentTest {
     @Before
     fun setUp() {
         val account = mockkClass(Account::class)
-        val ownCloudVersion = mockkClass(OwnCloudVersion::class)
 
         shareFragment = ShareFileFragment.newInstance(
             getOCFolderForTesting("Photos"),
-            account,
-            ownCloudVersion
+            account
         )
 
         activityRule.activity.capabilities = AppTestUtil.createCapability()
