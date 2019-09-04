@@ -57,36 +57,6 @@ import org.koin.core.parameter.parametersOf
  * Activity for sharing files
  */
 class ShareActivity : FileActivity(), ShareFragmentListener {
-    /**
-     * Shortcut to get access to the [ShareFileFragment] instance, if any
-     *
-     * @return A [ShareFileFragment] instance, or null
-     */
-    private val shareFileFragment: ShareFileFragment?
-        get() = supportFragmentManager.findFragmentByTag(TAG_SHARE_FRAGMENT) as ShareFileFragment
-
-    /**
-     * Shortcut to get access to the [PublicShareDialogFragment] instance, if any
-     *
-     * @return A [PublicShareDialogFragment] instance, or null
-     */
-    private val publicShareFragment: PublicShareDialogFragment?
-        get() = supportFragmentManager.findFragmentByTag(TAG_PUBLIC_SHARE_DIALOG_FRAGMENT) as PublicShareDialogFragment?
-
-    /**
-     * Shortcut to get access to the [EditPrivateShareFragment] instance, if any
-     *
-     * @return A [EditPrivateShareFragment] instance, or null
-     */
-    private val editPrivateShareFragment: EditPrivateShareFragment?
-        get() = supportFragmentManager.findFragmentByTag(TAG_EDIT_SHARE_FRAGMENT) as EditPrivateShareFragment?
-
-    // Needed for changing some UI elements in fragments before loading them, otherwise there will be UI glitches
-    private val ocCapabilityViewModel: OCCapabilityViewModel by viewModel {
-        parametersOf(
-            account
-        )
-    }
 
     private val ocShareViewModel: OCShareViewModel by viewModel {
         parametersOf(
@@ -116,45 +86,6 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
 
         observePrivateShareCreation()
         observePrivateShareEdition()
-    }
-
-    override fun observeCapabilities() {
-        ocCapabilityViewModel.capabilities.observe(
-            this,
-            Observer { uiResult ->
-                when (uiResult?.status) {
-                    Status.SUCCESS -> {
-                        if (publicShareFragment != null) {
-                            publicShareFragment?.updateCapabilities(uiResult.data)
-                        } else {
-                            shareFileFragment?.updateCapabilities(uiResult.data)
-                        }
-                        dismissLoadingDialog()
-                    }
-                    Status.ERROR -> {
-                        if (publicShareFragment != null) {
-                            publicShareFragment?.showError(uiResult.errorMessage!!)
-                        } else {
-                            Snackbar.make(
-                                findViewById(android.R.id.content),
-                                uiResult.errorMessage!!,
-                                Snackbar.LENGTH_SHORT
-                            ).show()
-                            shareFileFragment?.updateCapabilities(uiResult.data)
-                        }
-                        dismissLoadingDialog()
-                    }
-                    Status.LOADING -> {
-                        showLoadingDialog(R.string.common_loading)
-                        if (publicShareFragment != null) {
-                            publicShareFragment?.updateCapabilities(uiResult.data)
-                        } else {
-                            shareFileFragment?.updateCapabilities(uiResult.data)
-                        }
-                    }
-                }
-            }
-        )
     }
 
     /**************************************************************************************************************

@@ -62,7 +62,6 @@ class OCCapabilityViewModel(
         _capabilities.addSource(capabilitiesLiveData!!) { capabilities ->
             _capabilities.postValue(UIResult.success(capabilities))
         }
-
         refreshCapabilitiesFromNetwork()
     }
 
