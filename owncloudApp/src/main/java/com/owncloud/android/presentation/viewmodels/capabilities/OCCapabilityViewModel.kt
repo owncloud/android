@@ -64,7 +64,6 @@ class OCCapabilityViewModel(
 
     init {
         capabilitiesLiveData?.observeForever(capabilitiesObserver)
-
         refreshCapabilitiesFromNetwork()
     }
 

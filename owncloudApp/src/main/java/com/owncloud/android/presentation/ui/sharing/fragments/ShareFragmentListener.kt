@@ -40,8 +40,6 @@ interface ShareFragmentListener {
 
     fun copyOrSendPrivateLink(file: OCFile)
 
-    fun observeCapabilities()
-
     fun showLoading()
 
     fun dismissLoading()
