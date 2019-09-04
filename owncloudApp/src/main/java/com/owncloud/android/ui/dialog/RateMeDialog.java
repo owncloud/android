@@ -37,9 +37,11 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 import com.owncloud.android.AppRater;
 import com.owncloud.android.R;
+import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.utils.PreferenceUtils;
 
 public class RateMeDialog extends DialogFragment {
+    private static final String TAG = RateMeDialog.class.getName();
 
     private Dialog dialog;
 
@@ -75,73 +77,70 @@ public class RateMeDialog extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Create a view by inflating desired layout
-        View v = inflater.inflate(R.layout.rate_me_dialog, container, false);
+        View view = inflater.inflate(R.layout.rate_me_dialog, container, false);
 
         // Allow or disallow touches with other visible windows
-        v.setFilterTouchesWhenObscured(
+        view.setFilterTouchesWhenObscured(
                 PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(getContext())
         );
 
-        Button rateNowButton = v.findViewById(R.id.button_rate_now);
-        Button laterButton = v.findViewById(R.id.button_later);
-        Button noThanksButton = v.findViewById(R.id.button_no_thanks);
-        TextView titleView = v.findViewById(R.id.rate_me_dialog_title_view);
+        Button rateNowButton = view.findViewById(R.id.button_rate_now);
+        Button laterButton = view.findViewById(R.id.button_later);
+        Button noThanksButton = view.findViewById(R.id.button_no_thanks);
+        TextView titleView = view.findViewById(R.id.rate_me_dialog_title_view);
 
         titleView.setText(String.format(getString(R.string.rate_dialog_title), getString(R.string.app_name)));
 
-        rateNowButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String packageName = getArguments().getString(APP_PACKAGE_NAME);
-                Uri uri = Uri.parse(MARKET_DETAILS_URI + packageName);
-                Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
-
-                /// To count with Play market back stack, After pressing back button,
-                /// to taken back to our application, we need to add following flags to intent.
-                int flags = Intent.FLAG_ACTIVITY_NO_HISTORY |
-                        Intent.FLAG_ACTIVITY_MULTIPLE_TASK;
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    flags |= Intent.FLAG_ACTIVITY_NEW_DOCUMENT;
-                } else {
-                    flags |= Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET;
-                }
-                goToMarket.addFlags(flags);
-
-                try {
-                    startActivity(goToMarket);
-                } catch (ActivityNotFoundException e) {
-                    getActivity().startActivity(new Intent(Intent.ACTION_VIEW,
-                            Uri.parse(PLAY_STORE_URI + packageName)));
-                }
-                dialog.dismiss();
+        rateNowButton.setOnClickListener(rateNowButtonView -> {
+            Log_OC.d(TAG, "Rate now button was pressed");
+            String packageName = null;
+            if (getArguments() != null) {
+                packageName = getArguments().getString(APP_PACKAGE_NAME);
             }
+            Uri uri = Uri.parse(MARKET_DETAILS_URI + packageName);
+            Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
+
+            /// To count with Play market back stack, After pressing back button,
+            /// to taken back to our application, we need to add following flags to intent.
+            int flags = Intent.FLAG_ACTIVITY_NO_HISTORY |
+                    Intent.FLAG_ACTIVITY_MULTIPLE_TASK;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                flags |= Intent.FLAG_ACTIVITY_NEW_DOCUMENT;
+            } else {
+                flags |= Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET;
+            }
+            goToMarket.addFlags(flags);
+
+            try {
+                startActivity(goToMarket);
+            } catch (ActivityNotFoundException e) {
+                getActivity().startActivity(new Intent(Intent.ACTION_VIEW,
+                        Uri.parse(PLAY_STORE_URI + packageName)));
+            }
+            dialog.dismiss();
         });
 
-        laterButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SharedPreferences preferences = getActivity().getSharedPreferences
-                        (AppRater.APP_RATER_PREF_TITLE, 0);
-                SharedPreferences.Editor editor = preferences.edit();
-                editor.putLong(AppRater.APP_RATER_PREF_DATE_NEUTRAL, System.currentTimeMillis());
-                editor.apply();
-                dialog.dismiss();
-            }
+        laterButton.setOnClickListener(laterButtonView -> {
+            Log_OC.d(TAG, "Rate later button was pressed");
+            SharedPreferences preferences = getActivity().getSharedPreferences
+                    (AppRater.APP_RATER_PREF_TITLE, 0);
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putLong(AppRater.APP_RATER_PREF_DATE_NEUTRAL, System.currentTimeMillis());
+            editor.apply();
+            dialog.dismiss();
         });
 
-        noThanksButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SharedPreferences preferences = getActivity().getSharedPreferences
-                        (AppRater.APP_RATER_PREF_TITLE, 0);
-                SharedPreferences.Editor editor = preferences.edit();
-                editor.putBoolean(AppRater.APP_RATER_PREF_DONT_SHOW, true);
-                editor.apply();
-                dialog.dismiss();
-            }
+        noThanksButton.setOnClickListener(noThanksButtonView -> {
+            Log_OC.d(TAG, "Button to not show the rate dialog anymore was pressed");
+            SharedPreferences preferences = getActivity().getSharedPreferences
+                    (AppRater.APP_RATER_PREF_TITLE, 0);
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putBoolean(AppRater.APP_RATER_PREF_DONT_SHOW, true);
+            editor.apply();
+            dialog.dismiss();
         });
 
-        return v;
+        return view;
     }
 
     @NonNull
@@ -151,18 +150,14 @@ public class RateMeDialog extends DialogFragment {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         /// set cancellation behavior
-        boolean cancelable = getArguments().getBoolean(ARG_CANCELABLE, false);
+        boolean cancelable = false;
+        if (getArguments() != null) {
+            cancelable = getArguments().getBoolean(ARG_CANCELABLE, false);
+        }
         dialog.setCancelable(cancelable);
         if (!cancelable) {
             // disable the back button
-            DialogInterface.OnKeyListener keyListener = new DialogInterface.OnKeyListener() {
-                @Override
-                public boolean onKey(DialogInterface dialog, int keyCode,
-                                     KeyEvent event) {
-
-                    return keyCode == KeyEvent.KEYCODE_BACK;
-                }
-            };
+            DialogInterface.OnKeyListener keyListener = (dialog, keyCode, event) -> keyCode == KeyEvent.KEYCODE_BACK;
             dialog.setOnKeyListener(keyListener);
         }
         return dialog;

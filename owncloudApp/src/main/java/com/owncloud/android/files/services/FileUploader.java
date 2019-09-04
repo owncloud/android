@@ -323,6 +323,7 @@ public class FileUploader extends Service
         }
 
         Account account = intent.getParcelableExtra(KEY_ACCOUNT);
+        Log_OC.d(TAG, "Account to upload the file to: " + account);
         if (!AccountUtils.exists(account.name, getApplicationContext())) {
             return Service.START_NOT_STICKY;
         }
@@ -949,6 +950,8 @@ public class FileUploader extends Service
      * @param upload Upload operation starting.
      */
     private void notifyUploadStart(UploadFileOperation upload) {
+        Log_OC.d(TAG, "Notifying upload start");
+
         // / create status notification with a progress bar
         mLastPercent = 0;
         mNotificationBuilder
