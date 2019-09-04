@@ -328,9 +328,9 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
         updatePublicLinkButton()
 
         // Update view depending on updated capabilities
-        shareHeaderDivider.isVisible = isShareApiEnabled
-        shareWithUsersSection.isVisible = isShareApiEnabled
-        shareViaLinkSection.isVisible = isShareApiEnabled && isPublicShareEnabled
+        shareHeaderDivider?.isVisible = isShareApiEnabled
+        shareWithUsersSection?.isVisible = isShareApiEnabled
+        shareViaLinkSection?.isVisible = isShareApiEnabled && isPublicShareEnabled
     }
 
     /**************************************************************************************************************
