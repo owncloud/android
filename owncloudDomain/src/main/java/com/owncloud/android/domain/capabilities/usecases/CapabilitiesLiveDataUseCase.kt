@@ -28,7 +28,7 @@ import com.owncloud.android.data.capabilities.datasources.OCRemoteCapabilitiesDa
 import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
 import com.owncloud.android.domain.UseCaseResult
 import com.owncloud.android.domain.capabilities.OCCapabilityRepository
-import com.owncloud.android.domain.sharing.shares.usecases.BaseUseCase
+import com.owncloud.android.domain.BaseUseCase
 import com.owncloud.android.lib.common.OwnCloudAccount
 import com.owncloud.android.lib.common.OwnCloudClientManagerFactory
 
