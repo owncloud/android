@@ -49,6 +49,7 @@ import com.owncloud.android.lib.resources.shares.RemoteShare
 import com.owncloud.android.lib.resources.status.CapabilityBooleanType
 import com.owncloud.android.lib.resources.status.OwnCloudVersion
 import com.owncloud.android.presentation.UIResult.Status
+import com.owncloud.android.presentation.viewmodels.capabilities.OCCapabilityViewModel
 import com.owncloud.android.presentation.viewmodels.sharing.OCShareViewModel
 import com.owncloud.android.ui.dialog.ExpirationDatePickerDialogFragment
 import com.owncloud.android.utils.DateUtils
@@ -133,6 +134,12 @@ class PublicShareDialogFragment : DialogFragment() {
             )
                 .time
         } else -1
+
+    private val ocCapabilityViewModel: OCCapabilityViewModel by viewModel {
+        parametersOf(
+            account
+        )
+    }
 
     private val ocShareViewModel: OCShareViewModel by viewModel {
         parametersOf(
@@ -414,7 +421,7 @@ class PublicShareDialogFragment : DialogFragment() {
         super.onActivityCreated(savedInstanceState)
         Log_OC.d(TAG, "onActivityCreated")
 
-        listener?.observeCapabilities() // Get capabilities to update some UI elements depending on them
+        observeCapabilities()
         observePublicShareCreation()
         observePublicShareEdition()
     }
@@ -436,6 +443,32 @@ class PublicShareDialogFragment : DialogFragment() {
     override fun onDetach() {
         super.onDetach()
         listener = null
+    }
+
+    private fun observeCapabilities() {
+        ocCapabilityViewModel.capabilities.observe(
+            this,
+            Observer { uiResult ->
+                when (uiResult?.status) {
+                    Status.SUCCESS -> {
+                        updateCapabilities(uiResult.data)
+                        listener?.dismissLoading()
+                    }
+                    Status.ERROR -> {
+                        showError(uiResult.errorMessage!!)
+                        updateCapabilities(uiResult.data)
+                        listener?.dismissLoading()
+                    }
+                    Status.LOADING -> {
+                        listener?.showLoading()
+                        updateCapabilities(uiResult.data)
+                    }
+                    else -> {
+                        Log.d(TAG, "Unknown status when loading capabilities in account ${account?.name}")
+                    }
+                }
+            }
+        )
     }
 
     private fun observePublicShareCreation() {

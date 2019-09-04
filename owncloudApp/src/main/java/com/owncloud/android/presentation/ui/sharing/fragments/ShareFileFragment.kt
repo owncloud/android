@@ -44,10 +44,10 @@ import com.owncloud.android.datamodel.ThumbnailsCacheManager
 import com.owncloud.android.lib.common.utils.Log_OC
 import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.lib.resources.status.CapabilityBooleanType
-import com.owncloud.android.lib.resources.status.OwnCloudVersion
 import com.owncloud.android.presentation.UIResult.Status
 import com.owncloud.android.presentation.adapters.sharing.SharePublicLinkListAdapter
 import com.owncloud.android.presentation.adapters.sharing.ShareUserListAdapter
+import com.owncloud.android.presentation.viewmodels.capabilities.OCCapabilityViewModel
 import com.owncloud.android.presentation.viewmodels.sharing.OCShareViewModel
 import com.owncloud.android.utils.DisplayUtils
 import com.owncloud.android.utils.MimetypeIconUtil
@@ -190,6 +190,12 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
         get() = capabilities?.filesSharingPublicEnabled == CapabilityBooleanType.TRUE.value ||
                 capabilities?.filesSharingPublicEnabled == CapabilityBooleanType.UNKNOWN.value
 
+    private val ocCapabilityViewModel: OCCapabilityViewModel by viewModel {
+        parametersOf(
+            account
+        )
+    }
+
     private val ocShareViewModel: OCShareViewModel by viewModel {
         parametersOf(
             file?.remotePath,
@@ -286,7 +292,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
 
         activity!!.setTitle(R.string.share_dialog_title)
 
-        listener?.observeCapabilities() // Get capabilities to update some UI elements depending on them
+        observeCapabilities() // Get capabilities to update some UI elements depending on them
         observeShares()
     }
 
@@ -304,6 +310,32 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
         listener = null
     }
 
+    private fun observeCapabilities() {
+        ocCapabilityViewModel.capabilities.observe(
+            this,
+            Observer { uiResult ->
+                when (uiResult?.status) {
+                    Status.SUCCESS -> {
+                        updateCapabilities(uiResult.data)
+                        listener?.dismissLoading()
+                    }
+                    Status.ERROR -> {
+                        showError(uiResult.errorMessage!!)
+                        updateCapabilities(uiResult.data)
+                        listener?.dismissLoading()
+                    }
+                    Status.LOADING -> {
+                        listener?.showLoading()
+                        updateCapabilities(uiResult.data)
+                    }
+                    else -> {
+                        Log.d(TAG, "Unknown status when loading capabilities in account ${account?.name}")
+                    }
+                }
+            }
+        )
+    }
+
     private fun observeShares() {
         ocShareViewModel.shares.observe(
             this,
@@ -314,11 +346,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
                         listener?.dismissLoading()
                     }
                     Status.ERROR -> {
-                        Snackbar.make(
-                            activity?.findViewById(android.R.id.content)!!,
-                            uiResult.errorMessage!!,
-                            Snackbar.LENGTH_SHORT
-                        ).show()
+                        showError(uiResult.errorMessage!!)
                         updateShares(uiResult.data)
                         listener?.dismissLoading()
                     }
@@ -530,6 +558,14 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
         if (!shareWarningAllowed) {
             view.shareWarning?.visibility = View.GONE
         }
+    }
+
+    private fun showError(message: String) {
+        Snackbar.make(
+            activity?.findViewById(android.R.id.content)!!,
+            message,
+            Snackbar.LENGTH_SHORT
+        ).show()
     }
 
     companion object {
