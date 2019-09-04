@@ -17,13 +17,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.domain.sharing.shares.usecases
+package com.owncloud.android.data.auth
 
-import com.owncloud.android.domain.UseCaseResult
+import com.owncloud.android.lib.common.authentication.OwnCloudCredentials
 
-abstract class BaseUseCase<out Type, in Params> {
-
-    protected abstract fun run(params: Params): UseCaseResult<Type>
-
-    fun execute(params: Params): UseCaseResult<Type> = run(params)
+interface AuthRepository {
+    fun login(baseUrl: String, ownCloudCredentials: OwnCloudCredentials)
 }
