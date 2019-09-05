@@ -14,7 +14,7 @@ Here you have a description about how to get relevant information to be handled 
 
 You will find the Logs in the Settings view of the Android app. If the Logs option is not visible, tap five times on the build number (bottom of the Settings view), and Logs will be an option inside the "More" section.
 
-When you have reproduce the issue you want to address, the "Send History" button will automatically add the logs to a new mail message.
+When you have reproduced the issue you want to address, the "Send History" button will automatically add the logs to a new mail message. Please follow the next steps to send us your logs:
 
 1. Delete History
 2. Perform the steps to reproduce the error
