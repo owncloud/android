@@ -1,127 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout android:id="@+id/ListItemConstraintLayout"
+<androidx.constraintlayout.widget.ConstraintLayout android:id="@+id/file_list_constraint_layout"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:minHeight="72dp">
-
-    <View
-        android:id="@+id/view"
-        android:layout_width="0dp"
-        android:layout_height="0.1dp"
-        android:background="@color/list_divider_background"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/info_constraint_layout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="4dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginTop="4dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/options_constraint_layout"
-        app:layout_constraintStart_toEndOf="@+id/icon_constraint_layout"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <TextView
-            android:id="@+id/Filename"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="4dp"
-            android:layout_marginStart="0dp"
-            android:ellipsize="middle"
-            android:singleLine="true"
-            android:textColor="@color/textColor"
-            android:textSize="@dimen/two_line_primary_text_size"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="File name" />
-
-        <TextView
-            android:id="@+id/file_size"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/list_item_lastmod_and_filesize_text"
-            android:textSize="@dimen/two_line_secondary_text_size"
-            app:layout_constraintStart_toStartOf="@+id/Filename"
-            app:layout_constraintTop_toBottomOf="@+id/Filename"
-            tools:text="Size MB" />
-
-        <TextView
-            android:id="@+id/file_separator"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text=","
-            android:textColor="@color/list_item_lastmod_and_filesize_text"
-            android:textSize="@dimen/two_line_secondary_text_size"
-            app:layout_constraintStart_toEndOf="@+id/file_size"
-            app:layout_constraintTop_toBottomOf="@+id/Filename" />
-
-        <TextView
-            android:id="@+id/last_mod"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:textColor="@color/list_item_lastmod_and_filesize_text"
-            android:textSize="@dimen/two_line_secondary_text_size"
-            app:layout_constraintStart_toEndOf="@+id/file_separator"
-            app:layout_constraintTop_toBottomOf="@id/Filename"
-            tools:text="Mod Date" />
-
-        <TextView
-            android:id="@+id/file_path"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/list_item_lastmod_and_filesize_text"
-            android:textSize="@dimen/two_line_secondary_text_size"
-            android:visibility="gone"
-            app:layout_constraintStart_toStartOf="@+id/Filename"
-            app:layout_constraintTop_toBottomOf="@+id/file_size"
-            tools:text="/path/to/file" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/options_constraint_layout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:paddingEnd="@dimen/standard_padding"
-        android:paddingStart="@dimen/standard_padding"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <ImageView
-            android:id="@+id/sharedIcon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginBottom="4dp"
-            android:layout_marginLeft="4dp"
-            android:layout_marginRight="4dp"
-            android:layout_marginTop="4dp"
-            android:src="@drawable/shared_via_link"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/custom_checkbox"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageView
-            android:id="@+id/custom_checkbox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="4dp"
-            android:layout_toEndOf="@id/sharedIcon"
-            android:src="@drawable/ic_checkbox_blank_outline"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    android:minHeight="@dimen/item_file_list_min_height">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/icon_constraint_layout"
@@ -129,8 +13,7 @@
         android:layout_height="wrap_content"
         android:focusable="false"
         android:focusableInTouchMode="false"
-        android:paddingEnd="12dp"
-        android:paddingStart="12dp"
+        android:minWidth="@dimen/item_file_list_icon_min_width"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -141,6 +24,7 @@
             android:layout_height="@dimen/file_icon_size"
             android:src="@drawable/ic_menu_archive"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -153,6 +37,111 @@
             android:translationY="-10dp"
             app:layout_constraintStart_toEndOf="@+id/thumbnail"
             app:layout_constraintTop_toBottomOf="@+id/thumbnail" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/info_constraint_layout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        android:layout_marginTop="4dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/options_constraint_layout"
+        app:layout_constraintStart_toEndOf="@+id/icon_constraint_layout"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/Filename"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="middle"
+            android:singleLine="true"
+            android:textColor="@color/textColor"
+            android:textSize="@dimen/two_line_primary_text_size"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="File name" />
+
+        <TextView
+            android:id="@+id/file_list_size"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/list_item_lastmod_and_filesize_text"
+            android:textSize="@dimen/two_line_secondary_text_size"
+            app:layout_constraintStart_toStartOf="@+id/Filename"
+            app:layout_constraintTop_toBottomOf="@+id/Filename"
+            tools:text="Size MB" />
+
+        <TextView
+            android:id="@+id/file_list_separator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/item_file_list_separator"
+            android:textColor="@color/list_item_lastmod_and_filesize_text"
+            android:textSize="@dimen/two_line_secondary_text_size"
+            app:layout_constraintStart_toEndOf="@+id/file_list_size"
+            app:layout_constraintTop_toBottomOf="@+id/Filename" />
+
+        <TextView
+            android:id="@+id/file_list_last_mod"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:textColor="@color/list_item_lastmod_and_filesize_text"
+            android:textSize="@dimen/two_line_secondary_text_size"
+            app:layout_constraintStart_toEndOf="@+id/file_list_separator"
+            app:layout_constraintTop_toBottomOf="@id/Filename"
+            tools:text="Mod Date" />
+
+        <TextView
+            android:id="@+id/file_list_path"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="middle"
+            android:singleLine="true"
+            android:textColor="@color/list_item_lastmod_and_filesize_text"
+            android:textSize="@dimen/two_line_secondary_text_size"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="@+id/Filename"
+            app:layout_constraintTop_toBottomOf="@+id/file_list_size"
+            tools:text="/path/to/file" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/options_constraint_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/standard_padding"
+        android:layout_marginStart="@dimen/standard_padding"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/info_constraint_layout"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/sharedIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="8dp"
+            android:src="@drawable/shared_via_link"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/custom_checkbox"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/custom_checkbox" />
+
+        <ImageView
+            android:id="@+id/custom_checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_toEndOf="@id/sharedIcon"
+            android:src="@drawable/ic_checkbox_blank_outline"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

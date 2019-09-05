@@ -30,9 +30,7 @@ import android.accounts.Account;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.text.TextUtils;
 import android.util.SparseBooleanArray;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,6 +42,7 @@ import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.FileDataStorageManager;
@@ -177,7 +176,7 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
                     view.setTag(ViewType.GRID_ITEM);
                     break;
                 case LIST_ITEM:
-                    view = inflator.inflate(R.layout.list_item, parent, false);
+                    view = inflator.inflate(R.layout.item_file_list, parent, false);
                     view.setTag(ViewType.LIST_ITEM);
                     // Allow or disallow touches with other visible windows
                     view.setFilterTouchesWhenObscured(
@@ -195,47 +194,33 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
             TextView fileName;
             String name = file.getFileName();
 
-            final LinearLayout linearLayout = view.findViewById(R.id.ListItemLayout);
-            linearLayout.setContentDescription("LinearLayout-" + name);
-
-            // Allow or disallow touches with other visible windows
-            linearLayout.setFilterTouchesWhenObscured(
-                    PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(mContext)
-            );
-
             switch (viewType) {
                 case LIST_ITEM:
-                    TextView fileSizeV = view.findViewById(R.id.file_size);
-                    TextView fileSizeSeparatorV = view.findViewById(R.id.file_separator);
-                    TextView lastModV = view.findViewById(R.id.last_mod);
-                    lastModV.setVisibility(View.VISIBLE);
-                    lastModV.setText(DisplayUtils.getRelativeTimestamp(mContext, file.getModificationTimestamp()));
-                    fileSizeSeparatorV.setVisibility(View.VISIBLE);
-                    fileSizeV.setVisibility(View.VISIBLE);
-                    fileSizeV.setText(DisplayUtils.bytesToHumanReadable(
-                            file.getFileLength(), mContext
-                    ));
+                    ConstraintLayout constraintLayout = view.findViewById(R.id.file_list_constraint_layout);
+
+                    // Allow or disallow touches with other visible windows
+                    constraintLayout.setFilterTouchesWhenObscured(
+                            PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(mContext));
+
+                    TextView fileSizeTV = view.findViewById(R.id.file_list_size);
+                    TextView lastModTV = view.findViewById(R.id.file_list_last_mod);
+                    lastModTV.setText(DisplayUtils.getRelativeTimestamp(mContext, file.getModificationTimestamp()));
+                    fileSizeTV.setText(DisplayUtils.bytesToHumanReadable(file.getFileLength(), mContext));
                     if (mOnlyAvailableOffline) {
-                        ViewGroup.LayoutParams params = linearLayout.getLayoutParams();
-                        float px = TypedValue.applyDimension(
-                                TypedValue.COMPLEX_UNIT_DIP,
-                                92,
-                                mContext.getResources().getDisplayMetrics()
-                        );
-                        params.height = (int) px;
-                        linearLayout.setLayoutParams(params);
-                        TextView filePath = view.findViewById(R.id.list_item_filepath);
+                        TextView filePath = view.findViewById(R.id.file_list_path);
                         filePath.setVisibility(View.VISIBLE);
                         filePath.setText(file.getRemotePath());
                     }
 
                 case GRID_ITEM:
+                    setLinearLayout(view, name);
                     // filename
                     fileName = view.findViewById(R.id.Filename);
                     name = file.getFileName();
                     fileName.setText(name);
 
                 case GRID_IMAGE:
+                    setLinearLayout(view, name);
                     // sharedIcon
                     ImageView sharedIconV = view.findViewById(R.id.sharedIcon);
                     if (file.isSharedViaLink()) {
@@ -285,9 +270,7 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
             } else {
                 if (file.isImage() && file.getRemoteId() != null) {
                     // Thumbnail in Cache?
-                    Bitmap thumbnail = ThumbnailsCacheManager.getBitmapFromDiskCache(
-                            String.valueOf(file.getRemoteId())
-                    );
+                    Bitmap thumbnail = ThumbnailsCacheManager.getBitmapFromDiskCache(file.getRemoteId());
                     if (thumbnail != null && !file.needsUpdateThumbnail()) {
                         fileIcon.setImageBitmap(thumbnail);
                     } else {
@@ -424,7 +407,7 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
      * @param files Collection of files to filter
      * @return Folders in the input
      */
-    public Vector<OCFile> getFolders(Vector<OCFile> files) {
+    private Vector<OCFile> getFolders(Vector<OCFile> files) {
         Vector<OCFile> ret = new Vector<>();
         OCFile current;
         for (int i = 0; i < files.size(); i++) {
@@ -499,5 +482,17 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
     public void clearFilterBySearch() {
         mFiles = (Vector<OCFile>) mImmutableFilesList.clone();
         notifyDataSetChanged();
+    }
+
+    private void setLinearLayout(View view, String name) {
+        final LinearLayout linearLayout = view.findViewById(R.id.ListItemLayout);
+        if (linearLayout != null) {
+            linearLayout.setContentDescription("LinearLayout-" + name);
+
+            // Allow or disallow touches with other visible windows
+            linearLayout.setFilterTouchesWhenObscured(
+                    PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(mContext)
+            );
+        }
     }
 }

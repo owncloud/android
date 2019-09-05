@@ -2,7 +2,7 @@
 <!--
   ownCloud Android client application
 
-  Copyright (C) 2016 ownCloud GmbH.
+  Copyright (C) 2019 ownCloud GmbH.
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License version 2,
@@ -31,6 +31,10 @@
     <dimen name="nav_drawer_header_avatar_second_account_margin">56dp</dimen>
     <dimen name="nav_drawer_menu_avatar_radius">12sp</dimen>
     <dimen name="list_item_avatar_icon_radius">20dp</dimen>
+
+    <!-- item file list dimens -->
+    <dimen name="item_file_list_min_height">72dp</dimen>
+    <dimen name="item_file_list_icon_min_width">60dp</dimen>
 
     <dimen name="file_indicator_pin_size">12dp</dimen>
     <dimen name="file_indicator_pin_size_grid">18dp</dimen>
