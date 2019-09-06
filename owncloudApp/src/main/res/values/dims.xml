@@ -46,6 +46,7 @@
     <dimen name="standard_quarter_padding">4dp</dimen>
     <dimen name="standard_margin">16dp</dimen>
     <dimen name="standard_half_margin">8dp</dimen>
+    <dimen name="standard_quarter_margin">4dp</dimen>
 
     <dimen name="two_line_primary_text_size">16sp</dimen>
     <dimen name="two_line_secondary_text_size">14sp</dimen>

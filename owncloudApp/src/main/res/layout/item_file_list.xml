@@ -44,8 +44,8 @@
         android:id="@+id/info_constraint_layout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="4dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginBottom="@dimen/standard_quarter_margin"
+        android:layout_marginTop="@dimen/standard_quarter_margin"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/options_constraint_layout"
         app:layout_constraintStart_toEndOf="@+id/icon_constraint_layout"
@@ -78,7 +78,7 @@
             android:id="@+id/file_list_separator"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/item_file_list_separator"
+            android:text=","
             android:textColor="@color/list_item_lastmod_and_filesize_text"
             android:textSize="@dimen/two_line_secondary_text_size"
             app:layout_constraintStart_toEndOf="@+id/file_list_size"
@@ -88,7 +88,7 @@
             android:id="@+id/file_list_last_mod"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
+            android:layout_marginStart="@dimen/standard_quarter_margin"
             android:textColor="@color/list_item_lastmod_and_filesize_text"
             android:textSize="@dimen/two_line_secondary_text_size"
             app:layout_constraintStart_toEndOf="@+id/file_list_separator"
@@ -130,7 +130,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/custom_checkbox"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/custom_checkbox" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
             android:id="@+id/custom_checkbox"

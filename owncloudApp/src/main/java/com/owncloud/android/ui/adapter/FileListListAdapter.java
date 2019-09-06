@@ -194,6 +194,16 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
             TextView fileName;
             String name = file.getFileName();
 
+            final LinearLayout linearLayout = view.findViewById(R.id.ListItemLayout);
+            if (linearLayout != null) {
+                linearLayout.setContentDescription("LinearLayout-" + name);
+
+                // Allow or disallow touches with other visible windows
+                linearLayout.setFilterTouchesWhenObscured(
+                        PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(mContext)
+                );
+            }
+
             switch (viewType) {
                 case LIST_ITEM:
                     ConstraintLayout constraintLayout = view.findViewById(R.id.file_list_constraint_layout);
@@ -204,8 +214,9 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
 
                     TextView fileSizeTV = view.findViewById(R.id.file_list_size);
                     TextView lastModTV = view.findViewById(R.id.file_list_last_mod);
-                    lastModTV.setText(DisplayUtils.getRelativeTimestamp(mContext, file.getModificationTimestamp()));
                     fileSizeTV.setText(DisplayUtils.bytesToHumanReadable(file.getFileLength(), mContext));
+                    lastModTV.setText(DisplayUtils.getRelativeTimestamp(mContext, file.getModificationTimestamp()));
+
                     if (mOnlyAvailableOffline) {
                         TextView filePath = view.findViewById(R.id.file_list_path);
                         filePath.setVisibility(View.VISIBLE);
@@ -213,14 +224,12 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
                     }
 
                 case GRID_ITEM:
-                    setLinearLayout(view, name);
                     // filename
                     fileName = view.findViewById(R.id.Filename);
                     name = file.getFileName();
                     fileName.setText(name);
 
                 case GRID_IMAGE:
-                    setLinearLayout(view, name);
                     // sharedIcon
                     ImageView sharedIconV = view.findViewById(R.id.sharedIcon);
                     if (file.isSharedViaLink()) {
@@ -482,17 +491,5 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
     public void clearFilterBySearch() {
         mFiles = (Vector<OCFile>) mImmutableFilesList.clone();
         notifyDataSetChanged();
-    }
-
-    private void setLinearLayout(View view, String name) {
-        final LinearLayout linearLayout = view.findViewById(R.id.ListItemLayout);
-        if (linearLayout != null) {
-            linearLayout.setContentDescription("LinearLayout-" + name);
-
-            // Allow or disallow touches with other visible windows
-            linearLayout.setFilterTouchesWhenObscured(
-                    PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(mContext)
-            );
-        }
     }
 }
