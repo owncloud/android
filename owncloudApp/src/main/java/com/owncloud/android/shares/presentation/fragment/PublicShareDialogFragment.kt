@@ -402,8 +402,8 @@ class PublicShareDialogFragment : DialogFragment() {
         outState.putString(KEY_EXPIRATION_DATE, shareViaLinkExpirationValue?.text.toString())
     }
 
-    override fun onAttach(activity: Activity?) {
-        super.onAttach(activity)
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
         try {
             listener = activity as ShareFragmentListener?
         } catch (e: IllegalStateException) {
