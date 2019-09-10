@@ -75,7 +75,11 @@ class DocumentsStorageProvider : DocumentsProvider() {
     private var currentStorageManager: FileDataStorageManager? = null
     private lateinit var fileToUpload: OCFile
 
-    override fun openDocument(documentId: String, mode: String, signal: CancellationSignal?): ParcelFileDescriptor? {
+    override fun openDocument(
+        documentId: String,
+        mode: String,
+        signal: CancellationSignal?
+    ): ParcelFileDescriptor? {
         Log_OC.d(TAG, "Trying to open $documentId in mode $mode")
 
         // If documentId == NONEXISTENT_DOCUMENT_ID only Upload is needed because file does not exist in our database yet.
@@ -121,7 +125,10 @@ class DocumentsStorageProvider : DocumentsProvider() {
         try {
             return ParcelFileDescriptor.open(fileToOpen, accessMode, handler) {
                 // Update the file with the cloud server. The client is done writing.
-                Log_OC.d(TAG, "A file with id $documentId has been closed! Time to synchronize it with server.")
+                Log_OC.d(
+                    TAG,
+                    "A file with id $documentId has been closed! Time to synchronize it with server."
+                )
                 // If only needs to upload that file
                 if (uploadOnly) {
                     ocFile.fileLength = fileToOpen.length()
@@ -149,7 +156,11 @@ class DocumentsStorageProvider : DocumentsProvider() {
                         ).apply {
                             val result = execute(currentStorageManager, context)
                             if (result.code == RemoteOperationResult.ResultCode.SYNC_CONFLICT) {
-                                NotificationUtils.notifyConflict(ocFile, currentStorageManager?.account, context)
+                                NotificationUtils.notifyConflict(
+                                    ocFile,
+                                    currentStorageManager?.account,
+                                    context
+                                )
                             }
                         }
                     }.start()
@@ -251,7 +262,11 @@ class DocumentsStorageProvider : DocumentsProvider() {
         )
     }
 
-    override fun querySearchDocuments(rootId: String, query: String, projection: Array<String>?): Cursor {
+    override fun querySearchDocuments(
+        rootId: String,
+        query: String,
+        projection: Array<String>?
+    ): Cursor {
         updateCurrentStorageManagerIfNeeded(rootId)
 
         val result = FileCursor(projection)
@@ -265,8 +280,15 @@ class DocumentsStorageProvider : DocumentsProvider() {
         return result
     }
 
-    override fun createDocument(parentDocumentId: String, mimeType: String, displayName: String): String {
-        Log_OC.d(TAG, "Create Document ParentID $parentDocumentId Type $mimeType DisplayName $displayName")
+    override fun createDocument(
+        parentDocumentId: String,
+        mimeType: String,
+        displayName: String
+    ): String {
+        Log_OC.d(
+            TAG,
+            "Create Document ParentID $parentDocumentId Type $mimeType DisplayName $displayName"
+        )
         val parentDocId = parentDocumentId.toLong()
         updateCurrentStorageManagerIfNeeded(parentDocId)
 
@@ -289,7 +311,12 @@ class DocumentsStorageProvider : DocumentsProvider() {
         val file = getFileByIdOrException(docId)
 
         RenameFileOperation(file.remotePath, displayName).apply {
-            execute(currentStorageManager, context).also { checkOperationResult(it, file.parentId.toString()) }
+            execute(currentStorageManager, context).also {
+                checkOperationResult(
+                    it,
+                    file.parentId.toString()
+                )
+            }
         }
 
         return null
@@ -304,7 +331,12 @@ class DocumentsStorageProvider : DocumentsProvider() {
         val file = getFileByIdOrException(docId)
 
         RemoveFileOperation(file.remotePath, false, true).apply {
-            execute(currentStorageManager, context).also { checkOperationResult(it, file.parentId.toString()) }
+            execute(currentStorageManager, context).also {
+                checkOperationResult(
+                    it,
+                    file.parentId.toString()
+                )
+            }
         }
     }
 
@@ -340,7 +372,9 @@ class DocumentsStorageProvider : DocumentsProvider() {
 
     private fun checkOperationResult(result: RemoteOperationResult<Any>, folderToNotify: String) {
         if (!result.isSuccess) {
-            if (result.code != RemoteOperationResult.ResultCode.WRONG_CONNECTION) notifyChangeInFolder(folderToNotify)
+            if (result.code != RemoteOperationResult.ResultCode.WRONG_CONNECTION) notifyChangeInFolder(
+                folderToNotify
+            )
             throw FileNotFoundException("Remote Operation failed")
         }
         syncRequired = false
@@ -481,7 +515,20 @@ class DocumentsStorageProvider : DocumentsProvider() {
     private fun getFileByIdOrException(id: Long): OCFile =
         getFileById(id) ?: throw FileNotFoundException("File $id not found")
 
-    private fun getFileById(id: Long): OCFile? = currentStorageManager?.getFileById(id)
+    private fun getFileById(id: Long): OCFile? {
+        val file = currentStorageManager?.getFileById(id)
+        if (file != null) return file
+        // File not found in current storage manager, look for it in other ones
+        var fileFromOtherStorageManager: OCFile? = null
+        for (key in rootIdToStorageManager.keys) {
+            val otherStorageManager = rootIdToStorageManager[key]
+            // Skip current storage manager, already checked
+            if (otherStorageManager == currentStorageManager) continue
+            fileFromOtherStorageManager = otherStorageManager?.getFileById(id)
+            if (fileFromOtherStorageManager != null) break
+        }
+        return fileFromOtherStorageManager
+    }
 
     private fun getFileByPathOrException(path: String): OCFile =
         getFileByPath(path) ?: throw FileNotFoundException("File $path not found")
