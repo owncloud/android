@@ -72,7 +72,15 @@ public class CreateRemoteFolderOperation extends RemoteOperation {
      */
     @Override
     protected RemoteOperationResult run(OwnCloudClient client) {
-        return new RemoteOperationResult<>(ResultCode.INVALID_CHARACTER_IN_NAME);
+        RemoteOperationResult result = createFolder(client);
+        if (!result.isSuccess() && mCreateFullPath &&
+                RemoteOperationResult.ResultCode.CONFLICT == result.getCode()) {
+            result = createParentFolder(FileUtils.getParentPath(mRemotePath), client);
+            if (result.isSuccess()) {
+                result = createFolder(client);    // second (and last) try
+            }
+        }
+        return result;
     }
 
     private RemoteOperationResult createFolder(OwnCloudClient client) {

@@ -66,4 +66,21 @@ public class FileUtils {
         }
         return result;
     }
+
+    /**
+     * Validate the fileName to detect if contains any forbidden character: / , \ , < , > ,
+     * : , " , | , ? , *
+     *
+     * @param fileName
+     * @return
+     */
+    public static boolean isValidName(String fileName) {
+        boolean result = true;
+
+        Log_OC.d(TAG, "fileName =======" + fileName);
+        if (fileName.contains(PATH_SEPARATOR)) {
+            result = false;
+        }
+        return result;
+    }
 }
