@@ -126,7 +126,10 @@ class DocumentsStorageProvider : DocumentsProvider() {
         try {
             return ParcelFileDescriptor.open(fileToOpen, accessMode, handler) {
                 // Update the file with the cloud server. The client is done writing.
-                Log_OC.d(TAG, "A file with id $documentId has been closed! Time to synchronize it with server.")
+                Log_OC.d(
+                    TAG,
+                    "A file with id $documentId has been closed! Time to synchronize it with server."
+                )
                 // If only needs to upload that file
                 if (uploadOnly) {
                     ocFile.fileLength = fileToOpen.length()
@@ -283,7 +286,10 @@ class DocumentsStorageProvider : DocumentsProvider() {
         mimeType: String,
         displayName: String
     ): String {
-        Log_OC.d(TAG, "Create Document ParentID $parentDocumentId Type $mimeType DisplayName $displayName")
+        Log_OC.d(
+            TAG,
+            "Create Document ParentID $parentDocumentId Type $mimeType DisplayName $displayName"
+        )
         val parentDocId = parentDocumentId.toLong()
         updateCurrentStorageManagerIfNeeded(parentDocId)
 
@@ -394,7 +400,8 @@ class DocumentsStorageProvider : DocumentsProvider() {
     private fun createFile(parentDocument: OCFile, mimeType: String, displayName: String): String {
         // We just need to return a Document ID, so we'll return an empty one. File does not exist in our db yet.
         // File will be created at [openDocument] method.
-        val tempDir = File(FileStorageUtils.getTemporalPath(getAccountFromFileId(parentDocument.fileId)?.name))
+        val tempDir =
+            File(FileStorageUtils.getTemporalPath(getAccountFromFileId(parentDocument.fileId)?.name))
         val newFile = File(tempDir, displayName)
 
         fileToUpload = OCFile(parentDocument.remotePath + displayName).apply {
@@ -453,7 +460,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
         ).apply { syncVersionAndProfileEnabled(false) }
 
         val thread = Thread {
-            refreshFolderOperation.execute(currentStorageManager, context)
+            refreshFolderOperation.execute(getStoreManagerFromFileId(folderId), context)
             notifyChangeInFolder(parentDocumentId)
         }
         thread.start()
@@ -508,28 +515,13 @@ class DocumentsStorageProvider : DocumentsProvider() {
     private fun getFileByIdOrException(id: Long): OCFile =
         getFileById(id) ?: throw FileNotFoundException("File $id not found")
 
-    private fun getFileById(id: Long): OCFile? {
+    private fun getFileById(id: Long): OCFile? = getStoreManagerFromFileId(id)?.getFileById(id)
+
+    private fun getAccountFromFileId(id: Long): Account? = getStoreManagerFromFileId(id)?.account
+
+    private fun getStoreManagerFromFileId(id: Long): FileDataStorageManager? {
         // If file is found in current storage manager, return it
-        currentStorageManager?.getFileById(id)?.let { return it }
-
-        // Else, look for it in other ones
-        var fileFromOtherStorageManager: OCFile? = null
-        for (key in rootIdToStorageManager.keys) {
-            val otherStorageManager = rootIdToStorageManager[key]
-            // Skip current storage manager, already checked
-            if (otherStorageManager == currentStorageManager) continue
-            fileFromOtherStorageManager = otherStorageManager?.getFileById(id)
-            if (fileFromOtherStorageManager != null) {
-                Log_OC.d(TAG, "File with id $id found in: ${otherStorageManager?.account?.name}")
-                break
-            }
-        }
-        return fileFromOtherStorageManager
-    }
-
-    private fun getAccountFromFileId(id: Long): Account? {
-        // If file is found in current storage manager, return its account
-        currentStorageManager?.getFileById(id)?.let { return currentStorageManager!!.account }
+        currentStorageManager?.getFileById(id)?.let { return currentStorageManager!! }
 
         //  Else, look for it in other ones
         var fileFromOtherStorageManager: OCFile?
@@ -540,11 +532,14 @@ class DocumentsStorageProvider : DocumentsProvider() {
             if (otherStorageManager == currentStorageManager) continue
             fileFromOtherStorageManager = otherStorageManager?.getFileById(id)
             if (fileFromOtherStorageManager != null) {
-                Log_OC.d(TAG, "File with id $id belongs to account: ${otherStorageManager?.account?.name}")
+                Log_OC.d(
+                    TAG,
+                    "File with id $id found in storage manager: ${otherStorageManager}"
+                )
                 break
             }
         }
-        return otherStorageManager?.account
+        return otherStorageManager
     }
 
     private fun getFileByPathOrException(path: String): OCFile =
