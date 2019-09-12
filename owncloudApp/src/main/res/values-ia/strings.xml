@@ -44,7 +44,6 @@
   <string name="activity_chooser_send_file_title">Invia</string>
   <string name="clipboard_text_copied">Copiate in le area de transferentia</string>
   <string name="prefs_category_accounts">Contos</string>
-  <string name="saml_authentication_wrong_pass">Contrasigno errate</string>
   <string name="folder_picker_choose_button_text">Seliger</string>
   <string name="share_dialog_title">Compartir</string>
   <string name="share_cancel_public_link_button">Cancellar</string>

@@ -248,8 +248,7 @@
   <string name="auth_wtf_reenter_URL">Netikėta problema: įveskite serverio adresą dar kartą</string>
   <string name="auth_expired_oauth_token_toast">Autorizacijos laikas baigėsi. Prašome autorizuotis iš naujo</string>
   <string name="auth_expired_basic_auth_toast">Įveskite dabartinį slaptažodį</string>
-  <string name="auth_expired_saml_sso_token_toast">Jūsų sesijos laikas baigėsi. Prašome prisijungti iš naujo</string>
-  <string name="auth_connecting_auth_server">Jungiasi į authorizacijos serverį ...</string>
+    <string name="auth_connecting_auth_server">Jungiasi į authorizacijos serverį ...</string>
   <string name="auth_unsupported_auth_method">Serveris nepalaiko šio autentikacijos metodo</string>
   <string name="auth_unsupported_multiaccount">%1$s nepalaiko kelių paskyrų iš karto</string>
   <string name="auth_fail_get_user_name">Serveris negražina tinkamo vartotojo ID, susisiekite su administratoriumi</string>
@@ -373,9 +372,7 @@
   <string name="log_progress_dialog_text">Įkeliama...</string>
   <string name="actionbar_select_all">Pažymėti viską</string>
   <string name="actionbar_select_inverse">Pasirinkite atvirkštinį</string>
-  <string name="saml_authentication_required_text">Reikalinga autentikacija</string>
-  <string name="saml_authentication_wrong_pass">Neteisingas slaptažodis</string>
-  <string name="actionbar_move">perkelti</string>
+    <string name="actionbar_move">perkelti</string>
   <string name="file_list_empty_moving">Nieko nėra. Galite pridėti aplanką!</string>
   <string name="folder_picker_choose_button_text">Pasirinkite</string>
   <string name="move_file_not_found">Negalima perkelti. Prašau patikrinti ar failas egzistuoja</string>

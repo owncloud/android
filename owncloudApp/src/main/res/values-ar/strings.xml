@@ -178,7 +178,6 @@
   <string name="auth_oauth_error">فشل في التحقق</string>
   <string name="auth_oauth_error_access_denied">تم رفض الوصول من قبل الخادم المرخص</string>
   <string name="auth_expired_oauth_token_toast">مدة التحقق انتهت , يرجى اعادة التحقق </string>
-  <string name="auth_expired_saml_sso_token_toast">مدة الجلسة انتهت , يرجى اعادة الاتصال</string>
   <string name="auth_unsupported_auth_method">الخادم لا يدعم طريقة التحقق هذه</string>
   <string name="auth_unsupported_multiaccount">%1$s لا يدعم الحسابات المتعددة </string>
   <string name="auth_fail_get_user_name">الخادم الخاص بك لم يعد الإتصال بهويتك الصحيحة, الرجاء الإتصال بالمسؤول
@@ -252,7 +251,6 @@
   <string name="drawer_manage_accounts">إدارة الحسابات</string>
   <string name="actionbar_logger">سجل</string>
   <string name="log_progress_dialog_text">تحميل البيانات</string>
-  <string name="saml_authentication_wrong_pass">كلمة مرور خاطئة</string>
   <string name="actionbar_move">أنقل</string>
   <string name="folder_picker_choose_button_text">اختيار</string>
   <string name="move_file_invalid_overwrite">الملف موجود بالفعل في المجلد الوجهة</string>

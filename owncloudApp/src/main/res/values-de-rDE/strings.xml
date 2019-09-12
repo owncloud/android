@@ -266,7 +266,6 @@
   <string name="auth_wtf_reenter_URL">Unerwarteter Zustand; bitte geben Sie die Adresse des Servers nochmals ein</string>
   <string name="auth_expired_oauth_token_toast">Ihre Legitimierung ist abgelaufen. Bitte Legitimierung nochmals durchführen</string>
   <string name="auth_expired_basic_auth_toast">Bitte geben Sie Ihr aktuelles Passwort ein</string>
-  <string name="auth_expired_saml_sso_token_toast">Ihre Sitzung ist abgelaufen. Bitte Anmeldung nochmals durchführen</string>
   <string name="auth_connecting_auth_server">Verbinde mit dem Authentifizierung-Server…</string>
   <string name="auth_unsupported_auth_method">Der Server unterstützt diese Legitimierungsmethode nicht</string>
   <string name="auth_unsupported_multiaccount">%1$s unterstützt mehrere Benutzerkonten nicht</string>
@@ -400,8 +399,6 @@
   <string name="log_progress_dialog_text">Lade Daten…</string>
   <string name="actionbar_select_all">Alle auswählen</string>
   <string name="actionbar_select_inverse">Auswahl invertieren</string>
-  <string name="saml_authentication_required_text">Legitimierung benötigt</string>
-  <string name="saml_authentication_wrong_pass">Falsches Passwort</string>
   <string name="actionbar_move">Verschieben</string>
   <string name="file_list_empty_moving">Nichts vorhanden. Sie können einen Ordner hinzufügen!</string>
   <string name="folder_picker_choose_button_text">Auswählen</string>

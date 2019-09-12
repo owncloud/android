@@ -9,16 +9,16 @@
  * @author Shashvat Kedia
  * Copyright (C) 2012  Bartek Przybylski
  * Copyright (C) 2019 ownCloud GmbH.
- * <p>
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
  * as published by the Free Software Foundation.
- * <p>
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * <p>
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -28,11 +28,9 @@ package com.owncloud.android.authentication;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
@@ -41,8 +39,6 @@ import android.content.pm.ResolveInfo;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.net.http.SslError;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -59,9 +55,6 @@ import android.view.View.OnFocusChangeListener;
 import android.view.View.OnTouchListener;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
-import android.webkit.HttpAuthHandler;
-import android.webkit.SslErrorHandler;
-import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -76,10 +69,8 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import com.google.android.material.snackbar.Snackbar;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
-import com.owncloud.android.authentication.SAMLWebViewClient.SsoWebViewClientListener;
 import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.lib.common.OwnCloudClientManagerFactory;
 import com.owncloud.android.lib.common.accounts.AccountTypeUtils;
@@ -101,22 +92,17 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
-import com.owncloud.android.lib.resources.users.GetRemoteUserInfoOperation;
 import com.owncloud.android.lib.resources.users.GetRemoteUserInfoOperation.UserInfo;
 import com.owncloud.android.operations.AuthenticationMethod;
 import com.owncloud.android.operations.GetServerInfoOperation;
 import com.owncloud.android.services.OperationsService;
 import com.owncloud.android.services.OperationsService.OperationsServiceBinder;
-import com.owncloud.android.ui.dialog.CredentialsDialogFragment;
 import com.owncloud.android.ui.dialog.LoadingDialog;
-import com.owncloud.android.ui.dialog.LoginWebViewDialog;
 import com.owncloud.android.ui.dialog.SslUntrustedCertDialog;
-import com.owncloud.android.ui.dialog.SslUntrustedCertDialog.OnSslUntrustedCertListener;
 import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter;
 import com.owncloud.android.utils.DisplayUtils;
 import com.owncloud.android.utils.PreferenceUtils;
 
-import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -128,7 +114,6 @@ import static android.content.Intent.ACTION_VIEW;
  */
 public class AuthenticatorActivity extends AccountAuthenticatorActivity
         implements OnRemoteOperationListener, OnFocusChangeListener, OnEditorActionListener,
-        SsoWebViewClientListener, OnSslUntrustedCertListener,
         AuthenticatorAsyncTask.OnAuthenticatorTaskListener {
 
     private static final String TAG = AuthenticatorActivity.class.getSimpleName();
@@ -152,17 +137,12 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
     private static final String KEY_WAITING_FOR_OP_ID = "WAITING_FOR_OP_ID";
     private static final String KEY_AUTH_TOKEN = "AUTH_TOKEN";
 
-    private static final String AUTH_ON = "on";
-
     public static final byte ACTION_CREATE = 0;
     public static final byte ACTION_UPDATE_TOKEN = 1;               // requested by the user
     public static final byte ACTION_UPDATE_EXPIRED_TOKEN = 2;       // detected by the app
 
     private static final String UNTRUSTED_CERT_DIALOG_TAG = "UNTRUSTED_CERT_DIALOG";
-    private static final String SAML_DIALOG_TAG = "SAML_DIALOG";
-    private static final String OAUTH_DIALOG_TAG = "OAUTH_DIALOG";
     private static final String WAIT_DIALOG_TAG = "WAIT_DIALOG";
-    private static final String CREDENTIALS_DIALOG_TAG = "CREDENTIALS_DIALOG";
     private static final String KEY_AUTH_IS_FIRST_ATTEMPT_TAG = "KEY_AUTH_IS_FIRST_ATTEMPT";
 
     private static final String KEY_USERNAME = "USERNAME";
@@ -230,8 +210,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             MainApp.Companion.getAccountType());
     private final String OAUTH_TOKEN_TYPE = AccountTypeUtils.getAuthTokenTypeAccessToken(
             MainApp.Companion.getAccountType());
-    private final String SAML_TOKEN_TYPE =
-            AccountTypeUtils.getAuthTokenTypeSamlSessionCookie(MainApp.Companion.getAccountType());
 
     private CustomTabsClient mCustomTabsClient;
     private CustomTabsServiceConnection mCustomTabServiceConnection = new CustomTabsServiceConnection() {
@@ -249,7 +227,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
     /**
      * {@inheritDoc}
-     * <p>
+     * 
      * IMPORTANT ENTRY POINT 1: activity is shown to the user
      */
     @Override
@@ -314,7 +292,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             loginLayout.setBackgroundColor(
                     getResources().getColor(R.color.login_background_color)
             );
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+        } else {
             findViewById(R.id.login_background_image).setVisibility(View.VISIBLE);
         }
 
@@ -323,9 +301,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
         mCheckServerButton = findViewById(R.id.embeddedCheckServerButton);
 
-        mCheckServerButton.setOnClickListener(view -> {
-            checkOcServer();
-        });
+        mCheckServerButton.setOnClickListener(view -> checkOcServer());
 
         findViewById(R.id.centeredRefreshButton).setOnClickListener(view -> checkOcServer());
         findViewById(R.id.embeddedRefreshButton).setOnClickListener(view -> checkOcServer());
@@ -393,36 +369,12 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
                 getIntent().getExtras().getString(AccountAuthenticator.KEY_AUTH_TOKEN_TYPE);
         if (mAuthTokenType == null) {
             if (mAccount != null) {
-                boolean oAuthRequired =
-                        (mAccountMgr.getUserData(mAccount, Constants.KEY_SUPPORTS_OAUTH2) != null);
-                boolean samlWebSsoRequired = (
-                        mAccountMgr.getUserData(
-                                mAccount, Constants.KEY_SUPPORTS_SAML_WEB_SSO
-                        ) != null
-                );
-                mAuthTokenType = chooseAuthTokenType(oAuthRequired, samlWebSsoRequired);
-
+                boolean oAuthRequired = (mAccountMgr.getUserData(mAccount, Constants.KEY_SUPPORTS_OAUTH2) != null);
+                mAuthTokenType = oAuthRequired ? OAUTH_TOKEN_TYPE : BASIC_TOKEN_TYPE;
             } else {
-                boolean samlWebSsoSupported =
-                        AUTH_ON.equals(getString(R.string.auth_method_saml_web_sso));
-
-                if (samlWebSsoSupported) {
-                    mAuthTokenType = SAML_TOKEN_TYPE;
-                } else {
-                    // If SAML is not supported, OAuth will be the default authentication method
-                    mAuthTokenType = "";
-                }
+                // OAuth will be the default authentication method
+                mAuthTokenType = "";
             }
-        }
-    }
-
-    private String chooseAuthTokenType(boolean oauth, boolean saml) {
-        if (saml) {
-            return SAML_TOKEN_TYPE;
-        } else if (oauth) {
-            return OAUTH_TOKEN_TYPE;
-        } else {
-            return BASIC_TOKEN_TYPE;
         }
     }
 
@@ -439,11 +391,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             if (AccountTypeUtils.getAuthTokenTypeAccessToken(MainApp.Companion.getAccountType())
                     .equals(mAuthTokenType)) {
                 instructionsMessageText = getString(R.string.auth_expired_oauth_token_toast);
-
-            } else if (AccountTypeUtils.getAuthTokenTypeSamlSessionCookie(MainApp.Companion.getAccountType())
-                    .equals(mAuthTokenType)) {
-                instructionsMessageText = getString(R.string.auth_expired_saml_sso_token_toast);
-
             } else {
                 instructionsMessageText = getString(R.string.auth_expired_basic_auth_toast);
             }
@@ -679,7 +626,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
     /**
      * Saves relevant state before {@link #onPause()}
-     * <p>
+     * 
      * See {@link super#onSaveInstanceState(Bundle)}
      */
     @Override
@@ -887,11 +834,11 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
     /**
      * Handles changes in focus on the text input for the server URL.
-     * <p>
+     * 
      * IMPORTANT ENTRY POINT 2: When (!hasFocus), user wrote the server URL and changed to
      * other field. The operation to check the existence of the server in the entered URL is
      * started.
-     * <p>
+     * 
      * When hasFocus:    user 'comes back' to write again the server URL.
      */
     private void onUrlInputFocusLost() {
@@ -953,9 +900,9 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
     /**
      * Handles changes in focus on the text input for the password (basic authorization).
-     * <p>
+     * 
      * When (hasFocus), the button to toggle password visibility is shown.
-     * <p>
+     * 
      * When (!hasFocus), the button is made invisible and the password is hidden.
      *
      * @param hasFocus 'True' if focus is received, 'false' if is lost
@@ -1007,13 +954,13 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
     /**
      * Checks the credentials of the user in the root of the ownCloud server
      * before creating a new local account.
-     * <p>
+     * 
      * For basic authorization, a check of existence of the root folder is
      * performed.
-     * <p>
+     * 
      * For OAuth, starts the flow to get an access token; the credentials test
      * is postponed until it is available.
-     * <p>
+     * 
      * IMPORTANT ENTRY POINT 4
      */
     public void onLoginClick() {
@@ -1031,9 +978,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         if (AccountTypeUtils.getAuthTokenTypeAccessToken(MainApp.Companion.getAccountType()).
                 equals(mAuthTokenType)) {
             startOauthorization();
-        } else if (AccountTypeUtils.getAuthTokenTypeSamlSessionCookie(MainApp.Companion.getAccountType()).
-                equals(mAuthTokenType)) {
-            startSamlBasedFederatedSingleSignOnAuthorization();
         } else {
             checkBasicAuthorization();
         }
@@ -1126,41 +1070,14 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
     private void onNoBrowserInstalled() {
         new AlertDialog.Builder(this)
                 .setMessage(R.string.no_borwser_installed_alert)
-                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                })
+                .setPositiveButton(android.R.string.ok, (dialog, which) -> dialog.dismiss())
                 .create()
                 .show();
     }
 
     /**
-     * Starts the Web Single Sign On flow to get access to the root folder
-     * in the server.
-     */
-    private void startSamlBasedFederatedSingleSignOnAuthorization() {
-        /// be gentle with the user
-        mAuthStatusIcon = R.drawable.progress_small;
-        mAuthStatusText = getResources().getString(R.string.auth_connecting_auth_server);
-        showAuthStatus();
-
-        /// Show SAML-based SSO web dialog
-        ArrayList<String> targetUrls = new ArrayList<>();
-        targetUrls.add(
-                mServerInfo.mBaseUrl
-                        + AccountUtils.getWebdavPath(mServerInfo.mVersion, mAuthTokenType));
-        LoginWebViewDialog dialog = LoginWebViewDialog.newInstance(
-                targetUrls.get(0),
-                targetUrls,
-                AuthenticationMethod.SAML_WEB_SSO);
-        dialog.show(getSupportFragmentManager(), SAML_DIALOG_TAG);
-    }
-
-    /**
      * Callback method invoked when a RemoteOperation executed by this Activity finishes.
-     * <p>
+     * 
      * Dispatches the operation flow to the right method.
      */
     @Override
@@ -1174,46 +1091,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
         } else if (operation instanceof OAuth2GetAccessTokenOperation) {
             onGetOAuthAccessTokenFinish(result);
-
-        } else if (operation instanceof GetRemoteUserInfoOperation) {
-            // this path is only walked by SAML authentication
-            onGetUserNameFinish(result);
-        }
-    }
-
-    /**
-     * WARNING: this method is only called in SAML authentication; rest of authentication paths
-     * get their userId in {@link AuthenticatorAsyncTask}, that calls back here via
-     * {@link #onAuthenticatorTaskCallback(RemoteOperationResult)}
-     *
-     * @param result Result of {@link GetRemoteUserInfoOperation} performed.
-     */
-    private void onGetUserNameFinish(RemoteOperationResult<UserInfo> result) {
-        mWaitingForOpId = Long.MAX_VALUE;
-        if (result.isSuccess()) {
-            boolean success = false;
-            // WARNING: using mDisplayName was a path used because, in the past, mId was not avialable
-            // in servers with SAML; now seems that changed, and this needs to be updated. Meanwhile,
-            // for any other authentication method, please 
-            String username = result.getData().mDisplayName;
-
-            if (mAction == ACTION_CREATE) {
-                mUsernameInput.setText(username);
-                success = createAccount(result);
-
-            } else {
-                success = updateAccount(username);
-            }
-
-            if (success) {
-                finish();
-            }
-        } else {
-            int failedStatusText = result.getCode() == ResultCode.SERVICE_UNAVAILABLE ?
-                    R.string.service_unavailable : R.string.auth_fail_get_user_name;
-            updateFailedAuthStatusIconAndText(failedStatusText);
-            showAuthStatus();
-            Log_OC.e(TAG, "Access to user name failed: " + result.getLogMessage());
         }
     }
 
@@ -1242,21 +1119,10 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             mServerIsValid = true;
 
             // Update mAuthTokenType depending on the server info
-            if (!mAuthTokenType.equals(SAML_TOKEN_TYPE)) {
-
-                if (mServerInfo.mAuthMethods.contains(AuthenticationMethod.BEARER_TOKEN)) {
-
-                    mAuthTokenType = OAUTH_TOKEN_TYPE; // OAuth2
-
-                } else if (mServerInfo.mAuthMethods.contains(AuthenticationMethod.BASIC_HTTP_AUTH)) {
-
-                    mAuthTokenType = BASIC_TOKEN_TYPE; // Basic
-
-                } else if (mServerInfo.mAuthMethods.contains(AuthenticationMethod.SAML_WEB_SSO)) {
-
-                    updateServerStatusIconNoRegularAuth(); // overrides updateServerStatusIconAndText()
-                    mServerIsValid = false;
-                }
+            if (mServerInfo.mAuthMethods.contains(AuthenticationMethod.BEARER_TOKEN)) {
+                mAuthTokenType = OAUTH_TOKEN_TYPE; // OAuth2
+            } else if (mServerInfo.mAuthMethods.contains(AuthenticationMethod.BASIC_HTTP_AUTH)) {
+                mAuthTokenType = BASIC_TOKEN_TYPE; // Basic
             }
 
         } else {
@@ -1330,18 +1196,18 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
                 url.toLowerCase().startsWith("https://")) {
             if (url.indexOf("/", 8) != -1) {
                 url = url.substring(0, url.indexOf("/", 8)).toLowerCase()
-                        + url.substring(url.indexOf("/", 8), url.length());
+                        + url.substring(url.indexOf("/", 8));
             } else {
-                url = url.substring(0, url.length()).toLowerCase();
+                url = url.toLowerCase();
             }
 
             mHostUrlInput.setText(url);
         } else {
             if (url.contains("/")) {
                 url = url.substring(0, url.indexOf("/")).toLowerCase()
-                        + url.substring(url.indexOf("/"), url.length());
+                        + url.substring(url.indexOf("/"));
             } else {
-                url = url.substring(0, url.length()).toLowerCase();
+                url = url.toLowerCase();
             }
 
             mHostUrlInput.setText(url);
@@ -1425,16 +1291,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         }
     }
 
-    private void updateFailedAuthStatusIconAndText(int failedStatusText) {
-        mAuthStatusIcon = R.drawable.common_error;
-        mAuthStatusText = getResources().getString(failedStatusText);
-    }
-
-    private void updateServerStatusIconNoRegularAuth() {
-        mServerStatusIcon = R.drawable.common_error;
-        mServerStatusText = getResources().getString(R.string.auth_can_not_auth_against_server);
-    }
-
     /**
      * Processes the result of the request for an access token sent to an OAuth authorization server
      *
@@ -1442,7 +1298,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
      */
     private void onGetOAuthAccessTokenFinish(RemoteOperationResult<Map<String, String>> result) {
         mWaitingForOpId = Long.MAX_VALUE;
-        dismissDialog(WAIT_DIALOG_TAG);
+        dismissDialog();
 
         if (result.isSuccess()) {
             /// be gentle with the user
@@ -1450,7 +1306,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             dialog.show(getSupportFragmentManager(), WAIT_DIALOG_TAG);
 
             /// time to test the retrieved access token on the ownCloud server
-            @SuppressWarnings("unchecked")
             Map<String, String> tokens = result.getData();
             mAuthToken = tokens.get(OAuth2Constants.KEY_ACCESS_TOKEN);
 
@@ -1473,7 +1328,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
     /**
      * Processes the result of the access check performed to try the user credentials.
-     * <p>
+     * 
      * Creates a new account through the AccountManager.
      *
      * @param result Result of the operation.
@@ -1481,7 +1336,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
     @Override
     public void onAuthenticatorTaskCallback(RemoteOperationResult result) {
         mWaitingForOpId = Long.MAX_VALUE;
-        dismissDialog(WAIT_DIALOG_TAG);
+        dismissDialog();
         mAsyncTask = null;
 
         if (result.isSuccess()) {
@@ -1557,17 +1412,15 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
     /**
      * Creates a new account through the Account Authenticator that started this activity.
-     * <p>
+     * 
      * This makes the account permanent.
-     * <p>
+     * 
      * TODO Decide how to name the OAuth accounts
      */
     private boolean createAccount(RemoteOperationResult<UserInfo> authResult) {
         /// create and save new ownCloud account
         boolean isOAuth = AccountTypeUtils.
                 getAuthTokenTypeAccessToken(MainApp.Companion.getAccountType()).equals(mAuthTokenType);
-        boolean isSaml = AccountTypeUtils.
-                getAuthTokenTypeSamlSessionCookie(MainApp.Companion.getAccountType()).equals(mAuthTokenType);
 
         String lastPermanentLocation = authResult.getLastPermanentLocation();
         if (lastPermanentLocation != null) {
@@ -1590,7 +1443,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         } else {
             mAccount = newAccount;
 
-            if (isOAuth || isSaml) {
+            if (isOAuth) {
                 // with external authorizations, the password is never input in the app
                 mAccountMgr.addAccountExplicitly(mAccount, "", null);
             } else {
@@ -1612,7 +1465,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
                 SharedPreferences.Editor editor = PreferenceManager
                         .getDefaultSharedPreferences(this).edit();
                 editor.putString("select_oc_account", accountName);
-                editor.commit();
+                editor.apply();
             }
 
             /// prepare result to return to the Authenticator
@@ -1622,7 +1475,8 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             intent.putExtra(AccountManager.KEY_ACCOUNT_TYPE, MainApp.Companion.getAccountType());
             intent.putExtra(AccountManager.KEY_ACCOUNT_NAME, mAccount.name);
             intent.putExtra(AccountManager.KEY_USERDATA, username);
-            if (isOAuth || isSaml) {
+
+            if (isOAuth) {
                 mAccountMgr.setAuthToken(mAccount, mAuthTokenType, mAuthToken);
             }
             /// add user data to the new account; TODO probably can be done in the last parameter 
@@ -1635,7 +1489,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             );
             if (authResult.getData() != null) {
                 try {
-                    UserInfo userInfo = (UserInfo) authResult.getData();
+                    UserInfo userInfo = authResult.getData();
                     mAccountMgr.setUserData(
                             mAccount, Constants.KEY_DISPLAY_NAME, userInfo.mDisplayName
                     );
@@ -1646,9 +1500,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
                 Log_OC.w(TAG, "Couldn't get display name for " + username);
             }
 
-            if (isSaml) {
-                mAccountMgr.setUserData(mAccount, Constants.KEY_SUPPORTS_SAML_WEB_SSO, "TRUE");
-            } else if (isOAuth) {
+            if (isOAuth) {
                 mAccountMgr.setUserData(mAccount, Constants.KEY_SUPPORTS_OAUTH2, "TRUE");
                 mAccountMgr.setUserData(mAccount, Constants.KEY_OAUTH2_REFRESH_TOKEN, mRefreshToken);
             }
@@ -1667,7 +1519,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
     /**
      * Update an existing account
-     * <p>
+     * 
      * Check if the username of the account to update is the same as the username in the current
      * account, calling {@link #updateAccountAuthentication()} if so and showing an error otherwise
      *
@@ -1706,22 +1558,19 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
     /**
      * Updates the authentication token.
-     * <p>
+     * 
      * Sets the proper response so that the AccountAuthenticator that started this activity
      * saves a new authorization token for mAccount.
-     * <p>
+     * 
      * Kills the session kept by OwnCloudClientManager so that a new one will be created with
      * the new credentials when needed.
      */
     private void updateAccountAuthentication() throws AccountNotFoundException {
-
         Bundle response = new Bundle();
         response.putString(AccountManager.KEY_ACCOUNT_NAME, mAccount.name);
         response.putString(AccountManager.KEY_ACCOUNT_TYPE, mAccount.type);
 
         String OAuthSupported = mAccountMgr.getUserData(mAccount, Constants.KEY_SUPPORTS_OAUTH2);
-        String SAMLSupported = mAccountMgr.getUserData(mAccount, Constants.
-                KEY_SUPPORTS_SAML_WEB_SSO);
 
         if (AccountTypeUtils.getAuthTokenTypeAccessToken(MainApp.Companion.getAccountType()).
                 equals(mAuthTokenType)) { // OAuth
@@ -1730,43 +1579,11 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             // AuthenticatorActivity to update, without AccountManager intervention
             mAccountMgr.setAuthToken(mAccount, mAuthTokenType, mAuthToken);
 
-            if (OAuthSupported == null || OAuthSupported != null && OAuthSupported.equals("FALSE")) {
-
+            if (OAuthSupported == null || OAuthSupported.equals("FALSE")) {
                 mAccountMgr.setUserData(mAccount, Constants.KEY_SUPPORTS_OAUTH2, "TRUE");
             }
-
-            if (SAMLSupported != null && SAMLSupported.equals("TRUE")) {
-
-                mAccountMgr.setUserData(mAccount, Constants.KEY_SUPPORTS_SAML_WEB_SSO, "FALSE");
-            }
-
-        } else if (AccountTypeUtils.getAuthTokenTypeSamlSessionCookie(MainApp.Companion.getAccountType()).
-                equals(mAuthTokenType)) { // SAML
-
-            if (SAMLSupported == null || SAMLSupported != null && SAMLSupported.equals("FALSE")) {
-
-                mAccountMgr.setUserData(mAccount, Constants.KEY_SUPPORTS_SAML_WEB_SSO, "TRUE");
-            }
-
-            if (OAuthSupported != null && OAuthSupported.equals("TRUE")) {
-
-                mAccountMgr.setUserData(mAccount, Constants.KEY_SUPPORTS_OAUTH2, "FALSE");
-            }
-
-            response.putString(AccountManager.KEY_AUTHTOKEN, mAuthToken);
-            // the next line is necessary; by now, notifications are calling directly to the
-            // AuthenticatorActivity to update, without AccountManager intervention
-            mAccountMgr.setAuthToken(mAccount, mAuthTokenType, mAuthToken);
-
         } else { // BASIC
-
-            if (SAMLSupported != null && SAMLSupported.equals("TRUE")) {
-
-                mAccountMgr.setUserData(mAccount, Constants.KEY_SUPPORTS_SAML_WEB_SSO, "FALSE");
-            }
-
             if (OAuthSupported != null && OAuthSupported.equals("TRUE")) {
-
                 mAccountMgr.setUserData(mAccount, Constants.KEY_SUPPORTS_OAUTH2, "FALSE");
             }
 
@@ -1840,7 +1657,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
     /**
      * Called when the eye icon in the password field is clicked.
-     * <p>
+     * 
      * Toggles the visibility of the password in the field.
      */
     public void onViewPasswordClick() {
@@ -1856,7 +1673,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
     /**
      * Called when the 'action' button in an IME is pressed ('enter' in software keyboard).
-     * <p>
+     * 
      * Used to trigger the authentication check when the user presses 'enter' after writing the
      * password, or to throw the server test when the only field on screen is the URL input field.
      */
@@ -1880,8 +1697,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
     private abstract static class RightDrawableOnTouchListener implements OnTouchListener {
 
-        private int fuzz = 75;
-
         /**
          * {@inheritDoc}
          */
@@ -1898,6 +1713,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
                 final int x = (int) event.getX();
                 final int y = (int) event.getY();
                 final Rect bounds = rightDrawable.getBounds();
+                int fuzz = 75;
                 if (x >= (view.getRight() - bounds.width() - fuzz) &&
                         x <= (view.getRight() - view.getPaddingRight() + fuzz) &&
                         y >= (view.getPaddingTop() - fuzz) &&
@@ -1910,67 +1726,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         }
 
         public abstract boolean onDrawableTouch(final MotionEvent event);
-    }
-
-    private void getRemoteUserNameOperation(String sessionCookie) {
-        Intent getUserNameIntent = new Intent();
-        getUserNameIntent.setAction(OperationsService.ACTION_GET_USER_NAME);
-        getUserNameIntent.putExtra(OperationsService.EXTRA_SERVER_URL, mServerInfo.mBaseUrl);
-        getUserNameIntent.putExtra(OperationsService.EXTRA_COOKIE, sessionCookie);
-
-        if (mOperationsServiceBinder != null) {
-            mWaitingForOpId = mOperationsServiceBinder.queueNewOperation(getUserNameIntent);
-        }
-    }
-
-    @Override
-    public void onSsoFinished(String sessionCookie) {
-        if (sessionCookie != null && sessionCookie.length() > 0) {
-            Log_OC.d(TAG, "Successful SSO - time to save the account");
-            mAuthToken = sessionCookie;
-            getRemoteUserNameOperation(sessionCookie);
-            Fragment fd = getSupportFragmentManager().findFragmentByTag(SAML_DIALOG_TAG);
-            if (fd != null && fd instanceof DialogFragment) {
-                Dialog d = ((DialogFragment) fd).getDialog();
-                if (d != null && d.isShowing()) {
-                    d.dismiss();
-                }
-            }
-
-        } else {
-            // TODO - show fail
-            Log_OC.d(TAG, "SSO failed");
-        }
-    }
-
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        if (AccountTypeUtils.getAuthTokenTypeSamlSessionCookie(MainApp.Companion.getAccountType()).
-                equals(mAuthTokenType) &&
-                mHostUrlInput.hasFocus() && event.getAction() == MotionEvent.ACTION_DOWN) {
-            checkOcServer();
-        }
-        return super.onTouchEvent(event);
-    }
-
-    /**
-     * Show untrusted cert dialog
-     */
-    public void showUntrustedCertDialog(
-            X509Certificate x509Certificate, SslError error, SslErrorHandler handler
-    ) {
-        // Show a dialog with the certificate info
-        SslUntrustedCertDialog dialog;
-        if (x509Certificate == null) {
-            dialog = SslUntrustedCertDialog.newInstanceForEmptySslError(error, handler);
-        } else {
-            dialog = SslUntrustedCertDialog.
-                    newInstanceForFullSslError(x509Certificate, error, handler);
-        }
-        FragmentManager fm = getSupportFragmentManager();
-        FragmentTransaction ft = fm.beginTransaction();
-        ft.addToBackStack(null);
-        dialog.show(ft, UNTRUSTED_CERT_DIALOG_TAG);
     }
 
     /**
@@ -1987,26 +1742,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
     }
 
-    public void onSavedCertificate() {
-        Fragment fd = getSupportFragmentManager().findFragmentByTag(SAML_DIALOG_TAG);
-        if (fd == null) {
-            // if SAML dialog is not shown, 
-            // the SslDialog was shown due to an SSL error in the server check
-            checkOcServer();
-        }
-    }
-
-    @Override
-    public void onFailedSavingCertificate() {
-        dismissDialog(SAML_DIALOG_TAG);
-        showSnackMessage(R.string.ssl_validator_not_saved);
-    }
-
-    @Override
-    public void onCancelCertificate() {
-        dismissDialog(SAML_DIALOG_TAG);
-    }
-
     private void doOnResumeAndBound() {
         //Log_OC.e(TAG, "registering to listen for operation callbacks" );
         mOperationsServiceBinder.addOperationListener(AuthenticatorActivity.this, mHandler);
@@ -2020,9 +1755,9 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         }
     }
 
-    private void dismissDialog(String dialogTag) {
-        Fragment frag = getSupportFragmentManager().findFragmentByTag(dialogTag);
-        if (frag != null && frag instanceof DialogFragment) {
+    private void dismissDialog() {
+        Fragment frag = getSupportFragmentManager().findFragmentByTag(AuthenticatorActivity.WAIT_DIALOG_TAG);
+        if (frag instanceof DialogFragment) {
             DialogFragment dialog = (DialogFragment) frag;
             dialog.dismiss();
         }
@@ -2039,11 +1774,8 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
                     new ComponentName(AuthenticatorActivity.this, OperationsService.class)
             )) {
                 mOperationsServiceBinder = (OperationsServiceBinder) service;
-
                 doOnResumeAndBound();
-
             }
-
         }
 
         @Override
@@ -2055,46 +1787,5 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
                 mOperationsServiceBinder = null;
             }
         }
-    }
-
-    /**
-     * Create and show dialog for request authentication to the user
-     *
-     * @param webView Web view to embed into the authentication dialog.
-     * @param handler Object responsible for catching and recovering HTTP authentication fails.
-     */
-    public void createAuthenticationDialog(WebView webView, HttpAuthHandler handler) {
-
-        // Show a dialog with the certificate info
-        CredentialsDialogFragment dialog =
-                CredentialsDialogFragment.newInstanceForCredentials(webView, handler);
-        FragmentManager fm = getSupportFragmentManager();
-        FragmentTransaction ft = fm.beginTransaction();
-        ft.addToBackStack(null);
-        dialog.setCancelable(false);
-        dialog.show(ft, CREDENTIALS_DIALOG_TAG);
-
-        if (!mIsFirstAuthAttempt) {
-            showSnackMessage(R.string.saml_authentication_wrong_pass);
-
-        } else {
-            mIsFirstAuthAttempt = false;
-        }
-    }
-
-    /**
-     * For retrieving the clicking on authentication cancel button
-     */
-    public void doNegativeAuthenticatioDialogClick() {
-        mIsFirstAuthAttempt = true;
-    }
-
-    private void showSnackMessage(int messageResource) {
-        Snackbar snackbar = Snackbar.make(
-                findViewById(android.R.id.content),
-                messageResource,
-                Snackbar.LENGTH_LONG
-        );
-        snackbar.show();
     }
 }
