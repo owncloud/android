@@ -111,7 +111,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
             intent.putExtra(KEY_AUTH_TOKEN_TYPE, authTokenType);
             intent.putExtra(KEY_REQUIRED_FEATURES, requiredFeatures);
             intent.putExtra(KEY_LOGIN_OPTIONS, options);
-            intent.putExtra(AuthenticatorActivity.EXTRA_ACTION, AuthenticatorActivity.ACTION_CREATE);
+            intent.putExtra(AuthenticatorActivity.Companion.getEXTRA_ACTION(), AuthenticatorActivity.Companion.getACTION_CREATE());
 
             setIntentFlags(intent);
 
@@ -206,8 +206,8 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
         intent.putExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE, response);
         intent.putExtra(KEY_AUTH_TOKEN_TYPE, authTokenType);
         intent.putExtra(KEY_LOGIN_OPTIONS, options);
-        intent.putExtra(AuthenticatorActivity.EXTRA_ACCOUNT, account);
-        intent.putExtra(AuthenticatorActivity.EXTRA_ACTION, AuthenticatorActivity.ACTION_UPDATE_EXPIRED_TOKEN);
+        intent.putExtra(AuthenticatorActivity.Companion.getEXTRA_ACCOUNT(), account);
+        intent.putExtra(AuthenticatorActivity.Companion.getEXTRA_ACTION(), AuthenticatorActivity.Companion.getACTION_UPDATE_EXPIRED_TOKEN());
 
         final Bundle bundle = new Bundle();
         bundle.putParcelable(AccountManager.KEY_INTENT, intent);

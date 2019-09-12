@@ -29,7 +29,7 @@ import com.owncloud.android.lib.common.authentication.OwnCloudCredentials
 
 class LoginUseCase(
     context: Context,
-    val baseUrl: String,
+    private val baseUrl: String,
     private val ocAuthRepository: OCAuthRepository = OCAuthRepository(
         remoteAuthDataSource = OCRemoteAuthDataSource(
             OwnCloudClientFactory.createOwnCloudClient(
@@ -42,9 +42,8 @@ class LoginUseCase(
 ) : BaseUseCase<Unit, LoginUseCase.Params>() {
 
     override fun run(params: Params): UseCaseResult<Unit> {
-        // Existence check remote path
-        //
-        val a = ""
+        ocAuthRepository.login(baseUrl, params.ownCloudCredentials)
+        return UseCaseResult.success()
     }
 
     data class Params(
