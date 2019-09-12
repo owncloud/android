@@ -184,23 +184,6 @@
                 android:resource="@xml/exposed_filepaths" />
         </provider>
 
-        <activity
-            android:name=".authentication.AuthenticatorActivity"
-            android:exported="true"
-            android:launchMode="singleTask"
-            android:theme="@style/Theme.ownCloud.Authenticator">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data
-                    android:scheme="oc"
-                    android:host="android.owncloud.com" />
-            </intent-filter>
-        </activity>
-
         <service android:name=".services.OperationsService" />
         <service android:name=".files.services.FileDownloader" />
         <service android:name=".files.services.FileUploader" />

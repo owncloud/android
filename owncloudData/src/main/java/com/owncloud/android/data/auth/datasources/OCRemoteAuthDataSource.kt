@@ -37,8 +37,6 @@ class OCRemoteAuthDataSource(
             true
         )
 
-        val result = existenceCheckRemoteOperation.execute(client)
-
-        return result
+        return existenceCheckRemoteOperation.execute(client)
     }
 }

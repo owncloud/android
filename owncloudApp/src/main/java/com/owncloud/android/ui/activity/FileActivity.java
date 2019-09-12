@@ -38,7 +38,6 @@ import androidx.fragment.app.FragmentTransaction;
 import com.google.android.material.snackbar.Snackbar;
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
-import com.owncloud.android.authentication.AuthenticatorActivity;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.files.services.FileDownloader;
 import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder;
@@ -345,10 +344,10 @@ public class FileActivity extends DrawerActivity
 
         /// request credentials to user
         Intent updateAccountCredentials = new Intent(this, AuthenticatorActivity.class);
-        updateAccountCredentials.putExtra(AuthenticatorActivity.EXTRA_ACCOUNT, account);
+        updateAccountCredentials.putExtra(AuthenticatorActivity.Companion.getEXTRA_ACCOUNT(), account);
         updateAccountCredentials.putExtra(
-                AuthenticatorActivity.EXTRA_ACTION,
-                AuthenticatorActivity.ACTION_UPDATE_EXPIRED_TOKEN);
+                AuthenticatorActivity.Companion.getEXTRA_ACTION(),
+                AuthenticatorActivity.Companion.getACTION_UPDATE_EXPIRED_TOKEN());
         updateAccountCredentials.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
         startActivityForResult(updateAccountCredentials, REQUEST_CODE__UPDATE_CREDENTIALS);
     }

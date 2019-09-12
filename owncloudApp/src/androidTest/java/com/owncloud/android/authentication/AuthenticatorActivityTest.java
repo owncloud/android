@@ -99,7 +99,7 @@ public class AuthenticatorActivityTest {
             targetContext = InstrumentationRegistry.getInstrumentation()
                     .getTargetContext();
             Intent result = new Intent(targetContext, AuthenticatorActivity.class);
-            result.putExtra(EXTRA_ACTION, AuthenticatorActivity.ACTION_CREATE);
+            result.putExtra(EXTRA_ACTION, AuthenticatorActivity.Companion.getACTION_CREATE());
             return result;
         }
     };
