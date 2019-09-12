@@ -7,6 +7,7 @@
  * @author David González Verdugo
  * @author Christian Schabesberger
  * @author Shashvat Kedia
+ * @author Abel García de Prada
  * Copyright (C) 2012  Bartek Przybylski
  * Copyright (C) 2019 ownCloud GmbH.
  * <p>
@@ -47,7 +48,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
-import android.provider.DocumentsContract;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
@@ -114,6 +114,7 @@ import com.owncloud.android.ui.dialog.SslUntrustedCertDialog;
 import com.owncloud.android.ui.dialog.SslUntrustedCertDialog.OnSslUntrustedCertListener;
 import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter;
 import com.owncloud.android.utils.DisplayUtils;
+import com.owncloud.android.utils.DocumentProviderUtils;
 import com.owncloud.android.utils.PreferenceUtils;
 
 import java.security.cert.X509Certificate;
@@ -1656,10 +1657,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             setAccountAuthenticatorResult(intent.getExtras());
             setResult(RESULT_OK, intent);
 
-            // Notify login to Document Provider
-            String authority = getResources().getString(R.string.document_provider_authority);
-            Uri rootsUri = DocumentsContract.buildRootsUri(authority);
-            getContentResolver().notifyChange(rootsUri, null);
+            DocumentProviderUtils.Companion.notifyDocumentProviderRoots(getApplicationContext());
 
             return true;
         }

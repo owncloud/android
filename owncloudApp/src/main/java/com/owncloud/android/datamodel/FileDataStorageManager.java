@@ -5,19 +5,19 @@
  * @author Christian Schabesberger
  * @author David González Verdugo
  * @author Abel García de Prada
- * <p>
+ *
  * Copyright (C) 2012  Bartek Przybylski
  * Copyright (C) 2019 ownCloud GmbH.
- * <p>
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
  * as published by the Free Software Foundation.
- * <p>
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * <p>
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -265,7 +265,6 @@ public class FileDataStorageManager {
 
         } else {
             // new file
-
             setInitialAvailableOfflineStatus(file, cv);
 
             Uri result_uri = null;
@@ -470,8 +469,8 @@ public class FileDataStorageManager {
      * Adds the appropriate initial value for ProviderTableMeta.FILE_KEEP_IN_SYNC to
      * passed {@link ContentValues} instance.
      *
-     * @param file      {@link OCFile} which av-offline property will be set.
-     * @param cv        {@link ContentValues} instance where the property is added.
+     * @param file {@link OCFile} which av-offline property will be set.
+     * @param cv   {@link ContentValues} instance where the property is added.
      */
     private void setInitialAvailableOfflineStatus(OCFile file, ContentValues cv) {
         // set appropriate av-off folder depending on ancestor
@@ -496,8 +495,8 @@ public class FileDataStorageManager {
      *
      * If the file is a folder, updates the value of all its known descendants accordingly.
      *
-     * @param   file                        File which available-offline status will be updated.
-     * @return                              'true' if value was updated, 'false' otherwise.
+     * @param file File which available-offline status will be updated.
+     * @return 'true' if value was updated, 'false' otherwise.
      */
     public boolean saveLocalAvailableOfflineStatus(OCFile file) {
         if (!fileExists(file.getFileId())) {
@@ -711,7 +710,7 @@ public class FileDataStorageManager {
 
     /**
      * Updates database and file system for a file or folder that was moved to a different location.
-     * <p>
+     * 
      * TODO explore better (faster) implementations
      * TODO throw exceptions up !
      */
@@ -868,15 +867,24 @@ public class FileDataStorageManager {
                 }
             }
         }
-
     }
 
-    public void copyLocalFile(OCFile file, String targetPath) {
+    public void copyLocalFile(OCFile originalFile, String targetPath, String targetFileRemoteId) {
+        if (originalFile != null && originalFile.fileExists() && !OCFile.ROOT_PATH.equals(originalFile.getFileName())) {
+            // 1. Copy in database
+            OCFile ocTargetFile = new OCFile(targetPath);
+            long parentId = getFileByPath(FileStorageUtils.getParentPath(targetPath)).getFileId();
+            ocTargetFile.setParentId(parentId);
+            ocTargetFile.setRemoteId(targetFileRemoteId);
+            ocTargetFile.setFileLength(originalFile.getFileLength());
+            ocTargetFile.setMimetype(originalFile.getMimetype());
+            ocTargetFile.setModificationTimestamp(System.currentTimeMillis());
+            saveFile(ocTargetFile);
 
-        if (file != null && file.fileExists() && !OCFile.ROOT_PATH.equals(file.getFileName())) {
-            String localPath = FileStorageUtils.getDefaultSavePathFor(mAccount.name, file);
-            File localFile = new File(localPath);
+            // 2. Copy in local file system
             boolean copied = false;
+            String localPath = FileStorageUtils.getDefaultSavePathFor(mAccount.name, originalFile);
+            File localFile = new File(localPath);
             String defaultSavePath = FileStorageUtils.getSavePath(mAccount.name);
             if (localFile.exists()) {
                 File targetFile = new File(defaultSavePath + targetPath);
@@ -886,6 +894,7 @@ public class FileDataStorageManager {
                 }
                 copied = copyFile(localFile, targetFile);
             }
+
             Log_OC.d(TAG, "Local file COPIED : " + copied);
         }
     }
@@ -939,7 +948,7 @@ public class FileDataStorageManager {
 
         if (!onlyAvailableOffline) {
             selection = ProviderTableMeta.FILE_PARENT + "=?";
-            selectionArgs = new String[] {String.valueOf(parentId)};
+            selectionArgs = new String[]{String.valueOf(parentId)};
         } else {
             selection = ProviderTableMeta.FILE_PARENT + "=? AND (" + ProviderTableMeta.FILE_KEEP_IN_SYNC +
                     " = ? OR " + ProviderTableMeta.FILE_KEEP_IN_SYNC + "=? )";
@@ -977,7 +986,7 @@ public class FileDataStorageManager {
     /**
      * Checks if it is favorite or it is inside a favorite folder
      *
-     * @param file              {@link OCFile} which ancestors will be searched.
+     * @param file {@link OCFile} which ancestors will be searched.
      * @return true/false
      */
     private boolean isAnyAncestorAvailableOfflineFolder(OCFile file) {
@@ -987,9 +996,9 @@ public class FileDataStorageManager {
     /**
      * Returns ancestor folder with available offline status AVAILABLE_OFFLINE.
      *
-     * @param file              {@link OCFile} which ancestors will be searched.
+     * @param file {@link OCFile} which ancestors will be searched.
      * @return Ancestor folder with available offline status AVAILABLE_OFFLINE, or null if
-     *                          does not exist.
+     * does not exist.
      */
     public OCFile getAvailableOfflineAncestorOf(OCFile file) {
         OCFile avOffAncestor = null;
@@ -1199,7 +1208,7 @@ public class FileDataStorageManager {
     /**
      * Retrieves an stored {@link OCShare} given its id.
      *
-     * @param id    Identifier.
+     * @param id Identifier.
      * @return Stored {@link OCShare} given its id.
      */
     public OCShare getShareById(long id) {
@@ -1220,7 +1229,7 @@ public class FileDataStorageManager {
     /**
      * Retrieves an stored {@link OCShare} given its id.
      *
-     * @param id    Identifier of the share in OC server.
+     * @param id Identifier of the share in OC server.
      * @return Stored {@link OCShare} given its remote id.
      */
     public OCShare getShareByRemoteId(long id) {
@@ -1242,8 +1251,8 @@ public class FileDataStorageManager {
      * Checks the existance of an stored {@link RemoteShare} matching the given remote id (not to be confused with
      * the local id) in the current account.
      *
-     * @param remoteId      Remote of the share in the server.
-     * @return              'True' if a matching {@link RemoteShare} is stored in the current account.
+     * @param remoteId Remote of the share in the server.
+     * @return 'True' if a matching {@link RemoteShare} is stored in the current account.
      */
     private boolean shareExistsForRemoteId(long remoteId) {
         return shareExistsForValue(ProviderTableMeta.OCSHARES_ID_REMOTE_SHARED, String.valueOf(remoteId));
@@ -1253,9 +1262,9 @@ public class FileDataStorageManager {
      * Checks the existance of an stored {@link RemoteShare} in the current account
      * matching a given column and a value for that column
      *
-     * @param key           Name of the column to match.
-     * @param value         Value of the column to match.
-     * @return              'True' if a matching {@link RemoteShare} is stored in the current account.
+     * @param key   Name of the column to match.
+     * @param value Value of the column to match.
+     * @return 'True' if a matching {@link RemoteShare} is stored in the current account.
      */
     private boolean shareExistsForValue(String key, String value) {
         Cursor c = getShareCursorForValue(key, value);
@@ -1271,9 +1280,9 @@ public class FileDataStorageManager {
      * Gets a {@link Cursor} for an stored {@link RemoteShare} in the current account
      * matching a given column and a value for that column
      *
-     * @param key           Name of the column to match.
-     * @param value         Value of the column to match.
-     * @return              'True' if a matching {@link RemoteShare} is stored in the current account.
+     * @param key   Name of the column to match.
+     * @param value Value of the column to match.
+     * @return 'True' if a matching {@link RemoteShare} is stored in the current account.
      */
     private Cursor getShareCursorForValue(String key, String value) {
         Cursor c;
@@ -1349,8 +1358,9 @@ public class FileDataStorageManager {
 
     /**
      * Prepare operations to insert or update files to save in the given folder
-     * @param shares        List of shares to insert
-     * @param operations    List of operations
+     *
+     * @param shares     List of shares to insert
+     * @param operations List of operations
      * @return
      */
     private ArrayList<ContentProviderOperation> prepareInsertShares(
@@ -2005,7 +2015,7 @@ public class FileDataStorageManager {
      * Get a collection with all the files set by the user as available offline, from current account
      * putting away files whose parent is also available offline
      *
-     * @return      List with all the files set by current user as available offline.
+     * @return List with all the files set by current user as available offline.
      */
     public Vector<OCFile> getAvailableOfflineFilesFromCurrentAccount() {
         Vector<OCFile> result = new Vector<>();

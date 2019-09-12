@@ -4,6 +4,7 @@
  * @author Shashvat Kedia
  * @author Christian Schabesberger
  * @author David González Verdugo
+ * @author Abel García de Prada
  * Copyright (C) 2019 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
@@ -40,6 +41,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 import com.owncloud.android.lib.common.utils.Log_OC;
+import com.owncloud.android.utils.DocumentProviderUtils;
 import com.owncloud.android.utils.PreferenceUtils;
 
 import java.util.List;
@@ -204,6 +206,7 @@ public class PatternLockActivity extends AppCompatActivity {
                 Intent result = new Intent();
                 result.putExtra(KEY_CHECK_RESULT, true);
                 setResult(RESULT_OK, result);
+                DocumentProviderUtils.Companion.notifyDocumentProviderRoots(getApplicationContext());
                 finish();
             } else {
                 showErrorAndRestart(R.string.pattern_incorrect_pattern,
@@ -235,10 +238,11 @@ public class PatternLockActivity extends AppCompatActivity {
         }
     }
 
-    protected void savePatternAndExit() {
+    private void savePatternAndExit() {
         Intent result = new Intent();
         result.putExtra(KEY_PATTERN, mPatternValue);
         setResult(RESULT_OK, result);
+        DocumentProviderUtils.Companion.notifyDocumentProviderRoots(getApplicationContext());
         finish();
     }
 
