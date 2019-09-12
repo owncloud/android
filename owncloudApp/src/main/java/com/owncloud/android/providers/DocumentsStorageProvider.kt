@@ -365,8 +365,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
                 if (sourceFile.isFolder) {
                     newPath += OCFile.PATH_SEPARATOR
                 }
-                val newFile = currentStorageManager?.getFileByPath(newPath)
-                    ?: throw FileNotFoundException("File $newPath not found")
+                val newFile = getFileByPathOrException(newPath)
                 return newFile.fileId.toString()
             }
         }
@@ -380,12 +379,10 @@ class DocumentsStorageProvider : DocumentsProvider() {
         val sourceDocId = sourceDocumentId.toLong()
         updateCurrentStorageManagerIfNeeded(sourceDocId)
 
-        val sourceFile = currentStorageManager?.getFileById(sourceDocId)
-            ?: throw FileNotFoundException("File $sourceDocId not found")
+        val sourceFile = getFileByIdOrException(sourceDocId)
 
         val targetParentDocId = targetParentDocumentId.toLong()
-        val targetParentFile = currentStorageManager?.getFileById(targetParentDocId)
-            ?: throw FileNotFoundException("File $targetParentDocId not found")
+        val targetParentFile = getFileByIdOrException(targetParentDocId)
 
         MoveFileOperation(
             sourceFile.remotePath,
