@@ -43,7 +43,7 @@ import androidx.core.graphics.drawable.DrawableCompat;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
-import com.owncloud.android.authentication.AuthenticatorActivity;
+import com.owncloud.android.presentation.ui.auth.AuthenticatorActivity;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.files.services.FileDownloader;
 import com.owncloud.android.files.services.FileUploader;
@@ -234,9 +234,9 @@ public class ManageAccountsActivity extends FileActivity
     @Override
     public void changePasswordOfAccount(Account account) {
         Intent updateAccountCredentials = new Intent(ManageAccountsActivity.this, AuthenticatorActivity.class);
-        updateAccountCredentials.putExtra(AuthenticatorActivity.Companion.getEXTRA_ACCOUNT(), account);
-        updateAccountCredentials.putExtra(AuthenticatorActivity.Companion.getEXTRA_ACTION(),
-                AuthenticatorActivity.Companion.getACTION_UPDATE_TOKEN());
+        updateAccountCredentials.putExtra(AuthenticatorActivity.EXTRA_ACCOUNT, account);
+        updateAccountCredentials.putExtra(AuthenticatorActivity.EXTRA_ACTION,
+                AuthenticatorActivity.ACTION_UPDATE_TOKEN);
         startActivity(updateAccountCredentials);
     }
 

@@ -26,7 +26,7 @@
  * along with this program.  If not, see <http:></http:>//www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.authentication
+package com.owncloud.android.presentation.ui.auth
 
 import android.accounts.Account
 import android.accounts.AccountManager
@@ -101,6 +101,10 @@ import com.owncloud.android.utils.PreferenceUtils
 import java.util.ArrayList
 
 import android.content.Intent.ACTION_VIEW
+import com.owncloud.android.authentication.AccountAuthenticator
+import com.owncloud.android.authentication.AccountAuthenticatorActivity
+import com.owncloud.android.authentication.AccountUtils
+import com.owncloud.android.authentication.AuthenticatorAsyncTask
 
 /**
  * This Activity is used to add an ownCloud account to the App
@@ -197,7 +201,8 @@ class AuthenticatorActivity : AccountAuthenticatorActivity(), OnRemoteOperationL
             val packagesSupportingCustomTabs = ArrayList<String>()
             for (info in resolvedActivityList) {
                 val serviceIntent = Intent()
-                serviceIntent.action = ACTION_CUSTOM_TABS_CONNECTION
+                serviceIntent.action =
+                    ACTION_CUSTOM_TABS_CONNECTION
                 serviceIntent.setPackage(info.activityInfo.packageName)
                 if (pm.resolveService(serviceIntent, 0) != null) {
                     packagesSupportingCustomTabs.add(info.activityInfo.packageName)
@@ -262,7 +267,10 @@ class AuthenticatorActivity : AccountAuthenticatorActivity(), OnRemoteOperationL
         accountMgr = AccountManager.get(this)
 
         /// get input values
-        action = intent.getByteExtra(EXTRA_ACTION, ACTION_CREATE)
+        action = intent.getByteExtra(
+            EXTRA_ACTION,
+            ACTION_CREATE
+        )
         account = intent.extras?.getParcelable(EXTRA_ACCOUNT)
         if (savedInstanceState == null) {
             initAuthTokenType()
@@ -293,13 +301,13 @@ class AuthenticatorActivity : AccountAuthenticatorActivity(), OnRemoteOperationL
 
         checkServerButton = findViewById(R.id.embeddedCheckServerButton)
 
-        checkServerButton?.setOnClickListener { view -> checkOcServer() }
+        checkServerButton?.setOnClickListener { checkOcServer() }
 
-        findViewById<View>(R.id.centeredRefreshButton).setOnClickListener { view -> checkOcServer() }
-        findViewById<View>(R.id.embeddedRefreshButton).setOnClickListener { view -> checkOcServer() }
+        findViewById<View>(R.id.centeredRefreshButton).setOnClickListener { checkOcServer() }
+        findViewById<View>(R.id.embeddedRefreshButton).setOnClickListener { checkOcServer() }
 
         loginButton = findViewById(R.id.loginButton)
-        loginButton?.setOnClickListener { view -> onLoginClick() }
+        loginButton?.setOnClickListener { onLoginClick() }
 
         /// initialize block to be moved to single Fragment to check server and get info about it
         initServerPreFragment(savedInstanceState)
@@ -324,12 +332,12 @@ class AuthenticatorActivity : AccountAuthenticatorActivity(), OnRemoteOperationL
     private fun initAuthTokenType() {
         authTokenType = intent.extras?.getString(AccountAuthenticator.KEY_AUTH_TOKEN_TYPE)
         if (authTokenType == null) {
-            if (account != null) {
+            authTokenType = if (account != null) {
                 val oAuthRequired = accountMgr?.getUserData(account, Constants.KEY_SUPPORTS_OAUTH2) != null
-                authTokenType = if (oAuthRequired) OAUTH_TOKEN_TYPE else BASIC_TOKEN_TYPE
+                if (oAuthRequired) OAUTH_TOKEN_TYPE else BASIC_TOKEN_TYPE
             } else {
                 // OAuth will be the default authentication method
-                authTokenType = ""
+                ""
             }
         }
     }
@@ -343,10 +351,11 @@ class AuthenticatorActivity : AccountAuthenticatorActivity(), OnRemoteOperationL
 
         var instructionsMessageText: String? = null
         if (action == ACTION_UPDATE_EXPIRED_TOKEN) {
-            if (AccountTypeUtils.getAuthTokenTypeAccessToken(MainApp.accountType) == authTokenType) {
-                instructionsMessageText = getString(R.string.auth_expired_oauth_token_toast)
+            instructionsMessageText = if (AccountTypeUtils.getAuthTokenTypeAccessToken(MainApp.accountType) ==
+                authTokenType) {
+                getString(R.string.auth_expired_oauth_token_toast)
             } else {
-                instructionsMessageText = getString(R.string.auth_expired_basic_auth_toast)
+                getString(R.string.auth_expired_basic_auth_toast)
             }
         }
 
@@ -476,7 +485,7 @@ class AuthenticatorActivity : AccountAuthenticatorActivity(), OnRemoteOperationL
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
         }
 
-        findViewById<View>(R.id.scroll).setOnTouchListener { view, event ->
+        findViewById<View>(R.id.scroll).setOnTouchListener { _, event ->
             if (event.action == MotionEvent.ACTION_DOWN) {
                 if (hostUrlInput!!.hasFocus()) {
                     checkOcServer()
@@ -635,8 +644,6 @@ class AuthenticatorActivity : AccountAuthenticatorActivity(), OnRemoteOperationL
             val password = savedInstanceState.getString(KEY_PASSWORD)
             var credentials: OwnCloudCredentials? = null
             if (BASIC_TOKEN_TYPE == authTokenType) {
-                val version = savedInstanceState.getString(KEY_OC_VERSION)
-                val ocVersion = if (version != null) OwnCloudVersion(version) else null
                 credentials = OwnCloudCredentialsFactory.newBasicCredentials(
                     username,
                     password
@@ -689,7 +696,7 @@ class AuthenticatorActivity : AccountAuthenticatorActivity(), OnRemoteOperationL
             operationsServiceBinder = null
         }
 
-        if (customTabServiceConnection != null && mCustomTabPackageName != null) {
+        if (mCustomTabPackageName != null) {
             unbindService(customTabServiceConnection)
         }
 
@@ -712,7 +719,9 @@ class AuthenticatorActivity : AccountAuthenticatorActivity(), OnRemoteOperationL
 
             /// Showing the dialog with instructions for the user
             val dialog = LoadingDialog.newInstance(R.string.auth_getting_authorization, true)
-            dialog.show(supportFragmentManager, WAIT_DIALOG_TAG)
+            dialog.show(supportFragmentManager,
+                WAIT_DIALOG_TAG
+            )
 
             /// CREATE ACCESS TOKEN to the oAuth server
             val getAccessTokenIntent = Intent()
@@ -799,7 +808,7 @@ class AuthenticatorActivity : AccountAuthenticatorActivity(), OnRemoteOperationL
         serverInfo = GetServerInfoOperation.ServerInfo()
         showRefreshButton(false)
 
-        if (uri.length != 0) {
+        if (uri.isNotEmpty()) {
             uri = stripIndexPhpOrAppsFiles(uri, hostUrlInput!!)
             uri = subdomainToLower(uri, hostUrlInput!!)
 
@@ -894,11 +903,11 @@ class AuthenticatorActivity : AccountAuthenticatorActivity(), OnRemoteOperationL
      *
      * IMPORTANT ENTRY POINT 4
      */
-    fun onLoginClick() {
+    private fun onLoginClick() {
         // this check should be unnecessary
         if (serverInfo.mVersion == null ||
             serverInfo.mBaseUrl == null ||
-            serverInfo.mBaseUrl.length == 0
+            serverInfo.mBaseUrl.isEmpty()
         ) {
             serverStatusIcon = R.drawable.common_error
             serverStatusText = resources.getString(R.string.auth_wtf_reenter_URL)
@@ -925,7 +934,9 @@ class AuthenticatorActivity : AccountAuthenticatorActivity(), OnRemoteOperationL
 
         /// be gentle with the user
         val dialog = LoadingDialog.newInstance(R.string.auth_trying_to_login, true)
-        dialog.show(supportFragmentManager, WAIT_DIALOG_TAG)
+        dialog.show(supportFragmentManager,
+            WAIT_DIALOG_TAG
+        )
 
         /// validate credentials accessing the root folder
         val credentials = OwnCloudCredentialsFactory.newBasicCredentials(
@@ -987,7 +998,7 @@ class AuthenticatorActivity : AccountAuthenticatorActivity(), OnRemoteOperationL
 
     private fun openUrlInBrowser(url: String) {
         try {
-            val intent = Intent(Intent.ACTION_VIEW)
+            val intent = Intent(ACTION_VIEW)
             intent.data = Uri.parse(url)
             startActivity(intent)
         } catch (ae: ActivityNotFoundException) {
@@ -999,7 +1010,7 @@ class AuthenticatorActivity : AccountAuthenticatorActivity(), OnRemoteOperationL
     private fun onNoBrowserInstalled() {
         AlertDialog.Builder(this)
             .setMessage(R.string.no_borwser_installed_alert)
-            .setPositiveButton(android.R.string.ok) { dialog, which -> dialog.dismiss() }
+            .setPositiveButton(android.R.string.ok) { dialog, _ -> dialog.dismiss() }
             .create()
             .show()
     }
@@ -1082,9 +1093,9 @@ class AuthenticatorActivity : AccountAuthenticatorActivity(), OnRemoteOperationL
     }
 
     // TODO remove, if possible
-    private fun normalizeUrl(url: String?, sslWhenUnprefixed: Boolean): String {
-        var url = url
-        if (url != null && url.length > 0) {
+    private fun normalizeUrl(urlToNormalize: String?, sslWhenUnprefixed: Boolean): String {
+        var url = urlToNormalize
+        if (url != null && url.isNotEmpty()) {
             url = url.trim { it <= ' ' }
             if (!url.toLowerCase().startsWith("http://") && !url.toLowerCase().startsWith("https://")) {
                 if (sslWhenUnprefixed) {
@@ -1124,18 +1135,19 @@ class AuthenticatorActivity : AccountAuthenticatorActivity(), OnRemoteOperationL
     private fun subdomainToLower(url: String, mHostUrlInput: EditText): String {
         var url = url
         if (url.toLowerCase().startsWith("http://") || url.toLowerCase().startsWith("https://")) {
-            if (url.indexOf("/", 8) != -1) {
-                url = url.substring(0, url.indexOf("/", 8)).toLowerCase() + url.substring(url.indexOf("/", 8))
+            url = if (url.indexOf("/", 8) != -1) {
+                url.substring(0, url.indexOf("/", 8)).toLowerCase() +
+                        url.substring(url.indexOf("/", 8))
             } else {
-                url = url.toLowerCase()
+                url.toLowerCase()
             }
 
             mHostUrlInput.setText(url)
         } else {
-            if (url.contains("/")) {
-                url = url.substring(0, url.indexOf("/")).toLowerCase() + url.substring(url.indexOf("/"))
+            url = if (url.contains("/")) {
+                url.substring(0, url.indexOf("/")).toLowerCase() + url.substring(url.indexOf("/"))
             } else {
-                url = url.toLowerCase()
+                url.toLowerCase()
             }
 
             mHostUrlInput.setText(url)
@@ -1162,12 +1174,12 @@ class AuthenticatorActivity : AccountAuthenticatorActivity(), OnRemoteOperationL
         serverStatusIcon = R.drawable.common_error    // the most common case in the switch below
 
         when (result.code) {
-            RemoteOperationResult.ResultCode.OK_SSL -> {
+            ResultCode.OK_SSL -> {
                 serverStatusIcon = R.drawable.ic_lock
                 serverStatusText = resources.getString(R.string.auth_secure_connection)
             }
 
-            RemoteOperationResult.ResultCode.OK_NO_SSL, RemoteOperationResult.ResultCode.OK -> if (hostUrlInput?.text.toString().trim { it <= ' ' }.toLowerCase().startsWith(
+            ResultCode.OK_NO_SSL, ResultCode.OK -> if (hostUrlInput?.text.toString().trim { it <= ' ' }.toLowerCase().startsWith(
                     "http://"
                 )
             ) {
@@ -1178,11 +1190,11 @@ class AuthenticatorActivity : AccountAuthenticatorActivity(), OnRemoteOperationL
                 serverStatusIcon = R.drawable.ic_lock_open
             }
 
-            RemoteOperationResult.ResultCode.OK_REDIRECT_TO_NON_SECURE_CONNECTION -> {
+            ResultCode.OK_REDIRECT_TO_NON_SECURE_CONNECTION -> {
                 serverStatusIcon = R.drawable.ic_lock_open
                 serverStatusText = ErrorMessageAdapter.getResultMessage(result, null, resources)
             }
-            RemoteOperationResult.ResultCode.NO_NETWORK_CONNECTION -> {
+            ResultCode.NO_NETWORK_CONNECTION -> {
                 serverStatusIcon = R.drawable.no_network
                 serverStatusText = ErrorMessageAdapter.getResultMessage(result, null, resources)
             }
@@ -1199,11 +1211,11 @@ class AuthenticatorActivity : AccountAuthenticatorActivity(), OnRemoteOperationL
         authStatusIcon = R.drawable.common_error // the most common case in the switch below
 
         when (result.code) {
-            RemoteOperationResult.ResultCode.OK_SSL -> {
+            ResultCode.OK_SSL -> {
                 authStatusIcon = R.drawable.ic_lock
                 authStatusText = resources.getString(R.string.auth_secure_connection)
             }
-            RemoteOperationResult.ResultCode.OK_NO_SSL, RemoteOperationResult.ResultCode.OK -> if (hostUrlInput?.text.toString().trim { it <= ' ' }.toLowerCase().startsWith(
+            ResultCode.OK_NO_SSL, ResultCode.OK -> if (hostUrlInput?.text.toString().trim { it <= ' ' }.toLowerCase().startsWith(
                     "http://"
                 )
             ) {
@@ -1214,7 +1226,7 @@ class AuthenticatorActivity : AccountAuthenticatorActivity(), OnRemoteOperationL
                 authStatusIcon = R.drawable.ic_lock_open
             }
 
-            RemoteOperationResult.ResultCode.NO_NETWORK_CONNECTION -> {
+            ResultCode.NO_NETWORK_CONNECTION -> {
                 authStatusIcon = R.drawable.no_network
                 authStatusText = ErrorMessageAdapter.getResultMessage(result, null, resources)
             }
@@ -1234,7 +1246,9 @@ class AuthenticatorActivity : AccountAuthenticatorActivity(), OnRemoteOperationL
         if (result.isSuccess) {
             /// be gentle with the user
             val dialog = LoadingDialog.newInstance(R.string.auth_trying_to_login, true)
-            dialog.show(supportFragmentManager, WAIT_DIALOG_TAG)
+            dialog.show(supportFragmentManager,
+                WAIT_DIALOG_TAG
+            )
 
             /// time to test the retrieved access token on the ownCloud server
             val tokens = result.data
@@ -1287,15 +1301,11 @@ class AuthenticatorActivity : AccountAuthenticatorActivity(), OnRemoteOperationL
             } else {
 
                 try {
-
-                    if (BASIC_TOKEN_TYPE == authTokenType) {
-
+                    success = if (BASIC_TOKEN_TYPE == authTokenType) {
                         updateAccountAuthentication()
-                        success = true
-
+                        true
                     } else {
-
-                        success = updateAccount(username)
+                        updateAccount(username)
                     }
 
                 } catch (e: AccountNotFoundException) {
@@ -1359,7 +1369,8 @@ class AuthenticatorActivity : AccountAuthenticatorActivity(), OnRemoteOperationL
 
         val lastPermanentLocation = authResult.lastPermanentLocation
         if (lastPermanentLocation != null) {
-            serverInfo.mBaseUrl = AccountUtils.trimWebdavSuffix(lastPermanentLocation)
+            serverInfo.mBaseUrl =
+                AccountUtils.trimWebdavSuffix(lastPermanentLocation)
         }
 
         val uri = Uri.parse(serverInfo.mBaseUrl)
@@ -1371,7 +1382,7 @@ class AuthenticatorActivity : AccountAuthenticatorActivity(), OnRemoteOperationL
             val result = RemoteOperationResult<Any>(ResultCode.ACCOUNT_NOT_NEW)
             updateAuthStatusIconAndText(result)
             showAuthStatus()
-            Log_OC.d(TAG, result.getLogMessage())
+            Log_OC.d(TAG, result.logMessage)
             return false
 
         } else {
@@ -1390,7 +1401,7 @@ class AuthenticatorActivity : AccountAuthenticatorActivity(), OnRemoteOperationL
             accountMgr?.setUserData(
                 account,
                 Constants.KEY_OC_ACCOUNT_VERSION,
-                Integer.toString(AccountUtils.ACCOUNT_VERSION)
+                AccountUtils.ACCOUNT_VERSION.toString()
             )
 
             /// add the new account as default in preferences, if there is none already
@@ -1544,10 +1555,8 @@ class AuthenticatorActivity : AccountAuthenticatorActivity(), OnRemoteOperationL
 
     /**
      * Starts and activity to open the 'new account' page in the ownCloud web site
-     *
-     * @param view 'Account register' button
      */
-    fun onRegisterClick(view: View) {
+    fun onRegisterClick() {
         val register = Intent(
             ACTION_VIEW, Uri.parse(getString(R.string.welcome_link_url))
         )
@@ -1680,7 +1689,9 @@ class AuthenticatorActivity : AccountAuthenticatorActivity(), OnRemoteOperationL
         val fm = supportFragmentManager
         val ft = fm.beginTransaction()
         ft.addToBackStack(null)
-        dialog.show(ft, UNTRUSTED_CERT_DIALOG_TAG)
+        dialog.show(ft,
+            UNTRUSTED_CERT_DIALOG_TAG
+        )
 
     }
 
@@ -1698,7 +1709,7 @@ class AuthenticatorActivity : AccountAuthenticatorActivity(), OnRemoteOperationL
     }
 
     private fun dismissDialog() {
-        val frag = supportFragmentManager.findFragmentByTag(AuthenticatorActivity.WAIT_DIALOG_TAG)
+        val frag = supportFragmentManager.findFragmentByTag(WAIT_DIALOG_TAG)
         if (frag is DialogFragment) {
             val dialog = frag as DialogFragment?
             dialog?.dismiss()
@@ -1729,37 +1740,37 @@ class AuthenticatorActivity : AccountAuthenticatorActivity(), OnRemoteOperationL
 
         private val TAG = AuthenticatorActivity::class.java.simpleName
 
-        val EXTRA_ACTION = "ACTION"
-        val EXTRA_ACCOUNT = "ACCOUNT"
+        const val EXTRA_ACTION = "ACTION"
+        const val EXTRA_ACCOUNT = "ACCOUNT"
 
-        private val KEY_AUTH_TOKEN_TYPE = "AUTH_TOKEN_TYPE"
+        private const val KEY_AUTH_TOKEN_TYPE = "AUTH_TOKEN_TYPE"
 
-        private val KEY_HOST_URL_TEXT = "HOST_URL_TEXT"
-        private val KEY_OC_VERSION = "OC_VERSION"
-        private val KEY_SERVER_VALID = "SERVER_VALID"
-        private val KEY_SERVER_CHECKED = "SERVER_CHECKED"
-        private val KEY_SERVER_STATUS_TEXT = "SERVER_STATUS_TEXT"
-        private val KEY_SERVER_STATUS_ICON = "SERVER_STATUS_ICON"
-        private val KEY_IS_SSL_CONN = "IS_SSL_CONN"
-        private val KEY_PASSWORD_EXPOSED = "PASSWORD_VISIBLE"
-        private val KEY_AUTH_STATUS_TEXT = "AUTH_STATUS_TEXT"
-        private val KEY_AUTH_STATUS_ICON = "AUTH_STATUS_ICON"
-        private val KEY_SERVER_AUTH_METHOD = "SERVER_AUTH_METHOD"
-        private val KEY_WAITING_FOR_OP_ID = "WAITING_FOR_OP_ID"
-        private val KEY_AUTH_TOKEN = "AUTH_TOKEN"
+        private const val KEY_HOST_URL_TEXT = "HOST_URL_TEXT"
+        private const val KEY_OC_VERSION = "OC_VERSION"
+        private const val KEY_SERVER_VALID = "SERVER_VALID"
+        private const val KEY_SERVER_CHECKED = "SERVER_CHECKED"
+        private const val KEY_SERVER_STATUS_TEXT = "SERVER_STATUS_TEXT"
+        private const val KEY_SERVER_STATUS_ICON = "SERVER_STATUS_ICON"
+        private const val KEY_IS_SSL_CONN = "IS_SSL_CONN"
+        private const val KEY_PASSWORD_EXPOSED = "PASSWORD_VISIBLE"
+        private const val KEY_AUTH_STATUS_TEXT = "AUTH_STATUS_TEXT"
+        private const val KEY_AUTH_STATUS_ICON = "AUTH_STATUS_ICON"
+        private const val KEY_SERVER_AUTH_METHOD = "SERVER_AUTH_METHOD"
+        private const val KEY_WAITING_FOR_OP_ID = "WAITING_FOR_OP_ID"
+        private const val KEY_AUTH_TOKEN = "AUTH_TOKEN"
 
-        val ACTION_CREATE: Byte = 0
-        val ACTION_UPDATE_TOKEN: Byte = 1               // requested by the user
-        val ACTION_UPDATE_EXPIRED_TOKEN: Byte = 2       // detected by the app
+        const val ACTION_CREATE: Byte = 0
+        const val ACTION_UPDATE_TOKEN: Byte = 1               // requested by the user
+        const val ACTION_UPDATE_EXPIRED_TOKEN: Byte = 2       // detected by the app
 
-        private val UNTRUSTED_CERT_DIALOG_TAG = "UNTRUSTED_CERT_DIALOG"
-        private val WAIT_DIALOG_TAG = "WAIT_DIALOG"
-        private val KEY_AUTH_IS_FIRST_ATTEMPT_TAG = "KEY_AUTH_IS_FIRST_ATTEMPT"
+        private const val UNTRUSTED_CERT_DIALOG_TAG = "UNTRUSTED_CERT_DIALOG"
+        private const val WAIT_DIALOG_TAG = "WAIT_DIALOG"
+        private const val KEY_AUTH_IS_FIRST_ATTEMPT_TAG = "KEY_AUTH_IS_FIRST_ATTEMPT"
 
-        private val KEY_USERNAME = "USERNAME"
-        private val KEY_PASSWORD = "PASSWORD"
-        private val KEY_ASYNC_TASK_IN_PROGRESS = "AUTH_IN_PROGRESS"
+        private const val KEY_USERNAME = "USERNAME"
+        private const val KEY_PASSWORD = "PASSWORD"
+        private const val KEY_ASYNC_TASK_IN_PROGRESS = "AUTH_IN_PROGRESS"
 
-        private val ACTION_CUSTOM_TABS_CONNECTION = "android.support.customtabs.action.CustomTabsService"
+        private const val ACTION_CUSTOM_TABS_CONNECTION = "android.support.customtabs.action.CustomTabsService"
     }
 }

@@ -185,7 +185,7 @@
         </provider>
 
         <activity
-            android:name=".authentication.AuthenticatorActivity"
+            android:name=".presentation.ui.auth.AuthenticatorActivity"
             android:exported="true"
             android:launchMode="singleTask"
             android:theme="@style/Theme.ownCloud.Authenticator">
