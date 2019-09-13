@@ -37,6 +37,7 @@ import androidx.test.rule.ActivityTestRule;
 import androidx.test.uiautomator.UiDevice;
 import com.owncloud.android.R;
 import com.owncloud.android.lib.common.utils.Log_OC;
+import com.owncloud.android.presentation.ui.auth.AuthenticatorActivity;
 import com.owncloud.android.utils.AccountsManager;
 import com.owncloud.android.utils.ServerType;
 import org.junit.After;
@@ -99,7 +100,7 @@ public class AuthenticatorActivityTest {
             targetContext = InstrumentationRegistry.getInstrumentation()
                     .getTargetContext();
             Intent result = new Intent(targetContext, AuthenticatorActivity.class);
-            result.putExtra(EXTRA_ACTION, AuthenticatorActivity.Companion.getACTION_CREATE());
+            result.putExtra(EXTRA_ACTION, AuthenticatorActivity.ACTION_CREATE);
             return result;
         }
     };

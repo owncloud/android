@@ -44,6 +44,7 @@ import androidx.core.app.NotificationCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
+import com.owncloud.android.presentation.ui.auth.AuthenticatorActivity;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.lib.common.OwnCloudAccount;
@@ -640,11 +641,11 @@ public class FileDownloader extends Service
 
                 // let the user update credentials with one click
                 Intent updateAccountCredentials = new Intent(this, AuthenticatorActivity.class);
-                updateAccountCredentials.putExtra(AuthenticatorActivity.Companion.getEXTRA_ACCOUNT(),
+                updateAccountCredentials.putExtra(AuthenticatorActivity.EXTRA_ACCOUNT,
                         download.getAccount());
                 updateAccountCredentials.putExtra(
-                        AuthenticatorActivity.Companion.getEXTRA_ACTION(),
-                        AuthenticatorActivity.Companion.getACTION_UPDATE_EXPIRED_TOKEN()
+                        AuthenticatorActivity.EXTRA_ACTION,
+                        AuthenticatorActivity.ACTION_UPDATE_EXPIRED_TOKEN
                 );
                 updateAccountCredentials.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 updateAccountCredentials.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
