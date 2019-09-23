@@ -188,8 +188,12 @@ public class RemoteOperationResult<T>
                 try {
                     if (xmlParser.parseXMLResponse(is)) {
                         mCode = ResultCode.INVALID_CHARACTER_DETECT_IN_SERVER;
+                    } else {
+                        parseErrorMessageAndSetCode(
+                                httpMethod.getResponseBodyAsString(),
+                                ResultCode.SPECIFIC_BAD_REQUEST
+                        );
                     }
-
                 } catch (Exception e) {
                     Timber.w("Error reading exception from server: %s", e.getMessage());
                     // mCode stays as set in this(success, httpCode, headers)
@@ -305,13 +309,12 @@ public class RemoteOperationResult<T>
      * @param resultCode   our own custom result code
      */
     private void parseErrorMessageAndSetCode(String bodyResponse, ResultCode resultCode) {
-
         if (bodyResponse != null && bodyResponse.length() > 0) {
             InputStream is = new ByteArrayInputStream(bodyResponse.getBytes());
             ErrorMessageParser xmlParser = new ErrorMessageParser();
             try {
                 String errorMessage = xmlParser.parseXMLResponse(is);
-                if (errorMessage != null && !errorMessage.equals("")) {
+                if (!errorMessage.equals("")) {
                     mCode = resultCode;
                     mHttpPhrase = errorMessage;
                 }
@@ -566,6 +569,7 @@ public class RemoteOperationResult<T>
         SERVICE_UNAVAILABLE,
         SPECIFIC_SERVICE_UNAVAILABLE,
         SPECIFIC_UNSUPPORTED_MEDIA_TYPE,
-        SPECIFIC_METHOD_NOT_ALLOWED
+        SPECIFIC_METHOD_NOT_ALLOWED,
+        SPECIFIC_BAD_REQUEST
     }
 }

@@ -77,7 +77,7 @@ public class FileUtils {
     public static boolean isValidName(String fileName) {
         boolean result = true;
 
-        Log_OC.d(TAG, "fileName =======" + fileName);
+        Timber.d("fileName =======%s", fileName);
         if (fileName.contains(PATH_SEPARATOR)) {
             result = false;
         }
