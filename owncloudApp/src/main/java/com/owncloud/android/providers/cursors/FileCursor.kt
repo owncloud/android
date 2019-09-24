@@ -53,8 +53,9 @@ class FileCursor(projection: Array<String>?) : MatrixCursor(projection ?: DEFAUL
             flags = flags or Document.FLAG_SUPPORTS_RENAME
         }
 
-        if (Build.VERSION.SDK_INT>= Build.VERSION_CODES.N){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             flags = flags or Document.FLAG_SUPPORTS_COPY
+            flags = flags or Document.FLAG_SUPPORTS_MOVE
         }
 
         newRow()

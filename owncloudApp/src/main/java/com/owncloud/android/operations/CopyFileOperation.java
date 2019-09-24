@@ -45,9 +45,8 @@ public class CopyFileOperation extends SyncOperation {
      *
      * @param srcPath          Remote path of the {@link OCFile} to move.
      * @param targetParentPath Path to the folder where the file will be copied into.
-     * @param account          OwnCloud account containing both the file and the target folder
      */
-    public CopyFileOperation(String srcPath, String targetParentPath, Account account) {
+    public CopyFileOperation(String srcPath, String targetParentPath) {
         mSrcPath = srcPath;
         mTargetParentPath = targetParentPath;
         if (!mTargetParentPath.endsWith(OCFile.PATH_SEPARATOR)) {
