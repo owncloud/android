@@ -104,19 +104,19 @@ class RemoteShare : Parcelable, Serializable {
 
     fun readFromParcel(source: Parcel) {
         id = source.readLong()
-        shareWith = source.readString()
-        path = source.readString()
-        token = source.readString()
-        sharedWithDisplayName = source.readString()
-        sharedWithAdditionalInfo = source.readString()
-        name = source.readString()
-        shareLink = source.readString()
+        shareWith = source.readString().toString()
+        path = source.readString().toString()
+        token = source.readString().toString()
+        sharedWithDisplayName = source.readString().toString()
+        sharedWithAdditionalInfo = source.readString().toString()
+        name = source.readString().toString()
+        shareLink = source.readString().toString()
         fileSource = source.readLong()
         itemSource = source.readLong()
+        shareType = ShareType.NO_SHARED
         try {
-            shareType = ShareType.valueOf(source.readString())
+            shareType = source.readString()?.let { ShareType.valueOf(it) }
         } catch (x: IllegalArgumentException) {
-            shareType = ShareType.NO_SHARED
         }
         permissions = source.readInt()
         sharedDate = source.readLong()

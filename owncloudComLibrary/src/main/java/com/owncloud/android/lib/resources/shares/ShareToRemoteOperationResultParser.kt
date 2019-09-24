@@ -47,7 +47,7 @@ class ShareToRemoteOperationResultParser(private var shareXmlParser: ShareXMLPar
         }
 
         var result: RemoteOperationResult<ShareParserResult>
-        var resultData: List<RemoteShare>?
+        val resultData: List<RemoteShare>?
 
         try {
             // Parse xml response and obtain the list of shares
@@ -81,7 +81,9 @@ class ShareToRemoteOperationResultParser(private var shareXmlParser: ShareXMLPar
                             share
                         }
 
-                        result.setData(ShareParserResult(ArrayList(resultData)))
+                        if (resultData != null) {
+                            result.setData(ShareParserResult(ArrayList(resultData.toMutableList())))
+                        }
 
                     } else {
                         result = RemoteOperationResult(RemoteOperationResult.ResultCode.WRONG_SERVER_RESPONSE)
