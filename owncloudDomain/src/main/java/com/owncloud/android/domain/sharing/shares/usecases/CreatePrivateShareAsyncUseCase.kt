@@ -24,12 +24,13 @@ import android.content.Context
 import com.owncloud.android.data.sharing.shares.ShareRepository
 import com.owncloud.android.data.sharing.shares.datasources.OCLocalShareDataSource
 import com.owncloud.android.data.sharing.shares.datasources.OCRemoteShareDataSource
-import com.owncloud.android.domain.UseCaseResult
+import com.owncloud.android.domain.BaseAsyncUseCase
 import com.owncloud.android.domain.sharing.shares.OCShareRepository
 import com.owncloud.android.lib.common.OwnCloudAccount
 import com.owncloud.android.lib.common.OwnCloudClientManagerFactory
+import com.owncloud.android.lib.resources.shares.ShareType
 
-class DeleteShareUseCase(
+class CreatePrivateShareAsyncUseCase(
     context: Context,
     val account: Account,
     private val shareRepository: ShareRepository = OCShareRepository(
@@ -41,23 +42,21 @@ class DeleteShareUseCase(
             )
         )
     )
-) : BaseUseCase<Unit, DeleteShareUseCase.Params>() {
-    override fun run(params: Params): UseCaseResult<Unit> {
-        shareRepository.deleteShare(
-            params.remoteId
-        ).also { dataResult ->
-            if (!dataResult.isSuccess()) {
-                return UseCaseResult.error(
-                    code = dataResult.code,
-                    msg = dataResult.msg,
-                    exception = dataResult.exception
-                )
-            }
-            return UseCaseResult.success()
-        }
-    }
+) : BaseAsyncUseCase<Unit, CreatePrivateShareAsyncUseCase.Params>() {
+
+    override suspend fun run(params: Params) =
+        shareRepository.insertPrivateShare(
+            params.filePath,
+            params.shareType,
+            params.shareeName,
+            params.permissions,
+            account.name
+        )
 
     data class Params(
-        val remoteId: Long
+        val filePath: String,
+        val shareType: ShareType?,
+        val shareeName: String,
+        val permissions: Int
     )
 }
