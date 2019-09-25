@@ -21,13 +21,10 @@ package com.owncloud.android.domain.sharing.shares.usecases
 
 import android.accounts.Account
 import android.content.Context
-import androidx.lifecycle.LiveData
 import com.owncloud.android.data.sharing.shares.ShareRepository
 import com.owncloud.android.data.sharing.shares.datasources.OCLocalShareDataSource
 import com.owncloud.android.data.sharing.shares.datasources.OCRemoteShareDataSource
-import com.owncloud.android.data.sharing.shares.db.OCShareEntity
 import com.owncloud.android.domain.BaseAsyncUseCase
-import com.owncloud.android.domain.UseCaseResult
 import com.owncloud.android.domain.sharing.shares.OCShareRepository
 import com.owncloud.android.lib.common.OwnCloudAccount
 import com.owncloud.android.lib.common.OwnCloudClientManagerFactory
@@ -44,24 +41,13 @@ class RefreshSharesFromNetworkAsyncUseCase(
             )
         )
     )
-) : BaseAsyncUseCase<LiveData<List<OCShareEntity>>, RefreshSharesFromNetworkAsyncUseCase.Params>() {
+) : BaseAsyncUseCase<Unit, RefreshSharesFromNetworkAsyncUseCase.Params>() {
 
-    override fun run(params: Params): UseCaseResult<LiveData<List<OCShareEntity>>> {
+    override suspend fun run(params: Params) =
         shareRepository.refreshSharesFromNetwork(
             params.filePath,
             params.accountName
-        ).also { dataResult ->
-            if (!dataResult.isSuccess()) {
-                return UseCaseResult.error(
-                    code = dataResult.code,
-                    msg = dataResult.msg,
-                    exception = dataResult.exception
-                )
-            }
-
-            return UseCaseResult.success()
-        }
-    }
+        )
 
     data class Params(
         val filePath: String,

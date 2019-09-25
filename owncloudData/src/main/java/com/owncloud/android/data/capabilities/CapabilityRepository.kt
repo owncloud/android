@@ -20,7 +20,6 @@
 package com.owncloud.android.data.capabilities
 
 import androidx.lifecycle.LiveData
-import com.owncloud.android.data.DataResult
 import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
 
 interface CapabilityRepository {
@@ -31,5 +30,5 @@ interface CapabilityRepository {
     fun refreshCapabilitiesForAccount(
         accountName: String,
         shouldFetchFromNetwork: Boolean = true
-    ): DataResult<Unit>
+    )
 }

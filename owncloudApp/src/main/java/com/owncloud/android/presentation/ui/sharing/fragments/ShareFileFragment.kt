@@ -320,7 +320,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
 
         activity!!.setTitle(R.string.share_dialog_title)
 
-//        observeCapabilities() // Get capabilities to update some UI elements depending on them
+        observeCapabilities() // Get capabilities to update some UI elements depending on them
         observeShares()
     }
 
@@ -338,31 +338,30 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
         listener = null
     }
 
-//    private fun observeCapabilities() {
-//        ocCapabilityViewModel.capabilities.observe(
-//            this,
-//            Observer { uiResult ->
-//                when (uiResult?.status) {
-//                    Status.SUCCESS -> {
-//                        updateCapabilities(uiResult.data)
-//                        listener?.dismissLoading()
-//                    }
-//                    Status.ERROR -> {
-//                        showError(uiResult.errorMessage!!)
-//                        updateCapabilities(uiResult.data)
-//                        listener?.dismissLoading()
-//                    }
-//                    Status.LOADING -> {
-//                        listener?.showLoading()
-//                        updateCapabilities(uiResult.data)
-//                    }
-//                    else -> {
-//                        Log.d(TAG, "Unknown status when loading capabilities in account ${account?.name}")
-//                    }
-//                }
-//            }
-//        )
-//    }
+    private fun observeCapabilities() {
+        ocCapabilityViewModel.capabilities.observe(
+            this,
+            Observer { uiResult ->
+                when (uiResult) {
+                    is UIResult.Success -> {
+                        updateCapabilities(uiResult.data)
+                        listener?.dismissLoading()
+                    }
+                    is UIResult.Error -> {
+//                        showError(uiResult.error!!)
+                        listener?.dismissLoading()
+                    }
+                    is UIResult.Loading -> {
+                        listener?.showLoading()
+                        updateCapabilities(uiResult.data)
+                    }
+                    else -> {
+                        Log.d(TAG, "Unknown status when loading capabilities in account ${account?.name}")
+                    }
+                }
+            }
+        )
+    }
 
     private fun observeShares() {
         ocShareViewModel.shares.observe(
@@ -375,7 +374,8 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
                         listener?.dismissLoading()
                     }
                     is UIResult.Error -> {
-                        showError(uiResult.error?.message!!)
+//                        showError(uiResult.error!!)
+                        listener?.dismissLoading()
                     }
                     is UIResult.Loading -> {
                         listener?.showLoading()
