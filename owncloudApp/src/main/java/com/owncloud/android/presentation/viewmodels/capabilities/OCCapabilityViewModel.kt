@@ -27,11 +27,9 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
-import com.owncloud.android.domain.capabilities.usecases.CapabilitiesLiveDataAsyncUseCase
+import com.owncloud.android.domain.capabilities.usecases.GetCapabilitiesAsLiveDataUseCase
 import com.owncloud.android.domain.capabilities.usecases.RefreshCapabilitiesAsyncUseCase
-import com.owncloud.android.operations.common.OperationType
 import com.owncloud.android.presentation.UIResult
-import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -42,23 +40,29 @@ import kotlinx.coroutines.withContext
 class OCCapabilityViewModel(
     val context: Context,
     val account: Account,
-    capabilitiesLiveDataUseCase: CapabilitiesLiveDataAsyncUseCase = CapabilitiesLiveDataAsyncUseCase(context, account),
-    private val refreshCapabilitiesUseCase: RefreshCapabilitiesAsyncUseCase = RefreshCapabilitiesAsyncUseCase(context, account)
+    getCapabilitiesAsLiveDataUseCase: GetCapabilitiesAsLiveDataUseCase = GetCapabilitiesAsLiveDataUseCase(
+        context,
+        account
+    ),
+    private val refreshCapabilitiesUseCase: RefreshCapabilitiesAsyncUseCase = RefreshCapabilitiesAsyncUseCase(
+        context,
+        account
+    )
 ) : ViewModel() {
 
     private val _capabilities = MutableLiveData<UIResult<OCCapabilityEntity>>()
     val capabilities: LiveData<UIResult<OCCapabilityEntity>> = _capabilities
 
-    private var capabilitiesLiveData: LiveData<OCCapabilityEntity>? = capabilitiesLiveDataUseCase.execute(
-        CapabilitiesLiveDataAsyncUseCase.Params(
+    private var capabilitiesLiveData: LiveData<OCCapabilityEntity>? = getCapabilitiesAsLiveDataUseCase.execute(
+        GetCapabilitiesAsLiveDataUseCase.Params(
             accountName = account.name
         )
-    ).data
+    ).getDataOrNull()
 
     // to detect changes in capabilities
     private val capabilitiesObserver: Observer<OCCapabilityEntity> = Observer { capabilities ->
         if (capabilities != null) {
-            _capabilities.postValue(UIResult.success(capabilities))
+            _capabilities.postValue(UIResult.Success(capabilities))
         }
     }
 
@@ -71,7 +75,7 @@ class OCCapabilityViewModel(
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 _capabilities.postValue(
-                    UIResult.loading(capabilitiesLiveData?.value)
+                    UIResult.Loading(capabilitiesLiveData?.value)
                 )
 
                 refreshCapabilitiesUseCase.execute(
@@ -79,19 +83,9 @@ class OCCapabilityViewModel(
                         accountName = account.name
                     )
                 ).also { useCaseResult ->
-                    if (!useCaseResult.isSuccess()) {
-                        _capabilities.postValue(
-                            UIResult.error(
-                                capabilitiesLiveData?.value,
-                                errorMessage = useCaseResult.msg ?: ErrorMessageAdapter.getResultMessage(
-                                    useCaseResult.code,
-                                    useCaseResult.exception,
-                                    OperationType.GET_CAPABILITIES,
-                                    context.resources
-                                )
-                            )
-                        )
-                    }
+                    _capabilities.postValue(
+                        UIResult.Error(useCaseResult.getThrowableOrNull())
+                    )
                 }
             }
         }

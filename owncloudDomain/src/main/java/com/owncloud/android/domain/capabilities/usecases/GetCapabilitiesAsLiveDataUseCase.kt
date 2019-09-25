@@ -26,13 +26,12 @@ import com.owncloud.android.data.capabilities.CapabilityRepository
 import com.owncloud.android.data.capabilities.datasources.OCLocalCapabilitiesDataSource
 import com.owncloud.android.data.capabilities.datasources.OCRemoteCapabilitiesDataSource
 import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
-import com.owncloud.android.domain.UseCaseResult
+import com.owncloud.android.domain.BaseUseCase
 import com.owncloud.android.domain.capabilities.OCCapabilityRepository
-import com.owncloud.android.domain.BaseAsyncUseCase
 import com.owncloud.android.lib.common.OwnCloudAccount
 import com.owncloud.android.lib.common.OwnCloudClientManagerFactory
 
-class CapabilitiesLiveDataAsyncUseCase(
+class GetCapabilitiesAsLiveDataUseCase(
     context: Context,
     account: Account,
     private val capabilityRepository: CapabilityRepository = OCCapabilityRepository(
@@ -44,14 +43,10 @@ class CapabilitiesLiveDataAsyncUseCase(
             )
         )
     )
-) : BaseAsyncUseCase<LiveData<OCCapabilityEntity>, CapabilitiesLiveDataAsyncUseCase.Params>() {
-    override fun run(params: Params): UseCaseResult<LiveData<OCCapabilityEntity>> {
-        capabilityRepository.getCapabilitiesAsLiveData(
-            params.accountName
-        ).also { capabilitiesAsLiveData ->
-            return UseCaseResult.success(capabilitiesAsLiveData) // Always successful here, data comes from database
-        }
-    }
+) : BaseUseCase<LiveData<OCCapabilityEntity>, GetCapabilitiesAsLiveDataUseCase.Params>() {
+    override fun run(params: Params): LiveData<OCCapabilityEntity> = capabilityRepository.getCapabilitiesAsLiveData(
+        params.accountName
+    )
 
     data class Params(
         val accountName: String

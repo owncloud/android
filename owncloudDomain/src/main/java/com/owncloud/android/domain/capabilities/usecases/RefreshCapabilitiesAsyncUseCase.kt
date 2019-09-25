@@ -44,23 +44,12 @@ class RefreshCapabilitiesAsyncUseCase(
             )
         )
     )
-) : BaseAsyncUseCase<LiveData<OCCapabilityEntity>, RefreshCapabilitiesAsyncUseCase.Params>() {
+) : BaseAsyncUseCase<Unit, RefreshCapabilitiesAsyncUseCase.Params>() {
 
-    override fun run(params: Params): UseCaseResult<LiveData<OCCapabilityEntity>> {
+    override suspend fun run(params: Params) =
         capabilityRepository.refreshCapabilitiesForAccount(
             params.accountName
-        ).also { dataResult ->
-            if (!dataResult.isSuccess()) {
-                return UseCaseResult.error(
-                    code = dataResult.code,
-                    msg = dataResult.msg,
-                    exception = dataResult.exception
-                )
-            }
-
-            return UseCaseResult.success()
-        }
-    }
+        )
 
     data class Params(
         val accountName: String

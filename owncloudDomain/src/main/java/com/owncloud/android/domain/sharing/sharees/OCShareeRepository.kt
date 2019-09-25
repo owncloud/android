@@ -32,16 +32,10 @@ class OCShareeRepository(
         searchString: String,
         page: Int,
         perPage: Int
-    ): DataResult<ArrayList<JSONObject>> {
-        val remoteOperationResult = remoteShareDataSource.getSharees(
-            searchString, page, perPage
-        )
-        return if (remoteOperationResult.isSuccess)
-            DataResult.success(remoteOperationResult.data) else
-            DataResult.error(
-                remoteOperationResult.code,
-                msg = remoteOperationResult.httpPhrase,
-                exception = remoteOperationResult.exception
-            )
+    ): ArrayList<JSONObject> {
+//        return remoteShareDataSource.getSharees(
+//            searchString, page, perPage
+//        )
+        return arrayListOf()
     }
 }

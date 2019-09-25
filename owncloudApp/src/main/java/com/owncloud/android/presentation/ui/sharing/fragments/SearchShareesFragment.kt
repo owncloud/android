@@ -41,13 +41,12 @@ import androidx.appcompat.widget.SearchView
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import com.google.android.material.snackbar.Snackbar
 import com.owncloud.android.R
 import com.owncloud.android.data.sharing.shares.db.OCShareEntity
 import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.lib.common.utils.Log_OC
 import com.owncloud.android.lib.resources.shares.ShareType
-import com.owncloud.android.presentation.UIResult.Status
+import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.adapters.sharing.ShareUserListAdapter
 import com.owncloud.android.presentation.viewmodels.sharing.OCShareViewModel
 import com.owncloud.android.utils.PreferenceUtils
@@ -150,26 +149,26 @@ class SearchShareesFragment : Fragment(),
         ocShareViewModel.shares.observe(
             this,
             Observer { uiResult ->
-                val privateShares = uiResult.data?.filter { share ->
+                val privateShares = uiResult.getDataOrNull()?.filter { share ->
                     share.shareType == ShareType.USER.value ||
                             share.shareType == ShareType.GROUP.value ||
                             share.shareType == ShareType.FEDERATED.value
                 } as ArrayList<OCShareEntity>
-                when (uiResult?.status) {
-                    Status.SUCCESS -> {
+                when (uiResult) {
+                    is UIResult.Success -> {
                         updatePrivateShares(privateShares)
                         listener?.dismissLoading()
                     }
-                    Status.ERROR -> {
-                        Snackbar.make(
-                            activity?.findViewById(android.R.id.content)!!,
-                            uiResult.errorMessage!!,
-                            Snackbar.LENGTH_SHORT
-                        ).show()
+                    is UIResult.Error -> {
+//                        Snackbar.make(
+//                            activity?.findViewById(android.R.id.content)!!,
+//                            uiResult.errorMessage!!,
+//                            Snackbar.LENGTH_SHORT
+//                        ).show()
                         updatePrivateShares(privateShares)
                         listener?.dismissLoading()
                     }
-                    Status.LOADING -> {
+                    is UIResult.Loading -> {
                         listener?.showLoading()
                         updatePrivateShares(privateShares)
                     }

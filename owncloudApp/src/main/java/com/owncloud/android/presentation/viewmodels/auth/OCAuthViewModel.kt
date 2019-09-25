@@ -52,19 +52,12 @@ class OCAuthViewModel(
             }
 
             withContext(Dispatchers.Main) {
-                if (!loginUseCaseResult.isSuccess()) {
+                if (!loginUseCaseResult.isSuccess) {
                     _loginStatus.postValue(
-                        UIResult.error(
-                            errorMessage = loginUseCaseResult.msg ?: ErrorMessageAdapter.getResultMessage(
-                                loginUseCaseResult.code,
-                                loginUseCaseResult.exception,
-                                OperationType.UPDATE_SHARE,
-                                context.resources
-                            )
-                        )
+                        UIResult.Error(loginUseCaseResult.getThrowableOrNull())
                     )
                 } else {
-                    _loginStatus.postValue(UIResult.success())
+                    _loginStatus.postValue(UIResult.Success())
                 }
             }
         }

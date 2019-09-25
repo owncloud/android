@@ -35,6 +35,10 @@ sealed class UIResult<out T> {
     data class Success<out T>(val data: T? = null): UIResult<T>()
     data class Error<out T>(val error: Throwable? = null): UIResult<T>()
 
+    val isLoading get() = this is Loading
+    val isSuccess get() = this is Success
+    val isError get() = this is Error
+
     fun getDataOrNull(): T? =
         when (this) {
             is Success -> data
