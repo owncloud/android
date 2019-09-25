@@ -44,22 +44,12 @@ class EditPrivateShareAsyncUseCase(
     )
 ) : BaseAsyncUseCase<Unit, EditPrivateShareAsyncUseCase.Params>() {
 
-    override fun run(params: Params): UseCaseResult<Unit> {
+    override suspend fun run(params: Params): Unit =
         shareRepository.updatePrivateShare(
             params.remoteId,
             params.permissions,
             account.name
-        ).also { dataResult ->
-            if (!dataResult.isSuccess()) {
-                return UseCaseResult.error(
-                    code = dataResult.code,
-                    msg = dataResult.msg,
-                    exception = dataResult.exception
-                )
-            }
-            return UseCaseResult.success()
-        }
-    }
+        )
 
     data class Params(
         val remoteId: Long,

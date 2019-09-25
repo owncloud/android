@@ -23,9 +23,7 @@ import android.accounts.Account
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import com.owncloud.android.domain.sharing.sharees.GetShareesAsyncUseCase
-import com.owncloud.android.operations.common.OperationType
 import com.owncloud.android.presentation.UIResult
-import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter
 import org.json.JSONObject
 
 class OCShareeViewModel(
@@ -45,15 +43,10 @@ class OCShareeViewModel(
                 perPage
             )
         ).also { useCaseResult ->
-            return if (useCaseResult.isSuccess())
-                UIResult.success(useCaseResult.data) else
-                UIResult.error(
-                    errorMessage = useCaseResult.msg ?: ErrorMessageAdapter.getResultMessage(
-                        useCaseResult.code,
-                        useCaseResult.exception,
-                        OperationType.GET_SHAREES,
-                        context.resources
-                    )
+            return if (useCaseResult.isSuccess)
+                UIResult.Success(useCaseResult.getDataOrNull()) else
+                UIResult.Error(
+                    useCaseResult.getThrowableOrNull()
                 )
         }
     }

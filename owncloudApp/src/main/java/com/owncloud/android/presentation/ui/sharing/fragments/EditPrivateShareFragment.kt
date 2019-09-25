@@ -42,7 +42,7 @@ import com.owncloud.android.lib.common.utils.Log_OC
 import com.owncloud.android.lib.resources.shares.RemoteShare
 import com.owncloud.android.lib.resources.shares.SharePermissionsBuilder
 import com.owncloud.android.lib.resources.shares.ShareType
-import com.owncloud.android.presentation.UIResult.Status
+import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.viewmodels.sharing.OCShareViewModel
 import com.owncloud.android.utils.PreferenceUtils
 import kotlinx.android.synthetic.main.edit_share_layout.*
@@ -381,8 +381,8 @@ class EditPrivateShareFragment : DialogFragment() {
         ocShareViewModel.privateShare.observe(
             this,
             Observer { uiResult ->
-                when (uiResult?.status) {
-                    Status.SUCCESS -> {
+                when (uiResult) {
+                    is UIResult.Success -> {
                         updateShare(uiResult.data)
                     }
                     else -> {
@@ -399,12 +399,12 @@ class EditPrivateShareFragment : DialogFragment() {
         ocShareViewModel.privateShareEditionStatus.observe(
             this,
             Observer { uiResult ->
-                when (uiResult?.status) {
-                    Status.ERROR -> {
-                        showError(uiResult.errorMessage!!)
+                when (uiResult) {
+                    is UIResult.Error -> {
+//                        showError(uiResult.errorMessage!!)
                         listener?.dismissLoading()
                     }
-                    Status.LOADING -> {
+                    is UIResult.Loading -> {
                         listener?.showLoading()
                     }
                     else -> {

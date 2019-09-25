@@ -48,7 +48,7 @@ import com.owncloud.android.lib.common.utils.Log_OC
 import com.owncloud.android.lib.resources.shares.RemoteShare
 import com.owncloud.android.lib.resources.status.CapabilityBooleanType
 import com.owncloud.android.lib.resources.status.OwnCloudVersion
-import com.owncloud.android.presentation.UIResult.Status
+import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.viewmodels.capabilities.OCCapabilityViewModel
 import com.owncloud.android.presentation.viewmodels.sharing.OCShareViewModel
 import com.owncloud.android.ui.dialog.ExpirationDatePickerDialogFragment
@@ -449,17 +449,17 @@ class PublicShareDialogFragment : DialogFragment() {
         ocCapabilityViewModel.capabilities.observe(
             this,
             Observer { uiResult ->
-                when (uiResult?.status) {
-                    Status.SUCCESS -> {
+                when (uiResult) {
+                    is UIResult.Success -> {
                         updateCapabilities(uiResult.data)
                         listener?.dismissLoading()
                     }
-                    Status.ERROR -> {
-                        showError(uiResult.errorMessage!!)
-                        updateCapabilities(uiResult.data)
+                    is UIResult.Error -> {
+//                        showError(uiResult.errorMessage!!)
+                        updateCapabilities(uiResult.getDataOrNull())
                         listener?.dismissLoading()
                     }
-                    Status.LOADING -> {
+                    is UIResult.Loading -> {
                         listener?.showLoading()
                         updateCapabilities(uiResult.data)
                     }
@@ -475,15 +475,15 @@ class PublicShareDialogFragment : DialogFragment() {
         ocShareViewModel.publicShareCreationStatus.observe(
             this,
             Observer { uiResult ->
-                when (uiResult?.status) {
-                    Status.SUCCESS -> {
+                when (uiResult) {
+                    is UIResult.Success -> {
                         dismiss()
                     }
-                    Status.ERROR -> {
-                        showError(uiResult.errorMessage!!)
+                    is UIResult.Error -> {
+//                        showError(uiResult.errorMessage!!)
                         listener?.dismissLoading()
                     }
-                    Status.LOADING -> {
+                    is UIResult.Loading -> {
                         listener?.showLoading()
                     }
                     else -> {
@@ -500,15 +500,15 @@ class PublicShareDialogFragment : DialogFragment() {
         ocShareViewModel.publicShareEditionStatus.observe(
             this,
             Observer { uiResult ->
-                when (uiResult?.status) {
-                    Status.SUCCESS -> {
+                when (uiResult) {
+                    is UIResult.Success -> {
                         dismiss()
                     }
-                    Status.ERROR -> {
-                        showError(uiResult.errorMessage!!)
+                    is UIResult.Error -> {
+//                        showError(uiResult.errorMessage!!)
                         listener?.dismissLoading()
                     }
-                    Status.LOADING -> {
+                    is UIResult.Loading -> {
                         listener?.showLoading()
                     }
                     else -> {

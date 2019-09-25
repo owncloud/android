@@ -23,7 +23,6 @@ import android.content.Context
 import android.net.Uri
 import com.owncloud.android.data.auth.datasources.OCRemoteAuthDataSource
 import com.owncloud.android.domain.BaseAsyncUseCase
-import com.owncloud.android.domain.UseCaseResult
 import com.owncloud.android.lib.common.OwnCloudClientFactory
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentials
 
@@ -41,10 +40,7 @@ class LoginAsyncUseCase(
     )
 ) : BaseAsyncUseCase<Unit, LoginAsyncUseCase.Params>() {
 
-    override fun run(params: Params): UseCaseResult<Unit> {
-        ocAuthRepository.login(baseUrl, params.ownCloudCredentials)
-        return UseCaseResult.success()
-    }
+    override suspend fun run(params: Params) = ocAuthRepository.login(baseUrl, params.ownCloudCredentials)
 
     data class Params(
         val ownCloudCredentials: OwnCloudCredentials

@@ -27,7 +27,7 @@ interface CapabilityRepository {
     fun refreshCapabilitiesForAccount(
         accountName: String,
         shouldFetchFromNetwork: Boolean = true
-    ): DataResult<Unit>
+    )
 
     fun getCapabilitiesAsLiveData(accountName: String): LiveData<OCCapabilityEntity>
 }
