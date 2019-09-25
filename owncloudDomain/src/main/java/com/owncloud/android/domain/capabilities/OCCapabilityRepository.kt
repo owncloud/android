@@ -43,31 +43,31 @@ class OCCapabilityRepository(
     override fun refreshCapabilitiesForAccount(
         accountName: String,
         shouldFetchFromNetwork: Boolean
-    ): DataResult<Unit> {
-        remoteCapabilitiesDataSource.getCapabilities().also { remoteOperationResult ->
-            //Error
-            if (!remoteOperationResult.isSuccess) {
-                return DataResult.error(
-                    code = remoteOperationResult.code,
-                    msg = remoteOperationResult.httpPhrase,
-                    exception = remoteOperationResult.exception
-                )
-            }
-
-            // Success
-            val capabilitiesForAccountFromServer = remoteOperationResult.data.apply {
-                this.accountName = accountName
-            }
-
-            localCapabilitiesDataSource.insert(
-                listOf(
-                    OCCapabilityEntity.fromRemoteCapability(
-                        capabilitiesForAccountFromServer
-                    )
-                )
-            )
-
-            return DataResult.success()
-        }
+    ) {
+//        remoteCapabilitiesDataSource.getCapabilities().also { remoteOperationResult ->
+//            //Error
+//            if (!remoteOperationResult.isSuccess) {
+//                return DataResult.error(
+//                    code = remoteOperationResult.code,
+//                    msg = remoteOperationResult.httpPhrase,
+//                    exception = remoteOperationResult.exception
+//                )
+//            }
+//
+//            // Success
+//            val capabilitiesForAccountFromServer = remoteOperationResult.data.apply {
+//                this.accountName = accountName
+//            }
+//
+//            localCapabilitiesDataSource.insert(
+//                listOf(
+//                    OCCapabilityEntity.fromRemoteCapability(
+//                        capabilitiesForAccountFromServer
+//                    )
+//                )
+//            )
+//
+//            return DataResult.success()
+//        }
     }
 }

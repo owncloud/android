@@ -25,7 +25,6 @@ import com.owncloud.android.data.capabilities.CapabilityRepository
 import com.owncloud.android.data.capabilities.datasources.OCLocalCapabilitiesDataSource
 import com.owncloud.android.data.capabilities.datasources.OCRemoteCapabilitiesDataSource
 import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
-import com.owncloud.android.domain.UseCaseResult
 import com.owncloud.android.domain.capabilities.OCCapabilityRepository
 import com.owncloud.android.domain.sharing.shares.usecases.BaseUseCase
 import com.owncloud.android.lib.common.OwnCloudAccount
@@ -44,12 +43,10 @@ class GetStoredCapabilitiesUseCase(
         )
     )
 ) : BaseUseCase<OCCapabilityEntity, GetStoredCapabilitiesUseCase.Params>() {
-    override fun run(params: Params): UseCaseResult<OCCapabilityEntity> {
-        capabilityRepository.getStoredCapabilities(
+    override fun run(params: Params) : OCCapabilityEntity {
+        return capabilityRepository.getStoredCapabilities(
             params.accountName
-        ).also { storedCapabilities ->
-            return UseCaseResult.success(storedCapabilities) // Always successful here, data comes from database
-        }
+        )
     }
 
     data class Params(

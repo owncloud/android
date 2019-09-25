@@ -38,7 +38,7 @@ import com.owncloud.android.R
 import com.owncloud.android.data.sharing.shares.db.OCShareEntity
 import com.owncloud.android.lib.common.utils.Log_OC
 import com.owncloud.android.lib.resources.shares.ShareType
-import com.owncloud.android.presentation.UIResult.Status
+import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.ui.sharing.fragments.ShareFragmentListener
 import com.owncloud.android.presentation.viewmodels.sharing.OCShareViewModel
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment.ConfirmationDialogFragmentListener
@@ -106,11 +106,11 @@ class RemoveShareDialogFragment : ConfirmationDialogFragment(), ConfirmationDial
         ocShareViewModel.shareDeletionStatus.observe(
             this,
             Observer { uiResult ->
-                when (uiResult?.status) {
-                    Status.SUCCESS -> {
+                when (uiResult) {
+                    is UIResult.Success -> {
                         dismiss()
                     }
-                    Status.LOADING -> {
+                    is UIResult.Loading -> {
                         listener?.showLoading()
                     }
                     else -> {

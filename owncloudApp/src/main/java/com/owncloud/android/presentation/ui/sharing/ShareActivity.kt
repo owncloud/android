@@ -31,21 +31,19 @@ import android.util.Log
 import android.view.MenuItem
 import androidx.fragment.app.transaction
 import androidx.lifecycle.Observer
-import com.google.android.material.snackbar.Snackbar
 import com.owncloud.android.R
 import com.owncloud.android.data.sharing.shares.db.OCShareEntity
 import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.lib.common.utils.Log_OC
 import com.owncloud.android.lib.resources.shares.RemoteShare
 import com.owncloud.android.lib.resources.shares.ShareType
-import com.owncloud.android.presentation.UIResult.Status
+import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.providers.sharing.UsersAndGroupsSearchProvider
 import com.owncloud.android.presentation.ui.sharing.fragments.EditPrivateShareFragment
 import com.owncloud.android.presentation.ui.sharing.fragments.PublicShareDialogFragment
 import com.owncloud.android.presentation.ui.sharing.fragments.SearchShareesFragment
 import com.owncloud.android.presentation.ui.sharing.fragments.ShareFileFragment
 import com.owncloud.android.presentation.ui.sharing.fragments.ShareFragmentListener
-import com.owncloud.android.presentation.viewmodels.capabilities.OCCapabilityViewModel
 import com.owncloud.android.presentation.viewmodels.sharing.OCShareViewModel
 import com.owncloud.android.ui.activity.FileActivity
 import com.owncloud.android.ui.dialog.RemoveShareDialogFragment
@@ -192,15 +190,16 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
         ocShareViewModel.privateShareEditionStatus.observe(
             this,
             Observer { uiResult ->
-                when (uiResult?.status) {
-                    Status.ERROR -> {
-                        Snackbar.make(
-                            findViewById(android.R.id.content),
-                            uiResult.errorMessage!!,
-                            Snackbar.LENGTH_SHORT
-                        ).show()
+                when (uiResult) {
+                    is UIResult.Error -> {
+//                        Snackbar.make(
+//                            findViewById(android.R.id.content)!!,
+//                            uiResult.errorMessage!!,
+//                            Snackbar.LENGTH_SHORT
+//                        ).show()
+                        dismissLoadingDialog()
                     }
-                    Status.LOADING -> {
+                    is UIResult.Loading -> {
                         showLoadingDialog(R.string.common_loading)
                     }
                     else -> {

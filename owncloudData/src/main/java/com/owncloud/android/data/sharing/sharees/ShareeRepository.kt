@@ -27,5 +27,5 @@ interface ShareeRepository {
         searchString: String,
         page: Int,
         perPage: Int
-    ): DataResult<ArrayList<JSONObject>>
+    ): ArrayList<JSONObject>
 }
