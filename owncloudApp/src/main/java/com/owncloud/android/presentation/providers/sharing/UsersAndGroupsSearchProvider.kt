@@ -144,11 +144,12 @@ class UsersAndGroupsSearchProvider : ContentProvider() {
             REQUESTED_PAGE,
             RESULTS_PER_PAGE
         ).also { uiResult ->
-            if (uiResult.isError()) {
-                showErrorMessage(uiResult.errorMessage)
+
+            if (uiResult.isError) {
+//                showErrorMessage(uiResult.errorMessage)
             }
 
-            val names = uiResult.data
+            val names = uiResult.getDataOrNull()
 
             // convert the responses from the OC server to the expected format
             if (!names.isNullOrEmpty()) {

@@ -23,9 +23,7 @@ import android.accounts.Account
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import com.owncloud.android.domain.sharing.sharees.GetShareesAsyncUseCase
-import com.owncloud.android.operations.common.OperationType
 import com.owncloud.android.presentation.UIResult
-import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter
 import org.json.JSONObject
 
 class OCShareeViewModel(

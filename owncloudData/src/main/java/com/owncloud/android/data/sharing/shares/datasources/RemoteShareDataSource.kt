@@ -30,13 +30,14 @@ import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.lib.resources.shares.UpdateRemoteShareOperation
 
 interface RemoteShareDataSource {
-    fun getShares(
+    suspend fun getShares(
         remoteFilePath: String,
         reshares: Boolean,
         subfiles: Boolean,
+        accountName: String,
         getRemoteSharesForFileOperation: GetRemoteSharesForFileOperation =
             GetRemoteSharesForFileOperation(remoteFilePath, reshares, subfiles)
-    ): RemoteOperationResult<ShareParserResult>
+    ): List<OCShareEntity>
 
     suspend fun insertShare(
         remoteFilePath: String,

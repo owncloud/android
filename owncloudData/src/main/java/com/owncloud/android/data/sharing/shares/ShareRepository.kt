@@ -20,7 +20,6 @@
 package com.owncloud.android.data.sharing.shares
 
 import androidx.lifecycle.LiveData
-import com.owncloud.android.data.DataResult
 import com.owncloud.android.data.sharing.shares.db.OCShareEntity
 import com.owncloud.android.lib.resources.shares.ShareType
 
@@ -44,7 +43,7 @@ interface ShareRepository {
         remoteId: Long,
         permissions: Int,
         accountName: String
-    ): DataResult<Unit>
+    )
 
     /******************************************************************************************************
      ******************************************* PUBLIC SHARES ********************************************
@@ -68,7 +67,7 @@ interface ShareRepository {
         permissions: Int,
         publicUpload: Boolean,
         accountName: String
-    ): DataResult<Unit>
+    )
 
     /******************************************************************************************************
      *********************************************** COMMON ***********************************************
@@ -78,9 +77,9 @@ interface ShareRepository {
 
     fun getShareAsLiveData(remoteId: Long): LiveData<OCShareEntity>
 
-    fun refreshSharesFromNetwork(filePath: String, accountName: String): DataResult<Unit>
+    suspend fun refreshSharesFromNetwork(filePath: String, accountName: String)
 
     fun deleteShare(
         remoteId: Long
-    ): DataResult<Unit>
+    )
 }

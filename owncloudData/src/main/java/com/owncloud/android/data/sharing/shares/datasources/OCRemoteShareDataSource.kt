@@ -34,13 +34,21 @@ class OCRemoteShareDataSource(
     private val client: OwnCloudClient
 ) : RemoteShareDataSource {
 
-    override fun getShares(
+    override suspend fun getShares(
         remoteFilePath: String,
         reshares: Boolean,
         subfiles: Boolean,
+        accountName: String,
         getRemoteSharesForFileOperation: GetRemoteSharesForFileOperation
-    ): RemoteOperationResult<ShareParserResult> {
-        return getRemoteSharesForFileOperation.execute(client)
+    ): List<OCShareEntity> {
+        awaitToRemoteOperationResult {
+            getRemoteSharesForFileOperation.execute(client)
+        }.shares.let {
+            return it.map { remoteShare ->
+                OCShareEntity.fromRemoteShare(remoteShare)
+                    .also { it.accountOwner = accountName }
+            }
+        }
     }
 
     override suspend fun insertShare(
@@ -54,7 +62,7 @@ class OCRemoteShareDataSource(
         publicUpload: Boolean,
         accountName: String,
         createRemoteShareOperation: CreateRemoteShareOperation
-    ) : OCShareEntity {
+    ): OCShareEntity {
         createRemoteShareOperation.name = name
         createRemoteShareOperation.password = password
         createRemoteShareOperation.expirationDateInMillis = expirationDate
@@ -63,8 +71,8 @@ class OCRemoteShareDataSource(
 
         awaitToRemoteOperationResult {
             createRemoteShareOperation.execute(client)
-        }.shares.run{
-            return OCShareEntity.fromRemoteShare(this.first())
+        }.shares.let {
+            return OCShareEntity.fromRemoteShare(it.first()).also { it.accountOwner = accountName }
         }
     }
 

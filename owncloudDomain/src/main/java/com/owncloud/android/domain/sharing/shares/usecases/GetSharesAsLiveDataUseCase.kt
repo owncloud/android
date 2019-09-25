@@ -26,7 +26,6 @@ import com.owncloud.android.data.sharing.shares.ShareRepository
 import com.owncloud.android.data.sharing.shares.datasources.OCLocalShareDataSource
 import com.owncloud.android.data.sharing.shares.datasources.OCRemoteShareDataSource
 import com.owncloud.android.data.sharing.shares.db.OCShareEntity
-import com.owncloud.android.domain.BaseUseCase
 import com.owncloud.android.domain.sharing.shares.OCShareRepository
 import com.owncloud.android.lib.common.OwnCloudAccount
 import com.owncloud.android.lib.common.OwnCloudClientManagerFactory
@@ -45,12 +44,10 @@ class GetSharesAsLiveDataUseCase(
     )
 ) : BaseUseCase<LiveData<List<OCShareEntity>>, GetSharesAsLiveDataUseCase.Params>() {
 
-    override fun run(params: Params): LiveData<List<OCShareEntity>> {
-        return shareRepository.getSharesAsLiveData(
-            params.filePath,
-            params.accountName
-        )
-    }
+    override fun run(params: Params): LiveData<List<OCShareEntity>> = shareRepository.getSharesAsLiveData(
+        params.filePath,
+        params.accountName
+    )
 
     data class Params(
         val filePath: String,
