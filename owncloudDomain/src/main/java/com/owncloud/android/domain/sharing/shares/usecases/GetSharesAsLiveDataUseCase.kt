@@ -27,7 +27,6 @@ import com.owncloud.android.data.sharing.shares.datasources.OCLocalShareDataSour
 import com.owncloud.android.data.sharing.shares.datasources.OCRemoteShareDataSource
 import com.owncloud.android.data.sharing.shares.db.OCShareEntity
 import com.owncloud.android.domain.BaseUseCase
-import com.owncloud.android.domain.UseCaseResult
 import com.owncloud.android.domain.sharing.shares.OCShareRepository
 import com.owncloud.android.lib.common.OwnCloudAccount
 import com.owncloud.android.lib.common.OwnCloudClientManagerFactory
@@ -45,13 +44,12 @@ class GetSharesAsLiveDataUseCase(
         )
     )
 ) : BaseUseCase<LiveData<List<OCShareEntity>>, GetSharesAsLiveDataUseCase.Params>() {
-    override fun run(params: Params): UseCaseResult<LiveData<List<OCShareEntity>>> {
-        shareRepository.getSharesAsLiveData(
+
+    override fun run(params: Params): LiveData<List<OCShareEntity>> {
+        return shareRepository.getSharesAsLiveData(
             params.filePath,
             params.accountName
-        ).also { sharesAsLiveData ->
-            return UseCaseResult.success(sharesAsLiveData) // Always successful here, data comes from database
-        }
+        )
     }
 
     data class Params(

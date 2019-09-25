@@ -27,8 +27,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
-import com.owncloud.android.domain.capabilities.usecases.CapabilitiesLiveDataUseCase
-import com.owncloud.android.domain.capabilities.usecases.RefreshCapabilitiesUseCase
+import com.owncloud.android.domain.capabilities.usecases.CapabilitiesLiveDataAsyncUseCase
+import com.owncloud.android.domain.capabilities.usecases.RefreshCapabilitiesAsyncUseCase
 import com.owncloud.android.operations.common.OperationType
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter
@@ -42,15 +42,15 @@ import kotlinx.coroutines.withContext
 class OCCapabilityViewModel(
     val context: Context,
     val account: Account,
-    capabilitiesLiveDataUseCase: CapabilitiesLiveDataUseCase = CapabilitiesLiveDataUseCase(context, account),
-    private val refreshCapabilitiesUseCase: RefreshCapabilitiesUseCase = RefreshCapabilitiesUseCase(context, account)
+    capabilitiesLiveDataUseCase: CapabilitiesLiveDataAsyncUseCase = CapabilitiesLiveDataAsyncUseCase(context, account),
+    private val refreshCapabilitiesUseCase: RefreshCapabilitiesAsyncUseCase = RefreshCapabilitiesAsyncUseCase(context, account)
 ) : ViewModel() {
 
     private val _capabilities = MutableLiveData<UIResult<OCCapabilityEntity>>()
     val capabilities: LiveData<UIResult<OCCapabilityEntity>> = _capabilities
 
     private var capabilitiesLiveData: LiveData<OCCapabilityEntity>? = capabilitiesLiveDataUseCase.execute(
-        CapabilitiesLiveDataUseCase.Params(
+        CapabilitiesLiveDataAsyncUseCase.Params(
             accountName = account.name
         )
     ).data
@@ -75,7 +75,7 @@ class OCCapabilityViewModel(
                 )
 
                 refreshCapabilitiesUseCase.execute(
-                    RefreshCapabilitiesUseCase.Params(
+                    RefreshCapabilitiesAsyncUseCase.Params(
                         accountName = account.name
                     )
                 ).also { useCaseResult ->
