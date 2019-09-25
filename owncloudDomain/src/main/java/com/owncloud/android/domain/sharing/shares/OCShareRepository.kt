@@ -47,18 +47,18 @@ class OCShareRepository(
         )
     }
 
-    override fun insertPrivateShare(
+    override suspend fun insertPrivateShare(
         filePath: String,
         shareType: ShareType?,
         shareeName: String,     // User or group name of the target sharee.
         permissions: Int,        // See https://doc.owncloud.com/server/developer_manual/core/apis/ocs-share-api.html
         accountName: String
-    ): DataResult<Unit> {
-        if (shareType != ShareType.USER && shareType != ShareType.GROUP && shareType != ShareType.FEDERATED) {
+    ) {
+        if (!(shareType == ShareType.USER || shareType == ShareType.GROUP || shareType == ShareType.FEDERATED)) {
             throw IllegalArgumentException("Illegal share type $shareType");
         }
 
-        return insertShare(
+        insertShare(
             filePath = filePath,
             shareType = shareType,
             shareWith = shareeName,
@@ -79,7 +79,7 @@ class OCShareRepository(
      ******************************************* PUBLIC SHARES ********************************************
      ******************************************************************************************************/
 
-    override fun insertPublicShare(
+    override suspend fun insertPublicShare(
         filePath: String,
         permissions: Int,
         name: String,
@@ -87,8 +87,8 @@ class OCShareRepository(
         expirationTimeInMillis: Long,
         publicUpload: Boolean,
         accountName: String
-    ): DataResult<Unit> {
-        return insertShare(
+    ) {
+        insertShare(
             filePath = filePath,
             shareType = ShareType.PUBLIC_LINK,
             permissions = permissions,
@@ -195,7 +195,7 @@ class OCShareRepository(
         }
     }
 
-    private fun insertShare(
+    private suspend fun insertShare(
         filePath: String,
         shareType: ShareType,
         shareWith: String = "",
@@ -205,8 +205,8 @@ class OCShareRepository(
         expirationTimeInMillis: Long = RemoteShare.INIT_EXPIRATION_DATE_IN_MILLIS,
         publicUpload: Boolean = false,
         accountName: String
-    ): DataResult<Unit> {
-        remoteShareDataSource.insertShare(
+    ) {
+        val remotelyInsertedShare = remoteShareDataSource.insertShare(
             filePath,
             shareType,
             shareWith,
@@ -214,27 +214,11 @@ class OCShareRepository(
             name,
             password,
             expirationTimeInMillis,
-            publicUpload
-        ).also { remoteOperationResult ->
-            // Error
-            if (!remoteOperationResult.isSuccess) {
-                return DataResult.error(
-                    code = remoteOperationResult.code,
-                    msg = remoteOperationResult.httpPhrase,
-                    exception = remoteOperationResult.exception
-                )
-            }
+            publicUpload,
+            accountName
+        )
 
-            // Success
-            val newShareFromServer = remoteOperationResult.data.shares.map { remoteShare ->
-                OCShareEntity.fromRemoteShare(remoteShare)
-                    .also { it.accountOwner = accountName }
-            }
-
-            localShareDataSource.insert(newShareFromServer)
-
-            return DataResult.success()
-        }
+        localShareDataSource.insert(remotelyInsertedShare)
     }
 
     private fun updateShare(

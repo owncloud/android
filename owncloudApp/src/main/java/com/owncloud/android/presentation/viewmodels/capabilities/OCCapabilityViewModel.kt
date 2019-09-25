@@ -29,7 +29,7 @@ import androidx.lifecycle.viewModelScope
 import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
 import com.owncloud.android.domain.capabilities.usecases.GetCapabilitiesLiveDataUseCase
 import com.owncloud.android.domain.capabilities.usecases.GetStoredCapabilitiesUseCase
-import com.owncloud.android.domain.capabilities.usecases.RefreshCapabilitiesUseCase
+import com.owncloud.android.domain.capabilities.usecases.RefreshCapabilitiesAsyncUseCase
 import com.owncloud.android.operations.common.OperationType
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter
@@ -44,8 +44,11 @@ class OCCapabilityViewModel(
     val context: Context,
     val account: Account,
     getCapabilitiesLiveDataUseCase: GetCapabilitiesLiveDataUseCase = GetCapabilitiesLiveDataUseCase(context, account),
-    private val getStoredCapabilitiesUseCase: GetStoredCapabilitiesUseCase = GetStoredCapabilitiesUseCase(context, account),
-    private val refreshCapabilitiesUseCase: RefreshCapabilitiesUseCase = RefreshCapabilitiesUseCase(context, account),
+    private val getStoredCapabilitiesUseCase: GetStoredCapabilitiesUseCase = GetStoredCapabilitiesUseCase(
+        context,
+        account
+    ),
+    private val refreshCapabilitiesUseCase: RefreshCapabilitiesAsyncUseCase = RefreshCapabilitiesAsyncUseCase(context, account),
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ViewModel() {
 
@@ -56,11 +59,11 @@ class OCCapabilityViewModel(
         GetCapabilitiesLiveDataUseCase.Params(
             accountName = account.name
         )
-    ).data
+    ).getDataOrNull()
 
     init {
         _capabilities.addSource(capabilitiesLiveData!!) { capabilities ->
-            _capabilities.postValue(UIResult.success(capabilities))
+            _capabilities.postValue(UIResult.Success(capabilities))
         }
         refreshCapabilitiesFromNetwork()
     }
@@ -69,32 +72,32 @@ class OCCapabilityViewModel(
         GetStoredCapabilitiesUseCase.Params(
             accountName = account.name
         )
-    ).data
+    ).getDataOrNull()
 
     private fun refreshCapabilitiesFromNetwork() {
         viewModelScope.launch(ioDispatcher) {
             _capabilities.postValue(
-                UIResult.loading(capabilitiesLiveData?.value)
+                UIResult.Loading(capabilitiesLiveData?.value)
             )
 
             val useCaseResult = refreshCapabilitiesUseCase.execute(
-                RefreshCapabilitiesUseCase.Params(
+                RefreshCapabilitiesAsyncUseCase.Params(
                     accountName = account.name
                 )
             )
 
-            if (!useCaseResult.isSuccess()) {
-                _capabilities.postValue(
-                    UIResult.error(
-                        capabilitiesLiveData?.value,
-                        errorMessage = useCaseResult.msg ?: ErrorMessageAdapter.getResultMessage(
-                            useCaseResult.code,
-                            useCaseResult.exception,
-                            OperationType.GET_CAPABILITIES,
-                            context.resources
-                        )
-                    )
-                )
+            if (!useCaseResult.isSuccess) {
+//                _capabilities.postValue(
+//                    UIResult.Error(
+//                        capabilitiesLiveData?.value,
+//                        errorMessage = useCaseResult.msg ?: ErrorMessageAdapter.getResultMessage(
+//                            useCaseResult.code,
+//                            useCaseResult.exception,
+//                            OperationType.GET_CAPABILITIES,
+//                            context.resources
+//                        )
+//                    )
+//                )
             }
         }
     }

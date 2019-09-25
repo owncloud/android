@@ -5,12 +5,12 @@ import android.content.Context
 import com.owncloud.android.data.sharing.sharees.ShareeRepository
 import com.owncloud.android.data.sharing.sharees.datasources.OCRemoteShareeDataSource
 import com.owncloud.android.domain.UseCaseResult
-import com.owncloud.android.domain.sharing.shares.usecases.BaseUseCase
+import com.owncloud.android.domain.BaseAsyncUseCase
 import com.owncloud.android.lib.common.OwnCloudAccount
 import com.owncloud.android.lib.common.OwnCloudClientManagerFactory
 import org.json.JSONObject
 
-class GetShareesUseCase(
+class GetShareesAsyncUseCase(
     context: Context,
     account: Account,
     private val shareeRepository: ShareeRepository = OCShareeRepository(
@@ -21,7 +21,7 @@ class GetShareesUseCase(
             )
         )
     )
-) : BaseUseCase<ArrayList<JSONObject>, GetShareesUseCase.Params>() {
+) : BaseAsyncUseCase<ArrayList<JSONObject>, GetShareesAsyncUseCase.Params>() {
     override fun run(params: Params): UseCaseResult<ArrayList<JSONObject>> {
         shareeRepository.getSharees(
             params.searchString,

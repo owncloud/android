@@ -17,40 +17,38 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.domain.sharing.shares.usecases
+package com.owncloud.android.domain.capabilities.usecases
 
 import android.accounts.Account
 import android.content.Context
-import com.owncloud.android.data.sharing.shares.ShareRepository
-import com.owncloud.android.data.sharing.shares.datasources.OCLocalShareDataSource
-import com.owncloud.android.data.sharing.shares.datasources.OCRemoteShareDataSource
+import androidx.lifecycle.LiveData
+import com.owncloud.android.data.capabilities.CapabilityRepository
+import com.owncloud.android.data.capabilities.datasources.OCLocalCapabilitiesDataSource
+import com.owncloud.android.data.capabilities.datasources.OCRemoteCapabilitiesDataSource
+import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
 import com.owncloud.android.domain.UseCaseResult
-import com.owncloud.android.domain.sharing.shares.OCShareRepository
+import com.owncloud.android.domain.capabilities.OCCapabilityRepository
+import com.owncloud.android.domain.BaseAsyncUseCase
 import com.owncloud.android.lib.common.OwnCloudAccount
 import com.owncloud.android.lib.common.OwnCloudClientManagerFactory
-import com.owncloud.android.lib.resources.shares.ShareType
 
-class CreatePrivateShareUseCase(
+class RefreshCapabilitiesAsyncUseCase(
     context: Context,
-    val account: Account,
-    private val shareRepository: ShareRepository = OCShareRepository(
-        localShareDataSource = OCLocalShareDataSource(context),
-        remoteShareDataSource = OCRemoteShareDataSource(
+    account: Account,
+    private val capabilityRepository: CapabilityRepository = OCCapabilityRepository(
+        localCapabilitiesDataSource = OCLocalCapabilitiesDataSource(context),
+        remoteCapabilitiesDataSource = OCRemoteCapabilitiesDataSource(
             OwnCloudClientManagerFactory.getDefaultSingleton().getClientFor(
                 OwnCloudAccount(account, context),
                 context
             )
         )
     )
-) : BaseUseCase<Unit, CreatePrivateShareUseCase.Params>() {
+) : BaseAsyncUseCase<LiveData<OCCapabilityEntity>, RefreshCapabilitiesAsyncUseCase.Params>() {
 
-    override fun run(params: Params): UseCaseResult<Unit> {
-        shareRepository.insertPrivateShare(
-            params.filePath,
-            params.shareType,
-            params.shareeName,
-            params.permissions,
-            account.name
+    override fun run(params: Params): UseCaseResult<LiveData<OCCapabilityEntity>> {
+        capabilityRepository.refreshCapabilitiesForAccount(
+            params.accountName
         ).also { dataResult ->
             if (!dataResult.isSuccess()) {
                 return UseCaseResult.error(
@@ -59,14 +57,12 @@ class CreatePrivateShareUseCase(
                     exception = dataResult.exception
                 )
             }
+
             return UseCaseResult.success()
         }
     }
 
     data class Params(
-        val filePath: String,
-        val shareType: ShareType?,
-        val shareeName: String,
-        val permissions: Int
+        val accountName: String
     )
 }
