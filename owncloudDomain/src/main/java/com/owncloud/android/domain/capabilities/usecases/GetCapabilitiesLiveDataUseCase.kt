@@ -40,7 +40,7 @@ class GetCapabilitiesLiveDataUseCase(
         remoteCapabilitiesDataSource = OCRemoteCapabilitiesDataSource(
             OwnCloudClientManagerFactory.getDefaultSingleton().getClientFor(
                 OwnCloudAccount(account, context),
-                context
+                contextw
             )
         )
     )

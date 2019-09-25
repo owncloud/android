@@ -19,7 +19,9 @@
 
 package com.owncloud.android.data.sharing.shares.datasources
 
+import com.owncloud.android.data.sharing.shares.db.OCShareEntity
 import com.owncloud.android.lib.common.OwnCloudClient
+import com.owncloud.android.lib.common.operations.awaitToRemoteOperationResult
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.shares.CreateRemoteShareOperation
 import com.owncloud.android.lib.resources.shares.GetRemoteSharesForFileOperation
@@ -41,7 +43,7 @@ class OCRemoteShareDataSource(
         return getRemoteSharesForFileOperation.execute(client)
     }
 
-    override fun insertShare(
+    override suspend fun insertShare(
         remoteFilePath: String,
         shareType: ShareType,
         shareWith: String,
@@ -50,14 +52,20 @@ class OCRemoteShareDataSource(
         password: String,
         expirationDate: Long,
         publicUpload: Boolean,
+        accountName: String,
         createRemoteShareOperation: CreateRemoteShareOperation
-    ): RemoteOperationResult<ShareParserResult> {
+    ) : OCShareEntity {
         createRemoteShareOperation.name = name
         createRemoteShareOperation.password = password
         createRemoteShareOperation.expirationDateInMillis = expirationDate
         createRemoteShareOperation.publicUpload = publicUpload
         createRemoteShareOperation.retrieveShareDetails = true
-        return createRemoteShareOperation.execute(client)
+
+        awaitToRemoteOperationResult {
+            createRemoteShareOperation.execute(client)
+        }.shares.run{
+            return OCShareEntity.fromRemoteShare(this.first())
+        }
     }
 
     override fun updateShare(

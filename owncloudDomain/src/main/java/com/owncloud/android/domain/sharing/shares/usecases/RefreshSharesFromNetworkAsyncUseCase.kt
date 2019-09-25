@@ -21,17 +21,20 @@ package com.owncloud.android.domain.sharing.shares.usecases
 
 import android.accounts.Account
 import android.content.Context
+import androidx.lifecycle.LiveData
 import com.owncloud.android.data.sharing.shares.ShareRepository
 import com.owncloud.android.data.sharing.shares.datasources.OCLocalShareDataSource
 import com.owncloud.android.data.sharing.shares.datasources.OCRemoteShareDataSource
+import com.owncloud.android.data.sharing.shares.db.OCShareEntity
+import com.owncloud.android.domain.BaseAsyncUseCase
 import com.owncloud.android.domain.UseCaseResult
 import com.owncloud.android.domain.sharing.shares.OCShareRepository
 import com.owncloud.android.lib.common.OwnCloudAccount
 import com.owncloud.android.lib.common.OwnCloudClientManagerFactory
 
-class EditPublicShareUseCase(
+class RefreshSharesFromNetworkAsyncUseCase(
     context: Context,
-    val account: Account,
+    account: Account,
     private val shareRepository: ShareRepository = OCShareRepository(
         localShareDataSource = OCLocalShareDataSource(context),
         remoteShareDataSource = OCRemoteShareDataSource(
@@ -41,17 +44,12 @@ class EditPublicShareUseCase(
             )
         )
     )
-) : BaseUseCase<Unit, EditPublicShareUseCase.Params>() {
+) : BaseAsyncUseCase<LiveData<List<OCShareEntity>>, RefreshSharesFromNetworkAsyncUseCase.Params>() {
 
-    override fun run(params: Params): UseCaseResult<Unit> {
-        shareRepository.updatePublicShare(
-            params.remoteId,
-            params.name,
-            params.password,
-            params.expirationDateInMillis,
-            params.permissions,
-            params.publicUpload,
-            accountName = account.name
+    override fun run(params: Params): UseCaseResult<LiveData<List<OCShareEntity>>> {
+        shareRepository.refreshSharesFromNetwork(
+            params.filePath,
+            params.accountName
         ).also { dataResult ->
             if (!dataResult.isSuccess()) {
                 return UseCaseResult.error(
@@ -60,16 +58,13 @@ class EditPublicShareUseCase(
                     exception = dataResult.exception
                 )
             }
+
             return UseCaseResult.success()
         }
     }
 
     data class Params(
-        val remoteId: Long,
-        val name: String,
-        val password: String?,
-        val expirationDateInMillis: Long,
-        val permissions: Int,
-        val publicUpload: Boolean
+        val filePath: String,
+        val accountName: String
     )
 }
