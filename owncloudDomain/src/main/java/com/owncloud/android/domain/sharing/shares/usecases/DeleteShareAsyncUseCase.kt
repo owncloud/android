@@ -24,13 +24,13 @@ import android.content.Context
 import com.owncloud.android.data.sharing.shares.ShareRepository
 import com.owncloud.android.data.sharing.shares.datasources.OCLocalShareDataSource
 import com.owncloud.android.data.sharing.shares.datasources.OCRemoteShareDataSource
-import com.owncloud.android.domain.BaseUseCase
+import com.owncloud.android.domain.BaseAsyncUseCase
 import com.owncloud.android.domain.UseCaseResult
 import com.owncloud.android.domain.sharing.shares.OCShareRepository
 import com.owncloud.android.lib.common.OwnCloudAccount
 import com.owncloud.android.lib.common.OwnCloudClientManagerFactory
 
-class EditPublicShareUseCase(
+class DeleteShareAsyncUseCase(
     context: Context,
     val account: Account,
     private val shareRepository: ShareRepository = OCShareRepository(
@@ -42,17 +42,10 @@ class EditPublicShareUseCase(
             )
         )
     )
-) : BaseUseCase<Unit, EditPublicShareUseCase.Params>() {
-
+) : BaseAsyncUseCase<Unit, DeleteShareAsyncUseCase.Params>() {
     override fun run(params: Params): UseCaseResult<Unit> {
-        shareRepository.updatePublicShare(
-            params.remoteId,
-            params.name,
-            params.password,
-            params.expirationDateInMillis,
-            params.permissions,
-            params.publicUpload,
-            accountName = account.name
+        shareRepository.deleteShare(
+            params.remoteId
         ).also { dataResult ->
             if (!dataResult.isSuccess()) {
                 return UseCaseResult.error(
@@ -66,11 +59,6 @@ class EditPublicShareUseCase(
     }
 
     data class Params(
-        val remoteId: Long,
-        val name: String,
-        val password: String?,
-        val expirationDateInMillis: Long,
-        val permissions: Int,
-        val publicUpload: Boolean
+        val remoteId: Long
     )
 }

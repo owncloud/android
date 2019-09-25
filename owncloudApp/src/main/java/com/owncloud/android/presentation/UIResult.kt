@@ -19,34 +19,37 @@
 
 package com.owncloud.android.presentation
 
-data class UIResult<out T>(
-    val status: Status,
-    val data: T? = null,
-    val errorMessage: String? = null
-) {
+import com.owncloud.android.domain.UseCaseResult
+
+sealed class UIResult<out T> {
     companion object {
-        fun <T> success(data: T? = null): UIResult<T> {
-            return UIResult(Status.SUCCESS, data)
-        }
-
-        fun <T> error(
-            data: T? = null,
-            errorMessage: String? = null
-        ): UIResult<T> {
-            return UIResult(Status.ERROR, data, errorMessage)
-        }
-
-        fun <T> loading(data: T? = null): UIResult<T> {
-            return UIResult(Status.LOADING, data = data)
-        }
+        fun <T> fromUseCaseResult(useCaseResult: UseCaseResult<T>): UIResult<T> =
+            if (useCaseResult.isSuccess) {
+                Success(useCaseResult.getDataOrNull())
+            } else {
+                Error(useCaseResult.getThrowableOrNull())
+            }
     }
 
-    enum class Status {
-        SUCCESS,
-        LOADING,
-        ERROR
-    }
+    data class Loading<out T>(val data: T? = null): UIResult<T>()
+    data class Success<out T>(val data: T? = null): UIResult<T>()
+    data class Error<out T>(val error: Throwable? = null): UIResult<T>()
 
-    fun isLoading(): Boolean = (status == Status.LOADING)
-    fun isSuccess(): Boolean = (status == Status.SUCCESS)
+    fun getDataOrNull(): T? =
+        when (this) {
+            is Success -> data
+            else -> null
+        }
+
+    fun getThrowableOrNull(): Throwable? =
+        when (this) {
+            is Error -> error
+            else -> null
+        }
+
+    fun getLoadingOrNull(): T? =
+        when (this) {
+            is Loading -> data
+            else -> null
+        }
 }

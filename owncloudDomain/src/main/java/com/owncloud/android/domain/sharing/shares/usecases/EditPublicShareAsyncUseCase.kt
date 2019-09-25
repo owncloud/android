@@ -17,35 +17,42 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.domain.sharing.sharees
+package com.owncloud.android.domain.sharing.shares.usecases
 
 import android.accounts.Account
 import android.content.Context
-import com.owncloud.android.data.sharing.sharees.ShareeRepository
-import com.owncloud.android.data.sharing.sharees.datasources.OCRemoteShareeDataSource
+import com.owncloud.android.data.sharing.shares.ShareRepository
+import com.owncloud.android.data.sharing.shares.datasources.OCLocalShareDataSource
+import com.owncloud.android.data.sharing.shares.datasources.OCRemoteShareDataSource
+import com.owncloud.android.domain.BaseAsyncUseCase
 import com.owncloud.android.domain.UseCaseResult
-import com.owncloud.android.domain.BaseUseCase
+import com.owncloud.android.domain.sharing.shares.OCShareRepository
 import com.owncloud.android.lib.common.OwnCloudAccount
 import com.owncloud.android.lib.common.OwnCloudClientManagerFactory
-import org.json.JSONObject
 
-class GetShareesUseCase(
+class EditPublicShareAsyncUseCase(
     context: Context,
-    account: Account,
-    private val shareeRepository: ShareeRepository = OCShareeRepository(
-        remoteShareDataSource = OCRemoteShareeDataSource(
+    val account: Account,
+    private val shareRepository: ShareRepository = OCShareRepository(
+        localShareDataSource = OCLocalShareDataSource(context),
+        remoteShareDataSource = OCRemoteShareDataSource(
             OwnCloudClientManagerFactory.getDefaultSingleton().getClientFor(
                 OwnCloudAccount(account, context),
                 context
             )
         )
     )
-) : BaseUseCase<ArrayList<JSONObject>, GetShareesUseCase.Params>() {
-    override fun run(params: Params): UseCaseResult<ArrayList<JSONObject>> {
-        shareeRepository.getSharees(
-            params.searchString,
-            params.page,
-            params.perPage
+) : BaseAsyncUseCase<Unit, EditPublicShareAsyncUseCase.Params>() {
+
+    override fun run(params: Params): UseCaseResult<Unit> {
+        shareRepository.updatePublicShare(
+            params.remoteId,
+            params.name,
+            params.password,
+            params.expirationDateInMillis,
+            params.permissions,
+            params.publicUpload,
+            accountName = account.name
         ).also { dataResult ->
             if (!dataResult.isSuccess()) {
                 return UseCaseResult.error(
@@ -54,14 +61,16 @@ class GetShareesUseCase(
                     exception = dataResult.exception
                 )
             }
-
-            return UseCaseResult.success(data = dataResult.data)
+            return UseCaseResult.success()
         }
     }
 
     data class Params(
-        val searchString: String,
-        val page: Int,
-        val perPage: Int
+        val remoteId: Long,
+        val name: String,
+        val password: String?,
+        val expirationDateInMillis: Long,
+        val permissions: Int,
+        val publicUpload: Boolean
     )
 }

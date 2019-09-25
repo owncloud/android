@@ -32,13 +32,13 @@ interface ShareRepository {
 
     fun getPrivateSharesAsLiveData(filePath: String, accountName: String): LiveData<List<OCShareEntity>>
 
-    fun insertPrivateShare(
+    suspend fun insertPrivateShare(
         filePath: String,
         shareType: ShareType?,
         shareeName: String,
         permissions: Int,
         accountName: String
-    ): DataResult<Unit>
+    )
 
     fun updatePrivateShare(
         remoteId: Long,
@@ -50,7 +50,7 @@ interface ShareRepository {
      ******************************************* PUBLIC SHARES ********************************************
      ******************************************************************************************************/
 
-    fun insertPublicShare(
+    suspend fun insertPublicShare(
         filePath: String,
         permissions: Int,
         name: String,
@@ -58,7 +58,7 @@ interface ShareRepository {
         expirationTimeInMillis: Long,
         publicUpload: Boolean,
         accountName: String
-    ): DataResult<Unit>
+    )
 
     fun updatePublicShare(
         remoteId: Long,

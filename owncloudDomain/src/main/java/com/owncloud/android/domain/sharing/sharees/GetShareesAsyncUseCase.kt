@@ -17,41 +17,35 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.domain.sharing.shares.usecases
+package com.owncloud.android.domain.sharing.sharees
 
 import android.accounts.Account
 import android.content.Context
-import com.owncloud.android.data.sharing.shares.ShareRepository
-import com.owncloud.android.data.sharing.shares.datasources.OCLocalShareDataSource
-import com.owncloud.android.data.sharing.shares.datasources.OCRemoteShareDataSource
-import com.owncloud.android.domain.BaseUseCase
+import com.owncloud.android.data.sharing.sharees.ShareeRepository
+import com.owncloud.android.data.sharing.sharees.datasources.OCRemoteShareeDataSource
 import com.owncloud.android.domain.UseCaseResult
-import com.owncloud.android.domain.sharing.shares.OCShareRepository
+import com.owncloud.android.domain.BaseAsyncUseCase
 import com.owncloud.android.lib.common.OwnCloudAccount
 import com.owncloud.android.lib.common.OwnCloudClientManagerFactory
-import com.owncloud.android.lib.resources.shares.ShareType
+import org.json.JSONObject
 
-class CreatePrivateShareUseCase(
+class GetShareesAsyncUseCase(
     context: Context,
-    val account: Account,
-    private val shareRepository: ShareRepository = OCShareRepository(
-        localShareDataSource = OCLocalShareDataSource(context),
-        remoteShareDataSource = OCRemoteShareDataSource(
+    account: Account,
+    private val shareeRepository: ShareeRepository = OCShareeRepository(
+        remoteShareDataSource = OCRemoteShareeDataSource(
             OwnCloudClientManagerFactory.getDefaultSingleton().getClientFor(
                 OwnCloudAccount(account, context),
                 context
             )
         )
     )
-) : BaseUseCase<Unit, CreatePrivateShareUseCase.Params>() {
-
-    override fun run(params: Params): UseCaseResult<Unit> {
-        shareRepository.insertPrivateShare(
-            params.filePath,
-            params.shareType,
-            params.shareeName,
-            params.permissions,
-            account.name
+) : BaseAsyncUseCase<ArrayList<JSONObject>, GetShareesAsyncUseCase.Params>() {
+    override fun run(params: Params): UseCaseResult<ArrayList<JSONObject>> {
+        shareeRepository.getSharees(
+            params.searchString,
+            params.page,
+            params.perPage
         ).also { dataResult ->
             if (!dataResult.isSuccess()) {
                 return UseCaseResult.error(
@@ -60,14 +54,14 @@ class CreatePrivateShareUseCase(
                     exception = dataResult.exception
                 )
             }
-            return UseCaseResult.success()
+
+            return UseCaseResult.success(data = dataResult.data)
         }
     }
 
     data class Params(
-        val filePath: String,
-        val shareType: ShareType?,
-        val shareeName: String,
-        val permissions: Int
+        val searchString: String,
+        val page: Int,
+        val perPage: Int
     )
 }

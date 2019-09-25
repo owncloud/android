@@ -28,11 +28,11 @@ import com.owncloud.android.data.capabilities.datasources.OCRemoteCapabilitiesDa
 import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
 import com.owncloud.android.domain.UseCaseResult
 import com.owncloud.android.domain.capabilities.OCCapabilityRepository
-import com.owncloud.android.domain.BaseUseCase
+import com.owncloud.android.domain.BaseAsyncUseCase
 import com.owncloud.android.lib.common.OwnCloudAccount
 import com.owncloud.android.lib.common.OwnCloudClientManagerFactory
 
-class CapabilitiesLiveDataUseCase(
+class CapabilitiesLiveDataAsyncUseCase(
     context: Context,
     account: Account,
     private val capabilityRepository: CapabilityRepository = OCCapabilityRepository(
@@ -44,7 +44,7 @@ class CapabilitiesLiveDataUseCase(
             )
         )
     )
-) : BaseUseCase<LiveData<OCCapabilityEntity>, CapabilitiesLiveDataUseCase.Params>() {
+) : BaseAsyncUseCase<LiveData<OCCapabilityEntity>, CapabilitiesLiveDataAsyncUseCase.Params>() {
     override fun run(params: Params): UseCaseResult<LiveData<OCCapabilityEntity>> {
         capabilityRepository.getCapabilitiesAsLiveData(
             params.accountName

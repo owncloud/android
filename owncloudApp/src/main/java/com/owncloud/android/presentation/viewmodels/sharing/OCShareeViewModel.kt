@@ -22,7 +22,7 @@ package com.owncloud.android.presentation.viewmodels.sharing
 import android.accounts.Account
 import android.content.Context
 import androidx.lifecycle.ViewModel
-import com.owncloud.android.domain.sharing.sharees.GetShareesUseCase
+import com.owncloud.android.domain.sharing.sharees.GetShareesAsyncUseCase
 import com.owncloud.android.operations.common.OperationType
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter
@@ -31,7 +31,7 @@ import org.json.JSONObject
 class OCShareeViewModel(
     val context: Context,
     account: Account,
-    private val getShareesUseCase: GetShareesUseCase = GetShareesUseCase(
+    private val getShareesUseCase: GetShareesAsyncUseCase = GetShareesAsyncUseCase(
         context,
         account
     )
@@ -39,7 +39,7 @@ class OCShareeViewModel(
 
     fun getSharees(searchString: String, page: Int, perPage: Int): UIResult<ArrayList<JSONObject>> {
         getShareesUseCase.execute(
-            GetShareesUseCase.Params(
+            GetShareesAsyncUseCase.Params(
                 searchString,
                 page,
                 perPage

@@ -7,13 +7,13 @@ import com.owncloud.android.data.sharing.shares.ShareRepository
 import com.owncloud.android.data.sharing.shares.datasources.OCLocalShareDataSource
 import com.owncloud.android.data.sharing.shares.datasources.OCRemoteShareDataSource
 import com.owncloud.android.data.sharing.shares.db.OCShareEntity
-import com.owncloud.android.domain.BaseUseCase
+import com.owncloud.android.domain.BaseAsyncUseCase
 import com.owncloud.android.domain.UseCaseResult
 import com.owncloud.android.domain.sharing.shares.OCShareRepository
 import com.owncloud.android.lib.common.OwnCloudAccount
 import com.owncloud.android.lib.common.OwnCloudClientManagerFactory
 
-class GetShareAsLiveDataUseCase(
+class GetShareAsLiveDataAsyncUseCase(
     context: Context,
     account: Account,
     private val shareRepository: ShareRepository = OCShareRepository(
@@ -25,7 +25,7 @@ class GetShareAsLiveDataUseCase(
             )
         )
     )
-): BaseUseCase<LiveData<OCShareEntity>, GetShareAsLiveDataUseCase.Params>() {
+): BaseAsyncUseCase<LiveData<OCShareEntity>, GetShareAsLiveDataAsyncUseCase.Params>() {
     override fun run(params: Params): UseCaseResult<LiveData<OCShareEntity>> {
         shareRepository.getShareAsLiveData(
             params.remoteId

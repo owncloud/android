@@ -44,6 +44,7 @@ import com.owncloud.android.datamodel.ThumbnailsCacheManager
 import com.owncloud.android.lib.common.utils.Log_OC
 import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.lib.resources.status.CapabilityBooleanType
+import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.UIResult.Status
 import com.owncloud.android.presentation.adapters.sharing.SharePublicLinkListAdapter
 import com.owncloud.android.presentation.adapters.sharing.ShareUserListAdapter
@@ -292,7 +293,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
 
         activity!!.setTitle(R.string.share_dialog_title)
 
-        observeCapabilities() // Get capabilities to update some UI elements depending on them
+//        observeCapabilities() // Get capabilities to update some UI elements depending on them
         observeShares()
     }
 
@@ -310,48 +311,46 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
         listener = null
     }
 
-    private fun observeCapabilities() {
-        ocCapabilityViewModel.capabilities.observe(
-            this,
-            Observer { uiResult ->
-                when (uiResult?.status) {
-                    Status.SUCCESS -> {
-                        updateCapabilities(uiResult.data)
-                        listener?.dismissLoading()
-                    }
-                    Status.ERROR -> {
-                        showError(uiResult.errorMessage!!)
-                        updateCapabilities(uiResult.data)
-                        listener?.dismissLoading()
-                    }
-                    Status.LOADING -> {
-                        listener?.showLoading()
-                        updateCapabilities(uiResult.data)
-                    }
-                    else -> {
-                        Log.d(TAG, "Unknown status when loading capabilities in account ${account?.name}")
-                    }
-                }
-            }
-        )
-    }
+//    private fun observeCapabilities() {
+//        ocCapabilityViewModel.capabilities.observe(
+//            this,
+//            Observer { uiResult ->
+//                when (uiResult?.status) {
+//                    Status.SUCCESS -> {
+//                        updateCapabilities(uiResult.data)
+//                        listener?.dismissLoading()
+//                    }
+//                    Status.ERROR -> {
+//                        showError(uiResult.errorMessage!!)
+//                        updateCapabilities(uiResult.data)
+//                        listener?.dismissLoading()
+//                    }
+//                    Status.LOADING -> {
+//                        listener?.showLoading()
+//                        updateCapabilities(uiResult.data)
+//                    }
+//                    else -> {
+//                        Log.d(TAG, "Unknown status when loading capabilities in account ${account?.name}")
+//                    }
+//                }
+//            }
+//        )
+//    }
 
     private fun observeShares() {
         ocShareViewModel.shares.observe(
             this,
             Observer { uiResult ->
-                when (uiResult?.status) {
-                    Status.SUCCESS -> {
+                when (uiResult) {
+                    is UIResult.Success -> {
                         updateShares(uiResult.data as ArrayList<OCShareEntity>)
                         listener?.dismissLoading()
                     }
-                    Status.ERROR -> {
-                        showError(uiResult.errorMessage!!)
-                        updateShares(uiResult.data)
-                        listener?.dismissLoading()
+                    is UIResult.Error -> {
+                        showError(uiResult.error!!)
                     }
-                    Status.LOADING -> {
-                        listener?.showLoading() // TODO Use listener
+                    is UIResult.Loading -> {
+                        listener?.showLoading()
                         updateShares(uiResult.data)
                     }
                     else -> {
