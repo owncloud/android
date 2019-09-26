@@ -29,28 +29,25 @@ import org.json.JSONObject
 class OCShareeViewModel(
     val context: Context,
     account: Account,
-    private val getShareesUseCase: GetShareesAsyncUseCase = GetShareesAsyncUseCase(
+    private val getShareesAsyncUseCase: GetShareesAsyncUseCase = GetShareesAsyncUseCase(
         context,
         account
     )
 ) : ViewModel() {
 
-    fun getSharees(searchString: String, page: Int, perPage: Int): UIResult<ArrayList<JSONObject>> {
-        val useCaseResult = getShareesUseCase.execute(
-            GetShareesAsyncUseCase.Params(searchString, page, perPage)
+    suspend fun getSharees(searchString: String, page: Int, perPage: Int): UIResult<ArrayList<JSONObject>> {
+        val useCaseResult = getShareesAsyncUseCase.execute(
+            GetShareesAsyncUseCase.Params(
+                searchString,
+                page,
+                perPage
+            )
         )
 
-//        if (useCaseResult.isSuccess) {
-            return UIResult.Success(useCaseResult.getDataOrNull())
-//        } else {
-//            return UIResult.Error(
-//                errorMessage = useCaseResult.msg ?: ErrorMessageAdapter.getResultMessage(
-//                    useCaseResult.code,
-//                    useCaseResult.exception,
-//                    OperationType.GET_SHAREES,
-//                    context.resources
-//                )
-//            )
-//        }
+        return if (useCaseResult.isSuccess)
+            UIResult.Success(useCaseResult.getDataOrNull()) else
+            UIResult.Error(
+                useCaseResult.getThrowableOrNull()
+            )
     }
 }
