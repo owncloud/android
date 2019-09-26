@@ -32,7 +32,7 @@ import com.owncloud.android.domain.sharing.shares.usecases.CreatePublicShareAsyn
 import com.owncloud.android.domain.sharing.shares.usecases.DeleteShareAsyncUseCase
 import com.owncloud.android.domain.sharing.shares.usecases.EditPrivateShareAsyncUseCase
 import com.owncloud.android.domain.sharing.shares.usecases.EditPublicShareAsyncUseCase
-import com.owncloud.android.domain.sharing.shares.usecases.GetShareAsLiveDataAsyncUseCase
+import com.owncloud.android.domain.sharing.shares.usecases.GetShareAsLiveDataUseCase
 import com.owncloud.android.domain.sharing.shares.usecases.GetSharesAsLiveDataUseCase
 import com.owncloud.android.domain.sharing.shares.usecases.RefreshSharesFromServerAsyncUseCase
 import com.owncloud.android.lib.resources.shares.ShareType
@@ -49,7 +49,7 @@ class OCShareViewModel(
     val context: Context,
     val account: Account,
     getSharesAsLiveDataUseCase: GetSharesAsLiveDataUseCase = GetSharesAsLiveDataUseCase(context, account),
-    private val getShareAsLiveDataUseCase: GetShareAsLiveDataAsyncUseCase = GetShareAsLiveDataAsyncUseCase(
+    private val getShareAsLiveDataUseCase: GetShareAsLiveDataUseCase = GetShareAsLiveDataUseCase(
         context,
         account
     ),
@@ -193,7 +193,7 @@ class OCShareViewModel(
         remoteId: Long
     ) {
         privateShareLiveData = getShareAsLiveDataUseCase.execute(
-            GetShareAsLiveDataAsyncUseCase.Params(remoteId)
+            GetShareAsLiveDataUseCase.Params(remoteId)
         ).getDataOrNull()!!
 
         privateShareObserver = Observer { privateShare ->
