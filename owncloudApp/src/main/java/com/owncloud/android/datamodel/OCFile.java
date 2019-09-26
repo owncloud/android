@@ -754,5 +754,4 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
         setTreeEtag(sourceFile.getTreeEtag());
         setEtagInConflict(sourceFile.getEtagInConflict());
     }
-
 }

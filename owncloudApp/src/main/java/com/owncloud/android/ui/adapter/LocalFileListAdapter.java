@@ -4,6 +4,7 @@
  * @author David A. Velasco
  * @author Christian Schabesberger
  * @author Shashvat Kedia
+ * @author Abel García de Prada
  * Copyright (C) 2011  Bartek Przybylski
  * Copyright (C) 2019 ownCloud GmbH.
  * <p>
@@ -105,7 +106,7 @@ public class LocalFileListAdapter extends BaseAdapter implements ListAdapter {
             LayoutInflater inflater = (LayoutInflater) mContext
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-            view = inflater.inflate(R.layout.list_item, null);
+            view = inflater.inflate(R.layout.item_file_list, null);
 
             // Allow or disallow touches with other visible windows
             view.setFilterTouchesWhenObscured(
@@ -133,17 +134,17 @@ public class LocalFileListAdapter extends BaseAdapter implements ListAdapter {
             }
             fileIcon.setTag(file.hashCode());
 
-            TextView fileSizeV = view.findViewById(R.id.file_size);
-            TextView fileSizeSeparatorV = view.findViewById(R.id.file_separator);
-            TextView lastModV = view.findViewById(R.id.last_mod);
+            TextView fileSizeTV = view.findViewById(R.id.file_list_size);
+            TextView fileSizeSeparatorTV = view.findViewById(R.id.file_list_separator);
+            TextView lastModTV = view.findViewById(R.id.file_list_last_mod);
             ImageView checkBoxV = view.findViewById(R.id.custom_checkbox);
-            lastModV.setVisibility(View.VISIBLE);
-            lastModV.setText(DisplayUtils.getRelativeTimestamp(mContext, file.lastModified()));
+            lastModTV.setVisibility(View.VISIBLE);
+            lastModTV.setText(DisplayUtils.getRelativeTimestamp(mContext, file.lastModified()));
 
             if (!file.isDirectory()) {
-                fileSizeSeparatorV.setVisibility(View.VISIBLE);
-                fileSizeV.setVisibility(View.VISIBLE);
-                fileSizeV.setText(DisplayUtils.bytesToHumanReadable(file.length(), mContext));
+                fileSizeSeparatorTV.setVisibility(View.VISIBLE);
+                fileSizeTV.setVisibility(View.VISIBLE);
+                fileSizeTV.setText(DisplayUtils.bytesToHumanReadable(file.length(), mContext));
 
                 parentList = (ListView) parent;
                 if (parentList.getChoiceMode() == ListView.CHOICE_MODE_NONE) {
@@ -184,8 +185,8 @@ public class LocalFileListAdapter extends BaseAdapter implements ListAdapter {
                 }
 
             } else {
-                fileSizeSeparatorV.setVisibility(View.GONE);
-                fileSizeV.setVisibility(View.GONE);
+                fileSizeSeparatorTV.setVisibility(View.GONE);
+                fileSizeTV.setVisibility(View.GONE);
                 checkBoxV.setVisibility(View.GONE);
             }
 

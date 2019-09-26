@@ -35,13 +35,26 @@ class RootCursor(projection: Array<String>?) : MatrixCursor(projection ?: DEFAUL
         val manager = FileDataStorageManager(context, account, context.contentResolver)
         val mainDir = manager.getFileByPath(OCFile.ROOT_PATH)
 
+        val flags = Root.FLAG_SUPPORTS_SEARCH or Root.FLAG_SUPPORTS_CREATE
+
         newRow()
             .add(Root.COLUMN_ROOT_ID, account.name)
             .add(Root.COLUMN_DOCUMENT_ID, mainDir.fileId)
             .add(Root.COLUMN_SUMMARY, account.name)
             .add(Root.COLUMN_TITLE, context.getString(R.string.app_name))
             .add(Root.COLUMN_ICON, R.mipmap.icon)
-            .add(Root.COLUMN_FLAGS, Root.FLAG_SUPPORTS_SEARCH)
+            .add(Root.COLUMN_FLAGS, flags)
+    }
+
+    fun addProtectedRoot(context: Context, passcodeState: Boolean) {
+        newRow()
+            .add(
+                Root.COLUMN_SUMMARY,
+                if (passcodeState) context.getString(R.string.pass_code_locked)
+                else context.getString(R.string.pattern_locked)
+            )
+            .add(Root.COLUMN_TITLE, context.getString(R.string.app_name))
+            .add(Root.COLUMN_ICON, R.mipmap.icon)
     }
 
     companion object {

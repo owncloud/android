@@ -255,8 +255,11 @@ public class SynchronizeFileOperation extends SyncOperation {
         // services and available offline feature may try to do it, this is the way to proceed
         if (mRequestedFromAvOfflineJobService && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             intent.putExtra(FileDownloader.KEY_IS_AVAILABLE_OFFLINE_FILE, true);
+            Log_OC.d(TAG, "Download file from foreground/background, " +
+                    "startForeground() will be called soon");
             mContext.startForegroundService(intent);
         } else {
+            Log_OC.d(TAG, "Download file from foreground");
             mContext.startService(intent);
         }
 

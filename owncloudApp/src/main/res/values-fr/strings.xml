@@ -1,5 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+  <string name="about_android">%1$s pour Android</string>
+  <string name="about_version">Version %1$s</string>
   <string name="actionbar_search">Rechercher dans ce dossier</string>
   <string name="actionbar_sync">Actualiser le compte</string>
   <string name="actionbar_upload">Téléverser</string>
@@ -19,12 +21,14 @@
   <string name="drawer_item_all_files">Tous les fichiers</string>
   <string name="drawer_item_only_available_offline">Disponible hors-ligne</string>
   <string name="drawer_item_settings">Paramètres</string>
-  <string name="drawer_item_uploads_list">Envois</string>
+  <string name="drawer_item_uploads_list">Téléversements</string>
   <string name="drawer_close">Fermer</string>
   <string name="drawer_open">Ouvrir</string>
   <string name="drawer_loading_quota">Chargement du quota</string>
+  <string name="drawer_quota">%1$ssur %2$sutilisé(s) (%3$s %%)</string>
+  <string name="drawer_unavailable_free_storage">%1$s utilisé(s)</string>
   <string name="drawer_unavailable_used_storage">Aucune information d\'utilisation du stockage disponible</string>
-  <string name="drawer_feedback">Notifications</string>
+  <string name="drawer_feedback">Retour d’expérience</string>
   <string name="drawer_help">Aide...</string>
   <string name="prefs_category_general">Général</string>
   <string name="prefs_category_more">Plus</string>
@@ -33,6 +37,9 @@
   <string name="prefs_manage_accounts">Gérer les comptes</string>
   <string name="prefs_passcode">Code de sécurité</string>
   <string name="prefs_fingerprint">Verrouillage par empreinte</string>
+  <string name="prefs_fingerprint_summary">Activez un code de sécurité ou un motif afin d’activer cette option</string>
+  <string name="confirmation_touches_with_other_windows_title">Êtes-vous sûr de vouloir activer cette fonctionnalité ?</string>
+  <string name="confirmation_touches_with_other_windows_message">Vous utilisez cette fonctionnalité sous votre propre responsabilité. Une application malveillante pourrait tenter de vous pousser à effectuer des actions en falsifiant l’application.</string>
   <string name="prefs_camera_picture_upload">Envoi d\'images</string>
   <string name="prefs_camera_picture_upload_summary">Téléverser automatiquement les images prises par l\'appareil photo</string>
   <string name="prefs_camera_video_upload">Téléversement de vidéo</string>
@@ -44,13 +51,21 @@
   <string name="prefs_log_delete_history_button">Supprimer l\'historique</string>
   <string name="prefs_help">Aide</string>
   <string name="prefs_sync_calendar_contacts">Synchronisez vos contacts, agendas et tâches</string>
+  <string name="prefs_sync_calendar_contacts_summary">Installez DAVx⁵</string>
   <string name="prefs_recommend">Recommander à un ami</string>
   <string name="prefs_feedback">Commentaires</string>
   <string name="prefs_imprint">Mentions</string>
   <string name="prefs_remember_last_share_location">Mémoriser l\'emplacement de partage</string>
   <string name="prefs_remember_last_upload_location_summary">Mémoriser le dernier emplacement de téléversement</string>
+  <string name="prefs_pattern">Verrouillage par motif</string>
+  <string name="pattern_incorrect_pattern">Motif incorrect</string>
+  <string name="pattern_not_same_pattern">Les motifs ne sont pas identiques</string>
   <string name="pattern_stored">Modèles entreposés</string>
   <string name="pattern_removed">Modèles supprimés</string>
+  <string name="pattern_already_set">Un motif et un code de sécurité ne peuvent être activés en même temps. Veuillez d’abord désactiver le motif</string>
+  <string name="passcode_already_set">Un motif et un code de sécurité ne peuvent être activés en même temps. Veuillez d’abord désactiver le code de sécurité</string>
+  <string name="pattern_no_longer_required">La saisie du motif ne vous sera plus demandée</string>
+  <string name="pattern_configure_your_pattern_explanation">La saisie du motif sera requise à chaque ouverture de l’application</string>
   <string name="recommend_subject">Essayez %1$s sur votre smartphone !</string>
   <string name="recommend_text">J\'aimerais vous inviter à utiliser %1$s sur votre smartphone !
 Téléchargez-le ici : %2$s</string>
@@ -78,16 +93,19 @@ Téléchargez-le ici : %2$s</string>
   <string name="uploader_error_message_source_file_not_copied">Une erreur est survenue lors de la copie du fichier vers un dossier temporaire. Merci de recommencer votre envoi.</string>
   <string name="file_list_seconds_ago">il y a quelques secondes</string>
   <string name="file_list_empty">Il n\'y a rien ici ! Envoyez donc quelque chose :)</string>
+  <string name="file_list_empty_available_offline">Il n’y a pas de fichier hors connexion disponible.</string>
   <string name="file_list_loading">Chargement...</string>
   <string name="file_list_no_app_for_file_type">Aucune application trouvée pour ce type de fichier</string>
   <string name="local_file_list_empty">Aucun fichier n\'est présent dans ce dossier.</string>
   <string name="local_file_list_empty_just_folders">Il n\'y a pas de dossiers dans ce dossier.</string>
+  <string name="local_file_list_search_with_no_matches">Pas de résultat pour cette recherche</string>
   <string name="upload_list_empty">Aucun téléversement disponible.</string>
   <string name="file_list_folder">dossier</string>
   <string name="file_list_folders">dossiers</string>
   <string name="file_list_file">fichier</string>
   <string name="file_list_files">fichiers</string>
   <string name="filedetails_select_file">Sélectionnez un fichier pour afficher des informations supplémentaires</string>
+  <string name="upload_to">Téléversez vers %1$s</string>
   <string name="upload_files_title">Fichiers</string>
   <string name="filedetails_size">Taille :</string>
   <string name="filedetails_type">Type :</string>
@@ -115,6 +133,7 @@ Téléchargez-le ici : %2$s</string>
   <string name="change_password">Changer de mot de passe</string>
   <string name="delete_account">Supprimer le compte</string>
   <string name="create_account">Créer un compte</string>
+  <string name="upload_chooser_title">Téléversez depuis</string>
   <string name="uploader_info_dirname">Nom du dossier</string>
   <string name="uploader_upload_in_progress_ticker">Téléversement ...</string>
   <string name="uploader_upload_in_progress_content">Envoi du fichier %2$s : %1$d%% effectués</string>
@@ -133,6 +152,8 @@ Téléchargez-le ici : %2$s</string>
   <string name="uploads_view_group_current_uploads">En ce moment</string>
   <string name="uploads_view_group_failed_uploads">Échoué (appuyer pour réessayer)</string>
   <string name="uploads_view_group_finished_uploads">Téléversé</string>
+  <string name="uploads_view_group_file_count">%d fichiers</string>
+  <string name="uploads_view_group_file_count_single">%d fichier</string>
   <string name="uploads_view_upload_status_succeeded">Terminé</string>
   <string name="uploads_view_upload_status_cancelled">Annulé</string>
   <string name="uploads_view_upload_status_paused">En pause</string>
@@ -218,6 +239,7 @@ Ci-dessous la liste des fichiers locaux, et les fichiers distants dans %5$s auxq
   <string name="media_forward_description">Bouton d\'avance rapide</string>
   <string name="upload_from_camera_title">Image de la caméra</string>
   <string name="auth_getting_authorization">Demande d\'autorisation…</string>
+  <string name="auth_trying_to_login">Tentative de connexion ...</string>
   <string name="auth_no_net_conn_title">Pas de connexion réseau</string>
   <string name="auth_nossl_plain_ok_title">Connexion sécurisée non disponible</string>
   <string name="auth_connection_established">Connexion établie</string>
@@ -315,7 +337,10 @@ Ci-dessous la liste des fichiers locaux, et les fichiers distants dans %5$s auxq
   <string name="confirmation_disable_camera_uploads_title">Confirmer</string>
   <string name="confirmation_disable_pictures_upload_message">Êtes-vous sûr de vouloir désactiver cette fonction ? Les images en suspens ne seront pas téléversées</string>
   <string name="confirmation_disable_videos_upload_message">Êtes-vous sûr de vouloir désactiver cette fonction ? Les vidéos en suspens ne seront pas téléversées</string>
+  <string name="proper_pics_folder_warning_camera_upload">Veuillez vous assurer que le dossier sélectionné est celui où l’appareil photo enregistre les photos prises. Sinon, la fonctionnalité ne sera pas capable de détecter vos photos. Gardez en tête que les photos ne seront téléversées qu’au minimum 15 minutes après avoir été prises.</string>
+  <string name="proper_videos_folder_warning_camera_upload">Veuillez vous assurer que le dossier sélectionné est celui où la caméra enregistre les prises de vidéo. Sinon, la fonctionnalité ne sera pas capable de détecter vos vidéos. Gardez en tête que les vidéos ne seront téléversées qu’au minimum 15 minutes après avoir été prises.</string>
   <string name="conflict_title">Conflit de fichiers</string>
+  <string name="conflict_description">Il existe un conflit dans le fichier %1$s. Tapez pour le résoudre</string>
   <string name="conflict_message">Quel(s) fichier(s) voulez-vous conserver ? Si vous sélectionnez les deux, un chiffre sera ajouté au nom du fichier local.</string>
   <string name="conflict_keep_both">Conserver les deux versions</string>
   <string name="conflict_use_local_version">version locale</string>
@@ -324,6 +349,8 @@ Ci-dessous la liste des fichiers locaux, et les fichiers distants dans %5$s auxq
   <string name="preview_image_error_unknown_format">Cette image ne peut pas être affichée</string>
   <string name="error__upload__local_file_not_copied">%1$s n\'a pas pu être copié dans le dossier local %2$s</string>
   <string name="prefs_camera_picture_upload_path_title">Chemin d\'accès au répertoire de téléversement des images</string>
+  <string name="get_shares_error">Une erreur est survenue pendant la récupération des partages</string>
+  <string name="get_sharees_error">Une erreur est survenue pendant la récupération des utilisateurs et des groupes</string>
   <string name="share_link_no_support_share_api">Désolé, le partage n\'est pas disponible sur votre serveur. Veuillez contacter votre administrateur.</string>
   <string name="share_link_file_no_exist">Impossible de partager. Vérifiez que le fichier est bien présent</string>
   <string name="share_link_file_error">Une erreur est survenue lors de la tentative de partage de ce fichier ou répertoire</string>
@@ -364,6 +391,7 @@ Ci-dessous la liste des fichiers locaux, et les fichiers distants dans %5$s auxq
   <string name="log_send_mail_subject">Journaux de l\'application Android %1$s</string>
   <string name="log_progress_dialog_text">Chargement des données…</string>
   <string name="actionbar_select_all">Tout sélectionner</string>
+  <string name="actionbar_select_inverse">Inversez la sélection</string>
   <string name="saml_authentication_required_text">Authentification requise</string>
   <string name="saml_authentication_wrong_pass">Mot de passe incorrect</string>
   <string name="actionbar_move">Déplacer</string>
@@ -401,6 +429,8 @@ Ci-dessous la liste des fichiers locaux, et les fichiers distants dans %5$s auxq
   <string name="prefs_camera_upload_source_path_title">Dossier de l\'appareil photo (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">Requis</string>
   <string name="prefs_camera_upload_source_path_title_optional">Optionnel</string>
+  <string name="prefs_camera_upload_behaviour_dialogTitle">Le fichier original sera</string>
+  <string name="prefs_camera_upload_behaviour_title">Le fichier original sera</string>
   <string name="upload_copy_files">Copier le fichier</string>
   <string name="upload_move_files">Déplacer le fichier</string>
   <string name="pref_behaviour_entries_keep_file">gardé dans le dossier original</string>
@@ -475,6 +505,7 @@ Ci-dessous la liste des fichiers locaux, et les fichiers distants dans %5$s auxq
   <string name="share_via_link_expiration_date_enforced_label">Date d\'expiration *</string>
   <string name="share_via_link_expiration_date_explanation_label">Ce lien public expirera au plus tard %1$d jours après sa création</string>
   <string name="share_via_link_default_name_template">lien %1$s</string>
+  <string name="share_via_link_empty_password">Le mot de passe est vide</string>
   <string name="private_link_info">Ceci est un lien privé ; seules les personnes ayant accès à ce fichier/dossier peuvent l\'utiliser. Utilisez-le comme lien permanent pour vous-même ou pour pointer sur ce fichier/dossier dans le partage avec d\'autres utilisateur.</string>
   <string name="file_private_link_error">Le lien privé n\'est pas disponible pour ce fichier</string>
   <string name="download_notification_channel_name">Téléchargements</string>
@@ -485,6 +516,8 @@ Ci-dessous la liste des fichiers locaux, et les fichiers distants dans %5$s auxq
   <string name="media_service_notification_channel_description">Voir le lecteur de musique</string>
   <string name="file_sync_notification_channel_name">synchronisation de fichier</string>
   <string name="file_sync_notification_channel_description">Voir le résultat de la synchronisation de fichier</string>
+  <string name="rate_dialog_title">Notez l’application %1$s</string>
+  <string name="rate_dialog_description">Si vous appréciez l’utilisation de cette application, pouvez-vous prendre un instant pour la noter ? Votre retour d’expérience est très important pour nous.</string>
   <string name="button_no_thanks_name">NON MERCI</string>
   <string name="button_later_name">PLUS TARD</string>
   <string name="button_rate_now_name">NOTER MAINTENANT</string>
@@ -505,6 +538,11 @@ Ci-dessous la liste des fichiers locaux, et les fichiers distants dans %5$s auxq
   <string name="welcome_feature_5_title">Streaming vidéo</string>
   <string name="welcome_feature_5_text">Lire vos vidéos sans les télécharger</string>
   <string name="welcome_feature_6_title">Rechercher dans le dossier actuel</string>
+  <string name="welcome_feature_6_text">Filtrez vos fichiers par nom</string>
   <string name="welcome_feature_7_title">Tout sélectionner</string>
   <string name="welcome_feature_8_title">Disponible hors-ligne</string>
+  <string name="welcome_feature_8_text">Vos fichiers ont été synchronisés automatiquement</string>
+  <string name="welcome_feature_9_text">Accédez et modifiez vos fichiers ownCloud depuis d’autres applications</string>
+  <string name="welcome_feature_10_text">Envoyez nous vos journaux d’activité afin que nous puissions améliorer l’application</string>
+  <string name="no_borwser_installed_alert">Pas de navigateur installé. Veuillez installer un navigateur afin de permettre une connexion sécurisée.</string>
 </resources>

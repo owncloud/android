@@ -150,8 +150,8 @@ class SearchShareesFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterL
         }
     }
 
-    override fun onAttach(activity: Activity?) {
-        super.onAttach(activity)
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
         try {
             listener = activity as ShareFragmentListener?
         } catch (e: ClassCastException) {

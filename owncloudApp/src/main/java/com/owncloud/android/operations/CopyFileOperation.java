@@ -45,9 +45,8 @@ public class CopyFileOperation extends SyncOperation {
      *
      * @param srcPath          Remote path of the {@link OCFile} to move.
      * @param targetParentPath Path to the folder where the file will be copied into.
-     * @param account          OwnCloud account containing both the file and the target folder
      */
-    public CopyFileOperation(String srcPath, String targetParentPath, Account account) {
+    public CopyFileOperation(String srcPath, String targetParentPath) {
         mSrcPath = srcPath;
         mTargetParentPath = targetParentPath;
         if (!mTargetParentPath.endsWith(OCFile.PATH_SEPARATOR)) {
@@ -86,14 +85,14 @@ public class CopyFileOperation extends SyncOperation {
                 false
         );
         result = operation.execute(client);
+        String targetFileRemoteId = (String) result.getData();
 
         /// 3. local copy
         if (result.isSuccess()) {
-            getStorageManager().copyLocalFile(mFile, targetPath);
+            getStorageManager().copyLocalFile(mFile, targetPath, targetFileRemoteId);
         }
         // TODO handle ResultCode.PARTIAL_COPY_DONE in client Activity, for the moment
 
         return result;
     }
-
 }
