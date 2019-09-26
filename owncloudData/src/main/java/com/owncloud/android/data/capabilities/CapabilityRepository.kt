@@ -24,7 +24,7 @@ import com.owncloud.android.data.DataResult
 import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
 
 interface CapabilityRepository {
-    fun refreshCapabilitiesForAccount(
+    suspend fun refreshCapabilitiesForAccount(
         accountName: String,
         shouldFetchFromNetwork: Boolean = true
     )

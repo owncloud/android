@@ -19,21 +19,10 @@
 
 package com.owncloud.android.presentation
 
-import com.owncloud.android.domain.UseCaseResult
-
 sealed class UIResult<out T> {
-    companion object {
-        fun <T> fromUseCaseResult(useCaseResult: UseCaseResult<T>): UIResult<T> =
-            if (useCaseResult.isSuccess) {
-                Success(useCaseResult.getDataOrNull())
-            } else {
-                Error(useCaseResult.getThrowableOrNull())
-            }
-    }
-
-    data class Loading<out T>(val data: T? = null): UIResult<T>()
-    data class Success<out T>(val data: T? = null): UIResult<T>()
-    data class Error<out T>(val error: Throwable? = null): UIResult<T>()
+    data class Loading<out T>(val data: T? = null) : UIResult<T>()
+    data class Success<out T>(val data: T? = null) : UIResult<T>()
+    data class Error<out T>(val error: Throwable? = null, val data: T? = null) : UIResult<T>()
 
     val isLoading get() = this is Loading
     val isSuccess get() = this is Success

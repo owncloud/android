@@ -316,16 +316,23 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
             Observer { uiResult ->
                 when (uiResult) {
                     is UIResult.Success -> {
-                        updateCapabilities(uiResult.data)
+                        uiResult.data?.let {
+                            updateCapabilities(it)
+                        }
                         listener?.dismissLoading()
                     }
                     is UIResult.Error -> {
+                        uiResult.data?.let {
+                            updateCapabilities(it)
+                        }
 //                        showError(uiResult.error!!)
                         listener?.dismissLoading()
                     }
                     is UIResult.Loading -> {
                         listener?.showLoading()
-                        updateCapabilities(uiResult.data)
+                        uiResult.data?.let {
+                            updateCapabilities(it)
+                        }
                     }
                     else -> {
                         Log.d(TAG, "Unknown status when loading capabilities in account ${account?.name}")
@@ -341,16 +348,23 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
             Observer { uiResult ->
                 when (uiResult) {
                     is UIResult.Success -> {
-                        updateShares(uiResult.data as ArrayList<OCShareEntity>)
+                        uiResult.data?.let {
+                            updateShares(it)
+                        }
                         listener?.dismissLoading()
                     }
                     is UIResult.Error -> {
+                        uiResult.data?.let {
+                            updateShares(it)
+                        }
 //                        showError(uiResult.error!!)
                         listener?.dismissLoading()
                     }
                     is UIResult.Loading -> {
                         listener?.showLoading()
-                        updateShares(uiResult.data)
+                        uiResult.data?.let {
+                            updateShares(it)
+                        }
                     }
                     else -> {
                         Log.d(

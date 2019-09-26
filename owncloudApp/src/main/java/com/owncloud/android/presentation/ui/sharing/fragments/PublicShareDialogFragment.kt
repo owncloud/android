@@ -456,7 +456,7 @@ class PublicShareDialogFragment : DialogFragment() {
                     }
                     is UIResult.Error -> {
 //                        showError(uiResult.errorMessage!!)
-                        updateCapabilities(uiResult.getDataOrNull())
+//                        updateCapabilities(uiResult.getDataOrNull())
                         listener?.dismissLoading()
                     }
                     is UIResult.Loading -> {

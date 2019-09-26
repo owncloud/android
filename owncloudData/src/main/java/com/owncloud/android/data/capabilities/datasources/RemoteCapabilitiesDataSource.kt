@@ -19,12 +19,12 @@
 
 package com.owncloud.android.data.capabilities.datasources
 
-import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.status.GetRemoteCapabilitiesOperation
 import com.owncloud.android.lib.resources.status.RemoteCapability
 
 interface RemoteCapabilitiesDataSource {
-    fun getCapabilities(
+    suspend fun getCapabilities(
+        accountName: String,
         getRemoteCapabilitiesOperation: GetRemoteCapabilitiesOperation = GetRemoteCapabilitiesOperation()
-    ): RemoteOperationResult<RemoteCapability>
+    ): RemoteCapability
 }

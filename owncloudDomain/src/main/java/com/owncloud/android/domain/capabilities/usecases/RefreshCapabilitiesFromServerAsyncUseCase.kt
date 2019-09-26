@@ -17,40 +17,38 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.domain.sharing.shares.usecases
+package com.owncloud.android.domain.capabilities.usecases
 
 import android.accounts.Account
 import android.content.Context
-import com.owncloud.android.data.sharing.shares.ShareRepository
-import com.owncloud.android.data.sharing.shares.datasources.OCLocalShareDataSource
-import com.owncloud.android.data.sharing.shares.datasources.OCRemoteShareDataSource
+import com.owncloud.android.data.capabilities.CapabilityRepository
+import com.owncloud.android.data.capabilities.datasources.OCLocalCapabilitiesDataSource
+import com.owncloud.android.data.capabilities.datasources.OCRemoteCapabilitiesDataSource
+import com.owncloud.android.domain.capabilities.OCCapabilityRepository
 import com.owncloud.android.domain.BaseAsyncUseCase
-import com.owncloud.android.domain.sharing.shares.OCShareRepository
 import com.owncloud.android.lib.common.OwnCloudAccount
 import com.owncloud.android.lib.common.OwnCloudClientManagerFactory
 
-class RefreshSharesFromNetworkAsyncUseCase(
+class RefreshCapabilitiesFromServerAsyncUseCase(
     context: Context,
     account: Account,
-    private val shareRepository: ShareRepository = OCShareRepository(
-        localShareDataSource = OCLocalShareDataSource(context),
-        remoteShareDataSource = OCRemoteShareDataSource(
+    private val capabilityRepository: CapabilityRepository = OCCapabilityRepository(
+        localCapabilitiesDataSource = OCLocalCapabilitiesDataSource(context),
+        remoteCapabilitiesDataSource = OCRemoteCapabilitiesDataSource(
             OwnCloudClientManagerFactory.getDefaultSingleton().getClientFor(
                 OwnCloudAccount(account, context),
                 context
             )
         )
     )
-) : BaseAsyncUseCase<Unit, RefreshSharesFromNetworkAsyncUseCase.Params>() {
+) : BaseAsyncUseCase<Unit, RefreshCapabilitiesFromServerAsyncUseCase.Params>() {
 
     override suspend fun run(params: Params) =
-        shareRepository.refreshSharesFromNetwork(
-            params.filePath,
+        capabilityRepository.refreshCapabilitiesForAccount(
             params.accountName
         )
 
     data class Params(
-        val filePath: String,
         val accountName: String
     )
 }
