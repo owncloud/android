@@ -29,14 +29,14 @@ import org.json.JSONObject
 class OCShareeViewModel(
     val context: Context,
     account: Account,
-    private val getShareesUseCase: GetShareesAsyncUseCase = GetShareesAsyncUseCase(
+    private val getShareesAsyncUseCase: GetShareesAsyncUseCase = GetShareesAsyncUseCase(
         context,
         account
     )
 ) : ViewModel() {
 
-    fun getSharees(searchString: String, page: Int, perPage: Int): UIResult<ArrayList<JSONObject>> {
-        getShareesUseCase.execute(
+    suspend fun getSharees(searchString: String, page: Int, perPage: Int): UIResult<ArrayList<JSONObject>> {
+        getShareesAsyncUseCase.execute(
             GetShareesAsyncUseCase.Params(
                 searchString,
                 page,

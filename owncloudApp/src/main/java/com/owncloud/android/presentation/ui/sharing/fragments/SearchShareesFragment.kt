@@ -149,7 +149,7 @@ class SearchShareesFragment : Fragment(),
         ocShareViewModel.shares.observe(
             this,
             Observer { uiResult ->
-                val privateShares = uiResult.getDataOrNull()?.filter { share ->
+                val privateShares = uiResult.getStoredData()?.filter { share ->
                     share.shareType == ShareType.USER.value ||
                             share.shareType == ShareType.GROUP.value ||
                             share.shareType == ShareType.FEDERATED.value
