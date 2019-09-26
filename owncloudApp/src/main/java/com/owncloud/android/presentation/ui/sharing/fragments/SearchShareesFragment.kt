@@ -53,7 +53,6 @@ import com.owncloud.android.utils.PreferenceUtils
 import kotlinx.android.synthetic.main.search_users_groups_layout.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
-import java.util.ArrayList
 
 /**
  * Fragment for Searching sharees (users and groups)
@@ -149,14 +148,16 @@ class SearchShareesFragment : Fragment(),
         ocShareViewModel.shares.observe(
             this,
             Observer { uiResult ->
-                val privateShares = uiResult.getDataOrNull()?.filter { share ->
+                val privateShares = uiResult.getStoredData()?.filter { share ->
                     share.shareType == ShareType.USER.value ||
                             share.shareType == ShareType.GROUP.value ||
                             share.shareType == ShareType.FEDERATED.value
-                } as ArrayList<OCShareEntity>
+                }
                 when (uiResult) {
                     is UIResult.Success -> {
-                        updatePrivateShares(privateShares)
+                        privateShares?.let {
+                            updatePrivateShares(privateShares)
+                        }
                         listener?.dismissLoading()
                     }
                     is UIResult.Error -> {
@@ -165,12 +166,16 @@ class SearchShareesFragment : Fragment(),
 //                            uiResult.errorMessage!!,
 //                            Snackbar.LENGTH_SHORT
 //                        ).show()
-                        updatePrivateShares(privateShares)
+                        privateShares?.let {
+                            updatePrivateShares(privateShares)
+                        }
                         listener?.dismissLoading()
                     }
                     is UIResult.Loading -> {
                         listener?.showLoading()
-                        updatePrivateShares(privateShares)
+                        privateShares?.let {
+                            updatePrivateShares(privateShares)
+                        }
                     }
                     else -> {
                         Log.d(

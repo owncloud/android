@@ -30,7 +30,7 @@ import com.owncloud.android.domain.sharing.shares.OCShareRepository
 import com.owncloud.android.lib.common.OwnCloudAccount
 import com.owncloud.android.lib.common.OwnCloudClientManagerFactory
 
-class GetShareAsLiveDataAsyncUseCase(
+class GetShareAsLiveDataUseCase(
     context: Context,
     account: Account,
     private val shareRepository: ShareRepository = OCShareRepository(
@@ -42,7 +42,7 @@ class GetShareAsLiveDataAsyncUseCase(
             )
         )
     )
-) : BaseUseCase<LiveData<OCShareEntity>, GetShareAsLiveDataAsyncUseCase.Params>() {
+) : BaseUseCase<LiveData<OCShareEntity>, GetShareAsLiveDataUseCase.Params>() {
     override fun run(params: Params): LiveData<OCShareEntity> =
         shareRepository.getShareAsLiveData(
             params.remoteId

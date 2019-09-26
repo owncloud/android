@@ -28,21 +28,16 @@ sealed class UIResult<out T> {
     val isSuccess get() = this is Success
     val isError get() = this is Error
 
-    fun getDataOrNull(): T? =
+    fun getStoredData(): T? =
         when (this) {
+            is Loading -> data
             is Success -> data
-            else -> null
+            is Error -> data  // Even when there's an error we still want to show database data
         }
 
     fun getThrowableOrNull(): Throwable? =
         when (this) {
             is Error -> error
-            else -> null
-        }
-
-    fun getLoadingOrNull(): T? =
-        when (this) {
-            is Loading -> data
             else -> null
         }
 }
