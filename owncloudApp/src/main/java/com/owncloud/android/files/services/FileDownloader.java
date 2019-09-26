@@ -122,6 +122,7 @@ public class FileDownloader extends Service
         mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
         mNotificationBuilder = NotificationUtils.newNotificationBuilder(this);
+        mNotificationBuilder.setChannelId(DOWNLOAD_NOTIFICATION_CHANNEL_ID);
 
         // Configure notification channel
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
@@ -574,7 +575,6 @@ public class FileDownloader extends Service
                 .setContentText(
                         String.format(getString(R.string.downloader_download_in_progress_content), 0,
                                 new File(download.getSavePath()).getName()))
-                .setChannelId(DOWNLOAD_NOTIFICATION_CHANNEL_ID)
                 .setWhen(System.currentTimeMillis());
 
         /// includes a pending intent in the notification showing the details view of the file
@@ -608,7 +608,6 @@ public class FileDownloader extends Service
             String fileName = filePath.substring(filePath.lastIndexOf(FileUtils.PATH_SEPARATOR) + 1);
             String text = String.format(getString(R.string.downloader_download_in_progress_content), percent, fileName);
             mNotificationBuilder.setContentText(text);
-            mNotificationBuilder.setChannelId(DOWNLOAD_NOTIFICATION_CHANNEL_ID);
             mNotificationManager.notify(R.string.downloader_download_in_progress_ticker, mNotificationBuilder.build());
         }
         mLastPercent = percent;
@@ -665,10 +664,9 @@ public class FileDownloader extends Service
             }
 
             mNotificationBuilder.setContentText(
-                    ErrorMessageAdapter.getResultMessage(downloadResult, download,
+                    ErrorMessageAdapter.Companion.getResultMessage(downloadResult, download,
                             getResources())
             );
-            mNotificationBuilder.setChannelId(DOWNLOAD_NOTIFICATION_CHANNEL_ID);
             mNotificationManager.notify(tickerId, mNotificationBuilder.build());
 
             // Remove success notification
@@ -679,7 +677,6 @@ public class FileDownloader extends Service
                         R.string.downloader_download_succeeded_ticker,
                         2000);
             }
-
         }
     }
 

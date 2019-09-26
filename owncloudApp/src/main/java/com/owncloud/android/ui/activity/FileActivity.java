@@ -32,10 +32,7 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
-import android.view.View;
-import android.widget.Toast;
 
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import com.google.android.material.snackbar.Snackbar;
@@ -53,18 +50,13 @@ import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.common.utils.Log_OC;
-import com.owncloud.android.operations.CreateShareWithShareeOperation;
-import com.owncloud.android.operations.GetSharesForFileOperation;
 import com.owncloud.android.operations.RemoveShareOperation;
 import com.owncloud.android.operations.RenameFileOperation;
 import com.owncloud.android.operations.SynchronizeFileOperation;
 import com.owncloud.android.operations.SynchronizeFolderOperation;
-import com.owncloud.android.operations.UpdateSharePermissionsOperation;
-import com.owncloud.android.operations.UpdateShareViaLinkOperation;
 import com.owncloud.android.services.OperationsService;
 import com.owncloud.android.services.OperationsService.OperationsServiceBinder;
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment;
-import com.owncloud.android.ui.dialog.LoadingDialog;
 import com.owncloud.android.ui.dialog.SslUntrustedCertDialog;
 import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter;
 import com.owncloud.android.ui.helpers.FileOperationsHelper;
@@ -81,8 +73,6 @@ public class FileActivity extends DrawerActivity
             "com.owncloud.android.ui.activity.FROM_NOTIFICATION";
     static final String EXTRA_ONLY_AVAILABLE_OFFLINE ="ONLY_AVAILABLE_OFFLINE";
     public static final String TAG = FileActivity.class.getSimpleName();
-
-    private static final String DIALOG_WAIT_TAG = "DIALOG_WAIT";
 
     private static final String KEY_WAITING_FOR_OP_ID = "WAITING_FOR_OP_ID";
     private static final String KEY_ACTION_BAR_TITLE = "ACTION_BAR_TITLE";
@@ -293,7 +283,7 @@ public class FileActivity extends DrawerActivity
 
             if (result.getCode() == ResultCode.UNAUTHORIZED) {
                 showSnackMessage(
-                        ErrorMessageAdapter.getResultMessage(result, operation, getResources())
+                        ErrorMessageAdapter.Companion.getResultMessage(result, operation, getResources())
                 );
             }
 
@@ -302,38 +292,23 @@ public class FileActivity extends DrawerActivity
             showUntrustedCertDialog(result);
 
         } else if (operation == null ||
-                operation instanceof CreateShareWithShareeOperation ||
                 operation instanceof RemoveShareOperation ||
-                operation instanceof SynchronizeFolderOperation ||
-                operation instanceof UpdateShareViaLinkOperation ||
-                operation instanceof UpdateSharePermissionsOperation
+                operation instanceof SynchronizeFolderOperation
         ) {
             if (result.isSuccess()) {
                 updateFileFromDB();
 
             } else if (result.getCode() != ResultCode.CANCELLED) {
                 showSnackMessage(
-                        ErrorMessageAdapter.getResultMessage(result, operation, getResources())
+                        ErrorMessageAdapter.Companion.getResultMessage(result, operation, getResources())
                 );
             }
 
         } else if (operation instanceof SynchronizeFileOperation) {
             onSynchronizeFileOperationFinish((SynchronizeFileOperation) operation, result);
 
-        } else if (operation instanceof GetSharesForFileOperation) {
-            if (result.isSuccess() || result.getCode() == ResultCode.SHARE_NOT_FOUND) {
-                updateFileFromDB();
-
-            } else {
-                showSnackMessage(
-                        ErrorMessageAdapter.getResultMessage(result, operation, getResources())
-                );
-            }
-
         } else if (operation instanceof RenameFileOperation && result.isSuccess()) {
-
             result.getData();
-
         }
     }
 
@@ -412,36 +387,6 @@ public class FileActivity extends DrawerActivity
         if (file != null) {
             file = getStorageManager().getFileByPath(file.getRemotePath());
             setFile(file);
-        }
-    }
-
-    /**
-     * Show loading dialog
-     */
-    public void showLoadingDialog(int messageId) {
-        // grant that only one waiting dialog is shown
-        dismissLoadingDialog();
-        // Construct dialog
-        Fragment frag = getSupportFragmentManager().findFragmentByTag(DIALOG_WAIT_TAG);
-        if (frag == null) {
-            Log_OC.d(TAG, "show loading dialog");
-            LoadingDialog loading = LoadingDialog.newInstance(messageId, false);
-            FragmentManager fm = getSupportFragmentManager();
-            FragmentTransaction ft = fm.beginTransaction();
-            loading.show(ft, DIALOG_WAIT_TAG);
-            fm.executePendingTransactions();
-        }
-    }
-
-    /**
-     * Dismiss loading dialog
-     */
-    public void dismissLoadingDialog() {
-        Fragment frag = getSupportFragmentManager().findFragmentByTag(DIALOG_WAIT_TAG);
-        if (frag != null) {
-            Log_OC.d(TAG, "dismiss loading dialog");
-            LoadingDialog loading = (LoadingDialog) frag;
-            loading.dismiss();
         }
     }
 
@@ -547,24 +492,5 @@ public class FileActivity extends DrawerActivity
     @Override
     public void onCancelCertificate() {
         // nothing to do
-    }
-
-    /**
-     * Show a temporary message in a Snackbar bound to the content view
-     *
-     * @param message       Message to show.
-     */
-    public void showSnackMessage(String message) {
-        final View rootView = findViewById(android.R.id.content);
-        if (rootView != null) {
-            Snackbar.make(
-                    rootView,
-                    message,
-                    Snackbar.LENGTH_LONG)
-                    .show();
-        } else {
-            // If root view is not available don't let the app brake. show the notification anyway.
-            Toast.makeText(this, message, Snackbar.LENGTH_LONG).show();
-        }
     }
 }

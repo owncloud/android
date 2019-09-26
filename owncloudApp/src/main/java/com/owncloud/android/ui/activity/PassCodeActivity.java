@@ -6,6 +6,7 @@
  * @author David A. Velasco
  * @author Christian Schabesberger
  * @author David González Verdugo
+ * @author Abel García de Prada
  * Copyright (C) 2011 Bartek Przybylski
  * Copyright (C) 2019 ownCloud GmbH.
  * <p>
@@ -42,6 +43,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 import com.owncloud.android.lib.common.utils.Log_OC;
+import com.owncloud.android.utils.DocumentProviderUtils;
 import com.owncloud.android.utils.PreferenceUtils;
 
 import java.util.Arrays;
@@ -81,16 +83,13 @@ public class PassCodeActivity extends BaseActivity {
     /**
      * Initializes the activity.
      *
-     * An intent with a valid ACTION is expected; if none is found, an
-     * {@link IllegalArgumentException} will be thrown.
-     *
      * @param savedInstanceState    Previously saved state - irrelevant in this case
      */
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         /// protection against screen recording
-        if (!MainApp.isDeveloper()) {
+        if (!MainApp.Companion.isDeveloper()) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
         } // else, let it go, or taking screenshots & testing will not be possible
 
@@ -329,6 +328,7 @@ public class PassCodeActivity extends BaseActivity {
                 resultIntent.putExtra(KEY_CHECK_RESULT, true);
                 setResult(RESULT_OK, resultIntent);
                 hideSoftKeyboard();
+                DocumentProviderUtils.Companion.notifyDocumentProviderRoots(getApplicationContext());
                 finish();
             } else {
                 showErrorAndRestart(R.string.pass_code_wrong, R.string.pass_code_enter_pass_code,
@@ -456,7 +456,7 @@ public class PassCodeActivity extends BaseActivity {
                 mPassCodeDigits[0] + mPassCodeDigits[1] + mPassCodeDigits[2] + mPassCodeDigits[3]);
 
         setResult(RESULT_OK, resultIntent);
-
+        DocumentProviderUtils.Companion.notifyDocumentProviderRoots(getApplicationContext());
         finish();
     }
 

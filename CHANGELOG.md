@@ -1,3 +1,25 @@
+## 2.13 (September 2019)
+- Copy and move files from other third-party apps or internal storage to an ownCloud account through Downloads or Files app
+- Save files in an ownCloud account from third-party apps
+- Copy and move files within the same ownCloud account through Downloads or Files app
+- Add more logs coverage to gather information about known but difficult to reproduce issues
+- UI improvements, including:
+  + Show date and size for every file in Available Offline option from side menu
+
+## 2.12 (August 2019)
+- Shares rearchitecture
+- UI improvements, including:
+  + Private link accessible when share API is disabled
+- Bug fixes, including:
+  + Fix images not detected in Android 9 gallery after being downloaded
+
+## 2.12 beta v1 (August 2019)
+- Shares rearchitecture
+- UI improvements, including:
+  + Private link accessible when share API is disabled
+- Bug fixes, including:
+  + Fix images not detected in Android 9 gallery after being downloaded
+
 ## 2.11.1 (June 2019)
 - Fix crash triggered when notifying upload results
 

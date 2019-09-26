@@ -355,6 +355,9 @@
   <string name="preview_image_error_unknown_format">Dieses Bild kann nicht angezeigt werden</string>
   <string name="error__upload__local_file_not_copied">%1$s konnte nicht in den lokalen %2$s Ordner kopiert werden</string>
   <string name="prefs_camera_picture_upload_path_title">Speicherpfad für hochgeladene Bilder</string>
+  <string name="get_shares_error">Beim Abrufen der Freigaben ist ein Fehler aufgetreten</string>
+  <string name="get_sharees_error">Beim Abrufen von Benutzern und Gruppen ist ein Fehler aufgetreten</string>
+  <string name="get_capabilities_error">Beim Versuch, Funktionen abzurufen, ist ein Fehler aufgetreten</string>
   <string name="share_link_no_support_share_api">Entschuldigung, Freigaben sind auf Deinem Server nicht aktiviert. Bitte kontaktiere Deinen
 ⇥⇥Administrator.</string>
   <string name="share_link_file_no_exist">Teilen nicht möglich. Prüfe, dass die Datei existiert</string>
@@ -511,6 +514,7 @@
   <string name="share_via_link_expiration_date_enforced_label">Ablaufdatum *</string>
   <string name="share_via_link_expiration_date_explanation_label">Der öffentliche Link wird spätestens %1$d Tage nach seiner Erstellung ablaufen</string>
   <string name="share_via_link_default_name_template">%1$s - Link</string>
+  <string name="share_via_link_empty_password">Das Passwort ist leer</string>
   <string name="private_link_info">Dies ist ein privater Link, nur Personen die Zugriff auf diese Datei/Ordner haben, können dies nutzen. Nutze dies als permanenten Link für sich selbst oder um andere auf bestimmte Dateien innerhalb der Freigaben hinzuweisen.</string>
   <string name="file_private_link_error">Ein privater Link ist für diese Datei nicht verfügbar</string>
   <string name="download_notification_channel_name">Heruntergeladenes</string>

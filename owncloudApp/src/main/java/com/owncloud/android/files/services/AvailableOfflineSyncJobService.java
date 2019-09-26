@@ -110,7 +110,8 @@ public class AvailableOfflineSyncJobService extends JobService {
 
                 File localFile = new File(localPath);
 
-                if (localFile.lastModified() <= fileForAccount.first.getLastSyncDateForData() && MainApp.isDeveloper()) {
+                if (localFile.lastModified() <= fileForAccount.first.getLastSyncDateForData() &&
+                        MainApp.Companion.isDeveloper()) {
                     Log_OC.i(TAG, "File " + fileForAccount.first.getRemotePath() + " already synchronized " +
                             "in account " + fileForAccount.second + ", ignoring");
                     continue;
@@ -128,7 +129,7 @@ public class AvailableOfflineSyncJobService extends JobService {
          * @param accountName          account to synchronize the available offline file with
          */
         private void startSyncOperation(OCFile availableOfflineFile, String accountName) {
-            if (MainApp.isDeveloper()) {
+            if (MainApp.Companion.isDeveloper()) {
                 Log_OC.i(
                         TAG,
                         String.format(

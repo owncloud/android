@@ -333,7 +333,7 @@ Descárgueo de aquí: %2$s</string>
   <string name="ssl_validator_null_cert">Non é posíbel amosar o certificado.</string>
   <string name="ssl_validator_no_info_about_error">- Non hai información sobre este erro</string>
   <string name="placeholder_sentence">Isto é un marcador de posición</string>
-  <string name="placeholder_filename">placeholder.txt</string>
+  <string name="placeholder_filename">marcador_de-posición.txt</string>
   <string name="placeholder_filetype">Imaxe PNG</string>
   <string name="placeholder_filesize">389 KB</string>
   <string name="placeholder_timestamp">2012/05/18 12:23 PM</string>
@@ -356,6 +356,9 @@ Descárgueo de aquí: %2$s</string>
   <string name="preview_image_error_unknown_format">Esta imaxe non pode ser amosada</string>
   <string name="error__upload__local_file_not_copied">Non foi posíbel copiar %1$s no cartafol local %2$s</string>
   <string name="prefs_camera_picture_upload_path_title">Ruta de envío de imaxes</string>
+  <string name="get_shares_error">Produciuse un erro ao tentar recuperar comparticións</string>
+  <string name="get_sharees_error">Produciuse un erro ao tentar recuperar usuarios e grupos</string>
+  <string name="get_capabilities_error">Produciuse un erro ao tentar recuperar funcións</string>
   <string name="share_link_no_support_share_api">O seu servidor non ten activada a opción de compartir. Póñase en contacto co
 		administrador.</string>
   <string name="share_link_file_no_exist">Non foi posíbel compartir. Comprobe que existe o ficheiro</string>
@@ -512,6 +515,7 @@ Descárgueo de aquí: %2$s</string>
   <string name="share_via_link_expiration_date_enforced_label">Caducidade *</string>
   <string name="share_via_link_expiration_date_explanation_label">A ligazón pública non caducará antes de %1$d días após a súa creación</string>
   <string name="share_via_link_default_name_template">Ligazón %1$s</string>
+  <string name="share_via_link_empty_password">O contrasinal está baleiro</string>
   <string name="private_link_info">Isto é unha ligazón privada, só as persoas que teñen acceso ao ficheiro/cartafol poden empregalo. Úseo como ligazón permanente para vostede ou para dirixir a outros a ficheiros compartidos.</string>
   <string name="file_private_link_error">A ligazón privada non está dispoñíbel para este ficheiro</string>
   <string name="download_notification_channel_name">Descargas</string>
