@@ -19,12 +19,11 @@
 
 package com.owncloud.android.data.sharing.sharees.datasources
 
-import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.shares.GetRemoteShareesOperation
 import org.json.JSONObject
 
 interface RemoteShareeDataSource {
-    fun getSharees(
+    suspend fun getSharees(
         searchString: String,
         page: Int,
         perPage: Int,
@@ -33,5 +32,5 @@ interface RemoteShareeDataSource {
             page = page,
             perPage = perPage
         )
-    ): RemoteOperationResult<ArrayList<JSONObject>>
+    ): ArrayList<JSONObject>
 }

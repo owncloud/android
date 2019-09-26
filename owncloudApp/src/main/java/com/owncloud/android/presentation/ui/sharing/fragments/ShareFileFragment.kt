@@ -32,7 +32,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ListView
 import android.widget.Toast
-import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -342,15 +341,16 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
         ocCapabilityViewModel.capabilities.observe(
             this,
             Observer { uiResult ->
+                val capabilities = uiResult.getStoredData()
                 when (uiResult) {
                     is UIResult.Success -> {
-                        uiResult.data?.let {
+                        capabilities?.let {
                             updateCapabilities(it)
                         }
                         listener?.dismissLoading()
                     }
                     is UIResult.Error -> {
-                        uiResult.data?.let {
+                        capabilities?.let {
                             updateCapabilities(it)
                         }
 //                        showError(uiResult.error!!)
@@ -358,7 +358,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
                     }
                     is UIResult.Loading -> {
                         listener?.showLoading()
-                        uiResult.data?.let {
+                        capabilities?.let {
                             updateCapabilities(it)
                         }
                     }
@@ -374,16 +374,16 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
         ocShareViewModel.shares.observe(
             this,
             Observer { uiResult ->
-                val shares = uiResult.getDataOrNull()
+                val shares = uiResult.getStoredData()
                 when (uiResult) {
                     is UIResult.Success -> {
-                        uiResult.data?.let {
+                        shares?.let {
                             updateShares(it)
                         }
                         listener?.dismissLoading()
                     }
                     is UIResult.Error -> {
-                        uiResult.data?.let {
+                        shares?.let {
                             updateShares(it)
                         }
 //                        showError(uiResult.error!!)
@@ -391,7 +391,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
                     }
                     is UIResult.Loading -> {
                         listener?.showLoading()
-                        uiResult.data?.let {
+                        shares?.let {
                             updateShares(it)
                         }
                     }

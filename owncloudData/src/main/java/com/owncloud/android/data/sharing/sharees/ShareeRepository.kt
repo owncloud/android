@@ -19,11 +19,10 @@
 
 package com.owncloud.android.data.sharing.sharees
 
-import com.owncloud.android.data.DataResult
 import org.json.JSONObject
 
 interface ShareeRepository {
-    fun getSharees(
+    suspend fun getSharees(
         searchString: String,
         page: Int,
         perPage: Int
