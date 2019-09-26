@@ -160,47 +160,8 @@ function build_pdf_manual()
     echo "It is available at: ${pdf_filename}."
 }
 
-function build_docbook_manual()
-{
-    local revision="$1"
-    local build_directory="$(pwd)/build/server/${revision}/ROOT/"
-    local book_file="books/ownCloud_Android_App_Manual.adoc" 
-    local nav_file="modules/ROOT/nav.adoc"
-    local dbk_filename="$(pwd)/build/server/${revision}/ROOT/${EXPORT_FILENAME_PREFIX}.dbk"
-    local docx_filename="$(pwd)/build/server/${revision}/ROOT/${EXPORT_FILENAME_PREFIX}.docx"
-
-    mkdir -p "$build_directory"
-
-    echo "Generating Microsoft Word Document format (.docx) version '${revision}' of the ${MANUAL_NAME}, dated: ${RELEASE_DATE}"
-
-    echo "  Step 1. Converting AsciiDoc source files to intermediate DocBook format."
-    asciidoctor --quiet \
-        --backend docbook5 \
-        -d book \
-        -a examplesdir="$(pwd)/modules/ROOT/examples/" \
-        -a imagesdir="$(pwd)/modules/ROOT/assets/images/" \
-        -a partialsdir="$(pwd)/modules/ROOT/pages/_partials/" \
-        -a revnumber="${revision}" \
-        -a revdate="${RELEASE_DATE}" \
-        --base-dir "$(pwd)" \
-        --out-file "${dbk_filename}" \
-        <(cat $book_file <(convert_antora_nav_to_asciidoc_list "$nav_file"))
-
-    echo "  Step 2. Converting DocBook version to Microsoft Word Document format (.docx)."
-    pandoc -S --wrap=preserve --toc -f docbook -t docx -o "${docx_filename}" "${dbk_filename}"
-
-    echo "  Step 3. Removing intermediate DocBook version."
-    rm -f "${dbk_filename}" 
-
-    echo "The ${MANUAL_NAME} has been converted."
-    echo "It is available at: ${docx_filename}."
-}
-
 while getopts ":hcmdl:" o; do
     case "${o}" in
-        d)
-            ACTION="BUILD_DOCBOOK_MANUALS"
-            ;;
         m)
             ACTION="BUILD_MANUALS"
             ;;
@@ -219,9 +180,6 @@ done
 shift $((OPTIND-1))
 
 case "$ACTION" in 
-    BUILD_DOCBOOK_MANUALS)
-        build_docbook_manual "$VERSION"
-        ;;
     BUILD_MANUALS)
         build_pdf_manual "$VERSION"
         ;;
