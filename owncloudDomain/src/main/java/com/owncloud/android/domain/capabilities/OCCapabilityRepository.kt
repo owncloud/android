@@ -20,13 +20,10 @@
 package com.owncloud.android.domain.capabilities
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import com.owncloud.android.data.DataResult
 import com.owncloud.android.data.capabilities.CapabilityRepository
 import com.owncloud.android.data.capabilities.datasources.LocalCapabilitiesDataSource
 import com.owncloud.android.data.capabilities.datasources.RemoteCapabilitiesDataSource
 import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
-import com.owncloud.android.lib.resources.status.RemoteCapability
 
 class OCCapabilityRepository(
     private val localCapabilitiesDataSource: LocalCapabilitiesDataSource,
@@ -37,34 +34,20 @@ class OCCapabilityRepository(
         return localCapabilitiesDataSource.getCapabilitiesForAccountAsLiveData(accountName)
     }
 
-    override fun refreshCapabilitiesForAccount(
+    override suspend fun refreshCapabilitiesForAccount(
         accountName: String,
         shouldFetchFromNetwork: Boolean
     ) {
-//        remoteCapabilitiesDataSource.getCapabilities().also { remoteOperationResult ->
-//            //Error
-//            if (!remoteOperationResult.isSuccess) {
-//                return DataResult.error(
-//                    code = remoteOperationResult.code,
-//                    msg = remoteOperationResult.httpPhrase,
-//                    exception = remoteOperationResult.exception
-//                )
-//            }
-//
-//            // Success
-//            val capabilitiesForAccountFromServer = remoteOperationResult.data.apply {
-//                this.accountName = accountName
-//            }
-//
-//            localCapabilitiesDataSource.insert(
-//                listOf(
-//                    OCCapabilityEntity.fromRemoteCapability(
-//                        capabilitiesForAccountFromServer
-//                    )
-//                )
-//            )
-//
-//            return DataResult.success()
-//        }
+        remoteCapabilitiesDataSource.getCapabilities(
+            accountName
+        ).also { remoteCapabilities ->
+            localCapabilitiesDataSource.insert(
+                listOf(
+                    OCCapabilityEntity.fromRemoteCapability(
+                        remoteCapabilities
+                    )
+                )
+            )
+        }
     }
 }

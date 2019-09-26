@@ -39,7 +39,7 @@ interface ShareRepository {
         accountName: String
     )
 
-    fun updatePrivateShare(
+    suspend fun updatePrivateShare(
         remoteId: Long,
         permissions: Int,
         accountName: String
@@ -59,7 +59,7 @@ interface ShareRepository {
         accountName: String
     )
 
-    fun updatePublicShare(
+    suspend fun updatePublicShare(
         remoteId: Long,
         name: String,
         password: String?,
@@ -79,7 +79,7 @@ interface ShareRepository {
 
     suspend fun refreshSharesFromNetwork(filePath: String, accountName: String)
 
-    fun deleteShare(
+    suspend fun deleteShare(
         remoteId: Long
     )
 }

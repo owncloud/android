@@ -28,7 +28,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
 import com.owncloud.android.domain.capabilities.usecases.GetCapabilitiesAsLiveDataUseCase
-import com.owncloud.android.domain.capabilities.usecases.RefreshCapabilitiesAsyncUseCase
+import com.owncloud.android.domain.capabilities.usecases.RefreshCapabilitiesFromServerAsyncUseCase
 import com.owncloud.android.presentation.UIResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -44,7 +44,7 @@ class OCCapabilityViewModel(
         context,
         account
     ),
-    private val refreshCapabilitiesUseCase: RefreshCapabilitiesAsyncUseCase = RefreshCapabilitiesAsyncUseCase(
+    private val refreshCapabilitiesFromServerUseCase: RefreshCapabilitiesFromServerAsyncUseCase = RefreshCapabilitiesFromServerAsyncUseCase(
         context,
         account
     )
@@ -78,14 +78,16 @@ class OCCapabilityViewModel(
                     UIResult.Loading(capabilitiesLiveData?.value)
                 )
 
-                refreshCapabilitiesUseCase.execute(
-                    RefreshCapabilitiesAsyncUseCase.Params(
+                refreshCapabilitiesFromServerUseCase.execute(
+                    RefreshCapabilitiesFromServerAsyncUseCase.Params(
                         accountName = account.name
                     )
                 ).also { useCaseResult ->
-                    _capabilities.postValue(
-                        UIResult.Error(useCaseResult.getThrowableOrNull())
-                    )
+                    if (!useCaseResult.isSuccess) {
+                        _capabilities.postValue(
+                            UIResult.Error(useCaseResult.getThrowableOrNull(), capabilitiesLiveData?.value)
+                        )
+                    }
                 }
             }
         }
