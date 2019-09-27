@@ -23,7 +23,7 @@ import com.owncloud.android.lib.resources.shares.GetRemoteShareesOperation
 import org.json.JSONObject
 
 interface RemoteShareeDataSource {
-    suspend fun getSharees(
+    fun getSharees(
         searchString: String,
         page: Int,
         perPage: Int,

@@ -35,7 +35,7 @@ class OCShareeViewModel(
     )
 ) : ViewModel() {
 
-    suspend fun getSharees(searchString: String, page: Int, perPage: Int): UIResult<ArrayList<JSONObject>> {
+    fun getSharees(searchString: String, page: Int, perPage: Int): UIResult<ArrayList<JSONObject>> {
         getShareesAsyncUseCase.execute(
             GetShareesAsyncUseCase.Params(
                 searchString,

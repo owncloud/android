@@ -68,10 +68,9 @@ class OCCapabilityViewModel(
 
     init {
         capabilitiesLiveData?.observeForever(capabilitiesObserver)
-        refreshCapabilitiesFromNetwork()
     }
 
-    private fun refreshCapabilitiesFromNetwork() {
+    fun refreshCapabilitiesFromNetwork() {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 _capabilities.postValue(

@@ -43,6 +43,7 @@ import com.owncloud.android.presentation.ui.sharing.fragments.PublicShareDialogF
 import com.owncloud.android.presentation.ui.sharing.fragments.SearchShareesFragment
 import com.owncloud.android.presentation.ui.sharing.fragments.ShareFileFragment
 import com.owncloud.android.presentation.ui.sharing.fragments.ShareFragmentListener
+import com.owncloud.android.presentation.viewmodels.capabilities.OCCapabilityViewModel
 import com.owncloud.android.presentation.viewmodels.sharing.OCShareViewModel
 import com.owncloud.android.ui.activity.FileActivity
 import com.owncloud.android.ui.dialog.RemoveShareDialogFragment
@@ -54,6 +55,12 @@ import org.koin.core.parameter.parametersOf
  * Activity for sharing files
  */
 class ShareActivity : FileActivity(), ShareFragmentListener {
+
+    private val ocCapabilityViewModel: OCCapabilityViewModel by viewModel {
+        parametersOf(
+            account
+        )
+    }
 
     private val ocShareViewModel: OCShareViewModel by viewModel {
         parametersOf(
@@ -83,6 +90,13 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
         }
 
         observePrivateShareCreation()
+    }
+
+    override fun onAccountSet(stateWasRecovered: Boolean) {
+        super.onAccountSet(stateWasRecovered)
+
+        ocCapabilityViewModel.refreshCapabilitiesFromNetwork()
+        ocShareViewModel.refreshSharesFromNetwork()
     }
 
     public override fun onStop() {
