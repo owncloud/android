@@ -91,7 +91,7 @@ class OCShareViewModel(
         refreshSharesFromNetwork()
     }
 
-    private fun refreshSharesFromNetwork() {
+    fun refreshSharesFromNetwork() {
         viewModelScope.launch(ioDispatcher) {
             _shares.postValue(
                 UIResult.Loading(sharesLiveData?.value)

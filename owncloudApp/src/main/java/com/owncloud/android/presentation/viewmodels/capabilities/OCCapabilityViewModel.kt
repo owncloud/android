@@ -66,6 +66,7 @@ class OCCapabilityViewModel(
         _capabilities.addSource(capabilitiesLiveData!!) { capabilities ->
             _capabilities.postValue(UIResult.Success(capabilities))
         }
+
         refreshCapabilitiesFromNetwork()
     }
 
@@ -75,7 +76,7 @@ class OCCapabilityViewModel(
         )
     ).getDataOrNull()
 
-    private fun refreshCapabilitiesFromNetwork() {
+    fun refreshCapabilitiesFromNetwork() {
         viewModelScope.launch(ioDispatcher) {
             _capabilities.postValue(
                 UIResult.Loading(capabilitiesLiveData?.value)

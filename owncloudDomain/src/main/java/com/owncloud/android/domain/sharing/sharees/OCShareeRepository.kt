@@ -27,7 +27,7 @@ class OCShareeRepository(
     private val remoteShareeDataSource: RemoteShareeDataSource
 ) : ShareeRepository {
 
-    override suspend fun getSharees(
+    override fun getSharees(
         searchString: String,
         page: Int,
         perPage: Int

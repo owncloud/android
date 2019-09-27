@@ -22,7 +22,7 @@ package com.owncloud.android.data.sharing.sharees
 import org.json.JSONObject
 
 interface ShareeRepository {
-    suspend fun getSharees(
+    fun getSharees(
         searchString: String,
         page: Int,
         perPage: Int
