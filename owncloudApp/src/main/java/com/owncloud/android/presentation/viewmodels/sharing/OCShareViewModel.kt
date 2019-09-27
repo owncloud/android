@@ -85,31 +85,29 @@ class OCShareViewModel(
 
     init {
         sharesLiveData?.observeForever(sharesObserver)
-
-        viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                refreshSharesFromNetwork()
-            }
-        }
     }
 
-    private suspend fun refreshSharesFromNetwork() {
-        _shares.postValue(
-            UIResult.Loading(sharesLiveData?.value)
-        )
+     fun refreshSharesFromNetwork() {
+         viewModelScope.launch {
+             withContext(Dispatchers.IO) {
+                 _shares.postValue(
+                     UIResult.Loading(sharesLiveData?.value)
+                 )
 
-        refreshSharesFromServerAsyncUseCase.execute(
-            RefreshSharesFromServerAsyncUseCase.Params(
-                filePath = filePath,
-                accountName = account.name
-            )
-        ).also { useCaseResult ->
-            if (!useCaseResult.isSuccess) {
-                _shares.postValue(
-                    UIResult.Error(useCaseResult.getThrowableOrNull(), sharesLiveData?.value)
-                )
-            }
-        }
+                 refreshSharesFromServerAsyncUseCase.execute(
+                     RefreshSharesFromServerAsyncUseCase.Params(
+                         filePath = filePath,
+                         accountName = account.name
+                     )
+                 ).also { useCaseResult ->
+                     if (!useCaseResult.isSuccess) {
+                         _shares.postValue(
+                             UIResult.Error(useCaseResult.getThrowableOrNull(), sharesLiveData?.value)
+                         )
+                     }
+                 }
+             }
+         }
     }
 
     private val _shareDeletionStatus = MutableLiveData<UIResult<Unit>>()
