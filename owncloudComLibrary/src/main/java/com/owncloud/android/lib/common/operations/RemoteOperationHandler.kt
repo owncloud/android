@@ -20,14 +20,22 @@
 package com.owncloud.android.lib.common.operations
 
 suspend fun <T> awaitToRemoteOperationResult(remoteOperation: suspend () -> RemoteOperationResult<T>): T {
+    remoteOperation.invoke().also {
+        return handleRemoteOperationResult(it)
+    }
+}
 
-    val remoteOperationResult = remoteOperation.invoke()
+fun <T> waitForRemoteOperationResult(remoteOperation: () -> RemoteOperationResult<T>): T {
+    remoteOperation.invoke().also {
+        return handleRemoteOperationResult(it)
+    }
+}
 
+private fun <T> handleRemoteOperationResult(remoteOperationResult: RemoteOperationResult<T>): T {
     if (remoteOperationResult.isSuccess) {
         return remoteOperationResult.data
     }
 
-    // Errors
     when (remoteOperationResult.code) {
         RemoteOperationResult.ResultCode.UNHANDLED_HTTP_CODE -> throw Exception()
         RemoteOperationResult.ResultCode.UNAUTHORIZED -> throw Exception()

@@ -192,7 +192,7 @@ public abstract class RemoteOperation<T> implements Runnable {
 
     /**
      * Synchronously executes the remote operation
-     * <p>
+     *
      * Do not call this method from the main thread.
      *
      * @param client Client object to reach an ownCloud server during the execution of
