@@ -42,7 +42,6 @@ import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.lib.common.utils.Log_OC
 import com.owncloud.android.lib.resources.shares.RemoteShare
 import com.owncloud.android.lib.resources.shares.SharePermissionsBuilder
-import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.viewmodels.sharing.OCShareViewModel
 import com.owncloud.android.utils.PreferenceUtils
@@ -77,7 +76,7 @@ class EditPrivateShareFragment : DialogFragment() {
     private val ocShareViewModel: OCShareViewModel by viewModel {
         parametersOf(
             file?.remotePath,
-            account
+            account?.name
         )
     }
 
@@ -448,7 +447,7 @@ class EditPrivateShareFragment : DialogFragment() {
         }
         val permissions = spb.build()
 
-        ocShareViewModel.updatePrivateShare(share?.remoteId!!, permissions)
+        ocShareViewModel.updatePrivateShare(share?.remoteId!!, permissions, account?.name!!)
     }
 
     private fun refreshPrivateShare(remoteId: Long) {

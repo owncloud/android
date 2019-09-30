@@ -17,21 +17,24 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.data.sharing.shares.datasources
+package com.owncloud.android.data.sharing.shares.datasources.implementation
 
-import com.owncloud.android.data.sharing.shares.db.OCShareEntity
+import com.owncloud.android.data.sharing.shares.datasources.RemoteShareDataSource
+import com.owncloud.android.domain.sharing.shares.model.OCShare
+import com.owncloud.android.domain.sharing.shares.model.ShareType
 import com.owncloud.android.lib.common.OwnCloudClient
-import com.owncloud.android.lib.common.operations.awaitToRemoteOperationResult
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
+import com.owncloud.android.lib.common.operations.awaitToRemoteOperationResult
 import com.owncloud.android.lib.resources.shares.CreateRemoteShareOperation
 import com.owncloud.android.lib.resources.shares.GetRemoteSharesForFileOperation
+import com.owncloud.android.lib.resources.shares.RemoteShareMapper
 import com.owncloud.android.lib.resources.shares.RemoveRemoteShareOperation
 import com.owncloud.android.lib.resources.shares.ShareParserResult
-import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.lib.resources.shares.UpdateRemoteShareOperation
 
 class OCRemoteShareDataSource(
-    private val client: OwnCloudClient
+    private val client: OwnCloudClient,
+    private val remoteShareMapper: RemoteShareMapper
 ) : RemoteShareDataSource {
 
     override suspend fun getShares(
@@ -40,13 +43,14 @@ class OCRemoteShareDataSource(
         subfiles: Boolean,
         accountName: String,
         getRemoteSharesForFileOperation: GetRemoteSharesForFileOperation
-    ): List<OCShareEntity> {
+    ): List<OCShare> {
         awaitToRemoteOperationResult {
             getRemoteSharesForFileOperation.execute(client)
         }.shares.let {
             return it.map { remoteShare ->
-                OCShareEntity.fromRemoteShare(remoteShare)
-                    .also { it.accountOwner = accountName }
+                remoteShareMapper.toModel(remoteShare)!!.also {
+                    it.accountOwner = accountName
+                }
             }
         }
     }
@@ -62,7 +66,7 @@ class OCRemoteShareDataSource(
         publicUpload: Boolean,
         accountName: String,
         createRemoteShareOperation: CreateRemoteShareOperation
-    ): OCShareEntity {
+    ): OCShare {
         createRemoteShareOperation.name = name
         createRemoteShareOperation.password = password
         createRemoteShareOperation.expirationDateInMillis = expirationDate
@@ -72,7 +76,9 @@ class OCRemoteShareDataSource(
         awaitToRemoteOperationResult {
             createRemoteShareOperation.execute(client)
         }.shares.let {
-            return OCShareEntity.fromRemoteShare(it.first()).also { it.accountOwner = accountName }
+            return remoteShareMapper.toModel(it.first())!!.also {
+                it.accountOwner = accountName
+            }
         }
     }
 
@@ -85,7 +91,7 @@ class OCRemoteShareDataSource(
         publicUpload: Boolean,
         accountName: String,
         updateRemoteShareOperation: UpdateRemoteShareOperation
-    ): OCShareEntity {
+    ): OCShare {
         updateRemoteShareOperation.name = name
         updateRemoteShareOperation.password = password
         updateRemoteShareOperation.expirationDateInMillis = expirationDateInMillis
@@ -96,7 +102,9 @@ class OCRemoteShareDataSource(
         awaitToRemoteOperationResult {
             updateRemoteShareOperation.execute(client)
         }.shares.let {
-            return OCShareEntity.fromRemoteShare(it.first()).also { it.accountOwner = accountName }
+            return remoteShareMapper.toModel(it.first())!!.also {
+                it.accountOwner = accountName
+            }
         }
     }
 

@@ -23,6 +23,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
 import androidx.test.platform.app.InstrumentationRegistry
 import com.owncloud.android.data.OwncloudDatabase
+import com.owncloud.android.data.capabilities.datasources.implementation.OCLocalCapabilitiesDataSource
 import com.owncloud.android.data.capabilities.db.OCCapabilityDao
 import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
 import com.owncloud.android.data.utils.DataTestUtil
@@ -89,7 +90,10 @@ class OCLocalCapabilitiesDataSourceTest {
         val context = InstrumentationRegistry.getInstrumentation().targetContext
 
         ocLocalCapabilitiesDataSource =
-            OCLocalCapabilitiesDataSource(context, ocCapabilityDao)
+            OCLocalCapabilitiesDataSource(
+                context,
+                ocCapabilityDao
+            )
     }
 
     @Test

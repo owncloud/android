@@ -23,6 +23,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.owncloud.android.data.DataResult
+import com.owncloud.android.data.capabilities.OCCapabilityRepository
 import com.owncloud.android.data.capabilities.datasources.LocalCapabilitiesDataSource
 import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
 import com.owncloud.android.domain.utils.DomainTestUtil

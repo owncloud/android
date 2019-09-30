@@ -17,26 +17,23 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.data.sharing.sharees.datasources
+package com.owncloud.android.data.sharing.sharees
 
-import com.owncloud.android.lib.common.OwnCloudClient
-import com.owncloud.android.lib.common.operations.waitForRemoteOperationResult
-import com.owncloud.android.lib.resources.shares.GetRemoteShareesOperation
+import com.owncloud.android.data.sharing.sharees.datasources.RemoteShareeDataSource
+import com.owncloud.android.domain.sharing.sharees.ShareeRepository
 import org.json.JSONObject
-import java.util.ArrayList
 
-class OCRemoteShareeDataSource(
-    private val client: OwnCloudClient
-) : RemoteShareeDataSource {
+class OCShareeRepository(
+    private val remoteShareeDataSource: RemoteShareeDataSource
+) : ShareeRepository {
 
     override fun getSharees(
         searchString: String,
         page: Int,
-        perPage: Int,
-        getRemoteShareesOperation: GetRemoteShareesOperation
+        perPage: Int
     ): ArrayList<JSONObject> {
-        return waitForRemoteOperationResult {
-            getRemoteShareesOperation.execute(client)
-        }
+        return remoteShareeDataSource.getSharees(
+            searchString, page, perPage
+        )
     }
 }

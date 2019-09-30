@@ -23,6 +23,14 @@ import com.owncloud.android.domain.capabilities.usecases.GetCapabilitiesAsLiveDa
 import com.owncloud.android.domain.capabilities.usecases.GetStoredCapabilitiesUseCase
 import com.owncloud.android.domain.capabilities.usecases.RefreshCapabilitiesFromServerAsyncUseCase
 import com.owncloud.android.domain.sharing.sharees.GetShareesAsyncUseCase
+import com.owncloud.android.domain.sharing.shares.usecases.CreatePrivateShareAsyncUseCase
+import com.owncloud.android.domain.sharing.shares.usecases.CreatePublicShareAsyncUseCase
+import com.owncloud.android.domain.sharing.shares.usecases.DeleteShareAsyncUseCase
+import com.owncloud.android.domain.sharing.shares.usecases.EditPrivateShareAsyncUseCase
+import com.owncloud.android.domain.sharing.shares.usecases.EditPublicShareAsyncUseCase
+import com.owncloud.android.domain.sharing.shares.usecases.GetShareAsLiveDataUseCase
+import com.owncloud.android.domain.sharing.shares.usecases.GetSharesAsLiveDataUseCase
+import com.owncloud.android.domain.sharing.shares.usecases.RefreshSharesFromServerAsyncUseCase
 import org.koin.dsl.module
 
 val useCaseModule = module {
@@ -33,4 +41,12 @@ val useCaseModule = module {
 
     // Sharing
     factory { GetShareesAsyncUseCase(get()) }
+    factory { GetSharesAsLiveDataUseCase(get()) }
+    factory { GetShareAsLiveDataUseCase(get()) }
+    factory { RefreshSharesFromServerAsyncUseCase(get()) }
+    factory { CreatePrivateShareAsyncUseCase(get()) }
+    factory { EditPrivateShareAsyncUseCase(get()) }
+    factory { CreatePublicShareAsyncUseCase(get()) }
+    factory { EditPublicShareAsyncUseCase(get()) }
+    factory { DeleteShareAsyncUseCase(get()) }
 }

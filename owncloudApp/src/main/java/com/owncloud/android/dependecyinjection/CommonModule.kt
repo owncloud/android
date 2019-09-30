@@ -17,14 +17,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.data.sharing.sharees
+package com.owncloud.android.dependecyinjection
 
-import org.json.JSONObject
+import com.owncloud.android.data.sharing.shares.datasources.mapper.OCShareMapper
+import org.koin.dsl.module
 
-interface ShareeRepository {
-    fun getSharees(
-        searchString: String,
-        page: Int,
-        perPage: Int
-    ): ArrayList<JSONObject>
+val commonModule = module {
+    factory { OCShareMapper() }
 }
