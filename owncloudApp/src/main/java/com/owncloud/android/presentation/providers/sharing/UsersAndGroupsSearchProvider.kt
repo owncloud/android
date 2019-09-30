@@ -38,12 +38,13 @@ import android.widget.Toast
 import com.owncloud.android.R
 import com.owncloud.android.authentication.AccountUtils
 import com.owncloud.android.datamodel.FileDataStorageManager
+import com.owncloud.android.domain.sharing.sharees.GetShareesAsyncUseCase
 import com.owncloud.android.lib.common.utils.Log_OC
 import com.owncloud.android.lib.resources.shares.GetRemoteShareesOperation
 import com.owncloud.android.lib.resources.shares.ShareType
-import com.owncloud.android.presentation.viewmodels.sharing.OCShareeViewModel
 import org.json.JSONException
 import org.json.JSONObject
+import org.koin.android.ext.android.inject
 import java.util.HashMap
 
 /**
@@ -123,21 +124,20 @@ class UsersAndGroupsSearchProvider : ContentProvider() {
         /// directly started by our code, but from SearchView implementation
         val account = AccountUtils.getCurrentOwnCloudAccount(context)
 
-        val ocShareeViewModel = OCShareeViewModel(
-            context,
-            account
-        )
+        val getShareesAsyncUseCase : GetShareesAsyncUseCase by inject()
 
-        ocShareeViewModel.getSharees(
-            userQuery,
-            REQUESTED_PAGE,
-            RESULTS_PER_PAGE
-        ).also { uiResult ->
-            if (!uiResult.isSuccess && !uiResult.isLoading) {
-//                showErrorMessage(uiResult.getThrowableOrNull())
+        getShareesAsyncUseCase.execute(
+            GetShareesAsyncUseCase.Params(
+                userQuery,
+                REQUESTED_PAGE,
+                RESULTS_PER_PAGE
+            )
+        ).also { useCaseResult ->
+            if (useCaseResult.isError) {
+//                showErrorMessage(useCaseResult.getThrowableOrNull())
             }
 
-            val names = uiResult.getStoredData()
+            val names = useCaseResult.getDataOrNull()
 
             // convert the responses from the OC server to the expected format
             if (names?.size!! > 0) {
@@ -224,6 +224,7 @@ class UsersAndGroupsSearchProvider : ContentProvider() {
                 }
             }
         }
+
         return response
     }
 

@@ -26,7 +26,6 @@ import com.owncloud.android.data.DataResult
 import com.owncloud.android.domain.sharing.sharees.OCShareeRepository
 import com.owncloud.android.lib.resources.shares.GetRemoteShareesOperation
 import com.owncloud.android.lib.resources.shares.ShareType
-import com.owncloud.android.presentation.viewmodels.sharing.OCShareeViewModel
 import com.owncloud.android.utils.AppTestUtil
 import io.mockk.every
 import io.mockk.mockkClass
