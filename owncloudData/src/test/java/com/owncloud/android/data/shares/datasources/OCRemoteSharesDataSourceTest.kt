@@ -20,7 +20,7 @@
 
 package com.owncloud.android.data.shares.datasources
 
-import com.owncloud.android.data.sharing.shares.datasources.OCRemoteShareDataSource
+import com.owncloud.android.data.sharing.shares.datasources.implementation.OCRemoteShareDataSource
 import com.owncloud.android.data.utils.DataTestUtil
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
@@ -28,7 +28,6 @@ import com.owncloud.android.lib.resources.shares.CreateRemoteShareOperation
 import com.owncloud.android.lib.resources.shares.GetRemoteSharesForFileOperation
 import com.owncloud.android.lib.resources.shares.RemoveRemoteShareOperation
 import com.owncloud.android.lib.resources.shares.ShareParserResult
-import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.lib.resources.shares.UpdateRemoteShareOperation
 import io.mockk.every
 import io.mockk.mockk
@@ -46,7 +45,7 @@ class OCRemoteSharesDataSourceTest {
     @Before
     fun init() {
         ocRemoteSharesDataSource =
-            com.owncloud.android.data.sharing.shares.datasources.OCRemoteShareDataSource(ownCloudClient)
+            OCRemoteShareDataSource(ownCloudClient)
     }
 
     /******************************************************************************************************

@@ -17,20 +17,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.data.capabilities.datasources
+package com.owncloud.android.domain.mapper
 
-import androidx.lifecycle.LiveData
-import com.owncloud.android.data.capabilities.db.OCCapabilityDao
-import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
+interface RemoteMapper<Model, Remote> {
 
-class OCLocalCapabilitiesDataSource(
-    private val ocCapabilityDao: OCCapabilityDao
-) : LocalCapabilitiesDataSource {
+    fun toModel(remote: Remote?): Model?
 
-    override fun getCapabilitiesForAccountAsLiveData(accountName: String): LiveData<OCCapabilityEntity> =
-        ocCapabilityDao.getCapabilitiesForAccountAsLiveData(accountName)
-
-    override fun insert(ocCapabilities: List<OCCapabilityEntity>) {
-        ocCapabilityDao.replace(ocCapabilities)
-    }
+    fun toRemote(model: Model?): Remote?
 }

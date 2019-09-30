@@ -37,7 +37,6 @@ import androidx.lifecycle.Observer
 import com.owncloud.android.R
 import com.owncloud.android.data.sharing.shares.db.OCShareEntity
 import com.owncloud.android.lib.common.utils.Log_OC
-import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.ui.sharing.fragments.ShareFragmentListener
 import com.owncloud.android.presentation.viewmodels.sharing.OCShareViewModel
@@ -57,7 +56,7 @@ class RemoveShareDialogFragment : ConfirmationDialogFragment(), ConfirmationDial
     private val ocShareViewModel: OCShareViewModel by viewModel {
         parametersOf(
             targetShare?.path,
-            account
+            account?.name!!
         )
     }
 

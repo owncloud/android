@@ -35,7 +35,6 @@ import com.owncloud.android.data.sharing.shares.db.OCShareEntity
 import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.lib.common.utils.Log_OC
 import com.owncloud.android.lib.resources.shares.RemoteShare
-import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.providers.sharing.UsersAndGroupsSearchProvider
 import com.owncloud.android.presentation.ui.sharing.fragments.EditPrivateShareFragment
@@ -65,7 +64,7 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
     private val ocShareViewModel: OCShareViewModel by viewModel {
         parametersOf(
             file.remotePath,
-            account
+            account?.name
         )
     }
 
@@ -145,7 +144,8 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
             file.remotePath,
             shareType,
             shareeName,
-            getAppropiatePermissions(shareType)
+            getAppropiatePermissions(shareType),
+            account.name
         )
     }
 

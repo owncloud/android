@@ -23,9 +23,8 @@ import android.accounts.Account
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.platform.app.InstrumentationRegistry
 import com.owncloud.android.data.DataResult
-import com.owncloud.android.domain.sharing.sharees.OCShareeRepository
+import com.owncloud.android.data.sharing.sharees.OCShareeRepository
 import com.owncloud.android.lib.resources.shares.GetRemoteShareesOperation
-import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.utils.AppTestUtil
 import io.mockk.every
 import io.mockk.mockkClass

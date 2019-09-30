@@ -19,30 +19,30 @@
 
 package com.owncloud.android.domain.auth
 
-import android.content.Context
-import android.net.Uri
-import com.owncloud.android.data.auth.datasources.OCRemoteAuthDataSource
-import com.owncloud.android.domain.BaseAsyncUseCase
-import com.owncloud.android.lib.common.OwnCloudClientFactory
-import com.owncloud.android.lib.common.authentication.OwnCloudCredentials
+//import android.content.Context
+//import android.net.Uri
+//import com.owncloud.android.data.auth.datasources.OCRemoteAuthDataSource
+//import com.owncloud.android.domain.BaseAsyncUseCase
+//import com.owncloud.android.lib.common.OwnCloudClientFactory
+//import com.owncloud.android.lib.common.authentication.OwnCloudCredentials
 
-class LoginAsyncUseCase(
-    context: Context,
-    private val baseUrl: String,
-    private val ocAuthRepository: OCAuthRepository = OCAuthRepository(
-        remoteAuthDataSource = OCRemoteAuthDataSource(
-            OwnCloudClientFactory.createOwnCloudClient(
-                Uri.parse(baseUrl),
-                context,
-                true
-            )
-        )
-    )
-) : BaseAsyncUseCase<Unit, LoginAsyncUseCase.Params>() {
-
-    override suspend fun run(params: Params) = ocAuthRepository.login(baseUrl, params.ownCloudCredentials)
-
-    data class Params(
-        val ownCloudCredentials: OwnCloudCredentials
-    )
-}
+//class LoginAsyncUseCase(
+//    context: Context,
+//    private val baseUrl: String,
+//    private val ocAuthRepository: OCAuthRepository = OCAuthRepository(
+//        remoteAuthDataSource = OCRemoteAuthDataSource(
+//            OwnCloudClientFactory.createOwnCloudClient(
+//                Uri.parse(baseUrl),
+//                context,
+//                true
+//            )
+//        )
+//    )
+//) : BaseAsyncUseCase<Unit, LoginAsyncUseCase.Params>() {
+//
+//    override suspend fun run(params: Params) = ocAuthRepository.login(baseUrl, params.ownCloudCredentials)
+//
+//    data class Params(
+//        val ownCloudCredentials: OwnCloudCredentials
+//    )
+//}

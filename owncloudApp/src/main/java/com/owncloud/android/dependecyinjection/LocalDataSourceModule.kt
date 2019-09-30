@@ -21,7 +21,9 @@ package com.owncloud.android.dependecyinjection
 
 import com.owncloud.android.data.OwncloudDatabase
 import com.owncloud.android.data.capabilities.datasources.LocalCapabilitiesDataSource
-import com.owncloud.android.data.capabilities.datasources.OCLocalCapabilitiesDataSource
+import com.owncloud.android.data.capabilities.datasources.implementation.OCLocalCapabilitiesDataSource
+import com.owncloud.android.data.sharing.shares.datasources.LocalShareDataSource
+import com.owncloud.android.data.sharing.shares.datasources.implementation.OCLocalShareDataSource
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
@@ -29,5 +31,15 @@ val localDataSourceModule = module {
     single { OwncloudDatabase.getDatabase(androidContext()).capabilityDao() }
     single { OwncloudDatabase.getDatabase(androidContext()).shareDao() }
 
-    factory<LocalCapabilitiesDataSource> { OCLocalCapabilitiesDataSource(get())}
+    factory<LocalCapabilitiesDataSource> {
+        OCLocalCapabilitiesDataSource(
+            get()
+        )
+    }
+    factory<LocalShareDataSource> {
+        OCLocalShareDataSource(
+            get(),
+            get()
+        )
+    }
 }

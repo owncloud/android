@@ -19,7 +19,7 @@
 
 package com.owncloud.android.domain.capabilities.usecases
 
-import com.owncloud.android.data.capabilities.CapabilityRepository
+import com.owncloud.android.domain.capabilities.CapabilityRepository
 import com.owncloud.android.domain.BaseAsyncUseCase
 
 class RefreshCapabilitiesFromServerAsyncUseCase(

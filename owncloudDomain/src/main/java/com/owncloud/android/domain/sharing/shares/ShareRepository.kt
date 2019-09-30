@@ -17,11 +17,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.data.sharing.shares
+package com.owncloud.android.domain.sharing.shares
 
 import androidx.lifecycle.LiveData
-import com.owncloud.android.data.sharing.shares.db.OCShareEntity
-import com.owncloud.android.lib.resources.shares.ShareType
+import com.owncloud.android.domain.sharing.shares.model.OCShare
+import com.owncloud.android.domain.sharing.shares.model.ShareType
 
 interface ShareRepository {
 
@@ -29,7 +29,7 @@ interface ShareRepository {
      ******************************************* PRIVATE SHARES *******************************************
      ******************************************************************************************************/
 
-    fun getPrivateSharesAsLiveData(filePath: String, accountName: String): LiveData<List<OCShareEntity>>
+    fun getPrivateSharesAsLiveData(filePath: String, accountName: String): LiveData<List<OCShare>>
 
     suspend fun insertPrivateShare(
         filePath: String,
@@ -73,9 +73,9 @@ interface ShareRepository {
      *********************************************** COMMON ***********************************************
      ******************************************************************************************************/
 
-    fun getSharesAsLiveData(filePath: String, accountName: String): LiveData<List<OCShareEntity>>
+    fun getSharesAsLiveData(filePath: String, accountName: String): LiveData<List<OCShare>>
 
-    fun getShareAsLiveData(remoteId: Long): LiveData<OCShareEntity>
+    fun getShareAsLiveData(remoteId: Long): LiveData<OCShare>
 
     suspend fun refreshSharesFromNetwork(filePath: String, accountName: String)
 

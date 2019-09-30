@@ -19,14 +19,14 @@
 
 package com.owncloud.android.data.sharing.shares.datasources
 
-import com.owncloud.android.data.sharing.shares.db.OCShareEntity
+import com.owncloud.android.domain.sharing.shares.model.OCShare
+import com.owncloud.android.domain.sharing.shares.model.ShareType
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.shares.CreateRemoteShareOperation
 import com.owncloud.android.lib.resources.shares.GetRemoteSharesForFileOperation
 import com.owncloud.android.lib.resources.shares.RemoteShare.Companion.INIT_EXPIRATION_DATE_IN_MILLIS
 import com.owncloud.android.lib.resources.shares.RemoveRemoteShareOperation
 import com.owncloud.android.lib.resources.shares.ShareParserResult
-import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.lib.resources.shares.UpdateRemoteShareOperation
 
 interface RemoteShareDataSource {
@@ -37,7 +37,7 @@ interface RemoteShareDataSource {
         accountName: String,
         getRemoteSharesForFileOperation: GetRemoteSharesForFileOperation =
             GetRemoteSharesForFileOperation(remoteFilePath, reshares, subfiles)
-    ): List<OCShareEntity>
+    ): List<OCShare>
 
     suspend fun insertShare(
         remoteFilePath: String,
@@ -51,7 +51,7 @@ interface RemoteShareDataSource {
         accountName: String,
         createRemoteShareOperation: CreateRemoteShareOperation =
             CreateRemoteShareOperation(remoteFilePath, shareType, shareWith, permissions)
-    ): OCShareEntity
+    ): OCShare
 
     suspend fun updateShare(
         remoteId: Long,
@@ -65,7 +65,7 @@ interface RemoteShareDataSource {
             UpdateRemoteShareOperation(
                 remoteId
             )
-    ): OCShareEntity
+    ): OCShare
 
     fun deleteShare(
         remoteId: Long,

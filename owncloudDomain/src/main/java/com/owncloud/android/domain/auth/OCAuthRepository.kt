@@ -19,14 +19,14 @@
 
 package com.owncloud.android.domain.auth
 
-import com.owncloud.android.data.auth.AuthRepository
-import com.owncloud.android.data.auth.datasources.RemoteAuthDataSource
-import com.owncloud.android.lib.common.authentication.OwnCloudCredentials
-
-class OCAuthRepository(
-    private val remoteAuthDataSource: RemoteAuthDataSource
-) : AuthRepository {
-    override fun login(baseUrl: String, ownCloudCredentials: OwnCloudCredentials) {
-        remoteAuthDataSource.login(baseUrl, ownCloudCredentials)
-    }
-}
+//import com.owncloud.android.data.auth.AuthRepository
+//import com.owncloud.android.data.auth.datasources.RemoteAuthDataSource
+//import com.owncloud.android.lib.common.authentication.OwnCloudCredentials
+//
+//class OCAuthRepository(
+//    private val remoteAuthDataSource: RemoteAuthDataSource
+//) : AuthRepository {
+//    override fun login(baseUrl: String, ownCloudCredentials: OwnCloudCredentials) {
+//        remoteAuthDataSource.login(baseUrl, ownCloudCredentials)
+//    }
+//}

@@ -25,7 +25,6 @@ import androidx.test.platform.app.InstrumentationRegistry
 import com.owncloud.android.data.OwncloudDatabase
 import com.owncloud.android.data.utils.DataTestUtil
 import com.owncloud.android.data.utils.LiveDataTestUtil.getValue
-import com.owncloud.android.lib.resources.status.CapabilityBooleanType
 import junit.framework.Assert.assertEquals
 import org.hamcrest.CoreMatchers.notNullValue
 import org.hamcrest.CoreMatchers.nullValue

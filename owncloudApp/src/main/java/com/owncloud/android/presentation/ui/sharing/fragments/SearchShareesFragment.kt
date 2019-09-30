@@ -45,7 +45,6 @@ import com.owncloud.android.R
 import com.owncloud.android.data.sharing.shares.db.OCShareEntity
 import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.lib.common.utils.Log_OC
-import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.adapters.sharing.ShareUserListAdapter
 import com.owncloud.android.presentation.viewmodels.sharing.OCShareViewModel
@@ -81,7 +80,7 @@ class SearchShareesFragment : Fragment(),
     private val ocShareViewModel: OCShareViewModel by viewModel {
         parametersOf(
             file?.remotePath,
-            account
+            account?.name
         )
     }
 
