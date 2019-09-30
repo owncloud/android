@@ -21,7 +21,6 @@
  */
 package com.owncloud.android
 
-import android.accounts.Account
 import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageInfo
@@ -37,6 +36,10 @@ import com.owncloud.android.authentication.FingerprintManager
 import com.owncloud.android.authentication.PassCodeManager
 import com.owncloud.android.authentication.PatternManager
 import com.owncloud.android.datamodel.ThumbnailsCacheManager
+import com.owncloud.android.dependecyinjection.remoteDataSourceModule
+import com.owncloud.android.dependecyinjection.repositoryModule
+import com.owncloud.android.dependecyinjection.useCaseModule
+import com.owncloud.android.dependecyinjection.viewModelModule
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.OwnCloudClientManagerFactory
 import com.owncloud.android.lib.common.OwnCloudClientManagerFactory.Policy
@@ -44,17 +47,12 @@ import com.owncloud.android.lib.common.authentication.oauth.OAuth2ClientConfigur
 import com.owncloud.android.lib.common.authentication.oauth.OAuth2ProvidersRegistry
 import com.owncloud.android.lib.common.authentication.oauth.OwnCloudOAuth2Provider
 import com.owncloud.android.lib.common.utils.Log_OC
-import com.owncloud.android.presentation.viewmodels.capabilities.OCCapabilityViewModel
-import com.owncloud.android.presentation.viewmodels.sharing.OCShareeViewModel
-import com.owncloud.android.presentation.viewmodels.sharing.OCShareViewModel
 import com.owncloud.android.ui.activity.FingerprintActivity
 import com.owncloud.android.ui.activity.PassCodeActivity
 import com.owncloud.android.ui.activity.PatternLockActivity
 import com.owncloud.android.ui.activity.WhatsNewActivity
 import org.koin.android.ext.koin.androidContext
-import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.context.startKoin
-import org.koin.dsl.module
 
 /**
  * Main Application of the project
@@ -164,33 +162,14 @@ class MainApp : MultiDexApplication() {
             }
         })
 
-        val viewModelModule = module {
-            viewModel { (filePath: String, account: Account) ->
-                OCShareViewModel(
-                    filePath,
-                    androidContext(),
-                    account
-                )
-            }
-
-            viewModel { (account: Account) ->
-                OCShareeViewModel(androidContext(), account)
-            }
-
-            viewModel { (account: Account) ->
-                OCCapabilityViewModel(
-                    androidContext(),
-                    account
-                )
-            }
-        }
-
-
         startKoin {
             androidContext(applicationContext)
             modules(
                 listOf(
-                    viewModelModule
+                    viewModelModule,
+                    useCaseModule,
+                    repositoryModule,
+                    remoteDataSourceModule
                 )
             )
         }
