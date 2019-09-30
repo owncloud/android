@@ -17,15 +17,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.domain.sharing.shares
+package com.owncloud.android.data.sharing.shares
 
 import androidx.lifecycle.LiveData
-import com.owncloud.android.data.sharing.shares.ShareRepository
 import com.owncloud.android.data.sharing.shares.datasources.LocalShareDataSource
 import com.owncloud.android.data.sharing.shares.datasources.RemoteShareDataSource
-import com.owncloud.android.data.sharing.shares.db.OCShareEntity
+import com.owncloud.android.domain.sharing.shares.ShareRepository
+import com.owncloud.android.domain.sharing.shares.model.OCShare
+import com.owncloud.android.domain.sharing.shares.model.ShareType
 import com.owncloud.android.lib.resources.shares.RemoteShare
-import com.owncloud.android.lib.resources.shares.ShareType
 
 class OCShareRepository(
     private val localShareDataSource: LocalShareDataSource,
@@ -36,7 +36,7 @@ class OCShareRepository(
      ******************************************* PRIVATE SHARES *******************************************
      ******************************************************************************************************/
 
-    override fun getPrivateSharesAsLiveData(filePath: String, accountName: String): LiveData<List<OCShareEntity>> {
+    override fun getPrivateSharesAsLiveData(filePath: String, accountName: String): LiveData<List<OCShare>> {
         return localShareDataSource.getSharesAsLiveData(
             filePath, accountName, listOf(
                 ShareType.USER,
@@ -128,7 +128,7 @@ class OCShareRepository(
      *********************************************** COMMON ***********************************************
      ******************************************************************************************************/
 
-    override fun getSharesAsLiveData(filePath: String, accountName: String): LiveData<List<OCShareEntity>> {
+    override fun getSharesAsLiveData(filePath: String, accountName: String): LiveData<List<OCShare>> {
         return localShareDataSource.getSharesAsLiveData(
             filePath, accountName, listOf(
                 ShareType.PUBLIC_LINK,
@@ -139,7 +139,7 @@ class OCShareRepository(
         )
     }
 
-    override fun getShareAsLiveData(remoteId: Long): LiveData<OCShareEntity> =
+    override fun getShareAsLiveData(remoteId: Long): LiveData<OCShare> =
         localShareDataSource.getShareAsLiveData(remoteId)
 
     override suspend fun refreshSharesFromNetwork(

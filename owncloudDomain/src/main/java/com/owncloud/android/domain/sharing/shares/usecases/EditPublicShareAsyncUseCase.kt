@@ -19,28 +19,11 @@
 
 package com.owncloud.android.domain.sharing.shares.usecases
 
-import android.accounts.Account
-import android.content.Context
-import com.owncloud.android.data.sharing.shares.ShareRepository
-import com.owncloud.android.data.sharing.shares.datasources.OCLocalShareDataSource
-import com.owncloud.android.data.sharing.shares.datasources.OCRemoteShareDataSource
+import com.owncloud.android.domain.sharing.shares.ShareRepository
 import com.owncloud.android.domain.BaseAsyncUseCase
-import com.owncloud.android.domain.sharing.shares.OCShareRepository
-import com.owncloud.android.lib.common.OwnCloudAccount
-import com.owncloud.android.lib.common.OwnCloudClientManagerFactory
 
 class EditPublicShareAsyncUseCase(
-    context: Context,
-    val account: Account,
-    private val shareRepository: ShareRepository = OCShareRepository(
-        localShareDataSource = OCLocalShareDataSource(context),
-        remoteShareDataSource = OCRemoteShareDataSource(
-            OwnCloudClientManagerFactory.getDefaultSingleton().getClientFor(
-                OwnCloudAccount(account, context),
-                context
-            )
-        )
-    )
+    private val shareRepository: ShareRepository
 ) : BaseAsyncUseCase<Unit, EditPublicShareAsyncUseCase.Params>() {
 
     override suspend fun run(params: Params) {
@@ -51,7 +34,7 @@ class EditPublicShareAsyncUseCase(
             params.expirationDateInMillis,
             params.permissions,
             params.publicUpload,
-            accountName = account.name
+            params.accountName
         )
     }
 
@@ -61,6 +44,7 @@ class EditPublicShareAsyncUseCase(
         val password: String?,
         val expirationDateInMillis: Long,
         val permissions: Int,
-        val publicUpload: Boolean
+        val publicUpload: Boolean,
+        val accountName: String
     )
 }

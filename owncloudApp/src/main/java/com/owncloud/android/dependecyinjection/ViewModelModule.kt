@@ -19,20 +19,14 @@
 
 package com.owncloud.android.dependecyinjection
 
-import android.accounts.Account
 import com.owncloud.android.presentation.viewmodels.capabilities.OCCapabilityViewModel
 import com.owncloud.android.presentation.viewmodels.sharing.OCShareViewModel
-import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 val viewModelModule = module {
-    viewModel { (filePath: String, account: Account) ->
-        OCShareViewModel(
-            filePath,
-            androidContext(),
-            account
-        )
+    viewModel { (filePath: String, accountName: String) ->
+        OCShareViewModel(filePath, accountName, get(), get(), get(), get(), get(), get(), get(), get())
     }
 
     viewModel { (accountName: String) ->

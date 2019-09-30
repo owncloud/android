@@ -20,27 +20,27 @@
 package com.owncloud.android.data.sharing.shares.datasources
 
 import androidx.lifecycle.LiveData
-import com.owncloud.android.lib.resources.shares.ShareType
-import com.owncloud.android.data.sharing.shares.db.OCShareEntity
+import com.owncloud.android.domain.sharing.shares.model.OCShare
+import com.owncloud.android.domain.sharing.shares.model.ShareType
 
 interface LocalShareDataSource {
     fun getSharesAsLiveData(
         filePath: String,
         accountName: String,
         shareTypes: List<ShareType>
-    ): LiveData<List<OCShareEntity>>
+    ): LiveData<List<OCShare>>
 
     fun getShareAsLiveData(
         remoteId: Long
-    ): LiveData<OCShareEntity>
+    ): LiveData<OCShare>
 
-    fun insert(ocShare: OCShareEntity): Long
+    fun insert(ocShare: OCShare): Long
 
-    fun insert(ocShares: List<OCShareEntity>): List<Long>
+    fun insert(ocShares: List<OCShare>): List<Long>
 
-    fun update(ocShare: OCShareEntity): Long
+    fun update(ocShare: OCShare): Long
 
-    fun replaceShares(ocShares: List<OCShareEntity>): List<Long>
+    fun replaceShares(ocShares: List<OCShare>): List<Long>
 
     fun deleteShare(remoteId: Long): Int
 

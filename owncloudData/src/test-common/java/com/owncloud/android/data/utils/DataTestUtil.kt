@@ -24,8 +24,6 @@ import com.owncloud.android.data.sharing.shares.db.OCShareEntity
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.shares.GetRemoteShareesOperation
 import com.owncloud.android.lib.resources.shares.RemoteShare
-import com.owncloud.android.lib.resources.shares.ShareType
-import com.owncloud.android.lib.resources.status.CapabilityBooleanType
 import com.owncloud.android.lib.resources.status.RemoteCapability
 import io.mockk.every
 import io.mockk.mockk

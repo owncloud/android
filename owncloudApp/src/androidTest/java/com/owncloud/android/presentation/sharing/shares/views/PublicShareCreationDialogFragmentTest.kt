@@ -37,7 +37,6 @@ import androidx.test.rule.ActivityTestRule
 import com.owncloud.android.R
 import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
 import com.owncloud.android.datamodel.OCFile
-import com.owncloud.android.lib.resources.status.CapabilityBooleanType
 import com.owncloud.android.presentation.ui.sharing.fragments.PublicShareDialogFragment
 import com.owncloud.android.utils.AppTestUtil
 import com.owncloud.android.utils.DateUtils
