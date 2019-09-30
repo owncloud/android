@@ -26,6 +26,8 @@
  */
 package com.owncloud.android.lib.resources.status
 
+import com.owncloud.android.domain.capabilities.model.CapabilityBooleanType
+
 /**
  * Contains data of the Capabilities for an account, from the Capabilities API
  */

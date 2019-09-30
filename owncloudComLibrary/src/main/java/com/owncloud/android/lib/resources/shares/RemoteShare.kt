@@ -26,6 +26,7 @@ package com.owncloud.android.lib.resources.shares
 
 import android.os.Parcel
 import android.os.Parcelable
+import com.owncloud.android.domain.sharing.shares.model.ShareType
 import com.owncloud.android.lib.common.utils.Log_OC
 import com.owncloud.android.lib.resources.files.FileUtils
 import java.io.Serializable

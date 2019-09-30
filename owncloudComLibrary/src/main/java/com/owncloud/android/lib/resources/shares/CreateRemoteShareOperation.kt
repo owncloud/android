@@ -27,6 +27,7 @@
 
 package com.owncloud.android.lib.resources.shares
 
+import com.owncloud.android.domain.sharing.shares.model.ShareType
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.http.HttpConstants
 import com.owncloud.android.lib.common.http.methods.nonwebdav.PostMethod

@@ -27,6 +27,7 @@
 
 package com.owncloud.android.lib.resources.status
 
+import com.owncloud.android.domain.capabilities.model.CapabilityBooleanType
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.http.HttpConstants
 import com.owncloud.android.lib.common.http.methods.nonwebdav.GetMethod

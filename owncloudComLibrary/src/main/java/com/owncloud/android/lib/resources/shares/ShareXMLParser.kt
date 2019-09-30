@@ -25,6 +25,7 @@
 package com.owncloud.android.lib.resources.shares
 
 import android.util.Xml
+import com.owncloud.android.domain.sharing.shares.model.ShareType
 
 import com.owncloud.android.lib.common.network.WebdavUtils
 import com.owncloud.android.lib.resources.files.FileUtils
