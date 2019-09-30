@@ -34,6 +34,7 @@ import com.owncloud.android.authentication.FingerprintManager
 import com.owncloud.android.authentication.PassCodeManager
 import com.owncloud.android.authentication.PatternManager
 import com.owncloud.android.datamodel.ThumbnailsCacheManager
+import com.owncloud.android.dependecyinjection.localDataSourceModule
 import com.owncloud.android.dependecyinjection.remoteDataSourceModule
 import com.owncloud.android.dependecyinjection.repositoryModule
 import com.owncloud.android.dependecyinjection.useCaseModule
@@ -160,6 +161,7 @@ class MainApp : Application() {
                     viewModelModule,
                     useCaseModule,
                     repositoryModule,
+                    localDataSourceModule,
                     remoteDataSourceModule
                 )
             )
