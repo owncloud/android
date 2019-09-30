@@ -19,23 +19,15 @@
 
 package com.owncloud.android.dependecyinjection
 
-import android.accounts.Account
-import com.owncloud.android.presentation.viewmodels.capabilities.OCCapabilityViewModel
-import com.owncloud.android.presentation.viewmodels.sharing.OCShareViewModel
+import com.owncloud.android.data.OwncloudDatabase
+import com.owncloud.android.data.capabilities.datasources.LocalCapabilitiesDataSource
+import com.owncloud.android.data.capabilities.datasources.OCLocalCapabilitiesDataSource
 import org.koin.android.ext.koin.androidContext
-import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
-val viewModelModule = module {
-    viewModel { (filePath: String, account: Account) ->
-        OCShareViewModel(
-            filePath,
-            androidContext(),
-            account
-        )
-    }
+val localDataSourceModule = module {
+    single { OwncloudDatabase.getDatabase(androidContext()).capabilityDao() }
+    single { OwncloudDatabase.getDatabase(androidContext()).shareDao() }
 
-    viewModel { (accountName: String) ->
-        OCCapabilityViewModel(accountName, get(), get(), get())
-    }
+    factory<LocalCapabilitiesDataSource> { OCLocalCapabilitiesDataSource(get())}
 }

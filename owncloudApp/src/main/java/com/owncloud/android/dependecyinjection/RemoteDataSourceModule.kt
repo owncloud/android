@@ -20,6 +20,8 @@
 package com.owncloud.android.dependecyinjection
 
 import com.owncloud.android.authentication.AccountUtils
+import com.owncloud.android.data.capabilities.datasources.OCRemoteCapabilitiesDataSource
+import com.owncloud.android.data.capabilities.datasources.RemoteCapabilitiesDataSource
 import com.owncloud.android.data.sharing.sharees.datasources.OCRemoteShareeDataSource
 import com.owncloud.android.data.sharing.sharees.datasources.RemoteShareeDataSource
 import com.owncloud.android.lib.common.OwnCloudAccount
@@ -32,5 +34,6 @@ val remoteDataSourceModule = module {
     single { OwnCloudAccount(get(), androidContext()) }
     single { OwnCloudClientManagerFactory.getDefaultSingleton().getClientFor(get(), androidContext()) }
 
+    factory<RemoteCapabilitiesDataSource> { OCRemoteCapabilitiesDataSource(get()) }
     factory<RemoteShareeDataSource> { OCRemoteShareeDataSource(get()) }
 }
