@@ -27,8 +27,8 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta
+import com.owncloud.android.domain.sharing.shares.model.ShareType
 import com.owncloud.android.lib.resources.shares.RemoteShare
-import com.owncloud.android.lib.resources.shares.ShareType
 
 /**
  * Represents one record of the Shares table.
@@ -128,27 +128,6 @@ data class OCShareEntity(
                 DELETE_PERMISSION_FLAG
         const val FEDERATED_PERMISSIONS_FOR_FOLDER_AFTER_OC9 =
             FEDERATED_PERMISSIONS_FOR_FOLDER_UP_TO_OC9 + SHARE_PERMISSION_FLAG
-
-        fun fromRemoteShare(remoteShare: RemoteShare): OCShareEntity {
-            return OCShareEntity(
-                fileSource = remoteShare.fileSource,
-                itemSource = remoteShare.itemSource,
-                shareType = remoteShare.shareType!!.value,
-                shareWith = remoteShare.shareWith,
-                path = remoteShare.path,
-                permissions = remoteShare.permissions,
-                sharedDate = remoteShare.sharedDate,
-                expirationDate = remoteShare.expirationDate,
-                token = remoteShare.token,
-                sharedWithDisplayName = remoteShare.sharedWithDisplayName,
-                sharedWithAdditionalInfo = remoteShare.sharedWithAdditionalInfo,
-                isFolder = remoteShare.isFolder,
-                userId = remoteShare.userId,
-                remoteId = remoteShare.id,
-                name = remoteShare.name,
-                shareLink = remoteShare.shareLink
-            )
-        }
 
         fun fromCursor(cursor: Cursor): OCShareEntity {
             return OCShareEntity(

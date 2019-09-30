@@ -19,21 +19,12 @@
 
 package com.owncloud.android.domain.sharing.sharees
 
-import com.owncloud.android.data.sharing.sharees.ShareeRepository
-import com.owncloud.android.data.sharing.sharees.datasources.RemoteShareeDataSource
 import org.json.JSONObject
 
-class OCShareeRepository(
-    private val remoteShareeDataSource: RemoteShareeDataSource
-) : ShareeRepository {
-
-    override fun getSharees(
+interface ShareeRepository {
+    fun getSharees(
         searchString: String,
         page: Int,
         perPage: Int
-    ): ArrayList<JSONObject> {
-        return remoteShareeDataSource.getSharees(
-            searchString, page, perPage
-        )
-    }
+    ): ArrayList<JSONObject>
 }

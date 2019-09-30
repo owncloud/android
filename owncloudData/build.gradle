@@ -40,13 +40,14 @@ android {
 }
 
 dependencies {
+    implementation project(':owncloudDomain')
+
     // Owncloud Android Library
     api project(':owncloud-android-library:owncloudComLibrary')
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     implementation 'androidx.appcompat:appcompat:1.0.2'
-
 
     // Kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"

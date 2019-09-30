@@ -19,14 +19,14 @@
 
 package com.owncloud.android.domain.capabilities.usecases
 
-import com.owncloud.android.data.capabilities.CapabilityRepository
-import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
+import com.owncloud.android.domain.capabilities.CapabilityRepository
+import com.owncloud.android.domain.capabilities.model.OCCapability
 import com.owncloud.android.domain.sharing.shares.usecases.BaseUseCase
 
 class GetStoredCapabilitiesUseCase(
     private val capabilityRepository: CapabilityRepository
-) : BaseUseCase<OCCapabilityEntity, GetStoredCapabilitiesUseCase.Params>() {
-    override fun run(params: Params) : OCCapabilityEntity {
+) : BaseUseCase<OCCapability, GetStoredCapabilitiesUseCase.Params>() {
+    override fun run(params: Params): OCCapability {
         return capabilityRepository.getStoredCapabilities(
             params.accountName
         )

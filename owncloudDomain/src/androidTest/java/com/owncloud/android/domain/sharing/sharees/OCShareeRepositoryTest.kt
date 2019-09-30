@@ -19,6 +19,7 @@
 
 package com.owncloud.android.domain.sharing.sharees
 
+import com.owncloud.android.data.sharing.sharees.OCShareeRepository
 import com.owncloud.android.domain.utils.DomainTestUtil
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.shares.GetRemoteShareesOperation

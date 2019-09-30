@@ -20,15 +20,15 @@
 package com.owncloud.android.domain.capabilities.usecases
 
 import androidx.lifecycle.LiveData
-import com.owncloud.android.data.capabilities.CapabilityRepository
-import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
 import com.owncloud.android.domain.sharing.shares.usecases.BaseUseCase
+import com.owncloud.android.domain.capabilities.CapabilityRepository
+import com.owncloud.android.domain.capabilities.model.OCCapability
 
 class GetCapabilitiesAsLiveDataUseCase(
     private val capabilityRepository: CapabilityRepository
-) : BaseUseCase<LiveData<OCCapabilityEntity>, GetCapabilitiesAsLiveDataUseCase.Params>() {
+) : BaseUseCase<LiveData<OCCapability>, GetCapabilitiesAsLiveDataUseCase.Params>() {
 
-    override fun run(params: Params): LiveData<OCCapabilityEntity> = capabilityRepository.getCapabilitiesAsLiveData(
+    override fun run(params: Params): LiveData<OCCapability> = capabilityRepository.getCapabilitiesAsLiveData(
         params.accountName
     )
 

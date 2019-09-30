@@ -46,7 +46,6 @@ import com.owncloud.android.data.sharing.shares.db.OCShareEntity
 import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.lib.common.utils.Log_OC
 import com.owncloud.android.lib.resources.shares.RemoteShare
-import com.owncloud.android.lib.resources.status.CapabilityBooleanType
 import com.owncloud.android.lib.resources.status.OwnCloudVersion
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.viewmodels.capabilities.OCCapabilityViewModel
@@ -144,7 +143,7 @@ class PublicShareDialogFragment : DialogFragment() {
     private val ocShareViewModel: OCShareViewModel by viewModel {
         parametersOf(
             file?.remotePath,
-            account
+            account?.name
         )
     }
 
@@ -275,7 +274,8 @@ class PublicShareDialogFragment : DialogFragment() {
                 publicLinkName,
                 publicLinkPassword!!,
                 publicLinkExpirationDateInMillis,
-                false
+                false,
+                account?.name!!
             )
         } else { // Updating an existing public share
             if (!shareViaLinkPasswordSwitch.isChecked) {
@@ -290,7 +290,8 @@ class PublicShareDialogFragment : DialogFragment() {
                 publicLinkPassword,
                 publicLinkExpirationDateInMillis,
                 publicLinkPermissions,
-                publicUploadPermission
+                publicUploadPermission,
+                account?.name!!
             )
         }
     }

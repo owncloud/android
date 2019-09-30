@@ -19,6 +19,7 @@
 
 package com.owncloud.android.data.sharing.sharees.datasources
 
+import com.owncloud.android.data.sharing.sharees.datasources.implementation.OCRemoteShareeDataSource
 import com.owncloud.android.data.utils.DataTestUtil
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.resources.shares.GetRemoteShareesOperation

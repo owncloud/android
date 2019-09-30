@@ -19,14 +19,13 @@
 
 package com.owncloud.android.presentation.viewmodels.sharing
 
-import android.accounts.Account
-import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.owncloud.android.data.sharing.shares.db.OCShareEntity
+import com.owncloud.android.domain.sharing.shares.model.OCShare
+import com.owncloud.android.domain.sharing.shares.model.ShareType
 import com.owncloud.android.domain.sharing.shares.usecases.CreatePrivateShareAsyncUseCase
 import com.owncloud.android.domain.sharing.shares.usecases.CreatePublicShareAsyncUseCase
 import com.owncloud.android.domain.sharing.shares.usecases.DeleteShareAsyncUseCase
@@ -35,7 +34,6 @@ import com.owncloud.android.domain.sharing.shares.usecases.EditPublicShareAsyncU
 import com.owncloud.android.domain.sharing.shares.usecases.GetShareAsLiveDataUseCase
 import com.owncloud.android.domain.sharing.shares.usecases.GetSharesAsLiveDataUseCase
 import com.owncloud.android.domain.sharing.shares.usecases.RefreshSharesFromServerAsyncUseCase
-import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.presentation.UIResult
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -47,37 +45,26 @@ import kotlinx.coroutines.withContext
  */
 class OCShareViewModel(
     private val filePath: String,
-    val context: Context,
-    val account: Account,
-    getSharesAsLiveDataUseCase: GetSharesAsLiveDataUseCase = GetSharesAsLiveDataUseCase(context, account),
-    private val getShareAsLiveDataUseCase: GetShareAsLiveDataUseCase = GetShareAsLiveDataUseCase(
-        context,
-        account
-    ),
-    private val refreshSharesFromServerAsyncUseCase: RefreshSharesFromServerAsyncUseCase =
-        RefreshSharesFromServerAsyncUseCase(context, account),
-    private val createPrivateShareUseCase: CreatePrivateShareAsyncUseCase = CreatePrivateShareAsyncUseCase(
-        context,
-        account
-    ),
-    private val editPrivateShareUseCase: EditPrivateShareAsyncUseCase = EditPrivateShareAsyncUseCase(context, account),
-    private val createPublicShareUseCase: CreatePublicShareAsyncUseCase = CreatePublicShareAsyncUseCase(
-        context,
-        account
-    ),
-    private val editPublicShareUseCase: EditPublicShareAsyncUseCase = EditPublicShareAsyncUseCase(context, account),
-    private val deletePublicShareUseCase: DeleteShareAsyncUseCase = DeleteShareAsyncUseCase(context, account),
+    private val accountName: String,
+    getSharesAsLiveDataUseCase: GetSharesAsLiveDataUseCase,
+    private val getShareAsLiveDataUseCase: GetShareAsLiveDataUseCase,
+    private val refreshSharesFromServerAsyncUseCase: RefreshSharesFromServerAsyncUseCase,
+    private val createPrivateShareUseCase: CreatePrivateShareAsyncUseCase,
+    private val editPrivateShareUseCase: EditPrivateShareAsyncUseCase,
+    private val createPublicShareUseCase: CreatePublicShareAsyncUseCase,
+    private val editPublicShareUseCase: EditPublicShareAsyncUseCase,
+    private val deletePublicShareUseCase: DeleteShareAsyncUseCase,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
     private val mainDispatcher: CoroutineDispatcher = Dispatchers.Main
 ) : ViewModel() {
 
-    private val _shares = MediatorLiveData<UIResult<List<OCShareEntity>>>()
-    val shares: LiveData<UIResult<List<OCShareEntity>>> = _shares
+    private val _shares = MediatorLiveData<UIResult<List<OCShare>>>()
+    val shares: LiveData<UIResult<List<OCShare>>> = _shares
 
-    private var sharesLiveData: LiveData<List<OCShareEntity>>? = getSharesAsLiveDataUseCase.execute(
+    private var sharesLiveData: LiveData<List<OCShare>>? = getSharesAsLiveDataUseCase.execute(
         GetSharesAsLiveDataUseCase.Params(
             filePath = filePath,
-            accountName = account.name
+            accountName = accountName
         )
     ).getDataOrNull()
 
@@ -100,7 +87,7 @@ class OCShareViewModel(
             val useCaseResult = refreshSharesFromServerAsyncUseCase.execute(
                 RefreshSharesFromServerAsyncUseCase.Params(
                     filePath = filePath,
-                    accountName = account.name
+                    accountName = accountName
                 )
             )
 
@@ -154,7 +141,8 @@ class OCShareViewModel(
         filePath: String,
         shareType: ShareType?,
         shareeName: String, // User or group name of the target sharee.
-        permissions: Int
+        permissions: Int,
+        accountName: String
     ) {
         _privateShareCreationStatus.postValue(
             UIResult.Loading()
@@ -167,7 +155,8 @@ class OCShareViewModel(
                         filePath,
                         shareType,
                         shareeName,
-                        permissions
+                        permissions,
+                        accountName
                     )
                 )
             }
@@ -182,10 +171,10 @@ class OCShareViewModel(
         }
     }
 
-    private val _privateShare = MediatorLiveData<UIResult<OCShareEntity>>()
-    val privateShare: LiveData<UIResult<OCShareEntity>> = _privateShare
+    private val _privateShare = MediatorLiveData<UIResult<OCShare>>()
+    val privateShare: LiveData<UIResult<OCShare>> = _privateShare
 
-    private var privateShareLiveData: LiveData<OCShareEntity>? = null
+    private var privateShareLiveData: LiveData<OCShare>? = null
 
     // Used to get a specific private share after updating it
     fun refreshPrivateShare(
@@ -207,7 +196,8 @@ class OCShareViewModel(
 
     fun updatePrivateShare(
         remoteId: Long,
-        permissions: Int
+        permissions: Int,
+        accountName: String
     ) {
         _privateShareEditionStatus.postValue(
             UIResult.Loading()
@@ -218,7 +208,8 @@ class OCShareViewModel(
                 editPrivateShareUseCase.execute(
                     EditPrivateShareAsyncUseCase.Params(
                         remoteId,
-                        permissions
+                        permissions,
+                        accountName
                     )
                 )
             }
@@ -248,7 +239,8 @@ class OCShareViewModel(
         name: String,
         password: String,
         expirationTimeInMillis: Long,
-        publicUpload: Boolean
+        publicUpload: Boolean,
+        accountName: String
     ) {
         _publicShareCreationStatus.postValue(
             UIResult.Loading()
@@ -263,7 +255,8 @@ class OCShareViewModel(
                         name,
                         password,
                         expirationTimeInMillis,
-                        publicUpload
+                        publicUpload,
+                        accountName
                     )
                 )
             }
@@ -291,7 +284,8 @@ class OCShareViewModel(
         password: String?,
         expirationDateInMillis: Long,
         permissions: Int,
-        publicUpload: Boolean
+        publicUpload: Boolean,
+        accountName: String
     ) {
         _publicShareEditionStatus.postValue(
             UIResult.Loading()
@@ -306,7 +300,8 @@ class OCShareViewModel(
                         password,
                         expirationDateInMillis,
                         permissions,
-                        publicUpload
+                        publicUpload,
+                        accountName
                     )
                 )
             }

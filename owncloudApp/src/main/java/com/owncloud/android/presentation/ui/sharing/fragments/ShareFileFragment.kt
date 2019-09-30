@@ -42,9 +42,10 @@ import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
 import com.owncloud.android.data.sharing.shares.db.OCShareEntity
 import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.datamodel.ThumbnailsCacheManager
+import com.owncloud.android.domain.capabilities.model.CapabilityBooleanType
+import com.owncloud.android.domain.sharing.shares.model.OCShare
+import com.owncloud.android.domain.sharing.shares.model.ShareType
 import com.owncloud.android.lib.common.utils.Log_OC
-import com.owncloud.android.lib.resources.shares.ShareType
-import com.owncloud.android.lib.resources.status.CapabilityBooleanType
 import com.owncloud.android.lib.resources.status.OwnCloudVersion
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.adapters.sharing.SharePublicLinkListAdapter
@@ -203,7 +204,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
     private val ocShareViewModel: OCShareViewModel by viewModel {
         parametersOf(
             file?.remotePath,
-            account
+            account?.name
         )
     }
 
@@ -406,17 +407,17 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
         )
     }
 
-    private fun updateShares(shares: List<OCShareEntity>?) {
+    private fun updateShares(shares: List<OCShare>?) {
         shares?.filter { share ->
-            share.shareType == ShareType.USER.value ||
-                    share.shareType == ShareType.GROUP.value ||
-                    share.shareType == ShareType.FEDERATED.value
+            share.shareType == ShareType.USER ||
+                    share.shareType == ShareType.GROUP ||
+                    share.shareType == ShareType.FEDERATED
         }.also { privateShares ->
             updatePrivateShares(privateShares as ArrayList<OCShareEntity>)
         }
 
         shares?.filter { share ->
-            share.shareType == ShareType.PUBLIC_LINK.value
+            share.shareType == ShareType.PUBLIC_LINK
         }.also { publicShares ->
             updatePublicShares(publicShares as ArrayList<OCShareEntity>)
         }
