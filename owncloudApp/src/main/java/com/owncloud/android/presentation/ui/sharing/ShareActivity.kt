@@ -59,7 +59,7 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
 
     private val ocCapabilityViewModel: OCCapabilityViewModel by viewModel {
         parametersOf(
-            account
+            account?.name
         )
     }
 

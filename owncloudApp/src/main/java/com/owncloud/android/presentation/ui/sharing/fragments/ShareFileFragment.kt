@@ -196,7 +196,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
 
     private val ocCapabilityViewModel: OCCapabilityViewModel by viewModel {
         parametersOf(
-            account
+            account?.name
         )
     }
 
