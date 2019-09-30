@@ -1,6 +1,7 @@
 /* ownCloud Android Library is available under MIT license
  *   @author masensio
  *   @author David González Verdugo
+ *   @author Abel García de Prada
  *   Copyright (C) 2019 ownCloud GmbH.
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -43,6 +44,7 @@ class RemoteCapability {
 
     // Files Sharing
     var filesSharingApiEnabled: CapabilityBooleanType
+    var filesSharingMinLength: Int
     var filesSharingPublicEnabled: CapabilityBooleanType
     var filesSharingPublicPasswordEnforced: CapabilityBooleanType
     var filesSharingPublicPasswordEnforcedReadOnly: CapabilityBooleanType
@@ -77,6 +79,7 @@ class RemoteCapability {
         corePollinterval = 0
 
         filesSharingApiEnabled = CapabilityBooleanType.UNKNOWN
+        filesSharingMinLength = 4
         filesSharingPublicEnabled = CapabilityBooleanType.UNKNOWN
         filesSharingPublicPasswordEnforced = CapabilityBooleanType.UNKNOWN
         filesSharingPublicPasswordEnforcedReadOnly = CapabilityBooleanType.UNKNOWN

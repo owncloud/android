@@ -60,7 +60,7 @@ class GetRemoteCapabilitiesOperation : RemoteOperation<RemoteCapability>() {
 
             val getMethod = GetMethod(URL(uriBuilder.build().toString()))
 
-            getMethod.addRequestHeader(RemoteOperation.OCS_API_HEADER, RemoteOperation.OCS_API_HEADER_VALUE)
+            getMethod.addRequestHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE)
 
             val status = client.executeHttpMethod(getMethod)
 
@@ -122,6 +122,10 @@ class GetRemoteCapabilitiesOperation : RemoteOperation<RemoteCapability>() {
                             capability.filesSharingApiEnabled = CapabilityBooleanType.fromBooleanValue(
                                 respFilesSharing.getBoolean(PROPERTY_API_ENABLED)
                             )
+                        }
+                        if (respFilesSharing.has(PROPERTY_SEARCH_MIN_LENGTH)){
+                            capability.filesSharingMinLength = respFilesSharing.getInt(
+                                PROPERTY_SEARCH_MIN_LENGTH)
                         }
 
                         if (respFilesSharing.has(NODE_PUBLIC)) {
@@ -263,64 +267,65 @@ class GetRemoteCapabilitiesOperation : RemoteOperation<RemoteCapability>() {
         private val TAG = GetRemoteCapabilitiesOperation::class.java.simpleName
 
         // OCS Routes
-        private val OCS_ROUTE = "ocs/v2.php/cloud/capabilities"
+        private const val OCS_ROUTE = "ocs/v2.php/cloud/capabilities"
 
         // Arguments - names
-        private val PARAM_FORMAT = "format"
+        private const val PARAM_FORMAT = "format"
 
         // Arguments - constant values
-        private val VALUE_FORMAT = "json"
+        private const val VALUE_FORMAT = "json"
 
         // JSON Node names
-        private val NODE_OCS = "ocs"
+        private const val NODE_OCS = "ocs"
 
-        private val NODE_META = "meta"
+        private const val NODE_META = "meta"
 
-        private val NODE_DATA = "data"
-        private val NODE_VERSION = "version"
+        private const val NODE_DATA = "data"
+        private const val NODE_VERSION = "version"
 
-        private val NODE_CAPABILITIES = "capabilities"
-        private val NODE_CORE = "core"
+        private const val NODE_CAPABILITIES = "capabilities"
+        private const val NODE_CORE = "core"
 
-        private val NODE_FILES_SHARING = "files_sharing"
-        private val NODE_PUBLIC = "public"
-        private val NODE_PASSWORD = "password"
-        private val NODE_ENFORCED_FOR = "enforced_for"
-        private val NODE_EXPIRE_DATE = "expire_date"
-        private val NODE_USER = "user"
-        private val NODE_FEDERATION = "federation"
-        private val NODE_FILES = "files"
+        private const val NODE_FILES_SHARING = "files_sharing"
+        private const val NODE_PUBLIC = "public"
+        private const val NODE_PASSWORD = "password"
+        private const val NODE_ENFORCED_FOR = "enforced_for"
+        private const val NODE_EXPIRE_DATE = "expire_date"
+        private const val NODE_USER = "user"
+        private const val NODE_FEDERATION = "federation"
+        private const val NODE_FILES = "files"
 
-        private val PROPERTY_STATUS = "status"
-        private val PROPERTY_STATUS_OK = "ok"
-        private val PROPERTY_STATUSCODE = "statuscode"
-        private val PROPERTY_MESSAGE = "message"
+        private const val PROPERTY_STATUS = "status"
+        private const val PROPERTY_STATUS_OK = "ok"
+        private const val PROPERTY_STATUSCODE = "statuscode"
+        private const val PROPERTY_MESSAGE = "message"
 
-        private val PROPERTY_POLLINTERVAL = "pollinterval"
+        private const val PROPERTY_POLLINTERVAL = "pollinterval"
 
-        private val PROPERTY_MAJOR = "major"
-        private val PROPERTY_MINOR = "minor"
-        private val PROPERTY_MICRO = "micro"
-        private val PROPERTY_STRING = "string"
-        private val PROPERTY_EDITION = "edition"
+        private const val PROPERTY_MAJOR = "major"
+        private const val PROPERTY_MINOR = "minor"
+        private const val PROPERTY_MICRO = "micro"
+        private const val PROPERTY_STRING = "string"
+        private const val PROPERTY_EDITION = "edition"
 
-        private val PROPERTY_API_ENABLED = "api_enabled"
-        private val PROPERTY_ENABLED = "enabled"
-        private val PROPERTY_ENFORCED = "enforced"
-        private val PROPERTY_ENFORCED_READ_ONLY = "read_only"
-        private val PROPERTY_ENFORCED_READ_WRITE = "read_write"
-        private val PROPERTY_ENFORCED_UPLOAD_ONLY = "upload_only"
-        private val PROPERTY_DAYS = "days"
-        private val PROPERTY_SEND_MAIL = "send_mail"
-        private val PROPERTY_UPLOAD = "upload"
-        private val PROPERTY_UPLOAD_ONLY = "supports_upload_only"
-        private val PROPERTY_MULTIPLE = "multiple"
-        private val PROPERTY_RESHARING = "resharing"
-        private val PROPERTY_OUTGOING = "outgoing"
-        private val PROPERTY_INCOMING = "incoming"
+        private const val PROPERTY_API_ENABLED = "api_enabled"
+        private const val PROPERTY_ENABLED = "enabled"
+        private const val PROPERTY_ENFORCED = "enforced"
+        private const val PROPERTY_ENFORCED_READ_ONLY = "read_only"
+        private const val PROPERTY_ENFORCED_READ_WRITE = "read_write"
+        private const val PROPERTY_ENFORCED_UPLOAD_ONLY = "upload_only"
+        private const val PROPERTY_DAYS = "days"
+        private const val PROPERTY_SEARCH_MIN_LENGTH = "search_min_length"
+        private const val PROPERTY_SEND_MAIL = "send_mail"
+        private const val PROPERTY_UPLOAD = "upload"
+        private const val PROPERTY_UPLOAD_ONLY = "supports_upload_only"
+        private const val PROPERTY_MULTIPLE = "multiple"
+        private const val PROPERTY_RESHARING = "resharing"
+        private const val PROPERTY_OUTGOING = "outgoing"
+        private const val PROPERTY_INCOMING = "incoming"
 
-        private val PROPERTY_BIGFILECHUNKING = "bigfilechunking"
-        private val PROPERTY_UNDELETE = "undelete"
-        private val PROPERTY_VERSIONING = "versioning"
+        private const val PROPERTY_BIGFILECHUNKING = "bigfilechunking"
+        private const val PROPERTY_UNDELETE = "undelete"
+        private const val PROPERTY_VERSIONING = "versioning"
     }
 }
