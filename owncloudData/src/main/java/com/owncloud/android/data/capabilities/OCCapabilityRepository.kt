@@ -17,26 +17,26 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.domain.capabilities
+package com.owncloud.android.data.capabilities
 
 import androidx.lifecycle.LiveData
-import com.owncloud.android.data.capabilities.CapabilityRepository
 import com.owncloud.android.data.capabilities.datasources.LocalCapabilitiesDataSource
 import com.owncloud.android.data.capabilities.datasources.RemoteCapabilitiesDataSource
 import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
+import com.owncloud.android.domain.capabilities.CapabilityRepository
+import com.owncloud.android.domain.capabilities.model.OCCapability
 
 class OCCapabilityRepository(
     private val localCapabilitiesDataSource: LocalCapabilitiesDataSource,
     private val remoteCapabilitiesDataSource: RemoteCapabilitiesDataSource
 ) : CapabilityRepository {
 
-    override fun getCapabilitiesAsLiveData(accountName: String): LiveData<OCCapabilityEntity> {
+    override fun getCapabilitiesAsLiveData(accountName: String): LiveData<OCCapability> {
         return localCapabilitiesDataSource.getCapabilitiesForAccountAsLiveData(accountName)
     }
 
     override suspend fun refreshCapabilitiesForAccount(
-        accountName: String,
-        shouldFetchFromNetwork: Boolean
+        accountName: String
     ) {
         remoteCapabilitiesDataSource.getCapabilities(
             accountName

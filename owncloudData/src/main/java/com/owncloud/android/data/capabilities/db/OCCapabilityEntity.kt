@@ -47,45 +47,45 @@ data class OCCapabilityEntity(
     @ColumnInfo(name = ProviderTableMeta.CAPABILITIES_CORE_POLLINTERVAL)
     val corePollInterval: Int,
     @ColumnInfo(name = ProviderTableMeta.CAPABILITIES_SHARING_API_ENABLED)
-    val filesSharingApiEnabled: Int?,
+    val filesSharingApiEnabled: Int,
     @ColumnInfo(name = ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_ENABLED)
-    val filesSharingPublicEnabled: Int?,
+    val filesSharingPublicEnabled: Int,
     @ColumnInfo(name = ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED)
-    val filesSharingPublicPasswordEnforced: Int?,
+    val filesSharingPublicPasswordEnforced: Int,
     @ColumnInfo(name = ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_READ_ONLY)
-    val filesSharingPublicPasswordEnforcedReadOnly: Int?,
+    val filesSharingPublicPasswordEnforcedReadOnly: Int,
     @ColumnInfo(name = ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_READ_WRITE)
-    val filesSharingPublicPasswordEnforcedReadWrite: Int?,
+    val filesSharingPublicPasswordEnforcedReadWrite: Int,
     @ColumnInfo(name = ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_UPLOAD_ONLY)
-    val filesSharingPublicPasswordEnforcedUploadOnly: Int?,
+    val filesSharingPublicPasswordEnforcedUploadOnly: Int,
     @ColumnInfo(name = ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_ENABLED)
-    val filesSharingPublicExpireDateEnabled: Int?,
+    val filesSharingPublicExpireDateEnabled: Int,
     @ColumnInfo(name = ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_DAYS)
     val filesSharingPublicExpireDateDays: Int,
     @ColumnInfo(name = ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_ENFORCED)
-    val filesSharingPublicExpireDateEnforced: Int?,
+    val filesSharingPublicExpireDateEnforced: Int,
     @ColumnInfo(name = ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_SEND_MAIL)
-    val filesSharingPublicSendMail: Int?,
+    val filesSharingPublicSendMail: Int,
     @ColumnInfo(name = ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_UPLOAD)
-    val filesSharingPublicUpload: Int?,
+    val filesSharingPublicUpload: Int,
     @ColumnInfo(name = ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_MULTIPLE)
-    val filesSharingPublicMultiple: Int?,
+    val filesSharingPublicMultiple: Int,
     @ColumnInfo(name = ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_SUPPORTS_UPLOAD_ONLY)
-    val filesSharingPublicSupportsUploadOnly: Int?,
+    val filesSharingPublicSupportsUploadOnly: Int,
     @ColumnInfo(name = ProviderTableMeta.CAPABILITIES_SHARING_USER_SEND_MAIL)
-    val filesSharingUserSendMail: Int?,
+    val filesSharingUserSendMail: Int,
     @ColumnInfo(name = ProviderTableMeta.CAPABILITIES_SHARING_RESHARING)
-    val filesSharingResharing: Int?,
+    val filesSharingResharing: Int,
     @ColumnInfo(name = ProviderTableMeta.CAPABILITIES_SHARING_FEDERATION_OUTGOING)
-    val filesSharingFederationOutgoing: Int?,
+    val filesSharingFederationOutgoing: Int,
     @ColumnInfo(name = ProviderTableMeta.CAPABILITIES_SHARING_FEDERATION_INCOMING)
-    val filesSharingFederationIncoming: Int?,
+    val filesSharingFederationIncoming: Int,
     @ColumnInfo(name = ProviderTableMeta.CAPABILITIES_FILES_BIGFILECHUNKING)
-    val filesBigFileChunking: Int?,
+    val filesBigFileChunking: Int,
     @ColumnInfo(name = ProviderTableMeta.CAPABILITIES_FILES_UNDELETE)
-    val filesUndelete: Int?,
+    val filesUndelete: Int,
     @ColumnInfo(name = ProviderTableMeta.CAPABILITIES_FILES_VERSIONING)
-    val filesVersioning: Int?
+    val filesVersioning: Int
 ) {
     @PrimaryKey(autoGenerate = true) var id: Int = 0
 
@@ -99,26 +99,26 @@ data class OCCapabilityEntity(
                 remoteCapability.versionString,
                 remoteCapability.versionEdition,
                 remoteCapability.corePollinterval,
-                remoteCapability.filesSharingApiEnabled?.value,
-                remoteCapability.filesSharingPublicEnabled?.value,
-                remoteCapability.filesSharingPublicPasswordEnforced?.value,
-                remoteCapability.filesSharingPublicPasswordEnforcedReadOnly?.value,
-                remoteCapability.filesSharingPublicPasswordEnforcedReadWrite?.value,
-                remoteCapability.filesSharingPublicPasswordEnforcedUploadOnly?.value,
-                remoteCapability.filesSharingPublicExpireDateEnabled?.value,
+                remoteCapability.filesSharingApiEnabled.value,
+                remoteCapability.filesSharingPublicEnabled.value,
+                remoteCapability.filesSharingPublicPasswordEnforced.value,
+                remoteCapability.filesSharingPublicPasswordEnforcedReadOnly.value,
+                remoteCapability.filesSharingPublicPasswordEnforcedReadWrite.value,
+                remoteCapability.filesSharingPublicPasswordEnforcedUploadOnly.value,
+                remoteCapability.filesSharingPublicExpireDateEnabled.value,
                 remoteCapability.filesSharingPublicExpireDateDays,
-                remoteCapability.filesSharingPublicExpireDateEnforced?.value,
-                remoteCapability.filesSharingPublicSendMail?.value,
-                remoteCapability.filesSharingPublicUpload?.value,
-                remoteCapability.filesSharingPublicMultiple?.value,
-                remoteCapability.filesSharingPublicSupportsUploadOnly?.value,
-                remoteCapability.filesSharingUserSendMail?.value,
-                remoteCapability.filesSharingResharing?.value,
-                remoteCapability.filesSharingFederationOutgoing?.value,
-                remoteCapability.filesSharingFederationIncoming?.value,
-                remoteCapability.filesBigFileChunking?.value,
-                remoteCapability.filesUndelete?.value,
-                remoteCapability.filesVersioning?.value
+                remoteCapability.filesSharingPublicExpireDateEnforced.value,
+                remoteCapability.filesSharingPublicSendMail.value,
+                remoteCapability.filesSharingPublicUpload.value,
+                remoteCapability.filesSharingPublicMultiple.value,
+                remoteCapability.filesSharingPublicSupportsUploadOnly.value,
+                remoteCapability.filesSharingUserSendMail.value,
+                remoteCapability.filesSharingResharing.value,
+                remoteCapability.filesSharingFederationOutgoing.value,
+                remoteCapability.filesSharingFederationIncoming.value,
+                remoteCapability.filesBigFileChunking.value,
+                remoteCapability.filesUndelete.value,
+                remoteCapability.filesVersioning.value
             )
 
         fun fromCursor(cursor: Cursor) = OCCapabilityEntity(

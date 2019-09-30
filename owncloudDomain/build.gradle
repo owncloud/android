@@ -40,9 +40,6 @@ android {
 }
 
 dependencies {
-    // Data module
-    implementation project(':owncloudData')
-
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     implementation 'androidx.appcompat:appcompat:1.0.2'

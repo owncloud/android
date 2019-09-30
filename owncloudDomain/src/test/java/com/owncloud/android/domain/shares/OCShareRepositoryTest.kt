@@ -26,7 +26,7 @@ import androidx.lifecycle.Observer
 import com.owncloud.android.data.DataResult
 import com.owncloud.android.data.sharing.shares.datasources.LocalShareDataSource
 import com.owncloud.android.data.sharing.shares.db.OCShareEntity
-import com.owncloud.android.domain.sharing.shares.OCShareRepository
+import com.owncloud.android.data.sharing.shares.OCShareRepository
 import com.owncloud.android.domain.utils.DomainTestUtil
 import com.owncloud.android.domain.utils.InstantExecutors
 import com.owncloud.android.lib.common.operations.RemoteOperationResult

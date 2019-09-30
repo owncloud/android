@@ -17,17 +17,23 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.data.capabilities
+package com.owncloud.android.data.sharing.sharees
 
-import androidx.lifecycle.LiveData
-import com.owncloud.android.data.DataResult
-import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
+import com.owncloud.android.data.sharing.sharees.datasources.RemoteShareeDataSource
+import com.owncloud.android.domain.sharing.sharees.ShareeRepository
+import org.json.JSONObject
 
-interface CapabilityRepository {
-    suspend fun refreshCapabilitiesForAccount(
-        accountName: String,
-        shouldFetchFromNetwork: Boolean = true
-    )
+class OCShareeRepository(
+    private val remoteShareeDataSource: RemoteShareeDataSource
+) : ShareeRepository {
 
-    fun getCapabilitiesAsLiveData(accountName: String): LiveData<OCCapabilityEntity>
+    override fun getSharees(
+        searchString: String,
+        page: Int,
+        perPage: Int
+    ): ArrayList<JSONObject> {
+        return remoteShareeDataSource.getSharees(
+            searchString, page, perPage
+        )
+    }
 }

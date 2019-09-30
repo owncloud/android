@@ -23,11 +23,11 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
 import androidx.test.platform.app.InstrumentationRegistry
 import com.owncloud.android.data.OwncloudDatabase
+import com.owncloud.android.data.sharing.shares.datasources.implementation.OCLocalShareDataSource
 import com.owncloud.android.data.sharing.shares.db.OCShareDao
 import com.owncloud.android.data.sharing.shares.db.OCShareEntity
 import com.owncloud.android.data.utils.DataTestUtil
 import com.owncloud.android.data.utils.LiveDataTestUtil.getValue
-import com.owncloud.android.lib.resources.shares.ShareType
 import io.mockk.every
 import io.mockk.mockkClass
 import org.junit.Assert.assertEquals
@@ -52,7 +52,11 @@ class OCLocalDataSourceTest {
         } returns ocSharesDao
 
         val context = InstrumentationRegistry.getInstrumentation().targetContext
-        ocLocalSharesDataSource = OCLocalShareDataSource(context, ocSharesDao)
+        ocLocalSharesDataSource =
+            OCLocalShareDataSource(
+                context,
+                ocSharesDao
+            )
     }
 
     /******************************************************************************************************

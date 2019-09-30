@@ -42,8 +42,6 @@ import com.owncloud.android.data.sharing.shares.db.OCShareEntity
 import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.datamodel.ThumbnailsCacheManager
 import com.owncloud.android.lib.common.utils.Log_OC
-import com.owncloud.android.lib.resources.shares.ShareType
-import com.owncloud.android.lib.resources.status.CapabilityBooleanType
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.adapters.sharing.SharePublicLinkListAdapter
 import com.owncloud.android.presentation.adapters.sharing.ShareUserListAdapter
@@ -199,7 +197,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
     private val ocShareViewModel: OCShareViewModel by viewModel {
         parametersOf(
             file?.remotePath,
-            account
+            account?.name
         )
     }
 
