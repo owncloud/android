@@ -35,10 +35,7 @@ val viewModelModule = module {
         )
     }
 
-    viewModel { (account: Account) ->
-        OCCapabilityViewModel(
-            androidContext(),
-            account
-        )
+    viewModel { (accountName: String) ->
+        OCCapabilityViewModel(accountName, get(), get())
     }
 }

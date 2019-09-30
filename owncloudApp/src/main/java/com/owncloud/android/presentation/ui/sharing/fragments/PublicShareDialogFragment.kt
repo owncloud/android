@@ -137,7 +137,7 @@ class PublicShareDialogFragment : DialogFragment() {
 
     private val ocCapabilityViewModel: OCCapabilityViewModel by viewModel {
         parametersOf(
-            account
+            account?.name
         )
     }
 

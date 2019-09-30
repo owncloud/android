@@ -17,22 +17,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.domain.capabilities.usecases
+package com.owncloud.android.dependecyinjection
 
-import androidx.lifecycle.LiveData
-import com.owncloud.android.data.capabilities.CapabilityRepository
-import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
-import com.owncloud.android.domain.BaseUseCase
+import com.owncloud.android.data.OwncloudDatabase
+import com.owncloud.android.data.capabilities.datasources.LocalCapabilitiesDataSource
+import com.owncloud.android.data.capabilities.datasources.OCLocalCapabilitiesDataSource
+import org.koin.android.ext.koin.androidContext
+import org.koin.dsl.module
 
-class GetCapabilitiesAsLiveDataUseCase(
-    private val capabilityRepository: CapabilityRepository
-) : BaseUseCase<LiveData<OCCapabilityEntity>, GetCapabilitiesAsLiveDataUseCase.Params>() {
+val localDataSourceModule = module {
+    single { OwncloudDatabase.getDatabase(androidContext()).capabilityDao() }
+    single { OwncloudDatabase.getDatabase(androidContext()).shareDao() }
 
-    override fun run(params: Params): LiveData<OCCapabilityEntity> = capabilityRepository.getCapabilitiesAsLiveData(
-        params.accountName
-    )
-
-    data class Params(
-        val accountName: String
-    )
+    factory<LocalCapabilitiesDataSource> { OCLocalCapabilitiesDataSource(get())}
 }

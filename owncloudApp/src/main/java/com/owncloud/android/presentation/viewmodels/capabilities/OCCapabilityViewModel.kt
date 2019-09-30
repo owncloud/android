@@ -19,8 +19,6 @@
 
 package com.owncloud.android.presentation.viewmodels.capabilities
 
-import android.accounts.Account
-import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
@@ -38,16 +36,9 @@ import kotlinx.coroutines.withContext
  * View Model to keep a reference to the capability repository and an up-to-date capability
  */
 class OCCapabilityViewModel(
-    val context: Context,
-    val account: Account,
-    getCapabilitiesAsLiveDataUseCase: GetCapabilitiesAsLiveDataUseCase = GetCapabilitiesAsLiveDataUseCase(
-        context,
-        account
-    ),
-    private val refreshCapabilitiesFromServerUseCase: RefreshCapabilitiesFromServerAsyncUseCase = RefreshCapabilitiesFromServerAsyncUseCase(
-        context,
-        account
-    )
+    private val accountName: String,
+    getCapabilitiesAsLiveDataUseCase: GetCapabilitiesAsLiveDataUseCase,
+    private val refreshCapabilitiesFromServerUseCase: RefreshCapabilitiesFromServerAsyncUseCase
 ) : ViewModel() {
 
     private val _capabilities = MutableLiveData<UIResult<OCCapabilityEntity>>()
@@ -55,7 +46,7 @@ class OCCapabilityViewModel(
 
     private var capabilitiesLiveData: LiveData<OCCapabilityEntity>? = getCapabilitiesAsLiveDataUseCase.execute(
         GetCapabilitiesAsLiveDataUseCase.Params(
-            accountName = account.name
+            accountName = accountName
         )
     ).getDataOrNull()
 
@@ -79,7 +70,7 @@ class OCCapabilityViewModel(
 
                 refreshCapabilitiesFromServerUseCase.execute(
                     RefreshCapabilitiesFromServerAsyncUseCase.Params(
-                        accountName = account.name
+                        accountName = accountName
                     )
                 ).also { useCaseResult ->
                     if (!useCaseResult.isSuccess) {

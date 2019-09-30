@@ -19,28 +19,11 @@
 
 package com.owncloud.android.domain.capabilities.usecases
 
-import android.accounts.Account
-import android.content.Context
 import com.owncloud.android.data.capabilities.CapabilityRepository
-import com.owncloud.android.data.capabilities.datasources.OCLocalCapabilitiesDataSource
-import com.owncloud.android.data.capabilities.datasources.OCRemoteCapabilitiesDataSource
-import com.owncloud.android.domain.capabilities.OCCapabilityRepository
 import com.owncloud.android.domain.BaseAsyncUseCase
-import com.owncloud.android.lib.common.OwnCloudAccount
-import com.owncloud.android.lib.common.OwnCloudClientManagerFactory
 
 class RefreshCapabilitiesFromServerAsyncUseCase(
-    context: Context,
-    account: Account,
-    private val capabilityRepository: CapabilityRepository = OCCapabilityRepository(
-        localCapabilitiesDataSource = OCLocalCapabilitiesDataSource(context),
-        remoteCapabilitiesDataSource = OCRemoteCapabilitiesDataSource(
-            OwnCloudClientManagerFactory.getDefaultSingleton().getClientFor(
-                OwnCloudAccount(account, context),
-                context
-            )
-        )
-    )
+    private val capabilityRepository: CapabilityRepository
 ) : BaseAsyncUseCase<Unit, RefreshCapabilitiesFromServerAsyncUseCase.Params>() {
 
     override suspend fun run(params: Params) =

@@ -61,6 +61,7 @@ import com.owncloud.android.lib.common.accounts.AccountUtils
 import com.owncloud.android.lib.common.utils.Log_OC
 import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.utils.FileStorageUtils
+import org.koin.android.ext.android.inject
 import java.io.File
 import java.io.FileNotFoundException
 import java.util.ArrayList
@@ -998,9 +999,10 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
                 )
 
                 if (cursor.moveToFirst()) {
+                    val ocLocalCapabilitiesDataSource : OCLocalCapabilitiesDataSource by inject()
                     // Insert capability to the new capabilities table in new database
                     executors.diskIO().execute {
-                        OCLocalCapabilitiesDataSource(context).insert(
+                        ocLocalCapabilitiesDataSource.insert(
                             listOf(OCCapabilityEntity.fromCursor(cursor))
                         )
                     }
