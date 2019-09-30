@@ -17,30 +17,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.domain.sharing.sharees
+package com.owncloud.android.dependecyinjection
 
-import android.accounts.Account
-import android.content.Context
-import com.owncloud.android.data.sharing.sharees.ShareeRepository
+import com.owncloud.android.authentication.AccountUtils
 import com.owncloud.android.data.sharing.sharees.datasources.OCRemoteShareeDataSource
-import com.owncloud.android.domain.BaseUseCase
+import com.owncloud.android.data.sharing.sharees.datasources.RemoteShareeDataSource
 import com.owncloud.android.lib.common.OwnCloudAccount
 import com.owncloud.android.lib.common.OwnCloudClientManagerFactory
-import org.json.JSONObject
+import org.koin.android.ext.koin.androidContext
+import org.koin.dsl.module
 
-class GetShareesAsyncUseCase(
-    private val shareeRepository: ShareeRepository
-) : BaseUseCase<ArrayList<JSONObject>, GetShareesAsyncUseCase.Params>() {
-    override fun run(params: Params): ArrayList<JSONObject> =
-        shareeRepository.getSharees(
-            params.searchString,
-            params.page,
-            params.perPage
-        )
+val remoteDataSourceModule = module {
+    single { AccountUtils.getCurrentOwnCloudAccount(androidContext()) }
+    single { OwnCloudAccount(get(), androidContext()) }
+    single { OwnCloudClientManagerFactory.getDefaultSingleton().getClientFor(get(), androidContext()) }
 
-    data class Params(
-        val searchString: String,
-        val page: Int,
-        val perPage: Int
-    )
+    factory<RemoteShareeDataSource> { OCRemoteShareeDataSource(get()) }
 }
