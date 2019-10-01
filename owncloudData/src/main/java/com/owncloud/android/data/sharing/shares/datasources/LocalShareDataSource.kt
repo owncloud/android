@@ -28,7 +28,7 @@ interface LocalShareDataSource {
         filePath: String,
         accountName: String,
         shareTypes: List<ShareType>
-    ): LiveData<List<OCShare>>
+    ): LiveData<List<OCShare>?>
 
     fun getShareAsLiveData(
         remoteId: Long

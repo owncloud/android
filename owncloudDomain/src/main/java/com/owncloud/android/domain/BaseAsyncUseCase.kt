@@ -19,8 +19,10 @@
 
 package com.owncloud.android.domain
 
+/**
+ * Needs to be called from a coroutine, parent class for use cases that require network operations
+ */
 abstract class BaseAsyncUseCase<out Type, in Params> {
-
     protected abstract suspend fun run(params: Params): Type
 
     suspend fun execute(params: Params): UseCaseResult<Type> =

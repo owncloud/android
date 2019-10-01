@@ -61,12 +61,12 @@ class OCShareViewModel(
     private val _shares = MediatorLiveData<UIResult<List<OCShare>>>()
     val shares: LiveData<UIResult<List<OCShare>>> = _shares
 
-    private var sharesLiveData: LiveData<List<OCShare>>? = getSharesAsLiveDataUseCase.execute(
+    private var sharesLiveData: LiveData<List<OCShare>?>? = getSharesAsLiveDataUseCase.execute(
         GetSharesAsLiveDataUseCase.Params(
             filePath = filePath,
             accountName = accountName
         )
-    ).getDataOrNull()
+    )
 
     init {
         sharesLiveData?.let {
@@ -79,21 +79,24 @@ class OCShareViewModel(
     }
 
     fun refreshSharesFromNetwork() {
-        viewModelScope.launch(ioDispatcher) {
+        viewModelScope.launch {
             _shares.postValue(
                 UIResult.Loading(sharesLiveData?.value)
             )
 
-            val useCaseResult = refreshSharesFromServerAsyncUseCase.execute(
-                RefreshSharesFromServerAsyncUseCase.Params(
-                    filePath = filePath,
-                    accountName = accountName
+            val useCaseResult = withContext(Dispatchers.IO) {
+                refreshSharesFromServerAsyncUseCase.execute(
+                    RefreshSharesFromServerAsyncUseCase.Params(
+                        filePath = filePath,
+                        accountName = accountName
+                    )
                 )
-            )
+            }
 
             if (!useCaseResult.isSuccess) {
                 _shares.postValue(
                     UIResult.Error(useCaseResult.getThrowableOrNull(), sharesLiveData?.value)
+
                 )
             }
         }
@@ -182,7 +185,7 @@ class OCShareViewModel(
     ) {
         privateShareLiveData = getShareAsLiveDataUseCase.execute(
             GetShareAsLiveDataUseCase.Params(remoteId)
-        ).getDataOrNull()
+        )
 
         privateShareLiveData?.let {
             _privateShare.addSource(it) { privateShare ->

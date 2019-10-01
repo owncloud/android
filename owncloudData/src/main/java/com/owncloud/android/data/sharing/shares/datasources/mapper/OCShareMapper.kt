@@ -20,7 +20,7 @@
 package com.owncloud.android.data.sharing.shares.datasources.mapper
 
 import com.owncloud.android.data.sharing.shares.db.OCShareEntity
-import com.owncloud.android.domain.mapper.Mapper
+import com.owncloud.android.domain.mappers.Mapper
 import com.owncloud.android.domain.sharing.shares.model.OCShare
 import com.owncloud.android.domain.sharing.shares.model.ShareType
 

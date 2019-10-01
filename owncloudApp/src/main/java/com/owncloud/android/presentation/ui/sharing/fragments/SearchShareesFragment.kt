@@ -42,8 +42,9 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.owncloud.android.R
-import com.owncloud.android.data.sharing.shares.db.OCShareEntity
 import com.owncloud.android.datamodel.OCFile
+import com.owncloud.android.domain.sharing.shares.model.OCShare
+import com.owncloud.android.domain.sharing.shares.model.ShareType
 import com.owncloud.android.lib.common.utils.Log_OC
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.adapters.sharing.ShareUserListAdapter
@@ -148,10 +149,10 @@ class SearchShareesFragment : Fragment(),
             this,
             Observer { uiResult ->
                 val privateShares = uiResult.getStoredData()?.filter { share ->
-                    share.shareType == ShareType.USER.value ||
-                            share.shareType == ShareType.GROUP.value ||
-                            share.shareType == ShareType.FEDERATED.value
-                }
+                    share.shareType == ShareType.USER ||
+                            share.shareType == ShareType.GROUP ||
+                            share.shareType == ShareType.FEDERATED
+                } as ArrayList<OCShare>
                 when (uiResult) {
                     is UIResult.Success -> {
                         privateShares?.let {
@@ -187,7 +188,7 @@ class SearchShareesFragment : Fragment(),
         )
     }
 
-    private fun updatePrivateShares(privateShares: List<OCShareEntity>) {
+    private fun updatePrivateShares(privateShares: List<OCShare>) {
         // Update list of users/groups
         userGroupsAdapter = ShareUserListAdapter(
             requireActivity().applicationContext,
@@ -245,12 +246,12 @@ class SearchShareesFragment : Fragment(),
         }
     }
 
-    override fun unshareButtonPressed(share: OCShareEntity) {
+    override fun unshareButtonPressed(share: OCShare) {
         Log_OC.d(TAG, "Removed private share with " + share.sharedWithDisplayName!!)
         listener?.showRemoveShare(share)
     }
 
-    override fun editShare(share: OCShareEntity) {
+    override fun editShare(share: OCShare) {
         // move to fragment to edit share
         Log_OC.d(TAG, "Editing " + share.sharedWithDisplayName!!)
         listener?.showEditPrivateShare(share)

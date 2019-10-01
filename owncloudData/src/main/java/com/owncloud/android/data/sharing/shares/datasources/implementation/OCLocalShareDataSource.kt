@@ -24,6 +24,7 @@ import androidx.lifecycle.Transformations
 import com.owncloud.android.data.sharing.shares.datasources.LocalShareDataSource
 import com.owncloud.android.data.sharing.shares.datasources.mapper.OCShareMapper
 import com.owncloud.android.data.sharing.shares.db.OCShareDao
+import com.owncloud.android.domain.extensions.distinctUntilChanged
 import com.owncloud.android.domain.sharing.shares.model.OCShare
 import com.owncloud.android.domain.sharing.shares.model.ShareType
 
@@ -36,7 +37,7 @@ class OCLocalShareDataSource(
         filePath: String,
         accountName: String,
         shareTypes: List<ShareType>
-    ): LiveData<List<OCShare>> =
+    ): LiveData<List<OCShare>?> =
         Transformations.map(
             ocShareDao.getSharesAsLiveData(
                 filePath,

@@ -38,11 +38,11 @@ import androidx.lifecycle.Observer
 import com.google.android.material.snackbar.Snackbar
 import com.owncloud.android.R
 import com.owncloud.android.authentication.AccountUtils
-import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
 import com.owncloud.android.data.sharing.shares.db.OCShareEntity
 import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.datamodel.ThumbnailsCacheManager
 import com.owncloud.android.domain.capabilities.model.CapabilityBooleanType
+import com.owncloud.android.domain.capabilities.model.OCCapability
 import com.owncloud.android.domain.sharing.shares.model.OCShare
 import com.owncloud.android.domain.sharing.shares.model.ShareType
 import com.owncloud.android.lib.common.utils.Log_OC
@@ -98,7 +98,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
     /**
      * List of private shares bound to the file
      */
-    private var privateShares: List<OCShareEntity>? = null
+    private var privateShares: List<OCShare>? = null
 
     /**
      * Adapter to show private shares
@@ -108,7 +108,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
     /**
      * List of public links bound to the file
      */
-    private var publicLinks: List<OCShareEntity>? = null
+    private var publicLinks: List<OCShare>? = null
 
     /**
      * Adapter to show public shares
@@ -118,7 +118,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
     /**
      * Capabilities of the server
      */
-    private var capabilities: OCCapabilityEntity? = null
+    private var capabilities: OCCapability? = null
 
     private var serverVersion: OwnCloudVersion? = null
 
@@ -142,7 +142,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
             val usedNumbers = ArrayList<Int>()
             var isDefaultNameSet = false
             var number: String
-            for (share in publicLinks as ArrayList<OCShareEntity>) {
+            for (share in publicLinks as ArrayList<OCShare>) {
                 if (defaultName == share.name) {
                     isDefaultNameSet = true
                 } else if (share.name?.matches(defaultNameNumberedRegex.toRegex())!!) {
@@ -185,15 +185,15 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
         }
 
     private val isShareApiEnabled: Boolean
-        get() = capabilities?.filesSharingApiEnabled == CapabilityBooleanType.TRUE.value ||
-                capabilities?.filesSharingApiEnabled == CapabilityBooleanType.UNKNOWN.value
+        get() = capabilities?.filesSharingApiEnabled == CapabilityBooleanType.TRUE ||
+                capabilities?.filesSharingApiEnabled == CapabilityBooleanType.UNKNOWN
 
     /**
      * @return 'True' when public share is disabled in the server
      */
     private val isPublicShareEnabled: Boolean
-        get() = capabilities?.filesSharingPublicEnabled == CapabilityBooleanType.TRUE.value ||
-                capabilities?.filesSharingPublicEnabled == CapabilityBooleanType.UNKNOWN.value
+        get() = capabilities?.filesSharingPublicEnabled == CapabilityBooleanType.TRUE ||
+                capabilities?.filesSharingPublicEnabled == CapabilityBooleanType.UNKNOWN
 
     private val ocCapabilityViewModel: OCCapabilityViewModel by viewModel {
         parametersOf(
@@ -322,6 +322,9 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
 
         observeCapabilities() // Get capabilities to update some UI elements depending on them
         observeShares()
+
+        ocCapabilityViewModel.refreshCapabilitiesFromNetwork()
+        ocShareViewModel.refreshSharesFromNetwork()
     }
 
     override fun onAttach(context: Context) {
@@ -413,13 +416,13 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
                     share.shareType == ShareType.GROUP ||
                     share.shareType == ShareType.FEDERATED
         }.also { privateShares ->
-            updatePrivateShares(privateShares as ArrayList<OCShareEntity>)
+            updatePrivateShares(privateShares as ArrayList<OCShare>)
         }
 
         shares?.filter { share ->
             share.shareType == ShareType.PUBLIC_LINK
         }.also { publicShares ->
-            updatePublicShares(publicShares as ArrayList<OCShareEntity>)
+            updatePublicShares(publicShares as ArrayList<OCShare>)
         }
     }
 
@@ -427,7 +430,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
      ************************************************ CAPABILITIES ************************************************
      **************************************************************************************************************/
 
-    fun updateCapabilities(capabilities: OCCapabilityEntity?) {
+    fun updateCapabilities(capabilities: OCCapability?) {
         this.capabilities = capabilities
 
         updatePublicLinkButton()
@@ -442,12 +445,12 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
      *********************************************** PRIVATE SHARES ***********************************************
      **************************************************************************************************************/
 
-    private fun updatePrivateShares(privateShares: List<OCShareEntity>) {
+    private fun updatePrivateShares(privateShares: List<OCShare>) {
         // Get Users and Groups
         this.privateShares = ArrayList(privateShares.filter {
-            it.shareType == ShareType.USER.value ||
-                    it.shareType == ShareType.GROUP.value ||
-                    it.shareType == ShareType.FEDERATED.value
+            it.shareType == ShareType.USER ||
+                    it.shareType == ShareType.GROUP ||
+                    it.shareType == ShareType.FEDERATED
         })
 
         // Update list of users/groups
@@ -479,13 +482,13 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
         shareScroll?.scrollTo(0, 0)
     }
 
-    override fun unshareButtonPressed(share: OCShareEntity) {
+    override fun unshareButtonPressed(share: OCShare) {
         // Unshare
         Log_OC.d(TAG, "Removing private share with " + share.sharedWithDisplayName)
         removeShare(share)
     }
 
-    override fun editShare(share: OCShareEntity) {
+    override fun editShare(share: OCShare) {
         // move to fragment to edit share
         Log_OC.d(TAG, "Editing " + share.sharedWithDisplayName)
         listener?.showEditPrivateShare(share)
@@ -495,7 +498,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
      *********************************************** PUBLIC SHARES ************************************************
      **************************************************************************************************************/
 
-    private fun updatePublicShares(publicShares: List<OCShareEntity>) {
+    private fun updatePublicShares(publicShares: List<OCShare>) {
         publicLinks = publicShares
         updatePublicLinkButton()
         updateListOfPublicLinks()
@@ -548,7 +551,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
         shareScroll?.scrollTo(0, 0)
     }
 
-    override fun copyOrSendPublicLink(share: OCShareEntity) {
+    override fun copyOrSendPublicLink(share: OCShare) {
         //GetLink from the server and show ShareLinkToDialog
         listener?.copyOrSendPublicLink(share)
     }
@@ -568,16 +571,16 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
             // Server version <= 9.x, multiple public sharing not supported
             !serverVersion.isMultiplePublicSharingSupported -> false
             // Server version >= 10, multiple public sharing supported but disabled
-            capabilities?.filesSharingPublicMultiple == CapabilityBooleanType.FALSE.value -> false
+            capabilities?.filesSharingPublicMultiple == CapabilityBooleanType.FALSE -> false
             else -> true
         }
     }
 
-    override fun editPublicShare(share: OCShareEntity) {
+    override fun editPublicShare(share: OCShare) {
         listener?.showEditPublicShare(share)
     }
 
-    override fun removeShare(share: OCShareEntity) {
+    override fun removeShare(share: OCShare) {
         // Remove public link from server
         listener?.showRemoveShare(share)
     }

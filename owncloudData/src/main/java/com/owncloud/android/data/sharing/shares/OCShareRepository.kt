@@ -36,16 +36,6 @@ class OCShareRepository(
      ******************************************* PRIVATE SHARES *******************************************
      ******************************************************************************************************/
 
-    override fun getPrivateSharesAsLiveData(filePath: String, accountName: String): LiveData<List<OCShare>> {
-        return localShareDataSource.getSharesAsLiveData(
-            filePath, accountName, listOf(
-                ShareType.USER,
-                ShareType.GROUP,
-                ShareType.FEDERATED
-            )
-        )
-    }
-
     override suspend fun insertPrivateShare(
         filePath: String,
         shareType: ShareType?,
@@ -128,7 +118,7 @@ class OCShareRepository(
      *********************************************** COMMON ***********************************************
      ******************************************************************************************************/
 
-    override fun getSharesAsLiveData(filePath: String, accountName: String): LiveData<List<OCShare>> {
+    override fun getSharesAsLiveData(filePath: String, accountName: String): LiveData<List<OCShare>?> {
         return localShareDataSource.getSharesAsLiveData(
             filePath, accountName, listOf(
                 ShareType.PUBLIC_LINK,
@@ -151,12 +141,12 @@ class OCShareRepository(
             reshares = true,
             subfiles = false,
             accountName = accountName
-        ).also { remoteShares ->
-            if (remoteShares.isEmpty()) {
+        ).also { sharesFromNetwork ->
+            if (sharesFromNetwork.isEmpty()) {
                 localShareDataSource.deleteSharesForFile(filePath, accountName)
             }
             // Save shares
-            localShareDataSource.replaceShares(remoteShares)
+            localShareDataSource.replaceShares(sharesFromNetwork)
         }
     }
 

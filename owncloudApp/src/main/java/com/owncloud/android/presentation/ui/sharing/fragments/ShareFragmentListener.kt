@@ -24,8 +24,8 @@
 
 package com.owncloud.android.presentation.ui.sharing.fragments
 
-import com.owncloud.android.data.sharing.shares.db.OCShareEntity
 import com.owncloud.android.datamodel.OCFile
+import com.owncloud.android.domain.sharing.shares.model.OCShare
 
 /**
  * This interface must be implemented by activities that contain this
@@ -37,7 +37,6 @@ import com.owncloud.android.datamodel.OCFile
  * See the Android Training lesson [Communicating with Other Fragments](http://developer.android.com/training/basics/fragments/communicating.html) for more information.
  */
 interface ShareFragmentListener {
-
     fun copyOrSendPrivateLink(file: OCFile)
 
     fun showLoading()
@@ -50,11 +49,11 @@ interface ShareFragmentListener {
 
     fun showAddPublicShare(defaultLinkName: String)
 
-    fun showEditPublicShare(share: OCShareEntity)
+    fun showEditPublicShare(share: OCShare)
 
-    fun showRemoveShare(share: OCShareEntity)
+    fun showRemoveShare(share: OCShare)
 
-    fun copyOrSendPublicLink(share: OCShareEntity)
+    fun copyOrSendPublicLink(share: OCShare)
 
     /**************************************************************************************************************
      *********************************************** PRIVATE SHARES ***********************************************
@@ -62,5 +61,5 @@ interface ShareFragmentListener {
 
     fun showSearchUsersAndGroups()
 
-    fun showEditPrivateShare(share: OCShareEntity)
+    fun showEditPrivateShare(share: OCShare)
 }

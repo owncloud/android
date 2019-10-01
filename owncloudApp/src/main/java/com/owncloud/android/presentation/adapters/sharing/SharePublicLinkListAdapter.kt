@@ -29,7 +29,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import com.owncloud.android.R
-import com.owncloud.android.data.sharing.shares.db.OCShareEntity
+import com.owncloud.android.domain.sharing.shares.model.OCShare
 import com.owncloud.android.utils.PreferenceUtils
 import kotlinx.android.synthetic.main.share_public_link_item.view.*
 import java.util.ArrayList
@@ -40,16 +40,16 @@ import java.util.ArrayList
 class SharePublicLinkListAdapter(
     private val mContext: Context,
     resource: Int,
-    private var publicLinks: List<OCShareEntity>?,
+    private var publicLinks: List<OCShare>?,
     private val listener: SharePublicLinkAdapterListener
-) : ArrayAdapter<OCShareEntity>(mContext, resource) {
+) : ArrayAdapter<OCShare>(mContext, resource) {
     init {
         publicLinks = ArrayList(publicLinks?.sortedWith(compareBy { it.name }))
     }
 
     override fun getCount(): Int = publicLinks?.size ?: 0
 
-    override fun getItem(position: Int): OCShareEntity? = publicLinks!![position]
+    override fun getItem(position: Int): OCShare? = publicLinks!![position]
 
     override fun getItemId(position: Int): Long = 0
 
@@ -80,10 +80,10 @@ class SharePublicLinkListAdapter(
     }
 
     interface SharePublicLinkAdapterListener {
-        fun copyOrSendPublicLink(share: OCShareEntity)
+        fun copyOrSendPublicLink(share: OCShare)
 
-        fun removeShare(share: OCShareEntity)
+        fun removeShare(share: OCShare)
 
-        fun editPublicShare(share: OCShareEntity)
+        fun editPublicShare(share: OCShare)
     }
 }
