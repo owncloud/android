@@ -17,24 +17,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.domain.sharing.sharees
+package com.owncloud.android.domain.mappers
 
-import com.owncloud.android.domain.BaseSyncUseCase
-import org.json.JSONObject
+interface RemoteMapper<Model, Remote> {
 
-class GetShareesAsyncUseCase(
-    private val shareeRepository: ShareeRepository
-) : BaseSyncUseCase<ArrayList<JSONObject>, GetShareesAsyncUseCase.Params>() {
-    override fun run(params: Params): ArrayList<JSONObject> =
-        shareeRepository.getSharees(
-            params.searchString,
-            params.page,
-            params.perPage
-        )
+    fun toModel(remote: Remote?): Model?
 
-    data class Params(
-        val searchString: String,
-        val page: Int,
-        val perPage: Int
-    )
+    fun toRemote(model: Model?): Remote?
 }

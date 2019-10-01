@@ -17,11 +17,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.domain.mapper
+package com.owncloud.android.domain
 
-interface RemoteMapper<Model, Remote> {
+/**
+ * Same as [com.owncloud.android.domain.BaseAsyncUseCase] but does not need to be called from a coroutine
+ */
+abstract class BaseSyncUseCase<out Type, in Params> {
+    protected abstract fun run(params: Params): Type
 
-    fun toModel(remote: Remote?): Model?
-
-    fun toRemote(model: Model?): Remote?
+    fun execute(params: Params): UseCaseResult<Type> =
+        try {
+            UseCaseResult.Success(run(params))
+        } catch (throwable: Throwable) {
+            UseCaseResult.Error(throwable)
+        }
 }

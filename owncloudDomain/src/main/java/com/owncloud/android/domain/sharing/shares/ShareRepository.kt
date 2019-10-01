@@ -29,8 +29,6 @@ interface ShareRepository {
      ******************************************* PRIVATE SHARES *******************************************
      ******************************************************************************************************/
 
-    fun getPrivateSharesAsLiveData(filePath: String, accountName: String): LiveData<List<OCShare>>
-
     suspend fun insertPrivateShare(
         filePath: String,
         shareType: ShareType?,
@@ -73,7 +71,7 @@ interface ShareRepository {
      *********************************************** COMMON ***********************************************
      ******************************************************************************************************/
 
-    fun getSharesAsLiveData(filePath: String, accountName: String): LiveData<List<OCShare>>
+    fun getSharesAsLiveData(filePath: String, accountName: String): LiveData<List<OCShare>?>
 
     fun getShareAsLiveData(remoteId: Long): LiveData<OCShare>
 
