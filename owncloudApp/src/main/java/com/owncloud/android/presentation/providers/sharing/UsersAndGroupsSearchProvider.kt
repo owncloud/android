@@ -39,6 +39,7 @@ import com.owncloud.android.R
 import com.owncloud.android.authentication.AccountUtils
 import com.owncloud.android.datamodel.FileDataStorageManager
 import com.owncloud.android.domain.sharing.sharees.GetShareesAsyncUseCase
+import com.owncloud.android.domain.sharing.shares.model.ShareType
 import com.owncloud.android.lib.common.utils.Log_OC
 import com.owncloud.android.lib.resources.shares.GetRemoteShareesOperation
 import org.json.JSONException

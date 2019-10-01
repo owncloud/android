@@ -19,12 +19,12 @@
 
 package com.owncloud.android.domain.sharing.sharees
 
-import com.owncloud.android.domain.BaseUseCase
+import com.owncloud.android.domain.BaseSyncUseCase
 import org.json.JSONObject
 
 class GetShareesAsyncUseCase(
     private val shareeRepository: ShareeRepository
-) : BaseUseCase<ArrayList<JSONObject>, GetShareesAsyncUseCase.Params>() {
+) : BaseSyncUseCase<ArrayList<JSONObject>, GetShareesAsyncUseCase.Params>() {
     override fun run(params: Params): ArrayList<JSONObject> =
         shareeRepository.getSharees(
             params.searchString,

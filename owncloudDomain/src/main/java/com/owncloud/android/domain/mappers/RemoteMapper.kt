@@ -17,15 +17,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.domain.capabilities
+package com.owncloud.android.domain.mappers
 
-import androidx.lifecycle.LiveData
-import com.owncloud.android.domain.capabilities.model.OCCapability
+interface RemoteMapper<Model, Remote> {
 
-interface CapabilityRepository {
-    suspend fun refreshCapabilitiesForAccount(
-        accountName: String
-    )
+    fun toModel(remote: Remote?): Model?
 
-    fun getCapabilitiesAsLiveData(accountName: String): LiveData<OCCapability?>
+    fun toRemote(model: Model?): Remote?
 }

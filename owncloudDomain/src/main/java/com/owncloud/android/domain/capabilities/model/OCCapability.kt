@@ -21,7 +21,7 @@ package com.owncloud.android.domain.capabilities.model
 
 data class OCCapability(
     val id: Int? = null,
-    val accountName: String?,
+    var accountName: String?,
     val versionMayor: Int,
     val versionMinor: Int,
     val versionMicro: Int,
@@ -35,7 +35,7 @@ data class OCCapability(
     val filesSharingPublicPasswordEnforcedReadWrite: CapabilityBooleanType,
     val filesSharingPublicPasswordEnforcedUploadOnly: CapabilityBooleanType,
     val filesSharingPublicExpireDateEnabled: CapabilityBooleanType,
-    val filesSharingPublicExpireDateDays: CapabilityBooleanType,
+    val filesSharingPublicExpireDateDays: Int,
     val filesSharingPublicExpireDateEnforced: CapabilityBooleanType,
     val filesSharingPublicSendMail: CapabilityBooleanType,
     val filesSharingPublicUpload: CapabilityBooleanType,

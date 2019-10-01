@@ -24,7 +24,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.owncloud.android.data.sharing.shares.db.OCShareEntity
+import com.owncloud.android.domain.sharing.shares.model.OCShare
+import com.owncloud.android.domain.sharing.shares.model.ShareType
 import com.owncloud.android.domain.sharing.shares.usecases.CreatePrivateShareAsyncUseCase
 import com.owncloud.android.domain.sharing.shares.usecases.CreatePublicShareAsyncUseCase
 import com.owncloud.android.domain.sharing.shares.usecases.DeleteShareAsyncUseCase
@@ -54,46 +55,46 @@ class OCShareViewModel(
     private val deletePublicShareUseCase: DeleteShareAsyncUseCase
 ) : ViewModel() {
 
-    private val _shares = MutableLiveData<UIResult<List<OCShareEntity>>>()
-    val shares: LiveData<UIResult<List<OCShareEntity>>> = _shares
+    private val _shares = MutableLiveData<UIResult<List<OCShare>>>()
+    val shares: LiveData<UIResult<List<OCShare>>> = _shares
 
-    private var sharesLiveData: LiveData<List<OCShareEntity>>? = getSharesAsLiveDataUseCase.execute(
+    private var sharesLiveData: LiveData<List<OCShare>?> = getSharesAsLiveDataUseCase.execute(
         GetSharesAsLiveDataUseCase.Params(
             filePath = filePath,
             accountName = accountName
         )
-    ).getDataOrNull()
+    )
 
     // To detect changes in shares
-    private val sharesObserver: Observer<List<OCShareEntity>> = Observer { shares ->
+    private val sharesObserver: Observer<List<OCShare>?> = Observer { shares ->
         _shares.postValue(UIResult.Success(shares))
     }
 
     init {
-        sharesLiveData?.observeForever(sharesObserver)
+        sharesLiveData.observeForever(sharesObserver)
     }
 
-     fun refreshSharesFromNetwork() {
-         viewModelScope.launch {
-             withContext(Dispatchers.IO) {
-                 _shares.postValue(
-                     UIResult.Loading(sharesLiveData?.value)
-                 )
+    fun refreshSharesFromNetwork() {
+        viewModelScope.launch {
+            _shares.postValue(
+                UIResult.Loading(sharesLiveData.value)
+            )
 
-                 refreshSharesFromServerAsyncUseCase.execute(
-                     RefreshSharesFromServerAsyncUseCase.Params(
-                         filePath = filePath,
-                         accountName = accountName
-                     )
-                 ).also { useCaseResult ->
-                     if (!useCaseResult.isSuccess) {
-                         _shares.postValue(
-                             UIResult.Error(useCaseResult.getThrowableOrNull(), sharesLiveData?.value)
-                         )
-                     }
-                 }
-             }
-         }
+            val useCaseResult = withContext(Dispatchers.IO) {
+                refreshSharesFromServerAsyncUseCase.execute(
+                    RefreshSharesFromServerAsyncUseCase.Params(
+                        filePath = filePath,
+                        accountName = accountName
+                    )
+                )
+            }
+
+            if (!useCaseResult.isSuccess) {
+                _shares.postValue(
+                    UIResult.Error(useCaseResult.getThrowableOrNull(), sharesLiveData.value)
+                )
+            }
+        }
     }
 
     private val _shareDeletionStatus = MutableLiveData<UIResult<Unit>>()
@@ -168,11 +169,11 @@ class OCShareViewModel(
         }
     }
 
-    private val _privateShare = MutableLiveData<UIResult<OCShareEntity>>()
-    val privateShare: LiveData<UIResult<OCShareEntity>> = _privateShare
+    private val _privateShare = MutableLiveData<UIResult<OCShare>>()
+    val privateShare: LiveData<UIResult<OCShare>> = _privateShare
 
-    private var privateShareLiveData: LiveData<OCShareEntity>? = null
-    private lateinit var privateShareObserver: Observer<OCShareEntity>
+    private var privateShareLiveData: LiveData<OCShare>? = null
+    private lateinit var privateShareObserver: Observer<OCShare>
 
     // Used to get a specific private share after updating it
     fun refreshPrivateShare(
@@ -180,7 +181,7 @@ class OCShareViewModel(
     ) {
         privateShareLiveData = getShareAsLiveDataUseCase.execute(
             GetShareAsLiveDataUseCase.Params(remoteId)
-        ).getDataOrNull()!!
+        )
 
         privateShareObserver = Observer { privateShare ->
             _privateShare.postValue(UIResult.Success(privateShare))
@@ -320,7 +321,7 @@ class OCShareViewModel(
 
     override fun onCleared() {
         super.onCleared()
-        sharesLiveData?.removeObserver(sharesObserver)
+        sharesLiveData.removeObserver(sharesObserver)
         privateShareLiveData?.removeObserver(privateShareObserver)
     }
 }

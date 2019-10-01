@@ -38,11 +38,13 @@ val remoteDataSourceModule = module {
 
     factory<RemoteCapabilitiesDataSource> {
         OCRemoteCapabilitiesDataSource(
+            get(),
             get()
         )
     }
     factory<RemoteShareDataSource> {
         OCRemoteShareDataSource(
+            get(),
             get()
         )
     }

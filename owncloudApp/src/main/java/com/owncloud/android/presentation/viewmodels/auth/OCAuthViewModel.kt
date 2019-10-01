@@ -24,7 +24,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.owncloud.android.domain.auth.LoginAsyncUseCase
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentials
 import com.owncloud.android.operations.common.OperationType
 import com.owncloud.android.presentation.UIResult
@@ -34,32 +33,32 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class OCAuthViewModel(
-    val context: Context,
-    private val loginUseCase: LoginAsyncUseCase
+    val context: Context
+//    private val loginUseCase: LoginAsyncUseCase
 ) : ViewModel() {
 
     private val _loginStatus = MutableLiveData<UIResult<Unit>>()
     val loginStatus: LiveData<UIResult<Unit>> = _loginStatus
 
-    fun login(ownCloudCredentials: OwnCloudCredentials) {
-        viewModelScope.launch {
-            val loginUseCaseResult = withContext(Dispatchers.IO) {
-                loginUseCase.execute(
-                    LoginAsyncUseCase.Params(
-                        ownCloudCredentials
-                    )
-                )
-            }
-
-            withContext(Dispatchers.Main) {
-                if (!loginUseCaseResult.isSuccess) {
-                    _loginStatus.postValue(
-                        UIResult.Error(loginUseCaseResult.getThrowableOrNull())
-                    )
-                } else {
-                    _loginStatus.postValue(UIResult.Success())
-                }
-            }
-        }
-    }
+//    fun login(ownCloudCredentials: OwnCloudCredentials) {
+//        viewModelScope.launch {
+//            val loginUseCaseResult = withContext(Dispatchers.IO) {
+//                loginUseCase.execute(
+//                    LoginAsyncUseCase.Params(
+//                        ownCloudCredentials
+//                    )
+//                )
+//            }
+//
+//            withContext(Dispatchers.Main) {
+//                if (!loginUseCaseResult.isSuccess) {
+//                    _loginStatus.postValue(
+//                        UIResult.Error(loginUseCaseResult.getThrowableOrNull())
+//                    )
+//                } else {
+//                    _loginStatus.postValue(UIResult.Success())
+//                }
+//            }
+//        }
+//    }
 }

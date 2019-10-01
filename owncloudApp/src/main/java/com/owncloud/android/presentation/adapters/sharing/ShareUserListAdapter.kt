@@ -29,7 +29,8 @@ import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
 import com.owncloud.android.R
-import com.owncloud.android.data.sharing.shares.db.OCShareEntity
+import com.owncloud.android.domain.sharing.shares.model.OCShare
+import com.owncloud.android.domain.sharing.shares.model.ShareType
 import com.owncloud.android.utils.PreferenceUtils
 import java.util.ArrayList
 
@@ -38,17 +39,17 @@ import java.util.ArrayList
  */
 class ShareUserListAdapter(
     private val mContext: Context, resource: Int,
-    private var shares: ArrayList<OCShareEntity>?,
+    private var shares: ArrayList<OCShare>?,
     private val listener: ShareUserAdapterListener
-) : ArrayAdapter<OCShareEntity>(mContext, resource) {
+) : ArrayAdapter<OCShare>(mContext, resource) {
 
     init {
-        shares = ArrayList(shares?.sortedWith(compareBy {it.sharedWithDisplayName}))
+        shares = ArrayList(shares?.sortedWith(compareBy { it.sharedWithDisplayName }))
     }
 
     override fun getCount(): Int = shares!!.size
 
-    override fun getItem(position: Int): OCShareEntity? = shares!![position]
+    override fun getItem(position: Int): OCShare? = shares!![position]
 
     override fun getItemId(position: Int): Long = 0
 
@@ -72,7 +73,7 @@ class ShareUserListAdapter(
                 name + " (" + share.sharedWithAdditionalInfo + ")"
             var icon = context.resources.getDrawable(R.drawable.ic_user)
             iconView.tag = R.drawable.ic_user
-            if (share.shareType == ShareType.GROUP.value) {
+            if (share.shareType == ShareType.GROUP) {
                 name = context.getString(R.string.share_group_clarification, name)
                 icon = context.resources.getDrawable(R.drawable.ic_group)
                 iconView.tag = R.drawable.ic_group
@@ -93,7 +94,7 @@ class ShareUserListAdapter(
     }
 
     interface ShareUserAdapterListener {
-        fun unshareButtonPressed(share: OCShareEntity)
-        fun editShare(share: OCShareEntity)
+        fun unshareButtonPressed(share: OCShare)
+        fun editShare(share: OCShare)
     }
 }

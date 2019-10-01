@@ -35,7 +35,8 @@ import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.Observer
 import com.owncloud.android.R
-import com.owncloud.android.data.sharing.shares.db.OCShareEntity
+import com.owncloud.android.domain.sharing.shares.model.OCShare
+import com.owncloud.android.domain.sharing.shares.model.ShareType
 import com.owncloud.android.lib.common.utils.Log_OC
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.ui.sharing.fragments.ShareFragmentListener
@@ -45,7 +46,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
 class RemoveShareDialogFragment : ConfirmationDialogFragment(), ConfirmationDialogFragmentListener {
-    private var targetShare: OCShareEntity? = null
+    private var targetShare: OCShare? = null
     private var account: Account? = null
 
     /**
@@ -136,7 +137,7 @@ class RemoveShareDialogFragment : ConfirmationDialogFragment(), ConfirmationDial
          * @param account         [Account] which the share belongs to
          * @return                Dialog ready to show.
          */
-        fun newInstance(share: OCShareEntity, account: Account): RemoveShareDialogFragment {
+        fun newInstance(share: OCShare, account: Account): RemoveShareDialogFragment {
             val frag = RemoveShareDialogFragment()
             val args = Bundle()
 
@@ -157,7 +158,7 @@ class RemoveShareDialogFragment : ConfirmationDialogFragment(), ConfirmationDial
             )
             args.putInt(
                 ARG_TITLE_ID,
-                if (share.shareType == ShareType.PUBLIC_LINK.value)
+                if (share.shareType == ShareType.PUBLIC_LINK)
                     R.string.confirmation_remove_public_share_title else
                     R.string.confirmation_remove_private_share_title
             )

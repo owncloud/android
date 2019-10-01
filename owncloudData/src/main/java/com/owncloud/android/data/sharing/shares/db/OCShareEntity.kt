@@ -72,9 +72,6 @@ data class OCShareEntity(
 ) : Parcelable {
     @PrimaryKey(autoGenerate = true) var id: Int = 0
 
-    val isPasswordProtected: Boolean
-        get() = shareType == ShareType.PUBLIC_LINK.value && shareWith?.isNotEmpty()!!
-
     constructor(parcel: Parcel) : this(
         parcel.readLong(),
         parcel.readLong(),
