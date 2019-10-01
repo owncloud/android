@@ -32,8 +32,9 @@ import android.view.MenuItem
 import androidx.fragment.app.transaction
 import androidx.lifecycle.Observer
 import com.owncloud.android.R
-import com.owncloud.android.data.sharing.shares.db.OCShareEntity
 import com.owncloud.android.datamodel.OCFile
+import com.owncloud.android.domain.sharing.shares.model.OCShare
+import com.owncloud.android.domain.sharing.shares.model.ShareType
 import com.owncloud.android.lib.common.utils.Log_OC
 import com.owncloud.android.lib.resources.shares.RemoteShare
 import com.owncloud.android.presentation.UIResult
@@ -43,7 +44,6 @@ import com.owncloud.android.presentation.ui.sharing.fragments.PublicShareDialogF
 import com.owncloud.android.presentation.ui.sharing.fragments.SearchShareesFragment
 import com.owncloud.android.presentation.ui.sharing.fragments.ShareFileFragment
 import com.owncloud.android.presentation.ui.sharing.fragments.ShareFragmentListener
-import com.owncloud.android.presentation.viewmodels.capabilities.OCCapabilityViewModel
 import com.owncloud.android.presentation.viewmodels.sharing.OCShareViewModel
 import com.owncloud.android.ui.activity.FileActivity
 import com.owncloud.android.ui.dialog.RemoveShareDialogFragment
@@ -55,13 +55,6 @@ import org.koin.core.parameter.parametersOf
  * Activity for sharing files
  */
 class ShareActivity : FileActivity(), ShareFragmentListener {
-
-    private val ocCapabilityViewModel: OCCapabilityViewModel by viewModel {
-        parametersOf(
-            account?.name
-        )
-    }
-
     private val ocShareViewModel: OCShareViewModel by viewModel {
         parametersOf(
             file.remotePath,
@@ -90,13 +83,6 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
 
         observePrivateShareCreation()
         observePrivateShareEdition()
-    }
-
-    override fun onAccountSet(stateWasRecovered: Boolean) {
-        super.onAccountSet(stateWasRecovered)
-
-        ocCapabilityViewModel.refreshCapabilitiesFromNetwork()
-        ocShareViewModel.refreshSharesFromNetwork()
     }
 
     public override fun onStop() {
@@ -230,7 +216,7 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
         )
     }
 
-    override fun showEditPrivateShare(share: OCShareEntity) {
+    override fun showEditPrivateShare(share: OCShare) {
         val ft = supportFragmentManager.beginTransaction()
         val prev = supportFragmentManager.findFragmentByTag(TAG_EDIT_SHARE_FRAGMENT)
         if (prev != null) {
@@ -272,7 +258,7 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
         )
     }
 
-    override fun showEditPublicShare(share: OCShareEntity) {
+    override fun showEditPublicShare(share: OCShare) {
         // Create and show the dialog.
         val editPublicShareFragment = PublicShareDialogFragment.newInstanceToUpdate(file, account, share)
         showDialogFragment(
@@ -285,7 +271,7 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
      ************************************************** COMMON ****************************************************
      **************************************************************************************************************/
 
-    override fun showRemoveShare(share: OCShareEntity) {
+    override fun showRemoveShare(share: OCShare) {
         val removePublicShareFragment = RemoveShareDialogFragment.newInstance(share, account)
         showDialogFragment(
             removePublicShareFragment,
@@ -293,7 +279,7 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
         )
     }
 
-    override fun copyOrSendPublicLink(share: OCShareEntity) {
+    override fun copyOrSendPublicLink(share: OCShare) {
         fileOperationsHelper.copyOrSendPublicLink(share)
     }
 

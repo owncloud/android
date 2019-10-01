@@ -49,10 +49,10 @@ import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.data.sharing.shares.db.OCShareEntity;
 import com.owncloud.android.db.ProviderMeta.ProviderTableMeta;
+import com.owncloud.android.domain.capabilities.model.CapabilityBooleanType;
+import com.owncloud.android.domain.sharing.shares.model.ShareType;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.shares.RemoteShare;
-import com.owncloud.android.lib.resources.shares.ShareType;
-import com.owncloud.android.lib.resources.status.CapabilityBooleanType;
 import com.owncloud.android.lib.resources.status.RemoteCapability;
 import com.owncloud.android.utils.FileStorageUtils;
 

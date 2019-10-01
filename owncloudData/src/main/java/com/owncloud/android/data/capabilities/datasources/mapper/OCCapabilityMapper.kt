@@ -22,7 +22,7 @@ package com.owncloud.android.data.capabilities.datasources.mapper
 import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
 import com.owncloud.android.domain.capabilities.model.CapabilityBooleanType
 import com.owncloud.android.domain.capabilities.model.OCCapability
-import com.owncloud.android.domain.mapper.Mapper
+import com.owncloud.android.domain.mappers.Mapper
 
 class OCCapabilityMapper : Mapper<OCCapability, OCCapabilityEntity> {
     override fun toModel(entity: OCCapabilityEntity?): OCCapability? =
@@ -37,25 +37,35 @@ class OCCapabilityMapper : Mapper<OCCapability, OCCapabilityEntity> {
                 versionEdition = entity.versionEdition,
                 corePollInterval = entity.corePollInterval,
                 filesSharingApiEnabled = CapabilityBooleanType.fromValue(entity.filesSharingApiEnabled)!!,
-                filesSharingPublicEnabled = CapabilityBooleanType.fromValue(entity.filesSharingApiEnabled)!!,
-                filesSharingPublicPasswordEnforced = CapabilityBooleanType.fromValue(entity.filesSharingApiEnabled)!!,
-                filesSharingPublicPasswordEnforcedReadOnly = CapabilityBooleanType.fromValue(entity.filesSharingApiEnabled)!!,
-                filesSharingPublicPasswordEnforcedReadWrite = CapabilityBooleanType.fromValue(entity.filesSharingApiEnabled)!!,
-                filesSharingPublicPasswordEnforcedUploadOnly = CapabilityBooleanType.fromValue(entity.filesSharingApiEnabled)!!,
-                filesSharingPublicExpireDateEnabled = CapabilityBooleanType.fromValue(entity.filesSharingApiEnabled)!!,
-                filesSharingPublicExpireDateDays = CapabilityBooleanType.fromValue(entity.filesSharingApiEnabled)!!,
-                filesSharingPublicExpireDateEnforced = CapabilityBooleanType.fromValue(entity.filesSharingApiEnabled)!!,
-                filesSharingPublicSendMail = CapabilityBooleanType.fromValue(entity.filesSharingApiEnabled)!!,
-                filesSharingPublicUpload = CapabilityBooleanType.fromValue(entity.filesSharingApiEnabled)!!,
-                filesSharingPublicMultiple = CapabilityBooleanType.fromValue(entity.filesSharingApiEnabled)!!,
-                filesSharingPublicSupportsUploadOnly = CapabilityBooleanType.fromValue(entity.filesSharingApiEnabled)!!,
-                filesSharingUserSendMail = CapabilityBooleanType.fromValue(entity.filesSharingApiEnabled)!!,
-                filesSharingResharing = CapabilityBooleanType.fromValue(entity.filesSharingApiEnabled)!!,
-                filesSharingFederationOutgoing = CapabilityBooleanType.fromValue(entity.filesSharingApiEnabled)!!,
-                filesSharingFederationIncoming = CapabilityBooleanType.fromValue(entity.filesSharingApiEnabled)!!,
-                filesBigFileChunking = CapabilityBooleanType.fromValue(entity.filesSharingApiEnabled)!!,
-                filesUndelete = CapabilityBooleanType.fromValue(entity.filesSharingApiEnabled)!!,
-                filesVersioning = CapabilityBooleanType.fromValue(entity.filesSharingApiEnabled)!!
+                filesSharingPublicEnabled = CapabilityBooleanType.fromValue(entity.filesSharingPublicEnabled)!!,
+                filesSharingPublicPasswordEnforced =
+                CapabilityBooleanType.fromValue(entity.filesSharingPublicPasswordEnforced)!!,
+                filesSharingPublicPasswordEnforcedReadOnly =
+                CapabilityBooleanType.fromValue(entity.filesSharingPublicPasswordEnforcedReadOnly)!!,
+                filesSharingPublicPasswordEnforcedReadWrite =
+                CapabilityBooleanType.fromValue(entity.filesSharingPublicPasswordEnforcedReadWrite)!!,
+                filesSharingPublicPasswordEnforcedUploadOnly =
+                CapabilityBooleanType.fromValue(entity.filesSharingPublicPasswordEnforcedUploadOnly)!!,
+                filesSharingPublicExpireDateEnabled =
+                CapabilityBooleanType.fromValue(entity.filesSharingPublicExpireDateEnabled)!!,
+                filesSharingPublicExpireDateDays = entity.filesSharingPublicExpireDateDays,
+                filesSharingPublicExpireDateEnforced =
+                CapabilityBooleanType.fromValue(entity.filesSharingPublicExpireDateEnforced)!!,
+                filesSharingPublicSendMail =
+                CapabilityBooleanType.fromValue(entity.filesSharingPublicSendMail)!!,
+                filesSharingPublicUpload = CapabilityBooleanType.fromValue(entity.filesSharingPublicUpload)!!,
+                filesSharingPublicMultiple = CapabilityBooleanType.fromValue(entity.filesSharingPublicMultiple)!!,
+                filesSharingPublicSupportsUploadOnly =
+                CapabilityBooleanType.fromValue(entity.filesSharingPublicSupportsUploadOnly)!!,
+                filesSharingUserSendMail = CapabilityBooleanType.fromValue(entity.filesSharingUserSendMail)!!,
+                filesSharingResharing = CapabilityBooleanType.fromValue(entity.filesSharingResharing)!!,
+                filesSharingFederationOutgoing =
+                CapabilityBooleanType.fromValue(entity.filesSharingFederationOutgoing)!!,
+                filesSharingFederationIncoming =
+                CapabilityBooleanType.fromValue(entity.filesSharingFederationIncoming)!!,
+                filesBigFileChunking = CapabilityBooleanType.fromValue(entity.filesBigFileChunking)!!,
+                filesUndelete = CapabilityBooleanType.fromValue(entity.filesUndelete)!!,
+                filesVersioning = CapabilityBooleanType.fromValue(entity.filesVersioning)!!
             )
         }
 
@@ -76,7 +86,7 @@ class OCCapabilityMapper : Mapper<OCCapability, OCCapabilityEntity> {
                 filesSharingPublicPasswordEnforcedReadWrite = model.filesSharingPublicPasswordEnforcedReadWrite.value,
                 filesSharingPublicPasswordEnforcedUploadOnly = model.filesSharingPublicPasswordEnforcedUploadOnly.value,
                 filesSharingPublicExpireDateEnabled = model.filesSharingPublicExpireDateEnabled.value,
-                filesSharingPublicExpireDateDays = model.filesSharingPublicExpireDateDays.value,
+                filesSharingPublicExpireDateDays = model.filesSharingPublicExpireDateDays,
                 filesSharingPublicExpireDateEnforced = model.filesSharingPublicExpireDateEnforced.value,
                 filesSharingPublicSendMail = model.filesSharingPublicSendMail.value,
                 filesSharingPublicUpload = model.filesSharingPublicUpload.value,

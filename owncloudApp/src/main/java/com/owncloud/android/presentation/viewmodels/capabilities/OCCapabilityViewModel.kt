@@ -24,7 +24,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
+import com.owncloud.android.domain.capabilities.model.OCCapability
 import com.owncloud.android.domain.capabilities.usecases.GetCapabilitiesAsLiveDataUseCase
 import com.owncloud.android.domain.capabilities.usecases.GetStoredCapabilitiesUseCase
 import com.owncloud.android.domain.capabilities.usecases.RefreshCapabilitiesFromServerAsyncUseCase
@@ -44,14 +44,14 @@ class OCCapabilityViewModel(
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ViewModel() {
 
-    private val _capabilities = MediatorLiveData<UIResult<OCCapabilityEntity>>()
-    val capabilities: LiveData<UIResult<OCCapabilityEntity>> = _capabilities
+    private val _capabilities = MediatorLiveData<UIResult<OCCapability>>()
+    val capabilities: LiveData<UIResult<OCCapability>> = _capabilities
 
-    private var capabilitiesLiveData: LiveData<OCCapabilityEntity>? = getCapabilitiesAsLiveDataUseCase.execute(
+    private var capabilitiesLiveData: LiveData<OCCapability?>? = getCapabilitiesAsLiveDataUseCase.execute(
         GetCapabilitiesAsLiveDataUseCase.Params(
             accountName = accountName
         )
-    ).getDataOrNull()
+    )
 
     init {
         _capabilities.addSource(capabilitiesLiveData!!) { capabilities ->
@@ -61,11 +61,11 @@ class OCCapabilityViewModel(
         refreshCapabilitiesFromNetwork()
     }
 
-    fun getStoredCapabilities(): OCCapabilityEntity? = getStoredCapabilitiesUseCase.execute(
+    fun getStoredCapabilities(): OCCapability? = getStoredCapabilitiesUseCase.execute(
         GetStoredCapabilitiesUseCase.Params(
             accountName = accountName
         )
-    ).getDataOrNull()
+    )
 
     fun refreshCapabilitiesFromNetwork() {
         viewModelScope.launch(ioDispatcher) {

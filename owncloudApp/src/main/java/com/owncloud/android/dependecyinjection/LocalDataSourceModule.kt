@@ -33,6 +33,7 @@ val localDataSourceModule = module {
 
     factory<LocalCapabilitiesDataSource> {
         OCLocalCapabilitiesDataSource(
+            get(),
             get()
         )
     }
