@@ -19,7 +19,7 @@
 
 package com.owncloud.android.lib.resources.shares
 
-import com.owncloud.android.domain.mapper.RemoteMapper
+import com.owncloud.android.domain.mappers.RemoteMapper
 import com.owncloud.android.domain.sharing.shares.model.OCShare
 
 class RemoteShareMapper : RemoteMapper<OCShare, RemoteShare> {
