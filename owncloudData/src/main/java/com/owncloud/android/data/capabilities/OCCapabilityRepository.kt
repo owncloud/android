@@ -22,7 +22,6 @@ package com.owncloud.android.data.capabilities
 import androidx.lifecycle.LiveData
 import com.owncloud.android.data.capabilities.datasources.LocalCapabilitiesDataSource
 import com.owncloud.android.data.capabilities.datasources.RemoteCapabilitiesDataSource
-import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
 import com.owncloud.android.domain.capabilities.CapabilityRepository
 import com.owncloud.android.domain.capabilities.model.OCCapability
 
@@ -31,7 +30,7 @@ class OCCapabilityRepository(
     private val remoteCapabilitiesDataSource: RemoteCapabilitiesDataSource
 ) : CapabilityRepository {
 
-    override fun getCapabilitiesAsLiveData(accountName: String): LiveData<OCCapability> {
+    override fun getCapabilitiesAsLiveData(accountName: String): LiveData<OCCapability?> {
         return localCapabilitiesDataSource.getCapabilitiesForAccountAsLiveData(accountName)
     }
 
@@ -40,13 +39,9 @@ class OCCapabilityRepository(
     ) {
         remoteCapabilitiesDataSource.getCapabilities(
             accountName
-        ).also { remoteCapabilities ->
+        ).also { capabilitiesFromNetwork ->
             localCapabilitiesDataSource.insert(
-                listOf(
-                    OCCapabilityEntity.fromRemoteCapability(
-                        remoteCapabilities
-                    )
-                )
+                listOf(capabilitiesFromNetwork)
             )
         }
     }

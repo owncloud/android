@@ -20,11 +20,11 @@
 package com.owncloud.android.presentation.viewmodels.capabilities
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
+import com.owncloud.android.domain.capabilities.model.OCCapability
 import com.owncloud.android.domain.capabilities.usecases.GetCapabilitiesAsLiveDataUseCase
 import com.owncloud.android.domain.capabilities.usecases.RefreshCapabilitiesFromServerAsyncUseCase
 import com.owncloud.android.presentation.UIResult
@@ -37,35 +37,35 @@ import kotlinx.coroutines.withContext
  */
 class OCCapabilityViewModel(
     private val accountName: String,
-    getCapabilitiesAsLiveDataUseCase: GetCapabilitiesAsLiveDataUseCase,
+    private val getCapabilitiesAsLiveDataUseCase: GetCapabilitiesAsLiveDataUseCase,
     private val refreshCapabilitiesFromServerUseCase: RefreshCapabilitiesFromServerAsyncUseCase
 ) : ViewModel() {
 
-    private val _capabilities = MutableLiveData<UIResult<OCCapabilityEntity>>()
-    val capabilities: LiveData<UIResult<OCCapabilityEntity>> = _capabilities
+    private val _capabilities = MediatorLiveData<UIResult<OCCapability>>()
+    val capabilities: LiveData<UIResult<OCCapability>> = _capabilities
 
-    private var capabilitiesLiveData: LiveData<OCCapabilityEntity>? = getCapabilitiesAsLiveDataUseCase.execute(
+    private var capabilitiesLiveData: LiveData<OCCapability?> = getCapabilitiesAsLiveDataUseCase.execute(
         GetCapabilitiesAsLiveDataUseCase.Params(
             accountName = accountName
         )
-    ).getDataOrNull()
+    )
 
     // to detect changes in capabilities
-    private val capabilitiesObserver: Observer<OCCapabilityEntity> = Observer { capabilities ->
+    private val capabilitiesObserver: Observer<OCCapability?> = Observer { capabilities ->
         if (capabilities != null) {
             _capabilities.postValue(UIResult.Success(capabilities))
         }
     }
 
     init {
-        capabilitiesLiveData?.observeForever(capabilitiesObserver)
+        capabilitiesLiveData.observeForever(capabilitiesObserver)
     }
 
     fun refreshCapabilitiesFromNetwork() {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 _capabilities.postValue(
-                    UIResult.Loading(capabilitiesLiveData?.value)
+                    UIResult.Loading(capabilitiesLiveData.value)
                 )
 
                 refreshCapabilitiesFromServerUseCase.execute(
@@ -85,6 +85,6 @@ class OCCapabilityViewModel(
 
     override fun onCleared() {
         super.onCleared()
-        capabilitiesLiveData?.removeObserver(capabilitiesObserver)
+        capabilitiesLiveData.removeObserver(capabilitiesObserver)
     }
 }

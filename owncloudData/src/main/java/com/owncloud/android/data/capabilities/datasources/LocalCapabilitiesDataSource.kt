@@ -25,7 +25,7 @@ import com.owncloud.android.domain.capabilities.model.OCCapability
 interface LocalCapabilitiesDataSource {
     fun getCapabilitiesForAccountAsLiveData(
         accountName: String
-    ): LiveData<OCCapability>
+    ): LiveData<OCCapability?>
 
     fun insert(ocCapabilities: List<OCCapability>)
 }

@@ -36,8 +36,9 @@ import androidx.core.view.isGone
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import com.owncloud.android.R
-import com.owncloud.android.data.sharing.shares.db.OCShareEntity
 import com.owncloud.android.datamodel.OCFile
+import com.owncloud.android.domain.sharing.shares.model.OCShare
+import com.owncloud.android.domain.sharing.shares.model.ShareType
 import com.owncloud.android.lib.common.utils.Log_OC
 import com.owncloud.android.lib.resources.shares.RemoteShare
 import com.owncloud.android.lib.resources.shares.SharePermissionsBuilder
@@ -56,7 +57,7 @@ import java.util.Locale
 class EditPrivateShareFragment : DialogFragment() {
 
     /** Share to show & edit, received as a parameter in construction time  */
-    private var share: OCShareEntity? = null
+    private var share: OCShare? = null
 
     /** File bound to share, received as a parameter in construction time  */
     private var file: OCFile? = null
@@ -259,7 +260,7 @@ class EditPrivateShareFragment : DialogFragment() {
                 R.id.canEditSwitch -> {
                     Log_OC.v(TAG, "canEditCheckBox toggled to $isChecked")
                     /// sync subordinate CheckBoxes
-                    val isFederated = ShareType.FEDERATED.value == share!!.shareType
+                    val isFederated = ShareType.FEDERATED == share!!.shareType
                     if (file?.isFolder == true) {
                         if (isChecked) {
                             if (!isFederated) {
@@ -444,7 +445,7 @@ class EditPrivateShareFragment : DialogFragment() {
      * Updates the UI after the result of an update operation on the edited [RemoteShare] permissions.
      *
      */
-    fun updateShare(updatedShare: OCShareEntity?) {
+    fun updateShare(updatedShare: OCShare?) {
         share = updatedShare
         refreshUiFromState()
     }
@@ -478,7 +479,7 @@ class EditPrivateShareFragment : DialogFragment() {
          * @param account       The ownCloud account holding 'sharedFile'
          * @return A new instance of fragment EditPrivateShareFragment.
          */
-        fun newInstance(shareToEdit: OCShareEntity, sharedFile: OCFile, account: Account): EditPrivateShareFragment {
+        fun newInstance(shareToEdit: OCShare, sharedFile: OCFile, account: Account): EditPrivateShareFragment {
             val fragment = EditPrivateShareFragment()
             val args = Bundle()
             args.putParcelable(ARG_SHARE, shareToEdit)

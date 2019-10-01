@@ -17,7 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.domain.mapper
+package com.owncloud.android.domain.mappers
 
 interface Mapper<Model, Entity> {
 

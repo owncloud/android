@@ -25,16 +25,17 @@ import com.owncloud.android.data.capabilities.datasources.LocalCapabilitiesDataS
 import com.owncloud.android.data.capabilities.datasources.mapper.OCCapabilityMapper
 import com.owncloud.android.data.capabilities.db.OCCapabilityDao
 import com.owncloud.android.domain.capabilities.model.OCCapability
+import com.owncloud.android.domain.extensions.distinctUntilChanged
 
 class OCLocalCapabilitiesDataSource(
     private val ocCapabilityDao: OCCapabilityDao,
     private val ocCapabilityMapper: OCCapabilityMapper
 ) : LocalCapabilitiesDataSource {
 
-    override fun getCapabilitiesForAccountAsLiveData(accountName: String): LiveData<OCCapability> =
+    override fun getCapabilitiesForAccountAsLiveData(accountName: String): LiveData<OCCapability?> =
         Transformations.map(ocCapabilityDao.getCapabilitiesForAccountAsLiveData(accountName)) { ocCapabilityEntity ->
-            ocCapabilityMapper.toModel(ocCapabilityEntity)!!
-        }
+            ocCapabilityMapper.toModel(ocCapabilityEntity)
+        }.distinctUntilChanged()
 
     override fun insert(ocCapabilities: List<OCCapability>) {
         ocCapabilityDao.replace(

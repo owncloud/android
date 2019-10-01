@@ -90,37 +90,6 @@ data class OCCapabilityEntity(
     @PrimaryKey(autoGenerate = true) var id: Int = 0
 
     companion object {
-        fun fromRemoteCapability(remoteCapability: RemoteCapability) =
-            OCCapabilityEntity(
-                remoteCapability.accountName,
-                remoteCapability.versionMayor,
-                remoteCapability.versionMinor,
-                remoteCapability.versionMicro,
-                remoteCapability.versionString,
-                remoteCapability.versionEdition,
-                remoteCapability.corePollinterval,
-                remoteCapability.filesSharingApiEnabled.value,
-                remoteCapability.filesSharingPublicEnabled.value,
-                remoteCapability.filesSharingPublicPasswordEnforced.value,
-                remoteCapability.filesSharingPublicPasswordEnforcedReadOnly.value,
-                remoteCapability.filesSharingPublicPasswordEnforcedReadWrite.value,
-                remoteCapability.filesSharingPublicPasswordEnforcedUploadOnly.value,
-                remoteCapability.filesSharingPublicExpireDateEnabled.value,
-                remoteCapability.filesSharingPublicExpireDateDays,
-                remoteCapability.filesSharingPublicExpireDateEnforced.value,
-                remoteCapability.filesSharingPublicSendMail.value,
-                remoteCapability.filesSharingPublicUpload.value,
-                remoteCapability.filesSharingPublicMultiple.value,
-                remoteCapability.filesSharingPublicSupportsUploadOnly.value,
-                remoteCapability.filesSharingUserSendMail.value,
-                remoteCapability.filesSharingResharing.value,
-                remoteCapability.filesSharingFederationOutgoing.value,
-                remoteCapability.filesSharingFederationIncoming.value,
-                remoteCapability.filesBigFileChunking.value,
-                remoteCapability.filesUndelete.value,
-                remoteCapability.filesVersioning.value
-            )
-
         fun fromCursor(cursor: Cursor) = OCCapabilityEntity(
             cursor.getString(cursor.getColumnIndex(ProviderTableMeta.CAPABILITIES_ACCOUNT_NAME)),
             cursor.getInt(cursor.getColumnIndex(ProviderTableMeta.CAPABILITIES_VERSION_MAYOR)),

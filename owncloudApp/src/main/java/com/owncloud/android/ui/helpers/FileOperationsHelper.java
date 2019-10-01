@@ -32,16 +32,12 @@ import android.webkit.MimeTypeMap;
 
 import androidx.fragment.app.DialogFragment;
 import com.owncloud.android.R;
-import com.owncloud.android.authentication.AccountUtils;
-import com.owncloud.android.data.sharing.shares.db.OCShareEntity;
 import com.owncloud.android.datamodel.OCFile;
+import com.owncloud.android.domain.sharing.shares.model.OCShare;
 import com.owncloud.android.files.services.AvailableOfflineHandler;
 import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder;
 import com.owncloud.android.files.services.FileUploader.FileUploaderBinder;
 import com.owncloud.android.lib.common.utils.Log_OC;
-import com.owncloud.android.lib.resources.shares.RemoteShare;
-import com.owncloud.android.lib.resources.shares.ShareType;
-import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 import com.owncloud.android.presentation.ui.sharing.ShareActivity;
 import com.owncloud.android.services.OperationsService;
 import com.owncloud.android.ui.activity.FileActivity;
@@ -154,12 +150,12 @@ public class FileOperationsHelper {
     }
 
     /**
-     * Show dialog to allow the user to choose an app to send the link of an {@link OCShareEntity},
+     * Show dialog to allow the user to choose an app to send the link of an {@link OCShare},
      * or copy it to clipboard.
      *
-     * @param share {@link OCShareEntity} which link will be sent to the app chosen by the user.
+     * @param share {@link OCShare} which link will be sent to the app chosen by the user.
      */
-    public void copyOrSendPublicLink(OCShareEntity share) {
+    public void copyOrSendPublicLink(OCShare share) {
         String link = share.getShareLink();
         if (link.length() <= 0) {
             mFileActivity.showSnackMessage(
@@ -172,7 +168,8 @@ public class FileOperationsHelper {
     }
 
     /**
-     * Show an instance of {@link ShareType} for sharing or unsharing the {@link OCFile} received as parameter.
+     * Show an instance of {@link com.owncloud.android.domain.sharing.shares.model.ShareType} for sharing or unsharing
+     * the {@link OCFile} received as parameter.
      *
      * @param file File to share or unshare.
      */

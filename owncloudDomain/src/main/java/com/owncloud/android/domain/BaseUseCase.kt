@@ -19,14 +19,14 @@
 
 package com.owncloud.android.domain
 
+/**
+ * Parent class for use cases that do not require network operations, e.g. get data from database. That's why error
+ * handling is not needed as it is in [com.owncloud.android.domain.BaseAsyncUseCase] or
+ * [com.owncloud.android.domain.BaseSyncUseCase]
+ */
 abstract class BaseUseCase<out Type, in Params> {
 
     protected abstract fun run(params: Params): Type
 
-    fun execute(params: Params): UseCaseResult<Type> =
-        try {
-            UseCaseResult.Success(run(params))
-        } catch (throwable: Throwable) {
-            UseCaseResult.Error(throwable)
-        }
+    fun execute(params: Params): Type = run(params)
 }
