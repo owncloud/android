@@ -17,7 +17,6 @@ target/
 
 # Local configuration files (sdk path, etc)
 local.properties
-oc_workaround/local.properties
 oc_framework/local.properties
 oc_framework-test-project/local.properties
 tests/local.properties
@@ -28,7 +27,6 @@ lint.xml
 
 # Proguard README
 proguard-project.txt
-oc_workaround/proguard-project.txt
 oc_framework/proguard-project.txt
 oc_framework-test-project/proguard-project.txt
 tests/proguard-project.txt
@@ -41,3 +39,11 @@ build
 
 # android sdk captures folder
 captures
+
+!.idea/
+.idea/*
+!.idea/codeStyles/
+
+!Project.xml
+!codeStyleConfig.xml
+

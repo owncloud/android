@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="actionbar_upload_files">فائلیں</string>
+  <string name="actionbar_settings">سیٹینگز</string>
+  <string name="actionbar_send_file">بھجیں</string>
+  <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
+  <!--<string name="drawer_item_accounts">Accounts</string>-->
+  <string name="drawer_open">کھولیں</string>
+  <string name="drawer_help">مدد</string>
+  <string name="prefs_category_more">مزید</string>
+  <string name="prefs_help">مدد</string>
+  <string name="auth_username">یوزر نیم</string>
+  <string name="auth_password">پاسورڈ</string>
+  <string name="sync_string_files">فائلیں</string>
+  <string name="setup_btn_login">منسلک</string>
+  <string name="file_list_seconds_ago">سیکنڈز پہلے</string>
+  <string name="filedetails_download">ڈاؤن لوڈ،</string>
+  <string name="action_share">اشتراک</string>
+  <string name="common_yes">ہاں</string>
+  <string name="common_no">نہیں</string>
+    <string name="common_error">ایرر</string>
+  <string name="common_error_unknown">غیر معروف خرابی</string>
+  <string name="uploads_view_upload_status_unknown_fail">غیر معروف خرابی</string>
+  <string name="common_rename">نام بدلیں</string>
+  <string name="activity_chooser_send_file_title">بھجیں</string>
+  <string name="folder_picker_choose_button_text">منتخب کریں</string>
+  <string name="share_dialog_title">اشتراک</string>
+  <string name="share_cancel_public_link_button">منسوخ کریں</string>
+  <string name="share_confirm_public_link_button">حفظ</string>
+  <string name="share_via_link_password_label">پاسورڈ</string>
+  <string name="share_search">تلاش</string>
+  <string name="share_privilege_can_edit">تبدیل کر سکے ھیں</string>
+  <string name="share_privilege_can_edit_create">نیا بنائیں</string>
+  <string name="share_privilege_can_edit_delete">ختم کریں</string>
+  <!--Welcome to oC intro features-->
+</resources>

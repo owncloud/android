@@ -1,3 +1,134 @@
+## 2.13 (September 2019)
+- Copy and move files from other third-party apps or internal storage to an ownCloud account through Downloads or Files app
+- Save files in an ownCloud account from third-party apps
+- Copy and move files within the same ownCloud account through Downloads or Files app
+- Add more logs coverage to gather information about known but difficult to reproduce issues
+- UI improvements, including:
+  + Show date and size for every file in Available Offline option from side menu
+
+## 2.12 (August 2019)
+- Shares rearchitecture
+- UI improvements, including:
+  + Private link accessible when share API is disabled
+- Bug fixes, including:
+  + Fix images not detected in Android 9 gallery after being downloaded
+
+## 2.12 beta v1 (August 2019)
+- Shares rearchitecture
+- UI improvements, including:
+  + Private link accessible when share API is disabled
+- Bug fixes, including:
+  + Fix images not detected in Android 9 gallery after being downloaded
+
+## 2.11.1 (June 2019)
+- Fix crash triggered when notifying upload results
+
+## 2.11 (June 2019)
+- Replace ownCloud file picker with the Android native one when uploading files (contribution)
+- Send logs to support, enable it via new developer menu (contribution)
+- Logs search (contribution)
+- Shortcut to available offline files from side menu
+- Document provider: files and folders rename, edition and deletion.
+- Document provider: folder creation
+- Document provider: multiaccount support
+- UI improvements, including:
+  + Notch support
+  + Batched permission errors when deleting multiple files (contribution)
+- Bug fixes, including:
+  + Fix just created folder disappears when synchronizing parent folder
+  + Fix crash when clearing successful/failed uploads (contribution)
+  + Fix download progress bar still visible after successful download
+  + Fix UI glitch in warning icon when sharing a file publicly (contribution)
+  + Fix crash when sharing files with ownCloud and creating new folder (contribution)
+  + Fix canceling dialog in settings turns on setting (contribution)
+  + Bring back select all and select inverse icons to the app bar (contribution)
+  + Fix folder with brackets [ ] does not show the content
+  + Fix login fails with "§" in password
+
+## 2.11 beta v1 (May 2019)
+- Send logs to support, enable it via new developer menu (contribution)
+- Logs search (contribution)
+- Shortcut to available offline files from side menu
+- Document provider: files and folders rename, edition and deletion.
+- Document provider: folder creation
+- Document provider: multiaccount support
+- UI improvements, including:
+  + Notch support
+- Bug fixes, including:
+  + Fix download progress bar still visible after successful download
+  + Fix UI glitch in warning icon when sharing a file publicly (contribution)
+  + Fix crash when sharing files with ownCloud and creating new folder (contribution)
+  + Fix canceling dialog in settings turns on setting (contribution)
+  + Bring back select all and select inverse icons to the app bar (contribution)
+  + Fix folder with brackets [ ] does not show the content
+  + Fix login fails with "§" in password
+
+## 2.10.1 (April 2019)
+- Content provider improvements
+
+## 2.10.0 (March 2019)
+- Android 9 (P) support (contribution)
+- Allow light filtering apps (optional)
+- Show additional info (user ID, email) when sharing with users with same display name
+- Support more options to enforce password when sharing publicly
+- Select all and inverse when uploading files (contribution)
+- Sorting options in sharing view (contribution)
+- Batched notifications for file deletions (contribution)
+- Commit hash in settings (contribution)
+- UI improvements, including:
+  + Disable log in button when credentials are empty (contribution)
+  + Warning to properly set camera folder in camera uploads
+- Bug fixes, including:
+  + Some camera upload issues in Android 9 (P) (contribution)
+  + Fix eye icon not visible to show/hide password in public shares (contribution)
+  + Fix welcome wizard rotation (contribution)
+
+## 2.10.0 beta v1 (February 2019)
+- Android 9 (P) support (contribution)
+- Select all and inverse when uploading files (contribution)
+- Sorting options in sharing view (contribution)
+- Batched notifications for file deletions (contribution)
+- Commit hash in settings (contribution)
+- UI improvements, including:
+  + Disable log in button when credentials are empty (contribution)
+  + Warning to properly set camera folder in camera uploads
+- Bug fixes, including:
+  + Some camera upload issues in Android 9 (P) (contribution)
+  + Fix eye icon not visible to show/hide password in public shares (contribution)
+  + Fix welcome wizard rotation (contribution)
+
+## 2.9.3 (November 2018)
+- Bug fixes for users with username containing @ character
+
+## 2.9.2 (November 2018)
+- Bug fixes for users with username containing spaces
+
+## 2.9.1 (November 2018)
+- Bug fixes for LDAP users using uid:
+  + Fix login not working
+  + Fix empty list of files
+
+## 2.9.0 (November 2018)
+- Search in current folder
+- Select all/inverse files (contribution)
+- Improve available offline files synchronization and conflict resolution (Android 5 or higher required)
+- Sort files in file picker when uploading (contribution)
+- Access ownCloud files from files apps, even with files not downloaded
+- New login view
+- Show re-shares
+- Switch apache and jackrabbit deprecated network libraries to more modern and active library, OkHttp + Dav4Android
+- UI improvements, including:
+  + Change edit share icon
+  + New gradient in top of the list of files (contribution)
+  + More accurate message when creating folders with the same name (contribution)
+- Bug fixes, including:
+  + Fix some crashes:
+    - When rebooting the device
+    - When copying, moving files or choosing a folder within camera uploads feature
+    - When creating private/public link
+  + Fix some failing downloads
+  + Fix pattern lock being asked very often after disabling fingerprint lock (contribution)
+
 ## 2.9.0 beta v2 (October 2018)
 - Bug fixes, including:
   + Fix some crashes:

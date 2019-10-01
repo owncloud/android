@@ -1,0 +1,13 @@
+Welcome to the ownCloud Android App – Add an ownCloud server, and have your private file sync and share cloud up and running in no time.
+
+Do you need private file sync and share software? Then good news, because the ownCloud Android App enables you to connect Android devices to a private ownCloud Server running in your data center. ownCloud is open source file sync and share software for everyone from individuals operating the free ownCloud server, to large enterprises and service providers operating under the ownCloud Enterprise Subscription. ownCloud provides a safe, secure and compliant file sync and share solution – on servers you control.
+
+With the ownCloud Android App you can browse all of your ownCloud synced files, create and edit new files, share these files and folders with co-workers, and keep the contents of those folders in sync across all of your devices. Simply copy a file into a directory on your server and ownCloud does the rest.
+
+Whether using a mobile device, a desktop, or the web client, ownCloud provides the ability to put the right files in the right hands at the right time on any device in one simple-to-use, secure, private and controlled solution. After all, with ownCloud, it’s Your Cloud, Your Data, Your Way.
+
+Should you have any problem connecting or synchronizing with your ownCloud server, please contact us on https://github.com/owncloud/android/issues or check https://central.owncloud.org.
+
+Visit us at www.ownCloud.com for more information about ownCloud and the ownCloud Subscriptions. For more information on the free and open source ownCloud Server, visit www.ownCloud.org.
+
+*** If you are experiencing login issues after an update and the ownCloud Workaround App is installed in your device, please, try to uninstall and reinstall the Workaround App ***
