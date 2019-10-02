@@ -26,8 +26,6 @@
  */
 package com.owncloud.android.lib.resources.status
 
-import com.owncloud.android.domain.capabilities.model.CapabilityBooleanType
-
 /**
  * Contains data of the Capabilities for an account, from the Capabilities API
  */
@@ -102,5 +100,45 @@ class RemoteCapability {
         filesBigFileChunking = CapabilityBooleanType.UNKNOWN
         filesUndelete = CapabilityBooleanType.UNKNOWN
         filesVersioning = CapabilityBooleanType.UNKNOWN
+    }
+}
+
+/**
+ * Enum for Boolean Type in capabilities, with values:
+ * -1 - Unknown
+ * 0 - False
+ * 1 - True
+ */
+enum class CapabilityBooleanType constructor(val value: Int) {
+    UNKNOWN(-1),
+    FALSE(0),
+    TRUE(1);
+
+    val isUnknown: Boolean
+        get() = value == -1
+
+    val isFalse: Boolean
+        get() = value == 0
+
+    val isTrue: Boolean
+        get() = value == 1
+
+    companion object {
+        fun fromValue(value: Int): CapabilityBooleanType? {
+            return when (value) {
+                -1 -> UNKNOWN
+                0 -> FALSE
+                1 -> TRUE
+                else -> null
+            }
+        }
+
+        fun fromBooleanValue(boolValue: Boolean): CapabilityBooleanType {
+            return if (boolValue) {
+                TRUE
+            } else {
+                FALSE
+            }
+        }
     }
 }

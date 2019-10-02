@@ -28,7 +28,6 @@
 package com.owncloud.android.lib.resources.shares
 
 import android.net.Uri
-import com.owncloud.android.domain.sharing.shares.model.ShareType
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.common.utils.Log_OC
 import com.owncloud.android.lib.resources.status.OwnCloudVersion

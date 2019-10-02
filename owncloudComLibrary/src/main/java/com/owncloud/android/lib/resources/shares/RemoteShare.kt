@@ -26,7 +26,6 @@ package com.owncloud.android.lib.resources.shares
 
 import android.os.Parcel
 import android.os.Parcelable
-import com.owncloud.android.domain.sharing.shares.model.ShareType
 import com.owncloud.android.lib.common.utils.Log_OC
 import com.owncloud.android.lib.resources.files.FileUtils
 import java.io.Serializable
@@ -193,6 +192,47 @@ class RemoteShare : Parcelable, Serializable {
 
             override fun newArray(size: Int): Array<RemoteShare?> {
                 return arrayOfNulls(size)
+            }
+        }
+    }
+
+
+}
+
+/**
+ * // TODO This type is already included in the domain but we still need it here since the parsing takes place in this library for the moment
+ *
+ * Enum for Share Type, with values:
+ * -1 - No shared
+ * 0 - Shared by user
+ * 1 - Shared by group
+ * 3 - Shared by public link
+ * 4 - Shared by e-mail
+ * 5 - Shared by contact
+ * 6 - Federated
+ *
+ * @author masensio
+ */
+enum class ShareType constructor(val value: Int) {
+    NO_SHARED(-1),
+    USER(0),
+    GROUP(1),
+    PUBLIC_LINK(3),
+    EMAIL(4),
+    CONTACT(5),
+    FEDERATED(6);
+
+    companion object {
+        fun fromValue(value: Int): ShareType? {
+            return when (value) {
+                -1 -> NO_SHARED
+                0 -> USER
+                1 -> GROUP
+                3 -> PUBLIC_LINK
+                4 -> EMAIL
+                5 -> CONTACT
+                6 -> FEDERATED
+                else -> null
             }
         }
     }
