@@ -31,13 +31,11 @@ class OCRemoteCapabilitiesDataSource(
     private val remoteCapabilityMapper: RemoteCapabilityMapper
 ) : RemoteCapabilitiesDataSource {
 
-    override suspend fun getCapabilities(
+    override fun getCapabilities(
         accountName: String,
         getRemoteCapabilitiesOperation: GetRemoteCapabilitiesOperation
     ): OCCapability {
-        awaitToRemoteOperationResult {
-            getRemoteCapabilitiesOperation.execute(client)
-        }.let { remoteCapability ->
+        awaitToRemoteOperationResult(getRemoteCapabilitiesOperation, client).let { remoteCapability ->
             return remoteCapabilityMapper.toModel(remoteCapability)!!.also { it.accountName = accountName }
         }
     }
