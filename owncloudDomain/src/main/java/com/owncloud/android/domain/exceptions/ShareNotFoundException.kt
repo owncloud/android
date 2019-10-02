@@ -17,14 +17,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.data.capabilities.datasources
+package com.owncloud.android.domain.exceptions
 
-import com.owncloud.android.domain.capabilities.model.OCCapability
-import com.owncloud.android.lib.resources.status.GetRemoteCapabilitiesOperation
+import java.lang.Exception
 
-interface RemoteCapabilitiesDataSource {
-    fun getCapabilities(
-        accountName: String,
-        getRemoteCapabilitiesOperation: GetRemoteCapabilitiesOperation = GetRemoteCapabilitiesOperation()
-    ): OCCapability
-}
+class ShareNotFoundException : Exception()
