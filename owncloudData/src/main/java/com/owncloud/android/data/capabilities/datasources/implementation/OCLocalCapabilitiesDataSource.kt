@@ -35,7 +35,7 @@ class OCLocalCapabilitiesDataSource(
     override fun getCapabilitiesForAccountAsLiveData(accountName: String): LiveData<OCCapability?> =
         Transformations.map(ocCapabilityDao.getCapabilitiesForAccountAsLiveData(accountName)) { ocCapabilityEntity ->
             ocCapabilityMapper.toModel(ocCapabilityEntity)
-        }.distinctUntilChanged()
+        }
 
     override fun getCapabilityForAccount(accountName: String): OCCapability =
             ocCapabilityMapper.toModel(ocCapabilityDao.getCapabilityForAccount(accountName))
