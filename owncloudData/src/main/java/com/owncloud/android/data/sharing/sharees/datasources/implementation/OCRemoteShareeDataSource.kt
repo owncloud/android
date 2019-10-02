@@ -21,7 +21,7 @@ package com.owncloud.android.data.sharing.sharees.datasources.implementation
 
 import com.owncloud.android.data.sharing.sharees.datasources.RemoteShareeDataSource
 import com.owncloud.android.lib.common.OwnCloudClient
-import com.owncloud.android.lib.common.operations.waitForRemoteOperationResult
+import com.owncloud.android.data.waitForRemoteOperationResult
 import com.owncloud.android.lib.resources.shares.GetRemoteShareesOperation
 import org.json.JSONObject
 import java.util.ArrayList
