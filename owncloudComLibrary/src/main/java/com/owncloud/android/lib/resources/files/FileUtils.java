@@ -78,6 +78,7 @@ public class FileUtils {
                 (path.contains("\\") || path.contains("<") || path.contains(">") ||
                         path.contains(":") || path.contains("\"") || path.contains("|") ||
                         path.contains("?") || path.contains("*"))) {
+
             result = false;
         }
         return result;
