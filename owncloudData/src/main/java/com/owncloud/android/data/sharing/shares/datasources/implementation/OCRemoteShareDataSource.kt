@@ -27,7 +27,7 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.common.operations.awaitToRemoteOperationResult
 import com.owncloud.android.lib.resources.shares.CreateRemoteShareOperation
 import com.owncloud.android.lib.resources.shares.GetRemoteSharesForFileOperation
-import com.owncloud.android.lib.resources.shares.RemoteShareMapper
+import com.owncloud.android.data.sharing.shares.datasources.mapper.RemoteShareMapper
 import com.owncloud.android.lib.resources.shares.RemoveRemoteShareOperation
 import com.owncloud.android.lib.resources.shares.ShareParserResult
 import com.owncloud.android.lib.resources.shares.UpdateRemoteShareOperation

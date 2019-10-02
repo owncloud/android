@@ -30,7 +30,6 @@ package com.owncloud.android.ui.dialog
 
 import android.accounts.Account
 import android.app.Dialog
-import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.Observer
@@ -90,16 +89,6 @@ class RemoveShareDialogFragment : ConfirmationDialogFragment(), ConfirmationDial
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         observeShareDeletion()
-    }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-
-        try {
-            listener = activity as ShareFragmentListener?
-        } catch (e: IllegalStateException) {
-            throw IllegalStateException(activity!!.toString() + " must implement OnShareFragmentInteractionListener")
-        }
     }
 
     private fun observeShareDeletion() {

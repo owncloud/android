@@ -50,7 +50,12 @@ interface RemoteShareDataSource {
         publicUpload: Boolean = false,
         accountName: String,
         createRemoteShareOperation: CreateRemoteShareOperation =
-            CreateRemoteShareOperation(remoteFilePath, shareType, shareWith, permissions)
+            CreateRemoteShareOperation(
+                remoteFilePath,
+                com.owncloud.android.lib.resources.shares.ShareType.fromValue(shareType.value)!!,
+                shareWith,
+                permissions
+            )
     ): OCShare
 
     suspend fun updateShare(
