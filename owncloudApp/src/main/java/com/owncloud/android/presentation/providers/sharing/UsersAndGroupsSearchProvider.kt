@@ -164,8 +164,8 @@ class UsersAndGroupsSearchProvider : ContentProvider() {
                     context,
                     account, context!!.contentResolver
                 )
-                val federatedShareAllowed = manager.getCapability(account!!.name).filesSharingFederationOutgoing
-                    .isTrue
+                val federatedShareAllowed = manager.getCapability(account!!.name)?.filesSharingFederationOutgoing
+                    ?.isTrue
 
                 try {
                     while (namesIt.hasNext()) {
@@ -193,7 +193,7 @@ class UsersAndGroupsSearchProvider : ContentProvider() {
                             displayName = context!!.getString(R.string.share_group_clarification, userName)
                             icon = R.drawable.ic_group
                             dataUri = Uri.withAppendedPath(groupBaseUri, shareWith)
-                        } else if (ShareType.FEDERATED.value == type && federatedShareAllowed) {
+                        } else if (ShareType.FEDERATED.value == type && federatedShareAllowed!!) {
                             icon = R.drawable.ic_user
                             if (userName == shareWith) {
                                 displayName = context!!.getString(R.string.share_remote_clarification, userName)
