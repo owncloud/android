@@ -210,10 +210,10 @@ public class RefreshFolderOperation extends SyncOperation<ArrayList<RemoteFile>>
 
         if (result.isSuccess()) {
             resetShareFlagsInFolderChilds();
-            for (RemoteShare ocShare : result.getData().getShares()) {
-                OCFile file = getStorageManager().getFileByPath(ocShare.getPath());
+            for (RemoteShare remoteShare : result.getData().getShares()) {
+                OCFile file = getStorageManager().getFileByPath(remoteShare.getPath());
                 if (file != null) {
-                    ShareType shareType = ocShare.getShareType();
+                    ShareType shareType = ShareType.Companion.fromValue(remoteShare.getShareType().getValue());
                     if (shareType.equals(ShareType.PUBLIC_LINK)) {
                         file.setSharedViaLink(true);
                     } else if (shareType.equals(ShareType.USER) ||

@@ -47,7 +47,6 @@ import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.OwnCloudClientManagerFactory;
 import com.owncloud.android.lib.common.accounts.AccountUtils.AccountNotFoundException;
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentials;
-import com.owncloud.android.lib.common.authentication.OwnCloudCredentialsFactory;
 import com.owncloud.android.lib.common.authentication.oauth.OAuth2GrantType;
 import com.owncloud.android.lib.common.authentication.oauth.OAuth2Provider;
 import com.owncloud.android.lib.common.authentication.oauth.OAuth2ProvidersRegistry;
@@ -64,7 +63,6 @@ import com.owncloud.android.operations.CreateFolderOperation;
 import com.owncloud.android.operations.GetServerInfoOperation;
 import com.owncloud.android.operations.MoveFileOperation;
 import com.owncloud.android.operations.RemoveFileOperation;
-import com.owncloud.android.operations.RemoveShareOperation;
 import com.owncloud.android.operations.RenameFileOperation;
 import com.owncloud.android.operations.SynchronizeFileOperation;
 import com.owncloud.android.operations.SynchronizeFolderOperation;
@@ -517,11 +515,7 @@ public class OperationsService extends Service {
                 );
 
                 String action = operationIntent.getAction();
-                if (action.equals(ACTION_UNSHARE)) {  // Unshare file
-                    long shareId = operationIntent.getLongExtra(EXTRA_SHARE_ID, -1);
-                    operation = new RemoveShareOperation(shareId);
-
-                } else if (action.equals(ACTION_GET_SERVER_INFO)) {
+                if (action.equals(ACTION_GET_SERVER_INFO)) {
                     // check OC server and get basic information from it
                     operation = new GetServerInfoOperation(serverUrl, OperationsService.this);
 

@@ -461,18 +461,17 @@ class DocumentsStorageProvider : DocumentsProvider() {
             return
         }
         for (data in rootIdToStorageManager.values) {
-            if (data.account.name == rootId) {
+            if (data.account?.name == rootId) {
                 currentStorageManager = data
             }
         }
     }
 
     private fun initiateStorageMap() {
-
         for (account in AccountUtils.getAccounts(context)) {
-            val storageManager = FileDataStorageManager(context, account, context?.contentResolver)
+            val storageManager = FileDataStorageManager(context, account, context.contentResolver)
             val rootDir = storageManager.getFileByPath(OCFile.ROOT_PATH)
-            rootIdToStorageManager[rootDir.fileId] = storageManager
+            rootIdToStorageManager[rootDir!!.fileId] = storageManager
         }
     }
 

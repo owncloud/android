@@ -32,6 +32,7 @@ import com.owncloud.android.presentation.UIResult
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 /**
  * View Model to keep a reference to the capability repository and an up-to-date capability
@@ -68,16 +69,18 @@ class OCCapabilityViewModel(
     )
 
     fun refreshCapabilitiesFromNetwork() {
-        viewModelScope.launch(ioDispatcher) {
+        viewModelScope.launch {
             _capabilities.postValue(
                 UIResult.Loading(capabilitiesLiveData?.value)
             )
 
-            val useCaseResult = refreshCapabilitiesFromServerUseCase.execute(
-                RefreshCapabilitiesFromServerAsyncUseCase.Params(
-                    accountName = accountName
+            val useCaseResult = withContext(ioDispatcher) {
+                refreshCapabilitiesFromServerUseCase.execute(
+                    RefreshCapabilitiesFromServerAsyncUseCase.Params(
+                        accountName = accountName
+                    )
                 )
-            )
+            }
 
             if (!useCaseResult.isSuccess) {
                 _capabilities.postValue(
