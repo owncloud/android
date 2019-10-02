@@ -20,9 +20,11 @@
 package com.owncloud.android.extensions
 
 import android.content.res.Resources
-import com.owncloud.android.domain.exceptions.InternetConnectionException
+import com.owncloud.android.R
+import com.owncloud.android.domain.exceptions.NoConnectionWithServerException
 
 fun Throwable?.parseError(resources: Resources): CharSequence? =
     when(this) {
-        is InternetConnectionException ->
+        is NoConnectionWithServerException -> resources.getString(R.string.network_error_socket_exception)
+        else -> resources.getString(R.string.common_error_unknown)
     }
