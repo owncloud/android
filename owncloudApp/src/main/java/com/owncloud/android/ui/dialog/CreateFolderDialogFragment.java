@@ -128,6 +128,11 @@ public class CreateFolderDialogFragment
                 return;
             }
 
+            if (!FileUtils.isValidName(newFolderName)) {
+                showSnackMessage(R.string.filename_forbidden_charaters_from_server);
+                return;
+            }
+
             String path = mParentFolder.getRemotePath();
             path += newFolderName + OCFile.PATH_SEPARATOR;
             ((ComponentsGetter) getActivity()).
