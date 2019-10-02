@@ -63,22 +63,22 @@ class OCCapabilityViewModel(
 
     fun refreshCapabilitiesFromNetwork() {
         viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                _capabilities.postValue(
-                    UIResult.Loading(capabilitiesLiveData.value)
-                )
+            _capabilities.postValue(
+                UIResult.Loading(capabilitiesLiveData.value)
+            )
 
+            val useCaseResult = withContext(Dispatchers.IO) {
                 refreshCapabilitiesFromServerUseCase.execute(
                     RefreshCapabilitiesFromServerAsyncUseCase.Params(
                         accountName = accountName
                     )
-                ).also { useCaseResult ->
-                    if (!useCaseResult.isSuccess) {
-                        _capabilities.postValue(
-                            UIResult.Error(useCaseResult.getThrowableOrNull(), capabilitiesLiveData?.value)
-                        )
-                    }
-                }
+                )
+            }
+
+            if (!useCaseResult.isSuccess) {
+                _capabilities.postValue(
+                    UIResult.Error(useCaseResult.getThrowableOrNull(), capabilitiesLiveData?.value)
+                )
             }
         }
     }

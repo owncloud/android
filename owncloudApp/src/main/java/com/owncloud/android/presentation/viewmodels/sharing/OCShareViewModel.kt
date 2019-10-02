@@ -103,11 +103,11 @@ class OCShareViewModel(
     fun deleteShare(
         remoteId: Long
     ) {
-        _shareDeletionStatus.postValue(
-            UIResult.Loading()
-        )
-
         viewModelScope.launch {
+            _shareDeletionStatus.postValue(
+                UIResult.Loading()
+            )
+
             val useCaseResult = withContext(Dispatchers.IO) {
                 deletePublicShareUseCase.execute(
                     DeleteShareAsyncUseCase.Params(
@@ -116,14 +116,12 @@ class OCShareViewModel(
                 )
             }
 
-            withContext(Dispatchers.Main) {
-                if (!useCaseResult.isSuccess) {
-                    _shareDeletionStatus.postValue(
-                        UIResult.Error(useCaseResult.getThrowableOrNull())
-                    )
-                } else {
-                    _shareDeletionStatus.postValue(UIResult.Success())
-                }
+            if (!useCaseResult.isSuccess) {
+                _shareDeletionStatus.postValue(
+                    UIResult.Error(useCaseResult.getThrowableOrNull())
+                )
+            } else {
+                _shareDeletionStatus.postValue(UIResult.Success())
             }
         }
     }
@@ -142,11 +140,11 @@ class OCShareViewModel(
         permissions: Int,
         accountName: String
     ) {
-        _privateShareCreationStatus.postValue(
-            UIResult.Loading()
-        )
-
         viewModelScope.launch {
+            _privateShareCreationStatus.postValue(
+                UIResult.Loading()
+            )
+
             val useCaseResult = withContext(Dispatchers.IO) {
                 createPrivateShareUseCase.execute(
                     CreatePrivateShareAsyncUseCase.Params(
@@ -159,12 +157,10 @@ class OCShareViewModel(
                 )
             }
 
-            withContext(Dispatchers.Main) {
-                if (!useCaseResult.isSuccess) {
-                    _privateShareCreationStatus.postValue(
-                        UIResult.Error(useCaseResult.getThrowableOrNull())
-                    )
-                }
+            if (!useCaseResult.isSuccess) {
+                _privateShareCreationStatus.postValue(
+                    UIResult.Error(useCaseResult.getThrowableOrNull())
+                )
             }
         }
     }
@@ -198,11 +194,11 @@ class OCShareViewModel(
         permissions: Int,
         accountName: String
     ) {
-        _privateShareEditionStatus.postValue(
-            UIResult.Loading()
-        )
-
         viewModelScope.launch {
+            _privateShareEditionStatus.postValue(
+                UIResult.Loading()
+            )
+
             val useCaseResult = withContext(Dispatchers.IO) {
                 editPrivateShareUseCase.execute(
                     EditPrivateShareAsyncUseCase.Params(
@@ -213,14 +209,12 @@ class OCShareViewModel(
                 )
             }
 
-            withContext(Dispatchers.Main) {
-                if (!useCaseResult.isSuccess) {
-                    _privateShareEditionStatus.postValue(
-                        UIResult.Error()
-                    )
-                } else {
-                    _privateShareEditionStatus.postValue(UIResult.Success())
-                }
+            if (!useCaseResult.isSuccess) {
+                _privateShareEditionStatus.postValue(
+                    UIResult.Error()
+                )
+            } else {
+                _privateShareEditionStatus.postValue(UIResult.Success())
             }
         }
     }
@@ -241,11 +235,11 @@ class OCShareViewModel(
         publicUpload: Boolean,
         accountName: String
     ) {
-        _publicShareCreationStatus.postValue(
-            UIResult.Loading()
-        )
-
         viewModelScope.launch {
+            _publicShareCreationStatus.postValue(
+                UIResult.Loading()
+            )
+
             val useCaseResult = withContext(Dispatchers.IO) {
                 createPublicShareUseCase.execute(
                     CreatePublicShareAsyncUseCase.Params(
@@ -260,16 +254,14 @@ class OCShareViewModel(
                 )
             }
 
-            withContext(Dispatchers.Main) {
-                if (!useCaseResult.isSuccess) {
-                    _publicShareCreationStatus.postValue(
-                        UIResult.Error(
-                            useCaseResult.getThrowableOrNull()
-                        )
+            if (!useCaseResult.isSuccess) {
+                _publicShareCreationStatus.postValue(
+                    UIResult.Error(
+                        useCaseResult.getThrowableOrNull()
                     )
-                } else {
-                    _publicShareCreationStatus.postValue(UIResult.Success())
-                }
+                )
+            } else {
+                _publicShareCreationStatus.postValue(UIResult.Success())
             }
         }
     }
@@ -286,11 +278,11 @@ class OCShareViewModel(
         publicUpload: Boolean,
         accountName: String
     ) {
-        _publicShareEditionStatus.postValue(
-            UIResult.Loading()
-        )
-
         viewModelScope.launch {
+            _publicShareEditionStatus.postValue(
+                UIResult.Loading()
+            )
+
             val useCaseResult = withContext(Dispatchers.IO) {
                 editPublicShareUseCase.execute(
                     EditPublicShareAsyncUseCase.Params(
@@ -305,16 +297,14 @@ class OCShareViewModel(
                 )
             }
 
-            withContext(Dispatchers.Main) {
-                if (!useCaseResult.isSuccess) {
-                    _publicShareEditionStatus.postValue(
-                        UIResult.Error(
-                            useCaseResult.getThrowableOrNull()
-                        )
+            if (!useCaseResult.isSuccess) {
+                _publicShareEditionStatus.postValue(
+                    UIResult.Error(
+                        useCaseResult.getThrowableOrNull()
                     )
-                } else {
-                    _publicShareEditionStatus.postValue(UIResult.Success())
-                }
+                )
+            } else {
+                _publicShareEditionStatus.postValue(UIResult.Success())
             }
         }
     }

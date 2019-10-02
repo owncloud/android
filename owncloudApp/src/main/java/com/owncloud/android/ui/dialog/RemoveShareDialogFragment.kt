@@ -92,16 +92,6 @@ class RemoveShareDialogFragment : ConfirmationDialogFragment(), ConfirmationDial
         observeShareDeletion()
     }
 
-    override fun onAttach(context: Context?) {
-        super.onAttach(context)
-
-        try {
-            listener = activity as ShareFragmentListener?
-        } catch (e: IllegalStateException) {
-            throw IllegalStateException(activity!!.toString() + " must implement OnShareFragmentInteractionListener")
-        }
-    }
-
     private fun observeShareDeletion() {
         ocShareViewModel.shareDeletionStatus.observe(
             this,
