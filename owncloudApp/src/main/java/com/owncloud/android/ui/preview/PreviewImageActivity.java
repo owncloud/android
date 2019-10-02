@@ -434,7 +434,7 @@ public class PreviewImageActivity extends FileActivity implements
             }
 
             // Update file according to DB file, if it is possible
-            if (file.getFileId() > FileDataStorageManager.ROOT_PARENT_ID) {
+            if (file.getFileId() > FileDataStorageManager.Companion.getROOT_PARENT_ID()) {
                 file = getStorageManager().getFileById(file.getFileId());
             }
 

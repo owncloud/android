@@ -29,6 +29,7 @@ import android.preference.PreferenceManager;
 import androidx.annotation.Nullable;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.datamodel.FileDataStorageManager;
+import com.owncloud.android.domain.capabilities.model.OCCapability;
 import com.owncloud.android.lib.common.accounts.AccountTypeUtils;
 import com.owncloud.android.lib.common.accounts.AccountUtils.Constants;
 import com.owncloud.android.lib.common.utils.Log_OC;
@@ -300,10 +301,9 @@ public class AccountUtils {
                     account,
                     MainApp.Companion.getAppContext().getContentResolver()
             );
-            RemoteCapability capability = fileDataStorageManager.getCapability(account.name);
+            OCCapability capability = fileDataStorageManager.getCapability(account.name);
             if (capability != null) {
                 serverVersion = new OwnCloudVersion(capability.getVersionString());
-
             } else {
                 // legacy: AccountManager as source of version info
                 AccountManager accountMgr = AccountManager.get(MainApp.Companion.getAppContext());

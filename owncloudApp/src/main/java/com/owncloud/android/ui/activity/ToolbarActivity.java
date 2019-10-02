@@ -58,7 +58,7 @@ public abstract class ToolbarActivity extends BaseActivity {
         // choose the appropriate title
         inRoot = (
                 chosenFile == null ||
-                        (chosenFile.isFolder() && chosenFile.getParentId() == FileDataStorageManager.ROOT_PARENT_ID)
+                        (chosenFile.isFolder() && chosenFile.getParentId() == FileDataStorageManager.Companion.getROOT_PARENT_ID())
         );
         if (!inRoot) {
             title = chosenFile.getFileName();
@@ -103,7 +103,7 @@ public abstract class ToolbarActivity extends BaseActivity {
      */
     public boolean isRoot(OCFile file) {
         return file == null ||
-                (file.isFolder() && file.getParentId() == FileDataStorageManager.ROOT_PARENT_ID);
+                (file.isFolder() && file.getParentId() == FileDataStorageManager.Companion.getROOT_PARENT_ID());
     }
 
 }

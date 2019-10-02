@@ -21,8 +21,8 @@ package com.owncloud.android.dependecyinjection
 
 import com.owncloud.android.data.capabilities.datasources.mapper.OCCapabilityMapper
 import com.owncloud.android.data.sharing.shares.datasources.mapper.OCShareMapper
-import com.owncloud.android.lib.resources.shares.RemoteShareMapper
-import com.owncloud.android.lib.resources.status.RemoteCapabilityMapper
+import com.owncloud.android.data.sharing.shares.datasources.mapper.RemoteShareMapper
+import com.owncloud.android.data.sharing.shares.datasources.mapper.RemoteCapabilityMapper
 import org.koin.dsl.module
 
 val commonModule = module {
