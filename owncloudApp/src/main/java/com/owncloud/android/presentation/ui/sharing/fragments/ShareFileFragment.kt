@@ -35,7 +35,6 @@ import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import com.google.android.material.snackbar.Snackbar
 import com.owncloud.android.R
 import com.owncloud.android.authentication.AccountUtils
 import com.owncloud.android.data.sharing.shares.db.OCShareEntity
@@ -45,6 +44,7 @@ import com.owncloud.android.domain.capabilities.model.CapabilityBooleanType
 import com.owncloud.android.domain.capabilities.model.OCCapability
 import com.owncloud.android.domain.sharing.shares.model.OCShare
 import com.owncloud.android.domain.sharing.shares.model.ShareType
+import com.owncloud.android.extensions.showError
 import com.owncloud.android.lib.common.utils.Log_OC
 import com.owncloud.android.lib.resources.status.OwnCloudVersion
 import com.owncloud.android.presentation.UIResult
@@ -357,7 +357,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
                         capabilities?.let {
                             updateCapabilities(it)
                         }
-//                        showError(uiResult.error!!)
+                        showError(uiResult.error)
                         listener?.dismissLoading()
                     }
                     is UIResult.Loading -> {
@@ -390,7 +390,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
                         shares?.let {
                             updateShares(it)
                         }
-//                        showError(uiResult.error!!)
+                        showError(uiResult.error)
                         listener?.dismissLoading()
                     }
                     is UIResult.Loading -> {
@@ -610,13 +610,13 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
         }
     }
 
-    private fun showError(message: String) {
-        Snackbar.make(
-            activity?.findViewById(android.R.id.content)!!,
-            message,
-            Snackbar.LENGTH_SHORT
-        ).show()
-    }
+//    private fun showError(message: String) {
+//        Snackbar.make(
+//            activity?.findViewById(android.R.id.content)!!,
+//            message,
+//            Snackbar.LENGTH_SHORT
+//        ).show()
+//    }
 
     companion object {
 

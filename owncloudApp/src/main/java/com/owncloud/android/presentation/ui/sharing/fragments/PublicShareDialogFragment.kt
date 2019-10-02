@@ -45,6 +45,7 @@ import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.domain.capabilities.model.CapabilityBooleanType
 import com.owncloud.android.domain.capabilities.model.OCCapability
 import com.owncloud.android.domain.sharing.shares.model.OCShare
+import com.owncloud.android.extensions.parseError
 import com.owncloud.android.lib.common.utils.Log_OC
 import com.owncloud.android.lib.resources.shares.RemoteShare
 import com.owncloud.android.lib.resources.status.OwnCloudVersion
@@ -457,8 +458,8 @@ class PublicShareDialogFragment : DialogFragment() {
                         listener?.dismissLoading()
                     }
                     is UIResult.Error -> {
-//                        showError(uiResult.errorMessage!!)
-//                        updateCapabilities(uiResult.getStoredData())
+                        showError(uiResult.error)
+                        updateCapabilities(uiResult.data)
                         listener?.dismissLoading()
                     }
                     is UIResult.Loading -> {
@@ -484,7 +485,7 @@ class PublicShareDialogFragment : DialogFragment() {
                         dismiss()
                     }
                     is UIResult.Error -> {
-//                        showError(uiResult.errorMessage!!)
+                        showError(uiResult.error)
                         listener?.dismissLoading()
                     }
                     is UIResult.Loading -> {
@@ -509,7 +510,7 @@ class PublicShareDialogFragment : DialogFragment() {
                         dismiss()
                     }
                     is UIResult.Error -> {
-//                        showError(uiResult.errorMessage!!)
+                        showError(uiResult.error)
                         listener?.dismissLoading()
                     }
                     is UIResult.Loading -> {
@@ -789,9 +790,9 @@ class PublicShareDialogFragment : DialogFragment() {
 
     /**
      * Show error when creating or updating the public share, if any
-     * @param errorMessage
      */
-    fun showError(errorMessage: String) {
+    fun showError(throwable: Throwable?) {
+        val errorMessage = throwable?.parseError(resources) ?: return
         public_link_error_message?.visibility = View.VISIBLE
         public_link_error_message?.text = errorMessage
     }
