@@ -25,7 +25,6 @@ import com.owncloud.android.data.capabilities.datasources.LocalCapabilitiesDataS
 import com.owncloud.android.data.capabilities.datasources.mapper.OCCapabilityMapper
 import com.owncloud.android.data.capabilities.db.OCCapabilityDao
 import com.owncloud.android.domain.capabilities.model.OCCapability
-import com.owncloud.android.domain.extensions.distinctUntilChanged
 
 class OCLocalCapabilitiesDataSource(
     private val ocCapabilityDao: OCCapabilityDao,

@@ -20,8 +20,17 @@
 package com.owncloud.android.extensions
 
 import androidx.fragment.app.Fragment
+import com.google.android.material.snackbar.Snackbar
 
-fun Fragment.showError(throwable: Throwable?, onDismissed: () -> Unit = {}) {
+fun Fragment.showError(throwable: Throwable?) {
     val error = throwable?.parseError(resources) ?: return
-    showMessage(message = error, onDismissed = onDismissed)
+    showMessage(message = error)
+}
+
+fun Fragment.showMessage(
+    message: CharSequence,
+    duration: Int = Snackbar.LENGTH_LONG
+) {
+    val requiredView = view ?: return
+    Snackbar.make(requiredView, message, duration).show()
 }

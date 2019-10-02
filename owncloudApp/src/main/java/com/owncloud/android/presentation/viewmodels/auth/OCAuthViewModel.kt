@@ -53,7 +53,7 @@ class OCAuthViewModel(
 //            withContext(Dispatchers.Main) {
 //                if (!loginUseCaseResult.isSuccess) {
 //                    _loginStatus.postValue(
-//                        UIResult.Error(loginUseCaseResult.getThrowableOrNull())
+//                        UIResult.Error(loginUseCaseResult.getErrorOrNull())
 //                    )
 //                } else {
 //                    _loginStatus.postValue(UIResult.Success())

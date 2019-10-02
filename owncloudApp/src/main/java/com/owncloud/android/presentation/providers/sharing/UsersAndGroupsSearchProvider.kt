@@ -134,7 +134,7 @@ class UsersAndGroupsSearchProvider : ContentProvider() {
             )
         ).also { useCaseResult ->
             if (useCaseResult.isError) {
-//                showErrorMessage(useCaseResult.getThrowableOrNull())
+//                showErrorMessage(useCaseResult.getErrorOrNull())
             }
 
             val names = useCaseResult.getDataOrNull()

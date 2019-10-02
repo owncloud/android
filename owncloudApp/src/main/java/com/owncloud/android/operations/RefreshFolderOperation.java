@@ -166,20 +166,6 @@ public class RefreshFolderOperation extends SyncOperation<ArrayList<RemoteFile>>
         }
     }
 
-    private OwnCloudVersion syncCapabilitiesAndGetServerVersion() {
-        OwnCloudVersion serverVersion;
-        SyncCapabilitiesOperation getCapabilities = new SyncCapabilitiesOperation();
-        RemoteOperationResult<RemoteCapability> result = getCapabilities.execute(getStorageManager(), mContext);
-        if (result.isSuccess()) {
-            RemoteCapability capability = result.getData();
-            serverVersion = new OwnCloudVersion(capability.getVersionString());
-        } else {
-            // get whatever was stored before for the version
-            serverVersion = AccountUtils.getServerVersion(mAccount);
-        }
-        return serverVersion;
-    }
-
     /**
      * Normally user profile and owncloud version get synchronized if you sync the root directory.
      * With this you can override this behaviour and disable it, which is useful for the DocumentsProvider

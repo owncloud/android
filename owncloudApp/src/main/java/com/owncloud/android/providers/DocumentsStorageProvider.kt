@@ -413,6 +413,9 @@ class DocumentsStorageProvider : DocumentsProvider() {
 
     private fun createFolder(parentDocument: OCFile, displayName: String): String {
         val newPath = parentDocument.remotePath + displayName + OCFile.PATH_SEPARATOR
+        if (!FileUtils.isValidName(displayName)) {
+            throw UnsupportedOperationException("Folder $displayName contains at least one invalid character")
+        }
         Log_OC.d(TAG, "Trying to create folder with path $newPath")
 
         CreateFolderOperation(newPath, false).apply {
