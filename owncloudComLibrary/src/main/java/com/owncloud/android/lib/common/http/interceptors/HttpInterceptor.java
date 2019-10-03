@@ -60,12 +60,12 @@ public class HttpInterceptor implements Interceptor {
     }
 
     public HttpInterceptor addRequestInterceptor(RequestInterceptor requestInterceptor) {
-        mRequestInterceptors.add(requestInterceptor);
+        mRequestInterceptors.listIterator().add(requestInterceptor);
         return this;
     }
 
     public HttpInterceptor addResponseInterceptor(ResponseInterceptor responseInterceptor) {
-        mResponseInterceptors.add(responseInterceptor);
+        mResponseInterceptors.listIterator().add(responseInterceptor);
         return this;
     }
 
