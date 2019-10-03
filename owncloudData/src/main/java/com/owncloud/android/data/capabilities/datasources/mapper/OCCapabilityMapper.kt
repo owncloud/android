@@ -37,7 +37,7 @@ class OCCapabilityMapper : Mapper<OCCapability, OCCapabilityEntity> {
                 versionEdition = entity.versionEdition,
                 corePollInterval = entity.corePollInterval,
                 filesSharingApiEnabled = CapabilityBooleanType.fromValue(entity.filesSharingApiEnabled)!!,
-                filesSharingSearchMinLength = CapabilityBooleanType.fromValue(entity.filesSharingSearchMinLength)!!,
+                filesSharingSearchMinLength = entity.filesSharingSearchMinLength,
                 filesSharingPublicEnabled = CapabilityBooleanType.fromValue(entity.filesSharingPublicEnabled)!!,
                 filesSharingPublicPasswordEnforced =
                 CapabilityBooleanType.fromValue(entity.filesSharingPublicPasswordEnforced)!!,
@@ -81,7 +81,7 @@ class OCCapabilityMapper : Mapper<OCCapability, OCCapabilityEntity> {
                 versionEdition = model.versionEdition,
                 corePollInterval = model.corePollInterval,
                 filesSharingApiEnabled = model.filesSharingApiEnabled.value,
-                filesSharingSearchMinLength = model.filesSharingSearchMinLength?.value!!,
+                filesSharingSearchMinLength = model.filesSharingSearchMinLength,
                 filesSharingPublicEnabled = model.filesSharingPublicEnabled.value,
                 filesSharingPublicPasswordEnforced = model.filesSharingPublicPasswordEnforced.value,
                 filesSharingPublicPasswordEnforcedReadOnly = model.filesSharingPublicPasswordEnforcedReadOnly.value,

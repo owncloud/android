@@ -17,17 +17,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.data.sharing.shares.datasources
+package com.owncloud.android.data.shares.datasources
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
-import androidx.test.platform.app.InstrumentationRegistry
 import com.owncloud.android.data.OwncloudDatabase
 import com.owncloud.android.data.sharing.shares.datasources.implementation.OCLocalShareDataSource
+import com.owncloud.android.data.sharing.shares.datasources.mapper.OCShareMapper
 import com.owncloud.android.data.sharing.shares.db.OCShareDao
 import com.owncloud.android.data.sharing.shares.db.OCShareEntity
 import com.owncloud.android.data.utils.DataTestUtil
 import com.owncloud.android.data.utils.LiveDataTestUtil.getValue
+import com.owncloud.android.domain.sharing.shares.model.ShareType
 import io.mockk.every
 import io.mockk.mockkClass
 import org.junit.Assert.assertEquals
@@ -51,11 +52,10 @@ class OCLocalDataSourceTest {
             db.shareDao()
         } returns ocSharesDao
 
-        val context = InstrumentationRegistry.getInstrumentation().targetContext
         ocLocalSharesDataSource =
             OCLocalShareDataSource(
-                context,
-                ocSharesDao
+                ocSharesDao,
+                OCShareMapper()
             )
     }
 
@@ -85,7 +85,7 @@ class OCLocalDataSourceTest {
     @Test
     fun readLocalPrivateShares() {
         val privateSharesAsLiveData: MutableLiveData<List<OCShareEntity>> = MutableLiveData()
-        privateSharesAsLiveData.value = privateShares
+//        privateSharesAsLiveData.value = privateShares
 
         every {
             ocSharesDao.getSharesAsLiveData(
@@ -101,23 +101,23 @@ class OCLocalDataSourceTest {
             )
         )
 
-        assertEquals(2, shares.size)
+        assertEquals(2, shares?.size)
 
-        assertEquals("/Docs/doc1.doc", shares[0].path)
-        assertEquals(false, shares[0].isFolder)
-        assertEquals("username", shares[0].shareWith)
-        assertEquals("Sophie", shares[0].sharedWithDisplayName)
+        assertEquals("/Docs/doc1.doc", shares?.first()?.path)
+        assertEquals(false, shares?.first()?.isFolder)
+        assertEquals("username", shares?.first()?.shareWith)
+        assertEquals("Sophie", shares?.first()?.sharedWithDisplayName)
 
-        assertEquals("/Docs/doc1.doc", shares[1].path)
-        assertEquals(false, shares[1].isFolder)
-        assertEquals("user.name", shares[1].shareWith)
-        assertEquals("Nicole", shares[1].sharedWithDisplayName)
+        assertEquals("/Docs/doc1.doc", shares?.get(1)?.path)
+        assertEquals(false, shares?.get(1)?.isFolder)
+        assertEquals("user.name", shares?.get(1)?.shareWith)
+        assertEquals("Nicole", shares?.get(1)?.sharedWithDisplayName)
     }
 
     @Test
     fun insertPrivateShares() {
         val privateSharesAsLiveData: MutableLiveData<List<OCShareEntity>> = MutableLiveData()
-        privateSharesAsLiveData.value = privateShares
+//        privateSharesAsLiveData.value = privateShares
 
         every {
             ocSharesDao.insert(
