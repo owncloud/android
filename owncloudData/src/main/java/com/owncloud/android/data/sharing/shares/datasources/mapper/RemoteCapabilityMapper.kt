@@ -36,7 +36,7 @@ class RemoteCapabilityMapper : RemoteMapper<OCCapability, RemoteCapability> {
                 versionEdition = remote.versionEdition,
                 corePollInterval = remote.corePollinterval,
                 filesSharingApiEnabled = CapabilityBooleanType.fromValue(remote.filesSharingApiEnabled.value)!!,
-                filesSharingSearchMinLength = CapabilityBooleanType.fromValue(remote.filesSharingSearchMinLength.value)!!,
+                filesSharingSearchMinLength = remote.filesSharingSearchMinLength.value,
                 filesSharingPublicEnabled = CapabilityBooleanType.fromValue(remote.filesSharingPublicEnabled.value)!!,
                 filesSharingPublicPasswordEnforced =
                 CapabilityBooleanType.fromValue(remote.filesSharingPublicPasswordEnforced.value)!!,
