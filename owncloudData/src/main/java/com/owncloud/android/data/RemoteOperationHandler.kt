@@ -70,14 +70,14 @@ import com.owncloud.android.domain.exceptions.WrongServerResponseException
 import com.owncloud.android.domain.sharing.sharees.exceptions.GetShareesGenericException
 import com.owncloud.android.domain.sharing.shares.exceptions.CreateShareForbiddenException
 import com.owncloud.android.domain.sharing.shares.exceptions.CreateShareGenericException
-import com.owncloud.android.domain.sharing.shares.exceptions.CreateShareNotFoundException
+import com.owncloud.android.domain.sharing.shares.exceptions.CreateShareFileNotFoundException
 import com.owncloud.android.domain.sharing.shares.exceptions.GetSharesGenericException
 import com.owncloud.android.domain.sharing.shares.exceptions.RemoveShareForbiddenException
 import com.owncloud.android.domain.sharing.shares.exceptions.RemoveShareGenericException
-import com.owncloud.android.domain.sharing.shares.exceptions.RemoveShareNotFoundException
+import com.owncloud.android.domain.sharing.shares.exceptions.RemoveShareFileNotFoundException
 import com.owncloud.android.domain.sharing.shares.exceptions.UpdateShareForbiddenException
 import com.owncloud.android.domain.sharing.shares.exceptions.UpdateShareGenericException
-import com.owncloud.android.domain.sharing.shares.exceptions.UpdateShareNotFoundException
+import com.owncloud.android.domain.sharing.shares.exceptions.UpdateShareFileNotFoundException
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.operations.RemoteOperation
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
@@ -106,9 +106,9 @@ private fun <T> handleRemoteOperationResult(
     when (remoteOperationResult.code) {
         RemoteOperationResult.ResultCode.SHARE_NOT_FOUND -> {
             when (remoteOperation) {
-                is CreateRemoteShareOperation -> throw CreateShareNotFoundException()
-                is UpdateRemoteShareOperation -> throw UpdateShareNotFoundException()
-                is RemoveRemoteShareOperation -> throw RemoveShareNotFoundException()
+                is CreateRemoteShareOperation -> throw CreateShareFileNotFoundException()
+                is UpdateRemoteShareOperation -> throw UpdateShareFileNotFoundException()
+                is RemoveRemoteShareOperation -> throw RemoveShareFileNotFoundException()
             }
         }
 

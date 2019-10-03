@@ -24,6 +24,8 @@ import com.owncloud.android.data.sharing.shares.db.OCShareEntity
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.shares.GetRemoteShareesOperation
 import com.owncloud.android.lib.resources.shares.RemoteShare
+import com.owncloud.android.lib.resources.shares.ShareType
+import com.owncloud.android.lib.resources.status.CapabilityBooleanType
 import com.owncloud.android.lib.resources.status.RemoteCapability
 import io.mockk.every
 import io.mockk.mockk
@@ -333,11 +335,11 @@ object DataTestUtil {
         return remoteOperationResult
     }
 
-    fun createFile(name: String = "default") = OCFile("/Photos").apply {
-        availableOfflineStatus = OCFile.AvailableOfflineStatus.NOT_AVAILABLE_OFFLINE
-        fileName = name
-        fileId = 9456985479
-        remoteId = "1"
-        privateLink = "private link"
-    }
+//    fun createFile(name: String = "default") = OCFile("/Photos").apply {
+//        availableOfflineStatus = OCFile.AvailableOfflineStatus.NOT_AVAILABLE_OFFLINE
+//        fileName = name
+//        fileId = 9456985479
+//        remoteId = "1"
+//        privateLink = "private link"
+//    }
 }

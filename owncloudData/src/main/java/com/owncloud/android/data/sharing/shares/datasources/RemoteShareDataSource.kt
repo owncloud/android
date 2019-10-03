@@ -60,11 +60,11 @@ interface RemoteShareDataSource {
 
     fun updateShare(
         remoteId: Long,
-        name: String,
-        password: String?,
-        expirationDateInMillis: Long,
+        name: String = "",
+        password: String? = "",
+        expirationDateInMillis: Long = INIT_EXPIRATION_DATE_IN_MILLIS,
         permissions: Int,
-        publicUpload: Boolean,
+        publicUpload: Boolean = false,
         accountName: String,
         updateRemoteShareOperation: UpdateRemoteShareOperation =
             UpdateRemoteShareOperation(
@@ -78,5 +78,5 @@ interface RemoteShareDataSource {
             RemoveRemoteShareOperation(
                 remoteId
             )
-    ): RemoteOperationResult<ShareParserResult>
+    )
 }

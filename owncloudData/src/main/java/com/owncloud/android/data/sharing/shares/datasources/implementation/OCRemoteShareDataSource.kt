@@ -108,10 +108,9 @@ class OCRemoteShareDataSource(
         }
     }
 
-    override fun deleteShare(
-        remoteId: Long,
-        removeRemoteShareOperation: RemoveRemoteShareOperation
-    ): RemoteOperationResult<ShareParserResult> {
-        return removeRemoteShareOperation.execute(client)
+    override fun deleteShare(remoteId: Long, removeRemoteShareOperation: RemoveRemoteShareOperation) {
+        executeRemoteOperation(
+            removeRemoteShareOperation, client
+        )
     }
 }
