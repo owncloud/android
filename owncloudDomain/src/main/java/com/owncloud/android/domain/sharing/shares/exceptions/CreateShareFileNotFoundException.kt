@@ -21,4 +21,4 @@ package com.owncloud.android.domain.sharing.shares.exceptions
 
 import java.lang.Exception
 
-class CreateShareNotFoundException : Exception()
+class CreateShareFileNotFoundException : Exception()
