@@ -21,9 +21,9 @@ package com.owncloud.android.data.capabilities.datasources
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
-import androidx.test.platform.app.InstrumentationRegistry
 import com.owncloud.android.data.OwncloudDatabase
 import com.owncloud.android.data.capabilities.datasources.implementation.OCLocalCapabilitiesDataSource
+import com.owncloud.android.data.capabilities.datasources.mapper.OCCapabilityMapper
 import com.owncloud.android.data.capabilities.db.OCCapabilityDao
 import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
 import com.owncloud.android.data.utils.DataTestUtil
@@ -54,7 +54,7 @@ class OCLocalCapabilitiesDataSourceTest {
         } returns ocCapabilityDao
 
         val capabilityAsLiveData: MutableLiveData<OCCapabilityEntity> = MutableLiveData()
-        capabilityAsLiveData.value = DataTestUtil.createCapability(
+        capabilityAsLiveData.value = DataTestUtil.createCapabilityEntity(
             "user@server1", 5, 4, 3
         )
 
@@ -65,7 +65,7 @@ class OCLocalCapabilitiesDataSourceTest {
         } returns capabilityAsLiveData
 
         val newCapabilityAsLiveData: MutableLiveData<OCCapabilityEntity> = MutableLiveData()
-        newCapabilityAsLiveData.value = DataTestUtil.createCapability(
+        newCapabilityAsLiveData.value = DataTestUtil.createCapabilityEntity(
             "user@server2", 2, 1, 0
         )
 
@@ -75,12 +75,10 @@ class OCLocalCapabilitiesDataSourceTest {
             )
         } returns newCapabilityAsLiveData
 
-        val context = InstrumentationRegistry.getInstrumentation().targetContext
-
         ocLocalCapabilitiesDataSource =
             OCLocalCapabilitiesDataSource(
-                context,
-                ocCapabilityDao
+                ocCapabilityDao,
+                OCCapabilityMapper()
             )
     }
 
@@ -91,10 +89,10 @@ class OCLocalCapabilitiesDataSourceTest {
                 "user@server1"
             )
         )
-        assertEquals("user@server1", capability.accountName)
-        assertEquals(5, capability.versionMayor)
-        assertEquals(4, capability.versionMinor)
-        assertEquals(3, capability.versionMicro)
+        assertEquals("user@server1", capability?.accountName)
+        assertEquals(5, capability?.versionMayor)
+        assertEquals(4, capability?.versionMinor)
+        assertEquals(3, capability?.versionMicro)
     }
 
     @Test
@@ -115,9 +113,9 @@ class OCLocalCapabilitiesDataSourceTest {
                 "user@server2"
             )
         )
-        assertEquals("user@server2", capability.accountName)
-        assertEquals(2, capability.versionMayor)
-        assertEquals(1, capability.versionMinor)
-        assertEquals(0, capability.versionMicro)
+        assertEquals("user@server2", capability?.accountName)
+        assertEquals(2, capability?.versionMayor)
+        assertEquals(1, capability?.versionMinor)
+        assertEquals(0, capability?.versionMicro)
     }
 }
