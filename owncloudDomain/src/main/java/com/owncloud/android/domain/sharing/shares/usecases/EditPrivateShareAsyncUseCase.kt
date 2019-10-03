@@ -19,14 +19,14 @@
 
 package com.owncloud.android.domain.sharing.shares.usecases
 
-import com.owncloud.android.domain.BaseAsyncUseCase
 import com.owncloud.android.domain.sharing.shares.ShareRepository
+import com.owncloud.android.domain.BaseUseCaseWithResult
 
 class EditPrivateShareAsyncUseCase(
     private val shareRepository: ShareRepository
-) : BaseAsyncUseCase<Unit, EditPrivateShareAsyncUseCase.Params>() {
+) : BaseUseCaseWithResult<Unit, EditPrivateShareAsyncUseCase.Params>() {
 
-    override suspend fun run(params: Params): Unit =
+    override fun run(params: Params): Unit =
         shareRepository.updatePrivateShare(
             params.remoteId,
             params.permissions,

@@ -47,9 +47,9 @@ data class OCCapabilityEntity(
     val versionEdition: String?,
     @ColumnInfo(name = ProviderTableMeta.CAPABILITIES_CORE_POLLINTERVAL)
     val corePollInterval: Int,
-    val filesSharingApiEnabled: Int?,
+    val filesSharingApiEnabled: Int,
     @ColumnInfo(name = ProviderTableMeta.CAPABILITIES_SHARING_SEARCH_MIN_LENGTH)
-    val filesSharingSearchMinLength: Int?,
+    val filesSharingSearchMinLength: Int,
     @ColumnInfo(name = ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_ENABLED)
     val filesSharingPublicEnabled: Int,
     @ColumnInfo(name = ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED)

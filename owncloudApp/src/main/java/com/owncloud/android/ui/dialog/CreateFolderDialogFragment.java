@@ -128,7 +128,7 @@ public class CreateFolderDialogFragment
                 return;
             }
 
-            if (!FileUtils.isValidName(newFolderName)) {
+            if (!FileUtils.isValidName(newFolderName, serverWithForbiddenChars)) {
                 showSnackMessage(R.string.filename_forbidden_charaters_from_server);
                 return;
             }

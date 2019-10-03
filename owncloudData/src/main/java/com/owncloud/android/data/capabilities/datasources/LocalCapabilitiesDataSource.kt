@@ -21,16 +21,16 @@
 package com.owncloud.android.data.capabilities.datasources
 
 import androidx.lifecycle.LiveData
-import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
+import com.owncloud.android.domain.capabilities.model.OCCapability
 
 interface LocalCapabilitiesDataSource {
     fun getCapabilitiesForAccountAsLiveData(
         accountName: String
-    ): LiveData<OCCapabilityEntity>
+    ): LiveData<OCCapability?>
 
     fun getCapabilityForAccount(
         accountName: String
-    ): OCCapabilityEntity
+    ): OCCapability?
 
-    fun insert(ocCapabilities: List<OCCapabilityEntity>)
+    fun insert(ocCapabilities: List<OCCapability>)
 }

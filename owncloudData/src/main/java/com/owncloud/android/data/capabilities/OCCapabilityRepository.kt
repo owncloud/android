@@ -37,9 +37,9 @@ class OCCapabilityRepository(
 
     override fun getStoredCapabilities(
         accountName: String
-    ): OCCapabilityEntity = localCapabilitiesDataSource.getCapabilityForAccount(accountName)
+    ): OCCapability? = localCapabilitiesDataSource.getCapabilityForAccount(accountName)
 
-    override suspend fun refreshCapabilitiesForAccount(
+    override fun refreshCapabilitiesForAccount(
         accountName: String
     ) {
         remoteCapabilitiesDataSource.getCapabilities(
