@@ -17,24 +17,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.domain.sharing.sharees
+package com.owncloud.android.domain
 
-import com.owncloud.android.domain.BaseUseCaseWithResult
-import org.json.JSONObject
+/**
+ * Parent class for use cases that require network operations
+ */
+abstract class BaseUseCaseWithResult<out Type, in Params> {
+    protected abstract fun run(params: Params): Type
 
-class GetShareesAsyncUseCase(
-    private val shareeRepository: ShareeRepository
-) : BaseUseCaseWithResult<ArrayList<JSONObject>, GetShareesAsyncUseCase.Params>() {
-    override fun run(params: Params): ArrayList<JSONObject> =
-        shareeRepository.getSharees(
-            params.searchString,
-            params.page,
-            params.perPage
-        )
-
-    data class Params(
-        val searchString: String,
-        val page: Int,
-        val perPage: Int
-    )
+    fun execute(params: Params): UseCaseResult<Type> =
+        try {
+            UseCaseResult.Success(run(params))
+        } catch (throwable: Throwable) {
+            UseCaseResult.Error(throwable)
+        }
 }

@@ -30,7 +30,7 @@ import com.owncloud.android.lib.resources.shares.ShareParserResult
 import com.owncloud.android.lib.resources.shares.UpdateRemoteShareOperation
 
 interface RemoteShareDataSource {
-    suspend fun getShares(
+    fun getShares(
         remoteFilePath: String,
         reshares: Boolean,
         subfiles: Boolean,
@@ -39,7 +39,7 @@ interface RemoteShareDataSource {
             GetRemoteSharesForFileOperation(remoteFilePath, reshares, subfiles)
     ): List<OCShare>
 
-    suspend fun insertShare(
+    fun insertShare(
         remoteFilePath: String,
         shareType: ShareType,
         shareWith: String,
@@ -58,7 +58,7 @@ interface RemoteShareDataSource {
             )
     ): OCShare
 
-    suspend fun updateShare(
+    fun updateShare(
         remoteId: Long,
         name: String,
         password: String?,

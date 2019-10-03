@@ -17,18 +17,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.domain
+package com.owncloud.android.domain.sharing.shares.exceptions
 
-/**
- * Needs to be called from a coroutine, parent class for use cases that require network operations
- */
-abstract class BaseAsyncUseCase<out Type, in Params> {
-    protected abstract suspend fun run(params: Params): Type
+import java.lang.Exception
 
-    suspend fun execute(params: Params): UseCaseResult<Type> =
-        try {
-            UseCaseResult.Success(run(params))
-        } catch (throwable: Throwable) {
-            UseCaseResult.Error(throwable)
-        }
-}
+class CreateShareForbiddenException : Exception()

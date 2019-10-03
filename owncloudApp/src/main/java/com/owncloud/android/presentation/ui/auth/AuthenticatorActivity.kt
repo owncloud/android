@@ -1629,7 +1629,7 @@ class AuthenticatorActivity : AccountAuthenticatorActivity(), OnRemoteOperationL
      * Used to trigger the authentication check when the user presses 'enter' after writing the
      * password, or to throw the server test when the only field on screen is the URL input field.
      */
-    override fun onEditorAction(inputField: TextView?, actionId: Int, event: KeyEvent): Boolean {
+    override fun onEditorAction(inputField: TextView?, actionId: Int, event: KeyEvent?): Boolean {
         if (actionId == EditorInfo.IME_ACTION_DONE && inputField != null &&
             inputField == passwordInput
         ) {

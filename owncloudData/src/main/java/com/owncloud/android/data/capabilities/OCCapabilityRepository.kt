@@ -34,7 +34,7 @@ class OCCapabilityRepository(
         return localCapabilitiesDataSource.getCapabilitiesForAccountAsLiveData(accountName)
     }
 
-    override suspend fun refreshCapabilitiesForAccount(
+    override fun refreshCapabilitiesForAccount(
         accountName: String
     ) {
         remoteCapabilitiesDataSource.getCapabilities(

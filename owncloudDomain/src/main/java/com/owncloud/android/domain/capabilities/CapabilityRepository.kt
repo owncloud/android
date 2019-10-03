@@ -23,7 +23,7 @@ import androidx.lifecycle.LiveData
 import com.owncloud.android.domain.capabilities.model.OCCapability
 
 interface CapabilityRepository {
-    suspend fun refreshCapabilitiesForAccount(
+    fun refreshCapabilitiesForAccount(
         accountName: String
     )
 

@@ -23,14 +23,7 @@ import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.owncloud.android.lib.common.authentication.OwnCloudCredentials
-import com.owncloud.android.operations.common.OperationType
 import com.owncloud.android.presentation.UIResult
-import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class OCAuthViewModel(
     val context: Context

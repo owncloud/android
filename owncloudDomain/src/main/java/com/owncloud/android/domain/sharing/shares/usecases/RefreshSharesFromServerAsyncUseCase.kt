@@ -20,13 +20,13 @@
 package com.owncloud.android.domain.sharing.shares.usecases
 
 import com.owncloud.android.domain.sharing.shares.ShareRepository
-import com.owncloud.android.domain.BaseAsyncUseCase
+import com.owncloud.android.domain.BaseUseCaseWithResult
 
 class RefreshSharesFromServerAsyncUseCase(
     private val shareRepository: ShareRepository
-) : BaseAsyncUseCase<Unit, RefreshSharesFromServerAsyncUseCase.Params>() {
+) : BaseUseCaseWithResult<Unit, RefreshSharesFromServerAsyncUseCase.Params>() {
 
-    override suspend fun run(params: Params) =
+    override fun run(params: Params) =
         shareRepository.refreshSharesFromNetwork(
             params.filePath,
             params.accountName

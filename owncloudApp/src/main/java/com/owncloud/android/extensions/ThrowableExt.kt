@@ -21,10 +21,76 @@ package com.owncloud.android.extensions
 
 import android.content.res.Resources
 import com.owncloud.android.R
+import com.owncloud.android.domain.capabilities.exceptions.GetCapabilitiesGenericException
+import com.owncloud.android.domain.exceptions.AccountNotNewException
+import com.owncloud.android.domain.exceptions.AccountNotTheSameException
+import com.owncloud.android.domain.exceptions.BadOcVersionException
+import com.owncloud.android.domain.exceptions.FileNotFoundException
+import com.owncloud.android.domain.exceptions.IncorrectAddressException
+import com.owncloud.android.domain.exceptions.InstanceNotConfiguredException
 import com.owncloud.android.domain.exceptions.NoConnectionWithServerException
+import com.owncloud.android.domain.exceptions.NoNetworkConnectionException
+import com.owncloud.android.domain.exceptions.OAuth2ErrorAccessDeniedException
+import com.owncloud.android.domain.exceptions.OAuth2ErrorException
+import com.owncloud.android.domain.exceptions.RedirectToNonSecureException
+import com.owncloud.android.domain.exceptions.SSLErrorException
+import com.owncloud.android.domain.exceptions.SSLRecoverablePeerUnverifiedException
+import com.owncloud.android.domain.exceptions.ServerConnectionTimeoutException
+import com.owncloud.android.domain.exceptions.ServerNotReachableException
+import com.owncloud.android.domain.exceptions.ServerResponseTimeoutException
+import com.owncloud.android.domain.exceptions.ServiceUnavailableException
+import com.owncloud.android.domain.exceptions.UnauthorizedException
+import com.owncloud.android.domain.sharing.sharees.exceptions.GetShareesGenericException
+import com.owncloud.android.domain.sharing.shares.exceptions.CreateShareForbiddenException
+import com.owncloud.android.domain.sharing.shares.exceptions.CreateShareGenericException
+import com.owncloud.android.domain.sharing.shares.exceptions.CreateShareNotFoundException
+import com.owncloud.android.domain.sharing.shares.exceptions.GetSharesGenericException
+import com.owncloud.android.domain.sharing.shares.exceptions.RemoveShareForbiddenException
+import com.owncloud.android.domain.sharing.shares.exceptions.RemoveShareGenericException
+import com.owncloud.android.domain.sharing.shares.exceptions.RemoveShareNotFoundException
+import com.owncloud.android.domain.sharing.shares.exceptions.UpdateShareForbiddenException
+import com.owncloud.android.domain.sharing.shares.exceptions.UpdateShareGenericException
+import com.owncloud.android.domain.sharing.shares.exceptions.UpdateShareNotFoundException
 
 fun Throwable?.parseError(resources: Resources): CharSequence? =
     when(this) {
+        // Capabilities
+        is GetCapabilitiesGenericException -> resources.getString(R.string.get_capabilities_error)
+
+
+        // Shares
+        is CreateShareNotFoundException -> resources.getString(R.string.share_link_file_no_exist)
+        is UpdateShareNotFoundException -> resources.getString(R.string.update_link_file_no_exist)
+        is RemoveShareNotFoundException -> resources.getString(R.string.unshare_link_file_no_exist)
+
+        is CreateShareForbiddenException -> resources.getString(R.string.share_link_forbidden_permissions)
+        is UpdateShareForbiddenException -> resources.getString(R.string.update_link_forbidden_permissions)
+        is RemoveShareForbiddenException -> resources.getString(R.string.unshare_link_forbidden_permissions)
+
+        is GetSharesGenericException -> resources.getString(R.string.get_shares_error)
+        is GetShareesGenericException -> resources.getString(R.string.get_sharees_error)
+        is CreateShareGenericException -> resources.getString(R.string.share_link_file_error)
+        is UpdateShareGenericException -> resources.getString(R.string.update_link_file_error)
+        is RemoveShareGenericException -> resources.getString(R.string.unshare_link_file_error)
+
+
         is NoConnectionWithServerException -> resources.getString(R.string.network_error_socket_exception)
+        is NoNetworkConnectionException -> resources.getString(R.string.error_no_network_connection)
+        is ServerResponseTimeoutException -> resources.getString(R.string.network_error_socket_timeout_exception)
+        is ServerConnectionTimeoutException -> resources.getString(R.string.network_error_connect_timeout_exception)
+        is ServerNotReachableException -> resources.getString(R.string.network_host_not_available)
+        is ServiceUnavailableException -> resources.getString(R.string.service_unavailable)
+        is SSLRecoverablePeerUnverifiedException -> resources.getString(R.string.ssl_certificate_not_trusted)
+        is BadOcVersionException -> resources.getString(R.string.auth_bad_oc_version_title)
+        is IncorrectAddressException -> resources.getString(R.string.auth_incorrect_address_title)
+        is SSLErrorException -> resources.getString(R.string.auth_ssl_general_error_title)
+        is UnauthorizedException -> resources.getString(R.string.auth_unauthorized)
+        is InstanceNotConfiguredException -> resources.getString(R.string.auth_not_configured_title)
+        is FileNotFoundException -> resources.getString(R.string.auth_incorrect_path_title)
+        is OAuth2ErrorException -> resources.getString(R.string.auth_oauth_error)
+        is OAuth2ErrorAccessDeniedException -> resources.getString(R.string.auth_oauth_error_access_denied)
+        is AccountNotNewException -> resources.getString(R.string.auth_account_not_new)
+        is AccountNotTheSameException -> resources.getString(R.string.auth_account_not_the_same)
+        is RedirectToNonSecureException -> resources.getString(R.string.auth_redirect_non_secure_connection_title)
         else -> resources.getString(R.string.common_error_unknown)
     }

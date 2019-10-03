@@ -36,7 +36,7 @@ class OCShareRepository(
      ******************************************* PRIVATE SHARES *******************************************
      ******************************************************************************************************/
 
-    override suspend fun insertPrivateShare(
+    override fun insertPrivateShare(
         filePath: String,
         shareType: ShareType?,
         shareeName: String,     // User or group name of the target sharee.
@@ -56,7 +56,7 @@ class OCShareRepository(
         )
     }
 
-    override suspend fun updatePrivateShare(remoteId: Long, permissions: Int, accountName: String) {
+    override fun updatePrivateShare(remoteId: Long, permissions: Int, accountName: String) {
         return updateShare(
             remoteId = remoteId,
             permissions = permissions,
@@ -68,7 +68,7 @@ class OCShareRepository(
      ******************************************* PUBLIC SHARES ********************************************
      ******************************************************************************************************/
 
-    override suspend fun insertPublicShare(
+    override fun insertPublicShare(
         filePath: String,
         permissions: Int,
         name: String,
@@ -89,7 +89,7 @@ class OCShareRepository(
         )
     }
 
-    override suspend fun updatePublicShare(
+    override fun updatePublicShare(
         remoteId: Long,
         name: String,
         password: String?,
@@ -109,7 +109,7 @@ class OCShareRepository(
         )
     }
 
-    override suspend fun deleteShare(remoteId: Long) {
+    override fun deleteShare(remoteId: Long) {
         remoteShareDataSource.deleteShare(remoteId)
         localShareDataSource.deleteShare(remoteId)
     }
@@ -132,7 +132,7 @@ class OCShareRepository(
     override fun getShareAsLiveData(remoteId: Long): LiveData<OCShare> =
         localShareDataSource.getShareAsLiveData(remoteId)
 
-    override suspend fun refreshSharesFromNetwork(
+    override fun refreshSharesFromNetwork(
         filePath: String,
         accountName: String
     ) {
@@ -150,7 +150,7 @@ class OCShareRepository(
         }
     }
 
-    private suspend fun insertShare(
+    private fun insertShare(
         filePath: String,
         shareType: ShareType,
         shareWith: String = "",
@@ -176,7 +176,7 @@ class OCShareRepository(
         }
     }
 
-    private suspend fun updateShare(
+    private fun updateShare(
         remoteId: Long,
         permissions: Int,
         name: String = "",
