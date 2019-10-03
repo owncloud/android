@@ -43,36 +43,32 @@ import com.owncloud.android.domain.exceptions.UnauthorizedException
 import com.owncloud.android.domain.sharing.sharees.exceptions.GetShareesGenericException
 import com.owncloud.android.domain.sharing.shares.exceptions.CreateShareForbiddenException
 import com.owncloud.android.domain.sharing.shares.exceptions.CreateShareGenericException
-import com.owncloud.android.domain.sharing.shares.exceptions.CreateShareNotFoundException
+import com.owncloud.android.domain.sharing.shares.exceptions.CreateShareFileNotFoundException
 import com.owncloud.android.domain.sharing.shares.exceptions.GetSharesGenericException
 import com.owncloud.android.domain.sharing.shares.exceptions.RemoveShareForbiddenException
 import com.owncloud.android.domain.sharing.shares.exceptions.RemoveShareGenericException
-import com.owncloud.android.domain.sharing.shares.exceptions.RemoveShareNotFoundException
+import com.owncloud.android.domain.sharing.shares.exceptions.RemoveShareFileNotFoundException
 import com.owncloud.android.domain.sharing.shares.exceptions.UpdateShareForbiddenException
 import com.owncloud.android.domain.sharing.shares.exceptions.UpdateShareGenericException
-import com.owncloud.android.domain.sharing.shares.exceptions.UpdateShareNotFoundException
+import com.owncloud.android.domain.sharing.shares.exceptions.UpdateShareFileNotFoundException
 
 fun Throwable?.parseError(resources: Resources): CharSequence? =
     when(this) {
         // Capabilities
         is GetCapabilitiesGenericException -> resources.getString(R.string.get_capabilities_error)
 
-
         // Shares
-        is CreateShareNotFoundException -> resources.getString(R.string.share_link_file_no_exist)
-        is UpdateShareNotFoundException -> resources.getString(R.string.update_link_file_no_exist)
-        is RemoveShareNotFoundException -> resources.getString(R.string.unshare_link_file_no_exist)
-
+        is CreateShareFileNotFoundException -> resources.getString(R.string.share_link_file_no_exist)
+        is UpdateShareFileNotFoundException -> resources.getString(R.string.update_link_file_no_exist)
+        is RemoveShareFileNotFoundException -> resources.getString(R.string.unshare_link_file_no_exist)
         is CreateShareForbiddenException -> resources.getString(R.string.share_link_forbidden_permissions)
         is UpdateShareForbiddenException -> resources.getString(R.string.update_link_forbidden_permissions)
         is RemoveShareForbiddenException -> resources.getString(R.string.unshare_link_forbidden_permissions)
-
         is GetSharesGenericException -> resources.getString(R.string.get_shares_error)
         is GetShareesGenericException -> resources.getString(R.string.get_sharees_error)
         is CreateShareGenericException -> resources.getString(R.string.share_link_file_error)
         is UpdateShareGenericException -> resources.getString(R.string.update_link_file_error)
         is RemoveShareGenericException -> resources.getString(R.string.unshare_link_file_error)
-
 
         is NoConnectionWithServerException -> resources.getString(R.string.network_error_socket_exception)
         is NoNetworkConnectionException -> resources.getString(R.string.error_no_network_connection)
