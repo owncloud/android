@@ -21,7 +21,18 @@
 package com.owncloud.android.data.shares.datasources
 
 import com.owncloud.android.data.sharing.shares.datasources.implementation.OCRemoteShareDataSource
+import com.owncloud.android.data.sharing.shares.datasources.mapper.RemoteShareMapper
 import com.owncloud.android.data.utils.DataTestUtil
+import com.owncloud.android.domain.sharing.shares.exceptions.CreateShareFileNotFoundException
+import com.owncloud.android.domain.sharing.shares.exceptions.CreateShareForbiddenException
+import com.owncloud.android.domain.sharing.shares.exceptions.CreateShareGenericException
+import com.owncloud.android.domain.sharing.shares.exceptions.RemoveShareFileNotFoundException
+import com.owncloud.android.domain.sharing.shares.exceptions.RemoveShareForbiddenException
+import com.owncloud.android.domain.sharing.shares.exceptions.RemoveShareGenericException
+import com.owncloud.android.domain.sharing.shares.exceptions.UpdateShareFileNotFoundException
+import com.owncloud.android.domain.sharing.shares.exceptions.UpdateShareForbiddenException
+import com.owncloud.android.domain.sharing.shares.exceptions.UpdateShareGenericException
+import com.owncloud.android.domain.sharing.shares.model.ShareType
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.shares.CreateRemoteShareOperation
@@ -41,11 +52,11 @@ import org.junit.Test
 class OCRemoteSharesDataSourceTest {
     private lateinit var ocRemoteSharesDataSource: OCRemoteShareDataSource
     private val ownCloudClient = mockkClass(OwnCloudClient::class)
+    private val remoteShareMapper = RemoteShareMapper()
 
     @Before
     fun init() {
-        ocRemoteSharesDataSource =
-            OCRemoteShareDataSource(ownCloudClient)
+        ocRemoteSharesDataSource = OCRemoteShareDataSource(ownCloudClient, remoteShareMapper)
     }
 
     /******************************************************************************************************
@@ -76,18 +87,16 @@ class OCRemoteSharesDataSourceTest {
         } returns createRemoteShareOperationResult
 
         // Insert share on remote datasource
-        val remoteOperationResult = ocRemoteSharesDataSource.insertShare(
+        val privateShareAdded = ocRemoteSharesDataSource.insertShare(
             remoteFilePath = "Photos/",
             shareType = ShareType.USER,
             shareWith = "user",
             permissions = 1,
+            accountName = "user@server",
             createRemoteShareOperation = createShareOperation
         )
 
-        assertThat(remoteOperationResult, notNullValue())
-        assertEquals(1, remoteOperationResult.data.shares.size)
-
-        val privateShareAdded = remoteOperationResult.data.shares[0]
+        assertThat(privateShareAdded, notNullValue())
 
         assertEquals("Photos/", privateShareAdded.path)
         assertEquals(true, privateShareAdded.isFolder)
@@ -98,12 +107,12 @@ class OCRemoteSharesDataSourceTest {
 
     @Test
     fun updatePrivateShare() {
-        val updateRemoteShareOperation = mock(UpdateRemoteShareOperation::class.java)
+        val updateRemoteShareOperation = mockk<UpdateRemoteShareOperation>(relaxed = true)
 
-        val updateRemoteShareOperationResult = TestUtil.createRemoteOperationResultMock(
+        val updateRemoteShareOperationResult = DataTestUtil.createRemoteOperationResultMock(
             ShareParserResult(
                 arrayListOf(
-                    TestUtil.createRemoteShare(
+                    DataTestUtil.createRemoteShare(
                         shareType = ShareType.USER.value,
                         path = "Images/image_1.mp4",
                         shareWith = "user",
@@ -117,21 +126,19 @@ class OCRemoteSharesDataSourceTest {
             true
         )
 
-        `when`(updateRemoteShareOperation.execute(ownCloudClient)).thenReturn(
-            updateRemoteShareOperationResult
-        )
+        every {
+            updateRemoteShareOperation.execute(ownCloudClient)
+        } returns updateRemoteShareOperationResult
 
         // Update share on remote datasource
-        val remoteOperationResult = ocRemoteSharesDataSource.updateShare(
+        val privateShareUpdated = ocRemoteSharesDataSource.updateShare(
             remoteId = 3,
             permissions = 17,
+            accountName = "user@server",
             updateRemoteShareOperation = updateRemoteShareOperation
         )
 
-        assertThat(remoteOperationResult, notNullValue())
-        assertEquals(1, remoteOperationResult.data.shares.size)
-
-        val privateShareUpdated = remoteOperationResult.data.shares[0]
+        assertThat(privateShareUpdated, notNullValue())
 
         assertEquals("Images/image_1.mp4", privateShareUpdated.path)
         assertEquals("user", privateShareUpdated.shareWith)
@@ -146,7 +153,7 @@ class OCRemoteSharesDataSourceTest {
 
     @Test
     fun insertPublicShare() {
-        val createShareOperation = mockk<CreateRemoteShareOperation>(relaxed = true)
+        val createRemoteShareOperation = mockk<CreateRemoteShareOperation>(relaxed = true)
 
         val createRemoteShareOperationResult = DataTestUtil.createRemoteOperationResultMock(
             ShareParserResult(
@@ -164,26 +171,20 @@ class OCRemoteSharesDataSourceTest {
         )
 
         every {
-            createShareOperation.execute(ownCloudClient)
+            createRemoteShareOperation.execute(ownCloudClient)
         } returns createRemoteShareOperationResult
 
         // Insert share on remote datasource
-        val remoteOperationResult = ocRemoteSharesDataSource.insertShare(
+        val publicShareAdded = ocRemoteSharesDataSource.insertShare(
             "Photos/img1.png",
             ShareType.PUBLIC_LINK,
             "",
             1,
-            "img1 link",
-            "1234",
-            -1,
-            false,
-            createShareOperation
+            accountName = "user@server",
+            createRemoteShareOperation = createRemoteShareOperation
         )
 
-        assertThat(remoteOperationResult, notNullValue())
-        assertEquals(1, remoteOperationResult.data.shares.size)
-
-        val publicShareAdded = remoteOperationResult.data.shares[0]
+        assertThat(publicShareAdded, notNullValue())
 
         assertEquals("", publicShareAdded.shareWith)
         assertEquals(1, publicShareAdded.permissions)
@@ -191,41 +192,6 @@ class OCRemoteSharesDataSourceTest {
         assertEquals("Photos/img1.png", publicShareAdded.path)
         assertEquals(false, publicShareAdded.isFolder)
         assertEquals("http://server:port/s/112ejbhdasyd1", publicShareAdded.shareLink)
-    }
-
-    @Test
-    fun insertPublicShareNoFile() {
-        val createRemoteShareOperation = mockk<CreateRemoteShareOperation>(relaxed = true)
-
-        val httpPhrase = "Wrong path, file/folder doesn't exist"
-        val createRemoteSharesOperationResult = DataTestUtil.createRemoteOperationResultMock(
-            ShareParserResult(arrayListOf()),
-            false,
-            httpPhrase,
-            RemoteOperationResult.ResultCode.SHARE_NOT_FOUND
-        )
-
-        every {
-            createRemoteShareOperation.execute(ownCloudClient)
-        } returns createRemoteSharesOperationResult
-
-        val remoteOperationResult = ocRemoteSharesDataSource.insertShare(
-            "Photos/img2.png",
-            ShareType.PUBLIC_LINK,
-            "",
-            1,
-            "img2 link",
-            "5678",
-            -1,
-            false,
-            createRemoteShareOperation
-        )
-
-        val publicSharesAdded = remoteOperationResult.data
-
-        assertEquals(0, publicSharesAdded.shares.size)
-        assertEquals(RemoteOperationResult.ResultCode.SHARE_NOT_FOUND, remoteOperationResult.code)
-        assertEquals(httpPhrase, remoteOperationResult.httpPhrase)
     }
 
     @Test
@@ -254,20 +220,14 @@ class OCRemoteSharesDataSourceTest {
         } returns updateRemoteShareOperationResult
 
         // Update share on remote datasource
-        val remoteOperationResult = ocRemoteSharesDataSource.updateShare(
-            3,
-            "Videos/video1.mp4",
-            "1234",
-            2000,
-            1,
-            false,
-            updateRemoteShareOperation
+        val publicShareUpdated = ocRemoteSharesDataSource.updateShare(
+            remoteId = 3,
+            permissions = 17,
+            accountName = "user@server",
+            updateRemoteShareOperation = updateRemoteShareOperation
         )
 
-        assertThat(remoteOperationResult, notNullValue())
-        assertEquals(1, remoteOperationResult.data.shares.size)
-
-        val publicShareUpdated = remoteOperationResult.data.shares[0]
+        assertThat(publicShareUpdated, notNullValue())
 
         assertEquals("video1 link updated", publicShareUpdated.name)
         assertEquals("Videos/video1.mp4", publicShareUpdated.path)
@@ -275,25 +235,6 @@ class OCRemoteSharesDataSourceTest {
         assertEquals(2000, publicShareUpdated.expirationDate)
         assertEquals(1, publicShareUpdated.permissions)
         assertEquals("http://server:port/s/1275farv", publicShareUpdated.shareLink)
-    }
-
-    @Test
-    fun deletePublicShare() {
-        val removeRemoteShareOperation = mockkClass(RemoveRemoteShareOperation::class)
-
-        val removeRemoteShareOperationResult = DataTestUtil.createRemoteOperationResultMock(
-            ShareParserResult(arrayListOf()),
-            isSuccess = true
-        )
-
-        every {
-            removeRemoteShareOperation.execute(ownCloudClient)
-        } returns removeRemoteShareOperationResult
-
-        val remoteOperationResult = ocRemoteSharesDataSource.deleteShare(1, removeRemoteShareOperation)
-
-        assertThat(remoteOperationResult, notNullValue())
-        assertEquals(true, remoteOperationResult.isSuccess)
     }
 
     /******************************************************************************************************
@@ -345,38 +286,38 @@ class OCRemoteSharesDataSourceTest {
         } returns getRemoteSharesOperationResult
 
         // Get shares from remote datasource
-        val remoteOperationResult = ocRemoteSharesDataSource.getShares(
+        val shares = ocRemoteSharesDataSource.getShares(
             "/Documents/doc",
             true,
             true,
+            "user@server",
             getRemoteSharesForFileOperation
         )
 
-        assertThat(remoteOperationResult, notNullValue())
-        assertEquals(4, remoteOperationResult.data.shares.size)
+        assertEquals(4, shares.size)
 
-        val publicShare1 = remoteOperationResult.data.shares[0]
+        val publicShare1 = shares[0]
         assertEquals(ShareType.PUBLIC_LINK, publicShare1.shareType)
         assertEquals("/Documents/doc", publicShare1.path)
         assertEquals(false, publicShare1.isFolder)
         assertEquals("Doc link", publicShare1.name)
         assertEquals("http://server:port/s/1", publicShare1.shareLink)
 
-        val publicShare2 = remoteOperationResult.data.shares[1]
+        val publicShare2 = shares[1]
         assertEquals(ShareType.PUBLIC_LINK, publicShare2.shareType)
         assertEquals("/Documents/doc", publicShare2.path)
         assertEquals(false, publicShare2.isFolder)
         assertEquals("Doc link 2", publicShare2.name)
         assertEquals("http://server:port/s/2", publicShare2.shareLink)
 
-        val userShare = remoteOperationResult.data.shares[2]
+        val userShare = shares[2]
         assertEquals(ShareType.USER, userShare.shareType)
         assertEquals("/Documents/doc", userShare.path)
         assertEquals(false, userShare.isFolder)
         assertEquals("steve", userShare.shareWith)
         assertEquals("Steve", userShare.sharedWithDisplayName)
 
-        val groupShare = remoteOperationResult.data.shares[3]
+        val groupShare = shares[3]
         assertEquals(ShareType.GROUP, groupShare.shareType)
         assertEquals("/Documents/doc", groupShare.path)
         assertEquals(false, groupShare.isFolder)
@@ -384,22 +325,127 @@ class OCRemoteSharesDataSourceTest {
         assertEquals("My family", groupShare.sharedWithDisplayName)
     }
 
+    @Test(expected = CreateShareFileNotFoundException::class)
+    fun insertShareFileNotFound() {
+        createShareOperationWithError(RemoteOperationResult.ResultCode.SHARE_NOT_FOUND)
+    }
+
+    @Test(expected = CreateShareForbiddenException::class)
+    fun insertShareForbidden() {
+        createShareOperationWithError(RemoteOperationResult.ResultCode.SHARE_FORBIDDEN)
+    }
+
+    @Test(expected = CreateShareGenericException::class)
+    fun insertShareGenericError() {
+        createShareOperationWithError()
+    }
+
+    private fun createShareOperationWithError(resultCode: RemoteOperationResult.ResultCode? = null) {
+        val createRemoteShareOperation = mockk<CreateRemoteShareOperation>(relaxed = true)
+
+        val createRemoteSharesOperationResult = DataTestUtil.createRemoteOperationResultMock(
+            ShareParserResult(arrayListOf()),
+            false,
+            null,
+            resultCode
+        )
+
+        every {
+            createRemoteShareOperation.execute(ownCloudClient)
+        } returns createRemoteSharesOperationResult
+
+        ocRemoteSharesDataSource.insertShare(
+            "Photos/img2.png",
+            ShareType.PUBLIC_LINK,
+            "",
+            1,
+            accountName = "user@server",
+            createRemoteShareOperation = createRemoteShareOperation
+        )
+    }
+
+    @Test(expected = UpdateShareFileNotFoundException::class)
+    fun updateShareFileNotFound() {
+        updateShareOperationWithError(RemoteOperationResult.ResultCode.SHARE_NOT_FOUND)
+    }
+
+    @Test(expected = UpdateShareForbiddenException::class)
+    fun updateShareForbidden() {
+        updateShareOperationWithError(RemoteOperationResult.ResultCode.SHARE_FORBIDDEN)
+    }
+
+    @Test(expected = UpdateShareGenericException::class)
+    fun updateShareGenericError() {
+        updateShareOperationWithError()
+    }
+
+    private fun updateShareOperationWithError(resultCode: RemoteOperationResult.ResultCode? = null) {
+        val updateRemoteShareOperation = mockk<UpdateRemoteShareOperation>(relaxed = true)
+
+        val updateRemoteShareOperationResult = DataTestUtil.createRemoteOperationResultMock(
+            ShareParserResult(arrayListOf()),
+            false,
+            null,
+            resultCode
+        )
+
+        every {
+            updateRemoteShareOperation.execute(ownCloudClient)
+        } returns updateRemoteShareOperationResult
+
+        ocRemoteSharesDataSource.updateShare(
+            3,
+            permissions = 17,
+            accountName = "user@server",
+            updateRemoteShareOperation = updateRemoteShareOperation
+        )
+    }
+
     @Test
     fun deleteShare() {
-        val removeRemoteShareOperation = mock(RemoveRemoteShareOperation::class.java)
+        val removeRemoteShareOperation = mockk<RemoveRemoteShareOperation>(relaxed = true)
 
-        val removeRemoteShareOperationResult = TestUtil.createRemoteOperationResultMock(
+        val removeRemoteShareOperationResult = DataTestUtil.createRemoteOperationResultMock(
             ShareParserResult(arrayListOf()),
             isSuccess = true
         )
 
-        `when`(removeRemoteShareOperation.execute(ownCloudClient)).thenReturn(
-            removeRemoteShareOperationResult
+        every {
+            removeRemoteShareOperation.execute(ownCloudClient)
+        } returns removeRemoteShareOperationResult
+
+        ocRemoteSharesDataSource.deleteShare(1, removeRemoteShareOperation)
+    }
+
+    @Test(expected = RemoveShareFileNotFoundException::class)
+    fun removeShareFileNotFound() {
+        deleteShareOperationWithError(RemoteOperationResult.ResultCode.SHARE_NOT_FOUND)
+    }
+
+    @Test(expected = RemoveShareForbiddenException::class)
+    fun removeShareForbidden() {
+        deleteShareOperationWithError(RemoteOperationResult.ResultCode.SHARE_FORBIDDEN)
+    }
+
+    @Test(expected = RemoveShareGenericException::class)
+    fun removeShareGenericError() {
+        deleteShareOperationWithError()
+    }
+
+    private fun deleteShareOperationWithError(resultCode: RemoteOperationResult.ResultCode? = null) {
+        val removeRemoteShareOperation = mockk<RemoveRemoteShareOperation>(relaxed = true)
+
+        val removeRemoteShareOperationResult = DataTestUtil.createRemoteOperationResultMock(
+            ShareParserResult(arrayListOf()),
+            false,
+            null,
+            resultCode
         )
 
-        val remoteOperationResult = ocRemoteSharesDataSource.deleteShare(1, removeRemoteShareOperation)
+        every {
+            removeRemoteShareOperation.execute(ownCloudClient)
+        } returns removeRemoteShareOperationResult
 
-        assertThat(remoteOperationResult, notNullValue())
-        assertEquals(true, remoteOperationResult.isSuccess)
+        ocRemoteSharesDataSource.deleteShare(1, removeRemoteShareOperation)
     }
 }
