@@ -20,13 +20,13 @@
 package com.owncloud.android.domain.capabilities.usecases
 
 import com.owncloud.android.domain.capabilities.CapabilityRepository
-import com.owncloud.android.domain.BaseAsyncUseCase
+import com.owncloud.android.domain.BaseUseCaseWithResult
 
 class RefreshCapabilitiesFromServerAsyncUseCase(
     private val capabilityRepository: CapabilityRepository
-) : BaseAsyncUseCase<Unit, RefreshCapabilitiesFromServerAsyncUseCase.Params>() {
+) : BaseUseCaseWithResult<Unit, RefreshCapabilitiesFromServerAsyncUseCase.Params>() {
 
-    override suspend fun run(params: Params) =
+    override fun run(params: Params) =
         capabilityRepository.refreshCapabilitiesForAccount(
             params.accountName
         )

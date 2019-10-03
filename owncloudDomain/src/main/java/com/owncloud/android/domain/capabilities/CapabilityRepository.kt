@@ -25,9 +25,7 @@ import com.owncloud.android.domain.capabilities.model.OCCapability
 interface CapabilityRepository {
     fun getCapabilitiesAsLiveData(accountName: String): LiveData<OCCapability?>
 
-    fun getStoredCapabilities(accountName: String): OCCapability
+    fun getStoredCapabilities(accountName: String): OCCapability?
 
-    suspend fun refreshCapabilitiesForAccount(
-        accountName: String
-    )
+    fun refreshCapabilitiesForAccount(accountName: String)
 }

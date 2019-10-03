@@ -167,7 +167,7 @@ class EditPrivateShareFragment : DialogFragment() {
             setPermissionsListening(editShareView, false)
 
             val sharePermissions = share!!.permissions
-            val isFederated = ShareType.FEDERATED.value == share!!.shareType
+            val isFederated = ShareType.FEDERATED == share!!.shareType
             val serverVersion = AccountUtils.getServerVersion(account)
             val isNotReshareableFederatedSupported =
                 serverVersion != null && serverVersion.isNotReshareableFederatedSupported

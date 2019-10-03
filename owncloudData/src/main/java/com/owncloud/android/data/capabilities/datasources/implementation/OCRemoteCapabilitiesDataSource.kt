@@ -20,11 +20,11 @@
 package com.owncloud.android.data.capabilities.datasources.implementation
 
 import com.owncloud.android.data.capabilities.datasources.RemoteCapabilitiesDataSource
+import com.owncloud.android.data.executeRemoteOperation
+import com.owncloud.android.data.sharing.shares.datasources.mapper.RemoteCapabilityMapper
 import com.owncloud.android.domain.capabilities.model.OCCapability
 import com.owncloud.android.lib.common.OwnCloudClient
-import com.owncloud.android.data.awaitToRemoteOperationResult
 import com.owncloud.android.lib.resources.status.GetRemoteCapabilitiesOperation
-import com.owncloud.android.data.sharing.shares.datasources.mapper.RemoteCapabilityMapper
 
 class OCRemoteCapabilitiesDataSource(
     private val client: OwnCloudClient,
@@ -35,7 +35,7 @@ class OCRemoteCapabilitiesDataSource(
         accountName: String,
         getRemoteCapabilitiesOperation: GetRemoteCapabilitiesOperation
     ): OCCapability {
-        awaitToRemoteOperationResult(getRemoteCapabilitiesOperation, client).let { remoteCapability ->
+        executeRemoteOperation(getRemoteCapabilitiesOperation, client).let { remoteCapability ->
             return remoteCapabilityMapper.toModel(remoteCapability)!!.also { it.accountName = accountName }
         }
     }

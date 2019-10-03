@@ -29,7 +29,7 @@ interface ShareRepository {
      ******************************************* PRIVATE SHARES *******************************************
      ******************************************************************************************************/
 
-    suspend fun insertPrivateShare(
+    fun insertPrivateShare(
         filePath: String,
         shareType: ShareType?,
         shareeName: String,
@@ -37,7 +37,7 @@ interface ShareRepository {
         accountName: String
     )
 
-    suspend fun updatePrivateShare(
+    fun updatePrivateShare(
         remoteId: Long,
         permissions: Int,
         accountName: String
@@ -47,7 +47,7 @@ interface ShareRepository {
      ******************************************* PUBLIC SHARES ********************************************
      ******************************************************************************************************/
 
-    suspend fun insertPublicShare(
+    fun insertPublicShare(
         filePath: String,
         permissions: Int,
         name: String,
@@ -57,7 +57,7 @@ interface ShareRepository {
         accountName: String
     )
 
-    suspend fun updatePublicShare(
+    fun updatePublicShare(
         remoteId: Long,
         name: String,
         password: String?,
@@ -75,9 +75,9 @@ interface ShareRepository {
 
     fun getShareAsLiveData(remoteId: Long): LiveData<OCShare>
 
-    suspend fun refreshSharesFromNetwork(filePath: String, accountName: String)
+    fun refreshSharesFromNetwork(filePath: String, accountName: String)
 
-    suspend fun deleteShare(
+    fun deleteShare(
         remoteId: Long
     )
 }
