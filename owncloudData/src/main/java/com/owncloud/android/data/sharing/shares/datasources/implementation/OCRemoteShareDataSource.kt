@@ -19,15 +19,15 @@
 
 package com.owncloud.android.data.sharing.shares.datasources.implementation
 
+import com.owncloud.android.data.executeRemoteOperation
 import com.owncloud.android.data.sharing.shares.datasources.RemoteShareDataSource
+import com.owncloud.android.data.sharing.shares.datasources.mapper.RemoteShareMapper
 import com.owncloud.android.domain.sharing.shares.model.OCShare
 import com.owncloud.android.domain.sharing.shares.model.ShareType
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
-import com.owncloud.android.data.awaitToRemoteOperationResult
 import com.owncloud.android.lib.resources.shares.CreateRemoteShareOperation
 import com.owncloud.android.lib.resources.shares.GetRemoteSharesForFileOperation
-import com.owncloud.android.data.sharing.shares.datasources.mapper.RemoteShareMapper
 import com.owncloud.android.lib.resources.shares.RemoveRemoteShareOperation
 import com.owncloud.android.lib.resources.shares.ShareParserResult
 import com.owncloud.android.lib.resources.shares.UpdateRemoteShareOperation
@@ -37,17 +37,17 @@ class OCRemoteShareDataSource(
     private val remoteShareMapper: RemoteShareMapper
 ) : RemoteShareDataSource {
 
-    override suspend fun getShares(
+    override fun getShares(
         remoteFilePath: String,
         reshares: Boolean,
         subfiles: Boolean,
         accountName: String,
         getRemoteSharesForFileOperation: GetRemoteSharesForFileOperation
     ): List<OCShare> {
-        awaitToRemoteOperationResult {
-            getRemoteSharesForFileOperation.execute(client)
-        }.shares.let {
-            return it.map { remoteShare ->
+        executeRemoteOperation(
+            getRemoteSharesForFileOperation, client
+        ).let {
+            return it.shares.map { remoteShare ->
                 remoteShareMapper.toModel(remoteShare)!!.also {
                     it.accountOwner = accountName
                 }
@@ -55,7 +55,7 @@ class OCRemoteShareDataSource(
         }
     }
 
-    override suspend fun insertShare(
+    override fun insertShare(
         remoteFilePath: String,
         shareType: ShareType,
         shareWith: String,
@@ -73,16 +73,16 @@ class OCRemoteShareDataSource(
         createRemoteShareOperation.publicUpload = publicUpload
         createRemoteShareOperation.retrieveShareDetails = true
 
-        awaitToRemoteOperationResult {
-            createRemoteShareOperation.execute(client)
-        }.shares.let {
-            return remoteShareMapper.toModel(it.first())!!.also {
+        executeRemoteOperation(
+            createRemoteShareOperation, client
+        ).let {
+            return remoteShareMapper.toModel(it.shares.first())!!.also {
                 it.accountOwner = accountName
             }
         }
     }
 
-    override suspend fun updateShare(
+    override fun updateShare(
         remoteId: Long,
         name: String,
         password: String?,
@@ -99,9 +99,9 @@ class OCRemoteShareDataSource(
         updateRemoteShareOperation.publicUpload = publicUpload
         updateRemoteShareOperation.retrieveShareDetails = true
 
-        awaitToRemoteOperationResult {
-            updateRemoteShareOperation.execute(client)
-        }.shares.let {
+        executeRemoteOperation(
+            updateRemoteShareOperation, client
+        ).shares.let {
             return remoteShareMapper.toModel(it.first())!!.also {
                 it.accountOwner = accountName
             }

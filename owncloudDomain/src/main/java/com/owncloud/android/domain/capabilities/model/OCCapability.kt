@@ -29,6 +29,7 @@ data class OCCapability(
     val versionEdition: String?,
     val corePollInterval: Int,
     val filesSharingApiEnabled: CapabilityBooleanType,
+    val filesSharingSearchMinLength: CapabilityBooleanType? = null,
     val filesSharingPublicEnabled: CapabilityBooleanType,
     val filesSharingPublicPasswordEnforced: CapabilityBooleanType,
     val filesSharingPublicPasswordEnforcedReadOnly: CapabilityBooleanType,

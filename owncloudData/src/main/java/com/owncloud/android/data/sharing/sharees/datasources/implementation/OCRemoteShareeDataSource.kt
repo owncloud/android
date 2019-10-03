@@ -19,9 +19,9 @@
 
 package com.owncloud.android.data.sharing.sharees.datasources.implementation
 
+import com.owncloud.android.data.executeRemoteOperation
 import com.owncloud.android.data.sharing.sharees.datasources.RemoteShareeDataSource
 import com.owncloud.android.lib.common.OwnCloudClient
-import com.owncloud.android.data.waitForRemoteOperationResult
 import com.owncloud.android.lib.resources.shares.GetRemoteShareesOperation
 import org.json.JSONObject
 import java.util.ArrayList
@@ -36,8 +36,6 @@ class OCRemoteShareeDataSource(
         perPage: Int,
         getRemoteShareesOperation: GetRemoteShareesOperation
     ): ArrayList<JSONObject> {
-        return waitForRemoteOperationResult {
-            getRemoteShareesOperation.execute(client)
-        }
+        return executeRemoteOperation(getRemoteShareesOperation, client)
     }
 }
