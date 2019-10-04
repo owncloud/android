@@ -137,7 +137,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
                     TransferRequester().run {
                         uploadNewFile(
                             context,
-                            currentStorageManager?.account,
+                            currentStorageManager?.account!!,
                             ocFile.storagePath,
                             ocFile.remotePath,
                             FileUploader.LOCAL_BEHAVIOUR_COPY,
@@ -255,7 +255,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
 
         val file = getFileById(docId)
 
-        val realFile = File(file?.storagePath)
+        val realFile = File(file!!.storagePath)
 
         return AssetFileDescriptor(
             ParcelFileDescriptor.open(realFile, ParcelFileDescriptor.MODE_READ_ONLY),

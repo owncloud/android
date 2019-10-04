@@ -31,7 +31,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ListView
 import android.widget.Toast
-import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
@@ -57,8 +56,6 @@ import java.util.Locale
 /**
  * Fragment for Sharing a file with sharees (users or groups) or creating
  * a public link.
- *
- * A simple [Fragment] subclass.
  *
  * Activities that contain this fragment must implement the
  * [ShareFragmentListener] interface

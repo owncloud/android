@@ -203,18 +203,17 @@ class MainApp : Application() {
         const val CLICK_DEV_MENU = "clickDeveloperMenu"
         const val CLICKS_NEEDED_TO_BE_DEVELOPER = 5
 
-        private val AUTH_ON = "on"
+        private const val AUTH_ON = "on"
 
-        private val POLICY_SINGLE_SESSION_PER_ACCOUNT = "single session per account"
-        private val POLICY_ALWAYS_NEW_CLIENT = "always new client"
-        private val CLICKS_DEFAULT = 0
+        private const val CLICKS_DEFAULT = 0
 
+        // this is nasty !
         var appContext: Context? = null
             private set
         var isDeveloper: Boolean = false
             private set
 
-        var BETA_VERSION = "beta"
+        private var BETA_VERSION = "beta"
 
         /**
          * Next methods give access in code to some constants that need to be defined in string resources to be referred
@@ -224,13 +223,18 @@ class MainApp : Application() {
         val accountType: String
             get() = appContext!!.resources.getString(R.string.account_type)
 
-        val versionCode: Int
+        @Suppress("DEPRECATION")
+        val versionCode: Long
             get() {
-                try {
+                return try {
                     val thisPackageName = appContext!!.packageName
-                    return appContext!!.packageManager.getPackageInfo(thisPackageName, 0).versionCode
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                        appContext!!.packageManager.getPackageInfo(thisPackageName, 0).longVersionCode
+                    } else {
+                        appContext!!.packageManager.getPackageInfo(thisPackageName, 0).versionCode.toLong()
+                    }
                 } catch (e: PackageManager.NameNotFoundException) {
-                    return 0
+                    0
                 }
 
             }
