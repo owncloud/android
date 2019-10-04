@@ -120,7 +120,7 @@ public class CameraUploadsSyncJobService extends JobService {
             //Get local images and videos
             String localCameraPath = mCameraUploadsSourcePath;
 
-            File localFiles[] = new File[0];
+            File[] localFiles = new File[0];
 
             if (localCameraPath != null) {
                 File cameraFolder = new File(localCameraPath);
@@ -128,7 +128,7 @@ public class CameraUploadsSyncJobService extends JobService {
             }
 
             if (localFiles != null) {
-                localFiles = orderFilesByCreationTimestamp(localFiles);
+                orderFilesByCreationTimestamp(localFiles);
 
                 for (File localFile : localFiles) {
                     handleFile(localFile);
@@ -138,10 +138,8 @@ public class CameraUploadsSyncJobService extends JobService {
             Log_OC.d(TAG, "All files synced, finishing job");
         }
 
-        private File[] orderFilesByCreationTimestamp(File[] localFiles) {
+        private void orderFilesByCreationTimestamp(File[] localFiles) {
             Arrays.sort(localFiles, (file1, file2) -> Long.compare(file1.lastModified(), file2.lastModified()));
-
-            return localFiles;
         }
 
         /**
