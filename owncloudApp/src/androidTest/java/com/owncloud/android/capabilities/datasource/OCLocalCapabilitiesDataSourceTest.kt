@@ -54,7 +54,7 @@ class OCLocalCapabilitiesDataSourceTest {
         )
 
         `when`(
-            ocCapabilityDao.getCapabilityForAccount(
+            ocCapabilityDao.getCapabilityForAccountAsLiveData(
                 "user@server1"
             )
         ).thenReturn(
@@ -67,7 +67,7 @@ class OCLocalCapabilitiesDataSourceTest {
         )
 
         `when`(
-            ocCapabilityDao.getCapabilityForAccount(
+            ocCapabilityDao.getCapabilityForAccountAsLiveData(
                 "user@server2"
             )
         ).thenReturn(

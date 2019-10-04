@@ -2,6 +2,7 @@
  * ownCloud Android client application
  *
  * @author David González Verdugo
+ * @author Abel García de Prada
  * Copyright (C) 2019 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -51,6 +52,9 @@ class OCCapabilityViewModel(
         )
     )
 ) : ViewModel() {
-    fun getCapabilityForAccount(shouldFetchFromNetwork: Boolean = true): LiveData<Resource<OCCapability>> =
-        capabilityRepository.getCapabilityForAccount(account.name, shouldFetchFromNetwork)
+    fun getCapabilityForAccountAsLiveData(shouldFetchFromNetwork: Boolean = true): LiveData<Resource<OCCapability>> =
+        capabilityRepository.getCapabilityForAccountAsLiveData(account.name, shouldFetchFromNetwork)
+
+    fun getStoredCapabilityForAccount(): OCCapability =
+        capabilityRepository.getStoredCapabilityForAccount(account.name)
 }

@@ -5,6 +5,7 @@
  * @author David A. Velasco
  * @author Christian Schabesberger
  * @author David González Verdugo
+ * @author Abel García de Prada
  * Copyright (C) 2019 ownCloud GmbH.
  *
  *
@@ -26,7 +27,6 @@
 package com.owncloud.android.sharees.presentation
 
 import android.accounts.Account
-import android.app.Activity
 import android.app.SearchManager
 import android.content.Context
 import android.os.Bundle
@@ -46,7 +46,7 @@ import com.owncloud.android.shares.domain.OCShare
 import com.owncloud.android.shares.presentation.ShareUserListAdapter
 import com.owncloud.android.shares.presentation.fragment.ShareFragmentListener
 import com.owncloud.android.utils.PreferenceUtils
-import kotlinx.android.synthetic.main.search_users_groups_layout.*
+import kotlinx.android.synthetic.main.search_users_groups_layout.searchView
 import java.util.ArrayList
 
 /**
@@ -204,8 +204,8 @@ class SearchShareesFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterL
         private val TAG = SearchShareesFragment::class.java.simpleName
 
         // the fragment initialization parameters
-        private val ARG_FILE = "FILE"
-        private val ARG_ACCOUNT = "ACCOUNT"
+        private const val ARG_FILE = "FILE"
+        private const val ARG_ACCOUNT = "ACCOUNT"
 
         /**
          * Public factory method to create new SearchShareesFragment instances.

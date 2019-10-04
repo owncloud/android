@@ -133,7 +133,7 @@ class LoadSharesTest {
         `when`(intent.getParcelableExtra(FileActivity.EXTRA_FILE) as? Parcelable).thenReturn(file)
         intent.putExtra(FileActivity.EXTRA_FILE, file)
 
-        `when`(ocCapabilityViewModel.getCapabilityForAccount()).thenReturn(capabilitiesLiveData)
+        `when`(ocCapabilityViewModel.getCapabilityForAccountAsLiveData()).thenReturn(capabilitiesLiveData)
         `when`(ocShareViewModel.getPublicShares(file.remotePath)).thenReturn(publicSharesLiveData)
         `when`(ocShareViewModel.getPrivateShares(file.remotePath)).thenReturn(privateSharesLiveData)
 

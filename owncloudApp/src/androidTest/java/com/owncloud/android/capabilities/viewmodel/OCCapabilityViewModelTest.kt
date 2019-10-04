@@ -55,7 +55,7 @@ class OCCapabilityViewModelTest {
         val ocCapabilityRepository = mock(OCCapabilityRepository::class.java)
 
         `when`(
-            ocCapabilityRepository.getCapabilityForAccount(
+            ocCapabilityRepository.getCapabilityForAccountAsLiveData(
                 "admin@server"
             )
         ).thenReturn(
@@ -72,7 +72,7 @@ class OCCapabilityViewModelTest {
             capabilityRepository = ocCapabilityRepository
         )
 
-        val resource: Resource<OCCapability>? = ocCapabilityViewModel.getCapabilityForAccount().value
+        val resource: Resource<OCCapability>? = ocCapabilityViewModel.getCapabilityForAccountAsLiveData().value
         val capability: OCCapability? = resource?.data
 
         assertEquals("admin@server", capability?.accountName)

@@ -2,6 +2,7 @@
  * ownCloud Android client application
  *
  * @author David González Verdugo
+ * @author Abel García de Prada
  * Copyright (C) 2019 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -26,6 +27,10 @@ interface LocalCapabilitiesDataSource {
     fun getCapabilityForAccountAsLiveData(
         accountName: String
     ): LiveData<OCCapability>
+
+    fun getCapabilityForAccount(
+        accountName: String
+    ): OCCapability
 
     fun insert(ocCapabilities: List<OCCapability>)
 }
