@@ -45,8 +45,6 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.Locale;
 
-import androidx.annotation.RequiresApi;
-
 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 public class CameraUploadsSyncJobService extends JobService {
 
@@ -102,7 +100,7 @@ public class CameraUploadsSyncJobService extends JobService {
             mCameraUploadsBehaviorAfterUpload = jobParams[0].getExtras().
                     getInt(Extras.EXTRA_CAMERA_UPLOADS_BEHAVIOR_AFTER_UPLOAD);
 
-            syncFiles();
+            syncFiles(mCameraUploadsSyncJobService.getApplicationContext());
 
             return jobParams[0];
         }
@@ -115,7 +113,7 @@ public class CameraUploadsSyncJobService extends JobService {
         /**
          * Get local images and videos and start handling them
          */
-        private void syncFiles() {
+        private void syncFiles(Context context) {
 
             //Get local images and videos
             String localCameraPath = mCameraUploadsSourcePath;
@@ -136,6 +134,10 @@ public class CameraUploadsSyncJobService extends JobService {
             }
 
             Log_OC.d(TAG, "All files synced, finishing job");
+
+            // After scan of new files, we try to sync such files with waiting for Wifi as well
+            TransferRequester requester = new TransferRequester();
+            requester.retryFailedUploads(context, null, null, false);
         }
 
         private File[] orderFilesByCreationTimestamp(File[] localFiles) {

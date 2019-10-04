@@ -97,7 +97,6 @@ import static com.owncloud.android.operations.UploadFileOperation.CREATED_AS_CAM
  * fatal error occured.
  * <p>
  * Every file passed to this service is uploaded. No filtering is performed.
- * However, Intent keys (e.g., KEY_WIFI_ONLY) are obeyed.
  */
 public class FileUploader extends Service
         implements OnDatatransferProgressListener, OnAccountsUpdateListener,
