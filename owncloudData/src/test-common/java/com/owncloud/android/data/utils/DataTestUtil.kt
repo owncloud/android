@@ -20,6 +20,7 @@
 package com.owncloud.android.data.utils
 
 import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
+import com.owncloud.android.data.sharing.shares.db.OCShareEntity
 import com.owncloud.android.domain.capabilities.model.CapabilityBooleanType
 import com.owncloud.android.domain.capabilities.model.OCCapability
 import com.owncloud.android.domain.sharing.shares.model.OCShare
@@ -75,6 +76,44 @@ object DataTestUtil {
         shareLink
     )
 
+    private fun createShareEntity(
+        fileSource: Long = 7,
+        itemSource: Long = 7,
+        shareType: Int, // Public share by default
+        shareWith: String = "",
+        path: String,
+        permissions: Int = 1,
+        sharedDate: Long = 1542628397,
+        expirationDate: Long = 0,
+        token: String = "pwdasd12dasdWZ",
+        sharedWithDisplayName: String = "",
+        sharedWithAdditionalInfo: String = "",
+        isFolder: Boolean,
+        userId: Long = -1,
+        remoteId: Long = 1,
+        accountOwner: String = "admin@server",
+        name: String = "",
+        shareLink: String = ""
+    ) = OCShareEntity(
+        fileSource,
+        itemSource,
+        shareType,
+        shareWith,
+        path,
+        permissions,
+        sharedDate,
+        expirationDate,
+        token,
+        sharedWithDisplayName,
+        sharedWithAdditionalInfo,
+        isFolder,
+        userId,
+        remoteId,
+        accountOwner,
+        name,
+        shareLink
+    )
+
     fun createPrivateShare(
         remoteId: Long = 1,
         shareType: Int = 0,
@@ -85,6 +124,26 @@ object DataTestUtil {
         sharedWithDisplayName: String,
         accountOwner: String = "admin@server"
     ) = createShare(
+        remoteId = remoteId,
+        shareType = shareType,
+        shareWith = shareWith,
+        path = path,
+        permissions = permissions,
+        isFolder = isFolder,
+        sharedWithDisplayName = sharedWithDisplayName,
+        accountOwner = accountOwner
+    )
+
+    fun createPrivateShareEntity(
+        remoteId: Long = 1,
+        shareType: Int = 0,
+        shareWith: String,
+        path: String,
+        permissions: Int = -1,
+        isFolder: Boolean,
+        sharedWithDisplayName: String,
+        accountOwner: String = "admin@server"
+    ) = createShareEntity(
         remoteId = remoteId,
         shareType = shareType,
         shareWith = shareWith,
@@ -106,6 +165,29 @@ object DataTestUtil {
         name: String,
         shareLink: String
     ) = createShare(
+        shareWith = shareWith,
+        shareType = 3,
+        path = path,
+        permissions = permissions,
+        expirationDate = expirationDate,
+        isFolder = isFolder,
+        remoteId = remoteId,
+        accountOwner = accountOwner,
+        name = name,
+        shareLink = shareLink
+    )
+
+    fun createPublicShareEntity(
+        shareWith: String = "",
+        path: String,
+        expirationDate: Long = 1000,
+        isFolder: Boolean,
+        permissions: Int = 1,
+        remoteId: Long = 1,
+        accountOwner: String = "admin@server",
+        name: String,
+        shareLink: String
+    ) = createShareEntity(
         shareWith = shareWith,
         shareType = 3,
         path = path,
