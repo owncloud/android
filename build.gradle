@@ -15,7 +15,7 @@ buildscript {
         mockitoVersion = "2.24.0"
 
         // Extensions
-        ktxVersion = "1.0.2"
+        ktxVersion = "1.1.0"
     }
 
     repositories {
@@ -24,7 +24,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.5.0'
+        classpath 'com.android.tools.build:gradle:3.5.1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
         classpath "org.jetbrains.kotlin:kotlin-allopen:$kotlinVersion"
     }
