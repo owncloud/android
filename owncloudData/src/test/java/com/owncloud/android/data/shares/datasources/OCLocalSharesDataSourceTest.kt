@@ -64,13 +64,13 @@ class OCLocalDataSourceTest {
      ******************************************************************************************************/
 
     private val privateShares = listOf(
-        DataTestUtil.createPrivateShare(
+        DataTestUtil.createPrivateShareEntity(
             path = "/Docs/doc1.doc",
             isFolder = false,
             shareWith = "username",
             sharedWithDisplayName = "Sophie"
         ),
-        DataTestUtil.createPrivateShare(
+        DataTestUtil.createPrivateShareEntity(
             path = "/Docs/doc1.doc",
             isFolder = false,
             shareWith = "user.name",
@@ -85,7 +85,7 @@ class OCLocalDataSourceTest {
     @Test
     fun readLocalPrivateShares() {
         val privateSharesAsLiveData: MutableLiveData<List<OCShareEntity>> = MutableLiveData()
-//        privateSharesAsLiveData.value = privateShares
+        privateSharesAsLiveData.value = privateShares
 
         every {
             ocSharesDao.getSharesAsLiveData(
@@ -115,9 +115,28 @@ class OCLocalDataSourceTest {
     }
 
     @Test
+    fun readLocalPrivateShare() {
+        val privateShareAsLiveData: MutableLiveData<OCShareEntity> = MutableLiveData()
+        privateShareAsLiveData.value = privateShares.first()
+
+        every {
+            ocSharesDao.getShareAsLiveData(1)
+        } returns privateShareAsLiveData
+
+        val share = getValue(
+            ocLocalSharesDataSource.getShareAsLiveData(1)
+        )
+
+        assertEquals("/Docs/doc1.doc", share.path)
+        assertEquals(false, share.isFolder)
+        assertEquals("username", share.shareWith)
+        assertEquals("Sophie", share.sharedWithDisplayName)
+    }
+
+    @Test
     fun insertPrivateShares() {
         val privateSharesAsLiveData: MutableLiveData<List<OCShareEntity>> = MutableLiveData()
-//        privateSharesAsLiveData.value = privateShares
+        privateSharesAsLiveData.value = privateShares
 
         every {
             ocSharesDao.insert(
@@ -139,19 +158,17 @@ class OCLocalDataSourceTest {
 
     @Test
     fun updatePrivateShare() {
-        val privateSharesAsLiveData: MutableLiveData<List<OCShare>> = MutableLiveData()
+        val privateSharesAsLiveData: MutableLiveData<List<OCShareEntity>> = MutableLiveData()
         privateSharesAsLiveData.value = privateShares
 
-        `when`(
+        every {
             ocSharesDao.update(
                 privateSharesAsLiveData.value!![1]
             )
-        ).thenReturn(
-            3
-        )
+        } returns 3
 
         val updatedShareId = ocLocalSharesDataSource.update(
-            TestUtil.createPrivateShare(
+            DataTestUtil.createPrivateShare(
                 shareType = ShareType.USER.value,
                 path = "/Docs/doc1.doc",
                 isFolder = false,
@@ -167,13 +184,13 @@ class OCLocalDataSourceTest {
      ******************************************************************************************************/
 
     val publicShares = listOf(
-        DataTestUtil.createPublicShare(
+        DataTestUtil.createPublicShareEntity(
             path = "/Photos/",
             isFolder = true,
             name = "Photos link",
             shareLink = "http://server:port/s/1"
         ),
-        DataTestUtil.createPublicShare(
+        DataTestUtil.createPublicShareEntity(
             path = "/Photos/",
             isFolder = true,
             name = "Photos link 2",
@@ -198,17 +215,17 @@ class OCLocalDataSourceTest {
             )
         )
 
-        assertEquals(2, shares.size)
+        assertEquals(2, shares?.size)
 
-        assertEquals("/Photos/", shares[0].path)
-        assertEquals(true, shares[0].isFolder)
-        assertEquals("Photos link", shares[0].name)
-        assertEquals("http://server:port/s/1", shares[0].shareLink)
+        assertEquals("/Photos/", shares?.first()?.path)
+        assertEquals(true, shares?.first()?.isFolder)
+        assertEquals("Photos link", shares?.first()?.name)
+        assertEquals("http://server:port/s/1", shares?.first()?.shareLink)
 
-        assertEquals("/Photos/", shares[1].path)
-        assertEquals(true, shares[1].isFolder)
-        assertEquals("Photos link 2", shares[1].name)
-        assertEquals("http://server:port/s/2", shares[1].shareLink)
+        assertEquals("/Photos/", shares?.get(1)?.path)
+        assertEquals(true, shares?.get(1)?.isFolder)
+        assertEquals("Photos link 2", shares?.get(1)?.name)
+        assertEquals("http://server:port/s/2", shares?.get(1)?.shareLink)
     }
 
     @Test
@@ -260,7 +277,7 @@ class OCLocalDataSourceTest {
      **************************************************************************************************************/
 
     @Test
-    fun deletePublicShare() {
+    fun deleteShare() {
         every {
             ocSharesDao.deleteShare(
                 5
