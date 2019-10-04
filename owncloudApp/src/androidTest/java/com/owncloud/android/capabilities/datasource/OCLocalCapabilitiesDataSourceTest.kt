@@ -74,18 +74,42 @@ class OCLocalCapabilitiesDataSourceTest {
             newCapabilityAsLiveData
         )
 
+        val newCapability: OCCapability = TestUtil.createCapability(
+            "user@server2", 2, 1, 0
+        )
+
+        `when`(
+            ocCapabilityDao.getCapabilityForAccount(
+                "user@server2"
+            )
+        ).thenReturn(
+            newCapability
+        )
+
         val context = InstrumentationRegistry.getInstrumentation().targetContext
 
         ocLocalCapabilitiesDataSource = OCLocalCapabilitiesDataSource(context, ocCapabilityDao)
     }
 
     @Test
-    fun readLocalCapability() {
+    fun readLocalCapabilityAsLiveData() {
         val capability = getValue(
             ocLocalCapabilitiesDataSource.getCapabilityForAccountAsLiveData(
                 "user@server1"
             )
         )
+        assertEquals("user@server1", capability.accountName)
+        assertEquals(5, capability.versionMayor)
+        assertEquals(4, capability.versionMinor)
+        assertEquals(3, capability.versionMicro)
+    }
+
+    @Test
+    fun readLocalCapability() {
+        val capability =
+            ocLocalCapabilitiesDataSource.getCapabilityForAccount(
+                "user@server1"
+            )
         assertEquals("user@server1", capability.accountName)
         assertEquals(5, capability.versionMayor)
         assertEquals(4, capability.versionMinor)
