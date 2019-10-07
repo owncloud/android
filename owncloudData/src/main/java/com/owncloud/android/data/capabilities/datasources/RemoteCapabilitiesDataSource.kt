@@ -24,7 +24,6 @@ import com.owncloud.android.lib.resources.status.GetRemoteCapabilitiesOperation
 
 interface RemoteCapabilitiesDataSource {
     fun getCapabilities(
-        accountName: String,
-        getRemoteCapabilitiesOperation: GetRemoteCapabilitiesOperation = GetRemoteCapabilitiesOperation()
+        accountName: String
     ): OCCapability
 }

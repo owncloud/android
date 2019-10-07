@@ -17,15 +17,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.data.sharing.sharees.datasources
+package com.owncloud.android.data.capabilities.datasources
 
-import com.owncloud.android.lib.resources.shares.GetRemoteShareesOperation
-import org.json.JSONObject
+import com.owncloud.android.domain.capabilities.model.OCCapability
+import com.owncloud.android.lib.resources.status.GetRemoteCapabilitiesOperation
 
-interface RemoteShareeDataSource {
-    fun getSharees(
-        searchString: String,
-        page: Int,
-        perPage: Int
-    ): ArrayList<JSONObject>
+class RemoteCapabilitiesDataSourceTest(private val capability: OCCapability) : RemoteCapabilitiesDataSource {
+
+    override fun getCapabilities(
+        accountName: String,
+        getRemoteCapabilitiesOperation: GetRemoteCapabilitiesOperation
+    ): OCCapability {
+        return capability
+    }
 }

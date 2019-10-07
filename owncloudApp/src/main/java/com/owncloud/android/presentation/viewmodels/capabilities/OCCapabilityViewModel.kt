@@ -77,7 +77,7 @@ class OCCapabilityViewModel(
 
             if (!useCaseResult.isSuccess) {
                 _capabilities.postValue(
-                    UIResult.Error(useCaseResult.getThrowableOrNull(), capabilitiesLiveData?.value)
+                    UIResult.Error(useCaseResult.getThrowableOrNull(), capabilitiesLiveData.value)
                 )
             }
         }

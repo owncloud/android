@@ -21,22 +21,14 @@ package com.owncloud.android.data.sharing.shares.datasources
 
 import com.owncloud.android.domain.sharing.shares.model.OCShare
 import com.owncloud.android.domain.sharing.shares.model.ShareType
-import com.owncloud.android.lib.common.operations.RemoteOperationResult
-import com.owncloud.android.lib.resources.shares.CreateRemoteShareOperation
-import com.owncloud.android.lib.resources.shares.GetRemoteSharesForFileOperation
 import com.owncloud.android.lib.resources.shares.RemoteShare.Companion.INIT_EXPIRATION_DATE_IN_MILLIS
-import com.owncloud.android.lib.resources.shares.RemoveRemoteShareOperation
-import com.owncloud.android.lib.resources.shares.ShareParserResult
-import com.owncloud.android.lib.resources.shares.UpdateRemoteShareOperation
 
 interface RemoteShareDataSource {
     fun getShares(
         remoteFilePath: String,
         reshares: Boolean,
         subfiles: Boolean,
-        accountName: String,
-        getRemoteSharesForFileOperation: GetRemoteSharesForFileOperation =
-            GetRemoteSharesForFileOperation(remoteFilePath, reshares, subfiles)
+        accountName: String
     ): List<OCShare>
 
     fun insertShare(
@@ -48,14 +40,7 @@ interface RemoteShareDataSource {
         password: String = "",
         expirationDate: Long = INIT_EXPIRATION_DATE_IN_MILLIS,
         publicUpload: Boolean = false,
-        accountName: String,
-        createRemoteShareOperation: CreateRemoteShareOperation =
-            CreateRemoteShareOperation(
-                remoteFilePath,
-                com.owncloud.android.lib.resources.shares.ShareType.fromValue(shareType.value)!!,
-                shareWith,
-                permissions
-            )
+        accountName: String
     ): OCShare
 
     fun updateShare(
@@ -65,18 +50,10 @@ interface RemoteShareDataSource {
         expirationDateInMillis: Long = INIT_EXPIRATION_DATE_IN_MILLIS,
         permissions: Int,
         publicUpload: Boolean = false,
-        accountName: String,
-        updateRemoteShareOperation: UpdateRemoteShareOperation =
-            UpdateRemoteShareOperation(
-                remoteId
-            )
+        accountName: String
     ): OCShare
 
     fun deleteShare(
-        remoteId: Long,
-        removeRemoteShareOperation: RemoveRemoteShareOperation =
-            RemoveRemoteShareOperation(
-                remoteId
-            )
+        remoteId: Long
     )
 }

@@ -23,10 +23,9 @@ import android.accounts.Account
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
 import androidx.test.platform.app.InstrumentationRegistry
-import com.owncloud.android.data.DataResult
 import com.owncloud.android.data.Status
 import com.owncloud.android.data.sharing.shares.db.OCShareEntity
-import com.owncloud.android.data.sharing.shares.OCShareRepository
+import com.owncloud.android.data.sharing.shares.repository.OCShareRepository
 import com.owncloud.android.presentation.viewmodels.sharing.OCShareViewModel
 import com.owncloud.android.utils.AppTestUtil
 import io.mockk.every
@@ -46,7 +45,8 @@ class OCShareViewModelTest {
     private val filePath = "/Photos/image.jpg"
 
     private var testAccount: Account = AppTestUtil.createAccount("admin@server", "test")
-    private var ocShareRepository: OCShareRepository = mockkClass(OCShareRepository::class)
+    private var ocShareRepository: OCShareRepository = mockkClass(
+        OCShareRepository::class)
 
     /******************************************************************************************************
      ******************************************* PRIVATE SHARES *******************************************
