@@ -23,15 +23,8 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
-import com.owncloud.android.data.DataResult
-import com.owncloud.android.data.sharing.shares.datasources.LocalShareDataSource
-import com.owncloud.android.data.sharing.shares.db.OCShareEntity
-import com.owncloud.android.data.sharing.shares.OCShareRepository
 import com.owncloud.android.domain.utils.DomainTestUtil
 import com.owncloud.android.domain.utils.InstantExecutors
-import com.owncloud.android.lib.common.operations.RemoteOperationResult
-import com.owncloud.android.lib.resources.shares.ShareParserResult
-import com.owncloud.android.lib.resources.shares.ShareType
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify

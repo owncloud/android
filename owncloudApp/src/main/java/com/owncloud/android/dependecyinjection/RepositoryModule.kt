@@ -22,13 +22,18 @@ package com.owncloud.android.dependecyinjection
 import com.owncloud.android.domain.capabilities.CapabilityRepository
 import com.owncloud.android.domain.sharing.sharees.ShareeRepository
 import com.owncloud.android.domain.sharing.shares.ShareRepository
-import com.owncloud.android.data.capabilities.OCCapabilityRepository
-import com.owncloud.android.data.sharing.sharees.OCShareeRepository
-import com.owncloud.android.data.sharing.shares.OCShareRepository
+import com.owncloud.android.data.capabilities.repository.OCCapabilityRepository
+import com.owncloud.android.data.sharing.sharees.repository.OCShareeRepository
+import com.owncloud.android.data.sharing.shares.repository.OCShareRepository
 import org.koin.dsl.module
 
 val repositoryModule = module {
-    factory<CapabilityRepository> { OCCapabilityRepository(get(), get()) }
+    factory<CapabilityRepository> {
+        OCCapabilityRepository(
+            get(),
+            get()
+        )
+    }
     factory<ShareRepository> { OCShareRepository(get(), get()) }
     factory<ShareeRepository> { OCShareeRepository(get()) }
 }

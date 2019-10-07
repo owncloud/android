@@ -92,8 +92,7 @@ class OCRemoteSharesDataSourceTest {
             shareType = ShareType.USER,
             shareWith = "user",
             permissions = 1,
-            accountName = "user@server",
-            createRemoteShareOperation = createShareOperation
+            accountName = "user@server"
         )
 
         assertThat(privateShareAdded, notNullValue())
