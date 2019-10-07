@@ -35,11 +35,10 @@ public class ProviderMeta {
 
     public static final String DB_NAME = "filelist";
     public static final String NEW_DB_NAME = "owncloud_database";
-    public static final int DB_VERSION = 27;
+    public static final int DB_VERSION = 28;
 
     private ProviderMeta() {
     }
-
 
     static public class ProviderTableMeta implements BaseColumns {
         public static final String FILE_TABLE_NAME = "filelist";
