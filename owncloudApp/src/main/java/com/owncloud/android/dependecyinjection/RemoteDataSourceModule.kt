@@ -20,14 +20,20 @@
 package com.owncloud.android.dependecyinjection
 
 import com.owncloud.android.authentication.AccountUtils
-import com.owncloud.android.data.capabilities.datasources.implementation.OCRemoteCapabilitiesDataSource
 import com.owncloud.android.data.capabilities.datasources.RemoteCapabilitiesDataSource
-import com.owncloud.android.data.sharing.sharees.datasources.implementation.OCRemoteShareeDataSource
+import com.owncloud.android.data.capabilities.datasources.implementation.OCRemoteCapabilitiesDataSource
+import com.owncloud.android.data.capabilities.network.OCCapabilityService
+import com.owncloud.android.data.sharing.shares.network.OCShareService
 import com.owncloud.android.data.sharing.sharees.datasources.RemoteShareeDataSource
-import com.owncloud.android.data.sharing.shares.datasources.implementation.OCRemoteShareDataSource
+import com.owncloud.android.data.sharing.sharees.datasources.implementation.OCRemoteShareeDataSource
+import com.owncloud.android.data.sharing.sharees.network.OCShareeService
 import com.owncloud.android.data.sharing.shares.datasources.RemoteShareDataSource
+import com.owncloud.android.data.sharing.shares.datasources.implementation.OCRemoteShareDataSource
 import com.owncloud.android.lib.common.OwnCloudAccount
 import com.owncloud.android.lib.common.OwnCloudClientManagerFactory
+import com.owncloud.android.lib.resources.shares.ShareService
+import com.owncloud.android.lib.resources.shares.ShareeService
+import com.owncloud.android.lib.resources.status.CapabilityService
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
@@ -35,6 +41,10 @@ val remoteDataSourceModule = module {
     single { AccountUtils.getCurrentOwnCloudAccount(androidContext()) }
     single { OwnCloudAccount(get(), androidContext()) }
     single { OwnCloudClientManagerFactory.getDefaultSingleton().getClientFor(get(), androidContext()) }
+
+    single<CapabilityService> { OCCapabilityService(get()) }
+    single<ShareService> { OCShareService(get()) }
+    single<ShareeService> { OCShareeService(get()) }
 
     factory<RemoteCapabilitiesDataSource> {
         OCRemoteCapabilitiesDataSource(

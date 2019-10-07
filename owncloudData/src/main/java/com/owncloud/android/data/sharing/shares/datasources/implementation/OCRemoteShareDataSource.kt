@@ -19,21 +19,15 @@
 
 package com.owncloud.android.data.sharing.shares.datasources.implementation
 
-import com.owncloud.android.data.executeRemoteOperation
+import com.owncloud.android.data.awaitToResponse
 import com.owncloud.android.data.sharing.shares.datasources.RemoteShareDataSource
 import com.owncloud.android.data.sharing.shares.datasources.mapper.RemoteShareMapper
 import com.owncloud.android.domain.sharing.shares.model.OCShare
 import com.owncloud.android.domain.sharing.shares.model.ShareType
-import com.owncloud.android.lib.common.OwnCloudClient
-import com.owncloud.android.lib.common.operations.RemoteOperationResult
-import com.owncloud.android.lib.resources.shares.CreateRemoteShareOperation
-import com.owncloud.android.lib.resources.shares.GetRemoteSharesForFileOperation
-import com.owncloud.android.lib.resources.shares.RemoveRemoteShareOperation
-import com.owncloud.android.lib.resources.shares.ShareParserResult
-import com.owncloud.android.lib.resources.shares.UpdateRemoteShareOperation
+import com.owncloud.android.lib.resources.shares.ShareService
 
 class OCRemoteShareDataSource(
-    private val client: OwnCloudClient,
+    private val shareService: ShareService,
     private val remoteShareMapper: RemoteShareMapper
 ) : RemoteShareDataSource {
 
@@ -41,12 +35,11 @@ class OCRemoteShareDataSource(
         remoteFilePath: String,
         reshares: Boolean,
         subfiles: Boolean,
-        accountName: String,
-        getRemoteSharesForFileOperation: GetRemoteSharesForFileOperation
+        accountName: String
     ): List<OCShare> {
-        executeRemoteOperation(
-            getRemoteSharesForFileOperation, client
-        ).let {
+        awaitToResponse {
+            shareService.getShares(remoteFilePath, reshares, subfiles)
+        }.let {
             return it.shares.map { remoteShare ->
                 remoteShareMapper.toModel(remoteShare)!!.also {
                     it.accountOwner = accountName
@@ -64,18 +57,20 @@ class OCRemoteShareDataSource(
         password: String,
         expirationDate: Long,
         publicUpload: Boolean,
-        accountName: String,
-        createRemoteShareOperation: CreateRemoteShareOperation
+        accountName: String
     ): OCShare {
-        createRemoteShareOperation.name = name
-        createRemoteShareOperation.password = password
-        createRemoteShareOperation.expirationDateInMillis = expirationDate
-        createRemoteShareOperation.publicUpload = publicUpload
-        createRemoteShareOperation.retrieveShareDetails = true
-
-        executeRemoteOperation(
-            createRemoteShareOperation, client
-        ).let {
+        awaitToResponse {
+            shareService.insertShare(
+                remoteFilePath,
+                com.owncloud.android.lib.resources.shares.ShareType.fromValue(shareType.value)!!,
+                shareWith,
+                permissions,
+                name,
+                password,
+                expirationDate,
+                publicUpload
+            )
+        }.let {
             return remoteShareMapper.toModel(it.shares.first())!!.also {
                 it.accountOwner = accountName
             }
@@ -89,28 +84,27 @@ class OCRemoteShareDataSource(
         expirationDateInMillis: Long,
         permissions: Int,
         publicUpload: Boolean,
-        accountName: String,
-        updateRemoteShareOperation: UpdateRemoteShareOperation
+        accountName: String
     ): OCShare {
-        updateRemoteShareOperation.name = name
-        updateRemoteShareOperation.password = password
-        updateRemoteShareOperation.expirationDateInMillis = expirationDateInMillis
-        updateRemoteShareOperation.permissions = permissions
-        updateRemoteShareOperation.publicUpload = publicUpload
-        updateRemoteShareOperation.retrieveShareDetails = true
-
-        executeRemoteOperation(
-            updateRemoteShareOperation, client
-        ).shares.let {
-            return remoteShareMapper.toModel(it.first())!!.also {
+        awaitToResponse {
+            shareService.updateShare(
+                remoteId,
+                name,
+                password,
+                expirationDateInMillis,
+                permissions,
+                publicUpload
+            )
+        }.let {
+            return remoteShareMapper.toModel(it.shares.first())!!.also {
                 it.accountOwner = accountName
             }
         }
     }
 
-    override fun deleteShare(remoteId: Long, removeRemoteShareOperation: RemoveRemoteShareOperation) {
-        executeRemoteOperation(
-            removeRemoteShareOperation, client
-        )
+    override fun deleteShare(remoteId: Long) {
+        awaitToResponse {
+            shareService.deleteShare(remoteId)
+        }
     }
 }

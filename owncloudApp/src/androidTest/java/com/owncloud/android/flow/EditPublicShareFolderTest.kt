@@ -40,7 +40,6 @@ import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
 import com.owncloud.android.R
 import com.owncloud.android.authentication.AccountAuthenticator.KEY_AUTH_TOKEN_TYPE
-import com.owncloud.android.data.DataResult
 import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
 import com.owncloud.android.data.sharing.shares.db.OCShareEntity
 import com.owncloud.android.datamodel.OCFile

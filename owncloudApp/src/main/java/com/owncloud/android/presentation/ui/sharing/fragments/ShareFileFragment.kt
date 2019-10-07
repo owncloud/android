@@ -358,7 +358,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
                         capabilities?.let {
                             updateCapabilities(it)
                         }
-                        showError(uiResult.error)
+                        showError(getString(R.string.get_capabilities_error), uiResult.error)
                         listener?.dismissLoading()
                     }
                     is UIResult.Loading -> {
@@ -391,7 +391,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
                         shares?.let {
                             updateShares(it)
                         }
-                        showError(uiResult.error)
+                        showError(getString(R.string.get_shares_error), uiResult.error)
                         listener?.dismissLoading()
                     }
                     is UIResult.Loading -> {
