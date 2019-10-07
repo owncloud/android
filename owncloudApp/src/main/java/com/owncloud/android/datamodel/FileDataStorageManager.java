@@ -1757,7 +1757,6 @@ public class FileDataStorageManager {
         cv.put(ProviderTableMeta.CAPABILITIES_VERSION_EDITION, capability.getVersionEdition());
         cv.put(ProviderTableMeta.CAPABILITIES_CORE_POLLINTERVAL, capability.getCorePollinterval());
         cv.put(ProviderTableMeta.CAPABILITIES_SHARING_API_ENABLED, capability.getFilesSharingApiEnabled().getValue());
-        cv.put(ProviderTableMeta.CAPABILITIES_SHARING_SEARCH_MIN_LENGTH, capability.getFilesSharingMinLength());
         cv.put(ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_ENABLED,
                 capability.getFilesSharingPublicEnabled().getValue());
         cv.put(ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED,
@@ -1902,8 +1901,6 @@ public class FileDataStorageManager {
                     .getColumnIndex(ProviderTableMeta.CAPABILITIES_CORE_POLLINTERVAL)));
             capability.setFilesSharingApiEnabled(CapabilityBooleanType.Companion.fromValue(c.getInt(c
                     .getColumnIndex(ProviderTableMeta.CAPABILITIES_SHARING_API_ENABLED))));
-            capability.setFilesSharingMinLength(c.getInt(c
-                    .getColumnIndex(ProviderTableMeta.CAPABILITIES_SHARING_SEARCH_MIN_LENGTH)));
             capability.setFilesSharingPublicEnabled(CapabilityBooleanType.Companion.fromValue(c.getInt(c
                     .getColumnIndex(ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_ENABLED))));
             capability.setFilesSharingPublicPasswordEnforced(CapabilityBooleanType.Companion.fromValue(c.getInt(c

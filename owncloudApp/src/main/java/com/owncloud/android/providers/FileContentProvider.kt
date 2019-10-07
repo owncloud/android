@@ -1080,7 +1080,6 @@ class FileContentProvider(val appExecutors: AppExecutors = AppExecutors()) : Con
                     + ProviderTableMeta.CAPABILITIES_VERSION_EDITION + " TEXT, "
                     + ProviderTableMeta.CAPABILITIES_CORE_POLLINTERVAL + " INTEGER, "
                     + ProviderTableMeta.CAPABILITIES_SHARING_API_ENABLED + " INTEGER, " // boolean
-                    + ProviderTableMeta.CAPABILITIES_SHARING_SEARCH_MIN_LENGTH + " INTEGER, "
                     + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_ENABLED + " INTEGER, "  // boolean
                     + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED + " INTEGER, "    // boolean
                     + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_READ_ONLY + " INTEGER, "   // boolean
@@ -1428,8 +1427,6 @@ class FileContentProvider(val appExecutors: AppExecutors = AppExecutors()) : Con
                 ProviderTableMeta.CAPABILITIES_CORE_POLLINTERVAL
             capabilityProjectionMap[ProviderTableMeta.CAPABILITIES_SHARING_API_ENABLED] =
                 ProviderTableMeta.CAPABILITIES_SHARING_API_ENABLED
-            capabilityProjectionMap[ProviderTableMeta.CAPABILITIES_SHARING_SEARCH_MIN_LENGTH] =
-                ProviderTableMeta.CAPABILITIES_SHARING_SEARCH_MIN_LENGTH
             capabilityProjectionMap[ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_ENABLED] =
                 ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_ENABLED
             capabilityProjectionMap[ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED] =
@@ -1468,8 +1465,6 @@ class FileContentProvider(val appExecutors: AppExecutors = AppExecutors()) : Con
                 ProviderTableMeta.CAPABILITIES_FILES_UNDELETE
             capabilityProjectionMap[ProviderTableMeta.CAPABILITIES_FILES_VERSIONING] =
                 ProviderTableMeta.CAPABILITIES_FILES_VERSIONING
-            capabilityProjectionMap[ProviderTableMeta.CAPABILITIES_SHARING_SEARCH_MIN_LENGTH] =
-                ProviderTableMeta.CAPABILITIES_SHARING_SEARCH_MIN_LENGTH
         }
 
         private val uploadProjectionMap = HashMap<String, String>()
