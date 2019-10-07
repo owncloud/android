@@ -17,7 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.data.sharing.sharees
+package com.owncloud.android.data.sharing.sharees.repository
 
 import com.owncloud.android.data.sharing.sharees.datasources.RemoteShareeDataSource
 import com.owncloud.android.domain.sharing.sharees.ShareeRepository
@@ -31,7 +31,7 @@ class OCShareeRepository(
         searchString: String,
         page: Int,
         perPage: Int
-    ): ArrayList<JSONObject> {
+    ) : ArrayList<JSONObject> {
         return remoteShareeDataSource.getSharees(
             searchString, page, perPage
         )

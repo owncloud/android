@@ -19,7 +19,6 @@
 
 package com.owncloud.android.data
 
-import com.owncloud.android.domain.capabilities.exceptions.GetCapabilitiesGenericException
 import com.owncloud.android.domain.exceptions.AccountException
 import com.owncloud.android.domain.exceptions.AccountNotFoundException
 import com.owncloud.android.domain.exceptions.AccountNotNewException
@@ -57,6 +56,8 @@ import com.owncloud.android.domain.exceptions.ServerConnectionTimeoutException
 import com.owncloud.android.domain.exceptions.ServerNotReachableException
 import com.owncloud.android.domain.exceptions.ServerResponseTimeoutException
 import com.owncloud.android.domain.exceptions.ServiceUnavailableException
+import com.owncloud.android.domain.exceptions.ShareForbiddenException
+import com.owncloud.android.domain.exceptions.ShareNotFoundException
 import com.owncloud.android.domain.exceptions.ShareWrongParameterException
 import com.owncloud.android.domain.exceptions.SpecificForbiddenException
 import com.owncloud.android.domain.exceptions.SpecificMethodNotAllowedException
@@ -67,58 +68,25 @@ import com.owncloud.android.domain.exceptions.UnauthorizedException
 import com.owncloud.android.domain.exceptions.UnhandledHttpCodeException
 import com.owncloud.android.domain.exceptions.UnknownErrorException
 import com.owncloud.android.domain.exceptions.WrongServerResponseException
-import com.owncloud.android.domain.sharing.sharees.exceptions.GetShareesGenericException
-import com.owncloud.android.domain.sharing.shares.exceptions.CreateShareForbiddenException
-import com.owncloud.android.domain.sharing.shares.exceptions.CreateShareGenericException
-import com.owncloud.android.domain.sharing.shares.exceptions.CreateShareFileNotFoundException
-import com.owncloud.android.domain.sharing.shares.exceptions.GetSharesGenericException
-import com.owncloud.android.domain.sharing.shares.exceptions.RemoveShareForbiddenException
-import com.owncloud.android.domain.sharing.shares.exceptions.RemoveShareGenericException
-import com.owncloud.android.domain.sharing.shares.exceptions.RemoveShareFileNotFoundException
-import com.owncloud.android.domain.sharing.shares.exceptions.UpdateShareForbiddenException
-import com.owncloud.android.domain.sharing.shares.exceptions.UpdateShareGenericException
-import com.owncloud.android.domain.sharing.shares.exceptions.UpdateShareFileNotFoundException
-import com.owncloud.android.lib.common.OwnCloudClient
-import com.owncloud.android.lib.common.operations.RemoteOperation
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
-import com.owncloud.android.lib.resources.shares.CreateRemoteShareOperation
-import com.owncloud.android.lib.resources.shares.GetRemoteShareesOperation
-import com.owncloud.android.lib.resources.shares.GetRemoteSharesForFileOperation
-import com.owncloud.android.lib.resources.shares.RemoveRemoteShareOperation
-import com.owncloud.android.lib.resources.shares.UpdateRemoteShareOperation
-import com.owncloud.android.lib.resources.status.GetRemoteCapabilitiesOperation
 import java.net.SocketTimeoutException
 
-fun <T> executeRemoteOperation(remoteOperation: RemoteOperation<T>, client: OwnCloudClient): T {
-    remoteOperation.execute(client).also {
-        return handleRemoteOperationResult(it, remoteOperation)
+fun <T> awaitToResponse(request: () -> RemoteOperationResult<T>): T {
+    request.invoke().also {
+        return handleRemoteOperationResult(it)
     }
 }
 
 private fun <T> handleRemoteOperationResult(
-    remoteOperationResult: RemoteOperationResult<T>,
-    remoteOperation: RemoteOperation<T>
+    remoteOperationResult: RemoteOperationResult<T>
 ): T {
     if (remoteOperationResult.isSuccess) {
         return remoteOperationResult.data
     }
 
     when (remoteOperationResult.code) {
-        RemoteOperationResult.ResultCode.SHARE_NOT_FOUND -> {
-            when (remoteOperation) {
-                is CreateRemoteShareOperation -> throw CreateShareFileNotFoundException()
-                is UpdateRemoteShareOperation -> throw UpdateShareFileNotFoundException()
-                is RemoveRemoteShareOperation -> throw RemoveShareFileNotFoundException()
-            }
-        }
-
-        RemoteOperationResult.ResultCode.SHARE_FORBIDDEN -> {
-            when (remoteOperation) {
-                is CreateRemoteShareOperation -> throw CreateShareForbiddenException()
-                is UpdateRemoteShareOperation -> throw UpdateShareForbiddenException()
-                is RemoveRemoteShareOperation -> throw RemoveShareForbiddenException()
-            }
-        }
+        RemoteOperationResult.ResultCode.SHARE_NOT_FOUND -> throw ShareNotFoundException()
+        RemoteOperationResult.ResultCode.SHARE_FORBIDDEN -> throw ShareForbiddenException()
 
         RemoteOperationResult.ResultCode.WRONG_CONNECTION -> throw NoConnectionWithServerException()
         RemoteOperationResult.ResultCode.NO_NETWORK_CONNECTION -> throw NoNetworkConnectionException()
@@ -170,17 +138,15 @@ private fun <T> handleRemoteOperationResult(
         RemoteOperationResult.ResultCode.SPECIFIC_SERVICE_UNAVAILABLE -> throw SpecificServiceUnavailableException()
         RemoteOperationResult.ResultCode.SPECIFIC_UNSUPPORTED_MEDIA_TYPE -> throw SpecificUnsupportedMediaTypeException()
         RemoteOperationResult.ResultCode.SPECIFIC_METHOD_NOT_ALLOWED -> throw SpecificMethodNotAllowedException()
-        else -> {
-            when (remoteOperation) {
-                is GetRemoteCapabilitiesOperation -> throw GetCapabilitiesGenericException()
-                is GetRemoteShareesOperation -> throw GetShareesGenericException()
-                is GetRemoteSharesForFileOperation -> throw GetSharesGenericException()
-                is CreateRemoteShareOperation -> throw CreateShareGenericException()
-                is UpdateRemoteShareOperation -> throw UpdateShareGenericException()
-                is RemoveRemoteShareOperation -> throw RemoveShareGenericException()
-            }
-        }
+//        else -> {
+//            when (remoteOperation) {
+//                is GetRemoteShareesOperation -> throw GetShareesGenericException()
+//                is GetRemoteSharesForFileOperation -> throw GetSharesGenericException()
+//                is CreateRemoteShareOperation -> throw CreateShareGenericException()
+//                is UpdateRemoteShareOperation -> throw UpdateShareGenericException()
+//                is RemoveRemoteShareOperation -> throw RemoveShareGenericException()
+//            }
+//        }
+        else -> throw Exception()
     }
-
-    throw Exception()
 }

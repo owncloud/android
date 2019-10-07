@@ -19,23 +19,21 @@
 
 package com.owncloud.android.data.capabilities.datasources.implementation
 
+import com.owncloud.android.data.awaitToResponse
 import com.owncloud.android.data.capabilities.datasources.RemoteCapabilitiesDataSource
-import com.owncloud.android.data.executeRemoteOperation
 import com.owncloud.android.data.sharing.shares.datasources.mapper.RemoteCapabilityMapper
 import com.owncloud.android.domain.capabilities.model.OCCapability
-import com.owncloud.android.lib.common.OwnCloudClient
-import com.owncloud.android.lib.resources.status.GetRemoteCapabilitiesOperation
+import com.owncloud.android.lib.resources.status.CapabilityService
 
 class OCRemoteCapabilitiesDataSource(
-    private val client: OwnCloudClient,
+    private val capabilityService: CapabilityService,
     private val remoteCapabilityMapper: RemoteCapabilityMapper
 ) : RemoteCapabilitiesDataSource {
 
     override fun getCapabilities(
-        accountName: String,
-        getRemoteCapabilitiesOperation: GetRemoteCapabilitiesOperation
+        accountName: String
     ): OCCapability {
-        executeRemoteOperation(getRemoteCapabilitiesOperation, client).let { remoteCapability ->
+        awaitToResponse { capabilityService.getCapabilities() }.let { remoteCapability ->
             return remoteCapabilityMapper.toModel(remoteCapability)!!.also { it.accountName = accountName }
         }
     }

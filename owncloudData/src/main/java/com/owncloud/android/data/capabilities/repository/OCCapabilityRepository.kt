@@ -18,7 +18,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.data.capabilities
+package com.owncloud.android.data.capabilities.repository
 
 import androidx.lifecycle.LiveData
 import com.owncloud.android.data.capabilities.datasources.LocalCapabilitiesDataSource
