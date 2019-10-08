@@ -145,6 +145,4 @@ public class ConfirmationDialogFragment extends DialogFragment {
 
         void onCancel(String callerTag);
     }
-
 }
-

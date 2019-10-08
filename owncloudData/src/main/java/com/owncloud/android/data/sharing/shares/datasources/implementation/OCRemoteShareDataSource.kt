@@ -19,7 +19,7 @@
 
 package com.owncloud.android.data.sharing.shares.datasources.implementation
 
-import com.owncloud.android.data.awaitToResponse
+import com.owncloud.android.data.executeRemoteOperation
 import com.owncloud.android.data.sharing.shares.datasources.RemoteShareDataSource
 import com.owncloud.android.data.sharing.shares.datasources.mapper.RemoteShareMapper
 import com.owncloud.android.domain.sharing.shares.model.OCShare
@@ -37,7 +37,7 @@ class OCRemoteShareDataSource(
         subfiles: Boolean,
         accountName: String
     ): List<OCShare> {
-        awaitToResponse {
+        executeRemoteOperation {
             shareService.getShares(remoteFilePath, reshares, subfiles)
         }.let {
             return it.shares.map { remoteShare ->
@@ -59,7 +59,7 @@ class OCRemoteShareDataSource(
         publicUpload: Boolean,
         accountName: String
     ): OCShare {
-        awaitToResponse {
+        executeRemoteOperation {
             shareService.insertShare(
                 remoteFilePath,
                 com.owncloud.android.lib.resources.shares.ShareType.fromValue(shareType.value)!!,
@@ -86,7 +86,7 @@ class OCRemoteShareDataSource(
         publicUpload: Boolean,
         accountName: String
     ): OCShare {
-        awaitToResponse {
+        executeRemoteOperation {
             shareService.updateShare(
                 remoteId,
                 name,
@@ -103,7 +103,7 @@ class OCRemoteShareDataSource(
     }
 
     override fun deleteShare(remoteId: Long) {
-        awaitToResponse {
+        executeRemoteOperation {
             shareService.deleteShare(remoteId)
         }
     }

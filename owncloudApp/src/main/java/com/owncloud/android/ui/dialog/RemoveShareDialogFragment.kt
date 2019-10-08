@@ -30,19 +30,14 @@ package com.owncloud.android.ui.dialog
 
 import android.accounts.Account
 import android.app.Dialog
+import android.content.Context
 import android.os.Bundle
-import android.util.Log
-import androidx.lifecycle.Observer
 import com.owncloud.android.R
 import com.owncloud.android.domain.sharing.shares.model.OCShare
 import com.owncloud.android.domain.sharing.shares.model.ShareType
 import com.owncloud.android.lib.common.utils.Log_OC
-import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.ui.sharing.fragments.ShareFragmentListener
-import com.owncloud.android.presentation.viewmodels.sharing.OCShareViewModel
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment.ConfirmationDialogFragmentListener
-import org.koin.androidx.viewmodel.ext.android.viewModel
-import org.koin.core.parameter.parametersOf
 
 class RemoveShareDialogFragment : ConfirmationDialogFragment(), ConfirmationDialogFragmentListener {
     private var targetShare: OCShare? = null
@@ -52,13 +47,6 @@ class RemoveShareDialogFragment : ConfirmationDialogFragment(), ConfirmationDial
      * Reference to parent listener
      */
     private var listener: ShareFragmentListener? = null
-
-    private val ocShareViewModel: OCShareViewModel by viewModel {
-        parametersOf(
-            targetShare?.path,
-            account?.name!!
-        )
-    }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = super.onCreateDialog(savedInstanceState)
@@ -70,12 +58,21 @@ class RemoveShareDialogFragment : ConfirmationDialogFragment(), ConfirmationDial
         return dialog
     }
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        try {
+            listener = activity as ShareFragmentListener?
+        } catch (e: IllegalStateException) {
+            throw IllegalStateException(activity!!.toString() + " must implement OnShareFragmentInteractionListener")
+        }
+    }
+
     /**
      * Performs the removal of the target share, both locally and in the server.
      */
     override fun onConfirmation(callerTag: String) {
         Log_OC.d(TAG, "Removing share " + targetShare!!.name)
-        ocShareViewModel.deleteShare(targetShare?.remoteId!!)
+        listener?.deleteShare(targetShare?.remoteId!!)
     }
 
     override fun onCancel(callerTag: String) {
@@ -84,32 +81,6 @@ class RemoveShareDialogFragment : ConfirmationDialogFragment(), ConfirmationDial
 
     override fun onNeutral(callerTag: String) {
         // nothing to do here
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        observeShareDeletion()
-    }
-
-    private fun observeShareDeletion() {
-        ocShareViewModel.shareDeletionStatus.observe(
-            this,
-            Observer { uiResult ->
-                when (uiResult) {
-                    is UIResult.Success -> {
-                        dismiss()
-                    }
-                    is UIResult.Loading -> {
-                        listener?.showLoading()
-                    }
-                    else -> {
-                        Log.d(
-                            TAG, "Unknown status when removing share"
-                        )
-                    }
-                }
-            }
-        )
     }
 
     companion object {

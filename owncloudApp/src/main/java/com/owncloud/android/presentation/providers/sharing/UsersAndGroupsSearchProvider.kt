@@ -38,8 +38,10 @@ import android.widget.Toast
 import com.owncloud.android.R
 import com.owncloud.android.authentication.AccountUtils
 import com.owncloud.android.datamodel.FileDataStorageManager
+import com.owncloud.android.domain.capabilities.usecases.GetStoredCapabilitiesUseCase
 import com.owncloud.android.domain.sharing.sharees.GetShareesAsyncUseCase
 import com.owncloud.android.domain.sharing.shares.model.ShareType
+import com.owncloud.android.extensions.parseError
 import com.owncloud.android.lib.common.utils.Log_OC
 import com.owncloud.android.lib.resources.shares.GetRemoteShareesOperation
 import org.json.JSONException
@@ -125,104 +127,121 @@ class UsersAndGroupsSearchProvider : ContentProvider() {
         /// directly started by our code, but from SearchView implementation
         val account = AccountUtils.getCurrentOwnCloudAccount(context)
 
+        val getStoredCapabilitiesUseCase: GetStoredCapabilitiesUseCase by inject()
+
+        val capabilities = getStoredCapabilitiesUseCase.execute(
+            GetStoredCapabilitiesUseCase.Params(
+                accountName = account.name
+            )
+        )
+
+        val minCharactersToSearch = capabilities?.filesSharingSearchMinLength ?: DEFAULT_MIN_CHARACTERS_TO_SEARCH
+
+        if (userQuery.length < minCharactersToSearch) { // Do not search
+            return MatrixCursor(COLUMNS)
+        }
+
         val getShareesAsyncUseCase: GetShareesAsyncUseCase by inject()
 
-        getShareesAsyncUseCase.execute(
+        val getShareesResult = getShareesAsyncUseCase.execute(
             GetShareesAsyncUseCase.Params(
                 userQuery,
                 REQUESTED_PAGE,
                 RESULTS_PER_PAGE
             )
-        ).also { useCaseResult ->
-            if (useCaseResult.isError) {
-//                showErrorMessage(useCaseResult.getErrorOrNull())
-            }
+        )
 
-            val names = useCaseResult.getDataOrNull()
+        if (getShareesResult.isError) {
+            showErrorMessage(
+                context!!.resources.getString(R.string.get_sharees_error),
+                getShareesResult.getThrowableOrNull()
+            )
+        }
 
-            // convert the responses from the OC server to the expected format
-            if (names?.size!! > 0) {
-                response = MatrixCursor(COLUMNS)
-                val namesIt = names.iterator()
-                var item: JSONObject
-                var displayName: String? = null
-                var icon = 0
-                var dataUri: Uri? = null
-                var count = 0
+        val names = getShareesResult.getDataOrNull()
 
-                val userBaseUri = Uri.Builder().scheme(CONTENT).authority(
-                    suggestAuthority!! + DATA_USER_SUFFIX
-                ).build()
-                val groupBaseUri = Uri.Builder().scheme(CONTENT).authority(
-                    suggestAuthority!! + DATA_GROUP_SUFFIX
-                ).build()
-                val remoteBaseUri = Uri.Builder().scheme(CONTENT).authority(
-                    suggestAuthority!! + DATA_REMOTE_SUFFIX
-                ).build()
+        // convert the responses from the OC server to the expected format
+        if (names?.size!! > 0) {
+            response = MatrixCursor(COLUMNS)
+            val namesIt = names.iterator()
+            var item: JSONObject
+            var displayName: String? = null
+            var icon = 0
+            var dataUri: Uri? = null
+            var count = 0
 
-                val manager = FileDataStorageManager(
-                    context,
-                    account, context!!.contentResolver
-                )
-                val federatedShareAllowed = manager.getCapability(account!!.name)?.filesSharingFederationOutgoing
-                    ?.isTrue
+            val userBaseUri = Uri.Builder().scheme(CONTENT).authority(
+                suggestAuthority!! + DATA_USER_SUFFIX
+            ).build()
+            val groupBaseUri = Uri.Builder().scheme(CONTENT).authority(
+                suggestAuthority!! + DATA_GROUP_SUFFIX
+            ).build()
+            val remoteBaseUri = Uri.Builder().scheme(CONTENT).authority(
+                suggestAuthority!! + DATA_REMOTE_SUFFIX
+            ).build()
 
-                try {
-                    while (namesIt.hasNext()) {
-                        item = namesIt.next()
-                        var userName = item.getString(GetRemoteShareesOperation.PROPERTY_LABEL)
-                        val value = item.getJSONObject(GetRemoteShareesOperation.NODE_VALUE)
-                        val type = value.getInt(GetRemoteShareesOperation.PROPERTY_SHARE_TYPE)
-                        val shareWith = value.getString(GetRemoteShareesOperation.PROPERTY_SHARE_WITH)
+            val manager = FileDataStorageManager(
+                context,
+                account, context!!.contentResolver
+            )
+            val federatedShareAllowed = manager.getCapability(account!!.name)?.filesSharingFederationOutgoing
+                ?.isTrue
 
-                        try {
-                            val shareWithAdditionalInfo = value.getString(
-                                GetRemoteShareesOperation.PROPERTY_SHARE_WITH_ADDITIONAL_INFO
-                            )
+            try {
+                while (namesIt.hasNext()) {
+                    item = namesIt.next()
+                    var userName = item.getString(GetRemoteShareesOperation.PROPERTY_LABEL)
+                    val value = item.getJSONObject(GetRemoteShareesOperation.NODE_VALUE)
+                    val type = value.getInt(GetRemoteShareesOperation.PROPERTY_SHARE_TYPE)
+                    val shareWith = value.getString(GetRemoteShareesOperation.PROPERTY_SHARE_WITH)
 
-                            userName = if (shareWithAdditionalInfo.isEmpty())
-                                userName
-                            else
-                                "$userName ($shareWithAdditionalInfo)"
+                    try {
+                        val shareWithAdditionalInfo = value.getString(
+                            GetRemoteShareesOperation.PROPERTY_SHARE_WITH_ADDITIONAL_INFO
+                        )
 
-                        } catch (e: JSONException) {
-                            Log_OC.e(TAG, "Exception while parsing shareWithAdditionalInfo", e)
-                        }
+                        userName = if (shareWithAdditionalInfo.isEmpty())
+                            userName
+                        else
+                            "$userName ($shareWithAdditionalInfo)"
 
-                        if (ShareType.GROUP.value == type) {
-                            displayName = context!!.getString(R.string.share_group_clarification, userName)
-                            icon = R.drawable.ic_group
-                            dataUri = Uri.withAppendedPath(groupBaseUri, shareWith)
-                        } else if (ShareType.FEDERATED.value == type && federatedShareAllowed!!) {
-                            icon = R.drawable.ic_user
-                            if (userName == shareWith) {
-                                displayName = context!!.getString(R.string.share_remote_clarification, userName)
-                            } else {
-                                val uriSplitted =
-                                    shareWith.split("@".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-                                displayName = context!!.getString(
-                                    R.string.share_known_remote_clarification, userName,
-                                    uriSplitted[uriSplitted.size - 1]
-                                )
-                            }
-                            dataUri = Uri.withAppendedPath(remoteBaseUri, shareWith)
-                        } else if (ShareType.USER.value == type) {
-                            displayName = userName
-                            icon = R.drawable.ic_user
-                            dataUri = Uri.withAppendedPath(userBaseUri, shareWith)
-                        }
-
-                        if (displayName != null && dataUri != null) {
-                            response!!.newRow()
-                                .add(count++)             // BaseColumns._ID
-                                .add(displayName)         // SearchManager.SUGGEST_COLUMN_TEXT_1
-                                .add(icon)                // SearchManager.SUGGEST_COLUMN_ICON_1
-                                .add(dataUri)
-                        }
+                    } catch (e: JSONException) {
+                        Log_OC.e(TAG, "Exception while parsing shareWithAdditionalInfo", e)
                     }
-                } catch (e: JSONException) {
-                    Log_OC.e(TAG, "Exception while parsing data of users/groups", e)
+
+                    if (ShareType.GROUP.value == type) {
+                        displayName = context!!.getString(R.string.share_group_clarification, userName)
+                        icon = R.drawable.ic_group
+                        dataUri = Uri.withAppendedPath(groupBaseUri, shareWith)
+                    } else if (ShareType.FEDERATED.value == type && federatedShareAllowed!!) {
+                        icon = R.drawable.ic_user
+                        if (userName == shareWith) {
+                            displayName = context!!.getString(R.string.share_remote_clarification, userName)
+                        } else {
+                            val uriSplitted =
+                                shareWith.split("@".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+                            displayName = context!!.getString(
+                                R.string.share_known_remote_clarification, userName,
+                                uriSplitted[uriSplitted.size - 1]
+                            )
+                        }
+                        dataUri = Uri.withAppendedPath(remoteBaseUri, shareWith)
+                    } else if (ShareType.USER.value == type) {
+                        displayName = userName
+                        icon = R.drawable.ic_user
+                        dataUri = Uri.withAppendedPath(userBaseUri, shareWith)
+                    }
+
+                    if (displayName != null && dataUri != null) {
+                        response!!.newRow()
+                            .add(count++)             // BaseColumns._ID
+                            .add(displayName)         // SearchManager.SUGGEST_COLUMN_TEXT_1
+                            .add(icon)                // SearchManager.SUGGEST_COLUMN_ICON_1
+                            .add(dataUri)
+                    }
                 }
+            } catch (e: JSONException) {
+                Log_OC.e(TAG, "Exception while parsing data of users/groups", e)
             }
         }
 
@@ -249,7 +268,11 @@ class UsersAndGroupsSearchProvider : ContentProvider() {
      *
      * @param resource Resource with the failure information.
      */
-    private fun showErrorMessage(errorMessage: String?) {
+    private fun showErrorMessage(message: String?, throwable: Throwable?) {
+        val reason = throwable?.parseError(context!!.resources) ?: return
+        val errorMessage =
+            if (reason.isEmpty()) message else "$message ${context!!.resources.getString(R.string.error_reason)} $reason"
+
         val handler = Handler(Looper.getMainLooper())
 
         // The Toast must be shown in the main thread to grant that will be hidden correctly; otherwise

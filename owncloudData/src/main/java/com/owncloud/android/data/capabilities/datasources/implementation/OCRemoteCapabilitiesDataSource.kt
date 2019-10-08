@@ -19,7 +19,7 @@
 
 package com.owncloud.android.data.capabilities.datasources.implementation
 
-import com.owncloud.android.data.awaitToResponse
+import com.owncloud.android.data.executeRemoteOperation
 import com.owncloud.android.data.capabilities.datasources.RemoteCapabilitiesDataSource
 import com.owncloud.android.data.sharing.shares.datasources.mapper.RemoteCapabilityMapper
 import com.owncloud.android.domain.capabilities.model.OCCapability
@@ -33,7 +33,7 @@ class OCRemoteCapabilitiesDataSource(
     override fun getCapabilities(
         accountName: String
     ): OCCapability {
-        awaitToResponse { capabilityService.getCapabilities() }.let { remoteCapability ->
+        executeRemoteOperation { capabilityService.getCapabilities() }.let { remoteCapability ->
             return remoteCapabilityMapper.toModel(remoteCapability)!!.also { it.accountName = accountName }
         }
     }

@@ -38,7 +38,6 @@ import androidx.lifecycle.Observer
 import com.google.android.material.snackbar.Snackbar
 import com.owncloud.android.R
 import com.owncloud.android.authentication.AccountUtils
-import com.owncloud.android.data.sharing.shares.db.OCShareEntity
 import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.datamodel.ThumbnailsCacheManager
 import com.owncloud.android.domain.capabilities.model.CapabilityBooleanType
@@ -610,14 +609,6 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
             view.shareWarning?.visibility = View.GONE
         }
     }
-
-//    private fun showError(message: String) {
-//        Snackbar.make(
-//            activity?.findViewById(android.R.id.content)!!,
-//            message,
-//            Snackbar.LENGTH_SHORT
-//        ).show()
-//    }
 
     companion object {
 
