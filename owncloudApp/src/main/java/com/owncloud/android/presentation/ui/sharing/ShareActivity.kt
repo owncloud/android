@@ -35,6 +35,7 @@ import com.owncloud.android.R
 import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.domain.sharing.shares.model.OCShare
 import com.owncloud.android.domain.sharing.shares.model.ShareType
+import com.owncloud.android.extensions.showError
 import com.owncloud.android.lib.common.utils.Log_OC
 import com.owncloud.android.lib.resources.shares.RemoteShare
 import com.owncloud.android.presentation.UIResult
@@ -83,6 +84,7 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
 
         observePrivateShareCreation()
         observePrivateShareEdition()
+        observeShareDeletion()
     }
 
     public override fun onStop() {
@@ -143,11 +145,7 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
             Observer { uiResult ->
                 when (uiResult) {
                     is UIResult.Error -> {
-//                        Snackbar.make(
-//                            findViewById(android.R.id.content)!!,
-//                            uiResult.errorMessage!!,
-//                            Snackbar.LENGTH_SHORT
-//                        ).show()
+                        showError(getString(R.string.share_link_file_error), uiResult.error)
                         dismissLoadingDialog()
                     }
                     is UIResult.Loading -> {
@@ -196,11 +194,7 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
             Observer { uiResult ->
                 when (uiResult) {
                     is UIResult.Error -> {
-//                        Snackbar.make(
-//                            findViewById(android.R.id.content)!!,
-//                            uiResult.errorMessage!!,
-//                            Snackbar.LENGTH_SHORT
-//                        ).show()
+                        showError(getString(R.string.share_link_file_error), uiResult.error)
                         dismissLoadingDialog()
                     }
                     is UIResult.Loading -> {
@@ -271,12 +265,38 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
      ************************************************** COMMON ****************************************************
      **************************************************************************************************************/
 
+    private fun observeShareDeletion() {
+        ocShareViewModel.shareDeletionStatus.observe(
+            this,
+            Observer { uiResult ->
+                when (uiResult) {
+                    is UIResult.Error -> {
+                        dismissLoadingDialog()
+                        showError(getString(R.string.unshare_link_file_error), uiResult.error)
+                    }
+                    is UIResult.Loading -> {
+                        showLoading()
+                    }
+                    else -> {
+                        Log.d(
+                            TAG, "Unknown status when removing share"
+                        )
+                    }
+                }
+            }
+        )
+    }
+
     override fun showRemoveShare(share: OCShare) {
         val removePublicShareFragment = RemoveShareDialogFragment.newInstance(share, account)
         showDialogFragment(
             removePublicShareFragment,
             TAG_REMOVE_SHARE_DIALOG_FRAGMENT
         )
+    }
+
+    override fun deleteShare(remoteId: Long) {
+        ocShareViewModel.deleteShare(remoteId)
     }
 
     override fun copyOrSendPublicLink(share: OCShare) {

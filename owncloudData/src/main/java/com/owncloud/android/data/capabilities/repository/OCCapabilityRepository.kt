@@ -42,12 +42,7 @@ class OCCapabilityRepository(
     override fun refreshCapabilitiesForAccount(
         accountName: String
     ) {
-        remoteCapabilitiesDataSource.getCapabilities(
-            accountName
-        ).also { capabilitiesFromNetwork ->
-            localCapabilitiesDataSource.insert(
-                listOf(capabilitiesFromNetwork)
-            )
-        }
+        val capabilitiesFromNetwork = remoteCapabilitiesDataSource.getCapabilities(accountName)
+        localCapabilitiesDataSource.insert(listOf(capabilitiesFromNetwork))
     }
 }

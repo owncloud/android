@@ -39,6 +39,8 @@ import com.owncloud.android.domain.sharing.shares.model.OCShare
 interface ShareFragmentListener {
     fun copyOrSendPrivateLink(file: OCFile)
 
+    fun deleteShare(remoteId: Long)
+
     fun showLoading()
 
     fun dismissLoading()

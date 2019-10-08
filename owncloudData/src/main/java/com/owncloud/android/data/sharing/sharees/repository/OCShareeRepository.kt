@@ -31,9 +31,5 @@ class OCShareeRepository(
         searchString: String,
         page: Int,
         perPage: Int
-    ) : ArrayList<JSONObject> {
-        return remoteShareeDataSource.getSharees(
-            searchString, page, perPage
-        )
-    }
+    ): ArrayList<JSONObject> = remoteShareeDataSource.getSharees(searchString, page, perPage)
 }

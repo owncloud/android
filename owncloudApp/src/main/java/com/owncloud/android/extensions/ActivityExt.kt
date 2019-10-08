@@ -17,8 +17,24 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.domain.sharing.shares.exceptions
+package com.owncloud.android.extensions
 
-import java.lang.Exception
+import android.app.Activity
+import com.google.android.material.snackbar.Snackbar
+import com.owncloud.android.R
 
-class CreateShareFileNotFoundException : Exception()
+fun Activity.showError(message: String, throwable: Throwable?) {
+    val reason = throwable?.parseError(resources) ?: return
+    if (reason.isEmpty()) {
+        showMessage(message)
+    } else {
+        showMessage("$message ${getString(R.string.error_reason)} $reason")
+    }
+}
+
+fun Activity.showMessage(
+    message: CharSequence,
+    duration: Int = Snackbar.LENGTH_LONG
+) {
+    Snackbar.make(findViewById(android.R.id.content), message, duration).show()
+}
