@@ -71,9 +71,9 @@ interface ShareRepository {
      *********************************************** COMMON ***********************************************
      ******************************************************************************************************/
 
-    fun getSharesAsLiveData(filePath: String, accountName: String): LiveData<List<OCShare>?>
+    fun getStoredShares(filePath: String, accountName: String): LiveData<List<OCShare>?>
 
-    fun getShareAsLiveData(remoteId: Long): LiveData<OCShare>
+    fun getStoredShare(remoteId: Long): LiveData<OCShare>
 
     fun refreshSharesFromNetwork(filePath: String, accountName: String)
 

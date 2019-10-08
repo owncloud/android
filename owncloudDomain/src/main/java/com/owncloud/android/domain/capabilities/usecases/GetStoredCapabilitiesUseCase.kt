@@ -24,11 +24,11 @@ import com.owncloud.android.domain.capabilities.CapabilityRepository
 import com.owncloud.android.domain.BaseUseCase
 import com.owncloud.android.domain.capabilities.model.OCCapability
 
-class GetCapabilitiesAsLiveDataUseCase(
+class GetStoredCapabilitiesUseCase(
     private val capabilityRepository: CapabilityRepository
-) : BaseUseCase<LiveData<OCCapability?>, GetCapabilitiesAsLiveDataUseCase.Params>() {
+) : BaseUseCase<LiveData<OCCapability?>, GetStoredCapabilitiesUseCase.Params>() {
 
-    override fun run(params: Params): LiveData<OCCapability?> = capabilityRepository.getCapabilitiesAsLiveData(
+    override fun run(params: Params): LiveData<OCCapability?> = capabilityRepository.getStoredCapabilities(
         params.accountName
     )
 

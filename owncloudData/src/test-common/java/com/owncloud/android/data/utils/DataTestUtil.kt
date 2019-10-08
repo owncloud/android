@@ -117,11 +117,11 @@ object DataTestUtil {
     fun createPrivateShare(
         remoteId: Long = 1,
         shareType: Int = 0,
-        shareWith: String,
-        path: String,
+        shareWith: String = "whoever",
+        path: String = "/Photos/image.jpg",
         permissions: Int = -1,
-        isFolder: Boolean,
-        sharedWithDisplayName: String,
+        isFolder: Boolean = false,
+        sharedWithDisplayName: String = "whatever",
         accountOwner: String = "admin@server"
     ) = createShare(
         remoteId = remoteId,
@@ -156,14 +156,14 @@ object DataTestUtil {
 
     fun createPublicShare(
         shareWith: String = "",
-        path: String,
+        path: String = "/Photos/image.jpg",
         expirationDate: Long = 1000,
-        isFolder: Boolean,
+        isFolder: Boolean = false,
         permissions: Int = 1,
         remoteId: Long = 1,
         accountOwner: String = "admin@server",
-        name: String,
-        shareLink: String
+        name: String = "Image link",
+        shareLink: String = "link"
     ) = createShare(
         shareWith = shareWith,
         shareType = 3,

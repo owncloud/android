@@ -25,7 +25,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.owncloud.android.domain.capabilities.model.OCCapability
-import com.owncloud.android.domain.capabilities.usecases.GetCapabilitiesAsLiveDataUseCase
+import com.owncloud.android.domain.capabilities.usecases.GetStoredCapabilitiesUseCase
 import com.owncloud.android.domain.capabilities.usecases.RefreshCapabilitiesFromServerAsyncUseCase
 import com.owncloud.android.presentation.UIResult
 import kotlinx.coroutines.Dispatchers
@@ -37,15 +37,15 @@ import kotlinx.coroutines.withContext
  */
 class OCCapabilityViewModel(
     private val accountName: String,
-    private val getCapabilitiesAsLiveDataUseCase: GetCapabilitiesAsLiveDataUseCase,
+    getStoredCapabilitiesUseCase: GetStoredCapabilitiesUseCase,
     private val refreshCapabilitiesFromServerUseCase: RefreshCapabilitiesFromServerAsyncUseCase
 ) : ViewModel() {
 
     private val _capabilities = MediatorLiveData<UIResult<OCCapability>>()
     val capabilities: LiveData<UIResult<OCCapability>> = _capabilities
 
-    private var capabilitiesLiveData: LiveData<OCCapability?> = getCapabilitiesAsLiveDataUseCase.execute(
-        GetCapabilitiesAsLiveDataUseCase.Params(
+    private var capabilitiesLiveData: LiveData<OCCapability?> = getStoredCapabilitiesUseCase.execute(
+        GetStoredCapabilitiesUseCase.Params(
             accountName = accountName
         )
     )

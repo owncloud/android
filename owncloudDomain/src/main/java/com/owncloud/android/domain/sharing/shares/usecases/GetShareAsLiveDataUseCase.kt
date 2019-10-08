@@ -28,7 +28,7 @@ class GetShareAsLiveDataUseCase(
     private val shareRepository: ShareRepository
 ) : BaseUseCase<LiveData<OCShare>, GetShareAsLiveDataUseCase.Params>() {
     override fun run(params: Params): LiveData<OCShare> =
-        shareRepository.getShareAsLiveData(
+        shareRepository.getStoredShare(
             params.remoteId
         )
 

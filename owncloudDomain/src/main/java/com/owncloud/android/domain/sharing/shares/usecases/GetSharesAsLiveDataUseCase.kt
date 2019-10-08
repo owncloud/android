@@ -29,7 +29,7 @@ class GetSharesAsLiveDataUseCase(
 ) : BaseUseCase<LiveData<List<OCShare>?>, GetSharesAsLiveDataUseCase.Params>() {
 
     override fun run(params: Params): LiveData<List<OCShare>?> {
-        return shareRepository.getSharesAsLiveData(
+        return shareRepository.getStoredShares(
             params.filePath,
             params.accountName
         )

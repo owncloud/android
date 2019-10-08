@@ -27,5 +27,5 @@ interface CapabilityRepository {
         accountName: String
     )
 
-    fun getCapabilitiesAsLiveData(accountName: String): LiveData<OCCapability?>
+    fun getStoredCapabilities(accountName: String): LiveData<OCCapability?>
 }

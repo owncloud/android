@@ -30,7 +30,7 @@ class OCCapabilityRepository(
     private val remoteCapabilitiesDataSource: RemoteCapabilitiesDataSource
 ) : CapabilityRepository {
 
-    override fun getCapabilitiesAsLiveData(accountName: String): LiveData<OCCapability?> {
+    override fun getStoredCapabilities(accountName: String): LiveData<OCCapability?> {
         return localCapabilitiesDataSource.getCapabilitiesForAccountAsLiveData(accountName)
     }
 

@@ -109,16 +109,11 @@ class OCShareRepository(
         )
     }
 
-    override fun deleteShare(remoteId: Long) {
-        remoteShareDataSource.deleteShare(remoteId)
-        localShareDataSource.deleteShare(remoteId)
-    }
-
     /******************************************************************************************************
      *********************************************** COMMON ***********************************************
      ******************************************************************************************************/
 
-    override fun getSharesAsLiveData(filePath: String, accountName: String): LiveData<List<OCShare>?> {
+    override fun getStoredShares(filePath: String, accountName: String): LiveData<List<OCShare>?> {
         return localShareDataSource.getSharesAsLiveData(
             filePath, accountName, listOf(
                 ShareType.PUBLIC_LINK,
@@ -129,7 +124,7 @@ class OCShareRepository(
         )
     }
 
-    override fun getShareAsLiveData(remoteId: Long): LiveData<OCShare> =
+    override fun getStoredShare(remoteId: Long): LiveData<OCShare> =
         localShareDataSource.getShareAsLiveData(remoteId)
 
     override fun refreshSharesFromNetwork(
@@ -148,6 +143,11 @@ class OCShareRepository(
             // Save shares
             localShareDataSource.replaceShares(sharesFromNetwork)
         }
+    }
+
+    override fun deleteShare(remoteId: Long) {
+        remoteShareDataSource.deleteShare(remoteId)
+        localShareDataSource.deleteShare(remoteId)
     }
 
     private fun insertShare(
