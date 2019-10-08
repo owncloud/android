@@ -71,7 +71,7 @@ import com.owncloud.android.domain.exceptions.WrongServerResponseException
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import java.net.SocketTimeoutException
 
-fun <T> awaitToResponse(request: () -> RemoteOperationResult<T>): T {
+fun <T> executeRemoteOperation(request: () -> RemoteOperationResult<T>): T {
     request.invoke().also {
         return handleRemoteOperationResult(it)
     }
@@ -138,15 +138,6 @@ private fun <T> handleRemoteOperationResult(
         RemoteOperationResult.ResultCode.SPECIFIC_SERVICE_UNAVAILABLE -> throw SpecificServiceUnavailableException()
         RemoteOperationResult.ResultCode.SPECIFIC_UNSUPPORTED_MEDIA_TYPE -> throw SpecificUnsupportedMediaTypeException()
         RemoteOperationResult.ResultCode.SPECIFIC_METHOD_NOT_ALLOWED -> throw SpecificMethodNotAllowedException()
-//        else -> {
-//            when (remoteOperation) {
-//                is GetRemoteShareesOperation -> throw GetShareesGenericException()
-//                is GetRemoteSharesForFileOperation -> throw GetSharesGenericException()
-//                is CreateRemoteShareOperation -> throw CreateShareGenericException()
-//                is UpdateRemoteShareOperation -> throw UpdateShareGenericException()
-//                is RemoveRemoteShareOperation -> throw RemoveShareGenericException()
-//            }
-//        }
         else -> throw Exception()
     }
 }

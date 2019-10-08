@@ -54,8 +54,7 @@ class OCShareViewModel(
     private val createPublicShareUseCase: CreatePublicShareAsyncUseCase,
     private val editPublicShareUseCase: EditPublicShareAsyncUseCase,
     private val deletePublicShareUseCase: DeleteShareAsyncUseCase,
-    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
-    private val mainDispatcher: CoroutineDispatcher = Dispatchers.Main
+    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ViewModel() {
 
     private val _shares = MediatorLiveData<UIResult<List<OCShare>>>()
@@ -84,7 +83,7 @@ class OCShareViewModel(
                 UIResult.Loading(sharesLiveData?.value)
             )
 
-            val useCaseResult = withContext(Dispatchers.IO) {
+            val useCaseResult = withContext(ioDispatcher) {
                 refreshSharesFromServerAsyncUseCase.execute(
                     RefreshSharesFromServerAsyncUseCase.Params(
                         filePath = filePath,
@@ -215,7 +214,7 @@ class OCShareViewModel(
 
             if (!useCaseResult.isSuccess) {
                 _privateShareEditionStatus.postValue(
-                    UIResult.Error()
+                    UIResult.Error(useCaseResult.getThrowableOrNull())
                 )
             } else {
                 _privateShareEditionStatus.postValue(UIResult.Success())
@@ -260,9 +259,7 @@ class OCShareViewModel(
 
             if (!useCaseResult.isSuccess) {
                 _publicShareCreationStatus.postValue(
-                    UIResult.Error(
-                        useCaseResult.getThrowableOrNull()
-                    )
+                    UIResult.Error(useCaseResult.getThrowableOrNull())
                 )
             } else {
                 _publicShareCreationStatus.postValue(UIResult.Success())
@@ -287,7 +284,7 @@ class OCShareViewModel(
                 UIResult.Loading()
             )
 
-            val useCaseResult = withContext(Dispatchers.IO) {
+            val useCaseResult = withContext(ioDispatcher) {
                 editPublicShareUseCase.execute(
                     EditPublicShareAsyncUseCase.Params(
                         remoteId,
@@ -303,9 +300,7 @@ class OCShareViewModel(
 
             if (!useCaseResult.isSuccess) {
                 _publicShareEditionStatus.postValue(
-                    UIResult.Error(
-                        useCaseResult.getThrowableOrNull()
-                    )
+                    UIResult.Error(useCaseResult.getThrowableOrNull())
                 )
             } else {
                 _publicShareEditionStatus.postValue(UIResult.Success())

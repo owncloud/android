@@ -155,27 +155,10 @@ class SearchShareesFragment : Fragment(),
                 } as ArrayList<OCShare>
                 when (uiResult) {
                     is UIResult.Success -> {
-                        privateShares?.let {
+                        privateShares.let {
                             updatePrivateShares(privateShares)
                         }
                         listener?.dismissLoading()
-                    }
-                    is UIResult.Error -> {
-//                        Snackbar.make(
-//                            activity?.findViewById(android.R.id.content)!!,
-//                            uiResult.errorMessage!!,
-//                            Snackbar.LENGTH_SHORT
-//                        ).show()
-                        privateShares?.let {
-                            updatePrivateShares(privateShares)
-                        }
-                        listener?.dismissLoading()
-                    }
-                    is UIResult.Loading -> {
-                        listener?.showLoading()
-                        privateShares?.let {
-                            updatePrivateShares(privateShares)
-                        }
                     }
                     else -> {
                         Log.d(

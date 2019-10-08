@@ -22,7 +22,6 @@
 package com.owncloud.android.presentation.ui.sharing.fragments
 
 import android.accounts.Account
-import android.app.Activity
 import android.content.Context
 import android.graphics.drawable.Drawable
 import android.os.Bundle
@@ -457,17 +456,6 @@ class PublicShareDialogFragment : DialogFragment() {
                         updateCapabilities(uiResult.data)
                         listener?.dismissLoading()
                     }
-                    is UIResult.Error -> {
-                        showError(uiResult.error)
-                        updateCapabilities(uiResult.data)
-                        listener?.dismissLoading()
-                    }
-                    is UIResult.Loading -> {
-                        listener?.showLoading()
-                        capabilities?.let {
-                            updateCapabilities(uiResult.data)
-                        }
-                    }
                     else -> {
                         Log.d(TAG, "Unknown status when loading capabilities in account ${account?.name}")
                     }
@@ -485,7 +473,7 @@ class PublicShareDialogFragment : DialogFragment() {
                         dismiss()
                     }
                     is UIResult.Error -> {
-                        showError(uiResult.error)
+                        showError(getString(R.string.share_link_file_error), uiResult.error)
                         listener?.dismissLoading()
                     }
                     is UIResult.Loading -> {
@@ -510,7 +498,7 @@ class PublicShareDialogFragment : DialogFragment() {
                         dismiss()
                     }
                     is UIResult.Error -> {
-                        showError(uiResult.error)
+                        showError(getString(R.string.update_link_file_error), uiResult.error)
                         listener?.dismissLoading()
                     }
                     is UIResult.Loading -> {
@@ -791,10 +779,11 @@ class PublicShareDialogFragment : DialogFragment() {
     /**
      * Show error when creating or updating the public share, if any
      */
-    fun showError(throwable: Throwable?) {
-        val errorMessage = throwable?.parseError(resources) ?: return
+    fun showError(message: String, throwable: Throwable?) {
+        val reason = throwable?.parseError(resources) ?: return
+        public_link_error_message?.text =
+            if (reason.isEmpty()) message else "$message ${getString(R.string.error_reason)} $reason"
         public_link_error_message?.visibility = View.VISIBLE
-        public_link_error_message?.text = errorMessage
     }
 
     private fun setPasswordSwitchChecked(view: View, checked: Boolean) {

@@ -40,6 +40,7 @@ import com.owncloud.android.authentication.AccountUtils
 import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.domain.sharing.shares.model.OCShare
 import com.owncloud.android.domain.sharing.shares.model.ShareType
+import com.owncloud.android.extensions.parseError
 import com.owncloud.android.lib.common.utils.Log_OC
 import com.owncloud.android.lib.resources.shares.RemoteShare
 import com.owncloud.android.lib.resources.shares.SharePermissionsBuilder
@@ -415,7 +416,7 @@ class EditPrivateShareFragment : DialogFragment() {
             Observer { uiResult ->
                 when (uiResult) {
                     is UIResult.Error -> {
-//                        showError(uiResult.errorMessage!!)
+                        showError(getString(R.string.update_link_file_error), uiResult.error)
                         listener?.dismissLoading()
                     }
                     is UIResult.Loading -> {
@@ -468,9 +469,11 @@ class EditPrivateShareFragment : DialogFragment() {
      * Show error when updating the private share, if any
      * @param errorMessage
      */
-    fun showError(errorMessage: String) {
+    private fun showError(message: String, throwable: Throwable?) {
+        val reason = throwable?.parseError(resources) ?: return
+        private_share_error_message?.text =
+            if (reason.isEmpty()) message else "$message ${getString(R.string.error_reason)} $reason"
         private_share_error_message?.visibility = View.VISIBLE
-        private_share_error_message?.text = errorMessage
     }
 
     companion object {
