@@ -575,14 +575,6 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
         }
     }
 
-//    private fun showError(message: String) {
-//        Snackbar.make(
-//            activity?.findViewById(android.R.id.content)!!,
-//            message,
-//            Snackbar.LENGTH_SHORT
-//        ).show()
-//    }
-
     companion object {
 
         private val TAG = ShareFileFragment::class.java.simpleName

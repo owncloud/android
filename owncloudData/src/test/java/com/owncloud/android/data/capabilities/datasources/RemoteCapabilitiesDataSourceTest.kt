@@ -20,13 +20,11 @@
 package com.owncloud.android.data.capabilities.datasources
 
 import com.owncloud.android.domain.capabilities.model.OCCapability
-import com.owncloud.android.lib.resources.status.GetRemoteCapabilitiesOperation
 
 class RemoteCapabilitiesDataSourceTest(private val capability: OCCapability) : RemoteCapabilitiesDataSource {
 
     override fun getCapabilities(
-        accountName: String,
-        getRemoteCapabilitiesOperation: GetRemoteCapabilitiesOperation
+        accountName: String
     ): OCCapability {
         return capability
     }

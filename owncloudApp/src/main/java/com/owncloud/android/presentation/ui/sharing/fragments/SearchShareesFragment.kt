@@ -26,7 +26,6 @@
 package com.owncloud.android.presentation.ui.sharing.fragments
 
 import android.accounts.Account
-import android.app.Activity
 import android.app.SearchManager
 import android.content.Context
 import android.os.Bundle
@@ -158,19 +157,6 @@ class SearchShareesFragment : Fragment(),
                     is UIResult.Success -> {
                         updatePrivateShares(privateShares)
                         listener?.dismissLoading()
-                    }
-                    is UIResult.Error -> {
-//                        Snackbar.make(
-//                            activity?.findViewById(android.R.id.content)!!,
-//                            uiResult.errorMessage!!,
-//                            Snackbar.LENGTH_SHORT
-//                        ).show()
-                        updatePrivateShares(privateShares)
-                        listener?.dismissLoading()
-                    }
-                    is UIResult.Loading -> {
-                        listener?.showLoading()
-                        updatePrivateShares(privateShares)
                     }
                     else -> {
                         Log.d(

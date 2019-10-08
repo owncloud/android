@@ -40,6 +40,7 @@ import com.owncloud.android.authentication.AccountUtils
 import com.owncloud.android.datamodel.FileDataStorageManager
 import com.owncloud.android.domain.sharing.sharees.GetShareesAsyncUseCase
 import com.owncloud.android.domain.sharing.shares.model.ShareType
+import com.owncloud.android.extensions.parseError
 import com.owncloud.android.lib.common.utils.Log_OC
 import com.owncloud.android.lib.resources.shares.GetRemoteShareesOperation
 import org.json.JSONException
@@ -124,7 +125,7 @@ class UsersAndGroupsSearchProvider : ContentProvider() {
         /// directly started by our code, but from SearchView implementation
         val account = AccountUtils.getCurrentOwnCloudAccount(context)
 
-        val getShareesAsyncUseCase : GetShareesAsyncUseCase by inject()
+        val getShareesAsyncUseCase: GetShareesAsyncUseCase by inject()
 
         getShareesAsyncUseCase.execute(
             GetShareesAsyncUseCase.Params(
@@ -134,7 +135,10 @@ class UsersAndGroupsSearchProvider : ContentProvider() {
             )
         ).also { useCaseResult ->
             if (useCaseResult.isError) {
-//                showErrorMessage(useCaseResult.getErrorOrNull())
+                showErrorMessage(
+                    context!!.resources.getString(R.string.get_sharees_error),
+                    useCaseResult.getThrowableOrNull()
+                )
             }
 
             val names = useCaseResult.getDataOrNull()
@@ -248,7 +252,11 @@ class UsersAndGroupsSearchProvider : ContentProvider() {
      *
      * @param result Result with the failure information.
      */
-    private fun showErrorMessage(errorMessage: String?) {
+    private fun showErrorMessage(message: String?, throwable: Throwable?) {
+        val reason = throwable?.parseError(context!!.resources) ?: return
+        val errorMessage =
+            if (reason.isEmpty()) message else "$message ${context!!.resources.getString(R.string.error_reason)} $reason"
+
         val handler = Handler(Looper.getMainLooper())
 
         // The Toast must be shown in the main thread to grant that will be hidden correctly; otherwise

@@ -211,7 +211,7 @@ class OCShareViewModel(
 
             if (!useCaseResult.isSuccess) {
                 _privateShareEditionStatus.postValue(
-                    UIResult.Error()
+                    UIResult.Error(useCaseResult.getThrowableOrNull())
                 )
             } else {
                 _privateShareEditionStatus.postValue(UIResult.Success())
@@ -256,9 +256,7 @@ class OCShareViewModel(
 
             if (!useCaseResult.isSuccess) {
                 _publicShareCreationStatus.postValue(
-                    UIResult.Error(
-                        useCaseResult.getThrowableOrNull()
-                    )
+                    UIResult.Error(useCaseResult.getThrowableOrNull())
                 )
             } else {
                 _publicShareCreationStatus.postValue(UIResult.Success())
@@ -299,9 +297,7 @@ class OCShareViewModel(
 
             if (!useCaseResult.isSuccess) {
                 _publicShareEditionStatus.postValue(
-                    UIResult.Error(
-                        useCaseResult.getThrowableOrNull()
-                    )
+                    UIResult.Error(useCaseResult.getThrowableOrNull())
                 )
             } else {
                 _publicShareEditionStatus.postValue(UIResult.Success())
