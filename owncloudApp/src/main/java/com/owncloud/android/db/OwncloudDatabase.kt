@@ -39,7 +39,7 @@ import com.owncloud.android.shares.data.datasources.OCShareDao
         OCCapability::class
     ],
     version = ProviderMeta.DB_VERSION,
-    exportSchema = false
+    exportSchema = true
 )
 abstract class OwncloudDatabase : RoomDatabase() {
     abstract fun shareDao(): OCShareDao
@@ -48,6 +48,15 @@ abstract class OwncloudDatabase : RoomDatabase() {
     companion object {
         @Volatile
         private var INSTANCE: OwncloudDatabase? = null
+
+        val MIGRATION_27_28 = object : Migration(27, 28) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL(
+                    "ALTER TABLE ${ProviderMeta.ProviderTableMeta.CAPABILITIES_TABLE_NAME} " +
+                            "ADD COLUMN ${ProviderMeta.ProviderTableMeta.CAPABILITIES_SHARING_SEARCH_MIN_LENGTH} INTEGER"
+                )
+            }
+        }
 
         fun getDatabase(
             context: Context
@@ -72,15 +81,6 @@ abstract class OwncloudDatabase : RoomDatabase() {
                 context.applicationContext,
                 OwncloudDatabase::class.java
             ).build()
-        }
-
-        private val MIGRATION_27_28 = object : Migration(27, 28) {
-            override fun migrate(database: SupportSQLiteDatabase) {
-                database.execSQL(
-                    "ALTER TABLE ${ProviderMeta.ProviderTableMeta.CAPABILITIES_TABLE_NAME} " +
-                            "ADD COLUMN ${ProviderMeta.ProviderTableMeta.CAPABILITIES_SHARING_SEARCH_MIN_LENGTH} INTEGER"
-                )
-            }
         }
     }
 }
