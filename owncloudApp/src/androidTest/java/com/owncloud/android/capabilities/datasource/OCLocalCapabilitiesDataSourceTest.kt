@@ -108,12 +108,12 @@ class OCLocalCapabilitiesDataSourceTest {
     fun readLocalCapability() {
         val capability =
             ocLocalCapabilitiesDataSource.getCapabilityForAccount(
-                "user@server1"
+                "user@server2"
             )
-        assertEquals("user@server1", capability.accountName)
-        assertEquals(5, capability.versionMayor)
-        assertEquals(4, capability.versionMinor)
-        assertEquals(3, capability.versionMicro)
+        assertEquals("user@server2", capability.accountName)
+        assertEquals(2, capability.versionMayor)
+        assertEquals(1, capability.versionMinor)
+        assertEquals(0, capability.versionMicro)
     }
 
     @Test

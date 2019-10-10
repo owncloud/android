@@ -131,11 +131,12 @@ class UsersAndGroupsSearchProvider : ContentProvider() {
         val ocCapabilityViewModel = OCCapabilityViewModel(context, account)
         val capability = ocCapabilityViewModel.getStoredCapabilityForAccount()
 
-        val threshold = capability.filesSharingSearchMinLength ?: DEFAULT_MIN_CHARACTERS_TO_SEARCH
+        val minCharactersToSearch = capability.filesSharingSearchMinLength ?: DEFAULT_MIN_CHARACTERS_TO_SEARCH
 
-        if (userQuery.length < threshold) {
+        if (userQuery.length < minCharactersToSearch) {
             return MatrixCursor(COLUMNS)
         }
+
         val ocShareeViewModel = OCShareeViewModel(
             context,
             account
