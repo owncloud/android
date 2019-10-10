@@ -38,14 +38,14 @@ import org.junit.Before
 import org.junit.Test
 
 class OCRemoteSharesDataSourceTest {
-    private lateinit var ocRemoteSharesDataSource: OCRemoteShareDataSource
+    private lateinit var ocRemoteShareDataSource: OCRemoteShareDataSource
 
     private val ocShareService: OCShareService = mockk()
     private val remoteShareMapper = RemoteShareMapper()
 
     @Before
     fun init() {
-        ocRemoteSharesDataSource = OCRemoteShareDataSource(ocShareService, remoteShareMapper)
+        ocRemoteShareDataSource = OCRemoteShareDataSource(ocShareService, remoteShareMapper)
     }
 
     /******************************************************************************************************
@@ -74,7 +74,7 @@ class OCRemoteSharesDataSourceTest {
         } returns createRemoteShareOperationResult
 
         // Insert share on remote datasource
-        val privateShareAdded = ocRemoteSharesDataSource.insertShare(
+        val privateShareAdded = ocRemoteShareDataSource.insertShare(
             remoteFilePath = "Photos/",
             shareType = ShareType.USER,
             shareWith = "user",
@@ -115,7 +115,7 @@ class OCRemoteSharesDataSourceTest {
         } returns updateRemoteShareOperationResult
 
         // Update share on remote datasource
-        val privateShareUpdated = ocRemoteSharesDataSource.updateShare(
+        val privateShareUpdated = ocRemoteShareDataSource.updateShare(
             remoteId = 3,
             permissions = 17,
             accountName = "user@server"
@@ -156,7 +156,7 @@ class OCRemoteSharesDataSourceTest {
         } returns createRemoteShareOperationResult
 
         // Insert share on remote datasource
-        val publicShareAdded = ocRemoteSharesDataSource.insertShare(
+        val publicShareAdded = ocRemoteShareDataSource.insertShare(
             "Photos/img1.png",
             ShareType.PUBLIC_LINK,
             "",
@@ -198,7 +198,7 @@ class OCRemoteSharesDataSourceTest {
         } returns updateRemoteShareOperationResult
 
         // Update share on remote datasource
-        val publicShareUpdated = ocRemoteSharesDataSource.updateShare(
+        val publicShareUpdated = ocRemoteShareDataSource.updateShare(
             remoteId = 3,
             permissions = 17,
             accountName = "user@server"
@@ -261,7 +261,7 @@ class OCRemoteSharesDataSourceTest {
         } returns getRemoteSharesOperationResult
 
         // Get shares from remote datasource
-        val shares = ocRemoteSharesDataSource.getShares(
+        val shares = ocRemoteShareDataSource.getShares(
             "/Documents/doc",
             true,
             true,
@@ -321,7 +321,7 @@ class OCRemoteSharesDataSourceTest {
             ocShareService.insertShare(any(), any(), any(), any(), any(), any(), any(), any())
         } returns createRemoteSharesOperationResult
 
-        ocRemoteSharesDataSource.insertShare(
+        ocRemoteShareDataSource.insertShare(
             "Photos/img2.png",
             ShareType.PUBLIC_LINK,
             "",
@@ -352,7 +352,7 @@ class OCRemoteSharesDataSourceTest {
             ocShareService.updateShare(any(), any(), any(), any(), any(), any())
         } returns updateRemoteShareOperationResult
 
-        ocRemoteSharesDataSource.updateShare(
+        ocRemoteShareDataSource.updateShare(
             3,
             permissions = 17,
             accountName = "user@server"
@@ -370,7 +370,7 @@ class OCRemoteSharesDataSourceTest {
             ocShareService.deleteShare(any())
         } returns removeRemoteShareOperationResult
 
-        ocRemoteSharesDataSource.deleteShare(1)
+        ocRemoteShareDataSource.deleteShare(1)
 
         // We check there's no exception here
     }
@@ -397,6 +397,6 @@ class OCRemoteSharesDataSourceTest {
             ocShareService.deleteShare(any())
         } returns removeRemoteShareOperationResult
 
-        ocRemoteSharesDataSource.deleteShare(1)
+        ocRemoteShareDataSource.deleteShare(1)
     }
 }
