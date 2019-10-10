@@ -17,6 +17,7 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
+
 package com.owncloud.android.database
 
 import android.content.ContentValues
@@ -56,18 +57,48 @@ class MigrationTest {
     )
 
     @Test
+    fun startInVersion27_containsCorrectData() {
+        // Create the database with version 27
+        with(
+            helper.createDatabase(
+                TEST_DB_NAME,
+                DB_VERSION_27
+            )
+        ) {
+
+            // Insert some data
+            insert(ProviderTableMeta.CAPABILITIES_TABLE_NAME, SQLiteDatabase.CONFLICT_NONE, cv)
+
+            // Close database
+            close()
+        }
+
+        // Verify that the data is correct
+        val dbCapability =
+            getMigratedRoomDatabase().capabilityDao().getCapabilityForAccount(cv.getAsString(CAPABILITIES_ACCOUNT_NAME))
+        assertEquals(dbCapability.accountName, cv.getAsString(CAPABILITIES_ACCOUNT_NAME))
+        assertEquals(dbCapability.versionMayor, cv.getAsInteger(CAPABILITIES_VERSION_MAYOR))
+        assertEquals(dbCapability.versionMinor, cv.getAsInteger(CAPABILITIES_VERSION_MINOR))
+        assertEquals(dbCapability.versionMicro, cv.getAsInteger(CAPABILITIES_VERSION_MICRO))
+        assertEquals(dbCapability.corePollInterval, cv.getAsInteger(CAPABILITIES_CORE_POLLINTERVAL))
+        assertEquals(
+            dbCapability.filesSharingPublicExpireDateDays,
+            cv.getAsInteger(CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_DAYS)
+        )
+    }
+
+    @Test
     @Throws(IOException::class)
     fun migrate27To28() {
-        with(helper.createDatabase(
-            TEST_DB_NAME,
-            DB_VERSION_27
-        )) {
+        with(
+            helper.createDatabase(
+                TEST_DB_NAME,
+                DB_VERSION_27
+            )
+        ) {
             // Database has schema version 27. Insert some values to test if they are migrated successfully.
             // We cannot use DAO classes because they expect the latest schema and we may not have some fields there.
-            insert(ProviderTableMeta.CAPABILITIES_TABLE_NAME, SQLiteDatabase.CONFLICT_NONE,
-                cv
-            )
-            // Prepare for the next version.
+            insert(ProviderTableMeta.CAPABILITIES_TABLE_NAME, SQLiteDatabase.CONFLICT_NONE, cv)
             close()
         }
 
@@ -79,10 +110,10 @@ class MigrationTest {
             true,
             OwncloudDatabase.MIGRATION_27_28
         )
-        // MigrationTestHelper automatically verifies the schema changes,
-        // but you need to validate that the data was migrated properly.
-        // Verify that the data is correct
-        val dbCapability = getMigratedRoomDatabase().capabilityDao().getCapabilityForAccount("user1@server")
+        // MigrationTestHelper automatically verifies the schema changes.
+        // Verify that the data was migrated properly.
+        val dbCapability =
+            getMigratedRoomDatabase().capabilityDao().getCapabilityForAccount(cv.getAsString(CAPABILITIES_ACCOUNT_NAME))
         assertEquals(dbCapability.accountName, cv.getAsString(CAPABILITIES_ACCOUNT_NAME))
         assertEquals(dbCapability.versionMayor, cv.getAsInteger(CAPABILITIES_VERSION_MAYOR))
         assertEquals(dbCapability.versionMinor, cv.getAsInteger(CAPABILITIES_VERSION_MINOR))
@@ -92,29 +123,24 @@ class MigrationTest {
             dbCapability.filesSharingPublicExpireDateDays,
             cv.getAsInteger(CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_DAYS)
         )
-        // Field introduced in DB_VERSION_28, so it should be null in DB_VERSION_29
+        // Field introduced in this version (DB_VERSION_28), so it should be null.
         assertNull(dbCapability.filesSharingSearchMinLength)
     }
 
     @Test
     fun startInVersion28_containsCorrectData() {
-        // Create the database with version 28
-        with(helper.createDatabase(
-            TEST_DB_NAME,
-            DB_VERSION_28
-        )) {
-
-            // Insert some data
-            insert(ProviderTableMeta.CAPABILITIES_TABLE_NAME, SQLiteDatabase.CONFLICT_NONE,
-                cv
+        with(
+            helper.createDatabase(
+                TEST_DB_NAME,
+                DB_VERSION_28
             )
-
-            // Close database
+        ) {
+            insert(ProviderTableMeta.CAPABILITIES_TABLE_NAME, SQLiteDatabase.CONFLICT_NONE, cv)
             close()
         }
 
-        // Verify that the data is correct
-        val dbCapability = getMigratedRoomDatabase().capabilityDao().getCapabilityForAccount("user1@server")
+        val dbCapability =
+            getMigratedRoomDatabase().capabilityDao().getCapabilityForAccount(cv.getAsString(CAPABILITIES_ACCOUNT_NAME))
         assertEquals(dbCapability.accountName, cv.getAsString(CAPABILITIES_ACCOUNT_NAME))
         assertEquals(dbCapability.versionMayor, cv.getAsInteger(CAPABILITIES_VERSION_MAYOR))
         assertEquals(dbCapability.versionMinor, cv.getAsInteger(CAPABILITIES_VERSION_MINOR))
@@ -147,6 +173,8 @@ class MigrationTest {
         // Added a new capability: "search_min_length"
         private const val DB_VERSION_28 = 28
 
+        //TODO: Consider adding a DUMMY_CAPABILITY full of values available for testing
+        // to avoid including values hardcoded in each test
         private val cv = ContentValues().apply {
             put(CAPABILITIES_ACCOUNT_NAME, "user1@server")
             put(CAPABILITIES_VERSION_MAYOR, 3)
