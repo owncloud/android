@@ -56,6 +56,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.material.snackbar.Snackbar
+import com.owncloud.android.AppExecutors
 import com.owncloud.android.AppRater
 import com.owncloud.android.MainApp
 import com.owncloud.android.R
@@ -71,6 +72,7 @@ import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder
 import com.owncloud.android.files.services.FileUploader
 import com.owncloud.android.files.services.FileUploader.FileUploaderBinder
 import com.owncloud.android.files.services.TransferRequester
+import com.owncloud.android.lib.common.authentication.OwnCloudBearerCredentials
 import com.owncloud.android.lib.common.operations.RemoteOperation
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode
@@ -163,6 +165,9 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
 
     private val isGridView: Boolean
         get() = listOfFilesFragment!!.isGridEnabled
+
+
+    private val appExecutors: AppExecutors = AppExecutors()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Log_OC.v(TAG, "onCreate() start")
@@ -944,21 +949,31 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
                         FileSyncAdapter.EVENT_FULL_SYNC_END != event && RefreshFolderOperation.EVENT_SINGLE_FOLDER_SHARES_SYNCED != event
 
                     if (RefreshFolderOperation.EVENT_SINGLE_FOLDER_CONTENTS_SYNCED == event) {
-
                         if (!synchResult?.isSuccess!!) {
                             /// TODO refactor and make common
                             if (ResultCode.UNAUTHORIZED == synchResult.code ||
-                                synchResult.isException && synchResult.exception is AuthenticatorException) {
+                                synchResult.isException && synchResult.exception is AuthenticatorException
+                            ) {
+                                appExecutors.diskIO().execute {
+                                    val credentials =
+                                        com.owncloud.android.lib.common.accounts.AccountUtils.getCredentialsForAccount(
+                                            MainApp.appContext,
+                                            account
+                                        )
 
-                                // If we have saml enabled we consider the user to only have
-                                // one account with which he is logged into the app. This is because
-                                // only branded versions of the app have saml support.
-                                if (getString(R.string.auth_method_saml_web_sso) == "on") {
-                                    requestCredentialsUpdate()
-                                } else {
-                                    showRequestAccountChangeNotice()
+                                    appExecutors.mainThread().execute {
+                                        // If we have saml enabled we consider the user to only have
+                                        // one account with which he is logged into the app. This is because
+                                        // only branded versions of the app have saml support.
+                                        if (getString(R.string.auth_method_saml_web_sso) == "on") { // SAML
+                                            requestCredentialsUpdate()
+                                        } else if (credentials is OwnCloudBearerCredentials) { // OAuth
+                                            showRequestRegainAccess()
+                                        } else {
+                                            showRequestAccountChangeNotice()
+                                        }
+                                    }
                                 }
-
                             } else if (ResultCode.SSL_RECOVERABLE_PEER_UNVERIFIED == synchResult.code) {
                                 showUntrustedCertDialog(synchResult)
                             }
@@ -968,7 +983,6 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
                             setAccountInDrawer(account)
                         }
                     }
-
                 }
 
                 val fileListFragment = listOfFilesFragment

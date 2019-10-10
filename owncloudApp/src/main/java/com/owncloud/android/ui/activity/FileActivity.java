@@ -7,16 +7,16 @@
  * @author Abel García de Prada
  * Copyright (C) 2011  Bartek Przybylski
  * Copyright (C) 2019 ownCloud GmbH.
- * <p>
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
  * as published by the Free Software Foundation.
- * <p>
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * <p>
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -71,7 +71,7 @@ public class FileActivity extends DrawerActivity
     public static final String EXTRA_ACCOUNT = "com.owncloud.android.ui.activity.ACCOUNT";
     public static final String EXTRA_FROM_NOTIFICATION =
             "com.owncloud.android.ui.activity.FROM_NOTIFICATION";
-    static final String EXTRA_ONLY_AVAILABLE_OFFLINE ="ONLY_AVAILABLE_OFFLINE";
+    static final String EXTRA_ONLY_AVAILABLE_OFFLINE = "ONLY_AVAILABLE_OFFLINE";
     public static final String TAG = FileActivity.class.getSimpleName();
 
     private static final String KEY_WAITING_FOR_OP_ID = "WAITING_FOR_OP_ID";
@@ -87,13 +87,19 @@ public class FileActivity extends DrawerActivity
     private static final String DIALOG_UNTRUSTED_CERT = "DIALOG_UNTRUSTED_CERT";
     private static final String DIALOG_CERT_NOT_SAVED = "DIALOG_CERT_NOT_SAVED";
 
-    /** Main {@link OCFile} handled by the activity.*/
+    /**
+     * Main {@link OCFile} handled by the activity.
+     */
     private OCFile mFile;
 
-    /** Flag to signal if the activity is launched by a notification */
+    /**
+     * Flag to signal if the activity is launched by a notification
+     */
     private boolean mFromNotification;
 
-    /** Messages handler associated to the main thread and the life cycle of the activity */
+    /**
+     * Messages handler associated to the main thread and the life cycle of the activity
+     */
     private Handler mHandler;
 
     private FileOperationsHelper mFileOperationsHelper;
@@ -227,7 +233,7 @@ public class FileActivity extends DrawerActivity
     /**
      * Setter for the main {@link OCFile} handled by the activity.
      *
-     * @param file  Main {@link OCFile} to be handled by the activity.
+     * @param file Main {@link OCFile} to be handled by the activity.
      */
     public void setFile(OCFile file) {
         mFile = file;
@@ -261,9 +267,8 @@ public class FileActivity extends DrawerActivity
     }
 
     /**
-     *
-     * @param operation     Operation performed.
-     * @param result        Result of the removal.
+     * @param operation Operation performed.
+     * @param result    Result of the removal.
      */
     @Override
     public void onRemoteOperationFinish(RemoteOperation operation, RemoteOperationResult result) {
@@ -320,6 +325,13 @@ public class FileActivity extends DrawerActivity
                 .show();
     }
 
+    protected void showRequestRegainAccess() {
+        Snackbar.make(findViewById(android.R.id.content), R.string.auth_oauth_failure, Snackbar.LENGTH_INDEFINITE)
+                .setAction(R.string.auth_oauth_failure_snackbar_action, v ->
+                        requestCredentialsUpdate())
+                .show();
+    }
+
     /**
      * Invalidates the credentials stored for the current OC account and requests new credentials to the user,
      * navigating to {@link AuthenticatorActivity}
@@ -334,8 +346,8 @@ public class FileActivity extends DrawerActivity
      * Invalidates the credentials stored for the given OC account and requests new credentials to the user,
      * navigating to {@link AuthenticatorActivity}
      *
-     * @param account   Stored OC account to request credentials update for. If null, current account will
-     *                  be used.
+     * @param account Stored OC account to request credentials update for. If null, current account will
+     *                be used.
      */
     protected void requestCredentialsUpdate(Account account) {
 
@@ -454,12 +466,12 @@ public class FileActivity extends DrawerActivity
     }
 
     @Override
-    public void onlyAvailableOfflineOption(){
+    public void onlyAvailableOfflineOption() {
         Intent intent = new Intent(this, FileDisplayActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.putExtra(EXTRA_ONLY_AVAILABLE_OFFLINE, true);
         startActivity(intent);
-     }
+    }
 
     protected OCFile getCurrentDir() {
         OCFile file = getFile();

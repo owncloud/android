@@ -1,3 +1,6 @@
+## 2.13.1 (October 2019)
+- Improve oAuth user experience flow and wording when token expires or becomes invalid
+
 ## 2.13 (September 2019)
 - Copy and move files from other third-party apps or internal storage to an ownCloud account through Downloads or Files app
 - Save files in an ownCloud account from third-party apps

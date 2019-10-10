@@ -80,6 +80,8 @@
 
     <string name="auth_failure_snackbar">Authentication failed</string>
     <string name="auth_failure_snackbar_action">Change account</string>
+    <string name="auth_oauth_failure">The access token has expired or become invalid. Sign in again to regain access</string>
+    <string name="auth_oauth_failure_snackbar_action">Sign in</string>
     <string name="auth_check_server">Check server</string>
     <string name="auth_host_url">Server address https://&#8230;</string>
     <string name="auth_username">Username</string>

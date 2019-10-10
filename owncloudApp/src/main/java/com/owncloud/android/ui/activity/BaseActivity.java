@@ -325,7 +325,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
         if (rootView == null) {
             // If root view is not available don't let the app brake. show the notification anyway.
-            Toast.makeText(this, message, Snackbar.LENGTH_LONG).show();
+            Toast.makeText(this, message, Toast.LENGTH_LONG).show();
             return;
         }
         Snackbar.make(rootView, message, Snackbar.LENGTH_LONG).show();
