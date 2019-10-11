@@ -25,6 +25,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import com.owncloud.android.data.OwncloudDatabase
 import com.owncloud.android.data.utils.DataTestUtil
 import com.owncloud.android.data.utils.LiveDataTestUtil.getValue
+import com.owncloud.android.domain.sharing.shares.model.ShareType
 import junit.framework.Assert.assertEquals
 import org.hamcrest.CoreMatchers.notNullValue
 import org.hamcrest.MatcherAssert.assertThat
@@ -77,19 +78,19 @@ class OCShareDaoTest {
     fun insertSharesFromDifferentFilesAndRead() {
         ocShareDao.insert(
             listOf(
-                DataTestUtil.createPublicShare(
+                DataTestUtil.createPublicShareEntity(
                     path = "/Photos/",
                     isFolder = true,
                     name = "Photos folder link",
                     shareLink = "http://server:port/s/1"
                 ),
-                DataTestUtil.createPublicShare(
+                DataTestUtil.createPublicShareEntity(
                     path = "/Photos/image1.jpg",
                     isFolder = false,
                     name = "Image 1 link",
                     shareLink = "http://server:port/s/2"
                 ),
-                DataTestUtil.createPrivateShare(
+                DataTestUtil.createPrivateShareEntity(
                     path = "/Photos/image2.jpg",
                     isFolder = false,
                     shareWith = "username",
@@ -142,21 +143,21 @@ class OCShareDaoTest {
     fun insertSharesFromDifferentAccountsAndRead() {
         ocShareDao.insert(
             listOf(
-                DataTestUtil.createPublicShare(
+                DataTestUtil.createPublicShareEntity(
                     path = "/Documents/document1.docx",
                     isFolder = false,
                     accountOwner = "user1@server",
                     name = "Document 1 link",
                     shareLink = "http://server:port/s/1"
                 ),
-                DataTestUtil.createPublicShare(
+                DataTestUtil.createPublicShareEntity(
                     path = "/Documents/document1.docx",
                     isFolder = false,
                     accountOwner = "user2@server",
                     name = "Document 1 link",
                     shareLink = "http://server:port/s/2"
                 ),
-                DataTestUtil.createPrivateShare(
+                DataTestUtil.createPrivateShareEntity(
                     path = "/Documents/document1.docx",
                     isFolder = false,
                     accountOwner = "user3@server",
@@ -212,7 +213,7 @@ class OCShareDaoTest {
 
     @Test
     fun getNonExistingPrivateShare() {
-        val privateShare = createDefaultPrivateShare()
+        val privateShare = createDefaultPrivateShareEntity()
 
         ocShareDao.insert(privateShare)
 
@@ -227,11 +228,11 @@ class OCShareDaoTest {
 
     @Test
     fun replacePrivateShareIfAlreadyExists_exists() {
-        val privateShare = createDefaultPrivateShare()
+        val privateShare = createDefaultPrivateShareEntity()
 
-        ocShareDao.insert(createDefaultPrivateShare())
+        ocShareDao.insert(createDefaultPrivateShareEntity())
 
-        val privateShareToReplace = createDefaultPrivateShare(shareWith = "userName")
+        val privateShareToReplace = createDefaultPrivateShareEntity(shareWith = "userName")
 
         ocShareDao.replaceShares(
             listOf(privateShareToReplace)
@@ -249,13 +250,13 @@ class OCShareDaoTest {
 
     @Test
     fun replacePrivateShareIfAlreadyExists_doesNotExist() {
-        val privateShare = createDefaultPrivateShare(
+        val privateShare = createDefaultPrivateShareEntity(
             shareType = ShareType.GROUP.value
         )
 
         ocShareDao.insert(privateShare)
 
-        val privateShareToReplace = createDefaultPrivateShare(
+        val privateShareToReplace = createDefaultPrivateShareEntity(
             shareType = ShareType.GROUP.value,
             shareWith = "userName",
             path = "/Texts/text2.txt"
@@ -287,12 +288,12 @@ class OCShareDaoTest {
 
     @Test
     fun updatePrivateShare() {
-        val privateShare = createDefaultPrivateShare()
+        val privateShare = createDefaultPrivateShareEntity()
 
         ocShareDao.insert(privateShare)
 
         ocShareDao.update(
-            createDefaultPrivateShare(permissions = 17)
+            createDefaultPrivateShareEntity(permissions = 17)
         )
 
         val textShares = getValue(
@@ -308,9 +309,9 @@ class OCShareDaoTest {
 
     @Test
     fun deletePrivateShare() {
-        val privateShare = createDefaultPrivateShare()
+        val privateShare = createDefaultPrivateShareEntity()
 
-        ocShareDao.insert(createDefaultPrivateShare())
+        ocShareDao.insert(createDefaultPrivateShareEntity())
 
         ocShareDao.deleteShare(privateShare.remoteId)
 
@@ -323,13 +324,13 @@ class OCShareDaoTest {
         assertEquals(0, textShares.size) // List of textShares empty after deleting the existing share
     }
 
-    private fun createDefaultPrivateShare(
+    private fun createDefaultPrivateShareEntity(
         shareType: Int = 0,
         shareWith: String = "username",
         path: String = "/Texts/text1.txt",
         permissions: Int = -1,
         shareWithDisplayName: String = "Steve"
-    ) = DataTestUtil.createPrivateShare(
+    ) = DataTestUtil.createPrivateShareEntity(
         shareType = shareType,
         shareWith = shareWith,
         path = path,
@@ -344,7 +345,7 @@ class OCShareDaoTest {
 
     @Test
     fun getNonExistingPublicShare() {
-        val publicShare = createDefaultPublicShare()
+        val publicShare = createDefaultPublicShareEntity()
 
         ocShareDao.insert(publicShare)
 
@@ -359,11 +360,11 @@ class OCShareDaoTest {
 
     @Test
     fun replacePublicShareIfAlreadyExists_exists() {
-        val publicShare = createDefaultPublicShare()
+        val publicShare = createDefaultPublicShareEntity()
 
         ocShareDao.insert(publicShare)
 
-        val publicShareToReplace = createDefaultPublicShare(name = "Text 2 link")
+        val publicShareToReplace = createDefaultPublicShareEntity(name = "Text 2 link")
 
         ocShareDao.replaceShares(
             listOf(publicShareToReplace)
@@ -381,11 +382,11 @@ class OCShareDaoTest {
 
     @Test
     fun replacePublicShareIfAlreadyExists_doesNotExist() {
-        val publicShare = createDefaultPublicShare()
+        val publicShare = createDefaultPublicShareEntity()
 
         ocShareDao.insert(publicShare)
 
-        val publicShareToReplace = createDefaultPublicShare(path = "/Texts/text2.txt", name = "Text 2 link")
+        val publicShareToReplace = createDefaultPublicShareEntity(path = "/Texts/text2.txt", name = "Text 2 link")
 
         ocShareDao.replaceShares(
             listOf(publicShareToReplace)
@@ -413,11 +414,11 @@ class OCShareDaoTest {
 
     @Test
     fun updatePublicShare() {
-        val publicShare = createDefaultPublicShare()
+        val publicShare = createDefaultPublicShareEntity()
 
         ocShareDao.insert(publicShare)
 
-        val publicShareToUpdate = createDefaultPublicShare(name = "Text 1 link updated", expirationDate = 2000)
+        val publicShareToUpdate = createDefaultPublicShareEntity(name = "Text 1 link updated", expirationDate = 2000)
 
         ocShareDao.update(publicShareToUpdate)
 
@@ -434,7 +435,7 @@ class OCShareDaoTest {
 
     @Test
     fun deletePublicShare() {
-        val publicShare = createDefaultPublicShare()
+        val publicShare = createDefaultPublicShareEntity()
 
         ocShareDao.insert(publicShare)
 
@@ -449,11 +450,11 @@ class OCShareDaoTest {
         assertEquals(0, textShares.size) // List of textShares empty after deleting the existing share
     }
 
-    private fun createDefaultPublicShare(
+    private fun createDefaultPublicShareEntity(
         path: String = "/Texts/text1.txt",
         expirationDate: Long = 1000,
         name: String = "Text 1 link"
-    ) = DataTestUtil.createPublicShare(
+    ) = DataTestUtil.createPublicShareEntity(
         path = path,
         expirationDate = expirationDate,
         isFolder = false,

@@ -25,6 +25,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import com.owncloud.android.data.OwncloudDatabase
 import com.owncloud.android.data.utils.DataTestUtil
 import com.owncloud.android.data.utils.LiveDataTestUtil.getValue
+import com.owncloud.android.domain.capabilities.model.CapabilityBooleanType
 import junit.framework.Assert.assertEquals
 import org.hamcrest.CoreMatchers.notNullValue
 import org.hamcrest.CoreMatchers.nullValue
@@ -53,8 +54,8 @@ class OCCapabilityDaoTest {
     fun insertCapabilitiesAndRead() {
         ocCapabilityDao.insert(
             listOf(
-                DataTestUtil.createCapability("user1@server", 3, 2, 1, "3.1"),
-                DataTestUtil.createCapability("user2@server", 6, 5, 4, "6.0")
+                DataTestUtil.createCapabilityEntity("user1@server", 3, 2, 1, "3.1"),
+                DataTestUtil.createCapabilityEntity("user2@server", 6, 5, 4, "6.0")
             )
         )
 
@@ -74,7 +75,7 @@ class OCCapabilityDaoTest {
     @Test
     fun getNonExistingCapabilities() {
         ocCapabilityDao.insert(
-            DataTestUtil.createCapability("user@server", 10, 9, 8, "10.1.4")
+            DataTestUtil.createCapabilityEntity("user@server", 10, 9, 8, "10.1.4")
         )
 
         val capability = getValue(
@@ -88,7 +89,7 @@ class OCCapabilityDaoTest {
     @Test
     fun replaceCapabilityIfAlreadyExists_exists() {
         ocCapabilityDao.insert(
-            DataTestUtil.createCapability(
+            DataTestUtil.createCapabilityEntity(
                 "admin@server",
                 3,
                 2,
@@ -100,7 +101,7 @@ class OCCapabilityDaoTest {
 
         ocCapabilityDao.replace(
             listOf( // Update capability
-                DataTestUtil.createCapability(
+                DataTestUtil.createCapabilityEntity(
                     "admin@server",
                     3,
                     2,
@@ -128,7 +129,7 @@ class OCCapabilityDaoTest {
     @Test
     fun replacePublicShareIfAlreadyExists_doesNotExist() {
         ocCapabilityDao.insert(
-            DataTestUtil.createCapability(
+            DataTestUtil.createCapabilityEntity(
                 "cto@server",
                 10,
                 8,
@@ -140,7 +141,7 @@ class OCCapabilityDaoTest {
 
         ocCapabilityDao.replace(
             listOf( // Update capability
-                DataTestUtil.createCapability(
+                DataTestUtil.createCapabilityEntity(
                     "seo@server",
                     14,
                     13,

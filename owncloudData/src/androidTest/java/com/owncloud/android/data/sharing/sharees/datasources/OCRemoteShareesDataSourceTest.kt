@@ -77,14 +77,14 @@ class OCRemoteShareesDataSourceTest {
         assertEquals(value.getString(GetRemoteShareesOperation.PROPERTY_SHARE_WITH), "user1")
         assertEquals(value.getString(GetRemoteShareesOperation.PROPERTY_SHARE_WITH_ADDITIONAL_INFO), "user1@mail.com")
 
-        val sharee2 = sharees.get(2)
+        val sharee2 = sharees.get(1)
         assertEquals(sharee2.getString(GetRemoteShareesOperation.PROPERTY_LABEL), "User 2")
         val value2 = sharee2.getJSONObject(GetRemoteShareesOperation.NODE_VALUE)
         assertEquals(value2.getString(GetRemoteShareesOperation.PROPERTY_SHARE_TYPE), "0")
         assertEquals(value2.getString(GetRemoteShareesOperation.PROPERTY_SHARE_WITH), "user2")
         assertEquals(value2.getString(GetRemoteShareesOperation.PROPERTY_SHARE_WITH_ADDITIONAL_INFO), "user2@mail.com")
 
-        val sharee3 = sharees.get(3)
+        val sharee3 = sharees.get(2)
         assertEquals(sharee3.getString(GetRemoteShareesOperation.PROPERTY_LABEL), "User 3")
         val value3 = sharee3.getJSONObject(GetRemoteShareesOperation.NODE_VALUE)
         assertEquals(value3.getString(GetRemoteShareesOperation.PROPERTY_SHARE_TYPE), "0")
