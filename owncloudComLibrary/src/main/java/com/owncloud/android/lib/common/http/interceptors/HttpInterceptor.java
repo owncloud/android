@@ -46,14 +46,20 @@ public class HttpInterceptor implements Interceptor {
     public Response intercept(Chain chain) throws IOException {
         Request request = chain.request();
 
-        for (RequestInterceptor interceptor : mRequestInterceptors) {
-            request = interceptor.intercept(request);
+        ListIterator<RequestInterceptor> requestInterceptorIterator = mRequestInterceptors.listIterator();
+
+        while (requestInterceptorIterator.hasNext()) {
+            RequestInterceptor currentRequestInterceptor = requestInterceptorIterator.next();
+            request = currentRequestInterceptor.intercept(request);
         }
 
         Response response = chain.proceed(request);
 
-        for (ResponseInterceptor interceptor : mResponseInterceptors) {
-            response = interceptor.intercept(response);
+        ListIterator<ResponseInterceptor> responseInterceptorIterator = mResponseInterceptors.listIterator();
+
+        while (responseInterceptorIterator.hasNext()) {
+            ResponseInterceptor currentResponseInterceptor = responseInterceptorIterator.next();
+            response = currentResponseInterceptor.intercept(response);
         }
 
         return response;
