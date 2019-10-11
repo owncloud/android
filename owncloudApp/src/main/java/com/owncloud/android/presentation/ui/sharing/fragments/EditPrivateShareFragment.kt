@@ -5,6 +5,7 @@
  * @author David A. Velasco
  * @author Christian Schabesberger
  * @author David González Verdugo
+ * @author Abel García de Prada
  * Copyright (C) 2019 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -57,7 +58,7 @@ import java.util.Locale
  */
 class EditPrivateShareFragment : DialogFragment() {
 
-    /** Share to show & edit, received as a parameter in construction time  */
+    /** Share to show & edit */
     private var share: OCShare? = null
 
     /** File bound to share, received as a parameter in construction time  */
@@ -65,6 +66,9 @@ class EditPrivateShareFragment : DialogFragment() {
 
     /** OC account holding the shared file, received as a parameter in construction time  */
     private var account: Account? = null
+
+    /** Parameters received in construction time */
+    private var shareRemoteId: Long? = null
 
     /**
      * Reference to parent listener
@@ -90,15 +94,10 @@ class EditPrivateShareFragment : DialogFragment() {
         if (arguments != null) {
             file = arguments?.getParcelable(ARG_FILE)
             account = arguments?.getParcelable(ARG_ACCOUNT)
-            if (savedInstanceState == null) {
-                share = arguments?.getParcelable(ARG_SHARE)
-            } else {
-                share = savedInstanceState.getParcelable(ARG_SHARE)
-            }
+            shareRemoteId = savedInstanceState?.getLong(ARG_SHARE) ?: arguments?.getLong(ARG_SHARE)
             Log_OC.e(
                 TAG, String.format(
-                    Locale.getDefault(), "Share has id %1\$d remoteId %2\$d", share?.id,
-                    share?.remoteId
+                    Locale.getDefault(), "Share has remoteId %2\$d", shareRemoteId
                 )
             )
         }
@@ -111,7 +110,7 @@ class EditPrivateShareFragment : DialogFragment() {
         Log_OC.d(TAG, "onActivityCreated")
 
         // To observe the changes in a just updated share
-        refreshPrivateShare(share?.remoteId!!)
+        refreshPrivateShare(shareRemoteId!!)
         observePrivateShareToEdit()
 
         observePrivateShareEdition()
@@ -131,11 +130,6 @@ class EditPrivateShareFragment : DialogFragment() {
 
         // Allow or disallow touches with other visible windows
         view.filterTouchesWhenObscured = PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(context)
-
-        view.editShareTitle.text = resources.getString(R.string.share_with_edit_title, share?.sharedWithDisplayName)
-
-        // Setup layout
-        refreshUiFromState()
 
         return view
     }
@@ -159,12 +153,14 @@ class EditPrivateShareFragment : DialogFragment() {
     /**
      * Updates the UI with the current permissions in the edited [RemoteShare]
      *
-     * @param editShareView     Root view in the fragment.
      */
-    fun refreshUiFromState() {
+    private fun refreshUiFromState() {
         val editShareView = view
         if (editShareView != null) {
-            setPermissionsListening(editShareView, false)
+            editShareView.editShareTitle.text =
+                resources.getString(R.string.share_with_edit_title, share?.sharedWithDisplayName)
+
+            setPermissionsListening(false)
 
             val sharePermissions = share!!.permissions
             var compound: CompoundButton
@@ -195,7 +191,7 @@ class EditPrivateShareFragment : DialogFragment() {
                 compound.visibility = if (canEdit) View.VISIBLE else View.GONE
             }
 
-            setPermissionsListening(editShareView, true)
+            setPermissionsListening(true)
         }
     }
 
@@ -203,10 +199,9 @@ class EditPrivateShareFragment : DialogFragment() {
      * Binds or unbinds listener for user actions to enable or disable a permission on the edited share
      * to the views receiving the user events.
      *
-     * @param editShareView     Root view in the fragment.
      * @param enable            When 'true', listener is bound to view; when 'false', it is unbound.
      */
-    private fun setPermissionsListening(editShareView: View, enable: Boolean) {
+    private fun setPermissionsListening(enable: Boolean) {
         if (enable && onPrivilegeChangeListener == null) {
             onPrivilegeChangeListener = OnPrivilegeChangeListener()
         }
@@ -446,14 +441,15 @@ class EditPrivateShareFragment : DialogFragment() {
      * Updates the UI after the result of an update operation on the edited [RemoteShare] permissions.
      *
      */
-    fun updateShare(updatedShare: OCShare?) {
+    private fun updateShare(updatedShare: OCShare?) {
         share = updatedShare
         refreshUiFromState()
     }
 
     /**
      * Show error when updating the private share, if any
-     * @param errorMessage
+     * @param message
+     * @param throwable
      */
     private fun showError(message: String, throwable: Throwable?) {
         val reason = throwable?.parseError(resources) ?: return
@@ -485,7 +481,7 @@ class EditPrivateShareFragment : DialogFragment() {
         fun newInstance(shareToEdit: OCShare, sharedFile: OCFile, account: Account): EditPrivateShareFragment {
             val fragment = EditPrivateShareFragment()
             val args = Bundle()
-            args.putParcelable(ARG_SHARE, shareToEdit)
+            args.putLong(ARG_SHARE, shareToEdit.remoteId)
             args.putParcelable(ARG_FILE, sharedFile)
             args.putParcelable(ARG_ACCOUNT, account)
             fragment.arguments = args

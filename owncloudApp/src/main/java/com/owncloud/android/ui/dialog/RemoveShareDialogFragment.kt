@@ -3,6 +3,7 @@
  *
  * @author David A. Velasco
  * @author David González Verdugo
+ * @author Abel García de Prada
  * Copyright (C) 2019 ownCloud GmbH.
  *
  *
@@ -40,7 +41,6 @@ import com.owncloud.android.presentation.ui.sharing.fragments.ShareFragmentListe
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment.ConfirmationDialogFragmentListener
 
 class RemoveShareDialogFragment : ConfirmationDialogFragment(), ConfirmationDialogFragmentListener {
-    private var targetShare: OCShare? = null
     private var account: Account? = null
 
     /**
@@ -50,7 +50,7 @@ class RemoveShareDialogFragment : ConfirmationDialogFragment(), ConfirmationDial
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = super.onCreateDialog(savedInstanceState)
-        targetShare = arguments!!.getParcelable(ARG_TARGET_SHARE)
+        targetShareRemoteId = arguments!!.getLong(ARG_TARGET_SHARE)
         account = arguments!!.getParcelable(ARG_ACCOUNT)
 
         setOnConfirmationListener(this)
@@ -71,8 +71,8 @@ class RemoveShareDialogFragment : ConfirmationDialogFragment(), ConfirmationDial
      * Performs the removal of the target share, both locally and in the server.
      */
     override fun onConfirmation(callerTag: String) {
-        Log_OC.d(TAG, "Removing share " + targetShare!!.name)
-        listener?.deleteShare(targetShare?.remoteId!!)
+        Log_OC.d(TAG, "Removing share with id $targetShareRemoteId")
+        listener?.deleteShare(targetShareRemoteId!!)
     }
 
     override fun onCancel(callerTag: String) {
@@ -90,10 +90,12 @@ class RemoveShareDialogFragment : ConfirmationDialogFragment(), ConfirmationDial
         private const val ARG_TARGET_SHARE = "TARGET_SHARE"
         private const val ARG_ACCOUNT = "ACCOUNT"
 
+        private var targetShareRemoteId: Long? = null
+
         /**
          * Public factory method to create new RemoveFilesDialogFragment instances.
          *
-         * @param share           [OCShareEntity] to remove.
+         * @param share           [OCShare] to remove.
          * @param account         [Account] which the share belongs to
          * @return                Dialog ready to show.
          */
@@ -125,7 +127,7 @@ class RemoveShareDialogFragment : ConfirmationDialogFragment(), ConfirmationDial
             args.putInt(ARG_POSITIVE_BTN_RES, R.string.common_yes)
             args.putInt(ARG_NEUTRAL_BTN_RES, R.string.common_no)
             args.putInt(ARG_NEGATIVE_BTN_RES, -1)
-            args.putParcelable(ARG_TARGET_SHARE, share)
+            args.putLong(ARG_TARGET_SHARE, share.remoteId)
             args.putParcelable(ARG_ACCOUNT, account)
             frag.arguments = args
 

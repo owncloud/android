@@ -4,6 +4,7 @@
  * @author David A. Velasco
  * @author David González Verdugo
  * @author Christian Schabesberger
+ * @author Abel García de Prada
  * Copyright (C) 2019 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -77,6 +78,9 @@ class PublicShareDialogFragment : DialogFragment() {
      * Existing share to update. If NULL, the dialog will create a new share for file.
      */
     private var publicShare: OCShare? = null
+
+    /** Parameters received in construction time */
+    private var shareRemoteId: Long? = null
 
     /**
      * Reference to parent listener
@@ -154,12 +158,10 @@ class PublicShareDialogFragment : DialogFragment() {
         if (arguments != null) {
             file = arguments!!.getParcelable(ARG_FILE)
             account = arguments!!.getParcelable(ARG_ACCOUNT)
-            publicShare = arguments!!.getParcelable(ARG_SHARE)
+            shareRemoteId = arguments!!.getLong(ARG_SHARE)
         }
 
-        if (file == null && publicShare == null) {
-            throw IllegalStateException("Both ARG_FILE and ARG_SHARE cannot be NULL")
-        }
+        check(!(file == null && shareRemoteId == null)) { "Both ARG_FILE and ARG_SHARE cannot be NULL" }
 
         setStyle(STYLE_NO_TITLE, 0)
     }
@@ -721,7 +723,7 @@ class PublicShareDialogFragment : DialogFragment() {
         }
 
         // Set password label depending on the checked permission option
-        shareViaLinkEditPermissionGroup?.setOnCheckedChangeListener { group, checkedId ->
+        shareViaLinkEditPermissionGroup?.setOnCheckedChangeListener { _, checkedId ->
             public_link_error_message?.isGone = true
 
             if (checkedId == shareViaLinkEditPermissionReadOnly.id) {
@@ -849,7 +851,7 @@ class PublicShareDialogFragment : DialogFragment() {
             val args = Bundle()
             args.putParcelable(ARG_FILE, fileToShare)
             args.putParcelable(ARG_ACCOUNT, account)
-            args.putParcelable(ARG_SHARE, publicShare)
+            args.putLong(ARG_SHARE, publicShare.remoteId)
             publicShareDialogFragment.arguments = args
             return publicShareDialogFragment
         }

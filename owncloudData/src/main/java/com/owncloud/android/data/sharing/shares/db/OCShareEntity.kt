@@ -2,6 +2,7 @@
  * ownCloud Android client application
  *
  * @author David González Verdugo
+ * @author Abel García de Prada
  * Copyright (C) 2019 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -21,86 +22,71 @@ package com.owncloud.android.data.sharing.shares.db
 
 import android.content.ContentValues
 import android.database.Cursor
-import android.os.Parcel
-import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.owncloud.android.data.ProviderMeta.ProviderTableMeta
-import com.owncloud.android.domain.sharing.shares.model.ShareType
-import com.owncloud.android.lib.resources.shares.RemoteShare
+import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.OCSHARES_ACCOUNT_OWNER
+import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.OCSHARES_EXPIRATION_DATE
+import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.OCSHARES_FILE_SOURCE
+import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.OCSHARES_ID_REMOTE_SHARED
+import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.OCSHARES_IS_DIRECTORY
+import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.OCSHARES_ITEM_SOURCE
+import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.OCSHARES_NAME
+import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.OCSHARES_PATH
+import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.OCSHARES_PERMISSIONS
+import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.OCSHARES_SHARED_DATE
+import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.OCSHARES_SHARE_TYPE
+import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.OCSHARES_SHARE_WITH
+import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.OCSHARES_SHARE_WITH_ADDITIONAL_INFO
+import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.OCSHARES_SHARE_WITH_DISPLAY_NAME
+import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.OCSHARES_TABLE_NAME
+import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.OCSHARES_TOKEN
+import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.OCSHARES_URL
+import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.OCSHARES_USER_ID
 
 /**
  * Represents one record of the Shares table.
  */
-@Entity(tableName = ProviderTableMeta.OCSHARES_TABLE_NAME)
+@Entity(tableName = OCSHARES_TABLE_NAME)
 data class OCShareEntity(
-    @ColumnInfo(name = ProviderTableMeta.OCSHARES_FILE_SOURCE)
+    @ColumnInfo(name = OCSHARES_FILE_SOURCE)
     val fileSource: Long,
-    @ColumnInfo(name = ProviderTableMeta.OCSHARES_ITEM_SOURCE)
+    @ColumnInfo(name = OCSHARES_ITEM_SOURCE)
     val itemSource: Long,
-    @ColumnInfo(name = ProviderTableMeta.OCSHARES_SHARE_TYPE)
+    @ColumnInfo(name = OCSHARES_SHARE_TYPE)
     val shareType: Int,
-    @ColumnInfo(name = ProviderTableMeta.OCSHARES_SHARE_WITH)
+    @ColumnInfo(name = OCSHARES_SHARE_WITH)
     val shareWith: String?,
-    @ColumnInfo(name = ProviderTableMeta.OCSHARES_PATH)
+    @ColumnInfo(name = OCSHARES_PATH)
     val path: String,
-    @ColumnInfo(name = ProviderTableMeta.OCSHARES_PERMISSIONS)
+    @ColumnInfo(name = OCSHARES_PERMISSIONS)
     val permissions: Int,
-    @ColumnInfo(name = ProviderTableMeta.OCSHARES_SHARED_DATE)
+    @ColumnInfo(name = OCSHARES_SHARED_DATE)
     val sharedDate: Long,
-    @ColumnInfo(name = ProviderTableMeta.OCSHARES_EXPIRATION_DATE)
+    @ColumnInfo(name = OCSHARES_EXPIRATION_DATE)
     val expirationDate: Long,
-    @ColumnInfo(name = ProviderTableMeta.OCSHARES_TOKEN)
+    @ColumnInfo(name = OCSHARES_TOKEN)
     val token: String?,
-    @ColumnInfo(name = ProviderTableMeta.OCSHARES_SHARE_WITH_DISPLAY_NAME)
+    @ColumnInfo(name = OCSHARES_SHARE_WITH_DISPLAY_NAME)
     val sharedWithDisplayName: String?,
-    @ColumnInfo(name = ProviderTableMeta.OCSHARES_SHARE_WITH_ADDITIONAL_INFO)
+    @ColumnInfo(name = OCSHARES_SHARE_WITH_ADDITIONAL_INFO)
     val sharedWithAdditionalInfo: String?,
-    @ColumnInfo(name = ProviderTableMeta.OCSHARES_IS_DIRECTORY)
+    @ColumnInfo(name = OCSHARES_IS_DIRECTORY)
     val isFolder: Boolean,
-    @ColumnInfo(name = ProviderTableMeta.OCSHARES_USER_ID)
+    @ColumnInfo(name = OCSHARES_USER_ID)
     val userId: Long,
-    @ColumnInfo(name = ProviderTableMeta.OCSHARES_ID_REMOTE_SHARED)
+    @ColumnInfo(name = OCSHARES_ID_REMOTE_SHARED)
     val remoteId: Long,
-    @ColumnInfo(name = ProviderTableMeta.OCSHARES_ACCOUNT_OWNER)
+    @ColumnInfo(name = OCSHARES_ACCOUNT_OWNER)
     var accountOwner: String = "",
-    @ColumnInfo(name = ProviderTableMeta.OCSHARES_NAME)
+    @ColumnInfo(name = OCSHARES_NAME)
     val name: String?,
-    @ColumnInfo(name = ProviderTableMeta.OCSHARES_URL)
+    @ColumnInfo(name = OCSHARES_URL)
     val shareLink: String?
-) : Parcelable {
+) {
     @PrimaryKey(autoGenerate = true) var id: Int = 0
 
-    constructor(parcel: Parcel) : this(
-        parcel.readLong(),
-        parcel.readLong(),
-        parcel.readInt(),
-        parcel.readString(),
-        parcel.readString(),
-        parcel.readInt(),
-        parcel.readLong(),
-        parcel.readLong(),
-        parcel.readString(),
-        parcel.readString(),
-        parcel.readString(),
-        parcel.readByte() != 0.toByte(),
-        parcel.readLong(),
-        parcel.readLong(),
-        parcel.readString(),
-        parcel.readString(),
-        parcel.readString()
-    ) {
-        id = parcel.readInt()
-    }
-
     companion object {
-
-        /**
-         * Generated - should be refreshed every time the class changes!!
-         */
-        private const val serialVersionUID = 4124975224281327921L
-
         private val TAG = OCShareEntity::class.java.simpleName
 
         const val DEFAULT_PERMISSION = -1
@@ -126,83 +112,44 @@ data class OCShareEntity(
         const val FEDERATED_PERMISSIONS_FOR_FOLDER_AFTER_OC9 =
             FEDERATED_PERMISSIONS_FOR_FOLDER_UP_TO_OC9 + SHARE_PERMISSION_FLAG
 
-        fun fromCursor(cursor: Cursor): OCShareEntity {
-            return OCShareEntity(
-                cursor.getLong(cursor.getColumnIndex(ProviderTableMeta.OCSHARES_FILE_SOURCE)),
-                cursor.getLong(cursor.getColumnIndex(ProviderTableMeta.OCSHARES_ITEM_SOURCE)),
-                cursor.getInt(cursor.getColumnIndex(ProviderTableMeta.OCSHARES_SHARE_TYPE)),
-                cursor.getString(cursor.getColumnIndex(ProviderTableMeta.OCSHARES_SHARE_WITH)),
-                cursor.getString(cursor.getColumnIndex(ProviderTableMeta.OCSHARES_PATH)),
-                cursor.getInt(cursor.getColumnIndex(ProviderTableMeta.OCSHARES_PERMISSIONS)),
-                cursor.getLong(cursor.getColumnIndex(ProviderTableMeta.OCSHARES_SHARED_DATE)),
-                cursor.getLong(cursor.getColumnIndex(ProviderTableMeta.OCSHARES_EXPIRATION_DATE)),
-                cursor.getString(cursor.getColumnIndex(ProviderTableMeta.OCSHARES_TOKEN)),
-                cursor.getString(cursor.getColumnIndex(ProviderTableMeta.OCSHARES_SHARE_WITH_DISPLAY_NAME)),
-                cursor.getString(cursor.getColumnIndex(ProviderTableMeta.OCSHARES_SHARE_WITH_ADDITIONAL_INFO)),
-                cursor.getInt(cursor.getColumnIndex(ProviderTableMeta.OCSHARES_IS_DIRECTORY)) == 1,
-                cursor.getLong(cursor.getColumnIndex(ProviderTableMeta.OCSHARES_USER_ID)),
-                cursor.getLong(cursor.getColumnIndex(ProviderTableMeta.OCSHARES_ID_REMOTE_SHARED)),
-                cursor.getString(cursor.getColumnIndex(ProviderTableMeta.OCSHARES_ACCOUNT_OWNER)),
-                cursor.getString(cursor.getColumnIndex(ProviderTableMeta.OCSHARES_NAME)),
-                cursor.getString(cursor.getColumnIndex(ProviderTableMeta.OCSHARES_URL))
-            )
-        }
+        fun fromCursor(cursor: Cursor) = OCShareEntity(
+            cursor.getLong(cursor.getColumnIndex(OCSHARES_FILE_SOURCE)),
+            cursor.getLong(cursor.getColumnIndex(OCSHARES_ITEM_SOURCE)),
+            cursor.getInt(cursor.getColumnIndex(OCSHARES_SHARE_TYPE)),
+            cursor.getString(cursor.getColumnIndex(OCSHARES_SHARE_WITH)),
+            cursor.getString(cursor.getColumnIndex(OCSHARES_PATH)),
+            cursor.getInt(cursor.getColumnIndex(OCSHARES_PERMISSIONS)),
+            cursor.getLong(cursor.getColumnIndex(OCSHARES_SHARED_DATE)),
+            cursor.getLong(cursor.getColumnIndex(OCSHARES_EXPIRATION_DATE)),
+            cursor.getString(cursor.getColumnIndex(OCSHARES_TOKEN)),
+            cursor.getString(cursor.getColumnIndex(OCSHARES_SHARE_WITH_DISPLAY_NAME)),
+            cursor.getString(cursor.getColumnIndex(OCSHARES_SHARE_WITH_ADDITIONAL_INFO)),
+            cursor.getInt(cursor.getColumnIndex(OCSHARES_IS_DIRECTORY)) == 1,
+            cursor.getLong(cursor.getColumnIndex(OCSHARES_USER_ID)),
+            cursor.getLong(cursor.getColumnIndex(OCSHARES_ID_REMOTE_SHARED)),
+            cursor.getString(cursor.getColumnIndex(OCSHARES_ACCOUNT_OWNER)),
+            cursor.getString(cursor.getColumnIndex(OCSHARES_NAME)),
+            cursor.getString(cursor.getColumnIndex(OCSHARES_URL))
+        )
 
-        fun fromContentValues(values: ContentValues): OCShareEntity {
-            return OCShareEntity(
-                values.getAsLong(ProviderTableMeta.OCSHARES_FILE_SOURCE),
-                values.getAsLong(ProviderTableMeta.OCSHARES_ITEM_SOURCE),
-                values.getAsInteger(ProviderTableMeta.OCSHARES_SHARE_TYPE),
-                values.getAsString(ProviderTableMeta.OCSHARES_SHARE_WITH),
-                values.getAsString(ProviderTableMeta.OCSHARES_PATH),
-                values.getAsInteger(ProviderTableMeta.OCSHARES_PERMISSIONS),
-                values.getAsLong(ProviderTableMeta.OCSHARES_SHARED_DATE),
-                values.getAsLong(ProviderTableMeta.OCSHARES_EXPIRATION_DATE),
-                values.getAsString(ProviderTableMeta.OCSHARES_TOKEN),
-                values.getAsString(ProviderTableMeta.OCSHARES_SHARE_WITH_DISPLAY_NAME),
-                values.getAsString(ProviderTableMeta.OCSHARES_SHARE_WITH_ADDITIONAL_INFO),
-                values.getAsBoolean(ProviderTableMeta.OCSHARES_IS_DIRECTORY),
-                values.getAsLong(ProviderTableMeta.OCSHARES_USER_ID),
-                values.getAsLong(ProviderTableMeta.OCSHARES_ID_REMOTE_SHARED),
-                values.getAsString(ProviderTableMeta.OCSHARES_ACCOUNT_OWNER),
-                values.getAsString(ProviderTableMeta.OCSHARES_NAME),
-                values.getAsString(ProviderTableMeta.OCSHARES_URL)
-            )
-        }
-
-        /**
-         * Parcelable Methods
-         */
-        @JvmField
-        val CREATOR: Parcelable.Creator<OCShareEntity> = object : Parcelable.Creator<OCShareEntity> {
-            override fun createFromParcel(source: Parcel): OCShareEntity {
-                return OCShareEntity(source)
-            }
-
-            override fun newArray(size: Int): Array<OCShareEntity?> {
-                return arrayOfNulls(size)
-            }
-        }
-    }
-
-    override fun describeContents(): Int = this.hashCode()
-
-    override fun writeToParcel(dest: Parcel?, flags: Int) {
-        dest?.writeInt(id)
-        dest?.writeString(shareWith)
-        dest?.writeString(path)
-        dest?.writeString(token)
-        dest?.writeString(sharedWithDisplayName)
-        dest?.writeString(sharedWithAdditionalInfo)
-        dest?.writeString(name)
-        dest?.writeString(shareLink)
-        dest?.writeLong(fileSource)
-        dest?.writeLong(itemSource)
-        dest?.writeInt(shareType)
-        dest?.writeInt(permissions)
-        dest?.writeLong(sharedDate)
-        dest?.writeLong(expirationDate)
-        dest?.writeInt(if (isFolder) 1 else 0)
-        dest?.writeLong(userId)
+        fun fromContentValues(values: ContentValues) = OCShareEntity(
+            values.getAsLong(OCSHARES_FILE_SOURCE),
+            values.getAsLong(OCSHARES_ITEM_SOURCE),
+            values.getAsInteger(OCSHARES_SHARE_TYPE),
+            values.getAsString(OCSHARES_SHARE_WITH),
+            values.getAsString(OCSHARES_PATH),
+            values.getAsInteger(OCSHARES_PERMISSIONS),
+            values.getAsLong(OCSHARES_SHARED_DATE),
+            values.getAsLong(OCSHARES_EXPIRATION_DATE),
+            values.getAsString(OCSHARES_TOKEN),
+            values.getAsString(OCSHARES_SHARE_WITH_DISPLAY_NAME),
+            values.getAsString(OCSHARES_SHARE_WITH_ADDITIONAL_INFO),
+            values.getAsBoolean(OCSHARES_IS_DIRECTORY),
+            values.getAsLong(OCSHARES_USER_ID),
+            values.getAsLong(OCSHARES_ID_REMOTE_SHARED),
+            values.getAsString(OCSHARES_ACCOUNT_OWNER),
+            values.getAsString(OCSHARES_NAME),
+            values.getAsString(OCSHARES_URL)
+        )
     }
 }

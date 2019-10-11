@@ -2,6 +2,7 @@
  * ownCloud Android client application
  *
  * @author David González Verdugo
+ * @author Abel García de Prada
  * Copyright (C) 2019 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -18,9 +19,6 @@
  */
 
 package com.owncloud.android.domain.sharing.shares.model
-
-import android.os.Parcel
-import android.os.Parcelable
 
 data class OCShare(
     val id: Int? = null,
@@ -41,33 +39,11 @@ data class OCShare(
     var accountOwner: String = "",
     val name: String?,
     val shareLink: String?
-) : Parcelable {
+) {
 
     val isPasswordProtected: Boolean
         get() = shareType == ShareType.PUBLIC_LINK && shareWith?.isNotEmpty()!!
-
-    override fun writeToParcel(dest: Parcel?, flags: Int) {
-        dest?.writeInt(id!!)
-        dest?.writeString(shareWith)
-        dest?.writeString(path)
-        dest?.writeString(token)
-        dest?.writeString(sharedWithDisplayName)
-        dest?.writeString(sharedWithAdditionalInfo)
-        dest?.writeString(name)
-        dest?.writeString(shareLink)
-        dest?.writeLong(fileSource)
-        dest?.writeLong(itemSource)
-        dest?.writeInt(shareType.value)
-        dest?.writeInt(permissions)
-        dest?.writeLong(sharedDate)
-        dest?.writeLong(expirationDate)
-        dest?.writeInt(if (isFolder) 1 else 0)
-        dest?.writeLong(userId)
-    }
-
-    override fun describeContents(): Int = this.hashCode()
 }
-
 /**
  * Enum for Share Type, with values:
  * -1 - No shared
