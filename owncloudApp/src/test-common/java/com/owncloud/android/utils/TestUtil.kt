@@ -133,26 +133,22 @@ object TestUtil {
         remoteId: Long = 1,
         name: String = "",
         shareLink: String = ""
-    ): RemoteShare {
-        val remoteShare = RemoteShare();
-
-        remoteShare.fileSource = fileSource
-        remoteShare.itemSource = itemSource
-        remoteShare.shareType = ShareType.fromValue(shareType)
-        remoteShare.shareWith = shareWith
-        remoteShare.path = path
-        remoteShare.permissions = permissions
-        remoteShare.sharedDate = sharedDate
-        remoteShare.expirationDate = expirationDate
-        remoteShare.token = token
-        remoteShare.sharedWithDisplayName = sharedWithDisplayName
-        remoteShare.isFolder = isFolder
-        remoteShare.userId = userId
-        remoteShare.id = remoteId
-        remoteShare.name = name
-        remoteShare.shareLink = shareLink
-
-        return remoteShare
+    ): RemoteShare = RemoteShare().apply {
+        this.fileSource = fileSource
+        this.itemSource = itemSource
+        this.shareType = ShareType.fromValue(shareType)
+        this.shareWith = shareWith
+        this.path = path
+        this.permissions = permissions
+        this.sharedDate = sharedDate
+        this.expirationDate = expirationDate
+        this.token = token
+        this.sharedWithDisplayName = sharedWithDisplayName
+        this.isFolder = isFolder
+        this.userId = userId
+        this.id = remoteId
+        this.name = name
+        this.shareLink = shareLink
     }
 
     /**
@@ -191,6 +187,7 @@ object TestUtil {
         corePollinterval: Int = 0,
         sharingApiEnabled: Int = 1,
         sharingPublicEnabled: Int = 1,
+        filesSharingSearchMinLength: Int = 4,
         sharingPublicPasswordEnforced: Int = 0,
         sharingPublicPasswordEnforcedReadOnly: Int = 0,
         sharingPublicPasswordEnforcedReadWrite: Int = 0,
@@ -218,6 +215,7 @@ object TestUtil {
         versionEdition,
         corePollinterval,
         sharingApiEnabled,
+        filesSharingSearchMinLength,
         sharingPublicEnabled,
         sharingPublicPasswordEnforced,
         sharingPublicPasswordEnforcedReadOnly,

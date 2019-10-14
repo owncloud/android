@@ -2,6 +2,7 @@
  * ownCloud Android client application
  *
  * @author David González Verdugo
+ * @author Abel García de Prada
  * Copyright (C) 2019 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -48,6 +49,8 @@ data class OCCapability(
     val corePollInterval: Int,
     @ColumnInfo(name = ProviderTableMeta.CAPABILITIES_SHARING_API_ENABLED)
     val filesSharingApiEnabled: Int?,
+    @ColumnInfo(name = ProviderTableMeta.CAPABILITIES_SHARING_SEARCH_MIN_LENGTH)
+    val filesSharingSearchMinLength: Int?,
     @ColumnInfo(name = ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_ENABLED)
     val filesSharingPublicEnabled: Int?,
     @ColumnInfo(name = ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED)
@@ -98,26 +101,27 @@ data class OCCapability(
             remoteCapability.versionString,
             remoteCapability.versionEdition,
             remoteCapability.corePollinterval,
-            remoteCapability.filesSharingApiEnabled?.value,
-            remoteCapability.filesSharingPublicEnabled?.value,
-            remoteCapability.filesSharingPublicPasswordEnforced?.value,
-            remoteCapability.filesSharingPublicPasswordEnforcedReadOnly?.value,
-            remoteCapability.filesSharingPublicPasswordEnforcedReadWrite?.value,
-            remoteCapability.filesSharingPublicPasswordEnforcedUploadOnly?.value,
-            remoteCapability.filesSharingPublicExpireDateEnabled?.value,
+            remoteCapability.filesSharingApiEnabled.value,
+            remoteCapability.filesSharingMinLength,
+            remoteCapability.filesSharingPublicEnabled.value,
+            remoteCapability.filesSharingPublicPasswordEnforced.value,
+            remoteCapability.filesSharingPublicPasswordEnforcedReadOnly.value,
+            remoteCapability.filesSharingPublicPasswordEnforcedReadWrite.value,
+            remoteCapability.filesSharingPublicPasswordEnforcedUploadOnly.value,
+            remoteCapability.filesSharingPublicExpireDateEnabled.value,
             remoteCapability.filesSharingPublicExpireDateDays,
-            remoteCapability.filesSharingPublicExpireDateEnforced?.value,
-            remoteCapability.filesSharingPublicSendMail?.value,
-            remoteCapability.filesSharingPublicUpload?.value,
-            remoteCapability.filesSharingPublicMultiple?.value,
-            remoteCapability.filesSharingPublicSupportsUploadOnly?.value,
-            remoteCapability.filesSharingUserSendMail?.value,
-            remoteCapability.filesSharingResharing?.value,
-            remoteCapability.filesSharingFederationOutgoing?.value,
-            remoteCapability.filesSharingFederationIncoming?.value,
-            remoteCapability.filesBigFileChunking?.value,
-            remoteCapability.filesUndelete?.value,
-            remoteCapability.filesVersioning?.value
+            remoteCapability.filesSharingPublicExpireDateEnforced.value,
+            remoteCapability.filesSharingPublicSendMail.value,
+            remoteCapability.filesSharingPublicUpload.value,
+            remoteCapability.filesSharingPublicMultiple.value,
+            remoteCapability.filesSharingPublicSupportsUploadOnly.value,
+            remoteCapability.filesSharingUserSendMail.value,
+            remoteCapability.filesSharingResharing.value,
+            remoteCapability.filesSharingFederationOutgoing.value,
+            remoteCapability.filesSharingFederationIncoming.value,
+            remoteCapability.filesBigFileChunking.value,
+            remoteCapability.filesUndelete.value,
+            remoteCapability.filesVersioning.value
         )
 
         fun fromCursor(cursor: Cursor) = OCCapability(
@@ -129,6 +133,7 @@ data class OCCapability(
             cursor.getString(cursor.getColumnIndex(ProviderTableMeta.CAPABILITIES_VERSION_EDITION)),
             cursor.getInt(cursor.getColumnIndex(ProviderTableMeta.CAPABILITIES_CORE_POLLINTERVAL)),
             cursor.getInt(cursor.getColumnIndex(ProviderTableMeta.CAPABILITIES_SHARING_API_ENABLED)),
+            cursor.getInt(cursor.getColumnIndex(ProviderTableMeta.CAPABILITIES_SHARING_SEARCH_MIN_LENGTH)),
             cursor.getInt(cursor.getColumnIndex(ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_ENABLED)),
             cursor.getInt(cursor.getColumnIndex(ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED)),
             cursor.getInt(
@@ -171,6 +176,7 @@ data class OCCapability(
             values.getAsString(ProviderTableMeta.CAPABILITIES_VERSION_EDITION),
             values.getAsInteger(ProviderTableMeta.CAPABILITIES_CORE_POLLINTERVAL),
             values.getAsInteger(ProviderTableMeta.CAPABILITIES_SHARING_API_ENABLED),
+            values.getAsInteger(ProviderTableMeta.CAPABILITIES_SHARING_SEARCH_MIN_LENGTH),
             values.getAsInteger(ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_ENABLED),
             values.getAsInteger(ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED),
             values.getAsInteger(ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_READ_ONLY),

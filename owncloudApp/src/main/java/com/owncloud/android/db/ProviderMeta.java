@@ -5,6 +5,7 @@
  * @author David A. Velasco
  * @author masensio
  * @author David González Verdugo
+ * @author Abel García de Prada
  * Copyright (C) 2011  Bartek Przybylski
  * Copyright (C) 2019 ownCloud GmbH.
  * <p>
@@ -34,11 +35,10 @@ public class ProviderMeta {
 
     public static final String DB_NAME = "filelist";
     public static final String NEW_DB_NAME = "owncloud_database";
-    public static final int DB_VERSION = 27;
+    public static final int DB_VERSION = 28;
 
     private ProviderMeta() {
     }
-
 
     static public class ProviderTableMeta implements BaseColumns {
         public static final String FILE_TABLE_NAME = "filelist";
@@ -133,6 +133,7 @@ public class ProviderMeta {
         public static final String CAPABILITIES_VERSION_EDITION = "version_edition";
         public static final String CAPABILITIES_CORE_POLLINTERVAL = "core_pollinterval";
         public static final String CAPABILITIES_SHARING_API_ENABLED = "sharing_api_enabled";
+        public static final String CAPABILITIES_SHARING_SEARCH_MIN_LENGTH = "search_min_length";
         public static final String CAPABILITIES_SHARING_PUBLIC_ENABLED = "sharing_public_enabled";
         public static final String CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED = "sharing_public_password_enforced";
         public static final String CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_READ_ONLY =

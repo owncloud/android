@@ -51,11 +51,11 @@ class OCCapabilityViewModelTest {
     }
 
     @Test
-    fun loadCapability() {
+    fun loadCapabilityAsLiveData() {
         val ocCapabilityRepository = mock(OCCapabilityRepository::class.java)
 
         `when`(
-            ocCapabilityRepository.getCapabilityForAccount(
+            ocCapabilityRepository.getCapabilityForAccountAsLiveData(
                 "admin@server"
             )
         ).thenReturn(
@@ -72,8 +72,36 @@ class OCCapabilityViewModelTest {
             capabilityRepository = ocCapabilityRepository
         )
 
-        val resource: Resource<OCCapability>? = ocCapabilityViewModel.getCapabilityForAccount().value
+        val resource: Resource<OCCapability>? = ocCapabilityViewModel.getCapabilityForAccountAsLiveData().value
         val capability: OCCapability? = resource?.data
+
+        assertEquals("admin@server", capability?.accountName)
+        assertEquals(2, capability?.versionMayor)
+        assertEquals(1, capability?.versionMinor)
+        assertEquals(0, capability?.versionMicro)
+    }
+
+    @Test
+    fun loadCapability() {
+        val ocCapabilityRepository = mock(OCCapabilityRepository::class.java)
+
+        `when`(
+            ocCapabilityRepository.getStoredCapabilityForAccount(
+                "admin@server"
+            )
+        ).thenReturn(
+            capability
+        )
+
+        val context = InstrumentationRegistry.getInstrumentation().targetContext
+
+        val ocCapabilityViewModel = OCCapabilityViewModel(
+            context,
+            account = testAccount,
+            capabilityRepository = ocCapabilityRepository
+        )
+
+        val capability: OCCapability? = ocCapabilityViewModel.getStoredCapabilityForAccount()
 
         assertEquals("admin@server", capability?.accountName)
         assertEquals(2, capability?.versionMayor)

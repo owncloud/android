@@ -2,6 +2,7 @@
  * ownCloud Android client application
  *
  * @author David González Verdugo
+ * @author Abel García de Prada
  * Copyright (C) 2019 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -48,7 +49,7 @@ class OCCapabilityRepository(
         )
     }
 
-    override fun getCapabilityForAccount(
+    override fun getCapabilityForAccountAsLiveData(
         accountName: String,
         shouldFetchFromNetwork: Boolean
     ): LiveData<Resource<OCCapability>> =
@@ -66,4 +67,9 @@ class OCCapabilityRepository(
             override fun createCall() = remoteCapabilitiesDataSource.getCapabilities()
 
         }.asLiveData()
+
+    override fun getStoredCapabilityForAccount(
+        accountName: String
+    ): OCCapability =
+        localCapabilitiesDataSource.getCapabilityForAccount(accountName)
 }
