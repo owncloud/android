@@ -2,6 +2,7 @@
  * ownCloud Android client application
  *
  * @author David González Verdugo
+ * @author Abel García de Prada
  * Copyright (C) 2019 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -37,7 +38,7 @@ object DataTestUtil {
     /**
      * Shares
      */
-    private fun createShare(
+    fun createShare(
         fileSource: Long = 7,
         itemSource: Long = 7,
         shareType: Int, // Public share by default
@@ -76,7 +77,7 @@ object DataTestUtil {
         shareLink
     )
 
-    private fun createShareEntity(
+    fun createShareEntity(
         fileSource: Long = 7,
         itemSource: Long = 7,
         shareType: Int, // Public share by default
@@ -216,26 +217,22 @@ object DataTestUtil {
         remoteId: Long = 1,
         name: String = "",
         shareLink: String = ""
-    ): RemoteShare {
-        val remoteShare = RemoteShare();
-
-        remoteShare.fileSource = fileSource
-        remoteShare.itemSource = itemSource
-        remoteShare.shareType = com.owncloud.android.lib.resources.shares.ShareType.fromValue(shareType)
-        remoteShare.shareWith = shareWith
-        remoteShare.path = path
-        remoteShare.permissions = permissions
-        remoteShare.sharedDate = sharedDate
-        remoteShare.expirationDate = expirationDate
-        remoteShare.token = token
-        remoteShare.sharedWithDisplayName = sharedWithDisplayName
-        remoteShare.isFolder = isFolder
-        remoteShare.userId = userId
-        remoteShare.id = remoteId
-        remoteShare.name = name
-        remoteShare.shareLink = shareLink
-
-        return remoteShare
+    ): RemoteShare = RemoteShare().also {
+        it.fileSource = fileSource
+        it.itemSource = itemSource
+        it.shareType = com.owncloud.android.lib.resources.shares.ShareType.fromValue(shareType)
+        it.shareWith = shareWith
+        it.path = path
+        it.permissions = permissions
+        it.sharedDate = sharedDate
+        it.expirationDate = expirationDate
+        it.token = token
+        it.sharedWithDisplayName = sharedWithDisplayName
+        it.isFolder = isFolder
+        it.userId = userId
+        it.id = remoteId
+        it.name = name
+        it.shareLink = shareLink
     }
 
     /**

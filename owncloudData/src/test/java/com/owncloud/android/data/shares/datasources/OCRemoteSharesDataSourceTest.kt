@@ -31,9 +31,9 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.shares.ShareParserResult
 import io.mockk.every
 import io.mockk.mockk
-import junit.framework.Assert.assertEquals
 import org.hamcrest.CoreMatchers.notNullValue
 import org.hamcrest.MatcherAssert.assertThat
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 
@@ -262,10 +262,10 @@ class OCRemoteSharesDataSourceTest {
 
         // Get shares from remote datasource
         val shares = ocRemoteShareDataSource.getShares(
-            "/Documents/doc",
-            true,
-            true,
-            "user@server"
+            remoteFilePath = "/Documents/doc",
+            reshares = true,
+            subfiles = true,
+            accountName = "user@server"
         )
 
         assertEquals(4, shares.size)

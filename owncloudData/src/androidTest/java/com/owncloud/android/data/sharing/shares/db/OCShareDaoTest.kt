@@ -26,9 +26,10 @@ import com.owncloud.android.data.OwncloudDatabase
 import com.owncloud.android.data.utils.DataTestUtil
 import com.owncloud.android.data.utils.LiveDataTestUtil.getValue
 import com.owncloud.android.domain.sharing.shares.model.ShareType
-import junit.framework.Assert.assertEquals
 import org.hamcrest.CoreMatchers.notNullValue
 import org.hamcrest.MatcherAssert.assertThat
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -205,6 +206,49 @@ class OCShareDaoTest {
         assertEquals("user3@server", document1PrivateSharesForUser3[0].accountOwner)
         assertEquals("user_name", document1PrivateSharesForUser3[0].shareWith)
         assertEquals("Patrick", document1PrivateSharesForUser3[0].sharedWithDisplayName)
+    }
+
+    @Test
+    fun testAutogenerationId() {
+        ocShareDao.insert(
+            listOf(
+                DataTestUtil.createPublicShareEntity(
+                    path = "/Documents/document1.docx",
+                    isFolder = false,
+                    accountOwner = "user1@server",
+                    name = "Document 1 link",
+                    shareLink = "http://server:port/s/1"
+                ),
+                DataTestUtil.createPublicShareEntity(
+                    path = "/Documents/document1.docx",
+                    isFolder = false,
+                    accountOwner = "user1@server",
+                    name = "Document 1 link",
+                    shareLink = "http://server:port/s/1"
+                )
+            )
+        )
+
+        val sharesWithSameValues = getValue(
+            ocShareDao.getSharesAsLiveData(
+                "/Documents/document1.docx", "user1@server", listOf(ShareType.PUBLIC_LINK.value)
+            )
+        )
+        assertNotNull(sharesWithSameValues)
+        assertEquals(2, sharesWithSameValues.size)
+        assertEquals("/Documents/document1.docx", sharesWithSameValues[0].path)
+        assertEquals("/Documents/document1.docx", sharesWithSameValues[1].path)
+        assertEquals(false, sharesWithSameValues[0].isFolder)
+        assertEquals(false, sharesWithSameValues[1].isFolder)
+        assertEquals("user1@server", sharesWithSameValues[0].accountOwner)
+        assertEquals("user1@server", sharesWithSameValues[1].accountOwner)
+        assertEquals("Document 1 link", sharesWithSameValues[0].name)
+        assertEquals("Document 1 link", sharesWithSameValues[1].name)
+        assertEquals("http://server:port/s/1", sharesWithSameValues[0].shareLink)
+        assertEquals("http://server:port/s/1", sharesWithSameValues[1].shareLink)
+        assertNotNull(sharesWithSameValues[0].id)
+        assertNotNull(sharesWithSameValues[1].id)
+        assert(sharesWithSameValues[0].id != sharesWithSameValues[1].id)
     }
 
     /******************************************************************************************************
