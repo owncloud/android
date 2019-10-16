@@ -22,13 +22,13 @@ package com.owncloud.android.data.capabilities.datasources
 
 import com.owncloud.android.data.capabilities.datasources.implementation.OCRemoteCapabilitiesDataSource
 import com.owncloud.android.data.capabilities.network.OCCapabilityService
-import com.owncloud.android.data.sharing.shares.datasources.mapper.RemoteCapabilityMapper
+import com.owncloud.android.data.capabilities.datasources.mapper.RemoteCapabilityMapper
 import com.owncloud.android.data.utils.DataTestUtil
 import io.mockk.every
 import io.mockk.mockk
-import junit.framework.Assert.assertEquals
 import org.hamcrest.CoreMatchers.notNullValue
 import org.hamcrest.MatcherAssert.assertThat
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 
