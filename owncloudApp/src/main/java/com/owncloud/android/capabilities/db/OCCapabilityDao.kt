@@ -33,9 +33,17 @@ abstract class OCCapabilityDao {
         "SELECT * from " + ProviderTableMeta.CAPABILITIES_TABLE_NAME + " WHERE " +
                 ProviderTableMeta.CAPABILITIES_ACCOUNT_NAME + " = :accountName"
     )
-    abstract fun getCapabilityForAccount(
+    abstract fun getCapabilityForAccountAsLiveData(
         accountName: String
     ): LiveData<OCCapability>
+
+    @Query(
+        "SELECT * from " + ProviderTableMeta.CAPABILITIES_TABLE_NAME + " WHERE " +
+                ProviderTableMeta.CAPABILITIES_ACCOUNT_NAME + " = :accountName"
+    )
+    abstract fun getCapabilityForAccount(
+        accountName: String
+    ): OCCapability
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract fun insert(ocCapability: OCCapability): Long

@@ -37,18 +37,19 @@ import android.provider.BaseColumns
 import android.widget.Toast
 import com.owncloud.android.R
 import com.owncloud.android.authentication.AccountUtils
+import com.owncloud.android.capabilities.viewmodel.OCCapabilityViewModel
 import com.owncloud.android.datamodel.FileDataStorageManager
 import com.owncloud.android.lib.common.utils.Log_OC
 import com.owncloud.android.lib.resources.shares.GetRemoteShareesOperation
 import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.operations.common.OperationType
-import com.owncloud.android.shares.presentation.OCShareViewModel
 import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter
 import com.owncloud.android.vo.Resource
 import org.json.JSONException
 import org.json.JSONObject
 import java.util.ArrayList
 import java.util.HashMap
+import java.util.Locale
 
 /**
  * Content provider for search suggestions, to search for users and groups existing in an ownCloud server.
@@ -112,27 +113,37 @@ class UsersAndGroupsSearchProvider : ContentProvider() {
         sortOrder: String?
     ): Cursor? {
         Log_OC.d(TAG, "query received in thread " + Thread.currentThread().name)
-        when (uriMatcher.match(uri)) {
-            SEARCH -> return searchForUsersOrGroups(uri)
-            else -> return null
+        return when (uriMatcher.match(uri)) {
+            SEARCH -> searchForUsersOrGroups(uri)
+            else -> null
         }
     }
 
     private fun searchForUsersOrGroups(uri: Uri): Cursor? {
         var response: MatrixCursor? = null
 
-        val userQuery = uri.lastPathSegment!!.toLowerCase()
+        val userQuery = uri.lastPathSegment!!.toLowerCase(Locale.getDefault())
 
         /// need to trust on the AccountUtils to get the current account since the query in the client side is not
         /// directly started by our code, but from SearchView implementation
         val account = AccountUtils.getCurrentOwnCloudAccount(context)
+
+        val ocCapabilityViewModel = OCCapabilityViewModel(context, account)
+        val capability = ocCapabilityViewModel.getStoredCapabilityForAccount()
+
+        val minCharactersToSearch = capability.filesSharingSearchMinLength ?: DEFAULT_MIN_CHARACTERS_TO_SEARCH
+
+        if (userQuery.length < minCharactersToSearch) {
+            return MatrixCursor(COLUMNS)
+        }
 
         val ocShareeViewModel = OCShareeViewModel(
             context,
             account
         )
 
-        val shareesResource = ocShareeViewModel.getSharees(userQuery,
+        val shareesResource = ocShareeViewModel.getSharees(
+            userQuery,
             REQUESTED_PAGE,
             RESULTS_PER_PAGE
         )
@@ -249,7 +260,7 @@ class UsersAndGroupsSearchProvider : ContentProvider() {
     /**
      * Show error message
      *
-     * @param result Result with the failure information.
+     * @param resource Resource with the failure information.
      */
     private fun showErrorMessage(resource: Resource<ArrayList<JSONObject>>) {
         val handler = Handler(Looper.getMainLooper())
@@ -283,6 +294,7 @@ class UsersAndGroupsSearchProvider : ContentProvider() {
 
         private const val SEARCH = 1
 
+        private const val DEFAULT_MIN_CHARACTERS_TO_SEARCH = 4
         private const val RESULTS_PER_PAGE = 30
         private const val REQUESTED_PAGE = 1
 

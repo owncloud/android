@@ -117,7 +117,6 @@ public class PrepareVideoPlayerAsyncTask extends AsyncTask<Object, Void, MediaSo
         } else {
 
             try {
-
                 OwnCloudCredentials credentials = AccountUtils.
                         getCredentialsForAccount(MainApp.Companion.getAppContext(), account);
 

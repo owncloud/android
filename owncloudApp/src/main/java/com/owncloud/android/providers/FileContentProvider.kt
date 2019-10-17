@@ -6,6 +6,7 @@
  * @author masensio
  * @author David González Verdugo
  * @author Christian Schabesberger
+ * @author Abel García de Prada
  * Copyright (C) 2011  Bartek Przybylski
  * Copyright (C) 2019 ownCloud GmbH.
  *

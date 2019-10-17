@@ -2,6 +2,7 @@
  *   ownCloud Android client application
  *
  *   @author David González Verdugo
+ *   @author Abel García de Prada
  *   Copyright (C) 2019 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
@@ -25,12 +26,21 @@ import androidx.annotation.VisibleForTesting
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
 import com.owncloud.android.capabilities.db.OCCapability
 import com.owncloud.android.capabilities.db.OCCapabilityDao
 import com.owncloud.android.shares.domain.OCShare
 import com.owncloud.android.shares.data.datasources.OCShareDao
 
-@Database(entities = [OCShare::class, OCCapability::class], version = ProviderMeta.DB_VERSION, exportSchema = false)
+@Database(
+    entities = [
+        OCShare::class,
+        OCCapability::class
+    ],
+    version = ProviderMeta.DB_VERSION,
+    exportSchema = true
+)
 abstract class OwncloudDatabase : RoomDatabase() {
     abstract fun shareDao(): OCShareDao
     abstract fun capabilityDao(): OCCapabilityDao
@@ -38,6 +48,15 @@ abstract class OwncloudDatabase : RoomDatabase() {
     companion object {
         @Volatile
         private var INSTANCE: OwncloudDatabase? = null
+
+        val MIGRATION_27_28 = object : Migration(27, 28) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL(
+                    "ALTER TABLE ${ProviderMeta.ProviderTableMeta.CAPABILITIES_TABLE_NAME} " +
+                            "ADD COLUMN ${ProviderMeta.ProviderTableMeta.CAPABILITIES_SHARING_SEARCH_MIN_LENGTH} INTEGER"
+                )
+            }
+        }
 
         fun getDatabase(
             context: Context
@@ -49,7 +68,8 @@ abstract class OwncloudDatabase : RoomDatabase() {
                     context.applicationContext,
                     OwncloudDatabase::class.java,
                     ProviderMeta.NEW_DB_NAME
-                ).build()
+                ).addMigrations(MIGRATION_27_28)
+                    .build()
                 INSTANCE = instance
                 instance
             }

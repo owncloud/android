@@ -191,8 +191,8 @@ class EditPublicShareFolderTest {
         `when`(intent.getParcelableExtra(FileActivity.EXTRA_FILE) as? Parcelable).thenReturn(file)
         intent.putExtra(FileActivity.EXTRA_FILE, file)
 
-        `when`(ocCapabilityViewModel.getCapabilityForAccount(false)).thenReturn(capabilitiesLiveData)
-        `when`(ocCapabilityViewModel.getCapabilityForAccount(true)).thenReturn(capabilitiesLiveData)
+        `when`(ocCapabilityViewModel.getCapabilityForAccountAsLiveData(false)).thenReturn(capabilitiesLiveData)
+        `when`(ocCapabilityViewModel.getCapabilityForAccountAsLiveData(true)).thenReturn(capabilitiesLiveData)
         `when`(ocShareViewModel.getPublicShares(file.remotePath)).thenReturn(sharesLiveData)
         `when`(ocShareViewModel.getPrivateShares(file.remotePath)).thenReturn(MutableLiveData())
 

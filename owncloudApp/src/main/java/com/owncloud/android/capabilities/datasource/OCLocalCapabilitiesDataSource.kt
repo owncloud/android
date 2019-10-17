@@ -31,6 +31,9 @@ class OCLocalCapabilitiesDataSource(
 ) : LocalCapabilitiesDataSource {
 
     override fun getCapabilityForAccountAsLiveData(accountName: String): LiveData<OCCapability> =
+        ocCapabilityDao.getCapabilityForAccountAsLiveData(accountName)
+
+    override fun getCapabilityForAccount(accountName: String): OCCapability =
         ocCapabilityDao.getCapabilityForAccount(accountName)
 
     override fun insert(ocCapabilities: List<OCCapability>) {
