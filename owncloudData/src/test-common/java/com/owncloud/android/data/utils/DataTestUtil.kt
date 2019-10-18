@@ -29,6 +29,7 @@ import com.owncloud.android.domain.sharing.shares.model.ShareType
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.shares.GetRemoteShareesOperation
 import com.owncloud.android.lib.resources.shares.RemoteShare
+import com.owncloud.android.lib.resources.shares.ShareType as RemoteShareType
 import com.owncloud.android.lib.resources.status.CapabilityBooleanType as RemoteCapabilityBooleanType
 import com.owncloud.android.lib.resources.status.RemoteCapability
 import io.mockk.every
@@ -39,6 +40,45 @@ object DataTestUtil {
     /**
      * Shares
      */
+    val DUMMY_SHARE = OCShare(
+        fileSource = 7,
+        itemSource = 7,
+        shareType = ShareType.USER, // Public share by default
+        shareWith = "",
+        path = "/Photos/image.jpg",
+        permissions = 1,
+        sharedDate = 1542628397,
+        expirationDate = 0,
+        token = "AnyToken",
+        sharedWithDisplayName = "",
+        sharedWithAdditionalInfo = "",
+        isFolder = false,
+        userId = -1,
+        remoteId = 1,
+        accountOwner = "admin@server",
+        name = "",
+        shareLink = ""
+    )
+
+    val DUMMY_REMOTE_SHARE =
+        RemoteShare().apply {
+            fileSource = 7
+            itemSource = 7
+            shareType = RemoteShareType.USER
+            shareWith = ""
+            path = "/Photos/image.jpg"
+            permissions = 1
+            sharedDate = 1542628397
+            expirationDate = 0
+            token = "AnyToken"
+            sharedWithDisplayName = ""
+            isFolder = false
+            userId = -1
+            id = 1
+            name = ""
+            shareLink = ""
+        }
+
     fun createShare(
         fileSource: Long = 7,
         itemSource: Long = 7,
@@ -221,7 +261,7 @@ object DataTestUtil {
     ): RemoteShare = RemoteShare().also {
         it.fileSource = fileSource
         it.itemSource = itemSource
-        it.shareType = com.owncloud.android.lib.resources.shares.ShareType.fromValue(shareType)
+        it.shareType = RemoteShareType.fromValue(shareType)
         it.shareWith = shareWith
         it.path = path
         it.permissions = permissions
