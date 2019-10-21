@@ -3,6 +3,7 @@
  *
  * @author Jesús Recio (@jesmrec)
  * @author David González (@davigonz)
+ * @author Abel García (@abelgardep)
  * Copyright (C) 2019 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -40,19 +41,23 @@ import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
 import com.owncloud.android.R
 import com.owncloud.android.authentication.AccountAuthenticator.KEY_AUTH_TOKEN_TYPE
-import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
-import com.owncloud.android.data.sharing.shares.db.OCShareEntity
 import com.owncloud.android.datamodel.OCFile
+import com.owncloud.android.domain.capabilities.model.CapabilityBooleanType
+import com.owncloud.android.domain.capabilities.model.OCCapability
+import com.owncloud.android.domain.sharing.shares.model.OCShare
 import com.owncloud.android.lib.common.accounts.AccountUtils
 import com.owncloud.android.lib.resources.status.OwnCloudVersion
+import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.viewmodels.capabilities.OCCapabilityViewModel
 import com.owncloud.android.presentation.viewmodels.sharing.OCShareViewModel
 import com.owncloud.android.presentation.ui.sharing.ShareActivity
 import com.owncloud.android.ui.activity.FileActivity
 import com.owncloud.android.utils.AccountsManager
-import com.owncloud.android.utils.AppTestUtil
+import com.owncloud.android.utils.AppTestUtil.DUMMY_CAPABILITY
+import com.owncloud.android.utils.AppTestUtil.DUMMY_SHARE
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verify
 import org.junit.AfterClass
 import org.junit.Before
 import org.junit.BeforeClass
@@ -75,8 +80,8 @@ class EditPublicShareFolderTest {
 
     private lateinit var file: OCFile
 
-    private val publicShares = arrayListOf(
-        AppTestUtil.createPublicShare(
+    private val publicShares = listOf(
+        DUMMY_SHARE.copy(
             path = "/Photos/",
             expirationDate = 0L,
             permissions = 1,
@@ -84,7 +89,7 @@ class EditPublicShareFolderTest {
             name = "Photos link",
             shareLink = "http://server:port/s/1"
         ),
-        AppTestUtil.createPublicShare(  // With name updated
+        DUMMY_SHARE.copy(  // With name updated
             path = "/Photos/",
             expirationDate = 0L,
             permissions = 1,
@@ -92,7 +97,7 @@ class EditPublicShareFolderTest {
             name = "Photos updated link",
             shareLink = "http://server:port/s/1"
         ),
-        AppTestUtil.createPublicShare( // With permission Download/View/Upload
+        DUMMY_SHARE.copy( // With permission Download/View/Upload
             path = "/Photos/",
             expirationDate = 0L,
             permissions = 15,
@@ -100,7 +105,7 @@ class EditPublicShareFolderTest {
             name = "Photos link",
             shareLink = "http://server:port/s/1"
         ),
-        AppTestUtil.createPublicShare( // With permission Upload only
+        DUMMY_SHARE.copy( // With permission Upload only
             path = "/Photos/",
             expirationDate = 0L,
             permissions = 4,
@@ -108,7 +113,7 @@ class EditPublicShareFolderTest {
             name = "Photos link",
             shareLink = "http://server:port/s/1"
         ),
-        AppTestUtil.createPublicShare( // With password
+        DUMMY_SHARE.copy( // With password
             path = "/Photos/",
             expirationDate = 0L,
             isFolder = true,
@@ -118,8 +123,9 @@ class EditPublicShareFolderTest {
         )
     )
 
-    private val capabilitiesLiveData = MutableLiveData<DataResult<OCCapabilityEntity>>()
-    private val sharesLiveData = MutableLiveData<DataResult<List<OCShareEntity>>>()
+    private val capabilitiesLiveData = MutableLiveData<UIResult<OCCapability>>()
+    private val sharesLiveData = MutableLiveData<UIResult<List<OCShare>>>()
+    private val publicShareEditionStatusLiveData = MutableLiveData<UIResult<Unit>>()
 
     private val ocCapabilityViewModel = mockk<OCCapabilityViewModel>(relaxed = true)
     private val ocShareViewModel = mockk<OCShareViewModel>(relaxed = true)
@@ -183,10 +189,10 @@ class EditPublicShareFolderTest {
         file = getOCFileForTesting("Photos")
         intent.putExtra(FileActivity.EXTRA_FILE, file)
 
-        every { ocCapabilityViewModel.getCapabilityForAccount(false) } returns capabilitiesLiveData
-        every { ocCapabilityViewModel.getCapabilityForAccount(true) } returns capabilitiesLiveData
-        every { ocShareViewModel.getPublicShares(file.remotePath) } returns sharesLiveData
-        every { ocShareViewModel.getPrivateShares(file.remotePath) } returns MutableLiveData()
+        every { ocCapabilityViewModel.capabilities } returns capabilitiesLiveData
+        every { ocShareViewModel.shares } returns sharesLiveData
+        every { ocShareViewModel.publicShareEditionStatus } returns publicShareEditionStatusLiveData
+        every { ocShareViewModel.privateShare } returns MutableLiveData()
 
         stopKoin()
 
@@ -212,22 +218,9 @@ class EditPublicShareFolderTest {
         loadCapabilitiesSuccessfully()
 
         val existingPublicShare = publicShares[0]
-        loadSharesSuccessfully(arrayListOf(existingPublicShare))
+        sharesLiveData.postValue(UIResult.Success(listOf(existingPublicShare)))
 
         val updatedPublicShare = publicShares[1]
-
-        every {
-            ocShareViewModel.updatePublicShare(
-                1,
-                updatedPublicShare.name!!,
-                "",
-                -1,
-                1,
-                false
-            )
-        } returns MutableLiveData<DataResult<Unit>>().apply {
-            postValue(DataResult.success())
-        }
 
         // 1. Open dialog to edit an existing public share
         onView(withId(R.id.editPublicLinkButton)).perform(click())
@@ -238,10 +231,23 @@ class EditPublicShareFolderTest {
         // 3. Save updated share
         onView(withId(R.id.saveButton)).perform(scrollTo(), click())
 
+        verify {
+            ocShareViewModel.updatePublicShare(
+                remoteId = 1,
+                name = updatedPublicShare.name!!,
+                password = "",
+                expirationDateInMillis = -1,
+                permissions = 1,
+                publicUpload = false,
+                accountName = "user@server"
+            )
+        }
+
         // 4. Share properly updated
+        publicShareEditionStatusLiveData.postValue(UIResult.Success())
         sharesLiveData.postValue(
-            DataResult.success(
-                arrayListOf(updatedPublicShare)
+            UIResult.Success(
+                listOf(updatedPublicShare)
             )
         )
 
@@ -255,22 +261,9 @@ class EditPublicShareFolderTest {
         loadCapabilitiesSuccessfully()
 
         val existingPublicShare = publicShares[0]
-        loadSharesSuccessfully(arrayListOf(existingPublicShare))
+        sharesLiveData.postValue(UIResult.Success(listOf(existingPublicShare)))
 
         val updatedPublicShare = publicShares[2]
-
-        every {
-            ocShareViewModel.updatePublicShare(
-                1,
-                updatedPublicShare.name!!,
-                "",
-                -1,
-                15,
-                true
-            )
-        } returns MutableLiveData<DataResult<Unit>>().apply {
-            postValue(DataResult.success())
-        }
 
         // 1. Open dialog to edit an existing public share
         onView(withId(R.id.editPublicLinkButton)).perform(click())
@@ -281,10 +274,23 @@ class EditPublicShareFolderTest {
         // 3. Save updated share
         onView(withId(R.id.saveButton)).perform(scrollTo(), click())
 
+        verify {
+            ocShareViewModel.updatePublicShare(
+                remoteId = 1,
+                name = updatedPublicShare.name!!,
+                password = "",
+                expirationDateInMillis = -1,
+                permissions = 15,
+                publicUpload = true,
+                accountName = "user@server"
+            )
+        }
+
         // 4. Share properly updated
+        publicShareEditionStatusLiveData.postValue(UIResult.Success())
         sharesLiveData.postValue(
-            DataResult.success(
-                arrayListOf(updatedPublicShare)
+            UIResult.Success(
+                listOf(updatedPublicShare)
             )
         )
 
@@ -299,22 +305,9 @@ class EditPublicShareFolderTest {
         loadCapabilitiesSuccessfully()
 
         val existingPublicShare = publicShares[0]
-        loadSharesSuccessfully(arrayListOf(existingPublicShare))
+        sharesLiveData.postValue(UIResult.Success(listOf(existingPublicShare)))
 
         val updatedPublicShare = publicShares[3]
-
-        every {
-            ocShareViewModel.updatePublicShare(
-                1,
-                updatedPublicShare.name!!,
-                "",
-                -1,
-                4,
-                true
-            )
-        } returns MutableLiveData<DataResult<Unit>>().apply {
-            postValue(DataResult.success())
-        }
 
         // 1. Open dialog to edit an existing public share
         onView(withId(R.id.editPublicLinkButton)).perform(click())
@@ -325,10 +318,23 @@ class EditPublicShareFolderTest {
         // 3. Save updated share
         onView(withId(R.id.saveButton)).perform(scrollTo(), click())
 
+        verify {
+            ocShareViewModel.updatePublicShare(
+                remoteId = 1,
+                name = updatedPublicShare.name!!,
+                password = "",
+                expirationDateInMillis = -1,
+                permissions = 4,
+                publicUpload = true,
+                accountName = "user@server"
+            )
+        }
+
         // 4. Share properly updated
+        publicShareEditionStatusLiveData.postValue(UIResult.Success())
         sharesLiveData.postValue(
-            DataResult.success(
-                arrayListOf(updatedPublicShare)
+            UIResult.Success(
+                listOf(updatedPublicShare)
             )
         )
 
@@ -343,22 +349,9 @@ class EditPublicShareFolderTest {
         loadCapabilitiesSuccessfully()
 
         val existingPublicShare = publicShares[2]
-        loadSharesSuccessfully(arrayListOf(existingPublicShare))
+        sharesLiveData.postValue(UIResult.Success(listOf(existingPublicShare)))
 
         val updatedPublicShare = publicShares[0]
-
-        every {
-            ocShareViewModel.updatePublicShare(
-                1,
-                updatedPublicShare.name!!,
-                "",
-                -1,
-                1,
-                false
-            )
-        } returns MutableLiveData<DataResult<Unit>>().apply {
-            postValue(DataResult.success())
-        }
 
         // 1. Open dialog to edit an existing public share
         onView(withId(R.id.editPublicLinkButton)).perform(click())
@@ -369,10 +362,23 @@ class EditPublicShareFolderTest {
         // 3. Save updated share
         onView(withId(R.id.saveButton)).perform(scrollTo(), click())
 
+        verify {
+            ocShareViewModel.updatePublicShare(
+                remoteId = 1,
+                name = updatedPublicShare.name!!,
+                password = "",
+                expirationDateInMillis = -1,
+                permissions = 1,
+                publicUpload = false,
+                accountName = "user@server"
+            )
+        }
+
         // 4. Share properly updated
+        publicShareEditionStatusLiveData.postValue(UIResult.Success())
         sharesLiveData.postValue(
-            DataResult.success(
-                arrayListOf(updatedPublicShare)
+            UIResult.Success(
+                listOf(updatedPublicShare)
             )
         )
 
@@ -393,22 +399,16 @@ class EditPublicShareFolderTest {
         return file
     }
 
-    private fun loadCapabilitiesSuccessfully(
-        capability: OCCapabilityEntity = AppTestUtil.createCapability(
-            versionString = "10.1.1",
-            sharingPublicMultiple = CapabilityBooleanType.TRUE.value,
-            sharingPublicSupportsUploadOnly = CapabilityBooleanType.TRUE.value,
-            sharingPublicUpload = CapabilityBooleanType.TRUE.value
-        )
-    ) {
+    private fun loadCapabilitiesSuccessfully() {
         capabilitiesLiveData.postValue(
-            DataResult.success(
-                capability
+            UIResult.Success(
+                DUMMY_CAPABILITY.copy(
+                    versionString = "10.1.1",
+                    filesSharingPublicMultiple = CapabilityBooleanType.TRUE,
+                    filesSharingPublicSupportsUploadOnly = CapabilityBooleanType.TRUE,
+                    filesSharingPublicUpload = CapabilityBooleanType.TRUE
+                )
             )
         )
-    }
-
-    private fun loadSharesSuccessfully(shares: ArrayList<OCShareEntity> = publicShares) {
-        sharesLiveData.postValue(DataResult.success(shares))
     }
 }

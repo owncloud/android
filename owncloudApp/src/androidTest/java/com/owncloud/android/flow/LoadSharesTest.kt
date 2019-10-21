@@ -34,18 +34,18 @@ import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
 import com.owncloud.android.R
 import com.owncloud.android.authentication.AccountAuthenticator.KEY_AUTH_TOKEN_TYPE
-import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
-import com.owncloud.android.data.sharing.shares.db.OCShareEntity
 import com.owncloud.android.datamodel.OCFile
+import com.owncloud.android.domain.capabilities.model.OCCapability
+import com.owncloud.android.domain.sharing.shares.model.OCShare
 import com.owncloud.android.lib.common.accounts.AccountUtils
-import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.status.OwnCloudVersion
+import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.viewmodels.capabilities.OCCapabilityViewModel
 import com.owncloud.android.presentation.viewmodels.sharing.OCShareViewModel
 import com.owncloud.android.presentation.ui.sharing.ShareActivity
 import com.owncloud.android.ui.activity.FileActivity
 import com.owncloud.android.utils.AccountsManager
-import com.owncloud.android.utils.AppTestUtil
+import com.owncloud.android.utils.AppTestUtil.DUMMY_CAPABILITY
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.AfterClass
@@ -129,9 +129,9 @@ class LoadSharesTest {
         val file = getOCFileForTesting("image.jpg")
         intent.putExtra(FileActivity.EXTRA_FILE, file)
 
-        every { ocCapabilityViewModel.getCapabilityForAccount() } returns capabilitiesLiveData
-        every { ocShareViewModel.getPublicShares(file.remotePath) } returns publicSharesLiveData
-        every { ocShareViewModel.getPrivateShares(file.remotePath) } returns privateSharesLiveData
+        every { ocCapabilityViewModel.capabilities } returns capabilitiesLiveData
+        every { ocShareViewModel.shares } returns publicSharesLiveData
+        every { ocShareViewModel.privateShare } returns privateSharesLiveData
 
         stopKoin()
 
@@ -157,19 +157,19 @@ class LoadSharesTest {
      ******************************************************************************************************/
 
     private val ocCapabilityViewModel = mockk<OCCapabilityViewModel>(relaxed = true)
-    private val capabilitiesLiveData = MutableLiveData<DataResult<OCCapabilityEntity>>()
+    private val capabilitiesLiveData = MutableLiveData<UIResult<OCCapability>>()
 
     @Test
     fun showLoadingCapabilitiesDialog() {
-        capabilitiesLiveData.postValue(DataResult.loading(AppTestUtil.createCapability()))
+        capabilitiesLiveData.postValue(UIResult.Loading())
         onView(withId(R.id.loadingLayout)).check(matches(isDisplayed()))
     }
 
     @Test
     fun showErrorWhenLoadingCapabilities() {
         capabilitiesLiveData.postValue(
-            DataResult.error(
-                RemoteOperationResult.ResultCode.SERVICE_UNAVAILABLE
+            UIResult.Error(
+                Throwable()
             )
         )
 
@@ -180,26 +180,12 @@ class LoadSharesTest {
      ******************************************* PRIVATE SHARES *******************************************
      ******************************************************************************************************/
 
-    private val privateSharesLiveData = MutableLiveData<DataResult<List<OCShareEntity>>>()
-    private val privateShares = arrayListOf(
-        AppTestUtil.createPrivateShare(
-            path = "/Photos/image.jpg",
-            isFolder = false,
-            shareWith = "work",
-            sharedWithDisplayName = "Work"
-        ),
-        AppTestUtil.createPrivateShare(
-            path = "/Photos/image.jpg",
-            isFolder = false,
-            shareWith = "family",
-            sharedWithDisplayName = "Family"
-        )
-    )
+    private val privateSharesLiveData = MutableLiveData<UIResult<OCShare>>()
 
     @Test
     fun showLoadingPrivateSharesDialog() {
         loadCapabilitiesSuccessfully()
-        privateSharesLiveData.postValue(DataResult.loading(privateShares))
+        privateSharesLiveData.postValue(UIResult.Loading())
         onView(withId(R.id.loadingLayout)).check(matches(isDisplayed()))
     }
 
@@ -208,9 +194,8 @@ class LoadSharesTest {
         loadCapabilitiesSuccessfully()
 
         privateSharesLiveData.postValue(
-            DataResult.error(
-                RemoteOperationResult.ResultCode.FORBIDDEN,
-                data = privateShares
+            UIResult.Error(
+                Throwable()
             )
         )
         onView(withId(R.id.snackbar_text)).check(matches(withText(R.string.get_shares_error)))
@@ -220,26 +205,12 @@ class LoadSharesTest {
      ******************************************* PUBLIC SHARES ********************************************
      ******************************************************************************************************/
 
-    private val publicSharesLiveData = MutableLiveData<DataResult<List<OCShareEntity>>>()
-    private val publicShares = arrayListOf(
-        AppTestUtil.createPublicShare(
-            path = "/Photos/image.jpg",
-            isFolder = false,
-            name = "Image link",
-            shareLink = "http://server:port/s/1"
-        ),
-        AppTestUtil.createPublicShare(
-            path = "/Photos/image.jpg",
-            isFolder = false,
-            name = "Image link 2",
-            shareLink = "http://server:port/s/2"
-        )
-    )
+    private val publicSharesLiveData = MutableLiveData<UIResult<List<OCShare>>>()
 
     @Test
     fun showLoadingPublicSharesDialog() {
         loadCapabilitiesSuccessfully()
-        publicSharesLiveData.postValue(DataResult.loading(publicShares))
+        publicSharesLiveData.postValue(UIResult.Loading())
         onView(withId(R.id.loadingLayout)).check(matches(isDisplayed()))
     }
 
@@ -248,9 +219,8 @@ class LoadSharesTest {
         loadCapabilitiesSuccessfully()
 
         publicSharesLiveData.postValue(
-            DataResult.error(
-                RemoteOperationResult.ResultCode.SERVICE_UNAVAILABLE,
-                data = publicShares
+            UIResult.Error(
+                Throwable()
             )
         )
         onView(withId(R.id.snackbar_text)).check(matches(withText(R.string.service_unavailable)))
@@ -268,10 +238,10 @@ class LoadSharesTest {
         privateLink = "private link"
     }
 
-    private fun loadCapabilitiesSuccessfully(capability: OCCapabilityEntity = AppTestUtil.createCapability()) {
+    private fun loadCapabilitiesSuccessfully() {
         capabilitiesLiveData.postValue(
-            DataResult.success(
-                capability
+            UIResult.Success(
+                DUMMY_CAPABILITY
             )
         )
     }

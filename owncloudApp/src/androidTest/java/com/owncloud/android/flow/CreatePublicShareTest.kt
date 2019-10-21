@@ -2,6 +2,7 @@
  * ownCloud Android client application
  *
  * @author David González Verdugo
+ * @author Abel García de Prada
  * Copyright (C) 2019 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -36,20 +37,23 @@ import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
 import com.owncloud.android.R
 import com.owncloud.android.authentication.AccountAuthenticator.KEY_AUTH_TOKEN_TYPE
-import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
-import com.owncloud.android.data.sharing.shares.db.OCShareEntity
 import com.owncloud.android.datamodel.OCFile
+import com.owncloud.android.domain.capabilities.model.CapabilityBooleanType
+import com.owncloud.android.domain.capabilities.model.OCCapability
+import com.owncloud.android.domain.sharing.shares.model.OCShare
 import com.owncloud.android.lib.common.accounts.AccountUtils
-import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.status.OwnCloudVersion
+import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.viewmodels.capabilities.OCCapabilityViewModel
 import com.owncloud.android.presentation.viewmodels.sharing.OCShareViewModel
 import com.owncloud.android.presentation.ui.sharing.ShareActivity
 import com.owncloud.android.ui.activity.FileActivity
 import com.owncloud.android.utils.AccountsManager
-import com.owncloud.android.utils.AppTestUtil
+import com.owncloud.android.utils.AppTestUtil.DUMMY_CAPABILITY
+import com.owncloud.android.utils.AppTestUtil.DUMMY_SHARE
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verify
 import org.junit.AfterClass
 import org.junit.Before
 import org.junit.BeforeClass
@@ -72,20 +76,20 @@ class CreatePublicShareTest {
 
     private lateinit var file: OCFile
 
-    private val publicShares = arrayListOf(
-        AppTestUtil.createPublicShare(
+    private val publicShares = listOf(
+        DUMMY_SHARE.copy(
             path = "/Photos/image.jpg",
             isFolder = false,
             name = "image.jpg link",
             shareLink = "http://server:port/s/1"
         ),
-        AppTestUtil.createPublicShare(
+        DUMMY_SHARE.copy(
             path = "/Photos/image.jpg",
             isFolder = false,
             name = "image.jpg link (2)",
             shareLink = "http://server:port/s/2"
         ),
-        AppTestUtil.createPublicShare(
+        DUMMY_SHARE.copy(
             path = "/Photos/image.jpg",
             isFolder = false,
             name = "image.jpg link (3)",
@@ -93,8 +97,10 @@ class CreatePublicShareTest {
         )
     )
 
-    private val capabilitiesLiveData = MutableLiveData<DataResult<OCCapabilityEntity>>()
-    private val sharesLiveData = MutableLiveData<DataResult<List<OCShareEntity>>>()
+    private val capabilitiesLiveData = MutableLiveData<UIResult<OCCapability>>()
+    private val publicSharesLiveData = MutableLiveData<UIResult<List<OCShare>>>()
+    private val privateSharesLiveData = MutableLiveData<UIResult<OCShare>>()
+    private val publicShareCreationStatusLiveData = MutableLiveData<UIResult<Unit>>()
 
     private val ocCapabilityViewModel = mockk<OCCapabilityViewModel>(relaxed = true)
     private val ocShareViewModel = mockk<OCShareViewModel>(relaxed = true)
@@ -158,10 +164,10 @@ class CreatePublicShareTest {
         file = getOCFileForTesting("image.jpg")
         intent.putExtra(FileActivity.EXTRA_FILE, file)
 
-        every { ocCapabilityViewModel.getCapabilityForAccount(false) } returns capabilitiesLiveData
-        every { ocCapabilityViewModel.getCapabilityForAccount(true) } returns capabilitiesLiveData
-        every { ocShareViewModel.getPublicShares(file.remotePath) } returns sharesLiveData
-        every { ocShareViewModel.getPrivateShares(file.remotePath) } returns MutableLiveData()
+        every { ocCapabilityViewModel.capabilities } returns capabilitiesLiveData
+        every { ocShareViewModel.shares } returns publicSharesLiveData
+        every { ocShareViewModel.privateShare } returns privateSharesLiveData
+        every { ocShareViewModel.publicShareCreationStatus } returns publicShareCreationStatusLiveData
 
         stopKoin()
 
@@ -185,18 +191,32 @@ class CreatePublicShareTest {
     @Test
     fun createPublicShareWithNoPublicSharesYet() {
         loadCapabilitiesSuccessfully()
-        loadSharesSuccessfully(arrayListOf())
+        publicSharesLiveData.postValue(UIResult.Success(listOf()))
 
         // Create share
         onView(withId(R.id.addPublicLinkButton)).perform(click())
 
         val newPublicShare = publicShares[0]
-        savePublicShare(newPublicShare)
+
+        onView(withId(R.id.saveButton)).perform(click())
+
+        verify {
+            ocShareViewModel.insertPublicShare(
+                filePath = newPublicShare.path,
+                permissions = 1,
+                name = newPublicShare.name!!,
+                password = "",
+                expirationTimeInMillis = -1,
+                publicUpload = false,
+                accountName = "user@server"
+            )
+        }
 
         // New share properly created
-        sharesLiveData.postValue(
-            DataResult.success(
-                arrayListOf(newPublicShare)
+        publicShareCreationStatusLiveData.postValue(UIResult.Success())
+        publicSharesLiveData.postValue(
+            UIResult.Success(
+                listOf(newPublicShare)
             )
         )
 
@@ -208,19 +228,33 @@ class CreatePublicShareTest {
     @Test
     fun createPublicShareWithAlreadyExistingShares() {
         loadCapabilitiesSuccessfully()
-        val existingPublicShares = publicShares.take(2) as ArrayList<OCShareEntity>
-        loadSharesSuccessfully(
-            existingPublicShares
+        val existingPublicShares = publicShares.take(2) as ArrayList<OCShare>
+        publicSharesLiveData.postValue(
+            UIResult.Success(
+                existingPublicShares
+            )
         )
 
         onView(withId(R.id.addPublicLinkButton)).perform(click())
 
         val newPublicShare = publicShares[2]
-        savePublicShare(newPublicShare)
+
+        verify {
+            ocShareViewModel.insertPublicShare(
+                filePath = newPublicShare.path,
+                permissions = 1,
+                name = newPublicShare.name!!,
+                password = "",
+                expirationTimeInMillis = -1,
+                publicUpload = false,
+                accountName = "user@server"
+            )
+        }
 
         // New share properly created
-        sharesLiveData.postValue(
-            DataResult.success(
+        publicShareCreationStatusLiveData.postValue(UIResult.Success())
+        publicSharesLiveData.postValue(
+            UIResult.Success(
                 publicShares
             )
         )
@@ -233,7 +267,7 @@ class CreatePublicShareTest {
     @Test
     fun createMultiplePublicShares() {
         loadCapabilitiesSuccessfully()
-        loadSharesSuccessfully(arrayListOf())
+        publicSharesLiveData.postValue(UIResult.Success(listOf()))
 
         /**
          * 1st public share
@@ -241,12 +275,24 @@ class CreatePublicShareTest {
         onView(withId(R.id.addPublicLinkButton)).perform(click())
 
         val newPublicShare1 = publicShares[0]
-        savePublicShare(newPublicShare1)
+
+        verify {
+            ocShareViewModel.insertPublicShare(
+                filePath = newPublicShare1.path,
+                permissions = 1,
+                name = newPublicShare1.name!!,
+                password = "",
+                expirationTimeInMillis = -1,
+                publicUpload = false,
+                accountName = "user@server"
+            )
+        }
 
         // New share properly created
-        sharesLiveData.postValue(
-            DataResult.success(
-                arrayListOf(newPublicShare1)
+        publicShareCreationStatusLiveData.postValue(UIResult.Success())
+        publicSharesLiveData.postValue(
+            UIResult.Success(
+                listOf(newPublicShare1)
             )
         )
 
@@ -260,12 +306,24 @@ class CreatePublicShareTest {
         onView(withId(R.id.addPublicLinkButton)).perform(click())
 
         val newPublicShare2 = publicShares[1]
-        savePublicShare(newPublicShare2)
+
+        verify {
+            ocShareViewModel.insertPublicShare(
+                filePath = newPublicShare1.path,
+                permissions = 1,
+                name = newPublicShare1.name!!,
+                password = "",
+                expirationTimeInMillis = -1,
+                publicUpload = false,
+                accountName = "user@server"
+            )
+        }
 
         // New share properly created
-        sharesLiveData.postValue(
-            DataResult.success(
-                publicShares.take(2)
+        publicShareCreationStatusLiveData.postValue(UIResult.Success())
+        publicSharesLiveData.postValue(
+            UIResult.Success(
+                listOf(newPublicShare1, newPublicShare2)
             )
         )
 
@@ -279,11 +337,23 @@ class CreatePublicShareTest {
         onView(withId(R.id.addPublicLinkButton)).perform(click())
 
         val newPublicShare3 = publicShares[2]
-        savePublicShare(newPublicShare3)
+
+        verify {
+            ocShareViewModel.insertPublicShare(
+                filePath = newPublicShare1.path,
+                permissions = 1,
+                name = newPublicShare1.name!!,
+                password = "",
+                expirationTimeInMillis = -1,
+                publicUpload = false,
+                accountName = "user@server"
+            )
+        }
 
         // New share properly created
-        sharesLiveData.postValue(
-            DataResult.success(
+        publicShareCreationStatusLiveData.postValue(UIResult.Success())
+        publicSharesLiveData.postValue(
+            UIResult.Success(
                 publicShares
             )
         )
@@ -296,11 +366,11 @@ class CreatePublicShareTest {
     @Test
     fun createShareLoading() {
         loadCapabilitiesSuccessfully()
-        loadSharesSuccessfully(arrayListOf())
+        publicSharesLiveData.postValue(UIResult.Success(listOf()))
 
         onView(withId(R.id.addPublicLinkButton)).perform(click())
 
-        savePublicShare(publicShares[0], DataResult.loading())
+        publicShareCreationStatusLiveData.postValue(UIResult.Loading())
 
         onView(withText(R.string.common_loading)).check(matches(isDisplayed()))
     }
@@ -308,15 +378,13 @@ class CreatePublicShareTest {
     @Test
     fun createShareError() {
         loadCapabilitiesSuccessfully()
-        loadSharesSuccessfully(arrayListOf())
+        publicSharesLiveData.postValue(UIResult.Success(listOf()))
 
         onView(withId(R.id.addPublicLinkButton)).perform(click())
 
-        savePublicShare(
-            publicShares[0],
-            DataResult.error(
-                RemoteOperationResult.ResultCode.FORBIDDEN,
-                exception = Exception("Error when retrieving shares")
+        publicShareCreationStatusLiveData.postValue(
+            UIResult.Error(
+                Throwable()
             )
         )
 
@@ -331,38 +399,14 @@ class CreatePublicShareTest {
         privateLink = "private link"
     }
 
-    private fun loadCapabilitiesSuccessfully(
-        capability: OCCapabilityEntity = AppTestUtil.createCapability(
-            versionString = "10.1.1",
-            sharingPublicMultiple = CapabilityBooleanType.TRUE.value
-        )
-    ) {
+    private fun loadCapabilitiesSuccessfully() {
         capabilitiesLiveData.postValue(
-            DataResult.success(
-                capability
+            UIResult.Success(
+                DUMMY_CAPABILITY.copy(
+                    versionString = "10.1.1",
+                    filesSharingPublicMultiple = CapabilityBooleanType.TRUE
+                )
             )
         )
-    }
-
-    private fun loadSharesSuccessfully(shares: ArrayList<OCShareEntity> = publicShares) {
-        sharesLiveData.postValue(DataResult.success(shares))
-    }
-
-    private fun savePublicShare(newShare: OCShareEntity, resource: DataResult<Unit> = DataResult.success()) {
-
-        every {
-            ocShareViewModel.insertPublicShare(
-                file.remotePath,
-                1,
-                newShare.name!!,
-                "",
-                -1,
-                false
-            )
-        } returns MutableLiveData<DataResult<Unit>>().apply {
-            postValue(resource)
-        }
-
-        onView(withId(R.id.saveButton)).perform(click())
     }
 }

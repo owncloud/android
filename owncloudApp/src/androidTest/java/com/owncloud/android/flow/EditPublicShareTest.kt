@@ -2,6 +2,7 @@
  * ownCloud Android client application
  *
  * @author David González Verdugo
+ * @author Abel García de Prada
  * Copyright (C) 2019 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -43,20 +44,23 @@ import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
 import com.owncloud.android.R
 import com.owncloud.android.authentication.AccountAuthenticator.KEY_AUTH_TOKEN_TYPE
-import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
-import com.owncloud.android.data.sharing.shares.db.OCShareEntity
 import com.owncloud.android.datamodel.OCFile
+import com.owncloud.android.domain.capabilities.model.CapabilityBooleanType
+import com.owncloud.android.domain.capabilities.model.OCCapability
+import com.owncloud.android.domain.sharing.shares.model.OCShare
 import com.owncloud.android.lib.common.accounts.AccountUtils
-import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.status.OwnCloudVersion
+import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.viewmodels.capabilities.OCCapabilityViewModel
 import com.owncloud.android.presentation.viewmodels.sharing.OCShareViewModel
 import com.owncloud.android.presentation.ui.sharing.ShareActivity
 import com.owncloud.android.ui.activity.FileActivity
 import com.owncloud.android.utils.AccountsManager
-import com.owncloud.android.utils.AppTestUtil
+import com.owncloud.android.utils.AppTestUtil.DUMMY_SHARE
+import com.owncloud.android.utils.AppTestUtil.DUMMY_CAPABILITY
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verify
 import org.hamcrest.Matchers
 import org.junit.AfterClass
 import org.junit.Before
@@ -83,27 +87,27 @@ class EditPublicShareTest {
 
     private lateinit var file: OCFile
 
-    private val publicShares = arrayListOf(
-        AppTestUtil.createPublicShare( // With no expiration date
+    private val publicShares = listOf(
+        DUMMY_SHARE.copy( // With no expiration date
             path = "/Photos/image.jpg",
             expirationDate = 0L,
             isFolder = false,
             name = "image.jpg link",
             shareLink = "http://server:port/s/1"
         ),
-        AppTestUtil.createPublicShare(
+        DUMMY_SHARE.copy(
             path = "/Photos/image.jpg",
             isFolder = false,
             name = "image.jpg updated link",
             shareLink = "http://server:port/s/2"
         ),
-        AppTestUtil.createPublicShare(
+        DUMMY_SHARE.copy(
             path = "/Photos/image.jpg",
             isFolder = false,
             name = "image.jpg changed again link",
             shareLink = "http://server:port/s/3"
         ),
-        AppTestUtil.createPublicShare( // With password but not expiration date
+        DUMMY_SHARE.copy( // With password but not expiration date
             path = "/Photos/image.jpg",
             expirationDate = 0L,
             isFolder = false,
@@ -111,7 +115,7 @@ class EditPublicShareTest {
             shareLink = "http://server:port/s/1",
             shareWith = "1"
         ),
-        AppTestUtil.createPublicShare( // With expiration date but not password
+        DUMMY_SHARE.copy( // With expiration date but not password
             path = "/Photos/image.jpg",
             expirationDate = 2587896257,
             isFolder = false,
@@ -120,8 +124,9 @@ class EditPublicShareTest {
         )
     )
 
-    private val capabilitiesLiveData = MutableLiveData<DataResult<OCCapabilityEntity>>()
-    private val sharesLiveData = MutableLiveData<DataResult<List<OCShareEntity>>>()
+    private val capabilitiesLiveData = MutableLiveData<UIResult<OCCapability>>()
+    private val sharesLiveData = MutableLiveData<UIResult<List<OCShare>>>()
+    private val publicShareEditionStatusLiveData = MutableLiveData<UIResult<Unit>>()
 
     private val ocCapabilityViewModel = mockk<OCCapabilityViewModel>(relaxed = true)
     private val ocShareViewModel = mockk<OCShareViewModel>(relaxed = true)
@@ -185,10 +190,10 @@ class EditPublicShareTest {
         file = getOCFileForTesting("image.jpg")
         intent.putExtra(FileActivity.EXTRA_FILE, file)
 
-        every { ocCapabilityViewModel.getCapabilityForAccount(false) } returns capabilitiesLiveData
-        every { ocCapabilityViewModel.getCapabilityForAccount(true) } returns capabilitiesLiveData
-        every { ocShareViewModel.getPublicShares(file.remotePath) } returns sharesLiveData
-        every { ocShareViewModel.getPrivateShares(file.remotePath) } returns MutableLiveData()
+        every { ocCapabilityViewModel.capabilities } returns capabilitiesLiveData
+        every { ocShareViewModel.shares } returns sharesLiveData
+        every { ocShareViewModel.privateShare } returns MutableLiveData()
+        every { ocShareViewModel.publicShareEditionStatus } returns publicShareEditionStatusLiveData
 
         stopKoin()
 
@@ -214,7 +219,7 @@ class EditPublicShareTest {
         loadCapabilitiesSuccessfully()
 
         val existingPublicShare = publicShares[0]
-        loadSharesSuccessfully(arrayListOf(existingPublicShare))
+        sharesLiveData.postValue(UIResult.Success(listOf(existingPublicShare)))
 
         val updatedPublicShare = publicShares[1]
 
@@ -225,12 +230,25 @@ class EditPublicShareTest {
         onView(withId(R.id.shareViaLinkNameValue)).perform(replaceText(updatedPublicShare.name))
 
         // 3. Edit public share with success
-        editPublicShare(updatedPublicShare, "", resource = DataResult.success())
+        onView(withId(R.id.saveButton)).perform(click())
+
+        verify {
+            ocShareViewModel.updatePublicShare(
+                remoteId = 1,
+                name = existingPublicShare.name!!,
+                password = "",
+                expirationDateInMillis = -1,
+                permissions = 1,
+                publicUpload = false,
+                accountName = "user@server"
+            )
+        }
 
         // 4. Share properly updated
+        publicShareEditionStatusLiveData.postValue(UIResult.Success())
         sharesLiveData.postValue(
-            DataResult.success(
-                arrayListOf(updatedPublicShare)
+            UIResult.Success(
+                listOf(updatedPublicShare)
             )
         )
 
@@ -244,7 +262,7 @@ class EditPublicShareTest {
         loadCapabilitiesSuccessfully()
 
         val existingPublicShare = publicShares[0]
-        loadSharesSuccessfully(arrayListOf(existingPublicShare))
+        sharesLiveData.postValue(UIResult.Success(listOf(existingPublicShare)))
 
         val password = "1234"
 
@@ -256,14 +274,27 @@ class EditPublicShareTest {
         onView(withId(R.id.shareViaLinkPasswordValue)).perform(typeText(password))
 
         // 3. Edit public share with success
-        editPublicShare(existingPublicShare, "1234", resource = DataResult.success())
+        onView(withId(R.id.saveButton)).perform(click())
+
+        verify {
+            ocShareViewModel.updatePublicShare(
+                remoteId = 1,
+                name = existingPublicShare.name!!,
+                password = "1234",
+                expirationDateInMillis = -1,
+                permissions = 1,
+                publicUpload = false,
+                accountName = "user@server"
+            )
+        }
 
         // 4. Share properly updated
+        publicShareEditionStatusLiveData.postValue(UIResult.Success())
         val updatedPublicShare = publicShares[3]
 
         sharesLiveData.postValue(
-            DataResult.success(
-                arrayListOf(updatedPublicShare)
+            UIResult.Success(
+                listOf(updatedPublicShare)
             )
         )
 
@@ -277,7 +308,7 @@ class EditPublicShareTest {
         loadCapabilitiesSuccessfully()
 
         val existingPublicShare = publicShares[3]
-        loadSharesSuccessfully(arrayListOf(existingPublicShare))
+        sharesLiveData.postValue(UIResult.Success(listOf(existingPublicShare)))
 
         // 1. Open dialog to edit an existing public share
         onView(withId(R.id.editPublicLinkButton)).perform(click())
@@ -286,14 +317,27 @@ class EditPublicShareTest {
         onView(withId(R.id.shareViaLinkPasswordSwitch)).perform(click())
 
         // 3. Edit public share with success
-        editPublicShare(existingPublicShare, "", resource = DataResult.success())
+        onView(withId(R.id.saveButton)).perform(click())
+
+        verify {
+            ocShareViewModel.updatePublicShare(
+                remoteId = 1,
+                name = existingPublicShare.name!!,
+                password = "",
+                expirationDateInMillis = -1,
+                permissions = 1,
+                publicUpload = false,
+                accountName = "user@server"
+            )
+        }
 
         // 4. Share properly updated
+        publicShareEditionStatusLiveData.postValue(UIResult.Success())
         val updatedPublicShare = publicShares[0]
 
         sharesLiveData.postValue(
-            DataResult.success(
-                arrayListOf(updatedPublicShare)
+            UIResult.Success(
+                listOf(updatedPublicShare)
             )
         )
 
@@ -307,12 +351,12 @@ class EditPublicShareTest {
         loadCapabilitiesSuccessfully()
 
         val existingPublicShare = publicShares[0]
-        loadSharesSuccessfully(arrayListOf(existingPublicShare))
+        sharesLiveData.postValue(UIResult.Success(listOf(existingPublicShare)))
 
         val calendar = Calendar.getInstance()
         calendar.add(Calendar.DAY_OF_YEAR, 1)
-        val formatter: DateFormat = SimpleDateFormat("MMM dd, yyyy");
-        val expirationDate = formatter.format(calendar.time);
+        val formatter: DateFormat = SimpleDateFormat("MMM dd, yyyy")
+        val expirationDate = formatter.format(calendar.time)
         val publicLinkExpirationDateInMillis = SimpleDateFormat.getDateInstance().parse(expirationDate).time
 
         // 1. Open dialog to edit an existing public share
@@ -326,18 +370,30 @@ class EditPublicShareTest {
                 calendar.get(Calendar.MONTH) + 1, // January code is 0, so let's add 1
                 calendar.get(Calendar.DATE)
             )
-        );
+        )
         onView(withId(android.R.id.button1)).perform(click())
 
         // 3. Edit public share with success
-        editPublicShare(existingPublicShare, "", publicLinkExpirationDateInMillis, DataResult.success())
+        onView(withId(R.id.saveButton)).perform(click())
+
+        verify {
+            ocShareViewModel.updatePublicShare(
+                remoteId = 1,
+                name = existingPublicShare.name!!,
+                password = "",
+                expirationDateInMillis = publicLinkExpirationDateInMillis,
+                permissions = 1,
+                publicUpload = false,
+                accountName = "user@server"
+            )
+        }
 
         // 4. Share properly updated
         val updatedPublicShare = publicShares[4]
-
+        publicShareEditionStatusLiveData.postValue(UIResult.Success())
         sharesLiveData.postValue(
-            DataResult.success(
-                arrayListOf(updatedPublicShare)
+            UIResult.Success(
+                listOf(updatedPublicShare)
             )
         )
 
@@ -351,7 +407,7 @@ class EditPublicShareTest {
         loadCapabilitiesSuccessfully()
 
         val existingPublicShare = publicShares[4]
-        loadSharesSuccessfully(arrayListOf(existingPublicShare))
+        sharesLiveData.postValue(UIResult.Success(listOf(existingPublicShare)))
 
         // 1. Open dialog to edit an existing public share
         onView(withId(R.id.editPublicLinkButton)).perform(click())
@@ -360,14 +416,26 @@ class EditPublicShareTest {
         onView(withId(R.id.shareViaLinkExpirationSwitch)).perform(click())
 
         // 3. Edit public share with success
-        editPublicShare(existingPublicShare, "", resource = DataResult.success())
+        onView(withId(R.id.saveButton)).perform(click())
+
+        verify {
+            ocShareViewModel.updatePublicShare(
+                remoteId = 1,
+                name = existingPublicShare.name!!,
+                password = "",
+                expirationDateInMillis = -1,
+                permissions = 1,
+                publicUpload = false,
+                accountName = "user@server"
+            )
+        }
 
         // 4. Share properly updated
         val updatedPublicShare = publicShares[0]
-
+        publicShareEditionStatusLiveData.postValue(UIResult.Success())
         sharesLiveData.postValue(
-            DataResult.success(
-                arrayListOf(updatedPublicShare)
+            UIResult.Success(
+                listOf(updatedPublicShare)
             )
         )
 
@@ -381,11 +449,25 @@ class EditPublicShareTest {
         loadCapabilitiesSuccessfully()
 
         val existingPublicShare = publicShares[3]
-        loadSharesSuccessfully(arrayListOf(existingPublicShare))
+        sharesLiveData.postValue(UIResult.Success(listOf(existingPublicShare)))
 
         onView(withId(R.id.editPublicLinkButton)).perform(click())
 
-        editPublicShare(existingPublicShare, resource = DataResult.loading())
+        onView(withId(R.id.saveButton)).perform(click())
+
+        verify {
+            ocShareViewModel.updatePublicShare(
+                remoteId = 1,
+                name = existingPublicShare.name!!,
+                password = "",
+                expirationDateInMillis = -1,
+                permissions = 1,
+                publicUpload = false,
+                accountName = "user@server"
+            )
+        }
+
+        publicShareEditionStatusLiveData.postValue(UIResult.Loading())
 
         onView(withText(R.string.common_loading)).check(matches(isDisplayed()))
     }
@@ -395,18 +477,25 @@ class EditPublicShareTest {
         loadCapabilitiesSuccessfully()
 
         val existingPublicShare = publicShares[0]
-        loadSharesSuccessfully(arrayListOf(existingPublicShare))
+        sharesLiveData.postValue(UIResult.Success(listOf(existingPublicShare)))
 
         onView(withId(R.id.editPublicLinkButton)).perform(click())
 
-        editPublicShare(
-            existingPublicShare,
-            password = "",
-            resource = DataResult.error(
-                RemoteOperationResult.ResultCode.FORBIDDEN,
-                exception = Exception("Error when retrieving shares")
+        onView(withId(R.id.saveButton)).perform(click())
+
+        verify {
+            ocShareViewModel.updatePublicShare(
+                remoteId = 1,
+                name = existingPublicShare.name!!,
+                password = "",
+                expirationDateInMillis = -1,
+                permissions = 1,
+                publicUpload = false,
+                accountName = "user@server"
             )
-        )
+        }
+
+        publicShareEditionStatusLiveData.postValue(UIResult.Error(Throwable()))
 
         onView(withText(R.string.update_link_file_error)).check(matches(isDisplayed()))
     }
@@ -419,42 +508,14 @@ class EditPublicShareTest {
         privateLink = "private link"
     }
 
-    private fun loadCapabilitiesSuccessfully(
-        capability: OCCapabilityEntity = AppTestUtil.createCapability(
-            versionString = "10.1.1",
-            sharingPublicMultiple = CapabilityBooleanType.TRUE.value
-        )
-    ) {
+    private fun loadCapabilitiesSuccessfully() {
         capabilitiesLiveData.postValue(
-            DataResult.success(
-                capability
+            UIResult.Success(
+                DUMMY_CAPABILITY.copy(
+                    versionString = "10.1.1",
+                    filesSharingPublicMultiple = CapabilityBooleanType.TRUE
+                )
             )
         )
-    }
-
-    private fun loadSharesSuccessfully(shares: ArrayList<OCShareEntity> = publicShares) {
-        sharesLiveData.postValue(DataResult.success(shares))
-    }
-
-    private fun editPublicShare(
-        share: OCShareEntity,
-        password: String? = null,
-        publicLinkExpirationDateInMillis: Long = -1,
-        resource: DataResult<Unit> = DataResult.success() // Expected result when editing the share
-    ) {
-        every {
-            ocShareViewModel.updatePublicShare(
-                1,
-                share.name!!,
-                password,
-                publicLinkExpirationDateInMillis,
-                1,
-                false
-            )
-        } returns MutableLiveData<DataResult<Unit>>().apply {
-            postValue(resource)
-        }
-
-        onView(withId(R.id.saveButton)).perform(click())
     }
 }
