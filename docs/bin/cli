@@ -155,7 +155,7 @@ function build_pdf_manual()
         -a revdate="${RELEASE_DATE}" \
         --base-dir "$(pwd)" \
         --out-file "${pdf_filename}" \
-        <(cat $book_file <(convert_antora_nav_to_asciidoc_list "$nav_file"))
+        - < <(cat $book_file <(convert_antora_nav_to_asciidoc_list "$nav_file"))
 
     echo "The ${MANUAL_NAME} has been converted to PDF format."
     echo "It is available at: ${pdf_filename}."
