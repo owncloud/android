@@ -43,7 +43,7 @@ page:
   margin_outer: 0.59in
   size: A4
 base:
-  align: justify
+  align: left
   font_color: 1c1c1c
   font_family: "DejaVu Serif"
   font_size: 10.5
