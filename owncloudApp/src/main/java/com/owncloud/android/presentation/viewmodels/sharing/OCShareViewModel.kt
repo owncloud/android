@@ -116,12 +116,12 @@ class OCShareViewModel(
                 )
             }
 
-            if (!useCaseResult.isSuccess) {
+            if (useCaseResult.isSuccess) {
+                _shareDeletionStatus.postValue(UIResult.Success())
+            } else {
                 _shareDeletionStatus.postValue(
                     UIResult.Error(useCaseResult.getThrowableOrNull())
                 )
-            } else {
-                _shareDeletionStatus.postValue(UIResult.Success())
             }
         }
     }
@@ -157,7 +157,11 @@ class OCShareViewModel(
                 )
             }
 
-            if (!useCaseResult.isSuccess) {
+            if (useCaseResult.isSuccess) {
+                _privateShareCreationStatus.postValue(
+                    UIResult.Success()
+                )
+            } else {
                 _privateShareCreationStatus.postValue(
                     UIResult.Error(useCaseResult.getThrowableOrNull())
                 )
@@ -209,12 +213,12 @@ class OCShareViewModel(
                 )
             }
 
-            if (!useCaseResult.isSuccess) {
+            if (useCaseResult.isSuccess) {
+                _privateShareEditionStatus.postValue(UIResult.Success())
+            } else {
                 _privateShareEditionStatus.postValue(
                     UIResult.Error(useCaseResult.getThrowableOrNull())
                 )
-            } else {
-                _privateShareEditionStatus.postValue(UIResult.Success())
             }
         }
     }
@@ -254,12 +258,12 @@ class OCShareViewModel(
                 )
             }
 
-            if (!useCaseResult.isSuccess) {
+            if (useCaseResult.isSuccess) {
+                _publicShareCreationStatus.postValue(UIResult.Success())
+            } else {
                 _publicShareCreationStatus.postValue(
                     UIResult.Error(useCaseResult.getThrowableOrNull())
                 )
-            } else {
-                _publicShareCreationStatus.postValue(UIResult.Success())
             }
         }
     }
@@ -295,12 +299,12 @@ class OCShareViewModel(
                 )
             }
 
-            if (!useCaseResult.isSuccess) {
+            if (useCaseResult.isSuccess) {
+                _publicShareEditionStatus.postValue(UIResult.Success())
+            } else {
                 _publicShareEditionStatus.postValue(
                     UIResult.Error(useCaseResult.getThrowableOrNull())
                 )
-            } else {
-                _publicShareEditionStatus.postValue(UIResult.Success())
             }
         }
     }

@@ -41,6 +41,7 @@ class OCCapabilityViewModel(
     private val refreshCapabilitiesFromServerUseCase: RefreshCapabilitiesFromServerAsyncUseCase
 ) : ViewModel() {
 
+    //Capabilities to share with views
     private val _capabilities = MediatorLiveData<UIResult<OCCapability>>()
     val capabilities: LiveData<UIResult<OCCapability>> = _capabilities
 

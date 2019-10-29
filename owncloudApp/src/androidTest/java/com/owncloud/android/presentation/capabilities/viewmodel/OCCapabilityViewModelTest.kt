@@ -2,6 +2,7 @@
  * ownCloud Android client application
  *
  * @author David González Verdugo
+ * @author Abel García de Prada
  * Copyright (C) 2019 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -22,15 +23,25 @@ package com.owncloud.android.presentation.capabilities.viewmodel
 import android.accounts.Account
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
-import androidx.test.platform.app.InstrumentationRegistry
-import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
-import com.owncloud.android.data.capabilities.repository.OCCapabilityRepository
+import com.owncloud.android.domain.UseCaseResult
+import com.owncloud.android.domain.capabilities.model.OCCapability
+import com.owncloud.android.domain.capabilities.usecases.GetStoredCapabilitiesUseCase
+import com.owncloud.android.domain.capabilities.usecases.RefreshCapabilitiesFromServerAsyncUseCase
+import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.viewmodels.capabilities.OCCapabilityViewModel
 import com.owncloud.android.utils.AppTestUtil
+import com.owncloud.android.utils.AppTestUtil.DUMMY_CAPABILITY
+import com.owncloud.android.utils.LiveDataTestUtil.getOrAwaitValues
+import com.owncloud.android.utils.TIMEOUT_TEST_LONG
+import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockkClass
-import junit.framework.Assert.assertEquals
-import org.junit.Before
+import io.mockk.spyk
+import io.mockk.unmockkAll
+import io.mockk.verify
+import org.junit.After
+import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -38,44 +49,121 @@ import org.junit.runners.JUnit4
 
 @RunWith(JUnit4::class)
 class OCCapabilityViewModelTest {
+    private lateinit var ocCapabilityViewModel: OCCapabilityViewModel
+
+    private lateinit var getStoredCapabilitiesUseCase: GetStoredCapabilitiesUseCase
+    private lateinit var refreshCapabilitiesFromServerUseCase: RefreshCapabilitiesFromServerAsyncUseCase
+
+    private val capabilityLiveData = MutableLiveData<OCCapability>()
+
     private var testAccount: Account = AppTestUtil.createAccount("admin@server", "test")
-    private lateinit var capability: OCCapabilityEntity
 
     @Rule
     @JvmField
     val instantExecutorRule = InstantTaskExecutorRule()
 
-    @Before
-    fun init() {
-        capability = AppTestUtil.createCapability("admin@server", 2, 1, 0)
+    @After
+    fun tearDown() {
+        unmockkAll()
+    }
+
+    private fun initTest() {
+        getStoredCapabilitiesUseCase = spyk(mockkClass(GetStoredCapabilitiesUseCase::class))
+        refreshCapabilitiesFromServerUseCase = spyk(mockkClass(RefreshCapabilitiesFromServerAsyncUseCase::class))
+
+        every { getStoredCapabilitiesUseCase.execute(any()) } returns capabilityLiveData
+
+        ocCapabilityViewModel = OCCapabilityViewModel(
+            accountName = testAccount.name,
+            getStoredCapabilitiesUseCase = getStoredCapabilitiesUseCase,
+            refreshCapabilitiesFromServerUseCase = refreshCapabilitiesFromServerUseCase
+        )
     }
 
     @Test
-    fun loadCapability() {
-        val ocCapabilityRepository = mockkClass(OCCapabilityRepository::class)
+    fun getStoredCapabilitiesWithData() {
+        initTest()
 
-        every {
-            ocCapabilityRepository.refreshCapabilitiesForAccount(
-                "admin@server"
-            )
-        } returns MutableLiveData<DataResult<OCCapabilityEntity>>().apply {
-            value = DataResult.success(capability)
-        }
+        val capability = DUMMY_CAPABILITY.copy(accountName = testAccount.name)
 
-        val context = InstrumentationRegistry.getInstrumentation().targetContext
-
-        val ocCapabilityViewModel = OCCapabilityViewModel(
-            context,
-            account = testAccount,
-            capabilityRepository = ocCapabilityRepository
+        getStoredCapabilitiesVerification(
+            valueToTest = capability,
+            expectedValue = UIResult.Success(capability)
         )
+    }
 
-        val resource: DataResult<OCCapabilityEntity>? = ocCapabilityViewModel.getCapabilityForAccount().value
-        val capability: OCCapabilityEntity? = resource?.data
+    @Test
+    fun getStoredCapabilitiesWithoutData() {
+        initTest()
 
-        assertEquals("admin@server", capability?.accountName)
-        assertEquals(2, capability?.versionMayor)
-        assertEquals(1, capability?.versionMinor)
-        assertEquals(0, capability?.versionMicro)
+        getStoredCapabilitiesVerification(
+            valueToTest = null,
+            expectedValue = null
+        )
+    }
+
+    @Test
+    fun fetchCapabilitiesLoading() {
+        initTest()
+
+        fetchCapabilitiesVerification(
+            valueToTest = UseCaseResult.Success(Unit),
+            expectedValue = UIResult.Loading()
+        )
+    }
+
+    @Test
+    fun fetchCapabilitiesError() {
+        initTest()
+
+        val error = Throwable()
+        fetchCapabilitiesVerification(
+            valueToTest = UseCaseResult.Error(error),
+            expectedValue = UIResult.Error(error),
+            expectedOnPosition = 2
+        )
+    }
+
+    @Test
+    fun fetchCapabilitiesSuccess() {
+        initTest()
+
+        //Expect a null since we are mocking refreshCapabilities and we are not storing new capabilities on db
+        fetchCapabilitiesVerification(
+            valueToTest = UseCaseResult.Success(Unit),
+            expectedValue = null,
+            expectedOnPosition = 2
+        )
+    }
+
+    private fun getStoredCapabilitiesVerification(
+        valueToTest: OCCapability?,
+        expectedValue: UIResult<OCCapability>?,
+        expectedOnPosition: Int = 1
+    ) {
+        capabilityLiveData.postValue(valueToTest)
+
+        val value = ocCapabilityViewModel.capabilities.getOrAwaitValues()
+        assertEquals(expectedValue, value[expectedOnPosition - 1])
+
+        coVerify(exactly = 0) { refreshCapabilitiesFromServerUseCase.execute(any()) }
+        verify(exactly = 1) { getStoredCapabilitiesUseCase.execute(any()) }
+    }
+
+    private fun fetchCapabilitiesVerification(
+        valueToTest: UseCaseResult<Unit>,
+        expectedValue: UIResult<Unit>?,
+        expectedOnPosition: Int = 1
+    ) {
+        coEvery { refreshCapabilitiesFromServerUseCase.execute(any()) } returns valueToTest
+
+        ocCapabilityViewModel.refreshCapabilitiesFromNetwork()
+
+        val value = ocCapabilityViewModel.capabilities.getOrAwaitValues(expectedOnPosition)
+        assertEquals(expectedValue, value[expectedOnPosition - 1])
+
+        coVerify(exactly = 1, timeout = TIMEOUT_TEST_LONG) { refreshCapabilitiesFromServerUseCase.execute(any()) }
+        //Just once on init
+        verify(exactly = 1) { getStoredCapabilitiesUseCase.execute(any()) }
     }
 }
