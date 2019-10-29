@@ -289,8 +289,7 @@ public class FileUploader extends Service
                 KEY_REQUESTED_FROM_WIFI_BACK_EVENT, false
         );
 
-        if ((isCameraUploadFile || isAvailableOfflineFile || isRequestedFromWifiBackEvent) &&
-                Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 
             Log_OC.d(TAG, "Starting FileUploader service in foreground");
             mNotificationBuilder
