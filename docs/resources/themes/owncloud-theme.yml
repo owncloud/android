@@ -8,17 +8,17 @@ font:
       bold_italic: notoserif-bold_italic.ttf
     # M+ 1mn supports ASCII and the circled numbers used for conums
     M+ 1mn:
-      normal: mplus1mn-regular-ascii-conums.ttf
-      bold: mplus1mn-bold-ascii.ttf
-      italic: mplus1mn-italic-ascii.ttf
-      bold_italic: mplus1mn-bold_italic-ascii.ttf
+      normal: mplus-1mn-regular.ttf
+      bold: mplus-1mn-bold.ttf
+      italic: mplus-1mn-thin.ttf
+      bold_italic: mplus-1mn-medium.ttf
     # M+ 1p supports Latin, Latin-1 Supplement, Latin Extended, Greek, Cyrillic, Vietnamese, Japanese & an assortment of symbols
     # It also provides arrows for ->, <-, => and <= replacements in case these glyphs are missing from font
     M+ 1p Fallback:
-      normal: mplus1p-regular-fallback.ttf
-      bold: mplus1p-regular-fallback.ttf
-      italic: mplus1p-regular-fallback.ttf
-      bold_italic: mplus1p-regular-fallback.ttf
+      normal: mplus-1p-regular.ttf
+      bold: mplus-1p-regular.ttf
+      italic: mplus-1p-regular.ttf
+      bold_italic: mplus-1p-regular.ttf
     Open Sans:
       normal: opensans-light.ttf
       bold: opensans-bold.ttf
