@@ -8,4 +8,3 @@ The ownCloud Team <docs@owncloud.com>
 :toclevels: 1
 :icons: font
 :icon-set: octicon
-:module_base_path: modules/ROOT/pages/

@@ -149,6 +149,7 @@ function build_pdf_manual()
         -a pdf-style="${STYLE}" \
         -a examplesdir="$(pwd)/modules/ROOT/examples/" \
         -a imagesdir="$(pwd)/modules/ROOT/assets/images/" \
+        -a module_base_path="modules/ROOT/pages/" \
         -a partialsdir="$(pwd)/modules/ROOT/pages/_partials/" \
         -a revnumber="${revision}" \
         -a revdate="${RELEASE_DATE}" \
