@@ -37,8 +37,8 @@ class GetStoredCapabilitiesUseCaseTest {
     var instantTaskExecutorRule = InstantTaskExecutorRule()
 
     private val capabilityRepository: CapabilityRepository = spyk()
-    private val getStoredCapabilitiesUseCase =
-        GetStoredCapabilitiesUseCase((capabilityRepository))
+    private val useCase = GetStoredCapabilitiesUseCase((capabilityRepository))
+    private val useCaseParams = GetStoredCapabilitiesUseCase.Params("")
     private lateinit var capabilitiesEmitted: MutableList<OCCapability>
 
     @Before
@@ -53,9 +53,7 @@ class GetStoredCapabilitiesUseCaseTest {
 
         val capabilitiesToEmit = listOf(DomainTestUtil.createCapability())
 
-        getStoredCapabilitiesUseCase.execute(
-            GetStoredCapabilitiesUseCase.Params("")
-        ).observeForever {
+        useCase.execute(useCaseParams).observeForever {
             capabilitiesEmitted.add(it!!)
         }
 
@@ -68,8 +66,6 @@ class GetStoredCapabilitiesUseCaseTest {
     fun getStoredCapabilitiesException() {
         every { capabilityRepository.getStoredCapabilities(any()) } throws Exception()
 
-        getStoredCapabilitiesUseCase.execute(
-            GetStoredCapabilitiesUseCase.Params("")
-        )
+        useCase.execute(useCaseParams)
     }
 }

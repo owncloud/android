@@ -29,29 +29,25 @@ import org.junit.Test
 
 class RefreshCapabilitiesFromServerAsyncUseCaseTest {
     private val capabilityRepository: CapabilityRepository = spyk()
-    private val refreshCapabilitiesFromServerAsyncUseCase =
-        RefreshCapabilitiesFromServerAsyncUseCase((capabilityRepository))
+    private val useCase = RefreshCapabilitiesFromServerAsyncUseCase((capabilityRepository))
+    private val useCaseParams = RefreshCapabilitiesFromServerAsyncUseCase.Params("")
 
     @Test
     fun refreshCapabilitiesFromServerOk() {
-        val useCaseResult =
-            refreshCapabilitiesFromServerAsyncUseCase.execute(RefreshCapabilitiesFromServerAsyncUseCase.Params(""))
+        val useCaseResult = useCase.execute(useCaseParams)
 
         Assert.assertTrue(useCaseResult.isSuccess)
         Assert.assertFalse(useCaseResult.isError)
         Assert.assertEquals(Unit, useCaseResult.getDataOrNull())
 
-        verify(exactly = 1) {
-            capabilityRepository.refreshCapabilitiesForAccount("")
-        }
+        verify(exactly = 1) { capabilityRepository.refreshCapabilitiesForAccount("") }
     }
 
     @Test
     fun refreshCapabilitiesFromServerWithUnauthorizedException() {
         every { capabilityRepository.refreshCapabilitiesForAccount(any()) } throws UnauthorizedException()
 
-        val useCaseResult =
-            refreshCapabilitiesFromServerAsyncUseCase.execute(RefreshCapabilitiesFromServerAsyncUseCase.Params(""))
+        val useCaseResult = useCase.execute(useCaseParams)
 
         Assert.assertFalse(useCaseResult.isSuccess)
         Assert.assertTrue(useCaseResult.isError)
@@ -59,8 +55,6 @@ class RefreshCapabilitiesFromServerAsyncUseCaseTest {
         Assert.assertNull(useCaseResult.getDataOrNull())
         Assert.assertTrue(useCaseResult.getThrowableOrNull() is UnauthorizedException)
 
-        verify(exactly = 1) {
-            capabilityRepository.refreshCapabilitiesForAccount("")
-        }
+        verify(exactly = 1) { capabilityRepository.refreshCapabilitiesForAccount("") }
     }
 }
