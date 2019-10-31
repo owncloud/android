@@ -27,7 +27,16 @@ class CreatePrivateShareAsyncUseCase(
     private val shareRepository: ShareRepository
 ) : BaseUseCaseWithResult<Unit, CreatePrivateShareAsyncUseCase.Params>() {
 
-    override fun run(params: Params) =
+    override fun run(params: Params) {
+        require(
+            params.shareType != null &&
+                    (params.shareType == ShareType.USER ||
+                            params.shareType == ShareType.GROUP ||
+                            params.shareType == ShareType.FEDERATED)
+        ) {
+            "Illegal share type ${params.shareType}"
+        }
+
         shareRepository.insertPrivateShare(
             params.filePath,
             params.shareType,
@@ -35,6 +44,7 @@ class CreatePrivateShareAsyncUseCase(
             params.permissions,
             params.accountName
         )
+    }
 
     data class Params(
         val filePath: String,
