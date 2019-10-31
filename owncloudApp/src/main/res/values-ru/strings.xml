@@ -78,6 +78,7 @@
 	</string>
   <string name="auth_failure_snackbar">Аутентификация не удалась</string>
   <string name="auth_failure_snackbar_action">Измените учётную запись</string>
+  <string name="auth_oauth_failure_snackbar_action">Войти</string>
   <string name="auth_check_server">Проверить сервер</string>
   <string name="auth_host_url">Адрес сервера https://...</string>
   <string name="auth_username">Имя пользователя</string>

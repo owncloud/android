@@ -69,6 +69,7 @@
   <string name="recommend_text">Noriu pakviesti tave naudotis %1$s išmaniajame telefone!\nParsisiųks čia: %2$s</string>
   <string name="auth_failure_snackbar">Autentikacija nepavyko.</string>
   <string name="auth_failure_snackbar_action">Pakeisti paskyrą</string>
+  <string name="auth_oauth_failure_snackbar_action">Prisijungti</string>
   <string name="auth_check_server">Patikrinti serverį</string>
   <string name="auth_host_url">Serverio adresas </string>
   <string name="auth_username">Prisijungimo vardas</string>

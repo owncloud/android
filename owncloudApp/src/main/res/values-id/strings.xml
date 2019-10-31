@@ -77,6 +77,7 @@
   <string name="recommend_text">Saya mengajak Anda untuk menggunakan %1$s di ponsel cerdas Anda!\nUnduh gratis disini: %2$s</string>
   <string name="auth_failure_snackbar">Otentikasi gagal</string>
   <string name="auth_failure_snackbar_action">Ganti akun</string>
+  <string name="auth_oauth_failure_snackbar_action">Masuk</string>
   <string name="auth_check_server">Periksa peladen</string>
   <string name="auth_host_url">Alamat server https://…</string>
   <string name="auth_username">Nama Pengguna</string>

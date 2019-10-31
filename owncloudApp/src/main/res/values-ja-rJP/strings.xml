@@ -64,6 +64,7 @@
   <string name="recommend_subject">スマートフォンで %1$s を試してください！</string>
   <string name="recommend_text">スマートフォンで %1$s を利用してみませんか！
 ここからダウンロードしてください: %2$s</string>
+  <string name="auth_oauth_failure_snackbar_action">ログイン</string>
   <string name="auth_check_server">サーバーのチェック</string>
   <string name="auth_host_url">サーバーアドレス https://…</string>
   <string name="auth_username">ユーザー名</string>
