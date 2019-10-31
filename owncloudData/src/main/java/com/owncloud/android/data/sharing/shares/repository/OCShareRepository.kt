@@ -38,15 +38,11 @@ class OCShareRepository(
 
     override fun insertPrivateShare(
         filePath: String,
-        shareType: ShareType?,
+        shareType: ShareType,
         shareeName: String,     // User or group name of the target sharee.
         permissions: Int,        // See https://doc.owncloud.com/server/developer_manual/core/apis/ocs-share-api.html
         accountName: String
     ) {
-        if (!(shareType == ShareType.USER || shareType == ShareType.GROUP || shareType == ShareType.FEDERATED)) {
-            throw IllegalArgumentException("Illegal share type $shareType");
-        }
-
         insertShare(
             filePath = filePath,
             shareType = shareType,
