@@ -37,7 +37,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 
-class OCRemoteSharesDataSourceTest {
+class OCRemoteShareDataSourceTest {
     private lateinit var ocRemoteShareDataSource: OCRemoteShareDataSource
 
     private val ocShareService: OCShareService = mockk()

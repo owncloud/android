@@ -53,9 +53,6 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 
-/**
- * TODO: Check liveData values on each test and fix commented tests that are not working
- */
 @RunWith(JUnit4::class)
 class OCShareViewModelTest {
     private lateinit var ocShareViewModel: OCShareViewModel
