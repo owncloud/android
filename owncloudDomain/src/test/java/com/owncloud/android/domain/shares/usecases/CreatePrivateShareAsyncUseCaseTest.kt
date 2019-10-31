@@ -64,25 +64,25 @@ class CreatePrivateShareAsyncUseCaseTest {
     }
 
     @Test
-    fun createPrivateShareWithIllegalArgumentException() {
-        every {
-            shareRepository.insertPrivateShare(
-                any(),
-                any(),
-                any(),
-                any(),
-                any()
-            )
-        } throws IllegalArgumentException()
+    fun createPrivateShareWithNotValidShareTypeException() {
+        val useCaseParamsNotValid1 = useCaseParams.copy(shareType = null)
+        val useCaseResult1 = useCase.execute(useCaseParamsNotValid1)
 
-        val useCaseResult = useCase.execute(useCaseParams)
+        assertFalse(useCaseResult1.isSuccess)
+        assertTrue(useCaseResult1.isError)
 
-        assertFalse(useCaseResult.isSuccess)
-        assertTrue(useCaseResult.isError)
+        assertNull(useCaseResult1.getDataOrNull())
+        assertTrue(useCaseResult1.getThrowableOrNull() is IllegalArgumentException)
 
-        assertNull(useCaseResult.getDataOrNull())
-        assertTrue(useCaseResult.getThrowableOrNull() is IllegalArgumentException)
+        val useCaseParamsNotValid2 = useCaseParams.copy(shareType = ShareType.CONTACT)
+        val useCaseResult2 = useCase.execute(useCaseParamsNotValid2)
 
-        verify(exactly = 1) { shareRepository.insertPrivateShare("", ShareType.USER, "", 1, "") }
+        assertFalse(useCaseResult2.isSuccess)
+        assertTrue(useCaseResult2.isError)
+
+        assertNull(useCaseResult2.getDataOrNull())
+        assertTrue(useCaseResult2.getThrowableOrNull() is IllegalArgumentException)
+
+        verify(exactly = 0) { shareRepository.insertPrivateShare(any(), any(), any(), any(), any()) }
     }
 }

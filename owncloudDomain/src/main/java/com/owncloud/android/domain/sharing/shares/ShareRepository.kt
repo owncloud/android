@@ -31,7 +31,7 @@ interface ShareRepository {
 
     fun insertPrivateShare(
         filePath: String,
-        shareType: ShareType?,
+        shareType: ShareType,
         shareeName: String,
         permissions: Int,
         accountName: String
