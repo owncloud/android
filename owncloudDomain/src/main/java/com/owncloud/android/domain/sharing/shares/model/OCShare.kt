@@ -44,6 +44,7 @@ data class OCShare(
     val isPasswordProtected: Boolean
         get() = shareType == ShareType.PUBLIC_LINK && shareWith?.isNotEmpty()!!
 }
+
 /**
  * Enum for Share Type, with values:
  * -1 - No shared
@@ -67,8 +68,8 @@ enum class ShareType constructor(val value: Int) {
     FEDERATED(6);
 
     companion object {
-        fun fromValue(value: Int): ShareType? {
-            return when (value) {
+        fun fromValue(value: Int): ShareType? =
+            when (value) {
                 -1 -> NO_SHARED
                 0 -> USER
                 1 -> GROUP
@@ -78,6 +79,5 @@ enum class ShareType constructor(val value: Int) {
                 6 -> FEDERATED
                 else -> null
             }
-        }
     }
 }

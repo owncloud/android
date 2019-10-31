@@ -21,13 +21,32 @@ package com.owncloud.android.domain.utils
 
 import com.owncloud.android.domain.capabilities.model.CapabilityBooleanType
 import com.owncloud.android.domain.capabilities.model.OCCapability
-import io.mockk.every
-import io.mockk.mockk
+import com.owncloud.android.domain.sharing.shares.model.OCShare
+import com.owncloud.android.domain.sharing.shares.model.ShareType
 
 object DomainTestUtil {
 //    /**
 //     * Shares
 //     */
+val DUMMY_SHARE = OCShare(
+    fileSource = 7,
+    itemSource = 7,
+    shareType = ShareType.USER, // Public share by default
+    shareWith = "",
+    path = "/Photos/image.jpg",
+    permissions = 1,
+    sharedDate = 1542628397,
+    expirationDate = 0,
+    token = "AnyToken",
+    sharedWithDisplayName = "",
+    sharedWithAdditionalInfo = "",
+    isFolder = false,
+    userId = -1,
+    remoteId = 1,
+    accountOwner = "admin@server",
+    name = "",
+    shareLink = ""
+)
 //    private fun createShare(
 //        fileSource: Long = 7,
 //        itemSource: Long = 7,

@@ -71,21 +71,19 @@ enum class CapabilityBooleanType constructor(val value: Int) {
         get() = value == 1
 
     companion object {
-        fun fromValue(value: Int): CapabilityBooleanType? {
-            return when (value) {
+        fun fromValue(value: Int): CapabilityBooleanType? =
+            when (value) {
                 -1 -> UNKNOWN
                 0 -> FALSE
                 1 -> TRUE
                 else -> null
             }
-        }
 
-        fun fromBooleanValue(boolValue: Boolean): CapabilityBooleanType {
-            return if (boolValue) {
+        fun fromBooleanValue(boolValue: Boolean): CapabilityBooleanType =
+            if (boolValue) {
                 TRUE
             } else {
                 FALSE
             }
-        }
     }
 }
