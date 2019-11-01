@@ -52,10 +52,12 @@ import com.owncloud.android.ui.activity.FingerprintActivity
 import com.owncloud.android.ui.activity.PassCodeActivity
 import com.owncloud.android.ui.activity.PatternLockActivity
 import com.owncloud.android.ui.activity.WhatsNewActivity
+import info.hannes.timber.DebugTree
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
+import timber.log.Timber
 
 /**
  * Main Application of the project
@@ -194,6 +196,9 @@ class MainApp : MultiDexApplication() {
     }
 
     fun startLogIfDeveloper() {
+        if (BuildConfig.DEBUG)
+            Timber.plant(DebugTree(Log_OC::class.java))
+
         isDeveloper = BuildConfig.DEBUG || PreferenceManager.getDefaultSharedPreferences(applicationContext)
             .getInt(CLICK_DEV_MENU, CLICKS_DEFAULT) > CLICKS_NEEDED_TO_BE_DEVELOPER
 
