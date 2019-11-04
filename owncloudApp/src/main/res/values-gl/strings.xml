@@ -72,12 +72,14 @@
   <string name="passcode_already_set">Non é posíbel activar os bloqueos de patrón e de código de seguridade ao mesmo tempo, primeiro desactive o código de seguridade</string>
   <string name="pattern_no_longer_required">Xa non se pedirá o patrón</string>
   <string name="pattern_configure_your_pattern_explanation">Solicitaráselle o patrón cada vez que inicie a aplicación</string>
+  <string name="pattern_locked">Bloqueado con patrón</string>
   <string name="illegal_argument_exception_message">É necesaria unha ACCIÓN válida na intención pasada a</string>
   <string name="recommend_subject">Tente %1$s no seu teléfono intelixente!</string>
   <string name="recommend_text">Quero convidalo a empregar %1$s no seu teléfono intelixente!
 Descárgueo de aquí: %2$s</string>
   <string name="auth_failure_snackbar">Produciuse un fallo na autenticación.</string>
   <string name="auth_failure_snackbar_action">Cambiar a conta</string>
+  <string name="auth_oauth_failure">A marca de acceso caducou ou non é válida. Inicie sesión de novo para recuperar o acceso</string>
   <string name="auth_oauth_failure_snackbar_action">Rexistrarse</string>
   <string name="auth_check_server">Comprobar servidor</string>
   <string name="auth_host_url">Enderezo do servidor https://…</string>
@@ -219,6 +221,7 @@ Descárgueo de aquí: %2$s</string>
   <string name="pass_code_wrong">Código de seguridade incorrecto</string>
   <string name="pass_code_removed">Retirouse o código de seguridade</string>
   <string name="pass_code_stored">O código de seguridade foi almacenado</string>
+  <string name="pass_code_locked">Bloqueado con código de seguridade</string>
   <string name="fingerprint_confirm">Confirme a súa pegada para continuar</string>
   <string name="fingerprint_hint">Sensor táctil</string>
   <string name="fingerprint_not_recognized">Non se recoñeceu a pegada, ténteo de novo</string>
