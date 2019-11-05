@@ -126,9 +126,9 @@ class UsersAndGroupsSearchProvider : ContentProvider() {
         val account = AccountUtils.getCurrentOwnCloudAccount(context)
 
         val ocCapabilityViewModel = OCCapabilityViewModel(context, account)
-        val capability = ocCapabilityViewModel.getStoredCapabilityForAccount()
+        val capability = ocCapabilityViewModel.capabilities.value?.data
 
-        val minCharactersToSearch = capability.filesSharingSearchMinLength ?: DEFAULT_MIN_CHARACTERS_TO_SEARCH
+        val minCharactersToSearch = capability?.filesSharingSearchMinLength ?: DEFAULT_MIN_CHARACTERS_TO_SEARCH
 
         if (userQuery.length < minCharactersToSearch) {
             return MatrixCursor(COLUMNS)
