@@ -44,7 +44,7 @@ abstract class OCCapabilityDao {
     )
     abstract fun getCapabilityForAccount(
         accountName: String
-    ): OCCapability
+    ): OCCapabilityEntity
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract fun insert(ocCapability: OCCapabilityEntity): Long

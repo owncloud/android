@@ -21,13 +21,11 @@
 package com.owncloud.android.domain.capabilities
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.owncloud.android.data.DataResult
 import com.owncloud.android.data.capabilities.CapabilityRepository
 import com.owncloud.android.data.capabilities.datasources.LocalCapabilitiesDataSource
 import com.owncloud.android.data.capabilities.datasources.RemoteCapabilitiesDataSource
 import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
-import com.owncloud.android.lib.resources.status.RemoteCapability
 
 class OCCapabilityRepository(
     private val localCapabilitiesDataSource: LocalCapabilitiesDataSource,
@@ -65,10 +63,6 @@ class OCCapabilityRepository(
                 )
             )
 
-    override fun getStoredCapabilityForAccount(
-        accountName: String
-    ): OCCapabilityEntity =
-        localCapabilitiesDataSource.getCapabilityForAccount(accountName)
             return DataResult.success()
         }
     }
