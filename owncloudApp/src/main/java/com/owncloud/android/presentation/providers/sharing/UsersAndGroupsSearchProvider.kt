@@ -139,19 +139,19 @@ class UsersAndGroupsSearchProvider : ContentProvider() {
             account
         )
 
-        val shareesResource = ocShareeViewModel.getSharees(
+        ocShareeViewModel.getSharees(
             userQuery,
             REQUESTED_PAGE,
             RESULTS_PER_PAGE
         ).also { uiResult ->
-            if (!uiResult.isSuccess() && !uiResult.isLoading()) {
+            if (uiResult.isError()) {
                 showErrorMessage(uiResult.errorMessage)
             }
 
             val names = uiResult.data
 
             // convert the responses from the OC server to the expected format
-            if (names?.size!! > 0) {
+            if (!names.isNullOrEmpty()) {
                 response = MatrixCursor(COLUMNS)
                 val namesIt = names.iterator()
                 var item: JSONObject
@@ -172,16 +172,16 @@ class UsersAndGroupsSearchProvider : ContentProvider() {
 
                 val manager = FileDataStorageManager(
                     context,
-                    account, context!!.contentResolver
+                    account,
+                    context!!.contentResolver
                 )
                 val federatedShareAllowed = manager.getCapability(account!!.name).filesSharingFederationOutgoing
                     .isTrue
 
                 try {
-                    while (namesIt.hasNext()) {
-                        item = namesIt.next()
-                        var userName = item.getString(GetRemoteShareesOperation.PROPERTY_LABEL)
-                        val value = item.getJSONObject(GetRemoteShareesOperation.NODE_VALUE)
+                    for (name in names) {
+                        var userName = name.getString(GetRemoteShareesOperation.PROPERTY_LABEL)
+                        val value = name.getJSONObject(GetRemoteShareesOperation.NODE_VALUE)
                         val type = value.getInt(GetRemoteShareesOperation.PROPERTY_SHARE_TYPE)
                         val shareWith = value.getString(GetRemoteShareesOperation.PROPERTY_SHARE_WITH)
 

@@ -39,6 +39,7 @@ import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.operations.common.OperationType
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -58,7 +59,9 @@ class OCShareViewModel(
     private val editPrivateShareUseCase: EditPrivateShareUseCase = EditPrivateShareUseCase(context, account),
     private val createPublicShareUseCase: CreatePublicShareUseCase = CreatePublicShareUseCase(context, account),
     private val editPublicShareUseCase: EditPublicShareUseCase = EditPublicShareUseCase(context, account),
-    private val deletePublicShareUseCase: DeleteShareUseCase = DeleteShareUseCase(context, account)
+    private val deletePublicShareUseCase: DeleteShareUseCase = DeleteShareUseCase(context, account),
+    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
+    private val mainDispatcher: CoroutineDispatcher = Dispatchers.Main
 ) : ViewModel() {
 
     private val _shares = MutableLiveData<UIResult<List<OCShareEntity>>>()
@@ -124,7 +127,7 @@ class OCShareViewModel(
         )
 
         viewModelScope.launch {
-            val useCaseResult = withContext(Dispatchers.IO) {
+            val useCaseResult = withContext(ioDispatcher) {
                 deletePublicShareUseCase.execute(
                     DeleteShareUseCase.Params(
                         remoteId
@@ -132,7 +135,7 @@ class OCShareViewModel(
                 )
             }
 
-            withContext(Dispatchers.Main) {
+            withContext(mainDispatcher) {
                 if (!useCaseResult.isSuccess()) {
                     _shareDeletionStatus.postValue(
                         UIResult.error(
@@ -169,7 +172,7 @@ class OCShareViewModel(
         )
 
         viewModelScope.launch {
-            val useCaseResult = withContext(Dispatchers.IO) {
+            val useCaseResult = withContext(ioDispatcher) {
                 createPrivateShareUseCase.execute(
                     CreatePrivateShareUseCase.Params(
                         filePath,
@@ -180,7 +183,7 @@ class OCShareViewModel(
                 )
             }
 
-            withContext(Dispatchers.Main) {
+            withContext(mainDispatcher) {
                 if (!useCaseResult.isSuccess()) {
                     _privateShareCreationStatus.postValue(
                         UIResult.error(
@@ -230,7 +233,7 @@ class OCShareViewModel(
         )
 
         viewModelScope.launch {
-            val useCaseResult = withContext(Dispatchers.IO) {
+            val useCaseResult = withContext(ioDispatcher) {
                 editPrivateShareUseCase.execute(
                     EditPrivateShareUseCase.Params(
                         remoteId,
@@ -239,7 +242,7 @@ class OCShareViewModel(
                 )
             }
 
-            withContext(Dispatchers.Main) {
+            withContext(mainDispatcher) {
                 if (!useCaseResult.isSuccess()) {
                     _privateShareEditionStatus.postValue(
                         UIResult.error(
@@ -291,7 +294,7 @@ class OCShareViewModel(
                 )
             }
 
-            withContext(Dispatchers.Main) {
+            withContext(mainDispatcher) {
                 if (!useCaseResult.isSuccess()) {
                     _publicShareCreationStatus.postValue(
                         UIResult.error(
@@ -326,7 +329,7 @@ class OCShareViewModel(
         )
 
         viewModelScope.launch {
-            val useCaseResult = withContext(Dispatchers.IO) {
+            val useCaseResult = withContext(ioDispatcher) {
                 editPublicShareUseCase.execute(
                     EditPublicShareUseCase.Params(
                         remoteId,
@@ -339,8 +342,10 @@ class OCShareViewModel(
                 )
             }
 
-            withContext(Dispatchers.Main) {
-                if (!useCaseResult.isSuccess()) {
+            withContext(mainDispatcher) {
+                if (useCaseResult.isSuccess()) {
+                    _publicShareEditionStatus.postValue(UIResult.success())
+                } else {
                     _publicShareEditionStatus.postValue(
                         UIResult.error(
                             errorMessage = useCaseResult.msg ?: ErrorMessageAdapter.getResultMessage(
@@ -351,8 +356,6 @@ class OCShareViewModel(
                             )
                         )
                     )
-                } else {
-                    _publicShareEditionStatus.postValue(UIResult.success())
                 }
             }
         }

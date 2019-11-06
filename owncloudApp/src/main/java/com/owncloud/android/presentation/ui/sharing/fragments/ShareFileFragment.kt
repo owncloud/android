@@ -97,7 +97,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
     /**
      * List of private shares bound to the file
      */
-    private var privateShares: ArrayList<OCShareEntity>? = null
+    private var privateShares: List<OCShareEntity>? = null
 
     /**
      * Adapter to show private shares
@@ -107,7 +107,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
     /**
      * List of public links bound to the file
      */
-    private var publicLinks: ArrayList<OCShareEntity>? = null
+    private var publicLinks: List<OCShareEntity>? = null
 
     /**
      * Adapter to show public shares

@@ -29,6 +29,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
+import androidx.fragment.app.transaction
 import androidx.lifecycle.Observer
 import com.google.android.material.snackbar.Snackbar
 import com.owncloud.android.R
@@ -102,23 +103,19 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
         // Set back button
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        val ft = supportFragmentManager.beginTransaction()
-
-        if (savedInstanceState == null && file != null && account != null) {
-            // Add Share fragment on first creation
-            val fragment = ShareFileFragment.newInstance(file, account!!)
-            ft.replace(
-                R.id.share_fragment_container, fragment,
-                TAG_SHARE_FRAGMENT
-            )
-            ft.commit()
+        supportFragmentManager.transaction {
+            if (savedInstanceState == null && file != null && account != null) {
+                // Add Share fragment on first creation
+                val fragment = ShareFileFragment.newInstance(file, account!!)
+                replace(
+                    R.id.share_fragment_container, fragment,
+                    TAG_SHARE_FRAGMENT
+                )
+            }
         }
 
         observePrivateShareCreation()
-    }
-
-    public override fun onStop() {
-        super.onStop()
+        observePrivateShareEdition()
     }
 
     override fun observeCapabilities() {
@@ -155,9 +152,6 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
                             shareFileFragment?.updateCapabilities(uiResult.data)
                         }
                     }
-                    else -> {
-                        Log.d(TAG, "Unknown status when loading capabilities in account ${account?.name}")
-                    }
                 }
             }
         )
@@ -168,14 +162,15 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
      **************************************************************************************************************/
 
     override fun showSearchUsersAndGroups() {
-        val searchFragment = SearchShareesFragment.newInstance(file, account)
-        val ft = supportFragmentManager.beginTransaction()
-        ft.replace(
-            R.id.share_fragment_container, searchFragment,
-            TAG_SEARCH_FRAGMENT
-        )
-        ft.addToBackStack(null)    // BACK button will recover the ShareFragment
-        ft.commit()
+        supportFragmentManager.transaction {
+            val searchFragment = SearchShareesFragment.newInstance(file, account)
+            replace(
+                R.id.share_fragment_container,
+                searchFragment,
+                TAG_SEARCH_FRAGMENT
+            )
+            addToBackStack(null)
+        }
     }
 
     // Private share creation needs to be handled from here since is is carried out through intents
