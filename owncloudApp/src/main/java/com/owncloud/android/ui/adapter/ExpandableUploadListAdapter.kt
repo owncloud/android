@@ -589,7 +589,7 @@ class ExpandableUploadListAdapter(private val parentActivity: FileActivity) :
         notifyDataSetChanged()
     }
 
-    override fun update(arg0: Observable, arg1: Any) {
+    override fun update(o: Observable?, arg: Any?) {
         Log_OC.d(TAG, "update")
         loadUploadItemsFromDb()
     }
