@@ -39,7 +39,7 @@ import java.util.ArrayList
  */
 class ShareUserListAdapter(
     private val mContext: Context, resource: Int,
-    private var shares: ArrayList<OCShareEntity>?,
+    private var shares: List<OCShareEntity>?,
     private val listener: ShareUserAdapterListener
 ) : ArrayAdapter<OCShareEntity>(mContext, resource) {
 
