@@ -23,8 +23,7 @@ package com.owncloud.android.presentation.viewmodels.capabilities
 import android.accounts.Account
 import android.content.Context
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
@@ -36,7 +35,6 @@ import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 /**
  * View Model to keep a reference to the capability repository and an up-to-date capability
@@ -49,7 +47,7 @@ class OCCapabilityViewModel(
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ViewModel() {
 
-    private val _capabilities = MutableLiveData<UIResult<OCCapabilityEntity>>()
+    private val _capabilities = MediatorLiveData<UIResult<OCCapabilityEntity>>()
     val capabilities: LiveData<UIResult<OCCapabilityEntity>> = _capabilities
 
     private var capabilitiesLiveData: LiveData<OCCapabilityEntity>? = capabilitiesLiveDataUseCase.execute(
@@ -58,15 +56,10 @@ class OCCapabilityViewModel(
         )
     ).data
 
-    // to detect changes in capabilities
-    private val capabilitiesObserver: Observer<OCCapabilityEntity> = Observer { capabilities ->
-        if (capabilities != null) {
+    init {
+        _capabilities.addSource(capabilitiesLiveData!!) { capabilities ->
             _capabilities.postValue(UIResult.success(capabilities))
         }
-    }
-
-    init {
-        capabilitiesLiveData?.observeForever(capabilitiesObserver)
 
         refreshCapabilitiesFromNetwork()
     }
@@ -97,10 +90,5 @@ class OCCapabilityViewModel(
                 }
             }
         }
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        capabilitiesLiveData?.removeObserver(capabilitiesObserver)
     }
 }

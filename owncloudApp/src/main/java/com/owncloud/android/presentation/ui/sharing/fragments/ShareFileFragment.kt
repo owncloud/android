@@ -335,9 +335,12 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
         ocShareViewModel.shares.observe(
             this,
             Observer { uiResult ->
+                val shares = uiResult.data
                 when (uiResult?.status) {
                     Status.SUCCESS -> {
-                        updateShares(uiResult.data as ArrayList<OCShareEntity>)
+                        shares?.let {
+                            updateShares(it)
+                        }
                         listener?.dismissLoading()
                     }
                     Status.ERROR -> {
@@ -346,12 +349,16 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
                             uiResult.errorMessage!!,
                             Snackbar.LENGTH_SHORT
                         ).show()
-                        updateShares(uiResult.data)
+                        shares?.let {
+                            updateShares(it)
+                        }
                         listener?.dismissLoading()
                     }
                     Status.LOADING -> {
                         listener?.showLoading() // TODO Use listener
-                        updateShares(uiResult.data)
+                        shares?.let {
+                            updateShares(it)
+                        }
                     }
                     else -> {
                         Log.d(
@@ -399,7 +406,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
      *********************************************** PRIVATE SHARES ***********************************************
      **************************************************************************************************************/
 
-    private fun updatePrivateShares(privateShares: ArrayList<OCShareEntity>) {
+    private fun updatePrivateShares(privateShares: List<OCShareEntity>) {
         // Get Users and Groups
         this.privateShares = ArrayList(privateShares.filter {
             it.shareType == ShareType.USER.value ||
@@ -452,7 +459,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
      *********************************************** PUBLIC SHARES ************************************************
      **************************************************************************************************************/
 
-    private fun updatePublicShares(publicShares: ArrayList<OCShareEntity>) {
+    private fun updatePublicShares(publicShares: List<OCShareEntity>) {
         publicLinks = publicShares
         updatePublicLinkButton()
         updateListOfPublicLinks()

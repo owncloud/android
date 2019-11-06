@@ -154,10 +154,12 @@ class SearchShareesFragment : Fragment(),
                     share.shareType == ShareType.USER.value ||
                             share.shareType == ShareType.GROUP.value ||
                             share.shareType == ShareType.FEDERATED.value
-                } as ArrayList<OCShareEntity>
+                }
                 when (uiResult?.status) {
                     Status.SUCCESS -> {
-                        updatePrivateShares(privateShares)
+                        privateShares?.let {
+                            updatePrivateShares(it)
+                        }
                         listener?.dismissLoading()
                     }
                     Status.ERROR -> {
@@ -166,12 +168,16 @@ class SearchShareesFragment : Fragment(),
                             uiResult.errorMessage!!,
                             Snackbar.LENGTH_SHORT
                         ).show()
-                        updatePrivateShares(privateShares)
+                        privateShares?.let {
+                            updatePrivateShares(it)
+                        }
                         listener?.dismissLoading()
                     }
                     Status.LOADING -> {
                         listener?.showLoading()
-                        updatePrivateShares(privateShares)
+                        privateShares?.let {
+                            updatePrivateShares(it)
+                        }
                     }
                     else -> {
                         Log.d(
@@ -184,7 +190,7 @@ class SearchShareesFragment : Fragment(),
         )
     }
 
-    private fun updatePrivateShares(privateShares: ArrayList<OCShareEntity>) {
+    private fun updatePrivateShares(privateShares: List<OCShareEntity>) {
         // Update list of users/groups
         userGroupsAdapter = ShareUserListAdapter(
             requireActivity().applicationContext,
