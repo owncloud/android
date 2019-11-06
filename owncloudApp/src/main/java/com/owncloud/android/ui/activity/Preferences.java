@@ -510,20 +510,22 @@ public class Preferences extends PreferenceActivity {
             mAboutApp.setSummary(String.format(getString(R.string.about_version), appVersion));
             mAboutApp.setOnPreferenceClickListener(preference -> {
                 int clickCount = mAppPrefs.getInt(MainApp.CLICK_DEV_MENU, 0);
-                if (mAppPrefs.getInt(MainApp.CLICK_DEV_MENU, 0) > MainApp.CLICKS_NEEDED_TO_BE_DEVELOPER) {
-                    return true;
+                if (MainApp.Companion.isDeveloper()) {
+                    String commitUrl = BuildConfig.GIT_REMOTE + "/commit/" + BuildConfig.COMMIT_SHA1;
+                    Uri uriUrl = Uri.parse(commitUrl);
+                    Intent intent = new Intent(Intent.ACTION_VIEW, uriUrl);
+                    startActivity(intent);
                 } else if (mAppPrefs.getInt(MainApp.CLICK_DEV_MENU, 0) ==
                         MainApp.CLICKS_NEEDED_TO_BE_DEVELOPER) {
                     showDeveloperItems(pCategoryMore);
-                } else if (clickCount > 0) {
+                    ((MainApp) getApplication()).startLogIfDeveloper(); // read value to global variable
+                } else if (clickCount > 0 && clickCount < MainApp.CLICKS_NEEDED_TO_BE_DEVELOPER) {
                     Toast.makeText(this,
                             getString(R.string.clicks_to_be_developer,
                                     MainApp.CLICKS_NEEDED_TO_BE_DEVELOPER - clickCount),
                             Toast.LENGTH_SHORT).show();
                 }
                 mAppPrefs.edit().putInt(MainApp.CLICK_DEV_MENU, clickCount + 1).apply();
-                ((MainApp) getApplication()).startLogIfDeveloper(); // read value to global variable
-
                 return true;
             });
         }
