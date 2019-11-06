@@ -40,7 +40,7 @@ import java.util.ArrayList
 class SharePublicLinkListAdapter(
     private val mContext: Context,
     resource: Int,
-    private var publicLinks: ArrayList<OCShareEntity>?,
+    private var publicLinks: List<OCShareEntity>?,
     private val listener: SharePublicLinkAdapterListener
 ) : ArrayAdapter<OCShareEntity>(mContext, resource) {
     init {

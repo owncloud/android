@@ -33,6 +33,7 @@ import com.owncloud.android.domain.capabilities.usecases.RefreshCapabilitiesUseC
 import com.owncloud.android.operations.common.OperationType
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -44,7 +45,8 @@ class OCCapabilityViewModel(
     val context: Context,
     val account: Account,
     capabilitiesLiveDataUseCase: CapabilitiesLiveDataUseCase = CapabilitiesLiveDataUseCase(context, account),
-    private val refreshCapabilitiesUseCase: RefreshCapabilitiesUseCase = RefreshCapabilitiesUseCase(context, account)
+    private val refreshCapabilitiesUseCase: RefreshCapabilitiesUseCase = RefreshCapabilitiesUseCase(context, account),
+    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ViewModel() {
 
     private val _capabilities = MutableLiveData<UIResult<OCCapabilityEntity>>()
@@ -70,30 +72,28 @@ class OCCapabilityViewModel(
     }
 
     private fun refreshCapabilitiesFromNetwork() {
-        viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                _capabilities.postValue(
-                    UIResult.loading(capabilitiesLiveData?.value)
-                )
+        viewModelScope.launch(ioDispatcher) {
+            _capabilities.postValue(
+                UIResult.loading(capabilitiesLiveData?.value)
+            )
 
-                refreshCapabilitiesUseCase.execute(
-                    RefreshCapabilitiesUseCase.Params(
-                        accountName = account.name
-                    )
-                ).also { useCaseResult ->
-                    if (!useCaseResult.isSuccess()) {
-                        _capabilities.postValue(
-                            UIResult.error(
-                                capabilitiesLiveData?.value,
-                                errorMessage = useCaseResult.msg ?: ErrorMessageAdapter.getResultMessage(
-                                    useCaseResult.code,
-                                    useCaseResult.exception,
-                                    OperationType.GET_CAPABILITIES,
-                                    context.resources
-                                )
+            refreshCapabilitiesUseCase.execute(
+                RefreshCapabilitiesUseCase.Params(
+                    accountName = account.name
+                )
+            ).also { useCaseResult ->
+                if (!useCaseResult.isSuccess()) {
+                    _capabilities.postValue(
+                        UIResult.error(
+                            capabilitiesLiveData?.value,
+                            errorMessage = useCaseResult.msg ?: ErrorMessageAdapter.getResultMessage(
+                                useCaseResult.code,
+                                useCaseResult.exception,
+                                OperationType.GET_CAPABILITIES,
+                                context.resources
                             )
                         )
-                    }
+                    )
                 }
             }
         }
