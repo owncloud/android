@@ -21,17 +21,19 @@ package com.owncloud.android.data.capabilities.datasources
 
 import android.content.Context
 import androidx.lifecycle.LiveData
+import com.owncloud.android.data.OwncloudDatabase
 import com.owncloud.android.data.capabilities.db.OCCapabilityDao
 import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
-import com.owncloud.android.data.OwncloudDatabase
 
 class OCLocalCapabilitiesDataSource(
     context: Context,
     private val ocCapabilityDao: OCCapabilityDao = OwncloudDatabase.getDatabase(context).capabilityDao()
 ) : LocalCapabilitiesDataSource {
-
     override fun getCapabilitiesForAccountAsLiveData(accountName: String): LiveData<OCCapabilityEntity> =
         ocCapabilityDao.getCapabilitiesForAccountAsLiveData(accountName)
+
+    override fun getCapabilityForAccount(accountName: String): OCCapabilityEntity =
+        ocCapabilityDao.getCapabilityForAccount(accountName)
 
     override fun insert(ocCapabilities: List<OCCapabilityEntity>) {
         ocCapabilityDao.replace(ocCapabilities)
