@@ -90,25 +90,22 @@ class OCShareViewModel(
                 UIResult.loading(sharesLiveData?.value)
             )
 
-            refreshSharesFromNetworkUseCase.execute(
-                RefreshSharesFromNetworkUseCase.Params(
-                    filePath = filePath,
-                    accountName = account.name
-                )
-            ).also { useCaseResult ->
-                if (!useCaseResult.isSuccess()) {
-                    _shares.postValue(
-                        UIResult.error(
-                            sharesLiveData?.value,
-                            errorMessage = useCaseResult.msg ?: ErrorMessageAdapter.getResultMessage(
-                                useCaseResult.code,
-                                useCaseResult.exception,
-                                OperationType.GET_SHARES,
-                                context.resources
-                            )
+            val useCaseResult = refreshSharesFromNetworkUseCase.execute(
+                RefreshSharesFromNetworkUseCase.Params(filePath = filePath, accountName = account.name)
+            )
+
+            if (!useCaseResult.isSuccess()) {
+                _shares.postValue(
+                    UIResult.error(
+                        sharesLiveData?.value,
+                        errorMessage = useCaseResult.msg ?: ErrorMessageAdapter.getResultMessage(
+                            useCaseResult.code,
+                            useCaseResult.exception,
+                            OperationType.GET_SHARES,
+                            context.resources
                         )
                     )
-                }
+                )
             }
         }
     }

@@ -32,7 +32,7 @@ import com.owncloud.android.domain.sharing.shares.usecases.BaseUseCase
 import com.owncloud.android.lib.common.OwnCloudAccount
 import com.owncloud.android.lib.common.OwnCloudClientManagerFactory
 
-class CapabilitiesLiveDataUseCase(
+class GetCapabilitiesLiveDataUseCase(
     context: Context,
     account: Account,
     private val capabilityRepository: CapabilityRepository = OCCapabilityRepository(
@@ -44,7 +44,7 @@ class CapabilitiesLiveDataUseCase(
             )
         )
     )
-) : BaseUseCase<LiveData<OCCapabilityEntity>, CapabilitiesLiveDataUseCase.Params>() {
+) : BaseUseCase<LiveData<OCCapabilityEntity>, GetCapabilitiesLiveDataUseCase.Params>() {
     override fun run(params: Params): UseCaseResult<LiveData<OCCapabilityEntity>> {
         capabilityRepository.getCapabilitiesAsLiveData(
             params.accountName

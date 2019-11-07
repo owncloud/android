@@ -24,10 +24,12 @@ import com.owncloud.android.data.DataResult
 import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
 
 interface CapabilityRepository {
+    fun getCapabilitiesAsLiveData(accountName: String): LiveData<OCCapabilityEntity>
+
+    fun getStoredCapabilities(accountName: String): OCCapabilityEntity
+
     fun refreshCapabilitiesForAccount(
         accountName: String,
         shouldFetchFromNetwork: Boolean = true
     ): DataResult<Unit>
-
-    fun getCapabilitiesAsLiveData(accountName: String): LiveData<OCCapabilityEntity>
 }
