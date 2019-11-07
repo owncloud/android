@@ -8,8 +8,11 @@ def commitSHA1 = 'COMMIT_SHA1'
 def gitRemote = 'GIT_REMOTE'
 
 dependencies {
+    /// data and domain modules
+    implementation project(':owncloudDomain')
+    implementation project(':owncloudData')
+
     /// dependencies for app building
-    implementation project(':owncloud-android-library:owncloudComLibrary')
     implementation "androidx.legacy:legacy-support-v4:$androidX"
     implementation "androidx.annotation:annotation:1.1.0"
     implementation 'com.google.android.material:material:1.0.0'
@@ -25,7 +28,7 @@ dependencies {
     // Dependencies for unit tests
     testImplementation "junit:junit:$junitVersion"
     testImplementation "androidx.arch.core:core-testing:$archLifecycleVersion"
-    testImplementation "org.mockito:mockito-core:$mockitoVersion"
+    testImplementation "io.mockk:mockk:$mockkVersion"
 
     // Dependencies for instrumented tests
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
@@ -42,8 +45,9 @@ dependencies {
     androidTestImplementation 'androidx.annotation:annotation:1.1.0'
     androidTestImplementation "androidx.room:room-testing:$roomVersion"
     androidTestImplementation "androidx.arch.core:core-testing:$archLifecycleVersion"
-    androidTestImplementation "org.mockito:mockito-android:$mockitoVersion"
-    androidTestImplementation "org.mockito:mockito-core:$mockitoVersion"
+    androidTestImplementation ("io.mockk:mockk-android:$mockkVersion") {
+        exclude module: 'objenesis'
+    }
 
     // Image loading
     implementation('com.github.bumptech.glide:glide:4.6.1') {
@@ -68,8 +72,16 @@ dependencies {
     // Koin dependency injector
     implementation "org.koin:koin-androidx-viewmodel:$koinVersion"
 
-    // Kotlin extensions
-    implementation "androidx.core:core-ktx:$ktxVersion"
+    // KTX extensions, see https://developer.android.com/kotlin/ktx.html
+    implementation "androidx.core:core-ktx:$ktxCoreVersion"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$ktxViewModelVersion"
+    implementation "androidx.fragment:fragment-ktx:$ktxFragmentVersion"
+
+    // Kotlin library to mock
+    testImplementation "io.mockk:mockk:$mockkVersion"
+    androidTestImplementation ("io.mockk:mockk-android:$mockkVersion") {
+        exclude module: 'objenesis'
+    }
 }
 
 tasks.withType(Test) {

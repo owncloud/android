@@ -267,7 +267,7 @@ Automaticky nahrát video snímané kamerou
   <string name="confirmation_remove_local">Pouze místní</string>
   <string name="confirmation_remove_account_alert">Opravdu chcete odstranit účet %1$s ?</string>
   <string name="confirmation_remove_public_share_title">Odstranění odkazu</string>
-  <string name="confirmation_remove_public_share_message">Opravdu chcete odstranit %1$s ?</string>
+  <string name="confirmation_remove_share_message">Opravdu chcete odstranit %1$s ?</string>
   <string name="remove_success_msg">Úspěšně odstraněno</string>
   <string name="remove_fail_msg">Odstranění nelze dokončit</string>
   <string name="rename_dialog_title">Zadejte nový název</string>

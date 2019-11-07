@@ -9,6 +9,7 @@ buildscript {
 
         // Koin
         koinVersion = '2.0.1'
+        mockkVersion = '1.9.3'
 
         // Testing
         junitVersion = "4.12"
@@ -16,6 +17,11 @@ buildscript {
 
         // Extensions
         ktxVersion = "1.1.0"
+
+        // KTX extensions
+        ktxCoreVersion = "1.0.2"
+        ktxViewModelVersion = "2.2.0-alpha01"
+        ktxFragmentVersion = "1.0.0"
     }
 
     repositories {

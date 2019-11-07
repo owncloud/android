@@ -33,6 +33,7 @@ import android.webkit.MimeTypeMap;
 import androidx.fragment.app.DialogFragment;
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
+import com.owncloud.android.data.sharing.shares.db.OCShareEntity;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.files.services.AvailableOfflineHandler;
 import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder;
@@ -41,9 +42,8 @@ import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.shares.RemoteShare;
 import com.owncloud.android.lib.resources.shares.ShareType;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
+import com.owncloud.android.presentation.ui.sharing.ShareActivity;
 import com.owncloud.android.services.OperationsService;
-import com.owncloud.android.shares.domain.OCShare;
-import com.owncloud.android.shares.presentation.ShareActivity;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.dialog.ShareLinkToDialog;
 
@@ -154,12 +154,12 @@ public class FileOperationsHelper {
     }
 
     /**
-     * Show dialog to allow the user to choose an app to send the link of an {@link OCShare},
+     * Show dialog to allow the user to choose an app to send the link of an {@link OCShareEntity},
      * or copy it to clipboard.
      *
-     * @param share {@link OCShare} which link will be sent to the app chosen by the user.
+     * @param share {@link OCShareEntity} which link will be sent to the app chosen by the user.
      */
-    public void copyOrSendPublicLink(OCShare share) {
+    public void copyOrSendPublicLink(OCShareEntity share) {
         String link = share.getShareLink();
         if (link.length() <= 0) {
             mFileActivity.showSnackMessage(
@@ -186,9 +186,9 @@ public class FileOperationsHelper {
      * Helper method to remove an existing share, no matter if public or private.
      * Starts a request to do it in {@link OperationsService}
      *
-     * @param share The {@link OCShare} to remove (unshare).
+     * @param share The {@link OCShareEntity} to remove (unshare).
      */
-    public void removeShare(OCShare share) {
+    public void removeShare(OCShareEntity share) {
 
         Intent unshareService = new Intent(mFileActivity, OperationsService.class);
         unshareService.setAction(OperationsService.ACTION_UNSHARE);

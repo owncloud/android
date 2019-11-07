@@ -254,7 +254,7 @@
   <string name="confirmation_remove_local">로컬만</string>
   <string name="confirmation_remove_account_alert">%1$s 계정을 삭제하시겠습니까?</string>
   <string name="confirmation_remove_public_share_title">링크 삭제</string>
-  <string name="confirmation_remove_public_share_message">%1$s을(를) 삭제하시겠습니까?</string>
+  <string name="confirmation_remove_share_message">%1$s을(를) 삭제하시겠습니까?</string>
   <string name="remove_success_msg">삭제함</string>
   <string name="remove_fail_msg">삭제할 수 없음</string>
   <string name="rename_dialog_title">새 이름 입력</string>

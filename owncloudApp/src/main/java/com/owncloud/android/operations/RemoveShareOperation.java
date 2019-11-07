@@ -20,6 +20,7 @@
 
 package com.owncloud.android.operations;
 
+import com.owncloud.android.data.sharing.shares.db.OCShareEntity;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
@@ -30,12 +31,11 @@ import com.owncloud.android.lib.resources.shares.RemoveRemoteShareOperation;
 import com.owncloud.android.lib.resources.shares.ShareParserResult;
 import com.owncloud.android.lib.resources.shares.ShareType;
 import com.owncloud.android.operations.common.SyncOperation;
-import com.owncloud.android.shares.domain.OCShare;
 
 import java.util.ArrayList;
 
 /**
- * Removes an existing OCShare, known its LOCAL share id.
+ * Removes an existing OCShareEntity, known its LOCAL share id.
  */
 public class RemoveShareOperation extends SyncOperation {
 
@@ -51,8 +51,8 @@ public class RemoveShareOperation extends SyncOperation {
     protected RemoteOperationResult<ShareParserResult> run(OwnCloudClient client) {
         RemoteOperationResult result;
 
-        // Get OCShare from local storage
-        OCShare share = getStorageManager().getShareById(mLocalId);
+        // Get OCShareEntity from local storage
+        OCShareEntity share = getStorageManager().getShareById(mLocalId);
 
         if (share != null) {
             // Delete remote share
@@ -69,7 +69,7 @@ public class RemoveShareOperation extends SyncOperation {
                 if (ShareType.PUBLIC_LINK.equals(shareType)) {
 
                     // Check if it is the last public share
-                    ArrayList<OCShare> publicShares = getStorageManager().
+                    ArrayList<OCShareEntity> publicShares = getStorageManager().
                             getPublicSharesForAFile(share.getPath(),
                                     getStorageManager().getAccount().name);
 
@@ -82,7 +82,7 @@ public class RemoveShareOperation extends SyncOperation {
 
                     // Check if it is the last private share
 
-                    ArrayList<OCShare> sharesWith = getStorageManager().
+                    ArrayList<OCShareEntity> sharesWith = getStorageManager().
                             getPrivateSharesForAFile(share.getPath(),
                                     getStorageManager().getAccount().name);
 

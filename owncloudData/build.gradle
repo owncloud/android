@@ -1,0 +1,71 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'kotlin-allopen'
+
+allOpen {
+    // allows mocking for classes w/o directly opening them for release builds
+    annotation 'com.owncloud.android.testing.OpenClass'
+}
+
+android {
+    compileSdkVersion 28
+
+    defaultConfig {
+        minSdkVersion 19
+        targetSdkVersion 28
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    sourceSets {
+        androidTest.java.srcDirs += "src/test-common/java"
+        test.java.srcDirs += "src/test-common/java"
+    }
+}
+
+dependencies {
+    // Owncloud Android Library
+    api project(':owncloud-android-library:owncloudComLibrary')
+
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation 'androidx.appcompat:appcompat:1.0.2'
+
+
+    // Kotlin
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
+
+    // Room
+    implementation "androidx.room:room-runtime:$roomVersion"
+    kapt "androidx.room:room-compiler:$roomVersion"
+
+    // Dependencies for unit tests
+    testImplementation "junit:junit:$junitVersion"
+    testImplementation "androidx.arch.core:core-testing:$archLifecycleVersion"
+    testImplementation "io.mockk:mockk:$mockkVersion"
+
+    // Dependencies for instrumented tests
+    androidTestImplementation 'androidx.test:runner:1.2.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    androidTestImplementation "androidx.arch.core:core-testing:$archLifecycleVersion"
+    androidTestImplementation ("io.mockk:mockk-android:$mockkVersion") {
+        exclude module: 'objenesis'
+    }
+}
