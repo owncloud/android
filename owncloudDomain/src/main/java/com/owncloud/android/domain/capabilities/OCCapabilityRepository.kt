@@ -36,6 +36,10 @@ class OCCapabilityRepository(
         return localCapabilitiesDataSource.getCapabilitiesForAccountAsLiveData(accountName)
     }
 
+    override fun getStoredCapabilities(
+        accountName: String
+    ): OCCapabilityEntity = localCapabilitiesDataSource.getCapabilityForAccount(accountName)
+
     override fun refreshCapabilitiesForAccount(
         accountName: String,
         shouldFetchFromNetwork: Boolean
