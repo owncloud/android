@@ -38,23 +38,19 @@ class OCShareeViewModel(
 ) : ViewModel() {
 
     fun getSharees(searchString: String, page: Int, perPage: Int): UIResult<ArrayList<JSONObject>> {
-        getShareesUseCase.execute(
-            GetShareesUseCase.Params(
-                searchString,
-                page,
-                perPage
-            )
-        ).also { useCaseResult ->
-            return if (useCaseResult.isSuccess())
-                UIResult.success(useCaseResult.data) else
-                UIResult.error(
-                    errorMessage = useCaseResult.msg ?: ErrorMessageAdapter.getResultMessage(
-                        useCaseResult.code,
-                        useCaseResult.exception,
-                        OperationType.GET_SHAREES,
-                        context.resources
-                    )
+        val useCaseResult = getShareesUseCase.execute(
+            GetShareesUseCase.Params(searchString, page, perPage)
+        )
+
+        return if (useCaseResult.isSuccess())
+            UIResult.success(useCaseResult.data) else
+            UIResult.error(
+                errorMessage = useCaseResult.msg ?: ErrorMessageAdapter.getResultMessage(
+                    useCaseResult.code,
+                    useCaseResult.exception,
+                    OperationType.GET_SHAREES,
+                    context.resources
                 )
-        }
+            )
     }
 }
