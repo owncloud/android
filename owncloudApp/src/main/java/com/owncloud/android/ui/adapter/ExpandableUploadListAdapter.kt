@@ -80,6 +80,9 @@ class ExpandableUploadListAdapter(private val parentActivity: FileActivity) :
     }
 
     internal abstract inner class UploadGroup(var groupName: String) : Refresh {
+
+        abstract val groupIcon: Int
+
         var items = arrayListOf<OCUpload>()
 
         val groupCount: Int
@@ -111,18 +114,13 @@ class ExpandableUploadListAdapter(private val parentActivity: FileActivity) :
                 }
             }
 
-            private fun compareUploadId(upload1: OCUpload, upload2: OCUpload): Int {
-                return java.lang.Long.valueOf(upload1.uploadId).compareTo(upload2.uploadId)
-            }
+            private fun compareUploadId(upload1: OCUpload, upload2: OCUpload) =
+                upload1.uploadId.compareTo(upload2.uploadId)
 
-            private fun compareUpdateTime(upload1: OCUpload, upload2: OCUpload): Int {
-                return java.lang.Long.valueOf(upload2.uploadEndTimestamp)
-                    .compareTo(upload1.uploadEndTimestamp)
-            }
+            private fun compareUpdateTime(upload1: OCUpload, upload2: OCUpload) =
+                upload2.uploadEndTimestamp.compareTo(upload1.uploadEndTimestamp)
+
         }
-
-        abstract val groupIcon: Int
-
     }
 
     init {
@@ -183,9 +181,7 @@ class ExpandableUploadListAdapter(private val parentActivity: FileActivity) :
         Log_OC.d(TAG, "unregisterDataSetObserver")
     }
 
-    override fun areAllItemsEnabled(): Boolean {
-        return true
-    }
+    override fun areAllItemsEnabled() = true
 
     @SuppressLint("SetTextI18n")
     private fun getView(
@@ -548,8 +544,7 @@ class ExpandableUploadListAdapter(private val parentActivity: FileActivity) :
                     )
                 UploadResult.UPLOADED ->
                     // should not get here ; status should be UPLOAD_SUCCESS
-                    status =
-                        parentActivity.getString(R.string.uploads_view_upload_status_succeeded)
+                    status = parentActivity.getString(R.string.uploads_view_upload_status_succeeded)
                 UploadResult.SPECIFIC_FORBIDDEN ->
                     // We don't know the specific forbidden error message because it is not being
                     // saved in uploads storage
@@ -563,8 +558,7 @@ class ExpandableUploadListAdapter(private val parentActivity: FileActivity) :
                     // We don't know the specific unsupported media type error message because
                     // it is not being saved in uploads storage
                     status = parentActivity.getString(R.string.uploads_view_unsupported_media_type)
-                else -> status =
-                    "Naughty devs added a new fail result but no description for the user"
+                else -> status = "Naughty devs added a new fail result but no description for the user"
             }
 
             else -> status = "Uncontrolled status: " + upload.uploadStatus.toString()
@@ -582,9 +576,7 @@ class ExpandableUploadListAdapter(private val parentActivity: FileActivity) :
     private fun loadUploadItemsFromDb() {
         Log_OC.d(TAG, "loadUploadItemsFromDb")
 
-        uploadGroups.forEach {
-            it.refresh()
-        }
+        uploadGroups.forEach { it.refresh() }
 
         notifyDataSetChanged()
     }
@@ -683,24 +675,21 @@ class ExpandableUploadListAdapter(private val parentActivity: FileActivity) :
             R.string.uploads_view_group_file_count_single
         else
             R.string.uploads_view_group_file_count
-        val fileCountText =
-            String.format(parentActivity.getString(stringResFileCount), group.groupCount)
+        val fileCountText = String.format(parentActivity.getString(stringResFileCount), group.groupCount)
 
         tvGroupName?.text = group.groupName
         tvFileCount?.text = fileCountText
         return convertViewLocal!!
     }
 
-    override fun isChildSelectable(groupPosition: Int, childPosition: Int): Boolean {
-        return true
-    }
+    override fun isChildSelectable(groupPosition: Int, childPosition: Int) = true
 
     inner class ProgressListener(upload: OCUpload, progressBar: ProgressBar) :
         OnDatatransferProgressListener {
         private var lastPercent = 0
         var upload: OCUpload? = null
             internal set
-        private var weakProgressBar: WeakReference<ProgressBar>? = null
+        private var weakProgressBar: WeakReference<ProgressBar>
 
         init {
             this.upload = upload
@@ -713,13 +702,11 @@ class ExpandableUploadListAdapter(private val parentActivity: FileActivity) :
             totalToTransfer: Long,
             filename: String
         ) {
-            val percent =
-                (100.0 * totalTransferredSoFar.toDouble() / totalToTransfer.toDouble()).toInt()
+            val percent = (100.0 * totalTransferredSoFar.toDouble() / totalToTransfer.toDouble()).toInt()
             if (percent != lastPercent) {
-                val pb = weakProgressBar!!.get()
-                if (pb != null) {
-                    pb.progress = percent
-                    pb.postInvalidate()
+                weakProgressBar.get()?.let {
+                    it.progress = percent
+                    it.postInvalidate()
                 }
             }
             lastPercent = percent
@@ -729,7 +716,6 @@ class ExpandableUploadListAdapter(private val parentActivity: FileActivity) :
             val wrappedProgressBar = weakProgressBar!!.get()
             return wrappedProgressBar != null && wrappedProgressBar === progressBar   // on purpose; don't replace with equals
         }
-
     }
 
     fun addBinder() {

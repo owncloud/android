@@ -33,7 +33,6 @@ import android.net.wifi.WifiManager
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
-import com.owncloud.android.MainApp
 import com.owncloud.android.db.PreferenceManager
 import com.owncloud.android.db.UploadResult
 import com.owncloud.android.files.services.FileUploader
@@ -55,11 +54,11 @@ class ConnectivityActionReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
         // LOG ALL EVENTS:
-        Log_OC.v(TAG, "action: " + intent.action!!)
-        Log_OC.v(TAG, "component: " + intent.component!!)
+        Log_OC.v(TAG, "action: " + intent.action)
+        Log_OC.v(TAG, "component: " + intent.component)
         intent.extras?.let {
             for (key in it.keySet()) {
-                Log_OC.v(TAG, "key [" + key + "]: " + it.get(key))
+                Log_OC.v(TAG, "key [$key]: ${it.get(key)}")
             }
         }
 
@@ -85,7 +84,6 @@ class ConnectivityActionReceiver : BroadcastReceiver() {
             val wifiInfo = intent.getParcelableExtra<WifiInfo>(WifiManager.EXTRA_WIFI_INFO)
             val bssid = intent.getStringExtra(WifiManager.EXTRA_BSSID)
             if (networkInfo.isConnected &&      // not enough; see (*) right below
-
                 wifiInfo != null &&
                 UNKNOWN_SSID != wifiInfo.ssid.toLowerCase() &&
                 bssid != null
@@ -103,15 +101,14 @@ class ConnectivityActionReceiver : BroadcastReceiver() {
 
     private fun wifiConnected(context: Context) {
         // for the moment, only recovery of camera uploads, similar to behaviour in release 1.9.1
-        if (PreferenceManager.cameraPictureUploadEnabled(context) && PreferenceManager.cameraPictureUploadViaWiFiOnly(
-                context
-            ) || PreferenceManager.cameraVideoUploadEnabled(context) && PreferenceManager.cameraVideoUploadViaWiFiOnly(
-                context
-            )
+        if (PreferenceManager.cameraPictureUploadEnabled(context) &&
+            PreferenceManager.cameraPictureUploadViaWiFiOnly(context) ||
+            PreferenceManager.cameraVideoUploadEnabled(context) &&
+            PreferenceManager.cameraVideoUploadViaWiFiOnly(context)
         ) {
 
-            val h = Handler(Looper.getMainLooper())
-            h.postDelayed(
+            val handler = Handler(Looper.getMainLooper())
+            handler.postDelayed(
                 {
                     Log_OC.d(TAG, "Requesting retry of camera uploads (& friends)")
                     val requester = TransferRequester()
@@ -120,7 +117,8 @@ class ConnectivityActionReceiver : BroadcastReceiver() {
                     //by using jobs in versions 5 or higher
                     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
                         requester.retryFailedUploads(
-                            context, null,
+                            context,
+                            null,
                             // for the interrupted when Wifi fell, if any
                             // (side effect: any upload failed due to network error will be
                             // retried too, instant or not)
@@ -130,12 +128,13 @@ class ConnectivityActionReceiver : BroadcastReceiver() {
                     }
 
                     requester.retryFailedUploads(
-                        context, null,
+                        context,
+                        null,
                         UploadResult.DELAYED_FOR_WIFI, // for the rest of enqueued when Wifi fell
                         true
                     )
                 },
-                500
+                WAIT
             )
         }
     }
@@ -149,5 +148,6 @@ class ConnectivityActionReceiver : BroadcastReceiver() {
          * {@See http://developer.android.com/intl/es/reference/android/net/wifi/WifiInfo.html#getSSID()}
          */
         private const val UNKNOWN_SSID = "<unknown ssid>"
+        private const val WAIT = 500L
     }
 }

@@ -90,7 +90,7 @@ class TransferRequester {
             // services and camera uploads feature may try to do it, this is the way to proceed
             Log_OC.d(
                 TAG,
-                "Start to upload some files from foreground/background, " + "startForeground() will be called soon"
+                "Start to upload some files from foreground/background, startForeground() will be called soon"
             )
             context.startForegroundService(intent)
         } else {
@@ -112,7 +112,6 @@ class TransferRequester {
         createRemoteFile: Boolean,
         createdBy: Int
     ) {
-
         uploadNewFiles(
             context,
             account,
@@ -145,7 +144,7 @@ class TransferRequester {
             intent.putExtra(FileUploader.KEY_IS_AVAILABLE_OFFLINE_FILE, true)
             Log_OC.d(
                 TAG,
-                "Start to upload some already uploaded files from foreground/background, " + "startForeground() will be called soon"
+                "Start to upload some already uploaded files from foreground/background, startForeground() will be called soon"
             )
             context.startForegroundService(intent)
         } else {
@@ -158,12 +157,19 @@ class TransferRequester {
      * Call to update a dingle file already uploaded
      */
     fun uploadUpdate(
-        context: Context, account: Account, existingFile: OCFile, behaviour: Int?,
-        forceOverwrite: Boolean?, requestedFromAvOfflineJobService: Boolean
+        context: Context,
+        account: Account,
+        existingFile: OCFile,
+        behaviour: Int?,
+        forceOverwrite: Boolean?,
+        requestedFromAvOfflineJobService: Boolean
     ) {
-
         uploadsUpdate(
-            context, account, arrayOf(existingFile), behaviour, forceOverwrite,
+            context,
+            account,
+            arrayOf(existingFile),
+            behaviour,
+            forceOverwrite,
             requestedFromAvOfflineJobService
         )
     }
@@ -178,7 +184,6 @@ class TransferRequester {
                 upload.accountName
             )
             retry(context, account, upload, requestedFromWifiBackEvent)
-
         } else {
             throw IllegalArgumentException("Null parameter!")
         }
@@ -231,13 +236,14 @@ class TransferRequester {
         upload: OCUpload?,
         requestedFromWifiBackEvent: Boolean
     ) {
-        if (upload != null) {
+        upload?.let {
             val intent = Intent(context, FileUploader::class.java)
             intent.putExtra(FileUploader.KEY_RETRY, true)
             intent.putExtra(FileUploader.KEY_ACCOUNT, account)
             intent.putExtra(FileUploader.KEY_RETRY_UPLOAD, upload)
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && (upload.createdBy == CREATED_AS_CAMERA_UPLOAD_PICTURE || upload.createdBy == CREATED_AS_CAMERA_UPLOAD_VIDEO ||
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && (it.createdBy == CREATED_AS_CAMERA_UPLOAD_PICTURE ||
+                        it.createdBy == CREATED_AS_CAMERA_UPLOAD_VIDEO ||
                         requestedFromWifiBackEvent)
             ) {
                 // Since in Android O the apps in background are not allowed to start background
@@ -247,7 +253,7 @@ class TransferRequester {
                 }
                 Log_OC.d(
                     TAG,
-                    "Retry some uploads from foreground/background, " + "startForeground() will be called soon"
+                    "Retry some uploads from foreground/background startForeground() will be called soon"
                 )
                 context.startForegroundService(intent)
             } else {
@@ -263,11 +269,9 @@ class TransferRequester {
      * @param context       Caller [Context]
      * @return              'true' when conditions for a scheduled retry are met, 'false' otherwise.
      */
-    fun shouldScheduleRetry(context: Context, exception: Exception): Boolean {
-        return !ConnectivityUtils.isNetworkActive(context) ||
-                PowerUtils.isDeviceIdle(context) ||
-                exception is SocketTimeoutException // TODO check if exception is the same in HTTP server
-    }
+    fun shouldScheduleRetry(context: Context, exception: Exception) = !ConnectivityUtils.isNetworkActive(context) ||
+            PowerUtils.isDeviceIdle(context) ||
+            exception is SocketTimeoutException // TODO check if exception is the same in HTTP server
 
     /**
      * Schedule a future retry of an upload, to be done when a connection via an unmetered network (free Wifi)
@@ -293,14 +297,7 @@ class TransferRequester {
         )
 
         if (scheduled) {
-            Log_OC.d(
-                TAG,
-                String.format(
-                    "Scheduled upload retry for %1s in %2s",
-                    remotePath,
-                    accountName
-                )
-            )
+            Log_OC.d(TAG, "Scheduled upload retry for $remotePath in $accountName")
         }
     }
 
@@ -328,14 +325,7 @@ class TransferRequester {
         )
 
         if (scheduled) {
-            Log_OC.d(
-                TAG,
-                String.format(
-                    "Scheduled download retry for %1s in %2s",
-                    remotePath,
-                    accountName
-                )
-            )
+            Log_OC.d(TAG, "Scheduled download retry for $remotePath in $accountName")
         }
     }
 
@@ -358,7 +348,7 @@ class TransferRequester {
         remotePath: String
     ): Boolean {
 
-        // JobShceduler requires Android >= 5.0 ; do not remove this protection while minSdkVersion is lower
+        // JobScheduler requires Android >= 5.0 ; do not remove this protection while minSdkVersion is lower
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             return false
         }
@@ -413,9 +403,14 @@ class TransferRequester {
         // Wifi by default
         var networkType = JobInfo.NETWORK_TYPE_UNMETERED
 
-        if (ocUpload != null && (ocUpload.createdBy == CREATED_AS_CAMERA_UPLOAD_PICTURE && !mConfig.isWifiOnlyForPictures || ocUpload.createdBy == CREATED_AS_CAMERA_UPLOAD_VIDEO && !mConfig.isWifiOnlyForVideos)) {
-            // Wifi or cellular
-            networkType = JobInfo.NETWORK_TYPE_ANY
+        ocUpload?.let {
+            if (it.createdBy == CREATED_AS_CAMERA_UPLOAD_PICTURE &&
+                !mConfig.isWifiOnlyForPictures ||
+                it.createdBy == CREATED_AS_CAMERA_UPLOAD_VIDEO &&
+                !mConfig.isWifiOnlyForVideos
+            ) {
+                networkType = JobInfo.NETWORK_TYPE_ANY // Wifi or cellular
+            }
         }
 
         return networkType

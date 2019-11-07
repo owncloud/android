@@ -213,7 +213,7 @@ class MainApp : Application() {
         var isDeveloper: Boolean = false
             private set
 
-        private var BETA_VERSION = "beta"
+        private const val BETA_VERSION = "beta"
 
         /**
          * Next methods give access in code to some constants that need to be defined in string resources to be referred
