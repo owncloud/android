@@ -77,6 +77,7 @@
   <string name="recommend_text">ฉันอยากจะขอเชิญให้คุณใช้ %1$s บนสมาร์ทโฟนของคุณ!\nดาวน์โหลดที่นี่: %2$s</string>
   <string name="auth_failure_snackbar">การรับรองความถูกต้องล้มเหลว</string>
   <string name="auth_failure_snackbar_action">เปลี่ยนบัญชี</string>
+  <string name="auth_oauth_failure">โทเค็นการเข้าถึงหมดอายุหรือไม่ถูกต้อง กรุณาลงชื่อเข้าใช้อีกครั้ง</string>
   <string name="auth_oauth_failure_snackbar_action">เข้าสู่ระบบ</string>
   <string name="auth_check_server">ตรวจสอบเซิร์ฟเวอร์</string>
   <string name="auth_host_url">ที่อยู่ของเซิร์ฟเวอร์ https://…</string>
