@@ -20,7 +20,6 @@
 package com.owncloud.android.domain.sharing.shares
 
 import androidx.lifecycle.LiveData
-import com.owncloud.android.data.DataResult
 import com.owncloud.android.data.sharing.shares.ShareRepository
 import com.owncloud.android.data.sharing.shares.datasources.LocalShareDataSource
 import com.owncloud.android.data.sharing.shares.datasources.RemoteShareDataSource
@@ -67,7 +66,7 @@ class OCShareRepository(
         )
     }
 
-    override fun updatePrivateShare(remoteId: Long, permissions: Int, accountName: String) {
+    override suspend fun updatePrivateShare(remoteId: Long, permissions: Int, accountName: String) {
         return updateShare(
             remoteId = remoteId,
             permissions = permissions,
@@ -100,7 +99,7 @@ class OCShareRepository(
         )
     }
 
-    override fun updatePublicShare(
+    override suspend fun updatePublicShare(
         remoteId: Long,
         name: String,
         password: String?,
@@ -120,7 +119,7 @@ class OCShareRepository(
         )
     }
 
-    override fun deleteShare(remoteId: Long) {8
+    override suspend fun deleteShare(remoteId: Long) {
         remoteShareDataSource.deleteShare(remoteId)
         localShareDataSource.deleteShare(remoteId)
     }
@@ -147,19 +146,18 @@ class OCShareRepository(
         filePath: String,
         accountName: String
     ) {
-        val remoteShares = remoteShareDataSource.getShares(
+        remoteShareDataSource.getShares(
             filePath,
             reshares = true,
             subfiles = false,
             accountName = accountName
-        )
-
-        if (remoteShares.isEmpty()) {
-            localShareDataSource.deleteSharesForFile(filePath, accountName)
+        ).also { remoteShares ->
+            if (remoteShares.isEmpty()) {
+                localShareDataSource.deleteSharesForFile(filePath, accountName)
+            }
+            // Save shares
+            localShareDataSource.replaceShares(remoteShares)
         }
-
-        // Save shares
-        localShareDataSource.replaceShares(remoteShares)
     }
 
     private suspend fun insertShare(
@@ -173,7 +171,7 @@ class OCShareRepository(
         publicUpload: Boolean = false,
         accountName: String
     ) {
-        val remotelyInsertedShare = remoteShareDataSource.insertShare(
+        remoteShareDataSource.insertShare(
             filePath,
             shareType,
             shareWith,
@@ -183,12 +181,12 @@ class OCShareRepository(
             expirationTimeInMillis,
             publicUpload,
             accountName
-        )
-
-        localShareDataSource.insert(remotelyInsertedShare)
+        ).also { remotelyInsertedShare ->
+            localShareDataSource.insert(remotelyInsertedShare)
+        }
     }
 
-    private fun updateShare(
+    private suspend fun updateShare(
         remoteId: Long,
         permissions: Int,
         name: String = "",
@@ -203,17 +201,10 @@ class OCShareRepository(
             password,
             expirationDateInMillis,
             permissions,
-            publicUpload
-        ).also { remoteOperationResult ->
-//
-//            // Success
-//            val updatedShareFromServer = remoteOperationResult.data.shares.map { remoteShare ->
-//                OCShareEntity.fromRemoteShare(remoteShare)
-//                    .also { it.accountOwner = accountName }
-//            }
-//            localShareDataSource.update(updatedShareFromServer.first())
-//
-//            return DataResult.success()
+            publicUpload,
+            accountName
+        ).also { remotelyUpdatedShare ->
+            localShareDataSource.update(remotelyUpdatedShare)
         }
     }
 }

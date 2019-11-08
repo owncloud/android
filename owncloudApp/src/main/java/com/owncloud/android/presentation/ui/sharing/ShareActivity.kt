@@ -137,16 +137,16 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
         ocShareViewModel.privateShareCreationStatus.observe(
             this,
             Observer { uiResult ->
-                when (uiResult?.status) {
-                    Status.ERROR -> {
-                        Snackbar.make(
-                            findViewById(android.R.id.content)!!,
-                            uiResult.errorMessage!!,
-                            Snackbar.LENGTH_SHORT
-                        ).show()
+                when (uiResult) {
+                    is UIResult.Error -> {
+//                        Snackbar.make(
+//                            findViewById(android.R.id.content)!!,
+//                            uiResult.errorMessage!!,
+//                            Snackbar.LENGTH_SHORT
+//                        ).show()
                         dismissLoadingDialog()
                     }
-                    Status.LOADING -> {
+                    is UIResult.Loading -> {
                         showLoadingDialog(R.string.common_loading)
                     }
                     else -> {

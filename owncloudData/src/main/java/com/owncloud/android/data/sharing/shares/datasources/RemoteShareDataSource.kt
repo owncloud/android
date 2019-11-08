@@ -53,18 +53,19 @@ interface RemoteShareDataSource {
             CreateRemoteShareOperation(remoteFilePath, shareType, shareWith, permissions)
     ): OCShareEntity
 
-    fun updateShare(
+    suspend fun updateShare(
         remoteId: Long,
         name: String,
         password: String?,
         expirationDateInMillis: Long,
         permissions: Int,
         publicUpload: Boolean,
+        accountName: String,
         updateRemoteShareOperation: UpdateRemoteShareOperation =
             UpdateRemoteShareOperation(
                 remoteId
             )
-    ): RemoteOperationResult<ShareParserResult>
+    ): OCShareEntity
 
     fun deleteShare(
         remoteId: Long,
