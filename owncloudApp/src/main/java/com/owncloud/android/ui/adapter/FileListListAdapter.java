@@ -220,7 +220,7 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
                     fileSizeTV.setText(DisplayUtils.bytesToHumanReadable(file.getFileLength(), mContext));
                     lastModTV.setText(DisplayUtils.getRelativeTimestamp(mContext, file.getModificationTimestamp()));
 
-                    if (mOnlyAvailableOffline) {
+                    if (mOnlyAvailableOffline || mSharedByLinkFiles) {
                         TextView filePath = view.findViewById(R.id.file_list_path);
                         filePath.setVisibility(View.VISIBLE);
                         filePath.setText(file.getRemotePath());
