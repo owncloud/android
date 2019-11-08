@@ -128,6 +128,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
 
     private var syncInProgress = false
     private var onlyAvailableOffline = false
+    private var onlySharedByLink = false
 
     private var waitingToSend: OCFile? = null
 
@@ -158,14 +159,13 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
             } else null
         }
 
-    val isFabOpen: Boolean
+    private val isFabOpen: Boolean
         get() = (listOfFilesFragment != null
                 && listOfFilesFragment!!.fabMain != null
                 && listOfFilesFragment!!.fabMain.isExpanded)
 
     private val isGridView: Boolean
         get() = listOfFilesFragment!!.isGridEnabled
-
 
     private val appExecutors: AppExecutors = AppExecutors()
 
@@ -200,6 +200,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
 
         // Check if only available offline option is set
         onlyAvailableOffline = intent.getBooleanExtra(EXTRA_ONLY_AVAILABLE_OFFLINE, false)
+        onlySharedByLink = intent.getBooleanExtra(EXTRA_SHARED_BY_LINK_FILES, false)
 
         /// USER INTERFACE
 
@@ -210,10 +211,12 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         setupToolbar()
 
         // setup drawer
-        if (!onlyAvailableOffline) {
-            setupDrawer(R.id.nav_all_files)
-        } else {
+        if (onlySharedByLink) {
+            setupDrawer(R.id.nav_shared_by_link_files)
+        } else if (onlyAvailableOffline) {
             setupDrawer(R.id.nav_only_available_offline)
+        } else {
+            setupDrawer(R.id.nav_all_files)
         }
 
         leftFragmentContainer = findViewById(R.id.left_fragment_container)
@@ -282,9 +285,8 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     // permission was granted
                     startSyncFolderOperation(file, false)
-                } else {
-                    // permission denied --> do nothing
                 }
+                // If permission denied --> do nothing
                 return
             }
         }
@@ -360,7 +362,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
     }
 
     private fun createMinFragments() {
-        val listOfFiles = OCFileListFragment.newInstance(false, onlyAvailableOffline, false, true)
+        val listOfFiles = OCFileListFragment.newInstance(false, onlyAvailableOffline, onlySharedByLink, false, true)
         val transaction = supportFragmentManager.beginTransaction()
         transaction.add(R.id.left_fragment_container, listOfFiles, TAG_LIST_OF_FILES)
         transaction.commit()
@@ -496,7 +498,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         updateActionBarTitleAndHomeButton(null)
     }
 
-    protected fun refreshListOfFilesFragment(reloadData: Boolean) {
+     fun refreshListOfFilesFragment(reloadData: Boolean) {
         val fileListFragment = listOfFilesFragment
         fileListFragment?.listDirectory(reloadData)
     }
@@ -802,7 +804,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
             if (secondFragment == null) {
                 val currentDir = currentDir
                 if (currentDir == null || currentDir.parentId == FileDataStorageManager.ROOT_PARENT_ID.toLong()) {
-                    if (onlyAvailableOffline) {
+                    if (onlyAvailableOffline || onlySharedByLink) {
                         allFilesOption()
                     } else {
                         finish()
@@ -965,12 +967,12 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
                                         // If we have saml enabled we consider the user to only have
                                         // one account with which he is logged into the app. This is because
                                         // only branded versions of the app have saml support.
-                                        if (getString(R.string.auth_method_saml_web_sso) == "on") { // SAML
-                                            requestCredentialsUpdate()
-                                        } else if (credentials is OwnCloudBearerCredentials) { // OAuth
-                                            showRequestRegainAccess()
-                                        } else {
-                                            showRequestAccountChangeNotice()
+                                        when {
+                                            getString(R.string.auth_method_saml_web_sso) == "on" -> // SAML
+                                                requestCredentialsUpdate()
+                                            credentials is OwnCloudBearerCredentials -> // OAuth
+                                                showRequestRegainAccess()
+                                            else -> showRequestAccountChangeNotice()
                                         }
                                     }
                                 }
@@ -1025,7 +1027,11 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
             if (!syncInProgress) {
                 // In case file list is empty
                 message =
-                    if (onlyAvailableOffline) R.string.file_list_empty_available_offline else R.string.file_list_empty
+                    when {
+                        onlyAvailableOffline -> R.string.file_list_empty_available_offline
+                        onlySharedByLink -> R.string.file_list_empty_shared_by_links
+                        else -> R.string.file_list_empty
+                    }
                 ocFileListFragment.progressBar.visibility = View.GONE
                 ocFileListFragment.shadowView.visibility = View.VISIBLE
             }
@@ -1262,16 +1268,17 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         setFile(file)
     }
 
-    override fun updateActionBarTitleAndHomeButton(chosenFile: OCFile?) {
-        var chosenFile = chosenFile
+    override fun updateActionBarTitleAndHomeButton(chosenFileFromParam: OCFile?) {
+        var chosenFile = chosenFileFromParam
         if (chosenFile == null) {
             chosenFile = file     // if no file is passed, current file decides
         }
         super.updateActionBarTitleAndHomeButton(chosenFile)
-        if (chosenFile!!.remotePath == OCFile.ROOT_PATH && onlyAvailableOffline) {
-            updateActionBarTitleAndHomeButtonByString(
-                resources.getString(R.string.drawer_item_only_available_offline)
-            )
+        if (chosenFile!!.remotePath == OCFile.ROOT_PATH && (onlyAvailableOffline || onlySharedByLink)) {
+            val title =
+                if (onlyAvailableOffline) resources.getString(R.string.drawer_item_only_available_offline)
+                else resources.getString(R.string.drawer_item_shared_by_link_files)
+            updateActionBarTitleAndHomeButtonByString(title)
         }
     }
 
@@ -1815,7 +1822,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
     }
 
     override fun allFilesOption() {
-        if (onlyAvailableOffline) {
+        if (onlyAvailableOffline || onlySharedByLink) {
             super.allFilesOption()
         } else {
             browseToRoot()
@@ -1830,7 +1837,19 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         }
     }
 
+    override fun sharedByLinkFilesOption() {
+        if (!onlySharedByLink) {
+            super.sharedByLinkFilesOption()
+        } else {
+            browseToRoot()
+        }
+    }
+
     companion object {
+        private val TAG = FileDisplayActivity::class.java.simpleName
+
+        private const val TAG_LIST_OF_FILES = "LIST_OF_FILES"
+        private const val TAG_SECOND_FRAGMENT = "SECOND_FRAGMENT"
 
         private const val KEY_WAITING_TO_PREVIEW = "WAITING_TO_PREVIEW"
         private const val KEY_SYNC_IN_PROGRESS = "SYNC_IN_PROGRESS"
@@ -1844,10 +1863,5 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         val REQUEST_CODE__COPY_FILES = REQUEST_CODE__LAST_SHARED + 3
         val REQUEST_CODE__UPLOAD_FROM_CAMERA = REQUEST_CODE__LAST_SHARED + 4
         val RESULT_OK_AND_MOVE = Activity.RESULT_FIRST_USER
-
-        private val TAG = FileDisplayActivity::class.java.simpleName
-
-        private const val TAG_LIST_OF_FILES = "LIST_OF_FILES"
-        private const val TAG_SECOND_FRAGMENT = "SECOND_FRAGMENT"
     }
 }
