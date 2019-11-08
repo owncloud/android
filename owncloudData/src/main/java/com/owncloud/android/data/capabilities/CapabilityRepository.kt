@@ -27,7 +27,7 @@ interface CapabilityRepository {
 
     fun getStoredCapabilities(accountName: String): OCCapabilityEntity
 
-    fun refreshCapabilitiesForAccount(
+    suspend fun refreshCapabilitiesForAccount(
         accountName: String,
         shouldFetchFromNetwork: Boolean = true
     )

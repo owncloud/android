@@ -34,7 +34,7 @@ import com.owncloud.android.domain.sharing.shares.usecases.EditPrivateShareAsync
 import com.owncloud.android.domain.sharing.shares.usecases.EditPublicShareAsyncUseCase
 import com.owncloud.android.domain.sharing.shares.usecases.GetShareAsLiveDataAsyncUseCase
 import com.owncloud.android.domain.sharing.shares.usecases.GetSharesAsLiveDataUseCase
-import com.owncloud.android.domain.sharing.shares.usecases.RefreshSharesFromNetworkAsyncUseCase
+import com.owncloud.android.domain.sharing.shares.usecases.RefreshSharesFromServerAsyncUseCase
 import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.presentation.UIResult
 import kotlinx.coroutines.CoroutineDispatcher
@@ -54,8 +54,8 @@ class OCShareViewModel(
         context,
         account
     ),
-    private val refreshSharesFromNetworkAsyncUseCase: RefreshSharesFromNetworkAsyncUseCase =
-        RefreshSharesFromNetworkAsyncUseCase(context, account),
+    private val refreshSharesFromServerAsyncUseCase: RefreshSharesFromServerAsyncUseCase =
+        RefreshSharesFromServerAsyncUseCase(context, account),
     private val createPrivateShareUseCase: CreatePrivateShareAsyncUseCase = CreatePrivateShareAsyncUseCase(
         context,
         account
@@ -97,17 +97,16 @@ class OCShareViewModel(
                 UIResult.Loading(sharesLiveData?.value)
             )
 
-            val useCaseResult = refreshSharesFromNetworkAsyncUseCase.execute(
-                RefreshSharesFromNetworkAsyncUseCase.Params(
+            val useCaseResult = refreshSharesFromServerAsyncUseCase.execute(
+                RefreshSharesFromServerAsyncUseCase.Params(
                     filePath = filePath,
                     accountName = account.name
                 )
             )
 
-
             if (!useCaseResult.isSuccess) {
                 _shares.postValue(
-                    UIResult.Error(useCaseResult.getThrowableOrNull())
+                    UIResult.Error(useCaseResult.getThrowableOrNull(), sharesLiveData?.value)
                 )
             }
         }

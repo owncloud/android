@@ -20,7 +20,7 @@
 package com.owncloud.android.data.capabilities.datasources
 
 import com.owncloud.android.lib.common.OwnCloudClient
-import com.owncloud.android.lib.common.operations.RemoteOperationResult
+import com.owncloud.android.lib.common.operations.awaitToRemoteOperationResult
 import com.owncloud.android.lib.resources.status.GetRemoteCapabilitiesOperation
 import com.owncloud.android.lib.resources.status.RemoteCapability
 
@@ -28,7 +28,14 @@ class OCRemoteCapabilitiesDataSource(
     private val client: OwnCloudClient
 ) : RemoteCapabilitiesDataSource {
 
-    override fun getCapabilities(getRemoteCapabilitiesOperation: GetRemoteCapabilitiesOperation):
-            RemoteOperationResult<RemoteCapability> =
-        getRemoteCapabilitiesOperation.execute(client)
+    override suspend fun getCapabilities(
+        accountName: String,
+        getRemoteCapabilitiesOperation: GetRemoteCapabilitiesOperation
+    ): RemoteCapability {
+        awaitToRemoteOperationResult {
+            getRemoteCapabilitiesOperation.execute(client)
+        }.let {
+            return it.apply { this.accountName = accountName }
+        }
+    }
 }
