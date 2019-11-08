@@ -76,22 +76,28 @@ class OCRemoteShareDataSource(
         }
     }
 
-    override fun updateShare(
+    override suspend fun updateShare(
         remoteId: Long,
         name: String,
         password: String?,
         expirationDateInMillis: Long,
         permissions: Int,
         publicUpload: Boolean,
+        accountName: String,
         updateRemoteShareOperation: UpdateRemoteShareOperation
-    ): RemoteOperationResult<ShareParserResult> {
+    ): OCShareEntity {
         updateRemoteShareOperation.name = name
         updateRemoteShareOperation.password = password
         updateRemoteShareOperation.expirationDateInMillis = expirationDateInMillis
         updateRemoteShareOperation.permissions = permissions
         updateRemoteShareOperation.publicUpload = publicUpload
         updateRemoteShareOperation.retrieveShareDetails = true
-        return updateRemoteShareOperation.execute(client)
+
+        awaitToRemoteOperationResult {
+            updateRemoteShareOperation.execute(client)
+        }.shares.let {
+            return OCShareEntity.fromRemoteShare(it.first()).also { it.accountOwner = accountName }
+        }
     }
 
     override fun deleteShare(

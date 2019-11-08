@@ -17,41 +17,40 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.domain.capabilities.usecases
+package com.owncloud.android.domain.sharing.shares.usecases
 
 import android.accounts.Account
 import android.content.Context
-import androidx.lifecycle.LiveData
-import com.owncloud.android.data.capabilities.CapabilityRepository
-import com.owncloud.android.data.capabilities.datasources.OCLocalCapabilitiesDataSource
-import com.owncloud.android.data.capabilities.datasources.OCRemoteCapabilitiesDataSource
-import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
-import com.owncloud.android.domain.UseCaseResult
-import com.owncloud.android.domain.capabilities.OCCapabilityRepository
+import com.owncloud.android.data.sharing.shares.ShareRepository
+import com.owncloud.android.data.sharing.shares.datasources.OCLocalShareDataSource
+import com.owncloud.android.data.sharing.shares.datasources.OCRemoteShareDataSource
 import com.owncloud.android.domain.BaseAsyncUseCase
+import com.owncloud.android.domain.sharing.shares.OCShareRepository
 import com.owncloud.android.lib.common.OwnCloudAccount
 import com.owncloud.android.lib.common.OwnCloudClientManagerFactory
 
-class RefreshCapabilitiesAsyncUseCase(
+class RefreshSharesFromServerAsyncUseCase(
     context: Context,
     account: Account,
-    private val capabilityRepository: CapabilityRepository = OCCapabilityRepository(
-        localCapabilitiesDataSource = OCLocalCapabilitiesDataSource(context),
-        remoteCapabilitiesDataSource = OCRemoteCapabilitiesDataSource(
+    private val shareRepository: ShareRepository = OCShareRepository(
+        localShareDataSource = OCLocalShareDataSource(context),
+        remoteShareDataSource = OCRemoteShareDataSource(
             OwnCloudClientManagerFactory.getDefaultSingleton().getClientFor(
                 OwnCloudAccount(account, context),
                 context
             )
         )
     )
-) : BaseAsyncUseCase<Unit, RefreshCapabilitiesAsyncUseCase.Params>() {
+) : BaseAsyncUseCase<Unit, RefreshSharesFromServerAsyncUseCase.Params>() {
 
     override suspend fun run(params: Params) =
-        capabilityRepository.refreshCapabilitiesForAccount(
+        shareRepository.refreshSharesFromNetwork(
+            params.filePath,
             params.accountName
         )
 
     data class Params(
+        val filePath: String,
         val accountName: String
     )
 }
