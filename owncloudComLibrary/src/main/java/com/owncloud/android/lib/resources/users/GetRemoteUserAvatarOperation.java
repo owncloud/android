@@ -58,6 +58,11 @@ public class GetRemoteUserAvatarOperation extends RemoteOperation<GetRemoteUserA
      */
     private int mDimension;
 
+    @Deprecated
+    public GetRemoteUserAvatarOperation(int dimension, String currentEtag) {
+        this(dimension);
+    }
+
     public GetRemoteUserAvatarOperation(int dimension) {
         mDimension = dimension;
     }
