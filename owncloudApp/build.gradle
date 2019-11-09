@@ -107,8 +107,8 @@ android {
 
         testInstrumentationRunner "com.owncloud.android.utils.OCTestAndroidJUnitRunner"
 
-        versionCode = 21500200
-        versionName = "2.15.2"
+        versionCode = getGitCommitCount()
+        versionName = getTag()
 
         buildConfigField "String", gitRemote, "\"" + getGitOriginRemote() + "\""
         buildConfigField "String", commitSHA1, "\"" + getLatestGitHash() + "\""
@@ -237,6 +237,16 @@ def setOutputFileName(variant, appName, callerProject) {
     }
 }
 
+static def getGitCommitCount() {
+    def process = "git rev-list HEAD --count".execute()
+    return process.text.toInteger() + 21300106
+}
+
+static def getTag() {
+    def process = "git describe --abbrev=0".execute()
+    return process.text.toString().trim()
+}
+
 static def getLatestGitHash() {
     def process = "git rev-parse --short HEAD".execute()
     return process.text.toString().trim()
@@ -249,3 +259,35 @@ static def getGitOriginRemote() {
     def found = values.find { it.startsWith("origin") && it.endsWith("(push)") }
     return found.replace("origin", "").replace("(push)", "").replace(".git", "").trim()
 }
+
+static def getGitUser() {
+    def remote = getGitOriginRemote()
+    return remote.replace("https://github.com/", "").replace("/owncloud-android", "").trim()
+}
+
+task decryptPrivate {
+    def out = services.get(StyledTextOutputFactory).create("")
+    def pass = "$System.env.CRYPT_PASS"
+    if (pass == "null") {
+        out.style(Style.Normal).text("In decrypt files the mandatory ")
+                .style(Style.Failure).println('CRYPT_PASS not set')
+                .style(Style.Normal).println("  If you want use Firebase features, please set it with ")
+                .style(Style.SuccessHeader).println("  export CRYPT_PASS=<superSecret>")
+        println ""
+    } else {
+        out.style(Style.Normal).text("decrypt files for ")
+                .style(Style.SuccessHeader).text(getTag() + "." + getGitCommitCount() + "." + getLatestGitHash())
+                .style(Style.Info).println(' DECRYPTED')
+        println ""
+
+        def process = "pwd".execute()
+        println "pwd=" + process.text.toString().trim()
+        println "projectDir=$projectDir"
+        println ""
+
+        def processDecrypt = "$projectDir/../signing/decrypt.sh".execute()
+        processDecrypt.waitForProcessOutput(System.out, System.err)
+    }
+}
+
+clean.dependsOn decryptPrivate
