@@ -28,7 +28,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Environment;
-import android.os.StatFs;
 import android.preference.PreferenceManager;
 import android.webkit.MimeTypeMap;
 
@@ -99,22 +98,14 @@ public class FileStorageUtils {
     }
 
     /**
-     * Optimistic number of bytes available on sd-card. accountName is ignored.
+     * Optimistic number of bytes available on sd-card.
      *
-     * @param accountName not used. can thus be null.
      * @return Optimistic number of available bytes (can be less)
      */
-    @SuppressLint("NewApi")
-    public static long getUsableSpace(String accountName) {
+    @SuppressLint("UsableSpace")
+    public static long getUsableSpace() {
         File savePath = Environment.getExternalStorageDirectory();
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.GINGERBREAD) {
-            return savePath.getUsableSpace();
-
-        } else {
-            StatFs stats = new StatFs(savePath.getAbsolutePath());
-            return stats.getAvailableBlocks() * stats.getBlockSize();
-        }
-
+        return savePath.getUsableSpace();
     }
 
     public static String getLogPath() {
@@ -244,7 +235,7 @@ public class FileStorageUtils {
      * @param files
      */
     public static Vector<OCFile> sortByDate(Vector<OCFile> files, boolean isAscending) {
-        final Integer val;
+        final int val;
         if (isAscending) {
             val = 1;
         } else {
@@ -253,14 +244,7 @@ public class FileStorageUtils {
 
         Collections.sort(files, new Comparator<OCFile>() {
             public int compare(OCFile o1, OCFile o2) {
-                if (o1.isFolder() && o2.isFolder()) {
-                    Long obj1 = o1.getModificationTimestamp();
-                    return val * obj1.compareTo(o2.getModificationTimestamp());
-                } else if (o1.isFolder()) {
-                    return -1;
-                } else if (o2.isFolder()) {
-                    return 1;
-                } else if (o1.getModificationTimestamp() == 0 || o2.getModificationTimestamp() == 0) {
+                if (o1.getModificationTimestamp() == 0 || o2.getModificationTimestamp() == 0) {
                     return 0;
                 } else {
                     Long obj1 = o1.getModificationTimestamp();
@@ -276,7 +260,7 @@ public class FileStorageUtils {
      * Sorts list by Size
      */
     public static Vector<OCFile> sortBySize(Vector<OCFile> files, boolean isAscending) {
-        final Integer val;
+        final int val;
         if (isAscending) {
             val = 1;
         } else {
@@ -310,7 +294,7 @@ public class FileStorageUtils {
      * @param files files to sort
      */
     public static Vector<OCFile> sortByName(Vector<OCFile> files, boolean isAscending) {
-        final Integer val;
+        final int val;
         if (isAscending) {
             val = 1;
         } else {
@@ -353,13 +337,13 @@ public class FileStorageUtils {
         if (dir != null && dir.isDirectory()) {
             String[] children = dir.list();
             if (children != null) {
-                for (int i = 0; i < children.length; i++) {
-                    boolean success = deleteDir(new File(dir, children[i]));
+                for (String child : children) {
+                    boolean success = deleteDir(new File(dir, child));
                     if (!success) {
-                        Log_OC.w(TAG, "File NOT deleted " + children[i]);
+                        Log_OC.w(TAG, "File NOT deleted " + child);
                         return false;
                     } else {
-                        Log_OC.d(TAG, "File deleted " + children[i]);
+                        Log_OC.d(TAG, "File deleted " + child);
                     }
                 }
             } else {

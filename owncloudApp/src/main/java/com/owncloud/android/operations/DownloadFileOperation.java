@@ -158,7 +158,7 @@ public class DownloadFileOperation extends RemoteOperation {
         if (result.isSuccess()) {
             mModificationTimestamp = mDownloadOperation.getModificationTimestamp();
             mEtag = mDownloadOperation.getEtag();
-            if (FileStorageUtils.getUsableSpace(mAccount.name) < tmpFile.length()) {
+            if (FileStorageUtils.getUsableSpace() < tmpFile.length()) {
                 Log_OC.w(TAG, "Not enough space to copy " + tmpFile.getAbsolutePath());
             }
             newFile = new File(getSavePath());

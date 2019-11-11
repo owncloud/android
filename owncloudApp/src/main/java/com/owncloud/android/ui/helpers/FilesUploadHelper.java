@@ -108,7 +108,7 @@ public class FilesUploadHelper implements Parcelable {
                 File localFile = new File(localPath);
                 total += localFile.length();
             }
-            return (new Boolean(FileStorageUtils.getUsableSpace(accountName) >= total));
+            return (new Boolean(FileStorageUtils.getUsableSpace() >= total));
         }
 
         /**
