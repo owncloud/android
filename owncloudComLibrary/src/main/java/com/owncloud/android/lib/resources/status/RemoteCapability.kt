@@ -44,6 +44,7 @@ class RemoteCapability {
 
     // Files Sharing
     var filesSharingApiEnabled: CapabilityBooleanType
+    var filesSharingSearchMinLength: CapabilityBooleanType
     var filesSharingMinLength: Int
     var filesSharingPublicEnabled: CapabilityBooleanType
     var filesSharingPublicPasswordEnforced: CapabilityBooleanType
@@ -79,6 +80,7 @@ class RemoteCapability {
         corePollinterval = 0
 
         filesSharingApiEnabled = CapabilityBooleanType.UNKNOWN
+        filesSharingSearchMinLength = CapabilityBooleanType.UNKNOWN
         filesSharingMinLength = 4
         filesSharingPublicEnabled = CapabilityBooleanType.UNKNOWN
         filesSharingPublicPasswordEnforced = CapabilityBooleanType.UNKNOWN
