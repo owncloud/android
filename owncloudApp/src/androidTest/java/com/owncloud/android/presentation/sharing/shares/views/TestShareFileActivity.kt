@@ -124,7 +124,7 @@ class TestShareFileActivity : SingleFragmentActivity(),
         shareFileFragment.updatePublicShares(publicShares)
     }
 
-    override fun deleteShare(shareRemoteId: Long) {
+    override fun removeShare(shareRemoteId: Long) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 

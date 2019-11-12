@@ -71,8 +71,8 @@ import com.owncloud.android.domain.exceptions.WrongServerResponseException
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import java.net.SocketTimeoutException
 
-fun <T> executeRemoteOperation(request: () -> RemoteOperationResult<T>): T {
-    request.invoke().also {
+fun <T> executeRemoteOperation(operation: () -> RemoteOperationResult<T>): T {
+    operation.invoke().also {
         return handleRemoteOperationResult(it)
     }
 }
@@ -85,9 +85,6 @@ private fun <T> handleRemoteOperationResult(
     }
 
     when (remoteOperationResult.code) {
-        RemoteOperationResult.ResultCode.SHARE_NOT_FOUND -> throw ShareNotFoundException()
-        RemoteOperationResult.ResultCode.SHARE_FORBIDDEN -> throw ShareForbiddenException()
-
         RemoteOperationResult.ResultCode.WRONG_CONNECTION -> throw NoConnectionWithServerException()
         RemoteOperationResult.ResultCode.NO_NETWORK_CONNECTION -> throw NoNetworkConnectionException()
         RemoteOperationResult.ResultCode.TIMEOUT -> {
@@ -108,7 +105,6 @@ private fun <T> handleRemoteOperationResult(
         RemoteOperationResult.ResultCode.ACCOUNT_NOT_NEW -> throw AccountNotNewException()
         RemoteOperationResult.ResultCode.ACCOUNT_NOT_THE_SAME -> throw AccountNotTheSameException()
         RemoteOperationResult.ResultCode.OK_REDIRECT_TO_NON_SECURE_CONNECTION -> throw RedirectToNonSecureException()
-
         RemoteOperationResult.ResultCode.UNHANDLED_HTTP_CODE -> throw UnhandledHttpCodeException()
         RemoteOperationResult.ResultCode.UNKNOWN_ERROR -> throw UnknownErrorException()
         RemoteOperationResult.ResultCode.CANCELLED -> throw CancelledException()
@@ -138,6 +134,8 @@ private fun <T> handleRemoteOperationResult(
         RemoteOperationResult.ResultCode.SPECIFIC_SERVICE_UNAVAILABLE -> throw SpecificServiceUnavailableException()
         RemoteOperationResult.ResultCode.SPECIFIC_UNSUPPORTED_MEDIA_TYPE -> throw SpecificUnsupportedMediaTypeException()
         RemoteOperationResult.ResultCode.SPECIFIC_METHOD_NOT_ALLOWED -> throw SpecificMethodNotAllowedException()
+        RemoteOperationResult.ResultCode.SHARE_NOT_FOUND -> throw ShareNotFoundException(remoteOperationResult.httpPhrase)
+        RemoteOperationResult.ResultCode.SHARE_FORBIDDEN -> throw ShareForbiddenException(remoteOperationResult.httpPhrase)
         else -> throw Exception()
     }
 }

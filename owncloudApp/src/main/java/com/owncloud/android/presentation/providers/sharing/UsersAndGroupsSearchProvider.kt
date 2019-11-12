@@ -264,19 +264,17 @@ class UsersAndGroupsSearchProvider : ContentProvider() {
     }
 
     /**
-     * Show error message
+     * Show error genericErrorMessage
      *
      * @param resource Resource with the failure information.
      */
-    private fun showErrorMessage(message: String?, throwable: Throwable?) {
-        val reason = throwable?.parseError(context!!.resources) ?: return
-        val errorMessage =
-            if (reason.isEmpty()) message else "$message ${context!!.resources.getString(R.string.error_reason)} $reason"
+    private fun showErrorMessage(genericErrorMessage: String, throwable: Throwable?) {
+        val errorMessage = throwable?.parseError(genericErrorMessage, context!!.resources) ?: return
 
         val handler = Handler(Looper.getMainLooper())
 
         // The Toast must be shown in the main thread to grant that will be hidden correctly; otherwise
-        // the thread may die before, an exception will occur, and the message will be left on the screen
+        // the thread may die before, an exception will occur, and the genericErrorMessage will be left on the screen
         // until the app dies
         handler.post {
             Toast.makeText(
