@@ -107,13 +107,11 @@ public class OwnCloudAccount {
      * Method for deferred load of account attributes from AccountManager
      *
      * @param context
-     * @throws AccountNotFoundException
      * @throws AuthenticatorException
      * @throws IOException
      * @throws OperationCanceledException
      */
-    public void loadCredentials(Context context) throws AuthenticatorException,
-            IOException, OperationCanceledException {
+    public void loadCredentials(Context context) throws AuthenticatorException, IOException, OperationCanceledException {
 
         if (context == null) {
             throw new IllegalArgumentException("Parameter 'context' cannot be null");

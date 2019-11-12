@@ -28,10 +28,10 @@ import java.util.Collection;
 
 public interface ProgressiveDataTransferer {
 
-    public void addDatatransferProgressListener(OnDatatransferProgressListener listener);
+    void addDatatransferProgressListener(OnDatatransferProgressListener listener);
 
-    public void addDatatransferProgressListeners(Collection<OnDatatransferProgressListener> listeners);
+    void addDatatransferProgressListeners(Collection<OnDatatransferProgressListener> listeners);
 
-    public void removeDatatransferProgressListener(OnDatatransferProgressListener listener);
+    void removeDatatransferProgressListener(OnDatatransferProgressListener listener);
 
 }

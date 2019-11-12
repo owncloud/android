@@ -34,6 +34,7 @@ import android.util.Log;
 
 import com.owncloud.android.lib.common.accounts.AccountUtils;
 import com.owncloud.android.lib.common.authentication.OwnCloudSamlSsoCredentials;
+import com.owncloud.android.lib.common.http.HttpClient;
 import com.owncloud.android.lib.common.utils.Log_OC;
 
 import java.io.IOException;
@@ -56,11 +57,9 @@ public class SingleSessionManager implements OwnCloudClientManager {
 
     private static final String TAG = SingleSessionManager.class.getSimpleName();
 
-    private ConcurrentMap<String, OwnCloudClient> mClientsWithKnownUsername =
-            new ConcurrentHashMap<>();
+    private ConcurrentMap<String, OwnCloudClient> mClientsWithKnownUsername = new ConcurrentHashMap<>();
 
-    private ConcurrentMap<String, OwnCloudClient> mClientsWithUnknownUsername =
-            new ConcurrentHashMap<>();
+    private ConcurrentMap<String, OwnCloudClient> mClientsWithUnknownUsername = new ConcurrentHashMap<>();
 
     @Override
     public OwnCloudClient getClientFor(OwnCloudAccount account, Context context) throws OperationCanceledException,
@@ -76,9 +75,7 @@ public class SingleSessionManager implements OwnCloudClientManager {
         OwnCloudClient client = null;
         String accountName = account.getName();
         String sessionName = account.getCredentials() == null ? "" :
-                AccountUtils.buildAccountName(
-                        account.getBaseUri(),
-                        account.getCredentials().getAuthToken());
+                AccountUtils.buildAccountName(account.getBaseUri(), account.getCredentials().getAuthToken());
 
         if (accountName != null) {
             client = mClientsWithKnownUsername.get(accountName);
@@ -113,7 +110,7 @@ public class SingleSessionManager implements OwnCloudClientManager {
                     context.getApplicationContext(),
                     true);    // TODO remove dependency on OwnCloudClientFactory
             client.setAccount(account);
-            client.setContext(context);
+            HttpClient.setContext(context);
             client.setOwnCloudClientManager(this);
 
             account.loadCredentials(context);
@@ -198,10 +195,7 @@ public class SingleSessionManager implements OwnCloudClientManager {
         while (accountNames.hasNext()) {
             accountName = accountNames.next();
             account = new Account(accountName, accountType);
-            AccountUtils.saveClient(
-                    mClientsWithKnownUsername.get(accountName),
-                    account,
-                    context);
+            AccountUtils.saveClient(mClientsWithKnownUsername.get(accountName), account, context);
         }
 
         if (Log.isLoggable(TAG, Log.DEBUG)) {
@@ -218,7 +212,7 @@ public class SingleSessionManager implements OwnCloudClientManager {
         if (am != null && account.getSavedAccount() != null) {
             String recentCookies = am.getUserData(account.getSavedAccount(), AccountUtils.Constants.KEY_COOKIES);
             String previousCookies = reusedClient.getCookiesString();
-            if (recentCookies != null && previousCookies != "" && !recentCookies.equals(previousCookies)) {
+            if (recentCookies != null && !previousCookies.equals("") && !recentCookies.equals(previousCookies)) {
                 AccountUtils.restoreCookies(account.getSavedAccount(), reusedClient, context);
             }
         }
