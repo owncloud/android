@@ -38,6 +38,7 @@
   <string name="prefs_remember_last_upload_location_summary">Reține locația fișierului încărcat precedent</string>
   <string name="recommend_subject">Încearcă %1$s pe smartphone-ul tău!</string>
   <string name="recommend_text">Te invit să folosești %1$s pe smartphone-ul tău!\nDescarcă aici: %2$s</string>
+  <string name="auth_oauth_failure_snackbar_action">Înregistraţi-vă</string>
   <string name="auth_check_server">Verifică serverul</string>
   <string name="auth_host_url">Adresa serverului https://...</string>
   <string name="auth_username">Nume utilizator</string>

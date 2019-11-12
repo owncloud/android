@@ -68,6 +68,7 @@
   <string name="recommend_text">Vull invitar-te a utilitzar %1$s al teu smartphone!\nDescarrega-ho aqui: %2$s</string>
   <string name="auth_failure_snackbar">Autentificació denegada</string>
   <string name="auth_failure_snackbar_action">Canvia de compte</string>
+  <string name="auth_oauth_failure_snackbar_action">Inicia la sessió</string>
   <string name="auth_check_server">Comprova el funcionament del servidor</string>
   <string name="auth_host_url">Adreça del servidor https://…</string>
   <string name="auth_username">Nom d\'usuari</string>

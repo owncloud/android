@@ -77,6 +77,7 @@
   <string name="recommend_text">Θα ήθελα να σε προσκαλέσω να χρησιμοποιήσεις το %1$s στο κινητό σου!\nΛήψη εδώ: %2$s</string>
   <string name="auth_failure_snackbar">Αποτυχία πιστοποίησης</string>
   <string name="auth_failure_snackbar_action">Αλλαγή λογριασμού</string>
+  <string name="auth_oauth_failure_snackbar_action">Συνδεθείτε</string>
   <string name="auth_check_server">Έλεγχος διακομιστή</string>
   <string name="auth_host_url">Διεύθυνση διακομιστή https://…</string>
   <string name="auth_username">Όνομα χρήστη</string>

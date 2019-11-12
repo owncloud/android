@@ -5,7 +5,7 @@
   <string name="actionbar_search">ค้นหาโฟลเดอร์นี้</string>
   <string name="actionbar_sync">ฟื้นฟูบัญชี</string>
   <string name="actionbar_upload">อัปโหลดไฟล์</string>
-  <string name="actionbar_upload_from_apps">เนื้อหาจากแอพฯ อื่นๆ</string>
+  <string name="actionbar_upload_from_apps">เนื้อหาจากแอปอื่นๆ</string>
   <string name="actionbar_upload_files">ไฟล์</string>
   <string name="actionbar_open_with">เปิดด้วย</string>
   <string name="actionbar_mkdir">โฟลเดอร์ใหม่</string>
@@ -39,9 +39,9 @@
   <string name="prefs_fingerprint">ล็อคด้วยลายนิ้วมือ</string>
   <string name="prefs_fingerprint_summary">เปิดใช้งานรหัสผ่านหรือรูปแบบล็อคเพื่อเปิดใช้งานตัวเลือกนี้</string>
   <string name="prefs_touches_with_other_visible_windows">แตะกับหน้าต่างอื่นที่มองเห็น</string>
-  <string name="prefs_touches_with_other_visible_windows_summary">อนุญาตให้แตะเมื่อมุมมองถูกบดบังโดยหน้าต่างอื่นที่มองเห็นได้ เปิดใช้งานเพื่อใช้แอพกรองแสง</string>
+  <string name="prefs_touches_with_other_visible_windows_summary">อนุญาตให้แตะเมื่อมุมมองถูกบดบังโดยหน้าต่างอื่นที่มองเห็นได้ เปิดใช้งานเพื่อใช้แอปกรองแสง</string>
   <string name="confirmation_touches_with_other_windows_title">คุณแน่ใจหรือว่าต้องการเปิดใช้งานคุณลักษณะนี้?</string>
-  <string name="confirmation_touches_with_other_windows_message">ใช้คุณสมบัตินี้ภายใต้ความรับผิดชอบของคุณ แอพพลิเคชันที่เป็นอันตรายอาจพยายามหลอกให้คุณทำการกระทำบางอย่างแบบไม่รู้ตัวโดยใช้มุมมองอื่น</string>
+  <string name="confirmation_touches_with_other_windows_message">ใช้คุณสมบัตินี้ภายใต้ความรับผิดชอบของคุณ แอปพลิเคชันที่เป็นอันตรายอาจพยายามหลอกให้คุณทำการกระทำบางอย่างแบบไม่รู้ตัวโดยใช้มุมมองอื่น</string>
   <string name="prefs_camera_picture_upload">อัปโหลดรูปภาพ</string>
   <string name="prefs_camera_picture_upload_summary">อัปโหลดภาพที่ถ่ายด้วยกล้องโดยอัตโนมัติ</string>
   <string name="prefs_camera_video_upload">อัปโหลดวิดีโอ</string>
@@ -71,12 +71,14 @@
   <string name="pattern_already_set">คุณไม่สามารถเปิดใช้งานการเข้ารหัสรูปแบบและรหัสผ่านได้ในเวลาเดียวกัน โปรดปิดการใช้รูปแบบก่อน</string>
   <string name="passcode_already_set">คุณไม่สามารถเปิดใช้งานการเข้ารหัสรูปแบบและรหัสผ่านได้ในเวลาเดียวกัน โปรดปิดใช้งานรหัสผ่านก่อน</string>
   <string name="pattern_no_longer_required">จะไม่ถามเรื่องรูปแบบอีกต่อไป</string>
-  <string name="pattern_configure_your_pattern_explanation">ร้องขอรูปแบบทุกครั้งที่มีการเริ่มต้นแอพ</string>
+  <string name="pattern_configure_your_pattern_explanation">ร้องขอรูปแบบทุกครั้งที่มีการเริ่มต้นแอป</string>
   <string name="illegal_argument_exception_message">ต้องใช้การกระทำที่ถูกต้องเพื่อ</string>
   <string name="recommend_subject">ลองใช้ %1$s บนสมาร์ทโฟนของคุณ!</string>
   <string name="recommend_text">ฉันอยากจะขอเชิญให้คุณใช้ %1$s บนสมาร์ทโฟนของคุณ!\nดาวน์โหลดที่นี่: %2$s</string>
   <string name="auth_failure_snackbar">การรับรองความถูกต้องล้มเหลว</string>
   <string name="auth_failure_snackbar_action">เปลี่ยนบัญชี</string>
+  <string name="auth_oauth_failure">โทเค็นการเข้าถึงหมดอายุหรือไม่ถูกต้อง กรุณาลงชื่อเข้าใช้อีกครั้ง</string>
+  <string name="auth_oauth_failure_snackbar_action">เข้าสู่ระบบ</string>
   <string name="auth_check_server">ตรวจสอบเซิร์ฟเวอร์</string>
   <string name="auth_host_url">ที่อยู่ของเซิร์ฟเวอร์ https://…</string>
   <string name="auth_username">ชื่อผู้ใช้</string>
@@ -101,7 +103,7 @@
   <string name="file_list_empty">ยังไม่มีไฟล์ใดๆเลยลองอัปโหลดดูสิ!</string>
   <string name="file_list_empty_available_offline">ยังไม่มีไฟล์ออฟไลน์ที่พร้อมใช้งาน</string>
   <string name="file_list_loading">กำลังโหลด...</string>
-  <string name="file_list_no_app_for_file_type">ไม่พบแอพฯที่ตรงกับประเภทของไฟล์</string>
+  <string name="file_list_no_app_for_file_type">ไม่พบแอปฯที่ตรงกับประเภทของไฟล์</string>
   <string name="local_file_list_empty">ยังไม่มีไฟล์ในโฟลเดอร์นี้</string>
   <string name="local_file_list_empty_just_folders">ไม่มีโฟลเดอร์ในโฟลเดอร์นี้</string>
   <string name="local_file_list_search_with_no_matches">ไม่พบสิ่งที่คุณกำลังค้นหา</string>
@@ -175,7 +177,7 @@
   <string name="uploads_view_upload_status_failed_permission_error">เกิดข้อผิดพลาดเกี่ยวกับสิทธิ์การเข้าใช้งาน</string>
   <string name="uploads_view_upload_status_failed_firewall_error">ถูกห้ามเนื่องจากผิดกฎของไฟร์วอลล์</string>
   <string name="uploads_view_upload_status_conflict">ปัญหา</string>
-  <string name="uploads_view_upload_status_service_interrupted">แอพฯได้ถูกยกเลิกแล้ว</string>
+  <string name="uploads_view_upload_status_service_interrupted">แอปฯได้ถูกยกเลิกแล้ว</string>
   <string name="uploads_view_upload_status_unknown_fail">เกิดข้อผิดพลาดที่ไม่ทราบสาเหตุ</string>
   <string name="uploads_view_upload_status_waiting_for_wifi">กำลังรอการเชื่อมต่อ WiFi</string>
   <string name="uploads_view_later_waiting_to_upload">กำลังรออัปโหลด</string>
@@ -210,7 +212,7 @@
   <string name="upload_query_move_foreign_files">มีพื้นที่เหลือไม่เพียงพอสำหรับคัดลอกไฟล์ที่คุณเลือกไปไว้ในโฟลเดอร์ %1$s คุณต้องการย้ายไฟล์ดังกล่าวแทน?</string>
   <string name="pass_code_enter_pass_code">กรุณากรอกรหัสผ่านของคุณ</string>
   <string name="pass_code_configure_your_pass_code">ใส่รหัสยืนยันของคุณ</string>
-  <string name="pass_code_configure_your_pass_code_explanation">จะมีการร้องขอรหัสยืนยันทุกครั้งเมื่อเริ่มต้นใช้แอพฯ</string>
+  <string name="pass_code_configure_your_pass_code_explanation">จะมีการร้องขอรหัสยืนยันทุกครั้งเมื่อเริ่มต้นใช้แอปฯ</string>
   <string name="pass_code_reenter_your_pass_code">กรุณากรอกรหัสผ่านของคุณใหม่อีกครั้ง</string>
   <string name="pass_code_remove_your_pass_code">ลบรหัสยืนยันของคุณ</string>
   <string name="pass_code_mismatch">รหัสยืนยันของคุณไม่ตรงกัน</string>
@@ -297,7 +299,7 @@
   <string name="filename_empty">ต้องใส่ชื่อไฟล์</string>
   <string name="wait_a_moment">กรุณารอสักครู่</string>
   <string name="wait_checking_credentials">กำลังตรวจสอบหนังสือรับรองที่เก็บไว้</string>
-  <string name="filedisplay_unexpected_bad_get_content">มีปัญหาเกิดขึ้น กรุณาเลือกไฟล์งานแอพฯอื่นๆ</string>
+  <string name="filedisplay_unexpected_bad_get_content">มีปัญหาเกิดขึ้น กรุณาเลือกไฟล์จากแอปฯอื่น</string>
   <string name="filedisplay_no_file_selected">ไม่มีไฟล์ที่ถูกเลือก</string>
   <string name="activity_chooser_title">ส่งลิงก์ไปที่</string>
   <string name="wait_for_tmp_copy_from_private_storage">คัดลอกไฟล์จากพื้นที่จัดเก็บส่วนตัว</string>
@@ -393,8 +395,8 @@
   <string name="auth_redirect_non_secure_connection_title">เชื่อมต่อที่ปลอดภัยถูกเปลี่ยนเส้นทางผ่านเราเตอร์ที่ไม่ปลอดภัย</string>
   <string name="actionbar_logger">ไฟล์ log</string>
   <string name="log_send_history_button">ส่งประวัติการใช้งานย้อนหลัง</string>
-  <string name="log_send_no_mail_app">ไม่พบแอพสำหรับส่งข้อมูล log กรุณาติดตั้งแอพสำหรับส่งเมล</string>
-  <string name="log_send_mail_subject">%1$s ข้อมูล log สำหรับแอพแอนดรอยด์</string>
+  <string name="log_send_no_mail_app">ไม่พบแอปสำหรับส่งข้อมูล log กรุณาติดตั้งแอปสำหรับส่งเมล</string>
+  <string name="log_send_mail_subject">%1$s ข้อมูล log สำหรับแอปแอนดรอยด์</string>
   <string name="log_progress_dialog_text">กำลังโหลดข้อมูล ...</string>
   <string name="actionbar_select_all">เลือกทั้งหมด</string>
   <string name="actionbar_select_inverse">เลือกตรงกันข้าม</string>
@@ -440,7 +442,7 @@
   <string name="upload_copy_files">คัดลอกไฟล์</string>
   <string name="upload_move_files">ย้ายไฟล์</string>
   <string name="pref_behaviour_entries_keep_file">เก็บไว้ในโฟลเดอร์ต้นฉบับ</string>
-  <string name="pref_behaviour_entries_move">ถูกย้ายไปยังโฟลเดอร์แอพพลิเคชัน</string>
+  <string name="pref_behaviour_entries_move">ถูกย้ายไปยังโฟลเดอร์แอปพลิเคชัน</string>
   <string name="share_dialog_title">แชร์</string>
   <string name="share_file">แชร์ %1$s</string>
   <string name="share_with_user_section_title">ผู้ใช้และกลุ่ม</string>
@@ -524,8 +526,8 @@
   <string name="file_sync_notification_channel_name">ประสานข้อมูลไฟล์</string>
   <string name="file_sync_notification_channel_description">ดูผลลัพธ์การประสานข้อมูลไฟล์</string>
   <string name="clicks_to_be_developer">กดจำนวน %1$d ครั้งเพื่อเปิดใช้เมนูผู้พัฒนา</string>
-  <string name="rate_dialog_title">ให้คะแนนแอพฯ %1$s</string>
-  <string name="rate_dialog_description">ช่วยสละเวลาซักนิดเพื่อให้คะแนนแอพฯ ของเราหน่อยนะ</string>
+  <string name="rate_dialog_title">ให้คะแนนแอปฯ %1$s</string>
+  <string name="rate_dialog_description">ช่วยสละเวลาซักนิดเพื่อให้คะแนนแอปฯ ของเราหน่อยนะ</string>
   <string name="button_no_thanks_name">ไม่เป็นไรขอบคุณ</string>
   <string name="button_later_name">ไว้คราวหน้า</string>
   <string name="button_rate_now_name">ให้คะแนนตอนนี้</string>
@@ -551,7 +553,7 @@
   <string name="welcome_feature_8_title">การทำงานแบบออฟไลน์พร้อมใช้งาน</string>
   <string name="welcome_feature_8_text">ประสานข้อมูลไฟล์ของคุณโดยอัตโนมัติ</string>
   <string name="welcome_feature_9_title">ผู้ให้บริการเอกสาร</string>
-  <string name="welcome_feature_9_text">เข้าถึงและแก้ไขไฟล์ ownCloud ของคุณจากแอพอื่น</string>
+  <string name="welcome_feature_9_text">เข้าถึงและแก้ไขไฟล์ ownCloud ของคุณจากแอปอื่น</string>
   <string name="welcome_feature_10_title">log พร้อมค้นหาทุกคน</string>
   <string name="welcome_feature_10_text">ส่ง log ของคุณมาให้เราเพื่อให้แอปทำงานได้ดีขึ้น</string>
   <string name="no_borwser_installed_alert">โปรดติดตั้งเบราเซอร์ก่อนเพื่อให้สามารถล็อกอินได้อย่างปลอดภัย</string>

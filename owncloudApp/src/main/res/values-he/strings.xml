@@ -72,11 +72,14 @@
   <string name="passcode_already_set">לא ניתן להפעיל נעילת קוד ותבנית בו זמנית, נא להשבית את הקוד תחילה</string>
   <string name="pattern_no_longer_required">לא תופיע עוד בקשה עם תבנית</string>
   <string name="pattern_configure_your_pattern_explanation">תופיע בקשה לאימות תבנית עם כל הפעלה של היישומון</string>
+  <string name="pattern_locked">נעילה על בסיס תבנית</string>
   <string name="illegal_argument_exception_message">פעולה חוקית נדרשת להעברה</string>
   <string name="recommend_subject">לבדיקה %1$s בטלפון החכם שלך!</string>
   <string name="recommend_text">הנך מוזמן להשתמש ב- %1$s בטלפון החכם שלך!\nניתן להוריד מכאן: %2$s</string>
   <string name="auth_failure_snackbar">האימות נכשל</string>
   <string name="auth_failure_snackbar_action">החלף חשבון</string>
+  <string name="auth_oauth_failure">פג תוקף חתימת הייצוג או שהפך להיות לא חוקי. יש להתחבר שנית לקבלת גישה חוזרת.</string>
+  <string name="auth_oauth_failure_snackbar_action">התחברות</string>
   <string name="auth_check_server">בדיקת שרת</string>
   <string name="auth_host_url">כתובת שרת https://…</string>
   <string name="auth_username">שם משתמש</string>
@@ -217,6 +220,7 @@
   <string name="pass_code_wrong">קוד שגוי</string>
   <string name="pass_code_removed">הקוד הוסר</string>
   <string name="pass_code_stored">הקוד נשמר</string>
+  <string name="pass_code_locked">נעילה על בסיס סיסמא</string>
   <string name="fingerprint_confirm">יש לאשר את טביעת האצבע להמשך</string>
   <string name="fingerprint_hint">גלאי מגע</string>
   <string name="fingerprint_not_recognized">טביעת האצבע לא אומתה, יש לנסות שוב</string>

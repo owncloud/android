@@ -77,6 +77,7 @@
   <string name="recommend_text">Ich möchte Dich zum Benutzen von %1$s auf Deinem Smartphone einladen!\nLade es hier herunter: %2$s</string>
   <string name="auth_failure_snackbar">Authentifizierung fehlgeschlagen</string>
   <string name="auth_failure_snackbar_action">Konto ändern</string>
+  <string name="auth_oauth_failure_snackbar_action">Einloggen</string>
   <string name="auth_check_server">überprüfe den Server</string>
   <string name="auth_host_url">Serveradresse https://…</string>
   <string name="auth_username">Benutzername</string>

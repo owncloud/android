@@ -72,6 +72,7 @@
   <string name="recommend_text">Chciałbym zaprosić Cię do używania %1$s na swoim smartfonie!\nŚciągnij tutaj: %2$s</string>
   <string name="auth_failure_snackbar">Uwierzytelnianie nieudane</string>
   <string name="auth_failure_snackbar_action">Zmień konto</string>
+  <string name="auth_oauth_failure_snackbar_action">Zaloguj</string>
   <string name="auth_check_server">Sprawdź serwer</string>
   <string name="auth_host_url">Adres serwera https://...</string>
   <string name="auth_username">Nazwa użytkownika</string>

@@ -65,6 +65,7 @@
   <string name="recommend_text">Ég vil gjarnan bjóða þér að nota %1$s á snjallsímanum þínum!\nSæktu það hér: %2$s</string>
   <string name="auth_failure_snackbar">Auðkenning mistókst</string>
   <string name="auth_failure_snackbar_action">Skipta um notandaaðgang</string>
+  <string name="auth_oauth_failure_snackbar_action">Skrá inn</string>
   <string name="auth_check_server">Athuga með þjón</string>
   <string name="auth_host_url">Vistfang þjóns https://…</string>
   <string name="auth_username">Notandanafn</string>

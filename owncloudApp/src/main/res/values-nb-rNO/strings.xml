@@ -60,6 +60,7 @@
   <string name="illegal_argument_exception_message">En gyldig ACTION må være med i intent sendt til</string>
   <string name="recommend_subject">Prøv %1$s på smarttelefonen din!</string>
   <string name="recommend_text">Jeg ønsker å invitere deg til å bruke %1$s på smarttelefonen din!\nLast ned her: %2$s</string>
+  <string name="auth_oauth_failure_snackbar_action">Logg inn</string>
   <string name="auth_check_server">Sjekk server</string>
   <string name="auth_host_url">Serveradresse https://...</string>
   <string name="auth_username">Brukernavn</string>

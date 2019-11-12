@@ -5,7 +5,7 @@
   <string name="actionbar_search">Buscar neste cartafol</string>
   <string name="actionbar_sync">Actualizar a conta</string>
   <string name="actionbar_upload">Enviar</string>
-  <string name="actionbar_upload_from_apps">Contido doutros aplicativos</string>
+  <string name="actionbar_upload_from_apps">Contido doutras aplicacións</string>
   <string name="actionbar_upload_files">Ficheiros</string>
   <string name="actionbar_open_with">Abrir con</string>
   <string name="actionbar_mkdir">Novo cartafol</string>
@@ -41,7 +41,7 @@
   <string name="prefs_touches_with_other_visible_windows">Toques con outras xanelas visíbeis</string>
   <string name="prefs_touches_with_other_visible_windows_summary">Permitir toques cando a vista estea escurecida por outra xanela visíbel. Activar o emprego de aplis de filtrado de luz.</string>
   <string name="confirmation_touches_with_other_windows_title">Confirma que quere activar esta característica?</string>
-  <string name="confirmation_touches_with_other_windows_message">Empregue esta característica baixo a súa responsabilidade, un aplicativo malicioso podería tentar enganalo para que realice algunhas accións, sen decatarse, empregando outras vistas.</string>
+  <string name="confirmation_touches_with_other_windows_message">Empregue esta característica baixo a súa responsabilidade, unha aplicación maliciosa podería tentar enganalo para que realice algunhas accións, sen decatarse, empregando outras vistas.</string>
   <string name="prefs_camera_picture_upload">Envío de imaxe</string>
   <string name="prefs_camera_picture_upload_summary">Enviar instantaneamente as fotos tiradas coa cámara</string>
   <string name="prefs_camera_video_upload">Envío de vídeos</string>
@@ -71,13 +71,16 @@
   <string name="pattern_already_set">Non é posíbel activar os bloqueos de patrón e de código de seguridade ao mesmo tempo, primeiro desactive o patrón</string>
   <string name="passcode_already_set">Non é posíbel activar os bloqueos de patrón e de código de seguridade ao mesmo tempo, primeiro desactive o código de seguridade</string>
   <string name="pattern_no_longer_required">Xa non se pedirá o patrón</string>
-  <string name="pattern_configure_your_pattern_explanation">Solicitaráselle o patrón cada vez que inicie o aplicativo</string>
+  <string name="pattern_configure_your_pattern_explanation">Solicitaráselle o patrón cada vez que inicie a aplicación</string>
+  <string name="pattern_locked">Bloqueado con patrón</string>
   <string name="illegal_argument_exception_message">É necesaria unha ACCIÓN válida na intención pasada a</string>
   <string name="recommend_subject">Tente %1$s no seu teléfono intelixente!</string>
   <string name="recommend_text">Quero convidalo a empregar %1$s no seu teléfono intelixente!
 Descárgueo de aquí: %2$s</string>
   <string name="auth_failure_snackbar">Produciuse un fallo na autenticación.</string>
   <string name="auth_failure_snackbar_action">Cambiar a conta</string>
+  <string name="auth_oauth_failure">A marca de acceso caducou ou non é válida. Inicie sesión de novo para recuperar o acceso</string>
+  <string name="auth_oauth_failure_snackbar_action">Rexistrarse</string>
   <string name="auth_check_server">Comprobar servidor</string>
   <string name="auth_host_url">Enderezo do servidor https://…</string>
   <string name="auth_username">Nome de usuario</string>
@@ -102,7 +105,7 @@ Descárgueo de aquí: %2$s</string>
   <string name="file_list_empty">Aquí non hai nada. Envíe algo!</string>
   <string name="file_list_empty_available_offline">Non hai ficheiros dispoñíbeis sen conexión.</string>
   <string name="file_list_loading">Cargando...</string>
-  <string name="file_list_no_app_for_file_type">Non se atopou un aplicativo para este tipo de ficheiro</string>
+  <string name="file_list_no_app_for_file_type">Non se atopou unha aplicación para este tipo de ficheiro</string>
   <string name="local_file_list_empty">Non hai ficheiros neste cartafol.</string>
   <string name="local_file_list_empty_just_folders">Non hai cartafoles neste cartafol.</string>
   <string name="local_file_list_search_with_no_matches">Non hai coincidencias para esta busca</string>
@@ -176,7 +179,7 @@ Descárgueo de aquí: %2$s</string>
   <string name="uploads_view_upload_status_failed_permission_error"> Erro nos permisos   </string>
   <string name="uploads_view_upload_status_failed_firewall_error">Prohibido por mor dunha regra da devasa</string>
   <string name="uploads_view_upload_status_conflict">Conflito</string>
-  <string name="uploads_view_upload_status_service_interrupted">O aplicativo foi rematado</string>
+  <string name="uploads_view_upload_status_service_interrupted">A aplicación foi rematada</string>
   <string name="uploads_view_upload_status_unknown_fail">Produciuse un erro descoñecido</string>
   <string name="uploads_view_upload_status_waiting_for_wifi">Agardando pola wifi</string>
   <string name="uploads_view_later_waiting_to_upload">Agardando polo envío</string>
@@ -201,7 +204,7 @@ Descárgueo de aquí: %2$s</string>
   <string name="sync_fail_in_favourites_content">Non foi posíbel sincronizar o contido de %1$d ficheiros (%2$d conflitos)</string>
   <string name="sync_foreign_files_forgotten_ticker">Algúns ficheiros locais foron esquecidos</string>
   <string name="sync_foreign_files_forgotten_content">Non é posíbel copiar %1$d ficheiros do cartafol %2$s en</string>
-  <string name="sync_foreign_files_forgotten_explanation">Dende a versión 1.3.16, os ficheiros enviados dende este dispositivo cópianse no cartafol local %1$s para evitar a perda de datos cando se sincroniza un ficheiro con varias contas.\n\nPor mor deste cambio, todos os ficheiros enviados coas versións anteriores deste aplicativo cópianse no cartafol %2$s. Porén, un erro impediu a finalización desta operación durante a sincronización da conta. É posíbel deixar o(s) ficheiro(s) como está(n) e retirar a ligazón a %3$s, ou mover o(s) ficheiro(s) ao directorio %1$s e manter a ligazón a %4$s.\n\nA seguir enuméranse o(s) ficheiro(s) local(is), e o(s) ficheiro(s) remoto(s) en %5$s co(s) que estaba(n) ligado(s).</string>
+  <string name="sync_foreign_files_forgotten_explanation">Dende a versión 1.3.16, os ficheiros enviados dende este dispositivo cópianse no cartafol local %1$s para evitar a perda de datos cando se sincroniza un ficheiro con varias contas.\n\nPor mor deste cambio, todos os ficheiros enviados coas versións anteriores desta aplicación cópianse no cartafol %2$s. Porén, un erro impediu a finalización desta operación durante a sincronización da conta. É posíbel deixar o(s) ficheiro(s) como está(n) e retirar a ligazón a %3$s, ou mover o(s) ficheiro(s) ao directorio %1$s e manter a ligazón a %4$s.\n\nA seguir enuméranse o(s) ficheiro(s) local(is), e o(s) ficheiro(s) remoto(s) en %5$s co(s) que estaba(n) ligado(s).</string>
   <string name="sync_current_folder_was_removed">O cartafol %1$s xa non existe</string>
   <string name="foreign_files_move">Mover todo</string>
   <string name="foreign_files_success">Foron movidos todos os ficheiros</string>
@@ -211,13 +214,14 @@ Descárgueo de aquí: %2$s</string>
   <string name="upload_query_move_foreign_files">Non hai espazo abondo para copiar os ficheiros seleccionados no cartafol %1$s. Quere movelos no canto de copialos?</string>
   <string name="pass_code_enter_pass_code">Introduza o seu código de seguridade</string>
   <string name="pass_code_configure_your_pass_code">Escriba o seu código de seguridade</string>
-  <string name="pass_code_configure_your_pass_code_explanation">Solicitaráselle o código de seguridade cada vez que inicie o aplicativo.</string>
+  <string name="pass_code_configure_your_pass_code_explanation">Solicitaráselle o código de seguridade cada vez que inicie a aplicación</string>
   <string name="pass_code_reenter_your_pass_code">Volva escribir o seu código de seguridade</string>
   <string name="pass_code_remove_your_pass_code">Retirar o seu código de seguridade</string>
   <string name="pass_code_mismatch">Os códigos de seguridade non son iguais</string>
   <string name="pass_code_wrong">Código de seguridade incorrecto</string>
   <string name="pass_code_removed">Retirouse o código de seguridade</string>
   <string name="pass_code_stored">O código de seguridade foi almacenado</string>
+  <string name="pass_code_locked">Bloqueado con código de seguridade</string>
   <string name="fingerprint_confirm">Confirme a súa pegada para continuar</string>
   <string name="fingerprint_hint">Sensor táctil</string>
   <string name="fingerprint_not_recognized">Non se recoñeceu a pegada, ténteo de novo</string>
@@ -299,7 +303,7 @@ Descárgueo de aquí: %2$s</string>
   <string name="filename_empty">O nome de ficheiro non pode estar baleiro</string>
   <string name="wait_a_moment">Agarde un chisco</string>
   <string name="wait_checking_credentials">Comprobando as credenciais almacenadas</string>
-  <string name="filedisplay_unexpected_bad_get_content">Produciuse un erro non agardado. Seleccione o ficheiro con outro aplicativo diferente</string>
+  <string name="filedisplay_unexpected_bad_get_content">Produciuse un erro non agardado. Seleccione o ficheiro con outra aplicación diferente</string>
   <string name="filedisplay_no_file_selected">Non se escolleu ningún ficheiro</string>
   <string name="activity_chooser_title">Enviar a ligazón a</string>
   <string name="wait_for_tmp_copy_from_private_storage">Copiando o ficheiro dende o almacenamento privado</string>
@@ -396,8 +400,8 @@ Descárgueo de aquí: %2$s</string>
   <string name="auth_redirect_non_secure_connection_title">A conexión segura está a ser redirixida a través dunha ruta non segura.</string>
   <string name="actionbar_logger">Rexistros</string>
   <string name="log_send_history_button">Enviar o historial</string>
-  <string name="log_send_no_mail_app">Non se atopou un aplicativo para enviar os rexistros. Instale un aplicativo de correo!</string>
-  <string name="log_send_mail_subject">Rexistros do aplicativo %1$s Android</string>
+  <string name="log_send_no_mail_app">Non se atopou unha aplicación para enviar os rexistros. Instale unha aplicación de correo!</string>
+  <string name="log_send_mail_subject">Rexistros da aplicación %1$s Android</string>
   <string name="log_progress_dialog_text">Cargando os datos...</string>
   <string name="actionbar_select_all">Seleccionar todo</string>
   <string name="actionbar_select_inverse">Seleccionar á inversa</string>
@@ -407,7 +411,7 @@ Descárgueo de aquí: %2$s</string>
   <string name="file_list_empty_moving">Aquí non hai nada. Pode engadir un cartafol!</string>
   <string name="folder_picker_choose_button_text">Escoller</string>
   <string name="move_file_not_found">Non é posíbel movelo. Comprobe se existe o ficheiro</string>
-  <string name="move_file_invalid_into_descendent">Non é posíbel mover un cartafol cara un descendente</string>
+  <string name="move_file_invalid_into_descendent">Non é posíbel mover un cartafol cara a un descendente</string>
   <string name="move_file_invalid_overwrite">Este ficheiro xa existe no cartafol de destino</string>
   <string name="move_file_error">Produciuse un erro ao tentar mover este ficheiro ou cartafol.</string>
   <string name="forbidden_permissions_move">para mover este ficheiro</string>
@@ -443,7 +447,7 @@ Descárgueo de aquí: %2$s</string>
   <string name="upload_copy_files">Copiar ficheiro</string>
   <string name="upload_move_files">Mover ficheiro</string>
   <string name="pref_behaviour_entries_keep_file">mantense no cartafol orixinal</string>
-  <string name="pref_behaviour_entries_move">movido cara o cartafol do aplicativo</string>
+  <string name="pref_behaviour_entries_move">movido cara ao cartafol da aplicación</string>
   <string name="share_dialog_title">Compartir</string>
   <string name="share_file">Compartir %1$s</string>
   <string name="share_with_user_section_title">Usuarios e grupos</string>
@@ -527,8 +531,8 @@ Descárgueo de aquí: %2$s</string>
   <string name="file_sync_notification_channel_name">Sincronización de ficheiros</string>
   <string name="file_sync_notification_channel_description">Ver o resultado da sincronización de ficheiros</string>
   <string name="clicks_to_be_developer">Ten %1$d clics para activar os menús de desenvolvemento</string>
-  <string name="rate_dialog_title">Avalíe o aplicativo %1$s!</string>
-  <string name="rate_dialog_description">Se lle gusta usar este aplicativo, pode adicarlle un intre a valoralo? Os seus comentarios son moi importantes para nós.</string>
+  <string name="rate_dialog_title">Avalíe a aplicación %1$s!</string>
+  <string name="rate_dialog_description">Se lle gusta usar esta aplicación, pode adicarlle un intre a valorala? Os seus comentarios son moi importantes para nós.</string>
   <string name="button_no_thanks_name">NON, GRAZAS</string>
   <string name="button_later_name">MÁIS ADIANTE</string>
   <string name="button_rate_now_name">AVALIAR AGORA</string>
@@ -555,8 +559,8 @@ Descárgueo de aquí: %2$s</string>
   <string name="welcome_feature_8_title">Dispoñíbel sen conexión</string>
   <string name="welcome_feature_8_text">Os seus ficheiros sincronizados automaticamente </string>
   <string name="welcome_feature_9_title">Fornecedor de documentos</string>
-  <string name="welcome_feature_9_text">Acceda e edite os seus ficheiros ownCloud dnde doutros aplicativos</string>
+  <string name="welcome_feature_9_text">Acceda e edite os seus ficheiros ownCloud dende doutras aplicacións</string>
   <string name="welcome_feature_10_title">Rexistros con busca para todos</string>
-  <string name="welcome_feature_10_text">Envíenos os seus rexistros para que o aplicativo funcione mellor</string>
+  <string name="welcome_feature_10_text">Envíenos os seus rexistros para que a aplicación funcione mellor</string>
   <string name="no_borwser_installed_alert">Non hai un navegador instalado, Instale un para poder facer un acceso seguro.</string>
 </resources>

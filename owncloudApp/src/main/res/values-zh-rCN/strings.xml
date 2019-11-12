@@ -50,6 +50,7 @@
   <string name="prefs_log_delete_history_button">删除历史</string>
   <string name="prefs_help">帮助</string>
   <string name="prefs_sync_calendar_contacts">同步联系人、日历和任务</string>
+  <string name="prefs_sync_calendar_contacts_summary">安装 DAVx⁵</string>
   <string name="prefs_recommend">推荐给朋友</string>
   <string name="prefs_feedback">反馈</string>
   <string name="prefs_imprint">版本说明</string>
@@ -73,6 +74,7 @@
   <string name="recommend_text">我邀请你在智能手机上使用 %1$s\n下载路径：%2$s</string>
   <string name="auth_failure_snackbar">认证失败</string>
   <string name="auth_failure_snackbar_action">更换账户</string>
+  <string name="auth_oauth_failure_snackbar_action">登录</string>
   <string name="auth_check_server">检查服务器</string>
   <string name="auth_host_url">服务器地址 https://...</string>
   <string name="auth_username">用户名</string>
@@ -95,6 +97,7 @@
   <string name="uploader_error_message_source_file_not_copied">将文件复制到临时目录时出现错误。请尝试重新发送。</string>
   <string name="file_list_seconds_ago">几秒前</string>
   <string name="file_list_empty">这里还什么都没有。上传些东西吧！</string>
+  <string name="file_list_empty_available_offline">无可用的离线文件</string>
   <string name="file_list_loading">加载中...</string>
   <string name="file_list_no_app_for_file_type">没有支持此文件的应用</string>
   <string name="local_file_list_empty">在该文件夹中不存在文件。</string>
@@ -148,6 +151,7 @@
   <string name="uploader_upload_text_dialog_filename_error_empty">文件名不能为空</string>
   <string name="uploader_upload_text_dialog_filename_error_length_max">文件名不能超过 %d 个字符</string>
   <string name="uploader_upload_text_filename_hint">文件名</string>
+  <string name="uploader_upload_available_offline_files">正在上传可用的离线文件</string>
   <string name="uploader_upload_requested_from_wifi_files">正在上传来自 WIFI 设备上传的文件</string>
   <string name="ssl_certificate_not_trusted">服务器证书不被信任</string>
   <string name="uploads_view_title">上传</string>
@@ -348,6 +352,8 @@
   <string name="preview_image_error_unknown_format">无法显示图片</string>
   <string name="error__upload__local_file_not_copied">无法复制 %1$s 到本地目录 %2$s</string>
   <string name="prefs_camera_picture_upload_path_title">图片上传路径</string>
+  <string name="get_shares_error">尝试获取共享时发生错误</string>
+  <string name="get_sharees_error">尝试获取用户和用户组时发生错误</string>
   <string name="share_link_no_support_share_api">抱歉，共享功能未启用。请联系管理员。</string>
   <string name="share_link_file_no_exist">无法共享。请检查文件是否存在</string>
   <string name="share_link_file_error">共享文件或目录出错</string>
@@ -503,6 +509,7 @@
   <string name="share_via_link_expiration_date_enforced_label">过期日期*</string>
   <string name="share_via_link_expiration_date_explanation_label">公开链接将会在创建之后%1$d天过期</string>
   <string name="share_via_link_default_name_template">%1$s链接</string>
+  <string name="share_via_link_empty_password">密码为空</string>
   <string name="private_link_info">这是一个私有链接,只有有权访问该文件/文件夹的人才可以使用它。将其作为给您自己或者其他人分享文件的永久链接。</string>
   <string name="file_private_link_error">该文件不支持私密连接</string>
   <string name="download_notification_channel_name">下载</string>
@@ -539,6 +546,8 @@
   <string name="welcome_feature_7_text">一下子选中全部文件</string>
   <string name="welcome_feature_8_title">离线可用</string>
   <string name="welcome_feature_8_text">文件自动同步</string>
+  <string name="welcome_feature_9_title">文档提供者</string>
+  <string name="welcome_feature_9_text">从其他应用访问和编辑你的ownCloud文件</string>
   <string name="welcome_feature_10_text">发送您的日志让owncloud变得更好</string>
   <string name="no_borwser_installed_alert">未安装浏览器。请安装浏览器以使用安全登陆。</string>
 </resources>

@@ -72,11 +72,14 @@
   <string name="passcode_already_set">Kyçjet e rregullsive dhe kodkalimeve s\’mund të aktivizohen në të njëjtën kohë, ju lutemi, së pari çaktivizoni kodkalimin</string>
   <string name="pattern_no_longer_required">S\’do të pyetet më për rregullsinë</string>
   <string name="pattern_configure_your_pattern_explanation">Rregullsia do të kërkohet sa herë që niset aplikacioni</string>
+  <string name="pattern_locked">Kyçur përmes rregullsie</string>
   <string name="illegal_argument_exception_message">Lypset një VEPRIM i vlefshëm te Synimi që u dha</string>
   <string name="recommend_subject">Provojeni %1$s te telefoni juaj!</string>
   <string name="recommend_text">Dua t\’ju ftoj të përdorni %1$s në telefonin tuaj!\nShkarkojeni prej këtu: %2$s</string>
   <string name="auth_failure_snackbar">Mirëfilltësimi dështoi</string>
   <string name="auth_failure_snackbar_action">Ndryshoni llogari</string>
+  <string name="auth_oauth_failure">Token-i i hyrjeve ka skaduar ose është bërë i pavlefshëm. Ribëni hyrjen në llogari që të rifitoni mundësinë e përdorimit</string>
+  <string name="auth_oauth_failure_snackbar_action">Hyni</string>
   <string name="auth_check_server">Kontrollo shërbyesin</string>
   <string name="auth_host_url">Adresë https://… e shërbyesit</string>
   <string name="auth_username">Emër përdoruesi</string>
@@ -217,6 +220,7 @@
   <string name="pass_code_wrong">Kodkalim i pasaktë</string>
   <string name="pass_code_removed">Kodkalimi u hoq</string>
   <string name="pass_code_stored">Kodkalimi u depozitua</string>
+  <string name="pass_code_locked">Kyçur përmes kodkalimi</string>
   <string name="fingerprint_confirm">Që të vazhdohet, ripohoni shenjat tuaja të gishtave</string>
   <string name="fingerprint_hint">Ndijues prekjesh</string>
   <string name="fingerprint_not_recognized">Shenja gishtash jo të pranuara, riprovoni</string>

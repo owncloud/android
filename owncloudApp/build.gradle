@@ -34,17 +34,11 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     // Android JUnit Runner
     androidTestImplementation 'androidx.test:runner:1.2.0'
-    // Espresso core
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-    // Espresso contrib
     androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.2.0'
-    // Espresso intents
     androidTestImplementation 'androidx.test.espresso:espresso-intents:3.2.0'
-    // Espresso web
     androidTestImplementation 'androidx.test.espresso:espresso-web:3.2.0'
-    // UIAutomator - for cross-app UI tests, and to grant screen is turned on in Espresso tests
     androidTestImplementation 'androidx.test.uiautomator:uiautomator:2.2.0'
-    // fix conflict in dependencies; see http://g.co/androidstudio/app-test-app-conflict for details
     androidTestImplementation 'androidx.annotation:annotation:1.1.0'
     androidTestImplementation "androidx.room:room-testing:$roomVersion"
     androidTestImplementation "androidx.arch.core:core-testing:$archLifecycleVersion"
@@ -62,15 +56,12 @@ dependencies {
     // Convert Java Objects into JSON and back
     implementation 'com.google.code.gson:gson:2.8.5'
 
-    // Kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
 
-    // Architecture lifecycle components
     implementation "androidx.lifecycle:lifecycle-extensions:$archLifecycleVersion"
     implementation "androidx.lifecycle:lifecycle-viewmodel:$archLifecycleVersion"
     kapt "androidx.lifecycle:lifecycle-compiler:$archLifecycleVersion"
 
-    // Room
     implementation "androidx.room:room-runtime:$roomVersion"
     kapt "androidx.room:room-compiler:$roomVersion"
 

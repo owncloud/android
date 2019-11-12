@@ -72,12 +72,15 @@
   <string name="passcode_already_set">Графический ключ и код не могут быть включены одновременно, пожалуйста, отключите сперва код</string>
   <string name="pattern_no_longer_required">Графический ключ не будет больше запрашиваться</string>
   <string name="pattern_configure_your_pattern_explanation">Графический ключ будет запрашиваться каждый раз при запуске приложения</string>
+  <string name="pattern_locked">Заблокировано графическим ключом</string>
   <string name="illegal_argument_exception_message">Допустимое ДЕЙСТВИЕ требуется для передачи в намерениях</string>
   <string name="recommend_subject">Попробуйте %1$s на вашем смартфоне!</string>
   <string name="recommend_text">Хочу предложить вам использовать %1$s на смартфоне!\nЗагрузить можно здесь: %2$s
 	</string>
   <string name="auth_failure_snackbar">Аутентификация не удалась</string>
   <string name="auth_failure_snackbar_action">Измените учётную запись</string>
+  <string name="auth_oauth_failure">Токен доступа устарел или стал недопустимым. Перевойдите, чтобы восстановить доступ</string>
+  <string name="auth_oauth_failure_snackbar_action">Войти</string>
   <string name="auth_check_server">Проверить сервер</string>
   <string name="auth_host_url">Адрес сервера https://...</string>
   <string name="auth_username">Имя пользователя</string>
@@ -218,6 +221,7 @@
   <string name="pass_code_wrong">Некоррентный код</string>
   <string name="pass_code_removed">Код удален</string>
   <string name="pass_code_stored">Код сохранен</string>
+  <string name="pass_code_locked">Заблокировано кодом</string>
   <string name="fingerprint_confirm">Для продолжения подтвердите свой отпечаток пальца</string>
   <string name="fingerprint_hint">Датчик прикосновения</string>
   <string name="fingerprint_not_recognized">Отпечаток пальца не распознан, попробуйте ещё раз</string>

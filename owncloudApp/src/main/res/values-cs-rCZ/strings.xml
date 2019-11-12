@@ -61,6 +61,7 @@ Automaticky nahrát video snímané kamerou
   <string name="recommend_text">Chtěl bych vás pozvat k používání %1$s na vašem chytrém telefonu!\nKe stažení zde: %2$s</string>
   <string name="auth_failure_snackbar">Ověření selhalo</string>
   <string name="auth_failure_snackbar_action">Změna účtu</string>
+  <string name="auth_oauth_failure_snackbar_action">Přihlásit</string>
   <string name="auth_check_server">Ověřit server</string>
   <string name="auth_host_url">Adresa serveru https://...</string>
   <string name="auth_username">Uživatelské jméno</string>

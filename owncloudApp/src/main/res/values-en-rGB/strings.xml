@@ -38,6 +38,10 @@
   <string name="prefs_passcode">Passcode lock</string>
   <string name="prefs_fingerprint">Fingerprint lock</string>
   <string name="prefs_fingerprint_summary">Enable passcode or pattern lock to enable this option</string>
+  <string name="prefs_touches_with_other_visible_windows">Touches with other visible windows</string>
+  <string name="prefs_touches_with_other_visible_windows_summary">Allow touches when the view is obscured by another visible window. Enable it to use light filtering apps.</string>
+  <string name="confirmation_touches_with_other_windows_title">Are you sure you want to enable this feature?</string>
+  <string name="confirmation_touches_with_other_windows_message">Use this feature under your own responsibility, a malicious application could try to spoof you into performing some actions, unaware, using other views.</string>
   <string name="prefs_camera_picture_upload">Picture uploads</string>
   <string name="prefs_camera_picture_upload_summary">Automatically upload pictures taken by camera</string>
   <string name="prefs_camera_video_upload">Video uploads</string>
@@ -49,6 +53,7 @@
   <string name="prefs_log_delete_history_button">Delete history</string>
   <string name="prefs_help">Help</string>
   <string name="prefs_sync_calendar_contacts">Sync your contacts, calendars and tasks</string>
+  <string name="prefs_sync_calendar_contacts_summary">Install DAVx⁵</string>
   <string name="prefs_recommend">Recommend to a friend</string>
   <string name="prefs_feedback">Feedback</string>
   <string name="prefs_imprint">Imprint</string>
@@ -72,6 +77,7 @@
   <string name="recommend_text">I want to invite you to use %1$s on your smartphone!\nDownload here: %2$s</string>
   <string name="auth_failure_snackbar">Authentication failed</string>
   <string name="auth_failure_snackbar_action">Change account</string>
+  <string name="auth_oauth_failure_snackbar_action">Sign in</string>
   <string name="auth_check_server">Check server</string>
   <string name="auth_host_url">Server address https://…</string>
   <string name="auth_username">Username</string>
@@ -94,6 +100,7 @@
   <string name="uploader_error_message_source_file_not_copied">An error occurred whilst copying the file to a temporary folder. Please try to send again.</string>
   <string name="file_list_seconds_ago">seconds ago</string>
   <string name="file_list_empty">Nothing in here. Upload something!</string>
+  <string name="file_list_empty_available_offline">There are no available offline files.</string>
   <string name="file_list_loading">Loading…</string>
   <string name="file_list_no_app_for_file_type">No app found for file type</string>
   <string name="local_file_list_empty">There are no files in this folder.</string>
@@ -147,6 +154,9 @@
   <string name="uploader_upload_text_dialog_filename_error_empty">Filename must not be empty</string>
   <string name="uploader_upload_text_dialog_filename_error_length_max">Filename must not be more than %d characters</string>
   <string name="uploader_upload_text_filename_hint">Filename</string>
+  <string name="uploader_upload_camera_upload_files">Uploading camera upload files</string>
+  <string name="uploader_upload_available_offline_files">Uploading available offline files</string>
+  <string name="uploader_upload_requested_from_wifi_files">Uploading requested from WiFi files</string>
   <string name="ssl_certificate_not_trusted">Server certificate is not trusted</string>
   <string name="uploads_view_title">Uploads</string>
   <string name="uploads_view_group_current_uploads">Current</string>
@@ -346,6 +356,9 @@
   <string name="preview_image_error_unknown_format">This image cannot be shown</string>
   <string name="error__upload__local_file_not_copied">%1$s could not be copied to %2$s local folder</string>
   <string name="prefs_camera_picture_upload_path_title">Picture upload path</string>
+  <string name="get_shares_error">An error occurred while trying to retrieve shares</string>
+  <string name="get_sharees_error">An error occurred while trying to retrieve users and groups</string>
+  <string name="get_capabilities_error">An error occurred while trying to retrieve capabilities</string>
   <string name="share_link_no_support_share_api">Sorry, sharing is not enabled on your server. Please contact your
 		administrator.</string>
   <string name="share_link_file_no_exist">Unable to share. Please check whether the file exists</string>
@@ -502,6 +515,7 @@
   <string name="share_via_link_expiration_date_enforced_label">Expiration *</string>
   <string name="share_via_link_expiration_date_explanation_label">The public link will expire no later than %1$d days after it is created</string>
   <string name="share_via_link_default_name_template">%1$s link</string>
+  <string name="share_via_link_empty_password">The password is empty</string>
   <string name="private_link_info">This is a private link, only people who have access to the file/folder can use it. Use it as a permanent link for yourself or to point others to files within shares.</string>
   <string name="file_private_link_error">Private link is not available for this file</string>
   <string name="download_notification_channel_name">Downloads</string>
@@ -512,6 +526,7 @@
   <string name="media_service_notification_channel_description">See music player</string>
   <string name="file_sync_notification_channel_name">File sync</string>
   <string name="file_sync_notification_channel_description">See file sync result</string>
+  <string name="clicks_to_be_developer">You %1$d clicks away to enable developer menus</string>
   <string name="rate_dialog_title">Rate %1$s app!</string>
   <string name="rate_dialog_description">If you enjoy using this app, could you take a moment to rate it? Your feedback is very important for us. </string>
   <string name="button_no_thanks_name">NO, THANKS</string>
@@ -539,5 +554,9 @@
   <string name="welcome_feature_7_text">Select all files at once</string>
   <string name="welcome_feature_8_title">Available offline</string>
   <string name="welcome_feature_8_text">Your files automatically synchronised</string>
+  <string name="welcome_feature_9_title">Document provider</string>
+  <string name="welcome_feature_9_text">Access and edit your ownCloud files from other apps</string>
+  <string name="welcome_feature_10_title">Logs with search for everyone</string>
+  <string name="welcome_feature_10_text">Send us your logs to make the app work better</string>
   <string name="no_borwser_installed_alert">No browser installed. Please install a Browser in order to allow a secure login.</string>
 </resources>
