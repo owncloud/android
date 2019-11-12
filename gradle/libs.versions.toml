@@ -24,6 +24,8 @@ androidxWork = "2.8.1"
 coil = "2.2.2"
 dexopener = "2.0.5"
 disklrucache = "2.0.2"
+firebaseCrashlyticsGradle = "2.9.2"
+googleServices = "4.3.14"
 media3 ="1.1.1"
 floatingactionbutton = "1.10.1"
 glide = "4.15.1"
@@ -82,6 +84,8 @@ androidx-work-runtime-ktx = { group = "androidx.work", name = "work-runtime-ktx"
 coil = { group = "io.coil-kt", name = "coil", version.ref = "coil" }
 dexopener = { group = "com.github.tmurakami", name = "dexopener", version.ref = "dexopener" }
 disklrucache = { group = "com.jakewharton", name = "disklrucache", version.ref = "disklrucache" }
+firebase-crashlytics-gradle = { module = "com.google.firebase:firebase-crashlytics-gradle", version.ref = "firebaseCrashlyticsGradle" }
+google-services = { module = "com.google.gms:google-services", version.ref = "googleServices" }
 media3-exoplayer = { group = "androidx.media3", name = "media3-exoplayer", version.ref = "media3" }
 media3-ui = { group = "androidx.media3", name = "media3-ui", version.ref = "media3" }
 floatingactionbutton = { group = "com.getbase", name = "floatingactionbutton", version.ref = "floatingactionbutton" }
