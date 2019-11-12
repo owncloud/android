@@ -21,16 +21,9 @@ package com.owncloud.android.extensions
 
 import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
-import com.owncloud.android.R
 
-fun Fragment.showError(message: String, throwable: Throwable?) {
-    val reason = throwable?.parseError(resources) ?: return
-    if (reason.isEmpty()) {
-        showMessage(message)
-    } else {
-        showMessage("$message ${getString(R.string.error_reason)} $reason")
-    }
-}
+fun Fragment.showError(genericErrorMessage: String, throwable: Throwable?) =
+    showMessage(throwable?.parseError(genericErrorMessage, resources)!!)
 
 fun Fragment.showMessage(
     message: CharSequence,

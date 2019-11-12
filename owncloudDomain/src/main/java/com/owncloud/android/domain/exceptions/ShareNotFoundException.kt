@@ -19,6 +19,6 @@
 
 package com.owncloud.android.domain.exceptions
 
-import java.lang.Exception
-
-class ShareNotFoundException : Exception()
+class ShareNotFoundException(
+    message: String
+) : Exception(message)

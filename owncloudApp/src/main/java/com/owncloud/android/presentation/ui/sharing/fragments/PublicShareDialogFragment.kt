@@ -779,10 +779,8 @@ class PublicShareDialogFragment : DialogFragment() {
     /**
      * Show error when creating or updating the public share, if any
      */
-    fun showError(message: String, throwable: Throwable?) {
-        val reason = throwable?.parseError(resources) ?: return
-        public_link_error_message?.text =
-            if (reason.isEmpty()) message else "$message ${getString(R.string.error_reason)} $reason"
+    fun showError(genericErrorMessage: String, throwable: Throwable?) {
+        public_link_error_message?.text = throwable?.parseError(genericErrorMessage, resources)
         public_link_error_message?.visibility = View.VISIBLE
     }
 

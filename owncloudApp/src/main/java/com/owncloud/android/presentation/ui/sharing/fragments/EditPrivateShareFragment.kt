@@ -467,12 +467,9 @@ class EditPrivateShareFragment : DialogFragment() {
 
     /**
      * Show error when updating the private share, if any
-     * @param errorMessage
      */
-    private fun showError(message: String, throwable: Throwable?) {
-        val reason = throwable?.parseError(resources) ?: return
-        private_share_error_message?.text =
-            if (reason.isEmpty()) message else "$message ${getString(R.string.error_reason)} $reason"
+    private fun showError(genericErrorMessage: String, throwable: Throwable?) {
+        private_share_error_message?.text = throwable?.parseError(genericErrorMessage, resources)
         private_share_error_message?.visibility = View.VISIBLE
     }
 
