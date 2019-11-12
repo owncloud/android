@@ -3,11 +3,15 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-allopen'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'io.fabric'
 
 def commitSHA1 = 'COMMIT_SHA1'
 def gitRemote = 'GIT_REMOTE'
 
 dependencies {
+    implementation 'com.google.firebase:firebase-analytics:17.2.1'
+    implementation 'com.crashlytics.sdk.android:crashlytics:2.10.1'
+
     /// dependencies for app building
     implementation project(':owncloud-android-library:owncloudComLibrary')
     implementation "androidx.legacy:legacy-support-v4:$androidX"
@@ -225,3 +229,37 @@ static def getGitOriginRemote() {
     def found = values.find { it.startsWith("origin") && it.endsWith("(push)") }
     return found.replace("origin", "").replace("(push)", "").replace(".git", "").trim()
 }
+
+static def getGitUser() {
+    def remote = getGitOriginRemote()
+    return remote.replace("https://github.com/", "").replace("/owncloud-android", "").trim()
+}
+
+task decryptPrivate {
+    def out = services.get(StyledTextOutputFactory).create("")
+    def pass = "$System.env.CRYPT_PASS"
+    if (pass == "null") {
+        out.style(Style.Normal).text("In decrypt files the mandatory ")
+                .style(Style.Failure).println('CRYPT_PASS not set')
+                .style(Style.Normal).println("  If you want use Firebase features, please set it with ")
+                .style(Style.SuccessHeader).println("  export CRYPT_PASS=<superSecret>")
+        println ""
+    } else {
+        out.style(Style.Normal).text("decrypt files for ")
+                .style(Style.SuccessHeader).text(getTag() + "." + getGitCommitCount() + "." + getLatestGitHash())
+                .style(Style.Info).println(' DECRYPTED')
+        println ""
+
+        def process = "pwd".execute()
+        println "pwd=" + process.text.toString().trim()
+        println "projectDir=$projectDir"
+        println ""
+
+        def processDecrypt = "$projectDir/../signing/decrypt.sh".execute()
+        processDecrypt.waitForProcessOutput(System.out, System.err)
+    }
+}
+
+clean.dependsOn decryptPrivate
+
+apply plugin: 'com.google.gms.google-services'
