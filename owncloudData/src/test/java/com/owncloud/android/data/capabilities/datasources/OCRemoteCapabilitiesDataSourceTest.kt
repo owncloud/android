@@ -20,12 +20,11 @@
 
 package com.owncloud.android.data.capabilities.datasources
 
-import com.owncloud.android.data.capabilities.datasources.implementation.OCRemoteCapabilitiesDataSource
-import com.owncloud.android.data.capabilities.network.OCCapabilityService
-import com.owncloud.android.data.sharing.shares.datasources.mapper.RemoteCapabilityMapper
 import com.owncloud.android.data.utils.DataTestUtil
+import com.owncloud.android.lib.common.OwnCloudClient
+import com.owncloud.android.lib.resources.status.GetRemoteCapabilitiesOperation
 import io.mockk.every
-import io.mockk.mockk
+import io.mockk.mockkClass
 import junit.framework.Assert.assertEquals
 import org.hamcrest.CoreMatchers.notNullValue
 import org.hamcrest.MatcherAssert.assertThat
@@ -34,25 +33,20 @@ import org.junit.Test
 
 class OCRemoteCapabilitiesDataSourceTest {
     private lateinit var ocRemoteCapabilitiesDataSource: OCRemoteCapabilitiesDataSource
-
-    private val ocCapabilityService: OCCapabilityService = mockk()
-    private val remoteCapabilityMapper = RemoteCapabilityMapper()
+    private val ownCloudClient = mockkClass(OwnCloudClient::class)
 
     @Before
     fun init() {
         ocRemoteCapabilitiesDataSource =
-            OCRemoteCapabilitiesDataSource(
-                ocCapabilityService,
-                remoteCapabilityMapper
-            )
+            OCRemoteCapabilitiesDataSource(ownCloudClient)
     }
 
     @Test
     fun readRemoteCapabilities() {
-        val accountName = "ceo@server"
+        val getRemoteCapabilitiesOperation = mockkClass(GetRemoteCapabilitiesOperation::class)
 
         val remoteCapability = DataTestUtil.createRemoteCapability(
-            accountName, 15, 14, 13
+            "ceo@server", 15, 14, 13
         )
 
         val getRemoteCapabilitiesOperationResult = DataTestUtil.createRemoteOperationResultMock(
@@ -61,17 +55,22 @@ class OCRemoteCapabilitiesDataSourceTest {
         )
 
         every {
-            ocCapabilityService.getCapabilities()
+            getRemoteCapabilitiesOperation.execute(ownCloudClient)
         } returns getRemoteCapabilitiesOperationResult
 
         // Get capability from remote datasource
-        val capabilities = ocRemoteCapabilitiesDataSource.getCapabilities(accountName)
+        val remoteOperationResult = ocRemoteCapabilitiesDataSource.getCapabilities(
+            getRemoteCapabilitiesOperation
+        )
 
-        assertThat(capabilities, notNullValue())
+        assertThat(remoteOperationResult, notNullValue())
+        assertThat(remoteOperationResult.data, notNullValue())
 
-        assertEquals("ceo@server", capabilities.accountName)
-        assertEquals(15, capabilities.versionMayor)
-        assertEquals(14, capabilities.versionMinor)
-        assertEquals(13, capabilities.versionMicro)
+        val capability = remoteOperationResult.data
+
+        assertEquals("ceo@server", capability.accountName)
+        assertEquals(15, capability.versionMayor)
+        assertEquals(14, capability.versionMinor)
+        assertEquals(13, capability.versionMicro)
     }
 }

@@ -259,7 +259,7 @@ class ShareFileFragmentTest {
     @Test
     fun hideSharesSharingApiDisabled() {
         loadShareFileFragment(
-            capabilities = AppTestUtil.createCapability(sharingApiEnabled = CapabilityBooleanType.FALSE.value)
+            capabilities = TestUtil.createCapability(sharingApiEnabled = CapabilityBooleanType.FALSE.value)
         )
         onView(withId(R.id.shareWithUsersSection))
             .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)))
