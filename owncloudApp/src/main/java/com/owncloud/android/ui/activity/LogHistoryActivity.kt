@@ -53,12 +53,14 @@ class LogHistoryActivity : ToolbarActivity() {
                 logFragment = BothLogsFragment.newInstance(
                     "Owncloud.log",
                     "search logfile",
-                    "search logcat"
+                    "search logcat",
+                    getString(R.string.mail_logger)
                 )
             } ?: run {
                 logFragment = LogcatFragment.newInstance(
                     "logfile.log",
-                    "search logcat"
+                    "search logcat",
+                    getString(R.string.mail_logger)
                 )
             }
 
