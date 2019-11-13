@@ -100,7 +100,7 @@ public class CameraUploadsSyncJobService extends JobService {
             mCameraUploadsBehaviorAfterUpload = jobParams[0].getExtras().
                     getInt(Extras.EXTRA_CAMERA_UPLOADS_BEHAVIOR_AFTER_UPLOAD);
 
-            syncFiles(mCameraUploadsSyncJobService.getApplicationContext());
+            syncFiles();
 
             return jobParams[0];
         }
@@ -113,7 +113,7 @@ public class CameraUploadsSyncJobService extends JobService {
         /**
          * Get local images and videos and start handling them
          */
-        private void syncFiles(Context context) {
+        private void syncFiles() {
 
             //Get local images and videos
             String localCameraPath = mCameraUploadsSourcePath;
@@ -134,10 +134,6 @@ public class CameraUploadsSyncJobService extends JobService {
             }
 
             Log_OC.d(TAG, "All files synced, finishing job");
-
-            // After scan of new files, we try to sync such files with waiting for Wifi as well
-            TransferRequester requester = new TransferRequester();
-            requester.retryFailedUploads(context, null, null, false);
         }
 
         private File[] orderFilesByCreationTimestamp(File[] localFiles) {
