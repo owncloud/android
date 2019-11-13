@@ -26,7 +26,6 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.PowerManager;
 import android.preference.PreferenceManager;
-import android.view.WindowManager;
 
 import androidx.annotation.RequiresApi;
 import com.owncloud.android.MainApp;
@@ -71,16 +70,6 @@ public class FingerprintManager {
     private int mVisibleActivitiesCounter = 0;
 
     protected FingerprintManager() {
-    }
-
-    public void onActivityCreated(Activity activity) {
-        if (!MainApp.Companion.isDeveloper()) {
-            if (isFingerPrintEnabled()) {
-                activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
-            } else {
-                activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_SECURE);
-            }
-        } // else, let it go, or taking screenshots & testing will not be possible
     }
 
     public void onActivityStarted(Activity activity) {
