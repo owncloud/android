@@ -54,7 +54,7 @@ import com.owncloud.android.ui.whatsnew.ProgressIndicator;
  */
 public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPageChangeListener {
 
-    private static final String KEY_LAST_SEEN_VERSION_CODE = "lastSeenVersionCode";
+    private static final String KEY_LAST_SEEN_VERSION_CODE = "LastVersionCode";
 
     private ImageButton mForwardFinishButton;
     private ProgressIndicator mProgress;
