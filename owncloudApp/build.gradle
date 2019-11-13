@@ -104,18 +104,6 @@ android {
         }
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-
-        // arguments to be passed to functional tests
-        testInstrumentationRunnerArgument "TEST_USER", "\"$System.env.OCTEST_APP_USERNAME\""
-        testInstrumentationRunnerArgument "TEST_PASSWORD", "\"$System.env.OCTEST_APP_PASSWORD\""
-        testInstrumentationRunnerArgument "TEST_USER2", "\"$System.env.OCTEST_APP_USERNAME2\""
-        testInstrumentationRunnerArgument "TEST_PASSWORD2", "\"$System.env.OCTEST_APP_PASSWORD2\""
-        testInstrumentationRunnerArgument "TEST_SERVER_URL", "\"$System.env.OCTEST_SERVER_BASE_URL\""
-        testInstrumentationRunnerArgument "TRUSTED", "\"$System.env.OCTEST_SERVER_TRUSTED\""
-        testInstrumentationRunnerArgument "TEST_USERNAME_ID", "\"$System.env.OCTEST_WEB_USERFIELD\""
-        testInstrumentationRunnerArgument "TEST_PASSWORD_ID", "\"$System.env.OCTEST_WEB_PASSFIELD\""
-        testInstrumentationRunnerArgument "TEST_SUBMIT_XPATH", "\"$System.env.OCTEST_WEB_SUBMITXPATH\""
-        testInstrumentationRunnerArgument "TEST_LOOKUP", "\"$System.env.OCTEST_SERVER_LOOKUP\""
     }
 
     compileOptions {
