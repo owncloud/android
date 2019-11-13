@@ -511,7 +511,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
     private fun findFiles(root: OCFile, query: String): Vector<OCFile> {
         val result = Vector<OCFile>()
 
-        val folderContent = currentStorageManager?.getFolderContent(root, false,false) ?: return result
+        val folderContent = currentStorageManager?.getFolderContent(root, false, false) ?: return result
         folderContent.forEach {
             if (it.fileName.contains(query)) {
                 result.add(it)

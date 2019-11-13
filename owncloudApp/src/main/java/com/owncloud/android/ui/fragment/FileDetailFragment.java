@@ -60,7 +60,6 @@ import com.owncloud.android.utils.PreferenceUtils;
 
 import org.jetbrains.annotations.NotNull;
 
-
 /**
  * This Fragment is used to display the details about a file.
  */
@@ -83,8 +82,8 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
      * <p>
      * When 'fileToDetail' or 'ocAccount' are null, creates a dummy layout (to use when a file wasn't tapped before).
      *
-     * @param fileToDetail      An {@link OCFile} to show in the fragment
-     * @param account           An ownCloud account; needed to start downloads
+     * @param fileToDetail An {@link OCFile} to show in the fragment
+     * @param account      An ownCloud account; needed to start downloads
      * @return New fragment with arguments set
      */
     public static FileDetailFragment newInstance(OCFile fileToDetail, Account account) {
@@ -239,7 +238,7 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
                     mContainerActivity,
                     getActivity()
             );
-            mf.filter(menu, false, false, false,false);
+            mf.filter(menu, false, false, false, false);
         }
 
         // additional restriction for this fragment 

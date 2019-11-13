@@ -69,10 +69,9 @@ import com.owncloud.android.utils.DisplayUtils;
 /**
  * This fragment shows a preview of a downloaded video file, or starts streaming if file is not
  * downloaded yet.
- *
+ * <p>
  * Trying to get an instance with NULL {@link OCFile} or ownCloud {@link Account} values will
  * produce an {@link IllegalStateException}.
- *
  */
 public class PreviewVideoFragment extends FileFragment implements View.OnClickListener,
         ExoPlayer.EventListener, PrepareVideoPlayerAsyncTask.OnPrepareVideoPlayerTaskListener {
@@ -137,10 +136,10 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
 
     /**
      * Creates an empty fragment to preview video files.
-     *
+     * <p>
      * MUST BE KEPT: the system uses it when tries to reinstantiate a fragment automatically
      * (for instance, when the device is turned a aside).
-     *
+     * <p>
      * DO NOT CALL IT: an {@link OCFile} and {@link Account} must be provided for a successful
      * construction
      */
@@ -351,7 +350,7 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
                 mContainerActivity,
                 getActivity()
         );
-        mf.filter(menu, false, false, false,false);
+        mf.filter(menu, false, false, false, false);
 
         // additional restrictions for this fragment
 
@@ -471,6 +470,7 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
 
     /**
      * Called after preparing the player asynchronously
+     *
      * @param mediaSource media to be played
      */
     @Override

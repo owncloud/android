@@ -438,7 +438,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
 
         mFile = getStorageManager().getFileByPath(full_path);
         if (mFile != null) {
-            Vector<OCFile> files = getStorageManager().getFolderContent(mFile, false,false);
+            Vector<OCFile> files = getStorageManager().getFolderContent(mFile, false, false);
             files = sortFileList(files);
 
             mAdapter = new ReceiveExternalFilesAdapter(

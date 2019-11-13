@@ -89,7 +89,7 @@ import java.util.List;
 
 /**
  * A Fragment that lists all files and folders in a given path.
- *
+ * <p>
  * TODO refactor to get rid of direct dependency on FileDisplayActivity
  */
 public class OCFileListFragment extends ExtendedListFragment implements
@@ -132,25 +132,27 @@ public class OCFileListFragment extends ExtendedListFragment implements
     /**
      * Public factory method to create new {@link OCFileListFragment} instances.
      *
-     * @param justFolders               When 'true', only folders will be shown to the user, not files.
-     * @param onlyAvailableOffline      When 'true', only available offline files will be shown to the user.
-     * @param hideFAB                   When 'true', floating action button is hidden.
-     * @param allowContextualMode       When 'true', contextual action mode is enabled long-pressing an item.
+     * @param justFolders          When 'true', only folders will be shown to the user, not files.
+     * @param onlyAvailableOffline When 'true', only available offline files will be shown to the user.
+     * @param hideFAB              When 'true', floating action button is hidden.
+     * @param allowContextualMode  When 'true', contextual action mode is enabled long-pressing an item.
      * @return New fragment with arguments set.
      */
     public static OCFileListFragment newInstance(
-        boolean justFolders,
-        boolean onlyAvailableOffline,
-        boolean sharedByLinkFiles,
-        boolean hideFAB,
-        boolean allowContextualMode
+            boolean justFolders,
+            boolean onlyAvailableOffline,
+            boolean sharedByLinkFiles,
+            boolean hideFAB,
+            boolean allowContextualMode
     ) {
         OCFileListFragment frag = new OCFileListFragment();
         Bundle args = new Bundle();
         args.putBoolean(ARG_JUST_FOLDERS, justFolders);
         args.putBoolean(ARG_ONLY_AVAILABLE_OFFLINE, onlyAvailableOffline);
-        args.putBoolean(ARG_SHARED_BY_LINK_FILES,sharedByLinkFiles);
-        if(onlyAvailableOffline || sharedByLinkFiles) { hideFAB = true; }
+        args.putBoolean(ARG_SHARED_BY_LINK_FILES, sharedByLinkFiles);
+        if (onlyAvailableOffline || sharedByLinkFiles) {
+            hideFAB = true;
+        }
         args.putBoolean(ARG_HIDE_FAB, hideFAB);
         args.putBoolean(ARG_ALLOW_CONTEXTUAL_MODE, allowContextualMode);
         frag.setArguments(args);
@@ -300,8 +302,8 @@ public class OCFileListFragment extends ExtendedListFragment implements
         getFabUpload().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log_OC.i(TAG,"Clicked" + getContext().toString());
-                final View uploadBottomSheet = getLayoutInflater().inflate(R.layout.upload_bottom_sheet_fragment,null);
+                Log_OC.i(TAG, "Clicked" + getContext().toString());
+                final View uploadBottomSheet = getLayoutInflater().inflate(R.layout.upload_bottom_sheet_fragment, null);
                 final BottomSheetDialog dialog = new BottomSheetDialog(getContext());
                 dialog.setContentView(uploadBottomSheet);
                 final LinearLayout uploadFilesLinearLayout = uploadBottomSheet.findViewById(R.id.files_linear_layout);
@@ -384,8 +386,8 @@ public class OCFileListFragment extends ExtendedListFragment implements
     /**
      * records a click on a mini FAB and thus:
      * <ol>
-     *     <li>persists the click fact</li>
-     *     <li>removes the mini FAB labels</li>
+     * <li>persists the click fact</li>
+     * <li>removes the mini FAB labels</li>
      * </ol>
      */
     private void recordMiniFabClick() {
@@ -435,9 +437,9 @@ public class OCFileListFragment extends ExtendedListFragment implements
 
     /**
      * Handler for multiple selection mode.
-     *
+     * <p>
      * Manages input from the user when one or more files or folders are selected in the list.
-     *
+     * <p>
      * Also listens to changes in navigation drawer to hide and recover multiple selection when it's opened
      * and closed.
      */
@@ -471,7 +473,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
          * When the navigation drawer is closed, action mode is recovered in the same state as was
          * when the drawer was (started to be) opened.
          *
-         * @param drawerView        Navigation drawer just closed.
+         * @param drawerView Navigation drawer just closed.
          */
         @Override
         public void onDrawerClosed(View drawerView) {
@@ -492,7 +494,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
          * If the action mode is active when the navigation drawer starts to move, the action
          * mode is closed and the selection stored to be recovered when the drawer is closed.
          *
-         * @param newState     One of STATE_IDLE, STATE_DRAGGING or STATE_SETTLING.
+         * @param newState One of STATE_IDLE, STATE_DRAGGING or STATE_SETTLING.
          */
         @Override
         public void onDrawerStateChanged(int newState) {
@@ -562,7 +564,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
                     mContainerActivity,
                     getActivity()
             );
-            mf.filter(menu, mEnableSelectAll, true, isShowingOnlyAvailableOffline(),isShowingSharedByLinkFiles());
+            mf.filter(menu, mEnableSelectAll, true, isShowingOnlyAvailableOffline(), isShowingSharedByLinkFiles());
             return true;
         }
 
@@ -654,7 +656,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
 
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
-        if(isShowingOnlyAvailableOffline() || isShowingSharedByLinkFiles()){
+        if (isShowingOnlyAvailableOffline() || isShowingSharedByLinkFiles()) {
             super.onPrepareOptionsMenu(menu);
 
             MenuItem item = menu.findItem(R.id.action_sync_account);
@@ -668,7 +670,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
 
     /**
      * Call this, when the user presses the up button.
-     *
+     * <p>
      * Tries to move up the current folder one level. If the parent folder was removed from the
      * database, it continues browsing up until finding an existing folders.
      * <p/>
@@ -699,11 +701,11 @@ public class OCFileListFragment extends ExtendedListFragment implements
                 moveCount++;
             }   // exit is granted because storageManager.getFileByPath("/") never returns null
 
-            if (isShowingOnlyAvailableOffline() && !parentDir.isAvailableOffline()){
+            if (isShowingOnlyAvailableOffline() && !parentDir.isAvailableOffline()) {
                 parentDir = storageManager.getFileByPath(OCFile.ROOT_PATH);
             }
 
-            if(isShowingSharedByLinkFiles() && !parentDir.isSharedViaLink()){
+            if (isShowingSharedByLinkFiles() && !parentDir.isSharedViaLink()) {
                 parentDir = storageManager.getFileByPath(OCFile.ROOT_PATH);
             }
 
@@ -826,7 +828,6 @@ public class OCFileListFragment extends ExtendedListFragment implements
     }
 
     /**
-     *
      * @param file
      * @return 'true' if the file is being downloaded, 'false' otherwise.
      */
@@ -848,8 +849,8 @@ public class OCFileListFragment extends ExtendedListFragment implements
     /**
      * Start the appropriate action(s) on the currently selected files given menu selected by the user.
      *
-     * @param menuId        Identifier of the action menu selected by the user
-     * @return              'true' if the menu selection started any action, 'false' otherwise.
+     * @param menuId Identifier of the action menu selected by the user
+     * @return 'true' if the menu selection started any action, 'false' otherwise.
      */
     public boolean onFileActionChosen(int menuId) {
         final ArrayList<OCFile> checkedFiles = mFileListAdapter.getCheckedItems(getListView());
@@ -935,7 +936,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
                 mContainerActivity.getFileOperationsHelper().toggleAvailableOffline(checkedFiles, false);
                 getListView().invalidateViews();
                 invalidateActionMode();
-                if(isShowingOnlyAvailableOffline()){
+                if (isShowingOnlyAvailableOffline()) {
                     onRefresh();
                 }
                 return true;
@@ -943,13 +944,15 @@ public class OCFileListFragment extends ExtendedListFragment implements
             case R.id.action_move: {
                 Intent action = new Intent(getActivity(), FolderPickerActivity.class);
                 action.putParcelableArrayListExtra(FolderPickerActivity.EXTRA_FILES, checkedFiles);
-                getActivity().startActivityForResult(action, FileDisplayActivity.Companion.getREQUEST_CODE__MOVE_FILES());
+                getActivity().startActivityForResult(action,
+                        FileDisplayActivity.Companion.getREQUEST_CODE__MOVE_FILES());
                 return true;
             }
             case R.id.action_copy:
                 Intent action = new Intent(getActivity(), FolderPickerActivity.class);
                 action.putParcelableArrayListExtra(FolderPickerActivity.EXTRA_FILES, checkedFiles);
-                getActivity().startActivityForResult(action, FileDisplayActivity.Companion.getREQUEST_CODE__COPY_FILES());
+                getActivity().startActivityForResult(action,
+                        FileDisplayActivity.Companion.getREQUEST_CODE__COPY_FILES());
                 return true;
             default:
                 return false;
@@ -1007,11 +1010,11 @@ public class OCFileListFragment extends ExtendedListFragment implements
             }
 
             // If available offline option and folder is not available offline -> list root
-            if(!directory.isAvailableOffline() && isShowingOnlyAvailableOffline()){
+            if (!directory.isAvailableOffline() && isShowingOnlyAvailableOffline()) {
                 directory = storageManager.getFileByPath(OCFile.ROOT_PATH);
             }
 
-            if(!directory.isSharedViaLink() && isShowingSharedByLinkFiles()){
+            if (!directory.isSharedViaLink() && isShowingSharedByLinkFiles()) {
                 directory = storageManager.getFileByPath(OCFile.ROOT_PATH);
             }
 
@@ -1119,8 +1122,9 @@ public class OCFileListFragment extends ExtendedListFragment implements
     /**
      * Determines if user set folder to grid or list view. If folder is not set itself,
      * it finds a parent that is set (at least root is set).
-     * @param file      Folder to check.
-     * @return          'true' is folder should be shown in grid mode, 'false' if list mode is preferred.
+     *
+     * @param file Folder to check.
+     * @return 'true' is folder should be shown in grid mode, 'false' if list mode is preferred.
      */
     public boolean isGridViewPreferred(OCFile file) {
         if (file != null) {
@@ -1204,7 +1208,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
     /**
      * Show a temporary message in a Snackbar bound to the content view of the parent Activity
      *
-     * @param messageResource       Message to show.
+     * @param messageResource Message to show.
      */
     private void showSnackMessage(int messageResource) {
         Snackbar snackbar = Snackbar.make(

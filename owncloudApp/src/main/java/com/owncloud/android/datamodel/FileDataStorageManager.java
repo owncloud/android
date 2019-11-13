@@ -141,7 +141,7 @@ public class FileDataStorageManager {
     /**
      * This will return a OCFile by its given FileId here refered as the remoteId.
      * Its the fileId ownCloud Core uses to identify a file even if its name has changed.
-     *
+     * <p>
      * An Explenation about how to use ETags an those FileIds can be found here:
      * <a href="https://github.com/owncloud/client/wiki/Etags-and-file-ids" />
      *
@@ -490,9 +490,9 @@ public class FileDataStorageManager {
 
     /**
      * Updates available-offline status of OCFile received as a parameter, with its current value.
-     *
+     * <p>
      * Saves the new value property for the given file in persistent storage.
-     *
+     * <p>
      * If the file is a folder, updates the value of all its known descendants accordingly.
      *
      * @param file File which available-offline status will be updated.
@@ -710,7 +710,7 @@ public class FileDataStorageManager {
 
     /**
      * Updates database and file system for a file or folder that was moved to a different location.
-     *
+     * <p>
      * TODO explore better (faster) implementations
      * TODO throw exceptions up !
      */
@@ -1965,7 +1965,7 @@ public class FileDataStorageManager {
     /**
      * Get a collection with all the files set by the user as available offline, from all the accounts
      * in the device, putting away the folders
-     *
+     * <p>
      * This is the only method working with a NULL account in {@link #mAccount}. Not something to do often.
      *
      * @return List with all the files set by the user as available offline.

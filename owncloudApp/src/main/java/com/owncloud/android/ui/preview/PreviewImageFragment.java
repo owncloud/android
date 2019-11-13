@@ -60,10 +60,10 @@ import java.io.File;
 
 /**
  * This fragment shows a preview of a downloaded image.
- *
+ * <p>
  * Trying to get an instance with a NULL {@link OCFile} will produce an
  * {@link IllegalStateException}.
- *
+ * <p>
  * If the {@link OCFile} passed is not downloaded, an {@link IllegalStateException} is generated on
  * instantiation too.
  */
@@ -88,18 +88,18 @@ public class PreviewImageFragment extends FileFragment {
 
     /**
      * Public factory method to create a new fragment that previews an image.
-     *
+     * <p>
      * Android strongly recommends keep the empty constructor of fragments as the only public
      * constructor, and
      * use {@link #setArguments(Bundle)} to set the needed arguments.
-     *
+     * <p>
      * This method hides to client objects the need of doing the construction in two steps.
      *
-     * @param file                      An {@link OCFile} to preview as an image in the fragment
-     * @param account                   ownCloud account containing file
-     * @param ignoreFirstSavedState     Flag to work around an unexpected behaviour of
-     *                                  {@link FragmentStatePagerAdapter}
-     *                                  ; TODO better solution
+     * @param file                  An {@link OCFile} to preview as an image in the fragment
+     * @param account               ownCloud account containing file
+     * @param ignoreFirstSavedState Flag to work around an unexpected behaviour of
+     *                              {@link FragmentStatePagerAdapter}
+     *                              ; TODO better solution
      * @return Fragment ready to be used.
      */
     public static PreviewImageFragment newInstance(
@@ -117,13 +117,13 @@ public class PreviewImageFragment extends FileFragment {
     }
 
     /**
-     *  Creates an empty fragment for image previews.
-     *
-     *  MUST BE KEPT: the system uses it when tries to reinstantiate a fragment automatically
-     *  (for instance, when the device is turned a aside).
-     *
-     *  DO NOT CALL IT: an {@link OCFile} and {@link Account} must be provided for a successful
-     *  construction
+     * Creates an empty fragment for image previews.
+     * <p>
+     * MUST BE KEPT: the system uses it when tries to reinstantiate a fragment automatically
+     * (for instance, when the device is turned a aside).
+     * <p>
+     * DO NOT CALL IT: an {@link OCFile} and {@link Account} must be provided for a successful
+     * construction
      */
     public PreviewImageFragment() {
         mIgnoreFirstSavedState = false;
@@ -254,7 +254,7 @@ public class PreviewImageFragment extends FileFragment {
                     mContainerActivity,
                     getActivity()
             );
-            mf.filter(menu, false, false, false,false);
+            mf.filter(menu, false, false, false, false);
         }
 
         // additional restriction for this fragment 
@@ -425,8 +425,8 @@ public class PreviewImageFragment extends FileFragment {
      * Helper method to test if an {@link OCFile} can be passed to a {@link PreviewImageFragment}
      * to be previewed.
      *
-     * @param file      File to test if can be previewed.
-     * @return          'True' if the file can be handled by the fragment.
+     * @param file File to test if can be previewed.
+     * @return 'True' if the file can be handled by the fragment.
      */
     public static boolean canBePreviewed(OCFile file) {
         return (file != null && file.isImage());

@@ -395,12 +395,12 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
             if (mOnlyAvailableOffline && (folder.equals(updatedStorageManager.getFileByPath(OCFile.ROOT_PATH)) ||
                     !folder.isAvailableOffline())) {
                 mImmutableFilesList = updatedStorageManager.getAvailableOfflineFilesFromCurrentAccount();
-            } else if(mSharedByLinkFiles && (folder.equals(updatedStorageManager.getFileByPath(OCFile.ROOT_PATH)) ||
-                    !folder.isSharedViaLink())){
+            } else if (mSharedByLinkFiles && (folder.equals(updatedStorageManager.getFileByPath(OCFile.ROOT_PATH)) ||
+                    !folder.isSharedViaLink())) {
                 mImmutableFilesList = updatedStorageManager.getSharedByLinkFilesFromCurrentAccount();
-            }
-            else {
-                mImmutableFilesList = mStorageManager.getFolderContent(folder, mOnlyAvailableOffline,mSharedByLinkFiles);
+            } else {
+                mImmutableFilesList = mStorageManager.getFolderContent(folder, mOnlyAvailableOffline,
+                        mSharedByLinkFiles);
             }
 
             mFiles = mImmutableFilesList;
