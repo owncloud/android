@@ -297,8 +297,7 @@
   <string name="placeholder_media_time">12:23:45</string>
   <string name="camera_picture_upload_on_wifi">Pošiljaj slike le prek WiFi</string>
   <string name="camera_video_upload_on_wifi">Pošiljaj posnetke le prek Wifi</string>
-  <string name="camera_upload_path">/Poslano</string>
-  <string name="confirmation_disable_camera_uploads_title">Potrdi</string>
+    <string name="confirmation_disable_camera_uploads_title">Potrdi</string>
   <string name="confirmation_disable_pictures_upload_message">Ali ste prepričani, da želite onemogočiti to zmožnost? Slike na čakanju ne bodo poslane.</string>
   <string name="confirmation_disable_videos_upload_message">Ali ste prepričani, da želite onemogočiti to zmožnost? Posnetki na čakanju ne bodo poslani.</string>
   <string name="conflict_title">Neskladje datotek</string>

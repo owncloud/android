@@ -309,8 +309,7 @@
   <string name="placeholder_media_time">12:23:45</string>
   <string name="camera_picture_upload_on_wifi">Wi-Fi에서만 사진 업로드</string>
   <string name="camera_video_upload_on_wifi">Wi-Fi에서만 동영상 업로드</string>
-  <string name="camera_upload_path">/CameraUpload</string>
-  <string name="confirmation_disable_camera_uploads_title">확인</string>
+    <string name="confirmation_disable_camera_uploads_title">확인</string>
   <string name="confirmation_disable_pictures_upload_message">이 기능을 비활성화 하시겠습니까? 아직 업로드 되지 않은 사진은 자동으로 업로드 되지 않습니다</string>
   <string name="confirmation_disable_videos_upload_message">이 기능을 비활성화 하시겠습니까? 아직 업로드 되지 않은 동영상은 자동으로 업로드 되지 않습니다</string>
   <string name="conflict_title">파일 충돌</string>

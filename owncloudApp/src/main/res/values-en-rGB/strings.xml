@@ -340,8 +340,7 @@
   <string name="placeholder_media_time">12:23:45</string>
   <string name="camera_picture_upload_on_wifi">Upload pictures via wifi only</string>
   <string name="camera_video_upload_on_wifi">Upload videos via wifi only</string>
-  <string name="camera_upload_path">/CameraUpload</string>
-  <string name="confirmation_disable_camera_uploads_title">Confirm</string>
+    <string name="confirmation_disable_camera_uploads_title">Confirm</string>
   <string name="confirmation_disable_pictures_upload_message">Are you sure you want to disable this feature? The pending pictures will not be uploaded</string>
   <string name="confirmation_disable_videos_upload_message">Are you sure you want to disable this feature? The pending videos will not be uploaded</string>
   <string name="proper_pics_folder_warning_camera_upload">Please make sure the folder selected is where the camera you are using saves the pictures taken. Otherwise, the feature will not be able to detect your pictures. Keep in mind that pictures will be uploaded in at least 15 minutes after taking them.</string>

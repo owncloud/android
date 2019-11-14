@@ -354,7 +354,6 @@
 
     <string name="camera_picture_upload_on_wifi">Upload pictures via wifi only</string>
     <string name="camera_video_upload_on_wifi">Upload videos via wifi only</string>
-    <string name="camera_upload_path">/CameraUpload</string>
     <string name="confirmation_disable_camera_uploads_title">Confirm</string>
     <string name="confirmation_disable_pictures_upload_message">Are you sure you want to disable this feature? The pending pictures will not be uploaded</string>
     <string name="confirmation_disable_videos_upload_message">Are you sure you want to disable this feature? The pending videos will not be uploaded</string>

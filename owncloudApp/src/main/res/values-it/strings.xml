@@ -340,7 +340,6 @@
   <string name="placeholder_media_time">12:23:45</string>
   <string name="camera_picture_upload_on_wifi">Carica le immagini solo tramite wifi</string>
   <string name="camera_video_upload_on_wifi">Carica i video solo tramite wifi</string>
-  <string name="camera_upload_path">/CameraUpload</string>
   <string name="confirmation_disable_camera_uploads_title">Conferma</string>
   <string name="confirmation_disable_pictures_upload_message">Sei sicuro di voler disabilitare questa funzionalità? Le immagini rimanenti non saranno caricate</string>
   <string name="confirmation_disable_videos_upload_message">Sei sicuro di voler disabilitare questa funzionalità? I video immagini rimanenti non saranno caricati</string>

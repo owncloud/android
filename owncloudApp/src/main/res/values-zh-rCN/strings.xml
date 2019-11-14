@@ -336,8 +336,7 @@
   <string name="placeholder_media_time">12:23:45</string>
   <string name="camera_picture_upload_on_wifi">仅通过 WIFI 上传照片</string>
   <string name="camera_video_upload_on_wifi">仅通过 WIFI 上传图片。</string>
-  <string name="camera_upload_path">/相机目录</string>
-  <string name="confirmation_disable_camera_uploads_title">确认</string>
+    <string name="confirmation_disable_camera_uploads_title">确认</string>
   <string name="confirmation_disable_pictures_upload_message">你确定要禁用这项功能吗？未上传的图片将不会被上传</string>
   <string name="confirmation_disable_videos_upload_message">你确定要禁用这项功能吗？未上传的视频将不会被上传</string>
   <string name="proper_pics_folder_warning_camera_upload">请确保选择的文件夹是你使用的相机保存相片的位置，否则，该功能将无法检测到你的相片。请记住相片拍摄后15分钟会被上传。</string>

@@ -331,8 +331,7 @@
   <string name="placeholder_media_time">12:23:45</string>
   <string name="camera_picture_upload_on_wifi">Wysyłaj zdjęcia tylko przez WiFi</string>
   <string name="camera_video_upload_on_wifi">Wysyłaj filmy tylko przez WiFi</string>
-  <string name="camera_upload_path">/WrzucanieKamery</string>
-  <string name="confirmation_disable_camera_uploads_title">Potwierdź</string>
+    <string name="confirmation_disable_camera_uploads_title">Potwierdź</string>
   <string name="confirmation_disable_pictures_upload_message">Czy jesteś pewien że chcesz dezaktywować tą usługę ? Oczekujące obrazy nie zostaną wrzucone</string>
   <string name="confirmation_disable_videos_upload_message">Czy jesteś pewien że chcesz dezaktywować tą usługę ? Oczekujące filmy nie zostaną wrzucone</string>
   <string name="conflict_title">Konflikt pliku</string>

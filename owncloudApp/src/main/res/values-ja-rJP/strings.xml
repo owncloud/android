@@ -317,8 +317,7 @@
   <string name="placeholder_media_time">12:23:45</string>
   <string name="camera_picture_upload_on_wifi">WiFi経由でのみ画像をアップロード</string>
   <string name="camera_video_upload_on_wifi">WiFi経由でのみ動画をアップロード</string>
-  <string name="camera_upload_path">/CameraUpload</string>
-  <string name="confirmation_disable_camera_uploads_title">確認</string>
+    <string name="confirmation_disable_camera_uploads_title">確認</string>
   <string name="proper_pics_folder_warning_camera_upload">あなたが撮った写真の保存先が、選択されたフォルダーであることを確認してください。そうでないと、あなたの写真を特定することができません。また写真は撮ってから少なくとも15分後にアップロードされます。</string>
   <string name="proper_videos_folder_warning_camera_upload">あなたが撮った動画の保存先が、選択されたフォルダーであることを確認してください。そうでないと、あなたの動画を特定することができません。また動画は撮ってから少なくとも15分後にアップロードされます。</string>
   <string name="conflict_title">ファイルが競合</string>

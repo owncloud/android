@@ -342,8 +342,7 @@
   <string name="placeholder_media_time">12:23:45</string>
   <string name="camera_picture_upload_on_wifi">Fotot ngarkoji vetëm përmes wifi-it</string>
   <string name="camera_video_upload_on_wifi">Videot ngarkoji vetëm përmes wifi-it</string>
-  <string name="camera_upload_path">/NgarkimeNgaKamera</string>
-  <string name="confirmation_disable_camera_uploads_title">Ripohojeni</string>
+    <string name="confirmation_disable_camera_uploads_title">Ripohojeni</string>
   <string name="confirmation_disable_pictures_upload_message">Jeni i sigurt se doni të çaktivizohet kjo veçori? Fotot e mbetura nuk do të ngarkohen</string>
   <string name="confirmation_disable_videos_upload_message">Jeni i sigurt se doni të çaktivizohet kjo veçori? Videot e mbetura nuk do të ngarkohen</string>
   <string name="proper_pics_folder_warning_camera_upload">Ju lutemi, sigurohuni që dosja e përzgjedhur është ajo ku kamera që po përdorni ruan fotot e bëra. Përndryshe, veçoria s\’do të jetë në gjendje të pikasë fotot tuaja. Kini parasysh që fotot do të ngarkohen të paktën 15 minuta pasi të jenë bërë.</string>
