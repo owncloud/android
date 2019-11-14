@@ -26,7 +26,6 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.PowerManager;
 import android.preference.PreferenceManager;
-import android.view.WindowManager;
 
 import com.owncloud.android.MainApp;
 import com.owncloud.android.ui.activity.PassCodeActivity;
@@ -60,16 +59,6 @@ public class PassCodeManager {
     private int mVisibleActivitiesCounter = 0;
 
     protected PassCodeManager() {
-    }
-
-    public void onActivityCreated(Activity activity) {
-        if (!MainApp.Companion.isDeveloper()) {
-            if (isPassCodeEnabled()) {
-                activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
-            } else {
-                activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_SECURE);
-            }
-        } // else, let it go, or taking screenshots & testing will not be possible
     }
 
     public void onActivityStarted(Activity activity) {
