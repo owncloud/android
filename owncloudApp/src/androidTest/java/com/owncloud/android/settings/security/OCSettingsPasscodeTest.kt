@@ -23,7 +23,6 @@ import android.app.Activity
 import android.content.Intent
 import android.preference.PreferenceManager
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.Espresso.pressBack
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.replaceText
 import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
@@ -42,6 +41,7 @@ import com.owncloud.android.ui.activity.PassCodeActivity
 import org.junit.After
 import org.junit.Assert.assertThat
 import org.junit.Assert.assertTrue
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -115,11 +115,12 @@ class OCSettingsPasscodeTest {
     }
 
     @Test
+    @Ignore
     fun secondTryIncorrect(){
         //Open Activity in passcode creation mode
         openPasscodeActivity(PassCodeActivity.ACTION_REQUEST_WITH_RESULT)
 
-        //First typing )
+        //First typing
         typePasscode(DEFAULT_PASSCODE)
         //Second typing
         typePasscode(WRONG_PASSCODE)
