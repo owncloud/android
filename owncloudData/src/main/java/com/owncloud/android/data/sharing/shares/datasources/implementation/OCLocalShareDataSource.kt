@@ -36,7 +36,7 @@ class OCLocalShareDataSource(
         filePath: String,
         accountName: String,
         shareTypes: List<ShareType>
-    ): LiveData<List<OCShare>?> =
+    ): LiveData<List<OCShare>> =
         Transformations.map(
             ocShareDao.getSharesAsLiveData(
                 filePath,
