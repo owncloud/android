@@ -242,14 +242,12 @@ public class FileStorageUtils {
             val = -1;
         }
 
-        Collections.sort(files, new Comparator<OCFile>() {
-            public int compare(OCFile o1, OCFile o2) {
-                if (o1.getModificationTimestamp() == 0 || o2.getModificationTimestamp() == 0) {
-                    return 0;
-                } else {
-                    Long obj1 = o1.getModificationTimestamp();
-                    return val * obj1.compareTo(o2.getModificationTimestamp());
-                }
+        Collections.sort(files, (ocFile1, ocFile2) -> {
+            if (ocFile1.getModificationTimestamp() == 0 || ocFile2.getModificationTimestamp() == 0) {
+                return 0;
+            } else {
+                Long obj1 = ocFile1.getModificationTimestamp();
+                return val * obj1.compareTo(ocFile2.getModificationTimestamp());
             }
         });
 
@@ -267,21 +265,12 @@ public class FileStorageUtils {
             val = -1;
         }
 
-        Collections.sort(files, new Comparator<OCFile>() {
-            public int compare(OCFile o1, OCFile o2) {
-                if (o1.isFolder() && o2.isFolder()) {
-                    Long obj1 = o1.getFileLength();
-                    return val * obj1.compareTo(o2.getFileLength());
-                } else if (o1.isFolder()) {
-                    return -1;
-                } else if (o2.isFolder()) {
-                    return 1;
-                } else if (o1.getFileLength() == 0 || o2.getFileLength() == 0) {
-                    return 0;
-                } else {
-                    Long obj1 = o1.getFileLength();
-                    return val * obj1.compareTo(o2.getFileLength());
-                }
+        Collections.sort(files, (ocFile1, ocFile2) -> {
+            if (ocFile1.getFileLength() == 0 || ocFile2.getFileLength() == 0) {
+                return 0;
+            } else {
+                Long obj1 = ocFile1.getFileLength();
+                return val * obj1.compareTo(ocFile2.getFileLength());
             }
         });
 
@@ -301,17 +290,15 @@ public class FileStorageUtils {
             val = -1;
         }
 
-        Collections.sort(files, new Comparator<OCFile>() {
-            public int compare(OCFile o1, OCFile o2) {
-                if (o1.isFolder() && o2.isFolder()) {
-                    return val * new AlphanumComparator().compare(o1, o2);
-                } else if (o1.isFolder()) {
-                    return -1;
-                } else if (o2.isFolder()) {
-                    return 1;
-                }
-                return val * new AlphanumComparator().compare(o1, o2);
+        Collections.sort(files, (ocFile1, ocFile2) -> {
+            if (ocFile1.isFolder() && ocFile2.isFolder()) {
+                return val * new AlphanumComparator().compare(ocFile1, ocFile2);
+            } else if (ocFile1.isFolder()) {
+                return -1;
+            } else if (ocFile2.isFolder()) {
+                return 1;
             }
+            return val * new AlphanumComparator().compare(ocFile1, ocFile2);
         });
 
         return files;
