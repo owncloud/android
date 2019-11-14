@@ -70,7 +70,7 @@ data class OCShare(
 
 /**
  * Enum for Share Type, with values:
- * -1 - No shared
+ * -1 - Unknown
  * 0 - Shared by user
  * 1 - Shared by group
  * 3 - Shared by public link
@@ -82,7 +82,7 @@ data class OCShare(
  */
 
 enum class ShareType constructor(val value: Int) {
-    NO_SHARED(-1),
+    UNKNOWN(-1),
     USER(0),
     GROUP(1),
     PUBLIC_LINK(3),
@@ -93,7 +93,7 @@ enum class ShareType constructor(val value: Int) {
     companion object {
         fun fromValue(value: Int): ShareType? {
             return when (value) {
-                -1 -> NO_SHARED
+                -1 -> UNKNOWN
                 0 -> USER
                 1 -> GROUP
                 3 -> PUBLIC_LINK
