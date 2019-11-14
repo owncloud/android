@@ -60,7 +60,7 @@ class OCShareViewModel(
     private val _shares = MediatorLiveData<UIResult<List<OCShare>>>()
     val shares: LiveData<UIResult<List<OCShare>>> = _shares
 
-    private var sharesLiveData: LiveData<List<OCShare>?>? = getSharesAsLiveDataUseCase.execute(
+    private var sharesLiveData: LiveData<List<OCShare>> = getSharesAsLiveDataUseCase.execute(
         GetSharesAsLiveDataUseCase.Params(
             filePath = filePath,
             accountName = accountName
@@ -68,10 +68,8 @@ class OCShareViewModel(
     )
 
     init {
-        sharesLiveData?.let {
-            _shares.addSource(it) { shares ->
-                _shares.postValue(UIResult.Success(shares))
-            }
+        _shares.addSource(sharesLiveData) { shares ->
+            _shares.postValue(UIResult.Success(shares))
         }
 
         refreshSharesFromNetwork()
@@ -80,7 +78,7 @@ class OCShareViewModel(
     fun refreshSharesFromNetwork() {
         viewModelScope.launch {
             _shares.postValue(
-                UIResult.Loading(sharesLiveData?.value)
+                UIResult.Loading(sharesLiveData.value)
             )
 
             val useCaseResult = withContext(ioDispatcher) {

@@ -25,9 +25,9 @@ import com.owncloud.android.domain.sharing.shares.model.OCShare
 
 class GetSharesAsLiveDataUseCase(
     private val shareRepository: ShareRepository
-) : BaseUseCase<LiveData<List<OCShare>?>, GetSharesAsLiveDataUseCase.Params>() {
+) : BaseUseCase<LiveData<List<OCShare>>, GetSharesAsLiveDataUseCase.Params>() {
 
-    override fun run(params: Params): LiveData<List<OCShare>?> = shareRepository.getSharesAsLiveData(
+    override fun run(params: Params): LiveData<List<OCShare>> = shareRepository.getSharesAsLiveData(
         params.filePath,
         params.accountName
     )

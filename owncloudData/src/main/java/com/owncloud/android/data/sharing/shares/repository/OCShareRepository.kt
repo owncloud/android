@@ -118,7 +118,7 @@ class OCShareRepository(
      *********************************************** COMMON ***********************************************
      ******************************************************************************************************/
 
-    override fun getSharesAsLiveData(filePath: String, accountName: String): LiveData<List<OCShare>?> {
+    override fun getSharesAsLiveData(filePath: String, accountName: String): LiveData<List<OCShare>> {
         return localShareDataSource.getSharesAsLiveData(
             filePath, accountName, listOf(
                 ShareType.PUBLIC_LINK,
