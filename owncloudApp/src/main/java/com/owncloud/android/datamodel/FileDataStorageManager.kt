@@ -47,9 +47,11 @@ import com.owncloud.android.MainApp
 import com.owncloud.android.R
 import com.owncloud.android.authentication.AccountUtils
 import com.owncloud.android.data.sharing.shares.db.OCShareEntity
-import com.owncloud.android.db.ProviderMeta.ProviderTableMeta
+import com.owncloud.android.datamodel.OCFile.*
+import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.*
 import com.owncloud.android.domain.capabilities.model.CapabilityBooleanType
 import com.owncloud.android.domain.capabilities.model.OCCapability
+import com.owncloud.android.datamodel.OCFile.AvailableOfflineStatus.*
 import com.owncloud.android.domain.sharing.shares.model.ShareType
 import com.owncloud.android.lib.common.utils.Log_OC
 import com.owncloud.android.lib.resources.shares.RemoteShare
@@ -62,8 +64,8 @@ import java.io.FileOutputStream
 import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
+import java.lang.Long.parseLong
 import java.util.ArrayList
-import java.util.Collections
 import java.util.HashSet
 import java.util.Vector
 
@@ -93,13 +95,14 @@ class FileDataStorageManager {
             var cursorOnKeptInSync: Cursor? = null
             try {
                 cursorOnKeptInSync = contentResolver!!.query(
-                    ProviderTableMeta.CONTENT_URI, null,
-                    ProviderTableMeta.FILE_KEEP_IN_SYNC + " = ? OR " +
-                            ProviderTableMeta.FILE_KEEP_IN_SYNC + " = ?",
+                    CONTENT_URI,
+                    null,
+                    "$FILE_KEEP_IN_SYNC = ? OR $FILE_KEEP_IN_SYNC = ?",
                     arrayOf(
-                        OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE.value.toString(),
-                        OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE_PARENT.value.toString()
-                    ), null
+                        AVAILABLE_OFFLINE.value.toString(),
+                        AVAILABLE_OFFLINE_PARENT.value.toString()
+                    ),
+                    null
                 )
 
                 if (cursorOnKeptInSync != null && cursorOnKeptInSync.moveToFirst()) {
@@ -108,7 +111,7 @@ class FileDataStorageManager {
                     do {
                         file = createFileInstance(cursorOnKeptInSync)
                         accountName = cursorOnKeptInSync.getString(
-                            cursorOnKeptInSync.getColumnIndex(ProviderTableMeta.FILE_ACCOUNT_OWNER)
+                            cursorOnKeptInSync.getColumnIndex(FILE_ACCOUNT_OWNER)
                         )
                         if (!file!!.isFolder && AccountUtils.exists(accountName, mContext)) {
                             result.add(Pair(file, accountName))
@@ -140,15 +143,15 @@ class FileDataStorageManager {
             var cursorOnKeptInSync: Cursor? = null
             try {
                 cursorOnKeptInSync = contentResolver!!.query(
-                    ProviderTableMeta.CONTENT_URI, null,
-                    "(" + ProviderTableMeta.FILE_KEEP_IN_SYNC + " = ? AND NOT " +
-                            ProviderTableMeta.FILE_KEEP_IN_SYNC + " = ? ) AND " +
-                            ProviderTableMeta.FILE_ACCOUNT_OWNER + " = ? ",
+                    CONTENT_URI,
+                    null,
+                    "($FILE_KEEP_IN_SYNC = ? AND NOT $FILE_KEEP_IN_SYNC = ? ) AND $FILE_ACCOUNT_OWNER = ? ",
                     arrayOf(
-                        OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE.value.toString(),
-                        OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE_PARENT.value.toString(),
+                        AVAILABLE_OFFLINE.value.toString(),
+                        AVAILABLE_OFFLINE_PARENT.value.toString(),
                         account!!.name
-                    ), null
+                    ),
+                    null
                 )
 
                 if (cursorOnKeptInSync != null && cursorOnKeptInSync.moveToFirst()) {
@@ -166,7 +169,7 @@ class FileDataStorageManager {
                 cursorOnKeptInSync?.close()
             }
 
-            Collections.sort(result)
+            result.sort()
             return result
         }
 
@@ -185,7 +188,7 @@ class FileDataStorageManager {
     }
 
     fun getFileByPath(path: String): OCFile? {
-        val c = getFileCursorForValue(ProviderTableMeta.FILE_PATH, path)
+        val c = getFileCursorForValue(FILE_PATH, path)
         var file: OCFile? = null
         if (c != null) {
             if (c.moveToFirst()) {
@@ -193,20 +196,17 @@ class FileDataStorageManager {
             }
             c.close()
         }
-        return if (file == null && OCFile.ROOT_PATH == path) {
+        return if (file == null && ROOT_PATH == path) {
             createRootDir() // root should always exist
         } else file
     }
 
     fun getFileById(id: Long): OCFile? {
-        val c = getFileCursorForValue(ProviderTableMeta._ID, id.toString())
-        var file: OCFile? = null
-        if (c != null) {
-            if (c.moveToFirst()) {
-                file = createFileInstance(c)
-            }
-            c.close()
-        }
+        val c = getFileCursorForValue(_ID, id.toString()) ?: return null
+        val file: OCFile? = if (c.moveToFirst()) {
+            createFileInstance(c)
+        } else null
+        c.close()
         return file
     }
 
@@ -215,43 +215,33 @@ class FileDataStorageManager {
      * Its the fileId ownCloud Core uses to identify a file even if its name has changed.
      *
      *
-     * An Explenation about how to use ETags an those FileIds can be found here:
+     * An Explanation about how to use ETags an those FileIds can be found here:
      * [](https://github.com/owncloud/client/wiki/Etags-and-file-ids)
      *
      * @param remoteID
      * @return
      */
     fun getFileByRemoteId(remoteID: String): OCFile? {
-        val c = getFileCursorForValue(ProviderTableMeta.FILE_REMOTE_ID, remoteID)
-        var file: OCFile? = null
-        if (c != null) {
-            if (c.moveToFirst()) {
-                file = createFileInstance(c)
-            }
-            c.close()
-        }
+        val c = getFileCursorForValue(FILE_REMOTE_ID, remoteID) ?: return null
+        val file: OCFile? = if (c.moveToFirst()) {
+            createFileInstance(c)
+        } else null
+        c.close()
         return file
     }
 
     fun getFileByLocalPath(path: String): OCFile? {
-        val c = getFileCursorForValue(ProviderTableMeta.FILE_STORAGE_PATH, path)
-        var file: OCFile? = null
-        if (c != null) {
-            if (c.moveToFirst()) {
-                file = createFileInstance(c)
-            }
-            c.close()
-        }
+        val c = getFileCursorForValue(FILE_STORAGE_PATH, path) ?: return null
+        val file: OCFile? = if (c.moveToFirst()) {
+            createFileInstance(c)
+        } else null
+        c.close()
         return file
     }
 
-    fun fileExists(id: Long): Boolean {
-        return fileExists(ProviderTableMeta._ID, id.toString())
-    }
+    fun fileExists(id: Long): Boolean = fileExists(_ID, id.toString())
 
-    fun fileExists(path: String): Boolean {
-        return fileExists(ProviderTableMeta.FILE_PATH, path)
-    }
+    fun fileExists(path: String): Boolean = fileExists(FILE_PATH, path)
 
     fun getFolderContent(f: OCFile?, onlyAvailableOffline: Boolean): Vector<OCFile> {
         return if (f != null && f.isFolder && f.fileId != -1L) {
@@ -279,34 +269,30 @@ class FileDataStorageManager {
 
     fun saveFile(file: OCFile): Boolean {
         var overriden = false
-        val cv = ContentValues()
-        cv.put(ProviderTableMeta.FILE_MODIFIED, file.modificationTimestamp)
-        cv.put(
-            ProviderTableMeta.FILE_MODIFIED_AT_LAST_SYNC_FOR_DATA,
-            file.modificationTimestampAtLastSyncForData
-        )
-        cv.put(ProviderTableMeta.FILE_CREATION, file.creationTimestamp)
-        cv.put(ProviderTableMeta.FILE_CONTENT_LENGTH, file.fileLength)
-        cv.put(ProviderTableMeta.FILE_CONTENT_TYPE, file.mimetype)
-        cv.put(ProviderTableMeta.FILE_NAME, file.fileName)
-        cv.put(ProviderTableMeta.FILE_PARENT, file.parentId)
-        cv.put(ProviderTableMeta.FILE_PATH, file.remotePath)
-        if (!file.isFolder) {
-            cv.put(ProviderTableMeta.FILE_STORAGE_PATH, file.storagePath)
+        val cv = ContentValues().apply {
+            put(FILE_MODIFIED, file.modificationTimestamp)
+            put(FILE_MODIFIED_AT_LAST_SYNC_FOR_DATA, file.modificationTimestampAtLastSyncForData)
+            put(FILE_CREATION, file.creationTimestamp)
+            put(FILE_CONTENT_LENGTH, file.fileLength)
+            put(FILE_CONTENT_TYPE, file.mimetype)
+            put(FILE_NAME, file.fileName)
+            put(FILE_PARENT, file.parentId)
+            put(FILE_PATH, file.remotePath)
+            if (!file.isFolder) put(FILE_STORAGE_PATH, file.storagePath)
+            put(FILE_ACCOUNT_OWNER, account!!.name)
+            put(FILE_LAST_SYNC_DATE, file.lastSyncDateForProperties)
+            put(FILE_LAST_SYNC_DATE_FOR_DATA, file.lastSyncDateForData)
+            put(FILE_ETAG, file.etag)
+            put(FILE_TREE_ETAG, file.treeEtag)
+            put(FILE_SHARED_VIA_LINK, if (file.isSharedViaLink) 1 else 0)
+            put(FILE_SHARED_WITH_SHAREE, if (file.isSharedWithSharee) 1 else 0)
+            put(FILE_PERMISSIONS, file.permissions)
+            put(FILE_REMOTE_ID, file.remoteId)
+            put(FILE_UPDATE_THUMBNAIL, file.needsUpdateThumbnail())
+            put(FILE_IS_DOWNLOADING, file.isDownloading)
+            put(FILE_ETAG_IN_CONFLICT, file.etagInConflict)
+            put(FILE_PRIVATE_LINK, file.privateLink)
         }
-        cv.put(ProviderTableMeta.FILE_ACCOUNT_OWNER, account!!.name)
-        cv.put(ProviderTableMeta.FILE_LAST_SYNC_DATE, file.lastSyncDateForProperties)
-        cv.put(ProviderTableMeta.FILE_LAST_SYNC_DATE_FOR_DATA, file.lastSyncDateForData)
-        cv.put(ProviderTableMeta.FILE_ETAG, file.etag)
-        cv.put(ProviderTableMeta.FILE_TREE_ETAG, file.treeEtag)
-        cv.put(ProviderTableMeta.FILE_SHARED_VIA_LINK, if (file.isSharedViaLink) 1 else 0)
-        cv.put(ProviderTableMeta.FILE_SHARED_WITH_SHAREE, if (file.isSharedWithSharee) 1 else 0)
-        cv.put(ProviderTableMeta.FILE_PERMISSIONS, file.permissions)
-        cv.put(ProviderTableMeta.FILE_REMOTE_ID, file.remoteId)
-        cv.put(ProviderTableMeta.FILE_UPDATE_THUMBNAIL, file.needsUpdateThumbnail())
-        cv.put(ProviderTableMeta.FILE_IS_DOWNLOADING, file.isDownloading)
-        cv.put(ProviderTableMeta.FILE_ETAG_IN_CONFLICT, file.etagInConflict)
-        cv.put(ProviderTableMeta.FILE_PRIVATE_LINK, file.privateLink)
 
         val sameRemotePath = fileExists(file.remotePath)
         if (sameRemotePath || fileExists(file.fileId)) {  // for renamed files; no more delete and create
@@ -321,52 +307,31 @@ class FileDataStorageManager {
 
             overriden = true
             if (contentResolver != null) {
-                contentResolver!!.update(
-                    ProviderTableMeta.CONTENT_URI, cv,
-                    ProviderTableMeta._ID + "=?",
-                    arrayOf(file.fileId.toString())
-                )
+                contentResolver!!.update(CONTENT_URI, cv, "$_ID=?", arrayOf(file.fileId.toString()))
             } else {
                 try {
-                    contentProviderClient!!.update(
-                        ProviderTableMeta.CONTENT_URI,
-                        cv, ProviderTableMeta._ID + "=?",
-                        arrayOf(file.fileId.toString())
-                    )
+                    contentProviderClient!!.update(CONTENT_URI, cv, "$_ID=?", arrayOf(file.fileId.toString()))
                 } catch (e: RemoteException) {
-                    Log_OC.e(
-                        TAG,
-                        "Fail to insert insert file to database " + e.message
-                    )
+                    Log_OC.e(TAG, "Fail to insert insert file to database ${e.message}", e)
                 }
-
             }
 
         } else {
             // new file
             setInitialAvailableOfflineStatus(file, cv)
 
-            var result_uri: Uri? = null
+            var resultUri: Uri? = null
             if (contentResolver != null) {
-                result_uri = contentResolver!!.insert(
-                    ProviderTableMeta.CONTENT_URI_FILE, cv
-                )
+                resultUri = contentResolver!!.insert(CONTENT_URI_FILE, cv)
             } else {
                 try {
-                    result_uri = contentProviderClient!!.insert(
-                        ProviderTableMeta.CONTENT_URI_FILE, cv
-                    )
+                    resultUri = contentProviderClient!!.insert(CONTENT_URI_FILE, cv)
                 } catch (e: RemoteException) {
-                    Log_OC.e(
-                        TAG,
-                        "Fail to insert insert file to database " + e.message
-                    )
+                    Log_OC.e(TAG, "Fail to insert insert file to database ${e.message}", e)
                 }
-
             }
-            if (result_uri != null) {
-                val new_id = java.lang.Long.parseLong(result_uri.pathSegments[1])
-                file.fileId = new_id
+            resultUri?.let {
+                file.fileId = it.pathSegments[1].toLong()
             }
         }
 
@@ -387,76 +352,67 @@ class FileDataStorageManager {
     fun saveFolder(
         folder: OCFile, updatedFiles: Collection<OCFile>, filesToRemove: Collection<OCFile>
     ) {
-
         Log_OC.d(
-            TAG, "Saving folder " + folder.remotePath + " with " + updatedFiles.size
-                    + " children and " + filesToRemove.size + " files to remove"
+            TAG, "Saving folder ${folder.remotePath} with ${updatedFiles.size} children and " +
+                    "${filesToRemove.size} files to remove"
         )
 
         val operations = ArrayList<ContentProviderOperation>(updatedFiles.size)
 
         // prepare operations to insert or update files to save in the given folder
         for (file in updatedFiles) {
-            val cv = ContentValues()
-            cv.put(ProviderTableMeta.FILE_MODIFIED, file.modificationTimestamp)
-            cv.put(
-                ProviderTableMeta.FILE_MODIFIED_AT_LAST_SYNC_FOR_DATA,
-                file.modificationTimestampAtLastSyncForData
-            )
-            cv.put(ProviderTableMeta.FILE_CREATION, file.creationTimestamp)
-            cv.put(ProviderTableMeta.FILE_CONTENT_LENGTH, file.fileLength)
-            cv.put(ProviderTableMeta.FILE_CONTENT_TYPE, file.mimetype)
-            cv.put(ProviderTableMeta.FILE_NAME, file.fileName)
-            cv.put(ProviderTableMeta.FILE_PARENT, folder.fileId)
-            cv.put(ProviderTableMeta.FILE_PATH, file.remotePath)
-            if (!file.isFolder) {
-                cv.put(ProviderTableMeta.FILE_STORAGE_PATH, file.storagePath)
+            val cv = ContentValues().apply {
+                put(FILE_MODIFIED, file.modificationTimestamp)
+                put(FILE_MODIFIED_AT_LAST_SYNC_FOR_DATA, file.modificationTimestampAtLastSyncForData)
+                put(FILE_CREATION, file.creationTimestamp)
+                put(FILE_CONTENT_LENGTH, file.fileLength)
+                put(FILE_CONTENT_TYPE, file.mimetype)
+                put(FILE_NAME, file.fileName)
+                put(FILE_PARENT, folder.fileId)
+                put(FILE_PATH, file.remotePath)
+                if (!file.isFolder) put(FILE_STORAGE_PATH, file.storagePath)
+                put(FILE_ACCOUNT_OWNER, account!!.name)
+                put(FILE_LAST_SYNC_DATE, file.lastSyncDateForProperties)
+                put(FILE_LAST_SYNC_DATE_FOR_DATA, file.lastSyncDateForData)
+                put(FILE_ETAG, file.etag)
+                put(FILE_TREE_ETAG, file.treeEtag)
+                put(FILE_SHARED_VIA_LINK, if (file.isSharedViaLink) 1 else 0)
+                put(FILE_SHARED_WITH_SHAREE, if (file.isSharedWithSharee) 1 else 0)
+                put(FILE_PERMISSIONS, file.permissions)
+                put(FILE_REMOTE_ID, file.remoteId)
+                put(FILE_UPDATE_THUMBNAIL, file.needsUpdateThumbnail())
+                put(FILE_IS_DOWNLOADING, file.isDownloading)
+                put(FILE_ETAG_IN_CONFLICT, file.etagInConflict)
+                put(FILE_PRIVATE_LINK, file.privateLink)
             }
-            cv.put(ProviderTableMeta.FILE_ACCOUNT_OWNER, account!!.name)
-            cv.put(ProviderTableMeta.FILE_LAST_SYNC_DATE, file.lastSyncDateForProperties)
-            cv.put(ProviderTableMeta.FILE_LAST_SYNC_DATE_FOR_DATA, file.lastSyncDateForData)
-            cv.put(ProviderTableMeta.FILE_ETAG, file.etag)
-            cv.put(ProviderTableMeta.FILE_TREE_ETAG, file.treeEtag)
-            cv.put(ProviderTableMeta.FILE_SHARED_VIA_LINK, if (file.isSharedViaLink) 1 else 0)
-            cv.put(ProviderTableMeta.FILE_SHARED_WITH_SHAREE, if (file.isSharedWithSharee) 1 else 0)
-            cv.put(ProviderTableMeta.FILE_PERMISSIONS, file.permissions)
-            cv.put(ProviderTableMeta.FILE_REMOTE_ID, file.remoteId)
-            cv.put(ProviderTableMeta.FILE_UPDATE_THUMBNAIL, file.needsUpdateThumbnail())
-            cv.put(ProviderTableMeta.FILE_IS_DOWNLOADING, file.isDownloading)
-            cv.put(ProviderTableMeta.FILE_ETAG_IN_CONFLICT, file.etagInConflict)
-            cv.put(ProviderTableMeta.FILE_PRIVATE_LINK, file.privateLink)
 
             val existsByPath = fileExists(file.remotePath)
             if (existsByPath || fileExists(file.fileId)) {
                 // updating an existing file
                 operations.add(
-                    ContentProviderOperation.newUpdate(ProviderTableMeta.CONTENT_URI).withValues(cv).withSelection(
-                        ProviderTableMeta._ID + "=?",
+                    ContentProviderOperation.newUpdate(CONTENT_URI).withValues(cv).withSelection(
+                        "$_ID=?",
                         arrayOf(file.fileId.toString())
                     )
                         .build()
                 )
-
             } else {
                 // adding a new file
                 setInitialAvailableOfflineStatus(file, cv)
-                operations.add(ContentProviderOperation.newInsert(ProviderTableMeta.CONTENT_URI).withValues(cv).build())
+                operations.add(ContentProviderOperation.newInsert(CONTENT_URI).withValues(cv).build())
             }
         }
 
         // prepare operations to remove files in the given folder
-        val where = ProviderTableMeta.FILE_ACCOUNT_OWNER + "=?" + " AND " +
-                ProviderTableMeta.FILE_PATH + "=?"
-        var whereArgs: Array<String>? = null
+        val where = "$FILE_ACCOUNT_OWNER=? AND $FILE_PATH=?"
+        var whereArgs: Array<String>?
         for (file in filesToRemove) {
             if (file.parentId == folder.fileId) {
                 whereArgs = arrayOf(account!!.name, file.remotePath)
                 if (file.isFolder) {
                     operations.add(
                         ContentProviderOperation.newDelete(
-                            ContentUris.withAppendedId(
-                                ProviderTableMeta.CONTENT_URI_DIR, file.fileId
-                            )
+                            ContentUris.withAppendedId(CONTENT_URI_DIR, file.fileId)
                         ).withSelection(where, whereArgs).build()
                     )
 
@@ -467,9 +423,7 @@ class FileDataStorageManager {
                 } else {
                     operations.add(
                         ContentProviderOperation.newDelete(
-                            ContentUris.withAppendedId(
-                                ProviderTableMeta.CONTENT_URI_FILE, file.fileId
-                            )
+                            ContentUris.withAppendedId(CONTENT_URI_FILE, file.fileId)
                         ).withSelection(where, whereArgs).build()
                     )
 
@@ -483,68 +437,65 @@ class FileDataStorageManager {
         }
 
         // update metadata of folder
-        val cv = ContentValues()
-        cv.put(ProviderTableMeta.FILE_MODIFIED, folder.modificationTimestamp)
-        cv.put(
-            ProviderTableMeta.FILE_MODIFIED_AT_LAST_SYNC_FOR_DATA,
-            folder.modificationTimestampAtLastSyncForData
-        )
-        cv.put(ProviderTableMeta.FILE_CREATION, folder.creationTimestamp)
-        cv.put(ProviderTableMeta.FILE_CONTENT_LENGTH, folder.fileLength)
-        cv.put(ProviderTableMeta.FILE_CONTENT_TYPE, folder.mimetype)
-        cv.put(ProviderTableMeta.FILE_NAME, folder.fileName)
-        cv.put(ProviderTableMeta.FILE_PARENT, folder.parentId)
-        cv.put(ProviderTableMeta.FILE_PATH, folder.remotePath)
-        cv.put(ProviderTableMeta.FILE_ACCOUNT_OWNER, account!!.name)
-        cv.put(ProviderTableMeta.FILE_LAST_SYNC_DATE, folder.lastSyncDateForProperties)
-        cv.put(ProviderTableMeta.FILE_LAST_SYNC_DATE_FOR_DATA, folder.lastSyncDateForData)
-        cv.put(ProviderTableMeta.FILE_ETAG, folder.etag)
-        cv.put(ProviderTableMeta.FILE_TREE_ETAG, folder.treeEtag)
-        cv.put(ProviderTableMeta.FILE_SHARED_VIA_LINK, if (folder.isSharedViaLink) 1 else 0)
-        cv.put(ProviderTableMeta.FILE_SHARED_WITH_SHAREE, if (folder.isSharedWithSharee) 1 else 0)
-        cv.put(ProviderTableMeta.FILE_PERMISSIONS, folder.permissions)
-        cv.put(ProviderTableMeta.FILE_REMOTE_ID, folder.remoteId)
-        cv.put(ProviderTableMeta.FILE_PRIVATE_LINK, folder.privateLink)
+        val cv = ContentValues().apply {
+            put(FILE_MODIFIED, folder.modificationTimestamp)
+            put(FILE_MODIFIED_AT_LAST_SYNC_FOR_DATA, folder.modificationTimestampAtLastSyncForData)
+            put(FILE_CREATION, folder.creationTimestamp)
+            put(FILE_CONTENT_LENGTH, folder.fileLength)
+            put(FILE_CONTENT_TYPE, folder.mimetype)
+            put(FILE_NAME, folder.fileName)
+            put(FILE_PARENT, folder.parentId)
+            put(FILE_PATH, folder.remotePath)
+            put(FILE_ACCOUNT_OWNER, account!!.name)
+            put(FILE_LAST_SYNC_DATE, folder.lastSyncDateForProperties)
+            put(FILE_LAST_SYNC_DATE_FOR_DATA, folder.lastSyncDateForData)
+            put(FILE_ETAG, folder.etag)
+            put(FILE_TREE_ETAG, folder.treeEtag)
+            put(FILE_SHARED_VIA_LINK, if (folder.isSharedViaLink) 1 else 0)
+            put(FILE_SHARED_WITH_SHAREE, if (folder.isSharedWithSharee) 1 else 0)
+            put(FILE_PERMISSIONS, folder.permissions)
+            put(FILE_REMOTE_ID, folder.remoteId)
+            put(FILE_PRIVATE_LINK, folder.privateLink)
+        }
 
         operations.add(
-            ContentProviderOperation.newUpdate(ProviderTableMeta.CONTENT_URI).withValues(cv).withSelection(
-                ProviderTableMeta._ID + "=?",
-                arrayOf(folder.fileId.toString())
+            ContentProviderOperation.newUpdate(CONTENT_URI).withValues(cv).withSelection(
+                "$_ID=?", arrayOf(folder.fileId.toString())
             )
                 .build()
         )
 
         // apply operations in batch
         var results: Array<ContentProviderResult>? = null
-        Log_OC.d(TAG, "Sending " + operations.size + " operations to FileContentProvider")
+        Log_OC.d(TAG, "Sending ${operations.size} operations to FileContentProvider")
         try {
-            if (contentResolver != null) {
-                results = contentResolver!!.applyBatch(MainApp.authority, operations)
-
-            } else {
-                results = contentProviderClient!!.applyBatch(operations)
-            }
+            results =
+                if (contentResolver != null) {
+                    contentResolver!!.applyBatch(MainApp.authority, operations)
+                } else {
+                    contentProviderClient!!.applyBatch(operations)
+                }
 
         } catch (e: OperationApplicationException) {
-            Log_OC.e(TAG, "Exception in batch of operations " + e.message)
+            Log_OC.e(TAG, "Exception in batch of operations ${e.message}", e)
 
         } catch (e: RemoteException) {
-            Log_OC.e(TAG, "Exception in batch of operations  " + e.message)
+            Log_OC.e(TAG, "Exception in batch of operations ${e.message}", e)
         }
 
         // update new id in file objects for insertions
         if (results != null) {
             var newId: Long
             val filesIt = updatedFiles.iterator()
-            var file: OCFile? = null
+            var file: OCFile?
             for (i in results.indices) {
-                if (filesIt.hasNext()) {
-                    file = filesIt.next()
+                file = if (filesIt.hasNext()) {
+                    filesIt.next()
                 } else {
-                    file = null
+                    null
                 }
                 if (results[i].uri != null) {
-                    newId = java.lang.Long.parseLong(results[i].uri.pathSegments[1])
+                    newId = parseLong(results[i].uri.pathSegments[1])
                     //updatedFiles.get(i).setFileId(newId);
                     if (file != null) {
                         file.fileId = newId
@@ -552,11 +503,10 @@ class FileDataStorageManager {
                 }
             }
         }
-
     }
 
     /**
-     * Adds the appropriate initial value for ProviderTableMeta.FILE_KEEP_IN_SYNC to
+     * Adds the appropriate initial value for FILE_KEEP_IN_SYNC to
      * passed [ContentValues] instance.
      *
      * @param file [OCFile] which av-offline property will be set.
@@ -566,15 +516,9 @@ class FileDataStorageManager {
         // set appropriate av-off folder depending on ancestor
         val inFolderAvailableOffline = isAnyAncestorAvailableOfflineFolder(file)
         if (inFolderAvailableOffline) {
-            cv.put(
-                ProviderTableMeta.FILE_KEEP_IN_SYNC,
-                OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE_PARENT.value
-            )
+            cv.put(FILE_KEEP_IN_SYNC, AVAILABLE_OFFLINE_PARENT.value)
         } else {
-            cv.put(
-                ProviderTableMeta.FILE_KEEP_IN_SYNC,
-                OCFile.AvailableOfflineStatus.NOT_AVAILABLE_OFFLINE.value
-            )
+            cv.put(FILE_KEEP_IN_SYNC, NOT_AVAILABLE_OFFLINE.value)
         }
     }
 
@@ -596,39 +540,30 @@ class FileDataStorageManager {
         }
 
         val newStatus = file.availableOfflineStatus
-        require(OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE_PARENT != newStatus) { "Forbidden value, AVAILABLE_OFFLINE_PARENT is calculated, cannot be set" }
+        require(AVAILABLE_OFFLINE_PARENT != newStatus) {
+            "Forbidden value, AVAILABLE_OFFLINE_PARENT is calculated, cannot be set"
+        }
 
         val cv = ContentValues()
-        cv.put(ProviderTableMeta.FILE_KEEP_IN_SYNC, file.availableOfflineStatus.value)
+        cv.put(FILE_KEEP_IN_SYNC, file.availableOfflineStatus.value)
 
         var updatedCount: Int
         if (contentResolver != null) {
-            updatedCount = contentResolver!!.update(
-                ProviderTableMeta.CONTENT_URI,
-                cv,
-                ProviderTableMeta._ID + "=?",
-                arrayOf(file.fileId.toString())
-            )
+            updatedCount = contentResolver!!.update(CONTENT_URI, cv, "$_ID=?", arrayOf(file.fileId.toString()))
 
             // Update descendants
             if (file.isFolder && updatedCount > 0) {
                 val descendantsCv = ContentValues()
-                if (newStatus == OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE) {
+                if (newStatus == AVAILABLE_OFFLINE) {
                     // all descendant files MUST be av-off due to inheritance, not due to previous value
-                    descendantsCv.put(
-                        ProviderTableMeta.FILE_KEEP_IN_SYNC,
-                        OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE_PARENT.value
-                    )
+                    descendantsCv.put(FILE_KEEP_IN_SYNC, AVAILABLE_OFFLINE_PARENT.value)
                 } else {
                     // all descendant files MUST be not-available offline
-                    descendantsCv.put(
-                        ProviderTableMeta.FILE_KEEP_IN_SYNC,
-                        OCFile.AvailableOfflineStatus.NOT_AVAILABLE_OFFLINE.value
-                    )
+                    descendantsCv.put(FILE_KEEP_IN_SYNC, NOT_AVAILABLE_OFFLINE.value)
                 }
                 val selectDescendants = selectionForAllDescendantsOf(file)
                 updatedCount += contentResolver!!.update(
-                    ProviderTableMeta.CONTENT_URI,
+                    CONTENT_URI,
                     descendantsCv,
                     selectDescendants.first,
                     selectDescendants.second
@@ -637,23 +572,16 @@ class FileDataStorageManager {
 
         } else {
             try {
-                updatedCount = contentProviderClient!!.update(
-                    ProviderTableMeta.CONTENT_URI,
-                    cv,
-                    ProviderTableMeta._ID + "=?",
-                    arrayOf(file.fileId.toString())
-                )
+                updatedCount =
+                    contentProviderClient!!.update(CONTENT_URI, cv, "$_ID=?", arrayOf(file.fileId.toString()))
 
                 // If file is a folder, all children files that were available offline must be unset
                 if (file.isFolder && updatedCount > 0) {
                     val descendantsCv = ContentValues()
-                    descendantsCv.put(
-                        ProviderTableMeta.FILE_KEEP_IN_SYNC,
-                        OCFile.AvailableOfflineStatus.NOT_AVAILABLE_OFFLINE.value
-                    )
+                    descendantsCv.put(FILE_KEEP_IN_SYNC, NOT_AVAILABLE_OFFLINE.value)
                     val selectDescendants = selectionForAllDescendantsOf(file)
                     updatedCount += contentProviderClient!!.update(
-                        ProviderTableMeta.CONTENT_URI,
+                        CONTENT_URI,
                         descendantsCv,
                         selectDescendants.first,
                         selectDescendants.second
@@ -678,23 +606,19 @@ class FileDataStorageManager {
 
             } else {
                 if (removeDBData) {
-                    val file_uri = ContentUris.withAppendedId(
-                        ProviderTableMeta.CONTENT_URI_FILE,
-                        file.fileId
-                    )
-                    val where = ProviderTableMeta.FILE_ACCOUNT_OWNER + "=?" + " AND " +
-                            ProviderTableMeta.FILE_PATH + "=?"
+                    val fileUri = ContentUris.withAppendedId(CONTENT_URI_FILE, file.fileId)
+                    val where = "$FILE_ACCOUNT_OWNER=? AND $FILE_PATH=?"
                     val whereArgs = arrayOf(account!!.name, file.remotePath)
                     var deleted = 0
                     if (contentProviderClient != null) {
                         try {
-                            deleted = contentProviderClient!!.delete(file_uri, where, whereArgs)
+                            deleted = contentProviderClient!!.delete(fileUri, where, whereArgs)
                         } catch (e: RemoteException) {
                             e.printStackTrace()
                         }
 
                     } else {
-                        deleted = contentResolver!!.delete(file_uri, where, whereArgs)
+                        deleted = contentResolver!!.delete(fileUri, where, whereArgs)
                     }
                     success = success and (deleted > 0)
                 }
@@ -703,12 +627,12 @@ class FileDataStorageManager {
                     success = File(localPath).delete()
                     if (success) {
                         deleteFileInMediaScan(localPath)
-                    }
-                    if (!removeDBData && success) {
-                        // maybe unnecessary, but should be checked TODO remove if unnecessary
-                        file.storagePath = null
-                        saveFile(file)
-                        saveConflict(file, null)
+                        if (!removeDBData) {
+                            // maybe unnecessary, but should be checked TODO remove if unnecessary
+                            file.storagePath = null
+                            saveFile(file)
+                            saveConflict(file, null)
+                        }
                     }
                 }
             }
@@ -732,21 +656,20 @@ class FileDataStorageManager {
     }
 
     private fun removeFolderInDb(folder: OCFile): Boolean {
-        val folder_uri =
-            Uri.withAppendedPath(ProviderTableMeta.CONTENT_URI_DIR, "" + folder.fileId)   // URI for recursive deletion
-        val where = ProviderTableMeta.FILE_ACCOUNT_OWNER + "=?" + " AND " +
-                ProviderTableMeta.FILE_PATH + "=?"
+        val folderUri =
+            Uri.withAppendedPath(CONTENT_URI_DIR, "" + folder.fileId) // URI for recursive deletion
+        val where = "$FILE_ACCOUNT_OWNER=? AND $FILE_PATH=?"
         val whereArgs = arrayOf(account!!.name, folder.remotePath)
         var deleted = 0
         if (contentProviderClient != null) {
             try {
-                deleted = contentProviderClient!!.delete(folder_uri, where, whereArgs)
+                deleted = contentProviderClient!!.delete(folderUri, where, whereArgs)
             } catch (e: RemoteException) {
                 e.printStackTrace()
             }
 
         } else {
-            deleted = contentResolver!!.delete(folder_uri, where, whereArgs)
+            deleted = contentResolver!!.delete(folderUri, where, whereArgs)
         }
         return deleted > 0
     }
@@ -758,20 +681,18 @@ class FileDataStorageManager {
         if (localFolder.exists()) {
             // stage 1: remove the local files already registered in the files database
             val files = getFolderContent(folder.fileId, false)
-            if (files != null) {
-                for (file in files) {
-                    if (file.isFolder) {
-                        success = success and removeLocalFolder(file)
-                    } else {
-                        if (file.isDown) {
-                            val localFile = File(file.storagePath)
-                            success = success and localFile.delete()
-                            if (success) {
-                                // notify MediaScanner about removed file
-                                deleteFileInMediaScan(file.storagePath)
-                                file.storagePath = null
-                                saveFile(file)
-                            }
+            for (file in files) {
+                if (file.isFolder) {
+                    success = success and removeLocalFolder(file)
+                } else {
+                    if (file.isDown) {
+                        val localFile = File(file.storagePath)
+                        success = success and localFile.delete()
+                        if (success) {
+                            // notify MediaScanner about removed file
+                            deleteFileInMediaScan(file.storagePath)
+                            file.storagePath = null
+                            saveFile(file)
                         }
                     }
                 }
@@ -789,11 +710,11 @@ class FileDataStorageManager {
         val localFiles = localFolder.listFiles()
         if (localFiles != null) {
             for (localFile in localFiles) {
-                if (localFile.isDirectory) {
-                    success = success and removeLocalFolder(localFile)
+                success = if (localFile.isDirectory) {
+                    success and removeLocalFolder(localFile)
                 } else {
                     val path = localFile.absolutePath
-                    success = success and localFile.delete()
+                    success and localFile.delete()
                 }
             }
         }
@@ -809,7 +730,7 @@ class FileDataStorageManager {
      */
     fun moveLocalFile(file: OCFile?, targetPath: String, targetParentPath: String) {
 
-        if (file != null && file.fileExists() && OCFile.ROOT_PATH != file.fileName) {
+        if (file != null && file.fileExists() && ROOT_PATH != file.fileName) {
 
             val targetParent = getFileByPath(targetParentPath)
                 ?: throw IllegalStateException(
@@ -821,11 +742,11 @@ class FileDataStorageManager {
             if (contentProviderClient != null) {
                 try {
                     c = contentProviderClient!!.query(
-                        ProviderTableMeta.CONTENT_URI, null,
-                        ProviderTableMeta.FILE_ACCOUNT_OWNER + "=? AND " +
-                                ProviderTableMeta.FILE_PATH + " LIKE ? ",
-                        arrayOf(account!!.name, file.remotePath + "%"),
-                        ProviderTableMeta.FILE_PATH + " ASC "
+                        CONTENT_URI,
+                        null,
+                        "$FILE_ACCOUNT_OWNER=? AND $FILE_PATH LIKE ? ",
+                        arrayOf(account!!.name, "${file.remotePath}%"),
+                        "$FILE_PATH ASC "
                     )
                 } catch (e: RemoteException) {
                     Log_OC.e(TAG, e.message)
@@ -833,11 +754,11 @@ class FileDataStorageManager {
 
             } else {
                 c = contentResolver!!.query(
-                    ProviderTableMeta.CONTENT_URI, null,
-                    ProviderTableMeta.FILE_ACCOUNT_OWNER + "=? AND " +
-                            ProviderTableMeta.FILE_PATH + " LIKE ? ",
+                    CONTENT_URI,
+                    null,
+                    "$FILE_ACCOUNT_OWNER=? AND $FILE_PATH LIKE ? ",
                     arrayOf(account!!.name, file.remotePath + "%"),
-                    ProviderTableMeta.FILE_PATH + " ASC "
+                    "$FILE_PATH ASC "
                 )
             }
 
@@ -854,47 +775,34 @@ class FileDataStorageManager {
                     do {
                         val cv = ContentValues() // keep construction in the loop
                         val child = createFileInstance(c)
-                        cv.put(
-                            ProviderTableMeta.FILE_PATH,
-                            targetPath + child!!.remotePath.substring(lengthOfOldPath)
-                        )
+                        cv.put(FILE_PATH, targetPath + child!!.remotePath.substring(lengthOfOldPath))
                         if (child.storagePath != null && child.storagePath.startsWith(defaultSavePath)) {
                             // update link to downloaded content - but local move is not done here!
                             val targetLocalPath = defaultSavePath + targetPath +
                                     child.storagePath.substring(lengthOfOldStoragePath)
 
-                            cv.put(ProviderTableMeta.FILE_STORAGE_PATH, targetLocalPath)
+                            cv.put(FILE_STORAGE_PATH, targetLocalPath)
 
                             originalPathsToTriggerMediaScan.add(child.storagePath)
                             newPathsToTriggerMediaScan.add(targetLocalPath)
 
                         }
-                        if (targetParent.availableOfflineStatus != OCFile.AvailableOfflineStatus.NOT_AVAILABLE_OFFLINE) {
+                        if (targetParent.availableOfflineStatus != NOT_AVAILABLE_OFFLINE) {
                             // moving to an available offline subfolder
-                            cv.put(
-                                ProviderTableMeta.FILE_KEEP_IN_SYNC,
-                                OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE_PARENT.value
-                            )
-
+                            cv.put(FILE_KEEP_IN_SYNC, AVAILABLE_OFFLINE_PARENT.value)
                         } else {
                             // moving to a not available offline subfolder - with care
-                            if (file.availableOfflineStatus == OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE_PARENT) {
-                                cv.put(
-                                    ProviderTableMeta.FILE_KEEP_IN_SYNC,
-                                    OCFile.AvailableOfflineStatus.NOT_AVAILABLE_OFFLINE.value
-                                )
+                            if (file.availableOfflineStatus == AVAILABLE_OFFLINE_PARENT) {
+                                cv.put(FILE_KEEP_IN_SYNC, NOT_AVAILABLE_OFFLINE.value)
                             }
                         }
 
                         if (child.remotePath == file.remotePath) {
-                            cv.put(
-                                ProviderTableMeta.FILE_PARENT,
-                                targetParent.fileId
-                            )
+                            cv.put(FILE_PARENT, targetParent.fileId)
                         }
                         operations.add(
-                            ContentProviderOperation.newUpdate(ProviderTableMeta.CONTENT_URI).withValues(cv).withSelection(
-                                ProviderTableMeta._ID + "=?",
+                            ContentProviderOperation.newUpdate(CONTENT_URI).withValues(cv).withSelection(
+                                "$_ID=?",
                                 arrayOf(child.fileId.toString())
                             )
                                 .build()
@@ -914,10 +822,7 @@ class FileDataStorageManager {
                     }
 
                 } catch (e: Exception) {
-                    Log_OC.e(
-                        TAG, "Fail to update " + file.fileId + " and descendants in database",
-                        e
-                    )
+                    Log_OC.e(TAG, "Fail to update ${file.fileId} and descendants in database", e)
                 }
 
             }
@@ -952,7 +857,7 @@ class FileDataStorageManager {
     }
 
     fun copyLocalFile(originalFile: OCFile?, targetPath: String, targetFileRemoteId: String) {
-        if (originalFile != null && originalFile.fileExists() && OCFile.ROOT_PATH != originalFile.fileName) {
+        if (originalFile != null && originalFile.fileExists() && ROOT_PATH != originalFile.fileName) {
             // 1. Copy in database
             val ocTargetFile = OCFile(targetPath)
             val parentId = getFileByPath(FileStorageUtils.getParentPath(targetPath))!!.fileId
@@ -1023,38 +928,34 @@ class FileDataStorageManager {
     private fun getFolderContent(parentId: Long, onlyAvailableOffline: Boolean): Vector<OCFile> {
         val ret = Vector<OCFile>()
 
-        val req_uri = Uri.withAppendedPath(
-            ProviderTableMeta.CONTENT_URI_DIR,
-            parentId.toString()
-        )
-        var c: Cursor? = null
+        val reqUri = Uri.withAppendedPath(CONTENT_URI_DIR, parentId.toString())
+        var c: Cursor?
 
         val selection: String
         val selectionArgs: Array<String>
 
         if (!onlyAvailableOffline) {
-            selection = ProviderTableMeta.FILE_PARENT + "=?"
+            selection = "$FILE_PARENT=?"
             selectionArgs = arrayOf(parentId.toString())
         } else {
-            selection = ProviderTableMeta.FILE_PARENT + "=? AND (" + ProviderTableMeta.FILE_KEEP_IN_SYNC +
-                    " = ? OR " + ProviderTableMeta.FILE_KEEP_IN_SYNC + "=? )"
+            selection = "$FILE_PARENT=? AND ($FILE_KEEP_IN_SYNC = ? OR $FILE_KEEP_IN_SYNC=? )"
             selectionArgs = arrayOf(
                 parentId.toString(),
-                OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE.value.toString(),
-                OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE_PARENT.value.toString()
+                AVAILABLE_OFFLINE.value.toString(),
+                AVAILABLE_OFFLINE_PARENT.value.toString()
             )
         }
 
-        if (contentProviderClient != null) {
+        c = if (contentProviderClient != null) {
             try {
-                c = contentProviderClient!!.query(req_uri, null, selection, selectionArgs, null)
+                contentProviderClient!!.query(reqUri, null, selection, selectionArgs, null)
             } catch (e: RemoteException) {
                 Log_OC.e(TAG, e.message)
                 return ret
             }
 
         } else {
-            c = contentResolver!!.query(req_uri, null, selection, selectionArgs, null)
+            contentResolver!!.query(reqUri, null, selection, selectionArgs, null)
         }
 
         if (c != null) {
@@ -1067,9 +968,7 @@ class FileDataStorageManager {
             c.close()
         }
 
-        Collections.sort(ret)
-
-        return ret
+        return ret.apply { sort() }
     }
 
     /**
@@ -1078,9 +977,7 @@ class FileDataStorageManager {
      * @param file [OCFile] which ancestors will be searched.
      * @return true/false
      */
-    private fun isAnyAncestorAvailableOfflineFolder(file: OCFile): Boolean {
-        return getAvailableOfflineAncestorOf(file) != null
-    }
+    private fun isAnyAncestorAvailableOfflineFolder(file: OCFile) = getAvailableOfflineAncestorOf(file) != null
 
     /**
      * Returns ancestor folder with available offline status AVAILABLE_OFFLINE.
@@ -1089,13 +986,13 @@ class FileDataStorageManager {
      * @return Ancestor folder with available offline status AVAILABLE_OFFLINE, or null if
      * does not exist.
      */
-    fun getAvailableOfflineAncestorOf(file: OCFile): OCFile? {
+    private fun getAvailableOfflineAncestorOf(file: OCFile): OCFile? {
         var avOffAncestor: OCFile? = null
         val parent = getFileById(file.parentId)
         if (parent != null && parent.isFolder) {  // file is null for the parent of the root folder
-            if (parent.availableOfflineStatus == OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE) {
+            if (parent.availableOfflineStatus == AVAILABLE_OFFLINE) {
                 avOffAncestor = parent
-            } else if (parent.fileName != OCFile.ROOT_PATH) {
+            } else if (parent.fileName != ROOT_PATH) {
                 avOffAncestor = getAvailableOfflineAncestorOf(parent)
             }
         }
@@ -1103,9 +1000,9 @@ class FileDataStorageManager {
     }
 
     private fun createRootDir(): OCFile {
-        val file = OCFile(OCFile.ROOT_PATH)
+        val file = OCFile(ROOT_PATH)
         file.mimetype = "DIR"
-        file.parentId = FileDataStorageManager.ROOT_PARENT_ID.toLong()
+        file.parentId = ROOT_PARENT_ID.toLong()
         saveFile(file)
         return file
     }
@@ -1115,25 +1012,23 @@ class FileDataStorageManager {
         if (contentResolver != null) {
             c = contentResolver!!
                 .query(
-                    ProviderTableMeta.CONTENT_URI, null,
-                    cmp_key + "=? AND "
-                            + ProviderTableMeta.FILE_ACCOUNT_OWNER
-                            + "=?",
-                    arrayOf(value, account!!.name), null
+                    CONTENT_URI,
+                    null,
+                    "$cmp_key=? AND $FILE_ACCOUNT_OWNER=?",
+                    arrayOf(value, account!!.name),
+                    null
                 )
         } else {
             try {
                 c = contentProviderClient!!.query(
-                    ProviderTableMeta.CONTENT_URI, null,
-                    cmp_key + "=? AND "
-                            + ProviderTableMeta.FILE_ACCOUNT_OWNER + "=?",
-                    arrayOf(value, account!!.name), null
+                    CONTENT_URI,
+                    null,
+                    "$cmp_key=? AND $FILE_ACCOUNT_OWNER=?",
+                    arrayOf(value, account!!.name),
+                    null
                 )
             } catch (e: RemoteException) {
-                Log_OC.e(
-                    TAG,
-                    "Couldn't determine file existance, assuming non existance: " + e.message
-                )
+                Log_OC.e(TAG, "Couldn't determine file existence, assuming non existence: ${e.message}", e)
                 return false
             }
 
@@ -1151,180 +1046,121 @@ class FileDataStorageManager {
         if (contentResolver != null) {
             c = contentResolver!!
                 .query(
-                    ProviderTableMeta.CONTENT_URI, null,
-                    key + "=? AND "
-                            + ProviderTableMeta.FILE_ACCOUNT_OWNER
-                            + "=?",
-                    arrayOf(value, account!!.name), null
+                    CONTENT_URI,
+                    null,
+                    "$key=? AND $FILE_ACCOUNT_OWNER=?",
+                    arrayOf(value, account!!.name),
+                    null
                 )
         } else {
-            try {
-                c = contentProviderClient!!.query(
-                    ProviderTableMeta.CONTENT_URI, null,
-                    key + "=? AND " + ProviderTableMeta.FILE_ACCOUNT_OWNER
-                            + "=?", arrayOf(value, account!!.name), null
+            c = try {
+                contentProviderClient!!.query(
+                    CONTENT_URI,
+                    null,
+                    "$key=? AND $FILE_ACCOUNT_OWNER=?",
+                    arrayOf(value, account!!.name),
+                    null
                 )
             } catch (e: RemoteException) {
-                Log_OC.e(TAG, "Could not get file details: " + e.message)
-                c = null
+                Log_OC.e(TAG, "Could not get file details: ${e.message}", e)
+                null
             }
-
         }
         return c
     }
 
-    private fun createFileInstance(c: Cursor?): OCFile? {
-        var file: OCFile? = null
-        if (c != null) {
-            file = OCFile(
-                c.getString(
-                    c
-                        .getColumnIndex(ProviderTableMeta.FILE_PATH)
-                )
-            )
-            file.fileId = c.getLong(c.getColumnIndex(ProviderTableMeta._ID))
-            file.parentId = c.getLong(
-                c
-                    .getColumnIndex(ProviderTableMeta.FILE_PARENT)
-            )
-            file.mimetype = c.getString(
-                c
-                    .getColumnIndex(ProviderTableMeta.FILE_CONTENT_TYPE)
-            )
-            if (!file.isFolder) {
-                file.storagePath = c.getString(
-                    c
-                        .getColumnIndex(ProviderTableMeta.FILE_STORAGE_PATH)
-                )
-                if (file.storagePath == null) {
+    private fun createFileInstance(c: Cursor?): OCFile? = c?.let {
+        OCFile(it.getString(it.getColumnIndex(FILE_PATH))).apply {
+            fileId = it.getLong(it.getColumnIndex(_ID))
+            parentId = it.getLong(it.getColumnIndex(FILE_PARENT))
+            mimetype = it.getString(it.getColumnIndex(FILE_CONTENT_TYPE))
+            if (!isFolder) {
+                storagePath = it.getString(it.getColumnIndex(FILE_STORAGE_PATH))
+                if (storagePath == null) {
                     // try to find existing file and bind it with current account;
                     // with the current update of SynchronizeFolderOperation, this won't be
                     // necessary anymore after a full synchronization of the account
-                    val f = File(FileStorageUtils.getDefaultSavePathFor(account!!.name, file))
+                    val f = File(FileStorageUtils.getDefaultSavePathFor(account!!.name, this))
                     if (f.exists()) {
-                        file.storagePath = f.absolutePath
-                        file.lastSyncDateForData = f.lastModified()
+                        storagePath = f.absolutePath
+                        lastSyncDateForData = f.lastModified()
                     }
                 }
             }
-            file.fileLength = c.getLong(
-                c
-                    .getColumnIndex(ProviderTableMeta.FILE_CONTENT_LENGTH)
-            )
-            file.creationTimestamp = c.getLong(
-                c
-                    .getColumnIndex(ProviderTableMeta.FILE_CREATION)
-            )
-            file.modificationTimestamp = c.getLong(
-                c
-                    .getColumnIndex(ProviderTableMeta.FILE_MODIFIED)
-            )
-            file.modificationTimestampAtLastSyncForData = c.getLong(
-                c
-                    .getColumnIndex(ProviderTableMeta.FILE_MODIFIED_AT_LAST_SYNC_FOR_DATA)
-            )
-            file.lastSyncDateForProperties = c.getLong(
-                c
-                    .getColumnIndex(ProviderTableMeta.FILE_LAST_SYNC_DATE)
-            )
-            file.lastSyncDateForData = c.getLong(c.getColumnIndex(ProviderTableMeta.FILE_LAST_SYNC_DATE_FOR_DATA))
-            file.availableOfflineStatus = OCFile.AvailableOfflineStatus.fromValue(
-                c.getInt(c.getColumnIndex(ProviderTableMeta.FILE_KEEP_IN_SYNC))
-            )
-            file.etag = c.getString(c.getColumnIndex(ProviderTableMeta.FILE_ETAG))
-            file.treeEtag = c.getString(c.getColumnIndex(ProviderTableMeta.FILE_TREE_ETAG))
-            file.isSharedViaLink = c.getInt(
-                c.getColumnIndex(ProviderTableMeta.FILE_SHARED_VIA_LINK)
-            ) == 1
-            file.isSharedWithSharee = c.getInt(
-                c.getColumnIndex(ProviderTableMeta.FILE_SHARED_WITH_SHAREE)
-            ) == 1
-            file.permissions = c.getString(c.getColumnIndex(ProviderTableMeta.FILE_PERMISSIONS))
-            file.remoteId = c.getString(c.getColumnIndex(ProviderTableMeta.FILE_REMOTE_ID))
-            file.setNeedsUpdateThumbnail(
-                c.getInt(
-                    c.getColumnIndex(ProviderTableMeta.FILE_UPDATE_THUMBNAIL)
-                ) == 1
-            )
-            file.isDownloading = c.getInt(
-                c.getColumnIndex(ProviderTableMeta.FILE_IS_DOWNLOADING)
-            ) == 1
-            file.etagInConflict = c.getString(c.getColumnIndex(ProviderTableMeta.FILE_ETAG_IN_CONFLICT))
-            file.privateLink = c.getString(c.getColumnIndex(ProviderTableMeta.FILE_PRIVATE_LINK))
-
+            fileLength = it.getLong(it.getColumnIndex(FILE_CONTENT_LENGTH))
+            creationTimestamp = it.getLong(it.getColumnIndex(FILE_CREATION))
+            modificationTimestamp = it.getLong(it.getColumnIndex(FILE_MODIFIED))
+            modificationTimestampAtLastSyncForData = it.getLong(it.getColumnIndex(FILE_MODIFIED_AT_LAST_SYNC_FOR_DATA))
+            lastSyncDateForProperties = it.getLong(it.getColumnIndex(FILE_LAST_SYNC_DATE))
+            lastSyncDateForData = it.getLong(it.getColumnIndex(FILE_LAST_SYNC_DATE_FOR_DATA))
+            availableOfflineStatus = fromValue(it.getInt(it.getColumnIndex(FILE_KEEP_IN_SYNC)))
+            etag = it.getString(it.getColumnIndex(FILE_ETAG))
+            treeEtag = it.getString(it.getColumnIndex(FILE_TREE_ETAG))
+            isSharedViaLink = it.getInt(it.getColumnIndex(FILE_SHARED_VIA_LINK)) == 1
+            isSharedWithSharee = it.getInt(it.getColumnIndex(FILE_SHARED_WITH_SHAREE)) == 1
+            permissions = it.getString(it.getColumnIndex(FILE_PERMISSIONS))
+            remoteId = it.getString(it.getColumnIndex(FILE_REMOTE_ID))
+            setNeedsUpdateThumbnail(it.getInt(it.getColumnIndex(FILE_UPDATE_THUMBNAIL)) == 1)
+            isDownloading = it.getInt(it.getColumnIndex(FILE_IS_DOWNLOADING)) == 1
+            etagInConflict = it.getString(it.getColumnIndex(FILE_ETAG_IN_CONFLICT))
+            privateLink = it.getString(it.getColumnIndex(FILE_PRIVATE_LINK))
         }
-        return file
     }
 
     // Methods for Shares
     fun saveShare(remoteShare: RemoteShare): Boolean {
         var overriden = false
-        val cv = ContentValues()
-        cv.put(ProviderTableMeta.OCSHARES_FILE_SOURCE, remoteShare.fileSource)
-        cv.put(ProviderTableMeta.OCSHARES_ITEM_SOURCE, remoteShare.itemSource)
-        cv.put(ProviderTableMeta.OCSHARES_SHARE_TYPE, remoteShare.shareType!!.value)
-        cv.put(ProviderTableMeta.OCSHARES_SHARE_WITH, remoteShare.shareWith)
-        cv.put(ProviderTableMeta.OCSHARES_PATH, remoteShare.path)
-        cv.put(ProviderTableMeta.OCSHARES_PERMISSIONS, remoteShare.permissions)
-        cv.put(ProviderTableMeta.OCSHARES_SHARED_DATE, remoteShare.sharedDate)
-        cv.put(ProviderTableMeta.OCSHARES_EXPIRATION_DATE, remoteShare.expirationDate)
-        cv.put(ProviderTableMeta.OCSHARES_TOKEN, remoteShare.token)
-        cv.put(
-            ProviderTableMeta.OCSHARES_SHARE_WITH_DISPLAY_NAME,
-            remoteShare.sharedWithDisplayName
-        )
-        cv.put(
-            ProviderTableMeta.OCSHARES_SHARE_WITH_ADDITIONAL_INFO,
-            remoteShare.sharedWithAdditionalInfo
-        )
-        cv.put(ProviderTableMeta.OCSHARES_IS_DIRECTORY, if (remoteShare.isFolder) 1 else 0)
-        cv.put(ProviderTableMeta.OCSHARES_USER_ID, remoteShare.userId)
-        cv.put(ProviderTableMeta.OCSHARES_ID_REMOTE_SHARED, remoteShare.id)
-        cv.put(ProviderTableMeta.OCSHARES_NAME, remoteShare.name)
-        cv.put(ProviderTableMeta.OCSHARES_URL, remoteShare.shareLink)
-        cv.put(ProviderTableMeta.OCSHARES_ACCOUNT_OWNER, account!!.name)
+        val cv = ContentValues().apply {
+            put(OCSHARES_FILE_SOURCE, remoteShare.fileSource)
+            put(OCSHARES_ITEM_SOURCE, remoteShare.itemSource)
+            put(OCSHARES_SHARE_TYPE, remoteShare.shareType!!.value)
+            put(OCSHARES_SHARE_WITH, remoteShare.shareWith)
+            put(OCSHARES_PATH, remoteShare.path)
+            put(OCSHARES_PERMISSIONS, remoteShare.permissions)
+            put(OCSHARES_SHARED_DATE, remoteShare.sharedDate)
+            put(OCSHARES_EXPIRATION_DATE, remoteShare.expirationDate)
+            put(OCSHARES_TOKEN, remoteShare.token)
+            put(OCSHARES_SHARE_WITH_DISPLAY_NAME, remoteShare.sharedWithDisplayName)
+            put(OCSHARES_SHARE_WITH_ADDITIONAL_INFO, remoteShare.sharedWithAdditionalInfo)
+            put(OCSHARES_IS_DIRECTORY, if (remoteShare.isFolder) 1 else 0)
+            put(OCSHARES_USER_ID, remoteShare.userId)
+            put(OCSHARES_ID_REMOTE_SHARED, remoteShare.id)
+            put(OCSHARES_NAME, remoteShare.name)
+            put(OCSHARES_URL, remoteShare.shareLink)
+            put(OCSHARES_ACCOUNT_OWNER, account!!.name)
+        }
 
         if (shareExistsForRemoteId(remoteShare.id)) {// for renamed files; no more delete and create
             overriden = true
             if (contentResolver != null) {
                 contentResolver!!.update(
-                    ProviderTableMeta.CONTENT_URI_SHARE, cv,
-                    ProviderTableMeta.OCSHARES_ID_REMOTE_SHARED + "=?",
+                    CONTENT_URI_SHARE,
+                    cv,
+                    "$OCSHARES_ID_REMOTE_SHARED=?",
                     arrayOf(remoteShare.id.toString())
                 )
             } else {
                 try {
                     contentProviderClient!!.update(
-                        ProviderTableMeta.CONTENT_URI_SHARE,
-                        cv, ProviderTableMeta.OCSHARES_ID_REMOTE_SHARED + "=?",
+                        CONTENT_URI_SHARE,
+                        cv,
+                        "$OCSHARES_ID_REMOTE_SHARED=?",
                         arrayOf(remoteShare.id.toString())
                     )
                 } catch (e: RemoteException) {
-                    Log_OC.e(
-                        TAG,
-                        "Fail to insert insert file to database " + e.message
-                    )
+                    Log_OC.e(TAG, "Fail to insert insert file to database ${e.message}", e)
                 }
-
             }
         } else {
-            var result_uri: Uri? = null
+            var resultUri: Uri? = null
             if (contentResolver != null) {
-                result_uri = contentResolver!!.insert(
-                    ProviderTableMeta.CONTENT_URI_SHARE, cv
-                )
+                resultUri = contentResolver!!.insert(CONTENT_URI_SHARE, cv)
             } else {
                 try {
-                    result_uri = contentProviderClient!!.insert(
-                        ProviderTableMeta.CONTENT_URI_SHARE, cv
-                    )
+                    resultUri = contentProviderClient!!.insert(CONTENT_URI_SHARE, cv)
                 } catch (e: RemoteException) {
-                    Log_OC.e(
-                        TAG,
-                        "Fail to insert insert file to database " + e.message
-                    )
+                    Log_OC.e(TAG, "Fail to insert insert file to database ${e.message}", e)
                 }
-
             }
         }
 
@@ -1339,10 +1175,7 @@ class FileDataStorageManager {
      */
     fun getShareById(id: Long): OCShareEntity? {
         var share: OCShareEntity? = null
-        val c = getShareCursorForValue(
-            ProviderTableMeta._ID,
-            id.toString()
-        )
+        val c = getShareCursorForValue(_ID, id.toString())
         if (c != null) {
             if (c.moveToFirst()) {
                 share = createShareInstance(c)
@@ -1360,10 +1193,7 @@ class FileDataStorageManager {
      */
     fun getShareByRemoteId(id: Long): OCShareEntity? {
         var share: OCShareEntity? = null
-        val c = getShareCursorForValue(
-            ProviderTableMeta.OCSHARES_ID_REMOTE_SHARED,
-            id.toString()
-        )
+        val c = getShareCursorForValue(OCSHARES_ID_REMOTE_SHARED, id.toString())
         if (c != null) {
             if (c.moveToFirst()) {
                 share = createShareInstance(c)
@@ -1381,7 +1211,7 @@ class FileDataStorageManager {
      * @return 'True' if a matching [RemoteShare] is stored in the current account.
      */
     private fun shareExistsForRemoteId(remoteId: Long): Boolean {
-        return shareExistsForValue(ProviderTableMeta.OCSHARES_ID_REMOTE_SHARED, remoteId.toString())
+        return shareExistsForValue(OCSHARES_ID_REMOTE_SHARED, remoteId.toString())
     }
 
     /**
@@ -1411,169 +1241,139 @@ class FileDataStorageManager {
      * @return 'True' if a matching [RemoteShare] is stored in the current account.
      */
     private fun getShareCursorForValue(key: String, value: String): Cursor? {
-        var c: Cursor?
-        if (contentResolver != null) {
-            c = contentResolver!!
-                .query(
-                    ProviderTableMeta.CONTENT_URI_SHARE, null,
-                    key + "=? AND "
-                            + ProviderTableMeta.OCSHARES_ACCOUNT_OWNER + "=?",
-                    arrayOf(value, account!!.name), null
-                )
+        return if (contentResolver != null) {
+            contentResolver!!.query(
+                CONTENT_URI_SHARE,
+                null,
+                "$key=? AND $OCSHARES_ACCOUNT_OWNER=?",
+                arrayOf(value, account!!.name),
+                null
+            )
         } else {
             try {
-                c = contentProviderClient!!.query(
-                    ProviderTableMeta.CONTENT_URI_SHARE, null,
-                    key + "=? AND "
-                            + ProviderTableMeta.OCSHARES_ACCOUNT_OWNER + "=?",
-                    arrayOf(value, account!!.name), null
+                contentProviderClient!!.query(
+                    CONTENT_URI_SHARE,
+                    null,
+                    "$key=? AND $OCSHARES_ACCOUNT_OWNER=?",
+                    arrayOf(value, account!!.name),
+                    null
                 )
             } catch (e: RemoteException) {
-                Log_OC.w(
-                    TAG,
-                    "Could not get details, assuming share does not exist: " + e.message
-                )
-                c = null
+                Log_OC.w(TAG, "Could not get details, assuming share does not exist: ${e.message}")
+                null
             }
-
         }
-        return c
     }
 
-    private fun createShareInstance(c: Cursor?): OCShareEntity? {
-        var share: OCShareEntity? = null
-        if (c != null) {
-            share = OCShareEntity(
-                c.getLong(c.getColumnIndex(ProviderTableMeta.OCSHARES_FILE_SOURCE)),
-                c.getLong(c.getColumnIndex(ProviderTableMeta.OCSHARES_ITEM_SOURCE)),
-                c.getInt(c.getColumnIndex(ProviderTableMeta.OCSHARES_SHARE_TYPE)),
-                c.getString(c.getColumnIndex(ProviderTableMeta.OCSHARES_SHARE_WITH)),
-                c.getString(c.getColumnIndex(ProviderTableMeta.OCSHARES_PATH)),
-                c.getInt(c.getColumnIndex(ProviderTableMeta.OCSHARES_PERMISSIONS)),
-                c.getLong(c.getColumnIndex(ProviderTableMeta.OCSHARES_SHARED_DATE)),
-                c.getLong(c.getColumnIndex(ProviderTableMeta.OCSHARES_EXPIRATION_DATE)),
-                c.getString(c.getColumnIndex(ProviderTableMeta.OCSHARES_TOKEN)),
-                c.getString(c.getColumnIndex(ProviderTableMeta.OCSHARES_SHARE_WITH_DISPLAY_NAME)),
-                c.getString(c.getColumnIndex(ProviderTableMeta.OCSHARES_SHARE_WITH_ADDITIONAL_INFO)),
-                c.getInt(c.getColumnIndex(ProviderTableMeta.OCSHARES_IS_DIRECTORY)) == 1,
-                c.getLong(c.getColumnIndex(ProviderTableMeta.OCSHARES_USER_ID)),
-                c.getLong(c.getColumnIndex(ProviderTableMeta.OCSHARES_ID_REMOTE_SHARED)),
-                c.getString(c.getColumnIndex(ProviderTableMeta.OCSHARES_ACCOUNT_OWNER)),
-                c.getString(c.getColumnIndex(ProviderTableMeta.OCSHARES_NAME)),
-                c.getString(c.getColumnIndex(ProviderTableMeta.OCSHARES_URL))
-            )
-        }
-        return share
+    private fun createShareInstance(c: Cursor?) = c?.let {
+        OCShareEntity(
+            it.getLong(it.getColumnIndex(OCSHARES_FILE_SOURCE)),
+            it.getLong(it.getColumnIndex(OCSHARES_ITEM_SOURCE)),
+            it.getInt(it.getColumnIndex(OCSHARES_SHARE_TYPE)),
+            it.getString(it.getColumnIndex(OCSHARES_SHARE_WITH)),
+            it.getString(it.getColumnIndex(OCSHARES_PATH)),
+            it.getInt(it.getColumnIndex(OCSHARES_PERMISSIONS)),
+            it.getLong(it.getColumnIndex(OCSHARES_SHARED_DATE)),
+            it.getLong(it.getColumnIndex(OCSHARES_EXPIRATION_DATE)),
+            it.getString(it.getColumnIndex(OCSHARES_TOKEN)),
+            it.getString(it.getColumnIndex(OCSHARES_SHARE_WITH_DISPLAY_NAME)),
+            it.getString(it.getColumnIndex(OCSHARES_SHARE_WITH_ADDITIONAL_INFO)),
+            it.getInt(it.getColumnIndex(OCSHARES_IS_DIRECTORY)) == 1,
+            it.getLong(it.getColumnIndex(OCSHARES_USER_ID)),
+            it.getLong(it.getColumnIndex(OCSHARES_ID_REMOTE_SHARED)),
+            it.getString(it.getColumnIndex(OCSHARES_ACCOUNT_OWNER)),
+            it.getString(it.getColumnIndex(OCSHARES_NAME)),
+            it.getString(it.getColumnIndex(OCSHARES_URL))
+        )
     }
 
     private fun resetShareFlagsInAllFiles() {
         val cv = ContentValues()
-        cv.put(ProviderTableMeta.FILE_SHARED_VIA_LINK, false)
-        cv.put(ProviderTableMeta.FILE_SHARED_WITH_SHAREE, false)
-        cv.put(ProviderTableMeta.FILE_PUBLIC_LINK, "")
-        val where = ProviderTableMeta.FILE_ACCOUNT_OWNER + "=?"
+        cv.put(FILE_SHARED_VIA_LINK, false)
+        cv.put(FILE_SHARED_WITH_SHAREE, false)
+        cv.put(FILE_PUBLIC_LINK, "")
+        val where = "$FILE_ACCOUNT_OWNER=?"
         val whereArgs = arrayOf(account!!.name)
 
         if (contentResolver != null) {
-            contentResolver!!.update(ProviderTableMeta.CONTENT_URI, cv, where, whereArgs)
+            contentResolver!!.update(CONTENT_URI, cv, where, whereArgs)
 
         } else {
             try {
-                contentProviderClient!!.update(
-                    ProviderTableMeta.CONTENT_URI, cv, where,
-                    whereArgs
-                )
+                contentProviderClient!!.update(CONTENT_URI, cv, where, whereArgs)
             } catch (e: RemoteException) {
-                Log_OC.e(TAG, "Exception in resetShareFlagsInAllFiles" + e.message)
+                Log_OC.e(TAG, "Exception in resetShareFlagsInAllFiles ${e.message}", e)
             }
-
         }
     }
 
     private fun resetShareFlagsInFolder(folder: OCFile) {
         val cv = ContentValues()
-        cv.put(ProviderTableMeta.FILE_SHARED_VIA_LINK, false)
-        cv.put(ProviderTableMeta.FILE_SHARED_WITH_SHAREE, false)
-        cv.put(ProviderTableMeta.FILE_PUBLIC_LINK, "")
-        val where = ProviderTableMeta.FILE_ACCOUNT_OWNER + "=? AND " +
-                ProviderTableMeta.FILE_PARENT + "=?"
+        cv.put(FILE_SHARED_VIA_LINK, false)
+        cv.put(FILE_SHARED_WITH_SHAREE, false)
+        cv.put(FILE_PUBLIC_LINK, "")
+        val where = "$FILE_ACCOUNT_OWNER=? AND $FILE_PARENT=?"
         val whereArgs = arrayOf(account!!.name, folder.fileId.toString())
 
         if (contentResolver != null) {
-            contentResolver!!.update(ProviderTableMeta.CONTENT_URI, cv, where, whereArgs)
+            contentResolver!!.update(CONTENT_URI, cv, where, whereArgs)
 
         } else {
             try {
-                contentProviderClient!!.update(
-                    ProviderTableMeta.CONTENT_URI, cv, where,
-                    whereArgs
-                )
+                contentProviderClient!!.update(CONTENT_URI, cv, where, whereArgs)
             } catch (e: RemoteException) {
-                Log_OC.e(TAG, "Exception in resetShareFlagsInFolder " + e.message)
+                Log_OC.e(TAG, "Exception in resetShareFlagsInFolder ${e.message}", e)
             }
-
         }
     }
 
     private fun resetShareFlagInAFile(filePath: String) {
         val cv = ContentValues()
-        cv.put(ProviderTableMeta.FILE_SHARED_VIA_LINK, false)
-        cv.put(ProviderTableMeta.FILE_SHARED_WITH_SHAREE, false)
-        cv.put(ProviderTableMeta.FILE_PUBLIC_LINK, "")
-        val where = ProviderTableMeta.FILE_ACCOUNT_OWNER + "=? AND " +
-                ProviderTableMeta.FILE_PATH + "=?"
+        cv.put(FILE_SHARED_VIA_LINK, false)
+        cv.put(FILE_SHARED_WITH_SHAREE, false)
+        cv.put(FILE_PUBLIC_LINK, "")
+        val where = FILE_ACCOUNT_OWNER + "=? AND " + FILE_PATH + "=?"
         val whereArgs = arrayOf(account!!.name, filePath)
 
         if (contentResolver != null) {
-            contentResolver!!.update(ProviderTableMeta.CONTENT_URI, cv, where, whereArgs)
-
+            contentResolver!!.update(CONTENT_URI, cv, where, whereArgs)
         } else {
             try {
-                contentProviderClient!!.update(
-                    ProviderTableMeta.CONTENT_URI, cv, where,
-                    whereArgs
-                )
+                contentProviderClient!!.update(CONTENT_URI, cv, where, whereArgs)
             } catch (e: RemoteException) {
-                Log_OC.e(TAG, "Exception in resetShareFlagsInFolder " + e.message)
+                Log_OC.e(TAG, "Exception in resetShareFlagsInFolder ${e.message}", e)
             }
-
         }
     }
 
     private fun cleanShares() {
-        val where = ProviderTableMeta.OCSHARES_ACCOUNT_OWNER + "=?"
+        val where = "$OCSHARES_ACCOUNT_OWNER=?"
         val whereArgs = arrayOf(account!!.name)
 
         if (contentResolver != null) {
-            contentResolver!!.delete(ProviderTableMeta.CONTENT_URI_SHARE, where, whereArgs)
+            contentResolver!!.delete(CONTENT_URI_SHARE, where, whereArgs)
 
         } else {
             try {
-                contentProviderClient!!.delete(
-                    ProviderTableMeta.CONTENT_URI_SHARE, where,
-                    whereArgs
-                )
+                contentProviderClient!!.delete(CONTENT_URI_SHARE, where, whereArgs)
             } catch (e: RemoteException) {
-                Log_OC.e(TAG, "Exception in cleanShares" + e.message)
+                Log_OC.e(TAG, "Exception in cleanShares ${e.message}", e)
             }
-
         }
     }
 
     fun removeShare(share: OCShareEntity) {
-        val share_uri = ProviderTableMeta.CONTENT_URI_SHARE
-        val where = ProviderTableMeta.OCSHARES_ACCOUNT_OWNER + "=?" + " AND " +
-                ProviderTableMeta._ID + "=?"
-        val whereArgs = arrayOf(account!!.name, java.lang.Long.toString(share.id.toLong()))
+        val shareUri = CONTENT_URI_SHARE
+        val where = "$OCSHARES_ACCOUNT_OWNER=? AND $_ID=?"
+        val whereArgs = arrayOf(account!!.name, share.id.toString())
         if (contentProviderClient != null) {
             try {
-                contentProviderClient!!.delete(share_uri, where, whereArgs)
+                contentProviderClient!!.delete(shareUri, where, whereArgs)
             } catch (e: RemoteException) {
                 e.printStackTrace()
             }
-
         } else {
-            contentResolver!!.delete(share_uri, where, whereArgs)
+            contentResolver!!.delete(shareUri, where, whereArgs)
         }
     }
 
@@ -1585,41 +1385,35 @@ class FileDataStorageManager {
      * @return
      */
     private fun prepareInsertShares(
-        shares: List<RemoteShare>?, operations: ArrayList<ContentProviderOperation>
+        shares: List<RemoteShare>?,
+        operations: ArrayList<ContentProviderOperation>
     ): ArrayList<ContentProviderOperation> {
 
         if (shares != null) {
             // prepare operations to insert or update files to save in the given folder
             for (remoteShare in shares) {
-                val cv = ContentValues()
-                cv.put(ProviderTableMeta.OCSHARES_FILE_SOURCE, remoteShare.fileSource)
-                cv.put(ProviderTableMeta.OCSHARES_ITEM_SOURCE, remoteShare.itemSource)
-                cv.put(ProviderTableMeta.OCSHARES_SHARE_TYPE, remoteShare.shareType!!.value)
-                cv.put(ProviderTableMeta.OCSHARES_SHARE_WITH, remoteShare.shareWith)
-                cv.put(ProviderTableMeta.OCSHARES_PATH, remoteShare.path)
-                cv.put(ProviderTableMeta.OCSHARES_PERMISSIONS, remoteShare.permissions)
-                cv.put(ProviderTableMeta.OCSHARES_SHARED_DATE, remoteShare.sharedDate)
-                cv.put(ProviderTableMeta.OCSHARES_EXPIRATION_DATE, remoteShare.expirationDate)
-                cv.put(ProviderTableMeta.OCSHARES_TOKEN, remoteShare.token)
-                cv.put(
-                    ProviderTableMeta.OCSHARES_SHARE_WITH_DISPLAY_NAME,
-                    remoteShare.sharedWithDisplayName
-                )
-                cv.put(
-                    ProviderTableMeta.OCSHARES_SHARE_WITH_ADDITIONAL_INFO,
-                    remoteShare.sharedWithAdditionalInfo
-                )
-                cv.put(ProviderTableMeta.OCSHARES_IS_DIRECTORY, if (remoteShare.isFolder) 1 else 0)
-                cv.put(ProviderTableMeta.OCSHARES_USER_ID, remoteShare.userId)
-                cv.put(ProviderTableMeta.OCSHARES_ID_REMOTE_SHARED, remoteShare.id)
-                cv.put(ProviderTableMeta.OCSHARES_ACCOUNT_OWNER, account!!.name)
-                cv.put(ProviderTableMeta.OCSHARES_NAME, remoteShare.name)
-                cv.put(ProviderTableMeta.OCSHARES_URL, remoteShare.shareLink)
+                val cv = ContentValues().apply {
+                    put(OCSHARES_FILE_SOURCE, remoteShare.fileSource)
+                    put(OCSHARES_ITEM_SOURCE, remoteShare.itemSource)
+                    put(OCSHARES_SHARE_TYPE, remoteShare.shareType!!.value)
+                    put(OCSHARES_SHARE_WITH, remoteShare.shareWith)
+                    put(OCSHARES_PATH, remoteShare.path)
+                    put(OCSHARES_PERMISSIONS, remoteShare.permissions)
+                    put(OCSHARES_SHARED_DATE, remoteShare.sharedDate)
+                    put(OCSHARES_EXPIRATION_DATE, remoteShare.expirationDate)
+                    put(OCSHARES_TOKEN, remoteShare.token)
+                    put(OCSHARES_SHARE_WITH_DISPLAY_NAME, remoteShare.sharedWithDisplayName)
+                    put(OCSHARES_SHARE_WITH_ADDITIONAL_INFO, remoteShare.sharedWithAdditionalInfo)
+                    put(OCSHARES_IS_DIRECTORY, if (remoteShare.isFolder) 1 else 0)
+                    put(OCSHARES_USER_ID, remoteShare.userId)
+                    put(OCSHARES_ID_REMOTE_SHARED, remoteShare.id)
+                    put(OCSHARES_ACCOUNT_OWNER, account!!.name)
+                    put(OCSHARES_NAME, remoteShare.name)
+                    put(OCSHARES_URL, remoteShare.shareLink)
+                }
 
                 // adding a new share resource
-                operations.add(
-                    ContentProviderOperation.newInsert(ProviderTableMeta.CONTENT_URI_SHARE).withValues(cv).build()
-                )
+                operations.add(ContentProviderOperation.newInsert(CONTENT_URI_SHARE).withValues(cv).build())
             }
         }
         return operations
@@ -1629,8 +1423,7 @@ class FileDataStorageManager {
         folder: OCFile?, preparedOperations: ArrayList<ContentProviderOperation>
     ): ArrayList<ContentProviderOperation> {
         if (folder != null) {
-            val where = (ProviderTableMeta.OCSHARES_PATH + "=?" + " AND "
-                    + ProviderTableMeta.OCSHARES_ACCOUNT_OWNER + "=?")
+            val where = ("$OCSHARES_PATH=? AND $OCSHARES_ACCOUNT_OWNER=?")
             val whereArgs = arrayOf("", account!!.name)
 
             val files = getFolderContent(folder, false)
@@ -1638,7 +1431,7 @@ class FileDataStorageManager {
             for (file in files) {
                 whereArgs[0] = file.remotePath
                 preparedOperations.add(
-                    ContentProviderOperation.newDelete(ProviderTableMeta.CONTENT_URI_SHARE).withSelection(
+                    ContentProviderOperation.newDelete(CONTENT_URI_SHARE).withSelection(
                         where,
                         whereArgs
                     ).build()
@@ -1646,19 +1439,17 @@ class FileDataStorageManager {
             }
         }
         return preparedOperations
-
     }
 
     private fun prepareRemoveSharesInFile(
         filePath: String, preparedOperations: ArrayList<ContentProviderOperation>
     ): ArrayList<ContentProviderOperation> {
 
-        val where = (ProviderTableMeta.OCSHARES_PATH + "=?" + " AND "
-                + ProviderTableMeta.OCSHARES_ACCOUNT_OWNER + "=?")
+        val where = ("$OCSHARES_PATH=? AND $OCSHARES_ACCOUNT_OWNER=?")
         val whereArgs = arrayOf(filePath, account!!.name)
 
         preparedOperations.add(
-            ContentProviderOperation.newDelete(ProviderTableMeta.CONTENT_URI_SHARE).withSelection(
+            ContentProviderOperation.newDelete(CONTENT_URI_SHARE).withSelection(
                 where,
                 whereArgs
             ).build()
@@ -1670,33 +1461,26 @@ class FileDataStorageManager {
 
     fun getPrivateSharesForAFile(filePath: String, accountName: String): ArrayList<OCShareEntity> {
         // Condition
-        val where = (ProviderTableMeta.OCSHARES_PATH + "=?" + " AND "
-                + ProviderTableMeta.OCSHARES_ACCOUNT_OWNER + "=?" + "AND"
-                + " (" + ProviderTableMeta.OCSHARES_SHARE_TYPE + "=? OR "
-                + ProviderTableMeta.OCSHARES_SHARE_TYPE + "=? OR "
-                + ProviderTableMeta.OCSHARES_SHARE_TYPE + "=? ) ")
+        val where =
+            ("$OCSHARES_PATH=? AND $OCSHARES_ACCOUNT_OWNER=?AND ($OCSHARES_SHARE_TYPE=? OR $OCSHARES_SHARE_TYPE=? OR $OCSHARES_SHARE_TYPE=? ) ")
         val whereArgs = arrayOf(
             filePath,
             accountName,
-            Integer.toString(ShareType.USER.value),
-            Integer.toString(ShareType.GROUP.value),
-            Integer.toString(ShareType.FEDERATED.value)
+            ShareType.USER.value.toString(),
+            ShareType.GROUP.value.toString(),
+            ShareType.FEDERATED.value.toString()
         )
 
         var c: Cursor?
-        if (contentResolver != null) {
-            c = contentResolver!!.query(
-                ProviderTableMeta.CONTENT_URI_SHARE, null, where, whereArgs, null
-            )
+        c = if (contentResolver != null) {
+            contentResolver!!.query(CONTENT_URI_SHARE, null, where, whereArgs, null)
         } else {
             try {
-                c = contentProviderClient!!.query(
-                    ProviderTableMeta.CONTENT_URI_SHARE, null, where, whereArgs, null
-                )
+                contentProviderClient!!.query(CONTENT_URI_SHARE, null, where, whereArgs, null)
 
             } catch (e: RemoteException) {
-                Log_OC.e(TAG, "Could not get list of shares with: " + e.message)
-                c = null
+                Log_OC.e(TAG, "Could not get list of shares with: ${e.message}", e)
+                null
             }
 
         }
@@ -1717,27 +1501,19 @@ class FileDataStorageManager {
 
     fun getPublicSharesForAFile(filePath: String, accountName: String): ArrayList<OCShareEntity> {
         // Condition
-        val where = (ProviderTableMeta.OCSHARES_PATH + "=?" + " AND "
-                + ProviderTableMeta.OCSHARES_ACCOUNT_OWNER + "=?" + "AND "
-                + ProviderTableMeta.OCSHARES_SHARE_TYPE + "=? ")
-        val whereArgs = arrayOf(filePath, accountName, Integer.toString(ShareType.PUBLIC_LINK.value))
+        val where = ("$OCSHARES_PATH=? AND $OCSHARES_ACCOUNT_OWNER=?AND $OCSHARES_SHARE_TYPE=? ")
+        val whereArgs = arrayOf(filePath, accountName, ShareType.PUBLIC_LINK.value.toString())
 
-        var c: Cursor?
-        if (contentResolver != null) {
-            c = contentResolver!!.query(
-                ProviderTableMeta.CONTENT_URI_SHARE, null, where, whereArgs, null
-            )
+        val c: Cursor? = if (contentResolver != null) {
+            contentResolver!!.query(CONTENT_URI_SHARE, null, where, whereArgs, null)
         } else {
             try {
-                c = contentProviderClient!!.query(
-                    ProviderTableMeta.CONTENT_URI_SHARE, null, where, whereArgs, null
-                )
+                contentProviderClient!!.query(CONTENT_URI_SHARE, null, where, whereArgs, null)
 
             } catch (e: RemoteException) {
-                Log_OC.e(TAG, "Could not get list of shares with: " + e.message)
-                c = null
+                Log_OC.e(TAG, "Could not get list of shares with: ${e.message}", e)
+                null
             }
-
         }
         val publicShares = ArrayList<OCShareEntity>()
         var publicShare: OCShareEntity?
@@ -1781,106 +1557,106 @@ class FileDataStorageManager {
         }
     }
 
+    @Suppress("DEPRECATION")
     fun deleteFileInMediaScan(path: String) {
 
-        val mimetypeString = FileStorageUtils.getMimeTypeFromName(path)
+        val mimeTypeString = FileStorageUtils.getMimeTypeFromName(path)
         val contentResolver = contentResolver
 
         if (contentResolver != null) {
-            if (mimetypeString.startsWith("image/")) {
-                // Images
-                contentResolver.delete(
-                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                    MediaStore.Images.Media.DATA + "=?", arrayOf(path)
-                )
-            } else if (mimetypeString.startsWith("audio/")) {
-                // Audio
-                contentResolver.delete(
-                    MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-                    MediaStore.Audio.Media.DATA + "=?", arrayOf(path)
-                )
-            } else if (mimetypeString.startsWith("video/")) {
-                // Video
-                contentResolver.delete(
-                    MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
-                    MediaStore.Video.Media.DATA + "=?", arrayOf(path)
-                )
+            when {
+                mimeTypeString.startsWith(pathImage) -> // Images
+                    contentResolver.delete(
+                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                        MediaStore.Images.Media.DATA + "=?",
+                        arrayOf(path)
+                    )
+                mimeTypeString.startsWith(pathAudio) -> // Audio
+                    contentResolver.delete(
+                        MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+                        "${MediaStore.Audio.Media.DATA}=?",
+                        arrayOf(path)
+                    )
+                mimeTypeString.startsWith(pathVideo) -> // Video
+                    contentResolver.delete(
+                        MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
+                        "${MediaStore.Video.Media.DATA}=?",
+                        arrayOf(path)
+                    )
             }
         } else {
             val contentProviderClient = contentProviderClient
             try {
-                if (mimetypeString.startsWith("image/")) {
-                    // Images
-                    contentProviderClient!!.delete(
-                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                        MediaStore.Images.Media.DATA + "=?", arrayOf(path)
-                    )
-                } else if (mimetypeString.startsWith("audio/")) {
-                    // Audio
-                    contentProviderClient!!.delete(
-                        MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-                        MediaStore.Audio.Media.DATA + "=?", arrayOf(path)
-                    )
-                } else if (mimetypeString.startsWith("video/")) {
-                    // Video
-                    contentProviderClient!!.delete(
-                        MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
-                        MediaStore.Video.Media.DATA + "=?", arrayOf(path)
-                    )
+                when {
+                    mimeTypeString.startsWith(pathImage) -> // Images
+                        contentProviderClient!!.delete(
+                            MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                            "${MediaStore.Images.Media.DATA}=?",
+                            arrayOf(path)
+                        )
+                    mimeTypeString.startsWith(pathAudio) -> // Audio
+                        contentProviderClient!!.delete(
+                            MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+                            "${MediaStore.Audio.Media.DATA}=?",
+                            arrayOf(path)
+                        )
+                    mimeTypeString.startsWith(pathVideo) -> // Video
+                        contentProviderClient!!.delete(
+                            MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
+                            "${MediaStore.Video.Media.DATA}=?",
+                            arrayOf(path)
+                        )
                 }
             } catch (e: RemoteException) {
-                Log_OC.e(TAG, "Exception deleting media file in MediaStore " + e.message)
+                Log_OC.e(TAG, "Exception deleting media file in MediaStore ${e.message}", e)
             }
-
         }
-
     }
 
-    fun saveConflict(file: OCFile, etagInConflict: String?) {
-        var etagInConflict = etagInConflict
+    fun saveConflict(file: OCFile, eTagInConflictFromParameter: String?) {
+        var eTagInConflict = eTagInConflictFromParameter
         if (!file.isDown) {
-            etagInConflict = null
+            eTagInConflict = null
         }
         val cv = ContentValues()
-        cv.put(ProviderTableMeta.FILE_ETAG_IN_CONFLICT, etagInConflict)
+        cv.put(FILE_ETAG_IN_CONFLICT, eTagInConflict)
         var updated = 0
         if (contentResolver != null) {
             updated = contentResolver!!.update(
-                ProviderTableMeta.CONTENT_URI_FILE,
+                CONTENT_URI_FILE,
                 cv,
-                ProviderTableMeta._ID + "=?",
+                "$_ID=?",
                 arrayOf(file.fileId.toString())
             )
         } else {
             try {
                 updated = contentProviderClient!!.update(
-                    ProviderTableMeta.CONTENT_URI_FILE,
+                    CONTENT_URI_FILE,
                     cv,
-                    ProviderTableMeta._ID + "=?",
+                    "$_ID=?",
                     arrayOf(file.fileId.toString())
                 )
             } catch (e: RemoteException) {
-                Log_OC.e(TAG, "Failed saving conflict in database " + e.message)
+                Log_OC.e(TAG, "Failed saving conflict in database ${e.message}", e)
             }
-
         }
 
         Log_OC.d(TAG, "Number of files updated with CONFLICT: $updated")
 
         if (updated > 0) {
-            if (etagInConflict != null) {
+            if (eTagInConflict != null) {
                 /// set conflict in all ancestor folders
 
                 var parentId = file.parentId
                 val ancestorIds = HashSet<String>()
-                while (parentId != FileDataStorageManager.ROOT_PARENT_ID.toLong()) {
-                    ancestorIds.add(java.lang.Long.toString(parentId))
+                while (parentId != ROOT_PARENT_ID.toLong()) {
+                    ancestorIds.add(parentId.toString())
                     parentId = getFileById(parentId)!!.parentId
                 }
 
                 if (ancestorIds.size > 0) {
                     val whereBuffer = StringBuffer()
-                    whereBuffer.append(ProviderTableMeta._ID).append(" IN (")
+                    whereBuffer.append(_ID).append(" IN (")
                     for (i in 0 until ancestorIds.size - 1) {
                         whereBuffer.append("?,")
                     }
@@ -1889,7 +1665,7 @@ class FileDataStorageManager {
 
                     if (contentResolver != null) {
                         updated = contentResolver!!.update(
-                            ProviderTableMeta.CONTENT_URI_FILE,
+                            CONTENT_URI_FILE,
                             cv,
                             whereBuffer.toString(),
                             ancestorIds.toTypedArray()
@@ -1897,15 +1673,14 @@ class FileDataStorageManager {
                     } else {
                         try {
                             updated = contentProviderClient!!.update(
-                                ProviderTableMeta.CONTENT_URI_FILE,
+                                CONTENT_URI_FILE,
                                 cv,
                                 whereBuffer.toString(),
                                 ancestorIds.toTypedArray()
                             )
                         } catch (e: RemoteException) {
-                            Log_OC.e(TAG, "Failed saving conflict in database " + e.message)
+                            Log_OC.e(TAG, "Failed saving conflict in database ${e.message}", e)
                         }
-
                     }
                 } // else file is ROOT folder, no parent to set in conflict
 
@@ -1913,36 +1688,38 @@ class FileDataStorageManager {
                 /// update conflict in ancestor folders
                 // (not directly unset; maybe there are more conflicts below them)
                 var parentPath = file.remotePath
-                if (parentPath.endsWith(OCFile.PATH_SEPARATOR)) {
+                if (parentPath.endsWith(PATH_SEPARATOR)) {
                     parentPath = parentPath.substring(0, parentPath.length - 1)
                 }
-                parentPath = parentPath.substring(0, parentPath.lastIndexOf(OCFile.PATH_SEPARATOR) + 1)
+                parentPath = parentPath.substring(0, parentPath.lastIndexOf(PATH_SEPARATOR) + 1)
 
                 Log_OC.d(TAG, "checking parents to remove conflict; STARTING with $parentPath")
-                while (parentPath.length > 0) {
+                while (parentPath.isNotEmpty()) {
 
-                    val whereForDescencentsInConflict = ProviderTableMeta.FILE_ETAG_IN_CONFLICT + " IS NOT NULL AND " +
-                            ProviderTableMeta.FILE_CONTENT_TYPE + " != 'DIR' AND " +
-                            ProviderTableMeta.FILE_ACCOUNT_OWNER + " = ? AND " +
-                            ProviderTableMeta.FILE_PATH + " LIKE ?"
+                    val whereForDescendantsInConflict = FILE_ETAG_IN_CONFLICT + " IS NOT NULL AND " +
+                            FILE_CONTENT_TYPE + " != 'DIR' AND " +
+                            FILE_ACCOUNT_OWNER + " = ? AND " +
+                            FILE_PATH + " LIKE ?"
                     var descendantsInConflict: Cursor? = null
                     if (contentResolver != null) {
                         descendantsInConflict = contentResolver!!.query(
-                            ProviderTableMeta.CONTENT_URI_FILE,
-                            arrayOf(ProviderTableMeta._ID),
-                            whereForDescencentsInConflict,
-                            arrayOf(account!!.name, "$parentPath%"), null
+                            CONTENT_URI_FILE,
+                            arrayOf(_ID),
+                            whereForDescendantsInConflict,
+                            arrayOf(account!!.name, "$parentPath%"),
+                            null
                         )
                     } else {
                         try {
                             descendantsInConflict = contentProviderClient!!.query(
-                                ProviderTableMeta.CONTENT_URI_FILE,
-                                arrayOf(ProviderTableMeta._ID),
-                                whereForDescencentsInConflict,
-                                arrayOf(account!!.name, "$parentPath%"), null
+                                CONTENT_URI_FILE,
+                                arrayOf(_ID),
+                                whereForDescendantsInConflict,
+                                arrayOf(account!!.name, "$parentPath%"),
+                                null
                             )
                         } catch (e: RemoteException) {
-                            Log_OC.e(TAG, "Failed querying for descendants in conflict " + e.message)
+                            Log_OC.e(TAG, "Failed querying for descendants in conflict ${e.message}", e)
                         }
 
                     }
@@ -1950,150 +1727,111 @@ class FileDataStorageManager {
                         Log_OC.d(TAG, "NO MORE conflicts in $parentPath")
                         if (contentResolver != null) {
                             updated = contentResolver!!.update(
-                                ProviderTableMeta.CONTENT_URI_FILE,
+                                CONTENT_URI_FILE,
                                 cv,
-                                ProviderTableMeta.FILE_ACCOUNT_OWNER + "=? AND " +
-                                        ProviderTableMeta.FILE_PATH + "=?",
+                                "$FILE_ACCOUNT_OWNER=? AND $FILE_PATH=?",
                                 arrayOf(account!!.name, parentPath)
                             )
                         } else {
                             try {
                                 updated = contentProviderClient!!.update(
-                                    ProviderTableMeta.CONTENT_URI_FILE,
+                                    CONTENT_URI_FILE,
                                     cv,
-                                    ProviderTableMeta.FILE_ACCOUNT_OWNER + "=? AND " +
-                                            ProviderTableMeta.FILE_PATH + "=?", arrayOf(account!!.name, parentPath)
+                                    "$FILE_ACCOUNT_OWNER=? AND $FILE_PATH=?",
+                                    arrayOf(account!!.name, parentPath)
                                 )
                             } catch (e: RemoteException) {
-                                Log_OC.e(TAG, "Failed saving conflict in database " + e.message)
+                                Log_OC.e(TAG, "Failed saving conflict in database ${e.message}", e)
                             }
-
                         }
 
                     } else {
-                        Log_OC.d(TAG, "STILL " + descendantsInConflict.count + " in " + parentPath)
+                        Log_OC.d(TAG, "STILL ${descendantsInConflict.count} in $parentPath")
                     }
 
                     descendantsInConflict?.close()
 
                     parentPath = parentPath.substring(0, parentPath.length - 1)  // trim last /
-                    parentPath = parentPath.substring(0, parentPath.lastIndexOf(OCFile.PATH_SEPARATOR) + 1)
+                    parentPath = parentPath.substring(0, parentPath.lastIndexOf(PATH_SEPARATOR) + 1)
                     Log_OC.d(TAG, "checking parents to remove conflict; NEXT $parentPath")
                 }
             }
         }
-
     }
 
     fun saveCapabilities(capability: RemoteCapability): RemoteCapability {
 
         // Prepare capabilities data
-        val cv = ContentValues()
-        cv.put(ProviderTableMeta.CAPABILITIES_ACCOUNT_NAME, account!!.name)
-        cv.put(ProviderTableMeta.CAPABILITIES_VERSION_MAYOR, capability.versionMayor)
-        cv.put(ProviderTableMeta.CAPABILITIES_VERSION_MINOR, capability.versionMinor)
-        cv.put(ProviderTableMeta.CAPABILITIES_VERSION_MICRO, capability.versionMicro)
-        cv.put(ProviderTableMeta.CAPABILITIES_VERSION_STRING, capability.versionString)
-        cv.put(ProviderTableMeta.CAPABILITIES_VERSION_EDITION, capability.versionEdition)
-        cv.put(ProviderTableMeta.CAPABILITIES_CORE_POLLINTERVAL, capability.corePollinterval)
-        cv.put(ProviderTableMeta.CAPABILITIES_SHARING_API_ENABLED, capability.filesSharingApiEnabled.value)
-        cv.put(
-            ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_ENABLED,
-            capability.filesSharingPublicEnabled.value
-        )
-        cv.put(
-            ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED,
-            capability.filesSharingPublicPasswordEnforced.value
-        )
-        cv.put(
-            ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_READ_ONLY,
-            capability.filesSharingPublicPasswordEnforcedReadOnly.value
-        )
-        cv.put(
-            ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_READ_WRITE,
-            capability.filesSharingPublicPasswordEnforcedReadWrite.value
-        )
-        cv.put(
-            ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_UPLOAD_ONLY,
-            capability.filesSharingPublicPasswordEnforcedUploadOnly.value
-        )
-        cv.put(
-            ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_ENABLED,
-            capability.filesSharingPublicExpireDateEnabled.value
-        )
-        cv.put(
-            ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_DAYS,
-            capability.filesSharingPublicExpireDateDays
-        )
-        cv.put(
-            ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_ENFORCED,
-            capability.filesSharingPublicExpireDateEnforced.value
-        )
-        cv.put(
-            ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_SEND_MAIL,
-            capability.filesSharingPublicSendMail.value
-        )
-        cv.put(
-            ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_UPLOAD,
-            capability.filesSharingPublicUpload.value
-        )
-        cv.put(
-            ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_MULTIPLE,
-            capability.filesSharingPublicMultiple.value
-        )
-        cv.put(
-            ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_SUPPORTS_UPLOAD_ONLY,
-            capability.filesSharingPublicSupportsUploadOnly.value
-        )
-        cv.put(
-            ProviderTableMeta.CAPABILITIES_SHARING_USER_SEND_MAIL,
-            capability.filesSharingUserSendMail.value
-        )
-        cv.put(ProviderTableMeta.CAPABILITIES_SHARING_RESHARING, capability.filesSharingResharing.value)
-        cv.put(
-            ProviderTableMeta.CAPABILITIES_SHARING_FEDERATION_OUTGOING,
-            capability.filesSharingFederationOutgoing.value
-        )
-        cv.put(
-            ProviderTableMeta.CAPABILITIES_SHARING_FEDERATION_INCOMING,
-            capability.filesSharingFederationIncoming.value
-        )
-        cv.put(ProviderTableMeta.CAPABILITIES_FILES_BIGFILECHUNKING, capability.filesBigFileChunking.value)
-        cv.put(ProviderTableMeta.CAPABILITIES_FILES_UNDELETE, capability.filesUndelete.value)
-        cv.put(ProviderTableMeta.CAPABILITIES_FILES_VERSIONING, capability.filesVersioning.value)
+        val cv = ContentValues().apply {
+            put(CAPABILITIES_ACCOUNT_NAME, account!!.name)
+            put(CAPABILITIES_VERSION_MAYOR, capability.versionMayor)
+            put(CAPABILITIES_VERSION_MINOR, capability.versionMinor)
+            put(CAPABILITIES_VERSION_MICRO, capability.versionMicro)
+            put(CAPABILITIES_VERSION_STRING, capability.versionString)
+            put(CAPABILITIES_VERSION_EDITION, capability.versionEdition)
+            put(CAPABILITIES_CORE_POLLINTERVAL, capability.corePollinterval)
+            put(CAPABILITIES_SHARING_API_ENABLED, capability.filesSharingApiEnabled.value)
+            put(CAPABILITIES_SHARING_PUBLIC_ENABLED, capability.filesSharingPublicEnabled.value)
+            put(CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED, capability.filesSharingPublicPasswordEnforced.value)
+            put(
+                CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_READ_ONLY,
+                capability.filesSharingPublicPasswordEnforcedReadOnly.value
+            )
+            put(
+                CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_READ_WRITE,
+                capability.filesSharingPublicPasswordEnforcedReadWrite.value
+            )
+            put(
+                CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_UPLOAD_ONLY,
+                capability.filesSharingPublicPasswordEnforcedUploadOnly.value
+            )
+            put(CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_ENABLED, capability.filesSharingPublicExpireDateEnabled.value)
+            put(CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_DAYS, capability.filesSharingPublicExpireDateDays)
+            put(CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_ENFORCED, capability.filesSharingPublicExpireDateEnforced.value)
+            put(CAPABILITIES_SHARING_PUBLIC_SEND_MAIL, capability.filesSharingPublicSendMail.value)
+            put(CAPABILITIES_SHARING_PUBLIC_UPLOAD, capability.filesSharingPublicUpload.value)
+            put(CAPABILITIES_SHARING_PUBLIC_MULTIPLE, capability.filesSharingPublicMultiple.value)
+            put(CAPABILITIES_SHARING_PUBLIC_SUPPORTS_UPLOAD_ONLY, capability.filesSharingPublicSupportsUploadOnly.value)
+            put(CAPABILITIES_SHARING_USER_SEND_MAIL, capability.filesSharingUserSendMail.value)
+            put(CAPABILITIES_SHARING_RESHARING, capability.filesSharingResharing.value)
+            put(CAPABILITIES_SHARING_FEDERATION_OUTGOING, capability.filesSharingFederationOutgoing.value)
+            put(CAPABILITIES_SHARING_FEDERATION_INCOMING, capability.filesSharingFederationIncoming.value)
+            put(CAPABILITIES_FILES_BIGFILECHUNKING, capability.filesBigFileChunking.value)
+            put(CAPABILITIES_FILES_UNDELETE, capability.filesUndelete.value)
+            put(CAPABILITIES_FILES_VERSIONING, capability.filesVersioning.value)
+        }
 
         if (capabilityExists(account!!.name)) {
             if (contentResolver != null) {
                 contentResolver!!.update(
-                    ProviderTableMeta.CONTENT_URI_CAPABILITIES, cv,
-                    ProviderTableMeta.CAPABILITIES_ACCOUNT_NAME + "=?",
+                    CONTENT_URI_CAPABILITIES,
+                    cv,
+                    "$CAPABILITIES_ACCOUNT_NAME=?",
                     arrayOf(account!!.name)
                 )
             } else {
                 try {
                     contentProviderClient!!.update(
-                        ProviderTableMeta.CONTENT_URI_CAPABILITIES,
-                        cv, ProviderTableMeta.CAPABILITIES_ACCOUNT_NAME + "=?",
+                        CONTENT_URI_CAPABILITIES,
+                        cv,
+                        "$CAPABILITIES_ACCOUNT_NAME=?",
                         arrayOf(account!!.name)
                     )
                 } catch (e: RemoteException) {
-                    Log_OC.e(
-                        TAG,
-                        "Fail to insert insert file to database " + e.message
-                    )
+                    Log_OC.e(TAG, "Fail to insert insert file to database ${e.message}")
                 }
 
             }
         } else {
-            var result_uri: Uri? = null
+            var resultUri: Uri? = null
             if (contentResolver != null) {
-                result_uri = contentResolver!!.insert(
-                    ProviderTableMeta.CONTENT_URI_CAPABILITIES, cv
+                resultUri = contentResolver!!.insert(
+                    CONTENT_URI_CAPABILITIES, cv
                 )
             } else {
                 try {
-                    result_uri = contentProviderClient!!.insert(
-                        ProviderTableMeta.CONTENT_URI_CAPABILITIES, cv
+                    resultUri = contentProviderClient!!.insert(
+                        CONTENT_URI_CAPABILITIES, cv
                     )
                 } catch (e: RemoteException) {
                     Log_OC.e(
@@ -2101,10 +1839,9 @@ class FileDataStorageManager {
                         "Fail to insert insert capability to database " + e.message
                     )
                 }
-
             }
-            if (result_uri != null) {
-                val new_id = java.lang.Long.parseLong(result_uri.pathSegments[1])
+            if (resultUri != null) {
+                val new_id = parseLong(resultUri.pathSegments[1])
                 capability.accountName = account!!.name
             }
         }
@@ -2125,26 +1862,23 @@ class FileDataStorageManager {
     private fun getCapabilityCursorForAccount(accountName: String): Cursor? {
         var c: Cursor? = null
         if (contentResolver != null) {
-            c = contentResolver!!
-                .query(
-                    ProviderTableMeta.CONTENT_URI_CAPABILITIES, null,
-                    ProviderTableMeta.CAPABILITIES_ACCOUNT_NAME + "=? ",
-                    arrayOf(accountName), null
-                )
+            c = contentResolver!!.query(
+                CONTENT_URI_CAPABILITIES, null,
+                "$CAPABILITIES_ACCOUNT_NAME=? ",
+                arrayOf(accountName),
+                null
+            )
         } else {
             try {
                 c = contentProviderClient!!.query(
-                    ProviderTableMeta.CONTENT_URI_CAPABILITIES, null,
-                    ProviderTableMeta.CAPABILITIES_ACCOUNT_NAME + "=? ",
-                    arrayOf(accountName), null
+                    CONTENT_URI_CAPABILITIES, null,
+                    "$CAPABILITIES_ACCOUNT_NAME=? ",
+                    arrayOf(accountName),
+                    null
                 )
             } catch (e: RemoteException) {
-                Log_OC.e(
-                    TAG,
-                    "Couldn't determine capability existance, assuming non existance: " + e.message
-                )
+                Log_OC.e(TAG, "Couldn't determine capability existence, assuming non existence: ${e.message}")
             }
-
         }
         return c
     }
@@ -2167,72 +1901,70 @@ class FileDataStorageManager {
         var capability: OCCapability? = null
         if (c != null) {
             capability = OCCapability(
-                accountName = c.getString(c.getColumnIndex(ProviderTableMeta.CAPABILITIES_ACCOUNT_NAME)),
-                versionMayor = c.getInt(c.getColumnIndex(ProviderTableMeta.CAPABILITIES_VERSION_MAYOR)),
-                versionMinor = c.getInt(c.getColumnIndex(ProviderTableMeta.CAPABILITIES_VERSION_MINOR)),
-                versionMicro = c.getInt(c.getColumnIndex(ProviderTableMeta.CAPABILITIES_VERSION_MICRO)),
-                versionString = c.getString(c.getColumnIndex(ProviderTableMeta.CAPABILITIES_VERSION_STRING)),
-                versionEdition = c.getString(c.getColumnIndex(ProviderTableMeta.CAPABILITIES_VERSION_EDITION)),
-                corePollInterval = c.getInt(c.getColumnIndex(ProviderTableMeta.CAPABILITIES_CORE_POLLINTERVAL)),
+                accountName = c.getString(c.getColumnIndex(CAPABILITIES_ACCOUNT_NAME)),
+                versionMayor = c.getInt(c.getColumnIndex(CAPABILITIES_VERSION_MAYOR)),
+                versionMinor = c.getInt(c.getColumnIndex(CAPABILITIES_VERSION_MINOR)),
+                versionMicro = c.getInt(c.getColumnIndex(CAPABILITIES_VERSION_MICRO)),
+                versionString = c.getString(c.getColumnIndex(CAPABILITIES_VERSION_STRING)),
+                versionEdition = c.getString(c.getColumnIndex(CAPABILITIES_VERSION_EDITION)),
+                corePollInterval = c.getInt(c.getColumnIndex(CAPABILITIES_CORE_POLLINTERVAL)),
                 filesSharingApiEnabled = CapabilityBooleanType.fromValue(
-                    c.getInt(c.getColumnIndex(ProviderTableMeta.CAPABILITIES_SHARING_API_ENABLED))
+                    c.getInt(c.getColumnIndex(CAPABILITIES_SHARING_API_ENABLED))
                 )!!,
                 filesSharingPublicEnabled = CapabilityBooleanType.fromValue(
-                    c.getInt(c.getColumnIndex(ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_ENABLED))
+                    c.getInt(c.getColumnIndex(CAPABILITIES_SHARING_PUBLIC_ENABLED))
                 )!!,
                 filesSharingPublicPasswordEnforced = CapabilityBooleanType.fromValue(
-                    c.getInt(c.getColumnIndex(ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED))
+                    c.getInt(c.getColumnIndex(CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED))
                 )!!,
                 filesSharingPublicPasswordEnforcedReadOnly = CapabilityBooleanType.fromValue(
-                    c.getInt(c.getColumnIndex(ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_READ_ONLY))
+                    c.getInt(c.getColumnIndex(CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_READ_ONLY))
                 )!!,
                 filesSharingPublicPasswordEnforcedReadWrite = CapabilityBooleanType.fromValue(
-                    c.getInt(c.getColumnIndex(ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_READ_WRITE))
+                    c.getInt(c.getColumnIndex(CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_READ_WRITE))
                 )!!,
                 filesSharingPublicPasswordEnforcedUploadOnly = CapabilityBooleanType.fromValue(
-                    c.getInt(c.getColumnIndex(ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_UPLOAD_ONLY))
+                    c.getInt(c.getColumnIndex(CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_UPLOAD_ONLY))
                 )!!,
                 filesSharingPublicExpireDateEnabled = CapabilityBooleanType.fromValue(
-                    c.getInt(c.getColumnIndex(ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_ENABLED))
+                    c.getInt(c.getColumnIndex(CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_ENABLED))
                 )!!,
                 filesSharingPublicExpireDateDays = c.getInt(
-                    c.getColumnIndex(ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_DAYS)
+                    c.getColumnIndex(CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_DAYS)
                 ),
                 filesSharingPublicExpireDateEnforced = CapabilityBooleanType.fromValue(
-                    c.getInt(c.getColumnIndex(ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_ENFORCED))
+                    c.getInt(c.getColumnIndex(CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_ENFORCED))
                 )!!,
                 filesSharingPublicSendMail = CapabilityBooleanType.fromValue(
-                    c.getInt(c.getColumnIndex(ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_SEND_MAIL))
+                    c.getInt(c.getColumnIndex(CAPABILITIES_SHARING_PUBLIC_SEND_MAIL))
                 )!!,
                 filesSharingPublicUpload = CapabilityBooleanType.fromValue(
-                    c.getInt(c.getColumnIndex(ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_UPLOAD))
+                    c.getInt(c.getColumnIndex(CAPABILITIES_SHARING_PUBLIC_UPLOAD))
                 )!!,
                 filesSharingPublicMultiple = CapabilityBooleanType.fromValue(
-                    c.getInt(c.getColumnIndex(ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_MULTIPLE))
+                    c.getInt(c.getColumnIndex(CAPABILITIES_SHARING_PUBLIC_MULTIPLE))
                 )!!,
                 filesSharingPublicSupportsUploadOnly = CapabilityBooleanType.fromValue(
-                    c.getInt(c.getColumnIndex(ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_SUPPORTS_UPLOAD_ONLY))
+                    c.getInt(c.getColumnIndex(CAPABILITIES_SHARING_PUBLIC_SUPPORTS_UPLOAD_ONLY))
                 )!!,
                 filesSharingUserSendMail = CapabilityBooleanType.fromValue(
-                    c.getInt(c.getColumnIndex(ProviderTableMeta.CAPABILITIES_SHARING_USER_SEND_MAIL))
+                    c.getInt(c.getColumnIndex(CAPABILITIES_SHARING_USER_SEND_MAIL))
                 )!!,
                 filesSharingResharing = CapabilityBooleanType.fromValue(
-                    c.getInt(c.getColumnIndex(ProviderTableMeta.CAPABILITIES_SHARING_RESHARING))
+                    c.getInt(c.getColumnIndex(CAPABILITIES_SHARING_RESHARING))
                 )!!,
                 filesSharingFederationOutgoing = CapabilityBooleanType.fromValue(
-                    c.getInt(c.getColumnIndex(ProviderTableMeta.CAPABILITIES_SHARING_FEDERATION_OUTGOING))
+                    c.getInt(c.getColumnIndex(CAPABILITIES_SHARING_FEDERATION_OUTGOING))
                 )!!,
                 filesSharingFederationIncoming = CapabilityBooleanType.fromValue(
-                    c.getInt(c.getColumnIndex(ProviderTableMeta.CAPABILITIES_SHARING_FEDERATION_INCOMING))
+                    c.getInt(c.getColumnIndex(CAPABILITIES_SHARING_FEDERATION_INCOMING))
                 )!!,
                 filesBigFileChunking = CapabilityBooleanType.fromValue(
-                    c.getInt(c.getColumnIndex(ProviderTableMeta.CAPABILITIES_FILES_BIGFILECHUNKING))
+                    c.getInt(c.getColumnIndex(CAPABILITIES_FILES_BIGFILECHUNKING))
                 )!!,
-                filesUndelete = CapabilityBooleanType.fromValue(
-                    c.getInt(c.getColumnIndex(ProviderTableMeta.CAPABILITIES_FILES_UNDELETE))
-                )!!,
+                filesUndelete = CapabilityBooleanType.fromValue(c.getInt(c.getColumnIndex(CAPABILITIES_FILES_UNDELETE)))!!,
                 filesVersioning = CapabilityBooleanType.fromValue(
-                    c.getInt(c.getColumnIndex(ProviderTableMeta.CAPABILITIES_FILES_VERSIONING))
+                    c.getInt(c.getColumnIndex(CAPABILITIES_FILES_VERSIONING))
                 )!!
             )
         }
@@ -2240,19 +1972,16 @@ class FileDataStorageManager {
     }
 
     private fun selectionForAllDescendantsOf(file: OCFile): Pair<String, Array<String>> {
-        val selection = ProviderTableMeta.FILE_ACCOUNT_OWNER + "=? AND " +
-                ProviderTableMeta.FILE_PATH + " LIKE ? "
-        val selectionArgs = arrayOf(
-            account!!.name, file.remotePath + "_%"     // one or more characters after remote path
-        )
-        return Pair(
-            selection,
-            selectionArgs
-        )
+        val selection = "$FILE_ACCOUNT_OWNER=? AND $FILE_PATH LIKE ? "
+        val selectionArgs = arrayOf(account!!.name, "${file.remotePath}_%") // one or more characters after remote path
+        return Pair(selection, selectionArgs)
     }
 
     companion object {
-        val ROOT_PARENT_ID = 0
         private val TAG = FileDataStorageManager::class.java.simpleName
+        const val ROOT_PARENT_ID = 0
+        private const val pathAudio = "audio/"
+        private const val pathVideo = "video/"
+        private const val pathImage = "image/"
     }
 }
