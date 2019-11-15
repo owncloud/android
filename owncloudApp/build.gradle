@@ -53,7 +53,7 @@ dependencies {
     //Zooming Android ImageView.
     implementation 'com.github.chrisbanes:PhotoView:2.1.4'
 
-    implementation 'com.android.support:multidex:1.0.3'
+    implementation 'androidx:multidex:2.0.1'
 
     // Convert Java Objects into JSON and back
     implementation 'com.google.code.gson:gson:2.8.5'

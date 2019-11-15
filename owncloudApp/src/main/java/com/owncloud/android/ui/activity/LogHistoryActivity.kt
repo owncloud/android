@@ -54,14 +54,12 @@ class LogHistoryActivity : ToolbarActivity() {
                     "Owncloud.log",
                     "search logfile",
                     "search logcat",
-                    getString(R.string.mail_logger)
-                )
+                    DEFAULT_EMAIL)
             } ?: run {
                 logFragment = LogcatFragment.newInstance(
                     "logfile.log",
                     "search logcat",
-                    getString(R.string.mail_logger)
-                )
+                    DEFAULT_EMAIL)
             }
 
             // In case this activity was started with special instructions from an
@@ -73,6 +71,10 @@ class LogHistoryActivity : ToolbarActivity() {
                     .add(R.id.fragment_container, it).commit()
             }
         }
+    }
+
+    companion object {
+        const val DEFAULT_EMAIL = ""
     }
 
 }

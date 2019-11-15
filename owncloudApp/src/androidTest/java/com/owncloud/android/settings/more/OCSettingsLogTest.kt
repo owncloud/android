@@ -30,7 +30,6 @@ import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
 import com.owncloud.android.R
 import com.owncloud.android.ui.activity.LogHistoryActivity
-import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -41,10 +40,6 @@ class OCSettingsLogTest {
     @Rule
     @JvmField
     val activityRule = ActivityTestRule(LogHistoryActivity::class.java, true, true)
-
-    @Before
-    fun setUp() {
-    }
 
     @Test
     fun checkTitle() {
