@@ -23,7 +23,9 @@ import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
 
 fun Fragment.showError(genericErrorMessage: String, throwable: Throwable?) =
-    showMessage(throwable?.parseError(genericErrorMessage, resources)!!)
+    throwable?.let {
+        showMessage(it.parseError(genericErrorMessage, resources))
+    }
 
 fun Fragment.showMessage(
     message: CharSequence,

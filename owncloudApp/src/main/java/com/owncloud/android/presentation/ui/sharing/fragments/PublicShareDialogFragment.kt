@@ -456,9 +456,6 @@ class PublicShareDialogFragment : DialogFragment() {
                         updateCapabilities(uiResult.data)
                         listener?.dismissLoading()
                     }
-                    else -> {
-                        Log.d(TAG, "Unknown status when loading capabilities in account ${account?.name}")
-                    }
                 }
             }
         )

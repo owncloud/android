@@ -87,10 +87,6 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
         observeShareDeletion()
     }
 
-    public override fun onStop() {
-        super.onStop()
-    }
-
     /**************************************************************************************************************
      *********************************************** PRIVATE SHARES ***********************************************
      **************************************************************************************************************/
@@ -151,11 +147,6 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
                     is UIResult.Loading -> {
                         showLoadingDialog(R.string.common_loading)
                     }
-                    else -> {
-                        Log.d(
-                            TAG, "Unknown status when creating private share"
-                        )
-                    }
                 }
             }
         )
@@ -199,11 +190,6 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
                     }
                     is UIResult.Loading -> {
                         showLoadingDialog(R.string.common_loading)
-                    }
-                    else -> {
-                        Log.d(
-                            TAG, "Unknown status when editing private share"
-                        )
                     }
                 }
             }
@@ -276,11 +262,6 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
                     }
                     is UIResult.Loading -> {
                         showLoading()
-                    }
-                    else -> {
-                        Log.d(
-                            TAG, "Unknown status when removing share"
-                        )
                     }
                 }
             }
