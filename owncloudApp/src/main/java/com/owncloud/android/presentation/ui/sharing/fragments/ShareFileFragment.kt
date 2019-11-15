@@ -108,7 +108,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
     /**
      * List of public links bound to the file
      */
-    private var publicLinks: List<OCShare>? = null
+    private var publicLinks: List<OCShare> = listOf()
 
     /**
      * Adapter to show public shares
@@ -130,10 +130,6 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
     // no missing number in the list - take the next to the last one
     val availableDefaultPublicName: String
         get() {
-            if (publicLinks == null) {
-                return ""
-            }
-
             val defaultName = getString(
                 R.string.share_via_link_default_name_template,
                 file?.fileName
@@ -142,7 +138,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
             val usedNumbers = ArrayList<Int>()
             var isDefaultNameSet = false
             var number: String
-            for (share in publicLinks as ArrayList<OCShare>) {
+            for (share in publicLinks) {
                 if (defaultName == share.name) {
                     isDefaultNameSet = true
                 } else if (share.name?.matches(defaultNameNumberedRegex.toRegex())!!) {
@@ -410,19 +406,19 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
         )
     }
 
-    private fun updateShares(shares: List<OCShare>?) {
-        shares?.filter { share ->
+    private fun updateShares(shares: List<OCShare>) {
+        shares.filter { share ->
             share.shareType == ShareType.USER ||
                     share.shareType == ShareType.GROUP ||
                     share.shareType == ShareType.FEDERATED
-        }.also { privateShares ->
-            updatePrivateShares(privateShares as ArrayList<OCShare>)
+        }.let { privateShares ->
+            updatePrivateShares(privateShares)
         }
 
-        shares?.filter { share ->
+        shares.filter { share ->
             share.shareType == ShareType.PUBLIC_LINK
-        }.also { publicShares ->
-            updatePublicShares(publicShares as ArrayList<OCShare>)
+        }.let { publicShares ->
+            updatePublicShares(publicShares)
         }
     }
 
@@ -447,11 +443,11 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
 
     private fun updatePrivateShares(privateShares: List<OCShare>) {
         // Get Users and Groups
-        this.privateShares = ArrayList(privateShares.filter {
+        this.privateShares = privateShares.filter {
             it.shareType == ShareType.USER ||
                     it.shareType == ShareType.GROUP ||
                     it.shareType == ShareType.FEDERATED
-        })
+        }
 
         // Update list of users/groups
         updateListOfUserGroups()
