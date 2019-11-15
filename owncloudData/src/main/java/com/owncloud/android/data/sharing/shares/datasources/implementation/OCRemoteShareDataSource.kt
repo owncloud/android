@@ -41,8 +41,8 @@ class OCRemoteShareDataSource(
             shareService.getShares(remoteFilePath, reshares, subfiles)
         }.let {
             return it.shares.map { remoteShare ->
-                remoteShareMapper.toModel(remoteShare)!!.also {
-                    it.accountOwner = accountName
+                remoteShareMapper.toModel(remoteShare)!!.apply {
+                    accountOwner = accountName
                 }
             }
         }
@@ -71,8 +71,8 @@ class OCRemoteShareDataSource(
                 publicUpload
             )
         }.let {
-            return remoteShareMapper.toModel(it.shares.first())!!.also {
-                it.accountOwner = accountName
+            return remoteShareMapper.toModel(it.shares.first())!!.apply {
+                accountOwner = accountName
             }
         }
     }
@@ -96,8 +96,8 @@ class OCRemoteShareDataSource(
                 publicUpload
             )
         }.let {
-            return remoteShareMapper.toModel(it.shares.first())!!.also {
-                it.accountOwner = accountName
+            return remoteShareMapper.toModel(it.shares.first())!!.apply {
+                accountOwner = accountName
             }
         }
     }

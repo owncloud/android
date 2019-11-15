@@ -22,9 +22,10 @@ package com.owncloud.android.extensions
 import android.app.Activity
 import com.google.android.material.snackbar.Snackbar
 
-fun Activity.showError(genericErrorMessage: String, throwable: Throwable?) {
-    showMessage(throwable?.parseError(genericErrorMessage, resources)!!)
-}
+fun Activity.showError(genericErrorMessage: String, throwable: Throwable?) =
+    throwable?.let {
+        showMessage(it.parseError(genericErrorMessage, resources))
+    }
 
 fun Activity.showMessage(
     message: CharSequence,

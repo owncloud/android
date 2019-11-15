@@ -63,7 +63,7 @@ class UsersAndGroupsSearchProvider : ContentProvider() {
 
     override fun onCreate(): Boolean {
         try {
-            suggestAuthority = context!!.resources.getString(R.string.search_suggest_authority)
+            suggestAuthority = context.resources.getString(R.string.search_suggest_authority)
 
             // init share types
             shareTypes[suggestAuthority!! + DATA_USER_SUFFIX] = ShareType.USER
@@ -79,7 +79,7 @@ class UsersAndGroupsSearchProvider : ContentProvider() {
             )
 
             // init intent action
-            suggestIntentAction = context!!.resources.getString(R.string.search_suggest_intent_action)
+            suggestIntentAction = context.resources.getString(R.string.search_suggest_intent_action)
 
             return true
 
@@ -153,7 +153,7 @@ class UsersAndGroupsSearchProvider : ContentProvider() {
 
         if (getShareesResult.isError) {
             showErrorMessage(
-                context!!.resources.getString(R.string.get_sharees_error),
+                context.resources.getString(R.string.get_sharees_error),
                 getShareesResult.getThrowableOrNull()
             )
         }
@@ -161,7 +161,7 @@ class UsersAndGroupsSearchProvider : ContentProvider() {
         val names = getShareesResult.getDataOrNull()
 
         // convert the responses from the OC server to the expected format
-        if (names?.size!! > 0) {
+        if (!names.isNullOrEmpty()) {
             response = MatrixCursor(COLUMNS)
             val namesIt = names.iterator()
             var item: JSONObject
@@ -180,10 +180,8 @@ class UsersAndGroupsSearchProvider : ContentProvider() {
                 suggestAuthority!! + DATA_REMOTE_SUFFIX
             ).build()
 
-            val manager = FileDataStorageManager(
-                context,
-                account, context!!.contentResolver
-            )
+            val manager = FileDataStorageManager(context, account, context.contentResolver)
+
             val federatedShareAllowed = manager.getCapability(account!!.name)?.filesSharingFederationOutgoing
                 ?.isTrue
 
@@ -209,31 +207,37 @@ class UsersAndGroupsSearchProvider : ContentProvider() {
                         Log_OC.e(TAG, "Exception while parsing shareWithAdditionalInfo", e)
                     }
 
-                    if (ShareType.GROUP.value == type) {
-                        displayName = context!!.getString(R.string.share_group_clarification, userName)
-                        icon = R.drawable.ic_group
-                        dataUri = Uri.withAppendedPath(groupBaseUri, shareWith)
-                    } else if (ShareType.FEDERATED.value == type && federatedShareAllowed!!) {
-                        icon = R.drawable.ic_user
-                        if (userName == shareWith) {
-                            displayName = context!!.getString(R.string.share_remote_clarification, userName)
-                        } else {
-                            val uriSplitted =
-                                shareWith.split("@".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-                            displayName = context!!.getString(
-                                R.string.share_known_remote_clarification, userName,
-                                uriSplitted[uriSplitted.size - 1]
-                            )
+                    when (type) {
+                        ShareType.GROUP.value -> {
+                            displayName = context.getString(R.string.share_group_clarification, userName)
+                            icon = R.drawable.ic_group
+                            dataUri = Uri.withAppendedPath(groupBaseUri, shareWith)
                         }
-                        dataUri = Uri.withAppendedPath(remoteBaseUri, shareWith)
-                    } else if (ShareType.USER.value == type) {
-                        displayName = userName
-                        icon = R.drawable.ic_user
-                        dataUri = Uri.withAppendedPath(userBaseUri, shareWith)
+                        ShareType.FEDERATED.value -> {
+                            if (federatedShareAllowed!!) {
+                                icon = R.drawable.ic_user
+                                if (userName == shareWith) {
+                                    displayName = context.getString(R.string.share_remote_clarification, userName)
+                                } else {
+                                    val uriSplitted =
+                                        shareWith.split("@".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+                                    displayName = context.getString(
+                                        R.string.share_known_remote_clarification, userName,
+                                        uriSplitted[uriSplitted.size - 1]
+                                    )
+                                }
+                                dataUri = Uri.withAppendedPath(remoteBaseUri, shareWith)
+                            }
+                        }
+                        ShareType.USER.value -> {
+                            displayName = userName
+                            icon = R.drawable.ic_user
+                            dataUri = Uri.withAppendedPath(userBaseUri, shareWith)
+                        }
                     }
 
                     if (displayName != null && dataUri != null) {
-                        response!!.newRow()
+                        response.newRow()
                             .add(count++)             // BaseColumns._ID
                             .add(displayName)         // SearchManager.SUGGEST_COLUMN_TEXT_1
                             .add(icon)                // SearchManager.SUGGEST_COLUMN_ICON_1
@@ -269,7 +273,7 @@ class UsersAndGroupsSearchProvider : ContentProvider() {
      * @param resource Resource with the failure information.
      */
     private fun showErrorMessage(genericErrorMessage: String, throwable: Throwable?) {
-        val errorMessage = throwable?.parseError(genericErrorMessage, context!!.resources) ?: return
+        val errorMessage = throwable?.parseError(genericErrorMessage, context.resources) ?: return
 
         val handler = Handler(Looper.getMainLooper())
 
@@ -278,7 +282,7 @@ class UsersAndGroupsSearchProvider : ContentProvider() {
         // until the app dies
         handler.post {
             Toast.makeText(
-                context!!.applicationContext,
+                context.applicationContext,
                 errorMessage,
                 Toast.LENGTH_SHORT
             ).show()

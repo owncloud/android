@@ -504,12 +504,4 @@ object DataTestUtil {
 
         return remoteOperationResult
     }
-
-//    fun createFile(name: String = "default") = OCFile("/Photos").apply {
-//        availableOfflineStatus = OCFile.AvailableOfflineStatus.NOT_AVAILABLE_OFFLINE
-//        fileName = name
-//        fileId = 9456985479
-//        remoteId = "1"
-//        privateLink = "private link"
-//    }
 }

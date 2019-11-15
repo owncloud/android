@@ -40,9 +40,9 @@ import com.owncloud.android.domain.exceptions.ServerResponseTimeoutException
 import com.owncloud.android.domain.exceptions.ServiceUnavailableException
 import com.owncloud.android.domain.exceptions.UnauthorizedException
 
-fun Throwable?.parseError(genericErrorMessage: String, resources: Resources): CharSequence? {
-    if (!this?.message.isNullOrEmpty()) { // If there's an specific error message from layers below use it
-        return this?.message
+fun Throwable.parseError(genericErrorMessage: String, resources: Resources): CharSequence {
+    if (!this.message.isNullOrEmpty()) { // If there's an specific error message from layers below use it
+        return this.message as String
     } else { // Build the error message otherwise
         val reason = when (this) {
             is NoConnectionWithServerException -> resources.getString(R.string.network_error_socket_exception)

@@ -152,19 +152,13 @@ class SearchShareesFragment : Fragment(),
                     share.shareType == ShareType.USER ||
                             share.shareType == ShareType.GROUP ||
                             share.shareType == ShareType.FEDERATED
-                } as ArrayList<OCShare>
+                }
                 when (uiResult) {
                     is UIResult.Success -> {
-                        privateShares.let {
+                        privateShares?.let {
                             updatePrivateShares(privateShares)
                         }
                         listener?.dismissLoading()
-                    }
-                    else -> {
-                        Log.d(
-                            TAG, "Unknown status when loading private shares for file ${file?.fileName} in account" +
-                                    "${account?.name}"
-                        )
                     }
                 }
             }

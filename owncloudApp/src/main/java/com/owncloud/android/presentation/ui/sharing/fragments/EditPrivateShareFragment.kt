@@ -271,7 +271,7 @@ class EditPrivateShareFragment : DialogFragment() {
                 R.id.canEditSwitch -> {
                     Log_OC.v(TAG, "canEditCheckBox toggled to $isChecked")
                     /// sync subordinate CheckBoxes
-                    val isFederated = ShareType.FEDERATED == share!!.shareType
+                    val isFederated = share?.shareType == ShareType.FEDERATED
                     if (file?.isFolder == true) {
                         if (isChecked) {
                             val serverVersion = AccountUtils.getServerVersion(account)
@@ -400,11 +400,6 @@ class EditPrivateShareFragment : DialogFragment() {
                     is UIResult.Success -> {
                         updateShare(uiResult.data)
                     }
-                    else -> {
-                        Log.d(
-                            TAG, "Unknown status when getting updated private share"
-                        )
-                    }
                 }
             }
         )
@@ -421,11 +416,6 @@ class EditPrivateShareFragment : DialogFragment() {
                     }
                     is UIResult.Loading -> {
                         listener?.showLoading()
-                    }
-                    else -> {
-                        Log.d(
-                            TAG, "Unknown status when editing private share"
-                        )
                     }
                 }
             }
