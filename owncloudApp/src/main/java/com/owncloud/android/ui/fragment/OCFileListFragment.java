@@ -684,7 +684,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
             FileDataStorageManager storageManager = mContainerActivity.getStorageManager();
 
             String parentPath = null;
-            if (mFile.getParentId() != FileDataStorageManager.Companion.getROOT_PARENT_ID()) {
+            if (mFile.getParentId() != FileDataStorageManager.ROOT_PARENT_ID) {
                 parentPath = new File(mFile.getRemotePath()).getParent();
                 parentPath = parentPath.endsWith(OCFile.PATH_SEPARATOR) ? parentPath :
                         parentPath + OCFile.PATH_SEPARATOR;
@@ -1142,7 +1142,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
                 return setting.getBoolean(String.valueOf(fileToTest.getFileId()), false);
             } else {
                 do {
-                    if (fileToTest.getParentId() != FileDataStorageManager.Companion.getROOT_PARENT_ID()) {
+                    if (fileToTest.getParentId() != FileDataStorageManager.ROOT_PARENT_ID) {
                         parentPath = new File(fileToTest.getRemotePath()).getParent();
                         parentPath = parentPath.endsWith(OCFile.PATH_SEPARATOR) ? parentPath :
                                 parentPath + OCFile.PATH_SEPARATOR;
