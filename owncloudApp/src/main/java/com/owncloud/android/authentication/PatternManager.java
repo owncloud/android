@@ -27,7 +27,6 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.PowerManager;
 import android.preference.PreferenceManager;
-import android.view.WindowManager;
 
 import com.owncloud.android.MainApp;
 import com.owncloud.android.ui.activity.PatternLockActivity;
@@ -56,16 +55,6 @@ public class PatternManager {
     }
 
     private PatternManager() {
-    }
-
-    public void onActivityCreated(Activity activity) {
-        if (!MainApp.Companion.isDeveloper()) {
-            if (isPatternEnabled()) {
-                activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
-            } else {
-                activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_SECURE);
-            }
-        }
     }
 
     public void onActivityStarted(Activity activity) {

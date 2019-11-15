@@ -31,6 +31,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.preference.PreferenceManager
+import android.view.WindowManager
 
 import com.owncloud.android.authentication.FingerprintManager
 import com.owncloud.android.authentication.PassCodeManager
@@ -105,11 +106,18 @@ class MainApp : Application() {
         registerActivityLifecycleCallbacks(object : ActivityLifecycleCallbacks {
             override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
                 Log_OC.d(activity.javaClass.simpleName, "onCreate(Bundle) starting")
-                PassCodeManager.getPassCodeManager().onActivityCreated(activity)
-                PatternManager.getPatternManager().onActivityCreated(activity)
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    FingerprintManager.getFingerprintManager(activity).onActivityCreated(activity)
-                }
+                val preferences = PreferenceManager.getDefaultSharedPreferences(applicationContext)
+                val passCodeEnabled = preferences.getBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false)
+                val patternCodeEnabled = preferences.getBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN, false)
+                if (!isDeveloper) {
+                    // To enable FingerPrint you need to enable passCode or pattern, so no need to add check to if
+                    if (passCodeEnabled || patternCodeEnabled) {
+                        activity.window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
+                    } else {
+                        activity.window.clearFlags(WindowManager.LayoutParams.FLAG_SECURE)
+                    }
+                } // else, let it go, or taking screenshots & testing will not be possible
+
                 // If there's any lock protection, don't show wizard at this point, show it when lock activities
                 // have finished
                 if (activity !is PassCodeActivity &&

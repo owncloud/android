@@ -48,6 +48,9 @@
     <color name="secondary_button_text_color">@color/black</color>
     <color name="drawer_header_color">@color/owncloud_blue_accent</color>
 
+    <!-- Splash Screen Background -->
+    <color name="splash_background">@color/owncloud_blue</color>
+
     <!-- Button -->
     <color name="button_text_color">#000000</color>
 
