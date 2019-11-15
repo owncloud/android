@@ -19,9 +19,11 @@
 
 package com.owncloud.android.domain.sharing.shares.model
 
+import android.annotation.SuppressLint
 import android.os.Parcel
 import android.os.Parcelable
 
+@SuppressLint("ParcelCreator")
 data class OCShare(
     val id: Int? = null,
     val fileSource: Long,
