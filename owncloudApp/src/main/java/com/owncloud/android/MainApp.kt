@@ -108,7 +108,7 @@ class MainApp : MultiDexApplication() {
         // register global protection with pass code, pattern lock and fingerprint lock
         registerActivityLifecycleCallbacks(object : ActivityLifecycleCallbacks {
             override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
-                Log_OC.d(activity.javaClass.simpleName, "onCreate(Bundle) starting")
+                Log_OC.d("${activity.javaClass.simpleName} onCreate(Bundle) starting")
                 val preferences = PreferenceManager.getDefaultSharedPreferences(applicationContext)
                 val passCodeEnabled = preferences.getBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false)
                 val patternCodeEnabled = preferences.getBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN, false)
@@ -132,7 +132,7 @@ class MainApp : MultiDexApplication() {
             }
 
             override fun onActivityStarted(activity: Activity) {
-                Log_OC.v(activity.javaClass.simpleName, "onStart() starting")
+                Log_OC.v("${activity.javaClass.simpleName} onStart() starting")
                 PassCodeManager.getPassCodeManager().onActivityStarted(activity)
                 PatternManager.getPatternManager().onActivityStarted(activity)
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -141,15 +141,15 @@ class MainApp : MultiDexApplication() {
             }
 
             override fun onActivityResumed(activity: Activity) {
-                Log_OC.v(activity.javaClass.simpleName, "onResume() starting")
+                Log_OC.v("${activity.javaClass.simpleName} onResume() starting")
             }
 
             override fun onActivityPaused(activity: Activity) {
-                Log_OC.v(activity.javaClass.simpleName, "onPause() ending")
+                Log_OC.v("${activity.javaClass.simpleName} onPause() ending")
             }
 
             override fun onActivityStopped(activity: Activity) {
-                Log_OC.v(activity.javaClass.simpleName, "onStop() ending")
+                Log_OC.v("${activity.javaClass.simpleName} onStop() ending")
                 PassCodeManager.getPassCodeManager().onActivityStopped(activity)
                 PatternManager.getPatternManager().onActivityStopped(activity)
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -164,11 +164,11 @@ class MainApp : MultiDexApplication() {
             }
 
             override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) {
-                Log_OC.v(activity.javaClass.simpleName, "onSaveInstanceState(Bundle) starting")
+                Log_OC.v("${activity.javaClass.simpleName} onSaveInstanceState(Bundle) starting")
             }
 
             override fun onActivityDestroyed(activity: Activity) {
-                Log_OC.v(activity.javaClass.simpleName, "onDestroy() ending")
+                Log_OC.v("${activity.javaClass.simpleName} onDestroy() ending")
             }
         })
 
@@ -210,8 +210,7 @@ class MainApp : MultiDexApplication() {
 
             Log_OC.startLogging(Environment.getExternalStorageDirectory().absolutePath)
             Log_OC.d(
-                BuildConfig.BUILD_TYPE, "start logging " + BuildConfig.VERSION_NAME + " " +
-                        BuildConfig.COMMIT_SHA1
+                "${BuildConfig.BUILD_TYPE} start logging " + BuildConfig.VERSION_NAME + " " + BuildConfig.COMMIT_SHA1
             )
         }
     }
