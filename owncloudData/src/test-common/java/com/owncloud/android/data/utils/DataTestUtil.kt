@@ -2,6 +2,7 @@
  * ownCloud Android client application
  *
  * @author David González Verdugo
+ * @author Abel García de Prada
  * Copyright (C) 2019 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -28,6 +29,8 @@ import com.owncloud.android.domain.sharing.shares.model.ShareType
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.shares.GetRemoteShareesOperation
 import com.owncloud.android.lib.resources.shares.RemoteShare
+import com.owncloud.android.lib.resources.shares.ShareType as RemoteShareType
+import com.owncloud.android.lib.resources.status.CapabilityBooleanType as RemoteCapabilityBooleanType
 import com.owncloud.android.lib.resources.status.RemoteCapability
 import io.mockk.every
 import io.mockk.mockk
@@ -37,7 +40,46 @@ object DataTestUtil {
     /**
      * Shares
      */
-    private fun createShare(
+    val DUMMY_SHARE = OCShare(
+        fileSource = 7,
+        itemSource = 7,
+        shareType = ShareType.USER, // Public share by default
+        shareWith = "",
+        path = "/Photos/image.jpg",
+        permissions = 1,
+        sharedDate = 1542628397,
+        expirationDate = 0,
+        token = "AnyToken",
+        sharedWithDisplayName = "",
+        sharedWithAdditionalInfo = "",
+        isFolder = false,
+        userId = -1,
+        remoteId = 1,
+        accountOwner = "admin@server",
+        name = "",
+        shareLink = ""
+    )
+
+    val DUMMY_REMOTE_SHARE =
+        RemoteShare().apply {
+            fileSource = 7
+            itemSource = 7
+            shareType = RemoteShareType.USER
+            shareWith = ""
+            path = "/Photos/image.jpg"
+            permissions = 1
+            sharedDate = 1542628397
+            expirationDate = 0
+            token = "AnyToken"
+            sharedWithDisplayName = ""
+            isFolder = false
+            userId = -1
+            id = 1
+            name = ""
+            shareLink = ""
+        }
+
+    fun createShare(
         fileSource: Long = 7,
         itemSource: Long = 7,
         shareType: Int, // Public share by default
@@ -76,7 +118,7 @@ object DataTestUtil {
         shareLink
     )
 
-    private fun createShareEntity(
+    fun createShareEntity(
         fileSource: Long = 7,
         itemSource: Long = 7,
         shareType: Int, // Public share by default
@@ -117,11 +159,11 @@ object DataTestUtil {
     fun createPrivateShare(
         remoteId: Long = 1,
         shareType: Int = 0,
-        shareWith: String,
-        path: String,
+        shareWith: String = "whoever",
+        path: String = "/Photos/image.jpg",
         permissions: Int = -1,
-        isFolder: Boolean,
-        sharedWithDisplayName: String,
+        isFolder: Boolean = false,
+        sharedWithDisplayName: String = "whatever",
         accountOwner: String = "admin@server"
     ) = createShare(
         remoteId = remoteId,
@@ -156,14 +198,14 @@ object DataTestUtil {
 
     fun createPublicShare(
         shareWith: String = "",
-        path: String,
+        path: String = "/Photos/image.jpg",
         expirationDate: Long = 1000,
-        isFolder: Boolean,
+        isFolder: Boolean = false,
         permissions: Int = 1,
         remoteId: Long = 1,
         accountOwner: String = "admin@server",
-        name: String,
-        shareLink: String
+        name: String = "Image link",
+        shareLink: String = "link"
     ) = createShare(
         shareWith = shareWith,
         shareType = 3,
@@ -216,26 +258,22 @@ object DataTestUtil {
         remoteId: Long = 1,
         name: String = "",
         shareLink: String = ""
-    ): RemoteShare {
-        val remoteShare = RemoteShare();
-
-        remoteShare.fileSource = fileSource
-        remoteShare.itemSource = itemSource
-        remoteShare.shareType = com.owncloud.android.lib.resources.shares.ShareType.fromValue(shareType)
-        remoteShare.shareWith = shareWith
-        remoteShare.path = path
-        remoteShare.permissions = permissions
-        remoteShare.sharedDate = sharedDate
-        remoteShare.expirationDate = expirationDate
-        remoteShare.token = token
-        remoteShare.sharedWithDisplayName = sharedWithDisplayName
-        remoteShare.isFolder = isFolder
-        remoteShare.userId = userId
-        remoteShare.id = remoteId
-        remoteShare.name = name
-        remoteShare.shareLink = shareLink
-
-        return remoteShare
+    ): RemoteShare = RemoteShare().also {
+        it.fileSource = fileSource
+        it.itemSource = itemSource
+        it.shareType = RemoteShareType.fromValue(shareType)
+        it.shareWith = shareWith
+        it.path = path
+        it.permissions = permissions
+        it.sharedDate = sharedDate
+        it.expirationDate = expirationDate
+        it.token = token
+        it.sharedWithDisplayName = sharedWithDisplayName
+        it.isFolder = isFolder
+        it.userId = userId
+        it.id = remoteId
+        it.name = name
+        it.shareLink = shareLink
     }
 
     /**
@@ -264,6 +302,70 @@ object DataTestUtil {
     /**
      * Capability
      */
+    val DUMMY_CAPABILITY =
+        OCCapability(
+            accountName = "user@server",
+            versionMayor = 2,
+            versionMinor = 1,
+            versionMicro = 0,
+            versionString = "1.0.0",
+            versionEdition = "1.0.0",
+            corePollInterval = 0,
+            filesSharingApiEnabled = CapabilityBooleanType.TRUE,
+            filesSharingSearchMinLength = 3,
+            filesSharingPublicEnabled = CapabilityBooleanType.TRUE,
+            filesSharingPublicPasswordEnforced = CapabilityBooleanType.FALSE,
+            filesSharingPublicPasswordEnforcedReadOnly = CapabilityBooleanType.FALSE,
+            filesSharingPublicPasswordEnforcedReadWrite = CapabilityBooleanType.FALSE,
+            filesSharingPublicPasswordEnforcedUploadOnly = CapabilityBooleanType.FALSE,
+            filesSharingPublicExpireDateEnabled = CapabilityBooleanType.FALSE,
+            filesSharingPublicExpireDateDays = 0,
+            filesSharingPublicExpireDateEnforced = CapabilityBooleanType.FALSE,
+            filesSharingPublicSendMail = CapabilityBooleanType.FALSE,
+            filesSharingPublicUpload = CapabilityBooleanType.FALSE,
+            filesSharingPublicMultiple = CapabilityBooleanType.FALSE,
+            filesSharingPublicSupportsUploadOnly = CapabilityBooleanType.FALSE,
+            filesSharingUserSendMail = CapabilityBooleanType.FALSE,
+            filesSharingResharing = CapabilityBooleanType.FALSE,
+            filesSharingFederationOutgoing = CapabilityBooleanType.FALSE,
+            filesSharingFederationIncoming = CapabilityBooleanType.FALSE,
+            filesBigFileChunking = CapabilityBooleanType.FALSE,
+            filesUndelete = CapabilityBooleanType.FALSE,
+            filesVersioning = CapabilityBooleanType.FALSE
+        )
+
+    val DUMMY_REMOTE_CAPABILITY =
+        RemoteCapability().apply {
+            accountName = "user@server"
+            versionMayor = 2
+            versionMinor = 1
+            versionMicro = 0
+            versionString = "1.0.0"
+            versionEdition = "1.0.0"
+            corePollinterval = 0
+            filesSharingApiEnabled = RemoteCapabilityBooleanType.TRUE
+            filesSharingSearchMinLength = 3
+            filesSharingPublicEnabled = RemoteCapabilityBooleanType.TRUE
+            filesSharingPublicPasswordEnforced = RemoteCapabilityBooleanType.FALSE
+            filesSharingPublicPasswordEnforcedReadOnly = RemoteCapabilityBooleanType.FALSE
+            filesSharingPublicPasswordEnforcedReadWrite = RemoteCapabilityBooleanType.FALSE
+            filesSharingPublicPasswordEnforcedUploadOnly = RemoteCapabilityBooleanType.FALSE
+            filesSharingPublicExpireDateEnabled = RemoteCapabilityBooleanType.FALSE
+            filesSharingPublicExpireDateDays = 0
+            filesSharingPublicExpireDateEnforced = RemoteCapabilityBooleanType.FALSE
+            filesSharingPublicSendMail = RemoteCapabilityBooleanType.FALSE
+            filesSharingPublicUpload = RemoteCapabilityBooleanType.FALSE
+            filesSharingPublicMultiple = RemoteCapabilityBooleanType.FALSE
+            filesSharingPublicSupportsUploadOnly = RemoteCapabilityBooleanType.FALSE
+            filesSharingUserSendMail = RemoteCapabilityBooleanType.FALSE
+            filesSharingResharing = RemoteCapabilityBooleanType.FALSE
+            filesSharingFederationOutgoing = RemoteCapabilityBooleanType.FALSE
+            filesSharingFederationIncoming = RemoteCapabilityBooleanType.FALSE
+            filesBigFileChunking = RemoteCapabilityBooleanType.FALSE
+            filesUndelete = RemoteCapabilityBooleanType.FALSE
+            filesVersioning = RemoteCapabilityBooleanType.FALSE
+        }
+
     fun createCapability(
         accountName: String = "user@server",
         versionMayor: Int = 2,
@@ -273,7 +375,7 @@ object DataTestUtil {
         versionEdition: String = "1.0.0",
         corePollinterval: Int = 0,
         sharingApiEnabled: CapabilityBooleanType = CapabilityBooleanType.TRUE,
-        sharingSearchMinLength: Int = 4,
+        sharingSearchMinLength: Int = 0,
         sharingPublicEnabled: CapabilityBooleanType = CapabilityBooleanType.TRUE,
         sharingPublicPasswordEnforced: CapabilityBooleanType = CapabilityBooleanType.FALSE,
         sharingPublicPasswordEnforcedReadOnly: CapabilityBooleanType = CapabilityBooleanType.FALSE,
@@ -334,8 +436,8 @@ object DataTestUtil {
         versionEdition: String = "1.0.0",
         corePollinterval: Int = 0,
         sharingApiEnabled: Int = 1,
+        sharingSearchMinLength: Int = 0,
         sharingPublicEnabled: Int = 1,
-        filesSharingSearchMinLength: Int = 4,
         sharingPublicPasswordEnforced: Int = 0,
         sharingPublicPasswordEnforcedReadOnly: Int = 0,
         sharingPublicPasswordEnforcedReadWrite: Int = 0,
@@ -363,7 +465,7 @@ object DataTestUtil {
         versionEdition,
         corePollinterval,
         sharingApiEnabled,
-        filesSharingSearchMinLength,
+        sharingSearchMinLength,
         sharingPublicEnabled,
         sharingPublicPasswordEnforced,
         sharingPublicPasswordEnforcedReadOnly,
@@ -421,50 +523,29 @@ object DataTestUtil {
         this.versionString = versionString
         this.versionEdition = versionEdition
         this.corePollinterval = corePollinterval
-        filesSharingApiEnabled =
-            com.owncloud.android.lib.resources.status.CapabilityBooleanType.fromValue(sharingApiEnabled)!!
-        filesSharingPublicEnabled =
-            com.owncloud.android.lib.resources.status.CapabilityBooleanType.fromValue(sharingPublicEnabled)!!
-        filesSharingPublicPasswordEnforced =
-            com.owncloud.android.lib.resources.status.CapabilityBooleanType.fromValue(sharingPublicPasswordEnforced)!!
+        filesSharingApiEnabled = RemoteCapabilityBooleanType.fromValue(sharingApiEnabled)!!
+        filesSharingPublicEnabled = RemoteCapabilityBooleanType.fromValue(sharingPublicEnabled)!!
+        filesSharingPublicPasswordEnforced = RemoteCapabilityBooleanType.fromValue(sharingPublicPasswordEnforced)!!
         filesSharingPublicPasswordEnforcedReadOnly =
-            com.owncloud.android.lib.resources.status.CapabilityBooleanType.fromValue(
-                sharingPublicPasswordEnforcedReadOnly
-            )!!
+            RemoteCapabilityBooleanType.fromValue(sharingPublicPasswordEnforcedReadOnly)!!
         filesSharingPublicPasswordEnforcedReadWrite =
-            com.owncloud.android.lib.resources.status.CapabilityBooleanType.fromValue(
-                sharingPublicPasswordEnforcedReadWrite
-            )!!
+            RemoteCapabilityBooleanType.fromValue(sharingPublicPasswordEnforcedReadWrite)!!
         filesSharingPublicPasswordEnforcedUploadOnly =
-            com.owncloud.android.lib.resources.status.CapabilityBooleanType.fromValue(
-                sharingPublicPasswordEnforcedUploadOnly
-            )!!
-        filesSharingPublicExpireDateEnabled =
-            com.owncloud.android.lib.resources.status.CapabilityBooleanType.fromValue(sharingPublicExpireDateEnabled)!!
+            RemoteCapabilityBooleanType.fromValue(sharingPublicPasswordEnforcedUploadOnly)!!
+        filesSharingPublicExpireDateEnabled = RemoteCapabilityBooleanType.fromValue(sharingPublicExpireDateEnabled)!!
         filesSharingPublicExpireDateDays = sharingPublicExpireDateDays
-        filesSharingPublicExpireDateEnforced =
-            com.owncloud.android.lib.resources.status.CapabilityBooleanType.fromValue(sharingPublicExpireDateEnforced)!!
-        filesSharingPublicSendMail =
-            com.owncloud.android.lib.resources.status.CapabilityBooleanType.fromValue(sharingPublicSendMail)!!
-        filesSharingPublicUpload =
-            com.owncloud.android.lib.resources.status.CapabilityBooleanType.fromValue(sharingPublicUpload)!!
-        filesSharingPublicMultiple =
-            com.owncloud.android.lib.resources.status.CapabilityBooleanType.fromValue(sharingPublicMultiple)!!
-        filesSharingPublicSupportsUploadOnly =
-            com.owncloud.android.lib.resources.status.CapabilityBooleanType.fromValue(sharingPublicSupportsUploadOnly)!!
-        filesSharingUserSendMail =
-            com.owncloud.android.lib.resources.status.CapabilityBooleanType.fromValue(sharingUserSendMail)!!
-        filesSharingResharing =
-            com.owncloud.android.lib.resources.status.CapabilityBooleanType.fromValue(sharingResharing)!!
-        filesSharingFederationOutgoing =
-            com.owncloud.android.lib.resources.status.CapabilityBooleanType.fromValue(sharingFederationOutgoing)!!
-        filesSharingFederationIncoming =
-            com.owncloud.android.lib.resources.status.CapabilityBooleanType.fromValue(sharingFederationIncoming)!!
-        this.filesBigFileChunking =
-            com.owncloud.android.lib.resources.status.CapabilityBooleanType.fromValue(filesBigFileChunking)!!
-        this.filesUndelete = com.owncloud.android.lib.resources.status.CapabilityBooleanType.fromValue(filesUndelete)!!
-        this.filesVersioning =
-            com.owncloud.android.lib.resources.status.CapabilityBooleanType.fromValue(filesVersioning)!!
+        filesSharingPublicExpireDateEnforced = RemoteCapabilityBooleanType.fromValue(sharingPublicExpireDateEnforced)!!
+        filesSharingPublicSendMail = RemoteCapabilityBooleanType.fromValue(sharingPublicSendMail)!!
+        filesSharingPublicUpload = RemoteCapabilityBooleanType.fromValue(sharingPublicUpload)!!
+        filesSharingPublicMultiple = RemoteCapabilityBooleanType.fromValue(sharingPublicMultiple)!!
+        filesSharingPublicSupportsUploadOnly = RemoteCapabilityBooleanType.fromValue(sharingPublicSupportsUploadOnly)!!
+        filesSharingUserSendMail = RemoteCapabilityBooleanType.fromValue(sharingUserSendMail)!!
+        filesSharingResharing = RemoteCapabilityBooleanType.fromValue(sharingResharing)!!
+        filesSharingFederationOutgoing = RemoteCapabilityBooleanType.fromValue(sharingFederationOutgoing)!!
+        filesSharingFederationIncoming = RemoteCapabilityBooleanType.fromValue(sharingFederationIncoming)!!
+        this.filesBigFileChunking = RemoteCapabilityBooleanType.fromValue(filesBigFileChunking)!!
+        this.filesUndelete = RemoteCapabilityBooleanType.fromValue(filesUndelete)!!
+        this.filesVersioning = RemoteCapabilityBooleanType.fromValue(filesVersioning)!!
     }
 
     fun <T> createRemoteOperationResultMock(

@@ -101,17 +101,17 @@ class OCLocalDataSourceTest {
             )
         )
 
-        assertEquals(2, shares?.size)
+        assertEquals(2, shares.size)
 
-        assertEquals("/Docs/doc1.doc", shares?.first()?.path)
-        assertEquals(false, shares?.first()?.isFolder)
-        assertEquals("username", shares?.first()?.shareWith)
-        assertEquals("Sophie", shares?.first()?.sharedWithDisplayName)
+        assertEquals("/Docs/doc1.doc", shares.first().path)
+        assertEquals(false, shares.first().isFolder)
+        assertEquals("username", shares.first().shareWith)
+        assertEquals("Sophie", shares.first().sharedWithDisplayName)
 
-        assertEquals("/Docs/doc1.doc", shares?.get(1)?.path)
-        assertEquals(false, shares?.get(1)?.isFolder)
-        assertEquals("user.name", shares?.get(1)?.shareWith)
-        assertEquals("Nicole", shares?.get(1)?.sharedWithDisplayName)
+        assertEquals("/Docs/doc1.doc", shares[1].path)
+        assertEquals(false, shares[1].isFolder)
+        assertEquals("user.name", shares[1].shareWith)
+        assertEquals("Nicole", shares[1].sharedWithDisplayName)
     }
 
     @Test
@@ -215,17 +215,17 @@ class OCLocalDataSourceTest {
             )
         )
 
-        assertEquals(2, shares?.size)
+        assertEquals(2, shares.size)
 
-        assertEquals("/Photos/", shares?.first()?.path)
-        assertEquals(true, shares?.first()?.isFolder)
-        assertEquals("Photos link", shares?.first()?.name)
-        assertEquals("http://server:port/s/1", shares?.first()?.shareLink)
+        assertEquals("/Photos/", shares.first().path)
+        assertEquals(true, shares.first().isFolder)
+        assertEquals("Photos link", shares.first().name)
+        assertEquals("http://server:port/s/1", shares.first().shareLink)
 
-        assertEquals("/Photos/", shares?.get(1)?.path)
-        assertEquals(true, shares?.get(1)?.isFolder)
-        assertEquals("Photos link 2", shares?.get(1)?.name)
-        assertEquals("http://server:port/s/2", shares?.get(1)?.shareLink)
+        assertEquals("/Photos/", shares[1].path)
+        assertEquals(true, shares[1].isFolder)
+        assertEquals("Photos link 2", shares[1].name)
+        assertEquals("http://server:port/s/2", shares[1].shareLink)
     }
 
     @Test
