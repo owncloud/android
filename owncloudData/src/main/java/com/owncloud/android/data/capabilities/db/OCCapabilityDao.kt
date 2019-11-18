@@ -42,7 +42,7 @@ abstract class OCCapabilityDao {
         "SELECT * from " + ProviderTableMeta.CAPABILITIES_TABLE_NAME + " WHERE " +
                 ProviderTableMeta.CAPABILITIES_ACCOUNT_NAME + " = :accountName"
     )
-    abstract fun getCapabilityForAccount(
+    abstract fun getCapabilitiesForAccount(
         accountName: String
     ): OCCapabilityEntity
 

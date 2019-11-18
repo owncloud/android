@@ -37,7 +37,7 @@ class OCLocalCapabilitiesDataSource(
         }
 
     override fun getCapabilityForAccount(accountName: String): OCCapability? =
-        ocCapabilityMapper.toModel(ocCapabilityDao.getCapabilityForAccount(accountName))
+        ocCapabilityMapper.toModel(ocCapabilityDao.getCapabilitiesForAccount(accountName))
 
     override fun insert(ocCapabilities: List<OCCapability>) {
         ocCapabilityDao.replace(
