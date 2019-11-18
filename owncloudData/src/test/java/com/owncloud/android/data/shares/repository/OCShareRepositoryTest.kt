@@ -105,7 +105,7 @@ class OCShareRepositoryTest {
     }
 
     @Test
-    fun getStoredSharesOk() {
+    fun getSharesAsLiveDataOk() {
         val sharesLiveData = MutableLiveData<List<OCShare>>()
 
         every {
@@ -126,7 +126,7 @@ class OCShareRepositoryTest {
     }
 
     @Test(expected = Exception::class)
-    fun getStoredSharesException() {
+    fun getSharesAsLiveDataException() {
         val sharesLiveData = MutableLiveData<List<OCShare>>()
 
         every {
@@ -145,7 +145,7 @@ class OCShareRepositoryTest {
     }
 
     @Test
-    fun getStoredShareOk() {
+    fun getShareAsLiveDataOk() {
         val shareLiveData = MutableLiveData<OCShare>()
 
         every {
@@ -167,7 +167,7 @@ class OCShareRepositoryTest {
     }
 
     @Test(expected = Exception::class)
-    fun getStoredShareException() {
+    fun getShareAsLiveDataException() {
         val shareLiveData = MutableLiveData<OCShare>()
 
         every {

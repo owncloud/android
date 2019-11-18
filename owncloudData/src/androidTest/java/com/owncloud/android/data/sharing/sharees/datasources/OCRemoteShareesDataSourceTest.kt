@@ -30,6 +30,7 @@ import org.hamcrest.CoreMatchers.notNullValue
 import org.hamcrest.MatcherAssert.assertThat
 import org.json.JSONObject
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.Test
 
 // Needs to be instrumented since JSONObject is tied to the Android platform
@@ -43,6 +44,7 @@ class OCRemoteShareesDataSourceTest {
             OCRemoteShareeDataSource(ocShareeService)
     }
 
+    @Ignore("We need first to address https://github.com/owncloud/android/issues/2704 to properly test this")
     @Test
     fun readRemoteSharees() {
         val remoteSharees: ArrayList<JSONObject> = arrayListOf(

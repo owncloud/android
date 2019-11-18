@@ -21,7 +21,7 @@ package com.owncloud.android.domain.shares.usecases
 
 import com.owncloud.android.domain.exceptions.UnauthorizedException
 import com.owncloud.android.domain.sharing.shares.ShareRepository
-import com.owncloud.android.domain.sharing.shares.usecases.RefreshSharesFromServerAsyncUseCase
+import com.owncloud.android.domain.sharing.shares.usecases.EditPublicShareAsyncUseCase
 import io.mockk.every
 import io.mockk.spyk
 import io.mockk.verify
@@ -31,25 +31,35 @@ import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
-class RefreshSharesFromServerAsyncUseCaseTest {
+class EditPublicShareAsyncUseCaseTest {
     private val shareRepository: ShareRepository = spyk()
-    private val useCase = RefreshSharesFromServerAsyncUseCase((shareRepository))
-    private val useCaseParams = RefreshSharesFromServerAsyncUseCase.Params("", "")
+    private val useCase = EditPublicShareAsyncUseCase((shareRepository))
+    private val useCaseParams = EditPublicShareAsyncUseCase.Params(1, "", "", 1, 1, false, "")
 
     @Test
-    fun refreshSharesFromNetworkOk() {
+    fun editPublicShareOk() {
         val useCaseResult = useCase.execute(useCaseParams)
 
         assertTrue(useCaseResult.isSuccess)
         assertFalse(useCaseResult.isError)
         assertEquals(Unit, useCaseResult.getDataOrNull())
 
-        verify(exactly = 1) { shareRepository.refreshSharesFromNetwork("", "") }
+        verify(exactly = 1) { shareRepository.updatePublicShare(1, "", "", 1, 1, false, "") }
     }
 
     @Test
-    fun refreshSharesFromNetworkWithUnauthorizedException() {
-        every { shareRepository.refreshSharesFromNetwork(any(), any()) } throws UnauthorizedException()
+    fun editPublicShareWithUnauthorizedException() {
+        every {
+            shareRepository.updatePublicShare(
+                any(),
+                any(),
+                any(),
+                any(),
+                any(),
+                any(),
+                any()
+            )
+        } throws UnauthorizedException()
 
         val useCaseResult = useCase.execute(useCaseParams)
 
@@ -59,6 +69,6 @@ class RefreshSharesFromServerAsyncUseCaseTest {
         assertNull(useCaseResult.getDataOrNull())
         assertTrue(useCaseResult.getThrowableOrNull() is UnauthorizedException)
 
-        verify(exactly = 1) { shareRepository.refreshSharesFromNetwork("", "") }
+        verify(exactly = 1) { shareRepository.updatePublicShare(1, "", "", 1, 1, false, "") }
     }
 }
