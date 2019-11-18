@@ -61,7 +61,6 @@ import java.io.FileOutputStream
 import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
-import java.lang.Long.parseLong
 import java.util.ArrayList
 import java.util.HashSet
 import java.util.Vector
@@ -70,105 +69,10 @@ class FileDataStorageManager {
 
     var contentResolver: ContentResolver? = null
         private set
-    var contentProviderClient: ContentProviderClient? = null
+    private var contentProviderClient: ContentProviderClient? = null
         private set
-    var account: Account? = null
+    var account: Account
     private var mContext: Context? = null
-
-    /**
-     * Get a collection with all the files set by the user as available offline, from all the accounts
-     * in the device, putting away the folders
-     *
-     *
-     * This is the only method working with a NULL account in [.mAccount]. Not something to do often.
-     *
-     * @return List with all the files set by the user as available offline.
-     */
-    // query for any favorite file in any OC account
-    val availableOfflineFilesFromEveryAccount: List<Pair<OCFile, String>>
-        get() {
-            val result = ArrayList<Pair<OCFile, String>>()
-
-            var cursorOnKeptInSync: Cursor? = null
-            try {
-                cursorOnKeptInSync = contentResolver!!.query(
-                    CONTENT_URI,
-                    null,
-                    "$FILE_KEEP_IN_SYNC = ? OR $FILE_KEEP_IN_SYNC = ?",
-                    arrayOf(
-                        AVAILABLE_OFFLINE.value.toString(),
-                        AVAILABLE_OFFLINE_PARENT.value.toString()
-                    ),
-                    null
-                )
-
-                if (cursorOnKeptInSync != null && cursorOnKeptInSync.moveToFirst()) {
-                    var file: OCFile?
-                    var accountName: String
-                    do {
-                        file = createFileInstance(cursorOnKeptInSync)
-                        accountName = cursorOnKeptInSync.getString(
-                            cursorOnKeptInSync.getColumnIndex(FILE_ACCOUNT_OWNER)
-                        )
-                        if (!file!!.isFolder && AccountUtils.exists(accountName, mContext)) {
-                            result.add(Pair(file, accountName))
-                        }
-                    } while (cursorOnKeptInSync.moveToNext())
-                }
-
-            } catch (e: Exception) {
-                Log_OC.e(TAG, "Exception retrieving all the available offline files", e)
-
-            } finally {
-                cursorOnKeptInSync?.close()
-            }
-
-            return result
-        }
-
-    /**
-     * Get a collection with all the files set by the user as available offline, from current account
-     * putting away files whose parent is also available offline
-     *
-     * @return List with all the files set by current user as available offline.
-     */
-    // query for available offline files in current account and whose parent is not.
-    val availableOfflineFilesFromCurrentAccount: Vector<OCFile>
-        get() {
-            val result = Vector<OCFile>()
-
-            var cursorOnKeptInSync: Cursor? = null
-            try {
-                cursorOnKeptInSync = contentResolver!!.query(
-                    CONTENT_URI,
-                    null,
-                    "($FILE_KEEP_IN_SYNC = ? AND NOT $FILE_KEEP_IN_SYNC = ? ) AND $FILE_ACCOUNT_OWNER = ? ",
-                    arrayOf(
-                        AVAILABLE_OFFLINE.value.toString(),
-                        AVAILABLE_OFFLINE_PARENT.value.toString(),
-                        account!!.name
-                    ),
-                    null
-                )
-
-                if (cursorOnKeptInSync != null && cursorOnKeptInSync.moveToFirst()) {
-                    var file: OCFile?
-                    do {
-                        file = createFileInstance(cursorOnKeptInSync)
-                        result.add(file)
-                    } while (cursorOnKeptInSync.moveToNext())
-                }
-
-            } catch (e: Exception) {
-                Log_OC.e(TAG, "Exception retrieving all the available offline files", e)
-
-            } finally {
-                cursorOnKeptInSync?.close()
-            }
-
-            result.sort()
-            return result
-        }
 
     constructor(activity: Context, account: Account, cr: ContentResolver) {
         contentProviderClient = null
@@ -183,6 +87,98 @@ class FileDataStorageManager {
         this.account = account
         mContext = activity
     }
+
+    /**
+     * Get a collection with all the files set by the user as available offline, from all the accounts
+     * in the device, putting away the folders
+     *
+     *
+     * This is the only method working with a NULL account in [.mAccount]. Not something to do often.
+     *
+     * @return List with all the files set by the user as available offline.
+     */
+    fun getAvailableOfflineFilesFromEveryAccount(): List<Pair<OCFile, String>> {
+        val result = ArrayList<Pair<OCFile, String>>()
+        var cursorOnKeptInSync: Cursor? = null
+        try {
+            cursorOnKeptInSync = performQuery(
+                uri = CONTENT_URI,
+                projection = null,
+                selection = "$FILE_KEEP_IN_SYNC = ? OR $FILE_KEEP_IN_SYNC = ?",
+                selectionArgs = arrayOf(AVAILABLE_OFFLINE.value.toString(), AVAILABLE_OFFLINE_PARENT.value.toString()),
+                sortOrder = null,
+                performWithContentProviderClient = false
+            )
+
+            if (cursorOnKeptInSync != null && cursorOnKeptInSync.moveToFirst()) {
+                var file: OCFile?
+                var accountName: String
+                do {
+                    file = createFileInstance(cursorOnKeptInSync)
+                    accountName =
+                        cursorOnKeptInSync.getString(cursorOnKeptInSync.getColumnIndex(FILE_ACCOUNT_OWNER))
+                    if (!file!!.isFolder && AccountUtils.exists(accountName, mContext)) {
+                        result.add(Pair(file, accountName))
+                    }
+                } while (cursorOnKeptInSync.moveToNext())
+            } else {
+                Log_OC.d(TAG, "No available offline files found")
+            }
+
+        } catch (e: Exception) {
+            Log_OC.e(TAG, "Exception retrieving all the available offline files", e)
+
+        } finally {
+            cursorOnKeptInSync?.close()
+        }
+
+        return result
+    }
+
+    /**
+     * Get a collection with all the files set by the user as available offline, from current account
+     * putting away files whose parent is also available offline
+     *
+     * @return List with all the files set by current user as available offline.
+     */
+    val availableOfflineFilesFromCurrentAccount: Vector<OCFile>
+        get() {
+            val result = Vector<OCFile>()
+
+            var cursorOnKeptInSync: Cursor? = null
+            try {
+                cursorOnKeptInSync = performQuery(
+                    uri = CONTENT_URI,
+                    projection = null,
+                    selection = "($FILE_KEEP_IN_SYNC = ? AND NOT $FILE_KEEP_IN_SYNC = ? ) AND $FILE_ACCOUNT_OWNER = ? ",
+                    selectionArgs = arrayOf(
+                        AVAILABLE_OFFLINE.value.toString(),
+                        AVAILABLE_OFFLINE_PARENT.value.toString(),
+                        account.name
+                    ),
+                    sortOrder = null,
+                    performWithContentProviderClient = false
+                )
+
+                if (cursorOnKeptInSync != null && cursorOnKeptInSync.moveToFirst()) {
+                    var file: OCFile?
+                    do {
+                        file = createFileInstance(cursorOnKeptInSync)
+                        result.add(file)
+                    } while (cursorOnKeptInSync.moveToNext())
+                } else {
+                    Log_OC.d(TAG, "No available offline files found")
+                }
+
+            } catch (e: Exception) {
+                Log_OC.e(TAG, "Exception retrieving all the available offline files", e)
+
+            } finally {
+                cursorOnKeptInSync?.close()
+            }
+
+            return result.apply { sort() }
+        }
 
     fun getFileByPath(path: String): OCFile? {
         val c = getFileCursorForValue(FILE_PATH, path)
@@ -248,21 +244,15 @@ class FileDataStorageManager {
         }
     }
 
-    fun getFolderImages(folder: OCFile?): Vector<OCFile> {
-        val ret = Vector<OCFile>()
-        if (folder != null) {
+    fun getFolderImages(folder: OCFile?): Vector<OCFile> =
+        folder?.let {
             // TODO better implementation, filtering in the access to database instead of here
-            val tmp = getFolderContent(folder, false)
-            var current: OCFile
-            for (i in tmp.indices) {
-                current = tmp[i]
-                if (current.isImage) {
-                    ret.add(current)
-                }
+            val folderImages = Vector<OCFile>()
+            for (file in getFolderContent(it, false)) {
+                if (file.isImage) folderImages.add(file)
             }
-        }
-        return ret
-    }
+            folderImages
+        } ?: Vector()
 
     fun saveFile(file: OCFile): Boolean {
         var overriden = false
@@ -276,7 +266,7 @@ class FileDataStorageManager {
             put(FILE_PARENT, file.parentId)
             put(FILE_PATH, file.remotePath)
             if (!file.isFolder) put(FILE_STORAGE_PATH, file.storagePath)
-            put(FILE_ACCOUNT_OWNER, account!!.name)
+            put(FILE_ACCOUNT_OWNER, account.name)
             put(FILE_LAST_SYNC_DATE, file.lastSyncDateForProperties)
             put(FILE_LAST_SYNC_DATE_FOR_DATA, file.lastSyncDateForData)
             put(FILE_ETAG, file.etag)
@@ -303,30 +293,28 @@ class FileDataStorageManager {
             }
 
             overriden = true
-            if (contentResolver != null) {
-                contentResolver!!.update(CONTENT_URI, cv, "$_ID=?", arrayOf(file.fileId.toString()))
-            } else {
-                try {
-                    contentProviderClient!!.update(CONTENT_URI, cv, "$_ID=?", arrayOf(file.fileId.toString()))
-                } catch (e: RemoteException) {
-                    Log_OC.e(TAG, "Fail to insert insert file to database ${e.message}", e)
-                }
+            try {
+                performUpdate(
+                    uri = CONTENT_URI,
+                    contentValues = cv,
+                    where = "$_ID=?",
+                    selectionArgs = arrayOf(file.fileId.toString())
+                ).let { Log_OC.d(TAG, "Rows updated: $it") }
+            } catch (e: Exception) {
+                Log_OC.e(TAG, "Fail to insert insert file to database ${e.message}", e)
             }
 
         } else {
             // new file
             setInitialAvailableOfflineStatus(file, cv)
 
-            var resultUri: Uri? = null
-            if (contentResolver != null) {
-                resultUri = contentResolver!!.insert(CONTENT_URI_FILE, cv)
-            } else {
+            val resultUri: Uri? =
                 try {
-                    resultUri = contentProviderClient!!.insert(CONTENT_URI_FILE, cv)
+                    performInsert(CONTENT_URI_FILE, cv)
                 } catch (e: RemoteException) {
                     Log_OC.e(TAG, "Fail to insert insert file to database ${e.message}", e)
+                    null
                 }
-            }
             resultUri?.let {
                 file.fileId = it.pathSegments[1].toLong()
             }
@@ -368,7 +356,7 @@ class FileDataStorageManager {
                 put(FILE_PARENT, folder.fileId)
                 put(FILE_PATH, file.remotePath)
                 if (!file.isFolder) put(FILE_STORAGE_PATH, file.storagePath)
-                put(FILE_ACCOUNT_OWNER, account!!.name)
+                put(FILE_ACCOUNT_OWNER, account.name)
                 put(FILE_LAST_SYNC_DATE, file.lastSyncDateForProperties)
                 put(FILE_LAST_SYNC_DATE_FOR_DATA, file.lastSyncDateForData)
                 put(FILE_ETAG, file.etag)
@@ -405,7 +393,7 @@ class FileDataStorageManager {
         var whereArgs: Array<String>?
         for (file in filesToRemove) {
             if (file.parentId == folder.fileId) {
-                whereArgs = arrayOf(account!!.name, file.remotePath)
+                whereArgs = arrayOf(account.name, file.remotePath)
                 if (file.isFolder) {
                     operations.add(
                         ContentProviderOperation.newDelete(
@@ -413,7 +401,7 @@ class FileDataStorageManager {
                         ).withSelection(where, whereArgs).build()
                     )
 
-                    val localFolder = File(FileStorageUtils.getDefaultSavePathFor(account!!.name, file))
+                    val localFolder = File(FileStorageUtils.getDefaultSavePathFor(account.name, file))
                     if (localFolder.exists()) {
                         removeLocalFolder(localFolder)
                     }
@@ -443,7 +431,7 @@ class FileDataStorageManager {
             put(FILE_NAME, folder.fileName)
             put(FILE_PARENT, folder.parentId)
             put(FILE_PATH, folder.remotePath)
-            put(FILE_ACCOUNT_OWNER, account!!.name)
+            put(FILE_ACCOUNT_OWNER, account.name)
             put(FILE_LAST_SYNC_DATE, folder.lastSyncDateForProperties)
             put(FILE_LAST_SYNC_DATE_FOR_DATA, folder.lastSyncDateForData)
             put(FILE_ETAG, folder.etag)
@@ -482,7 +470,6 @@ class FileDataStorageManager {
 
         // update new id in file objects for insertions
         if (results != null) {
-            var newId: Long
             val filesIt = updatedFiles.iterator()
             var file: OCFile?
             for (i in results.indices) {
@@ -491,12 +478,8 @@ class FileDataStorageManager {
                 } else {
                     null
                 }
-                if (results[i].uri != null) {
-                    newId = parseLong(results[i].uri.pathSegments[1])
-                    //updatedFiles.get(i).setFileId(newId);
-                    if (file != null) {
-                        file.fileId = newId
-                    }
+                results[i].uri?.let { newId ->
+                    file?.fileId = newId.pathSegments[1].toLong()
                 }
             }
         }
@@ -545,8 +528,13 @@ class FileDataStorageManager {
         cv.put(FILE_KEEP_IN_SYNC, file.availableOfflineStatus.value)
 
         var updatedCount: Int
-        if (contentResolver != null) {
-            updatedCount = contentResolver!!.update(CONTENT_URI, cv, "$_ID=?", arrayOf(file.fileId.toString()))
+        try {
+            updatedCount = performUpdate(
+                uri = CONTENT_URI,
+                contentValues = cv,
+                where = "$_ID=?",
+                selectionArgs = arrayOf(file.fileId.toString())
+            )
 
             // Update descendants
             if (file.isFolder && updatedCount > 0) {
@@ -559,37 +547,17 @@ class FileDataStorageManager {
                     descendantsCv.put(FILE_KEEP_IN_SYNC, NOT_AVAILABLE_OFFLINE.value)
                 }
                 val selectDescendants = selectionForAllDescendantsOf(file)
-                updatedCount += contentResolver!!.update(
-                    CONTENT_URI,
-                    descendantsCv,
-                    selectDescendants.first,
-                    selectDescendants.second
+                updatedCount += performUpdate(
+                    uri = CONTENT_URI,
+                    contentValues = descendantsCv,
+                    where = selectDescendants.first,
+                    selectionArgs = selectDescendants.second
                 )
             }
 
-        } else {
-            try {
-                updatedCount =
-                    contentProviderClient!!.update(CONTENT_URI, cv, "$_ID=?", arrayOf(file.fileId.toString()))
-
-                // If file is a folder, all children files that were available offline must be unset
-                if (file.isFolder && updatedCount > 0) {
-                    val descendantsCv = ContentValues()
-                    descendantsCv.put(FILE_KEEP_IN_SYNC, NOT_AVAILABLE_OFFLINE.value)
-                    val selectDescendants = selectionForAllDescendantsOf(file)
-                    updatedCount += contentProviderClient!!.update(
-                        CONTENT_URI,
-                        descendantsCv,
-                        selectDescendants.first,
-                        selectDescendants.second
-                    )
-                }
-
-            } catch (e: RemoteException) {
-                Log_OC.e(TAG, "Fail updating available offline status", e)
-                return false
-            }
-
+        } catch (e: RemoteException) {
+            Log_OC.e(TAG, "Fail updating available offline status", e)
+            return false
         }
 
         return updatedCount > 0
@@ -605,18 +573,14 @@ class FileDataStorageManager {
                 if (removeDBData) {
                     val fileUri = ContentUris.withAppendedId(CONTENT_URI_FILE, file.fileId)
                     val where = "$FILE_ACCOUNT_OWNER=? AND $FILE_PATH=?"
-                    val whereArgs = arrayOf(account!!.name, file.remotePath)
-                    var deleted = 0
-                    if (contentProviderClient != null) {
+                    val whereArgs = arrayOf(account.name, file.remotePath)
+                    val deleted =
                         try {
-                            deleted = contentProviderClient!!.delete(fileUri, where, whereArgs)
+                            performDelete(fileUri, where, whereArgs)
                         } catch (e: RemoteException) {
                             e.printStackTrace()
+                            0
                         }
-
-                    } else {
-                        deleted = contentResolver!!.delete(fileUri, where, whereArgs)
-                    }
                     success = success and (deleted > 0)
                 }
                 val localPath = file.storagePath
@@ -656,24 +620,18 @@ class FileDataStorageManager {
         val folderUri =
             Uri.withAppendedPath(CONTENT_URI_DIR, "" + folder.fileId) // URI for recursive deletion
         val where = "$FILE_ACCOUNT_OWNER=? AND $FILE_PATH=?"
-        val whereArgs = arrayOf(account!!.name, folder.remotePath)
-        var deleted = 0
-        if (contentProviderClient != null) {
-            try {
-                deleted = contentProviderClient!!.delete(folderUri, where, whereArgs)
-            } catch (e: RemoteException) {
-                e.printStackTrace()
-            }
-
-        } else {
-            deleted = contentResolver!!.delete(folderUri, where, whereArgs)
+        val whereArgs = arrayOf(account.name, folder.remotePath)
+        return try {
+            performDelete(url = folderUri, where = where, selectionArgs = whereArgs) > 0
+        } catch (e: RemoteException) {
+            e.printStackTrace()
+            false
         }
-        return deleted > 0
     }
 
     private fun removeLocalFolder(folder: OCFile): Boolean {
         var success = true
-        val localFolderPath = FileStorageUtils.getDefaultSavePathFor(account!!.name, folder)
+        val localFolderPath = FileStorageUtils.getDefaultSavePathFor(account.name, folder)
         val localFolder = File(localFolderPath)
         if (localFolder.exists()) {
             // stage 1: remove the local files already registered in the files database
@@ -710,7 +668,6 @@ class FileDataStorageManager {
                 success = if (localFile.isDirectory) {
                     success and removeLocalFolder(localFile)
                 } else {
-                    val path = localFile.absolutePath
                     success and localFile.delete()
                 }
             }
@@ -735,33 +692,23 @@ class FileDataStorageManager {
                 )
 
             /// 1. get all the descendants of the moved element in a single QUERY
-            var c: Cursor? = null
-            if (contentProviderClient != null) {
+            val c: Cursor? =
                 try {
-                    c = contentProviderClient!!.query(
-                        CONTENT_URI,
-                        null,
-                        "$FILE_ACCOUNT_OWNER=? AND $FILE_PATH LIKE ? ",
-                        arrayOf(account!!.name, "${file.remotePath}%"),
-                        "$FILE_PATH ASC "
+                    performQuery(
+                        uri = CONTENT_URI,
+                        projection = null,
+                        selection = "$FILE_ACCOUNT_OWNER=? AND $FILE_PATH LIKE ? ",
+                        selectionArgs = arrayOf(account.name, "${file.remotePath}%"),
+                        sortOrder = "$FILE_PATH ASC "
                     )
                 } catch (e: RemoteException) {
                     Log_OC.e(TAG, e.message)
+                    null
                 }
-
-            } else {
-                c = contentResolver!!.query(
-                    CONTENT_URI,
-                    null,
-                    "$FILE_ACCOUNT_OWNER=? AND $FILE_PATH LIKE ? ",
-                    arrayOf(account!!.name, file.remotePath + "%"),
-                    "$FILE_PATH ASC "
-                )
-            }
 
             val originalPathsToTriggerMediaScan = ArrayList<String>()
             val newPathsToTriggerMediaScan = ArrayList<String>()
-            val defaultSavePath = FileStorageUtils.getSavePath(account!!.name)
+            val defaultSavePath = FileStorageUtils.getSavePath(account.name)
 
             /// 2. prepare a batch of update operations to change all the descendants
             if (c != null) {
@@ -825,14 +772,14 @@ class FileDataStorageManager {
             }
 
             /// 4. move in local file system
-            val originalLocalPath = FileStorageUtils.getDefaultSavePathFor(account!!.name, file)
+            val originalLocalPath = FileStorageUtils.getDefaultSavePathFor(account.name, file)
             val targetLocalPath = defaultSavePath + targetPath
             val localFile = File(originalLocalPath)
             var renamed = false
             if (localFile.exists()) {
                 val targetFile = File(targetLocalPath)
                 val targetFolder = targetFile.parentFile
-                if (!targetFolder.exists()) {
+                if (targetFolder != null && !targetFolder.exists()) {
                     targetFolder.mkdirs()
                 }
                 renamed = localFile.renameTo(targetFile)
@@ -867,13 +814,13 @@ class FileDataStorageManager {
 
             // 2. Copy in local file system
             var copied = false
-            val localPath = FileStorageUtils.getDefaultSavePathFor(account!!.name, originalFile)
+            val localPath = FileStorageUtils.getDefaultSavePathFor(account.name, originalFile)
             val localFile = File(localPath)
-            val defaultSavePath = FileStorageUtils.getSavePath(account!!.name)
+            val defaultSavePath = FileStorageUtils.getSavePath(account.name)
             if (localFile.exists()) {
                 val targetFile = File(defaultSavePath + targetPath)
                 val targetFolder = targetFile.parentFile
-                if (!targetFolder.exists()) {
+                if (targetFolder != null && !targetFolder.exists()) {
                     targetFolder.mkdirs()
                 }
                 copied = copyFile(localFile, targetFile)
@@ -926,7 +873,6 @@ class FileDataStorageManager {
         val ret = Vector<OCFile>()
 
         val reqUri = Uri.withAppendedPath(CONTENT_URI_DIR, parentId.toString())
-        var c: Cursor?
 
         val selection: String
         val selectionArgs: Array<String>
@@ -943,24 +889,25 @@ class FileDataStorageManager {
             )
         }
 
-        c = if (contentProviderClient != null) {
-            try {
-                contentProviderClient!!.query(reqUri, null, selection, selectionArgs, null)
-            } catch (e: RemoteException) {
-                Log_OC.e(TAG, e.message)
-                return ret
-            }
-
-        } else {
-            contentResolver!!.query(reqUri, null, selection, selectionArgs, null)
+        val c: Cursor? = try {
+            performQuery(
+                uri = reqUri,
+                projection = null,
+                selection = selection,
+                selectionArgs = selectionArgs,
+                sortOrder = null
+            )
+        } catch (e: RemoteException) {
+            Log_OC.e(TAG, e.message)
+            return ret
         }
 
-        if (c != null) {
-            if (c.moveToFirst()) {
+        c?.let {
+            if (it.moveToFirst()) {
                 do {
-                    val child = createFileInstance(c)
+                    val child = createFileInstance(it)
                     ret.add(child)
-                } while (c.moveToNext())
+                } while (it.moveToNext())
             }
             c.close()
         }
@@ -996,75 +943,47 @@ class FileDataStorageManager {
         return avOffAncestor
     }
 
-    private fun createRootDir(): OCFile {
-        val file = OCFile(ROOT_PATH)
-        file.mimetype = "DIR"
-        file.parentId = ROOT_PARENT_ID.toLong()
-        saveFile(file)
-        return file
-    }
+    private fun createRootDir(): OCFile =
+        OCFile(ROOT_PATH).apply {
+            mimetype = mimeTypeDir
+            parentId = ROOT_PARENT_ID.toLong()
+            saveFile(this)
+        }
 
     private fun fileExists(cmp_key: String, value: String): Boolean {
-        val c: Cursor?
-        if (contentResolver != null) {
-            c = contentResolver!!
-                .query(
-                    CONTENT_URI,
-                    null,
-                    "$cmp_key=? AND $FILE_ACCOUNT_OWNER=?",
-                    arrayOf(value, account!!.name),
-                    null
-                )
-        } else {
+        val c: Cursor? =
             try {
-                c = contentProviderClient!!.query(
-                    CONTENT_URI,
-                    null,
-                    "$cmp_key=? AND $FILE_ACCOUNT_OWNER=?",
-                    arrayOf(value, account!!.name),
-                    null
+                performQuery(
+                    uri = CONTENT_URI,
+                    projection = null,
+                    selection = "$cmp_key=? AND $FILE_ACCOUNT_OWNER=?",
+                    selectionArgs = arrayOf(value, account.name),
+                    sortOrder = null
                 )
             } catch (e: RemoteException) {
                 Log_OC.e(TAG, "Couldn't determine file existence, assuming non existence: ${e.message}", e)
                 return false
             }
-
-        }
-        var retval = false
-        if (c != null) {
-            retval = c.moveToFirst()
-            c.close()
-        }
-        return retval
+        return c?.let {
+            val toReturn = it.moveToFirst()
+            it.close()
+            toReturn
+        } ?: false
     }
 
-    private fun getFileCursorForValue(key: String, value: String): Cursor? {
-        var c: Cursor? = null
-        if (contentResolver != null) {
-            c = contentResolver!!
-                .query(
-                    CONTENT_URI,
-                    null,
-                    "$key=? AND $FILE_ACCOUNT_OWNER=?",
-                    arrayOf(value, account!!.name),
-                    null
-                )
-        } else {
-            c = try {
-                contentProviderClient!!.query(
-                    CONTENT_URI,
-                    null,
-                    "$key=? AND $FILE_ACCOUNT_OWNER=?",
-                    arrayOf(value, account!!.name),
-                    null
-                )
-            } catch (e: RemoteException) {
-                Log_OC.e(TAG, "Could not get file details: ${e.message}", e)
-                null
-            }
+    private fun getFileCursorForValue(key: String, value: String): Cursor? =
+        try {
+            performQuery(
+                uri = CONTENT_URI,
+                projection = null,
+                selection = "$key=? AND $FILE_ACCOUNT_OWNER=?",
+                selectionArgs = arrayOf(value, account.name),
+                sortOrder = null
+            )
+        } catch (e: RemoteException) {
+            Log_OC.e(TAG, "Could not get file details: ${e.message}", e)
+            null
         }
-        return c
-    }
 
     private fun createFileInstance(c: Cursor?): OCFile? = c?.let {
         OCFile(it.getString(it.getColumnIndex(FILE_PATH))).apply {
@@ -1077,7 +996,7 @@ class FileDataStorageManager {
                     // try to find existing file and bind it with current account;
                     // with the current update of SynchronizeFolderOperation, this won't be
                     // necessary anymore after a full synchronization of the account
-                    val f = File(FileStorageUtils.getDefaultSavePathFor(account!!.name, this))
+                    val f = File(FileStorageUtils.getDefaultSavePathFor(account.name, this))
                     if (f.exists()) {
                         storagePath = f.absolutePath
                         lastSyncDateForData = f.lastModified()
@@ -1104,6 +1023,7 @@ class FileDataStorageManager {
         }
     }
 
+    @Suppress("DEPRECATION")
     fun triggerMediaScan(path: String?) {
         if (path != null) {
             val intent = Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE)
@@ -1134,55 +1054,29 @@ class FileDataStorageManager {
     fun deleteFileInMediaScan(path: String) {
 
         val mimeTypeString = FileStorageUtils.getMimeTypeFromName(path)
-        val contentResolver = contentResolver
-
-        if (contentResolver != null) {
+        try {
             when {
                 mimeTypeString.startsWith(pathImage) -> // Images
-                    contentResolver.delete(
+                    performDelete(
                         MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                        MediaStore.Images.Media.DATA + "=?",
+                        "${MediaStore.Images.Media.DATA}=?",
                         arrayOf(path)
                     )
                 mimeTypeString.startsWith(pathAudio) -> // Audio
-                    contentResolver.delete(
+                    performDelete(
                         MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
                         "${MediaStore.Audio.Media.DATA}=?",
                         arrayOf(path)
                     )
                 mimeTypeString.startsWith(pathVideo) -> // Video
-                    contentResolver.delete(
+                    performDelete(
                         MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
                         "${MediaStore.Video.Media.DATA}=?",
                         arrayOf(path)
                     )
             }
-        } else {
-            val contentProviderClient = contentProviderClient
-            try {
-                when {
-                    mimeTypeString.startsWith(pathImage) -> // Images
-                        contentProviderClient!!.delete(
-                            MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                            "${MediaStore.Images.Media.DATA}=?",
-                            arrayOf(path)
-                        )
-                    mimeTypeString.startsWith(pathAudio) -> // Audio
-                        contentProviderClient!!.delete(
-                            MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-                            "${MediaStore.Audio.Media.DATA}=?",
-                            arrayOf(path)
-                        )
-                    mimeTypeString.startsWith(pathVideo) -> // Video
-                        contentProviderClient!!.delete(
-                            MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
-                            "${MediaStore.Video.Media.DATA}=?",
-                            arrayOf(path)
-                        )
-                }
-            } catch (e: RemoteException) {
-                Log_OC.e(TAG, "Exception deleting media file in MediaStore ${e.message}", e)
-            }
+        } catch (e: RemoteException) {
+            Log_OC.e(TAG, "Exception deleting media file in MediaStore ${e.message}", e)
         }
     }
 
@@ -1193,26 +1087,18 @@ class FileDataStorageManager {
         }
         val cv = ContentValues()
         cv.put(FILE_ETAG_IN_CONFLICT, eTagInConflict)
-        var updated = 0
-        if (contentResolver != null) {
-            updated = contentResolver!!.update(
-                CONTENT_URI_FILE,
-                cv,
-                "$_ID=?",
-                arrayOf(file.fileId.toString())
-            )
-        } else {
+        val updated =
             try {
-                updated = contentProviderClient!!.update(
-                    CONTENT_URI_FILE,
-                    cv,
-                    "$_ID=?",
-                    arrayOf(file.fileId.toString())
+                performUpdate(
+                    uri = CONTENT_URI_FILE,
+                    contentValues = cv,
+                    where = "$_ID=?",
+                    selectionArgs = arrayOf(file.fileId.toString())
                 )
             } catch (e: RemoteException) {
                 Log_OC.e(TAG, "Failed saving conflict in database ${e.message}", e)
+                0
             }
-        }
 
         Log_OC.d(TAG, "Number of files updated with CONFLICT: $updated")
 
@@ -1236,25 +1122,16 @@ class FileDataStorageManager {
                     whereBuffer.append("?")
                     whereBuffer.append(")")
 
-                    if (contentResolver != null) {
-                        updated = contentResolver!!.update(
-                            CONTENT_URI_FILE,
-                            cv,
-                            whereBuffer.toString(),
-                            ancestorIds.toTypedArray()
-                        )
-                    } else {
                         try {
-                            updated = contentProviderClient!!.update(
-                                CONTENT_URI_FILE,
-                                cv,
-                                whereBuffer.toString(),
-                                ancestorIds.toTypedArray()
+                            performUpdate(
+                                uri = CONTENT_URI_FILE,
+                                contentValues = cv,
+                                where = whereBuffer.toString(),
+                                selectionArgs = ancestorIds.toTypedArray()
                             )
                         } catch (e: RemoteException) {
                             Log_OC.e(TAG, "Failed saving conflict in database ${e.message}", e)
                         }
-                    }
                 } // else file is ROOT folder, no parent to set in conflict
 
             } else {
@@ -1273,50 +1150,33 @@ class FileDataStorageManager {
                             FILE_CONTENT_TYPE + " != 'DIR' AND " +
                             FILE_ACCOUNT_OWNER + " = ? AND " +
                             FILE_PATH + " LIKE ?"
-                    var descendantsInConflict: Cursor? = null
-                    if (contentResolver != null) {
-                        descendantsInConflict = contentResolver!!.query(
-                            CONTENT_URI_FILE,
-                            arrayOf(_ID),
-                            whereForDescendantsInConflict,
-                            arrayOf(account!!.name, "$parentPath%"),
-                            null
-                        )
-                    } else {
+                    val descendantsInConflict: Cursor? =
                         try {
-                            descendantsInConflict = contentProviderClient!!.query(
-                                CONTENT_URI_FILE,
-                                arrayOf(_ID),
-                                whereForDescendantsInConflict,
-                                arrayOf(account!!.name, "$parentPath%"),
-                                null
+                            performQuery(
+                                uri = CONTENT_URI_FILE,
+                                projection = arrayOf(_ID),
+                                selection = whereForDescendantsInConflict,
+                                selectionArgs = arrayOf(account.name, "$parentPath%"),
+                                sortOrder = null
                             )
                         } catch (e: RemoteException) {
                             Log_OC.e(TAG, "Failed querying for descendants in conflict ${e.message}", e)
+                            null
                         }
 
-                    }
                     if (descendantsInConflict == null || descendantsInConflict.count == 0) {
                         Log_OC.d(TAG, "NO MORE conflicts in $parentPath")
-                        if (contentResolver != null) {
-                            updated = contentResolver!!.update(
-                                CONTENT_URI_FILE,
-                                cv,
-                                "$FILE_ACCOUNT_OWNER=? AND $FILE_PATH=?",
-                                arrayOf(account!!.name, parentPath)
-                            )
-                        } else {
+
                             try {
-                                updated = contentProviderClient!!.update(
-                                    CONTENT_URI_FILE,
-                                    cv,
-                                    "$FILE_ACCOUNT_OWNER=? AND $FILE_PATH=?",
-                                    arrayOf(account!!.name, parentPath)
+                                performUpdate(
+                                    uri = CONTENT_URI_FILE,
+                                    contentValues = cv,
+                                    where = "$FILE_ACCOUNT_OWNER=? AND $FILE_PATH=?",
+                                    selectionArgs = arrayOf(account.name, parentPath)
                                 )
                             } catch (e: RemoteException) {
                                 Log_OC.e(TAG, "Failed saving conflict in database ${e.message}", e)
                             }
-                        }
 
                     } else {
                         Log_OC.d(TAG, "STILL ${descendantsInConflict.count} in $parentPath")
@@ -1336,7 +1196,7 @@ class FileDataStorageManager {
 
         // Prepare capabilities data
         val cv = ContentValues().apply {
-            put(CAPABILITIES_ACCOUNT_NAME, account!!.name)
+            put(CAPABILITIES_ACCOUNT_NAME, account.name)
             put(CAPABILITIES_VERSION_MAYOR, capability.versionMayor)
             put(CAPABILITIES_VERSION_MINOR, capability.versionMinor)
             put(CAPABILITIES_VERSION_MICRO, capability.versionMicro)
@@ -1374,48 +1234,27 @@ class FileDataStorageManager {
             put(CAPABILITIES_FILES_VERSIONING, capability.filesVersioning.value)
         }
 
-        if (capabilityExists(account!!.name)) {
-            if (contentResolver != null) {
-                contentResolver!!.update(
-                    CONTENT_URI_CAPABILITIES,
-                    cv,
-                    "$CAPABILITIES_ACCOUNT_NAME=?",
-                    arrayOf(account!!.name)
+        if (capabilityExists(account.name)) {
+            try {
+                performUpdate(
+                    uri = CONTENT_URI_CAPABILITIES,
+                    contentValues = cv,
+                    where = "$CAPABILITIES_ACCOUNT_NAME=?",
+                    selectionArgs = arrayOf(account.name)
                 )
-            } else {
-                try {
-                    contentProviderClient!!.update(
-                        CONTENT_URI_CAPABILITIES,
-                        cv,
-                        "$CAPABILITIES_ACCOUNT_NAME=?",
-                        arrayOf(account!!.name)
-                    )
-                } catch (e: RemoteException) {
-                    Log_OC.e(TAG, "Fail to insert insert file to database ${e.message}")
-                }
-
+            } catch (e: RemoteException) {
+                Log_OC.e(TAG, "Fail to insert insert file to database ${e.message}")
             }
         } else {
-            var resultUri: Uri? = null
-            if (contentResolver != null) {
-                resultUri = contentResolver!!.insert(
-                    CONTENT_URI_CAPABILITIES, cv
-                )
-            } else {
+            val resultUri: Uri? =
                 try {
-                    resultUri = contentProviderClient!!.insert(
-                        CONTENT_URI_CAPABILITIES, cv
-                    )
+                    performInsert(CONTENT_URI_CAPABILITIES, cv)
                 } catch (e: RemoteException) {
-                    Log_OC.e(
-                        TAG,
-                        "Fail to insert insert capability to database " + e.message
-                    )
+                    Log_OC.e(TAG, "Fail to insert insert capability to database ${e.message}")
+                    null
                 }
-            }
-            if (resultUri != null) {
-                val new_id = parseLong(resultUri.pathSegments[1])
-                capability.accountName = account!!.name
+            resultUri?.let {
+                capability.accountName = account.name
             }
         }
 
@@ -1432,29 +1271,19 @@ class FileDataStorageManager {
         return exists
     }
 
-    private fun getCapabilityCursorForAccount(accountName: String): Cursor? {
-        var c: Cursor? = null
-        if (contentResolver != null) {
-            c = contentResolver!!.query(
-                CONTENT_URI_CAPABILITIES, null,
-                "$CAPABILITIES_ACCOUNT_NAME=? ",
-                arrayOf(accountName),
-                null
+    private fun getCapabilityCursorForAccount(accountName: String): Cursor? =
+        try {
+            performQuery(
+                uri = CONTENT_URI_CAPABILITIES,
+                projection = null,
+                selection = "$CAPABILITIES_ACCOUNT_NAME=? ",
+                selectionArgs = arrayOf(accountName),
+                sortOrder = null
             )
-        } else {
-            try {
-                c = contentProviderClient!!.query(
-                    CONTENT_URI_CAPABILITIES, null,
-                    "$CAPABILITIES_ACCOUNT_NAME=? ",
-                    arrayOf(accountName),
-                    null
-                )
-            } catch (e: RemoteException) {
-                Log_OC.e(TAG, "Couldn't determine capability existence, assuming non existence: ${e.message}")
-            }
+        } catch (e: RemoteException) {
+            Log_OC.e(TAG, "Couldn't determine capability existence, assuming non existence: ${e.message}")
+            null
         }
-        return c
-    }
 
     fun getCapability(accountName: String): OCCapability? {
         val capability: OCCapability? = null
@@ -1546,8 +1375,68 @@ class FileDataStorageManager {
 
     private fun selectionForAllDescendantsOf(file: OCFile): Pair<String, Array<String>> {
         val selection = "$FILE_ACCOUNT_OWNER=? AND $FILE_PATH LIKE ? "
-        val selectionArgs = arrayOf(account!!.name, "${file.remotePath}_%") // one or more characters after remote path
+        val selectionArgs = arrayOf(account.name, "${file.remotePath}_%") // one or more characters after remote path
         return Pair(selection, selectionArgs)
+    }
+
+    private fun performQuery(
+        uri: Uri,
+        projection: Array<String>?,
+        selection: String?,
+        selectionArgs: Array<String>?,
+        sortOrder: String?,
+        performWithContentResolver: Boolean = true,
+        performWithContentProviderClient: Boolean = true
+    ): Cursor? {
+        val withContentResolver = contentResolver != null && performWithContentResolver
+        val withContentProvider = contentProviderClient != null && performWithContentProviderClient
+        return when {
+            withContentResolver -> contentResolver?.query(uri, projection, selection, selectionArgs, sortOrder)
+            withContentProvider -> contentProviderClient?.query(uri, projection, selection, selectionArgs, sortOrder)
+            else -> null
+        }
+    }
+
+    private fun performUpdate(
+        uri: Uri,
+        contentValues: ContentValues?,
+        where: String?,
+        selectionArgs: Array<String>?
+    ): Int {
+        val withContentResolver = contentResolver != null
+        val withContentProvider = contentProviderClient != null
+        return when {
+            withContentResolver -> contentResolver?.update(uri, contentValues, where, selectionArgs) ?: 0
+            withContentProvider -> contentProviderClient?.update(uri, contentValues, where, selectionArgs) ?: 0
+            else -> 0
+        }
+    }
+
+    private fun performInsert(
+        url: Uri,
+        contentValues: ContentValues?
+    ): Uri? {
+        val withContentResolver = contentResolver != null
+        val withContentProvider = contentProviderClient != null
+        return when {
+            withContentResolver -> contentResolver?.insert(url, contentValues)
+            withContentProvider -> contentProviderClient?.insert(url, contentValues)
+            else -> null
+        }
+    }
+
+    private fun performDelete(
+        url: Uri,
+        where: String?,
+        selectionArgs: Array<String>?
+    ): Int {
+        val withContentResolver = contentResolver != null
+        val withContentProvider = contentProviderClient != null
+        return when {
+            withContentResolver -> contentResolver?.delete(url, where, selectionArgs) ?: 0
+            withContentProvider -> contentProviderClient?.delete(url, where, selectionArgs) ?: 0
+            else -> 0
+        }
     }
 
     companion object {
@@ -1556,5 +1445,6 @@ class FileDataStorageManager {
         private const val pathAudio = "audio/"
         private const val pathVideo = "video/"
         private const val pathImage = "image/"
+        private const val mimeTypeDir = "DIR"
     }
 }
