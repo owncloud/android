@@ -51,15 +51,17 @@ class LogHistoryActivity : ToolbarActivity() {
 
             Timber.forest().fileLoggingTree()?.let {
                 logFragment = BothLogsFragment.newInstance(
-                    "Owncloud.log",
-                    "search logfile",
-                    "search logcat",
-                    DEFAULT_EMAIL)
+                    bothLogsTargetFileName,
+                    bothLogsSearchHint,
+                    logCatSearchHint,
+                    getString(R.string.mail_logger)
+                )
             } ?: run {
                 logFragment = LogcatFragment.newInstance(
-                    "logfile.log",
-                    "search logcat",
-                    DEFAULT_EMAIL)
+                    logCatTargetFileName,
+                    logCatSearchHint,
+                    getString(R.string.mail_logger)
+                )
             }
 
             // In case this activity was started with special instructions from an
@@ -74,7 +76,9 @@ class LogHistoryActivity : ToolbarActivity() {
     }
 
     companion object {
-        const val DEFAULT_EMAIL = ""
+        private const val logCatTargetFileName = "logfile.log"
+        private const val logCatSearchHint = "search logcat"
+        private const val bothLogsTargetFileName = "Owncloud.log"
+        private const val bothLogsSearchHint = "search logfile"
     }
-
 }
