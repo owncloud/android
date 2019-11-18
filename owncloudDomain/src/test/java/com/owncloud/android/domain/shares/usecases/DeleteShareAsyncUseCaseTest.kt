@@ -21,7 +21,7 @@ package com.owncloud.android.domain.shares.usecases
 
 import com.owncloud.android.domain.exceptions.UnauthorizedException
 import com.owncloud.android.domain.sharing.shares.ShareRepository
-import com.owncloud.android.domain.sharing.shares.usecases.RefreshSharesFromServerAsyncUseCase
+import com.owncloud.android.domain.sharing.shares.usecases.DeleteShareAsyncUseCase
 import io.mockk.every
 import io.mockk.spyk
 import io.mockk.verify
@@ -31,25 +31,25 @@ import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
-class RefreshSharesFromServerAsyncUseCaseTest {
+class DeleteShareAsyncUseCaseTest {
     private val shareRepository: ShareRepository = spyk()
-    private val useCase = RefreshSharesFromServerAsyncUseCase((shareRepository))
-    private val useCaseParams = RefreshSharesFromServerAsyncUseCase.Params("", "")
+    private val useCase = DeleteShareAsyncUseCase((shareRepository))
+    private val useCaseParams = DeleteShareAsyncUseCase.Params(1)
 
     @Test
-    fun refreshSharesFromNetworkOk() {
+    fun deleteShareOk() {
         val useCaseResult = useCase.execute(useCaseParams)
 
         assertTrue(useCaseResult.isSuccess)
         assertFalse(useCaseResult.isError)
         assertEquals(Unit, useCaseResult.getDataOrNull())
 
-        verify(exactly = 1) { shareRepository.refreshSharesFromNetwork("", "") }
+        verify(exactly = 1) { shareRepository.deleteShare(1) }
     }
 
     @Test
-    fun refreshSharesFromNetworkWithUnauthorizedException() {
-        every { shareRepository.refreshSharesFromNetwork(any(), any()) } throws UnauthorizedException()
+    fun deleteShareWithUnauthorizedException() {
+        every { shareRepository.deleteShare(any()) } throws UnauthorizedException()
 
         val useCaseResult = useCase.execute(useCaseParams)
 
@@ -59,6 +59,6 @@ class RefreshSharesFromServerAsyncUseCaseTest {
         assertNull(useCaseResult.getDataOrNull())
         assertTrue(useCaseResult.getThrowableOrNull() is UnauthorizedException)
 
-        verify(exactly = 1) { shareRepository.refreshSharesFromNetwork("", "") }
+        verify(exactly = 1) { shareRepository.deleteShare(1) }
     }
 }
