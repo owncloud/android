@@ -2,6 +2,7 @@
  * ownCloud Android client application
  *
  * @author David González Verdugo
+ * @author Abel García de Prada
  * Copyright (C) 2019 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -23,9 +24,10 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
 import com.owncloud.android.data.capabilities.datasources.LocalCapabilitiesDataSource
 import com.owncloud.android.data.capabilities.datasources.RemoteCapabilitiesDataSource
-import com.owncloud.android.data.utils.DataTestUtil
 import com.owncloud.android.domain.capabilities.model.OCCapability
 import com.owncloud.android.domain.exceptions.NoConnectionWithServerException
+import com.owncloud.android.testutil.OC_ACCOUNT_NAME
+import com.owncloud.android.testutil.OC_CAPABILITY
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -48,16 +50,14 @@ class OCCapabilityRepositoryTest {
 
     @Test
     fun refreshCapabilitiesFromNetworkOk() {
-        val defaultAccountName = "admin@server"
-
-        val capability = DataTestUtil.createCapability(defaultAccountName)
+        val capability = OC_CAPABILITY.copy(accountName = OC_ACCOUNT_NAME)
 
         every { remoteCapabilitiesDataSource.getCapabilities(any()) } returns capability
 
-        ocCapabilityRepository.refreshCapabilitiesForAccount(defaultAccountName)
+        ocCapabilityRepository.refreshCapabilitiesForAccount(OC_ACCOUNT_NAME)
 
         verify(exactly = 1) {
-            remoteCapabilitiesDataSource.getCapabilities(defaultAccountName)
+            remoteCapabilitiesDataSource.getCapabilities(OC_ACCOUNT_NAME)
         }
 
         verify(exactly = 1) {
@@ -67,25 +67,21 @@ class OCCapabilityRepositoryTest {
 
     @Test(expected = NoConnectionWithServerException::class)
     fun refreshCapabilitiesFromNetworkNoConnection() {
-        val defaultAccountName = "admin@server"
-        val capability = DataTestUtil.createCapability(defaultAccountName)
 
         every { remoteCapabilitiesDataSource.getCapabilities(any()) } throws NoConnectionWithServerException()
 
-        ocCapabilityRepository.refreshCapabilitiesForAccount(defaultAccountName)
+        ocCapabilityRepository.refreshCapabilitiesForAccount(OC_ACCOUNT_NAME)
 
         verify(exactly = 1) {
-            remoteCapabilitiesDataSource.getCapabilities(defaultAccountName)
+            remoteCapabilitiesDataSource.getCapabilities(OC_ACCOUNT_NAME)
         }
         verify(exactly = 0) {
-            localCapabilitiesDataSource.insert(listOf(capability))
+            localCapabilitiesDataSource.insert(any())
         }
     }
 
     @Test
     fun getCapabilitiesAsLiveData() {
-        val defaultAccountName = "admin@server"
-
         val capabilitiesLiveData = MutableLiveData<OCCapability>()
 
         every {
@@ -93,12 +89,11 @@ class OCCapabilityRepositoryTest {
         } returns capabilitiesLiveData
 
         val capabilitiesEmitted = mutableListOf<OCCapability>()
-        ocCapabilityRepository.getCapabilitiesAsLiveData(defaultAccountName).observeForever {
+        ocCapabilityRepository.getCapabilitiesAsLiveData(OC_ACCOUNT_NAME).observeForever {
             capabilitiesEmitted.add(it!!)
         }
 
-
-        val capabilitiesToEmit = listOf(DataTestUtil.createCapability())
+        val capabilitiesToEmit = listOf(OC_CAPABILITY)
         capabilitiesToEmit.forEach {
             capabilitiesLiveData.postValue(it)
         }
@@ -108,22 +103,34 @@ class OCCapabilityRepositoryTest {
 
     @Test(expected = Exception::class)
     fun getCapabilitiesAsLiveDataException() {
-        val defaultAccountName = "admin@server"
-
-        val capabilitiesLiveData = MutableLiveData<OCCapability>()
-
         every {
             localCapabilitiesDataSource.getCapabilitiesForAccountAsLiveData(any())
         } throws Exception()
 
-        val capabilitiesEmitted = mutableListOf<OCCapability>()
-        ocCapabilityRepository.getCapabilitiesAsLiveData(defaultAccountName)
+        ocCapabilityRepository.getCapabilitiesAsLiveData(OC_ACCOUNT_NAME)
+    }
 
-        val capabilitiesToEmit = listOf(DataTestUtil.createCapability())
-        capabilitiesToEmit.forEach {
-            capabilitiesLiveData.postValue(it)
-        }
+    @Test
+    fun getStoredCapabilities() {
 
-        Assert.assertEquals(capabilitiesToEmit, capabilitiesEmitted)
+        every {
+            localCapabilitiesDataSource.getCapabilityForAccount(any())
+        } returns OC_CAPABILITY
+
+        val result = ocCapabilityRepository.getStoredCapabilities(OC_ACCOUNT_NAME)
+
+        Assert.assertEquals(OC_CAPABILITY, result)
+    }
+
+    @Test
+    fun getStoredCapabilitiesNull() {
+
+        every {
+            localCapabilitiesDataSource.getCapabilityForAccount(any())
+        } returns null
+
+        val result = ocCapabilityRepository.getStoredCapabilities(OC_ACCOUNT_NAME)
+
+        Assert.assertEquals(null, result)
     }
 }
