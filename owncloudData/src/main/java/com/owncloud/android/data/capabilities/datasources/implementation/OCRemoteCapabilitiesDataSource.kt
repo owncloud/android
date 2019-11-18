@@ -21,7 +21,7 @@ package com.owncloud.android.data.capabilities.datasources.implementation
 
 import com.owncloud.android.data.capabilities.datasources.RemoteCapabilitiesDataSource
 import com.owncloud.android.data.executeRemoteOperation
-import com.owncloud.android.data.sharing.shares.datasources.mapper.RemoteCapabilityMapper
+import com.owncloud.android.data.capabilities.datasources.mapper.RemoteCapabilityMapper
 import com.owncloud.android.domain.capabilities.model.OCCapability
 import com.owncloud.android.lib.resources.status.CapabilityService
 

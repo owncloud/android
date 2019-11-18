@@ -17,7 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.data.sharing.shares.datasources.mapper
+package com.owncloud.android.data.capabilities.datasources.mapper
 
 import com.owncloud.android.domain.capabilities.model.CapabilityBooleanType
 import com.owncloud.android.domain.capabilities.model.OCCapability
@@ -36,7 +36,7 @@ class RemoteCapabilityMapper : RemoteMapper<OCCapability, RemoteCapability> {
                 versionEdition = remote.versionEdition,
                 corePollInterval = remote.corePollinterval,
                 filesSharingApiEnabled = CapabilityBooleanType.fromValue(remote.filesSharingApiEnabled.value)!!,
-                filesSharingSearchMinLength = remote.filesSharingSearchMinLength.value,
+                filesSharingSearchMinLength = remote.filesSharingSearchMinLength,
                 filesSharingPublicEnabled = CapabilityBooleanType.fromValue(remote.filesSharingPublicEnabled.value)!!,
                 filesSharingPublicPasswordEnforced =
                 CapabilityBooleanType.fromValue(remote.filesSharingPublicPasswordEnforced.value)!!,
