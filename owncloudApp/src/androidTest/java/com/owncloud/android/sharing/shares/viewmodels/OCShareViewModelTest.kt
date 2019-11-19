@@ -33,12 +33,11 @@ import com.owncloud.android.domain.sharing.shares.usecases.EditPublicShareAsyncU
 import com.owncloud.android.domain.sharing.shares.usecases.GetShareAsLiveDataUseCase
 import com.owncloud.android.domain.sharing.shares.usecases.GetSharesAsLiveDataUseCase
 import com.owncloud.android.domain.sharing.shares.usecases.RefreshSharesFromServerAsyncUseCase
+import com.owncloud.android.domain.utils.DomainTestUtil.DUMMY_SHARE
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.viewmodels.sharing.OCShareViewModel
 import com.owncloud.android.utils.AppTestUtil
-import com.owncloud.android.utils.AppTestUtil.DUMMY_SHARE
 import com.owncloud.android.utils.TIMEOUT_TEST_LONG
-import com.owncloud.android.utils.LiveDataTestUtil.getOrAwaitValues
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
