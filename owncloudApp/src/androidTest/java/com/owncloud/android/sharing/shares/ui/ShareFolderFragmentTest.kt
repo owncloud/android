@@ -21,63 +21,93 @@
 package com.owncloud.android.sharing.shares.ui
 
 import android.accounts.Account
+import android.content.Context
+import androidx.lifecycle.MutableLiveData
+import androidx.test.core.app.ActivityScenario
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.rule.ActivityTestRule
 import com.owncloud.android.R
-import com.owncloud.android.datamodel.OCFile
+import com.owncloud.android.domain.capabilities.model.OCCapability
+import com.owncloud.android.domain.sharing.shares.model.OCShare
 import com.owncloud.android.lib.resources.status.OwnCloudVersion
+import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.ui.sharing.fragments.ShareFileFragment
+import com.owncloud.android.presentation.viewmodels.capabilities.OCCapabilityViewModel
+import com.owncloud.android.presentation.viewmodels.sharing.OCShareViewModel
 import com.owncloud.android.utils.AppTestUtil
+import com.owncloud.android.utils.AppTestUtil.DUMMY_ACCOUNT
+import com.owncloud.android.utils.AppTestUtil.DUMMY_CAPABILITY
+import com.owncloud.android.utils.AppTestUtil.DUMMY_FOLDER
+import com.owncloud.android.utils.AppTestUtil.DUMMY_SHARE
 import io.mockk.every
+import io.mockk.mockk
 import io.mockk.mockkClass
-import org.hamcrest.Matchers.not
+import org.hamcrest.CoreMatchers.not
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.koin.android.ext.koin.androidContext
+import org.koin.androidx.viewmodel.dsl.viewModel
+import org.koin.core.context.startKoin
+import org.koin.core.context.stopKoin
+import org.koin.dsl.module
 
 @RunWith(AndroidJUnit4::class)
 class ShareFolderFragmentTest {
-    @Rule
-    @JvmField
-    val activityRule = ActivityTestRule(TestShareFileActivity::class.java, true, true)
-
-    private lateinit var shareFragment: ShareFileFragment
+    private val ocCapabilityViewModel = mockk<OCCapabilityViewModel>(relaxed = true)
+    private val capabilitiesLiveData = MutableLiveData<UIResult<OCCapability>>()
+    private val ocShareViewModel = mockk<OCShareViewModel>(relaxed = true)
+    private val sharesLiveData = MutableLiveData<UIResult<List<OCShare>>>()
 
     @Before
     fun setUp() {
-        val account = mockkClass(Account::class)
+        every { ocCapabilityViewModel.capabilities } returns capabilitiesLiveData
+        every { ocShareViewModel.shares } returns sharesLiveData
+
+        stopKoin()
+
+        startKoin {
+            androidContext(ApplicationProvider.getApplicationContext<Context>())
+            modules(
+                module(override = true) {
+                    viewModel {
+                        ocCapabilityViewModel
+                    }
+                    viewModel {
+                        ocShareViewModel
+                    }
+                }
+            )
+        }
+
         val ownCloudVersion = mockkClass(OwnCloudVersion::class)
         every { ownCloudVersion.isSearchUsersSupported } returns true
 
-        shareFragment = ShareFileFragment.newInstance(
-            getOCFolderForTesting("Photos"),
-            account,
+        val shareFileFragment = ShareFileFragment.newInstance(
+            DUMMY_FOLDER,
+            DUMMY_ACCOUNT,
             ownCloudVersion
         )
 
-        activityRule.activity.capabilities = AppTestUtil.createCapability()
-        activityRule.activity.publicShares = arrayListOf(
-            AppTestUtil.createPublicShare(
-                path = "/Photos",
-                isFolder = true,
-                name = "Photos link 1",
-                shareLink = "http://server:port/s/1"
+        ActivityScenario.launch(TestShareFileActivity::class.java).onActivity {
+            it.startFragment(shareFileFragment)
+        }
+
+        capabilitiesLiveData.postValue(
+            UIResult.Success(
+                DUMMY_CAPABILITY
             )
         )
-        activityRule.activity.privateShares = arrayListOf(
-            AppTestUtil.createPrivateShare(
-                path = "/Photos",
-                isFolder = true,
-                shareWith = "username",
-                sharedWithDisplayName = "Bob"
+
+        sharesLiveData.postValue(
+            UIResult.Success(
+                listOf(DUMMY_SHARE)
             )
         )
-        activityRule.activity.setFragment(shareFragment)
     }
 
     @Test
@@ -88,16 +118,5 @@ class ShareFolderFragmentTest {
     @Test
     fun hidePrivateLink() {
         onView(withId(R.id.getPrivateLinkButton)).check(matches(not(isDisplayed())))
-    }
-
-    private fun getOCFolderForTesting(name: String = "default"): OCFile {
-        val file = OCFile("/Photos")
-        file.availableOfflineStatus = OCFile.AvailableOfflineStatus.NOT_AVAILABLE_OFFLINE
-        file.fileName = name
-        file.fileId = 9456985479
-        file.remoteId = "1"
-        file.mimetype = "DIR"
-        file.privateLink = null
-        return file
     }
 }
