@@ -22,6 +22,7 @@ package com.owncloud.android.utils
 import android.accounts.Account
 import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
 import com.owncloud.android.data.sharing.shares.db.OCShareEntity
+import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.domain.capabilities.model.CapabilityBooleanType
 import com.owncloud.android.domain.capabilities.model.OCCapability
 import com.owncloud.android.domain.sharing.shares.model.OCShare
@@ -51,83 +52,6 @@ object AppTestUtil {
         accountOwner = "admin@server",
         name = "",
         shareLink = ""
-    )
-
-    private fun createShare(
-        fileSource: Long = 7,
-        itemSource: Long = 7,
-        shareType: Int, // Public share by default
-        shareWith: String = "",
-        path: String,
-        permissions: Int = 1,
-        sharedDate: Long = 1542628397,
-        expirationDate: Long = 0,
-        token: String = "pwdasd12dasdWZ",
-        sharedWithDisplayName: String = "",
-        sharedWithAdditionalInfo: String = "",
-        isFolder: Boolean,
-        userId: Long = -1,
-        remoteId: Long = 1,
-        accountOwner: String = "admin@server",
-        name: String = "",
-        shareLink: String = ""
-    ) = OCShareEntity(
-        fileSource,
-        itemSource,
-        shareType,
-        shareWith,
-        path,
-        permissions,
-        sharedDate,
-        expirationDate,
-        token,
-        sharedWithDisplayName,
-        sharedWithAdditionalInfo,
-        isFolder,
-        userId,
-        remoteId,
-        accountOwner,
-        name,
-        shareLink
-    )
-
-    fun createPrivateShare(
-        shareType: Int = 0,
-        shareWith: String,
-        path: String,
-        isFolder: Boolean,
-        sharedWithDisplayName: String,
-        accountOwner: String = "admin@server"
-    ) = createShare(
-        shareType = shareType,
-        shareWith = shareWith,
-        path = path,
-        isFolder = isFolder,
-        sharedWithDisplayName = sharedWithDisplayName,
-        accountOwner = accountOwner
-    )
-
-    fun createPublicShare(
-        shareWith: String = "",
-        path: String,
-        expirationDate: Long = 1000,
-        isFolder: Boolean,
-        permissions: Int = 1,
-        remoteId: Long = 1,
-        accountOwner: String = "admin@server",
-        name: String,
-        shareLink: String
-    ) = createShare(
-        shareWith = shareWith,
-        shareType = 3,
-        path = path,
-        permissions = permissions,
-        expirationDate = expirationDate,
-        isFolder = isFolder,
-        remoteId = remoteId,
-        accountOwner = accountOwner,
-        name = name,
-        shareLink = shareLink
     )
 
     /**
@@ -188,76 +112,27 @@ object AppTestUtil {
             filesVersioning = CapabilityBooleanType.FALSE
         )
 
-    fun createCapability(
-        accountName: String = "user@server",
-        versionMayor: Int = 2,
-        versionMinor: Int = 1,
-        versionMicro: Int = 0,
-        versionString: String = "1.0.0",
-        versionEdition: String = "1.0.0",
-        corePollinterval: Int = 0,
-        sharingApiEnabled: Int = 0,
-        sharingSearchMinLength: Int = 3,
-        sharingPublicEnabled: Int = 1,
-        sharingPublicPasswordEnforced: Int = 0,
-        sharingPublicPasswordEnforcedReadOnly: Int = 0,
-        sharingPublicPasswordEnforcedReadWrite: Int = 0,
-        sharingPublicPasswordEnforcedUploadOnly: Int = 0,
-        sharingPublicExpireDateEnabled: Int = 0,
-        sharingPublicExpireDateDays: Int = 0,
-        sharingPublicExpireDateEnforced: Int = 0,
-        sharingPublicSendMail: Int = 0,
-        sharingPublicUpload: Int = 0,
-        sharingPublicMultiple: Int = 0,
-        sharingPublicSupportsUploadOnly: Int = 0,
-        sharingUserSendMail: Int = 0,
-        sharingResharing: Int = 0,
-        sharingFederationOutgoing: Int = 0,
-        sharingFederationIncoming: Int = 0,
-        filesBigFileChunking: Int = 0,
-        filesUndelete: Int = 0,
-        filesVersioning: Int = 0
-    ) = OCCapabilityEntity(
-        accountName,
-        versionMayor,
-        versionMinor,
-        versionMicro,
-        versionString,
-        versionEdition,
-        corePollinterval,
-        sharingApiEnabled,
-        sharingSearchMinLength,
-        sharingPublicEnabled,
-        sharingPublicPasswordEnforced,
-        sharingPublicPasswordEnforcedReadOnly,
-        sharingPublicPasswordEnforcedReadWrite,
-        sharingPublicPasswordEnforcedUploadOnly,
-        sharingPublicExpireDateEnabled,
-        sharingPublicExpireDateDays,
-        sharingPublicExpireDateEnforced,
-        sharingPublicSendMail,
-        sharingPublicUpload,
-        sharingPublicMultiple,
-        sharingPublicSupportsUploadOnly,
-        sharingUserSendMail,
-        sharingResharing,
-        sharingFederationOutgoing,
-        sharingFederationIncoming,
-        filesBigFileChunking,
-        filesUndelete,
-        filesVersioning
-    )
+    /**
+     * Accounts
+     */
+    val DUMMY_ACCOUNT = Account("test", "ownCloudTest")
 
-    fun createAccount(name: String, type: String): Account {
-        val account = Account("MyAccount", "SomeType")
-        val nameField = account.javaClass.getDeclaredField("name")
-        nameField.isAccessible = true
-        nameField.set(account, name)
+    /**
+     * Files
+     */
+    val DUMMY_FILE = OCFile(
+        "/Images/img.png"
+    ).apply {
+        fileId = 1
+        fileName =  "img.png"
+        mimetype = ".png"
+        privateLink = "privateLink"
+    }
 
-        val typeField = account.javaClass.getDeclaredField("type")
-        typeField.isAccessible = true
-        typeField.set(account, type)
-
-        return account
+    val DUMMY_FOLDER = OCFile(
+        "/Images/img.png"
+    ).apply {
+        fileName =  "/Documents/"
+        mimetype = "DIR"
     }
 }

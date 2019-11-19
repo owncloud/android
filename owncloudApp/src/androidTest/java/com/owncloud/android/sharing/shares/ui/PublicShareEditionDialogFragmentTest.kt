@@ -19,6 +19,10 @@
 
 package com.owncloud.android.sharing.shares.ui
 
+import android.content.Context
+import androidx.lifecycle.MutableLiveData
+import androidx.test.core.app.ActivityScenario
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers
@@ -28,19 +32,30 @@ import androidx.test.espresso.matcher.ViewMatchers.withHint
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.rule.ActivityTestRule
 import com.owncloud.android.R
-import com.owncloud.android.data.sharing.shares.db.OCShareEntity
 import com.owncloud.android.datamodel.OCFile
+import com.owncloud.android.domain.capabilities.model.OCCapability
+import com.owncloud.android.domain.sharing.shares.model.OCShare
+import com.owncloud.android.domain.sharing.shares.model.ShareType
 import com.owncloud.android.lib.resources.shares.RemoteShare
+import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.ui.sharing.fragments.PublicShareDialogFragment
-import com.owncloud.android.utils.AppTestUtil
+import com.owncloud.android.presentation.viewmodels.capabilities.OCCapabilityViewModel
+import com.owncloud.android.presentation.viewmodels.sharing.OCShareViewModel
+import com.owncloud.android.utils.AppTestUtil.DUMMY_ACCOUNT
+import com.owncloud.android.utils.AppTestUtil.DUMMY_FILE
+import com.owncloud.android.utils.AppTestUtil.DUMMY_SHARE
 import io.mockk.every
+import io.mockk.mockk
 import io.mockk.mockkClass
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.koin.android.ext.koin.androidContext
+import org.koin.androidx.viewmodel.dsl.viewModel
+import org.koin.core.context.startKoin
+import org.koin.core.context.stopKoin
+import org.koin.dsl.module
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.GregorianCalendar
@@ -48,33 +63,49 @@ import java.util.TimeZone
 
 @RunWith(AndroidJUnit4::class)
 class PublicShareEditionDialogFragmentTest {
-    @Rule
-    @JvmField
-    val activityRule = ActivityTestRule(TestShareFileActivity::class.java, true, true)
+    private val ocCapabilityViewModel = mockk<OCCapabilityViewModel>(relaxed = true)
+    private val capabilitiesLiveData = MutableLiveData<UIResult<OCCapability>>()
+    private val ocShareViewModel = mockk<OCShareViewModel>(relaxed = true)
 
     private val file = mockkClass(OCFile::class)
-    private val publicShare = mockkClass(OCShareEntity::class)
     private val expirationDate = 1556575200000 // GMT: Monday, April 29, 2019 10:00:00 PM
 
     @Before
     fun setUp() {
-        every { file.mimetype } returns ".txt"
-        every { file.remotePath } returns "/Documents/doc3"
-        every { file.isFolder } returns false
-
-        every { publicShare.name } returns "Docs link"
-        every { publicShare.permissions } returns RemoteShare.CREATE_PERMISSION_FLAG
-        every { publicShare.isPasswordProtected } returns true
-        every { publicShare.expirationDate } returns expirationDate
-        every { publicShare.isFolder } returns false
+        every { ocCapabilityViewModel.capabilities } returns capabilitiesLiveData
 
         val publicShareDialogFragment = PublicShareDialogFragment.newInstanceToUpdate(
-            file,
-            publicShare
+            DUMMY_FILE,
+            DUMMY_ACCOUNT,
+            DUMMY_SHARE.copy(
+                shareType = ShareType.PUBLIC_LINK,
+                shareWith = "user",
+                name = "Docs link",
+                permissions = RemoteShare.CREATE_PERMISSION_FLAG,
+                expirationDate = expirationDate,
+                isFolder = true
+            )
         )
 
-        activityRule.activity.capabilities = AppTestUtil.createCapability()
-        activityRule.activity.setFragment(publicShareDialogFragment)
+        stopKoin()
+
+        startKoin {
+            androidContext(ApplicationProvider.getApplicationContext<Context>())
+            modules(
+                module(override = true) {
+                    viewModel {
+                        ocCapabilityViewModel
+                    }
+                    viewModel {
+                        ocShareViewModel
+                    }
+                }
+            )
+        }
+
+        ActivityScenario.launch(TestShareFileActivity::class.java).onActivity {
+            it.startFragment(publicShareDialogFragment)
+        }
     }
 
     @Test

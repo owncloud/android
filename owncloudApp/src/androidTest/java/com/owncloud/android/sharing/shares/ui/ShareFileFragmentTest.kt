@@ -19,7 +19,10 @@
 
 package com.owncloud.android.sharing.shares.ui
 
-import android.accounts.Account
+import android.content.Context
+import androidx.lifecycle.MutableLiveData
+import androidx.test.core.app.ActivityScenario
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers
@@ -29,38 +32,64 @@ import androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withTagValue
 import androidx.test.espresso.matcher.ViewMatchers.withText
-import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.rule.ActivityTestRule
 import com.owncloud.android.R
-import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
-import com.owncloud.android.data.sharing.shares.db.OCShareEntity
-import com.owncloud.android.datamodel.OCFile
-import com.owncloud.android.lib.resources.shares.ShareType
-import com.owncloud.android.lib.resources.status.CapabilityBooleanType
+import com.owncloud.android.domain.capabilities.model.CapabilityBooleanType
+import com.owncloud.android.domain.capabilities.model.OCCapability
+import com.owncloud.android.domain.sharing.shares.model.OCShare
+import com.owncloud.android.domain.sharing.shares.model.ShareType
 import com.owncloud.android.lib.resources.status.OwnCloudVersion
+import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.ui.sharing.fragments.ShareFileFragment
-import com.owncloud.android.utils.AppTestUtil
+import com.owncloud.android.presentation.viewmodels.capabilities.OCCapabilityViewModel
+import com.owncloud.android.presentation.viewmodels.sharing.OCShareViewModel
+import com.owncloud.android.utils.AppTestUtil.DUMMY_ACCOUNT
+import com.owncloud.android.utils.AppTestUtil.DUMMY_CAPABILITY
+import com.owncloud.android.utils.AppTestUtil.DUMMY_FILE
+import com.owncloud.android.utils.AppTestUtil.DUMMY_SHARE
 import io.mockk.every
+import io.mockk.mockk
 import io.mockk.mockkClass
 import org.hamcrest.CoreMatchers
-import org.junit.Rule
+import org.junit.Before
 import org.junit.Test
-import org.junit.runner.RunWith
+import org.koin.android.ext.koin.androidContext
+import org.koin.androidx.viewmodel.dsl.viewModel
+import org.koin.core.context.startKoin
+import org.koin.core.context.stopKoin
+import org.koin.dsl.module
 
-@RunWith(AndroidJUnit4::class)
 class ShareFileFragmentTest {
-    @Rule
-    @JvmField
-    val activityRule = ActivityTestRule(
-        TestShareFileActivity::class.java,
-        true,
-        true
-    )
+    private val ocCapabilityViewModel = mockk<OCCapabilityViewModel>(relaxed = true)
+    private val capabilitiesLiveData = MutableLiveData<UIResult<OCCapability>>()
+    private val ocShareViewModel = mockk<OCShareViewModel>(relaxed = true)
+    private val sharesLiveData = MutableLiveData<UIResult<List<OCShare>>>()
+
+    @Before
+    fun setUp() {
+        every { ocCapabilityViewModel.capabilities } returns capabilitiesLiveData
+        every { ocShareViewModel.shares } returns sharesLiveData
+
+        stopKoin()
+
+        startKoin {
+            androidContext(ApplicationProvider.getApplicationContext<Context>())
+            modules(
+                module(override = true) {
+                    viewModel {
+                        ocCapabilityViewModel
+                    }
+                    viewModel {
+                        ocShareViewModel
+                    }
+                }
+            )
+        }
+    }
 
     @Test
     fun showHeader() {
         loadShareFileFragment()
-        onView(withId(R.id.shareFileName)).check(matches(withText("image.jpg")))
+        onView(withId(R.id.shareFileName)).check(matches(withText("img.png")))
     }
 
     @Test
@@ -79,55 +108,41 @@ class ShareFileFragmentTest {
      ******************************************* PRIVATE SHARES *******************************************
      ******************************************************************************************************/
 
-    private var userSharesList = arrayListOf(
-        AppTestUtil.createPrivateShare(
-            shareType = ShareType.USER.value,
-            path = "/Photos/image.jpg",
-            isFolder = false,
-            shareWith = "batman",
+    private var userSharesList = listOf(
+        DUMMY_SHARE.copy(
             sharedWithDisplayName = "Batman"
         ),
-        AppTestUtil.createPrivateShare(
-            shareType = ShareType.USER.value,
-            path = "/Photos/image.jpg",
-            isFolder = false,
-            shareWith = "jocker",
+        DUMMY_SHARE.copy(
             sharedWithDisplayName = "Jocker"
         )
     )
 
-    private var groupSharesList = arrayListOf(
-        AppTestUtil.createPrivateShare(
-            shareType = ShareType.GROUP.value,
-            path = "/Photos/image.jpg",
-            isFolder = false,
-            shareWith = "suicideSquad",
+    private var groupSharesList = listOf(
+        DUMMY_SHARE.copy(
+            shareType = ShareType.GROUP,
             sharedWithDisplayName = "Suicide Squad"
         ),
-        AppTestUtil.createPrivateShare(
-            shareType = ShareType.GROUP.value,
-            path = "/Photos/image.jpg",
-            isFolder = false,
-            shareWith = "avengers",
+        DUMMY_SHARE.copy(
+            shareType = ShareType.GROUP,
             sharedWithDisplayName = "Avengers"
         )
     )
 
     @Test
     fun showUsersAndGroupsSectionTitle() {
-        loadShareFileFragment(privateShares = userSharesList)
+        loadShareFileFragment(shares = userSharesList)
         onView(withText(R.string.share_with_user_section_title)).check(matches(isDisplayed()))
     }
 
     @Test
     fun showNoPrivateShares() {
-        loadShareFileFragment()
+        loadShareFileFragment(shares = listOf())
         onView(withText(R.string.share_no_users)).check(matches(isDisplayed()))
     }
 
     @Test
     fun showUserShares() {
-        loadShareFileFragment(privateShares = userSharesList)
+        loadShareFileFragment(shares = userSharesList)
         onView(withText("Batman")).check(matches(isDisplayed()))
         onView(withText("Batman")).check(matches(hasSibling(withId(R.id.unshareButton))))
             .check(matches(isDisplayed()))
@@ -138,7 +153,7 @@ class ShareFileFragmentTest {
 
     @Test
     fun showGroupShares() {
-        loadShareFileFragment(privateShares = arrayListOf(groupSharesList[0]))
+        loadShareFileFragment(shares = listOf(groupSharesList.first()))
         onView(withText("Suicide Squad (group)")).check(matches(isDisplayed()))
         onView(withText("Suicide Squad (group)")).check(matches(hasSibling(withId(R.id.icon))))
             .check(matches(isDisplayed()))
@@ -149,20 +164,23 @@ class ShareFileFragmentTest {
      ******************************************* PUBLIC SHARES ********************************************
      ******************************************************************************************************/
 
-    private var publicShareList = arrayListOf(
-        AppTestUtil.createPublicShare(
+    private var publicShareList = listOf(
+        DUMMY_SHARE.copy(
+            shareType = ShareType.PUBLIC_LINK,
             path = "/Photos/image.jpg",
             isFolder = false,
             name = "Image link",
             shareLink = "http://server:port/s/1"
         ),
-        AppTestUtil.createPublicShare(
+        DUMMY_SHARE.copy(
+            shareType = ShareType.PUBLIC_LINK,
             path = "/Photos/image.jpg",
             isFolder = false,
             name = "Image link 2",
             shareLink = "http://server:port/s/2"
         ),
-        AppTestUtil.createPublicShare(
+        DUMMY_SHARE.copy(
+            shareType = ShareType.PUBLIC_LINK,
             path = "/Photos/image.jpg",
             isFolder = false,
             name = "Image link 3",
@@ -172,13 +190,13 @@ class ShareFileFragmentTest {
 
     @Test
     fun showNoPublicShares() {
-        loadShareFileFragment(publicShares = arrayListOf())
+        loadShareFileFragment(shares = listOf())
         onView(withText(R.string.share_no_public_links)).check(matches(isDisplayed()))
     }
 
     @Test
     fun showPublicShares() {
-        loadShareFileFragment()
+        loadShareFileFragment(shares = publicShareList)
         onView(withText("Image link")).check(matches(isDisplayed()))
         onView(withText("Image link")).check(matches(hasSibling(withId(R.id.getPublicLinkButton))))
             .check(matches(isDisplayed()))
@@ -193,7 +211,8 @@ class ShareFileFragmentTest {
     @Test
     fun showPublicSharesSharingEnabled() {
         loadShareFileFragment(
-            capabilities = AppTestUtil.createCapability(sharingPublicEnabled = CapabilityBooleanType.TRUE.value)
+            capabilities = DUMMY_CAPABILITY.copy(filesSharingPublicEnabled = CapabilityBooleanType.TRUE),
+            shares = publicShareList
         )
 
         onView(withText("Image link")).check(matches(isDisplayed()))
@@ -204,7 +223,8 @@ class ShareFileFragmentTest {
     @Test
     fun hidePublicSharesSharingDisabled() {
         loadShareFileFragment(
-            capabilities = AppTestUtil.createCapability(sharingPublicEnabled = CapabilityBooleanType.FALSE.value)
+            capabilities = DUMMY_CAPABILITY.copy(filesSharingPublicEnabled = CapabilityBooleanType.FALSE),
+            shares = publicShareList
         )
 
         onView(withId(R.id.shareViaLinkSection))
@@ -214,11 +234,11 @@ class ShareFileFragmentTest {
     @Test
     fun createPublicShareMultipleCapability() {
         loadShareFileFragment(
-            capabilities = AppTestUtil.createCapability(
+            capabilities = DUMMY_CAPABILITY.copy(
                 versionString = "10.1.1",
-                sharingPublicMultiple = CapabilityBooleanType.TRUE.value
+                filesSharingPublicMultiple = CapabilityBooleanType.TRUE
             ),
-            publicShares = arrayListOf(publicShareList.get(0))
+            shares = listOf(publicShareList.get(0))
         )
 
         onView(withId(R.id.addPublicLinkButton))
@@ -228,11 +248,11 @@ class ShareFileFragmentTest {
     @Test
     fun cannotCreatePublicShareMultipleCapability() {
         loadShareFileFragment(
-            capabilities = AppTestUtil.createCapability(
+            capabilities = DUMMY_CAPABILITY.copy(
                 versionString = "10.1.1",
-                sharingPublicMultiple = CapabilityBooleanType.FALSE.value
+                filesSharingPublicMultiple = CapabilityBooleanType.FALSE
             ),
-            publicShares = arrayListOf(publicShareList.get(0))
+            shares = listOf(publicShareList.get(0))
         )
 
         onView(withId(R.id.addPublicLinkButton))
@@ -242,10 +262,10 @@ class ShareFileFragmentTest {
     @Test
     fun cannotCreatePublicShareServerCapability() {
         loadShareFileFragment(
-            capabilities = AppTestUtil.createCapability(
+            capabilities = DUMMY_CAPABILITY.copy(
                 versionString = "9.3.1"
             ),
-            publicShares = arrayListOf(publicShareList.get(0))
+            shares = listOf(publicShareList.get(0))
         )
 
         onView(withId(R.id.addPublicLinkButton))
@@ -259,7 +279,9 @@ class ShareFileFragmentTest {
     @Test
     fun hideSharesSharingApiDisabled() {
         loadShareFileFragment(
-            capabilities = TestUtil.createCapability(sharingApiEnabled = CapabilityBooleanType.FALSE.value)
+            capabilities = DUMMY_CAPABILITY.copy(
+                filesSharingApiEnabled = CapabilityBooleanType.FALSE
+            )
         )
         onView(withId(R.id.shareWithUsersSection))
             .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)))
@@ -268,33 +290,34 @@ class ShareFileFragmentTest {
             .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)))
     }
 
-    private fun getOCFileForTesting(name: String = "default") = OCFile("/Photos").apply {
-        availableOfflineStatus = OCFile.AvailableOfflineStatus.NOT_AVAILABLE_OFFLINE
-        fileName = name
-        fileId = 9456985479
-        remoteId = "1"
-        privateLink = "private link"
-    }
-
     private fun loadShareFileFragment(
-        capabilities: OCCapabilityEntity = AppTestUtil.createCapability(),
-        privateShares: ArrayList<OCShareEntity> = arrayListOf(),
-        publicShares: ArrayList<OCShareEntity> = publicShareList
+        capabilities: OCCapability = DUMMY_CAPABILITY,
+        shares: List<OCShare> = listOf(DUMMY_SHARE)
     ) {
-        val account = mockkClass(Account::class)
         val ownCloudVersion = mockkClass(OwnCloudVersion::class)
 
         every { ownCloudVersion.isSearchUsersSupported } returns true
 
         val shareFileFragment = ShareFileFragment.newInstance(
-            getOCFileForTesting("image.jpg"),
-            account,
+            DUMMY_FILE,
+            DUMMY_ACCOUNT,
             ownCloudVersion
         )
 
-        activityRule.activity.capabilities = capabilities
-        activityRule.activity.privateShares = privateShares
-        activityRule.activity.publicShares = publicShares
-        activityRule.activity.setFragment(shareFileFragment)
+        ActivityScenario.launch(TestShareFileActivity::class.java).onActivity {
+            it.startFragment(shareFileFragment)
+        }
+
+        capabilitiesLiveData.postValue(
+            UIResult.Success(
+                capabilities
+            )
+        )
+
+        sharesLiveData.postValue(
+            UIResult.Success(
+                shares
+            )
+        )
     }
 }

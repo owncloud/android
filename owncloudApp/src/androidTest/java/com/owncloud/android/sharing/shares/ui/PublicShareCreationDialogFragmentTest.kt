@@ -19,8 +19,6 @@
 
 package com.owncloud.android.sharing.shares.ui
 
-import android.accounts.Account
-import android.accounts.AccountManager
 import android.content.Context
 import android.text.InputType.TYPE_CLASS_TEXT
 import android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD
@@ -39,28 +37,22 @@ import androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withInputType
 import androidx.test.espresso.matcher.ViewMatchers.withText
-import androidx.test.platform.app.InstrumentationRegistry
 import com.owncloud.android.R
-import com.owncloud.android.authentication.AccountAuthenticator
-import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.domain.capabilities.model.CapabilityBooleanType
 import com.owncloud.android.domain.capabilities.model.OCCapability
-import com.owncloud.android.lib.common.accounts.AccountUtils
-import com.owncloud.android.lib.resources.status.OwnCloudVersion
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.ui.sharing.fragments.PublicShareDialogFragment
 import com.owncloud.android.presentation.viewmodels.capabilities.OCCapabilityViewModel
 import com.owncloud.android.presentation.viewmodels.sharing.OCShareViewModel
-import com.owncloud.android.utils.AccountsManager
+import com.owncloud.android.utils.AppTestUtil.DUMMY_ACCOUNT
 import com.owncloud.android.utils.AppTestUtil.DUMMY_CAPABILITY
+import com.owncloud.android.utils.AppTestUtil.DUMMY_FILE
+import com.owncloud.android.utils.AppTestUtil.DUMMY_FOLDER
 import com.owncloud.android.utils.DateUtils
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.mockkClass
 import org.hamcrest.CoreMatchers.not
-import org.junit.AfterClass
 import org.junit.Before
-import org.junit.BeforeClass
 import org.junit.Test
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -75,58 +67,6 @@ class PublicShareCreationDialogFragmentTest {
     private val capabilitiesLiveData = MutableLiveData<UIResult<OCCapability>>()
     private val ocShareViewModel = mockk<OCShareViewModel>(relaxed = true)
     private val publicShareCreationStatus = MutableLiveData<UIResult<Unit>>()
-
-    companion object {
-        private val targetContext = InstrumentationRegistry.getInstrumentation().targetContext
-        private val account = Account("admin", "owncloud")
-
-        @BeforeClass
-        @JvmStatic
-        fun init() {
-            addAccount()
-        }
-
-        @AfterClass
-        @JvmStatic
-        fun cleanUp() {
-            AccountsManager.deleteAllAccounts(targetContext)
-        }
-
-        private fun addAccount() {
-            // obtaining an AccountManager instance
-            val accountManager = AccountManager.get(targetContext)
-
-            accountManager.addAccountExplicitly(account, "1234", null)
-
-            // include account version, user, server version and token with the new account
-            accountManager.setUserData(
-                account,
-                AccountUtils.Constants.KEY_OC_VERSION,
-                OwnCloudVersion("10.2").toString()
-            )
-            accountManager.setUserData(
-                account,
-                AccountUtils.Constants.KEY_OC_BASE_URL,
-                "serverUrl:port"
-            )
-            accountManager.setUserData(
-                account,
-                AccountUtils.Constants.KEY_DISPLAY_NAME,
-                "admin"
-            )
-            accountManager.setUserData(
-                account,
-                AccountUtils.Constants.KEY_OC_ACCOUNT_VERSION,
-                "1"
-            )
-
-            accountManager.setAuthToken(
-                account,
-                AccountAuthenticator.KEY_AUTH_TOKEN_TYPE,
-                "AUTH_TOKEN"
-            )
-        }
-    }
 
     @Before
     fun setUp() {
@@ -512,20 +452,13 @@ class PublicShareCreationDialogFragmentTest {
         isFolder: Boolean = false,
         capabilities: OCCapability = DUMMY_CAPABILITY
     ) {
-        val file = mockkClass(OCFile::class)
+        val file = if (isFolder) DUMMY_FOLDER else DUMMY_FILE
 
         val publicShareDialogFragment = PublicShareDialogFragment.newInstanceToCreate(
             file,
-            account,
+            DUMMY_ACCOUNT,
             "DOC_12112018.jpg link"
         )
-
-        val filePath = "/Documents/doc3"
-        val fileMimeType = ".txt"
-
-        every { file.remotePath } returns filePath
-        every { file.mimetype } returns fileMimeType
-        every { file.isFolder } returns isFolder
 
         ActivityScenario.launch(TestShareFileActivity::class.java).onActivity {
             it.startFragment(publicShareDialogFragment)
