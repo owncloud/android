@@ -19,8 +19,14 @@
 
 package com.owncloud.android.sharing.shares.ui
 
+import android.accounts.Account
+import android.accounts.AccountManager
+import android.content.Context
 import android.text.InputType.TYPE_CLASS_TEXT
 import android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD
+import androidx.lifecycle.MutableLiveData
+import androidx.test.core.app.ActivityScenario
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.scrollTo
@@ -33,28 +39,116 @@ import androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withInputType
 import androidx.test.espresso.matcher.ViewMatchers.withText
-import androidx.test.rule.ActivityTestRule
+import androidx.test.platform.app.InstrumentationRegistry
 import com.owncloud.android.R
-import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
+import com.owncloud.android.authentication.AccountAuthenticator
 import com.owncloud.android.datamodel.OCFile
-import com.owncloud.android.lib.resources.status.CapabilityBooleanType
+import com.owncloud.android.domain.capabilities.model.CapabilityBooleanType
+import com.owncloud.android.domain.capabilities.model.OCCapability
+import com.owncloud.android.lib.common.accounts.AccountUtils
+import com.owncloud.android.lib.resources.status.OwnCloudVersion
+import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.ui.sharing.fragments.PublicShareDialogFragment
-import com.owncloud.android.utils.AppTestUtil
+import com.owncloud.android.presentation.viewmodels.capabilities.OCCapabilityViewModel
+import com.owncloud.android.presentation.viewmodels.sharing.OCShareViewModel
+import com.owncloud.android.utils.AccountsManager
+import com.owncloud.android.utils.AppTestUtil.DUMMY_CAPABILITY
 import com.owncloud.android.utils.DateUtils
 import io.mockk.every
+import io.mockk.mockk
 import io.mockk.mockkClass
 import org.hamcrest.CoreMatchers.not
-import org.junit.Rule
+import org.junit.AfterClass
+import org.junit.Before
+import org.junit.BeforeClass
 import org.junit.Test
+import org.koin.android.ext.koin.androidContext
+import org.koin.androidx.viewmodel.dsl.viewModel
+import org.koin.core.context.startKoin
+import org.koin.core.context.stopKoin
+import org.koin.dsl.module
 import java.text.SimpleDateFormat
 import java.util.Date
 
 class PublicShareCreationDialogFragmentTest {
-    @Rule
-    @JvmField
-    val activityRule = ActivityTestRule(TestShareFileActivity::class.java, true, true)
+    private val ocCapabilityViewModel = mockk<OCCapabilityViewModel>(relaxed = true)
+    private val capabilitiesLiveData = MutableLiveData<UIResult<OCCapability>>()
+    private val ocShareViewModel = mockk<OCShareViewModel>(relaxed = true)
+    private val publicShareCreationStatus = MutableLiveData<UIResult<Unit>>()
 
-    private val file = mockkClass(OCFile::class)
+    companion object {
+        private val targetContext = InstrumentationRegistry.getInstrumentation().targetContext
+        private val account = Account("admin", "owncloud")
+
+        @BeforeClass
+        @JvmStatic
+        fun init() {
+            addAccount()
+        }
+
+        @AfterClass
+        @JvmStatic
+        fun cleanUp() {
+            AccountsManager.deleteAllAccounts(targetContext)
+        }
+
+        private fun addAccount() {
+            // obtaining an AccountManager instance
+            val accountManager = AccountManager.get(targetContext)
+
+            accountManager.addAccountExplicitly(account, "1234", null)
+
+            // include account version, user, server version and token with the new account
+            accountManager.setUserData(
+                account,
+                AccountUtils.Constants.KEY_OC_VERSION,
+                OwnCloudVersion("10.2").toString()
+            )
+            accountManager.setUserData(
+                account,
+                AccountUtils.Constants.KEY_OC_BASE_URL,
+                "serverUrl:port"
+            )
+            accountManager.setUserData(
+                account,
+                AccountUtils.Constants.KEY_DISPLAY_NAME,
+                "admin"
+            )
+            accountManager.setUserData(
+                account,
+                AccountUtils.Constants.KEY_OC_ACCOUNT_VERSION,
+                "1"
+            )
+
+            accountManager.setAuthToken(
+                account,
+                AccountAuthenticator.KEY_AUTH_TOKEN_TYPE,
+                "AUTH_TOKEN"
+            )
+        }
+    }
+
+    @Before
+    fun setUp() {
+        every { ocCapabilityViewModel.capabilities } returns capabilitiesLiveData
+        every { ocShareViewModel.publicShareCreationStatus } returns publicShareCreationStatus
+
+        stopKoin()
+
+        startKoin {
+            androidContext(ApplicationProvider.getApplicationContext<Context>())
+            modules(
+                module(override = true) {
+                    viewModel {
+                        ocCapabilityViewModel
+                    }
+                    viewModel {
+                        ocShareViewModel
+                    }
+                }
+            )
+        }
+    }
 
     @Test
     fun showDialogTitle() {
@@ -80,12 +174,12 @@ class PublicShareCreationDialogFragmentTest {
     @Test
     fun showFolderAdditionalFields() {
         loadPublicShareDialogFragment(
-            AppTestUtil.createCapability(
+            isFolder = true,
+            capabilities = DUMMY_CAPABILITY.copy(
                 versionString = "10.0.1",
-                sharingPublicUpload = CapabilityBooleanType.TRUE.value,
-                sharingPublicSupportsUploadOnly = CapabilityBooleanType.TRUE.value
-            ),
-            isFolder = true
+                filesSharingPublicUpload = CapabilityBooleanType.TRUE,
+                filesSharingPublicSupportsUploadOnly = CapabilityBooleanType.TRUE
+            )
         )
         onView(withId(R.id.shareViaLinkEditPermissionGroup)).check(matches(isDisplayed()))
     }
@@ -120,7 +214,9 @@ class PublicShareCreationDialogFragmentTest {
     @Test
     fun checkPasswordEnforced() {
         loadPublicShareDialogFragment(
-            capabilities = AppTestUtil.createCapability(sharingPublicPasswordEnforced = CapabilityBooleanType.TRUE.value)
+            capabilities = DUMMY_CAPABILITY.copy(
+                filesSharingPublicPasswordEnforced = CapabilityBooleanType.TRUE
+            )
         )
         onView(withId(R.id.shareViaLinkPasswordLabel)).check(
             matches(withText(R.string.share_via_link_password_enforced_label))
@@ -134,8 +230,8 @@ class PublicShareCreationDialogFragmentTest {
     @Test
     fun checkExpireDateEnforced() {
         loadPublicShareDialogFragment(
-            capabilities = AppTestUtil.createCapability(
-                sharingPublicExpireDateEnforced = CapabilityBooleanType.TRUE.value
+            capabilities = DUMMY_CAPABILITY.copy(
+                filesSharingPublicExpireDateEnforced = CapabilityBooleanType.TRUE
             )
         )
         onView(withId(R.id.shareViaLinkExpirationLabel))
@@ -149,8 +245,8 @@ class PublicShareCreationDialogFragmentTest {
     @Test
     fun checkExpireDateNotEnforced() {
         loadPublicShareDialogFragment(
-            capabilities = AppTestUtil.createCapability(
-                sharingPublicExpireDateEnforced = CapabilityBooleanType.FALSE.value
+            capabilities = DUMMY_CAPABILITY.copy(
+                filesSharingPublicExpireDateEnforced = CapabilityBooleanType.FALSE
             )
         )
         onView(withId(R.id.shareViaLinkExpirationLabel))
@@ -182,25 +278,34 @@ class PublicShareCreationDialogFragmentTest {
 
     @Test
     fun showError() {
-        loadPublicShareDialogFragment(
-            errorMessage = "Unable to share. Please check whether the file exists"
-        )
+        loadPublicShareDialogFragment()
+
         onView(withId(R.id.saveButton)).perform(click())
+
+        publicShareCreationStatus.postValue(
+            UIResult.Error(
+                error = Throwable("It was not possible to share this file or folder")
+            )
+        )
+
         onView(withId(R.id.public_link_error_message)).check(matches(isDisplayed()))
-        onView(withId(R.id.public_link_error_message)).check(matches(withText(R.string.share_link_file_no_exist)))
+        onView(withId(R.id.public_link_error_message)).check(
+            matches(
+                withText(R.string.share_link_file_error)
+            )
+        )
     }
 
     @Test
     fun uploadPermissionsWithFolderDisplayed() {
         loadPublicShareDialogFragment(
-            capabilities = AppTestUtil.createCapability(
+            isFolder = true,
+            capabilities = DUMMY_CAPABILITY.copy(
                 versionString = "10.1.1",
-                sharingPublicSupportsUploadOnly = CapabilityBooleanType.TRUE.value,
-                sharingPublicUpload = CapabilityBooleanType.TRUE.value
+                filesSharingPublicSupportsUploadOnly = CapabilityBooleanType.TRUE,
+                filesSharingPublicUpload = CapabilityBooleanType.TRUE
             )
         )
-
-        every { file.isFolder } returns true
 
         onView(withId(R.id.shareViaLinkEditPermissionGroup)).check(matches(isDisplayed()))
     }
@@ -208,14 +313,13 @@ class PublicShareCreationDialogFragmentTest {
     @Test
     fun uploadPermissionsWithFolderNotDisplayed() {
         loadPublicShareDialogFragment(
-            capabilities = AppTestUtil.createCapability(
+            isFolder = true,
+            capabilities = DUMMY_CAPABILITY.copy(
                 versionString = "10.1.1",
-                sharingPublicSupportsUploadOnly = CapabilityBooleanType.TRUE.value,
-                sharingPublicUpload = CapabilityBooleanType.FALSE.value
+                filesSharingPublicSupportsUploadOnly = CapabilityBooleanType.TRUE,
+                filesSharingPublicUpload = CapabilityBooleanType.FALSE
             )
         )
-
-        every { file.isFolder } returns true
 
         onView(withId(R.id.shareViaLinkEditPermissionGroup)).check(matches(not(isDisplayed())))
     }
@@ -224,9 +328,9 @@ class PublicShareCreationDialogFragmentTest {
     fun expirationDateDays() {
         val daysToTest = 15
         loadPublicShareDialogFragment(
-            capabilities = AppTestUtil.createCapability(
+            capabilities = DUMMY_CAPABILITY.copy(
                 versionString = "10.1.1",
-                sharingPublicExpireDateDays = daysToTest
+                filesSharingPublicExpireDateDays = daysToTest
             )
         )
         val formattedDate = SimpleDateFormat.getDateInstance().format(
@@ -244,9 +348,9 @@ class PublicShareCreationDialogFragmentTest {
     @Test
     fun passwordNotEnforced() {
         loadPublicShareDialogFragment(
-            capabilities = AppTestUtil.createCapability(
+            capabilities = DUMMY_CAPABILITY.copy(
                 versionString = "10.1.1",
-                sharingPublicPasswordEnforced = CapabilityBooleanType.FALSE.value
+                filesSharingPublicPasswordEnforced = CapabilityBooleanType.FALSE
             )
         )
         onView(withId(R.id.shareViaLinkPasswordLabel))
@@ -256,9 +360,9 @@ class PublicShareCreationDialogFragmentTest {
     @Test
     fun passwordEnforced() {
         loadPublicShareDialogFragment(
-            capabilities = AppTestUtil.createCapability(
+            capabilities = DUMMY_CAPABILITY.copy(
                 versionString = "10.1.1",
-                sharingPublicPasswordEnforced = CapabilityBooleanType.TRUE.value
+                filesSharingPublicPasswordEnforced = CapabilityBooleanType.TRUE
             )
         )
         onView(withId(R.id.shareViaLinkPasswordLabel))
@@ -268,15 +372,15 @@ class PublicShareCreationDialogFragmentTest {
     @Test
     fun passwordEnforcedReadOnlyFolders() {
         loadPublicShareDialogFragment(
-            capabilities = AppTestUtil.createCapability(
+            isFolder = true,
+            capabilities = DUMMY_CAPABILITY.copy(
                 versionString = "10.1.1",
-                sharingPublicSupportsUploadOnly = CapabilityBooleanType.TRUE.value,
-                sharingPublicUpload = CapabilityBooleanType.TRUE.value,
-                sharingPublicPasswordEnforcedReadOnly = CapabilityBooleanType.TRUE.value,
-                sharingPublicPasswordEnforced = CapabilityBooleanType.TRUE.value
+                filesSharingPublicSupportsUploadOnly = CapabilityBooleanType.TRUE,
+                filesSharingPublicUpload = CapabilityBooleanType.TRUE,
+                filesSharingPublicPasswordEnforcedReadOnly = CapabilityBooleanType.TRUE,
+                filesSharingPublicPasswordEnforced = CapabilityBooleanType.TRUE
             )
         )
-        every { file.isFolder } returns true
         onView(withId(R.id.shareViaLinkEditPermissionReadOnly)).check(matches(isDisplayed()))
         onView(withId(R.id.shareViaLinkEditPermissionReadOnly)).perform(click())
         onView(withId(R.id.shareViaLinkPasswordLabel))
@@ -286,15 +390,15 @@ class PublicShareCreationDialogFragmentTest {
     @Test
     fun passwordNotEnforcedReadOnlyFolders() {
         loadPublicShareDialogFragment(
-            capabilities = AppTestUtil.createCapability(
+            isFolder = true,
+            capabilities = DUMMY_CAPABILITY.copy(
                 versionString = "10.1.1",
-                sharingPublicSupportsUploadOnly = CapabilityBooleanType.TRUE.value,
-                sharingPublicUpload = CapabilityBooleanType.TRUE.value,
-                sharingPublicPasswordEnforcedReadOnly = CapabilityBooleanType.FALSE.value,
-                sharingPublicPasswordEnforced = CapabilityBooleanType.FALSE.value
+                filesSharingPublicSupportsUploadOnly = CapabilityBooleanType.TRUE,
+                filesSharingPublicUpload = CapabilityBooleanType.TRUE,
+                filesSharingPublicPasswordEnforcedReadOnly = CapabilityBooleanType.FALSE,
+                filesSharingPublicPasswordEnforced = CapabilityBooleanType.FALSE
             )
         )
-        every { file.isFolder } returns true
         onView(withId(R.id.shareViaLinkEditPermissionReadOnly)).check(matches(isDisplayed()))
         onView(withId(R.id.shareViaLinkEditPermissionReadOnly)).perform(click())
         onView(withId(R.id.shareViaLinkPasswordLabel))
@@ -304,15 +408,15 @@ class PublicShareCreationDialogFragmentTest {
     @Test
     fun passwordEnforcedReadWriteFolders() {
         loadPublicShareDialogFragment(
-            capabilities = AppTestUtil.createCapability(
+            isFolder = true,
+            capabilities = DUMMY_CAPABILITY.copy(
                 versionString = "10.1.1",
-                sharingPublicSupportsUploadOnly = CapabilityBooleanType.TRUE.value,
-                sharingPublicUpload = CapabilityBooleanType.TRUE.value,
-                sharingPublicPasswordEnforcedReadWrite = CapabilityBooleanType.TRUE.value,
-                sharingPublicPasswordEnforced = CapabilityBooleanType.TRUE.value
+                filesSharingPublicSupportsUploadOnly = CapabilityBooleanType.TRUE,
+                filesSharingPublicUpload = CapabilityBooleanType.TRUE,
+                filesSharingPublicPasswordEnforcedReadWrite = CapabilityBooleanType.TRUE,
+                filesSharingPublicPasswordEnforced = CapabilityBooleanType.TRUE
             )
         )
-        every { file.isFolder } returns true
         onView(withId(R.id.shareViaLinkEditPermissionReadAndWrite)).check(matches(isDisplayed()))
         onView(withId(R.id.shareViaLinkEditPermissionReadAndWrite)).perform(click())
         onView(withId(R.id.shareViaLinkPasswordLabel))
@@ -322,15 +426,15 @@ class PublicShareCreationDialogFragmentTest {
     @Test
     fun passwordNotEnforcedReadWriteFolders() {
         loadPublicShareDialogFragment(
-            capabilities = AppTestUtil.createCapability(
+            isFolder = true,
+            capabilities = DUMMY_CAPABILITY.copy(
                 versionString = "10.1.1",
-                sharingPublicSupportsUploadOnly = CapabilityBooleanType.TRUE.value,
-                sharingPublicUpload = CapabilityBooleanType.TRUE.value,
-                sharingPublicPasswordEnforcedReadWrite = CapabilityBooleanType.FALSE.value,
-                sharingPublicPasswordEnforced = CapabilityBooleanType.FALSE.value
+                filesSharingPublicSupportsUploadOnly = CapabilityBooleanType.TRUE,
+                filesSharingPublicUpload = CapabilityBooleanType.TRUE,
+                filesSharingPublicPasswordEnforcedReadWrite = CapabilityBooleanType.FALSE,
+                filesSharingPublicPasswordEnforced = CapabilityBooleanType.FALSE
             )
         )
-        every { file.isFolder } returns true
         onView(withId(R.id.shareViaLinkEditPermissionReadAndWrite)).check(matches(isDisplayed()))
         onView(withId(R.id.shareViaLinkEditPermissionReadAndWrite)).perform(click())
         onView(withId(R.id.shareViaLinkPasswordLabel))
@@ -340,15 +444,15 @@ class PublicShareCreationDialogFragmentTest {
     @Test
     fun passwordEnforcedUploadOnlyFolders() {
         loadPublicShareDialogFragment(
-            capabilities = AppTestUtil.createCapability(
+            isFolder = true,
+            capabilities = DUMMY_CAPABILITY.copy(
                 versionString = "10.1.1",
-                sharingPublicSupportsUploadOnly = CapabilityBooleanType.TRUE.value,
-                sharingPublicUpload = CapabilityBooleanType.TRUE.value,
-                sharingPublicPasswordEnforcedUploadOnly = CapabilityBooleanType.TRUE.value,
-                sharingPublicPasswordEnforced = CapabilityBooleanType.FALSE.value
+                filesSharingPublicSupportsUploadOnly = CapabilityBooleanType.TRUE,
+                filesSharingPublicUpload = CapabilityBooleanType.TRUE,
+                filesSharingPublicPasswordEnforcedUploadOnly = CapabilityBooleanType.TRUE,
+                filesSharingPublicPasswordEnforced = CapabilityBooleanType.FALSE
             )
         )
-        every { file.isFolder } returns true
         onView(withId(R.id.shareViaLinkEditPermissionUploadFiles)).check(matches(isDisplayed()))
         onView(withId(R.id.shareViaLinkEditPermissionUploadFiles)).perform(click())
         onView(withId(R.id.shareViaLinkPasswordLabel))
@@ -358,15 +462,15 @@ class PublicShareCreationDialogFragmentTest {
     @Test
     fun passwordNotEnforcedUploadOnlyFolders() {
         loadPublicShareDialogFragment(
-            capabilities = AppTestUtil.createCapability(
+            isFolder = true,
+            capabilities = DUMMY_CAPABILITY.copy(
                 versionString = "10.1.1",
-                sharingPublicSupportsUploadOnly = CapabilityBooleanType.TRUE.value,
-                sharingPublicUpload = CapabilityBooleanType.TRUE.value,
-                sharingPublicPasswordEnforcedUploadOnly = CapabilityBooleanType.FALSE.value,
-                sharingPublicPasswordEnforced = CapabilityBooleanType.FALSE.value
+                filesSharingPublicSupportsUploadOnly = CapabilityBooleanType.TRUE,
+                filesSharingPublicUpload = CapabilityBooleanType.TRUE,
+                filesSharingPublicPasswordEnforcedUploadOnly = CapabilityBooleanType.FALSE,
+                filesSharingPublicPasswordEnforced = CapabilityBooleanType.FALSE
             )
         )
-        every { file.isFolder } returns true
         onView(withId(R.id.shareViaLinkEditPermissionUploadFiles)).check(matches(isDisplayed()))
         onView(withId(R.id.shareViaLinkEditPermissionUploadFiles)).perform(click())
         onView(withId(R.id.shareViaLinkPasswordLabel))
@@ -375,32 +479,47 @@ class PublicShareCreationDialogFragmentTest {
 
     @Test
     fun passwordEnforcedClearErrorMessageIfSwitchsToNotEnforced() {
+        val commonError = "Common error"
+
         //One permission with password enforced. Error is cleaned after switching permission
         //to a non-forced one
         loadPublicShareDialogFragment(
-            capabilities = TestUtil.createCapability(
+            isFolder = true,
+            capabilities = DUMMY_CAPABILITY.copy(
                 versionString = "10.1.1",
-                sharingPublicSupportsUploadOnly = CapabilityBooleanType.TRUE.value,
-                sharingPublicUpload = CapabilityBooleanType.TRUE.value,
-                sharingPublicPasswordEnforcedUploadOnly = CapabilityBooleanType.FALSE.value,
-                sharingPublicPasswordEnforcedReadOnly = CapabilityBooleanType.FALSE.value,
-                sharingPublicPasswordEnforced = CapabilityBooleanType.TRUE.value
+                filesSharingPublicSupportsUploadOnly = CapabilityBooleanType.TRUE,
+                filesSharingPublicUpload = CapabilityBooleanType.TRUE,
+                filesSharingPublicPasswordEnforcedUploadOnly = CapabilityBooleanType.FALSE,
+                filesSharingPublicPasswordEnforcedReadOnly = CapabilityBooleanType.FALSE,
+                filesSharingPublicPasswordEnforced = CapabilityBooleanType.TRUE
             )
         )
-        `when`(file.isFolder).thenReturn(true)
 
-        onView(withId(R.id.saveButton)).perform(scrollTo(),click())
-        onView(withText("Common error")).check(matches(isDisplayed()))
+        onView(withId(R.id.saveButton)).perform(scrollTo(), click())
+
+        publicShareCreationStatus.postValue(
+            UIResult.Error(
+                error = Throwable(commonError)
+            )
+        )
+
+        onView(withText(commonError)).check(matches(isDisplayed()))
         onView(withId(R.id.shareViaLinkEditPermissionUploadFiles)).perform(click())
-        onView(withText("Common error")).check(matches(not(isDisplayed())))
+        onView(withText(commonError)).check(matches(not(isDisplayed())))
     }
 
     private fun loadPublicShareDialogFragment(
-        capabilities: OCCapabilityEntity = AppTestUtil.createCapability(),
-        errorMessage: String = "Common error",
-        isFolder: Boolean = false
+        isFolder: Boolean = false,
+        capabilities: OCCapability = DUMMY_CAPABILITY
     ) {
-        val defaultLinkName = "DOC_12112018.jpg link"
+        val file = mockkClass(OCFile::class)
+
+        val publicShareDialogFragment = PublicShareDialogFragment.newInstanceToCreate(
+            file,
+            account,
+            "DOC_12112018.jpg link"
+        )
+
         val filePath = "/Documents/doc3"
         val fileMimeType = ".txt"
 
@@ -408,13 +527,14 @@ class PublicShareCreationDialogFragmentTest {
         every { file.mimetype } returns fileMimeType
         every { file.isFolder } returns isFolder
 
-        val publicShareDialogFragment = PublicShareDialogFragment.newInstanceToCreate(
-            file,
-            defaultLinkName
-        )
+        ActivityScenario.launch(TestShareFileActivity::class.java).onActivity {
+            it.startFragment(publicShareDialogFragment)
+        }
 
-        activityRule.activity.capabilities = capabilities
-        activityRule.activity.errorMessage = errorMessage
-        activityRule.activity.setFragment(publicShareDialogFragment)
+        capabilitiesLiveData.postValue(
+            UIResult.Success(
+                capabilities
+            )
+        )
     }
 }
