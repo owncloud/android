@@ -29,19 +29,23 @@ import com.owncloud.android.data.ProviderMeta.ProviderTableMeta
 
 @Dao
 abstract class OCCapabilityDao {
-    @Query(
-        "SELECT * from " + ProviderTableMeta.CAPABILITIES_TABLE_NAME + " WHERE " +
-                ProviderTableMeta.CAPABILITIES_ACCOUNT_NAME + " = :accountName"
-    )
 
+    companion object {
+        private const val SELECT =
+            "SELECT * " +
+                    "FROM ${ProviderTableMeta.CAPABILITIES_TABLE_NAME} " +
+                    "WHERE ${ProviderTableMeta.CAPABILITIES_ACCOUNT_NAME} = :accountName"
+        private const val DELETE =
+            "DELETE FROM ${ProviderTableMeta.CAPABILITIES_TABLE_NAME} " +
+                    "WHERE ${ProviderTableMeta.CAPABILITIES_ACCOUNT_NAME} = :accountName"
+    }
+
+    @Query(SELECT)
     abstract fun getCapabilitiesForAccountAsLiveData(
         accountName: String
     ): LiveData<OCCapabilityEntity>
 
-    @Query(
-        "SELECT * from " + ProviderTableMeta.CAPABILITIES_TABLE_NAME + " WHERE " +
-                ProviderTableMeta.CAPABILITIES_ACCOUNT_NAME + " = :accountName"
-    )
+    @Query(SELECT)
     abstract fun getCapabilitiesForAccount(
         accountName: String
     ): OCCapabilityEntity
@@ -52,10 +56,7 @@ abstract class OCCapabilityDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract fun insert(ocCapabilities: List<OCCapabilityEntity>): List<Long>
 
-    @Query(
-        "DELETE from " + ProviderTableMeta.CAPABILITIES_TABLE_NAME + " WHERE " +
-                ProviderTableMeta.CAPABILITIES_ACCOUNT_NAME + " = :accountName"
-    )
+    @Query(DELETE)
     abstract fun delete(accountName: String)
 
     @Transaction

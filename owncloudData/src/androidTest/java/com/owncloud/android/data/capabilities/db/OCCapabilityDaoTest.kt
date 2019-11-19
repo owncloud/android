@@ -2,6 +2,7 @@
  * ownCloud Android client application
  *
  * @author David González Verdugo
+ * @author Abel García de Prada
  * Copyright (C) 2019 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -23,13 +24,13 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.filters.SmallTest
 import androidx.test.platform.app.InstrumentationRegistry
 import com.owncloud.android.data.OwncloudDatabase
-import com.owncloud.android.data.utils.DataTestUtil
+import com.owncloud.android.data.capabilities.datasources.mapper.OCCapabilityMapper
 import com.owncloud.android.data.utils.LiveDataTestUtil.getValue
 import com.owncloud.android.domain.capabilities.model.CapabilityBooleanType
-import junit.framework.Assert.assertEquals
-import org.hamcrest.CoreMatchers.notNullValue
-import org.hamcrest.CoreMatchers.nullValue
-import org.hamcrest.MatcherAssert.assertThat
+import com.owncloud.android.testutil.OC_CAPABILITY
+import org.junit.Assert.assertNull
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -37,6 +38,7 @@ import org.junit.Test
 @SmallTest
 class OCCapabilityDaoTest {
     private lateinit var ocCapabilityDao: OCCapabilityDao
+    private val ocCapabilityMapper = OCCapabilityMapper()
 
     @Rule
     @JvmField
@@ -51,132 +53,98 @@ class OCCapabilityDaoTest {
     }
 
     @Test
-    fun insertCapabilitiesAndRead() {
-        ocCapabilityDao.insert(
-            listOf(
-                DataTestUtil.createCapabilityEntity("user1@server", 3, 2, 1, "3.1"),
-                DataTestUtil.createCapabilityEntity("user2@server", 6, 5, 4, "6.0")
-            )
+    fun insertCapabilitiesListAndRead() {
+        val entityList: List<OCCapabilityEntity> = listOf(
+            ocCapabilityMapper.toEntity(OC_CAPABILITY.copy(accountName = "user1@server"))!!,
+            ocCapabilityMapper.toEntity(OC_CAPABILITY.copy(accountName = "user2@server"))!!
         )
 
-        val capability = getValue(
-            ocCapabilityDao.getCapabilitiesForAccountAsLiveData(
-                "user2@server"
-            )
-        )
-        assertThat(capability, notNullValue())
-        assertEquals("user2@server", capability.accountName)
-        assertEquals(6, capability.versionMayor)
-        assertEquals(5, capability.versionMinor)
-        assertEquals(4, capability.versionMicro)
-        assertEquals("6.0", capability.versionString)
+        ocCapabilityDao.insert(entityList)
+
+        val capability = ocCapabilityDao.getCapabilitiesForAccount("user2@server")
+        val capabilityAsLiveData = getValue(ocCapabilityDao.getCapabilitiesForAccountAsLiveData("user2@server"))
+
+        assertNotNull(capability)
+        assertNotNull(capabilityAsLiveData)
+        assertEquals(entityList[1], capability)
+        assertEquals(entityList[1], capabilityAsLiveData)
+    }
+
+    @Test
+    fun insertCapabilitiesAndRead() {
+        val entity1 = ocCapabilityMapper.toEntity(OC_CAPABILITY.copy(accountName = "user1@server"))!!
+        val entity2 = ocCapabilityMapper.toEntity(OC_CAPABILITY.copy(accountName = "user2@server"))!!
+
+        ocCapabilityDao.insert(entity1)
+        ocCapabilityDao.insert(entity2)
+
+        val capability = ocCapabilityDao.getCapabilitiesForAccount("user2@server")
+        val capabilityAsLiveData = getValue(ocCapabilityDao.getCapabilitiesForAccountAsLiveData("user2@server"))
+
+        assertNotNull(capability)
+        assertNotNull(capabilityAsLiveData)
+        assertEquals(entity2, capability)
+        assertEquals(entity2, capabilityAsLiveData)
     }
 
     @Test
     fun getNonExistingCapabilities() {
-        ocCapabilityDao.insert(
-            DataTestUtil.createCapabilityEntity("user@server", 10, 9, 8, "10.1.4")
-        )
+        ocCapabilityDao.insert(ocCapabilityMapper.toEntity(OC_CAPABILITY.copy(accountName = "user@server"))!!)
 
-        val capability = getValue(
-            ocCapabilityDao.getCapabilitiesForAccountAsLiveData(
-                "user@server2"
-            )
-        )
-        assertThat(capability, nullValue())
+        val capability = getValue(ocCapabilityDao.getCapabilitiesForAccountAsLiveData("user@server2"))
+
+        assertNull(capability)
     }
 
     @Test
     fun replaceCapabilityIfAlreadyExists_exists() {
-        ocCapabilityDao.insert(
-            DataTestUtil.createCapabilityEntity(
-                "admin@server",
-                3,
-                2,
-                1,
-                "3.7.5",
-                sharingPublicPasswordEnforced = CapabilityBooleanType.FALSE.value
-            )
-        )
+        val entity1 = ocCapabilityMapper.toEntity(OC_CAPABILITY.copy(filesVersioning = CapabilityBooleanType.FALSE))!!
+        val entity2 = ocCapabilityMapper.toEntity(OC_CAPABILITY.copy(filesVersioning = CapabilityBooleanType.TRUE))!!
 
-        ocCapabilityDao.replace(
-            listOf( // Update capability
-                DataTestUtil.createCapabilityEntity(
-                    "admin@server",
-                    3,
-                    2,
-                    1,
-                    "3.7.5",
-                    sharingPublicPasswordEnforced = CapabilityBooleanType.TRUE.value
-                )
-            )
-        )
+        ocCapabilityDao.insert(entity1)
+        ocCapabilityDao.replace(listOf(entity2))
 
-        val capability = getValue(
-            ocCapabilityDao.getCapabilitiesForAccountAsLiveData(
-                "admin@server"
-            )
-        )
-        assertThat(capability, notNullValue())
-        assertEquals("admin@server", capability.accountName)
-        assertEquals(3, capability.versionMayor)
-        assertEquals(2, capability.versionMinor)
-        assertEquals(1, capability.versionMicro)
-        assertEquals("3.7.5", capability.versionString)
-        assertEquals(1, capability.filesSharingPublicPasswordEnforced)
+        val capability = getValue(ocCapabilityDao.getCapabilitiesForAccountAsLiveData(OC_CAPABILITY.accountName!!))
+
+        assertNotNull(capability)
+        assertEquals(entity2, capability)
     }
 
     @Test
-    fun replacePublicShareIfAlreadyExists_doesNotExist() {
-        ocCapabilityDao.insert(
-            DataTestUtil.createCapabilityEntity(
-                "cto@server",
-                10,
-                8,
-                6,
-                "10.0.2",
-                sharingPublicPasswordEnforcedReadOnly = CapabilityBooleanType.FALSE.value
-            )
-        )
+    fun replaceCapabilityIfAlreadyExists_doesNotExist() {
+        val entity1 = ocCapabilityMapper.toEntity(OC_CAPABILITY.copy(accountName = "user1@server"))!!
+        val entity2 = ocCapabilityMapper.toEntity(OC_CAPABILITY.copy(accountName = "user2@server"))!!
 
-        ocCapabilityDao.replace(
-            listOf( // Update capability
-                DataTestUtil.createCapabilityEntity(
-                    "seo@server",
-                    14,
-                    13,
-                    12,
-                    "14.3.8",
-                    sharingPublicPasswordEnforcedReadOnly = CapabilityBooleanType.TRUE.value
-                )
-            )
-        )
+        ocCapabilityDao.insert(entity1)
 
-        val capability1 = getValue(
-            ocCapabilityDao.getCapabilitiesForAccountAsLiveData(
-                "cto@server"
-            )
-        )
-        assertThat(capability1, notNullValue())
-        assertEquals("cto@server", capability1.accountName)
-        assertEquals(10, capability1.versionMayor)
-        assertEquals(8, capability1.versionMinor)
-        assertEquals(6, capability1.versionMicro)
-        assertEquals("10.0.2", capability1.versionString)
-        assertEquals(CapabilityBooleanType.FALSE.value, capability1.filesSharingPublicPasswordEnforcedReadOnly)
+        ocCapabilityDao.replace(listOf(entity2))
+
+        val capability1 = getValue(ocCapabilityDao.getCapabilitiesForAccountAsLiveData("user1@server"))
+
+        assertNotNull(capability1)
+        assertEquals(entity1, capability1)
 
         // capability2 didn't exist before, it should not replace the old one but got created
-        val capability2 = getValue(
-            ocCapabilityDao.getCapabilitiesForAccountAsLiveData(
-                "seo@server"
-            )
-        )
-        assertThat(capability2, notNullValue())
-        assertEquals("seo@server", capability2.accountName)
-        assertEquals(14, capability2.versionMayor)
-        assertEquals(13, capability2.versionMinor)
-        assertEquals(12, capability2.versionMicro)
-        assertEquals("14.3.8", capability2.versionString)
-        assertEquals(CapabilityBooleanType.TRUE.value, capability2.filesSharingPublicPasswordEnforcedReadOnly)
+        val capability2 = getValue(ocCapabilityDao.getCapabilitiesForAccountAsLiveData("user2@server"))
+
+        assertNotNull(capability2)
+        assertEquals(entity2, capability2)
+    }
+
+    @Test
+    fun deleteCapability() {
+        val entity = ocCapabilityMapper.toEntity(OC_CAPABILITY.copy(accountName = "user1@server"))!!
+
+        ocCapabilityDao.insert(entity)
+
+        val capability1 = getValue(ocCapabilityDao.getCapabilitiesForAccountAsLiveData("user1@server"))
+
+        assertNotNull(capability1)
+
+        ocCapabilityDao.delete("user1@server")
+
+        val capability2 = getValue(ocCapabilityDao.getCapabilitiesForAccountAsLiveData("user1@server"))
+
+        assertNull(capability2)
     }
 }
