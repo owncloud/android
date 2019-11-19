@@ -30,7 +30,6 @@ import androidx.test.espresso.matcher.ViewMatchers.hasSibling
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.owncloud.android.R
 import com.owncloud.android.domain.sharing.shares.model.OCShare
 import com.owncloud.android.domain.sharing.shares.model.ShareType
@@ -51,7 +50,6 @@ import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.module
 
-@RunWith(AndroidJUnit4::class)
 class SearchShareesFragmentTest {
     private val ocShareViewModel = mockk<OCShareViewModel>(relaxed = true)
     private val sharesLiveData = MutableLiveData<UIResult<List<OCShare>>>()
