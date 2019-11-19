@@ -40,13 +40,13 @@ android {
 }
 
 dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(':owncloudDomain')
     testImplementation project(':owncloudTestUtil')
+    androidTestImplementation project(':owncloudTestUtil')
 
     // Owncloud Android Library
     api project(':owncloud-android-library:owncloudComLibrary')
-
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     implementation 'androidx.appcompat:appcompat:1.0.2'
 
