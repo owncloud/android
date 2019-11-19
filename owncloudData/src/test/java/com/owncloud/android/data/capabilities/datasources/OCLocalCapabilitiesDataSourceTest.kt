@@ -2,6 +2,7 @@
  * ownCloud Android client application
  *
  * @author David González Verdugo
+ * @author Abel García de Prada
  * Copyright (C) 2019 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -21,17 +22,17 @@ package com.owncloud.android.data.capabilities.datasources
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
-import com.owncloud.android.data.OwncloudDatabase
 import com.owncloud.android.data.capabilities.datasources.implementation.OCLocalCapabilitiesDataSource
 import com.owncloud.android.data.capabilities.datasources.mapper.OCCapabilityMapper
 import com.owncloud.android.data.capabilities.db.OCCapabilityDao
 import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
-import com.owncloud.android.data.utils.DataTestUtil
 import com.owncloud.android.data.utils.LiveDataTestUtil.getValue
+import com.owncloud.android.testutil.OC_CAPABILITY
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.mockkClass
+import io.mockk.verify
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -40,6 +41,7 @@ import org.junit.rules.TestRule
 class OCLocalCapabilitiesDataSourceTest {
     private lateinit var ocLocalCapabilitiesDataSource: OCLocalCapabilitiesDataSource
     private val ocCapabilityDao = mockk<OCCapabilityDao>(relaxed = true)
+    private val ocCapabilityMapper = OCCapabilityMapper()
 
     @Rule
     @JvmField
@@ -47,75 +49,62 @@ class OCLocalCapabilitiesDataSourceTest {
 
     @Before
     fun init() {
-        val db = mockkClass(OwncloudDatabase::class)
-
-        every {
-            db.capabilityDao()
-        } returns ocCapabilityDao
-
-        val capabilityAsLiveData: MutableLiveData<OCCapabilityEntity> = MutableLiveData()
-        capabilityAsLiveData.value = DataTestUtil.createCapabilityEntity(
-            "user@server1", 5, 4, 3
-        )
-
-        every {
-            ocCapabilityDao.getCapabilitiesForAccountAsLiveData(
-                "user@server1"
-            )
-        } returns capabilityAsLiveData
-
-        val newCapabilityAsLiveData: MutableLiveData<OCCapabilityEntity> = MutableLiveData()
-        newCapabilityAsLiveData.value = DataTestUtil.createCapabilityEntity(
-            "user@server2", 2, 1, 0
-        )
-
-        every {
-            ocCapabilityDao.getCapabilitiesForAccountAsLiveData(
-                "user@server2"
-            )
-        } returns newCapabilityAsLiveData
-
         ocLocalCapabilitiesDataSource =
             OCLocalCapabilitiesDataSource(
                 ocCapabilityDao,
-                OCCapabilityMapper()
+                ocCapabilityMapper
             )
     }
 
     @Test
-    fun readLocalCapability() {
-        val capability = getValue(
-            ocLocalCapabilitiesDataSource.getCapabilitiesForAccountAsLiveData(
-                "user@server1"
-            )
-        )
-        assertEquals("user@server1", capability?.accountName)
-        assertEquals(5, capability?.versionMayor)
-        assertEquals(4, capability?.versionMinor)
-        assertEquals(3, capability?.versionMicro)
+    fun getCapabilitiesForAccountAsLiveData() {
+        val capabilitiesLiveData = MutableLiveData<OCCapabilityEntity>()
+        every { ocCapabilityDao.getCapabilitiesForAccountAsLiveData(any()) } returns capabilitiesLiveData
+
+        capabilitiesLiveData.postValue(ocCapabilityMapper.toEntity(OC_CAPABILITY))
+
+        val capabilityEmitted =
+            getValue(ocLocalCapabilitiesDataSource.getCapabilitiesForAccountAsLiveData(OC_CAPABILITY.accountName!!))
+
+        assertEquals(OC_CAPABILITY, capabilityEmitted)
     }
 
     @Test
-    fun insertCapabilityAndRead() {
-        ocLocalCapabilitiesDataSource.insert(
-            listOf(
-                DataTestUtil.createCapability(
-                    "user@server1", 7, 6, 5
-                ),
-                DataTestUtil.createCapability(
-                    "user@server2", 2, 1, 0
-                )
-            )
-        )
+    fun getCapabilitiesForAccountAsLiveDataNull() {
+        val capabilitiesLiveData = MutableLiveData<OCCapabilityEntity>()
+        every { ocCapabilityDao.getCapabilitiesForAccountAsLiveData(any()) } returns capabilitiesLiveData
 
-        val capability = getValue(
-            ocLocalCapabilitiesDataSource.getCapabilitiesForAccountAsLiveData(
-                "user@server2"
-            )
-        )
-        assertEquals("user@server2", capability?.accountName)
-        assertEquals(2, capability?.versionMayor)
-        assertEquals(1, capability?.versionMinor)
-        assertEquals(0, capability?.versionMicro)
+        val capabilityEmitted =
+            getValue(ocLocalCapabilitiesDataSource.getCapabilitiesForAccountAsLiveData(OC_CAPABILITY.accountName!!))
+
+        assertNull(capabilityEmitted)
+    }
+
+    @Test
+    fun getCapabilitiesForAccount() {
+        every { ocCapabilityDao.getCapabilitiesForAccount(any()) } returns ocCapabilityMapper.toEntity(OC_CAPABILITY)!!
+
+        val capabilityEmitted = ocLocalCapabilitiesDataSource.getCapabilityForAccount(OC_CAPABILITY.accountName!!)
+
+        assertEquals(OC_CAPABILITY, capabilityEmitted)
+    }
+
+    @Test
+    fun getCapabilitiesForAccountNull() {
+        every { ocCapabilityDao.getCapabilitiesForAccountAsLiveData(any()) } returns MutableLiveData<OCCapabilityEntity>()
+
+        val capabilityEmitted =
+            getValue(ocLocalCapabilitiesDataSource.getCapabilitiesForAccountAsLiveData(OC_CAPABILITY.accountName!!))
+
+        assertNull(capabilityEmitted)
+    }
+
+    @Test
+    fun insertCapabilities() {
+        every { ocCapabilityDao.replace(any()) } returns Unit
+
+        ocLocalCapabilitiesDataSource.insert(listOf(OC_CAPABILITY))
+
+        verify(exactly = 1) { ocCapabilityDao.replace(listOf(ocCapabilityMapper.toEntity(OC_CAPABILITY)!!)) }
     }
 }
