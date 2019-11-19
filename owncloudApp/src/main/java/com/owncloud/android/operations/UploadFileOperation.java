@@ -486,8 +486,12 @@ public class UploadFileOperation extends SyncOperation {
         boolean delayCameraUploadsVideo = (
                 isCameraUploadsVideo() && PreferenceManager.cameraVideoUploadViaWiFiOnly(mContext)
         );
+        boolean delayManualUploads = (
+                !isCameraUploadsPicture() && !isCameraUploadsVideo() &&
+                        PreferenceManager.isManualUploadViaWiFiOnly(mContext)
+                );
         return (
-                (delayCameraUploadsPicture || delayCameraUploadsVideo) &&
+                (delayCameraUploadsPicture || delayCameraUploadsVideo || delayManualUploads) &&
                         !ConnectivityUtils.isAppConnectedViaWiFi(mContext)
         );
     }

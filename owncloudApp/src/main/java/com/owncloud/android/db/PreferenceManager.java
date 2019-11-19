@@ -50,6 +50,7 @@ public abstract class PreferenceManager {
 
     private static final String PREF__CAMERA_PICTURE_UPLOADS_ENABLED = "camera_picture_uploads";
     private static final String PREF__CAMERA_VIDEO_UPLOADS_ENABLED = "camera_video_uploads";
+    private static final String PREF__MANUAL_UPLOADS_WIFI_ONLY = "manual_uploads_on_wifi";
     private static final String PREF__CAMERA_PICTURE_UPLOADS_WIFI_ONLY = "camera_picture_uploads_on_wifi";
     private static final String PREF__CAMERA_VIDEO_UPLOADS_WIFI_ONLY = "camera_video_uploads_on_wifi";
     private static final String PREF__CAMERA_UPLOADS_ACCOUNT_NAME = "camera_uploads_account_name";  // NEW - not
@@ -58,6 +59,14 @@ public abstract class PreferenceManager {
     private static final String PREF__CAMERA_VIDEO_UPLOADS_PATH = "camera_video_uploads_path";
     private static final String PREF__CAMERA_UPLOADS_BEHAVIOUR = "camera_uploads_behaviour";
     private static final String PREF__CAMERA_UPLOADS_SOURCE = "camera_uploads_source_path";
+
+    public static boolean isManualUploadViaWiFiOnly(Context context){
+        return getDefaultSharedPreferences(context).getBoolean(PREF__MANUAL_UPLOADS_WIFI_ONLY, false);
+    }
+
+    public static void setManualUploadViaWifiOnly(Context context,boolean manualUploadViaWifiOnly){
+        saveBooleanPreference(PREF__MANUAL_UPLOADS_WIFI_ONLY,manualUploadViaWifiOnly,context);
+    }
 
     public static boolean cameraPictureUploadEnabled(Context context) {
         return getDefaultSharedPreferences(context).getBoolean(PREF__CAMERA_PICTURE_UPLOADS_ENABLED, false);
@@ -255,6 +264,7 @@ public abstract class PreferenceManager {
         public void setEnabledForPictures(boolean uploadPictures) {
             mEnabledForPictures = uploadPictures;
         }
+
 
         public boolean isEnabledForVideos() {
             return mEnabledForVideos;
