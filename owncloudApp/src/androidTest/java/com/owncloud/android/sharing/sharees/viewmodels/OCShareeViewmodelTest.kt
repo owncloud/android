@@ -17,16 +17,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.sharing.sharees.viewmodels
+package com.owncloud.android.presentation.sharing.sharees.viewmodels
 
 import android.accounts.Account
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.platform.app.InstrumentationRegistry
-import com.owncloud.android.data.DataResult
-import com.owncloud.android.domain.sharing.sharees.OCShareeRepository
+import com.owncloud.android.data.sharing.sharees.repository.OCShareeRepository
 import com.owncloud.android.lib.resources.shares.GetRemoteShareesOperation
-import com.owncloud.android.lib.resources.shares.ShareType
-import com.owncloud.android.presentation.viewmodels.sharing.OCShareeViewModel
 import com.owncloud.android.utils.AppTestUtil
 import io.mockk.every
 import io.mockk.mockkClass
@@ -44,7 +41,8 @@ class OCShareeViewmodelTest {
     val instantExecutorRule = InstantTaskExecutorRule()
 
     private var testAccount: Account = AppTestUtil.createAccount("admin@server", "test")
-    private var ocShareeRepository: OCShareeRepository = mockkClass(OCShareeRepository::class)
+    private var ocShareeRepository: OCShareeRepository = mockkClass(
+        OCShareeRepository::class)
 
     @Test
     fun loadSharees() {
