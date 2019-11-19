@@ -27,11 +27,10 @@ import com.owncloud.android.domain.UseCaseResult
 import com.owncloud.android.domain.capabilities.model.OCCapability
 import com.owncloud.android.domain.capabilities.usecases.GetStoredCapabilitiesUseCase
 import com.owncloud.android.domain.capabilities.usecases.RefreshCapabilitiesFromServerAsyncUseCase
+import com.owncloud.android.domain.utils.DomainTestUtil.DUMMY_CAPABILITY
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.viewmodels.capabilities.OCCapabilityViewModel
 import com.owncloud.android.utils.AppTestUtil
-import com.owncloud.android.utils.AppTestUtil.DUMMY_CAPABILITY
-import com.owncloud.android.utils.LiveDataTestUtil.getOrAwaitValues
 import com.owncloud.android.utils.TIMEOUT_TEST_LONG
 import io.mockk.coEvery
 import io.mockk.coVerify
