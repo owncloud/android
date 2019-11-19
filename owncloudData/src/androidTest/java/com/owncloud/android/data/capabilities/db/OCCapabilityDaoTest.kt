@@ -39,6 +39,8 @@ import org.junit.Test
 class OCCapabilityDaoTest {
     private lateinit var ocCapabilityDao: OCCapabilityDao
     private val ocCapabilityMapper = OCCapabilityMapper()
+    private val user1 = "user1@server"
+    private val user2 = "user2@server"
 
     @Rule
     @JvmField
@@ -55,14 +57,14 @@ class OCCapabilityDaoTest {
     @Test
     fun insertCapabilitiesListAndRead() {
         val entityList: List<OCCapabilityEntity> = listOf(
-            ocCapabilityMapper.toEntity(OC_CAPABILITY.copy(accountName = "user1@server"))!!,
-            ocCapabilityMapper.toEntity(OC_CAPABILITY.copy(accountName = "user2@server"))!!
+            ocCapabilityMapper.toEntity(OC_CAPABILITY.copy(accountName = user1))!!,
+            ocCapabilityMapper.toEntity(OC_CAPABILITY.copy(accountName = user2))!!
         )
 
         ocCapabilityDao.insert(entityList)
 
-        val capability = ocCapabilityDao.getCapabilitiesForAccount("user2@server")
-        val capabilityAsLiveData = getValue(ocCapabilityDao.getCapabilitiesForAccountAsLiveData("user2@server"))
+        val capability = ocCapabilityDao.getCapabilitiesForAccount(user2)
+        val capabilityAsLiveData = getValue(ocCapabilityDao.getCapabilitiesForAccountAsLiveData(user2))
 
         assertNotNull(capability)
         assertNotNull(capabilityAsLiveData)
@@ -72,14 +74,14 @@ class OCCapabilityDaoTest {
 
     @Test
     fun insertCapabilitiesAndRead() {
-        val entity1 = ocCapabilityMapper.toEntity(OC_CAPABILITY.copy(accountName = "user1@server"))!!
-        val entity2 = ocCapabilityMapper.toEntity(OC_CAPABILITY.copy(accountName = "user2@server"))!!
+        val entity1 = ocCapabilityMapper.toEntity(OC_CAPABILITY.copy(accountName = user1))!!
+        val entity2 = ocCapabilityMapper.toEntity(OC_CAPABILITY.copy(accountName = user2))!!
 
         ocCapabilityDao.insert(entity1)
         ocCapabilityDao.insert(entity2)
 
-        val capability = ocCapabilityDao.getCapabilitiesForAccount("user2@server")
-        val capabilityAsLiveData = getValue(ocCapabilityDao.getCapabilitiesForAccountAsLiveData("user2@server"))
+        val capability = ocCapabilityDao.getCapabilitiesForAccount(user2)
+        val capabilityAsLiveData = getValue(ocCapabilityDao.getCapabilitiesForAccountAsLiveData(user2))
 
         assertNotNull(capability)
         assertNotNull(capabilityAsLiveData)
@@ -89,9 +91,9 @@ class OCCapabilityDaoTest {
 
     @Test
     fun getNonExistingCapabilities() {
-        ocCapabilityDao.insert(ocCapabilityMapper.toEntity(OC_CAPABILITY.copy(accountName = "user@server"))!!)
+        ocCapabilityDao.insert(ocCapabilityMapper.toEntity(OC_CAPABILITY.copy(accountName = user1))!!)
 
-        val capability = getValue(ocCapabilityDao.getCapabilitiesForAccountAsLiveData("user@server2"))
+        val capability = getValue(ocCapabilityDao.getCapabilitiesForAccountAsLiveData(user2))
 
         assertNull(capability)
     }
@@ -112,20 +114,20 @@ class OCCapabilityDaoTest {
 
     @Test
     fun replaceCapabilityIfAlreadyExists_doesNotExist() {
-        val entity1 = ocCapabilityMapper.toEntity(OC_CAPABILITY.copy(accountName = "user1@server"))!!
-        val entity2 = ocCapabilityMapper.toEntity(OC_CAPABILITY.copy(accountName = "user2@server"))!!
+        val entity1 = ocCapabilityMapper.toEntity(OC_CAPABILITY.copy(accountName = user1))!!
+        val entity2 = ocCapabilityMapper.toEntity(OC_CAPABILITY.copy(accountName = user2))!!
 
         ocCapabilityDao.insert(entity1)
 
         ocCapabilityDao.replace(listOf(entity2))
 
-        val capability1 = getValue(ocCapabilityDao.getCapabilitiesForAccountAsLiveData("user1@server"))
+        val capability1 = getValue(ocCapabilityDao.getCapabilitiesForAccountAsLiveData(user1))
 
         assertNotNull(capability1)
         assertEquals(entity1, capability1)
 
         // capability2 didn't exist before, it should not replace the old one but got created
-        val capability2 = getValue(ocCapabilityDao.getCapabilitiesForAccountAsLiveData("user2@server"))
+        val capability2 = getValue(ocCapabilityDao.getCapabilitiesForAccountAsLiveData(user2))
 
         assertNotNull(capability2)
         assertEquals(entity2, capability2)
@@ -133,17 +135,17 @@ class OCCapabilityDaoTest {
 
     @Test
     fun deleteCapability() {
-        val entity = ocCapabilityMapper.toEntity(OC_CAPABILITY.copy(accountName = "user1@server"))!!
+        val entity = ocCapabilityMapper.toEntity(OC_CAPABILITY.copy(accountName = user1))!!
 
         ocCapabilityDao.insert(entity)
 
-        val capability1 = getValue(ocCapabilityDao.getCapabilitiesForAccountAsLiveData("user1@server"))
+        val capability1 = getValue(ocCapabilityDao.getCapabilitiesForAccountAsLiveData(user1))
 
         assertNotNull(capability1)
 
-        ocCapabilityDao.delete("user1@server")
+        ocCapabilityDao.delete(user1)
 
-        val capability2 = getValue(ocCapabilityDao.getCapabilitiesForAccountAsLiveData("user1@server"))
+        val capability2 = getValue(ocCapabilityDao.getCapabilitiesForAccountAsLiveData(user1))
 
         assertNull(capability2)
     }

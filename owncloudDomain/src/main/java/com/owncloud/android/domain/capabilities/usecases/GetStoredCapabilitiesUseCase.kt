@@ -26,11 +26,8 @@ import com.owncloud.android.domain.sharing.shares.usecases.BaseUseCase
 class GetStoredCapabilitiesUseCase(
     private val capabilityRepository: CapabilityRepository
 ) : BaseUseCase<OCCapability?, GetStoredCapabilitiesUseCase.Params>() {
-    override fun run(params: Params): OCCapability? {
-        return capabilityRepository.getStoredCapabilities(
-            params.accountName
-        )
-    }
+    override fun run(params: Params): OCCapability? =
+        capabilityRepository.getStoredCapabilities(params.accountName)
 
     data class Params(
         val accountName: String
