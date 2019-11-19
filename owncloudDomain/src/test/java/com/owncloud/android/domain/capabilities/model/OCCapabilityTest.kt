@@ -75,6 +75,7 @@ class OCCapabilityTest {
         assertEquals("1.0.0", item.versionEdition)
         assertEquals(0, item.corePollInterval)
         assertEquals(TRUE, item.filesSharingApiEnabled)
+        assertEquals(3, item.filesSharingSearchMinLength)
         assertEquals(TRUE, item.filesSharingPublicEnabled)
         assertEquals(FALSE, item.filesSharingPublicPasswordEnforced)
         assertEquals(FALSE, item.filesSharingPublicPasswordEnforcedReadOnly)
@@ -108,6 +109,7 @@ class OCCapabilityTest {
             versionEdition = "1.0.0",
             corePollInterval = 0,
             filesSharingApiEnabled = TRUE,
+            filesSharingSearchMinLength = 3,
             filesSharingPublicEnabled = TRUE,
             filesSharingPublicPasswordEnforced = FALSE,
             filesSharingPublicPasswordEnforcedReadOnly = FALSE,
@@ -177,6 +179,7 @@ class OCCapabilityTest {
             versionEdition = "1.0.0",
             corePollInterval = 0,
             filesSharingApiEnabled = TRUE,
+            filesSharingSearchMinLength = 3,
             filesSharingPublicEnabled = TRUE,
             filesSharingPublicPasswordEnforced = FALSE,
             filesSharingPublicPasswordEnforcedReadOnly = FALSE,
