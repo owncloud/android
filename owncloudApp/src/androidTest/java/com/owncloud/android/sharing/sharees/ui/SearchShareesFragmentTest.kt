@@ -19,7 +19,10 @@
 
 package com.owncloud.android.sharing.sharees.ui
 
-import android.accounts.Account
+import android.content.Context
+import androidx.lifecycle.MutableLiveData
+import androidx.test.core.app.ActivityScenario
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers
@@ -28,70 +31,71 @@ import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.rule.ActivityTestRule
 import com.owncloud.android.R
-import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
-import com.owncloud.android.data.sharing.shares.db.OCShareEntity
-import com.owncloud.android.datamodel.OCFile
-import com.owncloud.android.lib.resources.shares.ShareType
-import com.owncloud.android.lib.resources.status.OwnCloudVersion
+import com.owncloud.android.domain.sharing.shares.model.OCShare
+import com.owncloud.android.domain.sharing.shares.model.ShareType
+import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.ui.sharing.fragments.SearchShareesFragment
+import com.owncloud.android.presentation.viewmodels.sharing.OCShareViewModel
 import com.owncloud.android.sharing.shares.ui.TestShareFileActivity
-import com.owncloud.android.utils.AppTestUtil
+import com.owncloud.android.utils.AppTestUtil.DUMMY_SHARE
 import io.mockk.every
-import io.mockk.mockkClass
+import io.mockk.mockk
 import org.hamcrest.CoreMatchers
-import org.junit.Rule
+import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.koin.android.ext.koin.androidContext
+import org.koin.androidx.viewmodel.dsl.viewModel
+import org.koin.core.context.startKoin
+import org.koin.core.context.stopKoin
+import org.koin.dsl.module
 
 @RunWith(AndroidJUnit4::class)
 class SearchShareesFragmentTest {
-    @Rule
-    @JvmField
-    val activityRule = ActivityTestRule(
-        TestShareFileActivity::class.java,
-        true,
-        true
-    )
+    private val ocShareViewModel = mockk<OCShareViewModel>(relaxed = true)
+    private val sharesLiveData = MutableLiveData<UIResult<List<OCShare>>>()
 
-    private var userSharesList = arrayListOf(
-        AppTestUtil.createPrivateShare(
-            shareType = ShareType.USER.value,
-            path = "/Docs",
-            isFolder = true,
-            shareWith = "sheldon",
-            sharedWithDisplayName = "Sheldon"
-        ),
-        AppTestUtil.createPrivateShare(
-            shareType = ShareType.USER.value,
-            path = "/Docs",
-            isFolder = true,
-            shareWith = "penny",
-            sharedWithDisplayName = "Penny"
-        )
-    )
+    @Before
+    fun init() {
+        every { ocShareViewModel.shares } returns sharesLiveData
 
-    private var groupSharesList = arrayListOf(
-        AppTestUtil.createPrivateShare(
-            shareType = ShareType.GROUP.value,
-            path = "/Photos",
-            isFolder = false,
-            shareWith = "friends",
-            sharedWithDisplayName = "Friends"
-        )
-    )
+        stopKoin()
+
+        startKoin {
+            androidContext(ApplicationProvider.getApplicationContext<Context>())
+            modules(
+                module(override = true) {
+                    viewModel {
+                        ocShareViewModel
+                    }
+                }
+            )
+        }
+
+        ActivityScenario.launch(TestShareFileActivity::class.java).onActivity {
+            val searchShareesFragment = SearchShareesFragment()
+            it.startFragment(searchShareesFragment)
+        }
+    }
 
     @Test
     fun showSearchBar() {
-        loadSearchShareesFragment()
         onView(withId(R.id.search_mag_icon)).check(matches(isDisplayed()))
         onView(withId(R.id.search_plate)).check(matches(isDisplayed()))
     }
 
     @Test
     fun showUserShares() {
-        loadSearchShareesFragment(privateShares = userSharesList)
+        sharesLiveData.postValue(
+            UIResult.Success(
+                listOf(
+                    DUMMY_SHARE.copy(sharedWithDisplayName = "Sheldon"),
+                    DUMMY_SHARE.copy(sharedWithDisplayName = "Penny")
+                )
+            )
+        )
+
         onView(withText("Sheldon")).check(matches(isDisplayed()))
         onView(withText("Sheldon")).check(matches(hasSibling(withId(R.id.unshareButton))))
             .check(matches(isDisplayed()))
@@ -102,37 +106,20 @@ class SearchShareesFragmentTest {
 
     @Test
     fun showGroupShares() {
-        loadSearchShareesFragment(privateShares = groupSharesList)
+        sharesLiveData.postValue(
+            UIResult.Success(
+                listOf(
+                    DUMMY_SHARE.copy(
+                        shareType = ShareType.GROUP,
+                        sharedWithDisplayName = "Friends"
+                    )
+                )
+            )
+        )
+
         onView(withText("Friends (group)")).check(matches(isDisplayed()))
         onView(withText("Friends (group)")).check(matches(hasSibling(withId(R.id.icon))))
             .check(matches(isDisplayed()))
         onView(ViewMatchers.withTagValue(CoreMatchers.equalTo(R.drawable.ic_group))).check(matches(isDisplayed()))
-    }
-
-    private fun loadSearchShareesFragment(
-        capabilities: OCCapabilityEntity = AppTestUtil.createCapability(),
-        privateShares: ArrayList<OCShareEntity> = arrayListOf()
-    ) {
-        val account = mockkClass(Account::class)
-        val ownCloudVersion = mockkClass(OwnCloudVersion::class)
-        every { ownCloudVersion.isSearchUsersSupported } returns true
-
-        val searchShareesFragment =
-            SearchShareesFragment.newInstance(
-                getOCFileForTesting("image.jpg"),
-                account
-            )
-
-        activityRule.activity.capabilities = capabilities
-        activityRule.activity.privateShares = privateShares
-        activityRule.activity.setFragment(searchShareesFragment)
-    }
-
-    private fun getOCFileForTesting(name: String = "default") = OCFile("/Docs").apply {
-        availableOfflineStatus = OCFile.AvailableOfflineStatus.NOT_AVAILABLE_OFFLINE
-        fileName = name
-        fileId = 9456985479
-        remoteId = "1"
-        privateLink = "private link"
     }
 }

@@ -43,7 +43,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     testImplementation project(':owncloudTestUtil')
 
-    implementation 'androidx.appcompat:appcompat:1.0.2'
+    implementation "androidx.appcompat:appcompat:$appCompat"
 
     // Kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
@@ -55,8 +55,8 @@ dependencies {
 
     // Dependencies for instrumented tests
     androidTestImplementation "androidx.arch.core:core-testing:$archLifecycleVersion"
-    androidTestImplementation 'androidx.test:runner:1.2.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    androidTestImplementation "androidx.test:runner:$androidTestVersion"
+    androidTestImplementation "androidx.test.espresso:espresso-core:$espressoTestVersion"
     androidTestImplementation ("io.mockk:mockk-android:$mockkVersion") {
         exclude module: 'objenesis'
     }

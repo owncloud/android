@@ -27,7 +27,6 @@ package com.owncloud.android.presentation.ui.sharing
 import android.app.SearchManager
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.MenuItem
 import androidx.fragment.app.transaction
 import androidx.lifecycle.Observer

@@ -22,6 +22,8 @@ package com.owncloud.android.utils
 import android.accounts.Account
 import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
 import com.owncloud.android.data.sharing.shares.db.OCShareEntity
+import com.owncloud.android.domain.sharing.shares.model.OCShare
+import com.owncloud.android.domain.sharing.shares.model.ShareType
 import com.owncloud.android.lib.resources.shares.GetRemoteShareesOperation
 import org.json.JSONObject
 
@@ -29,6 +31,26 @@ object AppTestUtil {
     /**
      * Shares
      */
+    val DUMMY_SHARE = OCShare(
+        fileSource = 7,
+        itemSource = 7,
+        shareType = ShareType.USER, // Private share by default
+        shareWith = "",
+        path = "/Photos/image.jpg",
+        permissions = 1,
+        sharedDate = 1542628397,
+        expirationDate = 0,
+        token = "AnyToken",
+        sharedWithDisplayName = "",
+        sharedWithAdditionalInfo = "",
+        isFolder = false,
+        userId = -1,
+        remoteId = 1,
+        accountOwner = "admin@server",
+        name = "",
+        shareLink = ""
+    )
+
     private fun createShare(
         fileSource: Long = 7,
         itemSource: Long = 7,
@@ -141,6 +163,7 @@ object AppTestUtil {
         versionEdition: String = "1.0.0",
         corePollinterval: Int = 0,
         sharingApiEnabled: Int = 0,
+        sharingSearchMinLength: Int = 3,
         sharingPublicEnabled: Int = 1,
         sharingPublicPasswordEnforced: Int = 0,
         sharingPublicPasswordEnforcedReadOnly: Int = 0,
@@ -169,6 +192,7 @@ object AppTestUtil {
         versionEdition,
         corePollinterval,
         sharingApiEnabled,
+        sharingSearchMinLength,
         sharingPublicEnabled,
         sharingPublicPasswordEnforced,
         sharingPublicPasswordEnforcedReadOnly,
