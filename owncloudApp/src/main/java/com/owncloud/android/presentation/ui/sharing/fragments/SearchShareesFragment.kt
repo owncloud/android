@@ -175,10 +175,9 @@ class SearchShareesFragment : Fragment(),
         // Show data
         val usersList = view!!.findViewById<ListView>(R.id.searchUsersListView)
 
-        if (privateShares.size > 0) {
+        if (privateShares.isNotEmpty()) {
             usersList.visibility = View.VISIBLE
             usersList.adapter = userGroupsAdapter
-
         } else {
             usersList.visibility = View.GONE
         }
@@ -191,7 +190,6 @@ class SearchShareesFragment : Fragment(),
         } catch (e: ClassCastException) {
             throw ClassCastException(requireActivity().toString() + " must implement OnFragmentInteractionListener")
         }
-
     }
 
     override fun onStart() {
