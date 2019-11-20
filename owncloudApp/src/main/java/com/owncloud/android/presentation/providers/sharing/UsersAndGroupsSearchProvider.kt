@@ -180,10 +180,7 @@ class UsersAndGroupsSearchProvider : ContentProvider() {
                 suggestAuthority!! + DATA_REMOTE_SUFFIX
             ).build()
 
-            val manager = FileDataStorageManager(context, account, context.contentResolver)
-
-            val federatedShareAllowed = manager.getCapability(account!!.name)?.filesSharingFederationOutgoing
-                ?.isTrue
+            val federatedShareAllowed = capabilities?.filesSharingFederationOutgoing?.isTrue
 
             try {
                 while (namesIt.hasNext()) {
