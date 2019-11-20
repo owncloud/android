@@ -19,8 +19,10 @@
 
 package com.owncloud.android.sharing.shares.ui
 
-import android.accounts.Account
-import android.accounts.AccountManager
+import android.content.Context
+import androidx.lifecycle.MutableLiveData
+import androidx.test.core.app.ActivityScenario
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
@@ -31,86 +33,49 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import androidx.test.rule.ActivityTestRule
 import com.owncloud.android.R
-import com.owncloud.android.authentication.AccountAuthenticator
-import com.owncloud.android.datamodel.OCFile
-import com.owncloud.android.lib.common.accounts.AccountUtils
-import com.owncloud.android.lib.resources.status.OwnCloudVersion
-import com.owncloud.android.sharing.domain.OCShare
+import com.owncloud.android.domain.sharing.shares.model.OCShare
+import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.ui.sharing.fragments.EditPrivateShareFragment
-import com.owncloud.android.utils.AccountsManager
+import com.owncloud.android.presentation.viewmodels.sharing.OCShareViewModel
+import com.owncloud.android.utils.AppTestUtil.DUMMY_ACCOUNT
+import com.owncloud.android.utils.AppTestUtil.DUMMY_FILE
+import com.owncloud.android.utils.AppTestUtil.DUMMY_FOLDER
+import com.owncloud.android.utils.AppTestUtil.DUMMY_SHARE
 import com.owncloud.android.utils.Permissions
-import com.owncloud.android.utils.TestUtil
+import io.mockk.every
+import io.mockk.mockk
 import org.hamcrest.CoreMatchers.not
-import org.junit.AfterClass
-import org.junit.BeforeClass
-import org.junit.Rule
+import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.Mockito.`when`
-import org.mockito.Mockito.mock
+import org.koin.android.ext.koin.androidContext
+import org.koin.androidx.viewmodel.dsl.viewModel
+import org.koin.core.context.startKoin
+import org.koin.core.context.stopKoin
+import org.koin.dsl.module
 
 @RunWith(AndroidJUnit4::class)
 class EditPrivateShareFragmentTest {
-    @Rule
-    @JvmField
-    val activityRule = ActivityTestRule(
-        TestShareFileActivity::class.java,
-        true,
-        true
-    )
-
+    private val targetContext = InstrumentationRegistry.getInstrumentation().targetContext
     private val defaultSharedWithDisplayName = "user"
+    private val ocShareViewModel = mockk<OCShareViewModel>(relaxed = true)
+    private val privateShareAsLiveData = MutableLiveData<UIResult<OCShare>>()
 
-    companion object {
-        private val targetContext = InstrumentationRegistry.getInstrumentation().targetContext
-        private val account = Account("admin", "owncloud")
+    @Before
+    fun setUp() {
+        every { ocShareViewModel.privateShare } returns privateShareAsLiveData
 
-        @BeforeClass
-        @JvmStatic
-        fun init() {
-            addAccount()
-        }
+        stopKoin()
 
-        @AfterClass
-        @JvmStatic
-        fun cleanUp() {
-            AccountsManager.deleteAllAccounts(targetContext)
-        }
-
-        private fun addAccount() {
-            // obtaining an AccountManager instance
-            val accountManager = AccountManager.get(targetContext)
-
-            accountManager.addAccountExplicitly(account, "1234", null)
-
-            // include account version, user, server version and token with the new account
-            accountManager.setUserData(
-                account,
-                AccountUtils.Constants.KEY_OC_VERSION,
-                OwnCloudVersion("10.2").toString()
-            )
-            accountManager.setUserData(
-                account,
-                AccountUtils.Constants.KEY_OC_BASE_URL,
-                "serverUrl:port"
-            )
-            accountManager.setUserData(
-                account,
-                AccountUtils.Constants.KEY_DISPLAY_NAME,
-                "admin"
-            )
-            accountManager.setUserData(
-                account,
-                AccountUtils.Constants.KEY_OC_ACCOUNT_VERSION,
-                "1"
-            )
-
-            accountManager.setAuthToken(
-                account,
-                AccountAuthenticator.KEY_AUTH_TOKEN_TYPE,
-                "AUTH_TOKEN"
+        startKoin {
+            androidContext(ApplicationProvider.getApplicationContext<Context>())
+            modules(
+                module(override = true) {
+                    viewModel {
+                        ocShareViewModel
+                    }
+                }
             )
         }
     }
@@ -270,24 +235,33 @@ class EditPrivateShareFragmentTest {
         isFolder: Boolean = false,
         permissions: Int = Permissions.READ_PERMISSIONS.value
     ) {
-        val shareToEdit = mock(OCShare::class.java)
-        `when`(shareToEdit.sharedWithDisplayName).thenReturn(defaultSharedWithDisplayName)
-        `when`(shareToEdit.permissions).thenReturn(permissions)
+        val shareToEdit = DUMMY_SHARE.copy(
+            sharedWithDisplayName = defaultSharedWithDisplayName,
+            permissions = permissions
+        )
 
-        val sharedFile = mock(OCFile::class.java)
-        `when`(sharedFile.isFolder).thenReturn(isFolder)
+        val sharedFile = if (isFolder) DUMMY_FOLDER else DUMMY_FILE
 
-        val editPrivateShareFragment = EditPrivateShareFragment.newInstance(shareToEdit, sharedFile, account)
+        val editPrivateShareFragment = EditPrivateShareFragment.newInstance(
+            shareToEdit,
+            sharedFile,
+            DUMMY_ACCOUNT
+        )
 
-        activityRule.activity.privateShares = arrayListOf(
-            TestUtil.createPrivateShare(
-                shareWith = "user",
-                sharedWithDisplayName = "User",
-                path = "/Videos",
-                isFolder = isFolder,
-                permissions = permissions
+        ActivityScenario.launch(TestShareFileActivity::class.java).onActivity {
+            it.startFragment(editPrivateShareFragment)
+        }
+
+        privateShareAsLiveData.postValue(
+            UIResult.Success(
+                DUMMY_SHARE.copy(
+                    shareWith = "user",
+                    sharedWithDisplayName = "User",
+                    path = "/Videos",
+                    isFolder = isFolder,
+                    permissions = permissions
+                )
             )
         )
-        activityRule.activity.setFragment(editPrivateShareFragment)
     }
 }
