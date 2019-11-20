@@ -26,7 +26,6 @@ import android.content.Context
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.text.InputType
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -44,6 +43,7 @@ import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.domain.capabilities.model.CapabilityBooleanType
 import com.owncloud.android.domain.capabilities.model.OCCapability
 import com.owncloud.android.domain.sharing.shares.model.OCShare
+import com.owncloud.android.domain.utils.Event.EventObserver
 import com.owncloud.android.extensions.parseError
 import com.owncloud.android.lib.common.utils.Log_OC
 import com.owncloud.android.lib.resources.shares.RemoteShare
@@ -157,9 +157,7 @@ class PublicShareDialogFragment : DialogFragment() {
             publicShare = arguments!!.getParcelable(ARG_SHARE)
         }
 
-        if (file == null && publicShare == null) {
-            throw IllegalStateException("Both ARG_FILE and ARG_SHARE cannot be NULL")
-        }
+        check(!(file == null && publicShare == null)) { "Both ARG_FILE and ARG_SHARE cannot be NULL" }
 
         setStyle(STYLE_NO_TITLE, 0)
     }
@@ -464,7 +462,7 @@ class PublicShareDialogFragment : DialogFragment() {
     private fun observePublicShareCreation() {
         ocShareViewModel.publicShareCreationStatus.observe(
             this,
-            Observer { uiResult ->
+            EventObserver { uiResult ->
                 when (uiResult) {
                     is UIResult.Success -> {
                         dismiss()
@@ -476,11 +474,6 @@ class PublicShareDialogFragment : DialogFragment() {
                     is UIResult.Loading -> {
                         listener?.showLoading()
                     }
-                    else -> {
-                        Log.d(
-                            TAG, "Unknown status when creating public share"
-                        )
-                    }
                 }
             }
         )
@@ -489,7 +482,7 @@ class PublicShareDialogFragment : DialogFragment() {
     private fun observePublicShareEdition() {
         ocShareViewModel.publicShareEditionStatus.observe(
             this,
-            Observer { uiResult ->
+            EventObserver { uiResult ->
                 when (uiResult) {
                     is UIResult.Success -> {
                         dismiss()
@@ -500,11 +493,6 @@ class PublicShareDialogFragment : DialogFragment() {
                     }
                     is UIResult.Loading -> {
                         listener?.showLoading()
-                    }
-                    else -> {
-                        Log.d(
-                            TAG, "Unknown status when editing public share"
-                        )
                     }
                 }
             }
@@ -638,7 +626,7 @@ class PublicShareDialogFragment : DialogFragment() {
         }
     }
 
-    fun updateCapabilities(capabilities: OCCapability?) {
+    private fun updateCapabilities(capabilities: OCCapability?) {
         this.capabilities = capabilities
         updateInputFormAccordingToServerCapabilities()
     }
@@ -722,7 +710,7 @@ class PublicShareDialogFragment : DialogFragment() {
         }
 
         // Set password label depending on the checked permission option
-        shareViaLinkEditPermissionGroup?.setOnCheckedChangeListener { group, checkedId ->
+        shareViaLinkEditPermissionGroup?.setOnCheckedChangeListener { _, checkedId ->
             public_link_error_message?.isGone = true
 
             if (checkedId == shareViaLinkEditPermissionReadOnly.id) {
@@ -776,7 +764,7 @@ class PublicShareDialogFragment : DialogFragment() {
     /**
      * Show error when creating or updating the public share, if any
      */
-    fun showError(genericErrorMessage: String, throwable: Throwable?) {
+    private fun showError(genericErrorMessage: String, throwable: Throwable?) {
         public_link_error_message?.text = throwable?.parseError(genericErrorMessage, resources)
         public_link_error_message?.visibility = View.VISIBLE
     }

@@ -20,7 +20,6 @@
 
 package com.owncloud.android.sharing.shares.ui
 
-import android.accounts.Account
 import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.test.core.app.ActivityScenario
@@ -33,12 +32,12 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.owncloud.android.R
 import com.owncloud.android.domain.capabilities.model.OCCapability
 import com.owncloud.android.domain.sharing.shares.model.OCShare
+import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.lib.resources.status.OwnCloudVersion
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.ui.sharing.fragments.ShareFileFragment
 import com.owncloud.android.presentation.viewmodels.capabilities.OCCapabilityViewModel
 import com.owncloud.android.presentation.viewmodels.sharing.OCShareViewModel
-import com.owncloud.android.utils.AppTestUtil
 import com.owncloud.android.utils.AppTestUtil.DUMMY_ACCOUNT
 import com.owncloud.android.utils.AppTestUtil.DUMMY_CAPABILITY
 import com.owncloud.android.utils.AppTestUtil.DUMMY_FOLDER
@@ -61,7 +60,7 @@ class ShareFolderFragmentTest {
     private val ocCapabilityViewModel = mockk<OCCapabilityViewModel>(relaxed = true)
     private val capabilitiesLiveData = MutableLiveData<UIResult<OCCapability>>()
     private val ocShareViewModel = mockk<OCShareViewModel>(relaxed = true)
-    private val sharesLiveData = MutableLiveData<UIResult<List<OCShare>>>()
+    private val sharesLiveData = MutableLiveData<Event<UIResult<List<OCShare>>>>()
 
     @Before
     fun setUp() {
@@ -97,17 +96,9 @@ class ShareFolderFragmentTest {
             it.startFragment(shareFileFragment)
         }
 
-        capabilitiesLiveData.postValue(
-            UIResult.Success(
-                DUMMY_CAPABILITY
-            )
-        )
+        capabilitiesLiveData.postValue(UIResult.Success(DUMMY_CAPABILITY))
 
-        sharesLiveData.postValue(
-            UIResult.Success(
-                listOf(DUMMY_SHARE)
-            )
-        )
+        sharesLiveData.postValue(Event(UIResult.Success(listOf(DUMMY_SHARE))))
     }
 
     @Test

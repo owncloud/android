@@ -34,6 +34,7 @@ import com.owncloud.android.domain.sharing.shares.usecases.EditPublicShareAsyncU
 import com.owncloud.android.domain.sharing.shares.usecases.GetShareAsLiveDataUseCase
 import com.owncloud.android.domain.sharing.shares.usecases.GetSharesAsLiveDataUseCase
 import com.owncloud.android.domain.sharing.shares.usecases.RefreshSharesFromServerAsyncUseCase
+import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.presentation.UIResult
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -57,19 +58,16 @@ class OCShareViewModel(
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ViewModel() {
 
-    private val _shares = MediatorLiveData<UIResult<List<OCShare>>>()
-    val shares: LiveData<UIResult<List<OCShare>>> = _shares
+    private val _shares = MediatorLiveData<Event<UIResult<List<OCShare>>>>()
+    val shares: LiveData<Event<UIResult<List<OCShare>>>> = _shares
 
     private var sharesLiveData: LiveData<List<OCShare>> = getSharesAsLiveDataUseCase.execute(
-        GetSharesAsLiveDataUseCase.Params(
-            filePath = filePath,
-            accountName = accountName
-        )
+        GetSharesAsLiveDataUseCase.Params(filePath = filePath, accountName = accountName)
     )
 
     init {
         _shares.addSource(sharesLiveData) { shares ->
-            _shares.postValue(UIResult.Success(shares))
+            _shares.postValue(Event(UIResult.Success(shares)))
         }
 
         refreshSharesFromNetwork()
@@ -77,9 +75,7 @@ class OCShareViewModel(
 
     fun refreshSharesFromNetwork() {
         viewModelScope.launch {
-            _shares.postValue(
-                UIResult.Loading(sharesLiveData.value)
-            )
+            _shares.postValue(Event(UIResult.Loading(sharesLiveData.value)))
 
             val useCaseResult = withContext(ioDispatcher) {
                 refreshSharesFromServerAsyncUseCase.execute(
@@ -92,22 +88,21 @@ class OCShareViewModel(
 
             if (!useCaseResult.isSuccess) {
                 _shares.postValue(
-                    UIResult.Error(useCaseResult.getThrowableOrNull(), sharesLiveData?.value)
-
+                    Event(UIResult.Error(useCaseResult.getThrowableOrNull(), sharesLiveData.value))
                 )
             }
         }
     }
 
-    private val _shareDeletionStatus = MutableLiveData<UIResult<Unit>>()
-    val shareDeletionStatus: LiveData<UIResult<Unit>> = _shareDeletionStatus
+    private val _shareDeletionStatus = MutableLiveData<Event<UIResult<Unit>>>()
+    val shareDeletionStatus: LiveData<Event<UIResult<Unit>>> = _shareDeletionStatus
 
     fun deleteShare(
         remoteId: Long
     ) {
         viewModelScope.launch {
             _shareDeletionStatus.postValue(
-                UIResult.Loading()
+                Event(UIResult.Loading())
             )
 
             val useCaseResult = withContext(ioDispatcher) {
@@ -120,10 +115,10 @@ class OCShareViewModel(
 
             if (!useCaseResult.isSuccess) {
                 _shareDeletionStatus.postValue(
-                    UIResult.Error(useCaseResult.getThrowableOrNull())
+                    Event(UIResult.Error(useCaseResult.getThrowableOrNull()))
                 )
             } else {
-                _shareDeletionStatus.postValue(UIResult.Success())
+                _shareDeletionStatus.postValue(Event(UIResult.Success()))
             }
         }
     }
@@ -132,8 +127,8 @@ class OCShareViewModel(
      ******************************************* PRIVATE SHARES *******************************************
      ******************************************************************************************************/
 
-    private val _privateShareCreationStatus = MutableLiveData<UIResult<Unit>>()
-    val privateShareCreationStatus: LiveData<UIResult<Unit>> = _privateShareCreationStatus
+    private val _privateShareCreationStatus = MutableLiveData<Event<UIResult<Unit>>>()
+    val privateShareCreationStatus: LiveData<Event<UIResult<Unit>>> = _privateShareCreationStatus
 
     fun insertPrivateShare(
         filePath: String,
@@ -144,7 +139,7 @@ class OCShareViewModel(
     ) {
         viewModelScope.launch {
             _privateShareCreationStatus.postValue(
-                UIResult.Loading()
+                Event(UIResult.Loading())
             )
 
             val useCaseResult = withContext(ioDispatcher) {
@@ -161,14 +156,14 @@ class OCShareViewModel(
 
             if (!useCaseResult.isSuccess) {
                 _privateShareCreationStatus.postValue(
-                    UIResult.Error(useCaseResult.getThrowableOrNull())
+                    Event(UIResult.Error(useCaseResult.getThrowableOrNull()))
                 )
             }
         }
     }
 
-    private val _privateShare = MediatorLiveData<UIResult<OCShare>>()
-    val privateShare: LiveData<UIResult<OCShare>> = _privateShare
+    private val _privateShare = MediatorLiveData<Event<UIResult<OCShare>>>()
+    val privateShare: LiveData<Event<UIResult<OCShare>>> = _privateShare
 
     private var privateShareLiveData: LiveData<OCShare>? = null
 
@@ -182,13 +177,13 @@ class OCShareViewModel(
 
         privateShareLiveData?.let {
             _privateShare.addSource(it) { privateShare ->
-                _privateShare.postValue(UIResult.Success(privateShare))
+                _privateShare.postValue(Event(UIResult.Success(privateShare)))
             }
         }
     }
 
-    private val _privateShareEditionStatus = MutableLiveData<UIResult<Unit>>()
-    val privateShareEditionStatus: LiveData<UIResult<Unit>> = _privateShareEditionStatus
+    private val _privateShareEditionStatus = MutableLiveData<Event<UIResult<Unit>>>()
+    val privateShareEditionStatus: LiveData<Event<UIResult<Unit>>> = _privateShareEditionStatus
 
     fun updatePrivateShare(
         remoteId: Long,
@@ -197,7 +192,7 @@ class OCShareViewModel(
     ) {
         viewModelScope.launch {
             _privateShareEditionStatus.postValue(
-                UIResult.Loading()
+                Event(UIResult.Loading())
             )
 
             val useCaseResult = withContext(ioDispatcher) {
@@ -212,10 +207,10 @@ class OCShareViewModel(
 
             if (!useCaseResult.isSuccess) {
                 _privateShareEditionStatus.postValue(
-                    UIResult.Error(useCaseResult.getThrowableOrNull())
+                    Event(UIResult.Error(useCaseResult.getThrowableOrNull()))
                 )
             } else {
-                _privateShareEditionStatus.postValue(UIResult.Success())
+                _privateShareEditionStatus.postValue(Event(UIResult.Success()))
             }
         }
     }
@@ -224,8 +219,8 @@ class OCShareViewModel(
      ******************************************* PUBLIC SHARES ********************************************
      ******************************************************************************************************/
 
-    private val _publicShareCreationStatus = MutableLiveData<UIResult<Unit>>()
-    val publicShareCreationStatus: LiveData<UIResult<Unit>> = _publicShareCreationStatus
+    private val _publicShareCreationStatus = MutableLiveData<Event<UIResult<Unit>>>()
+    val publicShareCreationStatus: LiveData<Event<UIResult<Unit>>> = _publicShareCreationStatus
 
     fun insertPublicShare(
         filePath: String,
@@ -238,7 +233,7 @@ class OCShareViewModel(
     ) {
         viewModelScope.launch {
             _publicShareCreationStatus.postValue(
-                UIResult.Loading()
+                Event(UIResult.Loading())
             )
 
             val useCaseResult = withContext(ioDispatcher) {
@@ -257,16 +252,16 @@ class OCShareViewModel(
 
             if (!useCaseResult.isSuccess) {
                 _publicShareCreationStatus.postValue(
-                    UIResult.Error(useCaseResult.getThrowableOrNull())
+                    Event(UIResult.Error(useCaseResult.getThrowableOrNull()))
                 )
             } else {
-                _publicShareCreationStatus.postValue(UIResult.Success())
+                _publicShareCreationStatus.postValue(Event(UIResult.Success()))
             }
         }
     }
 
-    private val _publicShareEditionStatus = MutableLiveData<UIResult<Unit>>()
-    val publicShareEditionStatus: LiveData<UIResult<Unit>> = _publicShareEditionStatus
+    private val _publicShareEditionStatus = MutableLiveData<Event<UIResult<Unit>>>()
+    val publicShareEditionStatus: LiveData<Event<UIResult<Unit>>> = _publicShareEditionStatus
 
     fun updatePublicShare(
         remoteId: Long,
@@ -279,7 +274,7 @@ class OCShareViewModel(
     ) {
         viewModelScope.launch {
             _publicShareEditionStatus.postValue(
-                UIResult.Loading()
+                Event(UIResult.Loading())
             )
 
             val useCaseResult = withContext(ioDispatcher) {
@@ -298,10 +293,10 @@ class OCShareViewModel(
 
             if (!useCaseResult.isSuccess) {
                 _publicShareEditionStatus.postValue(
-                    UIResult.Error(useCaseResult.getThrowableOrNull())
+                    Event(UIResult.Error(useCaseResult.getThrowableOrNull()))
                 )
             } else {
-                _publicShareEditionStatus.postValue(UIResult.Success())
+                _publicShareEditionStatus.postValue(Event(UIResult.Success()))
             }
         }
     }

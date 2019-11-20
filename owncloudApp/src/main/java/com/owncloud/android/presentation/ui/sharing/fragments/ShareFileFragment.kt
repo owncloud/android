@@ -44,6 +44,7 @@ import com.owncloud.android.domain.capabilities.model.CapabilityBooleanType
 import com.owncloud.android.domain.capabilities.model.OCCapability
 import com.owncloud.android.domain.sharing.shares.model.OCShare
 import com.owncloud.android.domain.sharing.shares.model.ShareType
+import com.owncloud.android.domain.utils.Event.EventObserver
 import com.owncloud.android.extensions.showError
 import com.owncloud.android.lib.common.utils.Log_OC
 import com.owncloud.android.lib.resources.status.OwnCloudVersion
@@ -58,7 +59,6 @@ import kotlinx.android.synthetic.main.share_file_layout.*
 import kotlinx.android.synthetic.main.share_file_layout.view.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
-import java.util.Collections
 import java.util.Locale
 
 /**
@@ -155,7 +155,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
             if (!isDefaultNameSet) {
                 return defaultName
             }
-            Collections.sort(usedNumbers)
+            usedNumbers.sort()
             var chosenNumber = -1
             if (usedNumbers.size == 0 || usedNumbers[0] != 2) {
                 chosenNumber = 2
@@ -373,7 +373,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
     private fun observeShares() {
         ocShareViewModel.shares.observe(
             this,
-            Observer { uiResult ->
+            EventObserver { uiResult ->
                 val shares = uiResult.getStoredData()
                 when (uiResult) {
                     is UIResult.Success -> {
@@ -394,12 +394,6 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
                         shares?.let {
                             updateShares(it)
                         }
-                    }
-                    else -> {
-                        Log.d(
-                            TAG, "Unknown status when loading public shares for file ${file?.fileName} in account" +
-                                    "${account?.name}"
-                        )
                     }
                 }
             }
@@ -426,7 +420,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
      ************************************************ CAPABILITIES ************************************************
      **************************************************************************************************************/
 
-    fun updateCapabilities(capabilities: OCCapability?) {
+    private fun updateCapabilities(capabilities: OCCapability?) {
         this.capabilities = capabilities
 
         updatePublicLinkButton()
@@ -464,7 +458,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
         )
 
         // Show data
-        if (privateShares!!.size > 0) {
+        if (!privateShares.isNullOrEmpty()) {
             shareNoUsers?.visibility = View.GONE
             shareUsersList?.visibility = View.VISIBLE
             shareUsersList?.adapter = userGroupsAdapter
@@ -505,12 +499,12 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
      */
     private fun updatePublicLinkButton() {
         // Since capabilities and publicLinks are loaded asynchronously, let's check whether they both exist
-        if (capabilities == null || publicLinks == null) {
+        if (capabilities == null) {
             return
         }
 
         if (!enableMultiplePublicSharing()) {
-            if (publicLinks?.isNullOrEmpty() == true) {
+            if (publicLinks.isNullOrEmpty()) {
                 addPublicLinkButton.visibility = View.VISIBLE
                 return
             }
@@ -609,11 +603,11 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
     companion object {
 
         private val TAG = ShareFileFragment::class.java.simpleName
-        private val DEFAULT_NAME_SUFFIX = " (%1\$d)"
+        private const val DEFAULT_NAME_SUFFIX = " (%1\$d)"
 
-        private val QUOTE_START = "\\Q"
-        private val QUOTE_END = "\\E"
-        private val DEFAULT_NAME_REGEX_SUFFIX = " \\((\\d+)\\)\\z"
+        private const val QUOTE_START = "\\Q"
+        private const val QUOTE_END = "\\E"
+        private const val DEFAULT_NAME_REGEX_SUFFIX = " \\((\\d+)\\)\\z"
         // matches suffix (end of the string with \z) in the form "(X)", where X is an integer of any length;
         // also captures the number to reference it later during the match;
         // reference in https://developer.android.com/reference/java/util/regex/Pattern.html#sum
@@ -621,9 +615,9 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
         /**
          * The fragment initialization parameters
          */
-        private val ARG_FILE = "FILE"
-        private val ARG_ACCOUNT = "ACCOUNT"
-        private val ARG_SERVER_VERSION = "SERVER_VERSION"
+        private const val ARG_FILE = "FILE"
+        private const val ARG_ACCOUNT = "ACCOUNT"
+        private const val ARG_SERVER_VERSION = "SERVER_VERSION"
 
         /**
          * Public factory method to create new ShareFileFragment instances.
