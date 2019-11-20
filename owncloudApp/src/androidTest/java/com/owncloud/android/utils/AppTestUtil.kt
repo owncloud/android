@@ -115,7 +115,7 @@ object AppTestUtil {
     /**
      * Accounts
      */
-    val DUMMY_ACCOUNT = Account("test", "ownCloudTest")
+    val DUMMY_ACCOUNT = Account("test", "owncloud")
 
     /**
      * Files
