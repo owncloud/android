@@ -40,6 +40,7 @@ import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.owncloud.android.R
 import com.owncloud.android.domain.capabilities.model.CapabilityBooleanType
 import com.owncloud.android.domain.capabilities.model.OCCapability
+import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.ui.sharing.fragments.PublicShareDialogFragment
 import com.owncloud.android.presentation.viewmodels.capabilities.OCCapabilityViewModel
@@ -66,7 +67,7 @@ class PublicShareCreationDialogFragmentTest {
     private val ocCapabilityViewModel = mockk<OCCapabilityViewModel>(relaxed = true)
     private val capabilitiesLiveData = MutableLiveData<UIResult<OCCapability>>()
     private val ocShareViewModel = mockk<OCShareViewModel>(relaxed = true)
-    private val publicShareCreationStatus = MutableLiveData<UIResult<Unit>>()
+    private val publicShareCreationStatus = MutableLiveData<Event<UIResult<Unit>>>()
 
     @Before
     fun setUp() {
@@ -201,7 +202,7 @@ class PublicShareCreationDialogFragmentTest {
     fun enableExpirationSwitch() {
         loadPublicShareDialogFragment()
         onView(withId(R.id.shareViaLinkExpirationSwitch)).perform(click())
-        onView(withId(android.R.id.button1)).perform(click());
+        onView(withId(android.R.id.button1)).perform(click())
         onView(withId(R.id.shareViaLinkExpirationValue))
             .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))
         //TODO: check the date form the picker
@@ -223,8 +224,10 @@ class PublicShareCreationDialogFragmentTest {
         onView(withId(R.id.saveButton)).perform(click())
 
         publicShareCreationStatus.postValue(
-            UIResult.Error(
-                error = Throwable("It was not possible to share this file or folder")
+            Event(
+                UIResult.Error(
+                    error = Throwable("It was not possible to share this file or folder")
+                )
             )
         )
 
@@ -438,8 +441,10 @@ class PublicShareCreationDialogFragmentTest {
         onView(withId(R.id.saveButton)).perform(scrollTo(), click())
 
         publicShareCreationStatus.postValue(
-            UIResult.Error(
-                error = Throwable(commonError)
+            Event(
+                UIResult.Error(
+                    error = Throwable(commonError)
+                )
             )
         )
 

@@ -35,6 +35,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.owncloud.android.R
 import com.owncloud.android.domain.sharing.shares.model.OCShare
+import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.ui.sharing.fragments.EditPrivateShareFragment
 import com.owncloud.android.presentation.viewmodels.sharing.OCShareViewModel
@@ -60,7 +61,7 @@ class EditPrivateShareFragmentTest {
     private val targetContext = InstrumentationRegistry.getInstrumentation().targetContext
     private val defaultSharedWithDisplayName = "user"
     private val ocShareViewModel = mockk<OCShareViewModel>(relaxed = true)
-    private val privateShareAsLiveData = MutableLiveData<UIResult<OCShare>>()
+    private val privateShareAsLiveData = MutableLiveData<Event<UIResult<OCShare>>>()
 
     @Before
     fun setUp() {
@@ -253,13 +254,15 @@ class EditPrivateShareFragmentTest {
         }
 
         privateShareAsLiveData.postValue(
-            UIResult.Success(
-                DUMMY_SHARE.copy(
-                    shareWith = "user",
-                    sharedWithDisplayName = "User",
-                    path = "/Videos",
-                    isFolder = isFolder,
-                    permissions = permissions
+            Event(
+                UIResult.Success(
+                    DUMMY_SHARE.copy(
+                        shareWith = "user",
+                        sharedWithDisplayName = "User",
+                        path = "/Videos",
+                        isFolder = isFolder,
+                        permissions = permissions
+                    )
                 )
             )
         )

@@ -33,9 +33,7 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.owncloud.android.R
-import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.domain.capabilities.model.OCCapability
-import com.owncloud.android.domain.sharing.shares.model.OCShare
 import com.owncloud.android.domain.sharing.shares.model.ShareType
 import com.owncloud.android.lib.resources.shares.RemoteShare
 import com.owncloud.android.presentation.UIResult
@@ -47,7 +45,6 @@ import com.owncloud.android.utils.AppTestUtil.DUMMY_FILE
 import com.owncloud.android.utils.AppTestUtil.DUMMY_SHARE
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.mockkClass
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -67,7 +64,6 @@ class PublicShareEditionDialogFragmentTest {
     private val capabilitiesLiveData = MutableLiveData<UIResult<OCCapability>>()
     private val ocShareViewModel = mockk<OCShareViewModel>(relaxed = true)
 
-    private val file = mockkClass(OCFile::class)
     private val expirationDate = 1556575200000 // GMT: Monday, April 29, 2019 10:00:00 PM
 
     @Before
@@ -121,7 +117,7 @@ class PublicShareEditionDialogFragmentTest {
 
     @Test
     fun checkUploadOnly() {
-        onView(withId(R.id.shareViaLinkEditPermissionUploadFiles)).check(matches(isChecked()));
+        onView(withId(R.id.shareViaLinkEditPermissionUploadFiles)).check(matches(isChecked()))
     }
 
     @Test
@@ -140,10 +136,10 @@ class PublicShareEditionDialogFragmentTest {
         val calendar = GregorianCalendar()
         calendar.timeInMillis = expirationDate
 
-        val formatter: DateFormat = SimpleDateFormat("MMM dd, yyyy");
-        formatter.timeZone = TimeZone.getDefault();
+        val formatter: DateFormat = SimpleDateFormat("MMM dd, yyyy")
+        formatter.timeZone = TimeZone.getDefault()
 
-        val time = formatter.format(calendar.time);
+        val time = formatter.format(calendar.time)
 
         onView(withId(R.id.shareViaLinkExpirationLabel)).check(
             matches(withText(R.string.share_via_link_expiration_date_label))

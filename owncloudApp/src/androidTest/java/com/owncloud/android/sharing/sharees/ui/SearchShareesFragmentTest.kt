@@ -33,6 +33,7 @@ import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.owncloud.android.R
 import com.owncloud.android.domain.sharing.shares.model.OCShare
 import com.owncloud.android.domain.sharing.shares.model.ShareType
+import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.ui.sharing.fragments.SearchShareesFragment
 import com.owncloud.android.presentation.viewmodels.sharing.OCShareViewModel
@@ -43,7 +44,6 @@ import io.mockk.mockk
 import org.hamcrest.CoreMatchers
 import org.junit.Before
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.context.startKoin
@@ -52,7 +52,7 @@ import org.koin.dsl.module
 
 class SearchShareesFragmentTest {
     private val ocShareViewModel = mockk<OCShareViewModel>(relaxed = true)
-    private val sharesLiveData = MutableLiveData<UIResult<List<OCShare>>>()
+    private val sharesLiveData = MutableLiveData<Event<UIResult<List<OCShare>>>>()
 
     @Before
     fun init() {
@@ -86,10 +86,12 @@ class SearchShareesFragmentTest {
     @Test
     fun showUserShares() {
         sharesLiveData.postValue(
-            UIResult.Success(
-                listOf(
-                    DUMMY_SHARE.copy(sharedWithDisplayName = "Sheldon"),
-                    DUMMY_SHARE.copy(sharedWithDisplayName = "Penny")
+            Event(
+                UIResult.Success(
+                    listOf(
+                        DUMMY_SHARE.copy(sharedWithDisplayName = "Sheldon"),
+                        DUMMY_SHARE.copy(sharedWithDisplayName = "Penny")
+                    )
                 )
             )
         )
@@ -105,11 +107,13 @@ class SearchShareesFragmentTest {
     @Test
     fun showGroupShares() {
         sharesLiveData.postValue(
-            UIResult.Success(
-                listOf(
-                    DUMMY_SHARE.copy(
-                        shareType = ShareType.GROUP,
-                        sharedWithDisplayName = "Friends"
+            Event(
+                UIResult.Success(
+                    listOf(
+                        DUMMY_SHARE.copy(
+                            shareType = ShareType.GROUP,
+                            sharedWithDisplayName = "Friends"
+                        )
                     )
                 )
             )

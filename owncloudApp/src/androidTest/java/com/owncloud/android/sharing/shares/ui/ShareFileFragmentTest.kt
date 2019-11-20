@@ -37,6 +37,7 @@ import com.owncloud.android.domain.capabilities.model.CapabilityBooleanType
 import com.owncloud.android.domain.capabilities.model.OCCapability
 import com.owncloud.android.domain.sharing.shares.model.OCShare
 import com.owncloud.android.domain.sharing.shares.model.ShareType
+import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.lib.resources.status.OwnCloudVersion
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.ui.sharing.fragments.ShareFileFragment
@@ -62,7 +63,7 @@ class ShareFileFragmentTest {
     private val ocCapabilityViewModel = mockk<OCCapabilityViewModel>(relaxed = true)
     private val capabilitiesLiveData = MutableLiveData<UIResult<OCCapability>>()
     private val ocShareViewModel = mockk<OCShareViewModel>(relaxed = true)
-    private val sharesLiveData = MutableLiveData<UIResult<List<OCShare>>>()
+    private val sharesLiveData = MutableLiveData<Event<UIResult<List<OCShare>>>>()
 
     @Before
     fun setUp() {
@@ -238,7 +239,7 @@ class ShareFileFragmentTest {
                 versionString = "10.1.1",
                 filesSharingPublicMultiple = CapabilityBooleanType.TRUE
             ),
-            shares = listOf(publicShareList.get(0))
+            shares = listOf(publicShareList[0])
         )
 
         onView(withId(R.id.addPublicLinkButton))
@@ -252,7 +253,7 @@ class ShareFileFragmentTest {
                 versionString = "10.1.1",
                 filesSharingPublicMultiple = CapabilityBooleanType.FALSE
             ),
-            shares = listOf(publicShareList.get(0))
+            shares = listOf(publicShareList[0])
         )
 
         onView(withId(R.id.addPublicLinkButton))
@@ -265,7 +266,7 @@ class ShareFileFragmentTest {
             capabilities = DUMMY_CAPABILITY.copy(
                 versionString = "9.3.1"
             ),
-            shares = listOf(publicShareList.get(0))
+            shares = listOf(publicShareList[0])
         )
 
         onView(withId(R.id.addPublicLinkButton))
@@ -322,6 +323,6 @@ class ShareFileFragmentTest {
         }
 
         capabilitiesLiveData.postValue(capabilitiesUIResult)
-        sharesLiveData.postValue(sharesUIResult)
+        sharesLiveData.postValue(Event(sharesUIResult))
     }
 }
