@@ -443,6 +443,8 @@ class PublicShareCreationDialogFragmentTest {
             )
         )
 
+        onView(withId(R.id.public_link_error_message)).perform(scrollTo())
+
         onView(withText(commonError)).check(matches(isDisplayed()))
         onView(withId(R.id.shareViaLinkEditPermissionUploadFiles)).perform(click())
         onView(withText(commonError)).check(matches(not(isDisplayed())))

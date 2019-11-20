@@ -290,9 +290,22 @@ class ShareFileFragmentTest {
             .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)))
     }
 
+    @Test
+    fun showError() {
+        loadShareFileFragment(
+            sharesUIResult = UIResult.Error(
+                error = Throwable("It was not possible to retrieve the shares from server")
+            )
+        )
+        onView(withId(com.google.android.material.R.id.snackbar_text)).
+            check(matches(withText(R.string.get_shares_error)))
+    }
+
     private fun loadShareFileFragment(
         capabilities: OCCapability = DUMMY_CAPABILITY,
-        shares: List<OCShare> = listOf(DUMMY_SHARE)
+        capabilitiesUIResult: UIResult<OCCapability> = UIResult.Success(capabilities),
+        shares: List<OCShare> = listOf(DUMMY_SHARE),
+        sharesUIResult: UIResult<List<OCShare>> = UIResult.Success(shares)
     ) {
         val ownCloudVersion = mockkClass(OwnCloudVersion::class)
 
@@ -308,16 +321,7 @@ class ShareFileFragmentTest {
             it.startFragment(shareFileFragment)
         }
 
-        capabilitiesLiveData.postValue(
-            UIResult.Success(
-                capabilities
-            )
-        )
-
-        sharesLiveData.postValue(
-            UIResult.Success(
-                shares
-            )
-        )
+        capabilitiesLiveData.postValue(capabilitiesUIResult)
+        sharesLiveData.postValue(sharesUIResult)
     }
 }
