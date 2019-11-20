@@ -80,7 +80,7 @@
     <string name="recommend_subject">Try %1$s on your smartphone!</string>
     <string name="recommend_text">"I want to invite you to use %1$s on your smartphone!\nDownload here: %2$s"</string>
 
-    <string name="error_reason">due to</string>
+    <string name="error_reason">because</string>
     <string name="auth_failure_snackbar">Authentication failed</string>
     <string name="auth_failure_snackbar_action">Change account</string>
     <string name="auth_oauth_failure">The access token has expired or become invalid. Sign in again to regain access</string>
@@ -606,4 +606,5 @@
     <string name="welcome_feature_10_title">Logs with search for everyone</string>
     <string name="welcome_feature_10_text">Send us your logs to make the app work better</string>
     <string name="no_borwser_installed_alert">No browser installed. Please install a Browser in order to allow a secure login.</string>
+    <string name="common_not_found">it was not found</string>
 </resources>

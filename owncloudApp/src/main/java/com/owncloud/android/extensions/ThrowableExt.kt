@@ -57,7 +57,7 @@ fun Throwable.parseError(genericErrorMessage: String, resources: Resources): Cha
             is SSLErrorException -> resources.getString(R.string.auth_ssl_general_error_title)
             is UnauthorizedException -> resources.getString(R.string.auth_unauthorized)
             is InstanceNotConfiguredException -> resources.getString(R.string.auth_not_configured_title)
-            is FileNotFoundException -> resources.getString(R.string.auth_incorrect_path_title)
+            is FileNotFoundException -> resources.getString(R.string.common_not_found)
             is OAuth2ErrorException -> resources.getString(R.string.auth_oauth_error)
             is OAuth2ErrorAccessDeniedException -> resources.getString(R.string.auth_oauth_error_access_denied)
             is AccountNotNewException -> resources.getString(R.string.auth_account_not_new)
