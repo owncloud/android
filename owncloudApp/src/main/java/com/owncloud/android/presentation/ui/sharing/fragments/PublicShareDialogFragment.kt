@@ -37,7 +37,6 @@ import android.widget.TextView
 import androidx.appcompat.widget.SwitchCompat
 import androidx.core.view.isGone
 import androidx.fragment.app.DialogFragment
-import androidx.lifecycle.Observer
 import com.owncloud.android.R
 import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.domain.capabilities.model.CapabilityBooleanType
@@ -448,7 +447,7 @@ class PublicShareDialogFragment : DialogFragment() {
     private fun observeCapabilities() {
         ocCapabilityViewModel.capabilities.observe(
             this,
-            Observer { uiResult ->
+            EventObserver { uiResult ->
                 when (uiResult) {
                     is UIResult.Success -> {
                         updateCapabilities(uiResult.data)

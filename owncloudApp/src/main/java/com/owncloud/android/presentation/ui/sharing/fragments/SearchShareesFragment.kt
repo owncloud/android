@@ -30,7 +30,6 @@ import android.accounts.Account
 import android.app.SearchManager
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -40,11 +39,11 @@ import android.widget.ListView
 import androidx.appcompat.widget.SearchView
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import com.owncloud.android.R
 import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.domain.sharing.shares.model.OCShare
 import com.owncloud.android.domain.sharing.shares.model.ShareType
+import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.lib.common.utils.Log_OC
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.adapters.sharing.ShareUserListAdapter
@@ -147,7 +146,7 @@ class SearchShareesFragment : Fragment(),
     private fun observePrivateShares() {
         ocShareViewModel.shares.observe(
             this,
-            Observer { uiResult ->
+            Event.EventObserver { uiResult ->
                 val privateShares = uiResult.getStoredData()?.filter { share ->
                     share.shareType == ShareType.USER ||
                             share.shareType == ShareType.GROUP ||
