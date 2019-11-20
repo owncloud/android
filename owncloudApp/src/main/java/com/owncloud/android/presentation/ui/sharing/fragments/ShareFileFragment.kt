@@ -44,7 +44,6 @@ import com.owncloud.android.domain.capabilities.model.CapabilityBooleanType
 import com.owncloud.android.domain.capabilities.model.OCCapability
 import com.owncloud.android.domain.sharing.shares.model.OCShare
 import com.owncloud.android.domain.sharing.shares.model.ShareType
-import com.owncloud.android.domain.utils.Event.EventObserver
 import com.owncloud.android.extensions.showError
 import com.owncloud.android.lib.common.utils.Log_OC
 import com.owncloud.android.lib.resources.status.OwnCloudVersion
@@ -318,9 +317,6 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
 
         observeCapabilities() // Get capabilities to update some UI elements depending on them
         observeShares()
-
-        ocCapabilityViewModel.refreshCapabilitiesFromNetwork()
-        ocShareViewModel.refreshSharesFromNetwork()
     }
 
     override fun onAttach(context: Context) {
@@ -340,7 +336,8 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
     private fun observeCapabilities() {
         ocCapabilityViewModel.capabilities.observe(
             this,
-            Observer { uiResult ->
+            Observer { event ->
+                val uiResult = event.peekContent()
                 val capabilities = uiResult.getStoredData()
                 when (uiResult) {
                     is UIResult.Success -> {
@@ -353,7 +350,9 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
                         capabilities?.let {
                             updateCapabilities(it)
                         }
-                        showError(getString(R.string.get_capabilities_error), uiResult.error)
+                        event.getContentIfNotHandled()?.let {
+                            showError(getString(R.string.get_capabilities_error), uiResult.error)
+                        }
                         listener?.dismissLoading()
                     }
                     is UIResult.Loading -> {
@@ -373,7 +372,8 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
     private fun observeShares() {
         ocShareViewModel.shares.observe(
             this,
-            EventObserver { uiResult ->
+            Observer { event ->
+                val uiResult = event.peekContent()
                 val shares = uiResult.getStoredData()
                 when (uiResult) {
                     is UIResult.Success -> {
@@ -386,7 +386,9 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
                         shares?.let {
                             updateShares(it)
                         }
-                        showError(getString(R.string.get_shares_error), uiResult.error)
+                        event.getContentIfNotHandled()?.let {
+                            showError(getString(R.string.get_shares_error), uiResult.error)
+                        }
                         listener?.dismissLoading()
                     }
                     is UIResult.Loading -> {

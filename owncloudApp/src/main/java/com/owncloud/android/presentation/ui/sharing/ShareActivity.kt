@@ -29,11 +29,11 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.fragment.app.transaction
-import androidx.lifecycle.Observer
 import com.owncloud.android.R
 import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.domain.sharing.shares.model.OCShare
 import com.owncloud.android.domain.sharing.shares.model.ShareType
+import com.owncloud.android.domain.utils.Event.EventObserver
 import com.owncloud.android.extensions.showError
 import com.owncloud.android.lib.common.utils.Log_OC
 import com.owncloud.android.lib.resources.shares.RemoteShare
@@ -137,7 +137,7 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
     private fun observePrivateShareCreation() {
         ocShareViewModel.privateShareCreationStatus.observe(
             this,
-            Observer { uiResult ->
+            EventObserver { uiResult ->
                 when (uiResult) {
                     is UIResult.Error -> {
                         showError(getString(R.string.share_link_file_error), uiResult.error)
@@ -181,7 +181,7 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
     private fun observePrivateShareEdition() {
         ocShareViewModel.privateShareEditionStatus.observe(
             this,
-            Observer { uiResult ->
+            EventObserver { uiResult ->
                 when (uiResult) {
                     is UIResult.Error -> {
                         showError(getString(R.string.share_link_file_error), uiResult.error)
@@ -253,7 +253,7 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
     private fun observeShareDeletion() {
         ocShareViewModel.shareDeletionStatus.observe(
             this,
-            Observer { uiResult ->
+            EventObserver { uiResult ->
                 when (uiResult) {
                     is UIResult.Error -> {
                         dismissLoadingDialog()

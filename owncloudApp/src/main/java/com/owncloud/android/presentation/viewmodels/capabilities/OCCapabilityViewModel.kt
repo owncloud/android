@@ -28,6 +28,7 @@ import com.owncloud.android.domain.capabilities.model.OCCapability
 import com.owncloud.android.domain.capabilities.usecases.GetCapabilitiesAsLiveDataUseCase
 import com.owncloud.android.domain.capabilities.usecases.GetStoredCapabilitiesUseCase
 import com.owncloud.android.domain.capabilities.usecases.RefreshCapabilitiesFromServerAsyncUseCase
+import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.presentation.UIResult
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -45,8 +46,8 @@ class OCCapabilityViewModel(
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ViewModel() {
 
-    private val _capabilities = MediatorLiveData<UIResult<OCCapability>>()
-    val capabilities: LiveData<UIResult<OCCapability>> = _capabilities
+    private val _capabilities = MediatorLiveData<Event<UIResult<OCCapability>>>()
+    val capabilities: LiveData<Event<UIResult<OCCapability>>> = _capabilities
 
     private var capabilitiesLiveData: LiveData<OCCapability?>? = getCapabilitiesAsLiveDataUseCase.execute(
         GetCapabilitiesAsLiveDataUseCase.Params(
@@ -56,7 +57,7 @@ class OCCapabilityViewModel(
 
     init {
         _capabilities.addSource(capabilitiesLiveData!!) { capabilities ->
-            _capabilities.postValue(UIResult.Success(capabilities))
+            _capabilities.postValue(Event(UIResult.Success(capabilities)))
         }
 
         refreshCapabilitiesFromNetwork()
@@ -71,7 +72,7 @@ class OCCapabilityViewModel(
     fun refreshCapabilitiesFromNetwork() {
         viewModelScope.launch {
             _capabilities.postValue(
-                UIResult.Loading(capabilitiesLiveData?.value)
+                Event(UIResult.Loading(capabilitiesLiveData?.value))
             )
 
             val useCaseResult = withContext(ioDispatcher) {
@@ -84,7 +85,7 @@ class OCCapabilityViewModel(
 
             if (useCaseResult.isError) {
                 _capabilities.postValue(
-                    UIResult.Error(useCaseResult.getThrowableOrNull(), capabilitiesLiveData?.value)
+                    Event(UIResult.Error(useCaseResult.getThrowableOrNull(), capabilitiesLiveData?.value))
                 )
             }
         }
