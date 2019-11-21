@@ -180,10 +180,7 @@ class UsersAndGroupsSearchProvider : ContentProvider() {
                 suggestAuthority!! + DATA_REMOTE_SUFFIX
             ).build()
 
-            val manager = FileDataStorageManager(context, account, context.contentResolver)
-
-            val federatedShareAllowed = manager.getCapability(account!!.name)?.filesSharingFederationOutgoing
-                ?.isTrue
+            val federatedShareAllowed = capabilities?.filesSharingFederationOutgoing?.isTrue ?: false
 
             try {
                 while (namesIt.hasNext()) {
@@ -214,7 +211,7 @@ class UsersAndGroupsSearchProvider : ContentProvider() {
                             dataUri = Uri.withAppendedPath(groupBaseUri, shareWith)
                         }
                         ShareType.FEDERATED.value -> {
-                            if (federatedShareAllowed!!) {
+                            if (federatedShareAllowed) {
                                 icon = R.drawable.ic_user
                                 if (userName == shareWith) {
                                     displayName = context.getString(R.string.share_remote_clarification, userName)
