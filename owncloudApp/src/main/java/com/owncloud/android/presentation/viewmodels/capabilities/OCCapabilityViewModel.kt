@@ -41,7 +41,6 @@ import kotlinx.coroutines.withContext
 class OCCapabilityViewModel(
     private val accountName: String,
     getCapabilitiesAsLiveDataUseCase: GetCapabilitiesAsLiveDataUseCase,
-    private val getStoredCapabilitiesUseCase: GetStoredCapabilitiesUseCase,
     private val refreshCapabilitiesFromServerUseCase: RefreshCapabilitiesFromServerAsyncUseCase,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ViewModel() {
@@ -62,12 +61,6 @@ class OCCapabilityViewModel(
 
         refreshCapabilitiesFromNetwork()
     }
-
-    fun getStoredCapabilities(): OCCapability? = getStoredCapabilitiesUseCase.execute(
-        GetStoredCapabilitiesUseCase.Params(
-            accountName = accountName
-        )
-    )
 
     fun refreshCapabilitiesFromNetwork() {
         viewModelScope.launch {

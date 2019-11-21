@@ -25,29 +25,6 @@ import org.json.JSONObject
 
 object AppTestUtil {
     /**
-     * Sharees
-     */
-    fun createSharee(
-        label: String,
-        shareType: String,
-        shareWith: String,
-        shareWithAdditionalInfo: String
-    ): JSONObject {
-        val jsonObject = JSONObject()
-
-        jsonObject.put(GetRemoteShareesOperation.PROPERTY_LABEL, label)
-
-        val value = JSONObject()
-        value.put(GetRemoteShareesOperation.PROPERTY_SHARE_TYPE, shareType)
-        value.put(GetRemoteShareesOperation.PROPERTY_SHARE_WITH, shareWith)
-        value.put(GetRemoteShareesOperation.PROPERTY_SHARE_WITH_ADDITIONAL_INFO, shareWithAdditionalInfo)
-
-        jsonObject.put(GetRemoteShareesOperation.NODE_VALUE, value)
-
-        return jsonObject
-    }
-
-    /**
      * Files
      * Move to owncloudTestUtil module when OCFile is migrated to owncloudDomain
      */
