@@ -31,6 +31,7 @@ buildscript {
         ktxCoreVersion = "1.1.0"
         ktxViewModelVersion = "2.2.0-alpha01"
         ktxFragmentVersion = "1.0.0"
+        ktxLiveData = "2.1.0"
     }
 
     repositories {

@@ -17,7 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.utils
+package com.owncloud.android.testutil.livedata
 
 const val TIMEOUT_TEST_LONG = 5_000L
 const val TIMEOUT_TEST_SHORT = 2_000L

@@ -18,7 +18,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.presentation.capabilities.viewmodel
+package com.owncloud.android.capabilities.viewmodels
 
 import android.accounts.Account
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
@@ -27,11 +27,12 @@ import com.owncloud.android.domain.UseCaseResult
 import com.owncloud.android.domain.capabilities.model.OCCapability
 import com.owncloud.android.domain.capabilities.usecases.GetStoredCapabilitiesUseCase
 import com.owncloud.android.domain.capabilities.usecases.RefreshCapabilitiesFromServerAsyncUseCase
-import com.owncloud.android.domain.utils.DomainTestUtil.DUMMY_CAPABILITY
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.viewmodels.capabilities.OCCapabilityViewModel
-import com.owncloud.android.utils.AppTestUtil
-import com.owncloud.android.utils.TIMEOUT_TEST_LONG
+import com.owncloud.android.testutil.OC_ACCOUNT
+import com.owncloud.android.testutil.OC_CAPABILITY
+import com.owncloud.android.testutil.livedata.TIMEOUT_TEST_LONG
+import com.owncloud.android.testutil.livedata.getOrAwaitValues
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -55,7 +56,7 @@ class OCCapabilityViewModelTest {
 
     private val capabilityLiveData = MutableLiveData<OCCapability>()
 
-    private var testAccount: Account = AppTestUtil.createAccount("admin@server", "test")
+    private var testAccount: Account = OC_ACCOUNT
 
     @Rule
     @JvmField
@@ -83,7 +84,7 @@ class OCCapabilityViewModelTest {
     fun getStoredCapabilitiesWithData() {
         initTest()
 
-        val capability = DUMMY_CAPABILITY.copy(accountName = testAccount.name)
+        val capability = OC_CAPABILITY.copy(accountName = testAccount.name)
 
         getStoredCapabilitiesVerification(
             valueToTest = capability,

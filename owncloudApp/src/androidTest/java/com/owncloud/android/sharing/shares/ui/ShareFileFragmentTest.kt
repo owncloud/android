@@ -43,10 +43,10 @@ import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.ui.sharing.fragments.ShareFileFragment
 import com.owncloud.android.presentation.viewmodels.capabilities.OCCapabilityViewModel
 import com.owncloud.android.presentation.viewmodels.sharing.OCShareViewModel
-import com.owncloud.android.utils.AppTestUtil.DUMMY_ACCOUNT
-import com.owncloud.android.utils.AppTestUtil.DUMMY_CAPABILITY
-import com.owncloud.android.utils.AppTestUtil.DUMMY_FILE
-import com.owncloud.android.utils.AppTestUtil.DUMMY_SHARE
+import com.owncloud.android.testutil.OC_ACCOUNT
+import com.owncloud.android.testutil.OC_CAPABILITY
+import com.owncloud.android.testutil.OC_SHARE
+import com.owncloud.android.utils.AppTestUtil.OC_FILE
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkClass
@@ -61,7 +61,7 @@ import org.koin.dsl.module
 
 class ShareFileFragmentTest {
     private val ocCapabilityViewModel = mockk<OCCapabilityViewModel>(relaxed = true)
-    private val capabilitiesLiveData = MutableLiveData<UIResult<OCCapability>>()
+    private val capabilitiesLiveData = MutableLiveData<Event<UIResult<OCCapability>>>()
     private val ocShareViewModel = mockk<OCShareViewModel>(relaxed = true)
     private val sharesLiveData = MutableLiveData<Event<UIResult<List<OCShare>>>>()
 
@@ -110,20 +110,16 @@ class ShareFileFragmentTest {
      ******************************************************************************************************/
 
     private var userSharesList = listOf(
-        DUMMY_SHARE.copy(
-            sharedWithDisplayName = "Batman"
-        ),
-        DUMMY_SHARE.copy(
-            sharedWithDisplayName = "Jocker"
-        )
+        OC_SHARE.copy(sharedWithDisplayName = "Batman"),
+        OC_SHARE.copy(sharedWithDisplayName = "Jocker")
     )
 
     private var groupSharesList = listOf(
-        DUMMY_SHARE.copy(
+        OC_SHARE.copy(
             shareType = ShareType.GROUP,
             sharedWithDisplayName = "Suicide Squad"
         ),
-        DUMMY_SHARE.copy(
+        OC_SHARE.copy(
             shareType = ShareType.GROUP,
             sharedWithDisplayName = "Avengers"
         )
@@ -166,21 +162,21 @@ class ShareFileFragmentTest {
      ******************************************************************************************************/
 
     private var publicShareList = listOf(
-        DUMMY_SHARE.copy(
+        OC_SHARE.copy(
             shareType = ShareType.PUBLIC_LINK,
             path = "/Photos/image.jpg",
             isFolder = false,
             name = "Image link",
             shareLink = "http://server:port/s/1"
         ),
-        DUMMY_SHARE.copy(
+        OC_SHARE.copy(
             shareType = ShareType.PUBLIC_LINK,
             path = "/Photos/image.jpg",
             isFolder = false,
             name = "Image link 2",
             shareLink = "http://server:port/s/2"
         ),
-        DUMMY_SHARE.copy(
+        OC_SHARE.copy(
             shareType = ShareType.PUBLIC_LINK,
             path = "/Photos/image.jpg",
             isFolder = false,
@@ -212,7 +208,7 @@ class ShareFileFragmentTest {
     @Test
     fun showPublicSharesSharingEnabled() {
         loadShareFileFragment(
-            capabilities = DUMMY_CAPABILITY.copy(filesSharingPublicEnabled = CapabilityBooleanType.TRUE),
+            capabilities = OC_CAPABILITY.copy(filesSharingPublicEnabled = CapabilityBooleanType.TRUE),
             shares = publicShareList
         )
 
@@ -224,7 +220,7 @@ class ShareFileFragmentTest {
     @Test
     fun hidePublicSharesSharingDisabled() {
         loadShareFileFragment(
-            capabilities = DUMMY_CAPABILITY.copy(filesSharingPublicEnabled = CapabilityBooleanType.FALSE),
+            capabilities = OC_CAPABILITY.copy(filesSharingPublicEnabled = CapabilityBooleanType.FALSE),
             shares = publicShareList
         )
 
@@ -235,7 +231,7 @@ class ShareFileFragmentTest {
     @Test
     fun createPublicShareMultipleCapability() {
         loadShareFileFragment(
-            capabilities = DUMMY_CAPABILITY.copy(
+            capabilities = OC_CAPABILITY.copy(
                 versionString = "10.1.1",
                 filesSharingPublicMultiple = CapabilityBooleanType.TRUE
             ),
@@ -249,7 +245,7 @@ class ShareFileFragmentTest {
     @Test
     fun cannotCreatePublicShareMultipleCapability() {
         loadShareFileFragment(
-            capabilities = DUMMY_CAPABILITY.copy(
+            capabilities = OC_CAPABILITY.copy(
                 versionString = "10.1.1",
                 filesSharingPublicMultiple = CapabilityBooleanType.FALSE
             ),
@@ -263,7 +259,7 @@ class ShareFileFragmentTest {
     @Test
     fun cannotCreatePublicShareServerCapability() {
         loadShareFileFragment(
-            capabilities = DUMMY_CAPABILITY.copy(
+            capabilities = OC_CAPABILITY.copy(
                 versionString = "9.3.1"
             ),
             shares = listOf(publicShareList[0])
@@ -280,7 +276,7 @@ class ShareFileFragmentTest {
     @Test
     fun hideSharesSharingApiDisabled() {
         loadShareFileFragment(
-            capabilities = DUMMY_CAPABILITY.copy(
+            capabilities = OC_CAPABILITY.copy(
                 filesSharingApiEnabled = CapabilityBooleanType.FALSE
             )
         )
@@ -303,9 +299,9 @@ class ShareFileFragmentTest {
     }
 
     private fun loadShareFileFragment(
-        capabilities: OCCapability = DUMMY_CAPABILITY,
-        capabilitiesUIResult: UIResult<OCCapability> = UIResult.Success(capabilities),
-        shares: List<OCShare> = listOf(DUMMY_SHARE),
+        capabilities: OCCapability = OC_CAPABILITY,
+        capabilitiesEvent: Event<UIResult<OCCapability>> = Event(UIResult.Success(capabilities)),
+        shares: List<OCShare> = listOf(OC_SHARE),
         sharesUIResult: UIResult<List<OCShare>> = UIResult.Success(shares)
     ) {
         val ownCloudVersion = mockkClass(OwnCloudVersion::class)
@@ -313,8 +309,8 @@ class ShareFileFragmentTest {
         every { ownCloudVersion.isSearchUsersSupported } returns true
 
         val shareFileFragment = ShareFileFragment.newInstance(
-            DUMMY_FILE,
-            DUMMY_ACCOUNT,
+            OC_FILE,
+            OC_ACCOUNT,
             ownCloudVersion
         )
 
@@ -322,7 +318,7 @@ class ShareFileFragmentTest {
             it.startFragment(shareFileFragment)
         }
 
-        capabilitiesLiveData.postValue(capabilitiesUIResult)
+        capabilitiesLiveData.postValue(capabilitiesEvent)
         sharesLiveData.postValue(Event(sharesUIResult))
     }
 }

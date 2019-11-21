@@ -38,10 +38,10 @@ import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.ui.sharing.fragments.ShareFileFragment
 import com.owncloud.android.presentation.viewmodels.capabilities.OCCapabilityViewModel
 import com.owncloud.android.presentation.viewmodels.sharing.OCShareViewModel
-import com.owncloud.android.utils.AppTestUtil.DUMMY_ACCOUNT
-import com.owncloud.android.utils.AppTestUtil.DUMMY_CAPABILITY
-import com.owncloud.android.utils.AppTestUtil.DUMMY_FOLDER
-import com.owncloud.android.utils.AppTestUtil.DUMMY_SHARE
+import com.owncloud.android.testutil.OC_ACCOUNT
+import com.owncloud.android.testutil.OC_CAPABILITY
+import com.owncloud.android.testutil.OC_SHARE
+import com.owncloud.android.utils.AppTestUtil.OC_FOLDER
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkClass
@@ -58,7 +58,7 @@ import org.koin.dsl.module
 @RunWith(AndroidJUnit4::class)
 class ShareFolderFragmentTest {
     private val ocCapabilityViewModel = mockk<OCCapabilityViewModel>(relaxed = true)
-    private val capabilitiesLiveData = MutableLiveData<UIResult<OCCapability>>()
+    private val capabilitiesLiveData = MutableLiveData<Event<UIResult<OCCapability>>>()
     private val ocShareViewModel = mockk<OCShareViewModel>(relaxed = true)
     private val sharesLiveData = MutableLiveData<Event<UIResult<List<OCShare>>>>()
 
@@ -87,8 +87,8 @@ class ShareFolderFragmentTest {
         every { ownCloudVersion.isSearchUsersSupported } returns true
 
         val shareFileFragment = ShareFileFragment.newInstance(
-            DUMMY_FOLDER,
-            DUMMY_ACCOUNT,
+            OC_FOLDER,
+            OC_ACCOUNT,
             ownCloudVersion
         )
 
@@ -96,9 +96,9 @@ class ShareFolderFragmentTest {
             it.startFragment(shareFileFragment)
         }
 
-        capabilitiesLiveData.postValue(UIResult.Success(DUMMY_CAPABILITY))
+        capabilitiesLiveData.postValue(Event(UIResult.Success(OC_CAPABILITY)))
 
-        sharesLiveData.postValue(Event(UIResult.Success(listOf(DUMMY_SHARE))))
+        sharesLiveData.postValue(Event(UIResult.Success(listOf(OC_SHARE))))
     }
 
     @Test

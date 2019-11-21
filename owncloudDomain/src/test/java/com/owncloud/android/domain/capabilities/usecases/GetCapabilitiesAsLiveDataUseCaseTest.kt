@@ -24,7 +24,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
 import com.owncloud.android.domain.capabilities.CapabilityRepository
 import com.owncloud.android.domain.capabilities.model.OCCapability
-import com.owncloud.android.domain.utils.DomainTestUtil
+import com.owncloud.android.testutil.OC_CAPABILITY
 import io.mockk.every
 import io.mockk.spyk
 import org.junit.Assert
@@ -52,7 +52,7 @@ class GetCapabilitiesAsLiveDataUseCaseTest {
         val capabilitiesLiveData = MutableLiveData<OCCapability>()
         every { capabilityRepository.getCapabilitiesAsLiveData(any()) } returns capabilitiesLiveData
 
-        val capabilitiesToEmit = listOf(DomainTestUtil.DUMMY_CAPABILITY)
+        val capabilitiesToEmit = listOf(OC_CAPABILITY)
 
         useCase.execute(useCaseParams).observeForever {
             capabilitiesEmitted.add(it!!)

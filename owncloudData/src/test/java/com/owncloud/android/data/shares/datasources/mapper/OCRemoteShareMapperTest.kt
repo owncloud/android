@@ -21,7 +21,7 @@ package com.owncloud.android.data.shares.datasources.mapper
 
 import com.owncloud.android.data.sharing.shares.datasources.mapper.RemoteShareMapper
 import com.owncloud.android.data.utils.DataTestUtil.DUMMY_REMOTE_SHARE
-import com.owncloud.android.data.utils.DataTestUtil.DUMMY_SHARE
+import com.owncloud.android.testutil.OC_SHARE
 import org.junit.Assert
 import org.junit.Test
 
@@ -40,6 +40,6 @@ class OCRemoteShareMapperTest {
 
         val capability = ocRemoteShareMapper.toModel(DUMMY_REMOTE_SHARE)
         Assert.assertNotNull(capability)
-        Assert.assertEquals(capability, DUMMY_SHARE.copy(accountOwner = ""))
+        Assert.assertEquals(capability, OC_SHARE.copy(accountOwner = ""))
     }
 }

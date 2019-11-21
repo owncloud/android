@@ -27,6 +27,7 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.isChecked
+import androidx.test.espresso.matcher.ViewMatchers.Visibility.VISIBLE
 import androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility
 import androidx.test.espresso.matcher.ViewMatchers.withHint
 import androidx.test.espresso.matcher.ViewMatchers.withId
@@ -35,14 +36,15 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.owncloud.android.R
 import com.owncloud.android.domain.capabilities.model.OCCapability
 import com.owncloud.android.domain.sharing.shares.model.ShareType
+import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.lib.resources.shares.RemoteShare
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.ui.sharing.fragments.PublicShareDialogFragment
 import com.owncloud.android.presentation.viewmodels.capabilities.OCCapabilityViewModel
 import com.owncloud.android.presentation.viewmodels.sharing.OCShareViewModel
-import com.owncloud.android.utils.AppTestUtil.DUMMY_ACCOUNT
-import com.owncloud.android.utils.AppTestUtil.DUMMY_FILE
-import com.owncloud.android.utils.AppTestUtil.DUMMY_SHARE
+import com.owncloud.android.testutil.OC_ACCOUNT
+import com.owncloud.android.testutil.OC_SHARE
+import com.owncloud.android.utils.AppTestUtil.OC_FILE
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.Before
@@ -61,7 +63,7 @@ import java.util.TimeZone
 @RunWith(AndroidJUnit4::class)
 class PublicShareEditionDialogFragmentTest {
     private val ocCapabilityViewModel = mockk<OCCapabilityViewModel>(relaxed = true)
-    private val capabilitiesLiveData = MutableLiveData<UIResult<OCCapability>>()
+    private val capabilitiesLiveData = MutableLiveData<Event<UIResult<OCCapability>>>()
     private val ocShareViewModel = mockk<OCShareViewModel>(relaxed = true)
 
     private val expirationDate = 1556575200000 // GMT: Monday, April 29, 2019 10:00:00 PM
@@ -71,9 +73,9 @@ class PublicShareEditionDialogFragmentTest {
         every { ocCapabilityViewModel.capabilities } returns capabilitiesLiveData
 
         val publicShareDialogFragment = PublicShareDialogFragment.newInstanceToUpdate(
-            DUMMY_FILE,
-            DUMMY_ACCOUNT,
-            DUMMY_SHARE.copy(
+            OC_FILE,
+            OC_ACCOUNT,
+            OC_SHARE.copy(
                 shareType = ShareType.PUBLIC_LINK,
                 shareWith = "user",
                 name = "Docs link",
@@ -123,12 +125,9 @@ class PublicShareEditionDialogFragmentTest {
     @Test
     fun checkPasswordSet() {
         onView(withId(R.id.shareViaLinkPasswordLabel)).check(matches(withText(R.string.share_via_link_password_label)))
-        onView(withId(R.id.shareViaLinkPasswordSwitch))
-            .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))
-        onView(withId(R.id.shareViaLinkPasswordValue))
-            .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))
-        onView(withId(R.id.shareViaLinkPasswordValue))
-            .check(matches(withHint(R.string.share_via_link_default_password)))
+        onView(withId(R.id.shareViaLinkPasswordSwitch)).check(matches(withEffectiveVisibility(VISIBLE)))
+        onView(withId(R.id.shareViaLinkPasswordValue)).check(matches(withEffectiveVisibility(VISIBLE)))
+        onView(withId(R.id.shareViaLinkPasswordValue)).check(matches(withHint(R.string.share_via_link_default_password)))
     }
 
     @Test
@@ -141,14 +140,9 @@ class PublicShareEditionDialogFragmentTest {
 
         val time = formatter.format(calendar.time)
 
-        onView(withId(R.id.shareViaLinkExpirationLabel)).check(
-            matches(withText(R.string.share_via_link_expiration_date_label))
-        )
-        onView(withId(R.id.shareViaLinkExpirationSwitch))
-            .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))
-        onView(withId(R.id.shareViaLinkExpirationValue))
-            .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))
-        onView(withId(R.id.shareViaLinkExpirationValue))
-            .check(matches(withText(time)))
+        onView(withId(R.id.shareViaLinkExpirationLabel)).check(matches(withText(R.string.share_via_link_expiration_date_label)))
+        onView(withId(R.id.shareViaLinkExpirationSwitch)).check(matches(withEffectiveVisibility(VISIBLE)))
+        onView(withId(R.id.shareViaLinkExpirationValue)).check(matches(withEffectiveVisibility(VISIBLE)))
+        onView(withId(R.id.shareViaLinkExpirationValue)).check(matches(withText(time)))
     }
 }

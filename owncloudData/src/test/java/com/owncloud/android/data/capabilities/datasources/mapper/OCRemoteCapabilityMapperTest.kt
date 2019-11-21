@@ -19,8 +19,8 @@
 
 package com.owncloud.android.data.capabilities.datasources.mapper
 
-import com.owncloud.android.data.utils.DataTestUtil.DUMMY_CAPABILITY
 import com.owncloud.android.data.utils.DataTestUtil.DUMMY_REMOTE_CAPABILITY
+import com.owncloud.android.testutil.OC_CAPABILITY
 import org.junit.Assert
 import org.junit.Test
 
@@ -39,6 +39,6 @@ class OCRemoteCapabilityMapperTest {
 
         val capability = ocRemoteCapabilityMapper.toModel(DUMMY_REMOTE_CAPABILITY)
         Assert.assertNotNull(capability)
-        Assert.assertEquals(capability, DUMMY_CAPABILITY)
+        Assert.assertEquals(capability, OC_CAPABILITY)
     }
 }

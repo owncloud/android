@@ -29,7 +29,7 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SmallTest
 import androidx.test.platform.app.InstrumentationRegistry
-import com.owncloud.android.db.OwncloudDatabase
+import com.owncloud.android.data.OwncloudDatabase
 import com.owncloud.android.db.ProviderMeta.ProviderTableMeta
 import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CAPABILITIES_ACCOUNT_NAME
 import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CAPABILITIES_CORE_POLLINTERVAL
@@ -37,6 +37,7 @@ import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CAPABILITIES_SHARI
 import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CAPABILITIES_VERSION_MAYOR
 import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CAPABILITIES_VERSION_MICRO
 import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CAPABILITIES_VERSION_MINOR
+import com.owncloud.android.testutil.OC_CAPABILITY
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Rule
@@ -75,7 +76,7 @@ class MigrationTest {
 
         // Verify that the data is correct
         val dbCapability =
-            getMigratedRoomDatabase().capabilityDao().getCapabilityForAccount(cv.getAsString(CAPABILITIES_ACCOUNT_NAME))
+            getMigratedRoomDatabase().capabilityDao().getCapabilitiesForAccount(OC_CAPABILITY.accountName!!)
         assertEquals(dbCapability.accountName, cv.getAsString(CAPABILITIES_ACCOUNT_NAME))
         assertEquals(dbCapability.versionMayor, cv.getAsInteger(CAPABILITIES_VERSION_MAYOR))
         assertEquals(dbCapability.versionMinor, cv.getAsInteger(CAPABILITIES_VERSION_MINOR))
@@ -113,7 +114,7 @@ class MigrationTest {
         // MigrationTestHelper automatically verifies the schema changes.
         // Verify that the data was migrated properly.
         val dbCapability =
-            getMigratedRoomDatabase().capabilityDao().getCapabilityForAccount(cv.getAsString(CAPABILITIES_ACCOUNT_NAME))
+            getMigratedRoomDatabase().capabilityDao().getCapabilitiesForAccount(OC_CAPABILITY.accountName!!)
         assertEquals(dbCapability.accountName, cv.getAsString(CAPABILITIES_ACCOUNT_NAME))
         assertEquals(dbCapability.versionMayor, cv.getAsInteger(CAPABILITIES_VERSION_MAYOR))
         assertEquals(dbCapability.versionMinor, cv.getAsInteger(CAPABILITIES_VERSION_MINOR))
@@ -139,17 +140,13 @@ class MigrationTest {
             close()
         }
 
-        val dbCapability =
-            getMigratedRoomDatabase().capabilityDao().getCapabilityForAccount(cv.getAsString(CAPABILITIES_ACCOUNT_NAME))
-        assertEquals(dbCapability.accountName, cv.getAsString(CAPABILITIES_ACCOUNT_NAME))
-        assertEquals(dbCapability.versionMayor, cv.getAsInteger(CAPABILITIES_VERSION_MAYOR))
-        assertEquals(dbCapability.versionMinor, cv.getAsInteger(CAPABILITIES_VERSION_MINOR))
-        assertEquals(dbCapability.versionMicro, cv.getAsInteger(CAPABILITIES_VERSION_MICRO))
-        assertEquals(dbCapability.corePollInterval, cv.getAsInteger(CAPABILITIES_CORE_POLLINTERVAL))
-        assertEquals(
-            dbCapability.filesSharingPublicExpireDateDays,
-            cv.getAsInteger(CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_DAYS)
-        )
+        val dbCapability = getMigratedRoomDatabase().capabilityDao().getCapabilitiesForAccount(OC_CAPABILITY.accountName!!)
+        assertEquals(OC_CAPABILITY.accountName, dbCapability.accountName)
+        assertEquals(OC_CAPABILITY.versionMayor, dbCapability.versionMayor)
+        assertEquals(OC_CAPABILITY.versionMinor, dbCapability.versionMinor)
+        assertEquals(OC_CAPABILITY.versionMicro, dbCapability.versionMicro)
+        assertEquals(OC_CAPABILITY.corePollInterval, dbCapability.corePollInterval)
+        assertEquals(OC_CAPABILITY.filesSharingPublicExpireDateDays, dbCapability.filesSharingPublicExpireDateDays)
     }
 
     private fun getMigratedRoomDatabase(): OwncloudDatabase {
@@ -173,15 +170,13 @@ class MigrationTest {
         // Added a new capability: "search_min_length"
         private const val DB_VERSION_28 = 28
 
-        //TODO: Consider adding a DUMMY_CAPABILITY full of values available for testing
-        // to avoid including values hardcoded in each test
         private val cv = ContentValues().apply {
-            put(CAPABILITIES_ACCOUNT_NAME, "user1@server")
-            put(CAPABILITIES_VERSION_MAYOR, 3)
-            put(CAPABILITIES_VERSION_MINOR, 2)
-            put(CAPABILITIES_VERSION_MICRO, 1)
-            put(CAPABILITIES_CORE_POLLINTERVAL, 60)
-            put(CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_DAYS, 0)
+            put(CAPABILITIES_ACCOUNT_NAME, OC_CAPABILITY.accountName)
+            put(CAPABILITIES_VERSION_MAYOR, OC_CAPABILITY.versionMayor)
+            put(CAPABILITIES_VERSION_MINOR, OC_CAPABILITY.versionMinor)
+            put(CAPABILITIES_VERSION_MICRO, OC_CAPABILITY.versionMicro)
+            put(CAPABILITIES_CORE_POLLINTERVAL, OC_CAPABILITY.corePollInterval)
+            put(CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_DAYS, OC_CAPABILITY.filesSharingPublicExpireDateDays)
         }
     }
 }
