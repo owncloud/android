@@ -22,3 +22,16 @@ val OC_SHARE = OCShare(
     name = "",
     shareLink = ""
 )
+
+val OC_PRIVATE_SHARE = OC_SHARE.copy(
+    shareWith = "WhoEver",
+    permissions = -1,
+    sharedWithDisplayName = "anyDisplayName"
+)
+
+val OC_PUBLIC_SHARE = OC_SHARE.copy(
+    shareType = ShareType.PUBLIC_LINK,
+    expirationDate = 1000,
+    name = "Image link",
+    shareLink = "link"
+)

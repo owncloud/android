@@ -20,8 +20,7 @@
 package com.owncloud.android.data.shares.datasources.mapper
 
 import com.owncloud.android.data.sharing.shares.datasources.mapper.OCShareMapper
-import com.owncloud.android.data.utils.DataTestUtil.createShare
-import com.owncloud.android.data.utils.DataTestUtil.createShareEntity
+import com.owncloud.android.testutil.OC_SHARE
 import org.junit.Assert
 import org.junit.Test
 
@@ -29,17 +28,17 @@ class OCShareMapperTest {
     private val ocShareMapper = OCShareMapper()
 
     private val ocShare =
-        createShare(
+        OC_SHARE.copy(
             isFolder = false,
-            path = "/Photos/image2.jpg",
-            shareType = 0
+            path = "/Photos/image2.jpg"
         )
 
     private val ocShareEntity =
-        createShareEntity(
-            isFolder = false,
-            path = "/Photos/image2.jpg",
-            shareType = 0
+        ocShareMapper.toEntity(
+            OC_SHARE.copy(
+                isFolder = false,
+                path = "/Photos/image2.jpg"
+            )
         )
 
     @Test

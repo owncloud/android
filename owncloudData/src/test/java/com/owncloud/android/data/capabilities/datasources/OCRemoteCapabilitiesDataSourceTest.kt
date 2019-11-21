@@ -24,6 +24,8 @@ import com.owncloud.android.data.capabilities.datasources.implementation.OCRemot
 import com.owncloud.android.data.capabilities.network.OCCapabilityService
 import com.owncloud.android.data.capabilities.datasources.mapper.RemoteCapabilityMapper
 import com.owncloud.android.data.utils.DataTestUtil
+import com.owncloud.android.testutil.OC_ACCOUNT_NAME
+import com.owncloud.android.testutil.OC_CAPABILITY
 import io.mockk.every
 import io.mockk.mockk
 import org.hamcrest.CoreMatchers.notNullValue
@@ -36,8 +38,7 @@ class OCRemoteCapabilitiesDataSourceTest {
     private lateinit var ocRemoteCapabilitiesDataSource: OCRemoteCapabilitiesDataSource
 
     private val ocCapabilityService: OCCapabilityService = mockk()
-    private val remoteCapabilityMapper =
-        RemoteCapabilityMapper()
+    private val remoteCapabilityMapper = RemoteCapabilityMapper()
 
     @Before
     fun init() {
@@ -50,11 +51,9 @@ class OCRemoteCapabilitiesDataSourceTest {
 
     @Test
     fun readRemoteCapabilities() {
-        val accountName = "ceo@server"
+        val accountName = OC_ACCOUNT_NAME
 
-        val remoteCapability = DataTestUtil.createRemoteCapability(
-            accountName, 15, 14, 13
-        )
+        val remoteCapability = remoteCapabilityMapper.toRemote(OC_CAPABILITY)
 
         val getRemoteCapabilitiesOperationResult = DataTestUtil.createRemoteOperationResultMock(
             remoteCapability,
@@ -70,9 +69,9 @@ class OCRemoteCapabilitiesDataSourceTest {
 
         assertThat(capabilities, notNullValue())
 
-        assertEquals("ceo@server", capabilities.accountName)
-        assertEquals(15, capabilities.versionMayor)
-        assertEquals(14, capabilities.versionMinor)
-        assertEquals(13, capabilities.versionMicro)
+        assertEquals(OC_CAPABILITY.accountName, capabilities.accountName)
+        assertEquals(OC_CAPABILITY.versionMayor, capabilities.versionMayor)
+        assertEquals(OC_CAPABILITY.versionMinor, capabilities.versionMinor)
+        assertEquals(OC_CAPABILITY.versionMicro, capabilities.versionMicro)
     }
 }

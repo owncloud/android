@@ -29,6 +29,7 @@ import com.owncloud.android.domain.exceptions.ShareNotFoundException
 import com.owncloud.android.domain.sharing.shares.model.ShareType
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.shares.ShareParserResult
+import com.owncloud.android.testutil.OC_SHARE
 import io.mockk.every
 import io.mockk.mockk
 import org.hamcrest.CoreMatchers.notNullValue
@@ -56,14 +57,16 @@ class OCRemoteShareDataSourceTest {
     fun insertPrivateShare() {
         val createRemoteShareOperationResult = DataTestUtil.createRemoteOperationResultMock(
             ShareParserResult(
-                arrayListOf(
-                    DataTestUtil.createRemoteShare(
-                        shareType = ShareType.USER.value,
-                        path = "Photos/",
-                        isFolder = true,
-                        shareWith = "user",
-                        sharedWithDisplayName = "User"
-                    )
+                listOf(
+                    remoteShareMapper.toRemote(
+                        OC_SHARE.copy(
+                            shareType = ShareType.USER,
+                            path = "Photos/",
+                            isFolder = true,
+                            shareWith = "user",
+                            sharedWithDisplayName = "User"
+                        )
+                    )!!
                 )
             ),
             true
@@ -95,16 +98,17 @@ class OCRemoteShareDataSourceTest {
     fun updatePrivateShare() {
         val updateRemoteShareOperationResult = DataTestUtil.createRemoteOperationResultMock(
             ShareParserResult(
-                arrayListOf(
-                    DataTestUtil.createRemoteShare(
-                        shareType = ShareType.USER.value,
-                        path = "Images/image_1.mp4",
-                        shareWith = "user",
-                        sharedWithDisplayName = "User",
-                        permissions = 17,
-                        isFolder = false,
-                        remoteId = 3
-                    )
+                listOf(
+                    remoteShareMapper.toRemote(
+                        OC_SHARE.copy(
+                            shareType = ShareType.USER,
+                            path = "Images/image_1.mp4",
+                            shareWith = "user",
+                            sharedWithDisplayName = "User",
+                            permissions = 17,
+                            remoteId = 3
+                        )
+                    )!!
                 )
             ),
             true
@@ -138,14 +142,15 @@ class OCRemoteShareDataSourceTest {
     fun insertPublicShare() {
         val createRemoteShareOperationResult = DataTestUtil.createRemoteOperationResultMock(
             ShareParserResult(
-                arrayListOf(
-                    DataTestUtil.createRemoteShare(
-                        shareType = ShareType.PUBLIC_LINK.value,
-                        path = "Photos/img1.png",
-                        isFolder = false,
-                        name = "img1 link",
-                        shareLink = "http://server:port/s/112ejbhdasyd1"
-                    )
+                listOf(
+                    remoteShareMapper.toRemote(
+                        OC_SHARE.copy(
+                            shareType = ShareType.PUBLIC_LINK,
+                            path = "Photos/img1.png",
+                            name = "img1 link",
+                            shareLink = "http://server:port/s/112ejbhdasyd1"
+                        )
+                    )!!
                 )
             ),
             true
@@ -178,16 +183,17 @@ class OCRemoteShareDataSourceTest {
     fun updatePublicShare() {
         val updateRemoteShareOperationResult = DataTestUtil.createRemoteOperationResultMock(
             ShareParserResult(
-                arrayListOf(
-                    DataTestUtil.createRemoteShare(
-                        shareType = ShareType.PUBLIC_LINK.value,
-                        path = "Videos/video1.mp4",
-                        expirationDate = 2000,
-                        isFolder = false,
-                        remoteId = 3,
-                        name = "video1 link updated",
-                        shareLink = "http://server:port/s/1275farv"
-                    )
+                listOf(
+                    remoteShareMapper.toRemote(
+                        OC_SHARE.copy(
+                            shareType = ShareType.PUBLIC_LINK,
+                            path = "Videos/video1.mp4",
+                            expirationDate = 2000,
+                            remoteId = 3,
+                            name = "video1 link updated",
+                            shareLink = "http://server:port/s/1275farv"
+                        )
+                    )!!
                 )
             ),
             true
@@ -220,35 +226,39 @@ class OCRemoteShareDataSourceTest {
 
     @Test
     fun readRemoteShares() {
-        val remoteShares = arrayListOf(
-            DataTestUtil.createRemoteShare(
-                shareType = ShareType.PUBLIC_LINK.value,
-                path = "/Documents/doc",
-                isFolder = false,
-                name = "Doc link",
-                shareLink = "http://server:port/s/1"
-            ),
-            DataTestUtil.createRemoteShare(
-                shareType = ShareType.PUBLIC_LINK.value,
-                path = "/Documents/doc",
-                isFolder = false,
-                name = "Doc link 2",
-                shareLink = "http://server:port/s/2"
-            ),
-            DataTestUtil.createRemoteShare(
-                shareType = ShareType.USER.value,
-                path = "/Documents/doc",
-                isFolder = false,
-                shareWith = "steve",
-                sharedWithDisplayName = "Steve"
-            ),
-            DataTestUtil.createRemoteShare(
-                shareType = ShareType.GROUP.value,
-                path = "/Documents/doc",
-                isFolder = false,
-                shareWith = "family",
-                sharedWithDisplayName = "My family"
-            )
+        val remoteShares = listOf(
+            remoteShareMapper.toRemote(
+                OC_SHARE.copy(
+                    shareType = ShareType.PUBLIC_LINK,
+                    path = "/Documents/doc",
+                    name = "Doc link",
+                    shareLink = "http://server:port/s/1"
+                )
+            )!!,
+            remoteShareMapper.toRemote(
+                OC_SHARE.copy(
+                    shareType = ShareType.PUBLIC_LINK,
+                    path = "/Documents/doc",
+                    name = "Doc link 2",
+                    shareLink = "http://server:port/s/2"
+                )
+            )!!,
+            remoteShareMapper.toRemote(
+                OC_SHARE.copy(
+                    shareType = ShareType.USER,
+                    path = "/Documents/doc",
+                    shareWith = "steve",
+                    sharedWithDisplayName = "Steve"
+                )
+            )!!,
+            remoteShareMapper.toRemote(
+                OC_SHARE.copy(
+                    shareType = ShareType.GROUP,
+                    path = "/Documents/doc",
+                    shareWith = "family",
+                    sharedWithDisplayName = "My family"
+                )
+            )!!
         )
 
         val getRemoteSharesOperationResult = DataTestUtil.createRemoteOperationResultMock(
