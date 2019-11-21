@@ -19,8 +19,7 @@
 
 package com.owncloud.android.data.capabilities.datasources.mapper
 
-import com.owncloud.android.data.utils.DataTestUtil.createCapability
-import com.owncloud.android.data.utils.DataTestUtil.createCapabilityEntity
+import com.owncloud.android.testutil.OC_CAPABILITY
 import org.junit.Assert
 import org.junit.Test
 
@@ -28,8 +27,8 @@ class OCCapabilityMapperTest {
 
     private val ocCapabilityMapper = OCCapabilityMapper()
 
-    private val ocCapability = createCapability()
-    private val ocCapabilityEntity = createCapabilityEntity()
+    private val ocCapability = OC_CAPABILITY
+    private val ocCapabilityEntity = ocCapabilityMapper.toEntity(ocCapability)
 
     @Test
     fun checkToModelNull() {

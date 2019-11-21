@@ -19,7 +19,6 @@
 
 package com.owncloud.android.data.capabilities.datasources.mapper
 
-import com.owncloud.android.data.utils.DataTestUtil.DUMMY_REMOTE_CAPABILITY
 import com.owncloud.android.testutil.OC_CAPABILITY
 import org.junit.Assert
 import org.junit.Test
@@ -35,9 +34,10 @@ class OCRemoteCapabilityMapperTest {
 
     @Test
     fun checkToModelNotNull() {
-        Assert.assertNotNull(DUMMY_REMOTE_CAPABILITY)
+        val remoteCapability = ocRemoteCapabilityMapper.toRemote(OC_CAPABILITY)
+        Assert.assertNotNull(remoteCapability)
 
-        val capability = ocRemoteCapabilityMapper.toModel(DUMMY_REMOTE_CAPABILITY)
+        val capability = ocRemoteCapabilityMapper.toModel(remoteCapability)
         Assert.assertNotNull(capability)
         Assert.assertEquals(capability, OC_CAPABILITY)
     }

@@ -26,9 +26,10 @@ import com.owncloud.android.data.sharing.shares.datasources.implementation.OCLoc
 import com.owncloud.android.data.sharing.shares.datasources.mapper.OCShareMapper
 import com.owncloud.android.data.sharing.shares.db.OCShareDao
 import com.owncloud.android.data.sharing.shares.db.OCShareEntity
-import com.owncloud.android.data.utils.DataTestUtil
 import com.owncloud.android.data.utils.LiveDataTestUtil.getValue
 import com.owncloud.android.domain.sharing.shares.model.ShareType
+import com.owncloud.android.testutil.OC_PRIVATE_SHARE
+import com.owncloud.android.testutil.OC_PUBLIC_SHARE
 import io.mockk.every
 import io.mockk.mockkClass
 import org.junit.Assert.assertEquals
@@ -39,6 +40,7 @@ import org.junit.Test
 class OCLocalDataSourceTest {
     private lateinit var ocLocalSharesDataSource: OCLocalShareDataSource
     private val ocSharesDao = mockkClass(OCShareDao::class)
+    private val ocShareMapper = OCShareMapper()
 
     @Rule
     @JvmField
@@ -55,7 +57,7 @@ class OCLocalDataSourceTest {
         ocLocalSharesDataSource =
             OCLocalShareDataSource(
                 ocSharesDao,
-                OCShareMapper()
+                ocShareMapper
             )
     }
 
@@ -64,18 +66,20 @@ class OCLocalDataSourceTest {
      ******************************************************************************************************/
 
     private val privateShares = listOf(
-        DataTestUtil.createPrivateShareEntity(
-            path = "/Docs/doc1.doc",
-            isFolder = false,
-            shareWith = "username",
-            sharedWithDisplayName = "Sophie"
-        ),
-        DataTestUtil.createPrivateShareEntity(
-            path = "/Docs/doc1.doc",
-            isFolder = false,
-            shareWith = "user.name",
-            sharedWithDisplayName = "Nicole"
-        )
+        ocShareMapper.toEntity(
+            OC_PRIVATE_SHARE.copy(
+                path = "/Docs/doc1.doc",
+                shareWith = "username",
+                sharedWithDisplayName = "Sophie"
+            )
+        )!!,
+        ocShareMapper.toEntity(
+            OC_PRIVATE_SHARE.copy(
+                path = "/Docs/doc1.doc",
+                shareWith = "user.name",
+                sharedWithDisplayName = "Nicole"
+            )
+        )!!
     )
 
     private val privateShareTypes = listOf(
@@ -145,10 +149,8 @@ class OCLocalDataSourceTest {
         } returns 10
 
         val insertedShareId = ocLocalSharesDataSource.insert(
-            DataTestUtil.createPrivateShare(
-                shareType = ShareType.USER.value,
+            OC_PRIVATE_SHARE.copy(
                 path = "/Docs/doc1.doc",
-                isFolder = false,
                 shareWith = "username",
                 sharedWithDisplayName = "Sophie"
             )
@@ -168,10 +170,8 @@ class OCLocalDataSourceTest {
         } returns 3
 
         val updatedShareId = ocLocalSharesDataSource.update(
-            DataTestUtil.createPrivateShare(
-                shareType = ShareType.USER.value,
+            OC_PRIVATE_SHARE.copy(
                 path = "/Docs/doc1.doc",
-                isFolder = false,
                 shareWith = "user.name",
                 sharedWithDisplayName = "Nicole"
             )
@@ -183,19 +183,21 @@ class OCLocalDataSourceTest {
      ******************************************* PUBLIC SHARES ********************************************
      ******************************************************************************************************/
 
-    val publicShares = listOf(
-        DataTestUtil.createPublicShareEntity(
+    private val publicShares = listOf(
+        ocShareMapper.toEntity(
+            OC_PUBLIC_SHARE.copy(
             path = "/Photos/",
             isFolder = true,
             name = "Photos link",
             shareLink = "http://server:port/s/1"
-        ),
-        DataTestUtil.createPublicShareEntity(
+        ))!!,
+            ocShareMapper.toEntity(
+                OC_PUBLIC_SHARE.copy(
             path = "/Photos/",
             isFolder = true,
             name = "Photos link 2",
             shareLink = "http://server:port/s/2"
-        )
+        ))!!
     )
 
     @Test
@@ -240,7 +242,7 @@ class OCLocalDataSourceTest {
         } returns 7
 
         val insertedShareId = ocLocalSharesDataSource.insert(
-            DataTestUtil.createPublicShare(
+            OC_PUBLIC_SHARE.copy(
                 path = "/Photos/",
                 isFolder = true,
                 name = "Photos link",
@@ -262,7 +264,7 @@ class OCLocalDataSourceTest {
         } returns 8
 
         val updatedShareId = ocLocalSharesDataSource.update(
-            DataTestUtil.createPublicShare(
+            OC_PUBLIC_SHARE.copy(
                 path = "/Photos/",
                 isFolder = true,
                 name = "Photos link 2",

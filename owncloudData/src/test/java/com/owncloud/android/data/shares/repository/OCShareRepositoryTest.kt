@@ -24,11 +24,12 @@ import androidx.lifecycle.MutableLiveData
 import com.owncloud.android.data.sharing.shares.datasources.LocalShareDataSource
 import com.owncloud.android.data.sharing.shares.datasources.RemoteShareDataSource
 import com.owncloud.android.data.sharing.shares.repository.OCShareRepository
-import com.owncloud.android.data.utils.DataTestUtil
 import com.owncloud.android.domain.exceptions.FileNotFoundException
 import com.owncloud.android.domain.exceptions.NoConnectionWithServerException
 import com.owncloud.android.domain.sharing.shares.model.OCShare
 import com.owncloud.android.domain.sharing.shares.model.ShareType
+import com.owncloud.android.testutil.OC_PRIVATE_SHARE
+import com.owncloud.android.testutil.OC_PUBLIC_SHARE
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -50,10 +51,10 @@ class OCShareRepositoryTest {
         OCShareRepository(localShareDataSource, remoteShareDataSource)
 
     private val shares = arrayListOf(
-        DataTestUtil.createPublicShare(),
-        DataTestUtil.createPrivateShare(),
-        DataTestUtil.createPrivateShare(),
-        DataTestUtil.createPublicShare()
+        OC_PUBLIC_SHARE,
+        OC_PRIVATE_SHARE,
+        OC_PRIVATE_SHARE,
+        OC_PUBLIC_SHARE
     )
 
     private val filePath = "/Images"
@@ -368,7 +369,7 @@ class OCShareRepositoryTest {
                 any(),
                 any()
             )
-        } returns shares.get(2)
+        } returns shares[2]
 
         ocShareRepository.insertPrivateShare(
             filePath,
@@ -388,7 +389,7 @@ class OCShareRepositoryTest {
             )
         }
 
-        verify(exactly = 1) { localShareDataSource.insert(shares.get(2)) }
+        verify(exactly = 1) { localShareDataSource.insert(shares[2]) }
     }
 
     @Test(expected = FileNotFoundException::class)
@@ -426,7 +427,7 @@ class OCShareRepositoryTest {
         }
 
         verify(exactly = 0) {
-            localShareDataSource.insert(shares.get(2))
+            localShareDataSource.insert(shares[2])
         }
     }
 
@@ -442,7 +443,7 @@ class OCShareRepositoryTest {
                 any(),
                 any()
             )
-        } returns shares.get(2)
+        } returns shares[2]
 
         ocShareRepository.updatePrivateShare(
             1,
@@ -458,7 +459,7 @@ class OCShareRepositoryTest {
             )
         }
 
-        verify(exactly = 1) { localShareDataSource.update(shares.get(2)) }
+        verify(exactly = 1) { localShareDataSource.update(shares[2]) }
     }
 
     @Test(expected = FileNotFoundException::class)
@@ -489,7 +490,7 @@ class OCShareRepositoryTest {
             )
         }
 
-        verify(exactly = 0) { localShareDataSource.update(shares.get(2)) }
+        verify(exactly = 0) { localShareDataSource.update(shares[2]) }
     }
 
     @Test
