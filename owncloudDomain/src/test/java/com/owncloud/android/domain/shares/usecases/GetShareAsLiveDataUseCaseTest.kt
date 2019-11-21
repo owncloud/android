@@ -24,8 +24,7 @@ import androidx.lifecycle.MutableLiveData
 import com.owncloud.android.domain.sharing.shares.ShareRepository
 import com.owncloud.android.domain.sharing.shares.model.OCShare
 import com.owncloud.android.domain.sharing.shares.usecases.GetShareAsLiveDataUseCase
-import com.owncloud.android.domain.utils.DomainTestUtil.DUMMY_SHARE
-
+import com.owncloud.android.testutil.OC_SHARE
 import io.mockk.every
 import io.mockk.spyk
 import org.junit.Assert
@@ -53,7 +52,7 @@ class GetShareAsLiveDataUseCaseTest {
         val shareLiveData = MutableLiveData<OCShare>()
         every { shareRepository.getShareAsLiveData(any()) } returns shareLiveData
 
-        val shareToEmit = listOf(DUMMY_SHARE)
+        val shareToEmit = listOf(OC_SHARE)
 
         useCase.execute(useCaseParams).observeForever {
             shareEmitted.add(it)

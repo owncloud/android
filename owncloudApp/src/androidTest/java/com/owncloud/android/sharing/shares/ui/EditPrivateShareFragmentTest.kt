@@ -39,10 +39,10 @@ import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.ui.sharing.fragments.EditPrivateShareFragment
 import com.owncloud.android.presentation.viewmodels.sharing.OCShareViewModel
-import com.owncloud.android.utils.AppTestUtil.DUMMY_ACCOUNT
-import com.owncloud.android.utils.AppTestUtil.DUMMY_FILE
-import com.owncloud.android.utils.AppTestUtil.DUMMY_FOLDER
-import com.owncloud.android.utils.AppTestUtil.DUMMY_SHARE
+import com.owncloud.android.testutil.OC_ACCOUNT
+import com.owncloud.android.testutil.OC_SHARE
+import com.owncloud.android.utils.AppTestUtil.OC_FILE
+import com.owncloud.android.utils.AppTestUtil.OC_FOLDER
 import com.owncloud.android.utils.Permissions
 import io.mockk.every
 import io.mockk.mockk
@@ -236,17 +236,17 @@ class EditPrivateShareFragmentTest {
         isFolder: Boolean = false,
         permissions: Int = Permissions.READ_PERMISSIONS.value
     ) {
-        val shareToEdit = DUMMY_SHARE.copy(
+        val shareToEdit = OC_SHARE.copy(
             sharedWithDisplayName = defaultSharedWithDisplayName,
             permissions = permissions
         )
 
-        val sharedFile = if (isFolder) DUMMY_FOLDER else DUMMY_FILE
+        val sharedFile = if (isFolder) OC_FOLDER else OC_FILE
 
         val editPrivateShareFragment = EditPrivateShareFragment.newInstance(
             shareToEdit,
             sharedFile,
-            DUMMY_ACCOUNT
+            OC_ACCOUNT
         )
 
         ActivityScenario.launch(TestShareFileActivity::class.java).onActivity {
@@ -256,7 +256,7 @@ class EditPrivateShareFragmentTest {
         privateShareAsLiveData.postValue(
             Event(
                 UIResult.Success(
-                    DUMMY_SHARE.copy(
+                    OC_SHARE.copy(
                         shareWith = "user",
                         sharedWithDisplayName = "User",
                         path = "/Videos",

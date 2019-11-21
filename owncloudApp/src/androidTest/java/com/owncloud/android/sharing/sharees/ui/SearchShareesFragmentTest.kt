@@ -38,7 +38,7 @@ import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.ui.sharing.fragments.SearchShareesFragment
 import com.owncloud.android.presentation.viewmodels.sharing.OCShareViewModel
 import com.owncloud.android.sharing.shares.ui.TestShareFileActivity
-import com.owncloud.android.utils.AppTestUtil.DUMMY_SHARE
+import com.owncloud.android.testutil.OC_SHARE
 import io.mockk.every
 import io.mockk.mockk
 import org.hamcrest.CoreMatchers
@@ -89,8 +89,8 @@ class SearchShareesFragmentTest {
             Event(
                 UIResult.Success(
                     listOf(
-                        DUMMY_SHARE.copy(sharedWithDisplayName = "Sheldon"),
-                        DUMMY_SHARE.copy(sharedWithDisplayName = "Penny")
+                        OC_SHARE.copy(sharedWithDisplayName = "Sheldon"),
+                        OC_SHARE.copy(sharedWithDisplayName = "Penny")
                     )
                 )
             )
@@ -110,7 +110,7 @@ class SearchShareesFragmentTest {
             Event(
                 UIResult.Success(
                     listOf(
-                        DUMMY_SHARE.copy(
+                        OC_SHARE.copy(
                             shareType = ShareType.GROUP,
                             sharedWithDisplayName = "Friends"
                         )

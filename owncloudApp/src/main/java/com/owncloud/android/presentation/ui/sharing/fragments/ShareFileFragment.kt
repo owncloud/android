@@ -361,9 +361,6 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
                             updateCapabilities(it)
                         }
                     }
-                    else -> {
-                        Log.d(TAG, "Unknown status when loading capabilities in account ${account?.name}")
-                    }
                 }
             }
         )

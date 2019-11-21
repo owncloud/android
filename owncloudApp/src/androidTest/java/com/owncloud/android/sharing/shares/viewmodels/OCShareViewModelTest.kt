@@ -18,7 +18,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.presentation.sharing.shares.viewmodels
+package com.owncloud.android.sharing.shares.viewmodels
 
 import android.accounts.Account
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
@@ -33,11 +33,12 @@ import com.owncloud.android.domain.sharing.shares.usecases.EditPublicShareAsyncU
 import com.owncloud.android.domain.sharing.shares.usecases.GetShareAsLiveDataUseCase
 import com.owncloud.android.domain.sharing.shares.usecases.GetSharesAsLiveDataUseCase
 import com.owncloud.android.domain.sharing.shares.usecases.RefreshSharesFromServerAsyncUseCase
-import com.owncloud.android.domain.utils.DomainTestUtil.DUMMY_SHARE
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.viewmodels.sharing.OCShareViewModel
-import com.owncloud.android.utils.AppTestUtil
-import com.owncloud.android.utils.TIMEOUT_TEST_LONG
+import com.owncloud.android.testutil.OC_ACCOUNT
+import com.owncloud.android.testutil.OC_SHARE
+import com.owncloud.android.testutil.livedata.TIMEOUT_TEST_LONG
+import com.owncloud.android.testutil.livedata.getOrAwaitValues
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -67,9 +68,9 @@ class OCShareViewModelTest {
 
     private val filePath = "/Photos/image.jpg"
 
-    private var testAccount: Account = AppTestUtil.createAccount("admin@server", "test")
+    private var testAccount: Account = OC_ACCOUNT
 
-    private val sharesLiveData = MutableLiveData<List<OCShare>?>()
+    private val sharesLiveData = MutableLiveData<List<OCShare>>()
     private val privateShareLiveData = MutableLiveData<OCShare>()
 
     @Rule
@@ -173,7 +174,7 @@ class OCShareViewModelTest {
     fun refreshPrivateShareSuccess() {
         initTest()
 
-        val ocShare = DUMMY_SHARE.copy(id = 123, name = "PhotoLink")
+        val ocShare = OC_SHARE.copy(id = 123, name = "PhotoLink")
         privateShareLiveData.postValue(ocShare)
 
         refreshPrivateShareVerification(
@@ -190,12 +191,12 @@ class OCShareViewModelTest {
     ) {
         coEvery { createPrivateShareAsyncUseCase.execute(any()) } returns valueToTest
 
-        ocShareViewModel.refreshPrivateShare(DUMMY_SHARE.remoteId)
+        ocShareViewModel.refreshPrivateShare(OC_SHARE.remoteId)
 
         val value = ocShareViewModel.privateShare.getOrAwaitValues(expectedOnPosition)
         assertEquals(expectedValue, value[expectedOnPosition - 1])
 
-        verify(exactly = 1) { getShareAsLiveDataUseCase.execute(GetShareAsLiveDataUseCase.Params(DUMMY_SHARE.remoteId)) }
+        verify(exactly = 1) { getShareAsLiveDataUseCase.execute(GetShareAsLiveDataUseCase.Params(OC_SHARE.remoteId)) }
         // Just once on init
         verify(exactly = 1) { getSharesAsLiveDataUseCase.execute(any()) }
     }
@@ -208,11 +209,11 @@ class OCShareViewModelTest {
         coEvery { createPrivateShareAsyncUseCase.execute(any()) } returns valueToTest
 
         ocShareViewModel.insertPrivateShare(
-            filePath = DUMMY_SHARE.path,
-            shareType = DUMMY_SHARE.shareType,
-            shareeName = DUMMY_SHARE.accountOwner,
-            permissions = DUMMY_SHARE.permissions,
-            accountName = DUMMY_SHARE.accountOwner
+            filePath = OC_SHARE.path,
+            shareType = OC_SHARE.shareType,
+            shareeName = OC_SHARE.accountOwner,
+            permissions = OC_SHARE.permissions,
+            accountName = OC_SHARE.accountOwner
         )
 
         val value = ocShareViewModel.privateShareCreationStatus.getOrAwaitValues(expectedOnPosition)
@@ -230,9 +231,9 @@ class OCShareViewModelTest {
         coEvery { editPrivateShareAsyncUseCase.execute(any()) } returns valueToTest
 
         ocShareViewModel.updatePrivateShare(
-            remoteId = DUMMY_SHARE.remoteId,
-            permissions = DUMMY_SHARE.permissions,
-            accountName = DUMMY_SHARE.accountOwner
+            remoteId = OC_SHARE.remoteId,
+            permissions = OC_SHARE.permissions,
+            accountName = OC_SHARE.accountOwner
         )
 
         val value = ocShareViewModel.privateShareEditionStatus.getOrAwaitValues(expectedOnPosition)
@@ -324,13 +325,13 @@ class OCShareViewModelTest {
         coEvery { createPublicShareAsyncUseCase.execute(any()) } returns valueToTest
 
         ocShareViewModel.insertPublicShare(
-            filePath = DUMMY_SHARE.path,
+            filePath = OC_SHARE.path,
             name = "Photos 2 link",
             password = "1234",
             expirationTimeInMillis = -1,
             publicUpload = false,
-            permissions = DUMMY_SHARE.permissions,
-            accountName = DUMMY_SHARE.accountOwner
+            permissions = OC_SHARE.permissions,
+            accountName = OC_SHARE.accountOwner
         )
 
         val value = ocShareViewModel.publicShareCreationStatus.getOrAwaitValues(expectedOnPosition)
@@ -461,7 +462,7 @@ class OCShareViewModelTest {
         coEvery { deletePublicShareAsyncUseCase.execute(any()) } returns valueToTest
 
         ocShareViewModel.deleteShare(
-            remoteId = DUMMY_SHARE.remoteId
+            remoteId = OC_SHARE.remoteId
         )
 
         val value = ocShareViewModel.shareDeletionStatus.getOrAwaitValues(expectedOnPosition)
