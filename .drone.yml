@@ -45,7 +45,7 @@ pipeline:
     pull: true
     commands:
     - cd docs/
-    - make pdf
+    - bin/cli -m
 
   cache-rebuild:
     image: plugins/s3-cache:1
