@@ -97,7 +97,6 @@ import static com.owncloud.android.operations.UploadFileOperation.CREATED_AS_CAM
  * fatal error occured.
  * <p>
  * Every file passed to this service is uploaded. No filtering is performed.
- * However, Intent keys (e.g., KEY_WIFI_ONLY) are obeyed.
  */
 public class FileUploader extends Service
         implements OnDatatransferProgressListener, OnAccountsUpdateListener,
@@ -292,7 +291,6 @@ public class FileUploader extends Service
 
         if ((isCameraUploadFile || isAvailableOfflineFile || isRequestedFromWifiBackEvent) &&
                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-
             Log_OC.d(TAG, "Starting FileUploader service in foreground");
             mNotificationBuilder
                     .setChannelId(UPLOAD_NOTIFICATION_CHANNEL_ID)
@@ -884,31 +882,41 @@ public class FileUploader extends Service
                     );
                 }
 
-                if (!uploadResult.isSuccess() && uploadResult.getException() != null) {
-
-                    // if failed due to lack of connectivity, schedule an automatic retry
+                if (!uploadResult.isSuccess()) {
                     TransferRequester requester = new TransferRequester();
-                    if (requester.shouldScheduleRetry(this, uploadResult.getException())) {
-                        int jobId = mPendingUploads.buildKey(
-                                mCurrentAccount.name,
-                                mCurrentUpload.getRemotePath()
-                        ).hashCode();
+                    int jobId = mPendingUploads.buildKey(
+                            mCurrentAccount.name,
+                            mCurrentUpload.getRemotePath()
+                    ).hashCode();
+
+                    if (uploadResult.getException() != null) {
+                        // if failed due to lack of connectivity, schedule an automatic retry
+                        if (requester.shouldScheduleRetry(this, uploadResult.getException())) {
+                            requester.scheduleUpload(
+                                    this,
+                                    jobId,
+                                    mCurrentAccount.name,
+                                    mCurrentUpload.getRemotePath()
+                            );
+                            uploadResult = new RemoteOperationResult(
+                                    ResultCode.NO_NETWORK_CONNECTION);
+                        } else {
+                            Log_OC.v(
+                                    TAG,
+                                    String.format(
+                                            "Exception in upload, network is OK, no retry scheduled for %1s in %2s",
+                                            mCurrentUpload.getRemotePath(),
+                                            mCurrentAccount.name
+                                    )
+                            );
+                        }
+                    } else if (uploadResult.getCode() == ResultCode.DELAYED_FOR_WIFI) {
+                        // if failed due to the upload is delayed for wifi, schedule automatic retry as well
                         requester.scheduleUpload(
                                 this,
                                 jobId,
                                 mCurrentAccount.name,
                                 mCurrentUpload.getRemotePath()
-                        );
-                        uploadResult = new RemoteOperationResult(
-                                ResultCode.NO_NETWORK_CONNECTION);
-                    } else {
-                        Log_OC.v(
-                                TAG,
-                                String.format(
-                                        "Exception in upload, network is OK, no retry scheduled for %1s in %2s",
-                                        mCurrentUpload.getRemotePath(),
-                                        mCurrentAccount.name
-                                )
                         );
                     }
                 } else {
