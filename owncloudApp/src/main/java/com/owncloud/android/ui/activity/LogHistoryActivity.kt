@@ -49,7 +49,7 @@ class LogHistoryActivity : ToolbarActivity() {
 
             var logFragment: Fragment? = null
 
-            Timber.forest().fileLoggingTree()?.let {
+            fileLoggingTree()?.let {
                 logFragment = BothLogsFragment.newInstance(
                     bothLogsTargetFileName,
                     bothLogsSearchHint,
