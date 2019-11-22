@@ -8,7 +8,7 @@ import java.io.File
 object LoggingHelper {
 
     fun startLogging(directory: File, storagePath: String) {
-        Timber.forest().fileLoggingTree()?.let {
+        fileLoggingTree()?.let {
             Timber.forest().drop(Timber.forest().indexOf(it))
         }
         if (!directory.exists())
@@ -17,7 +17,7 @@ object LoggingHelper {
     }
 
     fun stopLogging() {
-        Timber.forest().fileLoggingTree()?.let {
+        fileLoggingTree()?.let {
             Timber.forest().drop(Timber.forest().indexOf(it))
         }
     }
