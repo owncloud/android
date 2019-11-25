@@ -235,8 +235,7 @@ public class FileDataStorageManager {
         cv.put(ProviderTableMeta.FILE_PRIVATE_LINK, file.getPrivateLink());
 
         boolean sameRemotePath = fileExists(file.getRemotePath());
-        if (sameRemotePath ||
-                fileExists(file.getFileId())) {  // for renamed files; no more delete and create
+        if (sameRemotePath || fileExists(file.getFileId())) {  // for renamed files; no more delete and create
 
             OCFile oldFile;
             if (sameRemotePath) {

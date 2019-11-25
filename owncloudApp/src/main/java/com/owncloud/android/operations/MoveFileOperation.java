@@ -2,6 +2,7 @@
  * ownCloud Android client application
  *
  * @author David A. Velasco
+ * @author David González Verdugo
  * Copyright (C) 2019 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -25,7 +26,7 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.resources.files.MoveRemoteFileOperation;
 import com.owncloud.android.operations.common.SyncOperation;
-import com.owncloud.android.utils.FileStorageUtils;
+import com.owncloud.android.utils.RemoteFileUtils;
 
 /**
  * Operation moving an {@link OCFile} to a different folder.
@@ -73,20 +74,22 @@ public class MoveFileOperation extends SyncOperation {
         }
 
         /// 2. remote move
-        String targetPath = mTargetParentPath + mFile.getFileName();
+        String targetRemotePath = mTargetParentPath + mFile.getFileName();
+        // Check if target remote path already exists on server or add suffix (2), (3) ... otherwise
+        String finalRemotePath = RemoteFileUtils.Companion.getAvailableRemotePath(client, targetRemotePath);
         if (mFile.isFolder()) {
-            targetPath += OCFile.PATH_SEPARATOR;
+            finalRemotePath += OCFile.PATH_SEPARATOR;
         }
         MoveRemoteFileOperation operation = new MoveRemoteFileOperation(
                 mSrcPath,
-                targetPath,
+                finalRemotePath,
                 false
         );
         result = operation.execute(client);
 
         /// 3. local move
         if (result.isSuccess()) {
-            getStorageManager().moveLocalFile(mFile, targetPath, mTargetParentPath);
+            getStorageManager().moveLocalFile(mFile, finalRemotePath, mTargetParentPath);
 
             // adjust available offline status after move resume observation of file after rename
             OCFile updatedFile = getStorageManager().getFileById(mFile.getFileId());
@@ -95,17 +98,5 @@ public class MoveFileOperation extends SyncOperation {
         // TODO handle ResultCode.PARTIAL_MOVE_DONE in client Activity, for the moment
 
         return result;
-    }
-
-    private void resumeObservation(String targetPath) {
-        OCFile updatedFile = new OCFile(targetPath);
-        updatedFile.setMimetype(mFile.getMimetype());
-        updatedFile.setFileId(mFile.getFileId());
-        updatedFile.setStoragePath(
-                FileStorageUtils.getDefaultSavePathFor(
-                        getStorageManager().getAccount().name,
-                        updatedFile
-                )
-        );
     }
 }

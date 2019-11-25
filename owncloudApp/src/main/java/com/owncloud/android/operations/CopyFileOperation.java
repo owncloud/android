@@ -1,23 +1,25 @@
-/* ownCloud Android client application
- *   Copyright (C) 2016 ownCloud GmbH.
+/**
+ * ownCloud Android client application
  *
- *   This program is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License version 2,
- *   as published by the Free Software Foundation.
+ * @author David A. Velasco
+ * @author David González Verdugo
+ * Copyright (C) 2019 ownCloud GmbH.
  *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
  *
- *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.operations;
 
-import android.accounts.Account;
+package com.owncloud.android.operations;
 
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.lib.common.OwnCloudClient;
@@ -25,6 +27,7 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.resources.files.CopyRemoteFileOperation;
 import com.owncloud.android.operations.common.SyncOperation;
+import com.owncloud.android.utils.RemoteFileUtils;
 
 /**
  * Operation copying an {@link OCFile} to a different folder.
@@ -75,13 +78,16 @@ public class CopyFileOperation extends SyncOperation {
         }
 
         /// 2. remote copy
-        String targetPath = mTargetParentPath + mFile.getFileName();
+        String targetRemotePath = mTargetParentPath + mFile.getFileName();
+        // Check if target remote path already exists on server or add suffix (2), (3) ... otherwise
+        String finalRemotePath = RemoteFileUtils.Companion.getAvailableRemotePath(client, targetRemotePath);
+
         if (mFile.isFolder()) {
-            targetPath += OCFile.PATH_SEPARATOR;
+            finalRemotePath += OCFile.PATH_SEPARATOR;
         }
         CopyRemoteFileOperation operation = new CopyRemoteFileOperation(
                 mSrcPath,
-                targetPath,
+                finalRemotePath,
                 false
         );
         result = operation.execute(client);
@@ -89,7 +95,7 @@ public class CopyFileOperation extends SyncOperation {
 
         /// 3. local copy
         if (result.isSuccess()) {
-            getStorageManager().copyLocalFile(mFile, targetPath, targetFileRemoteId);
+            getStorageManager().copyLocalFile(mFile, finalRemotePath, targetFileRemoteId);
         }
         // TODO handle ResultCode.PARTIAL_COPY_DONE in client Activity, for the moment
 
