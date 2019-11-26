@@ -45,7 +45,6 @@ dependencies {
     androidTestImplementation "androidx.test.espresso:espresso-web:$espressoTestVersion"
     androidTestImplementation "androidx.test.uiautomator:uiautomator:$uiAutomatorTestVersion"
     androidTestImplementation "androidx.annotation:annotation:$annotationTestVersion"
-    androidTestImplementation "androidx.room:room-testing:$roomVersion"
     androidTestImplementation "androidx.arch.core:core-testing:$archLifecycleVersion"
     androidTestImplementation("io.mockk:mockk-android:$mockkVersion") {
         exclude module: 'objenesis'
@@ -67,9 +66,6 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-extensions:$archLifecycleVersion"
     implementation "androidx.lifecycle:lifecycle-viewmodel:$archLifecycleVersion"
     kapt "androidx.lifecycle:lifecycle-common-java8:$archLifecycleVersion"
-
-    implementation "androidx.room:room-runtime:$roomVersion"
-    kapt "androidx.room:room-compiler:$roomVersion"
 
     // Koin dependency injector
     implementation "org.koin:koin-androidx-viewmodel:$koinVersion"
@@ -105,12 +101,6 @@ android {
         buildConfigField "String", gitRemote, "\"" + getGitOriginRemote() + "\""
         buildConfigField "String", commitSHA1, "\"" + getLatestGitHash() + "\""
 
-        javaCompileOptions {
-            annotationProcessorOptions {
-                arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
-            }
-        }
-
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -122,7 +112,6 @@ android {
     sourceSets {
         androidTest.java.srcDirs += "src/test-common/java"
         test.java.srcDirs += "src/test-common/java"
-        androidTest.assets.srcDirs += files("$projectDir/schemas".toString())
     }
 
     lintOptions {
