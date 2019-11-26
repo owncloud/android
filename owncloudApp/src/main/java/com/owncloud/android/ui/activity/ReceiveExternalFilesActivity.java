@@ -41,6 +41,7 @@ import android.content.IntentFilter;
 import android.content.res.Resources.NotFoundException;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Parcelable;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -501,7 +502,8 @@ public class ReceiveExternalFilesActivity extends FileActivity
             if (mStreamsToUpload.get(0) != null) {
                 String streamToUpload = mStreamsToUpload.get(0).toString();
                 if (streamToUpload.contains("/data") && streamToUpload.contains(getPackageName()) &&
-                        !streamToUpload.contains(getCacheDir().getPath())) {
+                        !streamToUpload.contains(getCacheDir().getPath()) &&
+                        !streamToUpload.contains(Environment.getExternalStorageDirectory().toString())) {
                     finish();
                 }
             }
