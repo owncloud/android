@@ -39,7 +39,6 @@ class LogHistoryActivity : ToolbarActivity() {
 
         // Check that the activity is using the layout version with the fragment_container FrameLayout
         if (findViewById<View>(R.id.fragment_container) != null) {
-
             // However, if we're being restored from a previous state,
             // then we don't need to do anything and should return or else
             // we could end up with overlapping fragments.
@@ -51,7 +50,7 @@ class LogHistoryActivity : ToolbarActivity() {
 
             fileLoggingTree()?.let {
                 logFragment = BothLogsFragment.newInstance(
-                    bothLogsTargetFileName,
+                    "${getString(R.string.app_name)}.log",
                     bothLogsSearchHint,
                     logCatSearchHint,
                     getString(R.string.mail_logger)
@@ -78,7 +77,6 @@ class LogHistoryActivity : ToolbarActivity() {
     companion object {
         private const val logCatTargetFileName = "logfile.log"
         private const val logCatSearchHint = "search logcat"
-        private const val bothLogsTargetFileName = "Owncloud.log"
         private const val bothLogsSearchHint = "search logfile"
     }
 }
