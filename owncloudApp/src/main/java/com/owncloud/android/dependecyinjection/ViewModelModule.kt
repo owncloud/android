@@ -26,10 +26,10 @@ import org.koin.dsl.module
 
 val viewModelModule = module {
     viewModel { (accountName: String) ->
-        OCCapabilityViewModel(accountName, get(), get())
+        OCCapabilityViewModel(accountName, get(), get(), get())
     }
 
     viewModel { (filePath: String, accountName: String) ->
-        OCShareViewModel(filePath, accountName, get(), get(), get(), get(), get(), get(), get(), get())
+        OCShareViewModel(filePath, accountName, get(), get(), get(), get(), get(), get(), get(), get(), get())
     }
 }

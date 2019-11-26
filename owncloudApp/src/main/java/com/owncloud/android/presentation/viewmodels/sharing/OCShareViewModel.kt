@@ -36,8 +36,7 @@ import com.owncloud.android.domain.sharing.shares.usecases.GetSharesAsLiveDataUs
 import com.owncloud.android.domain.sharing.shares.usecases.RefreshSharesFromServerAsyncUseCase
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.presentation.UIResult
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
+import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -55,7 +54,7 @@ class OCShareViewModel(
     private val createPublicShareUseCase: CreatePublicShareAsyncUseCase,
     private val editPublicShareUseCase: EditPublicShareAsyncUseCase,
     private val deletePublicShareUseCase: DeleteShareAsyncUseCase,
-    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
+    private val coroutineDispatcherProvider: CoroutinesDispatcherProvider
 ) : ViewModel() {
 
     private val _shares = MediatorLiveData<Event<UIResult<List<OCShare>>>>()
@@ -73,11 +72,11 @@ class OCShareViewModel(
         refreshSharesFromNetwork()
     }
 
-    fun refreshSharesFromNetwork() {
+    private fun refreshSharesFromNetwork() {
         viewModelScope.launch {
             _shares.postValue(Event(UIResult.Loading(sharesLiveData.value)))
 
-            val useCaseResult = withContext(ioDispatcher) {
+            val useCaseResult = withContext(coroutineDispatcherProvider.io) {
                 refreshSharesFromServerAsyncUseCase.execute(
                     RefreshSharesFromServerAsyncUseCase.Params(
                         filePath = filePath,
@@ -105,7 +104,7 @@ class OCShareViewModel(
                 Event(UIResult.Loading())
             )
 
-            val useCaseResult = withContext(ioDispatcher) {
+            val useCaseResult = withContext(coroutineDispatcherProvider.io) {
                 deletePublicShareUseCase.execute(
                     DeleteShareAsyncUseCase.Params(
                         remoteId
@@ -113,12 +112,8 @@ class OCShareViewModel(
                 )
             }
 
-            if (!useCaseResult.isSuccess) {
-                _shareDeletionStatus.postValue(
-                    Event(UIResult.Error(useCaseResult.getThrowableOrNull()))
-                )
-            } else {
-                _shareDeletionStatus.postValue(Event(UIResult.Success()))
+            if (useCaseResult.isError) {
+                _shareDeletionStatus.postValue(Event(UIResult.Error(useCaseResult.getThrowableOrNull())))
             }
         }
     }
@@ -142,7 +137,7 @@ class OCShareViewModel(
                 Event(UIResult.Loading())
             )
 
-            val useCaseResult = withContext(ioDispatcher) {
+            val useCaseResult = withContext(coroutineDispatcherProvider.io) {
                 createPrivateShareUseCase.execute(
                     CreatePrivateShareAsyncUseCase.Params(
                         filePath,
@@ -154,7 +149,9 @@ class OCShareViewModel(
                 )
             }
 
-            if (!useCaseResult.isSuccess) {
+            if (useCaseResult.isSuccess) {
+                _privateShareCreationStatus.postValue(Event(UIResult.Success()))
+            } else {
                 _privateShareCreationStatus.postValue(
                     Event(UIResult.Error(useCaseResult.getThrowableOrNull()))
                 )
@@ -165,20 +162,16 @@ class OCShareViewModel(
     private val _privateShare = MediatorLiveData<Event<UIResult<OCShare>>>()
     val privateShare: LiveData<Event<UIResult<OCShare>>> = _privateShare
 
-    private var privateShareLiveData: LiveData<OCShare>? = null
-
     // Used to get a specific private share after updating it
     fun refreshPrivateShare(
         remoteId: Long
     ) {
-        privateShareLiveData = getShareAsLiveDataUseCase.execute(
+        val privateShareLiveData = getShareAsLiveDataUseCase.execute(
             GetShareAsLiveDataUseCase.Params(remoteId)
         )
 
-        privateShareLiveData?.let {
-            _privateShare.addSource(it) { privateShare ->
-                _privateShare.postValue(Event(UIResult.Success(privateShare)))
-            }
+        _privateShare.addSource(privateShareLiveData) { privateShare ->
+            _privateShare.postValue(Event(UIResult.Success(privateShare)))
         }
     }
 
@@ -195,7 +188,7 @@ class OCShareViewModel(
                 Event(UIResult.Loading())
             )
 
-            val useCaseResult = withContext(ioDispatcher) {
+            val useCaseResult = withContext(coroutineDispatcherProvider.io) {
                 editPrivateShareUseCase.execute(
                     EditPrivateShareAsyncUseCase.Params(
                         remoteId,
@@ -205,12 +198,8 @@ class OCShareViewModel(
                 )
             }
 
-            if (!useCaseResult.isSuccess) {
-                _privateShareEditionStatus.postValue(
-                    Event(UIResult.Error(useCaseResult.getThrowableOrNull()))
-                )
-            } else {
-                _privateShareEditionStatus.postValue(Event(UIResult.Success()))
+            if (useCaseResult.isError) {
+                _privateShareEditionStatus.postValue(Event(UIResult.Error(useCaseResult.getThrowableOrNull())))
             }
         }
     }
@@ -236,7 +225,7 @@ class OCShareViewModel(
                 Event(UIResult.Loading())
             )
 
-            val useCaseResult = withContext(ioDispatcher) {
+            val useCaseResult = withContext(coroutineDispatcherProvider.io) {
                 createPublicShareUseCase.execute(
                     CreatePublicShareAsyncUseCase.Params(
                         filePath,
@@ -250,12 +239,10 @@ class OCShareViewModel(
                 )
             }
 
-            if (!useCaseResult.isSuccess) {
-                _publicShareCreationStatus.postValue(
-                    Event(UIResult.Error(useCaseResult.getThrowableOrNull()))
-                )
-            } else {
+            if (useCaseResult.isSuccess) {
                 _publicShareCreationStatus.postValue(Event(UIResult.Success()))
+            } else {
+                _publicShareCreationStatus.postValue(Event(UIResult.Error(useCaseResult.getThrowableOrNull())))
             }
         }
     }
@@ -273,11 +260,9 @@ class OCShareViewModel(
         accountName: String
     ) {
         viewModelScope.launch {
-            _publicShareEditionStatus.postValue(
-                Event(UIResult.Loading())
-            )
+            _publicShareEditionStatus.postValue(Event(UIResult.Loading()))
 
-            val useCaseResult = withContext(ioDispatcher) {
+            val useCaseResult = withContext(coroutineDispatcherProvider.io) {
                 editPublicShareUseCase.execute(
                     EditPublicShareAsyncUseCase.Params(
                         remoteId,
@@ -291,12 +276,10 @@ class OCShareViewModel(
                 )
             }
 
-            if (!useCaseResult.isSuccess) {
-                _publicShareEditionStatus.postValue(
-                    Event(UIResult.Error(useCaseResult.getThrowableOrNull()))
-                )
-            } else {
+            if (useCaseResult.isSuccess) {
                 _publicShareEditionStatus.postValue(Event(UIResult.Success()))
+            } else {
+                _publicShareEditionStatus.postValue(Event(UIResult.Error(useCaseResult.getThrowableOrNull())))
             }
         }
     }
