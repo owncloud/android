@@ -26,12 +26,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.owncloud.android.domain.capabilities.model.OCCapability
 import com.owncloud.android.domain.capabilities.usecases.GetCapabilitiesAsLiveDataUseCase
-import com.owncloud.android.domain.capabilities.usecases.GetStoredCapabilitiesUseCase
 import com.owncloud.android.domain.capabilities.usecases.RefreshCapabilitiesFromServerAsyncUseCase
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.presentation.UIResult
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
+import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -42,20 +40,20 @@ class OCCapabilityViewModel(
     private val accountName: String,
     getCapabilitiesAsLiveDataUseCase: GetCapabilitiesAsLiveDataUseCase,
     private val refreshCapabilitiesFromServerUseCase: RefreshCapabilitiesFromServerAsyncUseCase,
-    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
+    private val coroutineDispatcherProvider: CoroutinesDispatcherProvider
 ) : ViewModel() {
 
     private val _capabilities = MediatorLiveData<Event<UIResult<OCCapability>>>()
     val capabilities: LiveData<Event<UIResult<OCCapability>>> = _capabilities
 
-    private var capabilitiesLiveData: LiveData<OCCapability?>? = getCapabilitiesAsLiveDataUseCase.execute(
+    private var capabilitiesLiveData: LiveData<OCCapability?> = getCapabilitiesAsLiveDataUseCase.execute(
         GetCapabilitiesAsLiveDataUseCase.Params(
             accountName = accountName
         )
     )
 
     init {
-        _capabilities.addSource(capabilitiesLiveData!!) { capabilities ->
+        _capabilities.addSource(capabilitiesLiveData) { capabilities ->
             _capabilities.postValue(Event(UIResult.Success(capabilities)))
         }
 
@@ -65,10 +63,10 @@ class OCCapabilityViewModel(
     fun refreshCapabilitiesFromNetwork() {
         viewModelScope.launch {
             _capabilities.postValue(
-                Event(UIResult.Loading(capabilitiesLiveData?.value))
+                Event(UIResult.Loading(capabilitiesLiveData.value))
             )
 
-            val useCaseResult = withContext(ioDispatcher) {
+            val useCaseResult = withContext(coroutineDispatcherProvider.io) {
                 refreshCapabilitiesFromServerUseCase.execute(
                     RefreshCapabilitiesFromServerAsyncUseCase.Params(
                         accountName = accountName
@@ -78,7 +76,7 @@ class OCCapabilityViewModel(
 
             if (useCaseResult.isError) {
                 _capabilities.postValue(
-                    Event(UIResult.Error(useCaseResult.getThrowableOrNull(), capabilitiesLiveData?.value))
+                    Event(UIResult.Error(useCaseResult.getThrowableOrNull(), capabilitiesLiveData.value))
                 )
             }
         }

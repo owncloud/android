@@ -18,9 +18,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.capabilities.viewmodels
+package com.owncloud.android.presentation.viewmodels.capabilities
 
-import android.accounts.Account
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
 import com.owncloud.android.domain.UseCaseResult
@@ -30,10 +29,10 @@ import com.owncloud.android.domain.capabilities.usecases.RefreshCapabilitiesFrom
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.viewmodels.capabilities.OCCapabilityViewModel
-import com.owncloud.android.testutil.OC_ACCOUNT
+import com.owncloud.android.providers.CoroutinesDispatcherProvider
+import com.owncloud.android.testutil.OC_ACCOUNT_NAME
 import com.owncloud.android.testutil.OC_CAPABILITY
-import com.owncloud.android.testutil.livedata.TIMEOUT_TEST_LONG
-import com.owncloud.android.testutil.livedata.getOrAwaitValues
+import com.owncloud.android.testutil.livedata.getLastEmittedValue
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -41,14 +40,21 @@ import io.mockk.mockkClass
 import io.mockk.spyk
 import io.mockk.unmockkAll
 import io.mockk.verify
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.TestCoroutineDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Assert.assertEquals
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 
 @RunWith(JUnit4::class)
+@ExperimentalCoroutinesApi
 class OCCapabilityViewModelTest {
     private lateinit var ocCapabilityViewModel: OCCapabilityViewModel
 
@@ -57,14 +63,29 @@ class OCCapabilityViewModelTest {
 
     private val capabilitiesLiveData = MutableLiveData<OCCapability>()
 
-    private var testAccount: Account = OC_ACCOUNT
+    private val testCoroutineDispatcher = TestCoroutineDispatcher()
+    private val coroutineDispatcherProvider: CoroutinesDispatcherProvider = CoroutinesDispatcherProvider(
+        io = testCoroutineDispatcher,
+        main = testCoroutineDispatcher,
+        computation = testCoroutineDispatcher
+    )
+
+    private var testAccountName = OC_ACCOUNT_NAME
 
     @Rule
     @JvmField
     val instantExecutorRule = InstantTaskExecutorRule()
 
+    @Before
+    fun setUp() {
+        Dispatchers.setMain(testCoroutineDispatcher)
+    }
+
     @After
     fun tearDown() {
+        Dispatchers.resetMain()
+        testCoroutineDispatcher.cleanupTestCoroutines()
+
         unmockkAll()
     }
 
@@ -75,9 +96,10 @@ class OCCapabilityViewModelTest {
         every { getCapabilitiesAsLiveDataUseCase.execute(any()) } returns capabilitiesLiveData
 
         ocCapabilityViewModel = OCCapabilityViewModel(
-            accountName = testAccount.name,
+            accountName = testAccountName,
             getCapabilitiesAsLiveDataUseCase = getCapabilitiesAsLiveDataUseCase,
-            refreshCapabilitiesFromServerUseCase = refreshCapabilitiesFromServerUseCase
+            refreshCapabilitiesFromServerUseCase = refreshCapabilitiesFromServerUseCase,
+            coroutineDispatcherProvider = coroutineDispatcherProvider
         )
     }
 
@@ -85,7 +107,7 @@ class OCCapabilityViewModelTest {
     fun getCapabilitiesAsLiveDataWithData() {
         initTest()
 
-        val capability = OC_CAPABILITY.copy(accountName = testAccount.name)
+        val capability = OC_CAPABILITY.copy(accountName = testAccountName)
 
         getCapabilitiesAsLiveDataVerification(
             valueToTest = capability,
@@ -103,69 +125,50 @@ class OCCapabilityViewModelTest {
         )
     }
 
-    @Test
-    fun fetchCapabilitiesLoading() {
-        initTest()
-
-        fetchCapabilitiesVerification(
-            valueToTest = UseCaseResult.Success(Unit),
-            expectedValue = Event(UIResult.Loading())
-        )
-    }
-//
-//    @Test
-//    fun fetchCapabilitiesError() {
-//        initTest()
-//
-//        val error = Throwable()
-//        fetchCapabilitiesVerification(
-//            valueToTest = UseCaseResult.Error(error),
-//            expectedValue = UIResult.Error(error),
-//            expectedOnPosition = 2
-//        )
-//    }
-//
-//    @Test
-//    fun fetchCapabilitiesSuccess() {
-//        initTest()
-//
-//        //Expect a null since we are mocking refreshCapabilities and we are not storing new capabilities on db
-//        fetchCapabilitiesVerification(
-//            valueToTest = UseCaseResult.Success(Unit),
-//            expectedValue = null,
-//            expectedOnPosition = 2
-//        )
-//    }
-
     private fun getCapabilitiesAsLiveDataVerification(
         valueToTest: OCCapability?,
-        expectedValue: Event<UIResult<OCCapability>>?,
-        expectedOnPosition: Int = 1
+        expectedValue: Event<UIResult<OCCapability>>?
     ) {
+        capabilitiesLiveData.postValue(valueToTest)
+
+        val value = ocCapabilityViewModel.capabilities.getLastEmittedValue()
+        assertEquals(expectedValue, value)
+
         // Calls performed during OCCapabilityViewModel initialization
         verify(exactly = 1) { getCapabilitiesAsLiveDataUseCase.execute(any()) }
         verify(exactly = 1) { refreshCapabilitiesFromServerUseCase.execute(any()) }
+    }
 
-        capabilitiesLiveData.postValue(valueToTest)
+    @Test
+    fun fetchCapabilitiesSuccess() {
+        fetchCapabilitiesVerification(
+            useCaseResult = UseCaseResult.Success(Unit),
+            expectedValue = Event(UIResult.Loading())
+        )
+    }
 
-        val value = ocCapabilityViewModel.capabilities.getOrAwaitValues()
-        assertEquals(expectedValue, value[expectedOnPosition - 1])
+    @Test
+    fun fetchCapabilitiesError() {
+        val error = Throwable()
+        fetchCapabilitiesVerification(
+            useCaseResult = UseCaseResult.Error(error),
+            expectedValue = Event(UIResult.Error(error))
+        )
     }
 
     private fun fetchCapabilitiesVerification(
-        valueToTest: UseCaseResult<Unit>,
-        expectedValue: Event<UIResult<Unit>?>,
-        expectedOnPosition: Int = 1
+        useCaseResult: UseCaseResult<Unit>,
+        expectedValue: Event<UIResult<Unit>?>
     ) {
-        coEvery { refreshCapabilitiesFromServerUseCase.execute(any()) } returns valueToTest
+        initTest()
+        coEvery { refreshCapabilitiesFromServerUseCase.execute(any()) } returns useCaseResult
 
         ocCapabilityViewModel.refreshCapabilitiesFromNetwork()
 
-        val value = ocCapabilityViewModel.capabilities.getOrAwaitValues(expectedOnPosition)
-        assertEquals(expectedValue, value[expectedOnPosition - 1])
+        val value = ocCapabilityViewModel.capabilities.getLastEmittedValue()
+        assertEquals(expectedValue, value)
 
-        coVerify(exactly = 1, timeout = TIMEOUT_TEST_LONG) { refreshCapabilitiesFromServerUseCase.execute(any()) }
-        //Just once on init
+        coVerify(exactly = 2) { refreshCapabilitiesFromServerUseCase.execute(any()) }
         verify(exactly = 1) { getCapabilitiesAsLiveDataUseCase.execute(any()) }
     }
 }

@@ -11,7 +11,6 @@ dependencies {
     /// data and domain modules
     implementation project(':owncloudDomain')
     implementation project(':owncloudData')
-    androidTestImplementation project(':owncloudTestUtil')
 
     /// dependencies for app building
     implementation "androidx.legacy:legacy-support-v4:$androidX"
@@ -27,11 +26,14 @@ dependencies {
     implementation 'commons-io:commons-io:2.6'
 
     // Tests
+    testImplementation project(':owncloudTestUtil')
     testImplementation "junit:junit:$junitVersion"
     testImplementation "androidx.arch.core:core-testing:$archLifecycleVersion"
     testImplementation "io.mockk:mockk:$mockkVersion"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion"
 
     // Instrumented tests
+    androidTestImplementation project(':owncloudTestUtil')
     androidTestImplementation "androidx.test:core:$androidTestVersion"
     androidTestImplementation "androidx.test:rules:$androidTestVersion"
     androidTestImplementation "androidx.test:runner:$androidTestVersion"
