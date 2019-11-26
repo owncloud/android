@@ -18,7 +18,7 @@
  *
  */
 
-package com.owncloud.android.database
+package com.owncloud.android.data
 
 import android.content.ContentValues
 import android.database.sqlite.SQLiteDatabase
@@ -29,14 +29,12 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SmallTest
 import androidx.test.platform.app.InstrumentationRegistry
-import com.owncloud.android.data.OwncloudDatabase
-import com.owncloud.android.db.ProviderMeta.ProviderTableMeta
-import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CAPABILITIES_ACCOUNT_NAME
-import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CAPABILITIES_CORE_POLLINTERVAL
-import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_DAYS
-import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CAPABILITIES_VERSION_MAYOR
-import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CAPABILITIES_VERSION_MICRO
-import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CAPABILITIES_VERSION_MINOR
+import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_ACCOUNT_NAME
+import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_CORE_POLLINTERVAL
+import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_DAYS
+import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_VERSION_MAYOR
+import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_VERSION_MICRO
+import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_VERSION_MINOR
 import com.owncloud.android.testutil.OC_CAPABILITY
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
@@ -68,7 +66,7 @@ class MigrationTest {
         ) {
 
             // Insert some data
-            insert(ProviderTableMeta.CAPABILITIES_TABLE_NAME, SQLiteDatabase.CONFLICT_NONE, cv)
+            insert(ProviderMeta.ProviderTableMeta.CAPABILITIES_TABLE_NAME, SQLiteDatabase.CONFLICT_NONE, cv)
 
             // Close database
             close()
@@ -99,7 +97,7 @@ class MigrationTest {
         ) {
             // Database has schema version 27. Insert some values to test if they are migrated successfully.
             // We cannot use DAO classes because they expect the latest schema and we may not have some fields there.
-            insert(ProviderTableMeta.CAPABILITIES_TABLE_NAME, SQLiteDatabase.CONFLICT_NONE, cv)
+            insert(ProviderMeta.ProviderTableMeta.CAPABILITIES_TABLE_NAME, SQLiteDatabase.CONFLICT_NONE, cv)
             close()
         }
 
@@ -136,7 +134,7 @@ class MigrationTest {
                 DB_VERSION_28
             )
         ) {
-            insert(ProviderTableMeta.CAPABILITIES_TABLE_NAME, SQLiteDatabase.CONFLICT_NONE, cv)
+            insert(ProviderMeta.ProviderTableMeta.CAPABILITIES_TABLE_NAME, SQLiteDatabase.CONFLICT_NONE, cv)
             close()
         }
 

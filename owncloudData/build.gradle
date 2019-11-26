@@ -19,6 +19,12 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
+        // Room Database Tests
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
+            }
+        }
     }
 
     buildTypes {
@@ -36,6 +42,8 @@ android {
     sourceSets {
         androidTest.java.srcDirs += "src/test-common/java"
         test.java.srcDirs += "src/test-common/java"
+        // Room Database Tests
+        androidTest.assets.srcDirs += files("$projectDir/schemas".toString())
     }
 }
 
@@ -67,6 +75,7 @@ dependencies {
     androidTestImplementation "androidx.test.espresso:espresso-core:$espressoTestVersion"
     androidTestImplementation "androidx.test.ext:junit:$extJunitVersion"
     androidTestImplementation "androidx.arch.core:core-testing:$archLifecycleVersion"
+    androidTestImplementation "android.arch.persistence.room:testing:$roomVersion"
     androidTestImplementation ("io.mockk:mockk-android:$mockkVersion") {
         exclude module: 'objenesis'
     }
