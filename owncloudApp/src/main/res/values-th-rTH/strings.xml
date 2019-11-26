@@ -72,6 +72,7 @@
   <string name="passcode_already_set">คุณไม่สามารถเปิดใช้งานการเข้ารหัสรูปแบบและรหัสผ่านได้ในเวลาเดียวกัน โปรดปิดใช้งานรหัสผ่านก่อน</string>
   <string name="pattern_no_longer_required">จะไม่ถามเรื่องรูปแบบอีกต่อไป</string>
   <string name="pattern_configure_your_pattern_explanation">ร้องขอรูปแบบทุกครั้งที่มีการเริ่มต้นแอป</string>
+  <string name="pattern_locked">ล็อคด้วยรูปแบบ</string>
   <string name="illegal_argument_exception_message">ต้องใช้การกระทำที่ถูกต้องเพื่อ</string>
   <string name="recommend_subject">ลองใช้ %1$s บนสมาร์ทโฟนของคุณ!</string>
   <string name="recommend_text">ฉันอยากจะขอเชิญให้คุณใช้ %1$s บนสมาร์ทโฟนของคุณ!\nดาวน์โหลดที่นี่: %2$s</string>
@@ -99,7 +100,7 @@
   <string name="uploader_error_message_read_permission_not_granted">%1$s ไม่ได้รับอนุญาตให้อ่านไฟล์ที่ได้รับ</string>
   <string name="uploader_error_message_source_file_not_found">ไม่พบเส้นทางของไฟล์ที่ต้องการอัปโหลด กรุณาตรวจสอบว่ายังมีไฟล์นั่นอยู่</string>
   <string name="uploader_error_message_source_file_not_copied">เกิดข้อผิดพลาดขณะที่คัดลอกไฟล์ไปยังโฟลเดอร์ชั่วคราว โปรดลองส่งอีกครั้ง</string>
-  <string name="file_list_seconds_ago">วินาที ก่อนหน้านี้</string>
+  <string name="file_list_seconds_ago">ไม่กี่วินาทีก่อนหน้านี้</string>
   <string name="file_list_empty">ยังไม่มีไฟล์ใดๆเลยลองอัปโหลดดูสิ!</string>
   <string name="file_list_empty_available_offline">ยังไม่มีไฟล์ออฟไลน์ที่พร้อมใช้งาน</string>
   <string name="file_list_loading">กำลังโหลด...</string>
@@ -219,6 +220,7 @@
   <string name="pass_code_wrong">รหัสยืนยันไม่ถูกต้อง</string>
   <string name="pass_code_removed">ลบรหัสยืนยัน</string>
   <string name="pass_code_stored">รหัสยืนยันที่เก็บไว้</string>
+  <string name="pass_code_locked">ล็อคด้วยรหัสผ่าน</string>
   <string name="fingerprint_confirm">ยืนยันลายนิ้วมือของคุณเพื่อดำเนินการต่อ</string>
   <string name="fingerprint_hint">เซ็นเซอร์ระบบสัมผัส</string>
   <string name="fingerprint_not_recognized">ไม่รู้จักลายนิ้วมือนี้ โปรดลองอีกครั้ง</string>

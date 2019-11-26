@@ -72,6 +72,7 @@
   <string name="passcode_already_set">Δεν είναι δυνατή η ταυτόχρονη ενεργοποίηση των κλειδώματος με μοτίβο και κωδικό, απενεργοποιήστε πρώτα τον κωδικό</string>
   <string name="pattern_no_longer_required">Το μοτίβο δεν θα ζητείται πια</string>
   <string name="pattern_configure_your_pattern_explanation">Το πρότυπο θα ζητηθεί κάθε φορά που ξεκινάει η εφαρμογή</string>
+  <string name="pattern_locked">Κλείδωμα με μοτίβο</string>
   <string name="illegal_argument_exception_message">Μια έγκυρη ΕΝΕΡΓΕΙΑ είναι απαραίτητη για την πρόθεση να περάσει σε</string>
   <string name="recommend_subject">Δοκιμάστε %1$s στο κινητό σας!</string>
   <string name="recommend_text">Θα ήθελα να σε προσκαλέσω να χρησιμοποιήσεις το %1$s στο κινητό σου!\nΛήψη εδώ: %2$s</string>
@@ -218,6 +219,7 @@
   <string name="pass_code_wrong">Εσφαλμένος κωδικός</string>
   <string name="pass_code_removed">Ο κωδικός αφαιρέθηκε</string>
   <string name="pass_code_stored">Ο κωδικός αποθηκεύτηκε</string>
+  <string name="pass_code_locked">Κλείδωμα με κωδικό</string>
   <string name="fingerprint_confirm">Επιβεβαιώστε το δακτυλικό σας αποτύπωμα για να συνεχίσετε</string>
   <string name="fingerprint_hint">Αγγίξτε τον αισθητήρα</string>
   <string name="fingerprint_not_recognized">Δεν αναγνωρίστηκε το δακτυλικό αποτύπωμα, δοκιμάστε ξανά</string>

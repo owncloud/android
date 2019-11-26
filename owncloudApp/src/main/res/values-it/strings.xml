@@ -356,6 +356,7 @@
   <string name="preview_image_error_unknown_format">Questa immagine non può essere mostrata</string>
   <string name="error__upload__local_file_not_copied">%1$s non può essere copiato nella cartella locale %2$s</string>
   <string name="prefs_camera_picture_upload_path_title">Percorso caricamento immagini</string>
+  <string name="get_shares_error">Si è verificato un errore durante il tentativo di recuperare le condivisioni</string>
   <string name="share_link_no_support_share_api">Spiacenti, la condivisione non è abilitata sul tuo server. Contatta il tuo
 		amministratore.</string>
   <string name="share_link_file_no_exist">Impossibile condividere. Assicurati che il file esista</string>
@@ -513,6 +514,7 @@ Il Download del file inizierà automaticamente</string>
   <string name="share_via_link_expiration_date_enforced_label">Scadenza *</string>
   <string name="share_via_link_expiration_date_explanation_label">Il collegamento pubblico scadrà non più tardi di %1$d giorni dopo la sua creazione</string>
   <string name="share_via_link_default_name_template">collegamento %1$s</string>
+  <string name="share_via_link_empty_password">La password è vuota</string>
   <string name="private_link_info">Questo è un link privato, solo le persone che hanno accesso al file/cartella lo possono usare. Usalo come link permanente per te o per puntare altri file senza condivisioni. </string>
   <string name="file_private_link_error">Il link privato non è disponibile per questo file</string>
   <string name="download_notification_channel_name">Download</string>
