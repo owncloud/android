@@ -21,14 +21,13 @@ package com.owncloud.android.data.sharing.sharees.datasources
 
 import com.owncloud.android.data.sharing.sharees.datasources.implementation.OCRemoteShareeDataSource
 import com.owncloud.android.data.sharing.sharees.network.OCShareeService
-import com.owncloud.android.data.utils.DataTestUtil
+import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.shares.GetRemoteShareesOperation
 import io.mockk.every
 import io.mockk.mockk
-import junit.framework.Assert.assertEquals
-import org.hamcrest.CoreMatchers.notNullValue
-import org.hamcrest.MatcherAssert.assertThat
 import org.json.JSONObject
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Ignore
 import org.junit.Test
@@ -48,18 +47,18 @@ class OCRemoteShareesDataSourceTest {
     @Test
     fun readRemoteSharees() {
         val remoteSharees: ArrayList<JSONObject> = arrayListOf(
-            DataTestUtil.createSharee("User 1", "0", "user1", "user1@mail.com"),
-            DataTestUtil.createSharee("User 2", "0", "user2", "user2@mail.com"),
-            DataTestUtil.createSharee("User 3", "0", "user3", "user3@mail.com")
+            createSharee("User 1", "0", "user1", "user1@mail.com"),
+            createSharee("User 2", "0", "user2", "user2@mail.com"),
+            createSharee("User 3", "0", "user3", "user3@mail.com")
         )
 
-        val getRemoteShareesOperationResult = DataTestUtil.createRemoteOperationResultMock(
+        val getRemoteShareesOperationResult = createRemoteOperationResultMock(
             remoteSharees,
             true
         )
 
         every {
-            ocShareeService.getSharees("user", 1 ,30)
+            ocShareeService.getSharees("user", 1, 30)
         } returns getRemoteShareesOperationResult
 
         // Get sharees from remote datasource
@@ -69,7 +68,7 @@ class OCRemoteShareesDataSourceTest {
             30
         )
 
-        assertThat(sharees, notNullValue())
+        assertNotNull(sharees)
         assertEquals(3, sharees.size)
 
         val sharee1 = sharees.first()
@@ -79,18 +78,76 @@ class OCRemoteShareesDataSourceTest {
         assertEquals(value.getString(GetRemoteShareesOperation.PROPERTY_SHARE_WITH), "user1")
         assertEquals(value.getString(GetRemoteShareesOperation.PROPERTY_SHARE_WITH_ADDITIONAL_INFO), "user1@mail.com")
 
-        val sharee2 = sharees.get(1)
+        val sharee2 = sharees[1]
         assertEquals(sharee2.getString(GetRemoteShareesOperation.PROPERTY_LABEL), "User 2")
         val value2 = sharee2.getJSONObject(GetRemoteShareesOperation.NODE_VALUE)
         assertEquals(value2.getString(GetRemoteShareesOperation.PROPERTY_SHARE_TYPE), "0")
         assertEquals(value2.getString(GetRemoteShareesOperation.PROPERTY_SHARE_WITH), "user2")
         assertEquals(value2.getString(GetRemoteShareesOperation.PROPERTY_SHARE_WITH_ADDITIONAL_INFO), "user2@mail.com")
 
-        val sharee3 = sharees.get(2)
+        val sharee3 = sharees[2]
         assertEquals(sharee3.getString(GetRemoteShareesOperation.PROPERTY_LABEL), "User 3")
         val value3 = sharee3.getJSONObject(GetRemoteShareesOperation.NODE_VALUE)
         assertEquals(value3.getString(GetRemoteShareesOperation.PROPERTY_SHARE_TYPE), "0")
         assertEquals(value3.getString(GetRemoteShareesOperation.PROPERTY_SHARE_WITH), "user3")
         assertEquals(value3.getString(GetRemoteShareesOperation.PROPERTY_SHARE_WITH_ADDITIONAL_INFO), "user3@mail.com")
+    }
+
+    private fun <T> createRemoteOperationResultMock(
+        data: T,
+        isSuccess: Boolean,
+        httpPhrase: String? = null,
+        resultCode: RemoteOperationResult.ResultCode? = null,
+        exception: Exception? = null
+    ): RemoteOperationResult<T> {
+        val remoteOperationResult = mockk<RemoteOperationResult<T>>(relaxed = true)
+
+        every {
+            remoteOperationResult.data
+        } returns data
+
+        every {
+            remoteOperationResult.isSuccess
+        } returns isSuccess
+
+        if (httpPhrase != null) {
+            every {
+                remoteOperationResult.httpPhrase
+            } returns httpPhrase
+        }
+
+        if (resultCode != null) {
+            every {
+                remoteOperationResult.code
+            } returns resultCode
+        }
+
+        if (exception != null) {
+            every {
+                remoteOperationResult.exception
+            } returns exception
+        }
+
+        return remoteOperationResult
+    }
+
+    private fun createSharee(
+        label: String,
+        shareType: String,
+        shareWith: String,
+        shareWithAdditionalInfo: String
+    ): JSONObject {
+        val jsonObject = JSONObject()
+
+        jsonObject.put(GetRemoteShareesOperation.PROPERTY_LABEL, label)
+
+        val value = JSONObject()
+        value.put(GetRemoteShareesOperation.PROPERTY_SHARE_TYPE, shareType)
+        value.put(GetRemoteShareesOperation.PROPERTY_SHARE_WITH, shareWith)
+        value.put(GetRemoteShareesOperation.PROPERTY_SHARE_WITH_ADDITIONAL_INFO, shareWithAdditionalInfo)
+
+        jsonObject.put(GetRemoteShareesOperation.NODE_VALUE, value)
+
+        return jsonObject
     }
 }
