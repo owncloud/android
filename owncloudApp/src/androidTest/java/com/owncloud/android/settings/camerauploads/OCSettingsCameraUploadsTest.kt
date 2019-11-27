@@ -21,7 +21,9 @@ package com.owncloud.android.settings.camerauploads
 
 import android.os.Environment
 import android.preference.CheckBoxPreference
+import android.preference.PreferenceCategory
 import android.preference.PreferenceManager
+import android.preference.PreferenceScreen
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
@@ -36,14 +38,15 @@ import androidx.test.rule.ActivityTestRule
 import com.owncloud.android.R
 import com.owncloud.android.ui.activity.LocalFolderPickerActivity
 import com.owncloud.android.ui.activity.Preferences
-import org.junit.Assert
-import org.junit.Assert.assertTrue
-import org.junit.Assert.assertFalse
-import org.junit.Before
 import org.junit.After
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+
+
 
 @RunWith(AndroidJUnit4::class)
 class OCSettingsCameraUploadsTest {
@@ -65,6 +68,15 @@ class OCSettingsCameraUploadsTest {
 
         mPrefCameraPictureUploads = activityRule.activity.findPreference(CAMERA_PICTURE_UPLOADS) as CheckBoxPreference
         mPrefCameraVideoUploads = activityRule.activity.findPreference(CAMERA_VIDEO_UPLOADS) as CheckBoxPreference
+
+        //Only interested in "Camera Uploads" section, so we can get rid of the other categories.
+        val preferenceScreen = activityRule.activity.getPreferenceScreen() as PreferenceScreen
+        val securityCategory =
+            activityRule.activity.findPreference("security_category") as PreferenceCategory
+        val moreCategory =
+            activityRule.activity.findPreference("more") as PreferenceCategory
+        preferenceScreen.removePreference(securityCategory)
+        preferenceScreen.removePreference(moreCategory)
     }
 
     @After
