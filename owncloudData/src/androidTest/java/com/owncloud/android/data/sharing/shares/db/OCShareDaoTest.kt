@@ -87,7 +87,8 @@ class OCShareDaoTest {
                         path = "/Photos/",
                         isFolder = true,
                         name = "Photos folder link",
-                        shareLink = "http://server:port/s/1"
+                        shareLink = "http://server:port/s/1",
+                        accountOwner = "admin@server"
                     )
                 )!!,
                 ocShareMapper.toEntity(
@@ -95,7 +96,8 @@ class OCShareDaoTest {
                         path = "/Photos/image1.jpg",
                         isFolder = false,
                         name = "Image 1 link",
-                        shareLink = "http://server:port/s/2"
+                        shareLink = "http://server:port/s/2",
+                        accountOwner = "admin@server"
                     )
                 )!!,
                 ocShareMapper.toEntity(
@@ -103,7 +105,8 @@ class OCShareDaoTest {
                         path = "/Photos/image2.jpg",
                         isFolder = false,
                         shareWith = "username",
-                        sharedWithDisplayName = "John"
+                        sharedWithDisplayName = "John",
+                        accountOwner = "admin@server"
                     )
                 )!!
             )

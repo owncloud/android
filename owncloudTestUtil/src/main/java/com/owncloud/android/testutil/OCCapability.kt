@@ -5,8 +5,7 @@ import com.owncloud.android.domain.capabilities.model.OCCapability
 
 val OC_CAPABILITY =
     OCCapability(
-        id = 0,
-        accountName = "user@server",
+        accountName = "admin@server",
         versionMayor = 2,
         versionMinor = 1,
         versionMicro = 0,
