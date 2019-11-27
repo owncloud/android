@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 28,
-    "identityHash": "8ed0b6d76a72af8df6e792f9dcb43b2d",
+    "identityHash": "a1afd9487db21ba5b69279ed4f42749d",
     "entities": [
       {
         "tableName": "ocshares",
@@ -128,7 +128,7 @@
       },
       {
         "tableName": "capabilities",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `account` TEXT, `version_mayor` INTEGER NOT NULL, `version_minor` INTEGER NOT NULL, `version_micro` INTEGER NOT NULL, `version_string` TEXT, `version_edition` TEXT, `core_pollinterval` INTEGER NOT NULL, `sharing_api_enabled` INTEGER, `search_min_length` INTEGER, `sharing_public_enabled` INTEGER, `sharing_public_password_enforced` INTEGER, `sharing_public_password_enforced_read_only` INTEGER, `sharing_public_password_enforced_read_write` INTEGER, `sharing_public_password_enforced_public_only` INTEGER, `sharing_public_expire_date_enabled` INTEGER, `sharing_public_expire_date_days` INTEGER NOT NULL, `sharing_public_expire_date_enforced` INTEGER, `sharing_public_send_mail` INTEGER, `sharing_public_upload` INTEGER, `sharing_public_multiple` INTEGER, `supports_upload_only` INTEGER, `sharing_user_send_mail` INTEGER, `sharing_resharing` INTEGER, `sharing_federation_outgoing` INTEGER, `sharing_federation_incoming` INTEGER, `files_bigfilechunking` INTEGER, `files_undelete` INTEGER, `files_versioning` INTEGER)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `account` TEXT, `version_mayor` INTEGER NOT NULL, `version_minor` INTEGER NOT NULL, `version_micro` INTEGER NOT NULL, `version_string` TEXT, `version_edition` TEXT, `core_pollinterval` INTEGER NOT NULL, `filesSharingApiEnabled` INTEGER NOT NULL, `search_min_length` INTEGER NOT NULL, `sharing_public_enabled` INTEGER NOT NULL, `sharing_public_password_enforced` INTEGER NOT NULL, `sharing_public_password_enforced_read_only` INTEGER NOT NULL, `sharing_public_password_enforced_read_write` INTEGER NOT NULL, `sharing_public_password_enforced_public_only` INTEGER NOT NULL, `sharing_public_expire_date_enabled` INTEGER NOT NULL, `sharing_public_expire_date_days` INTEGER NOT NULL, `sharing_public_expire_date_enforced` INTEGER NOT NULL, `sharing_public_send_mail` INTEGER NOT NULL, `sharing_public_upload` INTEGER NOT NULL, `sharing_public_multiple` INTEGER NOT NULL, `supports_upload_only` INTEGER NOT NULL, `sharing_user_send_mail` INTEGER NOT NULL, `sharing_resharing` INTEGER NOT NULL, `sharing_federation_outgoing` INTEGER NOT NULL, `sharing_federation_incoming` INTEGER NOT NULL, `files_bigfilechunking` INTEGER NOT NULL, `files_undelete` INTEGER NOT NULL, `files_versioning` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -180,51 +180,51 @@
           },
           {
             "fieldPath": "filesSharingApiEnabled",
-            "columnName": "sharing_api_enabled",
+            "columnName": "filesSharingApiEnabled",
             "affinity": "INTEGER",
-            "notNull": false
+            "notNull": true
           },
           {
             "fieldPath": "filesSharingSearchMinLength",
             "columnName": "search_min_length",
             "affinity": "INTEGER",
-            "notNull": false
+            "notNull": true
           },
           {
             "fieldPath": "filesSharingPublicEnabled",
             "columnName": "sharing_public_enabled",
             "affinity": "INTEGER",
-            "notNull": false
+            "notNull": true
           },
           {
             "fieldPath": "filesSharingPublicPasswordEnforced",
             "columnName": "sharing_public_password_enforced",
             "affinity": "INTEGER",
-            "notNull": false
+            "notNull": true
           },
           {
             "fieldPath": "filesSharingPublicPasswordEnforcedReadOnly",
             "columnName": "sharing_public_password_enforced_read_only",
             "affinity": "INTEGER",
-            "notNull": false
+            "notNull": true
           },
           {
             "fieldPath": "filesSharingPublicPasswordEnforcedReadWrite",
             "columnName": "sharing_public_password_enforced_read_write",
             "affinity": "INTEGER",
-            "notNull": false
+            "notNull": true
           },
           {
             "fieldPath": "filesSharingPublicPasswordEnforcedUploadOnly",
             "columnName": "sharing_public_password_enforced_public_only",
             "affinity": "INTEGER",
-            "notNull": false
+            "notNull": true
           },
           {
             "fieldPath": "filesSharingPublicExpireDateEnabled",
             "columnName": "sharing_public_expire_date_enabled",
             "affinity": "INTEGER",
-            "notNull": false
+            "notNull": true
           },
           {
             "fieldPath": "filesSharingPublicExpireDateDays",
@@ -236,73 +236,73 @@
             "fieldPath": "filesSharingPublicExpireDateEnforced",
             "columnName": "sharing_public_expire_date_enforced",
             "affinity": "INTEGER",
-            "notNull": false
+            "notNull": true
           },
           {
             "fieldPath": "filesSharingPublicSendMail",
             "columnName": "sharing_public_send_mail",
             "affinity": "INTEGER",
-            "notNull": false
+            "notNull": true
           },
           {
             "fieldPath": "filesSharingPublicUpload",
             "columnName": "sharing_public_upload",
             "affinity": "INTEGER",
-            "notNull": false
+            "notNull": true
           },
           {
             "fieldPath": "filesSharingPublicMultiple",
             "columnName": "sharing_public_multiple",
             "affinity": "INTEGER",
-            "notNull": false
+            "notNull": true
           },
           {
             "fieldPath": "filesSharingPublicSupportsUploadOnly",
             "columnName": "supports_upload_only",
             "affinity": "INTEGER",
-            "notNull": false
+            "notNull": true
           },
           {
             "fieldPath": "filesSharingUserSendMail",
             "columnName": "sharing_user_send_mail",
             "affinity": "INTEGER",
-            "notNull": false
+            "notNull": true
           },
           {
             "fieldPath": "filesSharingResharing",
             "columnName": "sharing_resharing",
             "affinity": "INTEGER",
-            "notNull": false
+            "notNull": true
           },
           {
             "fieldPath": "filesSharingFederationOutgoing",
             "columnName": "sharing_federation_outgoing",
             "affinity": "INTEGER",
-            "notNull": false
+            "notNull": true
           },
           {
             "fieldPath": "filesSharingFederationIncoming",
             "columnName": "sharing_federation_incoming",
             "affinity": "INTEGER",
-            "notNull": false
+            "notNull": true
           },
           {
             "fieldPath": "filesBigFileChunking",
             "columnName": "files_bigfilechunking",
             "affinity": "INTEGER",
-            "notNull": false
+            "notNull": true
           },
           {
             "fieldPath": "filesUndelete",
             "columnName": "files_undelete",
             "affinity": "INTEGER",
-            "notNull": false
+            "notNull": true
           },
           {
             "fieldPath": "filesVersioning",
             "columnName": "files_versioning",
             "affinity": "INTEGER",
-            "notNull": false
+            "notNull": true
           }
         ],
         "primaryKey": {
@@ -318,7 +318,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '8ed0b6d76a72af8df6e792f9dcb43b2d')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'a1afd9487db21ba5b69279ed4f42749d')"
     ]
   }
 }
