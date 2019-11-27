@@ -27,19 +27,8 @@ import org.junit.Test
 class OCShareMapperTest {
     private val ocShareMapper = OCShareMapper()
 
-    private val ocShare =
-        OC_SHARE.copy(
-            isFolder = false,
-            path = "/Photos/image2.jpg"
-        )
-
-    private val ocShareEntity =
-        ocShareMapper.toEntity(
-            OC_SHARE.copy(
-                isFolder = false,
-                path = "/Photos/image2.jpg"
-            )
-        )
+    private val ocShare = OC_SHARE.copy(id = 0)
+    private val ocShareEntity = ocShareMapper.toEntity(OC_SHARE)
 
     @Test
     fun checkToModelNull() {
@@ -53,11 +42,6 @@ class OCShareMapperTest {
         val model = ocShareMapper.toModel(ocShareEntity)
         Assert.assertNotNull(model)
         Assert.assertEquals(ocShare, model)
-
-        val mappedEntity = ocShareMapper.toEntity(model)
-        Assert.assertNotNull(mappedEntity)
-
-        Assert.assertEquals(ocShareEntity, mappedEntity)
     }
 
     @Test

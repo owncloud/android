@@ -23,6 +23,7 @@ import com.owncloud.android.domain.capabilities.model.CapabilityBooleanType
 import com.owncloud.android.domain.capabilities.model.OCCapability
 import com.owncloud.android.domain.mappers.RemoteMapper
 import com.owncloud.android.lib.resources.status.RemoteCapability
+import com.owncloud.android.lib.resources.status.CapabilityBooleanType as RemoteCapabilityBooleanType
 
 class RemoteCapabilityMapper : RemoteMapper<OCCapability, RemoteCapability> {
     override fun toModel(remote: RemoteCapability?): OCCapability? =
@@ -68,7 +69,47 @@ class RemoteCapabilityMapper : RemoteMapper<OCCapability, RemoteCapability> {
             )
         }
 
-    override fun toRemote(model: OCCapability?): RemoteCapability? {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override fun toRemote(model: OCCapability?): RemoteCapability? =
+        model?.let {
+            RemoteCapability(
+                accountName = model.accountName!!,
+                versionMayor = model.versionMayor,
+                versionMinor = model.versionMinor,
+                versionMicro = model.versionMicro,
+                versionString = model.versionString!!,
+                versionEdition = model.versionEdition!!,
+                corePollinterval = model.corePollInterval,
+                filesSharingApiEnabled = RemoteCapabilityBooleanType.fromValue(model.filesSharingApiEnabled.value)!!,
+                filesSharingSearchMinLength = model.filesSharingSearchMinLength,
+                filesSharingPublicEnabled = RemoteCapabilityBooleanType.fromValue(model.filesSharingPublicEnabled.value)!!,
+                filesSharingPublicPasswordEnforced =
+                RemoteCapabilityBooleanType.fromValue(model.filesSharingPublicPasswordEnforced.value)!!,
+                filesSharingPublicPasswordEnforcedReadOnly =
+                RemoteCapabilityBooleanType.fromValue(model.filesSharingPublicPasswordEnforcedReadOnly.value)!!,
+                filesSharingPublicPasswordEnforcedReadWrite =
+                RemoteCapabilityBooleanType.fromValue(model.filesSharingPublicPasswordEnforcedReadWrite.value)!!,
+                filesSharingPublicPasswordEnforcedUploadOnly =
+                RemoteCapabilityBooleanType.fromValue(model.filesSharingPublicPasswordEnforcedUploadOnly.value)!!,
+                filesSharingPublicExpireDateEnabled =
+                RemoteCapabilityBooleanType.fromValue(model.filesSharingPublicExpireDateEnabled.value)!!,
+                filesSharingPublicExpireDateDays = model.filesSharingPublicExpireDateDays,
+                filesSharingPublicExpireDateEnforced =
+                RemoteCapabilityBooleanType.fromValue(model.filesSharingPublicExpireDateEnforced.value)!!,
+                filesSharingPublicSendMail = RemoteCapabilityBooleanType.fromValue(model.filesSharingPublicSendMail.value)!!,
+                filesSharingPublicUpload = RemoteCapabilityBooleanType.fromValue(model.filesSharingPublicUpload.value)!!,
+                filesSharingPublicMultiple = RemoteCapabilityBooleanType.fromValue(model.filesSharingPublicMultiple.value)!!,
+                filesSharingPublicSupportsUploadOnly =
+                RemoteCapabilityBooleanType.fromValue(model.filesSharingPublicSupportsUploadOnly.value)!!,
+                filesSharingUserSendMail = RemoteCapabilityBooleanType.fromValue(model.filesSharingUserSendMail.value)!!,
+                filesSharingResharing = RemoteCapabilityBooleanType.fromValue(model.filesSharingResharing.value)!!,
+                filesSharingFederationOutgoing =
+                RemoteCapabilityBooleanType.fromValue(model.filesSharingFederationOutgoing.value)!!,
+                filesSharingFederationIncoming =
+                RemoteCapabilityBooleanType.fromValue(model.filesSharingFederationIncoming.value)!!,
+                filesBigFileChunking = RemoteCapabilityBooleanType.fromValue(model.filesBigFileChunking.value)!!,
+                filesUndelete = RemoteCapabilityBooleanType.fromValue(model.filesUndelete.value)!!,
+                filesVersioning = RemoteCapabilityBooleanType.fromValue(model.filesVersioning.value)!!
+            )
+        }
+
 }

@@ -187,7 +187,6 @@ public class FileOperationsHelper {
      * @param share The {@link OCShare} to remove (unshare).
      */
     public void removeShare(OCShare share) {
-
         Intent unshareService = new Intent(mFileActivity, OperationsService.class);
         unshareService.setAction(OperationsService.ACTION_UNSHARE);
         unshareService.putExtra(OperationsService.EXTRA_SHARE_ID, share.getId());

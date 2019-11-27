@@ -27,7 +27,7 @@ class OCCapabilityMapperTest {
 
     private val ocCapabilityMapper = OCCapabilityMapper()
 
-    private val ocCapability = OC_CAPABILITY
+    private val ocCapability = OC_CAPABILITY.copy(id = 0)
     private val ocCapabilityEntity = ocCapabilityMapper.toEntity(ocCapability)
 
     @Test
@@ -42,11 +42,6 @@ class OCCapabilityMapperTest {
         val model = ocCapabilityMapper.toModel(ocCapabilityEntity)
         Assert.assertNotNull(model)
         Assert.assertEquals(ocCapability, model)
-
-        val mappedEntity = ocCapabilityMapper.toEntity(model)
-        Assert.assertNotNull(mappedEntity)
-
-        Assert.assertEquals(ocCapabilityEntity, mappedEntity)
     }
 
     @Test
