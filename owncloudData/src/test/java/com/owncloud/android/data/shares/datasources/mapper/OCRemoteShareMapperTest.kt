@@ -21,7 +21,9 @@ package com.owncloud.android.data.shares.datasources.mapper
 
 import com.owncloud.android.data.sharing.shares.datasources.mapper.RemoteShareMapper
 import com.owncloud.android.testutil.OC_SHARE
-import org.junit.Assert
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertNull
 import org.junit.Test
 
 class OCRemoteShareMapperTest {
@@ -30,16 +32,16 @@ class OCRemoteShareMapperTest {
 
     @Test
     fun checkToModelNull() {
-        Assert.assertNull(ocRemoteShareMapper.toModel(null))
+        assertNull(ocRemoteShareMapper.toModel(null))
     }
 
     @Test
     fun checkToModelNotNull() {
         val remoteShare = ocRemoteShareMapper.toRemote(OC_SHARE)
-        Assert.assertNotNull(remoteShare)
+        assertNotNull(remoteShare)
 
         val share = ocRemoteShareMapper.toModel(remoteShare)
-        Assert.assertNotNull(share)
-        Assert.assertEquals(OC_SHARE, share)
+        assertNotNull(share)
+        assertEquals(OC_SHARE, share)
     }
 }

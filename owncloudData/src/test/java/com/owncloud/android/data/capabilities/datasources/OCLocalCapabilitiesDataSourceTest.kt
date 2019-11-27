@@ -26,8 +26,8 @@ import com.owncloud.android.data.capabilities.datasources.implementation.OCLocal
 import com.owncloud.android.data.capabilities.datasources.mapper.OCCapabilityMapper
 import com.owncloud.android.data.capabilities.db.OCCapabilityDao
 import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
-import com.owncloud.android.data.utils.LiveDataTestUtil.getValue
 import com.owncloud.android.testutil.OC_CAPABILITY
+import com.owncloud.android.testutil.livedata.getLastEmittedValue
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -64,7 +64,8 @@ class OCLocalCapabilitiesDataSourceTest {
         capabilitiesLiveData.postValue(ocCapabilityMapper.toEntity(OC_CAPABILITY))
 
         val capabilityEmitted =
-            getValue(ocLocalCapabilitiesDataSource.getCapabilitiesForAccountAsLiveData(OC_CAPABILITY.accountName!!))
+            ocLocalCapabilitiesDataSource.getCapabilitiesForAccountAsLiveData(OC_CAPABILITY.accountName!!)
+                .getLastEmittedValue()
 
         assertEquals(OC_CAPABILITY, capabilityEmitted)
     }
@@ -75,7 +76,8 @@ class OCLocalCapabilitiesDataSourceTest {
         every { ocCapabilityDao.getCapabilitiesForAccountAsLiveData(any()) } returns capabilitiesLiveData
 
         val capabilityEmitted =
-            getValue(ocLocalCapabilitiesDataSource.getCapabilitiesForAccountAsLiveData(OC_CAPABILITY.accountName!!))
+            ocLocalCapabilitiesDataSource.getCapabilitiesForAccountAsLiveData(OC_CAPABILITY.accountName!!)
+                .getLastEmittedValue()
 
         assertNull(capabilityEmitted)
     }
@@ -94,7 +96,8 @@ class OCLocalCapabilitiesDataSourceTest {
         every { ocCapabilityDao.getCapabilitiesForAccountAsLiveData(any()) } returns MutableLiveData<OCCapabilityEntity>()
 
         val capabilityEmitted =
-            getValue(ocLocalCapabilitiesDataSource.getCapabilitiesForAccountAsLiveData(OC_CAPABILITY.accountName!!))
+            ocLocalCapabilitiesDataSource.getCapabilitiesForAccountAsLiveData(OC_CAPABILITY.accountName!!)
+                .getLastEmittedValue()
 
         assertNull(capabilityEmitted)
     }

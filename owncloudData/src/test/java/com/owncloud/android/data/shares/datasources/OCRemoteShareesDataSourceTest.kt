@@ -17,12 +17,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.data.sharing.sharees.datasources
+package com.owncloud.android.data.shares.datasources
 
 import com.owncloud.android.data.sharing.sharees.datasources.implementation.OCRemoteShareeDataSource
 import com.owncloud.android.data.sharing.sharees.network.OCShareeService
-import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.shares.GetRemoteShareesOperation
+import com.owncloud.android.utils.createRemoteOperationResultMock
 import io.mockk.every
 import io.mockk.mockk
 import org.json.JSONObject
@@ -91,44 +91,6 @@ class OCRemoteShareesDataSourceTest {
         assertEquals(value3.getString(GetRemoteShareesOperation.PROPERTY_SHARE_TYPE), "0")
         assertEquals(value3.getString(GetRemoteShareesOperation.PROPERTY_SHARE_WITH), "user3")
         assertEquals(value3.getString(GetRemoteShareesOperation.PROPERTY_SHARE_WITH_ADDITIONAL_INFO), "user3@mail.com")
-    }
-
-    private fun <T> createRemoteOperationResultMock(
-        data: T,
-        isSuccess: Boolean,
-        httpPhrase: String? = null,
-        resultCode: RemoteOperationResult.ResultCode? = null,
-        exception: Exception? = null
-    ): RemoteOperationResult<T> {
-        val remoteOperationResult = mockk<RemoteOperationResult<T>>(relaxed = true)
-
-        every {
-            remoteOperationResult.data
-        } returns data
-
-        every {
-            remoteOperationResult.isSuccess
-        } returns isSuccess
-
-        if (httpPhrase != null) {
-            every {
-                remoteOperationResult.httpPhrase
-            } returns httpPhrase
-        }
-
-        if (resultCode != null) {
-            every {
-                remoteOperationResult.code
-            } returns resultCode
-        }
-
-        if (exception != null) {
-            every {
-                remoteOperationResult.exception
-            } returns exception
-        }
-
-        return remoteOperationResult
     }
 
     private fun createSharee(

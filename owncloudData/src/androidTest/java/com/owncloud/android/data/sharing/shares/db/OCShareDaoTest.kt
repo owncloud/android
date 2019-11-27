@@ -172,7 +172,7 @@ class OCShareDaoTest {
                     )
                 )!!,
                 ocShareMapper.toEntity(
-                    OC_PUBLIC_SHARE.copy(
+                    OC_PRIVATE_SHARE.copy(
                         path = "/Documents/document1.docx",
                         isFolder = false,
                         accountOwner = "user3@server",

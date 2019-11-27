@@ -4,6 +4,7 @@ import com.owncloud.android.domain.sharing.shares.model.OCShare
 import com.owncloud.android.domain.sharing.shares.model.ShareType
 
 val OC_SHARE = OCShare(
+    id = 0,
     fileSource = 7,
     itemSource = 7,
     shareType = ShareType.USER, // Private share by default
