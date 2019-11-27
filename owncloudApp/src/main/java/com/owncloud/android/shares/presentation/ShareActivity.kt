@@ -128,6 +128,7 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
     }
 
     override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
         when (intent.action) {
             Intent.ACTION_SEARCH -> {  // Verify the action and get the query
                 val query = intent.getStringExtra(SearchManager.QUERY)
