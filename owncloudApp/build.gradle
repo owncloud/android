@@ -130,8 +130,11 @@ android {
     }
 
     lintOptions {
-        abortOnError false
-        disable 'MissingTranslation'
+        abortOnError true
+        ignoreWarnings false
+
+        xmlReport false
+        htmlOutput file("../lint-app-report.html")
     }
 
     packagingOptions {
