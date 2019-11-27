@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ownCloud Android client application
 
   Copyright (C) 2019 ownCloud GmbH.
@@ -17,7 +16,7 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
-       xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_view"
@@ -28,17 +27,7 @@
         app:headerLayout="@layout/drawer_header"
         app:menu="@menu/drawer_menu">
 
-        <ImageView
-            android:id="@+id/drawer_logo"
-            android:layout_width="match_parent"
-            android:layout_height="220dp"
-            android:scaleType="centerInside"
-            android:layout_gravity="bottom"
-            android:layout_margin="@dimen/standard_margin"
-            android:paddingBottom="70dp"/>
-
-
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
@@ -46,11 +35,18 @@
             android:orientation="vertical"
             android:padding="@dimen/standard_padding">
 
+            <ImageView
+                android:id="@+id/drawer_logo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true" />
+
             <ProgressBar
                 android:id="@+id/account_quota_bar"
                 style="?android:attr/progressBarStyleHorizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_below="@id/drawer_logo"
                 android:progress="25"
                 android:visibility="visible" />
 
@@ -58,9 +54,9 @@
                 android:id="@+id/account_quota_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@id/account_quota_bar"
                 android:text="@string/drawer_loading_quota" />
-
-        </LinearLayout>
+        </RelativeLayout>
 
     </com.google.android.material.navigation.NavigationView>
 
