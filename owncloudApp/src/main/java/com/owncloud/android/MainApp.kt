@@ -23,7 +23,6 @@ package com.owncloud.android
 
 import android.accounts.Account
 import android.app.Activity
-import android.app.Application
 import android.content.Context
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
@@ -31,6 +30,8 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.preference.PreferenceManager
+import androidx.multidex.MultiDex
+import androidx.multidex.MultiDexApplication
 import android.view.WindowManager
 
 import com.owncloud.android.authentication.FingerprintManager
@@ -51,10 +52,12 @@ import com.owncloud.android.ui.activity.FingerprintActivity
 import com.owncloud.android.ui.activity.PassCodeActivity
 import com.owncloud.android.ui.activity.PatternLockActivity
 import com.owncloud.android.ui.activity.WhatsNewActivity
+import info.hannes.timber.DebugTree
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
+import timber.log.Timber
 
 /**
  * Main Application of the project
@@ -63,7 +66,7 @@ import org.koin.dsl.module
  * Contains methods to build the "static" strings. These strings were before constants in different
  * classes
  */
-class MainApp : Application() {
+class MainApp : MultiDexApplication() {
 
     override fun onCreate() {
         super.onCreate()
@@ -187,7 +190,15 @@ class MainApp : Application() {
         }
     }
 
+    override fun attachBaseContext(base: Context?) {
+        super.attachBaseContext(base)
+        MultiDex.install(this)
+    }
+
     fun startLogIfDeveloper() {
+        if (BuildConfig.DEBUG)
+            Timber.plant(DebugTree(Log_OC::class.java))
+
         isDeveloper = BuildConfig.DEBUG || PreferenceManager.getDefaultSharedPreferences(applicationContext)
             .getInt(CLICK_DEV_MENU, CLICKS_DEFAULT) > CLICKS_NEEDED_TO_BE_DEVELOPER
 

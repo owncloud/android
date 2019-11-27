@@ -53,6 +53,8 @@ dependencies {
     //Zooming Android ImageView.
     implementation 'com.github.chrisbanes:PhotoView:2.1.4'
 
+    implementation "androidx.multidex:multidex:2.0.1"
+
     // Convert Java Objects into JSON and back
     implementation 'com.google.code.gson:gson:2.8.5'
 
@@ -96,6 +98,8 @@ android {
 
         buildConfigField "String", gitRemote, "\"" + getGitOriginRemote() + "\""
         buildConfigField "String", commitSHA1, "\"" + getLatestGitHash() + "\""
+
+        multiDexEnabled true
 
         javaCompileOptions {
             annotationProcessorOptions {
