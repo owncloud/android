@@ -343,8 +343,7 @@
   <string name="placeholder_media_time">12:23:45</string>
   <string name="camera_picture_upload_on_wifi">Envio de fotos apenas por wifi</string>
   <string name="camera_video_upload_on_wifi">Envio de vídeos apenas por wifi</string>
-  <string name="camera_upload_path">/CameraUpload</string>
-  <string name="confirmation_disable_camera_uploads_title">Confirmar</string>
+    <string name="confirmation_disable_camera_uploads_title">Confirmar</string>
   <string name="confirmation_disable_pictures_upload_message">Tem certeza de que deseja desativar esse recurso? As imagens pendentes não serão carregadas</string>
   <string name="confirmation_disable_videos_upload_message">Tem certeza de que deseja desativar esse recurso? Os vídeos pendentes não serão carregadas</string>
   <string name="proper_pics_folder_warning_camera_upload">Por favor, verifique se a pasta selecionada é onde a câmera que você está usando salva as fotos tiradas. Caso contrário, o recurso não poderá detectar suas fotos. Tenha em mente que as fotos serão enviadas em pelo menos 15 minutos depois de serem tiradas.</string>

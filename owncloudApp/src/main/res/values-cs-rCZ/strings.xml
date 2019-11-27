@@ -323,8 +323,7 @@ Automaticky nahrát video snímané kamerou
   <string name="placeholder_media_time">12:23:45</string>
   <string name="camera_picture_upload_on_wifi">Nahrávat obrázky pouze přes wifi</string>
   <string name="camera_video_upload_on_wifi">Odesílat videa pouze přes wifi</string>
-  <string name="camera_upload_path">/CameraUpload</string>
-  <string name="confirmation_disable_camera_uploads_title">Potvrzení</string>
+    <string name="confirmation_disable_camera_uploads_title">Potvrzení</string>
   <string name="confirmation_disable_pictures_upload_message">Opravdu chcete tuto funkci deaktivovat? Nevyřízené obrázky nebudou nahrány</string>
   <string name="confirmation_disable_videos_upload_message">Opravdu chcete tuto funkci deaktivovat? Nevyřízená videa nebudou nahrána</string>
   <string name="proper_pics_folder_warning_camera_upload">Prosím ujistěte se, že vybraná složka obsahuje fotografie pořízené fotoaparátem. Jinak aplikace nebude schopna rozpoznat vaše fotografie. Mějte na paměti, že budou nahrány nejdříve 15 minut po jejich pořízení.</string>

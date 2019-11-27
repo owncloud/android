@@ -344,8 +344,7 @@ Descárgueo de aquí: %2$s</string>
   <string name="placeholder_media_time">12:23:45</string>
   <string name="camera_picture_upload_on_wifi">Enviar imaxes só a través de WiFi</string>
   <string name="camera_video_upload_on_wifi">Enviar os vídeos só a través de WiFi</string>
-  <string name="camera_upload_path">/EnvíoCámara</string>
-  <string name="confirmation_disable_camera_uploads_title">Confirmar</string>
+    <string name="confirmation_disable_camera_uploads_title">Confirmar</string>
   <string name="confirmation_disable_pictures_upload_message">Confirma que quere desactivar esta característica? As imaxes pendentes non van ser enviadas</string>
   <string name="confirmation_disable_videos_upload_message">Confirma que quere desactivar esta característica? Os vídeos pendentes non van ser enviados</string>
   <string name="proper_pics_folder_warning_camera_upload">Asegúrese de que o cartafol seleccionado é onde a cámara que está a usar garda as imaxes tomadas. Se non, a función non poderá detectar as súas imaxes. Teña en conta que as imaxes serán enviadas, polo menos, 15 minutos despois de tomalas.</string>

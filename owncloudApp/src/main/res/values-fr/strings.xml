@@ -334,8 +334,7 @@ Ci-dessous la liste des fichiers locaux, et les fichiers distants dans %5$s auxq
   <string name="placeholder_media_time">12:23:45</string>
   <string name="camera_picture_upload_on_wifi">Téléverser les images via une connexion WiFi uniquement</string>
   <string name="camera_video_upload_on_wifi">Téléverser les images via une connexion WiFi uniquement</string>
-  <string name="camera_upload_path">/TeleversementCamera</string>
-  <string name="confirmation_disable_camera_uploads_title">Confirmer</string>
+    <string name="confirmation_disable_camera_uploads_title">Confirmer</string>
   <string name="confirmation_disable_pictures_upload_message">Êtes-vous sûr de vouloir désactiver cette fonction ? Les images en suspens ne seront pas téléversées</string>
   <string name="confirmation_disable_videos_upload_message">Êtes-vous sûr de vouloir désactiver cette fonction ? Les vidéos en suspens ne seront pas téléversées</string>
   <string name="proper_pics_folder_warning_camera_upload">Veuillez vous assurer que le dossier sélectionné est celui où l’appareil photo enregistre les photos prises. Sinon, la fonctionnalité ne sera pas capable de détecter vos photos. Gardez en tête que les photos ne seront téléversées qu’au minimum 15 minutes après avoir été prises.</string>

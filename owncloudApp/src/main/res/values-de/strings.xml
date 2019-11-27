@@ -340,7 +340,6 @@
   <string name="placeholder_media_time">12:23:45</string>
   <string name="camera_picture_upload_on_wifi">Bilder nur über Wifi hochladen</string>
   <string name="camera_video_upload_on_wifi">Videos nur über Wifi hochladen</string>
-  <string name="camera_upload_path">/CameraUpload</string>
   <string name="confirmation_disable_camera_uploads_title">Bestätigen</string>
   <string name="confirmation_disable_pictures_upload_message">Bist du dir sicher, dass du dieses Feature deaktivieren möchtest? Alle eingereihten Bilder werden nicht hochgeladen</string>
   <string name="confirmation_disable_videos_upload_message">Bist du dir sicher, dass du dieses Feature deaktivieren möchtest? Alle eingereihten Videos werden nicht hochgeladen</string>

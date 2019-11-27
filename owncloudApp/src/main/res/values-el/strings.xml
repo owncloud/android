@@ -342,8 +342,7 @@
   <string name="placeholder_media_time">12:23:45</string>
   <string name="camera_picture_upload_on_wifi">Μεταφόρτωση φωτογραφιών μόνο μέσω wifi</string>
   <string name="camera_video_upload_on_wifi">Μεταφόρτωση βίντεο μόνο μέσω wifi</string>
-  <string name="camera_upload_path">/CameraUpload</string>
-  <string name="confirmation_disable_camera_uploads_title">Επιβεβαίωση</string>
+    <string name="confirmation_disable_camera_uploads_title">Επιβεβαίωση</string>
   <string name="confirmation_disable_pictures_upload_message">Είστε βέβαιοι ότι θέλετε να απενεργοποιήσετε αυτήν τη λειτουργία; Οι φωτογραφίες που εκκρεμούν δεν θα μεταφορτωθούν</string>
   <string name="confirmation_disable_videos_upload_message">Είστε βέβαιοι ότι θέλετε να απενεργοποιήσετε αυτήν τη λειτουργία; Τα βίντεο που εκκρεμούν δεν θα μεταφορτωθούν</string>
   <string name="proper_pics_folder_warning_camera_upload">Βεβαιωθείτε ότι ο επιλεγμένος φάκελος είναι εκεί όπου η κάμερα που χρησιμοποιείτε αποθηκεύει τις φωτογραφίες που έχετε τραβήξει. Διαφορετικά, η λειτουργία δεν θα είναι σε θέση να ανιχνεύσει τις φωτογραφίες σας. Λάβετε υπόψη ότι οι φωτογραφίες θα μεταφορτωθούν τουλάχιστον 15 λεπτά μετά τη λήψη τους.</string>

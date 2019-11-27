@@ -340,8 +340,7 @@
   <string name="placeholder_media_time">12:23:45</string>
   <string name="camera_picture_upload_on_wifi">Fotos nur über WLAN hochladen</string>
   <string name="camera_video_upload_on_wifi">Videos nur über WLAN hochladen</string>
-  <string name="camera_upload_path">/Kamera-Upload</string>
-  <string name="confirmation_disable_camera_uploads_title">Bestätigen</string>
+    <string name="confirmation_disable_camera_uploads_title">Bestätigen</string>
   <string name="confirmation_disable_pictures_upload_message">Sind Sie sicher dass sie diese Funktion deaktivieren wollen? Die ausstehenden Bilder werden nicht hochgeladen.</string>
   <string name="confirmation_disable_videos_upload_message">Sind Sie sicher dass sie diese Funktion deaktivieren wollen? Die ausstehenden Videos werden nicht hochgeladen.</string>
   <string name="proper_pics_folder_warning_camera_upload">Bitte stellen Sie sicher, dass der Ordner ausgewählt ist, in dem die Kamera die Bilder speichert. Anderenfalls wird die Funktion Ihre Bilder nicht erkennen können. Bitte beachten Sie, dass Bilder frühestens 15 Minuten, nachdem sie aufgenommen wurden, hochgeladen werden.</string>

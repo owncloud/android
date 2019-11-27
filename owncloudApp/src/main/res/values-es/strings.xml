@@ -340,8 +340,7 @@
   <string name="placeholder_media_time">12:23:45</string>
   <string name="camera_picture_upload_on_wifi">Subir fotos por wifi únicamente</string>
   <string name="camera_video_upload_on_wifi">Subir archivos por wifi únicamente</string>
-  <string name="camera_upload_path">/SubidasCámara</string>
-  <string name="confirmation_disable_camera_uploads_title">Confirmar</string>
+    <string name="confirmation_disable_camera_uploads_title">Confirmar</string>
   <string name="confirmation_disable_pictures_upload_message">¿Está seguro de que desea deshabilitar esta opción ?  Las imagenes pendientes no se subiran.</string>
   <string name="confirmation_disable_videos_upload_message">¿Está seguro de que desea deshabilitar esta opción ? Los videos pendientes no se subiran.</string>
   <string name="proper_pics_folder_warning_camera_upload">Asegúrese de que la carpeta seleccionada es la misma que su cámara está utilizando para guardar sus fotos. De lo contrario, la función no podrá detectarlas. Tenga en cuenta que éstas se cargarán al menos 15 minutos después de haber sido tomadas.</string>

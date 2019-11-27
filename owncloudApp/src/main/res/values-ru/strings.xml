@@ -344,8 +344,7 @@
   <string name="placeholder_media_time">12:23:45</string>
   <string name="camera_picture_upload_on_wifi">Загрузка изображений только через wifi</string>
   <string name="camera_video_upload_on_wifi">Загрузка видео только через wifi</string>
-  <string name="camera_upload_path">/ЗагрузкиКамеры</string>
-  <string name="confirmation_disable_camera_uploads_title">Подтвердите</string>
+    <string name="confirmation_disable_camera_uploads_title">Подтвердите</string>
   <string name="confirmation_disable_pictures_upload_message">Вы уверены, что хотите отключить эту возможность? Последующие изображения не будут загружены</string>
   <string name="confirmation_disable_videos_upload_message">Вы уверены, что хотите отключить эту возможность? Последующие видеозаписи не будут загружены</string>
   <string name="proper_pics_folder_warning_camera_upload">Пожалуйста, удостоверьтесь, что выбранный вами каталог — тот самый, в который ваша камера сохраняет снятые изображения. Иначе данная возможность не сможет обнаружить ваши снимки. Учитывайте, что загрузка изображений происходит как минимум через 15 минут после момента съёмки.</string>
