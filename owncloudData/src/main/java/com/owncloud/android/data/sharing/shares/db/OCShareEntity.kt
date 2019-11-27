@@ -27,8 +27,6 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta
-import com.owncloud.android.domain.sharing.shares.model.ShareType
-import com.owncloud.android.lib.resources.shares.RemoteShare
 
 /**
  * Represents one record of the Shares table.

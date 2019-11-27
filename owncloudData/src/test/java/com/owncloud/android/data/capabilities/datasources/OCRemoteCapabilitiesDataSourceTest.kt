@@ -23,14 +23,13 @@ package com.owncloud.android.data.capabilities.datasources
 import com.owncloud.android.data.capabilities.datasources.implementation.OCRemoteCapabilitiesDataSource
 import com.owncloud.android.data.capabilities.network.OCCapabilityService
 import com.owncloud.android.data.capabilities.datasources.mapper.RemoteCapabilityMapper
-import com.owncloud.android.data.utils.DataTestUtil
 import com.owncloud.android.testutil.OC_ACCOUNT_NAME
 import com.owncloud.android.testutil.OC_CAPABILITY
+import com.owncloud.android.utils.createRemoteOperationResultMock
 import io.mockk.every
 import io.mockk.mockk
-import org.hamcrest.CoreMatchers.notNullValue
-import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Test
 
@@ -53,21 +52,16 @@ class OCRemoteCapabilitiesDataSourceTest {
     fun readRemoteCapabilities() {
         val accountName = OC_ACCOUNT_NAME
 
-        val remoteCapability = remoteCapabilityMapper.toRemote(OC_CAPABILITY)
+        val remoteCapability = remoteCapabilityMapper.toRemote(OC_CAPABILITY)!!
 
-        val getRemoteCapabilitiesOperationResult = DataTestUtil.createRemoteOperationResultMock(
-            remoteCapability,
-            true
-        )
+        val getRemoteCapabilitiesOperationResult = createRemoteOperationResultMock(remoteCapability, true)
 
-        every {
-            ocCapabilityService.getCapabilities()
-        } returns getRemoteCapabilitiesOperationResult
+        every { ocCapabilityService.getCapabilities() } returns getRemoteCapabilitiesOperationResult
 
         // Get capability from remote datasource
         val capabilities = ocRemoteCapabilitiesDataSource.getCapabilities(accountName)
 
-        assertThat(capabilities, notNullValue())
+        assertNotNull(capabilities)
 
         assertEquals(OC_CAPABILITY.accountName, capabilities.accountName)
         assertEquals(OC_CAPABILITY.versionMayor, capabilities.versionMayor)

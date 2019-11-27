@@ -26,10 +26,10 @@ import com.owncloud.android.data.sharing.shares.datasources.implementation.OCLoc
 import com.owncloud.android.data.sharing.shares.datasources.mapper.OCShareMapper
 import com.owncloud.android.data.sharing.shares.db.OCShareDao
 import com.owncloud.android.data.sharing.shares.db.OCShareEntity
-import com.owncloud.android.data.utils.LiveDataTestUtil.getValue
 import com.owncloud.android.domain.sharing.shares.model.ShareType
 import com.owncloud.android.testutil.OC_PRIVATE_SHARE
 import com.owncloud.android.testutil.OC_PUBLIC_SHARE
+import com.owncloud.android.testutil.livedata.getLastEmittedValue
 import io.mockk.every
 import io.mockk.mockkClass
 import org.junit.Assert.assertEquals
@@ -82,9 +82,7 @@ class OCLocalDataSourceTest {
         )!!
     )
 
-    private val privateShareTypes = listOf(
-        ShareType.USER, ShareType.GROUP, ShareType.FEDERATED
-    )
+    private val privateShareTypes = listOf(ShareType.USER, ShareType.GROUP, ShareType.FEDERATED)
 
     @Test
     fun readLocalPrivateShares() {
@@ -93,17 +91,15 @@ class OCLocalDataSourceTest {
 
         every {
             ocSharesDao.getSharesAsLiveData(
-                "/Docs/doc1.doc", "admin@server", privateShareTypes.map {
-                    it.value
-                }
-            )
+                "/Docs/doc1.doc",
+                "admin@server",
+                privateShareTypes.map { it.value })
         } returns privateSharesAsLiveData
 
-        val shares = getValue(
+        val shares =
             ocLocalSharesDataSource.getSharesAsLiveData(
                 "/Docs/doc1.doc", "admin@server", privateShareTypes
-            )
-        )
+            ).getLastEmittedValue()!!
 
         assertEquals(2, shares.size)
 
@@ -123,13 +119,9 @@ class OCLocalDataSourceTest {
         val privateShareAsLiveData: MutableLiveData<OCShareEntity> = MutableLiveData()
         privateShareAsLiveData.value = privateShares.first()
 
-        every {
-            ocSharesDao.getShareAsLiveData(1)
-        } returns privateShareAsLiveData
+        every { ocSharesDao.getShareAsLiveData(1) } returns privateShareAsLiveData
 
-        val share = getValue(
-            ocLocalSharesDataSource.getShareAsLiveData(1)
-        )
+        val share = ocLocalSharesDataSource.getShareAsLiveData(1).getLastEmittedValue()!!
 
         assertEquals("/Docs/doc1.doc", share.path)
         assertEquals(false, share.isFolder)
@@ -142,11 +134,7 @@ class OCLocalDataSourceTest {
         val privateSharesAsLiveData: MutableLiveData<List<OCShareEntity>> = MutableLiveData()
         privateSharesAsLiveData.value = privateShares
 
-        every {
-            ocSharesDao.insert(
-                privateSharesAsLiveData.value!![0]
-            )
-        } returns 10
+        every { ocSharesDao.insert(privateSharesAsLiveData.value!![0]) } returns 10
 
         val insertedShareId = ocLocalSharesDataSource.insert(
             OC_PRIVATE_SHARE.copy(
@@ -163,11 +151,7 @@ class OCLocalDataSourceTest {
         val privateSharesAsLiveData: MutableLiveData<List<OCShareEntity>> = MutableLiveData()
         privateSharesAsLiveData.value = privateShares
 
-        every {
-            ocSharesDao.update(
-                privateSharesAsLiveData.value!![1]
-            )
-        } returns 3
+        every { ocSharesDao.update(privateSharesAsLiveData.value!![1]) } returns 3
 
         val updatedShareId = ocLocalSharesDataSource.update(
             OC_PRIVATE_SHARE.copy(
@@ -186,18 +170,20 @@ class OCLocalDataSourceTest {
     private val publicShares = listOf(
         ocShareMapper.toEntity(
             OC_PUBLIC_SHARE.copy(
-            path = "/Photos/",
-            isFolder = true,
-            name = "Photos link",
-            shareLink = "http://server:port/s/1"
-        ))!!,
-            ocShareMapper.toEntity(
-                OC_PUBLIC_SHARE.copy(
-            path = "/Photos/",
-            isFolder = true,
-            name = "Photos link 2",
-            shareLink = "http://server:port/s/2"
-        ))!!
+                path = "/Photos/",
+                isFolder = true,
+                name = "Photos link",
+                shareLink = "http://server:port/s/1"
+            )
+        )!!,
+        ocShareMapper.toEntity(
+            OC_PUBLIC_SHARE.copy(
+                path = "/Photos/",
+                isFolder = true,
+                name = "Photos link 2",
+                shareLink = "http://server:port/s/2"
+            )
+        )!!
     )
 
     @Test
@@ -207,15 +193,17 @@ class OCLocalDataSourceTest {
 
         every {
             ocSharesDao.getSharesAsLiveData(
-                "/Photos/", "admin@server", listOf(ShareType.PUBLIC_LINK.value)
+                "/Photos/",
+                "admin@server",
+                listOf(ShareType.PUBLIC_LINK.value)
             )
         } returns publicSharesAsLiveData
 
-        val shares = getValue(
-            ocLocalSharesDataSource.getSharesAsLiveData(
-                "/Photos/", "admin@server", listOf(ShareType.PUBLIC_LINK)
-            )
-        )
+        val shares = ocLocalSharesDataSource.getSharesAsLiveData(
+            "/Photos/",
+            "admin@server",
+            listOf(ShareType.PUBLIC_LINK)
+        ).getLastEmittedValue()!!
 
         assertEquals(2, shares.size)
 
@@ -235,11 +223,7 @@ class OCLocalDataSourceTest {
         val publicSharesAsLiveData: MutableLiveData<List<OCShareEntity>> = MutableLiveData()
         publicSharesAsLiveData.value = publicShares
 
-        every {
-            ocSharesDao.insert(
-                publicSharesAsLiveData.value!![0]
-            )
-        } returns 7
+        every { ocSharesDao.insert(publicSharesAsLiveData.value!![0]) } returns 7
 
         val insertedShareId = ocLocalSharesDataSource.insert(
             OC_PUBLIC_SHARE.copy(
@@ -257,11 +241,7 @@ class OCLocalDataSourceTest {
         val publicSharesAsLiveData: MutableLiveData<List<OCShareEntity>> = MutableLiveData()
         publicSharesAsLiveData.value = publicShares
 
-        every {
-            ocSharesDao.update(
-                publicSharesAsLiveData.value!![1]
-            )
-        } returns 8
+        every { ocSharesDao.update(publicSharesAsLiveData.value!![1]) } returns 8
 
         val updatedShareId = ocLocalSharesDataSource.update(
             OC_PUBLIC_SHARE.copy(
@@ -280,15 +260,10 @@ class OCLocalDataSourceTest {
 
     @Test
     fun deleteShare() {
-        every {
-            ocSharesDao.deleteShare(
-                5
-            )
-        } returns 1
+        every { ocSharesDao.deleteShare(5) } returns 1
 
-        val deletedRows = ocLocalSharesDataSource.deleteShare(
-            5
-        )
+        val deletedRows = ocLocalSharesDataSource.deleteShare(5)
+
         assertEquals(1, deletedRows)
     }
 }

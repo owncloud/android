@@ -23,13 +23,13 @@ package com.owncloud.android.data.shares.datasources
 import com.owncloud.android.data.sharing.shares.datasources.implementation.OCRemoteShareDataSource
 import com.owncloud.android.data.sharing.shares.datasources.mapper.RemoteShareMapper
 import com.owncloud.android.data.sharing.shares.network.OCShareService
-import com.owncloud.android.data.utils.DataTestUtil
 import com.owncloud.android.domain.exceptions.ShareForbiddenException
 import com.owncloud.android.domain.exceptions.ShareNotFoundException
 import com.owncloud.android.domain.sharing.shares.model.ShareType
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.shares.ShareParserResult
 import com.owncloud.android.testutil.OC_SHARE
+import com.owncloud.android.utils.createRemoteOperationResultMock
 import io.mockk.every
 import io.mockk.mockk
 import org.hamcrest.CoreMatchers.notNullValue
@@ -55,7 +55,7 @@ class OCRemoteShareDataSourceTest {
 
     @Test
     fun insertPrivateShare() {
-        val createRemoteShareOperationResult = DataTestUtil.createRemoteOperationResultMock(
+        val createRemoteShareOperationResult = createRemoteOperationResultMock(
             ShareParserResult(
                 listOf(
                     remoteShareMapper.toRemote(
@@ -96,7 +96,7 @@ class OCRemoteShareDataSourceTest {
 
     @Test
     fun updatePrivateShare() {
-        val updateRemoteShareOperationResult = DataTestUtil.createRemoteOperationResultMock(
+        val updateRemoteShareOperationResult = createRemoteOperationResultMock(
             ShareParserResult(
                 listOf(
                     remoteShareMapper.toRemote(
@@ -140,7 +140,7 @@ class OCRemoteShareDataSourceTest {
 
     @Test
     fun insertPublicShare() {
-        val createRemoteShareOperationResult = DataTestUtil.createRemoteOperationResultMock(
+        val createRemoteShareOperationResult = createRemoteOperationResultMock(
             ShareParserResult(
                 listOf(
                     remoteShareMapper.toRemote(
@@ -181,7 +181,7 @@ class OCRemoteShareDataSourceTest {
 
     @Test
     fun updatePublicShare() {
-        val updateRemoteShareOperationResult = DataTestUtil.createRemoteOperationResultMock(
+        val updateRemoteShareOperationResult = createRemoteOperationResultMock(
             ShareParserResult(
                 listOf(
                     remoteShareMapper.toRemote(
@@ -261,7 +261,7 @@ class OCRemoteShareDataSourceTest {
             )!!
         )
 
-        val getRemoteSharesOperationResult = DataTestUtil.createRemoteOperationResultMock(
+        val getRemoteSharesOperationResult = createRemoteOperationResultMock(
             ShareParserResult(remoteShares),
             true
         )
@@ -320,7 +320,7 @@ class OCRemoteShareDataSourceTest {
     }
 
     private fun createShareOperationWithError(resultCode: RemoteOperationResult.ResultCode? = null) {
-        val createRemoteSharesOperationResult = DataTestUtil.createRemoteOperationResultMock(
+        val createRemoteSharesOperationResult = createRemoteOperationResultMock(
             ShareParserResult(arrayListOf()),
             false,
             null,
@@ -351,7 +351,7 @@ class OCRemoteShareDataSourceTest {
     }
 
     private fun updateShareOperationWithError(resultCode: RemoteOperationResult.ResultCode? = null) {
-        val updateRemoteShareOperationResult = DataTestUtil.createRemoteOperationResultMock(
+        val updateRemoteShareOperationResult = createRemoteOperationResultMock(
             ShareParserResult(arrayListOf()),
             false,
             null,
@@ -371,7 +371,7 @@ class OCRemoteShareDataSourceTest {
 
     @Test
     fun deleteShare() {
-        val removeRemoteShareOperationResult = DataTestUtil.createRemoteOperationResultMock(
+        val removeRemoteShareOperationResult = createRemoteOperationResultMock(
             ShareParserResult(arrayListOf()),
             isSuccess = true
         )
@@ -396,7 +396,7 @@ class OCRemoteShareDataSourceTest {
     }
 
     private fun deleteShareOperationWithError(resultCode: RemoteOperationResult.ResultCode? = null) {
-        val removeRemoteShareOperationResult = DataTestUtil.createRemoteOperationResultMock(
+        val removeRemoteShareOperationResult = createRemoteOperationResultMock(
             ShareParserResult(arrayListOf()),
             false,
             null,
