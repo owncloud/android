@@ -180,9 +180,9 @@ public class FileDataStorageManager {
         return fileExists(ProviderTableMeta.FILE_PATH, path);
     }
 
-    public Vector<OCFile> getFolderContent(OCFile f, boolean onlyAvailableOffline, boolean sharedByLinkFiles) {
+    public Vector<OCFile> getFolderContent(OCFile f) {
         if (f != null && f.isFolder() && f.getFileId() != -1) {
-            return getFolderContent(f.getFileId(), onlyAvailableOffline, sharedByLinkFiles);
+            return getFolderContent(f.getFileId());
         } else {
             return new Vector<>();
         }
@@ -192,7 +192,7 @@ public class FileDataStorageManager {
         Vector<OCFile> ret = new Vector<OCFile>();
         if (folder != null) {
             // TODO better implementation, filtering in the access to database instead of here
-            Vector<OCFile> tmp = getFolderContent(folder, false, false);
+            Vector<OCFile> tmp = getFolderContent(folder);
             OCFile current;
             for (int i = 0; i < tmp.size(); i++) {
                 current = tmp.get(i);
@@ -664,7 +664,7 @@ public class FileDataStorageManager {
         File localFolder = new File(localFolderPath);
         if (localFolder.exists()) {
             // stage 1: remove the local files already registered in the files database
-            Vector<OCFile> files = getFolderContent(folder.getFileId(), false, false);
+            Vector<OCFile> files = getFolderContent(folder.getFileId());
             if (files != null) {
                 for (OCFile file : files) {
                     if (file.isFolder()) {
@@ -935,7 +935,7 @@ public class FileDataStorageManager {
         return ret;
     }
 
-    private Vector<OCFile> getFolderContent(long parentId, boolean onlyAvailableOffline, boolean sharedByLinkFiles) {
+    private Vector<OCFile> getFolderContent(long parentId) {
         Vector<OCFile> ret = new Vector<OCFile>();
 
         Uri req_uri = Uri.withAppendedPath(
@@ -946,20 +946,8 @@ public class FileDataStorageManager {
         String selection;
         String[] selectionArgs;
 
-        if (sharedByLinkFiles) {
-            selection = ProviderTableMeta.FILE_PARENT + "=? AND (" + ProviderTableMeta.FILE_SHARED_VIA_LINK + " = ? )";
-            selectionArgs = new String[]{String.valueOf(parentId),
-                    String.valueOf(1)};
-        } else if (onlyAvailableOffline) {
-            selection = ProviderTableMeta.FILE_PARENT + "=? AND (" + ProviderTableMeta.FILE_KEEP_IN_SYNC +
-                    " = ? OR " + ProviderTableMeta.FILE_KEEP_IN_SYNC + "=? )";
-            selectionArgs = new String[]{String.valueOf(parentId),
-                    String.valueOf(OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE.getValue()),
-                    String.valueOf(OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE_PARENT.getValue())};
-        } else {
-            selection = ProviderTableMeta.FILE_PARENT + "=?";
-            selectionArgs = new String[]{String.valueOf(parentId)};
-        }
+        selection = ProviderTableMeta.FILE_PARENT + "=?";
+        selectionArgs = new String[]{String.valueOf(parentId)};
 
         if (getContentProviderClient() != null) {
             try {
@@ -1406,45 +1394,6 @@ public class FileDataStorageManager {
             }
         }
         return operations;
-    }
-
-    private ArrayList<ContentProviderOperation> prepareRemoveSharesInFolder(
-            OCFile folder, ArrayList<ContentProviderOperation> preparedOperations) {
-        if (folder != null) {
-            String where = ProviderTableMeta.OCSHARES_PATH + "=?" + " AND "
-                    + ProviderTableMeta.OCSHARES_ACCOUNT_OWNER + "=?";
-            String[] whereArgs = new String[]{"", mAccount.name};
-
-            Vector<OCFile> files = getFolderContent(folder, false, false);
-
-            for (OCFile file : files) {
-                whereArgs[0] = file.getRemotePath();
-                preparedOperations.add(
-                        ContentProviderOperation.newDelete(ProviderTableMeta.CONTENT_URI_SHARE).
-                                withSelection(where, whereArgs).
-                                build()
-                );
-            }
-        }
-        return preparedOperations;
-
-    }
-
-    private ArrayList<ContentProviderOperation> prepareRemoveSharesInFile(
-            String filePath, ArrayList<ContentProviderOperation> preparedOperations) {
-
-        String where = ProviderTableMeta.OCSHARES_PATH + "=?" + " AND "
-                + ProviderTableMeta.OCSHARES_ACCOUNT_OWNER + "=?";
-        String[] whereArgs = new String[]{filePath, mAccount.name};
-
-        preparedOperations.add(
-                ContentProviderOperation.newDelete(ProviderTableMeta.CONTENT_URI_SHARE).
-                        withSelection(where, whereArgs).
-                        build()
-        );
-
-        return preparedOperations;
-
     }
 
     public ArrayList<OCShare> getPrivateSharesForAFile(String filePath, String accountName) {

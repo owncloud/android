@@ -391,16 +391,15 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
             mAccount = AccountUtils.getCurrentOwnCloudAccount(mContext);
         }
 
+        boolean isRootFolder = folder.equals(updatedStorageManager.getFileByPath(OCFile.ROOT_PATH));
+
         if (mStorageManager != null) {
-            if (mOnlyAvailableOffline && (folder.equals(updatedStorageManager.getFileByPath(OCFile.ROOT_PATH)) ||
-                    !folder.isAvailableOffline())) {
+            if (mOnlyAvailableOffline && (isRootFolder || !folder.isAvailableOffline())) {
                 mImmutableFilesList = updatedStorageManager.getAvailableOfflineFilesFromCurrentAccount();
-            } else if (mSharedByLinkFiles && (folder.equals(updatedStorageManager.getFileByPath(OCFile.ROOT_PATH)) ||
-                    !folder.isSharedViaLink())) {
+            } else if (mSharedByLinkFiles && isRootFolder) {
                 mImmutableFilesList = updatedStorageManager.getSharedByLinkFilesFromCurrentAccount();
             } else {
-                mImmutableFilesList = mStorageManager.getFolderContent(folder, mOnlyAvailableOffline,
-                        mSharedByLinkFiles);
+                mImmutableFilesList = mStorageManager.getFolderContent(folder);
             }
 
             mFiles = mImmutableFilesList;

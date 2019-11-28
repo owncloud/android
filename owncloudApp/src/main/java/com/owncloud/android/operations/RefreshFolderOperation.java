@@ -228,7 +228,7 @@ public class RefreshFolderOperation extends SyncOperation<ArrayList<RemoteFile>>
     }
 
     private void resetShareFlagsInFolderChilds() {
-        Vector<OCFile> files = getStorageManager().getFolderContent(mLocalFolder, false, false);
+        Vector<OCFile> files = getStorageManager().getFolderContent(mLocalFolder);
         for (OCFile file: files) {
             file.setSharedViaLink(false);
             file.setSharedWithSharee(false);

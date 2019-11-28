@@ -185,7 +185,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
         val resultCursor = FileCursor(projection)
 
         // Create result cursor before syncing folder again, in order to enable faster loading
-        currentStorageManager?.getFolderContent(currentStorageManager?.getFileById(folderId), false, false)
+        currentStorageManager?.getFolderContent(currentStorageManager?.getFileById(folderId))
             ?.forEach { file -> resultCursor.addFile(file) }
 
         //Create notification listener
@@ -511,7 +511,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
     private fun findFiles(root: OCFile, query: String): Vector<OCFile> {
         val result = Vector<OCFile>()
 
-        val folderContent = currentStorageManager?.getFolderContent(root, false, false) ?: return result
+        val folderContent = currentStorageManager?.getFolderContent(root) ?: return result
         folderContent.forEach {
             if (it.fileName.contains(query)) {
                 result.add(it)
