@@ -42,15 +42,22 @@ class OCSettingsLogTest {
     val activityRule = ActivityTestRule(LogHistoryActivity::class.java, true, true)
 
     @Test
-    fun checkTitle() {
-        onView(withText(R.string.actionbar_logger)).check(matches(isDisplayed()))
+    fun itemsToolbar() {
+        onView(withId(R.id.search_button)).check(matches(isDisplayed()))
+        //Values not i18n
+        onView(withText("LOGCAT")).check(matches(isDisplayed()))
+        onView(withText("LOGFILE")).check(matches(isDisplayed()))
     }
 
     @Test
-    fun itemsToolbar() {
-        onView(withId(R.id.menu_search)).check(matches(isDisplayed()))
+    fun itemsLogLevel() {
         openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getInstrumentation().targetContext)
-        onView(withText("Logcat")).check(matches(isDisplayed()))
+        //Values not i18n
+        onView(withText("Verbose")).check(matches(isDisplayed()))
+        onView(withText("Debug")).check(matches(isDisplayed()))
+        onView(withText("Info")).check(matches(isDisplayed()))
+        onView(withText("Warning")).check(matches(isDisplayed()))
+        onView(withText("Error")).check(matches(isDisplayed()))
     }
 
 }
