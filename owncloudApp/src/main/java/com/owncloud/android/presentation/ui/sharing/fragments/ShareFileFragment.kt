@@ -178,9 +178,11 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
             )
         }
 
-    private val isShareApiEnabled = capabilities?.filesSharingApiEnabled == CapabilityBooleanType.TRUE
+    private val isShareApiEnabled
+        get() = capabilities?.filesSharingApiEnabled == CapabilityBooleanType.TRUE
 
-    private val isPublicShareEnabled = capabilities?.filesSharingPublicEnabled == CapabilityBooleanType.TRUE
+    private val isPublicShareEnabled
+        get() = capabilities?.filesSharingPublicEnabled == CapabilityBooleanType.TRUE
 
     private val ocCapabilityViewModel: OCCapabilityViewModel by viewModel {
         parametersOf(
