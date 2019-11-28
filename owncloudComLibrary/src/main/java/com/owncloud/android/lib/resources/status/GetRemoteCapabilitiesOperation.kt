@@ -124,7 +124,7 @@ class GetRemoteCapabilitiesOperation : RemoteOperation<RemoteCapability>() {
                             )
                         }
                         if (respFilesSharing.has(PROPERTY_SEARCH_MIN_LENGTH)){
-                            capability.filesSharingMinLength = respFilesSharing.getInt(
+                            capability.filesSharingSearchMinLength = respFilesSharing.getInt(
                                 PROPERTY_SEARCH_MIN_LENGTH)
                         }
 

@@ -44,8 +44,7 @@ data class RemoteCapability(
 
     // Files Sharing
     var filesSharingApiEnabled: CapabilityBooleanType = CapabilityBooleanType.UNKNOWN,
-    var filesSharingSearchMinLength: Int = 0,
-    var filesSharingMinLength: Int = 0,
+    var filesSharingSearchMinLength: Int? = 2,
     var filesSharingPublicEnabled: CapabilityBooleanType = CapabilityBooleanType.UNKNOWN,
     var filesSharingPublicPasswordEnforced: CapabilityBooleanType = CapabilityBooleanType.UNKNOWN,
     var filesSharingPublicPasswordEnforcedReadOnly: CapabilityBooleanType = CapabilityBooleanType.UNKNOWN,
