@@ -25,9 +25,9 @@ import androidx.test.filters.SmallTest
 import androidx.test.platform.app.InstrumentationRegistry
 import com.owncloud.android.data.OwncloudDatabase
 import com.owncloud.android.data.capabilities.datasources.mapper.OCCapabilityMapper
-import com.owncloud.android.data.utils.LiveDataTestUtil.getValue
 import com.owncloud.android.domain.capabilities.model.CapabilityBooleanType
 import com.owncloud.android.testutil.OC_CAPABILITY
+import com.owncloud.android.testutil.livedata.getLastEmittedValue
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
@@ -64,7 +64,7 @@ class OCCapabilityDaoTest {
         ocCapabilityDao.insert(entityList)
 
         val capability = ocCapabilityDao.getCapabilitiesForAccount(user2)
-        val capabilityAsLiveData = getValue(ocCapabilityDao.getCapabilitiesForAccountAsLiveData(user2))
+        val capabilityAsLiveData = ocCapabilityDao.getCapabilitiesForAccountAsLiveData(user2).getLastEmittedValue()
 
         assertNotNull(capability)
         assertNotNull(capabilityAsLiveData)
@@ -81,7 +81,7 @@ class OCCapabilityDaoTest {
         ocCapabilityDao.insert(entity2)
 
         val capability = ocCapabilityDao.getCapabilitiesForAccount(user2)
-        val capabilityAsLiveData = getValue(ocCapabilityDao.getCapabilitiesForAccountAsLiveData(user2))
+        val capabilityAsLiveData = ocCapabilityDao.getCapabilitiesForAccountAsLiveData(user2).getLastEmittedValue()
 
         assertNotNull(capability)
         assertNotNull(capabilityAsLiveData)
@@ -93,7 +93,7 @@ class OCCapabilityDaoTest {
     fun getNonExistingCapabilities() {
         ocCapabilityDao.insert(ocCapabilityMapper.toEntity(OC_CAPABILITY.copy(accountName = user1))!!)
 
-        val capability = getValue(ocCapabilityDao.getCapabilitiesForAccountAsLiveData(user2))
+        val capability = ocCapabilityDao.getCapabilitiesForAccountAsLiveData(user2).getLastEmittedValue()
 
         assertNull(capability)
     }
@@ -106,7 +106,7 @@ class OCCapabilityDaoTest {
         ocCapabilityDao.insert(entity1)
         ocCapabilityDao.replace(listOf(entity2))
 
-        val capability = getValue(ocCapabilityDao.getCapabilitiesForAccountAsLiveData(OC_CAPABILITY.accountName!!))
+        val capability = ocCapabilityDao.getCapabilitiesForAccountAsLiveData(OC_CAPABILITY.accountName!!).getLastEmittedValue()
 
         assertNotNull(capability)
         assertEquals(entity2, capability)
@@ -121,13 +121,13 @@ class OCCapabilityDaoTest {
 
         ocCapabilityDao.replace(listOf(entity2))
 
-        val capability1 = getValue(ocCapabilityDao.getCapabilitiesForAccountAsLiveData(user1))
+        val capability1 = ocCapabilityDao.getCapabilitiesForAccountAsLiveData(user1).getLastEmittedValue()
 
         assertNotNull(capability1)
         assertEquals(entity1, capability1)
 
         // capability2 didn't exist before, it should not replace the old one but got created
-        val capability2 = getValue(ocCapabilityDao.getCapabilitiesForAccountAsLiveData(user2))
+        val capability2 = ocCapabilityDao.getCapabilitiesForAccountAsLiveData(user2).getLastEmittedValue()
 
         assertNotNull(capability2)
         assertEquals(entity2, capability2)
@@ -139,13 +139,13 @@ class OCCapabilityDaoTest {
 
         ocCapabilityDao.insert(entity)
 
-        val capability1 = getValue(ocCapabilityDao.getCapabilitiesForAccountAsLiveData(user1))
+        val capability1 = ocCapabilityDao.getCapabilitiesForAccountAsLiveData(user1).getLastEmittedValue()
 
         assertNotNull(capability1)
 
         ocCapabilityDao.delete(user1)
 
-        val capability2 = getValue(ocCapabilityDao.getCapabilitiesForAccountAsLiveData(user1))
+        val capability2 = ocCapabilityDao.getCapabilitiesForAccountAsLiveData(user1).getLastEmittedValue()
 
         assertNull(capability2)
     }
