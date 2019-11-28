@@ -1122,16 +1122,16 @@ class FileDataStorageManager {
                     whereBuffer.append("?")
                     whereBuffer.append(")")
 
-                        try {
-                            performUpdate(
-                                uri = CONTENT_URI_FILE,
-                                contentValues = cv,
-                                where = whereBuffer.toString(),
-                                selectionArgs = ancestorIds.toTypedArray()
-                            )
-                        } catch (e: RemoteException) {
-                            Log_OC.e(TAG, "Failed saving conflict in database ${e.message}", e)
-                        }
+                    try {
+                        performUpdate(
+                            uri = CONTENT_URI_FILE,
+                            contentValues = cv,
+                            where = whereBuffer.toString(),
+                            selectionArgs = ancestorIds.toTypedArray()
+                        )
+                    } catch (e: RemoteException) {
+                        Log_OC.e(TAG, "Failed saving conflict in database ${e.message}", e)
+                    }
                 } // else file is ROOT folder, no parent to set in conflict
 
             } else {
@@ -1167,16 +1167,16 @@ class FileDataStorageManager {
                     if (descendantsInConflict == null || descendantsInConflict.count == 0) {
                         Log_OC.d(TAG, "NO MORE conflicts in $parentPath")
 
-                            try {
-                                performUpdate(
-                                    uri = CONTENT_URI_FILE,
-                                    contentValues = cv,
-                                    where = "$FILE_ACCOUNT_OWNER=? AND $FILE_PATH=?",
-                                    selectionArgs = arrayOf(account.name, parentPath)
-                                )
-                            } catch (e: RemoteException) {
-                                Log_OC.e(TAG, "Failed saving conflict in database ${e.message}", e)
-                            }
+                        try {
+                            performUpdate(
+                                uri = CONTENT_URI_FILE,
+                                contentValues = cv,
+                                where = "$FILE_ACCOUNT_OWNER=? AND $FILE_PATH=?",
+                                selectionArgs = arrayOf(account.name, parentPath)
+                            )
+                        } catch (e: RemoteException) {
+                            Log_OC.e(TAG, "Failed saving conflict in database ${e.message}", e)
+                        }
 
                     } else {
                         Log_OC.d(TAG, "STILL ${descendantsInConflict.count} in $parentPath")
@@ -1311,63 +1311,137 @@ class FileDataStorageManager {
                 versionEdition = c.getString(c.getColumnIndex(CAPABILITIES_VERSION_EDITION)),
                 corePollInterval = c.getInt(c.getColumnIndex(CAPABILITIES_CORE_POLLINTERVAL)),
                 filesSharingApiEnabled = CapabilityBooleanType.fromValue(
-                    c.getInt(c.getColumnIndex(CAPABILITIES_SHARING_API_ENABLED))
-                )!!,
+                    c.getInt(
+                        c.getColumnIndex(
+                            CAPABILITIES_SHARING_API_ENABLED
+                        )
+                    )
+                ),
                 filesSharingPublicEnabled = CapabilityBooleanType.fromValue(
-                    c.getInt(c.getColumnIndex(CAPABILITIES_SHARING_PUBLIC_ENABLED))
-                )!!,
+                    c.getInt(
+                        c.getColumnIndex(
+                            CAPABILITIES_SHARING_PUBLIC_ENABLED
+                        )
+                    )
+                ),
                 filesSharingPublicPasswordEnforced = CapabilityBooleanType.fromValue(
-                    c.getInt(c.getColumnIndex(CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED))
-                )!!,
+                    c.getInt(
+                        c.getColumnIndex(
+                            CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED
+                        )
+                    )
+                ),
                 filesSharingPublicPasswordEnforcedReadOnly = CapabilityBooleanType.fromValue(
-                    c.getInt(c.getColumnIndex(CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_READ_ONLY))
-                )!!,
+                    c.getInt(
+                        c.getColumnIndex(
+                            CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_READ_ONLY
+                        )
+                    )
+                ),
                 filesSharingPublicPasswordEnforcedReadWrite = CapabilityBooleanType.fromValue(
-                    c.getInt(c.getColumnIndex(CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_READ_WRITE))
-                )!!,
+                    c.getInt(
+                        c.getColumnIndex(
+                            CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_READ_WRITE
+                        )
+                    )
+                ),
                 filesSharingPublicPasswordEnforcedUploadOnly = CapabilityBooleanType.fromValue(
-                    c.getInt(c.getColumnIndex(CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_UPLOAD_ONLY))
-                )!!,
+                    c.getInt(
+                        c.getColumnIndex(
+                            CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_UPLOAD_ONLY
+                        )
+                    )
+                ),
                 filesSharingPublicExpireDateEnabled = CapabilityBooleanType.fromValue(
-                    c.getInt(c.getColumnIndex(CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_ENABLED))
-                )!!,
+                    c.getInt(
+                        c.getColumnIndex(
+                            CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_ENABLED
+                        )
+                    )
+                ),
                 filesSharingPublicExpireDateDays = c.getInt(
-                    c.getColumnIndex(CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_DAYS)
+                    c.getColumnIndex(
+                        CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_DAYS
+                    )
                 ),
                 filesSharingPublicExpireDateEnforced = CapabilityBooleanType.fromValue(
-                    c.getInt(c.getColumnIndex(CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_ENFORCED))
-                )!!,
+                    c.getInt(
+                        c.getColumnIndex(
+                            CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_ENFORCED
+                        )
+                    )
+                ),
                 filesSharingPublicSendMail = CapabilityBooleanType.fromValue(
-                    c.getInt(c.getColumnIndex(CAPABILITIES_SHARING_PUBLIC_SEND_MAIL))
-                )!!,
+                    c.getInt(
+                        c.getColumnIndex(
+                            CAPABILITIES_SHARING_PUBLIC_SEND_MAIL
+                        )
+                    )
+                ),
                 filesSharingPublicUpload = CapabilityBooleanType.fromValue(
-                    c.getInt(c.getColumnIndex(CAPABILITIES_SHARING_PUBLIC_UPLOAD))
-                )!!,
+                    c.getInt(
+                        c.getColumnIndex(
+                            CAPABILITIES_SHARING_PUBLIC_UPLOAD
+                        )
+                    )
+                ),
                 filesSharingPublicMultiple = CapabilityBooleanType.fromValue(
-                    c.getInt(c.getColumnIndex(CAPABILITIES_SHARING_PUBLIC_MULTIPLE))
-                )!!,
+                    c.getInt(
+                        c.getColumnIndex(
+                            CAPABILITIES_SHARING_PUBLIC_MULTIPLE
+                        )
+                    )
+                ),
                 filesSharingPublicSupportsUploadOnly = CapabilityBooleanType.fromValue(
-                    c.getInt(c.getColumnIndex(CAPABILITIES_SHARING_PUBLIC_SUPPORTS_UPLOAD_ONLY))
-                )!!,
+                    c.getInt(
+                        c.getColumnIndex(
+                            CAPABILITIES_SHARING_PUBLIC_SUPPORTS_UPLOAD_ONLY
+                        )
+                    )
+                ),
                 filesSharingUserSendMail = CapabilityBooleanType.fromValue(
-                    c.getInt(c.getColumnIndex(CAPABILITIES_SHARING_USER_SEND_MAIL))
-                )!!,
+                    c.getInt(
+                        c.getColumnIndex(
+                            CAPABILITIES_SHARING_USER_SEND_MAIL
+                        )
+                    )
+                ),
                 filesSharingResharing = CapabilityBooleanType.fromValue(
-                    c.getInt(c.getColumnIndex(CAPABILITIES_SHARING_RESHARING))
-                )!!,
+                    c.getInt(
+                        c.getColumnIndex(
+                            CAPABILITIES_SHARING_RESHARING
+                        )
+                    )
+                ),
                 filesSharingFederationOutgoing = CapabilityBooleanType.fromValue(
-                    c.getInt(c.getColumnIndex(CAPABILITIES_SHARING_FEDERATION_OUTGOING))
-                )!!,
+                    c.getInt(
+                        c.getColumnIndex(
+                            CAPABILITIES_SHARING_FEDERATION_OUTGOING
+                        )
+                    )
+                ),
                 filesSharingFederationIncoming = CapabilityBooleanType.fromValue(
-                    c.getInt(c.getColumnIndex(CAPABILITIES_SHARING_FEDERATION_INCOMING))
-                )!!,
+                    c.getInt(
+                        c.getColumnIndex(
+                            CAPABILITIES_SHARING_FEDERATION_INCOMING
+                        )
+                    )
+                ),
                 filesBigFileChunking = CapabilityBooleanType.fromValue(
-                    c.getInt(c.getColumnIndex(CAPABILITIES_FILES_BIGFILECHUNKING))
-                )!!,
-                filesUndelete = CapabilityBooleanType.fromValue(c.getInt(c.getColumnIndex(CAPABILITIES_FILES_UNDELETE)))!!,
+                    c.getInt(
+                        c.getColumnIndex(
+                            CAPABILITIES_FILES_BIGFILECHUNKING
+                        )
+                    )
+                ),
+                filesUndelete = CapabilityBooleanType.fromValue(c.getInt(c.getColumnIndex(CAPABILITIES_FILES_UNDELETE))),
                 filesVersioning = CapabilityBooleanType.fromValue(
-                    c.getInt(c.getColumnIndex(CAPABILITIES_FILES_VERSIONING))
-                )!!
+                    c.getInt(
+                        c.getColumnIndex(
+                            CAPABILITIES_FILES_VERSIONING
+                        )
+                    )
+                )
             )
         }
         return capability

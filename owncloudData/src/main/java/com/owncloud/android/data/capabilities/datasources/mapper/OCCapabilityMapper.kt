@@ -36,37 +36,27 @@ class OCCapabilityMapper : Mapper<OCCapability, OCCapabilityEntity> {
                 versionString = entity.versionString,
                 versionEdition = entity.versionEdition,
                 corePollInterval = entity.corePollInterval,
-                filesSharingApiEnabled = CapabilityBooleanType.fromValue(entity.filesSharingApiEnabled)!!,
+                filesSharingApiEnabled = CapabilityBooleanType.fromValue(entity.filesSharingApiEnabled),
                 filesSharingSearchMinLength = entity.filesSharingSearchMinLength,
-                filesSharingPublicEnabled = CapabilityBooleanType.fromValue(entity.filesSharingPublicEnabled)!!,
-                filesSharingPublicPasswordEnforced =
-                CapabilityBooleanType.fromValue(entity.filesSharingPublicPasswordEnforced)!!,
-                filesSharingPublicPasswordEnforcedReadOnly =
-                CapabilityBooleanType.fromValue(entity.filesSharingPublicPasswordEnforcedReadOnly)!!,
-                filesSharingPublicPasswordEnforcedReadWrite =
-                CapabilityBooleanType.fromValue(entity.filesSharingPublicPasswordEnforcedReadWrite)!!,
-                filesSharingPublicPasswordEnforcedUploadOnly =
-                CapabilityBooleanType.fromValue(entity.filesSharingPublicPasswordEnforcedUploadOnly)!!,
-                filesSharingPublicExpireDateEnabled =
-                CapabilityBooleanType.fromValue(entity.filesSharingPublicExpireDateEnabled)!!,
+                filesSharingPublicEnabled = CapabilityBooleanType.fromValue(entity.filesSharingPublicEnabled),
+                filesSharingPublicPasswordEnforced = CapabilityBooleanType.fromValue(entity.filesSharingPublicPasswordEnforced),
+                filesSharingPublicPasswordEnforcedReadOnly = CapabilityBooleanType.fromValue(entity.filesSharingPublicPasswordEnforcedReadOnly),
+                filesSharingPublicPasswordEnforcedReadWrite = CapabilityBooleanType.fromValue(entity.filesSharingPublicPasswordEnforcedReadWrite),
+                filesSharingPublicPasswordEnforcedUploadOnly = CapabilityBooleanType.fromValue(entity.filesSharingPublicPasswordEnforcedUploadOnly),
+                filesSharingPublicExpireDateEnabled = CapabilityBooleanType.fromValue(entity.filesSharingPublicExpireDateEnabled),
                 filesSharingPublicExpireDateDays = entity.filesSharingPublicExpireDateDays,
-                filesSharingPublicExpireDateEnforced =
-                CapabilityBooleanType.fromValue(entity.filesSharingPublicExpireDateEnforced)!!,
-                filesSharingPublicSendMail =
-                CapabilityBooleanType.fromValue(entity.filesSharingPublicSendMail)!!,
-                filesSharingPublicUpload = CapabilityBooleanType.fromValue(entity.filesSharingPublicUpload)!!,
-                filesSharingPublicMultiple = CapabilityBooleanType.fromValue(entity.filesSharingPublicMultiple)!!,
-                filesSharingPublicSupportsUploadOnly =
-                CapabilityBooleanType.fromValue(entity.filesSharingPublicSupportsUploadOnly)!!,
-                filesSharingUserSendMail = CapabilityBooleanType.fromValue(entity.filesSharingUserSendMail)!!,
-                filesSharingResharing = CapabilityBooleanType.fromValue(entity.filesSharingResharing)!!,
-                filesSharingFederationOutgoing =
-                CapabilityBooleanType.fromValue(entity.filesSharingFederationOutgoing)!!,
-                filesSharingFederationIncoming =
-                CapabilityBooleanType.fromValue(entity.filesSharingFederationIncoming)!!,
-                filesBigFileChunking = CapabilityBooleanType.fromValue(entity.filesBigFileChunking)!!,
-                filesUndelete = CapabilityBooleanType.fromValue(entity.filesUndelete)!!,
-                filesVersioning = CapabilityBooleanType.fromValue(entity.filesVersioning)!!
+                filesSharingPublicExpireDateEnforced = CapabilityBooleanType.fromValue(entity.filesSharingPublicExpireDateEnforced),
+                filesSharingPublicSendMail = CapabilityBooleanType.fromValue(entity.filesSharingPublicSendMail),
+                filesSharingPublicUpload = CapabilityBooleanType.fromValue(entity.filesSharingPublicUpload),
+                filesSharingPublicMultiple = CapabilityBooleanType.fromValue(entity.filesSharingPublicMultiple),
+                filesSharingPublicSupportsUploadOnly = CapabilityBooleanType.fromValue(entity.filesSharingPublicSupportsUploadOnly),
+                filesSharingUserSendMail = CapabilityBooleanType.fromValue(entity.filesSharingUserSendMail),
+                filesSharingResharing = CapabilityBooleanType.fromValue(entity.filesSharingResharing),
+                filesSharingFederationOutgoing = CapabilityBooleanType.fromValue(entity.filesSharingFederationOutgoing),
+                filesSharingFederationIncoming = CapabilityBooleanType.fromValue(entity.filesSharingFederationIncoming),
+                filesBigFileChunking = CapabilityBooleanType.fromValue(entity.filesBigFileChunking),
+                filesUndelete = CapabilityBooleanType.fromValue(entity.filesUndelete),
+                filesVersioning = CapabilityBooleanType.fromValue(entity.filesVersioning)
             )
         }
 

@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 28,
-    "identityHash": "a1afd9487db21ba5b69279ed4f42749d",
+    "identityHash": "20602132a618657e72b338b1e7c1850c",
     "entities": [
       {
         "tableName": "ocshares",
@@ -128,7 +128,7 @@
       },
       {
         "tableName": "capabilities",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `account` TEXT, `version_mayor` INTEGER NOT NULL, `version_minor` INTEGER NOT NULL, `version_micro` INTEGER NOT NULL, `version_string` TEXT, `version_edition` TEXT, `core_pollinterval` INTEGER NOT NULL, `filesSharingApiEnabled` INTEGER NOT NULL, `search_min_length` INTEGER NOT NULL, `sharing_public_enabled` INTEGER NOT NULL, `sharing_public_password_enforced` INTEGER NOT NULL, `sharing_public_password_enforced_read_only` INTEGER NOT NULL, `sharing_public_password_enforced_read_write` INTEGER NOT NULL, `sharing_public_password_enforced_public_only` INTEGER NOT NULL, `sharing_public_expire_date_enabled` INTEGER NOT NULL, `sharing_public_expire_date_days` INTEGER NOT NULL, `sharing_public_expire_date_enforced` INTEGER NOT NULL, `sharing_public_send_mail` INTEGER NOT NULL, `sharing_public_upload` INTEGER NOT NULL, `sharing_public_multiple` INTEGER NOT NULL, `supports_upload_only` INTEGER NOT NULL, `sharing_user_send_mail` INTEGER NOT NULL, `sharing_resharing` INTEGER NOT NULL, `sharing_federation_outgoing` INTEGER NOT NULL, `sharing_federation_incoming` INTEGER NOT NULL, `files_bigfilechunking` INTEGER NOT NULL, `files_undelete` INTEGER NOT NULL, `files_versioning` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `account` TEXT, `version_mayor` INTEGER NOT NULL, `version_minor` INTEGER NOT NULL, `version_micro` INTEGER NOT NULL, `version_string` TEXT, `version_edition` TEXT, `core_pollinterval` INTEGER NOT NULL, `sharing_api_enabled` INTEGER NOT NULL DEFAULT -1, `search_min_length` INTEGER, `sharing_public_enabled` INTEGER NOT NULL DEFAULT -1, `sharing_public_password_enforced` INTEGER NOT NULL DEFAULT -1, `sharing_public_password_enforced_read_only` INTEGER NOT NULL DEFAULT -1, `sharing_public_password_enforced_read_write` INTEGER NOT NULL DEFAULT -1, `sharing_public_password_enforced_public_only` INTEGER NOT NULL DEFAULT -1, `sharing_public_expire_date_enabled` INTEGER NOT NULL DEFAULT -1, `sharing_public_expire_date_days` INTEGER NOT NULL DEFAULT 0, `sharing_public_expire_date_enforced` INTEGER NOT NULL DEFAULT -1, `sharing_public_send_mail` INTEGER NOT NULL DEFAULT -1, `sharing_public_upload` INTEGER NOT NULL DEFAULT -1, `sharing_public_multiple` INTEGER NOT NULL DEFAULT -1, `supports_upload_only` INTEGER NOT NULL DEFAULT -1, `sharing_user_send_mail` INTEGER NOT NULL DEFAULT -1, `sharing_resharing` INTEGER NOT NULL DEFAULT -1, `sharing_federation_outgoing` INTEGER NOT NULL DEFAULT -1, `sharing_federation_incoming` INTEGER NOT NULL DEFAULT -1, `files_bigfilechunking` INTEGER NOT NULL DEFAULT -1, `files_undelete` INTEGER NOT NULL DEFAULT -1, `files_versioning` INTEGER NOT NULL DEFAULT -1)",
         "fields": [
           {
             "fieldPath": "id",
@@ -180,129 +180,149 @@
           },
           {
             "fieldPath": "filesSharingApiEnabled",
-            "columnName": "filesSharingApiEnabled",
+            "columnName": "sharing_api_enabled",
             "affinity": "INTEGER",
-            "notNull": true
+            "notNull": true,
+            "defaultValue": "-1"
           },
           {
             "fieldPath": "filesSharingSearchMinLength",
             "columnName": "search_min_length",
             "affinity": "INTEGER",
-            "notNull": true
+            "notNull": false
           },
           {
             "fieldPath": "filesSharingPublicEnabled",
             "columnName": "sharing_public_enabled",
             "affinity": "INTEGER",
-            "notNull": true
+            "notNull": true,
+            "defaultValue": "-1"
           },
           {
             "fieldPath": "filesSharingPublicPasswordEnforced",
             "columnName": "sharing_public_password_enforced",
             "affinity": "INTEGER",
-            "notNull": true
+            "notNull": true,
+            "defaultValue": "-1"
           },
           {
             "fieldPath": "filesSharingPublicPasswordEnforcedReadOnly",
             "columnName": "sharing_public_password_enforced_read_only",
             "affinity": "INTEGER",
-            "notNull": true
+            "notNull": true,
+            "defaultValue": "-1"
           },
           {
             "fieldPath": "filesSharingPublicPasswordEnforcedReadWrite",
             "columnName": "sharing_public_password_enforced_read_write",
             "affinity": "INTEGER",
-            "notNull": true
+            "notNull": true,
+            "defaultValue": "-1"
           },
           {
             "fieldPath": "filesSharingPublicPasswordEnforcedUploadOnly",
             "columnName": "sharing_public_password_enforced_public_only",
             "affinity": "INTEGER",
-            "notNull": true
+            "notNull": true,
+            "defaultValue": "-1"
           },
           {
             "fieldPath": "filesSharingPublicExpireDateEnabled",
             "columnName": "sharing_public_expire_date_enabled",
             "affinity": "INTEGER",
-            "notNull": true
+            "notNull": true,
+            "defaultValue": "-1"
           },
           {
             "fieldPath": "filesSharingPublicExpireDateDays",
             "columnName": "sharing_public_expire_date_days",
             "affinity": "INTEGER",
-            "notNull": true
+            "notNull": true,
+            "defaultValue": "0"
           },
           {
             "fieldPath": "filesSharingPublicExpireDateEnforced",
             "columnName": "sharing_public_expire_date_enforced",
             "affinity": "INTEGER",
-            "notNull": true
+            "notNull": true,
+            "defaultValue": "-1"
           },
           {
             "fieldPath": "filesSharingPublicSendMail",
             "columnName": "sharing_public_send_mail",
             "affinity": "INTEGER",
-            "notNull": true
+            "notNull": true,
+            "defaultValue": "-1"
           },
           {
             "fieldPath": "filesSharingPublicUpload",
             "columnName": "sharing_public_upload",
             "affinity": "INTEGER",
-            "notNull": true
+            "notNull": true,
+            "defaultValue": "-1"
           },
           {
             "fieldPath": "filesSharingPublicMultiple",
             "columnName": "sharing_public_multiple",
             "affinity": "INTEGER",
-            "notNull": true
+            "notNull": true,
+            "defaultValue": "-1"
           },
           {
             "fieldPath": "filesSharingPublicSupportsUploadOnly",
             "columnName": "supports_upload_only",
             "affinity": "INTEGER",
-            "notNull": true
+            "notNull": true,
+            "defaultValue": "-1"
           },
           {
             "fieldPath": "filesSharingUserSendMail",
             "columnName": "sharing_user_send_mail",
             "affinity": "INTEGER",
-            "notNull": true
+            "notNull": true,
+            "defaultValue": "-1"
           },
           {
             "fieldPath": "filesSharingResharing",
             "columnName": "sharing_resharing",
             "affinity": "INTEGER",
-            "notNull": true
+            "notNull": true,
+            "defaultValue": "-1"
           },
           {
             "fieldPath": "filesSharingFederationOutgoing",
             "columnName": "sharing_federation_outgoing",
             "affinity": "INTEGER",
-            "notNull": true
+            "notNull": true,
+            "defaultValue": "-1"
           },
           {
             "fieldPath": "filesSharingFederationIncoming",
             "columnName": "sharing_federation_incoming",
             "affinity": "INTEGER",
-            "notNull": true
+            "notNull": true,
+            "defaultValue": "-1"
           },
           {
             "fieldPath": "filesBigFileChunking",
             "columnName": "files_bigfilechunking",
             "affinity": "INTEGER",
-            "notNull": true
+            "notNull": true,
+            "defaultValue": "-1"
           },
           {
             "fieldPath": "filesUndelete",
             "columnName": "files_undelete",
             "affinity": "INTEGER",
-            "notNull": true
+            "notNull": true,
+            "defaultValue": "-1"
           },
           {
             "fieldPath": "filesVersioning",
             "columnName": "files_versioning",
             "affinity": "INTEGER",
-            "notNull": true
+            "notNull": true,
+            "defaultValue": "-1"
           }
         ],
         "primaryKey": {
@@ -318,7 +338,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'a1afd9487db21ba5b69279ed4f42749d')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '20602132a618657e72b338b1e7c1850c')"
     ]
   }
 }

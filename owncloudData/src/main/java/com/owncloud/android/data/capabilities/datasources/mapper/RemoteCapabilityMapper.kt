@@ -36,36 +36,36 @@ class RemoteCapabilityMapper : RemoteMapper<OCCapability, RemoteCapability> {
                 versionString = remote.versionString,
                 versionEdition = remote.versionEdition,
                 corePollInterval = remote.corePollinterval,
-                filesSharingApiEnabled = CapabilityBooleanType.fromValue(remote.filesSharingApiEnabled.value)!!,
+                filesSharingApiEnabled = CapabilityBooleanType.fromValue(remote.filesSharingApiEnabled.value),
                 filesSharingSearchMinLength = remote.filesSharingSearchMinLength,
-                filesSharingPublicEnabled = CapabilityBooleanType.fromValue(remote.filesSharingPublicEnabled.value)!!,
+                filesSharingPublicEnabled = CapabilityBooleanType.fromValue(remote.filesSharingPublicEnabled.value),
                 filesSharingPublicPasswordEnforced =
-                CapabilityBooleanType.fromValue(remote.filesSharingPublicPasswordEnforced.value)!!,
+                CapabilityBooleanType.fromValue(remote.filesSharingPublicPasswordEnforced.value),
                 filesSharingPublicPasswordEnforcedReadOnly =
-                CapabilityBooleanType.fromValue(remote.filesSharingPublicPasswordEnforcedReadOnly.value)!!,
+                CapabilityBooleanType.fromValue(remote.filesSharingPublicPasswordEnforcedReadOnly.value),
                 filesSharingPublicPasswordEnforcedReadWrite =
-                CapabilityBooleanType.fromValue(remote.filesSharingPublicPasswordEnforcedReadWrite.value)!!,
+                CapabilityBooleanType.fromValue(remote.filesSharingPublicPasswordEnforcedReadWrite.value),
                 filesSharingPublicPasswordEnforcedUploadOnly =
-                CapabilityBooleanType.fromValue(remote.filesSharingPublicPasswordEnforcedUploadOnly.value)!!,
+                CapabilityBooleanType.fromValue(remote.filesSharingPublicPasswordEnforcedUploadOnly.value),
                 filesSharingPublicExpireDateEnabled =
-                CapabilityBooleanType.fromValue(remote.filesSharingPublicExpireDateEnabled.value)!!,
+                CapabilityBooleanType.fromValue(remote.filesSharingPublicExpireDateEnabled.value),
                 filesSharingPublicExpireDateDays = remote.filesSharingPublicExpireDateDays,
                 filesSharingPublicExpireDateEnforced =
-                CapabilityBooleanType.fromValue(remote.filesSharingPublicExpireDateEnforced.value)!!,
-                filesSharingPublicSendMail = CapabilityBooleanType.fromValue(remote.filesSharingPublicSendMail.value)!!,
-                filesSharingPublicUpload = CapabilityBooleanType.fromValue(remote.filesSharingPublicUpload.value)!!,
-                filesSharingPublicMultiple = CapabilityBooleanType.fromValue(remote.filesSharingPublicMultiple.value)!!,
+                CapabilityBooleanType.fromValue(remote.filesSharingPublicExpireDateEnforced.value),
+                filesSharingPublicSendMail = CapabilityBooleanType.fromValue(remote.filesSharingPublicSendMail.value),
+                filesSharingPublicUpload = CapabilityBooleanType.fromValue(remote.filesSharingPublicUpload.value),
+                filesSharingPublicMultiple = CapabilityBooleanType.fromValue(remote.filesSharingPublicMultiple.value),
                 filesSharingPublicSupportsUploadOnly =
-                CapabilityBooleanType.fromValue(remote.filesSharingPublicSupportsUploadOnly.value)!!,
-                filesSharingUserSendMail = CapabilityBooleanType.fromValue(remote.filesSharingUserSendMail.value)!!,
-                filesSharingResharing = CapabilityBooleanType.fromValue(remote.filesSharingResharing.value)!!,
+                CapabilityBooleanType.fromValue(remote.filesSharingPublicSupportsUploadOnly.value),
+                filesSharingUserSendMail = CapabilityBooleanType.fromValue(remote.filesSharingUserSendMail.value),
+                filesSharingResharing = CapabilityBooleanType.fromValue(remote.filesSharingResharing.value),
                 filesSharingFederationOutgoing =
-                CapabilityBooleanType.fromValue(remote.filesSharingFederationOutgoing.value)!!,
+                CapabilityBooleanType.fromValue(remote.filesSharingFederationOutgoing.value),
                 filesSharingFederationIncoming =
-                CapabilityBooleanType.fromValue(remote.filesSharingFederationIncoming.value)!!,
-                filesBigFileChunking = CapabilityBooleanType.fromValue(remote.filesBigFileChunking.value)!!,
-                filesUndelete = CapabilityBooleanType.fromValue(remote.filesUndelete.value)!!,
-                filesVersioning = CapabilityBooleanType.fromValue(remote.filesVersioning.value)!!
+                CapabilityBooleanType.fromValue(remote.filesSharingFederationIncoming.value),
+                filesBigFileChunking = CapabilityBooleanType.fromValue(remote.filesBigFileChunking.value),
+                filesUndelete = CapabilityBooleanType.fromValue(remote.filesUndelete.value),
+                filesVersioning = CapabilityBooleanType.fromValue(remote.filesVersioning.value)
             )
         }
 

@@ -26,7 +26,6 @@ package com.owncloud.android.presentation.ui.sharing.fragments
 import android.accounts.Account
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -179,16 +178,9 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
             )
         }
 
-    private val isShareApiEnabled: Boolean
-        get() = capabilities?.filesSharingApiEnabled == CapabilityBooleanType.TRUE ||
-                capabilities?.filesSharingApiEnabled == CapabilityBooleanType.UNKNOWN
+    private val isShareApiEnabled = capabilities?.filesSharingApiEnabled == CapabilityBooleanType.TRUE
 
-    /**
-     * @return 'True' when public share is disabled in the server
-     */
-    private val isPublicShareEnabled: Boolean
-        get() = capabilities?.filesSharingPublicEnabled == CapabilityBooleanType.TRUE ||
-                capabilities?.filesSharingPublicEnabled == CapabilityBooleanType.UNKNOWN
+    private val isPublicShareEnabled = capabilities?.filesSharingPublicEnabled == CapabilityBooleanType.TRUE
 
     private val ocCapabilityViewModel: OCCapabilityViewModel by viewModel {
         parametersOf(
