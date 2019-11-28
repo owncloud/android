@@ -27,7 +27,6 @@ import com.owncloud.android.domain.capabilities.model.CapabilityBooleanType.Comp
 
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
-import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
@@ -252,7 +251,7 @@ class OCCapabilityTest {
         assertEquals(UNKNOWN, fromValueUnknownType)
         assertEquals(FALSE, fromValueFalseType)
         assertEquals(TRUE, fromValueTrueType)
-        assertNull(fromValueDifferentValue)
+        assertEquals(UNKNOWN, fromValueDifferentValue)
         assertEquals(TRUE, fromBooleanTrue)
         assertEquals(FALSE, fromBooleanFalse)
         assertEquals(true, capabilityUnknown.isUnknown)

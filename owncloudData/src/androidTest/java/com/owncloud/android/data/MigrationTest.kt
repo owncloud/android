@@ -32,12 +32,14 @@ import androidx.test.platform.app.InstrumentationRegistry
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_ACCOUNT_NAME
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_CORE_POLLINTERVAL
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_DAYS
+import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_TABLE_NAME
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_VERSION_MAYOR
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_VERSION_MICRO
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_VERSION_MINOR
+import com.owncloud.android.data.capabilities.db.OCCapabilityEntity.Companion.toContentValues
+import com.owncloud.android.domain.capabilities.model.CapabilityBooleanType.Companion.capabilityBooleanTypeUnknownInt
 import com.owncloud.android.testutil.OC_CAPABILITY
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNull
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -56,37 +58,6 @@ class MigrationTest {
     )
 
     @Test
-    fun startInVersion27_containsCorrectData() {
-        // Create the database with version 27
-        with(
-            helper.createDatabase(
-                TEST_DB_NAME,
-                DB_VERSION_27
-            )
-        ) {
-
-            // Insert some data
-            insert(ProviderMeta.ProviderTableMeta.CAPABILITIES_TABLE_NAME, SQLiteDatabase.CONFLICT_NONE, cv)
-
-            // Close database
-            close()
-        }
-
-        // Verify that the data is correct
-        val dbCapability =
-            getMigratedRoomDatabase().capabilityDao().getCapabilitiesForAccount(OC_CAPABILITY.accountName!!)
-        assertEquals(dbCapability.accountName, cv.getAsString(CAPABILITIES_ACCOUNT_NAME))
-        assertEquals(dbCapability.versionMayor, cv.getAsInteger(CAPABILITIES_VERSION_MAYOR))
-        assertEquals(dbCapability.versionMinor, cv.getAsInteger(CAPABILITIES_VERSION_MINOR))
-        assertEquals(dbCapability.versionMicro, cv.getAsInteger(CAPABILITIES_VERSION_MICRO))
-        assertEquals(dbCapability.corePollInterval, cv.getAsInteger(CAPABILITIES_CORE_POLLINTERVAL))
-        assertEquals(
-            dbCapability.filesSharingPublicExpireDateDays,
-            cv.getAsInteger(CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_DAYS)
-        )
-    }
-
-    @Test
     @Throws(IOException::class)
     fun migrate27To28() {
         with(
@@ -95,35 +66,19 @@ class MigrationTest {
                 DB_VERSION_27
             )
         ) {
-            // Database has schema version 27. Insert some values to test if they are migrated successfully.
-            // We cannot use DAO classes because they expect the latest schema and we may not have some fields there.
-            insert(ProviderMeta.ProviderTableMeta.CAPABILITIES_TABLE_NAME, SQLiteDatabase.CONFLICT_NONE, cv)
+            insert(CAPABILITIES_TABLE_NAME, SQLiteDatabase.CONFLICT_NONE, cv)
+            insert(CAPABILITIES_TABLE_NAME, SQLiteDatabase.CONFLICT_NONE, cvWithDefaultValues)
             close()
         }
 
-        // Re-open the database with version 28 and provide
-        // MIGRATION_27_28 as the migration process.
         helper.runMigrationsAndValidate(
             TEST_DB_NAME,
             DB_VERSION_28,
             true,
             OwncloudDatabase.MIGRATION_27_28
         )
-        // MigrationTestHelper automatically verifies the schema changes.
-        // Verify that the data was migrated properly.
-        val dbCapability =
-            getMigratedRoomDatabase().capabilityDao().getCapabilitiesForAccount(OC_CAPABILITY.accountName!!)
-        assertEquals(dbCapability.accountName, cv.getAsString(CAPABILITIES_ACCOUNT_NAME))
-        assertEquals(dbCapability.versionMayor, cv.getAsInteger(CAPABILITIES_VERSION_MAYOR))
-        assertEquals(dbCapability.versionMinor, cv.getAsInteger(CAPABILITIES_VERSION_MINOR))
-        assertEquals(dbCapability.versionMicro, cv.getAsInteger(CAPABILITIES_VERSION_MICRO))
-        assertEquals(dbCapability.corePollInterval, cv.getAsInteger(CAPABILITIES_CORE_POLLINTERVAL))
-        assertEquals(
-            dbCapability.filesSharingPublicExpireDateDays,
-            cv.getAsInteger(CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_DAYS)
-        )
-        // Field introduced in this version (DB_VERSION_28), so it should be null.
-        assertNull(dbCapability.filesSharingSearchMinLength)
+
+        validateMigrationTo28()
     }
 
     @Test
@@ -134,17 +89,12 @@ class MigrationTest {
                 DB_VERSION_28
             )
         ) {
-            insert(ProviderMeta.ProviderTableMeta.CAPABILITIES_TABLE_NAME, SQLiteDatabase.CONFLICT_NONE, cv)
+            insert(CAPABILITIES_TABLE_NAME, SQLiteDatabase.CONFLICT_NONE, cv)
+            insert(CAPABILITIES_TABLE_NAME, SQLiteDatabase.CONFLICT_NONE, cvWithDefaultValues)
             close()
         }
 
-        val dbCapability = getMigratedRoomDatabase().capabilityDao().getCapabilitiesForAccount(OC_CAPABILITY.accountName!!)
-        assertEquals(OC_CAPABILITY.accountName, dbCapability.accountName)
-        assertEquals(OC_CAPABILITY.versionMayor, dbCapability.versionMayor)
-        assertEquals(OC_CAPABILITY.versionMinor, dbCapability.versionMinor)
-        assertEquals(OC_CAPABILITY.versionMicro, dbCapability.versionMicro)
-        assertEquals(OC_CAPABILITY.corePollInterval, dbCapability.corePollInterval)
-        assertEquals(OC_CAPABILITY.filesSharingPublicExpireDateDays, dbCapability.filesSharingPublicExpireDateDays)
+        validateMigrationTo28()
     }
 
     private fun getMigratedRoomDatabase(): OwncloudDatabase {
@@ -160,21 +110,88 @@ class MigrationTest {
         return database
     }
 
+    private fun validateMigrationTo28() {
+        val dbCapability =
+            getMigratedRoomDatabase().capabilityDao().getCapabilitiesForAccount(OC_CAPABILITY.accountName!!)
+        with(dbCapability) {
+            assertEquals(OC_CAPABILITY.accountName, accountName)
+            assertEquals(OC_CAPABILITY.versionMayor, versionMayor)
+            assertEquals(OC_CAPABILITY.versionMinor, versionMinor)
+            assertEquals(OC_CAPABILITY.versionMicro, versionMicro)
+            assertEquals(OC_CAPABILITY.versionString, versionString)
+            assertEquals(OC_CAPABILITY.versionEdition, versionEdition)
+            assertEquals(OC_CAPABILITY.corePollInterval, corePollInterval)
+            assertEquals(OC_CAPABILITY.filesSharingApiEnabled.value, filesSharingApiEnabled)
+            assertEquals(null, filesSharingSearchMinLength)
+            assertEquals(OC_CAPABILITY.filesSharingPublicEnabled.value, filesSharingPublicEnabled)
+            assertEquals(OC_CAPABILITY.filesSharingPublicPasswordEnforced.value, filesSharingPublicPasswordEnforced)
+            assertEquals(OC_CAPABILITY.filesSharingPublicPasswordEnforcedReadOnly.value, filesSharingPublicPasswordEnforcedReadOnly)
+            assertEquals(OC_CAPABILITY.filesSharingPublicPasswordEnforcedReadWrite.value, filesSharingPublicPasswordEnforcedReadWrite)
+            assertEquals(OC_CAPABILITY.filesSharingPublicPasswordEnforcedUploadOnly.value, filesSharingPublicPasswordEnforcedUploadOnly)
+            assertEquals(OC_CAPABILITY.filesSharingPublicExpireDateEnabled.value, filesSharingPublicExpireDateEnabled)
+            assertEquals(OC_CAPABILITY.filesSharingPublicExpireDateDays, filesSharingPublicExpireDateDays)
+            assertEquals(OC_CAPABILITY.filesSharingPublicExpireDateEnforced.value, filesSharingPublicExpireDateEnforced)
+            assertEquals(OC_CAPABILITY.filesSharingPublicSendMail.value, filesSharingPublicSendMail)
+            assertEquals(OC_CAPABILITY.filesSharingPublicUpload.value, filesSharingPublicUpload)
+            assertEquals(OC_CAPABILITY.filesSharingPublicMultiple.value, filesSharingPublicMultiple)
+            assertEquals(OC_CAPABILITY.filesSharingPublicSupportsUploadOnly.value, filesSharingPublicSupportsUploadOnly)
+            assertEquals(OC_CAPABILITY.filesSharingResharing.value, filesSharingResharing)
+            assertEquals(OC_CAPABILITY.filesSharingFederationOutgoing.value, filesSharingFederationOutgoing)
+            assertEquals(OC_CAPABILITY.filesSharingFederationIncoming.value, filesSharingFederationIncoming)
+            assertEquals(OC_CAPABILITY.filesBigFileChunking.value, filesBigFileChunking)
+            assertEquals(OC_CAPABILITY.filesUndelete.value, filesUndelete)
+            assertEquals(OC_CAPABILITY.filesVersioning.value, filesVersioning)
+        }
+
+        val capabilityDefaultValue =
+            getMigratedRoomDatabase().capabilityDao().getCapabilitiesForAccount("accountWithDefaultValues")
+        with(capabilityDefaultValue) {
+            assertEquals("accountWithDefaultValues", accountName)
+            assertEquals(OC_CAPABILITY.versionMayor, versionMayor)
+            assertEquals(OC_CAPABILITY.versionMinor, versionMinor)
+            assertEquals(OC_CAPABILITY.versionMicro, versionMicro)
+            assertEquals(null, versionString)
+            assertEquals(null, versionEdition)
+            assertEquals(OC_CAPABILITY.corePollInterval, corePollInterval)
+            assertEquals(capabilityBooleanTypeUnknownInt, filesSharingApiEnabled)
+            assertEquals(null, filesSharingSearchMinLength)
+            assertEquals(capabilityBooleanTypeUnknownInt, filesSharingPublicEnabled)
+            assertEquals(capabilityBooleanTypeUnknownInt, filesSharingPublicPasswordEnforced)
+            assertEquals(capabilityBooleanTypeUnknownInt, filesSharingPublicPasswordEnforcedReadOnly)
+            assertEquals(capabilityBooleanTypeUnknownInt, filesSharingPublicPasswordEnforcedReadWrite)
+            assertEquals(capabilityBooleanTypeUnknownInt, filesSharingPublicPasswordEnforcedUploadOnly)
+            assertEquals(capabilityBooleanTypeUnknownInt, filesSharingPublicExpireDateEnabled)
+            assertEquals(0, filesSharingPublicExpireDateDays)
+            assertEquals(capabilityBooleanTypeUnknownInt, filesSharingPublicExpireDateEnforced)
+            assertEquals(capabilityBooleanTypeUnknownInt, filesSharingPublicSendMail)
+            assertEquals(capabilityBooleanTypeUnknownInt, filesSharingPublicUpload)
+            assertEquals(capabilityBooleanTypeUnknownInt, filesSharingPublicMultiple)
+            assertEquals(capabilityBooleanTypeUnknownInt, filesSharingPublicSupportsUploadOnly)
+            assertEquals(capabilityBooleanTypeUnknownInt, filesSharingResharing)
+            assertEquals(capabilityBooleanTypeUnknownInt, filesSharingFederationOutgoing)
+            assertEquals(capabilityBooleanTypeUnknownInt, filesSharingFederationIncoming)
+            assertEquals(capabilityBooleanTypeUnknownInt, filesBigFileChunking)
+            assertEquals(capabilityBooleanTypeUnknownInt, filesUndelete)
+            assertEquals(capabilityBooleanTypeUnknownInt, filesVersioning)
+        }
+    }
+
     companion object {
 
         private const val TEST_DB_NAME = "migration-test"
 
         private const val DB_VERSION_27 = 27
-        // Added a new capability: "search_min_length"
         private const val DB_VERSION_28 = 28
 
-        private val cv = ContentValues().apply {
-            put(CAPABILITIES_ACCOUNT_NAME, OC_CAPABILITY.accountName)
+        private val cvWithDefaultValues = ContentValues().apply {
+            put(CAPABILITIES_ACCOUNT_NAME, "accountWithDefaultValues")
             put(CAPABILITIES_VERSION_MAYOR, OC_CAPABILITY.versionMayor)
             put(CAPABILITIES_VERSION_MINOR, OC_CAPABILITY.versionMinor)
             put(CAPABILITIES_VERSION_MICRO, OC_CAPABILITY.versionMicro)
             put(CAPABILITIES_CORE_POLLINTERVAL, OC_CAPABILITY.corePollInterval)
             put(CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_DAYS, OC_CAPABILITY.filesSharingPublicExpireDateDays)
         }
+
+        private val cv = toContentValues(OC_CAPABILITY.copy(filesSharingSearchMinLength = null))
     }
 }
