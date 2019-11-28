@@ -39,7 +39,8 @@
                 android:id="@+id/drawer_logo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true" />
+                android:layout_alignParentEnd="true"
+                android:paddingBottom="@dimen/standard_half_padding" />
 
             <ProgressBar
                 android:id="@+id/account_quota_bar"
