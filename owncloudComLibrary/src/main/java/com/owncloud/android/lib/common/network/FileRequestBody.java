@@ -49,7 +49,7 @@ public class FileRequestBody extends RequestBody implements ProgressiveDataTrans
 
     protected File mFile;
     private MediaType mContentType;
-    Set<OnDatatransferProgressListener> mDataTransferListeners = new HashSet<>();
+    final Set<OnDatatransferProgressListener> mDataTransferListeners = new HashSet<>();
 
     public FileRequestBody(File file, MediaType contentType) {
         mFile = file;
