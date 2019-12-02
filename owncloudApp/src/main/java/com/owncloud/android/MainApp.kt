@@ -108,7 +108,7 @@ class MainApp : MultiDexApplication() {
         // register global protection with pass code, pattern lock and fingerprint lock
         registerActivityLifecycleCallbacks(object : ActivityLifecycleCallbacks {
             override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
-                Log_OC.d(activity.javaClass.simpleName, "onCreate(Bundle) starting")
+                Log_OC.d("${activity.javaClass.simpleName} onCreate(Bundle) starting")
                 val preferences = PreferenceManager.getDefaultSharedPreferences(applicationContext)
                 val passCodeEnabled = preferences.getBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false)
                 val patternCodeEnabled = preferences.getBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN, false)
@@ -132,7 +132,7 @@ class MainApp : MultiDexApplication() {
             }
 
             override fun onActivityStarted(activity: Activity) {
-                Log_OC.v(activity.javaClass.simpleName, "onStart() starting")
+                Log_OC.v("${activity.javaClass.simpleName} onStart() starting")
                 PassCodeManager.getPassCodeManager().onActivityStarted(activity)
                 PatternManager.getPatternManager().onActivityStarted(activity)
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -141,15 +141,15 @@ class MainApp : MultiDexApplication() {
             }
 
             override fun onActivityResumed(activity: Activity) {
-                Log_OC.v(activity.javaClass.simpleName, "onResume() starting")
+                Log_OC.v("${activity.javaClass.simpleName} onResume() starting")
             }
 
             override fun onActivityPaused(activity: Activity) {
-                Log_OC.v(activity.javaClass.simpleName, "onPause() ending")
+                Log_OC.v("${activity.javaClass.simpleName} onPause() ending")
             }
 
             override fun onActivityStopped(activity: Activity) {
-                Log_OC.v(activity.javaClass.simpleName, "onStop() ending")
+                Log_OC.v("${activity.javaClass.simpleName} onStop() ending")
                 PassCodeManager.getPassCodeManager().onActivityStopped(activity)
                 PatternManager.getPatternManager().onActivityStopped(activity)
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -164,11 +164,11 @@ class MainApp : MultiDexApplication() {
             }
 
             override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) {
-                Log_OC.v(activity.javaClass.simpleName, "onSaveInstanceState(Bundle) starting")
+                Log_OC.v("${activity.javaClass.simpleName} onSaveInstanceState(Bundle) starting")
             }
 
             override fun onActivityDestroyed(activity: Activity) {
-                Log_OC.v(activity.javaClass.simpleName, "onDestroy() ending")
+                Log_OC.v("${activity.javaClass.simpleName} onDestroy() ending")
             }
         })
 
@@ -209,31 +209,23 @@ class MainApp : MultiDexApplication() {
             Log_OC.setLogDataFolder(dataFolder)
 
             Log_OC.startLogging(Environment.getExternalStorageDirectory().absolutePath)
-            Log_OC.d(
-                BuildConfig.BUILD_TYPE, "start logging " + BuildConfig.VERSION_NAME + " " +
-                        BuildConfig.COMMIT_SHA1
-            )
+            Log_OC.d("${BuildConfig.BUILD_TYPE} start logging ${BuildConfig.VERSION_NAME} ${BuildConfig.COMMIT_SHA1}")
         }
     }
 
     companion object {
 
-        private val TAG = MainApp::class.java.simpleName
         const val CLICK_DEV_MENU = "clickDeveloperMenu"
         const val CLICKS_NEEDED_TO_BE_DEVELOPER = 5
 
-        private val AUTH_ON = "on"
-
-        private val POLICY_SINGLE_SESSION_PER_ACCOUNT = "single session per account"
-        private val POLICY_ALWAYS_NEW_CLIENT = "always new client"
-        private val CLICKS_DEFAULT = 0
+        private const val AUTH_ON = "on"
+        private const val BETA_VERSION = "beta"
+        private const val CLICKS_DEFAULT = 0
 
         var appContext: Context? = null
             private set
         var isDeveloper: Boolean = false
             private set
-
-        var BETA_VERSION = "beta"
 
         /**
          * Next methods give access in code to some constants that need to be defined in string resources to be referred
@@ -245,11 +237,11 @@ class MainApp : MultiDexApplication() {
 
         val versionCode: Int
             get() {
-                try {
+                return try {
                     val thisPackageName = appContext!!.packageName
-                    return appContext!!.packageManager.getPackageInfo(thisPackageName, 0).versionCode
+                    appContext!!.packageManager.getPackageInfo(thisPackageName, 0).versionCode
                 } catch (e: PackageManager.NameNotFoundException) {
-                    return 0
+                    0
                 }
 
             }
@@ -278,7 +270,7 @@ class MainApp : MultiDexApplication() {
                         version = pInfo.versionName
                     }
                 } catch (e: PackageManager.NameNotFoundException) {
-                    Log_OC.e(TAG, "Trying to get packageName", e.cause)
+                    Log_OC.e("Trying to get packageName", e.cause)
                 }
 
                 return String.format(appString, version)
