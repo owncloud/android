@@ -45,14 +45,14 @@
   <string name="prefs_camera_picture_upload">Fotoğraf yüklemeleri</string>
   <string name="prefs_camera_picture_upload_summary">Kamera ile çekilen fotoğrafları otomatik olarak karşıya yükle</string>
   <string name="prefs_camera_video_upload">Video yüklemeleri</string>
-  <string name="prefs_camera_video_upload_summary">Kamera ile kaydedilen kameraları otomatik olarak karşıya yükle</string>
+  <string name="prefs_camera_video_upload_summary">Kamera ile kaydedilen vidyoları otomatik olarak karşıya yükle</string>
   <string name="prefs_log_title">Günlüğü etkinleştir</string>
   <string name="prefs_log_summary">Bu, sorunları günlük dosyasına kaydetmek için kullanılır</string>
   <string name="prefs_log_title_history">Günlük geçmişi</string>
   <string name="prefs_log_summary_history">Bu, kayıtlı günlük dosyalarını görüntüler</string>
   <string name="prefs_log_delete_history_button">Geçmişi sil</string>
   <string name="prefs_help">Yardım</string>
-  <string name="prefs_sync_calendar_contacts">Kişilerinizi, takviminizi ve görevlerinizi senkronize edin</string>
+  <string name="prefs_sync_calendar_contacts">Kişilerinizi, takviminizi ve görevlerinizi eşitleyin</string>
   <string name="prefs_sync_calendar_contacts_summary">DAVx⁵ yükle</string>
   <string name="prefs_recommend">Bir arkadaşa öner</string>
   <string name="prefs_feedback">Geribildirim</string>
