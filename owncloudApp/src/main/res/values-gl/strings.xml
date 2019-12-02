@@ -154,7 +154,7 @@ Descárgueo de aquí: %2$s</string>
   <string name="uploader_upload_failed_credentials_error">Fallou o envío, necesita volver acceder</string>
   <string name="uploader_upload_failed_ssl_certificate_not_trusted">O certificado do servidor non é de confianza</string>
   <string name="uploader_upload_text_dialog_title">Introduza o nome do novo ficheiro</string>
-  <string name="uploader_upload_text_dialog_filename_error_empty">O nome de ficheiro non pode estar baleiro</string>
+  <string name="uploader_upload_text_dialog_filename_error_empty">O nome de ficheiro non debe estar baleiro</string>
   <string name="uploader_upload_text_dialog_filename_error_length_max">O nome do ficheiro non debe ter máis de %d caracteres</string>
   <string name="uploader_upload_text_filename_hint">Nome de ficheiro</string>
   <string name="uploader_upload_camera_upload_files">Enviando ficheiros pendentes de envío da cámara</string>
