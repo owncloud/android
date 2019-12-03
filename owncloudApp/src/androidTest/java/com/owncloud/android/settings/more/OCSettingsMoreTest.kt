@@ -46,6 +46,7 @@ import com.owncloud.android.ui.activity.LogHistoryActivity
 import com.owncloud.android.ui.activity.Preferences
 import com.owncloud.android.ui.activity.PrivacyPolicyActivity
 import org.hamcrest.Matchers.allOf
+import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -56,10 +57,11 @@ class OCSettingsMoreTest {
 
     @Rule
     @JvmField
-    val activityRule = ActivityTestRule(Preferences::class.java, true, true)
+    var activityRule = ActivityTestRule(Preferences::class.java, true, true)
 
     @Before
     fun setUp() {
+        Intents.init()
         //Only interested in "More" section, so we can get rid of the other categories. SmoothScroll is not
         //working fine to reach the bottom of the screen, so this approach was taken to display the section
         val preferenceScreen = activityRule.activity.getPreferenceScreen() as PreferenceScreen
@@ -71,108 +73,113 @@ class OCSettingsMoreTest {
         preferenceScreen.removePreference(securityCategory)
     }
 
-
-    @Test
-    fun helpView(){
-        onView(withText(R.string.prefs_help)).check(matches(isDisplayed()))
-    }
-
-    @Test
-    fun helpOptionOpensWeb(){
-        Intents.init()
-        onView(withText(R.string.prefs_help)).perform(click())
-        val intentResult = ActivityResult(Activity.RESULT_OK, Intent())
-        intending(hasAction(Intent.ACTION_VIEW)).respondWith(intentResult);
-        intended(hasData(activityRule.activity.getString(R.string.url_help)))
+    @After
+    fun cleanUp() {
         Intents.release()
     }
 
     @Test
-    fun davx5View(){
+    fun helpView() {
+        onView(withText(R.string.prefs_help)).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun helpOptionOpensWeb() {
+        onView(withText(R.string.prefs_help)).perform(click())
+        val intentResult = ActivityResult(Activity.RESULT_OK, Intent())
+        intending(hasAction(Intent.ACTION_VIEW)).respondWith(intentResult);
+        intended(hasData(activityRule.activity.getString(R.string.url_help)))
+    }
+
+    @Test
+    fun davx5View() {
         onView(withText(R.string.prefs_sync_calendar_contacts)).check(matches(isDisplayed()))
         onView(withText(R.string.prefs_sync_calendar_contacts_summary)).check(matches(isDisplayed()))
     }
 
     @Test
-    fun davx5OpensLink(){
-        Intents.init()
+    fun davx5OpensLink() {
         val intentResult = ActivityResult(Activity.RESULT_OK, Intent())
         intending(hasAction(Intent.ACTION_VIEW)).respondWith(intentResult);
         onView(withText(R.string.prefs_sync_calendar_contacts)).perform(click())
         intended(hasData(activityRule.activity.getString(R.string.url_sync_calendar_contacts)))
-        Intents.release()
     }
 
     @Test
-    fun recommendView(){
+    fun recommendView() {
         onView(withText(R.string.prefs_recommend)).check(matches(isDisplayed()))
     }
 
     @Test
-    fun recommendOpenSender(){
-        Intents.init()
+    fun recommendOpenSender() {
         val intentResult = ActivityResult(Activity.RESULT_OK, Intent())
         intending(hasAction(Intent.ACTION_SENDTO)).respondWith(intentResult);
         onView(withText(R.string.prefs_recommend)).perform(click())
-        intended(allOf(
-            hasAction(Intent.ACTION_SENDTO),
-            hasExtra(Intent.EXTRA_SUBJECT,
-                String.format(
-                    activityRule.activity.getString(R.string.recommend_subject),
-                    activityRule.activity.getString(R.string.app_name))),
-            hasExtra(Intent.EXTRA_TEXT,
-                String.format(
-                    activityRule.activity.getString(R.string.recommend_text),
-                    activityRule.activity.getString(R.string.app_name),
-                    activityRule.activity.getString(R.string.url_app_download)
-                )),
-            hasFlag(Intent.FLAG_ACTIVITY_NEW_TASK)))
-        Intents.release()
+        intended(
+            allOf(
+                hasAction(Intent.ACTION_SENDTO),
+                hasExtra(
+                    Intent.EXTRA_SUBJECT,
+                    String.format(
+                        activityRule.activity.getString(R.string.recommend_subject),
+                        activityRule.activity.getString(R.string.app_name)
+                    )
+                ),
+                hasExtra(
+                    Intent.EXTRA_TEXT,
+                    String.format(
+                        activityRule.activity.getString(R.string.recommend_text),
+                        activityRule.activity.getString(R.string.app_name),
+                        activityRule.activity.getString(R.string.url_app_download)
+                    )
+                ),
+                hasFlag(Intent.FLAG_ACTIVITY_NEW_TASK)
+            )
+        )
     }
 
     @Test
-    fun feedbackView(){
+    fun feedbackView() {
         onView(withText(R.string.drawer_feedback)).check(matches(isDisplayed()))
     }
 
     @Test
-    fun feedbackOpenSender(){
-        Intents.init()
+    fun feedbackOpenSender() {
         val intentResult = ActivityResult(Activity.RESULT_OK, Intent())
         intending(hasAction(Intent.ACTION_SENDTO)).respondWith(intentResult);
         onView(withText(R.string.drawer_feedback)).perform(click())
-        intended(allOf(
-            hasAction(Intent.ACTION_SENDTO),
-            hasExtra(Intent.EXTRA_SUBJECT,
-                "Android v" + BuildConfig.VERSION_NAME + " - " + activityRule.activity.getText(R.string.prefs_feedback)),
-            hasData(Uri.parse(activityRule.activity.getText(R.string.mail_feedback) as String)),
-            hasFlag(Intent.FLAG_ACTIVITY_NEW_TASK)))
-        Intents.release()
+        intended(
+            allOf(
+                hasAction(Intent.ACTION_SENDTO),
+                hasExtra(
+                    Intent.EXTRA_SUBJECT,
+                    "Android v" + BuildConfig.VERSION_NAME + " - " + activityRule.activity.getText(R.string.prefs_feedback)
+                ),
+                hasData(Uri.parse(activityRule.activity.getText(R.string.mail_feedback) as String)),
+                hasFlag(Intent.FLAG_ACTIVITY_NEW_TASK)
+            )
+        )
     }
 
     @Test
-    fun loggerView(){
+    fun loggerView() {
         onView(withText(R.string.actionbar_logger)).check(matches(isDisplayed()))
     }
 
     @Test
-    fun loggerOpen(){
-        Intents.init()
+    fun loggerOpen() {
         onView(withText(R.string.actionbar_logger)).perform(click())
         intended(hasComponent(LogHistoryActivity::class.java.name))
-        Intents.release()
     }
 
     @Test
-    fun privacyPolicyView(){
+    fun privacyPolicyView() {
         onView(withText(R.string.prefs_privacy_policy)).check(matches(isDisplayed()))
     }
 
     @Test
-    fun privacyPolicyOpenWeb(){
-        Intents.init()
+    fun privacyPolicyOpenWeb() {
         onView(withText(R.string.prefs_privacy_policy)).perform(click())
         intended(hasComponent(PrivacyPolicyActivity::class.java.name))
-        Intents.release()
     }
 }
