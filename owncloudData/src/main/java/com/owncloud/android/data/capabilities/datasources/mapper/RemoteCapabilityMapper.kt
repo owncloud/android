@@ -23,7 +23,7 @@ import com.owncloud.android.domain.capabilities.model.CapabilityBooleanType
 import com.owncloud.android.domain.capabilities.model.OCCapability
 import com.owncloud.android.domain.mappers.RemoteMapper
 import com.owncloud.android.lib.resources.status.RemoteCapability
-import com.owncloud.android.lib.resources.status.CapabilityBooleanType as RemoteCapabilityBooleanType
+import com.owncloud.android.lib.resources.status.RemoteCapability.CapabilityBooleanType as RemoteCapabilityBooleanType
 
 class RemoteCapabilityMapper : RemoteMapper<OCCapability, RemoteCapability> {
     override fun toModel(remote: RemoteCapability?): OCCapability? =
