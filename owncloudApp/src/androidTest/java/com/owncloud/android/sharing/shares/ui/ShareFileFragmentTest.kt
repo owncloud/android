@@ -111,7 +111,7 @@ class ShareFileFragmentTest {
 
     private var userSharesList = listOf(
         OC_SHARE.copy(sharedWithDisplayName = "Batman"),
-        OC_SHARE.copy(sharedWithDisplayName = "Jocker")
+        OC_SHARE.copy(sharedWithDisplayName = "Joker")
     )
 
     private var groupSharesList = listOf(
@@ -145,7 +145,7 @@ class ShareFileFragmentTest {
             .check(matches(isDisplayed()))
         onView(withText("Batman")).check(matches(hasSibling(withId(R.id.editShareButton))))
             .check(matches(isDisplayed()))
-        onView(withText("Jocker")).check(matches(isDisplayed()))
+        onView(withText("Joker")).check(matches(isDisplayed()))
     }
 
     @Test
