@@ -90,11 +90,7 @@ class EditPrivateShareFragment : DialogFragment() {
         if (arguments != null) {
             file = arguments?.getParcelable(ARG_FILE)
             account = arguments?.getParcelable(ARG_ACCOUNT)
-            share = if (savedInstanceState == null) {
-                arguments?.getParcelable(ARG_SHARE)
-            } else {
-                savedInstanceState.getParcelable(ARG_SHARE)
-            }
+            share = savedInstanceState?.getParcelable(ARG_SHARE) ?: arguments?.getParcelable(ARG_SHARE)
             Log_OC.e(
                 TAG, String.format(
                     Locale.getDefault(), "Share has id %1\$d remoteId %2\$d", share?.id,

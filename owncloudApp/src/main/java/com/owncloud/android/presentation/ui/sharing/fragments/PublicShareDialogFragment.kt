@@ -156,7 +156,9 @@ class PublicShareDialogFragment : DialogFragment() {
             publicShare = arguments!!.getParcelable(ARG_SHARE)
         }
 
-        check(!(file == null && publicShare == null)) { "Both ARG_FILE and ARG_SHARE cannot be NULL" }
+        check(file != null || publicShare != null) {
+            "Both ARG_FILE and ARG_SHARE cannot be NULL"
+        }
 
         setStyle(STYLE_NO_TITLE, 0)
     }

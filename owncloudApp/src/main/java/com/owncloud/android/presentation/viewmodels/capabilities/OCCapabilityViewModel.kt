@@ -31,7 +31,6 @@ import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 /**
  * View Model to keep a reference to the capability repository and an up-to-date capability
@@ -61,23 +60,25 @@ class OCCapabilityViewModel(
     }
 
     fun refreshCapabilitiesFromNetwork() {
-        viewModelScope.launch {
-            _capabilities.postValue(
-                Event(UIResult.Loading(capabilitiesLiveData.value))
-            )
-
-            val useCaseResult = withContext(coroutineDispatcherProvider.io) {
-                refreshCapabilitiesFromServerUseCase.execute(
-                    RefreshCapabilitiesFromServerAsyncUseCase.Params(
-                        accountName = accountName
-                    )
+        viewModelScope.launch(coroutineDispatcherProvider.io) {
+            viewModelScope.launch(coroutineDispatcherProvider.main) {
+                _capabilities.postValue(
+                    Event(UIResult.Loading(capabilitiesLiveData.value))
                 )
             }
 
-            if (useCaseResult.isError) {
-                _capabilities.postValue(
-                    Event(UIResult.Error(useCaseResult.getThrowableOrNull(), capabilitiesLiveData.value))
+            val useCaseResult = refreshCapabilitiesFromServerUseCase.execute(
+                RefreshCapabilitiesFromServerAsyncUseCase.Params(
+                    accountName = accountName
                 )
+            )
+
+            viewModelScope.launch(coroutineDispatcherProvider.main) {
+                if (useCaseResult.isError) {
+                    _capabilities.postValue(
+                        Event(UIResult.Error(useCaseResult.getThrowableOrNull(), capabilitiesLiveData.value))
+                    )
+                }
             }
         }
     }

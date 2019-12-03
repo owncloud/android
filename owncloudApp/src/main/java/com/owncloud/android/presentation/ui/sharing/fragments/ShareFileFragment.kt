@@ -154,10 +154,9 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
                 return defaultName
             }
             usedNumbers.sort()
-            var chosenNumber = -1
-            if (usedNumbers.size == 0 || usedNumbers[0] != 2) {
-                chosenNumber = 2
-
+            var chosenNumber = UNUSED_NUMBER
+            if (usedNumbers.size == 0 || usedNumbers[0] != USED_NUMBER_SECOND) {
+                chosenNumber = USED_NUMBER_SECOND
             } else {
                 for (i in 0 until usedNumbers.size - 1) {
                     val current = usedNumbers[i]
@@ -611,6 +610,9 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
         private const val ARG_FILE = "FILE"
         private const val ARG_ACCOUNT = "ACCOUNT"
         private const val ARG_SERVER_VERSION = "SERVER_VERSION"
+
+        private const val UNUSED_NUMBER = -1
+        private const val USED_NUMBER_SECOND = 2
 
         /**
          * Public factory method to create new ShareFileFragment instances.

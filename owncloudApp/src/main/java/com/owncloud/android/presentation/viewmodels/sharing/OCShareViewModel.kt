@@ -38,7 +38,6 @@ import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 /**
  * View Model to keep a reference to the share repository and an up-to-date list of a shares
@@ -73,22 +72,24 @@ class OCShareViewModel(
     }
 
     private fun refreshSharesFromNetwork() {
-        viewModelScope.launch {
-            _shares.postValue(Event(UIResult.Loading(sharesLiveData.value)))
-
-            val useCaseResult = withContext(coroutineDispatcherProvider.io) {
-                refreshSharesFromServerAsyncUseCase.execute(
-                    RefreshSharesFromServerAsyncUseCase.Params(
-                        filePath = filePath,
-                        accountName = accountName
-                    )
-                )
+        viewModelScope.launch(coroutineDispatcherProvider.io) {
+            viewModelScope.launch(coroutineDispatcherProvider.main) {
+                _shares.postValue(Event(UIResult.Loading(sharesLiveData.value)))
             }
 
-            if (!useCaseResult.isSuccess) {
-                _shares.postValue(
-                    Event(UIResult.Error(useCaseResult.getThrowableOrNull(), sharesLiveData.value))
+            val useCaseResult = refreshSharesFromServerAsyncUseCase.execute(
+                RefreshSharesFromServerAsyncUseCase.Params(
+                    filePath = filePath,
+                    accountName = accountName
                 )
+            )
+
+            viewModelScope.launch(coroutineDispatcherProvider.main) {
+                if (!useCaseResult.isSuccess) {
+                    _shares.postValue(
+                        Event(UIResult.Error(useCaseResult.getThrowableOrNull(), sharesLiveData.value))
+                    )
+                }
             }
         }
     }
@@ -99,21 +100,23 @@ class OCShareViewModel(
     fun deleteShare(
         remoteId: Long
     ) {
-        viewModelScope.launch {
-            _shareDeletionStatus.postValue(
-                Event(UIResult.Loading())
-            )
-
-            val useCaseResult = withContext(coroutineDispatcherProvider.io) {
-                deletePublicShareUseCase.execute(
-                    DeleteShareAsyncUseCase.Params(
-                        remoteId
-                    )
+        viewModelScope.launch(coroutineDispatcherProvider.io) {
+            viewModelScope.launch(coroutineDispatcherProvider.main) {
+                _shareDeletionStatus.postValue(
+                    Event(UIResult.Loading())
                 )
             }
 
-            if (useCaseResult.isError) {
-                _shareDeletionStatus.postValue(Event(UIResult.Error(useCaseResult.getThrowableOrNull())))
+            val useCaseResult = deletePublicShareUseCase.execute(
+                DeleteShareAsyncUseCase.Params(
+                    remoteId
+                )
+            )
+
+            viewModelScope.launch(coroutineDispatcherProvider.main) {
+                if (useCaseResult.isError) {
+                    _shareDeletionStatus.postValue(Event(UIResult.Error(useCaseResult.getThrowableOrNull())))
+                }
             }
         }
     }
@@ -132,29 +135,31 @@ class OCShareViewModel(
         permissions: Int,
         accountName: String
     ) {
-        viewModelScope.launch {
-            _privateShareCreationStatus.postValue(
-                Event(UIResult.Loading())
-            )
-
-            val useCaseResult = withContext(coroutineDispatcherProvider.io) {
-                createPrivateShareUseCase.execute(
-                    CreatePrivateShareAsyncUseCase.Params(
-                        filePath,
-                        shareType,
-                        shareeName,
-                        permissions,
-                        accountName
-                    )
+        viewModelScope.launch(coroutineDispatcherProvider.io) {
+            viewModelScope.launch(coroutineDispatcherProvider.main) {
+                _privateShareCreationStatus.postValue(
+                    Event(UIResult.Loading())
                 )
             }
 
-            if (useCaseResult.isSuccess) {
-                _privateShareCreationStatus.postValue(Event(UIResult.Success()))
-            } else {
-                _privateShareCreationStatus.postValue(
-                    Event(UIResult.Error(useCaseResult.getThrowableOrNull()))
+            val useCaseResult = createPrivateShareUseCase.execute(
+                CreatePrivateShareAsyncUseCase.Params(
+                    filePath,
+                    shareType,
+                    shareeName,
+                    permissions,
+                    accountName
                 )
+            )
+
+            viewModelScope.launch(coroutineDispatcherProvider.main) {
+                if (useCaseResult.isSuccess) {
+                    _privateShareCreationStatus.postValue(Event(UIResult.Success()))
+                } else {
+                    _privateShareCreationStatus.postValue(
+                        Event(UIResult.Error(useCaseResult.getThrowableOrNull()))
+                    )
+                }
             }
         }
     }
@@ -183,23 +188,25 @@ class OCShareViewModel(
         permissions: Int,
         accountName: String
     ) {
-        viewModelScope.launch {
-            _privateShareEditionStatus.postValue(
-                Event(UIResult.Loading())
-            )
-
-            val useCaseResult = withContext(coroutineDispatcherProvider.io) {
-                editPrivateShareUseCase.execute(
-                    EditPrivateShareAsyncUseCase.Params(
-                        remoteId,
-                        permissions,
-                        accountName
-                    )
+        viewModelScope.launch(coroutineDispatcherProvider.io) {
+            viewModelScope.launch(coroutineDispatcherProvider.main) {
+                _privateShareEditionStatus.postValue(
+                    Event(UIResult.Loading())
                 )
             }
 
-            if (useCaseResult.isError) {
-                _privateShareEditionStatus.postValue(Event(UIResult.Error(useCaseResult.getThrowableOrNull())))
+            val useCaseResult = editPrivateShareUseCase.execute(
+                EditPrivateShareAsyncUseCase.Params(
+                    remoteId,
+                    permissions,
+                    accountName
+                )
+            )
+
+            viewModelScope.launch(coroutineDispatcherProvider.main) {
+                if (useCaseResult.isError) {
+                    _privateShareEditionStatus.postValue(Event(UIResult.Error(useCaseResult.getThrowableOrNull())))
+                }
             }
         }
     }
@@ -220,29 +227,31 @@ class OCShareViewModel(
         publicUpload: Boolean,
         accountName: String
     ) {
-        viewModelScope.launch {
-            _publicShareCreationStatus.postValue(
-                Event(UIResult.Loading())
-            )
-
-            val useCaseResult = withContext(coroutineDispatcherProvider.io) {
-                createPublicShareUseCase.execute(
-                    CreatePublicShareAsyncUseCase.Params(
-                        filePath,
-                        permissions,
-                        name,
-                        password,
-                        expirationTimeInMillis,
-                        publicUpload,
-                        accountName
-                    )
+        viewModelScope.launch(coroutineDispatcherProvider.io) {
+            viewModelScope.launch(coroutineDispatcherProvider.main) {
+                _publicShareCreationStatus.postValue(
+                    Event(UIResult.Loading())
                 )
             }
 
-            if (useCaseResult.isSuccess) {
-                _publicShareCreationStatus.postValue(Event(UIResult.Success()))
-            } else {
-                _publicShareCreationStatus.postValue(Event(UIResult.Error(useCaseResult.getThrowableOrNull())))
+            val useCaseResult = createPublicShareUseCase.execute(
+                CreatePublicShareAsyncUseCase.Params(
+                    filePath,
+                    permissions,
+                    name,
+                    password,
+                    expirationTimeInMillis,
+                    publicUpload,
+                    accountName
+                )
+            )
+
+            viewModelScope.launch(coroutineDispatcherProvider.main) {
+                if (useCaseResult.isSuccess) {
+                    _publicShareCreationStatus.postValue(Event(UIResult.Success()))
+                } else {
+                    _publicShareCreationStatus.postValue(Event(UIResult.Error(useCaseResult.getThrowableOrNull())))
+                }
             }
         }
     }
@@ -259,27 +268,29 @@ class OCShareViewModel(
         publicUpload: Boolean,
         accountName: String
     ) {
-        viewModelScope.launch {
-            _publicShareEditionStatus.postValue(Event(UIResult.Loading()))
-
-            val useCaseResult = withContext(coroutineDispatcherProvider.io) {
-                editPublicShareUseCase.execute(
-                    EditPublicShareAsyncUseCase.Params(
-                        remoteId,
-                        name,
-                        password,
-                        expirationDateInMillis,
-                        permissions,
-                        publicUpload,
-                        accountName
-                    )
-                )
+        viewModelScope.launch(coroutineDispatcherProvider.io) {
+            viewModelScope.launch(coroutineDispatcherProvider.main) {
+                _publicShareEditionStatus.postValue(Event(UIResult.Loading()))
             }
 
-            if (useCaseResult.isSuccess) {
-                _publicShareEditionStatus.postValue(Event(UIResult.Success()))
-            } else {
-                _publicShareEditionStatus.postValue(Event(UIResult.Error(useCaseResult.getThrowableOrNull())))
+            val useCaseResult = editPublicShareUseCase.execute(
+                EditPublicShareAsyncUseCase.Params(
+                    remoteId,
+                    name,
+                    password,
+                    expirationDateInMillis,
+                    permissions,
+                    publicUpload,
+                    accountName
+                )
+            )
+
+            viewModelScope.launch(coroutineDispatcherProvider.main) {
+                if (useCaseResult.isSuccess) {
+                    _publicShareEditionStatus.postValue(Event(UIResult.Success()))
+                } else {
+                    _publicShareEditionStatus.postValue(Event(UIResult.Error(useCaseResult.getThrowableOrNull())))
+                }
             }
         }
     }

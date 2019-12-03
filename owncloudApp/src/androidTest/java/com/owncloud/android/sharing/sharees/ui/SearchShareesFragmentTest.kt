@@ -96,11 +96,10 @@ class SearchShareesFragmentTest {
             )
         )
 
-        onView(withText("Sheldon")).check(matches(isDisplayed()))
-        onView(withText("Sheldon")).check(matches(hasSibling(withId(R.id.unshareButton))))
+        onView(withText("Sheldon"))
             .check(matches(isDisplayed()))
-        onView(withText("Sheldon")).check(matches(hasSibling(withId(R.id.editShareButton))))
-            .check(matches(isDisplayed()))
+            .check(matches(hasSibling(withId(R.id.unshareButton))))
+            .check(matches(hasSibling(withId(R.id.editShareButton))))
         onView(withText("Penny")).check(matches(isDisplayed()))
     }
 
@@ -119,9 +118,9 @@ class SearchShareesFragmentTest {
             )
         )
 
-        onView(withText("Friends (group)")).check(matches(isDisplayed()))
-        onView(withText("Friends (group)")).check(matches(hasSibling(withId(R.id.icon))))
+        onView(withText("Friends (group)"))
             .check(matches(isDisplayed()))
+            .check(matches(hasSibling(withId(R.id.icon))))
         onView(ViewMatchers.withTagValue(CoreMatchers.equalTo(R.drawable.ic_group))).check(matches(isDisplayed()))
     }
 }
