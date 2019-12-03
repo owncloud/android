@@ -26,7 +26,6 @@ package com.owncloud.android.lib.common.http;
 
 import android.content.Context;
 
-import android.os.Build;
 import com.owncloud.android.lib.common.OwnCloudClientManagerFactory;
 import com.owncloud.android.lib.common.http.interceptors.HttpInterceptor;
 import com.owncloud.android.lib.common.http.interceptors.RequestHeaderInterceptor;
@@ -91,12 +90,7 @@ public class HttpClient {
 
                 SSLSocketFactory sslSocketFactory;
 
-                if (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT) {
-                    // TLS v1.2 is disabled by default in API 19, use custom SSLSocketFactory to enable it
-                    sslSocketFactory = new TLSSocketFactory(sslContext.getSocketFactory());
-                } else {
-                    sslSocketFactory = sslContext.getSocketFactory();
-                }
+                sslSocketFactory = sslContext.getSocketFactory();
 
                 // Automatic cookie handling, NOT PERSISTENT
                 CookieJar cookieJar = new CookieJar() {
@@ -158,7 +152,7 @@ public class HttpClient {
     public static void addHeaderForAllRequests(String headerName, String headerValue) {
         HttpInterceptor httpInterceptor = getOkHttpInterceptor();
 
-        if(getOkHttpInterceptor() != null) {
+        if (getOkHttpInterceptor() != null) {
             httpInterceptor.addRequestInterceptor(
                     new RequestHeaderInterceptor(headerName, headerValue)
             );
