@@ -50,14 +50,14 @@ class RemoteFileUtils {
             do {
                 suffix = " ($count)"
                 checkExistsFile = if (pos >= 0) {
-                    existsFile(ownCloudClient, "$remotePath$suffix.$extension")
+                    existsFile(ownCloudClient, "${remotePath.substringBeforeLast('.', "")}$suffix.$extension")
                 } else {
                     existsFile(ownCloudClient, remotePath + suffix)
                 }
                 count++
             } while (checkExistsFile)
             return if (pos >= 0) {
-                "$remotePath$suffix.$extension"
+                "${remotePath.substringBeforeLast('.', "")}$suffix.$extension"
             } else {
                 remotePath + suffix
             }
