@@ -44,6 +44,7 @@ import com.owncloud.android.operations.common.SyncOperation;
 import com.owncloud.android.utils.ConnectivityUtils;
 import com.owncloud.android.utils.FileStorageUtils;
 import com.owncloud.android.utils.MimetypeIconUtil;
+import com.owncloud.android.utils.RemoteFileUtils;
 import com.owncloud.android.utils.UriUtils;
 
 import java.io.File;
@@ -312,7 +313,7 @@ public class UploadFileOperation extends SyncOperation {
             /// automatic rename of file to upload in case of name collision in server
             Log_OC.d(TAG, "Checking name collision in server");
             if (!mForceOverwrite) {
-                String remotePath = getAvailableRemotePath(client, mRemotePath);
+                String remotePath = RemoteFileUtils.Companion.getAvailableRemotePath(client, mRemotePath);
                 mWasRenamed = !remotePath.equals(mRemotePath);
                 if (mWasRenamed) {
                     createNewOCFile(remotePath);
@@ -565,52 +566,6 @@ public class UploadFileOperation extends SyncOperation {
         newFile.setParentId(mFile.getParentId());
         mOldFile = mFile;
         mFile = newFile;
-    }
-
-    /**
-     * Checks if remotePath does not exist in the server and returns it, or adds
-     * a suffix to it in order to avoid the server file is overwritten.
-     *
-     * @param wc
-     * @param remotePath
-     * @return
-     */
-    private String getAvailableRemotePath(OwnCloudClient wc, String remotePath) {
-        boolean check = existsFile(wc, remotePath);
-        if (!check) {
-            return remotePath;
-        }
-
-        int pos = remotePath.lastIndexOf(".");
-        String suffix = "";
-        String extension = "";
-        if (pos >= 0) {
-            extension = remotePath.substring(pos + 1);
-            remotePath = remotePath.substring(0, pos);
-        }
-        int count = 2;
-        do {
-            suffix = " (" + count + ")";
-            if (pos >= 0) {
-                check = existsFile(wc, remotePath + suffix + "." + extension);
-            } else {
-                check = existsFile(wc, remotePath + suffix);
-            }
-            count++;
-        } while (check);
-
-        if (pos >= 0) {
-            return remotePath + suffix + "." + extension;
-        } else {
-            return remotePath + suffix;
-        }
-    }
-
-    private boolean existsFile(OwnCloudClient client, String remotePath) {
-        ExistenceCheckRemoteOperation existsOperation =
-                new ExistenceCheckRemoteOperation(remotePath, false, false);
-        RemoteOperationResult result = existsOperation.execute(client);
-        return result.isSuccess();
     }
 
     /**
