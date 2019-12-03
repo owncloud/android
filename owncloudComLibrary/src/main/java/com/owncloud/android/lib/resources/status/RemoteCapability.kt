@@ -44,7 +44,7 @@ data class RemoteCapability(
 
     // Files Sharing
     var filesSharingApiEnabled: CapabilityBooleanType = CapabilityBooleanType.UNKNOWN,
-    var filesSharingSearchMinLength: Int? = 2,
+    var filesSharingSearchMinLength: Int? = DEFAULT_MIN_CHARACTERS_TO_SEARCH,
     var filesSharingPublicEnabled: CapabilityBooleanType = CapabilityBooleanType.UNKNOWN,
     var filesSharingPublicPasswordEnforced: CapabilityBooleanType = CapabilityBooleanType.UNKNOWN,
     var filesSharingPublicPasswordEnforcedReadOnly: CapabilityBooleanType = CapabilityBooleanType.UNKNOWN,
@@ -66,35 +66,39 @@ data class RemoteCapability(
     var filesBigFileChunking: CapabilityBooleanType = CapabilityBooleanType.UNKNOWN,
     var filesUndelete: CapabilityBooleanType = CapabilityBooleanType.UNKNOWN,
     var filesVersioning: CapabilityBooleanType = CapabilityBooleanType.UNKNOWN
-)
+) {
+    /**
+     * Enum for Boolean Type in capabilities, with values:
+     * -1 - Unknown
+     * 0 - False
+     * 1 - True
+     */
+    enum class CapabilityBooleanType constructor(val value: Int) {
+        UNKNOWN(-1),
+        FALSE(0),
+        TRUE(1);
 
-/**
- * Enum for Boolean Type in capabilities, with values:
- * -1 - Unknown
- * 0 - False
- * 1 - True
- */
-enum class CapabilityBooleanType constructor(val value: Int) {
-    UNKNOWN(-1),
-    FALSE(0),
-    TRUE(1);
+        companion object {
+            fun fromValue(value: Int): CapabilityBooleanType? {
+                return when (value) {
+                    -1 -> UNKNOWN
+                    0 -> FALSE
+                    1 -> TRUE
+                    else -> null
+                }
+            }
+
+            fun fromBooleanValue(boolValue: Boolean): CapabilityBooleanType {
+                return if (boolValue) {
+                    TRUE
+                } else {
+                    FALSE
+                }
+            }
+        }
+    }
 
     companion object {
-        fun fromValue(value: Int): CapabilityBooleanType? {
-            return when (value) {
-                -1 -> UNKNOWN
-                0 -> FALSE
-                1 -> TRUE
-                else -> null
-            }
-        }
-
-        fun fromBooleanValue(boolValue: Boolean): CapabilityBooleanType {
-            return if (boolValue) {
-                TRUE
-            } else {
-                FALSE
-            }
-        }
+        private const val DEFAULT_MIN_CHARACTERS_TO_SEARCH = 2
     }
 }

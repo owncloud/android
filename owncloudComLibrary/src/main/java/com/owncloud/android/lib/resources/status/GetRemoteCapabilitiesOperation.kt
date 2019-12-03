@@ -36,6 +36,7 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCo
 import com.owncloud.android.lib.common.utils.Log_OC
 import org.json.JSONObject
 import java.net.URL
+import com.owncloud.android.lib.resources.status.RemoteCapability.CapabilityBooleanType
 
 /**
  * Get the Capabilities from the server
