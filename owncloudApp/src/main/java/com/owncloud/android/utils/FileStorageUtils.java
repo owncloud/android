@@ -42,7 +42,6 @@ import java.util.Vector;
  * Static methods to help in access to local file system.
  */
 public class FileStorageUtils {
-    private static final String TAG = FileStorageUtils.class.getSimpleName();
 
     public static final int SORT_NAME = 0;
     public static final int SORT_DATE = 1;
@@ -238,12 +237,8 @@ public class FileStorageUtils {
         }
 
         Collections.sort(files, (ocFile1, ocFile2) -> {
-            if (ocFile1.getFileLength() == 0 || ocFile2.getFileLength() == 0) {
-                return 0;
-            } else {
-                Long obj1 = ocFile1.getFileLength();
-                return val * obj1.compareTo(ocFile2.getFileLength());
-            }
+            Long obj1 = ocFile1.getFileLength();
+            return val * obj1.compareTo(ocFile2.getFileLength());
         });
 
     }
@@ -297,10 +292,10 @@ public class FileStorageUtils {
                 for (String child : children) {
                     boolean success = deleteDir(new File(dir, child));
                     if (!success) {
-                        Log_OC.w(TAG, "File NOT deleted " + child);
+                        Log_OC.w("File NOT deleted " + child);
                         return false;
                     } else {
-                        Log_OC.d(TAG, "File deleted " + child);
+                        Log_OC.d("File deleted " + child);
                     }
                 }
             } else {
