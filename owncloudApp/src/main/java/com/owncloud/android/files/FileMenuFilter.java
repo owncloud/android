@@ -34,7 +34,6 @@ import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.domain.capabilities.model.OCCapability;
 import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder;
 import com.owncloud.android.files.services.FileUploader.FileUploaderBinder;
-import com.owncloud.android.lib.resources.status.RemoteCapability;
 import com.owncloud.android.services.OperationsService.OperationsServiceBinder;
 import com.owncloud.android.ui.activity.ComponentsGetter;
 import com.owncloud.android.ui.preview.PreviewVideoFragment;
