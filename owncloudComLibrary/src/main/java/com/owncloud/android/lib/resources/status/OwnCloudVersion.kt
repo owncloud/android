@@ -45,8 +45,8 @@ class OwnCloudVersion(version: String) : Comparable<OwnCloudVersion>, Parcelable
             INVALID_ZERO_VERSION
         }
 
-    val isVersionLowerThan10: Boolean
-        get() = mVersion < VERSION_10
+    val isServerVersionSupported: Boolean
+        get() = mVersion >= MINIMUN_VERSION_SUPPORTED
 
     val isPublicSharingWriteOnlySupported: Boolean
         get() = mVersion >= MINIMUM_VERSION_WITH_WRITE_ONLY_PUBLIC_SHARING
@@ -143,6 +143,8 @@ class OwnCloudVersion(version: String) : Comparable<OwnCloudVersion>, Parcelable
         private const val MINIMUN_MAJOR_VERSION_WITHOUT_PUBLIC_UPLOAD_PERMISSION = 0xA000000 // 10.0.0
 
         private const val MINIMUM_VERSION_WITH_WRITE_ONLY_PUBLIC_SHARING = 0xA000100 // 10.0.1
+
+        private const val MINIMUN_VERSION_SUPPORTED = 0xA000000 // 10.0.0
 
         private const val INVALID_ZERO_VERSION = "0.0.0"
 
