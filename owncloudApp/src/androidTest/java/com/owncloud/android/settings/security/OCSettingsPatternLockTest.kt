@@ -39,8 +39,8 @@ class OCSettingsPatternLockTest {
     @Rule
     @JvmField
     val activityRule = ActivityTestRule(PatternLockActivity::class.java, true, false)
-    val errorMessage = "PatternLock Activity error"
-    val intent = Intent()
+    private val errorMessage = "PatternLock Activity error"
+    private val intent = Intent()
     private val context = InstrumentationRegistry.getInstrumentation().targetContext
 
     private val PATTERN_TOSAVE = "1234"
@@ -75,7 +75,7 @@ class OCSettingsPatternLockTest {
     }
 
     private fun storePattern() {
-        val appPrefs = PreferenceManager.getDefaultSharedPreferences(context).edit();
+        val appPrefs = PreferenceManager.getDefaultSharedPreferences(context).edit()
         appPrefs.putString(PatternLockActivity.KEY_PATTERN, PATTERN_TOSAVE)
         appPrefs.putBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN, true)
         appPrefs.apply()

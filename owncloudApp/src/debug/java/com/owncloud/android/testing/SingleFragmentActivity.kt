@@ -19,7 +19,6 @@ package com.owncloud.android.testing
 import android.os.Bundle
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import androidx.fragment.app.Fragment
 import com.owncloud.android.R
 import com.owncloud.android.ui.activity.BaseActivity
 

@@ -1861,10 +1861,10 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
 
         const val ACTION_DETAILS = "com.owncloud.android.ui.activity.action.DETAILS"
 
-        val REQUEST_CODE__SELECT_CONTENT_FROM_APPS = REQUEST_CODE__LAST_SHARED + 1
-        val REQUEST_CODE__MOVE_FILES = REQUEST_CODE__LAST_SHARED + 2
-        val REQUEST_CODE__COPY_FILES = REQUEST_CODE__LAST_SHARED + 3
-        val REQUEST_CODE__UPLOAD_FROM_CAMERA = REQUEST_CODE__LAST_SHARED + 4
-        val RESULT_OK_AND_MOVE = Activity.RESULT_FIRST_USER
+        const val REQUEST_CODE__SELECT_CONTENT_FROM_APPS = REQUEST_CODE__LAST_SHARED + 1
+        const val REQUEST_CODE__MOVE_FILES = REQUEST_CODE__LAST_SHARED + 2
+        const val REQUEST_CODE__COPY_FILES = REQUEST_CODE__LAST_SHARED + 3
+        const val REQUEST_CODE__UPLOAD_FROM_CAMERA = REQUEST_CODE__LAST_SHARED + 4
+        const val RESULT_OK_AND_MOVE = Activity.RESULT_FIRST_USER
     }
 }

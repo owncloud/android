@@ -23,7 +23,6 @@ import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.domain.capabilities.model.OCCapability;
 import com.owncloud.android.lib.common.utils.Log_OC;
-import com.owncloud.android.lib.resources.status.RemoteCapability;
 import com.owncloud.android.ui.dialog.LoadingDialog;
 
 /**

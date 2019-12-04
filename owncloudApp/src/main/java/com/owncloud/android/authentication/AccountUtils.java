@@ -33,7 +33,6 @@ import com.owncloud.android.domain.capabilities.model.OCCapability;
 import com.owncloud.android.lib.common.accounts.AccountTypeUtils;
 import com.owncloud.android.lib.common.accounts.AccountUtils.Constants;
 import com.owncloud.android.lib.common.utils.Log_OC;
-import com.owncloud.android.lib.resources.status.RemoteCapability;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 
 import java.util.Locale;

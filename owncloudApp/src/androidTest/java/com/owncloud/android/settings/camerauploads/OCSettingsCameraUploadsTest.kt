@@ -123,7 +123,7 @@ class OCSettingsCameraUploadsTest {
 
     @Test
     fun enablePictureUploads() {
-        onView(withText(R.string.prefs_camera_picture_upload)).perform(click());
+        onView(withText(R.string.prefs_camera_picture_upload)).perform(click())
         onView(withText(android.R.string.ok)).perform(click())
         //Asserts
         assertTrue(mPrefCameraPictureUploads.isChecked)
@@ -133,7 +133,7 @@ class OCSettingsCameraUploadsTest {
 
     @Test
     fun enableVideoUploads() {
-        onView(withText(R.string.prefs_camera_video_upload)).perform(click());
+        onView(withText(R.string.prefs_camera_video_upload)).perform(click())
         onView(withText(android.R.string.ok)).perform(click())
         //Asserts
         assertTrue(mPrefCameraVideoUploads.isChecked)
@@ -144,8 +144,8 @@ class OCSettingsCameraUploadsTest {
     @Test
     fun disablePictureUploadsAccept() {
         enableCameraPictureUploads()
-        onView(withText(R.string.prefs_camera_picture_upload)).perform(click());
-        onView(withText(R.string.common_yes)).perform(click());
+        onView(withText(R.string.prefs_camera_picture_upload)).perform(click())
+        onView(withText(R.string.common_yes)).perform(click())
         //Asserts
         assertFalse(mPrefCameraPictureUploads.isChecked)
         onView(withText(R.string.prefs_camera_picture_upload_path_title)).check(doesNotExist())
@@ -155,8 +155,8 @@ class OCSettingsCameraUploadsTest {
     @Test
     fun disablePictureUploadsRefuse() {
         enableCameraPictureUploads()
-        onView(withText(R.string.prefs_camera_picture_upload)).perform(click());
-        onView(withText(R.string.common_no)).perform(click());
+        onView(withText(R.string.prefs_camera_picture_upload)).perform(click())
+        onView(withText(R.string.common_no)).perform(click())
         //Asserts
         assertTrue(mPrefCameraPictureUploads.isChecked)
         onView(withText(R.string.prefs_camera_picture_upload_path_title)).check(matches(isDisplayed()))
@@ -166,8 +166,8 @@ class OCSettingsCameraUploadsTest {
     @Test
     fun disableVideoUploadsAccept() {
         enableCameraVideoUploads()
-        onView(withText(R.string.prefs_camera_video_upload)).perform(click());
-        onView(withText(R.string.common_yes)).perform(click());
+        onView(withText(R.string.prefs_camera_video_upload)).perform(click())
+        onView(withText(R.string.common_yes)).perform(click())
         //Asserts
         assertFalse(mPrefCameraVideoUploads.isChecked)
         onView(withText(R.string.prefs_camera_video_upload_path_title)).check(doesNotExist())
@@ -177,8 +177,8 @@ class OCSettingsCameraUploadsTest {
     @Test
     fun disableVideoUploadsRefuse() {
         enableCameraVideoUploads()
-        onView(withText(R.string.prefs_camera_video_upload)).perform(click());
-        onView(withText(R.string.common_no)).perform(click());
+        onView(withText(R.string.prefs_camera_video_upload)).perform(click())
+        onView(withText(R.string.common_no)).perform(click())
         //Asserts
         assertTrue(mPrefCameraVideoUploads.isChecked)
         onView(withText(R.string.prefs_camera_video_upload_path_title)).check(matches(isDisplayed()))
@@ -205,7 +205,7 @@ class OCSettingsCameraUploadsTest {
         enableCameraPictureUploads()
         val cameraFolder = Environment.getExternalStoragePublicDirectory(
             Environment.DIRECTORY_DCIM
-        ).absolutePath + "/Camera";
+        ).absolutePath + "/Camera"
         Intents.init()
         //Asserts
         onView(
@@ -232,13 +232,13 @@ class OCSettingsCameraUploadsTest {
         onView(withText(R.string.pref_behaviour_entries_move)).check(matches(isDisplayed()))
     }
 
-    fun enableCameraPictureUploads() {
-        onView(withText(R.string.prefs_camera_picture_upload)).perform(click());
+    private fun enableCameraPictureUploads() {
+        onView(withText(R.string.prefs_camera_picture_upload)).perform(click())
         onView(withText(android.R.string.ok)).perform(click())
     }
 
-    fun enableCameraVideoUploads() {
-        onView(withText(R.string.prefs_camera_video_upload)).perform(click());
+    private fun enableCameraVideoUploads() {
+        onView(withText(R.string.prefs_camera_video_upload)).perform(click())
         onView(withText(android.R.string.ok)).perform(click())
     }
 }

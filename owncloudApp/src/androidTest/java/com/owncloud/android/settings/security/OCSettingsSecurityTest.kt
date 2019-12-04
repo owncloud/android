@@ -126,7 +126,7 @@ class OCSettingsSecurityTest {
         val result = Intent()
         result.putExtra(KEY_PASSCODE, PASSCODE_VALUE)
         val intentResult = Instrumentation.ActivityResult(Activity.RESULT_OK, result)
-        intending(hasAction(PassCodeActivity.ACTION_REQUEST_WITH_RESULT)).respondWith(intentResult);
+        intending(hasAction(PassCodeActivity.ACTION_REQUEST_WITH_RESULT)).respondWith(intentResult)
         onView(withText(R.string.prefs_passcode)).perform(click())
         assertTrue(mPrefPasscode.isChecked)
         onView(withText(R.string.pass_code_stored)).check(matches(isDisplayed()))
@@ -230,7 +230,7 @@ class OCSettingsSecurityTest {
         val result = Intent()
         result.putExtra(KEY_PASSCODE, PASSCODE_VALUE)
         val intentResult = Instrumentation.ActivityResult(Activity.RESULT_OK, result)
-        intending(hasAction(PassCodeActivity.ACTION_REQUEST_WITH_RESULT)).respondWith(intentResult);
+        intending(hasAction(PassCodeActivity.ACTION_REQUEST_WITH_RESULT)).respondWith(intentResult)
         onView(withText(R.string.prefs_passcode)).perform(click())
     }
 

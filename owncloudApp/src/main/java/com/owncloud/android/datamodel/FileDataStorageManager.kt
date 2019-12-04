@@ -66,10 +66,8 @@ import java.util.Vector
 
 class FileDataStorageManager {
 
-    var contentResolver: ContentResolver? = null
-        private set
+    private var contentResolver: ContentResolver? = null
     private var contentProviderClient: ContentProviderClient? = null
-        private set
     var account: Account
     private var mContext: Context? = null
 

@@ -50,8 +50,8 @@ class OCSettingsPasscodeTest {
     @JvmField
     val activityRule = ActivityTestRule(PassCodeActivity::class.java, true, false)
 
-    val intent = Intent()
-    val errorMessage = "PassCode Activity error"
+    private val intent = Intent()
+    private val errorMessage = "PassCode Activity error"
     private val KEY_PASSCODE = "KEY_PASSCODE"
     private val context = InstrumentationRegistry.getInstrumentation().targetContext
 
@@ -207,7 +207,7 @@ class OCSettingsPasscodeTest {
     }
 
     private fun storePasscode(passcode: String = PASSCODE_TOSAVE) {
-        val appPrefs = PreferenceManager.getDefaultSharedPreferences(context).edit();
+        val appPrefs = PreferenceManager.getDefaultSharedPreferences(context).edit()
         for (i in 1..4) {
             appPrefs.putString(
                 PassCodeActivity.PREFERENCE_PASSCODE_D + i,

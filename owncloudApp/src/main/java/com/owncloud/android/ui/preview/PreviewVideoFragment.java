@@ -23,7 +23,6 @@ package com.owncloud.android.ui.preview;
 
 import android.accounts.Account;
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
