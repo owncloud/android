@@ -12,8 +12,6 @@
   <string name="actionbar_send_file">ផ្ញើ</string>
   <string name="actionbar_sort">តម្រៀប</string>
   <string name="actionbar_sort_title">តម្រៀបដោយ</string>
-  <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
-  <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_open">បើក</string>
   <string name="drawer_feedback">មតិត្រឡប់</string>
   <string name="drawer_help">ជំនួយ</string>
@@ -94,5 +92,4 @@
   <string name="share_privilege_can_edit">អាច​កែប្រែ</string>
   <string name="share_privilege_can_edit_create">បង្កើត</string>
   <string name="share_privilege_can_edit_delete">លុប</string>
-  <!--Welcome to oC intro features-->
 </resources>

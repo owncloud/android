@@ -12,8 +12,6 @@
   <string name="actionbar_send_file">Göndər</string>
   <string name="actionbar_sort">Çeşidləmək</string>
   <string name="actionbar_sort_title">Təyinata görə çeşidləmək </string>
-  <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
-  <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_open">Aç</string>
   <string name="drawer_feedback">Geriyə cavab</string>
   <string name="drawer_help">Kömək</string>
@@ -241,5 +239,4 @@ inzibatçınızla əlaqə saxlayasınız.</string>
   <string name="share_privilege_can_share">yayımlaya bilərsiniz</string>
   <string name="share_privilege_can_edit">dəyişmək olar</string>
   <string name="share_privilege_can_edit_delete">sil</string>
-  <!--Welcome to oC intro features-->
 </resources>

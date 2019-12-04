@@ -1,12 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="actionbar_settings">Налады</string>
-  <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
-  <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="file_list_seconds_ago">Секунд таму</string>
   <string name="common_yes">Так</string>
   <string name="common_no">Не</string>
     <string name="common_error">Памылка</string>
   <string name="folder_picker_choose_button_text">Выбар</string>
-  <!--Welcome to oC intro features-->
 </resources>

@@ -10,8 +10,6 @@
   <string name="actionbar_settings">নিয়ামকসমূহ</string>
   <string name="actionbar_see_details">বিস্তারিত</string>
   <string name="actionbar_send_file">পাঠাও</string>
-  <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
-  <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_open">খোল</string>
   <string name="drawer_feedback">মতামত</string>
   <string name="drawer_help">সহায়িকা</string>
@@ -216,5 +214,4 @@
   <string name="share_privilege_can_edit">সম্পাদনা করতে পারবেন</string>
   <string name="share_privilege_can_edit_create">তৈরী করুন</string>
   <string name="share_privilege_can_edit_delete">মুছে ফেল</string>
-  <!--Welcome to oC intro features-->
 </resources>

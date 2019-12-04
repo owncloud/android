@@ -17,8 +17,6 @@
   <string name="actionbar_sort_by_name">A-Z</string>
   <string name="actionbar_sort_by_date">Постари - Најнови</string>
   <string name="actionbar_sort_by_size">Помали - Поголеми</string>
-  <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
-  <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Сите датотеки</string>
   <string name="drawer_item_settings">Подесувања</string>
   <string name="drawer_item_uploads_list">Прикачувања</string>
@@ -278,5 +276,4 @@
   <string name="share_privilege_can_edit_delete">избриши</string>
   <string name="share_warning_about_forwarding_public_links">Било кој што го знае овој линк ќе има пристап до датотеката/директориумот</string>
   <string name="upload_notification_channel_name">Прикачувања</string>
-  <!--Welcome to oC intro features-->
 </resources>

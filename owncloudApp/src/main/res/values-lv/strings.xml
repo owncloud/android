@@ -12,8 +12,6 @@
   <string name="actionbar_send_file">Sūtīt</string>
   <string name="actionbar_sort">Kārtot</string>
   <string name="actionbar_sort_title">Kārtot pēc</string>
-  <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
-  <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Visas datnes</string>
   <string name="drawer_item_settings">Iestatījumi</string>
   <string name="drawer_close">Aizvērt</string>
@@ -169,5 +167,4 @@
   <string name="share_privilege_can_edit_change">veikt izmaiņas</string>
   <string name="share_privilege_can_edit_delete">dzēst</string>
   <string name="share_warning_about_forwarding_public_links">Katram, kuram ir saite, ir pieeja datnei/mapei</string>
-  <!--Welcome to oC intro features-->
 </resources>

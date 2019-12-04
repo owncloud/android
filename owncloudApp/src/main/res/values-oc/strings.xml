@@ -14,8 +14,6 @@
   <string name="actionbar_sort">Triar</string>
   <string name="actionbar_sort_title">Triar</string>
   <string name="actionbar_sort_by_name">A-Z</string>
-  <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
-  <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Totes los fichièrs</string>
   <string name="drawer_item_settings">Paramètres</string>
   <string name="drawer_item_uploads_list">Cargaments</string>
@@ -374,5 +372,4 @@ En rason d\'aquesta modificacion, totes los fichièrs mandats amb de versions an
     <item quantity="one">%d seleccionat</item>
     <item quantity="other">%d seleccionats</item>
   </plurals>
-  <!--Welcome to oC intro features-->
 </resources>

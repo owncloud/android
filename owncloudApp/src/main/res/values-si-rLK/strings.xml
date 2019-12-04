@@ -3,8 +3,6 @@
   <string name="actionbar_upload">උඩුගත කිරීම</string>
   <string name="actionbar_upload_files">ගොනු</string>
   <string name="actionbar_settings">සිටුවම්</string>
-  <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
-  <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_open">විවෘත කරන්න</string>
   <string name="drawer_help">උදව්</string>
   <string name="prefs_category_general">සාමාන්‍යයෙන්</string>
@@ -79,5 +77,4 @@
   <string name="share_privilege_can_edit">සංස්කරණය කළ හැක</string>
   <string name="share_privilege_can_edit_create">සදන්න</string>
   <string name="share_privilege_can_edit_delete">මකන්න</string>
-  <!--Welcome to oC intro features-->
 </resources>

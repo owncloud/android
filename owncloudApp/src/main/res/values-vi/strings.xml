@@ -15,8 +15,6 @@
   <string name="actionbar_descending">Giảm dần</string>
   <string name="actionbar_sort_title">Sắp xếp theo</string>
   <string name="actionbar_sort_by_name">A-Z</string>
-  <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
-  <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Tất cả tệp tin</string>
   <string name="drawer_item_settings">Thiết lập</string>
   <string name="drawer_item_uploads_list">Tải lên</string>
@@ -257,5 +255,4 @@
   <string name="share_privilege_can_edit_change">thay đôi</string>
   <string name="share_privilege_can_edit_delete">xóa</string>
   <string name="share_warning_about_forwarding_public_links">Bất cứ ai liên kết đều có quyền truy cập tệp tin/thư mục</string>
-  <!--Welcome to oC intro features-->
 </resources>

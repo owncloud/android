@@ -9,8 +9,6 @@
   <string name="actionbar_sort">Susun</string>
   <string name="actionbar_descending">Menurun</string>
   <string name="actionbar_sort_title">Susun mengikut</string>
-  <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
-  <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_open">Buka</string>
   <string name="drawer_help">Bantuan</string>
   <string name="prefs_category_general">Umum</string>
@@ -60,5 +58,4 @@
   <string name="share_search">Cari</string>
   <string name="share_privilege_can_share">boleh berkongsi</string>
   <string name="share_privilege_can_edit">boleh mengubah</string>
-  <!--Welcome to oC intro features-->
 </resources>

@@ -15,8 +15,6 @@
   <string name="actionbar_descending">Kahanevalt</string>
   <string name="actionbar_sort_title">Sorteeri</string>
   <string name="actionbar_sort_by_name">A-Z</string>
-  <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
-  <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Kõik failid</string>
   <string name="drawer_item_settings">Seaded</string>
   <string name="drawer_item_uploads_list">Üleslaadimised</string>
@@ -344,5 +342,4 @@ Allpool on loend kohalikest failidest ning serveris asuvatest failidest %5$s, mi
   <string name="manage_space_title">Ruumi haldamine</string>
   <string name="manage_space_clear_data">Tühjenda andmed</string>
   <string name="manage_space_error">Mõningate failide kustutamine ebaõnnestus.</string>
-  <!--Welcome to oC intro features-->
 </resources>

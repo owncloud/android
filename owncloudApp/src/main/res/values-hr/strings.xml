@@ -15,8 +15,6 @@
   <string name="actionbar_descending">Silazno</string>
   <string name="actionbar_sort_title">Sortiraj po</string>
   <string name="actionbar_sort_by_name">A-Z</string>
-  <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
-  <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Sve datoteke</string>
   <string name="drawer_item_settings">Postavke</string>
   <string name="drawer_item_uploads_list">Upload-i</string>
@@ -162,5 +160,4 @@
   <string name="share_privilege_can_edit_create">Kreirajte</string>
   <string name="share_privilege_can_edit_change">promijeni</string>
   <string name="share_privilege_can_edit_delete">Izbrišite</string>
-  <!--Welcome to oC intro features-->
 </resources>

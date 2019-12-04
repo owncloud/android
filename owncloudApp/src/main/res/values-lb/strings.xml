@@ -13,8 +13,6 @@
   <string name="actionbar_send_file">Schécken</string>
   <string name="actionbar_sort">Zortéieren</string>
   <string name="actionbar_sort_title">Zortéieren no</string>
-  <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
-  <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">All d\'Fichieren</string>
   <string name="drawer_item_settings">Astellungen</string>
   <string name="drawer_item_uploads_list">Uploads</string>
@@ -359,5 +357,4 @@
   <string name="manage_space_clear_data">Donnéeë läschen</string>
   <string name="manage_space_error">Verschidde Fichiere konnten net geläscht ginn.</string>
   <string name="local_file_not_found_toast">De Fichier konnt net am lokale Fichier System fonnt ginn</string>
-  <!--Welcome to oC intro features-->
 </resources>

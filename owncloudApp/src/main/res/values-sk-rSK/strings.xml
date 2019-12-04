@@ -14,8 +14,6 @@
   <string name="actionbar_descending">Zostupne</string>
   <string name="actionbar_sort_title">Zoradiť podľa</string>
   <string name="actionbar_sort_by_name">A-Z</string>
-  <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
-  <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Všetky súbory</string>
   <string name="drawer_item_settings">Nastavenia</string>
   <string name="drawer_item_uploads_list">Nahranie</string>
@@ -318,5 +316,4 @@
   <string name="share_privilege_can_edit_create">vytvoriť</string>
   <string name="share_privilege_can_edit_change">zmeniť</string>
   <string name="share_privilege_can_edit_delete">vymazať</string>
-  <!--Welcome to oC intro features-->
 </resources>

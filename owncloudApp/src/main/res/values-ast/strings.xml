@@ -14,8 +14,6 @@
   <string name="actionbar_sort">Ordenar</string>
   <string name="actionbar_sort_title">Ordenar por</string>
   <string name="actionbar_sort_by_name">A-Z</string>
-  <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
-  <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Tolos ficheros</string>
   <string name="drawer_item_settings">Axustes</string>
   <string name="drawer_item_uploads_list">Xubes </string>
@@ -396,5 +394,4 @@
     <item quantity="one">%d escoyíu</item>
     <item quantity="other">%d escoyíos</item>
   </plurals>
-  <!--Welcome to oC intro features-->
 </resources>

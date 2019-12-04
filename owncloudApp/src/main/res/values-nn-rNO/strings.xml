@@ -14,8 +14,6 @@
   <string name="actionbar_sort">Sorter</string>
   <string name="actionbar_sort_title">Sorter etter</string>
   <string name="actionbar_sort_by_name">A-Å</string>
-  <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
-  <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Alle filer</string>
   <string name="drawer_item_settings">Innstillingar</string>
   <string name="drawer_item_uploads_list">Opplastingar</string>
@@ -263,5 +261,4 @@
   <string name="action_retry_uploads">Prøv feila på nytt</string>
   <string name="action_clear_failed_uploads">Fjern feila</string>
   <string name="share_warning_about_forwarding_public_links">Alle med lenke har tilgang til fil eller mappe</string>
-  <!--Welcome to oC intro features-->
 </resources>

@@ -5,8 +5,6 @@
   <string name="actionbar_mkdir">﻿ಹೊಸ ಕಡತಕೋಶ</string>
   <string name="actionbar_settings">ಆಯ್ಕೆ</string>
   <string name="actionbar_send_file">﻿ಕಳುಹಿಸಿ</string>
-  <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
-  <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_open">ತೆರೆ</string>
   <string name="drawer_help">﻿ಸಹಾಯ</string>
   <string name="prefs_category_more">﻿ಇನ್ನಷ್ಟು</string>
@@ -42,5 +40,4 @@
   <string name="share_privilege_can_edit_create">ಸೃಷ್ಟಿಸು</string>
   <string name="share_privilege_can_edit_change">﻿ಬದಲಾವಣೆ</string>
   <string name="share_privilege_can_edit_delete">﻿ಅಳಿಸಿ</string>
-  <!--Welcome to oC intro features-->
 </resources>

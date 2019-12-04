@@ -9,8 +9,6 @@
   <string name="actionbar_see_details">Detaljnije</string>
   <string name="actionbar_send_file">Pošalji</string>
   <string name="actionbar_sort_by_name">A-Z</string>
-  <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
-  <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Svi fajlovi</string>
   <string name="drawer_item_settings">Podešavanja</string>
   <string name="drawer_close">Zatvori</string>
@@ -94,5 +92,4 @@
   <string name="share_privilege_can_edit_create">napravi</string>
   <string name="share_privilege_can_edit_change">izmeni</string>
   <string name="share_privilege_can_edit_delete">brisanje</string>
-  <!--Welcome to oC intro features-->
 </resources>

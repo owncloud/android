@@ -14,8 +14,6 @@
   <string name="actionbar_sort">Ordigi</string>
   <string name="actionbar_descending">Malsuprenirece</string>
   <string name="actionbar_sort_title">Ordigi laŭ</string>
-  <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
-  <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Ĉiuj dosieroj</string>
   <string name="drawer_item_settings">Agordo</string>
   <string name="drawer_item_uploads_list">Alŝutoj</string>
@@ -273,5 +271,4 @@
   <string name="manage_space_title">Administri spacon</string>
   <string name="manage_space_clear_data">Forviŝi datumojn</string>
   <string name="manage_space_error">Kelkaj dosieroj ne povis foriĝi.</string>
-  <!--Welcome to oC intro features-->
 </resources>

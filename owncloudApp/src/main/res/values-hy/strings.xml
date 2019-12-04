@@ -12,8 +12,6 @@
   <string name="actionbar_sort">Դասակարգել</string>
   <string name="actionbar_sort_title">Դասակարգել ըստ</string>
   <string name="actionbar_sort_by_name">Ա-Ֆ</string>
-  <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
-  <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Բոլոր ֆայլերը</string>
   <string name="drawer_item_settings">Կարգավորումներ</string>
   <string name="drawer_item_uploads_list">Բեռնումներ</string>
@@ -197,5 +195,4 @@
     <item quantity="one">%d նշված</item>
     <item quantity="other">%d նշված</item>
   </plurals>
-  <!--Welcome to oC intro features-->
 </resources>

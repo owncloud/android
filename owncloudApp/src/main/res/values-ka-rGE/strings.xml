@@ -6,8 +6,6 @@
   <string name="actionbar_mkdir">ახალი ფოლდერი</string>
   <string name="actionbar_settings">პარამეტრები</string>
   <string name="actionbar_send_file">გაგზავნა</string>
-  <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
-  <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_open">გახსნა</string>
   <string name="drawer_feedback">უკუკავშირი</string>
   <string name="drawer_help">დახმარება</string>
@@ -129,5 +127,4 @@
   <string name="share_privilege_can_edit">შეგიძლია შეცვლა</string>
   <string name="share_privilege_can_edit_create">შექმნა</string>
   <string name="share_privilege_can_edit_delete">წაშლა</string>
-  <!--Welcome to oC intro features-->
 </resources>

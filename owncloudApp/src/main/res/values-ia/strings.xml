@@ -6,8 +6,6 @@
   <string name="actionbar_settings">Configurationes</string>
   <string name="actionbar_see_details">Detalios</string>
   <string name="actionbar_send_file">Invia</string>
-  <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
-  <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_open">Aperi</string>
   <string name="drawer_help">Adjuta</string>
   <string name="prefs_category_general">General</string>
@@ -56,5 +54,4 @@
   <string name="share_privilege_can_edit_create">crear</string>
   <string name="share_privilege_can_edit_change">cambiar</string>
   <string name="share_privilege_can_edit_delete">deler</string>
-  <!--Welcome to oC intro features-->
 </resources>

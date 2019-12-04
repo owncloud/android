@@ -7,8 +7,6 @@
   <string name="actionbar_mkdir">Nuevo directorio</string>
   <string name="actionbar_settings">Configuración</string>
   <string name="actionbar_see_details">detalles</string>
-  <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
-  <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_help">Ayuda</string>
   <string name="prefs_category_general">General</string>
   <string name="prefs_accounts">Cuentas</string>
@@ -130,5 +128,4 @@
   <string name="share_dialog_title">Compartir</string>
   <string name="share_cancel_public_link_button">Cancelar</string>
   <string name="share_via_link_password_label">Clave</string>
-  <!--Welcome to oC intro features-->
 </resources>

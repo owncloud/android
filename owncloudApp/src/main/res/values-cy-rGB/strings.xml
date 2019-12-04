@@ -5,8 +5,6 @@
   <string name="actionbar_upload_files">Ffeiliau</string>
   <string name="actionbar_settings">Gosodiadau</string>
   <string name="actionbar_send_file">Anfon</string>
-  <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
-  <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_open">Agor</string>
   <string name="drawer_help">Cymorth</string>
   <string name="prefs_category_general">Cyffredinol</string>
@@ -116,5 +114,4 @@
   <string name="share_privilege_can_edit">yn gallu golygu</string>
   <string name="share_privilege_can_edit_create">creu</string>
   <string name="share_privilege_can_edit_delete">dileu</string>
-  <!--Welcome to oC intro features-->
 </resources>

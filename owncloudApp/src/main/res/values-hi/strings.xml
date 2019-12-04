@@ -12,8 +12,6 @@
   <string name="actionbar_see_details">विवरण </string>
   <string name="actionbar_send_file">भेजें</string>
   <string name="actionbar_sort">सॉर्ट करें</string>
-  <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
-  <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_settings">सेटिंग्स</string>
   <string name="drawer_open">खोलें</string>
   <string name="drawer_help">सहायता </string>
@@ -39,5 +37,4 @@
   <string name="share_cancel_public_link_button">रद्द करें </string>
   <string name="share_confirm_public_link_button">सहेजें</string>
   <string name="share_via_link_password_label">पासवर्ड</string>
-  <!--Welcome to oC intro features-->
 </resources>

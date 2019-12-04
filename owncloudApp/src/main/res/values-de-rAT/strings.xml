@@ -9,8 +9,6 @@
   <string name="actionbar_send_file">Senden</string>
   <string name="actionbar_sort">Sortieren</string>
   <string name="actionbar_sort_title">Sortieren nach</string>
-  <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
-  <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_feedback">Rückmeldung</string>
   <string name="drawer_help">Hilfe</string>
   <string name="prefs_category_general">Allgemein</string>
@@ -95,5 +93,4 @@
   <string name="share_privilege_can_edit_create">erstellen</string>
   <string name="share_privilege_can_edit_change">Ändern</string>
   <string name="share_privilege_can_edit_delete">löschen</string>
-  <!--Welcome to oC intro features-->
 </resources>

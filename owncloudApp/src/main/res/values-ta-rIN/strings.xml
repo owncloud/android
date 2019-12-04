@@ -10,8 +10,6 @@
   <string name="actionbar_settings">அமைப்புகள்</string>
   <string name="actionbar_see_details">விவரங்கள்</string>
   <string name="actionbar_send_file">அனுப்பவும்</string>
-  <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
-  <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="prefs_category_general">பொது</string>
   <string name="prefs_category_more">மேலும்</string>
   <string name="prefs_accounts">கணக்குகள்</string>
@@ -22,5 +20,4 @@
   <string name="ssl_validator_btn_details_see">விவரங்கள்</string>
   <string name="activity_chooser_send_file_title">அனுப்பவும்</string>
   <string name="prefs_category_accounts">கணக்குகள்</string>
-  <!--Welcome to oC intro features-->
 </resources>
