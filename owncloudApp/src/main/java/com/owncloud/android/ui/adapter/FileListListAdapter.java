@@ -73,6 +73,7 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
     private Vector<OCFile> mFiles = null; // List that can be changed when using search
     private boolean mJustFolders;
     private boolean mOnlyAvailableOffline;
+    private boolean mSharedByLinkFiles;
 
     private FileDataStorageManager mStorageManager;
     private Account mAccount;
@@ -83,12 +84,14 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
     public FileListListAdapter(
             boolean justFolders,
             boolean onlyAvailableOffline,
+            boolean sharedByLinkFiles,
             Context context,
             ComponentsGetter transferServiceGetter
     ) {
 
         mJustFolders = justFolders;
         mOnlyAvailableOffline = onlyAvailableOffline;
+        mSharedByLinkFiles = sharedByLinkFiles;
         mContext = context;
         mAccount = AccountUtils.getCurrentOwnCloudAccount(mContext);
 
@@ -217,7 +220,7 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
                     fileSizeTV.setText(DisplayUtils.bytesToHumanReadable(file.getFileLength(), mContext));
                     lastModTV.setText(DisplayUtils.getRelativeTimestamp(mContext, file.getModificationTimestamp()));
 
-                    if (mOnlyAvailableOffline) {
+                    if (mOnlyAvailableOffline || mSharedByLinkFiles) {
                         TextView filePath = view.findViewById(R.id.file_list_path);
                         filePath.setVisibility(View.VISIBLE);
                         filePath.setText(file.getRemotePath());
@@ -388,12 +391,15 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
             mAccount = AccountUtils.getCurrentOwnCloudAccount(mContext);
         }
 
+        boolean isRootFolder = folder.equals(updatedStorageManager.getFileByPath(OCFile.ROOT_PATH));
+
         if (mStorageManager != null) {
-            if (mOnlyAvailableOffline && (folder.equals(updatedStorageManager.getFileByPath(OCFile.ROOT_PATH)) ||
-                    !folder.isAvailableOffline())) {
+            if (mOnlyAvailableOffline && (isRootFolder || !folder.isAvailableOffline())) {
                 mImmutableFilesList = updatedStorageManager.getAvailableOfflineFilesFromCurrentAccount();
+            } else if (mSharedByLinkFiles && isRootFolder) {
+                mImmutableFilesList = updatedStorageManager.getSharedByLinkFilesFromCurrentAccount();
             } else {
-                mImmutableFilesList = mStorageManager.getFolderContent(folder, mOnlyAvailableOffline);
+                mImmutableFilesList = mStorageManager.getFolderContent(folder);
             }
 
             mFiles = mImmutableFilesList;

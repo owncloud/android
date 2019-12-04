@@ -4,6 +4,7 @@
  * @author David A. Velasco
  * @author Christian Schabesberger
  * @author Abel García de Prada
+ * @author Shashvat Kedia
  * Copyright (C) 2019 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
@@ -91,7 +92,7 @@ public class FileMenuFilter {
      * @param menu Options or context menu to filter.
      */
     public void filter(Menu menu, boolean displaySelectAll, boolean displaySelectInverse,
-                       boolean onlyAvailableOffline) {
+                       boolean onlyAvailableOffline, boolean sharedByLinkFiles) {
         if (mFiles == null || mFiles.size() <= 0) {
             hideAll(menu);
 
@@ -99,7 +100,7 @@ public class FileMenuFilter {
             List<Integer> toShow = new ArrayList<>();
             List<Integer> toHide = new ArrayList<>();
 
-            filter(toShow, toHide, displaySelectAll, displaySelectInverse, onlyAvailableOffline);
+            filter(toShow, toHide, displaySelectAll, displaySelectInverse, onlyAvailableOffline, sharedByLinkFiles);
 
             MenuItem item;
             for (int i : toShow) {
@@ -139,7 +140,7 @@ public class FileMenuFilter {
      */
 
     private void filter(List<Integer> toShow, List<Integer> toHide, boolean displaySelectAll,
-                        boolean displaySelectInverse, boolean onlyAvailableOffline) {
+                        boolean displaySelectInverse, boolean onlyAvailableOffline, boolean sharedByLinkFiles) {
 
         boolean synchronizing = anyFileSynchronizing();
 
@@ -162,7 +163,7 @@ public class FileMenuFilter {
 
         // DOWNLOAD
         if (mFiles.isEmpty() || containsFolder() || anyFileDown() || synchronizing || videoPreviewing ||
-                onlyAvailableOffline) {
+                onlyAvailableOffline || sharedByLinkFiles) {
             toHide.add(R.id.action_download_file);
 
         } else {
@@ -170,7 +171,7 @@ public class FileMenuFilter {
         }
 
         // RENAME
-        if (!isSingleSelection() || synchronizing || videoPreviewing || onlyAvailableOffline) {
+        if (!isSingleSelection() || synchronizing || videoPreviewing || onlyAvailableOffline || sharedByLinkFiles) {
             toHide.add(R.id.action_rename_file);
 
         } else {
@@ -178,7 +179,7 @@ public class FileMenuFilter {
         }
 
         // MOVE & COPY
-        if (mFiles.isEmpty() || synchronizing || videoPreviewing || onlyAvailableOffline) {
+        if (mFiles.isEmpty() || synchronizing || videoPreviewing || onlyAvailableOffline || sharedByLinkFiles) {
             toHide.add(R.id.action_move);
             toHide.add(R.id.action_copy);
 
@@ -188,7 +189,7 @@ public class FileMenuFilter {
         }
 
         // REMOVE
-        if (mFiles.isEmpty() || synchronizing || onlyAvailableOffline) {
+        if (mFiles.isEmpty() || synchronizing || onlyAvailableOffline || sharedByLinkFiles) {
             toHide.add(R.id.action_remove_file);
 
         } else {
@@ -204,7 +205,7 @@ public class FileMenuFilter {
         }
 
         // CANCEL SYNCHRONIZATION
-        if (mFiles.isEmpty() || !synchronizing || anyFavorite() || onlyAvailableOffline) {
+        if (mFiles.isEmpty() || !synchronizing || anyFavorite() || onlyAvailableOffline || sharedByLinkFiles) {
             toHide.add(R.id.action_cancel_sync);
 
         } else {
@@ -212,7 +213,7 @@ public class FileMenuFilter {
         }
 
         // SYNC CONTENTS (BOTH FILE AND FOLDER)
-        if (mFiles.isEmpty() || (!anyFileDown() && !containsFolder()) || synchronizing || onlyAvailableOffline) {
+        if (mFiles.isEmpty() || (!anyFileDown() && !containsFolder()) || synchronizing || onlyAvailableOffline || sharedByLinkFiles) {
             toHide.add(R.id.action_sync_file);
 
         } else {

@@ -7,16 +7,16 @@
  * @author Abel García de Prada
  * Copyright (C) 2011  Bartek Przybylski
  * Copyright (C) 2019 ownCloud GmbH.
- *
+ * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
  * as published by the Free Software Foundation.
- *
+ * <p>
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -71,7 +71,8 @@ public class FileActivity extends DrawerActivity
     public static final String EXTRA_ACCOUNT = "com.owncloud.android.ui.activity.ACCOUNT";
     public static final String EXTRA_FROM_NOTIFICATION =
             "com.owncloud.android.ui.activity.FROM_NOTIFICATION";
-    static final String EXTRA_ONLY_AVAILABLE_OFFLINE = "ONLY_AVAILABLE_OFFLINE";
+    public static final String EXTRA_ONLY_AVAILABLE_OFFLINE = "ONLY_AVAILABLE_OFFLINE";
+    public static final String EXTRA_SHARED_BY_LINK_FILES = "SHARED_BY_LINK_FILES";
     public static final String TAG = FileActivity.class.getSimpleName();
 
     private static final String KEY_WAITING_FOR_OP_ID = "WAITING_FOR_OP_ID";
@@ -470,6 +471,14 @@ public class FileActivity extends DrawerActivity
         Intent intent = new Intent(this, FileDisplayActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.putExtra(EXTRA_ONLY_AVAILABLE_OFFLINE, true);
+        startActivity(intent);
+    }
+
+    @Override
+    public void sharedByLinkFilesOption() {
+        Intent intent = new Intent(this, FileDisplayActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra(EXTRA_SHARED_BY_LINK_FILES, true);
         startActivity(intent);
     }
 

@@ -5,19 +5,20 @@
  * @author Christian Schabesberger
  * @author David González Verdugo
  * @author Abel García de Prada
- *
+ * @author Shashvat Kedia
+ * <p>
  * Copyright (C) 2012  Bartek Przybylski
  * Copyright (C) 2019 ownCloud GmbH.
- *
+ * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
  * as published by the Free Software Foundation.
- *
+ * <p>
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -140,7 +141,7 @@ public class FileDataStorageManager {
     /**
      * This will return a OCFile by its given FileId here refered as the remoteId.
      * Its the fileId ownCloud Core uses to identify a file even if its name has changed.
-     *
+     * <p>
      * An Explenation about how to use ETags an those FileIds can be found here:
      * <a href="https://github.com/owncloud/client/wiki/Etags-and-file-ids" />
      *
@@ -179,9 +180,9 @@ public class FileDataStorageManager {
         return fileExists(ProviderTableMeta.FILE_PATH, path);
     }
 
-    public Vector<OCFile> getFolderContent(OCFile f, boolean onlyAvailableOffline) {
+    public Vector<OCFile> getFolderContent(OCFile f) {
         if (f != null && f.isFolder() && f.getFileId() != -1) {
-            return getFolderContent(f.getFileId(), onlyAvailableOffline);
+            return getFolderContent(f.getFileId());
         } else {
             return new Vector<>();
         }
@@ -191,7 +192,7 @@ public class FileDataStorageManager {
         Vector<OCFile> ret = new Vector<OCFile>();
         if (folder != null) {
             // TODO better implementation, filtering in the access to database instead of here
-            Vector<OCFile> tmp = getFolderContent(folder, false);
+            Vector<OCFile> tmp = getFolderContent(folder);
             OCFile current;
             for (int i = 0; i < tmp.size(); i++) {
                 current = tmp.get(i);
@@ -489,9 +490,9 @@ public class FileDataStorageManager {
 
     /**
      * Updates available-offline status of OCFile received as a parameter, with its current value.
-     *
+     * <p>
      * Saves the new value property for the given file in persistent storage.
-     *
+     * <p>
      * If the file is a folder, updates the value of all its known descendants accordingly.
      *
      * @param file File which available-offline status will be updated.
@@ -663,7 +664,7 @@ public class FileDataStorageManager {
         File localFolder = new File(localFolderPath);
         if (localFolder.exists()) {
             // stage 1: remove the local files already registered in the files database
-            Vector<OCFile> files = getFolderContent(folder.getFileId(), false);
+            Vector<OCFile> files = getFolderContent(folder.getFileId());
             if (files != null) {
                 for (OCFile file : files) {
                     if (file.isFolder()) {
@@ -709,7 +710,7 @@ public class FileDataStorageManager {
 
     /**
      * Updates database and file system for a file or folder that was moved to a different location.
-     * 
+     * <p>
      * TODO explore better (faster) implementations
      * TODO throw exceptions up !
      */
@@ -934,7 +935,7 @@ public class FileDataStorageManager {
         return ret;
     }
 
-    private Vector<OCFile> getFolderContent(long parentId, boolean onlyAvailableOffline) {
+    private Vector<OCFile> getFolderContent(long parentId) {
         Vector<OCFile> ret = new Vector<OCFile>();
 
         Uri req_uri = Uri.withAppendedPath(
@@ -945,16 +946,8 @@ public class FileDataStorageManager {
         String selection;
         String[] selectionArgs;
 
-        if (!onlyAvailableOffline) {
-            selection = ProviderTableMeta.FILE_PARENT + "=?";
-            selectionArgs = new String[]{String.valueOf(parentId)};
-        } else {
-            selection = ProviderTableMeta.FILE_PARENT + "=? AND (" + ProviderTableMeta.FILE_KEEP_IN_SYNC +
-                    " = ? OR " + ProviderTableMeta.FILE_KEEP_IN_SYNC + "=? )";
-            selectionArgs = new String[]{String.valueOf(parentId),
-                    String.valueOf(OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE.getValue()),
-                    String.valueOf(OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE_PARENT.getValue())};
-        }
+        selection = ProviderTableMeta.FILE_PARENT + "=?";
+        selectionArgs = new String[]{String.valueOf(parentId)};
 
         if (getContentProviderClient() != null) {
             try {
@@ -978,7 +971,6 @@ public class FileDataStorageManager {
         }
 
         Collections.sort(ret);
-
         return ret;
     }
 
@@ -1402,45 +1394,6 @@ public class FileDataStorageManager {
             }
         }
         return operations;
-    }
-
-    private ArrayList<ContentProviderOperation> prepareRemoveSharesInFolder(
-            OCFile folder, ArrayList<ContentProviderOperation> preparedOperations) {
-        if (folder != null) {
-            String where = ProviderTableMeta.OCSHARES_PATH + "=?" + " AND "
-                    + ProviderTableMeta.OCSHARES_ACCOUNT_OWNER + "=?";
-            String[] whereArgs = new String[]{"", mAccount.name};
-
-            Vector<OCFile> files = getFolderContent(folder, false);
-
-            for (OCFile file : files) {
-                whereArgs[0] = file.getRemotePath();
-                preparedOperations.add(
-                        ContentProviderOperation.newDelete(ProviderTableMeta.CONTENT_URI_SHARE).
-                                withSelection(where, whereArgs).
-                                build()
-                );
-            }
-        }
-        return preparedOperations;
-
-    }
-
-    private ArrayList<ContentProviderOperation> prepareRemoveSharesInFile(
-            String filePath, ArrayList<ContentProviderOperation> preparedOperations) {
-
-        String where = ProviderTableMeta.OCSHARES_PATH + "=?" + " AND "
-                + ProviderTableMeta.OCSHARES_ACCOUNT_OWNER + "=?";
-        String[] whereArgs = new String[]{filePath, mAccount.name};
-
-        preparedOperations.add(
-                ContentProviderOperation.newDelete(ProviderTableMeta.CONTENT_URI_SHARE).
-                        withSelection(where, whereArgs).
-                        build()
-        );
-
-        return preparedOperations;
-
     }
 
     public ArrayList<OCShare> getPrivateSharesForAFile(String filePath, String accountName) {
@@ -1961,7 +1914,7 @@ public class FileDataStorageManager {
     /**
      * Get a collection with all the files set by the user as available offline, from all the accounts
      * in the device, putting away the folders
-     *
+     * <p>
      * This is the only method working with a NULL account in {@link #mAccount}. Not something to do often.
      *
      * @return List with all the files set by the user as available offline.
@@ -2053,6 +2006,49 @@ public class FileDataStorageManager {
             }
         }
 
+        Collections.sort(result);
+        return result;
+    }
+
+    public Vector<OCFile> getSharedByLinkFilesFromCurrentAccount() {
+        Vector<OCFile> allSharedFiles = new Vector<OCFile>();
+        Vector<OCFile> result = new Vector<OCFile>();
+        Cursor cursorOnShared = null;
+        try {
+            cursorOnShared = getContentResolver().query(ProviderTableMeta.CONTENT_URI,
+                    null,
+                     ProviderTableMeta.FILE_SHARED_VIA_LINK + " = ? AND " +
+                    ProviderTableMeta.FILE_ACCOUNT_OWNER + " = ? ",
+                    new String[]{String.valueOf(1),
+                            mAccount.name},
+                    null);
+            if (cursorOnShared != null && cursorOnShared.moveToFirst()) {
+                OCFile file;
+                do {
+                    file = createFileInstance(cursorOnShared);
+                    allSharedFiles.add(file);
+                } while (cursorOnShared.moveToNext());
+            }
+        } catch (Exception exception) {
+            Log_OC.e(TAG, "Exception retrieving all the shared by link files", exception);
+        } finally {
+            if (cursorOnShared != null) {
+                cursorOnShared.close();
+            }
+        }
+        if (allSharedFiles.size() > 0) {
+            Vector<Long> allSharedDirs = new Vector<Long>();
+            for (OCFile file : allSharedFiles) {
+                if (file.isFolder()) {
+                    allSharedDirs.add(file.getFileId());
+                }
+            }
+            for (OCFile file : allSharedFiles) {
+                if (file.isFolder() || (!file.isFolder() && !allSharedDirs.contains(file.getParentId()))) {
+                    result.add(file);
+                }
+            }
+        }
         Collections.sort(result);
         return result;
     }

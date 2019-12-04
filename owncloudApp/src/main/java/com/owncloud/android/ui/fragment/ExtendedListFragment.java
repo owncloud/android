@@ -65,6 +65,8 @@ public class ExtendedListFragment extends Fragment
     protected static final String ARG_JUST_FOLDERS = ExtendedListFragment.class.getCanonicalName() + ".JUST_FOLDERS";
     protected static final String ARG_ONLY_AVAILABLE_OFFLINE = ExtendedListFragment.class.getCanonicalName() +
             ".ONLY_AVAILABLE_OFFLINE";
+    protected static final String ARG_SHARED_BY_LINK_FILES = ExtendedListFragment.class.getCanonicalName() +
+            ".SHARED_BY_LINK_FILES";
 
     private ProgressBar mProgressBar;
     private View mShadowView;
@@ -241,12 +243,12 @@ public class ExtendedListFragment extends Fragment
      * Calculates the position of the item that will be used as a reference to
      * reposition the visible items in the list when the device is turned to
      * other position.
-     *
+     * <p>
      * The current policy is take as a reference the visible item in the center
      * of the screen.
      *
      * @return The position in the list of the visible item in the center of the
-     *         screen.
+     * screen.
      */
     protected int getReferencePosition() {
         if (mCurrentListView != null) {
@@ -332,12 +334,12 @@ public class ExtendedListFragment extends Fragment
 
     /**
      * Disables swipe gesture.
-     *
+     * <p>
      * Sets the 'enabled' state of the refresh layouts contained in the fragment.
-     *
+     * <p>
      * When 'false' is set, prevents user gestures but keeps the option to refresh programatically,
      *
-     * @param   enabled     Desired state for capturing swipe gesture.
+     * @param enabled Desired state for capturing swipe gesture.
      */
     public void setSwipeEnabled(boolean enabled) {
         mRefreshListLayout.setEnabled(enabled);
@@ -347,10 +349,10 @@ public class ExtendedListFragment extends Fragment
 
     /**
      * Sets the 'visibility' state of the FAB contained in the fragment.
-     *
+     * <p>
      * When 'false' is set, FAB visibility is set to View.GONE programatically,
      *
-     * @param   enabled     Desired visibility for the FAB.
+     * @param enabled Desired visibility for the FAB.
      */
     public void setFabEnabled(boolean enabled) {
         if (enabled) {
@@ -451,6 +453,7 @@ public class ExtendedListFragment extends Fragment
 
     /**
      * TODO doc
+     *
      * @param text
      */
     protected void setFooterText(String text) {
@@ -480,5 +483,10 @@ public class ExtendedListFragment extends Fragment
     boolean isShowingOnlyAvailableOffline() {
         Bundle args = getArguments();
         return ((args != null) && args.getBoolean(ARG_ONLY_AVAILABLE_OFFLINE, false));
+    }
+
+    boolean isShowingSharedByLinkFiles() {
+        Bundle args = getArguments();
+        return ((args != null) && args.getBoolean(ARG_SHARED_BY_LINK_FILES, false));
     }
 }
