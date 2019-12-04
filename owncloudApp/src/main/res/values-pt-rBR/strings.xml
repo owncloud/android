@@ -364,11 +364,8 @@
   <string name="get_capabilities_error">Ocorreu um erro enquanto tentava recuperar potencialidades</string>
   <string name="share_link_no_support_share_api">Desculpe, o compartilhamento não está habilitado em seu servidor. Entre em contato com seu 
 ⇥⇥ administrador.</string>
-  <string name="share_link_file_no_exist">Não é possível compartilhar. Por favor verifique se o arquivo existe</string>
   <string name="share_link_file_error">Ocorreu um erro durante a tentativa de compartilhar esse arquivo ou pasta</string>
-  <string name="unshare_link_file_no_exist">Não é possível cancelar o compartilhamento. Por favor verifique se o arquivo existe</string>
   <string name="unshare_link_file_error">Ocorreu um erro ao tentar descompartilhar este arquivo ou pasta</string>
-  <string name="update_link_file_no_exist">Não é possível atualizar. Por favor verifique se o arquivo existe</string>
   <string name="update_link_file_error">Ocorreu um erro enquanto tentava atualizar o compartilhamento</string>
   <string name="share_link_password_title">Digite uma senha</string>
   <string name="share_link_empty_password">Você deve digitar uma senha</string>

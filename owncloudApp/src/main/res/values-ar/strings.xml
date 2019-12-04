@@ -348,11 +348,8 @@
   <string name="get_sharees_error">حدث خطأ أثناء محاولة استرداد المستخدمين والمجموعات</string>
   <string name="get_capabilities_error">حدث خطأ أثناء محاولة استرداد الإمكانيات</string>
   <string name="share_link_no_support_share_api">عذرًا، المشاركة غير مفعلة على خادمك. برجاء الاتصال بالمسؤول.</string>
-  <string name="share_link_file_no_exist">غير قادر على المشاركة. برجاء التحقق مما إذا كان الملف موجودًا أم لا</string>
   <string name="share_link_file_error">حدث خطأ أثناء محاولة مشاركة هذا الملف أو المجلد</string>
-  <string name="unshare_link_file_no_exist">غير قادر على إلغاء المشاركة. برجاء التحقق مما إذا كان الملف موجودًا أم لا</string>
   <string name="unshare_link_file_error">حدث خطأ أثناء محاولة إلغاء مشاركة هذا الملف أو المجلد</string>
-  <string name="update_link_file_no_exist">غير قادر على التحديث. برجاء التحقق مما إذا كان الملف موجودًا أم لا</string>
   <string name="update_link_file_error">حدث خطأ أثناء محاولة تحديث المشاركة</string>
   <string name="share_link_password_title">أدخل كلمة مرور</string>
   <string name="share_link_empty_password">يجب عليك إدخال كلمة مرور</string>

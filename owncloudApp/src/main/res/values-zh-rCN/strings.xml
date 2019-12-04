@@ -354,11 +354,8 @@
   <string name="get_shares_error">尝试获取共享时发生错误</string>
   <string name="get_sharees_error">尝试获取用户和用户组时发生错误</string>
   <string name="share_link_no_support_share_api">抱歉，共享功能未启用。请联系管理员。</string>
-  <string name="share_link_file_no_exist">无法共享。请检查文件是否存在</string>
   <string name="share_link_file_error">共享文件或目录出错</string>
-  <string name="unshare_link_file_no_exist">无法取消共享。请检查文件是否存在</string>
   <string name="unshare_link_file_error">解除文件或目录共享时出错</string>
-  <string name="update_link_file_no_exist">无法上传，请检查文件是否存在</string>
   <string name="update_link_file_error">更新共享时发生错误</string>
   <string name="share_link_password_title">输入密码</string>
   <string name="share_link_empty_password">您必须输入密码</string>

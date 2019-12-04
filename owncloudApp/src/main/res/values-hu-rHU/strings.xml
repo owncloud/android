@@ -350,11 +350,8 @@
   <string name="prefs_camera_picture_upload_path_title">Képfeltöltési útvonal</string>
   <string name="share_link_no_support_share_api">Sajnáljuk, a megosztás nem engedélyezett ezen a kiszolgálón. Vegye fel a kapcsolatot a
 		rendszergazdával.</string>
-  <string name="share_link_file_no_exist">Nem sikerült megosztani. Ellenőrizze, hogy létezik-e a fájl</string>
   <string name="share_link_file_error">Hiba történt a fájl vagy mappa megosztásakor</string>
-  <string name="unshare_link_file_no_exist">A megosztás nem kapcsolható ki. Ellenőrizze, hogy létezik-e a fájl</string>
   <string name="unshare_link_file_error">Hiba történt a fájl vagy mappa megosztásának visszavonásakor</string>
-  <string name="update_link_file_no_exist">Nem sikerült frissíteni. Ellenőrizze, hogy létezik-e a fájl</string>
   <string name="update_link_file_error">Hiba történt a megosztás frissítése közben</string>
   <string name="share_link_password_title">Adjon meg egy jelszót</string>
   <string name="share_link_empty_password">Adjon meg egy jelszót</string>

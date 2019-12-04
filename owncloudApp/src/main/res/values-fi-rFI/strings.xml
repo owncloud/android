@@ -320,11 +320,8 @@
   <string name="prefs_camera_picture_upload_path_title">Kansio lähetetyille kuville</string>
   <string name="share_link_no_support_share_api">Jakaminen ei ole käytössä palvelimellasi. Ota yhteys
 		ylläpitäjään.</string>
-  <string name="share_link_file_no_exist">Jakaminen epäonnistui. Varmista, että tiedosto on olemassa</string>
   <string name="share_link_file_error">Virhe tiedoston tai kansion jakamista yrittäessä</string>
-  <string name="unshare_link_file_no_exist">Jakamisen lopettaminen epäonnistui. Tarkista onko tiedosto olemassa</string>
   <string name="unshare_link_file_error">Tiedoston tai kansion jakamista lopettaessa tapahtui virhe</string>
-  <string name="update_link_file_no_exist">Päivittäminen epäonnistui. Tarkista onko tiedosto olemassa</string>
   <string name="update_link_file_error">Jakoa päivittäessä tapahtui virhe</string>
   <string name="share_link_password_title">Anna salasana</string>
   <string name="share_link_empty_password">Salasana on pakko antaa</string>

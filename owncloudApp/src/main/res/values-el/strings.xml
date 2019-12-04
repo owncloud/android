@@ -362,11 +362,8 @@
   <string name="get_capabilities_error">Παρουσιάστηκε σφάλμα κατά την προσπάθεια ανάκτησης δυνατοτήτων</string>
   <string name="share_link_no_support_share_api">Λυπούμαστε, ο διαμοιρασμός δεν επιτρέπεται στο διακομιστή σας. Παρακαλούμε επικοινωνήστε με το
 		διαχειριστή σας.</string>
-  <string name="share_link_file_no_exist">Αδύνατη η κοινή χρήση. Παρακαλούμε ελέγξτε αν ο φάκελος υπάρχει</string>
   <string name="share_link_file_error">Ένα σφάλμα προέκυψε κατά την προσπάθεια διαμοιρασμού αυτού του αρχείου ή φακέλου</string>
-  <string name="unshare_link_file_no_exist">Αδύνατη η διακοπή κοινής χρήσης.  Παρακαλούμε ελέγξτε αν το αρχείο υπάρχει</string>
   <string name="unshare_link_file_error">Ένα σφάλμα προέκυψε κατά τη διάρκεια ακύρωσης διαμοιρασμού αυτού του αρχείου ή φακέλου</string>
-  <string name="update_link_file_no_exist">Αδυναμία ενημέρωσης. Παρακαλούμε ελέγξτε εάν υπάρχει το αρχείο</string>
   <string name="update_link_file_error">Ένα σφάλμα προέκυψε κατά τη διάρκεια ενημέρωσης του κοινόχρηστου</string>
   <string name="share_link_password_title">Εισάγετε συνθηματικό</string>
   <string name="share_link_empty_password">Πρέπει να εισάγετε συνθηματικό</string>

@@ -362,11 +362,8 @@
   <string name="get_sharees_error">เกิดข้อผิดพลาดขณะพยายามดึงผู้ใช้และกลุ่ม</string>
   <string name="get_capabilities_error">เกิดข้อผิดพลาดขณะพยายามเร่งขีดความสามารถ</string>
   <string name="share_link_no_support_share_api">ขออภัยการแชร์ไม่ได้เปิดใช้งานบนเซิร์ฟเวอร์ของคุณ กรุณาติดต่อผู้ดูแลระบบ</string>
-  <string name="share_link_file_no_exist">ไม่สามารถแชร์ กรุณาตรวจสอบว่ายังมีไฟล์นั้นอยู่</string>
   <string name="share_link_file_error">เกิดข้อผิดพลาดในขณะที่พยายามจะแชร์ไฟล์หรือโฟลเดอร์นี้</string>
-  <string name="unshare_link_file_no_exist">ไม่สามารถยกเลิกการแชร์ กรุณาตรวจสอบว่ายังมีไฟล์นั้นอยู่</string>
   <string name="unshare_link_file_error">เกิดข้อผิดพลาดในขณะยกเลิกการอชร์ไฟล์หรือโฟลเดอร์นี้</string>
-  <string name="update_link_file_no_exist">ไม่สามารถอัปเดต กรุณาตรวจสอบว่ายังมีไฟล์นั้นอยู่</string>
   <string name="update_link_file_error">เกิดข้อผิดพลาดในขณะที่พยายามอัปเดตการแชร์</string>
   <string name="share_link_password_title">ป้อนรหัสผ่าน</string>
   <string name="share_link_empty_password">คุณจะต้องใส่รหัสผ่าน</string>

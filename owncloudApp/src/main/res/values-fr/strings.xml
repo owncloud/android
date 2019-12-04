@@ -352,11 +352,8 @@ Ci-dessous la liste des fichiers locaux, et les fichiers distants dans %5$s auxq
   <string name="get_shares_error">Une erreur est survenue pendant la récupération des partages</string>
   <string name="get_sharees_error">Une erreur est survenue pendant la récupération des utilisateurs et des groupes</string>
   <string name="share_link_no_support_share_api">Désolé, le partage n\'est pas disponible sur votre serveur. Veuillez contacter votre administrateur.</string>
-  <string name="share_link_file_no_exist">Impossible de partager. Vérifiez que le fichier est bien présent</string>
   <string name="share_link_file_error">Une erreur est survenue lors de la tentative de partage de ce fichier ou répertoire</string>
-  <string name="unshare_link_file_no_exist">Impossible de supprimer le partage. Vérifiez que le fichier est bien présent</string>
   <string name="unshare_link_file_error">Une erreur est survenue lors de la tentative d’annulation du partage de ce fichier ou répertoire</string>
-  <string name="update_link_file_no_exist">Actualisation impossible. Veuillez vérifier que ce fichier existe</string>
   <string name="update_link_file_error">Une erreur est survenue lors de la mise à jour du partage</string>
   <string name="share_link_password_title">Saisissez un mot de passe</string>
   <string name="share_link_empty_password">Vous devez saisir un mot de passe</string>

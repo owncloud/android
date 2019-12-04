@@ -194,9 +194,7 @@ Aşağıda göstərilən %5$s-də olan daxili və xarici fayl(lar) link edilmiş
   <string name="error__upload__local_file_not_copied">%1$s nüsxələnə bilməz %2$s local qovluğa</string>
   <string name="share_link_no_support_share_api">Üzr istəyirik, sizin yerverdə paylaşıma izin verilmir. Xahiş olunur
 inzibatçınızla əlaqə saxlayasınız.</string>
-  <string name="share_link_file_no_exist">Paylaşa bilinmir.</string>
   <string name="share_link_file_error">Bu faylın yada qovluğun paylaşımı zamanı səhv baş verdi </string>
-  <string name="unshare_link_file_no_exist">Paylaşımı dayandırmaq olmur. Xahiş olunur fayl mövcudluğunu yoxlayasınız</string>
   <string name="unshare_link_file_error">Bu fayl və ya qovluğun yayımlanmasının dayandırılmasında səhv baş verdi</string>
   <string name="share_link_password_title">Şifrəni daxil et</string>
   <string name="share_link_empty_password">Siz şifrəni daxil etməlisiniz</string>

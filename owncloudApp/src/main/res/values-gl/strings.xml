@@ -364,11 +364,8 @@ Descárgueo de aquí: %2$s</string>
   <string name="get_capabilities_error">Produciuse un erro ao tentar recuperar funcións</string>
   <string name="share_link_no_support_share_api">O seu servidor non ten activada a opción de compartir. Póñase en contacto co
 		administrador.</string>
-  <string name="share_link_file_no_exist">Non foi posíbel compartir. Comprobe que existe o ficheiro</string>
   <string name="share_link_file_error">Produciuse un erro ao tentar compartir este ficheiro ou cartafol.</string>
-  <string name="unshare_link_file_no_exist">Non foi posíbel deixar de compartir. Comprobe que existe o ficheiro</string>
   <string name="unshare_link_file_error">Produciuse un erro ao tentar deixar de compartir este ficheiro ou cartafol</string>
-  <string name="update_link_file_no_exist">Non foi posíbel actualizar. Comprobe que existe o ficheiro</string>
   <string name="update_link_file_error">Produciuse un erro ao tentar actualizar o recurso compartido</string>
   <string name="share_link_password_title">Escriba un contrasinal</string>
   <string name="share_link_empty_password">Ten que escribir un contrasinal</string>

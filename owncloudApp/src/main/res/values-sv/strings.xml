@@ -294,11 +294,8 @@
   <string name="error__upload__local_file_not_copied">%1$s kunde inte kopieras till %2$s lokal mapp</string>
   <string name="share_link_no_support_share_api">Ledsen, delning är inte aktiverat på din server. Vänligen kontakta din
 		administratör.</string>
-  <string name="share_link_file_no_exist">Lyckades ej dela. Vänligen kontrollera om filen eisterar</string>
   <string name="share_link_file_error">Ett fel uppstod vid försök att dela denna fil eller mapp</string>
-  <string name="unshare_link_file_no_exist">Lyckades ej sluta dela. Vänligen kontrollera om filen existerar</string>
   <string name="unshare_link_file_error">Ett fel uppstod vid försök att sluta dela denna fil eller mapp</string>
-  <string name="update_link_file_no_exist">Kunde inte uppdatera. Var god kolla om filen existerar.</string>
   <string name="update_link_file_error">Ett fel inträffade när delningen skulle uppdateras</string>
   <string name="share_link_password_title">Ange ett lösenord</string>
   <string name="share_link_empty_password">Du måste ange ett lösenord</string>

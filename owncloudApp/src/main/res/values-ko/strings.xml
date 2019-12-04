@@ -322,11 +322,8 @@
   <string name="error__upload__local_file_not_copied">%1$s을(를) 로컬 폴더 %2$s(으)로 복사할 수 없습니다</string>
   <string name="prefs_camera_picture_upload_path_title">사진 업로드 경로</string>
   <string name="share_link_no_support_share_api">서버에서 공유가 활성화되지 않았습니다. 시스템 관리자에게 연락하십시오.</string>
-  <string name="share_link_file_no_exist">공유할 수 없습니다. 파일이 있는지 확인하십시오</string>
   <string name="share_link_file_error">이 파일이나 폴더를 공유하는 중 오류 발생</string>
-  <string name="unshare_link_file_no_exist">공유를 해제할 수 없습니다. 파일이 있는지 확인하십시오</string>
   <string name="unshare_link_file_error">이 파일이나 폴더의 공유를 해제하는 중 오류 발생</string>
-  <string name="update_link_file_no_exist">업데이트할 수 없습니다. 파일이 있는지 확인하십시오.</string>
   <string name="update_link_file_error">공유를 업데이트하는 중 오류 발생</string>
   <string name="share_link_password_title">암호 입력</string>
   <string name="share_link_empty_password">암호를 입력해야 합니다</string>

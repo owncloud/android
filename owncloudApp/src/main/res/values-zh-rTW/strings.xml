@@ -296,11 +296,8 @@
   <string name="prefs_camera_picture_upload_path_title">圖片上傳路徑</string>
   <string name="share_link_no_support_share_api">很抱歉, 您的伺服器並未開啟分享的功能. 請聯絡您的
 		伺服器管理員.</string>
-  <string name="share_link_file_no_exist">無法分享。請檢查檔案是否存在</string>
   <string name="share_link_file_error">在分享檔案或資料夾時發生了錯誤</string>
-  <string name="unshare_link_file_no_exist">無法取消分享. 請檢查檔案是否存在</string>
   <string name="unshare_link_file_error">在取消分享檔案或資料夾時發生了錯誤</string>
-  <string name="update_link_file_no_exist">無法更新, 請檢查檔案是否存在</string>
   <string name="update_link_file_error">當嘗試更新分享時發生錯誤</string>
   <string name="share_link_password_title">輸入密碼</string>
   <string name="share_link_empty_password">您必須輸入密碼</string>

@@ -365,11 +365,8 @@
   <string name="get_capabilities_error">Произошла ошибка при попытке получить возможности</string>
   <string name="share_link_no_support_share_api">Механизм общего доступа не включен на данном сервере. Пожалуйста, свяжитесь с вашим
 ⇥⇥администратором.</string>
-  <string name="share_link_file_no_exist">Невозможно поделиться. Убедитесь, что файл существует</string>
   <string name="share_link_file_error">При попытке поделиться этим файлом или каталогом произошла ошибка</string>
-  <string name="unshare_link_file_no_exist">Невозможно закрыть доступ. Убедитесь что файл существует</string>
   <string name="unshare_link_file_error">При попытке закрыть доступ к этому файлу или каталогу произошла ошибка</string>
-  <string name="update_link_file_no_exist">Не удается обновить. Пожалуйста, проверьте, существует ли файл</string>
   <string name="update_link_file_error">Произошла ошибка во время обновления ссылки доступа</string>
   <string name="share_link_password_title">Введите пароль</string>
   <string name="share_link_empty_password">Вы должны ввести пароль</string>

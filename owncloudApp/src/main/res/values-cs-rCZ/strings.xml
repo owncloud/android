@@ -340,11 +340,8 @@ Automaticky nahrát video snímané kamerou
   <string name="prefs_camera_picture_upload_path_title">Cesta k nahrání obrázku</string>
   <string name="share_link_no_support_share_api">Je nám líto, ale sdílení není na vašem serveru povoleno. Kontaktujte svého
 správce systému.</string>
-  <string name="share_link_file_no_exist">Nelze sdílet. Zkontrolujte prosím že soubor existuje</string>
   <string name="share_link_file_error">Při pokusu o sdílení tohoto souboru či adresáře nastala chyba</string>
-  <string name="unshare_link_file_no_exist">Nelze ukončit sdílení. Zkontrolujte prosím že soubor existuje</string>
   <string name="unshare_link_file_error">Při pokusu o zrušení sdílení tohoto souboru či adresáře nastala chyba</string>
-  <string name="update_link_file_no_exist">Nelze aktulizovat. Ověřte že soubor existuje</string>
   <string name="update_link_file_error">Došlo k chybě při pokusu o aktualizaci sdílení</string>
   <string name="share_link_password_title">Zadejte heslo</string>
   <string name="share_link_empty_password">Musíte zadat heslo</string>

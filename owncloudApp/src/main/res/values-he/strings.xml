@@ -364,11 +364,8 @@
   <string name="get_capabilities_error">שגיאה אירעה בניסיון לאחזר יכולות</string>
   <string name="share_link_no_support_share_api">מצטערים, שיתוף אינו מורשה על השרת שלך. יש ליצור קשר עם
 ⇥⇥מנהל.</string>
-  <string name="share_link_file_no_exist">לא ניתן לשתף. יש לבדוק אם הקובץ קיים</string>
   <string name="share_link_file_error">שגיאה אירעה בזמן ניסיון לשתף קובץ זה או תיקייה זו</string>
-  <string name="unshare_link_file_no_exist">לא ניתן לבטל שיתוף. יש לבדוק אם הקובץ קיים</string>
   <string name="unshare_link_file_error">שגיאה אירעה בזמן ניסיון לבטל שיתוף לקובץ זה או לתיקייה זו</string>
-  <string name="update_link_file_no_exist">לא ניתן לעדכן. יש לבדוק אם הקובץ קיים</string>
   <string name="update_link_file_error">שגיאה אירעה בניסיון לעדכן את השיתוף</string>
   <string name="share_link_password_title">הכנסת סיסמא</string>
   <string name="share_link_empty_password">יש להכניס סיסמא</string>

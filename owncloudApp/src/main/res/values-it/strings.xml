@@ -358,11 +358,8 @@
   <string name="get_shares_error">Si è verificato un errore durante il tentativo di recuperare le condivisioni</string>
   <string name="share_link_no_support_share_api">Spiacenti, la condivisione non è abilitata sul tuo server. Contatta il tuo
 		amministratore.</string>
-  <string name="share_link_file_no_exist">Impossibile condividere. Assicurati che il file esista</string>
   <string name="share_link_file_error">Si è verificato un errore durante il tentativo di condivisione del file o della cartella</string>
-  <string name="unshare_link_file_no_exist">Impossibile rimuovere dalla condivisione. Assicurati che il file esista</string>
   <string name="unshare_link_file_error">Si è verificato un errore durante il tentativo di rimuovere la condivisione del file o della cartella</string>
-  <string name="update_link_file_no_exist">Impossibile aggiornare. Assicurati che il file esista</string>
   <string name="update_link_file_error">Si è verificato un errore durante il tentativo di aggiornare la condivisione.</string>
   <string name="share_link_password_title">Digita una password</string>
   <string name="share_link_empty_password">Devi digitare una password</string>

@@ -359,11 +359,8 @@
   <string name="get_capabilities_error">Yetenekleri almaya çalışırken bir hata oluştu</string>
   <string name="share_link_no_support_share_api">Üzgünüz, paylaşım sunucunuzda etkin değil. Lütfen yöneticinizle
                 iletişime geçin.</string>
-  <string name="share_link_file_no_exist">Paylaşma başarısız. Lütfen dosyanın mevcut olup olmadığını denetleyin</string>
   <string name="share_link_file_error">Bu dosya veya klasörü paylaşmaya çalışılırken bir hata oluştu</string>
-  <string name="unshare_link_file_no_exist">Paylaşımı kaldırma başarısız. Lütfen dosyanın mevcut olup olmadığını denetleyin</string>
   <string name="unshare_link_file_error">Bu dosya veya klasör paylaşımı kaldırılmaya çalışılırken bir hata oluştu</string>
-  <string name="update_link_file_no_exist">Güncelleme yapılamıyor. Lütfen dosyanın mevcut olup olmadığını kontrol edin.</string>
   <string name="update_link_file_error">Paylaşım güncellenmeye çalışırken bir hata oluştu</string>
   <string name="share_link_password_title">Bir parola girin</string>
   <string name="share_link_empty_password">Bir parola girmelisiniz</string>

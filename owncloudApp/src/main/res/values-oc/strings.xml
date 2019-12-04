@@ -268,9 +268,7 @@ En rason d\'aquesta modificacion, totes los fichièrs mandats amb de versions an
   <string name="preview_image_error_unknown_format">Aqueste imatge pòt pas èsser afichada</string>
   <string name="error__upload__local_file_not_copied">%1$s a pas pogut èsser copiat dins lo dorsièr local %2$s</string>
   <string name="share_link_no_support_share_api">O planhèm, lo partiment es pas disponible sus vòstre servidor. Contactatz vòstre administrator.</string>
-  <string name="share_link_file_no_exist">Impossible de partejar. Verificatz que lo fichièr es plan present</string>
   <string name="share_link_file_error">Una error s\'es produita al moment de la temptativa de partiment d\'aqueste fichièr o repertòri</string>
-  <string name="unshare_link_file_no_exist">Impossible de suprimir lo partiment. Verificatz que lo fichièr es ben present</string>
   <string name="unshare_link_file_error">Una error s\'es produita al moment de la temptativa d’anullacion del partiment d\'aqueste fichièr o repertòri</string>
   <string name="share_link_password_title">Sasissètz un senhal</string>
   <string name="share_link_empty_password">Vos cal sasir un senhal</string>

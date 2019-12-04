@@ -360,11 +360,8 @@
   <string name="get_capabilities_error">Beim Versuch, Funktionen abzurufen, ist ein Fehler aufgetreten</string>
   <string name="share_link_no_support_share_api">Entschuldigung, Freigaben sind auf Ihrem Server nicht aktiviert. Bitte kontaktieren Sie Ihren
 ⇥⇥Administrator.</string>
-  <string name="share_link_file_no_exist">Teilen nicht möglich. Prüfen Sie, ob die Datei existiert</string>
   <string name="share_link_file_error">Es ist ein Fehler beim Freigeben der Datei oder des Ordners aufgetreten.</string>
-  <string name="unshare_link_file_no_exist">Entfernen der Freigabe nicht möglich. Prüfen Sie, ob die Datei existiert</string>
   <string name="unshare_link_file_error">Es ist ein Fehler beim Entfernen der Freigabe für diese Datei oder den Ordner aufgetreten.</string>
-  <string name="update_link_file_no_exist">Update nicht möglich. Bitte überprüfen Sie, ob die Datei existiert</string>
   <string name="update_link_file_error">Es ist ein Fehler beim Aktualisieren der Freigabe aufgetreten</string>
   <string name="share_link_password_title">Passwort eingeben</string>
   <string name="share_link_empty_password">Sie müssen ein Passwort eingeben</string>

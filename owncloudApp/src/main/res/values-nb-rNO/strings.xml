@@ -325,11 +325,8 @@
   <string name="prefs_camera_picture_upload_path_title">Bilde opplastings-sti</string>
   <string name="share_link_no_support_share_api">Beklager, deling er ikke skrudd på for din tjener. Ta kontakt med
 		administratoren.</string>
-  <string name="share_link_file_no_exist">Kan ikke dele. Sjekk om filen eksisterer.</string>
   <string name="share_link_file_error">Det skjedde en feil under deling av denne filen eller mappen</string>
-  <string name="unshare_link_file_no_exist">Kan ikke fjerne deling. Sjekk om filen eksisterer.</string>
   <string name="unshare_link_file_error">En feil oppstod ved avslutting av delingen av denne filen eller mappen</string>
-  <string name="update_link_file_no_exist">Kan ikke oppdatere. Sjekk om filen eksisterer</string>
   <string name="update_link_file_error">Det oppstod en feil ved oppdatering av delingen</string>
   <string name="share_link_password_title">Skriv inn ett passord</string>
   <string name="share_link_empty_password">Du må skrive inn ett passord</string>

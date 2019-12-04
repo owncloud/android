@@ -360,11 +360,8 @@
   <string name="get_capabilities_error">An error occurred while trying to retrieve capabilities</string>
   <string name="share_link_no_support_share_api">Sorry, sharing is not enabled on your server. Please contact your
 		administrator.</string>
-  <string name="share_link_file_no_exist">Unable to share. Please check whether the file exists</string>
   <string name="share_link_file_error">An error occurred while trying to share this file or folder</string>
-  <string name="unshare_link_file_no_exist">Unable to unshare. Please check whether the file exists</string>
   <string name="unshare_link_file_error">An error occurred while trying to unshare this file or folder</string>
-  <string name="update_link_file_no_exist">Unable to update. Please check whether the file exists </string>
   <string name="update_link_file_error">An error occurred while trying to update the share</string>
   <string name="share_link_password_title">Enter a password</string>
   <string name="share_link_empty_password">You must enter a password</string>

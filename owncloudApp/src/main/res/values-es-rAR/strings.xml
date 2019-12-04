@@ -359,11 +359,8 @@
   <string name="get_capabilities_error">Ha ocurrido un error al intentar obtener las capacidades</string>
   <string name="share_link_no_support_share_api">Lo sentimos, compartir no esta activado en su servidor. Por favor contacte a su
 ⇥⇥administrator.</string>
-  <string name="share_link_file_no_exist">Imposible compartir. Por favor revise si el archivo existe</string>
   <string name="share_link_file_error">Un error ocurrió cuando se intentaba compartir el archivo o carpeta</string>
-  <string name="unshare_link_file_no_exist">Imposible dejar de compartir. Por favor revise si los archivos existen</string>
   <string name="unshare_link_file_error">Un error ocurrió cuando se intentaba dejar de compartir el archivo o carpeta</string>
-  <string name="update_link_file_no_exist">No se puede actualizar. Por favor chequea si el archivo existe</string>
   <string name="update_link_file_error">Ha ocurrido un error al momento de actualizar el compartido</string>
   <string name="share_link_password_title">Ingresa una contraseña</string>
   <string name="share_link_empty_password">Debes ingresar una contraseña</string>

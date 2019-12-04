@@ -357,11 +357,8 @@
   <string name="prefs_camera_picture_upload_path_title">Jalur unggah gambar</string>
   <string name="share_link_no_support_share_api">Maaf, berbagi tidak diaktifkan pada server Anda. Silakan hubungi
 		administrator Anda.</string>
-  <string name="share_link_file_no_exist">Tidak dapat berbagi. Mohon periksa apakah berkas ada</string>
   <string name="share_link_file_error">Terjadi kesalahan saat mencoba membagikan berkas atau folder ini</string>
-  <string name="unshare_link_file_no_exist">Tidak dapat menghapus berbagi. Mohon periksa apakah berkas ada</string>
   <string name="unshare_link_file_error">Terjadi kesalahan saat mencoba menghapus berbagi berkas dan folder ini</string>
-  <string name="update_link_file_no_exist">Tidak dapat memperbarui. Mohon periksa apakah berkas tersedia</string>
   <string name="update_link_file_error">Terjadi kesalahan saat mencoba memperbarui berbagi</string>
   <string name="share_link_password_title">Masukkan sandi</string>
   <string name="share_link_empty_password">Anda harus memasukkan sandi</string>

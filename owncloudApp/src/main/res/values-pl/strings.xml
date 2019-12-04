@@ -346,11 +346,8 @@
   <string name="prefs_camera_picture_upload_path_title">Ścieżka wrzucania obrazu</string>
   <string name="share_link_no_support_share_api">Przepraszamy, ale współdzielenie nie jest włączone na Twoim serwerze. Proszę skontaktuj się z
 		administratorem.</string>
-  <string name="share_link_file_no_exist">Nie można udostępnić. Proszę sprawdzić, czy plik istnieje</string>
   <string name="share_link_file_error">Wystąpił błąd podczas udostępniania tego pliku lub folderu.</string>
-  <string name="unshare_link_file_no_exist">Nie można wyłączyć udostępniania. Proszę sprawdzić, czy plik istnieje</string>
   <string name="unshare_link_file_error">Wystąpił błąd podczas anulowania udostępniania tego pliku lub folderu.</string>
-  <string name="update_link_file_no_exist">Błąd aktualizacji. Upewnij się, że plik istnieje.</string>
   <string name="update_link_file_error">Wystąpił błąd podczas aktualizacji udziału</string>
   <string name="share_link_password_title">Wprowadź hasło</string>
   <string name="share_link_empty_password">Musisz wprowadzić hasło</string>

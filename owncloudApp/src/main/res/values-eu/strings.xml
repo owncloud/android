@@ -310,11 +310,8 @@ Mesedez, baimendu berriz</string>
   <string name="error__upload__local_file_not_copied">%1$s ezin da %2$s karpeta lokalera kopiatu</string>
   <string name="prefs_camera_picture_upload_path_title">Irudiak igotzeko bidea</string>
   <string name="share_link_no_support_share_api">Sentitzen dut, partekatzea ez dago zure zerbitzarian gaituta. Mesedez jarri harremanetan zure administratzailearekin.</string>
-  <string name="share_link_file_no_exist">Ezin izan da partekatu. Mesedez egiaztatu fitxategia existitzen dela</string>
   <string name="share_link_file_error">Errore bat egon da fitxategaia edo karpeta partekatzerakoan</string>
-  <string name="unshare_link_file_no_exist">Ezin izan da partekatzea desegin. Mesedez egiaztatu fitxategia existitzen dela</string>
   <string name="unshare_link_file_error">Errore bat egon da fitxategaia edo karpeta partekatzeari uzterakoan</string>
-  <string name="update_link_file_no_exist">Ezin izan da eguneratu. Mesedez, egiaztatu fitxategia existitzen dela.</string>
   <string name="share_link_password_title">Pasahitz bat sartu</string>
   <string name="share_link_empty_password">Pasahitz bat sartu behar duzu</string>
   <string name="activity_chooser_send_file_title">Bidali</string>

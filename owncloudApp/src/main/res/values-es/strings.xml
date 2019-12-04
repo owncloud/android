@@ -360,11 +360,8 @@
   <string name="get_capabilities_error">Ha ocurrido un error al tratar de recuperar las capacidades</string>
   <string name="share_link_no_support_share_api">La función Compartir no está activada en su servidor. Contacte a su
 		administrador.</string>
-  <string name="share_link_file_no_exist">No se puede compartir. Revise si el archivo existe</string>
   <string name="share_link_file_error">Ocurrió un error al tratar de compartir este archivo o carpeta</string>
-  <string name="unshare_link_file_no_exist">No se puede dejar de compartir. Revise si el archivo existe</string>
   <string name="unshare_link_file_error">Ocurrió un error al tratar de ya no compartir este archivo o carpeta</string>
-  <string name="update_link_file_no_exist">No se puede actualizar. Revise si el archivo existe</string>
   <string name="update_link_file_error">Un error ha ocurrido mientras se intentaba actualizar el comparto</string>
   <string name="share_link_password_title">Introduzca una contraseña</string>
   <string name="share_link_empty_password">Debe introducir una contraseña</string>

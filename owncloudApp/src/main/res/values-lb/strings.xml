@@ -263,11 +263,8 @@
   <string name="preview_image_error_unknown_format">Dëst Bild kann net ugewise ginn</string>
   <string name="error__upload__local_file_not_copied">%1$s konnt net an de lokalen Dossier %2$s kopéiert ginn</string>
   <string name="share_link_no_support_share_api">Pardon, Deelen ass net erlaabt op ärem Server. W.e.g. kontaktéier däin Administrateur.</string>
-  <string name="share_link_file_no_exist">Konnt net gedeelt ginn. Kontrolléier w.e.g. ob de Fichier existéiert</string>
   <string name="share_link_file_error">Beim Deele vun dësem Fichier oder Dossier ass e Feeler opgetrueden</string>
-  <string name="unshare_link_file_no_exist">Konnt net ongedeelt ginn. Kontrolléier w.e.g. ob de Fichier existéiert</string>
   <string name="unshare_link_file_error">Beim Zesummeleeë vun dësem Fichier oder Dossier ass e Feeler opgetrueden</string>
-  <string name="update_link_file_no_exist">Konnt net aktualiséiert ginn. Kontrolléier w.e.g. ob de Fichier existéiert</string>
   <string name="update_link_file_error">Beim Deele vun dësem Fichier oder Dossier ass e Feeler opgetrueden</string>
   <string name="share_link_password_title">E Passwuert aginn</string>
   <string name="share_link_empty_password">Du muss e Passwuert aginn</string>

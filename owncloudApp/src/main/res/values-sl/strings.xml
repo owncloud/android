@@ -311,11 +311,8 @@
   <string name="prefs_camera_picture_upload_path_title">Mapa v oblaku za odlaganje slik</string>
   <string name="share_link_no_support_share_api">Souporaba je na strežniku onemogočena. Možnost lahko spreminjajo le
 		uporabniki s skrbniškimi dovoljenji.</string>
-  <string name="share_link_file_no_exist">Souporaba ni mogoča. Preverite, ali datoteka obstaja.</string>
   <string name="share_link_file_error">Prišlo je do napake med poskusom omogočanja souporabe te datoteke ali mape</string>
-  <string name="unshare_link_file_no_exist">Ni mogoče prekiniti souporabe. Preverite, ali datoteka obstaja.</string>
   <string name="unshare_link_file_error">Prišlo je do napake med poskusom odstranjevanja souporabe te datoteke ali mape</string>
-  <string name="update_link_file_no_exist">Posodobitev ni mogoča. Preverite, ali datoteka obstaja.</string>
   <string name="update_link_file_error">Prišlo je do napake med posodabljanjem mesta souporabe</string>
   <string name="share_link_password_title">Vpis gesla</string>
   <string name="share_link_empty_password">Vpisati je treba geslo.</string>

@@ -278,11 +278,8 @@
   <string name="preview_image_error_unknown_format">Nun pue amosase esta imaxe</string>
   <string name="error__upload__local_file_not_copied">Nun se pudo copiar %1$s al ficheru llocal %2$s</string>
   <string name="share_link_no_support_share_api">Sentímoslo, la compartición nun ta activada nel to sirvidor. Por favor contauta col to alministrador</string>
-  <string name="share_link_file_no_exist">Nun pue compartise. Por favor, comprueba si\'l ficheru esiste</string>
   <string name="share_link_file_error">Hebo un fallu mientres s\'intentaba compartir esti ficheru o carpeta</string>
-  <string name="unshare_link_file_no_exist">Incapaz de dexar de compartir. Por favor, comprueba si\'l ficheru esiste</string>
   <string name="unshare_link_file_error">Hebo un fallu mientres s\'intentaba dexar de compartir esti ficheru o carpeta</string>
-  <string name="update_link_file_no_exist">Nun pue actualizase. Por favor, comprueba si esiste\'l ficheru</string>
   <string name="update_link_file_error">Hebo un fallu mientres s\'intentaba actualizar la cuota</string>
   <string name="share_link_password_title">Introduz una contraseña</string>
   <string name="share_link_empty_password">Tienes qu\'introducir una contraseña</string>

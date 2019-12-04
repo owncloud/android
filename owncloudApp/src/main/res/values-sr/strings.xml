@@ -261,11 +261,8 @@
   <string name="error__upload__local_file_not_copied">%1$s се не може копирати у локалну фасциклу %2$s</string>
   <string name="share_link_no_support_share_api">Дељење није укључено на вашем серверу. Контактирајте
 		администратора.</string>
-  <string name="share_link_file_no_exist">Не могу да делим. Проверите да ли фајл постоји</string>
   <string name="share_link_file_error">Дошло је до грешке приликом покушаја дељења овог фајла или фасцикле</string>
-  <string name="unshare_link_file_no_exist">Не могу да прекинем дељење. Проверите да ли фајл постоји</string>
   <string name="unshare_link_file_error">Дошло је до грешке приликом покушаја укидања дељења овог фајла или фасцикле</string>
-  <string name="update_link_file_no_exist">Не могу да ажурирам. Проверите да ли фајл постоји</string>
   <string name="update_link_file_error">Дошло је до грешке при покушају ажурирања дељења</string>
   <string name="share_link_password_title">Унесите лозинку</string>
   <string name="share_link_empty_password">Морате унети лозинку</string>

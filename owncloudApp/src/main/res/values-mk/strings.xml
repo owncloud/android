@@ -223,9 +223,7 @@
   <string name="error__upload__local_file_not_copied">%1$s не може да се копира во локалната папка %2$s</string>
   <string name="share_link_no_support_share_api">Жалиме, споделувањето не е овозможено на вашиот сервер. Ве молам контактирајте го вашиот
   администратор.</string>
-  <string name="share_link_file_no_exist">Не можам да споделам. Ве молам проверете дали постои датотеката</string>
   <string name="share_link_file_error">Се случи грешка кога пробав да ја споделам оваа папка</string>
-  <string name="unshare_link_file_no_exist">Не можам да го тргнам споделувањето. Ве молам проверете дали постои датотеката</string>
   <string name="unshare_link_file_error">Се случи грешка кога пробав да го тргнам споделувањето на оваа датотека или папка</string>
   <string name="share_link_password_title">Внесете лозинка</string>
   <string name="share_link_empty_password">Морате да внесете лозинка</string>
