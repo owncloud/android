@@ -18,7 +18,7 @@
  *
  */
 
-package com.owncloud.android.data
+package com.owncloud.android.data.roommigrations
 
 import android.content.ContentValues
 import android.database.sqlite.SQLiteDatabase
@@ -28,6 +28,7 @@ import androidx.sqlite.db.framework.FrameworkSQLiteOpenHelperFactory
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.filters.SmallTest
 import androidx.test.platform.app.InstrumentationRegistry
+import com.owncloud.android.data.OwncloudDatabase
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_ACCOUNT_NAME
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_CORE_POLLINTERVAL
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_DAYS
@@ -44,7 +45,7 @@ import org.junit.Test
 import java.io.IOException
 
 @SmallTest
-class MigrationTest {
+class MigrationToDB28 {
 
     @Rule
     @JvmField
