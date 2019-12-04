@@ -28,7 +28,6 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.owncloud.android.R
 import com.owncloud.android.domain.capabilities.model.OCCapability
 import com.owncloud.android.domain.sharing.shares.model.OCShare
@@ -48,14 +47,12 @@ import io.mockk.mockkClass
 import org.hamcrest.CoreMatchers.not
 import org.junit.Before
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.module
 
-@RunWith(AndroidJUnit4::class)
 class ShareFolderFragmentTest {
     private val ocCapabilityViewModel = mockk<OCCapabilityViewModel>(relaxed = true)
     private val capabilitiesLiveData = MutableLiveData<Event<UIResult<OCCapability>>>()

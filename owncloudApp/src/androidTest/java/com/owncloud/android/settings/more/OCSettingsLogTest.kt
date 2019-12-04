@@ -36,7 +36,6 @@ import androidx.test.espresso.intent.matcher.IntentMatchers.hasType
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
 import com.owncloud.android.R
@@ -45,9 +44,7 @@ import org.hamcrest.Matchers
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
 
-@RunWith(AndroidJUnit4::class)
 class OCSettingsLogTest {
 
     @Rule
@@ -55,28 +52,29 @@ class OCSettingsLogTest {
     val activityRule = ActivityTestRule(LogHistoryActivity::class.java, true, true)
 
     @Before
-    fun setUp() {}
+    fun setUp() {
+    }
 
     @Test
-    fun checkTitle(){
+    fun checkTitle() {
         onView(withText(R.string.actionbar_logger)).check(matches(isDisplayed()))
     }
 
     @Test
-    fun itemsToolbar(){
+    fun itemsToolbar() {
         onView(withId(R.id.menu_search)).check(matches(isDisplayed()))
         openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getInstrumentation().targetContext)
         onView(withText("Logcat")).check(matches(isDisplayed()))
     }
 
     @Test
-    fun logHistoryButtons(){
+    fun logHistoryButtons() {
         onView(withId(R.id.deleteLogHistoryButton)).check(matches(isDisplayed()))
         onView(withId(R.id.sendLogHistoryButton)).check(matches(isDisplayed()))
     }
 
     @Test
-    fun sendLogHistory(){
+    fun sendLogHistory() {
         Intents.init()
         val intentResult = Instrumentation.ActivityResult(Activity.RESULT_OK, Intent())
         intending(hasAction(Intent.ACTION_SEND_MULTIPLE)).respondWith(intentResult);
@@ -84,10 +82,13 @@ class OCSettingsLogTest {
         intended(
             Matchers.allOf(
                 hasAction(Intent.ACTION_SEND_MULTIPLE),
-                hasExtra(Intent.EXTRA_SUBJECT,
+                hasExtra(
+                    Intent.EXTRA_SUBJECT,
                     String.format(
                         activityRule.activity.getString(R.string.log_send_mail_subject),
-                        activityRule.activity.getString(R.string.app_name))),
+                        activityRule.activity.getString(R.string.app_name)
+                    )
+                ),
                 hasType("text/plain"),
                 hasFlag(Intent.FLAG_ACTIVITY_NEW_TASK)
             )

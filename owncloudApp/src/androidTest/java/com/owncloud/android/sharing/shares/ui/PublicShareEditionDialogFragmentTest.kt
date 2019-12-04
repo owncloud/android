@@ -26,13 +26,12 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers
-import androidx.test.espresso.matcher.ViewMatchers.isChecked
 import androidx.test.espresso.matcher.ViewMatchers.Visibility.VISIBLE
+import androidx.test.espresso.matcher.ViewMatchers.isChecked
 import androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility
 import androidx.test.espresso.matcher.ViewMatchers.withHint
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.owncloud.android.R
 import com.owncloud.android.domain.capabilities.model.OCCapability
 import com.owncloud.android.domain.sharing.shares.model.ShareType
@@ -49,7 +48,6 @@ import io.mockk.every
 import io.mockk.mockk
 import org.junit.Before
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.context.startKoin
@@ -60,7 +58,6 @@ import java.text.SimpleDateFormat
 import java.util.GregorianCalendar
 import java.util.TimeZone
 
-@RunWith(AndroidJUnit4::class)
 class PublicShareEditionDialogFragmentTest {
     private val ocCapabilityViewModel = mockk<OCCapabilityViewModel>(relaxed = true)
     private val capabilitiesLiveData = MutableLiveData<Event<UIResult<OCCapability>>>()
@@ -135,7 +132,7 @@ class PublicShareEditionDialogFragmentTest {
         val calendar = GregorianCalendar()
         calendar.timeInMillis = expirationDate
 
-        val formatter: DateFormat = SimpleDateFormat("MMM dd, yyyy")
+        val formatter: DateFormat = SimpleDateFormat.getDateInstance()
         formatter.timeZone = TimeZone.getDefault()
 
         val time = formatter.format(calendar.time)

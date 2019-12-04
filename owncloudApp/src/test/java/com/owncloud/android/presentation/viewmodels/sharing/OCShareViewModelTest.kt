@@ -37,7 +37,6 @@ import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import com.owncloud.android.testutil.OC_ACCOUNT_NAME
 import com.owncloud.android.testutil.OC_SHARE
-import com.owncloud.android.testutil.livedata.TIMEOUT_TEST_LONG
 import com.owncloud.android.testutil.livedata.getEmittedValues
 import com.owncloud.android.testutil.livedata.getLastEmittedValue
 import io.mockk.coEvery
@@ -56,11 +55,8 @@ import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.junit.runners.JUnit4
 
 @ExperimentalCoroutinesApi
-@RunWith(JUnit4::class)
 class OCShareViewModelTest {
     private lateinit var ocShareViewModel: OCShareViewModel
 
@@ -175,7 +171,7 @@ class OCShareViewModelTest {
         }
         assertEquals(expectedValues, emittedValues)
 
-        coVerify(exactly = 1, timeout = TIMEOUT_TEST_LONG) { createPrivateShareAsyncUseCase.execute(any()) }
+        coVerify(exactly = 1) { createPrivateShareAsyncUseCase.execute(any()) }
         coVerify(exactly = 0) { createPublicShareAsyncUseCase.execute(any()) }
     }
 
@@ -191,7 +187,7 @@ class OCShareViewModelTest {
         }
         assertEquals(Event(UIResult.Success(OC_SHARE)), emittedValues)
 
-        coVerify(exactly = 1, timeout = TIMEOUT_TEST_LONG) { getShareAsLiveDataUseCase.execute(any()) }
+        coVerify(exactly = 1) { getShareAsLiveDataUseCase.execute(any()) }
     }
 
     @Test
@@ -228,9 +224,9 @@ class OCShareViewModelTest {
         val emittedValues = ocShareViewModel.privateShareEditionStatus.getEmittedValues(expectedValues.size) {
             testCoroutineDispatcher.resumeDispatcher()
         }
-        assertEquals(expectedValues, emittedValues )
+        assertEquals(expectedValues, emittedValues)
 
-        coVerify(exactly = 1, timeout = TIMEOUT_TEST_LONG) { editPrivateShareAsyncUseCase.execute(any()) }
+        coVerify(exactly = 1) { editPrivateShareAsyncUseCase.execute(any()) }
         coVerify(exactly = 0) { editPublicShareAsyncUseCase.execute(any()) }
     }
 
@@ -279,7 +275,7 @@ class OCShareViewModelTest {
         assertEquals(expectedValues, emittedValues)
 
         coVerify(exactly = 0) { createPrivateShareAsyncUseCase.execute(any()) }
-        coVerify(exactly = 1, timeout = TIMEOUT_TEST_LONG) { createPublicShareAsyncUseCase.execute(any()) }
+        coVerify(exactly = 1) { createPublicShareAsyncUseCase.execute(any()) }
     }
 
     @Test
@@ -323,7 +319,7 @@ class OCShareViewModelTest {
         assertEquals(expectedValues, emittedValues)
 
         coVerify(exactly = 0) { editPrivateShareAsyncUseCase.execute(any()) }
-        coVerify(exactly = 1, timeout = TIMEOUT_TEST_LONG) { editPublicShareAsyncUseCase.execute(any()) }
+        coVerify(exactly = 1) { editPublicShareAsyncUseCase.execute(any()) }
     }
 
     /******************************************************************************************************
@@ -363,7 +359,7 @@ class OCShareViewModelTest {
 
         assertEquals(expectedValues, emittedValues)
 
-        coVerify(exactly = 1, timeout = TIMEOUT_TEST_LONG) {
+        coVerify(exactly = 1) {
             deletePublicShareAsyncUseCase.execute(any())
         }
     }

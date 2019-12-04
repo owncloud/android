@@ -2,11 +2,11 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 android {
-    compileSdkVersion 28
+    compileSdkVersion sdkCompileVersion
 
     defaultConfig {
-        minSdkVersion 19
-        targetSdkVersion 28
+        minSdkVersion sdkMinVersion
+        targetSdkVersion sdkTargetVersion
     }
 
     buildTypes {
@@ -21,5 +21,5 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(':owncloudDomain')
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
-    implementation "androidx.lifecycle:lifecycle-livedata:2.0.0"
+    implementation "androidx.lifecycle:lifecycle-livedata:$lifecycleLiveData"
 }

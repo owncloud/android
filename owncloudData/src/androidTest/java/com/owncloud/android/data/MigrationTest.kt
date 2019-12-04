@@ -26,7 +26,6 @@ import androidx.room.Room
 import androidx.room.testing.MigrationTestHelper
 import androidx.sqlite.db.framework.FrameworkSQLiteOpenHelperFactory
 import androidx.test.core.app.ApplicationProvider
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SmallTest
 import androidx.test.platform.app.InstrumentationRegistry
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_ACCOUNT_NAME
@@ -42,10 +41,8 @@ import com.owncloud.android.testutil.OC_CAPABILITY
 import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
 import java.io.IOException
 
-@RunWith(AndroidJUnit4::class)
 @SmallTest
 class MigrationTest {
 
@@ -125,9 +122,18 @@ class MigrationTest {
             assertEquals(null, filesSharingSearchMinLength)
             assertEquals(OC_CAPABILITY.filesSharingPublicEnabled.value, filesSharingPublicEnabled)
             assertEquals(OC_CAPABILITY.filesSharingPublicPasswordEnforced.value, filesSharingPublicPasswordEnforced)
-            assertEquals(OC_CAPABILITY.filesSharingPublicPasswordEnforcedReadOnly.value, filesSharingPublicPasswordEnforcedReadOnly)
-            assertEquals(OC_CAPABILITY.filesSharingPublicPasswordEnforcedReadWrite.value, filesSharingPublicPasswordEnforcedReadWrite)
-            assertEquals(OC_CAPABILITY.filesSharingPublicPasswordEnforcedUploadOnly.value, filesSharingPublicPasswordEnforcedUploadOnly)
+            assertEquals(
+                OC_CAPABILITY.filesSharingPublicPasswordEnforcedReadOnly.value,
+                filesSharingPublicPasswordEnforcedReadOnly
+            )
+            assertEquals(
+                OC_CAPABILITY.filesSharingPublicPasswordEnforcedReadWrite.value,
+                filesSharingPublicPasswordEnforcedReadWrite
+            )
+            assertEquals(
+                OC_CAPABILITY.filesSharingPublicPasswordEnforcedUploadOnly.value,
+                filesSharingPublicPasswordEnforcedUploadOnly
+            )
             assertEquals(OC_CAPABILITY.filesSharingPublicExpireDateEnabled.value, filesSharingPublicExpireDateEnabled)
             assertEquals(OC_CAPABILITY.filesSharingPublicExpireDateDays, filesSharingPublicExpireDateDays)
             assertEquals(OC_CAPABILITY.filesSharingPublicExpireDateEnforced.value, filesSharingPublicExpireDateEnforced)

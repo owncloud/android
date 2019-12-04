@@ -28,7 +28,6 @@ import com.owncloud.android.domain.capabilities.usecases.GetCapabilitiesAsLiveDa
 import com.owncloud.android.domain.capabilities.usecases.RefreshCapabilitiesFromServerAsyncUseCase
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.presentation.UIResult
-import com.owncloud.android.presentation.viewmodels.capabilities.OCCapabilityViewModel
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import com.owncloud.android.testutil.OC_ACCOUNT_NAME
 import com.owncloud.android.testutil.OC_CAPABILITY
@@ -50,10 +49,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.junit.runners.JUnit4
 
-@RunWith(JUnit4::class)
 @ExperimentalCoroutinesApi
 class OCCapabilityViewModelTest {
     private lateinit var ocCapabilityViewModel: OCCapabilityViewModel

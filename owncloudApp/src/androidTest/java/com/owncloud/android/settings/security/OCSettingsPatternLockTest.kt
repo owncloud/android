@@ -27,19 +27,15 @@ import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
 import com.owncloud.android.R
-import com.owncloud.android.ui.activity.PassCodeActivity
 import com.owncloud.android.ui.activity.PatternLockActivity
 import org.junit.After
 import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
 
-@RunWith(AndroidJUnit4::class)
 class OCSettingsPatternLockTest {
 
     @Rule
@@ -58,7 +54,7 @@ class OCSettingsPatternLockTest {
     }
 
     @Test
-    fun patternLockView(){
+    fun patternLockView() {
         //Open Activity in pattern creation mode
         openPatternActivity(PatternLockActivity.ACTION_REQUEST_WITH_RESULT)
 
@@ -69,7 +65,7 @@ class OCSettingsPatternLockTest {
     }
 
     @Test
-    fun cancelPatternLock(){
+    fun cancelPatternLock() {
         //Open Activity in pattern creation mode
         openPatternActivity(PatternLockActivity.ACTION_REQUEST_WITH_RESULT)
 
@@ -89,14 +85,14 @@ class OCSettingsPatternLockTest {
         onView(withText(R.string.pattern_no_longer_required)).check(matches(isDisplayed()))
     }
 
-    private fun storePattern(){
+    private fun storePattern() {
         val appPrefs = PreferenceManager.getDefaultSharedPreferences(context).edit();
         appPrefs.putString(PatternLockActivity.KEY_PATTERN, PATTERN_TOSAVE)
         appPrefs.putBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN, true)
         appPrefs.apply()
     }
 
-    private fun openPatternActivity (mode: String) {
+    private fun openPatternActivity(mode: String) {
         intent.action = mode
         activityRule.launchActivity(intent)
     }
