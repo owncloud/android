@@ -31,7 +31,6 @@ import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.isNotChecked
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.owncloud.android.R
 import com.owncloud.android.domain.sharing.shares.model.OCShare
@@ -49,14 +48,12 @@ import io.mockk.mockk
 import org.hamcrest.CoreMatchers.not
 import org.junit.Before
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.module
 
-@RunWith(AndroidJUnit4::class)
 class EditPrivateShareFragmentTest {
     private val targetContext = InstrumentationRegistry.getInstrumentation().targetContext
     private val defaultSharedWithDisplayName = "user"

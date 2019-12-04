@@ -21,7 +21,6 @@ package com.owncloud.android.sharing.shares.ui
 
 import android.content.ContentResolver
 import android.content.ContentValues
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SmallTest
 import androidx.test.platform.app.InstrumentationRegistry
 import com.owncloud.android.data.OwncloudDatabase
@@ -31,9 +30,7 @@ import org.hamcrest.Matchers.notNullValue
 import org.junit.Assert.assertThat
 import org.junit.Before
 import org.junit.Test
-import org.junit.runner.RunWith
 
-@RunWith(AndroidJUnit4::class)
 @SmallTest
 class SharesContentProviderTest {
     private var mContentResolver: ContentResolver? = null

@@ -155,7 +155,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
             }
             usedNumbers.sort()
             var chosenNumber = UNUSED_NUMBER
-            if (usedNumbers.size == 0 || usedNumbers[0] != USED_NUMBER_SECOND) {
+            if (usedNumbers.firstOrNull() != USED_NUMBER_SECOND) {
                 chosenNumber = USED_NUMBER_SECOND
             } else {
                 for (i in 0 until usedNumbers.size - 1) {

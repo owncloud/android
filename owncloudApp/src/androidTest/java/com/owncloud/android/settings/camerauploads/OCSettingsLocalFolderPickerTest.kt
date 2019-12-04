@@ -17,7 +17,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 package com.owncloud.android.settings.camerauploads
 
 import android.os.Environment
@@ -27,16 +26,13 @@ import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.ActivityTestRule
 import com.owncloud.android.R
 import com.owncloud.android.ui.activity.LocalFolderPickerActivity
 import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
 
-@RunWith(AndroidJUnit4::class)
 class OCSettingsLocalFolderPickerTest {
 
     @Rule
@@ -46,26 +42,26 @@ class OCSettingsLocalFolderPickerTest {
     val errorMessage = "Activity not finished"
 
     @Test
-    fun localFolderPickerView(){
+    fun localFolderPickerView() {
         onView(withId(R.id.folder_picker_btn_cancel)).check(matches(isDisplayed()))
         onView(withId(R.id.folder_picker_btn_choose)).check(matches(isDisplayed()))
         onView(withId(R.id.folder_picker_btn_home)).check(matches(isDisplayed()))
     }
 
     @Test
-    fun cancelButtonDismiss(){
+    fun cancelButtonDismiss() {
         onView(withId(R.id.folder_picker_btn_cancel)).perform(click())
         assertTrue(errorMessage, activityRule.activity.isFinishing)
     }
 
     @Test
-    fun chooseButtonDismiss(){
+    fun chooseButtonDismiss() {
         onView(withId(R.id.folder_picker_btn_choose)).perform(click())
         assertTrue(errorMessage, activityRule.activity.isFinishing)
     }
 
     @Test
-    fun homeButtonBrowsesToHome(){
+    fun homeButtonBrowsesToHome() {
         onView(withId(R.id.folder_picker_btn_home)).perform(click())
         val path = Environment.getExternalStoragePublicDirectory(
             Environment.DIRECTORY_DCIM

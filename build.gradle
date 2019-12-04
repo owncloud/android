@@ -1,12 +1,16 @@
 buildscript {
     ext {
-
+        // SDK
+        sdkCompileVersion = 28
+        sdkMinVersion = 19
+        sdkTargetVersion = 28
 
         // Android jetpack
         archLifecycleVersion = "2.1.0"
         roomVersion = "2.2.2"
         appCompat = "1.1.0"
         sqliteVersion = "2.0.1"
+        lifecycleLiveData = "2.0.0"
 
         // Kotlin
         kotlinVersion = "1.3.50"
