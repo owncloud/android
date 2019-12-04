@@ -14,7 +14,7 @@
         android:divider="@null"
         android:dividerHeight="0dp"
         android:ellipsize="middle"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingStart="@dimen/activity_horizontal_margin"
         android:showDividers="none"
         android:textColor="@color/color_accent"
         tools:text="Uploaded" />
@@ -25,7 +25,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingEnd="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
         tools:text="5 Files" />
 
 </LinearLayout>

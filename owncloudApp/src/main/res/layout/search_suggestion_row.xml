@@ -28,7 +28,6 @@
         android:scaleType="centerInside"
         android:layout_alignParentTop="true"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:visibility="invisible"
         style="@style/RtlOverlay.Widget.AppCompat.Search.DropDown.Icon1" />
@@ -76,7 +75,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_toRightOf="@android:id/icon1"
         android:layout_toEndOf="@android:id/icon1"
         />
 

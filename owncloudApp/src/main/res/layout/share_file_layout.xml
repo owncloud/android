@@ -37,7 +37,7 @@
                 android:layout_width="@dimen/file_icon_size"
                 android:layout_height="@dimen/file_icon_size"
                 android:layout_gravity="center_vertical"
-                android:layout_marginRight="@dimen/standard_half_margin"
+                android:layout_marginEnd="@dimen/standard_half_margin"
                 android:src="@drawable/file" />
 
             <TextView
@@ -45,12 +45,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/standard_half_margin"
-                android:layout_marginLeft="4dp"
-                android:layout_marginRight="@dimen/standard_half_margin"
                 android:layout_marginStart="4dp"
                 android:layout_toEndOf="@+id/shareFileIcon"
-                android:layout_toLeftOf="@+id/getPrivateLinkButton"
-                android:layout_toRightOf="@+id/shareFileIcon"
                 android:layout_toStartOf="@+id/getPrivateLinkButton"
                 android:ellipsize="middle"
                 android:singleLine="true"
@@ -64,9 +60,8 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/shareFileName"
                 android:layout_gravity="center_vertical"
-                android:layout_marginLeft="4dp"
+                android:layout_marginStart="4dp"
                 android:layout_toEndOf="@+id/shareFileIcon"
-                android:layout_toRightOf="@+id/shareFileIcon"
                 android:text="@string/placeholder_filesize"
                 android:textSize="12sp" />
 
@@ -74,7 +69,7 @@
                 android:id="@+id/getPrivateLinkButton"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
-                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
                 android:padding="@dimen/standard_half_padding"
                 android:src="@drawable/copy_link" />
 
@@ -104,7 +99,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:paddingLeft="@dimen/standard_half_padding"
+                    android:paddingStart="@dimen/standard_half_padding"
                     android:text="@string/share_with_user_section_title"
                     android:textAllCaps="true"
                     android:textColor="@color/white"
@@ -114,8 +109,8 @@
                     android:id="@+id/addUserButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginRight="@dimen/standard_half_margin"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="@dimen/standard_half_margin"
                     android:background="@color/transparent"
                     android:src="@drawable/ic_add" />
 
@@ -126,7 +121,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dip"
                 android:layout_weight="1"
-                android:paddingLeft="@dimen/standard_half_padding"
+                android:paddingStart="@dimen/standard_half_padding"
                 android:scrollbars="vertical"
                 android:visibility="gone" />
 
@@ -135,7 +130,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingBottom="@dimen/standard_padding"
-                android:paddingLeft="@dimen/standard_half_padding"
+                android:paddingStart="@dimen/standard_half_padding"
                 android:paddingTop="@dimen/standard_padding"
                 android:text="@string/share_no_users"
                 android:textSize="15sp" />
@@ -161,7 +156,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:paddingLeft="@dimen/standard_half_padding"
+                    android:paddingStart="@dimen/standard_half_padding"
                     android:text="@string/share_via_link_section_title"
                     android:textAllCaps="true"
                     android:textColor="@color/white"
@@ -171,8 +166,8 @@
                     android:id="@+id/addPublicLinkButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginRight="@dimen/standard_half_margin"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="@dimen/standard_half_margin"
                     android:background="@color/transparent"
                     android:src="@drawable/ic_add" />
 
@@ -195,7 +190,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dip"
                 android:layout_weight="1"
-                android:paddingLeft="@dimen/standard_half_padding"
+                android:paddingStart="@dimen/standard_half_padding"
                 android:scrollbars="vertical"
                 android:visibility="gone" />
 
@@ -204,7 +199,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingBottom="@dimen/standard_padding"
-                android:paddingLeft="@dimen/standard_half_padding"
+                android:paddingStart="@dimen/standard_half_padding"
                 android:paddingTop="@dimen/standard_padding"
                 android:text="@string/share_no_public_links"
                 android:textSize="15sp" />

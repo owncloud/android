@@ -53,7 +53,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_toRightOf="@id/pattern_lock_view"
+                android:layout_toEndOf="@id/pattern_lock_view"
                 android:text="@android:string/cancel"
                 android:theme="@style/Button.Primary" />
 

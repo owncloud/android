@@ -29,7 +29,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        android:drawableRight="@drawable/ic_star_black_24dp"
         android:drawableEnd="@drawable/ic_star_black_24dp"
         android:drawablePadding="16dp"
         android:textColor="@color/color_accent"
