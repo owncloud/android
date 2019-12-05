@@ -40,21 +40,20 @@ import android.os.Build
 import android.os.FileUriExposedException
 import android.os.RemoteException
 import android.provider.MediaStore
-
 import androidx.core.content.FileProvider
 import androidx.core.util.Pair
 import com.owncloud.android.MainApp
 import com.owncloud.android.R
 import com.owncloud.android.authentication.AccountUtils
-import com.owncloud.android.datamodel.OCFile.*
+import com.owncloud.android.datamodel.OCFile.AvailableOfflineStatus.*
+import com.owncloud.android.datamodel.OCFile.PATH_SEPARATOR
+import com.owncloud.android.datamodel.OCFile.ROOT_PATH
 import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.*
 import com.owncloud.android.domain.capabilities.model.CapabilityBooleanType
 import com.owncloud.android.domain.capabilities.model.OCCapability
-import com.owncloud.android.datamodel.OCFile.AvailableOfflineStatus.*
 import com.owncloud.android.lib.common.utils.Log_OC
 import com.owncloud.android.lib.resources.status.RemoteCapability
 import com.owncloud.android.utils.FileStorageUtils
-
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
@@ -180,6 +179,49 @@ class FileDataStorageManager {
             return result.apply { sort() }
         }
 
+    val sharedByLinkFilesFromCurrentAccount: Vector<OCFile>
+        get() {
+            val allSharedFiles = Vector<OCFile>();
+            val result = Vector<OCFile>();
+            var cursorOnShared: Cursor? = null;
+            try {
+                cursorOnShared = contentResolver?.query(
+                    CONTENT_URI,
+                    null,
+                    "$FILE_SHARED_VIA_LINK = ? AND $FILE_ACCOUNT_OWNER = ? ",
+                    arrayOf(1.toString(), account.name),
+                    null
+                )
+                if (cursorOnShared != null && cursorOnShared.moveToFirst()) {
+                    var file: OCFile?;
+                    do {
+                        file = createFileInstance(cursorOnShared);
+                        allSharedFiles.add(file);
+                    } while (cursorOnShared.moveToNext());
+                }
+            } catch (exception: Exception) {
+                Log_OC.e(TAG, "Exception retrieving all the shared by link files", exception);
+            } finally {
+                cursorOnShared?.close()
+            }
+
+            if (allSharedFiles.isNotEmpty()) {
+                val allSharedDirs = Vector<Long>();
+                for (file in allSharedFiles) {
+                    if (file.isFolder) {
+                        allSharedDirs.add(file.fileId);
+                    }
+                }
+                for (file in allSharedFiles) {
+                    if (file.isFolder || (!file.isFolder && !allSharedDirs.contains(file.parentId))) {
+                        result.add(file);
+                    }
+                }
+            }
+            result.sort();
+            return result;
+        }
+
     fun getFileByPath(path: String): OCFile? {
         val c = getFileCursorForValue(FILE_PATH, path)
         var file: OCFile? = null
@@ -236,9 +278,9 @@ class FileDataStorageManager {
 
     fun fileExists(path: String): Boolean = fileExists(FILE_PATH, path)
 
-    fun getFolderContent(f: OCFile?, onlyAvailableOffline: Boolean): Vector<OCFile> {
+    fun getFolderContent(f: OCFile?): Vector<OCFile> {
         return if (f != null && f.isFolder && f.fileId != -1L) {
-            getFolderContent(f.fileId, onlyAvailableOffline)
+            getFolderContent(f.fileId)
         } else {
             Vector()
         }
@@ -248,7 +290,7 @@ class FileDataStorageManager {
         folder?.let {
             // TODO better implementation, filtering in the access to database instead of here
             val folderImages = Vector<OCFile>()
-            for (file in getFolderContent(it, false)) {
+            for (file in getFolderContent(it)) {
                 if (file.isImage) folderImages.add(file)
             }
             folderImages
@@ -635,7 +677,7 @@ class FileDataStorageManager {
         val localFolder = File(localFolderPath)
         if (localFolder.exists()) {
             // stage 1: remove the local files already registered in the files database
-            val files = getFolderContent(folder.fileId, false)
+            val files = getFolderContent(folder.fileId)
             for (file in files) {
                 if (file.isFolder) {
                     success = success and removeLocalFolder(file)
@@ -869,25 +911,13 @@ class FileDataStorageManager {
         return ret
     }
 
-    private fun getFolderContent(parentId: Long, onlyAvailableOffline: Boolean): Vector<OCFile> {
+    fun getFolderContent(parentId: Long): Vector<OCFile> {
         val ret = Vector<OCFile>()
 
         val reqUri = Uri.withAppendedPath(CONTENT_URI_DIR, parentId.toString())
 
-        val selection: String
-        val selectionArgs: Array<String>
-
-        if (!onlyAvailableOffline) {
-            selection = "$FILE_PARENT=?"
-            selectionArgs = arrayOf(parentId.toString())
-        } else {
-            selection = "$FILE_PARENT=? AND ($FILE_KEEP_IN_SYNC = ? OR $FILE_KEEP_IN_SYNC=? )"
-            selectionArgs = arrayOf(
-                parentId.toString(),
-                AVAILABLE_OFFLINE.value.toString(),
-                AVAILABLE_OFFLINE_PARENT.value.toString()
-            )
-        }
+        val selection: String = "$FILE_PARENT=?"
+        val selectionArgs: Array<String> = arrayOf(parentId.toString())
 
         val c: Cursor? = try {
             performQuery(

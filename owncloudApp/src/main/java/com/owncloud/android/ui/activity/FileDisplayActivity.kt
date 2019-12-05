@@ -71,6 +71,7 @@ import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder
 import com.owncloud.android.files.services.FileUploader
 import com.owncloud.android.files.services.FileUploader.FileUploaderBinder
 import com.owncloud.android.files.services.TransferRequester
+import com.owncloud.android.lib.common.authentication.OwnCloudBearerCredentials
 import com.owncloud.android.lib.common.operations.RemoteOperation
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode
@@ -102,14 +103,23 @@ import com.owncloud.android.utils.Extras
 import com.owncloud.android.utils.FileStorageUtils
 import com.owncloud.android.utils.PermissionUtil
 import com.owncloud.android.utils.PreferenceUtils
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import java.io.File
 import java.util.ArrayList
+import kotlin.coroutines.CoroutineContext
 
 /**
  * Displays, what files the user has available in his ownCloud. This is the main view.
  */
 
-class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEnforceableRefreshListener {
+class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEnforceableRefreshListener,
+    CoroutineScope {
+    private val job = Job()
+    override val coroutineContext: CoroutineContext
+        get() = job + Dispatchers.Main
 
     private var syncBroadcastReceiver: SyncBroadcastReceiver? = null
     private var uploadBroadcastReceiver: UploadBroadcastReceiver? = null
@@ -944,7 +954,8 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
                     }
 
                     syncInProgress =
-                        FileSyncAdapter.EVENT_FULL_SYNC_END != event && RefreshFolderOperation.EVENT_SINGLE_FOLDER_SHARES_SYNCED != event
+                        FileSyncAdapter.EVENT_FULL_SYNC_END != event &&
+                                RefreshFolderOperation.EVENT_SINGLE_FOLDER_SHARES_SYNCED != event
 
                     if (RefreshFolderOperation.EVENT_SINGLE_FOLDER_CONTENTS_SYNCED == event) {
                         if (!synchResult?.isSuccess!!) {
@@ -952,6 +963,22 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
                             if (ResultCode.UNAUTHORIZED == synchResult.code ||
                                 synchResult.isException && synchResult.exception is AuthenticatorException
                             ) {
+                                launch(Dispatchers.IO) {
+                                    val credentials =
+                                        com.owncloud.android.lib.common.accounts.AccountUtils.getCredentialsForAccount(
+                                            MainApp.appContext,
+                                            account
+                                        )
+
+                                    launch {
+                                        if (credentials is OwnCloudBearerCredentials) { // OAuth
+                                            showRequestRegainAccess()
+                                        } else {
+                                            showRequestAccountChangeNotice()
+                                        }
+                                    }
+                                }
+
                                 showRequestAccountChangeNotice()
                             } else if (ResultCode.SSL_RECOVERABLE_PEER_UNVERIFIED == synchResult.code) {
                                 showUntrustedCertDialog(synchResult)
