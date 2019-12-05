@@ -75,7 +75,7 @@ class OCSettingsSecurityTest {
     fun setUp() {
         //Only interested in "More" section, so we can get rid of the other categories. SmoothScroll is not
         //working fine to reach the bottom of the screen, so this approach was taken to display the section
-        val preferenceScreen = activityRule.activity.getPreferenceScreen() as PreferenceScreen
+        val preferenceScreen = activityRule.activity.preferenceScreen as PreferenceScreen
         val cameraUploadsCategory =
             activityRule.activity.findPreference("camera_uploads_category") as PreferenceCategory
         val moreCategory =

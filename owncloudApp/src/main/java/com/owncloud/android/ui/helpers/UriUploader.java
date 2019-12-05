@@ -52,7 +52,7 @@ public class UriUploader {
     private final String TAG = UriUploader.class.getSimpleName();
 
     private FileActivity mActivity;
-    private ArrayList<Parcelable> mUrisToUpload;
+    private ArrayList<Uri> mUrisToUpload;
     private CopyAndUploadContentUrisTask.OnCopyTmpFilesTaskListener mCopyTmpTaskListener;
 
     private int mBehaviour;
@@ -72,7 +72,7 @@ public class UriUploader {
 
     public UriUploader(
             FileActivity activity,
-            ArrayList<Parcelable> uris,
+            ArrayList<Uri> uris,
             String uploadPath,
             Account account,
             int behaviour,
@@ -101,9 +101,6 @@ public class UriUploader {
                 Uri sourceUri = (Uri) sourceStream;
                 if (sourceUri != null) {
                     String displayName = UriUtils.getDisplayNameForUri(sourceUri, mActivity);
-                    if (displayName == null) {
-                        displayName = generateDiplayName();
-                    }
                     String remotePath = mUploadPath + displayName;
 
                     if (ContentResolver.SCHEME_CONTENT.equals(sourceUri.getScheme())) {
@@ -120,8 +117,8 @@ public class UriUploader {
 
             if (!contentUris.isEmpty()) {
                 /// content: uris will be copied to temporary files before calling {@link FileUploader}
-                copyThenUpload(contentUris.toArray(new Uri[contentUris.size()]),
-                        contentRemotePaths.toArray(new String[contentRemotePaths.size()]));
+                copyThenUpload(contentUris.toArray(new Uri[0]),
+                        contentRemotePaths.toArray(new String[0]));
 
             } else if (schemeFileCounter == 0) {
                 mCode = UriUploaderResultCode.ERROR_NO_FILE_TO_UPLOAD;
@@ -138,11 +135,6 @@ public class UriUploader {
 
         }
         return mCode;
-    }
-
-    private String generateDiplayName() {
-        return mActivity.getString(R.string.common_unknown) +
-                "-" + DisplayUtils.unixTimeToHumanReadable(System.currentTimeMillis());
     }
 
     /**

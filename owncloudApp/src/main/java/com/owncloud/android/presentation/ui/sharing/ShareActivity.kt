@@ -104,6 +104,7 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
 
     // Private share creation needs to be handled from here since is is carried out through intents
     override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
         when (intent.action) {
             Intent.ACTION_SEARCH -> {  // Verify the action and get the query
                 val query = intent.getStringExtra(SearchManager.QUERY)

@@ -44,7 +44,7 @@ public class ConflictsResolveDialog extends DialogFragment {
         SERVER
     }
 
-    OnConflictDecisionMadeListener mListener;
+    private OnConflictDecisionMadeListener mListener;
 
     public static ConflictsResolveDialog newInstance(String path, OnConflictDecisionMadeListener listener) {
         ConflictsResolveDialog f = new ConflictsResolveDialog();
@@ -57,11 +57,10 @@ public class ConflictsResolveDialog extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        String remotepath = getArguments().getString("remotepath");
         return new AlertDialog.Builder(getActivity())
                 .setIcon(R.drawable.ic_warning)
                 .setTitle(R.string.conflict_title)
-                .setMessage(String.format(getString(R.string.conflict_message), remotepath))
+                .setMessage(getString(R.string.conflict_message))
                 .setPositiveButton(R.string.conflict_use_local_version,
                         (dialog, which) -> {
                             if (mListener != null) {

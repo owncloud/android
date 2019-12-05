@@ -29,12 +29,10 @@ package com.owncloud.android.ui.activity;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.accounts.AuthenticatorException;
-import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.DialogInterface.OnCancelListener;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -94,6 +92,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Stack;
 import java.util.Vector;
 
@@ -110,7 +109,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
 
     private AccountManager mAccountManager;
     private Stack<String> mParents;
-    private ArrayList<Parcelable> mStreamsToUpload;
+    private ArrayList<Uri> mStreamsToUpload;
     private String mUploadPath;
     private OCFile mFile;
 
@@ -155,7 +154,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
         super.onCreate(savedInstanceState);
 
         if (mAccountSelected) {
-            setAccount((Account) savedInstanceState.getParcelable(FileActivity.EXTRA_ACCOUNT));
+            setAccount(savedInstanceState.getParcelable(FileActivity.EXTRA_ACCOUNT));
         }
 
         // Listen for sync messages
@@ -266,8 +265,8 @@ public class ReceiveExternalFilesActivity extends FileActivity
                 });
                 return builder.create();
             case DIALOG_MULTIPLE_ACCOUNT:
-                Account accounts[] = mAccountManager.getAccountsByType(MainApp.Companion.getAccountType());
-                CharSequence dialogItems[] = new CharSequence[accounts.length];
+                Account[] accounts = mAccountManager.getAccountsByType(MainApp.Companion.getAccountType());
+                CharSequence[] dialogItems = new CharSequence[accounts.length];
                 OwnCloudAccount oca;
                 for (int i = 0; i < dialogItems.length; ++i) {
                     try {
@@ -285,24 +284,18 @@ public class ReceiveExternalFilesActivity extends FileActivity
                     }
                 }
                 builder.setTitle(R.string.common_choose_account);
-                builder.setItems(dialogItems, new OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        setAccount(mAccountManager.getAccountsByType(MainApp.Companion.getAccountType())[which]);
-                        onAccountSet(mAccountWasRestored);
-                        dialog.dismiss();
-                        mAccountSelected = true;
-                        mAccountSelectionShowing = false;
-                    }
+                builder.setItems(dialogItems, (dialog, which) -> {
+                    setAccount(mAccountManager.getAccountsByType(MainApp.Companion.getAccountType())[which]);
+                    onAccountSet(mAccountWasRestored);
+                    dialog.dismiss();
+                    mAccountSelected = true;
+                    mAccountSelectionShowing = false;
                 });
                 builder.setCancelable(true);
-                builder.setOnCancelListener(new OnCancelListener() {
-                    @Override
-                    public void onCancel(DialogInterface dialog) {
-                        mAccountSelectionShowing = false;
-                        dialog.cancel();
-                        finish();
-                    }
+                builder.setOnCancelListener(dialog -> {
+                    mAccountSelectionShowing = false;
+                    dialog.cancel();
+                    finish();
                 });
                 return builder.create();
             default:
@@ -333,10 +326,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
             return;
         }
         // filter on dirtype
-        Vector<OCFile> files = new Vector<>();
-        for (OCFile f : tmpfiles) {
-            files.add(f);
-        }
+        Vector<OCFile> files = new Vector<>(tmpfiles);
         if (files.size() < position) {
             throw new IndexOutOfBoundsException("Incorrect item selected");
         }
@@ -471,16 +461,16 @@ public class ReceiveExternalFilesActivity extends FileActivity
     }
 
     private String generatePath(Stack<String> dirs) {
-        String full_path = "";
+        StringBuilder full_path = new StringBuilder();
 
         for (String a : dirs) {
-            full_path += a + "/";
+            full_path.append(a).append("/");
         }
-        return full_path;
+        return full_path.toString();
     }
 
     private void prepareStreamsToUpload() {
-        if (getIntent().getAction().equals(Intent.ACTION_SEND)) {
+        if (getIntent().getAction() != null && getIntent().getAction().equals(Intent.ACTION_SEND)) {
             mStreamsToUpload = new ArrayList<>();
             mStreamsToUpload.add(getIntent().getParcelableExtra(Intent.EXTRA_STREAM));
             if (mStreamsToUpload.get(0) != null) {
@@ -511,7 +501,6 @@ public class ReceiveExternalFilesActivity extends FileActivity
                 getIntent().getStringExtra(Intent.EXTRA_TEXT) != null;
     }
 
-    @SuppressLint("NewApi")
     public void uploadFiles() {
 
         UriUploader uploader = new UriUploader(
@@ -541,8 +530,6 @@ public class ReceiveExternalFilesActivity extends FileActivity
                 messageResTitle = R.string.uploader_error_title_no_file_to_upload;
             } else if (resultCode == UriUploader.UriUploaderResultCode.ERROR_READ_PERMISSION_NOT_GRANTED) {
                 messageResId = R.string.uploader_error_message_read_permission_not_granted;
-            } else if (resultCode == UriUploader.UriUploaderResultCode.ERROR_UNKNOWN) {
-                messageResId = R.string.common_error_unknown;
             }
 
             showErrorDialog(
@@ -603,9 +590,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
         } else {
             String[] dir_names = lastPath.split("/");
             mParents.clear();
-            for (String dir : dir_names) {
-                mParents.add(dir);
-            }
+            mParents.addAll(Arrays.asList(dir_names));
         }
         //Make sure that path still exists, if it doesn't pop the stack and try the previous path
         while (!getStorageManager().fileExists(generatePath(mParents)) && mParents.size() > 1) {
@@ -776,8 +761,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
                             currentFile = currentDir;
                         }
 
-                        if (synchFolderRemotePath != null &&
-                                currentDir.getRemotePath().equals(synchFolderRemotePath)) {
+                        if (currentDir.getRemotePath().equals(synchFolderRemotePath)) {
                             populateDirectoryList();
                         }
                         mFile = currentFile;
@@ -891,28 +875,26 @@ public class ReceiveExternalFilesActivity extends FileActivity
 
         final AlertDialog alertDialog = builder.create();
         setFileNameFromIntent(alertDialog, input);
-        alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
-            @Override
-            public void onShow(DialogInterface dialog) {
-                Button button = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
-                button.setOnClickListener(view -> {
-                    String fileName = input.getText().toString();
-                    String error = null;
-                    if (fileName.length() > MAX_FILENAME_LENGTH) {
-                        error = String.format(getString(R.string.uploader_upload_text_dialog_filename_error_length_max), MAX_FILENAME_LENGTH);
-                    } else if (fileName.length() == 0) {
-                        error = getString(R.string.uploader_upload_text_dialog_filename_error_empty);
-                    } else {
-                        fileName += ".txt";
-                        Uri fileUri = savePlainTextToFile(fileName);
-                        mStreamsToUpload.clear();
-                        mStreamsToUpload.add(fileUri);
-                        uploadFiles();
-                    }
-                    inputLayout.setErrorEnabled(error != null);
-                    inputLayout.setError(error);
-                });
-            }
+        alertDialog.setOnShowListener(dialog -> {
+            Button button = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+            button.setOnClickListener(view -> {
+                String fileName = input.getText().toString();
+                String error = null;
+                if (fileName.length() > MAX_FILENAME_LENGTH) {
+                    error = String.format(getString(R.string.uploader_upload_text_dialog_filename_error_length_max),
+                            MAX_FILENAME_LENGTH);
+                } else if (fileName.length() == 0) {
+                    error = getString(R.string.uploader_upload_text_dialog_filename_error_empty);
+                } else {
+                    fileName += ".txt";
+                    Uri fileUri = savePlainTextToFile(fileName);
+                    mStreamsToUpload.clear();
+                    mStreamsToUpload.add(fileUri);
+                    uploadFiles();
+                }
+                inputLayout.setErrorEnabled(error != null);
+                inputLayout.setError(error);
+            });
         });
         alertDialog.show();
     }

@@ -31,7 +31,6 @@ package com.owncloud.android.ui.activity
 import android.Manifest
 import android.accounts.Account
 import android.accounts.AuthenticatorException
-import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.app.Activity
 import android.content.BroadcastReceiver
@@ -44,6 +43,7 @@ import android.content.ServiceConnection
 import android.content.SyncRequest
 import android.content.pm.PackageManager
 import android.content.res.Resources.NotFoundException
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
@@ -731,15 +731,14 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
 
     private fun requestUploadOfContentFromApps(contentIntent: Intent?, resultCode: Int) {
 
-        val streamsToUpload = ArrayList<Parcelable>()
+        val streamsToUpload = ArrayList<Uri>()
 
-        //getClipData is only supported on api level 16+, Jelly Bean
         if (contentIntent!!.clipData != null && contentIntent.clipData!!.itemCount > 0) {
             for (i in 0 until contentIntent.clipData!!.itemCount) {
                 streamsToUpload.add(contentIntent.clipData!!.getItemAt(i).uri)
             }
         } else {
-            streamsToUpload.add(contentIntent!!.data)
+            streamsToUpload.add(contentIntent.data!!)
         }
 
         val behaviour = if (resultCode == RESULT_OK_AND_MOVE)
@@ -1054,7 +1053,6 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
          * @author David A. Velasco
          * [BroadcastReceiver] to enable upload feedback in UI
          */
-        @SuppressLint("StringFormatInvalid")
         override fun onReceive(context: Context, intent: Intent) {
             val uploadedRemotePath = intent.getStringExtra(Extras.EXTRA_REMOTE_PATH)
             val accountName = intent.getStringExtra(Extras.EXTRA_ACCOUNT_NAME)

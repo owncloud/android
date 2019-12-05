@@ -19,7 +19,7 @@
     android:id="@+id/shareScroll"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.owncloud.android.data.sharing.shares.presentation.fragment.ShareFileFragment">
+    tools:context=".presentation.ui.sharing.ShareActivity">
 
     <LinearLayout
         android:layout_width="match_parent"

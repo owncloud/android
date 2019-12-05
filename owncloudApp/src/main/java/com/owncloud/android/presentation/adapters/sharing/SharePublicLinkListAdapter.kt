@@ -32,7 +32,6 @@ import com.owncloud.android.R
 import com.owncloud.android.domain.sharing.shares.model.OCShare
 import com.owncloud.android.utils.PreferenceUtils
 import kotlinx.android.synthetic.main.share_public_link_item.view.*
-import java.util.ArrayList
 
 /**
  * Adapter to show a list of public links
@@ -44,7 +43,7 @@ class SharePublicLinkListAdapter(
     private val listener: SharePublicLinkAdapterListener
 ) : ArrayAdapter<OCShare>(mContext, resource) {
     init {
-        publicLinks = ArrayList(publicLinks?.sortedWith(compareBy { it.name }))
+        publicLinks = publicLinks?.sortedBy { it.name }
     }
 
     override fun getCount(): Int = publicLinks?.size ?: 0

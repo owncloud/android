@@ -286,7 +286,6 @@
   <string name="camera_video_upload_on_wifi">經由 wifi 上傳視訊</string>
   <string name="confirmation_disable_camera_uploads_title">確認</string>
   <string name="conflict_title">檔案衝突</string>
-  <string name="conflict_message">您要保留那個檔案? 如果您同時選擇兩個版本, 本地的檔案將在檔案名稱後面會加上編號</string>
   <string name="conflict_keep_both">都保留</string>
   <string name="conflict_use_local_version">本地版本</string>
   <string name="conflict_use_server_version">伺服器版本</string>

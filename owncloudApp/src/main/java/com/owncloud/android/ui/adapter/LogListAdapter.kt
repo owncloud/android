@@ -74,14 +74,19 @@ class LogListAdapter(private val completeLogs: ArrayList<String>, filter: String
      */
     override fun onBindViewHolder(holder: LogViewHolder, position: Int) {
         holder.logContent.text = filterLogs[position]
-        if (filterLogs[position].contains(" E: ")) {
-            holder.logContent.setTextColor(Color.RED)
-        } else if (filterLogs[position].contains(" W: ")) {
-            holder.logContent.setTextColor(Color.MAGENTA)
-        } else if (filterLogs[position].contains(" V: ")) {
-            holder.logContent.setTextColor(Color.GRAY)
-        } else {
-            holder.logContent.setTextColor(ContextCompat.getColor(context, R.color.primary_dark))
+        when {
+            filterLogs[position].contains(" E: ") -> {
+                holder.logContent.setTextColor(Color.RED)
+            }
+            filterLogs[position].contains(" W: ") -> {
+                holder.logContent.setTextColor(Color.MAGENTA)
+            }
+            filterLogs[position].contains(" V: ") -> {
+                holder.logContent.setTextColor(Color.GRAY)
+            }
+            else -> {
+                holder.logContent.setTextColor(ContextCompat.getColor(context, R.color.primary_dark))
+            }
         }
     }
 

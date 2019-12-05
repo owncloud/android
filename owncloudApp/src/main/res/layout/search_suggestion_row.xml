@@ -44,7 +44,7 @@
         style="@style/RtlOverlay.Widget.AppCompat.Search.DropDown.Query" />
 
     <ImageView
-        android:id="@id/android:icon2"
+        android:id="@android:id/icon2"
         android:layout_width="48dip"
         android:layout_height="48dip"
         android:scaleType="centerInside"
