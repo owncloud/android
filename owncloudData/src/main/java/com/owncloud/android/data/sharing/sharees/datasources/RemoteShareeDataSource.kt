@@ -19,7 +19,6 @@
 
 package com.owncloud.android.data.sharing.sharees.datasources
 
-import com.owncloud.android.lib.resources.shares.GetRemoteShareesOperation
 import org.json.JSONObject
 
 interface RemoteShareeDataSource {

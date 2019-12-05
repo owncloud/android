@@ -59,9 +59,6 @@ public class ProviderMeta {
         public static final String OCSHARES_NAME = "name";
         public static final String OCSHARES_URL = "url";
 
-        public static final String OCSHARES_DEFAULT_SORT_ORDER = OCSHARES_FILE_SOURCE
-                + " collate nocase asc";
-
         // Columns of capabilities table
         public static final String CAPABILITIES_ACCOUNT_NAME = "account";
         public static final String CAPABILITIES_VERSION_MAYOR = "version_mayor";
@@ -97,8 +94,5 @@ public class ProviderMeta {
         public static final String CAPABILITIES_FILES_BIGFILECHUNKING = "files_bigfilechunking";
         public static final String CAPABILITIES_FILES_UNDELETE = "files_undelete";
         public static final String CAPABILITIES_FILES_VERSIONING = "files_versioning";
-
-        public static final String CAPABILITIES_DEFAULT_SORT_ORDER = CAPABILITIES_ACCOUNT_NAME
-                + " collate nocase asc";
     }
 }
