@@ -14,6 +14,7 @@
   <string name="actionbar_sort_by_name">A-Z</string>
   <string name="drawer_item_all_files">所有檔案</string>
   <string name="drawer_item_only_available_offline">離線可使用</string>
+  <string name="drawer_item_shared_by_link_files">由連結分享</string>
   <string name="drawer_item_settings">設定</string>
   <string name="drawer_item_uploads_list">上傳</string>
   <string name="drawer_close"> 關閉</string>

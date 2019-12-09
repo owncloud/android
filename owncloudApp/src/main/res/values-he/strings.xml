@@ -20,6 +20,7 @@
   <string name="actionbar_sort_by_size">קטן - גדול</string>
   <string name="drawer_item_all_files">כל הקבצים</string>
   <string name="drawer_item_only_available_offline">זמין במצב לא מקוון</string>
+  <string name="drawer_item_shared_by_link_files">משותף עם קישור</string>
   <string name="drawer_item_settings">הגדרות</string>
   <string name="drawer_item_uploads_list">העלאות</string>
   <string name="drawer_close">סגירה</string>
@@ -103,6 +104,7 @@
   <string name="file_list_seconds_ago">שניות</string>
   <string name="file_list_empty">אין כאן שום דבר. אולי ברצונך להעלות משהו?</string>
   <string name="file_list_empty_available_offline">אין קבצים לא מקוונים זמינים.</string>
+  <string name="file_list_empty_shared_by_links">אף קובץ לא שותף באמצעות קישור.</string>
   <string name="file_list_loading">בטעינה …</string>
   <string name="file_list_no_app_for_file_type">לא נמצא יישום לסוג קובץ</string>
   <string name="local_file_list_empty">אין קבצים בתיקייה זו:</string>

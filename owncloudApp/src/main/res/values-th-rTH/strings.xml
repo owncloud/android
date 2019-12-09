@@ -20,6 +20,7 @@
   <string name="actionbar_sort_by_size">เล็กที่สุด - ใหญ่ที่สุด</string>
   <string name="drawer_item_all_files">ไฟล์ทั้งหมด</string>
   <string name="drawer_item_only_available_offline">การทำงานแบบออฟไลน์พร้อมใช้งาน</string>
+  <string name="drawer_item_shared_by_link_files">แชร์โดยลิงก์</string>
   <string name="drawer_item_settings">ตั้งค่า</string>
   <string name="drawer_item_uploads_list">อัปโหลด</string>
   <string name="drawer_close">ปิด</string>
@@ -103,6 +104,7 @@
   <string name="file_list_seconds_ago">ไม่กี่วินาทีก่อนหน้านี้</string>
   <string name="file_list_empty">ยังไม่มีไฟล์ใดๆเลยลองอัปโหลดดูสิ!</string>
   <string name="file_list_empty_available_offline">ยังไม่มีไฟล์ออฟไลน์ที่พร้อมใช้งาน</string>
+  <string name="file_list_empty_shared_by_links">ไม่มีการแชร์ไฟล์แบบลิงก์</string>
   <string name="file_list_loading">กำลังโหลด...</string>
   <string name="file_list_no_app_for_file_type">ไม่พบแอปฯที่ตรงกับประเภทของไฟล์</string>
   <string name="local_file_list_empty">ยังไม่มีไฟล์ในโฟลเดอร์นี้</string>

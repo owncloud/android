@@ -20,6 +20,7 @@
   <string name="actionbar_sort_by_size">Küçükten büyüğe</string>
   <string name="drawer_item_all_files">Tüm dosyalar</string>
   <string name="drawer_item_only_available_offline">Çevrimdışı kullanılabilir</string>
+  <string name="drawer_item_shared_by_link_files">Bağlantı ile paylaşılmış</string>
   <string name="drawer_item_settings">Ayarlar</string>
   <string name="drawer_item_uploads_list">Yüklemeler</string>
   <string name="drawer_close">Kapat</string>
@@ -68,10 +69,11 @@
   <string name="pattern_not_same_pattern">Desenler aynı değil</string>
   <string name="pattern_stored">Desen kaydedildi</string>
   <string name="pattern_removed">Desen kaldırıldı</string>
-  <string name="pattern_already_set">Desen ve parola kilitleme aynı anda etkinleştirilemez, öncelikle deseni devre dışı bırakınız.</string>
-  <string name="passcode_already_set">Desen ve parola kilitleme aynı anda etkinleştirilemez, öncelikle parolayı devre dışı bırakınız.</string>
+  <string name="pattern_already_set">Desen ve parola kilitleme aynı anda etkinleştirilemez, lütfen öncelikle deseni devre dışı bırakınız.</string>
+  <string name="passcode_already_set">Desen ve parola kilitleme aynı anda etkinleştirilemez, lütfen öncelikle parolayı devre dışı bırakınız.</string>
   <string name="pattern_no_longer_required">Desen artık sorulmayacak</string>
   <string name="pattern_configure_your_pattern_explanation">Uygulama her açılışında desen sorulacak</string>
+  <string name="pattern_locked">Desenle kilitlendi</string>
   <string name="recommend_subject">%1$s uygulamasını akıllı telefonunda dene!</string>
   <string name="recommend_text">Seni, akıllı telefonunda %1$s kullanmaya davet ediyorum!\nBuradan indirebilirsin: %2$s</string>
   <string name="auth_failure_snackbar">Kimlik doğrulaması başarısız oldu.</string>
@@ -151,7 +153,7 @@
   <string name="uploader_upload_failed_ssl_certificate_not_trusted">Sunucu sertifikasına güvenilmiyor</string>
   <string name="uploader_upload_text_dialog_title">Yeni dosya için bir isim giriniz</string>
   <string name="uploader_upload_text_dialog_filename_error_empty">Dosya adı boş bırakılamaz</string>
-  <string name="uploader_upload_text_dialog_filename_error_length_max">Dosya adı %d karakterden daha fazla olmamalı</string>
+  <string name="uploader_upload_text_dialog_filename_error_length_max">Dosya adı %d karakterden daha uzun olmamalı</string>
   <string name="uploader_upload_text_filename_hint">Dosya adı</string>
   <string name="uploader_upload_camera_upload_files">Kamera yükleme dosyaları yükleniyor</string>
   <string name="uploader_upload_available_offline_files">Erişilebilir çevrimdışı dosyalar yükleniyor</string>
@@ -445,7 +447,7 @@
   <string name="share_no_users">Henüz kullanıcılara paylaşılan veri yok</string>
   <string name="share_incompatible_version">Diğer kullanıcılarla paylaşmak için, sunucunuzun en az versiyon 8.2 olması gereklidir</string>
   <string name="share_add_user_or_group">Kullanıcı veya grup ekle</string>
-  <string name="share_via_link_section_title">Halka açık bağlantılar</string>
+  <string name="share_via_link_section_title">Herkese açık bağlantılar</string>
   <string name="share_via_link_create_title">Bağlantı paylaşımı oluştur</string>
   <string name="share_via_link_edit_title">Paylaşım bağlantısını düzenle</string>
   <string name="share_via_link_name_label">Bağlantı adı</string>
@@ -500,11 +502,11 @@
   <string name="streaming_crossed_redirection">Çapraz yeniden yönlendirme ile akışa izin verilmemekte</string>
   <string name="previewing_video_common_error">Bu video yeniden üretilemiyor</string>
   <string name="previewing_video_not_supported">Video ön izlemesi sahip olduğunuz Android versiyonunda desteklenmemektedir. Dosya indirmesi otomatik başlayacak.</string>
-  <string name="streaming_position_not_available">Pozisyon müsait değil</string>
+  <string name="streaming_position_not_available">\"Pozisyon müsait değil\"</string>
   <string name="error_no_network_connection">Cihaz ağa bağlı değil</string>
   <string name="share_no_public_links">Halka açık bağlantılar henüz oluşturulmadı</string>
   <string name="share_no_link_in_this_share">Bu paylaşımın bağlantısı yok</string>
-  <string name="share_warning_about_forwarding_public_links">Dosya/klasör linkine sahip Herkes erişebilir </string>
+  <string name="share_warning_about_forwarding_public_links">Bağlantya sahip herkes bu dosya/klasör\'e erişebilir</string>
   <string name="share_via_link_default_password">*****</string>
   <string name="share_via_link_password_enforced_label">Parola *</string>
   <string name="share_via_link_expiration_date_enforced_label">Bitiş *</string>
@@ -520,7 +522,7 @@
   <string name="media_service_notification_channel_name">Müzik çalar</string>
   <string name="media_service_notification_channel_description">Müzik çaları gör</string>
   <string name="file_sync_notification_channel_name">Dosya eşitleme</string>
-  <string name="file_sync_notification_channel_description">Dosya eşitleme durumunu gör</string>
+  <string name="file_sync_notification_channel_description">Dosya eşitleme sonucunu gör</string>
   <string name="clicks_to_be_developer">Geliştirici menülerini etkinleştirmeye %1$d tık uzaktasınız</string>
   <string name="rate_dialog_title">%1$s uygulamasını oyla!</string>
   <string name="rate_dialog_description">Bu uygulamayı kullanmaktan memnunsanız oylamak için birkaç dakikanızı ayırır mısınız? Geri dönüşünüz bizim için çok önemli.</string>
@@ -538,7 +540,7 @@
   <string name="welcome_feature_2_title">Dosyaları ve klasörleri paylaş</string>
   <string name="welcome_feature_2_text">Özel veya herkese açık olarak paylaşabilirsiniz</string>
   <string name="welcome_feature_3_title">Çoklu hesap</string>
-  <string name="welcome_feature_3_text">Tüm ownCloud sunucularına bağlan</string>
+  <string name="welcome_feature_3_text">Tüm ownCloud sunucularınınıza bağlanın</string>
   <string name="welcome_feature_4_title">Kamera yüklemeleri</string>
   <string name="welcome_feature_4_text">Resimleriniz/videolarınız otomatik yüklendi</string>
   <string name="welcome_feature_5_title">Video akışı</string>

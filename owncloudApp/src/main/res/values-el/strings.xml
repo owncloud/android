@@ -20,6 +20,7 @@
   <string name="actionbar_sort_by_size">Μικρότερο - Μεγαλύτερο</string>
   <string name="drawer_item_all_files">Όλα τα αρχεία</string>
   <string name="drawer_item_only_available_offline">Διαθέσιμο εκτός σύνδεσης</string>
+  <string name="drawer_item_shared_by_link_files">Διαμοιρασμένα μέσω συνδέσμου</string>
   <string name="drawer_item_settings">Ρυθμίσεις</string>
   <string name="drawer_item_uploads_list">Μεταφορτώσεις</string>
   <string name="drawer_close">Κλείσιμο</string>

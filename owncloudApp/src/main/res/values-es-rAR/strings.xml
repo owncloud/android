@@ -20,6 +20,7 @@
   <string name="actionbar_sort_by_size">Desde el más pequeño al más grande</string>
   <string name="drawer_item_all_files">Todos los archivos</string>
   <string name="drawer_item_only_available_offline">Disponible sin conexión</string>
+  <string name="drawer_item_shared_by_link_files">Compartido por enlace</string>
   <string name="drawer_item_settings">Configuración</string>
   <string name="drawer_item_uploads_list">Subidas</string>
   <string name="drawer_close">Cerrar</string>

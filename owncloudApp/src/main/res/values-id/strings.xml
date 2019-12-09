@@ -20,6 +20,7 @@
   <string name="actionbar_sort_by_size">Terkecil - Terbesar</string>
   <string name="drawer_item_all_files">Semua berkas</string>
   <string name="drawer_item_only_available_offline">Tersedia offline</string>
+  <string name="drawer_item_shared_by_link_files">Dibagikan dengan tautan</string>
   <string name="drawer_item_settings">Pengaturan</string>
   <string name="drawer_item_uploads_list">Unggah</string>
   <string name="drawer_close">Tutup</string>

@@ -20,6 +20,7 @@
   <string name="actionbar_sort_by_size">Menor - Maior</string>
   <string name="drawer_item_all_files">Todos os arquivos</string>
   <string name="drawer_item_only_available_offline">Disponível externamente</string>
+  <string name="drawer_item_shared_by_link_files">Compartilhado por link</string>
   <string name="drawer_item_settings">Configurações</string>
   <string name="drawer_item_uploads_list">Envios</string>
   <string name="drawer_close">Fechar</string>
@@ -103,6 +104,7 @@
   <string name="file_list_seconds_ago">segundos atrás</string>
   <string name="file_list_empty">Nada aqui. Envie alguma coisa!</string>
   <string name="file_list_empty_available_offline">Não há arquivos externos disponíveis.</string>
+  <string name="file_list_empty_shared_by_links">Nenhum arquivo foi compartilhado por linque.</string>
   <string name="file_list_loading">Carregando...</string>
   <string name="file_list_no_app_for_file_type">Nenhum aplicativo encontrado para esse tipo de arquivo</string>
   <string name="local_file_list_empty">Não existe nenhum arquivo nesta pasta.</string>

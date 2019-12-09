@@ -20,6 +20,7 @@
   <string name="actionbar_sort_by_size">Cele mai mici - Cele mai mari</string>
   <string name="drawer_item_all_files">Toate fișierele</string>
   <string name="drawer_item_only_available_offline">Disponibil offline</string>
+  <string name="drawer_item_shared_by_link_files">Partajat prin link</string>
   <string name="drawer_item_settings">Setări</string>
   <string name="drawer_item_uploads_list">Încărcări</string>
   <string name="drawer_close">Închide</string>

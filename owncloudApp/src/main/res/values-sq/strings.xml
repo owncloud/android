@@ -20,6 +20,7 @@
   <string name="actionbar_sort_by_size">Më e vogla - Më e madhja</string>
   <string name="drawer_item_all_files">Krejt kartelat</string>
   <string name="drawer_item_only_available_offline">I passhëm jo në linjë</string>
+  <string name="drawer_item_shared_by_link_files">Të ndara me lidhje</string>
   <string name="drawer_item_settings">Rregullime</string>
   <string name="drawer_item_uploads_list">Ngarkime</string>
   <string name="drawer_close">Mbylle</string>
@@ -103,6 +104,7 @@
   <string name="file_list_seconds_ago">sekonda më parë</string>
   <string name="file_list_empty">Këtu nuk ka gjë. Ngarkoni diçka!</string>
   <string name="file_list_empty_available_offline">S’ka kartela offline gati.</string>
+  <string name="file_list_empty_shared_by_links">S’janë ndarë kartela me të tjerë përmes lidhjeje.</string>
   <string name="file_list_loading">Po ngarkohet…</string>
   <string name="file_list_no_app_for_file_type">S\’u gjet aplikacion për llojin e kartelës</string>
   <string name="local_file_list_empty">Në këtë dosje s\’ka kartela.</string>
