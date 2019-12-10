@@ -324,6 +324,8 @@ class PublicShareCreationDialogFragmentTest {
                 filesSharingPublicPasswordEnforced = CapabilityBooleanType.TRUE
             )
         )
+
+        onView(withId(R.id.shareViaLinkEditPermissionReadOnly)).perform(scrollTo())
         onView(withId(R.id.shareViaLinkEditPermissionReadOnly)).check(matches(isDisplayed()))
         onView(withId(R.id.shareViaLinkEditPermissionReadOnly)).perform(click())
         onView(withId(R.id.shareViaLinkPasswordLabel))
@@ -438,7 +440,8 @@ class PublicShareCreationDialogFragmentTest {
             )
         )
 
-        onView(withId(R.id.saveButton)).perform(scrollTo(), click())
+        onView(withId(R.id.saveButton)).perform(scrollTo())
+        onView(withId(R.id.saveButton)).perform(click())
 
         publicShareCreationStatus.postValue(
             Event(
@@ -449,9 +452,10 @@ class PublicShareCreationDialogFragmentTest {
         )
 
         onView(withId(R.id.public_link_error_message)).perform(scrollTo())
-
         onView(withText(commonError)).check(matches(isDisplayed()))
-        onView(withId(R.id.shareViaLinkEditPermissionUploadFiles)).perform(click())
+
+        onView(withId(R.id.shareViaLinkEditPermissionUploadFiles)).perform(scrollTo(), click())
+
         onView(withText(commonError)).check(matches(not(isDisplayed())))
     }
 
