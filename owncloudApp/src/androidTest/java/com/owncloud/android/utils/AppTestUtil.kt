@@ -20,8 +20,6 @@
 package com.owncloud.android.utils
 
 import com.owncloud.android.datamodel.OCFile
-import com.owncloud.android.lib.resources.shares.GetRemoteShareesOperation
-import org.json.JSONObject
 
 object AppTestUtil {
     /**

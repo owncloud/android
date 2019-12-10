@@ -40,7 +40,7 @@ import com.owncloud.android.presentation.viewmodels.sharing.OCShareViewModel
 import com.owncloud.android.sharing.shares.ui.TestShareFileActivity
 import com.owncloud.android.testutil.OC_SHARE
 import io.mockk.every
-import io.mockk.mockk
+import io.mockk.mockkClass
 import org.hamcrest.CoreMatchers
 import org.junit.Before
 import org.junit.Test
@@ -51,7 +51,7 @@ import org.koin.core.context.stopKoin
 import org.koin.dsl.module
 
 class SearchShareesFragmentTest {
-    private val ocShareViewModel = mockk<OCShareViewModel>(relaxed = true)
+    private val ocShareViewModel = mockkClass(OCShareViewModel::class, relaxed = true)
     private val sharesLiveData = MutableLiveData<Event<UIResult<List<OCShare>>>>()
 
     @Before
