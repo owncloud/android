@@ -33,15 +33,11 @@ import com.owncloud.android.lib.common.http.HttpConstants
 import com.owncloud.android.lib.common.http.methods.nonwebdav.GetMethod
 import com.owncloud.android.lib.common.operations.RemoteOperation
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
+import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode.OK
 import com.owncloud.android.lib.common.utils.Log_OC
-
 import org.json.JSONObject
-
 import java.net.URL
 import java.util.ArrayList
-
-import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode.OK
-import com.owncloud.android.lib.testing.OpenForTesting
 
 /**
  * Created by masensio on 08/10/2015.
@@ -73,7 +69,6 @@ import com.owncloud.android.lib.testing.OpenForTesting
  * @author David A. Velasco
  * @author David González Verdugo
  */
-@OpenForTesting
 class GetRemoteShareesOperation
 /**
  * Constructor

@@ -75,7 +75,7 @@ class GetRemoteSharesForFileOperation(
 
             val getMethod = GetMethod(URL(uriBuilder.build().toString()))
 
-            getMethod.addRequestHeader(RemoteOperation.OCS_API_HEADER, RemoteOperation.OCS_API_HEADER_VALUE)
+            getMethod.addRequestHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE)
 
             val status = client.executeHttpMethod(getMethod)
 

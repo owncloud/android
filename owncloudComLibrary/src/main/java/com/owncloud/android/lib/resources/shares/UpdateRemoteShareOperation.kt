@@ -47,7 +47,6 @@ import java.util.Locale
  * @author David A. Velasco
  * @author David González Verdugo
  */
-
 class UpdateRemoteShareOperation
 /**
  * Constructor. No update is initialized by default, need to be applied with setters below.

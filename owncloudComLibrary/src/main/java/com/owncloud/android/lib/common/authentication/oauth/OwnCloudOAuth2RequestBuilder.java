@@ -152,5 +152,4 @@ public class OwnCloudOAuth2RequestBuilder implements OAuth2RequestBuilder {
                 );
         }
     }
-
 }

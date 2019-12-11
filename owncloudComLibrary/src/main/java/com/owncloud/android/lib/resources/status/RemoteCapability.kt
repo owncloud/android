@@ -29,76 +29,76 @@ package com.owncloud.android.lib.resources.status
 /**
  * Contains data of the Capabilities for an account, from the Capabilities API
  */
-class RemoteCapability {
-    var accountName: String
+data class RemoteCapability(
+    var accountName: String = "",
 
     // Server version
-    var versionMayor: Int
-    var versionMinor: Int
-    var versionMicro: Int
-    var versionString: String
-    var versionEdition: String
+    var versionMayor: Int = 0,
+    var versionMinor: Int = 0,
+    var versionMicro: Int = 0,
+    var versionString: String = "",
+    var versionEdition: String = "",
 
     // Core PollInterval
-    var corePollinterval: Int
+    var corePollinterval: Int = 0,
 
     // Files Sharing
-    var filesSharingApiEnabled: CapabilityBooleanType
-    var filesSharingMinLength: Int
-    var filesSharingPublicEnabled: CapabilityBooleanType
-    var filesSharingPublicPasswordEnforced: CapabilityBooleanType
-    var filesSharingPublicPasswordEnforcedReadOnly: CapabilityBooleanType
-    var filesSharingPublicPasswordEnforcedReadWrite: CapabilityBooleanType
-    var filesSharingPublicPasswordEnforcedUploadOnly: CapabilityBooleanType
-    var filesSharingPublicExpireDateEnabled: CapabilityBooleanType
-    var filesSharingPublicExpireDateDays: Int
-    var filesSharingPublicExpireDateEnforced: CapabilityBooleanType
-    var filesSharingPublicSendMail: CapabilityBooleanType
-    var filesSharingPublicUpload: CapabilityBooleanType
-    var filesSharingPublicMultiple: CapabilityBooleanType
-    var filesSharingPublicSupportsUploadOnly: CapabilityBooleanType
-    var filesSharingUserSendMail: CapabilityBooleanType
-    var filesSharingResharing: CapabilityBooleanType
-    var filesSharingFederationOutgoing: CapabilityBooleanType
-    var filesSharingFederationIncoming: CapabilityBooleanType
+    var filesSharingApiEnabled: CapabilityBooleanType = CapabilityBooleanType.UNKNOWN,
+    var filesSharingSearchMinLength: Int? = DEFAULT_MIN_CHARACTERS_TO_SEARCH,
+    var filesSharingPublicEnabled: CapabilityBooleanType = CapabilityBooleanType.UNKNOWN,
+    var filesSharingPublicPasswordEnforced: CapabilityBooleanType = CapabilityBooleanType.UNKNOWN,
+    var filesSharingPublicPasswordEnforcedReadOnly: CapabilityBooleanType = CapabilityBooleanType.UNKNOWN,
+    var filesSharingPublicPasswordEnforcedReadWrite: CapabilityBooleanType = CapabilityBooleanType.UNKNOWN,
+    var filesSharingPublicPasswordEnforcedUploadOnly: CapabilityBooleanType = CapabilityBooleanType.UNKNOWN,
+    var filesSharingPublicExpireDateEnabled: CapabilityBooleanType = CapabilityBooleanType.UNKNOWN,
+    var filesSharingPublicExpireDateDays: Int = 0,
+    var filesSharingPublicExpireDateEnforced: CapabilityBooleanType = CapabilityBooleanType.UNKNOWN,
+    var filesSharingPublicSendMail: CapabilityBooleanType = CapabilityBooleanType.UNKNOWN,
+    var filesSharingPublicUpload: CapabilityBooleanType = CapabilityBooleanType.UNKNOWN,
+    var filesSharingPublicMultiple: CapabilityBooleanType = CapabilityBooleanType.UNKNOWN,
+    var filesSharingPublicSupportsUploadOnly: CapabilityBooleanType = CapabilityBooleanType.UNKNOWN,
+    var filesSharingUserSendMail: CapabilityBooleanType = CapabilityBooleanType.UNKNOWN,
+    var filesSharingResharing: CapabilityBooleanType = CapabilityBooleanType.UNKNOWN,
+    var filesSharingFederationOutgoing: CapabilityBooleanType = CapabilityBooleanType.UNKNOWN,
+    var filesSharingFederationIncoming: CapabilityBooleanType = CapabilityBooleanType.UNKNOWN,
 
     // Files
-    var filesBigFileChunking: CapabilityBooleanType
-    var filesUndelete: CapabilityBooleanType
-    var filesVersioning: CapabilityBooleanType
+    var filesBigFileChunking: CapabilityBooleanType = CapabilityBooleanType.UNKNOWN,
+    var filesUndelete: CapabilityBooleanType = CapabilityBooleanType.UNKNOWN,
+    var filesVersioning: CapabilityBooleanType = CapabilityBooleanType.UNKNOWN
+) {
+    /**
+     * Enum for Boolean Type in capabilities, with values:
+     * -1 - Unknown
+     * 0 - False
+     * 1 - True
+     */
+    enum class CapabilityBooleanType constructor(val value: Int) {
+        UNKNOWN(-1),
+        FALSE(0),
+        TRUE(1);
 
-    init {
-        accountName = ""
+        companion object {
+            fun fromValue(value: Int): CapabilityBooleanType? {
+                return when (value) {
+                    -1 -> UNKNOWN
+                    0 -> FALSE
+                    1 -> TRUE
+                    else -> null
+                }
+            }
 
-        versionMayor = 0
-        versionMinor = 0
-        versionMicro = 0
-        versionString = ""
-        versionEdition = ""
+            fun fromBooleanValue(boolValue: Boolean): CapabilityBooleanType {
+                return if (boolValue) {
+                    TRUE
+                } else {
+                    FALSE
+                }
+            }
+        }
+    }
 
-        corePollinterval = 0
-
-        filesSharingApiEnabled = CapabilityBooleanType.UNKNOWN
-        filesSharingMinLength = 4
-        filesSharingPublicEnabled = CapabilityBooleanType.UNKNOWN
-        filesSharingPublicPasswordEnforced = CapabilityBooleanType.UNKNOWN
-        filesSharingPublicPasswordEnforcedReadOnly = CapabilityBooleanType.UNKNOWN
-        filesSharingPublicPasswordEnforcedReadWrite = CapabilityBooleanType.UNKNOWN
-        filesSharingPublicPasswordEnforcedUploadOnly = CapabilityBooleanType.UNKNOWN
-        filesSharingPublicExpireDateEnabled = CapabilityBooleanType.UNKNOWN
-        filesSharingPublicExpireDateDays = 0
-        filesSharingPublicExpireDateEnforced = CapabilityBooleanType.UNKNOWN
-        filesSharingPublicSendMail = CapabilityBooleanType.UNKNOWN
-        filesSharingPublicUpload = CapabilityBooleanType.UNKNOWN
-        filesSharingPublicMultiple = CapabilityBooleanType.UNKNOWN
-        filesSharingPublicSupportsUploadOnly = CapabilityBooleanType.UNKNOWN
-        filesSharingUserSendMail = CapabilityBooleanType.UNKNOWN
-        filesSharingResharing = CapabilityBooleanType.UNKNOWN
-        filesSharingFederationOutgoing = CapabilityBooleanType.UNKNOWN
-        filesSharingFederationIncoming = CapabilityBooleanType.UNKNOWN
-
-        filesBigFileChunking = CapabilityBooleanType.UNKNOWN
-        filesUndelete = CapabilityBooleanType.UNKNOWN
-        filesVersioning = CapabilityBooleanType.UNKNOWN
+    companion object {
+        private const val DEFAULT_MIN_CHARACTERS_TO_SEARCH = 2
     }
 }

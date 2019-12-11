@@ -156,10 +156,13 @@ public class HttpClient {
      * @param headerValue
      */
     public static void addHeaderForAllRequests(String headerName, String headerValue) {
-        getOkHttpInterceptor()
-                .addRequestInterceptor(
-                        new RequestHeaderInterceptor(headerName, headerValue)
-                );
+        HttpInterceptor httpInterceptor = getOkHttpInterceptor();
+
+        if(getOkHttpInterceptor() != null) {
+            httpInterceptor.addRequestInterceptor(
+                    new RequestHeaderInterceptor(headerName, headerValue)
+            );
+        }
     }
 
     public static void deleteHeaderForAllRequests(String headerName) {

@@ -24,11 +24,7 @@
 
 package com.owncloud.android.lib.resources.shares
 
-import android.os.Parcel
-import android.os.Parcelable
-import com.owncloud.android.lib.common.utils.Log_OC
 import com.owncloud.android.lib.resources.files.FileUtils
-import java.io.Serializable
 
 /**
  * Contains the data of a Share from the Share API
@@ -37,124 +33,27 @@ import java.io.Serializable
  * @author David A. Velasco
  * @author David González Verdugo
  */
-class RemoteShare : Parcelable, Serializable {
-    var id: Long = 0
-    var shareWith: String = ""
-    var path: String = ""
-    var token: String = ""
-    var sharedWithDisplayName: String = ""
-    var sharedWithAdditionalInfo: String = ""
-    var name: String = ""
-    var shareLink: String = ""
-    var fileSource: Long = 0
-    var itemSource: Long = 0
-    var shareType: ShareType? = null
-    var permissions: Int = DEFAULT_PERMISSION
-    var sharedDate: Long = INIT_SHARED_DATE
-    var expirationDate: Long = INIT_EXPIRATION_DATE_IN_MILLIS
-    var isFolder: Boolean = path.endsWith(FileUtils.PATH_SEPARATOR)
-    var userId: Long = 0
-
+data class RemoteShare(
+    var id: Long = 0,
+    var shareWith: String = "",
+    var path: String = "",
+    var token: String = "",
+    var sharedWithDisplayName: String = "",
+    var sharedWithAdditionalInfo: String = "",
+    var name: String = "",
+    var shareLink: String = "",
+    var fileSource: Long = 0,
+    var itemSource: Long = 0,
+    var shareType: ShareType? = ShareType.UNKNOWN,
+    var permissions: Int = DEFAULT_PERMISSION,
+    var sharedDate: Long = INIT_SHARED_DATE,
+    var expirationDate: Long = INIT_EXPIRATION_DATE_IN_MILLIS,
+    var isFolder: Boolean = path.endsWith(FileUtils.PATH_SEPARATOR),
+    var userId: Long = 0,
     val isValid: Boolean = id > -1
-
-    constructor() : super() {
-        resetData()
-    }
-
-    constructor(path: String?) {
-        resetData()
-        if (path.isNullOrEmpty() || !path.startsWith(FileUtils.PATH_SEPARATOR)) {
-            Log_OC.e(TAG, "Trying to create a RemoteShare with a non valid path")
-            throw IllegalArgumentException("Trying to create a RemoteShare with a non valid path: " + path!!)
-        }
-        this.path = path
-    }
-
-    /**
-     * Used internally. Reset all file properties
-     */
-    private fun resetData() {
-        id = -1
-        shareWith = ""
-        path = ""
-        token = ""
-        sharedWithDisplayName = ""
-        sharedWithAdditionalInfo = ""
-        name = ""
-        shareLink = ""
-        fileSource = 0
-        itemSource = 0
-        shareType = ShareType.NO_SHARED
-        permissions = DEFAULT_PERMISSION
-        sharedDate = INIT_SHARED_DATE
-        expirationDate = INIT_EXPIRATION_DATE_IN_MILLIS
-        sharedWithAdditionalInfo = ""
-        isFolder = false
-        userId = -1
-    }
-
-    /**
-     * Reconstruct from parcel
-     *
-     * @param source The source parcel
-     */
-    protected constructor(source: Parcel) {
-        readFromParcel(source)
-    }
-
-    fun readFromParcel(source: Parcel) {
-        id = source.readLong()
-        shareWith = source.readString().toString()
-        path = source.readString().toString()
-        token = source.readString().toString()
-        sharedWithDisplayName = source.readString().toString()
-        sharedWithAdditionalInfo = source.readString().toString()
-        name = source.readString().toString()
-        shareLink = source.readString().toString()
-        fileSource = source.readLong()
-        itemSource = source.readLong()
-        shareType = ShareType.NO_SHARED
-        try {
-            shareType = source.readString()?.let { ShareType.valueOf(it) }
-        } catch (x: IllegalArgumentException) {
-        }
-        permissions = source.readInt()
-        sharedDate = source.readLong()
-        expirationDate = source.readLong()
-        isFolder = source.readInt() == 0
-        userId = source.readLong()
-    }
-
-    override fun describeContents(): Int = this.hashCode()
-
-    override fun writeToParcel(dest: Parcel, flags: Int) {
-        dest.writeLong(id)
-        dest.writeString(shareWith)
-        dest.writeString(path)
-        dest.writeString(token)
-        dest.writeString(sharedWithDisplayName)
-        dest.writeString(sharedWithAdditionalInfo)
-        dest.writeString(name)
-        dest.writeString(shareLink)
-        dest.writeLong(fileSource)
-        dest.writeLong(itemSource)
-        dest.writeString(shareType?.name ?: "")
-        dest.writeInt(permissions)
-        dest.writeLong(sharedDate)
-        dest.writeLong(expirationDate)
-        dest.writeInt(if (isFolder) 1 else 0)
-        dest.writeLong(userId)
-    }
+) {
 
     companion object {
-
-        /**
-         * Generated - should be refreshed every time the class changes!!
-         */
-        private const val serialVersionUID = 4124975224281327921L
-
-        private val TAG = RemoteShare::class.java.simpleName
-
         const val DEFAULT_PERMISSION = -1
         const val READ_PERMISSION_FLAG = 1
         const val UPDATE_PERMISSION_FLAG = 2
@@ -180,18 +79,44 @@ class RemoteShare : Parcelable, Serializable {
 
         const val INIT_EXPIRATION_DATE_IN_MILLIS: Long = 0
         const val INIT_SHARED_DATE: Long = 0
+    }
+}
 
-        /**
-         * Parcelable Methods
-         */
-        @JvmField
-        val CREATOR: Parcelable.Creator<RemoteShare> = object : Parcelable.Creator<RemoteShare> {
-            override fun createFromParcel(source: Parcel): RemoteShare {
-                return RemoteShare(source)
-            }
+/**
+ * // TODO This type is already included in the domain but we still need it here since the parsing takes place in this library for the moment
+ *
+ * Enum for Share Type, with values:
+ * -1 - Unknown
+ * 0 - Shared by user
+ * 1 - Shared by group
+ * 3 - Shared by public link
+ * 4 - Shared by e-mail
+ * 5 - Shared by contact
+ * 6 - Federated
+ *
+ * @author masensio
+ */
 
-            override fun newArray(size: Int): Array<RemoteShare?> {
-                return arrayOfNulls(size)
+enum class ShareType constructor(val value: Int) {
+    UNKNOWN(-1),
+    USER(0),
+    GROUP(1),
+    PUBLIC_LINK(3),
+    EMAIL(4),
+    CONTACT(5),
+    FEDERATED(6);
+
+    companion object {
+        fun fromValue(value: Int): ShareType? {
+            return when (value) {
+                -1 -> UNKNOWN
+                0 -> USER
+                1 -> GROUP
+                3 -> PUBLIC_LINK
+                4 -> EMAIL
+                5 -> CONTACT
+                6 -> FEDERATED
+                else -> null
             }
         }
     }

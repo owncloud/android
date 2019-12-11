@@ -16,7 +16,7 @@ import okhttp3.OkHttpClient;
 
 import java.io.IOException;
 
-public abstract class RemoteOperation<T extends Object> implements Runnable {
+public abstract class RemoteOperation<T> implements Runnable {
 
     /**
      * OCS API header name
@@ -192,7 +192,7 @@ public abstract class RemoteOperation<T extends Object> implements Runnable {
 
     /**
      * Synchronously executes the remote operation
-     * <p>
+     *
      * Do not call this method from the main thread.
      *
      * @param client Client object to reach an ownCloud server during the execution of

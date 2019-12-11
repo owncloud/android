@@ -114,7 +114,7 @@ public class OwnCloudClient extends HttpClient {
             status = method.execute();
             checkFirstRedirection(method);
 
-            if (mFollowRedirects && !isIdPRedirection()) {
+            if (mFollowRedirects) {
                 status = followRedirection(method).getLastStatus();
             }
 
@@ -422,7 +422,7 @@ public class OwnCloudClient extends HttpClient {
      */
     private boolean shouldInvalidateAccountCredentials(int httpStatusCode) {
 
-        boolean should = (httpStatusCode == HttpConstants.HTTP_UNAUTHORIZED || isIdPRedirection());   // invalid credentials
+        boolean should = (httpStatusCode == HttpConstants.HTTP_UNAUTHORIZED);   // invalid credentials
 
         should &= (mCredentials != null &&         // real credentials
                 !(mCredentials instanceof OwnCloudCredentialsFactory.OwnCloudAnonymousCredentials));
@@ -457,17 +457,6 @@ public class OwnCloudClient extends HttpClient {
 
     void setOwnCloudClientManager(OwnCloudClientManager clientManager) {
         mOwnCloudClientManager = clientManager;
-    }
-
-    /**
-     * Check if the redirection is to an identity provider such as SAML or wayf
-     *
-     * @return true if the redirection location includes SAML or wayf, false otherwise
-     */
-    private boolean isIdPRedirection() {
-        return (mRedirectedLocation != null &&
-                (mRedirectedLocation.toUpperCase().contains("SAML") ||
-                        mRedirectedLocation.toLowerCase().contains("wayf")));
     }
 
     public boolean followRedirects() {

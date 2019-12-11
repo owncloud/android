@@ -65,11 +65,7 @@ public class AccountUtils {
             OwnCloudCredentials ownCloudCredentials = getCredentialsForAccount(context, account);
             webDavUrlForAccount = getBaseUrlForAccount(context, account) + OwnCloudClient.WEBDAV_FILES_PATH_4_0
                     + ownCloudCredentials.getUsername();
-        } catch (OperationCanceledException e) {
-            e.printStackTrace();
-        } catch (AuthenticatorException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+        } catch (OperationCanceledException | AuthenticatorException | IOException e) {
             e.printStackTrace();
         }
 
@@ -148,11 +144,6 @@ public class AccountUtils {
         String supportsOAuth2 = am.getUserData(account, AccountUtils.Constants.KEY_SUPPORTS_OAUTH2);
         boolean isOauth2 = supportsOAuth2 != null && supportsOAuth2.equals("TRUE");
 
-        String supportsSamlSSo = am.getUserData(account,
-                AccountUtils.Constants.KEY_SUPPORTS_SAML_WEB_SSO);
-
-        boolean isSamlSso = supportsSamlSSo != null && supportsSamlSSo.equals("TRUE");
-
         String username = AccountUtils.getUsernameForAccount(account);
         OwnCloudVersion version = new OwnCloudVersion(am.getUserData(account, Constants.KEY_OC_VERSION));
 
@@ -163,14 +154,6 @@ public class AccountUtils {
                     false);
 
             credentials = OwnCloudCredentialsFactory.newBearerCredentials(username, accessToken);
-
-        } else if (isSamlSso) {
-            String accessToken = am.blockingGetAuthToken(
-                    account,
-                    AccountTypeUtils.getAuthTokenTypeSamlSessionCookie(account.type),
-                    false);
-
-            credentials = OwnCloudCredentialsFactory.newSamlSsoCredentials(username, accessToken);
 
         } else {
             String password = am.blockingGetAuthToken(
@@ -317,10 +300,7 @@ public class AccountUtils {
          * Flag signaling if the ownCloud server can be accessed with OAuth2 access tokens.
          */
         public static final String KEY_SUPPORTS_OAUTH2 = "oc_supports_oauth2";
-        /**
-         * Flag signaling if the ownCloud server can be accessed with session cookies from SAML-based web single-sign-on.
-         */
-        public static final String KEY_SUPPORTS_SAML_WEB_SSO = "oc_supports_saml_web_sso";
+
         /**
          * OC account cookies
          */
@@ -345,6 +325,5 @@ public class AccountUtils {
          * OAuth2 refresh token
          **/
         public static final String KEY_OAUTH2_REFRESH_TOKEN = "oc_oauth2_refresh_token";
-
     }
 }

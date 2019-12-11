@@ -52,7 +52,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class RemoteOperationResult<T extends Object>
+public class RemoteOperationResult<T>
         implements Serializable {
 
     /**
@@ -70,6 +70,7 @@ public class RemoteOperationResult<T extends Object>
     private ArrayList<String> mAuthenticate = new ArrayList<>();
     private String mLastPermanentLocation = null;
     private T mData = null;
+
     /**
      * Public constructor from result code.
      * <p>
@@ -252,10 +253,6 @@ public class RemoteOperationResult<T extends Object>
                     mAuthenticate.add(header.getValue().get(0).toLowerCase());
                 }
             }
-        }
-        if (isIdPRedirection()) {
-            // overrides default ResultCode.UNKNOWN
-            mCode = ResultCode.UNAUTHORIZED;
         }
     }
 
@@ -489,12 +486,6 @@ public class RemoteOperationResult<T extends Object>
 
     public String getRedirectedLocation() {
         return mRedirectedLocation;
-    }
-
-    public boolean isIdPRedirection() {
-        return (mRedirectedLocation != null &&
-                (mRedirectedLocation.toUpperCase().contains("SAML") ||
-                        mRedirectedLocation.toLowerCase().contains("wayf")));
     }
 
     /**
