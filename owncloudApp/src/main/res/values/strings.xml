@@ -605,10 +605,10 @@
     <string name="welcome_feature_9_text">Access and edit your ownCloud files from other apps</string>
     <string name="welcome_feature_10_title">Logs with search for everyone</string>
     <string name="welcome_feature_10_text">Send us your logs to make the app work better</string>
-    <string name="welcome_feature_11_title">End of support for servers lower than 10 is coming</string>
+    <string name="welcome_feature_11_title">End of support for servers lower than 10</string>
     <string name="welcome_feature_11_text">Please upgrade your server or the coming app versions will not work for you</string>
-    <string name="welcome_feature_12_title">End of support for Android 4.4 devices is coming</string>
-    <string name="welcome_feature_12_text">The coming app versions will not appear in Google Play for devices lower that Android 5</string>
+    <string name="welcome_feature_12_title">End of support for Android 4.4 devices</string>
+    <string name="welcome_feature_12_text">The coming app versions will not appear in Google Play for devices lower than Android 5</string>
     <string name="no_borwser_installed_alert">No browser installed. Please install a Browser in order to allow a secure login.</string>
     <string name="common_not_found">it was not found</string>
 </resources>

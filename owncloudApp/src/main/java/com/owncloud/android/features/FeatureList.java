@@ -57,9 +57,9 @@ public class FeatureList {
 
             // Features introduced in 2.14.0
             new FeatureItem(R.drawable.whats_new_no_more_10, R.string.welcome_feature_11_title,
-                    R.string.welcome_feature_11_text, "2.14", "0", SHOW_ON_UPGRADE),
+                    R.string.welcome_feature_11_text, "2.14.0", "0", SHOW_ON_UPGRADE),
             new FeatureItem(R.drawable.whats_new_no_more_4_4, R.string.welcome_feature_12_title,
-                    R.string.welcome_feature_12_text, "2.14", "0", SHOW_ON_UPGRADE)
+                    R.string.welcome_feature_12_text, "2.14.0", "0", SHOW_ON_UPGRADE)
     };
 
     static public FeatureItem[] get() {
