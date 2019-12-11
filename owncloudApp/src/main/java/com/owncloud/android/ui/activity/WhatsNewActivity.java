@@ -108,18 +108,10 @@ public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPa
     private void updateNextButtonIfNeeded() {
         if (!mProgress.hasNextStep()) {
             mForwardFinishButton.setImageResource(R.drawable.ic_done_white);
-            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                mForwardFinishButton.setBackground(getResources().getDrawable(R.drawable.round_button));
-            } else {
-                mForwardFinishButton.setBackgroundDrawable(getResources().getDrawable(R.drawable.round_button));
-            }
+            mForwardFinishButton.setBackground(getResources().getDrawable(R.drawable.round_button));
         } else {
             mForwardFinishButton.setImageResource(R.drawable.ic_arrow_forward);
-            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                mForwardFinishButton.setBackground(null);
-            } else {
-                mForwardFinishButton.setBackgroundDrawable(null);
-            }
+            mForwardFinishButton.setBackground(null);
         }
     }
 
@@ -147,7 +139,8 @@ public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPa
 
     static private boolean shouldShow(Context context) {
         boolean isBeta = MainApp.Companion.isBeta();
-        boolean showWizard = context.getResources().getBoolean(R.bool.wizard_enabled) && !BuildConfig.DEBUG;
+        boolean showWizard = context.getResources().getBoolean(R.bool.wizard_enabled);
+//                && !BuildConfig.DEBUG;
         return showWizard &&
                 ((isFirstRun() && context instanceof AccountAuthenticatorActivity) ||
                         (

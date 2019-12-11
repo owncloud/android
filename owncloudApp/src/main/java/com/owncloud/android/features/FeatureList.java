@@ -55,11 +55,11 @@ public class FeatureList {
             new FeatureItem(R.drawable.whats_new_video_streaming, R.string.welcome_feature_5_title,
                     R.string.welcome_feature_5_text, "2.7.0", "0", SHOW_ON_FIRST_RUN),
 
-            // Features introduced in 2.11.0
-            new FeatureItem(R.drawable.whats_new_document_provider, R.string.welcome_feature_9_title,
-                    R.string.welcome_feature_9_text, "2.11.0", "0", SHOW_ON_UPGRADE),
-            new FeatureItem(R.drawable.whats_new_logs_search, R.string.welcome_feature_10_title,
-                    R.string.welcome_feature_10_text, "2.11.0", "0", SHOW_ON_UPGRADE)
+            // Features introduced in 2.14.0
+            new FeatureItem(R.drawable.whats_new_no_more_10, R.string.welcome_feature_11_title,
+                    R.string.welcome_feature_11_text, "2.14", "0", SHOW_ON_UPGRADE),
+            new FeatureItem(R.drawable.whats_new_no_more_4_4, R.string.welcome_feature_12_title,
+                    R.string.welcome_feature_12_text, "2.14", "0", SHOW_ON_UPGRADE)
     };
 
     static public FeatureItem[] get() {
