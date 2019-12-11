@@ -55,64 +55,60 @@ public class CameraUploadsHandler {
      * Schedule a periodic job to check pictures and videos to be uploaded
      */
     public void scheduleCameraUploadsSyncJob(Context context) {
+        // DB Connection
+        CameraUploadsSyncStorageManager cameraUploadsSyncStorageManager = new
+                CameraUploadsSyncStorageManager(context.getContentResolver());
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        OCCameraUploadSync ocCameraUploadSync = cameraUploadsSyncStorageManager.
+                getCameraUploadSync(null, null, null);
 
-            // DB Connection
-            CameraUploadsSyncStorageManager cameraUploadsSyncStorageManager = new
-                    CameraUploadsSyncStorageManager(context.getContentResolver());
+        // Initialize synchronization timestamps for pictures/videos, if needed
+        if (ocCameraUploadSync == null ||
+                ocCameraUploadSync.getPicturesLastSync() == 0 ||
+                ocCameraUploadSync.getVideosLastSync() == 0) {
 
-            OCCameraUploadSync ocCameraUploadSync = cameraUploadsSyncStorageManager.
-                    getCameraUploadSync(null, null, null);
-
-            // Initialize synchronization timestamps for pictures/videos, if needed
-            if (ocCameraUploadSync == null ||
-                    ocCameraUploadSync.getPicturesLastSync() == 0 ||
-                    ocCameraUploadSync.getVideosLastSync() == 0) {
-
-                initializeCameraUploadSync(cameraUploadsSyncStorageManager, ocCameraUploadSync);
-            }
-
-            ComponentName serviceComponent = new ComponentName(context, CameraUploadsSyncJobService.class);
-            JobInfo.Builder builder;
-
-            builder = new JobInfo.Builder(JOB_ID_CAMERA_UPLOAD, serviceComponent);
-
-            builder.setPersisted(true);
-
-            // Execute job every 15 minutes
-            builder.setPeriodic(MILLISECONDS_INTERVAL_CAMERA_UPLOAD);
-
-            // Extra data
-            PersistableBundle extras = new PersistableBundle();
-
-            extras.putInt(Extras.EXTRA_CAMERA_UPLOADS_SYNC_JOB_ID, JOB_ID_CAMERA_UPLOAD);
-
-            extras.putString(Extras.EXTRA_ACCOUNT_NAME, mCameraUploadsConfig.getUploadAccountName());
-
-            if (mCameraUploadsConfig.isEnabledForPictures()) {
-                extras.putString(Extras.EXTRA_CAMERA_UPLOADS_PICTURES_PATH, mCameraUploadsConfig.
-                        getUploadPathForPictures());
-            }
-
-            if (mCameraUploadsConfig.isEnabledForVideos()) {
-                extras.putString(Extras.EXTRA_CAMERA_UPLOADS_VIDEOS_PATH, mCameraUploadsConfig.
-                        getUploadPathForVideos());
-            }
-
-            extras.putString(Extras.EXTRA_CAMERA_UPLOADS_SOURCE_PATH, mCameraUploadsConfig.getSourcePath());
-
-            extras.putInt(Extras.EXTRA_CAMERA_UPLOADS_BEHAVIOR_AFTER_UPLOAD, mCameraUploadsConfig.
-                    getBehaviourAfterUpload());
-
-            builder.setExtras(extras);
-
-            Log_OC.d(TAG, "Scheduling a CameraUploadsSyncJobService");
-
-            JobScheduler jobScheduler = (JobScheduler) context.getSystemService(Context.JOB_SCHEDULER_SERVICE);
-
-            jobScheduler.schedule(builder.build());
+            initializeCameraUploadSync(cameraUploadsSyncStorageManager, ocCameraUploadSync);
         }
+
+        ComponentName serviceComponent = new ComponentName(context, CameraUploadsSyncJobService.class);
+        JobInfo.Builder builder;
+
+        builder = new JobInfo.Builder(JOB_ID_CAMERA_UPLOAD, serviceComponent);
+
+        builder.setPersisted(true);
+
+        // Execute job every 15 minutes
+        builder.setPeriodic(MILLISECONDS_INTERVAL_CAMERA_UPLOAD);
+
+        // Extra data
+        PersistableBundle extras = new PersistableBundle();
+
+        extras.putInt(Extras.EXTRA_CAMERA_UPLOADS_SYNC_JOB_ID, JOB_ID_CAMERA_UPLOAD);
+
+        extras.putString(Extras.EXTRA_ACCOUNT_NAME, mCameraUploadsConfig.getUploadAccountName());
+
+        if (mCameraUploadsConfig.isEnabledForPictures()) {
+            extras.putString(Extras.EXTRA_CAMERA_UPLOADS_PICTURES_PATH, mCameraUploadsConfig.
+                    getUploadPathForPictures());
+        }
+
+        if (mCameraUploadsConfig.isEnabledForVideos()) {
+            extras.putString(Extras.EXTRA_CAMERA_UPLOADS_VIDEOS_PATH, mCameraUploadsConfig.
+                    getUploadPathForVideos());
+        }
+
+        extras.putString(Extras.EXTRA_CAMERA_UPLOADS_SOURCE_PATH, mCameraUploadsConfig.getSourcePath());
+
+        extras.putInt(Extras.EXTRA_CAMERA_UPLOADS_BEHAVIOR_AFTER_UPLOAD, mCameraUploadsConfig.
+                getBehaviourAfterUpload());
+
+        builder.setExtras(extras);
+
+        Log_OC.d(TAG, "Scheduling a CameraUploadsSyncJobService");
+
+        JobScheduler jobScheduler = (JobScheduler) context.getSystemService(Context.JOB_SCHEDULER_SERVICE);
+
+        jobScheduler.schedule(builder.build());
     }
 
     /**
@@ -161,6 +157,7 @@ public class CameraUploadsHandler {
 
     /**
      * Update timestamp (in milliseconds) from which to start checking pictures to upload
+     *
      * @param lastSyncTimestamp
      */
     public void updatePicturesLastSync(Context context, long lastSyncTimestamp) {
@@ -181,6 +178,7 @@ public class CameraUploadsHandler {
 
     /**
      * Update timestamp (in milliseconds) from which to start checking videos to upload
+     *
      * @param lastSyncTimestamp
      */
     public void updateVideosLastSync(Context context, long lastSyncTimestamp) {

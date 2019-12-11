@@ -45,7 +45,6 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.Locale;
 
-@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 public class CameraUploadsSyncJobService extends JobService {
 
     private static final String TAG = CameraUploadsSyncJobService.class.getSimpleName();

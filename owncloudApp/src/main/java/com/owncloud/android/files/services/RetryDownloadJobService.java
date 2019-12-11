@@ -34,7 +34,6 @@ import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.utils.Extras;
 
-@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 public class RetryDownloadJobService extends JobService {
 
     private static final String TAG = RetryDownloadJobService.class.getName();

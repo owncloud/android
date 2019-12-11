@@ -312,11 +312,9 @@ public class FileOperationsHelper {
 
             if (success) {
                 // Schedule job to check to watch for local changes in available offline files and sync them
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-                    AvailableOfflineHandler availableOfflineHandler =
-                            new AvailableOfflineHandler(mFileActivity, mFileActivity.getAccount().name);
-                    availableOfflineHandler.scheduleAvailableOfflineJob(mFileActivity);
-                }
+                AvailableOfflineHandler availableOfflineHandler =
+                        new AvailableOfflineHandler(mFileActivity, mFileActivity.getAccount().name);
+                availableOfflineHandler.scheduleAvailableOfflineJob(mFileActivity);
 
                 /// immediate content synchronization
                 if (OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE == file.getAvailableOfflineStatus()) {

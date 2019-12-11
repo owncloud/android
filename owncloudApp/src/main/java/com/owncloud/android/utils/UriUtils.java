@@ -119,12 +119,9 @@ public class UriUtils {
      * @param uri       The URI to resolve
      * @return The path in the file system to the content or null if it could not be found (not a file)
      */
-    @TargetApi(Build.VERSION_CODES.KITKAT)
     public static String getLocalPath(Uri uri, Context context) {
-        final boolean isKitKatOrLater = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
-
         // DocumentProvider
-        if (isKitKatOrLater && DocumentsContract.isDocumentUri(context, uri)) {
+        if ( DocumentsContract.isDocumentUri(context, uri)) {
             // ExternalStorageProvider
             if (UriUtils.isExternalStorageDocument(uri)) {
                 final String docId = DocumentsContract.getDocumentId(uri);

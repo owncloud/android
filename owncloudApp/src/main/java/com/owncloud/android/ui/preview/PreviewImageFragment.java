@@ -158,7 +158,6 @@ public class PreviewImageFragment extends FileFragment {
         );
 
         mProgressBar = view.findViewById(R.id.syncProgressBar);
-        DisplayUtils.colorPreLollipopHorizontalProgressBar(mProgressBar);
         mImageView = view.findViewById(R.id.photo_view);
         mImageView.setVisibility(View.GONE);
         mImageView.setOnClickListener(v -> {

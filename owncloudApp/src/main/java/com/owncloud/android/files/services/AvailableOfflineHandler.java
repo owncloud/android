@@ -46,7 +46,6 @@ public class AvailableOfflineHandler {
     private String mAccountName;
     private JobScheduler mJobScheduler;
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public AvailableOfflineHandler(Context context, String accountName) {
         mAccountName = accountName;
         mJobScheduler = (JobScheduler) context.getSystemService(Context.JOB_SCHEDULER_SERVICE);
@@ -55,7 +54,6 @@ public class AvailableOfflineHandler {
     /**
      * Schedule a periodic job to check whether recently updated available offline files need to be synchronized
      */
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void scheduleAvailableOfflineJob(Context context) {
         ComponentName serviceComponent = new ComponentName(context, AvailableOfflineSyncJobService.class);
         JobInfo.Builder builder;

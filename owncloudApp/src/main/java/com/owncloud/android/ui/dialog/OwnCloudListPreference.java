@@ -30,12 +30,10 @@ public class OwnCloudListPreference extends ListPreference {
         this.mContext = context;
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public OwnCloudListPreference(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public OwnCloudListPreference(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }

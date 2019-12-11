@@ -533,11 +533,9 @@ public class OCFileListFragment extends ExtendedListFragment implements
             mode.invalidate();
 
             //set gray color
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                Window w = getActivity().getWindow();
-                mStatusBarColor = w.getStatusBarColor();
-                w.setStatusBarColor(mStatusBarColorActionMode);
-            }
+            Window w = getActivity().getWindow();
+            mStatusBarColor = w.getStatusBarColor();
+            w.setStatusBarColor(mStatusBarColorActionMode);
 
             // hide FAB in multi selection mode
             setFabEnabled(false);
@@ -584,9 +582,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
             mActiveActionMode = null;
 
             // reset to previous color
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                getActivity().getWindow().setStatusBarColor(mStatusBarColor);
-            }
+            getActivity().getWindow().setStatusBarColor(mStatusBarColor);
 
             // show FAB on multi selection mode exit
             if (!mHideFab) {
@@ -744,8 +740,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
     private boolean isInPowerSaveMode() {
         PowerManager powerManager = (PowerManager)
                 getActivity().getSystemService(Context.POWER_SERVICE);
-        return android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
-                && powerManager.isPowerSaveMode();
+        return  powerManager.isPowerSaveMode();
     }
 
     private void listDirectoryWidthAnimationUp(final OCFile file) {

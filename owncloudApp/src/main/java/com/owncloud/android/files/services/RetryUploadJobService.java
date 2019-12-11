@@ -31,7 +31,6 @@ import com.owncloud.android.datamodel.UploadsStorageManager;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.utils.Extras;
 
-@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 public class RetryUploadJobService extends JobService {
 
     private static final String TAG = RetryUploadJobService.class.getName();

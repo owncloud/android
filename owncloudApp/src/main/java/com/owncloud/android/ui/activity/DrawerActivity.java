@@ -143,12 +143,6 @@ public abstract class DrawerActivity extends ToolbarActivity {
             mAccountMiddleAccountAvatar = (ImageView) findNavigationViewChildById(R.id.drawer_account_middle);
             mAccountEndAccountAvatar = (ImageView) findNavigationViewChildById(R.id.drawer_account_end);
 
-            // on pre lollipop the light theme adds a black tint to icons with white coloring
-            // ruining the generic avatars, so tinting for icons is deactivated pre lollipop
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-                mNavigationView.setItemIconTintList(null);
-            }
-
             //Notch support
             mNavigationView.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
                 @Override
@@ -163,8 +157,8 @@ public abstract class DrawerActivity extends ToolbarActivity {
                             int orientation = getResources().getConfiguration().orientation;
                             if (orientation == Configuration.ORIENTATION_PORTRAIT) {
                                 int displayCutoutDP = (displayCutout.getSafeInsetTop()) /
-                                                (getResources().getDisplayMetrics().densityDpi /
-                                                        DisplayMetrics.DENSITY_DEFAULT);
+                                        (getResources().getDisplayMetrics().densityDpi /
+                                                DisplayMetrics.DENSITY_DEFAULT);
                                 rlDrawerActiveUser.getLayoutParams().height =
                                         (int) getResources().getDimension(R.dimen.nav_drawer_header_height) +
                                                 displayCutoutDP;
@@ -175,6 +169,7 @@ public abstract class DrawerActivity extends ToolbarActivity {
                         }
                     }
                 }
+
                 @Override
                 public void onViewDetachedFromWindow(View v) {
                 }
@@ -793,7 +788,7 @@ public abstract class DrawerActivity extends ToolbarActivity {
     /**
      * Adds other listeners to react on changes of the drawer layout.
      *
-     * @param listener      Object interested in changes of the drawer layout.
+     * @param listener Object interested in changes of the drawer layout.
      */
     public void addDrawerListener(DrawerLayout.DrawerListener listener) {
         if (mDrawerLayout != null) {

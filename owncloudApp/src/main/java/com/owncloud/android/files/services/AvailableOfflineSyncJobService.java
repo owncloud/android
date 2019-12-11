@@ -50,7 +50,6 @@ import static com.owncloud.android.ui.notifications.NotificationUtils.notifyConf
  * This job should be executed every 15 minutes since a file is set as available offline for the first time and stopped
  * when there's no available offline files
  */
-@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 public class AvailableOfflineSyncJobService extends JobService {
     private static final String TAG = "AvOfflineSyncJobService";
 

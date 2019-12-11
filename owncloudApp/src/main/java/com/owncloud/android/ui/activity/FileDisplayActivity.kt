@@ -654,7 +654,6 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
     /**
      * Called, when the user selected something for uploading
      */
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {

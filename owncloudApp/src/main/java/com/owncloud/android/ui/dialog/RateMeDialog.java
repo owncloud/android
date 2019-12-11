@@ -61,8 +61,8 @@ public class RateMeDialog extends DialogFragment {
     /**
      * Public factory method to get dialog instances.
      *
-     * @param packageName   The package name of the application
-     * @param cancelable    If 'true', the dialog can be cancelled by the user input (BACK button, touch outside...)
+     * @param packageName The package name of the application
+     * @param cancelable  If 'true', the dialog can be cancelled by the user input (BACK button, touch outside...)
      * @return New dialog instance, ready to show.
      */
     public static RateMeDialog newInstance(String packageName, boolean cancelable) {
@@ -102,13 +102,8 @@ public class RateMeDialog extends DialogFragment {
 
             /// To count with Play market back stack, After pressing back button,
             /// to taken back to our application, we need to add following flags to intent.
-            int flags = Intent.FLAG_ACTIVITY_NO_HISTORY |
-                    Intent.FLAG_ACTIVITY_MULTIPLE_TASK;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                flags |= Intent.FLAG_ACTIVITY_NEW_DOCUMENT;
-            } else {
-                flags |= Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET;
-            }
+            int flags =
+                    Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_MULTIPLE_TASK | Intent.FLAG_ACTIVITY_NEW_DOCUMENT;
             goToMarket.addFlags(flags);
 
             try {

@@ -130,7 +130,6 @@ public class FileDownloadFragment extends FileFragment implements OnClickListene
         View rootView = inflater.inflate(R.layout.file_download_fragment, container, false);
 
         mProgressBar = rootView.findViewById(R.id.progressBar);
-        DisplayUtils.colorPreLollipopHorizontalProgressBar(mProgressBar);
 
         (rootView.findViewById(R.id.cancelBtn)).setOnClickListener(this);
 

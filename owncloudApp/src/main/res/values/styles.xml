@@ -57,10 +57,13 @@
     <style name="Theme.ownCloud.Toolbar">
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
+        <!-- (status/nav)BarColor are set by the Activity, not the system -->
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
     </style>
 
-    <!-- Extends Theme.ownCloud.Toolbar for Drawer activities including Drawwer; needed for v21+ theming -->
+    <!-- Extends Theme.ownCloud.Toolbar for Drawer activities including Drawer -->
     <style name="Theme.ownCloud.Toolbar.Drawer">
+        <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
 
     <!-- Extends Theme.ownCloud to make LEGACY ActionBar both OVERLAY and TRANSPARENT -->

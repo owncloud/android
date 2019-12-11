@@ -254,24 +254,11 @@ public class GridViewWithHeaderAndFooter extends GridView {
     }
 
     private int getNumColumnsCompatible() {
-       return super.getNumColumns();
+        return super.getNumColumns();
     }
 
-    @TargetApi(16)
     private int getColumnWidthCompatible() {
-        if (Build.VERSION.SDK_INT >= 16) {
-            return super.getColumnWidth();
-        } else {
-            try {
-                Field numColumns = getClass().getSuperclass().getDeclaredField("mColumnWidth");
-                numColumns.setAccessible(true);
-                return numColumns.getInt(this);
-            } catch (NoSuchFieldException e) {
-                throw new RuntimeException(e);
-            } catch (IllegalAccessException e) {
-                throw new RuntimeException(e);
-            }
-        }
+        return super.getColumnWidth();
     }
 
     @Override

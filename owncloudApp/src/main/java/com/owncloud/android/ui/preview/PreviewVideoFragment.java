@@ -6,16 +6,16 @@
  * @author Christian Schabesberger
  * @author Shashvat Kedia
  * Copyright (C) 2019 ownCloud GmbH.
- * 
+ * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
  * as published by the Free Software Foundation.
- * 
+ * <p>
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ * <p>
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -172,7 +172,6 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
         View view = inflater.inflate(R.layout.video_preview, container, false);
 
         mProgressBar = view.findViewById(R.id.syncProgressBar);
-        DisplayUtils.colorPreLollipopHorizontalProgressBar(mProgressBar);
         mProgressBar.setVisibility(View.GONE);
 
         simpleExoPlayerView = view.findViewById(R.id.video_player);
@@ -446,26 +445,19 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
         trackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
 
         // Video streaming is only supported at Jelly Bean or higher Android versions (>= API 16)
-        if (Util.SDK_INT >= 16) {
 
-            // Create the player
-            player = ExoPlayerFactory.newSimpleInstance(getContext(), trackSelector,
-                    new DefaultLoadControl());
+        // Create the player
+        player = ExoPlayerFactory.newSimpleInstance(getContext(), trackSelector,
+                new DefaultLoadControl());
 
-            player.addListener(this);
+        player.addListener(this);
 
-            // Bind the player to the view.
-            simpleExoPlayerView.setPlayer(player);
+        // Bind the player to the view.
+        simpleExoPlayerView.setPlayer(player);
 
-            // Prepare video player asynchronously
-            new PrepareVideoPlayerAsyncTask(getActivity(), this,
-                    getFile(), mAccount, mainHandler).execute();
-        } else {
-
-            // Show dialog with error and starts file download
-            showAlertDialog(new PreviewVideoError(getString(R.string.previewing_video_not_supported),
-                    true, false));
-        }
+        // Prepare video player asynchronously
+        new PrepareVideoPlayerAsyncTask(getActivity(), this,
+                getFile(), mAccount, mainHandler).execute();
     }
 
     /**

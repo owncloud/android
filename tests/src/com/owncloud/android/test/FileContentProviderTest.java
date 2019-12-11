@@ -10,7 +10,6 @@ import android.util.Log;
 import com.owncloud.android.db.ProviderMeta.ProviderTableMeta;
 import com.owncloud.android.providers.FileContentProvider;
 
-@TargetApi(Build.VERSION_CODES.CUPCAKE)
 public class FileContentProviderTest extends ProviderTestCase2<FileContentProvider> {
 
     private static final String TAG = FileContentProvider.class.getName();
