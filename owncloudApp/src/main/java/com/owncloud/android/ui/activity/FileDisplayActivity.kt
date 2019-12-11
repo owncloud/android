@@ -47,8 +47,6 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
-import android.os.Parcelable
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -184,7 +182,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
 
         /// Load of saved instance state
         if (savedInstanceState != null) {
-            Log.d(TAG, savedInstanceState.toString())
+            Log_OC.d(savedInstanceState.toString())
 
             fileWaitingToPreview = savedInstanceState.getParcelable(KEY_WAITING_TO_PREVIEW)
             syncInProgress = savedInstanceState.getBoolean(KEY_SYNC_IN_PROGRESS)

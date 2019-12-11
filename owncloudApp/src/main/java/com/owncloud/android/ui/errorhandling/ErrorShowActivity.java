@@ -21,24 +21,22 @@
 package com.owncloud.android.ui.errorhandling;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.owncloud.android.R;
+import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.ui.activity.BaseActivity;
 import com.owncloud.android.utils.PreferenceUtils;
 
 public class ErrorShowActivity extends BaseActivity {
-
-    private static final String TAG = ErrorShowActivity.class.getSimpleName();
 
     TextView mError;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.e(TAG, "ErrorShowActivity was called. See above for StackTrace.");
+        Log_OC.e("ErrorShowActivity was called. See above for StackTrace.");
         Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler(this));
         setContentView(R.layout.errorhandling_showerror);
 

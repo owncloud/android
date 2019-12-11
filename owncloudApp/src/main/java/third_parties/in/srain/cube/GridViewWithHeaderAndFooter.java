@@ -22,7 +22,6 @@ import android.database.DataSetObservable;
 import android.database.DataSetObserver;
 import android.os.Build;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -32,6 +31,8 @@ import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.ListAdapter;
 import android.widget.WrapperListAdapter;
+
+import com.owncloud.android.lib.common.utils.Log_OC;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -68,7 +69,6 @@ public class GridViewWithHeaderAndFooter extends GridView {
 
     private View mViewForMeasureRowHeight = null;
     private int mRowHeight = -1;
-    private static final String LOG_TAG = "grid-view-header-footer";
 
     private ArrayList<FixedViewInfo> mHeaderViewInfos = new ArrayList<>();
     private ArrayList<FixedViewInfo> mFooterViewInfos = new ArrayList<>();
@@ -580,7 +580,7 @@ public class GridViewWithHeaderAndFooter extends GridView {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             if (DEBUG) {
-                Log.d(LOG_TAG, String.format("getView: %s, reused: %s", position, convertView == null));
+                Log_OC.d(String.format("getView: %s, reused: %s", position, convertView == null));
             }
             // Header (negative positions will throw an ArrayIndexOutOfBoundsException)
             int numHeadersAndPlaceholders = getHeadersCount() * mNumColumns;
@@ -683,7 +683,7 @@ public class GridViewWithHeaderAndFooter extends GridView {
                 }
             }
             if (DEBUG) {
-                Log.d(LOG_TAG, String.format("getItemViewType: pos: %s, result: %s", position, type,
+                Log_OC.d(String.format("getItemViewType: pos: %s, result: %s", position, type,
                         mCachePlaceHoldView, mCacheFirstHeaderView));
             }
             return type;
@@ -705,7 +705,7 @@ public class GridViewWithHeaderAndFooter extends GridView {
                 count += offset;
             }
             if (DEBUG) {
-                Log.d(LOG_TAG, String.format("getViewTypeCount: %s", count));
+                Log_OC.d(String.format("getViewTypeCount: %s", count));
             }
             return count;
         }

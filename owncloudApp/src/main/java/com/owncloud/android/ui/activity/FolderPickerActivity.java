@@ -30,7 +30,6 @@ import android.content.IntentFilter;
 import android.content.res.Resources.NotFoundException;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -68,8 +67,6 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
             + ".EXTRA_FOLDER";
     public static final String EXTRA_FILES = FolderPickerActivity.class.getCanonicalName()
             + ".EXTRA_FILES";
-
-    private static final String TAG = FolderPickerActivity.class.getSimpleName();
 
     private static final String TAG_LIST_OF_FOLDERS = "LIST_OF_FOLDERS";
 
@@ -170,7 +167,7 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
             }
             listFragment.setMessageForEmptyList(getString(message));
         } else {
-            Log.e(TAG, "OCFileListFragment is null");
+            Log_OC.e("OCFileListFragment is null");
         }
     }
 

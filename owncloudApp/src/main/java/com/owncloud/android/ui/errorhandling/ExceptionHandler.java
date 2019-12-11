@@ -21,7 +21,8 @@ package com.owncloud.android.ui.errorhandling;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
-import android.util.Log;
+
+import com.owncloud.android.lib.common.utils.Log_OC;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -30,14 +31,12 @@ public class ExceptionHandler implements java.lang.Thread.UncaughtExceptionHandl
     private final Activity mContext;
     private final String LINE_SEPARATOR = "\n";
 
-    private static final String TAG = ExceptionHandler.class.getSimpleName();
-
     public ExceptionHandler(Activity context) {
         mContext = context;
     }
 
     public void uncaughtException(Thread thread, Throwable exception) {
-        Log.e(TAG, "ExceptionHandler caught UncaughtException", exception);
+        Log_OC.e("ExceptionHandler caught UncaughtException", exception);
         StringWriter stackTrace = new StringWriter();
         exception.printStackTrace(new PrintWriter(stackTrace));
         StringBuilder errorReport = new StringBuilder();
@@ -71,7 +70,7 @@ public class ExceptionHandler implements java.lang.Thread.UncaughtExceptionHandl
         errorReport.append(Build.VERSION.INCREMENTAL);
         errorReport.append(LINE_SEPARATOR);
 
-        Log.e(TAG, "An exception was thrown and handled by ExceptionHandler:", exception);
+        Log_OC.e("An exception was thrown and handled by ExceptionHandler:", exception);
 
         Intent intent = new Intent(mContext, ErrorShowActivity.class);
         intent.putExtra("error", errorReport.toString());
