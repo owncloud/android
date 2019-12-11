@@ -82,6 +82,7 @@
 
     <string name="error_reason">because</string>
     <string name="auth_failure_snackbar">Authentication failed</string>
+    <string name="server_not_supported">Your server version is lower than 10 so is not supported</string>
     <string name="auth_failure_snackbar_action">Change account</string>
     <string name="auth_oauth_failure">The access token has expired or become invalid. Sign in again to regain access</string>
     <string name="auth_oauth_failure_snackbar_action">Sign in</string>

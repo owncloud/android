@@ -314,8 +314,8 @@ public class FileActivity extends DrawerActivity
         }
     }
 
-    protected void showRequestAccountChangeNotice() {
-        Snackbar.make(findViewById(android.R.id.content), R.string.auth_failure_snackbar, Snackbar.LENGTH_INDEFINITE)
+    protected void showRequestAccountChangeNotice(String errorMessage) {
+        Snackbar.make(findViewById(android.R.id.content), errorMessage, Snackbar.LENGTH_INDEFINITE)
                 .setAction(R.string.auth_failure_snackbar_action, v ->
                         startActivity(
                                 new Intent(FileActivity.this, ManageAccountsActivity.class)))
