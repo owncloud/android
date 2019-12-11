@@ -22,9 +22,9 @@
 package com.owncloud.android.ui.dialog;
 
 /**
- *  Dialog to input a new name for an {@link OCFile} being renamed.  
- *
- *  Triggers the rename operation. 
+ * Dialog to input a new name for an {@link OCFile} being renamed.
+ * <p>
+ * Triggers the rename operation.
  */
 
 import android.app.Dialog;
@@ -155,5 +155,4 @@ public class RenameFileDialogFragment
         );
         snackbar.show();
     }
-
 }

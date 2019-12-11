@@ -262,8 +262,7 @@ Ci-dessous la liste des fichiers locaux, et les fichiers distants dans %5$s auxq
   <string name="auth_wtf_reenter_URL">Problème inattendu ; veuillez saisir à nouveau l\'adresse du serveur</string>
   <string name="auth_expired_oauth_token_toast">Votre autorisation a expiré. Merci de vous authentifier à nouveau</string>
   <string name="auth_expired_basic_auth_toast">Veuillez saisir votre mot de passe</string>
-  <string name="auth_expired_saml_sso_token_toast">Votre session a expiré. Merci de vous reconnecter</string>
-  <string name="auth_connecting_auth_server">Connexion au serveur d\'authentification …</string>
+    <string name="auth_connecting_auth_server">Connexion au serveur d\'authentification …</string>
   <string name="auth_unsupported_auth_method">Le serveur ne prend pas en charge pas cette méthode d\'authentification</string>
   <string name="auth_unsupported_multiaccount">%1$s ne prend pas en charge les comptes multiples</string>
   <string name="auth_fail_get_user_name">Votre serveur a retourné un identifiant d\'utilisateur incorrect. Veuillez prendre contact avec votre administrateur
@@ -279,7 +278,7 @@ Ci-dessous la liste des fichiers locaux, et les fichiers distants dans %5$s auxq
   <string name="confirmation_remove_local">Local seulement</string>
   <string name="confirmation_remove_account_alert">Voulez-vous vraiment supprimer le compte %1$s ?</string>
   <string name="confirmation_remove_public_share_title">Supprimer le lien</string>
-  <string name="confirmation_remove_public_share_message">Voulez-vous vraiment supprimer %1$s ?</string>
+  <string name="confirmation_remove_share_message">Voulez-vous vraiment supprimer %1$s ?</string>
   <string name="remove_success_msg">Suppression effectuée avec succès</string>
   <string name="remove_fail_msg">Suppression impossible</string>
   <string name="rename_dialog_title">Entrez un nouveau nom</string>
@@ -393,8 +392,6 @@ Ci-dessous la liste des fichiers locaux, et les fichiers distants dans %5$s auxq
   <string name="log_progress_dialog_text">Chargement des données…</string>
   <string name="actionbar_select_all">Tout sélectionner</string>
   <string name="actionbar_select_inverse">Inversez la sélection</string>
-  <string name="saml_authentication_required_text">Authentification requise</string>
-  <string name="saml_authentication_wrong_pass">Mot de passe incorrect</string>
   <string name="actionbar_move">Déplacer</string>
   <string name="file_list_empty_moving">Il n\'y a rien ici. Vous pouvez ajouter un dossier !</string>
   <string name="folder_picker_choose_button_text">Choisir</string>

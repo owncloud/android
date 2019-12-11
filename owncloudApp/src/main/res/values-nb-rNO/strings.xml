@@ -240,8 +240,7 @@
   <string name="auth_wtf_reenter_URL">Uventet tilstand. Legg inn server-adressen på nytt</string>
   <string name="auth_expired_oauth_token_toast">Autorisasjonen din har gått ut. Vennligt autoriser igjen</string>
   <string name="auth_expired_basic_auth_toast">Legg inn nåværende passord</string>
-  <string name="auth_expired_saml_sso_token_toast">Sesjonen din har gått ut. Vennligst koble til igjen</string>
-  <string name="auth_connecting_auth_server">Kobler til autentiserings-server ..</string>
+    <string name="auth_connecting_auth_server">Kobler til autentiserings-server ..</string>
   <string name="auth_unsupported_auth_method">Serveren støtter ikke denne autorisasjonsmetoden</string>
   <string name="auth_unsupported_multiaccount">%1$s støtter ikke flere kontoer</string>
   <string name="auth_fail_get_user_name">Tjeneren din svarer ikke med korrekt bruker-ID, vennligst ta kontakt med en administrator
@@ -257,7 +256,7 @@
   <string name="confirmation_remove_local">Kun lokalt</string>
   <string name="confirmation_remove_account_alert">Vil du virkelig fjerne kontoen %1$s?</string>
   <string name="confirmation_remove_public_share_title">Fjern lenke</string>
-  <string name="confirmation_remove_public_share_message">Vil du virkelig fjerne %1$s?</string>
+  <string name="confirmation_remove_share_message">Vil du virkelig fjerne %1$s?</string>
   <string name="remove_success_msg">Fjerning var vellykket</string>
   <string name="remove_fail_msg">Fjerning mislyktes</string>
   <string name="rename_dialog_title">Skriv inn et nytt navn</string>
@@ -365,9 +364,7 @@
   <string name="log_send_mail_subject">%1$s Android app logger</string>
   <string name="log_progress_dialog_text">Laster data...</string>
   <string name="actionbar_select_all">Velg alle</string>
-  <string name="saml_authentication_required_text">Autentisering kreves</string>
-  <string name="saml_authentication_wrong_pass">Feil passord</string>
-  <string name="actionbar_move">Flytt</string>
+    <string name="actionbar_move">Flytt</string>
   <string name="file_list_empty_moving">Ingenting her. Du kan legge til en mappe!</string>
   <string name="folder_picker_choose_button_text">Velg</string>
   <string name="move_file_not_found">Kan ikke flytte. Sjekk om filen eksisterer.</string>

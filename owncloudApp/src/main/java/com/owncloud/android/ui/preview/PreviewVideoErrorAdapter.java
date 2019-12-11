@@ -5,16 +5,16 @@
  * @author David González Verdugo
  * @author Christian Schabesberger
  * Copyright (C) 2019 ownCloud GmbH.
- * <p>
+ * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
  * as published by the Free Software Foundation.
- * <p>
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * <p>
+ * 
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -90,7 +90,7 @@ public class PreviewVideoErrorAdapter {
             }
 
             // trying to access to a part of the video not available now;
-            // ALSO: error obtained when (SAML) session expired while playing the video. To handle
+            // ALSO: error obtained when the session expired while playing the video. To handle
             // this case, the parent folder is refreshed and login view is shown
             if (sourceException.getCause() != null &&
                     sourceException.getCause() instanceof EOFException) {
@@ -100,7 +100,7 @@ public class PreviewVideoErrorAdapter {
         }
 
         // Unsupported video file format
-        // Important: this error is also thrown when the SAML session is expired an OC server
+        // Important: this error is also thrown when the session is expired an OC server
         // redirects to the IDP.
         // To handle this case, the parent folder is refreshed and login view is shown
         if (sourceException instanceof UnrecognizedInputFormatException) {

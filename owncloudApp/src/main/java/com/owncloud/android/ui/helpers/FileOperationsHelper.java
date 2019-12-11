@@ -34,16 +34,14 @@ import androidx.fragment.app.DialogFragment;
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.OCFile;
+import com.owncloud.android.domain.sharing.shares.model.OCShare;
 import com.owncloud.android.files.services.AvailableOfflineHandler;
 import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder;
 import com.owncloud.android.files.services.FileUploader.FileUploaderBinder;
 import com.owncloud.android.lib.common.utils.Log_OC;
-import com.owncloud.android.lib.resources.shares.RemoteShare;
-import com.owncloud.android.lib.resources.shares.ShareType;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
+import com.owncloud.android.presentation.ui.sharing.ShareActivity;
 import com.owncloud.android.services.OperationsService;
-import com.owncloud.android.shares.domain.OCShare;
-import com.owncloud.android.shares.presentation.ShareActivity;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.dialog.ShareLinkToDialog;
 
@@ -189,7 +187,6 @@ public class FileOperationsHelper {
      * @param share The {@link OCShare} to remove (unshare).
      */
     public void removeShare(OCShare share) {
-
         Intent unshareService = new Intent(mFileActivity, OperationsService.class);
         unshareService.setAction(OperationsService.ACTION_UNSHARE);
         unshareService.putExtra(OperationsService.EXTRA_SHARE_ID, share.getId());
@@ -215,7 +212,8 @@ public class FileOperationsHelper {
     }
 
     /**
-     * Show an instance of {@link ShareType} for sharing or unsharing the {@link OCFile} received as parameter.
+     * Show an instance of {@link com.owncloud.android.domain.sharing.shares.model.ShareType} for sharing or unsharing
+     * the {@link OCFile} received as parameter.
      *
      * @param file File to share or unshare.
      */

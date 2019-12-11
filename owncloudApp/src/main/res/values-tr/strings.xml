@@ -267,7 +267,6 @@
   <string name="auth_wtf_reenter_URL">Beklenilmeyen durum. Lütfen, sunucu adresini yeniden girin</string>
   <string name="auth_expired_oauth_token_toast">Kimlik doğrulamanızın süresi doldu. Lütfen tekrar kimlik doğrulayın</string>
   <string name="auth_expired_basic_auth_toast">Lütfen mevcut parolanızı girin</string>
-  <string name="auth_expired_saml_sso_token_toast">Oturumuzun süresi doldu. Lütfen tekrar bağlanın</string>
   <string name="auth_connecting_auth_server">Kimlik doğrulama sunucusuna bağlanılıyor…</string>
   <string name="auth_unsupported_auth_method">Sunucu bu kimlik doğrulama yöntemini desteklemiyor</string>
   <string name="auth_unsupported_multiaccount">%1$s çoklu hesapları desteklemiyor</string>
@@ -284,7 +283,7 @@
   <string name="confirmation_remove_local">Sadece yerel</string>
   <string name="confirmation_remove_account_alert">%1$s hesabını gerçekten kaldırmak istiyor musunuz?</string>
   <string name="confirmation_remove_public_share_title">Bağlantıyı sil</string>
-  <string name="confirmation_remove_public_share_message">Gerçekten %1$s dosyasını kaldırmak istiyor musunuz?</string>
+  <string name="confirmation_remove_share_message">Gerçekten %1$s dosyasını kaldırmak istiyor musunuz?</string>
   <string name="remove_success_msg">Kaldırma başarılı</string>
   <string name="remove_fail_msg">Kaldırma başarısız</string>
   <string name="rename_dialog_title">Yeni bir isim girin</string>
@@ -400,8 +399,6 @@
   <string name="log_progress_dialog_text">Veri yükleniyor...</string>
   <string name="actionbar_select_all">Tümünü seç</string>
   <string name="actionbar_select_inverse">Seçimi tersine çevir</string>
-  <string name="saml_authentication_required_text">Kimlik doğrulama gerekli</string>
-  <string name="saml_authentication_wrong_pass">Hatalı parola</string>
   <string name="actionbar_move">Taşı</string>
   <string name="file_list_empty_moving">Burada bir şey yok. Bir klasör ekleyebilirsiniz!</string>
   <string name="folder_picker_choose_button_text">Seç</string>

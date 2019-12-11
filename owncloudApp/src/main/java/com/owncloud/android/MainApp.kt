@@ -21,7 +21,6 @@
  */
 package com.owncloud.android
 
-import android.accounts.Account
 import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageInfo
@@ -36,8 +35,13 @@ import androidx.multidex.MultiDexApplication
 import com.owncloud.android.authentication.FingerprintManager
 import com.owncloud.android.authentication.PassCodeManager
 import com.owncloud.android.authentication.PatternManager
-import com.owncloud.android.capabilities.viewmodel.OCCapabilityViewModel
 import com.owncloud.android.datamodel.ThumbnailsCacheManager
+import com.owncloud.android.dependecyinjection.commonModule
+import com.owncloud.android.dependecyinjection.localDataSourceModule
+import com.owncloud.android.dependecyinjection.remoteDataSourceModule
+import com.owncloud.android.dependecyinjection.repositoryModule
+import com.owncloud.android.dependecyinjection.useCaseModule
+import com.owncloud.android.dependecyinjection.viewModelModule
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.OwnCloudClientManagerFactory
 import com.owncloud.android.lib.common.OwnCloudClientManagerFactory.Policy
@@ -45,16 +49,12 @@ import com.owncloud.android.lib.common.authentication.oauth.OAuth2ClientConfigur
 import com.owncloud.android.lib.common.authentication.oauth.OAuth2ProvidersRegistry
 import com.owncloud.android.lib.common.authentication.oauth.OwnCloudOAuth2Provider
 import com.owncloud.android.lib.common.utils.Log_OC
-import com.owncloud.android.sharees.presentation.OCShareeViewModel
-import com.owncloud.android.shares.presentation.OCShareViewModel
 import com.owncloud.android.ui.activity.FingerprintActivity
 import com.owncloud.android.ui.activity.PassCodeActivity
 import com.owncloud.android.ui.activity.PatternLockActivity
 import com.owncloud.android.ui.activity.WhatsNewActivity
 import org.koin.android.ext.koin.androidContext
-import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.context.startKoin
-import org.koin.dsl.module
 
 /**
  * Main Application of the project
@@ -74,16 +74,11 @@ class MainApp : MultiDexApplication() {
 
         OwnCloudClient.setContext(appContext)
 
-        val isSamlAuth = AUTH_ON == getString(R.string.auth_method_saml_web_sso)
-
         OwnCloudClientManagerFactory.setUserAgent(userAgent)
-        if (isSamlAuth) {
-            OwnCloudClientManagerFactory.setDefaultPolicy(Policy.SINGLE_SESSION_PER_ACCOUNT)
-        } else {
-            OwnCloudClientManagerFactory.setDefaultPolicy(
-                Policy.SINGLE_SESSION_PER_ACCOUNT_IF_SERVER_SUPPORTS_SERVER_MONITORING
-            )
-        }
+
+        OwnCloudClientManagerFactory.setDefaultPolicy(
+            Policy.SINGLE_SESSION_PER_ACCOUNT_IF_SERVER_SUPPORTS_SERVER_MONITORING
+        )
 
         val oauth2Provider = OwnCloudOAuth2Provider()
         oauth2Provider.authorizationCodeEndpointPath = getString(R.string.oauth2_url_endpoint_auth)
@@ -169,21 +164,18 @@ class MainApp : MultiDexApplication() {
             }
         })
 
-        val newArchModule = module {
-            viewModel { (account: Account) ->
-                OCShareViewModel(androidContext(), account)
-            }
-            viewModel { (account: Account) ->
-                OCShareeViewModel(androidContext(), account)
-            }
-            viewModel { (account: Account) ->
-                OCCapabilityViewModel(androidContext(), account)
-            }
-        }
-
         startKoin {
             androidContext(applicationContext)
-            modules(newArchModule)
+            modules(
+                listOf(
+                    commonModule,
+                    viewModelModule,
+                    useCaseModule,
+                    repositoryModule,
+                    localDataSourceModule,
+                    remoteDataSourceModule
+                )
+            )
         }
     }
 
@@ -193,8 +185,9 @@ class MainApp : MultiDexApplication() {
     }
 
     fun startLogIfDeveloper() {
-        isDeveloper = BuildConfig.DEBUG || PreferenceManager.getDefaultSharedPreferences(applicationContext)
-            .getInt(CLICK_DEV_MENU, CLICKS_DEFAULT) > CLICKS_NEEDED_TO_BE_DEVELOPER
+        isDeveloper =
+            BuildConfig.DEBUG || PreferenceManager.getDefaultSharedPreferences(applicationContext)
+                .getInt(CLICK_DEV_MENU, CLICKS_DEFAULT) > CLICKS_NEEDED_TO_BE_DEVELOPER
 
         if (isDeveloper) {
             val dataFolder = dataFolder
@@ -208,11 +201,8 @@ class MainApp : MultiDexApplication() {
     }
 
     companion object {
-
         const val CLICK_DEV_MENU = "clickDeveloperMenu"
         const val CLICKS_NEEDED_TO_BE_DEVELOPER = 5
-
-        private const val AUTH_ON = "on"
         private const val BETA_VERSION = "beta"
         private const val CLICKS_DEFAULT = 0
 

@@ -46,13 +46,13 @@ public class ConfirmationDialogFragment extends DialogFragment {
     /**
      * Public factory method to create new ConfirmationDialogFragment instances.
      *
-     * @param messageResId      Resource id for a message to show in the dialog.
+     * @param messageResId      DataResult id for a message to show in the dialog.
      * @param messageArguments  Arguments to complete the message, if it's a format string. May be null.
-     * @param titleResId        Resource id for a text to show in the title.
+     * @param titleResId        DataResult id for a text to show in the title.
      *                          0 for default alert title, -1 for no title.
-     * @param posBtn            Resource id for the text of the positive button. -1 for no positive button.
-     * @param neuBtn            Resource id for the text of the neutral button. -1 for no neutral button.
-     * @param negBtn            Resource id for the text of the negative button. -1 for no negative button.
+     * @param posBtn            DataResult id for the text of the positive button. -1 for no positive button.
+     * @param neuBtn            DataResult id for the text of the neutral button. -1 for no neutral button.
+     * @param negBtn            DataResult id for the text of the negative button. -1 for no negative button.
      * @return Dialog ready to show.
      */
     public static ConfirmationDialogFragment newInstance(
@@ -145,6 +145,4 @@ public class ConfirmationDialogFragment extends DialogFragment {
 
         void onCancel(String callerTag);
     }
-
 }
-

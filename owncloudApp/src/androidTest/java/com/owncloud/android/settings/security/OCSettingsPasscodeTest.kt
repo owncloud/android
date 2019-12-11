@@ -33,7 +33,6 @@ import androidx.test.espresso.intent.matcher.IntentMatchers.hasExtra
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
 import com.owncloud.android.R
@@ -44,9 +43,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
 
-@RunWith(AndroidJUnit4::class)
 class OCSettingsPasscodeTest {
 
     @Rule
@@ -58,8 +55,8 @@ class OCSettingsPasscodeTest {
     private val KEY_PASSCODE = "KEY_PASSCODE"
     private val context = InstrumentationRegistry.getInstrumentation().targetContext
 
-    private val DEFAULT_PASSCODE = arrayOf('1','1','1','1')
-    private val WRONG_PASSCODE = arrayOf('1','1','1','2')
+    private val DEFAULT_PASSCODE = arrayOf('1', '1', '1', '1')
+    private val WRONG_PASSCODE = arrayOf('1', '1', '1', '2')
     private val PASSCODE_TOSAVE = "1111"
 
     @After
@@ -68,9 +65,8 @@ class OCSettingsPasscodeTest {
         PreferenceManager.getDefaultSharedPreferences(context).edit().clear().commit()
     }
 
-
     @Test
-    fun passcodeView(){
+    fun passcodeView() {
         //Open Activity in passcode creation mode
         openPasscodeActivity(PassCodeActivity.ACTION_REQUEST_WITH_RESULT)
 
@@ -86,7 +82,7 @@ class OCSettingsPasscodeTest {
     }
 
     @Test
-    fun firstTry(){
+    fun firstTry() {
         //Open Activity in passcode creation mode
         openPasscodeActivity(PassCodeActivity.ACTION_REQUEST_WITH_RESULT)
 
@@ -98,7 +94,7 @@ class OCSettingsPasscodeTest {
     }
 
     @Test
-    fun secondTryCorrect(){
+    fun secondTryCorrect() {
         //Open Activity in passcode creation mode
         openPasscodeActivity(PassCodeActivity.ACTION_REQUEST_WITH_RESULT)
 
@@ -116,7 +112,7 @@ class OCSettingsPasscodeTest {
 
     @Test
     @Ignore
-    fun secondTryIncorrect(){
+    fun secondTryIncorrect() {
         //Open Activity in passcode creation mode
         openPasscodeActivity(PassCodeActivity.ACTION_REQUEST_WITH_RESULT)
 
@@ -198,19 +194,19 @@ class OCSettingsPasscodeTest {
         onView(withText(R.string.pass_code_enter_pass_code)).check(matches(isDisplayed()))
     }
 
-    private fun openPasscodeActivity (mode: String) {
+    private fun openPasscodeActivity(mode: String) {
         intent.action = mode
         activityRule.launchActivity(intent)
     }
 
-    private fun typePasscode (digits: Array<Char>){
+    private fun typePasscode(digits: Array<Char>) {
         onView(withId(R.id.txt0)).perform(replaceText(digits[0].toString()))
         onView(withId(R.id.txt1)).perform(replaceText(digits[1].toString()))
         onView(withId(R.id.txt2)).perform(replaceText(digits[2].toString()))
         onView(withId(R.id.txt3)).perform(replaceText(digits[3].toString()))
     }
 
-    private fun storePasscode (passcode: String = PASSCODE_TOSAVE){
+    private fun storePasscode(passcode: String = PASSCODE_TOSAVE) {
         val appPrefs = PreferenceManager.getDefaultSharedPreferences(context).edit();
         for (i in 1..4) {
             appPrefs.putString(

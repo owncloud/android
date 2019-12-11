@@ -56,7 +56,6 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.material.snackbar.Snackbar
-import com.owncloud.android.AppExecutors
 import com.owncloud.android.AppRater
 import com.owncloud.android.MainApp
 import com.owncloud.android.R
@@ -104,14 +103,23 @@ import com.owncloud.android.utils.Extras
 import com.owncloud.android.utils.FileStorageUtils
 import com.owncloud.android.utils.PermissionUtil
 import com.owncloud.android.utils.PreferenceUtils
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import java.io.File
 import java.util.ArrayList
+import kotlin.coroutines.CoroutineContext
 
 /**
  * Displays, what files the user has available in his ownCloud. This is the main view.
  */
 
-class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEnforceableRefreshListener {
+class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEnforceableRefreshListener,
+    CoroutineScope {
+    private val job = Job()
+    override val coroutineContext: CoroutineContext
+        get() = job + Dispatchers.Main
 
     private var syncBroadcastReceiver: SyncBroadcastReceiver? = null
     private var uploadBroadcastReceiver: UploadBroadcastReceiver? = null
@@ -166,8 +174,6 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
 
     private val isGridView: Boolean
         get() = listOfFilesFragment!!.isGridEnabled
-
-    private val appExecutors: AppExecutors = AppExecutors()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Log_OC.v(TAG, "onCreate() start")
@@ -948,7 +954,8 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
                     }
 
                     syncInProgress =
-                        FileSyncAdapter.EVENT_FULL_SYNC_END != event && RefreshFolderOperation.EVENT_SINGLE_FOLDER_SHARES_SYNCED != event
+                        FileSyncAdapter.EVENT_FULL_SYNC_END != event &&
+                                RefreshFolderOperation.EVENT_SINGLE_FOLDER_SHARES_SYNCED != event
 
                     if (RefreshFolderOperation.EVENT_SINGLE_FOLDER_CONTENTS_SYNCED == event) {
                         if (!synchResult?.isSuccess!!) {
@@ -956,26 +963,23 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
                             if (ResultCode.UNAUTHORIZED == synchResult.code ||
                                 synchResult.isException && synchResult.exception is AuthenticatorException
                             ) {
-                                appExecutors.diskIO().execute {
+                                launch(Dispatchers.IO) {
                                     val credentials =
                                         com.owncloud.android.lib.common.accounts.AccountUtils.getCredentialsForAccount(
                                             MainApp.appContext,
                                             account
                                         )
 
-                                    appExecutors.mainThread().execute {
-                                        // If we have saml enabled we consider the user to only have
-                                        // one account with which he is logged into the app. This is because
-                                        // only branded versions of the app have saml support.
-                                        when {
-                                            getString(R.string.auth_method_saml_web_sso) == "on" -> // SAML
-                                                requestCredentialsUpdate()
-                                            credentials is OwnCloudBearerCredentials -> // OAuth
-                                                showRequestRegainAccess()
-                                            else -> showRequestAccountChangeNotice()
+                                    launch {
+                                        if (credentials is OwnCloudBearerCredentials) { // OAuth
+                                            showRequestRegainAccess()
+                                        } else {
+                                            showRequestAccountChangeNotice()
                                         }
                                     }
                                 }
+
+                                showRequestAccountChangeNotice()
                             } else if (ResultCode.SSL_RECOVERABLE_PEER_UNVERIFIED == synchResult.code) {
                                 showUntrustedCertDialog(synchResult)
                             }

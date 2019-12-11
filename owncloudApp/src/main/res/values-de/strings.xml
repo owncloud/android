@@ -268,7 +268,6 @@
   <string name="auth_wtf_reenter_URL">Unerwarteter Zustand; Bitte gib die Adresse des Servers erneut ein</string>
   <string name="auth_expired_oauth_token_toast">Deine Autorisierung ist abgelaufen. Bitte Autorisierung nochmals durchführen</string>
   <string name="auth_expired_basic_auth_toast">Bitte gib das aktuelle Passwort ein</string>
-  <string name="auth_expired_saml_sso_token_toast">Deine Sitzung ist abgelaufen. Bitte Anmeldung nochmals durchführen</string>
   <string name="auth_connecting_auth_server">Verbinden zum Authentifizierungs-Server ...</string>
   <string name="auth_unsupported_auth_method">Der Server unterstützt diese Authentifizierung-Methode nicht</string>
   <string name="auth_unsupported_multiaccount">%1$s unterstützt nicht mehrere Benutzerkonten</string>
@@ -285,7 +284,7 @@
   <string name="confirmation_remove_local">Nur lokal</string>
   <string name="confirmation_remove_account_alert">Möchtest du das Konto von %1$s wirklich löschen?</string>
   <string name="confirmation_remove_public_share_title">Link entfernen</string>
-  <string name="confirmation_remove_public_share_message">Möchtest Du %1$s wirklich löschen?</string>
+  <string name="confirmation_remove_share_message">Möchtest Du %1$s wirklich löschen?</string>
   <string name="remove_success_msg">Erfolgreich gelöscht</string>
   <string name="remove_fail_msg">Der Löschvorgang konnte nicht beendet werden</string>
   <string name="rename_dialog_title">Gib einen neuen Namen ein</string>
@@ -401,8 +400,6 @@
   <string name="log_progress_dialog_text">Lade Daten…</string>
   <string name="actionbar_select_all">Alle auswählen</string>
   <string name="actionbar_select_inverse">Selektion umkehren</string>
-  <string name="saml_authentication_required_text">Legitimierung benötigt</string>
-  <string name="saml_authentication_wrong_pass">Falsches Passwort</string>
   <string name="actionbar_move">Verschieben</string>
   <string name="file_list_empty_moving">Nichts vorhanden. Du kannst einen Ordner hinzufügen!</string>
   <string name="folder_picker_choose_button_text">Auswählen</string>

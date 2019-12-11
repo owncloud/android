@@ -220,7 +220,6 @@
   <string name="auth_wtf_reenter_URL">وضعیت غیرمنتظره. لطفاً نشانی کارساز را دوباره وارد کنید</string>
   <string name="auth_expired_oauth_token_toast">احراز هویت شما منقضی شده است. لطفا، مجددا احراز هویت فرمایید.</string>
   <string name="auth_expired_basic_auth_toast">لطفا رمز عبور فعلی را وارد نمایید</string>
-  <string name="auth_expired_saml_sso_token_toast">نشتتان منقضی شد. لطفاً‌دوباره وصل شوید</string>
   <string name="auth_connecting_auth_server">اتّصال به کارساز تصدیق…</string>
   <string name="auth_unsupported_auth_method">سرور این نوع احراز هویت را پشتیبانی نمی‌کند</string>
   <string name="auth_unsupported_multiaccount">%1$s چند اکانته بودن را پشتیبانی نمی‌کند</string>
@@ -237,7 +236,7 @@
   <string name="confirmation_remove_local">فقط محلی</string>
   <string name="confirmation_remove_account_alert">واقعاً می‌خواهید حساب %1$s را بردارید؟</string>
   <string name="confirmation_remove_public_share_title">حذف لینک</string>
-  <string name="confirmation_remove_public_share_message">آیا واقعا می‌خواهید %1$s حذف شود ؟</string>
+  <string name="confirmation_remove_share_message">آیا واقعا می‌خواهید %1$s حذف شود ؟</string>
   <string name="remove_success_msg">حذف با موفقیت انجام شد</string>
   <string name="remove_fail_msg">حذف نا موفق بود</string>
   <string name="rename_dialog_title">نام جدید وارد کنید</string>
@@ -324,8 +323,6 @@
   <string name="log_send_history_button">فرستادن تاریخچه</string>
   <string name="log_progress_dialog_text">بارگذاری داده...</string>
   <string name="actionbar_select_all">انتخاب همه</string>
-  <string name="saml_authentication_required_text">احراز هویت مورد نیاز است</string>
-  <string name="saml_authentication_wrong_pass">رمز عبور اشتباه است</string>
   <string name="actionbar_move">انتقال</string>
   <string name="file_list_empty_moving">اینجا هیچی نیست، میتوانید پوشه اضافه کنید</string>
   <string name="folder_picker_choose_button_text">انتخاب کردن</string>

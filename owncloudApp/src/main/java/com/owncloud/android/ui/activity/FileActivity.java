@@ -50,7 +50,6 @@ import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.common.utils.Log_OC;
-import com.owncloud.android.operations.RemoveShareOperation;
 import com.owncloud.android.operations.RenameFileOperation;
 import com.owncloud.android.operations.SynchronizeFileOperation;
 import com.owncloud.android.operations.SynchronizeFolderOperation;
@@ -298,7 +297,6 @@ public class FileActivity extends DrawerActivity
             showUntrustedCertDialog(result);
 
         } else if (operation == null ||
-                operation instanceof RemoveShareOperation ||
                 operation instanceof SynchronizeFolderOperation
         ) {
             if (result.isSuccess()) {

@@ -268,7 +268,6 @@
   <string name="auth_wtf_reenter_URL">Unexpected state; please enter the server address again</string>
   <string name="auth_expired_oauth_token_toast">Your authorisation expired. Please, authorise again</string>
   <string name="auth_expired_basic_auth_toast">Please enter the current password</string>
-  <string name="auth_expired_saml_sso_token_toast">Your session expired. Please connect again</string>
   <string name="auth_connecting_auth_server">Connecting to authentication server …</string>
   <string name="auth_unsupported_auth_method">The server does not support this authentication method</string>
   <string name="auth_unsupported_multiaccount">%1$s does not support multiple accounts</string>
@@ -285,7 +284,7 @@
   <string name="confirmation_remove_local">Local only</string>
   <string name="confirmation_remove_account_alert">Do you really want to remove the account %1$s?</string>
   <string name="confirmation_remove_public_share_title">Remove link</string>
-  <string name="confirmation_remove_public_share_message">Do you really want to remove %1$s?</string>
+  <string name="confirmation_remove_share_message">Do you really want to remove %1$s?</string>
   <string name="remove_success_msg">Removal succeeded</string>
   <string name="remove_fail_msg">Removal failed</string>
   <string name="rename_dialog_title">Enter a new name</string>
@@ -401,8 +400,6 @@
   <string name="log_progress_dialog_text">Loading data…</string>
   <string name="actionbar_select_all">Select all</string>
   <string name="actionbar_select_inverse">Select inverse</string>
-  <string name="saml_authentication_required_text">Authentication required</string>
-  <string name="saml_authentication_wrong_pass">Incorrect password</string>
   <string name="actionbar_move">Move</string>
   <string name="file_list_empty_moving">Nothing in here. You can add a folder!</string>
   <string name="folder_picker_choose_button_text">Choose</string>

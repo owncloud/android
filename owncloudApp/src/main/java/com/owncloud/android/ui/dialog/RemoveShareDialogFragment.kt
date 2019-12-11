@@ -28,33 +28,51 @@ package com.owncloud.android.ui.dialog
  * Triggers the removal according to the user response.
  */
 
+import android.accounts.Account
 import android.app.Dialog
+import android.content.Context
 import android.os.Bundle
 import com.owncloud.android.R
+import com.owncloud.android.domain.sharing.shares.model.OCShare
+import com.owncloud.android.domain.sharing.shares.model.ShareType
 import com.owncloud.android.lib.common.utils.Log_OC
-import com.owncloud.android.shares.domain.OCShare
+import com.owncloud.android.presentation.ui.sharing.fragments.ShareFragmentListener
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment.ConfirmationDialogFragmentListener
-import com.owncloud.android.shares.presentation.fragment.ShareFragmentListener
 
 class RemoveShareDialogFragment : ConfirmationDialogFragment(), ConfirmationDialogFragmentListener {
     private var targetShare: OCShare? = null
+    private var account: Account? = null
+
+    /**
+     * Reference to parent listener
+     */
+    private var listener: ShareFragmentListener? = null
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = super.onCreateDialog(savedInstanceState)
         targetShare = arguments!!.getParcelable(ARG_TARGET_SHARE)
+        account = arguments!!.getParcelable(ARG_ACCOUNT)
 
         setOnConfirmationListener(this)
 
         return dialog
     }
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        try {
+            listener = activity as ShareFragmentListener?
+        } catch (e: IllegalStateException) {
+            throw IllegalStateException(activity!!.toString() + " must implement OnShareFragmentInteractionListener")
+        }
+    }
+
     /**
      * Performs the removal of the target share, both locally and in the server.
      */
     override fun onConfirmation(callerTag: String) {
-        val listener = activity as ShareFragmentListener?
-        Log_OC.d(TAG, "Removing public share " + targetShare!!.name)
-        listener?.removeShare(targetShare?.remoteId!!)
+        Log_OC.d(TAG, "Removing share " + targetShare!!.name)
+        listener?.deleteShare(targetShare?.remoteId!!)
     }
 
     override fun onCancel(callerTag: String) {
@@ -70,30 +88,45 @@ class RemoveShareDialogFragment : ConfirmationDialogFragment(), ConfirmationDial
         private val TAG = RemoveShareDialogFragment::class.java.name
 
         private const val ARG_TARGET_SHARE = "TARGET_SHARE"
+        private const val ARG_ACCOUNT = "ACCOUNT"
 
         /**
          * Public factory method to create new RemoveFilesDialogFragment instances.
          *
-         * @param share           [OCShare] to remove.
+         * @param share           [OCShareEntity] to remove.
+         * @param account         [Account] which the share belongs to
          * @return                Dialog ready to show.
          */
-        fun newInstance(share: OCShare): RemoveShareDialogFragment {
+        fun newInstance(share: OCShare, account: Account): RemoveShareDialogFragment {
             val frag = RemoveShareDialogFragment()
             val args = Bundle()
 
             args.putInt(
                 ARG_MESSAGE_RESOURCE_ID,
-                R.string.confirmation_remove_public_share_message
+                R.string.confirmation_remove_share_message
             )
+
+            val privateShareName = if (share.sharedWithAdditionalInfo!!.isEmpty()) {
+                share.sharedWithDisplayName
+            } else {
+                share.sharedWithDisplayName + " (" + share.sharedWithAdditionalInfo + ")"
+            }
+
             args.putStringArray(
                 ARG_MESSAGE_ARGUMENTS,
-                arrayOf(if (share.name!!.isNotEmpty()) share.name!! else share.token!!)
+                arrayOf(if (share.name!!.isNotEmpty()) share.name!! else privateShareName)
             )
-            args.putInt(ARG_TITLE_ID, R.string.confirmation_remove_public_share_title)
+            args.putInt(
+                ARG_TITLE_ID,
+                if (share.shareType == ShareType.PUBLIC_LINK)
+                    R.string.confirmation_remove_public_share_title else
+                    R.string.confirmation_remove_private_share_title
+            )
             args.putInt(ARG_POSITIVE_BTN_RES, R.string.common_yes)
             args.putInt(ARG_NEUTRAL_BTN_RES, R.string.common_no)
             args.putInt(ARG_NEGATIVE_BTN_RES, -1)
             args.putParcelable(ARG_TARGET_SHARE, share)
+            args.putParcelable(ARG_ACCOUNT, account)
             frag.arguments = args
 
             return frag

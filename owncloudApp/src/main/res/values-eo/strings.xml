@@ -140,7 +140,7 @@
   <string name="confirmation_remove_file_alert">Ĉu vi vere volas forigi %1$s?</string>
   <string name="confirmation_remove_folder_alert">Ĉu vi vere volas forigi %1$s kaj ĝia enhavo?</string>
   <string name="confirmation_remove_local">Nur loka</string>
-  <string name="confirmation_remove_public_share_message">Ĉu vi vere volas forigi %1$s?</string>
+  <string name="confirmation_remove_share_message">Ĉu vi vere volas forigi %1$s?</string>
   <string name="remove_success_msg">Forigo sukcesis</string>
   <string name="remove_fail_msg">Forigo ne eblis plenumiĝi</string>
   <string name="rename_dialog_title">Enigu novan nomon</string>
@@ -213,8 +213,6 @@
   <string name="log_send_no_mail_app">Neniu aplikaĵo por sendi protokolojn troviĝas. Bonvolu instali retpoŝtaplikaĵon.</string>
   <string name="log_send_mail_subject">%1$s protokoloj de Android-aplikaĵoj</string>
   <string name="log_progress_dialog_text">Ŝargante datumojn...</string>
-  <string name="saml_authentication_required_text">Aŭtentiĝo nepras</string>
-  <string name="saml_authentication_wrong_pass">Malĝusta pasvorto</string>
   <string name="actionbar_move">Movi</string>
   <string name="file_list_empty_moving">Nenio estas ĉi tie. Vi povas aldoni dosierujon!</string>
   <string name="folder_picker_choose_button_text">Elekti</string>

@@ -268,7 +268,6 @@
   <string name="auth_wtf_reenter_URL">Kondisi tak terduga; silakan masukkan alamat penyedia lagi</string>
   <string name="auth_expired_oauth_token_toast">Otorisasi Anda telah berakhir. Silakan mengotorisasi lagi</string>
   <string name="auth_expired_basic_auth_toast">Masukkan password</string>
-  <string name="auth_expired_saml_sso_token_toast">Sesi Anda telah berakhir. Silakan masuk kembali</string>
   <string name="auth_connecting_auth_server">Menyambung ke penyedia otentikasi ...</string>
   <string name="auth_unsupported_auth_method">Server tidak mendukung medote otentikasi ini</string>
   <string name="auth_unsupported_multiaccount">%1$s tidak mendukung banyak akun </string>
@@ -285,7 +284,7 @@
   <string name="confirmation_remove_local">Lokal saja</string>
   <string name="confirmation_remove_account_alert">Apakah anda serius ingin menghapus akun %1$s ?</string>
   <string name="confirmation_remove_public_share_title">Hapus tautan</string>
-  <string name="confirmation_remove_public_share_message">Apakah Anda yakin ingin menghapus %1$s?</string>
+  <string name="confirmation_remove_share_message">Apakah Anda yakin ingin menghapus %1$s?</string>
   <string name="remove_success_msg">Penghapusan berhasil</string>
   <string name="remove_fail_msg">Penghapusan gagal</string>
   <string name="rename_dialog_title">Masukkan nama baru</string>
@@ -398,8 +397,6 @@
   <string name="log_progress_dialog_text">Memuat data...</string>
   <string name="actionbar_select_all">Pilih Semua</string>
   <string name="actionbar_select_inverse">Pilih kebalikan</string>
-  <string name="saml_authentication_required_text">Diperlukan otentikasi</string>
-  <string name="saml_authentication_wrong_pass">Sandi salah</string>
   <string name="actionbar_move">Pindah</string>
   <string name="file_list_empty_moving">Tdak ada apapun disini. Anda dapat menambahkan sebuah folder!</string>
   <string name="folder_picker_choose_button_text">Pilih</string>

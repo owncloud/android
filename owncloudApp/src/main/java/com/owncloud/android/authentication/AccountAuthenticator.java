@@ -5,16 +5,16 @@
  * @author Christian Schabesberger
  * Copyright (C) 2012  Bartek Przybylski
  * Copyright (C) 2019 ownCloud GmbH.
- * <p>
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
  * as published by the Free Software Foundation.
- * <p>
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * <p>
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -50,13 +50,13 @@ import com.owncloud.android.lib.common.utils.Log_OC;
 import java.util.Map;
 
 /**
- *  Authenticator for ownCloud accounts.
- *
- *  Controller class accessed from the system AccountManager, providing integration of ownCloud accounts with the
- *  Android system.
- *
- *  TODO - better separation in operations for OAuth-capable and regular ownCloud accounts.
- *  TODO - review completeness
+ * Authenticator for ownCloud accounts.
+ * 
+ * Controller class accessed from the system AccountManager, providing integration of ownCloud accounts with the
+ * Android system.
+ * 
+ * TODO - better separation in operations for OAuth-capable and regular ownCloud accounts.
+ * TODO - review completeness
  */
 public class AccountAuthenticator extends AbstractAccountAuthenticator {
 
@@ -65,8 +65,8 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
      * used by application and all extensions.
      */
     public static final String KEY_AUTH_TOKEN_TYPE = "authTokenType";
-    public static final String KEY_REQUIRED_FEATURES = "requiredFeatures";
-    public static final String KEY_LOGIN_OPTIONS = "loginOptions";
+    private static final String KEY_REQUIRED_FEATURES = "requiredFeatures";
+    private static final String KEY_LOGIN_OPTIONS = "loginOptions";
     public static final String KEY_ACCOUNT = "account";
 
     private static final String TAG = AccountAuthenticator.class.getSimpleName();
@@ -118,21 +118,13 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
             bundle.putParcelable(AccountManager.KEY_INTENT, intent);
 
         } else {
-
             // Return an error
             bundle.putInt(AccountManager.KEY_ERROR_CODE, AccountManager.ERROR_CODE_UNSUPPORTED_OPERATION);
             final String message = String.format(mContext.getString(R.string.auth_unsupported_multiaccount),
                     mContext.getString(R.string.app_name));
             bundle.putString(AccountManager.KEY_ERROR_MESSAGE, message);
 
-            mHandler.post(new Runnable() {
-
-                @Override
-                public void run() {
-                    Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
-                }
-            });
-
+            mHandler.post(() -> Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show());
         }
 
         return bundle;
@@ -276,8 +268,8 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
         if (!authTokenType.equals(MainApp.Companion.getAuthTokenType()) &&
                 !authTokenType.equals(AccountTypeUtils.getAuthTokenTypePass(MainApp.Companion.getAccountType())) &&
                 !authTokenType.equals(AccountTypeUtils.getAuthTokenTypeAccessToken(MainApp.Companion.getAccountType())) &&
-                !authTokenType.equals(AccountTypeUtils.getAuthTokenTypeRefreshToken(MainApp.Companion.getAccountType())) &&
-                !authTokenType.equals(AccountTypeUtils.getAuthTokenTypeSamlSessionCookie(MainApp.Companion.getAccountType()))) {
+                !authTokenType.equals(AccountTypeUtils.getAuthTokenTypeRefreshToken(MainApp.Companion.getAccountType()))
+        ) {
             throw new UnsupportedAuthTokenTypeException();
         }
     }
@@ -286,14 +278,14 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
         private static final long serialVersionUID = 1L;
         private Bundle mFailureBundle;
 
-        public AuthenticatorException(int code, String errorMsg) {
+        AuthenticatorException(int code, String errorMsg) {
             mFailureBundle = new Bundle();
             mFailureBundle.putInt(AccountManager.KEY_ERROR_CODE, code);
             mFailureBundle
                     .putString(AccountManager.KEY_ERROR_MESSAGE, errorMsg);
         }
 
-        public Bundle getFailureBundle() {
+        Bundle getFailureBundle() {
             return mFailureBundle;
         }
     }
@@ -302,7 +294,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
             AuthenticatorException {
         private static final long serialVersionUID = 1L;
 
-        public UnsupportedAccountTypeException() {
+        UnsupportedAccountTypeException() {
             super(AccountManager.ERROR_CODE_UNSUPPORTED_OPERATION,
                     "Unsupported account type");
         }
@@ -312,7 +304,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
             AuthenticatorException {
         private static final long serialVersionUID = 1L;
 
-        public UnsupportedAuthTokenTypeException() {
+        UnsupportedAuthTokenTypeException() {
             super(AccountManager.ERROR_CODE_UNSUPPORTED_OPERATION,
                     "Unsupported auth token type");
         }

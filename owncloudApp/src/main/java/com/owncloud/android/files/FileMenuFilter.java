@@ -31,9 +31,9 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.OCFile;
+import com.owncloud.android.domain.capabilities.model.OCCapability;
 import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder;
 import com.owncloud.android.files.services.FileUploader.FileUploaderBinder;
-import com.owncloud.android.lib.resources.status.RemoteCapability;
 import com.owncloud.android.services.OperationsService.OperationsServiceBinder;
 import com.owncloud.android.ui.activity.ComponentsGetter;
 import com.owncloud.android.ui.preview.PreviewVideoFragment;
@@ -226,7 +226,7 @@ public class FileMenuFilter {
         boolean shareWithUsersAllowed = (mContext != null &&
                 mContext.getResources().getBoolean(R.bool.share_with_users_feature));
 
-        RemoteCapability capability = mComponentsGetter.getStorageManager().getCapability(mAccount.name);
+        OCCapability capability = mComponentsGetter.getStorageManager().getCapability(mAccount.name);
 
         boolean notAllowResharing = anyFileSharedWithMe() &&
                 capability != null && capability.getFilesSharingResharing().isFalse();

@@ -27,6 +27,7 @@ import android.content.Intent;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.OCFile;
+import com.owncloud.android.domain.sharing.shares.model.ShareType;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
@@ -34,7 +35,6 @@ import com.owncloud.android.lib.resources.files.RemoteFile;
 import com.owncloud.android.lib.resources.shares.GetRemoteSharesForFileOperation;
 import com.owncloud.android.lib.resources.shares.RemoteShare;
 import com.owncloud.android.lib.resources.shares.ShareParserResult;
-import com.owncloud.android.lib.resources.shares.ShareType;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 import com.owncloud.android.lib.resources.status.RemoteCapability;
 import com.owncloud.android.operations.common.SyncOperation;
@@ -210,10 +210,10 @@ public class RefreshFolderOperation extends SyncOperation<ArrayList<RemoteFile>>
 
         if (result.isSuccess()) {
             resetShareFlagsInFolderChilds();
-            for (RemoteShare ocShare : result.getData().getShares()) {
-                OCFile file = getStorageManager().getFileByPath(ocShare.getPath());
+            for (RemoteShare remoteShare : result.getData().getShares()) {
+                OCFile file = getStorageManager().getFileByPath(remoteShare.getPath());
                 if (file != null) {
-                    ShareType shareType = ocShare.getShareType();
+                    ShareType shareType = ShareType.Companion.fromValue(remoteShare.getShareType().getValue());
                     if (shareType.equals(ShareType.PUBLIC_LINK)) {
                         file.setSharedViaLink(true);
                     } else if (shareType.equals(ShareType.USER) ||
