@@ -179,9 +179,9 @@ class FileDataStorageManager {
 
     val sharedByLinkFilesFromCurrentAccount: Vector<OCFile>
         get() {
-            val allSharedFiles = Vector<OCFile>();
-            val result = Vector<OCFile>();
-            var cursorOnShared: Cursor? = null;
+            val allSharedFiles = Vector<OCFile>()
+            val result = Vector<OCFile>()
+            var cursorOnShared: Cursor? = null
             try {
                 cursorOnShared = contentResolver?.query(
                     CONTENT_URI,
@@ -191,33 +191,33 @@ class FileDataStorageManager {
                     null
                 )
                 if (cursorOnShared != null && cursorOnShared.moveToFirst()) {
-                    var file: OCFile?;
+                    var file: OCFile?
                     do {
-                        file = createFileInstance(cursorOnShared);
-                        allSharedFiles.add(file);
-                    } while (cursorOnShared.moveToNext());
+                        file = createFileInstance(cursorOnShared)
+                        allSharedFiles.add(file)
+                    } while (cursorOnShared.moveToNext())
                 }
             } catch (exception: Exception) {
-                Log_OC.e(TAG, "Exception retrieving all the shared by link files", exception);
+                Log_OC.e(TAG, "Exception retrieving all the shared by link files", exception)
             } finally {
                 cursorOnShared?.close()
             }
 
             if (allSharedFiles.isNotEmpty()) {
-                val allSharedDirs = Vector<Long>();
+                val allSharedDirs = Vector<Long>()
                 for (file in allSharedFiles) {
                     if (file.isFolder) {
-                        allSharedDirs.add(file.fileId);
+                        allSharedDirs.add(file.fileId)
                     }
                 }
                 for (file in allSharedFiles) {
                     if (file.isFolder || (!file.isFolder && !allSharedDirs.contains(file.parentId))) {
-                        result.add(file);
+                        result.add(file)
                     }
                 }
             }
-            result.sort();
-            return result;
+            result.sort()
+            return result
         }
 
     fun getFileByPath(path: String): OCFile? {
@@ -914,7 +914,7 @@ class FileDataStorageManager {
 
         val reqUri = Uri.withAppendedPath(CONTENT_URI_DIR, parentId.toString())
 
-        val selection: String = "$FILE_PARENT=?"
+        val selection = "$FILE_PARENT=?"
         val selectionArgs: Array<String> = arrayOf(parentId.toString())
 
         val c: Cursor? = try {

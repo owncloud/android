@@ -266,7 +266,6 @@ class UsersAndGroupsSearchProvider : ContentProvider() {
     /**
      * Show error genericErrorMessage
      *
-     * @param resource Resource with the failure information.
      */
     private fun showErrorMessage(genericErrorMessage: String, throwable: Throwable?) {
         val errorMessage = throwable?.parseError(genericErrorMessage, context.resources)

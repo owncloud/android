@@ -67,30 +67,8 @@ data class OCShareEntity(
     val name: String?,
     @ColumnInfo(name = ProviderTableMeta.OCSHARES_URL)
     val shareLink: String?
-) : Parcelable {
+) {
     @PrimaryKey(autoGenerate = true) var id: Int = 0
-
-    constructor(parcel: Parcel) : this(
-        parcel.readLong(),
-        parcel.readLong(),
-        parcel.readInt(),
-        parcel.readString(),
-        parcel.readString(),
-        parcel.readInt(),
-        parcel.readLong(),
-        parcel.readLong(),
-        parcel.readString(),
-        parcel.readString(),
-        parcel.readString(),
-        parcel.readByte() != 0.toByte(),
-        parcel.readLong(),
-        parcel.readLong(),
-        parcel.readString(),
-        parcel.readString(),
-        parcel.readString()
-    ) {
-        id = parcel.readInt()
-    }
 
     companion object {
 
@@ -137,40 +115,5 @@ data class OCShareEntity(
                 values.getAsString(ProviderTableMeta.OCSHARES_URL)
             )
         }
-
-        /**
-         * Parcelable Methods
-         */
-        @JvmField
-        val CREATOR: Parcelable.Creator<OCShareEntity> = object : Parcelable.Creator<OCShareEntity> {
-            override fun createFromParcel(source: Parcel): OCShareEntity {
-                return OCShareEntity(source)
-            }
-
-            override fun newArray(size: Int): Array<OCShareEntity?> {
-                return arrayOfNulls(size)
-            }
-        }
-    }
-
-    override fun describeContents(): Int = this.hashCode()
-
-    override fun writeToParcel(dest: Parcel?, flags: Int) {
-        dest?.writeInt(id)
-        dest?.writeString(shareWith)
-        dest?.writeString(path)
-        dest?.writeString(token)
-        dest?.writeString(sharedWithDisplayName)
-        dest?.writeString(sharedWithAdditionalInfo)
-        dest?.writeString(name)
-        dest?.writeString(shareLink)
-        dest?.writeLong(fileSource)
-        dest?.writeLong(itemSource)
-        dest?.writeInt(shareType)
-        dest?.writeInt(permissions)
-        dest?.writeLong(sharedDate)
-        dest?.writeLong(expirationDate)
-        dest?.writeInt(if (isFolder) 1 else 0)
-        dest?.writeLong(userId)
     }
 }

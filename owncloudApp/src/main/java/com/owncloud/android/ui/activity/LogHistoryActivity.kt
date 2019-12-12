@@ -27,7 +27,6 @@ import com.owncloud.android.R
 import info.hannes.logcat.BothLogsFragment
 import info.hannes.logcat.LogcatFragment
 import info.hannes.timber.fileLoggingTree
-import timber.log.Timber
 
 class LogHistoryActivity : ToolbarActivity() {
 
