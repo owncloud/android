@@ -121,7 +121,7 @@ public class UriUtils {
      */
     public static String getLocalPath(Uri uri, Context context) {
         // DocumentProvider
-        if ( DocumentsContract.isDocumentUri(context, uri)) {
+        if (DocumentsContract.isDocumentUri(context, uri)) {
             // ExternalStorageProvider
             if (UriUtils.isExternalStorageDocument(uri)) {
                 final String docId = DocumentsContract.getDocumentId(uri);
