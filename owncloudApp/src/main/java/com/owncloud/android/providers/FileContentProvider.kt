@@ -102,7 +102,7 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
         when (uriMatcher.match(uri)) {
             SINGLE_FILE -> {
                 val c = query(uri, null, where, whereArgs, null)
-                var remoteId = ""
+                var remoteId : String? = ""
                 if (c.moveToFirst()) {
                     remoteId = c.getString(c.getColumnIndex(ProviderTableMeta.FILE_REMOTE_ID))
                     c.close()
