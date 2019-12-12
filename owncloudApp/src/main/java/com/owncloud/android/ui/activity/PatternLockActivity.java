@@ -30,7 +30,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.RelativeLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -81,7 +81,7 @@ public class PatternLockActivity extends AppCompatActivity {
         setContentView(R.layout.activity_pattern_lock);
 
         // Allow or disallow touches with other visible windows
-        RelativeLayout activityPatternLockLayout = findViewById(R.id.activityPatternLockLayout);
+        LinearLayout activityPatternLockLayout = findViewById(R.id.activityPatternLockLayout);
         activityPatternLockLayout.setFilterTouchesWhenObscured(
                 PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(this)
         );
