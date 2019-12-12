@@ -53,8 +53,8 @@ class OCSettingsCameraUploadsTest {
 
     private val context = InstrumentationRegistry.getInstrumentation().targetContext
 
-    private val CAMERA_PICTURE_UPLOADS = "camera_picture_uploads"
-    private val CAMERA_VIDEO_UPLOADS = "camera_video_uploads"
+    private val cameraPictureUploads = "camera_picture_uploads"
+    private val cameraVideoUploads = "camera_video_uploads"
 
     private lateinit var mPrefCameraPictureUploads: CheckBoxPreference
     private lateinit var mPrefCameraVideoUploads: CheckBoxPreference
@@ -62,11 +62,11 @@ class OCSettingsCameraUploadsTest {
     @Before
     fun setUp() {
 
-        mPrefCameraPictureUploads = activityRule.activity.findPreference(CAMERA_PICTURE_UPLOADS) as CheckBoxPreference
-        mPrefCameraVideoUploads = activityRule.activity.findPreference(CAMERA_VIDEO_UPLOADS) as CheckBoxPreference
+        mPrefCameraPictureUploads = activityRule.activity.findPreference(cameraPictureUploads) as CheckBoxPreference
+        mPrefCameraVideoUploads = activityRule.activity.findPreference(cameraVideoUploads) as CheckBoxPreference
 
         //Only interested in "Camera Uploads" section, so we can get rid of the other categories.
-        val preferenceScreen = activityRule.activity.getPreferenceScreen() as PreferenceScreen
+        val preferenceScreen = activityRule.activity.preferenceScreen as PreferenceScreen
         val securityCategory =
             activityRule.activity.findPreference("security_category") as PreferenceCategory
         val moreCategory =
@@ -226,7 +226,7 @@ class OCSettingsCameraUploadsTest {
     @Test
     fun switchOriginalFileWillBe() {
         enableCameraPictureUploads()
-        onData(PreferenceMatchers.withTitle(R.string.prefs_camera_upload_behaviour_title)).perform(click());
+        onData(PreferenceMatchers.withTitle(R.string.prefs_camera_upload_behaviour_title)).perform(click())
         onView(withText(R.string.pref_behaviour_entries_move)).perform(click())
         //Asserts
         onView(withText(R.string.pref_behaviour_entries_move)).check(matches(isDisplayed()))

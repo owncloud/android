@@ -52,12 +52,12 @@ class OCSettingsPasscodeTest {
 
     private val intent = Intent()
     private val errorMessage = "PassCode Activity error"
-    private val KEY_PASSCODE = "KEY_PASSCODE"
+    private val keyPassCode = "KEY_PASSCODE"
     private val context = InstrumentationRegistry.getInstrumentation().targetContext
 
-    private val DEFAULT_PASSCODE = arrayOf('1', '1', '1', '1')
-    private val WRONG_PASSCODE = arrayOf('1', '1', '1', '2')
-    private val PASSCODE_TOSAVE = "1111"
+    private val defaultPassCode = arrayOf('1', '1', '1', '1')
+    private val wrongPassCode = arrayOf('1', '1', '1', '2')
+    private val passCodeToSave = "1111"
 
     @After
     fun tearDown() {
@@ -87,7 +87,7 @@ class OCSettingsPasscodeTest {
         openPasscodeActivity(PassCodeActivity.ACTION_REQUEST_WITH_RESULT)
 
         //First typing
-        typePasscode(DEFAULT_PASSCODE)
+        typePasscode(defaultPassCode)
 
         onView(withText(R.string.pass_code_reenter_your_pass_code)).check(matches(isDisplayed()))
         onView(withText(R.string.pass_code_configure_your_pass_code)).check(doesNotExist())
@@ -99,13 +99,13 @@ class OCSettingsPasscodeTest {
         openPasscodeActivity(PassCodeActivity.ACTION_REQUEST_WITH_RESULT)
 
         //First typing
-        typePasscode(DEFAULT_PASSCODE)
+        typePasscode(defaultPassCode)
         //Second typing
-        typePasscode(DEFAULT_PASSCODE)
+        typePasscode(defaultPassCode)
 
         //Checking that the setResult returns the typed passcode
         assertThat(activityRule.activityResult, hasResultCode(Activity.RESULT_OK))
-        assertThat(activityRule.activityResult, hasResultData(hasExtra(KEY_PASSCODE, PASSCODE_TOSAVE)))
+        assertThat(activityRule.activityResult, hasResultData(hasExtra(keyPassCode, passCodeToSave)))
 
         assertTrue(errorMessage, activityRule.activity.isFinishing)
     }
@@ -117,9 +117,9 @@ class OCSettingsPasscodeTest {
         openPasscodeActivity(PassCodeActivity.ACTION_REQUEST_WITH_RESULT)
 
         //First typing
-        typePasscode(DEFAULT_PASSCODE)
+        typePasscode(defaultPassCode)
         //Second typing
-        typePasscode(WRONG_PASSCODE)
+        typePasscode(wrongPassCode)
 
         onView(withText(R.string.pass_code_reenter_your_pass_code)).check(doesNotExist())
         onView(withText(R.string.pass_code_configure_your_pass_code)).check(matches(isDisplayed()))
@@ -146,7 +146,7 @@ class OCSettingsPasscodeTest {
         openPasscodeActivity(PassCodeActivity.ACTION_REQUEST_WITH_RESULT)
 
         //First typing
-        typePasscode(DEFAULT_PASSCODE)
+        typePasscode(defaultPassCode)
 
         onView(withId(R.id.txt0)).perform(replaceText("1"))
         onView(withId(R.id.txt1)).perform(replaceText("1"))
@@ -169,13 +169,13 @@ class OCSettingsPasscodeTest {
     @Test
     fun deletePasscodeCorrect() {
         //Save a passcode in Preferences
-        storePasscode(PASSCODE_TOSAVE)
+        storePasscode(passCodeToSave)
 
         //Open Activity in passcode deletion mode
         openPasscodeActivity(PassCodeActivity.ACTION_CHECK_WITH_RESULT)
 
         //Type correct passcode
-        typePasscode(DEFAULT_PASSCODE)
+        typePasscode(defaultPassCode)
 
         assertTrue(errorMessage, activityRule.activity.isFinishing)
     }
@@ -183,13 +183,13 @@ class OCSettingsPasscodeTest {
     @Test
     fun deletePasscodeIncorrect() {
         //Save a passcode in Preferences
-        storePasscode(PASSCODE_TOSAVE)
+        storePasscode(passCodeToSave)
 
         //Open Activity in passcode deletion mode
         openPasscodeActivity(PassCodeActivity.ACTION_CHECK_WITH_RESULT)
 
         //Type incorrect passcode
-        typePasscode(WRONG_PASSCODE)
+        typePasscode(wrongPassCode)
 
         onView(withText(R.string.pass_code_enter_pass_code)).check(matches(isDisplayed()))
     }
@@ -206,7 +206,7 @@ class OCSettingsPasscodeTest {
         onView(withId(R.id.txt3)).perform(replaceText(digits[3].toString()))
     }
 
-    private fun storePasscode(passcode: String = PASSCODE_TOSAVE) {
+    private fun storePasscode(passcode: String = passCodeToSave) {
         val appPrefs = PreferenceManager.getDefaultSharedPreferences(context).edit()
         for (i in 1..4) {
             appPrefs.putString(
