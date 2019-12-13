@@ -32,8 +32,6 @@ import android.widget.GridView;
 import android.widget.ListAdapter;
 import android.widget.WrapperListAdapter;
 
-import com.owncloud.android.lib.common.utils.Log_OC;
-
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 
@@ -44,9 +42,6 @@ import java.util.ArrayList;
  * See {@link GridViewWithHeaderAndFooter#addFooterView(View, Object, boolean)}
  */
 public class GridViewWithHeaderAndFooter extends GridView {
-
-    public static boolean DEBUG = false;
-
     /**
      * A class that represents a fixed view in a list, for example a header at the top
      * or a footer at the bottom.
@@ -579,9 +574,6 @@ public class GridViewWithHeaderAndFooter extends GridView {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            if (DEBUG) {
-                Log_OC.d(String.format("getView: %s, reused: %s", position, convertView == null));
-            }
             // Header (negative positions will throw an ArrayIndexOutOfBoundsException)
             int numHeadersAndPlaceholders = getHeadersCount() * mNumColumns;
             if (position < numHeadersAndPlaceholders) {
@@ -682,10 +674,6 @@ public class GridViewWithHeaderAndFooter extends GridView {
                     type = adapterViewTypeStart + mHeaderViewInfos.size() + 1 + (footerPosition / mNumColumns + 1);
                 }
             }
-            if (DEBUG) {
-                Log_OC.d(String.format("getItemViewType: pos: %s, result: %s", position, type,
-                        mCachePlaceHoldView, mCacheFirstHeaderView));
-            }
             return type;
         }
 
@@ -703,9 +691,6 @@ public class GridViewWithHeaderAndFooter extends GridView {
                     offset += 1;
                 }
                 count += offset;
-            }
-            if (DEBUG) {
-                Log_OC.d(String.format("getViewTypeCount: %s", count));
             }
             return count;
         }
@@ -760,34 +745,6 @@ public class GridViewWithHeaderAndFooter extends GridView {
         }
 
         setSelection(position);
-        //setSelectionInt(position);
-
-        /*if (!isInTouchMode()) {
-            position = super.lookForSelectablePosition(position, true);
-            if (position >= 0) {
-                setNextSelectedPositionInt(position);
-            }
-        } else {
-            mResurrectToPosition = position;
-        }*/
-
-        /*
-        if (position >= 0) {
-            mLayoutMode = LAYOUT_SPECIFIC;
-            mSpecificTop = mListPadding.top + y;
-
-            if (mNeedSync) {
-                mSyncPosition = position;
-                mSyncRowId = getAdapter().getItemId(position);
-            }
-
-            if (mPositionScroller != null) {
-                mPositionScroller.stop();
-            }
-
-            requestLayout();
-        }
-        */
     }
 
 }
