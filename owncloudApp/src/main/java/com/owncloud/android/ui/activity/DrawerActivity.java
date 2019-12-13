@@ -326,6 +326,8 @@ public abstract class DrawerActivity extends ToolbarActivity {
     private void accountClicked(String accountName) {
         if (!AccountUtils.getCurrentOwnCloudAccount(getApplicationContext()).name.equals(accountName)) {
             AccountUtils.setCurrentOwnCloudAccount(getApplicationContext(), accountName);
+            // Refresh dependencies to be used in selected account
+            MainApp.Companion.initDependencies();
             restart();
         }
     }
@@ -733,6 +735,8 @@ public abstract class DrawerActivity extends ToolbarActivity {
             // current account has changed
             if (data.getBooleanExtra(ManageAccountsActivity.KEY_CURRENT_ACCOUNT_CHANGED, false)) {
                 setAccount(AccountUtils.getCurrentOwnCloudAccount(this));
+                // Refresh dependencies to be used in selected account
+                MainApp.Companion.initDependencies();
                 restart();
             } else {
                 updateAccountList();
@@ -761,6 +765,8 @@ public abstract class DrawerActivity extends ToolbarActivity {
         super.onAccountCreationSuccessful(future);
         updateAccountList();
         updateQuota();
+        // Refresh dependencies to be used in selected account
+        MainApp.Companion.initDependencies();
         restart();
     }
 

@@ -339,6 +339,8 @@ public class ManageAccountsActivity extends FileActivity
                     ManageAccountsActivity.this,
                     clickedAccount.name
             );
+            // Refresh dependencies to be used in selected account
+            MainApp.Companion.initDependencies();
             Intent i = new Intent(
                     ManageAccountsActivity.this,
                     FileDisplayActivity.class
@@ -347,7 +349,6 @@ public class ManageAccountsActivity extends FileActivity
             i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(i);
         }
-
     }
 
     @Override

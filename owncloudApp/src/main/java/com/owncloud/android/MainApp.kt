@@ -55,6 +55,7 @@ import com.owncloud.android.ui.activity.PatternLockActivity
 import com.owncloud.android.ui.activity.WhatsNewActivity
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
+import org.koin.core.context.stopKoin
 
 /**
  * Main Application of the project
@@ -64,7 +65,6 @@ import org.koin.core.context.startKoin
  * classes
  */
 class MainApp : MultiDexApplication() {
-
     override fun onCreate() {
         super.onCreate()
 
@@ -164,19 +164,7 @@ class MainApp : MultiDexApplication() {
             }
         })
 
-        startKoin {
-            androidContext(applicationContext)
-            modules(
-                listOf(
-                    commonModule,
-                    viewModelModule,
-                    useCaseModule,
-                    repositoryModule,
-                    localDataSourceModule,
-                    remoteDataSourceModule
-                )
-            )
-        }
+        initDependencies()
     }
 
     override fun attachBaseContext(base: Context?) {
@@ -276,5 +264,22 @@ class MainApp : MultiDexApplication() {
 
                 return isBeta
             }
+
+        fun initDependencies() {
+            stopKoin()
+            startKoin {
+                androidContext(appContext!!)
+                modules(
+                    listOf(
+                        commonModule,
+                        viewModelModule,
+                        useCaseModule,
+                        repositoryModule,
+                        localDataSourceModule,
+                        remoteDataSourceModule
+                    )
+                )
+            }
+        }
     }
 }

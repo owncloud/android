@@ -35,12 +35,11 @@ class OCShareService(override val client: OwnCloudClient) : ShareService {
         remoteFilePath: String,
         reshares: Boolean,
         subfiles: Boolean
-    ): RemoteOperationResult<ShareParserResult> =
-        GetRemoteSharesForFileOperation(
-            remoteFilePath,
-            reshares,
-            subfiles
-        ).execute(client)
+    ): RemoteOperationResult<ShareParserResult> = GetRemoteSharesForFileOperation(
+        remoteFilePath,
+        reshares,
+        subfiles
+    ).execute(client)
 
     override fun insertShare(
         remoteFilePath: String,
