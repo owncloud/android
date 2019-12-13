@@ -340,7 +340,7 @@ public class ManageAccountsActivity extends FileActivity
                     clickedAccount.name
             );
             // Refresh dependencies to be used in selected account
-            MainApp.Companion.initDependencies();
+            MainApp.Companion.initDependencyInjection();
             Intent i = new Intent(
                     ManageAccountsActivity.this,
                     FileDisplayActivity.class

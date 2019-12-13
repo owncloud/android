@@ -327,7 +327,7 @@ public abstract class DrawerActivity extends ToolbarActivity {
         if (!AccountUtils.getCurrentOwnCloudAccount(getApplicationContext()).name.equals(accountName)) {
             AccountUtils.setCurrentOwnCloudAccount(getApplicationContext(), accountName);
             // Refresh dependencies to be used in selected account
-            MainApp.Companion.initDependencies();
+            MainApp.Companion.initDependencyInjection();
             restart();
         }
     }
@@ -736,7 +736,7 @@ public abstract class DrawerActivity extends ToolbarActivity {
             if (data.getBooleanExtra(ManageAccountsActivity.KEY_CURRENT_ACCOUNT_CHANGED, false)) {
                 setAccount(AccountUtils.getCurrentOwnCloudAccount(this));
                 // Refresh dependencies to be used in selected account
-                MainApp.Companion.initDependencies();
+                MainApp.Companion.initDependencyInjection();
                 restart();
             } else {
                 updateAccountList();
@@ -766,7 +766,7 @@ public abstract class DrawerActivity extends ToolbarActivity {
         updateAccountList();
         updateQuota();
         // Refresh dependencies to be used in selected account
-        MainApp.Companion.initDependencies();
+        MainApp.Companion.initDependencyInjection();
         restart();
     }
 

@@ -164,7 +164,7 @@ class MainApp : MultiDexApplication() {
             }
         })
 
-        initDependencies()
+        initDependencyInjection()
     }
 
     override fun attachBaseContext(base: Context?) {
@@ -265,7 +265,7 @@ class MainApp : MultiDexApplication() {
                 return isBeta
             }
 
-        fun initDependencies() {
+        fun initDependencyInjection() {
             stopKoin()
             startKoin {
                 androidContext(appContext!!)
