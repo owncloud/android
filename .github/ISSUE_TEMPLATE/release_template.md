@@ -1,6 +1,6 @@
 ---
 name: Release
-about: Create a bug report to help us improve
+about: List of checklist to accomplish for the ownCloud team to finish the release process
 title: "[RELEASE]"
 labels: Release
 assignees: ''
