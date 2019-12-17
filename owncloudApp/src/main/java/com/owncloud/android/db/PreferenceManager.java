@@ -59,6 +59,8 @@ public abstract class PreferenceManager {
     private static final String PREF__CAMERA_UPLOADS_BEHAVIOUR = "camera_uploads_behaviour";
     private static final String PREF__CAMERA_UPLOADS_SOURCE = "camera_uploads_source_path";
 
+    public static final String PREF__CAMERA_UPLOADS_DEFAULT_PATH = "/CameraUpload";
+
     public static boolean cameraPictureUploadEnabled(Context context) {
         return getDefaultSharedPreferences(context).getBoolean(PREF__CAMERA_PICTURE_UPLOADS_ENABLED, false);
     }
@@ -99,14 +101,14 @@ public abstract class PreferenceManager {
         );
         String uploadPath = prefs.getString(
                 PREF__CAMERA_PICTURE_UPLOADS_PATH,
-                context.getString(R.string.camera_upload_path) + OCFile.PATH_SEPARATOR
+                PREF__CAMERA_UPLOADS_DEFAULT_PATH + OCFile.PATH_SEPARATOR
         );
         result.setUploadPathForPictures(
                 uploadPath.endsWith(File.separator) ? uploadPath : uploadPath + File.separator
         );
         uploadPath = prefs.getString(
                 PREF__CAMERA_VIDEO_UPLOADS_PATH,
-                context.getString(R.string.camera_upload_path) + OCFile.PATH_SEPARATOR
+                PREF__CAMERA_UPLOADS_DEFAULT_PATH + OCFile.PATH_SEPARATOR
         );
         result.setUploadPathForVideos(
                 uploadPath.endsWith(File.separator) ? uploadPath : uploadPath + File.separator

@@ -17,6 +17,7 @@
   <string name="actionbar_sort_by_size">Petit - Gran</string>
   <string name="drawer_item_all_files">Tots els fitxers</string>
   <string name="drawer_item_only_available_offline">Disponible fora de línia</string>
+  <string name="drawer_item_shared_by_link_files">Compartit amb enllaç</string>
   <string name="drawer_item_settings">Configuració</string>
   <string name="drawer_item_uploads_list">Fitxers carregats</string>
   <string name="drawer_close">Tanca</string>
@@ -68,6 +69,7 @@
   <string name="recommend_text">Vull invitar-te a utilitzar %1$s al teu smartphone!\nDescarrega-ho aqui: %2$s</string>
   <string name="auth_failure_snackbar">Autentificació denegada</string>
   <string name="auth_failure_snackbar_action">Canvia de compte</string>
+  <string name="auth_oauth_failure_snackbar_action">Inicia la sessió</string>
   <string name="auth_check_server">Comprova el funcionament del servidor</string>
   <string name="auth_host_url">Adreça del servidor https://…</string>
   <string name="auth_username">Nom d\'usuari</string>
@@ -246,7 +248,6 @@
   <string name="auth_wtf_reenter_URL">Estat inesperat; torna a escriure l\'adreça del servidor</string>
   <string name="auth_expired_oauth_token_toast">La vostra autorització ha vençut. Acrediteu-vos de nou</string>
   <string name="auth_expired_basic_auth_toast">Escriviu la contrasenya actual</string>
-  <string name="auth_expired_saml_sso_token_toast">La sessió ha vençut. Connecteu-vos de nou</string>
   <string name="auth_connecting_auth_server">Connectant amb el servidor d\'autentificació...</string>
   <string name="auth_unsupported_auth_method">El serivdor no permet aquest mètode d\'autenticació</string>
   <string name="auth_unsupported_multiaccount">%1$s no permet comptes múltiples</string>
@@ -262,7 +263,7 @@
   <string name="confirmation_remove_local">Només local</string>
   <string name="confirmation_remove_account_alert">Segur que vols borrar el compte %1$s?</string>
   <string name="confirmation_remove_public_share_title">Borrar l\'enllaç</string>
-  <string name="confirmation_remove_public_share_message">Esteu segur que voleu eliminar %1$s?</string>
+  <string name="confirmation_remove_share_message">Esteu segur que voleu eliminar %1$s?</string>
   <string name="remove_success_msg">L\'eliminació ha tingut èxit</string>
   <string name="remove_fail_msg">No s\'ha pogut completar l\'eliminació</string>
   <string name="rename_dialog_title">Introdueix un nom nou</string>
@@ -317,7 +318,6 @@
   <string name="placeholder_media_time">12:23:45</string>
   <string name="camera_picture_upload_on_wifi">Pujar les fotos només via WiFi</string>
   <string name="camera_video_upload_on_wifi">Pujar videos només via WiFi</string>
-  <string name="camera_upload_path">/Càmera</string>
   <string name="confirmation_disable_camera_uploads_title">Confirma</string>
   <string name="confirmation_disable_pictures_upload_message">Estàs segur que vols desactivar aquesta funció? Les fotos pendents no es carregaran.</string>
   <string name="confirmation_disable_videos_upload_message">Estàs segur que vols desactivar aquesta funció? Les fotos pendents no es carregaran.</string>
@@ -370,8 +370,6 @@
   <string name="log_send_mail_subject">%1$s app de registres Android</string>
   <string name="log_progress_dialog_text">Carregant dades...</string>
   <string name="actionbar_select_all">Seleccionar tot</string>
-  <string name="saml_authentication_required_text">Es requereix autenticació</string>
-  <string name="saml_authentication_wrong_pass">Contrasenya incorrecta</string>
   <string name="actionbar_move">Moure</string>
   <string name="file_list_empty_moving">Res per aquí. Pots afegir una carpeta!</string>
   <string name="folder_picker_choose_button_text">Escull</string>

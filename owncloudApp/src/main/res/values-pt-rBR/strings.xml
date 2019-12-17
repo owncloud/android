@@ -20,6 +20,7 @@
   <string name="actionbar_sort_by_size">Menor - Maior</string>
   <string name="drawer_item_all_files">Todos os arquivos</string>
   <string name="drawer_item_only_available_offline">Disponível externamente</string>
+  <string name="drawer_item_shared_by_link_files">Compartilhado por link</string>
   <string name="drawer_item_settings">Configurações</string>
   <string name="drawer_item_uploads_list">Envios</string>
   <string name="drawer_close">Fechar</string>
@@ -72,11 +73,14 @@
   <string name="passcode_already_set">Os bloqueios de padrão e senha não podem ser ativados ao mesmo tempo, desative primeiro o código de acesso</string>
   <string name="pattern_no_longer_required">O padrão não será mais solicitado</string>
   <string name="pattern_configure_your_pattern_explanation">O padrão será solicitado sempre que o aplicativo for iniciado</string>
+  <string name="pattern_locked">Bloqueado com padrão</string>
   <string name="illegal_argument_exception_message">Uma AÇÃO válida é necessária no intento passado para</string>
   <string name="recommend_subject">Tentar %1$s em seu smartfone!</string>
   <string name="recommend_text">Gostaria de convida-lo a usar %1$s em seu smartphone!\nBaixe aqui: %2$s</string>
   <string name="auth_failure_snackbar">Falha na autenticação</string>
   <string name="auth_failure_snackbar_action">Mudar de conta</string>
+  <string name="auth_oauth_failure">O token de acesso expirou ou se tornou inválido. Faça login novamente para recuperar o acesso</string>
+  <string name="auth_oauth_failure_snackbar_action">Entrar</string>
   <string name="auth_check_server">Verificar servidor</string>
   <string name="auth_host_url">Endereço do servidor https://...</string>
   <string name="auth_username">Nome de usuário</string>
@@ -100,6 +104,7 @@
   <string name="file_list_seconds_ago">segundos atrás</string>
   <string name="file_list_empty">Nada aqui. Envie alguma coisa!</string>
   <string name="file_list_empty_available_offline">Não há arquivos externos disponíveis.</string>
+  <string name="file_list_empty_shared_by_links">Nenhum arquivo foi compartilhado por linque.</string>
   <string name="file_list_loading">Carregando...</string>
   <string name="file_list_no_app_for_file_type">Nenhum aplicativo encontrado para esse tipo de arquivo</string>
   <string name="local_file_list_empty">Não existe nenhum arquivo nesta pasta.</string>
@@ -217,6 +222,7 @@
   <string name="pass_code_wrong">Código de acesso incorreto</string>
   <string name="pass_code_removed">Código de acesso removido</string>
   <string name="pass_code_stored">Código de acesso armazenado</string>
+  <string name="pass_code_locked">Bloqueado com senha</string>
   <string name="fingerprint_confirm">Confirme sua impressão digital para continuar</string>
   <string name="fingerprint_hint">Sensor de toque</string>
   <string name="fingerprint_not_recognized">Impressão digital não reconhecida, tente novamente</string>
@@ -266,8 +272,7 @@
   <string name="auth_wtf_reenter_URL">Estado inesperado; por favor insira o endereço do servidor novamente</string>
   <string name="auth_expired_oauth_token_toast">Sua autorização expirou. Por favor, solicite autorizar novamente</string>
   <string name="auth_expired_basic_auth_toast">Por favor, digite a senha atual</string>
-  <string name="auth_expired_saml_sso_token_toast">Sua sessão expirou. Por favor, conecte-se novamente</string>
-  <string name="auth_connecting_auth_server">Conectando ao servidor de autenticação ...</string>
+    <string name="auth_connecting_auth_server">Conectando ao servidor de autenticação ...</string>
   <string name="auth_unsupported_auth_method">O servidor não suporta este método de autenticação</string>
   <string name="auth_unsupported_multiaccount">%1$s não suporta múltiplas contas</string>
   <string name="auth_fail_get_user_name">Seu servidor não está retornando um ID de usuário correto, por favor, entre em contato com um administrador
@@ -283,7 +288,7 @@
   <string name="confirmation_remove_local">Somente local</string>
   <string name="confirmation_remove_account_alert">Você realmente deseja remover a conta %1$s?</string>
   <string name="confirmation_remove_public_share_title">Remover link</string>
-  <string name="confirmation_remove_public_share_message">Você realmente deseja remover %1$s?</string>
+  <string name="confirmation_remove_share_message">Você realmente deseja remover %1$s?</string>
   <string name="remove_success_msg">Removido com sucesso</string>
   <string name="remove_fail_msg">Erro ao remover</string>
   <string name="rename_dialog_title">Digite um novo nome</string>
@@ -339,7 +344,6 @@
   <string name="placeholder_media_time">12:23:45</string>
   <string name="camera_picture_upload_on_wifi">Envio de fotos apenas por wifi</string>
   <string name="camera_video_upload_on_wifi">Envio de vídeos apenas por wifi</string>
-  <string name="camera_upload_path">/CameraUpload</string>
   <string name="confirmation_disable_camera_uploads_title">Confirmar</string>
   <string name="confirmation_disable_pictures_upload_message">Tem certeza de que deseja desativar esse recurso? As imagens pendentes não serão carregadas</string>
   <string name="confirmation_disable_videos_upload_message">Tem certeza de que deseja desativar esse recurso? Os vídeos pendentes não serão carregadas</string>
@@ -400,9 +404,7 @@
   <string name="log_progress_dialog_text">Carregando dados...</string>
   <string name="actionbar_select_all">Selecionar tudo</string>
   <string name="actionbar_select_inverse">Selecione inverso</string>
-  <string name="saml_authentication_required_text">Autenticação é requerida</string>
-  <string name="saml_authentication_wrong_pass">Senha incorreta</string>
-  <string name="actionbar_move">Mover</string>
+    <string name="actionbar_move">Mover</string>
   <string name="file_list_empty_moving">Nada aqui. Você pode adicionar uma pasta!</string>
   <string name="folder_picker_choose_button_text">Escolher</string>
   <string name="move_file_not_found">Não é possível mover. Por favor verifique se o arquivo existe</string>

@@ -20,6 +20,7 @@
   <string name="actionbar_sort_by_size">Más pequeño - Más grande</string>
   <string name="drawer_item_all_files">Todos los archivos</string>
   <string name="drawer_item_only_available_offline">Disponible offline</string>
+  <string name="drawer_item_shared_by_link_files">Compartido por medio de enlaces</string>
   <string name="drawer_item_settings">Ajustes</string>
   <string name="drawer_item_uploads_list">Subidas</string>
   <string name="drawer_close">Cerrar</string>
@@ -77,6 +78,7 @@
   <string name="recommend_text">¡Quiero invitarle a usar %1$s en su smartphone!\nDescárguelo aquí: %2$s</string>
   <string name="auth_failure_snackbar">Fallo en la autenticación</string>
   <string name="auth_failure_snackbar_action">Cambiar cuenta</string>
+  <string name="auth_oauth_failure_snackbar_action">Registrarse</string>
   <string name="auth_check_server">Verificar servidor</string>
   <string name="auth_host_url">Dirección del servidor https://…</string>
   <string name="auth_username">Nombre de usuario</string>
@@ -266,8 +268,7 @@
   <string name="auth_wtf_reenter_URL">Estado inesperado; por favor introduzca su dirección de correo de nuevo</string>
   <string name="auth_expired_oauth_token_toast">Su autorización ha expirado. Por favor, autorice de nuevo</string>
   <string name="auth_expired_basic_auth_toast">Por favor introduzca su contraseña actual</string>
-  <string name="auth_expired_saml_sso_token_toast">Su sesión ha expirado. Favor de conectarse de nuevo</string>
-  <string name="auth_connecting_auth_server">Conectando al servidor de autentificación</string>
+    <string name="auth_connecting_auth_server">Conectando al servidor de autentificación</string>
   <string name="auth_unsupported_auth_method">El servidor no soporta este método de autenticación</string>
   <string name="auth_unsupported_multiaccount">%1$s no soporta cuentas múltiples</string>
   <string name="auth_fail_get_user_name">Su servidor no está retornando una identificación de usuario correcta; contacte a un administrador
@@ -283,7 +284,7 @@
   <string name="confirmation_remove_local">Sólo local</string>
   <string name="confirmation_remove_account_alert">¿Desea realmente eliminar la cuenta de %1$s?</string>
   <string name="confirmation_remove_public_share_title">Eliminar link</string>
-  <string name="confirmation_remove_public_share_message">¿Realmente desea eliminar %1$s?</string>
+  <string name="confirmation_remove_share_message">¿Realmente desea eliminar %1$s?</string>
   <string name="remove_success_msg">Borrado correctamente</string>
   <string name="remove_fail_msg">El borrado no pudo ser completado</string>
   <string name="rename_dialog_title">Introduzca un nombre nuevo</string>
@@ -339,7 +340,6 @@
   <string name="placeholder_media_time">12:23:45</string>
   <string name="camera_picture_upload_on_wifi">Subir fotos por wifi únicamente</string>
   <string name="camera_video_upload_on_wifi">Subir archivos por wifi únicamente</string>
-  <string name="camera_upload_path">/SubidasCámara</string>
   <string name="confirmation_disable_camera_uploads_title">Confirmar</string>
   <string name="confirmation_disable_pictures_upload_message">¿Está seguro de que desea deshabilitar esta opción ?  Las imagenes pendientes no se subiran.</string>
   <string name="confirmation_disable_videos_upload_message">¿Está seguro de que desea deshabilitar esta opción ? Los videos pendientes no se subiran.</string>
@@ -400,9 +400,7 @@
   <string name="log_progress_dialog_text">Cargando datos...</string>
   <string name="actionbar_select_all">Seleccionar todo</string>
   <string name="actionbar_select_inverse">Seleccionar inverso</string>
-  <string name="saml_authentication_required_text">Se necesita autenticación</string>
-  <string name="saml_authentication_wrong_pass">Contraseña incorrecta</string>
-  <string name="actionbar_move">Mover</string>
+    <string name="actionbar_move">Mover</string>
   <string name="file_list_empty_moving">Aquí no hay nada. ¡Puede agregar una carpeta!</string>
   <string name="folder_picker_choose_button_text">Elegir</string>
   <string name="move_file_not_found">No se puede mover. Revise si el archivo existe</string>

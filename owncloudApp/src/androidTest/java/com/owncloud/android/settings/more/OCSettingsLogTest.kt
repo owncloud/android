@@ -19,79 +19,41 @@
 
 package com.owncloud.android.settings.more
 
-import android.app.Activity
-import android.app.Instrumentation
-import android.content.Intent
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu
-import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.intent.Intents
-import androidx.test.espresso.intent.Intents.intended
-import androidx.test.espresso.intent.Intents.intending
-import androidx.test.espresso.intent.matcher.IntentMatchers.hasAction
-import androidx.test.espresso.intent.matcher.IntentMatchers.hasExtra
-import androidx.test.espresso.intent.matcher.IntentMatchers.hasFlag
-import androidx.test.espresso.intent.matcher.IntentMatchers.hasType
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
 import com.owncloud.android.R
 import com.owncloud.android.ui.activity.LogHistoryActivity
-import org.hamcrest.Matchers
-import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
 
-@RunWith(AndroidJUnit4::class)
 class OCSettingsLogTest {
 
     @Rule
     @JvmField
     val activityRule = ActivityTestRule(LogHistoryActivity::class.java, true, true)
 
-    @Before
-    fun setUp() {}
-
     @Test
-    fun checkTitle(){
-        onView(withText(R.string.actionbar_logger)).check(matches(isDisplayed()))
+    fun itemsToolbar() {
+        onView(withId(R.id.search_button)).check(matches(isDisplayed()))
+        //Values not i18n
+        onView(withText("LOGCAT")).check(matches(isDisplayed()))
+        onView(withText("LOGFILE")).check(matches(isDisplayed()))
     }
 
     @Test
-    fun itemsToolbar(){
-        onView(withId(R.id.menu_search)).check(matches(isDisplayed()))
+    fun itemsLogLevel() {
         openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getInstrumentation().targetContext)
-        onView(withText("Logcat")).check(matches(isDisplayed()))
-    }
-
-    @Test
-    fun logHistoryButtons(){
-        onView(withId(R.id.deleteLogHistoryButton)).check(matches(isDisplayed()))
-        onView(withId(R.id.sendLogHistoryButton)).check(matches(isDisplayed()))
-    }
-
-    @Test
-    fun sendLogHistory(){
-        Intents.init()
-        val intentResult = Instrumentation.ActivityResult(Activity.RESULT_OK, Intent())
-        intending(hasAction(Intent.ACTION_SEND_MULTIPLE)).respondWith(intentResult);
-        onView(withId(R.id.sendLogHistoryButton)).perform(click())
-        intended(
-            Matchers.allOf(
-                hasAction(Intent.ACTION_SEND_MULTIPLE),
-                hasExtra(Intent.EXTRA_SUBJECT,
-                    String.format(
-                        activityRule.activity.getString(R.string.log_send_mail_subject),
-                        activityRule.activity.getString(R.string.app_name))),
-                hasType("text/plain"),
-                hasFlag(Intent.FLAG_ACTIVITY_NEW_TASK)
-            )
-        )
-        Intents.release()
+        //Values not i18n
+        onView(withText("Verbose")).check(matches(isDisplayed()))
+        onView(withText("Debug")).check(matches(isDisplayed()))
+        onView(withText("Info")).check(matches(isDisplayed()))
+        onView(withText("Warning")).check(matches(isDisplayed()))
+        onView(withText("Error")).check(matches(isDisplayed()))
     }
 }

@@ -24,47 +24,9 @@
 
     <include layout="@layout/toolbar_standard" />
 
-    <HorizontalScrollView
+    <FrameLayout
+        android:id="@+id/fragment_container"
         android:layout_width="match_parent"
-        android:layout_weight="1"
-        android:layout_margin="@dimen/standard_half_margin"
-        android:layout_height="match_parent">
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/log_recycler"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scrollbars="vertical" />
-
-    </HorizontalScrollView>
-
-    <LinearLayout
-        android:id="@+id/historyButtonBar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/standard_margin"
-        android:layout_marginRight="@dimen/standard_margin"
-        android:layout_marginBottom="@dimen/standard_margin"
-        android:orientation="horizontal">
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/deleteLogHistoryButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:layout_weight="1"
-            android:text="@string/prefs_log_delete_history_button"
-            android:theme="@style/Button.Secondary" />
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/sendLogHistoryButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:layout_weight="1"
-            android:text="@string/log_send_history_button"
-            android:theme="@style/Button.Primary" />
-
-    </LinearLayout>
+        android:layout_height="match_parent" />
 
 </LinearLayout>

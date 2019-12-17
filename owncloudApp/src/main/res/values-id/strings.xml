@@ -20,6 +20,7 @@
   <string name="actionbar_sort_by_size">Terkecil - Terbesar</string>
   <string name="drawer_item_all_files">Semua berkas</string>
   <string name="drawer_item_only_available_offline">Tersedia offline</string>
+  <string name="drawer_item_shared_by_link_files">Dibagikan dengan tautan</string>
   <string name="drawer_item_settings">Pengaturan</string>
   <string name="drawer_item_uploads_list">Unggah</string>
   <string name="drawer_close">Tutup</string>
@@ -77,6 +78,7 @@
   <string name="recommend_text">Saya mengajak Anda untuk menggunakan %1$s di ponsel cerdas Anda!\nUnduh gratis disini: %2$s</string>
   <string name="auth_failure_snackbar">Otentikasi gagal</string>
   <string name="auth_failure_snackbar_action">Ganti akun</string>
+  <string name="auth_oauth_failure_snackbar_action">Masuk</string>
   <string name="auth_check_server">Periksa peladen</string>
   <string name="auth_host_url">Alamat server https://…</string>
   <string name="auth_username">Nama Pengguna</string>
@@ -266,7 +268,6 @@
   <string name="auth_wtf_reenter_URL">Kondisi tak terduga; silakan masukkan alamat penyedia lagi</string>
   <string name="auth_expired_oauth_token_toast">Otorisasi Anda telah berakhir. Silakan mengotorisasi lagi</string>
   <string name="auth_expired_basic_auth_toast">Masukkan password</string>
-  <string name="auth_expired_saml_sso_token_toast">Sesi Anda telah berakhir. Silakan masuk kembali</string>
   <string name="auth_connecting_auth_server">Menyambung ke penyedia otentikasi ...</string>
   <string name="auth_unsupported_auth_method">Server tidak mendukung medote otentikasi ini</string>
   <string name="auth_unsupported_multiaccount">%1$s tidak mendukung banyak akun </string>
@@ -283,7 +284,7 @@
   <string name="confirmation_remove_local">Lokal saja</string>
   <string name="confirmation_remove_account_alert">Apakah anda serius ingin menghapus akun %1$s ?</string>
   <string name="confirmation_remove_public_share_title">Hapus tautan</string>
-  <string name="confirmation_remove_public_share_message">Apakah Anda yakin ingin menghapus %1$s?</string>
+  <string name="confirmation_remove_share_message">Apakah Anda yakin ingin menghapus %1$s?</string>
   <string name="remove_success_msg">Penghapusan berhasil</string>
   <string name="remove_fail_msg">Penghapusan gagal</string>
   <string name="rename_dialog_title">Masukkan nama baru</string>
@@ -339,7 +340,6 @@
   <string name="placeholder_media_time">12:23:45</string>
   <string name="camera_picture_upload_on_wifi">Unggah gambar hanya melalui WiFi</string>
   <string name="camera_video_upload_on_wifi">Unggah video hanya melalui WiFi</string>
-  <string name="camera_upload_path">/UnggahKamera</string>
   <string name="confirmation_disable_camera_uploads_title">Memastikan</string>
   <string name="confirmation_disable_pictures_upload_message">Anda yakin ingin menonaktifkan fitur ini? Gambar yang tertunda tidak akan diunggah</string>
   <string name="confirmation_disable_videos_upload_message">Anda yakin ingin menonaktifkan feature ini? Video yang tertunda tidak akan diunggah</string>
@@ -397,8 +397,6 @@
   <string name="log_progress_dialog_text">Memuat data...</string>
   <string name="actionbar_select_all">Pilih Semua</string>
   <string name="actionbar_select_inverse">Pilih kebalikan</string>
-  <string name="saml_authentication_required_text">Diperlukan otentikasi</string>
-  <string name="saml_authentication_wrong_pass">Sandi salah</string>
   <string name="actionbar_move">Pindah</string>
   <string name="file_list_empty_moving">Tdak ada apapun disini. Anda dapat menambahkan sebuah folder!</string>
   <string name="folder_picker_choose_button_text">Pilih</string>

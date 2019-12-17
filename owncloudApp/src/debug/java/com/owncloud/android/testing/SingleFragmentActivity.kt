@@ -38,16 +38,4 @@ open class SingleFragmentActivity : BaseActivity() {
         }
         setContentView(content)
     }
-
-    fun setFragment(fragment: Fragment) {
-        supportFragmentManager.beginTransaction()
-            .add(R.id.container, fragment, "TEST FRAGMENT")
-            .commitAllowingStateLoss()
-    }
-
-    fun replaceFragment(fragment: Fragment) {
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.container, fragment)
-            .commit()
-    }
 }

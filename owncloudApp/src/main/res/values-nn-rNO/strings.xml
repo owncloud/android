@@ -211,8 +211,7 @@
   <string name="auth_wtf_reenter_URL">Uventa tilstand, ver venleg å oppgje adresse til tenaren på ny</string>
   <string name="auth_expired_oauth_token_toast">Tilgang er utgått. Ver venleg å autorisere på ny</string>
   <string name="auth_expired_basic_auth_toast">Oppgje passord</string>
-  <string name="auth_expired_saml_sso_token_toast">Sesjon er utgått, koble opp på ny</string>
-  <string name="auth_connecting_auth_server">Koblar til autentiseringstenar</string>
+    <string name="auth_connecting_auth_server">Koblar til autentiseringstenar</string>
   <string name="auth_unsupported_auth_method">Tenaren støttar ikkje denne metode for autentisering</string>
   <string name="auth_unsupported_multiaccount">%1$sstøttar ikkje fleire kontoar</string>
   <string name="common_rename">Endra namn</string>
@@ -247,7 +246,6 @@
   <string name="prefs_category_accounts">Kontoar</string>
   <string name="drawer_manage_accounts">Handter kontoar</string>
   <string name="actionbar_logger">Loggar</string>
-  <string name="saml_authentication_wrong_pass">Feil passord</string>
   <string name="actionbar_move">Flytt</string>
   <string name="folder_picker_choose_button_text">Vel</string>
   <string name="auth_host_address">Tenaradresse</string>

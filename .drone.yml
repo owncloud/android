@@ -45,13 +45,7 @@ pipeline:
     pull: true
     commands:
     - cd docs/
-    - make pdf
-
-  docs-artifacts:
-    image: owncloud/ubuntu:latest
-    pull: true
-    commands:
-    - tree docs/public/
+    - bin/cli -m
 
   cache-rebuild:
     image: plugins/s3-cache:1

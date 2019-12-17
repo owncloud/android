@@ -41,6 +41,7 @@ import android.content.IntentFilter;
 import android.content.res.Resources.NotFoundException;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Parcelable;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -341,7 +342,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         // click on folder in the list
         Log_OC.d(TAG, "on item click");
-        Vector<OCFile> tmpfiles = getStorageManager().getFolderContent(mFile, false);
+        Vector<OCFile> tmpfiles = getStorageManager().getFolderContent(mFile);
         tmpfiles = sortFileList(tmpfiles);
 
         if (tmpfiles.size() <= 0) {
@@ -437,7 +438,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
 
         mFile = getStorageManager().getFileByPath(full_path);
         if (mFile != null) {
-            Vector<OCFile> files = getStorageManager().getFolderContent(mFile, false);
+            Vector<OCFile> files = getStorageManager().getFolderContent(mFile);
             files = sortFileList(files);
 
             mAdapter = new ReceiveExternalFilesAdapter(
@@ -501,7 +502,8 @@ public class ReceiveExternalFilesActivity extends FileActivity
             if (mStreamsToUpload.get(0) != null) {
                 String streamToUpload = mStreamsToUpload.get(0).toString();
                 if (streamToUpload.contains("/data") && streamToUpload.contains(getPackageName()) &&
-                        !streamToUpload.contains(getCacheDir().getPath())) {
+                        !streamToUpload.contains(getCacheDir().getPath()) &&
+                        !streamToUpload.contains(Environment.getExternalStorageDirectory().toString())) {
                     finish();
                 }
             }
@@ -835,8 +837,8 @@ public class ReceiveExternalFilesActivity extends FileActivity
     /**
      * Show an error dialog, forcing the user to click a single button to exit the activity
      *
-     * @param messageResId    Resource id of the message to show in the dialog.
-     * @param messageResTitle Resource id of the title to show in the dialog. 0 to show default alert message.
+     * @param messageResId    DataResult id of the message to show in the dialog.
+     * @param messageResTitle DataResult id of the title to show in the dialog. 0 to show default alert message.
      *                        -1 to show no title.
      */
     private void showErrorDialog(int messageResId, int messageResTitle) {

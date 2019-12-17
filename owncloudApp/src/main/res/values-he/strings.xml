@@ -20,6 +20,7 @@
   <string name="actionbar_sort_by_size">קטן - גדול</string>
   <string name="drawer_item_all_files">כל הקבצים</string>
   <string name="drawer_item_only_available_offline">זמין במצב לא מקוון</string>
+  <string name="drawer_item_shared_by_link_files">משותף עם קישור</string>
   <string name="drawer_item_settings">הגדרות</string>
   <string name="drawer_item_uploads_list">העלאות</string>
   <string name="drawer_close">סגירה</string>
@@ -72,11 +73,14 @@
   <string name="passcode_already_set">לא ניתן להפעיל נעילת קוד ותבנית בו זמנית, נא להשבית את הקוד תחילה</string>
   <string name="pattern_no_longer_required">לא תופיע עוד בקשה עם תבנית</string>
   <string name="pattern_configure_your_pattern_explanation">תופיע בקשה לאימות תבנית עם כל הפעלה של היישומון</string>
+  <string name="pattern_locked">נעילה על בסיס תבנית</string>
   <string name="illegal_argument_exception_message">פעולה חוקית נדרשת להעברה</string>
   <string name="recommend_subject">לבדיקה %1$s בטלפון החכם שלך!</string>
   <string name="recommend_text">הנך מוזמן להשתמש ב- %1$s בטלפון החכם שלך!\nניתן להוריד מכאן: %2$s</string>
   <string name="auth_failure_snackbar">האימות נכשל</string>
   <string name="auth_failure_snackbar_action">החלף חשבון</string>
+  <string name="auth_oauth_failure">פג תוקף חתימת הייצוג או שהפך להיות לא חוקי. יש להתחבר שנית לקבלת גישה חוזרת.</string>
+  <string name="auth_oauth_failure_snackbar_action">התחברות</string>
   <string name="auth_check_server">בדיקת שרת</string>
   <string name="auth_host_url">כתובת שרת https://…</string>
   <string name="auth_username">שם משתמש</string>
@@ -100,6 +104,7 @@
   <string name="file_list_seconds_ago">שניות</string>
   <string name="file_list_empty">אין כאן שום דבר. אולי ברצונך להעלות משהו?</string>
   <string name="file_list_empty_available_offline">אין קבצים לא מקוונים זמינים.</string>
+  <string name="file_list_empty_shared_by_links">אף קובץ לא שותף באמצעות קישור.</string>
   <string name="file_list_loading">בטעינה …</string>
   <string name="file_list_no_app_for_file_type">לא נמצא יישום לסוג קובץ</string>
   <string name="local_file_list_empty">אין קבצים בתיקייה זו:</string>
@@ -217,6 +222,7 @@
   <string name="pass_code_wrong">קוד שגוי</string>
   <string name="pass_code_removed">הקוד הוסר</string>
   <string name="pass_code_stored">הקוד נשמר</string>
+  <string name="pass_code_locked">נעילה על בסיס סיסמא</string>
   <string name="fingerprint_confirm">יש לאשר את טביעת האצבע להמשך</string>
   <string name="fingerprint_hint">גלאי מגע</string>
   <string name="fingerprint_not_recognized">טביעת האצבע לא אומתה, יש לנסות שוב</string>
@@ -266,7 +272,6 @@
   <string name="auth_wtf_reenter_URL">מצב בלתי צפוי ; יש להכניס את כתובת השרת שנית</string>
   <string name="auth_expired_oauth_token_toast">האישור שלך פג. נא לבצע אישור מחדש</string>
   <string name="auth_expired_basic_auth_toast">יש להכניס את הסיסמא הנוכחית</string>
-  <string name="auth_expired_saml_sso_token_toast">זמן ההתקשרות שלך הסתיים. יש להתחבר מחדש</string>
   <string name="auth_connecting_auth_server">מתחבר לשרת אימות...</string>
   <string name="auth_unsupported_auth_method">השרת אינו תומך בשיטת אימות זו</string>
   <string name="auth_unsupported_multiaccount">%1$s אינו תומך בריבוי חשבונות</string>
@@ -283,7 +288,7 @@
   <string name="confirmation_remove_local">מקומי בלבד</string>
   <string name="confirmation_remove_account_alert">האם באמת להסיר את החשבון %1$s?</string>
   <string name="confirmation_remove_public_share_title">הסרת קישור</string>
-  <string name="confirmation_remove_public_share_message">האם באמת להסיר %1$s?</string>
+  <string name="confirmation_remove_share_message">האם באמת להסיר %1$s?</string>
   <string name="remove_success_msg">ההסרה הצליחה</string>
   <string name="remove_fail_msg">ההסרה נכשלה</string>
   <string name="rename_dialog_title">נא להזין שם חדש</string>
@@ -339,7 +344,6 @@
   <string name="placeholder_media_time">12:23:45</string>
   <string name="camera_picture_upload_on_wifi">העלאת תמונות על בסיס חיבור wifi בלבד</string>
   <string name="camera_video_upload_on_wifi">העלאת סרטים על בסיס חיבור wifi בלבד</string>
-  <string name="camera_upload_path">/CameraUpload</string>
   <string name="confirmation_disable_camera_uploads_title">אישור</string>
   <string name="confirmation_disable_pictures_upload_message">להשבית את התכונה הזאת? התמונות שממתינות לא יועלו</string>
   <string name="confirmation_disable_videos_upload_message">להשבית את התכונה הזאת? הסרטונים שממתינים לא יועלו</string>
@@ -400,8 +404,6 @@
   <string name="log_progress_dialog_text">טעינת מידע...</string>
   <string name="actionbar_select_all">לבחור הכול</string>
   <string name="actionbar_select_inverse">בחירה הפוכה</string>
-  <string name="saml_authentication_required_text">נדרש אימות</string>
-  <string name="saml_authentication_wrong_pass">סיסמא שגוייה</string>
   <string name="actionbar_move">העברה</string>
   <string name="file_list_empty_moving">אין כאן כלום. ניתן להוסיף תיקייה!</string>
   <string name="folder_picker_choose_button_text">בחירה</string>

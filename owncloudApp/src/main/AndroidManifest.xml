@@ -73,13 +73,17 @@
         android:theme="@style/Theme.ownCloud.Toolbar"
         tools:targetApi="n">
         <activity
-            android:name=".ui.activity.FileDisplayActivity"
-            android:theme="@style/Theme.ownCloud.Toolbar.Drawer">
+            android:name=".ui.activity.SplashActivity"
+            android:theme="@style/Theme.ownCloud.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".ui.activity.FileDisplayActivity"
+            android:theme="@style/Theme.ownCloud.Toolbar.Drawer">
         </activity>
         <activity android:name=".ui.activity.ManageAccountsActivity" />
         <activity
@@ -157,7 +161,7 @@
             android:syncable="true"
             />
         <provider
-            android:name="com.owncloud.android.sharees.presentation.UsersAndGroupsSearchProvider"
+            android:name="com.owncloud.android.presentation.providers.sharing.UsersAndGroupsSearchProvider"
             android:authorities="@string/search_suggest_authority"
             android:enabled="true"
             android:exported="false"
@@ -247,7 +251,7 @@
         <activity android:name=".ui.activity.LocalFolderPickerActivity" />
         <activity android:name=".ui.activity.UploadPathActivity" />
         <activity
-            android:name=".shares.presentation.ShareActivity"
+            android:name="com.owncloud.android.presentation.ui.sharing.ShareActivity"
             android:label="@string/share_dialog_title"
             android:launchMode="singleTop"
             android:theme="@style/Theme.ownCloud"

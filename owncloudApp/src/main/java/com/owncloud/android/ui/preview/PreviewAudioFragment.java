@@ -5,6 +5,7 @@
  * @author Christian Schabesberger
  * @author David González Verdugo
  * @author Abel García de Prada
+ * @author Shashvat Kedia
  * Copyright (C) 2019 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
@@ -57,10 +58,10 @@ import com.owncloud.android.utils.PreferenceUtils;
 
 /**
  * This fragment shows a preview of a downloaded audio.
- *
+ * <p>
  * Trying to get an instance with NULL {@link OCFile} or ownCloud {@link Account} values will
  * produce an {@link IllegalStateException}.
- *
+ * <p>
  * If the {@link OCFile} passed is not downloaded, an {@link IllegalStateException} is
  * generated on instantiation too.
  */
@@ -88,11 +89,11 @@ public class PreviewAudioFragment extends FileFragment {
     /**
      * Public factory method to create new PreviewAudioFragment instances.
      *
-     * @param file                      An {@link OCFile} to preview in the fragment
-     * @param account                   ownCloud account containing file
-     * @param startPlaybackPosition     Time in milliseconds where the play should be started
-     * @param autoplay                  If 'true', the file will be played automatically when
-     *                                  the fragment is displayed.
+     * @param file                  An {@link OCFile} to preview in the fragment
+     * @param account               ownCloud account containing file
+     * @param startPlaybackPosition Time in milliseconds where the play should be started
+     * @param autoplay              If 'true', the file will be played automatically when
+     *                              the fragment is displayed.
      * @return Fragment ready to be used.
      */
     public static PreviewAudioFragment newInstance(
@@ -318,7 +319,7 @@ public class PreviewAudioFragment extends FileFragment {
                 mContainerActivity,
                 getActivity()
         );
-        mf.filter(menu, false, false, false);
+        mf.filter(menu, false, false, false, false);
 
         // additional restriction for this fragment 
         // TODO allow renaming in PreviewAudioFragment
@@ -442,7 +443,9 @@ public class PreviewAudioFragment extends FileFragment {
         }
     }
 
-    /** Defines callbacks for service binding, passed to bindService() */
+    /**
+     * Defines callbacks for service binding, passed to bindService()
+     */
     private class MediaServiceConnection implements ServiceConnection {
 
         @Override

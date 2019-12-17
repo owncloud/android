@@ -34,7 +34,6 @@ import androidx.core.content.FileProvider;
 import com.owncloud.android.R;
 import com.owncloud.android.lib.common.network.WebdavUtils;
 import com.owncloud.android.lib.common.utils.Log_OC;
-import third_parties.daveKoeller.AlphanumComparator;
 
 import java.io.File;
 
@@ -571,7 +570,7 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
         } else if (another.isFolder()) {
             return 1;
         }
-        return new AlphanumComparator().compare(this, another);
+        return getRemotePath().toLowerCase().compareTo(another.getRemotePath().toLowerCase());
     }
 
     @Override

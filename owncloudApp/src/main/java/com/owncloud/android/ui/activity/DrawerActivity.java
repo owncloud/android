@@ -4,6 +4,7 @@
  * @author Andy Scherzinger
  * @author Christian Schabesberger
  * @author David González Verdugo
+ * @author Shashvat Kedia
  * Copyright (C) 2019 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
@@ -254,6 +255,11 @@ public abstract class DrawerActivity extends ToolbarActivity {
                                 mCheckedMenuItem = menuItem.getItemId();
                                 onlyAvailableOfflineOption();
                                 break;
+                            case R.id.nav_shared_by_link_files:
+                                menuItem.setChecked(true);
+                                mCheckedMenuItem = menuItem.getItemId();
+                                sharedByLinkFilesOption();
+                                break;
                             case R.id.nav_settings:
                                 Intent settingsIntent = new Intent(getApplicationContext(),
                                         Preferences.class);
@@ -320,6 +326,8 @@ public abstract class DrawerActivity extends ToolbarActivity {
     private void accountClicked(String accountName) {
         if (!AccountUtils.getCurrentOwnCloudAccount(getApplicationContext()).name.equals(accountName)) {
             AccountUtils.setCurrentOwnCloudAccount(getApplicationContext(), accountName);
+            // Refresh dependencies to be used in selected account
+            MainApp.Companion.initDependencyInjection();
             restart();
         }
     }
@@ -536,6 +544,8 @@ public abstract class DrawerActivity extends ToolbarActivity {
      */
     public abstract void onlyAvailableOfflineOption();
 
+    public abstract void sharedByLinkFilesOption();
+
     /**
      * Updates title bar and home buttons (state and icon).
      * <p/>
@@ -725,6 +735,8 @@ public abstract class DrawerActivity extends ToolbarActivity {
             // current account has changed
             if (data.getBooleanExtra(ManageAccountsActivity.KEY_CURRENT_ACCOUNT_CHANGED, false)) {
                 setAccount(AccountUtils.getCurrentOwnCloudAccount(this));
+                // Refresh dependencies to be used in selected account
+                MainApp.Companion.initDependencyInjection();
                 restart();
             } else {
                 updateAccountList();
@@ -753,6 +765,8 @@ public abstract class DrawerActivity extends ToolbarActivity {
         super.onAccountCreationSuccessful(future);
         updateAccountList();
         updateQuota();
+        // Refresh dependencies to be used in selected account
+        MainApp.Companion.initDependencyInjection();
         restart();
     }
 

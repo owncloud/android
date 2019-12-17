@@ -23,9 +23,6 @@
     <string name="welcome_link_url" formatted="false">"https://owncloud.com/mobile/new"</string>
     <string name="share_api_link" formatted="false"></string>
 
-    <!-- Flags to setup the authentication methods available in the app -->
-    <string name="auth_method_saml_web_sso" formatted="false">off</string>
-
     <!-- Flags to enable/disable some features -->
     <string name="send_files_to_other_apps" formatted="false">on</string>
     <bool name="share_via_link_feature">true</bool>
@@ -47,6 +44,9 @@
     <color name="secondary_button_background_color">#D6D7D7</color>
     <color name="secondary_button_text_color">@color/black</color>
     <color name="drawer_header_color">@color/owncloud_blue_accent</color>
+
+    <!-- Splash Screen Background -->
+    <color name="splash_background">@color/owncloud_blue</color>
 
     <!-- Button -->
     <color name="button_text_color">#000000</color>

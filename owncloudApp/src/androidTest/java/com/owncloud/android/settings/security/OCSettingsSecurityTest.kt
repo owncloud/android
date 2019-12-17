@@ -29,15 +29,14 @@ import android.preference.PreferenceScreen
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
-import androidx.test.espresso.matcher.ViewMatchers.isEnabled
-import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.Intents.intended
 import androidx.test.espresso.intent.Intents.intending
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasAction
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent
-import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import androidx.test.espresso.matcher.ViewMatchers.isEnabled
+import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
 import com.owncloud.android.R
@@ -51,9 +50,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
 
-@RunWith(AndroidJUnit4::class)
 class OCSettingsSecurityTest {
 
     @Rule
@@ -95,14 +92,14 @@ class OCSettingsSecurityTest {
     }
 
     @After
-    fun tearDown(){
+    fun tearDown() {
         Intents.release()
         //clear SharedPreferences
         PreferenceManager.getDefaultSharedPreferences(context).edit().clear().commit()
     }
 
     @Test
-    fun securityView(){
+    fun securityView() {
         onView(withText(R.string.prefs_passcode)).check(matches(isDisplayed()))
         onView(withText(R.string.prefs_pattern)).check(matches(isDisplayed()))
         onView(withText(R.string.prefs_fingerprint)).check(matches(isDisplayed()))
@@ -113,19 +110,19 @@ class OCSettingsSecurityTest {
     }
 
     @Test
-    fun passcodeOpen(){
+    fun passcodeOpen() {
         onView(withText(R.string.prefs_passcode)).perform(click())
         intended(hasComponent(PassCodeActivity::class.java.name))
     }
 
     @Test
-    fun patternOpen(){
+    fun patternOpen() {
         onView(withText(R.string.prefs_pattern)).perform(click())
         intended(hasComponent(PatternLockActivity::class.java.name))
     }
 
     @Test
-    fun passcodeLockEnabled(){
+    fun passcodeLockEnabled() {
         val result = Intent()
         result.putExtra(KEY_PASSCODE, PASSCODE_VALUE)
         val intentResult = Instrumentation.ActivityResult(Activity.RESULT_OK, result)
@@ -136,7 +133,7 @@ class OCSettingsSecurityTest {
     }
 
     @Test
-    fun patternLockEnabled(){
+    fun patternLockEnabled() {
         val result = Intent()
         result.putExtra(KEY_PATTERN, PATTERN_VALUE)
         val intentResult = Instrumentation.ActivityResult(Activity.RESULT_OK, result)
@@ -147,33 +144,33 @@ class OCSettingsSecurityTest {
     }
 
     @Test
-    fun enablePasscodeEnablesFingerprint(){
+    fun enablePasscodeEnablesFingerprint() {
         firstEnablePasscode()
         onView(withText(R.string.prefs_fingerprint)).check(matches(isEnabled()))
     }
 
     @Test
-    fun enablePatternEnablesFingerprint(){
+    fun enablePatternEnablesFingerprint() {
         firstEnablePattern()
         onView(withText(R.string.prefs_fingerprint)).check(matches(isEnabled()))
     }
 
     @Test
-    fun onlyOneMethodEnabledPattern(){
+    fun onlyOneMethodEnabledPattern() {
         firstEnablePattern()
         onView(withText(R.string.prefs_passcode)).perform(click())
         onView(withText(R.string.pattern_already_set)).check(matches(isEnabled()))
     }
 
     @Test
-    fun onlyOneMethodEnabledPasscode(){
+    fun onlyOneMethodEnabledPasscode() {
         firstEnablePasscode()
         onView(withText(R.string.prefs_pattern)).perform(click())
         onView(withText(R.string.passcode_already_set)).check(matches(isEnabled()))
     }
 
     @Test
-    fun disablePasscode(){
+    fun disablePasscode() {
         firstEnablePasscode()
         val result = Intent()
         result.putExtra(KEY_CHECK_RESULT, true)
@@ -186,7 +183,7 @@ class OCSettingsSecurityTest {
     }
 
     @Test
-    fun disablePattern(){
+    fun disablePattern() {
         firstEnablePattern()
         val result = Intent()
         result.putExtra(KEY_CHECK_PATTERN_RESULT, true)
@@ -199,7 +196,7 @@ class OCSettingsSecurityTest {
     }
 
     @Test
-    fun touchesDialog(){
+    fun touchesDialog() {
         onView(withText(R.string.prefs_touches_with_other_visible_windows)).perform(click())
         onView(withText(activityRule.activity.getString(R.string.confirmation_touches_with_other_windows_title)))
             .check(matches(isDisplayed()))
@@ -208,28 +205,28 @@ class OCSettingsSecurityTest {
     }
 
     @Test
-    fun touchesEnable(){
+    fun touchesEnable() {
         onView(withText(R.string.prefs_touches_with_other_visible_windows)).perform(click())
         onView(withText(R.string.common_yes)).perform(click())
         assertTrue(mPrefTouches.isChecked)
     }
 
     @Test
-    fun touchesRefuse(){
+    fun touchesRefuse() {
         onView(withText(R.string.prefs_touches_with_other_visible_windows)).perform(click())
         onView(withText(R.string.common_no)).perform(click())
         assertFalse(mPrefTouches.isChecked)
     }
 
     @Test
-    fun disableTouches(){
+    fun disableTouches() {
         onView(withText(R.string.prefs_touches_with_other_visible_windows)).perform(click())
         onView(withText(R.string.common_yes)).perform(click())
         onView(withText(R.string.prefs_touches_with_other_visible_windows)).perform(click())
         assertFalse(mPrefTouches.isChecked)
     }
 
-    private fun firstEnablePasscode(){
+    private fun firstEnablePasscode() {
         val result = Intent()
         result.putExtra(KEY_PASSCODE, PASSCODE_VALUE)
         val intentResult = Instrumentation.ActivityResult(Activity.RESULT_OK, result)
@@ -237,7 +234,7 @@ class OCSettingsSecurityTest {
         onView(withText(R.string.prefs_passcode)).perform(click())
     }
 
-    private fun firstEnablePattern(){
+    private fun firstEnablePattern() {
         val result = Intent()
         result.putExtra(KEY_PATTERN, PATTERN_VALUE)
         val intentResult = Instrumentation.ActivityResult(Activity.RESULT_OK, result)

@@ -1,6 +1,6 @@
 ---
 name: Release
-about: Create a bug report to help us improve
+about: List of checklist to accomplish for the ownCloud team to finish the release process
 title: "[RELEASE]"
 labels: Release
 assignees: ''
@@ -20,7 +20,7 @@ assignees: ''
  - [ ] [GIT] Create and sign tag 'oc-android-X.X.X' in HEAD commit of stable master branch, in owncloud/android
  - [ ] [GIT] Create and sign tag 'Y.Y.Y' in HEAD commit of stable master branch, in owncloud/android-library
  - [ ] [DIS] Generate final APKs from signed commit in owncloud/android
- - [ ] [mail] inform john@owncloud.com and emil@owncloud.com about new release.
+ - [ ] [COM] inform `#release_coordination` and `#marketing` in internal chat
  - [ ] [GIT] Merge branch `release_Y.Y.Y` in owncloud/android-library, into master
  - [ ] [GIT] Merge branch `release_X.X.X` in owncloud/android, into master
  - [ ] [DIS] Upload & publish release APK and changelog in Play Store

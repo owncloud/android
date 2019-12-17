@@ -170,9 +170,9 @@
     defer-to-connect "^1.0.1"
 
 "@types/node@*":
-  version "12.7.2"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-12.7.2.tgz#c4e63af5e8823ce9cc3f0b34f7b998c2171f0c44"
-  integrity sha512-dyYO+f6ihZEtNPDcWNR1fkoTDf3zAK3lAABDze3mz6POyIercH0lEUawUFXlG8xaQZmm1yEBON/4TsYv/laDYg==
+  version "12.7.8"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-12.7.8.tgz#cb1bf6800238898bc2ff6ffa5702c3cadd350708"
+  integrity sha512-FMdVn84tJJdV+xe+53sYiZS4R5yn1mAIxfj+DVoNiQjTYz1+OYmjwEZr1ev9nU0axXwda0QDbYl06QHanRVH3A==
 
 abbrev@1:
   version "1.1.1"
@@ -975,9 +975,9 @@ http-server@^0.11.1:
     union "~0.4.3"
 
 humanize-duration@^3.9.1:
-  version "3.20.1"
-  resolved "https://registry.yarnpkg.com/humanize-duration/-/humanize-duration-3.20.1.tgz#e5edf1edcd32ac1e97e71e0e97f02533f664dc45"
-  integrity sha512-r2FR5Tkwo482oDmoutbX22KLzmz83UlWD8KgfQuM+EvxxDS10m2tRgHsKU+M6nFxaDU72YCKmLKi3lYB0CPMnw==
+  version "3.21.0"
+  resolved "https://registry.yarnpkg.com/humanize-duration/-/humanize-duration-3.21.0.tgz#ae5dc7e67640770cbf6a8d03a5d1138d47c7ce38"
+  integrity sha512-7BLsrQZ2nMGeakmGDUl1pDne6/7iAdvwf1RtDLCOPHNFIHjkOVW7lcu7xHkIM9HhZAlSSO5crhC1dHvtl4dIQw==
 
 ignore@^5.0.4:
   version "5.1.4"
@@ -1087,9 +1087,9 @@ isarray@~1.0.0:
   integrity sha1-u5NdSFgsuhaMBoNJV6VKPgcSTxE=
 
 isbot@^2.0.0:
-  version "2.4.0"
-  resolved "https://registry.yarnpkg.com/isbot/-/isbot-2.4.0.tgz#07e8a20eb0df976755ae55f195543be1e6530f1b"
-  integrity sha512-vuwfDK/BTiBPXswT0hH+gajLoYqnX7X9OxtF1ryfB0LgUVemvL+NtcZpE7L57TitMoCmwvWSGEiAfEOjbcbHdg==
+  version "2.4.1"
+  resolved "https://registry.yarnpkg.com/isbot/-/isbot-2.4.1.tgz#80e05e94fc9bfb05b499b8033803cee08bc3314e"
+  integrity sha512-aYmlG6ztVRersWtRyniFXgOhyMI9IuehRL0zUa3QIRPrZSFSB8G1O3MOKK5nWw7ozpyQdbEtUF3prTaQSf6zqg==
 
 isomorphic-git@0.47.0:
   version "0.47.0"
@@ -1562,9 +1562,9 @@ pseudomap@^1.0.2:
   integrity sha1-8FKijacOYYkX7wqKw0wa5aaChrM=
 
 psl@^1.1.28:
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/psl/-/psl-1.3.0.tgz#e1ebf6a3b5564fa8376f3da2275da76d875ca1bd"
-  integrity sha512-avHdspHO+9rQTLbv1RO+MPYeP/SzsCoxofjVnHanETfQhTJrmB0HlDoW+EiN/R+C0BZ+gERab9NY0lPN2TxNag==
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/psl/-/psl-1.4.0.tgz#5dd26156cdb69fa1fdb8ab1991667d3f80ced7c2"
+  integrity sha512-HZzqCGPecFLyoRj5HLfuDSKYTJkAfB5thKBIkRHtGjWwY7p1dAyveIbXIq4tO0KYfDF2tHqPUgY9SDnGm00uFw==
 
 pump@^2.0.0:
   version "2.0.1"

@@ -21,33 +21,32 @@ package com.owncloud.android.settings.camerauploads
 
 import android.os.Environment
 import android.preference.CheckBoxPreference
+import android.preference.PreferenceCategory
 import android.preference.PreferenceManager
+import android.preference.PreferenceScreen
+import androidx.test.espresso.Espresso.onData
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.matcher.IntentMatchers
+import androidx.test.espresso.matcher.PreferenceMatchers
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withText
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
 import com.owncloud.android.R
 import com.owncloud.android.ui.activity.LocalFolderPickerActivity
 import com.owncloud.android.ui.activity.Preferences
-import org.junit.Assert
-import org.junit.Assert.assertTrue
-import org.junit.Assert.assertFalse
-import org.junit.Before
 import org.junit.After
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
 
-@RunWith(AndroidJUnit4::class)
 class OCSettingsCameraUploadsTest {
-
     @Rule
     @JvmField
     val activityRule = ActivityTestRule(Preferences::class.java, true, true)
@@ -65,10 +64,19 @@ class OCSettingsCameraUploadsTest {
 
         mPrefCameraPictureUploads = activityRule.activity.findPreference(CAMERA_PICTURE_UPLOADS) as CheckBoxPreference
         mPrefCameraVideoUploads = activityRule.activity.findPreference(CAMERA_VIDEO_UPLOADS) as CheckBoxPreference
+
+        //Only interested in "Camera Uploads" section, so we can get rid of the other categories.
+        val preferenceScreen = activityRule.activity.getPreferenceScreen() as PreferenceScreen
+        val securityCategory =
+            activityRule.activity.findPreference("security_category") as PreferenceCategory
+        val moreCategory =
+            activityRule.activity.findPreference("more") as PreferenceCategory
+        preferenceScreen.removePreference(securityCategory)
+        preferenceScreen.removePreference(moreCategory)
     }
 
     @After
-    fun tearDown(){
+    fun tearDown() {
         //Clean preferences
         PreferenceManager.getDefaultSharedPreferences(context).edit().clear().commit()
     }
@@ -100,9 +108,14 @@ class OCSettingsCameraUploadsTest {
     @Test
     fun optionsCameraFolderBehaviour() {
         //Asserts
-        onView(withText(String.format(
-            activityRule.activity.getString(R.string.prefs_camera_upload_source_path_title),
-            activityRule.activity.getString(R.string.prefs_camera_upload_source_path_title_required))))
+        onView(
+            withText(
+                String.format(
+                    activityRule.activity.getString(R.string.prefs_camera_upload_source_path_title),
+                    activityRule.activity.getString(R.string.prefs_camera_upload_source_path_title_required)
+                )
+            )
+        )
             .check(doesNotExist())
         onView(withText(R.string.prefs_camera_upload_behaviour_title)).check(doesNotExist())
         onView(withText(R.string.pref_behaviour_entries_keep_file)).check(doesNotExist())
@@ -176,9 +189,14 @@ class OCSettingsCameraUploadsTest {
     fun cameraFolderView() {
         enableCameraPictureUploads()
         //Asserts
-        onView(withText(String.format(
-            activityRule.activity.getString(R.string.prefs_camera_upload_source_path_title),
-            activityRule.activity.getString(R.string.prefs_camera_upload_source_path_title_required))))
+        onView(
+            withText(
+                String.format(
+                    activityRule.activity.getString(R.string.prefs_camera_upload_source_path_title),
+                    activityRule.activity.getString(R.string.prefs_camera_upload_source_path_title_required)
+                )
+            )
+        )
             .check(matches(isDisplayed()))
     }
 
@@ -190,9 +208,14 @@ class OCSettingsCameraUploadsTest {
         ).absolutePath + "/Camera";
         Intents.init()
         //Asserts
-        onView(withText(String.format(
-            activityRule.activity.getString(R.string.prefs_camera_upload_source_path_title),
-            activityRule.activity.getString(R.string.prefs_camera_upload_source_path_title_required))))
+        onView(
+            withText(
+                String.format(
+                    activityRule.activity.getString(R.string.prefs_camera_upload_source_path_title),
+                    activityRule.activity.getString(R.string.prefs_camera_upload_source_path_title_required)
+                )
+            )
+        )
             .perform(click())
         Intents.intended(IntentMatchers.hasComponent(LocalFolderPickerActivity::class.java.name))
         IntentMatchers.hasExtra(LocalFolderPickerActivity.EXTRA_PATH, cameraFolder)
@@ -203,18 +226,18 @@ class OCSettingsCameraUploadsTest {
     @Test
     fun switchOriginalFileWillBe() {
         enableCameraPictureUploads()
-        onView(withText(R.string.prefs_camera_upload_behaviour_title)).perform(click())
+        onData(PreferenceMatchers.withTitle(R.string.prefs_camera_upload_behaviour_title)).perform(click());
         onView(withText(R.string.pref_behaviour_entries_move)).perform(click())
         //Asserts
         onView(withText(R.string.pref_behaviour_entries_move)).check(matches(isDisplayed()))
     }
 
-    fun enableCameraPictureUploads(){
+    fun enableCameraPictureUploads() {
         onView(withText(R.string.prefs_camera_picture_upload)).perform(click());
         onView(withText(android.R.string.ok)).perform(click())
     }
 
-    fun enableCameraVideoUploads(){
+    fun enableCameraVideoUploads() {
         onView(withText(R.string.prefs_camera_video_upload)).perform(click());
         onView(withText(android.R.string.ok)).perform(click())
     }

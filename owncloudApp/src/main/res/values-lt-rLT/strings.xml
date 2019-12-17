@@ -18,6 +18,7 @@
   <string name="actionbar_sort_by_size">Mažiausi - Didžiausi</string>
   <string name="drawer_item_all_files">Visi failai</string>
   <string name="drawer_item_only_available_offline">Pasiekiamas neprisijungus</string>
+  <string name="drawer_item_shared_by_link_files">Pasidalinta su nuoroda</string>
   <string name="drawer_item_settings">Parinktys</string>
   <string name="drawer_item_uploads_list">Įkėlimai</string>
   <string name="drawer_close">Užverti</string>
@@ -69,6 +70,7 @@
   <string name="recommend_text">Noriu pakviesti tave naudotis %1$s išmaniajame telefone!\nParsisiųks čia: %2$s</string>
   <string name="auth_failure_snackbar">Autentikacija nepavyko.</string>
   <string name="auth_failure_snackbar_action">Pakeisti paskyrą</string>
+  <string name="auth_oauth_failure_snackbar_action">Prisijungti</string>
   <string name="auth_check_server">Patikrinti serverį</string>
   <string name="auth_host_url">Serverio adresas </string>
   <string name="auth_username">Prisijungimo vardas</string>
@@ -248,8 +250,7 @@
   <string name="auth_wtf_reenter_URL">Netikėta problema: įveskite serverio adresą dar kartą</string>
   <string name="auth_expired_oauth_token_toast">Autorizacijos laikas baigėsi. Prašome autorizuotis iš naujo</string>
   <string name="auth_expired_basic_auth_toast">Įveskite dabartinį slaptažodį</string>
-  <string name="auth_expired_saml_sso_token_toast">Jūsų sesijos laikas baigėsi. Prašome prisijungti iš naujo</string>
-  <string name="auth_connecting_auth_server">Jungiasi į authorizacijos serverį ...</string>
+    <string name="auth_connecting_auth_server">Jungiasi į authorizacijos serverį ...</string>
   <string name="auth_unsupported_auth_method">Serveris nepalaiko šio autentikacijos metodo</string>
   <string name="auth_unsupported_multiaccount">%1$s nepalaiko kelių paskyrų iš karto</string>
   <string name="auth_fail_get_user_name">Serveris negražina tinkamo vartotojo ID, susisiekite su administratoriumi</string>
@@ -264,7 +265,7 @@
   <string name="confirmation_remove_local">Tik vietiniai</string>
   <string name="confirmation_remove_account_alert">Ar tikrai norite pašalinti paskyrą%1$s?</string>
   <string name="confirmation_remove_public_share_title">Pašalinti nuorodą</string>
-  <string name="confirmation_remove_public_share_message">Ar tikrai norite pašalinti %1$s?</string>
+  <string name="confirmation_remove_share_message">Ar tikrai norite pašalinti %1$s?</string>
   <string name="remove_success_msg">Pašalinta sėkmingai</string>
   <string name="remove_fail_msg">Pašalinti nepavyko</string>
   <string name="rename_dialog_title">Įveskite naują pavadinimą</string>
@@ -319,7 +320,6 @@
   <string name="placeholder_media_time">12:23:45</string>
   <string name="camera_picture_upload_on_wifi">Įkelti nuotraukas tik veikiant WiFi</string>
   <string name="camera_video_upload_on_wifi">Įkelti video tik veikiant WiFi</string>
-  <string name="camera_upload_path">/CameraUpload</string>
   <string name="confirmation_disable_camera_uploads_title">Patvirtinti</string>
   <string name="confirmation_disable_pictures_upload_message">Ar tikrai norite išjungti šią funkciją? Laukiančios nuotraukos nebus nusiųstos</string>
   <string name="confirmation_disable_videos_upload_message">Ar tikrai norite išjungti šią funkciją? Laukiantys video nebus nusiųsti</string>
@@ -373,9 +373,7 @@
   <string name="log_progress_dialog_text">Įkeliama...</string>
   <string name="actionbar_select_all">Pažymėti viską</string>
   <string name="actionbar_select_inverse">Pasirinkite atvirkštinį</string>
-  <string name="saml_authentication_required_text">Reikalinga autentikacija</string>
-  <string name="saml_authentication_wrong_pass">Neteisingas slaptažodis</string>
-  <string name="actionbar_move">perkelti</string>
+    <string name="actionbar_move">perkelti</string>
   <string name="file_list_empty_moving">Nieko nėra. Galite pridėti aplanką!</string>
   <string name="folder_picker_choose_button_text">Pasirinkite</string>
   <string name="move_file_not_found">Negalima perkelti. Prašau patikrinti ar failas egzistuoja</string>

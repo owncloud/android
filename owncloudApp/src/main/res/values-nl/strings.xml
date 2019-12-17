@@ -1,5 +1,8 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+  <string name="about_android">%1$s voor Android</string>
+  <string name="about_version">Versie %1$s</string>
+  <string name="actionbar_search">Zoek in deze map</string>
   <string name="actionbar_sync">Account verversen</string>
   <string name="actionbar_upload">Uploaden</string>
   <string name="actionbar_upload_from_apps">Inhoud van andere apps</string>
@@ -10,14 +13,22 @@
   <string name="actionbar_see_details">Details</string>
   <string name="actionbar_send_file">Versturen</string>
   <string name="actionbar_sort">Sorteren</string>
+  <string name="actionbar_descending">Aflopend</string>
   <string name="actionbar_sort_title">Sorteer op</string>
   <string name="actionbar_sort_by_name">A-Z</string>
+  <string name="actionbar_sort_by_date">Oudste - Nieuwste</string>
+  <string name="actionbar_sort_by_size">Kleinste - Grootste</string>
   <string name="drawer_item_all_files">Alle bestanden</string>
   <string name="drawer_item_only_available_offline">Beschikbaar off-line</string>
+  <string name="drawer_item_shared_by_link_files">Gedeeld via een link</string>
   <string name="drawer_item_settings">Instellingen</string>
   <string name="drawer_item_uploads_list">Uploads</string>
   <string name="drawer_close">Sluiten</string>
   <string name="drawer_open">Open</string>
+  <string name="drawer_loading_quota">Laden van Quota</string>
+  <string name="drawer_quota">%1$s van %2$s gebruikt (%3$s %%)</string>
+  <string name="drawer_unavailable_free_storage">%1$s in gebruik</string>
+  <string name="drawer_unavailable_used_storage">Geen opslaggebruiksinformatie beschikbaar</string>
   <string name="drawer_feedback">Feedback</string>
   <string name="drawer_help">Help</string>
   <string name="prefs_category_general">Algemeen</string>
@@ -28,6 +39,8 @@
   <string name="prefs_passcode">Pincode slot</string>
   <string name="prefs_fingerprint">Vingerafdrukvergrendeling</string>
   <string name="prefs_fingerprint_summary">Zet de toegangscode of de patroonvergrendeling aan om deze optie te activeren </string>
+  <string name="prefs_touches_with_other_visible_windows_summary">Sta acties toe als het scherm wordt beinvloed door een andere app. Zet dit aan als je licht-filter apps gebruikt.</string>
+  <string name="confirmation_touches_with_other_windows_title">Weet je zeker dat je deze functionaliteit wilt aanzetten?</string>
   <string name="prefs_camera_picture_upload">Afbeeldingen uploaden</string>
   <string name="prefs_camera_picture_upload_summary">Automatisch afbeeldingen uploaden die met de camera genomen zijn</string>
   <string name="prefs_camera_video_upload">Video’s uploaden</string>
@@ -38,6 +51,8 @@
   <string name="prefs_log_summary_history">Dit toont de bijgehouden logs</string>
   <string name="prefs_log_delete_history_button">Verwijder geschiedenis</string>
   <string name="prefs_help">Help</string>
+  <string name="prefs_sync_calendar_contacts">Synchroniseer je contacten, kalenders en taken</string>
+  <string name="prefs_sync_calendar_contacts_summary">installeer DAVx⁵</string>
   <string name="prefs_recommend">Aanbevelen bij een vriend</string>
   <string name="prefs_feedback">Feedback</string>
   <string name="prefs_imprint">afdruk</string>
@@ -56,9 +71,14 @@
   <string name="passcode_already_set">Patroon- en toegangscodes kunnen niet tegelijkertijd actief zijn, deactiveer eerst de toegangscode</string>
   <string name="pattern_no_longer_required">Het patroon zal niet meer worden gevraagd</string>
   <string name="pattern_configure_your_pattern_explanation">Telkens wanneer de app is gestart zal er om een patroon worden gevraagd</string>
+  <string name="pattern_locked">Vergrendeld met patroon</string>
   <string name="recommend_subject">Probeer %1$s op uw smartphone!</string>
   <string name="recommend_text">Uitnodiging om %1$s op uw smartphone uit te proberen!
 Download hier: %2$s</string>
+  <string name="auth_failure_snackbar">Authenticatie is mislukt</string>
+  <string name="auth_failure_snackbar_action">Verander account</string>
+  <string name="auth_oauth_failure">Het toegangstoken is verlopen of niet meer geldig. Log opnieuw in om weer toegang te krijgen.</string>
+  <string name="auth_oauth_failure_snackbar_action">Inloggen</string>
   <string name="auth_check_server">Controleer server</string>
   <string name="auth_host_url">Serveradres https://…</string>
   <string name="auth_username">Gebruikersnaam</string>
@@ -81,10 +101,12 @@ Download hier: %2$s</string>
   <string name="uploader_error_message_source_file_not_copied">Er trad een fout op bij het kopiëren van het bestand naar een tijdelijke map. Probeer het opnieuw te versturen.</string>
   <string name="file_list_seconds_ago">seconden geleden</string>
   <string name="file_list_empty">Er bevindt zich hier niets. Upload een bestand!</string>
+  <string name="file_list_empty_available_offline">Er zijn geen offline bestanden beschikbaar</string>
   <string name="file_list_loading">Laden...</string>
   <string name="file_list_no_app_for_file_type">Geen app gevonden voor het bestandsformaat</string>
   <string name="local_file_list_empty">Er staan geen bestanden in deze map.</string>
   <string name="local_file_list_empty_just_folders">Er zitten geen mappen in deze map.</string>
+  <string name="local_file_list_search_with_no_matches">Geen matches voor deze zoekopdracht</string>
   <string name="upload_list_empty">Geen uploads beschikbaar.</string>
   <string name="file_list_folder">map</string>
   <string name="file_list_folders">mappen</string>
@@ -119,7 +141,9 @@ Download hier: %2$s</string>
   <string name="change_password">Wijzig wachtwoord</string>
   <string name="delete_account">Account uitloggen</string>
   <string name="create_account">Maak account aan</string>
+  <string name="upload_chooser_title">Upload vanaf</string>
   <string name="uploader_info_dirname">Mapnaam</string>
+  <string name="uploader_upload_in_progress_ticker">uploaden...</string>
   <string name="uploader_upload_in_progress_content">%1$d%% Uploaden %2$s</string>
   <string name="uploader_upload_succeeded_ticker">Upload succesvol</string>
   <string name="uploader_upload_succeeded_content_single">%1$s geüpload</string>
@@ -131,11 +155,15 @@ Download hier: %2$s</string>
   <string name="uploader_upload_text_dialog_filename_error_empty">Bestandsnaam mag niet leeg zijn</string>
   <string name="uploader_upload_text_dialog_filename_error_length_max">De bestandsnaam mag niet langer zijn dan %d tekens</string>
   <string name="uploader_upload_text_filename_hint">Bestandsnaam</string>
+  <string name="uploader_upload_camera_upload_files">Camera bestanden worden geupload</string>
+  <string name="uploader_upload_available_offline_files">Uploaden van beschikbare offline bestanden</string>
   <string name="ssl_certificate_not_trusted">Het servercertificaat is niet vertrouwd</string>
   <string name="uploads_view_title">Uploads</string>
   <string name="uploads_view_group_current_uploads">Huidige</string>
   <string name="uploads_view_group_failed_uploads">Mislukt (tik om opnieuw te proberen)</string>
   <string name="uploads_view_group_finished_uploads">Geüpload</string>
+  <string name="uploads_view_group_file_count">%d bestanden</string>
+  <string name="uploads_view_group_file_count_single">%d bestand</string>
   <string name="uploads_view_upload_status_succeeded">Afgerond</string>
   <string name="uploads_view_upload_status_cancelled">Geannuleerd</string>
   <string name="uploads_view_upload_status_paused">Gepauzeerd</string>
@@ -153,6 +181,7 @@ Download hier: %2$s</string>
   <string name="uploads_view_upload_status_waiting_for_wifi">Wachten op een wifi-verbinding</string>
   <string name="uploads_view_later_waiting_to_upload">Wachten om te uploaden</string>
   <string name="uploads_view_unsupported_media_type">Niet ondersteund media type</string>
+  <string name="downloader_download_in_progress_ticker">Downloaden</string>
   <string name="downloader_download_in_progress_content">%1$d%% Aan het downloaden %2$s</string>
   <string name="downloader_download_succeeded_ticker">Downloaden gelukt</string>
   <string name="downloader_download_succeeded_content">%1$s gedownload.</string>
@@ -191,6 +220,7 @@ Hieronder staan de lokale bestanden en de externe bestanden in %5$s waar ze naar
   <string name="pass_code_wrong">Onjuiste pincode</string>
   <string name="pass_code_removed">Pincode verwijderd</string>
   <string name="pass_code_stored">Pincode opgeslagen</string>
+  <string name="pass_code_locked">Vergrendeld met wachtwoord</string>
   <string name="fingerprint_confirm">Bevestig uw vingerafdruk om door te gaan</string>
   <string name="fingerprint_hint">Touch sensor</string>
   <string name="fingerprint_not_recognized">Vingerafdruk niet herkend, probeer opnieuw</string>
@@ -219,6 +249,7 @@ Hieronder staan de lokale bestanden en de externe bestanden in %5$s waar ze naar
   <string name="media_forward_description">Doorspoel knop</string>
   <string name="upload_from_camera_title">Afbeelding vanaf de camera</string>
   <string name="auth_getting_authorization">Ophalen autorisaties...</string>
+  <string name="auth_trying_to_login">Proberen in te loggen...</string>
   <string name="auth_no_net_conn_title">Geen netwerkverbinding</string>
   <string name="auth_nossl_plain_ok_title">Veilige verbinding niet beschikbaar.</string>
   <string name="auth_connection_established">Verbinding tot stand gebracht</string>
@@ -239,8 +270,7 @@ Hieronder staan de lokale bestanden en de externe bestanden in %5$s waar ze naar
   <string name="auth_wtf_reenter_URL">Onverwachte toestand; voer a.u.b. nogmaals de server-URL in</string>
   <string name="auth_expired_oauth_token_toast">Uw autorisatie is verstreken. Autoriseer opnieuw.</string>
   <string name="auth_expired_basic_auth_toast">Voer uw huidige wachtwoord in</string>
-  <string name="auth_expired_saml_sso_token_toast">Uw sessie is verstreken. Verbind opnieuw</string>
-  <string name="auth_connecting_auth_server">Verbinden met authenticatieserver...</string>
+    <string name="auth_connecting_auth_server">Verbinden met authenticatieserver...</string>
   <string name="auth_unsupported_auth_method">De server ondersteunt deze authenticatiemethode niet</string>
   <string name="auth_unsupported_multiaccount">%1$s ondersteunt het gebruik van meerdere accounts niet</string>
   <string name="auth_fail_get_user_name">Uw server geeft geen goede userid terug, neem contact op met uw beheerder
@@ -256,7 +286,7 @@ Hieronder staan de lokale bestanden en de externe bestanden in %5$s waar ze naar
   <string name="confirmation_remove_local">Alleen lokaal</string>
   <string name="confirmation_remove_account_alert">Wilt u werkelijk account %1$s verwijderen?</string>
   <string name="confirmation_remove_public_share_title">Verwijderen link</string>
-  <string name="confirmation_remove_public_share_message">Wilt u %1$s werkelijk verwijderen?</string>
+  <string name="confirmation_remove_share_message">Wilt u %1$s werkelijk verwijderen?</string>
   <string name="remove_success_msg">Succesvol verwijderd</string>
   <string name="remove_fail_msg">Verwijdering kon niet voltooid worden</string>
   <string name="rename_dialog_title">Voer een nieuwe naam in</string>
@@ -273,6 +303,7 @@ Hieronder staan de lokale bestanden en de externe bestanden in %5$s waar ze naar
   <string name="wait_checking_credentials">Opgeslagen inloggegevens nakijken</string>
   <string name="filedisplay_unexpected_bad_get_content">Onverwacht probleem; probeer een andere app om het bestand te selecteren</string>
   <string name="filedisplay_no_file_selected">Er werd geen bestand geselecteerd</string>
+  <string name="activity_chooser_title">Stuur link naar</string>
   <string name="wait_for_tmp_copy_from_private_storage">Kopiëren bestand vanaf privéopslag</string>
   <string name="oauth_check_onoff">Inloggen met oAuth2</string>
   <string name="oauth_login_connection">Verbinden met OAuth2 server…</string>
@@ -311,11 +342,13 @@ Hieronder staan de lokale bestanden en de externe bestanden in %5$s waar ze naar
   <string name="placeholder_media_time">12:23:45</string>
   <string name="camera_picture_upload_on_wifi">Upload afbeeldingen alleen via WiFi</string>
   <string name="camera_video_upload_on_wifi">Upload videos alleen via WiFi</string>
-  <string name="camera_upload_path">/CameraUpload</string>
   <string name="confirmation_disable_camera_uploads_title">Bevestigen</string>
   <string name="confirmation_disable_pictures_upload_message">Weet u zeker dat u deze optie uit wilt schakelen? Klaarstaande afbeeldingen worden niet geuploade</string>
   <string name="confirmation_disable_videos_upload_message">Weet u zeker dat u deze optie uit wilt schakelen? Klaarstaande video’s worden niet geuploade</string>
+  <string name="proper_pics_folder_warning_camera_upload">Zorg ervoor dat de map is geselecteerd waar de camera foto\'s opslaat na het opnemen. Anders is deze functionaliteit niet in staat om de foto\'s te detecteren. Houd er rekening mee dat uploaden van video\'s tot 15 minuten kan duren.</string>
+  <string name="proper_videos_folder_warning_camera_upload">Zorg ervoor dat de map is geselecteerd waar de camera video\'s opslaat na het opnemen. Anders is deze functionaliteit niet in staat om de video\'s te detecteren. Houd er rekening mee dat uploaden van video\'s tot 15 minuten kan duren.</string>
   <string name="conflict_title">Bestandsconflict</string>
+  <string name="conflict_description">Er is een conflict in bestand %1$s, klik om het op te lossen</string>
   <string name="conflict_message">Welke bestanden wilt u bewaren? Als u beide versies selecteert zal het lokale bestand een nummer aan de naam toegevoegd krijgen.</string>
   <string name="conflict_keep_both">Beide bewaren</string>
   <string name="conflict_use_local_version">lokale versie</string>
@@ -324,6 +357,8 @@ Hieronder staan de lokale bestanden en de externe bestanden in %5$s waar ze naar
   <string name="preview_image_error_unknown_format">Deze afbeelding kan niet worden getoond</string>
   <string name="error__upload__local_file_not_copied">%1$s kon niet worden gekopieerd naar de %2$s lokale map</string>
   <string name="prefs_camera_picture_upload_path_title">Afbeelding upload bestemming</string>
+  <string name="get_shares_error">Een probleem is ontstaan tijdens het ophalen van shares</string>
+  <string name="get_sharees_error">Een probleem is ontstaan tijdens het ophalen van gebruikers en groepen</string>
   <string name="share_link_no_support_share_api">Sorry, delen is niet mogelijk op uw server. Neem contact op met uw
 		beheerder.</string>
   <string name="share_link_file_no_exist">Kan dit niet delen. Controleer of dit bestand wel bestaat.</string>
@@ -365,8 +400,7 @@ Hieronder staan de lokale bestanden en de externe bestanden in %5$s waar ze naar
   <string name="log_send_mail_subject">%1$s Android app logs</string>
   <string name="log_progress_dialog_text">Laden data...</string>
   <string name="actionbar_select_all">Alles selecteren</string>
-  <string name="saml_authentication_required_text">Authenticatie vereist</string>
-  <string name="saml_authentication_wrong_pass">Onjuist wachtwoord</string>
+  <string name="actionbar_select_inverse">Selecteer omgekeerd</string>
   <string name="actionbar_move">Verplaatsen</string>
   <string name="file_list_empty_moving">Niets hier. U kunt een map toevoegen!</string>
   <string name="folder_picker_choose_button_text">Kies</string>
@@ -423,6 +457,7 @@ Hieronder staan de lokale bestanden en de externe bestanden in %5$s waar ze naar
   <string name="share_via_link_password_title">Beveiligd</string>
   <string name="share_via_link_edit_permission_read_only_label">Download / Bekijk</string>
   <string name="share_via_link_edit_permission_read_and_write_label">Download / Bekijk / Upload</string>
+  <string name="share_via_link_edit_permission_upload_only_label">Alleen uploaden (File Drop)</string>
   <string name="share_get_public_link_button">Ophalen link</string>
   <string name="share_with_title">Deel met</string>
   <string name="share_with_edit_title">Deel met %1$s</string>
@@ -476,6 +511,7 @@ Neem contact op met uw beheerder</string>
   <string name="share_via_link_expiration_date_enforced_label">Vervaldatum *</string>
   <string name="share_via_link_expiration_date_explanation_label">De openbare link vervalt niet eerder dan %1$d dagen na het aanmaken</string>
   <string name="share_via_link_default_name_template">%1$s link</string>
+  <string name="share_via_link_empty_password">Het wachtwoord-veld is leeg</string>
   <string name="private_link_info">Dit is een privélink, alleen mensen met toegang tot het bestand/map kunnen hem gebruiken. Gebruik het als een permanente link voor uwzelf of om andere naar bestanden de wijzen in gedeelde mappen.</string>
   <string name="file_private_link_error">Privelink naar dit bestand is niet beschikbaar</string>
   <string name="download_notification_channel_name">Downloads</string>
@@ -486,6 +522,12 @@ Neem contact op met uw beheerder</string>
   <string name="media_service_notification_channel_description">Zie muziekspeler</string>
   <string name="file_sync_notification_channel_name">Bestand-synchronisatie</string>
   <string name="file_sync_notification_channel_description">Zie het resultaat van de bestand-synchronisatie</string>
+  <string name="clicks_to_be_developer">Je bent %1$d kliks van het aanzetten van developer menus</string>
+  <string name="rate_dialog_title">Beoordeel %1$s app!</string>
+  <string name="rate_dialog_description">Als je de app vaak gebruikt, zou je deze dan willen beoordelen? Je feedback is belangrijk voor ons.</string>
+  <string name="button_no_thanks_name">NEE, BEDANKT</string>
+  <string name="button_later_name">NIET NU</string>
+  <string name="button_rate_now_name">BEOORDEEL NU</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d geselecteerd</item>
     <item quantity="other">%d geselecteerd</item>
@@ -502,6 +544,14 @@ Neem contact op met uw beheerder</string>
   <string name="welcome_feature_4_text">Uw afbeeldingen/video\'s automatisch uploaden</string>
   <string name="welcome_feature_5_title">Video streaming</string>
   <string name="welcome_feature_5_text">Speel uw video\'s af zonder te downloaden</string>
+  <string name="welcome_feature_6_title">Zoek in huidige map</string>
+  <string name="welcome_feature_6_text">Filter je bestanden bij naam</string>
   <string name="welcome_feature_7_title">Alles selecteren</string>
+  <string name="welcome_feature_7_text">Selecteer alle bestanden</string>
   <string name="welcome_feature_8_title">Beschikbaar off-line</string>
+  <string name="welcome_feature_8_text">Je bestanden automatisch gesynchroniseerd</string>
+  <string name="welcome_feature_9_title">Document provider</string>
+  <string name="welcome_feature_9_text">Krijg toegang en bewerk je bestanden vanuit andere apps</string>
+  <string name="welcome_feature_10_text">Stuur uw logs om de app te verbeteren.</string>
+  <string name="no_borwser_installed_alert">Geen browser geinstalleerd. Installeer een browser om een veilige login mogelijk te maken.</string>
 </resources>

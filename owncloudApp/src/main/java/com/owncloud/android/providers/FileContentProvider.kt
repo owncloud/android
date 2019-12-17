@@ -6,6 +6,7 @@
  * @author masensio
  * @author David González Verdugo
  * @author Christian Schabesberger
+ * @author Abel García de Prada
  * Copyright (C) 2011  Bartek Przybylski
  * Copyright (C) 2019 ownCloud GmbH.
  *
@@ -45,21 +46,22 @@ import android.provider.BaseColumns
 import android.text.TextUtils
 import androidx.sqlite.db.SupportSQLiteDatabase
 import androidx.sqlite.db.SupportSQLiteQueryBuilder
-import com.owncloud.android.AppExecutors
 import com.owncloud.android.MainApp
 import com.owncloud.android.R
-import com.owncloud.android.capabilities.datasource.OCLocalCapabilitiesDataSource
-import com.owncloud.android.capabilities.db.OCCapability
+import com.owncloud.android.data.Executors
+import com.owncloud.android.data.capabilities.datasources.implementation.OCLocalCapabilitiesDataSource
+import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
+import com.owncloud.android.data.OwncloudDatabase
+import com.owncloud.android.data.ProviderMeta
+import com.owncloud.android.data.capabilities.datasources.mapper.OCCapabilityMapper
+import com.owncloud.android.data.sharing.shares.db.OCShareEntity
 import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.datamodel.UploadsStorageManager
-import com.owncloud.android.db.OwncloudDatabase
-import com.owncloud.android.db.ProviderMeta
 import com.owncloud.android.db.ProviderMeta.ProviderTableMeta
 import com.owncloud.android.lib.common.accounts.AccountUtils
 import com.owncloud.android.lib.common.utils.Log_OC
-import com.owncloud.android.shares.data.datasources.OCLocalShareDataSource
-import com.owncloud.android.shares.domain.OCShare
 import com.owncloud.android.utils.FileStorageUtils
+import org.koin.android.ext.android.inject
 import java.io.File
 import java.io.FileNotFoundException
 import java.util.ArrayList
@@ -68,7 +70,7 @@ import java.util.HashMap
 /**
  * The ContentProvider for the ownCloud App.
  */
-class FileContentProvider(val appExecutors: AppExecutors = AppExecutors()) : ContentProvider() {
+class FileContentProvider(val executors: Executors = Executors()) : ContentProvider() {
 
     private lateinit var dbHelper: DataBaseHelper
 
@@ -100,7 +102,7 @@ class FileContentProvider(val appExecutors: AppExecutors = AppExecutors()) : Con
         when (uriMatcher.match(uri)) {
             SINGLE_FILE -> {
                 val c = query(uri, null, where, whereArgs, null)
-                var remoteId = ""
+                var remoteId : String? = ""
                 if (c.moveToFirst()) {
                     remoteId = c.getString(c.getColumnIndex(ProviderTableMeta.FILE_REMOTE_ID))
                     c.close()
@@ -221,7 +223,7 @@ class FileContentProvider(val appExecutors: AppExecutors = AppExecutors()) : Con
             }
             SHARES -> {
                 val shareId = OwncloudDatabase.getDatabase(context).shareDao().insert(
-                    OCShare.fromContentValues(values)
+                    OCShareEntity.fromContentValues(values)
                 )
 
                 if (shareId <= 0) throw SQLException("ERROR $uri")
@@ -308,9 +310,6 @@ class FileContentProvider(val appExecutors: AppExecutors = AppExecutors()) : Con
         sqlQuery.setStrict(true)
         sqlQuery.tables = ProviderTableMeta.FILE_TABLE_NAME
 
-        // To use full SQL queries within Room
-        val newDb: SupportSQLiteDatabase = OwncloudDatabase.getDatabase(context).openHelper.writableDatabase
-
         when (uriMatcher.match(uri)) {
             ROOT_DIRECTORY -> sqlQuery.setProjectionMap(fileProjectionMap)
             DIRECTORY -> {
@@ -343,6 +342,8 @@ class FileContentProvider(val appExecutors: AppExecutors = AppExecutors()) : Con
                         }
                     ).create()
 
+                // To use full SQL queries within Room
+                val newDb: SupportSQLiteDatabase = OwncloudDatabase.getDatabase(context).openHelper.writableDatabase
                 return newDb.query(supportSqlQuery)
             }
             CAPABILITIES -> {
@@ -473,7 +474,7 @@ class FileContentProvider(val appExecutors: AppExecutors = AppExecutors()) : Con
         when (uriMatcher.match(uri)) {
             DIRECTORY -> return 0 //updateFolderSize(db, selectionArgs[0]);
             SHARES -> return OwncloudDatabase.getDatabase(context!!).shareDao()
-                .update(OCShare.fromContentValues(values)).toInt()
+                .update(OCShareEntity.fromContentValues(values)).toInt()
             CAPABILITIES -> return db.update(
                 ProviderTableMeta.CAPABILITIES_TABLE_NAME, values, selection, selectionArgs
             )
@@ -520,7 +521,12 @@ class FileContentProvider(val appExecutors: AppExecutors = AppExecutors()) : Con
     }
 
     private inner class DataBaseHelper internal constructor(context: Context) :
-        SQLiteOpenHelper(context, ProviderMeta.DB_NAME, null, ProviderMeta.DB_VERSION) {
+        SQLiteOpenHelper(
+            context,
+            ProviderMeta.DB_NAME,
+            null,
+            ProviderMeta.DB_VERSION
+        ) {
 
         override fun onCreate(db: SQLiteDatabase) {
             // files table
@@ -962,16 +968,17 @@ class FileContentProvider(val appExecutors: AppExecutors = AppExecutors()) : Con
                 )
 
                 if (cursor.moveToFirst()) {
-                    val shares = mutableListOf<OCShare>()
+                    val shares = mutableListOf<OCShareEntity>()
 
                     do {
-                        shares.add(OCShare.fromCursor(cursor))
+                        shares.add(OCShareEntity.fromCursor(cursor))
                     } while (cursor.moveToNext())
 
                     // Insert share list to the new shares table in new database
-                    appExecutors.diskIO().execute {
-                        OCLocalShareDataSource(context).insert(shares)
-                    }
+                    // TODO New arch
+//                    executors.diskIO().execute {
+//                        OCLocalShareDataSource(context).insert(shares)
+//                    }
 
                     // Drop old shares table from old database
                     db.execSQL("DROP TABLE IF EXISTS " + ProviderTableMeta.OCSHARES_TABLE_NAME + ";")
@@ -991,10 +998,15 @@ class FileContentProvider(val appExecutors: AppExecutors = AppExecutors()) : Con
                 )
 
                 if (cursor.moveToFirst()) {
+                    val ocLocalCapabilitiesDataSource : OCLocalCapabilitiesDataSource by inject()
+                    val ocCapabilityMapper : OCCapabilityMapper by inject()
+
                     // Insert capability to the new capabilities table in new database
-                    appExecutors.diskIO().execute {
-                        OCLocalCapabilitiesDataSource(context).insert(
-                            listOf(OCCapability.fromCursor(cursor))
+                    executors.diskIO().execute {
+                        ocLocalCapabilitiesDataSource.insert(
+                            listOf(OCCapabilityEntity.fromCursor(cursor)).map {
+                                ocCapabilityMapper.toModel(it)!!
+                            }
                         )
                     }
                 }

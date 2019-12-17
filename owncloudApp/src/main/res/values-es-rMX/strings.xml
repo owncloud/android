@@ -1,5 +1,8 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+  <string name="about_android">%1$s para Android</string>
+  <string name="about_version">Versión %1$s</string>
+  <string name="actionbar_search">Buscar en esta carpeta</string>
   <string name="actionbar_sync">Actualizar cuenta</string>
   <string name="actionbar_upload">Subir</string>
   <string name="actionbar_upload_from_apps">Contenido de otras aplicaciones</string>
@@ -10,13 +13,22 @@
   <string name="actionbar_see_details">Detalles</string>
   <string name="actionbar_send_file">Enviar</string>
   <string name="actionbar_sort">Ordenar</string>
+  <string name="actionbar_descending">Descendente</string>
   <string name="actionbar_sort_title">Ordenar por</string>
   <string name="actionbar_sort_by_name">A-Z</string>
+  <string name="actionbar_sort_by_date">Más antiguo - Más Nuevo</string>
+  <string name="actionbar_sort_by_size">Más chico - Más grande</string>
   <string name="drawer_item_all_files">Todos los archivos</string>
+  <string name="drawer_item_only_available_offline">Disponible sin conexión</string>
+  <string name="drawer_item_shared_by_link_files">Compartido mediante vínculo</string>
   <string name="drawer_item_settings">Ajustes</string>
   <string name="drawer_item_uploads_list">Subidas</string>
   <string name="drawer_close">Cerrar</string>
   <string name="drawer_open">Abrir</string>
+  <string name="drawer_loading_quota">Cuota de carga</string>
+  <string name="drawer_quota">%1$s de %2$s usado (%3$s %%)</string>
+  <string name="drawer_unavailable_free_storage">%1$s en uso</string>
+  <string name="drawer_unavailable_used_storage">No hay información de uso de almacenamiento disponible</string>
   <string name="drawer_feedback">Mensajes de retroalimentación</string>
   <string name="drawer_help">Ayuda</string>
   <string name="prefs_category_general">General</string>
@@ -25,6 +37,8 @@
   <string name="prefs_accounts">Cuentas</string>
   <string name="prefs_manage_accounts">Gestionar cuentas</string>
   <string name="prefs_passcode">Contraseña</string>
+  <string name="prefs_fingerprint">Bloqueo de huella digital</string>
+  <string name="prefs_fingerprint_summary">Habilitar código de acceso o bloqueo de patrón para habilitar esta opción</string>
   <string name="prefs_camera_picture_upload">Cargar imagenes</string>
   <string name="prefs_camera_picture_upload_summary">Cargar fotos automáticamente tomadas por la cámara</string>
   <string name="prefs_camera_video_upload">Cargar videos</string>
@@ -42,6 +56,7 @@
   <string name="prefs_remember_last_upload_location_summary">Recordar la ubicación de los últimos archivos compartidos subidos</string>
   <string name="recommend_subject">¡Prueba  %1$s en su smarthphone!</string>
   <string name="recommend_text">¡Quiero invitarle a usar %1$s en su smartphone!\nDescárguelo aquí: %2$s</string>
+  <string name="auth_oauth_failure_snackbar_action">Iniciar sesión</string>
   <string name="auth_check_server">Verificar servidor</string>
   <string name="auth_host_url">Dirección del servidor https://…</string>
   <string name="auth_username">Nombre de usuario</string>
@@ -212,8 +227,7 @@
   <string name="auth_wtf_reenter_URL">Estado inesperado; por favor introduzca su dirección de correo de nuevo</string>
   <string name="auth_expired_oauth_token_toast">Su autorización ha expirado. Por favor, autorice de nuevo</string>
   <string name="auth_expired_basic_auth_toast">Por favor introduzca su contraseña actual</string>
-  <string name="auth_expired_saml_sso_token_toast">Su sesión ha expirado. Favor de conectarse de nuevo</string>
-  <string name="auth_connecting_auth_server">Conectando al servidor de autentificación</string>
+    <string name="auth_connecting_auth_server">Conectando al servidor de autentificación</string>
   <string name="auth_unsupported_auth_method">El servidor no soporta este método de autenticación</string>
   <string name="auth_unsupported_multiaccount">%1$s no soporta cuentas múltiples</string>
   <string name="auth_fail_get_user_name">Su servidor no está retornando una identificación de usuario correcta; contacte a un administrador
@@ -229,7 +243,7 @@
   <string name="confirmation_remove_local">Sólo local</string>
   <string name="confirmation_remove_account_alert">Realmente quiere eliminar la cuenta %1$s?</string>
   <string name="confirmation_remove_public_share_title">Eliminar enlace</string>
-  <string name="confirmation_remove_public_share_message">¿Realmente desea eliminar %1$s?</string>
+  <string name="confirmation_remove_share_message">¿Realmente desea eliminar %1$s?</string>
   <string name="remove_success_msg">Borrado correctamente</string>
   <string name="remove_fail_msg">El borrado no pudo ser completado</string>
   <string name="rename_dialog_title">Introduzca un nombre nuevo</string>
@@ -284,7 +298,6 @@
   <string name="placeholder_media_time">12:23:45</string>
   <string name="camera_picture_upload_on_wifi">Subir fotos por wifi únicamente</string>
   <string name="camera_video_upload_on_wifi">Subir archivos por wifi únicamente</string>
-  <string name="camera_upload_path">/CargasDesdeLaCamara</string>
   <string name="confirmation_disable_camera_uploads_title">Confirmar</string>
   <string name="confirmation_disable_pictures_upload_message">¿Seguro/a que desea deshabilitar esta función? Las imagenes pendientes no se subirán</string>
   <string name="confirmation_disable_videos_upload_message">¿Seguro/a que desea deshabilitar esta función? Los videos pendientes no se subirán</string>
@@ -337,9 +350,7 @@
   <string name="log_send_no_mail_app">Aplicación para enviar registros no encontrada. Por favor instale una aplicación de correo.</string>
   <string name="log_send_mail_subject">Se han encontrado %1$s logs de la app Android</string>
   <string name="actionbar_select_all">Seleccionar todo</string>
-  <string name="saml_authentication_required_text">Se necesita autenticación</string>
-  <string name="saml_authentication_wrong_pass">Contraseña incorrecta</string>
-  <string name="actionbar_move">Mover</string>
+    <string name="actionbar_move">Mover</string>
   <string name="file_list_empty_moving">Aquí no hay nada. ¡Puede agregar una carpeta!</string>
   <string name="folder_picker_choose_button_text">Elegir</string>
   <string name="move_file_not_found">No se puede mover. Revise si el archivo existe</string>
@@ -462,4 +473,5 @@
   <!--Welcome to oC intro features-->
   <string name="welcome_feature_4_title">Cargas de la cámara</string>
   <string name="welcome_feature_7_title">Seleccionar todo</string>
+  <string name="welcome_feature_8_title">Disponible sin conexión</string>
 </resources>

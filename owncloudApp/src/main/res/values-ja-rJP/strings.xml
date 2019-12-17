@@ -19,6 +19,7 @@
   <string name="actionbar_sort_by_size">最小 - 最大</string>
   <string name="drawer_item_all_files">すべてのファイル</string>
   <string name="drawer_item_only_available_offline">オフラインが利用可能です</string>
+  <string name="drawer_item_shared_by_link_files">URLリンクで共有中</string>
   <string name="drawer_item_settings">設定</string>
   <string name="drawer_item_uploads_list">アップロード</string>
   <string name="drawer_close">閉じる</string>
@@ -64,6 +65,7 @@
   <string name="recommend_subject">スマートフォンで %1$s を試してください！</string>
   <string name="recommend_text">スマートフォンで %1$s を利用してみませんか！
 ここからダウンロードしてください: %2$s</string>
+  <string name="auth_oauth_failure_snackbar_action">ログイン</string>
   <string name="auth_check_server">サーバーのチェック</string>
   <string name="auth_host_url">サーバーアドレス https://…</string>
   <string name="auth_username">ユーザー名</string>
@@ -243,8 +245,7 @@
   <string name="auth_wtf_reenter_URL">予期せぬ状態；別のサーバーアドレスを入力してみてください</string>
   <string name="auth_expired_oauth_token_toast">認証情報は有効期限切れです。再度認証を行ってください。</string>
   <string name="auth_expired_basic_auth_toast">現在のパスワードを入力してください</string>
-  <string name="auth_expired_saml_sso_token_toast">セッションの有効期限切れです。再度接続してください。</string>
-  <string name="auth_connecting_auth_server">認証サーバーに接続中...</string>
+    <string name="auth_connecting_auth_server">認証サーバーに接続中...</string>
   <string name="auth_unsupported_auth_method">サーバーはこの認証方式をサポートしていません</string>
   <string name="auth_unsupported_multiaccount">%1$s は複数アカウントをサポートしていません</string>
   <string name="auth_fail_get_user_name">サーバーが正しいユーザーIDを返しませんでした。管理者に問い合わせてください。
@@ -260,7 +261,7 @@
   <string name="confirmation_remove_local">ローカルのみ</string>
   <string name="confirmation_remove_account_alert">本当にアカウント %1$s を削除しますか？</string>
   <string name="confirmation_remove_public_share_title">リンクを削除</string>
-  <string name="confirmation_remove_public_share_message">本当に %1$s を削除しますか？</string>
+  <string name="confirmation_remove_share_message">本当に %1$s を削除しますか？</string>
   <string name="remove_success_msg">削除に成功しました</string>
   <string name="remove_fail_msg">削除を完了できませんでした</string>
   <string name="rename_dialog_title">新しい名前を入力</string>
@@ -316,7 +317,6 @@
   <string name="placeholder_media_time">12:23:45</string>
   <string name="camera_picture_upload_on_wifi">WiFi経由でのみ画像をアップロード</string>
   <string name="camera_video_upload_on_wifi">WiFi経由でのみ動画をアップロード</string>
-  <string name="camera_upload_path">/CameraUpload</string>
   <string name="confirmation_disable_camera_uploads_title">確認</string>
   <string name="proper_pics_folder_warning_camera_upload">あなたが撮った写真の保存先が、選択されたフォルダーであることを確認してください。そうでないと、あなたの写真を特定することができません。また写真は撮ってから少なくとも15分後にアップロードされます。</string>
   <string name="proper_videos_folder_warning_camera_upload">あなたが撮った動画の保存先が、選択されたフォルダーであることを確認してください。そうでないと、あなたの動画を特定することができません。また動画は撮ってから少なくとも15分後にアップロードされます。</string>
@@ -369,9 +369,7 @@
   <string name="log_send_mail_subject">%1$s アンドロイドアプリログ</string>
   <string name="log_progress_dialog_text">読込中 ...</string>
   <string name="actionbar_select_all">すべて選択</string>
-  <string name="saml_authentication_required_text">認証を必要とする</string>
-  <string name="saml_authentication_wrong_pass">パスワードが間違っています</string>
-  <string name="actionbar_move">移動</string>
+    <string name="actionbar_move">移動</string>
   <string name="file_list_empty_moving">何もありません。フォルダーを追加してください。</string>
   <string name="folder_picker_choose_button_text">選択</string>
   <string name="move_file_not_found">移動できません。ファイルがあるか確認してください。</string>

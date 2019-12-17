@@ -1,18 +1,18 @@
 /**
  * ownCloud Android client application
- * <p>
+ *
  * Copyright (C) 2012  Bartek Przybylski
  * Copyright (C) 2019 ownCloud GmbH.
- * <p>
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
  * as published by the Free Software Foundation.
- * <p>
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * <p>
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -29,6 +29,7 @@ import android.preference.PreferenceManager;
 import androidx.annotation.Nullable;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.datamodel.FileDataStorageManager;
+import com.owncloud.android.domain.capabilities.model.OCCapability;
 import com.owncloud.android.lib.common.accounts.AccountTypeUtils;
 import com.owncloud.android.lib.common.accounts.AccountUtils.Constants;
 import com.owncloud.android.lib.common.utils.Log_OC;
@@ -43,7 +44,6 @@ public class AccountUtils {
 
     public static final String WEBDAV_PATH_4_0_AND_LATER = "/remote.php/dav";
     private static final String ODAV_PATH = "/remote.php/odav";
-    private static final String SAML_SSO_PATH = "/remote.php/webdav";
 
     public static final int ACCOUNT_VERSION = 1;
 
@@ -153,7 +153,7 @@ public class AccountUtils {
                             .getDefaultSharedPreferences(context).edit();
                     appPrefs.putString("select_oc_account", accountName);
 
-                    appPrefs.commit();
+                    appPrefs.apply();
                     result = true;
                     break;
                 }
@@ -176,9 +176,6 @@ public class AccountUtils {
         if (version != null) {
             if (AccountTypeUtils.getAuthTokenTypeAccessToken(MainApp.Companion.getAccountType()).equals(authTokenType)) {
                 return ODAV_PATH;
-            }
-            if (AccountTypeUtils.getAuthTokenTypeSamlSessionCookie(MainApp.Companion.getAccountType()).equals(authTokenType)) {
-                return SAML_SSO_PATH;
             }
             return WEBDAV_PATH_4_0_AND_LATER;
         }
@@ -239,23 +236,11 @@ public class AccountUtils {
                                 accountMgr.getUserData(account, Constants.KEY_COOKIES)
                         );
 
-                        // copy type of authentication
-                        String isSamlStr = accountMgr.getUserData(account, Constants.KEY_SUPPORTS_SAML_WEB_SSO);
-                        boolean isSaml = "TRUE".equals(isSamlStr);
-                        if (isSaml) {
-                            accountMgr.setUserData(newAccount, Constants.KEY_SUPPORTS_SAML_WEB_SSO, "TRUE");
-                        }
-
                         String isOauthStr = accountMgr.getUserData(account, Constants.KEY_SUPPORTS_OAUTH2);
                         boolean isOAuth = "TRUE".equals(isOauthStr);
                         if (isOAuth) {
                             accountMgr.setUserData(newAccount, Constants.KEY_SUPPORTS_OAUTH2, "TRUE");
                         }
-                        /* TODO - study if it's possible to run this method in a background thread to copy the authToken
-                        if (isOAuth || isSaml) {
-                            accountMgr.setAuthToken(newAccount, mAuthTokenType, mAuthToken);
-                        }
-                        */
 
                         // don't forget the account saved in preferences as the current one
                         if (currentAccount.name.equals(account.name)) {
@@ -283,7 +268,7 @@ public class AccountUtils {
         }
     }
 
-    public static String trimWebdavSuffix(String url) {
+    static String trimWebdavSuffix(String url) {
         while (url.endsWith("/")) {
             url = url.substring(0, url.length() - 1);
         }
@@ -316,10 +301,9 @@ public class AccountUtils {
                     account,
                     MainApp.Companion.getAppContext().getContentResolver()
             );
-            RemoteCapability capability = fileDataStorageManager.getCapability(account.name);
+            OCCapability capability = fileDataStorageManager.getCapability(account.name);
             if (capability != null) {
                 serverVersion = new OwnCloudVersion(capability.getVersionString());
-
             } else {
                 // legacy: AccountManager as source of version info
                 AccountManager accountMgr = AccountManager.get(MainApp.Companion.getAppContext());

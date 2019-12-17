@@ -45,6 +45,7 @@ import com.owncloud.android.datamodel.OCUpload;
 import com.owncloud.android.datamodel.ThumbnailsCacheManager;
 import com.owncloud.android.datamodel.UploadsStorageManager;
 import com.owncloud.android.datamodel.UploadsStorageManager.UploadStatus;
+import com.owncloud.android.db.PreferenceManager;
 import com.owncloud.android.db.UploadResult;
 import com.owncloud.android.files.services.FileUploader;
 import com.owncloud.android.files.services.TransferRequester;
@@ -62,6 +63,8 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Observable;
 import java.util.Observer;
+
+import static com.owncloud.android.db.PreferenceManager.PREF__CAMERA_UPLOADS_DEFAULT_PATH;
 
 /**
  * This Adapter populates a ListView with following types of uploads: pending,
@@ -232,6 +235,7 @@ public class ExpandableUploadListAdapter extends BaseExpandableListAdapter imple
 
             // remote path to parent folder
             TextView pathTextView = view.findViewById(R.id.upload_remote_path);
+            pathTextView.setText(PREF__CAMERA_UPLOADS_DEFAULT_PATH);
             String remoteParentPath = upload.getRemotePath();
             remoteParentPath = new File(remoteParentPath).getParent();
             pathTextView.setText(mParentActivity.getString(R.string.app_name) + remoteParentPath);

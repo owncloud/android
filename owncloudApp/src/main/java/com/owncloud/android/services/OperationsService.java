@@ -6,16 +6,16 @@
  * @author Christian Schabesberger
  * @author Shashvat Kedia
  * Copyright (C) 2019 ownCloud GmbH.
- * <p>
+ * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
  * as published by the Free Software Foundation.
- * <p>
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * <p>
+ * 
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -47,7 +47,6 @@ import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.OwnCloudClientManagerFactory;
 import com.owncloud.android.lib.common.accounts.AccountUtils.AccountNotFoundException;
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentials;
-import com.owncloud.android.lib.common.authentication.OwnCloudCredentialsFactory;
 import com.owncloud.android.lib.common.authentication.oauth.OAuth2GrantType;
 import com.owncloud.android.lib.common.authentication.oauth.OAuth2Provider;
 import com.owncloud.android.lib.common.authentication.oauth.OAuth2ProvidersRegistry;
@@ -64,7 +63,6 @@ import com.owncloud.android.operations.CreateFolderOperation;
 import com.owncloud.android.operations.GetServerInfoOperation;
 import com.owncloud.android.operations.MoveFileOperation;
 import com.owncloud.android.operations.RemoveFileOperation;
-import com.owncloud.android.operations.RemoveShareOperation;
 import com.owncloud.android.operations.RenameFileOperation;
 import com.owncloud.android.operations.SynchronizeFileOperation;
 import com.owncloud.android.operations.SynchronizeFolderOperation;
@@ -165,7 +163,7 @@ public class OperationsService extends Service {
 
     /**
      * Entry point to add a new operation to the queue of operations.
-     * <p>
+     * 
      * New operations are added calling to startService(), resulting in a call to this method.
      * This ensures the service will keep on working although the caller activity goes away.
      */
@@ -324,7 +322,7 @@ public class OperationsService extends Service {
 
         /**
          * Creates and adds to the queue a new operation, as described by operationIntent.
-         * <p>
+         * 
          * Calls startService to make the operation is processed by the ServiceHandler.
          *
          * @param operationIntent Intent describing a new operation to queue and execute.
@@ -360,7 +358,7 @@ public class OperationsService extends Service {
         /**
          * Returns True when the file described by 'file' in the ownCloud account 'account' is
          * downloading or waiting to download.
-         * <p>
+         * 
          * If 'file' is a directory, returns 'true' if some of its descendant files is downloading
          * or waiting to download.
          *
@@ -376,7 +374,7 @@ public class OperationsService extends Service {
 
     /**
      * Operations worker. Performs the pending operations in the order they were requested.
-     * <p>
+     * 
      * Created with the Looper of a new thread, started in {@link OperationsService#onCreate()}.
      */
     private static class ServiceHandler extends Handler {
@@ -445,19 +443,7 @@ public class OperationsService extends Service {
                             );
                         } else {
                             OwnCloudCredentials credentials = null;
-                            if (mLastTarget.mCookie != null && mLastTarget.mCookie.length() > 0) { // SAML SSO
-                                // just used for GetUserName
-                                // TODO refactor to run GetUserName as AsyncTask in the context of AuthenticatorActivity
-                                credentials = OwnCloudCredentialsFactory.newSamlSsoCredentials(
-                                        null,                  // unknown
-                                        mLastTarget.mCookie);           // SAML cookie
-                                ocAccount = new OwnCloudAccount(mLastTarget.mServerUrl, credentials);
-                                // Force to create client with new SAML cookies when a session expires
-                                OwnCloudClientManagerFactory.getDefaultSingleton().removeClientFor(ocAccount);
-                            } else {
-                                ocAccount = new OwnCloudAccount(mLastTarget.mServerUrl, credentials);
-                            }
-
+                            ocAccount = new OwnCloudAccount(mLastTarget.mServerUrl, credentials);
                             mOwnCloudClient = OwnCloudClientManagerFactory.getDefaultSingleton().
                                     getClientFor(ocAccount, mService);
                             mStorageManager = null;
@@ -503,7 +489,7 @@ public class OperationsService extends Service {
 
     /**
      * Creates a new operation, as described by operationIntent.
-     * <p>
+     * 
      * TODO - move to ServiceHandler (probably)
      *
      * @param operationIntent Intent describing a new operation to queue and execute.
@@ -529,11 +515,7 @@ public class OperationsService extends Service {
                 );
 
                 String action = operationIntent.getAction();
-                if (action.equals(ACTION_UNSHARE)) {  // Unshare file
-                    long shareId = operationIntent.getLongExtra(EXTRA_SHARE_ID, -1);
-                    operation = new RemoveShareOperation(shareId);
-
-                } else if (action.equals(ACTION_GET_SERVER_INFO)) {
+                if (action.equals(ACTION_GET_SERVER_INFO)) {
                     // check OC server and get basic information from it
                     operation = new GetServerInfoOperation(serverUrl, OperationsService.this);
 
@@ -630,7 +612,7 @@ public class OperationsService extends Service {
 
     /**
      * Sends a broadcast when a new operation is added to the queue.
-     * <p>
+     * 
      * Local broadcasts are only delivered to activities in the same process, but can't be
      * done sticky :\
      *
@@ -652,7 +634,7 @@ public class OperationsService extends Service {
     /**
      * Sends a LOCAL broadcast when an operations finishes in order to the interested activities c
      * an update their view
-     * <p>
+     * 
      * Local broadcasts are only delivered to activities in the same process.
      *
      * @param target    Account or URL pointing to an OC server.

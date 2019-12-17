@@ -1,21 +1,43 @@
 buildscript {
     ext {
+        // SDK
+        sdkCompileVersion = 28
+        sdkMinVersion = 19
+        sdkTargetVersion = 28
+
         // Android jetpack
-        archLifecycleVersion = '2.1.0'
-        roomVersion = '2.1.0'
+        archLifecycleVersion = "2.1.0"
+        roomVersion = "2.2.2"
+        appCompat = "1.1.0"
+        sqliteVersion = "2.0.1"
+        lifecycleLiveData = "2.0.0"
 
         // Kotlin
-        kotlinVersion = '1.3.50'
+        kotlinVersion = "1.3.50"
+        coroutinesVersion = "1.3.2"
 
         // Koin
-        koinVersion = '2.0.1'
+        koinVersion = "2.0.1"
+        mockkVersion = "1.9.3"
 
         // Testing
         junitVersion = "4.12"
+        extJunitVersion = "1.1.1"
+        androidTestVersion = "1.2.0"
         mockitoVersion = "2.24.0"
+        espressoTestVersion = "3.2.0"
+        fragmentTestVersion = "1.1.0"
+        uiAutomatorTestVersion = "2.2.0"
+        annotationTestVersion = "1.1.0"
 
         // Extensions
-        ktxVersion = "1.0.2"
+        ktxVersion = "1.1.0"
+
+        // KTX extensions
+        ktxCoreVersion = "1.1.0"
+        ktxViewModelVersion = "2.2.0-alpha01"
+        ktxFragmentVersion = "1.0.0"
+        ktxLiveData = "2.1.0"
     }
 
     repositories {
@@ -24,7 +46,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.5.0'
+        classpath 'com.android.tools.build:gradle:3.5.2'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
         classpath "org.jetbrains.kotlin:kotlin-allopen:$kotlinVersion"
     }

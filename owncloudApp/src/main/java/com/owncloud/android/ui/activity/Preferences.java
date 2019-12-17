@@ -23,7 +23,6 @@
 package com.owncloud.android.ui.activity;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
@@ -62,6 +61,8 @@ import java.io.File;
 import androidx.annotation.LayoutRes;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatDelegate;
+
+import static com.owncloud.android.db.PreferenceManager.PREF__CAMERA_UPLOADS_DEFAULT_PATH;
 
 /**
  * An Activity that allows the user to change the application's settings.
@@ -873,8 +874,7 @@ public class Preferences extends PreferenceActivity {
      * Load picture upload path set on preferences
      */
     private void loadCameraUploadsPicturePath() {
-        mUploadPath = mAppPrefs.getString(PREFERENCE_CAMERA_PICTURE_UPLOADS_PATH,
-                getString(R.string.camera_upload_path));
+        mUploadPath = mAppPrefs.getString(PREFERENCE_CAMERA_PICTURE_UPLOADS_PATH, PREF__CAMERA_UPLOADS_DEFAULT_PATH);
         mPrefCameraPictureUploadsPath.setSummary(
                 DisplayUtils.getPathWithoutLastSlash(mUploadPath)
         );
@@ -891,8 +891,7 @@ public class Preferences extends PreferenceActivity {
      * Load video upload path set on preferences
      */
     private void loadCameraUploadsVideoPath() {
-        mUploadVideoPath = mAppPrefs.getString(PREFERENCE_CAMERA_VIDEO_UPLOADS_PATH,
-                getString(R.string.camera_upload_path));
+        mUploadVideoPath = mAppPrefs.getString(PREFERENCE_CAMERA_VIDEO_UPLOADS_PATH, PREF__CAMERA_UPLOADS_DEFAULT_PATH);
         mPrefCameraVideoUploadsPath.setSummary(DisplayUtils.getPathWithoutLastSlash(mUploadVideoPath));
     }
 

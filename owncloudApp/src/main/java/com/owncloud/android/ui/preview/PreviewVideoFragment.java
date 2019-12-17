@@ -4,17 +4,18 @@
  * @author David A. Velasco
  * @author David González Verdugo
  * @author Christian Schabesberger
+ * @author Shashvat Kedia
  * Copyright (C) 2019 ownCloud GmbH.
- * <p>
+ * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
  * as published by the Free Software Foundation.
- * <p>
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * <p>
+ * 
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -68,10 +69,9 @@ import com.owncloud.android.utils.DisplayUtils;
 /**
  * This fragment shows a preview of a downloaded video file, or starts streaming if file is not
  * downloaded yet.
- *
+ * <p>
  * Trying to get an instance with NULL {@link OCFile} or ownCloud {@link Account} values will
  * produce an {@link IllegalStateException}.
- *
  */
 public class PreviewVideoFragment extends FileFragment implements View.OnClickListener,
         ExoPlayer.EventListener, PrepareVideoPlayerAsyncTask.OnPrepareVideoPlayerTaskListener {
@@ -136,10 +136,10 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
 
     /**
      * Creates an empty fragment to preview video files.
-     *
+     * <p>
      * MUST BE KEPT: the system uses it when tries to reinstantiate a fragment automatically
      * (for instance, when the device is turned a aside).
-     *
+     * <p>
      * DO NOT CALL IT: an {@link OCFile} and {@link Account} must be provided for a successful
      * construction
      */
@@ -350,7 +350,7 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
                 mContainerActivity,
                 getActivity()
         );
-        mf.filter(menu, false, false, false);
+        mf.filter(menu, false, false, false, false);
 
         // additional restrictions for this fragment
 
@@ -470,6 +470,7 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
 
     /**
      * Called after preparing the player asynchronously
+     *
      * @param mediaSource media to be played
      */
     @Override
@@ -509,27 +510,23 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
      * @param previewVideoError player error with the needed info
      */
     private void showAlertDialog(final PreviewVideoError previewVideoError) {
-
         new AlertDialog.Builder(getActivity())
                 .setMessage(previewVideoError.getErrorMessage())
                 .setPositiveButton(android.R.string.VideoView_error_button,
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int whichButton) {
+                        (dialog, whichButton) -> {
+                            if (previewVideoError.isFileSyncNeeded() && mContainerActivity != null) {
+                                // Initialize the file download
+                                mContainerActivity.getFileOperationsHelper().syncFile(getFile());
+                            }
 
-                                if (previewVideoError.isFileSyncNeeded() && mContainerActivity != null) {
-                                    // Initialize the file download
-                                    mContainerActivity.getFileOperationsHelper().syncFile(getFile());
-                                }
-
-                                // This solution is not the best one but is an easy way to handle
-                                // SAML expiration error from here, without modifying so much code
-                                // or involving other parts
-                                if (previewVideoError.isParentFolderSyncNeeded()) {
-                                    // Start to sync the parent file folder
-                                    OCFile folder = new OCFile(getFile().getParentRemotePath());
-                                    ((FileDisplayActivity) getActivity()).
-                                            startSyncFolderOperation(folder, false);
-                                }
+                            // This solution is not the best one but is an easy way to handle
+                            // expiration error from here, without modifying so much code
+                            // or involving other parts
+                            if (previewVideoError.isParentFolderSyncNeeded()) {
+                                // Start to sync the parent file folder
+                                OCFile folder = new OCFile(getFile().getParentRemotePath());
+                                ((FileDisplayActivity) getActivity()).
+                                        startSyncFolderOperation(folder, false);
                             }
                         })
                 .setCancelable(false)

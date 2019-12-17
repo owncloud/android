@@ -18,6 +18,7 @@
   <string name="actionbar_sort_by_size">Pequeno - Grande</string>
   <string name="drawer_item_all_files">Todos os ficheiros</string>
   <string name="drawer_item_only_available_offline">Disponível off-line</string>
+  <string name="drawer_item_shared_by_link_files">Partilhado por hiperligação</string>
   <string name="drawer_item_settings">Definições</string>
   <string name="drawer_item_uploads_list">Envios</string>
   <string name="drawer_close">Fechar</string>
@@ -47,6 +48,7 @@
   <string name="recommend_text">Eu quero convidá-lo a usar %1$s no seu telemóvel!\nTransfere  aqui: %2$s</string>
   <string name="auth_failure_snackbar">A autenticação falhou</string>
   <string name="auth_failure_snackbar_action">Mudar de conta</string>
+  <string name="auth_oauth_failure_snackbar_action">Iniciar Sessão</string>
   <string name="auth_check_server">Verificar servidor</string>
   <string name="auth_host_url">Endereço do servidor https://..</string>
   <string name="auth_username">Nome de Utilizador</string>
@@ -220,8 +222,7 @@
   <string name="auth_wtf_reenter_URL">Estado inesperado; por favor, introduza novamente o endereço do servidor</string>
   <string name="auth_expired_oauth_token_toast">A sua autenticação expirou. Por favor, autentique novamente</string>
   <string name="auth_expired_basic_auth_toast">Por favor, introduza a sua passe actual</string>
-  <string name="auth_expired_saml_sso_token_toast">A sua sessão expirou. Por favor, inicie a sessão novamente</string>
-  <string name="auth_connecting_auth_server">A ligar ao servidor de autenticação...</string>
+    <string name="auth_connecting_auth_server">A ligar ao servidor de autenticação...</string>
   <string name="auth_unsupported_auth_method">O servidor não suporta este método de autenticação</string>
   <string name="auth_unsupported_multiaccount">%1$s não suporta contas múltiplas</string>
   <string name="auth_fail_get_user_name">O seu servidor não está a devolver a id. correcta, por favor, contacte um administrador.</string>
@@ -236,7 +237,7 @@
   <string name="confirmation_remove_local">Apenas localmente</string>
   <string name="confirmation_remove_account_alert">Tem mesmo a certeza que pretende remover a conta %1$s?</string>
   <string name="confirmation_remove_public_share_title">Remover hiperligação</string>
-  <string name="confirmation_remove_public_share_message">Tem a certeza que deseja remover %1$s ?</string>
+  <string name="confirmation_remove_share_message">Tem a certeza que deseja remover %1$s ?</string>
   <string name="remove_success_msg">Remoção bem sucedida</string>
   <string name="remove_fail_msg">Remoção falhou</string>
   <string name="rename_dialog_title">Introduza um novo nome</string>
@@ -341,9 +342,7 @@
   <string name="log_send_mail_subject">%1$s registos de aplicação Android</string>
   <string name="log_progress_dialog_text">A carregar os dados...</string>
   <string name="actionbar_select_all">Selecionar todos</string>
-  <string name="saml_authentication_required_text">Autenticação necessária</string>
-  <string name="saml_authentication_wrong_pass">Palavra-passe errada</string>
-  <string name="actionbar_move">Mover</string>
+    <string name="actionbar_move">Mover</string>
   <string name="file_list_empty_moving">Não está aqui nada. Pode adicionar uma pasta!</string>
   <string name="folder_picker_choose_button_text">Escolher</string>
   <string name="move_file_not_found">Não é possível mover. Por favor, verifique se o ficheiro existe</string>

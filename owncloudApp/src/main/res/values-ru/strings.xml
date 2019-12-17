@@ -20,6 +20,7 @@
   <string name="actionbar_sort_by_size">От маленьких к большим</string>
   <string name="drawer_item_all_files">Все файлы</string>
   <string name="drawer_item_only_available_offline">Доступно автономно</string>
+  <string name="drawer_item_shared_by_link_files">Доступные по ссылке</string>
   <string name="drawer_item_settings">Настройки</string>
   <string name="drawer_item_uploads_list">Загрузки</string>
   <string name="drawer_close">Закрыть</string>
@@ -72,12 +73,15 @@
   <string name="passcode_already_set">Графический ключ и код не могут быть включены одновременно, пожалуйста, отключите сперва код</string>
   <string name="pattern_no_longer_required">Графический ключ не будет больше запрашиваться</string>
   <string name="pattern_configure_your_pattern_explanation">Графический ключ будет запрашиваться каждый раз при запуске приложения</string>
+  <string name="pattern_locked">Заблокировано графическим ключом</string>
   <string name="illegal_argument_exception_message">Допустимое ДЕЙСТВИЕ требуется для передачи в намерениях</string>
   <string name="recommend_subject">Попробуйте %1$s на вашем смартфоне!</string>
   <string name="recommend_text">Хочу предложить вам использовать %1$s на смартфоне!\nЗагрузить можно здесь: %2$s
 	</string>
   <string name="auth_failure_snackbar">Аутентификация не удалась</string>
   <string name="auth_failure_snackbar_action">Измените учётную запись</string>
+  <string name="auth_oauth_failure">Токен доступа устарел или стал недопустимым. Перевойдите, чтобы восстановить доступ</string>
+  <string name="auth_oauth_failure_snackbar_action">Войти</string>
   <string name="auth_check_server">Проверить сервер</string>
   <string name="auth_host_url">Адрес сервера https://...</string>
   <string name="auth_username">Имя пользователя</string>
@@ -101,6 +105,7 @@
   <string name="file_list_seconds_ago">несколько секунд назад</string>
   <string name="file_list_empty">Здесь ничего нет. Загрузите что-нибудь!</string>
   <string name="file_list_empty_available_offline">Нет доступных автономных файлов.</string>
+  <string name="file_list_empty_shared_by_links">Отсутствуют файлы общего доступа по ссылке</string>
   <string name="file_list_loading">Загрузка...</string>
   <string name="file_list_no_app_for_file_type">Не найдено приложение для типа файла</string>
   <string name="local_file_list_empty">В этом каталоге нет файлов.</string>
@@ -218,6 +223,7 @@
   <string name="pass_code_wrong">Некоррентный код</string>
   <string name="pass_code_removed">Код удален</string>
   <string name="pass_code_stored">Код сохранен</string>
+  <string name="pass_code_locked">Заблокировано кодом</string>
   <string name="fingerprint_confirm">Для продолжения подтвердите свой отпечаток пальца</string>
   <string name="fingerprint_hint">Датчик прикосновения</string>
   <string name="fingerprint_not_recognized">Отпечаток пальца не распознан, попробуйте ещё раз</string>
@@ -267,8 +273,7 @@
   <string name="auth_wtf_reenter_URL">Неожиданное состояние; пожалуйста укажите адрес сервера повторно</string>
   <string name="auth_expired_oauth_token_toast">Время авторизации истекло. Пожалуйста, авторизуйтесь снова</string>
   <string name="auth_expired_basic_auth_toast">Пожалуйста укажите текущий пароль</string>
-  <string name="auth_expired_saml_sso_token_toast">Время сессии истекло. Пожалуйста, подключитесь снова</string>
-  <string name="auth_connecting_auth_server">Подключение к серверу авторизации ...</string>
+    <string name="auth_connecting_auth_server">Подключение к серверу авторизации ...</string>
   <string name="auth_unsupported_auth_method">Сервер не поддерживает выбранный метод аутентификации</string>
   <string name="auth_unsupported_multiaccount">%1$s не поддерживает несколько учётных записей</string>
   <string name="auth_fail_get_user_name">Сервер вернул некорректный пользовательский идентификатор. Пожалуйста, свяжитесь с вашим администратором
@@ -284,7 +289,7 @@
   <string name="confirmation_remove_local">Только локально</string>
   <string name="confirmation_remove_account_alert">Вы действительно хотите удалить аккаунт %1$s?</string>
   <string name="confirmation_remove_public_share_title">Удалить ссылку</string>
-  <string name="confirmation_remove_public_share_message">Вы действительно хотите удалить %1$s?</string>
+  <string name="confirmation_remove_share_message">Вы действительно хотите удалить %1$s?</string>
   <string name="remove_success_msg">Удаление завершено</string>
   <string name="remove_fail_msg">Ошибка удаления</string>
   <string name="rename_dialog_title">Введите новое имя</string>
@@ -340,7 +345,6 @@
   <string name="placeholder_media_time">12:23:45</string>
   <string name="camera_picture_upload_on_wifi">Загрузка изображений только через wifi</string>
   <string name="camera_video_upload_on_wifi">Загрузка видео только через wifi</string>
-  <string name="camera_upload_path">/ЗагрузкиКамеры</string>
   <string name="confirmation_disable_camera_uploads_title">Подтвердите</string>
   <string name="confirmation_disable_pictures_upload_message">Вы уверены, что хотите отключить эту возможность? Последующие изображения не будут загружены</string>
   <string name="confirmation_disable_videos_upload_message">Вы уверены, что хотите отключить эту возможность? Последующие видеозаписи не будут загружены</string>
@@ -401,9 +405,7 @@
   <string name="log_progress_dialog_text">Загрузка данных…</string>
   <string name="actionbar_select_all">Выделить все</string>
   <string name="actionbar_select_inverse">Выбрать наоборот</string>
-  <string name="saml_authentication_required_text">Требуется аутентификация </string>
-  <string name="saml_authentication_wrong_pass">Неправильный пароль</string>
-  <string name="actionbar_move">Переместить</string>
+    <string name="actionbar_move">Переместить</string>
   <string name="file_list_empty_moving">Здесь ничего нет. Вы можете создать каталог!</string>
   <string name="folder_picker_choose_button_text">Выбрать</string>
   <string name="move_file_not_found">Невозможно переместить. Убедитесь, что файл существует</string>

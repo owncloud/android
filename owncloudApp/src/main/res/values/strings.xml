@@ -20,6 +20,7 @@
     <string name="actionbar_sort_by_size">Smallest - Largest</string>
     <string name="drawer_item_all_files">All files</string>
     <string name="drawer_item_only_available_offline">Available offline</string>
+    <string name="drawer_item_shared_by_link_files">Shared by link</string>
     <string name="drawer_item_settings">Settings</string>
     <string name="drawer_item_uploads_list">Uploads</string>
     <string name="drawer_close">Close</string>
@@ -72,12 +73,14 @@
     <string name="passcode_already_set">Pattern and passcode locks cannot be enabled at the same time, please disable passcode first</string>
     <string name="pattern_no_longer_required">The pattern will not be asked anymore</string>
     <string name="pattern_configure_your_pattern_explanation">The pattern will be requested every time the app is started</string>
+    <string name="pass_code_locked">Locked with passcode</string>
     <string name="pattern_locked">Locked with pattern</string>
     <string name="illegal_argument_exception_message">A valid ACTION is needed in the Intent passed to</string>
 
     <string name="recommend_subject">Try %1$s on your smartphone!</string>
     <string name="recommend_text">"I want to invite you to use %1$s on your smartphone!\nDownload here: %2$s"</string>
 
+    <string name="error_reason">because</string>
     <string name="auth_failure_snackbar">Authentication failed</string>
     <string name="auth_failure_snackbar_action">Change account</string>
     <string name="auth_oauth_failure">The access token has expired or become invalid. Sign in again to regain access</string>
@@ -105,6 +108,7 @@
     <string name="file_list_seconds_ago">seconds ago</string>
     <string name="file_list_empty">Nothing in here. Upload something!</string>
     <string name="file_list_empty_available_offline">There are no available offline files.</string>
+    <string name="file_list_empty_shared_by_links">No files have been shared by link.</string>
     <string name="file_list_loading">Loading&#8230;</string>
     <string name="file_list_no_app_for_file_type">No app found for file type</string>
     <string name="local_file_list_empty">There are no files in this folder.</string>
@@ -137,7 +141,7 @@
     <string name="common_error">Error</string>
     <string name="common_loading">Loading&#8230;</string>
     <string name="common_unknown">unknown</string>
-    <string name="common_error_unknown">Unknown error</string>
+    <string name="common_error_unknown">unknown error</string>
     <string name="common_pending">Pending</string>
     <string name="common_important">Important</string>
     <string name="about_title">About</string>
@@ -223,7 +227,6 @@
     <string name="pass_code_wrong">Incorrect passcode</string>
     <string name="pass_code_removed">Passcode removed</string>
     <string name="pass_code_stored">Passcode stored</string>
-    <string name="pass_code_locked">Locked with passcode</string>
 
     <string name="fingerprint_confirm">Confirm your fingerprint to continue</string>
     <string name="fingerprint_hint">Touch sensor</string>
@@ -276,7 +279,6 @@
     <string name="auth_wtf_reenter_URL">Unexpected state; please enter the server address again</string>
     <string name="auth_expired_oauth_token_toast">Your authorization expired. Please, authorize again</string>
     <string name="auth_expired_basic_auth_toast">Please enter the current password</string>
-    <string name="auth_expired_saml_sso_token_toast">Your session expired. Please connect again</string>
     <string name="auth_connecting_auth_server">Connecting to authentication server …</string>
     <string name="auth_unsupported_auth_method">The server does not support this authentication method</string>
     <string name="auth_unsupported_multiaccount">%1$s does not support multiple accounts</string>
@@ -294,7 +296,8 @@
     <string name="confirmation_remove_local">Local only</string>
     <string name="confirmation_remove_account_alert">Do you really want to remove the account %1$s?</string>
     <string name="confirmation_remove_public_share_title">Remove link</string>
-    <string name="confirmation_remove_public_share_message">Do you really want to remove %1$s?</string>
+    <string name="confirmation_remove_private_share_title">Remove private share</string>
+    <string name="confirmation_remove_share_message">Do you really want to remove %1$s share?</string>
     <string name="remove_success_msg">Removal succeeded</string>
     <string name="remove_fail_msg">Removal failed</string>
     <string name="rename_dialog_title">Enter a new name</string>
@@ -354,7 +357,6 @@
 
     <string name="camera_picture_upload_on_wifi">Upload pictures via wifi only</string>
     <string name="camera_video_upload_on_wifi">Upload videos via wifi only</string>
-    <string name="camera_upload_path">/CameraUpload</string>
     <string name="confirmation_disable_camera_uploads_title">Confirm</string>
     <string name="confirmation_disable_pictures_upload_message">Are you sure you want to disable this feature? The pending pictures will not be uploaded</string>
     <string name="confirmation_disable_videos_upload_message">Are you sure you want to disable this feature? The pending videos will not be uploaded</string>
@@ -373,17 +375,14 @@
     <string name="error__upload__local_file_not_copied">%1$s could not be copied to %2$s local folder</string>
     <string name="prefs_camera_picture_upload_path_title">Picture upload path</string>
 
-    <string name="get_shares_error">An error occurred while trying to retrieve shares</string>
-    <string name="get_sharees_error">An error occurred while trying to retrieve users and groups</string>
-    <string name="get_capabilities_error">An error occurred while trying to retrieve capabilities</string>
+    <string name="get_shares_error">It was not possible to retrieve the shares from server</string>
+    <string name="get_sharees_error">It was not possible to retrieve users and groups from server</string>
+    <string name="get_capabilities_error">It was not possible to retrieve the capabilities from server</string>
     <string name="share_link_no_support_share_api">Sorry, sharing is not enabled on your server. Please contact your
 		administrator.</string>
-    <string name="share_link_file_no_exist">Unable to share. Please check whether the file exists</string>
-    <string name="share_link_file_error">An error occurred while trying to share this file or folder</string>
-    <string name="unshare_link_file_no_exist">Unable to unshare. Please check whether the file exists</string>
-    <string name="unshare_link_file_error">An error occurred while trying to unshare this file or folder</string>
-    <string name="update_link_file_no_exist">Unable to update. Please check whether the file exists </string>
-    <string name="update_link_file_error">An error occurred while trying to update the share</string>
+    <string name="share_link_file_error">It was not possible to share this file or folder</string>
+    <string name="unshare_link_file_error">It was not possible to unshare this file or folder</string>
+    <string name="update_link_file_error">It was not possible to update this file or folder</string>
     <string name="share_link_password_title">Enter a password</string>
     <string name="share_link_empty_password">You must enter a password</string>
 
@@ -397,7 +396,7 @@
 
     <string name="error_cant_bind_to_operations_service">Critical error: cannot perform operations</string>
 
-    <string name="network_error_socket_exception">An error occurred while connecting with the server.</string>
+    <string name="network_error_socket_exception">an error while connecting with the server</string>
     <string name="network_error_socket_timeout_exception">The server took too long to respond</string>
     <string name="network_error_connect_timeout_exception">The server took too long to connect</string>
     <string name="network_host_not_available">Server could not be reached</string>
@@ -427,8 +426,6 @@
     <string name="actionbar_select_all">Select all</string>
     <string name="actionbar_select_inverse">Select inverse</string>
 
-    <string name="saml_authentication_required_text">Authentication required</string>
-    <string name="saml_authentication_wrong_pass">Wrong password</string>
     <string name="actionbar_move">Move</string>
     <string name="file_list_empty_moving">Nothing in here. You can add a folder!</string>
     <string name="folder_picker_choose_button_text">Choose</string>
@@ -608,5 +605,10 @@
     <string name="welcome_feature_9_text">Access and edit your ownCloud files from other apps</string>
     <string name="welcome_feature_10_title">Logs with search for everyone</string>
     <string name="welcome_feature_10_text">Send us your logs to make the app work better</string>
+    <string name="welcome_feature_11_title">End of support for servers lower than 10</string>
+    <string name="welcome_feature_11_text">Please upgrade your server or the coming app versions will not work for you</string>
+    <string name="welcome_feature_12_title">End of support for Android 4.4 devices</string>
+    <string name="welcome_feature_12_text">The coming app versions will not appear in Google Play for devices lower than Android 5</string>
     <string name="no_borwser_installed_alert">No browser installed. Please install a Browser in order to allow a secure login.</string>
+    <string name="common_not_found">it was not found</string>
 </resources>

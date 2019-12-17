@@ -3,7 +3,7 @@
   <string name="about_android">%1$s për Android</string>
   <string name="about_version">Version %1$s</string>
   <string name="actionbar_search">Kërko në këtë dosje</string>
-  <string name="actionbar_sync">Freskoni llogarinë</string>
+  <string name="actionbar_sync">Fresko llogarinë</string>
   <string name="actionbar_upload">Ngarkoni</string>
   <string name="actionbar_upload_from_apps">Lëndë nga aplikacione të tjera</string>
   <string name="actionbar_upload_files">Kartela</string>
@@ -20,6 +20,7 @@
   <string name="actionbar_sort_by_size">Më e vogla - Më e madhja</string>
   <string name="drawer_item_all_files">Krejt kartelat</string>
   <string name="drawer_item_only_available_offline">I passhëm jo në linjë</string>
+  <string name="drawer_item_shared_by_link_files">Të ndara me lidhje</string>
   <string name="drawer_item_settings">Rregullime</string>
   <string name="drawer_item_uploads_list">Ngarkime</string>
   <string name="drawer_close">Mbylle</string>
@@ -72,11 +73,14 @@
   <string name="passcode_already_set">Kyçjet e rregullsive dhe kodkalimeve s\’mund të aktivizohen në të njëjtën kohë, ju lutemi, së pari çaktivizoni kodkalimin</string>
   <string name="pattern_no_longer_required">S\’do të pyetet më për rregullsinë</string>
   <string name="pattern_configure_your_pattern_explanation">Rregullsia do të kërkohet sa herë që niset aplikacioni</string>
+  <string name="pattern_locked">Kyçur përmes rregullsie</string>
   <string name="illegal_argument_exception_message">Lypset një VEPRIM i vlefshëm te Synimi që u dha</string>
   <string name="recommend_subject">Provojeni %1$s te telefoni juaj!</string>
   <string name="recommend_text">Dua t\’ju ftoj të përdorni %1$s në telefonin tuaj!\nShkarkojeni prej këtu: %2$s</string>
   <string name="auth_failure_snackbar">Mirëfilltësimi dështoi</string>
   <string name="auth_failure_snackbar_action">Ndryshoni llogari</string>
+  <string name="auth_oauth_failure">Token-i i hyrjeve ka skaduar ose është bërë i pavlefshëm. Ribëni hyrjen në llogari që të rifitoni mundësinë e përdorimit</string>
+  <string name="auth_oauth_failure_snackbar_action">Hyni</string>
   <string name="auth_check_server">Kontrollo shërbyesin</string>
   <string name="auth_host_url">Adresë https://… e shërbyesit</string>
   <string name="auth_username">Emër përdoruesi</string>
@@ -100,6 +104,7 @@
   <string name="file_list_seconds_ago">sekonda më parë</string>
   <string name="file_list_empty">Këtu nuk ka gjë. Ngarkoni diçka!</string>
   <string name="file_list_empty_available_offline">S’ka kartela offline gati.</string>
+  <string name="file_list_empty_shared_by_links">S’janë ndarë kartela me të tjerë përmes lidhjeje.</string>
   <string name="file_list_loading">Po ngarkohet…</string>
   <string name="file_list_no_app_for_file_type">S\’u gjet aplikacion për llojin e kartelës</string>
   <string name="local_file_list_empty">Në këtë dosje s\’ka kartela.</string>
@@ -217,6 +222,7 @@
   <string name="pass_code_wrong">Kodkalim i pasaktë</string>
   <string name="pass_code_removed">Kodkalimi u hoq</string>
   <string name="pass_code_stored">Kodkalimi u depozitua</string>
+  <string name="pass_code_locked">Kyçur përmes kodkalimi</string>
   <string name="fingerprint_confirm">Që të vazhdohet, ripohoni shenjat tuaja të gishtave</string>
   <string name="fingerprint_hint">Ndijues prekjesh</string>
   <string name="fingerprint_not_recognized">Shenja gishtash jo të pranuara, riprovoni</string>
@@ -266,7 +272,6 @@
   <string name="auth_wtf_reenter_URL">Gjendje e papritur; ju lutemi, rijepni adresën e shërbyesit</string>
   <string name="auth_expired_oauth_token_toast">Autorizimi juaj skadoi. Ju lutemi, autorizohuni sërish</string>
   <string name="auth_expired_basic_auth_toast">Ju lutem, jepni fjalëkalimin e tanishëm</string>
-  <string name="auth_expired_saml_sso_token_toast">Sesioni juaj skadoi. Ju lutemi, rilidhuni</string>
   <string name="auth_connecting_auth_server">Po lidhet te shërbyesi i mirëfilltësimeve …</string>
   <string name="auth_unsupported_auth_method">Shërbyesi s\’e mbulon këtë metodë mirëfilltësimesh</string>
   <string name="auth_unsupported_multiaccount">%1$s s\’mbulon llogari të shumëfishta</string>
@@ -282,7 +287,7 @@
   <string name="confirmation_remove_local">Vetëm vendorja</string>
   <string name="confirmation_remove_account_alert">Doni vërtet të hiqet llogaria %1$s?</string>
   <string name="confirmation_remove_public_share_title">Hiqe lidhjen</string>
-  <string name="confirmation_remove_public_share_message">Doni vërtet të hiqet %1$s?</string>
+  <string name="confirmation_remove_share_message">Doni vërtet të hiqet %1$s?</string>
   <string name="remove_success_msg">Heqja doli me sukses</string>
   <string name="remove_fail_msg">Heqja dështoi</string>
   <string name="rename_dialog_title">Jepni një emër të ri</string>
@@ -338,7 +343,6 @@
   <string name="placeholder_media_time">12:23:45</string>
   <string name="camera_picture_upload_on_wifi">Fotot ngarkoji vetëm përmes wifi-it</string>
   <string name="camera_video_upload_on_wifi">Videot ngarkoji vetëm përmes wifi-it</string>
-  <string name="camera_upload_path">/NgarkimeNgaKamera</string>
   <string name="confirmation_disable_camera_uploads_title">Ripohojeni</string>
   <string name="confirmation_disable_pictures_upload_message">Jeni i sigurt se doni të çaktivizohet kjo veçori? Fotot e mbetura nuk do të ngarkohen</string>
   <string name="confirmation_disable_videos_upload_message">Jeni i sigurt se doni të çaktivizohet kjo veçori? Videot e mbetura nuk do të ngarkohen</string>
@@ -398,8 +402,6 @@
   <string name="log_progress_dialog_text">Po ngarkohen të dhëna…</string>
   <string name="actionbar_select_all">Përzgjidhi krejt</string>
   <string name="actionbar_select_inverse">Përzgjidhe së prapthi</string>
-  <string name="saml_authentication_required_text">Lypset mirëfilltësim</string>
-  <string name="saml_authentication_wrong_pass">Fjalëkalim i gabuar</string>
   <string name="actionbar_move">Zhvendose</string>
   <string name="file_list_empty_moving">S\’ka gjë këtu. Mund të shtoni një dosje!</string>
   <string name="folder_picker_choose_button_text">Zgjidhni</string>

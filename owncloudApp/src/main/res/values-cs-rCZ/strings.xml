@@ -20,6 +20,7 @@
   <string name="actionbar_sort_by_size">Nejmenší - Největší</string>
   <string name="drawer_item_all_files">Všechny soubory</string>
   <string name="drawer_item_only_available_offline">Dostupné offline</string>
+  <string name="drawer_item_shared_by_link_files">Sdíleno pomocí odkazu</string>
   <string name="drawer_item_settings">Nastavení</string>
   <string name="drawer_item_uploads_list">Nahrání</string>
   <string name="drawer_close">Zavřít</string>
@@ -61,6 +62,7 @@ Automaticky nahrát video snímané kamerou
   <string name="recommend_text">Chtěl bych vás pozvat k používání %1$s na vašem chytrém telefonu!\nKe stažení zde: %2$s</string>
   <string name="auth_failure_snackbar">Ověření selhalo</string>
   <string name="auth_failure_snackbar_action">Změna účtu</string>
+  <string name="auth_oauth_failure_snackbar_action">Přihlásit</string>
   <string name="auth_check_server">Ověřit server</string>
   <string name="auth_host_url">Adresa serveru https://...</string>
   <string name="auth_username">Uživatelské jméno</string>
@@ -250,7 +252,6 @@ Automaticky nahrát video snímané kamerou
   <string name="auth_wtf_reenter_URL">Neočekávaný stav; zadejte prosím znovu adresu serveru</string>
   <string name="auth_expired_oauth_token_toast">Vaše přihlášení vypršelo. Přihlaste se prosím znovu</string>
   <string name="auth_expired_basic_auth_toast">Zadejte prosím aktuální heslo</string>
-  <string name="auth_expired_saml_sso_token_toast">Vaše přihlášení vypršelo. Přihlaste se prosím znovu</string>
   <string name="auth_connecting_auth_server">Připojování k ověřovacímu serveru ...</string>
   <string name="auth_unsupported_auth_method">Server nepodporuje tuto přihlašovací metodu</string>
   <string name="auth_unsupported_multiaccount">%1$s nepodporuje více účtů</string>
@@ -266,7 +267,7 @@ Automaticky nahrát video snímané kamerou
   <string name="confirmation_remove_local">Pouze místní</string>
   <string name="confirmation_remove_account_alert">Opravdu chcete odstranit účet %1$s ?</string>
   <string name="confirmation_remove_public_share_title">Odstranění odkazu</string>
-  <string name="confirmation_remove_public_share_message">Opravdu chcete odstranit %1$s ?</string>
+  <string name="confirmation_remove_share_message">Opravdu chcete odstranit %1$s ?</string>
   <string name="remove_success_msg">Úspěšně odstraněno</string>
   <string name="remove_fail_msg">Odstranění nelze dokončit</string>
   <string name="rename_dialog_title">Zadejte nový název</string>
@@ -322,7 +323,6 @@ Automaticky nahrát video snímané kamerou
   <string name="placeholder_media_time">12:23:45</string>
   <string name="camera_picture_upload_on_wifi">Nahrávat obrázky pouze přes wifi</string>
   <string name="camera_video_upload_on_wifi">Odesílat videa pouze přes wifi</string>
-  <string name="camera_upload_path">/CameraUpload</string>
   <string name="confirmation_disable_camera_uploads_title">Potvrzení</string>
   <string name="confirmation_disable_pictures_upload_message">Opravdu chcete tuto funkci deaktivovat? Nevyřízené obrázky nebudou nahrány</string>
   <string name="confirmation_disable_videos_upload_message">Opravdu chcete tuto funkci deaktivovat? Nevyřízená videa nebudou nahrána</string>
@@ -379,8 +379,6 @@ správce systému.</string>
   <string name="log_send_mail_subject">%1$s logy aplikace pro Android</string>
   <string name="log_progress_dialog_text">Načítání dat…</string>
   <string name="actionbar_select_all">Vybrat vše</string>
-  <string name="saml_authentication_required_text">Vyžadováno přihlášení</string>
-  <string name="saml_authentication_wrong_pass">Nesprávné heslo</string>
   <string name="actionbar_move">Přesunout</string>
   <string name="file_list_empty_moving">Zde nic není. Můžete přidat adresář!</string>
   <string name="folder_picker_choose_button_text">Vybrat</string>

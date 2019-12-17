@@ -5,6 +5,7 @@
  * @author Christian Schabesberger
  * @author David González Verdugo
  * @author Abel García de Prada
+ * @author Shashvat Kedia
  * Copyright (C) 2015  Bartosz Przybylski
  * Copyright (C) 2019 ownCloud GmbH.
  * <p>
@@ -184,7 +185,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
         val resultCursor = FileCursor(projection)
 
         // Create result cursor before syncing folder again, in order to enable faster loading
-        currentStorageManager?.getFolderContent(getFileById(folderId), false)
+        currentStorageManager?.getFolderContent(currentStorageManager?.getFileById(folderId))
             ?.forEach { file -> resultCursor.addFile(file) }
 
         //Create notification listener
@@ -461,18 +462,17 @@ class DocumentsStorageProvider : DocumentsProvider() {
             return
         }
         for (data in rootIdToStorageManager.values) {
-            if (data.account.name == rootId) {
+            if (data.account?.name == rootId) {
                 currentStorageManager = data
             }
         }
     }
 
     private fun initiateStorageMap() {
-
         for (account in AccountUtils.getAccounts(context)) {
-            val storageManager = FileDataStorageManager(context, account, context?.contentResolver)
+            val storageManager = FileDataStorageManager(context, account, context.contentResolver)
             val rootDir = storageManager.getFileByPath(OCFile.ROOT_PATH)
-            rootIdToStorageManager[rootDir.fileId] = storageManager
+            rootIdToStorageManager[rootDir!!.fileId] = storageManager
         }
     }
 
@@ -510,8 +510,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
     private fun findFiles(root: OCFile, query: String): Vector<OCFile> {
         val result = Vector<OCFile>()
 
-        val folderContent = currentStorageManager?.getFolderContent(root, false) ?: return result
-
+        val folderContent = currentStorageManager?.getFolderContent(root) ?: return result
         folderContent.forEach {
             if (it.fileName.contains(query)) {
                 result.add(it)

@@ -20,6 +20,7 @@
   <string name="actionbar_sort_by_size">Più piccolo - Più grande</string>
   <string name="drawer_item_all_files">Tutti i file</string>
   <string name="drawer_item_only_available_offline">Disponibile non in linea</string>
+  <string name="drawer_item_shared_by_link_files">Condivisi tramite collegamento</string>
   <string name="drawer_item_settings">Impostazioni</string>
   <string name="drawer_item_uploads_list">Caricamenti</string>
   <string name="drawer_close">Chiudi</string>
@@ -77,6 +78,7 @@
   <string name="recommend_text">Vorrei invitarti a usare %1$s sul tuo smartphone!\nScarica qui: %2$s</string>
   <string name="auth_failure_snackbar">Autenticazione fallita</string>
   <string name="auth_failure_snackbar_action">Cambia account</string>
+  <string name="auth_oauth_failure_snackbar_action">Accedi</string>
   <string name="auth_check_server">Controlla il server</string>
   <string name="auth_host_url">Indirizzo server https://...</string>
   <string name="auth_username">Nome utente</string>
@@ -266,8 +268,7 @@
   <string name="auth_wtf_reenter_URL">Stato inatteso; digita nuovamente l\'indirizzo del server</string>
   <string name="auth_expired_oauth_token_toast">Autorizzazione scaduta. Richiedi l\'autorizzazione</string>
   <string name="auth_expired_basic_auth_toast">Digita la password attuale</string>
-  <string name="auth_expired_saml_sso_token_toast">Sessione scaduta. Riconnettiti</string>
-  <string name="auth_connecting_auth_server">Connessione al server di autenticazione in corso...</string>
+    <string name="auth_connecting_auth_server">Connessione al server di autenticazione in corso...</string>
   <string name="auth_unsupported_auth_method">Il server non supporta questo metodo di autenticazione</string>
   <string name="auth_unsupported_multiaccount">%1$s non supporta account multipli</string>
   <string name="auth_fail_get_user_name">Il tuo server non ha restituito un id utente corretto, contatta un amministratore
@@ -283,7 +284,7 @@
   <string name="confirmation_remove_local">Solo localmente</string>
   <string name="confirmation_remove_account_alert">Vuoi davvero rimuovere l\'account %1$s?</string>
   <string name="confirmation_remove_public_share_title">Rimuovi collegamento</string>
-  <string name="confirmation_remove_public_share_message">Vuoi davvero rimuovere %1$s?</string>
+  <string name="confirmation_remove_share_message">Vuoi davvero rimuovere %1$s?</string>
   <string name="remove_success_msg">Rimozione effettuata con successo</string>
   <string name="remove_fail_msg">La rimozione non può essere completata</string>
   <string name="rename_dialog_title">Digita un nuovo nome</string>
@@ -339,7 +340,6 @@
   <string name="placeholder_media_time">12:23:45</string>
   <string name="camera_picture_upload_on_wifi">Carica le immagini solo tramite wifi</string>
   <string name="camera_video_upload_on_wifi">Carica i video solo tramite wifi</string>
-  <string name="camera_upload_path">/CameraUpload</string>
   <string name="confirmation_disable_camera_uploads_title">Conferma</string>
   <string name="confirmation_disable_pictures_upload_message">Sei sicuro di voler disabilitare questa funzionalità? Le immagini rimanenti non saranno caricate</string>
   <string name="confirmation_disable_videos_upload_message">Sei sicuro di voler disabilitare questa funzionalità? I video immagini rimanenti non saranno caricati</string>
@@ -355,6 +355,7 @@
   <string name="preview_image_error_unknown_format">Questa immagine non può essere mostrata</string>
   <string name="error__upload__local_file_not_copied">%1$s non può essere copiato nella cartella locale %2$s</string>
   <string name="prefs_camera_picture_upload_path_title">Percorso caricamento immagini</string>
+  <string name="get_shares_error">Si è verificato un errore durante il tentativo di recuperare le condivisioni</string>
   <string name="share_link_no_support_share_api">Spiacenti, la condivisione non è abilitata sul tuo server. Contatta il tuo
 		amministratore.</string>
   <string name="share_link_file_no_exist">Impossibile condividere. Assicurati che il file esista</string>
@@ -397,9 +398,7 @@
   <string name="log_progress_dialog_text">Caricamento dati in corso...</string>
   <string name="actionbar_select_all">Seleziona tutto</string>
   <string name="actionbar_select_inverse">Seleziona inverso</string>
-  <string name="saml_authentication_required_text">Autenticazione richiesta</string>
-  <string name="saml_authentication_wrong_pass">Password errata</string>
-  <string name="actionbar_move">Sposta</string>
+    <string name="actionbar_move">Sposta</string>
   <string name="file_list_empty_moving">Qui non c\'è niente. Puoi aggiungere una cartella.</string>
   <string name="folder_picker_choose_button_text">Scegli</string>
   <string name="move_file_not_found">Impossibile spostare. Assicurati che il file esista</string>
@@ -512,6 +511,7 @@ Il Download del file inizierà automaticamente</string>
   <string name="share_via_link_expiration_date_enforced_label">Scadenza *</string>
   <string name="share_via_link_expiration_date_explanation_label">Il collegamento pubblico scadrà non più tardi di %1$d giorni dopo la sua creazione</string>
   <string name="share_via_link_default_name_template">collegamento %1$s</string>
+  <string name="share_via_link_empty_password">La password è vuota</string>
   <string name="private_link_info">Questo è un link privato, solo le persone che hanno accesso al file/cartella lo possono usare. Usalo come link permanente per te o per puntare altri file senza condivisioni. </string>
   <string name="file_private_link_error">Il link privato non è disponibile per questo file</string>
   <string name="download_notification_channel_name">Download</string>

@@ -15,6 +15,7 @@
   <string name="actionbar_sort_by_name">A-Å</string>
   <string name="drawer_item_all_files">Alle filer</string>
   <string name="drawer_item_only_available_offline">Tilgængelig offline</string>
+  <string name="drawer_item_shared_by_link_files">Delt via link</string>
   <string name="drawer_item_settings">Indstillinger</string>
   <string name="drawer_item_uploads_list">Uploade filer</string>
   <string name="drawer_close">Luk</string>
@@ -42,6 +43,7 @@
   <string name="prefs_remember_last_upload_location_summary">Husk seneste delte placering for overførsel</string>
   <string name="recommend_subject">Prøv %1$s på din smartphone!</string>
   <string name="recommend_text">Jeg ønsker at invitere dig til at bruge %1$s på din smartphone!\nHent den her: %2$s</string>
+  <string name="auth_oauth_failure_snackbar_action">Log ind</string>
   <string name="auth_check_server">Tjek server</string>
   <string name="auth_host_url">Serveradresse https://…</string>
   <string name="auth_username">Brugernavn</string>
@@ -210,7 +212,6 @@
   <string name="auth_wtf_reenter_URL">Uventet tilstand; vær venlig at indtaste serverens adresse igen</string>
   <string name="auth_expired_oauth_token_toast">Din godkendelse udløb. Gentag godkendelse</string>
   <string name="auth_expired_basic_auth_toast">Indtast venligst den nuværende adgangskode</string>
-  <string name="auth_expired_saml_sso_token_toast">Din session udløb. Forbind venligst igen</string>
   <string name="auth_connecting_auth_server">Tilslutter til adgangsgivende server …</string>
   <string name="auth_unsupported_auth_method">Serveren understøtter ikke denne godkendelsesmetode</string>
   <string name="auth_unsupported_multiaccount">%1$s understøtter ikke flere konti</string>
@@ -226,7 +227,7 @@
   <string name="confirmation_remove_local">Kun lokal</string>
   <string name="confirmation_remove_account_alert">Er du sikker på at du vil fjerne kontoen %1$s ?</string>
   <string name="confirmation_remove_public_share_title">Fjern link</string>
-  <string name="confirmation_remove_public_share_message">Er du sikker på at du vil fjerne %1$s ?</string>
+  <string name="confirmation_remove_share_message">Er du sikker på at du vil fjerne %1$s ?</string>
   <string name="remove_success_msg">Vellykket fjernelse</string>
   <string name="remove_fail_msg">Fjernelse kunne ikke fuldføres</string>
   <string name="rename_dialog_title">Indtast et nyt navn</string>
@@ -280,7 +281,6 @@
   <string name="placeholder_media_time">12:23:45</string>
   <string name="camera_picture_upload_on_wifi">Upload billeder udelukkende via wifi</string>
   <string name="camera_video_upload_on_wifi">Upload videoer udelukkende via wifi</string>
-  <string name="camera_upload_path">/KameraUpload</string>
   <string name="conflict_title">Filkonflikt</string>
   <string name="conflict_message">Hvilke filer ønsker du at beholde? Hvis du vælger begge versioner, så vil den lokale fil få et tal tilføjet til sit navn.</string>
   <string name="conflict_keep_both">Behold begge</string>
@@ -330,8 +330,6 @@
   <string name="log_send_mail_subject">%1$s Android-app - logge</string>
   <string name="log_progress_dialog_text">Indlæser data ...</string>
   <string name="actionbar_select_all">Vælg alle</string>
-  <string name="saml_authentication_required_text">Godkendelse påkrævet</string>
-  <string name="saml_authentication_wrong_pass">Forkert kodeord</string>
   <string name="actionbar_move">Flyt</string>
   <string name="file_list_empty_moving">Der er intet her. Du kan tilføje en mappe!</string>
   <string name="folder_picker_choose_button_text">Vælg</string>

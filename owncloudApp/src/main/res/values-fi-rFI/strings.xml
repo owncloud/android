@@ -16,6 +16,7 @@
   <string name="actionbar_sort_by_date">Vanhin - Uusin</string>
   <string name="actionbar_sort_by_size">Pienin - Suurin</string>
   <string name="drawer_item_all_files">Kaikki tiedostot</string>
+  <string name="drawer_item_shared_by_link_files">Jaettu linkin kautta</string>
   <string name="drawer_item_settings">Asetukset</string>
   <string name="drawer_item_uploads_list">Lataukset</string>
   <string name="drawer_close">Sulje</string>
@@ -65,6 +66,7 @@
   <string name="recommend_text">Kutsun sinut käyttämään %1$sia älypuhelimellasi!\nLataa se tästä: %2$s</string>
   <string name="auth_failure_snackbar">Tunnistautuminen epäonnistui</string>
   <string name="auth_failure_snackbar_action">Vaihda tili</string>
+  <string name="auth_oauth_failure_snackbar_action">Kirjaudu</string>
   <string name="auth_check_server">Tarkista palvelin</string>
   <string name="auth_host_url">Palvelinosoite https://…</string>
   <string name="auth_username">Käyttäjätunnus</string>
@@ -213,6 +215,7 @@
   <string name="media_play_pause_description">Toisto tai keskeytys -painike</string>
   <string name="media_forward_description">Eteenpäin kelaus -painike</string>
   <string name="auth_getting_authorization">Noudetaan valtuutusta…</string>
+  <string name="auth_trying_to_login">Yritetään kirjautua sisään…</string>
   <string name="auth_no_net_conn_title">Ei verkkoyhteyttä</string>
   <string name="auth_nossl_plain_ok_title">Salattu yhteys ei ole käytettävissä.</string>
   <string name="auth_connection_established">Yhteys muodostettu</string>
@@ -233,8 +236,7 @@
   <string name="auth_wtf_reenter_URL">Odottamaton tila; anna palvelimen osoite uudelleen</string>
   <string name="auth_expired_oauth_token_toast">Valtuutus vanhentui. Valtuuta uudelleen</string>
   <string name="auth_expired_basic_auth_toast">Anna nykyinen salasana</string>
-  <string name="auth_expired_saml_sso_token_toast">Istunto vanhentui. Yhdistä uudelleen</string>
-  <string name="auth_connecting_auth_server">Yhdistetään tunnistautumispalvelimeen…</string>
+    <string name="auth_connecting_auth_server">Yhdistetään tunnistautumispalvelimeen…</string>
   <string name="auth_unsupported_auth_method">Palvelin ei tue tätä tunnistautumistapaa</string>
   <string name="auth_unsupported_multiaccount">%1$s ei tue useita tilejä</string>
   <string name="auth_fail_get_user_name">Palvelimesi ei palauta oikeaa käyttäjä-ID:tä, ota yhteyttä järjestelmänvalvojaan
@@ -250,7 +252,7 @@
   <string name="confirmation_remove_local">Vain paikallinen</string>
   <string name="confirmation_remove_account_alert">Haluatko varmasti poistaa tilin %1$s?</string>
   <string name="confirmation_remove_public_share_title">Poista linkki</string>
-  <string name="confirmation_remove_public_share_message">Haluatko varmasti poistaa kohteen %1$s?</string>
+  <string name="confirmation_remove_share_message">Haluatko varmasti poistaa kohteen %1$s?</string>
   <string name="remove_success_msg">Poistettu onnistuneesti</string>
   <string name="remove_fail_msg">Poistamista ei voitu suorittaa loppuun asti</string>
   <string name="rename_dialog_title">Anna uusi nimi</string>
@@ -304,7 +306,6 @@
   <string name="placeholder_media_time">12:23:45</string>
   <string name="camera_picture_upload_on_wifi">Lähetä kuvat vain wifi-yhteyden kautta</string>
   <string name="camera_video_upload_on_wifi">Lähetä videot vain wifi-yhteyden kautta</string>
-  <string name="camera_upload_path">/CameraUpload</string>
   <string name="confirmation_disable_camera_uploads_title">Vahvista</string>
   <string name="confirmation_disable_pictures_upload_message">Oletko varma, että haluat poistaa toiminnon käytöstä? Jonossa olevia kuvia ei lähetetä.</string>
   <string name="confirmation_disable_videos_upload_message">Oletko varma, että haluat poistaa toiminnon käytöstä? Jonossa olevia videoita ei lähetetä.</string>
@@ -358,9 +359,7 @@
   <string name="log_send_mail_subject">%1$sin Android-sovelluksen lokit</string>
   <string name="log_progress_dialog_text">Ladataan tietoja…</string>
   <string name="actionbar_select_all">Valitse kaikki</string>
-  <string name="saml_authentication_required_text">Tunnistautuminen vaaditaan</string>
-  <string name="saml_authentication_wrong_pass">Väärä salasana</string>
-  <string name="actionbar_move">Siirrä</string>
+    <string name="actionbar_move">Siirrä</string>
   <string name="file_list_empty_moving">Täällä ei ole mitään. Voit lisätä kansion!</string>
   <string name="folder_picker_choose_button_text">Valitse</string>
   <string name="move_file_not_found">Siirto ei onnistu. Tarkista, ettei tiedostoa ole jo olemassa</string>
@@ -479,7 +478,7 @@
   <!--Welcome to oC intro features-->
   <string name="welcome_feature_skip_button">Ohita</string>
   <string name="welcome_feature_1_title">Hallitse kaikkia synkronoituja tiedostojasi</string>
-  <string name="welcome_feature_1_text">Voit kopioida siirtää ja poistaa</string>
+  <string name="welcome_feature_1_text">Voit kopioida, siirtää ja poistaa</string>
   <string name="welcome_feature_2_title">Jaa tiedostoja ja kansioita</string>
   <string name="welcome_feature_2_text">Voit jakaa yksityisesti tai julkisesti</string>
   <string name="welcome_feature_3_title">Monta käyttäjää</string>

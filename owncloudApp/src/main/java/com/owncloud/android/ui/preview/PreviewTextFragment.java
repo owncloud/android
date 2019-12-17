@@ -2,6 +2,7 @@
  * ownCloud Android client application
  *
  * @author Christian Schabesberger
+ * @author Shashvat Kedia
  * Copyright (C) 2019 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
@@ -70,8 +71,8 @@ public class PreviewTextFragment extends FileFragment {
     /**
      * Public factory method to create new PreviewTextFragment instances.
      *
-     * @param file                      An {@link OCFile} to preview in the fragment
-     * @param account                   ownCloud account containing file
+     * @param file    An {@link OCFile} to preview in the fragment
+     * @param account ownCloud account containing file
      * @return Fragment ready to be used.
      */
     public static PreviewTextFragment newInstance(
@@ -303,7 +304,7 @@ public class PreviewTextFragment extends FileFragment {
                     mContainerActivity,
                     getActivity()
             );
-            mf.filter(menu, false, false, false);
+            mf.filter(menu, false, false, false, false);
         }
 
         // additional restriction for this fragment

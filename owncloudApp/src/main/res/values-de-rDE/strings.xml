@@ -20,6 +20,7 @@
   <string name="actionbar_sort_by_size">Kleinste - Größte</string>
   <string name="drawer_item_all_files">Alle Dateien</string>
   <string name="drawer_item_only_available_offline">Offline verfügbar</string>
+  <string name="drawer_item_shared_by_link_files">Geteilt über einen Link</string>
   <string name="drawer_item_settings">Einstellungen</string>
   <string name="drawer_item_uploads_list">Uploads</string>
   <string name="drawer_close">Schließen</string>
@@ -77,6 +78,7 @@
   <string name="recommend_text">Ich möchte Sie einladen, %1$s auf Ihrem Smartphone zu verwenden!\nHier herunterladen: %2$s</string>
   <string name="auth_failure_snackbar">Authentifizierung fehlgeschlagen.</string>
   <string name="auth_failure_snackbar_action">Konto ändern</string>
+  <string name="auth_oauth_failure_snackbar_action">Einloggen</string>
   <string name="auth_check_server">Server überprüfen</string>
   <string name="auth_host_url">Server-Adresse https://…</string>
   <string name="auth_username">Benutzername</string>
@@ -266,7 +268,6 @@
   <string name="auth_wtf_reenter_URL">Unerwarteter Zustand; bitte geben Sie die Adresse des Servers nochmals ein</string>
   <string name="auth_expired_oauth_token_toast">Ihre Legitimierung ist abgelaufen. Bitte Legitimierung nochmals durchführen</string>
   <string name="auth_expired_basic_auth_toast">Bitte geben Sie Ihr aktuelles Passwort ein</string>
-  <string name="auth_expired_saml_sso_token_toast">Ihre Sitzung ist abgelaufen. Bitte Anmeldung nochmals durchführen</string>
   <string name="auth_connecting_auth_server">Verbinde mit dem Authentifizierung-Server…</string>
   <string name="auth_unsupported_auth_method">Der Server unterstützt diese Legitimierungsmethode nicht</string>
   <string name="auth_unsupported_multiaccount">%1$s unterstützt mehrere Benutzerkonten nicht</string>
@@ -283,7 +284,7 @@
   <string name="confirmation_remove_local">Nur lokal</string>
   <string name="confirmation_remove_account_alert">Möchten Sie das Konto von %1$s wirklich löschen?</string>
   <string name="confirmation_remove_public_share_title">Link entfernen</string>
-  <string name="confirmation_remove_public_share_message">Möchten Sie %1$s wirklich löschen?</string>
+  <string name="confirmation_remove_share_message">Möchten Sie %1$s wirklich löschen?</string>
   <string name="remove_success_msg">Erfolgreich gelöscht</string>
   <string name="remove_fail_msg">Der Löschvorgang konnte nicht beendet werden</string>
   <string name="rename_dialog_title">Geben Sie einen neuen Namen ein</string>
@@ -339,7 +340,6 @@
   <string name="placeholder_media_time">12:23:45</string>
   <string name="camera_picture_upload_on_wifi">Fotos nur über WLAN hochladen</string>
   <string name="camera_video_upload_on_wifi">Videos nur über WLAN hochladen</string>
-  <string name="camera_upload_path">/Kamera-Upload</string>
   <string name="confirmation_disable_camera_uploads_title">Bestätigen</string>
   <string name="confirmation_disable_pictures_upload_message">Sind Sie sicher dass sie diese Funktion deaktivieren wollen? Die ausstehenden Bilder werden nicht hochgeladen.</string>
   <string name="confirmation_disable_videos_upload_message">Sind Sie sicher dass sie diese Funktion deaktivieren wollen? Die ausstehenden Videos werden nicht hochgeladen.</string>
@@ -400,8 +400,6 @@
   <string name="log_progress_dialog_text">Lade Daten…</string>
   <string name="actionbar_select_all">Alle auswählen</string>
   <string name="actionbar_select_inverse">Auswahl invertieren</string>
-  <string name="saml_authentication_required_text">Legitimierung benötigt</string>
-  <string name="saml_authentication_wrong_pass">Falsches Passwort</string>
   <string name="actionbar_move">Verschieben</string>
   <string name="file_list_empty_moving">Nichts vorhanden. Sie können einen Ordner hinzufügen!</string>
   <string name="folder_picker_choose_button_text">Auswählen</string>

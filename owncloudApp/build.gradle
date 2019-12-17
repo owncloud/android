@@ -8,48 +8,50 @@ def commitSHA1 = 'COMMIT_SHA1'
 def gitRemote = 'GIT_REMOTE'
 
 dependencies {
-    /// dependencies for app building
-    implementation project(':owncloud-android-library:owncloudComLibrary')
+    // Data and domain modules
+    implementation project(':owncloudDomain')
+    implementation project(':owncloudData')
+
+    // Dependencies for app building
     implementation "androidx.legacy:legacy-support-v4:$androidX"
     implementation "androidx.annotation:annotation:1.1.0"
     implementation 'com.google.android.material:material:1.0.0'
     implementation 'com.jakewharton:disklrucache:2.0.2'
     implementation 'com.google.android.exoplayer:exoplayer:r2.2.0'
     implementation 'com.andrognito.patternlockview:patternlockview:1.0.0'
-    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation "androidx.appcompat:appcompat:$appCompat"
     implementation 'com.getbase:floatingactionbutton:1.10.1'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
     implementation "androidx.browser:browser:$androidX"
     implementation 'commons-io:commons-io:2.6'
+    implementation "androidx.sqlite:sqlite:$sqliteVersion"
 
-    // Dependencies for unit tests
+    // Tests
+    testImplementation project(':owncloudTestUtil')
     testImplementation "junit:junit:$junitVersion"
     testImplementation "androidx.arch.core:core-testing:$archLifecycleVersion"
-    testImplementation "org.mockito:mockito-core:$mockitoVersion"
+    testImplementation "io.mockk:mockk:$mockkVersion"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion"
 
-    // Dependencies for instrumented tests
-    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
-    // JUnit4 Rules
-    androidTestImplementation 'androidx.test:rules:1.2.0'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
-    // Android JUnit Runner
-    androidTestImplementation 'androidx.test:runner:1.2.0'
-    // Espresso core
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-    // Espresso contrib
-    androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.2.0'
-    // Espresso intents
-    androidTestImplementation 'androidx.test.espresso:espresso-intents:3.2.0'
-    // Espresso web
-    androidTestImplementation 'androidx.test.espresso:espresso-web:3.2.0'
-    // UIAutomator - for cross-app UI tests, and to grant screen is turned on in Espresso tests
-    androidTestImplementation 'androidx.test.uiautomator:uiautomator:2.2.0'
-    // fix conflict in dependencies; see http://g.co/androidstudio/app-test-app-conflict for details
-    androidTestImplementation 'androidx.annotation:annotation:1.1.0'
-    androidTestImplementation "androidx.room:room-testing:$roomVersion"
+    // Instrumented tests
+    androidTestImplementation project(':owncloudTestUtil')
+    androidTestImplementation "androidx.test:core:$androidTestVersion"
+    androidTestImplementation "androidx.test:rules:$androidTestVersion"
+    androidTestImplementation "androidx.test:runner:$androidTestVersion"
+    androidTestImplementation "androidx.test:runner:$androidTestVersion"
+    androidTestImplementation "androidx.test.ext:junit:$extJunitVersion"
+    androidTestImplementation "androidx.test.espresso:espresso-core:$espressoTestVersion"
+    androidTestImplementation "androidx.test.espresso:espresso-contrib:$espressoTestVersion"
+    androidTestImplementation "androidx.test.espresso:espresso-intents:$espressoTestVersion"
+    androidTestImplementation "androidx.test.espresso:espresso-web:$espressoTestVersion"
+    androidTestImplementation "androidx.test.uiautomator:uiautomator:$uiAutomatorTestVersion"
+    androidTestImplementation "androidx.annotation:annotation:$annotationTestVersion"
     androidTestImplementation "androidx.arch.core:core-testing:$archLifecycleVersion"
-    androidTestImplementation "org.mockito:mockito-android:$mockitoVersion"
-    androidTestImplementation "org.mockito:mockito-core:$mockitoVersion"
+    androidTestImplementation("io.mockk:mockk-android:$mockkVersion") {
+        exclude module: 'objenesis'
+    }
+    androidTestImplementation 'com.github.tmurakami:dexopener:2.0.4'
+    androidTestImplementation 'androidx.test:runner:1.1.0'
 
     // Image loading
     implementation('com.github.bumptech.glide:glide:4.6.1') {
@@ -59,26 +61,26 @@ dependencies {
     //Zooming Android ImageView.
     implementation 'com.github.chrisbanes:PhotoView:2.1.4'
 
+    implementation "androidx.multidex:multidex:2.0.1"
+
     // Convert Java Objects into JSON and back
     implementation 'com.google.code.gson:gson:2.8.5'
 
-    // Kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
 
-    // Architecture lifecycle components
     implementation "androidx.lifecycle:lifecycle-extensions:$archLifecycleVersion"
     implementation "androidx.lifecycle:lifecycle-viewmodel:$archLifecycleVersion"
-    kapt "androidx.lifecycle:lifecycle-compiler:$archLifecycleVersion"
+    kapt "androidx.lifecycle:lifecycle-common-java8:$archLifecycleVersion"
 
-    // Room
     implementation "androidx.room:room-runtime:$roomVersion"
-    kapt "androidx.room:room-compiler:$roomVersion"
 
     // Koin dependency injector
     implementation "org.koin:koin-androidx-viewmodel:$koinVersion"
 
-    // Kotlin extensions
-    implementation "androidx.core:core-ktx:$ktxVersion"
+    // KTX extensions, see https://developer.android.com/kotlin/ktx.html
+    implementation "androidx.core:core-ktx:$ktxCoreVersion"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$ktxViewModelVersion"
+    implementation "androidx.fragment:fragment-ktx:$ktxFragmentVersion"
 }
 
 tasks.withType(Test) {
@@ -94,31 +96,27 @@ allOpen {
 }
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion sdkCompileVersion
 
     defaultConfig {
-        minSdkVersion 19
-        targetSdkVersion 28
+        minSdkVersion sdkMinVersion
+        targetSdkVersion sdkTargetVersion
 
-        versionCode = 21300100
-        versionName = "2.13.1"
+        testInstrumentationRunner "com.owncloud.android.utils.OCTestAndroidJUnitRunner"
+
+        versionCode = 21400000
+        versionName = "2.14"
 
         buildConfigField "String", gitRemote, "\"" + getGitOriginRemote() + "\""
         buildConfigField "String", commitSHA1, "\"" + getLatestGitHash() + "\""
 
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
 
-        // arguments to be passed to functional tests
-        testInstrumentationRunnerArgument "TEST_USER", "\"$System.env.OCTEST_APP_USERNAME\""
-        testInstrumentationRunnerArgument "TEST_PASSWORD", "\"$System.env.OCTEST_APP_PASSWORD\""
-        testInstrumentationRunnerArgument "TEST_USER2", "\"$System.env.OCTEST_APP_USERNAME2\""
-        testInstrumentationRunnerArgument "TEST_PASSWORD2", "\"$System.env.OCTEST_APP_PASSWORD2\""
-        testInstrumentationRunnerArgument "TEST_SERVER_URL", "\"$System.env.OCTEST_SERVER_BASE_URL\""
-        testInstrumentationRunnerArgument "TRUSTED", "\"$System.env.OCTEST_SERVER_TRUSTED\""
-        testInstrumentationRunnerArgument "TEST_USERNAME_ID", "\"$System.env.OCTEST_WEB_USERFIELD\""
-        testInstrumentationRunnerArgument "TEST_PASSWORD_ID", "\"$System.env.OCTEST_WEB_PASSFIELD\""
-        testInstrumentationRunnerArgument "TEST_SUBMIT_XPATH", "\"$System.env.OCTEST_WEB_SUBMITXPATH\""
-        testInstrumentationRunnerArgument "TEST_LOOKUP", "\"$System.env.OCTEST_SERVER_LOOKUP\""
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
+            }
+        }
     }
 
     compileOptions {
