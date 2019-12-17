@@ -64,7 +64,7 @@ data class OCCapabilityEntity(
     val filesSharingPublicPasswordEnforcedUploadOnly: Int,
     @ColumnInfo(name = CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_ENABLED, defaultValue = capabilityBooleanTypeUnknownString)
     val filesSharingPublicExpireDateEnabled: Int,
-    @ColumnInfo(name = CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_DAYS, defaultValue = "0")
+    @ColumnInfo(name = CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_DAYS)
     val filesSharingPublicExpireDateDays: Int,
     @ColumnInfo(name = CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_ENFORCED, defaultValue = capabilityBooleanTypeUnknownString)
     val filesSharingPublicExpireDateEnforced: Int,

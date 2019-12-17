@@ -102,7 +102,7 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
         when (uriMatcher.match(uri)) {
             SINGLE_FILE -> {
                 val c = query(uri, null, where, whereArgs, null)
-                var remoteId = ""
+                var remoteId : String? = ""
                 if (c.moveToFirst()) {
                     remoteId = c.getString(c.getColumnIndex(ProviderTableMeta.FILE_REMOTE_ID))
                     c.close()
@@ -310,9 +310,6 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
         sqlQuery.setStrict(true)
         sqlQuery.tables = ProviderTableMeta.FILE_TABLE_NAME
 
-        // To use full SQL queries within Room
-        val newDb: SupportSQLiteDatabase = OwncloudDatabase.getDatabase(context).openHelper.writableDatabase
-
         when (uriMatcher.match(uri)) {
             ROOT_DIRECTORY -> sqlQuery.setProjectionMap(fileProjectionMap)
             DIRECTORY -> {
@@ -345,6 +342,8 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
                         }
                     ).create()
 
+                // To use full SQL queries within Room
+                val newDb: SupportSQLiteDatabase = OwncloudDatabase.getDatabase(context).openHelper.writableDatabase
                 return newDb.query(supportSqlQuery)
             }
             CAPABILITIES -> {

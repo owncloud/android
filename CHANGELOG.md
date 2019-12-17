@@ -1,3 +1,16 @@
+## 2.14 (December 2019)
+- Splash screen
+- Shortcut to shared by link files from side menu (contribution)
+- Use new server parameter to set a minimum number of characters for searching users, groups or federated shares
+- End of support for SAML authentication.
+- UI improvements, including:
+  + Mix files and folders when sorting them by date (contribution) or size
+  + Redesign logs view with new tabs, filters and share options (contribution)
+  + Resize cloud image in side menu to not overlap the new side menu options
+- Bug fixes, including:
+  + Avoid overwritten files with the same name during copy or move operations
+  + Retry camera uploads when recovering wifi connectivity and "Upload with wifi only" option is enabled
+
 ## 2.13.1 (October 2019)
 - Improve oAuth user experience flow and wording when token expires or becomes invalid
 

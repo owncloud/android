@@ -1316,15 +1316,15 @@ class FileDataStorageManager {
         }
 
     fun getCapability(accountName: String): OCCapability? {
-        val capability: OCCapability? = null
-        val c = getCapabilityCursorForAccount(accountName)
+        var capability: OCCapability? = null
+        val cursor = getCapabilityCursorForAccount(accountName)
 
         // default value with all UNKNOWN
-        if (c != null) {
-            if (c.moveToFirst()) {
-                createCapabilityInstance(c)
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                capability = createCapabilityInstance(cursor)
             }
-            c.close()
+            cursor.close()
         }
         return capability
     }
