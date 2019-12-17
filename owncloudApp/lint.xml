@@ -2,6 +2,4 @@
 <lint>
     <issue id="WrongConstant" severity="ignore" />
     <issue id="MissingTranslation" severity="ignore" />
-    <issue id="ByteOrderMark" severity="ignore" />
-
 </lint>
