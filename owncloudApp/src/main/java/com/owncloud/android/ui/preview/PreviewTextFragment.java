@@ -116,7 +116,6 @@ public class PreviewTextFragment extends FileFragment {
         );
 
         mProgressBar = ret.findViewById(R.id.syncProgressBar);
-        DisplayUtils.colorPreLollipopHorizontalProgressBar(mProgressBar);
         mTextPreview = ret.findViewById(R.id.text_preview);
 
         return ret;

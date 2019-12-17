@@ -61,7 +61,7 @@ import com.owncloud.android.utils.Extras;
 import com.owncloud.android.utils.PreferenceUtils;
 
 /**
- *  Holds a swiping galley where image files contained in an ownCloud directory are shown
+ * Holds a swiping galley where image files contained in an ownCloud directory are shown
  */
 public class PreviewImageActivity extends FileActivity implements
         FileFragment.ContainerActivity,
@@ -115,9 +115,7 @@ public class PreviewImageActivity extends FileActivity implements
                     }
                 });
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setStatusBarColor(getResources().getColor(R.color.owncloud_blue_dark_transparent));
-        }
+        getWindow().setStatusBarColor(getResources().getColor(R.color.owncloud_blue_dark_transparent));
 
         mLocalBroadcastManager = LocalBroadcastManager.getInstance(this);
 
@@ -228,7 +226,9 @@ public class PreviewImageActivity extends FileActivity implements
         return new PreviewImageServiceConnection();
     }
 
-    /** Defines callbacks for service binding, passed to bindService() */
+    /**
+     * Defines callbacks for service binding, passed to bindService()
+     */
     private class PreviewImageServiceConnection implements ServiceConnection {
 
         @Override
@@ -322,7 +322,7 @@ public class PreviewImageActivity extends FileActivity implements
      * This method will be invoked when a new page becomes selected. Animation is not necessarily
      * complete.
      *
-     *  @param  position        Position index of the new selected page
+     * @param position Position index of the new selected page
      */
     @Override
     public void onPageSelected(int position) {
@@ -356,10 +356,10 @@ public class PreviewImageActivity extends FileActivity implements
     }
 
     /**
-     * Called when the scroll state changes. Useful for discovering when the user begins dragging, 
+     * Called when the scroll state changes. Useful for discovering when the user begins dragging,
      * when the pager is automatically settling to the current page. when it is fully stopped/idle.
      *
-     * @param   state       The new scroll state (SCROLL_STATE_IDLE, _DRAGGING, _SETTLING
+     * @param state The new scroll state (SCROLL_STATE_IDLE, _DRAGGING, _SETTLING
      */
     @Override
     public void onPageScrollStateChanged(int state) {
@@ -369,13 +369,12 @@ public class PreviewImageActivity extends FileActivity implements
      * This method will be invoked when the current page is scrolled, either as part of a
      * programmatically initiated smooth scroll or a user initiated touch scroll.
      *
-     * @param   position                Position index of the first page currently being displayed. 
-     *                                  Page position+1 will be visible if positionOffset is
-     *                                  nonzero.
-     *
-     * @param   positionOffset          Value from [0, 1) indicating the offset from the page
-     *                                  at position.
-     * @param   positionOffsetPixels    Value in pixels indicating the offset from position. 
+     * @param position             Position index of the first page currently being displayed.
+     *                             Page position+1 will be visible if positionOffset is
+     *                             nonzero.
+     * @param positionOffset       Value from [0, 1) indicating the offset from the page
+     *                             at position.
+     * @param positionOffsetPixels Value in pixels indicating the offset from position.
      */
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -383,7 +382,7 @@ public class PreviewImageActivity extends FileActivity implements
 
     /**
      * Class waiting for broadcast events from the {@link FileDownloader} service.
-     *
+     * <p>
      * Updates the UI when a download is started or finished, provided that it is relevant for the
      * folder displayed in the gallery.
      */
@@ -485,7 +484,7 @@ public class PreviewImageActivity extends FileActivity implements
     }
 
     @Override
-    public void onlyAvailableOfflineOption(){
+    public void onlyAvailableOfflineOption() {
         backToDisplayActivity();
         super.onlyAvailableOfflineOption();
     }

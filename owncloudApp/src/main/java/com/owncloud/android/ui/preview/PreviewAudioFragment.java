@@ -153,7 +153,6 @@ public class PreviewAudioFragment extends FileFragment {
         mImagePreview = view.findViewById(R.id.image_preview);
         mMediaController = view.findViewById(R.id.media_controller);
         mProgressBar = view.findViewById(R.id.syncProgressBar);
-        DisplayUtils.colorPreLollipopHorizontalProgressBar(mProgressBar);
 
         return view;
     }

@@ -53,9 +53,9 @@ import static com.owncloud.android.operations.UploadFileOperation.CREATED_AS_CAM
 /**
  * Facade class providing methods to ease requesting commands to transfer services {@link FileUploader} and
  * {@link FileDownloader}.
- *
+ * <p>
  * Protects client objects from the verbosity of {@link android.content.Intent}s.
- *
+ * <p>
  * TODO add methods for {@link FileDownloader}, right now it's just about uploads
  */
 
@@ -171,13 +171,13 @@ public class TransferRequester {
     /**
      * Retry a subset of all the stored failed uploads.
      *
-     * @param context           Caller {@link Context}
-     * @param account           If not null, only failed uploads to this OC account will be retried; otherwise,
-     *                          uploads of all accounts will be retried.
-     * @param uploadResult      If not null, only failed uploads with the result specified will be retried;
-     *                          otherwise, failed uploads due to any result will be retried.
-     * @param requestedFromWifiBackEvent  true if the retry was requested because wifi connection was back,
-     *                                    false otherwise
+     * @param context                    Caller {@link Context}
+     * @param account                    If not null, only failed uploads to this OC account will be retried; otherwise,
+     *                                   uploads of all accounts will be retried.
+     * @param uploadResult               If not null, only failed uploads with the result specified will be retried;
+     *                                   otherwise, failed uploads due to any result will be retried.
+     * @param requestedFromWifiBackEvent true if the retry was requested because wifi connection was back,
+     *                                   false otherwise
      */
     public void retryFailedUploads(Context context, Account account, UploadResult uploadResult,
                                    boolean requestedFromWifiBackEvent) {
@@ -201,9 +201,9 @@ public class TransferRequester {
     /**
      * Private implementation of retry.
      *
-     * @param context           Caller {@link Context}
-     * @param account           OC account where the upload will be retried.
-     * @param upload            Persisted upload to retry.
+     * @param context                    Caller {@link Context}
+     * @param account                    OC account where the upload will be retried.
+     * @param upload                     Persisted upload to retry.
      * @param requestedFromWifiBackEvent true if the retry was requested because wifi connection was back,
      *                                   false otherwise
      */
@@ -235,8 +235,8 @@ public class TransferRequester {
     /**
      * Return 'true' when conditions for a scheduled retry are met.
      *
-     * @param context       Caller {@link Context}
-     * @return              'true' when conditions for a scheduled retry are met, 'false' otherwise.
+     * @param context Caller {@link Context}
+     * @return 'true' when conditions for a scheduled retry are met, 'false' otherwise.
      */
     boolean shouldScheduleRetry(Context context, Exception exception) {
         return (
@@ -251,10 +251,10 @@ public class TransferRequester {
      * Schedule a future retry of an upload, to be done when a connection via an unmetered network (free Wifi)
      * is available.
      *
-     * @param context           Caller {@link Context}.
-     * @param jobId             Identifier to set to the retry job.
-     * @param accountName       Local name of the OC account where the upload will be retried.
-     * @param remotePath        Full path of the file to upload, relative to root of the OC account.
+     * @param context     Caller {@link Context}.
+     * @param jobId       Identifier to set to the retry job.
+     * @param accountName Local name of the OC account where the upload will be retried.
+     * @param remotePath  Full path of the file to upload, relative to root of the OC account.
      */
     void scheduleUpload(Context context, int jobId, String accountName, String remotePath) {
         boolean scheduled = scheduleTransfer(
@@ -281,10 +281,10 @@ public class TransferRequester {
      * Schedule a future retry of a download, to be done when a connection via an unmetered network (free Wifi)
      * is available.
      *
-     * @param context           Caller {@link Context}.
-     * @param jobId             Identifier to set to the retry job.
-     * @param accountName       Local name of the OC account where the download will be retried.
-     * @param remotePath        Full path of the file to download, relative to root of the OC account.
+     * @param context     Caller {@link Context}.
+     * @param jobId       Identifier to set to the retry job.
+     * @param accountName Local name of the OC account where the download will be retried.
+     * @param remotePath  Full path of the file to download, relative to root of the OC account.
      */
     void scheduleDownload(Context context, int jobId, String accountName, String remotePath) {
         boolean scheduled = scheduleTransfer(
@@ -311,12 +311,12 @@ public class TransferRequester {
      * Schedule a future transfer of an upload, to be done when a connection via an unmetered network (free Wifi)
      * is available.
      *
-     * @param context                   Caller {@link Context}.
-     * @param scheduledRetryService     Class of the appropriate retry service, either to retry downloads
-     *                                  or to retry uploads.
-     * @param jobId                     Identifier to set to the retry job.
-     * @param accountName               Local name of the OC account where the upload will be retried.
-     * @param remotePath                Full path of the file to upload, relative to root of the OC account.
+     * @param context               Caller {@link Context}.
+     * @param scheduledRetryService Class of the appropriate retry service, either to retry downloads
+     *                              or to retry uploads.
+     * @param jobId                 Identifier to set to the retry job.
+     * @param accountName           Local name of the OC account where the upload will be retried.
+     * @param remotePath            Full path of the file to upload, relative to root of the OC account.
      */
     private boolean scheduleTransfer(
             Context context,
@@ -325,12 +325,6 @@ public class TransferRequester {
             String accountName,
             String remotePath
     ) {
-
-        // JobShceduler requires Android >= 5.0 ; do not remove this protection while minSdkVersion is lower
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            return false;
-        }
-
         ComponentName serviceComponent = new ComponentName(
                 context,
                 scheduledRetryService
@@ -361,9 +355,10 @@ public class TransferRequester {
 
     /**
      * Retrieve the type of network connection required to schedule the last upload for an account
+     *
      * @param context
      * @param accountName
-     * @param remotePath to upload the file
+     * @param remotePath  to upload the file
      * @return 2 if only wifi is required, 1 if any internet connection is required (wifi or cellular)
      */
     private int getRequiredNetworkType(Context context, String accountName, String remotePath) {

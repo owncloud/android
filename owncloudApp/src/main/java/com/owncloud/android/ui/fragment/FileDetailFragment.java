@@ -113,7 +113,6 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
         setHasOptionsMenu(true);
         mProgressController = new TransferProgressController((ComponentsGetter) getActivity());
         ProgressBar progressBar = mView.findViewById(R.id.fdProgressBar);
-        DisplayUtils.colorPreLollipopHorizontalProgressBar(progressBar);
         mProgressController.setProgressBar(progressBar);
 
         // Allow or disallow touches with other visible windows

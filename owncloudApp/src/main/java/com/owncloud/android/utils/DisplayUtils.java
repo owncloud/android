@@ -157,7 +157,6 @@ public class DisplayUtils {
      * @param toASCII if true converts from Unicode to ASCII, if false converts from ASCII to Unicode
      * @return the URL containing the converted domain name
      */
-    @TargetApi(Build.VERSION_CODES.GINGERBREAD)
     public static String convertIdn(String url, boolean toASCII) {
 
         String urlNoDots = url;
@@ -254,36 +253,6 @@ public class DisplayUtils {
             display.getSize(size);
         }
         return size;
-    }
-
-    /**
-     * sets the coloring of the given progress bar to color_accent.
-     *
-     * @param progressBar the progress bar to be colored
-     */
-    public static void colorPreLollipopHorizontalProgressBar(ProgressBar progressBar) {
-        if (progressBar != null && Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            int color = progressBar.getResources().getColor(R.color.color_accent);
-            progressBar.getIndeterminateDrawable().setColorFilter(color, PorterDuff.Mode.SRC_IN);
-            progressBar.getProgressDrawable().setColorFilter(color, PorterDuff.Mode.SRC_IN);
-        }
-    }
-
-    /**
-     * sets the coloring of the given seek bar to color_accent.
-     *
-     * @param seekBar the seek bar to be colored
-     */
-    public static void colorPreLollipopHorizontalSeekBar(SeekBar seekBar) {
-        if (seekBar != null && Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            colorPreLollipopHorizontalProgressBar(seekBar);
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                int color = seekBar.getResources().getColor(R.color.color_accent);
-                seekBar.getThumb().setColorFilter(color, PorterDuff.Mode.SRC_IN);
-                seekBar.getThumb().setColorFilter(color, PorterDuff.Mode.SRC_IN);
-            }
-        }
     }
 
     /**

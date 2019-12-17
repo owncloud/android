@@ -54,7 +54,6 @@ public class PrivacyPolicyActivity extends ToolbarActivity {
 
         // Display the progress in a progress bar, like the browser app does.
         final ProgressBar mProgressBar = findViewById(R.id.syncProgressBar);
-        DisplayUtils.colorPreLollipopHorizontalProgressBar(mProgressBar);
 
         // Allow or disallow touches with other visible windows
         LinearLayout activityPrivacyPolicyLayout = findViewById(R.id.activityPrivacyPolicyLayout);
