@@ -71,7 +71,7 @@
   <string name="uploader_error_message_source_file_not_copied">Ocorreu um erro durante a cópia do ficheiro para uma pasta temporária. Por favor, tente submeter novamente.</string>
   <string name="file_list_seconds_ago">segundos atrás</string>
   <string name="file_list_empty">Aqui não existe nada. Envie qualquer coisa!</string>
-  <string name="file_list_loading">A carregar...</string>
+  <string name="file_list_loading">A carregar…</string>
   <string name="file_list_no_app_for_file_type">Nenhuma aplicação encontrada para o tipo de ficheiro</string>
   <string name="local_file_list_empty">Não existem ficheiros nesta pasta.</string>
   <string name="local_file_list_empty_just_folders">Não existem pastas dentro desta pasta</string>
@@ -100,7 +100,7 @@
   <string name="common_back">Voltar</string>
   <string name="common_save_exit">Guardar e sair</string>
   <string name="common_error">Erro</string>
-  <string name="common_loading">A carregar...</string>
+  <string name="common_loading">A carregar…</string>
   <string name="common_unknown">desconhecido</string>
   <string name="common_error_unknown">Erro desconhecido</string>
   <string name="common_pending">Pendente</string>
@@ -201,7 +201,7 @@
   <string name="media_play_pause_description">Botão de Reproduzir/Pausar</string>
   <string name="media_forward_description">Botão de avanço rápido</string>
   <string name="upload_from_camera_title">Fotografia da camera</string>
-  <string name="auth_getting_authorization">A obter autorização...</string>
+  <string name="auth_getting_authorization">A obter autorização…</string>
   <string name="auth_no_net_conn_title">Nenhuma ligação de rede</string>
   <string name="auth_nossl_plain_ok_title">Ligação segura indisponível.</string>
   <string name="auth_connection_established">Ligação estabelecida</string>
@@ -222,7 +222,7 @@
   <string name="auth_wtf_reenter_URL">Estado inesperado; por favor, introduza novamente o endereço do servidor</string>
   <string name="auth_expired_oauth_token_toast">A sua autenticação expirou. Por favor, autentique novamente</string>
   <string name="auth_expired_basic_auth_toast">Por favor, introduza a sua passe actual</string>
-    <string name="auth_connecting_auth_server">A ligar ao servidor de autenticação...</string>
+    <string name="auth_connecting_auth_server">A ligar ao servidor de autenticação…</string>
   <string name="auth_unsupported_auth_method">O servidor não suporta este método de autenticação</string>
   <string name="auth_unsupported_multiaccount">%1$s não suporta contas múltiplas</string>
   <string name="auth_fail_get_user_name">O seu servidor não está a devolver a id. correcta, por favor, contacte um administrador.</string>
@@ -256,7 +256,7 @@
   <string name="filedisplay_no_file_selected">Nenhum ficheiro foi seleccionado</string>
   <string name="wait_for_tmp_copy_from_private_storage">A copiar o ficheiro do armazenamento privado</string>
   <string name="oauth_check_onoff">Iniciar sessão com oAuth2</string>
-  <string name="oauth_login_connection">A ligar ao servidor OAuth2...</string>
+  <string name="oauth_login_connection">A ligar ao servidor OAuth2…</string>
   <string name="ssl_validator_header">Não foi possivel verificar a identidade do servidor</string>
   <string name="ssl_validator_reason_cert_not_trusted">- O certificado do servidor não é de confiança</string>
   <string name="ssl_validator_reason_cert_expired">- O certificado do servidor expirou</string>
@@ -337,7 +337,7 @@
   <string name="log_send_history_button">Histórico de envio</string>
   <string name="log_send_no_mail_app">Não foi encontrada nenhuma app para enviar logs. Por favor, instale uma aplicação de envio.</string>
   <string name="log_send_mail_subject">%1$s registos de aplicação Android</string>
-  <string name="log_progress_dialog_text">A carregar os dados...</string>
+  <string name="log_progress_dialog_text">A carregar os dados…</string>
   <string name="actionbar_select_all">Selecionar todos</string>
     <string name="actionbar_move">Mover</string>
   <string name="file_list_empty_moving">Não está aqui nada. Pode adicionar uma pasta!</string>

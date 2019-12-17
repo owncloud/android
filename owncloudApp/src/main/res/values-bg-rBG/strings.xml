@@ -178,7 +178,7 @@
   <string name="media_rewind_description">Бутон за превъртане</string>
   <string name="media_play_pause_description">Бутон пусни / пауза </string>
   <string name="media_forward_description">Бутон за превъртане напред</string>
-  <string name="auth_getting_authorization">Получване на оторизация...</string>
+  <string name="auth_getting_authorization">Получване на оторизация…</string>
   <string name="auth_no_net_conn_title">Няма интернет връзка</string>
   <string name="auth_nossl_plain_ok_title">Няма сигурна връзка</string>
   <string name="auth_connection_established">Осъществена връзка</string>
@@ -309,7 +309,7 @@
   <string name="log_send_history_button">Изпрати историята</string>
   <string name="log_send_no_mail_app">Не е намерено приложение за изпращане на логове. Моля инсталирайте e-mail приложение</string>
   <string name="log_send_mail_subject">%1$s Android журнали на приложенията</string>
-  <string name="log_progress_dialog_text">Зареждане на данни...</string>
+  <string name="log_progress_dialog_text">Зареждане на данни…</string>
   <string name="actionbar_select_all">Избери всички</string>
   <string name="actionbar_move">Премести</string>
   <string name="file_list_empty_moving">Тук няма нищо. Можеш да добавиш папка!</string>

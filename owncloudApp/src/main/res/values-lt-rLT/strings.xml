@@ -93,7 +93,7 @@
   <string name="uploader_error_message_source_file_not_copied">Įvyko klaida kopijuojant failą į laikinąjį katalogą. Pabandykite siųsti iš naujo. </string>
   <string name="file_list_seconds_ago">prieš sekundę</string>
   <string name="file_list_empty">Čia tuščia. Įkelkite ką nors!</string>
-  <string name="file_list_loading">Įkeliama...</string>
+  <string name="file_list_loading">Įkeliama…</string>
   <string name="file_list_no_app_for_file_type">Nerasta programėlė šiam failo tipui</string>
   <string name="local_file_list_empty">Šiame aplanke nėra failų.</string>
   <string name="local_file_list_empty_just_folders">Šiame aplanke nėra aplankų.</string>
@@ -123,7 +123,7 @@
   <string name="common_back">Atgal</string>
   <string name="common_save_exit">Išsaugoti &amp; išeiti</string>
   <string name="common_error">Klaida</string>
-  <string name="common_loading">Įkeliama...</string>
+  <string name="common_loading">Įkeliama…</string>
   <string name="common_unknown">nežinomas</string>
   <string name="common_error_unknown">Neatpažinta klaida</string>
   <string name="common_pending">Laukiantis</string>
@@ -229,7 +229,7 @@
   <string name="media_play_pause_description">Grojimo arba pauzės mygtukas</string>
   <string name="media_forward_description">Prasukimo mygtukas</string>
   <string name="upload_from_camera_title">Nuotrauka iš kameros</string>
-  <string name="auth_getting_authorization">Gaunama autorizaciją...</string>
+  <string name="auth_getting_authorization">Gaunama autorizaciją…</string>
   <string name="auth_no_net_conn_title">Nėra tinklo ryšio</string>
   <string name="auth_nossl_plain_ok_title">Saugus prisijungimas negalimas.</string>
   <string name="auth_connection_established">Ryšys užmegztas</string>
@@ -250,7 +250,7 @@
   <string name="auth_wtf_reenter_URL">Netikėta problema: įveskite serverio adresą dar kartą</string>
   <string name="auth_expired_oauth_token_toast">Autorizacijos laikas baigėsi. Prašome autorizuotis iš naujo</string>
   <string name="auth_expired_basic_auth_toast">Įveskite dabartinį slaptažodį</string>
-    <string name="auth_connecting_auth_server">Jungiasi į authorizacijos serverį ...</string>
+    <string name="auth_connecting_auth_server">Jungiasi į authorizacijos serverį …</string>
   <string name="auth_unsupported_auth_method">Serveris nepalaiko šio autentikacijos metodo</string>
   <string name="auth_unsupported_multiaccount">%1$s nepalaiko kelių paskyrų iš karto</string>
   <string name="auth_fail_get_user_name">Serveris negražina tinkamo vartotojo ID, susisiekite su administratoriumi</string>
@@ -284,7 +284,7 @@
   <string name="filedisplay_no_file_selected">Joks failas nebuvo pasirinktas</string>
   <string name="wait_for_tmp_copy_from_private_storage">Kopijuoti failą iš privačios talpyklos</string>
   <string name="oauth_check_onoff">Prisijungti naudojant oAuth2</string>
-  <string name="oauth_login_connection">Jungiamasi prie OAuth2 serverio ...</string>
+  <string name="oauth_login_connection">Jungiamasi prie OAuth2 serverio …</string>
   <string name="ssl_validator_header">Nepavyko atpažinti serverio</string>
   <string name="ssl_validator_reason_cert_not_trusted">- Nepatikimas serverio sertifikatas</string>
   <string name="ssl_validator_reason_cert_expired">- Serverio sertifikatas galiojimo laikas pasibaigęs</string>
@@ -367,7 +367,7 @@
   <string name="log_send_history_button">Išsiųsti istorija</string>
   <string name="log_send_no_mail_app">Nėra programos siųsti laiškam. Įdiekite pašto programa.</string>
   <string name="log_send_mail_subject">%1$s Android žurnalai</string>
-  <string name="log_progress_dialog_text">Įkeliama...</string>
+  <string name="log_progress_dialog_text">Įkeliama…</string>
   <string name="actionbar_select_all">Pažymėti viską</string>
   <string name="actionbar_select_inverse">Pasirinkite atvirkštinį</string>
     <string name="actionbar_move">perkelti</string>

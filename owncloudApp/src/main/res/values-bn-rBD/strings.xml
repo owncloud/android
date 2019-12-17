@@ -66,7 +66,7 @@
   <string name="uploads_view_group_finished_uploads">আপলোড করা হয়েছে</string>
   <string name="uploads_view_upload_status_succeeded">সুসম্পন্ন</string>
   <string name="uploads_view_upload_status_unknown_fail">অজানা জটিলতা</string>
-  <string name="downloader_download_in_progress_ticker">ডাউনলোড চলছে...</string>
+  <string name="downloader_download_in_progress_ticker">ডাউনলোড চলছে…</string>
   <string name="downloader_download_in_progress_content">%1$d%% ডাউনলোড করছে %2$s</string>
   <string name="downloader_download_succeeded_ticker">ডাউনলোড সফল</string>
   <string name="downloader_download_failed_ticker">ডাউনলোড হয়নি</string>

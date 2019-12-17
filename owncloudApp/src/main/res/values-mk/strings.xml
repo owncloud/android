@@ -78,15 +78,15 @@
   <string name="common_no">Не</string>
     <string name="common_back">Назад</string>
   <string name="common_error">Грешка</string>
-  <string name="common_loading">Вчитувам ...</string>
+  <string name="common_loading">Вчитувам …</string>
   <string name="common_error_unknown">Непозната грешка</string>
   <string name="common_pending">Чека</string>
   <string name="about_title">За</string>
   <string name="change_password">Смени лозинка</string>
   <string name="create_account">Креирај сметка</string>
-  <string name="upload_chooser_title">подигни од ...</string>
+  <string name="upload_chooser_title">подигни од …</string>
   <string name="uploader_info_dirname">Име на папка</string>
-  <string name="uploader_upload_in_progress_ticker">Подигнувам...</string>
+  <string name="uploader_upload_in_progress_ticker">Подигнувам…</string>
   <string name="uploader_upload_in_progress_content">%1$d%% Прикачување %2$s</string>
   <string name="uploader_upload_succeeded_ticker">Прикачувањето беше успешно</string>
   <string name="uploader_upload_failed_ticker">Прикачувањето не успеа</string>
@@ -96,7 +96,7 @@
   <string name="uploads_view_upload_status_succeeded">Завршено</string>
   <string name="uploads_view_upload_status_cancelled">Откажано</string>
   <string name="uploads_view_upload_status_unknown_fail">Непозната грешка</string>
-  <string name="downloader_download_in_progress_ticker">Преземање...</string>
+  <string name="downloader_download_in_progress_ticker">Преземање…</string>
   <string name="downloader_download_in_progress_content">%1$d%% Превземање %2$s</string>
   <string name="downloader_download_succeeded_ticker">Преземањето е успешно</string>
   <string name="downloader_download_failed_ticker">Преземањето не беше успешно</string>
@@ -185,7 +185,7 @@
   <string name="wait_a_moment">Почекајте малку</string>
   <string name="filedisplay_unexpected_bad_get_content">Неочекуван проблем ; ве молам одберете датотека од друга апликација</string>
   <string name="filedisplay_no_file_selected">Нема избрано датотека</string>
-  <string name="activity_chooser_title">Пратете линк на ...</string>
+  <string name="activity_chooser_title">Пратете линк на …</string>
   <string name="wait_for_tmp_copy_from_private_storage">Копирам датотека од приватното складиште</string>
   <string name="oauth_check_onoff">Најави се со oAuth2</string>
   <string name="ssl_validator_reason_cert_not_trusted">- Сертификатот на серверот не е доверлив</string>

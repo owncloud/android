@@ -41,7 +41,7 @@
   <string name="uploader_upload_succeeded_ticker">උඩුගත කිරීම සාර්ථකයි</string>
   <string name="uploader_upload_failed_ticker">උඩුගත කිරීම අසාර්ථකයි</string>
   <string name="uploads_view_upload_status_failed_permission_error">අනුමැතියේ දෝෂයක්</string>
-  <string name="downloader_download_in_progress_ticker">බාගතවේ...</string>
+  <string name="downloader_download_in_progress_ticker">බාගතවේ…</string>
   <string name="downloader_download_succeeded_ticker">බාගත කිරීම සාර්ථකයි</string>
   <string name="downloader_download_failed_ticker">බාගත කිරීම අසාර්ථකයි</string>
   <string name="common_choose_account">ගිණුම තෝරන්න</string>

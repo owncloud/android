@@ -14,7 +14,7 @@
   <string name="actionbar_send_file">Pošlji</string>
   <string name="actionbar_sort">Razvrsti</string>
   <string name="actionbar_descending">Padajoče</string>
-  <string name="actionbar_sort_title">Razvrsti ...</string>
+  <string name="actionbar_sort_title">Razvrsti …</string>
   <string name="actionbar_sort_by_name">A-Z</string>
   <string name="actionbar_sort_by_date">Starejše - Novejše</string>
   <string name="actionbar_sort_by_size">Manjše - Večje</string>
@@ -77,7 +77,7 @@
   <string name="uploader_error_message_source_file_not_copied">Prišlo je do napake med kopiranjem datoteke v začasno mapo. Poskusite znova poslati kasneje.</string>
   <string name="file_list_seconds_ago">pred nekaj sekundami</string>
   <string name="file_list_empty">Tukaj še ni ničesar. Najprej je treba datoteke poslati v oblak!</string>
-  <string name="file_list_loading">Poteka nalaganje ...</string>
+  <string name="file_list_loading">Poteka nalaganje …</string>
   <string name="file_list_no_app_for_file_type">Ni nameščenega programa za to vrsto datoteke</string>
   <string name="local_file_list_empty">V tej mapi ni datotek.</string>
   <string name="local_file_list_empty_just_folders">V tej mapi ni drugih map.</string>
@@ -106,10 +106,10 @@
   <string name="common_back">Nazaj</string>
   <string name="common_save_exit">Shrani in končaj</string>
   <string name="common_error">Napaka</string>
-  <string name="common_loading">Poteka nalaganje ...</string>
+  <string name="common_loading">Poteka nalaganje …</string>
   <string name="common_unknown">neznano</string>
   <string name="common_error_unknown">Neznana napaka</string>
-  <string name="common_pending">V čakanju ...</string>
+  <string name="common_pending">V čakanju …</string>
   <string name="common_important">Pomembno</string>
   <string name="about_title">O oblaku %1$s</string>
   <string name="change_password">Spremeni geslo</string>
@@ -146,7 +146,7 @@
   <string name="uploads_view_upload_status_conflict">Spor</string>
   <string name="uploads_view_upload_status_service_interrupted">Program je končan</string>
   <string name="uploads_view_upload_status_unknown_fail">Neznana napaka</string>
-  <string name="uploads_view_upload_status_waiting_for_wifi">Čakanje na povezavo WiFi ...</string>
+  <string name="uploads_view_upload_status_waiting_for_wifi">Čakanje na povezavo WiFi …</string>
   <string name="uploads_view_later_waiting_to_upload">Čakanje na pošiljanje</string>
   <string name="uploads_view_unsupported_media_type">Nepodprta vrsta predstavne vsebine</string>
   <string name="downloader_download_in_progress_content">%1$d%% Prejemanje %2$s</string>
@@ -205,7 +205,7 @@
   <string name="media_play_pause_description">Gumb za predvajanje in premor</string>
   <string name="media_forward_description">Gumb za hitro predvajanje naprej</string>
   <string name="upload_from_camera_title">Slika s kamere</string>
-  <string name="auth_getting_authorization">Pridobivanje overitve ...</string>
+  <string name="auth_getting_authorization">Pridobivanje overitve …</string>
   <string name="auth_no_net_conn_title">Ni omrežne povezave</string>
   <string name="auth_nossl_plain_ok_title">Varna povezava ni na voljo.</string>
   <string name="auth_connection_established">Povezava je vzpostavljena</string>
@@ -255,13 +255,13 @@
   <string name="filename_forbidden_characters">Nedovoljeni znaki: characters: / \\ &lt; &gt; : \" | ? *</string>
   <string name="filename_forbidden_charaters_from_server">Ime datoteke vsebuje vsaj en neveljaven znak.</string>
   <string name="filename_empty">Ime datoteke ne sme biti prazno</string>
-  <string name="wait_a_moment">Počakajte trenutek ...</string>
+  <string name="wait_a_moment">Počakajte trenutek …</string>
   <string name="wait_checking_credentials">Poteka preverjanje shranjenih poveril</string>
   <string name="filedisplay_unexpected_bad_get_content">Prišlo je do nepričakovane napake. Poskusite datoteko izbrati z drugim programom.</string>
   <string name="filedisplay_no_file_selected">Ni izbranih datotek</string>
   <string name="wait_for_tmp_copy_from_private_storage">Kopiranje datoteke iz zasebne shrambe</string>
   <string name="oauth_check_onoff">Prijava  z oAuth2</string>
-  <string name="oauth_login_connection">Vzpostavljanje povezave s strežnikom OAuth2 ...</string>
+  <string name="oauth_login_connection">Vzpostavljanje povezave s strežnikom OAuth2 …</string>
   <string name="ssl_validator_header">Istovetnosti strežnika ni mogoče preveriti</string>
   <string name="ssl_validator_reason_cert_not_trusted">- potrdilo strežnika ni vredno zaupanja</string>
   <string name="ssl_validator_reason_cert_expired">- potrdilo strežnika je poteklo</string>
@@ -345,7 +345,7 @@
   <string name="log_send_history_button">Pošlji zgodovino</string>
   <string name="log_send_no_mail_app">Ni programa za pošiljanje dnevniških datotek. Namestite vsaj poštni program.</string>
   <string name="log_send_mail_subject">%1$s dnevniki programa</string>
-  <string name="log_progress_dialog_text">Poteka nalaganje podatkov ...</string>
+  <string name="log_progress_dialog_text">Poteka nalaganje podatkov …</string>
   <string name="actionbar_select_all">izberi vse</string>
   <string name="actionbar_move">Premakni</string>
   <string name="file_list_empty_moving">Ni vsebine in datotek. Lahko ustvarite na primer mapo.</string>

@@ -83,7 +83,7 @@
   <string name="auth_oauth_failure">Токен доступа устарел или стал недопустимым. Перевойдите, чтобы восстановить доступ</string>
   <string name="auth_oauth_failure_snackbar_action">Войти</string>
   <string name="auth_check_server">Проверить сервер</string>
-  <string name="auth_host_url">Адрес сервера https://...</string>
+  <string name="auth_host_url">Адрес сервера https://…</string>
   <string name="auth_username">Имя пользователя</string>
   <string name="auth_password">Пароль</string>
   <string name="auth_register">Незнакомы с %1$s?</string>
@@ -106,7 +106,7 @@
   <string name="file_list_empty">Здесь ничего нет. Загрузите что-нибудь!</string>
   <string name="file_list_empty_available_offline">Нет доступных автономных файлов.</string>
   <string name="file_list_empty_shared_by_links">Отсутствуют файлы общего доступа по ссылке</string>
-  <string name="file_list_loading">Загрузка...</string>
+  <string name="file_list_loading">Загрузка…</string>
   <string name="file_list_no_app_for_file_type">Не найдено приложение для типа файла</string>
   <string name="local_file_list_empty">В этом каталоге нет файлов.</string>
   <string name="local_file_list_empty_just_folders">В этом каталоге нет каталогов.</string>
@@ -136,7 +136,7 @@
   <string name="common_back">Назад</string>
   <string name="common_save_exit">Сохранить и выйти</string>
   <string name="common_error">Ошибка</string>
-  <string name="common_loading">Загрузка...</string>
+  <string name="common_loading">Загрузка…</string>
   <string name="common_unknown">неизвестно</string>
   <string name="common_error_unknown">Неизвестная ошибка</string>
   <string name="common_pending">Ожидается</string>
@@ -251,7 +251,7 @@
   <string name="media_play_pause_description">Воспроизведение или пауза</string>
   <string name="media_forward_description">Перемотка вперед</string>
   <string name="upload_from_camera_title">Изображение из камеры</string>
-  <string name="auth_getting_authorization">Выполняется авторизация...</string>
+  <string name="auth_getting_authorization">Выполняется авторизация…</string>
   <string name="auth_trying_to_login">Пробую войти…</string>
   <string name="auth_no_net_conn_title">Нет подключения к сети</string>
   <string name="auth_nossl_plain_ok_title">Защищённое соединение недоступно.</string>
@@ -273,7 +273,7 @@
   <string name="auth_wtf_reenter_URL">Неожиданное состояние; пожалуйста укажите адрес сервера повторно</string>
   <string name="auth_expired_oauth_token_toast">Время авторизации истекло. Пожалуйста, авторизуйтесь снова</string>
   <string name="auth_expired_basic_auth_toast">Пожалуйста укажите текущий пароль</string>
-    <string name="auth_connecting_auth_server">Подключение к серверу авторизации ...</string>
+    <string name="auth_connecting_auth_server">Подключение к серверу авторизации …</string>
   <string name="auth_unsupported_auth_method">Сервер не поддерживает выбранный метод аутентификации</string>
   <string name="auth_unsupported_multiaccount">%1$s не поддерживает несколько учётных записей</string>
   <string name="auth_fail_get_user_name">Сервер вернул некорректный пользовательский идентификатор. Пожалуйста, свяжитесь с вашим администратором
@@ -309,7 +309,7 @@
   <string name="activity_chooser_title">Отправка ссылки пользователю</string>
   <string name="wait_for_tmp_copy_from_private_storage">Копирование файла из частной хранилища</string>
   <string name="oauth_check_onoff">Войти через oAuth2</string>
-  <string name="oauth_login_connection">Подключение к oAuth2 серверу...</string>
+  <string name="oauth_login_connection">Подключение к oAuth2 серверу…</string>
   <string name="ssl_validator_header">Не удалось проверить подлинность сервера</string>
   <string name="ssl_validator_reason_cert_not_trusted">- Сертификат сервера не является доверенным</string>
   <string name="ssl_validator_reason_cert_expired">- Срок действия сертификата сервера истёк</string>

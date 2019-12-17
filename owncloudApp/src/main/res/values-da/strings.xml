@@ -66,7 +66,7 @@
   <string name="uploader_error_message_source_file_not_copied">En fejl opstod ved kopiering af filen til en midlertidig folder. Prøv venligst igen.</string>
   <string name="file_list_seconds_ago">sekunder siden</string>
   <string name="file_list_empty">Her er tomt. Upload noget!</string>
-  <string name="file_list_loading">Indlæser...</string>
+  <string name="file_list_loading">Indlæser…</string>
   <string name="file_list_no_app_for_file_type">Ingen app fundet for filtype</string>
   <string name="local_file_list_empty">Der er ingen filer i denne mappe.</string>
   <string name="local_file_list_empty_just_folders">Der er ingen mapper i denne mappe.</string>
@@ -93,7 +93,7 @@
   <string name="common_back">Tilbage</string>
   <string name="common_save_exit">Gem &amp; afslut</string>
   <string name="common_error">Fejl</string>
-  <string name="common_loading">Indlæser...</string>
+  <string name="common_loading">Indlæser…</string>
   <string name="common_unknown">ukendt</string>
   <string name="common_error_unknown">Ukendt fejl</string>
   <string name="common_pending">Afventer</string>
@@ -190,7 +190,7 @@
   <string name="media_rewind_description">Tilbagespolingsknap</string>
   <string name="media_play_pause_description">Afspil eller pause knap</string>
   <string name="media_forward_description">Hurtigt fremad-knap</string>
-  <string name="auth_getting_authorization">Forsøger godkendelse...</string>
+  <string name="auth_getting_authorization">Forsøger godkendelse…</string>
   <string name="auth_no_net_conn_title">Ingen netværksforbindelse</string>
   <string name="auth_nossl_plain_ok_title">Sikker forbindelse ikke tilgængelig.</string>
   <string name="auth_connection_established">Forbindelse oprettet</string>
@@ -324,7 +324,7 @@
   <string name="log_send_history_button">Afsend historik</string>
   <string name="log_send_no_mail_app">Ingen app til afsendelse af logs fundet. Installer venligst en mail-app.</string>
   <string name="log_send_mail_subject">%1$s Android-app - logge</string>
-  <string name="log_progress_dialog_text">Indlæser data ...</string>
+  <string name="log_progress_dialog_text">Indlæser data …</string>
   <string name="actionbar_select_all">Vælg alle</string>
   <string name="actionbar_move">Flyt</string>
   <string name="file_list_empty_moving">Der er intet her. Du kan tilføje en mappe!</string>

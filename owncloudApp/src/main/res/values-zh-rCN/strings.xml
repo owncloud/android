@@ -77,7 +77,7 @@
   <string name="auth_failure_snackbar_action">更换账户</string>
   <string name="auth_oauth_failure_snackbar_action">登录</string>
   <string name="auth_check_server">检查服务器</string>
-  <string name="auth_host_url">服务器地址 https://...</string>
+  <string name="auth_host_url">服务器地址 https://…</string>
   <string name="auth_username">用户名</string>
   <string name="auth_password">密码</string>
   <string name="auth_register">初次使用 %1$s?</string>
@@ -99,7 +99,7 @@
   <string name="file_list_seconds_ago">几秒前</string>
   <string name="file_list_empty">这里还什么都没有。上传些东西吧！</string>
   <string name="file_list_empty_available_offline">无可用的离线文件</string>
-  <string name="file_list_loading">加载中...</string>
+  <string name="file_list_loading">加载中…</string>
   <string name="file_list_no_app_for_file_type">没有支持此文件的应用</string>
   <string name="local_file_list_empty">在该文件夹中不存在文件。</string>
   <string name="local_file_list_empty_just_folders">在该文件夹中不存在其它文件夹。</string>
@@ -129,7 +129,7 @@
   <string name="common_back">返回</string>
   <string name="common_save_exit">保存并退出</string>
   <string name="common_error">错误</string>
-  <string name="common_loading">加载中...</string>
+  <string name="common_loading">加载中…</string>
   <string name="common_unknown">未知</string>
   <string name="common_error_unknown">未知错误</string>
   <string name="common_pending">等待</string>
@@ -176,7 +176,7 @@
   <string name="uploads_view_upload_status_service_interrupted">应用已被终止</string>
   <string name="uploads_view_upload_status_unknown_fail">未知错误</string>
   <string name="uploads_view_upload_status_waiting_for_wifi">等待WiFi连接</string>
-  <string name="uploads_view_later_waiting_to_upload">等待上传...</string>
+  <string name="uploads_view_later_waiting_to_upload">等待上传…</string>
   <string name="uploads_view_unsupported_media_type">不支持的媒体类型</string>
   <string name="downloader_download_in_progress_ticker">下载中……</string>
   <string name="downloader_download_in_progress_content">%1$d%% 下载中 %2$s</string>
@@ -242,7 +242,7 @@
   <string name="media_play_pause_description">播放暂停按钮</string>
   <string name="media_forward_description">快进按钮</string>
   <string name="upload_from_camera_title">从相机获取照片</string>
-  <string name="auth_getting_authorization">正在认证...</string>
+  <string name="auth_getting_authorization">正在认证…</string>
   <string name="auth_trying_to_login">尝试登录中.……</string>
   <string name="auth_no_net_conn_title">没有网络连接</string>
   <string name="auth_nossl_plain_ok_title">安全连接不可用。</string>
@@ -264,7 +264,7 @@
   <string name="auth_wtf_reenter_URL">未知状态，请重新输入服务器地址</string>
   <string name="auth_expired_oauth_token_toast">你的授权已经过期。请重新授权。</string>
   <string name="auth_expired_basic_auth_toast">请输入当前的密码</string>
-    <string name="auth_connecting_auth_server">连接认证服务器...</string>
+  <string name="auth_connecting_auth_server">连接认证服务器…</string>
   <string name="auth_unsupported_auth_method">服务器不支持这种验证方式</string>
   <string name="auth_unsupported_multiaccount">%1$s不支持多个账户</string>
   <string name="auth_fail_get_user_name">您的服务器没有返回一个正确的用户 id，请联系管理员
@@ -388,7 +388,7 @@
   <string name="log_send_history_button">发送历史日志</string>
   <string name="log_send_no_mail_app">无法发送日志，请安装邮箱应用。</string>
   <string name="log_send_mail_subject">%1$s Android 程序日志</string>
-  <string name="log_progress_dialog_text">载入数据...</string>
+  <string name="log_progress_dialog_text">载入数据…</string>
   <string name="actionbar_select_all">全部选择</string>
   <string name="actionbar_select_inverse">反向选择</string>
     <string name="actionbar_move">移动</string>

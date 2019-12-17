@@ -155,7 +155,7 @@
   <string name="uploads_view_upload_status_waiting_for_wifi">Wi-Fi 연결을 기다리는 중</string>
   <string name="uploads_view_later_waiting_to_upload">업로드 대기 중</string>
   <string name="uploads_view_unsupported_media_type">지원하지 않는 미디어 형식</string>
-  <string name="downloader_download_in_progress_ticker">다운로드중...</string>
+  <string name="downloader_download_in_progress_ticker">다운로드중…</string>
   <string name="downloader_download_in_progress_content">%1$d%% %2$s 다운로드 중</string>
   <string name="downloader_download_succeeded_ticker">다운로드됨</string>
   <string name="downloader_download_succeeded_content">%1$s 다운로드됨</string>
@@ -216,8 +216,8 @@
   <string name="media_rewind_description">되감기 단추</string>
   <string name="media_play_pause_description">재생 혹은 일시 정지 단추</string>
   <string name="media_forward_description">빨리감기 단추</string>
-  <string name="auth_getting_authorization">인증 정보 가져오는 중...</string>
-  <string name="auth_trying_to_login">로그인 시도중...</string>
+  <string name="auth_getting_authorization">인증 정보 가져오는 중…</string>
+  <string name="auth_trying_to_login">로그인 시도중…</string>
   <string name="auth_no_net_conn_title">네트워크에 연결할 수 없음</string>
   <string name="auth_nossl_plain_ok_title">암호화된 연결을 사용할 수 없습니다.</string>
   <string name="auth_connection_established">연결됨</string>
@@ -356,7 +356,7 @@
   <string name="log_send_history_button">기록 보내기</string>
   <string name="log_send_no_mail_app">로그를 보내는 데 사용할 수 있는 앱이 없습니다. 이메일 앱을 설치하십시오.</string>
   <string name="log_send_mail_subject">%1$s Android 앱 로그</string>
-  <string name="log_progress_dialog_text">데이터 불러오는 중...</string>
+  <string name="log_progress_dialog_text">데이터 불러오는 중…</string>
   <string name="actionbar_select_all">모두 선택</string>
     <string name="actionbar_move">이동</string>
   <string name="file_list_empty_moving">항목이 없습니다. 폴더를 추가할 수 있습니다!</string>

@@ -82,7 +82,7 @@
   <string name="auth_oauth_failure">O token de acesso expirou ou se tornou inválido. Faça login novamente para recuperar o acesso</string>
   <string name="auth_oauth_failure_snackbar_action">Entrar</string>
   <string name="auth_check_server">Verificar servidor</string>
-  <string name="auth_host_url">Endereço do servidor https://...</string>
+  <string name="auth_host_url">Endereço do servidor https://…</string>
   <string name="auth_username">Nome de usuário</string>
   <string name="auth_password">Senha</string>
   <string name="auth_register">Novo para %1$s?</string>
@@ -105,7 +105,7 @@
   <string name="file_list_empty">Nada aqui. Envie alguma coisa!</string>
   <string name="file_list_empty_available_offline">Não há arquivos externos disponíveis.</string>
   <string name="file_list_empty_shared_by_links">Nenhum arquivo foi compartilhado por linque.</string>
-  <string name="file_list_loading">Carregando...</string>
+  <string name="file_list_loading">Carregando…</string>
   <string name="file_list_no_app_for_file_type">Nenhum aplicativo encontrado para esse tipo de arquivo</string>
   <string name="local_file_list_empty">Não existe nenhum arquivo nesta pasta.</string>
   <string name="local_file_list_empty_just_folders">Não existem pastas nessa pasta.</string>
@@ -135,7 +135,7 @@
   <string name="common_back">Voltar</string>
   <string name="common_save_exit">Salvar &amp; e sair</string>
   <string name="common_error">Erro</string>
-  <string name="common_loading">Carregando...</string>
+  <string name="common_loading">Carregando…</string>
   <string name="common_unknown">desconhecido</string>
   <string name="common_error_unknown">Erro desconhecido</string>
   <string name="common_pending">Pendente</string>
@@ -146,7 +146,7 @@
   <string name="create_account">Criar conta</string>
   <string name="upload_chooser_title">Enviando de</string>
   <string name="uploader_info_dirname">Nome da pasta</string>
-  <string name="uploader_upload_in_progress_ticker">Enviando...</string>
+  <string name="uploader_upload_in_progress_ticker">Enviando…</string>
   <string name="uploader_upload_in_progress_content">%1$d%% Enviando %2$s</string>
   <string name="uploader_upload_succeeded_ticker">Envio bem sucedido</string>
   <string name="uploader_upload_succeeded_content_single">%1$s enviado</string>
@@ -185,7 +185,7 @@
   <string name="uploads_view_upload_status_waiting_for_wifi">Aguardando conexão wi-fi</string>
   <string name="uploads_view_later_waiting_to_upload">Aguardando para enviar</string>
   <string name="uploads_view_unsupported_media_type">Tipo de mídia não suportada</string>
-  <string name="downloader_download_in_progress_ticker">Baixando...</string>
+  <string name="downloader_download_in_progress_ticker">Baixando…</string>
   <string name="downloader_download_in_progress_content">%1$d%% Baixando %2$s</string>
   <string name="downloader_download_succeeded_ticker">Download bem sucedido</string>
   <string name="downloader_download_succeeded_content">%1$s baixado</string>
@@ -250,12 +250,12 @@
   <string name="media_play_pause_description">Botão reproduzir parar</string>
   <string name="media_forward_description">Botão de adiantamento rápido</string>
   <string name="upload_from_camera_title">Imagem da câmera</string>
-  <string name="auth_getting_authorization">Obtendo autorização...</string>
+  <string name="auth_getting_authorization">Obtendo autorização…</string>
   <string name="auth_trying_to_login">Tentando fazer o login…</string>
   <string name="auth_no_net_conn_title">Sem conexão de rede</string>
   <string name="auth_nossl_plain_ok_title">Conexão segura indisponível.</string>
   <string name="auth_connection_established">Conexão estabelecida</string>
-  <string name="auth_testing_connection">Testando conexão...</string>
+  <string name="auth_testing_connection">Testando conexão…</string>
   <string name="auth_not_configured_title">Configuração do servidor mal formada</string>
   <string name="auth_account_not_new">Uma conta para o mesmo usuário e servidor já existe no dispositivo</string>
   <string name="auth_account_not_the_same">As informações que o usuário digitou não correspondem ao usuário da conta</string>
@@ -272,7 +272,7 @@
   <string name="auth_wtf_reenter_URL">Estado inesperado; por favor insira o endereço do servidor novamente</string>
   <string name="auth_expired_oauth_token_toast">Sua autorização expirou. Por favor, solicite autorizar novamente</string>
   <string name="auth_expired_basic_auth_toast">Por favor, digite a senha atual</string>
-    <string name="auth_connecting_auth_server">Conectando ao servidor de autenticação ...</string>
+    <string name="auth_connecting_auth_server">Conectando ao servidor de autenticação …</string>
   <string name="auth_unsupported_auth_method">O servidor não suporta este método de autenticação</string>
   <string name="auth_unsupported_multiaccount">%1$s não suporta múltiplas contas</string>
   <string name="auth_fail_get_user_name">Seu servidor não está retornando um ID de usuário correto, por favor, entre em contato com um administrador
@@ -398,7 +398,7 @@
   <string name="log_send_history_button">Enviar histórico</string>
   <string name="log_send_no_mail_app">Nenhum aplicativo para envio de logs foi encontrado. Por favor instale um aplicativo de e-mail</string>
   <string name="log_send_mail_subject">%1$s logs do Android app</string>
-  <string name="log_progress_dialog_text">Carregando dados...</string>
+  <string name="log_progress_dialog_text">Carregando dados…</string>
   <string name="actionbar_select_all">Selecionar tudo</string>
   <string name="actionbar_select_inverse">Selecione inverso</string>
     <string name="actionbar_move">Mover</string>

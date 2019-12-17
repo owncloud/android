@@ -75,7 +75,7 @@
     <string name="common_back">Назад</string>
   <string name="common_save_exit">Сачувај и изађи</string>
   <string name="common_error">Грешка</string>
-  <string name="common_loading">Учитавам...</string>
+  <string name="common_loading">Учитавам…</string>
   <string name="common_unknown">непознато</string>
   <string name="common_error_unknown">Непозната грешка</string>
   <string name="common_pending">На чекању</string>
@@ -215,7 +215,7 @@
   <string name="wait_a_moment">Сачекајте тренутак</string>
   <string name="filedisplay_unexpected_bad_get_content">Неочекивани проблем. Изаберите фајл другом апликацијом</string>
   <string name="filedisplay_no_file_selected">Нисте изабрали фајл</string>
-  <string name="activity_chooser_title">Пошаљи везу ...</string>
+  <string name="activity_chooser_title">Пошаљи везу …</string>
   <string name="wait_for_tmp_copy_from_private_storage">Копирам фајл из личног складишта</string>
   <string name="oauth_check_onoff">Пријави се помоћу „oAuth2“</string>
   <string name="ssl_validator_reason_cert_not_trusted">– Сертификат сервера није од поверења</string>
@@ -321,8 +321,8 @@
   <string name="file_list__footer__files_and_folders">%1$d фајлова, %2$d фасцикли</string>
   <string name="prefs_camera_upload_source_path_title_required">неопходно</string>
   <string name="prefs_camera_upload_source_path_title_optional">опционо</string>
-  <string name="prefs_camera_upload_behaviour_dialogTitle">Оригинални фајл ће бити...</string>
-  <string name="prefs_camera_upload_behaviour_title">Оригинални фајл ће бити...</string>
+  <string name="prefs_camera_upload_behaviour_dialogTitle">Оригинални фајл ће бити…</string>
+  <string name="prefs_camera_upload_behaviour_title">Оригинални фајл ће бити…</string>
   <string name="upload_copy_files">Копирај фајл</string>
   <string name="upload_move_files">Премести фајл</string>
   <string name="pref_behaviour_entries_keep_file">остављен у изворној фасцикли</string>

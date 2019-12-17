@@ -62,7 +62,7 @@
   <string name="uploader_error_message_source_file_not_copied">Feil ved kopi av fil til mellombels katalog, prøv å sende fil på ny.</string>
   <string name="file_list_seconds_ago">sekund sidan</string>
   <string name="file_list_empty">Ingenting her. Last noko opp!</string>
-  <string name="file_list_loading">Lastar...</string>
+  <string name="file_list_loading">Lastar…</string>
   <string name="file_list_no_app_for_file_type">Ingen program funnen for denne fil type</string>
   <string name="local_file_list_empty">Ingen filer i denne mappa</string>
   <string name="local_file_list_empty_just_folders">Ingen mappe i denne mappa.</string>
@@ -89,7 +89,7 @@
     <string name="common_back">Tilbake</string>
   <string name="common_save_exit">Lagre &amp; avslutt</string>
   <string name="common_error">Feil</string>
-  <string name="common_loading">Lastar...</string>
+  <string name="common_loading">Lastar…</string>
   <string name="common_unknown">ukjend</string>
   <string name="common_error_unknown">Ukjend feil</string>
   <string name="common_pending">Under vegs</string>
@@ -189,8 +189,8 @@
   <string name="media_rewind_description">Tilbake knapp</string>
   <string name="media_play_pause_description">Avspeling eller pause knapp</string>
   <string name="media_forward_description">Raskt framover knapp</string>
-  <string name="auth_getting_authorization">Blir autorisert...</string>
-  <string name="auth_trying_to_login">Førsøker å logge inn...</string>
+  <string name="auth_getting_authorization">Blir autorisert…</string>
+  <string name="auth_trying_to_login">Førsøker å logge inn…</string>
   <string name="auth_no_net_conn_title">Inga nettilkopling</string>
   <string name="auth_nossl_plain_ok_title">Trygg tilkopling ikkje tilgjengeleg.</string>
   <string name="auth_connection_established">Tilkopling oppretta</string>

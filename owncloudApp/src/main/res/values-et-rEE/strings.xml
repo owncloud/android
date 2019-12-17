@@ -42,7 +42,7 @@
   <string name="recommend_subject">Proovi oma nutitelefonil rakendust %1$s!</string>
   <string name="recommend_text">Kutsun sind kasutama oma nutitelefonis rakendust %1$s!\nLaadi see alla siit: %2$s</string>
   <string name="auth_check_server">Kontrolli serverit</string>
-  <string name="auth_host_url">Serveri aadress https://...</string>
+  <string name="auth_host_url">Serveri aadress https://…</string>
   <string name="auth_username">Kasutajanimi</string>
   <string name="auth_password">Parool</string>
   <string name="auth_register">Uus %1$s kasutaja?</string>
@@ -56,7 +56,7 @@
   <string name="uploader_error_title_no_file_to_upload">Ühtegi faili ei laaditud</string>
   <string name="file_list_seconds_ago">sekundit tagasi</string>
   <string name="file_list_empty">Siin pole midagi. Lae midagi üles!</string>
-  <string name="file_list_loading">Laadimine...</string>
+  <string name="file_list_loading">Laadimine…</string>
   <string name="local_file_list_empty">Kaustas pole faile.</string>
   <string name="file_list_folder">kaust</string>
   <string name="file_list_folders">kaustad</string>
@@ -77,7 +77,7 @@
     <string name="common_back">Tagasi</string>
   <string name="common_save_exit">Salvesta &amp; välju</string>
   <string name="common_error">Viga</string>
-  <string name="common_loading">Laadimine ...</string>
+  <string name="common_loading">Laadimine …</string>
   <string name="common_unknown">tundmatu</string>
   <string name="common_error_unknown">Tundmatu viga</string>
   <string name="common_pending">Ootel</string>
@@ -85,9 +85,9 @@
   <string name="change_password">Muuda parooli</string>
   <string name="delete_account">Eemalda konto</string>
   <string name="create_account">Loo konto</string>
-  <string name="upload_chooser_title">Lae fail üles kohast ...</string>
+  <string name="upload_chooser_title">Lae fail üles kohast …</string>
   <string name="uploader_info_dirname">Kausta nimi</string>
-  <string name="uploader_upload_in_progress_ticker">Üleslaadimine ...</string>
+  <string name="uploader_upload_in_progress_ticker">Üleslaadimine …</string>
   <string name="uploader_upload_in_progress_content">%1$d%% üleslaadimine %2$s</string>
   <string name="uploader_upload_succeeded_ticker">Üleslaadimine oli edukas</string>
   <string name="uploader_upload_failed_ticker">Üleslaadimine ebaõnnestus</string>
@@ -110,7 +110,7 @@
   <string name="uploads_view_upload_status_service_interrupted">Rakendus suleti jõuga</string>
   <string name="uploads_view_upload_status_unknown_fail">Tundmatu viga</string>
   <string name="uploads_view_later_waiting_to_upload">Üleslaadimise ootamine</string>
-  <string name="downloader_download_in_progress_ticker">Allalaadimine ...</string>
+  <string name="downloader_download_in_progress_ticker">Allalaadimine …</string>
   <string name="downloader_download_in_progress_content">%1$d%% allalaadimine %2$s</string>
   <string name="downloader_download_succeeded_ticker">Allalaadimine oli edukas</string>
   <string name="downloader_download_failed_ticker">Allalaadimine ebaõnnestus</string>
@@ -275,7 +275,7 @@ Allpool on loend kohalikest failidest ning serveris asuvatest failidest %5$s, mi
   <string name="actionbar_logger">Logid</string>
   <string name="log_send_history_button">Saada ajalugu</string>
   <string name="log_send_mail_subject">%1$s Androidi rakenduse logid</string>
-  <string name="log_progress_dialog_text">Andmete laadimine ...</string>
+  <string name="log_progress_dialog_text">Andmete laadimine …</string>
     <string name="actionbar_move">Tõsta ümber</string>
   <string name="file_list_empty_moving">Siin pole midagi. Sa võid lisada kausta!</string>
   <string name="folder_picker_choose_button_text">Vali</string>
@@ -305,8 +305,8 @@ Allpool on loend kohalikest failidest ning serveris asuvatest failidest %5$s, mi
   <string name="file_list__footer__files">%1$d faili</string>
   <string name="file_list__footer__files_and_folder">%1$d faili, 1 kaust</string>
   <string name="file_list__footer__files_and_folders">%1$d faili, %2$d kausta</string>
-  <string name="prefs_camera_upload_behaviour_dialogTitle">Algne fail...</string>
-  <string name="prefs_camera_upload_behaviour_title">Algne fail...</string>
+  <string name="prefs_camera_upload_behaviour_dialogTitle">Algne fail…</string>
+  <string name="prefs_camera_upload_behaviour_title">Algne fail…</string>
   <string name="upload_copy_files">Kopeeri fail</string>
   <string name="upload_move_files">Liiguta fail</string>
   <string name="pref_behaviour_entries_keep_file">hoitakse algses kaustas</string>
@@ -320,7 +320,7 @@ Allpool on loend kohalikest failidest ning serveris asuvatest failidest %5$s, mi
   <string name="share_via_link_password_label">Parool</string>
   <string name="share_via_link_password_title">Turvatud</string>
   <string name="share_get_public_link_button">Hangi link</string>
-  <string name="share_with_title">Jaga ...</string>
+  <string name="share_with_title">Jaga …</string>
   <string name="share_search">Otsi</string>
   <string name="search_users_and_groups_hint">Otsi kasutajaid ja gruppe</string>
   <string name="share_group_clarification">%1$s (grupp)</string>

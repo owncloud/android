@@ -46,7 +46,7 @@
   <string name="recommend_text">我想邀起您也在智慧型手機上使用%1$s!\n下載:%2$s</string>
   <string name="auth_oauth_failure_snackbar_action">登入</string>
   <string name="auth_check_server">檢查伺服器</string>
-  <string name="auth_host_url">伺服器位址 https://...</string>
+  <string name="auth_host_url">伺服器位址 https://…</string>
   <string name="auth_username">使用者名稱</string>
   <string name="auth_password">密碼</string>
   <string name="auth_register">新增到 %1$s?</string>
@@ -106,7 +106,7 @@
   <string name="create_account">建立帳號</string>
   <string name="upload_chooser_title">上傳來自</string>
   <string name="uploader_info_dirname">資料夾名稱</string>
-  <string name="uploader_upload_in_progress_ticker">上傳中...</string>
+  <string name="uploader_upload_in_progress_ticker">上傳中…</string>
   <string name="uploader_upload_in_progress_content">%1$d%% 上傳中 %2$s</string>
   <string name="uploader_upload_succeeded_ticker">更新成功</string>
   <string name="uploader_upload_succeeded_content_single">%1$s 已上傳</string>
@@ -136,7 +136,7 @@
   <string name="uploads_view_upload_status_waiting_for_wifi">等待無線網路連線</string>
   <string name="uploads_view_later_waiting_to_upload">上傳等候中</string>
   <string name="uploads_view_unsupported_media_type">不支援的媒體類型</string>
-  <string name="downloader_download_in_progress_ticker">下載中 ...</string>
+  <string name="downloader_download_in_progress_ticker">下載中 …</string>
   <string name="downloader_download_in_progress_content">%1$d%% 下載中 %2$s</string>
   <string name="downloader_download_succeeded_ticker">下載成功</string>
   <string name="downloader_download_succeeded_content">%1$s 已下載</string>
@@ -193,8 +193,8 @@
   <string name="media_play_pause_description">播放或暫停按鍵</string>
   <string name="media_forward_description">快轉按鍵</string>
   <string name="upload_from_camera_title">相片</string>
-  <string name="auth_getting_authorization">登入中...</string>
-  <string name="auth_trying_to_login">輸入來登入...</string>
+  <string name="auth_getting_authorization">登入中…</string>
+  <string name="auth_trying_to_login">輸入來登入…</string>
   <string name="auth_no_net_conn_title">沒有網際網路連線</string>
   <string name="auth_nossl_plain_ok_title">安全連線不可用。</string>
   <string name="auth_connection_established">連線已建立</string>
@@ -215,7 +215,7 @@
   <string name="auth_wtf_reenter_URL">未知狀態; 請重新輸入伺服器的位址</string>
   <string name="auth_expired_oauth_token_toast">你的登入授權已過期. 請再次登入</string>
   <string name="auth_expired_basic_auth_toast">請輸入目前的密碼</string>
-    <string name="auth_connecting_auth_server">連接驗證伺服器中...</string>
+    <string name="auth_connecting_auth_server">連接驗證伺服器中…</string>
   <string name="auth_unsupported_auth_method">伺服器不支援這種認證方式</string>
   <string name="auth_unsupported_multiaccount">%1$s 不支援複數賬戶</string>
   <string name="auth_fail_get_user_name">你的伺服器並沒有傳回正確的使用者 ID, 請聯絡伺服器的管理員
@@ -328,7 +328,7 @@
   <string name="log_send_history_button">傳送歷史</string>
   <string name="log_send_no_mail_app">沒有傳送紀錄的軟體. 請安裝郵件軟體</string>
   <string name="log_send_mail_subject">%1$s Android 應用程式記錄</string>
-  <string name="log_progress_dialog_text">資料載入中...</string>
+  <string name="log_progress_dialog_text">資料載入中…</string>
   <string name="actionbar_select_all">全選</string>
     <string name="actionbar_move">移動</string>
   <string name="file_list_empty_moving">這裡什麼也沒有，您可以增加目錄！</string>

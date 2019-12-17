@@ -61,9 +61,9 @@
   <string name="about_title">Par</string>
   <string name="change_password">Mainīt paroli</string>
   <string name="create_account">Izveidot kontu</string>
-  <string name="upload_chooser_title">Augšupielādēt no...</string>
+  <string name="upload_chooser_title">Augšupielādēt no…</string>
   <string name="uploader_info_dirname">Mapes nosaukums</string>
-  <string name="uploader_upload_in_progress_ticker">Augšupielādē ...</string>
+  <string name="uploader_upload_in_progress_ticker">Augšupielādē …</string>
   <string name="uploader_upload_in_progress_content">%1$d%% augšupielādē %2$s</string>
   <string name="uploader_upload_succeeded_ticker">Augšupielāde ir veiksmīga</string>
   <string name="uploader_upload_failed_ticker">Neizdevās augšupielādēt</string>
@@ -73,7 +73,7 @@
   <string name="uploads_view_upload_status_succeeded">Pabeigts</string>
   <string name="uploads_view_upload_status_cancelled">Atcelts</string>
   <string name="uploads_view_upload_status_unknown_fail">Nezināma kļūda</string>
-  <string name="downloader_download_in_progress_ticker">Lejupielādē ...</string>
+  <string name="downloader_download_in_progress_ticker">Lejupielādē …</string>
   <string name="downloader_download_in_progress_content">%1$d%% lejupielādē %2$s</string>
   <string name="downloader_download_succeeded_ticker">Lejupielāde beidzās veiksmīgi</string>
   <string name="downloader_download_failed_ticker">Neizdevās lejupielādēt</string>
