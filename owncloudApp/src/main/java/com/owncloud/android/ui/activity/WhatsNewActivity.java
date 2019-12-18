@@ -142,8 +142,7 @@ public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPa
 
     static private boolean shouldShow(Context context) {
         boolean isBeta = MainApp.Companion.isBeta();
-        boolean showWizard = context.getResources().getBoolean(R.bool.wizard_enabled);
-//                && !BuildConfig.DEBUG;
+        boolean showWizard = context.getResources().getBoolean(R.bool.wizard_enabled) && !BuildConfig.DEBUG;
         boolean anyAccountWithServerVersionLowerThan10 = AccountUtils.isAnyAccountServerVersionLowerThan10(context);
         return showWizard &&
                 ((isFirstRun() && context instanceof AccountAuthenticatorActivity) ||
