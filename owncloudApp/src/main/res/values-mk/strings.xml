@@ -17,8 +17,6 @@
   <string name="actionbar_sort_by_name">A-Z</string>
   <string name="actionbar_sort_by_date">Постари - Најнови</string>
   <string name="actionbar_sort_by_size">Помали - Поголеми</string>
-  <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
-  <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Сите датотеки</string>
   <string name="drawer_item_settings">Подесувања</string>
   <string name="drawer_item_uploads_list">Прикачувања</string>
@@ -80,15 +78,15 @@
   <string name="common_no">Не</string>
     <string name="common_back">Назад</string>
   <string name="common_error">Грешка</string>
-  <string name="common_loading">Вчитувам ...</string>
+  <string name="common_loading">Вчитувам …</string>
   <string name="common_error_unknown">Непозната грешка</string>
   <string name="common_pending">Чека</string>
   <string name="about_title">За</string>
   <string name="change_password">Смени лозинка</string>
   <string name="create_account">Креирај сметка</string>
-  <string name="upload_chooser_title">подигни од ...</string>
+  <string name="upload_chooser_title">подигни од …</string>
   <string name="uploader_info_dirname">Име на папка</string>
-  <string name="uploader_upload_in_progress_ticker">Подигнувам...</string>
+  <string name="uploader_upload_in_progress_ticker">Подигнувам…</string>
   <string name="uploader_upload_in_progress_content">%1$d%% Прикачување %2$s</string>
   <string name="uploader_upload_succeeded_ticker">Прикачувањето беше успешно</string>
   <string name="uploader_upload_failed_ticker">Прикачувањето не успеа</string>
@@ -98,7 +96,7 @@
   <string name="uploads_view_upload_status_succeeded">Завршено</string>
   <string name="uploads_view_upload_status_cancelled">Откажано</string>
   <string name="uploads_view_upload_status_unknown_fail">Непозната грешка</string>
-  <string name="downloader_download_in_progress_ticker">Преземање...</string>
+  <string name="downloader_download_in_progress_ticker">Преземање…</string>
   <string name="downloader_download_in_progress_content">%1$d%% Превземање %2$s</string>
   <string name="downloader_download_succeeded_ticker">Преземањето е успешно</string>
   <string name="downloader_download_failed_ticker">Преземањето не беше успешно</string>
@@ -187,7 +185,7 @@
   <string name="wait_a_moment">Почекајте малку</string>
   <string name="filedisplay_unexpected_bad_get_content">Неочекуван проблем ; ве молам одберете датотека од друга апликација</string>
   <string name="filedisplay_no_file_selected">Нема избрано датотека</string>
-  <string name="activity_chooser_title">Пратете линк на ...</string>
+  <string name="activity_chooser_title">Пратете линк на …</string>
   <string name="wait_for_tmp_copy_from_private_storage">Копирам датотека од приватното складиште</string>
   <string name="oauth_check_onoff">Најави се со oAuth2</string>
   <string name="ssl_validator_reason_cert_not_trusted">- Сертификатот на серверот не е доверлив</string>
@@ -225,9 +223,7 @@
   <string name="error__upload__local_file_not_copied">%1$s не може да се копира во локалната папка %2$s</string>
   <string name="share_link_no_support_share_api">Жалиме, споделувањето не е овозможено на вашиот сервер. Ве молам контактирајте го вашиот
   администратор.</string>
-  <string name="share_link_file_no_exist">Не можам да споделам. Ве молам проверете дали постои датотеката</string>
   <string name="share_link_file_error">Се случи грешка кога пробав да ја споделам оваа папка</string>
-  <string name="unshare_link_file_no_exist">Не можам да го тргнам споделувањето. Ве молам проверете дали постои датотеката</string>
   <string name="unshare_link_file_error">Се случи грешка кога пробав да го тргнам споделувањето на оваа датотека или папка</string>
   <string name="share_link_password_title">Внесете лозинка</string>
   <string name="share_link_empty_password">Морате да внесете лозинка</string>
@@ -278,5 +274,4 @@
   <string name="share_privilege_can_edit_delete">избриши</string>
   <string name="share_warning_about_forwarding_public_links">Било кој што го знае овој линк ќе има пристап до датотеката/директориумот</string>
   <string name="upload_notification_channel_name">Прикачувања</string>
-  <!--Welcome to oC intro features-->
 </resources>

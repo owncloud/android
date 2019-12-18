@@ -130,7 +130,7 @@
   <string name="create_account">Stofna aðgang</string>
   <string name="upload_chooser_title">Senda inn úr</string>
   <string name="uploader_info_dirname">Nafn möppu</string>
-  <string name="uploader_upload_in_progress_ticker">Sendi inn ...</string>
+  <string name="uploader_upload_in_progress_ticker">Sendi inn …</string>
   <string name="uploader_upload_in_progress_content">%1$d%% Sendi inn %2$s</string>
   <string name="uploader_upload_succeeded_ticker">Innsending tókst</string>
   <string name="uploader_upload_succeeded_content_single">%1$s sent inn</string>
@@ -166,7 +166,7 @@
   <string name="uploads_view_upload_status_waiting_for_wifi">Bíð eftir þráðlausri nettengingu</string>
   <string name="uploads_view_later_waiting_to_upload">Bíð eftir að senda inn</string>
   <string name="uploads_view_unsupported_media_type">Óstudd gerð gagnamiðils</string>
-  <string name="downloader_download_in_progress_ticker">Sæki ...</string>
+  <string name="downloader_download_in_progress_ticker">Sæki …</string>
   <string name="downloader_download_in_progress_content">%1$d%% Sæki %2$s</string>
   <string name="downloader_download_succeeded_ticker">Niðurhal tókst</string>
   <string name="downloader_download_succeeded_content">%1$s niðurhalað</string>
@@ -226,7 +226,7 @@
   <string name="media_play_pause_description">Afspilun-eða-hlé hnappur</string>
   <string name="media_forward_description">Spóla-hratt-áfram hnappur</string>
   <string name="upload_from_camera_title">Mynd úr myndavél</string>
-  <string name="auth_getting_authorization">Fæ heimild ...</string>
+  <string name="auth_getting_authorization">Fæ heimild …</string>
   <string name="auth_trying_to_login">Reyni að skrá inn …</string>
   <string name="auth_no_net_conn_title">Engin nettenging</string>
   <string name="auth_nossl_plain_ok_title">Örugg tenging ekki tiltæk.</string>
@@ -332,11 +332,8 @@
   <string name="prefs_camera_picture_upload_path_title">Innsendingarslóð fyrir myndir</string>
   <string name="share_link_no_support_share_api">Því miður, deiling gagna er ekki virk á þjóninum. Hafðu samband við
 		kerfisstjóra.</string>
-  <string name="share_link_file_no_exist">Get ekki deilt. Athugaðu hvort skráin sé til</string>
   <string name="share_link_file_error">Villa kom upp við að reyna að deila þessari skrá eða möppu</string>
-  <string name="unshare_link_file_no_exist">Get ekki hætt deilingu. Athugaðu hvort skráin sé til</string>
   <string name="unshare_link_file_error">Villa kom upp við að reyna að hætta deilingu á þessari skrá eða möppu</string>
-  <string name="update_link_file_no_exist">Get ekki uppfært. Athugaðu hvort skráin sé til</string>
   <string name="update_link_file_error">Villa kom upp við að reyna að uppfæra sameignina</string>
   <string name="share_link_password_title">Settu inn lykilorð</string>
   <string name="share_link_empty_password">Þú verður að setja inn lykilorð</string>

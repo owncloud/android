@@ -1,9 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="actionbar_upload_files">ફાઇલો</string>
-  <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
-  <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_close">બંધ </string>
   <string name="sync_string_files">ફાઇલો</string>
-  <!--Welcome to oC intro features-->
 </resources>

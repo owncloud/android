@@ -3,8 +3,6 @@
   <string name="actionbar_mkdir">కొత్త సంచయం</string>
   <string name="actionbar_settings">అమరికలు</string>
   <string name="actionbar_send_file">పంపించు</string>
-  <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
-  <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_help">సహాయం</string>
   <string name="prefs_category_more">మరిన్ని</string>
   <string name="prefs_help">సహాయం</string>
@@ -21,5 +19,4 @@
   <string name="share_confirm_public_link_button">భద్రపరచు</string>
   <string name="share_via_link_password_label">సంకేతపదం</string>
   <string name="share_privilege_can_edit_delete">తొలగించు</string>
-  <!--Welcome to oC intro features-->
 </resources>

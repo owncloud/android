@@ -3,8 +3,6 @@
   <string name="actionbar_upload">Байршуулах</string>
   <string name="actionbar_upload_files">Файлууд</string>
   <string name="actionbar_settings">Тохиргоо</string>
-  <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
-  <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="prefs_category_general">Ерөнхий</string>
   <string name="prefs_category_security">Аюулгүй байдал</string>
   <string name="auth_username">Хэрэглэгчийн нэр</string>
@@ -21,5 +19,4 @@
   <string name="share_cancel_public_link_button">Цуцлах</string>
   <string name="share_confirm_public_link_button">Хадгалах</string>
   <string name="share_via_link_password_label">Нууц үг</string>
-  <!--Welcome to oC intro features-->
 </resources>

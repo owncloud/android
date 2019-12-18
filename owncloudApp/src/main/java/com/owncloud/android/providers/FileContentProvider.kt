@@ -206,11 +206,11 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
                 val doubleCheck = query(uri, projection, where, whereArgs, null)
                 // ugly patch; serious refactorization is needed to reduce work in
                 // FileDataStorageManager and bring it to FileContentProvider
-                if (!doubleCheck.moveToFirst()) {
+                return if (!doubleCheck.moveToFirst()) {
                     doubleCheck.close()
                     val fileId = db.insert(ProviderTableMeta.FILE_TABLE_NAME, null, values)
                     if (fileId <= 0) throw SQLException("ERROR $uri")
-                    return ContentUris.withAppendedId(ProviderTableMeta.CONTENT_URI_FILE, fileId)
+                    ContentUris.withAppendedId(ProviderTableMeta.CONTENT_URI_FILE, fileId)
                 } else {
                     // file is already inserted; race condition, let's avoid a duplicated entry
                     val insertedFileUri = ContentUris.withAppendedId(
@@ -218,7 +218,7 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
                         doubleCheck.getLong(doubleCheck.getColumnIndex(ProviderTableMeta._ID))
                     )
                     doubleCheck.close()
-                    return insertedFileUri
+                    insertedFileUri
                 }
             }
             SHARES -> {

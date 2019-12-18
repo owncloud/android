@@ -21,7 +21,7 @@
     android:id="@+id/share_activity_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.owncloud.android.ui.activity.ShareActivity"
+    tools:context=".presentation.ui.sharing.ShareActivity"
     android:filterTouchesWhenObscured="true"
     >
 

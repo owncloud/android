@@ -13,8 +13,6 @@
   <string name="actionbar_send_file">Schécken</string>
   <string name="actionbar_sort">Zortéieren</string>
   <string name="actionbar_sort_title">Zortéieren no</string>
-  <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
-  <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">All d\'Fichieren</string>
   <string name="drawer_item_settings">Astellungen</string>
   <string name="drawer_item_uploads_list">Uploads</string>
@@ -86,16 +84,16 @@
   <string name="common_cancel_sync">Synchronisatioun ofbriechen</string>
     <string name="common_back">Zeréck</string>
   <string name="common_error">Feeler</string>
-  <string name="common_loading">Et gëtt gelueden ...</string>
+  <string name="common_loading">Et gëtt gelueden …</string>
   <string name="common_unknown">Onbekannt</string>
   <string name="common_error_unknown">Onbekannte Feeler</string>
   <string name="about_title">Iwwer</string>
   <string name="change_password">Passwuert änneren</string>
   <string name="delete_account">De Kont läschen</string>
   <string name="create_account">Kont uleeën</string>
-  <string name="upload_chooser_title">Eropluede vun ... </string>
+  <string name="upload_chooser_title">Eropluede vun … </string>
   <string name="uploader_info_dirname">Dossiersnumm:</string>
-  <string name="uploader_upload_in_progress_ticker">Lueden erop ...</string>
+  <string name="uploader_upload_in_progress_ticker">Lueden erop …</string>
   <string name="uploader_upload_in_progress_content">%1$d%% eroplueden %2$s</string>
   <string name="uploader_upload_succeeded_ticker">Eroplueden ofgeschloss</string>
   <string name="uploader_upload_succeeded_content_single">%1$s eropgelueden</string>
@@ -170,8 +168,8 @@
   <string name="media_rewind_description">Zréckspull-Knäppchen</string>
   <string name="media_play_pause_description">Ofspill- oder Paus-Knäppchen</string>
   <string name="media_forward_description">Virspull-Knäppche</string>
-  <string name="auth_getting_authorization">Authoriséierung kréien ...</string>
-  <string name="auth_trying_to_login">Versuch fir sech anzeloggen ...</string>
+  <string name="auth_getting_authorization">Authoriséierung kréien …</string>
+  <string name="auth_trying_to_login">Versuch fir sech anzeloggen …</string>
   <string name="auth_no_net_conn_title">Keng Netzwierkconnectioun</string>
   <string name="auth_nossl_plain_ok_title">Keng geséchert Connectioun disponibel.</string>
   <string name="auth_connection_established">Connectioun hiergestallt</string>
@@ -265,11 +263,8 @@
   <string name="preview_image_error_unknown_format">Dëst Bild kann net ugewise ginn</string>
   <string name="error__upload__local_file_not_copied">%1$s konnt net an de lokalen Dossier %2$s kopéiert ginn</string>
   <string name="share_link_no_support_share_api">Pardon, Deelen ass net erlaabt op ärem Server. W.e.g. kontaktéier däin Administrateur.</string>
-  <string name="share_link_file_no_exist">Konnt net gedeelt ginn. Kontrolléier w.e.g. ob de Fichier existéiert</string>
   <string name="share_link_file_error">Beim Deele vun dësem Fichier oder Dossier ass e Feeler opgetrueden</string>
-  <string name="unshare_link_file_no_exist">Konnt net ongedeelt ginn. Kontrolléier w.e.g. ob de Fichier existéiert</string>
   <string name="unshare_link_file_error">Beim Zesummeleeë vun dësem Fichier oder Dossier ass e Feeler opgetrueden</string>
-  <string name="update_link_file_no_exist">Konnt net aktualiséiert ginn. Kontrolléier w.e.g. ob de Fichier existéiert</string>
   <string name="update_link_file_error">Beim Deele vun dësem Fichier oder Dossier ass e Feeler opgetrueden</string>
   <string name="share_link_password_title">E Passwuert aginn</string>
   <string name="share_link_empty_password">Du muss e Passwuert aginn</string>
@@ -297,7 +292,7 @@
   <string name="actionbar_logger">Protokoller</string>
   <string name="log_send_history_button">Historique schécken</string>
   <string name="log_send_mail_subject">Protokoller vun der %1$s-Android-App</string>
-  <string name="log_progress_dialog_text">Donnée gi gelueden ...</string>
+  <string name="log_progress_dialog_text">Donnée gi gelueden …</string>
     <string name="actionbar_move">Réckelen</string>
   <string name="file_list_empty_moving">Hei ass näischt. Setz en Dossier dobäi!</string>
   <string name="folder_picker_choose_button_text">Auswielen</string>
@@ -328,8 +323,8 @@
   <string name="file_list__footer__files">%1$d Fichieren</string>
   <string name="file_list__footer__files_and_folder">1 Fichier, %1$d Dossieren</string>
   <string name="file_list__footer__files_and_folders">%1$d Fichieren, %2$d Dossieren</string>
-  <string name="prefs_camera_upload_behaviour_dialogTitle">Den original Fichier gëtt ...</string>
-  <string name="prefs_camera_upload_behaviour_title">Den original Fichier gëtt ...</string>
+  <string name="prefs_camera_upload_behaviour_dialogTitle">Den original Fichier gëtt …</string>
+  <string name="prefs_camera_upload_behaviour_title">Den original Fichier gëtt …</string>
   <string name="upload_copy_files">Fichier kopéieren</string>
   <string name="upload_move_files">Fichier réckelen</string>
   <string name="pref_behaviour_entries_keep_file">Am original Dossier gehalen</string>
@@ -359,5 +354,4 @@
   <string name="manage_space_clear_data">Donnéeë läschen</string>
   <string name="manage_space_error">Verschidde Fichiere konnten net geläscht ginn.</string>
   <string name="local_file_not_found_toast">De Fichier konnt net am lokale Fichier System fonnt ginn</string>
-  <!--Welcome to oC intro features-->
 </resources>

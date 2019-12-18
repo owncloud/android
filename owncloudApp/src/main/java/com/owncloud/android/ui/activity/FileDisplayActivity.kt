@@ -31,7 +31,6 @@ package com.owncloud.android.ui.activity
 import android.Manifest
 import android.accounts.Account
 import android.accounts.AuthenticatorException
-import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.app.Activity
 import android.content.BroadcastReceiver
@@ -44,11 +43,10 @@ import android.content.ServiceConnection
 import android.content.SyncRequest
 import android.content.pm.PackageManager
 import android.content.res.Resources.NotFoundException
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
-import android.os.Parcelable
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -184,7 +182,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
 
         /// Load of saved instance state
         if (savedInstanceState != null) {
-            Log.d(TAG, savedInstanceState.toString())
+            Log_OC.d(savedInstanceState.toString())
 
             fileWaitingToPreview = savedInstanceState.getParcelable(KEY_WAITING_TO_PREVIEW)
             syncInProgress = savedInstanceState.getBoolean(KEY_SYNC_IN_PROGRESS)
@@ -731,15 +729,14 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
 
     private fun requestUploadOfContentFromApps(contentIntent: Intent?, resultCode: Int) {
 
-        val streamsToUpload = ArrayList<Parcelable>()
+        val streamsToUpload = ArrayList<Uri>()
 
-        //getClipData is only supported on api level 16+, Jelly Bean
         if (contentIntent!!.clipData != null && contentIntent.clipData!!.itemCount > 0) {
             for (i in 0 until contentIntent.clipData!!.itemCount) {
                 streamsToUpload.add(contentIntent.clipData!!.getItemAt(i).uri)
             }
         } else {
-            streamsToUpload.add(contentIntent!!.data)
+            streamsToUpload.add(contentIntent.data!!)
         }
 
         val behaviour = if (resultCode == RESULT_OK_AND_MOVE)
@@ -1054,7 +1051,6 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
          * @author David A. Velasco
          * [BroadcastReceiver] to enable upload feedback in UI
          */
-        @SuppressLint("StringFormatInvalid")
         override fun onReceive(context: Context, intent: Intent) {
             val uploadedRemotePath = intent.getStringExtra(Extras.EXTRA_REMOTE_PATH)
             val accountName = intent.getStringExtra(Extras.EXTRA_ACCOUNT_NAME)
@@ -1861,10 +1857,10 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
 
         const val ACTION_DETAILS = "com.owncloud.android.ui.activity.action.DETAILS"
 
-        val REQUEST_CODE__SELECT_CONTENT_FROM_APPS = REQUEST_CODE__LAST_SHARED + 1
-        val REQUEST_CODE__MOVE_FILES = REQUEST_CODE__LAST_SHARED + 2
-        val REQUEST_CODE__COPY_FILES = REQUEST_CODE__LAST_SHARED + 3
-        val REQUEST_CODE__UPLOAD_FROM_CAMERA = REQUEST_CODE__LAST_SHARED + 4
-        val RESULT_OK_AND_MOVE = Activity.RESULT_FIRST_USER
+        const val REQUEST_CODE__SELECT_CONTENT_FROM_APPS = REQUEST_CODE__LAST_SHARED + 1
+        const val REQUEST_CODE__MOVE_FILES = REQUEST_CODE__LAST_SHARED + 2
+        const val REQUEST_CODE__COPY_FILES = REQUEST_CODE__LAST_SHARED + 3
+        const val REQUEST_CODE__UPLOAD_FROM_CAMERA = REQUEST_CODE__LAST_SHARED + 4
+        const val RESULT_OK_AND_MOVE = Activity.RESULT_FIRST_USER
     }
 }

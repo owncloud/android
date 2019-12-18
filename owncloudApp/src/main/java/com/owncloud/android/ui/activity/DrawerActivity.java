@@ -40,6 +40,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -90,8 +91,6 @@ public abstract class DrawerActivity extends ToolbarActivity {
      * accounts for the (max) three displayed accounts in the drawer header.
      */
     private Account[] mAccountsWithAvatars = new Account[3];
-
-    private TextView mAccountQuotaText;
 
     /**
      * Initializes the drawer, its content and highlights the menu item with the given id.
@@ -178,12 +177,7 @@ public abstract class DrawerActivity extends ToolbarActivity {
             setupDrawerContent(mNavigationView);
 
             findNavigationViewChildById(R.id.drawer_active_user)
-                    .setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            toggleAccountList();
-                        }
-                    });
+                    .setOnClickListener(onClick -> toggleAccountList());
         }
 
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.drawer_open, R.string.drawer_close) {
@@ -304,10 +298,9 @@ public abstract class DrawerActivity extends ToolbarActivity {
         String feedbackMail = (String) getText(R.string.mail_feedback);
         String feedback = "Android v" + BuildConfig.VERSION_NAME + " - " + getText(R.string.drawer_feedback);
         Intent intent = new Intent(Intent.ACTION_SENDTO);
-        intent.setType("text/plain");
         intent.putExtra(Intent.EXTRA_SUBJECT, feedback);
 
-        intent.setData(Uri.parse(feedbackMail));
+        intent.setDataAndType(Uri.parse(feedbackMail), "text/plain");
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
@@ -439,19 +432,19 @@ public abstract class DrawerActivity extends ToolbarActivity {
         mNavigationView.getMenu().removeGroup(R.id.drawer_menu_accounts);
 
         // add all accounts to list
-        for (int i = 0; i < accounts.length; i++) {
-            if (!getAccount().name.equals(accounts[i].name)) {
+        for (Account account : accounts) {
+            if (!getAccount().name.equals(account.name)) {
 
                 MenuItem accountMenuItem = mNavigationView.getMenu().add(
                         R.id.drawer_menu_accounts,
                         Menu.NONE,
                         MENU_ORDER_ACCOUNT,
-                        accounts[i].name
+                        account.name
                 );
                 ThumbnailsCacheManager.GetAvatarTask task =
                         new ThumbnailsCacheManager.GetAvatarTask(
                                 accountMenuItem,
-                                accounts[i],
+                                account,
                                 mMenuAccountAvatarRadiusDimension,
                                 false
                         );
@@ -521,7 +514,7 @@ public abstract class DrawerActivity extends ToolbarActivity {
                         String.format(getString(R.string.drawer_quota),
                                 DisplayUtils.bytesToHumanReadable(userQuota.getUsed(), this),
                                 DisplayUtils.bytesToHumanReadable(userQuota.getTotal(), this),
-                                userQuota.getRelative()
+                                String.valueOf(userQuota.getRelative())
                         )
                 );
 
@@ -694,7 +687,7 @@ public abstract class DrawerActivity extends ToolbarActivity {
     }
 
     @Override
-    public void onConfigurationChanged(Configuration newConfig) {
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         if (mDrawerToggle != null) {
             mDrawerToggle.onConfigurationChanged(newConfig);

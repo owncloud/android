@@ -105,7 +105,7 @@ Descárgueo de aquí: %2$s</string>
   <string name="file_list_seconds_ago">segundos atrás</string>
   <string name="file_list_empty">Aquí non hai nada. Envíe algo!</string>
   <string name="file_list_empty_available_offline">Non hai ficheiros dispoñíbeis sen conexión.</string>
-  <string name="file_list_loading">Cargando...</string>
+  <string name="file_list_loading">Cargando…</string>
   <string name="file_list_no_app_for_file_type">Non se atopou unha aplicación para este tipo de ficheiro</string>
   <string name="local_file_list_empty">Non hai ficheiros neste cartafol.</string>
   <string name="local_file_list_empty_just_folders">Non hai cartafoles neste cartafol.</string>
@@ -135,7 +135,7 @@ Descárgueo de aquí: %2$s</string>
   <string name="common_back">Atrás</string>
   <string name="common_save_exit">Gardaer e saír.</string>
   <string name="common_error">Erro</string>
-  <string name="common_loading">Cargando...</string>
+  <string name="common_loading">Cargando…</string>
   <string name="common_unknown">descoñecido</string>
   <string name="common_error_unknown">Produciuse un erro descoñecido</string>
   <string name="common_pending">Pendentes</string>
@@ -250,8 +250,8 @@ Descárgueo de aquí: %2$s</string>
   <string name="media_play_pause_description">Botón de reprodución/pausa</string>
   <string name="media_forward_description">Botón de avance rápido</string>
   <string name="upload_from_camera_title">Imaxe da cámara</string>
-  <string name="auth_getting_authorization">Obtendo a autorización...</string>
-  <string name="auth_trying_to_login">Tentando acceder...</string>
+  <string name="auth_getting_authorization">Obtendo a autorización…</string>
+  <string name="auth_trying_to_login">Tentando acceder…</string>
   <string name="auth_no_net_conn_title">Sen conexión de rede</string>
   <string name="auth_nossl_plain_ok_title">Non hai conexión seguras dispoñíbeis.</string>
   <string name="auth_connection_established">Estabeleceuse a conexión</string>
@@ -364,11 +364,8 @@ Descárgueo de aquí: %2$s</string>
   <string name="get_capabilities_error">Produciuse un erro ao tentar recuperar funcións</string>
   <string name="share_link_no_support_share_api">O seu servidor non ten activada a opción de compartir. Póñase en contacto co
 		administrador.</string>
-  <string name="share_link_file_no_exist">Non foi posíbel compartir. Comprobe que existe o ficheiro</string>
   <string name="share_link_file_error">Produciuse un erro ao tentar compartir este ficheiro ou cartafol.</string>
-  <string name="unshare_link_file_no_exist">Non foi posíbel deixar de compartir. Comprobe que existe o ficheiro</string>
   <string name="unshare_link_file_error">Produciuse un erro ao tentar deixar de compartir este ficheiro ou cartafol</string>
-  <string name="update_link_file_no_exist">Non foi posíbel actualizar. Comprobe que existe o ficheiro</string>
   <string name="update_link_file_error">Produciuse un erro ao tentar actualizar o recurso compartido</string>
   <string name="share_link_password_title">Escriba un contrasinal</string>
   <string name="share_link_empty_password">Ten que escribir un contrasinal</string>
@@ -401,7 +398,7 @@ Descárgueo de aquí: %2$s</string>
   <string name="log_send_history_button">Enviar o historial</string>
   <string name="log_send_no_mail_app">Non se atopou unha aplicación para enviar os rexistros. Instale unha aplicación de correo!</string>
   <string name="log_send_mail_subject">Rexistros da aplicación %1$s Android</string>
-  <string name="log_progress_dialog_text">Cargando os datos...</string>
+  <string name="log_progress_dialog_text">Cargando os datos…</string>
   <string name="actionbar_select_all">Seleccionar todo</string>
   <string name="actionbar_select_inverse">Seleccionar á inversa</string>
   <string name="actionbar_move">Mover</string>

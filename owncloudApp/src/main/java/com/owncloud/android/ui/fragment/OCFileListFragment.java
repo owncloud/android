@@ -318,7 +318,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
                         action.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
                         getActivity().startActivityForResult(
                                 Intent.createChooser(action, getString(R.string.upload_chooser_title)),
-                                FileDisplayActivity.Companion.getREQUEST_CODE__SELECT_CONTENT_FROM_APPS()
+                                FileDisplayActivity.REQUEST_CODE__SELECT_CONTENT_FROM_APPS
                         );
                         dialog.hide();
                         return false;
@@ -328,7 +328,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
                     @Override
                     public boolean onTouch(View v, MotionEvent event) {
 
-                        ((FileDisplayActivity) getActivity()).getFilesUploadHelper().uploadFromCamera(FileDisplayActivity.Companion.getREQUEST_CODE__UPLOAD_FROM_CAMERA());
+                        ((FileDisplayActivity) getActivity()).getFilesUploadHelper().uploadFromCamera(FileDisplayActivity.REQUEST_CODE__UPLOAD_FROM_CAMERA);
                         dialog.hide();
                         return false;
                     }
@@ -939,15 +939,13 @@ public class OCFileListFragment extends ExtendedListFragment implements
             case R.id.action_move: {
                 Intent action = new Intent(getActivity(), FolderPickerActivity.class);
                 action.putParcelableArrayListExtra(FolderPickerActivity.EXTRA_FILES, checkedFiles);
-                getActivity().startActivityForResult(action,
-                        FileDisplayActivity.Companion.getREQUEST_CODE__MOVE_FILES());
+                getActivity().startActivityForResult(action, FileDisplayActivity.REQUEST_CODE__MOVE_FILES);
                 return true;
             }
             case R.id.action_copy:
                 Intent action = new Intent(getActivity(), FolderPickerActivity.class);
                 action.putParcelableArrayListExtra(FolderPickerActivity.EXTRA_FILES, checkedFiles);
-                getActivity().startActivityForResult(action,
-                        FileDisplayActivity.Companion.getREQUEST_CODE__COPY_FILES());
+                getActivity().startActivityForResult(action, FileDisplayActivity.REQUEST_CODE__COPY_FILES);
                 return true;
             default:
                 return false;

@@ -462,7 +462,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
             return
         }
         for (data in rootIdToStorageManager.values) {
-            if (data.account?.name == rootId) {
+            if (data.account.name == rootId) {
                 currentStorageManager = data
             }
         }
@@ -564,7 +564,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
             if (fileFromOtherStorageManager != null) {
                 Log_OC.d(
                     TAG,
-                    "File with id $id found in storage manager: ${otherStorageManager}"
+                    "File with id $id found in storage manager: $otherStorageManager"
                 )
                 break
             }
@@ -575,7 +575,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
     private fun getFileByPathOrException(path: String): OCFile =
         getFileByPath(path) ?: throw FileNotFoundException("File $path not found")
 
-    private fun getFileByPath(path: String): OCFile? = currentStorageManager?.getFileByPath(path)
+    private fun getFileByPath(path: String): OCFile? = getFileByPath(path)
 
     companion object {
         private val TAG = DocumentsStorageProvider::class.java.toString()

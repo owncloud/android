@@ -66,10 +66,10 @@ fun Throwable.parseError(genericErrorMessage: String, resources: Resources): Cha
             else -> resources.getString(R.string.common_error_unknown)
         }
 
-        if (reason.isEmpty()) {
-            return genericErrorMessage
+        return if (reason.isEmpty()) {
+            genericErrorMessage
         } else {
-            return "$genericErrorMessage ${resources.getString(R.string.error_reason)} $reason"
+            "$genericErrorMessage ${resources.getString(R.string.error_reason)} $reason"
         }
     }
 }

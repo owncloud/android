@@ -1,8 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
-  <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="common_error_unknown">ຂໍ້ຜິດພາດທີ່ບໍ່ຮູ້ສາເຫດ</string>
   <string name="uploads_view_upload_status_unknown_fail">ຂໍ້ຜິດພາດທີ່ບໍ່ຮູ້ສາເຫດ</string>
-  <!--Welcome to oC intro features-->
 </resources>

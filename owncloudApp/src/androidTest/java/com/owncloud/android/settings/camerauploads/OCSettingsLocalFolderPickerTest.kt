@@ -40,7 +40,7 @@ class OCSettingsLocalFolderPickerTest {
     @JvmField
     val activityRule = ActivityTestRule(LocalFolderPickerActivity::class.java, true, true)
 
-    val errorMessage = "Activity not finished"
+    private val errorMessage = "Activity not finished"
 
     @Test
     fun localFolderPickerView() {

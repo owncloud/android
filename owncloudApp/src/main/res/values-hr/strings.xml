@@ -15,8 +15,6 @@
   <string name="actionbar_descending">Silazno</string>
   <string name="actionbar_sort_title">Sortiraj po</string>
   <string name="actionbar_sort_by_name">A-Z</string>
-  <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
-  <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Sve datoteke</string>
   <string name="drawer_item_settings">Postavke</string>
   <string name="drawer_item_uploads_list">Upload-i</string>
@@ -65,7 +63,7 @@
   <string name="uploader_error_message_source_file_not_copied">Za vrijeme kopiranja datoteke u priveremenu mapu desila se greška. Molimo probaj poslati ponovo.</string>
   <string name="file_list_seconds_ago">prije par sekundi</string>
   <string name="file_list_empty">Nema ničega u ovoj mapi. Pošalji nešto!</string>
-  <string name="file_list_loading">Učitavanje...</string>
+  <string name="file_list_loading">Učitavanje…</string>
   <string name="file_list_no_app_for_file_type">Nije nađena aplikacija za ovaj tip datoteke</string>
   <string name="local_file_list_empty">Nema datoteka u ovoj mapi</string>
   <string name="local_file_list_empty_just_folders">Nema mapa u ovoj mapi</string>
@@ -92,7 +90,7 @@
     <string name="common_back">Natrag</string>
   <string name="common_save_exit">Spremi &amp; izađi</string>
   <string name="common_error">Greška</string>
-  <string name="common_loading">Učitavanje...</string>
+  <string name="common_loading">Učitavanje…</string>
   <string name="common_unknown">nepoznato</string>
   <string name="common_error_unknown">Nepoznata pogreška</string>
   <string name="common_pending">Na čekanju</string>
@@ -162,5 +160,4 @@
   <string name="share_privilege_can_edit_create">Kreirajte</string>
   <string name="share_privilege_can_edit_change">promijeni</string>
   <string name="share_privilege_can_edit_delete">Izbrišite</string>
-  <!--Welcome to oC intro features-->
 </resources>

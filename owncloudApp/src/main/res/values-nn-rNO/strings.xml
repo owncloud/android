@@ -14,8 +14,6 @@
   <string name="actionbar_sort">Sorter</string>
   <string name="actionbar_sort_title">Sorter etter</string>
   <string name="actionbar_sort_by_name">A-Å</string>
-  <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
-  <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Alle filer</string>
   <string name="drawer_item_settings">Innstillingar</string>
   <string name="drawer_item_uploads_list">Opplastingar</string>
@@ -64,7 +62,7 @@
   <string name="uploader_error_message_source_file_not_copied">Feil ved kopi av fil til mellombels katalog, prøv å sende fil på ny.</string>
   <string name="file_list_seconds_ago">sekund sidan</string>
   <string name="file_list_empty">Ingenting her. Last noko opp!</string>
-  <string name="file_list_loading">Lastar...</string>
+  <string name="file_list_loading">Lastar…</string>
   <string name="file_list_no_app_for_file_type">Ingen program funnen for denne fil type</string>
   <string name="local_file_list_empty">Ingen filer i denne mappa</string>
   <string name="local_file_list_empty_just_folders">Ingen mappe i denne mappa.</string>
@@ -91,7 +89,7 @@
     <string name="common_back">Tilbake</string>
   <string name="common_save_exit">Lagre &amp; avslutt</string>
   <string name="common_error">Feil</string>
-  <string name="common_loading">Lastar...</string>
+  <string name="common_loading">Lastar…</string>
   <string name="common_unknown">ukjend</string>
   <string name="common_error_unknown">Ukjend feil</string>
   <string name="common_pending">Under vegs</string>
@@ -191,8 +189,8 @@
   <string name="media_rewind_description">Tilbake knapp</string>
   <string name="media_play_pause_description">Avspeling eller pause knapp</string>
   <string name="media_forward_description">Raskt framover knapp</string>
-  <string name="auth_getting_authorization">Blir autorisert...</string>
-  <string name="auth_trying_to_login">Førsøker å logge inn...</string>
+  <string name="auth_getting_authorization">Blir autorisert…</string>
+  <string name="auth_trying_to_login">Førsøker å logge inn…</string>
   <string name="auth_no_net_conn_title">Inga nettilkopling</string>
   <string name="auth_nossl_plain_ok_title">Trygg tilkopling ikkje tilgjengeleg.</string>
   <string name="auth_connection_established">Tilkopling oppretta</string>
@@ -263,5 +261,4 @@
   <string name="action_retry_uploads">Prøv feila på nytt</string>
   <string name="action_clear_failed_uploads">Fjern feila</string>
   <string name="share_warning_about_forwarding_public_links">Alle med lenke har tilgang til fil eller mappe</string>
-  <!--Welcome to oC intro features-->
 </resources>

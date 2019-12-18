@@ -321,7 +321,7 @@
   <string name="drawer_manage_accounts">مدیریت حساب‌ها</string>
   <string name="actionbar_logger">لاگ‌ها</string>
   <string name="log_send_history_button">فرستادن تاریخچه</string>
-  <string name="log_progress_dialog_text">بارگذاری داده...</string>
+  <string name="log_progress_dialog_text">بارگذاری داده…</string>
   <string name="actionbar_select_all">انتخاب همه</string>
   <string name="actionbar_move">انتقال</string>
   <string name="file_list_empty_moving">اینجا هیچی نیست، میتوانید پوشه اضافه کنید</string>

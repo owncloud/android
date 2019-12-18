@@ -14,8 +14,6 @@
   <string name="actionbar_sort">Sorteer</string>
   <string name="actionbar_sort_title">Sorteer volgens</string>
   <string name="actionbar_sort_by_name">A-Z</string>
-  <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
-  <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Alle lêers</string>
   <string name="drawer_item_settings">Instellings</string>
   <string name="drawer_item_uploads_list">Oplaaie</string>
@@ -108,5 +106,4 @@
   <string name="edit_share_unshare">Staak deling</string>
   <string name="failed_upload_quota_exceeded_text">Nie genoeg spasie in die rekening</string>
   <string name="share_warning_about_forwarding_public_links">Enigeen met die skakel het toegang tot die lêer/vouer</string>
-  <!--Welcome to oC intro features-->
 </resources>

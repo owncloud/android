@@ -67,62 +67,10 @@ data class OCShareEntity(
     val name: String?,
     @ColumnInfo(name = ProviderTableMeta.OCSHARES_URL)
     val shareLink: String?
-) : Parcelable {
+) {
     @PrimaryKey(autoGenerate = true) var id: Int = 0
 
-    constructor(parcel: Parcel) : this(
-        parcel.readLong(),
-        parcel.readLong(),
-        parcel.readInt(),
-        parcel.readString(),
-        parcel.readString(),
-        parcel.readInt(),
-        parcel.readLong(),
-        parcel.readLong(),
-        parcel.readString(),
-        parcel.readString(),
-        parcel.readString(),
-        parcel.readByte() != 0.toByte(),
-        parcel.readLong(),
-        parcel.readLong(),
-        parcel.readString(),
-        parcel.readString(),
-        parcel.readString()
-    ) {
-        id = parcel.readInt()
-    }
-
     companion object {
-
-        /**
-         * Generated - should be refreshed every time the class changes!!
-         */
-        private const val serialVersionUID = 4124975224281327921L
-
-        private val TAG = OCShareEntity::class.java.simpleName
-
-        const val DEFAULT_PERMISSION = -1
-        const val READ_PERMISSION_FLAG = 1
-        const val UPDATE_PERMISSION_FLAG = 2
-        const val CREATE_PERMISSION_FLAG = 4
-        const val DELETE_PERMISSION_FLAG = 8
-        const val SHARE_PERMISSION_FLAG = 16
-        const val MAXIMUM_PERMISSIONS_FOR_FILE = READ_PERMISSION_FLAG +
-                UPDATE_PERMISSION_FLAG +
-                SHARE_PERMISSION_FLAG
-        const val MAXIMUM_PERMISSIONS_FOR_FOLDER = MAXIMUM_PERMISSIONS_FOR_FILE +
-                CREATE_PERMISSION_FLAG +
-                DELETE_PERMISSION_FLAG
-        const val FEDERATED_PERMISSIONS_FOR_FILE_UP_TO_OC9 = READ_PERMISSION_FLAG + UPDATE_PERMISSION_FLAG
-        const val FEDERATED_PERMISSIONS_FOR_FILE_AFTER_OC9 = READ_PERMISSION_FLAG +
-                UPDATE_PERMISSION_FLAG +
-                SHARE_PERMISSION_FLAG
-        const val FEDERATED_PERMISSIONS_FOR_FOLDER_UP_TO_OC9 = READ_PERMISSION_FLAG +
-                UPDATE_PERMISSION_FLAG +
-                CREATE_PERMISSION_FLAG +
-                DELETE_PERMISSION_FLAG
-        const val FEDERATED_PERMISSIONS_FOR_FOLDER_AFTER_OC9 =
-            FEDERATED_PERMISSIONS_FOR_FOLDER_UP_TO_OC9 + SHARE_PERMISSION_FLAG
 
         fun fromCursor(cursor: Cursor): OCShareEntity {
             return OCShareEntity(
@@ -167,40 +115,5 @@ data class OCShareEntity(
                 values.getAsString(ProviderTableMeta.OCSHARES_URL)
             )
         }
-
-        /**
-         * Parcelable Methods
-         */
-        @JvmField
-        val CREATOR: Parcelable.Creator<OCShareEntity> = object : Parcelable.Creator<OCShareEntity> {
-            override fun createFromParcel(source: Parcel): OCShareEntity {
-                return OCShareEntity(source)
-            }
-
-            override fun newArray(size: Int): Array<OCShareEntity?> {
-                return arrayOfNulls(size)
-            }
-        }
-    }
-
-    override fun describeContents(): Int = this.hashCode()
-
-    override fun writeToParcel(dest: Parcel?, flags: Int) {
-        dest?.writeInt(id)
-        dest?.writeString(shareWith)
-        dest?.writeString(path)
-        dest?.writeString(token)
-        dest?.writeString(sharedWithDisplayName)
-        dest?.writeString(sharedWithAdditionalInfo)
-        dest?.writeString(name)
-        dest?.writeString(shareLink)
-        dest?.writeLong(fileSource)
-        dest?.writeLong(itemSource)
-        dest?.writeInt(shareType)
-        dest?.writeInt(permissions)
-        dest?.writeLong(sharedDate)
-        dest?.writeLong(expirationDate)
-        dest?.writeInt(if (isFolder) 1 else 0)
-        dest?.writeLong(userId)
     }
 }

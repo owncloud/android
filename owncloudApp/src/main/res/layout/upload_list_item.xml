@@ -52,7 +52,7 @@
                 android:id="@+id/upload_file_size"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="left"
+                android:gravity="start"
                 android:textColor="@color/list_item_lastmod_and_filesize_text"
                 android:ellipsize="middle"
                 android:singleLine="true"
@@ -112,7 +112,7 @@
         android:focusable="false"
         android:focusableInTouchMode="false"
         android:layout_gravity="center_vertical"
-        android:paddingLeft="8dp"
+        android:paddingStart="8dp"
         >
 
         <ImageButton

@@ -222,7 +222,7 @@ class ErrorMessageAdapter {
                     return f.format(R.string.auth_account_not_the_same)
                 RemoteOperationResult.ResultCode.OK_REDIRECT_TO_NON_SECURE_CONNECTION ->
                     return f.format(R.string.auth_redirect_non_secure_connection_title)
-                else -> if (result.httpPhrase != null && result.httpPhrase.length > 0)
+                else -> if (result.httpPhrase != null && result.httpPhrase.isNotEmpty())
                     return result.httpPhrase
             }
 

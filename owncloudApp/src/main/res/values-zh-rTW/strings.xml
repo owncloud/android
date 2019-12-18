@@ -46,7 +46,7 @@
   <string name="recommend_text">我想邀起您也在智慧型手機上使用%1$s!\n下載:%2$s</string>
   <string name="auth_oauth_failure_snackbar_action">登入</string>
   <string name="auth_check_server">檢查伺服器</string>
-  <string name="auth_host_url">伺服器位址 https://...</string>
+  <string name="auth_host_url">伺服器位址 https://…</string>
   <string name="auth_username">使用者名稱</string>
   <string name="auth_password">密碼</string>
   <string name="auth_register">新增到 %1$s?</string>
@@ -106,7 +106,7 @@
   <string name="create_account">建立帳號</string>
   <string name="upload_chooser_title">上傳來自</string>
   <string name="uploader_info_dirname">資料夾名稱</string>
-  <string name="uploader_upload_in_progress_ticker">上傳中...</string>
+  <string name="uploader_upload_in_progress_ticker">上傳中…</string>
   <string name="uploader_upload_in_progress_content">%1$d%% 上傳中 %2$s</string>
   <string name="uploader_upload_succeeded_ticker">更新成功</string>
   <string name="uploader_upload_succeeded_content_single">%1$s 已上傳</string>
@@ -136,7 +136,7 @@
   <string name="uploads_view_upload_status_waiting_for_wifi">等待無線網路連線</string>
   <string name="uploads_view_later_waiting_to_upload">上傳等候中</string>
   <string name="uploads_view_unsupported_media_type">不支援的媒體類型</string>
-  <string name="downloader_download_in_progress_ticker">下載中 ...</string>
+  <string name="downloader_download_in_progress_ticker">下載中 …</string>
   <string name="downloader_download_in_progress_content">%1$d%% 下載中 %2$s</string>
   <string name="downloader_download_succeeded_ticker">下載成功</string>
   <string name="downloader_download_succeeded_content">%1$s 已下載</string>
@@ -193,8 +193,8 @@
   <string name="media_play_pause_description">播放或暫停按鍵</string>
   <string name="media_forward_description">快轉按鍵</string>
   <string name="upload_from_camera_title">相片</string>
-  <string name="auth_getting_authorization">登入中...</string>
-  <string name="auth_trying_to_login">輸入來登入...</string>
+  <string name="auth_getting_authorization">登入中…</string>
+  <string name="auth_trying_to_login">輸入來登入…</string>
   <string name="auth_no_net_conn_title">沒有網際網路連線</string>
   <string name="auth_nossl_plain_ok_title">安全連線不可用。</string>
   <string name="auth_connection_established">連線已建立</string>
@@ -215,7 +215,7 @@
   <string name="auth_wtf_reenter_URL">未知狀態; 請重新輸入伺服器的位址</string>
   <string name="auth_expired_oauth_token_toast">你的登入授權已過期. 請再次登入</string>
   <string name="auth_expired_basic_auth_toast">請輸入目前的密碼</string>
-    <string name="auth_connecting_auth_server">連接驗證伺服器中...</string>
+    <string name="auth_connecting_auth_server">連接驗證伺服器中…</string>
   <string name="auth_unsupported_auth_method">伺服器不支援這種認證方式</string>
   <string name="auth_unsupported_multiaccount">%1$s 不支援複數賬戶</string>
   <string name="auth_fail_get_user_name">你的伺服器並沒有傳回正確的使用者 ID, 請聯絡伺服器的管理員
@@ -286,7 +286,6 @@
   <string name="camera_video_upload_on_wifi">經由 wifi 上傳視訊</string>
   <string name="confirmation_disable_camera_uploads_title">確認</string>
   <string name="conflict_title">檔案衝突</string>
-  <string name="conflict_message">您要保留那個檔案? 如果您同時選擇兩個版本, 本地的檔案將在檔案名稱後面會加上編號</string>
   <string name="conflict_keep_both">都保留</string>
   <string name="conflict_use_local_version">本地版本</string>
   <string name="conflict_use_server_version">伺服器版本</string>
@@ -296,11 +295,8 @@
   <string name="prefs_camera_picture_upload_path_title">圖片上傳路徑</string>
   <string name="share_link_no_support_share_api">很抱歉, 您的伺服器並未開啟分享的功能. 請聯絡您的
 		伺服器管理員.</string>
-  <string name="share_link_file_no_exist">無法分享。請檢查檔案是否存在</string>
   <string name="share_link_file_error">在分享檔案或資料夾時發生了錯誤</string>
-  <string name="unshare_link_file_no_exist">無法取消分享. 請檢查檔案是否存在</string>
   <string name="unshare_link_file_error">在取消分享檔案或資料夾時發生了錯誤</string>
-  <string name="update_link_file_no_exist">無法更新, 請檢查檔案是否存在</string>
   <string name="update_link_file_error">當嘗試更新分享時發生錯誤</string>
   <string name="share_link_password_title">輸入密碼</string>
   <string name="share_link_empty_password">您必須輸入密碼</string>
@@ -332,7 +328,7 @@
   <string name="log_send_history_button">傳送歷史</string>
   <string name="log_send_no_mail_app">沒有傳送紀錄的軟體. 請安裝郵件軟體</string>
   <string name="log_send_mail_subject">%1$s Android 應用程式記錄</string>
-  <string name="log_progress_dialog_text">資料載入中...</string>
+  <string name="log_progress_dialog_text">資料載入中…</string>
   <string name="actionbar_select_all">全選</string>
     <string name="actionbar_move">移動</string>
   <string name="file_list_empty_moving">這裡什麼也沒有，您可以增加目錄！</string>

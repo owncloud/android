@@ -196,7 +196,6 @@ public class DisplayUtils {
                 DateUtils.WEEK_IN_MILLIS, 0);
     }
 
-    @SuppressWarnings("deprecation")
     public static CharSequence getRelativeDateTimeString(
             Context c, long time, long minResolution, long transitionResolution, int flags
     ) {

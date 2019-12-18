@@ -3,8 +3,6 @@
   <string name="actionbar_upload_files">فائلیں</string>
   <string name="actionbar_settings">سیٹینگز</string>
   <string name="actionbar_send_file">بھجیں</string>
-  <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
-  <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_open">کھولیں</string>
   <string name="drawer_help">مدد</string>
   <string name="prefs_category_more">مزید</string>
@@ -32,5 +30,4 @@
   <string name="share_privilege_can_edit">تبدیل کر سکے ھیں</string>
   <string name="share_privilege_can_edit_create">نیا بنائیں</string>
   <string name="share_privilege_can_edit_delete">ختم کریں</string>
-  <!--Welcome to oC intro features-->
 </resources>

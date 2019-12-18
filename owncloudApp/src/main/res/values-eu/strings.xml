@@ -15,8 +15,6 @@
   <string name="actionbar_descending">Beherantz</string>
   <string name="actionbar_sort_title">Ordenatu honen arabera</string>
   <string name="actionbar_sort_by_name">A-Z</string>
-  <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
-  <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Fitxategi guztiak</string>
   <string name="drawer_item_settings">Ezarpenak</string>
   <string name="drawer_item_uploads_list">Kargatutakoak</string>
@@ -80,7 +78,7 @@
   <string name="uploader_error_message_source_file_not_copied">Errore bat gertatu da fitxategia aldi baterako karpetan kopiatzerakoan. Mesedez, saia zaitez berriz bidaltzen.</string>
   <string name="file_list_seconds_ago">segundu</string>
   <string name="file_list_empty">Ez dago ezer. Igo zerbait!</string>
-  <string name="file_list_loading">Kargatzen...</string>
+  <string name="file_list_loading">Kargatzen…</string>
   <string name="file_list_no_app_for_file_type">Ez da fitxategi motarentzat app-ik aurkitu</string>
   <string name="local_file_list_empty">Ez dago fitxategirik karpeta honetan.</string>
   <string name="local_file_list_empty_just_folders">Ez dago karpetarik karpeta honetan.</string>
@@ -109,7 +107,7 @@
     <string name="common_back">Atzera</string>
   <string name="common_save_exit">Gorde &amp; irten</string>
   <string name="common_error">Errorea</string>
-  <string name="common_loading">Kargatzen ...</string>
+  <string name="common_loading">Kargatzen …</string>
   <string name="common_unknown">ezezaguna</string>
   <string name="common_error_unknown">Errore ezezaguna</string>
   <string name="common_pending">Zain</string>
@@ -117,9 +115,9 @@
   <string name="change_password">Aldatu pasahitza</string>
   <string name="delete_account">Kontua ezabatu</string>
   <string name="create_account">Sortu kontua</string>
-  <string name="upload_chooser_title">Igo fitxategia hemendik ...</string>
+  <string name="upload_chooser_title">Igo fitxategia hemendik …</string>
   <string name="uploader_info_dirname">Karpetaren izena</string>
-  <string name="uploader_upload_in_progress_ticker">Igotzen ...</string>
+  <string name="uploader_upload_in_progress_ticker">Igotzen …</string>
   <string name="uploader_upload_in_progress_content">%1$d%% Igotzen %2$s</string>
   <string name="uploader_upload_succeeded_ticker">Igotzea ongi burutu da</string>
   <string name="uploader_upload_succeeded_content_single">%1$s kargatuta</string>
@@ -155,7 +153,7 @@
   <string name="uploads_view_upload_status_waiting_for_wifi">Wifi konektibitatea itxoiten</string>
   <string name="uploads_view_later_waiting_to_upload">Kargatzeko itxoiten</string>
   <string name="uploads_view_unsupported_media_type">Onartzen ez den euskarri mota</string>
-  <string name="downloader_download_in_progress_ticker">Deskargatzen ...</string>
+  <string name="downloader_download_in_progress_ticker">Deskargatzen …</string>
   <string name="downloader_download_in_progress_content">%1$d%% Deskargatzen %2$s</string>
   <string name="downloader_download_succeeded_ticker">Deskarga ongi burutu da</string>
   <string name="downloader_download_succeeded_content">%1$s deskargatu da</string>
@@ -236,7 +234,7 @@
   <string name="auth_expired_oauth_token_toast">Zure baimena iraungitu da.
 Mesedez, baimendu berriz</string>
   <string name="auth_expired_basic_auth_toast">Mesedez, sartu oraingo pasahitza</string>
-  <string name="auth_connecting_auth_server">Konektatzen autentikazio zerbitzarira...</string>
+  <string name="auth_connecting_auth_server">Konektatzen autentikazio zerbitzarira…</string>
   <string name="auth_unsupported_auth_method">Zerbitzariak ez du autentikazio metodo hau onartzen</string>
   <string name="auth_unsupported_multiaccount">%1$s ez du kontu anitzak onartzen</string>
   <string name="auth_fail_get_user_name">Zure zerbitzariak ez du bueltatzen erabiltzailearen id egokia, mesedez jarri harremanetan administratzailearekin.</string>
@@ -267,10 +265,10 @@ Mesedez, baimendu berriz</string>
   <string name="wait_checking_credentials">Egiaztatzen gordetako kredentzialak</string>
   <string name="filedisplay_unexpected_bad_get_content">Ezusteko arazoa; mesedez, saiatu beste app batekin fitxategia hautatzeko</string>
   <string name="filedisplay_no_file_selected">Ez da fitxategirik hautatu</string>
-  <string name="activity_chooser_title">Bidali lotura honi...</string>
+  <string name="activity_chooser_title">Bidali lotura honi…</string>
   <string name="wait_for_tmp_copy_from_private_storage">Fitxategia biltegi pribatutik kopiatzen</string>
   <string name="oauth_check_onoff">Saioa hasi oAuth2-rekin</string>
-  <string name="oauth_login_connection">Konektatzen oAuth2 zerbitzarira...</string>
+  <string name="oauth_login_connection">Konektatzen oAuth2 zerbitzarira…</string>
   <string name="ssl_validator_reason_cert_not_trusted">- Zerbitzariaren ziurtagiria ez da fidagarria</string>
   <string name="ssl_validator_reason_cert_expired">- Zerbitzariaren ziurtagiria iraungi da</string>
   <string name="ssl_validator_reason_cert_not_yet_valid">- Zerbitzariaren ziurtagiria oso gaztea da</string>
@@ -312,11 +310,8 @@ Mesedez, baimendu berriz</string>
   <string name="error__upload__local_file_not_copied">%1$s ezin da %2$s karpeta lokalera kopiatu</string>
   <string name="prefs_camera_picture_upload_path_title">Irudiak igotzeko bidea</string>
   <string name="share_link_no_support_share_api">Sentitzen dut, partekatzea ez dago zure zerbitzarian gaituta. Mesedez jarri harremanetan zure administratzailearekin.</string>
-  <string name="share_link_file_no_exist">Ezin izan da partekatu. Mesedez egiaztatu fitxategia existitzen dela</string>
   <string name="share_link_file_error">Errore bat egon da fitxategaia edo karpeta partekatzerakoan</string>
-  <string name="unshare_link_file_no_exist">Ezin izan da partekatzea desegin. Mesedez egiaztatu fitxategia existitzen dela</string>
   <string name="unshare_link_file_error">Errore bat egon da fitxategaia edo karpeta partekatzeari uzterakoan</string>
-  <string name="update_link_file_no_exist">Ezin izan da eguneratu. Mesedez, egiaztatu fitxategia existitzen dela.</string>
   <string name="share_link_password_title">Pasahitz bat sartu</string>
   <string name="share_link_empty_password">Pasahitz bat sartu behar duzu</string>
   <string name="activity_chooser_send_file_title">Bidali</string>
@@ -340,7 +335,7 @@ Mesedez, baimendu berriz</string>
   <string name="auth_redirect_non_secure_connection_title">Konexio segurua birbideratu da segurua ez den bide batetik.</string>
   <string name="actionbar_logger">Egunkariak</string>
   <string name="log_send_mail_subject">%1$s Android aplikazioaren egunerokoak</string>
-  <string name="log_progress_dialog_text">Datuak kargatzen...</string>
+  <string name="log_progress_dialog_text">Datuak kargatzen…</string>
   <string name="actionbar_move">Mugitu</string>
   <string name="file_list_empty_moving">Hemen ez dago ezer. Karpeta bat gehi dezakezu!</string>
   <string name="folder_picker_choose_button_text">Aukeratu</string>

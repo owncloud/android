@@ -45,19 +45,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_marginLeft="0dp"
-            android:layout_marginRight="4dp"
+            android:layout_marginStart="0dp"
+            android:layout_marginEnd="4dp"
             android:ellipsize="middle"
             android:singleLine="true"
-            android:text="TextView"
             android:textColor="@color/textColor"
             android:textSize="16dip" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="0dp"
-            android:layout_marginRight="4dp"
+            android:layout_marginStart="0dp"
+            android:layout_marginEnd="4dp"
             android:orientation="horizontal">
 
             <TextView
@@ -72,7 +71,7 @@
                 android:id="@+id/file_separator"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="right"
+                android:gravity="end"
                 android:text=", "
                 android:textColor="@color/list_item_lastmod_and_filesize_text"
                 android:textSize="@dimen/two_line_secondary_text_size" />
@@ -81,7 +80,7 @@
                 android:id="@+id/last_mod"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="right"
+                android:gravity="end"
                 android:text="Mod Date"
                 android:textColor="@color/list_item_lastmod_and_filesize_text"
                 android:textSize="@dimen/two_line_secondary_text_size" />

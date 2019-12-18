@@ -362,11 +362,8 @@
   <string name="get_sharees_error">Ndodhi një gabim teksa provohej të merreshin përdorues dhe grupe</string>
   <string name="get_capabilities_error">Ndodhi një gabim teksa provohej të merreshin aftësi</string>
   <string name="share_link_no_support_share_api">Na ndjeni, ndarja me të tjerët s\’është e aktivizuar te shërbyesi juaj. Ju lutemi, lidhuni me përgjegjësin tuaj.</string>
-  <string name="share_link_file_no_exist">S\’arrihet të ndahet me të tjerët. Ju lutemi, kontrolloni nëse ekziston apo jo kartela</string>
   <string name="share_link_file_error">Ndodhi një gabim teksa përpiqej të ndahej me të tjerët kjo kartelë apo dosje</string>
-  <string name="unshare_link_file_no_exist">S\’arrihet të zhbëhet ndarja me të tjerët. Ju lutemi, kontrolloni nëse kartela ekziston</string>
   <string name="unshare_link_file_error">Ndodhi një gabim teksa përpiqej të zhbëhej ndarja me të tjerët e kësaj kartele apo dosjeje</string>
-  <string name="update_link_file_no_exist">S\’u arrit të përditësohej gjë. Ju lutemi, kontrolloni nëse ekziston apo jo kartela.</string>
   <string name="update_link_file_error">Ndodhi një gabim teksa provohej të përditësohej ndarja</string>
   <string name="share_link_password_title">Jepni një fjalëkalim</string>
   <string name="share_link_empty_password">Duhet të jepni një fjalëkalim</string>

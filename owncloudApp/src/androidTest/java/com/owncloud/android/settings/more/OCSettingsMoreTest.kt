@@ -61,7 +61,7 @@ class OCSettingsMoreTest {
         Intents.init()
         //Only interested in "More" section, so we can get rid of the other categories. SmoothScroll is not
         //working fine to reach the bottom of the screen, so this approach was taken to display the section
-        val preferenceScreen = activityRule.activity.getPreferenceScreen() as PreferenceScreen
+        val preferenceScreen = activityRule.activity.preferenceScreen as PreferenceScreen
         val cameraUploadsCategory =
             activityRule.activity.findPreference("camera_uploads_category") as PreferenceCategory
         val securityCategory =
@@ -84,7 +84,7 @@ class OCSettingsMoreTest {
     fun helpOptionOpensWeb() {
         onView(withText(R.string.prefs_help)).perform(click())
         val intentResult = ActivityResult(Activity.RESULT_OK, Intent())
-        intending(hasAction(Intent.ACTION_VIEW)).respondWith(intentResult);
+        intending(hasAction(Intent.ACTION_VIEW)).respondWith(intentResult)
         intended(hasData(activityRule.activity.getString(R.string.url_help)))
     }
 
@@ -97,7 +97,7 @@ class OCSettingsMoreTest {
     @Test
     fun davx5OpensLink() {
         val intentResult = ActivityResult(Activity.RESULT_OK, Intent())
-        intending(hasAction(Intent.ACTION_VIEW)).respondWith(intentResult);
+        intending(hasAction(Intent.ACTION_VIEW)).respondWith(intentResult)
         onView(withText(R.string.prefs_sync_calendar_contacts)).perform(click())
         intended(hasData(activityRule.activity.getString(R.string.url_sync_calendar_contacts)))
     }
@@ -110,7 +110,7 @@ class OCSettingsMoreTest {
     @Test
     fun recommendOpenSender() {
         val intentResult = ActivityResult(Activity.RESULT_OK, Intent())
-        intending(hasAction(Intent.ACTION_SENDTO)).respondWith(intentResult);
+        intending(hasAction(Intent.ACTION_SENDTO)).respondWith(intentResult)
         onView(withText(R.string.prefs_recommend)).perform(click())
         intended(
             allOf(
@@ -143,7 +143,7 @@ class OCSettingsMoreTest {
     @Test
     fun feedbackOpenSender() {
         val intentResult = ActivityResult(Activity.RESULT_OK, Intent())
-        intending(hasAction(Intent.ACTION_SENDTO)).respondWith(intentResult);
+        intending(hasAction(Intent.ACTION_SENDTO)).respondWith(intentResult)
         onView(withText(R.string.drawer_feedback)).perform(click())
         intended(
             allOf(

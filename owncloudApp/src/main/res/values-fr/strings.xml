@@ -30,7 +30,7 @@
   <string name="drawer_unavailable_free_storage">%1$s utilisé(s)</string>
   <string name="drawer_unavailable_used_storage">Aucune information d\'utilisation du stockage disponible</string>
   <string name="drawer_feedback">Retour d’expérience</string>
-  <string name="drawer_help">Aide...</string>
+  <string name="drawer_help">Aide…</string>
   <string name="prefs_category_general">Général</string>
   <string name="prefs_category_more">Plus</string>
   <string name="prefs_category_security">Sécurité</string>
@@ -96,7 +96,7 @@ Téléchargez-le ici : %2$s</string>
   <string name="file_list_seconds_ago">il y a quelques secondes</string>
   <string name="file_list_empty">Il n\'y a rien ici ! Envoyez donc quelque chose :)</string>
   <string name="file_list_empty_available_offline">Il n’y a pas de fichier hors connexion disponible.</string>
-  <string name="file_list_loading">Chargement...</string>
+  <string name="file_list_loading">Chargement…</string>
   <string name="file_list_no_app_for_file_type">Aucune application trouvée pour ce type de fichier</string>
   <string name="local_file_list_empty">Aucun fichier n\'est présent dans ce dossier.</string>
   <string name="local_file_list_empty_just_folders">Il n\'y a pas de dossiers dans ce dossier.</string>
@@ -126,7 +126,7 @@ Téléchargez-le ici : %2$s</string>
   <string name="common_back">Retour</string>
   <string name="common_save_exit">Enregistrer et quitter</string>
   <string name="common_error">Erreur</string>
-  <string name="common_loading">Chargement...</string>
+  <string name="common_loading">Chargement…</string>
   <string name="common_unknown">Inconnu</string>
   <string name="common_error_unknown">Erreur inconnue </string>
   <string name="common_pending">En attente</string>
@@ -137,7 +137,7 @@ Téléchargez-le ici : %2$s</string>
   <string name="create_account">Créer un compte</string>
   <string name="upload_chooser_title">Téléversez depuis</string>
   <string name="uploader_info_dirname">Nom du dossier</string>
-  <string name="uploader_upload_in_progress_ticker">Téléversement ...</string>
+  <string name="uploader_upload_in_progress_ticker">Téléversement …</string>
   <string name="uploader_upload_in_progress_content">Envoi du fichier %2$s : %1$d%% effectués</string>
   <string name="uploader_upload_succeeded_ticker">Téléversement réussi</string>
   <string name="uploader_upload_succeeded_content_single">%1$s téléversé</string>
@@ -173,7 +173,7 @@ Téléchargez-le ici : %2$s</string>
   <string name="uploads_view_upload_status_waiting_for_wifi">En attente d\'une connexion wifi</string>
   <string name="uploads_view_later_waiting_to_upload">En attente de chargement</string>
   <string name="uploads_view_unsupported_media_type">Type de média non pris en charge</string>
-  <string name="downloader_download_in_progress_ticker">Téléchargement ...</string>
+  <string name="downloader_download_in_progress_ticker">Téléchargement …</string>
   <string name="downloader_download_in_progress_content">Téléchargement en cours de %2$s, %1$d%% effectués</string>
   <string name="downloader_download_succeeded_ticker">Téléchargement réussi</string>
   <string name="downloader_download_succeeded_content">%1$s téléchargé</string>
@@ -241,7 +241,7 @@ Ci-dessous la liste des fichiers locaux, et les fichiers distants dans %5$s auxq
   <string name="media_forward_description">Bouton d\'avance rapide</string>
   <string name="upload_from_camera_title">Image de la caméra</string>
   <string name="auth_getting_authorization">Demande d\'autorisation…</string>
-  <string name="auth_trying_to_login">Tentative de connexion ...</string>
+  <string name="auth_trying_to_login">Tentative de connexion …</string>
   <string name="auth_no_net_conn_title">Pas de connexion réseau</string>
   <string name="auth_nossl_plain_ok_title">Connexion sécurisée non disponible</string>
   <string name="auth_connection_established">Connexion établie</string>
@@ -352,11 +352,8 @@ Ci-dessous la liste des fichiers locaux, et les fichiers distants dans %5$s auxq
   <string name="get_shares_error">Une erreur est survenue pendant la récupération des partages</string>
   <string name="get_sharees_error">Une erreur est survenue pendant la récupération des utilisateurs et des groupes</string>
   <string name="share_link_no_support_share_api">Désolé, le partage n\'est pas disponible sur votre serveur. Veuillez contacter votre administrateur.</string>
-  <string name="share_link_file_no_exist">Impossible de partager. Vérifiez que le fichier est bien présent</string>
   <string name="share_link_file_error">Une erreur est survenue lors de la tentative de partage de ce fichier ou répertoire</string>
-  <string name="unshare_link_file_no_exist">Impossible de supprimer le partage. Vérifiez que le fichier est bien présent</string>
   <string name="unshare_link_file_error">Une erreur est survenue lors de la tentative d’annulation du partage de ce fichier ou répertoire</string>
-  <string name="update_link_file_no_exist">Actualisation impossible. Veuillez vérifier que ce fichier existe</string>
   <string name="update_link_file_error">Une erreur est survenue lors de la mise à jour du partage</string>
   <string name="share_link_password_title">Saisissez un mot de passe</string>
   <string name="share_link_empty_password">Vous devez saisir un mot de passe</string>

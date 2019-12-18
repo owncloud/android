@@ -32,7 +32,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginBottom="@dimen/standard_half_margin"
-            android:layout_marginLeft="@dimen/standard_half_margin"
+            android:layout_marginStart="@dimen/standard_half_margin"
             android:layout_marginTop="@dimen/standard_half_margin"
             android:layout_weight="1"
             android:ellipsize="middle"

@@ -16,6 +16,7 @@
   
 -->
 <com.owncloud.android.ui.SquareLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/ListItemLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -44,14 +45,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
-            android:layout_gravity="top|right"
+            android:layout_gravity="top|end"
             android:src="@drawable/shared_via_link" />
 
         <ImageView
             android:id="@+id/localFileIndicator"
             android:layout_width="@dimen/file_indicator_pin_size_grid"
             android:layout_height="@dimen/file_indicator_pin_size_grid"
-            android:layout_gravity="bottom|right"
+            android:layout_gravity="bottom|end"
             android:layout_marginBottom="2dp"
             android:layout_marginRight="12dp"
             android:src="@drawable/sync_pin" />
@@ -77,8 +78,8 @@
         android:ellipsize="middle"
         android:gravity="center_horizontal"
         android:singleLine="true"
-        android:text="TextView"
         android:textColor="@color/textColor"
-        android:textSize="16dip" />
+        android:textSize="16dip"
+        tools:text="TextView"/>
 
 </com.owncloud.android.ui.SquareLinearLayout>
