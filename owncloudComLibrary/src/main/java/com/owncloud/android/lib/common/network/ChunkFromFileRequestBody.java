@@ -24,8 +24,6 @@
 
 package com.owncloud.android.lib.common.network;
 
-import android.util.Log;
-
 import com.owncloud.android.lib.common.utils.Log_OC;
 import okhttp3.MediaType;
 import okio.BufferedSink;
@@ -43,9 +41,6 @@ import java.util.Iterator;
  */
 public class ChunkFromFileRequestBody extends FileRequestBody {
 
-    private static final String TAG = ChunkFromFileRequestBody.class.getSimpleName();
-
-    //private final File mFile;
     private final FileChannel mChannel;
     private final long mChunkSize;
     private long mOffset;
@@ -89,17 +84,17 @@ public class ChunkFromFileRequestBody extends FileRequestBody {
             long maxCount = Math.min(mOffset + mChunkSize, mChannel.size());
             while (mChannel.position() < maxCount) {
 
-                Log_OC.d(TAG, "Sink buffer size: " + sink.buffer().size());
+                Log_OC.v("Sink buffer size: " + sink.buffer().size());
 
                 readCount = mChannel.read(mBuffer);
 
-                Log_OC.d(TAG, "Read " + readCount + " bytes from file channel to " + mBuffer.toString());
+                Log_OC.v("Read " + readCount + " bytes from file channel to " + mBuffer.toString());
 
                 sink.buffer().write(mBuffer.array(), 0, readCount);
 
                 sink.flush();
 
-                Log_OC.d(TAG, "Write " + readCount + " bytes to sink buffer with size " + sink.buffer().size());
+                Log_OC.v("Write " + readCount + " bytes to sink buffer with size " + sink.buffer().size());
 
                 mBuffer.clear();
                 if (mTransferred < maxCount) {  // condition to avoid accumulate progress for repeated chunks
@@ -113,19 +108,10 @@ public class ChunkFromFileRequestBody extends FileRequestBody {
                 }
             }
 
-            Log.d(TAG, "Chunk with size " + mChunkSize + " written in request body");
+            Log_OC.v("Chunk with size " + mChunkSize + " written in request body");
 
         } catch (Exception exception) {
-
-            Log.e(TAG, exception.toString());
-            //            // any read problem will be handled as if the file is not there
-            //            if (io instanceof FileNotFoundException) {
-            //                throw io;
-            //            } else {
-            //                FileNotFoundException fnf = new FileNotFoundException("Exception reading source file");
-            //                fnf.initCause(io);
-            //                throw fnf;
-            //            }
+            Log_OC.e(exception.getMessage());
         }
     }
 
