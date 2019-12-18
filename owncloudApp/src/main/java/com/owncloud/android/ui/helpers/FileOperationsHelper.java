@@ -103,7 +103,7 @@ public class FileOperationsHelper {
             }
 
             List<ResolveInfo> launchables = mFileActivity.getPackageManager().
-                    queryIntentActivities(openFileWithIntent, PackageManager.GET_INTENT_FILTERS);
+                    queryIntentActivities(openFileWithIntent, PackageManager.MATCH_DEFAULT_ONLY);
 
             if (launchables != null && launchables.size() > 0) {
                 try {
