@@ -181,37 +181,6 @@ public class FileOperationsHelper {
     }
 
     /**
-     * Helper method to remove an existing share, no matter if public or private.
-     * Starts a request to do it in {@link OperationsService}
-     *
-     * @param share The {@link OCShare} to remove (unshare).
-     */
-    public void removeShare(OCShare share) {
-        Intent unshareService = new Intent(mFileActivity, OperationsService.class);
-        unshareService.setAction(OperationsService.ACTION_UNSHARE);
-        unshareService.putExtra(OperationsService.EXTRA_SHARE_ID, share.getId());
-        unshareService.putExtra(OperationsService.EXTRA_ACCOUNT, mFileActivity.getAccount());
-
-        queueShareIntent(unshareService);
-    }
-
-    private void queueShareIntent(Intent shareIntent) {
-        if (isSharedSupported()) {
-            // Unshare the file
-            mWaitingForOpId = mFileActivity.getOperationsServiceBinder().
-                    queueNewOperation(shareIntent);
-
-            mFileActivity.showLoadingDialog(R.string.wait_a_moment);
-
-        } else {
-            // Show a Message
-            mFileActivity.showSnackMessage(
-                    mFileActivity.getString(R.string.share_link_no_support_share_api)
-            );
-        }
-    }
-
-    /**
      * Show an instance of {@link com.owncloud.android.domain.sharing.shares.model.ShareType} for sharing or unsharing
      * the {@link OCFile} received as parameter.
      *
