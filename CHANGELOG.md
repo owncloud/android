@@ -1,3 +1,6 @@
+## 2.14.1 (December 2019)
+- Some improvements in wizard
+
 ## 2.14 (December 2019)
 - Splash screen
 - Shortcut to shared by link files from side menu (contribution)

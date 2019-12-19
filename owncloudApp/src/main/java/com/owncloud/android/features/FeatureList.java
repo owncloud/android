@@ -84,7 +84,7 @@ public class FeatureList {
                     features.add(item);
                 } else if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP && item.shouldShowOnlyInDevicesLowerThan5()) {
                     features.add(item);
-                } else if (!item.showOnlyInAccountsWithServersLowerThan10) {
+                } else if (!item.shouldShowOnlyInAccountsWithServersLowerThan10() && !item.shouldShowOnlyInDevicesLowerThan5()) {
                     features.add(item);
                 }
             }
