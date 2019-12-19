@@ -87,6 +87,15 @@ public class AccountUtils {
         return accountManager.getAccountsByType(MainApp.Companion.getAccountType());
     }
 
+    public static boolean isAnyAccountServerVersionLowerThan10(Context context) {
+        for (Account account : getAccounts(context)) {
+            if (account != null && getServerVersion(account).isVersionLowerThan10()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static boolean exists(String accountName, Context context) {
         Account[] ocAccounts = getAccounts(context);
 

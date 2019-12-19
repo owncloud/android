@@ -48,6 +48,7 @@ import com.owncloud.android.authentication.AccountAuthenticatorActivity;
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.features.FeatureList;
 import com.owncloud.android.features.FeatureList.FeatureItem;
+import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 import com.owncloud.android.ui.whatsnew.ProgressIndicator;
 
 /**
@@ -70,9 +71,11 @@ public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPa
         mPager = findViewById(R.id.contentPanel);
 
         boolean isBeta = MainApp.Companion.isBeta();
+        boolean anyAccountWithServerVersionLowerThan10 = AccountUtils.isAnyAccountServerVersionLowerThan10(this);
 
         FeaturesViewAdapter adapter = new FeaturesViewAdapter(getSupportFragmentManager(),
-                FeatureList.getFiltered(getLastSeenVersionCode(), isFirstRun(), isBeta));
+                FeatureList.getFiltered(getLastSeenVersionCode(), isFirstRun(), isBeta,
+                        anyAccountWithServerVersionLowerThan10));
 
         mProgress.setNumberOfSteps(adapter.getCount());
         mPager.setAdapter(adapter);
@@ -140,13 +143,14 @@ public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPa
     static private boolean shouldShow(Context context) {
         boolean isBeta = MainApp.Companion.isBeta();
         boolean showWizard = context.getResources().getBoolean(R.bool.wizard_enabled) && !BuildConfig.DEBUG;
+        boolean anyAccountWithServerVersionLowerThan10 = AccountUtils.isAnyAccountServerVersionLowerThan10(context);
         return showWizard &&
                 ((isFirstRun() && context instanceof AccountAuthenticatorActivity) ||
                         (
                                 !(isFirstRun() && (context instanceof FileDisplayActivity)) &&
                                         !(context instanceof PassCodeActivity) &&
                                         (FeatureList.getFiltered(getLastSeenVersionCode(), isFirstRun(),
-                                                isBeta).length > 0)
+                                                isBeta, anyAccountWithServerVersionLowerThan10).length > 0)
 
                         ));
     }
