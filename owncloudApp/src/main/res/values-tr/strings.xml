@@ -547,20 +547,5 @@
   <string name="welcome_feature_4_text">Resimleriniz/videolarınız otomatik yüklendi</string>
   <string name="welcome_feature_5_title">Video akışı</string>
   <string name="welcome_feature_5_text">Videolarınızı onları indirmeden oynatın</string>
-  <string name="welcome_feature_6_title">Mevcut klasörde ara</string>
-  <string name="welcome_feature_6_text">Dosyalarınızı ada göre filtreleyin</string>
-  <string name="welcome_feature_7_title">Tümünü seç</string>
-  <string name="welcome_feature_7_text">Tüm dosyaları tek seferde seçin</string>
-  <string name="welcome_feature_8_title">Çevrimdışı kullanılabilir</string>
-  <string name="welcome_feature_8_text">Dosyalarınız otomatik olarak eşitlendi</string>
-  <string name="welcome_feature_9_title">Belge sağlayıcı</string>
-  <string name="welcome_feature_9_text">Diğer uygulamalardan ownCloud dosyalarınıza erişin ve düzenleyin</string>
-  <string name="welcome_feature_10_title">Herkesin arama kayıtları</string>
-  <string name="welcome_feature_10_text">Uygulamanın daha iyi çalışmasını sağlamak için kayıtlarınızı bize gönderin</string>
-  <string name="welcome_feature_11_title">Versiyon 10 altı sunuculara destek sona erdi</string>
-  <string name="welcome_feature_11_text">Lütfen sunucunuzu yükseltin, aksi takdirde yeni gelen uygulama sürümleri sizin için çalışmayacak</string>
-  <string name="welcome_feature_12_title">Android 4.4 cihazlara destek sona erdi</string>
-  <string name="welcome_feature_12_text">Yeni gelen uygulama sürümleri Google Play üzerinde Android 5 altı sürümle için gözükmeyecek</string>
   <string name="no_borwser_installed_alert">Yüklü tarayıcı yok. Lütfen güvenli bağlantıyı sağlamak için bir tarayıcı yükleyin.</string>
-  <string name="common_not_found">bulunamadı</string>
 </resources>

@@ -463,6 +463,4 @@
   </plurals>
   <!--Welcome to oC intro features-->
   <string name="welcome_feature_4_title">Cargas de la cámara</string>
-  <string name="welcome_feature_7_title">Seleccionar todo</string>
-  <string name="welcome_feature_8_title">Disponible sin conexión</string>
 </resources>

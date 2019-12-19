@@ -398,5 +398,4 @@
     <item quantity="other">%d избран</item>
   </plurals>
   <!--Welcome to oC intro features-->
-  <string name="welcome_feature_7_title">Избери всички</string>
 </resources>

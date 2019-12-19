@@ -533,15 +533,5 @@
   <string name="welcome_feature_4_text">يتم تحميل صورك/فيديوهاتك تلقائيًا</string>
   <string name="welcome_feature_5_title">بث الفيديوهات</string>
   <string name="welcome_feature_5_text">شغِّل فيديوهاتك دون تنزيلها</string>
-  <string name="welcome_feature_6_title">البحث في المجلد الحالي</string>
-  <string name="welcome_feature_6_text">قم بتصفية ملفاتك حسب الاسم</string>
-  <string name="welcome_feature_7_title">تحديد الكل</string>
-  <string name="welcome_feature_7_text">تحديد كل الملفات في وقتٍ واحد</string>
-  <string name="welcome_feature_8_title">متوفر دون اتصال بالإنترنت</string>
-  <string name="welcome_feature_8_text">تتم مزامنة ملفاتك تلقائيًا</string>
-  <string name="welcome_feature_9_title">موفر مستندات</string>
-  <string name="welcome_feature_9_text">ادخل إلى ملفاتك السحابية وعدلها من تطبيقات أخرى</string>
-  <string name="welcome_feature_10_title">سجلات مع البحث عن الجميع</string>
-  <string name="welcome_feature_10_text">أرسل إلينا سجلاتك لجعل التطبيق يعمل بشكل افضل</string>
   <string name="no_borwser_installed_alert">لا يوجد متصفح مثبت. برجاء تثبيت متصفح للسماح بتسجيل دخول آمن.</string>
 </resources>

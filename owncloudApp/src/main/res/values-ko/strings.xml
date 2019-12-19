@@ -481,6 +481,4 @@
   <string name="welcome_feature_skip_button">건너뛰기</string>
   <string name="welcome_feature_4_title">카메라 업로드</string>
   <string name="welcome_feature_5_title">비디오 스트리밍</string>
-  <string name="welcome_feature_7_title">모두 선택</string>
-  <string name="welcome_feature_8_title">오프라인 사용 가능</string>
 </resources>

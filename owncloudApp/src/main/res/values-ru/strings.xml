@@ -550,20 +550,5 @@
   <string name="welcome_feature_4_text">Ваши снимки и видео загружаются автоматически</string>
   <string name="welcome_feature_5_title"> Потоковое видео</string>
   <string name="welcome_feature_5_text">Проигрывайте ваши ролики, не скачивая их</string>
-  <string name="welcome_feature_6_title">Поиск в текущей папке</string>
-  <string name="welcome_feature_6_text">Фильтрация ваших файлов по имени</string>
-  <string name="welcome_feature_7_title">Выделить все</string>
-  <string name="welcome_feature_7_text">Выбор всех файлов за один раз</string>
-  <string name="welcome_feature_8_title">Доступно автономно</string>
-  <string name="welcome_feature_8_text">Ваши файлы синхронизируются автоматически</string>
-  <string name="welcome_feature_9_title">Провайдер документов</string>
-  <string name="welcome_feature_9_text">Открывайте и правьте ваши файлы ownCloud из других приложений</string>
-  <string name="welcome_feature_10_title">Журналы с поиском для всех</string>
-  <string name="welcome_feature_10_text">Отправьте нам ваши журналы и сделайте приложение ещё лучше</string>
-  <string name="welcome_feature_11_title">Поддержка серверов ниже 10 завершается</string>
-  <string name="welcome_feature_11_text">Пожалуйста, обновите ваш сервер, иначе последующие версии приложения не смогут работать для вас</string>
-  <string name="welcome_feature_12_title">Поддержка устройств под Андроидом 4.4 завершается</string>
-  <string name="welcome_feature_12_text">Последующие версии приложения не появятся в Google Play для устройств под Андроидом ниже 5</string>
   <string name="no_borwser_installed_alert">Не установлен никакой браузер. Пожалуйста, установите браузер для поддержки безопасного входа.</string>
-  <string name="common_not_found">не найдено</string>
 </resources>

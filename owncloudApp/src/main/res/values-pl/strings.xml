@@ -519,6 +519,4 @@
   <string name="welcome_feature_4_title">Wrzucanie kamery</string>
   <string name="welcome_feature_4_text">Automatyczne wysyłanie twoich zdjęć oraz wideo </string>
   <string name="welcome_feature_5_text">Odtwarzaj twoje pliki wideo bez pobierania</string>
-  <string name="welcome_feature_7_title">Wybierz wszystko</string>
-  <string name="welcome_feature_8_title">Dostępne w trybie offline</string>
 </resources>

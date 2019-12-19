@@ -436,6 +436,4 @@
   </plurals>
   <!--Welcome to oC intro features-->
   <string name="welcome_feature_skip_button">Hoppa över</string>
-  <string name="welcome_feature_7_title">Välj allt</string>
-  <string name="welcome_feature_8_title">Tillgänglig offline</string>
 </resources>

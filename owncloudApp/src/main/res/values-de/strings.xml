@@ -533,15 +533,5 @@
   <string name="welcome_feature_4_text">Deine Bilder/Videos werden automatisch hochgeladen</string>
   <string name="welcome_feature_5_title">Videostreaming</string>
   <string name="welcome_feature_5_text">Gib deine Videos wieder, ohne sie herunterzuladen</string>
-  <string name="welcome_feature_6_title">Suche im aktuellen Ordner</string>
-  <string name="welcome_feature_6_text">Filter deine Dateien nach Namen</string>
-  <string name="welcome_feature_7_title">Alle auswählen</string>
-  <string name="welcome_feature_7_text">Wähle alle Dateien aus</string>
-  <string name="welcome_feature_8_title">Offline verfügbar</string>
-  <string name="welcome_feature_8_text">Deine Dateien werden automatisch synchronisiert</string>
-  <string name="welcome_feature_9_title">Dokumentenanbieter</string>
-  <string name="welcome_feature_9_text">Zugriff und Bearbeiten deiner ownCloud-Dateien durch andere Apps</string>
-  <string name="welcome_feature_10_title">Protokolle mit Suchfunktion für jeden</string>
-  <string name="welcome_feature_10_text"> Sende uns deine Protokolle, damit die App besser funktioniert</string>
-  <string name="no_borwser_installed_alert">Es ist kein Browser installiert. Bitte installiere zur sicheren Anmeldung einen Browser.</string>
+    <string name="no_borwser_installed_alert">Es ist kein Browser installiert. Bitte installiere zur sicheren Anmeldung einen Browser.</string>
 </resources>
