@@ -79,6 +79,9 @@ class OwnCloudVersion(version: String) : Comparable<OwnCloudVersion>, Parcelable
     val isPreemptiveAuthenticationPreferred: Boolean
         get() = mVersion < MINIMUM_VERSION_WITH_SESSION_MONITORING || mVersion >= MINIMUM_VERSION_WITH_SESSION_MONITORING_WORKING_IN_PREEMPTIVE_MODE
 
+    val isVersionLowerThan10: Boolean
+        get() = mVersion < VERSION_10
+
     val isMultiplePublicSharingSupported: Boolean
         get() = mVersion >= MINIMUM_VERSION_WITH_MULTIPLE_PUBLIC_SHARING
 
@@ -198,6 +201,8 @@ class OwnCloudVersion(version: String) : Comparable<OwnCloudVersion>, Parcelable
 
         private const val MINIMUM_VERSION_WITH_SESSION_MONITORING_WORKING_IN_PREEMPTIVE_MODE = 0x09010301
         // 9.1.3.1, final 9.1.3: https://github.com/owncloud/core/commit/f9a867b70c217463289a741d4d26079eb2a80dfd
+
+        private const val VERSION_10 = 0xA000000 // 10.0.0
 
         private const val MINIMUM_VERSION_WITH_MULTIPLE_PUBLIC_SHARING = 0xA000000 // 10.0.0
 
