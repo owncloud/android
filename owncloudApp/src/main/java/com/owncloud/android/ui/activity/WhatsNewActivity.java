@@ -24,7 +24,6 @@ package com.owncloud.android.ui.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
@@ -48,7 +47,6 @@ import com.owncloud.android.authentication.AccountAuthenticatorActivity;
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.features.FeatureList;
 import com.owncloud.android.features.FeatureList.FeatureItem;
-import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 import com.owncloud.android.ui.whatsnew.ProgressIndicator;
 
 /**
