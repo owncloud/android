@@ -960,13 +960,13 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
                                             account
                                         )
 
-                                    launch {
+                                    launch(Dispatchers.Main) {
                                         if (credentials is OwnCloudBearerCredentials) { // OAuth
                                             showRequestRegainAccess()
                                         } else if (!AccountUtils.getServerVersion(account)?.isServerVersionSupported!!){
-                                            showRequestAccountChangeNotice(getString(R.string.server_not_supported))
+                                            showRequestAccountChangeNotice(getString(R.string.server_not_supported),true)
                                         } else {
-                                            showRequestAccountChangeNotice(getString(R.string.auth_failure_snackbar))
+                                            showRequestAccountChangeNotice(getString(R.string.auth_failure_snackbar), false)
                                         }
                                     }
                                 }
@@ -993,12 +993,12 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
             } else if (synchResult?.code == ResultCode.SPECIFIC_SERVICE_UNAVAILABLE) {
                 if (synchResult.httpCode == 503) {
                     if (synchResult.httpPhrase == "Error: Call to a member function getUID() on null") {
-                        showRequestAccountChangeNotice(getString(R.string.auth_failure_snackbar))
+                        showRequestAccountChangeNotice(getString(R.string.auth_failure_snackbar), false)
                     } else {
                         showSnackMessage(synchResult.httpPhrase)
                     }
                 } else {
-                    showRequestAccountChangeNotice(getString(R.string.auth_failure_snackbar))
+                    showRequestAccountChangeNotice(getString(R.string.auth_failure_snackbar), false)
                 }
             }
         }

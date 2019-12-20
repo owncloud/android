@@ -25,6 +25,7 @@ package com.owncloud.android.ui.activity;
 
 import android.accounts.Account;
 import android.accounts.AuthenticatorException;
+import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -314,12 +315,22 @@ public class FileActivity extends DrawerActivity
         }
     }
 
-    protected void showRequestAccountChangeNotice(String errorMessage) {
-        Snackbar.make(findViewById(android.R.id.content), errorMessage, Snackbar.LENGTH_INDEFINITE)
-                .setAction(R.string.auth_failure_snackbar_action, v ->
-                        startActivity(
-                                new Intent(FileActivity.this, ManageAccountsActivity.class)))
-                .show();
+    protected void showRequestAccountChangeNotice(String errorMessage, boolean mustChange) {
+        if (mustChange) {
+            new AlertDialog.Builder(this)
+                    .setTitle(R.string.auth_failure_snackbar_action)
+                    .setMessage(errorMessage)
+                    .setPositiveButton(android.R.string.yes, (dialog, which) -> startActivity(
+                            new Intent(FileActivity.this, ManageAccountsActivity.class)))
+                    .setIcon(R.drawable.common_error_grey)
+                    .setCancelable(false)
+                    .show();
+        } else {
+            Snackbar.make(findViewById(android.R.id.content), errorMessage, Snackbar.LENGTH_INDEFINITE)
+                    .setAction(R.string.auth_failure_snackbar_action, v ->
+                            startActivity(new Intent(FileActivity.this, ManageAccountsActivity.class)))
+                    .show();
+        }
     }
 
     protected void showRequestRegainAccess() {

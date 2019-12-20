@@ -87,7 +87,7 @@ public class AccountUtils {
 
     public static boolean isAnyAccountServerVersionLowerThan10(Context context) {
         for (Account account : getAccounts(context)) {
-            if (account != null && getServerVersion(account).isVersionLowerThan10()) {
+            if (account != null && !getServerVersion(account).isServerVersionSupported()) {
                 return true;
             }
         }
