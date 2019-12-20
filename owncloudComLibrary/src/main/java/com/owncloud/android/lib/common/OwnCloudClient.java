@@ -381,11 +381,8 @@ public class OwnCloudClient extends HttpClient {
      * cannot be invalidated with the given arguments.
      */
     private boolean shouldInvalidateAccountCredentials(int httpStatusCode) {
-        boolean isServerVersionSupported = AccountUtils.getServerVersionForAccount(getAccount().getSavedAccount(),
-                getContext()).isServerVersionSupported();
-
         boolean shouldInvalidateAccountCredentials =
-                (httpStatusCode == HttpConstants.HTTP_UNAUTHORIZED || !isServerVersionSupported);
+                (httpStatusCode == HttpConstants.HTTP_UNAUTHORIZED);
 
         shouldInvalidateAccountCredentials &= (mCredentials != null &&         // real credentials
                 !(mCredentials instanceof OwnCloudCredentialsFactory.OwnCloudAnonymousCredentials));
