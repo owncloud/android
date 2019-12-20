@@ -48,7 +48,7 @@ import com.owncloud.android.lib.common.OwnCloudClientManagerFactory.Policy
 import com.owncloud.android.lib.common.authentication.oauth.OAuth2ClientConfiguration
 import com.owncloud.android.lib.common.authentication.oauth.OAuth2ProvidersRegistry
 import com.owncloud.android.lib.common.authentication.oauth.OwnCloudOAuth2Provider
-import com.owncloud.android.lib.common.utils.Log_OC
+import com.owncloud.android.lib.common.utils.LoggingHelper
 import com.owncloud.android.ui.activity.FingerprintActivity
 import com.owncloud.android.ui.activity.PassCodeActivity
 import com.owncloud.android.ui.activity.PatternLockActivity
@@ -56,6 +56,8 @@ import com.owncloud.android.ui.activity.WhatsNewActivity
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
+import timber.log.Timber
+import java.io.File
 
 /**
  * Main Application of the project
@@ -100,7 +102,7 @@ class MainApp : MultiDexApplication() {
         // register global protection with pass code, pattern lock and fingerprint lock
         registerActivityLifecycleCallbacks(object : ActivityLifecycleCallbacks {
             override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
-                Log_OC.d("${activity.javaClass.simpleName} onCreate(Bundle) starting")
+                Timber.d("${activity.javaClass.simpleName} onCreate(Bundle) starting")
                 val preferences = PreferenceManager.getDefaultSharedPreferences(applicationContext)
                 val passCodeEnabled = preferences.getBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false)
                 val patternCodeEnabled = preferences.getBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN, false)
@@ -124,7 +126,7 @@ class MainApp : MultiDexApplication() {
             }
 
             override fun onActivityStarted(activity: Activity) {
-                Log_OC.v("${activity.javaClass.simpleName} onStart() starting")
+                Timber.v("${activity.javaClass.simpleName} onStart() starting")
                 PassCodeManager.getPassCodeManager().onActivityStarted(activity)
                 PatternManager.getPatternManager().onActivityStarted(activity)
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -133,15 +135,15 @@ class MainApp : MultiDexApplication() {
             }
 
             override fun onActivityResumed(activity: Activity) {
-                Log_OC.v("${activity.javaClass.simpleName} onResume() starting")
+                Timber.v("${activity.javaClass.simpleName} onResume() starting")
             }
 
             override fun onActivityPaused(activity: Activity) {
-                Log_OC.v("${activity.javaClass.simpleName} onPause() ending")
+                Timber.v("${activity.javaClass.simpleName} onPause() ending")
             }
 
             override fun onActivityStopped(activity: Activity) {
-                Log_OC.v("${activity.javaClass.simpleName} onStop() ending")
+                Timber.v("${activity.javaClass.simpleName} onStop() ending")
                 PassCodeManager.getPassCodeManager().onActivityStopped(activity)
                 PatternManager.getPatternManager().onActivityStopped(activity)
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -156,11 +158,11 @@ class MainApp : MultiDexApplication() {
             }
 
             override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) {
-                Log_OC.v("${activity.javaClass.simpleName} onSaveInstanceState(Bundle) starting")
+                Timber.v("${activity.javaClass.simpleName} onSaveInstanceState(Bundle) starting")
             }
 
             override fun onActivityDestroyed(activity: Activity) {
-                Log_OC.v("${activity.javaClass.simpleName} onDestroy() ending")
+                Timber.v("${activity.javaClass.simpleName} onDestroy() ending")
             }
         })
 
@@ -181,10 +183,10 @@ class MainApp : MultiDexApplication() {
             val dataFolder = dataFolder
 
             // Set folder for store logs
-            Log_OC.setLogDataFolder(dataFolder)
-
-            Log_OC.startLogging(Environment.getExternalStorageDirectory().absolutePath)
-            Log_OC.d("${BuildConfig.BUILD_TYPE} start logging ${BuildConfig.VERSION_NAME} ${BuildConfig.COMMIT_SHA1}")
+            LoggingHelper.startLogging(
+                File(Environment.getExternalStorageDirectory().absolutePath + File.separator + dataFolder), dataFolder
+            )
+            Timber.d("${BuildConfig.BUILD_TYPE} start logging ${BuildConfig.VERSION_NAME} ${BuildConfig.COMMIT_SHA1}")
         }
     }
 
@@ -242,7 +244,7 @@ class MainApp : MultiDexApplication() {
                         version = pInfo.versionName
                     }
                 } catch (e: PackageManager.NameNotFoundException) {
-                    Log_OC.e("Trying to get packageName", e.cause)
+                    Timber.e(e, "Trying to get packageName")
                 }
 
                 return String.format(appString, version)
