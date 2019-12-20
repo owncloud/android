@@ -6,12 +6,6 @@ import java.io.File;
 
 public class Log_OC {
 
-    private static String mOwncloudDataFolderLog;
-
-    public static void setLogDataFolder(String logFolder) {
-        mOwncloudDataFolderLog = logFolder;
-    }
-
     public static void i(String message) {
         Timber.i(message);
     }
@@ -74,14 +68,4 @@ public class Log_OC {
     public static void w(String TAG, String message) {
         Timber.w(message);
     }
-
-    public static void startLogging(String storagePath) {
-        LoggingHelper.INSTANCE.startLogging(
-                new File(storagePath+ File.separator + mOwncloudDataFolderLog), mOwncloudDataFolderLog);
-    }
-
-    public static void stopLogging() {
-        LoggingHelper.INSTANCE.stopLogging();
-    }
-
 }
