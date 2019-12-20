@@ -596,8 +596,6 @@
     <string name="welcome_feature_4_text">Your pictures/videos automatically uploaded</string>
     <string name="welcome_feature_5_title">Video streaming</string>
     <string name="welcome_feature_5_text">Play your videos without downloading them</string>
-    <string name="welcome_feature_11_title">End of support for servers lower than 10</string>
-    <string name="welcome_feature_11_text">Please upgrade your server or the coming app versions will not work for you</string>
     <string name="no_borwser_installed_alert">No browser installed. Please install a Browser in order to allow a secure login.</string>
     <string name="common_not_found">it was not found</string>
 </resources>

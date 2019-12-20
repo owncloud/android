@@ -259,14 +259,6 @@ class PublicShareDialogFragment : DialogFragment() {
             }
         }
 
-        // since the public link permission foo got a bit despagetified in the server somewhere
-        // at 10.0.4 we don't need publicUploadPermission there anymore. By setting it to false
-        // it will not be sent to the server.
-        if (capabilities != null) {
-            val serverVersion = OwnCloudVersion(capabilities?.versionString!!)
-            publicUploadPermission = serverVersion.isPublicUploadPermissionNeeded && publicUploadPermission
-        }
-
         if (!updating()) { // Creating a new public share
             ocShareViewModel.insertPublicShare(
                 file?.remotePath!!,

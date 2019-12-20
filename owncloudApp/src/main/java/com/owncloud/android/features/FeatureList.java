@@ -43,23 +43,22 @@ public class FeatureList {
     static final private FeatureItem[] featuresList = {
             // Basic features showed on first install
             new FeatureItem(R.drawable.whats_new_files, R.string.welcome_feature_1_title,
-                    R.string.welcome_feature_1_text, "2.7.0", "0", SHOW_ON_FIRST_RUN, false),
+                    R.string.welcome_feature_1_text, "2.7.0", "0", SHOW_ON_FIRST_RUN),
             new FeatureItem(R.drawable.whats_new_share, R.string.welcome_feature_2_title,
-                    R.string.welcome_feature_2_text, "2.7.0", "0", SHOW_ON_FIRST_RUN, false),
+                    R.string.welcome_feature_2_text, "2.7.0", "0", SHOW_ON_FIRST_RUN),
             new FeatureItem(R.drawable.whats_new_accounts, R.string.welcome_feature_3_title,
-                    R.string.welcome_feature_3_text, "2.7.0", "0", SHOW_ON_FIRST_RUN, false),
+                    R.string.welcome_feature_3_text, "2.7.0", "0", SHOW_ON_FIRST_RUN),
             new FeatureItem(R.drawable.whats_new_camera_uploads, R.string.welcome_feature_4_title,
-                    R.string.welcome_feature_4_text, "2.7.0", "0", SHOW_ON_FIRST_RUN, false),
+                    R.string.welcome_feature_4_text, "2.7.0", "0", SHOW_ON_FIRST_RUN),
             new FeatureItem(R.drawable.whats_new_video_streaming, R.string.welcome_feature_5_title,
-                    R.string.welcome_feature_5_text, "2.7.0", "0", SHOW_ON_FIRST_RUN, false)
+                    R.string.welcome_feature_5_text, "2.7.0", "0", SHOW_ON_FIRST_RUN)
     };
 
     static public FeatureItem[] get() {
         return featuresList;
     }
 
-    static public FeatureItem[] getFiltered(final int lastSeenVersionCode, final boolean isFirstRun, boolean isBeta,
-                                            boolean anyAccountWithServerVersionLowerThan10) {
+    static public FeatureItem[] getFiltered(final int lastSeenVersionCode, final boolean isFirstRun, boolean isBeta) {
         List<FeatureItem> features = new LinkedList<>();
 
         Timber.d("Getting filtered features");
@@ -71,11 +70,7 @@ public class FeatureList {
             } else if (!isFirstRun && !item.shouldShowOnFirstRun() &&
                     MainApp.Companion.getVersionCode() >= itemVersionCode &&
                     lastSeenVersionCode < itemVersionCode) {
-                if (anyAccountWithServerVersionLowerThan10 && item.shouldShowOnlyInAccountsWithServersLowerThan10()) {
-                    features.add(item);
-                } else if (!item.shouldShowOnlyInAccountsWithServersLowerThan10()) {
-                    features.add(item);
-                }
+                features.add(item);
             }
         }
         return features.toArray(new FeatureItem[features.size()]);
@@ -89,17 +84,15 @@ public class FeatureList {
         private int versionNumber;
         private int betaVersion;
         private boolean showOnInitialRun;
-        private boolean showOnlyInAccountsWithServersLowerThan10;
 
         private FeatureItem(int image, int titleText, int contentText, String version, String betaVersion,
-                            boolean showOnInitialRun, boolean showOnlyInAccountsWithServersLowerThan10) {
+                            boolean showOnInitialRun) {
             this.image = image;
             this.titleText = titleText;
             this.contentText = contentText;
             this.versionNumber = versionCodeFromString(version);
             this.betaVersion = versionCodeFromString(betaVersion);
             this.showOnInitialRun = showOnInitialRun;
-            this.showOnlyInAccountsWithServersLowerThan10 = showOnlyInAccountsWithServersLowerThan10;
         }
 
         public boolean shouldShowImage() {
@@ -136,10 +129,6 @@ public class FeatureList {
 
         private boolean shouldShowOnFirstRun() {
             return showOnInitialRun;
-        }
-
-        private boolean shouldShowOnlyInAccountsWithServersLowerThan10() {
-            return showOnlyInAccountsWithServersLowerThan10;
         }
 
         @Override
