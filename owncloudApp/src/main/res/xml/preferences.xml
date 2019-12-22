@@ -101,6 +101,10 @@
             android:id="@+id/about_app"
             android:key="about_app"
             android:title="@string/about_title" />
+        <Preference
+            android:id="@+id/sync_start"
+            android:key="sync_start"
+            android:title="Sync start" />
     </PreferenceCategory>
 
 </PreferenceScreen>
