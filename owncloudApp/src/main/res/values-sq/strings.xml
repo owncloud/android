@@ -73,6 +73,7 @@
   <string name="passcode_already_set">Kyçjet e rregullsive dhe kodkalimeve s\’mund të aktivizohen në të njëjtën kohë, ju lutemi, së pari çaktivizoni kodkalimin</string>
   <string name="pattern_no_longer_required">S\’do të pyetet më për rregullsinë</string>
   <string name="pattern_configure_your_pattern_explanation">Rregullsia do të kërkohet sa herë që niset aplikacioni</string>
+  <string name="pass_code_locked">Kyçur përmes kodkalimi</string>
   <string name="pattern_locked">Kyçur përmes rregullsie</string>
   <string name="illegal_argument_exception_message">Lypset një VEPRIM i vlefshëm te Synimi që u dha</string>
   <string name="recommend_subject">Provojeni %1$s te telefoni juaj!</string>
@@ -137,7 +138,6 @@
   <string name="common_error">Gabim</string>
   <string name="common_loading">Po ngarkohet…</string>
   <string name="common_unknown">i panjohur</string>
-  <string name="common_error_unknown">Gabim i panjohur</string>
   <string name="common_pending">Në pritje</string>
   <string name="common_important">E rëndësishme</string>
   <string name="about_title">Rreth</string>
@@ -222,7 +222,6 @@
   <string name="pass_code_wrong">Kodkalim i pasaktë</string>
   <string name="pass_code_removed">Kodkalimi u hoq</string>
   <string name="pass_code_stored">Kodkalimi u depozitua</string>
-  <string name="pass_code_locked">Kyçur përmes kodkalimi</string>
   <string name="fingerprint_confirm">Që të vazhdohet, ripohoni shenjat tuaja të gishtave</string>
   <string name="fingerprint_hint">Ndijues prekjesh</string>
   <string name="fingerprint_not_recognized">Shenja gishtash jo të pranuara, riprovoni</string>
@@ -287,7 +286,6 @@
   <string name="confirmation_remove_local">Vetëm vendorja</string>
   <string name="confirmation_remove_account_alert">Doni vërtet të hiqet llogaria %1$s?</string>
   <string name="confirmation_remove_public_share_title">Hiqe lidhjen</string>
-  <string name="confirmation_remove_share_message">Doni vërtet të hiqet %1$s?</string>
   <string name="remove_success_msg">Heqja doli me sukses</string>
   <string name="remove_fail_msg">Heqja dështoi</string>
   <string name="rename_dialog_title">Jepni një emër të ri</string>
@@ -358,13 +356,7 @@
   <string name="preview_image_error_unknown_format">Kjo figurë nuk mund të shfaqet</string>
   <string name="error__upload__local_file_not_copied">%1$s s\’u kopjua dot te dosja vendore %2$s</string>
   <string name="prefs_camera_picture_upload_path_title">Shteg ngarkimesh fotosh</string>
-  <string name="get_shares_error">Ndodhi një gabim teksa provohej të merreshin ndarje</string>
-  <string name="get_sharees_error">Ndodhi një gabim teksa provohej të merreshin përdorues dhe grupe</string>
-  <string name="get_capabilities_error">Ndodhi një gabim teksa provohej të merreshin aftësi</string>
   <string name="share_link_no_support_share_api">Na ndjeni, ndarja me të tjerët s\’është e aktivizuar te shërbyesi juaj. Ju lutemi, lidhuni me përgjegjësin tuaj.</string>
-  <string name="share_link_file_error">Ndodhi një gabim teksa përpiqej të ndahej me të tjerët kjo kartelë apo dosje</string>
-  <string name="unshare_link_file_error">Ndodhi një gabim teksa përpiqej të zhbëhej ndarja me të tjerët e kësaj kartele apo dosjeje</string>
-  <string name="update_link_file_error">Ndodhi një gabim teksa provohej të përditësohej ndarja</string>
   <string name="share_link_password_title">Jepni një fjalëkalim</string>
   <string name="share_link_empty_password">Duhet të jepni një fjalëkalim</string>
   <string name="activity_chooser_send_file_title">Dërgoje</string>
@@ -374,7 +366,6 @@
   <string name="clipboard_uxexpected_error">Gabim i panjohur teksa kopjohej në të papastër</string>
   <string name="clipboard_label">Tekst i kopjuar prej %1$s</string>
   <string name="error_cant_bind_to_operations_service">Gabim kritik: nuk mund të kryhen veprime</string>
-  <string name="network_error_socket_exception">Ndodhi një gabim teksa po lidhej me shërbyesin.</string>
   <string name="network_error_socket_timeout_exception">Shërbyesit iu desh shumë kohë për përgjigje</string>
   <string name="network_error_connect_timeout_exception">Shërbyesit iu desh shumë kohë për t\’u lidhur</string>
   <string name="network_host_not_available">S\’u kap dot shërbyesi</string>

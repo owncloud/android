@@ -118,7 +118,6 @@
   <string name="common_error">Virhe</string>
   <string name="common_loading">Ladataan…</string>
   <string name="common_unknown">tuntematon</string>
-  <string name="common_error_unknown">Tuntematon virhe</string>
   <string name="common_pending">Odottaa</string>
   <string name="common_important">Tärkeä</string>
   <string name="about_title">Tietoja</string>
@@ -236,7 +235,7 @@
   <string name="auth_wtf_reenter_URL">Odottamaton tila; anna palvelimen osoite uudelleen</string>
   <string name="auth_expired_oauth_token_toast">Valtuutus vanhentui. Valtuuta uudelleen</string>
   <string name="auth_expired_basic_auth_toast">Anna nykyinen salasana</string>
-    <string name="auth_connecting_auth_server">Yhdistetään tunnistautumispalvelimeen…</string>
+  <string name="auth_connecting_auth_server">Yhdistetään tunnistautumispalvelimeen…</string>
   <string name="auth_unsupported_auth_method">Palvelin ei tue tätä tunnistautumistapaa</string>
   <string name="auth_unsupported_multiaccount">%1$s ei tue useita tilejä</string>
   <string name="auth_fail_get_user_name">Palvelimesi ei palauta oikeaa käyttäjä-ID:tä, ota yhteyttä järjestelmänvalvojaan
@@ -252,7 +251,6 @@
   <string name="confirmation_remove_local">Vain paikallinen</string>
   <string name="confirmation_remove_account_alert">Haluatko varmasti poistaa tilin %1$s?</string>
   <string name="confirmation_remove_public_share_title">Poista linkki</string>
-  <string name="confirmation_remove_share_message">Haluatko varmasti poistaa kohteen %1$s?</string>
   <string name="remove_success_msg">Poistettu onnistuneesti</string>
   <string name="remove_fail_msg">Poistamista ei voitu suorittaa loppuun asti</string>
   <string name="rename_dialog_title">Anna uusi nimi</string>
@@ -320,9 +318,6 @@
   <string name="prefs_camera_picture_upload_path_title">Kansio lähetetyille kuville</string>
   <string name="share_link_no_support_share_api">Jakaminen ei ole käytössä palvelimellasi. Ota yhteys
 		ylläpitäjään.</string>
-  <string name="share_link_file_error">Virhe tiedoston tai kansion jakamista yrittäessä</string>
-  <string name="unshare_link_file_error">Tiedoston tai kansion jakamista lopettaessa tapahtui virhe</string>
-  <string name="update_link_file_error">Jakoa päivittäessä tapahtui virhe</string>
   <string name="share_link_password_title">Anna salasana</string>
   <string name="share_link_empty_password">Salasana on pakko antaa</string>
   <string name="activity_chooser_send_file_title">Lähetä</string>
@@ -332,7 +327,6 @@
   <string name="clipboard_uxexpected_error">Odottamaton virhe kopioitaessa leikepöydälle.</string>
   <string name="clipboard_label">Teksti koioitiin kohteesta %1$s</string>
   <string name="error_cant_bind_to_operations_service">Kriittinen virhe: toimintoja ei voi suorittaa</string>
-  <string name="network_error_socket_exception">Virhe palvelimeen yhdistäessä</string>
   <string name="network_error_socket_timeout_exception">Palvelimen vastaus viipyy liian kauan</string>
   <string name="network_error_connect_timeout_exception">Palvelimeen yhdistäminen kesti liian kauan</string>
   <string name="network_host_not_available">Palvelinta ei tavoitettu</string>
@@ -356,7 +350,7 @@
   <string name="log_send_mail_subject">%1$sin Android-sovelluksen lokit</string>
   <string name="log_progress_dialog_text">Ladataan tietoja…</string>
   <string name="actionbar_select_all">Valitse kaikki</string>
-    <string name="actionbar_move">Siirrä</string>
+  <string name="actionbar_move">Siirrä</string>
   <string name="file_list_empty_moving">Täällä ei ole mitään. Voit lisätä kansion!</string>
   <string name="folder_picker_choose_button_text">Valitse</string>
   <string name="move_file_not_found">Siirto ei onnistu. Tarkista, ettei tiedostoa ole jo olemassa</string>

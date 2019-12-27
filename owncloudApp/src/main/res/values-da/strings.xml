@@ -66,7 +66,7 @@
   <string name="uploader_error_message_source_file_not_copied">En fejl opstod ved kopiering af filen til en midlertidig folder. Prøv venligst igen.</string>
   <string name="file_list_seconds_ago">sekunder siden</string>
   <string name="file_list_empty">Her er tomt. Upload noget!</string>
-  <string name="file_list_loading">Indlæser…</string>
+  <string name="file_list_loading">Indlæser...</string>
   <string name="file_list_no_app_for_file_type">Ingen app fundet for filtype</string>
   <string name="local_file_list_empty">Der er ingen filer i denne mappe.</string>
   <string name="local_file_list_empty_just_folders">Der er ingen mapper i denne mappe.</string>
@@ -93,9 +93,8 @@
   <string name="common_back">Tilbage</string>
   <string name="common_save_exit">Gem &amp; afslut</string>
   <string name="common_error">Fejl</string>
-  <string name="common_loading">Indlæser…</string>
+  <string name="common_loading">Indlæser...</string>
   <string name="common_unknown">ukendt</string>
-  <string name="common_error_unknown">Ukendt fejl</string>
   <string name="common_pending">Afventer</string>
   <string name="common_important">Vigtigt</string>
   <string name="about_title">Om</string>
@@ -185,12 +184,13 @@
   <string name="media_err_timeout">Tiden udløb under forsøg på at afspille</string>
   <string name="media_err_invalid_progressive_playback">Mediefilen kan ikke streames</string>
   <string name="media_err_unknown">Mediefil kan ikke afspilles med tilgængelige medieafspiller</string>
+  <string name="media_err_security_ex">Sikkerhedsfejl ved forsøg på afspilning af </string>
   <string name="media_err_io_ex">Inputfejl ved forsøg på afspilning af %1$s</string>
   <string name="media_err_unexpected">Uventet fejl ved forsøg på afspilning af %1$s</string>
   <string name="media_rewind_description">Tilbagespolingsknap</string>
   <string name="media_play_pause_description">Afspil eller pause knap</string>
   <string name="media_forward_description">Hurtigt fremad-knap</string>
-  <string name="auth_getting_authorization">Forsøger godkendelse…</string>
+  <string name="auth_getting_authorization">Forsøger godkendelse...</string>
   <string name="auth_no_net_conn_title">Ingen netværksforbindelse</string>
   <string name="auth_nossl_plain_ok_title">Sikker forbindelse ikke tilgængelig.</string>
   <string name="auth_connection_established">Forbindelse oprettet</string>
@@ -226,7 +226,6 @@
   <string name="confirmation_remove_local">Kun lokal</string>
   <string name="confirmation_remove_account_alert">Er du sikker på at du vil fjerne kontoen %1$s ?</string>
   <string name="confirmation_remove_public_share_title">Fjern link</string>
-  <string name="confirmation_remove_share_message">Er du sikker på at du vil fjerne %1$s ?</string>
   <string name="remove_success_msg">Vellykket fjernelse</string>
   <string name="remove_fail_msg">Fjernelse kunne ikke fuldføres</string>
   <string name="rename_dialog_title">Indtast et nyt navn</string>
@@ -290,9 +289,6 @@
   <string name="error__upload__local_file_not_copied">%1$s kunne ikke kopieres til %2$s lokale mappe</string>
   <string name="share_link_no_support_share_api">Beklager, deling er ikke slået til på din server. Kontakt venligst din
 ⇥⇥administrator.</string>
-  <string name="share_link_file_error">Der opstod en fejl ved deling af denne fil eller mappe</string>
-  <string name="unshare_link_file_error">Der opstod en fejl ved stopning af deling af denne mappe.</string>
-  <string name="update_link_file_error">Der opstod en fejl under forsøg på at opdatere andelen</string>
   <string name="share_link_password_title">Angiv et kodeord</string>
   <string name="share_link_empty_password">Du skal angive et kodeord</string>
   <string name="activity_chooser_send_file_title">Send</string>
@@ -302,7 +298,6 @@
   <string name="clipboard_uxexpected_error">Uventet fejl under kopiering til udklipsholder</string>
   <string name="clipboard_label">Tekst kopieret fra %1$s</string>
   <string name="error_cant_bind_to_operations_service">Kritisk fejl: kan ikke udføre handlingerne</string>
-  <string name="network_error_socket_exception">Der opstod en fejl under tilslutningen til serveren.</string>
   <string name="network_error_socket_timeout_exception">Serveren var for længe om at svare</string>
   <string name="network_error_connect_timeout_exception">Serveren var for længe om at forbinde</string>
   <string name="network_host_not_available">Serveren kunne ikke forbindes til</string>
@@ -324,7 +319,7 @@
   <string name="log_send_history_button">Afsend historik</string>
   <string name="log_send_no_mail_app">Ingen app til afsendelse af logs fundet. Installer venligst en mail-app.</string>
   <string name="log_send_mail_subject">%1$s Android-app - logge</string>
-  <string name="log_progress_dialog_text">Indlæser data …</string>
+  <string name="log_progress_dialog_text">Indlæser data ...</string>
   <string name="actionbar_select_all">Vælg alle</string>
   <string name="actionbar_move">Flyt</string>
   <string name="file_list_empty_moving">Der er intet her. Du kan tilføje en mappe!</string>

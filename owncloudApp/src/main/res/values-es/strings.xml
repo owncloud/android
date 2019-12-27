@@ -73,11 +73,14 @@
   <string name="passcode_already_set">El patrón y el código de bloqueo no pueden ser habilitados al mismo tiempo, por favor deshabilite primero el código de bloqueo</string>
   <string name="pattern_no_longer_required">El patrón no será requerido nuevamente</string>
   <string name="pattern_configure_your_pattern_explanation">El patrón será requerido cada vez que se inicie la aplicación</string>
+  <string name="pass_code_locked">Bloqueado con contraseña</string>
+  <string name="pattern_locked">Bloqueado con patrón</string>
   <string name="illegal_argument_exception_message">Se necesita una ACCIÓN válida</string>
   <string name="recommend_subject">¡Prueba  %1$s en su smarthphone!</string>
   <string name="recommend_text">¡Quiero invitarle a usar %1$s en su smartphone!\nDescárguelo aquí: %2$s</string>
   <string name="auth_failure_snackbar">Fallo en la autenticación</string>
   <string name="auth_failure_snackbar_action">Cambiar cuenta</string>
+  <string name="auth_oauth_failure">El token de acceso ha caducado o ya no es válido. Inicie sesión de nuevo para volver a tener acceso</string>
   <string name="auth_oauth_failure_snackbar_action">Registrarse</string>
   <string name="auth_check_server">Verificar servidor</string>
   <string name="auth_host_url">Dirección del servidor https://…</string>
@@ -102,7 +105,8 @@
   <string name="file_list_seconds_ago">hace segundos</string>
   <string name="file_list_empty">No hay nada aquí. ¡Suba algo!</string>
   <string name="file_list_empty_available_offline">No hay archivos sin conexión disponibles.</string>
-  <string name="file_list_loading">Cargando…</string>
+  <string name="file_list_empty_shared_by_links">No se han compartido archivos mediante enlace.</string>
+  <string name="file_list_loading">Cargando...</string>
   <string name="file_list_no_app_for_file_type">No se han encontrado apps para ese tipo de archivos</string>
   <string name="local_file_list_empty">No hay archivos en esta carpeta.</string>
   <string name="local_file_list_empty_just_folders">No hay carpetas en esta carpeta.</string>
@@ -132,9 +136,8 @@
   <string name="common_back">Volver</string>
   <string name="common_save_exit">Guardar &amp; salir</string>
   <string name="common_error">Error</string>
-  <string name="common_loading">Cargando…</string>
+  <string name="common_loading">Cargando...</string>
   <string name="common_unknown">desconocido</string>
-  <string name="common_error_unknown">Error desconocido</string>
   <string name="common_pending">Pendiente</string>
   <string name="common_important">Importante</string>
   <string name="about_title">Acerca de</string>
@@ -143,7 +146,7 @@
   <string name="create_account">Crear cuenta</string>
   <string name="upload_chooser_title">Subir desde</string>
   <string name="uploader_info_dirname">Nombre de la carpeta</string>
-  <string name="uploader_upload_in_progress_ticker">Subiendo…</string>
+  <string name="uploader_upload_in_progress_ticker">Subiendo...</string>
   <string name="uploader_upload_in_progress_content">%1$d%% Subiendo %2$s</string>
   <string name="uploader_upload_succeeded_ticker">Subido con éxito</string>
   <string name="uploader_upload_succeeded_content_single">%1$s subido</string>
@@ -182,7 +185,7 @@
   <string name="uploads_view_upload_status_waiting_for_wifi">Esperando a la conexión wifi</string>
   <string name="uploads_view_later_waiting_to_upload">Esperando para subir</string>
   <string name="uploads_view_unsupported_media_type">Tipo de archivo no soportado</string>
-  <string name="downloader_download_in_progress_ticker">Descargando…</string>
+  <string name="downloader_download_in_progress_ticker">Descargando...</string>
   <string name="downloader_download_in_progress_content">%1$d%% Descargado de %2$s</string>
   <string name="downloader_download_succeeded_ticker">Descarga completa</string>
   <string name="downloader_download_succeeded_content">%1$s descargado</string>
@@ -246,8 +249,8 @@
   <string name="media_play_pause_description">Botón de reproducción o pausa </string>
   <string name="media_forward_description">Botón avance rápido</string>
   <string name="upload_from_camera_title">Imagen de la cámara</string>
-  <string name="auth_getting_authorization">Consiguiendo autorización…</string>
-  <string name="auth_trying_to_login">Tratando de iniciar sesión…</string>
+  <string name="auth_getting_authorization">Consiguiendo autorización...</string>
+  <string name="auth_trying_to_login">Tratando de iniciar sesión...</string>
   <string name="auth_no_net_conn_title">Sin conexión de red</string>
   <string name="auth_nossl_plain_ok_title">Conexión segura no disponible.</string>
   <string name="auth_connection_established">Conexión establecida</string>
@@ -268,7 +271,7 @@
   <string name="auth_wtf_reenter_URL">Estado inesperado; por favor introduzca su dirección de correo de nuevo</string>
   <string name="auth_expired_oauth_token_toast">Su autorización ha expirado. Por favor, autorice de nuevo</string>
   <string name="auth_expired_basic_auth_toast">Por favor introduzca su contraseña actual</string>
-    <string name="auth_connecting_auth_server">Conectando al servidor de autentificación</string>
+  <string name="auth_connecting_auth_server">Conectando al servidor de autentificación</string>
   <string name="auth_unsupported_auth_method">El servidor no soporta este método de autenticación</string>
   <string name="auth_unsupported_multiaccount">%1$s no soporta cuentas múltiples</string>
   <string name="auth_fail_get_user_name">Su servidor no está retornando una identificación de usuario correcta; contacte a un administrador
@@ -284,7 +287,6 @@
   <string name="confirmation_remove_local">Sólo local</string>
   <string name="confirmation_remove_account_alert">¿Desea realmente eliminar la cuenta de %1$s?</string>
   <string name="confirmation_remove_public_share_title">Eliminar link</string>
-  <string name="confirmation_remove_share_message">¿Realmente desea eliminar %1$s?</string>
   <string name="remove_success_msg">Borrado correctamente</string>
   <string name="remove_fail_msg">El borrado no pudo ser completado</string>
   <string name="rename_dialog_title">Introduzca un nombre nuevo</string>
@@ -355,14 +357,8 @@
   <string name="preview_image_error_unknown_format">No se puede mostrar la imagen</string>
   <string name="error__upload__local_file_not_copied">%1$s se pudo copiar a la carpeta local %2$s</string>
   <string name="prefs_camera_picture_upload_path_title">Ruta de subida de imagenes</string>
-  <string name="get_shares_error">Ha ocurrido un error al intentar recuperar los compartidos</string>
-  <string name="get_sharees_error">Ha ocurrido un error al intentar recuperar los usuarios y grupos</string>
-  <string name="get_capabilities_error">Ha ocurrido un error al tratar de recuperar las capacidades</string>
   <string name="share_link_no_support_share_api">La función Compartir no está activada en su servidor. Contacte a su
 		administrador.</string>
-  <string name="share_link_file_error">Ocurrió un error al tratar de compartir este archivo o carpeta</string>
-  <string name="unshare_link_file_error">Ocurrió un error al tratar de ya no compartir este archivo o carpeta</string>
-  <string name="update_link_file_error">Un error ha ocurrido mientras se intentaba actualizar el comparto</string>
   <string name="share_link_password_title">Introduzca una contraseña</string>
   <string name="share_link_empty_password">Debe introducir una contraseña</string>
   <string name="activity_chooser_send_file_title">Enviar</string>
@@ -372,7 +368,6 @@
   <string name="clipboard_uxexpected_error">Error inesperado al copiar al portapapeles</string>
   <string name="clipboard_label">Texto copiado de %1$s</string>
   <string name="error_cant_bind_to_operations_service">Error crítico: no es posible realizar operaciones</string>
-  <string name="network_error_socket_exception">Ocurrió un error al conectarse con el servidor.</string>
   <string name="network_error_socket_timeout_exception">El servidor ha tardado demasiado en responder</string>
   <string name="network_error_connect_timeout_exception">El servidor ha tardado demasiado en conectar</string>
   <string name="network_host_not_available">No puedo encontrar el servidor</string>
@@ -394,10 +389,10 @@
   <string name="log_send_history_button">Mandar historial.</string>
   <string name="log_send_no_mail_app">Aplicación para enviar registros no encontrada. Por favor instale una aplicación de correo.</string>
   <string name="log_send_mail_subject">Se han encontrado %1$s logs de la app Android</string>
-  <string name="log_progress_dialog_text">Cargando datos…</string>
+  <string name="log_progress_dialog_text">Cargando datos...</string>
   <string name="actionbar_select_all">Seleccionar todo</string>
   <string name="actionbar_select_inverse">Seleccionar inverso</string>
-    <string name="actionbar_move">Mover</string>
+  <string name="actionbar_move">Mover</string>
   <string name="file_list_empty_moving">Aquí no hay nada. ¡Puede agregar una carpeta!</string>
   <string name="folder_picker_choose_button_text">Elegir</string>
   <string name="move_file_not_found">No se puede mover. Revise si el archivo existe</string>

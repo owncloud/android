@@ -102,7 +102,8 @@
   <string name="file_list_seconds_ago">saniyeler önce</string>
   <string name="file_list_empty">Burada hiçbir şey yok. Bir şeyler yükleyin!</string>
   <string name="file_list_empty_available_offline">Erişilebilir hiçbir çevrimdışı dosya yok.</string>
-  <string name="file_list_loading">Yükleniyor…</string>
+  <string name="file_list_empty_shared_by_links">Bağlantı ile paylaşılan hiçbir dosya yok.</string>
+  <string name="file_list_loading">Yükleniyor...</string>
   <string name="file_list_no_app_for_file_type">Dosya türü için hiçbir uygulama bulunamadı</string>
   <string name="local_file_list_empty">Bu klasörde dosya yok.</string>
   <string name="local_file_list_empty_just_folders">Bu klasör içinde klasör yok.</string>
@@ -132,9 +133,8 @@
   <string name="common_back">Geri</string>
   <string name="common_save_exit">Kaydet ve çık</string>
   <string name="common_error">Hata</string>
-  <string name="common_loading">Yükleniyor…</string>
+  <string name="common_loading">Yükleniyor...</string>
   <string name="common_unknown">bilinmiyor</string>
-  <string name="common_error_unknown">Bilinmeyen hata</string>
   <string name="common_pending">Bekliyor</string>
   <string name="common_important">Önemli</string>
   <string name="about_title">Hakkında</string>
@@ -143,7 +143,7 @@
   <string name="create_account">Hesap oluştur</string>
   <string name="upload_chooser_title">Şuradan yükle</string>
   <string name="uploader_info_dirname">Klasör adı</string>
-  <string name="uploader_upload_in_progress_ticker">Yükleniyor…</string>
+  <string name="uploader_upload_in_progress_ticker">Yükleniyor...</string>
   <string name="uploader_upload_in_progress_content">%%%1$d Yüklenen: %2$s</string>
   <string name="uploader_upload_succeeded_ticker">Yükleme başarılı</string>
   <string name="uploader_upload_succeeded_content_single">%1$s yüklendi</string>
@@ -181,7 +181,7 @@
   <string name="uploads_view_upload_status_waiting_for_wifi">Kablosuz bağlantısı bekleniyor</string>
   <string name="uploads_view_later_waiting_to_upload">Yüklemek için bekliyor</string>
   <string name="uploads_view_unsupported_media_type">Desteklenmeyen ortam türü</string>
-  <string name="downloader_download_in_progress_ticker">İndiriliyor…</string>
+  <string name="downloader_download_in_progress_ticker">İndiriliyor...</string>
   <string name="downloader_download_in_progress_content">%%%1$d İndirilen: %2$s</string>
   <string name="downloader_download_succeeded_ticker">İndirme başarılı</string>
   <string name="downloader_download_succeeded_content">%1$s indirildi.</string>
@@ -245,8 +245,8 @@
   <string name="media_play_pause_description">Oynat veya duraklat düğmesi</string>
   <string name="media_forward_description">Hızlı ileri düğmesi</string>
   <string name="upload_from_camera_title">Kameradan resim</string>
-  <string name="auth_getting_authorization">Kimlik doğrulama alınıyor…</string>
-  <string name="auth_trying_to_login">Giriş deneniyor…</string>
+  <string name="auth_getting_authorization">Kimlik doğrulama alınıyor...</string>
+  <string name="auth_trying_to_login">Giriş deneniyor...</string>
   <string name="auth_no_net_conn_title">Ağ bağlantısı yok</string>
   <string name="auth_nossl_plain_ok_title">Güvenli bağlantı mevcut değil.</string>
   <string name="auth_connection_established">Bağlantı kuruldu</string>
@@ -283,7 +283,6 @@
   <string name="confirmation_remove_local">Sadece yerel</string>
   <string name="confirmation_remove_account_alert">%1$s hesabını gerçekten kaldırmak istiyor musunuz?</string>
   <string name="confirmation_remove_public_share_title">Bağlantıyı sil</string>
-  <string name="confirmation_remove_share_message">Gerçekten %1$s dosyasını kaldırmak istiyor musunuz?</string>
   <string name="remove_success_msg">Kaldırma başarılı</string>
   <string name="remove_fail_msg">Kaldırma başarısız</string>
   <string name="rename_dialog_title">Yeni bir isim girin</string>
@@ -303,7 +302,7 @@
   <string name="activity_chooser_title">Bağlantıyı gönder</string>
   <string name="wait_for_tmp_copy_from_private_storage">Dosya özel depolamadan kopyalanıyor</string>
   <string name="oauth_check_onoff">oAuth2 ile oturum aç</string>
-  <string name="oauth_login_connection">OAuth2 sunucusuna bağlanıyor…</string>
+  <string name="oauth_login_connection">OAuth2 sunucusuna bağlanıyor...</string>
   <string name="ssl_validator_header">Sunucunun kimliği doğrulanamadı. </string>
   <string name="ssl_validator_reason_cert_not_trusted">- Sunucu sertifikasına güvenilmiyor</string>
   <string name="ssl_validator_reason_cert_expired">- Sunucu sertifikasının süresi dolmuş</string>
@@ -354,14 +353,8 @@
   <string name="preview_image_error_unknown_format">Bu resim gösterilemiyor</string>
   <string name="error__upload__local_file_not_copied">%1$s, %2$s yerel klasörüne kopyalanamadı</string>
   <string name="prefs_camera_picture_upload_path_title">Resim yükleme yolu</string>
-  <string name="get_shares_error">Paylaşımları almaya çalışırken bir hata oluştu</string>
-  <string name="get_sharees_error">Kullanıcıları ve grupları almaya çalışırken bir hata oluştu</string>
-  <string name="get_capabilities_error">Yetenekleri almaya çalışırken bir hata oluştu</string>
   <string name="share_link_no_support_share_api">Üzgünüz, paylaşım sunucunuzda etkin değil. Lütfen yöneticinizle
                 iletişime geçin.</string>
-  <string name="share_link_file_error">Bu dosya veya klasörü paylaşmaya çalışılırken bir hata oluştu</string>
-  <string name="unshare_link_file_error">Bu dosya veya klasör paylaşımı kaldırılmaya çalışılırken bir hata oluştu</string>
-  <string name="update_link_file_error">Paylaşım güncellenmeye çalışırken bir hata oluştu</string>
   <string name="share_link_password_title">Bir parola girin</string>
   <string name="share_link_empty_password">Bir parola girmelisiniz</string>
   <string name="activity_chooser_send_file_title">Gönder</string>
@@ -371,7 +364,6 @@
   <string name="clipboard_uxexpected_error">Panoya kopyalanırken beklenmeyen bir hata oluştu</string>
   <string name="clipboard_label">%1$s metni kopyalandı</string>
   <string name="error_cant_bind_to_operations_service">Ciddi hata: işlem gerçekleştirilemiyor</string>
-  <string name="network_error_socket_exception">Sunucuya bağlanılırken bir hata oluştu.</string>
   <string name="network_error_socket_timeout_exception">Sunucu çok geç cevap veriyor</string>
   <string name="network_error_connect_timeout_exception">Sunucuya bağlanmak çok uzun sürdü</string>
   <string name="network_host_not_available">Sunucuya ulaşılamadı</string>
@@ -393,7 +385,7 @@
   <string name="log_send_history_button">Geçmişi gönder</string>
   <string name="log_send_no_mail_app">Kayıtları göndermek için uygulama bulunamadı. Lütfen bir e-posta uygulaması yükleyin!</string>
   <string name="log_send_mail_subject">%1$s Android uygulama kayıtları</string>
-  <string name="log_progress_dialog_text">Veri yükleniyor…</string>
+  <string name="log_progress_dialog_text">Veri yükleniyor...</string>
   <string name="actionbar_select_all">Tümünü seç</string>
   <string name="actionbar_select_inverse">Seçimi tersine çevir</string>
   <string name="actionbar_move">Taşı</string>

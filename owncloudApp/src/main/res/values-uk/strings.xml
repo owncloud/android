@@ -58,7 +58,7 @@
   <string name="recommend_text">Пропоную вам користуватися %1$s на вашому смартфоні!\nЗавантажити можна за посиланням: %2$s</string>
   <string name="auth_failure_snackbar">Автентифікація не виконана</string>
   <string name="auth_failure_snackbar_action">Змінити обліковий запис</string>
-  <string name="auth_oauth_failure_snackbar_action">Ввійти…</string>
+  <string name="auth_oauth_failure_snackbar_action">Ввійти...</string>
   <string name="auth_check_server">Перевірити сервер</string>
   <string name="auth_host_url">Адреса серверу https://…</string>
   <string name="auth_username">Ім\'я користувача</string>
@@ -113,7 +113,6 @@
   <string name="common_error">Помилка</string>
   <string name="common_loading">Завантаження…</string>
   <string name="common_unknown">невідомо</string>
-  <string name="common_error_unknown">Невідома помилка</string>
   <string name="common_pending">Очікування</string>
   <string name="common_important">Важливий</string>
   <string name="about_title">Про</string>
@@ -215,7 +214,7 @@
   <string name="media_play_pause_description">Відтворення або пауза</string>
   <string name="media_forward_description">Перемотка вперед</string>
   <string name="upload_from_camera_title">Зображення з камери</string>
-  <string name="auth_getting_authorization">Виконується вхід…</string>
+  <string name="auth_getting_authorization">Виконується вхід...</string>
   <string name="auth_no_net_conn_title">Відсутнє підключення до мережі</string>
   <string name="auth_nossl_plain_ok_title">Безпечне з\'єднання не доступне.</string>
   <string name="auth_connection_established">З\'єднання встановлено</string>
@@ -236,7 +235,7 @@
   <string name="auth_wtf_reenter_URL">Неочікуваний стан; будь ласка, введіть адресу сервера знову</string>
   <string name="auth_expired_oauth_token_toast">Час авторизації минув. Будь ласка, увійдіть знову</string>
   <string name="auth_expired_basic_auth_toast">Будь ласка, введіть поточний пароль</string>
-  <string name="auth_connecting_auth_server">Підключення до серверу аутентифікації …</string>
+  <string name="auth_connecting_auth_server">Підключення до серверу аутентифікації ...</string>
   <string name="auth_unsupported_auth_method">Цей сервер не підтримує обраний метод аутентифікації</string>
   <string name="auth_unsupported_multiaccount">%1$s не підтримує одночасно декілька облікових записів</string>
   <string name="auth_fail_get_user_name">Ваш сервер не повертає коректний ідентифікатор користувача, будь ласка зверніться до адміністратора
@@ -252,7 +251,6 @@
   <string name="confirmation_remove_local">Лише локально</string>
   <string name="confirmation_remove_account_alert">Ви дійсно бажаєте вилучити рахунок %1$s?</string>
   <string name="confirmation_remove_public_share_title">Видалити посилання</string>
-  <string name="confirmation_remove_share_message">Ви дійсно бажаєте видалити %1$s?</string>
   <string name="remove_success_msg">Успішно видалено</string>
   <string name="remove_fail_msg">Видалення не вдалось</string>
   <string name="rename_dialog_title">Введіть нове ім\'я</string>
@@ -317,9 +315,6 @@
   <string name="error__upload__local_file_not_copied">%1$s неможливо скопіювати до %2$s</string>
   <string name="prefs_camera_picture_upload_path_title">Шлях для завантаження зображень</string>
   <string name="share_link_no_support_share_api">На жаль, обмін не включений на вашому сервері. Будь ласка, зв\'яжіться з вашим адмінистратором.</string>
-  <string name="share_link_file_error">Виникла помилка при спробі поділитися файлом або текою</string>
-  <string name="unshare_link_file_error">Виникла помилка при спробі заборонити доступ до файлу або теки</string>
-  <string name="update_link_file_error">Виникла помилка при спробі оновити дані доступу</string>
   <string name="share_link_password_title">Ввести пароль</string>
   <string name="share_link_empty_password">Ви повинні ввести пароль</string>
   <string name="activity_chooser_send_file_title">Надіслати</string>
@@ -329,7 +324,6 @@
   <string name="clipboard_uxexpected_error">Неочікувана помилка під час копіювання в буфер</string>
   <string name="clipboard_label">Скопійований текст з %1$s</string>
   <string name="error_cant_bind_to_operations_service">Критична помилка: виконання операції неможливе</string>
-  <string name="network_error_socket_exception">Виникла помилка при підключені до сервера.</string>
   <string name="network_error_socket_timeout_exception">Сервер занадто довго не відповідає</string>
   <string name="network_error_connect_timeout_exception">Сервер занадто довго не підключається</string>
   <string name="network_host_not_available">Немає доступу до серверу</string>
@@ -351,7 +345,7 @@
   <string name="log_send_history_button">Надіслати історію</string>
   <string name="log_send_no_mail_app">Не знайдено програм для висилання журналів. Будь ласка, встановіть поштову програму.</string>
   <string name="log_send_mail_subject">%1$s Android лог додатку</string>
-  <string name="log_progress_dialog_text">Завантаження даних…</string>
+  <string name="log_progress_dialog_text">Завантаження даних...</string>
   <string name="actionbar_select_all">Вибрати всі</string>
   <string name="actionbar_move">Перемістити</string>
   <string name="file_list_empty_moving">Тут нічого немає. Ви можете додати теку!</string>

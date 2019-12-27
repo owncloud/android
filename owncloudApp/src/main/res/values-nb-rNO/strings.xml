@@ -63,7 +63,7 @@
   <string name="recommend_text">Jeg ønsker å invitere deg til å bruke %1$s på smarttelefonen din!\nLast ned her: %2$s</string>
   <string name="auth_oauth_failure_snackbar_action">Logg inn</string>
   <string name="auth_check_server">Sjekk server</string>
-  <string name="auth_host_url">Serveradresse https://…</string>
+  <string name="auth_host_url">Serveradresse https://...</string>
   <string name="auth_username">Brukernavn</string>
   <string name="auth_password">Passord</string>
   <string name="auth_register">Ny med %1$s?</string>
@@ -84,7 +84,7 @@
   <string name="uploader_error_message_source_file_not_copied">Det skjedde en feil under kopiering av filen til en foreløpig mappe. Prøv å sende igjen.</string>
   <string name="file_list_seconds_ago">for få sekunder siden</string>
   <string name="file_list_empty">Ingenting her. Last opp noe!</string>
-  <string name="file_list_loading">Laster…</string>
+  <string name="file_list_loading">Laster...</string>
   <string name="file_list_no_app_for_file_type">Ingen apper funnet for filtypen</string>
   <string name="local_file_list_empty">Det er ingen filer i denne mappen.</string>
   <string name="local_file_list_empty_just_folders">Det er ingen mapper i denne mappen.</string>
@@ -113,9 +113,8 @@
   <string name="common_back">Tilbake</string>
   <string name="common_save_exit">Lagre &amp; avslutt</string>
   <string name="common_error">Feil</string>
-  <string name="common_loading">Laster…</string>
+  <string name="common_loading">Laster...</string>
   <string name="common_unknown">ukjent</string>
-  <string name="common_error_unknown">Ukjent feil</string>
   <string name="common_pending">Venter</string>
   <string name="common_important">Viktig</string>
   <string name="about_title">Om</string>
@@ -219,7 +218,7 @@
   <string name="media_play_pause_description">Spill eller pause</string>
   <string name="media_forward_description">Spol fremover</string>
   <string name="upload_from_camera_title">Bilde fra kamera</string>
-  <string name="auth_getting_authorization">Henter godkjenning…</string>
+  <string name="auth_getting_authorization">Henter godkjenning...</string>
   <string name="auth_no_net_conn_title">Ingen nettverkstilkobling</string>
   <string name="auth_nossl_plain_ok_title">Sikker tilkobling ikke tilgjengelig.</string>
   <string name="auth_connection_established">Tilkobling opprettet</string>
@@ -240,7 +239,7 @@
   <string name="auth_wtf_reenter_URL">Uventet tilstand. Legg inn server-adressen på nytt</string>
   <string name="auth_expired_oauth_token_toast">Autorisasjonen din har gått ut. Vennligt autoriser igjen</string>
   <string name="auth_expired_basic_auth_toast">Legg inn nåværende passord</string>
-    <string name="auth_connecting_auth_server">Kobler til autentiserings-server ..</string>
+  <string name="auth_connecting_auth_server">Kobler til autentiserings-server ..</string>
   <string name="auth_unsupported_auth_method">Serveren støtter ikke denne autorisasjonsmetoden</string>
   <string name="auth_unsupported_multiaccount">%1$s støtter ikke flere kontoer</string>
   <string name="auth_fail_get_user_name">Tjeneren din svarer ikke med korrekt bruker-ID, vennligst ta kontakt med en administrator
@@ -256,7 +255,6 @@
   <string name="confirmation_remove_local">Kun lokalt</string>
   <string name="confirmation_remove_account_alert">Vil du virkelig fjerne kontoen %1$s?</string>
   <string name="confirmation_remove_public_share_title">Fjern lenke</string>
-  <string name="confirmation_remove_share_message">Vil du virkelig fjerne %1$s?</string>
   <string name="remove_success_msg">Fjerning var vellykket</string>
   <string name="remove_fail_msg">Fjerning mislyktes</string>
   <string name="rename_dialog_title">Skriv inn et nytt navn</string>
@@ -275,7 +273,7 @@
   <string name="filedisplay_no_file_selected">Ingen fil ble valgt</string>
   <string name="wait_for_tmp_copy_from_private_storage">Kopierer fil fra privat lager</string>
   <string name="oauth_check_onoff">Logg inn med oAuth2</string>
-  <string name="oauth_login_connection">Kobler til OAuth2-server…</string>
+  <string name="oauth_login_connection">Kobler til OAuth2-server...</string>
   <string name="ssl_validator_header">Kunne ikke verifisere dentiteten til serveren</string>
   <string name="ssl_validator_reason_cert_not_trusted">- Serverens sertifikat er ikke til å stole på</string>
   <string name="ssl_validator_reason_cert_expired">- Serverens sertifikat er utløpt</string>
@@ -325,9 +323,6 @@
   <string name="prefs_camera_picture_upload_path_title">Bilde opplastings-sti</string>
   <string name="share_link_no_support_share_api">Beklager, deling er ikke skrudd på for din tjener. Ta kontakt med
 		administratoren.</string>
-  <string name="share_link_file_error">Det skjedde en feil under deling av denne filen eller mappen</string>
-  <string name="unshare_link_file_error">En feil oppstod ved avslutting av delingen av denne filen eller mappen</string>
-  <string name="update_link_file_error">Det oppstod en feil ved oppdatering av delingen</string>
   <string name="share_link_password_title">Skriv inn ett passord</string>
   <string name="share_link_empty_password">Du må skrive inn ett passord</string>
   <string name="activity_chooser_send_file_title">Send</string>
@@ -337,7 +332,6 @@
   <string name="clipboard_uxexpected_error">Uventet feil under kopiering til utklippstavlen</string>
   <string name="clipboard_label">Tekst kopiert fra %1$s</string>
   <string name="error_cant_bind_to_operations_service">Kritisk feil: kan ikke utføre operasjonene</string>
-  <string name="network_error_socket_exception">En feil oppstod ved oppretting av forbindelse til serveren.</string>
   <string name="network_error_socket_timeout_exception">Serveren brukte for lang tid på å svare</string>
   <string name="network_error_connect_timeout_exception">Tjeneren brukte for lang tid på å koble til</string>
   <string name="network_host_not_available">Tjeneren kunne ikke nås</string>
@@ -359,9 +353,9 @@
   <string name="log_send_history_button">Send historik</string>
   <string name="log_send_no_mail_app">Ingen app for sending av logger funnet. Installer epost-app.</string>
   <string name="log_send_mail_subject">%1$s Android app logger</string>
-  <string name="log_progress_dialog_text">Laster data…</string>
+  <string name="log_progress_dialog_text">Laster data...</string>
   <string name="actionbar_select_all">Velg alle</string>
-    <string name="actionbar_move">Flytt</string>
+  <string name="actionbar_move">Flytt</string>
   <string name="file_list_empty_moving">Ingenting her. Du kan legge til en mappe!</string>
   <string name="folder_picker_choose_button_text">Velg</string>
   <string name="move_file_not_found">Kan ikke flytte. Sjekk om filen eksisterer.</string>

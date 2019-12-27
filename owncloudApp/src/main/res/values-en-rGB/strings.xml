@@ -134,7 +134,6 @@
   <string name="common_error">Error</string>
   <string name="common_loading">Loading…</string>
   <string name="common_unknown">unknown</string>
-  <string name="common_error_unknown">Unknown error</string>
   <string name="common_pending">Pending</string>
   <string name="common_important">Important</string>
   <string name="about_title">About</string>
@@ -284,7 +283,6 @@
   <string name="confirmation_remove_local">Local only</string>
   <string name="confirmation_remove_account_alert">Do you really want to remove the account %1$s?</string>
   <string name="confirmation_remove_public_share_title">Remove link</string>
-  <string name="confirmation_remove_share_message">Do you really want to remove %1$s?</string>
   <string name="remove_success_msg">Removal succeeded</string>
   <string name="remove_fail_msg">Removal failed</string>
   <string name="rename_dialog_title">Enter a new name</string>
@@ -355,14 +353,8 @@
   <string name="preview_image_error_unknown_format">This image cannot be shown</string>
   <string name="error__upload__local_file_not_copied">%1$s could not be copied to %2$s local folder</string>
   <string name="prefs_camera_picture_upload_path_title">Picture upload path</string>
-  <string name="get_shares_error">An error occurred while trying to retrieve shares</string>
-  <string name="get_sharees_error">An error occurred while trying to retrieve users and groups</string>
-  <string name="get_capabilities_error">An error occurred while trying to retrieve capabilities</string>
   <string name="share_link_no_support_share_api">Sorry, sharing is not enabled on your server. Please contact your
 		administrator.</string>
-  <string name="share_link_file_error">An error occurred while trying to share this file or folder</string>
-  <string name="unshare_link_file_error">An error occurred while trying to unshare this file or folder</string>
-  <string name="update_link_file_error">An error occurred while trying to update the share</string>
   <string name="share_link_password_title">Enter a password</string>
   <string name="share_link_empty_password">You must enter a password</string>
   <string name="activity_chooser_send_file_title">Send</string>
@@ -372,7 +364,6 @@
   <string name="clipboard_uxexpected_error">Unexpected error whilst copying to clipboard</string>
   <string name="clipboard_label">Text copied from %1$s</string>
   <string name="error_cant_bind_to_operations_service">Critical error: cannot perform operations</string>
-  <string name="network_error_socket_exception">An error occurred whilst connecting to the server.</string>
   <string name="network_error_socket_timeout_exception">The server took too long to respond</string>
   <string name="network_error_connect_timeout_exception">The server took too long to connect</string>
   <string name="network_host_not_available">Server could not be reached</string>

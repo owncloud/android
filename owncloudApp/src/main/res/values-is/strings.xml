@@ -121,7 +121,6 @@
   <string name="common_error">Villa</string>
   <string name="common_loading">Hleð inn…</string>
   <string name="common_unknown">óþekkt</string>
-  <string name="common_error_unknown">Óþekkt villa</string>
   <string name="common_pending">Í bið</string>
   <string name="common_important">Mikilvægt</string>
   <string name="about_title">Um hugbúnaðinn</string>
@@ -130,7 +129,7 @@
   <string name="create_account">Stofna aðgang</string>
   <string name="upload_chooser_title">Senda inn úr</string>
   <string name="uploader_info_dirname">Nafn möppu</string>
-  <string name="uploader_upload_in_progress_ticker">Sendi inn …</string>
+  <string name="uploader_upload_in_progress_ticker">Sendi inn ...</string>
   <string name="uploader_upload_in_progress_content">%1$d%% Sendi inn %2$s</string>
   <string name="uploader_upload_succeeded_ticker">Innsending tókst</string>
   <string name="uploader_upload_succeeded_content_single">%1$s sent inn</string>
@@ -166,7 +165,7 @@
   <string name="uploads_view_upload_status_waiting_for_wifi">Bíð eftir þráðlausri nettengingu</string>
   <string name="uploads_view_later_waiting_to_upload">Bíð eftir að senda inn</string>
   <string name="uploads_view_unsupported_media_type">Óstudd gerð gagnamiðils</string>
-  <string name="downloader_download_in_progress_ticker">Sæki …</string>
+  <string name="downloader_download_in_progress_ticker">Sæki ...</string>
   <string name="downloader_download_in_progress_content">%1$d%% Sæki %2$s</string>
   <string name="downloader_download_succeeded_ticker">Niðurhal tókst</string>
   <string name="downloader_download_succeeded_content">%1$s niðurhalað</string>
@@ -226,7 +225,7 @@
   <string name="media_play_pause_description">Afspilun-eða-hlé hnappur</string>
   <string name="media_forward_description">Spóla-hratt-áfram hnappur</string>
   <string name="upload_from_camera_title">Mynd úr myndavél</string>
-  <string name="auth_getting_authorization">Fæ heimild …</string>
+  <string name="auth_getting_authorization">Fæ heimild ...</string>
   <string name="auth_trying_to_login">Reyni að skrá inn …</string>
   <string name="auth_no_net_conn_title">Engin nettenging</string>
   <string name="auth_nossl_plain_ok_title">Örugg tenging ekki tiltæk.</string>
@@ -264,7 +263,6 @@
   <string name="confirmation_remove_local">Einungis staðvært</string>
   <string name="confirmation_remove_account_alert">Ertu viss um að þú viljir fjarlægja %1$s aðganginn?</string>
   <string name="confirmation_remove_public_share_title">Fjarlægja tengil</string>
-  <string name="confirmation_remove_share_message">Ertu viss um að þú viljir fjarlægja %1$s?</string>
   <string name="remove_success_msg">Fjarlæging tókst</string>
   <string name="remove_fail_msg">Fjarlæging mistókst</string>
   <string name="rename_dialog_title">Settu inn nýtt nafn</string>
@@ -332,9 +330,6 @@
   <string name="prefs_camera_picture_upload_path_title">Innsendingarslóð fyrir myndir</string>
   <string name="share_link_no_support_share_api">Því miður, deiling gagna er ekki virk á þjóninum. Hafðu samband við
 		kerfisstjóra.</string>
-  <string name="share_link_file_error">Villa kom upp við að reyna að deila þessari skrá eða möppu</string>
-  <string name="unshare_link_file_error">Villa kom upp við að reyna að hætta deilingu á þessari skrá eða möppu</string>
-  <string name="update_link_file_error">Villa kom upp við að reyna að uppfæra sameignina</string>
   <string name="share_link_password_title">Settu inn lykilorð</string>
   <string name="share_link_empty_password">Þú verður að setja inn lykilorð</string>
   <string name="activity_chooser_send_file_title">Senda</string>
@@ -344,7 +339,6 @@
   <string name="clipboard_uxexpected_error">Óvænt villa kom upp við afritun á klippispjald</string>
   <string name="clipboard_label">Texti afritaður úr %1$s</string>
   <string name="error_cant_bind_to_operations_service">Alvarleg villa: get ekki framkvæmt aðgerðir</string>
-  <string name="network_error_socket_exception">Villa kom upp við að tengjast við þjóninn.</string>
   <string name="network_error_socket_timeout_exception">Þjónninn var of lengi að svara</string>
   <string name="network_error_connect_timeout_exception">Þjónninn var of lengi að tengjast</string>
   <string name="network_host_not_available">Ekki tókst að ná sambandi við þjón</string>
