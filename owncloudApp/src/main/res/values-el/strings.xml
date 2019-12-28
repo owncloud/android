@@ -37,8 +37,8 @@
   <string name="prefs_accounts">Λογαριασμοί</string>
   <string name="prefs_manage_accounts">Διαχείριση λογαριασμών</string>
   <string name="prefs_passcode">Κλείδωμα με κωδικό</string>
-  <string name="prefs_fingerprint">Κλείδωμα με δακτυλικό αποτύπωμα</string>
-  <string name="prefs_fingerprint_summary">Ενεργοποιήστε τον κωδικό ή το μοτίβο κλειδώματος για να ενεργοποιήσετε αυτήν την επιλογή</string>
+  <string name="prefs_biometric">Κλείδωμα με δακτυλικό αποτύπωμα</string>
+  <string name="prefs_biometric_summary">Ενεργοποιήστε τον κωδικό ή το μοτίβο κλειδώματος για να ενεργοποιήσετε αυτήν την επιλογή</string>
   <string name="prefs_touches_with_other_visible_windows">Άγγιγμα με άλλα ορατά παράθυρα</string>
   <string name="prefs_touches_with_other_visible_windows_summary">Επιτρέψτε το άγγιγμα όταν η προβολή καλύπτεται από άλλο ορατό παράθυρο. Ενεργοποιήστε τη χρήση εφαρμογών φιλτραρίσματος φωτός.</string>
   <string name="confirmation_touches_with_other_windows_title">Είστε βέβαιοι ότι θέλετε να ενεργοποιήσετε αυτήν τη λειτουργία;</string>
@@ -220,13 +220,8 @@
   <string name="pass_code_wrong">Εσφαλμένος κωδικός</string>
   <string name="pass_code_removed">Ο κωδικός αφαιρέθηκε</string>
   <string name="pass_code_stored">Ο κωδικός αποθηκεύτηκε</string>
-  <string name="fingerprint_confirm">Επιβεβαιώστε το δακτυλικό σας αποτύπωμα για να συνεχίσετε</string>
-  <string name="fingerprint_hint">Αγγίξτε τον αισθητήρα</string>
-  <string name="fingerprint_not_recognized">Δεν αναγνωρίστηκε το δακτυλικό αποτύπωμα, δοκιμάστε ξανά</string>
-  <string name="fingerprint_success">Αναγνωρίστηκε το δακτυλικό αποτυπώμα</string>
-  <string name="fingerprint_not_hardware_detected">Αυτή η συσκευή δεν υποστηρίζει την πιστοποίηση με δακτυλικό αποτύπωμα</string>
-  <string name="fingerprint_not_enrolled_fingerprints">Καταχωρήστε τουλάχιστον ένα δακτυλικό αποτύπωμα για να χρησιμοποιήσετε αυτό το χαρακτηριστικό</string>
-  <string name="fingerprint_not_granted_permissions">Δεν επιτρέπονται τα δικαιώματα δακτυλικών αποτυπωμάτων</string>
+  <string name="biometric_not_hardware_detected">Αυτή η συσκευή δεν υποστηρίζει την πιστοποίηση με δακτυλικό αποτύπωμα</string>
+  <string name="biometric_not_enrolled">Καταχωρήστε τουλάχιστον ένα δακτυλικό αποτύπωμα για να χρησιμοποιήσετε αυτό το χαρακτηριστικό</string>
   <string name="media_notif_ticker">%1$s αναπαραγωγή μουσικής</string>
   <string name="media_state_playing">%1$s (αναπαραγωγή)</string>
   <string name="media_state_loading">%1$s (φόρτωση)</string>

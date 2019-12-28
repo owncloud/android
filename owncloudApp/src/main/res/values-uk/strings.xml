@@ -35,7 +35,7 @@
   <string name="prefs_accounts">Облікові записи</string>
   <string name="prefs_manage_accounts">Управління обліковими записами</string>
   <string name="prefs_passcode">Захистити паролем</string>
-  <string name="prefs_fingerprint_summary">Увімкніть блокування паролем або графічним ключем щоб увімкнути це налаштування</string>
+  <string name="prefs_biometric_summary">Увімкніть блокування паролем або графічним ключем щоб увімкнути це налаштування</string>
   <string name="prefs_camera_picture_upload">Завантаження зображень</string>
   <string name="prefs_camera_picture_upload_summary">Автоматично завантажувати зображення з камери</string>
   <string name="prefs_camera_video_upload">Завантаження відео</string>

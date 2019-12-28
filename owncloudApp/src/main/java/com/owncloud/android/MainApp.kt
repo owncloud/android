@@ -32,7 +32,7 @@ import android.preference.PreferenceManager
 import android.view.WindowManager
 import androidx.multidex.MultiDex
 import androidx.multidex.MultiDexApplication
-import com.owncloud.android.authentication.FingerprintManager
+import com.owncloud.android.authentication.BiometricManager
 import com.owncloud.android.authentication.PassCodeManager
 import com.owncloud.android.authentication.PatternManager
 import com.owncloud.android.datamodel.ThumbnailsCacheManager
@@ -45,7 +45,7 @@ import com.owncloud.android.dependecyinjection.viewModelModule
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.SingleSessionManager
 import com.owncloud.android.lib.common.utils.LoggingHelper
-import com.owncloud.android.ui.activity.FingerprintActivity
+import com.owncloud.android.ui.activity.BiometricActivity
 import com.owncloud.android.ui.activity.PassCodeActivity
 import com.owncloud.android.ui.activity.PatternLockActivity
 import com.owncloud.android.ui.activity.WhatsNewActivity
@@ -77,7 +77,7 @@ class MainApp : MultiDexApplication() {
         // initialise thumbnails cache on background thread
         ThumbnailsCacheManager.InitDiskCacheTask().execute()
 
-        // register global protection with pass code, pattern lock and fingerprint lock
+        // register global protection with pass code, pattern lock and biometric lock
         registerActivityLifecycleCallbacks(object : ActivityLifecycleCallbacks {
             override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
                 Timber.d("${activity.javaClass.simpleName} onCreate(Bundle) starting")
@@ -85,7 +85,7 @@ class MainApp : MultiDexApplication() {
                 val passCodeEnabled = preferences.getBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false)
                 val patternCodeEnabled = preferences.getBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN, false)
                 if (!isDeveloper) {
-                    // To enable FingerPrint you need to enable passCode or pattern, so no need to add check to if
+                    // To enable biometric you need to enable passCode or pattern, so no need to add check to if
                     if (passCodeEnabled || patternCodeEnabled) {
                         activity.window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
                     } else {
@@ -97,7 +97,7 @@ class MainApp : MultiDexApplication() {
                 // have finished
                 if (activity !is PassCodeActivity &&
                     activity !is PatternLockActivity &&
-                    activity !is FingerprintActivity
+                    activity !is BiometricActivity
                 ) {
                     WhatsNewActivity.runIfNeeded(activity)
                 }
@@ -108,7 +108,7 @@ class MainApp : MultiDexApplication() {
                 PassCodeManager.getPassCodeManager().onActivityStarted(activity)
                 PatternManager.getPatternManager().onActivityStarted(activity)
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    FingerprintManager.getFingerprintManager(activity).onActivityStarted(activity)
+                    BiometricManager.getBiometricManager(activity).onActivityStarted(activity)
                 }
             }
 
@@ -125,11 +125,11 @@ class MainApp : MultiDexApplication() {
                 PassCodeManager.getPassCodeManager().onActivityStopped(activity)
                 PatternManager.getPatternManager().onActivityStopped(activity)
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    FingerprintManager.getFingerprintManager(activity).onActivityStopped(activity)
+                    BiometricManager.getBiometricManager(activity).onActivityStopped(activity)
                 }
                 if (activity is PassCodeActivity ||
                     activity is PatternLockActivity ||
-                    activity is FingerprintActivity
+                    activity is BiometricActivity
                 ) {
                     WhatsNewActivity.runIfNeeded(activity)
                 }

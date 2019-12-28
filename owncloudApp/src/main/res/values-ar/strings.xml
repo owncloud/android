@@ -37,8 +37,8 @@
   <string name="prefs_accounts">الحسابات</string>
   <string name="prefs_manage_accounts">إدارة الحسابات</string>
   <string name="prefs_passcode">قفل رمز المرور</string>
-  <string name="prefs_fingerprint">قفل بصمة الإصبع</string>
-  <string name="prefs_fingerprint_summary">فعِّل رمز المرور أو قفل النمط لتفعيل هذا الخيار</string>
+  <string name="prefs_biometric">قفل بصمة الإصبع</string>
+  <string name="prefs_biometric_summary">فعِّل رمز المرور أو قفل النمط لتفعيل هذا الخيار</string>
   <string name="prefs_touches_with_other_visible_windows">اللمس باستخدام نوافذ أخرى مرئية</string>
   <string name="prefs_touches_with_other_visible_windows_summary">يتيح اللمس باستخدام نافذة أخرى مرئية عندما تكون نافذة العرض مخفية. فعِّله لاستخدام تطبيقات تصفية الإضاءة.</string>
   <string name="confirmation_touches_with_other_windows_title">هل أنت متأكد أنك ترغب في تفعيل هذه الميزة؟</string>
@@ -218,13 +218,8 @@
   <string name="pass_code_wrong">رمز مرور غير صحيح</string>
   <string name="pass_code_removed">تم حذف رمز المرور</string>
   <string name="pass_code_stored">تم تخزين رمز المرور</string>
-  <string name="fingerprint_confirm">أكد بصمة إصبعك للمتابعة</string>
-  <string name="fingerprint_hint">مستشعر اللمس</string>
-  <string name="fingerprint_not_recognized">لم يتم التعرف على بصمة الإصبع، أعد المحاولة</string>
-  <string name="fingerprint_success">تم التعرف على بصمة الإصبع</string>
-  <string name="fingerprint_not_hardware_detected">لا يدعم هذا الجهاز المصادقة باستخدام بصمة الإصبع</string>
-  <string name="fingerprint_not_enrolled_fingerprints">سجِّل بصمة إصبع واحدة على الأقل لاستخدام هذه الميزة</string>
-  <string name="fingerprint_not_granted_permissions">لم تُمنح إذونات بصمة الإصبع</string>
+  <string name="biometric_not_hardware_detected">لا يدعم هذا الجهاز المصادقة باستخدام بصمة الإصبع</string>
+  <string name="biometric_not_enrolled">سجِّل بصمة إصبع واحدة على الأقل لاستخدام هذه الميزة</string>
   <string name="media_notif_ticker">%1$s مُشغل الموسيقى</string>
   <string name="media_state_playing">%1$s (تشغيل)</string>
   <string name="media_state_loading">%1$s (تحميل)</string>
