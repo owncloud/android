@@ -16,6 +16,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics:18.0.2'
     implementation 'com.google.firebase:firebase-crashlytics:17.4.1'
 
+    implementation 'com.github.hannesa2:githubAppUpdate:1.4'
+
     // Data and domain modules
     implementation project(':owncloudDomain')
     implementation project(':owncloudData')
@@ -110,6 +112,11 @@ android {
 
         buildConfigField "String", gitRemote, "\"" + getGitOriginRemote() + "\""
         buildConfigField "String", commitSHA1, "\"" + getLatestGitHash() + "\""
+
+        multiDexEnabled true
+
+        buildConfigField "String", 'GIT_REPOSITORY', "\"" + getGitOriginRemote() + "\""
+        buildConfigField "String", 'HTTP_LOGGING_LEVEL', "\"NONE\""  //NONE, BASIC, HEADERS, BODY
     }
 
     compileOptions {
@@ -263,11 +270,6 @@ static def getGitOriginRemote() {
 
     def found = values.find { it.startsWith("origin") && it.endsWith("(push)") }
     return found.replace("origin", "").replace("(push)", "").replace(".git", "").trim()
-}
-
-static def getGitUser() {
-    def remote = getGitOriginRemote()
-    return remote.replace("https://github.com/", "").replace("/owncloud-android", "").trim()
 }
 
 task decryptPrivate {
