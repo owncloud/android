@@ -54,6 +54,7 @@ import androidx.fragment.app.Fragment
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.material.snackbar.Snackbar
 import com.owncloud.android.AppRater
+import com.owncloud.android.BuildConfig
 import com.owncloud.android.MainApp
 import com.owncloud.android.R
 import com.owncloud.android.authentication.BiometricManager
@@ -101,6 +102,7 @@ import com.owncloud.android.utils.Extras
 import com.owncloud.android.utils.FileStorageUtils
 import com.owncloud.android.utils.PermissionUtil
 import com.owncloud.android.utils.PreferenceUtils
+import info.hannes.github.AppUpdateHelper
 import kotlinx.android.synthetic.main.nav_coordinator_layout.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -224,6 +226,8 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         if (resources.getBoolean(R.bool.enable_rate_me_feature) && !MainApp.isDeveloper) {
             AppRater.appLaunched(this, packageName)
         }
+
+        AppUpdateHelper.checkForNewVersion(this, BuildConfig.GIT_USER, BuildConfig.GIT_REPOSITORY, BuildConfig.VERSION_NAME)
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {

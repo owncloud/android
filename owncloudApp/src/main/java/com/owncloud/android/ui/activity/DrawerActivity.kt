@@ -52,6 +52,7 @@ import com.owncloud.android.presentation.viewmodels.drawer.DrawerViewModel
 import com.owncloud.android.utils.AvatarUtils
 import com.owncloud.android.utils.DisplayUtils
 import com.owncloud.android.utils.PreferenceUtils
+import info.hannes.github.AppUpdateHelper.checkForNewVersion
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.nav_coordinator_layout.*
 import kotlinx.android.synthetic.main.nav_drawer_content.*
@@ -172,6 +173,12 @@ abstract class DrawerActivity : ToolbarActivity() {
                     startActivityForResult(manageAccountsIntent, ACTION_MANAGE_ACCOUNTS)
                 }
                 R.id.drawer_menu_feedback -> openFeedback()
+                R.id.nav_check_update -> checkForNewVersion(
+                    this@DrawerActivity,
+                    BuildConfig.GIT_USER,
+                    BuildConfig.GIT_REPOSITORY,
+                    BuildConfig.VERSION_NAME
+                )
                 R.id.drawer_menu_help -> openHelp()
                 Menu.NONE -> {
                     accountClicked(menuItem.title.toString())
