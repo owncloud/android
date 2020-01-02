@@ -67,6 +67,7 @@ import com.owncloud.android.operations.RenameFileOperation;
 import com.owncloud.android.operations.SynchronizeFileOperation;
 import com.owncloud.android.operations.SynchronizeFolderOperation;
 import com.owncloud.android.operations.common.SyncOperation;
+import timber.log.Timber;
 
 import java.io.IOException;
 import java.util.Iterator;
@@ -212,10 +213,8 @@ public class OperationsService extends Service {
                     saveAllClients(this, MainApp.Companion.getAccountType());
 
             // TODO - get rid of these exceptions
-        } catch (
-                AccountNotFoundException | AuthenticatorException |
-                        OperationCanceledException | IOException e) {
-            e.printStackTrace();
+        } catch (AccountNotFoundException | AuthenticatorException | OperationCanceledException | IOException e) {
+            Timber.e(e);
         }
 
         mUndispatchedFinishedOperations.clear();
