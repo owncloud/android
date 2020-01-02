@@ -16,6 +16,7 @@ import okhttp3.OkHttpClient;
 
 import java.io.IOException;
 
+@SuppressWarnings("WeakerAccess")
 public abstract class RemoteOperation<T> implements Runnable {
 
     /**
@@ -106,8 +107,7 @@ public abstract class RemoteOperation<T> implements Runnable {
      *                        the listener objects must be called.
      * @return Thread were the remote operation is executed.
      */
-    public Thread execute(OwnCloudClient client,
-                          OnRemoteOperationListener listener, Handler listenerHandler) {
+    public Thread execute(OwnCloudClient client, OnRemoteOperationListener listener, Handler listenerHandler) {
         if (client == null) {
             throw new IllegalArgumentException
                     ("Trying to execute a remote operation with a NULL OwnCloudClient");
@@ -121,7 +121,7 @@ public abstract class RemoteOperation<T> implements Runnable {
         if (listener == null) {
             throw new IllegalArgumentException
                     ("Trying to execute a remote operation asynchronously " +
-                            "without a listener to notiy the result");
+                            "without a listener to notify the result");
         }
         mListener = listener;
 
@@ -236,9 +236,7 @@ public abstract class RemoteOperation<T> implements Runnable {
     /**
      * Run operation for asynchronous or synchronous 'onExecute' method.
      * <p>
-     * Considers and performs silent refresh of account credentials if possible, and if
-     * {@link RemoteOperation#setSilentRefreshOfAccountCredentials(boolean)} was called with
-     * parameter 'true' before the execution.
+     * Considers and performs silent refresh of account credentials if possible
      *
      * @return Remote operation result
      */
