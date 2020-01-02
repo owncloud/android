@@ -116,8 +116,7 @@ class SyncFolderHandler extends Handler {
 
                 // always get client from client manager, to get fresh credentials in case of update
                 OwnCloudAccount ocAccount = new OwnCloudAccount(account, mService);
-                mOwnCloudClient = SingleSessionManager.getDefaultSingleton().
-                        getClientFor(ocAccount, mService);
+                mOwnCloudClient = SingleSessionManager.getDefaultSingleton().getClientFor(ocAccount, mService);
 
                 result = mCurrentSyncOperation.execute(mOwnCloudClient, mStorageManager);
 
