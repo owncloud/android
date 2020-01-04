@@ -72,6 +72,8 @@ dependencies {
     // Timber
     implementation libs.timber
 
+    implementation 'com.github.hannesa2:CVScanner:1.0'
+
     // Tests
     testImplementation project(":owncloudTestUtil")
     testImplementation libs.androidx.arch.core.testing

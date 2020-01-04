@@ -32,6 +32,9 @@ allprojects {
         maven {
             url "https://jitpack.io"
         }
+        maven {
+            url 'https://artifactory.mxtracks.info/artifactory/gradle-dev-local/'
+        }
     }
 }
 

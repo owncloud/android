@@ -183,6 +183,10 @@ public class FilesUploadHelper implements Parcelable {
         checkIfAvailableSpace(new String[]{getCapturedImageFile().getAbsolutePath()}, callback);
     }
 
+    public void onActivityResult(String imagePath, final OnCheckAvailableSpaceListener callback) {
+        checkIfAvailableSpace(new String[]{imagePath}, callback);
+    }
+
     public void deleteImageFile() {
         if (image != null) {
             image.delete();
