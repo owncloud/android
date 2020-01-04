@@ -102,6 +102,7 @@ import com.owncloud.android.utils.Extras
 import com.owncloud.android.utils.FileStorageUtils
 import com.owncloud.android.utils.PermissionUtil
 import com.owncloud.android.utils.PreferenceUtils
+import info.hannes.cvscanner.CVScanner
 import info.hannes.github.AppUpdateHelper
 import kotlinx.android.synthetic.main.nav_coordinator_layout.*
 import kotlinx.coroutines.CoroutineScope
@@ -646,6 +647,21 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
             }
 
             // requestUploadOfFilesFromFileSystem(data,resultCode);
+        } else if (requestCode == REQUEST_CODE__UPLOAD_SCANNED_DOCUMENT) {
+            if(resultCode == RESULT_OK) {
+                val scannedDocumentPath = data?.getStringExtra (CVScanner.RESULT_IMAGE_PATH);
+
+                filesUploadHelper!!.onActivityResult(scannedDocumentPath, object : FilesUploadHelper.OnCheckAvailableSpaceListener {
+
+                    override fun onCheckAvailableSpaceStart() = Unit
+
+                    override fun onCheckAvailableSpaceFinished(hasEnoughSpace: Boolean, capturedFilePaths: Array<String>) {
+                        if (hasEnoughSpace) {
+                            requestUploadOfFilesFromFileSystem(capturedFilePaths, FileUploader.LOCAL_BEHAVIOUR_MOVE)
+                        }
+                    }
+                })
+            }
         } else if (requestCode == REQUEST_CODE__MOVE_FILES && resultCode == Activity.RESULT_OK) {
             handler.postDelayed(
                 { requestMoveOperation(data!!) },
@@ -1820,6 +1836,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         const val REQUEST_CODE__MOVE_FILES = REQUEST_CODE__LAST_SHARED + 2
         const val REQUEST_CODE__COPY_FILES = REQUEST_CODE__LAST_SHARED + 3
         const val REQUEST_CODE__UPLOAD_FROM_CAMERA = REQUEST_CODE__LAST_SHARED + 4
+        const val REQUEST_CODE__UPLOAD_SCANNED_DOCUMENT = REQUEST_CODE__LAST_SHARED + 5;
         const val RESULT_OK_AND_MOVE = Activity.RESULT_FIRST_USER
     }
 }
