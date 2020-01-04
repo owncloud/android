@@ -52,6 +52,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SearchView;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -170,7 +171,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
      * {@inheritDoc}
      */
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         Log_OC.v(TAG, "onAttach");
         try {
@@ -262,14 +263,14 @@ public class OCFileListFragment extends ExtendedListFragment implements
         }
 
         // Allow or disallow touches with other visible windows
-        CoordinatorLayout coordinatorLayout = getActivity().findViewById(R.id.coordinator_layout);
+        CoordinatorLayout coordinatorLayout = requireActivity().findViewById(R.id.coordinator_layout);
         coordinatorLayout.setFilterTouchesWhenObscured(
                 PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(getContext())
         );
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         mSearchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
         mSearchView.setMaxWidth(Integer.MAX_VALUE);
@@ -302,36 +303,28 @@ public class OCFileListFragment extends ExtendedListFragment implements
         getFabUpload().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log_OC.i(TAG, "Clicked" + getContext().toString());
                 final View uploadBottomSheet = getLayoutInflater().inflate(R.layout.upload_bottom_sheet_fragment, null);
-                final BottomSheetDialog dialog = new BottomSheetDialog(getContext());
+                final BottomSheetDialog dialog = new BottomSheetDialog(requireContext());
                 dialog.setContentView(uploadBottomSheet);
                 final LinearLayout uploadFilesLinearLayout = uploadBottomSheet.findViewById(R.id.files_linear_layout);
                 LinearLayout uploadFromCameraLinearLayout =
                         uploadBottomSheet.findViewById(R.id.upload_from_camera_linear_layout);
                 TextView uploadToTextView = uploadBottomSheet.findViewById(R.id.upload_to_text_view);
-                uploadFilesLinearLayout.setOnTouchListener(new View.OnTouchListener() {
-                    @Override
-                    public boolean onTouch(View v, MotionEvent event) {
-                        Intent action = new Intent(Intent.ACTION_GET_CONTENT);
-                        action = action.setType(ALL_FILES_SAF_REGEX).addCategory(Intent.CATEGORY_OPENABLE);
-                        action.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-                        getActivity().startActivityForResult(
-                                Intent.createChooser(action, getString(R.string.upload_chooser_title)),
-                                FileDisplayActivity.REQUEST_CODE__SELECT_CONTENT_FROM_APPS
-                        );
-                        dialog.hide();
-                        return false;
-                    }
+                uploadFilesLinearLayout.setOnTouchListener((v13, event) -> {
+                    Intent action = new Intent(Intent.ACTION_GET_CONTENT);
+                    action = action.setType(ALL_FILES_SAF_REGEX).addCategory(Intent.CATEGORY_OPENABLE);
+                    action.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+                    getActivity().startActivityForResult(
+                            Intent.createChooser(action, getString(R.string.upload_chooser_title)),
+                            FileDisplayActivity.REQUEST_CODE__SELECT_CONTENT_FROM_APPS
+                    );
+                    dialog.hide();
+                    return false;
                 });
-                uploadFromCameraLinearLayout.setOnTouchListener(new View.OnTouchListener() {
-                    @Override
-                    public boolean onTouch(View v, MotionEvent event) {
-
-                        ((FileDisplayActivity) getActivity()).getFilesUploadHelper().uploadFromCamera(FileDisplayActivity.REQUEST_CODE__UPLOAD_FROM_CAMERA);
-                        dialog.hide();
-                        return false;
-                    }
+                uploadFromCameraLinearLayout.setOnTouchListener((v12, event) -> {
+                    ((FileDisplayActivity) getActivity()).getFilesUploadHelper().uploadFromCamera(FileDisplayActivity.REQUEST_CODE__UPLOAD_FROM_CAMERA);
+                    dialog.hide();
+                    return false;
                 });
                 uploadToTextView.setText(String.format(getResources().getString(R.string.upload_to),
                         getResources().getString(R.string.app_name)));
@@ -366,9 +359,8 @@ public class OCFileListFragment extends ExtendedListFragment implements
         getFabMkdir().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CreateFolderDialogFragment dialog =
-                        CreateFolderDialogFragment.newInstance(mFile);
-                dialog.show(getActivity().getSupportFragmentManager(), DIALOG_CREATE_FOLDER);
+                CreateFolderDialogFragment dialog = CreateFolderDialogFragment.newInstance(mFile);
+                dialog.show(requireActivity().getSupportFragmentManager(), DIALOG_CREATE_FOLDER);
                 getFabMain().collapse();
                 recordMiniFabClick();
             }
@@ -394,7 +386,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
         // only record if it hasn't been done already at some other time
         if (!miniFabClicked) {
             final SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
-            sp.edit().putLong(KEY_FAB_EVER_CLICKED, 1).commit();
+            sp.edit().putLong(KEY_FAB_EVER_CLICKED, 1).apply();
             miniFabClicked = true;
         }
     }
@@ -405,10 +397,8 @@ public class OCFileListFragment extends ExtendedListFragment implements
     private void removeFabLabels() {
         getFabUpload().setTitle(null);
         getFabMkdir().setTitle(null);
-        ((TextView) getFabUpload().getTag(
-                com.getbase.floatingactionbutton.R.id.fab_label)).setVisibility(View.GONE);
-        ((TextView) getFabMkdir().getTag(
-                com.getbase.floatingactionbutton.R.id.fab_label)).setVisibility(View.GONE);
+        ((TextView) getFabUpload().getTag(com.getbase.floatingactionbutton.R.id.fab_label)).setVisibility(View.GONE);
+        ((TextView) getFabMkdir().getTag(com.getbase.floatingactionbutton.R.id.fab_label)).setVisibility(View.GONE);
     }
 
     @Override
@@ -427,7 +417,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
         if (hasFocus) {
             setMessageForEmptyList(getString(R.string.local_file_list_search_with_no_matches));
         } else { // Set default message for empty list of files
-            ((FileDisplayActivity) getActivity()).setBackgroundText();
+            ((FileDisplayActivity) requireActivity()).setBackgroundText();
         }
     }
 
@@ -460,12 +450,12 @@ public class OCFileListFragment extends ExtendedListFragment implements
         private SparseBooleanArray mSelectionWhenActionModeClosedByDrawer = null;
 
         @Override
-        public void onDrawerSlide(View drawerView, float slideOffset) {
+        public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
             // nothing to do
         }
 
         @Override
-        public void onDrawerOpened(View drawerView) {
+        public void onDrawerOpened(@NonNull View drawerView) {
             clearLocalSearchView();
         }
 
@@ -476,7 +466,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
          * @param drawerView Navigation drawer just closed.
          */
         @Override
-        public void onDrawerClosed(View drawerView) {
+        public void onDrawerClosed(@NonNull View drawerView) {
             if (mSelectionWhenActionModeClosedByDrawer != null && mActionModeClosedByDrawer) {
                 for (int i = 0; i < mSelectionWhenActionModeClosedByDrawer.size(); i++) {
                     if (mSelectionWhenActionModeClosedByDrawer.valueAt(i)) {
@@ -528,7 +518,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
             mActiveActionMode = mode;
 
-            MenuInflater inflater = getActivity().getMenuInflater();
+            MenuInflater inflater = requireActivity().getMenuInflater();
             inflater.inflate(R.menu.file_actions_menu, menu);
             mode.invalidate();
 
@@ -558,7 +548,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
             mode.setTitle(title);
             FileMenuFilter mf = new FileMenuFilter(
                     checkedFiles,
-                    ((FileActivity) getActivity()).getAccount(),
+                    ((FileActivity) requireActivity()).getAccount(),
                     mContainerActivity,
                     getActivity()
             );
@@ -582,7 +572,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
             mActiveActionMode = null;
 
             // reset to previous color
-            getActivity().getWindow().setStatusBarColor(mStatusBarColor);
+            requireActivity().getWindow().setStatusBarColor(mStatusBarColor);
 
             // show FAB on multi selection mode exit
             if (!mHideFab) {
@@ -615,7 +605,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
     }
 
     private void clearLocalSearchView() {
-        ((FileActivity) getActivity()).hideSoftKeyboard();
+        ((FileActivity) requireActivity()).hideSoftKeyboard();
         mFileListAdapter.clearFilterBySearch();
         if (mSearchView != null) {
             mSearchView.onActionViewCollapsed();
@@ -632,7 +622,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
             mMultiChoiceModeListener.loadStateFrom(savedInstanceState);
         }
         setMultiChoiceModeListener(mMultiChoiceModeListener);
-        ((FileActivity) getActivity()).addDrawerListener(mMultiChoiceModeListener);
+        ((FileActivity) requireActivity()).addDrawerListener(mMultiChoiceModeListener);
     }
 
     /**
@@ -651,7 +641,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
     }
 
     @Override
-    public void onPrepareOptionsMenu(Menu menu) {
+    public void onPrepareOptionsMenu(@NonNull Menu menu) {
         if (isShowingOnlyAvailableOffline() || isShowingSharedByLinkFiles()) {
             super.onPrepareOptionsMenu(menu);
 
@@ -738,9 +728,12 @@ public class OCFileListFragment extends ExtendedListFragment implements
     }
 
     private boolean isInPowerSaveMode() {
-        PowerManager powerManager = (PowerManager)
-                getActivity().getSystemService(Context.POWER_SERVICE);
-        return  powerManager.isPowerSaveMode();
+        PowerManager powerManager = (PowerManager) requireActivity().getSystemService(Context.POWER_SERVICE);
+        if (powerManager != null) {
+            return powerManager.isPowerSaveMode();
+        } else {
+            return false;
+        }
     }
 
     private void listDirectoryWidthAnimationUp(final OCFile file) {
@@ -823,7 +816,6 @@ public class OCFileListFragment extends ExtendedListFragment implements
     }
 
     /**
-     * @param file
      * @return 'true' if the file is being downloaded, 'false' otherwise.
      */
     private boolean fileIsDownloading(OCFile file) {
@@ -939,13 +931,13 @@ public class OCFileListFragment extends ExtendedListFragment implements
             case R.id.action_move: {
                 Intent action = new Intent(getActivity(), FolderPickerActivity.class);
                 action.putParcelableArrayListExtra(FolderPickerActivity.EXTRA_FILES, checkedFiles);
-                getActivity().startActivityForResult(action, FileDisplayActivity.REQUEST_CODE__MOVE_FILES);
+                requireActivity().startActivityForResult(action, FileDisplayActivity.REQUEST_CODE__MOVE_FILES);
                 return true;
             }
             case R.id.action_copy:
                 Intent action = new Intent(getActivity(), FolderPickerActivity.class);
                 action.putParcelableArrayListExtra(FolderPickerActivity.EXTRA_FILES, checkedFiles);
-                getActivity().startActivityForResult(action, FileDisplayActivity.REQUEST_CODE__COPY_FILES);
+                requireActivity().startActivityForResult(action, FileDisplayActivity.REQUEST_CODE__COPY_FILES);
                 return true;
             default:
                 return false;
@@ -1038,10 +1030,8 @@ public class OCFileListFragment extends ExtendedListFragment implements
             }
 
             // decide grid vs list view
-            OwnCloudVersion version = AccountUtils.getServerVersion(
-                    ((FileActivity) mContainerActivity).getAccount());
-            if (version != null && version.supportsRemoteThumbnails() &&
-                    isGridViewPreferred(mFile)) {
+            OwnCloudVersion version = AccountUtils.getServerVersion(((FileActivity) mContainerActivity).getAccount());
+            if (version != null && version.supportsRemoteThumbnails() && isGridViewPreferred(mFile)) {
                 switchToGridView();
             } else {
                 switchToListView();
@@ -1127,9 +1117,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
             FileDataStorageManager storageManager = mContainerActivity.getStorageManager();
 
             SharedPreferences setting =
-                    getActivity().getSharedPreferences(
-                            GRID_IS_PREFERED_PREFERENCE, Context.MODE_PRIVATE
-                    );
+                    requireActivity().getSharedPreferences(GRID_IS_PREFERED_PREFERENCE, Context.MODE_PRIVATE);
 
             if (setting.contains(String.valueOf(fileToTest.getFileId()))) {
                 return setting.getBoolean(String.valueOf(fileToTest.getFileId()), false);
@@ -1189,7 +1177,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
     }
 
     private void saveGridAsPreferred(boolean setGrid) {
-        SharedPreferences setting = getActivity().getSharedPreferences(
+        SharedPreferences setting = requireActivity().getSharedPreferences(
                 GRID_IS_PREFERED_PREFERENCE, Context.MODE_PRIVATE
         );
 
@@ -1205,7 +1193,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
      */
     private void showSnackMessage(int messageResource) {
         Snackbar snackbar = Snackbar.make(
-                getActivity().findViewById(R.id.coordinator_layout),
+                requireActivity().findViewById(R.id.coordinator_layout),
                 messageResource,
                 Snackbar.LENGTH_LONG
         );
