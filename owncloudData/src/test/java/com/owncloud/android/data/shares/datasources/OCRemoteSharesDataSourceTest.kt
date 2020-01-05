@@ -3,7 +3,7 @@
  *
  * @author David González Verdugo
  * @author Jesús Recio
- * Copyright (C) 2019 ownCloud GmbH.
+ * Copyright (C) 2020 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,

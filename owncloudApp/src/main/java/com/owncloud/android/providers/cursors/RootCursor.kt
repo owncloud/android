@@ -4,7 +4,7 @@
  * @author Bartosz Przybylski
  * @author Abel García de Prada
  * Copyright (C) 2015  Bartosz Przybylski
- * Copyright (C) 2019 ownCloud GmbH.
+ * Copyright (C) 2020 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
