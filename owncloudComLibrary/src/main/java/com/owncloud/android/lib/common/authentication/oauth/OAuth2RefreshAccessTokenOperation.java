@@ -30,17 +30,16 @@ import com.owncloud.android.lib.common.http.methods.nonwebdav.PostMethod;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
-import com.owncloud.android.lib.common.utils.Log_OC;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import org.json.JSONObject;
+import timber.log.Timber;
 
 import java.net.URL;
 import java.util.Map;
 
 public class OAuth2RefreshAccessTokenOperation extends RemoteOperation<Map<String, String>> {
 
-    private static final String TAG = OAuth2RefreshAccessTokenOperation.class.getSimpleName();
     private final String mAccessTokenEndpointPath;
     private final OAuth2ResponseParser mResponseParser;
     private String mClientId;
@@ -96,7 +95,7 @@ public class OAuth2RefreshAccessTokenOperation extends RemoteOperation<Map<Strin
             switchClientCredentials(oldCredentials);
 
             final String responseData = postMethod.getResponseBodyAsString();
-            Log_OC.d(TAG, "OAUTH2: raw response from POST TOKEN: " + responseData);
+            Timber.d("OAUTH2: raw response from POST TOKEN: %s", responseData);
 
             if (responseData != null && responseData.length() > 0) {
                 final JSONObject tokenJson = new JSONObject(responseData);

@@ -26,8 +26,7 @@ package com.owncloud.android.lib.common.network;
 
 import android.content.Context;
 
-import com.owncloud.android.lib.common.utils.Log_OC;
-import org.apache.http.conn.ssl.X509HostnameVerifier;
+import timber.log.Timber;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -41,25 +40,6 @@ import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 
 public class NetworkUtils {
-
-    /**
-     * Default timeout for waiting data from the server
-     */
-    public static final int DEFAULT_DATA_TIMEOUT = 60000;
-    /**
-     * Default timeout for establishing a connection
-     */
-    public static final int DEFAULT_CONNECTION_TIMEOUT = 60000;
-    /**
-     * Standard name for protocol TLS version 1.2 in Java Secure Socket Extension (JSSE) API
-     */
-    public static final String PROTOCOL_TLSv1_2 = "TLSv1.2";
-    /**
-     * Standard name for protocol TLS version 1.0 in JSSE API
-     */
-    public static final String PROTOCOL_TLSv1_0 = "TLSv1";
-    final private static String TAG = NetworkUtils.class.getSimpleName();
-    private static X509HostnameVerifier mHostnameVerifier = null;
 
     private static String LOCAL_TRUSTSTORE_FILENAME = "knownServers.bks";
 
@@ -88,7 +68,7 @@ public class NetworkUtils {
             //mKnownServersStore = KeyStore.getInstance("BKS");
             mKnownServersStore = KeyStore.getInstance(KeyStore.getDefaultType());
             File localTrustStoreFile = new File(context.getFilesDir(), LOCAL_TRUSTSTORE_FILENAME);
-            Log_OC.d(TAG, "Searching known-servers store at " + localTrustStoreFile.getAbsolutePath());
+            Timber.d("Searching known-servers store at %s", localTrustStoreFile.getAbsolutePath());
             if (localTrustStoreFile.exists()) {
                 InputStream in = new FileInputStream(localTrustStoreFile);
                 try {
@@ -109,22 +89,9 @@ public class NetworkUtils {
 
         KeyStore knownServers = getKnownServersStore(context);
         knownServers.setCertificateEntry(Integer.toString(cert.hashCode()), cert);
-        FileOutputStream fos = null;
-        try {
-            fos = context.openFileOutput(LOCAL_TRUSTSTORE_FILENAME, Context.MODE_PRIVATE);
+        try (FileOutputStream fos = context.openFileOutput(LOCAL_TRUSTSTORE_FILENAME, Context.MODE_PRIVATE)) {
             knownServers.store(fos, LOCAL_TRUSTSTORE_PASSWORD.toCharArray());
-        } finally {
-            fos.close();
         }
-    }
-
-    public static boolean isCertInKnownServersStore(Certificate cert, Context context)
-            throws KeyStoreException, NoSuchAlgorithmException, CertificateException, IOException {
-
-        KeyStore knownServers = getKnownServersStore(context);
-        Log_OC.d(TAG, "Certificate - HashCode: " + cert.hashCode() + " "
-                + Boolean.toString(knownServers.isCertificateEntry(Integer.toString(cert.hashCode()))));
-        return knownServers.isCertificateEntry(Integer.toString(cert.hashCode()));
     }
 
 }

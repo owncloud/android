@@ -33,9 +33,9 @@ import com.owncloud.android.lib.common.accounts.AccountUtils;
 import com.owncloud.android.lib.common.http.HttpConstants;
 import com.owncloud.android.lib.common.http.methods.HttpBaseMethod;
 import com.owncloud.android.lib.common.network.CertificateCombinedException;
-import com.owncloud.android.lib.common.utils.Log_OC;
 import okhttp3.Headers;
 import org.json.JSONException;
+import timber.log.Timber;
 
 import javax.net.ssl.SSLException;
 import javax.net.ssl.SSLPeerUnverifiedException;
@@ -60,7 +60,6 @@ public class RemoteOperationResult<T>
      */
     private static final long serialVersionUID = 4968939884332372230L;
 
-    private static final String TAG = RemoteOperationResult.class.getSimpleName();
     private boolean mSuccess = false;
     private int mHttpCode = -1;
     private String mHttpPhrase = null;
@@ -192,7 +191,7 @@ public class RemoteOperationResult<T>
                     }
 
                 } catch (Exception e) {
-                    Log_OC.w(TAG, "Error reading exception from server: " + e.getMessage());
+                    Timber.w("Error reading exception from server: %s", e.getMessage());
                     // mCode stays as set in this(success, httpCode, headers)
                 }
             }
@@ -293,11 +292,7 @@ public class RemoteOperationResult<T>
                     break;
                 default:
                     mCode = ResultCode.UNHANDLED_HTTP_CODE;         // UNKNOWN ERROR
-                    Log_OC.d(TAG,
-                            "RemoteOperationResult has processed UNHANDLED_HTTP_CODE: " +
-
-                                    mHttpCode + " " + mHttpPhrase
-                    );
+                    Timber.d("RemoteOperationResult has processed UNHANDLED_HTTP_CODE: " + mHttpCode + " " + mHttpPhrase);
             }
         }
     }
@@ -308,7 +303,6 @@ public class RemoteOperationResult<T>
      *
      * @param bodyResponse okHttp response body
      * @param resultCode   our own custom result code
-     * @throws IOException
      */
     private void parseErrorMessageAndSetCode(String bodyResponse, ResultCode resultCode) {
 
@@ -317,12 +311,12 @@ public class RemoteOperationResult<T>
             ErrorMessageParser xmlParser = new ErrorMessageParser();
             try {
                 String errorMessage = xmlParser.parseXMLResponse(is);
-                if (errorMessage != "" && errorMessage != null) {
+                if (errorMessage != null && !errorMessage.equals("")) {
                     mCode = resultCode;
                     mHttpPhrase = errorMessage;
                 }
             } catch (Exception e) {
-                Log_OC.w(TAG, "Error reading exception from server: " + e.getMessage());
+                Timber.w("Error reading exception from server: %s", e.getMessage());
                 // mCode stays as set in this(success, httpCode, headers)
             }
         }
@@ -376,7 +370,7 @@ public class RemoteOperationResult<T>
             previousCause = cause;
             cause = cause.getCause();
         }
-        if (cause != null && cause instanceof CertificateCombinedException) {
+        if (cause instanceof CertificateCombinedException) {
             result = (CertificateCombinedException) cause;
         }
         return result;

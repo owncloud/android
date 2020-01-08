@@ -29,9 +29,9 @@ package com.owncloud.android.lib.resources.shares
 
 import android.net.Uri
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
-import com.owncloud.android.lib.common.utils.Log_OC
 import com.owncloud.android.lib.resources.status.OwnCloudVersion
 import org.xmlpull.v1.XmlPullParserException
+import timber.log.Timber
 import java.io.ByteArrayInputStream
 import java.io.IOException
 import java.util.ArrayList
@@ -53,7 +53,7 @@ class ShareToRemoteOperationResultParser(private var shareXmlParser: ShareXMLPar
             // Parse xml response and obtain the list of shares
             val byteArrayServerResponse = ByteArrayInputStream(serverResponse.toByteArray())
             if (shareXmlParser == null) {
-                Log_OC.w(TAG, "No ShareXmlParser provided, creating new instance ")
+                Timber.w("No ShareXmlParser provided, creating new instance")
                 shareXmlParser = ShareXMLParser()
             }
             val shares = shareXmlParser?.parseXMLResponse(byteArrayServerResponse)
@@ -75,7 +75,7 @@ class ShareToRemoteOperationResultParser(private var shareXmlParser: ShareXMLPar
                                 val sharingLinkPath = ShareUtils.getSharingLinkPath(ownCloudVersion)
                                 share.shareLink = serverBaseUri.toString() + sharingLinkPath + share.token
                             } else {
-                                Log_OC.e(TAG, "Couldn't build link for public share :(")
+                                Timber.e("Couldn't build link for public share :(")
                             }
 
                             share
@@ -87,7 +87,7 @@ class ShareToRemoteOperationResultParser(private var shareXmlParser: ShareXMLPar
 
                     } else {
                         result = RemoteOperationResult(RemoteOperationResult.ResultCode.WRONG_SERVER_RESPONSE)
-                        Log_OC.e(TAG, "Successful status with no share in the response")
+                        Timber.e("Successful status with no share in the response")
                     }
                 }
                 shareXmlParser?.isWrongParameter!! -> {
@@ -107,18 +107,14 @@ class ShareToRemoteOperationResultParser(private var shareXmlParser: ShareXMLPar
                 }
             }
         } catch (e: XmlPullParserException) {
-            Log_OC.e(TAG, "Error parsing response from server ", e)
+            Timber.e(e, "Error parsing response from server")
             result = RemoteOperationResult(RemoteOperationResult.ResultCode.WRONG_SERVER_RESPONSE)
 
         } catch (e: IOException) {
-            Log_OC.e(TAG, "Error reading response from server ", e)
+            Timber.e(e, "Error reading response from server")
             result = RemoteOperationResult(RemoteOperationResult.ResultCode.WRONG_SERVER_RESPONSE)
         }
 
         return result
-    }
-
-    companion object {
-        private val TAG = ShareToRemoteOperationResultParser::class.java.simpleName
     }
 }

@@ -26,7 +26,7 @@
 
 package com.owncloud.android.lib.common.authentication.oauth;
 
-import com.owncloud.android.lib.common.utils.Log_OC;
+import timber.log.Timber;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -61,7 +61,7 @@ public class OAuth2QueryParser {
                         mOAuth2ParsedAuthorizationResponse.put(key, value);
                     }
 
-                    Log_OC.v(TAG, "[" + i + "," + j + "] = " + p);
+                    Timber.v("[" + i + "," + j + "] = " + p);
                     j++;
                 }
                 i++;

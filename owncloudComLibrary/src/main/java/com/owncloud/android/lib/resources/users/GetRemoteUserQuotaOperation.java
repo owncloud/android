@@ -37,7 +37,7 @@ import com.owncloud.android.lib.common.http.methods.webdav.PropfindMethod;
 import com.owncloud.android.lib.common.network.WebdavUtils;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
-import com.owncloud.android.lib.common.utils.Log_OC;
+import timber.log.Timber;
 
 import java.net.URL;
 import java.util.List;
@@ -51,7 +51,6 @@ import static com.owncloud.android.lib.common.operations.RemoteOperationResult.R
  */
 public class GetRemoteUserQuotaOperation extends RemoteOperation<GetRemoteUserQuotaOperation.RemoteQuota> {
 
-    private static final String TAG = GetRemoteUserQuotaOperation.class.getSimpleName();
     private String mRemotePath;
 
     /**
@@ -94,13 +93,12 @@ public class GetRemoteUserQuotaOperation extends RemoteOperation<GetRemoteUserQu
 
         } finally {
             if (result.isSuccess()) {
-                Log_OC.i(TAG, "Get quota from " + mRemotePath + ": " + result.getLogMessage());
+                Timber.i("Get quota from " + mRemotePath + ": " + result.getLogMessage());
             } else {
                 if (result.isException()) {
-                    Log_OC.e(TAG, "Get quota from " + mRemotePath + ": " + result.getLogMessage(),
-                            result.getException());
+                    Timber.e(result.getException(), "Get quota from " + mRemotePath + ": " + result.getLogMessage());
                 } else {
-                    Log_OC.e(TAG, "Get quota from " + mRemotePath + ": " + result.getLogMessage());
+                    Timber.e("Get quota from " + mRemotePath + ": " + result.getLogMessage());
                 }
             }
         }

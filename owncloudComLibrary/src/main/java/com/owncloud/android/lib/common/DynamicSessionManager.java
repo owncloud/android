@@ -26,8 +26,7 @@ public class DynamicSessionManager implements OwnCloudClientManager {
 
     @Override
     public OwnCloudClient getClientFor(OwnCloudAccount account, Context context)
-            throws AccountUtils.AccountNotFoundException,
-            OperationCanceledException, AuthenticatorException, IOException {
+            throws OperationCanceledException, AuthenticatorException, IOException {
 
         OwnCloudVersion ownCloudVersion = null;
         if (account.getSavedAccount() != null) {

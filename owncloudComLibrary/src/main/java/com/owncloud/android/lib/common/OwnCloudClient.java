@@ -38,12 +38,11 @@ import com.owncloud.android.lib.common.http.HttpClient;
 import com.owncloud.android.lib.common.http.HttpConstants;
 import com.owncloud.android.lib.common.http.methods.HttpBaseMethod;
 import com.owncloud.android.lib.common.network.RedirectionPath;
-import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.common.utils.RandomUtils;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 import okhttp3.Cookie;
-import okhttp3.Headers;
 import okhttp3.HttpUrl;
+import timber.log.Timber;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -58,7 +57,6 @@ public class OwnCloudClient extends HttpClient {
     public static final String STATUS_PATH = "/status.php";
     public static final String FILES_WEB_PATH = "/index.php/apps/files";
 
-    private static final String TAG = OwnCloudClient.class.getSimpleName();
     private static final int MAX_REDIRECTIONS_COUNT = 3;
     private static final int MAX_REPEAT_COUNT_WITH_FRESH_CREDENTIALS = 1;
 
@@ -86,7 +84,7 @@ public class OwnCloudClient extends HttpClient {
         mBaseUri = baseUri;
 
         mInstanceNumber = sIntanceCounter++;
-        Log_OC.d(TAG + " #" + mInstanceNumber, "Creating OwnCloudClient");
+        Timber.d(" #" + mInstanceNumber + "Creating OwnCloudClient");
 
         clearCredentials();
         clearCookies();
@@ -163,7 +161,7 @@ public class OwnCloudClient extends HttpClient {
         // Header to allow tracing requests in apache and ownCloud logs
         addHeaderForAllRequests(OC_X_REQUEST_ID, requestId);
 
-        Log_OC.d(TAG, "Executing " + method.getClass().getSimpleName() + " in request with id " + requestId);
+        Timber.d("Executing " + method.getClass().getSimpleName() + " in request with id " + requestId);
     }
 
     public RedirectionPath followRedirection(HttpBaseMethod method) throws Exception {
@@ -175,15 +173,14 @@ public class OwnCloudClient extends HttpClient {
                 (status == HttpConstants.HTTP_MOVED_PERMANENTLY ||
                         status == HttpConstants.HTTP_MOVED_TEMPORARILY ||
                         status == HttpConstants.HTTP_TEMPORARY_REDIRECT)
-                ) {
+        ) {
 
             final String location = method.getResponseHeader(HttpConstants.LOCATION_HEADER) != null
                     ? method.getResponseHeader(HttpConstants.LOCATION_HEADER)
                     : method.getResponseHeader(HttpConstants.LOCATION_HEADER_LOWER);
 
             if (location != null) {
-                Log_OC.d(TAG + " #" + mInstanceNumber,
-                        "Location to redirect: " + location);
+                Timber.d("#" + mInstanceNumber + "Location to redirect: " + location);
 
                 redirectionPath.addLocation(location);
 
@@ -216,7 +213,7 @@ public class OwnCloudClient extends HttpClient {
                 redirectionsCount++;
 
             } else {
-                Log_OC.d(TAG + " #" + mInstanceNumber, "No location to redirect!");
+                Timber.d(" #" + mInstanceNumber + "No location to redirect!");
                 status = HttpConstants.HTTP_NOT_FOUND;
             }
         }
@@ -237,8 +234,7 @@ public class OwnCloudClient extends HttpClient {
                 responseBodyAsStream.close();
 
             } catch (IOException io) {
-                Log_OC.e(TAG, "Unexpected exception while exhausting not interesting HTTP response;" +
-                        " will be IGNORED", io);
+                Timber.e(io, "Unexpected exception while exhausting not interesting HTTP response; will be IGNORED");
             }
         }
     }
@@ -293,38 +289,6 @@ public class OwnCloudClient extends HttpClient {
             mCredentials.applyTo(this);
         } else {
             clearCredentials();
-        }
-    }
-
-    private void logCookie(Cookie cookie) {
-        Log_OC.d(TAG, "Cookie name: " + cookie.name());
-        Log_OC.d(TAG, "       value: " + cookie.value());
-        Log_OC.d(TAG, "       domain: " + cookie.domain());
-        Log_OC.d(TAG, "       path: " + cookie.path());
-        Log_OC.d(TAG, "       expiryDate: " + cookie.expiresAt());
-        Log_OC.d(TAG, "       secure: " + cookie.secure());
-    }
-
-    private void logCookiesAtRequest(Headers headers, String when) {
-        int counter = 0;
-        for (final String cookieHeader : headers.toMultimap().get("cookie")) {
-            Log_OC.d(TAG + " #" + mInstanceNumber,
-                    "Cookies at request (" + when + ") (" + counter++ + "): "
-                            + cookieHeader);
-        }
-        if (counter == 0) {
-            Log_OC.d(TAG + " #" + mInstanceNumber, "No cookie at request before");
-        }
-    }
-
-    private void logSetCookiesAtResponse(Headers headers) {
-        int counter = 0;
-        for (final String cookieHeader : headers.toMultimap().get("set-cookie")) {
-            Log_OC.d(TAG + " #" + mInstanceNumber,
-                    "Set-Cookie (" + counter++ + "): " + cookieHeader);
-        }
-        if (counter == 0) {
-            Log_OC.d(TAG + " #" + mInstanceNumber, "No set-cookie");
         }
     }
 
@@ -392,11 +356,7 @@ public class OwnCloudClient extends HttpClient {
                         credentialsWereRefreshed = true;
 
                     } catch (AccountsException | IOException e) {
-                        Log_OC.e(
-                                TAG,
-                                "Error while trying to refresh auth token for " + mAccount.getSavedAccount().name,
-                                e
-                        );
+                        Timber.e(e, "Error while trying to refresh auth token for %s", mAccount.getSavedAccount().name);
                     }
                 }
 
@@ -449,10 +409,6 @@ public class OwnCloudClient extends HttpClient {
         );
         am.clearPassword(mAccount.getSavedAccount()); // being strict, only needed for Basic Auth credentials
         return true;
-    }
-
-    public OwnCloudClientManager getOwnCloudClientManager() {
-        return mOwnCloudClientManager;
     }
 
     void setOwnCloudClientManager(OwnCloudClientManager clientManager) {

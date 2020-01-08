@@ -130,7 +130,6 @@ class ShareXMLParser {
     @Throws(XmlPullParserException::class, IOException::class)
     private fun readMeta(parser: XmlPullParser) {
         parser.require(XmlPullParser.START_TAG, ns, NODE_META)
-        //Log_OC.d(TAG, "---- NODE META ---");
         while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.eventType != XmlPullParser.START_TAG) {
                 continue
@@ -165,7 +164,6 @@ class ShareXMLParser {
         var share: RemoteShare? = null
 
         parser.require(XmlPullParser.START_TAG, ns, NODE_DATA)
-        //Log_OC.d(TAG, "---- NODE DATA ---");
         while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.eventType != XmlPullParser.START_TAG) {
                 continue
@@ -217,7 +215,6 @@ class ShareXMLParser {
 
         val remoteShare = RemoteShare()
 
-        //Log_OC.d(TAG, "---- NODE ELEMENT ---");
         while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.eventType != XmlPullParser.START_TAG) {
                 continue
@@ -343,7 +340,6 @@ class ShareXMLParser {
     private fun readNode(parser: XmlPullParser, node: String): String {
         parser.require(XmlPullParser.START_TAG, ns, node)
         val value = readText(parser)
-        //Log_OC.d(TAG, "node= " + node + ", value= " + value);
         parser.require(XmlPullParser.END_TAG, ns, node)
         return value
     }

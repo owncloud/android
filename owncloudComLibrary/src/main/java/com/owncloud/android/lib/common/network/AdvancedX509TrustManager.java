@@ -24,7 +24,7 @@
 
 package com.owncloud.android.lib.common.network;
 
-import com.owncloud.android.lib.common.utils.Log_OC;
+import timber.log.Timber;
 
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
@@ -136,7 +136,7 @@ public class AdvancedX509TrustManager implements X509TrustManager {
         try {
             return (mKnownServersKeyStore.getCertificateAlias(cert) != null);
         } catch (KeyStoreException e) {
-            Log_OC.d(TAG, "Fail while checking certificate in the known-servers store");
+            Timber.e(e, "Fail while checking certificate in the known-servers store");
             return false;
         }
     }

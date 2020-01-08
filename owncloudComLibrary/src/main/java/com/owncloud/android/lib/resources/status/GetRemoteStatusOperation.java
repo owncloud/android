@@ -33,9 +33,9 @@ import com.owncloud.android.lib.common.http.HttpConstants;
 import com.owncloud.android.lib.common.http.methods.nonwebdav.GetMethod;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
-import com.owncloud.android.lib.common.utils.Log_OC;
 import org.json.JSONException;
 import org.json.JSONObject;
+import timber.log.Timber;
 
 import javax.net.ssl.SSLException;
 import java.net.URL;
@@ -58,8 +58,6 @@ public class GetRemoteStatusOperation extends RemoteOperation<OwnCloudVersion> {
      * in MILLISECONDs.
      */
     public static final long TRY_CONNECTION_TIMEOUT = 5000;
-
-    private static final String TAG = GetRemoteStatusOperation.class.getSimpleName();
 
     private static final String NODE_INSTALLED = "installed";
     private static final String NODE_VERSION = "version";
@@ -117,8 +115,7 @@ public class GetRemoteStatusOperation extends RemoteOperation<OwnCloudVersion> {
 
                 JSONObject respJSON = new JSONObject(getMethod.getResponseBodyAsString());
                 if (!respJSON.getBoolean(NODE_INSTALLED)) {
-                    mLatestResult = new RemoteOperationResult(
-                            RemoteOperationResult.ResultCode.INSTANCE_NOT_CONFIGURED);
+                    mLatestResult = new RemoteOperationResult(RemoteOperationResult.ResultCode.INSTANCE_NOT_CONFIGURED);
                 } else {
                     String version = respJSON.getString(NODE_VERSION);
                     OwnCloudVersion ocVersion = new OwnCloudVersion(version);
@@ -153,14 +150,13 @@ public class GetRemoteStatusOperation extends RemoteOperation<OwnCloudVersion> {
         }
 
         if (mLatestResult.isSuccess()) {
-            Log_OC.i(TAG, "Connection check at " + baseUrlSt + ": " + mLatestResult.getLogMessage());
+            Timber.i("Connection check at " + baseUrlSt + ": " + mLatestResult.getLogMessage());
 
         } else if (mLatestResult.getException() != null) {
-            Log_OC.e(TAG, "Connection check at " + baseUrlSt + ": " + mLatestResult.getLogMessage(),
-                    mLatestResult.getException());
+            Timber.e(mLatestResult.getException(), "Connection check at " + baseUrlSt + ": " + mLatestResult.getLogMessage());
 
         } else {
-            Log_OC.e(TAG, "Connection check at " + baseUrlSt + ": " + mLatestResult.getLogMessage());
+            Timber.e("Connection check at " + baseUrlSt + ": " + mLatestResult.getLogMessage());
         }
 
         return retval;
@@ -186,7 +182,7 @@ public class GetRemoteStatusOperation extends RemoteOperation<OwnCloudVersion> {
             client.setBaseUri(Uri.parse(HTTPS_PREFIX + baseUriStr));
             boolean httpsSuccess = tryConnection(client);
             if (!httpsSuccess && !mLatestResult.isSslRecoverableException()) {
-                Log_OC.d(TAG, "establishing secure connection failed, trying non secure connection");
+                Timber.d("Establishing secure connection failed, trying non secure connection");
                 client.setBaseUri(Uri.parse(HTTP_PREFIX + baseUriStr));
                 tryConnection(client);
             }

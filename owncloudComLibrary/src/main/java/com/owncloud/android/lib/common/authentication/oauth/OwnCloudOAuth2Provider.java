@@ -26,7 +26,7 @@
 
 package com.owncloud.android.lib.common.authentication.oauth;
 
-import com.owncloud.android.lib.common.utils.Log_OC;
+import timber.log.Timber;
 
 public class OwnCloudOAuth2Provider implements OAuth2Provider {
 
@@ -72,7 +72,7 @@ public class OwnCloudOAuth2Provider implements OAuth2Provider {
 
     public void setAccessTokenEndpointPath(String accessTokenEndpointPath) {
         if (accessTokenEndpointPath == null || accessTokenEndpointPath.length() <= 0) {
-            Log_OC.w(NAME, "Setting invalid access token endpoint path, going on with default");
+            Timber.w("Setting invalid access token endpoint path, going on with default");
             mAccessTokenEndpointPath = ACCESS_TOKEN_ENDPOINT_PATH;
         } else {
             mAccessTokenEndpointPath = accessTokenEndpointPath;
@@ -85,7 +85,7 @@ public class OwnCloudOAuth2Provider implements OAuth2Provider {
 
     public void setAuthorizationCodeEndpointPath(String authorizationCodeEndpointPath) {
         if (authorizationCodeEndpointPath == null || authorizationCodeEndpointPath.length() <= 0) {
-            Log_OC.w(NAME, "Setting invalid authorization code endpoint path, going on with default");
+            Timber.w("Setting invalid authorization code endpoint path, going on with default");
             mAuthorizationCodeEndpointPath = AUTHORIZATION_CODE_ENDPOINT_PATH;
         } else {
             mAuthorizationCodeEndpointPath = authorizationCodeEndpointPath;

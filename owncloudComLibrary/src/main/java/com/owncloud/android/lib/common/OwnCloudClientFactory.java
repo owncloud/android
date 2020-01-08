@@ -29,8 +29,6 @@ import android.net.Uri;
 
 public class OwnCloudClientFactory {
 
-    final private static String TAG = OwnCloudClientFactory.class.getSimpleName();
-
     /**
      * Creates a OwnCloudClient to access a URL and sets the desired parameters for ownCloud
      * client connections.

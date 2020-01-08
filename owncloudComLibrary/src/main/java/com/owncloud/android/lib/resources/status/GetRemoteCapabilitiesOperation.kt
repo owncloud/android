@@ -33,10 +33,10 @@ import com.owncloud.android.lib.common.http.methods.nonwebdav.GetMethod
 import com.owncloud.android.lib.common.operations.RemoteOperation
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode.OK
-import com.owncloud.android.lib.common.utils.Log_OC
 import org.json.JSONObject
 import java.net.URL
 import com.owncloud.android.lib.resources.status.RemoteCapability.CapabilityBooleanType
+import timber.log.Timber
 
 /**
  * Get the Capabilities from the server
@@ -69,17 +69,17 @@ class GetRemoteCapabilitiesOperation : RemoteOperation<RemoteCapability>() {
 
             if (!isSuccess(status)) {
                 result = RemoteOperationResult(getMethod)
-                Log_OC.e(TAG, "Failed response while getting capabilities from the server ")
+                Timber.e("Failed response while getting capabilities from the server ")
                 if (response != null) {
-                    Log_OC.e(TAG, "*** status code: $status; response message: $response")
+                    Timber.e("*** status code: $status; response message: $response")
                 } else {
-                    Log_OC.e(TAG, "*** status code: $status")
+                    Timber.e("*** status code: $status")
                 }
 
                 return result
             }
 
-            Log_OC.d(TAG, "Successful response: " + response!!)
+            Timber.d("Successful response: " + response!!)
 
             // Parse the response
             val respJSON = JSONObject(response)
@@ -102,7 +102,7 @@ class GetRemoteCapabilitiesOperation : RemoteOperation<RemoteCapability>() {
                     capability.versionMicro = respVersion.getInt(PROPERTY_MICRO)
                     capability.versionString = respVersion.getString(PROPERTY_STRING)
                     capability.versionEdition = respVersion.getString(PROPERTY_EDITION)
-                    Log_OC.d(TAG, "*** Added $NODE_VERSION")
+                    Timber.d("*** Added $NODE_VERSION")
                 }
 
                 // Capabilities Object
@@ -113,7 +113,7 @@ class GetRemoteCapabilitiesOperation : RemoteOperation<RemoteCapability>() {
                     if (respCapabilities.has(NODE_CORE)) {
                         val respCore = respCapabilities.getJSONObject(NODE_CORE)
                         capability.corePollinterval = respCore.getInt(PROPERTY_POLLINTERVAL)
-                        Log_OC.d(TAG, "*** Added $NODE_CORE")
+                        Timber.d("*** Added $NODE_CORE")
                     }
 
                     // Add files_sharing: public, user, resharing
@@ -124,9 +124,10 @@ class GetRemoteCapabilitiesOperation : RemoteOperation<RemoteCapability>() {
                                 respFilesSharing.getBoolean(PROPERTY_API_ENABLED)
                             )
                         }
-                        if (respFilesSharing.has(PROPERTY_SEARCH_MIN_LENGTH)){
+                        if (respFilesSharing.has(PROPERTY_SEARCH_MIN_LENGTH)) {
                             capability.filesSharingSearchMinLength = respFilesSharing.getInt(
-                                PROPERTY_SEARCH_MIN_LENGTH)
+                                PROPERTY_SEARCH_MIN_LENGTH
+                            )
                         }
 
                         if (respFilesSharing.has(NODE_PUBLIC)) {
@@ -218,7 +219,7 @@ class GetRemoteCapabilitiesOperation : RemoteOperation<RemoteCapability>() {
                                 respFederation.getBoolean(PROPERTY_INCOMING)
                             )
                         }
-                        Log_OC.d(TAG, "*** Added $NODE_FILES_SHARING")
+                        Timber.d("*** Added $NODE_FILES_SHARING")
                     }
 
                     if (respCapabilities.has(NODE_FILES)) {
@@ -237,23 +238,23 @@ class GetRemoteCapabilitiesOperation : RemoteOperation<RemoteCapability>() {
                                 respFiles.getBoolean(PROPERTY_VERSIONING)
                             )
                         }
-                        Log_OC.d(TAG, "*** Added $NODE_FILES")
+                        Timber.d("*** Added $NODE_FILES")
                     }
                 }
                 // Result
                 result = RemoteOperationResult(OK)
                 result.data = capability
 
-                Log_OC.d(TAG, "*** Get Capabilities completed ")
+                Timber.d("*** Get Capabilities completed ")
             } else {
                 result = RemoteOperationResult(statuscode, message, null)
-                Log_OC.e(TAG, "Failed response while getting capabilities from the server ")
-                Log_OC.e(TAG, "*** status: $statusProp; message: $message")
+                Timber.e("Failed response while getting capabilities from the server ")
+                Timber.e("*** status: $statusProp; message: $message")
             }
 
         } catch (e: Exception) {
             result = RemoteOperationResult(e)
-            Log_OC.e(TAG, "Exception while getting capabilities", e)
+            Timber.e(e, "Exception while getting capabilities")
         }
 
         return result
@@ -264,8 +265,6 @@ class GetRemoteCapabilitiesOperation : RemoteOperation<RemoteCapability>() {
     }
 
     companion object {
-
-        private val TAG = GetRemoteCapabilitiesOperation::class.java.simpleName
 
         // OCS Routes
         private const val OCS_ROUTE = "ocs/v2.php/cloud/capabilities"

@@ -31,8 +31,8 @@ import com.owncloud.android.lib.common.network.WebdavUtils;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
-import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
+import timber.log.Timber;
 
 import java.io.File;
 import java.net.URL;
@@ -45,8 +45,6 @@ import java.util.concurrent.TimeUnit;
  * @author masensio
  */
 public class RenameRemoteFileOperation extends RemoteOperation {
-
-    private static final String TAG = RenameRemoteFileOperation.class.getSimpleName();
 
     private static final int RENAME_READ_TIMEOUT = 600000;
     private static final int RENAME_CONNECTION_TIMEOUT = 5000;
@@ -117,16 +115,14 @@ public class RenameRemoteFileOperation extends RemoteOperation {
                             ? new RemoteOperationResult<>(ResultCode.OK)
                             : new RemoteOperationResult<>(move);
 
-            Log_OC.i(TAG, "Rename " + mOldRemotePath + " to " + mNewRemotePath + ": " +
-                    result.getLogMessage()
-            );
+            Timber.i("Rename " + mOldRemotePath + " to " + mNewRemotePath + ": " + result.getLogMessage());
             client.exhaustResponse(move.getResponseBodyAsStream());
             return result;
         } catch (Exception e) {
             final RemoteOperationResult result = new RemoteOperationResult<>(e);
-            Log_OC.e(TAG, "Rename " + mOldRemotePath + " to " +
-                    ((mNewRemotePath == null) ? mNewName : mNewRemotePath) + ": " +
-                    result.getLogMessage(), e);
+            Timber.e(e,
+                    "Rename " + mOldRemotePath + " to " + ((mNewRemotePath == null) ? mNewName : mNewRemotePath) + ":" +
+                            " " + result.getLogMessage());
             return result;
         }
     }

@@ -11,8 +11,8 @@ import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.OwnCloudClientManagerFactory;
 import com.owncloud.android.lib.common.accounts.AccountUtils;
-import com.owncloud.android.lib.common.utils.Log_OC;
 import okhttp3.OkHttpClient;
+import timber.log.Timber;
 
 import java.io.IOException;
 
@@ -27,7 +27,6 @@ public abstract class RemoteOperation<T> implements Runnable {
      * OCS API header value
      */
     public static final String OCS_API_HEADER_VALUE = "true";
-    private static final String TAG = RemoteOperation.class.getSimpleName();
     /**
      * ownCloud account in the remote ownCloud server to operate
      */
@@ -41,22 +40,22 @@ public abstract class RemoteOperation<T> implements Runnable {
     /**
      * Object to interact with the remote server
      */
-    protected OwnCloudClient mClient = null;
+    private OwnCloudClient mClient = null;
 
     /**
      * Object to interact with the remote server
      */
-    protected OkHttpClient mHttpClient = null;
+    private OkHttpClient mHttpClient = null;
 
     /**
      * Callback object to notify about the execution of the remote operation
      */
-    protected OnRemoteOperationListener mListener = null;
+    private OnRemoteOperationListener mListener = null;
 
     /**
      * Handler to the thread where mListener methods will be called
      */
-    protected Handler mListenerHandler = null;
+    private Handler mListenerHandler = null;
 
     /**
      * Asynchronously executes the remote operation
@@ -76,12 +75,10 @@ public abstract class RemoteOperation<T> implements Runnable {
                           OnRemoteOperationListener listener, Handler listenerHandler) {
 
         if (account == null) {
-            throw new IllegalArgumentException
-                    ("Trying to execute a remote operation with a NULL Account");
+            throw new IllegalArgumentException("Trying to execute a remote operation with a NULL Account");
         }
         if (context == null) {
-            throw new IllegalArgumentException
-                    ("Trying to execute a remote operation with a NULL Context");
+            throw new IllegalArgumentException("Trying to execute a remote operation with a NULL Context");
         }
         // mAccount and mContext in the runnerThread to create below
         mAccount = account;
@@ -109,8 +106,7 @@ public abstract class RemoteOperation<T> implements Runnable {
      */
     public Thread execute(OwnCloudClient client, OnRemoteOperationListener listener, Handler listenerHandler) {
         if (client == null) {
-            throw new IllegalArgumentException
-                    ("Trying to execute a remote operation with a NULL OwnCloudClient");
+            throw new IllegalArgumentException("Trying to execute a remote operation with a NULL OwnCloudClient");
         }
         mClient = client;
         if (client.getAccount() != null) {
@@ -120,8 +116,7 @@ public abstract class RemoteOperation<T> implements Runnable {
 
         if (listener == null) {
             throw new IllegalArgumentException
-                    ("Trying to execute a remote operation asynchronously " +
-                            "without a listener to notify the result");
+                    ("Trying to execute a remote operation asynchronously without a listener to notify the result");
         }
         mListener = listener;
 
@@ -134,7 +129,7 @@ public abstract class RemoteOperation<T> implements Runnable {
         return runnerThread;
     }
 
-    protected void grantOwnCloudClient() throws
+    private void grantOwnCloudClient() throws
             AccountUtils.AccountNotFoundException, OperationCanceledException, AuthenticatorException, IOException {
         if (mClient == null) {
             if (mAccount != null && mContext != null) {
@@ -177,12 +172,10 @@ public abstract class RemoteOperation<T> implements Runnable {
      */
     public RemoteOperationResult<T> execute(Account account, Context context) {
         if (account == null) {
-            throw new IllegalArgumentException("Trying to execute a remote operation with a NULL " +
-                    "Account");
+            throw new IllegalArgumentException("Trying to execute a remote operation with a NULL Account");
         }
         if (context == null) {
-            throw new IllegalArgumentException("Trying to execute a remote operation with a NULL " +
-                    "Context");
+            throw new IllegalArgumentException("Trying to execute a remote operation with a NULL Context");
         }
         mAccount = account;
         mContext = context.getApplicationContext();
@@ -192,7 +185,7 @@ public abstract class RemoteOperation<T> implements Runnable {
 
     /**
      * Synchronously executes the remote operation
-     *
+     * <p>
      * Do not call this method from the main thread.
      *
      * @param client Client object to reach an ownCloud server during the execution of
@@ -201,8 +194,7 @@ public abstract class RemoteOperation<T> implements Runnable {
      */
     public RemoteOperationResult<T> execute(OwnCloudClient client) {
         if (client == null) {
-            throw new IllegalArgumentException("Trying to execute a remote operation with a NULL " +
-                    "OwnCloudClient");
+            throw new IllegalArgumentException("Trying to execute a remote operation with a NULL OwnCloudClient");
         }
         mClient = client;
         if (client.getAccount() != null) {
@@ -224,8 +216,7 @@ public abstract class RemoteOperation<T> implements Runnable {
      */
     public RemoteOperationResult<T> execute(OkHttpClient client, Context context) {
         if (client == null) {
-            throw new IllegalArgumentException("Trying to execute a remote operation with a NULL " +
-                    "OwnCloudClient");
+            throw new IllegalArgumentException("Trying to execute a remote operation with a NULL OwnCloudClient");
         }
         mHttpClient = client;
         mContext = context;
@@ -249,7 +240,7 @@ public abstract class RemoteOperation<T> implements Runnable {
             result = run(mClient);
 
         } catch (AccountsException | IOException e) {
-            Log_OC.e(TAG, "Error while trying to access to " + mAccount.name, e);
+            Timber.e(e, "Error while trying to access to %s", mAccount.name);
             result = new RemoteOperationResult<>(e);
         }
 
