@@ -79,6 +79,7 @@
   <string name="recommend_subject">Tente %1$s no seu teléfono intelixente!</string>
   <string name="recommend_text">Quero convidalo a empregar %1$s no seu teléfono intelixente!
 Descárgueo de aquí: %2$s</string>
+  <string name="error_reason">por mor</string>
   <string name="auth_failure_snackbar">Produciuse un fallo na autenticación.</string>
   <string name="auth_failure_snackbar_action">Cambiar a conta</string>
   <string name="auth_oauth_failure">A marca de acceso caducou ou non é válida. Inicie sesión de novo para recuperar o acceso</string>
@@ -139,6 +140,7 @@ Descárgueo de aquí: %2$s</string>
   <string name="common_error">Erro</string>
   <string name="common_loading">Cargando...</string>
   <string name="common_unknown">descoñecido</string>
+  <string name="common_error_unknown">erro descoñecido</string>
   <string name="common_pending">Pendentes</string>
   <string name="common_important">Importante</string>
   <string name="about_title">Sobre</string>
@@ -288,6 +290,8 @@ Descárgueo de aquí: %2$s</string>
   <string name="confirmation_remove_local">Só local</string>
   <string name="confirmation_remove_account_alert">Confirma que quere eliminar a conta %1$s?</string>
   <string name="confirmation_remove_public_share_title">Retirar a ligazón</string>
+  <string name="confirmation_remove_private_share_title">Retirar a compartición privada</string>
+  <string name="confirmation_remove_share_message">Confirma que quere retirar %1$s  compartición(s)?</string>
   <string name="remove_success_msg">Retirado correctamente</string>
   <string name="remove_fail_msg">Non foi posíbel retiralo</string>
   <string name="rename_dialog_title">Introducir un novo nome</string>
@@ -358,8 +362,14 @@ Descárgueo de aquí: %2$s</string>
   <string name="preview_image_error_unknown_format">Esta imaxe non pode ser amosada</string>
   <string name="error__upload__local_file_not_copied">Non foi posíbel copiar %1$s no cartafol local %2$s</string>
   <string name="prefs_camera_picture_upload_path_title">Ruta de envío de imaxes</string>
+  <string name="get_shares_error">Non foi posíbel recuperar as comparticións do servidor</string>
+  <string name="get_sharees_error">Non foi posíbel recuperar os usuarios e grupos do servidor</string>
+  <string name="get_capabilities_error">Non foi posíbel recuperar as capacidades do servidor</string>
   <string name="share_link_no_support_share_api">O seu servidor non ten activada a opción de compartir. Póñase en contacto co
 		administrador.</string>
+  <string name="share_link_file_error">Non foi posíbel compartir este ficheiro ou cartafol</string>
+  <string name="unshare_link_file_error">Non foi posíbel deixar de compartir este ficheiro ou cartafol</string>
+  <string name="update_link_file_error">Non foi posíbel actualizar este ficheiro ou cartafol</string>
   <string name="share_link_password_title">Escriba un contrasinal</string>
   <string name="share_link_empty_password">Ten que escribir un contrasinal</string>
   <string name="activity_chooser_send_file_title">Enviar</string>
@@ -369,6 +379,7 @@ Descárgueo de aquí: %2$s</string>
   <string name="clipboard_uxexpected_error">Produciuse un erro non agardado ao copiar no portapapeis</string>
   <string name="clipboard_label">Texto copiado dende %1$s</string>
   <string name="error_cant_bind_to_operations_service">Produciuse un erro crítico: non é posíbel realizar as operacións</string>
+  <string name="network_error_socket_exception">produciuse un erro ao conectar co servidor</string>
   <string name="network_error_socket_timeout_exception">O servidor tardou de máis en responder</string>
   <string name="network_error_connect_timeout_exception">O servidor tardou de máis en conectar</string>
   <string name="network_host_not_available">Non foi posíbel acadar o servidor</string>
@@ -548,5 +559,10 @@ Descárgueo de aquí: %2$s</string>
   <string name="welcome_feature_9_text">Acceda e edite os seus ficheiros ownCloud dende doutras aplicacións</string>
   <string name="welcome_feature_10_title">Rexistros con busca para todos</string>
   <string name="welcome_feature_10_text">Envíenos os seus rexistros para que a aplicación funcione mellor</string>
+  <string name="welcome_feature_11_title">Fin da compatibilidade soporte para servidores inferiores a 10</string>
+  <string name="welcome_feature_11_text">Actualice o servidor ou as versións de aplicacións que non lle funcionen</string>
+  <string name="welcome_feature_12_title">Fin da compatibilidade para dispositivos Android 4.4</string>
+  <string name="welcome_feature_12_text">As próximas versións de aplicacións non aparecerán en Google Play para dispositivos inferiores a Android 5</string>
   <string name="no_borwser_installed_alert">Non hai un navegador instalado, Instale un para poder facer un acceso seguro.</string>
+  <string name="common_not_found">non foi atopado</string>
 </resources>

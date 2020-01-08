@@ -78,6 +78,7 @@
   <string name="illegal_argument_exception_message">פעולה חוקית נדרשת להעברה</string>
   <string name="recommend_subject">לבדיקה %1$s בטלפון החכם שלך!</string>
   <string name="recommend_text">הנך מוזמן להשתמש ב- %1$s בטלפון החכם שלך!\nניתן להוריד מכאן: %2$s</string>
+  <string name="error_reason">כיוון ש-</string>
   <string name="auth_failure_snackbar">האימות נכשל</string>
   <string name="auth_failure_snackbar_action">החלף חשבון</string>
   <string name="auth_oauth_failure">פג תוקף חתימת הייצוג או שהפך להיות לא חוקי. יש להתחבר שנית לקבלת גישה חוזרת.</string>
@@ -138,6 +139,7 @@
   <string name="common_error">שגיאה</string>
   <string name="common_loading">בטעינה …</string>
   <string name="common_unknown">לא ידוע</string>
+  <string name="common_error_unknown">שגיאה בלתי ידועה</string>
   <string name="common_pending">ממתין</string>
   <string name="common_important">חשוב</string>
   <string name="about_title">על אודות</string>
@@ -287,6 +289,8 @@
   <string name="confirmation_remove_local">מקומי בלבד</string>
   <string name="confirmation_remove_account_alert">האם באמת להסיר את החשבון %1$s?</string>
   <string name="confirmation_remove_public_share_title">הסרת קישור</string>
+  <string name="confirmation_remove_private_share_title">הסרת קישור פרטי</string>
+  <string name="confirmation_remove_share_message">האם באמת להסיר את שיתוף %1$s ?</string>
   <string name="remove_success_msg">ההסרה הצליחה</string>
   <string name="remove_fail_msg">ההסרה נכשלה</string>
   <string name="rename_dialog_title">נא להזין שם חדש</string>
@@ -357,8 +361,14 @@
   <string name="preview_image_error_unknown_format">תמונה זו לא ניתנת לצפייה</string>
   <string name="error__upload__local_file_not_copied">%1$s לא ניתן להעתקה לתיקייה מקומית %2$s</string>
   <string name="prefs_camera_picture_upload_path_title">נתיב העלאת תמונות</string>
+  <string name="get_shares_error">לא ניתן היה לאחזר את השיתופים מהשרת</string>
+  <string name="get_sharees_error">לא ניתן היה לאחזר את המשתמשים והקבוצות מהשרת</string>
+  <string name="get_capabilities_error">לא ניתן היה לאחזר את היכולות מהשרת</string>
   <string name="share_link_no_support_share_api">מצטערים, שיתוף אינו מורשה על השרת שלך. יש ליצור קשר עם
 ⇥⇥מנהל.</string>
+  <string name="share_link_file_error">לא ניתן היה לשתף את הקובץ או התיקייה</string>
+  <string name="unshare_link_file_error">לא ניתן היה לבטל את השיתוף של הקובץ או התיקייה</string>
+  <string name="update_link_file_error">לא ניתן היה לעדכן את הקובץ או התיקייה</string>
   <string name="share_link_password_title">הכנסת סיסמא</string>
   <string name="share_link_empty_password">יש להכניס סיסמא</string>
   <string name="activity_chooser_send_file_title">שליחה</string>
@@ -368,6 +378,7 @@
   <string name="clipboard_uxexpected_error">שגיאה לא צפויה בזמן העתקה ללוח הגזירים</string>
   <string name="clipboard_label">טקסט הועתק מ- %1$s</string>
   <string name="error_cant_bind_to_operations_service">שגיאה קריטית: לא ניתן לבצע את הפעולות</string>
+  <string name="network_error_socket_exception">שגיאה בזמן החיבור לשרת</string>
   <string name="network_error_socket_timeout_exception">לשרת לקח יותר מדי זמן להגיב</string>
   <string name="network_error_connect_timeout_exception">לשרת לקח זמן רב מדי להתחבר</string>
   <string name="network_host_not_available">לא ניתן לגשת לשרת</string>
@@ -549,5 +560,10 @@
   <string name="welcome_feature_9_text">גישה ועריכה של קובצי ה- ownCloud שלך מיישומים אחרים</string>
   <string name="welcome_feature_10_title">יומני תיעוד עם חיפוש לכולם</string>
   <string name="welcome_feature_10_text">משלוח של יומני התיעוד שלך לשיפור עבודת היישום</string>
+  <string name="welcome_feature_11_title">סיום התמיכה בשרתית הנמוכים מגרסה 10</string>
+  <string name="welcome_feature_11_text">יש לשדרג את השרת או שהעדכונים הבאים של היישום לא יעבדו עבורך</string>
+  <string name="welcome_feature_12_title">סיום תמיכה עבור התקנים של אנדרואיד 4.4</string>
+  <string name="welcome_feature_12_text">הגרסאות הבאות של היישום לא יופיעו בחנות ה- Google Play עבור התקנים הנמוכים מגרסת אנדרואיד 5</string>
   <string name="no_borwser_installed_alert">לא הותקן דפדפן. יש להתקין דפדפן בכדי לאפשר חיבור מאובטח.</string>
+  <string name="common_not_found">לא נמצא</string>
 </resources>

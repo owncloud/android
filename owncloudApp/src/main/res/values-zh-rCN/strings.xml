@@ -131,6 +131,7 @@
   <string name="common_error">错误</string>
   <string name="common_loading">加载中...</string>
   <string name="common_unknown">未知</string>
+  <string name="common_error_unknown">未知错误</string>
   <string name="common_pending">等待</string>
   <string name="common_important">重要</string>
   <string name="about_title">关于</string>
@@ -350,6 +351,8 @@
   <string name="error__upload__local_file_not_copied">无法复制 %1$s 到本地目录 %2$s</string>
   <string name="prefs_camera_picture_upload_path_title">图片上传路径</string>
   <string name="share_link_no_support_share_api">抱歉，共享功能未启用。请联系管理员。</string>
+  <string name="share_link_file_error">分享这个文件或文件夹是不可能的</string>
+  <string name="unshare_link_file_error">取消分享这个文件或文件夹是不可能的</string>
   <string name="share_link_password_title">输入密码</string>
   <string name="share_link_empty_password">您必须输入密码</string>
   <string name="activity_chooser_send_file_title">发送</string>
@@ -359,6 +362,7 @@
   <string name="clipboard_uxexpected_error">复制到剪切板时出现了未预料的错误</string>
   <string name="clipboard_label">文本拷贝至 %1$s</string>
   <string name="error_cant_bind_to_operations_service">严重错误：无法执行操作</string>
+  <string name="network_error_socket_exception">在连接到服务器时有一个错误</string>
   <string name="network_error_socket_timeout_exception">看起来服务器不太给力</string>
   <string name="network_error_connect_timeout_exception">服务器连接时间过长</string>
   <string name="network_host_not_available">无法连接到服务器</string>

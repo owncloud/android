@@ -78,6 +78,7 @@
   <string name="illegal_argument_exception_message">Se necesita una ACCION válida para poder pasar a</string>
   <string name="recommend_subject">¡Intento %1$s en tu teléfono inteligente!</string>
   <string name="recommend_text">Quiero invitarte a usar %1$s en tu teléfono inteligente!\nDescárgalo aquí: %2$s</string>
+  <string name="error_reason">porque</string>
   <string name="auth_failure_snackbar">Fallo al identificar</string>
   <string name="auth_failure_snackbar_action">Cambiar cuenta</string>
   <string name="auth_oauth_failure">El tóken de acceso ha expirado o se ha vuelto inválido. Ingresa nuevamente para conseguir el acceso</string>
@@ -137,6 +138,7 @@
   <string name="common_error">Error</string>
   <string name="common_loading">Cargando...</string>
   <string name="common_unknown">desconocido</string>
+  <string name="common_error_unknown">error desconocido</string>
   <string name="common_pending">Pendientes</string>
   <string name="common_important">Importante</string>
   <string name="about_title">Acerca de</string>
@@ -284,6 +286,8 @@
   <string name="confirmation_remove_local">Sólo local</string>
   <string name="confirmation_remove_account_alert">¿Está seguro que quiere eliminar la cuenta %1$s?</string>
   <string name="confirmation_remove_public_share_title">Eliminar enlace</string>
+  <string name="confirmation_remove_private_share_title">Eliminar compartido privado</string>
+  <string name="confirmation_remove_share_message">¿Realmente deseas eliminar el compartido %1$s?</string>
   <string name="remove_success_msg">Borrado correctamente</string>
   <string name="remove_fail_msg">El borrado no pudo ser completado</string>
   <string name="rename_dialog_title">Ingrese un nombre</string>
@@ -352,8 +356,14 @@
   <string name="preview_image_error_unknown_format">Esta imagen no puede ser mostrada</string>
   <string name="error__upload__local_file_not_copied">%1$s no pudo ser copiado a la carpeta local %2$s </string>
   <string name="prefs_camera_picture_upload_path_title">Ruta de carga de la imagen</string>
+  <string name="get_shares_error">No fue posible recuperar los compartidos desde el servidor</string>
+  <string name="get_sharees_error">No fue posible recuperar los usuarios y grupos desde el servidor</string>
+  <string name="get_capabilities_error">No fue posible recuperar los permisos desde el servidor</string>
   <string name="share_link_no_support_share_api">Lo sentimos, compartir no esta activado en su servidor. Por favor contacte a su
 ⇥⇥administrator.</string>
+  <string name="share_link_file_error">No fue posible compartir este archivo o carpeta</string>
+  <string name="unshare_link_file_error">No fue posible dejar de compartir este archivo o carpeta</string>
+  <string name="update_link_file_error">No fue posible actualizar este archivo o carpeta</string>
   <string name="share_link_password_title">Ingresa una contraseña</string>
   <string name="share_link_empty_password">Debes ingresar una contraseña</string>
   <string name="activity_chooser_send_file_title">Mandar</string>
@@ -363,6 +373,7 @@
   <string name="clipboard_uxexpected_error">Error inesperado al copiar al portapapeles</string>
   <string name="clipboard_label">Texto copiado desde %1$s</string>
   <string name="error_cant_bind_to_operations_service">Error critico: no se puede realizar operaciones</string>
+  <string name="network_error_socket_exception">ha ocurrido un error al conectar con el servidor</string>
   <string name="network_error_socket_timeout_exception">El servidor tardó demasiado en responder</string>
   <string name="network_error_connect_timeout_exception">El servidor tomó demasiado tiempo para conectar</string>
   <string name="network_host_not_available">El servidor no ha podido ser alcanzado</string>

@@ -73,11 +73,14 @@
   <string name="passcode_already_set">Desen ve parola kilitleme aynı anda etkinleştirilemez, lütfen öncelikle parolayı devre dışı bırakınız.</string>
   <string name="pattern_no_longer_required">Desen artık sorulmayacak</string>
   <string name="pattern_configure_your_pattern_explanation">Uygulama her açılışında desen sorulacak</string>
+  <string name="pass_code_locked">Parola kodu ile kilitlendi</string>
   <string name="pattern_locked">Desenle kilitlendi</string>
   <string name="recommend_subject">%1$s uygulamasını akıllı telefonunda dene!</string>
   <string name="recommend_text">Seni, akıllı telefonunda %1$s kullanmaya davet ediyorum!\nBuradan indirebilirsin: %2$s</string>
+  <string name="error_reason">neden</string>
   <string name="auth_failure_snackbar">Kimlik doğrulaması başarısız oldu.</string>
   <string name="auth_failure_snackbar_action">Hesabı değiştir</string>
+  <string name="auth_oauth_failure">Erişim belirtecinin süresi doldu veya geçersiz hale geldi. Tekrar erişim kazanmak için tekrar oturum açın.</string>
   <string name="auth_oauth_failure_snackbar_action">Oturum aç</string>
   <string name="auth_check_server">Sunucuyu denetle</string>
   <string name="auth_host_url">Sunucu adresi https://…</string>
@@ -135,6 +138,7 @@
   <string name="common_error">Hata</string>
   <string name="common_loading">Yükleniyor...</string>
   <string name="common_unknown">bilinmiyor</string>
+  <string name="common_error_unknown">bilinmeyen hata</string>
   <string name="common_pending">Bekliyor</string>
   <string name="common_important">Önemli</string>
   <string name="about_title">Hakkında</string>
@@ -157,6 +161,7 @@
   <string name="uploader_upload_text_filename_hint">Dosya adı</string>
   <string name="uploader_upload_camera_upload_files">Kamera yükleme dosyaları yükleniyor</string>
   <string name="uploader_upload_available_offline_files">Erişilebilir çevrimdışı dosyalar yükleniyor</string>
+  <string name="uploader_upload_requested_from_wifi_files">Wifi dosyalarından yükleme istendi</string>
   <string name="ssl_certificate_not_trusted">Sunucu sertifikası güvenilir değil</string>
   <string name="uploads_view_title">Yüklemeler</string>
   <string name="uploads_view_group_current_uploads">Geçerli</string>
@@ -283,6 +288,8 @@
   <string name="confirmation_remove_local">Sadece yerel</string>
   <string name="confirmation_remove_account_alert">%1$s hesabını gerçekten kaldırmak istiyor musunuz?</string>
   <string name="confirmation_remove_public_share_title">Bağlantıyı sil</string>
+  <string name="confirmation_remove_private_share_title">Özel paylaşımı kaldır</string>
+  <string name="confirmation_remove_share_message">Gerçekten %1$s paylaşımını kaldırmak istiyor musunuz?</string>
   <string name="remove_success_msg">Kaldırma başarılı</string>
   <string name="remove_fail_msg">Kaldırma başarısız</string>
   <string name="rename_dialog_title">Yeni bir isim girin</string>
@@ -353,8 +360,14 @@
   <string name="preview_image_error_unknown_format">Bu resim gösterilemiyor</string>
   <string name="error__upload__local_file_not_copied">%1$s, %2$s yerel klasörüne kopyalanamadı</string>
   <string name="prefs_camera_picture_upload_path_title">Resim yükleme yolu</string>
+  <string name="get_shares_error">Paylaşımlar sunucudan alınamadı</string>
+  <string name="get_sharees_error">Sunucudan kullanıcılar ve gruplar alınamadı</string>
+  <string name="get_capabilities_error">Yetenekler sunucudan alınamadı</string>
   <string name="share_link_no_support_share_api">Üzgünüz, paylaşım sunucunuzda etkin değil. Lütfen yöneticinizle
                 iletişime geçin.</string>
+  <string name="share_link_file_error">Bu dosya veya klasör paylaşılamadı</string>
+  <string name="unshare_link_file_error">Bu dosya veya klasör paylaşımdan kaldırılamadı</string>
+  <string name="update_link_file_error">Bu dosya veya klasör güncellenemedi</string>
   <string name="share_link_password_title">Bir parola girin</string>
   <string name="share_link_empty_password">Bir parola girmelisiniz</string>
   <string name="activity_chooser_send_file_title">Gönder</string>
@@ -364,6 +377,7 @@
   <string name="clipboard_uxexpected_error">Panoya kopyalanırken beklenmeyen bir hata oluştu</string>
   <string name="clipboard_label">%1$s metni kopyalandı</string>
   <string name="error_cant_bind_to_operations_service">Ciddi hata: işlem gerçekleştirilemiyor</string>
+  <string name="network_error_socket_exception">sunucu ile bağlanılırken bir hata oluştu</string>
   <string name="network_error_socket_timeout_exception">Sunucu çok geç cevap veriyor</string>
   <string name="network_error_connect_timeout_exception">Sunucuya bağlanmak çok uzun sürdü</string>
   <string name="network_host_not_available">Sunucuya ulaşılamadı</string>
@@ -423,6 +437,8 @@
   <string name="prefs_camera_upload_source_path_title">Kamera klasörü (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">gerekli</string>
   <string name="prefs_camera_upload_source_path_title_optional">isteğe bağlı</string>
+  <string name="prefs_camera_upload_behaviour_dialogTitle">Orjinal dosya davranışı</string>
+  <string name="prefs_camera_upload_behaviour_title">Orjinal dosya davranışı</string>
   <string name="upload_copy_files">Dosyayı kopyala</string>
   <string name="upload_move_files">Dosyayı taşı</string>
   <string name="pref_behaviour_entries_keep_file">özgün klasöründe tutuldu</string>
@@ -496,7 +512,7 @@
   <string name="share_via_link_default_password">*****</string>
   <string name="share_via_link_password_enforced_label">Parola *</string>
   <string name="share_via_link_expiration_date_enforced_label">Bitiş *</string>
-  <string name="share_via_link_expiration_date_explanation_label">Herkese açık bağlantının, oluşturulduktan en geç %1$d gün sonra süresi dolacak</string>
+  <string name="share_via_link_expiration_date_explanation_label">Herkese açık bağlantının süresi, oluşturulduktan en geç %1$d gün sonra dolacak</string>
   <string name="share_via_link_default_name_template">%1$s bağlantı</string>
   <string name="share_via_link_empty_password">Parola boş</string>
   <string name="private_link_info">Bu özel bir bağlantıdır, sadece dosyaya/klasöre erişimi olanlar kullanabilir. Paylaşımlarda, kendinize veya başkalarına kalıcı bağlantı olarak kullanın.</string>
@@ -541,5 +557,10 @@
   <string name="welcome_feature_9_text">Diğer uygulamalardan ownCloud dosyalarınıza erişin ve düzenleyin</string>
   <string name="welcome_feature_10_title">Herkesin arama kayıtları</string>
   <string name="welcome_feature_10_text">Uygulamanın daha iyi çalışmasını sağlamak için kayıtlarınızı bize gönderin</string>
+  <string name="welcome_feature_11_title">Versiyon 10 altı sunuculara destek sona erdi</string>
+  <string name="welcome_feature_11_text">Lütfen sunucunuzu yükseltin, aksi takdirde yeni gelen uygulama sürümleri sizin için çalışmayacak</string>
+  <string name="welcome_feature_12_title">Android 4.4 cihazlara destek sona erdi</string>
+  <string name="welcome_feature_12_text">Yeni gelen uygulama sürümleri Google Play üzerinde Android 5 altı sürümle için gözükmeyecek</string>
   <string name="no_borwser_installed_alert">Yüklü tarayıcı yok. Lütfen güvenli bağlantıyı sağlamak için bir tarayıcı yükleyin.</string>
+  <string name="common_not_found">bulunamadı</string>
 </resources>
