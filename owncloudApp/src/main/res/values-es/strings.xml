@@ -78,6 +78,7 @@
   <string name="illegal_argument_exception_message">Se necesita una ACCIÓN válida</string>
   <string name="recommend_subject">¡Prueba  %1$s en su smarthphone!</string>
   <string name="recommend_text">¡Quiero invitarle a usar %1$s en su smartphone!\nDescárguelo aquí: %2$s</string>
+  <string name="error_reason">debido a </string>
   <string name="auth_failure_snackbar">Fallo en la autenticación</string>
   <string name="auth_failure_snackbar_action">Cambiar cuenta</string>
   <string name="auth_oauth_failure">El token de acceso ha caducado o ya no es válido. Inicie sesión de nuevo para volver a tener acceso</string>
@@ -138,6 +139,7 @@
   <string name="common_error">Error</string>
   <string name="common_loading">Cargando...</string>
   <string name="common_unknown">desconocido</string>
+  <string name="common_error_unknown">error desconocido</string>
   <string name="common_pending">Pendiente</string>
   <string name="common_important">Importante</string>
   <string name="about_title">Acerca de</string>
@@ -287,6 +289,8 @@
   <string name="confirmation_remove_local">Sólo local</string>
   <string name="confirmation_remove_account_alert">¿Desea realmente eliminar la cuenta de %1$s?</string>
   <string name="confirmation_remove_public_share_title">Eliminar link</string>
+  <string name="confirmation_remove_private_share_title">Eliminar compartición privada</string>
+  <string name="confirmation_remove_share_message">¿Realmente deseas eliminar la compartición %1$s?</string>
   <string name="remove_success_msg">Borrado correctamente</string>
   <string name="remove_fail_msg">El borrado no pudo ser completado</string>
   <string name="rename_dialog_title">Introduzca un nombre nuevo</string>
@@ -357,8 +361,14 @@
   <string name="preview_image_error_unknown_format">No se puede mostrar la imagen</string>
   <string name="error__upload__local_file_not_copied">%1$s se pudo copiar a la carpeta local %2$s</string>
   <string name="prefs_camera_picture_upload_path_title">Ruta de subida de imagenes</string>
+  <string name="get_shares_error">No se pudieron recuperar los objetos compartidos del servidor</string>
+  <string name="get_sharees_error">No se pudieron recuperar los usuarios y grupos del servidor</string>
+  <string name="get_capabilities_error">No se pudieron recuperar las propiedades del servidor</string>
   <string name="share_link_no_support_share_api">La función Compartir no está activada en su servidor. Contacte a su
 		administrador.</string>
+  <string name="share_link_file_error">No se pudo compartir este archivo o carpeta</string>
+  <string name="unshare_link_file_error">No se pudo eliminar la compartición de este archivo o carpeta</string>
+  <string name="update_link_file_error">No se pudo actualizar este archivo o carpeta</string>
   <string name="share_link_password_title">Introduzca una contraseña</string>
   <string name="share_link_empty_password">Debe introducir una contraseña</string>
   <string name="activity_chooser_send_file_title">Enviar</string>
@@ -368,6 +378,7 @@
   <string name="clipboard_uxexpected_error">Error inesperado al copiar al portapapeles</string>
   <string name="clipboard_label">Texto copiado de %1$s</string>
   <string name="error_cant_bind_to_operations_service">Error crítico: no es posible realizar operaciones</string>
+  <string name="network_error_socket_exception">hubo un error al conectar con el servidor</string>
   <string name="network_error_socket_timeout_exception">El servidor ha tardado demasiado en responder</string>
   <string name="network_error_connect_timeout_exception">El servidor ha tardado demasiado en conectar</string>
   <string name="network_host_not_available">No puedo encontrar el servidor</string>
@@ -546,5 +557,10 @@
   <string name="welcome_feature_9_text">Accede y gestiona tus archivos ownCloud desde otras aplicaciones</string>
   <string name="welcome_feature_10_title">Registros con búsqueda para todos</string>
   <string name="welcome_feature_10_text">Envíanos tus archivos de registro para mejorar la aplicación</string>
+  <string name="welcome_feature_11_title">Fin del soporte para servidores con versión anterior a la 10</string>
+  <string name="welcome_feature_11_text">Por favor actualiza tu servidor o las versiones siguientes de la aplicación no funcionarán</string>
+  <string name="welcome_feature_12_title">Fin del soporte para dispositivos Android 4.4</string>
+  <string name="welcome_feature_12_text">Las versiones siguientes de la aplicación no aparecerán en Google Play para dispositivos con versión de Android anterior a 5</string>
   <string name="no_borwser_installed_alert">No hay un navegador instalado, Por favor, instale uno para poder realizar un login seguro</string>
+  <string name="common_not_found">no se encontró</string>
 </resources>
