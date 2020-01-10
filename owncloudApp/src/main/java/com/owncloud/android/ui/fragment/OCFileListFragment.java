@@ -729,11 +729,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
 
     private boolean isInPowerSaveMode() {
         PowerManager powerManager = (PowerManager) requireActivity().getSystemService(Context.POWER_SERVICE);
-        if (powerManager != null) {
-            return powerManager.isPowerSaveMode();
-        } else {
-            return false;
-        }
+        return (powerManager != null) && powerManager.isPowerSaveMode();
     }
 
     private void listDirectoryWidthAnimationUp(final OCFile file) {
