@@ -25,6 +25,7 @@ assignees: ''
  - [ ] [GIT] Merge branch `release_X.X.X` in owncloud/android, into master
  - [ ] [DIS] Upload & publish release APK and changelog in Play Store
  - [ ] [DIS] Update screenshots and store listing, if needed, in Play Store
+ - [ ] [DIS] Upload release APK to internal owncloud instance
  - [ ] [GIT] merge master branch into stable, in owncloud/android-library
  - [ ] [GIT] merge master branch into stable, in owncloud/android
  - [ ] [DOC] Update owncloud.org/download version numbers (notify rocketchat #marketing)
