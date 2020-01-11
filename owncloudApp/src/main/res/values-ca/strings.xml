@@ -550,5 +550,6 @@
   <string name="welcome_feature_8_title">Disponible fora de línia</string>
   <string name="welcome_feature_8_text">Els teus arxius sincronitzats automàticament</string>
   <string name="welcome_feature_9_title">Proveïdor de document</string>
+  <string name="welcome_feature_9_text">Accedeix i edita els teus fitxers d\'Owncloud des d\'altres aplicacions</string>
   <string name="no_borwser_installed_alert">Ningun navegador instal·lat. Si us plau, instal·la un navegador per permetre un inici de sessió segur.</string>
 </resources>
