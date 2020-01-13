@@ -49,7 +49,6 @@ import com.owncloud.android.lib.common.operations.OnRemoteOperationListener;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
-import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.operations.RenameFileOperation;
 import com.owncloud.android.operations.SynchronizeFileOperation;
 import com.owncloud.android.operations.SynchronizeFolderOperation;
@@ -59,6 +58,7 @@ import com.owncloud.android.ui.dialog.ConfirmationDialogFragment;
 import com.owncloud.android.ui.dialog.SslUntrustedCertDialog;
 import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter;
 import com.owncloud.android.ui.helpers.FileOperationsHelper;
+import timber.log.Timber;
 
 /**
  * Activity with common behaviour for activities handling {@link OCFile}s in ownCloud {@link Account}s .
@@ -72,7 +72,6 @@ public class FileActivity extends DrawerActivity
             "com.owncloud.android.ui.activity.FROM_NOTIFICATION";
     public static final String EXTRA_ONLY_AVAILABLE_OFFLINE = "ONLY_AVAILABLE_OFFLINE";
     public static final String EXTRA_SHARED_BY_LINK_FILES = "SHARED_BY_LINK_FILES";
-    public static final String TAG = FileActivity.class.getSimpleName();
 
     private static final String KEY_WAITING_FOR_OP_ID = "WAITING_FOR_OP_ID";
     private static final String KEY_ACTION_BAR_TITLE = "ACTION_BAR_TITLE";
@@ -117,7 +116,7 @@ public class FileActivity extends DrawerActivity
     /**
      * Loads the ownCloud {@link Account} and main {@link OCFile} to be handled by the instance of
      * the {@link FileActivity}.
-     *
+     * <p>
      * Grants that a valid ownCloud {@link Account} is associated to the instance, or that the user
      * is requested to create a new one.
      */
@@ -272,8 +271,7 @@ public class FileActivity extends DrawerActivity
      */
     @Override
     public void onRemoteOperationFinish(RemoteOperation operation, RemoteOperationResult result) {
-        Log_OC.d(TAG, "Received result of operation in FileActivity - common behaviour for all the "
-                + "FileActivities ");
+        Timber.d("Received result of operation in FileActivity - common behaviour for all the FileActivities");
 
         mFileOperationsHelper.setOpIdWaitingFor(Long.MAX_VALUE);
 
@@ -334,7 +332,7 @@ public class FileActivity extends DrawerActivity
     /**
      * Invalidates the credentials stored for the current OC account and requests new credentials to the user,
      * navigating to {@link AuthenticatorActivity}
-     *
+     * <p>
      * Equivalent to call requestCredentialsUpdate(null);
      */
     protected void requestCredentialsUpdate() {
@@ -421,21 +419,18 @@ public class FileActivity extends DrawerActivity
         @Override
         public void onServiceConnected(ComponentName component, IBinder service) {
             if (component.equals(new ComponentName(FileActivity.this, OperationsService.class))) {
-                Log_OC.d(TAG, "Operations service connected");
+                Timber.d("Operations service connected");
                 mOperationsServiceBinder = (OperationsServiceBinder) service;
                 if (mResumed) {
                     doOnResumeAndBound();
                 }
-
-            } else {
-                return;
             }
         }
 
         @Override
         public void onServiceDisconnected(ComponentName component) {
             if (component.equals(new ComponentName(FileActivity.this, OperationsService.class))) {
-                Log_OC.d(TAG, "Operations service disconnected");
+                Timber.d("Operations service disconnected");
                 mOperationsServiceBinder = null;
                 // TODO whatever could be waiting for the service is unbound
             }

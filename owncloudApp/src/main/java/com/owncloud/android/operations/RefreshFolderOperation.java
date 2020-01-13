@@ -30,7 +30,6 @@ import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.domain.sharing.shares.model.ShareType;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
-import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.files.RemoteFile;
 import com.owncloud.android.lib.resources.shares.GetRemoteSharesForFileOperation;
 import com.owncloud.android.lib.resources.shares.RemoteShare;
@@ -39,6 +38,7 @@ import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 import com.owncloud.android.lib.resources.status.RemoteCapability;
 import com.owncloud.android.operations.common.SyncOperation;
 import com.owncloud.android.syncadapter.FileSyncAdapter;
+import timber.log.Timber;
 
 import java.util.ArrayList;
 import java.util.Vector;
@@ -58,8 +58,6 @@ import java.util.Vector;
  * set as AVAILABLE OFFLINE FOLDERS.
  */
 public class RefreshFolderOperation extends SyncOperation<ArrayList<RemoteFile>> {
-
-    private static final String TAG = RefreshFolderOperation.class.getSimpleName();
 
     public static final String EVENT_SINGLE_FOLDER_CONTENTS_SYNCED =
             RefreshFolderOperation.class.getName() + ".EVENT_SINGLE_FOLDER_CONTENTS_SYNCED";
@@ -170,9 +168,9 @@ public class RefreshFolderOperation extends SyncOperation<ArrayList<RemoteFile>>
         GetUserProfileOperation update = new GetUserProfileOperation(mLocalFolder.getRemotePath());
         RemoteOperationResult result = update.execute(getStorageManager(), mContext);
         if (!result.isSuccess()) {
-            Log_OC.w(TAG, "Couldn't update user profile from server");
+            Timber.w("Couldn't update user profile from server");
         } else {
-            Log_OC.i(TAG, "Got user profile");
+            Timber.i("Got user profile");
         }
     }
 
@@ -247,7 +245,7 @@ public class RefreshFolderOperation extends SyncOperation<ArrayList<RemoteFile>>
     private void sendLocalBroadcast(
             String event, String dirRemotePath, RemoteOperationResult result
     ) {
-        Log_OC.d(TAG, "Send broadcast " + event);
+        Timber.d("Send broadcast %s", event);
         Intent intent = new Intent(event);
         intent.putExtra(FileSyncAdapter.EXTRA_ACCOUNT_NAME, mAccount.name);
         if (dirRemotePath != null) {

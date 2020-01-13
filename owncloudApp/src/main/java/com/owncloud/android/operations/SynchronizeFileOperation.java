@@ -35,19 +35,17 @@ import com.owncloud.android.files.services.TransferRequester;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
-import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.files.ReadRemoteFileOperation;
 import com.owncloud.android.lib.resources.files.RemoteFile;
 import com.owncloud.android.operations.common.SyncOperation;
 import com.owncloud.android.utils.FileStorageUtils;
+import timber.log.Timber;
 
 /**
  * Operation synchronizing the properties and contents of an OC file between local and remote copies.
  */
 
 public class SynchronizeFileOperation extends SyncOperation {
-
-    private String TAG = SynchronizeFileOperation.class.getSimpleName();
 
     private OCFile mLocalFile;
     private String mRemotePath;
@@ -221,8 +219,7 @@ public class SynchronizeFileOperation extends SyncOperation {
         }
 
         if (MainApp.Companion.isDeveloper()) {
-            Log_OC.i(TAG, "Synchronizing " + mAccount.name + ", file " + mLocalFile.getRemotePath() +
-                    ": " + result.getLogMessage());
+            Timber.i("Synchronizing " + mAccount.name + ", file " + mLocalFile.getRemotePath() + ": " + result.getLogMessage());
         }
 
         return result;
@@ -255,11 +252,10 @@ public class SynchronizeFileOperation extends SyncOperation {
         // services and available offline feature may try to do it, this is the way to proceed
         if (mRequestedFromAvOfflineJobService && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             intent.putExtra(FileDownloader.KEY_IS_AVAILABLE_OFFLINE_FILE, true);
-            Log_OC.d(TAG, "Download file from foreground/background, " +
-                    "startForeground() will be called soon");
+            Timber.d("Download file from foreground/background, startForeground() will be called soon");
             mContext.startForegroundService(intent);
         } else {
-            Log_OC.d(TAG, "Download file from foreground");
+            Timber.d("Download file from foreground");
             mContext.startService(intent);
         }
 

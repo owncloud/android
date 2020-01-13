@@ -25,19 +25,17 @@ import android.app.job.JobScheduler;
 import android.app.job.JobService;
 import android.content.Context;
 import android.os.AsyncTask;
-import android.os.Build;
 
-import androidx.annotation.RequiresApi;
 import androidx.core.util.Pair;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
-import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.operations.SynchronizeFileOperation;
 import com.owncloud.android.utils.Extras;
 import com.owncloud.android.utils.FileStorageUtils;
+import timber.log.Timber;
 
 import java.io.File;
 import java.util.List;
@@ -51,11 +49,10 @@ import static com.owncloud.android.ui.notifications.NotificationUtils.notifyConf
  * when there's no available offline files
  */
 public class AvailableOfflineSyncJobService extends JobService {
-    private static final String TAG = "AvOfflineSyncJobService";
 
     @Override
     public boolean onStartJob(JobParameters jobParameters) {
-        Log_OC.d(TAG, "Starting job to sync available offline files");
+        Timber.d("Starting job to sync available offline files");
 
         new AvailableOfflineJobTask(this).execute(jobParameters);
 
@@ -111,7 +108,7 @@ public class AvailableOfflineSyncJobService extends JobService {
 
                 if (localFile.lastModified() <= fileForAccount.first.getLastSyncDateForData() &&
                         MainApp.Companion.isDeveloper()) {
-                    Log_OC.i(TAG, "File " + fileForAccount.first.getRemotePath() + " already synchronized " +
+                    Timber.i("File " + fileForAccount.first.getRemotePath() + " already synchronized " +
                             "in account " + fileForAccount.second + ", ignoring");
                     continue;
                 }
@@ -129,14 +126,8 @@ public class AvailableOfflineSyncJobService extends JobService {
          */
         private void startSyncOperation(OCFile availableOfflineFile, String accountName) {
             if (MainApp.Companion.isDeveloper()) {
-                Log_OC.i(
-                        TAG,
-                        String.format(
-                                "Requested synchronization for file %1s in account %2s",
-                                availableOfflineFile.getRemotePath(),
-                                accountName
-                        )
-                );
+                Timber.i("Requested synchronization for file %1s in account %2s",
+                        availableOfflineFile.getRemotePath(), accountName);
             }
 
             Account account = AccountUtils.getOwnCloudAccountByName(mAvailableOfflineJobService, accountName);
@@ -169,7 +160,7 @@ public class AvailableOfflineSyncJobService extends JobService {
 
             jobScheduler.cancel(jobId);
 
-            Log_OC.d(TAG, "No available offline files to check, cancelling the periodic job");
+            Timber.d("No available offline files to check, cancelling the periodic job");
         }
 
         @Override
@@ -179,11 +170,11 @@ public class AvailableOfflineSyncJobService extends JobService {
     }
 
     @Override
-    /**
+    /*
      * Called by the system if the job is cancelled before being finished
      */
     public boolean onStopJob(JobParameters jobParameters) {
-        Log_OC.d(TAG, "Job " + TAG + " was cancelled before finishing.");
+        Timber.d("Job was cancelled before finishing.");
         return true;
     }
 }

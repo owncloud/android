@@ -31,9 +31,9 @@ import android.widget.Toast;
 import com.owncloud.android.R;
 import com.owncloud.android.files.services.TransferRequester;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
-import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.operations.UploadFileOperation;
 import com.owncloud.android.utils.FileStorageUtils;
+import timber.log.Timber;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -45,8 +45,6 @@ import java.lang.ref.WeakReference;
  * AsyncTask to copy a file from a uri in a temporal file
  */
 public class CopyAndUploadContentUrisTask extends AsyncTask<Object, Void, ResultCode> {
-
-    private final String TAG = CopyAndUploadContentUrisTask.class.getSimpleName();
 
     /**
      * Helper method building a correct array of parameters to be passed to {@link #execute(Object[])} )}
@@ -89,7 +87,7 @@ public class CopyAndUploadContentUrisTask extends AsyncTask<Object, Void, Result
                 account,
                 sourceUris,
                 remotePaths,
-                new Integer(behaviour),
+                behaviour,
                 contentResolver
         };
     }
@@ -135,7 +133,7 @@ public class CopyAndUploadContentUrisTask extends AsyncTask<Object, Void, Result
             Account account = (Account) params[0];
             Uri[] uris = (Uri[]) params[1];
             String[] remotePaths = (String[]) params[2];
-            int behaviour = (Integer) params[3];
+            int behaviour = (int) params[3];
             ContentResolver leakedContentResolver = (ContentResolver) params[4];
 
             String currentRemotePath;
@@ -173,21 +171,21 @@ public class CopyAndUploadContentUrisTask extends AsyncTask<Object, Void, Result
             result = ResultCode.OK;
 
         } catch (ArrayIndexOutOfBoundsException e) {
-            Log_OC.e(TAG, "Wrong number of arguments received ", e);
+            Timber.e(e, "Wrong number of arguments received");
 
         } catch (ClassCastException e) {
-            Log_OC.e(TAG, "Wrong parameter received ", e);
+            Timber.e(e, "Wrong parameter received");
 
         } catch (FileNotFoundException e) {
-            Log_OC.e(TAG, "Could not find source file " + currentUri, e);
+            Timber.e(e, "Could not find source file %s", currentUri);
             result = ResultCode.LOCAL_FILE_NOT_FOUND;
 
         } catch (SecurityException e) {
-            Log_OC.e(TAG, "Not enough permissions to read source file " + currentUri, e);
+            Timber.e(e, "Not enough permissions to read source file %s", currentUri);
             result = ResultCode.FORBIDDEN;
 
         } catch (Exception e) {
-            Log_OC.e(TAG, "Exception while copying " + currentUri + " to temporary file", e);
+            Timber.e(e, "Exception while copying " + currentUri + " to temporary file");
             result = ResultCode.LOCAL_STORAGE_NOT_COPIED;
 
             // clean
@@ -195,7 +193,7 @@ public class CopyAndUploadContentUrisTask extends AsyncTask<Object, Void, Result
                 File f = new File(fullTempPath);
                 if (f.exists()) {
                     if (!f.delete()) {
-                        Log_OC.e(TAG, "Could not delete temporary file " + fullTempPath);
+                        Timber.e("Could not delete temporary file %s", fullTempPath);
                     }
                 }
             }
@@ -205,7 +203,7 @@ public class CopyAndUploadContentUrisTask extends AsyncTask<Object, Void, Result
                 try {
                     inputStream.close();
                 } catch (Exception e) {
-                    Log_OC.w(TAG, "Ignoring exception of inputStream closure");
+                    Timber.w("Ignoring exception of inputStream closure");
                 }
             }
 
@@ -213,7 +211,7 @@ public class CopyAndUploadContentUrisTask extends AsyncTask<Object, Void, Result
                 try {
                     outputStream.close();
                 } catch (Exception e) {
-                    Log_OC.w(TAG, "Ignoring exception of outStream closure");
+                    Timber.w("Ignoring exception of outStream closure");
                 }
             }
         }
@@ -242,7 +240,7 @@ public class CopyAndUploadContentUrisTask extends AsyncTask<Object, Void, Result
             listener.onTmpFilesCopied(result);
 
         } else {
-            Log_OC.i(TAG, "User left the caller activity before the temporal copies were finished ");
+            Timber.i("User left the caller activity before the temporal copies were finished");
             if (result != ResultCode.OK) {
                 // if the user left the app, report background error in a Toast
                 int messageId;

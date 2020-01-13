@@ -41,11 +41,11 @@ import com.owncloud.android.domain.capabilities.usecases.GetStoredCapabilitiesUs
 import com.owncloud.android.domain.sharing.sharees.GetShareesAsyncUseCase
 import com.owncloud.android.domain.sharing.shares.model.ShareType
 import com.owncloud.android.extensions.parseError
-import com.owncloud.android.lib.common.utils.Log_OC
 import com.owncloud.android.lib.resources.shares.GetRemoteShareesOperation
 import org.json.JSONException
 import org.json.JSONObject
 import org.koin.android.ext.android.inject
+import timber.log.Timber
 import java.util.HashMap
 import java.util.Locale
 
@@ -83,7 +83,7 @@ class UsersAndGroupsSearchProvider : ContentProvider() {
             return true
 
         } catch (t: Throwable) {
-            Log_OC.e("TAG", "Fail creating provider", t)
+            Timber.e(t, "Fail creating provider")
             return false
         }
     }
@@ -110,7 +110,7 @@ class UsersAndGroupsSearchProvider : ContentProvider() {
         selectionArgs: Array<String>?,
         sortOrder: String?
     ): Cursor? {
-        Log_OC.d(TAG, "query received in thread " + Thread.currentThread().name)
+        Timber.d("query received in thread ${Thread.currentThread().name}")
         return when (uriMatcher.match(uri)) {
             SEARCH -> searchForUsersOrGroups(uri)
             else -> null
@@ -200,7 +200,7 @@ class UsersAndGroupsSearchProvider : ContentProvider() {
                             "$userName ($shareWithAdditionalInfo)"
 
                     } catch (e: JSONException) {
-                        Log_OC.e(TAG, "Exception while parsing shareWithAdditionalInfo", e)
+                        Timber.e(e, "Exception while parsing shareWithAdditionalInfo")
                     }
 
                     when (type) {
@@ -241,7 +241,7 @@ class UsersAndGroupsSearchProvider : ContentProvider() {
                     }
                 }
             } catch (e: JSONException) {
-                Log_OC.e(TAG, "Exception while parsing data of users/groups", e)
+                Timber.e(e, "Exception while parsing data of users/groups")
             }
         }
 
@@ -283,7 +283,6 @@ class UsersAndGroupsSearchProvider : ContentProvider() {
     }
 
     companion object {
-        private val TAG = UsersAndGroupsSearchProvider::class.java.simpleName
 
         private val COLUMNS = arrayOf(
             BaseColumns._ID,

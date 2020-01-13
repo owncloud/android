@@ -35,12 +35,12 @@ import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.operations.OperationCancelledException;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
-import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.files.ReadRemoteFolderOperation;
 import com.owncloud.android.lib.resources.files.RemoteFile;
 import com.owncloud.android.operations.common.SyncOperation;
 import com.owncloud.android.services.OperationsService;
 import com.owncloud.android.utils.FileStorageUtils;
+import timber.log.Timber;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -53,16 +53,14 @@ import java.util.concurrent.atomic.AtomicBoolean;
 /**
  * Operation performing the synchronization of the list of files contained
  * in a folder identified with its remote path.
- *
+ * <p>
  * Fetches the list and properties of the files contained in the given folder, including their
  * properties, and updates the local database with them.
- *
+ * <p>
  * Does NOT enter in the child folders to synchronize their contents also, BUT requests for a new operation instance
  * doing so.
  */
 public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFile>> {
-
-    private static final String TAG = SynchronizeFolderOperation.class.getSimpleName();
 
     /**
      * Time stamp for the synchronization process in progress
@@ -195,7 +193,7 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
 
     /**
      * Performs the synchronization.
-     *
+     * <p>
      * {@inheritDoc}
      */
     @Override
@@ -212,7 +210,7 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
 
             if (mPushOnly) {
                 // assuming there is no update in the server side, still need to handle local changes
-                Log_OC.i(TAG, "Push only sync of " + mAccount.name + mRemotePath);
+                Timber.i("Push only sync of " + mAccount.name + mRemotePath);
                 preparePushOfLocalChanges();
                 syncContents();
                 //pushOnlySync();
@@ -233,11 +231,10 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
                         removeLocalFolder();
                     }
                     if (fetchFolderResult.isException()) {
-                        Log_OC.e(TAG, "Checked " + mAccount.name + mRemotePath + " : " +
-                                fetchFolderResult.getLogMessage(), fetchFolderResult.getException());
+                        Timber.e(fetchFolderResult.getException(),
+                                "Checked " + mAccount.name + mRemotePath + " : " + fetchFolderResult.getLogMessage());
                     } else {
-                        Log_OC.e(TAG, "Checked " + mAccount.name + mRemotePath + " : " +
-                                fetchFolderResult.getLogMessage());
+                        Timber.e("Checked " + mAccount.name + mRemotePath + " : " + fetchFolderResult.getLogMessage());
                     }
                 }
             }
@@ -257,7 +254,7 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
      */
     @NonNull
     private RemoteOperationResult<ArrayList<RemoteFile>> fetchRemoteFolder(OwnCloudClient client) throws OperationCancelledException {
-        Log_OC.d(TAG, "Fetching list of files in  " + mAccount.name + mRemotePath + ", if changed");
+        Timber.d("Fetching list of files in  " + mAccount.name + mRemotePath + ", if changed");
 
         if (mCancellationRequested.get()) {
             throw new OperationCancelledException();
@@ -295,14 +292,14 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
     /**
      * Synchronizes the data retrieved from the server about the contents of the target folder
      * with the current data in the local database.
-     *
+     * <p>
      * Grants that mFoldersToVisit is updated with fresh data after execution.
      *
      * @param remoteFolderAndFiles Remote folder and children files in folder
      */
     private void mergeRemoteFolder(ArrayList<RemoteFile> remoteFolderAndFiles)
             throws OperationCancelledException {
-        Log_OC.d(TAG, "Synchronizing " + mAccount.name + mRemotePath);
+        Timber.d("Synchronizing " + mAccount.name + mRemotePath);
 
         FileDataStorageManager storageManager = getStorageManager();
 
@@ -312,8 +309,7 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
         );  // NOTE: updates ETag with remote value; that's INTENDED
         updatedFolder.copyLocalPropertiesFrom(mLocalFolder);
 
-        Log_OC.d(TAG, "Remote folder " + mLocalFolder.getRemotePath()
-                + " changed - starting update of local data ");
+        Timber.d("Remote folder " + mLocalFolder.getRemotePath() + " changed - starting update of local data ");
 
         List<OCFile> updatedFiles = new Vector<>(remoteFolderAndFiles.size() - 1);
         mFoldersToVisit = new Vector<>(remoteFolderAndFiles.size() - 1);
@@ -335,7 +331,6 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
 
         // loop to synchronize every child
         OCFile remoteFile, localFile, updatedLocalFile;
-        RemoteFile r;
         int foldersToExpand = 0;
         for (int i = 1; i < remoteFolderAndFiles.size(); i++) {
             /// new OCFile instance with the data from the server
@@ -408,7 +403,7 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
 
     /**
      * Generates the appropriate operations to later sync the contents of localFile with the server.
-     *
+     * <p>
      * Stores the operations in mFoldersToSyncContents and mFilesToSyncContents.
      *
      * @param localFile  Local information about the file which contents might be sync'ed.
@@ -470,13 +465,13 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
     /**
      * Performs a list of synchronization operations, determining if a download or upload is needed
      * or if exists conflict due to changes both in local and remote contents of the each file.
-     *
+     * <p>
      * If download or upload is needed, request the operation to the corresponding service and goes
      * on.
      */
     private void syncContents() throws OperationCancelledException {
 
-        Log_OC.v(TAG, "Starting content synchronization... ");
+        Timber.v("Starting content synchronization... ");
         RemoteOperationResult contentsResult;
         for (SyncOperation op : mFilesToSyncContents) {
             if (mCancellationRequested.get()) {
@@ -489,11 +484,10 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
                 } else {
                     mFailsInFileSyncsFound++;
                     if (contentsResult.getException() != null) {
-                        Log_OC.e(TAG, "Error while synchronizing file : "   // Vs " av-off file"
-                                + contentsResult.getLogMessage(), contentsResult.getException());
+                        Timber.e(contentsResult.getException(), "Error while synchronizing file : %s",
+                                contentsResult.getLogMessage());
                     } else {
-                        Log_OC.e(TAG, "Error while synchronizing file : "
-                                + contentsResult.getLogMessage());
+                        Timber.e("Error while synchronizing file : %s", contentsResult.getLogMessage());
                     }
                 }
             }   // won't let these fails break the synchronization process
@@ -511,14 +505,14 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
      * Scans the default location for saving local copies of files searching for
      * a 'lost' file with the same full name as the {@link OCFile} received as
      * parameter.
-     *
+     * <p>
      * This method helps to keep linked local copies of the files when the app is uninstalled, and then
      * reinstalled in the device. OR after the cache of the app was deleted in system settings.
-     *
+     * <p>
      * The method is assuming that all the local changes in the file where synchronized in the past. This is dangerous,
      * but assuming the contrary could lead to massive unnecessary synchronizations of downloaded file after deleting
      * the app cache.
-     *
+     * <p>
      * This should be changed in the near future to avoid any chance of data loss, but we need to add some options
      * to limit hard automatic synchronizations to wifi, unless the user wants otherwise.
      *

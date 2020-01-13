@@ -28,7 +28,6 @@ import android.accounts.AccountManagerFuture;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.DisplayCutout;
@@ -54,9 +53,9 @@ import com.owncloud.android.datamodel.ThumbnailsCacheManager;
 import com.owncloud.android.datamodel.UserProfile;
 import com.owncloud.android.datamodel.UserProfilesRepository;
 import com.owncloud.android.lib.common.OwnCloudAccount;
-import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.utils.DisplayUtils;
 import com.owncloud.android.utils.PreferenceUtils;
+import timber.log.Timber;
 
 /**
  * Base class to handle setup of the drawer implementation including user switching and avatar fetching and fallback
@@ -64,7 +63,6 @@ import com.owncloud.android.utils.PreferenceUtils;
  */
 public abstract class DrawerActivity extends ToolbarActivity {
 
-    private static final String TAG = DrawerActivity.class.getSimpleName();
     private static final String KEY_IS_ACCOUNT_CHOOSER_ACTIVE = "IS_ACCOUNT_CHOOSER_ACTIVE";
     private static final String KEY_CHECKED_MENU_ITEM = "CHECKED_MENU_ITEM";
     private static final int ACTION_MANAGE_ACCOUNTS = 101;
@@ -272,7 +270,7 @@ public abstract class DrawerActivity extends ToolbarActivity {
                                 // account clicked
                                 accountClicked(menuItem.getTitle().toString());
                             default:
-                                Log_OC.i(TAG, "Unknown drawer menu item clicked: " + menuItem.getTitle());
+                                Timber.i("Unknown drawer menu item clicked: %s", menuItem.getTitle());
                         }
 
                         return true;
@@ -564,7 +562,7 @@ public abstract class DrawerActivity extends ToolbarActivity {
                 username.setText(oca.getDisplayName());
 
             } catch (Exception e) {
-                Log_OC.w(TAG, "Couldn't read display name of account; using account name instead");
+                Timber.w("Couldn't read display name of account; using account name instead");
 
                 username.setText(AccountUtils.getUsernameOfAccount(account.name));
             }
@@ -627,7 +625,7 @@ public abstract class DrawerActivity extends ToolbarActivity {
             mNavigationView.getMenu().findItem(menuItemId).setChecked(true);
             mCheckedMenuItem = menuItemId;
         } else {
-            Log_OC.w(TAG, "setDrawerMenuItemChecked has been called with invalid menu-item-ID");
+            Timber.w("setDrawerMenuItemChecked has been called with invalid menu-item-ID");
         }
     }
 
@@ -787,7 +785,7 @@ public abstract class DrawerActivity extends ToolbarActivity {
         if (mDrawerLayout != null) {
             mDrawerLayout.addDrawerListener(listener);
         } else {
-            Log_OC.e(TAG, "Drawer layout not ready to add drawer listener");
+            Timber.e("Drawer layout not ready to add drawer listener");
         }
     }
 }

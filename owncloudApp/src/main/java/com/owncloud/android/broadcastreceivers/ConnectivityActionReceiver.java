@@ -36,7 +36,7 @@ import com.owncloud.android.db.PreferenceManager;
 import com.owncloud.android.db.UploadResult;
 import com.owncloud.android.files.services.FileUploader;
 import com.owncloud.android.files.services.TransferRequester;
-import com.owncloud.android.lib.common.utils.Log_OC;
+import timber.log.Timber;
 
 /**
  * Receives all connectivity action from Android OS at all times and performs
@@ -50,7 +50,6 @@ import com.owncloud.android.lib.common.utils.Log_OC;
  * Have fun with the comments :S
  */
 public class ConnectivityActionReceiver extends BroadcastReceiver {
-    private static final String TAG = ConnectivityActionReceiver.class.getSimpleName();
 
     /**
      * Magic keyword, by Google.
@@ -62,18 +61,18 @@ public class ConnectivityActionReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(final Context context, Intent intent) {
         // LOG ALL EVENTS:
-        Log_OC.v(TAG, "action: " + intent.getAction());
-        Log_OC.v(TAG, "component: " + intent.getComponent());
+        Timber.v("action: %s", intent.getAction());
+        Timber.v("component: %s", intent.getComponent());
         Bundle extras = intent.getExtras();
         if (extras != null) {
             for (String key : extras.keySet()) {
-                Log_OC.v(TAG, "key [" + key + "]: " + extras.get(key));
+                Timber.v("key [" + key + "]: " + extras.get(key));
             }
         } else {
-            Log_OC.v(TAG, "no extras");
+            Timber.v("no extras");
         }
 
-        /**
+        /*
          * There is an interesting mess to process WifiManager.NETWORK_STATE_CHANGED_ACTION and
          * ConnectivityManager.CONNECTIVITY_ACTION in a simple and reliable way.
          *
@@ -102,13 +101,13 @@ public class ConnectivityActionReceiver extends BroadcastReceiver {
                     !UNKNOWN_SSID.equals(wifiInfo.getSSID().toLowerCase()) &&
                     bssid != null
             ) {
-                Log_OC.d(TAG, "WiFi connected");
+                Timber.d("WiFi connected");
 
                 wifiConnected(context);
             } else {
                 // TODO tons of things to check to conclude disconnection;
                 // TODO maybe alternative commented below, based on CONNECTIVITY_ACTION is better
-                Log_OC.d(TAG, "WiFi disconnected ... but don't know if right now");
+                Timber.d("WiFi disconnected ... but don't know if right now");
             }
         }
         // (*) When WiFi is lost, an Intent with network state CONNECTED and SSID "<unknown ssid>" is
@@ -124,7 +123,7 @@ public class ConnectivityActionReceiver extends BroadcastReceiver {
         //  and reproduced in Nexus 5 with Android 6.
 
         // TODO check if this helps us
-        /**
+        /*
          * Possible alternative attending ConnectivityManager.CONNECTIVITY_ACTION.
          *
          * Let's see what QA has to say
@@ -144,10 +143,10 @@ public class ConnectivityActionReceiver extends BroadcastReceiver {
 
          if (couldBeWifiAction) {
          if (ConnectivityUtils.isAppConnectedViaWiFi(context)) {
-         Log_OC.d(TAG, "WiFi connected");
+         Timber.d("WiFi connected");
          wifiConnected(context);
          } else {
-         Log_OC.d(TAG, "WiFi disconnected");
+         Timber.d("WiFi disconnected");
          wifiDisconnected(context);
          }
          } /* else, CONNECTIVIY_ACTION is (probably) about other network interface (mobile, bluetooth, ...)
@@ -166,7 +165,7 @@ public class ConnectivityActionReceiver extends BroadcastReceiver {
 
             Handler h = new Handler(Looper.getMainLooper());
             h.postDelayed(() -> {
-                        Log_OC.d(TAG, "Requesting retry of camera uploads (& friends)");
+                        Timber.d("Requesting retry of camera uploads (& friends)");
                         TransferRequester requester = new TransferRequester();
 
                         requester.retryFailedUploads(

@@ -30,8 +30,8 @@ import com.owncloud.android.db.ProviderMeta.ProviderTableMeta;
 import com.owncloud.android.db.UploadResult;
 import com.owncloud.android.files.services.FileUploader;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
-import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.operations.UploadFileOperation;
+import timber.log.Timber;
 
 import java.util.Calendar;
 import java.util.Observable;
@@ -43,8 +43,6 @@ import java.util.Observable;
 public class UploadsStorageManager extends Observable {
 
     private ContentResolver mContentResolver;
-
-    static private final String TAG = UploadsStorageManager.class.getSimpleName();
 
     public enum UploadStatus {
 
@@ -97,11 +95,11 @@ public class UploadsStorageManager extends Observable {
     /**
      * Stores an upload object in DB.
      *
-     * @param ocUpload      Upload object to store
+     * @param ocUpload Upload object to store
      * @return upload id, -1 if the insert process fails.
      */
     public long storeUpload(OCUpload ocUpload) {
-        Log_OC.v(TAG, "Inserting " + ocUpload.getLocalPath() + " with status=" + ocUpload.getUploadStatus());
+        Timber.v("Inserting " + ocUpload.getLocalPath() + " with status=" + ocUpload.getUploadStatus());
 
         ContentValues cv = new ContentValues();
         cv.put(ProviderTableMeta.UPLOADS_LOCAL_PATH, ocUpload.getLocalPath());
@@ -118,9 +116,9 @@ public class UploadsStorageManager extends Observable {
 
         Uri result = getDB().insert(ProviderTableMeta.CONTENT_URI_UPLOADS, cv);
 
-        Log_OC.d(TAG, "storeUpload returns with: " + result + " for file: " + ocUpload.getLocalPath());
+        Timber.d("storeUpload returns with: " + result + " for file: " + ocUpload.getLocalPath());
         if (result == null) {
-            Log_OC.e(TAG, "Failed to insert item " + ocUpload.getLocalPath() + " into upload db.");
+            Timber.e("Failed to insert item " + ocUpload.getLocalPath() + " into upload db.");
             return -1;
         } else {
             long new_id = Long.parseLong(result.getPathSegments().get(1));
@@ -133,11 +131,11 @@ public class UploadsStorageManager extends Observable {
     /**
      * Update an upload object in DB.
      *
-     * @param ocUpload      Upload object with state to update
+     * @param ocUpload Upload object with state to update
      * @return num of updated uploads.
      */
     public int updateUpload(OCUpload ocUpload) {
-        Log_OC.v(TAG, "Updating " + ocUpload.getLocalPath() + " with status=" + ocUpload.getUploadStatus());
+        Timber.v("Updating " + ocUpload.getLocalPath() + " with status=" + ocUpload.getUploadStatus());
 
         ContentValues cv = new ContentValues();
         cv.put(ProviderTableMeta.UPLOADS_LOCAL_PATH, ocUpload.getLocalPath());
@@ -154,9 +152,9 @@ public class UploadsStorageManager extends Observable {
                 new String[]{String.valueOf(ocUpload.getUploadId())}
         );
 
-        Log_OC.d(TAG, "updateCameraUploadSync returns with: " + result + " for file: " + ocUpload.getLocalPath());
+        Timber.d("updateCameraUploadSync returns with: " + result + " for file: " + ocUpload.getLocalPath());
         if (result != 1) {
-            Log_OC.e(TAG, "Failed to update item " + ocUpload.getLocalPath() + " into upload db.");
+            Timber.e("Failed to update item " + ocUpload.getLocalPath() + " into upload db.");
         } else {
             notifyObserversNow();
         }
@@ -172,11 +170,8 @@ public class UploadsStorageManager extends Observable {
             OCUpload upload = createOCUploadFromCursor(c);
 
             String path = c.getString(c.getColumnIndex(ProviderTableMeta.UPLOADS_LOCAL_PATH));
-            Log_OC.v(
-                    TAG,
-                    "Updating " + path + " with status:" + status + " and result:"
-                            + (result == null ? "null" : result.toString()) + " (old:"
-                            + upload.toFormattedString() + ")");
+            Timber.v("Updating " + path + " with status:" + status + " and result:" + (result == null ? "null" :
+                    result.toString()) + " (old:" + upload.toFormattedString() + ")");
 
             upload.setUploadStatus(status);
             upload.setLastResult(result);
@@ -196,16 +191,16 @@ public class UploadsStorageManager extends Observable {
     /**
      * Update upload status of file uniquely referenced by id.
      *
-     * @param id     upload id.
-     * @param status new status.
-     * @param result new result of upload operation
+     * @param id         upload id.
+     * @param status     new status.
+     * @param result     new result of upload operation
      * @param remotePath path of the file to upload in the ownCloud storage
-     * @param localPath path of the file to upload in the device storage
+     * @param localPath  path of the file to upload in the device storage
      * @return 1 if file status was updated, else 0.
      */
     public int updateUploadStatus(long id, UploadStatus status, UploadResult result, String remotePath,
                                   String localPath) {
-        //Log_OC.v(TAG, "Updating "+filepath+" with uploadStatus="+status +" and result="+result);
+        //Timber.v("Updating "+filepath+" with uploadStatus="+status +" and result="+result);
 
         int returnValue = 0;
         Cursor c = getDB().query(
@@ -217,7 +212,7 @@ public class UploadsStorageManager extends Observable {
         );
 
         if (c.getCount() != 1) {
-            Log_OC.e(TAG, c.getCount() + " items for id=" + id
+            Timber.e(c.getCount() + " items for id=" + id
                     + " available in UploadDb. Expected 1. Failed to update upload db.");
         } else {
             returnValue = updateUploadInternal(c, status, result, remotePath, localPath);
@@ -231,7 +226,7 @@ public class UploadsStorageManager extends Observable {
      * are informed.
      */
     public void notifyObserversNow() {
-        Log_OC.d(TAG, "notifyObserversNow");
+        Timber.d("notifyObserversNow");
         setChanged();
         notifyObservers();
     }
@@ -239,8 +234,7 @@ public class UploadsStorageManager extends Observable {
     /**
      * Remove an upload from the uploads list, known its target account and remote path.
      *
-     * @param upload            Upload instance to remove from persisted storage.
-     *
+     * @param upload Upload instance to remove from persisted storage.
      * @return true when the upload was stored and could be removed.
      */
     public int removeUpload(OCUpload upload) {
@@ -249,7 +243,7 @@ public class UploadsStorageManager extends Observable {
                 ProviderTableMeta._ID + "=?",
                 new String[]{Long.toString(upload.getUploadId())}
         );
-        Log_OC.d(TAG, "delete returns " + result + " for upload " + upload);
+        Timber.d("delete returns " + result + " for upload " + upload);
         if (result > 0) {
             notifyObserversNow();
         }
@@ -259,8 +253,8 @@ public class UploadsStorageManager extends Observable {
     /**
      * Remove an upload from the uploads list, known its target account and remote path.
      *
-     * @param accountName       Name of the OC account target of the upload to remove.
-     * @param remotePath        Absolute path in the OC account target of the upload to remove.
+     * @param accountName Name of the OC account target of the upload to remove.
+     * @param remotePath  Absolute path in the OC account target of the upload to remove.
      * @return true when one or more upload entries were removed
      */
     public int removeUpload(String accountName, String remotePath) {
@@ -269,7 +263,7 @@ public class UploadsStorageManager extends Observable {
                 ProviderTableMeta.UPLOADS_ACCOUNT_NAME + "=? AND " + ProviderTableMeta.UPLOADS_REMOTE_PATH + "=?",
                 new String[]{accountName, remotePath}
         );
-        Log_OC.d(TAG, "delete returns " + result + " for file " + remotePath + " in " + accountName);
+        Timber.d("delete returns " + result + " for file " + remotePath + " in " + accountName);
         if (result > 0) {
             notifyObserversNow();
         }
@@ -279,7 +273,7 @@ public class UploadsStorageManager extends Observable {
     /**
      * Remove all the uploads of a given account from the uploads list.
      *
-     * @param accountName       Name of the OC account target of the uploads to remove.
+     * @param accountName Name of the OC account target of the uploads to remove.
      * @return true when one or more upload entries were removed
      */
     public int removeUploads(String accountName) {
@@ -288,7 +282,7 @@ public class UploadsStorageManager extends Observable {
                 ProviderTableMeta.UPLOADS_ACCOUNT_NAME + "=?",
                 new String[]{accountName}
         );
-        Log_OC.d(TAG, "delete returns " + result + " for uploads in " + accountName);
+        Timber.d("delete returns " + result + " for uploads in " + accountName);
         if (result > 0) {
             notifyObserversNow();
         }
@@ -325,7 +319,7 @@ public class UploadsStorageManager extends Observable {
             do {
                 OCUpload upload = createOCUploadFromCursor(c);
                 if (upload == null) {
-                    Log_OC.e(TAG, "OCUpload could not be created from cursor");
+                    Timber.e("OCUpload could not be created from cursor");
                 } else {
                     list[c.getPosition()] = upload;
                 }
@@ -407,6 +401,7 @@ public class UploadsStorageManager extends Observable {
 
     /**
      * Get all failed uploads, except for those that were not performed due to lack of Wifi connection
+     *
      * @return Array of failed uploads, except for those that were not performed due to lack of Wifi connection.
      */
     public OCUpload[] getFailedButNotDelayedForWifiUploads() {
@@ -429,11 +424,11 @@ public class UploadsStorageManager extends Observable {
         long result = getDB().delete(
                 ProviderTableMeta.CONTENT_URI_UPLOADS,
                 ProviderTableMeta.UPLOADS_STATUS + "=? AND " +
-                        ProviderTableMeta.UPLOADS_LAST_RESULT + "!=?" ,
+                        ProviderTableMeta.UPLOADS_LAST_RESULT + "!=?",
                 new String[]{String.valueOf(UploadStatus.UPLOAD_FAILED.value),
                         String.valueOf(UploadResult.DELAYED_FOR_WIFI.getValue())}
         );
-        Log_OC.d(TAG, "delete all failed uploads but those delayed for Wifi");
+        Timber.d("delete all failed uploads but those delayed for Wifi");
         if (result > 0) {
             notifyObserversNow();
         }
@@ -446,7 +441,7 @@ public class UploadsStorageManager extends Observable {
                 ProviderTableMeta.UPLOADS_STATUS + "=?",
                 new String[]{String.valueOf(UploadStatus.UPLOAD_SUCCEEDED.value)}
         );
-        Log_OC.d(TAG, "delete all successful uploads");
+        Timber.d("delete all successful uploads");
         if (result > 0) {
             notifyObserversNow();
         }
@@ -463,7 +458,7 @@ public class UploadsStorageManager extends Observable {
                         ProviderTableMeta.UPLOADS_LAST_RESULT + "<>" + UploadResult.DELAYED_FOR_WIFI.getValue(),
                 whereArgs
         );
-        Log_OC.d(TAG, "delete all finished uploads");
+        Timber.d("delete all finished uploads");
         if (result > 0) {
             notifyObserversNow();
         }
@@ -476,8 +471,7 @@ public class UploadsStorageManager extends Observable {
     public void updateDatabaseUploadResult(RemoteOperationResult uploadResult,
                                            UploadFileOperation uploadFileOperation) {
         // result: success or fail notification
-        Log_OC.d(TAG, "updateDataseUploadResult uploadResult: " + uploadResult + " upload: " +
-                uploadFileOperation);
+        Timber.d("updateDataseUploadResult uploadResult: " + uploadResult + " upload: " + uploadFileOperation);
 
         if (uploadResult.isCancelled()) {
             removeUpload(
@@ -531,7 +525,7 @@ public class UploadsStorageManager extends Observable {
      * @return Number of uploads which status was changed.
      */
     public int failInProgressUploads(UploadResult uploadResult) {
-        Log_OC.v(TAG, "Updating state of any killed upload");
+        Timber.v("Updating state of any killed upload");
 
         ContentValues cv = new ContentValues();
         cv.put(ProviderTableMeta.UPLOADS_STATUS, UploadStatus.UPLOAD_FAILED.getValue());
@@ -549,9 +543,9 @@ public class UploadsStorageManager extends Observable {
         );
 
         if (result == 0) {
-            Log_OC.v(TAG, "No upload was killed");
+            Timber.v("No upload was killed");
         } else {
-            Log_OC.w(TAG, Integer.toString(result) + " uploads where abruptly interrupted");
+            Timber.w("%s uploads where abruptly interrupted", result);
             notifyObserversNow();
         }
         return result;

@@ -51,7 +51,6 @@ import com.owncloud.android.authentication.FingerprintManager;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.db.PreferenceManager.CameraUploadsConfiguration;
 import com.owncloud.android.files.services.CameraUploadsHandler;
-import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.utils.DisplayUtils;
 import com.owncloud.android.utils.PreferenceUtils;
 import org.jetbrains.annotations.NotNull;
@@ -61,6 +60,7 @@ import java.io.File;
 import androidx.annotation.LayoutRes;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatDelegate;
+import timber.log.Timber;
 
 import static com.owncloud.android.db.PreferenceManager.PREF__CAMERA_UPLOADS_DEFAULT_PATH;
 
@@ -71,8 +71,6 @@ import static com.owncloud.android.db.PreferenceManager.PREF__CAMERA_UPLOADS_DEF
  * with AppCompat.
  */
 public class Preferences extends PreferenceActivity {
-
-    private static final String TAG = Preferences.class.getSimpleName();
 
     private static final int ACTION_SELECT_UPLOAD_PATH = 1;
     private static final int ACTION_SELECT_UPLOAD_VIDEO_PATH = 2;
@@ -163,7 +161,7 @@ public class Preferences extends PreferenceActivity {
             temp = pkg.versionName;
         } catch (NameNotFoundException e) {
             temp = "";
-            Log_OC.e(TAG, "Error while showing about dialog", e);
+            Timber.e(e, "Error while showing about dialog");
         }
         final String appVersion = temp + " " + BuildConfig.BUILD_TYPE + " " + BuildConfig.COMMIT_SHA1;
 
@@ -256,7 +254,7 @@ public class Preferences extends PreferenceActivity {
                 return true;
             });
         } else {
-            Log_OC.e(TAG, "Lost preference PREFERENCE_CAMERA_UPLOADS_SOURCE_PATH");
+            Timber.e("Lost preference PREFERENCE_CAMERA_UPLOADS_SOURCE_PATH");
         }
 
         mPrefCameraUploadsBehaviour = findPreference(PREFERENCE_CAMERA_UPLOADS_BEHAVIOUR);
@@ -683,7 +681,7 @@ public class Preferences extends PreferenceActivity {
                 startActivity(intent);
                 break;
             default:
-                Log_OC.w(TAG, "Unknown menu item triggered");
+                Timber.w("Unknown menu item triggered");
                 return false;
         }
         return true;

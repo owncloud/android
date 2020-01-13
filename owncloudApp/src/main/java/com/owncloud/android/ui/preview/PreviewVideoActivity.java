@@ -21,7 +21,6 @@
 
 package com.owncloud.android.ui.preview;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -46,16 +45,14 @@ import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.owncloud.android.R;
-import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.ui.activity.FileActivity;
+import timber.log.Timber;
 
 /**
  * An activity that plays media using {@link SimpleExoPlayer}.
  */
 public class PreviewVideoActivity extends FileActivity implements ExoPlayer.EventListener,
         PrepareVideoPlayerAsyncTask.OnPrepareVideoPlayerTaskListener {
-
-    private static final String TAG = PreviewVideoActivity.class.getSimpleName();
 
     /** Key to receive a flag signaling if the video should be started immediately */
     public static final String EXTRA_AUTOPLAY = "AUTOPLAY";
@@ -81,7 +78,7 @@ public class PreviewVideoActivity extends FileActivity implements ExoPlayer.Even
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log_OC.v(TAG, "onCreate");
+        Timber.v("onCreate");
 
         clearResumePosition();
 
@@ -101,13 +98,7 @@ public class PreviewVideoActivity extends FileActivity implements ExoPlayer.Even
         ImageButton exitFullScreen = findViewById(R.id.exit_fullscreen_button);
         exitFullScreen.setVisibility(View.VISIBLE);
 
-        exitFullScreen.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
+        exitFullScreen.setOnClickListener(v -> onBackPressed());
 
         Bundle extras = getIntent().getExtras();
 
@@ -118,27 +109,27 @@ public class PreviewVideoActivity extends FileActivity implements ExoPlayer.Even
     @Override
     public void onStart() {
         super.onStart();
-        Log_OC.v(TAG, "onStart");
+        Timber.v("onStart");
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        Log_OC.v(TAG, "onResume");
+        Timber.v("onResume");
         preparePlayer();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        Log_OC.v(TAG, "onPause");
+        Timber.v("onPause");
         releasePlayer();
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        Log_OC.v(TAG, "onStop");
+        Timber.v("onStop");
     }
 
     // Handle full screen modes
@@ -183,7 +174,7 @@ public class PreviewVideoActivity extends FileActivity implements ExoPlayer.Even
      */
     @Override
     public void OnPrepareVideoPlayerTaskCallback(MediaSource mediaSource) {
-        Log_OC.v(TAG, "playerPrepared");
+        Timber.v("playerPrepared");
         player.prepare(mediaSource);
     }
 
@@ -194,7 +185,7 @@ public class PreviewVideoActivity extends FileActivity implements ExoPlayer.Even
             player.release();
             player = null;
             trackSelector = null;
-            Log_OC.v(TAG, "playerReleased");
+            Timber.v("playerReleased");
         }
     }
 
@@ -212,7 +203,7 @@ public class PreviewVideoActivity extends FileActivity implements ExoPlayer.Even
     @Override
     public void onPlayerError(ExoPlaybackException error) {
 
-        Log_OC.v(TAG, "Error in video player, what = " + error);
+        Timber.e(error, "Error in video player");
 
         showAlertDialog(PreviewVideoErrorAdapter.handlePreviewVideoError(error, this));
     }
@@ -226,13 +217,7 @@ public class PreviewVideoActivity extends FileActivity implements ExoPlayer.Even
 
         new AlertDialog.Builder(this)
                 .setMessage(previewVideoError.getErrorMessage())
-                .setPositiveButton(android.R.string.VideoView_error_button,
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int whichButton) {
-
-                                finish();
-                            }
-                        })
+                .setPositiveButton(android.R.string.VideoView_error_button, (dialog, whichButton) -> finish())
                 .setCancelable(false)
                 .show();
     }
@@ -266,7 +251,7 @@ public class PreviewVideoActivity extends FileActivity implements ExoPlayer.Even
 
     @Override
     public void onBackPressed() {
-        Log_OC.v(TAG, "onBackPressed");
+        Timber.v("onBackPressed");
         Intent i = new Intent();
         i.putExtra(EXTRA_AUTOPLAY, player.getPlayWhenReady());
         i.putExtra(EXTRA_START_POSITION, player.getCurrentPosition());

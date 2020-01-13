@@ -44,7 +44,6 @@ import com.owncloud.android.domain.capabilities.model.OCCapability
 import com.owncloud.android.domain.sharing.shares.model.OCShare
 import com.owncloud.android.domain.sharing.shares.model.ShareType
 import com.owncloud.android.extensions.showError
-import com.owncloud.android.lib.common.utils.Log_OC
 import com.owncloud.android.lib.resources.status.OwnCloudVersion
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.adapters.sharing.SharePublicLinkListAdapter
@@ -57,13 +56,12 @@ import kotlinx.android.synthetic.main.share_file_layout.*
 import kotlinx.android.synthetic.main.share_file_layout.view.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
+import timber.log.Timber
 import java.util.Locale
 
 /**
  * Fragment for Sharing a file with sharees (users or groups) or creating
  * a public link.
- *
- * A simple [Fragment] subclass.
  *
  * Activities that contain this fragment must implement the
  * [ShareFragmentListener] interface
@@ -144,7 +142,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
                     try {
                         usedNumbers.add(Integer.parseInt(number))
                     } catch (e: Exception) {
-                        Log_OC.e(TAG, "Wrong capture of number in share named " + share.name, e)
+                        Timber.e(e, "Wrong capture of number in share named " + share.name)
                         return ""
                     }
                 }
@@ -201,7 +199,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log_OC.d(TAG, "onCreate")
+        Timber.d("onCreate")
         if (arguments != null) {
             file = arguments!!.getParcelable(ARG_FILE)
             account = arguments!!.getParcelable(ARG_ACCOUNT)
@@ -216,7 +214,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        Log_OC.d(TAG, "onCreateView")
+        Timber.d("onCreateView")
 
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.share_file_layout, container, false)
@@ -304,7 +302,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        Log_OC.d(TAG, "onActivityCreated")
+        Timber.d("onActivityCreated")
 
         activity!!.setTitle(R.string.share_dialog_title)
 
@@ -466,13 +464,13 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
 
     override fun unshareButtonPressed(share: OCShare) {
         // Unshare
-        Log_OC.d(TAG, "Removing private share with " + share.sharedWithDisplayName)
+        Timber.d("Removing private share with " + share.sharedWithDisplayName)
         removeShare(share)
     }
 
     override fun editShare(share: OCShare) {
         // move to fragment to edit share
-        Log_OC.d(TAG, "Editing " + share.sharedWithDisplayName)
+        Timber.d("Editing " + share.sharedWithDisplayName)
         listener?.showEditPrivateShare(share)
     }
 
@@ -593,8 +591,6 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
     }
 
     companion object {
-
-        private val TAG = ShareFileFragment::class.java.simpleName
         private const val DEFAULT_NAME_SUFFIX = " (%1\$d)"
 
         private const val QUOTE_START = "\\Q"

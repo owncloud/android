@@ -27,8 +27,8 @@ import com.owncloud.android.lib.common.http.HttpConstants;
 import com.owncloud.android.lib.common.operations.OnRemoteOperationListener;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
-import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.files.ExistenceCheckRemoteOperation;
+import timber.log.Timber;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,8 +46,6 @@ import java.util.List;
  * a value of {@link AuthenticationMethod}.
  */
 public class DetectAuthenticationMethodOperation extends RemoteOperation<List<AuthenticationMethod>> {
-
-    private static final String TAG = DetectAuthenticationMethodOperation.class.getSimpleName();
 
     /**
      *  Performs the operation.
@@ -96,11 +94,11 @@ public class DetectAuthenticationMethodOperation extends RemoteOperation<List<Au
                 new RemoteOperationResult<>(resultFromExistenceCheck);
 
         if (allAvailableAuthMethods.isEmpty()) {
-            Log_OC.d(TAG, "Authentication method not found: ");
+            Timber.d("Authentication method not found: ");
         } else {
-            Log_OC.d(TAG, "Authentication methods found:");
+            Timber.d("Authentication methods found:");
             for (AuthenticationMethod authMetod : allAvailableAuthMethods) {
-                Log_OC.d(TAG, " " + authenticationMethodToString(authMetod));
+                Timber.d(authenticationMethodToString(authMetod));
             }
 
             result = new RemoteOperationResult<>(result.getHttpCode(), result.getHttpPhrase(), null);

@@ -27,15 +27,13 @@ import android.os.Bundle;
 import android.widget.Toast;
 
 import com.owncloud.android.R;
-import com.owncloud.android.lib.common.utils.Log_OC;
+import timber.log.Timber;
 
 /**
  * Activity copying the text of the received Intent into the system clibpoard.
  */
 @SuppressWarnings("deprecation")
 public class CopyToClipboardActivity extends Activity {
-
-    private static final String TAG = CopyToClipboardActivity.class.getName();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -69,7 +67,7 @@ public class CopyToClipboardActivity extends Activity {
 
         } catch (Exception e) {
             Toast.makeText(this, R.string.clipboard_uxexpected_error, Toast.LENGTH_SHORT).show();
-            Log_OC.e(TAG, "Exception caught while copying to clipboard", e);
+            Timber.e(e, "Exception caught while copying to clipboard");
         }
 
         finish();

@@ -32,9 +32,9 @@ import android.widget.TextView;
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.lib.common.OwnCloudAccount;
-import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.ui.activity.BaseActivity;
 import com.owncloud.android.utils.DisplayUtils;
+import timber.log.Timber;
 
 import java.util.List;
 
@@ -42,7 +42,6 @@ import java.util.List;
  * This Adapter populates a ListView with all accounts within the app.
  */
 public class AccountListAdapter extends ArrayAdapter<AccountListItem> {
-    private static final String TAG = AccountListAdapter.class.getSimpleName();
     private float mAccountAvatarRadiusDimension;
     private final BaseActivity mContext;
     private List<AccountListItem> mValues;
@@ -90,10 +89,7 @@ public class AccountListAdapter extends ArrayAdapter<AccountListItem> {
                     OwnCloudAccount oca = new OwnCloudAccount(account, mContext);
                     viewHolder.nameViewItem.setText(oca.getDisplayName());
                 } catch (Exception e) {
-                    Log_OC.w(
-                            TAG,
-                            "Account not found right after being read :\\ ; using account name instead of display name"
-                    );
+                    Timber.w("Account not found right after being read :\\ ; using account name instead of display name");
                     viewHolder.nameViewItem.setText(
                             AccountUtils.getUsernameOfAccount(account.name)
                     );
@@ -112,7 +108,7 @@ public class AccountListAdapter extends ArrayAdapter<AccountListItem> {
                             true
                     );
                 } catch (Exception e) {
-                    Log_OC.e(TAG, "Error calculating RGB value for account list item.", e);
+                    Timber.e(e, "Error calculating RGB value for account list item.");
                     // use user icon as a fallback
                     viewHolder.imageViewItem.setImageResource(R.drawable.ic_user);
                 }

@@ -32,9 +32,9 @@ import android.widget.ListView;
 
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import com.owncloud.android.R;
-import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.ui.adapter.LocalFileListAdapter;
 import com.owncloud.android.utils.PreferenceUtils;
+import timber.log.Timber;
 
 import java.io.File;
 
@@ -42,8 +42,6 @@ import java.io.File;
  * A Fragment that lists all files and folders in a given LOCAL path.
  */
 public class LocalFileListFragment extends ExtendedListFragment {
-
-    private static final String TAG = LocalFileListFragment.class.getName();
 
     /**
      * Reference to the Activity which this fragment is attached to. For callbacks
@@ -93,7 +91,7 @@ public class LocalFileListFragment extends ExtendedListFragment {
      */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Log_OC.i(TAG, "onCreateView() start");
+        Timber.i("onCreateView() start");
         View v = super.onCreateView(inflater, container, savedInstanceState);
         setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         setSwipeEnabled(false); // Disable pull-to-refresh
@@ -103,7 +101,7 @@ public class LocalFileListFragment extends ExtendedListFragment {
                         getString(R.string.local_file_list_empty_just_folders) :
                         getString(R.string.local_file_list_empty)
         );
-        Log_OC.i(TAG, "onCreateView() end");
+        Timber.i("onCreateView() end");
         return v;
     }
 
@@ -116,7 +114,7 @@ public class LocalFileListFragment extends ExtendedListFragment {
      */
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
-        Log_OC.i(TAG, "onActivityCreated() start");
+        Timber.i("onActivityCreated() start");
 
         super.onActivityCreated(savedInstanceState);
         mDirectory = mContainerActivity.getCurrentFolder();
@@ -129,7 +127,7 @@ public class LocalFileListFragment extends ExtendedListFragment {
                     PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(getContext())
             );
         }
-        Log_OC.i(TAG, "onActivityCreated() stop");
+        Timber.i("onActivityCreated() stop");
     }
 
     public LocalFileListAdapter getAdapter() {
@@ -138,10 +136,10 @@ public class LocalFileListFragment extends ExtendedListFragment {
 
     @Override
     public void onResume() {
-        Log_OC.d(TAG, "onResume() start");
+        Timber.d("onResume() start");
         super.onResume();
         listFolder();
-        Log_OC.d(TAG, "onResume() end");
+        Timber.d("onResume() end");
     }
 
     /**
@@ -163,7 +161,7 @@ public class LocalFileListFragment extends ExtendedListFragment {
 
             }
         } else {
-            Log_OC.w(TAG, "Null object in ListAdapter!!");
+            Timber.w("Null object in ListAdapter!!");
         }
     }
 
@@ -223,7 +221,7 @@ public class LocalFileListFragment extends ExtendedListFragment {
 
         // if that's not a directory -> List its parent
         if (!directory.isDirectory()) {
-            Log_OC.w(TAG, "You see, that is not a directory -> " + directory.toString());
+            Timber.w("That is not a directory -> %s", directory.toString());
             directory = directory.getParentFile();
         }
 

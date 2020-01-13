@@ -42,15 +42,13 @@ import android.widget.TextView;
 import com.google.android.material.snackbar.Snackbar;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
-import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.utils.DocumentProviderUtils;
 import com.owncloud.android.utils.PreferenceUtils;
+import timber.log.Timber;
 
 import java.util.Arrays;
 
 public class PassCodeActivity extends BaseActivity {
-
-    private static final String TAG = PassCodeActivity.class.getSimpleName();
 
     public final static String ACTION_REQUEST_WITH_RESULT = "ACTION_REQUEST_WITH_RESULT";
     public final static String ACTION_CHECK_WITH_RESULT = "ACTION_CHECK_WITH_RESULT";
@@ -147,8 +145,7 @@ public class PassCodeActivity extends BaseActivity {
             setCancelButtonEnabled(true);
 
         } else {
-            throw new IllegalArgumentException(R.string.illegal_argument_exception_message + " "
-                    + TAG);
+            throw new IllegalArgumentException(R.string.illegal_argument_exception_message + " ");
         }
 
         setTextListeners();
@@ -387,7 +384,7 @@ public class PassCodeActivity extends BaseActivity {
         SharedPreferences appPrefs = PreferenceManager
                 .getDefaultSharedPreferences(getApplicationContext());
 
-        String savedPassCodeDigits[] = new String[4];
+        String[] savedPassCodeDigits = new String[4];
         savedPassCodeDigits[0] = appPrefs.getString(PREFERENCE_PASSCODE_D1, null);
         savedPassCodeDigits[1] = appPrefs.getString(PREFERENCE_PASSCODE_D2, null);
         savedPassCodeDigits[2] = appPrefs.getString(PREFERENCE_PASSCODE_D3, null);
@@ -421,8 +418,8 @@ public class PassCodeActivity extends BaseActivity {
      * Sets the input fields to empty strings and puts the focus on the first one.
      */
     protected void clearBoxes() {
-        for (int i = 0; i < mPassCodeEditTexts.length; i++) {
-            mPassCodeEditTexts[i].setText("");
+        for (EditText passCodeEditText : mPassCodeEditTexts) {
+            passCodeEditText.setText("");
         }
         mPassCodeEditTexts[0].requestFocus();
     }
@@ -517,7 +514,7 @@ public class PassCodeActivity extends BaseActivity {
                 }
 
             } else {
-                Log_OC.d(TAG, "Text box " + mIndex + " was cleaned");
+                Timber.d("Text box " + mIndex + " was cleaned");
             }
         }
 

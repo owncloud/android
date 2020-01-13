@@ -22,14 +22,13 @@ import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.domain.capabilities.model.OCCapability;
-import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.ui.dialog.LoadingDialog;
+import timber.log.Timber;
 
 /**
  * Base Activity with common behaviour for activities dealing with ownCloud {@link Account}s .
  */
 public abstract class BaseActivity extends AppCompatActivity {
-    private static final String TAG = BaseActivity.class.getSimpleName();
 
     /**
      * ownCloud {@link Account} where the main {@link OCFile} handled by the activity is located.
@@ -66,12 +65,12 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        Log_OC.v(TAG, "onNewIntent() start");
+        Timber.v("onNewIntent() start");
         Account current = AccountUtils.getCurrentOwnCloudAccount(this);
         if (current != null && mCurrentAccount != null && !mCurrentAccount.name.equals(current.name)) {
             mCurrentAccount = current;
         }
-        Log_OC.v(TAG, "onNewIntent() stop");
+        Timber.v("onNewIntent() stop");
     }
 
     /**
@@ -80,13 +79,13 @@ public abstract class BaseActivity extends AppCompatActivity {
      */
     @Override
     protected void onRestart() {
-        Log_OC.v(TAG, "onRestart() start");
+        Timber.v("onRestart() start");
         super.onRestart();
         boolean validAccount = (mCurrentAccount != null && AccountUtils.exists(mCurrentAccount.name, this));
         if (!validAccount) {
             swapToDefaultAccount();
         }
-        Log_OC.v(TAG, "onRestart() end");
+        Timber.v("onRestart() end");
     }
 
     /**
@@ -166,7 +165,7 @@ public abstract class BaseActivity extends AppCompatActivity {
             mStorageManager = new FileDataStorageManager(this, getAccount(), getContentResolver());
             mCapabilities = mStorageManager.getCapability(mCurrentAccount.name);
         } else {
-            Log_OC.e(TAG, "onAccountChanged was called with NULL account associated!");
+            Timber.e("onAccountChanged was called with NULL account associated!");
         }
     }
 
@@ -258,14 +257,14 @@ public abstract class BaseActivity extends AppCompatActivity {
 
                     onAccountCreationSuccessful(future);
                 } catch (OperationCanceledException e) {
-                    Log_OC.d(TAG, "Account creation canceled");
+                    Timber.d("Account creation canceled");
 
                 } catch (Exception e) {
-                    Log_OC.e(TAG, "Account creation finished in exception: ", e);
+                    Timber.e(e, "Account creation finished in exception");
                 }
 
             } else {
-                Log_OC.e(TAG, "Account creation callback with null bundle");
+                Timber.e("Account creation callback with null bundle");
             }
             if (mMandatoryCreation && !accountWasSet) {
                 finish();
@@ -293,7 +292,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         // Construct dialog
         Fragment frag = getSupportFragmentManager().findFragmentByTag(DIALOG_WAIT_TAG);
         if (frag == null) {
-            Log_OC.d(TAG, "show loading dialog");
+            Timber.d("show loading dialog");
             LoadingDialog loading = LoadingDialog.newInstance(messageId, false);
             FragmentManager fm = getSupportFragmentManager();
             FragmentTransaction ft = fm.beginTransaction();
@@ -311,7 +310,7 @@ public abstract class BaseActivity extends AppCompatActivity {
             return;
         }
 
-        Log_OC.d(TAG, "dismiss loading dialog");
+        Timber.d("dismiss loading dialog");
         LoadingDialog loading = (LoadingDialog) frag;
         loading.dismiss();
     }

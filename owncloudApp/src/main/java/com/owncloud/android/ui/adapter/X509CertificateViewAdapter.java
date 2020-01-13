@@ -24,8 +24,8 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.owncloud.android.R;
-import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.ui.dialog.SslUntrustedCertDialog;
+import timber.log.Timber;
 
 import javax.security.auth.x500.X500Principal;
 import java.security.MessageDigest;
@@ -41,8 +41,6 @@ import java.util.Map;
  *
  */
 public class X509CertificateViewAdapter implements SslUntrustedCertDialog.CertificateViewAdapter {
-
-    //private final static String TAG = X509CertificateViewAdapter.class.getSimpleName();
 
     private X509Certificate mCertificate = null;
 
@@ -102,7 +100,7 @@ public class X509CertificateViewAdapter implements SslUntrustedCertDialog.Certif
             }
 
         } catch (CertificateEncodingException e) {
-            Log_OC.e("Problem while trying to decode the certificate.");
+            Timber.e(e, "Problem while trying to decode the certificate.");
         }
 
     }

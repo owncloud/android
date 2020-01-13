@@ -51,19 +51,17 @@ import com.google.android.exoplayer2.trackselection.TrackSelection;
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
-import com.google.android.exoplayer2.util.Util;
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.files.FileMenuFilter;
-import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.activity.FileDisplayActivity;
 import com.owncloud.android.ui.controller.TransferProgressController;
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment;
 import com.owncloud.android.ui.dialog.RemoveFilesDialogFragment;
 import com.owncloud.android.ui.fragment.FileFragment;
-import com.owncloud.android.utils.DisplayUtils;
+import timber.log.Timber;
 
 /**
  * This fragment shows a preview of a downloaded video file, or starts streaming if file is not
@@ -102,8 +100,6 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
 
     private boolean mAutoplay;
     private long mPlaybackPosition;
-
-    private static final String TAG = PreviewVideoFragment.class.getSimpleName();
 
     private static final DefaultBandwidthMeter BANDWIDTH_METER = new DefaultBandwidthMeter();
 
@@ -166,7 +162,7 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        Log_OC.v(TAG, "onCreateView");
+        Timber.v("onCreateView");
 
         View view = inflater.inflate(R.layout.video_preview, container, false);
 
@@ -188,7 +184,7 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Log_OC.v(TAG, "onActivityCreated");
+        Timber.v("onActivityCreated");
 
         OCFile file;
         if (savedInstanceState == null) {
@@ -224,7 +220,7 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
     @Override
     public void onStart() {
         super.onStart();
-        Log_OC.v(TAG, "onStart");
+        Timber.v("onStart");
 
         OCFile file = getFile();
 
@@ -236,7 +232,7 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
     @Override
     public void onResume() {
         super.onResume();
-        Log_OC.v(TAG, "onResume");
+        Timber.v("onResume");
 
         preparePlayer();
 
@@ -249,14 +245,14 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
     @Override
     public void onPause() {
         super.onPause();
-        Log_OC.v(TAG, "onPause");
+        Timber.v("onPause");
 
         releasePlayer();
     }
 
     @Override
     public void onStop() {
-        Log_OC.v(TAG, "onStop");
+        Timber.v("onStop");
 
         super.onStop();
     }
@@ -267,7 +263,7 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        Log_OC.v(TAG, "onSaveInstanceState");
+        Timber.v("onSaveInstanceState");
 
         outState.putParcelable(PreviewVideoFragment.EXTRA_FILE, getFile());
         outState.putParcelable(PreviewVideoFragment.EXTRA_ACCOUNT, mAccount);
@@ -279,7 +275,7 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log_OC.v(TAG, "onActivityResult " + this);
+        Timber.v("onActivityResult %s", this);
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
             mAutoplay = data.getExtras().getBoolean(PreviewVideoActivity.EXTRA_AUTOPLAY);
@@ -466,7 +462,7 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
      */
     @Override
     public void OnPrepareVideoPlayerTaskCallback(MediaSource mediaSource) {
-        Log_OC.v(TAG, "playerPrepared");
+        Timber.v("playerPrepared");
         player.prepare(mediaSource);
     }
 
@@ -476,7 +472,7 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
             updateResumePosition();
             player.release();
             trackSelector = null;
-            Log_OC.v(TAG, "playerReleased");
+            Timber.v("playerReleased");
         }
     }
 
@@ -489,7 +485,7 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
     @Override
     public void onPlayerError(ExoPlaybackException error) {
 
-        Log_OC.v(TAG, "Error in video player, what = " + error);
+        Timber.e(error, "Error in video player");
 
         showAlertDialog(PreviewVideoErrorAdapter.handlePreviewVideoError(error, getContext()));
     }
@@ -592,7 +588,7 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        Log_OC.v(TAG, "onConfigurationChanged " + this);
+        Timber.v("onConfigurationChanged %s", this);
     }
 
     /**

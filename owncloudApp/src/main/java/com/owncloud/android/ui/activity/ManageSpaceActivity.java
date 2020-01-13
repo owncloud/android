@@ -34,15 +34,13 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.snackbar.Snackbar;
 import com.owncloud.android.R;
-import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.utils.FileStorageUtils;
 import com.owncloud.android.utils.PreferenceUtils;
+import timber.log.Timber;
 
 import java.io.File;
 
 public class ManageSpaceActivity extends AppCompatActivity {
-
-    private static final String TAG = ManageSpaceActivity.class.getSimpleName();
 
     private static final String LIB_FOLDER = "lib";
 
@@ -79,7 +77,7 @@ public class ManageSpaceActivity extends AppCompatActivity {
                 finish();
                 break;
             default:
-                Log_OC.w(TAG, "Unknown menu item triggered");
+                Timber.w("Unknown menu item triggered");
                 retval = super.onOptionsItemSelected(item);
         }
         return retval;
@@ -103,14 +101,14 @@ public class ManageSpaceActivity extends AppCompatActivity {
             boolean patternEnabled = appPrefs.getBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN, false);
             boolean fingerprintEnabled = appPrefs.getBoolean(FingerprintActivity.PREFERENCE_SET_FINGERPRINT, false);
 
-            String passCodeDigits[] = new String[4];
+            String[] passCodeDigits = new String[4];
             if (passCodeEnable) {
                 passCodeDigits[0] = appPrefs.getString(PassCodeActivity.PREFERENCE_PASSCODE_D1, null);
                 passCodeDigits[1] = appPrefs.getString(PassCodeActivity.PREFERENCE_PASSCODE_D2, null);
                 passCodeDigits[2] = appPrefs.getString(PassCodeActivity.PREFERENCE_PASSCODE_D3, null);
                 passCodeDigits[3] = appPrefs.getString(PassCodeActivity.PREFERENCE_PASSCODE_D4, null);
             }
-            String patternValue = new String();
+            String patternValue = "";
             if (patternEnabled) {
                 patternValue = appPrefs.getString(PatternLockActivity.KEY_PATTERN, null);
             }
@@ -175,7 +173,7 @@ public class ManageSpaceActivity extends AppCompatActivity {
                         if (!LIB_FOLDER.equals(s)) {
                             File fileToDelete = new File(appDir, s);
                             clearResult = clearResult && FileStorageUtils.deleteDir(fileToDelete);
-                            Log_OC.d(TAG, "Clear Application Data, File: " + fileToDelete.getName() + " DELETED *****");
+                            Timber.d("Clear Application Data, File: " + fileToDelete.getName() + " DELETED *****");
                         }
                     }
                 } else {

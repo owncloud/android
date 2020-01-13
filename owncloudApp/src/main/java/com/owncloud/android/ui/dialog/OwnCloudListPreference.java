@@ -1,21 +1,18 @@
 package com.owncloud.android.ui.dialog;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.PreferenceManager;
 import android.util.AttributeSet;
 
 import androidx.appcompat.app.AppCompatDialog;
-import com.owncloud.android.lib.common.utils.Log_OC;
+import timber.log.Timber;
 
 import java.lang.reflect.Method;
 
 public class OwnCloudListPreference extends ListPreference {
-    private static final String TAG = OwnCloudListPreference.class.getSimpleName();
 
     private Context mContext;
     private AppCompatDialog mDialog;
@@ -63,7 +60,7 @@ public class OwnCloudListPreference extends ListPreference {
             method.invoke(pm, this);
         } catch (Exception e) {
             // no way to handle this but logging it
-            Log_OC.e(TAG, "error invoking registerOnActivityDestroyListener", e);
+            Timber.e(e, "error invoking registerOnActivityDestroyListener");
         }
 
         mDialog = builder.create();

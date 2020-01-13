@@ -23,14 +23,13 @@ import android.app.job.JobInfo;
 import android.app.job.JobScheduler;
 import android.content.ComponentName;
 import android.content.Context;
-import android.os.Build;
 import android.os.PersistableBundle;
 
 import com.owncloud.android.datamodel.CameraUploadsSyncStorageManager;
 import com.owncloud.android.datamodel.OCCameraUploadSync;
 import com.owncloud.android.db.PreferenceManager.CameraUploadsConfiguration;
-import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.utils.Extras;
+import timber.log.Timber;
 
 /**
  * Schedule the periodic job responsible for camera uploads and initialize the required
@@ -38,7 +37,6 @@ import com.owncloud.android.utils.Extras;
  */
 public class CameraUploadsHandler {
 
-    private static final String TAG = CameraUploadsHandler.class.getSimpleName();
     private static final long MILLISECONDS_INTERVAL_CAMERA_UPLOAD = 900000;
 
     // It needs to be always the same so that the previous job is removed and replaced with a new one with the recent
@@ -104,7 +102,7 @@ public class CameraUploadsHandler {
 
         builder.setExtras(extras);
 
-        Log_OC.d(TAG, "Scheduling a CameraUploadsSyncJobService");
+        Timber.d("Scheduling a CameraUploadsSyncJobService");
 
         JobScheduler jobScheduler = (JobScheduler) context.getSystemService(Context.JOB_SCHEDULER_SERVICE);
 
@@ -135,7 +133,7 @@ public class CameraUploadsHandler {
             OCCameraUploadSync firstOcCameraUploadSync = new OCCameraUploadSync(firstPicturesTimeStamp,
                     firstVideosTimeStamp);
 
-            Log_OC.d(TAG, "Storing synchronization timestamp in database");
+            Timber.d("Storing synchronization timestamp in database");
 
             cameraUploadsSyncStorageManager.storeCameraUploadSync(firstOcCameraUploadSync);
 
@@ -168,9 +166,7 @@ public class CameraUploadsHandler {
         OCCameraUploadSync ocCameraUploadSync = cameraUploadsSyncStorageManager.
                 getCameraUploadSync(null, null, null);
 
-        if (ocCameraUploadSync == null) {
-            return;
-        } else {
+        if (ocCameraUploadSync != null) {
             ocCameraUploadSync.setPicturesLastSync(lastSyncTimestamp);
             cameraUploadsSyncStorageManager.updateCameraUploadSync(ocCameraUploadSync);
         }

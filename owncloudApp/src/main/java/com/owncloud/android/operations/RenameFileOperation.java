@@ -25,10 +25,10 @@ import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
-import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.files.RenameRemoteFileOperation;
 import com.owncloud.android.operations.common.SyncOperation;
 import com.owncloud.android.utils.FileStorageUtils;
+import timber.log.Timber;
 
 import java.io.File;
 import java.io.IOException;
@@ -38,8 +38,6 @@ import java.io.IOException;
  */
 public class RenameFileOperation extends SyncOperation {
 
-    private static final String TAG = RenameFileOperation.class.getSimpleName();
-
     private OCFile mFile;
     private String mRemotePath;
     private String mNewName;
@@ -48,9 +46,9 @@ public class RenameFileOperation extends SyncOperation {
     /**
      * Constructor
      *
-     * @param remotePath            RemotePath of the OCFile instance describing the remote file or
-     *                              folder to rename
-     * @param newName               New name to set as the name of file.
+     * @param remotePath RemotePath of the OCFile instance describing the remote file or
+     *                   folder to rename
+     * @param newName    New name to set as the name of file.
      */
     public RenameFileOperation(String remotePath, String newName) {
         mRemotePath = remotePath;
@@ -65,7 +63,7 @@ public class RenameFileOperation extends SyncOperation {
     /**
      * Performs the rename operation.
      *
-     * @param   client      Client object to communicate with the remote ownCloud server.
+     * @param client Client object to communicate with the remote ownCloud server.
      */
     @Override
     protected RemoteOperationResult run(OwnCloudClient client) {
@@ -106,8 +104,8 @@ public class RenameFileOperation extends SyncOperation {
             }
 
         } catch (IOException e) {
-            Log_OC.e(TAG, "Rename " + mFile.getRemotePath() + " to " + ((mNewRemotePath==null) ?
-                    mNewName : mNewRemotePath) + " failed", e);
+            Timber.e(e, "Rename " + mFile.getRemotePath() + " to " + ((mNewRemotePath == null) ? mNewName :
+                    mNewRemotePath) + " failed");
         }
 
         return result;
@@ -147,20 +145,20 @@ public class RenameFileOperation extends SyncOperation {
     }
 
     /**
-     * Checks if the new name to set is valid in the file system 
-     *
+     * Checks if the new name to set is valid in the file system
+     * <p>
      * The only way to be sure is trying to create a file with that name. It's made in the
      * temporal directory for downloads, out of any account, and then removed.
-     *
+     * <p>
      * IMPORTANT: The test must be made in the same file system where files are download.
      * The internal storage could be formatted with a different file system.
-     *
+     * <p>
      * TODO move this method, and maybe FileDownload.get***Path(), to a class with utilities
      * specific for the interactions with the file system
      *
-     * @return              'True' if a temporal file named with the name to set could be
-     *                      created in the file system where local files are stored.
-     * @throws IOException  When the temporal folder can not be created.
+     * @return 'True' if a temporal file named with the name to set could be
+     * created in the file system where local files are stored.
+     * @throws IOException When the temporal folder can not be created.
      */
     private boolean isValidNewName() throws IOException {
         // check tricky names
@@ -179,7 +177,7 @@ public class RenameFileOperation extends SyncOperation {
             testFile.createNewFile();   // return value is ignored; it could be 'false' because
             // the file already existed, that doesn't invalidate the name
         } catch (IOException e) {
-            Log_OC.i(TAG, "Test for validity of name " + mNewName + " in the file system failed");
+            Timber.i("Test for validity of name " + mNewName + " in the file system failed");
             return false;
         }
         boolean result = (testFile.exists() && testFile.isFile());

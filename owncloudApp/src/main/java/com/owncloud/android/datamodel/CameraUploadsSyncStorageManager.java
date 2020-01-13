@@ -25,15 +25,13 @@ import android.database.Cursor;
 import android.net.Uri;
 
 import com.owncloud.android.db.ProviderMeta;
-import com.owncloud.android.lib.common.utils.Log_OC;
+import timber.log.Timber;
 
 import java.util.Observable;
 
 public class CameraUploadsSyncStorageManager extends Observable {
 
     private ContentResolver mContentResolver;
-
-    static private final String TAG = CameraUploadsSyncStorageManager.class.getSimpleName();
 
     public CameraUploadsSyncStorageManager(ContentResolver contentResolver) {
         if (contentResolver == null) {
@@ -49,7 +47,7 @@ public class CameraUploadsSyncStorageManager extends Observable {
      * @return camera upload sync id, -1 if the insert process fails
      */
     public long storeCameraUploadSync(OCCameraUploadSync ocCameraUploadSync) {
-        Log_OC.v(TAG, "Inserting camera upload sync with timestamp of last pictures synchronization "
+        Timber.v("Inserting camera upload sync with timestamp of last pictures synchronization "
                 + ocCameraUploadSync.getPicturesLastSync() + " and timestamp of last videos " +
                 "synchronzization" + ocCameraUploadSync.getVideosLastSync());
 
@@ -62,11 +60,9 @@ public class CameraUploadsSyncStorageManager extends Observable {
         Uri result = getDB().insert(ProviderMeta.ProviderTableMeta.CONTENT_URI_CAMERA_UPLOADS_SYNC,
                 cv);
 
-        Log_OC.d(TAG, "storeUpload returns with: " + result + " for camera upload sync " +
-                ocCameraUploadSync.getId());
+        Timber.d("storeUpload returns with: " + result + " for camera upload sync " + ocCameraUploadSync.getId());
         if (result == null) {
-            Log_OC.e(TAG, "Failed to insert camera upload sync " + ocCameraUploadSync.getId()
-                    + " into camera uploads sync db.");
+            Timber.e("Failed to insert camera upload sync " + ocCameraUploadSync.getId() + " into camera uploads sync db.");
             return -1;
         } else {
             long new_id = Long.parseLong(result.getPathSegments().get(1));
@@ -83,7 +79,7 @@ public class CameraUploadsSyncStorageManager extends Observable {
      * @return num of updated camera upload sync
      */
     public int updateCameraUploadSync(OCCameraUploadSync ocCameraUploadSync) {
-        Log_OC.v(TAG, "Updating " + ocCameraUploadSync.getId());
+        Timber.v("Updating %s", ocCameraUploadSync.getId());
 
         ContentValues cv = new ContentValues();
         cv.put(ProviderMeta.ProviderTableMeta.PICTURES_LAST_SYNC_TIMESTAMP, ocCameraUploadSync.
@@ -97,10 +93,10 @@ public class CameraUploadsSyncStorageManager extends Observable {
                 new String[]{String.valueOf(ocCameraUploadSync.getId())}
         );
 
-        Log_OC.d(TAG, "updateCameraUploadSync returns with: " + result + " for camera upload sync: " +
+        Timber.d("updateCameraUploadSync returns with: " + result + " for camera upload sync: " +
                 ocCameraUploadSync.getId());
         if (result != 1) {
-            Log_OC.e(TAG, "Failed to update item " + ocCameraUploadSync.getId() + " into " +
+            Timber.e("Failed to update item " + ocCameraUploadSync.getId() + " into " +
                     "camera upload sync db.");
         } else {
             notifyObserversNow();
@@ -131,7 +127,7 @@ public class CameraUploadsSyncStorageManager extends Observable {
         if (c.moveToFirst()) {
             ocCameraUploadSync = createOCCameraUploadSyncFromCursor(c);
             if (ocCameraUploadSync == null) {
-                Log_OC.e(TAG, "Camera upload sync could not be created from cursor");
+                Timber.e("Camera upload sync could not be created from cursor");
             }
         }
 
@@ -163,8 +159,8 @@ public class CameraUploadsSyncStorageManager extends Observable {
      * Should be called when some value of this DB was changed. All observers
      * are informed.
      */
-    public void notifyObserversNow() {
-        Log_OC.d(TAG, "notifyObserversNow");
+    private void notifyObserversNow() {
+        Timber.d("notifyObserversNow");
         setChanged();
         notifyObservers();
     }

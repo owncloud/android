@@ -27,7 +27,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -51,7 +50,6 @@ import com.owncloud.android.files.services.FileUploader.FileUploaderBinder;
 import com.owncloud.android.lib.common.operations.OnRemoteOperationListener;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
-import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.operations.RemoveFileOperation;
 import com.owncloud.android.operations.SynchronizeFileOperation;
 import com.owncloud.android.ui.activity.FileActivity;
@@ -59,6 +57,7 @@ import com.owncloud.android.ui.activity.FileDisplayActivity;
 import com.owncloud.android.ui.fragment.FileFragment;
 import com.owncloud.android.utils.Extras;
 import com.owncloud.android.utils.PreferenceUtils;
+import timber.log.Timber;
 
 /**
  * Holds a swiping galley where image files contained in an ownCloud directory are shown
@@ -66,8 +65,6 @@ import com.owncloud.android.utils.PreferenceUtils;
 public class PreviewImageActivity extends FileActivity implements
         FileFragment.ContainerActivity,
         ViewPager.OnPageChangeListener, OnRemoteOperationListener {
-
-    public static final String TAG = PreviewImageActivity.class.getSimpleName();
 
     private static final int INITIAL_HIDE_DELAY = 0; // immediate hide
 
@@ -236,12 +233,12 @@ public class PreviewImageActivity extends FileActivity implements
 
             if (component.equals(new ComponentName(PreviewImageActivity.this,
                     FileDownloader.class))) {
-                Log_OC.d(TAG, "onServiceConnected, FileDownloader");
+                Timber.d("onServiceConnected, FileDownloader");
                 mDownloaderBinder = (FileDownloaderBinder) service;
 
             } else if (component.equals(new ComponentName(PreviewImageActivity.this,
                     FileUploader.class))) {
-                Log_OC.d(TAG, "onServiceConnected, FileUploader");
+                Timber.d("onServiceConnected, FileUploader");
                 mUploaderBinder = (FileUploaderBinder) service;
             }
 
@@ -253,11 +250,11 @@ public class PreviewImageActivity extends FileActivity implements
         public void onServiceDisconnected(ComponentName component) {
             if (component.equals(new ComponentName(PreviewImageActivity.this,
                     FileDownloader.class))) {
-                Log_OC.d(TAG, "Download service suddenly disconnected");
+                Timber.d("Download service suddenly disconnected");
                 mDownloaderBinder = null;
             } else if (component.equals(new ComponentName(PreviewImageActivity.this,
                     FileUploader.class))) {
-                Log_OC.d(TAG, "Upload service suddenly disconnected");
+                Timber.d("Upload service suddenly disconnected");
                 mUploaderBinder = null;
             }
         }
@@ -326,7 +323,7 @@ public class PreviewImageActivity extends FileActivity implements
      */
     @Override
     public void onPageSelected(int position) {
-        Log_OC.d(TAG, "onPageSelected " + position);
+        Timber.d("onPageSelected %s", position);
 
         if (getOperationsServiceBinder() != null) {
             mSavedPosition = position;

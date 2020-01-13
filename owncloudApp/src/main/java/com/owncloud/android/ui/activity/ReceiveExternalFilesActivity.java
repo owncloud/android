@@ -40,7 +40,6 @@ import android.content.res.Resources.NotFoundException;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Parcelable;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Menu;
@@ -64,7 +63,6 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
-import com.owncloud.android.authentication.AccountAuthenticator;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.db.PreferenceManager;
 import com.owncloud.android.files.services.FileUploader;
@@ -72,7 +70,6 @@ import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
-import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.operations.CreateFolderOperation;
 import com.owncloud.android.operations.RefreshFolderOperation;
 import com.owncloud.android.operations.common.SyncOperation;
@@ -87,6 +84,7 @@ import com.owncloud.android.ui.helpers.UriUploader;
 import com.owncloud.android.utils.DisplayUtils;
 import com.owncloud.android.utils.Extras;
 import com.owncloud.android.utils.FileStorageUtils;
+import timber.log.Timber;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -102,8 +100,6 @@ import java.util.Vector;
 public class ReceiveExternalFilesActivity extends FileActivity
         implements OnItemClickListener, android.view.View.OnClickListener,
         CopyAndUploadContentUrisTask.OnCopyTmpFilesTaskListener {
-
-    private static final String TAG = ReceiveExternalFilesActivity.class.getSimpleName();
 
     private static final String FTAG_ERROR_FRAGMENT = "ERROR_FRAGMENT";
 
@@ -188,10 +184,10 @@ public class ReceiveExternalFilesActivity extends FileActivity
             mAccountManager = (AccountManager) getSystemService(Context.ACCOUNT_SERVICE);
             Account[] accounts = mAccountManager.getAccountsByType(MainApp.Companion.getAccountType());
             if (accounts.length == 0) {
-                Log_OC.i(TAG, "No ownCloud account is available");
+                Timber.i("No ownCloud account is available");
                 showDialog(DIALOG_NO_ACCOUNT);
             } else if (accounts.length > 1 && !mAccountSelected && !mAccountSelectionShowing) {
-                Log_OC.i(TAG, "More than one ownCloud is available");
+                Timber.i("More than one ownCloud is available");
                 showDialog(DIALOG_MULTIPLE_ACCOUNT);
                 mAccountSelectionShowing = true;
             } else {
@@ -218,7 +214,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        Log_OC.d(TAG, "onSaveInstanceState() start");
+        Timber.v("onSaveInstanceState() start");
         super.onSaveInstanceState(outState);
         outState.putSerializable(KEY_PARENTS, mParents);
         //outState.putParcelable(KEY_ACCOUNT, mAccount);
@@ -227,7 +223,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
         outState.putBoolean(KEY_ACCOUNT_SELECTION_SHOWING, mAccountSelectionShowing);
         outState.putParcelable(FileActivity.EXTRA_ACCOUNT, getAccount());
 
-        Log_OC.d(TAG, "onSaveInstanceState() end");
+        Timber.v("onSaveInstanceState() end");
     }
 
     @Override
@@ -279,7 +275,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
                                         );
 
                     } catch (Exception e) {
-                        Log_OC.w(TAG, "Couldn't read display name of account; using account name instead");
+                        Timber.w("Couldn't read display name of account; using account name instead");
                         dialogItems[i] = DisplayUtils.convertIdn(accounts[i].name, false);
                     }
                 }
@@ -318,7 +314,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         // click on folder in the list
-        Log_OC.d(TAG, "on item click");
+        Timber.d("on item click");
         Vector<OCFile> tmpfiles = getStorageManager().getFolderContent(mFile);
         tmpfiles = sortFileList(tmpfiles);
 
@@ -349,7 +345,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
                     mUploadPath += p + OCFile.PATH_SEPARATOR;
                 }
                 if (!isPlainTextUpload()) {
-                    Log_OC.d(TAG, "Uploading file to dir " + mUploadPath);
+                    Timber.d("Uploading file to dir %s", mUploadPath);
                     uploadFiles();
                 } else {
                     showUploadTextDialog();
@@ -368,7 +364,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log_OC.i(TAG, "result received. req: " + requestCode + " res: " + resultCode);
+        Timber.i("result received. req: " + requestCode + " res: " + resultCode);
         if (requestCode == REQUEST_CODE__SETUP_ACCOUNT) {
             dismissDialog(DIALOG_NO_ACCOUNT);
             if (resultCode == RESULT_CANCELED) {
@@ -408,7 +404,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
 
         String full_path = generatePath(mParents);
 
-        Log_OC.d(TAG, "Populating view with content of : " + full_path);
+        Timber.d("Populating view with content of : %s", full_path);
 
         mFile = getStorageManager().getFileByPath(full_path);
         if (mFile != null) {
@@ -567,7 +563,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
                 );
 
             } catch (NotFoundException e) {
-                Log_OC.e(TAG, "Error while trying to show fail message ", e);
+                Timber.e(e, "Error while trying to show fail message ");
             }
         }
     }
@@ -724,7 +720,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
         @Override
         public void onReceive(Context context, Intent intent) {
             String event = intent.getAction();
-            Log_OC.d(TAG, "Received broadcast " + event);
+            Timber.d("Received broadcast %s", event);
             String accountName = intent.getStringExtra(FileSyncAdapter.EXTRA_ACCOUNT_NAME);
             String synchFolderRemotePath =
                     intent.getStringExtra(FileSyncAdapter.EXTRA_FOLDER_PATH);
@@ -787,7 +783,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
                         }
                     }
                 }
-                Log_OC.d(TAG, "Setting progress visibility to " + mSyncInProgress);
+                Timber.d("Setting progress visibility to %s", mSyncInProgress);
 
             }
         }
@@ -916,7 +912,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
             uri = Uri.fromFile(tmpFile);
 
         } catch (IOException e) {
-            Log_OC.w(TAG, "Failed to create temp file for uploading plain text: " + e.getMessage());
+            Timber.w(e, "Failed to create temp file for uploading plain text: %s", e.getMessage());
         }
         return uri;
     }

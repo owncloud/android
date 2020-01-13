@@ -23,12 +23,10 @@ import android.content.SharedPreferences;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.ui.dialog.RateMeDialog;
+import timber.log.Timber;
 
 public class AppRater {
-    private static final String TAG = AppRater.class.getName();
-
     private static final String DIALOG_RATE_ME_TAG = "DIALOG_RATE_ME";
 
     private final static int DAYS_UNTIL_PROMPT = 2;
@@ -44,7 +42,7 @@ public class AppRater {
     public static void appLaunched(Context mContext, String packageName) {
         SharedPreferences prefs = mContext.getSharedPreferences(APP_RATER_PREF_TITLE, 0);
         if (prefs.getBoolean(APP_RATER_PREF_DONT_SHOW, false)) {
-            Log_OC.d(TAG, "Do not show the rate dialog again as the user decided");
+            Timber.d("Do not show the rate dialog again as the user decided");
             return;
         }
 
@@ -52,14 +50,14 @@ public class AppRater {
 
         /// Increment launch counter
         long launchCount = prefs.getLong(APP_RATER_PREF_LAUNCH_COUNT, 0) + 1;
-        Log_OC.d(TAG, "The app has been launched " + launchCount + " times");
+        Timber.d("The app has been launched " + launchCount + " times");
         editor.putLong(APP_RATER_PREF_LAUNCH_COUNT, launchCount);
 
         /// Get date of first launch
         long dateFirstLaunch = prefs.getLong(APP_RATER_PREF_DATE_FIRST_LAUNCH, 0);
         if (dateFirstLaunch == 0) {
             dateFirstLaunch = System.currentTimeMillis();
-            Log_OC.d(TAG, "The app has been launched in " + dateFirstLaunch + " for the first time");
+            Timber.d("The app has been launched in " + dateFirstLaunch + " for the first time");
             editor.putLong(APP_RATER_PREF_DATE_FIRST_LAUNCH, dateFirstLaunch);
         }
 
@@ -68,18 +66,17 @@ public class AppRater {
 
         /// Wait at least n days before opening
         if (launchCount >= LAUNCHES_UNTIL_PROMPT) {
-            Log_OC.d(TAG, "The number of launchs already exceed " + LAUNCHES_UNTIL_PROMPT +
+            Timber.d("The number of launchs already exceed " + LAUNCHES_UNTIL_PROMPT +
                     ", the default number of launches, so let's check some dates");
-            Log_OC.d(TAG, "Current moment is " + System.currentTimeMillis());
-            Log_OC.d(TAG, "The date of the first launch + days until prompt is " + dateFirstLaunch +
+            Timber.d("Current moment is %s", System.currentTimeMillis());
+            Timber.d("The date of the first launch + days until prompt is " + dateFirstLaunch +
                     daysToMilliseconds(DAYS_UNTIL_PROMPT));
-            Log_OC.d(TAG, "The date of the neutral click + days until neutral click is " + dateNeutralClick +
+            Timber.d("The date of the neutral click + days until neutral click is " + dateNeutralClick +
                     daysToMilliseconds(DAYS_UNTIL_NEUTRAL_CLICK));
             if (System.currentTimeMillis() >= Math.max(dateFirstLaunch
                     + daysToMilliseconds(DAYS_UNTIL_PROMPT), dateNeutralClick
                     + daysToMilliseconds(DAYS_UNTIL_NEUTRAL_CLICK))) {
-                Log_OC.d(TAG, "The current moment is later than any of the days set, so let's show the rate " +
-                        " dialog");
+                Timber.d("The current moment is later than any of the days set, so let's show the rate dialog");
                 showRateDialog(mContext, packageName);
             }
         }

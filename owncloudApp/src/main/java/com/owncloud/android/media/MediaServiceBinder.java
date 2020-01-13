@@ -26,8 +26,8 @@ import android.os.Binder;
 import android.widget.MediaController;
 
 import com.owncloud.android.datamodel.OCFile;
-import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.media.MediaService.State;
+import timber.log.Timber;
 
 /**
  *  Binder allowing client components to perform operations on on the MediaPlayer managed by a MediaService instance.
@@ -120,13 +120,13 @@ public class MediaServiceBinder extends Binder implements MediaController.MediaP
 
     @Override
     public void pause() {
-        Log_OC.d(TAG, "Pausing through binder...");
+        Timber.d("Pausing through binder...");
         mService.processPauseRequest();
     }
 
     @Override
     public void seekTo(int pos) {
-        Log_OC.d(TAG, "Seeking " + pos + " through binder...");
+        Timber.d("Seeking " + pos + " through binder...");
         MediaPlayer currentPlayer = mService.getPlayer();
         MediaService.State currentState = mService.getState();
         if (currentPlayer != null && currentState != State.PREPARING && currentState != State.STOPPED) {
@@ -136,12 +136,12 @@ public class MediaServiceBinder extends Binder implements MediaController.MediaP
 
     @Override
     public void start() {
-        Log_OC.d(TAG, "Starting through binder...");
+        Timber.d("Starting through binder...");
         mService.processPlayRequest();  // this will finish the service if there is no file preloaded to play
     }
 
     public void start(Account account, OCFile file, boolean playImmediately, int position) {
-        Log_OC.d(TAG, "Loading and starting through binder...");
+        Timber.d("Loading and starting through binder...");
         Intent i = new Intent(mService, MediaService.class);
         i.putExtra(MediaService.EXTRA_ACCOUNT, account);
         i.putExtra(MediaService.EXTRA_FILE, file);

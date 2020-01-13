@@ -36,17 +36,17 @@ import com.owncloud.android.datamodel.OCUpload;
 import com.owncloud.android.datamodel.UploadsStorageManager;
 import com.owncloud.android.db.PreferenceManager;
 import com.owncloud.android.db.UploadResult;
-import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.utils.ConnectivityUtils;
 import com.owncloud.android.utils.Extras;
 import com.owncloud.android.utils.PowerUtils;
+import timber.log.Timber;
 
 import java.net.SocketTimeoutException;
 
 import static com.owncloud.android.operations.UploadFileOperation.CREATED_AS_CAMERA_UPLOAD_PICTURE;
 import static com.owncloud.android.operations.UploadFileOperation.CREATED_AS_CAMERA_UPLOAD_VIDEO;
 
-/**
+/*
  * Facade to start operations in transfer services without the verbosity of Android Intents.
  */
 
@@ -60,9 +60,6 @@ import static com.owncloud.android.operations.UploadFileOperation.CREATED_AS_CAM
  */
 
 public class TransferRequester {
-
-    private static final String TAG = TransferRequester.class.getName();
-
     /**
      * Call to upload several new files
      */
@@ -90,11 +87,10 @@ public class TransferRequester {
                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             // Since in Android O the apps in background are not allowed to start background
             // services and camera uploads feature may try to do it, this is the way to proceed
-            Log_OC.d(TAG, "Start to upload some files from foreground/background, " +
-                    "startForeground() will be called soon");
+            Timber.d("Start to upload some files from foreground/background, startForeground() will be called soon");
             context.startForegroundService(intent);
         } else {
-            Log_OC.d(TAG, "Start to upload some files from foreground");
+            Timber.d("Start to upload some files from foreground");
             context.startService(intent);
         }
     }
@@ -133,11 +129,10 @@ public class TransferRequester {
         // services and available offline feature may try to do it, this is the way to proceed
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && requestedFromAvOfflineJobService) {
             intent.putExtra(FileUploader.KEY_IS_AVAILABLE_OFFLINE_FILE, true);
-            Log_OC.d(TAG, "Start to upload some already uploaded files from foreground/background, " +
-                    "startForeground() will be called soon");
+            Timber.d("Start to upload some already uploaded files from foreground/background, startForeground() will be called soon");
             context.startForegroundService(intent);
         } else {
-            Log_OC.d(TAG, "Start to upload some already uploaded files from foreground");
+            Timber.d("Start to upload some already uploaded files from foreground");
             context.startService(intent);
         }
     }
@@ -222,11 +217,10 @@ public class TransferRequester {
                 if (requestedFromWifiBackEvent) {
                     intent.putExtra(FileUploader.KEY_REQUESTED_FROM_WIFI_BACK_EVENT, true);
                 }
-                Log_OC.d(TAG, "Retry some uploads from foreground/background, " +
-                        "startForeground() will be called soon");
+                Timber.d("Retry some uploads from foreground/background, startForeground() will be called soon");
                 context.startForegroundService(intent);
             } else {
-                Log_OC.d(TAG, "Retry some uploads from foreground");
+                Timber.d("Retry some uploads from foreground");
                 context.startService(intent);
             }
         }
@@ -266,14 +260,7 @@ public class TransferRequester {
         );
 
         if (scheduled) {
-            Log_OC.d(
-                    TAG,
-                    String.format(
-                            "Scheduled upload retry for %1s in %2s",
-                            remotePath,
-                            accountName
-                    )
-            );
+            Timber.d("Scheduled upload retry for %1s in %2s", remotePath, accountName);
         }
     }
 
@@ -296,14 +283,7 @@ public class TransferRequester {
         );
 
         if (scheduled) {
-            Log_OC.d(
-                    TAG,
-                    String.format(
-                            "Scheduled download retry for %1s in %2s",
-                            remotePath,
-                            accountName
-                    )
-            );
+            Timber.d("Scheduled download retry for %1s in %2s", remotePath, accountName);
         }
     }
 

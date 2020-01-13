@@ -44,7 +44,6 @@ import com.owncloud.android.domain.capabilities.model.OCCapability
 import com.owncloud.android.domain.sharing.shares.model.OCShare
 import com.owncloud.android.domain.utils.Event.EventObserver
 import com.owncloud.android.extensions.parseError
-import com.owncloud.android.lib.common.utils.Log_OC
 import com.owncloud.android.lib.resources.shares.RemoteShare
 import com.owncloud.android.lib.resources.status.OwnCloudVersion
 import com.owncloud.android.presentation.UIResult
@@ -56,6 +55,7 @@ import kotlinx.android.synthetic.main.share_public_dialog.*
 import kotlinx.android.synthetic.main.share_public_dialog.view.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
+import timber.log.Timber
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -115,7 +115,7 @@ class PublicShareDialogFragment : DialogFragment() {
                     publicLinkExpirationDateInMillis =
                         ExpirationDatePickerDialogFragment.getDateFormat().parse(expirationDate).time
                 } catch (e: ParseException) {
-                    Log_OC.e(TAG, "Error reading expiration date from input field", e)
+                    Timber.e(e, "Error reading expiration date from input field")
                 }
 
             }
@@ -171,7 +171,7 @@ class PublicShareDialogFragment : DialogFragment() {
     ): View? {
         val view = inflater.inflate(R.layout.share_public_dialog, container, false)
 
-        Log_OC.d(TAG, "onCreateView")
+        Timber.v("onCreateView")
 
         // Get and set the values saved previous to the screen rotation, if any
         if (savedInstanceState != null) {
@@ -420,7 +420,7 @@ class PublicShareDialogFragment : DialogFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        Log_OC.d(TAG, "onActivityCreated")
+        Timber.d("onActivityCreated")
 
         observeCapabilities()
         observePublicShareCreation()
@@ -789,8 +789,6 @@ class PublicShareDialogFragment : DialogFragment() {
     }
 
     companion object {
-        private val TAG = PublicShareDialogFragment::class.java.simpleName
-
         /**
          * The fragment initialization parameters
          */

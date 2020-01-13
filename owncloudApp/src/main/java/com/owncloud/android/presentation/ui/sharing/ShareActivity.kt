@@ -35,7 +35,6 @@ import com.owncloud.android.domain.sharing.shares.model.OCShare
 import com.owncloud.android.domain.sharing.shares.model.ShareType
 import com.owncloud.android.domain.utils.Event.EventObserver
 import com.owncloud.android.extensions.showError
-import com.owncloud.android.lib.common.utils.Log_OC
 import com.owncloud.android.lib.resources.shares.RemoteShare
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.providers.sharing.UsersAndGroupsSearchProvider
@@ -50,6 +49,7 @@ import com.owncloud.android.ui.dialog.RemoveShareDialogFragment
 import com.owncloud.android.ui.utils.showDialogFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
+import timber.log.Timber
 
 /**
  * Activity for sharing files
@@ -108,7 +108,7 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
         when (intent.action) {
             Intent.ACTION_SEARCH -> {  // Verify the action and get the query
                 val query = intent.getStringExtra(SearchManager.QUERY)
-                Log_OC.w(TAG, "Ignored Intent requesting to query for $query")
+                Timber.w("Ignored Intent requesting to query for $query")
             }
             UsersAndGroupsSearchProvider.suggestIntentAction -> {
                 val data = intent.data
@@ -119,7 +119,7 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
                     data?.authority
                 )
             }
-            else -> Log_OC.e(TAG, "Unexpected intent $intent")
+            else -> Timber.e("Unexpected intent $intent")
         }
     }
 
@@ -304,8 +304,6 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
     }
 
     companion object {
-        private val TAG = ShareActivity::class.java.simpleName
-
         const val TAG_SHARE_FRAGMENT = "SHARE_FRAGMENT"
         const val TAG_SEARCH_FRAGMENT = "SEARCH_USER_AND_GROUPS_FRAGMENT"
         const val TAG_EDIT_SHARE_FRAGMENT = "EDIT_SHARE_FRAGMENT"

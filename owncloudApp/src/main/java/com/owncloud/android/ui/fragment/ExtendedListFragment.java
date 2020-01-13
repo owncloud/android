@@ -40,11 +40,11 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.owncloud.android.R;
-import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.ui.ExtendedListView;
 import com.owncloud.android.ui.activity.OnEnforceableRefreshListener;
 import com.owncloud.android.utils.PreferenceUtils;
 import third_parties.in.srain.cube.GridViewWithHeaderAndFooter;
+import timber.log.Timber;
 
 import java.util.ArrayList;
 
@@ -142,6 +142,7 @@ public class ExtendedListFragment extends Fragment
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        Timber.v("onCreateView");
         View v = inflater.inflate(R.layout.list_fragment, null);
 
         mProgressBar = v.findViewById(R.id.syncProgressBar);
@@ -189,10 +190,10 @@ public class ExtendedListFragment extends Fragment
             }
             int referencePosition = savedInstanceState.getInt(KEY_SAVED_LIST_POSITION);
             if (isGridEnabled()) {
-                Log_OC.v("Setting grid position " + referencePosition);
+                Timber.v("Setting grid position %s", referencePosition);
                 mGridView.setSelection(referencePosition);
             } else {
-                Log_OC.v("Setting and centering around list position " + referencePosition);
+                Timber.v("Setting and centering around list position %s", referencePosition);
                 mListView.setAndCenterSelection(referencePosition);
             }
         }
@@ -224,7 +225,7 @@ public class ExtendedListFragment extends Fragment
     @Override
     public void onSaveInstanceState(@NonNull Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
-        Log_OC.d("onSaveInstanceState()");
+        Timber.v("onSaveInstanceState()");
         savedInstanceState.putBoolean(KEY_IS_GRID_VISIBLE, isGridEnabled());
         savedInstanceState.putInt(KEY_SAVED_LIST_POSITION, getReferencePosition());
         savedInstanceState.putIntegerArrayList(KEY_INDEXES, mIndexes);
@@ -265,8 +266,7 @@ public class ExtendedListFragment extends Fragment
             final int firstPosition = mFirstPositions.remove(mFirstPositions.size() - 1);
             int top = mTops.remove(mTops.size() - 1);
 
-            Log_OC.v("Setting selection to position: " + firstPosition + "; top: "
-                    + top + "; index: " + index);
+            Timber.v("Setting selection to position: " + firstPosition + "; top: " + top + "; index: " + index);
 
             if (mCurrentListView == mListView) {
                 if (mHeightCell * index <= mListView.getHeight()) {
@@ -419,7 +419,7 @@ public class ExtendedListFragment extends Fragment
                 try {
                     mGridView.addFooterView(mGridFooterView, null, false);
                 } catch (IllegalStateException ie) {
-                    Log_OC.w("Could not add footer to grid view, because it exists");
+                    Timber.w("Could not add footer to grid view, because it exists");
                 }
             }
             mGridFooterView.invalidate();
@@ -463,7 +463,7 @@ public class ExtendedListFragment extends Fragment
     }
 
     public void setProgressBarAsIndeterminate(boolean indeterminate) {
-        Log_OC.d("Setting progress visibility to " + indeterminate);
+        Timber.d("Setting progress visibility to %s", indeterminate);
         mShadowView.setVisibility(View.GONE);
         mProgressBar.setVisibility(View.VISIBLE);
         mProgressBar.setIndeterminate(indeterminate);

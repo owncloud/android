@@ -21,12 +21,10 @@ package com.owncloud.android.operations;
 
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
-import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.files.chunks.CreateRemoteChunkFolderOperation;
+import timber.log.Timber;
 
 public class CreateChunksFolderOperation extends CreateFolderOperation {
-
-    private static final String TAG = CreateChunksFolderOperation.class.getSimpleName();
 
     /**
      * Constructor
@@ -47,9 +45,9 @@ public class CreateChunksFolderOperation extends CreateFolderOperation {
         RemoteOperationResult result = createRemoteChunkFolderOperation.execute(client);
 
         if (result.isSuccess()) {
-            Log_OC.w(TAG, "Remote chunks folder " + mRemotePath + " was created");
+            Timber.w("Remote chunks folder " + mRemotePath + " was created");
         } else {
-            Log_OC.e(TAG, mRemotePath + " hasn't been created");
+            Timber.e("%s hasn't been created", mRemotePath);
         }
 
         return result;

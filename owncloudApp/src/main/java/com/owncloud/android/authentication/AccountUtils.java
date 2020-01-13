@@ -32,14 +32,12 @@ import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.domain.capabilities.model.OCCapability;
 import com.owncloud.android.lib.common.accounts.AccountTypeUtils;
 import com.owncloud.android.lib.common.accounts.AccountUtils.Constants;
-import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
+import timber.log.Timber;
 
 import java.util.Locale;
 
 public class AccountUtils {
-
-    private static final String TAG = AccountUtils.class.getSimpleName();
 
     public static final String WEBDAV_PATH_4_0_AND_LATER = "/remote.php/dav";
     private static final String ODAV_PATH = "/remote.php/odav";
@@ -206,7 +204,7 @@ public class AccountUtils {
             String currentAccountVersion = accountMgr.getUserData(currentAccount, Constants.KEY_OC_ACCOUNT_VERSION);
 
             if (currentAccountVersion == null) {
-                Log_OC.i(TAG, "Upgrading accounts to account version #" + ACCOUNT_VERSION);
+                Timber.i("Upgrading accounts to account version #%s", ACCOUNT_VERSION);
                 Account[] ocAccounts = accountMgr.getAccountsByType(MainApp.Companion.getAccountType());
                 String serverUrl, username, newAccountName, password;
                 Account newAccount;
@@ -220,7 +218,7 @@ public class AccountUtils {
 
                     // migrate to a new account, if needed
                     if (!newAccountName.equals(account.name)) {
-                        Log_OC.d(TAG, "Upgrading " + account.name + " to " + newAccountName);
+                        Timber.d("Upgrading " + account.name + " to " + newAccountName);
 
                         // create the new account
                         newAccount = new Account(newAccountName, MainApp.Companion.getAccountType());
@@ -261,12 +259,12 @@ public class AccountUtils {
 
                     } else {
                         // servers which base URL is in the root of their domain need no change
-                        Log_OC.d(TAG, account.name + " needs no upgrade ");
+                        Timber.d("%s needs no upgrade ", account.name);
                         newAccount = account;
                     }
 
                     // at least, upgrade account version
-                    Log_OC.d(TAG, "Setting version " + ACCOUNT_VERSION + " to " + newAccountName);
+                    Timber.d("Setting version " + ACCOUNT_VERSION + " to " + newAccountName);
                     accountMgr.setUserData(
                             newAccount, Constants.KEY_OC_ACCOUNT_VERSION, Integer.toString(ACCOUNT_VERSION)
                     );

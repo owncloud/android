@@ -30,11 +30,10 @@ import android.webkit.MimeTypeMap;
 
 import com.owncloud.android.MainApp;
 import com.owncloud.android.datamodel.OCFile;
-import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.files.RemoteFile;
+import timber.log.Timber;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Vector;
 
@@ -49,14 +48,6 @@ public class FileStorageUtils {
     public static final int FILE_DISPLAY_SORT = 3;
     public static Integer mSortOrderFileDisp = SORT_NAME;
     public static Boolean mSortAscendingFileDisp = true;
-
-    /**
-     * Get local storage path for all data of the app in public storages.
-     */
-    public static String getDataFolder() {
-        File sdCard = Environment.getExternalStorageDirectory();
-        return sdCard.getAbsolutePath() + "/" + MainApp.Companion.getDataFolder();
-    }
 
     /**
      * Get local owncloud storage path for accountName.
@@ -129,60 +120,6 @@ public class FileStorageUtils {
     }
 
     /**
-     * Creates and populates a list of new {@link OCFile} objects with the data read from the server.
-     *
-     * @param remoteFiles remote files read from the server (remote files or folders)
-     * @return New OCFile list instance representing the remote resource described by remote.
-     */
-    public static ArrayList<OCFile> createOCFilesFromRemoteFilesList(ArrayList<RemoteFile>
-                                                                             remoteFiles) {
-        ArrayList<OCFile> files = new ArrayList<>();
-
-        for (RemoteFile remoteFile : remoteFiles) {
-            files.add(createOCFileFromRemoteFile(remoteFile));
-        }
-
-        return files;
-    }
-
-    /**
-     * Cast list of objects into a list of {@link RemoteFile}
-     *
-     * @param remoteObjects objects to cast into remote files
-     * @return New remote files list
-     */
-    public static ArrayList<RemoteFile> castObjectsIntoRemoteFiles(ArrayList<Object>
-                                                                           remoteObjects) {
-
-        ArrayList<RemoteFile> remoteFiles = new ArrayList<>(remoteObjects.size());
-
-        for (Object object : remoteObjects) {
-            remoteFiles.add((RemoteFile) object);
-        }
-
-        return remoteFiles;
-    }
-
-    /**
-     * Creates and populates a new {@link RemoteFile} object with the data read from an {@link OCFile}.
-     *
-     * @param ocFile OCFile
-     * @return New RemoteFile instance representing the resource described by ocFile.
-     */
-    public static RemoteFile fillRemoteFile(OCFile ocFile) {
-        RemoteFile file = new RemoteFile(ocFile.getRemotePath());
-        file.setCreationTimestamp(ocFile.getCreationTimestamp());
-        file.setLength(ocFile.getFileLength());
-        file.setMimeType(ocFile.getMimetype());
-        file.setModifiedTimestamp(ocFile.getModificationTimestamp());
-        file.setEtag(ocFile.getEtag());
-        file.setPermissions(ocFile.getPermissions());
-        file.setRemoteId(ocFile.getRemoteId());
-        file.setPrivateLink(ocFile.getPrivateLink());
-        return file;
-    }
-
-    /**
      * Sorts all filenames, regarding last user decision
      */
     public static Vector<OCFile> sortFolder(Vector<OCFile> files, int sortOrder, boolean isAscending) {
@@ -203,8 +140,6 @@ public class FileStorageUtils {
 
     /**
      * Sorts list by Date
-     *
-     * @param files
      */
     private static void sortByDate(Vector<OCFile> files, boolean isAscending) {
         final int val;
@@ -248,7 +183,7 @@ public class FileStorageUtils {
      *
      * @param files files to sort
      */
-    public static void sortByName(Vector<OCFile> files, boolean isAscending) {
+    private static void sortByName(Vector<OCFile> files, boolean isAscending) {
         final int val;
         if (isAscending) {
             val = 1;
@@ -272,8 +207,6 @@ public class FileStorageUtils {
     /**
      * Mimetype String of a file
      *
-     * @param path
-     * @return
      */
     public static String getMimeTypeFromName(String path) {
         String extension = "";
@@ -292,10 +225,10 @@ public class FileStorageUtils {
                 for (String child : children) {
                     boolean success = deleteDir(new File(dir, child));
                     if (!success) {
-                        Log_OC.w("File NOT deleted " + child);
+                        Timber.w("File NOT deleted %s", child);
                         return false;
                     } else {
-                        Log_OC.d("File deleted " + child);
+                        Timber.d("File deleted %s", child);
                     }
                 }
             } else {
