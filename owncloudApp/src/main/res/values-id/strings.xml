@@ -531,15 +531,5 @@
   <string name="welcome_feature_4_text">Gambar / video Anda diunggah secara otomatis</string>
   <string name="welcome_feature_5_title">Streaming video</string>
   <string name="welcome_feature_5_text">Putar video Anda tanpa mengunduhnya</string>
-  <string name="welcome_feature_6_title">Cari di folder saat ini</string>
-  <string name="welcome_feature_6_text">Saring file Anda dengan nama</string>
-  <string name="welcome_feature_7_title">Pilih Semua</string>
-  <string name="welcome_feature_7_text">Pilih semua file sekaligus</string>
-  <string name="welcome_feature_8_title">Tersedia offline</string>
-  <string name="welcome_feature_8_text">File Anda secara otomatis disinkronkan</string>
-  <string name="welcome_feature_9_title">Penyedia dokumen</string>
-  <string name="welcome_feature_9_text">Akses dan sunting data ownCloud Anda dari aplikasi lainnya</string>
-  <string name="welcome_feature_10_title">log dengan pencarian untuk semua orang</string>
-  <string name="welcome_feature_10_text">Kirimkan kami log Anda agar aplikasi dapat bekerja dengan lebih baik</string>
-  <string name="no_borwser_installed_alert">Tidak ada browser yang diinstal. Silakan instal Browser untuk memperbolehkan login yang aman.</string>
+    <string name="no_borwser_installed_alert">Tidak ada browser yang diinstal. Silakan instal Browser untuk memperbolehkan login yang aman.</string>
 </resources>

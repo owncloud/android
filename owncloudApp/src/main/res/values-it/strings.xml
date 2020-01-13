@@ -533,14 +533,5 @@ Il Download del file inizierà automaticamente</string>
   <string name="welcome_feature_4_text">Le tue foto e video saranno automaticamente inviati al server</string>
   <string name="welcome_feature_5_title">Flusso video</string>
   <string name="welcome_feature_5_text">Guarda i tuoi filmati senza doverli scaricare</string>
-  <string name="welcome_feature_6_title">Cerca nella cartella attuale</string>
-  <string name="welcome_feature_6_text">Filtra i file per nome</string>
-  <string name="welcome_feature_7_title">Seleziona tutto</string>
-  <string name="welcome_feature_7_text">Seleziona tutti i file</string>
-  <string name="welcome_feature_8_title">Disponibile non in linea</string>
-  <string name="welcome_feature_8_text">I tuoi file sincronizzati automaticamente</string>
-  <string name="welcome_feature_9_title">Fornitore di documenti</string>
-  <string name="welcome_feature_9_text">Accedi e modifica i tuoi file da altre app</string>
-  <string name="welcome_feature_10_text">Inviaci i tuoi log per rendere l\'app migliore</string>
-  <string name="no_borwser_installed_alert">Nessun browser installato. Si prega di installarne uno in modo da consentire un accesso sicuro.</string>
+    <string name="no_borwser_installed_alert">Nessun browser installato. Si prega di installarne uno in modo da consentire un accesso sicuro.</string>
 </resources>

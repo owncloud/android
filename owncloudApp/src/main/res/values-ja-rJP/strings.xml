@@ -482,7 +482,5 @@
   <string name="welcome_feature_skip_button">スキップ</string>
   <string name="welcome_feature_3_title">複数アカウント</string>
   <string name="welcome_feature_4_title">カメラアップロード</string>
-  <string name="welcome_feature_7_title">すべて選択</string>
-  <string name="welcome_feature_8_title">オフラインが利用可能です</string>
-  <string name="no_borwser_installed_alert">ブラウザーがインストールされていません。安全なログインを許可するためにブラウザーをインストールしてください。</string>
+    <string name="no_borwser_installed_alert">ブラウザーがインストールされていません。安全なログインを許可するためにブラウザーをインストールしてください。</string>
 </resources>

@@ -535,14 +535,5 @@
   <string name="welcome_feature_4_text">Tus fotos/videos automáticamente cargadas</string>
   <string name="welcome_feature_5_title">Video streaming</string>
   <string name="welcome_feature_5_text">Reproduce tus videos sin descargarlos</string>
-  <string name="welcome_feature_6_title">Buscar en la carpeta actual</string>
-  <string name="welcome_feature_6_text">Filtrar tus archivos por nombre</string>
-  <string name="welcome_feature_7_title">Seleccionar todos</string>
-  <string name="welcome_feature_7_text">Seleccionar todos los archivos</string>
-  <string name="welcome_feature_8_title">Disponible sin conexión</string>
-  <string name="welcome_feature_8_text">Tus archivos se han sincronizado automáticamente</string>
-  <string name="welcome_feature_9_title">Proveedor del documento</string>
-  <string name="welcome_feature_9_text">Accede y edita tus archivos en OwnCloud desde otras aplicaciones</string>
-  <string name="welcome_feature_10_text">Envíanos tus registros para hacer que esta aplicación funcione mejor</string>
-  <string name="no_borwser_installed_alert">No hay un navegador instalado. Por favor instale un navegador para poder realizar un ingreso seguro.</string>
+    <string name="no_borwser_installed_alert">No hay un navegador instalado. Por favor instale un navegador para poder realizar un ingreso seguro.</string>
 </resources>

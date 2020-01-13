@@ -498,10 +498,4 @@
   <string name="welcome_feature_3_text">Tengst við öll ownCloud tölvuskýin þín</string>
   <string name="welcome_feature_4_title">Innsendingar úr myndavél</string>
   <string name="welcome_feature_5_title">Streyming myndskeiða</string>
-  <string name="welcome_feature_6_title">Leita í fyrirliggjandi möppu</string>
-  <string name="welcome_feature_6_text">Síaðu skrárnar þínar eftir heiti þeirra</string>
-  <string name="welcome_feature_7_title">Velja allt</string>
-  <string name="welcome_feature_7_text">Veldu allar skrár í einu</string>
-  <string name="welcome_feature_8_title">Tiltækt án nettengingar</string>
-  <string name="welcome_feature_8_text">Skrárnar þínar eru sjálfvirkt samstilltar</string>
 </resources>

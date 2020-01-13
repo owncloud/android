@@ -453,6 +453,4 @@
   </plurals>
   <!--Welcome to oC intro features-->
   <string name="welcome_feature_skip_button">Ignorar</string>
-  <string name="welcome_feature_7_title">Selecionar todos</string>
-  <string name="welcome_feature_8_title">Disponível off-line</string>
 </resources>

@@ -549,20 +549,5 @@ Descárgueo de aquí: %2$s</string>
   <string name="welcome_feature_4_text">As súas imaxes ou vídeos enviaranse automaticamente</string>
   <string name="welcome_feature_5_title">Fluxo de vídeo</string>
   <string name="welcome_feature_5_text">Reproduza os seus vídeos sen descargalos</string>
-  <string name="welcome_feature_6_title">Buscar no cartafol actual</string>
-  <string name="welcome_feature_6_text">Filtrar os seus ficheiros polo seu nome</string>
-  <string name="welcome_feature_7_title">Seleccionar todo</string>
-  <string name="welcome_feature_7_text">Seleccionar todos os ficheiros de vez</string>
-  <string name="welcome_feature_8_title">Dispoñíbel sen conexión</string>
-  <string name="welcome_feature_8_text">Os seus ficheiros sincronizados automaticamente </string>
-  <string name="welcome_feature_9_title">Fornecedor de documentos</string>
-  <string name="welcome_feature_9_text">Acceda e edite os seus ficheiros ownCloud dende doutras aplicacións</string>
-  <string name="welcome_feature_10_title">Rexistros con busca para todos</string>
-  <string name="welcome_feature_10_text">Envíenos os seus rexistros para que a aplicación funcione mellor</string>
-  <string name="welcome_feature_11_title">Fin da compatibilidade soporte para servidores inferiores a 10</string>
-  <string name="welcome_feature_11_text">Actualice o servidor ou as versións de aplicacións que non lle funcionen</string>
-  <string name="welcome_feature_12_title">Fin da compatibilidade para dispositivos Android 4.4</string>
-  <string name="welcome_feature_12_text">As próximas versións de aplicacións non aparecerán en Google Play para dispositivos inferiores a Android 5</string>
   <string name="no_borwser_installed_alert">Non hai un navegador instalado, Instale un para poder facer un acceso seguro.</string>
-  <string name="common_not_found">non foi atopado</string>
 </resources>

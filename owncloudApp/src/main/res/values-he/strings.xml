@@ -550,20 +550,5 @@
   <string name="welcome_feature_4_text">התמונות/הסרטונים שלך יועלו אוטומטית</string>
   <string name="welcome_feature_5_title">הזרמת סרטונים</string>
   <string name="welcome_feature_5_text">ניגון הסרטונים שלך ללא הורדה שלהם</string>
-  <string name="welcome_feature_6_title">חיפוש בתיקייה נוכחית</string>
-  <string name="welcome_feature_6_text">סינון של הקבצים על פי שם</string>
-  <string name="welcome_feature_7_title">לבחור הכול</string>
-  <string name="welcome_feature_7_text">בחירת כל הקבצים בפעם אחת</string>
-  <string name="welcome_feature_8_title">זמין במצב לא מקוון</string>
-  <string name="welcome_feature_8_text">הקבצים שלך סונכרנו אוטומטית</string>
-  <string name="welcome_feature_9_title">ספק המסמך</string>
-  <string name="welcome_feature_9_text">גישה ועריכה של קובצי ה- ownCloud שלך מיישומים אחרים</string>
-  <string name="welcome_feature_10_title">יומני תיעוד עם חיפוש לכולם</string>
-  <string name="welcome_feature_10_text">משלוח של יומני התיעוד שלך לשיפור עבודת היישום</string>
-  <string name="welcome_feature_11_title">סיום התמיכה בשרתית הנמוכים מגרסה 10</string>
-  <string name="welcome_feature_11_text">יש לשדרג את השרת או שהעדכונים הבאים של היישום לא יעבדו עבורך</string>
-  <string name="welcome_feature_12_title">סיום תמיכה עבור התקנים של אנדרואיד 4.4</string>
-  <string name="welcome_feature_12_text">הגרסאות הבאות של היישום לא יופיעו בחנות ה- Google Play עבור התקנים הנמוכים מגרסת אנדרואיד 5</string>
   <string name="no_borwser_installed_alert">לא הותקן דפדפן. יש להתקין דפדפן בכדי לאפשר חיבור מאובטח.</string>
-  <string name="common_not_found">לא נמצא</string>
 </resources>

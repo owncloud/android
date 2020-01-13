@@ -547,20 +547,5 @@
   <string name="welcome_feature_4_text">Tus fotografías/vídeos automáticamente se subirán</string>
   <string name="welcome_feature_5_title">Retransmitir video</string>
   <string name="welcome_feature_5_text">Reproduce tus videos sin descargarlos</string>
-  <string name="welcome_feature_6_title">Buscar en la actual carpeta</string>
-  <string name="welcome_feature_6_text">Filtrar archivos por su nombre</string>
-  <string name="welcome_feature_7_title">Seleccionar todo</string>
-  <string name="welcome_feature_7_text">Seleccione todos sus archivos de una vez</string>
-  <string name="welcome_feature_8_title">Disponible offline</string>
-  <string name="welcome_feature_8_text">Sus archivos sincronizados automáticamente</string>
-  <string name="welcome_feature_9_title">Proveedor del documento</string>
-  <string name="welcome_feature_9_text">Accede y gestiona tus archivos ownCloud desde otras aplicaciones</string>
-  <string name="welcome_feature_10_title">Registros con búsqueda para todos</string>
-  <string name="welcome_feature_10_text">Envíanos tus archivos de registro para mejorar la aplicación</string>
-  <string name="welcome_feature_11_title">Fin del soporte para servidores con versión anterior a la 10</string>
-  <string name="welcome_feature_11_text">Por favor actualiza tu servidor o las versiones siguientes de la aplicación no funcionarán</string>
-  <string name="welcome_feature_12_title">Fin del soporte para dispositivos Android 4.4</string>
-  <string name="welcome_feature_12_text">Las versiones siguientes de la aplicación no aparecerán en Google Play para dispositivos con versión de Android anterior a 5</string>
   <string name="no_borwser_installed_alert">No hay un navegador instalado, Por favor, instale uno para poder realizar un login seguro</string>
-  <string name="common_not_found">no se encontró</string>
 </resources>

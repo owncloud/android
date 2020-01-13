@@ -486,11 +486,4 @@ Te rog ia legătura cu administratorul</string>
   <string name="welcome_feature_4_title">Încărcări de pe cameră</string>
   <string name="welcome_feature_4_text">Fotografiile/videoclipurile tale au fost încărcate automat</string>
   <string name="welcome_feature_5_text">Rulează videoclipurile tale fără a le descărca</string>
-  <string name="welcome_feature_6_title">Caută în dosarul curent</string>
-  <string name="welcome_feature_6_text">Filtrează fișierele după nume</string>
-  <string name="welcome_feature_7_title">Selectează tot</string>
-  <string name="welcome_feature_7_text">Selectează toate fișierele o dată</string>
-  <string name="welcome_feature_8_title">Disponibil offline</string>
-  <string name="welcome_feature_8_text">Fișierele au fost sincronizate automat</string>
-  <string name="welcome_feature_10_text">Trimite-ne logurile tale pentru a face aplicația să funcționeze mai bine</string>
 </resources>

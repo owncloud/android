@@ -530,14 +530,5 @@
   <string name="welcome_feature_4_text">你的照片/视频将会自动上传</string>
   <string name="welcome_feature_5_title">流媒体视频</string>
   <string name="welcome_feature_5_text">无需下载模仿你的视频</string>
-  <string name="welcome_feature_6_title">在当前文件夹内搜索</string>
-  <string name="welcome_feature_6_text">按文件名筛选文件</string>
-  <string name="welcome_feature_7_title">全部选择</string>
-  <string name="welcome_feature_7_text">一下子选中全部文件</string>
-  <string name="welcome_feature_8_title">离线可用</string>
-  <string name="welcome_feature_8_text">文件自动同步</string>
-  <string name="welcome_feature_9_title">文档提供者</string>
-  <string name="welcome_feature_9_text">从其他应用访问和编辑你的ownCloud文件</string>
-  <string name="welcome_feature_10_text">发送您的日志让owncloud变得更好</string>
-  <string name="no_borwser_installed_alert">未安装浏览器。请安装浏览器以使用安全登陆。</string>
+    <string name="no_borwser_installed_alert">未安装浏览器。请安装浏览器以使用安全登陆。</string>
 </resources>

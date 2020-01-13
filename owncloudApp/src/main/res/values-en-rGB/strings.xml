@@ -548,20 +548,5 @@
   <string name="welcome_feature_4_text">Your pictures/videos automatically uploaded</string>
   <string name="welcome_feature_5_title">Video streaming</string>
   <string name="welcome_feature_5_text">Play your videos without downloading them</string>
-  <string name="welcome_feature_6_title">Search in current folder</string>
-  <string name="welcome_feature_6_text">Filter your files by name</string>
-  <string name="welcome_feature_7_title">Select all</string>
-  <string name="welcome_feature_7_text">Select all files at once</string>
-  <string name="welcome_feature_8_title">Available offline</string>
-  <string name="welcome_feature_8_text">Your files automatically synchronised</string>
-  <string name="welcome_feature_9_title">Document provider</string>
-  <string name="welcome_feature_9_text">Access and edit your ownCloud files from other apps</string>
-  <string name="welcome_feature_10_title">Logs with search for everyone</string>
-  <string name="welcome_feature_10_text">Send us your logs to make the app work better</string>
-  <string name="welcome_feature_11_title">End of support for servers lower than 10</string>
-  <string name="welcome_feature_11_text">Please upgrade your server or the coming app versions will not work for you</string>
-  <string name="welcome_feature_12_title">End of support for Android 4.4 devices</string>
-  <string name="welcome_feature_12_text">The coming app versions will not appear in Google Play for devices lower than Android 5</string>
   <string name="no_borwser_installed_alert">No browser installed. Please install a Browser in order to allow a secure login.</string>
-  <string name="common_not_found">it was not found</string>
 </resources>

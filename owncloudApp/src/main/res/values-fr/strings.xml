@@ -524,12 +524,5 @@ Ci-dessous la liste des fichiers locaux, et les fichiers distants dans %5$s auxq
   <string name="welcome_feature_4_text">Vos images/vidéos ont été téléversées automatiquement</string>
   <string name="welcome_feature_5_title">Streaming vidéo</string>
   <string name="welcome_feature_5_text">Lire vos vidéos sans les télécharger</string>
-  <string name="welcome_feature_6_title">Rechercher dans le dossier actuel</string>
-  <string name="welcome_feature_6_text">Filtrez vos fichiers par nom</string>
-  <string name="welcome_feature_7_title">Tout sélectionner</string>
-  <string name="welcome_feature_8_title">Disponible hors-ligne</string>
-  <string name="welcome_feature_8_text">Vos fichiers ont été synchronisés automatiquement</string>
-  <string name="welcome_feature_9_text">Accédez et modifiez vos fichiers ownCloud depuis d’autres applications</string>
-  <string name="welcome_feature_10_text">Envoyez nous vos journaux d’activité afin que nous puissions améliorer l’application</string>
-  <string name="no_borwser_installed_alert">Pas de navigateur installé. Veuillez installer un navigateur afin de permettre une connexion sécurisée.</string>
+    <string name="no_borwser_installed_alert">Pas de navigateur installé. Veuillez installer un navigateur afin de permettre une connexion sécurisée.</string>
 </resources>

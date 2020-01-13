@@ -433,6 +433,4 @@
   </plurals>
   <!--Welcome to oC intro features-->
   <string name="welcome_feature_skip_button">Spring over</string>
-  <string name="welcome_feature_7_title">Vælg alle</string>
-  <string name="welcome_feature_8_title">Tilgængelig offline</string>
 </resources>

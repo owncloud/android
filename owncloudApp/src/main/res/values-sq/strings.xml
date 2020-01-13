@@ -546,20 +546,5 @@
   <string name="welcome_feature_4_text">Fotot/videot tuaja të ngarkuara automatikisht</string>
   <string name="welcome_feature_5_title">Transmetim videosh</string>
   <string name="welcome_feature_5_text">Luajini videot tuaja pa i shkarkuar</string>
-  <string name="welcome_feature_6_title">Kërko në dosjen e tanishme</string>
-  <string name="welcome_feature_6_text">Filtrojini kartelat tuaja sipas emrash</string>
-  <string name="welcome_feature_7_title">Përzgjidhi krejt</string>
-  <string name="welcome_feature_7_text">Përzgjidhini krejt kartelat njëherësh</string>
-  <string name="welcome_feature_8_title">I passhëm jo në linjë</string>
-  <string name="welcome_feature_8_text">Kartelat tuaja u njëkohësuan vetvetiu</string>
-  <string name="welcome_feature_9_title">Furnizues dokumentesh</string>
-  <string name="welcome_feature_9_text">Hyni në to dhe përpunoni kartela tuajat ownCloud që nga aplikacione të tjera</string>
-  <string name="welcome_feature_10_title">Regjistra me mundësi kërkimi për këdo</string>
-  <string name="welcome_feature_10_text">Dërgonani regjistrat tuaj për ta bërë aplikacionin të punojë më mirë</string>
-  <string name="welcome_feature_11_title">Mbarim mbulimi për shërbyes më poshtë se 10</string>
-  <string name="welcome_feature_11_text">Ju lutemi, përditësoni shërbyesin tuaj ose versionet e ardhshme të aplikacionit s’do të funksionojnë për ju</string>
-  <string name="welcome_feature_12_title">Mbarim mbulimi për pajisje Android 4.4</string>
-  <string name="welcome_feature_12_text">Versionet e ardhshëm të aplikacionit s’do të shfaqen në Google Play për pajisje poshtë Android 5-s</string>
   <string name="no_borwser_installed_alert">S\’ka shfletues të instaluar. Ju lutemi, instaloni një Shfletues, që të mund të lejohet hyrje e sigurt.</string>
-  <string name="common_not_found">s’u gjet</string>
 </resources>

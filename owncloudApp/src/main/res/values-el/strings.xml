@@ -535,15 +535,5 @@
   <string name="welcome_feature_4_text">Οι φωτογραφίες  / τα βίντεο σας μεταφορτώθηκαν αυτόματα</string>
   <string name="welcome_feature_5_title">Ροή βίντεο</string>
   <string name="welcome_feature_5_text">Αναπαράγετε τα βίντεό σας χωρίς να κάνετε λήψη</string>
-  <string name="welcome_feature_6_title">Αναζήτηση στον τρέχοντα φάκελο</string>
-  <string name="welcome_feature_6_text">Φιλτράρισμα των αρχείων σας ανά όνομα</string>
-  <string name="welcome_feature_7_title">Επιλογή όλων</string>
-  <string name="welcome_feature_7_text">Επιλογή όλων των αρχείων ταυτόχρονα</string>
-  <string name="welcome_feature_8_title">Διαθέσιμο εκτός σύνδεσης</string>
-  <string name="welcome_feature_8_text">Τα αρχεία σας θα συγχρονιστούν αυτόματα</string>
-  <string name="welcome_feature_9_title">Πάροχος εγγράφων</string>
-  <string name="welcome_feature_9_text">Να έχετε πρόσβαση και επεξεργαστείτε τα αρχεία από το ownCloud σας, από άλλες εφαρμογές</string>
-  <string name="welcome_feature_10_title">Αρχεία καταγραφής με αναζήτηση για όλους</string>
-  <string name="welcome_feature_10_text">Στείλτε μας τα αρχεία καταγραφής σας για να βελτιώσουμε την εφαρμογή</string>
-  <string name="no_borwser_installed_alert">Δεν είναι εγκατεστημένος περιηγητής. Παρακαλούμε εγκαταστήστε ένα περιηγητή έτσι ώστε να επιτρέπεται η ασφαλής σύνδεση.</string>
+    <string name="no_borwser_installed_alert">Δεν είναι εγκατεστημένος περιηγητής. Παρακαλούμε εγκαταστήστε ένα περιηγητή έτσι ώστε να επιτρέπεται η ασφαλής σύνδεση.</string>
 </resources>
