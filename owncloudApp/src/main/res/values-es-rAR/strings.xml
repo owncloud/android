@@ -535,5 +535,5 @@
   <string name="welcome_feature_4_text">Tus fotos/videos automáticamente cargadas</string>
   <string name="welcome_feature_5_title">Video streaming</string>
   <string name="welcome_feature_5_text">Reproduce tus videos sin descargarlos</string>
-    <string name="no_borwser_installed_alert">No hay un navegador instalado. Por favor instale un navegador para poder realizar un ingreso seguro.</string>
+  <string name="no_borwser_installed_alert">No hay un navegador instalado. Por favor instale un navegador para poder realizar un ingreso seguro.</string>
 </resources>

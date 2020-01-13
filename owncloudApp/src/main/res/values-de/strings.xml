@@ -533,5 +533,5 @@
   <string name="welcome_feature_4_text">Deine Bilder/Videos werden automatisch hochgeladen</string>
   <string name="welcome_feature_5_title">Videostreaming</string>
   <string name="welcome_feature_5_text">Gib deine Videos wieder, ohne sie herunterzuladen</string>
-    <string name="no_borwser_installed_alert">Es ist kein Browser installiert. Bitte installiere zur sicheren Anmeldung einen Browser.</string>
+  <string name="no_borwser_installed_alert">Es ist kein Browser installiert. Bitte installiere zur sicheren Anmeldung einen Browser.</string>
 </resources>

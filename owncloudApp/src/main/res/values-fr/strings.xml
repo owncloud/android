@@ -524,5 +524,5 @@ Ci-dessous la liste des fichiers locaux, et les fichiers distants dans %5$s auxq
   <string name="welcome_feature_4_text">Vos images/vidéos ont été téléversées automatiquement</string>
   <string name="welcome_feature_5_title">Streaming vidéo</string>
   <string name="welcome_feature_5_text">Lire vos vidéos sans les télécharger</string>
-    <string name="no_borwser_installed_alert">Pas de navigateur installé. Veuillez installer un navigateur afin de permettre une connexion sécurisée.</string>
+  <string name="no_borwser_installed_alert">Pas de navigateur installé. Veuillez installer un navigateur afin de permettre une connexion sécurisée.</string>
 </resources>

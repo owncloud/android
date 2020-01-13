@@ -514,5 +514,5 @@ správce systému.</string>
   <string name="welcome_feature_4_text">Obrázky/videa se automaticky nahrály</string>
   <string name="welcome_feature_5_title">Přehrávání videa</string>
   <string name="welcome_feature_5_text">Přehrávejte videa bez nutnosti stažení na disk</string>
-    <string name="no_borwser_installed_alert">Není nainstalován žádný prohlížeč. Nainstalujte si prosím prohlížeč pro bezpečné přihlášení.</string>
+  <string name="no_borwser_installed_alert">Není nainstalován žádný prohlížeč. Nainstalujte si prosím prohlížeč pro bezpečné přihlášení.</string>
 </resources>

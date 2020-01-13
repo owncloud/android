@@ -533,5 +533,5 @@ Il Download del file inizierà automaticamente</string>
   <string name="welcome_feature_4_text">Le tue foto e video saranno automaticamente inviati al server</string>
   <string name="welcome_feature_5_title">Flusso video</string>
   <string name="welcome_feature_5_text">Guarda i tuoi filmati senza doverli scaricare</string>
-    <string name="no_borwser_installed_alert">Nessun browser installato. Si prega di installarne uno in modo da consentire un accesso sicuro.</string>
+  <string name="no_borwser_installed_alert">Nessun browser installato. Si prega di installarne uno in modo da consentire un accesso sicuro.</string>
 </resources>
