@@ -550,8 +550,6 @@
   <string name="welcome_feature_4_text">התמונות/הסרטונים שלך יועלו אוטומטית</string>
   <string name="welcome_feature_5_title">הזרמת סרטונים</string>
   <string name="welcome_feature_5_text">ניגון הסרטונים שלך ללא הורדה שלהם</string>
-  <string name="welcome_feature_11_title">סיום התמיכה בשרתית הנמוכים מגרסה 10</string>
-  <string name="welcome_feature_11_text">יש לשדרג את השרת או שהעדכונים הבאים של היישום לא יעבדו עבורך</string>
   <string name="no_borwser_installed_alert">לא הותקן דפדפן. יש להתקין דפדפן בכדי לאפשר חיבור מאובטח.</string>
   <string name="common_not_found">לא נמצא</string>
 </resources>

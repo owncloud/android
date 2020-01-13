@@ -549,8 +549,6 @@ Descárgueo de aquí: %2$s</string>
   <string name="welcome_feature_4_text">As súas imaxes ou vídeos enviaranse automaticamente</string>
   <string name="welcome_feature_5_title">Fluxo de vídeo</string>
   <string name="welcome_feature_5_text">Reproduza os seus vídeos sen descargalos</string>
-  <string name="welcome_feature_11_title">Fin da compatibilidade soporte para servidores inferiores a 10</string>
-  <string name="welcome_feature_11_text">Actualice o servidor ou as versións de aplicacións que non lle funcionen</string>
   <string name="no_borwser_installed_alert">Non hai un navegador instalado, Instale un para poder facer un acceso seguro.</string>
   <string name="common_not_found">non foi atopado</string>
 </resources>

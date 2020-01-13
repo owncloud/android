@@ -547,8 +547,6 @@
   <string name="welcome_feature_4_text">Resimleriniz/videolarınız otomatik yüklendi</string>
   <string name="welcome_feature_5_title">Video akışı</string>
   <string name="welcome_feature_5_text">Videolarınızı onları indirmeden oynatın</string>
-  <string name="welcome_feature_11_title">Versiyon 10 altı sunuculara destek sona erdi</string>
-  <string name="welcome_feature_11_text">Lütfen sunucunuzu yükseltin, aksi takdirde yeni gelen uygulama sürümleri sizin için çalışmayacak</string>
   <string name="no_borwser_installed_alert">Yüklü tarayıcı yok. Lütfen güvenli bağlantıyı sağlamak için bir tarayıcı yükleyin.</string>
   <string name="common_not_found">bulunamadı</string>
 </resources>

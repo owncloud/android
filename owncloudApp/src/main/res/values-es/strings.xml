@@ -547,8 +547,6 @@
   <string name="welcome_feature_4_text">Tus fotografías/vídeos automáticamente se subirán</string>
   <string name="welcome_feature_5_title">Retransmitir video</string>
   <string name="welcome_feature_5_text">Reproduce tus videos sin descargarlos</string>
-  <string name="welcome_feature_11_title">Fin del soporte para servidores con versión anterior a la 10</string>
-  <string name="welcome_feature_11_text">Por favor actualiza tu servidor o las versiones siguientes de la aplicación no funcionarán</string>
   <string name="no_borwser_installed_alert">No hay un navegador instalado, Por favor, instale uno para poder realizar un login seguro</string>
   <string name="common_not_found">no se encontró</string>
 </resources>

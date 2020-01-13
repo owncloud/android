@@ -546,8 +546,6 @@
   <string name="welcome_feature_4_text">Fotot/videot tuaja të ngarkuara automatikisht</string>
   <string name="welcome_feature_5_title">Transmetim videosh</string>
   <string name="welcome_feature_5_text">Luajini videot tuaja pa i shkarkuar</string>
-  <string name="welcome_feature_11_title">Mbarim mbulimi për shërbyes më poshtë se 10</string>
-  <string name="welcome_feature_11_text">Ju lutemi, përditësoni shërbyesin tuaj ose versionet e ardhshme të aplikacionit s’do të funksionojnë për ju</string>
   <string name="no_borwser_installed_alert">S\’ka shfletues të instaluar. Ju lutemi, instaloni një Shfletues, që të mund të lejohet hyrje e sigurt.</string>
   <string name="common_not_found">s’u gjet</string>
 </resources>
