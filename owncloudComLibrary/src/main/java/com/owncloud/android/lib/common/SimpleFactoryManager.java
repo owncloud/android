@@ -46,7 +46,7 @@ public class SimpleFactoryManager implements OwnCloudClientManager {
                 context.getApplicationContext(),
                 true);
 
-        Timber.v("    new client {" + (account.getName() != null ? account.getName() :
+        Timber.v("new client {" + (account.getName() != null ? account.getName() :
                 AccountUtils.buildAccountName(account.getBaseUri(), "")) + ", " + client.hashCode() + "}");
 
         if (account.getCredentials() == null) {

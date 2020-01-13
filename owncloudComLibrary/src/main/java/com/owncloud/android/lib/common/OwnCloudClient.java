@@ -84,7 +84,7 @@ public class OwnCloudClient extends HttpClient {
         mBaseUri = baseUri;
 
         mInstanceNumber = sIntanceCounter++;
-        Timber.d(" #" + mInstanceNumber + "Creating OwnCloudClient");
+        Timber.d("#" + mInstanceNumber + "Creating OwnCloudClient");
 
         clearCredentials();
         clearCookies();
@@ -161,7 +161,7 @@ public class OwnCloudClient extends HttpClient {
         // Header to allow tracing requests in apache and ownCloud logs
         addHeaderForAllRequests(OC_X_REQUEST_ID, requestId);
 
-        Timber.d("Executing " + method.getClass().getSimpleName() + " in request with id " + requestId);
+        Timber.d("Executing in request with id %s", requestId);
     }
 
     public RedirectionPath followRedirection(HttpBaseMethod method) throws Exception {
