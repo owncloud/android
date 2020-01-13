@@ -1116,6 +1116,12 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
                 mAuthTokenType = BASIC_TOKEN_TYPE; // Basic
             }
 
+            if(!result.getData().mVersion.isServerVersionSupported()){
+                mServerIsValid = false;
+                mServerStatusIcon = R.drawable.common_error;
+                mServerStatusText = getString(R.string.server_not_supported);
+            }
+
         } else {
             mServerIsValid = false;
         }
