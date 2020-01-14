@@ -170,7 +170,7 @@ public class FilesUploadHelper implements Parcelable {
 
     /**
      * Function to send an intent to the device's camera to capture a picture
-     * */
+     */
     public void uploadFromCamera(final int requestCode) {
         Intent pictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         File photoFile = createImageFile();

@@ -121,6 +121,7 @@
             fab:fab_icon="@drawable/ic_action_create_dir"
             fab:fab_size="mini"
             fab:fab_title="" />
+
     </com.getbase.floatingactionbutton.FloatingActionsMenu>
 
     <!-- last to draw, will be top in Z axis -->

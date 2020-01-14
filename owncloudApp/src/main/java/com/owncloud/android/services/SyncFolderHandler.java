@@ -138,8 +138,7 @@ class SyncFolderHandler extends Handler {
         }
     }
 
-    public void add(Account account, String remotePath,
-                    SynchronizeFolderOperation syncFolderOperation) {
+    public void add(Account account, String remotePath, SynchronizeFolderOperation syncFolderOperation) {
         Pair<String, String> putResult =
                 mPendingOperations.putIfAbsent(account.name, remotePath, syncFolderOperation);
         if (putResult != null) {
@@ -171,8 +170,6 @@ class SyncFolderHandler extends Handler {
                 mCurrentSyncOperation.cancel();
             }
         }
-
-        //sendBroadcastFinishedSyncFolder(account, file.getRemotePath());
     }
 
     /**
@@ -183,8 +180,7 @@ class SyncFolderHandler extends Handler {
         Intent added = new Intent(FileDownloader.getDownloadAddedMessage());
         added.putExtra(Extras.EXTRA_ACCOUNT_NAME, account.name);
         added.putExtra(Extras.EXTRA_REMOTE_PATH, remotePath);
-        added.putExtra(Extras.EXTRA_FILE_PATH, FileStorageUtils.getSavePath(account.name)
-                + remotePath);
+        added.putExtra(Extras.EXTRA_FILE_PATH, FileStorageUtils.getSavePath(account.name) + remotePath);
         mLocalBroadcastManager.sendBroadcast(added);
     }
 
@@ -192,13 +188,11 @@ class SyncFolderHandler extends Handler {
      * TODO review this method when "folder synchronization" replaces "folder download";
      * this is a fast and ugly patch.
      */
-    private void sendBroadcastFinishedSyncFolder(Account account, String remotePath,
-                                                 boolean success) {
+    private void sendBroadcastFinishedSyncFolder(Account account, String remotePath, boolean success) {
         Intent finished = new Intent(FileDownloader.getDownloadFinishMessage());
         finished.putExtra(Extras.EXTRA_ACCOUNT_NAME, account.name);
         finished.putExtra(Extras.EXTRA_REMOTE_PATH, remotePath);
-        finished.putExtra(Extras.EXTRA_FILE_PATH,
-                FileStorageUtils.getSavePath(account.name) + remotePath);
+        finished.putExtra(Extras.EXTRA_FILE_PATH, FileStorageUtils.getSavePath(account.name) + remotePath);
         finished.putExtra(Extras.EXTRA_DOWNLOAD_RESULT, success);
         mLocalBroadcastManager.sendBroadcast(finished);
     }

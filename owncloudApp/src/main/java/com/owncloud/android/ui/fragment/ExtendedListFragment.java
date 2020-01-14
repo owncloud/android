@@ -34,6 +34,7 @@ import android.widget.ListAdapter;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.getbase.floatingactionbutton.FloatingActionButton;
@@ -140,10 +141,7 @@ public class ExtendedListFragment extends Fragment
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        Log_OC.d("onCreateView");
-
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.list_fragment, null);
 
         mProgressBar = v.findViewById(R.id.syncProgressBar);
@@ -216,15 +214,15 @@ public class ExtendedListFragment extends Fragment
             setMessageForEmptyList(savedInstanceState.getString(KEY_EMPTY_LIST_MESSAGE));
 
         } else {
-            mIndexes = new ArrayList<Integer>();
-            mFirstPositions = new ArrayList<Integer>();
-            mTops = new ArrayList<Integer>();
+            mIndexes = new ArrayList<>();
+            mFirstPositions = new ArrayList<>();
+            mTops = new ArrayList<>();
             mHeightCell = 0;
         }
     }
 
     @Override
-    public void onSaveInstanceState(Bundle savedInstanceState) {
+    public void onSaveInstanceState(@NonNull Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
         Log_OC.d("onSaveInstanceState()");
         savedInstanceState.putBoolean(KEY_IS_GRID_VISIBLE, isGridEnabled());
