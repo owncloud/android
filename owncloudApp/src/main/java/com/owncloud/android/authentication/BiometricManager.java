@@ -3,6 +3,7 @@
  *
  * @author David González Verdugo
  * @author Christian Schabesberger
+ * @author Roberto Bermejo
  * Copyright (C) 2019 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
@@ -37,7 +38,7 @@ import java.util.Set;
 @RequiresApi(api = Build.VERSION_CODES.M)
 /**
  * Handle biometric requests. Besides, is a facade to access some
- * {@link android.hardware.biometrics.BiometricMananager} methods
+ * {@link androidx.biometric.BiometricMananager} methods
  */
     public class BiometricManager {
 
@@ -46,7 +47,7 @@ import java.util.Set;
     private androidx.biometric.BiometricManager mBiometricManager;
 
     static {
-        sExemptOfBiometricActivites = new HashSet<Class>();
+        sExemptOfBiometricActivites = new HashSet<>();
         sExemptOfBiometricActivites.add(BiometricActivity.class);
         // other activities may be exempted, if needed
     }
@@ -118,8 +119,7 @@ import java.util.Set;
 
     private boolean biometricShouldBeRequested() {
 
-        if ((System.currentTimeMillis() - mTimestamp) > BIOMETRIC_TIMEOUT &&
-                mVisibleActivitiesCounter <= 0) {
+        if ((System.currentTimeMillis() - mTimestamp) > BIOMETRIC_TIMEOUT && mVisibleActivitiesCounter <= 0) {
             return isBiometricEnabled();
         }
 
