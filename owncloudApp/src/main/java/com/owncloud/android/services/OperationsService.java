@@ -395,9 +395,6 @@ public class OperationsService extends Service {
          * Performs the next operation in the queue
          */
         private void nextOperation() {
-
-            //Timber.e("nextOperation init" );
-
             Pair<Target, RemoteOperation> next;
             synchronized (mPendingOperations) {
                 next = mPendingOperations.peek();

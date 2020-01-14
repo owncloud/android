@@ -630,7 +630,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
      */
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        //Timber.e("onSaveInstanceState init" );
         super.onSaveInstanceState(outState);
 
         /// global state
@@ -677,8 +676,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             outState.putBoolean(KEY_ASYNC_TASK_IN_PROGRESS, false);
         }
         mAsyncTask = null;
-
-        //Timber.e("onSaveInstanceState end" );
     }
 
     @Override
@@ -1739,7 +1736,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
     }
 
     private void doOnResumeAndBound() {
-        //Timber.e("registering to listen for operation callbacks" );
         mOperationsServiceBinder.addOperationListener(AuthenticatorActivity.this, mHandler);
         if (mWaitingForOpId <= Integer.MAX_VALUE) {
             mOperationsServiceBinder.dispatchResultIfFinished((int) mWaitingForOpId, this);

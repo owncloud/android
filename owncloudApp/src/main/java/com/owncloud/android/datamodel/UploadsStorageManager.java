@@ -200,8 +200,6 @@ public class UploadsStorageManager extends Observable {
      */
     public int updateUploadStatus(long id, UploadStatus status, UploadResult result, String remotePath,
                                   String localPath) {
-        //Timber.v("Updating "+filepath+" with uploadStatus="+status +" and result="+result);
-
         int returnValue = 0;
         Cursor c = getDB().query(
                 ProviderTableMeta.CONTENT_URI_UPLOADS,
