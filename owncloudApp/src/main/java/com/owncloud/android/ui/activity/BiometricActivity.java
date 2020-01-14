@@ -87,12 +87,10 @@ public class BiometricActivity extends AppCompatActivity {
         }
 
         BiometricManager biometricManager = BiometricManager.from(this);
-        switch (biometricManager.canAuthenticate()) {
-            case BiometricManager.BIOMETRIC_SUCCESS:
-                showBiometricPrompt();
-                break;
-            default:
-                authError();
+        if (biometricManager.canAuthenticate() == BiometricManager.BIOMETRIC_SUCCESS) {
+            showBiometricPrompt();
+        } else {
+            authError();
         }
     }
 
@@ -118,16 +116,14 @@ public class BiometricActivity extends AppCompatActivity {
         BiometricPrompt biometricPrompt = new BiometricPrompt(BiometricActivity.this,
                 executor, new BiometricPrompt.AuthenticationCallback() {
             @Override
-            public void onAuthenticationError(int errorCode,
-                                              @NonNull CharSequence errString) {
+            public void onAuthenticationError(int errorCode, @NonNull CharSequence errString) {
                 super.onAuthenticationError(errorCode, errString);
                 Timber.e("onAuthenticationError (" + errorCode + "): " + errString);
                 authError();
             }
 
             @Override
-            public void onAuthenticationSucceeded(
-                    @NonNull BiometricPrompt.AuthenticationResult result) {
+            public void onAuthenticationSucceeded(@NonNull BiometricPrompt.AuthenticationResult result) {
                 super.onAuthenticationSucceeded(result);
                 mActivity.finish();
             }
@@ -195,7 +191,7 @@ public class BiometricActivity extends AppCompatActivity {
     }
 
     /**
-     * Init mCipher that will be used to create the encrypted BiometricManager.CryptoObject instance. This
+     * Init mCipher that will be used to create the encrypted {@link BiometricPrompt.CryptoObject} instance. This
      * CryptoObject will be used during the biometric authentication process
      *
      * @return true if mCipher is properly initialized, false otherwise
