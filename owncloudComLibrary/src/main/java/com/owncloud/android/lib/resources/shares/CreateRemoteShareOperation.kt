@@ -32,9 +32,9 @@ import com.owncloud.android.lib.common.http.HttpConstants
 import com.owncloud.android.lib.common.http.methods.nonwebdav.PostMethod
 import com.owncloud.android.lib.common.operations.RemoteOperation
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
-import com.owncloud.android.lib.common.utils.Log_OC
 import com.owncloud.android.lib.resources.shares.RemoteShare.Companion.INIT_EXPIRATION_DATE_IN_MILLIS
 import okhttp3.FormBody
+import timber.log.Timber
 import java.net.URL
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -150,7 +150,7 @@ class CreateRemoteShareOperation(
 
         } catch (e: Exception) {
             result = RemoteOperationResult(e)
-            Log_OC.e(TAG, "Exception while Creating New Share", e)
+            Timber.e(e, "Exception while Creating New Share")
         }
 
         return result
@@ -159,8 +159,6 @@ class CreateRemoteShareOperation(
     private fun isSuccess(status: Int): Boolean = status == HttpConstants.HTTP_OK
 
     companion object {
-        private val TAG = CreateRemoteShareOperation::class.java.simpleName
-
         private const val PARAM_NAME = "name"
         private const val PARAM_PASSWORD = "password"
         private const val PARAM_EXPIRATION_DATE = "expireDate"

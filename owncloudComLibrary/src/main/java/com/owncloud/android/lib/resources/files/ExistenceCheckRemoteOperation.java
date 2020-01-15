@@ -32,7 +32,7 @@ import com.owncloud.android.lib.common.network.RedirectionPath;
 import com.owncloud.android.lib.common.network.WebdavUtils;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
-import com.owncloud.android.lib.common.utils.Log_OC;
+import timber.log.Timber;
 
 import java.net.URL;
 import java.util.concurrent.TimeUnit;
@@ -51,8 +51,6 @@ public class ExistenceCheckRemoteOperation extends RemoteOperation {
      * Maximum time to wait for a response from the server in MILLISECONDs.
      */
     public static final int TIMEOUT = 10000;
-
-    private static final String TAG = ExistenceCheckRemoteOperation.class.getSimpleName();
 
     private String mPath;
     private boolean mSuccessIfAbsent;
@@ -103,13 +101,13 @@ public class ExistenceCheckRemoteOperation extends RemoteOperation {
                 status = mRedirectionPath.getLastStatus();
             }
 
-            /**
+            /*
              *  PROPFIND method
              *  404 NOT FOUND: path doesn't exist,
              *  207 MULTI_STATUS: path exists.
              */
 
-            Log_OC.d(TAG, "Existence check for " + stringUrl + WebdavUtils.encodePath(mPath) +
+            Timber.d("Existence check for " + stringUrl + WebdavUtils.encodePath(mPath) +
                     " targeting for " + (mSuccessIfAbsent ? " absence " : " existence ") +
                     "finished with HTTP status " + status + (!isSuccess(status) ? "(FAIL)" : ""));
 
@@ -119,10 +117,9 @@ public class ExistenceCheckRemoteOperation extends RemoteOperation {
 
         } catch (Exception e) {
             final RemoteOperationResult result = new RemoteOperationResult<>(e);
-            Log_OC.e(TAG, "Existence check for " + client.getUserFilesWebDavUri() +
-                    WebdavUtils.encodePath(mPath) + " targeting for " +
-                    (mSuccessIfAbsent ? " absence " : " existence ") + ": " +
-                    result.getLogMessage(), result.getException());
+            Timber.e(result.getException(),
+                    "Existence check for " + client.getUserFilesWebDavUri() + WebdavUtils.encodePath(mPath) + " " +
+                            "targeting for " + (mSuccessIfAbsent ? " absence " : " existence ") + ": " + result.getLogMessage());
             return result;
         } finally {
             client.setFollowRedirects(previousFollowRedirects);

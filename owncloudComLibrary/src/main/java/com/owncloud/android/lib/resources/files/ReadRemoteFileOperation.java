@@ -31,7 +31,7 @@ import com.owncloud.android.lib.common.http.methods.webdav.PropfindMethod;
 import com.owncloud.android.lib.common.network.WebdavUtils;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
-import com.owncloud.android.lib.common.utils.Log_OC;
+import timber.log.Timber;
 
 import java.net.URL;
 import java.util.concurrent.TimeUnit;
@@ -49,7 +49,6 @@ import static com.owncloud.android.lib.common.operations.RemoteOperationResult.R
 
 public class ReadRemoteFileOperation extends RemoteOperation<RemoteFile> {
 
-    private static final String TAG = ReadRemoteFileOperation.class.getSimpleName();
     private static final int SYNC_READ_TIMEOUT = 40000;
     private static final int SYNC_CONNECTION_TIMEOUT = 5000;
 
@@ -101,8 +100,7 @@ public class ReadRemoteFileOperation extends RemoteOperation<RemoteFile> {
         } catch (Exception e) {
             result = new RemoteOperationResult<>(e);
             e.printStackTrace();
-            Log_OC.e(TAG, "Synchronizing  file " + mRemotePath + ": " + result.getLogMessage(),
-                    result.getException());
+            Timber.e(result.getException(), "Synchronizing  file " + mRemotePath + ": " + result.getLogMessage());
         }
 
         return result;

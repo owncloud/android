@@ -24,7 +24,7 @@
 
 package com.owncloud.android.lib.resources.files;
 
-import com.owncloud.android.lib.common.utils.Log_OC;
+import timber.log.Timber;
 
 import java.io.File;
 
@@ -32,7 +32,6 @@ public class FileUtils {
 
     public static final String PATH_SEPARATOR = "/";
     public static final String FINAL_CHUNKS_FILE = ".file";
-    private static final String TAG = FileUtils.class.getSimpleName();
 
     public static String getParentPath(String remotePath) {
         String parentPath = new File(remotePath).getParent();
@@ -43,15 +42,11 @@ public class FileUtils {
     /**
      * Validate the fileName to detect if contains any forbidden character: / , \ , < , > ,
      * : , " , | , ? , *
-     *
-     * @param fileName
-     * @param versionSupportsForbiddenChars
-     * @return
      */
     public static boolean isValidName(String fileName, boolean versionSupportsForbiddenChars) {
         boolean result = true;
 
-        Log_OC.d(TAG, "fileName =======" + fileName);
+        Timber.d("fileName =======%s", fileName);
         if ((versionSupportsForbiddenChars && fileName.contains(PATH_SEPARATOR)) ||
                 (!versionSupportsForbiddenChars && (fileName.contains(PATH_SEPARATOR) ||
                         fileName.contains("\\") || fileName.contains("<") || fileName.contains(">") ||
@@ -66,14 +61,11 @@ public class FileUtils {
     /**
      * Validate the path to detect if contains any forbidden character: \ , < , > , : , " , | ,
      * ? , *
-     *
-     * @param path
-     * @return
      */
     public static boolean isValidPath(String path, boolean versionSupportsForbidenChars) {
         boolean result = true;
 
-        Log_OC.d(TAG, "path ....... " + path);
+        Timber.d("path ....... %s", path);
         if (!versionSupportsForbidenChars &&
                 (path.contains("\\") || path.contains("<") || path.contains(">") ||
                         path.contains(":") || path.contains("\"") || path.contains("|") ||

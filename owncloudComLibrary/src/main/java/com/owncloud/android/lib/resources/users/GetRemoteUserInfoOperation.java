@@ -29,8 +29,8 @@ import com.owncloud.android.lib.common.http.HttpConstants;
 import com.owncloud.android.lib.common.http.methods.nonwebdav.GetMethod;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
-import com.owncloud.android.lib.common.utils.Log_OC;
 import org.json.JSONObject;
+import timber.log.Timber;
 
 import java.net.URL;
 
@@ -45,8 +45,6 @@ import static com.owncloud.android.lib.common.operations.RemoteOperationResult.R
  */
 
 public class GetRemoteUserInfoOperation extends RemoteOperation<GetRemoteUserInfoOperation.UserInfo> {
-
-    private static final String TAG = GetRemoteUserInfoOperation.class.getSimpleName();
 
     // OCS Route
     private static final String OCS_ROUTE = "/ocs/v2.php/cloud/user?format=json";
@@ -72,7 +70,7 @@ public class GetRemoteUserInfoOperation extends RemoteOperation<GetRemoteUserInf
             int status = client.executeHttpMethod(getMethod);
 
             if (isSuccess(status)) {
-                Log_OC.d(TAG, "Successful response");
+                Timber.d("Successful response");
 
                 JSONObject respJSON = new JSONObject(getMethod.getResponseBodyAsString());
                 JSONObject respOCS = respJSON.getJSONObject(NODE_OCS);
@@ -90,16 +88,12 @@ public class GetRemoteUserInfoOperation extends RemoteOperation<GetRemoteUserInf
             } else {
                 result = new RemoteOperationResult<>(getMethod);
                 String response = getMethod.getResponseBodyAsString();
-                Log_OC.e(TAG, "Failed response while getting user information ");
-                if (getMethod != null) {
-                    Log_OC.e(TAG, "*** status code: " + status + " ; response message: " + response);
-                } else {
-                    Log_OC.e(TAG, "*** status code: " + status);
-                }
+                Timber.e("Failed response while getting user information ");
+                Timber.e("*** status code: " + status + " ; response message: " + response);
             }
         } catch (Exception e) {
             result = new RemoteOperationResult<>(e);
-            Log_OC.e(TAG, "Exception while getting OC user information", e);
+            Timber.e(e, "Exception while getting OC user information");
         }
 
         return result;

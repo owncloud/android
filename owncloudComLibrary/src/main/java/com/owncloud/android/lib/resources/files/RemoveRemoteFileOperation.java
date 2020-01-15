@@ -32,7 +32,7 @@ import com.owncloud.android.lib.common.http.methods.nonwebdav.DeleteMethod;
 import com.owncloud.android.lib.common.network.WebdavUtils;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
-import com.owncloud.android.lib.common.utils.Log_OC;
+import timber.log.Timber;
 
 import java.net.URL;
 
@@ -46,7 +46,6 @@ import static com.owncloud.android.lib.common.operations.RemoteOperationResult.R
  * @author David González Verdugo
  */
 public class RemoveRemoteFileOperation extends RemoteOperation {
-    private static final String TAG = RemoveRemoteFileOperation.class.getSimpleName();
     private String mRemotePath;
 
     protected boolean removeChunksFolder = false;
@@ -81,11 +80,11 @@ public class RemoveRemoteFileOperation extends RemoteOperation {
                     new RemoteOperationResult<>(OK) :
                     new RemoteOperationResult<>(deleteMethod);
 
-            Log_OC.i(TAG, "Remove " + mRemotePath + ": " + result.getLogMessage());
+            Timber.i("Remove " + mRemotePath + ": " + result.getLogMessage());
 
         } catch (Exception e) {
             result = new RemoteOperationResult<>(e);
-            Log_OC.e(TAG, "Remove " + mRemotePath + ": " + result.getLogMessage(), e);
+            Timber.e(e, "Remove " + mRemotePath + ": " + result.getLogMessage());
         }
 
         return result;

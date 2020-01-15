@@ -13,7 +13,7 @@ object LoggingHelper {
         }
         if (!directory.exists())
             directory.mkdirs()
-        Timber.plant(FileLoggingTree(directory, filename = storagePath, delegator = Log_OC::class.java))
+        Timber.plant(FileLoggingTree(directory, filename = storagePath))
     }
 
     fun stopLogging() {

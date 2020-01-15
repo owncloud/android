@@ -24,9 +24,9 @@
 
 package com.owncloud.android.lib.common.network;
 
-import com.owncloud.android.lib.common.utils.Log_OC;
 import okhttp3.MediaType;
 import okio.BufferedSink;
+import timber.log.Timber;
 
 import java.io.File;
 import java.io.IOException;
@@ -84,17 +84,17 @@ public class ChunkFromFileRequestBody extends FileRequestBody {
             long maxCount = Math.min(mOffset + mChunkSize, mChannel.size());
             while (mChannel.position() < maxCount) {
 
-                Log_OC.v("Sink buffer size: " + sink.buffer().size());
+                Timber.v("Sink buffer size: %s", sink.buffer().size());
 
                 readCount = mChannel.read(mBuffer);
 
-                Log_OC.v("Read " + readCount + " bytes from file channel to " + mBuffer.toString());
+                Timber.v("Read " + readCount + " bytes from file channel to " + mBuffer.toString());
 
                 sink.buffer().write(mBuffer.array(), 0, readCount);
 
                 sink.flush();
 
-                Log_OC.v("Write " + readCount + " bytes to sink buffer with size " + sink.buffer().size());
+                Timber.v("Write " + readCount + " bytes to sink buffer with size " + sink.buffer().size());
 
                 mBuffer.clear();
                 if (mTransferred < maxCount) {  // condition to avoid accumulate progress for repeated chunks
@@ -108,10 +108,10 @@ public class ChunkFromFileRequestBody extends FileRequestBody {
                 }
             }
 
-            Log_OC.v("Chunk with size " + mChunkSize + " written in request body");
+            Timber.v("Chunk with size " + mChunkSize + " written in request body");
 
         } catch (Exception exception) {
-            Log_OC.e(exception.getMessage());
+            Timber.e(exception);
         }
     }
 

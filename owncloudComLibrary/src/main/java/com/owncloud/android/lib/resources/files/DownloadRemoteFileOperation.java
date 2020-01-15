@@ -32,7 +32,7 @@ import com.owncloud.android.lib.common.network.WebdavUtils;
 import com.owncloud.android.lib.common.operations.OperationCancelledException;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
-import com.owncloud.android.lib.common.utils.Log_OC;
+import timber.log.Timber;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -53,7 +53,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class DownloadRemoteFileOperation extends RemoteOperation {
 
-    private static final String TAG = DownloadRemoteFileOperation.class.getSimpleName();
     private static final int FORBIDDEN_ERROR = 403;
     private static final int SERVICE_UNAVAILABLE_ERROR = 503;
     private final AtomicBoolean mCancellationRequested = new AtomicBoolean(false);
@@ -81,13 +80,11 @@ public class DownloadRemoteFileOperation extends RemoteOperation {
         try {
             tmpFile.getParentFile().mkdirs();
             result = downloadFile(client, tmpFile);
-            Log_OC.i(TAG, "Download of " + mRemotePath + " to " + getTmpPath() + ": " +
-                    result.getLogMessage());
+            Timber.i("Download of " + mRemotePath + " to " + getTmpPath() + ": " + result.getLogMessage());
 
         } catch (Exception e) {
             result = new RemoteOperationResult<>(e);
-            Log_OC.e(TAG, "Download of " + mRemotePath + " to " + getTmpPath() + ": " +
-                    result.getLogMessage(), e);
+            Timber.e(e, "Download of " + mRemotePath + " to " + getTmpPath() + ": " + result.getLogMessage());
         }
 
         return result;
@@ -149,7 +146,7 @@ public class DownloadRemoteFileOperation extends RemoteOperation {
                         final Date d = WebdavUtils.parseResponseDate(modificationTime);
                         mModificationTimestamp = (d != null) ? d.getTime() : 0;
                     } else {
-                        Log_OC.e(TAG, "Could not read modification time from response downloading " + mRemotePath);
+                        Timber.e("Could not read modification time from response downloading %s", mRemotePath);
                     }
 
                     mEtag = WebdavUtils.getEtagFromResponse(mGet);
@@ -158,7 +155,7 @@ public class DownloadRemoteFileOperation extends RemoteOperation {
                     mEtag = mEtag.replace("\"", "");
 
                     if (mEtag.length() == 0) {
-                        Log_OC.e(TAG, "Could not read eTag from response downloading " + mRemotePath);
+                        Timber.e("Could not read eTag from response downloading %s", mRemotePath);
                     }
 
                 } else {

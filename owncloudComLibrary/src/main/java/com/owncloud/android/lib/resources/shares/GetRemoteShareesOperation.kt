@@ -34,8 +34,8 @@ import com.owncloud.android.lib.common.http.methods.nonwebdav.GetMethod
 import com.owncloud.android.lib.common.operations.RemoteOperation
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode.OK
-import com.owncloud.android.lib.common.utils.Log_OC
 import org.json.JSONObject
+import timber.log.Timber
 import java.net.URL
 import java.util.ArrayList
 
@@ -95,13 +95,13 @@ class GetRemoteShareesOperation
 
             val getMethod = GetMethod(URL(uriBuilder.build().toString()))
 
-            getMethod.addRequestHeader(RemoteOperation.OCS_API_HEADER, RemoteOperation.OCS_API_HEADER_VALUE)
+            getMethod.addRequestHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE)
 
             val status = client.executeHttpMethod(getMethod)
             val response = getMethod.responseBodyAsString
 
             if (isSuccess(status)) {
-                Log_OC.d(TAG, "Successful response: " + response!!)
+                Timber.d("Successful response: $response")
 
                 // Parse the response
                 val respJSON = JSONObject(response)
@@ -128,65 +128,61 @@ class GetRemoteShareesOperation
                     for (j in 0 until jsonResults[i].length()) {
                         val jsonResult = jsonResults[i].getJSONObject(j)
                         data.add(jsonResult)
-                        Log_OC.d(TAG, "*** Added item: " + jsonResult.getString(PROPERTY_LABEL))
+                        Timber.d("*** Added item: ${jsonResult.getString(PROPERTY_LABEL)}")
                     }
                 }
 
                 result = RemoteOperationResult(OK)
                 result.data = data
 
-                Log_OC.d(TAG, "*** Get Users or groups completed ")
+                Timber.d("*** Get Users or groups completed ")
 
             } else {
                 result = RemoteOperationResult(getMethod)
-                Log_OC.e(TAG, "Failed response while getting users/groups from the server ")
+                Timber.e("Failed response while getting users/groups from the server ")
                 if (response != null) {
-                    Log_OC.e(TAG, "*** status code: $status; response message: $response")
+                    Timber.e("*** status code: $status; response message: $response")
                 } else {
-                    Log_OC.e(TAG, "*** status code: $status")
+                    Timber.e("*** status code: $status")
                 }
             }
         } catch (e: Exception) {
             result = RemoteOperationResult(e)
-            Log_OC.e(TAG, "Exception while getting users/groups", e)
+            Timber.e(e, "Exception while getting users/groups")
         }
 
         return result
     }
 
-    private fun isSuccess(status: Int): Boolean {
-        return status == HttpConstants.HTTP_OK
-    }
+    private fun isSuccess(status: Int) = status == HttpConstants.HTTP_OK
 
     companion object {
 
-        private val TAG = GetRemoteShareesOperation::class.java.simpleName
-
         // OCS Routes
-        private val OCS_ROUTE = "ocs/v2.php/apps/files_sharing/api/v1/sharees"    // from OC 8.2
+        private const val OCS_ROUTE = "ocs/v2.php/apps/files_sharing/api/v1/sharees"    // from OC 8.2
 
         // Arguments - names
-        private val PARAM_FORMAT = "format"
-        private val PARAM_ITEM_TYPE = "itemType"
-        private val PARAM_SEARCH = "search"
-        private val PARAM_PAGE = "page"                //  default = 1
-        private val PARAM_PER_PAGE = "perPage"         //  default = 200
+        private const val PARAM_FORMAT = "format"
+        private const val PARAM_ITEM_TYPE = "itemType"
+        private const val PARAM_SEARCH = "search"
+        private const val PARAM_PAGE = "page"                //  default = 1
+        private const val PARAM_PER_PAGE = "perPage"         //  default = 200
 
         // Arguments - constant values
-        private val VALUE_FORMAT = "json"
-        private val VALUE_ITEM_TYPE = "file"         //  to get the server search for users / groups
+        private const val VALUE_FORMAT = "json"
+        private const val VALUE_ITEM_TYPE = "file"         //  to get the server search for users / groups
 
         // JSON Node names
-        private val NODE_OCS = "ocs"
-        private val NODE_DATA = "data"
-        private val NODE_EXACT = "exact"
-        private val NODE_USERS = "users"
-        private val NODE_GROUPS = "groups"
-        private val NODE_REMOTES = "remotes"
-        val NODE_VALUE = "value"
-        val PROPERTY_LABEL = "label"
-        val PROPERTY_SHARE_TYPE = "shareType"
-        val PROPERTY_SHARE_WITH = "shareWith"
-        val PROPERTY_SHARE_WITH_ADDITIONAL_INFO = "shareWithAdditionalInfo"
+        private const val NODE_OCS = "ocs"
+        private const val NODE_DATA = "data"
+        private const val NODE_EXACT = "exact"
+        private const val NODE_USERS = "users"
+        private const val NODE_GROUPS = "groups"
+        private const val NODE_REMOTES = "remotes"
+        const val NODE_VALUE = "value"
+        const val PROPERTY_LABEL = "label"
+        const val PROPERTY_SHARE_TYPE = "shareType"
+        const val PROPERTY_SHARE_WITH = "shareWith"
+        const val PROPERTY_SHARE_WITH_ADDITIONAL_INFO = "shareWithAdditionalInfo"
     }
 }

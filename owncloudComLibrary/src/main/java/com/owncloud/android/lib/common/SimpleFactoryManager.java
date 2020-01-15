@@ -29,31 +29,25 @@ import android.accounts.OperationCanceledException;
 import android.content.Context;
 
 import com.owncloud.android.lib.common.accounts.AccountUtils;
-import com.owncloud.android.lib.common.utils.Log_OC;
+import timber.log.Timber;
 
 import java.io.IOException;
 
 public class SimpleFactoryManager implements OwnCloudClientManager {
 
-    private static final String TAG = SimpleFactoryManager.class.getSimpleName();
-
     @Override
     public OwnCloudClient getClientFor(OwnCloudAccount account, Context context) throws
             OperationCanceledException, AuthenticatorException, IOException {
 
-        Log_OC.d(TAG, "getClientFor(OwnCloudAccount ... : ");
+        Timber.d("getClientFor(OwnCloudAccount ... : ");
 
         OwnCloudClient client = OwnCloudClientFactory.createOwnCloudClient(
                 account.getBaseUri(),
                 context.getApplicationContext(),
                 true);
 
-        Log_OC.v(TAG, "    new client {" +
-                (account.getName() != null ?
-                        account.getName() :
-                        AccountUtils.buildAccountName(account.getBaseUri(), "")
-
-                ) + ", " + client.hashCode() + "}");
+        Timber.v("new client {" + (account.getName() != null ? account.getName() :
+                AccountUtils.buildAccountName(account.getBaseUri(), "")) + ", " + client.hashCode() + "}");
 
         if (account.getCredentials() == null) {
             account.loadCredentials(context);
@@ -75,5 +69,4 @@ public class SimpleFactoryManager implements OwnCloudClientManager {
     public void saveAllClients(Context context, String accountType) {
         // nothing to do - not taking care of tracking instances!
     }
-
 }

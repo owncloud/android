@@ -33,8 +33,8 @@ import com.owncloud.android.lib.common.network.WebdavUtils;
 import com.owncloud.android.lib.common.operations.OperationCancelledException;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
-import com.owncloud.android.lib.common.utils.Log_OC;
 import okhttp3.MediaType;
+import timber.log.Timber;
 
 import java.io.File;
 import java.net.URL;
@@ -54,7 +54,6 @@ import static com.owncloud.android.lib.common.operations.RemoteOperationResult.R
 
 public class UploadRemoteFileOperation extends RemoteOperation {
 
-    private static final String TAG = UploadRemoteFileOperation.class.getSimpleName();
     protected final AtomicBoolean mCancellationRequested = new AtomicBoolean(false);
     protected String mLocalPath;
     protected String mRemotePath;
@@ -62,7 +61,7 @@ public class UploadRemoteFileOperation extends RemoteOperation {
     protected String mFileLastModifTimestamp;
     protected PutMethod mPutMethod = null;
     protected String mRequiredEtag = null;
-    protected Set<OnDatatransferProgressListener> mDataTransferListeners = new HashSet<OnDatatransferProgressListener>();
+    protected Set<OnDatatransferProgressListener> mDataTransferListeners = new HashSet<>();
 
     protected FileRequestBody mFileRequestBody = null;
 
@@ -96,27 +95,25 @@ public class UploadRemoteFileOperation extends RemoteOperation {
             } else {
                 // perform the upload
                 result = uploadFile(client);
-                Log_OC.i(TAG, "Upload of " + mLocalPath + " to " + mRemotePath + ": " +
-                        result.getLogMessage());
+                Timber.i("Upload of " + mLocalPath + " to " + mRemotePath + ": " + result.getLogMessage());
             }
 
         } catch (Exception e) {
 
             if (mPutMethod != null && mPutMethod.isAborted()) {
                 result = new RemoteOperationResult<>(new OperationCancelledException());
-                Log_OC.e(TAG, "Upload of " + mLocalPath + " to " + mRemotePath + ": " +
-                        result.getLogMessage(), new OperationCancelledException());
+                Timber.e(result.getException(),
+                        "Upload of " + mLocalPath + " to " + mRemotePath + ": " + result.getLogMessage());
             } else {
                 result = new RemoteOperationResult<>(e);
-                Log_OC.e(TAG, "Upload of " + mLocalPath + " to " + mRemotePath + ": " +
-                        result.getLogMessage(), e);
+                Timber.e(e, "Upload of " + mLocalPath + " to " + mRemotePath + ": " + result.getLogMessage());
             }
         }
 
         return result;
     }
 
-    protected RemoteOperationResult<? extends Object> uploadFile(OwnCloudClient client) throws Exception {
+    protected RemoteOperationResult<?> uploadFile(OwnCloudClient client) throws Exception {
 
         File fileToUpload = new File(mLocalPath);
 

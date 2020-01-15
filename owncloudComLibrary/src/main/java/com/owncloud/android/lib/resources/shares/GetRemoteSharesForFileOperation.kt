@@ -32,7 +32,7 @@ import com.owncloud.android.lib.common.http.HttpConstants
 import com.owncloud.android.lib.common.http.methods.nonwebdav.GetMethod
 import com.owncloud.android.lib.common.operations.RemoteOperation
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
-import com.owncloud.android.lib.common.utils.Log_OC
+import timber.log.Timber
 import java.net.URL
 
 /**
@@ -89,14 +89,14 @@ class GetRemoteSharesForFileOperation(
                 result = parser.parse(getMethod.responseBodyAsString)
 
                 if (result.isSuccess) {
-                    Log_OC.d(TAG, "Got " + result.data.shares.size + " shares")
+                    Timber.d("Got " + result.data.shares.size + " shares")
                 }
             } else {
                 result = RemoteOperationResult(getMethod)
             }
         } catch (e: Exception) {
             result = RemoteOperationResult(e)
-            Log_OC.e(TAG, "Exception while getting shares", e)
+            Timber.e(e, "Exception while getting shares")
         }
 
         return result
@@ -105,9 +105,6 @@ class GetRemoteSharesForFileOperation(
     private fun isSuccess(status: Int): Boolean = status == HttpConstants.HTTP_OK
 
     companion object {
-
-        private val TAG = GetRemoteSharesForFileOperation::class.java.simpleName
-
         private const val PARAM_PATH = "path"
         private const val PARAM_RESHARES = "reshares"
         private const val PARAM_SUBFILES = "subfiles"

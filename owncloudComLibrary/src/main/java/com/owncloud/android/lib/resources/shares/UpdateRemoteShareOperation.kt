@@ -30,9 +30,9 @@ import com.owncloud.android.lib.common.http.HttpConstants
 import com.owncloud.android.lib.common.http.methods.nonwebdav.PutMethod
 import com.owncloud.android.lib.common.operations.RemoteOperation
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
-import com.owncloud.android.lib.common.utils.Log_OC
 import com.owncloud.android.lib.resources.shares.RemoteShare.Companion.DEFAULT_PERMISSION
 import okhttp3.FormBody
+import timber.log.Timber
 import java.net.URL
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -61,7 +61,6 @@ class UpdateRemoteShareOperation
     /**
      * Name to update in Share resource. Ignored by servers previous to version 10.0.0
      *
-     * @param name Name to set to the target share.
      * Empty string clears the current name.
      * Null results in no update applied to the name.
      */
@@ -70,7 +69,6 @@ class UpdateRemoteShareOperation
     /**
      * Password to update in Share resource.
      *
-     * @param password Password to set to the target share.
      * Empty string clears the current password.
      * Null results in no update applied to the password.
      */
@@ -79,7 +77,6 @@ class UpdateRemoteShareOperation
     /**
      * Expiration date to update in Share resource.
      *
-     * @param expirationDateInMillis Expiration date to set to the target share.
      * A negative value clears the current expiration date.
      * Zero value (start-of-epoch) results in no update done on
      * the expiration date.
@@ -89,7 +86,6 @@ class UpdateRemoteShareOperation
     /**
      * Permissions to update in Share resource.
      *
-     * @param permissions Permissions to set to the target share.
      * Values <= 0 result in no update applied to the permissions.
      */
     var permissions: Int = DEFAULT_PERMISSION
@@ -97,7 +93,6 @@ class UpdateRemoteShareOperation
     /**
      * Enable upload permissions to update in Share resource.
      *
-     * @param publicUpload Upload permission to set to the target share.
      * Null results in no update applied to the upload permission.
      */
     var publicUpload: Boolean? = null
@@ -181,7 +176,7 @@ class UpdateRemoteShareOperation
 
         } catch (e: Exception) {
             result = RemoteOperationResult(e)
-            Log_OC.e(TAG, "Exception while Creating New Share", e)
+            Timber.e(e, "Exception while Creating New Share")
         }
 
         return result
@@ -190,7 +185,6 @@ class UpdateRemoteShareOperation
     private fun isSuccess(status: Int): Boolean = status == HttpConstants.HTTP_OK
 
     companion object {
-        private val TAG = GetRemoteShareOperation::class.java.simpleName
 
         private const val PARAM_NAME = "name"
         private const val PARAM_PASSWORD = "password"

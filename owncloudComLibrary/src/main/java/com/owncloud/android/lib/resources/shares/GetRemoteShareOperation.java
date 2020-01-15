@@ -33,7 +33,7 @@ import com.owncloud.android.lib.common.http.HttpConstants;
 import com.owncloud.android.lib.common.http.methods.nonwebdav.GetMethod;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
-import com.owncloud.android.lib.common.utils.Log_OC;
+import timber.log.Timber;
 
 import java.net.URL;
 
@@ -45,8 +45,6 @@ import java.net.URL;
  */
 
 public class GetRemoteShareOperation extends RemoteOperation<ShareParserResult> {
-
-    private static final String TAG = GetRemoteShareOperation.class.getSimpleName();
 
     private long mRemoteId;
 
@@ -85,7 +83,7 @@ public class GetRemoteShareOperation extends RemoteOperation<ShareParserResult> 
 
         } catch (Exception e) {
             result = new RemoteOperationResult<>(e);
-            Log_OC.e(TAG, "Exception while getting remote shares ", e);
+            Timber.e(e, "Exception while getting remote shares");
         }
         return result;
     }

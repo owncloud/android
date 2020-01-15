@@ -31,7 +31,7 @@ import com.owncloud.android.lib.common.http.methods.nonwebdav.GetMethod;
 import com.owncloud.android.lib.common.network.WebdavUtils;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
-import com.owncloud.android.lib.common.utils.Log_OC;
+import timber.log.Timber;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
@@ -49,19 +49,12 @@ import static com.owncloud.android.lib.common.operations.RemoteOperationResult.R
  */
 public class GetRemoteUserAvatarOperation extends RemoteOperation<GetRemoteUserAvatarOperation.ResultData> {
 
-    private static final String TAG = GetRemoteUserAvatarOperation.class.getSimpleName();
-
     private static final String NON_OFFICIAL_AVATAR_PATH = "/index.php/avatar/";
 
     /**
      * Desired size in pixels of the squared image
      */
     private int mDimension;
-
-    @Deprecated
-    public GetRemoteUserAvatarOperation(int dimension, String currentEtag) {
-        this(dimension);
-    }
 
     public GetRemoteUserAvatarOperation(int dimension) {
         mDimension = dimension;
@@ -77,7 +70,7 @@ public class GetRemoteUserAvatarOperation extends RemoteOperation<GetRemoteUserA
 
         try {
             final String url = client.getBaseUri() + NON_OFFICIAL_AVATAR_PATH + client.getCredentials().getUsername() + "/" + mDimension;
-            Log_OC.d(TAG, "avatar URI: " + url);
+            Timber.d("avatar URI: %s", url);
 
             getMethod = new GetMethod(new URL(url));
 
@@ -97,7 +90,7 @@ public class GetRemoteUserAvatarOperation extends RemoteOperation<GetRemoteUserA
                 String contentType = getMethod.getResponseHeader(HttpConstants.CONTENT_TYPE_HEADER);
 
                 if (contentType == null || !contentType.startsWith("image")) {
-                    Log_OC.e(TAG, "Not an image, failing with no avatar");
+                    Timber.w("Not an image, failing with no avatar");
                     result = new RemoteOperationResult<>(RemoteOperationResult.ResultCode.FILE_NOT_FOUND);
                     return result;
                 }
@@ -119,7 +112,7 @@ public class GetRemoteUserAvatarOperation extends RemoteOperation<GetRemoteUserA
                 // find out etag
                 String etag = WebdavUtils.getEtagFromResponse(getMethod);
                 if (etag.length() == 0) {
-                    Log_OC.w(TAG, "Could not read Etag from avatar");
+                    Timber.w("Could not read Etag from avatar");
                 }
 
                 // Result
@@ -133,7 +126,7 @@ public class GetRemoteUserAvatarOperation extends RemoteOperation<GetRemoteUserA
 
         } catch (Exception e) {
             result = new RemoteOperationResult<>(e);
-            Log_OC.e(TAG, "Exception while getting OC user avatar", e);
+            Timber.e(e, "Exception while getting OC user avatar");
 
         } finally {
             if (getMethod != null) {
@@ -147,14 +140,14 @@ public class GetRemoteUserAvatarOperation extends RemoteOperation<GetRemoteUserA
                         }
                     }
                 } catch (IOException i) {
-                    Log_OC.e(TAG, "Unexpected exception closing input stream ", i);
+                    Timber.e(i, "Unexpected exception closing input stream");
                 }
                 try {
                     if (bos != null) {
                         bos.close();
                     }
                 } catch (IOException o) {
-                    Log_OC.e(TAG, "Unexpected exception closing output stream ", o);
+                    Timber.e(o, "Unexpected exception closing output stream");
                 }
             }
         }

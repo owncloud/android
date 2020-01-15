@@ -33,8 +33,8 @@ import com.owncloud.android.lib.common.network.WebdavUtils;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
-import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
+import timber.log.Timber;
 
 import java.net.URL;
 import java.util.concurrent.TimeUnit;
@@ -46,8 +46,6 @@ import java.util.concurrent.TimeUnit;
  * @author masensio
  */
 public class CreateRemoteFolderOperation extends RemoteOperation {
-
-    private static final String TAG = CreateRemoteFolderOperation.class.getSimpleName();
 
     private static final int READ_TIMEOUT = 30000;
     private static final int CONNECTION_TIMEOUT = 5000;
@@ -108,12 +106,12 @@ public class CreateRemoteFolderOperation extends RemoteOperation {
             result = (status == HttpConstants.HTTP_CREATED)
                     ? new RemoteOperationResult<>(ResultCode.OK)
                     : new RemoteOperationResult<>(mkcol);
-            Log_OC.d(TAG, "Create directory " + mRemotePath + ": " + result.getLogMessage());
+            Timber.d("Create directory " + mRemotePath + ": " + result.getLogMessage());
             client.exhaustResponse(mkcol.getResponseBodyAsStream());
 
         } catch (Exception e) {
             result = new RemoteOperationResult<>(e);
-            Log_OC.e(TAG, "Create directory " + mRemotePath + ": " + result.getLogMessage(), e);
+            Timber.e(e, "Create directory " + mRemotePath + ": " + result.getLogMessage());
         }
 
         return result;

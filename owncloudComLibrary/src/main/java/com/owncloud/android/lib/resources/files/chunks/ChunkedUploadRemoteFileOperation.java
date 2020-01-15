@@ -29,10 +29,10 @@ import com.owncloud.android.lib.common.http.methods.webdav.PutMethod;
 import com.owncloud.android.lib.common.network.ChunkFromFileRequestBody;
 import com.owncloud.android.lib.common.operations.OperationCancelledException;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
-import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.files.FileUtils;
 import com.owncloud.android.lib.resources.files.UploadRemoteFileOperation;
 import okhttp3.MediaType;
+import timber.log.Timber;
 
 import java.io.File;
 import java.io.RandomAccessFile;
@@ -53,7 +53,6 @@ public class ChunkedUploadRemoteFileOperation extends UploadRemoteFileOperation 
 
     public static final long CHUNK_SIZE = 1024000;
     private static final int LAST_CHUNK_TIMEOUT = 900000; //15 mins.
-    private static final String TAG = ChunkedUploadRemoteFileOperation.class.getSimpleName();
 
     private String mTransferId;
 
@@ -113,7 +112,7 @@ public class ChunkedUploadRemoteFileOperation extends UploadRemoteFileOperation 
 
                 status = client.executeHttpMethod(mPutMethod);
 
-                Log_OC.d(TAG, "Upload of " + mLocalPath + " to " + mRemotePath +
+                Timber.d("Upload of " + mLocalPath + " to " + mRemotePath +
                         ", chunk index " + chunkIndex + ", count " + chunkCount +
                         ", HTTP result status " + status);
 

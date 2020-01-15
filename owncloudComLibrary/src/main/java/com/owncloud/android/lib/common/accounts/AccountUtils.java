@@ -36,18 +36,16 @@ import android.net.Uri;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentials;
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentialsFactory;
-import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.files.FileUtils;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 import okhttp3.Cookie;
+import timber.log.Timber;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class AccountUtils {
-
-    private static final String TAG = AccountUtils.class.getSimpleName();
 
     /**
      * Constructs full url to host and webdav resource basing on host version
@@ -104,7 +102,7 @@ public class AccountUtils {
         try {
             username = account.name.substring(0, account.name.lastIndexOf('@'));
         } catch (Exception e) {
-            Log_OC.e(TAG, "Couldn't get a username for the given account", e);
+            Timber.e(e, "Couldn't get a username for the given account");
         }
         return username;
     }
@@ -124,7 +122,7 @@ public class AccountUtils {
             version = new OwnCloudVersion(versionString);
 
         } catch (Exception e) {
-            Log_OC.e(TAG, "Couldn't get a the server version for an account", e);
+            Timber.e(e, "Couldn't get a the server version for an account");
         }
         return version;
     }
@@ -216,7 +214,7 @@ public class AccountUtils {
             String cookiesString = client.getCookiesString();
             if (!"".equals(cookiesString)) {
                 ac.setUserData(savedAccount, Constants.KEY_COOKIES, cookiesString);
-                Log_OC.d(TAG, "Saving Cookies: " + cookiesString);
+                Timber.d("Saving Cookies: %s", cookiesString);
             }
         }
     }
@@ -230,10 +228,10 @@ public class AccountUtils {
      */
     public static void restoreCookies(Account account, OwnCloudClient client, Context context) {
         if (account == null) {
-            Log_OC.d(TAG, "Cannot restore cookie for null account");
+            Timber.d("Cannot restore cookie for null account");
 
         } else {
-            Log_OC.d(TAG, "Restoring cookies for " + account.name);
+            Timber.d("Restoring cookies for %s", account.name);
 
             // Account Manager
             AccountManager am = AccountManager.get(context.getApplicationContext());
