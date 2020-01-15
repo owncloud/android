@@ -18,26 +18,22 @@
 
 package com.owncloud.android.utils;
 
-import android.annotation.TargetApi;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.webkit.MimeTypeMap;
 
-import com.owncloud.android.lib.common.utils.Log_OC;
+import timber.log.Timber;
 
 /**
  * A helper class for some Uri operations.
  */
 public class UriUtils {
-
-    public static final String TAG = UriUtils.class.getSimpleName();
 
     public static final String URI_CONTENT_SCHEME = "content://";
 
@@ -189,7 +185,7 @@ public class UriUtils {
             throw new IllegalArgumentException("Received NULL!");
         }
 
-        String displayName = null;
+        String displayName;
 
         if (!ContentResolver.SCHEME_CONTENT.equals(uri.getScheme())) {
             displayName = uri.getLastPathSegment();     // ready to return
@@ -217,7 +213,7 @@ public class UriUtils {
                 }
 
             } catch (Exception e) {
-                Log_OC.e(TAG, "No way to get a display name for " + uri.toString());
+                Timber.e(e, "No way to get a display name for %s", uri.toString());
             }
         }
 
@@ -258,7 +254,7 @@ public class UriUtils {
                 }
 
             } catch (Exception e) {
-                Log_OC.e(TAG, "Could not retrieve display name for " + uri.toString());
+                Timber.e(e, "Could not retrieve display name for %s", uri.toString());
                 // nothing else, displayName keeps null
 
             } finally {

@@ -27,16 +27,14 @@ import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.files.services.FileDownloader;
 import com.owncloud.android.files.services.FileUploader;
 import com.owncloud.android.lib.common.network.OnDatatransferProgressListener;
-import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.ui.activity.ComponentsGetter;
+import timber.log.Timber;
 
 /**
  * Controller updating a progress bar with the progress of a file transfer
  * reported from upload or download service.
  */
 public class TransferProgressController implements OnDatatransferProgressListener {
-
-    private static final String TAG = TransferProgressController.class.getCanonicalName();
 
     private ProgressBar mProgressBar = null;
     private ComponentsGetter mComponentsGetter = null;
@@ -96,7 +94,7 @@ public class TransferProgressController implements OnDatatransferProgressListene
                 mProgressBar.setIndeterminate(true);
             }
         } else {
-            Log_OC.i(TAG, "Download service not ready to notify progress");
+            Timber.i("Download service not ready to notify progress");
         }
 
         if (uploaderBinder != null) {
@@ -105,7 +103,7 @@ public class TransferProgressController implements OnDatatransferProgressListene
                 mProgressBar.setIndeterminate(true);
             }
         } else {
-            Log_OC.i(TAG, "Upload service not ready to notify progress");
+            Timber.i("Upload service not ready to notify progress");
         }
     }
 

@@ -32,7 +32,7 @@ import android.graphics.BitmapFactory;
 
 import com.jakewharton.disklrucache.DiskLruCache;
 import com.owncloud.android.MainApp;
-import com.owncloud.android.lib.common.utils.Log_OC;
+import timber.log.Timber;
 
 public class DiskLruImageCache {
 
@@ -42,8 +42,6 @@ public class DiskLruImageCache {
     private static final int CACHE_VERSION = 1;
     private static final int VALUE_COUNT = 1;
     private static final int IO_BUFFER_SIZE = 8 * 1024;
-
-    private static final String TAG = DiskLruImageCache.class.getSimpleName();
 
     //public DiskLruImageCache( Context context,String uniqueName, int diskCacheSize,
     public DiskLruImageCache(
@@ -84,17 +82,17 @@ public class DiskLruImageCache {
                 mDiskCache.flush();
                 editor.commit();
                 if (MainApp.Companion.isDeveloper()) {
-                   Log_OC.d( "cache_test_DISK_", "image put on disk cache " + validKey );
+                   Timber.d( "cache_test_DISK_ image put on disk cache %s", validKey );
                 }
             } else {
                 editor.abort();
                 if (MainApp.Companion.isDeveloper()) {
-                    Log_OC.d( "cache_test_DISK_", "ERROR on: image put on disk cache " + validKey );
+                    Timber.d( "cache_test_DISK_ ERROR on: image put on disk cache %s", validKey );
                 }
             }
         } catch (IOException e) {
             if (MainApp.Companion.isDeveloper()) {
-                Log_OC.d( "cache_test_DISK_", "ERROR on: image put on disk cache " + validKey );
+                Timber.d( "cache_test_DISK_ ERROR on: image put on disk cache %s", validKey );
             }
             try {
                 if (editor != null) {
@@ -132,8 +130,7 @@ public class DiskLruImageCache {
         }
 
         if (MainApp.Companion.isDeveloper()) {
-            Log_OC.d("cache_test_DISK_", bitmap == null ? 
-                    "not found" : "image read from disk " + validKey);
+            Timber.d(bitmap == null ? "not found" : "image read from disk %s", validKey);
         }
 
         return bitmap;
@@ -152,7 +149,7 @@ public class DiskLruImageCache {
         String validKey = convertToValidKey(key);
         try {
             mDiskCache.remove(validKey);
-            Log_OC.d(TAG, "removeKey from cache: " + validKey);
+            Timber.d("removeKey from cache: %s", validKey);
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -1,15 +1,3 @@
-package com.owncloud.android.datamodel;
-
-import android.content.ContentValues;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-
-import com.owncloud.android.MainApp;
-import com.owncloud.android.db.ProviderMeta;
-import com.owncloud.android.lib.common.utils.Log_OC;
-
-import java.io.File;
-
 /**
  * ownCloud Android client application
  *
@@ -29,14 +17,24 @@ import java.io.File;
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+package com.owncloud.android.datamodel;
+
+import android.content.ContentValues;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+
+import com.owncloud.android.MainApp;
+import com.owncloud.android.db.ProviderMeta;
+import timber.log.Timber;
+
+import java.io.File;
+
 /**
  * Minimum to get things working.
  *
  * Working around FileContentProvider, we have no interest in exporting user profiles to other apps.
  */
 public class UserProfilesRepository {
-
-    private static final String TAG = UserProfilesRepository.class.getName();
 
     private static UserProfilesRepository sUserProfilesSingleton;
 
@@ -99,7 +97,7 @@ public class UserProfilesRepository {
                             ProviderMeta.ProviderTableMeta.USER_AVATARS__ACCOUNT_NAME + "=?",
                             new String[]{String.valueOf(userProfile.getAccountName())}
                     );
-                    Log_OC.d(TAG, "Avatar updated");
+                    Timber.d("Avatar updated");
 
                 } else {
                     // new, CREATE
@@ -108,7 +106,7 @@ public class UserProfilesRepository {
                             null,
                             avatarValues
                     );
-                    Log_OC.d(TAG, "Avatar inserted");
+                    Timber.d("Avatar inserted");
                 }
                 database.setTransactionSuccessful();
 
@@ -151,7 +149,7 @@ public class UserProfilesRepository {
                             ProviderMeta.ProviderTableMeta.USER_QUOTAS__ACCOUNT_NAME + "=?",
                             new String[]{String.valueOf(userProfile.getAccountName())}
                     );
-                    Log_OC.d(TAG, "Quota updated");
+                    Timber.d("Quota updated");
 
                 } else {
                     // new, CREATE
@@ -160,7 +158,7 @@ public class UserProfilesRepository {
                             null,
                             quotaValues
                     );
-                    Log_OC.d(TAG, "Quota inserted");
+                    Timber.d("Quota inserted");
                 }
                 database.setTransactionSuccessful();
 
@@ -206,7 +204,7 @@ public class UserProfilesRepository {
                 );
             }   // else, no avatar to return
         } catch (Exception e) {
-            Log_OC.e(TAG, "Exception while querying avatar", e);
+            Timber.e(e, "Exception while querying avatar");
         } finally {
             if (c != null) {
                 c.close();
@@ -244,7 +242,7 @@ public class UserProfilesRepository {
                 );
             }
         } catch (Exception e) {
-            Log_OC.e(TAG, "Exception while querying quota", e);
+            Timber.e(e, "Exception while querying quota");
         } finally {
             if (c != null) {
                 c.close();
@@ -260,10 +258,10 @@ public class UserProfilesRepository {
                     ProviderMeta.ProviderTableMeta.USER_AVATARS__ACCOUNT_NAME + "=?",
                     new String[]{String.valueOf(accountName)}
             );
-            Log_OC.d(TAG, "Avatar deleted");
+            Timber.d("Avatar deleted");
 
         } catch (Exception e) {
-            Log_OC.e(TAG, "Exception while deleting avatar", e);
+            Timber.e(e, "Exception while deleting avatar");
         }
     }
 

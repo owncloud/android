@@ -23,19 +23,17 @@ import android.accounts.AccountManager;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
-import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.status.GetRemoteCapabilitiesOperation;
 import com.owncloud.android.lib.resources.status.GetRemoteStatusOperation;
 import com.owncloud.android.lib.resources.status.RemoteCapability;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 import com.owncloud.android.operations.common.SyncOperation;
+import timber.log.Timber;
 
 /**
  * Get and save capabilities from the server
  */
 public class SyncCapabilitiesOperation extends SyncOperation<RemoteCapability> {
-
-    private static final String TAG = SyncCapabilitiesOperation.class.getName();
 
     @Override
     protected RemoteOperationResult<RemoteCapability> run(OwnCloudClient client) {
@@ -53,7 +51,7 @@ public class SyncCapabilitiesOperation extends SyncOperation<RemoteCapability> {
             }
 
         } else {
-            Log_OC.w(TAG, "Remote capabilities not available");
+            Timber.w("Remote capabilities not available");
 
             // server version is important; this fallback will try to get it from status.php
             // if capabilities API is not available

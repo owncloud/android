@@ -36,11 +36,11 @@ import androidx.fragment.app.DialogFragment;
 import com.owncloud.android.R;
 import com.owncloud.android.lib.common.network.CertificateCombinedException;
 import com.owncloud.android.lib.common.network.NetworkUtils;
-import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.ui.adapter.CertificateCombinedExceptionViewAdapter;
 import com.owncloud.android.ui.adapter.SslCertificateViewAdapter;
 import com.owncloud.android.ui.adapter.SslErrorViewAdapter;
 import com.owncloud.android.ui.adapter.X509CertificateViewAdapter;
+import timber.log.Timber;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
@@ -54,8 +54,6 @@ import java.security.cert.X509Certificate;
  * get the information about the error and the certificate from different classes.
  */
 public class SslUntrustedCertDialog extends DialogFragment {
-
-    private final static String TAG = SslUntrustedCertDialog.class.getSimpleName();
 
     protected View mView = null;
     protected SslErrorHandler mHandler = null;
@@ -110,7 +108,7 @@ public class SslUntrustedCertDialog extends DialogFragment {
 
     @Override
     public void onAttach(Activity activity) {
-        Log_OC.d(TAG, "onAttach");
+        Timber.d("onAttach");
         super.onAttach(activity);
         if (!(activity instanceof OnSslUntrustedCertListener)) {
             throw new IllegalArgumentException("The host activity must implement " + OnSslUntrustedCertListener.class.getCanonicalName());
@@ -119,7 +117,7 @@ public class SslUntrustedCertDialog extends DialogFragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        Log_OC.d(TAG, "onCreate, savedInstanceState is " + savedInstanceState);
+        Timber.d("onCreate, savedInstanceState is %s", savedInstanceState);
         super.onCreate(savedInstanceState);
         setRetainInstance(true);    // force to keep the state of the fragment on configuration changes (such as
         // device rotations)
@@ -129,7 +127,7 @@ public class SslUntrustedCertDialog extends DialogFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Log_OC.d(TAG, "onCreateView, savedInsanceState is " + savedInstanceState);
+        Timber.d("onCreateView, savedInstanceState is %s", savedInstanceState);
         // Create a view by inflating desired layout
         if (mView == null) {
             mView = inflater.inflate(R.layout.ssl_untrusted_cert_layout, container, false);
@@ -169,7 +167,7 @@ public class SslUntrustedCertDialog extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        Log_OC.d(TAG, "onCreateDialog, savedInstanceState is " + savedInstanceState);
+        Timber.d("onCreateDialog, savedInstanceState is %s", savedInstanceState);
         final Dialog dialog = super.onCreateDialog(savedInstanceState);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         return dialog;
@@ -177,7 +175,7 @@ public class SslUntrustedCertDialog extends DialogFragment {
 
     @Override
     public void onDestroyView() {
-        Log_OC.d(TAG, "onDestroyView");
+        Timber.d("onDestroyView");
         if (getDialog() != null && getRetainInstance()) {
             getDialog().setDismissMessage(null);
         }
@@ -213,11 +211,11 @@ public class SslUntrustedCertDialog extends DialogFragment {
 
                 } catch (GeneralSecurityException e) {
                     ((OnSslUntrustedCertListener) activity).onFailedSavingCertificate();
-                    Log_OC.e(TAG, "Server certificate could not be saved in the known-servers trust store ", e);
+                    Timber.e(e, "Server certificate could not be saved in the known-servers trust store ");
 
                 } catch (IOException e) {
                     ((OnSslUntrustedCertListener) activity).onFailedSavingCertificate();
-                    Log_OC.e(TAG, "Server certificate could not be saved in the known-servers trust store ", e);
+                    Timber.e(e, "Server certificate could not be saved in the known-servers trust store ");
                 }
             }
         }

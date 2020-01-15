@@ -26,18 +26,16 @@ import android.app.job.JobScheduler;
 import android.app.job.JobService;
 import android.content.Context;
 import android.os.AsyncTask;
-import android.os.Build;
 
-import androidx.annotation.RequiresApi;
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.CameraUploadsSyncStorageManager;
 import com.owncloud.android.datamodel.OCCameraUploadSync;
 import com.owncloud.android.db.PreferenceManager;
 import com.owncloud.android.db.PreferenceManager.CameraUploadsConfiguration;
-import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.operations.UploadFileOperation;
 import com.owncloud.android.utils.Extras;
 import com.owncloud.android.utils.MimetypeIconUtil;
+import timber.log.Timber;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -47,12 +45,10 @@ import java.util.Locale;
 
 public class CameraUploadsSyncJobService extends JobService {
 
-    private static final String TAG = CameraUploadsSyncJobService.class.getSimpleName();
-
     @Override
     public boolean onStartJob(JobParameters jobParameters) {
 
-        Log_OC.d(TAG, "Starting job to sync camera folder");
+        Timber.d("Starting job to sync camera folder");
 
         new CameraUploadsSyncJobTask(this).execute(jobParameters);
 
@@ -117,7 +113,7 @@ public class CameraUploadsSyncJobService extends JobService {
             //Get local images and videos
             String localCameraPath = mCameraUploadsSourcePath;
 
-            File localFiles[] = new File[0];
+            File[] localFiles = new File[0];
 
             if (localCameraPath != null) {
                 File cameraFolder = new File(localCameraPath);
@@ -132,7 +128,7 @@ public class CameraUploadsSyncJobService extends JobService {
                 }
             }
 
-            Log_OC.d(TAG, "All files synced, finishing job");
+            Timber.d("All files synced, finishing job");
         }
 
         private File[] orderFilesByCreationTimestamp(File[] localFiles) {
@@ -156,17 +152,17 @@ public class CameraUploadsSyncJobService extends JobService {
             boolean isVideo = mimeType.startsWith("video/");
 
             if (!isImage && !isVideo) {
-                Log_OC.d(TAG, "Ignoring " + fileName);
+                Timber.d("Ignoring %s", fileName);
                 return;
             }
 
             if (isImage && mCameraUploadsPicturesPath == null) {
-                Log_OC.d(TAG, "Camera uploads disabled for images, ignoring " + fileName);
+                Timber.d("Camera uploads disabled for images, ignoring %s", fileName);
                 return;
             }
 
             if (isVideo && mCameraUploadsVideosPath == null) {
-                Log_OC.d(TAG, "Camera uploads disabled for videos, ignoring " + fileName);
+                Timber.d("Camera uploads disabled for videos, ignoring %s", fileName);
                 return;
             }
 
@@ -181,13 +177,13 @@ public class CameraUploadsSyncJobService extends JobService {
                     null);
 
             if (mOCCameraUploadSync == null) {
-                Log_OC.d(TAG, "There's no timestamp to compare with in database yet, not continue");
+                Timber.d("There's no timestamp to compare with in database yet, not continue");
                 return;
             }
 
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.getDefault());
             if (isImage && localFile.lastModified() <= mOCCameraUploadSync.getPicturesLastSync()) {
-                Log_OC.i(TAG, "Image " + localPath + " created before period to check, ignoring " +
+                Timber.i("Image " + localPath + " created before period to check, ignoring " +
                         simpleDateFormat.format(new Date(localFile.lastModified())) + " <= " +
                         simpleDateFormat.format(new Date(mOCCameraUploadSync.getPicturesLastSync()))
                 );
@@ -195,7 +191,7 @@ public class CameraUploadsSyncJobService extends JobService {
             }
 
             if (isVideo && localFile.lastModified() <= mOCCameraUploadSync.getVideosLastSync()) {
-                Log_OC.i(TAG, "Video " + localPath + " created before period to check, ignoring " +
+                Timber.i("Video " + localPath + " created before period to check, ignoring " +
                         simpleDateFormat.format(new Date(localFile.lastModified())) + " <= " +
                         simpleDateFormat.format(new Date(mOCCameraUploadSync.getVideosLastSync()))
                 );
@@ -217,15 +213,7 @@ public class CameraUploadsSyncJobService extends JobService {
             // Update timestamps once the first picture/video has been enqueued
             updateTimestamps(isImage, isVideo, localFile.lastModified());
 
-            Log_OC.i(
-                    TAG,
-                    String.format(
-                            "Requested upload of %1s to %2s in %3s",
-                            localPath,
-                            remotePath,
-                            mAccount.name
-                    )
-            );
+            Timber.i("Requested upload of %1s to %2s in %3s", localPath, remotePath, mAccount.name);
         }
 
         /**
@@ -242,14 +230,14 @@ public class CameraUploadsSyncJobService extends JobService {
 
             if (isImage) {
 
-                Log_OC.d(TAG, "Updating timestamp for pictures");
+                Timber.d("Updating timestamp for pictures");
 
                 picturesTimestamp = fileTimestamp;
             }
 
             if (isVideo) {
 
-                Log_OC.d(TAG, "Updating timestamp for videos");
+                Timber.d("Updating timestamp for videos");
 
                 videosTimestamp = fileTimestamp;
             }
@@ -274,17 +262,17 @@ public class CameraUploadsSyncJobService extends JobService {
 
             jobScheduler.cancel(jobId);
 
-            Log_OC.d(TAG, "Camera uploads disabled, cancelling the periodic job");
+            Timber.d("Camera uploads disabled, cancelling the periodic job");
         }
     }
 
     @Override
-    /**
+    /*
      * Called by the system if the job is cancelled before being finished
      */
     public boolean onStopJob(JobParameters jobParameters) {
 
-        Log_OC.d(TAG, "Job " + TAG + " was cancelled before finishing.");
+        Timber.d("Job was cancelled before finishing.");
 
         return true;
     }

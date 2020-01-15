@@ -24,10 +24,10 @@ package com.owncloud.android.operations;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
-import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.files.CreateRemoteFolderOperation;
 import com.owncloud.android.operations.common.SyncOperation;
 import com.owncloud.android.utils.FileStorageUtils;
+import timber.log.Timber;
 
 import java.io.File;
 
@@ -36,8 +36,6 @@ import java.io.File;
  * Save the new folder in Database
  */
 public class CreateFolderOperation extends SyncOperation {
-
-    private static final String TAG = CreateFolderOperation.class.getSimpleName();
 
     protected String mRemotePath;
     protected boolean mCreateFullPath;
@@ -69,10 +67,10 @@ public class CreateFolderOperation extends SyncOperation {
             File localFile = new File(localPath);
             boolean created = localFile.mkdirs();
             if (!created) {
-                Log_OC.w(TAG, "Local folder " + localPath + " was not fully created");
+                Timber.w("Local folder " + localPath + " was not fully created");
             }
         } else {
-            Log_OC.e(TAG, mRemotePath + " hasn't been created");
+            Timber.e("%s hasn't been created", mRemotePath);
         }
 
         return result;
@@ -109,7 +107,7 @@ public class CreateFolderOperation extends SyncOperation {
             newDir.setModificationTimestamp(System.currentTimeMillis());
             getStorageManager().saveFile(newDir);
 
-            Log_OC.d(TAG, "Create directory " + mRemotePath + " in Database");
+            Timber.d("Create directory " + mRemotePath + " in Database");
         }
         return newDir;
     }

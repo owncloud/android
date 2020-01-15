@@ -31,14 +31,13 @@ import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 
 import com.owncloud.android.R;
-import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.utils.PreferenceUtils;
+import timber.log.Timber;
 
 /**
  *  Extending ExtendedListFragment. This allows dividing list in groups.
  */
 public class ExpandableListFragment extends ExtendedListFragment implements OnChildClickListener {
-    protected static final String TAG = ExpandableListFragment.class.getSimpleName();
 
     protected ExpandableListView mList;
 
@@ -53,7 +52,7 @@ public class ExpandableListFragment extends ExtendedListFragment implements OnCh
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Log_OC.e(TAG, "onCreateView");
+        Timber.v("onCreateView");
 
         View v = inflater.inflate(R.layout.list_fragment_expandable, null);
 
@@ -89,7 +88,7 @@ public class ExpandableListFragment extends ExtendedListFragment implements OnCh
     @Override
     public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
         // to be @overriden
-        Log_OC.e(TAG, "onChildClick(). This method should be overriden!");
+        Timber.w("onChildClick(). This method should be overriden!");
         return false;
     }
 

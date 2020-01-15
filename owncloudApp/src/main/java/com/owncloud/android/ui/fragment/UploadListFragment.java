@@ -29,16 +29,15 @@ import android.widget.ListView;
 
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.OCUpload;
-import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.adapter.ExpandableUploadListAdapter;
+import timber.log.Timber;
 
 /**
  * A Fragment that lists all files and folders in a given LOCAL path.
  *
  */
 public class UploadListFragment extends ExpandableListFragment {
-    static private String TAG = UploadListFragment.class.getSimpleName();
 
     /**
      * Reference to the Activity which this fragment is attached to. For
@@ -90,14 +89,14 @@ public class UploadListFragment extends ExpandableListFragment {
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
-        Log_OC.d(TAG, "onActivityCreated() start");
+        Timber.d("onActivityCreated() start");
         super.onActivityCreated(savedInstanceState);
 
     }
 
     @Override
     public void onStart() {
-        Log_OC.d(TAG, "onStart() start");
+        Timber.v("onStart() start");
         super.onStart();
         mAdapter = new ExpandableUploadListAdapter((FileActivity) getActivity());
         setListAdapter(mAdapter);
@@ -111,7 +110,7 @@ public class UploadListFragment extends ExpandableListFragment {
             // notify the click to container Activity
             handled = mContainerActivity.onUploadItemClick(OCUpload);
         } else {
-            Log_OC.w(TAG, "Null object in ListAdapter!!");
+            Timber.w("Null object in ListAdapter!!");
         }
         return handled;
     }

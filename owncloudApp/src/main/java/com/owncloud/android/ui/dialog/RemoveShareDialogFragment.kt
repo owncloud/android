@@ -35,9 +35,9 @@ import android.os.Bundle
 import com.owncloud.android.R
 import com.owncloud.android.domain.sharing.shares.model.OCShare
 import com.owncloud.android.domain.sharing.shares.model.ShareType
-import com.owncloud.android.lib.common.utils.Log_OC
 import com.owncloud.android.presentation.ui.sharing.fragments.ShareFragmentListener
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment.ConfirmationDialogFragmentListener
+import timber.log.Timber
 
 class RemoveShareDialogFragment : ConfirmationDialogFragment(), ConfirmationDialogFragmentListener {
     private var targetShare: OCShare? = null
@@ -71,7 +71,7 @@ class RemoveShareDialogFragment : ConfirmationDialogFragment(), ConfirmationDial
      * Performs the removal of the target share, both locally and in the server.
      */
     override fun onConfirmation(callerTag: String) {
-        Log_OC.d(TAG, "Removing share " + targetShare!!.name)
+        Timber.d("Removing share " + targetShare!!.name)
         listener?.deleteShare(targetShare?.remoteId!!)
     }
 
@@ -85,15 +85,13 @@ class RemoveShareDialogFragment : ConfirmationDialogFragment(), ConfirmationDial
 
     companion object {
 
-        private val TAG = RemoveShareDialogFragment::class.java.name
-
         private const val ARG_TARGET_SHARE = "TARGET_SHARE"
         private const val ARG_ACCOUNT = "ACCOUNT"
 
         /**
          * Public factory method to create new RemoveFilesDialogFragment instances.
          *
-         * @param share           [OCShareEntity] to remove.
+         * @param share           [OCShare] to remove.
          * @param account         [Account] which the share belongs to
          * @return                Dialog ready to show.
          */

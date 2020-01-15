@@ -47,7 +47,6 @@ import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
-import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.operations.CreateFolderOperation;
 import com.owncloud.android.operations.RefreshFolderOperation;
 import com.owncloud.android.operations.common.SyncOperation;
@@ -57,6 +56,7 @@ import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter;
 import com.owncloud.android.ui.fragment.FileFragment;
 import com.owncloud.android.ui.fragment.OCFileListFragment;
 import com.owncloud.android.utils.PreferenceUtils;
+import timber.log.Timber;
 
 import java.util.ArrayList;
 
@@ -79,7 +79,7 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log_OC.d(TAG, "onCreate() start");
+        Timber.d("onCreate() start");
 
         super.onCreate(savedInstanceState);
 
@@ -107,7 +107,7 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
 
         mLocalBroadcastManager = LocalBroadcastManager.getInstance(this);
 
-        Log_OC.d(TAG, "onCreate() end");
+        Timber.d("onCreate() end");
     }
 
     @Override
@@ -167,7 +167,7 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
             }
             listFragment.setMessageForEmptyList(getString(message));
         } else {
-            Log_OC.e("OCFileListFragment is null");
+            Timber.e("OCFileListFragment is null");
         }
     }
 
@@ -176,7 +176,7 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
         if (listOfFiles != null) {
             return (OCFileListFragment) listOfFiles;
         }
-        Log_OC.e(TAG, "Access to unexisting list of files fragment!!");
+        Timber.e("Access to unexisting list of files fragment!!");
         return null;
     }
 
@@ -224,7 +224,7 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
     @Override
     protected void onResume() {
         super.onResume();
-        Log_OC.e(TAG, "onResume() start");
+        Timber.d("onResume() start");
 
         // refresh list of files
         refreshListOfFilesFragment();
@@ -238,18 +238,18 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
         mSyncBroadcastReceiver = new SyncBroadcastReceiver();
         mLocalBroadcastManager.registerReceiver(mSyncBroadcastReceiver, syncIntentFilter);
 
-        Log_OC.d(TAG, "onResume() end");
+        Timber.d("onResume() end");
     }
 
     @Override
     protected void onPause() {
-        Log_OC.e(TAG, "onPause() start");
+        Timber.d("onPause() start");
         if (mSyncBroadcastReceiver != null) {
             mLocalBroadcastManager.unregisterReceiver(mSyncBroadcastReceiver);
             mSyncBroadcastReceiver = null;
         }
 
-        Log_OC.d(TAG, "onPause() end");
+        Timber.d("onPause() end");
         super.onPause();
     }
 
@@ -404,7 +404,7 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
                 );
 
             } catch (NotFoundException e) {
-                Log_OC.e(TAG, "Error while trying to show fail message ", e);
+                Timber.e(e, "Error while trying to show fail message ");
             }
         }
     }
@@ -417,7 +417,7 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
         @Override
         public void onReceive(Context context, Intent intent) {
             String event = intent.getAction();
-            Log_OC.d(TAG, "Received broadcast " + event);
+            Timber.d("Received broadcast %s", event);
             String accountName = intent.getStringExtra(FileSyncAdapter.EXTRA_ACCOUNT_NAME);
             String synchFolderRemotePath = intent.getStringExtra(FileSyncAdapter.EXTRA_FOLDER_PATH);
             RemoteOperationResult synchResult = (RemoteOperationResult) intent.
@@ -452,8 +452,7 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
                             currentFile = currentDir;
                         }
 
-                        if (synchFolderRemotePath != null && currentDir.getRemotePath().
-                                equals(synchFolderRemotePath)) {
+                        if (currentDir.getRemotePath().equals(synchFolderRemotePath)) {
                             OCFileListFragment fileListFragment = getListOfFilesFragment();
                             if (fileListFragment != null) {
                                 fileListFragment.listDirectory(currentDir);
@@ -483,7 +482,7 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
 
                     }
                 }
-                Log_OC.d(TAG, "Setting progress visibility to " + mSyncInProgress);
+                Timber.d("Setting progress visibility to %s", mSyncInProgress);
 
                 OCFileListFragment fileListFragment = getListOfFilesFragment();
                 if (fileListFragment != null) {

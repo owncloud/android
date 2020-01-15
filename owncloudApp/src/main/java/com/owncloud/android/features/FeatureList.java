@@ -26,7 +26,7 @@ import android.os.Parcelable;
 
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
-import com.owncloud.android.lib.common.utils.Log_OC;
+import timber.log.Timber;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -40,8 +40,6 @@ public class FeatureList {
     static final private boolean SHOW_ON_FIRST_RUN = true;
     static final private boolean SHOW_ON_UPGRADE = false;
 
-    private static final String TAG = FeatureList.class.getSimpleName();
-
     static final private FeatureItem[] featuresList = {
             // Basic features showed on first install
             new FeatureItem(R.drawable.whats_new_files, R.string.welcome_feature_1_title,
@@ -53,11 +51,7 @@ public class FeatureList {
             new FeatureItem(R.drawable.whats_new_camera_uploads, R.string.welcome_feature_4_title,
                     R.string.welcome_feature_4_text, "2.7.0", "0", SHOW_ON_FIRST_RUN, false),
             new FeatureItem(R.drawable.whats_new_video_streaming, R.string.welcome_feature_5_title,
-                    R.string.welcome_feature_5_text, "2.7.0", "0", SHOW_ON_FIRST_RUN, false),
-
-            // Features introduced in 2.14.0
-            new FeatureItem(R.drawable.whats_new_no_more_10, R.string.welcome_feature_11_title,
-                    R.string.welcome_feature_11_text, "2.14.1", "0", SHOW_ON_UPGRADE, true)
+                    R.string.welcome_feature_5_text, "2.7.0", "0", SHOW_ON_FIRST_RUN, false)
     };
 
     static public FeatureItem[] get() {
@@ -68,7 +62,7 @@ public class FeatureList {
                                             boolean anyAccountWithServerVersionLowerThan10) {
         List<FeatureItem> features = new LinkedList<>();
 
-        Log_OC.d(TAG, "Getting filtered features");
+        Timber.d("Getting filtered features");
 
         for (FeatureItem item : get()) {
             final int itemVersionCode = isBeta ? item.getBetaVersionNumber() : item.getVersionNumber();
@@ -190,7 +184,7 @@ public class FeatureList {
     static int versionCodeFromString(String version) {
         String v[] = version.split(Pattern.quote("."));
         if (v.length != 3) {
-            Log_OC.d(TAG, "Version string is incorrect " + version);
+            Timber.d("Version string is incorrect %s", version);
             return 0;
         }
         int result = Integer.parseInt(v[0]) * (int) (10e6) +

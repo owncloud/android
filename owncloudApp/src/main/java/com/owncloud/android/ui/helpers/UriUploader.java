@@ -26,13 +26,12 @@ import androidx.fragment.app.FragmentManager;
 import com.owncloud.android.R;
 import com.owncloud.android.files.services.FileUploader;
 import com.owncloud.android.files.services.TransferRequester;
-import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.operations.UploadFileOperation;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.asynctasks.CopyAndUploadContentUrisTask;
 import com.owncloud.android.ui.fragment.TaskRetainerFragment;
-import com.owncloud.android.utils.DisplayUtils;
 import com.owncloud.android.utils.UriUtils;
+import timber.log.Timber;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,8 +47,6 @@ import java.util.List;
  * the OC app, and then passed {@link FileUploader}.
  */
 public class UriUploader {
-
-    private final String TAG = UriUploader.class.getSimpleName();
 
     private FileActivity mActivity;
     private ArrayList<Uri> mUrisToUpload;
@@ -127,11 +124,11 @@ public class UriUploader {
 
         } catch (SecurityException e) {
             mCode = UriUploaderResultCode.ERROR_READ_PERMISSION_NOT_GRANTED;
-            Log_OC.e(TAG, "Permissions fail", e);
+            Timber.e(e, "Permissions fail");
 
         } catch (Exception e) {
             mCode = UriUploaderResultCode.ERROR_UNKNOWN;
-            Log_OC.e(TAG, "Unexpected error", e);
+            Timber.e(e, "Unexpected error");
 
         }
         return mCode;

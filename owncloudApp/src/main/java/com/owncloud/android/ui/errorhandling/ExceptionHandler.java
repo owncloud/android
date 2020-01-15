@@ -22,7 +22,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
 
-import com.owncloud.android.lib.common.utils.Log_OC;
+import timber.log.Timber;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -36,7 +36,7 @@ public class ExceptionHandler implements java.lang.Thread.UncaughtExceptionHandl
     }
 
     public void uncaughtException(Thread thread, Throwable exception) {
-        Log_OC.e("ExceptionHandler caught UncaughtException", exception);
+        Timber.e(exception, "ExceptionHandler caught UncaughtException");
         StringWriter stackTrace = new StringWriter();
         exception.printStackTrace(new PrintWriter(stackTrace));
         StringBuilder errorReport = new StringBuilder();
@@ -70,7 +70,7 @@ public class ExceptionHandler implements java.lang.Thread.UncaughtExceptionHandl
         errorReport.append(Build.VERSION.INCREMENTAL);
         errorReport.append(LINE_SEPARATOR);
 
-        Log_OC.e("An exception was thrown and handled by ExceptionHandler:", exception);
+        Timber.e(exception, "An exception was thrown and handled by ExceptionHandler:");
 
         Intent intent = new Intent(mContext, ErrorShowActivity.class);
         intent.putExtra("error", errorReport.toString());

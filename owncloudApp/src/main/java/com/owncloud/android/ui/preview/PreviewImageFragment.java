@@ -48,13 +48,12 @@ import com.owncloud.android.R;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.files.FileMenuFilter;
-import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.ui.controller.TransferProgressController;
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment;
 import com.owncloud.android.ui.dialog.RemoveFilesDialogFragment;
 import com.owncloud.android.ui.fragment.FileFragment;
-import com.owncloud.android.utils.DisplayUtils;
 import com.owncloud.android.utils.PreferenceUtils;
+import timber.log.Timber;
 
 import java.io.File;
 
@@ -68,8 +67,6 @@ import java.io.File;
  * instantiation too.
  */
 public class PreviewImageFragment extends FileFragment {
-
-    private static final String TAG = PreviewImageFragment.class.getSimpleName();
 
     public static final String EXTRA_FILE = "FILE";
 
@@ -222,7 +219,7 @@ public class PreviewImageFragment extends FileFragment {
 
     @Override
     public void onStop() {
-        Log_OC.d(TAG, "onStop starts");
+        Timber.v("onStop starts");
         mProgressController.stopListeningProgressFor(getFile(), mAccount);
         super.onStop();
     }
@@ -404,14 +401,14 @@ public class PreviewImageFragment extends FileFragment {
                     @Override
                     public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target,
                                                 boolean isFirstResource) {
-                        Log_OC.e(TAG, "Error loading image", e);
+                        Timber.e(e, "Error loading image");
                         return false;
                     }
 
                     @Override
                     public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target,
                                                    DataSource dataSource, boolean isFirstResource) {
-                        Log_OC.d(TAG, "Loading image " + getFile().getFileName());
+                        Timber.d("Loading image %s", getFile().getFileName());
                         return false;
                     }
                 })

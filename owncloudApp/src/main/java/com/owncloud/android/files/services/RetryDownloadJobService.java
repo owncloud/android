@@ -24,19 +24,15 @@ import android.accounts.Account;
 import android.app.job.JobParameters;
 import android.app.job.JobService;
 import android.content.Intent;
-import android.os.Build;
 
-import androidx.annotation.RequiresApi;
 import androidx.core.content.ContextCompat;
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
-import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.utils.Extras;
+import timber.log.Timber;
 
 public class RetryDownloadJobService extends JobService {
-
-    private static final String TAG = RetryDownloadJobService.class.getName();
 
     @Override
     public boolean onStartJob(JobParameters jobParameters) {
@@ -57,8 +53,7 @@ public class RetryDownloadJobService extends JobService {
                     Extras.EXTRA_REMOTE_PATH
             );
 
-            Log_OC.d(TAG, String.format("Retrying download of %1s in %2s", fileRemotePath,
-                    accountName));
+            Timber.d("Retrying download of %1s in %2s", fileRemotePath, accountName);
 
             // Get download file from database
             OCFile ocFile = fileDataStorageManager.getFileByPath(fileRemotePath);
@@ -69,27 +64,14 @@ public class RetryDownloadJobService extends JobService {
                 intent.putExtra(FileDownloader.KEY_ACCOUNT, account);
                 intent.putExtra(FileDownloader.KEY_FILE, ocFile);
                 intent.putExtra(FileDownloader.KEY_RETRY_DOWNLOAD, true);
-                Log_OC.d(TAG, "Retry download from foreground/background, " +
-                        "startForeground() will be called soon");
+                Timber.d("Retry download from foreground/background, startForeground() will be called soon");
                 ContextCompat.startForegroundService(this, intent);
             } else {
-                Log_OC.w(
-                        TAG,
-                        String.format(
-                                "File %1s in %2s not found in database",
-                                fileRemotePath, accountName
-                        )
-                );
+                Timber.w("File %1s in %2s not found in database", fileRemotePath, accountName);
             }
 
         } else {
-            Log_OC.w(
-                    TAG,
-                    String.format(
-                            "Account %1s was deleted, no retry will be done",
-                            accountName
-                    )
-            );
+            Timber.w("Account %1s was deleted, no retry will be done", accountName);
         }
 
         jobFinished(jobParameters, false);  // done here, real job was delegated to another castle

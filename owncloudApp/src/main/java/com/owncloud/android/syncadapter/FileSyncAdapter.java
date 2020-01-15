@@ -45,10 +45,10 @@ import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
-import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.operations.SyncCapabilitiesOperation;
 import com.owncloud.android.operations.SynchronizeFolderOperation;
 import com.owncloud.android.ui.activity.ErrorsWhileCopyingHandlerActivity;
+import timber.log.Timber;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -57,18 +57,18 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Implementation of {@link AbstractThreadedSyncAdapter} responsible for synchronizing 
+ * Implementation of {@link AbstractThreadedSyncAdapter} responsible for synchronizing
  * ownCloud files.
- *
+ * <p>
  * Performs a full synchronization of the account received in {@link #onPerformSync(Account, Bundle,
  * String, ContentProviderClient, SyncResult)}.
  */
 public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
 
-    private final static String TAG = FileSyncAdapter.class.getSimpleName();
-
-    /** Maximum number of failed folder synchronizations that are supported before finishing
-     * the synchronization operation */
+    /**
+     * Maximum number of failed folder synchronizations that are supported before finishing
+     * the synchronization operation
+     */
     private static final int MAX_FAILED_RESULTS = 3;
 
     public static final String EVENT_FULL_SYNC_START = FileSyncAdapter.class.getName() +
@@ -88,41 +88,61 @@ public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
 
     private static final String FILE_SYNC_NOTIFICATION_CHANNEL_ID = "FILE_SYNC_NOTIFICATION_CHANNEL";
 
-    /** Time stamp for the current synchronization process, used to distinguish fresh data */
+    /**
+     * Time stamp for the current synchronization process, used to distinguish fresh data
+     */
     private long mCurrentSyncTime;
 
-    /** Flag made 'true' when a request to cancel the synchronization is received */
+    /**
+     * Flag made 'true' when a request to cancel the synchronization is received
+     */
     private boolean mCancellation;
 
-    /** When 'true' the process was requested by the user through the user interface;
-     *  when 'false', it was requested automatically by the system */
+    /**
+     * When 'true' the process was requested by the user through the user interface;
+     * when 'false', it was requested automatically by the system
+     */
     private boolean mIsManualSync;
 
-    /** Counter for failed operations in the synchronization process */
+    /**
+     * Counter for failed operations in the synchronization process
+     */
     private int mFailedResultsCounter;
 
-    /** Result of the last failed operation */
+    /**
+     * Result of the last failed operation
+     */
     private RemoteOperationResult mLastFailedResult;
 
-    /** Counter of conflicts found between local and remote files */
+    /**
+     * Counter of conflicts found between local and remote files
+     */
     private int mConflictsFound;
 
-    /** Counter of failed operations in synchronization of kept-in-sync files */
+    /**
+     * Counter of failed operations in synchronization of kept-in-sync files
+     */
     private int mFailsInFavouritesFound;
 
-    /** Map of remote and local paths to files that where locally stored in a location out
-     * of the ownCloud folder and couldn't be copied automatically into it */
+    /**
+     * Map of remote and local paths to files that where locally stored in a location out
+     * of the ownCloud folder and couldn't be copied automatically into it
+     */
     private Map<String, String> mForgottenLocalFiles;
 
-    /** {@link SyncResult} instance to return to the system when the synchronization finish */
+    /**
+     * {@link SyncResult} instance to return to the system when the synchronization finish
+     */
     private SyncResult mSyncResult;
 
-    /** To send broadcast messages not visible out of the app */
+    /**
+     * To send broadcast messages not visible out of the app
+     */
     private LocalBroadcastManager mLocalBroadcastManager;
 
     /**
      * Creates a {@link FileSyncAdapter}
-     *
+     * <p>
      * {@inheritDoc}
      */
     public FileSyncAdapter(Context context, boolean autoInitialize) {
@@ -131,7 +151,7 @@ public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
 
     /**
      * Creates a {@link FileSyncAdapter}
-     *
+     * <p>
      * {@inheritDoc}
      */
     public FileSyncAdapter(Context context, boolean autoInitialize, boolean allowParallelSyncs) {
@@ -174,7 +194,7 @@ public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
             return;
         }
 
-        Log_OC.d(TAG, "Synchronization of ownCloud account " + account.name + " starting");
+        Timber.d("Synchronization of ownCloud account " + account.name + " starting");
         sendLocalBroadcast(EVENT_FULL_SYNC_START, null, null);  // message to signal the start
         // of the synchronization to the UI
         try {
@@ -184,8 +204,7 @@ public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
                 synchronizeFolder(getStorageManager().getFileByPath(OCFile.ROOT_PATH), false);
 
             } else {
-                Log_OC.d(TAG, "Leaving synchronization before synchronizing the root folder " +
-                        "because cancelation request");
+                Timber.d("Leaving synchronization before synchronizing the root folder because cancelation request");
             }
 
         } finally {
@@ -215,17 +234,17 @@ public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
 
     /**
      * Called by system SyncManager when a synchronization is required to be cancelled.
-     *
-     * Sets the mCancellation flag to 'true'. THe synchronization will be stopped later, 
-     * before a new folder is fetched. Data of the last folder synchronized will be still 
-     * locally saved. 
-     *
+     * <p>
+     * Sets the mCancellation flag to 'true'. THe synchronization will be stopped later,
+     * before a new folder is fetched. Data of the last folder synchronized will be still
+     * locally saved.
+     * <p>
      * See {@link #onPerformSync(Account, Bundle, String, ContentProviderClient, SyncResult)}
      * and {@link #synchronizeFolder(OCFile, boolean)}.
      */
     @Override
     public void onSyncCanceled() {
-        Log_OC.d(TAG, "Synchronization of " + getAccount().name + " has been requested to cancel");
+        Timber.d("Synchronization of " + getAccount().name + " has been requested to cancel");
         mCancellation = true;
         super.onSyncCanceled();
     }
@@ -242,18 +261,18 @@ public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
     }
 
     /**
-     *  Synchronizes the list of files contained in a folder identified with its remote path.
+     * Synchronizes the list of files contained in a folder identified with its remote path.
+     * <p>
+     * Fetches the list and properties of the files contained in the given folder, including their
+     * properties, and updates the local database with them.
+     * <p>
+     * Enters in the child folders to synchronize their contents also, following a recursive
+     * depth first strategy.
      *
-     *  Fetches the list and properties of the files contained in the given folder, including their 
-     *  properties, and updates the local database with them.
-     *
-     *  Enters in the child folders to synchronize their contents also, following a recursive
-     *  depth first strategy. 
-     *
-     *  @param folder                   Folder to synchronize.
-     *  @param pushOnly                 When 'true', it's assumed that the folder did not change in the
-     *                                  server, so data will not be fetched. Only local changes of
-     *                                  available offline files will be pushed.
+     * @param folder   Folder to synchronize.
+     * @param pushOnly When 'true', it's assumed that the folder did not change in the
+     *                 server, so data will not be fetched. Only local changes of
+     *                 available offline files will be pushed.
      */
     private void synchronizeFolder(OCFile folder, boolean pushOnly) {
 
@@ -274,7 +293,6 @@ public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
 
         RemoteOperationResult result;
         boolean repeat;
-        int repeatCounter = 0;
         do {
             repeat = false;
 
@@ -326,9 +344,9 @@ public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
      * Checks if a failed result should terminate the synchronization process immediately,
      * according to OUR OWN POLICY
      *
-     * @param   failedResult        Remote operation result to check.
-     * @return                      'True' if the result should immediately finish the
-     *                              synchronization
+     * @param failedResult Remote operation result to check.
+     * @return 'True' if the result should immediately finish the
+     * synchronization
      */
     private boolean isFinisher(RemoteOperationResult failedResult) {
         if (failedResult != null) {
@@ -346,14 +364,14 @@ public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
 
     /**
      * Triggers the synchronization of any folder contained in the list of received files.
-     *
+     * <p>
      * Every subfolder comes with a boolean flag, set to true if the previous sync operation detected
      * that there are pending changes in the file.
-     *
+     * <p>
      * Only folders that have pending changes in the server will be sync'd here.
      *
-     * @param folders       Subfolders to recursively synchronize, with boolean value signaling if there are pending
-     *                      changes to sync in the server.
+     * @param folders Subfolders to recursively synchronize, with boolean value signaling if there are pending
+     *                changes to sync in the server.
      */
     private void syncSubfolders(List<Pair<OCFile, Boolean>> folders) {
         int i;
@@ -366,12 +384,8 @@ public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
         }
 
         if (mCancellation && i < folders.size()) {
-            Log_OC.d(
-                    TAG,
-                    "Leaving synchronization before synchronizing " +
-                            folders.get(i).first.getRemotePath() +
-                            " due to cancelation request"
-            );
+            Timber.d("Leaving synchronization before synchronizing " + folders.get(i).first.getRemotePath() + " due " +
+                    "to cancelation request");
         }
     }
 
@@ -379,14 +393,14 @@ public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
      * Sends a message to any application component interested in the progress of the
      * synchronization.
      *
-     * @param event             Event in the process of synchronization to be notified.   
-     * @param dirRemotePath     Remote path of the folder target of the event occurred.
-     * @param result            Result of an individual folder synchronization,
-     *                          if completed; may be null.
+     * @param event         Event in the process of synchronization to be notified.
+     * @param dirRemotePath Remote path of the folder target of the event occurred.
+     * @param result        Result of an individual folder synchronization,
+     *                      if completed; may be null.
      */
     private void sendLocalBroadcast(String event, String dirRemotePath,
                                     RemoteOperationResult result) {
-        Log_OC.d(TAG, "Send broadcast " + event);
+        Timber.d("Send broadcast %s", event);
         Intent intent = new Intent(event);
         intent.putExtra(FileSyncAdapter.EXTRA_ACCOUNT_NAME, getAccount().name);
         if (dirRemotePath != null) {
@@ -399,7 +413,7 @@ public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
     }
 
     /**
-     * Notifies the user about a failed synchronization through the status notification bar 
+     * Notifies the user about a failed synchronization through the status notification bar
      */
     private void notifyFailedSynchronization() {
         NotificationCompat.Builder notificationBuilder = createNotificationBuilder();
@@ -437,7 +451,7 @@ public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
     /**
      * Notifies the user about conflicts and strange fails when trying to synchronize the contents
      * of kept-in-sync files.
-     *
+     * <p>
      * By now, we won't consider a failed synchronization.
      */
     private void notifyFailsInFavourites() {
@@ -474,11 +488,11 @@ public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
     /**
      * Notifies the user about local copies of files out of the ownCloud local directory that
      * were 'forgotten' because copying them inside the ownCloud local directory was not possible.
-     *
+     * <p>
      * We don't want links to files out of the ownCloud local directory (foreign files) anymore.
      * It's easy to have synchronization problems if a local file is linked to more than one
      * remote file.
-     *
+     * <p>
      * We won't consider a synchronization as failed when foreign files can not be copied to
      * the ownCloud local directory.
      */
@@ -523,8 +537,8 @@ public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
     /**
      * Builds and shows the notification
      *
-     * @param id            Id for the notification to build.
-     * @param builder       Notification builder, already set up.
+     * @param id      Id for the notification to build.
+     * @param builder Notification builder, already set up.
      */
     private void showNotification(int id, NotificationCompat.Builder builder) {
 
@@ -556,8 +570,8 @@ public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
     /**
      * Shorthand translation
      *
-     * @param key       String key.
-     * @param args      Arguments to replace in a formatted string.
+     * @param key  String key.
+     * @param args Arguments to replace in a formatted string.
      * @return
      */
     private String i18n(int key, Object... args) {

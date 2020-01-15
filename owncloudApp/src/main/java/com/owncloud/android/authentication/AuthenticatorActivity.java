@@ -90,7 +90,6 @@ import com.owncloud.android.lib.common.operations.OnRemoteOperationListener;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
-import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 import com.owncloud.android.lib.resources.users.GetRemoteUserInfoOperation.UserInfo;
 import com.owncloud.android.operations.AuthenticationMethod;
@@ -103,6 +102,7 @@ import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter;
 import com.owncloud.android.utils.DisplayUtils;
 import com.owncloud.android.utils.DocumentProviderUtils;
 import com.owncloud.android.utils.PreferenceUtils;
+import timber.log.Timber;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -116,8 +116,6 @@ import static android.content.Intent.ACTION_VIEW;
 public class AuthenticatorActivity extends AccountAuthenticatorActivity
         implements OnRemoteOperationListener, OnFocusChangeListener, OnEditorActionListener,
         AuthenticatorAsyncTask.OnAuthenticatorTaskListener {
-
-    private static final String TAG = AuthenticatorActivity.class.getSimpleName();
 
     public static final String EXTRA_ACTION = "ACTION";
     public static final String EXTRA_ACCOUNT = "ACCOUNT";
@@ -499,7 +497,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (mAuthStatusIcon != 0) {
-                    Log_OC.d(TAG, "onTextChanged: hiding authentication status");
+                    Timber.d("onTextChanged: hiding authentication status");
                     mAuthStatusIcon = 0;
                     mAuthStatusText = "";
                     showAuthStatus();
@@ -632,7 +630,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
      */
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        //Log_OC.e(TAG, "onSaveInstanceState init" );
         super.onSaveInstanceState(outState);
 
         /// global state
@@ -679,8 +676,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             outState.putBoolean(KEY_ASYNC_TASK_IN_PROGRESS, false);
         }
         mAsyncTask = null;
-
-        //Log_OC.e(TAG, "onSaveInstanceState end" );
     }
 
     @Override
@@ -795,7 +790,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             );
 
             if (mOperationsServiceBinder != null) {
-                Log_OC.i(TAG, "Getting OAuth access token...");
+                Timber.i("Getting OAuth access token...");
                 mWaitingForOpId = mOperationsServiceBinder.queueNewOperation(getAccessTokenIntent);
             }
 
@@ -889,7 +884,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             if (mOperationsServiceBinder != null) {
                 mWaitingForOpId = mOperationsServiceBinder.queueNewOperation(getServerInfoIntent);
             } else {
-                Log_OC.e(TAG, "Server check tried with OperationService unbound!");
+                Timber.e("Server check tried with OperationService unbound!");
             }
 
         } else {
@@ -1323,7 +1318,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         } else {
             updateAuthStatusIconAndText(result);
             showAuthStatus();
-            Log_OC.d(TAG, "Access failed: " + result.getLogMessage());
+            Timber.d("Access failed: %s", result.getLogMessage());
         }
     }
 
@@ -1341,7 +1336,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         mAsyncTask = null;
 
         if (result.isSuccess()) {
-            Log_OC.d(TAG, "Successful access - time to save the account");
+            Timber.d("Successful access - time to save the account");
 
             boolean success = false;
             String username = ((RemoteOperationResult<UserInfo>) result).getData().mId;
@@ -1369,7 +1364,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
                     }
 
                 } catch (AccountNotFoundException e) {
-                    Log_OC.e(TAG, "Account " + mAccount + " was removed!", e);
+                    Timber.e(e, "Account " + mAccount + " was removed!");
                     Toast.makeText(this, R.string.auth_account_does_not_exist,
                             Toast.LENGTH_SHORT).show();
                     // do not use a Snackbar, finishing right now!
@@ -1407,7 +1402,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         } else {    // authorization fail due to client side - probably wrong credentials
             updateAuthStatusIconAndText(result);
             showAuthStatus();
-            Log_OC.d(TAG, "Access failed: " + result.getLogMessage());
+            Timber.d("Access failed: %s", result.getLogMessage());
         }
     }
 
@@ -1438,7 +1433,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             RemoteOperationResult result = new RemoteOperationResult(ResultCode.ACCOUNT_NOT_NEW);
             updateAuthStatusIconAndText(result);
             showAuthStatus();
-            Log_OC.d(TAG, result.getLogMessage());
+            Timber.d(result.getLogMessage());
             return false;
 
         } else {
@@ -1495,10 +1490,10 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
                             mAccount, Constants.KEY_DISPLAY_NAME, userInfo.mDisplayName
                     );
                 } catch (ClassCastException c) {
-                    Log_OC.w(TAG, "Couldn't get display name for " + username);
+                    Timber.w("Couldn't get display name for %s", username);
                 }
             } else {
-                Log_OC.w(TAG, "Couldn't get display name for " + username);
+                Timber.w("Couldn't get display name for %s", username);
             }
 
             if (isOAuth) {
@@ -1536,7 +1531,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             mAuthToken = "";
             updateAuthStatusIconAndText(result);
             showAuthStatus();
-            Log_OC.d(TAG, result.getLogMessage());
+            Timber.d(result.getLogMessage());
 
         } else {
             try {
@@ -1544,7 +1539,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
                 success = true;
 
             } catch (AccountNotFoundException e) {
-                Log_OC.e(TAG, "Account " + mAccount + " was removed!", e);
+                Timber.e(e, "Account " + mAccount + " was removed!");
                 Toast.makeText(this, R.string.auth_account_does_not_exist,
                         Toast.LENGTH_SHORT).show();
                 // don't use a Snackbar, finishing right now
@@ -1741,7 +1736,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
     }
 
     private void doOnResumeAndBound() {
-        //Log_OC.e(TAG, "registering to listen for operation callbacks" );
         mOperationsServiceBinder.addOperationListener(AuthenticatorActivity.this, mHandler);
         if (mWaitingForOpId <= Integer.MAX_VALUE) {
             mOperationsServiceBinder.dispatchResultIfFinished((int) mWaitingForOpId, this);
@@ -1781,7 +1775,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             if (component.equals(
                     new ComponentName(AuthenticatorActivity.this, OperationsService.class)
             )) {
-                Log_OC.e(TAG, "Operations service crashed");
+                Timber.e("Operations service crashed");
                 mOperationsServiceBinder = null;
             }
         }

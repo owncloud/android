@@ -35,11 +35,11 @@ import android.widget.TextView;
 
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.ThumbnailsCacheManager;
-import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.utils.BitmapUtils;
 import com.owncloud.android.utils.DisplayUtils;
 import com.owncloud.android.utils.MimetypeIconUtil;
 import com.owncloud.android.utils.PreferenceUtils;
+import timber.log.Timber;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -51,8 +51,6 @@ import java.util.Comparator;
  * in a local directory
  */
 public class LocalFileListAdapter extends BaseAdapter implements ListAdapter {
-
-    private static final String TAG = LocalFileListAdapter.class.getSimpleName();
 
     private Context mContext;
     private File mFolder;
@@ -122,9 +120,9 @@ public class LocalFileListAdapter extends BaseAdapter implements ListAdapter {
 
             ImageView fileIcon = view.findViewById(R.id.thumbnail);
 
-            /** Cancellation needs do be checked and done before changing the drawable in fileIcon, or
+            /* Cancellation needs do be checked and done before changing the drawable in fileIcon, or
              * {@link ThumbnailsCacheManager#cancelPotentialThumbnailWork} will NEVER cancel any task.
-             **/
+             */
             boolean allowedToCreateNewThumbnail = (ThumbnailsCacheManager.cancelPotentialThumbnailWork(file, fileIcon));
 
             if (!file.isDirectory()) {
@@ -176,7 +174,7 @@ public class LocalFileListAdapter extends BaseAdapter implements ListAdapter {
                                     );
                             fileIcon.setImageDrawable(asyncDrawable);
                             task.execute(file);
-                            Log_OC.v(TAG, "Executing task to generate a new thumbnail");
+                            Timber.v("Executing task to generate a new thumbnail");
 
                         } // else, already being generated, don't restart it
                     }
@@ -220,7 +218,7 @@ public class LocalFileListAdapter extends BaseAdapter implements ListAdapter {
      */
     public void swapDirectory(File directory) {
         if (directory == null) {
-            Log_OC.e(TAG, "Null received as directory to swap; ignoring");
+            Timber.e("Null received as directory to swap; ignoring");
             return;
         }
         mFolder = directory;

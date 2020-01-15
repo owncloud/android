@@ -31,16 +31,14 @@ import android.provider.MediaStore;
 
 import androidx.core.content.FileProvider;
 import com.owncloud.android.R;
-import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.utils.FileStorageUtils;
+import timber.log.Timber;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Calendar;
 
 public class FilesUploadHelper implements Parcelable {
-
-    private static final String TAG = FilesUploadHelper.class.toString();
 
     private String capturedPhotoPath;
     private File image = null;
@@ -108,7 +106,7 @@ public class FilesUploadHelper implements Parcelable {
                 File localFile = new File(localPath);
                 total += localFile.length();
             }
-            return (new Boolean(FileStorageUtils.getUsableSpace() >= total));
+            return (FileStorageUtils.getUsableSpace() >= total);
         }
 
         /**
@@ -163,7 +161,7 @@ public class FilesUploadHelper implements Parcelable {
             image = File.createTempFile(getCapturedImageName(), ".jpg", storageDir);
             capturedPhotoPath = image.getAbsolutePath();
         } catch (IOException exception) {
-            Log_OC.d(TAG, exception.toString());
+            Timber.e(exception, exception.toString());
         }
         return image;
     }
@@ -191,7 +189,7 @@ public class FilesUploadHelper implements Parcelable {
     public void deleteImageFile() {
         if (image != null) {
             image.delete();
-            Log_OC.d(TAG, "File deleted");
+            Timber.d("File deleted");
         }
     }
 

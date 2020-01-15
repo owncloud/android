@@ -23,12 +23,10 @@ import android.app.job.JobInfo;
 import android.app.job.JobScheduler;
 import android.content.ComponentName;
 import android.content.Context;
-import android.os.Build;
 import android.os.PersistableBundle;
 
-import androidx.annotation.RequiresApi;
-import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.utils.Extras;
+import timber.log.Timber;
 
 /**
  * Schedule the periodic job responsible for synchronizing available offline files, a.k.a. kept-in-sync files, that
@@ -36,7 +34,6 @@ import com.owncloud.android.utils.Extras;
  */
 public class AvailableOfflineHandler {
 
-    private static final String TAG = AvailableOfflineHandler.class.getSimpleName();
     private static final long MILLISECONDS_INTERVAL_AVAILABLE_OFFLINE = 900000;
 
     // It needs to be always the same so that the previous job is removed and replaced with a new one with the recent
@@ -74,7 +71,7 @@ public class AvailableOfflineHandler {
 
         builder.setExtras(extras);
 
-        Log_OC.d(TAG, "Scheduling an AvailableOfflineSyncJobService");
+        Timber.d("Scheduling an AvailableOfflineSyncJobService");
 
         mJobScheduler.schedule(builder.build());
     }

@@ -47,7 +47,6 @@ import com.owncloud.android.datamodel.ThumbnailsCacheManager;
 import com.owncloud.android.files.FileMenuFilter;
 import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder;
 import com.owncloud.android.files.services.FileUploader.FileUploaderBinder;
-import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.ui.activity.ComponentsGetter;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.activity.FileDisplayActivity;
@@ -59,6 +58,7 @@ import com.owncloud.android.utils.MimetypeIconUtil;
 import com.owncloud.android.utils.PreferenceUtils;
 
 import org.jetbrains.annotations.NotNull;
+import timber.log.Timber;
 
 /**
  * This Fragment is used to display the details about a file.
@@ -70,7 +70,6 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
     private Account mAccount;
     private TransferProgressController mProgressController;
 
-    private static final String TAG = FileDetailFragment.class.getSimpleName();
     public static final String FTAG_CONFIRMATION = "REMOVE_CONFIRMATION_FRAGMENT";
     public static final String FTAG_RENAME_FILE = "RENAME_FILE_FRAGMENT";
 
@@ -322,7 +321,7 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
             case R.id.action_send_file: {
                 // Obtain the file
                 if (!getFile().isDown()) {  // Download the file                    
-                    Log_OC.d(TAG, getFile().getRemotePath() + " : File must be downloaded");
+                    Timber.d("%s : File must be downloaded", getFile().getRemotePath());
                     ((FileDisplayActivity) mContainerActivity).startDownloadForSending(getFile());
                 } else {
                     mContainerActivity.getFileOperationsHelper().sendDownloadedFile(getFile());
@@ -350,7 +349,7 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
                 break;
             }
             default:
-                Log_OC.e(TAG, "Incorrect view clicked!");
+                Timber.e("Incorrect view clicked!");
         }
     }
 

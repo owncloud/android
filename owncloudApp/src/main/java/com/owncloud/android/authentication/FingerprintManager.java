@@ -29,8 +29,8 @@ import android.preference.PreferenceManager;
 
 import androidx.annotation.RequiresApi;
 import com.owncloud.android.MainApp;
-import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.ui.activity.FingerprintActivity;
+import timber.log.Timber;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -140,9 +140,7 @@ public class FingerprintManager {
         try {
             return mHwFingerPrintManager.hasEnrolledFingerprints();
         } catch (RuntimeException re) {
-            Log_OC.e(FingerprintManager.class.toString(),
-                    "Could find out if finger prints are enroded due to lack of android.permission" +
-                            ".INTERACT_ACROSS_USERS");
+            Timber.e(re, "Could find out if finger prints are enroded due to lack of android.permission.INTERACT_ACROSS_USERS");
             return false;
         }
     }

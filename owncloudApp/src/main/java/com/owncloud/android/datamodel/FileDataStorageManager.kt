@@ -51,9 +51,9 @@ import com.owncloud.android.datamodel.OCFile.ROOT_PATH
 import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.*
 import com.owncloud.android.domain.capabilities.model.CapabilityBooleanType
 import com.owncloud.android.domain.capabilities.model.OCCapability
-import com.owncloud.android.lib.common.utils.Log_OC
 import com.owncloud.android.lib.resources.status.RemoteCapability
 import com.owncloud.android.utils.FileStorageUtils
+import timber.log.Timber
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
@@ -119,11 +119,11 @@ class FileDataStorageManager {
                     }
                 } while (cursorOnKeptInSync.moveToNext())
             } else {
-                Log_OC.d(TAG, "No available offline files found")
+                Timber.d("No available offline files found")
             }
 
         } catch (e: Exception) {
-            Log_OC.e(TAG, "Exception retrieving all the available offline files", e)
+            Timber.e(e, "Exception retrieving all the available offline files")
 
         } finally {
             cursorOnKeptInSync?.close()
@@ -164,11 +164,11 @@ class FileDataStorageManager {
                         result.add(file)
                     } while (cursorOnKeptInSync.moveToNext())
                 } else {
-                    Log_OC.d(TAG, "No available offline files found")
+                    Timber.d("No available offline files found")
                 }
 
             } catch (e: Exception) {
-                Log_OC.e(TAG, "Exception retrieving all the available offline files", e)
+                Timber.e(e, "Exception retrieving all the available offline files")
 
             } finally {
                 cursorOnKeptInSync?.close()
@@ -198,7 +198,7 @@ class FileDataStorageManager {
                     } while (cursorOnShared.moveToNext())
                 }
             } catch (exception: Exception) {
-                Log_OC.e(TAG, "Exception retrieving all the shared by link files", exception)
+                Timber.e(exception, "Exception retrieving all the shared by link files")
             } finally {
                 cursorOnShared?.close()
             }
@@ -339,9 +339,9 @@ class FileDataStorageManager {
                     contentValues = cv,
                     where = "$_ID=?",
                     selectionArgs = arrayOf(file.fileId.toString())
-                ).let { Log_OC.d(TAG, "Rows updated: $it") }
+                ).let { Timber.d("Rows updated: $it") }
             } catch (e: Exception) {
-                Log_OC.e(TAG, "Fail to insert insert file to database ${e.message}", e)
+                Timber.e(e, "Fail to insert insert file to database ${e.message}")
             }
 
         } else {
@@ -352,7 +352,7 @@ class FileDataStorageManager {
                 try {
                     performInsert(CONTENT_URI_FILE, cv)
                 } catch (e: RemoteException) {
-                    Log_OC.e(TAG, "Fail to insert insert file to database ${e.message}", e)
+                    Timber.e(e, "Fail to insert insert file to database ${e.message}")
                     null
                 }
             resultUri?.let {
@@ -377,10 +377,7 @@ class FileDataStorageManager {
     fun saveFolder(
         folder: OCFile, updatedFiles: Collection<OCFile>, filesToRemove: Collection<OCFile>
     ) {
-        Log_OC.d(
-            TAG, "Saving folder ${folder.remotePath} with ${updatedFiles.size} children and " +
-                    "${filesToRemove.size} files to remove"
-        )
+        Timber.d("Saving folder ${folder.remotePath} with ${updatedFiles.size} children and " + "${filesToRemove.size} files to remove")
 
         val operations = ArrayList<ContentProviderOperation>(updatedFiles.size)
 
@@ -492,7 +489,7 @@ class FileDataStorageManager {
 
         // apply operations in batch
         var results: Array<ContentProviderResult>? = null
-        Log_OC.d(TAG, "Sending ${operations.size} operations to FileContentProvider")
+        Timber.d("Sending ${operations.size} operations to FileContentProvider")
         try {
             results =
                 if (contentResolver != null) {
@@ -502,10 +499,10 @@ class FileDataStorageManager {
                 }
 
         } catch (e: OperationApplicationException) {
-            Log_OC.e(TAG, "Exception in batch of operations ${e.message}", e)
+            Timber.e(e, "Exception in batch of operations ${e.message}")
 
         } catch (e: RemoteException) {
-            Log_OC.e(TAG, "Exception in batch of operations ${e.message}", e)
+            Timber.e(e, "Exception in batch of operations ${e.message}")
         }
 
         // update new id in file objects for insertions
@@ -596,7 +593,7 @@ class FileDataStorageManager {
             }
 
         } catch (e: RemoteException) {
-            Log_OC.e(TAG, "Fail updating available offline status", e)
+            Timber.e(e, "Fail updating available offline status")
             return false
         }
 
@@ -742,7 +739,7 @@ class FileDataStorageManager {
                         sortOrder = "$FILE_PATH ASC "
                     )
                 } catch (e: RemoteException) {
-                    Log_OC.e(TAG, e.message)
+                    Timber.e(e.message)
                     null
                 }
 
@@ -806,7 +803,7 @@ class FileDataStorageManager {
                     }
 
                 } catch (e: Exception) {
-                    Log_OC.e(TAG, "Fail to update ${file.fileId} and descendants in database", e)
+                    Timber.e(e, "Fail to update ${file.fileId} and descendants in database")
                 }
 
             }
@@ -866,7 +863,7 @@ class FileDataStorageManager {
                 copied = copyFile(localFile, targetFile)
             }
 
-            Log_OC.d(TAG, "Local file COPIED : $copied")
+            Timber.d("Local file COPIED : $copied")
         }
     }
 
@@ -926,7 +923,7 @@ class FileDataStorageManager {
                 sortOrder = null
             )
         } catch (e: RemoteException) {
-            Log_OC.e(TAG, e.message)
+            Timber.e(e.message)
             return ret
         }
 
@@ -989,7 +986,7 @@ class FileDataStorageManager {
                     sortOrder = null
                 )
             } catch (e: RemoteException) {
-                Log_OC.e(TAG, "Couldn't determine file existence, assuming non existence: ${e.message}", e)
+                Timber.e(e, "Couldn't determine file existence, assuming non existence: ${e.message}")
                 return false
             }
         return c?.let {
@@ -1009,7 +1006,7 @@ class FileDataStorageManager {
                 sortOrder = null
             )
         } catch (e: RemoteException) {
-            Log_OC.e(TAG, "Could not get file details: ${e.message}", e)
+            Timber.e(e, "Could not get file details: ${e.message}")
             null
         }
 
@@ -1104,7 +1101,7 @@ class FileDataStorageManager {
                     )
             }
         } catch (e: RemoteException) {
-            Log_OC.e(TAG, "Exception deleting media file in MediaStore ${e.message}", e)
+            Timber.e(e, "Exception deleting media file in MediaStore ${e.message}")
         }
     }
 
@@ -1124,11 +1121,11 @@ class FileDataStorageManager {
                     selectionArgs = arrayOf(file.fileId.toString())
                 )
             } catch (e: RemoteException) {
-                Log_OC.e(TAG, "Failed saving conflict in database ${e.message}", e)
+                Timber.e(e, "Failed saving conflict in database ${e.message}")
                 0
             }
 
-        Log_OC.d(TAG, "Number of files updated with CONFLICT: $updated")
+        Timber.d("Number of files updated with CONFLICT: $updated")
 
         if (updated > 0) {
             if (eTagInConflict != null) {
@@ -1158,7 +1155,7 @@ class FileDataStorageManager {
                             selectionArgs = ancestorIds.toTypedArray()
                         )
                     } catch (e: RemoteException) {
-                        Log_OC.e(TAG, "Failed saving conflict in database ${e.message}", e)
+                        Timber.e(e, "Failed saving conflict in database ${e.message}")
                     }
                 } // else file is ROOT folder, no parent to set in conflict
 
@@ -1171,7 +1168,7 @@ class FileDataStorageManager {
                 }
                 parentPath = parentPath.substring(0, parentPath.lastIndexOf(PATH_SEPARATOR) + 1)
 
-                Log_OC.d(TAG, "checking parents to remove conflict; STARTING with $parentPath")
+                Timber.d("checking parents to remove conflict; STARTING with $parentPath")
                 while (parentPath.isNotEmpty()) {
 
                     val whereForDescendantsInConflict = FILE_ETAG_IN_CONFLICT + " IS NOT NULL AND " +
@@ -1188,12 +1185,12 @@ class FileDataStorageManager {
                                 sortOrder = null
                             )
                         } catch (e: RemoteException) {
-                            Log_OC.e(TAG, "Failed querying for descendants in conflict ${e.message}", e)
+                            Timber.e(e, "Failed querying for descendants in conflict ${e.message}")
                             null
                         }
 
                     if (descendantsInConflict == null || descendantsInConflict.count == 0) {
-                        Log_OC.d(TAG, "NO MORE conflicts in $parentPath")
+                        Timber.d("NO MORE conflicts in $parentPath")
 
                         try {
                             performUpdate(
@@ -1203,18 +1200,18 @@ class FileDataStorageManager {
                                 selectionArgs = arrayOf(account.name, parentPath)
                             )
                         } catch (e: RemoteException) {
-                            Log_OC.e(TAG, "Failed saving conflict in database ${e.message}", e)
+                            Timber.e(e, "Failed saving conflict in database ${e.message}")
                         }
 
                     } else {
-                        Log_OC.d(TAG, "STILL ${descendantsInConflict.count} in $parentPath")
+                        Timber.d("STILL ${descendantsInConflict.count} in $parentPath")
                     }
 
                     descendantsInConflict?.close()
 
                     parentPath = parentPath.substring(0, parentPath.length - 1)  // trim last /
                     parentPath = parentPath.substring(0, parentPath.lastIndexOf(PATH_SEPARATOR) + 1)
-                    Log_OC.d(TAG, "checking parents to remove conflict; NEXT $parentPath")
+                    Timber.d("checking parents to remove conflict; NEXT $parentPath")
                 }
             }
         }
@@ -1271,14 +1268,14 @@ class FileDataStorageManager {
                     selectionArgs = arrayOf(account.name)
                 )
             } catch (e: RemoteException) {
-                Log_OC.e(TAG, "Fail to insert insert file to database ${e.message}")
+                Timber.e("Fail to insert insert file to database ${e.message}")
             }
         } else {
             val resultUri: Uri? =
                 try {
                     performInsert(CONTENT_URI_CAPABILITIES, cv)
                 } catch (e: RemoteException) {
-                    Log_OC.e(TAG, "Fail to insert insert capability to database ${e.message}")
+                    Timber.e("Fail to insert insert capability to database ${e.message}")
                     null
                 }
             resultUri?.let {
@@ -1309,7 +1306,7 @@ class FileDataStorageManager {
                 sortOrder = null
             )
         } catch (e: RemoteException) {
-            Log_OC.e(TAG, "Couldn't determine capability existence, assuming non existence: ${e.message}")
+            Timber.e("Couldn't determine capability existence, assuming non existence: ${e.message}")
             null
         }
 
@@ -1542,7 +1539,6 @@ class FileDataStorageManager {
     }
 
     companion object {
-        private val TAG = FileDataStorageManager::class.java.simpleName
         const val ROOT_PARENT_ID = 0
         private const val pathAudio = "audio/"
         private const val pathVideo = "video/"

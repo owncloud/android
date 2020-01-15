@@ -25,7 +25,7 @@ import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.widget.ListView;
 
-import com.owncloud.android.lib.common.utils.Log_OC;
+import timber.log.Timber;
 
 /**
  * ListView allowing to specify the position of an item that should be centered in the visible area, if possible.
@@ -33,8 +33,6 @@ import com.owncloud.android.lib.common.utils.Log_OC;
  * The cleanest way I found to overcome the problem due to getHeight() returns 0 until the view is really drawn.
  */
 public class ExtendedListView extends ListView {
-
-    private static final String TAG = ExtendedListView.class.getSimpleName();
 
     private int mPositionToSetAndCenter = 0;
 
@@ -59,7 +57,7 @@ public class ExtendedListView extends ListView {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         if (mPositionToSetAndCenter > 0) {
-            Log_OC.v(TAG, "Centering around position " + mPositionToSetAndCenter);
+            Timber.v("Centering around position %s", mPositionToSetAndCenter);
             this.setSelectionFromTop(mPositionToSetAndCenter, getHeight() / 2);
             mPositionToSetAndCenter = 0;
         }

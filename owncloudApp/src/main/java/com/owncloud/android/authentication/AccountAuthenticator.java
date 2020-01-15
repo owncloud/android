@@ -45,7 +45,7 @@ import com.owncloud.android.lib.common.authentication.oauth.OAuth2ProvidersRegis
 import com.owncloud.android.lib.common.authentication.oauth.OAuth2RefreshAccessTokenOperation;
 import com.owncloud.android.lib.common.authentication.oauth.OAuth2RequestBuilder;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
-import com.owncloud.android.lib.common.utils.Log_OC;
+import timber.log.Timber;
 
 import java.util.Map;
 
@@ -69,8 +69,6 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
     private static final String KEY_LOGIN_OPTIONS = "loginOptions";
     public static final String KEY_ACCOUNT = "account";
 
-    private static final String TAG = AccountAuthenticator.class.getSimpleName();
-
     private Context mContext;
 
     private Handler mHandler;
@@ -88,8 +86,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
     public Bundle addAccount(AccountAuthenticatorResponse response,
                              String accountType, String authTokenType,
                              String[] requiredFeatures, Bundle options) {
-        Log_OC.i(TAG, "Adding account with type " + accountType
-                + " and auth token " + authTokenType);
+        Timber.i("Adding account with type " + accountType + " and auth token " + authTokenType);
 
         final Bundle bundle = new Bundle();
 
@@ -100,8 +97,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
             try {
                 validateAccountType(accountType);
             } catch (AuthenticatorException e) {
-                Log_OC.e(TAG, "Failed to validate account type " + accountType + ": "
-                        + e.getMessage());
+                Timber.e(e, "Failed to validate account type " + accountType + ": " + e.getMessage());
                 e.printStackTrace();
                 return e.getFailureBundle();
             }
@@ -139,8 +135,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
         try {
             validateAccountType(account.type);
         } catch (AuthenticatorException e) {
-            Log_OC.e(TAG, "Failed to validate account type " + account.type + ": "
-                    + e.getMessage());
+            Timber.e(e, "Failed to validate account type " + account.type + ": " + e.getMessage());
             e.printStackTrace();
             return e.getFailureBundle();
         }
@@ -174,8 +169,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
             validateAccountType(account.type);
             validateAuthTokenType(authTokenType);
         } catch (AuthenticatorException e) {
-            Log_OC.e(TAG, "Failed to validate account type " + account.type + ": "
-                    + e.getMessage());
+            Timber.e(e, "Failed to validate account type " + account.type + ": " + e.getMessage());
             e.printStackTrace();
             return e.getFailureBundle();
         }
@@ -317,7 +311,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
 
     private String refreshToken(Account account, String authTokenType, AccountManager accountManager) {
 
-        Log_OC.v(TAG, "Refreshing token!");
+        Timber.v("Refreshing token!");
         String accessToken;
         try {
             String refreshToken = accountManager.getUserData(
@@ -326,7 +320,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
             );
 
             if (refreshToken == null || refreshToken.length() <= 0) {
-                Log_OC.w(TAG, "No refresh token stored for silent renewal of access token");
+                Timber.w("No refresh token stored for silent renewal of access token");
                 return null;
             }
 
@@ -347,7 +341,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
 
             RemoteOperationResult<Map<String, String>> result = oAuth2RefreshAccessTokenOperation.execute(client);
             if (!result.isSuccess()) {
-                Log_OC.e(TAG, "Failed to refresh access token");
+                Timber.e("Failed to refresh access token");
                 return null;
             }
 
@@ -356,15 +350,15 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
 
             accessToken = tokens.get(OAuth2Constants.KEY_ACCESS_TOKEN);
 
-            Log_OC.d(TAG, "Got OAuth2 access token: " + accessToken);
+            Timber.d("Got OAuth2 access token: %s", accessToken);
 
             accountManager.setAuthToken(account, authTokenType, accessToken);
 
-            Log_OC.d(TAG, "Set OAuth2 new access token in account: " + accessToken);
+            Timber.d("Set OAuth2 new access token in account: %s", accessToken);
 
             refreshToken = tokens.get(OAuth2Constants.KEY_REFRESH_TOKEN);
 
-            Log_OC.d(TAG, "Got OAuth2 refresh token: " + refreshToken);
+            Timber.d("Got OAuth2 refresh token: %s", refreshToken);
 
             accountManager.setUserData(
                     account,
@@ -373,7 +367,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
             );
 
         } catch (Exception e) {
-            Log_OC.e(TAG, "Failed to store refreshed access token");
+            Timber.e(e, "Failed to store refreshed access token");
             return null;
         }
 

@@ -31,7 +31,6 @@ package com.owncloud.android.ui.activity
 import android.Manifest
 import android.accounts.Account
 import android.accounts.AuthenticatorException
-import android.annotation.TargetApi
 import android.app.Activity
 import android.content.BroadcastReceiver
 import android.content.ComponentName
@@ -73,7 +72,6 @@ import com.owncloud.android.lib.common.authentication.OwnCloudBearerCredentials
 import com.owncloud.android.lib.common.operations.RemoteOperation
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode
-import com.owncloud.android.lib.common.utils.Log_OC
 import com.owncloud.android.operations.CopyFileOperation
 import com.owncloud.android.operations.CreateFolderOperation
 import com.owncloud.android.operations.MoveFileOperation
@@ -105,6 +103,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.io.File
 import java.util.ArrayList
 import kotlin.coroutines.CoroutineContext
@@ -151,7 +150,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
             if (listOfFiles != null) {
                 return listOfFiles as OCFileListFragment?
             }
-            Log_OC.e(TAG, "Access to unexisting list of files fragment!!")
+            Timber.e("Access to unexisting list of files fragment!!")
             return null
         }
 
@@ -174,7 +173,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         get() = listOfFilesFragment!!.isGridEnabled
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        Log_OC.v(TAG, "onCreate() start")
+        Timber.v("onCreate() start")
 
         super.onCreate(savedInstanceState) // this calls onAccountChanged() when ownCloud Account is valid
 
@@ -182,7 +181,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
 
         /// Load of saved instance state
         if (savedInstanceState != null) {
-            Log_OC.d(savedInstanceState.toString())
+            Timber.d(savedInstanceState.toString())
 
             fileWaitingToPreview = savedInstanceState.getParcelable(KEY_WAITING_TO_PREVIEW)
             syncInProgress = savedInstanceState.getBoolean(KEY_SYNC_IN_PROGRESS)
@@ -215,13 +214,13 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         setupToolbar()
 
         // setup drawer
-        if (onlySharedByLink) {
-            setupDrawer(R.id.nav_shared_by_link_files)
-        } else if (onlyAvailableOffline) {
-            setupDrawer(R.id.nav_only_available_offline)
-        } else {
-            setupDrawer(R.id.nav_all_files)
-        }
+        setupDrawer(
+            when {
+                onlySharedByLink -> R.id.nav_shared_by_link_files
+                onlyAvailableOffline -> R.id.nav_only_available_offline
+                else -> R.id.nav_all_files
+            }
+        )
 
         leftFragmentContainer = findViewById(R.id.left_fragment_container)
         rightFragmentContainer = findViewById(R.id.right_fragment_container)
@@ -239,7 +238,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
                 .add(taskRetainerFragment, TaskRetainerFragment.FTAG_TASK_RETAINER_FRAGMENT).commit()
         }   // else, Fragment already created and retained across configuration change
 
-        Log_OC.v(TAG, "onCreate() end")
+        Timber.v("onCreate() end")
 
         if (resources.getBoolean(R.bool.enable_rate_me_feature) && !MainApp.isDeveloper) {
             AppRater.appLaunched(this, packageName)
@@ -297,21 +296,18 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
     }
 
     override fun onStart() {
-        Log_OC.v(TAG, "onStart() start")
         super.onStart()
-        Log_OC.v(TAG, "onStart() end")
+        Timber.v("onStart()")
     }
 
     override fun onStop() {
-        Log_OC.v(TAG, "onStop() start")
         super.onStop()
-        Log_OC.v(TAG, "onStop() end")
+        Timber.v("onStop()")
     }
 
     override fun onDestroy() {
-        Log_OC.v(TAG, "onDestroy() start")
         super.onDestroy()
-        Log_OC.v(TAG, "onDestroy() end")
+        Timber.v("onDestroy()")
     }
 
     /**
@@ -352,7 +348,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
             }
 
             if (!stateWasRecovered) {
-                Log_OC.d(TAG, "Initializing Fragments in onAccountChanged..")
+                Timber.d("Initializing Fragments in onAccountChanged..")
                 initFragmentsWithFile()
                 if (file!!.isFolder) {
                     startSyncFolderOperation(file, false)
@@ -380,7 +376,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
                 listOfFiles.listDirectory(currentDir)
 
             } else {
-                Log_OC.e(TAG, "Still have a chance to lose the initializacion of list fragment >(")
+                Timber.e("Still have a chance to lose the initializacion of list fragment >(")
             }
 
             /// Second fragment
@@ -395,12 +391,12 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
             }
 
         } else {
-            Log_OC.e(TAG, "initFragments() called with invalid NULLs!")
+            Timber.e("initFragments() called with invalid NULLs!")
             if (account == null) {
-                Log_OC.e(TAG, "\t account is NULL")
+                Timber.e("\t account is NULL")
             }
             if (file == null) {
-                Log_OC.e(TAG, "\t file is NULL")
+                Timber.e("\t file is NULL")
             }
         }
     }
@@ -502,7 +498,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         updateActionBarTitleAndHomeButton(null)
     }
 
-     fun refreshListOfFilesFragment(reloadData: Boolean) {
+    fun refreshListOfFilesFragment(reloadData: Boolean) {
         val fileListFragment = listOfFilesFragment
         fileListFragment?.listDirectory(reloadData)
     }
@@ -630,11 +626,8 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
     }
 
     private fun startSynchronization() {
-        Log_OC.d(TAG, "Got to start sync")
-        Log_OC.d(
-            TAG, "Requesting sync for " + account.name + " at " +
-                    MainApp.authority + " with new API"
-        )
+        Timber.d("Got to start sync")
+        Timber.d("Requesting sync for ${account.name} at ${MainApp.authority} with new API")
         val builder = SyncRequest.Builder()
         builder.setSyncAdapter(account, MainApp.authority)
         builder.setExpedited(true)
@@ -722,7 +715,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
             )
 
         } else {
-            Log_OC.d(TAG, "User clicked on 'Update' with no selection")
+            Timber.d("User clicked on 'Update' with no selection")
             showSnackMessage(getString(R.string.filedisplay_no_file_selected))
         }
     }
@@ -826,7 +819,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
     override fun onSaveInstanceState(outState: Bundle) {
         // responsibility of restore is preferred in onCreate() before than in
         // onRestoreInstanceState when there are Fragments involved
-        Log_OC.v(TAG, "onSaveInstanceState() start")
+        Timber.v("onSaveInstanceState() start")
         super.onSaveInstanceState(outState)
         outState.putParcelable(KEY_WAITING_TO_PREVIEW, fileWaitingToPreview)
         outState.putBoolean(KEY_SYNC_IN_PROGRESS, syncInProgress)
@@ -835,11 +828,11 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         outState.putParcelable(KEY_WAITING_TO_SEND, waitingToSend)
         outState.putParcelable(KEY_UPLOAD_HELPER, filesUploadHelper)
 
-        Log_OC.v(TAG, "onSaveInstanceState() end")
+        Timber.v("onSaveInstanceState() end")
     }
 
     override fun onResume() {
-        Log_OC.v(TAG, "onResume() start")
+        Timber.v("onResume() start")
         super.onResume()
 
         // refresh list of files
@@ -870,11 +863,11 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
 
         recoverSortMenuFormPreferences(mainMenu)
 
-        Log_OC.v(TAG, "onResume() end")
+        Timber.v("onResume() end")
     }
 
     override fun onPause() {
-        Log_OC.v(TAG, "onPause() start")
+        Timber.v("onPause() start")
         if (syncBroadcastReceiver != null) {
             localBroadcastManager!!.unregisterReceiver(syncBroadcastReceiver!!)
             syncBroadcastReceiver = null
@@ -889,7 +882,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         }
 
         super.onPause()
-        Log_OC.v(TAG, "onPause() end")
+        Timber.v("onPause() end")
     }
 
     private inner class SyncBroadcastReceiver : BroadcastReceiver() {
@@ -899,7 +892,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
          */
         override fun onReceive(context: Context, intent: Intent) {
             val event = intent.action
-            Log_OC.d(TAG, "Received broadcast " + event!!)
+            Timber.d("Received broadcast " + event!!)
             val accountName = intent.getStringExtra(FileSyncAdapter.EXTRA_ACCOUNT_NAME)
 
             val synchFolderRemotePath = intent.getStringExtra(FileSyncAdapter.EXTRA_FOLDER_PATH)
@@ -989,7 +982,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
 
                 val fileListFragment = listOfFilesFragment
                 fileListFragment?.setProgressBarAsIndeterminate(syncInProgress)
-                Log_OC.d(TAG, "Setting progress visibility to $syncInProgress")
+                Timber.d("Setting progress visibility to $syncInProgress")
 
                 setBackgroundText()
             }
@@ -1037,7 +1030,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
             }
             ocFileListFragment.setMessageForEmptyList(getString(message))
         } else {
-            Log_OC.e(TAG, "OCFileListFragment is null")
+            Timber.e("OCFileListFragment is null")
         }
     }
 
@@ -1295,7 +1288,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
                     this@FileDisplayActivity, FileDownloader::class.java
                 )
             ) {
-                Log_OC.d(TAG, "Download service connected")
+                Timber.d("Download service connected")
                 mDownloaderBinder = service as FileDownloaderBinder
 
                 if (fileWaitingToPreview != null) {
@@ -1329,7 +1322,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
                     FileUploader::class.java
                 )
             ) {
-                Log_OC.d(TAG, "Upload service connected")
+                Timber.d("Upload service connected")
                 mUploaderBinder = service as FileUploaderBinder
             } else {
                 return
@@ -1346,14 +1339,14 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
                     FileDownloader::class.java
                 )
             ) {
-                Log_OC.d(TAG, "Download service disconnected")
+                Timber.d("Download service disconnected")
                 mDownloaderBinder = null
             } else if (component == ComponentName(
                     this@FileDisplayActivity,
                     FileUploader::class.java
                 )
             ) {
-                Log_OC.d(TAG, "Upload service disconnected")
+                Timber.d("Upload service disconnected")
                 mUploaderBinder = null
             }
         }
@@ -1443,7 +1436,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
                 )
 
             } catch (e: NotFoundException) {
-                Log_OC.e(TAG, "Error while trying to show fail message ", e)
+                Timber.e(e, "Error while trying to show fail message")
             }
 
         }
@@ -1466,7 +1459,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
                 )
 
             } catch (e: NotFoundException) {
-                Log_OC.e(TAG, "Error while trying to show fail message ", e)
+                Timber.e(e, "Error while trying to show fail message")
             }
 
         }
@@ -1561,7 +1554,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
                     ErrorMessageAdapter.getResultMessage(result, operation, resources)
                 )
             } catch (e: NotFoundException) {
-                Log_OC.e(TAG, "Error while trying to show fail message ", e)
+                Timber.e(e, "Error while trying to show fail message")
             }
 
         }
@@ -1845,8 +1838,6 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
     }
 
     companion object {
-        private val TAG = FileDisplayActivity::class.java.simpleName
-
         private const val TAG_LIST_OF_FILES = "LIST_OF_FILES"
         private const val TAG_SECOND_FRAGMENT = "SECOND_FRAGMENT"
 

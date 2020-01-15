@@ -28,8 +28,8 @@ import android.security.keystore.KeyProperties;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.ui.dialog.FingerprintAuthDialogFragment;
+import timber.log.Timber;
 
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
@@ -46,8 +46,6 @@ import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 
 public class FingerprintActivity extends AppCompatActivity {
-
-    private static final String TAG = FingerprintActivity.class.getSimpleName();
 
     private static final String TAG_FINGERPRINT_FRAGMENT = "FINGERPRINT_LOCK";
 
@@ -100,7 +98,7 @@ public class FingerprintActivity extends AppCompatActivity {
             mKeyStore = KeyStore.getInstance(ANDROID_KEY_STORE);
 
         } catch (KeyStoreException e) {
-            Log_OC.e(TAG, "Failed while getting KeyStore instance", e);
+            Timber.e(e, "Failed while getting KeyStore instance");
         }
 
         try {
@@ -108,7 +106,7 @@ public class FingerprintActivity extends AppCompatActivity {
             mKeyGenerator = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, ANDROID_KEY_STORE);
 
         } catch (NoSuchAlgorithmException | NoSuchProviderException e) {
-            Log_OC.e(TAG, "Failed while getting KeyGenerator instance", e);
+            Timber.e(e, "Failed while getting KeyGenerator instance");
         }
 
         try {
@@ -125,7 +123,7 @@ public class FingerprintActivity extends AppCompatActivity {
                     .build());
             mKeyGenerator.generateKey();
         } catch (NoSuchAlgorithmException | InvalidAlgorithmParameterException | CertificateException | IOException e) {
-            Log_OC.e(TAG, "Failed while generating and saving the encryption key", e);
+            Timber.e(e, "Failed while generating and saving the encryption key");
         }
     }
 
@@ -144,7 +142,7 @@ public class FingerprintActivity extends AppCompatActivity {
                             + KeyProperties.BLOCK_MODE_CBC + "/"
                             + KeyProperties.ENCRYPTION_PADDING_PKCS7);
         } catch (NoSuchAlgorithmException | NoSuchPaddingException e) {
-            Log_OC.e(TAG, "Error while generating and saving the encryption key", e);
+            Timber.e(e, "Error while generating and saving the encryption key");
         }
 
         try {
@@ -154,11 +152,11 @@ public class FingerprintActivity extends AppCompatActivity {
             mCipher.init(Cipher.ENCRYPT_MODE, key);
             return true;
         } catch (KeyPermanentlyInvalidatedException e) {
-            Log_OC.e(TAG, "Key permanently invalidated while initializing the cipher", e);
+            Timber.e(e, "Key permanently invalidated while initializing the cipher");
             return false;
         } catch (KeyStoreException | CertificateException | UnrecoverableKeyException | IOException |
                 NoSuchAlgorithmException | InvalidKeyException e) {
-            Log_OC.e(TAG, "Failed while initializing the cipher", e);
+            Timber.e(e, "Failed while initializing the cipher");
             return false;
         }
     }

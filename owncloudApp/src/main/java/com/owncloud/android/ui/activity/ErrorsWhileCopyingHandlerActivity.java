@@ -45,10 +45,10 @@ import com.google.android.material.snackbar.Snackbar;
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
-import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.ui.dialog.LoadingDialog;
 import com.owncloud.android.utils.FileStorageUtils;
 import com.owncloud.android.utils.PreferenceUtils;
+import timber.log.Timber;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -64,8 +64,6 @@ import java.util.ArrayList;
  */
 public class ErrorsWhileCopyingHandlerActivity extends AppCompatActivity
         implements OnClickListener {
-
-    private static final String TAG = ErrorsWhileCopyingHandlerActivity.class.getSimpleName();
 
     public static final String EXTRA_ACCOUNT =
             ErrorsWhileCopyingHandlerActivity.class.getCanonicalName() + ".KEY_ACCOUNT";
@@ -196,16 +194,16 @@ public class ErrorsWhileCopyingHandlerActivity extends AppCompatActivity
     public void onClick(View v) {
         if (v.getId() == R.id.ok) {
             /// perform movement operation in background thread
-            Log_OC.d(TAG, "Clicked MOVE, start movement");
+            Timber.d("Clicked MOVE, start movement");
             new MoveFilesTask().execute();
 
         } else if (v.getId() == R.id.cancel) {
             /// just finish
-            Log_OC.d(TAG, "Clicked CANCEL, bye");
+            Timber.d("Clicked CANCEL, bye");
             finish();
 
         } else {
-            Log_OC.e(TAG, "Clicked phantom button, id: " + v.getId());
+            Timber.e("Clicked phantom button, id: %s", v.getId());
         }
     }
 

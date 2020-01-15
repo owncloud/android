@@ -28,18 +28,16 @@ import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.files.services.FileDownloader;
 import com.owncloud.android.files.services.FileUploader;
 import com.owncloud.android.files.services.TransferRequester;
-import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.ui.dialog.ConflictsResolveDialog;
 import com.owncloud.android.ui.dialog.ConflictsResolveDialog.Decision;
 import com.owncloud.android.ui.dialog.ConflictsResolveDialog.OnConflictDecisionMadeListener;
+import timber.log.Timber;
 
 /**
  * Wrapper activity which will be launched if keep-in-sync file will be modified by external
  * application.
  */
 public class ConflictsResolveActivity extends FileActivity implements OnConflictDecisionMadeListener {
-
-    private String TAG = ConflictsResolveActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +70,7 @@ public class ConflictsResolveActivity extends FileActivity implements OnConflict
                 finish();
                 return;
             default:
-                Log_OC.e(TAG, "Unhandled conflict decision " + decision);
+                Timber.e("Unhandled conflict decision %s", decision);
                 return;
         }
 
@@ -87,7 +85,7 @@ public class ConflictsResolveActivity extends FileActivity implements OnConflict
         if (getAccount() != null) {
             OCFile file = getFile();
             if (getFile() == null) {
-                Log_OC.e(TAG, "No conflictive file received");
+                Timber.e("No conflictive file received");
                 finish();
             } else {
                 /// Check whether the 'main' OCFile handled by the Activity is contained in the current Account

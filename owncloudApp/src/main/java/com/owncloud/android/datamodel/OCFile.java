@@ -33,7 +33,7 @@ import androidx.annotation.NonNull;
 import androidx.core.content.FileProvider;
 import com.owncloud.android.R;
 import com.owncloud.android.lib.common.network.WebdavUtils;
-import com.owncloud.android.lib.common.utils.Log_OC;
+import timber.log.Timber;
 
 import java.io.File;
 
@@ -88,8 +88,6 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
         }
 
     }
-
-    private static final String TAG = OCFile.class.getSimpleName();
 
     private long mId;
     private long mParentId;
@@ -307,7 +305,7 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
                             new File(mLocalPath)
                     );
                 } catch (IllegalArgumentException e) {
-                    Log_OC.e(TAG, "File can't be exported");
+                    Timber.e(e, "File can't be exported");
                 }
             }
         }
@@ -404,7 +402,7 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
      * directory
      */
     public void setFileName(String name) {
-        Log_OC.d(TAG, "OCFile name changin from " + mRemotePath);
+        Timber.d("OCFile name changing from %s", mRemotePath);
         if (name != null && name.length() > 0 && !name.contains(PATH_SEPARATOR) &&
                 !mRemotePath.equals(ROOT_PATH)) {
             String parent = (new File(getRemotePath())).getParent();
@@ -413,7 +411,7 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
             if (isFolder()) {
                 mRemotePath += PATH_SEPARATOR;
             }
-            Log_OC.d(TAG, "OCFile name changed to " + mRemotePath);
+            Timber.d("OCFile name changed to %s", mRemotePath);
         }
     }
 

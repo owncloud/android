@@ -37,9 +37,9 @@ import androidx.appcompat.app.ActionBar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import com.owncloud.android.R;
-import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.ui.fragment.LocalFileListFragment;
 import com.owncloud.android.utils.PreferenceUtils;
+import timber.log.Timber;
 
 import java.io.File;
 
@@ -48,8 +48,6 @@ import java.io.File;
  */
 
 public class LocalFolderPickerActivity extends ToolbarActivity implements LocalFileListFragment.ContainerActivity {
-
-    private static final String TAG = LocalFolderPickerActivity.class.getName();
 
     public static final String EXTRA_PATH = LocalFolderPickerActivity.class.getCanonicalName() + ".PATH";
 
@@ -81,7 +79,7 @@ public class LocalFolderPickerActivity extends ToolbarActivity implements LocalF
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        Log_OC.d(TAG, "onCreate() start");
+        Timber.v("onCreate() start");
         super.onCreate(savedInstanceState);
 
         // set current folder
@@ -149,7 +147,7 @@ public class LocalFolderPickerActivity extends ToolbarActivity implements LocalF
         }
         updateActionBar();
 
-        Log_OC.d(TAG, "onCreate() end");
+        Timber.v("onCreate() end");
     }
 
     private void createFragments() {
@@ -170,7 +168,7 @@ public class LocalFolderPickerActivity extends ToolbarActivity implements LocalF
             actionBar.setDisplayHomeAsUpEnabled(mayBrowseUp);
             actionBar.setTitle(mayBrowseUp ? mCurrentFolder.getName() : File.separator);
         } else {
-            Log_OC.w(TAG, "Action bar missing in action");
+            Timber.w("Action bar missing in action");
         }
     }
 
@@ -211,7 +209,7 @@ public class LocalFolderPickerActivity extends ToolbarActivity implements LocalF
             mCurrentFolder = listFragment.getCurrentFolder();
             updateActionBar();
         } else {
-            Log_OC.e(TAG, "List of files not found - cannot browse up");
+            Timber.e("List of files not found - cannot browse up");
         }
     }
 
@@ -227,10 +225,10 @@ public class LocalFolderPickerActivity extends ToolbarActivity implements LocalF
      */
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        Log_OC.d(TAG, "onSaveInstanceState() start");
+        Timber.v("onSaveInstanceState() start");
         super.onSaveInstanceState(outState);
         outState.putString(LocalFolderPickerActivity.EXTRA_PATH, mCurrentFolder.getAbsolutePath());
-        Log_OC.d(TAG, "onSaveInstanceState() end");
+        Timber.v("onSaveInstanceState() end");
     }
 
     /**

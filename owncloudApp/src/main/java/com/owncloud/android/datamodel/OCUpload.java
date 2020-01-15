@@ -31,9 +31,9 @@ import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.UploadsStorageManager.UploadStatus;
 import com.owncloud.android.db.UploadResult;
 import com.owncloud.android.files.services.FileUploader;
-import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.operations.UploadFileOperation;
 import com.owncloud.android.utils.MimetypeIconUtil;
+import timber.log.Timber;
 
 import java.io.File;
 
@@ -42,8 +42,6 @@ import java.io.File;
  * be stored persistently by {@link UploadsStorageManager}.
  */
 public class OCUpload implements Parcelable {
-
-    private static final String TAG = OCUpload.class.getSimpleName();
 
     private long mId;
 
@@ -326,7 +324,7 @@ public class OCUpload implements Parcelable {
             return localPath + " status:" + getUploadStatus() + " result:" +
                     (getLastResult() == null ? "null" : getLastResult().getValue());
         } catch (NullPointerException e) {
-            Log_OC.d(TAG, "Exception " + e.toString());
+            Timber.d("Exception %s", e.toString());
             return (e.toString());
         }
     }

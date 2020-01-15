@@ -29,7 +29,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.PowerManager;
@@ -65,7 +64,6 @@ import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.files.FileMenuFilter;
-import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.activity.FileDisplayActivity;
@@ -83,6 +81,7 @@ import com.owncloud.android.ui.preview.PreviewTextFragment;
 import com.owncloud.android.ui.preview.PreviewVideoFragment;
 import com.owncloud.android.utils.FileStorageUtils;
 import com.owncloud.android.utils.PreferenceUtils;
+import timber.log.Timber;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -95,8 +94,6 @@ import java.util.List;
  */
 public class OCFileListFragment extends ExtendedListFragment implements
         SearchView.OnQueryTextListener, View.OnFocusChangeListener {
-
-    private static final String TAG = OCFileListFragment.class.getSimpleName();
 
     private static final String MY_PACKAGE = OCFileListFragment.class.getPackage() != null ?
             OCFileListFragment.class.getPackage().getName() : "com.owncloud.android.ui.fragment";
@@ -173,7 +170,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        Log_OC.v(TAG, "onAttach");
+        Timber.v("onAttach");
         try {
             mContainerActivity = (FileFragment.ContainerActivity) context;
 
@@ -195,14 +192,14 @@ public class OCFileListFragment extends ExtendedListFragment implements
      */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Log_OC.i(TAG, "onCreateView() start");
+        Timber.i("onCreateView() start");
         View v = super.onCreateView(inflater, container, savedInstanceState);
         Bundle args = getArguments();
         boolean allowContextualActions = (args != null) && args.getBoolean(ARG_ALLOW_CONTEXTUAL_MODE, false);
         if (allowContextualActions) {
             setChoiceModeAsMultipleModal(savedInstanceState);
         }
-        Log_OC.i(TAG, "onCreateView() end");
+        Timber.i("onCreateView() end");
         return v;
     }
 
@@ -219,7 +216,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Log_OC.d(TAG, "onActivityCreated() start");
+        Timber.v("onActivityCreated() start");
 
         if (savedInstanceState != null) {
             mFile = savedInstanceState.getParcelable(KEY_FILE);
@@ -806,7 +803,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
             }
 
         } else {
-            Log_OC.d(TAG, "Null object in ListAdapter!!");
+            Timber.d("Null object in ListAdapter!!");
         }
 
     }
@@ -869,7 +866,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
                 case R.id.action_send_file: {
                     // Obtain the file
                     if (!singleFile.isDown()) {  // Download the file
-                        Log_OC.d(TAG, singleFile.getRemotePath() + " : File must be downloaded");
+                        Timber.d("%s : File must be downloaded", singleFile.getRemotePath());
                         ((FileDisplayActivity) mContainerActivity).startDownloadForSending(singleFile);
 
                     } else {
@@ -986,7 +983,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
 
             // If that's not a directory -> List its parent
             if (!directory.isFolder()) {
-                Log_OC.w(TAG, "You see, that is not a directory -> " + directory.toString());
+                Timber.w("You see, that is not a directory -> %s", directory.toString());
                 directory = storageManager.getFileById(directory.getParentId());
             }
 

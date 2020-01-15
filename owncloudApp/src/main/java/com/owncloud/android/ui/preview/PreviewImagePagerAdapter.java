@@ -29,9 +29,9 @@ import androidx.fragment.app.FragmentStatePagerAdapter;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.files.services.FileDownloader;
-import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.ui.fragment.FileFragment;
 import com.owncloud.android.utils.FileStorageUtils;
+import timber.log.Timber;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -45,8 +45,6 @@ import java.util.Vector;
  */
 //public class PreviewImagePagerAdapter extends PagerAdapter {
 public class PreviewImagePagerAdapter extends FragmentStatePagerAdapter {
-
-    private static final String TAG = PreviewImagePagerAdapter.class.getCanonicalName();
 
     private Vector<OCFile> mImageFiles;
     private Account mAccount;
@@ -232,7 +230,7 @@ public class PreviewImagePagerAdapter extends FragmentStatePagerAdapter {
                 fragment.onSyncEvent(action, success, null);
             }
         } else {
-            Log_OC.d(TAG, "Download finished, but the fragment is offscreen");
+            Timber.d("Download finished, but the fragment is offscreen");
         }
     }
 }

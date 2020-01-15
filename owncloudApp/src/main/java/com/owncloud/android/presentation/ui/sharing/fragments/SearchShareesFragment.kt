@@ -44,7 +44,6 @@ import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.domain.sharing.shares.model.OCShare
 import com.owncloud.android.domain.sharing.shares.model.ShareType
 import com.owncloud.android.domain.utils.Event
-import com.owncloud.android.lib.common.utils.Log_OC
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.adapters.sharing.ShareUserListAdapter
 import com.owncloud.android.presentation.viewmodels.sharing.OCShareViewModel
@@ -52,6 +51,7 @@ import com.owncloud.android.utils.PreferenceUtils
 import kotlinx.android.synthetic.main.search_users_groups_layout.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
+import timber.log.Timber
 
 /**
  * Fragment for Searching sharees (users and groups)
@@ -121,7 +121,7 @@ class SearchShareesFragment : Fragment(),
 
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
-                Log_OC.v(TAG, "onQueryTextSubmit intercepted, query: $query")
+                Timber.v("onQueryTextSubmit intercepted, query: $query")
                 return true    // return true to prevent the query is processed to be queried;
                 // a user / group will be picked only if selected in the list of suggestions
             }
@@ -221,19 +221,17 @@ class SearchShareesFragment : Fragment(),
     }
 
     override fun unshareButtonPressed(share: OCShare) {
-        Log_OC.d(TAG, "Removed private share with " + share.sharedWithDisplayName!!)
+        Timber.d("Removed private share with ${share.sharedWithDisplayName}")
         listener?.showRemoveShare(share)
     }
 
     override fun editShare(share: OCShare) {
         // move to fragment to edit share
-        Log_OC.d(TAG, "Editing " + share.sharedWithDisplayName!!)
+        Timber.d("Editing ${share.sharedWithDisplayName}")
         listener?.showEditPrivateShare(share)
     }
 
     companion object {
-        private val TAG = SearchShareesFragment::class.java.simpleName
-
         // the fragment initialization parameters
         private const val ARG_FILE = "FILE"
         private const val ARG_ACCOUNT = "ACCOUNT"

@@ -19,15 +19,13 @@
 
 package com.owncloud.android.utils;
 
-import com.owncloud.android.lib.common.utils.Log_OC;
+import timber.log.Timber;
 
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 public class SecurityUtils {
-
-    private static final String TAG = SecurityUtils.class.getSimpleName();
 
     public static String stringToMD5Hash(String stringToTransform) {
         MessageDigest messageDigest;
@@ -38,7 +36,7 @@ public class SecurityUtils {
             messageDigest.update(stringToTransform.getBytes(), 0, stringToTransform.length());
             hash = new BigInteger(1, messageDigest.digest()).toString(16);
         } catch (NoSuchAlgorithmException e) {
-            Log_OC.d(TAG, "It's been not possible to generate the MD5 hash because of " + e);
+            Timber.e(e, "It's been not possible to generate the MD5 hash");
         }
 
         return hash;

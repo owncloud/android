@@ -45,7 +45,6 @@ import com.owncloud.android.R;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.files.FileMenuFilter;
-import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.media.MediaControlView;
 import com.owncloud.android.media.MediaService;
 import com.owncloud.android.media.MediaServiceBinder;
@@ -53,8 +52,8 @@ import com.owncloud.android.ui.controller.TransferProgressController;
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment;
 import com.owncloud.android.ui.dialog.RemoveFilesDialogFragment;
 import com.owncloud.android.ui.fragment.FileFragment;
-import com.owncloud.android.utils.DisplayUtils;
 import com.owncloud.android.utils.PreferenceUtils;
+import timber.log.Timber;
 
 /**
  * This fragment shows a preview of a downloaded audio.
@@ -83,8 +82,6 @@ public class PreviewAudioFragment extends FileFragment {
 
     private ProgressBar mProgressBar = null;
     public TransferProgressController mProgressController;
-
-    private static final String TAG = PreviewAudioFragment.class.getSimpleName();
 
     /**
      * Public factory method to create new PreviewAudioFragment instances.
@@ -143,7 +140,7 @@ public class PreviewAudioFragment extends FileFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        Log_OC.v(TAG, "onCreateView");
+        Timber.v("onCreateView");
 
         View view = inflater.inflate(R.layout.preview_audio_fragment, container, false);
         view.setFilterTouchesWhenObscured(
@@ -163,7 +160,7 @@ public class PreviewAudioFragment extends FileFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Log_OC.v(TAG, "onActivityCreated");
+        Timber.v("onActivityCreated");
 
         OCFile file;
         Bundle args = getArguments();
@@ -234,7 +231,7 @@ public class PreviewAudioFragment extends FileFragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        Log_OC.v(TAG, "onSaveInstanceState");
+        Timber.v("onSaveInstanceState");
 
         outState.putParcelable(PreviewAudioFragment.EXTRA_FILE, getFile());
         outState.putParcelable(PreviewAudioFragment.EXTRA_ACCOUNT, mAccount);
@@ -247,7 +244,7 @@ public class PreviewAudioFragment extends FileFragment {
     @Override
     public void onStart() {
         super.onStart();
-        Log_OC.v(TAG, "onStart");
+        Timber.v("onStart");
 
         OCFile file = getFile();
         if (file != null && file.isDown()) {
@@ -393,12 +390,12 @@ public class PreviewAudioFragment extends FileFragment {
 
     @Override
     public void onStop() {
-        Log_OC.v(TAG, "onStop");
+        Timber.v("onStop");
 
         mProgressController.stopListeningProgressFor(getFile(), mAccount);
 
         if (mMediaServiceConnection != null) {
-            Log_OC.d(TAG, "Unbinding from MediaService ...");
+            Timber.d("Unbinding from MediaService ...");
             if (mMediaServiceBinder != null && mMediaController != null) {
                 mMediaServiceBinder.unregisterMediaController(mMediaController);
             }
@@ -413,13 +410,13 @@ public class PreviewAudioFragment extends FileFragment {
     public void playAudio(boolean restart) {
         OCFile file = getFile();
         if (restart) {
-            Log_OC.d(TAG, "restarting playback of " + file.getStoragePath());
+            Timber.d("restarting playback of %s", file.getStoragePath());
             mAutoplay = true;
             mSavedPlaybackPosition = 0;
             mMediaServiceBinder.start(mAccount, file, true, 0);
 
         } else if (!mMediaServiceBinder.isPlaying(file)) {
-            Log_OC.d(TAG, "starting playback of " + file.getStoragePath());
+            Timber.d("starting playback of %s", file.getStoragePath());
             mMediaServiceBinder.start(mAccount, file, mAutoplay, mSavedPlaybackPosition);
 
         } else {
@@ -431,7 +428,7 @@ public class PreviewAudioFragment extends FileFragment {
     }
 
     private void bindMediaService() {
-        Log_OC.d(TAG, "Binding to MediaService...");
+        Timber.d("Binding to MediaService...");
         if (mMediaServiceConnection == null) {
             mMediaServiceConnection = new MediaServiceConnection();
             getActivity().bindService(new Intent(getActivity(),
@@ -452,15 +449,15 @@ public class PreviewAudioFragment extends FileFragment {
             if (getActivity() != null) {
                 if (component.equals(
                         new ComponentName(getActivity(), MediaService.class))) {
-                    Log_OC.d(TAG, "Media service connected");
+                    Timber.d("Media service connected");
                     mMediaServiceBinder = (MediaServiceBinder) service;
                     if (mMediaServiceBinder != null) {
                         prepareMediaController();
                         playAudio(false);
-                        Log_OC.d(TAG, "Successfully bound to MediaService, MediaController ready");
+                        Timber.d("Successfully bound to MediaService, MediaController ready");
 
                     } else {
-                        Log_OC.e(TAG, "Unexpected response from MediaService while binding");
+                        Timber.e("Unexpected response from MediaService while binding");
                     }
                 }
             }
@@ -478,11 +475,11 @@ public class PreviewAudioFragment extends FileFragment {
         @Override
         public void onServiceDisconnected(ComponentName component) {
             if (component.equals(new ComponentName(getActivity(), MediaService.class))) {
-                Log_OC.w(TAG, "Media service suddenly disconnected");
+                Timber.w("Media service suddenly disconnected");
                 if (mMediaController != null) {
                     mMediaController.setMediaPlayer(null);
                 } else {
-                    Log_OC.w(TAG, "No media controller to release when disconnected from media service");
+                    Timber.w("No media controller to release when disconnected from media service");
                 }
                 mMediaServiceBinder = null;
                 mMediaServiceConnection = null;

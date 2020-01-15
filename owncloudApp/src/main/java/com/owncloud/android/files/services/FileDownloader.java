@@ -53,7 +53,6 @@ import com.owncloud.android.lib.common.OwnCloudClientManagerFactory;
 import com.owncloud.android.lib.common.network.OnDatatransferProgressListener;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
-import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.files.FileUtils;
 import com.owncloud.android.operations.DownloadFileOperation;
 import com.owncloud.android.ui.activity.FileActivity;
@@ -63,6 +62,7 @@ import com.owncloud.android.ui.notifications.NotificationUtils;
 import com.owncloud.android.ui.preview.PreviewImageActivity;
 import com.owncloud.android.ui.preview.PreviewImageFragment;
 import com.owncloud.android.utils.Extras;
+import timber.log.Timber;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
@@ -83,8 +83,6 @@ public class FileDownloader extends Service
     private static final String DOWNLOAD_ADDED_MESSAGE = "DOWNLOAD_ADDED";
     private static final String DOWNLOAD_FINISH_MESSAGE = "DOWNLOAD_FINISH";
     private static final String DOWNLOAD_NOTIFICATION_CHANNEL_ID = "DOWNLOAD_NOTIFICATION_CHANNEL";
-
-    private static final String TAG = FileDownloader.class.getSimpleName();
 
     private Looper mServiceLooper;
     private ServiceHandler mServiceHandler;
@@ -117,7 +115,7 @@ public class FileDownloader extends Service
     @Override
     public void onCreate() {
         super.onCreate();
-        Log_OC.d(TAG, "Creating service");
+        Timber.d("Creating service");
 
         mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
@@ -160,7 +158,7 @@ public class FileDownloader extends Service
      */
     @Override
     public void onDestroy() {
-        Log_OC.v(TAG, "Destroying service");
+        Timber.v("Destroying service");
         mBinder = null;
         mServiceHandler = null;
         mServiceLooper.quit();
@@ -182,25 +180,25 @@ public class FileDownloader extends Service
      */
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log_OC.d(TAG, "Starting command with id " + startId);
+        Timber.d("Starting command with id %s", startId);
 
         boolean isAvailableOfflineFile = intent.getBooleanExtra(KEY_IS_AVAILABLE_OFFLINE_FILE, false);
         boolean retryDownload = intent.getBooleanExtra(KEY_RETRY_DOWNLOAD, false);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && (isAvailableOfflineFile || retryDownload)) {
-            /**
+            /*
              * We have to call this within five seconds after the service is created with startForegroundService when:
              * - Checking available offline files in background
              * - Retry downloads in background, e.g. when recovering wifi connection
              */
-            Log_OC.d(TAG, "Starting FileDownloader service in foreground");
+            Timber.d("Starting FileDownloader service in foreground");
             startForeground(1, mNotificationBuilder.build());
         }
 
         if (!intent.hasExtra(KEY_ACCOUNT) ||
                 !intent.hasExtra(KEY_FILE)
         ) {
-            Log_OC.e(TAG, "Not enough information provided in intent");
+            Timber.e("Not enough information provided in intent");
             return START_NOT_STICKY;
         } else {
             final Account account = intent.getParcelableExtra(KEY_ACCOUNT);
@@ -219,7 +217,7 @@ public class FileDownloader extends Service
                 }   // else, file already in the queue of downloads; don't repeat the request
 
             } catch (IllegalArgumentException e) {
-                Log_OC.e(TAG, "Not enough information provided in intent: " + e.getMessage());
+                Timber.e(e, "Not enough information provided in intent");
                 return START_NOT_STICKY;
             }
 
@@ -306,10 +304,10 @@ public class FileDownloader extends Service
          * @param account   ownCloud account.
          */
         public void cancel(Account account) {
-            Log_OC.d(TAG, "Account= " + account.name);
+            Timber.d("Account= %s", account.name);
 
             if (mCurrentDownload != null) {
-                Log_OC.d(TAG, "Current Download Account= " + mCurrentDownload.getAccount().name);
+                Timber.d("Current Download Account= %s", mCurrentDownload.getAccount().name);
                 if (mCurrentDownload.getAccount().name.equals(account.name)) {
                     mCurrentDownload.cancel();
                 }
@@ -413,13 +411,11 @@ public class FileDownloader extends Service
             @SuppressWarnings("unchecked")
             AbstractList<String> requestedDownloads = (AbstractList<String>) msg.obj;
             if (msg.obj != null) {
-                Iterator<String> it = requestedDownloads.iterator();
-                while (it.hasNext()) {
-                    String next = it.next();
+                for (String next : requestedDownloads) {
                     mService.downloadFile(next);
                 }
             }
-            Log_OC.d(TAG, "Stopping after command with id " + msg.arg1);
+            Timber.d("Stopping after command with id %s", msg.arg1);
             mService.stopForeground(true);
             mService.stopSelf(msg.arg1);
         }
@@ -438,11 +434,7 @@ public class FileDownloader extends Service
 
             /// Check account existence
             if (!AccountUtils.exists(mCurrentDownload.getAccount().name, this)) {
-                Log_OC.w(
-                        TAG,
-                        "Account " + mCurrentDownload.getAccount().name +
-                                " does not exist anymore -> cancelling all its downloads"
-                );
+                Timber.w("Account " + mCurrentDownload.getAccount().name + " does not exist anymore -> cancelling all its downloads");
                 cancelDownloadsForAccount(mCurrentDownload.getAccount());
                 return;
             }
@@ -477,7 +469,7 @@ public class FileDownloader extends Service
                 }
 
             } catch (Exception e) {
-                Log_OC.e(TAG, "Error downloading", e);
+                Timber.e(e, "Error downloading");
                 downloadResult = new RemoteOperationResult(e);
 
             } finally {
@@ -505,24 +497,10 @@ public class FileDownloader extends Service
                         downloadResult = new RemoteOperationResult(
                                 ResultCode.NO_NETWORK_CONNECTION);
                     } else {
-                        Log_OC.v(
-                                TAG,
-                                String.format(
-                                        "Exception in download, network is OK, no retry scheduled for %1s in %2s",
-                                        mCurrentDownload.getRemotePath(),
-                                        mCurrentAccount.name
-                                )
-                        );
+                        Timber.v("Exception in download, network is OK, no retry scheduled for %1s in %2s", mCurrentDownload.getRemotePath(), mCurrentAccount.name);
                     }
                 } else {
-                    Log_OC.v(
-                            TAG,
-                            String.format(
-                                    "Success OR fail without exception for %1s in %2s",
-                                    mCurrentDownload.getRemotePath(),
-                                    mCurrentAccount.name
-                            )
-                    );
+                    Timber.v("Success OR fail without exception for %1s in %2s", mCurrentDownload.getRemotePath(),mCurrentAccount.name);
                 }
 
                 /// notify result
@@ -578,7 +556,7 @@ public class FileDownloader extends Service
                 .setWhen(System.currentTimeMillis());
 
         /// includes a pending intent in the notification showing the details view of the file
-        Intent showDetailsIntent = null;
+        Intent showDetailsIntent;
         if (PreviewImageFragment.canBePreviewed(download.getFile())) {
             showDetailsIntent = new Intent(this, PreviewImageActivity.class);
         } else {

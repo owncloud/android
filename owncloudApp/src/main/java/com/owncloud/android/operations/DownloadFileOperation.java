@@ -29,9 +29,9 @@ import com.owncloud.android.lib.common.network.OnDatatransferProgressListener;
 import com.owncloud.android.lib.common.operations.OperationCancelledException;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
-import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.files.DownloadRemoteFileOperation;
 import com.owncloud.android.utils.FileStorageUtils;
+import timber.log.Timber;
 
 import java.io.File;
 import java.util.HashSet;
@@ -44,11 +44,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public class DownloadFileOperation extends RemoteOperation {
 
-    private static final String TAG = DownloadFileOperation.class.getSimpleName();
-
     private Account mAccount;
     private OCFile mFile;
-    private Set<OnDatatransferProgressListener> mDataTransferListeners = new HashSet<OnDatatransferProgressListener>();
+    private Set<OnDatatransferProgressListener> mDataTransferListeners = new HashSet<>();
     private long mModificationTimestamp = 0;
     private String mEtag = "";
     private final AtomicBoolean mCancellationRequested = new AtomicBoolean(false);
@@ -107,8 +105,7 @@ public class DownloadFileOperation extends RemoteOperation {
                                 mFile.getRemotePath().substring(
                                         mFile.getRemotePath().lastIndexOf('.') + 1));
             } catch (IndexOutOfBoundsException e) {
-                Log_OC.e(TAG, "Trying to find out MIME type of a file without extension: " +
-                        mFile.getRemotePath());
+                Timber.e("Trying to find out MIME type of a file without extension: %s", mFile.getRemotePath());
             }
         }
         if (mimeType == null) {
@@ -159,25 +156,24 @@ public class DownloadFileOperation extends RemoteOperation {
             mModificationTimestamp = mDownloadOperation.getModificationTimestamp();
             mEtag = mDownloadOperation.getEtag();
             if (FileStorageUtils.getUsableSpace() < tmpFile.length()) {
-                Log_OC.w(TAG, "Not enough space to copy " + tmpFile.getAbsolutePath());
+                Timber.w("Not enough space to copy %s", tmpFile.getAbsolutePath());
             }
             newFile = new File(getSavePath());
-            Log_OC.d(TAG, "Save path: " + newFile.getAbsolutePath());
+            Timber.d("Save path: %s", newFile.getAbsolutePath());
             File parent = newFile.getParentFile();
             boolean created = parent.mkdirs();
-            Log_OC.d(TAG, "Creation of parent folder " + parent.getAbsolutePath() + " succeeded: " + created);
-            Log_OC.d(TAG, "Parent folder " + parent.getAbsolutePath() + " exists: " + parent.exists());
-            Log_OC.d(TAG, "Parent folder " + parent.getAbsolutePath() + " is directory: " + parent.isDirectory());
+            Timber.d("Creation of parent folder " + parent.getAbsolutePath() + " succeeded: " + created);
+            Timber.d("Parent folder " + parent.getAbsolutePath() + " exists: " + parent.exists());
+            Timber.d("Parent folder " + parent.getAbsolutePath() + " is directory: " + parent.isDirectory());
             moved = tmpFile.renameTo(newFile);
-            Log_OC.d(TAG, "New file " + newFile.getAbsolutePath() + " exists: " + newFile.exists());
-            Log_OC.d(TAG, "New file " + newFile.getAbsolutePath() + " is directory: " + newFile.isDirectory());
+            Timber.d("New file " + newFile.getAbsolutePath() + " exists: " + newFile.exists());
+            Timber.d("New file " + newFile.getAbsolutePath() + " is directory: " + newFile.isDirectory());
             if (!moved) {
                 result = new RemoteOperationResult<>(
                         RemoteOperationResult.ResultCode.LOCAL_STORAGE_NOT_MOVED);
             }
         }
-        Log_OC.i(TAG, "Download of " + mFile.getRemotePath() + " to " + getSavePath() + ": " +
-                result.getLogMessage());
+        Timber.i("Download of " + mFile.getRemotePath() + " to " + getSavePath() + ": " + result.getLogMessage());
 
         return result;
     }

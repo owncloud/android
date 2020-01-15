@@ -25,9 +25,9 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.owncloud.android.R;
-import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.ui.activity.BaseActivity;
 import com.owncloud.android.utils.PreferenceUtils;
+import timber.log.Timber;
 
 public class ErrorShowActivity extends BaseActivity {
 
@@ -36,7 +36,7 @@ public class ErrorShowActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log_OC.e("ErrorShowActivity was called. See above for StackTrace.");
+        Timber.e("ErrorShowActivity was called. See above for StackTrace.");
         Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler(this));
         setContentView(R.layout.errorhandling_showerror);
 

@@ -45,17 +45,16 @@ import com.owncloud.android.datamodel.OCUpload;
 import com.owncloud.android.datamodel.ThumbnailsCacheManager;
 import com.owncloud.android.datamodel.UploadsStorageManager;
 import com.owncloud.android.datamodel.UploadsStorageManager.UploadStatus;
-import com.owncloud.android.db.PreferenceManager;
 import com.owncloud.android.db.UploadResult;
 import com.owncloud.android.files.services.FileUploader;
 import com.owncloud.android.files.services.TransferRequester;
 import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.lib.common.network.OnDatatransferProgressListener;
-import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.utils.DisplayUtils;
 import com.owncloud.android.utils.MimetypeIconUtil;
 import com.owncloud.android.utils.PreferenceUtils;
+import timber.log.Timber;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
@@ -73,7 +72,6 @@ import static com.owncloud.android.db.PreferenceManager.PREF__CAMERA_UPLOADS_DEF
  */
 public class ExpandableUploadListAdapter extends BaseExpandableListAdapter implements Observer {
 
-    private static final String TAG = ExpandableUploadListAdapter.class.getSimpleName();
     private FileActivity mParentActivity;
 
     private UploadsStorageManager mUploadsStorageManager;
@@ -143,7 +141,7 @@ public class ExpandableUploadListAdapter extends BaseExpandableListAdapter imple
     private UploadGroup[] mUploadGroups;
 
     public ExpandableUploadListAdapter(FileActivity parentActivity) {
-        Log_OC.d(TAG, "ExpandableUploadListAdapter");
+        Timber.d("ExpandableUploadListAdapter");
         mParentActivity = parentActivity;
         mUploadsStorageManager = new UploadsStorageManager(mParentActivity.getContentResolver());
         mUploadGroups = new UploadGroup[3];
@@ -192,14 +190,14 @@ public class ExpandableUploadListAdapter extends BaseExpandableListAdapter imple
     public void registerDataSetObserver(DataSetObserver observer) {
         super.registerDataSetObserver(observer);
         mUploadsStorageManager.addObserver(this);
-        Log_OC.d(TAG, "registerDataSetObserver");
+        Timber.d("registerDataSetObserver");
     }
 
     @Override
     public void unregisterDataSetObserver(DataSetObserver observer) {
         super.unregisterDataSetObserver(observer);
         mUploadsStorageManager.deleteObserver(this);
-        Log_OC.d(TAG, "unregisterDataSetObserver");
+        Timber.d("unregisterDataSetObserver");
     }
 
     @Override
@@ -266,7 +264,7 @@ public class ExpandableUploadListAdapter extends BaseExpandableListAdapter imple
                         DisplayUtils.convertIdn(account.name.substring(account.name.lastIndexOf("@") + 1), false);
                 accountNameTextView.setText(accountName);
             } catch (Exception e) {
-                Log_OC.w(TAG, "Couldn't get display name for account, using old style");
+                Timber.w("Couldn't get display name for account, using old style");
                 accountNameTextView.setText(upload.getAccountName());
             }
 
@@ -320,10 +318,7 @@ public class ExpandableUploadListAdapter extends BaseExpandableListAdapter imple
                             }
                         }
                     } else {
-                        Log_OC.w(
-                                TAG,
-                                "FileUploaderBinder not ready yet for upload " + upload.getRemotePath()
-                        );
+                        Timber.w("FileUploaderBinder not ready yet for upload %s", upload.getRemotePath());
                     }
                     uploadDateTextView.setVisibility(View.GONE);
                     pathTextView.setVisibility(View.GONE);
@@ -472,7 +467,7 @@ public class ExpandableUploadListAdapter extends BaseExpandableListAdapter imple
                                 );
                         fileIcon.setImageDrawable(asyncDrawable);
                         task.execute(file);
-                        Log_OC.v(TAG, "Executing task to generate a new thumbnail");
+                        Timber.v("Executing task to generate a new thumbnail");
                     }
                 }
 
@@ -627,7 +622,7 @@ public class ExpandableUploadListAdapter extends BaseExpandableListAdapter imple
      * Load upload items from {@link UploadsStorageManager}.
      */
     private void loadUploadItemsFromDb() {
-        Log_OC.d(TAG, "loadUploadItemsFromDb");
+        Timber.d("loadUploadItemsFromDb");
 
         for (UploadGroup group : mUploadGroups) {
             group.refresh();
@@ -638,12 +633,12 @@ public class ExpandableUploadListAdapter extends BaseExpandableListAdapter imple
 
     @Override
     public void update(Observable arg0, Object arg1) {
-        Log_OC.d(TAG, "update");
+        Timber.d("update");
         loadUploadItemsFromDb();
     }
 
     public void refreshView() {
-        Log_OC.d(TAG, "refreshView");
+        Timber.d("refreshView");
         loadUploadItemsFromDb();
     }
 

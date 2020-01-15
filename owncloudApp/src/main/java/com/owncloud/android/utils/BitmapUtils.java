@@ -31,7 +31,7 @@ import android.webkit.MimeTypeMap;
 import androidx.core.graphics.drawable.RoundedBitmapDrawable;
 import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
 import com.owncloud.android.authentication.AccountUtils;
-import com.owncloud.android.lib.common.utils.Log_OC;
+import timber.log.Timber;
 
 import java.io.File;
 import java.io.UnsupportedEncodingException;
@@ -44,8 +44,6 @@ import java.util.Locale;
  * Utility class with methods for decoding Bitmaps.
  */
 public class BitmapUtils {
-
-    private static final String TAG = BitmapUtils.class.toString();
 
     /**
      * Decodes a bitmap from a file containing it minimizing the memory use, known that the bitmap
@@ -160,7 +158,7 @@ public class BitmapUtils {
             }
             return resultBitmap;
         } catch (Exception exception) {
-            Log_OC.e("BitmapUtil", "Could not rotate the image: " + storagePath);
+            Timber.w("Could not rotate the image: %s", storagePath);
             return bitmap;
         }
     }
@@ -177,21 +175,21 @@ public class BitmapUtils {
      *  @param h Hue is specified as degrees in the range 0 - 360.
      *  @param s Saturation is specified as a percentage in the range 1 - 100.
      *  @param l Lumanance is specified as a percentage in the range 1 - 100.
-     *  @paran alpha  the alpha value between 0 - 1
+     *  @param alpha  the alpha value between 0 - 1
      *  adapted from https://svn.codehaus.org/griffon/builders/gfxbuilder/tags/GFXBUILDER_0.2/
      *  gfxbuilder-core/src/main/com/camick/awt/HSLColor.java
      */
     public static int[] HSLtoRGB(final float h, final float s, final float l, final float alpha) {
         if (s < 0.0f || s > 100.0f) {
-            Log_OC.w(TAG, "Color parameter outside of expected range - Saturation");
+            Timber.w("Color parameter outside of expected range - Saturation");
         }
 
         if (l < 0.0f || l > 100.0f) {
-            Log_OC.w(TAG, "Color parameter outside of expected range - Luminance");
+            Timber.w("Color parameter outside of expected range - Luminance");
         }
 
         if (alpha < 0.0f || alpha > 1.0f) {
-            Log_OC.w(TAG, "Color parameter outside of expected range - Alpha");
+            Timber.w("Color parameter outside of expected range - Alpha");
         }
 
         //  Formula needs all values between 0 - 1.

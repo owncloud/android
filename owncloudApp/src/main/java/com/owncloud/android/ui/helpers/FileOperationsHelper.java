@@ -38,23 +38,21 @@ import com.owncloud.android.domain.sharing.shares.model.OCShare;
 import com.owncloud.android.files.services.AvailableOfflineHandler;
 import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder;
 import com.owncloud.android.files.services.FileUploader.FileUploaderBinder;
-import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 import com.owncloud.android.presentation.ui.sharing.ShareActivity;
 import com.owncloud.android.services.OperationsService;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.dialog.ShareLinkToDialog;
+import timber.log.Timber;
 
 import java.util.Collection;
 import java.util.List;
 
 public class FileOperationsHelper {
 
-    private static final String TAG = FileOperationsHelper.class.getSimpleName();
-
     private static final String FTAG_CHOOSER_DIALOG = "CHOOSER_DIALOG";
 
-    private FileActivity mFileActivity = null;
+    private FileActivity mFileActivity;
 
     /// Identifier of operation in progress which result shouldn't be lost 
     private long mWaitingForOpId = Long.MAX_VALUE;
@@ -126,7 +124,7 @@ public class FileOperationsHelper {
             }
 
         } else {
-            Log_OC.e(TAG, "Trying to open a NULL OCFile");
+            Timber.e("Trying to open a NULL OCFile");
         }
     }
 
@@ -222,7 +220,7 @@ public class FileOperationsHelper {
             chooserDialog.show(mFileActivity.getSupportFragmentManager(), FTAG_CHOOSER_DIALOG);
 
         } else {
-            Log_OC.e(TAG, "Trying to send a NULL OCFile");
+            Timber.e("Trying to send a NULL OCFile");
         }
     }
 
