@@ -31,8 +31,6 @@ import okhttp3.internal.Util;
 
 public class OwnCloudBasicCredentials implements OwnCloudCredentials {
 
-    private static final String TAG = OwnCloudCredentials.class.getSimpleName();
-
     private String mUsername;
     private String mPassword;
 

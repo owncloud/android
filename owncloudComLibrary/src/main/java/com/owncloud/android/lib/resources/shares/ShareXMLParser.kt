@@ -383,8 +383,6 @@ class ShareXMLParser {
 
     companion object {
 
-        //private static final String TAG = ShareXMLParser.class.getSimpleName();
-
         // No namespaces
         private val ns: String? = null
 

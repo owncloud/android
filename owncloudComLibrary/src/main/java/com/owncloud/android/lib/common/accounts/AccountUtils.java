@@ -64,7 +64,7 @@ public class AccountUtils {
             webDavUrlForAccount = getBaseUrlForAccount(context, account) + OwnCloudClient.WEBDAV_FILES_PATH_4_0
                     + ownCloudCredentials.getUsername();
         } catch (OperationCanceledException | AuthenticatorException | IOException e) {
-            e.printStackTrace();
+            Timber.e(e);
         }
 
         return webDavUrlForAccount;

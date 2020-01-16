@@ -43,11 +43,8 @@ import java.security.cert.X509Certificate;
  */
 public class AdvancedX509TrustManager implements X509TrustManager {
 
-    private static final String TAG = AdvancedX509TrustManager.class.getSimpleName();
-
     private X509TrustManager mStandardTrustManager;
     private KeyStore mKnownServersKeyStore;
-
     /**
      * Constructor for AdvancedX509TrustManager
      *
