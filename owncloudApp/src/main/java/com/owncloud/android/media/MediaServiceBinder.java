@@ -37,7 +37,6 @@ import timber.log.Timber;
  */
 public class MediaServiceBinder extends Binder implements MediaController.MediaPlayerControl {
 
-    private static final String TAG = MediaServiceBinder.class.getSimpleName();
     /**
      * {@link MediaService} instance to access with the binder
      */

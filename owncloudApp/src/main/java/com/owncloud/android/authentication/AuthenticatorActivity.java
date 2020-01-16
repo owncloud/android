@@ -1044,7 +1044,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         try {
             intent.launchUrl(this, Uri.parse(url));
         } catch (Exception e) {
-            e.printStackTrace();
+            Timber.e(e);
         }
     }
 

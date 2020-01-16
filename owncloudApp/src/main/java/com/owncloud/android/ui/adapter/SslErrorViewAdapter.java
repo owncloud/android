@@ -33,8 +33,6 @@ import com.owncloud.android.utils.PreferenceUtils;
  */
 public class SslErrorViewAdapter implements SslUntrustedCertDialog.ErrorViewAdapter {
 
-    //private final static String TAG = SslErrorViewAdapter.class.getSimpleName();
-
     private SslError mSslError;
 
     public SslErrorViewAdapter(SslError sslError) {

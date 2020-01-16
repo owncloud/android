@@ -615,7 +615,7 @@ class FileDataStorageManager {
                         try {
                             performDelete(fileUri, where, whereArgs)
                         } catch (e: RemoteException) {
-                            e.printStackTrace()
+                            Timber.e(e)
                             0
                         }
                     success = success and (deleted > 0)
@@ -661,7 +661,7 @@ class FileDataStorageManager {
         return try {
             performDelete(url = folderUri, where = where, selectionArgs = whereArgs) > 0
         } catch (e: RemoteException) {
-            e.printStackTrace()
+            Timber.e(e)
             false
         }
     }
@@ -889,7 +889,7 @@ class FileDataStorageManager {
                 try {
                     input.close()
                 } catch (e: IOException) {
-                    e.printStackTrace(System.err)
+                    Timber.e(e)
                 }
 
             }
@@ -897,7 +897,7 @@ class FileDataStorageManager {
                 try {
                     out.close()
                 } catch (e: IOException) {
-                    e.printStackTrace(System.err)
+                    Timber.e(e)
                 }
 
             }

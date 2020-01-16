@@ -122,7 +122,7 @@ public class DiskLruImageCache {
                 bitmap = BitmapFactory.decodeStream(buffIn);
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            Timber.e(e);
         } finally {
             if (snapshot != null) {
                 snapshot.close();
@@ -151,7 +151,7 @@ public class DiskLruImageCache {
             mDiskCache.remove(validKey);
             Timber.d("removeKey from cache: %s", validKey);
         } catch (IOException e) {
-            e.printStackTrace();
+Timber.e(e);
         }
     }
 }

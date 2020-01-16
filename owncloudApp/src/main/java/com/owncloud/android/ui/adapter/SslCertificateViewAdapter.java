@@ -35,8 +35,6 @@ import java.util.Date;
  */
 public class SslCertificateViewAdapter implements SslUntrustedCertDialog.CertificateViewAdapter {
 
-    //private final static String TAG = SslCertificateViewAdapter.class.getSimpleName();
-
     private SslCertificate mCertificate;
 
     /**

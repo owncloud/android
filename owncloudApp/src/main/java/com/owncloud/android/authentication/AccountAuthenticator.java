@@ -97,8 +97,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
             try {
                 validateAccountType(accountType);
             } catch (AuthenticatorException e) {
-                Timber.e(e, "Failed to validate account type " + accountType + ": " + e.getMessage());
-                e.printStackTrace();
+                Timber.e(e, "Failed to validate account type %s", accountType);
                 return e.getFailureBundle();
             }
 
@@ -135,8 +134,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
         try {
             validateAccountType(account.type);
         } catch (AuthenticatorException e) {
-            Timber.e(e, "Failed to validate account type " + account.type + ": " + e.getMessage());
-            e.printStackTrace();
+            Timber.e(e, "Failed to validate account type %s", account.type);
             return e.getFailureBundle();
         }
         Intent intent = new Intent(mContext, AuthenticatorActivity.class);
@@ -169,8 +167,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
             validateAccountType(account.type);
             validateAuthTokenType(authTokenType);
         } catch (AuthenticatorException e) {
-            Timber.e(e, "Failed to validate account type " + account.type + ": " + e.getMessage());
-            e.printStackTrace();
+            Timber.e(e, "Failed to validate account type " + account.type);
             return e.getFailureBundle();
         }
 

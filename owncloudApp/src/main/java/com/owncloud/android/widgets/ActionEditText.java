@@ -32,6 +32,7 @@ import android.view.MotionEvent;
 
 import androidx.appcompat.widget.AppCompatEditText;
 import com.owncloud.android.R;
+import timber.log.Timber;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -116,14 +117,8 @@ public class ActionEditText extends AppCompatEditText {
                                 badgeClickCallback, paramtypes);
                         method.invoke(getContext(), this, s);
 
-                    } catch (NoSuchMethodException e) {
-                        e.printStackTrace();
-                    } catch (IllegalArgumentException e) {
-                        e.printStackTrace();
-                    } catch (IllegalAccessException e) {
-                        e.printStackTrace();
-                    } catch (InvocationTargetException e) {
-                        e.printStackTrace();
+                    } catch (NoSuchMethodException | IllegalArgumentException | IllegalAccessException | InvocationTargetException e) {
+                        Timber.e(e);
                     }
 
                     invalidate();

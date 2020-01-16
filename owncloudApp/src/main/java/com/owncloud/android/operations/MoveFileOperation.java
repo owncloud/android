@@ -33,8 +33,6 @@ import com.owncloud.android.utils.RemoteFileUtils;
  */
 public class MoveFileOperation extends SyncOperation {
 
-    //private static final String TAG = MoveFileOperation.class.getSimpleName();
-
     protected String mSrcPath;
     protected String mTargetParentPath;
     protected OCFile mFile;

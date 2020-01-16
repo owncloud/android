@@ -261,7 +261,7 @@ class MainApp : MultiDexApplication() {
                         isBeta = true
                     }
                 } catch (e: PackageManager.NameNotFoundException) {
-                    e.printStackTrace()
+                    Timber.e(e)
                 }
 
                 return isBeta

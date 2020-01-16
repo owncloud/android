@@ -5,14 +5,11 @@ import android.net.Uri;
 import android.os.Build;
 import android.test.ProviderTestCase2;
 import android.test.mock.MockContentResolver;
-import android.util.Log;
 
 import com.owncloud.android.db.ProviderMeta.ProviderTableMeta;
 import com.owncloud.android.providers.FileContentProvider;
 
 public class FileContentProviderTest extends ProviderTestCase2<FileContentProvider> {
-
-    private static final String TAG = FileContentProvider.class.getName();
 
     private static MockContentResolver resolve;
 
@@ -28,7 +25,7 @@ public class FileContentProviderTest extends ProviderTestCase2<FileContentProvid
 
     @Override
     public void setUp() {
-        Log.i(TAG, "Entered setup");
+        Timber.i("Entered setup");
         try {
             super.setUp();
             resolve = this.getMockContentResolver();

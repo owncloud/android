@@ -311,7 +311,7 @@ public class ThumbnailsCacheManager {
                                 mClient.exhaustResponse(get.getResponseBodyAsStream());
                             }
                         } catch (Exception e) {
-                            e.printStackTrace();
+                            Timber.e(e);
                         }
                     }
                 }
