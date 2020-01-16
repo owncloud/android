@@ -26,7 +26,6 @@
  *   THE SOFTWARE.
  *
  */
-
 package com.owncloud.android.lib.resources.status
 
 import com.owncloud.android.lib.common.OwnCloudClient
@@ -36,11 +35,14 @@ import com.owncloud.android.lib.common.operations.RemoteOperation
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode.OK
 import com.owncloud.android.lib.resources.response.CapabilityResponse
+import com.owncloud.android.lib.resources.response.CommonResponse
 import com.owncloud.android.lib.resources.status.RemoteCapability.CapabilityBooleanType.Companion.fromBooleanValue
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
-import org.json.JSONObject
+import com.squareup.moshi.Types
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import timber.log.Timber
+import java.lang.reflect.Type
 import java.net.URL
 
 /**
@@ -49,9 +51,6 @@ import java.net.URL
  *
  * @author masensio
  * @author David González Verdugo
- */
-/**
- * Constructor
  */
 class GetRemoteCapabilitiesOperation : RemoteOperation<RemoteCapability>() {
 
@@ -72,7 +71,7 @@ class GetRemoteCapabilitiesOperation : RemoteOperation<RemoteCapability>() {
 
             val response = getMethod.responseBodyAsString
 
-            if (!isSuccess(status)) {
+            if (status != HttpConstants.HTTP_OK) {
                 result = RemoteOperationResult(getMethod)
                 Timber.e("Failed response while getting capabilities from the server status code: $status; response message: $response")
                 return result
@@ -81,31 +80,27 @@ class GetRemoteCapabilitiesOperation : RemoteOperation<RemoteCapability>() {
             Timber.d("Successful response: $response")
 
             // Parse the response
-            val respJSON = JSONObject(response)
-            val respOCS = respJSON.getJSONObject(NODE_OCS)
-            val respMeta = respOCS.getJSONObject(NODE_META)
-            val respData = respOCS.getJSONObject(NODE_DATA)
+            val moshi: Moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
+            val type: Type = Types.newParameterizedType(CommonResponse::class.java, CapabilityResponse::class.java)
+            val adapter: JsonAdapter<CommonResponse<CapabilityResponse>> = moshi.adapter(type)
+            val commonResponse: CommonResponse<CapabilityResponse>? = adapter.fromJson(response)
 
-            // Read meta
-            val statusProp = respMeta.getString(PROPERTY_STATUS).equals(PROPERTY_STATUS_OK, ignoreCase = true)
-            val statuscode = respMeta.getInt(PROPERTY_STATUSCODE)
-            val message = respMeta.getString(PROPERTY_MESSAGE)
+            // Read MetaData
+            val statusMessage = commonResponse?.ocs?.meta?.status
+            val statusCode = commonResponse?.ocs?.meta?.statuscode
+            val message = commonResponse?.ocs?.meta?.message
 
-            if (statusProp) {
-                val moshi: Moshi = Moshi.Builder().build()
-                val adapter: JsonAdapter<CapabilityResponse> = moshi.adapter(CapabilityResponse::class.java)
-                val capabilityResponse: CapabilityResponse? = adapter.fromJson(respData.toString())
-
-                val remoteCapability = capabilityResponse?.let { mapToModel(it) } ?: RemoteCapability()
+            if (statusMessage.equals(PROPERTY_STATUS_OK, ignoreCase = true)) {
+                val remoteCapability = commonResponse?.ocs?.data?.let { mapToModel(it) } ?: RemoteCapability()
                 // Result
                 result = RemoteOperationResult(OK)
                 result.data = remoteCapability
 
-                Timber.d("*** Get Capabilities completed $remoteCapability")
+                Timber.d("*** Get Capabilities completed and parsed to: $remoteCapability")
             } else {
-                result = RemoteOperationResult(statuscode, message, null)
+                result = RemoteOperationResult(statusCode!!, message, null)
                 Timber.e("Failed response while getting capabilities from the server ")
-                Timber.e("*** status: $statusProp; message: $message")
+                Timber.e("*** statusCode: $status; status: $statusMessage; message: $message")
             }
 
         } catch (e: Exception) {
@@ -116,19 +111,15 @@ class GetRemoteCapabilitiesOperation : RemoteOperation<RemoteCapability>() {
         return result
     }
 
-    private fun isSuccess(status: Int): Boolean {
-        return status == HttpConstants.HTTP_OK
-    }
-
     private fun mapToModel(capabilityResponse: CapabilityResponse): RemoteCapability =
         with(capabilityResponse) {
             RemoteCapability(
-                versionMayor = serverVersion.versionMayor,
-                versionMinor = serverVersion.versionMinor,
-                versionMicro = serverVersion.versionMicro,
-                versionString = serverVersion.versionString,
-                versionEdition = serverVersion.versionEdition,
-                corePollinterval = capabilities.coreCapabilities.pollInterval,
+                versionMayor = serverVersion.major,
+                versionMinor = serverVersion.minor,
+                versionMicro = serverVersion.micro,
+                versionString = serverVersion.string,
+                versionEdition = serverVersion.edition,
+                corePollinterval = capabilities.coreCapabilities.pollinterval,
                 filesSharingApiEnabled = fromBooleanValue(capabilities.fileSharingCapabilities.fileSharingApiEnabled),
                 filesSharingResharing = fromBooleanValue(capabilities.fileSharingCapabilities.fileSharingReSharing),
                 filesSharingPublicEnabled = fromBooleanValue(capabilities.fileSharingCapabilities.fileSharingPublic.enabled),
@@ -142,9 +133,9 @@ class GetRemoteCapabilitiesOperation : RemoteOperation<RemoteCapability>() {
                 filesSharingPublicExpireDateEnabled = fromBooleanValue(capabilities.fileSharingCapabilities.fileSharingPublic.fileSharingPublicExpireDate.enabled),
                 filesSharingPublicExpireDateDays = capabilities.fileSharingCapabilities.fileSharingPublic.fileSharingPublicExpireDate.days ?: 0,
                 filesSharingPublicExpireDateEnforced = fromBooleanValue(capabilities.fileSharingCapabilities.fileSharingPublic.fileSharingPublicExpireDate.enforced?:false),
-                filesBigFileChunking = fromBooleanValue(capabilities.filesCapabilities.filesBigFileChunking),
-                filesUndelete = fromBooleanValue(capabilities.filesCapabilities.filesUnDelete),
-                filesVersioning = fromBooleanValue(capabilities.filesCapabilities.filesVersioning),
+                filesBigFileChunking = fromBooleanValue(capabilities.filesCapabilities.bigfilechunking),
+                filesUndelete = fromBooleanValue(capabilities.filesCapabilities.undelete),
+                filesVersioning = fromBooleanValue(capabilities.filesCapabilities.versioning),
                 filesSharingFederationIncoming = fromBooleanValue(capabilities.fileSharingCapabilities.fileSharingFederation.incoming),
                 filesSharingFederationOutgoing = fromBooleanValue(capabilities.fileSharingCapabilities.fileSharingFederation.outgoing)
             )
@@ -161,16 +152,6 @@ class GetRemoteCapabilitiesOperation : RemoteOperation<RemoteCapability>() {
         // Arguments - constant values
         private const val VALUE_FORMAT = "json"
 
-        // JSON Node names
-        private const val NODE_OCS = "ocs"
-
-        private const val NODE_META = "meta"
-
-        private const val NODE_DATA = "data"
-
-        private const val PROPERTY_STATUS = "status"
         private const val PROPERTY_STATUS_OK = "ok"
-        private const val PROPERTY_STATUSCODE = "statuscode"
-        private const val PROPERTY_MESSAGE = "message"
     }
 }

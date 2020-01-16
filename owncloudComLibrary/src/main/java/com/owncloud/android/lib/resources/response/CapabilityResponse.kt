@@ -31,7 +31,6 @@ import com.squareup.moshi.JsonClass
 data class CapabilityResponse(
     @Json(name = NODE_SERVER_VERSION)
     val serverVersion: ServerVersion,
-    @Json(name = NODE_CAPABILITIES)
     val capabilities: Capabilities
 )
 
@@ -47,8 +46,7 @@ data class Capabilities(
 
 @JsonClass(generateAdapter = true)
 data class CoreCapabilities(
-    @Json(name = PROPERTY_CORE_POLLINTERVAL)
-    val pollInterval: Int
+    val pollinterval: Int
 )
 
 @JsonClass(generateAdapter = true)
@@ -112,39 +110,23 @@ data class FileSharingFederation(
 
 @JsonClass(generateAdapter = true)
 data class FilesCapabilities(
-    @Json(name = PROPERTY_FILES_BIGFILECHUNKING)
-    val filesBigFileChunking: Boolean,
-    @Json(name = PROPERTY_FILES_UNDELETE)
-    val filesUnDelete: Boolean,
-    @Json(name = PROPERTY_FILES_VERSIONING)
-    val filesVersioning: Boolean
+    val bigfilechunking: Boolean,
+    val undelete: Boolean,
+    val versioning: Boolean
 )
 
 @JsonClass(generateAdapter = true)
 data class ServerVersion(
-    @Json(name = PROPERTY_VERSION_MAJOR)
-    var versionMayor: Int = 0,
-    @Json(name = PROPERTY_VERSION_MINOR)
-    var versionMinor: Int = 0,
-    @Json(name = PROPERTY_VERSION_MICRO)
-    var versionMicro: Int = 0,
-    @Json(name = PROPERTY_VERSION_STRING)
-    var versionString: String = "",
-    @Json(name = PROPERTY_VERSION_EDITION)
-    var versionEdition: String = ""
+    var major: Int = 0,
+    var minor: Int = 0,
+    var micro: Int = 0,
+    var string: String = "",
+    var edition: String = ""
 )
 
 private const val NODE_SERVER_VERSION = "version"
-private const val PROPERTY_VERSION_MAJOR = "major"
-private const val PROPERTY_VERSION_MINOR = "minor"
-private const val PROPERTY_VERSION_MICRO = "micro"
-private const val PROPERTY_VERSION_STRING = "string"
-private const val PROPERTY_VERSION_EDITION = "edition"
-
-private const val NODE_CAPABILITIES = "capabilities"
 
 private const val NODE_CORE = "core"
-private const val PROPERTY_CORE_POLLINTERVAL = "pollinterval"
 
 private const val NODE_FILES_SHARING = "files_sharing"
 private const val PROPERTY_FILES_SHARING_API_ENABLED = "api_enabled"
@@ -167,6 +149,3 @@ private const val PROPERTY_FILES_SHARING_PUBLIC_PASSWORD_ENFORCED_UPLOAD_ONLY = 
 private const val NODE_EXPIRE_DATE = "expire_date"
 
 private const val NODE_FILES = "files"
-private const val PROPERTY_FILES_BIGFILECHUNKING = "bigfilechunking"
-private const val PROPERTY_FILES_UNDELETE = "undelete"
-private const val PROPERTY_FILES_VERSIONING = "versioning"
