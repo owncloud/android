@@ -86,7 +86,7 @@ public class ThumbnailsCacheManager {
 
                 if (mThumbnailCache == null) {
                     try {
-                        // Check if media is mounted or storage is built-in, if so, 
+                        // Check if media is mounted or storage is built-in, if so,
                         // try and use external cache dir; otherwise use internal cache dir
                         final String cachePath =
                                 MainApp.Companion.getAppContext().getExternalCacheDir().getPath() +
@@ -290,7 +290,7 @@ public class ThumbnailsCacheManager {
                             String uri = mClient.getBaseUri() + "" +
                                     "/index.php/apps/files/api/v1/thumbnail/" +
                                     px + "/" + px + Uri.encode(file.getRemotePath(), "/");
-                            Timber.d("URI: " + uri);
+                            Timber.d("URI: %s", uri);
                             get = new GetMethod(new URL(uri));
                             int status = mClient.executeHttpMethod(get);
                             if (status == HttpConstants.HTTP_OK) {
@@ -508,11 +508,11 @@ public class ThumbnailsCacheManager {
                     // Download avatar from server
                     OwnCloudVersion serverOCVersion = AccountUtils.getServerVersion(mAccount);
                     if (mClient != null && serverOCVersion != null) {
-                        GetMethod get ;
+                        GetMethod get;
                         try {
                             String uri = mClient.getBaseUri() + "" +
                                     "/index.php/avatar/" + AccountUtils.getUsernameOfAccount(mUsername) + "/" + px;
-                            Timber.d("URI: " + uri);
+                            Timber.d("URI: %s", uri);
                             get = new GetMethod(new URL(uri));
                             int status = mClient.executeHttpMethod(get);
                             if (status == HttpConstants.HTTP_OK) {
@@ -528,7 +528,7 @@ public class ThumbnailsCacheManager {
                                 mClient.exhaustResponse(get.getResponseBodyAsStream());
                             }
                         } catch (Exception e) {
-                            Timber.e("Error downloading avatar");
+                            Timber.e(e, "Error downloading avatar");
                         }
                     }
                 }
@@ -590,31 +590,6 @@ public class ThumbnailsCacheManager {
         return true;
     }
 
-    public static boolean cancelPotentialAvatarWork(Object file, ImageView imageView) {
-        return cancelPotentialAvatarWork(file, getAvatarWorkerTask(imageView));
-    }
-
-    public static boolean cancelPotentialAvatarWork(Object file, MenuItem menuItem) {
-        return cancelPotentialAvatarWork(file, getAvatarWorkerTask(menuItem));
-    }
-
-    private static boolean cancelPotentialAvatarWork(Object file, final GetAvatarTask avatarWorkerTask) {
-        if (avatarWorkerTask != null) {
-            final Object usernameData = avatarWorkerTask.mUsername;
-            // If usernameData is not yet set or it differs from the new data
-            if (usernameData == null || usernameData != file) {
-                // Cancel previous task
-                avatarWorkerTask.cancel(true);
-                Timber.v("Cancelled generation of avatar for a reused imageView");
-            } else {
-                // The same work is already in progress
-                return false;
-            }
-        }
-        // No task associated with the ImageView, or an existing task was cancelled
-        return true;
-    }
-
     private static ThumbnailGenerationTask getBitmapWorkerTask(ImageView imageView) {
         if (imageView != null) {
             final Drawable drawable = imageView.getDrawable();
@@ -639,23 +614,6 @@ public class ThumbnailsCacheManager {
 
         ThumbnailGenerationTask getBitmapWorkerTask() {
             return bitmapWorkerTaskReference.get();
-        }
-    }
-
-    public static class AsyncAvatarDrawable extends BitmapDrawable {
-        private final WeakReference<GetAvatarTask> avatarWorkerTaskReference;
-
-        public AsyncAvatarDrawable(
-                Resources res, Bitmap bitmap, GetAvatarTask avatarWorkerTask
-        ) {
-
-            super(res, bitmap);
-            avatarWorkerTaskReference =
-                    new WeakReference<>(avatarWorkerTask);
-        }
-
-        GetAvatarTask getAvatarWorkerTask() {
-            return avatarWorkerTaskReference.get();
         }
     }
 }

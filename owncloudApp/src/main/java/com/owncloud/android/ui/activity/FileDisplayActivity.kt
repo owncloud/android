@@ -56,7 +56,6 @@ import com.google.android.material.snackbar.Snackbar
 import com.owncloud.android.AppRater
 import com.owncloud.android.MainApp
 import com.owncloud.android.R
-import com.owncloud.android.authentication.AccountUtils
 import com.owncloud.android.authentication.FingerprintManager
 import com.owncloud.android.authentication.PassCodeManager
 import com.owncloud.android.authentication.PatternManager
@@ -73,6 +72,7 @@ import com.owncloud.android.lib.common.authentication.OwnCloudBearerCredentials
 import com.owncloud.android.lib.common.operations.RemoteOperation
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode
+import com.owncloud.android.lib.resources.status.OwnCloudVersion
 import com.owncloud.android.operations.CopyFileOperation
 import com.owncloud.android.operations.CreateFolderOperation
 import com.owncloud.android.operations.MoveFileOperation
@@ -317,10 +317,6 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
     override fun onAccountSet(stateWasRecovered: Boolean) {
         super.onAccountSet(stateWasRecovered)
         if (account != null) {
-            if (!AccountUtils.getServerVersion(account)?.isServerVersionSupported!!) {
-                Timber.d("Server version not supported")
-                showRequestAccountChangeNotice(getString(R.string.server_not_supported), true)
-            }
             /// Check whether the 'main' OCFile handled by the Activity is contained in the
             // current Account
             var file: OCFile? = file
@@ -901,11 +897,15 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
             val accountName = intent.getStringExtra(FileSyncAdapter.EXTRA_ACCOUNT_NAME)
 
             val synchFolderRemotePath = intent.getStringExtra(FileSyncAdapter.EXTRA_FOLDER_PATH)
-            val synchResult = intent.getSerializableExtra(
-                FileSyncAdapter.EXTRA_RESULT
-            ) as? RemoteOperationResult<*>
-            val sameAccount = account != null &&
-                    accountName == account.name && storageManager != null
+            val serverVersion = intent.getParcelableExtra<OwnCloudVersion>(FileSyncAdapter.EXTRA_SERVER_VERSION)
+
+            if (serverVersion != null && !serverVersion.isServerVersionSupported) {
+                Timber.d("Server version not supported")
+                showRequestAccountChangeNotice(getString(R.string.server_not_supported), true)
+            }
+
+            val synchResult = intent.getSerializableExtra(FileSyncAdapter.EXTRA_RESULT) as? RemoteOperationResult<*>
+            val sameAccount = account != null && accountName == account.name && storageManager != null
 
             if (sameAccount) {
 
@@ -968,7 +968,10 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
                                         if (credentials is OwnCloudBearerCredentials) { // OAuth
                                             showRequestRegainAccess()
                                         } else {
-                                            showRequestAccountChangeNotice(getString(R.string.auth_failure_snackbar), false)
+                                            showRequestAccountChangeNotice(
+                                                getString(R.string.auth_failure_snackbar),
+                                                false
+                                            )
                                         }
                                     }
                                 }
