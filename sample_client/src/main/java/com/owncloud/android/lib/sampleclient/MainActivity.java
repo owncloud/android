@@ -33,7 +33,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -47,13 +46,14 @@ import com.owncloud.android.lib.common.network.OnDatatransferProgressListener;
 import com.owncloud.android.lib.common.operations.OnRemoteOperationListener;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
-import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.files.DownloadRemoteFileOperation;
 import com.owncloud.android.lib.resources.files.FileUtils;
 import com.owncloud.android.lib.resources.files.ReadRemoteFolderOperation;
 import com.owncloud.android.lib.resources.files.RemoteFile;
 import com.owncloud.android.lib.resources.files.RemoveRemoteFileOperation;
 import com.owncloud.android.lib.resources.files.UploadRemoteFileOperation;
+import info.hannes.timber.DebugTree;
+import timber.log.Timber;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -63,11 +63,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import static android.content.ContentValues.TAG;
-
 public class MainActivity extends Activity implements OnRemoteOperationListener, OnDatatransferProgressListener {
-
-    private static String LOG_TAG = MainActivity.class.getCanonicalName();
 
     private Handler mHandler;
     private OwnCloudClient mClient;
@@ -82,6 +78,7 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
+        Timber.plant(new DebugTree());
         mHandler = new Handler();
 
         final Uri serverUri = Uri.parse(getString(R.string.server_base_url));
@@ -117,7 +114,7 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
             fos.close();
         } catch (IOException e) {
             Toast.makeText(this, R.string.error_copying_sample_file, Toast.LENGTH_SHORT).show();
-            Log.e(LOG_TAG, getString(R.string.error_copying_sample_file), e);
+            Timber.e(e, getString(R.string.error_copying_sample_file));
         }
 
         mFrame = findViewById(R.id.frame);
@@ -212,7 +209,7 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
     public void onRemoteOperationFinish(RemoteOperation operation, RemoteOperationResult result) {
         if (!result.isSuccess()) {
             Toast.makeText(this, R.string.todo_operation_finished_in_fail, Toast.LENGTH_SHORT).show();
-            Log.e(LOG_TAG, result.getLogMessage(), result.getException());
+            Timber.e(result.getException(), result.getLogMessage());
 
         } else if (operation instanceof ReadRemoteFolderOperation) {
             onSuccessfulRefresh((ReadRemoteFolderOperation) operation, result);
@@ -266,23 +263,21 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
         mFrame.setBackgroundDrawable(bDraw);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onTransferProgress(long progressRate, long totalTransferredSoFar, long totalToTransfer, String fileName) {
         final long percentage = (totalToTransfer > 0 ? totalTransferredSoFar * 100 / totalToTransfer : 0);
         final boolean upload = fileName.contains(getString(R.string.upload_folder_path));
-        Log.d(LOG_TAG, "progressRate " + percentage);
-        mHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                TextView progressView = null;
-                if (upload) {
-                    progressView = findViewById(R.id.upload_progress);
-                } else {
-                    progressView = findViewById(R.id.download_progress);
-                }
-                if (progressView != null) {
-                    progressView.setText(Long.toString(percentage) + "%");
-                }
+        Timber.d("progressRate %s", percentage);
+        mHandler.post(() -> {
+            TextView progressView;
+            if (upload) {
+                progressView = findViewById(R.id.upload_progress);
+            } else {
+                progressView = findViewById(R.id.download_progress);
+            }
+            if (progressView != null) {
+                progressView.setText(percentage + "%");
             }
         });
     }
@@ -301,7 +296,7 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
                 version = pInfo.versionName;
             }
         } catch (PackageManager.NameNotFoundException e) {
-            Log_OC.e(TAG, "Trying to get packageName", e.getCause());
+            Timber.e(e);
         }
 
         // Mozilla/5.0 (Android) ownCloud-android/1.7.0
