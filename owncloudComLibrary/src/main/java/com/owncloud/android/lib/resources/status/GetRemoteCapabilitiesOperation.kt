@@ -2,6 +2,8 @@
  *   @author masensio
  *   @author Semih Serhat Karakaya <karakayasemi@itu.edu.tr>
  *   @author David González Verdugo
+ *   @author Abel García de Prada
+ *
  *   Copyright (C) 2020 ownCloud GmbH.
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -33,10 +35,13 @@ import com.owncloud.android.lib.common.http.methods.nonwebdav.GetMethod
 import com.owncloud.android.lib.common.operations.RemoteOperation
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode.OK
+import com.owncloud.android.lib.resources.response.CapabilityResponse
+import com.owncloud.android.lib.resources.status.RemoteCapability.CapabilityBooleanType.Companion.fromBooleanValue
+import com.squareup.moshi.JsonAdapter
+import com.squareup.moshi.Moshi
 import org.json.JSONObject
-import java.net.URL
-import com.owncloud.android.lib.resources.status.RemoteCapability.CapabilityBooleanType
 import timber.log.Timber
+import java.net.URL
 
 /**
  * Get the Capabilities from the server
@@ -69,13 +74,7 @@ class GetRemoteCapabilitiesOperation : RemoteOperation<RemoteCapability>() {
 
             if (!isSuccess(status)) {
                 result = RemoteOperationResult(getMethod)
-                Timber.e("Failed response while getting capabilities from the server ")
-                if (response != null) {
-                    Timber.e("*** status code: $status; response message: $response")
-                } else {
-                    Timber.e("*** status code: $status")
-                }
-
+                Timber.e("Failed response while getting capabilities from the server status code: $status; response message: $response")
                 return result
             }
 
@@ -93,154 +92,16 @@ class GetRemoteCapabilitiesOperation : RemoteOperation<RemoteCapability>() {
             val message = respMeta.getString(PROPERTY_MESSAGE)
 
             if (statusProp) {
-                val capability = RemoteCapability()
-                // Add Version
-                if (respData.has(NODE_VERSION)) {
-                    val respVersion = respData.getJSONObject(NODE_VERSION)
-                    capability.versionMayor = respVersion.getInt(PROPERTY_MAJOR)
-                    capability.versionMinor = respVersion.getInt(PROPERTY_MINOR)
-                    capability.versionMicro = respVersion.getInt(PROPERTY_MICRO)
-                    capability.versionString = respVersion.getString(PROPERTY_STRING)
-                    capability.versionEdition = respVersion.getString(PROPERTY_EDITION)
-                    Timber.d("*** Added $NODE_VERSION")
-                }
+                val moshi: Moshi = Moshi.Builder().build()
+                val adapter: JsonAdapter<CapabilityResponse> = moshi.adapter(CapabilityResponse::class.java)
+                val capabilityResponse: CapabilityResponse? = adapter.fromJson(respData.toString())
 
-                // Capabilities Object
-                if (respData.has(NODE_CAPABILITIES)) {
-                    val respCapabilities = respData.getJSONObject(NODE_CAPABILITIES)
-
-                    // Add Core: pollinterval
-                    if (respCapabilities.has(NODE_CORE)) {
-                        val respCore = respCapabilities.getJSONObject(NODE_CORE)
-                        capability.corePollinterval = respCore.getInt(PROPERTY_POLLINTERVAL)
-                        Timber.d("*** Added $NODE_CORE")
-                    }
-
-                    // Add files_sharing: public, user, resharing
-                    if (respCapabilities.has(NODE_FILES_SHARING)) {
-                        val respFilesSharing = respCapabilities.getJSONObject(NODE_FILES_SHARING)
-                        if (respFilesSharing.has(PROPERTY_API_ENABLED)) {
-                            capability.filesSharingApiEnabled = CapabilityBooleanType.fromBooleanValue(
-                                respFilesSharing.getBoolean(PROPERTY_API_ENABLED)
-                            )
-                        }
-
-                        if (respFilesSharing.has(NODE_PUBLIC)) {
-                            val respPublic = respFilesSharing.getJSONObject(NODE_PUBLIC)
-                            capability.filesSharingPublicEnabled = CapabilityBooleanType.fromBooleanValue(
-                                respPublic.getBoolean(PROPERTY_ENABLED)
-                            )
-
-                            if (respPublic.has(NODE_PASSWORD)) {
-                                val respPassword = respPublic.getJSONObject(NODE_PASSWORD)
-                                capability.filesSharingPublicPasswordEnforced =
-                                    CapabilityBooleanType.fromBooleanValue(
-                                        respPublic.getJSONObject(NODE_PASSWORD).getBoolean(PROPERTY_ENFORCED)
-                                    )
-
-                                if (respPassword.has(NODE_ENFORCED_FOR)) {
-                                    capability.filesSharingPublicPasswordEnforcedReadOnly =
-                                        CapabilityBooleanType.fromBooleanValue(
-                                            respPassword.getJSONObject(NODE_ENFORCED_FOR).getBoolean(
-                                                PROPERTY_ENFORCED_READ_ONLY
-                                            )
-                                        )
-
-                                    capability.filesSharingPublicPasswordEnforcedReadWrite =
-                                        CapabilityBooleanType.fromBooleanValue(
-                                            respPassword.getJSONObject(NODE_ENFORCED_FOR).getBoolean(
-                                                PROPERTY_ENFORCED_READ_WRITE
-                                            )
-                                        )
-
-                                    capability.filesSharingPublicPasswordEnforcedUploadOnly =
-                                        CapabilityBooleanType.fromBooleanValue(
-                                            respPassword.getJSONObject(NODE_ENFORCED_FOR).getBoolean(
-                                                PROPERTY_ENFORCED_UPLOAD_ONLY
-                                            )
-                                        )
-                                }
-                            }
-                            if (respPublic.has(NODE_EXPIRE_DATE)) {
-                                val respExpireDate = respPublic.getJSONObject(NODE_EXPIRE_DATE)
-                                capability.filesSharingPublicExpireDateEnabled =
-                                    CapabilityBooleanType.fromBooleanValue(
-                                        respExpireDate.getBoolean(PROPERTY_ENABLED)
-                                    )
-                                if (respExpireDate.has(PROPERTY_DAYS)) {
-                                    capability.filesSharingPublicExpireDateDays =
-                                        respExpireDate.getInt(PROPERTY_DAYS)
-                                }
-                                if (respExpireDate.has(PROPERTY_ENFORCED)) {
-                                    capability.filesSharingPublicExpireDateEnforced =
-                                        CapabilityBooleanType.fromBooleanValue(
-                                            respExpireDate.getBoolean(PROPERTY_ENFORCED)
-                                        )
-                                }
-                            }
-                            if (respPublic.has(PROPERTY_UPLOAD)) {
-                                capability.filesSharingPublicUpload = CapabilityBooleanType.fromBooleanValue(
-                                    respPublic.getBoolean(PROPERTY_UPLOAD)
-                                )
-                            }
-                            if (respPublic.has(PROPERTY_UPLOAD_ONLY)) {
-                                capability.filesSharingPublicSupportsUploadOnly =
-                                    CapabilityBooleanType.fromBooleanValue(
-                                        respPublic.getBoolean(PROPERTY_UPLOAD_ONLY)
-                                    )
-                            }
-                            if (respPublic.has(PROPERTY_MULTIPLE)) {
-                                capability.filesSharingPublicMultiple = CapabilityBooleanType.fromBooleanValue(
-                                    respPublic.getBoolean(PROPERTY_MULTIPLE)
-                                )
-                            }
-                        }
-
-                        if (respFilesSharing.has(NODE_USER)) {
-                            val respUser = respFilesSharing.getJSONObject(NODE_USER)
-                            capability.filesSharingUserSendMail = CapabilityBooleanType.fromBooleanValue(
-                                respUser.getBoolean(PROPERTY_SEND_MAIL)
-                            )
-                        }
-
-                        capability.filesSharingResharing = CapabilityBooleanType.fromBooleanValue(
-                            respFilesSharing.getBoolean(PROPERTY_RESHARING)
-                        )
-                        if (respFilesSharing.has(NODE_FEDERATION)) {
-                            val respFederation = respFilesSharing.getJSONObject(NODE_FEDERATION)
-                            capability.filesSharingFederationOutgoing =
-                                CapabilityBooleanType.fromBooleanValue(respFederation.getBoolean(PROPERTY_OUTGOING))
-                            capability.filesSharingFederationIncoming = CapabilityBooleanType.fromBooleanValue(
-                                respFederation.getBoolean(PROPERTY_INCOMING)
-                            )
-                        }
-                        Timber.d("*** Added $NODE_FILES_SHARING")
-                    }
-
-                    if (respCapabilities.has(NODE_FILES)) {
-                        val respFiles = respCapabilities.getJSONObject(NODE_FILES)
-                        // Add files
-                        capability.filesBigFileChunking = CapabilityBooleanType.fromBooleanValue(
-                            respFiles.getBoolean(PROPERTY_BIGFILECHUNKING)
-                        )
-                        if (respFiles.has(PROPERTY_UNDELETE)) {
-                            capability.filesUndelete = CapabilityBooleanType.fromBooleanValue(
-                                respFiles.getBoolean(PROPERTY_UNDELETE)
-                            )
-                        }
-                        if (respFiles.has(PROPERTY_VERSIONING)) {
-                            capability.filesVersioning = CapabilityBooleanType.fromBooleanValue(
-                                respFiles.getBoolean(PROPERTY_VERSIONING)
-                            )
-                        }
-                        Timber.d("*** Added $NODE_FILES")
-                    }
-                }
+                val remoteCapability = capabilityResponse?.let { mapToModel(it) } ?: RemoteCapability()
                 // Result
                 result = RemoteOperationResult(OK)
-                result.data = capability
+                result.data = remoteCapability
 
-                Timber.d("*** Get Capabilities completed ")
+                Timber.d("*** Get Capabilities completed $remoteCapability")
             } else {
                 result = RemoteOperationResult(statuscode, message, null)
                 Timber.e("Failed response while getting capabilities from the server ")
@@ -259,6 +120,36 @@ class GetRemoteCapabilitiesOperation : RemoteOperation<RemoteCapability>() {
         return status == HttpConstants.HTTP_OK
     }
 
+    private fun mapToModel(capabilityResponse: CapabilityResponse): RemoteCapability =
+        with(capabilityResponse) {
+            RemoteCapability(
+                versionMayor = serverVersion.versionMayor,
+                versionMinor = serverVersion.versionMinor,
+                versionMicro = serverVersion.versionMicro,
+                versionString = serverVersion.versionString,
+                versionEdition = serverVersion.versionEdition,
+                corePollinterval = capabilities.coreCapabilities.pollInterval,
+                filesSharingApiEnabled = fromBooleanValue(capabilities.fileSharingCapabilities.fileSharingApiEnabled),
+                filesSharingResharing = fromBooleanValue(capabilities.fileSharingCapabilities.fileSharingReSharing),
+                filesSharingPublicEnabled = fromBooleanValue(capabilities.fileSharingCapabilities.fileSharingPublic.enabled),
+                filesSharingPublicUpload = fromBooleanValue(capabilities.fileSharingCapabilities.fileSharingPublic.fileSharingPublicUpload),
+                filesSharingPublicSupportsUploadOnly = fromBooleanValue(capabilities.fileSharingCapabilities.fileSharingPublic.fileSharingPublicUploadOnly),
+                filesSharingPublicMultiple = fromBooleanValue(capabilities.fileSharingCapabilities.fileSharingPublic.fileSharingPublicMultiple),
+                filesSharingPublicPasswordEnforced = fromBooleanValue(capabilities.fileSharingCapabilities.fileSharingPublic.fileSharingPublicPassword.enforced),
+                filesSharingPublicPasswordEnforcedReadOnly = fromBooleanValue(capabilities.fileSharingCapabilities.fileSharingPublic.fileSharingPublicPassword.enforcedFor.enforcedReadOnly),
+                filesSharingPublicPasswordEnforcedReadWrite = fromBooleanValue(capabilities.fileSharingCapabilities.fileSharingPublic.fileSharingPublicPassword.enforcedFor.enforcedReadWrite),
+                filesSharingPublicPasswordEnforcedUploadOnly = fromBooleanValue(capabilities.fileSharingCapabilities.fileSharingPublic.fileSharingPublicPassword.enforcedFor.enforcedUploadOnly),
+                filesSharingPublicExpireDateEnabled = fromBooleanValue(capabilities.fileSharingCapabilities.fileSharingPublic.fileSharingPublicExpireDate.enabled),
+                filesSharingPublicExpireDateDays = capabilities.fileSharingCapabilities.fileSharingPublic.fileSharingPublicExpireDate.days ?: 0,
+                filesSharingPublicExpireDateEnforced = fromBooleanValue(capabilities.fileSharingCapabilities.fileSharingPublic.fileSharingPublicExpireDate.enforced?:false),
+                filesBigFileChunking = fromBooleanValue(capabilities.filesCapabilities.filesBigFileChunking),
+                filesUndelete = fromBooleanValue(capabilities.filesCapabilities.filesUnDelete),
+                filesVersioning = fromBooleanValue(capabilities.filesCapabilities.filesVersioning),
+                filesSharingFederationIncoming = fromBooleanValue(capabilities.fileSharingCapabilities.fileSharingFederation.incoming),
+                filesSharingFederationOutgoing = fromBooleanValue(capabilities.fileSharingCapabilities.fileSharingFederation.outgoing)
+            )
+        }
+
     companion object {
 
         // OCS Routes
@@ -276,50 +167,10 @@ class GetRemoteCapabilitiesOperation : RemoteOperation<RemoteCapability>() {
         private const val NODE_META = "meta"
 
         private const val NODE_DATA = "data"
-        private const val NODE_VERSION = "version"
-
-        private const val NODE_CAPABILITIES = "capabilities"
-        private const val NODE_CORE = "core"
-
-        private const val NODE_FILES_SHARING = "files_sharing"
-        private const val NODE_PUBLIC = "public"
-        private const val NODE_PASSWORD = "password"
-        private const val NODE_ENFORCED_FOR = "enforced_for"
-        private const val NODE_EXPIRE_DATE = "expire_date"
-        private const val NODE_USER = "user"
-        private const val NODE_FEDERATION = "federation"
-        private const val NODE_FILES = "files"
 
         private const val PROPERTY_STATUS = "status"
         private const val PROPERTY_STATUS_OK = "ok"
         private const val PROPERTY_STATUSCODE = "statuscode"
         private const val PROPERTY_MESSAGE = "message"
-
-        private const val PROPERTY_POLLINTERVAL = "pollinterval"
-
-        private const val PROPERTY_MAJOR = "major"
-        private const val PROPERTY_MINOR = "minor"
-        private const val PROPERTY_MICRO = "micro"
-        private const val PROPERTY_STRING = "string"
-        private const val PROPERTY_EDITION = "edition"
-
-        private const val PROPERTY_API_ENABLED = "api_enabled"
-        private const val PROPERTY_ENABLED = "enabled"
-        private const val PROPERTY_ENFORCED = "enforced"
-        private const val PROPERTY_ENFORCED_READ_ONLY = "read_only"
-        private const val PROPERTY_ENFORCED_READ_WRITE = "read_write"
-        private const val PROPERTY_ENFORCED_UPLOAD_ONLY = "upload_only"
-        private const val PROPERTY_DAYS = "days"
-        private const val PROPERTY_SEND_MAIL = "send_mail"
-        private const val PROPERTY_UPLOAD = "upload"
-        private const val PROPERTY_UPLOAD_ONLY = "supports_upload_only"
-        private const val PROPERTY_MULTIPLE = "multiple"
-        private const val PROPERTY_RESHARING = "resharing"
-        private const val PROPERTY_OUTGOING = "outgoing"
-        private const val PROPERTY_INCOMING = "incoming"
-
-        private const val PROPERTY_BIGFILECHUNKING = "bigfilechunking"
-        private const val PROPERTY_UNDELETE = "undelete"
-        private const val PROPERTY_VERSIONING = "versioning"
     }
 }
