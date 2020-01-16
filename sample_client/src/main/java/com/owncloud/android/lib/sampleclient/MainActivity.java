@@ -60,7 +60,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class MainActivity extends Activity implements OnRemoteOperationListener, OnDatatransferProgressListener {
@@ -105,7 +104,7 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
             File upFile = new File(upFolder, sampleFileName);
             FileOutputStream fos = new FileOutputStream(upFile);
             InputStream is = assets.open(sampleFileName);
-            int count = 0;
+            int count;
             byte[] buffer = new byte[1024];
             while ((count = is.read(buffer, 0, buffer.length)) >= 0) {
                 fos.write(buffer, 0, count);
@@ -163,8 +162,8 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
         String mimeType = getString(R.string.sample_file_mimetype);
 
         // Get the last modification date of the file from the file system
-        Long timeStampLong = fileToUpload.lastModified() / 1000;
-        String timeStamp = timeStampLong.toString();
+        long timeStampLong = fileToUpload.lastModified() / 1000;
+        String timeStamp = Long.toString(timeStampLong);
 
         UploadRemoteFileOperation uploadOperation = new UploadRemoteFileOperation(fileToUpload.getAbsolutePath(),
                 remotePath, mimeType, timeStamp);
@@ -212,13 +211,13 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
             Timber.e(result.getException(), result.getLogMessage());
 
         } else if (operation instanceof ReadRemoteFolderOperation) {
-            onSuccessfulRefresh((ReadRemoteFolderOperation) operation, result);
+            onSuccessfulRefresh(result);
 
         } else if (operation instanceof com.owncloud.android.lib.resources.files.UploadRemoteFileOperation) {
-            onSuccessfulUpload((com.owncloud.android.lib.resources.files.UploadRemoteFileOperation) operation, result);
+            onSuccessfulUpload();
 
         } else if (operation instanceof RemoveRemoteFileOperation) {
-            onSuccessfulRemoteDeletion((RemoveRemoteFileOperation) operation, result);
+            onSuccessfulRemoteDeletion();
 
         } else if (operation instanceof DownloadRemoteFileOperation) {
             onSuccessfulDownload();
@@ -228,29 +227,26 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
         }
     }
 
-    private void onSuccessfulRefresh(ReadRemoteFolderOperation operation, RemoteOperationResult result) {
+    private void onSuccessfulRefresh(RemoteOperationResult result) {
         mFilesAdapter.clear();
         List<RemoteFile> files = new ArrayList<>();
         for (RemoteFile remoteFile : (List<RemoteFile>) result.getData()) {
             files.add(remoteFile);
         }
-        if (files != null) {
-            Iterator<RemoteFile> it = files.iterator();
-            while (it.hasNext()) {
-                mFilesAdapter.add(it.next());
-            }
-            mFilesAdapter.remove(mFilesAdapter.getItem(0));
+        for (RemoteFile file : files) {
+            mFilesAdapter.add(file);
         }
+        mFilesAdapter.remove(mFilesAdapter.getItem(0));
         mFilesAdapter.notifyDataSetChanged();
     }
 
-    private void onSuccessfulUpload(com.owncloud.android.lib.resources.files.UploadRemoteFileOperation operation, RemoteOperationResult result) {
+    private void onSuccessfulUpload() {
         startRefresh();
     }
 
-    private void onSuccessfulRemoteDeletion(RemoveRemoteFileOperation operation, RemoteOperationResult result) {
+    private void onSuccessfulRemoteDeletion() {
         startRefresh();
-        TextView progressView = (TextView) findViewById(R.id.upload_progress);
+        TextView progressView = findViewById(R.id.upload_progress);
         if (progressView != null) {
             progressView.setText("0%");
         }
