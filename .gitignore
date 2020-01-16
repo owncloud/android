@@ -19,11 +19,6 @@ gen/
 # Local configuration files (sdk path, etc)
 .gradle/
 local.properties
-sample_client/local.properties
 
 # Mac .DS_Store files
 .DS_Store
-
-# Proguard README
-proguard-project.txt
-sample_client/proguard-project.txt
