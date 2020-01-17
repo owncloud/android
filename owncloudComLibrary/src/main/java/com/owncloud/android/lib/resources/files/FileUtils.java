@@ -26,45 +26,16 @@ package com.owncloud.android.lib.resources.files;
 
 import timber.log.Timber;
 
+import java.io.File;
+
 public class FileUtils {
     public static final String PATH_SEPARATOR = "/";
     public static final String FINAL_CHUNKS_FILE = ".file";
 
-    /**
-     * Validate the fileName to detect if contains any forbidden character: / , \ , < , > ,
-     * : , " , | , ? , *
-     */
-    public static boolean isValidName(String fileName, boolean versionSupportsForbiddenChars) {
-        boolean result = true;
-
-        Timber.d("fileName =======%s", fileName);
-        if ((versionSupportsForbiddenChars && fileName.contains(PATH_SEPARATOR)) ||
-                (!versionSupportsForbiddenChars && (fileName.contains(PATH_SEPARATOR) ||
-                        fileName.contains("\\") || fileName.contains("<") || fileName.contains(">") ||
-                        fileName.contains(":") || fileName.contains("\"") || fileName.contains("|") ||
-                        fileName.contains("?") || fileName.contains("*")))) {
-
-            result = false;
-        }
-        return result;
-    }
-
-    /**
-     * Validate the path to detect if contains any forbidden character: \ , < , > , : , " , | ,
-     * ? , *
-     */
-    public static boolean isValidPath(String path, boolean versionSupportsForbidenChars) {
-        boolean result = true;
-
-        Timber.d("path ....... %s", path);
-        if (!versionSupportsForbidenChars &&
-                (path.contains("\\") || path.contains("<") || path.contains(">") ||
-                        path.contains(":") || path.contains("\"") || path.contains("|") ||
-                        path.contains("?") || path.contains("*"))) {
-
-            result = false;
-        }
-        return result;
+    static String getParentPath(String remotePath) {
+        String parentPath = new File(remotePath).getParent();
+        parentPath = parentPath.endsWith(PATH_SEPARATOR) ? parentPath : parentPath + PATH_SEPARATOR;
+        return parentPath;
     }
 
     /**
