@@ -893,7 +893,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
          */
         override fun onReceive(context: Context, intent: Intent) {
             val event = intent.action
-            Timber.d("Received broadcast " + event!!)
+            Timber.d("Received broadcast $event")
             val accountName = intent.getStringExtra(FileSyncAdapter.EXTRA_ACCOUNT_NAME)
 
             val synchFolderRemotePath = intent.getStringExtra(FileSyncAdapter.EXTRA_FOLDER_PATH)

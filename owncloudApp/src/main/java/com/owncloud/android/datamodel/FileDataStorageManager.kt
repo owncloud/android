@@ -377,7 +377,7 @@ class FileDataStorageManager {
     fun saveFolder(
         folder: OCFile, updatedFiles: Collection<OCFile>, filesToRemove: Collection<OCFile>
     ) {
-        Timber.d("Saving folder ${folder.remotePath} with ${updatedFiles.size} children and " + "${filesToRemove.size} files to remove")
+        Timber.d("Saving folder ${folder.remotePath} with ${updatedFiles.size} children and ${filesToRemove.size} files to remove")
 
         val operations = ArrayList<ContentProviderOperation>(updatedFiles.size)
 

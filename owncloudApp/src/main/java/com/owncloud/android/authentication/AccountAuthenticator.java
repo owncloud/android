@@ -167,7 +167,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
             validateAccountType(account.type);
             validateAuthTokenType(authTokenType);
         } catch (AuthenticatorException e) {
-            Timber.e(e, "Failed to validate account type " + account.type);
+            Timber.e(e, "Failed to validate account type %s", account.type);
             return e.getFailureBundle();
         }
 

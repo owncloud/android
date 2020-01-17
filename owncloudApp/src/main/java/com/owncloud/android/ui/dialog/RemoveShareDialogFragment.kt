@@ -71,7 +71,7 @@ class RemoveShareDialogFragment : ConfirmationDialogFragment(), ConfirmationDial
      * Performs the removal of the target share, both locally and in the server.
      */
     override fun onConfirmation(callerTag: String) {
-        Timber.d("Removing share " + targetShare!!.name)
+        Timber.d("Removing share ${targetShare?.name}")
         listener?.deleteShare(targetShare?.remoteId!!)
     }
 
