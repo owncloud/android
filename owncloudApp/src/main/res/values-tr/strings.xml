@@ -77,7 +77,7 @@
   <string name="pattern_locked">Desenle kilitlendi</string>
   <string name="recommend_subject">%1$s uygulamasını akıllı telefonunda dene!</string>
   <string name="recommend_text">Seni, akıllı telefonunda %1$s kullanmaya davet ediyorum!\nBuradan indirebilirsin: %2$s</string>
-  <string name="error_reason">neden</string>
+  <string name="error_reason">çünkü</string>
   <string name="auth_failure_snackbar">Kimlik doğrulaması başarısız oldu.</string>
   <string name="auth_failure_snackbar_action">Hesabı değiştir</string>
   <string name="auth_oauth_failure">Erişim belirtecinin süresi doldu veya geçersiz hale geldi. Tekrar erişim kazanmak için tekrar oturum açın.</string>
@@ -515,7 +515,7 @@
   <string name="share_via_link_expiration_date_explanation_label">Herkese açık bağlantının süresi, oluşturulduktan en geç %1$d gün sonra dolacak</string>
   <string name="share_via_link_default_name_template">%1$s bağlantı</string>
   <string name="share_via_link_empty_password">Parola boş</string>
-  <string name="private_link_info">Bu özel bir bağlantıdır, sadece dosyaya/klasöre erişimi olanlar kullanabilir. Paylaşımlarda, kendinize veya başkalarına kalıcı bağlantı olarak kullanın.</string>
+  <string name="private_link_info">Bu bir özel bağlantıdır, bunu sadece dosyaya/klasöre erişimi olan kişiler kullanabilir. Bu bağlantıyı, kendiniz için kalıcı bir bağlantı olarak veya başkalarına paylaşım içindeki dosyaları gösterebilmek için kullanın.</string>
   <string name="file_private_link_error">Bu dosya için özel bağlantı mevcut değil</string>
   <string name="download_notification_channel_name">İndirmeler</string>
   <string name="download_notification_channel_description">İndirilen dosyanın adını ve durumunu gör</string>
