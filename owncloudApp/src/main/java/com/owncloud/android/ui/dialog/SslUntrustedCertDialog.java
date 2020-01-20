@@ -129,7 +129,7 @@ public class SslUntrustedCertDialog extends DialogFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Log_OC.d(TAG, "onCreateView, savedInsanceState is " + savedInstanceState);
+        Log_OC.d(TAG, "onCreateView, savedInstanceState is " + savedInstanceState);
         // Create a view by inflating desired layout
         if (mView == null) {
             mView = inflater.inflate(R.layout.ssl_untrusted_cert_layout, container, false);
