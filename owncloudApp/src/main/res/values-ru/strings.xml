@@ -550,8 +550,6 @@
   <string name="welcome_feature_4_text">Ваши снимки и видео загружаются автоматически</string>
   <string name="welcome_feature_5_title"> Потоковое видео</string>
   <string name="welcome_feature_5_text">Проигрывайте ваши ролики, не скачивая их</string>
-  <string name="welcome_feature_11_title">Поддержка серверов ниже 10 завершается</string>
-  <string name="welcome_feature_11_text">Пожалуйста, обновите ваш сервер, иначе последующие версии приложения не смогут работать для вас</string>
   <string name="no_borwser_installed_alert">Не установлен никакой браузер. Пожалуйста, установите браузер для поддержки безопасного входа.</string>
   <string name="common_not_found">не найдено</string>
 </resources>

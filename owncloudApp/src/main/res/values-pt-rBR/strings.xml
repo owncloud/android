@@ -548,8 +548,6 @@
   <string name="welcome_feature_4_text">Suas fotos/vídeos carregados automaticamente</string>
   <string name="welcome_feature_5_title">Transmissão de vídeo</string>
   <string name="welcome_feature_5_text">Assista seus vídeos sem baixá-los</string>
-  <string name="welcome_feature_11_title">Fim do suporte para servidores inferiores a 10</string>
-  <string name="welcome_feature_11_text">Atualize seu servidor ou as próximas versões de aplicativos não funcionarão para você</string>
   <string name="no_borwser_installed_alert">Nenhum navegador instalado. Por favor, instale um navegador para permitir um login seguro.</string>
   <string name="common_not_found">não foi encontrado</string>
 </resources>

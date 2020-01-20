@@ -545,8 +545,6 @@
   <string name="welcome_feature_4_text">รูปภาพ/วิดีโอ ของคุณถูกอัปโหลดโดยอัตโนมัติแล้ว</string>
   <string name="welcome_feature_5_title">กำลังสตรีมวิดีโอ</string>
   <string name="welcome_feature_5_text">เล่นวิดีโอของคุณโดยไม่ต้องดาวน์โหลด</string>
-  <string name="welcome_feature_11_title">สิ้นสุดการสนับสนุนสำหรับเซิร์ฟเวอร์ที่มีรุ่นต่ำกว่า 10</string>
-  <string name="welcome_feature_11_text">โปรดอัปเกรดเซิร์ฟเวอร์ของคุณมิฉะนั้นแอปเวอร์ชั่นใหม่จะไม่สามารถใช้งานได้</string>
   <string name="no_borwser_installed_alert">โปรดติดตั้งเบราเซอร์ก่อนเพื่อให้สามารถล็อกอินได้อย่างปลอดภัย</string>
   <string name="common_not_found">ไม่พบข้อมูลใดๆ</string>
 </resources>

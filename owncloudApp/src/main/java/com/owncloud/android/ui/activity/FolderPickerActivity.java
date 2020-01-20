@@ -206,7 +206,6 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
         // perform folder synchronization
         SyncOperation synchFolderOp = new RefreshFolderOperation(
                 folder,
-                getFileOperationsHelper().isSharedSupported(),
                 ignoreETag,
                 getAccount(),
                 getApplicationContext()

@@ -34,9 +34,7 @@ import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import com.google.android.material.snackbar.Snackbar
 import com.owncloud.android.R
-import com.owncloud.android.authentication.AccountUtils
 import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.datamodel.ThumbnailsCacheManager
 import com.owncloud.android.domain.capabilities.model.CapabilityBooleanType
@@ -115,8 +113,6 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
      * Capabilities of the server
      */
     private var capabilities: OCCapability? = null
-
-    private var serverVersion: OwnCloudVersion? = null
 
     private// Array with numbers already set in public link names
     // Inspect public links for default names already used
@@ -203,7 +199,6 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
         if (arguments != null) {
             file = arguments!!.getParcelable(ARG_FILE)
             account = arguments!!.getParcelable(ARG_ACCOUNT)
-            serverVersion = arguments!!.getParcelable(ARG_SERVER_VERSION)
         }
     }
 
@@ -251,16 +246,6 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
             view.getPrivateLinkButton?.visibility = View.VISIBLE
         }
 
-        val shareWithUsersEnable = serverVersion != null && serverVersion!!.isSearchUsersSupported
-
-        // Change the sharing text depending on the server version (at least version 8.2 is needed
-        // for sharing with other users)
-        if (!shareWithUsersEnable) {
-            view.shareNoUsers?.setText(R.string.share_incompatible_version)
-            view.shareNoUsers?.gravity = View.TEXT_ALIGNMENT_CENTER
-            view.addUserButton?.visibility = View.GONE
-        }
-
         // Hide share features sections that are not enabled
         hideSectionsDisabledInBuildTime(view)
 
@@ -276,21 +261,9 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
             true
         }
 
-        val shareWithUsersEnable = serverVersion != null && serverVersion!!.isSearchUsersSupported
-
         addUserButton?.setOnClickListener {
-            if (shareWithUsersEnable) {
-                // Show Search Fragment
-                listener?.showSearchUsersAndGroups()
-            } else {
-                val message = getString(R.string.share_sharee_unavailable)
-                val snackbar = Snackbar.make(
-                    activity!!.findViewById(android.R.id.content),
-                    message,
-                    Snackbar.LENGTH_LONG
-                )
-                snackbar.show()
-            }
+            // Show Search Fragment
+            listener?.showSearchUsersAndGroups()
         }
 
         //  Add Public Link Button
@@ -542,19 +515,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
      *
      * @return true if should be enabled, false otherwise
      */
-    private fun enableMultiplePublicSharing(): Boolean {
-        if (capabilities == null) return true
-
-        val serverVersion = OwnCloudVersion(capabilities?.versionString!!)
-
-        return when {
-            // Server version <= 9.x, multiple public sharing not supported
-            !serverVersion.isMultiplePublicSharingSupported -> false
-            // Server version >= 10, multiple public sharing supported but disabled
-            capabilities?.filesSharingPublicMultiple == CapabilityBooleanType.FALSE -> false
-            else -> true
-        }
-    }
+    private fun enableMultiplePublicSharing() = capabilities?.filesSharingPublicMultiple?.isTrue ?: false
 
     override fun editPublicShare(share: OCShare) {
         listener?.showEditPublicShare(share)
@@ -605,7 +566,6 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
          */
         private const val ARG_FILE = "FILE"
         private const val ARG_ACCOUNT = "ACCOUNT"
-        private const val ARG_SERVER_VERSION = "SERVER_VERSION"
 
         private const val UNUSED_NUMBER = -1
         private const val USED_NUMBER_SECOND = 2
@@ -619,14 +579,12 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
          */
         fun newInstance(
             fileToShare: OCFile,
-            account: Account,
-            serverVersion: OwnCloudVersion? = AccountUtils.getServerVersion(account)
+            account: Account
         ): ShareFileFragment {
             val fragment = ShareFileFragment()
             val args = Bundle()
             args.putParcelable(ARG_FILE, fileToShare)
             args.putParcelable(ARG_ACCOUNT, account)
-            args.putParcelable(ARG_SERVER_VERSION, serverVersion)
             fragment.arguments = args
             return fragment
         }

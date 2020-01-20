@@ -79,7 +79,7 @@ class MainApp : MultiDexApplication() {
         OwnCloudClientManagerFactory.setUserAgent(userAgent)
 
         OwnCloudClientManagerFactory.setDefaultPolicy(
-            Policy.SINGLE_SESSION_PER_ACCOUNT_IF_SERVER_SUPPORTS_SERVER_MONITORING
+            Policy.SINGLE_SESSION_PER_ACCOUNT
         )
 
         val oauth2Provider = OwnCloudOAuth2Provider()

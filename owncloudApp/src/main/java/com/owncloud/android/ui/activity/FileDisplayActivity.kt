@@ -72,6 +72,7 @@ import com.owncloud.android.lib.common.authentication.OwnCloudBearerCredentials
 import com.owncloud.android.lib.common.operations.RemoteOperation
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode
+import com.owncloud.android.lib.resources.status.OwnCloudVersion
 import com.owncloud.android.operations.CopyFileOperation
 import com.owncloud.android.operations.CreateFolderOperation
 import com.owncloud.android.operations.MoveFileOperation
@@ -896,11 +897,15 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
             val accountName = intent.getStringExtra(FileSyncAdapter.EXTRA_ACCOUNT_NAME)
 
             val synchFolderRemotePath = intent.getStringExtra(FileSyncAdapter.EXTRA_FOLDER_PATH)
-            val synchResult = intent.getSerializableExtra(
-                FileSyncAdapter.EXTRA_RESULT
-            ) as? RemoteOperationResult<*>
-            val sameAccount = account != null &&
-                    accountName == account.name && storageManager != null
+            val serverVersion = intent.getParcelableExtra<OwnCloudVersion>(FileSyncAdapter.EXTRA_SERVER_VERSION)
+
+            if (serverVersion != null && !serverVersion.isServerVersionSupported) {
+                Timber.d("Server version not supported")
+                showRequestAccountChangeNotice(getString(R.string.server_not_supported), true)
+            }
+
+            val synchResult = intent.getSerializableExtra(FileSyncAdapter.EXTRA_RESULT) as? RemoteOperationResult<*>
+            val sameAccount = account != null && accountName == account.name && storageManager != null
 
             if (sameAccount) {
 
@@ -959,16 +964,17 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
                                             account
                                         )
 
-                                    launch {
+                                    launch(Dispatchers.Main) {
                                         if (credentials is OwnCloudBearerCredentials) { // OAuth
                                             showRequestRegainAccess()
                                         } else {
-                                            showRequestAccountChangeNotice()
+                                            showRequestAccountChangeNotice(
+                                                getString(R.string.auth_failure_snackbar),
+                                                false
+                                            )
                                         }
                                     }
                                 }
-
-                                showRequestAccountChangeNotice()
                             } else if (ResultCode.SSL_RECOVERABLE_PEER_UNVERIFIED == synchResult.code) {
                                 showUntrustedCertDialog(synchResult)
                             }
@@ -992,12 +998,12 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
             } else if (synchResult?.code == ResultCode.SPECIFIC_SERVICE_UNAVAILABLE) {
                 if (synchResult.httpCode == 503) {
                     if (synchResult.httpPhrase == "Error: Call to a member function getUID() on null") {
-                        showRequestAccountChangeNotice()
+                        showRequestAccountChangeNotice(getString(R.string.auth_failure_snackbar), false)
                     } else {
                         showSnackMessage(synchResult.httpPhrase)
                     }
                 } else {
-                    showRequestAccountChangeNotice()
+                    showRequestAccountChangeNotice(getString(R.string.auth_failure_snackbar), false)
                 }
             }
         }
@@ -1604,7 +1610,6 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
                     // perform folder synchronization
                     val synchFolderOp = RefreshFolderOperation(
                         folder,
-                        fileOperationsHelper.isSharedSupported,
                         ignoreETag,
                         account,
                         applicationContext

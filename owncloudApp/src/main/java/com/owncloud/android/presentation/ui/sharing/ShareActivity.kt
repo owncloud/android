@@ -156,26 +156,20 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
         // check if the Share is FERERATED
         val isFederated = ShareType.FEDERATED == shareType
 
-        when {
-            file.isSharedWithMe -> return RemoteShare.READ_PERMISSION_FLAG    // minimum permissions
-            isFederated -> {
-                val serverVersion = com.owncloud.android.authentication.AccountUtils.getServerVersion(account)
-                return if (serverVersion != null && serverVersion.isNotReshareableFederatedSupported) {
-                    if (file.isFolder)
-                        RemoteShare.FEDERATED_PERMISSIONS_FOR_FOLDER_AFTER_OC9
-                    else
-                        RemoteShare.FEDERATED_PERMISSIONS_FOR_FILE_AFTER_OC9
+        return when {
+            file.isSharedWithMe -> RemoteShare.READ_PERMISSION_FLAG    // minimum permissions
+            isFederated ->
+                if (file.isFolder) {
+                    RemoteShare.FEDERATED_PERMISSIONS_FOR_FOLDER
                 } else {
-                    if (file.isFolder)
-                        RemoteShare.FEDERATED_PERMISSIONS_FOR_FOLDER_UP_TO_OC9
-                    else
-                        RemoteShare.FEDERATED_PERMISSIONS_FOR_FILE_UP_TO_OC9
+                    RemoteShare.FEDERATED_PERMISSIONS_FOR_FILE
                 }
-            }
-            else -> return if (file.isFolder)
-                RemoteShare.MAXIMUM_PERMISSIONS_FOR_FOLDER
-            else
-                RemoteShare.MAXIMUM_PERMISSIONS_FOR_FILE
+            else ->
+                if (file.isFolder) {
+                    RemoteShare.MAXIMUM_PERMISSIONS_FOR_FOLDER
+                } else {
+                    RemoteShare.MAXIMUM_PERMISSIONS_FOR_FILE
+                }
         }
     }
 

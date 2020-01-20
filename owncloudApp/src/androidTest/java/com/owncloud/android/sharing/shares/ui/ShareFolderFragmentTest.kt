@@ -32,7 +32,6 @@ import com.owncloud.android.R
 import com.owncloud.android.domain.capabilities.model.OCCapability
 import com.owncloud.android.domain.sharing.shares.model.OCShare
 import com.owncloud.android.domain.utils.Event
-import com.owncloud.android.lib.resources.status.OwnCloudVersion
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.ui.sharing.fragments.ShareFileFragment
 import com.owncloud.android.presentation.viewmodels.capabilities.OCCapabilityViewModel
@@ -43,7 +42,6 @@ import com.owncloud.android.testutil.OC_SHARE
 import com.owncloud.android.utils.AppTestUtil.OC_FOLDER
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.mockkClass
 import org.hamcrest.CoreMatchers.not
 import org.junit.Before
 import org.junit.Test
@@ -80,13 +78,9 @@ class ShareFolderFragmentTest {
             )
         }
 
-        val ownCloudVersion = mockkClass(OwnCloudVersion::class)
-        every { ownCloudVersion.isSearchUsersSupported } returns true
-
         val shareFileFragment = ShareFileFragment.newInstance(
             OC_FOLDER,
-            OC_ACCOUNT,
-            ownCloudVersion
+            OC_ACCOUNT
         )
 
         ActivityScenario.launch(TestShareFileActivity::class.java).onActivity {
