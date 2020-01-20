@@ -34,7 +34,6 @@ import com.owncloud.android.lib.common.network.WebdavUtils;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
-import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 
 import java.net.URL;
 import java.util.concurrent.TimeUnit;
@@ -87,16 +86,6 @@ public class MoveRemoteFileOperation extends RemoteOperation {
      */
     @Override
     protected RemoteOperationResult run(OwnCloudClient client) {
-
-        OwnCloudVersion version = client.getOwnCloudVersion();
-        boolean versionWithForbiddenChars =
-                (version != null && version.isVersionWithForbiddenCharacters());
-
-        /// check parameters
-        if (!FileUtils.isValidPath(mTargetRemotePath, versionWithForbiddenChars)) {
-            return new RemoteOperationResult<>(ResultCode.INVALID_CHARACTER_IN_NAME);
-        }
-
         if (mTargetRemotePath.equals(mSrcRemotePath)) {
             // nothing to do!
             return new RemoteOperationResult<>(ResultCode.OK);

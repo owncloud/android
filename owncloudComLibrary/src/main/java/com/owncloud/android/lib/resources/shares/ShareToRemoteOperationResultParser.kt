@@ -72,7 +72,7 @@ class ShareToRemoteOperationResultParser(private var shareXmlParser: ShareXMLPar
                             }
 
                             if (serverBaseUri != null) {
-                                val sharingLinkPath = ShareUtils.getSharingLinkPath(ownCloudVersion)
+                                val sharingLinkPath = ShareUtils.SHARING_LINK_PATH
                                 share.shareLink = serverBaseUri.toString() + sharingLinkPath + share.token
                             } else {
                                 Timber.e("Couldn't build link for public share :(")

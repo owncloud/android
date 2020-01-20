@@ -33,7 +33,6 @@ import com.owncloud.android.lib.common.network.WebdavUtils;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
-import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 
 import java.net.URL;
 import java.util.concurrent.TimeUnit;
@@ -41,11 +40,12 @@ import java.util.concurrent.TimeUnit;
 /**
  * Remote operation moving a remote file or folder in the ownCloud server to a different folder
  * in the same account.
- * <p>
+ *
  * Allows renaming the moving file/folder at the same time.
  *
  * @author David A. Velasco
  * @author Christian Schabesberger
+ * @author David González V.
  */
 public class CopyRemoteFileOperation extends RemoteOperation<String> {
 
@@ -81,14 +81,6 @@ public class CopyRemoteFileOperation extends RemoteOperation<String> {
      */
     @Override
     protected RemoteOperationResult<String> run(OwnCloudClient client) {
-        OwnCloudVersion version = client.getOwnCloudVersion();
-        boolean versionWithForbiddenChars =
-                (version != null && version.isVersionWithForbiddenCharacters());
-
-        /// check parameters
-        if (!FileUtils.isValidPath(mTargetRemotePath, versionWithForbiddenChars)) {
-            return new RemoteOperationResult<>(ResultCode.INVALID_CHARACTER_IN_NAME);
-        }
 
         if (mTargetRemotePath.equals(mSrcRemotePath)) {
             // nothing to do!
@@ -100,7 +92,7 @@ public class CopyRemoteFileOperation extends RemoteOperation<String> {
         }
 
         /// perform remote operation
-        RemoteOperationResult<String> result;
+        RemoteOperationResult result;
         try {
             CopyMethod copyMethod =
                     new CopyMethod(new URL(client.getUserFilesWebDavUri() + WebdavUtils.encodePath(mSrcRemotePath)),
