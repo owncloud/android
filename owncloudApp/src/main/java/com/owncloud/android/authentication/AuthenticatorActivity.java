@@ -115,7 +115,7 @@ import static android.content.Intent.ACTION_VIEW;
  */
 public class AuthenticatorActivity extends AccountAuthenticatorActivity
         implements OnRemoteOperationListener, OnFocusChangeListener, OnEditorActionListener,
-        AuthenticatorAsyncTask.OnAuthenticatorTaskListener {
+        AuthenticatorAsyncTask.OnAuthenticatorTaskListener, SslUntrustedCertDialog.OnSslUntrustedCertListener {
 
     private static final String TAG = AuthenticatorActivity.class.getSimpleName();
 
@@ -1691,6 +1691,23 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             }
         }
         return false;   // always return false to grant that the software keyboard is hidden anyway
+    }
+
+    @Override
+    public void onSavedCertificate() {
+        Log_OC.d("Server certificate is trusted");
+        checkOcServer();
+    }
+
+    @Override
+    public void onFailedSavingCertificate() {
+        Log_OC.d("Server certificate could not be saved");
+        Toast.makeText(this, R.string.ssl_validator_not_saved, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onCancelCertificate() {
+        Log_OC.d("Server certificate is not trusted");
     }
 
     private abstract static class RightDrawableOnTouchListener implements OnTouchListener {
