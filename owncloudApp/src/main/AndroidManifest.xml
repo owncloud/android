@@ -194,14 +194,17 @@
             android:launchMode="singleTask"
             android:theme="@style/Theme.ownCloud.Authenticator">
             <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
+                <action android:name="HANDLE_AUTHORIZATION_RESPONSE"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
 
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data
-                    android:scheme="oc"
-                    android:host="android.owncloud.com" />
+        <activity android:name="net.openid.appauth.RedirectUriReceiverActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data android:scheme="oc" />
             </intent-filter>
         </activity>
 

@@ -29,6 +29,7 @@ package com.owncloud.android.authentication;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
 import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Context;
@@ -62,6 +63,7 @@ import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.browser.customtabs.CustomTabsClient;
 import androidx.browser.customtabs.CustomTabsIntent;
 import androidx.browser.customtabs.CustomTabsServiceConnection;
@@ -80,11 +82,7 @@ import com.owncloud.android.lib.common.authentication.OwnCloudCredentials;
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentialsFactory;
 import com.owncloud.android.lib.common.authentication.oauth.OAuth2Constants;
 import com.owncloud.android.lib.common.authentication.oauth.OAuth2GetAccessTokenOperation;
-import com.owncloud.android.lib.common.authentication.oauth.OAuth2GrantType;
-import com.owncloud.android.lib.common.authentication.oauth.OAuth2Provider;
-import com.owncloud.android.lib.common.authentication.oauth.OAuth2ProvidersRegistry;
 import com.owncloud.android.lib.common.authentication.oauth.OAuth2QueryParser;
-import com.owncloud.android.lib.common.authentication.oauth.OAuth2RequestBuilder;
 import com.owncloud.android.lib.common.network.CertificateCombinedException;
 import com.owncloud.android.lib.common.operations.OnRemoteOperationListener;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
@@ -102,6 +100,12 @@ import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter;
 import com.owncloud.android.utils.DisplayUtils;
 import com.owncloud.android.utils.DocumentProviderUtils;
 import com.owncloud.android.utils.PreferenceUtils;
+import net.openid.appauth.AuthorizationException;
+import net.openid.appauth.AuthorizationRequest;
+import net.openid.appauth.AuthorizationResponse;
+import net.openid.appauth.AuthorizationService;
+import net.openid.appauth.AuthorizationServiceConfiguration;
+import net.openid.appauth.ResponseTypeValues;
 import timber.log.Timber;
 
 import java.util.ArrayList;
@@ -150,6 +154,9 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
     private static final String ACTION_CUSTOM_TABS_CONNECTION =
             "android.support.customtabs.action.CustomTabsService";
+
+    private static final String HANDLE_AUTHORIZATION_RESPONSE_ACTION = "HANDLE_AUTHORIZATION_RESPONSE";
+    private static final String USED_INTENT = "USED_INTENT";
 
     // ChromeCustomTab
     String mCustomTabPackageName;
@@ -324,13 +331,10 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
     @Override
     public void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        if (intent != null && intent.getAction() != null && intent.getAction().equals(ACTION_VIEW)) {
-            getOAuth2AccessTokenFromCapturedRedirection(intent.getData());
-        }
+        checkIntent(intent);
     }
 
     private String getCustomTabPackageName() {
-
         PackageManager pm = getPackageManager();
         // Get default VIEW intent handler.
         Intent activityIntent = new Intent(ACTION_VIEW, Uri.parse("https://owncloud.org"));
@@ -756,6 +760,32 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         super.onDestroy();
     }
 
+    private void checkIntent(@Nullable Intent intent) {
+        if (intent != null) {
+            String action = intent.getAction();
+            if (HANDLE_AUTHORIZATION_RESPONSE_ACTION.equals(action)) {
+                if (!intent.hasExtra(USED_INTENT)) {
+                    handleAuthorizationResponse(intent);
+                    intent.putExtra(USED_INTENT, true);
+                }
+            }
+        }
+    }
+
+    private void handleAuthorizationResponse(Intent intent) {
+        AuthorizationResponse response = AuthorizationResponse.fromIntent(intent);
+        if (response != null) {
+            AuthorizationService service = new AuthorizationService(this);
+            service.performTokenRequest(response.createTokenExchangeRequest(), (tokenResponse, exception) -> {
+                if (exception != null) {
+                    Timber.e(exception, "Token Exchange failed");
+                } else {
+
+                }
+            });
+        }
+    }
+
     /**
      * Parses the redirection with the response to the GET AUTHORIZATION request to the
      * OAuth server and requests for the access token (GET ACCESS TOKEN)
@@ -807,7 +837,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
                         new RemoteOperationResult(ResultCode.OAUTH2_ERROR)
                 );
             }
-
         }
     }
 
@@ -1015,19 +1044,26 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         mAuthStatusText = getResources().getString(R.string.oauth_login_connection);
         showAuthStatus();
 
-        // GET AUTHORIZATION CODE URI to open in WebView
-        OAuth2Provider oAuth2Provider = OAuth2ProvidersRegistry.getInstance().getProvider();
-        oAuth2Provider.setAuthorizationServerUri(mServerInfo.mBaseUrl);
+        AuthorizationServiceConfiguration serviceConfiguration = new AuthorizationServiceConfiguration(
+                Uri.parse(mServerInfo.mBaseUrl + "/" + getString(R.string.oauth2_url_endpoint_auth)) /* auth endpoint */,
+                Uri.parse(mServerInfo.mBaseUrl + "/" + getString(R.string.oauth2_url_endpoint_access)) /* token endpoint */
+        );
 
-        OAuth2RequestBuilder builder = oAuth2Provider.getOperationBuilder();
-        builder.setGrantType(OAuth2GrantType.AUTHORIZATION_CODE);
-        builder.setRequest(OAuth2RequestBuilder.OAuthRequest.GET_AUTHORIZATION_CODE);
+        String clientId = getString(R.string.oauth2_client_id);
+        Uri redirectUri = Uri.parse(getString(R.string.oauth2_redirect_uri));
+        AuthorizationRequest.Builder builder = new AuthorizationRequest.Builder(
+                serviceConfiguration,
+                clientId,
+                ResponseTypeValues.CODE,
+                redirectUri
+        );
+        AuthorizationRequest request = builder.build();
 
-        if (mCustomTabPackageName != null) {
-            openUrlWithCustomTab(builder.buildUri());
-        } else {
-            openUrlInBrowser(builder.buildUri());
-        }
+        AuthorizationService authorizationService = new AuthorizationService(this);
+
+        Intent postAuthorizationIntent = new Intent(HANDLE_AUTHORIZATION_RESPONSE_ACTION);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, request.hashCode(), postAuthorizationIntent, 0);
+        authorizationService.performAuthorizationRequest(request, pendingIntent);
     }
 
     private void openUrlWithCustomTab(String url) {
