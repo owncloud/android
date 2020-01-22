@@ -81,6 +81,7 @@
 Descárgueo de aquí: %2$s</string>
   <string name="error_reason">por mor</string>
   <string name="auth_failure_snackbar">Produciuse un fallo na autenticación.</string>
+  <string name="server_not_supported">A súa versión do servidor é inferior a 10, polo que non é compatíbel, actualice o servidor a versión máis recente</string>
   <string name="auth_failure_snackbar_action">Cambiar a conta</string>
   <string name="auth_oauth_failure">A marca de acceso caducou ou non é válida. Inicie sesión de novo para recuperar o acceso</string>
   <string name="auth_oauth_failure_snackbar_action">Rexistrarse</string>

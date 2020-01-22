@@ -80,6 +80,7 @@
   <string name="recommend_text">Dua t\’ju ftoj të përdorni %1$s në telefonin tuaj!\nShkarkojeni prej këtu: %2$s</string>
   <string name="error_reason">ngaqë</string>
   <string name="auth_failure_snackbar">Mirëfilltësimi dështoi</string>
+  <string name="server_not_supported">Versioni i shërbyesit tuaj është më i vogël se 10, ndaj nuk mbulohet, ju lutemi, përmirësoni shërbyesin tuaj me version më të ri</string>
   <string name="auth_failure_snackbar_action">Ndryshoni llogari</string>
   <string name="auth_oauth_failure">Token-i i hyrjeve ka skaduar ose është bërë i pavlefshëm. Ribëni hyrjen në llogari që të rifitoni mundësinë e përdorimit</string>
   <string name="auth_oauth_failure_snackbar_action">Hyni</string>

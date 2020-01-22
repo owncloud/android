@@ -79,6 +79,7 @@
   <string name="recommend_text">Seni, akıllı telefonunda %1$s kullanmaya davet ediyorum!\nBuradan indirebilirsin: %2$s</string>
   <string name="error_reason">çünkü</string>
   <string name="auth_failure_snackbar">Kimlik doğrulaması başarısız oldu.</string>
+  <string name="server_not_supported">Sunucu sürümünüz 10\'dan daha düşük olduğu için desteklenmiyor, lütfen sunucunu daha yeni bir sürüme yükseltiniz.</string>
   <string name="auth_failure_snackbar_action">Hesabı değiştir</string>
   <string name="auth_oauth_failure">Erişim belirtecinin süresi doldu veya geçersiz hale geldi. Tekrar erişim kazanmak için tekrar oturum açın.</string>
   <string name="auth_oauth_failure_snackbar_action">Oturum aç</string>
@@ -306,7 +307,7 @@
   <string name="wait_checking_credentials">Kayıtlı kimlik bilgileri kontrol ediliyor</string>
   <string name="filedisplay_unexpected_bad_get_content">Beklenmedik sorun; lütfen dosya seçmek için farklı bir uygulama kullanın</string>
   <string name="filedisplay_no_file_selected">Hiçbir dosya seçilmedi</string>
-  <string name="activity_chooser_title">Bağlantıyı gönder</string>
+  <string name="activity_chooser_title">Bağlantıyı şuna gönder</string>
   <string name="wait_for_tmp_copy_from_private_storage">Dosya özel depolamadan kopyalanıyor</string>
   <string name="oauth_check_onoff">oAuth2 ile oturum aç</string>
   <string name="oauth_login_connection">OAuth2 sunucusuna bağlanıyor...</string>
@@ -437,8 +438,8 @@
   <string name="prefs_camera_upload_source_path_title">Kamera klasörü (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">gerekli</string>
   <string name="prefs_camera_upload_source_path_title_optional">isteğe bağlı</string>
-  <string name="prefs_camera_upload_behaviour_dialogTitle">Orjinal dosya davranışı</string>
-  <string name="prefs_camera_upload_behaviour_title">Orjinal dosya davranışı</string>
+  <string name="prefs_camera_upload_behaviour_dialogTitle">Orjinal dosya şu olacak</string>
+  <string name="prefs_camera_upload_behaviour_title">şu olacak</string>
   <string name="upload_copy_files">Dosyayı kopyala</string>
   <string name="upload_move_files">Dosyayı taşı</string>
   <string name="pref_behaviour_entries_keep_file">özgün klasöründe tutuldu</string>
