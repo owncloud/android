@@ -1,3 +1,6 @@
+## 2.14.2 (January 2020)
+- Fix crash triggered when trying to connect to server secured with self signed certificate
+
 ## 2.14.1 (December 2019)
 - Some improvements in wizard
 
