@@ -80,6 +80,7 @@
   <string name="recommend_text">ฉันอยากจะขอเชิญให้คุณใช้ %1$s บนสมาร์ทโฟนของคุณ!\nดาวน์โหลดที่นี่: %2$s</string>
   <string name="error_reason">เพราะว่า</string>
   <string name="auth_failure_snackbar">การรับรองความถูกต้องล้มเหลว</string>
+  <string name="server_not_supported">เซิร์ฟเวอร์ของคุณเวอร์ชันเก่ากว่า 10 โปรดอัปเกรดเซิร์ฟเวอร์ของคุณเป็นรุ่นใหม่</string>
   <string name="auth_failure_snackbar_action">เปลี่ยนบัญชี</string>
   <string name="auth_oauth_failure">โทเค็นการเข้าถึงหมดอายุหรือไม่ถูกต้อง กรุณาลงชื่อเข้าใช้อีกครั้ง</string>
   <string name="auth_oauth_failure_snackbar_action">เข้าสู่ระบบ</string>

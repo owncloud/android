@@ -75,6 +75,7 @@
   <string name="pattern_configure_your_pattern_explanation">Uygulama her açılışında desen sorulacak</string>
   <string name="pass_code_locked">Parola kodu ile kilitlendi</string>
   <string name="pattern_locked">Desenle kilitlendi</string>
+  <string name="illegal_argument_exception_message">Geçilen Niyette geçerli bir EYLEM gerekli</string>
   <string name="recommend_subject">%1$s uygulamasını akıllı telefonunda dene!</string>
   <string name="recommend_text">Seni, akıllı telefonunda %1$s kullanmaya davet ediyorum!\nBuradan indirebilirsin: %2$s</string>
   <string name="error_reason">çünkü</string>
