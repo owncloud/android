@@ -9,6 +9,12 @@ dependencies {
     api 'com.gitlab.ownclouders:dav4android:oc_support_1.0.1'
     api 'com.github.hannesa2:Logcat:1.6.0'
     api 'net.openid:appauth:0.7.1'
+
+    // Moshi
+    implementation ("com.squareup.moshi:moshi-kotlin:$moshiVersion") {
+        exclude module: "kotlin-reflect"
+    }
+    kapt "com.squareup.moshi:moshi-kotlin-codegen:$moshiVersion"
 }
 
 allOpen {
