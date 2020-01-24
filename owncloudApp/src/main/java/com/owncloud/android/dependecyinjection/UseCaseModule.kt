@@ -31,6 +31,7 @@ import com.owncloud.android.domain.sharing.shares.usecases.EditPublicShareAsyncU
 import com.owncloud.android.domain.sharing.shares.usecases.GetShareAsLiveDataUseCase
 import com.owncloud.android.domain.sharing.shares.usecases.GetSharesAsLiveDataUseCase
 import com.owncloud.android.domain.sharing.shares.usecases.RefreshSharesFromServerAsyncUseCase
+import com.owncloud.android.domain.user.usecases.GetUserInfoUseCase
 import org.koin.dsl.module
 
 val useCaseModule = module {
@@ -49,4 +50,7 @@ val useCaseModule = module {
     factory { CreatePublicShareAsyncUseCase(get()) }
     factory { EditPublicShareAsyncUseCase(get()) }
     factory { DeleteShareAsyncUseCase(get()) }
+
+    // User
+    factory { GetUserInfoUseCase(get()) }
 }
