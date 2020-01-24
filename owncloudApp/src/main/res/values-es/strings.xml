@@ -80,6 +80,7 @@
   <string name="recommend_text">¡Quiero invitarle a usar %1$s en su smartphone!\nDescárguelo aquí: %2$s</string>
   <string name="error_reason">debido a </string>
   <string name="auth_failure_snackbar">Fallo en la autenticación</string>
+  <string name="server_not_supported">Tu versión del servidor es menor a la 10, por tanto, ya no es soportada, actualiza tu servidor a una versión más nueva.</string>
   <string name="auth_failure_snackbar_action">Cambiar cuenta</string>
   <string name="auth_oauth_failure">El token de acceso ha caducado o ya no es válido. Inicie sesión de nuevo para volver a tener acceso</string>
   <string name="auth_oauth_failure_snackbar_action">Registrarse</string>
