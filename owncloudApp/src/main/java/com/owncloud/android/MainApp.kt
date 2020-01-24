@@ -28,7 +28,6 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
-import android.preference.PreferenceManager
 import android.view.WindowManager
 import androidx.multidex.MultiDex
 import androidx.multidex.MultiDexApplication
@@ -36,6 +35,7 @@ import com.owncloud.android.authentication.BiometricManager
 import com.owncloud.android.authentication.PassCodeManager
 import com.owncloud.android.authentication.PatternManager
 import com.owncloud.android.datamodel.ThumbnailsCacheManager
+import com.owncloud.android.db.PreferenceManager
 import com.owncloud.android.dependecyinjection.commonModule
 import com.owncloud.android.dependecyinjection.localDataSourceModule
 import com.owncloud.android.dependecyinjection.remoteDataSourceModule
@@ -101,6 +101,8 @@ class MainApp : MultiDexApplication() {
                 ) {
                     WhatsNewActivity.runIfNeeded(activity)
                 }
+
+                PreferenceManager.migrateFingerprintToBiometricKey(applicationContext);
             }
 
             override fun onActivityStarted(activity: Activity) {
