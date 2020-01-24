@@ -56,7 +56,7 @@ public class BiometricActivity extends AppCompatActivity {
 
     private static final String ANDROID_KEY_STORE = "AndroidKeyStore";
 
-    public final static String PREFERENCE_SET_BIOMETRIC = "set_fingerprint";
+    public final static String PREFERENCE_SET_BIOMETRIC = "set_biometric";
 
     private static final String KEY_NAME = "default_key";
 
