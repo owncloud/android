@@ -63,7 +63,6 @@ import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
 
-import androidx.annotation.Nullable;
 import androidx.browser.customtabs.CustomTabsClient;
 import androidx.browser.customtabs.CustomTabsIntent;
 import androidx.browser.customtabs.CustomTabsServiceConnection;
@@ -83,6 +82,7 @@ import com.owncloud.android.lib.common.authentication.OwnCloudCredentialsFactory
 import com.owncloud.android.lib.common.authentication.oauth.OAuth2Constants;
 import com.owncloud.android.lib.common.authentication.oauth.OAuth2GetAccessTokenOperation;
 import com.owncloud.android.lib.common.authentication.oauth.OAuth2QueryParser;
+import com.owncloud.android.lib.common.authentication.oauth.OAuthConnectionBuilder;
 import com.owncloud.android.lib.common.network.CertificateCombinedException;
 import com.owncloud.android.lib.common.operations.OnRemoteOperationListener;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
@@ -100,7 +100,7 @@ import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter;
 import com.owncloud.android.utils.DisplayUtils;
 import com.owncloud.android.utils.DocumentProviderUtils;
 import com.owncloud.android.utils.PreferenceUtils;
-import net.openid.appauth.AuthorizationException;
+import net.openid.appauth.AppAuthConfiguration;
 import net.openid.appauth.AuthorizationRequest;
 import net.openid.appauth.AuthorizationResponse;
 import net.openid.appauth.AuthorizationService;
@@ -231,6 +231,8 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         }
     };
 
+    private AuthorizationService mAuthService;
+
     /**
      * {@inheritDoc}
      * <p>
@@ -331,7 +333,9 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
     @Override
     public void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        checkIntent(intent);
+        if (intent != null) {
+            handleAuthorizationResponse(intent);
+        }
     }
 
     private String getCustomTabPackageName() {
@@ -742,6 +746,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
     @Override
     protected void onDestroy() {
+        super.onDestroy();
 
         mHostUrlInputWatcher = null;
         mUsernamePasswordInputWatcher = null;
@@ -757,26 +762,15 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
         }
 
-        super.onDestroy();
-    }
-
-    private void checkIntent(@Nullable Intent intent) {
-        if (intent != null) {
-            String action = intent.getAction();
-            if (HANDLE_AUTHORIZATION_RESPONSE_ACTION.equals(action)) {
-                if (!intent.hasExtra(USED_INTENT)) {
-                    handleAuthorizationResponse(intent);
-                    intent.putExtra(USED_INTENT, true);
-                }
-            }
+        if (mAuthService != null) {
+            mAuthService.dispose();
         }
     }
 
     private void handleAuthorizationResponse(Intent intent) {
         AuthorizationResponse response = AuthorizationResponse.fromIntent(intent);
         if (response != null) {
-            AuthorizationService service = new AuthorizationService(this);
-            service.performTokenRequest(response.createTokenExchangeRequest(), (tokenResponse, exception) -> {
+            mAuthService.performTokenRequest(response.createTokenExchangeRequest(), (tokenResponse, exception) -> {
                 if (exception != null) {
                     Timber.e(exception, "Token Exchange failed");
                 } else {
@@ -1045,8 +1039,10 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         showAuthStatus();
 
         AuthorizationServiceConfiguration serviceConfiguration = new AuthorizationServiceConfiguration(
-                Uri.parse(mServerInfo.mBaseUrl + "/" + getString(R.string.oauth2_url_endpoint_auth)) /* auth endpoint */,
-                Uri.parse(mServerInfo.mBaseUrl + "/" + getString(R.string.oauth2_url_endpoint_access)) /* token endpoint */
+                Uri.parse(mServerInfo.mBaseUrl + "/" + getString(R.string.oauth2_url_endpoint_auth)) /* auth endpoint
+                 */,
+                Uri.parse(mServerInfo.mBaseUrl + "/" + getString(R.string.oauth2_url_endpoint_access)) /* token
+                endpoint */
         );
 
         String clientId = getString(R.string.oauth2_client_id);
@@ -1057,13 +1053,16 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
                 ResponseTypeValues.CODE,
                 redirectUri
         );
+
+        AppAuthConfiguration.Builder appAuthConfigurationBuilder = new AppAuthConfiguration.Builder();
+        appAuthConfigurationBuilder.setConnectionBuilder(new OAuthConnectionBuilder());
+        mAuthService = new AuthorizationService(this, appAuthConfigurationBuilder.build());
+
         AuthorizationRequest request = builder.build();
+        Intent completedIntent = new Intent(this, AuthenticatorActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, completedIntent, 0);
 
-        AuthorizationService authorizationService = new AuthorizationService(this);
-
-        Intent postAuthorizationIntent = new Intent(HANDLE_AUTHORIZATION_RESPONSE_ACTION);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, request.hashCode(), postAuthorizationIntent, 0);
-        authorizationService.performAuthorizationRequest(request, pendingIntent);
+        mAuthService.performAuthorizationRequest(request, pendingIntent);
     }
 
     private void openUrlWithCustomTab(String url) {
@@ -1109,7 +1108,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
      */
     @Override
     public void onRemoteOperationFinish(RemoteOperation operation, RemoteOperationResult result) {
-
         if (operation instanceof GetServerInfoOperation) {
             if (operation.hashCode() == mWaitingForOpId) {
                 onGetServerInfoFinish(result);
@@ -1152,7 +1150,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
                 mAuthTokenType = BASIC_TOKEN_TYPE; // Basic
             }
 
-            if(!result.getData().mVersion.isServerVersionSupported()){
+            if (!result.getData().mVersion.isServerVersionSupported()) {
                 mServerIsValid = false;
                 mServerStatusIcon = R.drawable.common_error;
                 mServerStatusText = getString(R.string.server_not_supported);

@@ -81,8 +81,6 @@ dependencies {
     implementation "androidx.core:core-ktx:$ktxCoreVersion"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$ktxViewModelVersion"
     implementation "androidx.fragment:fragment-ktx:$ktxFragmentVersion"
-
-    implementation 'net.openid:appauth:0.7.1'
 }
 
 tasks.withType(Test) {
