@@ -31,6 +31,7 @@ import com.owncloud.android.lib.common.network.WebdavUtils;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
+import com.owncloud.android.lib.resources.server.CheckPathExistenceOperation;
 import timber.log.Timber;
 
 import java.io.File;
@@ -123,9 +124,8 @@ public class RenameRemoteFileOperation extends RemoteOperation {
      * @return 'True' if the target path is already used by an existing file.
      */
     private boolean targetPathIsUsed(OwnCloudClient client) {
-        ExistenceCheckRemoteOperation existenceCheckRemoteOperation =
-                new ExistenceCheckRemoteOperation(mNewRemotePath, false, false);
-        RemoteOperationResult exists = existenceCheckRemoteOperation.run(client);
+        CheckPathExistenceOperation checkPathExistenceOperation = new CheckPathExistenceOperation(mNewRemotePath, false);
+        RemoteOperationResult exists = checkPathExistenceOperation.execute(client);
         return exists.isSuccess();
     }
 }
