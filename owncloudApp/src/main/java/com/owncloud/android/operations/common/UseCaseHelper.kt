@@ -19,6 +19,7 @@
 package com.owncloud.android.operations.common
 
 import com.owncloud.android.domain.UseCaseResult
+import com.owncloud.android.domain.server.usecases.CheckPathExistenceUseCase
 import com.owncloud.android.domain.user.model.UserInfo
 import com.owncloud.android.domain.user.usecases.GetUserInfoUseCase
 import org.koin.core.KoinComponent
@@ -30,7 +31,10 @@ import org.koin.core.inject
  */
 class UseCaseHelper : KoinComponent {
     private val getUserInfoUseCase: GetUserInfoUseCase by inject()
+    private val checkPathExistenceUseCase: CheckPathExistenceUseCase by inject()
 
     fun getUserInfo(): UseCaseResult<UserInfo> = getUserInfoUseCase.execute(Unit)
+
+    fun checkPathExistence(remotePath: String): UseCaseResult<Any> = checkPathExistenceUseCase.execute(CheckPathExistenceUseCase.Params(remotePath, false))
 
 }
