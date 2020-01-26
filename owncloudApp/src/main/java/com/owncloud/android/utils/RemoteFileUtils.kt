@@ -19,8 +19,11 @@
 
 package com.owncloud.android.utils
 
+import com.owncloud.android.domain.server.usecases.CheckPathExistenceUseCase
 import com.owncloud.android.lib.common.OwnCloudClient
-import com.owncloud.android.lib.resources.files.ExistenceCheckRemoteOperation
+import com.owncloud.android.lib.resources.server.CheckPathExistenceOperation
+import com.owncloud.android.operations.common.UseCaseHelper
+import org.koin.android.ext.android.inject
 
 class RemoteFileUtils {
     companion object {
@@ -64,8 +67,9 @@ class RemoteFileUtils {
         }
 
         private fun existsFile(client: OwnCloudClient, remotePath: String): Boolean {
-            val existsOperation = ExistenceCheckRemoteOperation(remotePath, false, false)
-            return existsOperation.execute(client).isSuccess
+
+            val useCaseHelper = UseCaseHelper()
+            return useCaseHelper.checkPathExistence(remotePath).isSuccess
         }
     }
 }

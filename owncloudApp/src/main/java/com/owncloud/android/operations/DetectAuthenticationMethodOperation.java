@@ -27,7 +27,7 @@ import com.owncloud.android.lib.common.http.HttpConstants;
 import com.owncloud.android.lib.common.operations.OnRemoteOperationListener;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
-import com.owncloud.android.lib.resources.files.ExistenceCheckRemoteOperation;
+import com.owncloud.android.lib.resources.server.CheckPathExistenceOperation;
 import timber.log.Timber;
 
 import java.util.ArrayList;
@@ -60,7 +60,7 @@ public class DetectAuthenticationMethodOperation extends RemoteOperation<List<Au
     protected RemoteOperationResult<List<AuthenticationMethod>> run(OwnCloudClient client) {
         ArrayList<AuthenticationMethod> allAvailableAuthMethods = new ArrayList<>();
 
-        ExistenceCheckRemoteOperation operation = new ExistenceCheckRemoteOperation("", false,
+        CheckPathExistenceOperation operation = new CheckPathExistenceOperation("",
                 false);
         client.clearCredentials();
 

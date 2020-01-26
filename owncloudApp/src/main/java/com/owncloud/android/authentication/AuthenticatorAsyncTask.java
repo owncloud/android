@@ -23,12 +23,13 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
 
+import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.OwnCloudClientFactory;
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentials;
 import com.owncloud.android.lib.common.network.RedirectionPath;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
-import com.owncloud.android.lib.resources.files.ExistenceCheckRemoteOperation;
+import com.owncloud.android.lib.resources.server.CheckPathExistenceOperation;
 import com.owncloud.android.lib.resources.users.GetRemoteUserInfoOperation;
 
 import java.lang.ref.WeakReference;
@@ -60,18 +61,15 @@ public class AuthenticatorAsyncTask extends AsyncTask<Object, Void, RemoteOperat
             client.setCredentials(credentials);
 
             // Operation - try credentials
-            String REMOTE_PATH = "/";
-            boolean SUCCESS_IF_ABSENT = false;
-            ExistenceCheckRemoteOperation existenceCheckRemoteOperation = new ExistenceCheckRemoteOperation(
-                    REMOTE_PATH,
-                    SUCCESS_IF_ABSENT,
+            CheckPathExistenceOperation checkPathExistenceOperation = new CheckPathExistenceOperation(
+                    OCFile.ROOT_PATH,
                     true
             );
-            result = existenceCheckRemoteOperation.execute(client);
+            result = checkPathExistenceOperation.execute(client);
 
             String targetUrlAfterPermanentRedirection = null;
-            if (existenceCheckRemoteOperation.wasRedirected()) {
-                RedirectionPath redirectionPath = existenceCheckRemoteOperation.getRedirectionPath();
+            if (checkPathExistenceOperation.wasRedirected()) {
+                RedirectionPath redirectionPath = checkPathExistenceOperation.getRedirectionPath();
                 targetUrlAfterPermanentRedirection = redirectionPath.getLastPermanentLocation();
             }
 

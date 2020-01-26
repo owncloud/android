@@ -23,6 +23,9 @@ import com.owncloud.android.authentication.AccountUtils
 import com.owncloud.android.data.capabilities.datasources.RemoteCapabilitiesDataSource
 import com.owncloud.android.data.capabilities.datasources.implementation.OCRemoteCapabilitiesDataSource
 import com.owncloud.android.data.capabilities.network.OCCapabilityService
+import com.owncloud.android.data.server.datasources.RemoteServerDataSource
+import com.owncloud.android.data.server.datasources.implementation.OCRemoteServerDataSource
+import com.owncloud.android.data.server.network.OCServerService
 import com.owncloud.android.data.sharing.shares.network.OCShareService
 import com.owncloud.android.data.sharing.sharees.datasources.RemoteShareeDataSource
 import com.owncloud.android.data.sharing.sharees.datasources.implementation.OCRemoteShareeDataSource
@@ -34,6 +37,7 @@ import com.owncloud.android.data.user.datasources.implementation.OCRemoteUserDat
 import com.owncloud.android.data.user.network.OCUserService
 import com.owncloud.android.lib.common.OwnCloudAccount
 import com.owncloud.android.lib.common.SingleSessionManager
+import com.owncloud.android.lib.resources.server.ServerService
 import com.owncloud.android.lib.resources.shares.ShareService
 import com.owncloud.android.lib.resources.shares.ShareeService
 import com.owncloud.android.lib.resources.status.CapabilityService
@@ -50,6 +54,7 @@ val remoteDataSourceModule = module {
     single<ShareService> { OCShareService(get()) }
     single<ShareeService> { OCShareeService(get()) }
     single<UserService> { OCUserService(get()) }
+    single<ServerService> { OCServerService(get()) }
 
     factory<RemoteCapabilitiesDataSource> {
         OCRemoteCapabilitiesDataSource(
@@ -74,4 +79,5 @@ val remoteDataSourceModule = module {
             get()
         )
     }
+    factory<RemoteServerDataSource> { OCRemoteServerDataSource(get()) }
 }
