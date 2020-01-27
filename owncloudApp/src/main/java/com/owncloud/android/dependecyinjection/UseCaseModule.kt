@@ -23,6 +23,7 @@ import com.owncloud.android.domain.capabilities.usecases.GetCapabilitiesAsLiveDa
 import com.owncloud.android.domain.capabilities.usecases.GetStoredCapabilitiesUseCase
 import com.owncloud.android.domain.capabilities.usecases.RefreshCapabilitiesFromServerAsyncUseCase
 import com.owncloud.android.domain.server.usecases.CheckPathExistenceUseCase
+import com.owncloud.android.domain.server.usecases.GetServerInfoUseCase
 import com.owncloud.android.domain.sharing.sharees.GetShareesAsyncUseCase
 import com.owncloud.android.domain.sharing.shares.usecases.CreatePrivateShareAsyncUseCase
 import com.owncloud.android.domain.sharing.shares.usecases.CreatePublicShareAsyncUseCase
@@ -57,4 +58,5 @@ val useCaseModule = module {
 
     // Server
     factory { CheckPathExistenceUseCase(get()) }
+    factory { GetServerInfoUseCase(get()) }
 }

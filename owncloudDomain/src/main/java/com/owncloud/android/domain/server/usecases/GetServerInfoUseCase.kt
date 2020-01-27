@@ -17,14 +17,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.data.server.repository
+package com.owncloud.android.domain.server.usecases
 
-import com.owncloud.android.data.server.datasources.RemoteServerDataSource
-import com.owncloud.android.domain.server.ServerRepository
+import com.owncloud.android.domain.BaseUseCaseWithResult
+import com.owncloud.android.domain.server.AnonymousServerRepository
+import com.owncloud.android.domain.server.model.ServerInfo
 
-class OCServerRepository(
-    private val remoteServerDataSource: RemoteServerDataSource
-) : ServerRepository {
-    override fun checkPathExistence(path: String, userLogged: Boolean): Boolean =
-        remoteServerDataSource.checkPathExistence(path, userLogged)
+class GetServerInfoUseCase(
+    private val anonymousServerRepository: AnonymousServerRepository
+) : BaseUseCaseWithResult<ServerInfo, GetServerInfoUseCase.Params>() {
+    override fun run(params: Params): ServerInfo =
+        anonymousServerRepository.getServerInfo(params.serverPath)
+
+    data class Params(
+        val serverPath: String
+    )
 }

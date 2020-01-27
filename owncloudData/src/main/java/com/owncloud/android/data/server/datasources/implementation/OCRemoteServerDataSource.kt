@@ -28,6 +28,7 @@ class OCRemoteServerDataSource(
 ) : RemoteServerDataSource {
     override fun checkPathExistence(path: String, checkUserCredentials: Boolean): Boolean {
         executeRemoteOperation {
-             serverService.checkPathExistence(path = path, isUserLogged = checkUserCredentials)
-        }.let { return it == Any() }}
+            serverService.checkPathExistence(path = path, isUserLogged = checkUserCredentials)
+        }.let { return it == Any() }
+    }
 }

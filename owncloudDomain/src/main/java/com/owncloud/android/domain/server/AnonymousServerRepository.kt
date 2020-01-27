@@ -17,14 +17,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.data.server.repository
+package com.owncloud.android.domain.server
 
-import com.owncloud.android.data.server.datasources.RemoteServerDataSource
-import com.owncloud.android.domain.server.ServerRepository
+import com.owncloud.android.domain.server.model.ServerInfo
 
-class OCServerRepository(
-    private val remoteServerDataSource: RemoteServerDataSource
-) : ServerRepository {
-    override fun checkPathExistence(path: String, userLogged: Boolean): Boolean =
-        remoteServerDataSource.checkPathExistence(path, userLogged)
+interface AnonymousServerRepository {
+    fun checkPathExistence(path: String, userLogged: Boolean): Boolean
+
+    fun getServerInfo(path: String): ServerInfo
 }
