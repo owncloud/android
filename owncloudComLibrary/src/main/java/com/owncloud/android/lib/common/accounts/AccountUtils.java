@@ -329,5 +329,7 @@ public class AccountUtils {
          * OAuth2 scope
          */
         public static final String KEY_OAUTH2_SCOPE = "oc_oauth2_scope";
+
+        public static final String WEBDAV_PATH_4_0_AND_LATER = "/remote.php/dav";
     }
 }

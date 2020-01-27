@@ -23,9 +23,6 @@
 */
 package com.owncloud.android.lib.resources.server
 
-import android.content.Context
-import android.net.ConnectivityManager
-import android.net.NetworkInfo
 import android.net.Uri
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.http.HttpConstants
@@ -42,20 +39,17 @@ import java.util.concurrent.TimeUnit
 import javax.net.ssl.SSLException
 
 /**
- * Checks if the server is valid and if the server supports the Share API
+ * Checks if the server is valid
  *
  * @author David A. Velasco
  * @author masensio
  * @author David González Verdugo
+ * @author Abel García de Prada
  */
-class GetRemoteStatusOperation(private var context: Context) : RemoteOperation<OwnCloudVersion>() {
+class GetRemoteStatusOperation : RemoteOperation<OwnCloudVersion>() {
     private lateinit var latestResult: RemoteOperationResult<OwnCloudVersion>
 
     override fun run(client: OwnCloudClient): RemoteOperationResult<OwnCloudVersion> {
-
-        if (!isOnline) {
-            return RemoteOperationResult(ResultCode.NO_NETWORK_CONNECTION)
-        }
 
         val baseUriStr = client.baseUri.toString()
         if (baseUriStr.startsWith(HTTP_PREFIX) || baseUriStr.startsWith(HTTPS_PREFIX)) {
@@ -73,7 +67,7 @@ class GetRemoteStatusOperation(private var context: Context) : RemoteOperation<O
     }
 
     private fun tryConnection(client: OwnCloudClient): Boolean {
-        var retval = false
+        var successfulConnection = false
         val baseUrlSt = client.baseUri.toString()
         try {
             var getMethod = GetMethod(URL(baseUrlSt + OwnCloudClient.STATUS_PATH)).apply {
@@ -90,10 +84,10 @@ class GetRemoteStatusOperation(private var context: Context) : RemoteOperation<O
                     else RemoteOperationResult(getMethod)
             } catch (sslE: SSLException) {
                 latestResult = RemoteOperationResult(sslE)
-                return false
+                return successfulConnection
             }
             var redirectedLocation = latestResult.redirectedLocation
-            while (redirectedLocation != null && redirectedLocation.isNotEmpty() && !latestResult.isSuccess) {
+            while (!redirectedLocation.isNullOrEmpty() && !latestResult.isSuccess) {
                 isRedirectToNonSecureConnection =
                     isRedirectToNonSecureConnection or
                             (baseUrlSt.startsWith(HTTPS_PREFIX) && redirectedLocation.startsWith(HTTP_PREFIX))
@@ -108,7 +102,6 @@ class GetRemoteStatusOperation(private var context: Context) : RemoteOperation<O
             }
 
             if (isSuccess(status)) {
-                Timber.d(getMethod.responseBodyAsString)
                 val respJSON = JSONObject(getMethod.responseBodyAsString)
                 if (!respJSON.getBoolean(NODE_INSTALLED)) {
                     latestResult = RemoteOperationResult(ResultCode.INSTANCE_NOT_CONFIGURED)
@@ -120,10 +113,11 @@ class GetRemoteStatusOperation(private var context: Context) : RemoteOperation<O
                     latestResult = if (isRedirectToNonSecureConnection) {
                         RemoteOperationResult(ResultCode.OK_REDIRECT_TO_NON_SECURE_CONNECTION)
                     } else {
-                        RemoteOperationResult(if (baseUrlSt.startsWith(HTTPS_PREFIX)) ResultCode.OK_SSL else ResultCode.OK_NO_SSL)
+                        if (baseUrlSt.startsWith(HTTPS_PREFIX)) RemoteOperationResult(ResultCode.OK_SSL)
+                        else RemoteOperationResult(ResultCode.OK_NO_SSL)
                     }
                     latestResult.data = ocVersion
-                    retval = true
+                    successfulConnection = true
                 }
             } else {
                 latestResult = RemoteOperationResult(getMethod)
@@ -134,25 +128,15 @@ class GetRemoteStatusOperation(private var context: Context) : RemoteOperation<O
             latestResult = RemoteOperationResult(e)
         }
         when {
-            latestResult.isSuccess -> {
-                Timber.i("Connection check at $baseUrlSt: ${latestResult.logMessage}")
-            }
-            latestResult.exception != null -> {
-                Timber.e(latestResult.exception, "Connection check at $baseUrlSt: ${latestResult.logMessage}")
-            }
-            else -> {
-                Timber.e("Connection check at $baseUrlSt: ${latestResult.logMessage}")
-            }
-        }
-        return retval
-    }
+            latestResult.isSuccess -> Timber.i("Connection check at $baseUrlSt: ${latestResult.logMessage}")
 
-    private val isOnline: Boolean
-        get() {
-            val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-            val activeNetwork: NetworkInfo? = cm.activeNetworkInfo
-            return activeNetwork?.isConnected == true
+            latestResult.isException ->
+                Timber.e(latestResult.exception, "Connection check at $baseUrlSt: ${latestResult.logMessage}")
+
+            else -> Timber.e("Connection check at $baseUrlSt: ${latestResult.logMessage}")
         }
+        return successfulConnection
+    }
 
     private fun isSuccess(status: Int): Boolean = status == HttpConstants.HTTP_OK
 
@@ -161,7 +145,7 @@ class GetRemoteStatusOperation(private var context: Context) : RemoteOperation<O
          * Maximum time to wait for a response from the server when the connection is being tested,
          * in MILLISECONDs.
          */
-        const val TRY_CONNECTION_TIMEOUT: Long = 5000
+        private const val TRY_CONNECTION_TIMEOUT: Long = 5000
         private const val NODE_INSTALLED = "installed"
         private const val NODE_VERSION = "version"
         private const val HTTPS_PREFIX = "https://"

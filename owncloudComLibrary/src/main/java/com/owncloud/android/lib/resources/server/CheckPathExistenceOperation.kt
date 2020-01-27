@@ -56,7 +56,7 @@ class CheckPathExistenceOperation(
      *
      * @return Sequence of redirections followed, if any, or NULL if the operation was not executed.
      */
-    var redirectionPath: RedirectionPath? = null
+    lateinit var redirectionPath: RedirectionPath
         private set
 
     override fun run(client: OwnCloudClient): RemoteOperationResult<Any> {
@@ -75,7 +75,7 @@ class CheckPathExistenceOperation(
             var status = client.executeHttpMethod(propFindMethod)
             if (previousFollowRedirects) {
                 redirectionPath = client.followRedirection(propFindMethod)
-                status = redirectionPath?.lastStatus!!
+                status = redirectionPath.lastStatus
             }
             /* PROPFIND method
              * 404 NOT FOUND: path doesn't exist,
@@ -103,10 +103,9 @@ class CheckPathExistenceOperation(
     /**
      * @return 'True' if the operation was executed and at least one redirection was followed.
      */
-    fun wasRedirected() = redirectionPath != null && redirectionPath!!.redirectionsCount > 0
+    fun wasRedirected() = redirectionPath.redirectionsCount > 0
 
-    private fun isSuccess(status: Int) =
-        status == HttpConstants.HTTP_OK || status == HttpConstants.HTTP_MULTI_STATUS || status == HttpConstants.HTTP_MULTI_STATUS
+    private fun isSuccess(status: Int) = status == HttpConstants.HTTP_OK || status == HttpConstants.HTTP_MULTI_STATUS
 
     companion object {
         /**

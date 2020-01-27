@@ -24,8 +24,10 @@
 package com.owncloud.android.lib.resources.server
 
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
-import com.owncloud.android.lib.resources.Service
+import com.owncloud.android.lib.resources.status.OwnCloudVersion
 
-interface ServerService: Service {
+interface AnonymousService {
     fun checkPathExistence(path: String, isUserLogged: Boolean): RemoteOperationResult<Any>
+
+    fun getRemoteStatus(path: String): RemoteOperationResult<OwnCloudVersion>
 }
