@@ -19,11 +19,8 @@
 
 package com.owncloud.android.utils
 
-import com.owncloud.android.domain.server.usecases.CheckPathExistenceUseCase
 import com.owncloud.android.lib.common.OwnCloudClient
-import com.owncloud.android.lib.resources.server.CheckPathExistenceOperation
 import com.owncloud.android.operations.common.UseCaseHelper
-import org.koin.android.ext.android.inject
 
 class RemoteFileUtils {
     companion object {
@@ -35,8 +32,8 @@ class RemoteFileUtils {
          * @param remotePath
          * @return
          */
-        fun getAvailableRemotePath(ownCloudClient: OwnCloudClient, remotePath: String): String? {
-            var checkExistsFile = existsFile(ownCloudClient, remotePath)
+        fun getAvailableRemotePath(remotePath: String): String? {
+            var checkExistsFile = existsFile(remotePath)
             if (!checkExistsFile) {
                 return remotePath
             }
@@ -53,9 +50,9 @@ class RemoteFileUtils {
             do {
                 suffix = " ($count)"
                 checkExistsFile = if (pos >= 0) {
-                    existsFile(ownCloudClient, "${remotePath.substringBeforeLast('.', "")}$suffix.$extension")
+                    existsFile("${remotePath.substringBeforeLast('.', "")}$suffix.$extension")
                 } else {
-                    existsFile(ownCloudClient, remotePath + suffix)
+                    existsFile(remotePath + suffix)
                 }
                 count++
             } while (checkExistsFile)
@@ -66,7 +63,7 @@ class RemoteFileUtils {
             }
         }
 
-        private fun existsFile(client: OwnCloudClient, remotePath: String): Boolean {
+        private fun existsFile(remotePath: String): Boolean {
 
             val useCaseHelper = UseCaseHelper()
             return useCaseHelper.checkPathExistence(remotePath).isSuccess

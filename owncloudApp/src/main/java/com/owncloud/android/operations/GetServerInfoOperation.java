@@ -28,7 +28,7 @@ import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
-import com.owncloud.android.lib.resources.status.GetRemoteStatusOperation;
+import com.owncloud.android.lib.resources.server.GetRemoteStatusOperation;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 import timber.log.Timber;
 
@@ -37,23 +37,22 @@ import java.util.List;
 
 /**
  * Get basic information from an ownCloud server given its URL.
- *
- * Checks the existence of a configured ownCloud server in the URL, gets its version 
+ * <p>
+ * Checks the existence of a configured ownCloud server in the URL, gets its version
  * and finds out what authentication method is needed to access files in it.
+ *
+ * TODO: Remove this operation. Call {@link com.owncloud.android.domain.server.usecases.GetServerInfoUseCase} instead.
  */
-
+@Deprecated
 public class GetServerInfoOperation extends RemoteOperation<GetServerInfoOperation.ServerInfo> {
 
     private String mUrl;
-    private Context mContext;
     private ServerInfo mResultData;
 
     /**
      * Constructor.
      *
-     * @param url               URL to an ownCloud server.
-     * @param context           Android context; needed to check network state
-     *                          TODO ugly dependency, get rid of it. 
+     * @param url URL to an ownCloud server.
      */
     public GetServerInfoOperation(String url, Context context) {
         mUrl = trimWebdavSuffix(url);
@@ -66,13 +65,13 @@ public class GetServerInfoOperation extends RemoteOperation<GetServerInfoOperati
      * Performs the operation
      *
      * @return Result of the operation. If successful, includes an instance of
-     *              {@link ServerInfo} with the information retrieved from the server. 
-     *              Call {@link RemoteOperationResult#getData()}.get(0) to get it.
+     * {@link ServerInfo} with the information retrieved from the server.
+     * Call {@link RemoteOperationResult#getData()}.get(0) to get it.
      */
     @Override
     protected RemoteOperationResult<ServerInfo> run(OwnCloudClient client) {
         // first: check the status of the server (including its version)
-        GetRemoteStatusOperation getStatusOperation = new GetRemoteStatusOperation(mContext);
+        GetRemoteStatusOperation getStatusOperation = new GetRemoteStatusOperation();
         final RemoteOperationResult<OwnCloudVersion> remoteStatusResult = getStatusOperation.execute(client);
         RemoteOperationResult<ServerInfo> result = new RemoteOperationResult(remoteStatusResult);
 
@@ -129,6 +128,8 @@ public class GetServerInfoOperation extends RemoteOperation<GetServerInfoOperati
         return url;
     }
 
+    @Deprecated
+    /** TODO: Remove this class and use {@link com.owncloud.android.domain.server.model.ServerInfo} */
     public static class ServerInfo {
         public OwnCloudVersion mVersion = null;
         public String mBaseUrl = "";

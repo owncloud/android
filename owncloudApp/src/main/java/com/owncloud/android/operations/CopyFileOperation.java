@@ -78,7 +78,7 @@ public class CopyFileOperation extends SyncOperation {
         /// 2. remote copy
         String targetRemotePath = mTargetParentPath + mFile.getFileName();
         // Check if target remote path already exists on server or add suffix (2), (3) ... otherwise
-        String finalRemotePath = RemoteFileUtils.Companion.getAvailableRemotePath(client, targetRemotePath);
+        String finalRemotePath = RemoteFileUtils.Companion.getAvailableRemotePath(targetRemotePath);
 
         if (mFile.isFolder()) {
             finalRemotePath += OCFile.PATH_SEPARATOR;

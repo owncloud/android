@@ -309,7 +309,7 @@ public class UploadFileOperation extends SyncOperation {
             /// automatic rename of file to upload in case of name collision in server
             Timber.d("Checking name collision in server");
             if (!mForceOverwrite) {
-                String remotePath = RemoteFileUtils.Companion.getAvailableRemotePath(client, mRemotePath);
+                String remotePath = RemoteFileUtils.Companion.getAvailableRemotePath(mRemotePath);
                 mWasRenamed = !mRemotePath.equals(remotePath);
                 if (mWasRenamed) {
                     createNewOCFile(remotePath);
