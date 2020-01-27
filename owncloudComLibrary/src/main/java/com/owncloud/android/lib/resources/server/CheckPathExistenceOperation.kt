@@ -44,7 +44,7 @@ import java.util.concurrent.TimeUnit
  * @author Abel García de Prada
  *
  * @param remotePath      Path to append to the URL owned by the client instance.
- * @param isUserLogged         When `true`, the username won't be added at the end of the PROPFIND url since is not
+ * @param isUserLogged    When `true`, the username won't be added at the end of the PROPFIND url since is not
  *                        needed to check user credentials
  */
 class CheckPathExistenceOperation(
