@@ -80,6 +80,7 @@
   <string name="recommend_text">הנך מוזמן להשתמש ב- %1$s בטלפון החכם שלך!\nניתן להוריד מכאן: %2$s</string>
   <string name="error_reason">כיוון ש-</string>
   <string name="auth_failure_snackbar">האימות נכשל</string>
+  <string name="server_not_supported">גרסת השרת שלך נמוכה מ- 10 לפיכך אינה נתמכת, יש לשדרג את השרת שלך לגרסה חדשה יותר</string>
   <string name="auth_failure_snackbar_action">החלף חשבון</string>
   <string name="auth_oauth_failure">פג תוקף חתימת הייצוג או שהפך להיות לא חוקי. יש להתחבר שנית לקבלת גישה חוזרת.</string>
   <string name="auth_oauth_failure_snackbar_action">התחברות</string>
