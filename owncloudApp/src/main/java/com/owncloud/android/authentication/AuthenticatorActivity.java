@@ -105,6 +105,8 @@ import net.openid.appauth.AuthorizationRequest;
 import net.openid.appauth.AuthorizationResponse;
 import net.openid.appauth.AuthorizationService;
 import net.openid.appauth.AuthorizationServiceConfiguration;
+import net.openid.appauth.ClientAuthentication;
+import net.openid.appauth.ClientSecretBasic;
 import net.openid.appauth.ResponseTypeValues;
 import timber.log.Timber;
 
@@ -334,7 +336,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
     public void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         if (intent != null) {
-            handleAuthorizationResponse(intent);
+            handleAuthorizationResponseAndGetAccessToken(intent);
         }
     }
 
@@ -759,7 +761,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         if (mCustomTabServiceConnection != null
                 && mCustomTabPackageName != null) {
             unbindService(mCustomTabServiceConnection);
-
         }
 
         if (mAuthService != null) {
@@ -767,16 +768,34 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         }
     }
 
-    private void handleAuthorizationResponse(Intent intent) {
+    private void handleAuthorizationResponseAndGetAccessToken(Intent intent) {
         AuthorizationResponse response = AuthorizationResponse.fromIntent(intent);
         if (response != null) {
-            mAuthService.performTokenRequest(response.createTokenExchangeRequest(), (tokenResponse, exception) -> {
-                if (exception != null) {
-                    Timber.e(exception, "Token Exchange failed");
-                } else {
+            ClientAuthentication clientAuth = new ClientSecretBasic(getString(R.string.oauth2_client_secret));
+            mAuthService.performTokenRequest(
+                    response.createTokenExchangeRequest(),
+                    clientAuth,
+                    (tokenResponse, exception) -> {
+                        if (exception != null) {
+                            // TODO HANDLE ERRORS
+                            Timber.e(exception, "Token Exchange failed");
+                        } else if (tokenResponse != null) {
+                            mAuthToken = tokenResponse.accessToken;
+                            mRefreshToken = tokenResponse.refreshToken;
 
-                }
-            });
+                            /// validate token accessing to root folder / getting session
+                            OwnCloudCredentials credentials = OwnCloudCredentialsFactory.newBearerCredentials(
+                                    tokenResponse.additionalParameters.get(OAuth2Constants.KEY_USER_ID),
+                                    mAuthToken
+                            );
+
+                            accessRootFolder(credentials);
+
+                        } else {
+                            Timber.d("Token error");
+                        }
+                    }
+            );
         }
     }
 
@@ -1655,7 +1674,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             mServerStatusView.setCompoundDrawablesWithIntrinsicBounds(mServerStatusIcon, 0, 0, 0);
             mServerStatusView.setVisibility(View.VISIBLE);
         }
-
     }
 
     /**
