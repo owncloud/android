@@ -64,7 +64,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
      * Is used by android system to assign accounts to authenticators. Should be
      * used by application and all extensions.
      */
-    public static final String KEY_AUTH_TOKEN_TYPE = "authTokenType";
+    static final String KEY_AUTH_TOKEN_TYPE = "authTokenType";
     private static final String KEY_REQUIRED_FEATURES = "requiredFeatures";
     private static final String KEY_LOGIN_OPTIONS = "loginOptions";
     public static final String KEY_ACCOUNT = "account";
@@ -73,7 +73,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
 
     private Handler mHandler;
 
-    public AccountAuthenticator(Context context) {
+    AccountAuthenticator(Context context) {
         super(context);
         mContext = context;
         mHandler = new Handler();

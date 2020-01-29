@@ -101,9 +101,11 @@ import com.owncloud.android.utils.DisplayUtils;
 import com.owncloud.android.utils.DocumentProviderUtils;
 import com.owncloud.android.utils.PreferenceUtils;
 import net.openid.appauth.AppAuthConfiguration;
+import net.openid.appauth.AuthorizationException;
 import net.openid.appauth.AuthorizationRequest;
 import net.openid.appauth.AuthorizationResponse;
 import net.openid.appauth.AuthorizationService;
+import net.openid.appauth.AuthorizationService.TokenResponseCallback;
 import net.openid.appauth.AuthorizationServiceConfiguration;
 import net.openid.appauth.ClientAuthentication;
 import net.openid.appauth.ClientSecretBasic;
@@ -234,6 +236,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
     };
 
     private AuthorizationService mAuthService;
+    private AuthStateManager mAuthStateManager;
 
     /**
      * {@inheritDoc}
@@ -330,13 +333,15 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         if (mCustomTabPackageName != null) {
             CustomTabsClient.bindCustomTabsService(this, mCustomTabPackageName, mCustomTabServiceConnection);
         }
+
+        mAuthStateManager = AuthStateManager.getInstance(this);
     }
 
     @Override
     public void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         if (intent != null) {
-            handleAuthorizationResponseAndGetAccessToken(intent);
+            handleGetAuthorizationCodeResponse(intent);
         }
     }
 
@@ -768,37 +773,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         }
     }
 
-    private void handleAuthorizationResponseAndGetAccessToken(Intent intent) {
-        AuthorizationResponse response = AuthorizationResponse.fromIntent(intent);
-        if (response != null) {
-            ClientAuthentication clientAuth = new ClientSecretBasic(getString(R.string.oauth2_client_secret));
-            mAuthService.performTokenRequest(
-                    response.createTokenExchangeRequest(),
-                    clientAuth,
-                    (tokenResponse, exception) -> {
-                        if (exception != null) {
-                            // TODO HANDLE ERRORS
-                            Timber.e(exception, "Token Exchange failed");
-                        } else if (tokenResponse != null) {
-                            mAuthToken = tokenResponse.accessToken;
-                            mRefreshToken = tokenResponse.refreshToken;
-
-                            /// validate token accessing to root folder / getting session
-                            OwnCloudCredentials credentials = OwnCloudCredentialsFactory.newBearerCredentials(
-                                    tokenResponse.additionalParameters.get(OAuth2Constants.KEY_USER_ID),
-                                    mAuthToken
-                            );
-
-                            accessRootFolder(credentials);
-
-                        } else {
-                            Timber.d("Token error");
-                        }
-                    }
-            );
-        }
-    }
-
     /**
      * Parses the redirection with the response to the GET AUTHORIZATION request to the
      * OAuth server and requests for the access token (GET ACCESS TOKEN)
@@ -1041,27 +1015,18 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         accessRootFolder(credentials);
     }
 
-    private void accessRootFolder(OwnCloudCredentials credentials) {
-        mAsyncTask = new AuthenticatorAsyncTask(this);
-        Object[] params = {mServerInfo.mBaseUrl, credentials};
-        mAsyncTask.execute(params);
-    }
-
     /**
-     * Starts the OAuth 'grant type' flow to get an access token, with
-     * a GET AUTHORIZATION request to the BUILT-IN authorization server.
+     * OAuth step 1: Get authorization code
      */
-    private void startOauthorization() {
+    private void startOauthorization() {  // OAuth step 1: Get authorization code
         // be gentle with the user
         mAuthStatusIcon = R.drawable.progress_small;
         mAuthStatusText = getResources().getString(R.string.oauth_login_connection);
         showAuthStatus();
 
         AuthorizationServiceConfiguration serviceConfiguration = new AuthorizationServiceConfiguration(
-                Uri.parse(mServerInfo.mBaseUrl + "/" + getString(R.string.oauth2_url_endpoint_auth)) /* auth endpoint
-                 */,
-                Uri.parse(mServerInfo.mBaseUrl + "/" + getString(R.string.oauth2_url_endpoint_access)) /* token
-                endpoint */
+                Uri.parse(mServerInfo.mBaseUrl + "/" + getString(R.string.oauth2_url_endpoint_auth)), // auth endpoint
+                Uri.parse(mServerInfo.mBaseUrl + "/" + getString(R.string.oauth2_url_endpoint_access)) // token endpoint
         );
 
         String clientId = getString(R.string.oauth2_client_id);
@@ -1082,6 +1047,69 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, completedIntent, 0);
 
         mAuthService.performAuthorizationRequest(request, pendingIntent);
+    }
+
+    private void handleGetAuthorizationCodeResponse(Intent intent) {
+        AuthorizationResponse authorizationResponse = AuthorizationResponse.fromIntent(intent);
+        AuthorizationException authorizationException = AuthorizationException.fromIntent(intent);
+
+        if (authorizationResponse != null || authorizationException != null) {  // Save authorization state
+            mAuthStateManager.updateAfterAuthorization(authorizationResponse, authorizationException);
+        }
+
+        if (authorizationResponse != null && authorizationResponse.authorizationCode != null) {
+            mAuthStateManager.updateAfterAuthorization(authorizationResponse, authorizationException);
+            exchangeAuthorizationCodeForTokens(authorizationResponse);
+        } else if (authorizationException != null) {
+            updateOAuthStatusIconAndText(authorizationException);
+            showAuthStatus();
+            Timber.d("OAuth request to get authorization code failed: %s", authorizationException.error);
+        }
+    }
+
+    /**
+     * OAuth step 2: Exchange the received authorization code for access and refresh tokens
+     */
+    private void exchangeAuthorizationCodeForTokens(AuthorizationResponse authorizationResponse) {
+        ClientAuthentication clientAuth = new ClientSecretBasic(getString(R.string.oauth2_client_secret));
+        mAuthService.performTokenRequest(
+                authorizationResponse.createTokenExchangeRequest(),
+                clientAuth,
+                handleExchangeAuthorizationCodeForTokensResponse()
+        );
+    }
+
+    private TokenResponseCallback handleExchangeAuthorizationCodeForTokensResponse() {
+        return (tokenResponse, authorizationException) -> {
+            if (tokenResponse != null || authorizationException != null) {  // Save authorization state
+                mAuthStateManager.updateAfterTokenResponse(tokenResponse, authorizationException);
+            }
+
+            if (tokenResponse != null && tokenResponse.accessToken != null && tokenResponse.refreshToken != null) {
+                mAuthStateManager.updateAfterTokenResponse(tokenResponse, authorizationException);
+                mAuthToken = tokenResponse.accessToken;
+                mRefreshToken = tokenResponse.refreshToken;
+
+                // Validate token accessing to root folder / getting session
+                OwnCloudCredentials credentials = OwnCloudCredentialsFactory.newBearerCredentials(
+                        tokenResponse.additionalParameters.get(OAuth2Constants.KEY_USER_ID),
+                        mAuthToken
+                );
+
+                accessRootFolder(credentials);
+            } else if (authorizationException != null) {
+                updateOAuthStatusIconAndText(authorizationException);
+                showAuthStatus();
+                Timber.d("OAuth request to exchange authorization code for tokens failed: %s",
+                        authorizationException.error);
+            }
+        };
+    }
+
+    private void accessRootFolder(OwnCloudCredentials credentials) {
+        mAsyncTask = new AuthenticatorAsyncTask(this);
+        Object[] params = {mServerInfo.mBaseUrl, credentials};
+        mAsyncTask.execute(params);
     }
 
     private void openUrlWithCustomTab(String url) {
@@ -1338,6 +1366,15 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
                 mAuthStatusIcon = R.drawable.no_network;
             default:
                 mAuthStatusText = ErrorMessageAdapter.Companion.getResultMessage(result, null, getResources());
+        }
+    }
+
+    private void updateOAuthStatusIconAndText(AuthorizationException authorizationException) {
+        mAuthStatusIcon = R.drawable.common_error;
+        if (authorizationException == AuthorizationException.AuthorizationRequestErrors.ACCESS_DENIED) {
+            mAuthStatusText = getResources().getString(R.string.auth_oauth_error_access_denied);
+        } else {
+            mAuthStatusText = getResources().getString(R.string.auth_oauth_error);
         }
     }
 
