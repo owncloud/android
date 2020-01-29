@@ -1691,19 +1691,19 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
     @Override
     public void onSavedCertificate() {
-        Log_OC.d("Server certificate is trusted");
+        Timber.d("Server certificate is trusted");
         checkOcServer();
     }
 
     @Override
     public void onFailedSavingCertificate() {
-        Log_OC.d("Server certificate could not be saved");
+        Timber.d("Server certificate could not be saved");
         Toast.makeText(this, R.string.ssl_validator_not_saved, Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void onCancelCertificate() {
-        Log_OC.d("Server certificate is not trusted");
+        Timber.d("Server certificate is not trusted");
     }
 
     private abstract static class RightDrawableOnTouchListener implements OnTouchListener {
