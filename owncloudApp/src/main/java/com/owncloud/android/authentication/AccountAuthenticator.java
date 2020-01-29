@@ -44,7 +44,14 @@ import com.owncloud.android.lib.common.authentication.oauth.OAuth2Provider;
 import com.owncloud.android.lib.common.authentication.oauth.OAuth2ProvidersRegistry;
 import com.owncloud.android.lib.common.authentication.oauth.OAuth2RefreshAccessTokenOperation;
 import com.owncloud.android.lib.common.authentication.oauth.OAuth2RequestBuilder;
+import com.owncloud.android.lib.common.authentication.oauth.OAuthConnectionBuilder;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
+import net.openid.appauth.AppAuthConfiguration;
+import net.openid.appauth.AuthState;
+import net.openid.appauth.AuthorizationException;
+import net.openid.appauth.AuthorizationResponse;
+import net.openid.appauth.AuthorizationService;
+import net.openid.appauth.TokenResponse;
 import timber.log.Timber;
 
 import java.util.Map;
@@ -78,6 +85,8 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
         mContext = context;
         mHandler = new Handler();
     }
+
+    private String mAccessToken;
 
     /**
      * {@inheritDoc}
@@ -173,18 +182,18 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
 
         /// check if required token is stored
         final AccountManager am = AccountManager.get(mContext);
-        String accessToken;
         if (authTokenType.equals(AccountTypeUtils.getAuthTokenTypePass(MainApp.Companion.getAccountType()))) {
-            accessToken = am.getPassword(account);
+            mAccessToken = am.getPassword(account);
         } else {
             // Gets an auth token from the AccountManager's cache. If no auth token is cached for
             // this account, null will be returned
-            accessToken = am.peekAuthToken(account, authTokenType);
-            if (accessToken == null && canBeRefreshed(authTokenType)) {
-                accessToken = refreshToken(account, authTokenType, am);
+            mAccessToken = am.peekAuthToken(account, authTokenType);
+            if (mAccessToken == null && canBeRefreshed(authTokenType)) {
+                mAccessToken = refreshToken(account, authTokenType, am);
             }
         }
-        if (accessToken != null) {
+
+        if (mAccessToken != null) {
             final Bundle result = new Bundle();
             result.putString(AccountManager.KEY_ACCOUNT_NAME, account.name);
             result.putString(AccountManager.KEY_ACCOUNT_TYPE, MainApp.Companion.getAccountType());
@@ -307,7 +316,6 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
     }
 
     private String refreshToken(Account account, String authTokenType, AccountManager accountManager) {
-
         Timber.v("Refreshing token!");
         String accessToken;
         try {
@@ -369,5 +377,37 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
         }
 
         return accessToken;
+    }
+
+    private String refreshtoken(Account account, String authTokenType, AccountManager accountManager) {
+        String refreshToken = accountManager.getUserData(
+                account,
+                AccountUtils.Constants.KEY_OAUTH2_REFRESH_TOKEN
+        );
+
+        if (refreshToken == null || refreshToken.length() <= 0) {
+            Timber.w("No refresh token stored for silent renewal of access token");
+            return null;
+        }
+
+        AppAuthConfiguration.Builder appAuthConfigurationBuilder = new AppAuthConfiguration.Builder();
+        appAuthConfigurationBuilder.setConnectionBuilder(new OAuthConnectionBuilder());
+        AuthorizationService authService = new AuthorizationService(mContext, appAuthConfigurationBuilder.build());
+
+        AuthStateManager authStateManager = AuthStateManager.getInstance(mContext);
+        AuthState authState = authStateManager.getCurrent();
+        authState.createTokenRefreshRequest();
+
+        authService.performTokenRequest(
+                authState.createTokenRefreshRequest(),
+                (tokenResponse, authorizationException) -> {
+                    if (tokenResponse != null) {
+                        // exchange succeeded
+                    } else {
+                        // authorization failed, check ex for more details
+                    }
+                });
+
+        return "";
     }
 }

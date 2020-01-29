@@ -110,6 +110,7 @@ import net.openid.appauth.AuthorizationServiceConfiguration;
 import net.openid.appauth.ClientAuthentication;
 import net.openid.appauth.ClientSecretBasic;
 import net.openid.appauth.ResponseTypeValues;
+import org.jetbrains.annotations.NotNull;
 import timber.log.Timber;
 
 import java.util.ArrayList;
@@ -224,7 +225,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
     private CustomTabsClient mCustomTabsClient;
     private CustomTabsServiceConnection mCustomTabServiceConnection = new CustomTabsServiceConnection() {
         @Override
-        public void onCustomTabsServiceConnected(ComponentName name, CustomTabsClient client) {
+        public void onCustomTabsServiceConnected(@NotNull ComponentName name, @NotNull CustomTabsClient client) {
             mCustomTabsClient = client;
             mCustomTabsClient.warmup(0);
         }
